@@ -31,7 +31,7 @@ const Hero = () => {
                         className="text-5xl md:text-7xl lg:text-7xl font-black text-white tracking-tight mb-8 leading-[1.1]"
                     >
                         BECOME A <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-ra-blue">
                             T20 STAR
                         </span>
                     </motion.h1>
@@ -52,13 +52,13 @@ const Hero = () => {
                         transition={{ duration: 0.5, delay: 0.4 }}
                         className="flex flex-col sm:flex-row gap-4"
                     >
-                        <Button onClick={scrollToForm} variant="gold" className="text-base px-8 py-3 shadow-yellow-500/20">
+                        <Button onClick={scrollToForm} variant="primary" className="text-base px-8 py-3">
                             START JOURNEY
                         </Button>
                         <Button
                             onClick={() => document.getElementById('program')?.scrollIntoView({ behavior: 'smooth' })}
                             variant="secondary"
-                            className="text-base px-8 py-3 border-slate-700 text-white hover:bg-white/10 hover:text-white"
+                            className="text-base px-8 py-3"
                         >
                             LEARN MORE
                         </Button>

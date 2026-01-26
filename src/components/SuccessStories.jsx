@@ -5,8 +5,8 @@ const SuccessStories = () => {
         <section className="py-24 bg-white">
             <div className="container mx-auto px-6">
                 <div className="max-w-4xl mx-auto text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-6">UNCOVERING TALENT</h2>
-                    <p className="text-lg text-slate-600">
+                    <h2 className="text-3xl md:text-4xl font-black text-rr-dark mb-6">UNCOVERING TALENT</h2>
+                    <p className="text-lg text-rr-grey">
                         Rajasthan Royals have developed a reputation for uncovering and developing talent that others miss. Siddhartha Lahiri and his network leave no stone unturned.
                     </p>
                 </div>
@@ -20,7 +20,7 @@ const SuccessStories = () => {
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-8">
                             <h3 className="text-2xl font-bold text-white mb-1">YASHASVI JAISWAL</h3>
-                            <p className="text-yellow-400 font-medium">Global T20 Superstar</p>
+                            <p className="text-rr-pink font-medium">Global T20 Superstar</p>
                         </div>
                     </div>
 
@@ -32,7 +32,7 @@ const SuccessStories = () => {
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-8">
                             <h3 className="text-2xl font-bold text-white mb-1">KWENA MAPHAKA</h3>
-                            <p className="text-yellow-400 font-medium">U19 World Cup Sensation</p>
+                            <p className="text-rr-pink font-medium">U19 World Cup Sensation</p>
                         </div>
                     </div>
                 </div>

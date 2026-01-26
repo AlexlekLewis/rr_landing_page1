@@ -20,14 +20,14 @@ const Navbar = () => {
     return (
         <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-md shadow-md py-4' : 'bg-transparent py-6'}`}>
             <div className="container mx-auto px-6 flex justify-between items-center">
-                <div className="text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600">
-                    ROYALS ACADEMY
+                <div className="flex items-center">
+                    <img src="/assets/rr_academy_logo.png" alt="Royals Academy" className="h-12 md:h-16 w-auto object-contain" />
                 </div>
                 <div className="hidden md:flex items-center space-x-8">
                     <a href="#program" className={`text-sm font-semibold hover:text-pink-600 transition-colors ${scrolled ? 'text-gray-800' : 'text-white'}`}>THE PROGRAM</a>
                     <a href="#coaches" className={`text-sm font-semibold hover:text-pink-600 transition-colors ${scrolled ? 'text-gray-800' : 'text-white'}`}>COACHES</a>
                     <a href="#faq" className={`text-sm font-semibold hover:text-pink-600 transition-colors ${scrolled ? 'text-gray-800' : 'text-white'}`}>FAQ</a>
-                    <Button onClick={scrollToForm} variant={scrolled ? 'primary' : 'gold'} className="text-sm px-6 py-2">
+                    <Button onClick={scrollToForm} variant={'primary'} className="text-sm px-6 py-2">
                         APPLY NOW
                     </Button>
                 </div>

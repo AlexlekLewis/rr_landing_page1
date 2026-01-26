@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 const TierCard = ({ title, features, recommendedFor, color }) => (
     <div className={`bg-white p-8 rounded-2xl shadow-xl border-t-8 ${color}`}>
-        <h3 className="text-2xl font-black text-slate-900 mb-2">{title}</h3>
+        <h3 className="text-2xl font-black text-rr-dark mb-2">{title}</h3>
         <p className="text-sm font-semibold text-slate-500 mb-6 uppercase tracking-wider">{recommendedFor}</p>
         <ul className="space-y-4">
             {features.map((feat, i) => (
@@ -20,14 +20,14 @@ const Tiers = () => {
     return (
         <section className="py-24 bg-white">
             <div className="container mx-auto px-6">
-                <h2 className="text-4xl md:text-5xl font-black text-center text-slate-900 mb-16">
-                    ELITE PROGRAMME <span className="text-purple-600">TIERS</span>
+                <h2 className="text-4xl md:text-5xl font-black text-center text-rr-dark mb-16">
+                    ELITE PROGRAMME <span className="text-ra-blue">TIERS</span>
                 </h2>
 
                 <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
                     <TierCard
                         title="TIER 1"
-                        color="border-purple-600"
+                        color="border-ra-blue"
                         recommendedFor="High Performance / Representative"
                         features={[
                             "Comprehensive Technical Analysis",
@@ -40,7 +40,7 @@ const Tiers = () => {
                     />
                     <TierCard
                         title="TIER 2"
-                        color="border-pink-600"
+                        color="border-rf-pink"
                         recommendedFor="Emerging Talent / Club Cricket"
                         features={[
                             "Core Technical Skills Development",

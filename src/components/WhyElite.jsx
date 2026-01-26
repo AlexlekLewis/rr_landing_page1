@@ -8,7 +8,7 @@ const WhyElite = () => {
     };
 
     return (
-        <section className="py-20 bg-white text-slate-900">
+        <section className="py-20 bg-white text-rr-dark">
             <div className="container mx-auto px-6 max-w-5xl">
                 <div className="grid md:grid-cols-2 gap-12 items-center">
                     <motion.div
@@ -18,9 +18,9 @@ const WhyElite = () => {
                     >
                         <h2 className="text-4xl md:text-5xl font-black mb-6 leading-tight">
                             THE WORLD'S BEST <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600">T20 PLAYERS</span>
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">T20 PLAYERS</span>
                         </h2>
-                        <div className="h-1.5 w-24 bg-gradient-to-r from-pink-600 to-purple-600 mb-8" />
+                        <div className="h-1.5 w-24 bg-gradient-to-r from-rr-pink to-rr-blue mb-8" />
                         <p className="text-lg text-slate-600 leading-relaxed mb-6">
                             Have become global stars making millions a year. Those who are getting noticed and selected at representative levels and at the highest grades in the club system, are those that have a T20 skill set that they can adapt to situations within all formats of the game.
                         </p>

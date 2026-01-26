@@ -9,10 +9,10 @@ const FAQItem = ({ question, answer }) => {
         <div className="border-b border-slate-200 last:border-0">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full py-6 flex justify-between items-center text-left hover:text-pink-600 transition-colors focus:outline-none"
+                className="w-full py-6 flex justify-between items-center text-left hover:text-rr-pink transition-colors focus:outline-none"
             >
-                <span className="font-bold text-lg text-slate-800 pr-8">{question}</span>
-                {isOpen ? <Minus className="w-5 h-5 text-pink-600 flex-shrink-0" /> : <Plus className="w-5 h-5 text-slate-400 flex-shrink-0" />}
+                <span className="font-bold text-lg text-rr-dark pr-8">{question}</span>
+                {isOpen ? <Minus className="w-5 h-5 text-rr-pink flex-shrink-0" /> : <Plus className="w-5 h-5 text-slate-400 flex-shrink-0" />}
             </button>
             <AnimatePresence>
                 {isOpen && (
@@ -46,7 +46,7 @@ const FAQ = () => {
     return (
         <section className="py-24 bg-white" id="faq">
             <div className="container mx-auto px-6 max-w-4xl">
-                <h2 className="text-4xl font-black text-center text-slate-900 mb-12">COMMON QUESTIONS</h2>
+                <h2 className="text-4xl font-black text-center text-rr-dark mb-12">COMMON QUESTIONS</h2>
                 <div className="bg-slate-50 rounded-2xl p-8 border border-slate-100 shadow-sm">
                     {aqs.map((item, i) => <FAQItem key={i} question={item.q} answer={item.a} />)}
                 </div>

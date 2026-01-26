@@ -8,8 +8,8 @@ const CoachProfile = ({ name, role, bio }) => (
                 {name.charAt(0)}
             </div>
         </div>
-        <h3 className="text-xl font-black text-slate-900">{name}</h3>
-        <p className="text-pink-600 font-bold text-xs uppercase tracking-widest mb-3">{role}</p>
+        <h3 className="text-xl font-black text-rr-dark">{name}</h3>
+        <p className="text-rr-pink font-bold text-xs uppercase tracking-widest mb-3">{role}</p>
         <p className="text-slate-600 text-sm leading-relaxed max-w-xs mx-auto">{bio}</p>
     </div>
 );
@@ -25,8 +25,8 @@ const Coaches = () => {
     return (
         <section className="py-24 bg-slate-50" id="coaches">
             <div className="container mx-auto px-6">
-                <h2 className="text-4xl md:text-5xl font-black text-center text-slate-900 mb-16">
-                    WORLD CLASS <span className="text-pink-600">MENTORS</span>
+                <h2 className="text-4xl md:text-5xl font-black text-center text-rr-dark mb-16">
+                    WORLD CLASS <span className="text-rr-pink">MENTORS</span>
                 </h2>
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
                     {coaches.map((c, i) => <CoachProfile key={i} {...c} />)}

@@ -7,7 +7,7 @@ const InputField = ({ label, type = "text", placeholder }) => (
         <input
             type={type}
             placeholder={placeholder}
-            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200 transition-all text-slate-900"
+            className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-pink-200 transition-all text-rr-dark"
         />
     </div>
 );
@@ -17,7 +17,7 @@ const Apply = () => {
         <section className="py-24 bg-gradient-to-br from-slate-50 to-slate-100" id="apply-form">
             <div className="container mx-auto px-6 max-w-2xl">
                 <div className="text-center mb-12">
-                    <h2 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600 mb-6">
+                    <h2 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-ra-blue mb-6">
                         START YOUR JOURNEY
                     </h2>
                     <p className="text-lg text-slate-600">
@@ -46,7 +46,7 @@ const Apply = () => {
                     <div className="mb-6">
                         <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Representative History</label>
                         <textarea
-                            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200 transition-all text-slate-900 h-32"
+                            className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-pink-200 transition-all text-rr-dark h-32"
                             placeholder="List your representative achievements..."
                         ></textarea>
                     </div>
@@ -55,14 +55,14 @@ const Apply = () => {
                         <div className="mb-6">
                             <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Written Bio</label>
                             <textarea
-                                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200 transition-all text-slate-900 h-32"
+                                className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-pink-200 transition-all text-rr-dark h-32"
                                 placeholder="Tell us about yourself..."
                             ></textarea>
                         </div>
                         <div className="mb-6">
                             <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Career Goals</label>
                             <textarea
-                                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200 transition-all text-slate-900 h-32"
+                                className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-pink-200 transition-all text-rr-dark h-32"
                                 placeholder="Where do you want to be in 5 years?"
                             ></textarea>
                         </div>
@@ -72,7 +72,7 @@ const Apply = () => {
                         <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Attach Cricket CV</label>
                         <input
                             type="file"
-                            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-pink-500 text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100"
+                            className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-rr-pink hover:file:bg-pink-100"
                         />
                     </div>
 
