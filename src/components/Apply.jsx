@@ -101,12 +101,7 @@ const Apply = () => {
         setLoading(true);
         setStatus(null);
 
-        // Capture snapshot of form data for redundancy
-        const backupData = {
-            ...formData,
-            timestamp: new Date().toISOString(),
-            source: 'web_application_form'
-        };
+
 
         const sendToWebhook = async (payload, type) => {
             const webhookUrl = import.meta.env.VITE_APP_WEBHOOK_URL;
@@ -166,8 +161,13 @@ const Apply = () => {
 
             if (insertError) throw insertError;
 
-            // SUCCESS: Send success webhook (Process this in Zapier/Make to verify and log)
-            await sendToWebhook({ ...backupData, cvUrl, status: 'success' }, 'NEW_SUBMISSION');
+            // SUCCESS: Send success webhook with SAME schema as Supabase
+            await sendToWebhook({
+                ...finalSubmissionData,
+                status: 'success',
+                timestamp: new Date().toISOString(),
+                source: 'web_application_form'
+            }, 'NEW_SUBMISSION');
 
             setStatus('success');
             setFormData({
@@ -179,11 +179,29 @@ const Apply = () => {
         } catch (error) {
             console.error('Error submitting application:', error);
 
-            // FAILURE: Urgent Alert! Send all data to webhook so it's not lost.
+            // FAILURE: Urgent Alert! Send all data with SAME schema as Supabase
+            const failedSubmissionData = {
+                first_name: formData.firstName,
+                last_name: formData.lastName,
+                age: formData.age ? parseInt(formData.age) : null,
+                dob: formData.dob || null,
+                email: formData.email,
+                phone: formData.phone,
+                suburb: formData.suburb,
+                profile_link: formData.profileLink,
+                club: formData.club,
+                history: formData.history,
+                bio: formData.bio,
+                goals: formData.goals,
+                cv_url: null // No CV uploaded yet since it failed
+            };
+
             await sendToWebhook({
-                ...backupData,
+                ...failedSubmissionData,
                 error: error.message || 'Unknown Error',
-                status: 'failed'
+                status: 'failed',
+                timestamp: new Date().toISOString(),
+                source: 'web_application_form'
             }, 'SUBMISSION_FAILED');
 
             alert(`Application Error: ${error.message || 'Please check your connection.'}. We have been notified of this error.`);
