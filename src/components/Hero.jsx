@@ -14,25 +14,25 @@ const Hero = () => {
             <div
                 className="absolute inset-0 w-full h-full bg-cover bg-no-repeat"
                 style={{
-                    backgroundImage: "url('/assets/Hero.jpeg')",
-                    backgroundPosition: "center"
+                    backgroundImage: "url('/assets/lhuan-pretorius.jpg')",
+                    backgroundPosition: "center top"
                 }}
             >
-                <div className="absolute inset-0 bg-black/60" />
+                <div className="absolute inset-0 bg-black/50" />
             </div>
 
             {/* Content Container */}
             <div className="relative z-20 container mx-auto px-6 h-full flex flex-col justify-center text-left">
-                <div className="max-w-2xl lg:max-w-md xl:max-w-lg">
+                <div className="max-w-3xl lg:max-w-4xl">
                     <motion.h1
                         initial={{ opacity: 0, x: -50 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                         className="text-5xl md:text-7xl lg:text-7xl font-black text-white tracking-tight mb-8 leading-[1.1]"
                     >
-                        BECOME A <br />
+                        WANT TO STAR IN <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-ra-blue">
-                            T20 STAR
+                            THE T20 GAME?
                         </span>
                     </motion.h1>
 
@@ -40,10 +40,9 @@ const Hero = () => {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                        className="text-xl md:text-xl text-gray-300 mb-10 font-light leading-relaxed max-w-sm"
+                        className="text-xl md:text-2xl text-gray-200 mb-10 font-light leading-relaxed max-w-2xl"
                     >
-                        Traditional methods aren’t cutting it for the modern day game.
-                        The Royals Academy brings a whole new perspective.
+                        Traditional methods aren't cutting it. Whether you're aiming for club success or professional pathways, we provide the elite skills and mindset to help you dominate the modern game.
                     </motion.p>
 
                     <motion.div
@@ -66,7 +65,7 @@ const Hero = () => {
                 </div>
             </div>
 
-        </div>
+        </div >
     );
 };
 

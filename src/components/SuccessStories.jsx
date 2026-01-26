@@ -35,6 +35,30 @@ const SuccessStories = () => {
                             <p className="text-rr-pink font-medium">U19 World Cup Sensation</p>
                         </div>
                     </div>
+
+                    <div className="group relative rounded-2xl overflow-hidden shadow-xl aspect-video cursor-pointer">
+                        <img
+                            src="/assets/sooryavanchi-arms-raised.jpg"
+                            alt="Angkrish Raghuvanshi"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-8">
+                            <h3 className="text-2xl font-bold text-white mb-1">ANGKRISH RAGHUVANSHI</h3>
+                            <p className="text-rr-pink font-medium">India U19 Star</p>
+                        </div>
+                    </div>
+
+                    <div className="group relative rounded-2xl overflow-hidden shadow-xl aspect-video cursor-pointer">
+                        <img
+                            src="/assets/lahiri-pirag.jpg"
+                            alt="Riyan Parag"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-8">
+                            <h3 className="text-2xl font-bold text-white mb-1">RIYAN PARAG</h3>
+                            <p className="text-rr-pink font-medium">Royals Young Gun</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
