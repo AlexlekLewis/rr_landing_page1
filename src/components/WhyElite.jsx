@@ -38,15 +38,16 @@ const WhyElite = () => {
                         viewport={{ once: true }}
                         className="relative"
                     >
-                        {/* Abstract Graphic or Image Placeholder */}
-                        <div className="aspect-[4/5] bg-slate-100 rounded-2xl overflow-hidden relative shadow-2xl">
-                            <div className="absolute inset-0 bg-gradient-to-br from-pink-100 to-purple-100" />
-                            <div className="absolute inset-0 flex items-center justify-center text-slate-300 font-bold text-2xl rotate-[-45deg]">
+                        <div className="aspect-[4/5] rounded-2xl overflow-hidden relative shadow-2xl">
+                            <img
+                                src="/assets/jaiswal-celebrating.webp"
+                                alt="Yashasvi Jaiswal Celebrating"
+                                className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                            <div className="absolute bottom-6 left-6 font-bold text-white text-xl">
                                 ELITE MINDSET
                             </div>
-                            {/* Decorative elements */}
-                            <div className="absolute top-10 right-10 w-20 h-20 bg-purple-500/10 rounded-full blur-xl" />
-                            <div className="absolute bottom-10 left-10 w-32 h-32 bg-pink-500/10 rounded-full blur-xl" />
                         </div>
                     </motion.div>
                 </div>
