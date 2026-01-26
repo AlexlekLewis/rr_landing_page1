@@ -101,6 +101,32 @@ const Apply = () => {
         setLoading(true);
         setStatus(null);
 
+        // Capture snapshot of form data for redundancy
+        const backupData = {
+            ...formData,
+            timestamp: new Date().toISOString(),
+            source: 'web_application_form'
+        };
+
+        const sendToWebhook = async (payload, type) => {
+            const webhookUrl = import.meta.env.VITE_APP_WEBHOOK_URL;
+            if (!webhookUrl) return; // Skip if no webhook configured
+
+            try {
+                await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        type, // 'success' or 'failure'
+                        ...payload
+                    })
+                });
+            } catch (err) {
+                console.error('Webhook sending failed', err);
+                // Non-blocking: don't stop the user flow if webhook fails
+            }
+        };
+
         try {
             let cvUrl = null;
 
@@ -117,25 +143,31 @@ const Apply = () => {
                 cvUrl = data.publicUrl;
             }
 
+            // Enhanced data object with file URL
+            const finalSubmissionData = {
+                first_name: formData.firstName,
+                last_name: formData.lastName,
+                age: formData.age ? parseInt(formData.age) : null,
+                dob: formData.dob || null,
+                email: formData.email,
+                phone: formData.phone,
+                suburb: formData.suburb,
+                profile_link: formData.profileLink,
+                club: formData.club,
+                history: formData.history,
+                bio: formData.bio,
+                goals: formData.goals,
+                cv_url: cvUrl
+            };
+
             const { error: insertError } = await supabase
                 .from('applications')
-                .insert([{
-                    first_name: formData.firstName,
-                    last_name: formData.lastName,
-                    age: formData.age ? parseInt(formData.age) : null,
-                    dob: formData.dob || null,
-                    email: formData.email,
-                    phone: formData.phone,
-                    suburb: formData.suburb,
-                    profile_link: formData.profileLink,
-                    club: formData.club,
-                    history: formData.history,
-                    bio: formData.bio,
-                    goals: formData.goals,
-                    cv_url: cvUrl
-                }]);
+                .insert([finalSubmissionData]);
 
             if (insertError) throw insertError;
+
+            // SUCCESS: Send success webhook (Process this in Zapier/Make to verify and log)
+            await sendToWebhook({ ...backupData, cvUrl, status: 'success' }, 'NEW_SUBMISSION');
 
             setStatus('success');
             setFormData({
@@ -143,12 +175,18 @@ const Apply = () => {
                 profileLink: '', club: '', history: '', bio: '', goals: ''
             });
             setCvFile(null);
-            // Reset file input manually if needed via ref, keeping it simple for now
 
         } catch (error) {
             console.error('Error submitting application:', error);
-            // Alert the specific error message to help debugging
-            alert(`Application Error: ${error.message || JSON.stringify(error)}`);
+
+            // FAILURE: Urgent Alert! Send all data to webhook so it's not lost.
+            await sendToWebhook({
+                ...backupData,
+                error: error.message || 'Unknown Error',
+                status: 'failed'
+            }, 'SUBMISSION_FAILED');
+
+            alert(`Application Error: ${error.message || 'Please check your connection.'}. We have been notified of this error.`);
             setStatus('error');
         } finally {
             setLoading(false);
