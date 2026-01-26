@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Check, AlertCircle } from 'lucide-react';
 import Button from './Button';
 import { supabase } from '../lib/supabase';
+import DateOfBirthInput from './DateOfBirthInput';
 
 const StatusModal = ({ type, isOpen, onClose }) => {
     const isSuccess = type === 'success';
@@ -146,6 +147,8 @@ const Apply = () => {
 
         } catch (error) {
             console.error('Error submitting application:', error);
+            // Alert the specific error message to help debugging
+            alert(`Application Error: ${error.message || JSON.stringify(error)}`);
             setStatus('error');
         } finally {
             setLoading(false);
@@ -178,7 +181,11 @@ const Apply = () => {
 
                     <div className="grid md:grid-cols-2 gap-6">
                         <InputField label="Age" type="number" name="age" value={formData.age} onChange={handleChange} required />
-                        <InputField label="Date of Birth" type="date" name="dob" value={formData.dob} onChange={handleChange} required />
+                        <DateOfBirthInput
+                            value={formData.dob}
+                            onChange={(val) => setFormData(prev => ({ ...prev, dob: val }))}
+                            required
+                        />
                     </div>
 
                     <InputField label="Email Address" type="email" name="email" value={formData.email} onChange={handleChange} required />
