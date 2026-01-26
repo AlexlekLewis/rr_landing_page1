@@ -1,41 +1,52 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check } from 'lucide-react';
+import { Check, AlertCircle } from 'lucide-react';
 import Button from './Button';
 import { supabase } from '../lib/supabase';
 
-const SuccessModal = ({ isOpen, onClose }) => (
-    <AnimatePresence>
-        {isOpen && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-                    onClick={onClose}
-                />
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                    className="bg-white rounded-3xl p-8 max-w-sm w-full relative z-10 shadow-2xl text-center"
-                >
-                    <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <Check className="w-10 h-10 text-green-600" />
-                    </div>
-                    <h3 className="text-3xl font-black text-rr-dark mb-3">RECEIVED!</h3>
-                    <p className="text-slate-600 mb-8 leading-relaxed">
-                        Your application has been successfully submitted. We'll review your details and get back to you soon.
-                    </p>
-                    <Button onClick={onClose} className="w-full">
-                        AWESOME
-                    </Button>
-                </motion.div>
-            </div>
-        )}
-    </AnimatePresence>
-);
+const StatusModal = ({ type, isOpen, onClose }) => {
+    const isSuccess = type === 'success';
+    return (
+        <AnimatePresence>
+            {isOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                        onClick={onClose}
+                    />
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                        className="bg-white rounded-3xl p-8 max-w-sm w-full relative z-10 shadow-2xl text-center"
+                    >
+                        <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 ${isSuccess ? 'bg-green-100' : 'bg-red-100'}`}>
+                            {isSuccess ? (
+                                <Check className="w-10 h-10 text-green-600" />
+                            ) : (
+                                <AlertCircle className="w-10 h-10 text-red-600" />
+                            )}
+                        </div>
+                        <h3 className="text-3xl font-black text-rr-dark mb-3">
+                            {isSuccess ? 'RECEIVED!' : 'OOPS!'}
+                        </h3>
+                        <p className="text-slate-600 mb-8 leading-relaxed">
+                            {isSuccess
+                                ? "Your application has been successfully submitted. We'll review your details and get back to you soon."
+                                : "Something went wrong submitting your application. Please check your internet connection and try again."}
+                        </p>
+                        <Button onClick={onClose} className="w-full">
+                            {isSuccess ? 'AWESOME' : 'TRY AGAIN'}
+                        </Button>
+                    </motion.div>
+                </div>
+            )}
+        </AnimatePresence>
+    );
+};
 
 const InputField = ({ label, type = "text", placeholder, name, value, onChange, required = false }) => (
     <div className="mb-6">
@@ -154,13 +165,11 @@ const Apply = () => {
                 </div>
 
                 <form onSubmit={handleSubmit} className="bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-slate-100">
-                    <SuccessModal isOpen={status === 'success'} onClose={() => setStatus(null)} />
-
-                    {status === 'error' && (
-                        <div className="mb-8 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-center font-bold">
-                            Something went wrong. Please try again.
-                        </div>
-                    )}
+                    <StatusModal
+                        type={status}
+                        isOpen={status === 'success' || status === 'error'}
+                        onClose={() => setStatus(null)}
+                    />
 
                     <div className="grid md:grid-cols-2 gap-6">
                         <InputField label="First Name" name="firstName" value={formData.firstName} onChange={handleChange} required />
