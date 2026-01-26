@@ -105,10 +105,18 @@ const Apply = () => {
 
         const sendToWebhook = async (payload, type) => {
             const webhookUrl = import.meta.env.VITE_APP_WEBHOOK_URL;
-            if (!webhookUrl) return; // Skip if no webhook configured
+
+            console.log('🔔 Webhook URL:', webhookUrl);
+            console.log('🔔 Sending webhook type:', type);
+            console.log('🔔 Webhook payload:', payload);
+
+            if (!webhookUrl) {
+                console.warn('⚠️ No webhook URL configured');
+                return; // Skip if no webhook configured
+            }
 
             try {
-                await fetch(webhookUrl, {
+                const response = await fetch(webhookUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -116,8 +124,12 @@ const Apply = () => {
                         ...payload
                     })
                 });
+
+                console.log('✅ Webhook response status:', response.status);
+                const responseData = await response.json();
+                console.log('✅ Webhook response:', responseData);
             } catch (err) {
-                console.error('Webhook sending failed', err);
+                console.error('❌ Webhook sending failed:', err);
                 // Non-blocking: don't stop the user flow if webhook fails
             }
         };
