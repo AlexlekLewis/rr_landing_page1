@@ -51,6 +51,31 @@ const Apply = () => {
                         ></textarea>
                     </div>
 
+                    <div className="grid md:grid-cols-2 gap-6">
+                        <div className="mb-6">
+                            <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Written Bio</label>
+                            <textarea
+                                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200 transition-all text-slate-900 h-32"
+                                placeholder="Tell us about yourself..."
+                            ></textarea>
+                        </div>
+                        <div className="mb-6">
+                            <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Career Goals</label>
+                            <textarea
+                                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200 transition-all text-slate-900 h-32"
+                                placeholder="Where do you want to be in 5 years?"
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <div className="mb-8">
+                        <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Attach Cricket CV</label>
+                        <input
+                            type="file"
+                            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-pink-500 text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100"
+                        />
+                    </div>
+
                     <Button className="w-full py-4 text-xl">
                         SUBMIT APPLICATION
                     </Button>

@@ -39,7 +39,8 @@ const FAQ = () => {
         { q: "Are trials with IPL franchises guaranteed?", a: "No. Trial opportunities are for players demonstrating exceptional skill. However, ALL members are tracked by Royals coaches." },
         { q: "Will I go to the High Performance Centre in Jaipur?", a: "Select players will be invited to attend camps at the High Performance facility in Jaipur, India." },
         { q: "Is entry guaranteed?", a: "No. Places are limited and based on merit, skills, and potential." },
-        { q: "Is it only T20 cricket?", a: "70% T20 tailored, 30% traditional. The goal is to apply elite skills to all formats." }
+        { q: "Is it only T20 cricket?", a: "70% T20 tailored, 30% traditional. The goal is to apply elite skills to all formats." },
+        { q: "What if I am at the young end of the age groups?", a: "Younger players will be monitored as future talent. Trial opportunities are likely for older age groups, but younger players benefit from early exposure to Royals systems and data tracking." }
     ];
 
     return (

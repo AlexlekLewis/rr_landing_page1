@@ -38,6 +38,18 @@ const Intro = () => {
                     <cite className="block mt-8 text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 not-italic">
                         — Siddhartha Lahiri, Royals Group Head of International Player Development
                     </cite>
+
+                    <div className="mt-12 space-y-6 text-lg font-light text-gray-300 md:text-xl max-w-3xl mx-auto leading-relaxed">
+                        <p>
+                            The World’s best T20 players have become global stars making millions a year, and those who are getting noticed and selected at representative levels and at the highest grades in the club system, are those that have a T20 skill set that they can adapt to situations within all formats of the game.
+                        </p>
+                        <p>
+                            So, if the game has already changed, are you prepared to do what it takes to put your name in the picture to be scouted and selected at higher levels?
+                        </p>
+                        <p className="font-bold text-white">
+                            Here’s your chance. Apply to secure your place NOW.
+                        </p>
+                    </div>
                 </motion.div>
 
             </div>

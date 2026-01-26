@@ -26,22 +26,22 @@ const Features = () => {
         {
             title: "Power Hitting",
             description: "Never before has the need to develop a power game and optimise ball exit velocity and trajectory been so critical.",
-            image: "/assets/power_hitting.png"
+            image: "/assets/jaiswal-power.webp"
         },
         {
             title: "360 Degree Striking",
             description: "Playing a true 360 degree style of play confuses opponents and wins matches...if done with skill and with strategy.",
-            image: "/assets/360_striking.png"
+            image: "/assets/360-degree.webp"
         },
         {
             title: "Winning T20 Mindset",
             description: "Learn how and why the elite T20 cricketers think the way they do, and transform results with an advanced mindset.",
-            image: "/assets/winning_mindset.png"
+            image: "/assets/winning-mindset.jpg"
         },
         {
             title: "Off Pace or On Pace?",
             description: "That is the question. When, where, what, how are questions you’ll learn to answer as a pace or spin bowler.",
-            image: "/assets/off_pace_on_pace.png"
+            image: "/assets/on-pace-off-pace.jpg"
         }
     ];
 

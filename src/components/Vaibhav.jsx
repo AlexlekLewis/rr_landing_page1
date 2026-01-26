@@ -21,7 +21,7 @@ const Vaibhav = () => {
                     >
                         <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-700 bg-slate-800 aspect-[3/4] flex items-center justify-center">
                             <img
-                                src="/assets/vaibhav.png"
+                                src="/assets/sooryavanchi-arms-raised.jpg"
                                 alt="Vaibhav Sooryavanchi"
                                 className="w-full h-full object-cover"
                             />
@@ -45,23 +45,26 @@ const Vaibhav = () => {
 
                         <div className="space-y-8 text-lg text-slate-300 leading-relaxed font-light">
                             <p>
-                                This is not just another coaching program. Designed and managed by one of the <strong className="text-white">biggest cricket brands on the planet</strong>, the Elite program draws on decades of global T20 experience.
+                                This is not just another coaching program. Designed and managed by one of the <strong className="text-white">biggest cricket brands on the planet</strong>, the Elite program draws on decades of global T20 experience and success at the very highest levels, and provides opportunities previously not available in Australia.
                             </p>
                             <p>
-                                The Royals know how to uncover T20 talent like nobody else.
+                                And, the Royals know how to uncover T20 talent like nobody else.
                             </p>
 
                             <div className="p-8 bg-slate-800/50 rounded-2xl border border-slate-700">
-                                <h3 className="text-2xl font-bold text-white mb-4">EARN YOUR CHANCE</h3>
+                                <h3 className="text-2xl font-bold text-white mb-4">EARN YOUR CHANCE TO BREAK INTO THE GLOBAL T20 SCENE</h3>
                                 <p>
-                                    Key Royals coach visits, online mentoring, and invitations to train at Rajasthan, Paarl, or Barbados Royals franchises are rewards for the best of the best.
+                                    All Elite program players will be monitored by the Royals Group coaching team. For those who demonstrate star quality and regularly perform to the benchmarks set by the Royals Group have the chance to earn themselves opportunities to display their skills in front of Royals Group decision makers.
+                                </p>
+                                <p className="mt-4">
+                                    Key Royals coach visits to Bundoora’s Academy, online mentoring opportunities as well as invitations to attend training sessions and/or trials at Rajasthan, Paarl or Barbados Royals franchises are rewards for those who develop into the best of the best performers at the Rajasthan Royals Academy Australia.
                                 </p>
                             </div>
 
                             <div>
-                                <h3 className="text-2xl font-bold text-white mb-4">CHANGE YOUR CAREER</h3>
+                                <h3 className="text-2xl font-bold text-white mb-4">BECOME A MATCH WINNER AND CHANGE YOUR CAREER</h3>
                                 <p className="mb-8">
-                                    Perform at a higher level. Build the speed, power, skillset and mindset that the very best T20 performers have perfected.
+                                    For ALL graduates who complete the Elite program, you are guaranteed to be exposed to and develop the necessary tools to push your career forward and perform at a higher level. Become a true match winner and a star that performs at crucial times for your club or representative side by building the speed, power, skillset and mindset that the very best T20 performers have perfected in order to play on the biggest stage.
                                 </p>
                                 <Button onClick={scrollToForm} variant="gold">
                                     APPLY TO SECURE YOUR PLACE

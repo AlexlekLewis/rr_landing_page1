@@ -10,25 +10,16 @@ const Hero = () => {
     return (
         <div className="relative min-h-screen w-full flex items-center overflow-hidden bg-slate-900">
 
-            {/* Background Image Layer (Right Side) */}
+            {/* Background Image Layer */}
             <div
                 className="absolute inset-0 w-full h-full bg-cover bg-no-repeat"
                 style={{
                     backgroundImage: "url('/assets/Hero.jpeg')",
-                    backgroundPosition: "25% center"
+                    backgroundPosition: "center"
                 }}
             >
-                <div className="absolute inset-0 bg-black/40 lg:bg-transparent" /> {/* Mobile Overlay */}
+                <div className="absolute inset-0 bg-black/60" />
             </div>
-
-            {/* Angled Dark Cutout Layer (Left Side) - Reduced to ~30-40% width */}
-            <div
-                className="absolute inset-y-0 left-0 w-full lg:w-[40%] bg-slate-900 z-10 hidden lg:block shadow-2xl"
-                style={{ clipPath: "polygon(0 0, 100% 0, 85% 100%, 0% 100%)" }}
-            />
-
-            {/* Mobile Dark Gradient (Alternative to Cutout) */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-transparent lg:hidden z-10" />
 
             {/* Content Container */}
             <div className="relative z-20 container mx-auto px-6 h-full flex flex-col justify-center text-left">
