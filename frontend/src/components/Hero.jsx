@@ -15,7 +15,7 @@ const Hero = () => {
                 className="absolute inset-0 w-full h-full bg-cover bg-no-repeat"
                 style={{
                     backgroundImage: "url('/assets/Hero.jpeg')",
-                    backgroundPosition: "60% center"
+                    backgroundPosition: "25% center"
                 }}
             >
                 <div className="absolute inset-0 bg-black/40 lg:bg-transparent" /> {/* Mobile Overlay */}
