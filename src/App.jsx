@@ -6,7 +6,7 @@ import WhyElite from './components/WhyElite';
 
 import Features from './components/Features';
 import Director from './components/Director';
-import Tiers from './components/Tiers';
+import ProgramOverview from './components/ProgramOverview';
 import Coaches from './components/Coaches';
 import SuccessStories from './components/SuccessStories';
 import SelectionProcess from './components/SelectionProcess';
@@ -25,7 +25,7 @@ function App() {
 
       <Features />
       <Director />
-      <Tiers />
+      <ProgramOverview />
       <Coaches />
       <BonusOffer />
       <SuccessStories />
