@@ -16,10 +16,10 @@ const CoachProfile = ({ name, role, bio }) => (
 
 const Coaches = () => {
     const coaches = [
-        { name: "Sid Lahiri", role: "Head of Int. Player Dev", bio: "Expert in identifying high performance talent globally for the Royals franchise." },
-        { name: "Andy", role: "Senior Coach", bio: "Spins specialist with a wealth of T20 tactical knowledge." },
-        { name: "Steve Crook", role: "Director of Talent", bio: "Former pro with extensive coaching experience in the BBL and UK county circuit." },
-        { name: "Alex", role: "High Performance Manager", bio: "Ensures athletes reach their peak physical condition for elite competition." }
+        { name: "Siddhartha Lahiri", role: "Head of International Player Development", bio: "Expert in identifying high performance talent globally for the Royals franchise." },
+        { name: "Andy Crook", role: "Managing Director", bio: "Former Director of Cricket Australia with extensive global experience." },
+        { name: "Steven Crook", role: "Director of Talent", bio: "Former professional with over 330 matches, known for his power-hitting and coaching success with the Adelaide Strikers." },
+        { name: "Alex Lewis", role: "Head Coach", bio: "A highly successful academy builder with 22 years of experience in developing Victorian talent." }
     ];
 
     return (

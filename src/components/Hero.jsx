@@ -8,42 +8,51 @@ const Hero = () => {
     };
 
     return (
-        <div className="relative min-h-screen w-full flex items-center overflow-hidden bg-slate-900">
+        <div className="relative min-h-screen w-full flex items-center bg-rr-dark overflow-hidden">
 
-            {/* Background Image Layer */}
+            {/* Background Image Layer - using Vaibhav image */}
             <div
-                className="absolute inset-0 w-full h-full bg-cover bg-no-repeat"
+                className="absolute inset-0 w-full h-full bg-cover bg-no-repeat bg-center"
                 style={{
-                    backgroundImage: "url('/assets/lhuan-pretorius.jpg')",
-                    backgroundPosition: "center top"
+                    backgroundImage: "url('/assets/sooryavanchi-arms-raised.jpg')",
+                    backgroundPosition: "center 20%" // Adjust to focus on face/upper body if needed
                 }}
             >
-                <div className="absolute inset-0 bg-black/50" />
+                {/* Gradient Overlay for text readability */}
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/80 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-transparent to-transparent" />
             </div>
 
             {/* Content Container */}
-            <div className="relative z-20 container mx-auto px-6 h-full flex flex-col justify-center text-left">
-                <div className="max-w-3xl lg:max-w-4xl">
-                    <motion.h1
+            <div className="relative z-20 container mx-auto px-6 h-full flex flex-col justify-center text-left pt-20">
+                <div className="max-w-3xl">
+                    <motion.div
                         initial={{ opacity: 0, x: -50 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
-                        className="text-5xl md:text-7xl lg:text-7xl font-black text-white tracking-tight mb-8 leading-[1.1]"
                     >
-                        WANT TO STAR IN <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-ra-blue">
-                            THE T20 GAME?
-                        </span>
-                    </motion.h1>
+                        <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 mb-6 tracking-tighter leading-none">
+                            GET NOTICED!
+                        </h1>
+                        <h2 className="text-2xl md:text-4xl font-bold text-rr-pink mb-8">
+                            VAIBHAV SOORYAVANCHI <br />
+                            <span className="text-white font-light text-xl md:text-2xl">Royals Academy Star</span>
+                        </h2>
+                    </motion.div>
 
-                    <motion.p
+                    <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                        className="text-xl md:text-2xl text-gray-200 mb-10 font-light leading-relaxed max-w-2xl"
+                        className="space-y-6 text-lg md:text-xl text-slate-300 leading-relaxed font-light mb-10 max-w-2xl"
                     >
-                        Traditional methods aren't cutting it. Whether you're aiming for club success or professional pathways, we provide the elite skills and mindset to help you dominate the modern game.
-                    </motion.p>
+                        <p>
+                            Designed and managed by one of the <strong className="text-white">biggest cricket brands on the planet</strong>, the Elite program draws on decades of global T20 experience.
+                        </p>
+                        <p>
+                            We provide opportunities previously not available in Australia. The Royals know how to uncover T20 talent like nobody else.
+                        </p>
+                    </motion.div>
 
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -51,13 +60,13 @@ const Hero = () => {
                         transition={{ duration: 0.5, delay: 0.4 }}
                         className="flex flex-col sm:flex-row gap-4"
                     >
-                        <Button onClick={scrollToForm} variant="primary" className="text-base px-8 py-3">
-                            START JOURNEY
+                        <Button onClick={scrollToForm} variant="gold" className="text-base px-8 py-4 text-lg">
+                            APPLY TO SECURE YOUR PLACE
                         </Button>
                         <Button
                             onClick={() => document.getElementById('program')?.scrollIntoView({ behavior: 'smooth' })}
                             variant="secondary"
-                            className="text-base px-8 py-3"
+                            className="text-base px-8 py-4 text-lg"
                         >
                             LEARN MORE
                         </Button>
@@ -65,7 +74,7 @@ const Hero = () => {
                 </div>
             </div>
 
-        </div >
+        </div>
     );
 };
 

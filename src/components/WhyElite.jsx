@@ -17,15 +17,14 @@ const WhyElite = () => {
                         viewport={{ once: true }}
                     >
                         <h2 className="text-4xl md:text-5xl font-black mb-6 leading-tight">
-                            THE WORLD'S BEST <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">T20 PLAYERS</span>
+                            THE ROYALS <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">WAY</span>
                         </h2>
                         <div className="h-1.5 w-24 bg-gradient-to-r from-rr-pink to-rr-blue mb-8" />
                         <p className="text-lg text-slate-600 leading-relaxed mb-6">
-                            Have become global stars making millions a year. Those who are getting noticed and selected at representative levels and at the highest grades in the club system, are those that have a T20 skill set that they can adapt to situations within all formats of the game.
+                            We believe cricket is a vehicle to shape confident, curious, resilient people. We back talent early and teach boldly. Our approach is holistic, valuing courage over comfort and curiosity over ego.
                         </p>
                         <p className="text-xl font-medium text-slate-800 mb-8">
-                            So, if the game has already changed, are you prepared to do what it takes to put your name in the picture?
+                            This is the Royals Way: discover, develop, and elevate—with purpose, integrity, and relentless optimism.
                         </p>
                         <Button onClick={scrollToForm} variant="primary">
                             APPLY NOW

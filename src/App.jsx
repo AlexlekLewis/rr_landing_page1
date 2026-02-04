@@ -3,7 +3,7 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Intro from './components/Intro';
 import WhyElite from './components/WhyElite';
-import Vaibhav from './components/Vaibhav';
+
 import Features from './components/Features';
 import Director from './components/Director';
 import Tiers from './components/Tiers';
@@ -22,7 +22,7 @@ function App() {
       <Hero />
       <Intro />
       <WhyElite />
-      <Vaibhav />
+
       <Features />
       <Director />
       <Tiers />

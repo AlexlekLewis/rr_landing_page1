@@ -41,13 +41,13 @@ const Intro = () => {
 
                     <div className="mt-12 space-y-6 text-lg font-light text-gray-300 md:text-xl max-w-3xl mx-auto leading-relaxed">
                         <p>
-                            The World’s best T20 players have become global stars making millions a year, and those who are getting noticed and selected at representative levels and at the highest grades in the club system, are those that have a T20 skill set that they can adapt to situations within all formats of the game.
+                            We are delighted to invite you to be part of an exciting new opportunity for aspiring cricketers in Australia, the <strong className="text-white">Rajasthan Royals Academy - Elite Program</strong>, beginning in Melbourne in early April 2026.
                         </p>
                         <p>
-                            So, if the game has already changed, are you prepared to do what it takes to put your name in the picture to be scouted and selected at higher levels?
+                            You have been identified by our scouting network as an emerging young talent and this unique opportunity with one of the world’s biggest and most successful cricket franchises can help take your game to the next level.
                         </p>
-                        <p className="font-bold text-white">
-                            Here’s your chance. Apply to secure your place NOW.
+                        <p>
+                            For the first time, cricketers within Australia will have direct access to developing their T20 skills from within the Rajasthan Royals global organisation and their player development system, helping put you on a pathway to success.
                         </p>
                     </div>
                 </motion.div>
