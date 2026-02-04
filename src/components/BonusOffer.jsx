@@ -14,7 +14,7 @@ const BonusOffer = () => {
                 <p className="text-lg md:text-xl font-medium max-w-3xl mx-auto mb-8 leading-relaxed">
                     Siddhartha Lahiri is coming to Melbourne! Apply before <strong>February XX</strong> for a chance to attend an exclusive assessment session with Siddartha and the coaching team at Cutting Edge Cricket, Bundoora.
                 </p>
-                <Button onClick={scrollToForm} variant="secondary" className="border-none shadow-xl bg-white text-ra-blue hover:bg-white/90">
+                <Button onClick={scrollToForm} variant="white">
                     DON'T MISS OUT - APPLY NOW
                 </Button>
             </div>
