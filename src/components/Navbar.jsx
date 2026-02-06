@@ -18,10 +18,10 @@ const Navbar = () => {
     };
 
     return (
-        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-md shadow-md py-4' : 'bg-transparent py-6'}`}>
+        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-md shadow-md py-6' : 'bg-transparent py-8'}`}>
             <div className="container mx-auto px-6 flex justify-between items-center">
                 <div className="flex items-center">
-                    <img src="/assets/rra-australia-logo.png" alt="Rajasthan Royals Academy Australia" className="h-12 md:h-16 w-auto object-contain" />
+                    <img src="/assets/rra-australia-logo.png" alt="Rajasthan Royals Academy Australia" className="h-16 md:h-20 w-auto object-contain" />
                 </div>
                 <div className="hidden md:flex items-center space-x-8">
                     <a href="#program" className={`text-sm font-semibold hover:text-pink-600 transition-colors ${scrolled ? 'text-gray-800' : 'text-white'}`}>THE PROGRAM</a>
