@@ -3,27 +3,35 @@
 @theme {
   /* Fonts */
   --font-sans: 'Montserrat', sans-serif;
-  --font-display: 'Exo 2', sans-serif;
+  --font-display: 'Montserrat', sans-serif;
 
   /* Brand Colors */
-  --color-rr-pink: #E50695;
+  --color-rr-pink: #E11F8F;
   --color-rr-blue: #1226AA;
   --color-ra-blue: #0075C9;
-  --color-rr-dark: #111921;
+  --color-rr-dark: #323E48;
+  /* Updated to Dark Charcoal per guidelines */
   --color-rf-pink: #E96BB0;
   --color-rr-grey: #323E48;
-  
+
   /* Retain original functional colors mapped to new brand colors where appropriate */
-  --color-royal-blue: #0075C9; /* Mapped to RA Blue */
-  --color-royal-gold: #FFD700; /* Keeping mostly for subtle accents if needed, but deprioritized */
+  --color-royal-blue: #0075C9;
+  /* Mapped to RA Blue */
+  --color-royal-gold: #FFD700;
+  /* Keeping mostly for subtle accents if needed, but deprioritized */
 }
 
 @layer base {
   body {
     @apply bg-white text-rr-dark font-sans;
   }
-  
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-display uppercase tracking-wide;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display uppercase tracking-wide font-black;
   }
 }
