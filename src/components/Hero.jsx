@@ -37,18 +37,18 @@ const Hero = () => {
                                 className="inline-block text-xs md:text-sm font-bold tracking-[0.2em] text-white py-2 px-4 rounded-full border border-white/30 backdrop-blur-sm"
                                 style={{ background: 'linear-gradient(135deg, rgba(18,38,170,0.6) 0%, rgba(225,31,143,0.6) 100%)' }}
                             >
-                                RAJASTHAN ROYALS ACADEMY AUSTRALIA — ELITE PROGRAM
+                                RAJASTHAN ROYALS ACADEMY MELBOURNE — ELITE PROGRAM
                             </span>
                         </div>
-                        <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 mb-6 tracking-tighter leading-none">
-                            GET NOTICED!
+                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 mb-6 tracking-tighter leading-none">
+                            READY TO OWN<br />THE T20 GAME?
                         </h1>
-                        <h2 className="text-2xl md:text-4xl font-bold text-rr-pink mb-4">
-                            VAIBHAV SOORYAVANCHI <br />
-                            <span className="text-white font-light text-xl md:text-2xl">Royals Academy Star</span>
+                        <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-white/90 mb-4 leading-snug normal-case tracking-normal">
+                            Modern cricket demands more than tradition.<br className="hidden md:block" />
+                            <span className="text-rr-pink">We develop explosive skills, sharp thinking and elite habits.</span>
                         </h2>
-                        <p className="text-sm md:text-base text-slate-400 font-medium tracking-wide mb-8">
-                            Melbourne's first IPL-affiliated cricket development pathway — starting April 2026
+                        <p className="text-sm md:text-base text-slate-400 font-bold tracking-[0.15em] uppercase mb-8">
+                            The future of T20 development starts here.
                         </p>
                     </motion.div>
 
@@ -84,6 +84,12 @@ const Hero = () => {
                         </Button>
                     </motion.div>
                 </div>
+            </div>
+
+            {/* Image caption */}
+            <div className="absolute bottom-6 right-6 z-20 text-right hidden md:block">
+                <p className="text-xs text-white/40 font-medium tracking-wider">VAIBHAV SOORYAVANSHI</p>
+                <p className="text-[10px] text-white/25 tracking-wider">Royals Academy Star</p>
             </div>
 
         </div>

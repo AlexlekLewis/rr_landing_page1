@@ -1,43 +1,52 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Plus, Minus } from 'lucide-react';
 
-const SectionItem = ({ title, content }) => (
-    <div className="mb-6 last:mb-0">
-        <h4 className="text-lg font-bold text-rr-dark mb-2">{title}</h4>
-        <p className="text-slate-600 leading-relaxed text-sm">{content}</p>
-    </div>
-);
+const AccordionSection = ({ title, items, color = "border-rr-pink", defaultOpen = false }) => {
+    const [isOpen, setIsOpen] = useState(defaultOpen);
 
-const ProgramSection = ({ title, items, color = "border-rr-pink" }) => (
-    <div className={`bg-white p-8 rounded-2xl shadow-lg border-t-8 ${color} hover:shadow-xl transition-shadow duration-300 h-full`}>
-        <h3 className="text-2xl font-black text-rr-dark mb-6 border-b border-slate-100 pb-4">{title}</h3>
-        <div>
-            {items.map((item, index) => (
-                <SectionItem key={index} title={item.title} content={item.content} />
-            ))}
+    return (
+        <div className={`bg-white rounded-2xl shadow-lg border-l-4 ${color} hover:shadow-xl transition-shadow duration-300 overflow-hidden`}>
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="w-full p-6 md:p-8 flex justify-between items-center text-left focus:outline-none group"
+            >
+                <h3 className="text-xl md:text-2xl font-black text-rr-dark group-hover:text-rr-pink transition-colors">{title}</h3>
+                {isOpen
+                    ? <Minus className="w-6 h-6 text-rr-pink flex-shrink-0" />
+                    : <Plus className="w-6 h-6 text-slate-400 flex-shrink-0" />
+                }
+            </button>
+            <AnimatePresence initial={defaultOpen}>
+                {isOpen && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                    >
+                        <div className="px-6 md:px-8 pb-6 md:pb-8 space-y-5 border-t border-slate-100 pt-5">
+                            {items.map((item, index) => (
+                                <div key={index}>
+                                    <h4 className="text-base font-bold text-rr-dark mb-1">{item.title}</h4>
+                                    <p className="text-slate-600 leading-relaxed text-sm">{item.content}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
-    </div>
-);
+    );
+};
 
 const ProgramOverview = () => {
     const sections = [
         {
-            title: "PROGRAM LENGTH",
-            color: "border-rr-blue",
-            items: [
-                {
-                    title: "Intensive Period",
-                    content: "The Elite program is built for a specific purpose and as such is staged in a block of approximately 12-weeks. This high intensity program is a perfect launching pad into the 2026/27 club pre-season and representative trial periods."
-                },
-                {
-                    title: "Beyond the Elite Program",
-                    content: "The performance of players in the Elite program will be continually monitored and assessed during and after their time in the program. Depending on a player's development level and trajectory, the Rajasthan Royals Academy may make further offers to additional future programs."
-                }
-            ]
-        },
-        {
             title: "COACHING",
             color: "border-rr-pink",
+            defaultOpen: true,
             items: [
                 { title: "2 on 1", content: "Players will receive 2 on 1 coaching during particular training sessions to provide for both expert coaching and peer to peer learning, critical for the development of talented players." },
                 { title: "Squad Training", content: "Each player will be allocated to a squad that is at a similar age and similar ability based on the assessment of the Academy selection team, and this squad will train together on a regular basis." },
@@ -46,8 +55,38 @@ const ProgramOverview = () => {
             ]
         },
         {
+            title: "MATCH PLAY / SIMULATION",
+            color: "border-rr-pink",
+            defaultOpen: true,
+            items: [
+                { title: "Matches and Match Simulation", content: "Players from the Elite Program may be invited to outdoor internal matches and match simulations, staged from time to time through the 2nd half of 2026." },
+                { title: "Scenario Simulation", content: "Indoor scenario sessions will be held at Cutting Edge Cricket Centre to provide for assisting players in recognising and navigating their way through specific match situations." },
+                { title: "Power Hitting Sessions", content: "The ability to switch into a power hitting mode is a huge part of the modern game and our expert coaches have built a program heavy on building this vital skillset." }
+            ]
+        },
+        {
+            title: "ADDITIONAL OPPORTUNITIES",
+            color: "border-rr-blue",
+            defaultOpen: true,
+            items: [
+                { title: "Rajasthan Royals High Performance Centre", content: "Each calendar year, talented cricketers from the Elite program may be invited to the Rajasthan Royals High Performance Centre in Jaipur, India." },
+                { title: "Invitation to Trial with Royals Franchises", content: "Elite players who show exceptional development and growth may be offered opportunities to trial with Rajasthan Royals, Paarl Royals or Barbados Royals." },
+                { title: "Visits by Royals Coaches and Scouts", content: "From time to time, Royals coaches, scouts and franchise players will visit the Elite program to facilitate opportunities for members." }
+            ]
+        },
+        {
+            title: "PROGRAM LENGTH",
+            color: "border-rr-blue",
+            defaultOpen: false,
+            items: [
+                { title: "Intensive Period", content: "The Elite program is built for a specific purpose and as such is staged in a block of approximately 12-weeks. This high intensity program is a perfect launching pad into the 2026/27 club pre-season and representative trial periods." },
+                { title: "Beyond the Elite Program", content: "The performance of players in the Elite program will be continually monitored and assessed during and after their time in the program. Depending on a player's development level and trajectory, the Rajasthan Royals Academy may make further offers to additional future programs." }
+            ]
+        },
+        {
             title: "ADDITIONAL SERVICES",
             color: "border-ra-blue",
+            defaultOpen: false,
             items: [
                 { title: "Performance Analysis", content: "Primarily the Rajasthan Royals Academy Management System and Full Track, as well as other tech programs, will form the basis of our monitoring tools." },
                 { title: "Career Mentorship", content: "Critical to your development, our expert team will work with you on mapping out cricket career and development opportunities based on your skills and performance." },
@@ -56,29 +95,12 @@ const ProgramOverview = () => {
             ]
         },
         {
-            title: "MATCH PLAY / SIMULATION",
-            color: "border-rr-pink",
-            items: [
-                { title: "Matches and Match Simulation", content: "Players from the Elite Program may be invited to outdoor internal matches and match simulations, staged from time to time through the 2nd half of 2026." },
-                { title: "Scenario Simulation", content: "Indoor scenario sessions will be held at Cutting Edge Cricket Centre to provide for assisting players in recognising and navigating their way through specific match situations." },
-                { title: "Power Hitting Sessions", content: "The ability to switch into a power hitting mode is a huge part of the modern game and our expert coaches have built a program heavy on building this vital skillset." }
-            ]
-        },
-        {
             title: "APPAREL",
             color: "border-rr-blue",
+            defaultOpen: false,
             items: [
                 { title: "Playing Apparel", content: "Players will receive an apparel pack, consisting of a hat, a training shirt and training shorts." },
                 { title: "Additional Apparel", content: "Additional apparel items can be purchased by Academy players, including jumper, track pants, jacket. Only those competing in matches are permitted to purchase playing apparel." }
-            ]
-        },
-        {
-            title: "ADDITIONAL OPPORTUNITIES",
-            color: "border-gold", // Check if border-gold exists, otherwise fallback to custom style or yellow
-            items: [
-                { title: "Rajasthan Royals High Performance Centre", content: "Each calendar year, talented cricketers from the Elite program may be invited to the Rajasthan Royals High Performance Centre in Jaipur, India." },
-                { title: "Invitation to Trial with Royals Franchises", content: "Elite players who show exceptional development and growth may be offered opportunities to trial with Rajasthan Royals, Paarl Royals or Barbados Royals." },
-                { title: "Visits by Royals Coaches and Scouts", content: "From time to time, Royals coaches, scouts and franchise players will visit the Elite program to facilitate opportunities for members." }
             ]
         }
     ];
@@ -101,16 +123,16 @@ const ProgramOverview = () => {
                     </p>
                 </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="max-w-4xl mx-auto space-y-4">
                     {sections.map((section, index) => (
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ delay: index * 0.1, duration: 0.5 }}
+                            transition={{ delay: index * 0.08, duration: 0.5 }}
                         >
-                            <ProgramSection {...section} />
+                            <AccordionSection {...section} />
                         </motion.div>
                     ))}
                 </div>

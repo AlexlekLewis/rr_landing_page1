@@ -41,7 +41,7 @@ const Intro = () => {
 
                     <div className="mt-12 space-y-6 text-lg font-light text-gray-300 md:text-xl max-w-3xl mx-auto leading-relaxed">
                         <p>
-                            We are delighted to invite you to be part of an exciting new opportunity for aspiring cricketers in Australia, the <strong className="text-white">Rajasthan Royals Academy - Elite Program</strong>, beginning in Melbourne in early April 2026.
+                            We are delighted to invite you to be part of an exciting new opportunity for aspiring cricketers in Melbourne, the <strong className="text-white">Rajasthan Royals Academy - Elite Program</strong>, beginning in early April 2026.
                         </p>
                         <p>
                             You have been identified by our scouting network as an emerging young talent and this unique opportunity with one of the world’s biggest and most successful cricket franchises can help take your game to the next level.
@@ -49,6 +49,17 @@ const Intro = () => {
                         <p>
                             For the first time, cricketers within Australia will have direct access to developing their T20 skills from within the Rajasthan Royals global organisation and their player development system, helping put you on a pathway to success.
                         </p>
+                    </div>
+
+                    {/* Franchise Strip */}
+                    <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-10 text-sm text-slate-500 font-medium tracking-wide">
+                        <span className="text-slate-400 uppercase text-xs tracking-[0.2em]">Part of the Royals Group</span>
+                        <span className="hidden sm:inline text-slate-600">|</span>
+                        <span>Rajasthan Royals <span className="text-rr-pink font-bold">IPL</span></span>
+                        <span className="text-slate-600">·</span>
+                        <span>Paarl Royals <span className="text-rr-pink font-bold">SA20</span></span>
+                        <span className="text-slate-600">·</span>
+                        <span>Barbados Royals <span className="text-rr-pink font-bold">CPL</span></span>
                     </div>
                 </motion.div>
 

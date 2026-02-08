@@ -21,16 +21,15 @@ function App() {
       <Navbar />
       <Hero />
       <Intro />
+      <SuccessStories />
       <WhyElite />
-
       <Features />
       <Director />
       <ProgramOverview />
       <Coaches />
-      <BonusOffer />
-      <SuccessStories />
       <SelectionProcess />
       <FAQ />
+      <BonusOffer />
       <Apply />
       <Footer />
     </div>
