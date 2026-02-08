@@ -31,13 +31,25 @@ const Hero = () => {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                     >
+                        {/* Program badge */}
+                        <div className="inline-block mb-6">
+                            <span
+                                className="inline-block text-xs md:text-sm font-bold tracking-[0.2em] text-white py-2 px-4 rounded-full border border-white/30 backdrop-blur-sm"
+                                style={{ background: 'linear-gradient(135deg, rgba(18,38,170,0.6) 0%, rgba(225,31,143,0.6) 100%)' }}
+                            >
+                                RAJASTHAN ROYALS ACADEMY AUSTRALIA — ELITE PROGRAM
+                            </span>
+                        </div>
                         <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 mb-6 tracking-tighter leading-none">
                             GET NOTICED!
                         </h1>
-                        <h2 className="text-2xl md:text-4xl font-bold text-rr-pink mb-8">
+                        <h2 className="text-2xl md:text-4xl font-bold text-rr-pink mb-4">
                             VAIBHAV SOORYAVANCHI <br />
                             <span className="text-white font-light text-xl md:text-2xl">Royals Academy Star</span>
                         </h2>
+                        <p className="text-sm md:text-base text-slate-400 font-medium tracking-wide mb-8">
+                            Melbourne's first IPL-affiliated cricket development pathway — starting April 2026
+                        </p>
                     </motion.div>
 
                     <motion.div

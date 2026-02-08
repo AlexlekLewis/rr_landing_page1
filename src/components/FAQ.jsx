@@ -33,22 +33,46 @@ const FAQItem = ({ question, answer }) => {
 };
 
 const FAQ = () => {
-    const aqs = [
-        { q: "What age group is eligible?", a: "Male and female cricketers from age 10/11 through to senior cricketers in their 20’s and 30’s." },
-        { q: "Where is the Academy based?", a: "Cutting Edge Indoor Cricket Centre in Bundoora, with other facilities used periodically." },
+    const programFaqs = [
+        { q: "What age group is eligible?", a: "Male and female cricketers from age 10/11 through to senior cricketers in their 20's and 30's." },
+        { q: "When does the program start and how long does it run?", a: "12 weeks starting early April 2026, with two sessions per week — one weeknight evening and one weekend session." },
+        { q: "Where are sessions held?", a: "Primarily at Cutting Edge Cricket in Bundoora, Melbourne, with other facilities used periodically." },
+        { q: "Are girls eligible?", a: "Absolutely. Talent is talent — the Royals back emerging cricketers regardless of gender. There is a specific focus on preparing U15–U18 girls for WBBL, Women's IPL, state, and premier opportunities." },
+        { q: "What's included in the program?", a: "Individual Development Plans, video analysis, sports psychology, nutrition, strength & conditioning coaching, official Royals apparel (hat, training shirt, shorts), and performance data reviewed by Royals Group coaches globally." },
+        { q: "Is it only T20 cricket?", a: "70% T20 tailored, 30% traditional. The goal is to apply elite skills to all formats." },
+        { q: "How many places are available?", a: "The program is capped at approximately 98–120 players per intake." },
+    ];
+
+    const selectionFaqs = [
+        { q: "Is entry guaranteed?", a: "No. Places are limited and based on merit, skills, and potential." },
+        { q: "What is the selection process?", a: "Invitation → Register Interest → Selection Team Reviews → Possible Trials. Even if not selected in the first intake, your details stay on file — the Royals are building something long-term." },
+        { q: "What pathway opportunities exist?", a: "Performance-based opportunities include: potential match play against external opposition, invitation to the Royals High Performance Centre in Jaipur, trial opportunities with Rajasthan Royals (IPL), Paarl Royals (SA20), or Barbados Royals (CPL), and visits from franchise coaches and players." },
         { q: "Are trials with IPL franchises guaranteed?", a: "No. Trial opportunities are for players demonstrating exceptional skill. However, ALL members are tracked by Royals coaches." },
         { q: "Will I go to the High Performance Centre in Jaipur?", a: "Select players will be invited to attend camps at the High Performance facility in Jaipur, India." },
-        { q: "Is entry guaranteed?", a: "No. Places are limited and based on merit, skills, and potential." },
-        { q: "Is it only T20 cricket?", a: "70% T20 tailored, 30% traditional. The goal is to apply elite skills to all formats." },
-        { q: "What if I am at the young end of the age groups?", a: "Younger players will be monitored as future talent. Trial opportunities are likely for older age groups, but younger players benefit from early exposure to Royals systems and data tracking." }
+        { q: "What if I am at the young end of the age groups?", a: "Younger players will be monitored as future talent. Trial opportunities are likely for older age groups, but younger players benefit from early exposure to Royals systems and data tracking." },
+        { q: "What happens if I'm not selected in the first intake?", a: "Your details stay on file. The Royals are building a long-term pathway in Australia — this is just the first intake." },
     ];
 
     return (
         <section className="py-24 bg-white" id="faq">
             <div className="container mx-auto px-6 max-w-4xl">
-                <h2 className="text-4xl font-black text-center text-rr-dark mb-12">COMMON QUESTIONS</h2>
-                <div className="bg-slate-50 rounded-2xl p-8 border border-slate-100 shadow-sm">
-                    {aqs.map((item, i) => <FAQItem key={i} question={item.q} answer={item.a} />)}
+                <h2 className="text-4xl font-black text-center text-rr-dark mb-4">COMMON QUESTIONS</h2>
+                <p className="text-center text-slate-500 mb-12">Everything you need to know about the Elite Program</p>
+
+                {/* Program Details */}
+                <div className="mb-8">
+                    <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-rr-pink mb-4 px-2">Program Details</h3>
+                    <div className="bg-slate-50 rounded-2xl p-6 md:p-8 border border-slate-100 shadow-sm">
+                        {programFaqs.map((item, i) => <FAQItem key={`p-${i}`} question={item.q} answer={item.a} />)}
+                    </div>
+                </div>
+
+                {/* Selection & Pathways */}
+                <div>
+                    <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-rr-pink mb-4 px-2">Selection & Pathways</h3>
+                    <div className="bg-slate-50 rounded-2xl p-6 md:p-8 border border-slate-100 shadow-sm">
+                        {selectionFaqs.map((item, i) => <FAQItem key={`s-${i}`} question={item.q} answer={item.a} />)}
+                    </div>
                 </div>
             </div>
         </section>

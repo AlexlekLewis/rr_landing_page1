@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X } from 'lucide-react';
 import Button from './Button';
 
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -15,24 +17,111 @@ const Navbar = () => {
 
     const scrollToForm = () => {
         document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' });
+        setMobileMenuOpen(false);
     };
 
+    const handleNavClick = (id) => {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+        setMobileMenuOpen(false);
+    };
+
+    const navLinks = [
+        { label: 'THE PROGRAM', id: 'program' },
+        { label: 'COACHES', id: 'coaches' },
+        { label: 'FAQ', id: 'faq' },
+    ];
+
     return (
-        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-md shadow-md py-6' : 'bg-transparent py-8'}`}>
-            <div className="container mx-auto px-6 flex justify-between items-center">
-                <div className="flex items-center">
-                    <img src="/assets/rra-australia-logo.png" alt="Rajasthan Royals Academy Australia" className="h-16 md:h-20 w-auto object-contain" />
+        <>
+            {/* Pink accent bar */}
+            <div className="fixed top-0 left-0 right-0 z-[60] h-1" style={{ background: '#E11F8F' }} />
+
+            <nav
+                className={`fixed top-1 left-0 right-0 z-50 transition-all duration-500 ${scrolled
+                        ? 'py-4 shadow-lg'
+                        : 'bg-transparent py-6'
+                    }`}
+                style={scrolled ? {
+                    background: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
+                } : {}}
+            >
+                <div className="container mx-auto px-6 flex justify-between items-center">
+                    <div className="flex items-center">
+                        <img
+                            src="/assets/rra-australia-logo.png"
+                            alt="Rajasthan Royals Academy Australia"
+                            className="h-12 md:h-16 w-auto object-contain"
+                        />
+                    </div>
+
+                    {/* Desktop nav */}
+                    <div className="hidden md:flex items-center space-x-8">
+                        {navLinks.map((link) => (
+                            <a
+                                key={link.id}
+                                href={`#${link.id}`}
+                                onClick={(e) => { e.preventDefault(); handleNavClick(link.id); }}
+                                className="text-sm font-semibold text-white hover:text-pink-300 transition-colors"
+                            >
+                                {link.label}
+                            </a>
+                        ))}
+                        <Button onClick={scrollToForm} variant="primary" className="text-sm px-6 py-2">
+                            APPLY NOW
+                        </Button>
+                    </div>
+
+                    {/* Mobile hamburger */}
+                    <button
+                        className="md:hidden text-white p-2 focus:outline-none"
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        aria-label="Toggle menu"
+                    >
+                        {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+                    </button>
                 </div>
-                <div className="hidden md:flex items-center space-x-8">
-                    <a href="#program" className={`text-sm font-semibold hover:text-pink-600 transition-colors ${scrolled ? 'text-gray-800' : 'text-white'}`}>THE PROGRAM</a>
-                    <a href="#coaches" className={`text-sm font-semibold hover:text-pink-600 transition-colors ${scrolled ? 'text-gray-800' : 'text-white'}`}>COACHES</a>
-                    <a href="#faq" className={`text-sm font-semibold hover:text-pink-600 transition-colors ${scrolled ? 'text-gray-800' : 'text-white'}`}>FAQ</a>
-                    <Button onClick={scrollToForm} variant={'primary'} className="text-sm px-6 py-2">
-                        APPLY NOW
-                    </Button>
-                </div>
-            </div>
-        </nav>
+            </nav>
+
+            {/* Mobile menu overlay */}
+            <AnimatePresence>
+                {mobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, x: '100%' }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: '100%' }}
+                        transition={{ type: 'tween', duration: 0.3 }}
+                        className="fixed inset-0 z-[55] pt-20"
+                        style={{
+                            background: 'linear-gradient(180deg, #001D48 0%, #1226AA 50%, #E11F8F 100%)',
+                        }}
+                    >
+                        <div className="flex flex-col items-center space-y-8 pt-12">
+                            {navLinks.map((link) => (
+                                <a
+                                    key={link.id}
+                                    href={`#${link.id}`}
+                                    onClick={(e) => { e.preventDefault(); handleNavClick(link.id); }}
+                                    className="text-2xl font-bold text-white hover:text-pink-300 transition-colors tracking-wider"
+                                >
+                                    {link.label}
+                                </a>
+                            ))}
+                            <Button onClick={scrollToForm} variant="primary" className="text-lg px-10 py-4 mt-4">
+                                APPLY NOW
+                            </Button>
+                            <a
+                                href="https://www.rajasthanroyals.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-sm text-white/60 hover:text-white transition-colors mt-8"
+                            >
+                                rajasthanroyals.com
+                            </a>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </>
     );
 };
 
