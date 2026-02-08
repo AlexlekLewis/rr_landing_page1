@@ -38,8 +38,8 @@ const Navbar = () => {
 
             <nav
                 className={`fixed top-1 left-0 right-0 z-50 transition-all duration-500 ${scrolled
-                        ? 'py-4 shadow-lg'
-                        : 'bg-transparent py-6'
+                    ? 'py-4 shadow-lg'
+                    : 'bg-transparent py-6'
                     }`}
                 style={scrolled ? {
                     background: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
@@ -48,8 +48,8 @@ const Navbar = () => {
                 <div className="container mx-auto px-6 flex justify-between items-center">
                     <div className="flex items-center">
                         <img
-                            src="/assets/rra-australia-logo.png"
-                            alt="Rajasthan Royals Academy Australia"
+                            src="/assets/rra-melbourne-logo.png"
+                            alt="Rajasthan Royals Academy Melbourne"
                             className="h-12 md:h-16 w-auto object-contain"
                         />
                     </div>

@@ -7,13 +7,13 @@ const Footer = () => {
                 <div className="flex flex-col md:flex-row justify-between items-center gap-8">
                     <div className="flex items-center gap-4">
                         <img
-                            src="/assets/rra-australia-logo.png"
-                            alt="Rajasthan Royals Academy Australia"
+                            src="/assets/rra-melbourne-logo.png"
+                            alt="Rajasthan Royals Academy Melbourne"
                             className="h-12 w-auto object-contain"
                         />
                         <div>
                             <h4 className="text-white font-bold text-lg">ROYALS ACADEMY</h4>
-                            <p className="text-sm">Australia Elite Program</p>
+                            <p className="text-sm">Melbourne Elite Program</p>
                         </div>
                     </div>
 
@@ -31,7 +31,7 @@ const Footer = () => {
                             {' '}global cricket network
                         </p>
                         <p className="text-xs text-slate-500">
-                            &copy; {new Date().getFullYear()} Rajasthan Royals Academy Australia. All rights reserved.
+                            &copy; {new Date().getFullYear()} Rajasthan Royals Academy Melbourne. All rights reserved.
                         </p>
                     </div>
                 </div>

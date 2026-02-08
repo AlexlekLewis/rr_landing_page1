@@ -34,7 +34,7 @@ const Director = () => {
 
                             <div>
                                 <h4 className="text-xl font-bold text-white">STEVEN CROOK</h4>
-                                <p className="text-rr-pink font-bold text-sm tracking-wider mb-2">Director of Talent, Rajasthan Royals Academy Australia</p>
+                                <p className="text-rr-pink font-bold text-sm tracking-wider mb-2">Director of Talent, Rajasthan Royals Academy Melbourne</p>
                                 <p className="text-slate-400 text-xs">2x Vitality Blast champion with Northamptonshire Steelbacks. <br />Sheffield Shield winning Assistant Coach. BBL Assistant Coach.</p>
                             </div>
                         </div>

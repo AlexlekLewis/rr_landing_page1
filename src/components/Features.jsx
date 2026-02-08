@@ -51,7 +51,7 @@ const Features = () => {
                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <h2 className="text-4xl md:text-5xl font-black text-rr-dark mb-4">CRITICAL COMPONENTS</h2>
                     <p className="text-lg text-slate-600">
-                        With T20 cricket at the heart of the Rajasthan Royals Australia Elite Program, expect an education in the formats that matter.
+                        With T20 cricket at the heart of the Rajasthan Royals Melbourne Elite Program, expect an education in the formats that matter.
                     </p>
                 </div>
 
