@@ -25,12 +25,12 @@ const players = [
     {
         name: "VAIBHAV SOORYAVANSHI",
         label: "Youngest IPL Centurion",
-        image: "/assets/sooryavanchi-arms-raised.jpg",
+        image: "/assets/vaibhav-debut-six.jpg",
     },
     {
         name: "RIYAN PARAG",
         label: "Royals Young Gun",
-        image: "/assets/lahiri-pirag.jpg",
+        image: "/assets/riyan-parag-batting.jpg",
     },
 ];
 

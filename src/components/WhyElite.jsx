@@ -39,14 +39,11 @@ const WhyElite = () => {
                     >
                         <div className="aspect-[4/5] rounded-2xl overflow-hidden relative shadow-2xl">
                             <img
-                                src="/assets/jaiswal-celebrating.webp"
-                                alt="Yashasvi Jaiswal Celebrating"
+                                src="/assets/riyan-parag-royals.png"
+                                alt="Riyan Parag - Rajasthan Royals"
                                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                            <div className="absolute bottom-6 left-6 font-bold text-white text-xl">
-                                ELITE MINDSET
-                            </div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                         </div>
                     </motion.div>
                 </div>
