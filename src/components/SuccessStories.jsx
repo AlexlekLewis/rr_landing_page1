@@ -5,7 +5,7 @@ const players = [
     {
         name: "YASHASVI JAISWAL",
         label: "Global T20 Superstar",
-        image: "/assets/jaiswal-100.webp",
+        image: "/assets/jaiswal-100.jpg",
     },
     {
         name: "KWENA MAPHAKA",

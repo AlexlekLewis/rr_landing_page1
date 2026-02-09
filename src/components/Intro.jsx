@@ -32,12 +32,9 @@ const Intro = () => {
                     viewport={{ once: true }}
                     className="max-w-4xl mx-auto text-center"
                 >
-                    <blockquote className="text-2xl md:text-4xl font-serif italic leading-relaxed text-gray-300">
-                        "You’ve heard from Sid. A man at the cutting edge. T20 has already changed the game."
-                    </blockquote>
-                    <cite className="block mt-8 text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-ra-blue not-italic">
-                        — Siddhartha Lahiri, Royals Group Head of International Player Development
-                    </cite>
+                    <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-ra-blue">Invitation to Apply</span>
+                    </h2>
 
                     <div className="mt-12 space-y-6 text-lg font-light text-gray-300 md:text-xl max-w-3xl mx-auto leading-relaxed">
                         <p>
@@ -52,14 +49,61 @@ const Intro = () => {
                     </div>
 
                     {/* Franchise Strip */}
-                    <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-10 text-sm text-slate-500 font-medium tracking-wide">
-                        <span className="text-slate-400 uppercase text-xs tracking-[0.2em]">Part of the Royals Group</span>
-                        <span className="hidden sm:inline text-slate-600">|</span>
-                        <span>Rajasthan Royals <span className="text-rr-pink font-bold">IPL</span></span>
-                        <span className="text-slate-600">·</span>
-                        <span>Paarl Royals <span className="text-rr-pink font-bold">SA20</span></span>
-                        <span className="text-slate-600">·</span>
-                        <span>Barbados Royals <span className="text-rr-pink font-bold">CPL</span></span>
+                    <div className="mt-14">
+                        <p className="text-slate-400 uppercase text-xs tracking-[0.25em] font-medium mb-6">Part of the Royals Group</p>
+                        <div className="flex flex-wrap items-center justify-center gap-5">
+                            {/* Rajasthan Royals */}
+                            <motion.div
+                                whileHover={{ scale: 1.05 }}
+                                transition={{ type: 'spring', stiffness: 300 }}
+                                className="flex items-center gap-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl px-5 py-3 hover:border-rr-pink/40 transition-colors duration-300"
+                            >
+                                <img src="/assets/rajasthan-royals-logo.png" alt="Rajasthan Royals" className="w-10 h-10 rounded-lg object-cover" />
+                                <div className="text-left">
+                                    <span className="text-sm font-semibold text-white block leading-tight">Rajasthan Royals</span>
+                                    <span className="text-xs font-bold text-rr-pink tracking-wider">IPL</span>
+                                </div>
+                            </motion.div>
+
+                            {/* Paarl Royals */}
+                            <motion.div
+                                whileHover={{ scale: 1.05 }}
+                                transition={{ type: 'spring', stiffness: 300 }}
+                                className="flex items-center gap-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl px-5 py-3 hover:border-rr-pink/40 transition-colors duration-300"
+                            >
+                                <img src="/assets/paarl-royals-logo.png" alt="Paarl Royals" className="w-10 h-10 rounded-lg object-cover" />
+                                <div className="text-left">
+                                    <span className="text-sm font-semibold text-white block leading-tight">Paarl Royals</span>
+                                    <span className="text-xs font-bold text-rr-pink tracking-wider">SA20</span>
+                                </div>
+                            </motion.div>
+
+                            {/* Barbados Royals */}
+                            <motion.div
+                                whileHover={{ scale: 1.05 }}
+                                transition={{ type: 'spring', stiffness: 300 }}
+                                className="flex items-center gap-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl px-5 py-3 hover:border-rr-pink/40 transition-colors duration-300"
+                            >
+                                <img src="/assets/barbados-royals-logo.png" alt="Barbados Royals" className="w-10 h-10 rounded-lg object-cover" />
+                                <div className="text-left">
+                                    <span className="text-sm font-semibold text-white block leading-tight">Barbados Royals</span>
+                                    <span className="text-xs font-bold text-rr-pink tracking-wider">CPL</span>
+                                </div>
+                            </motion.div>
+
+                            {/* Royals Academy */}
+                            <motion.div
+                                whileHover={{ scale: 1.05 }}
+                                transition={{ type: 'spring', stiffness: 300 }}
+                                className="flex items-center gap-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl px-5 py-3 hover:border-rr-pink/40 transition-colors duration-300"
+                            >
+                                <img src="/assets/rra-australia-logo.png" alt="Royals Academy" className="w-10 h-10 rounded-lg object-contain" />
+                                <div className="text-left">
+                                    <span className="text-sm font-semibold text-white block leading-tight">Royals Academy</span>
+                                    <span className="text-xs font-bold text-rr-pink tracking-wider">AUSTRALIA</span>
+                                </div>
+                            </motion.div>
+                        </div>
                     </div>
                 </motion.div>
 

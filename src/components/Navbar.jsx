@@ -37,21 +37,35 @@ const Navbar = () => {
             <div className="fixed top-0 left-0 right-0 z-[60] h-1" style={{ background: '#E11F8F' }} />
 
             <nav
-                className={`fixed top-1 left-0 right-0 z-50 transition-all duration-500 ${scrolled
-                    ? 'py-4 shadow-lg'
-                    : 'bg-transparent py-6'
+                className={`fixed top-1 left-0 right-0 z-50 transition-[padding] duration-500 ${scrolled
+                    ? 'py-4'
+                    : 'py-6'
                     }`}
-                style={scrolled ? {
-                    background: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
-                } : {}}
             >
-                <div className="container mx-auto px-6 flex justify-between items-center">
-                    <div className="flex items-center">
+                {/* Background layer with opacity fade-in */}
+                <div
+                    className="absolute inset-0 transition-opacity duration-700 ease-in-out shadow-lg"
+                    style={{
+                        background: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
+                        opacity: scrolled ? 1 : 0,
+                        pointerEvents: 'none',
+                    }}
+                />
+
+                <div className="relative container mx-auto px-6 flex justify-between items-center">
+                    <div className="flex items-center gap-4">
                         <img
                             src="/assets/rra-melbourne-logo.png"
                             alt="Rajasthan Royals Academy Melbourne"
                             className="h-12 md:h-16 w-auto object-contain"
                         />
+                        {/* Program title inline */}
+                        <span
+                            className="hidden md:inline-block text-[10px] lg:text-xs font-bold tracking-[0.15em] text-white/90 uppercase"
+                            style={{ lineHeight: 1.3 }}
+                        >
+                            RAJASTHAN ROYALS ACADEMY<br />MELBOURNE — ELITE PROGRAM
+                        </span>
                     </div>
 
                     {/* Desktop nav */}
