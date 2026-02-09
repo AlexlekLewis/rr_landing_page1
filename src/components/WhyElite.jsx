@@ -37,13 +37,12 @@ const WhyElite = () => {
                         viewport={{ once: true }}
                         className="relative"
                     >
-                        <div className="aspect-[4/5] rounded-2xl overflow-hidden relative shadow-2xl">
+                        <div className="aspect-[3/4] rounded-2xl overflow-hidden relative shadow-2xl">
                             <img
-                                src="/assets/riyan-parag-royals.png"
-                                alt="Riyan Parag - Rajasthan Royals"
+                                src="/assets/lahiri-riyan-parag.jpg"
+                                alt="Lahiri speaks with Riyan Parag"
                                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                         </div>
                     </motion.div>
                 </div>
