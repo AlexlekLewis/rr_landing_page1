@@ -20,7 +20,7 @@ const players = [
     {
         name: "RAVINDRA JADEJA",
         label: "Uncovered by the Royals",
-        image: "/assets/jadeja-young-ipl.jpg",
+        image: "/assets/jadeja-rr-2008.jpg",
     },
     {
         name: "VAIBHAV SOORYAVANSHI",
