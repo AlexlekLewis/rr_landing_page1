@@ -4,7 +4,7 @@ import Button from './Button';
 
 const TOTAL_FRAMES = 80;
 const SCROLL_HEIGHT_VH_DESKTOP = 400;
-const SCROLL_HEIGHT_VH_MOBILE = 280;
+const SCROLL_HEIGHT_VH_MOBILE = 140;
 const getScrollHeight = () =>
     window.innerWidth < 768 ? SCROLL_HEIGHT_VH_MOBILE : SCROLL_HEIGHT_VH_DESKTOP;
 const EAGER_FRAMES = 12; // Load first N frames eagerly
