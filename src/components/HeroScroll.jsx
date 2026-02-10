@@ -3,7 +3,10 @@ import { motion } from 'framer-motion';
 import Button from './Button';
 
 const TOTAL_FRAMES = 80;
-const SCROLL_HEIGHT_VH = 200; // Total scroll container height in vh
+const SCROLL_HEIGHT_VH_DESKTOP = 400;
+const SCROLL_HEIGHT_VH_MOBILE = 280;
+const getScrollHeight = () =>
+    window.innerWidth < 768 ? SCROLL_HEIGHT_VH_MOBILE : SCROLL_HEIGHT_VH_DESKTOP;
 const EAGER_FRAMES = 12; // Load first N frames eagerly
 const BATCH_SIZE = 15; // Load remaining in batches of N
 
@@ -21,6 +24,7 @@ const HeroScroll = () => {
     const rafRef = useRef(null);
     const [loadProgress, setLoadProgress] = useState(0);
     const [isReady, setIsReady] = useState(false);
+    const [scrollHeightVh, setScrollHeightVh] = useState(getScrollHeight());
 
     const scrollToForm = () => {
         document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' });
@@ -151,16 +155,20 @@ const HeroScroll = () => {
 
     // Handle resize
     useEffect(() => {
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-        return () => window.removeEventListener('resize', resizeCanvas);
+        const onResize = () => {
+            resizeCanvas();
+            setScrollHeightVh(getScrollHeight());
+        };
+        onResize();
+        window.addEventListener('resize', onResize);
+        return () => window.removeEventListener('resize', onResize);
     }, [resizeCanvas]);
 
     return (
         <div
             ref={containerRef}
             className="relative w-full bg-rr-dark"
-            style={{ height: `${SCROLL_HEIGHT_VH}vh` }}
+            style={{ height: `${scrollHeightVh}vh` }}
         >
             {/* Sticky viewport container */}
             <div className="sticky top-0 w-full h-screen overflow-hidden" style={{ willChange: 'transform' }}>

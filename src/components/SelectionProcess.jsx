@@ -6,29 +6,21 @@ const steps = [
         num: 1,
         title: "Apply",
         desc: "Complete the online application form with player details and cricket history.",
-        month: "OCT",
-        day: "23",
     },
     {
         num: 2,
         title: "Assess",
         desc: "Participate in a structured trial and skills assessment session.",
-        month: "NOV",
-        day: "10",
     },
     {
         num: 3,
         title: "Offer",
         desc: "Successful candidates will receive an official academy offer letter.",
-        month: "NOV",
-        day: "25",
     },
     {
         num: 4,
         title: "Alternative",
         desc: "Feedback provided with development pathways or future trial options.",
-        month: "DEC",
-        day: "05",
     },
 ];
 
@@ -109,21 +101,8 @@ const SelectionProcess = () => {
                                             {step.num}
                                         </div>
 
-                                        {/* Title + Date badge row */}
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <h3 className="text-base font-bold uppercase tracking-wider text-white">{step.title}</h3>
-                                            <span
-                                                className="inline-flex flex-col items-center leading-none rounded px-1.5 py-0.5"
-                                                style={{
-                                                    background: 'linear-gradient(135deg, rgba(225,31,143,0.25), rgba(18,38,170,0.25))',
-                                                    border: '1px solid rgba(225,31,143,0.3)',
-                                                    fontSize: '0.55rem',
-                                                }}
-                                            >
-                                                <span className="text-rr-pink font-bold" style={{ fontSize: '0.5rem' }}>{step.month}</span>
-                                                <span className="text-white font-bold text-xs">{step.day}</span>
-                                            </span>
-                                        </div>
+                                        {/* Title */}
+                                        <h3 className="text-base font-bold uppercase tracking-wider text-white mb-2">{step.title}</h3>
 
                                         <p className="text-slate-400 text-sm leading-relaxed px-2">{step.desc}</p>
                                     </motion.div>
@@ -167,20 +146,7 @@ const SelectionProcess = () => {
                                     </div>
 
                                     <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-5">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <h3 className="text-lg font-bold uppercase text-white">{step.title}</h3>
-                                            <span
-                                                className="inline-flex flex-col items-center leading-none rounded px-1.5 py-0.5"
-                                                style={{
-                                                    background: 'linear-gradient(135deg, rgba(225,31,143,0.25), rgba(18,38,170,0.25))',
-                                                    border: '1px solid rgba(225,31,143,0.3)',
-                                                    fontSize: '0.55rem',
-                                                }}
-                                            >
-                                                <span className="text-rr-pink font-bold" style={{ fontSize: '0.5rem' }}>{step.month}</span>
-                                                <span className="text-white font-bold text-xs">{step.day}</span>
-                                            </span>
-                                        </div>
+                                        <h3 className="text-lg font-bold uppercase text-white mb-1">{step.title}</h3>
                                         <p className="text-slate-400 text-sm">{step.desc}</p>
                                     </div>
                                 </motion.div>
