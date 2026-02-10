@@ -33,7 +33,7 @@ const Intro = () => {
                     className="max-w-4xl mx-auto text-center"
                 >
                     <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-ra-blue">Invitation to Apply</span>
+                        <span className="text-white">Invitation to Apply</span>
                     </h2>
 
                     <div className="mt-12 space-y-6 text-lg font-light text-gray-300 md:text-xl max-w-3xl mx-auto leading-relaxed">

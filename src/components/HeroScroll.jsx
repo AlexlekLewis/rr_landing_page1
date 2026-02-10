@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import Button from './Button';
 
 const TOTAL_FRAMES = 80;
-const SCROLL_HEIGHT_VH = 400; // Total scroll container height in vh
+const SCROLL_HEIGHT_VH = 200; // Total scroll container height in vh
 const EAGER_FRAMES = 12; // Load first N frames eagerly
 const BATCH_SIZE = 15; // Load remaining in batches of N
 
@@ -163,7 +163,7 @@ const HeroScroll = () => {
             style={{ height: `${SCROLL_HEIGHT_VH}vh` }}
         >
             {/* Sticky viewport container */}
-            <div className="sticky top-0 w-full h-screen overflow-hidden">
+            <div className="sticky top-0 w-full h-screen overflow-hidden" style={{ willChange: 'transform' }}>
                 {/* Canvas layer */}
                 <canvas
                     ref={canvasRef}
@@ -199,7 +199,7 @@ const HeroScroll = () => {
                             transition={{ duration: 0.8, ease: 'easeOut' }}
                         >
                             <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 mb-6 tracking-tighter leading-none">
-                                READY TO OWN
+                                READY TO <em className="italic">DOMINATE</em>
                                 <br />
                                 THE T20 GAME?
                             </h1>

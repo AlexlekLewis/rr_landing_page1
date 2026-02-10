@@ -18,9 +18,9 @@ const players = [
         image: "/assets/lhuan-pretorius.jpg",
     },
     {
-        name: "MITCHELL OWEN",
-        label: "Royals' Australian Star",
-        image: "/assets/mitchell-owen.png",
+        name: "RAVINDRA JADEJA",
+        label: "Uncovered by the Royals",
+        image: "/assets/jadeja-young-ipl.jpg",
     },
     {
         name: "VAIBHAV SOORYAVANSHI",
@@ -71,9 +71,6 @@ const SuccessStories = () => {
                     ))}
                 </div>
 
-                <p className="text-center text-slate-500 italic mt-10 text-sm">
-                    "Are you ready to start yours?"
-                </p>
             </div>
         </section>
     );

@@ -25,8 +25,8 @@ function App() {
       <WhyElite />
       <Features />
       <Director />
-      <ProgramOverview />
       <Coaches />
+      <ProgramOverview />
       <SelectionProcess />
       <FAQ />
       <BonusOffer />

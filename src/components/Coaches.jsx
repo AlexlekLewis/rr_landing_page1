@@ -5,16 +5,16 @@ const coaches = [
     {
         name: "Siddhartha Lahiri",
         role: "Head of International Player Development",
-        bio: "Expert in identifying high performance talent globally for the Royals franchise.",
+        bio: "Leading talent identification and performance globally for the Royals Group of franchises and the Royals Academy network.",
         image: "/assets/rra/headcoach-lahiri.png",
-        fullBio: "A key figure in the Royals Group's global scouting network, Siddhartha has been instrumental in identifying and developing world-class talent across India, South Africa, the Caribbean and beyond. His eye for raw potential has helped unearth some of the most exciting names in modern T20 cricket."
+        fullBio: "Sid oversees the Rajasthan Royals Academy system within his portfolio, including the Rajasthan Royals Academy Melbourne. As well as an assistant or performance coach to Rajasthan, Paarl and Barbados Royals, he is a key figure in the global scouting network for the Royals Group and an expert in identifying performance talent. His eye for raw talent has unearthed some of the most exciting names in modern T20 cricket. Sid has also recently been appointed as an Assistant Coach of the Birmingham Phoenix in England's The Hundred franchise."
     },
     {
         name: "Andy Crook",
-        role: "Director of Cricket, Australia",
-        bio: "Former Director of Cricket Australia with extensive global experience.",
+        role: "Director of Cricket",
+        bio: "Leading the development of the Royals Academy system in Australia, providing opportunities to talented cricketers.",
         image: "/assets/rra/coaching-strategy.png",
-        fullBio: "With decades of experience at the highest levels of Australian cricket administration, Andy brings unparalleled organisational expertise and a deep understanding of player development pathways. His network and vision are driving the Rajasthan Royals Academy's Melbourne operations."
+        fullBio: "Andy brings to the Royals Academy decades of executive experience at the highest levels of sport, including leading such sports leagues as Australia's National Basketball League and Super Netball. A former professional who played for South Australia, Northamptonshire and Lancashire, Andy's connection with the game has remained strong, playing for Victoria at Masters level, and recently being a part of Australia's 2025 T20 Masters World Cup winning campaign in Pakistan. Charged driving the Rajasthan Royals Academy in Australia, his network and vision for T20 cricket and player development has led to creating a world first pathway of opportunities for talented youngsters to put themselves in front of global leaders of the T20 game."
     },
     {
         name: "Steven Crook",
@@ -100,7 +100,7 @@ const Coaches = () => {
                     ELITE <span className="text-rr-pink">LEADERSHIP</span>
                 </h2>
                 <p className="text-center text-slate-500 mb-16 max-w-2xl mx-auto">
-                    World-class insight from coaches with direct connections to the Rajasthan Royals global franchise network
+                    Rajasthan Royals Academy Melbourne elite program leadership group has been assembled to take your T20 game to the next level and provide a direct connection into the Royals global network.
                 </p>
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
                     {coaches.map((c) => <CoachProfile key={c.name} coach={c} />)}

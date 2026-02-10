@@ -32,15 +32,20 @@ const BonusOffer = () => {
 
                     <div className="max-w-3xl mx-auto space-y-4 mb-10">
                         <p className="text-lg md:text-xl font-medium text-white/90 leading-relaxed">
-                            Elite development. Global pathways. Proven results.
+                            The Elite Program is designed to improve your game, help you excel, and get noticed on your current pathway.
                         </p>
                         <p className="text-base text-white/70 leading-relaxed">
-                            Younger players gain early visibility within the Royals global scouting network.
-                            Older players who consistently meet performance benchmarks may be considered for
-                            trial opportunities in <strong className="text-white">Australia, India, Barbados or South Africa</strong>.
+                            Every participant gains early visibility within the Royals global scouting network.
+                            Our coaches will work with you to develop the skills, mindset and match awareness
+                            needed to perform at higher levels — whether that's at club, representative or professional level.
                         </p>
                         <p className="text-base text-white/70 leading-relaxed">
-                            This is about momentum, opportunity and progression.
+                            For those who consistently meet the benchmarks set by the Royals Group, opportunities
+                            arise to display your skills in front of franchise decision makers in{' '}
+                            <strong className="text-white">Australia, India, Barbados or South Africa</strong>.
+                        </p>
+                        <p className="text-base text-white/70 leading-relaxed">
+                            This is about momentum, development and genuine opportunity.
                         </p>
                     </div>
 

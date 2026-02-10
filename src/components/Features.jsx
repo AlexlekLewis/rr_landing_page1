@@ -1,55 +1,80 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const FeatureCard = ({ title, description, image, delay }) => (
-    <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay, duration: 0.5 }}
-        className="bg-white p-8 rounded-2xl shadow-lg border-b-4 border-rr-pink hover:-translate-y-2 transition-transform duration-300"
-    >
-        <div className="h-48 bg-slate-100 rounded-xl mb-6 overflow-hidden">
-            <img
-                src={image}
-                alt={title}
-                className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
-            />
-        </div>
-        <h3 className="text-2xl font-black text-rr-dark mb-3">{title}</h3>
-        <p className="text-slate-600">{description}</p>
-    </motion.div>
-);
+const features = [
+    {
+        title: "Power Hitting",
+        description: "Never before has the need to develop a power game and optimise ball exit velocity and trajectory been so critical.",
+        image: "/assets/jaiswal-power.webp"
+    },
+    {
+        title: "360 Degree Striking",
+        description: "Playing a true 360 degree style of play confuses opponents and wins matches...if done with skill and with strategy.",
+        image: "/assets/360-degree.webp"
+    },
+    {
+        title: "Winning T20 Mindset",
+        description: "Learn how and why the elite T20 cricketers think the way they do, and transform results with an advanced mindset.",
+        image: "/assets/winning-mindset.jpg"
+    },
+    {
+        title: "Control the Game with the Ball",
+        description: "That is the question. When, where, what, how are questions you'll learn to answer as a pace or spin bowler.",
+        image: "/assets/on-pace-off-pace.jpg"
+    }
+];
+
+const FeatureCard = ({ title, description, image, delay }) => {
+    const [showDesc, setShowDesc] = useState(false);
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay, duration: 0.5 }}
+            className="bg-white rounded-2xl shadow-lg border-b-4 border-rr-pink hover:-translate-y-2 transition-transform duration-300 overflow-hidden cursor-pointer"
+            onMouseEnter={() => setShowDesc(true)}
+            onMouseLeave={() => setShowDesc(false)}
+            onClick={() => setShowDesc(!showDesc)}
+        >
+            <div className="relative h-72 md:h-80 overflow-hidden">
+                <img
+                    src={image}
+                    alt={title}
+                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
+                />
+
+                {/* Hover/tap overlay */}
+                <AnimatePresence>
+                    {showDesc && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 40 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 40 }}
+                            transition={{ duration: 0.25, ease: 'easeOut' }}
+                            className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-black/30 flex items-end"
+                        >
+                            <p className="text-white text-sm md:text-base leading-relaxed p-6 md:p-8">
+                                {description}
+                            </p>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
+            <div className="p-6">
+                <h3 className="text-xl font-black text-rr-dark uppercase">{title}</h3>
+            </div>
+        </motion.div>
+    );
+};
 
 const Features = () => {
-    const features = [
-        {
-            title: "Power Hitting",
-            description: "Never before has the need to develop a power game and optimise ball exit velocity and trajectory been so critical.",
-            image: "/assets/jaiswal-power.webp"
-        },
-        {
-            title: "360 Degree Striking",
-            description: "Playing a true 360 degree style of play confuses opponents and wins matches...if done with skill and with strategy.",
-            image: "/assets/360-degree.webp"
-        },
-        {
-            title: "Winning T20 Mindset",
-            description: "Learn how and why the elite T20 cricketers think the way they do, and transform results with an advanced mindset.",
-            image: "/assets/winning-mindset.jpg"
-        },
-        {
-            title: "Off Pace or On Pace?",
-            description: "That is the question. When, where, what, how are questions you’ll learn to answer as a pace or spin bowler.",
-            image: "/assets/on-pace-off-pace.jpg"
-        }
-    ];
-
     return (
         <section className="py-24 bg-slate-50" id="program">
             <div className="container mx-auto px-6">
                 <div className="text-center max-w-3xl mx-auto mb-16">
-                    <h2 className="text-4xl md:text-5xl font-black text-rr-dark mb-4">CRITICAL COMPONENTS</h2>
+                    <h2 className="text-4xl md:text-5xl font-black text-rr-dark mb-4">CRITICAL MODERN SKILLS</h2>
                     <p className="text-lg text-slate-600">
                         With T20 cricket at the heart of the Rajasthan Royals Melbourne Elite Program, expect an education in the formats that matter.
                     </p>
