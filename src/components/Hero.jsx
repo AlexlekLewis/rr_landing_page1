@@ -43,7 +43,7 @@ const Hero = () => {
                         transition={{ duration: 0.8, ease: "easeOut" }}
                     >
                         <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 mb-6 tracking-tighter leading-none">
-                            READY TO OWN<br />THE T20 GAME?
+                            READY TO DOMINATE<br />THE T20 GAME?
                         </h1>
                         <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-white/90 mb-4 leading-snug normal-case tracking-normal">
                             Modern cricket demands more than tradition.<br className="hidden md:block" />
