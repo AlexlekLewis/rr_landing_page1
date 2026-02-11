@@ -10,15 +10,26 @@ const Hero = () => {
     return (
         <div className="relative min-h-screen w-full flex items-center bg-rr-dark overflow-hidden">
 
-            {/* Background Image Layer */}
+            {/* Background Image Layer - Mobile */}
             <div
-                className="absolute inset-0 w-full h-full bg-cover bg-no-repeat bg-center"
+                className="absolute inset-0 w-full h-full bg-cover bg-no-repeat bg-[center_top] md:hidden"
+                style={{
+                    backgroundImage: "url('/assets/Hero.jpeg')",
+                }}
+            >
+                {/* Gradient Overlay for mobile text readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/60 to-transparent" />
+            </div>
+
+            {/* Background Image Layer - Desktop */}
+            <div
+                className="absolute inset-0 w-full h-full bg-cover bg-no-repeat hidden md:block"
                 style={{
                     backgroundImage: "url('/assets/hero-final.jpeg')",
                     backgroundPosition: "center 20%"
                 }}
             >
-                {/* Gradient Overlay for text readability */}
+                {/* Gradient Overlay for desktop text readability */}
                 <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/80 to-transparent" />
                 <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-transparent to-transparent" />
             </div>
