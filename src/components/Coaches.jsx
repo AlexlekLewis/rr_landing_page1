@@ -27,7 +27,7 @@ const coaches = [
         name: "Alex Lewis",
         role: "Head Coach",
         bio: "For over 22 years, thousands of young cricketers have had their careers heavily and positively influenced by his coaching, tactical and player management skills.",
-        image: "/assets/rra/coaching-fielding.png",
+        image: "/assets/rra/headcoach-alex.png",
         fullBio: "With over two decades of hands-on coaching experience in Victorian cricket system, Alex has a proven track record of identifying emerging talent and creating development environments where cricketers thrive and progress to representative honours. Selected by the Rajasthan Royals Academy to lead the Melbourne Elite Program, Alex will ensure that no stone is left unturned in maximising a players return from their time in the Elite Program. Academy Director as well as Assistant Coach at Fitzroy Doncaster Cricket Club, Alex operates at the cutting edge of the games development pathway, and will oversee a group of coaches and mentors who have been appointed to coach and mentor players through development of specific skills."
     }
 ];
