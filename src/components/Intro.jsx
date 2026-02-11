@@ -21,7 +21,7 @@ const Intro = () => {
                         <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm group-hover:scale-110 transition-transform duration-300 z-10">
                             <Play className="w-8 h-8 text-white fill-current ml-1" />
                         </div>
-                        <p className="absolute bottom-6 left-6 text-sm font-medium tracking-wider text-slate-400">WATCH: THE ACADEMY VISION</p>
+                        <p className="absolute bottom-6 left-6 text-sm font-medium tracking-wider text-gray-300">WATCH: THE ACADEMY VISION</p>
                     </motion.div>
                 </div>
 
@@ -51,7 +51,27 @@ const Intro = () => {
                     {/* Franchise Strip */}
                     <div className="mt-14">
                         <p className="text-slate-400 uppercase text-xs tracking-[0.25em] font-medium mb-6">Part of the Royals Group</p>
-                        <div className="flex flex-wrap items-center justify-center gap-5">
+
+                        {/* Mobile: 2x2 circular logo grid */}
+                        <div className="grid grid-cols-2 gap-6 md:hidden">
+                            {[
+                                { href: "https://www.rajasthanroyals.com", logo: "/assets/rajasthan-royals-logo.png", name: "Rajasthan Royals", league: "IPL" },
+                                { href: "https://www.paarlroyals.com", logo: "/assets/paarl-royals-logo.png", name: "Paarl Royals", league: "SA20" },
+                                { href: "https://www.barbadosroyals.com", logo: "/assets/barbados-royals-logo.png", name: "Barbados Royals", league: "CPL" },
+                                { href: "https://rajasthanroyalsacademy.com", logo: "/assets/rr_academy_logo.png", name: "RR Academy", league: "GLOBAL" },
+                            ].map((item) => (
+                                <a key={item.name} href={item.href} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2">
+                                    <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
+                                        <img src={item.logo} alt={item.name} className="w-10 h-10 object-contain" />
+                                    </div>
+                                    <span className="text-xs font-semibold text-white text-center leading-tight">{item.name}</span>
+                                    <span className="text-[10px] font-bold text-rr-pink tracking-wider">{item.league}</span>
+                                </a>
+                            ))}
+                        </div>
+
+                        {/* Desktop: horizontal pill layout (unchanged) */}
+                        <div className="hidden md:flex flex-wrap items-center justify-center gap-5">
                             {/* Rajasthan Royals */}
                             <a href="https://www.rajasthanroyals.com" target="_blank" rel="noopener noreferrer">
                                 <motion.div

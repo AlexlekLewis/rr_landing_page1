@@ -89,7 +89,7 @@ const SelectionProcess = () => {
                                         <div
                                             className="w-20 h-20 rounded-full flex items-center justify-center text-3xl font-black text-white mb-5 relative shrink-0"
                                             style={{
-                                                background: 'linear-gradient(135deg, #E11F8F 0%, #7B2FBE 50%, #1226AA 100%)',
+                                                background: 'linear-gradient(135deg, #E11F8F 0%, #1226AA 100%)',
                                                 boxShadow: '0 0 30px rgba(225,31,143,0.35), 0 0 60px rgba(18,38,170,0.2), inset 0 0 20px rgba(255,255,255,0.05)',
                                             }}
                                         >
@@ -121,7 +121,7 @@ const SelectionProcess = () => {
                         <div className="md:hidden space-y-8 relative pl-14">
                             {/* Vertical line */}
                             <div className="absolute left-6 top-0 bottom-0 w-0.5" style={{
-                                background: 'linear-gradient(to bottom, #E11F8F, #7B2FBE, #1226AA)',
+                                background: 'linear-gradient(to bottom, #E11F8F, #1226AA)',
                                 opacity: 0.4,
                             }} />
 
@@ -138,7 +138,7 @@ const SelectionProcess = () => {
                                     <div
                                         className="absolute -left-14 top-3 w-12 h-12 rounded-full flex items-center justify-center text-lg font-black text-white"
                                         style={{
-                                            background: 'linear-gradient(135deg, #E11F8F 0%, #7B2FBE 50%, #1226AA 100%)',
+                                            background: 'linear-gradient(135deg, #E11F8F 0%, #1226AA 100%)',
                                             boxShadow: '0 0 20px rgba(225,31,143,0.3)',
                                         }}
                                     >

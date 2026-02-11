@@ -18,7 +18,7 @@ const Hero = () => {
                 }}
             >
                 {/* Gradient Overlay for mobile text readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-rr-navy via-rr-navy/60 to-transparent" />
             </div>
 
             {/* Background Image Layer - Desktop */}
@@ -30,8 +30,8 @@ const Hero = () => {
                 }}
             >
                 {/* Gradient Overlay for desktop text readability */}
-                <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/80 to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-rr-navy via-rr-navy/80 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-rr-navy via-transparent to-transparent" />
             </div>
 
             {/* Content Container */}
@@ -49,7 +49,7 @@ const Hero = () => {
                             Modern cricket demands more than tradition.<br className="hidden md:block" />
                             <span className="text-rr-pink">We develop explosive skills, sharp thinking and elite habits.</span>
                         </h2>
-                        <p className="text-sm md:text-base text-slate-400 font-bold tracking-[0.15em] uppercase mb-8">
+                        <p className="text-sm md:text-base text-gray-300 font-bold tracking-[0.15em] uppercase mb-8">
                             The future of T20 development starts here.
                         </p>
                     </motion.div>

@@ -13,12 +13,11 @@
   /* Updated to Dark Charcoal per guidelines */
   --color-rf-pink: #E96BB0;
   --color-rr-grey: #323E48;
+  --color-rr-navy: #001D48;
 
   /* Retain original functional colors mapped to new brand colors where appropriate */
   --color-royal-blue: #0075C9;
   /* Mapped to RA Blue */
-  --color-royal-gold: #FFD700;
-  /* Keeping mostly for subtle accents if needed, but deprioritized */
 }
 
 @layer base {

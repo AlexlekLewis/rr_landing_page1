@@ -61,7 +61,7 @@ const InputField = ({ label, type = "text", placeholder, name, value, onChange, 
             onChange={onChange}
             placeholder={placeholder}
             required={required}
-            className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-pink-200 transition-all text-rr-dark"
+            className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-rr-pink/20 transition-all text-rr-dark"
         />
     </div>
 );
@@ -202,7 +202,7 @@ const Apply = () => {
                             name="history"
                             value={formData.history}
                             onChange={handleChange}
-                            className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-pink-200 transition-all text-rr-dark h-32"
+                            className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-rr-pink/20 transition-all text-rr-dark h-32"
                             placeholder="List your representative achievements..."
                         ></textarea>
                     </div>
@@ -214,7 +214,7 @@ const Apply = () => {
                                 name="bio"
                                 value={formData.bio}
                                 onChange={handleChange}
-                                className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-pink-200 transition-all text-rr-dark h-32"
+                                className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-rr-pink/20 transition-all text-rr-dark h-32"
                                 placeholder="Tell us about yourself..."
                             ></textarea>
                         </div>
@@ -224,7 +224,7 @@ const Apply = () => {
                                 name="goals"
                                 value={formData.goals}
                                 onChange={handleChange}
-                                className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-pink-200 transition-all text-rr-dark h-32"
+                                className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-rr-pink/20 transition-all text-rr-dark h-32"
                                 placeholder="Where do you want to be in 5 years?"
                             ></textarea>
                         </div>

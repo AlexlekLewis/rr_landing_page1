@@ -20,10 +20,10 @@ const WhyElite = () => {
                             THE ROYALS <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">WAY</span>
                         </h2>
                         <div className="h-1.5 w-24 bg-gradient-to-r from-rr-pink to-rr-blue mb-8" />
-                        <p className="text-lg text-slate-600 leading-relaxed mb-6">
+                        <p className="text-lg text-rr-grey leading-relaxed mb-6">
                             We believe cricket is a vehicle to shape confident, curious, resilient people. We back talent early and teach boldly. Our approach is holistic, valuing courage over comfort and curiosity over ego.
                         </p>
-                        <p className="text-xl font-medium text-slate-800 mb-8">
+                        <p className="text-xl font-medium text-rr-dark mb-8">
                             This is the Royals Way: discover, develop, and elevate—with purpose, integrity, and relentless optimism.
                         </p>
                         <Button onClick={scrollToForm} variant="primary">

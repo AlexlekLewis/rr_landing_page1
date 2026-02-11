@@ -17,7 +17,7 @@ import Footer from './components/Footer';
 
 function App() {
   return (
-    <div className="font-sans antialiased text-slate-900 bg-white selection:bg-pink-200 selection:text-pink-900">
+    <div className="font-sans antialiased text-rr-dark bg-white selection:bg-rr-pink selection:text-white">
       <Navbar />
       <Hero />
       <Intro />
