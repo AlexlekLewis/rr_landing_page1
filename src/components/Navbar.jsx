@@ -59,13 +59,7 @@ const Navbar = () => {
                             alt="Rajasthan Royals Academy Melbourne"
                             className="h-12 md:h-16 w-auto object-contain"
                         />
-                        {/* Program title inline */}
-                        <span
-                            className="hidden md:inline-block text-[10px] lg:text-xs font-bold tracking-[0.15em] text-white/90 uppercase"
-                            style={{ lineHeight: 1.3 }}
-                        >
-                            RAJASTHAN ROYALS ACADEMY<br />MELBOURNE — ELITE PROGRAM
-                        </span>
+
                     </div>
 
                     {/* Desktop nav */}

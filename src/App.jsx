@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from './components/Navbar';
-import HeroScroll from './components/HeroScroll';
+import Hero from './components/Hero';
 import Intro from './components/Intro';
 import WhyElite from './components/WhyElite';
 
@@ -19,7 +19,7 @@ function App() {
   return (
     <div className="font-sans antialiased text-slate-900 bg-white selection:bg-pink-200 selection:text-pink-900">
       <Navbar />
-      <HeroScroll />
+      <Hero />
       <Intro />
       <SuccessStories />
       <WhyElite />

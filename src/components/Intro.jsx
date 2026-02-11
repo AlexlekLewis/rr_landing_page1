@@ -97,17 +97,17 @@ const Intro = () => {
                                 </motion.div>
                             </a>
 
-                            {/* RR Academy India */}
+                            {/* RR Academy Global */}
                             <a href="https://rajasthanroyalsacademy.com" target="_blank" rel="noopener noreferrer">
                                 <motion.div
                                     whileHover={{ scale: 1.05 }}
                                     transition={{ type: 'spring', stiffness: 300 }}
                                     className="flex items-center gap-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl px-5 py-3 hover:border-rr-pink/40 transition-colors duration-300 cursor-pointer"
                                 >
-                                    <img src="/assets/rajasthan-royals-logo.png" alt="RR Academy" className="w-10 h-10 rounded-lg object-contain" />
+                                    <img src="/assets/rr_academy_logo.png" alt="RR Academy" className="w-10 h-10 rounded-lg object-contain" />
                                     <div className="text-left">
                                         <span className="text-sm font-semibold text-white block leading-tight">RR Academy</span>
-                                        <span className="text-xs font-bold text-rr-pink tracking-wider">INDIA</span>
+                                        <span className="text-xs font-bold text-rr-pink tracking-wider">GLOBAL</span>
                                     </div>
                                 </motion.div>
                             </a>

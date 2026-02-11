@@ -10,12 +10,12 @@ const Hero = () => {
     return (
         <div className="relative min-h-screen w-full flex items-center bg-rr-dark overflow-hidden">
 
-            {/* Background Image Layer - using Vaibhav image */}
+            {/* Background Image Layer */}
             <div
                 className="absolute inset-0 w-full h-full bg-cover bg-no-repeat bg-center"
                 style={{
-                    backgroundImage: "url('/assets/sooryavanchi-arms-raised.jpg')",
-                    backgroundPosition: "center 20%" // Adjust to focus on face/upper body if needed
+                    backgroundImage: "url('/assets/hero-final.jpeg')",
+                    backgroundPosition: "center 20%"
                 }}
             >
                 {/* Gradient Overlay for text readability */}
@@ -75,12 +75,6 @@ const Hero = () => {
                         </Button>
                     </motion.div>
                 </div>
-            </div>
-
-            {/* Image caption */}
-            <div className="absolute bottom-6 right-6 z-20 text-right hidden md:block">
-                <p className="text-xs text-white/40 font-medium tracking-wider">VAIBHAV SOORYAVANSHI</p>
-                <p className="text-[10px] text-white/25 tracking-wider">Royals Academy Star</p>
             </div>
 
         </div>

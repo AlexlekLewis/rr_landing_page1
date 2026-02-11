@@ -39,13 +39,12 @@ const FAQ = () => {
         { q: "Where are sessions held?", a: "Primarily at Cutting Edge Cricket in Bundoora, Melbourne, with other facilities used periodically." },
         { q: "Are girls eligible?", a: "Absolutely. Talent is talent — the Royals back emerging cricketers regardless of gender. There is a specific focus on preparing U15–U18 girls for WBBL, Women's IPL, state, and premier opportunities." },
         { q: "What's included in the program?", a: "Individual Development Plans, video analysis, sports psychology, nutrition, strength & conditioning coaching, official Royals apparel (hat, training shirt, shorts), and performance data reviewed by Royals Group coaches globally." },
-        { q: "Is it only T20 cricket?", a: "70% T20 tailored, 30% traditional. The goal is to apply elite skills to all formats." },
-        { q: "How many places are available?", a: "The program is capped at approximately 98–120 players per intake." },
+        { q: "Is it T20 cricket?", a: "Approximately 70-80% T20 skill based, and 20-30% traditional skills. The goal is to ensure players can apply T20 skills to all formats of the game in relevant scenarios." },
     ];
 
     const selectionFaqs = [
         { q: "Is entry guaranteed?", a: "No. Places are limited and based on merit, skills, and potential." },
-        { q: "What is the selection process?", a: "Invitation → Register Interest → Selection Team Reviews → Possible Trials. Even if not selected in the first intake, your details stay on file — the Royals are building something long-term." },
+        { q: "What is the selection process?", a: "Invitation from a RR Academy Melbourne scout → Complete Application → Selection Team Reviews Applications → Possible Trial and Assessment Session → Possible Offer and Acceptance. Even if not selected in the first intake, your details stay on file — the Royals are building something long-term and the Melbourne team will begin touch regarding future programs." },
         { q: "What pathway opportunities exist?", a: "Performance-based opportunities include: potential match play against external opposition, invitation to the Royals High Performance Centre in Jaipur, trial opportunities with Rajasthan Royals (IPL), Paarl Royals (SA20), or Barbados Royals (CPL), and visits from franchise coaches and players." },
         { q: "Are trials with IPL franchises guaranteed?", a: "No. Trial opportunities are for players demonstrating exceptional skill. However, ALL members are tracked by Royals coaches." },
         { q: "Will I go to the High Performance Centre in Jaipur?", a: "Select players will be invited to attend camps at the High Performance facility in Jaipur, India." },

@@ -5,22 +5,22 @@ const steps = [
     {
         num: 1,
         title: "Apply",
-        desc: "Complete the online application form with player details and cricket history.",
+        desc: "Complete the online application form below and our selection team will work through yours and all other applications.",
     },
     {
         num: 2,
         title: "Assess",
-        desc: "Participate in a structured trial and skills assessment session.",
+        desc: "On Sunday March 2nd, a select group of applicants will be invited to a trial and skill assessment session led by Sid Lahiri.",
     },
     {
         num: 3,
         title: "Offer",
-        desc: "Successful candidates will receive an official academy offer letter.",
+        desc: "Shortly following the session on Sunday March 2nd, successful candidates will receive an official offer to join the Elite Program.",
     },
     {
         num: 4,
         title: "Alternative",
-        desc: "Feedback provided with development pathways or future trial options.",
+        desc: "Should you be unsuccessful, the road doesn't end. Your application details will remain with us and we will provide invitations to alternative suitable program options.",
     },
 ];
 
@@ -70,7 +70,7 @@ const SelectionProcess = () => {
                     <div className="relative z-10 px-8 py-16 md:px-12 md:py-20">
                         <h2 className="text-3xl md:text-4xl font-black text-center text-white mb-4">SELECTION PROCESS</h2>
                         <p className="text-center text-slate-300 max-w-2xl mx-auto mb-16 text-base md:text-lg leading-relaxed">
-                            The Rajasthan Royals Academy Melbourne selection process is designed to identify talented cricketers ready to take the next step. Here's how it works.
+                            Places in the Rajasthan Royals Academy Melbourne Elite Program are limited and as such the selection process is designed to identify talented cricketers ready to take the next step in their development. Here's how the process works.
                         </p>
 
                         {/* Desktop: horizontal timeline with curved arrows */}

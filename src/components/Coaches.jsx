@@ -19,16 +19,16 @@ const coaches = [
     {
         name: "Steven Crook",
         role: "Director of Talent",
-        bio: "Former professional with over 330 matches, known for power-hitting and coaching success.",
+        bio: "One of the original T20 power hitting allrounders, 330 professional games, 2x T20 champion, Sheffield Shield winning and BBL Assistant Coach.",
         image: "/assets/rra/coaching-nets.png",
-        fullBio: "2x Vitality Blast champion with Northamptonshire Steelbacks. Sheffield Shield winning Assistant Coach. BBL Assistant Coach with Adelaide Strikers. Steven brings first-hand elite T20 experience and a passion for developing the next generation of power players."
+        fullBio: "Steven was one of the original T20 power hitting allrounders. Regularly reaching speeds of 150km/ph+ and known for demolishing teams at the back end of a T20 innings with his 6 hitting capability, his 330 professional game career at Lancashire, Middlesex and Northamptonshire saw him take part in 4 Vitality Blast Finals Days, claiming 2 Championships with Northamptonshire Steelbacks, one of which he claimed a man of the match performance. Now, Steven has made his mark in the coaching World. Head Coach of the Adelaide Strikers Academy that won the Top End T20 Series in 2024, Assistant Coach to Ryan Harris during the victorious 2025/26 Sheffield Shield winning season for South Australia, and Assistant Coach to Tim Paine at the Adelaide Strikers, Steven brings first-hand and modern day elite T20 experience and a passion for developing the next generation of T20 cricketers."
     },
     {
         name: "Alex Lewis",
         role: "Head Coach",
-        bio: "22 years of experience developing Victorian cricket talent.",
+        bio: "For over 22 years, thousands of young cricketers have had their careers heavily and positively influenced by his coaching, tactical and player management skills.",
         image: "/assets/rra/coaching-fielding.png",
-        fullBio: "A highly successful academy builder with over two decades of hands-on coaching experience in Victorian cricket. Alex has a proven track record of identifying emerging talent and creating development environments where young cricketers thrive and progress to representative honours."
+        fullBio: "With over two decades of hands-on coaching experience in Victorian cricket system, Alex has a proven track record of identifying emerging talent and creating development environments where cricketers thrive and progress to representative honours. Selected by the Rajasthan Royals Academy to lead the Melbourne Elite Program, Alex will ensure that no stone is left unturned in maximising a players return from their time in the Elite Program. Academy Director as well as Assistant Coach at Fitzroy Doncaster Cricket Club, Alex operates at the cutting edge of the games development pathway, and will oversee a group of coaches and mentors who have been appointed to coach and mentor players through development of specific skills."
     }
 ];
 
@@ -42,7 +42,7 @@ const CoachProfile = ({ coach }) => {
             onMouseLeave={() => setIsHovered(false)}
             onClick={() => setIsHovered(!isHovered)}
         >
-            <div className="w-40 h-40 rounded-full mx-auto mb-6 overflow-hidden shadow-lg group-hover:scale-105 transition-transform duration-300 border-4 border-white relative">
+            <div className="w-56 h-56 rounded-full mx-auto mb-6 overflow-hidden shadow-lg group-hover:scale-105 transition-transform duration-300 border-4 border-white relative">
                 <img
                     src={coach.image}
                     alt={coach.name}
@@ -100,7 +100,7 @@ const Coaches = () => {
                     ELITE <span className="text-rr-pink">LEADERSHIP</span>
                 </h2>
                 <p className="text-center text-slate-500 mb-16 max-w-2xl mx-auto">
-                    Rajasthan Royals Academy Melbourne elite program leadership group has been assembled to take your T20 game to the next level and provide a direct connection into the Royals global network.
+                    Rajasthan Royals Academy Melbourne ELITE PROGRAM leadership group has been assembled to take your T20 game to the next level and provide a direct connection into the Royals global network.
                 </p>
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
                     {coaches.map((c) => <CoachProfile key={c.name} coach={c} />)}

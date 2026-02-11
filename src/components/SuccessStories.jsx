@@ -20,7 +20,7 @@ const players = [
     {
         name: "RAVINDRA JADEJA",
         label: "Uncovered by the Royals",
-        image: "/assets/jadeja-rr-2008.jpg",
+        image: "/assets/jadeja-rr-bowling.webp",
     },
     {
         name: "VAIBHAV SOORYAVANSHI",
@@ -44,7 +44,7 @@ const SuccessStories = () => {
                         The T20 game has changed. Have you?
                     </p>
                     <p className="text-lg text-rr-grey">
-                        Rajasthan Royals have developed a reputation for uncovering and developing talent that others miss. Siddhartha Lahiri and his network leave no stone unturned.
+                        Rajasthan Royals have developed a reputation for uncovering and developing talent across the world. Siddhartha Lahiri and his network leave no stone unturned.
                     </p>
                 </div>
 
