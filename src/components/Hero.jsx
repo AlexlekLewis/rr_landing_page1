@@ -72,7 +72,7 @@ const Hero = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.4 }}
-                        className="flex flex-col sm:flex-row gap-4"
+                        className="flex flex-col sm:flex-row gap-4 pb-16 md:pb-24"
                     >
                         <Button onClick={scrollToForm} variant="gold" className="text-base px-8 py-4 text-lg">
                             APPLY TO SECURE YOUR PLACE
