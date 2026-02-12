@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
+import Button from './Button';
 
 const FAQItem = ({ question, answer }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -33,6 +34,10 @@ const FAQItem = ({ question, answer }) => {
 };
 
 const FAQ = () => {
+    const scrollToForm = () => {
+        document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' });
+    };
+
     const programFaqs = [
         { q: "What age group is eligible?", a: "Male and female cricketers from age 10/11 through to senior cricketers in their 20's and 30's." },
         { q: "When does the program start and how long does it run?", a: "12 weeks starting early April 2026, with two sessions per week — one weeknight evening and one weekend session." },
@@ -72,6 +77,12 @@ const FAQ = () => {
                     <div className="bg-slate-50 rounded-2xl p-6 md:p-8 border border-slate-100 shadow-sm">
                         {selectionFaqs.map((item, i) => <FAQItem key={`s-${i}`} question={item.q} answer={item.a} />)}
                     </div>
+                </div>
+
+                <div className="text-center mt-12">
+                    <Button onClick={scrollToForm} variant="primary">
+                        APPLY NOW
+                    </Button>
                 </div>
             </div>
         </section>

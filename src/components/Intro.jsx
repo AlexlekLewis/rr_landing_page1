@@ -1,8 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Play } from 'lucide-react';
+import Button from './Button';
 
 const Intro = () => {
+    const scrollToForm = () => {
+        document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' });
+    };
+
     return (
         <section className="py-20 bg-rr-dark text-white relative overflow-hidden">
             <div className="container mx-auto px-6">
@@ -136,6 +141,12 @@ const Intro = () => {
                         </div>
                     </div>
                 </motion.div>
+
+                <div className="text-center mt-12">
+                    <Button onClick={scrollToForm} variant="blue" className="text-base px-8 py-4">
+                        APPLY NOW
+                    </Button>
+                </div>
 
             </div>
         </section>

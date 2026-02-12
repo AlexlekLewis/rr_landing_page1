@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Button from './Button';
 
 const coaches = [
     {
@@ -94,6 +95,10 @@ const CoachProfile = ({ coach }) => {
 };
 
 const Coaches = () => {
+    const scrollToForm = () => {
+        document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' });
+    };
+
     return (
         <section className="py-24 bg-slate-50" id="coaches">
             <div className="container mx-auto px-6">
@@ -105,6 +110,11 @@ const Coaches = () => {
                 </p>
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
                     {coaches.map((c) => <CoachProfile key={c.name} coach={c} />)}
+                </div>
+                <div className="text-center mt-12">
+                    <Button onClick={scrollToForm} variant="primary">
+                        APPLY NOW
+                    </Button>
                 </div>
             </div>
         </section>

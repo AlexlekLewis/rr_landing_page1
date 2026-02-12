@@ -10,15 +10,15 @@ const Director = () => {
     return (
         <section className="py-20 bg-rr-dark text-white">
             <div className="container mx-auto px-6">
-                <div className="max-w-4xl mx-auto text-center">
+                <div className="max-w-5xl mx-auto text-center">
 
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className="bg-slate-800 p-8 rounded-3xl border border-slate-700 relative flex flex-col md:flex-row items-center gap-8"
+                        className="bg-slate-800 p-8 md:p-10 rounded-3xl border border-slate-700 relative flex flex-col md:flex-row items-center gap-8 md:gap-10"
                     >
-                        <div className="w-full md:w-1/3 aspect-[3/4] rounded-2xl overflow-hidden shrink-0">
+                        <div className="w-full md:w-[280px] aspect-[3/4] rounded-2xl overflow-hidden shrink-0">
                             <img
                                 src="/assets/crook-powerhitting.webp"
                                 alt="Steven Crook"
@@ -26,13 +26,10 @@ const Director = () => {
                             />
                         </div>
 
-                        <div className="flex-1 text-left relative">
+                        <div className="flex-1 text-left relative flex flex-col justify-center">
                             <div className="text-6xl text-rr-pink absolute -top-8 -left-4 opacity-50">"</div>
-                            <p className="text-base md:text-lg italic text-gray-300 leading-relaxed relative z-10 mb-4 pt-4">
+                            <p className="text-base md:text-lg italic text-gray-300 leading-relaxed relative z-10 mb-6 pt-4">
                                 My playing and coaching career has been an incredible journey. I built my game on impact — scoring quickly, taking key wickets and setting standards in the field — and I learned that real success comes from understanding the moments that matter and having the courage to execute under pressure.
-                            </p>
-                            <p className="text-base md:text-lg italic text-gray-300 leading-relaxed relative z-10 mb-8">
-                                Now as a coach and mentor my focus is on the current and next generation. I'm passionate about developing complete cricketers — players who can change a game with bat or ball, raise the standard in the field, and lead through their actions. If we bring the same high-performance mindset, attention to detail and competitive edge, we won't just produce powerful players — we'll develop leaders who understand how to win.
                             </p>
 
                             <div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import Button from './Button';
 
 const steps = [
     {
@@ -49,6 +50,10 @@ const CurvedArrow = ({ id }) => (
 );
 
 const SelectionProcess = () => {
+    const scrollToForm = () => {
+        document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' });
+    };
+
     return (
         <section className="py-24 bg-gradient-to-b from-slate-100 to-white">
             <div className="container mx-auto px-6">
@@ -152,6 +157,12 @@ const SelectionProcess = () => {
                                 </motion.div>
                             ))}
                         </div>
+                    </div>
+
+                    <div className="text-center mt-12">
+                        <Button onClick={scrollToForm} variant="blue" className="text-base px-8 py-4">
+                            APPLY NOW
+                        </Button>
                     </div>
                 </div>
             </div>

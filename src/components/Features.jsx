@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Button from './Button';
 
 const features = [
     {
@@ -18,7 +19,7 @@ const features = [
         image: "/assets/winning-mindset.jpg"
     },
     {
-        title: "Control the Game with the Ball",
+        title: "Control the Game",
         description: "That is the question. When, where, what, how are questions you'll learn to answer as a pace or spin bowler.",
         image: "/assets/on-pace-off-pace.jpg"
     }
@@ -70,6 +71,10 @@ const FeatureCard = ({ title, description, image, delay }) => {
 };
 
 const Features = () => {
+    const scrollToForm = () => {
+        document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' });
+    };
+
     return (
         <section className="py-24 bg-slate-50" id="program">
             <div className="container mx-auto px-6">
@@ -86,6 +91,11 @@ const Features = () => {
                     ))}
                 </div>
 
+                <div className="text-center mt-12">
+                    <Button onClick={scrollToForm} variant="primary">
+                        APPLY NOW
+                    </Button>
+                </div>
 
             </div>
         </section>

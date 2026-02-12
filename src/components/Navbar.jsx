@@ -17,8 +17,8 @@ const Navbar = () => {
     };
 
     const navLinks = [
-        { label: 'THE PROGRAM', id: 'program' },
-        { label: 'COACHES', id: 'coaches' },
+        { label: 'PROGRAM OVERVIEW', id: 'program' },
+        { label: 'COACHING & LEADERSHIP', id: 'coaches' },
         { label: 'FAQ', id: 'faq' },
     ];
 

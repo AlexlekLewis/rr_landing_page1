@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
+import Button from './Button';
 
 const AccordionSection = ({ title, items, color = "border-rr-pink", defaultOpen = false }) => {
     const [isOpen, setIsOpen] = useState(defaultOpen);
@@ -42,22 +43,27 @@ const AccordionSection = ({ title, items, color = "border-rr-pink", defaultOpen 
 };
 
 const ProgramOverview = () => {
+    const scrollToForm = () => {
+        document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' });
+    };
+
     const sections = [
         {
-            title: "COACHING",
+            title: "CRICKET COACHING & MENTORING",
             color: "border-rr-pink",
-            defaultOpen: true,
+            defaultOpen: false,
             items: [
                 { title: "2 on 1", content: "Players will receive 2 on 1 coaching during particular training sessions to provide for both expert coaching and peer to peer learning, critical for the development of talented players." },
                 { title: "Squad Training", content: "Each player will be allocated to a squad that is at a similar age and similar ability based on the assessment of the Academy selection team, and this squad will train together on a regular basis." },
                 { title: "Specialist (Masterclass)", content: "Coaches and mentors with elite level skills will conduct masterclass sessions. The coaching team will monitor the skill set of the group and determine the appropriate masterclass." },
-                { title: "Individual Development Plans", content: "Each player receives a personalised development plan that addresses the whole person: skills, fitness, mindset, recovery, and life." }
+                { title: "Performance Analysis", content: "Primarily the Rajasthan Royals Academy Management System and Full Track, as well as other tech programs, will form the basis of our monitoring tools." },
+                { title: "Video Analysis", content: "Video analysis is a cornerstone of the Elite program, providing you with instant feedback on your development as a player." },
             ]
         },
         {
             title: "MATCH PLAY / SIMULATION",
             color: "border-rr-pink",
-            defaultOpen: true,
+            defaultOpen: false,
             items: [
                 { title: "Matches and Match Simulation", content: "Players from the Elite Program may be invited to outdoor internal matches and match simulations, staged from time to time through the 2nd half of 2026." },
                 { title: "Scenario Simulation", content: "Indoor scenario sessions will be held at Cutting Edge Cricket Centre to provide for assisting players in recognising and navigating their way through specific match situations." },
@@ -67,7 +73,7 @@ const ProgramOverview = () => {
         {
             title: "ROYALS OPPORTUNITIES",
             color: "border-rr-blue",
-            defaultOpen: true,
+            defaultOpen: false,
             items: [
                 { title: "Rajasthan Royals High Performance Centre", content: "Each calendar year, talented cricketers from the Elite program may be invited to the Rajasthan Royals High Performance Centre in Jaipur, India." },
                 { title: "Invitation to Trial with Royals Franchises", content: "Elite players who show exceptional development and growth may be offered opportunities to trial with Rajasthan Royals, Paarl Royals or Barbados Royals." },
@@ -88,9 +94,8 @@ const ProgramOverview = () => {
             color: "border-ra-blue",
             defaultOpen: false,
             items: [
-                { title: "Performance Analysis", content: "Primarily the Rajasthan Royals Academy Management System and Full Track, as well as other tech programs, will form the basis of our monitoring tools." },
+                { title: "Individual Development Plans (IDP)", content: "Each player receives a personalised development plan that addresses the whole person: skills, fitness, mindset, recovery, and life." },
                 { title: "Career Mentorship", content: "Critical to your development, our expert team will work with you on mapping out cricket career and development opportunities based on your skills and performance." },
-                { title: "Video Analysis", content: "Video analysis is a cornerstone of the Elite program, providing you with instant feedback on your development as a player." },
                 { title: "360 Player Development", content: "Sessions in nutrition, sports & performance psychology, strength & conditioning development and body management." }
             ]
         },
@@ -135,6 +140,12 @@ const ProgramOverview = () => {
                             <AccordionSection {...section} />
                         </motion.div>
                     ))}
+                </div>
+
+                <div className="text-center mt-12">
+                    <Button onClick={scrollToForm} variant="primary">
+                        APPLY NOW
+                    </Button>
                 </div>
             </div>
         </section>

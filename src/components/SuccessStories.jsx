@@ -1,15 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import Button from './Button';
 
 const players = [
     {
         name: "YASHASVI JAISWAL",
-        label: "Global T20 Superstar",
+        label: "T20 Superstar",
         image: "/assets/jaiswal-100.jpg",
     },
     {
         name: "KWENA MAPHAKA",
-        label: "U19 World Cup Sensation",
+        label: "T20 Bowling Sensation",
         image: "/assets/kwena-maphaka.webp",
     },
     {
@@ -35,6 +36,10 @@ const players = [
 ];
 
 const SuccessStories = () => {
+    const scrollToForm = () => {
+        document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' });
+    };
+
     return (
         <section className="py-24 bg-white">
             <div className="container mx-auto px-6">
@@ -69,6 +74,12 @@ const SuccessStories = () => {
                             </div>
                         </motion.div>
                     ))}
+                </div>
+
+                <div className="text-center mt-12">
+                    <Button onClick={scrollToForm} variant="primary">
+                        APPLY NOW
+                    </Button>
                 </div>
 
             </div>
