@@ -60,12 +60,14 @@ const Intro = () => {
                                 { href: "https://www.barbadosroyals.com", logo: "/assets/barbados-royals-logo.png", name: "Barbados Royals", league: "CPL" },
                                 { href: "https://rajasthanroyalsacademy.com", logo: "/assets/Basic logo.png", name: "RR Academy", league: "GLOBAL" },
                             ].map((item) => (
-                                <a key={item.name} href={item.href} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2">
-                                    <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
-                                        <img src={item.logo} alt={item.name} className="w-10 h-10 object-contain" />
+                                <a key={item.name} href={item.href} target="_blank" rel="noopener noreferrer">
+                                    <div className="flex items-center gap-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl px-3 py-3 hover:border-rr-pink/40 transition-colors duration-300 h-full">
+                                        <img src={item.logo} alt={item.name} className="w-8 h-8 rounded-lg object-contain shrink-0" />
+                                        <div className="text-left min-w-0">
+                                            <span className="text-[10px] sm:text-xs font-semibold text-white block leading-tight truncate">{item.name}</span>
+                                            <span className="text-[9px] sm:text-[10px] font-bold text-rr-pink tracking-wider">{item.league}</span>
+                                        </div>
                                     </div>
-                                    <span className="text-xs font-semibold text-white text-center leading-tight">{item.name}</span>
-                                    <span className="text-[10px] font-bold text-rr-pink tracking-wider">{item.league}</span>
                                 </a>
                             ))}
                         </div>
