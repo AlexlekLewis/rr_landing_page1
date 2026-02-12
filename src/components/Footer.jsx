@@ -2,39 +2,29 @@ import React from 'react';
 
 const Footer = () => {
     return (
-        <footer className="bg-rr-dark text-slate-400 py-12 border-t border-slate-800">
-            <div className="container mx-auto px-6">
-                <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-                    <div className="flex items-center gap-4">
-                        <img
-                            src="/assets/rra-melbourne-logo.png"
-                            alt="Rajasthan Royals Academy Melbourne"
-                            className="h-12 w-auto object-contain"
-                        />
-                        <div>
-                            <h4 className="text-white font-bold text-lg">ROYALS ACADEMY</h4>
-                            <p className="text-sm">Melbourne Elite Program</p>
-                        </div>
-                    </div>
-
-                    <div className="text-center">
-                        <p className="text-sm mb-2">
-                            Part of the{' '}
-                            <a
-                                href="https://www.rajasthanroyals.com"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-rr-pink hover:underline font-semibold transition-colors hover:text-rf-pink"
-                            >
-                                Rajasthan Royals
-                            </a>
-                            {' '}global cricket network
-                        </p>
-                        <p className="text-xs text-slate-500">
-                            &copy; {new Date().getFullYear()} Rajasthan Royals Academy Melbourne. All rights reserved.
-                        </p>
+        <footer
+            className="text-white py-6 relative overflow-hidden"
+            style={{
+                background: 'linear-gradient(90deg, #E11F8F 0%, #001D48 100%)'
+            }}
+        >
+            <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div className="flex flex-col md:flex-row items-center gap-8">
+                    <img
+                        src="/assets/MELBOURNE_OFFICIAL.png"
+                        alt="Rajasthan Royals Academy Melbourne"
+                        className="h-12 w-auto object-contain brightness-0 invert"
+                    />
+                    <div className="flex gap-6 text-xs text-white/80">
+                        <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+                        <span className="hidden md:inline">|</span>
+                        <a href="#" className="hover:text-white transition-colors">Term and Condition</a>
                     </div>
                 </div>
+
+                <p className="text-xs text-white/60 text-center md:text-right">
+                    &copy; {new Date().getFullYear()} Rajasthan Royals Academy Australia. All rights reserved.
+                </p>
             </div>
         </footer>
     );
