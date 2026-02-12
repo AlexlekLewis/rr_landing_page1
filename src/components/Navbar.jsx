@@ -44,21 +44,23 @@ const Navbar = () => {
             >
                 {/* Background layer with opacity fade-in */}
                 <div
-                    className="absolute inset-0 transition-opacity duration-700 ease-in-out shadow-lg"
+                    className="absolute inset-0 shadow-lg"
                     style={{
-                        background: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
-                        opacity: scrolled ? 1 : 0,
+                        background: '#E11F8F',
+                        opacity: 1,
                         pointerEvents: 'none',
                     }}
                 />
 
                 <div className="relative container mx-auto px-6 flex justify-between items-center">
                     <div className="flex items-center gap-4">
-                        <img
-                            src="/assets/rra-melbourne-logo.png"
-                            alt="Rajasthan Royals Academy Melbourne"
-                            className="h-12 md:h-16 w-auto object-contain"
-                        />
+                        <div className="bg-[#E11F8F] px-4 pt-1 pb-2 rounded-b-xl -mt-4 shadow-lg">
+                            <img
+                                src="/assets/MELBOURNE.png"
+                                alt="Rajasthan Royals Academy Melbourne"
+                                className="h-24 md:h-32 w-auto object-contain mt-2"
+                            />
+                        </div>
 
                     </div>
 
