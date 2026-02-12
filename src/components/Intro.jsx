@@ -58,7 +58,7 @@ const Intro = () => {
                                 { href: "https://www.rajasthanroyals.com", logo: "/assets/rajasthan-royals-logo.png", name: "Rajasthan Royals", league: "IPL" },
                                 { href: "https://www.paarlroyals.com", logo: "/assets/paarl-royals-logo.png", name: "Paarl Royals", league: "SA20" },
                                 { href: "https://www.barbadosroyals.com", logo: "/assets/barbados-royals-logo.png", name: "Barbados Royals", league: "CPL" },
-                                { href: "https://rajasthanroyalsacademy.com", logo: "/assets/rr_academy_logo.png", name: "RR Academy", league: "GLOBAL" },
+                                { href: "https://rajasthanroyalsacademy.com", logo: "/assets/Basic logo.png", name: "RR Academy", league: "GLOBAL" },
                             ].map((item) => (
                                 <a key={item.name} href={item.href} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2">
                                     <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
