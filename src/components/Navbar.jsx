@@ -1,19 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import Button from './Button';
 
 const Navbar = () => {
-    const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
 
     const scrollToForm = () => {
         document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' });
@@ -33,22 +24,12 @@ const Navbar = () => {
 
     return (
         <>
-            {/* Pink accent bar */}
-            <div className="fixed top-0 left-0 right-0 z-[60] h-1" style={{ background: '#E11F8F' }} />
-
-            <nav
-                className={`fixed top-1 left-0 right-0 z-50 transition-[padding] duration-500 ${scrolled
-                    ? 'py-4'
-                    : 'py-6'
-                    }`}
-            >
-                {/* Background layer with opacity fade-in */}
+            <nav className="fixed top-0 left-0 right-0 z-50 py-2 transition-all duration-300">
+                {/* Background layer */}
                 <div
-                    className="absolute inset-0 transition-opacity duration-700 ease-in-out shadow-lg"
+                    className="absolute inset-0 shadow-lg"
                     style={{
-                        background: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
-                        opacity: scrolled ? 1 : 0,
-                        pointerEvents: 'none',
+                        background: '#E11F8F',
                     }}
                 />
 
@@ -57,9 +38,8 @@ const Navbar = () => {
                         <img
                             src="/assets/MELBOURNE_OFFICIAL.png"
                             alt="Rajasthan Royals Academy Melbourne"
-                            className="h-12 md:h-16 w-auto object-contain"
+                            className="h-16 md:h-24 w-auto object-contain brightness-0 invert"
                         />
-
                     </div>
 
                     {/* Desktop nav */}
@@ -74,7 +54,7 @@ const Navbar = () => {
                                 {link.label}
                             </a>
                         ))}
-                        <Button onClick={scrollToForm} variant="primary" className="text-sm px-6 py-2">
+                        <Button onClick={scrollToForm} variant="blue" className="text-sm px-6 py-2">
                             APPLY NOW
                         </Button>
                     </div>
@@ -114,7 +94,7 @@ const Navbar = () => {
                                     {link.label}
                                 </a>
                             ))}
-                            <Button onClick={scrollToForm} variant="primary" className="text-lg px-10 py-4 mt-4">
+                            <Button onClick={scrollToForm} variant="blue" className="text-lg px-10 py-4 mt-4">
                                 APPLY NOW
                             </Button>
                             <a
