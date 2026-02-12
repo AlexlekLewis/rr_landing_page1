@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
@@ -16,9 +17,9 @@ const Footer = () => {
                         className="h-12 w-auto object-contain brightness-0 invert"
                     />
                     <div className="flex gap-6 text-xs text-white/80">
-                        <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+                        <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
                         <span className="hidden md:inline">|</span>
-                        <a href="#" className="hover:text-white transition-colors">Term and Condition</a>
+                        <Link to="/terms-conditions" className="hover:text-white transition-colors">Terms &amp; Conditions</Link>
                     </div>
                 </div>
 
