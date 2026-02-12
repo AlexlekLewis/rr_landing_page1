@@ -28,8 +28,11 @@ const Director = () => {
 
                         <div className="flex-1 text-left relative">
                             <div className="text-6xl text-rr-pink absolute -top-8 -left-4 opacity-50">"</div>
-                            <p className="text-xl md:text-2xl italic text-gray-300 leading-relaxed relative z-10 mb-8 pt-4">
-                                I wish I had a program like this coming through the system. Who knows where my cricket would have ended up. It’s an incredible opportunity to develop the modern day skills required to star in the shortest of formats.
+                            <p className="text-base md:text-lg italic text-gray-300 leading-relaxed relative z-10 mb-4 pt-4">
+                                My playing and coaching career has been an incredible journey. I built my game on impact — scoring quickly, taking key wickets and setting standards in the field — and I learned that real success comes from understanding the moments that matter and having the courage to execute under pressure.
+                            </p>
+                            <p className="text-base md:text-lg italic text-gray-300 leading-relaxed relative z-10 mb-8">
+                                Now as a coach and mentor my focus is on the current and next generation. I'm passionate about developing complete cricketers — players who can change a game with bat or ball, raise the standard in the field, and lead through their actions. If we bring the same high-performance mindset, attention to detail and competitive edge, we won't just produce powerful players — we'll develop leaders who understand how to win.
                             </p>
 
                             <div>
