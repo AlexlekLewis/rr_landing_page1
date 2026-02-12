@@ -8,7 +8,7 @@ const features = [
         image: "/assets/jaiswal-power.webp"
     },
     {
-        title: "360 Degree Striking",
+        title: "360 Degrees",
         description: "Playing a true 360 degree style of play confuses opponents and wins matches...if done with skill and with strategy.",
         image: "/assets/360-degree.webp"
     },

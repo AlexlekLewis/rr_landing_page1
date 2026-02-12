@@ -65,7 +65,7 @@ const ProgramOverview = () => {
             ]
         },
         {
-            title: "ADDITIONAL OPPORTUNITIES",
+            title: "ROYALS OPPORTUNITIES",
             color: "border-rr-blue",
             defaultOpen: true,
             items: [
