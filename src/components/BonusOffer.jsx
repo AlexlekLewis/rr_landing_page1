@@ -1,12 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import Button from './Button';
 
 const BonusOffer = () => {
-    const scrollToForm = () => {
-        document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' });
-    };
-
     return (
         <section className="py-20 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)' }}>
             {/* Background texture */}
@@ -49,14 +44,9 @@ const BonusOffer = () => {
                         </p>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <Button onClick={scrollToForm} variant="white">
-                            APPLY TO SECURE YOUR PLACE
-                        </Button>
-                    </div>
                 </motion.div>
             </div>
-        </section>
+        </section >
     );
 };
 

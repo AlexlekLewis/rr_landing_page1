@@ -72,7 +72,7 @@ const SelectionProcess = () => {
                         backgroundSize: '60px 60px',
                     }} />
 
-                    <div className="relative z-10 px-8 py-16 md:px-12 md:py-20">
+                    <div className="relative z-10 px-8 pt-16 pb-16 md:px-12 md:pt-20 md:pb-20">
                         <h2 className="text-3xl md:text-4xl font-black text-center text-white mb-4">SELECTION PROCESS</h2>
                         <p className="text-center text-slate-300 max-w-2xl mx-auto mb-16 text-base md:text-lg leading-relaxed">
                             Places in the Rajasthan Royals Academy Melbourne Elite Program are limited and as such the selection process is designed to identify talented cricketers ready to take the next step in their development. Here's how the process works.
@@ -157,12 +157,11 @@ const SelectionProcess = () => {
                                 </motion.div>
                             ))}
                         </div>
-                    </div>
-
-                    <div className="text-center mt-12">
-                        <Button onClick={scrollToForm} variant="blue" className="text-base px-8 py-4">
-                            APPLY NOW
-                        </Button>
+                        <div className="text-center mt-4">
+                            <Button onClick={scrollToForm} variant="blue" className="text-base px-8 py-4">
+                                APPLY NOW
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
