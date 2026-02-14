@@ -21,7 +21,7 @@ const TermsConditions = () => {
                         Back to Home
                     </Link>
                     <h1 className="text-4xl md:text-5xl font-black uppercase tracking-wide">Terms &amp; Conditions</h1>
-                    <p className="text-white/70 mt-4 text-sm">Last updated: February 2025</p>
+                    <p className="text-white/70 mt-4 text-sm">Last updated: February 2026</p>
                 </div>
             </div>
 
@@ -33,7 +33,7 @@ const TermsConditions = () => {
                         <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">1. Introduction</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             These Terms and Conditions ("Terms") govern your use of the Rajasthan Royals Academy
-                            Australia website and your participation in the application and selection process for
+                            Melbourne website and your participation in the application and selection process for
                             the Academy program. By submitting an application or using our website, you agree to
                             be bound by these Terms. Please read them carefully.
                         </p>
@@ -41,7 +41,7 @@ const TermsConditions = () => {
 
                     <section>
                         <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">2. Eligibility</h2>
-                        <p className="text-rr-dark/80 leading-relaxed mb-4">To be eligible to apply for the Rajasthan Royals Academy program, applicants must:</p>
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">To be eligible to apply for the Rajasthan Royals Academy Melbourne program, applicants must:</p>
                         <ul className="list-disc pl-6 space-y-2 text-rr-dark/80">
                             <li>Meet the age and skill requirements specified in the current intake announcement.</li>
                             <li>Provide accurate and truthful information in their application.</li>
@@ -53,7 +53,7 @@ const TermsConditions = () => {
                     <section>
                         <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">3. Application Process</h2>
                         <p className="text-rr-dark/80 leading-relaxed mb-4">
-                            The application process for the Rajasthan Royals Academy involves the following:
+                            The application process for the Rajasthan Royals Academy Melbourne involves the following:
                         </p>
                         <ul className="list-disc pl-6 space-y-2 text-rr-dark/80">
                             <li><strong>Submission:</strong> Applicants must complete the online application form in full, including all required personal details, cricket background, and any supporting materials (e.g., performance videos, references).</li>
@@ -67,7 +67,7 @@ const TermsConditions = () => {
                         <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">4. Selection Process</h2>
                         <p className="text-rr-dark/80 leading-relaxed mb-4">
                             The selection process is designed to identify talented cricketers who demonstrate the
-                            potential to develop within the Rajasthan Royals system. Please note:
+                            potential to develop within the Rajasthan Royals Melbourne system. Please note:
                         </p>
                         <ul className="list-disc pl-6 space-y-2 text-rr-dark/80">
                             <li><strong>Trials &amp; Assessment:</strong> Shortlisted applicants may be invited to attend in-person trials, skills assessments, fitness evaluations, and interviews at the Academy's discretion.</li>
@@ -80,7 +80,7 @@ const TermsConditions = () => {
                     <section>
                         <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">5. Right to Select</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
-                            The Rajasthan Royals Academy reserves the absolute and sole right to select, reject,
+                            The Rajasthan Royals Academy Melbourne reserves the absolute and sole right to select, reject,
                             or defer any applicant at any stage of the application or selection process, without
                             obligation to provide reasons for its decisions. The Academy may also revoke an offer
                             of placement at any time prior to commencement of the program if it becomes aware of
@@ -98,7 +98,7 @@ const TermsConditions = () => {
                             <li>Conduct themselves in a professional and respectful manner at all times.</li>
                             <li>Adhere to the Academy's code of conduct, training schedules, and program requirements.</li>
                             <li>Comply with all applicable laws, regulations, and anti-doping policies.</li>
-                            <li>Respect the intellectual property and brand of the Rajasthan Royals.</li>
+                            <li>Respect the intellectual property and brand of the Rajasthan Royals Academy Melbourne.</li>
                         </ul>
                         <p className="text-rr-dark/80 leading-relaxed mt-4">
                             Failure to comply with these standards may result in immediate removal from the program
@@ -110,7 +110,7 @@ const TermsConditions = () => {
                         <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">7. Intellectual Property</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             All content on this website, including text, images, logos, graphics, and branding,
-                            is the intellectual property of the Rajasthan Royals organisation and its licensors.
+                            is the intellectual property of the Rajasthan Royals Academy Melbourne and its licensors.
                             You may not reproduce, distribute, modify, or create derivative works from any content
                             without prior written permission. By submitting media (e.g., performance videos) as
                             part of your application, you grant the Academy a non-exclusive, royalty-free licence
@@ -121,7 +121,7 @@ const TermsConditions = () => {
                     <section>
                         <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">8. Limitation of Liability</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
-                            To the fullest extent permitted by law, the Rajasthan Royals Academy, its directors,
+                            To the fullest extent permitted by law, the Rajasthan Royals Academy Melbourne, its directors,
                             officers, employees, and agents shall not be liable for any direct, indirect, incidental,
                             consequential, or special damages arising from your use of this website, participation
                             in the application process, or involvement in the Academy program. Participation in
@@ -132,7 +132,7 @@ const TermsConditions = () => {
                     <section>
                         <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">9. Indemnification</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
-                            You agree to indemnify and hold harmless the Rajasthan Royals Academy and its affiliates
+                            You agree to indemnify and hold harmless the Rajasthan Royals Academy Melbourne and its affiliates
                             from any claims, damages, losses, or expenses (including legal fees) arising from your
                             breach of these Terms, your application, or your participation in the program.
                         </p>
@@ -172,8 +172,8 @@ const TermsConditions = () => {
                             If you have any questions regarding these Terms, please contact us at:
                         </p>
                         <div className="mt-4 p-6 bg-gray-50 rounded-xl border border-gray-200">
-                            <p className="font-bold text-rr-navy">Rajasthan Royals Academy Australia</p>
-                            <p className="text-rr-dark/70 mt-1">Email: info@rajasthanroyalsacademy.com.au</p>
+                            <p className="font-bold text-rr-navy">Rajasthan Royals Academy Melbourne</p>
+                            <p className="text-rr-dark/70 mt-1">Email: info@rramelbourne.com</p>
                         </div>
                     </section>
                 </div>

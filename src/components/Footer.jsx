@@ -24,7 +24,7 @@ const Footer = () => {
                 </div>
 
                 <p className="text-xs text-white/60 text-center md:text-right">
-                    &copy; {new Date().getFullYear()} Rajasthan Royals Academy Australia. All rights reserved.
+                    &copy; {new Date().getFullYear()} Rajasthan Royals Academy Melbourne. All rights reserved.
                 </p>
             </div>
         </footer>

@@ -21,7 +21,7 @@ const PrivacyPolicy = () => {
                         Back to Home
                     </Link>
                     <h1 className="text-4xl md:text-5xl font-black uppercase tracking-wide">Privacy Policy</h1>
-                    <p className="text-white/70 mt-4 text-sm">Last updated: February 2025</p>
+                    <p className="text-white/70 mt-4 text-sm">Last updated: February 2026</p>
                 </div>
             </div>
 
@@ -32,7 +32,7 @@ const PrivacyPolicy = () => {
                     <section>
                         <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">1. Introduction</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
-                            Rajasthan Royals Academy Australia ("we", "our", "us") is committed to protecting
+                            Rajasthan Royals Academy Melbourne ("we", "our", "us") is committed to protecting
                             and respecting your privacy. This Privacy Policy explains how we collect, use, store,
                             and protect personal information provided to us through our website, application forms,
                             and related services.
@@ -56,7 +56,7 @@ const PrivacyPolicy = () => {
                         <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">3. Data Ownership</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             All personal data submitted by applicants remains the property of the Rajasthan Royals
-                            organisation. By submitting your application, you acknowledge that the Rajasthan Royals
+                            Academy Melbourne. By submitting your application, you acknowledge that the Rajasthan Royals Academy Melbourne
                             and its affiliated academies hold custodianship over the data you provide for the
                             purposes outlined in this policy. You retain the right to request access to, correction of,
                             or deletion of your personal data at any time, subject to our legal obligations.
@@ -69,7 +69,7 @@ const PrivacyPolicy = () => {
                         <ul className="list-disc pl-6 space-y-2 text-rr-dark/80">
                             <li>To process and evaluate your application to the Academy program.</li>
                             <li>To communicate with you about your application status, upcoming trials, and Academy events.</li>
-                            <li>To facilitate talent identification and scouting within the Rajasthan Royals network.</li>
+                            <li>To facilitate talent identification and scouting within the Rajasthan Royals Academy Melbourne network.</li>
                             <li>To administer the Academy program, including scheduling, logistics, and participant management.</li>
                             <li>To comply with legal and regulatory requirements.</li>
                             <li>To improve our services, website functionality, and user experience.</li>
@@ -83,7 +83,7 @@ const PrivacyPolicy = () => {
                             marketing purposes. Your data may be shared only in the following circumstances:
                         </p>
                         <ul className="list-disc pl-6 space-y-2 text-rr-dark/80">
-                            <li><strong>Rajasthan Royals Group:</strong> Your data may be shared with affiliated entities within the Rajasthan Royals organisation (including franchise teams and partner academies) solely for talent identification and development purposes.</li>
+                            <li><strong>Rajasthan Royals Academy Melbourne:</strong> Your data may be shared with affiliated entities within the Rajasthan Royals Academy Melbourne (including franchise teams and partner academies) solely for talent identification and development purposes.</li>
                             <li><strong>Service Providers:</strong> We may engage trusted third-party service providers (e.g., hosting providers, email platforms) who process data on our behalf under strict confidentiality agreements.</li>
                             <li><strong>Legal Obligations:</strong> We may disclose your information if required by law, court order, or governmental regulation.</li>
                         </ul>
@@ -153,8 +153,8 @@ const PrivacyPolicy = () => {
                             please contact us at:
                         </p>
                         <div className="mt-4 p-6 bg-gray-50 rounded-xl border border-gray-200">
-                            <p className="font-bold text-rr-navy">Rajasthan Royals Academy Australia</p>
-                            <p className="text-rr-dark/70 mt-1">Email: info@rajasthanroyalsacademy.com.au</p>
+                            <p className="font-bold text-rr-navy">Rajasthan Royals Academy Melbourne</p>
+                            <p className="text-rr-dark/70 mt-1">Email: info@rramelbourne.com</p>
                         </div>
                     </section>
                 </div>
