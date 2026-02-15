@@ -46,7 +46,7 @@ const Hero = () => {
                             READY TO DOMINATE<br />THE T20 GAME?
                         </h1>
                         <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-white/90 mb-4 leading-snug normal-case tracking-normal">
-                            Modern cricket demands more than tradition.<br className="hidden md:block" />
+                            Modern cricket demands more than tradition.<br />
                             <span className="text-rr-pink">We develop explosive skills, sharp thinking and elite habits.</span>
                         </h2>
                         <p className="text-sm md:text-base text-gray-300 font-bold tracking-[0.15em] uppercase mb-8">

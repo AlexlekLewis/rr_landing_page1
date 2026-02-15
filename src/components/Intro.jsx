@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Play } from 'lucide-react';
 import Button from './Button';
 
+const YOUTUBE_VIDEO_ID = 'gqDVw9Idktw';
+
 const Intro = () => {
+    const [isPlaying, setIsPlaying] = useState(false);
+
     const scrollToForm = () => {
         document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' });
     };
@@ -12,21 +16,41 @@ const Intro = () => {
         <section className="py-20 bg-rr-dark text-white relative overflow-hidden">
             <div className="container mx-auto px-6">
 
-                {/* Video Placeholder */}
+                {/* Video Section */}
                 <div className="flex justify-center mb-16">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className="w-full max-w-4xl aspect-video bg-rr-grey rounded-2xl border border-rr-grey shadow-2xl flex items-center justify-center group cursor-pointer relative overflow-hidden"
+                        className="w-full max-w-4xl aspect-video bg-rr-grey rounded-2xl border border-rr-grey shadow-2xl relative overflow-hidden"
                     >
-                        <img src="/assets/academy_vision.png" alt="Academy Vision" className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" />
-                        <div className="absolute inset-0 bg-gradient-to-tr from-rr-pink/40 to-rr-blue/40" />
-                        <div className="absolute inset-0 bg-gradient-to-tr from-rr-pink/20 to-ra-blue/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                        <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm group-hover:scale-110 transition-transform duration-300 z-10">
-                            <Play className="w-8 h-8 text-white fill-current ml-1" />
-                        </div>
-                        <p className="absolute bottom-6 left-6 text-sm font-medium tracking-wider text-gray-300">WATCH: THE ACADEMY VISION</p>
+                        {isPlaying ? (
+                            <iframe
+                                src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1&rel=0&modestbranding=1`}
+                                title="Rajasthan Royals Academy Vision"
+                                className="absolute inset-0 w-full h-full rounded-2xl"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                            />
+                        ) : (
+                            <div
+                                className="absolute inset-0 flex items-center justify-center group cursor-pointer"
+                                onClick={() => setIsPlaying(true)}
+                            >
+                                <img
+                                    src={`https://img.youtube.com/vi/${YOUTUBE_VIDEO_ID}/maxresdefault.jpg`}
+                                    alt="Academy Vision"
+                                    className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-tr from-rr-pink/40 to-rr-blue/40" />
+                                <div className="absolute inset-0 bg-gradient-to-tr from-rr-pink/20 to-rr-blue/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm group-hover:scale-110 transition-transform duration-300 z-10">
+                                    <Play className="w-8 h-8 text-white fill-current ml-1" />
+                                </div>
+                                <p className="absolute bottom-6 left-6 text-sm font-medium tracking-wider text-gray-300">WATCH: THE ACADEMY VISION</p>
+                            </div>
+                        )}
                     </motion.div>
                 </div>
 
