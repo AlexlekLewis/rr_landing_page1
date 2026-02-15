@@ -7,7 +7,7 @@ const PrivacyPolicy = () => {
             {/* Header */}
             <div
                 className="py-20 md:py-28 text-center text-white relative overflow-hidden"
-                style={{ background: 'linear-gradient(135deg, #001D48 0%, #0075C9 50%, #E11F8F 100%)' }}
+                style={{ background: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)' }}
             >
                 <div className="absolute inset-0 bg-black/20" />
                 <div className="relative z-10 container mx-auto px-6">
