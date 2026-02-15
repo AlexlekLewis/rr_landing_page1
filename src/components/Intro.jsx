@@ -22,16 +22,15 @@ const Intro = () => {
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className="w-full max-w-4xl aspect-video bg-rr-grey rounded-2xl border border-rr-grey shadow-2xl relative overflow-hidden"
+                        className="w-full max-w-4xl aspect-video bg-white/5 rounded-2xl border border-white/10 shadow-2xl relative overflow-hidden"
                     >
                         {isPlaying ? (
-                            <iframe
-                                src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1&rel=0&modestbranding=1`}
+                            <video
+                                src="https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/Kumar%20Video%20Landing/Landing%20Page%20Full%20Edit%20v1.mov"
                                 title="Rajasthan Royals Academy Vision"
-                                className="absolute inset-0 w-full h-full rounded-2xl"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
+                                className="absolute inset-0 w-full h-full rounded-2xl object-cover"
+                                controls
+                                autoPlay
                             />
                         ) : (
                             <div

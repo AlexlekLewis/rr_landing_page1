@@ -23,7 +23,7 @@ const FAQItem = ({ question, answer }) => {
                         exit={{ height: 0, opacity: 0 }}
                         className="overflow-hidden"
                     >
-                        <div className="pb-6 text-slate-600 leading-relaxed">
+                        <div className="pb-6 text-slate-600 leading-relaxed font-medium">
                             {answer}
                         </div>
                     </motion.div>
@@ -58,10 +58,12 @@ const FAQ = () => {
     ];
 
     return (
-        <section className="py-24 bg-white" id="faq">
-            <div className="container mx-auto px-6 max-w-4xl">
-                <h2 className="text-4xl font-black text-center text-rr-dark mb-4">COMMON QUESTIONS</h2>
-                <p className="text-center text-slate-500 mb-12">Everything you need to know about the Elite Program</p>
+        <section className="py-24 bg-rr-dark relative" id="faq">
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+            <div className="container mx-auto px-6 max-w-4xl relative z-10">
+                <h2 className="text-4xl font-black text-center text-white mb-4">COMMON QUESTIONS</h2>
+                <p className="text-center text-slate-300 mb-12 font-light">Everything you need to know about the Elite Program</p>
 
                 {/* Program Details */}
                 <div className="mb-8">

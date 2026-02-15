@@ -63,7 +63,7 @@ const DateOfBirthInput = ({ value, onChange, required = false }) => {
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: 100 }, (_, i) => String(currentYear - i));
 
-    const selectClass = "w-full bg-white border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-rr-pink/20 transition-all text-rr-dark appearance-none";
+    const selectClass = "w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-rr-pink/20 transition-all text-rr-dark appearance-none cursor-pointer";
 
     return (
         <div className="mb-6">

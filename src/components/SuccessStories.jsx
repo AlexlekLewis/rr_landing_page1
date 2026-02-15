@@ -41,14 +41,17 @@ const SuccessStories = () => {
     };
 
     return (
-        <section className="py-24 bg-white">
-            <div className="container mx-auto px-6">
+        <section className="py-24 bg-rr-dark relative overflow-hidden">
+            {/* Decoration */}
+            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-rr-pink/50 to-transparent" />
+
+            <div className="container mx-auto px-6 relative z-10">
                 <div className="max-w-4xl mx-auto text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-black text-rr-dark mb-4">UNCOVERING TALENT</h2>
-                    <p className="text-sm font-bold uppercase tracking-[0.15em] text-rr-pink mb-4">
+                    <h2 className="text-3xl md:text-4xl font-black text-white mb-4">UNCOVERING TALENT</h2>
+                    <p className="text-sm font-bold uppercase tracking-[0.15em] text-rr-light-pink mb-4">
                         The T20 game has changed. Have you?
                     </p>
-                    <p className="text-lg text-rr-grey">
+                    <p className="text-lg text-slate-300 font-light">
                         Rajasthan Royals have developed a reputation for uncovering and developing talent across the world. Siddhartha Lahiri and his network leave no stone unturned.
                     </p>
                 </div>

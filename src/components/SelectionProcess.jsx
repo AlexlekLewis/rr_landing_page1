@@ -55,8 +55,9 @@ const SelectionProcess = () => {
     };
 
     return (
-        <section className="py-24 bg-gradient-to-b from-slate-100 to-white">
-            <div className="container mx-auto px-6">
+        <section className="py-24 bg-rr-dark relative">
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-rr-blue/5 to-transparent pointer-events-none" />
+            <div className="container mx-auto px-6 relative z-10">
                 {/* Contained dark card matching the mockup */}
                 <div
                     className="max-w-6xl mx-auto rounded-2xl overflow-hidden relative"

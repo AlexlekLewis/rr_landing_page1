@@ -29,7 +29,7 @@ const Navbar = () => {
                 <div
                     className="absolute inset-0 shadow-lg"
                     style={{
-                        background: '#E11F8F',
+                        background: 'var(--color-rr-pink)',
                     }}
                 />
 
@@ -80,7 +80,7 @@ const Navbar = () => {
                         transition={{ type: 'tween', duration: 0.3 }}
                         className="fixed inset-0 z-[55] pt-20"
                         style={{
-                            background: 'linear-gradient(180deg, #001D48 0%, #1226AA 50%, #E11F8F 100%)',
+                            background: 'linear-gradient(180deg, var(--color-rr-navy) 0%, var(--color-rr-blue) 50%, var(--color-rr-pink) 100%)',
                         }}
                     >
                         <div className="flex flex-col items-center space-y-8 pt-12">

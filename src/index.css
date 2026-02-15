@@ -5,19 +5,26 @@
   --font-sans: 'Montserrat', sans-serif;
   --font-display: 'Montserrat', sans-serif;
 
-  /* Brand Colors */
-  --color-rr-pink: #E11F8F;
+  /* Brand Colors - Verified from BRAND_GUIDE.md */
+  --color-rr-pink: #E50695;
+  /* Pantone Rhodamine Red C */
   --color-rr-blue: #1226AA;
-  --color-ra-blue: #0075C9;
-  --color-rr-dark: #323E48;
-  /* Updated to Dark Charcoal per guidelines */
-  --color-rf-pink: #E96BB0;
-  --color-rr-grey: #323E48;
-  --color-rr-navy: #001D48;
+  /* Pantone 2736 C */
+  --color-rr-admiral-blue: #132485;
+  /* Admiral Blue - Jersey/Bus */
+  --color-rr-dark: #111921;
+  /* Pantone Black 6 C - Main Background */
+  --color-rr-light-pink: #F15AA2;
+  /* Web Highlight */
+  --color-rr-navy: #132485;
+  /* Usage for depth, mapped to Admiral Blue */
 
-  /* Retain original functional colors mapped to new brand colors where appropriate */
-  --color-royal-blue: #0075C9;
-  /* Mapped to RA Blue */
+  /* Functional Colors */
+  --color-royal-blue: var(--color-rr-blue);
+
+  /* Gradients */
+  --image-gradient-rr: linear-gradient(to right, var(--color-rr-blue), var(--color-rr-pink));
+  --image-gradient-dark: linear-gradient(180deg, rgba(17, 25, 33, 0) 0%, var(--color-rr-dark) 100%);
 }
 
 @layer base {

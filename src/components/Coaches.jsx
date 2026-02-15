@@ -54,7 +54,7 @@ const CoachProfile = ({ coach }) => {
             </div>
             <h3 className="text-xl font-black text-rr-dark">{coach.name}</h3>
             <p className="text-rr-pink font-bold text-xs uppercase tracking-widest mb-3">{coach.role}</p>
-            <p className="text-slate-600 text-sm leading-relaxed max-w-xs mx-auto">{coach.bio}</p>
+            <p className="text-slate-600 text-sm leading-relaxed max-w-xs mx-auto font-medium">{coach.bio}</p>
 
             {/* Hover Lightbox */}
             <AnimatePresence>
@@ -100,12 +100,16 @@ const Coaches = () => {
     };
 
     return (
-        <section className="py-24 bg-slate-50" id="coaches">
-            <div className="container mx-auto px-6">
+        <section className="py-24 bg-white relative" id="coaches">
+            {/* Subtle background decoration */}
+            <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-bl from-rr-blue/5 to-transparent rounded-bl-full pointer-events-none" />
+
+            <div className="container mx-auto px-6 relative z-10">
                 <h2 className="text-4xl md:text-5xl font-black text-center text-rr-dark mb-4">
-                    ELITE <span className="text-rr-pink">LEADERSHIP</span>
+                    ELITE <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">LEADERSHIP</span>
                 </h2>
-                <p className="text-center text-slate-500 mb-16 max-w-2xl mx-auto">
+                <div className="h-1.5 w-24 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto mb-12 rounded-full" />
+                <p className="text-center text-slate-600 mb-16 max-w-2xl mx-auto font-medium text-lg">
                     Rajasthan Royals Academy Melbourne Elite Program leadership group has been assembled to take your T20 game to the next level and provide a direct connection into the Royals global network.
                 </p>
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">

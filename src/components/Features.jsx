@@ -34,7 +34,7 @@ const FeatureCard = ({ title, description, image, delay }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay, duration: 0.5 }}
-            className="bg-white rounded-2xl shadow-lg border-b-4 border-rr-pink hover:-translate-y-2 transition-transform duration-300 overflow-hidden cursor-pointer"
+            className="bg-white rounded-2xl shadow-xl border border-slate-100 border-b-4 border-b-rr-pink hover:-translate-y-2 transition-transform duration-300 overflow-hidden cursor-pointer group"
             onMouseEnter={() => setShowDesc(true)}
             onMouseLeave={() => setShowDesc(false)}
             onClick={() => setShowDesc(!showDesc)}
@@ -43,7 +43,7 @@ const FeatureCard = ({ title, description, image, delay }) => {
                 <img
                     src={image}
                     alt={title}
-                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                 />
 
                 {/* Hover/tap overlay */}
@@ -54,17 +54,17 @@ const FeatureCard = ({ title, description, image, delay }) => {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 40 }}
                             transition={{ duration: 0.25, ease: 'easeOut' }}
-                            className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-black/30 flex items-end"
+                            className="absolute inset-0 bg-gradient-to-t from-rr-blue/90 via-rr-blue/70 to-transparent flex items-end"
                         >
-                            <p className="text-white text-sm md:text-base leading-relaxed p-6 md:p-8">
+                            <p className="text-white text-sm md:text-base leading-relaxed p-6 md:p-8 font-medium">
                                 {description}
                             </p>
                         </motion.div>
                     )}
                 </AnimatePresence>
             </div>
-            <div className="p-6">
-                <h3 className="text-xl font-black text-rr-dark uppercase">{title}</h3>
+            <div className="p-6 bg-white">
+                <h3 className="text-xl font-bold text-rr-dark uppercase tracking-wider">{title}</h3>
             </div>
         </motion.div>
     );
@@ -76,11 +76,15 @@ const Features = () => {
     };
 
     return (
-        <section className="py-24 bg-slate-50" id="program">
-            <div className="container mx-auto px-6">
+        <section className="py-24 bg-white relative" id="program">
+            {/* Subtle background decoration */}
+            <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-gradient-to-bl from-rr-pink/5 to-transparent rounded-bl-full pointer-events-none" />
+
+            <div className="container mx-auto px-6 relative z-10">
                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <h2 className="text-4xl md:text-5xl font-black text-rr-dark mb-4">CRITICAL MODERN SKILLS</h2>
-                    <p className="text-lg text-slate-600">
+                    <div className="h-1.5 w-24 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto mb-8 rounded-full" />
+                    <p className="text-lg text-slate-600 font-medium">
                         With T20 cricket at the heart of the Rajasthan Royals Academy Melbourne Elite Program, expect an education in the skills that matter.
                     </p>
                 </div>

@@ -16,7 +16,7 @@ const Director = () => {
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className="bg-slate-800 p-8 md:p-10 rounded-3xl border border-slate-700 relative flex flex-col md:flex-row items-center gap-8 md:gap-10"
+                        className="bg-white/5 backdrop-blur-sm p-8 md:p-10 rounded-3xl border border-white/10 relative flex flex-col md:flex-row items-center gap-8 md:gap-10 shadow-2xl"
                     >
                         <div className="w-full md:w-[280px] aspect-[3/4] rounded-2xl overflow-hidden shrink-0">
                             <img

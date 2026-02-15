@@ -6,7 +6,7 @@ const Footer = () => {
         <footer
             className="text-white py-6 relative overflow-hidden"
             style={{
-                background: 'linear-gradient(90deg, #E11F8F 0%, #001D48 100%)'
+                background: 'linear-gradient(90deg, var(--color-rr-pink) 0%, var(--color-rr-navy) 100%)'
             }}
         >
             <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">

@@ -7,7 +7,7 @@ const AccordionSection = ({ title, items, color = "border-rr-pink", defaultOpen 
     const [isOpen, setIsOpen] = useState(defaultOpen);
 
     return (
-        <div className={`bg-white rounded-2xl shadow-lg border-l-4 ${color} hover:shadow-xl transition-shadow duration-300 overflow-hidden`}>
+        <div className={`bg-white rounded-2xl shadow-lg border-l-4 ${color} hover:shadow-xl transition-all duration-300 overflow-hidden border border-slate-100`}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="w-full p-6 md:p-8 flex justify-between items-center text-left focus:outline-none group"
@@ -31,7 +31,7 @@ const AccordionSection = ({ title, items, color = "border-rr-pink", defaultOpen 
                             {items.map((item, index) => (
                                 <div key={index}>
                                     <h4 className="text-base font-bold text-rr-dark mb-1">{item.title}</h4>
-                                    <p className="text-slate-600 leading-relaxed text-sm">{item.content}</p>
+                                    <p className="text-slate-600 leading-relaxed text-sm font-medium">{item.content}</p>
                                 </div>
                             ))}
                         </div>
@@ -111,19 +111,19 @@ const ProgramOverview = () => {
     ];
 
     return (
-        <section className="py-24 bg-slate-50 relative overflow-hidden" id="program-overview">
+        <section className="py-24 bg-white relative overflow-hidden" id="program-overview">
             {/* Background Elements */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-5">
                 <div className="absolute -top-24 -left-24 w-96 h-96 bg-rr-pink rounded-full blur-3xl" />
-                <div className="absolute top-1/2 right-0 w-64 h-64 bg-ra-blue rounded-full blur-3xl" />
+                <div className="absolute top-1/2 right-0 w-64 h-64 bg-rr-blue rounded-full blur-3xl" />
             </div>
 
             <div className="container mx-auto px-6 relative z-10">
                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <h2 className="text-4xl md:text-5xl font-black text-rr-dark mb-4">
-                        ELITE PROGRAM <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-ra-blue">OVERVIEW</span>
+                        ELITE PROGRAM <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">OVERVIEW</span>
                     </h2>
-                    <p className="text-lg text-slate-600">
+                    <p className="text-lg text-slate-600 font-medium">
                         A comprehensive, professional environment designed to take your game to the next level.
                     </p>
                 </div>

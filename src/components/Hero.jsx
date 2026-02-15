@@ -18,7 +18,7 @@ const Hero = () => {
                 }}
             >
                 {/* Gradient Overlay for mobile text readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-rr-navy via-rr-navy/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/60 to-transparent" />
             </div>
 
             {/* Background Image Layer - Desktop */}
@@ -29,9 +29,9 @@ const Hero = () => {
                     backgroundPosition: "center 20%"
                 }}
             >
-                {/* Gradient Overlay for desktop text readability */}
-                <div className="absolute inset-0 bg-gradient-to-r from-rr-navy via-rr-navy/80 to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-t from-rr-navy via-transparent to-transparent" />
+                {/* Gradient Overlay for desktop text readability - Deep Dark Brand Theme */}
+                <div className="absolute inset-0 bg-gradient-to-r from-rr-dark via-rr-dark/80 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-transparent to-transparent" />
             </div>
 
             {/* Content Container */}
@@ -74,7 +74,7 @@ const Hero = () => {
                         transition={{ duration: 0.5, delay: 0.4 }}
                         className="flex flex-col sm:flex-row gap-4 pb-16 md:pb-24"
                     >
-                        <Button onClick={scrollToForm} variant="gold" className="text-base px-8 py-4 text-lg">
+                        <Button onClick={scrollToForm} variant="primary" className="text-base px-8 py-4 text-lg">
                             APPLY TO SECURE YOUR PLACE
                         </Button>
                         <Button
