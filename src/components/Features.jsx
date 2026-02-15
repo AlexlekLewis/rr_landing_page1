@@ -20,7 +20,7 @@ const features = [
     },
     {
         title: "Control the Game",
-        description: "That is the question. When, where, what, how are questions you'll learn to answer as a pace or spin bowler.",
+        description: "Powerplay, middle overs or bowling at the death, learn skills to control the game with the ball in hand.",
         image: "/assets/on-pace-off-pace.jpg"
     }
 ];

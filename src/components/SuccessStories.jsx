@@ -30,7 +30,7 @@ const players = [
     },
     {
         name: "RIYAN PARAG",
-        label: "Royals Young Gun",
+        label: "Young Gun to Royals Captain",
         image: "/assets/riyan-parag-batting.jpg",
     },
 ];

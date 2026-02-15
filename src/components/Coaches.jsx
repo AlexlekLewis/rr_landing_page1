@@ -8,7 +8,7 @@ const coaches = [
         role: "Head of International Player Development",
         bio: "Leading talent identification and performance globally for the Royals Group of franchises and the Royals Academy network.",
         image: "/assets/rra/headcoach-lahiri.png",
-        fullBio: "Sid oversees the Rajasthan Royals Academy system within his portfolio, including the Rajasthan Royals Academy Melbourne. As well as an assistant or performance coach to Rajasthan, Paarl and Barbados Royals, he is a key figure in the global scouting network for the Royals Group and an expert in identifying performance talent. His eye for raw talent has unearthed some of the most exciting names in modern T20 cricket. Sid has also recently been appointed as an Assistant Coach of the Birmingham Phoenix in England's The Hundred franchise."
+        fullBio: "Sid oversees the Rajasthan Royals Academy system within his portfolio, including the Rajasthan Royals Academy Melbourne. As well as an assistant or performance coach to Rajasthan, Paarl and Barbados Royals, he is a key figure in the global scouting network for the Royals Group and an expert in identifying performance talent. His eye for raw talent has unearthed some of the most exciting names in modern T20 cricket."
     },
     {
         name: "Andy Crook",
@@ -106,7 +106,7 @@ const Coaches = () => {
                     ELITE <span className="text-rr-pink">LEADERSHIP</span>
                 </h2>
                 <p className="text-center text-slate-500 mb-16 max-w-2xl mx-auto">
-                    Rajasthan Royals Academy Melbourne ELITE PROGRAM leadership group has been assembled to take your T20 game to the next level and provide a direct connection into the Royals global network.
+                    Rajasthan Royals Academy Melbourne Elite Program leadership group has been assembled to take your T20 game to the next level and provide a direct connection into the Royals global network.
                 </p>
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
                     {coaches.map((c) => <CoachProfile key={c.name} coach={c} />)}

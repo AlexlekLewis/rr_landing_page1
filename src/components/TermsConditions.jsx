@@ -173,7 +173,7 @@ const TermsConditions = () => {
                         </p>
                         <div className="mt-4 p-6 bg-gray-50 rounded-xl border border-gray-200">
                             <p className="font-bold text-rr-navy">Rajasthan Royals Academy Melbourne</p>
-                            <p className="text-rr-dark/70 mt-1">Email: info@rramelbourne.com</p>
+                            <p className="text-rr-dark/70 mt-1">Email: Admin@rramelbourne.com</p>
                         </div>
                     </section>
                 </div>

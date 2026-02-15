@@ -164,7 +164,7 @@ const Apply = () => {
                         START YOUR JOURNEY
                     </h2>
                     <p className="text-lg text-slate-600">
-                        Ready to become a T20 star? Fill out the form below to apply for the Rajasthan Royals Academy Melbourne Elite Program.
+                        Ready to take your next step? Fill out the form below to apply for the Rajasthan Royals Academy Melbourne Elite Program.
                     </p>
                 </div>
 
