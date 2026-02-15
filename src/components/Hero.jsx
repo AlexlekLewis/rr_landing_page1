@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Button from './Button';
+import { TopRightCurve } from './Decals';
 
 const Hero = () => {
     const scrollToForm = () => {
@@ -8,31 +9,31 @@ const Hero = () => {
     };
 
     return (
-        <div className="relative min-h-screen w-full flex items-center bg-rr-dark overflow-hidden">
+        <div className="relative min-h-screen w-full flex items-center bg-white overflow-hidden">
+            {/* Decal Background */}
+            <TopRightCurve className="z-0" />
 
             {/* Background Image Layer - Mobile */}
             <div
-                className="absolute inset-0 w-full h-full bg-cover bg-no-repeat bg-[center_top] md:hidden"
+                className="absolute inset-0 w-full h-full bg-cover bg-no-repeat bg-[center_top] md:hidden z-0 opacity-20"
                 style={{
                     backgroundImage: "url('/assets/Hero.jpeg')",
                 }}
-            >
-                {/* Gradient Overlay for mobile text readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/60 to-transparent" />
-            </div>
+            />
 
             {/* Background Image Layer - Desktop */}
             <div
-                className="absolute inset-0 w-full h-full bg-cover bg-no-repeat hidden md:block"
+                className="absolute inset-0 w-full h-full bg-cover bg-no-repeat hidden md:block z-0"
                 style={{
                     backgroundImage: "url('/assets/hero-final.jpeg')",
-                    backgroundPosition: "center 20%"
+                    backgroundPosition: "center 20%",
+                    maskImage: "linear-gradient(to right, transparent, black 40%)",
+                    WebkitMaskImage: "linear-gradient(to right, transparent, black 40%)"
                 }}
-            >
-                {/* Gradient Overlay for desktop text readability - Deep Dark Brand Theme */}
-                <div className="absolute inset-0 bg-gradient-to-r from-rr-dark via-rr-dark/80 to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-transparent to-transparent" />
-            </div>
+            />
+            {/* White Gradient Fade for Desktop integration */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent z-10 hidden md:block" />
+
 
             {/* Content Container */}
             <div className="relative z-20 container mx-auto px-6 h-full flex flex-col justify-center text-left pt-32">
@@ -42,14 +43,14 @@ const Hero = () => {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                     >
-                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 mb-6 tracking-tighter leading-none">
+                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-rr-dark mb-6 tracking-tighter leading-none drop-shadow-sm">
                             READY TO DOMINATE<br />THE T20 GAME?
                         </h1>
-                        <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-white/90 mb-4 leading-snug normal-case tracking-normal">
+                        <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-slate-700 mb-4 leading-snug normal-case tracking-normal">
                             Modern cricket demands more than tradition.<br />
-                            <span className="text-rr-pink">We develop explosive skills, sharp thinking and elite habits.</span>
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">We develop explosive skills, sharp thinking and elite habits.</span>
                         </h2>
-                        <p className="text-sm md:text-base text-gray-300 font-bold tracking-[0.15em] uppercase mb-8">
+                        <p className="text-sm md:text-base text-rr-pink font-bold tracking-[0.15em] uppercase mb-8">
                             The future of T20 development starts here.
                         </p>
                     </motion.div>
@@ -58,10 +59,10 @@ const Hero = () => {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                        className="space-y-6 text-lg md:text-xl text-slate-300 leading-relaxed font-light mb-10 max-w-2xl"
+                        className="space-y-6 text-lg md:text-xl text-slate-600 leading-relaxed font-medium mb-10 max-w-2xl"
                     >
                         <p>
-                            Designed and managed by one of the <strong className="text-white">biggest cricket brands on the planet</strong>, the Elite program draws on decades of global T20 experience.
+                            Designed and managed by one of the <strong className="text-rr-dark">biggest cricket brands on the planet</strong>, the Elite program draws on decades of global T20 experience.
                         </p>
                         <p>
                             We provide opportunities previously not available in Australia. The Royals know how to uncover T20 talent like nobody else.
@@ -74,13 +75,13 @@ const Hero = () => {
                         transition={{ duration: 0.5, delay: 0.4 }}
                         className="flex flex-col sm:flex-row gap-4 pb-16 md:pb-24"
                     >
-                        <Button onClick={scrollToForm} variant="primary" className="text-base px-8 py-4 text-lg">
+                        <Button onClick={scrollToForm} variant="primary" className="text-base px-8 py-4 text-lg shadow-xl shadow-rr-pink/20">
                             APPLY TO SECURE YOUR PLACE
                         </Button>
                         <Button
                             onClick={() => document.getElementById('program')?.scrollIntoView({ behavior: 'smooth' })}
                             variant="secondary"
-                            className="text-base px-8 py-4 text-lg"
+                            className="text-base px-8 py-4 text-lg bg-white border-slate-200 text-rr-dark hover:bg-slate-50"
                         >
                             LEARN MORE
                         </Button>

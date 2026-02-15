@@ -49,33 +49,31 @@ const CurvedArrow = ({ id }) => (
     </svg>
 );
 
+import { TopRightCurve } from './Decals';
+
 const SelectionProcess = () => {
     const scrollToForm = () => {
         document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (
-        <section className="py-24 bg-rr-dark relative">
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-rr-blue/5 to-transparent pointer-events-none" />
+        <section className="py-24 bg-white relative overflow-hidden">
+            <TopRightCurve />
             <div className="container mx-auto px-6 relative z-10">
-                {/* Contained dark card matching the mockup */}
+                {/* Contained light card */}
                 <div
-                    className="max-w-6xl mx-auto rounded-2xl overflow-hidden relative"
-                    style={{
-                        background: 'linear-gradient(145deg, #0a1628 0%, #0f1d3a 50%, #0a1628 100%)',
-                        boxShadow: '0 25px 80px rgba(0,0,0,0.4)',
-                    }}
+                    className="max-w-6xl mx-auto rounded-3xl overflow-hidden relative border border-slate-200 shadow-2xl bg-white ring-1 ring-slate-50"
                 >
-                    {/* Subtle circuit pattern overlay */}
-                    <div className="absolute inset-0 opacity-[0.04]" style={{
-                        backgroundImage: `radial-gradient(circle at 20% 80%, #1226AA 1px, transparent 1px),
-                                          radial-gradient(circle at 80% 20%, #E11F8F 1px, transparent 1px)`,
-                        backgroundSize: '60px 60px',
+                    {/* Subtle circuit pattern overlay - adjusted for light theme */}
+                    <div className="absolute inset-0 opacity-[0.4]" style={{
+                        backgroundImage: `radial-gradient(circle at 20% 80%, #1226AA 0.5px, transparent 0.5px),
+                                          radial-gradient(circle at 80% 20%, #E11F8F 0.5px, transparent 0.5px)`,
+                        backgroundSize: '40px 40px',
                     }} />
 
                     <div className="relative z-10 px-8 pt-16 pb-16 md:px-12 md:pt-20 md:pb-20">
-                        <h2 className="text-3xl md:text-4xl font-black text-center text-white mb-4">SELECTION PROCESS</h2>
-                        <p className="text-center text-slate-300 max-w-2xl mx-auto mb-16 text-base md:text-lg leading-relaxed">
+                        <h2 className="text-3xl md:text-4xl font-black text-center text-rr-dark mb-4">SELECTION PROCESS</h2>
+                        <p className="text-center text-slate-600 max-w-2xl mx-auto mb-16 text-base md:text-lg leading-relaxed font-medium">
                             Places in the Rajasthan Royals Academy Melbourne Elite Program are limited and as such the selection process is designed to identify talented cricketers ready to take the next step in their development. Here's how the process works.
                         </p>
 
@@ -91,31 +89,27 @@ const SelectionProcess = () => {
                                         className="flex flex-col items-center text-center"
                                         style={{ width: '180px' }}
                                     >
-                                        {/* Glowing number circle */}
+                                        {/* Glowing number circle - Light Theme */}
                                         <div
-                                            className="w-20 h-20 rounded-full flex items-center justify-center text-3xl font-black text-white mb-5 relative shrink-0"
+                                            className="w-20 h-20 rounded-full flex items-center justify-center text-3xl font-black text-white mb-5 relative shrink-0 shadow-xl shadow-rr-pink/20"
                                             style={{
                                                 background: 'linear-gradient(135deg, #E11F8F 0%, #1226AA 100%)',
-                                                boxShadow: '0 0 30px rgba(225,31,143,0.35), 0 0 60px rgba(18,38,170,0.2), inset 0 0 20px rgba(255,255,255,0.05)',
                                             }}
                                         >
-                                            {/* Outer ring glow */}
-                                            <div className="absolute inset-[-3px] rounded-full" style={{
-                                                border: '1.5px solid rgba(225,31,143,0.3)',
-                                                boxShadow: '0 0 15px rgba(225,31,143,0.15)',
-                                            }} />
+                                            {/* Outer ring */}
+                                            <div className="absolute inset-[-4px] rounded-full border-2 border-white/50" />
                                             {step.num}
                                         </div>
 
                                         {/* Title */}
-                                        <h3 className="text-base font-bold uppercase tracking-wider text-white mb-2">{step.title}</h3>
+                                        <h3 className="text-base font-bold uppercase tracking-wider text-rr-dark mb-2">{step.title}</h3>
 
-                                        <p className="text-slate-400 text-sm leading-relaxed px-2">{step.desc}</p>
+                                        <p className="text-slate-500 text-sm leading-relaxed px-2 font-medium">{step.desc}</p>
                                     </motion.div>
 
                                     {/* Curved arrow between steps */}
                                     {i < steps.length - 1 && (
-                                        <div className="flex items-center pt-4 shrink-0">
+                                        <div className="flex items-center pt-4 shrink-0 opacity-40">
                                             <CurvedArrow id={i} />
                                         </div>
                                     )}
@@ -126,10 +120,7 @@ const SelectionProcess = () => {
                         {/* Mobile: vertical timeline */}
                         <div className="md:hidden space-y-8 relative pl-14">
                             {/* Vertical line */}
-                            <div className="absolute left-6 top-0 bottom-0 w-0.5" style={{
-                                background: 'linear-gradient(to bottom, #E11F8F, #1226AA)',
-                                opacity: 0.4,
-                            }} />
+                            <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-rr-pink to-rr-blue opacity-30" />
 
                             {steps.map((step, i) => (
                                 <motion.div
@@ -142,24 +133,23 @@ const SelectionProcess = () => {
                                 >
                                     {/* Number circle */}
                                     <div
-                                        className="absolute -left-14 top-3 w-12 h-12 rounded-full flex items-center justify-center text-lg font-black text-white"
+                                        className="absolute -left-14 top-3 w-12 h-12 rounded-full flex items-center justify-center text-lg font-black text-white shadow-lg"
                                         style={{
                                             background: 'linear-gradient(135deg, #E11F8F 0%, #1226AA 100%)',
-                                            boxShadow: '0 0 20px rgba(225,31,143,0.3)',
                                         }}
                                     >
                                         {step.num}
                                     </div>
 
-                                    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-5">
-                                        <h3 className="text-lg font-bold uppercase text-white mb-1">{step.title}</h3>
-                                        <p className="text-slate-400 text-sm">{step.desc}</p>
+                                    <div className="bg-white border border-slate-100 rounded-xl p-5 shadow-sm">
+                                        <h3 className="text-lg font-bold uppercase text-rr-dark mb-1">{step.title}</h3>
+                                        <p className="text-slate-600 text-sm font-medium">{step.desc}</p>
                                     </div>
                                 </motion.div>
                             ))}
                         </div>
-                        <div className="text-center mt-4">
-                            <Button onClick={scrollToForm} variant="blue" className="text-base px-8 py-4">
+                        <div className="text-center mt-12">
+                            <Button onClick={scrollToForm} variant="primary" className="text-base px-8 py-4 shadow-xl shadow-rr-blue/20">
                                 APPLY NOW
                             </Button>
                         </div>
