@@ -18,8 +18,6 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsConditions from './components/TermsConditions';
 import ComingSoonSplash from './components/ComingSoonSplash';
 
-const isSplashMode = import.meta.env.VITE_SPLASH_MODE === 'true';
-
 function LandingPage() {
   return (
     <>
@@ -42,14 +40,11 @@ function LandingPage() {
 }
 
 function App() {
-  if (isSplashMode) {
-    return <ComingSoonSplash />;
-  }
-
   return (
     <div className="font-sans antialiased text-rr-dark bg-white selection:bg-rr-pink selection:text-white">
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<ComingSoonSplash />} />
+        <Route path="/eliteprogram/2026registrations" element={<LandingPage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-conditions" element={<TermsConditions />} />
       </Routes>
