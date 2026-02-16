@@ -38,12 +38,12 @@ const Intro = () => {
                         <video
                             ref={videoRef}
                             src={VIDEO_URL}
-                            title="Kumar Sangakkara Director of Cricket Rajasthan Royals"
-                            className="absolute inset-0 w-full h-full rounded-2xl object-contain bg-white"
+                            title="Kumar Sangakkara"
+                            className="absolute inset-0 w-full h-full rounded-2xl object-cover"
                             controls={isPlaying}
                             playsInline
                             preload="auto"
-                            poster="/assets/MELBOURNE_OFFICIAL.png"
+                            poster="/assets/Kumar_Poster_Image.jpg"
                             onEnded={() => setIsPlaying(false)}
                         />
 
@@ -56,7 +56,7 @@ const Intro = () => {
                                 <div className="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center backdrop-blur-sm group-hover:scale-110 transition-transform duration-300 shadow-lg">
                                     <Play className="w-8 h-8 text-rr-pink fill-current ml-1" />
                                 </div>
-                                <p className="absolute bottom-6 left-6 text-sm font-bold tracking-wider text-rr-dark drop-shadow-sm">KUMAR SANGAKKARA — DIRECTOR OF CRICKET, RAJASTHAN ROYALS</p>
+                                <p className="absolute bottom-6 left-6 text-sm font-bold tracking-wider text-white drop-shadow-md">KUMAR SANGAKKARA</p>
                             </div>
                         )}
                     </motion.div>
