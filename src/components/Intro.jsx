@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Play } from 'lucide-react';
 import Button from './Button';
 import { RoyalsWave } from './Decals';
 
-const YOUTUBE_VIDEO_ID = 'gqDVw9Idktw';
+const VIDEO_URL = 'https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/Kumar%20Video%20Landing/Landing%20Page%20Full%20Edit%20v1.1.mov';
 
 const Intro = () => {
     const [isPlaying, setIsPlaying] = useState(false);
+    const videoRef = useRef(null);
+
+    const handlePlay = () => {
+        setIsPlaying(true);
+        if (videoRef.current) {
+            videoRef.current.play();
+        }
+    };
 
     const scrollToForm = () => {
         document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' });
@@ -26,33 +34,28 @@ const Intro = () => {
                         viewport={{ once: true }}
                         className="w-full max-w-4xl aspect-video bg-white rounded-2xl border border-slate-200 shadow-2xl relative overflow-hidden ring-4 ring-slate-50"
                     >
-                        {isPlaying ? (
-                            <video
-                                src="https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/Kumar%20Video%20Landing/Landing%20Page%20Full%20Edit%20v1.1.mov"
-                                title="Kumar Sangakkara Director of Cricket Rajasthan Royals"
-                                className="absolute inset-0 w-full h-full rounded-2xl object-cover"
-                                controls
-                                autoPlay
-                                playsInline
-                                preload="metadata"
-                                poster={`https://img.youtube.com/vi/${YOUTUBE_VIDEO_ID}/maxresdefault.jpg`}
-                            />
-                        ) : (
+                        {/* Video element - always rendered, shows first frame when paused */}
+                        <video
+                            ref={videoRef}
+                            src={VIDEO_URL}
+                            title="Kumar Sangakkara Director of Cricket Rajasthan Royals"
+                            className="absolute inset-0 w-full h-full rounded-2xl object-cover"
+                            controls={isPlaying}
+                            playsInline
+                            preload="metadata"
+                            onEnded={() => setIsPlaying(false)}
+                        />
+
+                        {/* Play button overlay - shown when dormant */}
+                        {!isPlaying && (
                             <div
-                                className="absolute inset-0 flex items-center justify-center group cursor-pointer"
-                                onClick={() => setIsPlaying(true)}
+                                className="absolute inset-0 flex items-center justify-center group cursor-pointer z-10"
+                                onClick={handlePlay}
                             >
-                                <img
-                                    src={`https://img.youtube.com/vi/${YOUTUBE_VIDEO_ID}/maxresdefault.jpg`}
-                                    alt="Academy Vision"
-                                    className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700"
-                                    loading="lazy"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-tr from-rr-pink/20 to-rr-blue/20" />
-                                <div className="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center backdrop-blur-sm group-hover:scale-110 transition-transform duration-300 z-10 shadow-lg">
+                                <div className="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center backdrop-blur-sm group-hover:scale-110 transition-transform duration-300 shadow-lg">
                                     <Play className="w-8 h-8 text-rr-pink fill-current ml-1" />
                                 </div>
-                                <p className="absolute bottom-6 left-6 text-sm font-bold tracking-wider text-white drop-shadow-md">KUMAR SANGAKKARA — DIRECTOR OF CRICKET, RAJASTHAN ROYALS</p>
+                                <p className="absolute bottom-6 left-6 text-sm font-bold tracking-wider text-rr-dark drop-shadow-sm">KUMAR SANGAKKARA — DIRECTOR OF CRICKET, RAJASTHAN ROYALS</p>
                             </div>
                         )}
                     </motion.div>
