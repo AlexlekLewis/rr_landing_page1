@@ -4,14 +4,14 @@ import Button from './Button';
 
 const features = [
     {
-        title: "Power Hitting",
-        description: "Never before has the need to develop a power game and optimise ball exit velocity and trajectory been so critical.",
+        title: "Power and 360 Hitting",
+        description: "No longer are the terms power hitting and 360 degrees just ‘gimmicks’. They have become critical part of the modern day skillset required to change the momentum of games.",
         image: "/assets/jaiswal-power.webp"
     },
     {
-        title: "360 Degrees",
-        description: "Playing a true 360 degree style of play confuses opponents and wins matches...if done with skill and with strategy.",
-        image: "/assets/360-degree.webp"
+        title: "Fielding is critical",
+        description: "Elite fielders change the momentum of games. Millimetres matter in the modern game with wins and losses dependant on individual skills.",
+        image: "/assets/fielding-dive.webp"
     },
     {
         title: "Winning T20 Mindset",

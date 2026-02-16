@@ -36,7 +36,7 @@ const StatusModal = ({ type, isOpen, onClose }) => {
                         </h3>
                         <p className="text-slate-600 mb-8 leading-relaxed">
                             {isSuccess
-                                ? "Your application has been successfully submitted. We'll review your details and get back to you soon."
+                                ? "Your application has been successfully received. We are currently assessing applications daily and as such invitations to our assessment session on Sunday March 1st will be extended by latest February 25th for those being considered for an Elite Program offer."
                                 : "Something went wrong submitting your application. Please check your internet connection and try again."}
                         </p>
                         <Button onClick={onClose} className="w-full">
@@ -191,7 +191,7 @@ const Apply = () => {
 
                     <InputField label="Email Address" type="email" name="email" value={formData.email} onChange={handleChange} required />
                     <InputField label="Phone Number" type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
-                    <InputField label="Primary Suburb" name="suburb" value={formData.suburb} onChange={handleChange} required />
+                    <InputField label="Primary Residential Suburb" name="suburb" value={formData.suburb} onChange={handleChange} required />
 
                     <InputField label="Play Cricket Profile Link" name="profileLink" value={formData.profileLink} onChange={handleChange} />
                     <InputField label="Current Club(s)" name="club" value={formData.club} onChange={handleChange} required />

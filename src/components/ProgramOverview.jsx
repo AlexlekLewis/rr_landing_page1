@@ -124,7 +124,7 @@ const ProgramOverview = () => {
                         ELITE PROGRAM <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">OVERVIEW</span>
                     </h2>
                     <p className="text-lg text-slate-600 font-medium">
-                        A comprehensive, professional environment designed to take your game to the next level.
+                        A comprehensive, professional environment designed to support the development of a T20 based skillset to help you meet the demands of the modern game.
                     </p>
                 </div>
 
