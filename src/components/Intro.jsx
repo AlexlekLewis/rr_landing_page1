@@ -34,15 +34,16 @@ const Intro = () => {
                         viewport={{ once: true }}
                         className="w-full max-w-4xl aspect-video bg-white rounded-2xl border border-slate-200 shadow-2xl relative overflow-hidden ring-4 ring-slate-50"
                     >
-                        {/* Video element - always rendered, shows first frame when paused */}
+                        {/* Video element - always rendered, shows poster when paused */}
                         <video
                             ref={videoRef}
                             src={VIDEO_URL}
                             title="Kumar Sangakkara Director of Cricket Rajasthan Royals"
-                            className="absolute inset-0 w-full h-full rounded-2xl object-cover"
+                            className="absolute inset-0 w-full h-full rounded-2xl object-contain bg-white"
                             controls={isPlaying}
                             playsInline
-                            preload="metadata"
+                            preload="auto"
+                            poster="/assets/MELBOURNE_OFFICIAL.png"
                             onEnded={() => setIsPlaying(false)}
                         />
 
