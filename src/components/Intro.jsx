@@ -4,7 +4,7 @@ import { Play } from 'lucide-react';
 import Button from './Button';
 import { RoyalsWave } from './Decals';
 
-const VIDEO_URL = 'https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/videos/landing-page-full-edit-v1.mov';
+const VIDEO_URL = 'https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/Kumar%20Video%20Landing/Kumar%20Sangakkara%20V2.mp4';
 
 const Intro = () => {
     const [isPlaying, setIsPlaying] = useState(false);
