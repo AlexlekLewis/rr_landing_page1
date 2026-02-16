@@ -15,7 +15,7 @@ const coaches = [
         role: "Director of Cricket",
         bio: "Leading the development of the Royals Academy system in Australia, providing opportunities to talented cricketers.",
         image: "/assets/rra/headcoach-andy.png",
-        imagePosition: "object-[center_25%]",
+        imagePosition: "object-[center_20%]",
         fullBio: "Andy brings to the Royals Academy decades of executive experience at the highest levels of sport, including leading such sports leagues as Australia's National Basketball League and Super Netball. A former professional who played for South Australia, Northamptonshire and Lancashire, Andy's connection with the game has remained strong, playing for Victoria at Masters level, and recently being a part of Australia's 2025 T20 Masters World Cup winning campaign in Pakistan. Charged driving the Rajasthan Royals Academy in Australia, his network and vision for T20 cricket and player development has led to creating a world first pathway of opportunities for talented youngsters to put themselves in front of global leaders of the T20 game."
     },
     {
