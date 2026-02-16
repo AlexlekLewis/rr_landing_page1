@@ -43,7 +43,7 @@ const FeatureCard = ({ title, description, image, delay }) => {
                 <img
                     src={image}
                     alt={title}
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                    className="w-full h-full object-cover object-top transform group-hover:scale-110 transition-transform duration-700"
                 />
 
                 {/* Hover/tap overlay */}
