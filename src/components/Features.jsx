@@ -9,9 +9,9 @@ const features = [
         image: "/assets/jaiswal-power.webp"
     },
     {
-        title: "Fielding is critical",
+        title: "Game Changing Fielding",
         description: "Elite fielders change the momentum of games. Millimetres matter in the modern game with wins and losses dependant on individual skills.",
-        image: "/assets/fielding-dive.webp"
+        image: "/assets/kwena-catch.png"
     },
     {
         title: "Winning T20 Mindset",
