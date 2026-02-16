@@ -15,6 +15,7 @@ const coaches = [
         role: "Director of Cricket",
         bio: "Leading the development of the Royals Academy system in Australia, providing opportunities to talented cricketers.",
         image: "/assets/rra/headcoach-andy.png",
+        imageScale: 0.92,
         fullBio: "Andy brings to the Royals Academy decades of executive experience at the highest levels of sport, including leading such sports leagues as Australia's National Basketball League and Super Netball. A former professional who played for South Australia, Northamptonshire and Lancashire, Andy's connection with the game has remained strong, playing for Victoria at Masters level, and recently being a part of Australia's 2025 T20 Masters World Cup winning campaign in Pakistan. Charged driving the Rajasthan Royals Academy in Australia, his network and vision for T20 cricket and player development has led to creating a world first pathway of opportunities for talented youngsters to put themselves in front of global leaders of the T20 game."
     },
     {
@@ -49,6 +50,7 @@ const CoachProfile = ({ coach }) => {
                     src={coach.image}
                     alt={coach.name}
                     className={`w-full h-full object-cover ${coach.imagePosition || 'object-[center_15%]'}`}
+                    style={{ transform: coach.imageScale ? `scale(${coach.imageScale})` : 'none' }}
                 />
                 <div className="absolute inset-0 bg-rr-pink/0 group-hover:bg-rr-pink/20 transition-colors duration-300 rounded-full" />
             </div>
