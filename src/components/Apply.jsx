@@ -66,6 +66,33 @@ const InputField = ({ label, type = "text", placeholder, name, value, onChange, 
     </div>
 );
 
+const TextAreaField = ({ label, name, value, onChange, placeholder, limit = 150 }) => {
+    const wordCount = value.trim().split(/\s+/).filter(Boolean).length;
+    const isOverLimit = wordCount > limit;
+
+    return (
+        <div className="mb-6">
+            <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">
+                {label}
+                <span className={`float-right text-xs normal-case ${isOverLimit ? 'text-red-500 font-bold' : 'text-slate-400'}`}>
+                    {wordCount}/{limit} words
+                </span>
+            </label>
+            <textarea
+                name={name}
+                value={value}
+                onChange={onChange}
+                className={`w-full bg-slate-50 border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 transition-all text-rr-dark placeholder-slate-400 h-32 ${isOverLimit
+                    ? 'border-red-300 focus:border-red-500 focus:ring-red-200'
+                    : 'border-slate-200 focus:border-rr-pink focus:ring-rr-pink/20'
+                    }`}
+                placeholder={placeholder}
+            />
+            {isOverLimit && <p className="text-red-500 text-xs mt-1">Please keep your response under {limit} words.</p>}
+        </div>
+    );
+};
+
 const Apply = () => {
     const [formData, setFormData] = useState({
         firstName: '',
@@ -79,7 +106,14 @@ const Apply = () => {
         club: '',
         history: '',
         bio: '',
-        goals: ''
+        goals: '',
+        secondaryEmail: '',
+        parent1Name: '',
+        parent1Email: '',
+        parent1Phone: '',
+        parent2Name: '',
+        parent2Email: '',
+        parent2Phone: ''
     });
     const [cvFile, setCvFile] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -100,6 +134,16 @@ const Apply = () => {
         e.preventDefault();
         setLoading(true);
         setStatus(null);
+
+        setStatus(null);
+
+        // Validation for word limits
+        const getWordCount = (text) => text.trim().split(/\s+/).filter(Boolean).length;
+        if (getWordCount(formData.bio) > 150 || getWordCount(formData.goals) > 150) {
+            alert("Please ensure your Bio and Career Goals are under 150 words.");
+            setLoading(false);
+            return;
+        }
 
         try {
             let cvUrl = null;
@@ -131,7 +175,14 @@ const Apply = () => {
                 history: formData.history,
                 bio: formData.bio,
                 goals: formData.goals,
-                cv_url: cvUrl
+                cv_url: cvUrl,
+                second_email: formData.secondaryEmail,
+                parent1_name: formData.parent1Name,
+                parent1_email: formData.parent1Email,
+                parent1_phone: formData.parent1Phone,
+                parent2_name: formData.parent2Name,
+                parent2_email: formData.parent2Email,
+                parent2_phone: formData.parent2Phone
             };
 
             const { error: insertError } = await supabase
@@ -143,7 +194,9 @@ const Apply = () => {
             setStatus('success');
             setFormData({
                 firstName: '', lastName: '', age: '', dob: '', email: '', phone: '', suburb: '',
-                profileLink: '', club: '', history: '', bio: '', goals: ''
+                profileLink: '', club: '', history: '', bio: '', goals: '',
+                secondaryEmail: '', parent1Name: '', parent1Email: '', parent1Phone: '',
+                parent2Name: '', parent2Email: '', parent2Phone: ''
             });
             setCvFile(null);
 
@@ -189,7 +242,33 @@ const Apply = () => {
                         />
                     </div>
 
-                    <InputField label="Email Address" type="email" name="email" value={formData.email} onChange={handleChange} required />
+                    <div className="my-8 border-t border-slate-100 pt-8">
+                        <h3 className="text-xl font-black text-rr-dark mb-6">PARENT / GUARDIAN DETAILS</h3>
+
+                        <div className="mb-6">
+                            <h4 className="text-sm font-bold text-rr-pink mb-4 uppercase tracking-wider">Parent / Guardian 1</h4>
+                            <div className="grid md:grid-cols-3 gap-6">
+                                <InputField label="Name" name="parent1Name" value={formData.parent1Name} onChange={handleChange} required />
+                                <InputField label="Email" name="parent1Email" value={formData.parent1Email} onChange={handleChange} required />
+                                <InputField label="Phone" name="parent1Phone" value={formData.parent1Phone} onChange={handleChange} required />
+                            </div>
+                        </div>
+
+                        <div className="mb-6">
+                            <h4 className="text-sm font-bold text-rr-pink mb-4 uppercase tracking-wider">Parent / Guardian 2</h4>
+                            <div className="grid md:grid-cols-3 gap-6">
+                                <InputField label="Name" name="parent2Name" value={formData.parent2Name} onChange={handleChange} />
+                                <InputField label="Email" name="parent2Email" value={formData.parent2Email} onChange={handleChange} />
+                                <InputField label="Phone" name="parent2Phone" value={formData.parent2Phone} onChange={handleChange} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                        <InputField label="Email Address" type="email" name="email" value={formData.email} onChange={handleChange} required />
+                        <InputField label="Secondary Email" type="email" name="secondaryEmail" value={formData.secondaryEmail} onChange={handleChange} />
+                    </div>
+
                     <InputField label="Phone Number" type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
                     <InputField label="Primary Residential Suburb" name="suburb" value={formData.suburb} onChange={handleChange} required />
 
@@ -208,26 +287,22 @@ const Apply = () => {
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-6">
-                        <div className="mb-6">
-                            <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Written Bio</label>
-                            <textarea
-                                name="bio"
-                                value={formData.bio}
-                                onChange={handleChange}
-                                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-rr-pink/20 transition-all text-rr-dark placeholder-slate-400 h-32"
-                                placeholder="Tell us about yourself..."
-                            ></textarea>
-                        </div>
-                        <div className="mb-6">
-                            <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Career Goals</label>
-                            <textarea
-                                name="goals"
-                                value={formData.goals}
-                                onChange={handleChange}
-                                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-rr-pink/20 transition-all text-rr-dark placeholder-slate-400 h-32"
-                                placeholder="Where do you want to be in 5 years?"
-                            ></textarea>
-                        </div>
+                        <TextAreaField
+                            label="Written Bio"
+                            name="bio"
+                            value={formData.bio}
+                            onChange={handleChange}
+                            placeholder="Tell us about yourself..."
+                            limit={150}
+                        />
+                        <TextAreaField
+                            label="Career Goals"
+                            name="goals"
+                            value={formData.goals}
+                            onChange={handleChange}
+                            placeholder="Where do you want to be in 5 years?"
+                            limit={150}
+                        />
                     </div>
 
                     <div className="mb-8">
