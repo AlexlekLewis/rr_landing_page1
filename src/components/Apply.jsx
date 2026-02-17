@@ -107,7 +107,6 @@ const Apply = () => {
         history: '',
         bio: '',
         goals: '',
-        secondaryEmail: '',
         parent1Name: '',
         parent1Email: '',
         parent1Phone: '',
@@ -176,7 +175,6 @@ const Apply = () => {
                 bio: formData.bio,
                 goals: formData.goals,
                 cv_url: cvUrl,
-                second_email: formData.secondaryEmail,
                 parent1_name: formData.parent1Name,
                 parent1_email: formData.parent1Email,
                 parent1_phone: formData.parent1Phone,
@@ -195,7 +193,7 @@ const Apply = () => {
             setFormData({
                 firstName: '', lastName: '', age: '', dob: '', email: '', phone: '', suburb: '',
                 profileLink: '', club: '', history: '', bio: '', goals: '',
-                secondaryEmail: '', parent1Name: '', parent1Email: '', parent1Phone: '',
+                parent1Name: '', parent1Email: '', parent1Phone: '',
                 parent2Name: '', parent2Email: '', parent2Phone: ''
             });
             setCvFile(null);
@@ -266,10 +264,9 @@ const Apply = () => {
 
                     <div className="grid md:grid-cols-2 gap-6">
                         <InputField label="Email Address" type="email" name="email" value={formData.email} onChange={handleChange} required />
-                        <InputField label="Secondary Email" type="email" name="secondaryEmail" value={formData.secondaryEmail} onChange={handleChange} />
+                        <InputField label="Phone Number" type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
                     </div>
 
-                    <InputField label="Phone Number" type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
                     <InputField label="Primary Residential Suburb" name="suburb" value={formData.suburb} onChange={handleChange} required />
 
                     <InputField label="Play Cricket Profile Link" name="profileLink" value={formData.profileLink} onChange={handleChange} />
