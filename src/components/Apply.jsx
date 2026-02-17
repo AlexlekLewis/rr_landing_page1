@@ -144,6 +144,16 @@ const Apply = () => {
             return;
         }
 
+        // Validate player contact details if over 18
+        const isUnder18 = formData.age && parseInt(formData.age) < 18;
+        if (!isUnder18) {
+            if (!formData.email || !formData.phone) {
+                alert("Please provide your email and phone number (Required for applicants 18+).");
+                setLoading(false);
+                return;
+            }
+        }
+
         try {
             let cvUrl = null;
 
@@ -241,8 +251,22 @@ const Apply = () => {
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-6">
-                        <InputField label="Player Email" type="email" name="email" value={formData.email} onChange={handleChange} required />
-                        <InputField label="Player Phone Number" type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
+                        <InputField
+                            label={`Player Email ${formData.age && parseInt(formData.age) < 18 ? '(Optional)' : ''}`}
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required={!formData.age || parseInt(formData.age) >= 18}
+                        />
+                        <InputField
+                            label={`Player Phone Number ${formData.age && parseInt(formData.age) < 18 ? '(Optional)' : ''}`}
+                            type="tel"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            required={!formData.age || parseInt(formData.age) >= 18}
+                        />
                     </div>
 
                     <InputField label="Primary Residential Suburb" name="suburb" value={formData.suburb} onChange={handleChange} required />
