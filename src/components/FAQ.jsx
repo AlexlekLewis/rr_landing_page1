@@ -43,7 +43,7 @@ const FAQ = () => {
         { q: "When does the program start and how long does it run?", a: "12 weeks starting early April 2026, with two sessions per week — one weeknight evening and one weekend session." },
         { q: "Where are sessions held?", a: "Primarily at Cutting Edge Cricket in Bundoora, Melbourne, with other facilities used periodically." },
         { q: "Is it available for female cricketers?", a: "Absolutely. Talent is talent — the Royals back emerging cricketers regardless of gender. There is a specific focus on preparing U15–U18 girls for WBBL, Women's IPL, state, and premier opportunities." },
-        { q: "Is there a cost involved?", a: "Yes, there is an investment. The program is a premium, high-performance experience with access to elite coaching and resources. Specific costs will be provided upon successful application." },
+        { q: "Is there a cost involved?", a: "Yes, there is an investment. The program is a premium performance experience with access to elite coaching and resources. Specific costs will be provided to successful applicants." },
         { q: "What's included in the program?", a: "Individual Development Plans, video analysis, sports psychology, nutrition, strength & conditioning coaching, official Royals apparel (hat, training shirt, shorts), and performance data reviewed by Royals Group coaches globally." },
         { q: "Is it T20 cricket?", a: "Approximately 70-80% T20 skill based, and 20-30% traditional skills. The goal is to ensure players can apply T20 skills to all formats of the game in relevant scenarios." },
     ];
