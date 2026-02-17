@@ -45,6 +45,8 @@ const Intro = () => {
                             preload="auto"
                             poster="/assets/Kumar_Poster_Image.jpg"
                             onEnded={() => setIsPlaying(false)}
+                            controlsList="nodownload"
+                            onContextMenu={(e) => e.preventDefault()}
                         />
 
                         {/* Play button overlay - shown when dormant */}
