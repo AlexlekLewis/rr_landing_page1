@@ -326,16 +326,6 @@ const Apply = () => {
                         />
                     </div>
 
-                    <div className="mb-8">
-                        <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Attach Cricket CV</label>
-                        <input
-                            type="file"
-                            onChange={handleFileChange}
-                            accept=".pdf,.doc,.docx"
-                            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-rr-pink hover:file:bg-pink-100"
-                        />
-                    </div>
-
                     <Button className="w-full py-4 text-xl" disabled={loading}>
                         {loading ? 'SUBMITTING...' : 'SUBMIT APPLICATION'}
                     </Button>
