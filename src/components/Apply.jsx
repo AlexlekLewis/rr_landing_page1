@@ -240,6 +240,13 @@ const Apply = () => {
                         />
                     </div>
 
+                    <div className="grid md:grid-cols-2 gap-6">
+                        <InputField label="Player Email" type="email" name="email" value={formData.email} onChange={handleChange} required />
+                        <InputField label="Player Phone Number" type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
+                    </div>
+
+                    <InputField label="Primary Residential Suburb" name="suburb" value={formData.suburb} onChange={handleChange} required />
+
                     <div className="my-8 border-t border-slate-100 pt-8">
                         <h3 className="text-xl font-black text-rr-dark mb-6">PARENT / GUARDIAN DETAILS</h3>
 
@@ -261,13 +268,6 @@ const Apply = () => {
                             </div>
                         </div>
                     </div>
-
-                    <div className="grid md:grid-cols-2 gap-6">
-                        <InputField label="Email Address" type="email" name="email" value={formData.email} onChange={handleChange} required />
-                        <InputField label="Phone Number" type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
-                    </div>
-
-                    <InputField label="Primary Residential Suburb" name="suburb" value={formData.suburb} onChange={handleChange} required />
 
                     <InputField label="Play Cricket Profile Link" name="profileLink" value={formData.profileLink} onChange={handleChange} />
                     <InputField label="Current Club(s)" name="club" value={formData.club} onChange={handleChange} required />
