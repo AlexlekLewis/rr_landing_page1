@@ -52,7 +52,7 @@ const SuccessStories = () => {
                         The T20 game has changed. Have you?
                     </p>
                     <p className="text-lg text-slate-300 font-light">
-                        Rajasthan Royals have developed a reputation for uncovering and developing talent across the world. Siddhartha Lahiri and his network leave no stone unturned.
+                        Rajasthan Royals have developed a reputation for uncovering and developing talent across the world.
                     </p>
                 </div>
 

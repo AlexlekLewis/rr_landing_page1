@@ -83,7 +83,7 @@ const Intro = () => {
                             You have been identified by our scouting network as an emerging young talent and this unique opportunity with one of the world’s biggest and most successful cricket franchises can help take your game to the next level.
                         </p>
                         <p>
-                            For the first time, cricketers within Australia will have direct access to developing their T20 skills from within the Rajasthan Royals global organisation and their player development system, helping put you on a pathway to success.
+                            For the first time, cricketers in Australia will have opportunities to learn and develop their T20 skills from some of the best T20 coaches in the Royals ecosystem.
                         </p>
                     </div>
 
@@ -97,7 +97,7 @@ const Intro = () => {
                                 { href: "https://www.rajasthanroyals.com", logo: "/assets/rajasthan-royals-logo.png", name: "Rajasthan Royals", league: "IPL" },
                                 { href: "https://www.paarlroyals.com", logo: "/assets/paarl-royals-logo.png", name: "Paarl Royals", league: "SA20" },
                                 { href: "https://www.barbadosroyals.com", logo: "/assets/barbados-royals-logo.png", name: "Barbados Royals", league: "CPL" },
-                                { href: "https://rajasthanroyalsacademy.com", logo: "/assets/Basic logo.png", name: "RR Academy", league: "GLOBAL" },
+                                { href: "https://www.rajasthanroyals.com/cricket-academies", logo: "/assets/Basic logo.png", name: "RR Academy", league: "GLOBAL" },
                             ].map((item) => (
                                 <a key={item.name} href={item.href} target="_blank" rel="noopener noreferrer">
                                     <div className="flex items-center gap-3 bg-white border border-slate-100 shadow-md rounded-xl px-3 py-3 hover:border-rr-pink/40 transition-colors duration-300 h-full">
@@ -159,7 +159,7 @@ const Intro = () => {
                             </a>
 
                             {/* RR Academy Global */}
-                            <a href="https://rajasthanroyalsacademy.com" target="_blank" rel="noopener noreferrer">
+                            <a href="https://www.rajasthanroyals.com/cricket-academies" target="_blank" rel="noopener noreferrer">
                                 <motion.div
                                     whileHover={{ scale: 1.05 }}
                                     transition={{ type: 'spring', stiffness: 300 }}
