@@ -124,6 +124,21 @@ const OfferResponsePage = () => {
                 </div>
             </nav>
 
+            {/* Mock Dev Legend */}
+            {import.meta.env.DEV && token === 'preview' && (
+                <div className="fixed bottom-4 left-4 z-50 bg-slate-900 border border-slate-700 p-4 rounded-xl shadow-2xl flex flex-col gap-2">
+                    <p className="font-bold text-white text-sm uppercase tracking-wider mb-1">Copy Origin Legend</p>
+                    <div className="flex items-center gap-2 text-sm text-slate-300">
+                        <span className="w-4 h-4 bg-emerald-500/50 border border-emerald-500 rounded block"></span>
+                        Andy's Exact Language
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-slate-300">
+                        <span className="w-4 h-4 bg-amber-500/50 border border-amber-500 rounded block"></span>
+                        AI Generated / Paraphrased
+                    </div>
+                </div>
+            )}
+
             {/* Main Content Flow */}
             <main className="pt-20">
                 {!isSubmitted ? (

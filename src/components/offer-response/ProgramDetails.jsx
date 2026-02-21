@@ -35,12 +35,12 @@ const ProgramDetails = () => {
             <div className="max-w-5xl mx-auto px-6 relative z-10">
 
                 <div className="mb-32 text-center max-w-3xl mx-auto">
-                    <p className="text-xl text-slate-500 font-medium leading-relaxed italic">
+                    <p className="text-xl text-slate-500 font-medium leading-relaxed italic bg-emerald-500/20 text-emerald-900 px-4 py-2 rounded-xl border border-emerald-500/30">
                         "So that you can begin to prepare for both the assessment session and the possibility of being offered a place, please find below details of the program including program content, training days & times and the cost of this premium program."
                     </p>
                 </div>
 
-                <DetailSection title={<span>EXPLORE &bull; CHALLENGE &bull; EXECUTE</span>} prefix="The Philosophy">
+                <DetailSection title={<span className="bg-amber-500/20 text-amber-900 px-2 rounded border border-amber-500/30 inline-block">EXPLORE &bull; CHALLENGE &bull; EXECUTE</span>} prefix={<span className="bg-amber-500/20 text-amber-900 px-2 rounded border border-amber-500/30 inline-block">The Philosophy</span>}>
                     <p>We believe that when you want to learn a skill, you first learn the full range of everything you're capable of. Then you learn how to use decision-making and match awareness to apply those skills. Then you perform under pressure.</p>
                     <p>Cricket provides the perfect environment for this. Our framework gives young players the space to discover what they can do, the structure to sharpen when and why, and the competitive pressure to prove they can deliver.</p>
 
@@ -60,7 +60,7 @@ const ProgramDetails = () => {
                     </div>
                 </DetailSection>
 
-                <DetailSection title="Direct Access to the Rajasthan Royals" prefix="The Exclusivity" align="left">
+                <DetailSection title={<span className="bg-amber-500/20 text-amber-900 px-2 rounded border border-amber-500/30 inline-block">Direct Access to the Rajasthan Royals</span>} prefix={<span className="bg-amber-500/20 text-amber-900 px-2 rounded border border-amber-500/30 inline-block">The Exclusivity</span>} align="left">
                     <p>This isn't a franchise that licensed its name and walked away. The Rajasthan Royals are actively embedded in this program — reviewing players, visiting Melbourne, and providing access that doesn't exist through any other pathway in Australia.</p>
 
                     <ul className="space-y-6 mt-8">
@@ -81,7 +81,7 @@ const ProgramDetails = () => {
                     </ul>
                 </DetailSection>
 
-                <DetailSection title="The Player DNA Card" prefix="The Innovation">
+                <DetailSection title={<span className="bg-amber-500/20 text-amber-900 px-2 rounded border border-amber-500/30 inline-block">The Player DNA Card</span>} prefix={<span className="bg-amber-500/20 text-amber-900 px-2 rounded border border-amber-500/30 inline-block">The Innovation</span>}>
                     <p className="font-bold text-2xl text-rr-dark mb-4">Who is your child as a cricketer?</p>
                     <p>Most academies tell you your child is "going well" or "needs to work on their batting." That's not a development plan. That's a guess.</p>
                     <p>Within the first two weeks of the program, every player receives a Player DNA Card — a proprietary assessment system exclusive to the Rajasthan Royals Academy Melbourne. Built by our coaching team, it paints a complete picture of who your child is as a cricketer right now, and where they're heading. No other academy in Australia offers this.</p>
@@ -102,7 +102,7 @@ const ProgramDetails = () => {
                     </div>
                 </DetailSection>
 
-                <DetailSection title="Individual Development Plans" prefix="The Roadmap">
+                <DetailSection title={<span className="bg-amber-500/20 text-amber-900 px-2 rounded border border-amber-500/30 inline-block">Individual Development Plans</span>} prefix={<span className="bg-amber-500/20 text-amber-900 px-2 rounded border border-amber-500/30 inline-block">The Roadmap</span>}>
                     <p>The DNA Card isn't a report card that goes on the fridge. It's the starting point for a personalised <strong className="text-rr-dark underline decoration-rr-pink decoration-2 underline-offset-4">Individual Development Plan (IDP)</strong> — a written, measurable, week-by-week plan that tells your child exactly what they're working on, why it matters, and how they'll know when they've improved.</p>
                     <p className="mt-4 font-bold text-rr-blue">No other cricket program in Australia provides this.</p>
 
@@ -129,7 +129,7 @@ const ProgramDetails = () => {
                     className="mt-32 border-4 border-rr-dark p-8 md:p-16 rounded-3xl bg-white shadow-2xl relative"
                 >
                     <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-rr-dark text-white px-8 py-3 rounded-full font-black uppercase tracking-widest shadow-xl">
-                        The Commitment
+                        <span className="bg-amber-500/30 text-amber-200 px-2 rounded border border-amber-500/30 inline-block">The Commitment</span>
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -185,7 +185,7 @@ const ProgramDetails = () => {
                 </motion.div>
 
                 <div className="mt-32 text-center pb-12">
-                    <h3 className="text-3xl font-black text-rr-dark uppercase mb-6">Discover. Develop. Elevate.</h3>
+                    <h3 className="text-3xl font-black text-rr-dark uppercase mb-6"><span className="bg-amber-500/20 text-amber-900 px-2 rounded border border-amber-500/30 inline-block">Discover. Develop. Elevate.</span></h3>
                 </div>
 
             </div>
