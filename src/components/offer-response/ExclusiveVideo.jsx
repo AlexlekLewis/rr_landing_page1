@@ -65,7 +65,7 @@ const ExclusiveVideo = ({ applicantName }) => {
                         viewport={{ once: true }}
                         className="text-4xl md:text-5xl font-black text-white uppercase tracking-wider mb-6"
                     >
-                        <span className="bg-amber-500/20 text-amber-100 border border-amber-500/30 rounded inline-block px-2">What Happens <span className="text-rr-pink">Next?</span></span>
+                        What Happens <span className="text-rr-pink">Next?</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -74,7 +74,7 @@ const ExclusiveVideo = ({ applicantName }) => {
                         transition={{ delay: 0.1 }}
                         className="text-lg text-slate-300 max-w-3xl mx-auto leading-relaxed"
                     >
-                        <span className="bg-amber-500/20 text-amber-100 border border-amber-500/30 rounded inline-block px-2">As you have been invited to attend the assessment session, you are one step closer to the Elite Program. The Rajasthan Royals Academy team considers you a candidate with a strong possibility of being offered a place.</span>
+                        As you have been invited to attend the assessment session, you are one step closer to the Elite Program. The Rajasthan Royals Academy team considers you a candidate with a strong possibility of being offered a place.
                     </motion.p>
                 </div>
 
@@ -149,7 +149,7 @@ const ExclusiveVideo = ({ applicantName }) => {
 
                 <div className="mt-8 text-center">
                     <p className="text-sm text-slate-500">
-                        <span className="bg-amber-500/20 text-amber-100 border border-amber-500/30 rounded inline-block px-1">This video contains confidential information intended only for {applicantName}. Do not distribute.</span>
+                        This video contains confidential information intended only for {applicantName}. Do not distribute.
                     </p>
                 </div>
             </div>

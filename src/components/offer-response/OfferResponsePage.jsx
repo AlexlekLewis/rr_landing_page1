@@ -11,6 +11,24 @@ import ProgramDetails from './ProgramDetails';
 import RSVPForm from './RSVPForm';
 import ConfirmationScreen from './ConfirmationScreen';
 
+const CopyOriginWrapper = ({ label, color, isPreview, children }) => {
+    if (isPreview) {
+        const borderColor = color === 'emerald' ? 'border-emerald-500' : color === 'amber' ? 'border-amber-500' : 'border-rr-blue';
+        const bgColor = color === 'emerald' ? 'bg-emerald-500' : color === 'amber' ? 'bg-amber-500' : 'bg-rr-blue';
+        const textLabel = color === 'emerald' ? "ANDY'S LANGUAGE" : color === 'amber' ? "AI LANGUAGE" : label;
+
+        return (
+            <div className={`relative border-l-[12px] ${borderColor} pl-6 md:pl-10 py-6 my-16 mx-4 md:mx-8 rounded-r-3xl bg-slate-50/50 shadow-sm print:my-8 print:break-inside-avoid`}>
+                <div className={`absolute -left-3 -top-5 ${bgColor} text-white text-sm md:text-base font-black px-6 py-2 rounded-xl uppercase tracking-widest shadow-xl z-50`}>
+                    {textLabel} - {label}
+                </div>
+                {children}
+            </div>
+        );
+    }
+    return children;
+};
+
 const OfferResponsePage = () => {
     const { token } = useParams();
     const navigate = useNavigate();
@@ -124,29 +142,27 @@ const OfferResponsePage = () => {
                 </div>
             </nav>
 
-            {/* Mock Dev Legend */}
-            {import.meta.env.DEV && token === 'preview' && (
-                <div className="fixed bottom-4 left-4 z-50 bg-slate-900 border border-slate-700 p-4 rounded-xl shadow-2xl flex flex-col gap-2">
-                    <p className="font-bold text-white text-sm uppercase tracking-wider mb-1">Copy Origin Legend</p>
-                    <div className="flex items-center gap-2 text-sm text-slate-300">
-                        <span className="w-4 h-4 bg-emerald-500/50 border border-emerald-500 rounded block"></span>
-                        Andy's Exact Language
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-300">
-                        <span className="w-4 h-4 bg-amber-500/50 border border-amber-500 rounded block"></span>
-                        AI Generated / Paraphrased
-                    </div>
-                </div>
-            )}
+            {/* Mock Dev Legend - Removed as requested */}
 
             {/* Main Content Flow */}
             <main className="pt-20">
                 {!isSubmitted ? (
                     <>
-                        <InvitationHero applicantName={tokenData.applicant_name} />
-                        <ExclusiveVideo applicantName={tokenData.applicant_name} />
-                        <ProgramDetails />
-                        <RSVPForm tokenData={tokenData} onSubmitSuccess={handleRSVPSubmit} />
+                        <CopyOriginWrapper isPreview={import.meta.env.DEV && token === 'preview'} label="Hero & Invitation" color="emerald">
+                            <InvitationHero applicantName={tokenData.applicant_name} />
+                        </CopyOriginWrapper>
+
+                        <CopyOriginWrapper isPreview={import.meta.env.DEV && token === 'preview'} label="Next Steps Video" color="amber">
+                            <ExclusiveVideo applicantName={tokenData.applicant_name} />
+                        </CopyOriginWrapper>
+
+                        <CopyOriginWrapper isPreview={import.meta.env.DEV && token === 'preview'} label="Program Details & Investment" color="emerald">
+                            <ProgramDetails />
+                        </CopyOriginWrapper>
+
+                        <CopyOriginWrapper isPreview={import.meta.env.DEV && token === 'preview'} label="RSVP Form" color="amber">
+                            <RSVPForm tokenData={tokenData} onSubmitSuccess={handleRSVPSubmit} />
+                        </CopyOriginWrapper>
                     </>
                 ) : (
                     <ConfirmationScreen decision={submissionResult} applicantName={tokenData.applicant_name} />

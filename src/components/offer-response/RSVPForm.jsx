@@ -5,10 +5,10 @@ import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import Button from '../Button';
 
 const DECISION_OPTIONS = [
-    { id: 'yes', label: <span className="bg-emerald-500/20 text-emerald-900 px-1 rounded border border-emerald-500/30">Yes, absolutely I can’t wait</span> },
-    { id: 'no', label: <span className="bg-emerald-500/20 text-emerald-900 px-1 rounded border border-emerald-500/30">No, unfortunately I need to decline</span> },
-    { id: 'maybe', label: <span className="bg-emerald-500/20 text-emerald-900 px-1 rounded border border-emerald-500/30">I’m not sure at this point</span> },
-    { id: 'yes_but_no_assess', label: <span className="bg-emerald-500/20 text-emerald-900 px-1 rounded border border-emerald-500/30">I’m not able to attend the assessment session but I would definitely accept an offer</span> }
+    { id: 'yes', label: Yes, absolutely I can’t wait },
+    { id: 'no', label: No, unfortunately I need to decline },
+    { id: 'maybe', label: I’m not sure at this point },
+    { id: 'yes_but_no_assess', label: I’m not able to attend the assessment session but I would definitely accept an offer }
 ];
 
 const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
@@ -89,7 +89,7 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
 
     const renderTextarea = (name, label, placeholder, required = true) => (
         <div className="mb-6">
-            <label className="block text-rr-dark font-bold mb-2 uppercase tracking-wide text-sm"><span className="bg-amber-500/20 text-amber-900 px-1 rounded border border-amber-500/30">{label}</span> {required && '*'}</label>
+            <label className="block text-rr-dark font-bold mb-2 uppercase tracking-wide text-sm">{label} {required && '*'}</label>
             <textarea
                 name={name}
                 required={required}
@@ -108,7 +108,7 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
                 return (
                     <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
                         <div className="bg-slate-50 p-6 md:p-8 rounded-2xl border border-slate-200 mt-8 mb-8">
-                            <h4 className="font-black text-xl text-rr-dark uppercase mb-6 border-b border-slate-200 pb-4"><span className="bg-amber-500/20 text-amber-900 px-1 rounded border border-amber-500/30">Thank you! Before you submit, please tell us:</span></h4>
+                            <h4 className="font-black text-xl text-rr-dark uppercase mb-6 border-b border-slate-200 pb-4">Thank you! Before you submit, please tell us:</h4>
                             {renderTextarea('what_excites', 'What excites you the most about the program?', 'e.g., The coaching, the DNA card, the IPL connection...')}
                             {renderTextarea('what_concerns', 'Is there anything that concerns you about the program?', 'e.g., Nothing right now, or scheduling, intensity, etc.')}
                             {renderTextarea('parent_sentiment', 'As a parent, how are you feeling about your child being involved in the Elite Program?', 'Your honest thoughts help us align with your family goals.')}
@@ -130,12 +130,12 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
                 return (
                     <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
                         <div className="bg-slate-100 p-6 md:p-8 rounded-2xl border border-slate-300 mt-8 mb-8">
-                            <h4 className="font-black text-xl text-slate-700 uppercase mb-6 border-b border-slate-300 pb-4"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">We're sorry you can't join us.</span></h4>
-                            <p className="text-slate-600 mb-6 font-medium"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">To help us improve our offerings and understand our applicants better, please tell us why you are declining the invitation.</span></p>
+                            <h4 className="font-black text-xl text-slate-700 uppercase mb-6 border-b border-slate-300 pb-4">We're sorry you can't join us.</h4>
+                            <p className="text-slate-600 mb-6 font-medium">To help us improve our offerings and understand our applicants better, please tell us why you are declining the invitation.</p>
 
                             {/* Radio Buttons for Primary Reason */}
                             <div className="mb-6">
-                                <label className="block text-rr-dark font-bold mb-4 uppercase tracking-wide text-sm"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">Primary reason for declining *</span></label>
+                                <label className="block text-rr-dark font-bold mb-4 uppercase tracking-wide text-sm">Primary reason for declining *</label>
                                 <div className="space-y-3">
                                     {['Schedule Conflict', 'Financial / Cost', 'Location / Travel', 'Joined Another Program', 'Other'].map(reason => (
                                         <label key={reason} className="flex items-center gap-3 cursor-pointer group">
@@ -147,7 +147,7 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
                                                 onChange={handleInputChange}
                                                 className="w-5 h-5 text-rr-pink border-slate-300 focus:ring-rr-pink"
                                             />
-                                            <span className="text-slate-700 font-medium group-hover:text-rr-dark transition-colors"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">{reason}</span></span>
+                                            <span className="text-slate-700 font-medium group-hover:text-rr-dark transition-colors">{reason}</span>
                                         </label>
                                     ))}
                                 </div>
@@ -169,12 +169,12 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
 
                             {/* Radio for Future Interest */}
                             <div className="mt-6 pt-6 border-t border-slate-200">
-                                <label className="block text-rr-dark font-bold mb-4 uppercase tracking-wide text-sm"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">Would you like to be considered for future programs? *</span></label>
+                                <label className="block text-rr-dark font-bold mb-4 uppercase tracking-wide text-sm">Would you like to be considered for future programs? *</label>
                                 <div className="flex gap-6">
                                     {['Yes', 'No'].map(opt => (
                                         <label key={opt} className="flex items-center gap-3 cursor-pointer group">
                                             <input type="radio" name="future_interest" value={opt} required onChange={handleInputChange} className="w-5 h-5 text-rr-pink border-slate-300 focus:ring-rr-pink" />
-                                            <span className="text-slate-700 font-medium"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">{opt}</span></span>
+                                            <span className="text-slate-700 font-medium">{opt}</span>
                                         </label>
                                     ))}
                                 </div>
@@ -194,16 +194,16 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
             <div className="max-w-4xl mx-auto px-6 relative z-10">
                 <div className="text-center mb-16">
                     <h2 className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-wider mb-6">
-                        <span className="bg-emerald-500/20 text-emerald-900 px-2 rounded inline-block border border-emerald-500/30">Assessment session acceptance.</span>
+                        Assessment session acceptance.
                     </h2>
                     <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-4">
-                        <span className="bg-emerald-500/20 text-emerald-900 px-2 rounded inline-block border border-emerald-500/30">As places in the Elite Program foundation intake are strictly limited, we want to ensure we provide as many applicants as possible an opportunity to put their best foot forward.</span>
+                        As places in the Elite Program foundation intake are strictly limited, we want to ensure we provide as many applicants as possible an opportunity to put their best foot forward.
                     </p>
                     <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-8 font-bold">
-                        <span className="bg-emerald-500/20 text-emerald-900 px-2 rounded inline-block border border-emerald-500/30">So that we can accurately manage the applicants through the selection process, please tick one of the answers below.</span>
+                        So that we can accurately manage the applicants through the selection process, please tick one of the answers below.
                     </p>
                     <p className="text-xl text-rr-dark max-w-2xl mx-auto font-black italic">
-                        <span className="bg-emerald-500/20 text-emerald-900 px-2 rounded inline-block border border-emerald-500/30">After the assessment session, if offered a place in the Elite Program, will you accept the offer?</span>
+                        After the assessment session, if offered a place in the Elite Program, will you accept the offer?
                     </p>
                 </div>
 
@@ -242,7 +242,7 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
 
                     <div className="mt-12 text-center mb-6 pt-8 border-t border-slate-200">
                         <p className="text-slate-600 mb-6 italic">
-                            <span className="bg-emerald-500/20 text-emerald-900 px-2 rounded inline-block border border-emerald-500/30">If, for reasons beyond your control, you are unable to attend the assessment session on afternoon of Sunday March 1st but would accept an offer to the program, please tick the box below.</span>
+                            If, for reasons beyond your control, you are unable to attend the assessment session on afternoon of Sunday March 1st but would accept an offer to the program, please tick the box below.
                         </p>
                         <div
                             onClick={() => handleOptionSelect('yes_but_no_assess')}
@@ -264,7 +264,7 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
                                 font-bold text-lg 
                                 ${decision === 'yes_but_no_assess' ? 'text-rr-dark' : 'text-slate-600 group-hover:text-rr-dark'}
                             `}>
-                                <span className="bg-emerald-500/20 text-emerald-900 px-1 rounded border border-emerald-500/30">I’m not able to attend the assessment session but I would definitely accept an offer</span>
+                                I’m not able to attend the assessment session but I would definitely accept an offer
                             </span>
                         </div>
                     </div>
@@ -276,7 +276,7 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
                     {error && (
                         <div className="mb-8 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-4 text-red-700">
                             <AlertCircle className="w-6 h-6 shrink-0 mt-0.5" />
-                            <p className="font-medium text-sm"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">{error}</span></p>
+                            <p className="font-medium text-sm">{error}</p>
                         </div>
                     )}
 
@@ -289,10 +289,10 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
                         >
                             {isSubmitting ? (
                                 <span className="flex items-center gap-2">
-                                    <Loader2 className="w-5 h-5 animate-spin" /> <span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">Processing...</span>
+                                    <Loader2 className="w-5 h-5 animate-spin" /> Processing...
                                 </span>
                             ) : (
-                                <span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">Submit Decision</span>
+                                Submit Decision
                             )}
                         </Button>
                     </div>

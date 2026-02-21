@@ -53,17 +53,17 @@ const ConfirmationScreen = ({ decision, applicantName }) => {
                 {content.icon}
 
                 <h1 className="text-4xl md:text-5xl font-black text-white uppercase tracking-wider mb-2">
-                    <span className="bg-amber-500/20 text-amber-100 border border-amber-500/30 rounded inline-block px-2">{content.title}</span>
+                    {content.title}
                 </h1>
 
                 <p className="text-xl text-rr-pink font-bold uppercase tracking-widest mb-8">
-                    <span className="bg-amber-500/20 text-amber-100 border border-amber-500/30 rounded inline-block px-2">{content.subtitle}</span>
+                    {content.subtitle}
                 </p>
 
                 <div className="space-y-6 text-lg text-slate-300 leading-relaxed mb-12">
-                    <p><span className="bg-amber-500/20 text-amber-100 border border-amber-500/30 rounded inline-block px-2">{content.message}</span></p>
+                    <p>{content.message}</p>
                     <p className="p-6 bg-black/30 rounded-xl border border-white/5">
-                        <span className="bg-amber-500/20 text-amber-100 border border-amber-500/30 rounded inline-block px-2">{content.details}</span>
+                        {content.details}
                     </p>
                 </div>
 
@@ -73,12 +73,12 @@ const ConfirmationScreen = ({ decision, applicantName }) => {
                         onClick={() => window.location.href = 'https://rramelbourne.com'}
                         className="flex items-center justify-center gap-2"
                     >
-                        <span className="bg-amber-500/20 text-amber-100 border border-amber-500/30 rounded inline-block px-1">Return to Main Site</span> <ArrowRight className="w-5 h-5" />
+                        Return to Main Site <ArrowRight className="w-5 h-5" />
                     </Button>
                 </div>
 
                 <div className="mt-12 pt-8 border-t border-white/10 text-sm text-slate-500">
-                    <span className="bg-amber-500/20 text-amber-100 border border-amber-500/30 rounded inline-block px-1">If you have any urgent questions, please contact us at <a href="mailto:info@rramelbourne.com" className="text-rr-pink hover:underline">info@rramelbourne.com</a>.</span>
+                    If you have any urgent questions, please contact us at <a href="mailto:info@rramelbourne.com" className="text-rr-pink hover:underline">info@rramelbourne.com</a>.
                 </div>
             </motion.div>
         </section>
