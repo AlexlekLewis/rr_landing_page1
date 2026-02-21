@@ -77,13 +77,23 @@ const Intro = () => {
 
                     <div className="mt-12 space-y-6 text-lg font-medium text-slate-600 md:text-xl max-w-3xl mx-auto leading-relaxed">
                         <p>
-                            We are delighted to invite you to be part of an exciting new opportunity for aspiring cricketers in Melbourne, the <strong className="text-rr-dark">Rajasthan Royals Academy - Elite Program</strong>, beginning in early April 2026.
+                            We are delighted to invite you to apply for an exciting new opportunity for aspiring cricketers in Melbourne: the <strong className="text-rr-dark">Rajasthan Royals Academy - Elite Program</strong>, beginning in early April 2026.
                         </p>
                         <p>
-                            You have been identified by our scouting network as an emerging young talent and this unique opportunity with one of the world’s biggest and most successful cricket franchises can help take your game to the next level.
+                            You’ve received this invitation because someone who knows your game well—a coach, scout, or teammate—believes you have what it takes. This is your chance to elevate your game with one of the world's most successful cricket franchises.
                         </p>
                         <p>
-                            For the first time, cricketers in Australia will have opportunities to learn and develop their T20 skills from some of the best T20 coaches in the Royals ecosystem.
+                            For the first time in Australia, emerging players can learn directly from top-tier T20 coaches within the Royals ecosystem. High-potential cricketers will benefit from unprecedented resources designed to make a meaningful difference to your development trajectory.
+                        </p>
+                        <p>
+                            If you’re ready to take your T20 skills to an elite level and join our foundation intake, simply apply through the form below. Places are strictly limited, and our selection team will thoroughly review all applications.
+                        </p>
+                        <p>
+                            Browse the information below to discover more about the Elite Program and the selection process. We look forward to receiving your application.
+                        </p>
+                        <p className="font-bold text-rr-dark pt-2">
+                            Best wishes,<br />
+                            The Rajasthan Royals Academy Melbourne Team
                         </p>
                     </div>
 

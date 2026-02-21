@@ -11,29 +11,27 @@ const ConfirmationScreen = ({ decision, applicantName }) => {
     if (decision === 'yes' || decision === 'yes_but_no_assess' || decision === 'attended') {
         content = {
             icon: <CheckCircle2 className="w-24 h-24 text-rr-pink mx-auto mb-8" />,
-            title: "Decision Confirmed",
-            subtitle: "You're taking the next step.",
-            message: `Thank you for confirming, ${applicantName}. We have received your response and are thrilled to move forward.`,
-            details: decision !== 'yes_but_no_assess'
-                ? "Please mark your calendar for Sunday March 1 at 2-4pm at Cutting Edge Cricket, Bundoora. We will send a reminder email closer to the date with full details."
-                : "We note you cannot attend the assessment but remain interested. Our team will contact you shortly regarding the next steps."
+            title: "[Language TBC]",
+            subtitle: "[Language TBC]",
+            message: `[Language TBC]`,
+            details: "[Language TBC]"
         };
     } else if (decision === 'maybe') {
         content = {
             icon: <AlertCircle className="w-24 h-24 text-rr-blue mx-auto mb-8" />,
-            title: "Response Received",
-            subtitle: "We're here to help.",
-            message: `Thank you for your honesty, ${applicantName}. Making the right decision for your cricket development is important.`,
-            details: "One of our Coaching Directors will review your response and give you a call within the next 48 hours to discuss your questions and talk through the logistics."
+            title: "[Language TBC]",
+            subtitle: "[Language TBC]",
+            message: `[Language TBC]`,
+            details: "[Language TBC]"
         };
     } else {
         // 'no' or 'declined'
         content = {
             icon: <CheckCircle2 className="w-24 h-24 text-slate-400 mx-auto mb-8" />,
-            title: "Response Received",
-            subtitle: "We wish you the best.",
-            message: `Thank you for letting us know, ${applicantName}. We appreciate you taking the time to review the offer and provide feedback.`,
-            details: "While you won't be joining the Elite Program this time, we wish you the greatest success with your cricket this season. We will keep your details on file should you wish to be considered for future programs."
+            title: "[Language TBC]",
+            subtitle: "[Language TBC]",
+            message: `[Language TBC]`,
+            details: "[Language TBC]"
         };
     }
 
@@ -73,12 +71,12 @@ const ConfirmationScreen = ({ decision, applicantName }) => {
                         onClick={() => window.location.href = 'https://rramelbourne.com'}
                         className="flex items-center justify-center gap-2"
                     >
-                        Return to Main Site <ArrowRight className="w-5 h-5" />
+                        [Language TBC] <ArrowRight className="w-5 h-5" />
                     </Button>
                 </div>
 
                 <div className="mt-12 pt-8 border-t border-white/10 text-sm text-slate-500">
-                    If you have any urgent questions, please contact us at <a href="mailto:info@rramelbourne.com" className="text-rr-pink hover:underline">info@rramelbourne.com</a>.
+                    [Language TBC]
                 </div>
             </motion.div>
         </section>

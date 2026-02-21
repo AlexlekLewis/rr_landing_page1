@@ -5,10 +5,10 @@ import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import Button from '../Button';
 
 const DECISION_OPTIONS = [
-    { id: 'yes', label: Yes, absolutely I can’t wait },
-    { id: 'no', label: No, unfortunately I need to decline },
-    { id: 'maybe', label: I’m not sure at this point },
-    { id: 'yes_but_no_assess', label: I’m not able to attend the assessment session but I would definitely accept an offer }
+    { id: 'yes', label: "Yes, absolutely I can’t wait" },
+    { id: 'no', label: "No, unfortunately I need to decline" },
+    { id: 'maybe', label: "I’m not sure at this point" },
+    { id: 'yes_but_no_assess', label: "I’m not able to attend the assessment session but I would definitely accept an offer" }
 ];
 
 const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
@@ -108,10 +108,10 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
                 return (
                     <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
                         <div className="bg-slate-50 p-6 md:p-8 rounded-2xl border border-slate-200 mt-8 mb-8">
-                            <h4 className="font-black text-xl text-rr-dark uppercase mb-6 border-b border-slate-200 pb-4">Thank you! Before you submit, please tell us:</h4>
-                            {renderTextarea('what_excites', 'What excites you the most about the program?', 'e.g., The coaching, the DNA card, the IPL connection...')}
-                            {renderTextarea('what_concerns', 'Is there anything that concerns you about the program?', 'e.g., Nothing right now, or scheduling, intensity, etc.')}
-                            {renderTextarea('parent_sentiment', 'As a parent, how are you feeling about your child being involved in the Elite Program?', 'Your honest thoughts help us align with your family goals.')}
+                            <h4 className="font-black text-xl text-rr-dark uppercase mb-6 border-b border-slate-200 pb-4">[Language TBC]</h4>
+                            {renderTextarea('what_excites', '[Language TBC]', '[Language TBC]')}
+                            {renderTextarea('what_concerns', '[Language TBC]', '[Language TBC]')}
+                            {renderTextarea('parent_sentiment', '[Language TBC]', '[Language TBC]')}
                         </div>
                     </motion.div>
                 );
@@ -119,10 +119,10 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
                 return (
                     <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
                         <div className="bg-rr-pink/5 p-6 md:p-8 rounded-2xl border border-rr-pink/20 mt-8 mb-8">
-                            <h4 className="font-black text-xl text-rr-dark uppercase mb-6 border-b border-rr-pink/20 pb-4 text-rr-pink">We want to make sure you have all the information you need.</h4>
-                            {renderTextarea('hesitation_reason', 'What is causing you to hesitate?', 'Please be as honest as possible so we can help.')}
-                            {renderTextarea('decision_help', 'What information or conversation do you need to help you make a decision?', 'e.g. A phone call about schedule, a question about fees.')}
-                            {renderTextarea('scheduling_concerns', 'Are there any specific scheduling conflicts or logistical concerns?', 'Let us know if the proposed days/times are the main issue.', false)}
+                            <h4 className="font-black text-xl text-rr-dark uppercase mb-6 border-b border-rr-pink/20 pb-4 text-rr-pink">[Language TBC]</h4>
+                            {renderTextarea('hesitation_reason', '[Language TBC]', '[Language TBC]')}
+                            {renderTextarea('decision_help', '[Language TBC]', '[Language TBC]')}
+                            {renderTextarea('scheduling_concerns', '[Language TBC]', '[Language TBC]', false)}
                         </div>
                     </motion.div>
                 );
@@ -130,12 +130,12 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
                 return (
                     <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
                         <div className="bg-slate-100 p-6 md:p-8 rounded-2xl border border-slate-300 mt-8 mb-8">
-                            <h4 className="font-black text-xl text-slate-700 uppercase mb-6 border-b border-slate-300 pb-4">We're sorry you can't join us.</h4>
-                            <p className="text-slate-600 mb-6 font-medium">To help us improve our offerings and understand our applicants better, please tell us why you are declining the invitation.</p>
+                            <h4 className="font-black text-xl text-slate-700 uppercase mb-6 border-b border-slate-300 pb-4">[Language TBC]</h4>
+                            <p className="text-slate-600 mb-6 font-medium">[Language TBC]</p>
 
                             {/* Radio Buttons for Primary Reason */}
                             <div className="mb-6">
-                                <label className="block text-rr-dark font-bold mb-4 uppercase tracking-wide text-sm">Primary reason for declining *</label>
+                                <label className="block text-rr-dark font-bold mb-4 uppercase tracking-wide text-sm">[Language TBC] *</label>
                                 <div className="space-y-3">
                                     {['Schedule Conflict', 'Financial / Cost', 'Location / Travel', 'Joined Another Program', 'Other'].map(reason => (
                                         <label key={reason} className="flex items-center gap-3 cursor-pointer group">
@@ -153,23 +153,23 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
                                 </div>
                             </div>
 
-                            {renderTextarea('decline_details', 'Please provide more details about your decision.', 'Any additional context is greatly appreciated.', false)}
+                            {renderTextarea('decline_details', '[Language TBC]', '[Language TBC]', false)}
 
                             {formData.primary_reason === 'Financial / Cost' && (
                                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4">
-                                    {renderTextarea('cost_factor', 'If cost was the primary factor, what price point would make this program viable for your family?', 'This is purely for our market research.', false)}
+                                    {renderTextarea('cost_factor', '[Language TBC]', '[Language TBC]', false)}
                                 </motion.div>
                             )}
 
                             {formData.primary_reason === 'Joined Another Program' && (
                                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4">
-                                    {renderTextarea('competing_programs', 'What other program did you choose and why?', 'Help us understand what other offerings appealed to you.', false)}
+                                    {renderTextarea('competing_programs', '[Language TBC]', '[Language TBC]', false)}
                                 </motion.div>
                             )}
 
                             {/* Radio for Future Interest */}
                             <div className="mt-6 pt-6 border-t border-slate-200">
-                                <label className="block text-rr-dark font-bold mb-4 uppercase tracking-wide text-sm">Would you like to be considered for future programs? *</label>
+                                <label className="block text-rr-dark font-bold mb-4 uppercase tracking-wide text-sm">[Language TBC] *</label>
                                 <div className="flex gap-6">
                                     {['Yes', 'No'].map(opt => (
                                         <label key={opt} className="flex items-center gap-3 cursor-pointer group">
@@ -180,7 +180,7 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
                                 </div>
                             </div>
 
-                            {renderTextarea('improvement_suggestions', 'Is there anything we could have done differently to change your decision?', 'Your feedback is invaluable.', false)}
+                            {renderTextarea('improvement_suggestions', '[Language TBC]', '[Language TBC]', false)}
                         </div>
                     </motion.div>
                 );
@@ -289,10 +289,10 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
                         >
                             {isSubmitting ? (
                                 <span className="flex items-center gap-2">
-                                    <Loader2 className="w-5 h-5 animate-spin" /> Processing...
+                                    <Loader2 className="w-5 h-5 animate-spin" /> [Language TBC]
                                 </span>
                             ) : (
-                                Submit Decision
+                                <span>[Language TBC]</span>
                             )}
                         </Button>
                     </div>
