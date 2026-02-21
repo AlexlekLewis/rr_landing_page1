@@ -40,6 +40,15 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
         setIsSubmitting(true);
         setError(null);
 
+        // Developer preview bypass
+        if (import.meta.env.DEV && tokenData.id === 'preview-mode') {
+            setTimeout(() => {
+                onSubmitSuccess({ decision, ...formData });
+                setIsSubmitting(false);
+            }, 1000);
+            return;
+        }
+
         try {
             // 1. Insert detailed response
             const { error: insertError } = await supabase
