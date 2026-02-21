@@ -33,6 +33,24 @@ const AdminLayout = ({ children }) => {
 
     const checkAuth = async () => {
         try {
+            // --- LOCAL DEV BYPASS ---
+            // Automatically logs you into the dashboard UI if on localhost
+            // Note: Supabase data requests will still be anonymous unless you actually log in.
+            // If you need real data, set the VITE_DEV_BYPASS=false environment variable.
+            if ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && import.meta.env.VITE_DEV_BYPASS !== 'false') {
+                setUser({ email: 'local-dev@rra.com' });
+                setDashUser({
+                    id: 'dev-123',
+                    email: 'local-dev@rra.com',
+                    display_name: 'Local Developer',
+                    role: 'super_admin',
+                    active: true
+                });
+                setLoading(false);
+                return;
+            }
+            // ------------------------
+
             const { data: { session } } = await supabase.auth.getSession();
 
             if (!session) {
