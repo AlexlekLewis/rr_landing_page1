@@ -41,8 +41,8 @@ const ProgramDetails = () => {
                 </div>
 
                 <DetailSection title={<span className="bg-amber-500/20 text-amber-900 px-2 rounded border border-amber-500/30 inline-block">EXPLORE &bull; CHALLENGE &bull; EXECUTE</span>} prefix={<span className="bg-amber-500/20 text-amber-900 px-2 rounded border border-amber-500/30 inline-block">The Philosophy</span>}>
-                    <p>We believe that when you want to learn a skill, you first learn the full range of everything you're capable of. Then you learn how to use decision-making and match awareness to apply those skills. Then you perform under pressure.</p>
-                    <p>Cricket provides the perfect environment for this. Our framework gives young players the space to discover what they can do, the structure to sharpen when and why, and the competitive pressure to prove they can deliver.</p>
+                    <p><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block">We believe that when you want to learn a skill, you first learn the full range of everything you're capable of. Then you learn how to use decision-making and match awareness to apply those skills. Then you perform under pressure.</span></p>
+                    <p><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block">Cricket provides the perfect environment for this. Our framework gives young players the space to discover what they can do, the structure to sharpen when and why, and the competitive pressure to prove they can deliver.</span></p>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
                         {[
@@ -51,17 +51,17 @@ const ProgramDetails = () => {
                             { title: 'EXECUTE', weeks: 'Weeks 9–12', sub: 'Prove it under pressure.', text: 'Match scenarios, live bowling, scoreboard pressure. Perform when it matters.' }
                         ].map((phase, i) => (
                             <div key={i} className="bg-slate-50 border border-slate-200 rounded-2xl p-8 hover:border-rr-pink/50 transition-colors">
-                                <h4 className="text-rr-blue font-black uppercase tracking-wider mb-2">{phase.title}</h4>
-                                <span className="text-xs font-bold text-rr-pink bg-rr-pink/10 px-3 py-1 rounded-full uppercase tracking-widest">{phase.weeks}</span>
-                                <p className="font-bold text-rr-dark mt-6 mb-2">{phase.sub}</p>
-                                <p className="text-sm text-slate-600">{phase.text}</p>
+                                <h4 className="text-rr-blue font-black uppercase tracking-wider mb-2"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">{phase.title}</span></h4>
+                                <span className="text-xs font-bold text-rr-pink bg-amber-500/30 border border-amber-500/30 px-3 py-1 rounded-full uppercase tracking-widest">{phase.weeks}</span>
+                                <p className="font-bold text-rr-dark mt-6 mb-2"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">{phase.sub}</span></p>
+                                <p className="text-sm text-slate-600"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">{phase.text}</span></p>
                             </div>
                         ))}
                     </div>
                 </DetailSection>
 
                 <DetailSection title={<span className="bg-amber-500/20 text-amber-900 px-2 rounded border border-amber-500/30 inline-block">Direct Access to the Rajasthan Royals</span>} prefix={<span className="bg-amber-500/20 text-amber-900 px-2 rounded border border-amber-500/30 inline-block">The Exclusivity</span>} align="left">
-                    <p>This isn't a franchise that licensed its name and walked away. The Rajasthan Royals are actively embedded in this program — reviewing players, visiting Melbourne, and providing access that doesn't exist through any other pathway in Australia.</p>
+                    <p><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block">This isn't a franchise that licensed its name and walked away. The Rajasthan Royals are actively embedded in this program — reviewing players, visiting Melbourne, and providing access that doesn't exist through any other pathway in Australia.</span></p>
 
                     <ul className="space-y-6 mt-8">
                         {[
@@ -73,8 +73,8 @@ const ProgramDetails = () => {
                             <li key={i} className="flex flex-col md:flex-row gap-4 md:gap-8 items-start">
                                 <ShieldCheck className="w-8 h-8 text-rr-pink shrink-0 mt-1" />
                                 <div>
-                                    <h5 className="text-xl font-bold text-rr-dark mb-2">{item.title}</h5>
-                                    <p className="text-base text-slate-600">{item.text}</p>
+                                    <h5 className="text-xl font-bold text-rr-dark mb-2"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">{item.title}</span></h5>
+                                    <p className="text-base text-slate-600"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">{item.text}</span></p>
                                 </div>
                             </li>
                         ))}
@@ -82,13 +82,13 @@ const ProgramDetails = () => {
                 </DetailSection>
 
                 <DetailSection title={<span className="bg-amber-500/20 text-amber-900 px-2 rounded border border-amber-500/30 inline-block">The Player DNA Card</span>} prefix={<span className="bg-amber-500/20 text-amber-900 px-2 rounded border border-amber-500/30 inline-block">The Innovation</span>}>
-                    <p className="font-bold text-2xl text-rr-dark mb-4">Who is your child as a cricketer?</p>
-                    <p>Most academies tell you your child is "going well" or "needs to work on their batting." That's not a development plan. That's a guess.</p>
-                    <p>Within the first two weeks of the program, every player receives a Player DNA Card — a proprietary assessment system exclusive to the Rajasthan Royals Academy Melbourne. Built by our coaching team, it paints a complete picture of who your child is as a cricketer right now, and where they're heading. No other academy in Australia offers this.</p>
+                    <p className="font-bold text-2xl text-rr-dark mb-4"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">Who is your child as a cricketer?</span></p>
+                    <p><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">Most academies tell you your child is "going well" or "needs to work on their batting." That's not a development plan. That's a guess.</span></p>
+                    <p><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">Within the first two weeks of the program, every player receives a Player DNA Card — a proprietary assessment system exclusive to the Rajasthan Royals Academy Melbourne. Built by our coaching team, it paints a complete picture of who your child is as a cricketer right now, and where they're heading. No other academy in Australia offers this.</span></p>
 
                     <div className="bg-gradient-to-br from-rr-blue to-rr-dark rounded-3xl p-8 md:p-12 text-white mt-12 shadow-2xl relative overflow-hidden">
                         <Activity className="absolute -bottom-10 -right-10 w-64 h-64 text-white/5" />
-                        <h4 className="text-2xl font-black uppercase tracking-widest mb-6">What the DNA Card captures:</h4>
+                        <h4 className="text-2xl font-black uppercase tracking-widest mb-6"><span className="bg-amber-500/50 text-amber-100 border border-amber-500/30 rounded inline-block px-1">What the DNA Card captures:</span></h4>
                         <ul className="space-y-4 text-slate-300">
                             <li className="flex items-start gap-3"><ArrowRight className="w-5 h-5 text-rr-pink shrink-0" /> <span><strong className="text-white">A batting archetype</strong> — is your child a Firestarter who dominates the Powerplay? An Accumulator who builds innings? An Enforcer? A Game Manager? A Dual Threat?</span></li>
                             <li className="flex items-start gap-3"><ArrowRight className="w-5 h-5 text-rr-pink shrink-0" /> <span><strong className="text-white">A bowling archetype</strong> — Wicket Hunter, Weapon, Squeeze, or Developer. Not just "medium-pacer" — a defined role with purpose.</span></li>
@@ -97,25 +97,25 @@ const ProgramDetails = () => {
                             <li className="flex items-start gap-3"><ArrowRight className="w-5 h-5 text-rr-pink shrink-0" /> <span><strong className="text-white">Top 3 strengths and top 3 development priorities</strong> — specific, actionable, and honest.</span></li>
                         </ul>
                         <div className="mt-8 pt-8 border-t border-white/20">
-                            <p className="text-lg italic font-medium">"This is how IPL franchises evaluate talent. The Player DNA Card brings that same framework to your child — and it's only available through the Rajasthan Royals Academy Melbourne."</p>
+                            <p className="text-lg italic font-medium"><span className="bg-amber-500/50 text-amber-100 border border-amber-500/30 rounded inline-block px-1">"This is how IPL franchises evaluate talent. The Player DNA Card brings that same framework to your child — and it's only available through the Rajasthan Royals Academy Melbourne."</span></p>
                         </div>
                     </div>
                 </DetailSection>
 
                 <DetailSection title={<span className="bg-amber-500/20 text-amber-900 px-2 rounded border border-amber-500/30 inline-block">Individual Development Plans</span>} prefix={<span className="bg-amber-500/20 text-amber-900 px-2 rounded border border-amber-500/30 inline-block">The Roadmap</span>}>
-                    <p>The DNA Card isn't a report card that goes on the fridge. It's the starting point for a personalised <strong className="text-rr-dark underline decoration-rr-pink decoration-2 underline-offset-4">Individual Development Plan (IDP)</strong> — a written, measurable, week-by-week plan that tells your child exactly what they're working on, why it matters, and how they'll know when they've improved.</p>
-                    <p className="mt-4 font-bold text-rr-blue">No other cricket program in Australia provides this.</p>
+                    <p><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">The DNA Card isn't a report card that goes on the fridge. It's the starting point for a personalised <strong className="text-rr-dark underline decoration-rr-pink decoration-2 underline-offset-4">Individual Development Plan (IDP)</strong> — a written, measurable, week-by-week plan that tells your child exactly what they're working on, why it matters, and how they'll know when they've improved.</span></p>
+                    <p className="mt-4 font-bold text-rr-blue"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">No other cricket program in Australia provides this.</span></p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 bg-slate-50 p-8 rounded-3xl border border-slate-200">
                         <div>
                             <Map className="w-10 h-10 text-rr-blue mb-4" />
-                            <h5 className="text-xl font-black text-rr-dark uppercase mb-2">Targeted Growth</h5>
-                            <p className="text-base text-slate-600">The DNA Card reveals where the gaps are. If a player's technical skills are strong but their T20 game intelligence is low, the IDP doesn't say "improve batting." It says "technical foundation is solid — the priority is learning when and where to use those skills under match pressure."</p>
+                            <h5 className="text-xl font-black text-rr-dark uppercase mb-2"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">Targeted Growth</span></h5>
+                            <p className="text-base text-slate-600"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">The DNA Card reveals where the gaps are. If a player's technical skills are strong but their T20 game intelligence is low, the IDP doesn't say "improve batting." It says "technical foundation is solid — the priority is learning when and where to use those skills under match pressure."</span></p>
                         </div>
                         <div>
                             <Target className="w-10 h-10 text-rr-blue mb-4" />
-                            <h5 className="text-xl font-black text-rr-dark uppercase mb-2">Archetype Trajectory</h5>
-                            <p className="text-base text-slate-600">Archetype profiling sets the direction. A player's current archetype and their target archetype create a trajectory. The IDP maps exactly what needs to change — technically, tactically and mentally — to get there.</p>
+                            <h5 className="text-xl font-black text-rr-dark uppercase mb-2"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">Archetype Trajectory</span></h5>
+                            <p className="text-base text-slate-600"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">Archetype profiling sets the direction. A player's current archetype and their target archetype create a trajectory. The IDP maps exactly what needs to change — technically, tactically and mentally — to get there.</span></p>
                         </div>
                     </div>
                 </DetailSection>
@@ -134,8 +134,8 @@ const ProgramDetails = () => {
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                         <div>
-                            <h3 className="text-3xl font-black text-rr-dark uppercase mb-6">Your Weekly Structure</h3>
-                            <p className="text-lg text-slate-600 mb-8">Each player trains for two hours, twice per week — one weekday session and one weekend session. Squads are allocated to a consistent block across the 12 weeks.</p>
+                            <h3 className="text-3xl font-black text-rr-dark uppercase mb-6"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">Your Weekly Structure</span></h3>
+                            <p className="text-lg text-slate-600 mb-8"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">Each player trains for two hours, twice per week — one weekday session and one weekend session. Squads are allocated to a consistent block across the 12 weeks.</span></p>
 
                             <div className="space-y-4">
                                 <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
@@ -143,8 +143,8 @@ const ProgramDetails = () => {
                                         <Calendar className="w-6 h-6 text-rr-pink" />
                                     </div>
                                     <div>
-                                        <p className="font-bold text-rr-dark">Tuesday & Thursday (Weekday)</p>
-                                        <p className="text-sm text-slate-500">5:30 – 9:30pm (Allocated Slot)</p>
+                                        <p className="font-bold text-rr-dark"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">Tuesday & Thursday (Weekday)</span></p>
+                                        <p className="text-sm text-slate-500"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">5:30 – 9:30pm (Allocated Slot)</span></p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
@@ -152,33 +152,33 @@ const ProgramDetails = () => {
                                         <Clock className="w-6 h-6 text-rr-pink" />
                                     </div>
                                     <div>
-                                        <p className="font-bold text-rr-dark">Saturday & Sunday (Weekend)</p>
-                                        <p className="text-sm text-slate-500">2:00 – 6:00pm (Allocated Slot)</p>
+                                        <p className="font-bold text-rr-dark"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">Saturday & Sunday (Weekend)</span></p>
+                                        <p className="text-sm text-slate-500"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">2:00 – 6:00pm (Allocated Slot)</span></p>
                                     </div>
                                 </div>
                             </div>
                             <p className="text-sm font-bold text-rr-blue mt-6 uppercase tracking-wider">
-                                48 HOURS ACROSS 12 WEEKS
+                                <span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">48 HOURS ACROSS 12 WEEKS</span>
                             </p>
                         </div>
 
                         <div className="bg-rr-dark text-white rounded-2xl p-8 text-center h-full flex flex-col justify-center">
-                            <h3 className="text-2xl font-black uppercase tracking-wider mb-8 text-rr-pink">Program Investment</h3>
+                            <h3 className="text-2xl font-black uppercase tracking-wider mb-8 text-rr-pink"><span className="bg-amber-500/50 text-amber-100 border border-amber-500/30 rounded inline-block px-1">Program Investment</span></h3>
 
                             <div className="text-6xl md:text-7xl font-black mb-4">
-                                $3,990
+                                <span className="bg-amber-500/50 text-amber-100 border border-amber-500/30 rounded inline-block px-2">$3,990</span>
                             </div>
-                            <p className="text-xl font-bold uppercase tracking-wider text-slate-300 mb-8">Inc. GST</p>
+                            <p className="text-xl font-bold uppercase tracking-wider text-slate-300 mb-8"><span className="bg-amber-500/50 text-amber-100 border border-amber-500/30 rounded inline-block px-1">Inc. GST</span></p>
 
                             <p className="text-lg text-slate-400 font-medium max-w-sm mx-auto">
-                                All Included. Nothing Extra.
+                                <span className="bg-amber-500/50 text-amber-100 border border-amber-500/30 rounded inline-block px-1">All Included. Nothing Extra.</span>
                             </p>
 
                             <div className="mt-8 pt-8 border-t border-white/10 text-sm text-slate-400 space-y-2">
-                                <p>48 hours of coaching.</p>
-                                <p>DNA profiling & Individual development plans.</p>
-                                <p>In-person masterclasses with Royals coaches.</p>
-                                <p>Official Royals apparel.</p>
+                                <p><span className="bg-amber-500/50 text-amber-100 border border-amber-500/30 rounded inline-block px-1">48 hours of coaching.</span></p>
+                                <p><span className="bg-amber-500/50 text-amber-100 border border-amber-500/30 rounded inline-block px-1">DNA profiling & Individual development plans.</span></p>
+                                <p><span className="bg-amber-500/50 text-amber-100 border border-amber-500/30 rounded inline-block px-1">In-person masterclasses with Royals coaches.</span></p>
+                                <p><span className="bg-amber-500/50 text-amber-100 border border-amber-500/30 rounded inline-block px-1">Official Royals apparel.</span></p>
                             </div>
                         </div>
                     </div>

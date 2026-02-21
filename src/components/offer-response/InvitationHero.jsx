@@ -70,11 +70,11 @@ const InvitationHero = ({ applicantName }) => {
                     className="mt-16 pt-16 border-t border-white/10 text-left max-w-4xl mx-auto"
                 >
                     <h3 className="text-3xl font-black text-white uppercase tracking-widest mb-6">
-                        <span className="bg-emerald-500/30 text-emerald-200 px-2 rounded inline-block">What happens next?</span>
+                        <span className="bg-amber-500/30 text-amber-200 px-2 rounded inline-block">What happens next?</span>
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-lg md:text-xl text-slate-300 font-medium leading-relaxed">
                         <p>
-                            <span className="bg-emerald-500/30 text-emerald-200 px-2 rounded inline-block">As you have been invited to attend the assessment session, you are one step closer to the Elite Program as the Rajasthan Royals Academy team are considering you as a candidate with strong possibility of being offered a place.</span>
+                            <span className="bg-amber-500/30 text-amber-200 px-2 rounded inline-block">As you have been invited to attend the assessment session, you are one step closer to the Elite Program as the Rajasthan Royals Academy team are considering you as a candidate with strong possibility of being offered a place.</span>
                         </p>
                     </div>
                 </motion.div>
@@ -86,7 +86,7 @@ const InvitationHero = ({ applicantName }) => {
                     className="mt-16 flex flex-col items-center justify-center animate-bounce cursor-pointer"
                     onClick={() => document.getElementById('video-section').scrollIntoView({ behavior: 'smooth' })}
                 >
-                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-2">What Happens Next</p>
+                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-2"><span className="bg-amber-500/30 text-amber-200 px-1 rounded inline-block">What Happens Next</span></p>
                     <svg className="w-6 h-6 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                     </svg>

@@ -130,12 +130,12 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
                 return (
                     <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
                         <div className="bg-slate-100 p-6 md:p-8 rounded-2xl border border-slate-300 mt-8 mb-8">
-                            <h4 className="font-black text-xl text-slate-700 uppercase mb-6 border-b border-slate-300 pb-4">We're sorry you can't join us.</h4>
-                            <p className="text-slate-600 mb-6 font-medium">To help us improve our offerings and understand our applicants better, please tell us why you are declining the invitation.</p>
+                            <h4 className="font-black text-xl text-slate-700 uppercase mb-6 border-b border-slate-300 pb-4"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">We're sorry you can't join us.</span></h4>
+                            <p className="text-slate-600 mb-6 font-medium"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">To help us improve our offerings and understand our applicants better, please tell us why you are declining the invitation.</span></p>
 
                             {/* Radio Buttons for Primary Reason */}
                             <div className="mb-6">
-                                <label className="block text-rr-dark font-bold mb-4 uppercase tracking-wide text-sm">Primary reason for declining *</label>
+                                <label className="block text-rr-dark font-bold mb-4 uppercase tracking-wide text-sm"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">Primary reason for declining *</span></label>
                                 <div className="space-y-3">
                                     {['Schedule Conflict', 'Financial / Cost', 'Location / Travel', 'Joined Another Program', 'Other'].map(reason => (
                                         <label key={reason} className="flex items-center gap-3 cursor-pointer group">
@@ -147,7 +147,7 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
                                                 onChange={handleInputChange}
                                                 className="w-5 h-5 text-rr-pink border-slate-300 focus:ring-rr-pink"
                                             />
-                                            <span className="text-slate-700 font-medium group-hover:text-rr-dark transition-colors">{reason}</span>
+                                            <span className="text-slate-700 font-medium group-hover:text-rr-dark transition-colors"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">{reason}</span></span>
                                         </label>
                                     ))}
                                 </div>
@@ -169,12 +169,12 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
 
                             {/* Radio for Future Interest */}
                             <div className="mt-6 pt-6 border-t border-slate-200">
-                                <label className="block text-rr-dark font-bold mb-4 uppercase tracking-wide text-sm">Would you like to be considered for future programs? *</label>
+                                <label className="block text-rr-dark font-bold mb-4 uppercase tracking-wide text-sm"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">Would you like to be considered for future programs? *</span></label>
                                 <div className="flex gap-6">
                                     {['Yes', 'No'].map(opt => (
                                         <label key={opt} className="flex items-center gap-3 cursor-pointer group">
                                             <input type="radio" name="future_interest" value={opt} required onChange={handleInputChange} className="w-5 h-5 text-rr-pink border-slate-300 focus:ring-rr-pink" />
-                                            <span className="text-slate-700 font-medium">{opt}</span>
+                                            <span className="text-slate-700 font-medium"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">{opt}</span></span>
                                         </label>
                                     ))}
                                 </div>
@@ -276,7 +276,7 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
                     {error && (
                         <div className="mb-8 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-4 text-red-700">
                             <AlertCircle className="w-6 h-6 shrink-0 mt-0.5" />
-                            <p className="font-medium text-sm">{error}</p>
+                            <p className="font-medium text-sm"><span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">{error}</span></p>
                         </div>
                     )}
 
@@ -289,10 +289,10 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
                         >
                             {isSubmitting ? (
                                 <span className="flex items-center gap-2">
-                                    <Loader2 className="w-5 h-5 animate-spin" /> Processing...
+                                    <Loader2 className="w-5 h-5 animate-spin" /> <span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">Processing...</span>
                                 </span>
                             ) : (
-                                'Submit Decision'
+                                <span className="bg-amber-500/20 text-amber-900 border border-amber-500/30 rounded inline-block px-1">Submit Decision</span>
                             )}
                         </Button>
                     </div>
