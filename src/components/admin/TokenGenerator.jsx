@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Upload, FileSpreadsheet, Copy, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
+import { Upload, FileSpreadsheet, Copy, CheckCircle2, AlertCircle, RefreshCw, Lock } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 const TokenGenerator = () => {
