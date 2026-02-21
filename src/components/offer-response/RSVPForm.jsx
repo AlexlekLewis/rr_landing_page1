@@ -185,18 +185,24 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
             <div className="max-w-4xl mx-auto px-6 relative z-10">
                 <div className="text-center mb-16">
                     <h2 className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-wider mb-6">
-                        Your <span className="text-rr-pink">Decision</span>
+                        Assessment session acceptance.
                     </h2>
-                    <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                        Please confirm your attendance for the assessment session so we can finalize our planning and coaching ratios.
+                    <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-4">
+                        As places in the Elite Program foundation intake are strictly limited, we want to ensure we provide as many applicants as possible an opportunity to put their best foot forward.
+                    </p>
+                    <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-8 font-bold">
+                        So that we can accurately manage the applicants through the selection process, please tick one of the answers below.
+                    </p>
+                    <p className="text-xl text-rr-dark max-w-2xl mx-auto font-black italic">
+                        After the assessment session, if offered a place in the Elite Program, will you accept the offer?
                     </p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="bg-white p-8 md:p-12 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100">
 
                     {/* Decision Options */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                        {DECISION_OPTIONS.map((option) => (
+                    <div className="space-y-4 mb-8">
+                        {DECISION_OPTIONS.slice(0, 3).map((option) => (
                             <div
                                 key={option.id}
                                 onClick={() => handleOptionSelect(option.id)}
@@ -223,6 +229,35 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
                                 </span>
                             </div>
                         ))}
+                    </div>
+
+                    <div className="mt-12 text-center mb-6 pt-8 border-t border-slate-200">
+                        <p className="text-slate-600 mb-6 italic">
+                            If, for reasons beyond your control, you are unable to attend the assessment session on afternoon of Sunday March 1st but would accept an offer to the program, please tick the box below.
+                        </p>
+                        <div
+                            onClick={() => handleOptionSelect('yes_but_no_assess')}
+                            className={`
+                                relative p-6 rounded-2xl cursor-pointer transition-all duration-300 border-2 flex items-center justify-center text-center group overflow-hidden max-w-2xl mx-auto
+                                ${decision === 'yes_but_no_assess'
+                                    ? 'border-rr-pink bg-rr-pink/5 shadow-md shadow-rr-pink/10'
+                                    : 'border-slate-200 hover:border-rr-pink/50 hover:bg-slate-50'
+                                }
+                            `}
+                        >
+                            {decision === 'yes_but_no_assess' && (
+                                <div className="absolute top-3 right-3">
+                                    <CheckCircle2 className="w-6 h-6 text-rr-pink" />
+                                </div>
+                            )}
+
+                            <span className={`
+                                font-bold text-lg 
+                                ${decision === 'yes_but_no_assess' ? 'text-rr-dark' : 'text-slate-600 group-hover:text-rr-dark'}
+                            `}>
+                                I’m not able to attend the assessment session but I would definitely accept an offer
+                            </span>
+                        </div>
                     </div>
 
                     <AnimatePresence mode="wait">

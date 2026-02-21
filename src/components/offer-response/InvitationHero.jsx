@@ -45,13 +45,10 @@ const InvitationHero = ({ applicantName }) => {
                     className="text-lg md:text-xl text-slate-300 font-medium max-w-2xl mx-auto space-y-6"
                 >
                     <p>
-                        Thank you for your application to Melbourne's Rajasthan Royals Academy Elite Program, <strong className="text-white">{applicantName}</strong>.
+                        Thank you for your application to Melbourne's Rajasthan Royals Academy Elite Program.
                     </p>
                     <p className="text-white font-bold text-xl md:text-2xl mt-8 mb-4 border-l-4 border-rr-pink pl-6 text-left">
-                        We are delighted to now invite you to an assessment session on <span className="text-rr-pink">Sunday March 1 at 2-4pm</span> (or Monday March 2 at 5:30-7:30pm) at Cutting Edge Cricket in Bundoora.
-                    </p>
-                    <p className="text-left">
-                        This session forms a key part of the final offers that will be made to successful applicants.
+                        We are delighted to now invite you to an assessment session on <span className="text-rr-pink">Sunday March 1 at XXpm</span> at Cutting Edge Cricket in Bundoora. This sessions forms a key part of the final offers that will be made to successful applicants.
                     </p>
                 </motion.div>
 
@@ -61,7 +58,6 @@ const InvitationHero = ({ applicantName }) => {
                     transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
                     className="mt-16 bg-white/5 border border-white/10 rounded-3xl p-8 max-w-3xl mx-auto text-left backdrop-blur-sm"
                 >
-                    <h3 className="text-2xl font-black text-white uppercase tracking-wide mb-4">The Assessment Session</h3>
                     <p className="text-slate-300 mb-6 leading-relaxed">
                         The session will be led by <strong className="text-white">Siddhartha Lahiri</strong>, the Rajasthan Royals Head of International Talent Development, as well as Assistant and Performance Coach for Rajasthan, Paarl and Barbados Royals.
                     </p>

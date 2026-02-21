@@ -36,7 +36,7 @@ const ProgramDetails = () => {
 
                 <div className="mb-32 text-center max-w-3xl mx-auto">
                     <p className="text-xl text-slate-500 font-medium leading-relaxed italic">
-                        "So that you can begin to prepare for both the assessment session and the possibility of being offered a place, please find below details of the program..."
+                        "So that you can begin to prepare for both the assessment session and the possibility of being offered a place, please find below details of the program including program content, training days & times and the cost of this premium program."
                     </p>
                 </div>
 
