@@ -13,6 +13,7 @@ const NAV_ITEMS = [
     { label: 'Applications', path: '/rramadmin_26/applications', icon: Table2 },
     { label: 'Selection', path: '/rramadmin_26/selection', icon: CheckCircle2 },
     { label: 'Analytics', path: '/rramadmin_26/analytics', icon: BarChart3 },
+    { label: 'Offer Tokens', path: '/rramadmin_26/tokens', icon: Shield },
     { label: 'Pages', path: '/rramadmin_26/pages', icon: FileText },
     { label: 'Settings', path: '/rramadmin_26/settings', icon: Settings },
 ];
