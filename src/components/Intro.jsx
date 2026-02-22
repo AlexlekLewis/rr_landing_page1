@@ -64,37 +64,93 @@ const Intro = () => {
                     </motion.div>
                 </div>
 
-                {/* Quote */}
+                {/* Quote Layout */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="max-w-4xl mx-auto text-center"
+                    className="max-w-6xl mx-auto"
                 >
-                    <h2 className="text-3xl md:text-5xl font-black tracking-tight text-rr-dark">
-                        INVITATION TO <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">APPLY</span>
-                    </h2>
+                    <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+                        {/* Left Column - Logo & Accent */}
+                        <div className="lg:col-span-4 flex flex-col items-center justify-center lg:h-full lg:sticky lg:top-24 pt-4 pb-8 lg:pb-0">
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.6 }}
+                            >
+                                <img src="/assets/MELBOURNE.png" alt="Rajasthan Royals Academy Melbourne" className="w-[16.5rem] md:w-[19rem] max-w-full drop-shadow-2xl hover:scale-105 transition-transform duration-500" />
+                            </motion.div>
+                            <div className="mt-8 hidden lg:block text-center space-y-2">
+                                <p className="text-xs font-black tracking-[0.2em] text-rr-pink uppercase">Foundation Intake</p>
+                                <p className="text-sm font-bold text-rr-dark uppercase tracking-widest">April 2026</p>
+                            </div>
+                        </div>
 
-                    <div className="mt-12 space-y-6 text-lg font-medium text-slate-600 md:text-xl max-w-3xl mx-auto leading-relaxed">
-                        <p>
-                            We are delighted to invite you to apply for an exciting new opportunity for aspiring cricketers in Melbourne: the <strong className="text-rr-dark">Rajasthan Royals Academy - Elite Program</strong>, beginning in early April 2026.
-                        </p>
-                        <p>
-                            You’ve received this invitation because someone who knows your game well—a coach, scout, or teammate—believes you have what it takes. This is your chance to elevate your game with one of the world's most successful cricket franchises.
-                        </p>
-                        <p>
-                            For the first time in Australia, emerging players can learn directly from top-tier T20 coaches within the Royals ecosystem. High-potential cricketers will benefit from unprecedented resources designed to make a meaningful difference to your development trajectory.
-                        </p>
-                        <p>
-                            If you’re ready to take your T20 skills to an elite level and join our foundation intake, simply apply through the form below. Places are strictly limited, and our selection team will thoroughly review all applications.
-                        </p>
-                        <p>
-                            Browse the information below to discover more about the Elite Program and the selection process. We look forward to receiving your application.
-                        </p>
-                        <p className="font-bold text-rr-dark pt-2">
-                            Best wishes,<br />
-                            The Rajasthan Royals Academy Melbourne Team
-                        </p>
+                        {/* Right Column - Content */}
+                        <div className="lg:col-span-8">
+                            <h2 className="text-3xl md:text-5xl font-black tracking-tight text-rr-dark text-left mb-10">
+                                INVITATION TO <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">APPLY</span>
+                            </h2>
+
+                            <div className="space-y-6 text-lg font-medium text-slate-600 leading-relaxed text-left">
+                                <p className="text-xl text-rr-dark font-bold border-l-4 border-rr-pink pl-5 py-1 bg-gradient-to-r from-rr-pink/5 to-transparent rounded-r-xl">
+                                    We are delighted to invite you to be part of an exciting new opportunity for aspiring cricketers in Melbourne, the <strong className="text-rr-dark">Rajasthan Royals Academy - Elite Program</strong>, beginning in early April 2026.
+                                </p>
+
+                                <p>
+                                    You will have received this invitation to apply to the Rajasthan Royals Academy Elite Program by someone who knows your game well, and thought you should consider the opportunity. This may be a coach, a player scout or a teammate. No matter how this invitation found its way to you, this unique opportunity with one of the world's biggest and most successful cricket franchises could help take your game to the next level.
+                                </p>
+
+                                <p>
+                                    For the first time, cricketers in Australia will have opportunities to learn and develop their T20 skills from some of the best T20 coaches in the Royals ecosystem. And, never before have the opportunities been so great and the potential rewards so high for those who develop an elite level T20 skillset.
+                                </p>
+
+                                <p>
+                                    As it is the first time an IPL franchise has opened its doors in such a way to emerging cricketers in Melbourne, the Rajasthan Royals Academy have made sure the resources and opportunities are provided to make a meaningful difference to your development trajectory.
+                                </p>
+
+                                {/* Highlighted Event Panel */}
+                                <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-lg shadow-rr-blue/5 relative overflow-hidden my-10 group hover:border-rr-pink/30 transition-colors duration-300">
+                                    <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-rr-pink to-rr-blue"></div>
+                                    <div className="flex flex-col sm:flex-row items-start gap-5">
+                                        <div className="w-14 h-14 rounded-2xl bg-rr-pink/10 flex items-center justify-center shrink-0 group-hover:bg-rr-pink/20 transition-colors duration-300">
+                                            <svg className="w-7 h-7 text-rr-pink" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <div className="flex items-center gap-3 mb-2">
+                                                <span className="text-xs font-black text-rr-pink uppercase tracking-widest bg-rr-pink/10 px-3 py-1 rounded-full">Assessment Session</span>
+                                            </div>
+                                            <p className="text-[17px] text-slate-600 leading-relaxed font-medium">
+                                                On the afternoon of <strong className="text-rr-dark">Sunday March 1st</strong>, Siddhartha Lahiri (Royals Head of International Development, Rajasthan Royals Performance Coach & Assistant Coach of Paarl and Barbados Royals) will be in Melbourne to hold an assessment session as a part of the selection process for the Elite Program. Siddhartha is a key person responsible for identifying talent across the Royals global network of franchises and Academy's, and as such this will be an important step in offers being made to players to join the foundation intake of the Elite Program.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p>
+                                    If you're serious about your cricket, and would like to be a part of the foundation intake, simply apply through the form below. Our selection team will be considering all applications however places are strictly limited for the foundation intake.
+                                </p>
+
+                                <p>
+                                    To find out more about the Elite Program and the selection process, please browse through the information below.
+                                </p>
+
+                                <p>
+                                    We look forward to receiving your application.
+                                </p>
+
+                                <div className="pt-6 mt-6 border-t border-slate-100">
+                                    <p className="font-bold text-rr-dark">
+                                        Best wishes,<br />
+                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">Rajasthan Royals Academy Melbourne Team</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Franchise Strip */}

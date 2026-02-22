@@ -18,6 +18,7 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsConditions from './components/TermsConditions';
 import ComingSoonSplash from './components/ComingSoonSplash';
 import OfferResponsePage from './components/offer-response/OfferResponsePage';
+import LandingPage2 from './components/landing-page-2/LandingPage2';
 
 // Admin components
 import AdminLogin from './components/admin/AdminLogin';
@@ -30,6 +31,7 @@ import PagesManager from './components/admin/PagesManager';
 import SettingsPanel from './components/admin/SettingsPanel';
 import SelectionAnalytics from './components/admin/SelectionAnalytics';
 import TokenGenerator from './components/admin/TokenGenerator';
+import LandingPage2Preview from './components/admin/LandingPage2Preview';
 
 function LandingPage() {
   return (
@@ -60,6 +62,7 @@ function App() {
         <Route path="/" element={<ComingSoonSplash />} />
         <Route path="/eliteprogram/2026registration" element={<LandingPage />} />
         <Route path="/eliteprogram/2026registrations" element={<LandingPage />} />
+        <Route path="/invite" element={<LandingPage2 />} />
         <Route path="/offer/:token" element={<OfferResponsePage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-conditions" element={<TermsConditions />} />
@@ -72,6 +75,7 @@ function App() {
         <Route path="/rramadmin_26/analytics" element={<AdminLayout><AnalyticsPanel /></AdminLayout>} />
         <Route path="/rramadmin_26/tokens" element={<AdminLayout><TokenGenerator /></AdminLayout>} />
         <Route path="/rramadmin_26/pages" element={<AdminLayout><PagesManager /></AdminLayout>} />
+        <Route path="/rramadmin_26/landing_page2/preview" element={<AdminLayout><LandingPage2Preview /></AdminLayout>} />
         <Route path="/rramadmin_26/selection" element={<AdminLayout><SelectionAnalytics /></AdminLayout>} />
         <Route path="/rramadmin_26/settings" element={<AdminLayout><SettingsPanel /></AdminLayout>} />
       </Routes>

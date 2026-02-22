@@ -26,17 +26,6 @@ const OfferResponsePage = () => {
     }, [token]);
 
     const validateToken = async () => {
-        // Developer preview bypass (only works on localhost/development)
-        if (import.meta.env.DEV && token === 'preview') {
-            setTokenData({
-                id: 'preview-mode',
-                applicant_name: 'Alex Lewis (Preview)',
-                status: 'pending'
-            });
-            setLoading(false);
-            return;
-        }
-
         if (!token) {
             setError('Invalid invitation link.');
             setLoading(false);
@@ -123,8 +112,6 @@ const OfferResponsePage = () => {
                     />
                 </div>
             </nav>
-
-
 
             {/* Main Content Flow */}
             <main className="pt-20">
