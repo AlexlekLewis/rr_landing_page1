@@ -73,14 +73,14 @@ const Intro = () => {
                 >
                     <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
                         {/* Left Column - Logo & Accent */}
-                        <div className="lg:col-span-4 flex flex-col items-center justify-center lg:h-full lg:sticky lg:top-24 pt-4 pb-8 lg:pb-0">
+                        <div className="lg:col-span-4 flex flex-col items-center justify-start pt-6 lg:pt-0 lg:mt-[5.5rem] lg:sticky lg:top-24 pb-8 lg:pb-0">
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6 }}
                             >
-                                <img src="/assets/MELBOURNE.png" alt="Rajasthan Royals Academy Melbourne" className="w-[16.5rem] md:w-[19rem] max-w-full drop-shadow-2xl hover:scale-105 transition-transform duration-500" />
+                                <img src="/assets/MELBOURNE.ai.png" alt="Rajasthan Royals Academy Melbourne" className="w-[16.5rem] md:w-[19rem] max-w-full drop-shadow-2xl hover:scale-105 transition-transform duration-500" />
                             </motion.div>
                             <div className="mt-8 hidden lg:block text-center space-y-2">
                                 <p className="text-xs font-black tracking-[0.2em] text-rr-pink uppercase">Foundation Intake</p>
