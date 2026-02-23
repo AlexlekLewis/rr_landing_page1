@@ -193,11 +193,31 @@ const Apply = () => {
                 parent2_phone: formData.parent2Phone
             };
 
-            const { error: insertError } = await supabase
+            const { data: insertedData, error: insertError } = await supabase
                 .from('applications')
-                .insert([finalSubmissionData]);
+                .insert([finalSubmissionData])
+                .select();
 
             if (insertError) throw insertError;
+
+            const newApp = insertedData[0];
+
+            if (newApp) {
+                // Create initial pipeline entry
+                await supabase.from('pipeline_entries').insert([{
+                    application_id: newApp.id,
+                    stage_slug: 'applied',
+                }]);
+
+                // Create activity log
+                await supabase.from('pipeline_activity_log').insert([{
+                    application_id: newApp.id,
+                    action: 'created',
+                    to_stage: 'applied',
+                    performed_by: 'system',
+                    notes: 'Application submitted via landing page'
+                }]);
+            }
 
             setStatus('success');
             setFormData({

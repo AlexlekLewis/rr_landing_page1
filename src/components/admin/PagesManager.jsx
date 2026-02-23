@@ -25,13 +25,6 @@ const PAGES = [
         icon: FileText,
     },
     {
-        name: 'Assessment Invite (Landing Page 2)',
-        path: '/invite',
-        status: 'live',
-        description: 'Bespoke invitation page for assessed candidates',
-        icon: FileText,
-    },
-    {
         name: 'Privacy Policy',
         path: '/privacy-policy',
         status: 'live',
