@@ -67,6 +67,12 @@
 - Leading the development of the Royals Academy system in Australia, providing opportunities to talented cricketers.
 - Andy brings to the Royals Academy decades of executive experience at the highest levels of sport, including leading such sports leagues as Australia's National Basketball League and Super Netball. A former professional who played for South Australia, Northamptonshire and Lancashire, Andy's connection with the game has remained strong, playing for Victoria at Masters level, and recently being a part of Australia's 2025 T20 Masters World Cup winning campaign in Pakistan. Charged driving the Rajasthan Royals Academy in Australia, his network and vision for T20 cricket and player development has led to creating a world first pathway of opportunities for talented youngsters to put themselves in front of global leaders of the T20 game.
 
+
+**Alex Lewis**
+- *Head Coach*
+- For over 22 years, thousands of young cricketers have had their careers heavily and positively influenced by his coaching, tactical and player management skills.
+- With over two decades of hands-on coaching experience in Victorian cricket system, Alex has a proven track record of identifying emerging talent and creating development environments where cricketers thrive and progress to representative honours. Selected by the Rajasthan Royals Academy to lead the Melbourne Elite Program, Alex will ensure that no stone is left unturned in maximising a players return from their time in the Elite Program. Alex will oversee a group of coaches and mentors who have been appointed to coach and mentor players through development of specific skills.
+
 - APPLY NOW
 
 ## Program Overview
