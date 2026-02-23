@@ -42,12 +42,12 @@ const RrampDnaProfile = () => {
                 {/* Hero Intro */}
                 <div className="text-center mb-16 space-y-6 max-w-4xl mx-auto">
                     <motion.h2 variants={fadeIn} className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight">
-                        RRAMP <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">DNA PROFILE</span>
+                        PLAYER <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">DNA PROFILE</span>
                     </motion.h2>
                     <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full" />
 
                     <motion.p variants={fadeIn} className="text-lg md:text-xl text-slate-300 leading-relaxed font-light mt-8">
-                        The RRAMP DNA Profile is your roadmap to elite performance. It is a comprehensive, evidence-based assessment tool used to benchmark your current capabilities across the critical dimensions of T20 cricket.
+                        The Player DNA Profile is your roadmap to elite performance. It is a comprehensive, evidence-based assessment tool used to benchmark your current capabilities across the critical dimensions of T20 cricket.
                     </motion.p>
                     <motion.p variants={fadeIn} className="text-lg text-slate-400 font-medium">
                         Throughout the 12 weeks, we track your progression across these 8 core pillars to build a professional-grade blueprint of you as a cricketer.

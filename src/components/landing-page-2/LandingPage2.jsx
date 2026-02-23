@@ -15,6 +15,9 @@ import BeyondTwelveWeeks from './BeyondTwelveWeeks';
 import YourInvestment from './YourInvestment';
 import RoyalsGroupConnection from '../RoyalsGroupConnection';
 import Coaches from '../Coaches';
+import KumarVideo from './KumarVideo';
+import AcceptInvitationCTA from './AcceptInvitationCTA';
+import PlayerImageStrip from './PlayerImageStrip';
 
 const LandingPage2 = () => {
     // Animation variants
@@ -43,42 +46,49 @@ const LandingPage2 = () => {
                 <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-rr-blue/10 rounded-full blur-[100px] translate-x-1/4 translate-y-1/4 pointer-events-none" />
 
                 {/* --- HERO SECTION --- */}
-                <section className="relative pt-32 pb-20 px-6 lg:px-8 max-w-7xl mx-auto z-10">
+                <section className="relative pt-32 pb-10 px-6 lg:px-8 min-h-[80vh] flex items-center justify-center z-10">
+                    {/* Background Image */}
+                    <div className="absolute inset-0 z-0">
+                        <img
+                            src="/assets/Hero.jpeg"
+                            alt="Hero Background"
+                            className="w-full h-full object-cover object-top opacity-20 mix-blend-luminosity"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-b from-rr-dark/80 via-rr-dark/90 to-rr-dark"></div>
+                    </div>
+
                     <motion.div
                         initial="hidden"
                         animate="visible"
                         variants={staggerContainer}
-                        className="max-w-4xl mx-auto space-y-8"
+                        className="relative z-10 max-w-5xl mx-auto space-y-10"
                     >
                         <motion.h1
                             variants={fadeIn}
-                            className="text-5xl md:text-7xl font-black tracking-tight leading-tight uppercase font-heading bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent"
+                            className="text-5xl md:text-8xl font-black tracking-wide leading-tight uppercase font-heading bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent text-center md:text-left drop-shadow-lg"
                         >
                             IT'S TIME TO SHINE
                         </motion.h1>
 
                         <motion.div variants={fadeIn} className="space-y-6 text-xl md:text-2xl text-slate-300 leading-relaxed font-light">
                             <p>
-                                You are receiving this invitation because you were <span className="text-white font-medium">identified first</span> by our scouting and coaching network.
-                            </p>
-                            <p>
-                                The Rajasthan Royals Academy Melbourne is building its foundation, and we are looking for players to form our exclusive <span className="text-rr-pink font-semibold">First Intake</span>.
+                                Thank you for taking the time to apply for a position in the <span className="text-white font-medium">Rajasthan Royals Elite Program</span>. We are pleased to provide an invitation to the next stage in the selection process.
                             </p>
                             <p className="text-lg md:text-xl">
-                                We are delighted to now invite you to an exclusive assessment session on Sunday March 1st at <span className="text-white font-medium">Cutting Edge Cricket Centre</span> in Bundoora. Multiple sessions will be operated, and via email or text, by Friday February 27 we will confirm the time of the session that you have been assigned, as well as the format of the session.
+                                As an identified player from within our scouting network, we are providing a first round invitation to attend the exclusive assessment session on the afternoon of <span className="text-white font-medium">Sunday March 1st</span> at <span className="text-white font-medium">Cutting Edge Cricket Centre</span> in Bundoora. Multiple sessions between 1.30pm and 4.30pm will be held, and should you accept the invitation to the assessment session, you will be assigned a session time which will be communicated by Friday February 27. We will also provide information on the format of the session.
                             </p>
                             <p className="text-lg md:text-xl">
-                                The assessment session will form a key part of the final offers that will be made to successful applicants.
+                                This session will be led by <span className="text-white font-medium">Siddhartha Lahiri</span>, the Rajasthan Royals Head of International Talent Development, as well as Assistant and Performance Coach for Rajasthan, Paarl and Barbados Royals. Alongside Siddhartha, our Melbourne coaching and leadership team will also be present and working through the final selection.
                             </p>
                             <p className="text-lg md:text-xl">
-                                The session will be led by <span className="text-white font-medium">Siddhartha Lahiri</span>, the Rajasthan Royals Head of International Talent Development, as well as Assistant and Performance Coach for Rajasthan, Paarl and Barbados Royals. Alongside Siddhartha, our Melbourne coaching and leadership team will also be present and working through the final selection.
+                                Please now take the time to read through the information below, including the details of our world class T20 based Academy program, the times and dates that the program is scheduled to operated, the benefits of being a part of the initial intake of Melbourne’s Rajasthan Royals Academy Elite Program, as well as the pricing and payment options of this premium program.
                             </p>
                         </motion.div>
                     </motion.div>
                 </section>
 
                 {/* --- NEXT STEPS SECTION --- */}
-                <section className="py-20 px-6 lg:px-8 relative z-10 border-t border-white/5 bg-gradient-to-b from-transparent to-black/30">
+                <section className="pt-10 pb-20 px-6 lg:px-8 relative z-10 border-t border-white/5 bg-gradient-to-b from-transparent to-black/30">
                     <motion.div
                         initial="hidden"
                         whileInView="visible"
@@ -99,7 +109,7 @@ const LandingPage2 = () => {
                                     As you have been invited to attend the assessment session, you are one step closer to the Elite Program. Melbourne’s Rajasthan Royals Academy team are considering you as a candidate with strong possibility of being offered a place.
                                 </p>
                                 <p>
-                                    So that you can begin to prepare for both the assessment session and the possibility of being offered a place, please find below details of the program including program content, training days & times and the cost of this premium program.
+                                    So that you can begin to prepare for both the assessment session and the possibility of being offered a place, please find below details of the program including program content, program benefits, training days & times and the cost of this premium program.
                                 </p>
                             </div>
                         </motion.div>
@@ -115,10 +125,13 @@ const LandingPage2 = () => {
                 {/* Phase Effectiveness */}
                 <PhaseEffectiveness />
 
+                {/* Player Image Strip */}
+                <PlayerImageStrip />
+
                 {/* Program Overview */}
                 <ProgramOverviewDark />
 
-                {/* RRAMP DNA Profile */}
+                {/* Player DNA Profile */}
                 <RrampDnaProfile />
 
                 {/* Specialist Coaching */}
@@ -126,6 +139,9 @@ const LandingPage2 = () => {
 
                 {/* Individual Development Plan */}
                 <IndividualDevPlan />
+
+                {/* Accept Invitation CTA */}
+                <AcceptInvitationCTA />
 
                 {/* Royals Group Connection (Reused) */}
                 <div className="bg-zinc-950 py-12">
@@ -140,8 +156,14 @@ const LandingPage2 = () => {
                 {/* Beyond 12 Weeks */}
                 <BeyondTwelveWeeks />
 
+                {/* Kumar Sangakkara Video */}
+                <KumarVideo />
+
                 {/* Your Investment */}
                 <YourInvestment />
+
+                {/* Accept Invitation CTA */}
+                <AcceptInvitationCTA />
 
                 {/* RSVP Section */}
                 <AssessmentRSVP />

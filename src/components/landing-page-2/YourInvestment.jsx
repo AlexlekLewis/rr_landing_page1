@@ -63,11 +63,11 @@ const YourInvestment = () => {
                             </div>
                             <div className="flex items-center gap-3">
                                 <CheckCircle2 className="w-5 h-5 text-rr-pink flex-shrink-0" />
-                                <span className="text-slate-300">RRAMP DNA Profile & Individual Dev Plan</span>
+                                <span className="text-slate-300">Player DNA Profile & Individual Dev Plan</span>
                             </div>
                             <div className="flex items-center gap-3">
                                 <CheckCircle2 className="w-5 h-5 text-rr-pink flex-shrink-0" />
-                                <span className="text-slate-300">Full Official Player Apparel Kit</span>
+                                <span className="text-slate-300">Player Training Apparel Kit</span>
                             </div>
                         </div>
                     </motion.div>

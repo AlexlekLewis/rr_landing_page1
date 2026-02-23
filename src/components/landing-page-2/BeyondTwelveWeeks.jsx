@@ -42,7 +42,7 @@ const BeyondTwelveWeeks = () => {
                     </motion.h2>
                     <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full mt-4" />
                     <motion.p variants={fadeIn} className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto mt-6 leading-relaxed font-light">
-                        Completion of the 12-week program is not the end; it is your initiation into the Rajasthan Royals Academy global system. You don't just graduate—you belong.
+                        Completion of the 12-week program is not the end; it is your initiation into the Rajasthan Royals ecosystem and Global Academy network. You don't just graduate—you belong.
                     </motion.p>
                 </div>
 

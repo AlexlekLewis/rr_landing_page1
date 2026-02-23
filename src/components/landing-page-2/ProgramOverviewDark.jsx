@@ -46,7 +46,7 @@ const ProgramOverviewDark = () => {
         {
             title: "CRICKET COACHING & MENTORING",
             color: "border-rr-pink",
-            defaultOpen: true,
+            defaultOpen: false,
             items: [
                 { title: "2 on 1", content: "Players will receive 2 on 1 coaching during particular training sessions to provide for both expert coaching and peer to peer learning, critical for the development of talented players." },
                 { title: "Squad Training", content: "Each player will be allocated to a squad that is at a similar age and similar ability based on the assessment of the Academy selection team, and this squad will train together on a regular basis." },
@@ -81,7 +81,7 @@ const ProgramOverviewDark = () => {
             defaultOpen: false,
             items: [
                 { title: "Playing Apparel", content: "Players will receive an apparel pack, consisting of a hat, a training shirt and training shorts." },
-                { title: "Additional Apparel", content: "Additional apparel items can be purchased by Academy players, including jumper, track pants, jacket. Only those competing in matches are permitted to purchase playing apparel." }
+                { title: "Additional Apparel", content: "Additional apparel items can be purchased by Academy players, including jacket and training pants. Only those competing in matches are permitted to purchase playing apparel." }
             ]
         }
     ];

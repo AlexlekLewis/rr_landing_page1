@@ -35,7 +35,7 @@ const ProgramAtAGlance = () => {
                                 <Calendar className="w-8 h-8" />
                             </div>
                             <h3 className="text-2xl font-bold text-white mb-2">12 Weeks</h3>
-                            <p className="text-slate-400">Comprehensive holistic development program designed for measurable growth.</p>
+                            <p className="text-slate-400">Comprehensive holistic T20 development program designed for measurable growth.</p>
                         </div>
                     </motion.div>
 
@@ -47,7 +47,7 @@ const ProgramAtAGlance = () => {
                                 <Clock className="w-8 h-8" />
                             </div>
                             <h3 className="text-2xl font-bold text-white mb-2">2 Sessions Per Week</h3>
-                            <p className="text-slate-300 font-medium mb-2">1 Weekday Evening & 1 Weekend session</p>
+                            <p className="text-slate-300 font-medium mb-2">1 Weekday Evening & 1 Weekend Session</p>
                             <p className="text-slate-400 text-sm max-w-md">We value your time and travel commitments. Sessions are strictly mapped to 2-hour blocks to maximize intensity without overwhelming your schedule.</p>
                         </div>
                     </motion.div>

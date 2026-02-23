@@ -60,7 +60,7 @@ const PhaseEffectiveness = () => {
                     </motion.h2>
                     <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full" />
                     <motion.p variants={fadeIn} className="text-lg text-slate-400 max-w-2xl mx-auto mt-6">
-                        The 12-week program is scientifically periodized into three distinct phases to ensure skills are not just learned, but weaponized for competition.
+                        The 12-week program is scientifically periodised into three distinct phases to ensure skills are not just learned, but weaponised for competition.
                     </motion.p>
                 </div>
 

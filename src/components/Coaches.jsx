@@ -116,11 +116,6 @@ const Coaches = () => {
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
                     {coaches.map((c) => <CoachProfile key={c.name} coach={c} />)}
                 </div>
-                <div className="text-center mt-12">
-                    <Button onClick={scrollToForm} variant="primary">
-                        APPLY NOW
-                    </Button>
-                </div>
             </div>
         </section>
     );
