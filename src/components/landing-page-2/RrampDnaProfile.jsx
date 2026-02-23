@@ -39,19 +39,39 @@ const RrampDnaProfile = () => {
                 variants={staggerContainer}
                 className="max-w-6xl mx-auto"
             >
-                {/* Hero Intro */}
-                <div className="text-center mb-16 space-y-6 max-w-4xl mx-auto">
-                    <motion.h2 variants={fadeIn} className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight">
-                        PLAYER <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">DNA PROFILE</span>
-                    </motion.h2>
-                    <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full" />
+                {/* Hero Intro with Player Accent */}
+                <div className="mb-16 space-y-6 max-w-6xl mx-auto">
+                    <div className="text-center space-y-4">
+                        <motion.h2 variants={fadeIn} className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight">
+                            PLAYER <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">DNA PROFILE</span>
+                        </motion.h2>
+                        <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full" />
+                    </div>
 
-                    <motion.p variants={fadeIn} className="text-lg md:text-xl text-slate-300 leading-relaxed font-light mt-8">
-                        The Player DNA Profile is your roadmap to elite performance. It is a comprehensive, evidence-based assessment tool used to benchmark your current capabilities across the critical dimensions of T20 cricket.
-                    </motion.p>
-                    <motion.p variants={fadeIn} className="text-lg text-slate-400 font-medium">
-                        Throughout the 12 weeks, we track your progression across these 8 core pillars to build a professional-grade blueprint of you as a cricketer.
-                    </motion.p>
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mt-8">
+                        <motion.div variants={fadeIn} className="lg:col-span-8 space-y-4">
+                            <p className="text-lg md:text-xl text-slate-300 leading-relaxed font-light">
+                                The Player DNA Profile is your roadmap to elite performance. It is a comprehensive, evidence-based assessment tool used to benchmark your current capabilities across the critical dimensions of T20 cricket.
+                            </p>
+                            <p className="text-lg text-slate-400 font-medium">
+                                Throughout the 12 weeks, we track your progression across these 8 core pillars to build a professional-grade blueprint of you as a cricketer.
+                            </p>
+                        </motion.div>
+                        <motion.div variants={fadeIn} className="hidden lg:flex lg:col-span-4 justify-center">
+                            <div className="relative">
+                                <div className="w-40 h-40 rounded-2xl overflow-hidden border border-white/10 shadow-xl shadow-rr-blue/10">
+                                    <img
+                                        src="/assets/lp2/shimron-hetmyer.png"
+                                        alt="Shimron Hetmyer — Rajasthan Royals"
+                                        className="w-full h-full object-cover object-top"
+                                    />
+                                </div>
+                                <div className="absolute -bottom-2 -right-2 bg-rr-blue/20 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-rr-blue/30">
+                                    <p className="text-[10px] font-bold text-white tracking-wider uppercase">Shimron Hetmyer</p>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
                 </div>
 
                 {/* 8-Box Grid */}

@@ -5,7 +5,7 @@ import Hero from './components/Hero';
 import Intro from './components/Intro';
 import WhyElite from './components/WhyElite';
 import Features from './components/Features';
-import Director from './components/Director';
+
 import ProgramOverview from './components/ProgramOverview';
 import Coaches from './components/Coaches';
 import SuccessStories from './components/SuccessStories';
@@ -19,6 +19,7 @@ import TermsConditions from './components/TermsConditions';
 import ComingSoonSplash from './components/ComingSoonSplash';
 import OfferResponsePage from './components/offer-response/OfferResponsePage';
 import LandingPage2 from './components/landing-page-2/LandingPage2';
+import usePageAnalytics from './hooks/usePageAnalytics';
 
 // Admin components
 import AdminLogin from './components/admin/AdminLogin';
@@ -27,12 +28,23 @@ import DashboardOverview from './components/admin/DashboardOverview';
 import KanbanBoard from './components/admin/KanbanBoard';
 import ApplicationsTable from './components/admin/ApplicationsTable';
 import AnalyticsPanel from './components/admin/AnalyticsPanel';
+import PageAnalyticsPanel from './components/admin/PageAnalyticsPanel';
 import PagesManager from './components/admin/PagesManager';
 import SettingsPanel from './components/admin/SettingsPanel';
 import SelectionAnalytics from './components/admin/SelectionAnalytics';
 import TokenGenerator from './components/admin/TokenGenerator';
 
+const TRACKED_SECTIONS = [
+  'intro', 'success-stories', 'why-elite', 'program',
+  'coaches', 'program-overview', 'faq',
+  'bonus-offer', 'apply-form',
+];
+
 function LandingPage() {
+  usePageAnalytics('/eliteprogram/2026registration', {
+    sections: TRACKED_SECTIONS,
+  });
+
   return (
     <>
       <Navbar />
@@ -41,7 +53,7 @@ function LandingPage() {
       <SuccessStories />
       <WhyElite />
       <Features />
-      <Director />
+
       <Coaches />
       <ProgramOverview />
       <SelectionProcess />
@@ -57,7 +69,7 @@ function App() {
   return (
     <div className="font-sans antialiased text-rr-dark bg-white selection:bg-rr-pink selection:text-white">
       <Routes>
-        {/* Public routes — UNCHANGED */}
+        {/* Public routes */}
         <Route path="/" element={<ComingSoonSplash />} />
         <Route path="/eliteprogram/2026registration" element={<LandingPage />} />
         <Route path="/eliteprogram/2026registrations" element={<LandingPage />} />
@@ -73,6 +85,7 @@ function App() {
         <Route path="/rramadmin_26/pipeline" element={<AdminLayout><KanbanBoard /></AdminLayout>} />
         <Route path="/rramadmin_26/applications" element={<AdminLayout><ApplicationsTable /></AdminLayout>} />
         <Route path="/rramadmin_26/analytics" element={<AdminLayout><AnalyticsPanel /></AdminLayout>} />
+        <Route path="/rramadmin_26/page-analytics" element={<AdminLayout><PageAnalyticsPanel /></AdminLayout>} />
         <Route path="/rramadmin_26/tokens" element={<AdminLayout><TokenGenerator /></AdminLayout>} />
         <Route path="/rramadmin_26/pages" element={<AdminLayout><PagesManager /></AdminLayout>} />
         <Route path="/rramadmin_26/selection" element={<AdminLayout><SelectionAnalytics /></AdminLayout>} />

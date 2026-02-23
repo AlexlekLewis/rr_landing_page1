@@ -46,7 +46,17 @@ const PhaseEffectiveness = () => {
     ];
 
     return (
-        <section className="py-24 px-6 lg:px-8 relative z-10 bg-black">
+        <section className="py-24 px-6 lg:px-8 relative z-10 bg-black overflow-hidden">
+            {/* Background Player Image — desaturated per branding guidelines */}
+            <div className="absolute inset-0 z-0 pointer-events-none">
+                <img
+                    src="/assets/vaibhav.png"
+                    alt=""
+                    className="absolute right-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain opacity-[0.06] mix-blend-luminosity"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent" />
+            </div>
+
             <motion.div
                 initial="hidden"
                 whileInView="visible"

@@ -52,12 +52,6 @@
 - **Control the Game**: Powerplay, middle overs or bowling at the death, learn skills to control the game with the ball in hand.
 - APPLY NOW
 
-## Director Quote
-- "My playing and coaching career has been an incredible journey. I built my game on impact — scoring quickly, taking key wickets and setting standards in the field — and I learned that real success comes from understanding the moments that matter and having the courage to execute under pressure."
-- **STEVEN CROOK**
-- Director of Talent, Rajasthan Royals Academy Melbourne
-- 2x Vitality Blast champion with Northamptonshire Steelbacks. Sheffield Shield winning Assistant Coach. BBL Assistant Coach.
-- APPLY NOW
 
 ## Coaching & Leadership
 - **ELITE LEADERSHIP**
@@ -73,10 +67,6 @@
 - Leading the development of the Royals Academy system in Australia, providing opportunities to talented cricketers.
 - Andy brings to the Royals Academy decades of executive experience at the highest levels of sport, including leading such sports leagues as Australia's National Basketball League and Super Netball. A former professional who played for South Australia, Northamptonshire and Lancashire, Andy's connection with the game has remained strong, playing for Victoria at Masters level, and recently being a part of Australia's 2025 T20 Masters World Cup winning campaign in Pakistan. Charged driving the Rajasthan Royals Academy in Australia, his network and vision for T20 cricket and player development has led to creating a world first pathway of opportunities for talented youngsters to put themselves in front of global leaders of the T20 game.
 
-**Steven Crook**
-- *Director of Talent*
-- One of the original T20 power hitting allrounders, 330 professional games, 2x T20 champion, Sheffield Shield and One Day Cup winning and BBL Assistant Coach.
-- Steven was one of the original T20 power hitting allrounders. Regularly reaching speeds of 150km/ph+ and known for demolishing teams at the back end of a T20 innings with his 6 hitting capability, his 330 professional game career at Lancashire, Middlesex and Northamptonshire saw him take part in 4 Vitality Blast Finals Days, claiming 2 Championships with Northamptonshire Steelbacks, one of which he claimed a man of the match performance. Now, Steven has made his mark in the coaching World. Head Coach of the Adelaide Strikers Academy that won the Top End T20 Series in 2024, Assistant Coach to Ryan Harris during the victorious 2025/26 Sheffield Shield winning season for South Australia, and Assistant Coach to Tim Paine at the Adelaide Strikers, Steven brings first-hand and modern day elite T20 experience and a passion for developing the next generation of T20 cricketers.
 
 **Alex Lewis**
 - *Head Coach*

@@ -18,6 +18,7 @@ import Coaches from '../Coaches';
 import KumarVideo from './KumarVideo';
 import AcceptInvitationCTA from './AcceptInvitationCTA';
 import PlayerImageStrip from './PlayerImageStrip';
+import LogoDivider from './LogoDivider';
 
 const LandingPage2 = () => {
     // Animation variants
@@ -50,9 +51,9 @@ const LandingPage2 = () => {
                     {/* Background Image */}
                     <div className="absolute inset-0 z-0">
                         <img
-                            src="/assets/Hero.jpeg"
-                            alt="Hero Background"
-                            className="w-full h-full object-cover object-top opacity-20 mix-blend-luminosity"
+                            src="/assets/sooryavanchi-arms-raised.jpg"
+                            alt="Vaibhav Sooryavanshi Celebrates Century"
+                            className="w-full h-full object-cover object-[center_30%] opacity-20 mix-blend-luminosity"
                         />
                         <div className="absolute inset-0 bg-gradient-to-b from-rr-dark/80 via-rr-dark/90 to-rr-dark"></div>
                     </div>
@@ -83,6 +84,18 @@ const LandingPage2 = () => {
                             <p className="text-lg md:text-xl">
                                 Please now take the time to read through the information below, including the details of our world class T20 based Academy program, the times and dates that the program is scheduled to operated, the benefits of being a part of the initial intake of Melbourne’s Rajasthan Royals Academy Elite Program, as well as the pricing and payment options of this premium program.
                             </p>
+                        </motion.div>
+
+                        {/* RRA Melbourne Logo */}
+                        <motion.div
+                            variants={fadeIn}
+                            className="flex justify-center md:justify-start pt-4"
+                        >
+                            <img
+                                src="/assets/MELBOURNE.ai.png"
+                                alt="Rajasthan Royals Academy Melbourne"
+                                className="w-44 md:w-56 drop-shadow-2xl opacity-90 hover:opacity-100 hover:scale-105 transition-all duration-500"
+                            />
                         </motion.div>
                     </motion.div>
                 </section>
@@ -116,8 +129,12 @@ const LandingPage2 = () => {
                     </motion.div>
                 </section>
 
+                <LogoDivider />
+
                 {/* Program At A Glance */}
                 <ProgramAtAGlance />
+
+                <LogoDivider />
 
                 {/* The Royals Way Philosophy */}
                 <TheRoyalsWay />
@@ -127,6 +144,8 @@ const LandingPage2 = () => {
 
                 {/* Player Image Strip */}
                 <PlayerImageStrip />
+
+                <LogoDivider />
 
                 {/* Program Overview */}
                 <ProgramOverviewDark />
@@ -139,6 +158,8 @@ const LandingPage2 = () => {
 
                 {/* Individual Development Plan */}
                 <IndividualDevPlan />
+
+                <LogoDivider />
 
                 {/* Accept Invitation CTA */}
                 <AcceptInvitationCTA />
@@ -158,6 +179,8 @@ const LandingPage2 = () => {
 
                 {/* Kumar Sangakkara Video */}
                 <KumarVideo />
+
+                <LogoDivider />
 
                 {/* Your Investment */}
                 <YourInvestment />

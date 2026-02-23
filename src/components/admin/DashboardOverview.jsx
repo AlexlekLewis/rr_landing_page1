@@ -43,8 +43,11 @@ const DashboardOverview = () => {
             // Fetch all applications
             const { data: apps } = await supabase
                 .from('applications')
-                .select('id, created_at, first_name, last_name')
+                .select('id, created_at, first_name, last_name, archived')
                 .order('created_at', { ascending: false });
+
+            const activeApps = (apps || []).filter(a => !a.archived);
+            const archivedCount = (apps || []).length - activeApps.length;
 
             // Fetch pipeline entries with stage info
             const { data: entries } = await supabase
@@ -67,7 +70,7 @@ const DashboardOverview = () => {
             // Calculate this week's applications
             const weekAgo = new Date();
             weekAgo.setDate(weekAgo.getDate() - 7);
-            const thisWeek = (apps || []).filter(a => new Date(a.created_at) > weekAgo).length;
+            const thisWeek = activeApps.filter(a => new Date(a.created_at) > weekAgo).length;
 
             // Count per stage
             const stageCounts = (stages || []).map(s => ({
@@ -76,7 +79,8 @@ const DashboardOverview = () => {
             }));
 
             setStats({
-                totalApplications: apps?.length || 0,
+                totalApplications: activeApps.length,
+                archivedCount,
                 thisWeek,
                 stages: stageCounts,
                 recentActivity: activity || [],
@@ -132,6 +136,7 @@ const DashboardOverview = () => {
                     value={stats.totalApplications}
                     icon={FileText}
                     color="#3B82F6"
+                    subtext={stats.archivedCount ? `${stats.archivedCount} archived` : undefined}
                 />
                 <StatCard
                     label="This Week"

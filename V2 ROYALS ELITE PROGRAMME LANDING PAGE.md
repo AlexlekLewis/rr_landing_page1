@@ -71,14 +71,7 @@ That is the question. When, where, what, how are questions you’ll learn to ans
 
 We have not omitted an element of the modern day game required to help you succeed.
 
-—-----------
 
-“I wish I had a program like this coming through the system. Who knows where my cricket would have ended up. It’s an incredible opportunity to develop the modern day skills required to star in the shortest of formats” 
-
-***STEVEN CROOK** \- **Director of Talent,** **Rajasthan Royals Academy Australia***   
-*2x Vitality Blast champion with Northamptonshire Steebacks. Sheffield Shield winning Assistant Coach. BBL Assistant Coach.*
-
-—-------------
 
   					  INSERT ‘**APPLY NOW**’ BUTTON
 
@@ -90,7 +83,7 @@ INSERT A TABLE COMPARISON OF TIERS/INC HIGHLIGHTS OF KEY AREAS
 —----------------
 
 ***Coach and Mentor Profiles:***  
-INSERT BIOS OF SID, ANDY, STEVE, ALEX
+INSERT BIOS OF SID, ANDY, ALEX
 
 ***Royals Testimonials and Success Stories:***
 

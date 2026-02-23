@@ -72,6 +72,23 @@ const SpecialistCoaching = () => {
                     </motion.p>
                 </div>
 
+                {/* Hero Image Banner */}
+                <motion.div
+                    variants={fadeIn}
+                    className="relative w-full h-48 md:h-64 rounded-2xl overflow-hidden mb-12 border border-white/10"
+                >
+                    <img
+                        src="/assets/hero-celebration.jpg"
+                        alt="Rajasthan Royals Team Celebration"
+                        className="w-full h-full object-cover object-center"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-rr-pink/20 to-rr-blue/20 mix-blend-overlay" />
+                    <div className="absolute bottom-4 left-6">
+                        <p className="text-xs font-bold text-white/70 tracking-widest uppercase">Elite Coaching • World-Class Resources</p>
+                    </div>
+                </motion.div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {specialties.map((item, index) => (
                         <motion.div

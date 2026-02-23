@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Filter, Download, ChevronDown, ChevronUp, Check, X } from 'lucide-react';
+import { Search, Filter, Download, ChevronDown, ChevronUp, Check, X, Archive, RotateCcw } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import useRealtimeSync from '../../hooks/useRealtimeSync';
 import ApplicationDetail from './ApplicationDetail';
@@ -18,6 +18,7 @@ const ApplicationsTable = () => {
     const [selected, setSelected] = useState(new Set());
     const [bulkStage, setBulkStage] = useState('');
     const [refreshKey, setRefreshKey] = useState(0);
+    const [viewMode, setViewMode] = useState('active'); // 'active' | 'archived'
 
     const fetchData = useCallback(async () => {
         const [appsRes, entriesRes, stagesRes] = await Promise.all([
@@ -40,8 +41,11 @@ const ApplicationsTable = () => {
     const getEntry = (appId) => entries.find(e => e.application_id === appId);
     const getStage = (slug) => stages.find(s => s.slug === slug);
 
+    const activeApps = useMemo(() => applications.filter(a => !a.archived), [applications]);
+    const archivedApps = useMemo(() => applications.filter(a => a.archived), [applications]);
+
     const filtered = useMemo(() => {
-        let result = applications;
+        let result = viewMode === 'archived' ? archivedApps : activeApps;
 
         if (search) {
             const q = search.toLowerCase();
@@ -66,7 +70,18 @@ const ApplicationsTable = () => {
         });
 
         return result;
-    }, [applications, entries, search, stageFilter, sortKey, sortDir]);
+    }, [activeApps, archivedApps, viewMode, entries, search, stageFilter, sortKey, sortDir]);
+
+    const handleArchive = async (appId) => {
+        await supabase.from('applications').update({ archived: true, archived_reason: 'Manually archived by admin' }).eq('id', appId);
+        setRefreshKey(p => p + 1);
+        setSelectedApp(null);
+    };
+
+    const handleRestore = async (appId) => {
+        await supabase.from('applications').update({ archived: false, archived_reason: null }).eq('id', appId);
+        setRefreshKey(p => p + 1);
+    };
 
     const toggleSort = (key) => {
         if (sortKey === key) {
@@ -170,7 +185,24 @@ const ApplicationsTable = () => {
         <div className="space-y-6">
             <div>
                 <h1 className="text-2xl md:text-3xl font-black text-white tracking-wider">APPLICATIONS</h1>
-                <p className="text-slate-400 text-sm mt-1">{filtered.length} of {applications.length} applications</p>
+                <p className="text-slate-400 text-sm mt-1">{filtered.length} of {viewMode === 'archived' ? archivedApps.length : activeApps.length} {viewMode === 'archived' ? 'archived' : 'active'} applications</p>
+            </div>
+
+            {/* Active / Archived toggle */}
+            <div className="flex gap-2">
+                <button
+                    onClick={() => setViewMode('active')}
+                    className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${viewMode === 'active' ? 'bg-rr-pink text-white' : 'bg-white/5 text-slate-400 hover:text-white border border-white/10'}`}
+                >
+                    Active ({activeApps.length})
+                </button>
+                <button
+                    onClick={() => setViewMode('archived')}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${viewMode === 'archived' ? 'bg-amber-500 text-white' : 'bg-white/5 text-slate-400 hover:text-white border border-white/10'}`}
+                >
+                    <Archive className="w-4 h-4" />
+                    Archived ({archivedApps.length})
+                </button>
             </div>
 
             {/* Filters */}
@@ -262,6 +294,7 @@ const ApplicationsTable = () => {
                                     </th>
                                 ))}
                                 <th className="p-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Stage</th>
+                                <th className="p-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Action</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
@@ -296,6 +329,17 @@ const ApplicationsTable = () => {
                                                 <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: stage?.color }} />
                                                 {stage?.name?.length > 18 ? stage.name.substring(0, 18) + '…' : stage?.name || entry?.stage_slug}
                                             </span>
+                                        </td>
+                                        <td className="p-4" onClick={(e) => e.stopPropagation()}>
+                                            {viewMode === 'archived' ? (
+                                                <button onClick={() => handleRestore(app.id)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 text-xs font-semibold transition-all">
+                                                    <RotateCcw className="w-3 h-3" /> Restore
+                                                </button>
+                                            ) : (
+                                                <button onClick={() => handleArchive(app.id)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 text-xs font-semibold transition-all">
+                                                    <Archive className="w-3 h-3" /> Archive
+                                                </button>
+                                            )}
                                         </td>
                                     </tr>
                                 );

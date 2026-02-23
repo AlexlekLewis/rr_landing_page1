@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LP2 Image Gallery V2 — Fresh Action Shots</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', system-ui, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #E50695, #1226AA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 40px;
+            font-size: 0.9rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .section {
+            margin-bottom: 60px;
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 24px;
+            background: #111;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            color: #E50695;
+        }
+
+        .section-desc {
+            color: #999;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        .divider {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .divider span {
+            display: block;
+            height: 3px;
+            width: 40px;
+            background: linear-gradient(90deg, #E50695, #1226AA);
+            border-radius: 2px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #1a1a1a;
+            transition: border-color 0.3s;
+        }
+
+        .card:hover {
+            border-color: #E50695;
+        }
+
+        .card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            background: #222;
+        }
+
+        .card .info {
+            padding: 14px;
+        }
+
+        .card .filename {
+            font-size: 0.7rem;
+            color: #E50695;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            font-family: monospace;
+        }
+
+        .card .label {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .card .usage {
+            font-size: 0.8rem;
+            color: #888;
+            line-height: 1.4;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-right: 4px;
+            text-transform: uppercase;
+        }
+
+        .badge-new {
+            background: #22c55e;
+            color: #000;
+        }
+
+        .badge-bg {
+            background: #1226AA;
+            color: #fff;
+        }
+
+        .badge-split {
+            background: #E50695;
+            color: #fff;
+        }
+
+        .badge-headshot {
+            background: #333;
+            color: #ccc;
+        }
+
+        .badge-banner {
+            background: #0a5e3a;
+            color: #fff;
+        }
+
+        .badge-blacklisted {
+            background: #ff3333;
+            color: #fff;
+        }
+
+        .source {
+            color: #555;
+            font-size: 0.7rem;
+            margin-top: 6px;
+            font-style: italic;
+        }
+
+        .blacklisted {
+            opacity: 0.35;
+            pointer-events: none;
+        }
+
+        .blacklisted .card {
+            border-color: #ff3333;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #222;
+            margin: 50px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>LP2 IMAGE GALLERY V2</h1>
+    <p class="subtitle">
+        <strong>30 new official Rajasthan Royals action photos</strong> sourced from the RR website's IPL 2025
+        galleries.
+        These are bold, dramatic, high-res images — team huddles, celebrations, batting action, bowling, fielding.
+        All from the 2025 season. Scroll through and tell me which images you want for each section.
+    </p>
+
+    <!-- ===== RR vs GT — HISTORY MADE AT HOME ===== -->
+    <div class="section">
+        <div class="section-title">Gallery 1: RR vs GT — "History Made at Home" (Apr 2025)</div>
+        <div class="divider"><span></span><span></span><span></span></div>
+        <div class="section-desc">Vaibhav Suryavanshi's record-breaking T20 century. 12 high-res action shots.</div>
+        <div class="grid">
+            <div class="card">
+                <img src="/assets/lp2/action/rr-vs-gt-hero.jpg" alt="">
+                <div class="info">
+                    <div class="filename">rr-vs-gt-hero.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Gallery Hero Image</div>
+                    <div class="usage">16:9 landscape. Could be: hero background, wide banner, section header.</div>
+                    <div class="source">rajasthanroyals.com/photos/ipl-2025-rr-vs-gt</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/rr-vs-gt-action1.jpg" alt="">
+                <div class="info">
+                    <div class="filename">rr-vs-gt-action1.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 1</div>
+                    <div class="usage">2:3 portrait. Could be: 50/50 split, side accent, card image.</div>
+                    <div class="source">rajasthanroyals.com</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/rr-vs-gt-action2.jpg" alt="">
+                <div class="info">
+                    <div class="filename">rr-vs-gt-action2.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 2</div>
+                    <div class="usage">2:3 portrait. Could be: 50/50 split, side accent, card image.</div>
+                    <div class="source">rajasthanroyals.com</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/rr-vs-gt-action3.jpg" alt="">
+                <div class="info">
+                    <div class="filename">rr-vs-gt-action3.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 3</div>
+                    <div class="usage">16:9 landscape. Could be: hero background, wide banner, section header.</div>
+                    <div class="source">rajasthanroyals.com</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/rr-vs-gt-action4.jpg" alt="">
+                <div class="info">
+                    <div class="filename">rr-vs-gt-action4.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 4</div>
+                    <div class="usage">2:3 portrait. Could be: 50/50 split, side accent, card image.</div>
+                    <div class="source">rajasthanroyals.com</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/rr-vs-gt-action5.jpg" alt="">
+                <div class="info">
+                    <div class="filename">rr-vs-gt-action5.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 5</div>
+                    <div class="usage">2:3 portrait. Could be: 50/50 split, side accent, card image.</div>
+                    <div class="source">rajasthanroyals.com</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/rr-vs-gt-action6.jpg" alt="">
+                <div class="info">
+                    <div class="filename">rr-vs-gt-action6.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 6</div>
+                    <div class="usage">16:9 landscape. Could be: hero background, wide banner.</div>
+                    <div class="source">rajasthanroyals.com</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/rr-vs-gt-action7.jpg" alt="">
+                <div class="info">
+                    <div class="filename">rr-vs-gt-action7.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 7</div>
+                    <div class="usage">2:3 portrait. Could be: 50/50 split, side accent, card image.</div>
+                    <div class="source">rajasthanroyals.com</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/rr-vs-gt-action8.jpg" alt="">
+                <div class="info">
+                    <div class="filename">rr-vs-gt-action8.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 8</div>
+                    <div class="usage">2:3 portrait. Could be: 50/50 split, side accent, card image.</div>
+                    <div class="source">rajasthanroyals.com</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/rr-vs-gt-action9.jpg" alt="">
+                <div class="info">
+                    <div class="filename">rr-vs-gt-action9.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 9</div>
+                    <div class="usage">16:9 landscape. Could be: hero background, wide banner.</div>
+                    <div class="source">rajasthanroyals.com</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/rr-vs-gt-action10.jpg" alt="">
+                <div class="info">
+                    <div class="filename">rr-vs-gt-action10.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 10</div>
+                    <div class="usage">2:3 portrait. Could be: 50/50 split, side accent, card image.</div>
+                    <div class="source">rajasthanroyals.com</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/rr-vs-gt-action11.jpg" alt="">
+                <div class="info">
+                    <div class="filename">rr-vs-gt-action11.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 11</div>
+                    <div class="usage">2:3 portrait. Could be: 50/50 split, side accent, card image.</div>
+                    <div class="source">rajasthanroyals.com</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== CSK vs RR — END ON A HIGH ===== -->
+    <div class="section">
+        <div class="section-title">Gallery 2: CSK vs RR — "Season Finale" (May 2025)</div>
+        <div class="divider"><span></span><span></span><span></span></div>
+        <div class="section-desc">Season ending high. Vaibhav's 57, Jurel's finishing. 8 high-res action shots.</div>
+        <div class="grid">
+            <div class="card">
+                <img src="/assets/lp2/action/csk-vs-rr-hero.jpg" alt="">
+                <div class="info">
+                    <div class="filename">csk-vs-rr-hero.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Gallery Hero Image</div>
+                    <div class="usage">16:9 landscape. Hero background, wide banner.</div>
+                    <div class="source">rajasthanroyals.com/photos/ipl-2025-csk-vs-rr…</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/csk-vs-rr-action1.jpg" alt="">
+                <div class="info">
+                    <div class="filename">csk-vs-rr-action1.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 1</div>
+                    <div class="usage">2:3 portrait. 50/50 split, side accent, card image.</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/csk-vs-rr-action2.jpg" alt="">
+                <div class="info">
+                    <div class="filename">csk-vs-rr-action2.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 2</div>
+                    <div class="usage">2:3 portrait. 50/50 split, side accent, card image.</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/csk-vs-rr-action3.jpg" alt="">
+                <div class="info">
+                    <div class="filename">csk-vs-rr-action3.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 3</div>
+                    <div class="usage">16:9 landscape. Hero background, wide banner.</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/csk-vs-rr-action4.jpg" alt="">
+                <div class="info">
+                    <div class="filename">csk-vs-rr-action4.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 4</div>
+                    <div class="usage">2:3 portrait. 50/50 split, side accent, card image.</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/csk-vs-rr-action5.jpg" alt="">
+                <div class="info">
+                    <div class="filename">csk-vs-rr-action5.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 5</div>
+                    <div class="usage">2:3 portrait. 50/50 split, side accent, card image.</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/csk-vs-rr-action6.jpg" alt="">
+                <div class="info">
+                    <div class="filename">csk-vs-rr-action6.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 6</div>
+                    <div class="usage">16:9 landscape. Hero background, wide banner.</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/csk-vs-rr-action7.jpg" alt="">
+                <div class="info">
+                    <div class="filename">csk-vs-rr-action7.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 7</div>
+                    <div class="usage">2:3 portrait. 50/50 split, side accent, card image.</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/csk-vs-rr-action8.jpg" alt="">
+                <div class="info">
+                    <div class="filename">csk-vs-rr-action8.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 8</div>
+                    <div class="usage">2:3 portrait. 50/50 split, side accent, card image.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== RR vs MI — PINK PROMISE ===== -->
+    <div class="section">
+        <div class="section-title">Gallery 3: RR vs MI — "Pink Promise" (May 2025)</div>
+        <div class="divider"><span></span><span></span><span></span></div>
+        <div class="section-desc">Pink jerseys, crowd atmosphere, team unity. 7 high-res action shots.</div>
+        <div class="grid">
+            <div class="card">
+                <img src="/assets/lp2/action/rr-vs-mi-hero.jpg" alt="">
+                <div class="info">
+                    <div class="filename">rr-vs-mi-hero.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Gallery Hero Image</div>
+                    <div class="usage">16:9 landscape. Hero background, wide banner.</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/rr-vs-mi-action1.jpg" alt="">
+                <div class="info">
+                    <div class="filename">rr-vs-mi-action1.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 1</div>
+                    <div class="usage">2:3 portrait. 50/50 split, side accent, card image.</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/rr-vs-mi-action2.jpg" alt="">
+                <div class="info">
+                    <div class="filename">rr-vs-mi-action2.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 2</div>
+                    <div class="usage">2:3 portrait. 50/50 split, side accent, card image.</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/rr-vs-mi-action3.jpg" alt="">
+                <div class="info">
+                    <div class="filename">rr-vs-mi-action3.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 3</div>
+                    <div class="usage">16:9 landscape. Hero background, wide banner.</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/rr-vs-mi-action4.jpg" alt="">
+                <div class="info">
+                    <div class="filename">rr-vs-mi-action4.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 4</div>
+                    <div class="usage">2:3 portrait. 50/50 split, side accent, card image.</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/rr-vs-mi-action5.jpg" alt="">
+                <div class="info">
+                    <div class="filename">rr-vs-mi-action5.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 5</div>
+                    <div class="usage">2:3 portrait. 50/50 split, side accent, card image.</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/action/rr-vs-mi-action6.jpg" alt="">
+                <div class="info">
+                    <div class="filename">rr-vs-mi-action6.jpg</div>
+                    <div class="label"><span class="badge badge-new">NEW</span> Action Shot 6</div>
+                    <div class="usage">16:9 landscape. Hero background, wide banner.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== EXISTING USABLE LOCAL IMAGES ===== -->
+    <div class="section">
+        <div class="section-title">Local Images (Already On Disk — Not Used on LP1)</div>
+        <div class="divider"><span></span><span></span><span></span></div>
+        <div class="section-desc">These were already in your project but NOT used on Landing Page 1. Still available if
+            you like any.</div>
+        <div class="grid">
+            <div class="card">
+                <img src="/assets/riyan-parag-royals.png" alt="">
+                <div class="info">
+                    <div class="filename">riyan-parag-royals.png</div>
+                    <div class="label">Riyan Parag — RR Captain 2026</div>
+                    <div class="usage">Portrait. 50/50 split or side accent.</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/vaibhav-first-ball.jpg" alt="">
+                <div class="info">
+                    <div class="filename">vaibhav-first-ball.jpg</div>
+                    <div class="label">Vaibhav Suryavanshi — First Ball</div>
+                    <div class="usage">Action shot. Background or card image.</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/vaibhav-batting.jpg" alt="">
+                <div class="info">
+                    <div class="filename">vaibhav-batting.jpg</div>
+                    <div class="label">Vaibhav Suryavanshi — Batting</div>
+                    <div class="usage">Action shot. Background or card image.</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/vaibhav.png" alt="">
+                <div class="info">
+                    <div class="filename">vaibhav.png</div>
+                    <div class="label">Vaibhav Suryavanshi — Portrait</div>
+                    <div class="usage">Portrait. Side accent or background.</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/hero-celebration.jpg" alt="">
+                <div class="info">
+                    <div class="filename">hero-celebration.jpg</div>
+                    <div class="label">Team Celebration (Local)</div>
+                    <div class="usage">Wide shot. Banner, background, hero.</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/hero-celebration-new.jpg" alt="">
+                <div class="info">
+                    <div class="filename">hero-celebration-new.jpg</div>
+                    <div class="label">Team Celebration Alt (Local)</div>
+                    <div class="usage">Wide shot. Banner, background, hero.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== HEADSHOTS ===== -->
+    <div class="section">
+        <div class="section-title">Official 2026 RR Headshots (from rajasthanroyals.com)</div>
+        <div class="divider"><span></span><span></span><span></span></div>
+        <div class="section-desc">Official squad photos. Good for card accents, profile circles, or small inline images
+            — but probably NOT bold enough for hero/banner use.</div>
+        <div class="grid">
+            <div class="card">
+                <img src="/assets/lp2/riyan-parag.png" alt="">
+                <div class="info">
+                    <div class="filename">lp2/riyan-parag.png</div>
+                    <div class="label">Riyan Parag — Captain</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/yashasvi-jaiswal.png" alt="">
+                <div class="info">
+                    <div class="filename">lp2/yashasvi-jaiswal.png</div>
+                    <div class="label">Yashasvi Jaiswal</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/jofra-archer.png" alt="">
+                <div class="info">
+                    <div class="filename">lp2/jofra-archer.png</div>
+                    <div class="label">Jofra Archer</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/sam-curran.png" alt="">
+                <div class="info">
+                    <div class="filename">lp2/sam-curran.png</div>
+                    <div class="label">Sam Curran</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/shimron-hetmyer.png" alt="">
+                <div class="info">
+                    <div class="filename">lp2/shimron-hetmyer.png</div>
+                    <div class="label">Shimron Hetmyer</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/dhruv-jurel.png" alt="">
+                <div class="info">
+                    <div class="filename">lp2/dhruv-jurel.png</div>
+                    <div class="label">Dhruv Jurel</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/ravi-bishnoi.png" alt="">
+                <div class="info">
+                    <div class="filename">lp2/ravi-bishnoi.png</div>
+                    <div class="label">Ravi Bishnoi</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/ravindra-jadeja.png" alt="">
+                <div class="info">
+                    <div class="filename">lp2/ravindra-jadeja.png</div>
+                    <div class="label">Ravindra Jadeja</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/vaibhav-suryavanshi.png" alt="">
+                <div class="info">
+                    <div class="filename">lp2/vaibhav-suryavanshi.png</div>
+                    <div class="label">Vaibhav Suryavanshi</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/tushar-deshpande.png" alt="">
+                <div class="info">
+                    <div class="filename">lp2/tushar-deshpande.png</div>
+                    <div class="label">Tushar Deshpande</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/lp2/nandre-burger.png" alt="">
+                <div class="info">
+                    <div class="filename">lp2/nandre-burger.png</div>
+                    <div class="label">Nandre Burger</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== LP1 BLACKLISTED ===== -->
+    <div class="section" style="border-color: #ff3333;">
+        <div class="section-title" style="color: #ff3333;">⛔ LP1 Blacklisted — These CANNOT Appear on LP2</div>
+        <div class="divider"><span style="background: #ff3333;"></span><span style="background: #ff3333;"></span><span
+                style="background: #ff3333;"></span></div>
+        <div class="section-desc">Already used on Landing Page 1. Greyed out so you can check for duplicates.</div>
+        <div class="grid blacklisted">
+            <div class="card"><img src="/assets/Hero.jpeg">
+                <div class="info">
+                    <div class="filename">Hero.jpeg</div>
+                    <div class="label">LP1 Hero Mobile</div>
+                </div>
+            </div>
+            <div class="card"><img src="/assets/hero-final.jpeg">
+                <div class="info">
+                    <div class="filename">hero-final.jpeg</div>
+                    <div class="label">LP1 Hero Desktop</div>
+                </div>
+            </div>
+            <div class="card"><img src="/assets/jaiswal-power.webp">
+                <div class="info">
+                    <div class="filename">jaiswal-power.webp</div>
+                    <div class="label">LP1 Jaiswal Power</div>
+                </div>
+            </div>
+            <div class="card"><img src="/assets/kwena-catch.png">
+                <div class="info">
+                    <div class="filename">kwena-catch.png</div>
+                    <div class="label">LP1 Kwena Fielding</div>
+                </div>
+            </div>
+            <div class="card"><img src="/assets/winning-mindset.jpg">
+                <div class="info">
+                    <div class="filename">winning-mindset.jpg</div>
+                    <div class="label">LP1 Mindset</div>
+                </div>
+            </div>
+            <div class="card"><img src="/assets/on-pace-off-pace.jpg">
+                <div class="info">
+                    <div class="filename">on-pace-off-pace.jpg</div>
+                    <div class="label">LP1 Bowling</div>
+                </div>
+            </div>
+            <div class="card"><img src="/assets/jaiswal-100.jpg">
+                <div class="info">
+                    <div class="filename">jaiswal-100.jpg</div>
+                    <div class="label">LP1 Jaiswal Century</div>
+                </div>
+            </div>
+            <div class="card"><img src="/assets/kwena-maphaka.webp">
+                <div class="info">
+                    <div class="filename">kwena-maphaka.webp</div>
+                    <div class="label">LP1 Kwena Maphaka</div>
+                </div>
+            </div>
+            <div class="card"><img src="/assets/lhuan-pretorius.jpg">
+                <div class="info">
+                    <div class="filename">lhuan-pretorius.jpg</div>
+                    <div class="label">LP1 Pretorius</div>
+                </div>
+            </div>
+            <div class="card"><img src="/assets/jadeja-rr-bowling.webp">
+                <div class="info">
+                    <div class="filename">jadeja-rr-bowling.webp</div>
+                    <div class="label">LP1 Jadeja Bowling</div>
+                </div>
+            </div>
+            <div class="card"><img src="/assets/vaibhav-debut-six.jpg">
+                <div class="info">
+                    <div class="filename">vaibhav-debut-six.jpg</div>
+                    <div class="label">LP1 Vaibhav Six</div>
+                </div>
+            </div>
+            <div class="card"><img src="/assets/riyan-parag-batting.jpg">
+                <div class="info">
+                    <div class="filename">riyan-parag-batting.jpg</div>
+                    <div class="label">LP1 Parag Batting</div>
+                </div>
+            </div>
+            <div class="card"><img src="/assets/crook-powerhitting.webp">
+                <div class="info">
+                    <div class="filename">crook-powerhitting.webp</div>
+                    <div class="label">LP1 Crook</div>
+                </div>
+            </div>
+            <div class="card"><img src="/assets/lahiri-riyan-parag.jpg">
+                <div class="info">
+                    <div class="filename">lahiri-riyan-parag.jpg</div>
+                    <div class="label">LP1 Lahiri+Parag</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

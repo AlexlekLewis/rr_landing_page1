@@ -8,7 +8,7 @@ const WhyElite = () => {
     };
 
     return (
-        <section className="py-24 bg-white text-rr-dark relative overflow-hidden">
+        <section className="py-24 bg-white text-rr-dark relative overflow-hidden" id="why-elite">
             {/* Subtle Background Pattern or Gradient Blur if needed, keeping it clean for now */}
 
             <div className="container mx-auto px-6 max-w-5xl relative z-10">

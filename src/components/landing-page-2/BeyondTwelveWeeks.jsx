@@ -20,6 +20,11 @@ const BeyondTwelveWeeks = () => {
         <section className="py-24 px-6 lg:px-8 relative z-10 bg-zinc-950 overflow-hidden">
             {/* Ambient Backgrounds */}
             <div className="absolute top-0 right-0 w-full h-full overflow-hidden pointer-events-none">
+                <img
+                    src="/assets/jadeja-rr-2008.jpg"
+                    alt=""
+                    className="absolute left-0 top-0 w-full h-full object-cover opacity-[0.04] mix-blend-luminosity"
+                />
                 <div className="absolute top-1/4 right-1/4 w-[400px] h-[400px] bg-rr-blue/10 rounded-full blur-[100px]" />
                 <div className="absolute bottom-1/4 left-1/4 w-[400px] h-[400px] bg-rr-pink/10 rounded-full blur-[100px]" />
             </div>

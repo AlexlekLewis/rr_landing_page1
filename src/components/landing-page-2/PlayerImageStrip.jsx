@@ -2,14 +2,14 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const playerImages = [
-    { src: "/assets/jaiswal-power.webp", alt: "Yashasvi Jaiswal" },
-    { src: "/assets/kwena-maphaka.webp", alt: "Kwena Maphaka" },
-    { src: "/assets/mitchell-owen.png", alt: "Mitchell Owen" },
-    { src: "/assets/lhuan-pretorius.jpg", alt: "Lhuan-dré Pretorius" },
-    { src: "/assets/jaiswal-celebrating.webp", alt: "Jaiswal Celebrating" },
-    { src: "/assets/crook-powerhitting.webp", alt: "Power Hitting" },
-    { src: "/assets/fielding-dive.webp", alt: "Athletic Fielding" },
-    { src: "/assets/crook-celebrates.webp", alt: "Celebrating" },
+    { src: "/assets/vaibhav-first-ball.jpg", alt: "Vaibhav Sooryavanshi — First Ball" },
+    { src: "/assets/lp2/jofra-archer.png", alt: "Jofra Archer" },
+    { src: "/assets/vaibhav-batting.jpg", alt: "Vaibhav Sooryavanshi Batting" },
+    { src: "/assets/lp2/sam-curran.png", alt: "Sam Curran" },
+    { src: "/assets/jadeja-young-ipl.jpg", alt: "Ravindra Jadeja — Early IPL Days" },
+    { src: "/assets/lp2/dhruv-jurel.png", alt: "Dhruv Jurel" },
+    { src: "/assets/hero-celebration-new.jpg", alt: "Rajasthan Royals Celebrating" },
+    { src: "/assets/sooryavanchi-arms-raised.jpg", alt: "Vaibhav Sooryavanshi Century Celebration" },
 ];
 
 const PlayerImageStrip = () => {

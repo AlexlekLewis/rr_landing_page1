@@ -22,7 +22,7 @@ const Intro = () => {
     };
 
     return (
-        <section className="py-20 bg-white text-rr-dark relative overflow-hidden">
+        <section className="py-20 bg-white text-rr-dark relative overflow-hidden" id="intro">
             <RoyalsWave />
             <div className="container mx-auto px-6 relative z-10">
 

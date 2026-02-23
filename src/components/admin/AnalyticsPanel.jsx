@@ -32,7 +32,7 @@ const AnalyticsPanel = () => {
             supabase.from('pipeline_entries').select('*'),
             supabase.from('pipeline_stages').select('*').order('sort_order'),
         ]);
-        setApplications(appsRes.data || []);
+        setApplications((appsRes.data || []).filter(a => !a.archived));
         setEntries(entriesRes.data || []);
         setStages(stagesRes.data || []);
         setLoading(false);
@@ -150,6 +150,16 @@ const AnalyticsPanel = () => {
         return new Set(applications.map(a => normaliseSuburb(a.suburb)).filter(Boolean)).size;
     }, [applications]);
 
+    const uniqueApplicants = useMemo(() => {
+        const seen = new Set();
+        return applications.filter(a => {
+            const key = `${(a.first_name || '').toLowerCase().trim()}|${(a.last_name || '').toLowerCase().trim()}`;
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        }).length;
+    }, [applications]);
+
     const tooltipStyle = {
         backgroundColor: '#1e293b',
         border: '1px solid rgba(255,255,255,0.1)',
@@ -179,7 +189,7 @@ const AnalyticsPanel = () => {
             {/* Stats Row */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {[
-                    { label: 'Total Applications', value: applications.length, icon: Users, color: '#3B82F6' },
+                    { label: 'Unique Applicants', value: uniqueApplicants, icon: Users, color: '#3B82F6' },
                     { label: 'This Week', value: thisWeek, icon: TrendingUp, color: '#10B981' },
                     { label: 'Avg Age', value: avgAge, icon: Calendar, color: '#8B5CF6' },
                     { label: 'Suburbs', value: uniqueSuburbs, icon: MapPin, color: '#EC4899' },

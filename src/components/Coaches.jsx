@@ -18,14 +18,7 @@ const coaches = [
         imagePosition: "object-[center_20%]",
         fullBio: "Andy brings to the Royals Academy decades of executive experience at the highest levels of sport, including leading such sports leagues as Australia's National Basketball League and Super Netball. A former professional who played for South Australia, Northamptonshire and Lancashire, Andy's connection with the game has remained strong, playing for Victoria at Masters level, and recently being a part of Australia's 2025 T20 Masters World Cup winning campaign in Pakistan. Charged driving the Rajasthan Royals Academy in Australia, his network and vision for T20 cricket and player development has led to creating a world first pathway of opportunities for talented youngsters to put themselves in front of global leaders of the T20 game."
     },
-    {
-        name: "Steven Crook",
-        role: "Director of Talent",
-        bio: "One of the original T20 power hitting allrounders, 330 professional games, 2x T20 champion, Sheffield Shield and One Day Cup winning and BBL Assistant Coach.",
-        image: "/assets/rra/headcoach-steven.png",
-        imagePosition: "object-top",
-        fullBio: "Steven was one of the original T20 power hitting allrounders. Regularly reaching speeds of 150km/ph+ and known for demolishing teams at the back end of a T20 innings with his 6 hitting capability, his 330 professional game career at Lancashire, Middlesex and Northamptonshire saw him take part in 4 Vitality Blast Finals Days, claiming 2 Championships with Northamptonshire Steelbacks, one of which he claimed a man of the match performance. Now, Steven has made his mark in the coaching World. Head Coach of the Adelaide Strikers Academy that won the Top End T20 Series in 2024, Assistant Coach to Ryan Harris during the victorious 2025/26 Sheffield Shield winning season for South Australia, and Assistant Coach to Tim Paine at the Adelaide Strikers, Steven brings first-hand and modern day elite T20 experience and a passion for developing the next generation of T20 cricketers."
-    },
+
     {
         name: "Alex Lewis",
         role: "Head Coach",
@@ -113,7 +106,7 @@ const Coaches = () => {
                 <p className="text-center text-slate-600 mb-16 max-w-2xl mx-auto font-medium text-lg">
                     Rajasthan Royals Academy Melbourne Elite Program leadership group has been assembled to take your T20 game to the next level and provide a direct connection into the Royals global network.
                 </p>
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
                     {coaches.map((c) => <CoachProfile key={c.name} coach={c} />)}
                 </div>
             </div>

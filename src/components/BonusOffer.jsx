@@ -5,7 +5,7 @@ import { RoyalsWave } from './Decals';
 
 const BonusOffer = () => {
     return (
-        <section className="py-20 relative overflow-hidden bg-white">
+        <section className="py-20 relative overflow-hidden bg-white" id="bonus-offer">
             <RoyalsWave />
 
             <div className="container mx-auto px-6 text-center relative z-10">
