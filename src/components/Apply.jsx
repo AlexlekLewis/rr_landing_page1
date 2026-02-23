@@ -230,7 +230,6 @@ const Apply = () => {
 
         } catch (error) {
             console.error('Error submitting application:', error);
-            alert(`Application Error: ${error.message || 'Please check your connection.'}`);
             setStatus('error');
         } finally {
             setLoading(false);
