@@ -76,7 +76,6 @@ const ProgramOverview = () => {
             defaultOpen: false,
             items: [
                 { title: "Rajasthan Royals High Performance Centre", content: "Each calendar year, talented cricketers from the Elite program may be invited to the Rajasthan Royals High Performance Centre in Nagpur, India." },
-                { title: "Invitation to Trial with Royals Franchises", content: "Elite players who show exceptional development and growth may be offered opportunities to trial with Rajasthan Royals, Paarl Royals or Barbados Royals." },
                 { title: "Visits by Royals Coaches and Scouts", content: "From time to time, Royals coaches, scouts and franchise players will visit the Elite program to facilitate opportunities for members." }
             ]
         },
