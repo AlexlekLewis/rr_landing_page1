@@ -42,7 +42,7 @@ const TheRoyalsWay = () => {
                     <img
                         src="/assets/lp2/action/hetmyer-t20wc-fastest-fifty.jpg"
                         alt="Shimron Hetmyer — T20 World Cup Fastest Fifty"
-                        className="w-full h-full object-cover object-center"
+                        className="w-full h-full object-cover object-top"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/70 via-transparent to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-r from-rr-pink/10 to-rr-blue/10 mix-blend-overlay" />

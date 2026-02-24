@@ -70,7 +70,7 @@ const SpecialistCoaching = () => {
                     <img
                         src="/assets/lp2/action/jofra-archer-50-wickets.jpg"
                         alt="Jofra Archer — Elite Bowling Coaching"
-                        className="w-full h-full object-cover object-[center_30%]"
+                        className="w-full h-full object-cover object-top"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/90 via-rr-dark/40 to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-r from-rr-pink/20 to-rr-blue/20 mix-blend-overlay" />

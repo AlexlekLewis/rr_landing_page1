@@ -30,7 +30,7 @@ const BeyondTwelveWeeks = () => {
                     <img
                         src="/assets/lp2/action/rr-vs-mi-hero.jpg"
                         alt="Rajasthan Royals vs Mumbai Indians — IPL 2025"
-                        className="w-full h-full object-cover object-[center_30%]"
+                        className="w-full h-full object-cover object-top"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/80 via-transparent to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-r from-rr-pink/15 to-rr-blue/15 mix-blend-overlay" />

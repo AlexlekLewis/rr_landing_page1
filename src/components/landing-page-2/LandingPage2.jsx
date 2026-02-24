@@ -38,7 +38,7 @@ const LandingPage2 = () => {
 
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white">
-            <Navbar />
+            <Navbar variant="lp2" />
 
             <main className="flex-1 overflow-hidden relative">
 

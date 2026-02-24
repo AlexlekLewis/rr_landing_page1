@@ -413,10 +413,10 @@ const AssessmentRSVP = () => {
                                         type="checkbox"
                                         checked={acceptTerms}
                                         onChange={(e) => setAcceptTerms(e.target.checked)}
-                                        className="peer sr-only"
+                                        className="sr-only"
                                     />
-                                    <div className="w-6 h-6 border-2 border-slate-300 rounded peer-checked:bg-rr-pink peer-checked:border-rr-pink transition-all flex items-center justify-center bg-white shadow-sm">
-                                        <span className="text-xs text-white font-bold opacity-0 peer-checked:opacity-100">✓</span>
+                                    <div className={`w-6 h-6 border-2 rounded transition-all flex items-center justify-center shadow-sm ${acceptTerms ? 'bg-rr-pink border-rr-pink' : 'bg-white border-slate-300 group-hover:border-slate-400'}`}>
+                                        {acceptTerms && <span className="text-xs text-white font-bold">✓</span>}
                                     </div>
                                 </div>
                                 <span className="text-sm text-slate-600 font-medium leading-relaxed max-w-2xl">
@@ -431,10 +431,10 @@ const AssessmentRSVP = () => {
                                         type="checkbox"
                                         checked={acceptComms}
                                         onChange={(e) => setAcceptComms(e.target.checked)}
-                                        className="peer sr-only"
+                                        className="sr-only"
                                     />
-                                    <div className="w-6 h-6 border-2 border-slate-300 rounded peer-checked:bg-rr-pink peer-checked:border-rr-pink transition-all flex items-center justify-center bg-white shadow-sm">
-                                        <span className="text-xs text-white font-bold opacity-0 peer-checked:opacity-100">✓</span>
+                                    <div className={`w-6 h-6 border-2 rounded transition-all flex items-center justify-center shadow-sm ${acceptComms ? 'bg-rr-pink border-rr-pink' : 'bg-white border-slate-300 group-hover:border-slate-400'}`}>
+                                        {acceptComms && <span className="text-xs text-white font-bold">✓</span>}
                                     </div>
                                 </div>
                                 <span className="text-sm text-slate-600 font-medium leading-relaxed max-w-2xl">
@@ -451,8 +451,8 @@ const AssessmentRSVP = () => {
                                 className={`
                                     px-10 py-4 rounded-xl font-bold text-lg flex items-center gap-3 transition-all duration-300
                                     ${!isFormValid()
-                                        ? 'bg-slate-200 text-slate-400 cursor-not-allowed hidden'
-                                        : 'bg-rr-dark text-white hover:shadow-xl hover:scale-[1.02]'
+                                        ? 'bg-slate-300 text-slate-500 cursor-not-allowed opacity-60'
+                                        : 'bg-gradient-to-r from-rr-pink to-rr-blue text-white hover:shadow-xl hover:shadow-rr-pink/20 hover:scale-[1.02]'
                                     }
                                 `}
                             >

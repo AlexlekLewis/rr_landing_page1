@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Intro from './components/Intro';
@@ -33,6 +33,7 @@ import PagesManager from './components/admin/PagesManager';
 import SettingsPanel from './components/admin/SettingsPanel';
 import SelectionAnalytics from './components/admin/SelectionAnalytics';
 import TokenGenerator from './components/admin/TokenGenerator';
+import RSVPResponses from './components/admin/RSVPResponses';
 
 const TRACKED_SECTIONS = [
   'intro', 'success-stories', 'why-elite', 'program',
@@ -73,7 +74,8 @@ function App() {
         <Route path="/" element={<ComingSoonSplash />} />
         <Route path="/eliteprogram/2026registration" element={<LandingPage />} />
         <Route path="/eliteprogram/2026registrations" element={<LandingPage />} />
-        <Route path="/invite" element={<LandingPage2 />} />
+        <Route path="/offer/assessment" element={<LandingPage2 />} />
+        <Route path="/invite" element={<Navigate to="/offer/assessment" replace />} />
         <Route path="/landing_page2/Preview" element={<LandingPage2 />} />
         <Route path="/offer/:token" element={<OfferResponsePage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -90,6 +92,7 @@ function App() {
         <Route path="/rramadmin_26/pages" element={<AdminLayout><PagesManager /></AdminLayout>} />
         <Route path="/rramadmin_26/selection" element={<AdminLayout><SelectionAnalytics /></AdminLayout>} />
         <Route path="/rramadmin_26/settings" element={<AdminLayout><SettingsPanel /></AdminLayout>} />
+        <Route path="/rramadmin_26/rsvp" element={<AdminLayout><RSVPResponses /></AdminLayout>} />
       </Routes>
     </div>
   );

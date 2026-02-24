@@ -3,7 +3,7 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     LayoutDashboard, Kanban, Table2, BarChart3, FileText,
-    Settings, LogOut, ChevronLeft, ChevronRight, Menu, X, Shield, CheckCircle2, Eye
+    Settings, LogOut, ChevronLeft, ChevronRight, Menu, X, Shield, CheckCircle2, Eye, ClipboardList
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
@@ -12,6 +12,7 @@ const NAV_ITEMS = [
     { label: 'Pipeline', path: '/rramadmin_26/pipeline', icon: Kanban },
     { label: 'Applications', path: '/rramadmin_26/applications', icon: Table2 },
     { label: 'Selection', path: '/rramadmin_26/selection', icon: CheckCircle2 },
+    { label: 'RSVP Responses', path: '/rramadmin_26/rsvp', icon: ClipboardList },
     { label: 'Analytics', path: '/rramadmin_26/analytics', icon: BarChart3 },
     { label: 'Page Analytics', path: '/rramadmin_26/page-analytics', icon: Eye },
     { label: 'Offer Tokens', path: '/rramadmin_26/tokens', icon: Shield },

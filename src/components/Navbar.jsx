@@ -3,11 +3,28 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import Button from './Button';
 
-const Navbar = () => {
+const LP1_NAV = [
+    { label: 'PROGRAM OVERVIEW', id: 'program-overview' },
+    { label: 'COACHING & LEADERSHIP', id: 'coaches' },
+    { label: 'FAQ', id: 'faq' },
+];
+
+const LP2_NAV = [
+    { label: 'THE PROGRAM', id: 'program-at-a-glance' },
+    { label: 'COACHING & LEADERSHIP', id: 'coaches' },
+    { label: 'YOUR INVESTMENT', id: 'your-investment' },
+];
+
+const Navbar = ({ variant = 'lp1' }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+    const isLP2 = variant === 'lp2';
+    const navLinks = isLP2 ? LP2_NAV : LP1_NAV;
+    const ctaLabel = isLP2 ? 'ACCEPT INVITATION' : 'APPLY NOW';
+    const ctaTarget = isLP2 ? 'rsvp' : 'apply-form';
+
     const scrollToForm = () => {
-        document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' });
+        document.getElementById(ctaTarget)?.scrollIntoView({ behavior: 'smooth' });
         setMobileMenuOpen(false);
     };
 
@@ -15,12 +32,6 @@ const Navbar = () => {
         document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
         setMobileMenuOpen(false);
     };
-
-    const navLinks = [
-        { label: 'PROGRAM OVERVIEW', id: 'program-overview' },
-        { label: 'COACHING & LEADERSHIP', id: 'coaches' },
-        { label: 'FAQ', id: 'faq' },
-    ];
 
     return (
         <>
@@ -55,7 +66,7 @@ const Navbar = () => {
                             </a>
                         ))}
                         <Button onClick={scrollToForm} variant="blue" className="text-sm px-6 py-2">
-                            APPLY NOW
+                            {ctaLabel}
                         </Button>
                     </div>
 
@@ -95,7 +106,7 @@ const Navbar = () => {
                                 </a>
                             ))}
                             <Button onClick={scrollToForm} variant="blue" className="text-lg px-10 py-4 mt-4">
-                                APPLY NOW
+                                {ctaLabel}
                             </Button>
                             <a
                                 href="https://www.rajasthanroyals.com"
