@@ -44,28 +44,14 @@ const RrampDnaProfile = () => {
                         <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full" />
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mt-8">
-                        <motion.div variants={fadeIn} className="lg:col-span-8 space-y-4">
+                    <div className="grid grid-cols-1 gap-8 items-center mt-8">
+                        <motion.div variants={fadeIn} className="space-y-4 max-w-3xl mx-auto text-center">
                             <p className="text-lg md:text-xl text-slate-700 leading-relaxed font-medium">
                                 The Player DNA Profile is your roadmap to elite performance. It is a comprehensive, evidence-based assessment tool used to benchmark your current capabilities across the critical dimensions of T20 cricket.
                             </p>
                             <p className="text-lg text-slate-600 font-medium">
                                 Throughout the 12 weeks, we track your progression across these 8 core pillars to build a professional-grade blueprint of your T20 skillset.
                             </p>
-                        </motion.div>
-                        <motion.div variants={fadeIn} className="hidden lg:flex lg:col-span-4 justify-center">
-                            <div className="relative">
-                                <div className="w-40 h-40 rounded-2xl overflow-hidden border-4 border-white shadow-xl">
-                                    <img
-                                        src="/assets/lp2/shimron-hetmyer.png"
-                                        alt="Shimron Hetmyer — Rajasthan Royals"
-                                        className="w-full h-full object-cover object-top"
-                                    />
-                                </div>
-                                <div className="absolute -bottom-2 -right-2 bg-white shadow-md rounded-lg px-3 py-1.5 border border-slate-100">
-                                    <p className="text-[10px] font-black text-rr-dark tracking-wider uppercase">Shimron Hetmyer</p>
-                                </div>
-                            </div>
                         </motion.div>
                     </div>
                 </div>

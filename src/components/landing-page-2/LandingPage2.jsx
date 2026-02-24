@@ -126,7 +126,7 @@ const LandingPage2 = () => {
                             <img
                                 src="/assets/lp2/action/csk-vs-rr-hero.jpg"
                                 alt="CSK vs Rajasthan Royals — IPL 2025"
-                                className="w-full h-full object-cover object-[center_40%]"
+                                className="w-full h-full object-cover object-top"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/70 via-transparent to-transparent" />
                             <div className="absolute inset-0 bg-gradient-to-r from-rr-pink/10 to-rr-blue/10 mix-blend-overlay" />

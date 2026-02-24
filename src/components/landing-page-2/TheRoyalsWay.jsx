@@ -68,43 +68,21 @@ const TheRoyalsWay = () => {
                     <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full mt-4" />
                 </div>
 
-                {/* Content with Player Image */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-                    {/* List of Principles */}
-                    <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {principles.map((principle, index) => (
-                            <motion.div
-                                key={index}
-                                variants={fadeIn}
-                                className={`flex items-start gap-4 p-6 rounded-2xl bg-white shadow-sm border border-slate-100 ${index === principles.length - 1 ? 'md:col-span-2 md:w-1/2 md:mx-auto' : ''}`}
-                            >
-                                <span className="text-rr-pink font-black text-2xl leading-none mt-1">
-                                    {index + 1}.
-                                </span>
-                                <p className="text-lg text-slate-700 font-medium leading-relaxed">
-                                    {principle}
-                                </p>
-                            </motion.div>
-                        ))}
-                    </div>
-
-                    {/* Player Image Accent — Desktop Only */}
-                    <motion.div
-                        variants={fadeIn}
-                        className="hidden lg:flex lg:col-span-4 justify-center items-start sticky top-24"
-                    >
-                        <div className="relative">
-                            <img
-                                src="/assets/riyan-parag-royals.png"
-                                alt="Riyan Parag — Rajasthan Royals Captain"
-                                className="w-72 rounded-2xl object-cover shadow-2xl border-4 border-white"
-                            />
-                            <div className="absolute -bottom-3 -right-3 bg-white shadow-lg rounded-xl px-4 py-2 border border-slate-100">
-                                <p className="text-xs font-black text-rr-dark tracking-wider uppercase">Riyan Parag</p>
-                                <p className="text-[10px] text-rr-pink font-bold">RR Captain</p>
-                            </div>
-                        </div>
-                    </motion.div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                    {principles.map((principle, index) => (
+                        <motion.div
+                            key={index}
+                            variants={fadeIn}
+                            className={`flex items-start gap-4 p-6 rounded-2xl bg-white shadow-sm border border-slate-100 ${index === principles.length - 1 ? 'md:col-span-2 md:w-1/2 md:mx-auto' : ''}`}
+                        >
+                            <span className="text-rr-pink font-black text-2xl leading-none mt-1">
+                                {index + 1}.
+                            </span>
+                            <p className="text-lg text-slate-700 font-medium leading-relaxed">
+                                {principle}
+                            </p>
+                        </motion.div>
+                    ))}
                 </div>
             </motion.div>
         </section>

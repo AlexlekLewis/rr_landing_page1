@@ -88,7 +88,7 @@ const AssessmentRSVP = () => {
         };
 
         try {
-            const { error } = await supabase.from('rsvp_responses').insert({
+            const payload = {
                 player_name: playerName.trim(),
                 parent_name: parentName.trim(),
                 email: email.trim().toLowerCase(),
@@ -102,9 +102,21 @@ const AssessmentRSVP = () => {
                 decline_other: selectedOption === 4 && declineReasons.includes('Other') ? declineOther : null,
                 accepted_terms: acceptTerms,
                 accepted_comms: acceptComms,
-            });
+            };
 
+            // Insert into Supabase
+            const { error } = await supabase.from('rsvp_responses').insert(payload);
             if (error) throw error;
+
+            // Fire webhook to Zapier (for Google Sheets routing) — fire and forget
+            const webhookUrl = import.meta.env.VITE_RSVP_WEBHOOK_URL;
+            if (webhookUrl) {
+                fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                }).catch(err => console.warn('Zapier webhook warning:', err));
+            }
 
             setIsSubmitting(false);
             setShowIdentityModal(false);
