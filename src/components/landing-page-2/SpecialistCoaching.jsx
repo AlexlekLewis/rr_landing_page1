@@ -68,9 +68,9 @@ const SpecialistCoaching = () => {
                     className="relative w-full h-48 md:h-64 rounded-2xl overflow-hidden mb-12 border border-slate-200 shadow-lg"
                 >
                     <img
-                        src="/assets/hero-celebration.jpg"
-                        alt="Rajasthan Royals Team Celebration"
-                        className="w-full h-full object-cover object-center"
+                        src="/assets/lp2/action/jofra-archer-50-wickets.jpg"
+                        alt="Jofra Archer — Elite Bowling Coaching"
+                        className="w-full h-full object-cover object-[center_30%]"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/90 via-rr-dark/40 to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-r from-rr-pink/20 to-rr-blue/20 mix-blend-overlay" />

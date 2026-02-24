@@ -16,7 +16,7 @@ import RoyalsGroupConnection from '../RoyalsGroupConnection';
 import Coaches from '../Coaches';
 import KumarVideo from './KumarVideo';
 import AcceptInvitationCTA from './AcceptInvitationCTA';
-import PlayerImageStrip from './PlayerImageStrip';
+
 import LogoDivider from './LogoDivider';
 
 const LandingPage2 = () => {
@@ -124,9 +124,9 @@ const LandingPage2 = () => {
                         {/* Action Banner */}
                         <motion.div variants={fadeIn} className="relative w-full h-44 md:h-56 rounded-2xl overflow-hidden mb-8 shadow-lg border border-slate-200">
                             <img
-                                src="/assets/lp2/action/vaibhav-u19-wc-century.jpg"
-                                alt="Vaibhav Sooryavanshi — U19 World Cup Century"
-                                className="w-full h-full object-cover object-center"
+                                src="/assets/lp2/action/csk-vs-rr-hero.jpg"
+                                alt="CSK vs Rajasthan Royals — IPL 2025"
+                                className="w-full h-full object-cover object-[center_40%]"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/70 via-transparent to-transparent" />
                             <div className="absolute inset-0 bg-gradient-to-r from-rr-pink/10 to-rr-blue/10 mix-blend-overlay" />
@@ -154,8 +154,7 @@ const LandingPage2 = () => {
                 {/* Phase Effectiveness */}
                 <PhaseEffectiveness />
 
-                {/* Player Image Strip */}
-                <PlayerImageStrip />
+
 
                 {/* Program Overview */}
                 <ProgramOverviewDark />
