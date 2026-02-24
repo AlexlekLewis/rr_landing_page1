@@ -11,7 +11,6 @@ const LP1_NAV = [
 
 const LP2_NAV = [
     { label: 'THE PROGRAM', id: 'program-at-a-glance' },
-    { label: 'COACHING & LEADERSHIP', id: 'coaches' },
     { label: 'YOUR INVESTMENT', id: 'your-investment' },
 ];
 

@@ -18,7 +18,7 @@ const YourInvestment = () => {
     const inclusions = [
         "12 Weeks of Elite Coaching",
         "Indoor & Outdoor Facilities Access",
-        "RRAM DNA Profile",
+        "Player DNA Profile",
         "Individual Development Plan",
         "Player Training Apparel Kit"
     ];

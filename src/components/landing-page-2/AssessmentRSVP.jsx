@@ -137,12 +137,12 @@ const AssessmentRSVP = () => {
     const options = [
         {
             id: 1,
-            label: "Yes, we would welcome an offer and are available to attend the assessment on Sunday",
+            label: "Yes, we would love an offer to the Elite Program and are available to attend the assessment on Sunday",
             color: 'rr-pink'
         },
         {
             id: 2,
-            label: "Yes, we would welcome an offer, however we are unable to attend on Sunday",
+            label: "Yes, we would love an offer to the Elite Program, however we are unable to attend on Sunday",
             color: 'rr-blue'
         },
         {
@@ -163,7 +163,7 @@ const AssessmentRSVP = () => {
         "More detail on session content & structure",
         "Understanding the coaching methodology",
         "Clarity on scheduling & time commitment",
-        "More information on the pathway opportunities",
+        "More information on the opportunities available",
         "Need to discuss with family",
         "Other"
     ];
@@ -226,7 +226,7 @@ const AssessmentRSVP = () => {
                             Spots for the Sunday assessment session are capped.
                         </p>
                         <p className="text-slate-600 font-medium text-lg max-w-2xl">
-                            Please select the option that best reflects your current position and provide any relevant information.
+                            Being offered a spot at the assessment session means our selection team are strongly considering offering you a place in the Elite Program. Which of these answers best reflects your position on the Elite Program?
                         </p>
                     </motion.div>
 

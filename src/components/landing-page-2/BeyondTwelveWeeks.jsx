@@ -41,7 +41,7 @@ const BeyondTwelveWeeks = () => {
                     </motion.h2>
                     <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full mt-4" />
                     <motion.p variants={fadeIn} className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto mt-6 leading-relaxed font-medium">
-                        Completing the 12-week program marks the beginning of your connection to the Rajasthan Royals ecosystem and Global Academy network — a pathway that continues to grow with you.
+                        Completing the 12-week program marks the beginning of your connection to the Rajasthan Royals ecosystem and Global Academy network — a connection that can grow with you.
                     </motion.p>
                 </div>
 
@@ -67,9 +67,9 @@ const BeyondTwelveWeeks = () => {
                     {/* Matches */}
                     <motion.div variants={fadeIn} className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 relative overflow-hidden group hover:border-rr-blue/30 transition-colors duration-500">
                         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-blue to-rr-pink rounded-t-3xl" />
-                        <h3 className="text-xl font-bold text-rr-dark mb-3">Match Opportunities</h3>
+                        <h3 className="text-xl font-bold text-rr-dark mb-3">Match and Simulation Opportunities</h3>
                         <p className="text-slate-600 leading-relaxed font-medium">
-                            While the core 12 weeks is training-focused, alumni will form the basis of our competitive squads.
+                            While the core 12 weeks is training-focused, Elite Program alumni will form the basis of teams and squads that will be invited to take part in simulation and practice matches from time to time.
                         </p>
                     </motion.div>
                 </div>

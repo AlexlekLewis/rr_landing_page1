@@ -40,6 +40,16 @@ const SpecialistCoaching = () => {
             title: "Mental Performance & Mindset",
             desc: "Elite cricketers make better decisions faster, manage risk more accurately, and execute under pressure more consistently. Pre-performance routines, pressure management, acceptable risk decision-making, and the self-awareness to back your game when it matters most.",
             color: "from-rr-blue to-rr-pink"
+        },
+        {
+            title: "Bowl to Control the Game",
+            desc: "Bowling with intent is about more than taking wickets — it's about controlling pressure, manipulating scoring zones, and executing plans that suffocate the opposition. Accuracy under pressure, variation sequencing, and the ability to bowl to fields and force mistakes.",
+            color: "from-rr-pink to-rr-blue"
+        },
+        {
+            title: "Power and 360 Hitting",
+            desc: "Modern T20 cricket demands batters who can score all around the ground, switch between gears, and accelerate at will. Range hitting, ramp shots, reverse sweeps, and the ability to manufacture boundaries under pressure from any position on the crease.",
+            color: "from-rr-blue to-rr-pink"
         }
     ];
 
@@ -65,7 +75,7 @@ const SpecialistCoaching = () => {
                 {/* Player Portrait — LP1 Style */}
                 <motion.div
                     variants={fadeIn}
-                    className="relative w-full aspect-[3/2] rounded-2xl overflow-hidden mb-12 border border-slate-200 shadow-xl group bg-gradient-to-br from-rr-dark via-rr-navy to-rr-dark"
+                    className="relative w-full aspect-[5/2] rounded-2xl overflow-hidden mb-12 border border-slate-200 shadow-xl group bg-gradient-to-br from-rr-dark via-rr-navy to-rr-dark"
                 >
                     <img
                         src="/assets/lp2/sam-curran.png"

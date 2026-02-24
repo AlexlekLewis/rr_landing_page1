@@ -50,7 +50,7 @@ const ProgramOverviewDark = () => {
                 { title: "Squad Training", content: "Each player will be allocated to a squad that is at a similar age and similar ability based on the assessment of the Academy selection team, and this squad will train together on a regular basis." },
                 { title: "Specialist (Masterclass)", content: "Coaches and mentors with elite level skills will conduct masterclass sessions. The coaching team will monitor the skill set of the group and determine the appropriate masterclass." },
                 { title: "Performance Analysis", content: "Primarily the Rajasthan Royals Academy Management System and Full Track, as well as other tech programs, will form the basis of our monitoring tools." },
-                { title: "Video Analysis", content: "Video analysis is a cornerstone of the Elite program, providing you with instant feedback on your development as a player." },
+                { title: "Video Analysis", content: "Video analysis is a cornerstone of the Elite Program, providing you with instant feedback on your development as a player." },
             ]
         },
         {
@@ -71,7 +71,7 @@ const ProgramOverviewDark = () => {
                 { title: "Individual Development Plans (IDP)", content: "Each player receives a personalised development plan that addresses the whole person: skills, fitness, mindset, recovery, and life." },
                 { title: "Career Mentorship", content: "Critical to your development, our expert team will work with you on mapping out cricket career and development opportunities based on your skills and performance." },
                 { title: "360 Player Development", content: "Sessions in nutrition, sports & performance psychology, strength & conditioning development and body management." },
-                { title: "Daily Player Essentials", content: "Building routine and professional behaviors through the 'daily vitamins' of the game. We respect that the smaller things and the one percenters matter most, and your attitude towards them can make or break you over the long term." }
+                { title: "Daily Player Essentials", content: "Building routine and professional behaviours through discipline and repetition. We respect that the smaller things and the one percenters matter most, and your attitude towards them can make or break you over the long term." }
             ]
         },
         {

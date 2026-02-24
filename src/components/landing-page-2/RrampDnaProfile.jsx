@@ -47,10 +47,10 @@ const RrampDnaProfile = () => {
                     <div className="grid grid-cols-1 gap-8 items-center mt-8">
                         <motion.div variants={fadeIn} className="space-y-4 max-w-3xl mx-auto text-center">
                             <p className="text-lg md:text-xl text-slate-700 leading-relaxed font-medium">
-                                The RRAM DNA Profile is your roadmap to elite performance. It is a comprehensive, evidence-based assessment tool used to benchmark your current capabilities across the critical dimensions of cricket.
+                                The Player DNA Profile is your roadmap to elite performance. It is a comprehensive, evidence-based assessment tool used to benchmark your current capabilities across the critical dimensions of cricket.
                             </p>
                             <p className="text-lg text-slate-600 font-medium">
-                                Throughout the 12 weeks, we track your progression across these 8 core pillars to build a professional-grade blueprint of your elite skillset.
+                                Throughout the 12 weeks, we track your progression across these 8 core pillars to build a professional-grade blueprint of your T20 skillset.
                             </p>
                         </motion.div>
                     </div>
