@@ -23,7 +23,7 @@ const YourInvestment = () => {
     ];
 
     return (
-        <section className="py-24 px-6 lg:px-8 relative z-10 bg-white border-t border-b border-slate-200">
+        <section className="py-24 px-6 lg:px-8 relative z-10 bg-white border-t border-b border-slate-200" id="your-investment">
             <motion.div
                 initial="hidden"
                 whileInView="visible"
@@ -88,7 +88,7 @@ const YourInvestment = () => {
                                 </p>
                             </div>
                             <p>
-                                We believe in unlocking your potential in a premier T20 environment, providing an ecosystem that makes elite development accessible to the best talent.
+                                We believe in unlocking your potential in a premier high-performance environment, providing an ecosystem that makes elite development accessible to the best talent.
                             </p>
                         </div>
                     </motion.div>

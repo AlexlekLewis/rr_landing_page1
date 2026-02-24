@@ -28,15 +28,12 @@ const BeyondTwelveWeeks = () => {
                 {/* Hero Action Banner */}
                 <motion.div variants={fadeIn} className="relative w-full h-48 md:h-72 rounded-2xl overflow-hidden mb-16 shadow-xl border border-slate-200">
                     <img
-                        src="/assets/lp2/action/rr-vs-mi-hero.jpg"
-                        alt="Rajasthan Royals vs Mumbai Indians — IPL 2025"
+                        src="/assets/lp2/action/jofra-archer-50-wickets.jpg"
+                        alt="Jofra Archer — Rajasthan Royals"
                         className="w-full h-full object-cover object-top"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/80 via-transparent to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-r from-rr-pink/15 to-rr-blue/15 mix-blend-overlay" />
-                    <div className="absolute bottom-6 left-6 right-6">
-                        <p className="text-xs font-bold text-white/80 tracking-widest uppercase">The Royals Ecosystem • Your Lifetime Connection</p>
-                    </div>
                 </motion.div>
 
                 <div className="text-center mb-16 space-y-4">
@@ -45,23 +42,23 @@ const BeyondTwelveWeeks = () => {
                     </motion.h2>
                     <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full mt-4" />
                     <motion.p variants={fadeIn} className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto mt-6 leading-relaxed font-medium">
-                        Completion of the 12-week program is not the end; it is your initiation into the Rajasthan Royals ecosystem and Global Academy network. You don't just graduate—you belong.
+                        Completing the 12-week program marks the beginning of your connection to the Rajasthan Royals ecosystem and Global Academy network — a pathway that continues to grow with you.
                     </motion.p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {/* Masterclasses */}
                     <motion.div variants={fadeIn} className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 relative overflow-hidden group hover:border-rr-blue/30 transition-colors duration-500">
-                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-rr-blue rounded-t-3xl" />
+                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-blue to-rr-pink rounded-t-3xl" />
                         <h3 className="text-xl font-bold text-rr-dark mb-3">Priority Access</h3>
                         <p className="text-slate-600 leading-relaxed font-medium">
-                            As an Academy alumni, you receive priority access and "first dibs" on all future high-performance masterclasses, specialist clinics, and ad-hoc coaching sessions hosted by Rajasthan Royals Academy Melbourne coaches.
+                            As an Academy alumni, you receive priority access and "first dibs" on all future high-performance masterclasses, specialist clinics, and sessions hosted by Rajasthan Royals Academy Melbourne.
                         </p>
                     </motion.div>
 
                     {/* Tours */}
                     <motion.div variants={fadeIn} className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 relative overflow-hidden group hover:border-rr-pink/30 transition-colors duration-500">
-                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-pink to-rose-500 rounded-t-3xl" />
+                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-pink to-rr-blue rounded-t-3xl" />
                         <h3 className="text-xl font-bold text-rr-dark mb-3">Global Tours</h3>
                         <p className="text-slate-600 leading-relaxed font-medium">
                             Inclusion in the selection pool for future academy tours. This includes potential visits to the Rajasthan Royals High Performance Centre in Nagpur, India, and other franchise locations.
@@ -69,11 +66,11 @@ const BeyondTwelveWeeks = () => {
                     </motion.div>
 
                     {/* Matches */}
-                    <motion.div variants={fadeIn} className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 relative overflow-hidden group hover:border-purple-500/30 transition-colors duration-500">
-                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 to-violet-600 rounded-t-3xl" />
+                    <motion.div variants={fadeIn} className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 relative overflow-hidden group hover:border-rr-blue/30 transition-colors duration-500">
+                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-blue to-rr-pink rounded-t-3xl" />
                         <h3 className="text-xl font-bold text-rr-dark mb-3">Match Opportunities</h3>
                         <p className="text-slate-600 leading-relaxed font-medium">
-                            While the core 12 weeks is training-focused, alumni will form the basis of our competitive squads. We are currently scouting opportunities for an Inter-Academy T20 Tournament in the back half of 2026.
+                            While the core 12 weeks is training-focused, alumni will form the basis of our competitive squads. We are currently scouting opportunities for an Inter-Academy Tournament in the back half of 2026.
                         </p>
                     </motion.div>
                 </div>

@@ -8,7 +8,7 @@ const ProgramAtAGlance = () => {
     };
 
     return (
-        <section className="py-24 px-6 lg:px-8 relative z-10 bg-white">
+        <section className="py-24 px-6 lg:px-8 relative z-10 bg-white" id="program-at-a-glance">
             <motion.div
                 initial="hidden"
                 whileInView="visible"
@@ -30,7 +30,7 @@ const ProgramAtAGlance = () => {
                     <motion.div variants={fadeIn} className="bg-white border border-slate-100 border-b-4 border-b-rr-pink shadow-xl rounded-2xl p-8 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300 text-center">
                         <div className="relative z-10 flex flex-col items-center">
                             <h3 className="text-2xl font-bold text-rr-dark mb-2">12 Weeks</h3>
-                            <p className="text-slate-600 font-medium">Comprehensive holistic T20 development program designed for measurable growth.</p>
+                            <p className="text-slate-600 font-medium">Comprehensive holistic development program designed for measurable growth.</p>
                         </div>
                     </motion.div>
 

@@ -41,7 +41,7 @@ const TheRoyalsWay = () => {
                 <motion.div variants={fadeIn} className="relative w-full h-44 md:h-64 rounded-2xl overflow-hidden mb-16 shadow-xl border border-slate-200">
                     <img
                         src="/assets/lp2/action/hetmyer-t20wc-fastest-fifty.jpg"
-                        alt="Shimron Hetmyer — T20 World Cup Fastest Fifty"
+                        alt="Shimron Hetmyer — Rajasthan Royals"
                         className="w-full h-full object-cover object-top"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/70 via-transparent to-transparent" />
@@ -49,15 +49,23 @@ const TheRoyalsWay = () => {
                 </motion.div>
 
                 {/* Quote Section */}
-                <motion.div variants={fadeIn} className="mb-20 text-center relative max-w-4xl mx-auto">
-                    <span className="text-7xl md:text-8xl text-rr-pink/10 absolute -top-6 -left-4 md:-left-8 font-serif select-none leading-none" aria-hidden="true">“</span>
-                    <h3 className="text-3xl md:text-5xl font-black text-rr-dark leading-tight tracking-tight relative z-10">
-                        "We don't wait for the finished product — we back talent early and <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">teach boldly</span>."
-                    </h3>
-                    <p className="text-xl md:text-2xl font-bold text-rr-navy mt-6">
-                        "We value courage over comfort, curiosity over ego, and joy over jargon."
-                    </p>
-                    <span className="text-7xl md:text-8xl text-rr-blue/20 absolute -bottom-6 -right-4 md:-right-8 font-serif select-none leading-none" aria-hidden="true">”</span>
+                <motion.div variants={fadeIn} className="mb-20 relative max-w-4xl mx-auto">
+                    <div className="bg-white rounded-3xl shadow-xl border border-slate-200 p-8 md:p-12 relative overflow-hidden">
+                        {/* Brand accent stripe */}
+                        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-rr-pink to-rr-blue rounded-t-3xl" />
+                        {/* Left accent bar */}
+                        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-rr-pink to-rr-blue rounded-l-3xl" />
+
+                        <div className="text-center space-y-6">
+                            <h3 className="text-2xl md:text-4xl font-black text-rr-dark leading-tight tracking-tight">
+                                We don't wait for the finished product — we back talent early and{' '}
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">teach boldly</span>.
+                            </h3>
+                            <p className="text-lg md:text-xl font-bold text-rr-navy">
+                                We value courage over comfort, curiosity over ego, and joy over jargon.
+                            </p>
+                        </div>
+                    </div>
                 </motion.div>
 
                 {/* The Royals Way Title */}
@@ -66,6 +74,9 @@ const TheRoyalsWay = () => {
                         The Royals Way
                     </motion.h2>
                     <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full mt-4" />
+                    <motion.p variants={fadeIn} className="text-lg text-slate-600 mt-4 font-medium max-w-2xl mx-auto">
+                        Royalty is earned — through courage, undying spirit, and a willingness to go above and beyond.
+                    </motion.p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">

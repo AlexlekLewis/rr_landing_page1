@@ -18,28 +18,28 @@ const SpecialistCoaching = () => {
     const specialties = [
         {
             title: "Spin Mastery & Variation",
-            desc: "Effective spin in T20 is about control, deception, and taking the game away from a batter at the right moment. Stock ball accuracy, flight and loop, wrong'uns, arm balls — and the tactical intelligence to know when and where each variation is the right weapon.",
-            color: "from-blue-500 to-rr-blue"
+            desc: "Effective spin is about control, deception, and taking the game away from a batter at the right moment. Stock ball accuracy, flight and loop, wrong'uns, arm balls — and the tactical intelligence to know when and where each variation is the right weapon.",
+            color: "from-rr-blue to-rr-pink"
         },
         {
             title: "Wicketkeeping Craft",
-            desc: "Modern T20 keeping demands explosive athleticism, technical precision, and match intelligence. Stance and footwork, standing-up skills, glove work in high-pressure moments, and reading bowlers and batters — separating good keepers from exceptional ones.",
-            color: "from-amber-500 to-orange-600"
+            desc: "Modern keeping demands explosive athleticism, technical precision, and match intelligence. Stance and footwork, standing-up skills, glove work in high-pressure moments, and reading bowlers and batters — separating good keepers from exceptional ones.",
+            color: "from-rr-pink to-rr-blue"
         },
         {
             title: "Game-Changing Fielding",
             desc: "Elite fielders don't just save runs — they change the momentum of matches. Ground coverage, long-barrier and sliding technique, direct-hit accuracy, and high-pressure catching that turns half-chances into wickets. Millimetres matter and this is where they're trained.",
-            color: "from-emerald-400 to-teal-600"
+            color: "from-rr-blue to-rr-pink"
         },
         {
             title: "Strength & Conditioning",
-            desc: "Cricket-specific athleticism built for T20 performance: explosive power for hitting, bowling endurance, speed and agility in the field, and recovery management across a full 12 weeks. S&C integrated to keep players performing at their peak throughout the program.",
-            color: "from-purple-500 to-rr-pink"
+            desc: "Cricket-specific athleticism built for elite performance: explosive power for hitting, bowling endurance, speed and agility in the field, and recovery management across a full 12 weeks. S&C integrated to keep players performing at their peak throughout the program.",
+            color: "from-rr-pink to-rr-blue"
         },
         {
             title: "Mental Performance & Mindset",
-            desc: "Elite T20 cricketers make better decisions faster, manage risk more accurately, and execute under pressure more consistently. Pre-performance routines, pressure management, acceptable risk decision-making, and the self-awareness to back your game when it matters most.",
-            color: "from-rr-pink to-rose-600"
+            desc: "Elite cricketers make better decisions faster, manage risk more accurately, and execute under pressure more consistently. Pre-performance routines, pressure management, acceptable risk decision-making, and the self-awareness to back your game when it matters most.",
+            color: "from-rr-blue to-rr-pink"
         }
     ];
 
@@ -54,11 +54,11 @@ const SpecialistCoaching = () => {
             >
                 <div className="text-center mb-16 max-w-3xl mx-auto space-y-4">
                     <motion.h2 variants={fadeIn} className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight">
-                        Specialist <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-rr-blue">Coaching</span>
+                        Specialist <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">Coaching</span>
                     </motion.h2>
-                    <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-blue-400 to-rr-blue mx-auto rounded-full" />
+                    <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full" />
                     <motion.p variants={fadeIn} className="text-lg text-slate-600 mt-6 font-medium">
-                        Beyond core skills, the Elite Program provides access to highly specialized disciplines necessary for conquering the modern T20 game.
+                        Beyond core skills, the Elite Program provides access to highly specialized disciplines necessary for dominating the modern game.
                     </motion.p>
                 </div>
 
@@ -74,9 +74,6 @@ const SpecialistCoaching = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/90 via-rr-dark/40 to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-r from-rr-pink/20 to-rr-blue/20 mix-blend-overlay" />
-                    <div className="absolute bottom-4 left-6">
-                        <p className="text-xs font-bold text-white/90 tracking-widest uppercase">Elite Coaching • World-Class Resources</p>
-                    </div>
                 </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

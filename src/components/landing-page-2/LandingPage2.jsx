@@ -124,8 +124,8 @@ const LandingPage2 = () => {
                         {/* Action Banner */}
                         <motion.div variants={fadeIn} className="relative w-full h-44 md:h-56 rounded-2xl overflow-hidden mb-8 shadow-lg border border-slate-200">
                             <img
-                                src="/assets/lp2/action/csk-vs-rr-hero.jpg"
-                                alt="CSK vs Rajasthan Royals — IPL 2025"
+                                src="/assets/lp2/action/riyan-parag-captain-announcement.jpg"
+                                alt="Riyan Parag — Rajasthan Royals"
                                 className="w-full h-full object-cover object-top"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/70 via-transparent to-transparent" />

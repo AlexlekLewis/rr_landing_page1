@@ -23,21 +23,21 @@ const PhaseEffectiveness = () => {
             title: "Foundation & Execution",
             weeks: "Weeks 1-4",
             description: "Establishing technical baselines. Intense focus on repetitive skill execution under low-to-medium pressure to embed muscle memory and correct biomechanical inefficiencies.",
-            color: "from-blue-500 to-rr-blue"
+            color: "from-rr-blue to-rr-pink"
         },
         {
             number: "02",
             title: "Pressure Testing",
             weeks: "Weeks 5-8",
             description: "Elevating the environment. Introduction of constrained match scenarios and higher-velocity challenges to stress-test skills and measure decision-making under genuine pressure.",
-            color: "from-purple-500 to-rr-pink"
+            color: "from-rr-pink to-rr-blue"
         },
         {
             number: "03",
             title: "Match Domination",
             weeks: "Weeks 9-12",
-            description: "Full contextual immersion. High-intensity T20 match simulations. Players are tested on their ability to read the game, execute the Royals Way, and influence outcomes.",
-            color: "from-rr-pink to-orange-500"
+            description: "Full contextual immersion. High-intensity match simulations. Players are tested on their ability to read the game, execute the Royals Way, and influence outcomes.",
+            color: "from-rr-blue to-rr-pink"
         }
     ];
 
@@ -66,7 +66,7 @@ const PhaseEffectiveness = () => {
                     </motion.h2>
                     <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full" />
                     <motion.p variants={fadeIn} className="text-lg text-slate-600 font-medium max-w-2xl mx-auto mt-6">
-                        The 12-week program is scientifically periodised into three distinct phases to ensure skills are not just learned, but weaponised for competition.
+                        The 12-week program is scientifically periodized into three distinct phases to ensure skills are not just learned, but weaponized for competition.
                     </motion.p>
                 </div>
 
