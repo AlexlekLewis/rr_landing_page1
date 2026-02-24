@@ -65,15 +65,14 @@ const TheRoyalsWay = () => {
                 variants={staggerContainer}
                 className="max-w-5xl mx-auto"
             >
-                {/* Action Banner */}
-                <motion.div variants={fadeIn} className="relative w-full h-44 md:h-64 rounded-2xl overflow-hidden mb-16 shadow-xl border border-slate-200">
+                {/* Action Image — LP1 Style */}
+                <motion.div variants={fadeIn} className="relative w-full aspect-video rounded-2xl overflow-hidden mb-16 shadow-xl border border-slate-200 group">
                     <img
-                        src="/assets/lp2/action/hetmyer-t20wc-fastest-fifty.jpg"
-                        alt="Shimron Hetmyer — Rajasthan Royals"
-                        className="w-full h-full object-cover object-top"
+                        src="/assets/lp2/jaiswal-power-hitting.webp"
+                        alt="Yashasvi Jaiswal — Power Hitting"
+                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/70 via-transparent to-transparent" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-rr-pink/10 to-rr-blue/10 mix-blend-overlay" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                 </motion.div>
 
                 {/* Our Belief — Quote Card */}

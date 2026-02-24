@@ -112,15 +112,14 @@ const LandingPage2 = () => {
                             What happens <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">next?</span>
                         </motion.h2>
 
-                        {/* Action Banner */}
-                        <motion.div variants={fadeIn} className="relative w-full h-44 md:h-56 rounded-2xl overflow-hidden mb-8 shadow-lg border border-slate-200">
+                        {/* Action Image — LP1 Style */}
+                        <motion.div variants={fadeIn} className="relative w-full aspect-video rounded-2xl overflow-hidden mb-8 shadow-xl border border-slate-200 group">
                             <img
-                                src="/assets/lp2/action/riyan-parag-captain-announcement.jpg"
-                                alt="Riyan Parag — Rajasthan Royals"
-                                className="w-full h-full object-cover object-top"
+                                src="/assets/lp2/jaiswal-celebrating-100.webp"
+                                alt="Yashasvi Jaiswal — Century Celebration"
+                                className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/70 via-transparent to-transparent" />
-                            <div className="absolute inset-0 bg-gradient-to-r from-rr-pink/10 to-rr-blue/10 mix-blend-overlay" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                         </motion.div>
 
                         <motion.div variants={fadeIn} className="bg-white rounded-2xl p-8 md:p-10 shadow-xl border border-slate-100 relative overflow-hidden">

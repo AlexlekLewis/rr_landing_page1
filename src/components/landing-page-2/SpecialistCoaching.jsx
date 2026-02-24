@@ -62,18 +62,17 @@ const SpecialistCoaching = () => {
                     </motion.p>
                 </div>
 
-                {/* Hero Image Banner */}
+                {/* Action Image — LP1 Style */}
                 <motion.div
                     variants={fadeIn}
-                    className="relative w-full h-48 md:h-64 rounded-2xl overflow-hidden mb-12 border border-slate-200 shadow-lg"
+                    className="relative w-full aspect-video rounded-2xl overflow-hidden mb-12 border border-slate-200 shadow-xl group"
                 >
                     <img
-                        src="/assets/lp2/action/jofra-archer-50-wickets.jpg"
-                        alt="Jofra Archer — Elite Bowling Coaching"
-                        className="w-full h-full object-cover object-top"
+                        src="/assets/lp2/rr-match-action.jpeg"
+                        alt="Vaibhav Sooryavanshi — Rajasthan Royals"
+                        className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/90 via-rr-dark/40 to-transparent" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-rr-pink/20 to-rr-blue/20 mix-blend-overlay" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                 </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
