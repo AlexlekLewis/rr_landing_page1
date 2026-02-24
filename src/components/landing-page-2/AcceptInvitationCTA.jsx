@@ -8,7 +8,7 @@ const AcceptInvitationCTA = () => {
     };
 
     return (
-        <section className="py-12 px-6 lg:px-8 relative z-10 bg-gradient-to-b from-black/60 to-zinc-950">
+        <section className="py-12 px-6 lg:px-8 relative z-10 bg-slate-50">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -18,7 +18,7 @@ const AcceptInvitationCTA = () => {
             >
                 <button
                     onClick={scrollToRSVP}
-                    className="group inline-flex items-center gap-3 px-10 py-4 rounded-xl font-bold text-lg bg-gradient-to-r from-rr-pink to-rr-blue text-white hover:shadow-[0_0_30px_rgba(236,72,153,0.4)] hover:scale-[1.03] transition-all duration-300"
+                    className="group inline-flex items-center gap-3 px-10 py-4 rounded-xl font-bold text-lg bg-gradient-to-r from-rr-pink to-rr-blue text-white hover:shadow-xl hover:scale-[1.03] transition-all duration-300"
                 >
                     Accept Invitation
                     <ChevronDown className="w-5 h-5 group-hover:translate-y-0.5 transition-transform" />

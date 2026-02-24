@@ -50,11 +50,7 @@ const SpecialistCoaching = () => {
     ];
 
     return (
-        <section className="py-24 px-6 lg:px-8 relative z-10 bg-black border-t border-b border-white/5 overflow-hidden">
-            {/* Ambient Backgrounds */}
-            <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-rr-blue/5 rounded-full blur-[120px] pointer-events-none -translate-y-1/2" />
-            <div className="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-rr-pink/5 rounded-full blur-[120px] pointer-events-none translate-y-1/2" />
-
+        <section className="py-24 px-6 lg:px-8 relative z-10 bg-white border-t border-b border-slate-200 overflow-hidden">
             <motion.div
                 initial="hidden"
                 whileInView="visible"
@@ -63,11 +59,11 @@ const SpecialistCoaching = () => {
                 className="max-w-7xl mx-auto"
             >
                 <div className="text-center mb-16 max-w-3xl mx-auto space-y-4">
-                    <motion.h2 variants={fadeIn} className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight">
-                        Specialist <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-rr-blue">Coaching</span>
+                    <motion.h2 variants={fadeIn} className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight">
+                        Specialist <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-rr-blue">Coaching</span>
                     </motion.h2>
                     <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-blue-400 to-rr-blue mx-auto rounded-full" />
-                    <motion.p variants={fadeIn} className="text-lg text-slate-400 mt-6">
+                    <motion.p variants={fadeIn} className="text-lg text-slate-600 mt-6 font-medium">
                         Beyond core skills, the Elite Program provides access to highly specialized disciplines necessary for conquering the modern T20 game.
                     </motion.p>
                 </div>
@@ -75,17 +71,17 @@ const SpecialistCoaching = () => {
                 {/* Hero Image Banner */}
                 <motion.div
                     variants={fadeIn}
-                    className="relative w-full h-48 md:h-64 rounded-2xl overflow-hidden mb-12 border border-white/10"
+                    className="relative w-full h-48 md:h-64 rounded-2xl overflow-hidden mb-12 border border-slate-200 shadow-lg"
                 >
                     <img
                         src="/assets/hero-celebration.jpg"
                         alt="Rajasthan Royals Team Celebration"
                         className="w-full h-full object-cover object-center"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/90 via-rr-dark/40 to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-r from-rr-pink/20 to-rr-blue/20 mix-blend-overlay" />
                     <div className="absolute bottom-4 left-6">
-                        <p className="text-xs font-bold text-white/70 tracking-widest uppercase">Elite Coaching • World-Class Resources</p>
+                        <p className="text-xs font-bold text-white/90 tracking-widest uppercase">Elite Coaching • World-Class Resources</p>
                     </div>
                 </motion.div>
 
@@ -95,22 +91,20 @@ const SpecialistCoaching = () => {
                             key={index}
                             variants={fadeIn}
                             className={`
-                                bg-zinc-900/80 backdrop-blur-md border border-white/10 rounded-3xl p-8 
+                                bg-white shadow-xl border border-slate-200 rounded-3xl p-8 
                                 relative group hover:-translate-y-1 transition-all duration-300
                                 ${index >= 3 ? 'lg:col-span-1.5' : ''} 
                             `}
                         >
-                            <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-10 rounded-full blur-2xl transition-opacity duration-500`} />
-
                             <div className="relative z-10 flex flex-col h-full">
-                                <div className={`w-14 h-14 bg-gradient-to-br ${item.color} rounded-2xl flex items-center justify-center p-[1px] mb-6 shadow-lg`}>
-                                    <div className="w-full h-full bg-zinc-900 rounded-[15px] flex items-center justify-center">
-                                        <item.icon className="w-6 h-6 text-white" />
+                                <div className={`w-14 h-14 bg-gradient-to-br ${item.color} rounded-2xl flex items-center justify-center p-[1px] mb-6 shadow-md`}>
+                                    <div className="w-full h-full bg-white rounded-[15px] flex items-center justify-center">
+                                        <item.icon className="w-6 h-6 text-slate-700" />
                                     </div>
                                 </div>
 
-                                <h3 className="text-xl font-bold text-white mb-4">{item.title}</h3>
-                                <p className="text-slate-400 leading-relaxed text-sm flex-grow">
+                                <h3 className="text-xl font-bold text-rr-dark mb-4">{item.title}</h3>
+                                <p className="text-slate-600 leading-relaxed text-sm flex-grow font-medium">
                                     {item.desc}
                                 </p>
                             </div>

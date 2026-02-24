@@ -31,7 +31,7 @@ const RrampDnaProfile = () => {
     ];
 
     return (
-        <section className="py-24 px-6 lg:px-8 relative z-10 bg-black/60 border-t border-b border-white/5">
+        <section className="py-24 px-6 lg:px-8 relative z-10 bg-slate-50 border-t border-b border-slate-200">
             <motion.div
                 initial="hidden"
                 whileInView="visible"
@@ -42,7 +42,7 @@ const RrampDnaProfile = () => {
                 {/* Hero Intro with Player Accent */}
                 <div className="mb-16 space-y-6 max-w-6xl mx-auto">
                     <div className="text-center space-y-4">
-                        <motion.h2 variants={fadeIn} className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight">
+                        <motion.h2 variants={fadeIn} className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight">
                             PLAYER <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">DNA PROFILE</span>
                         </motion.h2>
                         <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full" />
@@ -50,24 +50,24 @@ const RrampDnaProfile = () => {
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mt-8">
                         <motion.div variants={fadeIn} className="lg:col-span-8 space-y-4">
-                            <p className="text-lg md:text-xl text-slate-300 leading-relaxed font-light">
+                            <p className="text-lg md:text-xl text-slate-700 leading-relaxed font-medium">
                                 The Player DNA Profile is your roadmap to elite performance. It is a comprehensive, evidence-based assessment tool used to benchmark your current capabilities across the critical dimensions of T20 cricket.
                             </p>
-                            <p className="text-lg text-slate-400 font-medium">
+                            <p className="text-lg text-slate-600 font-medium">
                                 Throughout the 12 weeks, we track your progression across these 8 core pillars to build a professional-grade blueprint of your T20 skillset.
                             </p>
                         </motion.div>
                         <motion.div variants={fadeIn} className="hidden lg:flex lg:col-span-4 justify-center">
                             <div className="relative">
-                                <div className="w-40 h-40 rounded-2xl overflow-hidden border border-white/10 shadow-xl shadow-rr-blue/10">
+                                <div className="w-40 h-40 rounded-2xl overflow-hidden border-4 border-white shadow-xl">
                                     <img
                                         src="/assets/lp2/shimron-hetmyer.png"
                                         alt="Shimron Hetmyer — Rajasthan Royals"
                                         className="w-full h-full object-cover object-top"
                                     />
                                 </div>
-                                <div className="absolute -bottom-2 -right-2 bg-rr-blue/20 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-rr-blue/30">
-                                    <p className="text-[10px] font-bold text-white tracking-wider uppercase">Shimron Hetmyer</p>
+                                <div className="absolute -bottom-2 -right-2 bg-white shadow-md rounded-lg px-3 py-1.5 border border-slate-100">
+                                    <p className="text-[10px] font-black text-rr-dark tracking-wider uppercase">Shimron Hetmyer</p>
                                 </div>
                             </div>
                         </motion.div>
@@ -80,13 +80,13 @@ const RrampDnaProfile = () => {
                         <motion.div
                             key={index}
                             variants={fadeIn}
-                            className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm relative overflow-hidden group hover:bg-white/10 hover:border-rr-pink/30 transition-all duration-300 flex flex-col items-center text-center"
+                            className="bg-white border border-slate-100 shadow-md rounded-2xl p-6 relative overflow-hidden group hover:-translate-y-1 hover:shadow-lg hover:border-rr-pink/30 transition-all duration-300 flex flex-col items-center text-center"
                         >
                             <div className="w-14 h-14 bg-rr-pink/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-rr-pink/20 transition-all duration-300">
                                 <box.icon className="w-7 h-7 text-rr-pink" />
                             </div>
-                            <h3 className="text-lg font-bold text-white mb-2">{box.title}</h3>
-                            <p className="text-sm text-slate-400 leading-relaxed">{box.desc}</p>
+                            <h3 className="text-lg font-bold text-rr-dark mb-2">{box.title}</h3>
+                            <p className="text-sm text-slate-600 font-medium leading-relaxed">{box.desc}</p>
                         </motion.div>
                     ))}
                 </motion.div>

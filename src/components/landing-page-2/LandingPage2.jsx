@@ -38,16 +38,13 @@ const LandingPage2 = () => {
     };
 
     return (
-        <div className="min-h-screen bg-rr-dark text-white font-sans flex flex-col selection:bg-rr-pink selection:text-white">
+        <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white">
             <Navbar />
 
             <main className="flex-1 overflow-hidden relative">
-                {/* Background Ambient Glows */}
-                <div className="absolute top-0 left-0 w-[800px] h-[800px] bg-rr-pink/10 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-                <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-rr-blue/10 rounded-full blur-[100px] translate-x-1/4 translate-y-1/4 pointer-events-none" />
 
                 {/* --- HERO SECTION --- */}
-                <section className="relative pt-32 pb-10 px-6 lg:px-8 min-h-[80vh] flex items-center justify-center z-10">
+                <section className="relative pt-32 pb-20 px-6 lg:px-8 min-h-[80vh] flex items-center justify-center z-10 bg-rr-dark text-white overflow-hidden">
                     {/* Background Image */}
                     <div className="absolute inset-0 z-0">
                         <img
@@ -101,7 +98,7 @@ const LandingPage2 = () => {
                 </section>
 
                 {/* --- NEXT STEPS SECTION --- */}
-                <section className="pt-10 pb-20 px-6 lg:px-8 relative z-10 border-t border-white/5 bg-gradient-to-b from-transparent to-black/30">
+                <section className="py-24 px-6 lg:px-8 relative z-10 bg-slate-50 border-b border-slate-200">
                     <motion.div
                         initial="hidden"
                         whileInView="visible"
@@ -109,15 +106,12 @@ const LandingPage2 = () => {
                         variants={staggerContainer}
                         className="max-w-4xl mx-auto"
                     >
-                        <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-white mb-8">
-                            What happens next?
+                        <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-black text-rr-dark mb-8 text-center uppercase tracking-wide">
+                            What happens <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">next?</span>
                         </motion.h2>
 
-                        <motion.div variants={fadeIn} className="bg-white/5 border border-rr-pink/20 rounded-2xl p-8 md:p-10 backdrop-blur-sm relative overflow-hidden group hover:border-rr-pink/40 transition-colors duration-500">
-                            {/* Subtle internal glow */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-rr-pink/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                            <div className="relative z-10 space-y-6 text-lg text-slate-300 leading-relaxed">
+                        <motion.div variants={fadeIn} className="bg-white rounded-2xl p-8 md:p-10 shadow-xl border border-slate-100 relative overflow-hidden">
+                            <div className="relative z-10 space-y-6 text-lg text-slate-700 leading-relaxed font-medium text-center">
                                 <p>
                                     As you have been invited to attend the assessment session, you are one step closer to the Elite Program. Melbourne’s Rajasthan Royals Academy team are considering you as a candidate with strong possibility of being offered a place.
                                 </p>
@@ -129,12 +123,8 @@ const LandingPage2 = () => {
                     </motion.div>
                 </section>
 
-                <LogoDivider />
-
                 {/* Program At A Glance */}
                 <ProgramAtAGlance />
-
-                <LogoDivider />
 
                 {/* The Royals Way Philosophy */}
                 <TheRoyalsWay />
@@ -144,8 +134,6 @@ const LandingPage2 = () => {
 
                 {/* Player Image Strip */}
                 <PlayerImageStrip />
-
-                <LogoDivider />
 
                 {/* Program Overview */}
                 <ProgramOverviewDark />
@@ -159,18 +147,16 @@ const LandingPage2 = () => {
                 {/* Individual Development Plan */}
                 <IndividualDevPlan />
 
-                <LogoDivider />
-
                 {/* Accept Invitation CTA */}
                 <AcceptInvitationCTA />
 
                 {/* Royals Group Connection (Reused) */}
-                <div className="bg-zinc-950 py-12">
+                <div className="bg-slate-50 py-12">
                     <RoyalsGroupConnection />
                 </div>
 
                 {/* Cricket Leadership Team (Reused) */}
-                <div className="bg-black py-12">
+                <div className="bg-white py-12">
                     <Coaches />
                 </div>
 
@@ -179,8 +165,6 @@ const LandingPage2 = () => {
 
                 {/* Kumar Sangakkara Video */}
                 <KumarVideo />
-
-                <LogoDivider />
 
                 {/* Your Investment */}
                 <YourInvestment />

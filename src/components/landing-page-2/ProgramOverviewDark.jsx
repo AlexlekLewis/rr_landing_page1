@@ -6,12 +6,12 @@ const AccordionSection = ({ title, items, color = "border-rr-pink", defaultOpen 
     const [isOpen, setIsOpen] = useState(defaultOpen);
 
     return (
-        <div className={`bg-white/5 rounded-2xl border-l-4 ${color} hover:bg-white/10 transition-all duration-300 overflow-hidden border border-white/10 backdrop-blur-sm`}>
+        <div className={`bg-white rounded-2xl border-l-4 ${color} hover:shadow-lg transition-all duration-300 overflow-hidden border border-slate-200 shadow-md`}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="w-full p-6 md:p-8 flex justify-between items-center text-left focus:outline-none group"
             >
-                <h3 className="text-xl md:text-2xl font-black text-white group-hover:text-rr-pink transition-colors">{title}</h3>
+                <h3 className="text-xl md:text-2xl font-black text-rr-dark group-hover:text-rr-pink transition-colors">{title}</h3>
                 {isOpen
                     ? <Minus className="w-6 h-6 text-rr-pink flex-shrink-0" />
                     : <Plus className="w-6 h-6 text-slate-400 flex-shrink-0" />
@@ -26,11 +26,11 @@ const AccordionSection = ({ title, items, color = "border-rr-pink", defaultOpen 
                         transition={{ duration: 0.3, ease: "easeInOut" }}
                         className="overflow-hidden"
                     >
-                        <div className="px-6 md:px-8 pb-6 md:pb-8 space-y-5 border-t border-white/10 pt-5">
+                        <div className="px-6 md:px-8 pb-6 md:pb-8 space-y-5 border-t border-slate-100 pt-5">
                             {items.map((item, index) => (
                                 <div key={index}>
-                                    <h4 className="text-base font-bold text-white mb-1">{item.title}</h4>
-                                    <p className="text-slate-400 leading-relaxed text-sm font-medium">{item.content}</p>
+                                    <h4 className="text-base font-bold text-rr-dark mb-1">{item.title}</h4>
+                                    <p className="text-slate-600 leading-relaxed text-sm font-medium">{item.content}</p>
                                 </div>
                             ))}
                         </div>
@@ -88,13 +88,13 @@ const ProgramOverviewDark = () => {
     ];
 
     return (
-        <section className="py-24 bg-rr-dark relative overflow-hidden">
+        <section className="py-24 bg-white relative overflow-hidden">
             <div className="container mx-auto px-6 relative z-10">
                 <div className="text-center max-w-3xl mx-auto mb-16">
-                    <h2 className="text-4xl md:text-5xl font-black text-white mb-4 uppercase">
+                    <h2 className="text-4xl md:text-5xl font-black text-rr-dark mb-4 uppercase">
                         What's Included <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">Overview</span>
                     </h2>
-                    <p className="text-lg text-slate-400 font-medium">
+                    <p className="text-lg text-slate-600 font-medium">
                         Everything you need to elevate your game, mapped out in detail.
                     </p>
                 </div>

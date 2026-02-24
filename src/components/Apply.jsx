@@ -285,6 +285,7 @@ const Apply = () => {
                                 className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-rr-pink/20 transition-all text-rr-dark placeholder-slate-400 disabled:opacity-50 disabled:bg-slate-200 disabled:cursor-not-allowed"
                             />
                         </div>
+                        <p className="text-xs text-slate-400 -mt-4 mb-6 italic">* Player email and phone number are required for applicants aged 18 and over only.</p>
                     </div>
 
                     <InputField label="Primary Residential Suburb" name="suburb" value={formData.suburb} onChange={handleChange} required />

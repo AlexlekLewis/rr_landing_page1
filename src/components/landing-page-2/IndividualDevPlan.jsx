@@ -6,14 +6,14 @@ const AccordionSection = ({ title, items, defaultOpen = false }) => {
     const [isOpen, setIsOpen] = useState(defaultOpen);
 
     return (
-        <div className={`bg-white/5 rounded-2xl hover:bg-white/10 transition-all duration-300 overflow-hidden border border-white/10 backdrop-blur-sm`}>
+        <div className={`bg-white rounded-2xl border border-slate-200 shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden`}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="w-full p-6 md:p-8 flex justify-between items-center text-left focus:outline-none group"
             >
                 <div className="flex items-center gap-4">
                     <UserCheck className="w-6 h-6 text-rr-blue group-hover:text-rr-pink transition-colors" />
-                    <h3 className="text-xl md:text-2xl font-black text-white group-hover:text-rr-pink transition-colors">{title}</h3>
+                    <h3 className="text-xl md:text-2xl font-black text-rr-dark group-hover:text-rr-pink transition-colors">{title}</h3>
                 </div>
                 {isOpen
                     ? <Minus className="w-6 h-6 text-rr-pink flex-shrink-0" />
@@ -29,11 +29,11 @@ const AccordionSection = ({ title, items, defaultOpen = false }) => {
                         transition={{ duration: 0.3, ease: "easeInOut" }}
                         className="overflow-hidden"
                     >
-                        <div className="px-6 md:px-8 pb-6 md:pb-8 space-y-5 border-t border-white/10 pt-5">
+                        <div className="px-6 md:px-8 pb-6 md:pb-8 space-y-5 border-t border-slate-100 pt-5">
                             {items.map((item, index) => (
                                 <div key={index}>
                                     <h4 className="text-xl font-bold text-rr-pink mb-2">{item.title}</h4>
-                                    <p className="text-slate-400 leading-relaxed font-medium">{item.content}</p>
+                                    <p className="text-slate-600 leading-relaxed font-medium">{item.content}</p>
                                 </div>
                             ))}
                         </div>
@@ -67,9 +67,7 @@ const IndividualDevPlan = () => {
     ];
 
     return (
-        <section className="py-24 bg-rr-dark relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-rr-blue/10 rounded-full blur-[100px] pointer-events-none translate-x-1/2 -translate-y-1/2" />
-
+        <section className="py-24 bg-slate-50 relative overflow-hidden">
             <div className="container mx-auto px-6 relative z-10 max-w-4xl">
                 <div className="space-y-4">
                     {sections.map((section, index) => (

@@ -14,7 +14,7 @@ const playerImages = [
 
 const PlayerImageStrip = () => {
     return (
-        <section className="py-6 relative z-10 bg-black/40 overflow-hidden">
+        <section className="py-12 relative z-10 bg-slate-50 overflow-hidden">
             <div className="flex animate-scroll-x">
                 {/* Double the images for infinite scroll effect */}
                 {[...playerImages, ...playerImages].map((image, index) => (
@@ -23,7 +23,7 @@ const PlayerImageStrip = () => {
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         viewport={{ once: true }}
-                        className="flex-shrink-0 w-48 h-48 mx-2 rounded-xl overflow-hidden relative group"
+                        className="flex-shrink-0 w-48 h-48 mx-2 rounded-xl overflow-hidden relative group shadow-md"
                     >
                         <img
                             src={image.src}
