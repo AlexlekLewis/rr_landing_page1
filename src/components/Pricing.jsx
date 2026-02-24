@@ -42,7 +42,6 @@ const Pricing = () => {
                 '1-on-1 Personalized Coaching',
                 'Full Biomechanical Analysis',
                 'Nutrition & Mental Conditioning',
-                'Direct Pathway to Trials',
                 'Full Training Kit',
             ],
             cta: 'Go Elite',
@@ -88,8 +87,8 @@ const Pricing = () => {
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 }}
                             className={`relative rounded-2xl p-8 h-full flex flex-col ${tier.mostPopular
-                                    ? 'bg-white shadow-2xl ring-2 ring-rr-pink scale-105 z-10'
-                                    : 'bg-gray-50 border border-gray-200 hover:border-rr-blue/30 transition-colors'
+                                ? 'bg-white shadow-2xl ring-2 ring-rr-pink scale-105 z-10'
+                                : 'bg-gray-50 border border-gray-200 hover:border-rr-blue/30 transition-colors'
                                 }`}
                         >
                             {tier.mostPopular && (
@@ -123,8 +122,8 @@ const Pricing = () => {
 
                             <button
                                 className={`w-full py-4 rounded-lg font-black uppercase tracking-wider text-sm transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg ${tier.mostPopular
-                                        ? 'bg-gradient-to-r from-rr-blue to-rr-pink text-white shadow-md'
-                                        : 'bg-white text-rr-blue border-2 border-rr-blue/10 hover:border-rr-blue hover:text-white hover:bg-rr-blue'
+                                    ? 'bg-gradient-to-r from-rr-blue to-rr-pink text-white shadow-md'
+                                    : 'bg-white text-rr-blue border-2 border-rr-blue/10 hover:border-rr-blue hover:text-white hover:bg-rr-blue'
                                     }`}
                             >
                                 {tier.cta}

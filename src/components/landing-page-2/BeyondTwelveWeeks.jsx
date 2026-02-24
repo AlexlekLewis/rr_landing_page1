@@ -25,6 +25,20 @@ const BeyondTwelveWeeks = () => {
                 variants={staggerContainer}
                 className="max-w-6xl mx-auto"
             >
+                {/* Hero Action Banner */}
+                <motion.div variants={fadeIn} className="relative w-full h-48 md:h-72 rounded-2xl overflow-hidden mb-16 shadow-xl border border-slate-200">
+                    <img
+                        src="/assets/lp2/action/riyan-parag-captain-announcement.jpg"
+                        alt="Riyan Parag — Rajasthan Royals Captain"
+                        className="w-full h-full object-cover object-top"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/80 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-rr-pink/15 to-rr-blue/15 mix-blend-overlay" />
+                    <div className="absolute bottom-6 left-6 right-6">
+                        <p className="text-xs font-bold text-white/80 tracking-widest uppercase">The Royals Ecosystem • Your Lifetime Connection</p>
+                    </div>
+                </motion.div>
+
                 <div className="text-center mb-16 space-y-4">
                     <motion.h2 variants={fadeIn} className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight">
                         Beyond <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">12 Weeks</span>

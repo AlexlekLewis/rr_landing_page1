@@ -48,7 +48,7 @@ const PhaseEffectiveness = () => {
                 <img
                     src="/assets/vaibhav.png"
                     alt=""
-                    className="absolute right-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain opacity-[0.03] mix-blend-multiply"
+                    className="absolute right-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain opacity-[0.06] mix-blend-multiply"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent" />
             </div>

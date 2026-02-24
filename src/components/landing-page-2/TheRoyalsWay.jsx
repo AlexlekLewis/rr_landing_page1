@@ -37,6 +37,17 @@ const TheRoyalsWay = () => {
                 variants={staggerContainer}
                 className="max-w-5xl mx-auto"
             >
+                {/* Action Banner */}
+                <motion.div variants={fadeIn} className="relative w-full h-44 md:h-64 rounded-2xl overflow-hidden mb-16 shadow-xl border border-slate-200">
+                    <img
+                        src="/assets/lp2/action/hetmyer-t20wc-fastest-fifty.jpg"
+                        alt="Shimron Hetmyer — T20 World Cup Fastest Fifty"
+                        className="w-full h-full object-cover object-center"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/70 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-rr-pink/10 to-rr-blue/10 mix-blend-overlay" />
+                </motion.div>
+
                 {/* Quote Section */}
                 <motion.div variants={fadeIn} className="mb-20 text-center relative max-w-4xl mx-auto">
                     <span className="text-7xl md:text-8xl text-rr-pink/10 absolute -top-6 -left-4 md:-left-8 font-serif select-none leading-none" aria-hidden="true">“</span>

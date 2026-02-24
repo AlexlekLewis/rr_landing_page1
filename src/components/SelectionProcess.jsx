@@ -11,7 +11,7 @@ const steps = [
     {
         num: 2,
         title: "Assess",
-        desc: "On Sunday March 1st, a select group of applicants will be invited to a trial and skill assessment session led by Sid Lahiri.",
+        desc: "On Sunday March 1st, a select group of applicants will be invited to a skill assessment session led by Sid Lahiri.",
     },
     {
         num: 3,

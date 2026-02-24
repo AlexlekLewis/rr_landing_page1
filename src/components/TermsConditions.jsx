@@ -56,7 +56,7 @@ const TermsConditions = () => {
                             Your interaction with the Rajasthan Royals Academy Melbourne occurs in distinct phases:
                         </p>
                         <ul className="list-disc pl-6 space-y-2 text-rr-dark/80">
-                            <li><strong>Phase 1: Initial Application.</strong> By submitting your initial application, you agree to these Terms for the purpose of evaluation and scouting. Submission does not guarantee an invitation to trial or acceptance.</li>
+                            <li><strong>Phase 1: Initial Application.</strong> By submitting your initial application, you agree to these Terms for the purpose of evaluation and scouting. Submission does not guarantee an invitation to an assessment or acceptance.</li>
                             <li><strong>Phase 2: Assessment Session &amp; RSVP.</strong> If invited to an assessment session, your RSVP constitutes a secondary consent. By accepting the invitation, you (and your parent/guardian if under 18) acknowledge the physical risks, equipment requirements, and specific terms associated with attending an in-person, high-performance T20 assessment.</li>
                             <li><strong>Incomplete Applications:</strong> Applications that are incomplete, contain false information, or do not meet minimum requirements may be rejected.</li>
                         </ul>
@@ -69,10 +69,10 @@ const TermsConditions = () => {
                             potential to develop within the Rajasthan Royals Melbourne system. Please note:
                         </p>
                         <ul className="list-disc pl-6 space-y-2 text-rr-dark/80">
-                            <li><strong>Trials &amp; Assessment:</strong> Shortlisted applicants may be invited to attend in-person trials, skills assessments, fitness evaluations, and interviews at the Academy's discretion.</li>
+                            <li><strong>Assessment &amp; Evaluation:</strong> Shortlisted applicants may be invited to attend in-person skills assessments, fitness evaluations, and interviews at the Academy's discretion.</li>
                             <li><strong>Selection Criteria:</strong> Selection is based on a holistic evaluation including, but not limited to, technical skill, tactical awareness, physical fitness, mental resilience, attitude, and development potential.</li>
                             <li><strong>Panel Decisions:</strong> All selection decisions are made by the Academy's coaching and selection panel. Decisions are final and not subject to appeal or negotiation.</li>
-                            <li><strong>No Guaranteed Outcome:</strong> Applying to or trialling for the Academy does not guarantee selection, placement, or any form of contractual engagement with the Rajasthan Royals or its affiliates.</li>
+                            <li><strong>No Guaranteed Outcome:</strong> Applying to or attending an assessment for the Academy does not guarantee selection, placement, or any form of contractual engagement with the Rajasthan Royals or its affiliates.</li>
                         </ul>
                     </section>
 
@@ -138,7 +138,7 @@ const TermsConditions = () => {
                             officers, employees, and agents shall not be liable for any direct, indirect, incidental,
                             consequential, or special damages arising from your use of this website, participation
                             in the application process, attendance at the assessment sessions, or involvement in the Academy program. Participation in
-                            any trials, assessments, or Academy activities is undertaken at the applicant's own risk.
+                            any assessments or Academy activities is undertaken at the applicant's own risk.
                         </p>
                     </section>
 

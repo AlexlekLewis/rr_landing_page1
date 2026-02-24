@@ -77,7 +77,7 @@ const PrivacyPolicy = () => {
                         <p className="text-rr-dark/80 leading-relaxed mb-4">We use the information we collect for the following purposes:</p>
                         <ul className="list-disc pl-6 space-y-2 text-rr-dark/80">
                             <li>To process and evaluate your application to the Academy program.</li>
-                            <li>To communicate with you about your application status, upcoming trials, and Academy events.</li>
+                            <li>To communicate with you about your application status, upcoming assessments, and Academy events.</li>
                             <li>To facilitate talent identification and scouting within the Rajasthan Royals Academy Melbourne network.</li>
                             <li>To administer the Academy program, including scheduling, logistics, and participant management.</li>
                             <li>To comply with legal and regulatory requirements.</li>

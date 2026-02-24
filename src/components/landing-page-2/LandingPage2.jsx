@@ -49,9 +49,9 @@ const LandingPage2 = () => {
                         <img
                             src="/assets/sooryavanchi-arms-raised.jpg"
                             alt="Vaibhav Sooryavanshi Celebrates Century"
-                            className="w-full h-full object-cover object-[center_30%] opacity-20 mix-blend-luminosity"
+                            className="w-full h-full object-cover object-[center_30%] opacity-40"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-b from-rr-dark/80 via-rr-dark/90 to-rr-dark"></div>
+                        <div className="absolute inset-0 bg-gradient-to-b from-rr-dark/60 via-rr-dark/70 to-rr-dark"></div>
                     </div>
 
                     <motion.div
@@ -109,10 +109,21 @@ const LandingPage2 = () => {
                             What happens <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">next?</span>
                         </motion.h2>
 
+                        {/* Action Banner */}
+                        <motion.div variants={fadeIn} className="relative w-full h-44 md:h-56 rounded-2xl overflow-hidden mb-8 shadow-lg border border-slate-200">
+                            <img
+                                src="/assets/lp2/action/vaibhav-u19-wc-century.jpg"
+                                alt="Vaibhav Sooryavanshi — U19 World Cup Century"
+                                className="w-full h-full object-cover object-center"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/70 via-transparent to-transparent" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-rr-pink/10 to-rr-blue/10 mix-blend-overlay" />
+                        </motion.div>
+
                         <motion.div variants={fadeIn} className="bg-white rounded-2xl p-8 md:p-10 shadow-xl border border-slate-100 relative overflow-hidden">
                             <div className="relative z-10 space-y-6 text-lg text-slate-700 leading-relaxed font-medium text-center">
                                 <p>
-                                    As you have been invited to attend the assessment session, you are one step closer to the Elite Program. Melbourne’s Rajasthan Royals Academy team are considering you as a candidate with strong possibility of being offered a place.
+                                    As you have been invited to attend the assessment session, you are one step closer to the Elite Program. Melbourne's Rajasthan Royals Academy team are considering you as a candidate with strong possibility of being offered a place.
                                 </p>
                                 <p>
                                     So that you can begin to prepare for both the assessment session and the possibility of being offered a place, please find below details of the program including program content, program benefits, training days & times and the cost of this premium program.

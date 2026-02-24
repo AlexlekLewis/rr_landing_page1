@@ -84,7 +84,7 @@ const ProgramOverview = () => {
             color: "border-rr-blue",
             defaultOpen: false,
             items: [
-                { title: "Intensive Period", content: "The Elite program is built for a specific purpose and as such is staged in a block of approximately 12-weeks. This high intensity program is a perfect launching pad into the 2026/27 club pre-season and representative trial periods." },
+                { title: "Intensive Period", content: "The Elite program is built for a specific purpose and as such is staged in a block of approximately 12-weeks. This high intensity program is a perfect launching pad into the 2026/27 club pre-season and representative assessment periods." },
                 { title: "Beyond the Elite Program", content: "The performance of players in the Elite program will be continually monitored and assessed during and after their time in the program. Depending on a player's development level and trajectory, the Rajasthan Royals Academy may make further offers to additional future programs." }
             ]
         },
