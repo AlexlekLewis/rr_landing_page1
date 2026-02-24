@@ -28,9 +28,9 @@ const BeyondTwelveWeeks = () => {
                 {/* Hero Action Banner */}
                 <motion.div variants={fadeIn} className="relative w-full h-48 md:h-72 rounded-2xl overflow-hidden mb-16 shadow-xl border border-slate-200">
                     <img
-                        src="/assets/lp2/action/rr-vs-gt-hero.jpg"
-                        alt="Rajasthan Royals vs Gujarat Titans — IPL 2025"
-                        className="w-full h-full object-cover object-[center_35%]"
+                        src="/assets/lp2/action/rr-vs-mi-hero.jpg"
+                        alt="Rajasthan Royals vs Mumbai Indians — IPL 2025"
+                        className="w-full h-full object-cover object-[center_30%]"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/80 via-transparent to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-r from-rr-pink/15 to-rr-blue/15 mix-blend-overlay" />
