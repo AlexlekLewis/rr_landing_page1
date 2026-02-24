@@ -38,23 +38,34 @@ const ProgramAtAGlance = () => {
                     <motion.div variants={fadeIn} className="bg-white border border-slate-100 border-b-4 border-b-rr-blue shadow-xl rounded-2xl p-8 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300 md:col-span-2">
                         <div className="relative z-10 flex flex-col items-center">
                             <h3 className="text-2xl font-bold text-rr-dark mb-2">2 Sessions Per Week</h3>
-                            <p className="text-rr-navy font-bold mb-3">1 Weekday Evening & 1 Weekend Session</p>
-                            <p className="text-slate-600 font-medium text-sm max-w-md mb-5">Squads are allocated a consistent 2-hour block across the 12 weeks.</p>
+                            <p className="text-rr-navy font-bold mb-3">1 Weekday Evening + 1 Weekend Session</p>
+                            <p className="text-slate-600 font-medium text-sm max-w-lg mb-5">Each player is allocated one 2-hour weekday session and one 2-hour weekend session per week, held at the same time each week for the duration of the program.</p>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-lg">
                                 {/* Weekday Block */}
                                 <div className="bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 text-center">
-                                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-1">Weekday</p>
-                                    <p className="font-bold text-rr-dark text-sm">Tuesday & Thursday</p>
-                                    <p className="text-slate-500 text-xs mt-1">5:00–7:00pm or 7:00–9:00pm</p>
+                                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-2">Weekday Session</p>
+                                    <p className="font-bold text-rr-dark text-sm mb-2">Tuesday & Thursday</p>
+                                    <div className="space-y-1">
+                                        <p className="text-slate-500 text-xs">5:00 – 7:00pm</p>
+                                        <p className="text-slate-500 text-xs">7:00 – 9:00pm</p>
+                                    </div>
+                                    <p className="text-slate-400 text-[10px] mt-2 italic">Allocated one slot</p>
                                 </div>
                                 {/* Weekend Block */}
                                 <div className="bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 text-center">
-                                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-1">Weekend</p>
-                                    <p className="font-bold text-rr-dark text-sm">Saturday & Sunday</p>
-                                    <p className="text-slate-500 text-xs mt-1">8:00–10:00am, 2:00–4:00pm or 4:00–6:00pm</p>
+                                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-2">Weekend Session</p>
+                                    <p className="font-bold text-rr-dark text-sm mb-2">Saturday & Sunday</p>
+                                    <div className="space-y-1">
+                                        <p className="text-slate-500 text-xs">8:00 – 10:00am</p>
+                                        <p className="text-slate-500 text-xs">2:00 – 4:00pm</p>
+                                        <p className="text-slate-500 text-xs">4:00 – 6:00pm</p>
+                                    </div>
+                                    <p className="text-slate-400 text-[10px] mt-2 italic">Allocated one slot</p>
                                 </div>
                             </div>
+
+                            <p className="text-sm font-bold text-rr-blue mt-5 uppercase tracking-wider">48 hours of coaching across 12 weeks</p>
                         </div>
                     </motion.div>
                 </div>

@@ -88,13 +88,33 @@ const ProgramOverviewDark = () => {
     return (
         <section className="py-24 bg-white relative overflow-hidden">
             <div className="container mx-auto px-6 relative z-10">
-                <div className="text-center max-w-3xl mx-auto mb-16">
+                <div className="text-center max-w-4xl mx-auto mb-16">
                     <h2 className="text-4xl md:text-5xl font-black text-rr-dark mb-4 uppercase">
                         What's Included <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">Overview</span>
                     </h2>
-                    <p className="text-lg text-slate-600 font-medium">
-                        Everything you need to elevate your game, mapped out in detail.
+                    <p className="text-lg text-slate-600 font-medium mb-8">
+                        48 hours of coaching contact time across 12 weeks — plus additional development beyond the training sessions.
                     </p>
+
+                    {/* Value Card */}
+                    <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 md:p-8 text-left max-w-3xl mx-auto">
+                        <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-4 text-center">Additional Value Beyond Indoor Coaching Hours</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
+                            {[
+                                "Online performance & development sessions",
+                                "Outdoor fielding programs",
+                                "Skill-specific fitness & conditioning",
+                                "Priority access to Academy tours",
+                                "Priority access to further Academy programs",
+                                "Exclusive masterclasses with Rajasthan Royals guests",
+                            ].map((item, i) => (
+                                <div key={i} className="flex items-start gap-2.5">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-rr-pink mt-1.5 shrink-0" />
+                                    <span className="text-sm text-slate-600 font-medium">{item}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
 
                 <div className="max-w-4xl mx-auto space-y-4">
