@@ -93,6 +93,19 @@ const TextAreaField = ({ label, name, value, onChange, placeholder, limit = 150 
     );
 };
 
+const calculateAge = (dobString) => {
+    const [year, month, day] = dobString.split('-').map(Number);
+    if (!year || !month || !day) return null;
+    const today = new Date();
+    const birthDate = new Date(year, month - 1, day);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age >= 0 ? age : null;
+};
+
 const Apply = () => {
     const [formData, setFormData] = useState({
         firstName: '',
@@ -117,6 +130,8 @@ const Apply = () => {
     const [cvFile, setCvFile] = useState(null);
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState(null); // 'success', 'error', null
+    const [acceptTerms, setAcceptTerms] = useState(false);
+    const [acceptComms, setAcceptComms] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -246,12 +261,23 @@ const Apply = () => {
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-6">
-                        <InputField label="Age" type="number" name="age" value={formData.age} onChange={handleChange} required />
                         <DateOfBirthInput
                             value={formData.dob}
-                            onChange={(val) => setFormData(prev => ({ ...prev, dob: val }))}
+                            onChange={(val) => {
+                                const age = val ? calculateAge(val) : '';
+                                setFormData(prev => ({ ...prev, dob: val, age: age !== null ? String(age) : '' }));
+                            }}
                             required
                         />
+                        <div className="mb-6">
+                            <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">
+                                Age <span className="text-rr-pink">*</span>
+                            </label>
+                            <div className={`w-full bg-slate-100 border border-slate-200 rounded-lg px-4 py-3 text-rr-dark font-medium ${formData.age ? '' : 'text-slate-400 italic'
+                                }`}>
+                                {formData.age ? `${formData.age} years old` : 'Calculated from DOB'}
+                            </div>
+                        </div>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-6">
@@ -345,12 +371,13 @@ const Apply = () => {
                         />
                     </div>
 
-                    <div className="mb-8 pt-6 border-t border-slate-100">
+                    <div className="mb-4 pt-6 border-t border-slate-100">
                         <label className="flex items-start gap-4 cursor-pointer group">
                             <div className="relative flex items-start mt-1">
                                 <input
                                     type="checkbox"
-                                    required
+                                    checked={acceptTerms}
+                                    onChange={(e) => setAcceptTerms(e.target.checked)}
                                     className="peer sr-only"
                                 />
                                 <div className="w-6 h-6 border-2 border-slate-300 rounded peer-checked:bg-rr-pink peer-checked:border-rr-pink transition-all flex items-center justify-center">
@@ -358,18 +385,36 @@ const Apply = () => {
                                 </div>
                             </div>
                             <span className="text-sm text-slate-600 leading-relaxed font-medium">
-                                I confirm that all information provided is accurate.
+                                I have read and agree to the <a href="/terms-conditions" target="_blank" className="text-rr-blue hover:underline">Terms &amp; Conditions</a> and <a href="/privacy-policy" target="_blank" className="text-rr-blue hover:underline">Privacy Policy</a>. I confirm that all information provided is accurate.
                                 {formData.age && parseInt(formData.age) < 18 && (
                                     <strong className="text-rr-pink block mt-1">
                                         As the applicant is under 18, this application must be completed by a parent or legal guardian.
                                     </strong>
                                 )}
-                                By submitting this application, I voluntarily agree to the <a href="/terms-conditions" target="_blank" className="text-rr-blue hover:underline">Terms &amp; Conditions</a> and <a href="/privacy-policy" target="_blank" className="text-rr-blue hover:underline">Privacy Policy</a>, acknowledging how data is collected and managed.
                             </span>
                         </label>
                     </div>
 
-                    <Button className="w-full py-4 text-xl" disabled={loading}>
+                    <div className="mb-8">
+                        <label className="flex items-start gap-4 cursor-pointer group">
+                            <div className="relative flex items-start mt-1">
+                                <input
+                                    type="checkbox"
+                                    checked={acceptComms}
+                                    onChange={(e) => setAcceptComms(e.target.checked)}
+                                    className="peer sr-only"
+                                />
+                                <div className="w-6 h-6 border-2 border-slate-300 rounded peer-checked:bg-rr-pink peer-checked:border-rr-pink transition-all flex items-center justify-center">
+                                    <Check className="w-4 h-4 text-white opacity-0 peer-checked:opacity-100" />
+                                </div>
+                            </div>
+                            <span className="text-sm text-slate-600 leading-relaxed font-medium">
+                                I confirm that I am over 18 years of age, or that this form is being submitted by a parent or legal guardian on behalf of a minor. I am happy to receive newsletters, program updates, and other information from Rajasthan Royals Academy Melbourne in the future.
+                            </span>
+                        </label>
+                    </div>
+
+                    <Button className="w-full py-4 text-xl" disabled={loading || !acceptTerms || !acceptComms}>
                         {loading ? 'SUBMITTING...' : 'SUBMIT APPLICATION'}
                     </Button>
                 </form>

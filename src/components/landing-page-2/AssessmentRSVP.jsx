@@ -7,7 +7,8 @@ const AssessmentRSVP = () => {
     const [unableToAttend, setUnableToAttend] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const [hasConsented, setHasConsented] = useState(false);
+    const [acceptTerms, setAcceptTerms] = useState(false);
+    const [acceptComms, setAcceptComms] = useState(false);
 
     // Detailed feedback state
     const [excitedReason, setExcitedReason] = useState('');
@@ -249,14 +250,14 @@ const AssessmentRSVP = () => {
                         </label>
                     </motion.div>
 
-                    {/* Consent Checkbox */}
-                    <motion.div variants={fadeIn} className="pt-8 border-t border-slate-200">
+                    {/* Consent Checkbox 1 — Terms & Privacy */}
+                    <motion.div variants={fadeIn} className="pt-8 border-t border-slate-200 space-y-4">
                         <label className="flex items-start gap-4 cursor-pointer group">
                             <div className="relative flex items-start mt-1">
                                 <input
                                     type="checkbox"
-                                    checked={hasConsented}
-                                    onChange={(e) => setHasConsented(e.target.checked)}
+                                    checked={acceptTerms}
+                                    onChange={(e) => setAcceptTerms(e.target.checked)}
                                     className="peer sr-only"
                                 />
                                 <div className="w-6 h-6 border-2 border-slate-300 rounded peer-checked:bg-rr-pink peer-checked:border-rr-pink transition-all flex items-center justify-center bg-white shadow-sm">
@@ -264,7 +265,25 @@ const AssessmentRSVP = () => {
                                 </div>
                             </div>
                             <span className="text-sm text-slate-600 font-medium leading-relaxed max-w-2xl">
-                                I confirm my RSVP selection. By submitting, I acknowledge that if the participant is under 18, this form must be completed by a parent or legal guardian. I voluntarily agree to the <a href="/terms-conditions" target="_blank" className="text-rr-pink hover:underline">Terms &amp; Conditions</a> and understand the <a href="/privacy-policy" target="_blank" className="text-rr-pink hover:underline">Privacy Policy</a>.
+                                I have read and agree to the <a href="/terms-conditions" target="_blank" className="text-rr-pink hover:underline">Terms &amp; Conditions</a> and <a href="/privacy-policy" target="_blank" className="text-rr-pink hover:underline">Privacy Policy</a>. I confirm my RSVP selection and that all information provided is accurate. If the participant is under 18, this form must be completed by a parent or legal guardian.
+                            </span>
+                        </label>
+
+                        {/* Consent Checkbox 2 — Age & Communications */}
+                        <label className="flex items-start gap-4 cursor-pointer group">
+                            <div className="relative flex items-start mt-1">
+                                <input
+                                    type="checkbox"
+                                    checked={acceptComms}
+                                    onChange={(e) => setAcceptComms(e.target.checked)}
+                                    className="peer sr-only"
+                                />
+                                <div className="w-6 h-6 border-2 border-slate-300 rounded peer-checked:bg-rr-pink peer-checked:border-rr-pink transition-all flex items-center justify-center bg-white shadow-sm">
+                                    <CheckCircle2 className="w-4 h-4 text-white opacity-0 peer-checked:opacity-100" />
+                                </div>
+                            </div>
+                            <span className="text-sm text-slate-600 font-medium leading-relaxed max-w-2xl">
+                                I confirm that I am over 18 years of age, or that this form is being submitted by a parent or legal guardian on behalf of a minor. I am happy to receive newsletters, program updates, and other information from Rajasthan Royals Academy Melbourne in the future.
                             </span>
                         </label>
                     </motion.div>
@@ -273,10 +292,10 @@ const AssessmentRSVP = () => {
                     <motion.div variants={fadeIn} className="pt-8 flex justify-end">
                         <button
                             type="submit"
-                            disabled={!hasConsented || (!selectedRSVP && !unableToAttend) || isSubmitting || (selectedRSVP === 'yes' && !excitedReason) || (selectedRSVP === 'no' && !declineReason) || (selectedRSVP === 'no' && declineReason === 'Other' && !otherReason)}
+                            disabled={!acceptTerms || !acceptComms || (!selectedRSVP && !unableToAttend) || isSubmitting || (selectedRSVP === 'yes' && !excitedReason) || (selectedRSVP === 'no' && !declineReason) || (selectedRSVP === 'no' && declineReason === 'Other' && !otherReason)}
                             className={`
                                 px-10 py-4 rounded-xl font-bold text-lg flex items-center gap-3 transition-all duration-300
-                                ${(!hasConsented || (!selectedRSVP && !unableToAttend) || (selectedRSVP === 'yes' && !excitedReason) || (selectedRSVP === 'no' && !declineReason) || (selectedRSVP === 'no' && declineReason === 'Other' && !otherReason))
+                                ${(!acceptTerms || !acceptComms || (!selectedRSVP && !unableToAttend) || (selectedRSVP === 'yes' && !excitedReason) || (selectedRSVP === 'no' && !declineReason) || (selectedRSVP === 'no' && declineReason === 'Other' && !otherReason))
                                     ? 'bg-slate-200 text-slate-400 cursor-not-allowed hidden'
                                     : 'bg-rr-dark text-white hover:shadow-xl hover:scale-[1.02]'
                                 }
