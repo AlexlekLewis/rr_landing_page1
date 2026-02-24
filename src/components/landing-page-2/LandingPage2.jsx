@@ -43,56 +43,68 @@ const LandingPage2 = () => {
             <main className="flex-1 overflow-hidden relative">
 
                 {/* --- HERO SECTION --- */}
-                <section className="relative pt-32 pb-20 px-6 lg:px-8 min-h-[80vh] flex items-center justify-center z-10 bg-rr-dark text-white overflow-hidden">
-                    {/* Background Image */}
+                <section className="relative pt-32 pb-20 px-6 lg:px-8 min-h-[85vh] flex items-center z-10 bg-rr-dark text-white overflow-hidden">
+                    {/* Background Image — More Opaque */}
                     <div className="absolute inset-0 z-0">
                         <img
                             src="/assets/sooryavanchi-arms-raised.jpg"
                             alt="Vaibhav Sooryavanshi Celebrates Century"
-                            className="w-full h-full object-cover object-[center_30%] opacity-40"
+                            className="w-full h-full object-cover object-[center_30%] opacity-60"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-b from-rr-dark/60 via-rr-dark/70 to-rr-dark"></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-rr-dark/90 via-rr-dark/70 to-rr-dark/40"></div>
+                        <div className="absolute inset-0 bg-gradient-to-b from-rr-dark/50 via-transparent to-rr-dark/90"></div>
                     </div>
 
                     <motion.div
                         initial="hidden"
                         animate="visible"
                         variants={staggerContainer}
-                        className="relative z-10 max-w-5xl mx-auto space-y-10"
+                        className="relative z-10 max-w-6xl mx-auto w-full"
                     >
-                        <motion.h1
-                            variants={fadeIn}
-                            className="text-5xl md:text-8xl font-black tracking-wide leading-tight uppercase font-heading bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent text-center md:text-left drop-shadow-lg"
-                        >
-                            IT'S TIME TO SHINE
-                        </motion.h1>
+                        {/* Two Column Grid: Content Left, Logo Right */}
+                        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-10 md:gap-16 items-center">
+                            {/* Left: Headline + Key Info */}
+                            <div className="space-y-8">
+                                <motion.h1
+                                    variants={fadeIn}
+                                    className="text-5xl md:text-8xl font-black tracking-wide leading-[0.95] uppercase font-heading bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent drop-shadow-lg"
+                                >
+                                    IT'S TIME<br />TO SHINE
+                                </motion.h1>
 
-                        <motion.div variants={fadeIn} className="space-y-6 text-xl md:text-2xl text-slate-300 leading-relaxed font-light">
-                            <p>
-                                Thank you for taking the time to apply for a position in the <span className="text-white font-medium">Rajasthan Royals Elite Program</span>. We are pleased to provide an invitation to the next stage in the selection process.
-                            </p>
-                            <p className="text-lg md:text-xl">
-                                As an identified player from within our scouting network, we are providing a first round invitation to attend the exclusive assessment session on the afternoon of <span className="text-white font-medium">Sunday March 1st</span> at <span className="text-white font-medium">Cutting Edge Cricket Centre</span> in Bundoora. Multiple sessions between 1.30pm and 4.30pm will be held, and should you accept the invitation to the assessment session, you will be assigned a session time which will be communicated by Friday February 27. We will also provide information on the format of the session.
-                            </p>
-                            <p className="text-lg md:text-xl">
-                                This session will be led by <span className="text-white font-medium">Siddhartha Lahiri</span>, the Rajasthan Royals Head of International Talent Development, as well as Assistant and Performance Coach for Rajasthan, Paarl and Barbados Royals. Alongside Siddhartha, our Melbourne coaching and leadership team will also be present and working through the final selection.
-                            </p>
-                            <p className="text-lg md:text-xl">
-                                Please now take the time to read through the information below, including the details of our world class T20 based Academy program, the times and dates that the program is scheduled to operated, the benefits of being a part of the initial intake of Melbourne’s Rajasthan Royals Academy Elite Program, as well as the pricing and payment options of this premium program.
-                            </p>
-                        </motion.div>
+                                <motion.p variants={fadeIn} className="text-lg md:text-xl text-slate-300 leading-relaxed font-light max-w-2xl">
+                                    You have been identified by our scouting network and invited to the next stage of the <span className="text-white font-medium">Rajasthan Royals Elite Program</span> selection process. We are pleased to offer you a place at the exclusive assessment session.
+                                </motion.p>
 
-                        {/* RRA Melbourne Logo */}
-                        <motion.div
-                            variants={fadeIn}
-                            className="flex justify-center md:justify-start pt-4"
-                        >
-                            <img
-                                src="/assets/MELBOURNE.ai.png"
-                                alt="Rajasthan Royals Academy Melbourne"
-                                className="w-44 md:w-56 drop-shadow-2xl opacity-90 hover:opacity-100 hover:scale-105 transition-all duration-500"
-                            />
-                        </motion.div>
+                                {/* Key Info Highlights */}
+                                <motion.div variants={fadeIn} className="flex flex-wrap gap-3">
+                                    <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3">
+                                        <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-0.5">When</p>
+                                        <p className="text-white font-bold text-sm">Sunday March 1st • 1:30–4:30pm</p>
+                                    </div>
+                                    <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3">
+                                        <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-0.5">Where</p>
+                                        <p className="text-white font-bold text-sm">Cutting Edge Cricket Centre, Bundoora</p>
+                                    </div>
+                                    <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3">
+                                        <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-0.5">Led By</p>
+                                        <p className="text-white font-bold text-sm">Siddhartha Lahiri — RR Head of Int'l Talent</p>
+                                    </div>
+                                </motion.div>
+                            </div>
+
+                            {/* Right: RRA Melbourne Logo */}
+                            <motion.div
+                                variants={fadeIn}
+                                className="flex justify-center md:justify-end"
+                            >
+                                <img
+                                    src="/assets/MELBOURNE.ai.png"
+                                    alt="Rajasthan Royals Academy Melbourne"
+                                    className="w-40 md:w-52 drop-shadow-2xl opacity-90 hover:opacity-100 hover:scale-105 transition-all duration-500"
+                                />
+                            </motion.div>
+                        </div>
                     </motion.div>
                 </section>
 
