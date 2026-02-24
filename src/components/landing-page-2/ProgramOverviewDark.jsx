@@ -101,12 +101,13 @@ const ProgramOverviewDark = () => {
                         <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-4 text-center">Additional Value Beyond Indoor Coaching Hours</p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
                             {[
-                                "Online performance & development sessions",
+                                "Online mental skill development sessions",
+                                "Guest online sessions with Rajasthan Royals Academy coaches",
                                 "Outdoor fielding programs",
                                 "Skill-specific fitness & conditioning",
                                 "Priority access to Academy tours",
                                 "Priority access to further Academy programs",
-                                "Exclusive masterclasses with Rajasthan Royals guests",
+                                "Priority access to masterclasses with Rajasthan Royals Academy guests",
                             ].map((item, i) => (
                                 <div key={i} className="flex items-start gap-2.5">
                                     <span className="w-1.5 h-1.5 rounded-full bg-rr-pink mt-1.5 shrink-0" />
