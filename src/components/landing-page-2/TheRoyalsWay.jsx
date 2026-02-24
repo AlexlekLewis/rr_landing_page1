@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Quote } from 'lucide-react';
 
 const TheRoyalsWay = () => {
     const fadeIn = {
@@ -40,14 +39,14 @@ const TheRoyalsWay = () => {
             >
                 {/* Quote Section */}
                 <motion.div variants={fadeIn} className="mb-20 text-center relative max-w-4xl mx-auto">
-                    <Quote className="w-16 h-16 text-rr-pink/10 absolute -top-8 -left-8 md:-left-12 rotate-180" />
+                    <span className="text-7xl md:text-8xl text-rr-pink/10 absolute -top-6 -left-4 md:-left-8 font-serif select-none leading-none" aria-hidden="true">“</span>
                     <h3 className="text-3xl md:text-5xl font-black text-rr-dark leading-tight tracking-tight relative z-10">
                         "We don't wait for the finished product — we back talent early and <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">teach boldly</span>."
                     </h3>
                     <p className="text-xl md:text-2xl font-bold text-rr-navy mt-6">
                         "We value courage over comfort, curiosity over ego, and joy over jargon."
                     </p>
-                    <Quote className="w-16 h-16 text-rr-blue/20 absolute -bottom-8 -right-8 md:-right-12" />
+                    <span className="text-7xl md:text-8xl text-rr-blue/20 absolute -bottom-6 -right-4 md:-right-8 font-serif select-none leading-none" aria-hidden="true">”</span>
                 </motion.div>
 
                 {/* The Royals Way Title */}

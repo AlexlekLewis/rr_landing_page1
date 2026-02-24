@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Play } from 'lucide-react';
 
 const VIDEO_URL = 'https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/Kumar%20Video%20Landing/Final%20Andy%20%26%20Kumar%20Edit.mov';
 
@@ -61,7 +60,7 @@ const KumarVideo = () => {
                             onClick={handlePlay}
                         >
                             <div className="w-20 h-20 bg-rr-dark/60 border border-white/30 rounded-full flex items-center justify-center backdrop-blur-md group-hover:scale-110 group-hover:bg-rr-dark/80 transition-all duration-300 shadow-lg">
-                                <Play className="w-8 h-8 text-white fill-current ml-1" />
+                                <svg viewBox="0 0 24 24" fill="white" className="w-8 h-8 ml-1"><polygon points="5,3 19,12 5,21" /></svg>
                             </div>
                             <p className="absolute bottom-6 left-6 text-sm font-bold tracking-wider text-white drop-shadow-md uppercase">Kumar Sangakkara</p>
                         </div>

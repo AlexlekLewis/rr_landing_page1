@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2, ChevronRight } from 'lucide-react';
+
 
 const AssessmentRSVP = () => {
     const [selectedRSVP, setSelectedRSVP] = useState(null);
@@ -57,7 +57,7 @@ const AssessmentRSVP = () => {
             <section className="py-24 px-6 lg:px-8 relative z-10 bg-slate-50 border-t border-slate-200" id="rsvp">
                 <motion.div initial="hidden" animate="visible" variants={fadeIn} className="max-w-4xl mx-auto text-center space-y-6 bg-white border border-slate-200 shadow-xl rounded-3xl p-12">
                     <div className="w-20 h-20 bg-rr-pink/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <CheckCircle2 className="w-10 h-10 text-rr-pink" />
+                        <span className="text-4xl text-rr-pink font-bold">✓</span>
                     </div>
                     {selectedRSVP === 'yes' ? (
                         <>
@@ -242,7 +242,7 @@ const AssessmentRSVP = () => {
                                 w-6 h-6 rounded border-2 flex items-center justify-center mr-4 shrink-0 transition-colors mt-0.5 bg-white
                                 ${unableToAttend ? 'border-rr-blue bg-rr-blue' : 'border-slate-300'}
                             `}>
-                                {unableToAttend && <CheckCircle2 className="w-4 h-4 text-white" />}
+                                {unableToAttend && <span className="text-xs text-white font-bold">✓</span>}
                             </div>
                             <span className={`text-lg font-bold leading-relaxed ${unableToAttend ? 'text-rr-dark' : 'text-slate-600'}`}>
                                 I cannot attend the assessment, but I am still extremely interested in joining the foundation intake.
@@ -261,7 +261,7 @@ const AssessmentRSVP = () => {
                                     className="peer sr-only"
                                 />
                                 <div className="w-6 h-6 border-2 border-slate-300 rounded peer-checked:bg-rr-pink peer-checked:border-rr-pink transition-all flex items-center justify-center bg-white shadow-sm">
-                                    <CheckCircle2 className="w-4 h-4 text-white opacity-0 peer-checked:opacity-100" />
+                                    <span className="text-xs text-white font-bold opacity-0 peer-checked:opacity-100">✓</span>
                                 </div>
                             </div>
                             <span className="text-sm text-slate-600 font-medium leading-relaxed max-w-2xl">
@@ -279,7 +279,7 @@ const AssessmentRSVP = () => {
                                     className="peer sr-only"
                                 />
                                 <div className="w-6 h-6 border-2 border-slate-300 rounded peer-checked:bg-rr-pink peer-checked:border-rr-pink transition-all flex items-center justify-center bg-white shadow-sm">
-                                    <CheckCircle2 className="w-4 h-4 text-white opacity-0 peer-checked:opacity-100" />
+                                    <span className="text-xs text-white font-bold opacity-0 peer-checked:opacity-100">✓</span>
                                 </div>
                             </div>
                             <span className="text-sm text-slate-600 font-medium leading-relaxed max-w-2xl">
@@ -302,7 +302,7 @@ const AssessmentRSVP = () => {
                             `}
                         >
                             {isSubmitting ? 'Recording Decision...' : 'Submit Decision'}
-                            {!isSubmitting && <ChevronRight className="w-5 h-5" />}
+                            {!isSubmitting && <span className="text-lg">→</span>}
                         </button>
                     </motion.div>
                 </form>

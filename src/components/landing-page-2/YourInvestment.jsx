@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2, Calculator } from 'lucide-react';
 
 const YourInvestment = () => {
     const fadeIn = {
@@ -15,6 +14,13 @@ const YourInvestment = () => {
             transition: { staggerChildren: 0.1 }
         }
     };
+
+    const inclusions = [
+        "12 Weeks of Elite Coaching (2 on 1 & Squad)",
+        "Indoor & Outdoor Facilities Access",
+        "Player DNA Profile & Individual Dev Plan",
+        "Player Training Apparel Kit"
+    ];
 
     return (
         <section className="py-24 px-6 lg:px-8 relative z-10 bg-white border-t border-b border-slate-200">
@@ -50,35 +56,22 @@ const YourInvestment = () => {
                         <p className="text-slate-400 font-medium mb-8 text-sm italic">Payment plans are available</p>
 
                         <div className="space-y-4">
-                            <div className="flex items-center gap-3">
-                                <CheckCircle2 className="w-5 h-5 text-rr-pink flex-shrink-0" />
-                                <span className="text-slate-600 font-medium">12 Weeks of Elite Coaching (2 on 1 & Squad)</span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <CheckCircle2 className="w-5 h-5 text-rr-pink flex-shrink-0" />
-                                <span className="text-slate-600 font-medium">Indoor & Outdoor Facilities Access</span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <CheckCircle2 className="w-5 h-5 text-rr-pink flex-shrink-0" />
-                                <span className="text-slate-600 font-medium">Player DNA Profile & Individual Dev Plan</span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <CheckCircle2 className="w-5 h-5 text-rr-pink flex-shrink-0" />
-                                <span className="text-slate-600 font-medium">Player Training Apparel Kit</span>
-                            </div>
+                            {inclusions.map((item, index) => (
+                                <div key={index} className="flex items-center gap-3">
+                                    <span className="w-5 h-5 flex-shrink-0 rounded-full bg-rr-pink/10 flex items-center justify-center">
+                                        <span className="text-rr-pink text-xs font-bold">✓</span>
+                                    </span>
+                                    <span className="text-slate-600 font-medium">{item}</span>
+                                </div>
+                            ))}
                         </div>
                     </motion.div>
 
                     {/* ROI / Value Breakdown */}
                     <motion.div variants={fadeIn} className="relative z-10">
-                        <div className="flex items-center gap-4 mb-6">
-                            <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center shadow-sm">
-                                <Calculator className="w-6 h-6 text-rr-blue" />
-                            </div>
-                            <div>
-                                <h3 className="text-2xl font-bold text-rr-dark">The ROI Breakdown</h3>
-                                <p className="text-rr-blue font-medium">Value, not just cost.</p>
-                            </div>
+                        <div className="mb-6">
+                            <h3 className="text-2xl font-bold text-rr-dark">The ROI Breakdown</h3>
+                            <p className="text-rr-blue font-medium">Value, not just cost.</p>
                         </div>
 
                         <div className="space-y-6 text-slate-600 leading-relaxed font-medium">

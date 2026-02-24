@@ -1,9 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import {
-    Activity, ShieldCheck, HeartPulse, BrainCircuit,
-    Crosshair, Zap, Ruler, Trello
-} from 'lucide-react';
 
 const RrampDnaProfile = () => {
     const fadeIn = {
@@ -20,14 +16,14 @@ const RrampDnaProfile = () => {
     };
 
     const dnaBoxes = [
-        { title: "Technical Mastery", icon: Crosshair, desc: "Biomechanical efficiency and repeatable core skills." },
-        { title: "Tactical Execution", icon: Trello, desc: "Game awareness, field placement manipulation, and scenario planning." },
-        { title: "Physical Conditioning", icon: HeartPulse, desc: "Cricket-specific endurance, strength, and explosive power." },
-        { title: "Mental Resilience", icon: BrainCircuit, desc: "Pressure management, routine building, and emotional control." },
-        { title: "Athletic Fielding", icon: Activity, desc: "Ground coverage, throwing speed and accuracy, and catching reliability." },
-        { title: "Match Impact", icon: ShieldCheck, desc: "Ability to influence the outcome of the game under pressure." },
-        { title: "Power Hitting", icon: Zap, desc: "Range hitting, boundary maximization, and scoring intent." },
-        { title: "Self-Awareness", icon: Ruler, desc: "Understanding personal strengths, weaknesses, and learning styles." }
+        { title: "Technical Mastery", desc: "Biomechanical efficiency and repeatable core skills." },
+        { title: "Tactical Execution", desc: "Game awareness, field placement manipulation, and scenario planning." },
+        { title: "Physical Conditioning", desc: "Cricket-specific endurance, strength, and explosive power." },
+        { title: "Mental Resilience", desc: "Pressure management, routine building, and emotional control." },
+        { title: "Athletic Fielding", desc: "Ground coverage, throwing speed and accuracy, and catching reliability." },
+        { title: "Match Impact", desc: "Ability to influence the outcome of the game under pressure." },
+        { title: "Power Hitting", desc: "Range hitting, boundary maximization, and scoring intent." },
+        { title: "Self-Awareness", desc: "Understanding personal strengths, weaknesses, and learning styles." }
     ];
 
     return (
@@ -82,9 +78,11 @@ const RrampDnaProfile = () => {
                             variants={fadeIn}
                             className="bg-white border border-slate-100 shadow-md rounded-2xl p-6 relative overflow-hidden group hover:-translate-y-1 hover:shadow-lg hover:border-rr-pink/30 transition-all duration-300 flex flex-col items-center text-center"
                         >
-                            <div className="w-14 h-14 bg-rr-pink/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-rr-pink/20 transition-all duration-300">
-                                <box.icon className="w-7 h-7 text-rr-pink" />
-                            </div>
+                            {/* Accent stripe */}
+                            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-pink to-rr-blue rounded-t-2xl" />
+                            <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue mb-3">
+                                {String(index + 1).padStart(2, '0')}
+                            </span>
                             <h3 className="text-lg font-bold text-rr-dark mb-2">{box.title}</h3>
                             <p className="text-sm text-slate-600 font-medium leading-relaxed">{box.desc}</p>
                         </motion.div>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
 
 const AcceptInvitationCTA = () => {
     const scrollToRSVP = () => {
@@ -21,7 +20,6 @@ const AcceptInvitationCTA = () => {
                     className="group inline-flex items-center gap-3 px-10 py-4 rounded-xl font-bold text-lg bg-gradient-to-r from-rr-pink to-rr-blue text-white hover:shadow-xl hover:scale-[1.03] transition-all duration-300"
                 >
                     Accept Invitation
-                    <ChevronDown className="w-5 h-5 group-hover:translate-y-0.5 transition-transform" />
                 </button>
             </motion.div>
         </section>

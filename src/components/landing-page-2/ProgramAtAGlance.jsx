@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, MapPin, Clock } from 'lucide-react';
 
 const ProgramAtAGlance = () => {
     const fadeIn = {
@@ -30,9 +29,6 @@ const ProgramAtAGlance = () => {
                     {/* Duration Tile */}
                     <motion.div variants={fadeIn} className="bg-white border border-slate-100 border-b-4 border-b-rr-pink shadow-xl rounded-2xl p-8 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300 text-center">
                         <div className="relative z-10 flex flex-col items-center">
-                            <div className="w-16 h-16 bg-rr-pink/10 rounded-full flex items-center justify-center mb-6 text-rr-pink">
-                                <Calendar className="w-8 h-8" />
-                            </div>
                             <h3 className="text-2xl font-bold text-rr-dark mb-2">12 Weeks</h3>
                             <p className="text-slate-600 font-medium">Comprehensive holistic T20 development program designed for measurable growth.</p>
                         </div>
@@ -41,9 +37,6 @@ const ProgramAtAGlance = () => {
                     {/* Schedule Tile */}
                     <motion.div variants={fadeIn} className="bg-white border border-slate-100 border-b-4 border-b-rr-blue shadow-xl rounded-2xl p-8 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300 text-center md:col-span-2">
                         <div className="relative z-10 flex flex-col items-center">
-                            <div className="w-16 h-16 bg-rr-blue/10 rounded-full flex items-center justify-center mb-6 text-rr-blue">
-                                <Clock className="w-8 h-8" />
-                            </div>
                             <h3 className="text-2xl font-bold text-rr-dark mb-2">2 Sessions Per Week</h3>
                             <p className="text-rr-navy font-bold mb-2">1 Weekday Evening & 1 Weekend Session</p>
                             <p className="text-slate-600 font-medium text-sm max-w-md">We value your time and travel commitments. Sessions are strictly mapped to 2-hour blocks to maximize intensity without overwhelming your schedule.</p>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { RotateCw, Shield, Crosshair, Dumbbell, Brain } from 'lucide-react';
 
 const SpecialistCoaching = () => {
     const fadeIn = {
@@ -19,31 +18,26 @@ const SpecialistCoaching = () => {
     const specialties = [
         {
             title: "Spin Mastery & Variation",
-            icon: RotateCw,
             desc: "Effective spin in T20 is about control, deception, and taking the game away from a batter at the right moment. Stock ball accuracy, flight and loop, wrong'uns, arm balls — and the tactical intelligence to know when and where each variation is the right weapon.",
             color: "from-blue-500 to-rr-blue"
         },
         {
             title: "Wicketkeeping Craft",
-            icon: Shield,
             desc: "Modern T20 keeping demands explosive athleticism, technical precision, and match intelligence. Stance and footwork, standing-up skills, glove work in high-pressure moments, and reading bowlers and batters — separating good keepers from exceptional ones.",
             color: "from-amber-500 to-orange-600"
         },
         {
             title: "Game-Changing Fielding",
-            icon: Crosshair,
             desc: "Elite fielders don't just save runs — they change the momentum of matches. Ground coverage, long-barrier and sliding technique, direct-hit accuracy, and high-pressure catching that turns half-chances into wickets. Millimetres matter and this is where they're trained.",
             color: "from-emerald-400 to-teal-600"
         },
         {
             title: "Strength & Conditioning",
-            icon: Dumbbell,
             desc: "Cricket-specific athleticism built for T20 performance: explosive power for hitting, bowling endurance, speed and agility in the field, and recovery management across a full 12 weeks. S&C integrated to keep players performing at their peak throughout the program.",
             color: "from-purple-500 to-rr-pink"
         },
         {
             title: "Mental Performance & Mindset",
-            icon: Brain,
             desc: "Elite T20 cricketers make better decisions faster, manage risk more accurately, and execute under pressure more consistently. Pre-performance routines, pressure management, acceptable risk decision-making, and the self-awareness to back your game when it matters most.",
             color: "from-rr-pink to-rose-600"
         }
@@ -96,13 +90,10 @@ const SpecialistCoaching = () => {
                                 ${index >= 3 ? 'lg:col-span-1.5' : ''} 
                             `}
                         >
-                            <div className="relative z-10 flex flex-col h-full">
-                                <div className={`w-14 h-14 bg-gradient-to-br ${item.color} rounded-2xl flex items-center justify-center p-[1px] mb-6 shadow-md`}>
-                                    <div className="w-full h-full bg-white rounded-[15px] flex items-center justify-center">
-                                        <item.icon className="w-6 h-6 text-slate-700" />
-                                    </div>
-                                </div>
+                            {/* Accent stripe at top */}
+                            <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${item.color} rounded-t-3xl`} />
 
+                            <div className="relative z-10 flex flex-col h-full">
                                 <h3 className="text-xl font-bold text-rr-dark mb-4">{item.title}</h3>
                                 <p className="text-slate-600 leading-relaxed text-sm flex-grow font-medium">
                                     {item.desc}

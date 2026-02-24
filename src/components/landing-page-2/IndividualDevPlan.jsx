@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Minus, UserCheck } from 'lucide-react';
 
 const AccordionSection = ({ title, items, defaultOpen = false }) => {
     const [isOpen, setIsOpen] = useState(defaultOpen);
@@ -11,14 +10,10 @@ const AccordionSection = ({ title, items, defaultOpen = false }) => {
                 onClick={() => setIsOpen(!isOpen)}
                 className="w-full p-6 md:p-8 flex justify-between items-center text-left focus:outline-none group"
             >
-                <div className="flex items-center gap-4">
-                    <UserCheck className="w-6 h-6 text-rr-blue group-hover:text-rr-pink transition-colors" />
-                    <h3 className="text-xl md:text-2xl font-black text-rr-dark group-hover:text-rr-pink transition-colors">{title}</h3>
-                </div>
-                {isOpen
-                    ? <Minus className="w-6 h-6 text-rr-pink flex-shrink-0" />
-                    : <Plus className="w-6 h-6 text-slate-400 flex-shrink-0" />
-                }
+                <h3 className="text-xl md:text-2xl font-black text-rr-dark group-hover:text-rr-pink transition-colors">{title}</h3>
+                <span className="text-2xl font-light text-slate-400 flex-shrink-0 ml-4 group-hover:text-rr-pink transition-colors">
+                    {isOpen ? '−' : '+'}
+                </span>
             </button>
             <AnimatePresence initial={defaultOpen}>
                 {isOpen && (

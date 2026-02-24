@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Target, Activity, ShieldCheck } from 'lucide-react';
 
 const PhaseEffectiveness = () => {
     const fadeIn = {
@@ -24,7 +23,6 @@ const PhaseEffectiveness = () => {
             title: "Foundation & Execution",
             weeks: "Weeks 1-4",
             description: "Establishing technical baselines. Intense focus on repetitive skill execution under low-to-medium pressure to embed muscle memory and correct biomechanical inefficiencies.",
-            icon: Target,
             color: "from-blue-500 to-rr-blue"
         },
         {
@@ -32,7 +30,6 @@ const PhaseEffectiveness = () => {
             title: "Pressure Testing",
             weeks: "Weeks 5-8",
             description: "Elevating the environment. Introduction of constrained match scenarios and higher-velocity challenges to stress-test skills and measure decision-making under genuine pressure.",
-            icon: Activity,
             color: "from-purple-500 to-rr-pink"
         },
         {
@@ -40,7 +37,6 @@ const PhaseEffectiveness = () => {
             title: "Match Domination",
             weeks: "Weeks 9-12",
             description: "Full contextual immersion. High-intensity T20 match simulations. Players are tested on their ability to read the game, execute the Royals Way, and influence outcomes.",
-            icon: ShieldCheck,
             color: "from-rr-pink to-orange-500"
         }
     ];
@@ -81,17 +77,12 @@ const PhaseEffectiveness = () => {
                             variants={fadeIn}
                             className="bg-white border border-slate-100 shadow-xl rounded-3xl p-8 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300"
                         >
-                            {/* Ambient Glow */}
-                            <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${phase.color} opacity-5 rounded-full blur-2xl group-hover:opacity-10 transition-opacity duration-300`} />
+                            {/* Accent stripe at top */}
+                            <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${phase.color}`} />
 
                             <div className="relative z-10">
                                 <div className="flex justify-between items-start mb-8">
-                                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${phase.color} flex items-center justify-center p-[2px] shadow-sm`}>
-                                        <div className="w-full h-full bg-white rounded-[14px] flex items-center justify-center">
-                                            <phase.icon className="w-6 h-6 text-rr-dark" />
-                                        </div>
-                                    </div>
-                                    <span className="text-5xl font-black text-slate-100 tracking-tighter">
+                                    <span className={`text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br ${phase.color}`}>
                                         {phase.number}
                                     </span>
                                 </div>
