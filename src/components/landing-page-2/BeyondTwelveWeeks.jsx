@@ -26,7 +26,7 @@ const BeyondTwelveWeeks = () => {
                 className="max-w-6xl mx-auto"
             >
                 {/* Action Image — Approved Media/LP2 */}
-                <motion.div variants={fadeIn} className="relative w-full aspect-video rounded-2xl overflow-hidden mb-16 shadow-xl border border-slate-200 group">
+                <motion.div variants={fadeIn} className="relative w-full h-40 md:aspect-video md:h-auto rounded-2xl overflow-hidden mb-8 md:mb-16 shadow-xl border border-slate-200 group">
                     <img
                         src="/assets/lp2/on-pace-off-pace.avif"
                         alt="Rajasthan Royals — Elite Performance"

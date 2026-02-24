@@ -75,7 +75,7 @@ const SpecialistCoaching = () => {
                 {/* Action Image — Approved Media/LP2 */}
                 <motion.div
                     variants={fadeIn}
-                    className="relative w-full aspect-video rounded-2xl overflow-hidden mb-12 border border-slate-200 shadow-xl group"
+                    className="relative w-full h-40 md:aspect-video md:h-auto rounded-2xl overflow-hidden mb-8 md:mb-12 border border-slate-200 shadow-xl group"
                 >
                     <img
                         src="/assets/lp2/sooryavanshi-century-walkoff.avif"

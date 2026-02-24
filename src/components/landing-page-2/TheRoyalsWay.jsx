@@ -66,7 +66,7 @@ const TheRoyalsWay = () => {
                 className="max-w-5xl mx-auto"
             >
                 {/* Action Image — LP1 Style */}
-                <motion.div variants={fadeIn} className="relative w-full aspect-video rounded-2xl overflow-hidden mb-16 shadow-xl border border-slate-200 group">
+                <motion.div variants={fadeIn} className="relative w-full h-40 md:aspect-video md:h-auto rounded-2xl overflow-hidden mb-8 md:mb-16 shadow-xl border border-slate-200 group">
                     <img
                         src="/assets/lp2/jaiswal-power-hitting.webp"
                         alt="Yashasvi Jaiswal — Power Hitting"

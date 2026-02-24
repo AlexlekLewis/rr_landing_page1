@@ -39,7 +39,7 @@ const ProgramAtAGlance = () => {
                         <div className="relative z-10 flex flex-col items-center">
                             <h3 className="text-2xl font-bold text-rr-dark mb-2">2 Sessions Per Week</h3>
                             <p className="text-rr-navy font-bold mb-3">1 Weekday Evening + 1 Weekend Session</p>
-                            <p className="text-slate-600 font-medium text-sm max-w-lg mb-5">Each player is allocated one 2-hour weekday session and one 2-hour weekend session per week, held at the same time each week for the duration of the program.</p>
+                            <p className="text-slate-600 font-medium text-sm max-w-lg mb-5">Each player is allocated one 2-hour weekday session and one 2-hour weekend session per week.</p>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-lg">
                                 {/* Weekday Block */}

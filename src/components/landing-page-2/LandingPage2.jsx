@@ -50,7 +50,7 @@ const LandingPage2 = () => {
             <main className="flex-1 overflow-hidden relative">
 
                 {/* --- HERO SECTION --- */}
-                <section id="lp2-hero" className="relative pt-32 pb-20 px-6 lg:px-8 min-h-[85vh] flex items-center z-10 bg-rr-dark text-white overflow-hidden">
+                <section id="lp2-hero" className="relative pt-32 pb-20 px-6 lg:px-8 min-h-[70vh] md:min-h-[85vh] flex items-center z-10 bg-rr-dark text-white overflow-hidden">
                     {/* Background Image — More Opaque */}
                     <div className="absolute inset-0 z-0">
                         <img
@@ -113,7 +113,7 @@ const LandingPage2 = () => {
                         </motion.h2>
 
                         {/* Action Image — LP1 Style */}
-                        <motion.div variants={fadeIn} className="relative w-full aspect-video rounded-2xl overflow-hidden mb-8 shadow-xl border border-slate-200 group">
+                        <motion.div variants={fadeIn} className="relative w-full h-40 md:aspect-video md:h-auto rounded-2xl overflow-hidden mb-6 md:mb-8 shadow-xl border border-slate-200 group">
                             <img
                                 src="/assets/lp2/jaiswal-celebrating-100.webp"
                                 alt="Yashasvi Jaiswal — Century Celebration"
