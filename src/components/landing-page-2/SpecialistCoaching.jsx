@@ -72,17 +72,17 @@ const SpecialistCoaching = () => {
                     </motion.p>
                 </div>
 
-                {/* Player Portrait — LP1 Style */}
+                {/* Action Image — Approved Media/LP2 */}
                 <motion.div
                     variants={fadeIn}
-                    className="relative w-full aspect-[5/2] rounded-2xl overflow-hidden mb-12 border border-slate-200 shadow-xl group bg-gradient-to-br from-rr-dark via-rr-navy to-rr-dark"
+                    className="relative w-full aspect-video rounded-2xl overflow-hidden mb-12 border border-slate-200 shadow-xl group"
                 >
                     <img
-                        src="/assets/lp2/sam-curran.png"
-                        alt="Sam Curran — Rajasthan Royals"
-                        className="w-full h-full object-contain object-bottom group-hover:scale-105 transition-transform duration-700"
+                        src="/assets/lp2/sooryavanshi-century-walkoff.avif"
+                        alt="Vaibhav Sooryavanshi — Century Walkoff"
+                        className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                 </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
