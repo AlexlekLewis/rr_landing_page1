@@ -94,6 +94,10 @@ const LandingPage2 = () => {
                                     <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-0.5">Led By</p>
                                     <p className="text-white font-bold text-sm">Siddhartha Lahiri — Head of International Player Development</p>
                                 </div>
+                                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3">
+                                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-0.5">Assessment Fee</p>
+                                    <p className="text-white font-bold text-sm">No fee — this session is complimentary</p>
+                                </div>
                             </motion.div>
                         </div>
                     </motion.div>

@@ -223,7 +223,7 @@ const AssessmentRSVP = () => {
                     <motion.div variants={fadeIn} className="space-y-4 mb-12">
                         <h2 className="text-3xl md:text-5xl font-bold text-rr-dark tracking-tight">Secure Your Spot</h2>
                         <p className="text-rr-pink font-bold text-base md:text-lg">
-                            Spots for the Sunday assessment session are capped.
+                            Spots for Sunday's free assessment session are capped.
                         </p>
                         <p className="text-slate-600 font-medium text-lg max-w-2xl">
                             Being offered a spot at the assessment session means our selection team are strongly considering offering you a place in the Elite Program. Which of these answers best reflects your position on the Elite Program?
