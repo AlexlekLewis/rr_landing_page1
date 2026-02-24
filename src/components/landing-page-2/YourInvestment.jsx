@@ -50,7 +50,8 @@ const YourInvestment = () => {
                             <span className="text-4xl text-slate-400 font-bold mb-2">$</span>
                             <span className="text-7xl font-black text-white tracking-tighter">2,995</span>
                         </div>
-                        <p className="text-slate-400 font-medium mb-8">Includes GST & All Transaction Fees</p>
+                        <p className="text-slate-400 font-medium mb-2">Includes GST & All Transaction Fees</p>
+                        <p className="text-slate-500 font-medium mb-8 text-sm italic">Payment plans are available</p>
 
                         <div className="space-y-4">
                             <div className="flex items-center gap-3">
@@ -91,14 +92,14 @@ const YourInvestment = () => {
                             <div className="bg-black/30 border border-white/5 rounded-xl p-6 relative overflow-hidden">
                                 <div className="absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-rr-pink to-rr-blue" />
                                 <p className="font-semibold text-white mb-2">
-                                    Our program breaks down to approximately <span className="text-rr-pink text-xl">$55 per hour</span>.
+                                    Our Elite Program breaks down to approximately <span className="text-rr-pink text-xl">$55 per hour</span>.
                                 </p>
                                 <p className="text-sm text-slate-400">
-                                    This isn't just one coach feeding balls. This includes access to our international coaching network, premium facilities, data monitoring, mental performance training, and S&C programming.
+                                    This includes access to our international coaching network, premium facilities, data monitoring, mental performance training, and S&C programming.
                                 </p>
                             </div>
                             <p>
-                                We believe in providing an unmatched high-performance ecosystem at a price point that makes elite development accessible to the best talent.
+                                We believe in unlocking your potential in a premier T20 environment, providing an ecosystem that makes elite development accessible to the best talent.
                             </p>
                         </div>
                     </motion.div>

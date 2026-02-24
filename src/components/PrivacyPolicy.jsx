@@ -40,8 +40,10 @@ const PrivacyPolicy = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">2. Information We Collect</h2>
-                        <p className="text-rr-dark/80 leading-relaxed mb-4">We may collect and process the following personal data:</p>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">2. Information We Collect &amp; Voluntary Provision</h2>
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            By filling out our Application (Phase 1) or Assessment RSVP forms (Phase 2), you voluntarily provide and consent to the collection of your personal data. We may collect and process the following personal data:
+                        </p>
                         <ul className="list-disc pl-6 space-y-2 text-rr-dark/80">
                             <li><strong>Personal Identifiers:</strong> Full name, date of birth, nationality, and gender.</li>
                             <li><strong>Contact Information:</strong> Email address, phone number, and residential address.</li>
@@ -53,7 +55,14 @@ const PrivacyPolicy = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">3. Data Ownership</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">3. Underage Applicants (Under 18)</h2>
+                        <p className="text-rr-dark/80 leading-relaxed">
+                            For any applicant under the age of 18, all applications, RSVPs, and associated forms <strong>must</strong> be completed and submitted by a parent or legal guardian. We do not directly collect email addresses or phone numbers from applicants under 18; instead, we collect the contact details of their parent/guardian. By submitting an application or RSVP on behalf of a minor, the parent/guardian explicitly consents to the collection, use, and processing of the minor's data as described in this policy, and acknowledges that they are voluntarily providing this information.
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">4. Data Ownership</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             All personal data submitted by applicants remains the property of the Rajasthan Royals
                             Academy Melbourne. By submitting your application, you acknowledge that the Rajasthan Royals Academy Melbourne
@@ -64,7 +73,7 @@ const PrivacyPolicy = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">4. How We Use Your Information</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">5. How We Use Your Information</h2>
                         <p className="text-rr-dark/80 leading-relaxed mb-4">We use the information we collect for the following purposes:</p>
                         <ul className="list-disc pl-6 space-y-2 text-rr-dark/80">
                             <li>To process and evaluate your application to the Academy program.</li>
@@ -77,7 +86,7 @@ const PrivacyPolicy = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">5. Data Sharing &amp; Third Parties</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">6. Data Sharing &amp; Third Parties</h2>
                         <p className="text-rr-dark/80 leading-relaxed mb-4">
                             We will never sell, rent, or trade your personal information to third parties for
                             marketing purposes. Your data may be shared only in the following circumstances:
@@ -90,7 +99,7 @@ const PrivacyPolicy = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">6. Data Security</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">7. Data Security</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             We implement appropriate technical and organisational measures to safeguard your
                             personal data against unauthorised access, alteration, disclosure, or destruction.
@@ -101,7 +110,7 @@ const PrivacyPolicy = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">7. Data Retention</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">8. Data Retention</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             We retain your personal data for as long as necessary to fulfil the purposes for
                             which it was collected, including to satisfy any legal, accounting, or reporting
@@ -112,7 +121,7 @@ const PrivacyPolicy = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">8. Your Rights</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">9. Your Rights</h2>
                         <p className="text-rr-dark/80 leading-relaxed mb-4">Under applicable data protection laws, you have the right to:</p>
                         <ul className="list-disc pl-6 space-y-2 text-rr-dark/80">
                             <li><strong>Access:</strong> Request a copy of the personal data we hold about you.</li>
@@ -128,7 +137,7 @@ const PrivacyPolicy = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">9. Cookies</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">10. Cookies</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             Our website uses cookies and similar technologies to enhance your browsing experience,
                             analyse site traffic, and understand user behaviour. You can manage your cookie
@@ -138,7 +147,7 @@ const PrivacyPolicy = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">10. Changes to This Policy</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">11. Changes to This Policy</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             We may update this Privacy Policy from time to time to reflect changes in our
                             practices or applicable laws. Any updates will be posted on this page with a revised
@@ -147,7 +156,7 @@ const PrivacyPolicy = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">11. Contact Us</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">12. Contact Us</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             If you have any questions or concerns about this Privacy Policy or our data practices,
                             please contact us at:

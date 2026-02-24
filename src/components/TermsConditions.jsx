@@ -51,15 +51,14 @@ const TermsConditions = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">3. Application Process</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">3. Phases of Engagement</h2>
                         <p className="text-rr-dark/80 leading-relaxed mb-4">
-                            The application process for the Rajasthan Royals Academy Melbourne involves the following:
+                            Your interaction with the Rajasthan Royals Academy Melbourne occurs in distinct phases:
                         </p>
                         <ul className="list-disc pl-6 space-y-2 text-rr-dark/80">
-                            <li><strong>Submission:</strong> Applicants must complete the online application form in full, including all required personal details, cricket background, and any supporting materials (e.g., performance videos, references).</li>
-                            <li><strong>Review:</strong> All applications are reviewed by the Academy coaching staff and selection panel. Submission of an application does not guarantee an invitation to trial or acceptance into the program.</li>
-                            <li><strong>Incomplete Applications:</strong> Applications that are incomplete, contain false information, or do not meet the minimum requirements may be rejected without further consideration.</li>
-                            <li><strong>Application Fee:</strong> Where applicable, any application or registration fees are non-refundable unless otherwise stated.</li>
+                            <li><strong>Phase 1: Initial Application.</strong> By submitting your initial application, you agree to these Terms for the purpose of evaluation and scouting. Submission does not guarantee an invitation to trial or acceptance.</li>
+                            <li><strong>Phase 2: Assessment Session &amp; RSVP.</strong> If invited to an assessment session, your RSVP constitutes a secondary consent. By accepting the invitation, you (and your parent/guardian if under 18) acknowledge the physical risks, equipment requirements, and specific terms associated with attending an in-person, high-performance T20 assessment.</li>
+                            <li><strong>Incomplete Applications:</strong> Applications that are incomplete, contain false information, or do not meet minimum requirements may be rejected.</li>
                         </ul>
                     </section>
 
@@ -107,7 +106,21 @@ const TermsConditions = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">7. Intellectual Property</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">7. Health, Safety &amp; Equipment (CA/CV Compliance)</h2>
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            The Rajasthan Royals Academy Melbourne takes player safety seriously and strictly adheres to the guidelines set out by Cricket Australia (CA) and Cricket Victoria (CV). By attending an assessment session or participating in the program, you agree to the following:
+                        </p>
+                        <ul className="list-disc pl-6 space-y-2 text-rr-dark/80">
+                            <li><strong>Helmets &amp; Protective Gear:</strong> It is mandatory for all players (regardless of age) to wear a British Standard (BS7928:2013) compliant helmet when batting, wicket-keeping standing up to the stumps, or fielding in close proximity to the batter.</li>
+                            <li><strong>StemGuards:</strong> In alignment with Cricket Australia safety recommendations, the use of neck protectors (StemGuards) is strongly recommended for all players, and is enforced as mandatory for specific high-performance scenarios as directed by the coaching staff.</li>
+                            <li><strong>Equipment Standard:</strong> Participants must provide their own personal protective equipment (pads, gloves, protectors) and ensure it is in good, safe working condition. Coaches reserve the right to prevent a player from participating if their equipment is deemed unsafe.</li>
+                            <li><strong>Medical Conditions:</strong> It is the responsibility of the player (or parent/guardian if under 18) to disclose any pre-existing medical conditions, allergies, or injuries prior to participating.</li>
+                            <li><strong>Risk Acknowledgement:</strong> Cricket is an active sport with inherent risks. By participating in the high-performance assessment sessions or the Elite Program, you acknowledge and accept all risks of physical injury, and agree that the Academy and its coaching staff are not liable for injuries sustained during standard training activities.</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">8. Intellectual Property</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             All content on this website, including text, images, logos, graphics, and branding,
                             is the intellectual property of the Rajasthan Royals Academy Melbourne and its licensors.
@@ -119,18 +132,18 @@ const TermsConditions = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">8. Limitation of Liability</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">9. Limitation of Liability</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             To the fullest extent permitted by law, the Rajasthan Royals Academy Melbourne, its directors,
                             officers, employees, and agents shall not be liable for any direct, indirect, incidental,
                             consequential, or special damages arising from your use of this website, participation
-                            in the application process, or involvement in the Academy program. Participation in
-                            any trials or Academy activities is undertaken at the applicant's own risk.
+                            in the application process, attendance at the assessment sessions, or involvement in the Academy program. Participation in
+                            any trials, assessments, or Academy activities is undertaken at the applicant's own risk.
                         </p>
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">9. Indemnification</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">10. Indemnification</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             You agree to indemnify and hold harmless the Rajasthan Royals Academy Melbourne and its affiliates
                             from any claims, damages, losses, or expenses (including legal fees) arising from your
@@ -139,7 +152,7 @@ const TermsConditions = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">10. Program Changes &amp; Cancellation</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">11. Program Changes &amp; Cancellation</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             The Academy reserves the right to modify, postpone, or cancel any aspect of the program,
                             including schedules, locations, coaching staff, and program structure, at its discretion.
@@ -149,7 +162,7 @@ const TermsConditions = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">11. Governing Law</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">12. Governing Law</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             These Terms shall be governed by and construed in accordance with the laws of the
                             State of Victoria, Australia. Any disputes arising in connection with these Terms
@@ -158,16 +171,16 @@ const TermsConditions = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">12. Amendments</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">13. Amendments</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             We reserve the right to amend these Terms at any time. Updated Terms will be posted
                             on this page with a revised date. Continued use of the website or participation in
-                            the application process following any changes constitutes acceptance of the revised Terms.
+                            the application process and assessment RSVP following any changes constitutes acceptance of the revised Terms.
                         </p>
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">13. Contact Us</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">14. Contact Us</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             If you have any questions regarding these Terms, please contact us at:
                         </p>

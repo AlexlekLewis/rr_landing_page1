@@ -7,6 +7,7 @@ const AssessmentRSVP = () => {
     const [unableToAttend, setUnableToAttend] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [hasConsented, setHasConsented] = useState(false);
 
     // Detailed feedback state
     const [excitedReason, setExcitedReason] = useState('');
@@ -57,10 +58,15 @@ const AssessmentRSVP = () => {
                     <div className="w-20 h-20 bg-rr-pink/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-rr-pink/50">
                         <CheckCircle2 className="w-10 h-10 text-rr-pink" />
                     </div>
-                    {selectedRSVP === 'yes' || unableToAttend ? (
+                    {selectedRSVP === 'yes' ? (
                         <>
                             <h2 className="text-3xl font-bold text-white">Application Updated</h2>
-                            <p className="text-slate-300 text-lg">Thank you. We look forward to seeing you at the assessment session (or keeping you updated if you cannot attend). Please look out for further communications.</p>
+                            <p className="text-slate-300 text-lg">We look forward to seeing you at the assessment session. If under 18, parents or guardians will receive a message by Friday February 27 providing the timing of the assessment session.</p>
+                        </>
+                    ) : selectedRSVP === 'considering' || unableToAttend ? (
+                        <>
+                            <h2 className="text-3xl font-bold text-white">Application Updated</h2>
+                            <p className="text-slate-300 text-lg">Thank you for letting us know that you are still considering if this is the right option. We will be in touch via email by Friday February 27 to confirm assessment session time allocation and format of the session.</p>
                         </>
                     ) : (
                         <>
@@ -83,15 +89,10 @@ const AssessmentRSVP = () => {
                 className="max-w-4xl mx-auto"
             >
                 <motion.div variants={fadeIn} className="space-y-6 mb-12">
-                    <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight">Your Decision.</h2>
-                    <div className="text-lg text-slate-300 space-y-4 font-light">
-                        <p>
-                            As places in the Elite Program foundation intake are strictly limited, we want to ensure we provide as many applicants as possible an opportunity to put their best foot forward.
-                        </p>
-                        <p>
-                            So that we can accurately manage our scouts and coaches through the selection process, please tick one of the answers below and provide any relevant information.
-                        </p>
-                    </div>
+                    <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight">Secure Your Spot</h2>
+                    <p className="text-slate-400 text-lg max-w-2xl">
+                        Please tick one of the answers below and provide any relevant information.
+                    </p>
                 </motion.div>
 
                 <form onSubmit={handleSubmit} className="space-y-12">
@@ -101,9 +102,10 @@ const AssessmentRSVP = () => {
                             Pending a final offer, are you intending to join the Elite Program?
                         </h3>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             {[
                                 { id: 'yes', label: "Yes, I am excited to trial for a place" },
+                                { id: 'considering', label: "I'm still considering, but would like to attend" },
                                 { id: 'no', label: "No, unfortunately I need to decline" }
                             ].map((option) => (
                                 <label
@@ -133,7 +135,7 @@ const AssessmentRSVP = () => {
                                             <div className="w-3 h-3 bg-rr-pink rounded-full" />
                                         )}
                                     </div>
-                                    <span className={`text-lg font-medium ${selectedRSVP === option.id ? 'text-white' : 'text-slate-300'}`}>
+                                    <span className={`text-base font-medium leading-snug ${selectedRSVP === option.id ? 'text-white' : 'text-slate-300'}`}>
                                         {option.label}
                                     </span>
                                 </label>
@@ -172,11 +174,11 @@ const AssessmentRSVP = () => {
 
                                 <div className="space-y-3">
                                     {[
-                                        "Program Cost / Personal Finances",
                                         "Distance / Travel Requirements",
                                         "Schedule Conflicts (Days/Times)",
                                         "Committed to another program/squad",
                                         "Don't see enough value in the program",
+                                        "Program Cost / Personal Finances",
                                         "Other"
                                     ].map((reason) => (
                                         <label key={reason} className="flex items-center space-x-3 cursor-pointer group">
@@ -247,14 +249,34 @@ const AssessmentRSVP = () => {
                         </label>
                     </motion.div>
 
+                    {/* Consent Checkbox */}
+                    <motion.div variants={fadeIn} className="pt-8 border-t border-white/10">
+                        <label className="flex items-start gap-4 cursor-pointer group">
+                            <div className="relative flex items-start mt-1">
+                                <input
+                                    type="checkbox"
+                                    checked={hasConsented}
+                                    onChange={(e) => setHasConsented(e.target.checked)}
+                                    className="peer sr-only"
+                                />
+                                <div className="w-6 h-6 border-2 border-slate-500 rounded peer-checked:bg-rr-pink peer-checked:border-rr-pink transition-all flex items-center justify-center bg-transparent">
+                                    <CheckCircle2 className="w-4 h-4 text-white opacity-0 peer-checked:opacity-100" />
+                                </div>
+                            </div>
+                            <span className="text-sm text-slate-400 leading-relaxed max-w-2xl">
+                                I confirm my RSVP selection. By submitting, I acknowledge that if the participant is under 18, this form must be completed by a parent or legal guardian. I voluntarily agree to the <a href="/terms-conditions" target="_blank" className="text-rr-pink hover:underline">Terms &amp; Conditions</a> and understand the <a href="/privacy-policy" target="_blank" className="text-rr-pink hover:underline">Privacy Policy</a>.
+                            </span>
+                        </label>
+                    </motion.div>
+
                     {/* Submit Button */}
                     <motion.div variants={fadeIn} className="pt-8 flex justify-end">
                         <button
                             type="submit"
-                            disabled={(!selectedRSVP && !unableToAttend) || isSubmitting || (selectedRSVP === 'yes' && !excitedReason) || (selectedRSVP === 'no' && !declineReason) || (selectedRSVP === 'no' && declineReason === 'Other' && !otherReason)}
+                            disabled={!hasConsented || (!selectedRSVP && !unableToAttend) || isSubmitting || (selectedRSVP === 'yes' && !excitedReason) || (selectedRSVP === 'no' && !declineReason) || (selectedRSVP === 'no' && declineReason === 'Other' && !otherReason)}
                             className={`
                                 px-10 py-4 rounded-xl font-bold text-lg flex items-center gap-3 transition-all duration-300
-                                ${((!selectedRSVP && !unableToAttend) || (selectedRSVP === 'yes' && !excitedReason) || (selectedRSVP === 'no' && !declineReason) || (selectedRSVP === 'no' && declineReason === 'Other' && !otherReason))
+                                ${(!hasConsented || (!selectedRSVP && !unableToAttend) || (selectedRSVP === 'yes' && !excitedReason) || (selectedRSVP === 'no' && !declineReason) || (selectedRSVP === 'no' && declineReason === 'Other' && !otherReason))
                                     ? 'bg-white/10 text-slate-500 cursor-not-allowed'
                                     : 'bg-white text-black hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] hover:scale-[1.02]'
                                 }

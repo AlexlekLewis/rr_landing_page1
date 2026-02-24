@@ -72,7 +72,8 @@ const ProgramOverviewDark = () => {
             items: [
                 { title: "Individual Development Plans (IDP)", content: "Each player receives a personalised development plan that addresses the whole person: skills, fitness, mindset, recovery, and life." },
                 { title: "Career Mentorship", content: "Critical to your development, our expert team will work with you on mapping out cricket career and development opportunities based on your skills and performance." },
-                { title: "360 Player Development", content: "Sessions in nutrition, sports & performance psychology, strength & conditioning development and body management." }
+                { title: "360 Player Development", content: "Sessions in nutrition, sports & performance psychology, strength & conditioning development and body management." },
+                { title: "Daily Player Essentials", content: "Building routine and professional behaviors through the 'daily vitamins' of the game. We respect that the smaller things and the one percenters matter most, and your attitude towards them can make or break you over the long term." }
             ]
         },
         {

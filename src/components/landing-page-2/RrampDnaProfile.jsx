@@ -54,7 +54,7 @@ const RrampDnaProfile = () => {
                                 The Player DNA Profile is your roadmap to elite performance. It is a comprehensive, evidence-based assessment tool used to benchmark your current capabilities across the critical dimensions of T20 cricket.
                             </p>
                             <p className="text-lg text-slate-400 font-medium">
-                                Throughout the 12 weeks, we track your progression across these 8 core pillars to build a professional-grade blueprint of you as a cricketer.
+                                Throughout the 12 weeks, we track your progression across these 8 core pillars to build a professional-grade blueprint of your T20 skillset.
                             </p>
                         </motion.div>
                         <motion.div variants={fadeIn} className="hidden lg:flex lg:col-span-4 justify-center">

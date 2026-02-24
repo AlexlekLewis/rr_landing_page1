@@ -152,6 +152,10 @@ const Apply = () => {
                 setLoading(false);
                 return;
             }
+        } else {
+            // Ensure under 18s don't submit their own email/phone
+            formData.email = '';
+            formData.phone = '';
         }
 
         try {
@@ -251,22 +255,36 @@ const Apply = () => {
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-6">
-                        <InputField
-                            label={`Player Email ${formData.age && parseInt(formData.age) < 18 ? '(Optional)' : ''}`}
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required={!formData.age || parseInt(formData.age) >= 18}
-                        />
-                        <InputField
-                            label={`Player Phone Number ${formData.age && parseInt(formData.age) < 18 ? '(Optional)' : ''}`}
-                            type="tel"
-                            name="phone"
-                            value={formData.phone}
-                            onChange={handleChange}
-                            required={!formData.age || parseInt(formData.age) >= 18}
-                        />
+                        <div className="mb-6">
+                            <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">
+                                Player Email {formData.age && parseInt(formData.age) < 18 ? <span className="text-red-500 font-normal lowercase">(Not collected for Under 18s)</span> : <span className="text-rr-pink">*</span>}
+                            </label>
+                            <input
+                                type="email"
+                                name="email"
+                                value={formData.age && parseInt(formData.age) < 18 ? '' : formData.email}
+                                onChange={handleChange}
+                                disabled={formData.age && parseInt(formData.age) < 18}
+                                required={!formData.age || parseInt(formData.age) >= 18}
+                                placeholder={formData.age && parseInt(formData.age) < 18 ? "Disabled for Under 18s" : ""}
+                                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-rr-pink/20 transition-all text-rr-dark placeholder-slate-400 disabled:opacity-50 disabled:bg-slate-200 disabled:cursor-not-allowed"
+                            />
+                        </div>
+                        <div className="mb-6">
+                            <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">
+                                Player Phone Number {formData.age && parseInt(formData.age) < 18 ? <span className="text-red-500 font-normal lowercase">(Not collected for Under 18s)</span> : <span className="text-rr-pink">*</span>}
+                            </label>
+                            <input
+                                type="tel"
+                                name="phone"
+                                value={formData.age && parseInt(formData.age) < 18 ? '' : formData.phone}
+                                onChange={handleChange}
+                                disabled={formData.age && parseInt(formData.age) < 18}
+                                required={!formData.age || parseInt(formData.age) >= 18}
+                                placeholder={formData.age && parseInt(formData.age) < 18 ? "Disabled for Under 18s" : ""}
+                                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-rr-pink/20 transition-all text-rr-dark placeholder-slate-400 disabled:opacity-50 disabled:bg-slate-200 disabled:cursor-not-allowed"
+                            />
+                        </div>
                     </div>
 
                     <InputField label="Primary Residential Suburb" name="suburb" value={formData.suburb} onChange={handleChange} required />
@@ -324,6 +342,30 @@ const Apply = () => {
                             placeholder="Where do you want to be in 5 years?"
                             limit={150}
                         />
+                    </div>
+
+                    <div className="mb-8 pt-6 border-t border-slate-100">
+                        <label className="flex items-start gap-4 cursor-pointer group">
+                            <div className="relative flex items-start mt-1">
+                                <input
+                                    type="checkbox"
+                                    required
+                                    className="peer sr-only"
+                                />
+                                <div className="w-6 h-6 border-2 border-slate-300 rounded peer-checked:bg-rr-pink peer-checked:border-rr-pink transition-all flex items-center justify-center">
+                                    <Check className="w-4 h-4 text-white opacity-0 peer-checked:opacity-100" />
+                                </div>
+                            </div>
+                            <span className="text-sm text-slate-600 leading-relaxed font-medium">
+                                I confirm that all information provided is accurate.
+                                {formData.age && parseInt(formData.age) < 18 && (
+                                    <strong className="text-rr-pink block mt-1">
+                                        As the applicant is under 18, this application must be completed by a parent or legal guardian.
+                                    </strong>
+                                )}
+                                By submitting this application, I voluntarily agree to the <a href="/terms-conditions" target="_blank" className="text-rr-blue hover:underline">Terms &amp; Conditions</a> and <a href="/privacy-policy" target="_blank" className="text-rr-blue hover:underline">Privacy Policy</a>, acknowledging how data is collected and managed.
+                            </span>
+                        </label>
                     </div>
 
                     <Button className="w-full py-4 text-xl" disabled={loading}>

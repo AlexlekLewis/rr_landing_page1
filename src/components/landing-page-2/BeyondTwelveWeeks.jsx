@@ -59,7 +59,7 @@ const BeyondTwelveWeeks = () => {
                         </div>
                         <h3 className="text-xl font-bold text-white mb-3">Priority Access</h3>
                         <p className="text-slate-400 leading-relaxed">
-                            As an Academy alumni, you receive priority access and "first dibs" on all future high-performance masterclasses, specialist clinics, and ad-hoc coaching sessions hosted by visiting Royals staff.
+                            As an Academy alumni, you receive priority access and "first dibs" on all future high-performance masterclasses, specialist clinics, and ad-hoc coaching sessions hosted by Rajasthan Royals Academy Melbourne coaches.
                         </p>
                     </motion.div>
 
