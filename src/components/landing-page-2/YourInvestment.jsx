@@ -38,7 +38,7 @@ const YourInvestment = () => {
                     </motion.h2>
                     <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full mt-4" />
                     <motion.p variants={fadeIn} className="text-lg text-slate-600 max-w-2xl mx-auto mt-6 font-medium">
-                        Everything your child needs to train, develop and thrive within the Rajasthan Royals Academy Melbourne — included in one transparent price.
+                        Everything players need to train, develop and thrive within the Rajasthan Royals Academy Melbourne — included in one transparent price.
                     </motion.p>
                 </div>
 
