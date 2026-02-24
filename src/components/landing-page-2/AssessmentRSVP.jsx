@@ -109,12 +109,18 @@ const AssessmentRSVP = () => {
             if (error) throw error;
 
             // Fire webhook to Zapier (for Google Sheets routing) — fire and forget
+            // Uses URL-encoded form data to avoid CORS preflight (Zapier doesn't support OPTIONS)
             const webhookUrl = import.meta.env.VITE_RSVP_WEBHOOK_URL;
             if (webhookUrl) {
+                const formData = new URLSearchParams();
+                Object.entries(payload).forEach(([key, value]) => {
+                    if (value !== null && value !== undefined) {
+                        formData.append(key, Array.isArray(value) ? value.join(', ') : String(value));
+                    }
+                });
                 fetch(webhookUrl, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload),
+                    body: formData,
                 }).catch(err => console.warn('Zapier webhook warning:', err));
             }
 
