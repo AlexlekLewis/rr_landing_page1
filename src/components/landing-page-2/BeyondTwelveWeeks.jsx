@@ -25,14 +25,14 @@ const BeyondTwelveWeeks = () => {
                 variants={staggerContainer}
                 className="max-w-6xl mx-auto"
             >
-                {/* Action Image — LP1 Style */}
-                <motion.div variants={fadeIn} className="relative w-full aspect-video rounded-2xl overflow-hidden mb-16 shadow-xl border border-slate-200 group">
+                {/* Player Portrait — LP1 Style */}
+                <motion.div variants={fadeIn} className="relative w-full aspect-[3/2] rounded-2xl overflow-hidden mb-16 shadow-xl border border-slate-200 group bg-gradient-to-br from-rr-dark via-rr-navy to-rr-dark">
                     <img
-                        src="/assets/lp2/kwena-catch.png"
-                        alt="Kwena Maphaka — Athletic Fielding"
-                        className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                        src="/assets/lp2/jofra-archer.png"
+                        alt="Jofra Archer — Rajasthan Royals"
+                        className="w-full h-full object-contain object-bottom group-hover:scale-105 transition-transform duration-700"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                 </motion.div>
 
                 <div className="text-center mb-16 space-y-4">
