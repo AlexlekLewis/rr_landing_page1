@@ -110,6 +110,9 @@ const TheRoyalsWay = () => {
                     <motion.p variants={fadeIn} className="text-lg text-slate-500 mt-4 font-bold uppercase tracking-widest">
                         The 7 Pillars
                     </motion.p>
+                    <motion.p variants={fadeIn} className="text-base text-slate-600 mt-3 font-medium max-w-2xl mx-auto">
+                        The philosophy that governs how we coach, develop and deliver our program.
+                    </motion.p>
                 </div>
 
                 {/* Pillars Grid */}

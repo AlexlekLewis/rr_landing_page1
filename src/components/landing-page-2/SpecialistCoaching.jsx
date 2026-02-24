@@ -58,7 +58,7 @@ const SpecialistCoaching = () => {
                     </motion.h2>
                     <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full" />
                     <motion.p variants={fadeIn} className="text-lg text-slate-600 mt-6 font-medium">
-                        Beyond core skills, the Elite Program provides access to highly specialized disciplines necessary for dominating the modern game.
+                        Beyond core skills, the Elite Program provides access to highly specialised disciplines necessary for dominating the modern game.
                     </motion.p>
                 </div>
 

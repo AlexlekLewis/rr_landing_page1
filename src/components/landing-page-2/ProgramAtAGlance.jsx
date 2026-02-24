@@ -39,7 +39,7 @@ const ProgramAtAGlance = () => {
                         <div className="relative z-10 flex flex-col items-center">
                             <h3 className="text-2xl font-bold text-rr-dark mb-2">2 Sessions Per Week</h3>
                             <p className="text-rr-navy font-bold mb-2">1 Weekday Evening & 1 Weekend Session</p>
-                            <p className="text-slate-600 font-medium text-sm max-w-md">We value your time and travel commitments. Sessions are strictly mapped to 2-hour blocks to maximize intensity without overwhelming your schedule.</p>
+                            <p className="text-slate-600 font-medium text-sm max-w-md">We value your time and travel commitments. Sessions are strictly mapped to 2-hour blocks to maximise intensity without overwhelming your schedule.</p>
                         </div>
                     </motion.div>
                 </div>

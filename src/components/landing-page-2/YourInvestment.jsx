@@ -16,9 +16,10 @@ const YourInvestment = () => {
     };
 
     const inclusions = [
-        "12 Weeks of Elite Coaching (2 on 1 & Squad)",
+        "12 Weeks of Elite Coaching",
         "Indoor & Outdoor Facilities Access",
-        "Player DNA Profile & Individual Dev Plan",
+        "RRAM DNA Profile",
+        "Individual Development Plan",
         "Player Training Apparel Kit"
     ];
 
@@ -37,8 +38,7 @@ const YourInvestment = () => {
                     </motion.h2>
                     <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full mt-4" />
                     <motion.p variants={fadeIn} className="text-lg text-slate-600 max-w-2xl mx-auto mt-6 font-medium">
-                        We don't do hidden fees, incremental charges, or confusing payment tiers.
-                        The program is comprehensive, and the price is total.
+                        Everything your child needs to train, develop and be assessed at the elite level — included in one transparent price.
                     </motion.p>
                 </div>
 
@@ -70,8 +70,8 @@ const YourInvestment = () => {
                     {/* ROI / Value Breakdown */}
                     <motion.div variants={fadeIn} className="relative z-10">
                         <div className="mb-6">
-                            <h3 className="text-2xl font-bold text-rr-dark">The ROI Breakdown</h3>
-                            <p className="text-rr-blue font-medium">Value, not just cost.</p>
+                            <h3 className="text-2xl font-bold text-rr-dark">What You're Getting</h3>
+                            <p className="text-rr-blue font-medium">Premium development, one clear price.</p>
                         </div>
 
                         <div className="space-y-6 text-slate-600 leading-relaxed font-medium">
@@ -88,7 +88,7 @@ const YourInvestment = () => {
                                 </p>
                             </div>
                             <p>
-                                We believe in unlocking your potential in a premier high-performance environment, providing an ecosystem that makes elite development accessible to the best talent.
+                                Our ecosystem is built around developing the skills that matter — helping young cricketers of all ages become more proficient in winning the key moments and big moments that define modern cricket.
                             </p>
                         </div>
                     </motion.div>

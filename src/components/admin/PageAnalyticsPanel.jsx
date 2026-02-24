@@ -273,7 +273,7 @@ const PageAnalyticsPanel = () => {
                         className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-slate-300 text-sm focus:outline-none focus:border-rr-pink/50"
                     >
                         <option value="/eliteprogram/2026registration">Landing Page 1</option>
-                        <option value="/invite">Landing Page 2</option>
+                        <option value="/offer/assessment">Landing Page 2</option>
                         <option value="/">Splash Page</option>
                     </select>
                     <select

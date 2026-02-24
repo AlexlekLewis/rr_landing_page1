@@ -59,7 +59,7 @@ const ProgramOverviewDark = () => {
             defaultOpen: false,
             items: [
                 { title: "Matches and Match Simulation", content: "Players from the Elite Program may be invited to outdoor internal matches and match simulations, staged from time to time through the 2nd half of 2026." },
-                { title: "Scenario Simulation", content: "Indoor scenario sessions will be held at Cutting Edge Cricket Centre to provide for assisting players in recognizing and navigating their way through specific match situations." },
+                { title: "Scenario Simulation", content: "Indoor scenario sessions will be held at Cutting Edge Cricket Centre to provide for assisting players in recognising and navigating their way through specific match situations." },
                 { title: "Power Hitting Sessions", content: "The ability to switch into a power hitting mode is a huge part of the modern game and our expert coaches have built a program heavy on building this vital skillset." }
             ]
         },

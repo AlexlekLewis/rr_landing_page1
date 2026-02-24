@@ -70,7 +70,7 @@ const BeyondTwelveWeeks = () => {
                         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-blue to-rr-pink rounded-t-3xl" />
                         <h3 className="text-xl font-bold text-rr-dark mb-3">Match Opportunities</h3>
                         <p className="text-slate-600 leading-relaxed font-medium">
-                            While the core 12 weeks is training-focused, alumni will form the basis of our competitive squads. We are currently scouting opportunities for an Inter-Academy Tournament in the back half of 2026.
+                            While the core 12 weeks is training-focused, alumni will form the basis of our competitive squads.
                         </p>
                     </motion.div>
                 </div>

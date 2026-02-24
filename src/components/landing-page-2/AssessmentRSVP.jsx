@@ -148,7 +148,7 @@ const AssessmentRSVP = () => {
         {
             id: 3,
             label: "I'm still considering whether this program is the right fit",
-            color: 'amber-500'
+            color: 'rr-blue'
         },
         {
             id: 4,
@@ -231,179 +231,173 @@ const AssessmentRSVP = () => {
                     </motion.div>
 
                     <form onSubmit={handleFormSubmit} className="space-y-8">
-                        {/* Primary Options */}
+                        {/* Primary Options with inline sub-questions */}
                         <motion.div variants={fadeIn} className="space-y-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="flex flex-col gap-4">
                                 {options.map((option) => (
-                                    <label
-                                        key={option.id}
-                                        className={`
-                                            relative flex items-start p-5 cursor-pointer rounded-2xl border transition-all duration-300
-                                            ${selectedOption === option.id
-                                                ? 'bg-rr-pink/10 border-rr-pink shadow-md'
-                                                : 'bg-white border-slate-200 hover:bg-slate-50 shadow-sm'
-                                            }
-                                        `}
-                                    >
-                                        <input
-                                            type="radio"
-                                            name="primary_option"
-                                            value={option.id}
-                                            checked={selectedOption === option.id}
-                                            onChange={() => handleOptionChange(option.id)}
-                                            className="sr-only"
-                                        />
-                                        <div className={`
-                                            w-6 h-6 rounded-full border-2 flex items-center justify-center mr-4 shrink-0 mt-0.5 transition-colors bg-white
-                                            ${selectedOption === option.id ? 'border-rr-pink' : 'border-slate-300'}
-                                        `}>
-                                            {selectedOption === option.id && (
-                                                <div className="w-3 h-3 bg-rr-pink rounded-full" />
-                                            )}
-                                        </div>
-                                        <div>
-                                            <span className={`text-base font-bold leading-snug block ${selectedOption === option.id ? 'text-rr-dark' : 'text-slate-600'}`}>
-                                                {option.label}
-                                            </span>
-                                        </div>
-                                    </label>
+                                    <React.Fragment key={option.id}>
+                                        <label
+                                            className={`
+                                                relative flex items-start p-5 cursor-pointer rounded-2xl border transition-all duration-300
+                                                ${selectedOption === option.id
+                                                    ? 'bg-rr-pink/10 border-rr-pink shadow-md'
+                                                    : 'bg-white border-slate-200 hover:bg-slate-50 shadow-sm'
+                                                }
+                                            `}
+                                        >
+                                            <input
+                                                type="radio"
+                                                name="primary_option"
+                                                value={option.id}
+                                                checked={selectedOption === option.id}
+                                                onChange={() => handleOptionChange(option.id)}
+                                                className="sr-only"
+                                            />
+                                            <div className={`
+                                                w-6 h-6 rounded-full border-2 flex items-center justify-center mr-4 shrink-0 mt-0.5 transition-colors bg-white
+                                                ${selectedOption === option.id ? 'border-rr-pink' : 'border-slate-300'}
+                                            `}>
+                                                {selectedOption === option.id && (
+                                                    <div className="w-3 h-3 bg-rr-pink rounded-full" />
+                                                )}
+                                            </div>
+                                            <div>
+                                                <span className={`text-base font-bold leading-snug block ${selectedOption === option.id ? 'text-rr-dark' : 'text-slate-600'}`}>
+                                                    {option.label}
+                                                </span>
+                                            </div>
+                                        </label>
+
+                                        {/* Inline sub-questions for Option 1 */}
+                                        {option.id === 1 && selectedOption === 1 && (
+                                            <motion.div
+                                                initial={{ opacity: 0, height: 0 }}
+                                                animate={{ opacity: 1, height: 'auto' }}
+                                                className="p-6 md:p-8 bg-rr-blue/5 border border-rr-blue/20 rounded-2xl space-y-6 ml-0 md:ml-4"
+                                            >
+                                                <div className="space-y-3">
+                                                    <label className="block text-rr-dark font-bold">Please choose a preferred time slot *</label>
+                                                    <div className="flex flex-wrap gap-3">
+                                                        {timeSlots.map((time) => (
+                                                            <button
+                                                                key={time}
+                                                                type="button"
+                                                                onClick={() => setSelectedTime(time)}
+                                                                className={`
+                                                                    px-6 py-3 rounded-xl font-bold text-sm transition-all duration-200 border
+                                                                    ${selectedTime === time
+                                                                        ? 'bg-rr-pink text-white border-rr-pink shadow-md'
+                                                                        : 'bg-white text-slate-600 border-slate-200 hover:border-rr-pink hover:text-rr-dark'
+                                                                    }
+                                                                `}
+                                                            >
+                                                                {time}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="block text-rr-dark font-bold">What element of the program are you most excited about? *</label>
+                                                    <textarea
+                                                        value={excitedReason}
+                                                        onChange={(e) => setExcitedReason(e.target.value)}
+                                                        placeholder="(e.g. Masterclasses, DNA Profile, Specialist Coaching, Pathway Opportunities...)"
+                                                        className="w-full bg-white shadow-inner border border-slate-200 rounded-xl p-4 text-rr-dark placeholder:text-slate-400 focus:outline-none focus:border-rr-blue focus:ring-1 focus:ring-rr-blue min-h-[100px] resize-y"
+                                                        required
+                                                    />
+                                                </div>
+                                            </motion.div>
+                                        )}
+
+                                        {/* Inline sub-questions for Option 3 */}
+                                        {option.id === 3 && selectedOption === 3 && (
+                                            <motion.div
+                                                initial={{ opacity: 0, height: 0 }}
+                                                animate={{ opacity: 1, height: 'auto' }}
+                                                className="p-6 md:p-8 bg-rr-blue/5 border border-rr-blue/20 rounded-2xl space-y-6 ml-0 md:ml-4"
+                                            >
+                                                <div className="space-y-2">
+                                                    <p className="text-rr-dark font-bold">We'd love to help you make the right decision.</p>
+                                                    <p className="text-slate-600 text-sm font-medium">What information or clarity would help you decide? Select all that apply.</p>
+                                                </div>
+                                                <div className="space-y-3">
+                                                    {consideringOptions.map((reason) => (
+                                                        <label key={reason} className="flex items-center space-x-3 cursor-pointer group">
+                                                            <div className={`w-5 h-5 rounded border flex bg-white items-center justify-center shrink-0 transition-colors ${consideringReasons.includes(reason) ? 'border-rr-blue bg-rr-blue' : 'border-slate-300 group-hover:border-slate-400'}`}>
+                                                                {consideringReasons.includes(reason) && <span className="text-xs text-white font-bold">✓</span>}
+                                                            </div>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={consideringReasons.includes(reason)}
+                                                                onChange={() => toggleCheckbox(consideringReasons, setConsideringReasons, reason)}
+                                                                className="sr-only"
+                                                            />
+                                                            <span className={`text-base font-medium transition-colors ${consideringReasons.includes(reason) ? 'text-rr-dark font-bold' : 'text-slate-600 group-hover:text-rr-dark'}`}>
+                                                                {reason}
+                                                            </span>
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                                {consideringReasons.includes('Other') && (
+                                                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pt-2">
+                                                        <textarea
+                                                            value={consideringOther}
+                                                            onChange={(e) => setConsideringOther(e.target.value)}
+                                                            placeholder="Please tell us what would help you decide..."
+                                                            className="w-full bg-white border border-slate-200 shadow-inner rounded-xl p-4 text-rr-dark placeholder:text-slate-400 focus:outline-none focus:border-rr-blue focus:ring-1 focus:ring-rr-blue min-h-[100px] resize-y"
+                                                            required
+                                                        />
+                                                    </motion.div>
+                                                )}
+                                            </motion.div>
+                                        )}
+
+                                        {/* Inline sub-questions for Option 4 */}
+                                        {option.id === 4 && selectedOption === 4 && (
+                                            <motion.div
+                                                initial={{ opacity: 0, height: 0 }}
+                                                animate={{ opacity: 1, height: 'auto' }}
+                                                className="p-6 md:p-8 bg-rr-pink/5 border border-rr-pink/20 rounded-2xl space-y-6 ml-0 md:ml-4"
+                                            >
+                                                <div className="space-y-2">
+                                                    <p className="text-rr-dark font-bold">We understand, and we appreciate you letting us know.</p>
+                                                    <p className="text-slate-600 text-sm font-medium">To help us build better programs, could you share what factored into your decision? Select all that apply.</p>
+                                                </div>
+                                                <div className="space-y-3">
+                                                    {declineOptions.map((reason) => (
+                                                        <label key={reason} className="flex items-center space-x-3 cursor-pointer group">
+                                                            <div className={`w-5 h-5 rounded border flex bg-white items-center justify-center shrink-0 transition-colors ${declineReasons.includes(reason) ? 'border-rr-pink bg-rr-pink' : 'border-slate-300 group-hover:border-slate-400'}`}>
+                                                                {declineReasons.includes(reason) && <span className="text-xs text-white font-bold">✓</span>}
+                                                            </div>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={declineReasons.includes(reason)}
+                                                                onChange={() => toggleCheckbox(declineReasons, setDeclineReasons, reason)}
+                                                                className="sr-only"
+                                                            />
+                                                            <span className={`text-base font-medium transition-colors ${declineReasons.includes(reason) ? 'text-rr-dark font-bold' : 'text-slate-600 group-hover:text-rr-dark'}`}>
+                                                                {reason}
+                                                            </span>
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                                {declineReasons.includes('Other') && (
+                                                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pt-2">
+                                                        <textarea
+                                                            value={declineOther}
+                                                            onChange={(e) => setDeclineOther(e.target.value)}
+                                                            placeholder="Please let us know what influenced your decision..."
+                                                            className="w-full bg-white border border-slate-200 shadow-inner rounded-xl p-4 text-rr-dark placeholder:text-slate-400 focus:outline-none focus:border-rr-pink focus:ring-1 focus:ring-rr-pink min-h-[100px] resize-y"
+                                                            required
+                                                        />
+                                                    </motion.div>
+                                                )}
+                                            </motion.div>
+                                        )}
+                                    </React.Fragment>
                                 ))}
                             </div>
                         </motion.div>
-
-                        {/* ---- Option 1 Sub-Questions ---- */}
-                        {selectedOption === 1 && (
-                            <motion.div
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
-                                className="p-6 md:p-8 bg-rr-blue/5 border border-rr-blue/20 rounded-2xl space-y-6"
-                            >
-                                {/* Time Slot Picker */}
-                                <div className="space-y-3">
-                                    <label className="block text-rr-dark font-bold">Please choose a preferred time slot *</label>
-                                    <div className="flex flex-wrap gap-3">
-                                        {timeSlots.map((time) => (
-                                            <button
-                                                key={time}
-                                                type="button"
-                                                onClick={() => setSelectedTime(time)}
-                                                className={`
-                                                    px-6 py-3 rounded-xl font-bold text-sm transition-all duration-200 border
-                                                    ${selectedTime === time
-                                                        ? 'bg-rr-pink text-white border-rr-pink shadow-md'
-                                                        : 'bg-white text-slate-600 border-slate-200 hover:border-rr-pink hover:text-rr-dark'
-                                                    }
-                                                `}
-                                            >
-                                                {time}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Excitement Question */}
-                                <div className="space-y-2">
-                                    <label className="block text-rr-dark font-bold">What element of the program are you most excited about? *</label>
-                                    <textarea
-                                        value={excitedReason}
-                                        onChange={(e) => setExcitedReason(e.target.value)}
-                                        placeholder="(e.g. Masterclasses, DNA Profile, Specialist Coaching, Pathway Opportunities...)"
-                                        className="w-full bg-white shadow-inner border border-slate-200 rounded-xl p-4 text-rr-dark placeholder:text-slate-400 focus:outline-none focus:border-rr-blue focus:ring-1 focus:ring-rr-blue min-h-[100px] resize-y"
-                                        required
-                                    />
-                                </div>
-                            </motion.div>
-                        )}
-
-                        {/* ---- Option 3 Sub-Questions ---- */}
-                        {selectedOption === 3 && (
-                            <motion.div
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
-                                className="p-6 md:p-8 bg-amber-50 border border-amber-200 rounded-2xl space-y-6"
-                            >
-                                <div className="space-y-2">
-                                    <p className="text-rr-dark font-bold">We'd love to help you make the right decision.</p>
-                                    <p className="text-slate-600 text-sm font-medium">What information or clarity would help you decide? Select all that apply.</p>
-                                </div>
-
-                                <div className="space-y-3">
-                                    {consideringOptions.map((reason) => (
-                                        <label key={reason} className="flex items-center space-x-3 cursor-pointer group">
-                                            <div className={`w-5 h-5 rounded border flex bg-white items-center justify-center shrink-0 transition-colors ${consideringReasons.includes(reason) ? 'border-amber-500 bg-amber-500' : 'border-slate-300 group-hover:border-slate-400'}`}>
-                                                {consideringReasons.includes(reason) && <span className="text-xs text-white font-bold">✓</span>}
-                                            </div>
-                                            <input
-                                                type="checkbox"
-                                                checked={consideringReasons.includes(reason)}
-                                                onChange={() => toggleCheckbox(consideringReasons, setConsideringReasons, reason)}
-                                                className="sr-only"
-                                            />
-                                            <span className={`text-base font-medium transition-colors ${consideringReasons.includes(reason) ? 'text-rr-dark font-bold' : 'text-slate-600 group-hover:text-rr-dark'}`}>
-                                                {reason}
-                                            </span>
-                                        </label>
-                                    ))}
-                                </div>
-
-                                {consideringReasons.includes('Other') && (
-                                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pt-2">
-                                        <textarea
-                                            value={consideringOther}
-                                            onChange={(e) => setConsideringOther(e.target.value)}
-                                            placeholder="Please tell us what would help you decide..."
-                                            className="w-full bg-white border border-slate-200 shadow-inner rounded-xl p-4 text-rr-dark placeholder:text-slate-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 min-h-[100px] resize-y"
-                                            required
-                                        />
-                                    </motion.div>
-                                )}
-                            </motion.div>
-                        )}
-
-                        {/* ---- Option 4 Sub-Questions ---- */}
-                        {selectedOption === 4 && (
-                            <motion.div
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
-                                className="p-6 md:p-8 bg-rr-pink/5 border border-rr-pink/20 rounded-2xl space-y-6"
-                            >
-                                <div className="space-y-2">
-                                    <p className="text-rr-dark font-bold">We understand, and we appreciate you letting us know.</p>
-                                    <p className="text-slate-600 text-sm font-medium">To help us build better programs, could you share what factored into your decision? Select all that apply.</p>
-                                </div>
-
-                                <div className="space-y-3">
-                                    {declineOptions.map((reason) => (
-                                        <label key={reason} className="flex items-center space-x-3 cursor-pointer group">
-                                            <div className={`w-5 h-5 rounded border flex bg-white items-center justify-center shrink-0 transition-colors ${declineReasons.includes(reason) ? 'border-rr-pink bg-rr-pink' : 'border-slate-300 group-hover:border-slate-400'}`}>
-                                                {declineReasons.includes(reason) && <span className="text-xs text-white font-bold">✓</span>}
-                                            </div>
-                                            <input
-                                                type="checkbox"
-                                                checked={declineReasons.includes(reason)}
-                                                onChange={() => toggleCheckbox(declineReasons, setDeclineReasons, reason)}
-                                                className="sr-only"
-                                            />
-                                            <span className={`text-base font-medium transition-colors ${declineReasons.includes(reason) ? 'text-rr-dark font-bold' : 'text-slate-600 group-hover:text-rr-dark'}`}>
-                                                {reason}
-                                            </span>
-                                        </label>
-                                    ))}
-                                </div>
-
-                                {declineReasons.includes('Other') && (
-                                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pt-2">
-                                        <textarea
-                                            value={declineOther}
-                                            onChange={(e) => setDeclineOther(e.target.value)}
-                                            placeholder="Please let us know what influenced your decision..."
-                                            className="w-full bg-white border border-slate-200 shadow-inner rounded-xl p-4 text-rr-dark placeholder:text-slate-400 focus:outline-none focus:border-rr-pink focus:ring-1 focus:ring-rr-pink min-h-[100px] resize-y"
-                                            required
-                                        />
-                                    </motion.div>
-                                )}
-                            </motion.div>
-                        )}
 
                         {/* Consent Checkbox 1 — Terms & Privacy */}
                         <motion.div variants={fadeIn} className="pt-8 border-t border-slate-200 space-y-4">

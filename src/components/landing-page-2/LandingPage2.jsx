@@ -13,13 +13,20 @@ import TheRoyalsWay from './TheRoyalsWay';
 import BeyondTwelveWeeks from './BeyondTwelveWeeks';
 import YourInvestment from './YourInvestment';
 import RoyalsGroupConnection from '../RoyalsGroupConnection';
-import Coaches from '../Coaches';
-import KumarVideo from './KumarVideo';
 import AcceptInvitationCTA from './AcceptInvitationCTA';
-
 import LogoDivider from './LogoDivider';
+import usePageAnalytics from '../../hooks/usePageAnalytics';
+
+const LP2_SECTIONS = [
+    'lp2-hero', 'lp2-next-steps', 'program-at-a-glance', 'the-royals-way',
+    'phase-effectiveness', 'program-overview-dark', 'dna-profile',
+    'specialist-coaching', 'individual-dev-plan', 'accept-invitation',
+    'beyond-twelve-weeks', 'your-investment', 'rsvp',
+];
 
 const LandingPage2 = () => {
+    usePageAnalytics('/offer/assessment', { sections: LP2_SECTIONS });
+
     // Animation variants
     const fadeIn = {
         hidden: { opacity: 0, y: 20 },
@@ -43,7 +50,7 @@ const LandingPage2 = () => {
             <main className="flex-1 overflow-hidden relative">
 
                 {/* --- HERO SECTION --- */}
-                <section className="relative pt-32 pb-20 px-6 lg:px-8 min-h-[85vh] flex items-center z-10 bg-rr-dark text-white overflow-hidden">
+                <section id="lp2-hero" className="relative pt-32 pb-20 px-6 lg:px-8 min-h-[85vh] flex items-center z-10 bg-rr-dark text-white overflow-hidden">
                     {/* Background Image — More Opaque */}
                     <div className="absolute inset-0 z-0">
                         <img
@@ -61,55 +68,39 @@ const LandingPage2 = () => {
                         variants={staggerContainer}
                         className="relative z-10 max-w-6xl mx-auto w-full"
                     >
-                        {/* Two Column Grid: Content Left, Logo Right */}
-                        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-10 md:gap-16 items-center">
-                            {/* Left: Headline + Key Info */}
-                            <div className="space-y-8">
-                                <motion.h1
-                                    variants={fadeIn}
-                                    className="text-5xl md:text-8xl font-black tracking-wide leading-[0.95] uppercase font-heading bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent drop-shadow-lg"
-                                >
-                                    IT'S TIME<br />TO SHINE
-                                </motion.h1>
-
-                                <motion.p variants={fadeIn} className="text-lg md:text-xl text-slate-300 leading-relaxed font-light max-w-2xl">
-                                    You have been identified by our scouting network and invited to the next stage of the <span className="text-white font-medium">Rajasthan Royals Elite Program</span> selection process. We are pleased to offer you a place at the exclusive assessment session.
-                                </motion.p>
-
-                                {/* Key Info Highlights */}
-                                <motion.div variants={fadeIn} className="flex flex-wrap gap-3">
-                                    <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3">
-                                        <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-0.5">When</p>
-                                        <p className="text-white font-bold text-sm">Sunday March 1st • 1:30–4:30pm</p>
-                                    </div>
-                                    <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3">
-                                        <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-0.5">Where</p>
-                                        <p className="text-white font-bold text-sm">Cutting Edge Cricket Centre, Bundoora</p>
-                                    </div>
-                                    <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3">
-                                        <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-0.5">Led By</p>
-                                        <p className="text-white font-bold text-sm">Siddhartha Lahiri — RR Head of Int'l Talent</p>
-                                    </div>
-                                </motion.div>
-                            </div>
-
-                            {/* Right: RRA Melbourne Logo */}
-                            <motion.div
+                        <div className="max-w-3xl space-y-8">
+                            <motion.h1
                                 variants={fadeIn}
-                                className="flex justify-center md:justify-end"
+                                className="text-4xl md:text-8xl font-black tracking-wide leading-[0.95] uppercase font-heading bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent drop-shadow-lg"
                             >
-                                <img
-                                    src="/assets/MELBOURNE.ai.png"
-                                    alt="Rajasthan Royals Academy Melbourne"
-                                    className="w-40 md:w-52 drop-shadow-2xl opacity-90 hover:opacity-100 hover:scale-105 transition-all duration-500"
-                                />
+                                IT'S TIME<br />TO SHINE
+                            </motion.h1>
+
+                            <motion.p variants={fadeIn} className="text-base md:text-xl text-slate-300 leading-relaxed font-light max-w-2xl">
+                                Thank you for your interest and application. You have progressed to the next stage of the <span className="text-white font-medium">Rajasthan Royals Elite Program</span> selection process — an exclusive assessment session.
+                            </motion.p>
+
+                            {/* Key Info Highlights */}
+                            <motion.div variants={fadeIn} className="flex flex-wrap gap-3">
+                                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3">
+                                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-0.5">When</p>
+                                    <p className="text-white font-bold text-sm">Sunday March 1st • 1:30–4:30pm</p>
+                                </div>
+                                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3">
+                                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-0.5">Where</p>
+                                    <p className="text-white font-bold text-sm">Cutting Edge Cricket Centre, Bundoora</p>
+                                </div>
+                                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3">
+                                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-0.5">Led By</p>
+                                    <p className="text-white font-bold text-sm">Siddhartha Lahiri — Head of International Player Development</p>
+                                </div>
                             </motion.div>
                         </div>
                     </motion.div>
                 </section>
 
                 {/* --- NEXT STEPS SECTION --- */}
-                <section className="py-24 px-6 lg:px-8 relative z-10 bg-slate-50 border-b border-slate-200">
+                <section id="lp2-next-steps" className="py-24 px-6 lg:px-8 relative z-10 bg-slate-50 border-b border-slate-200">
                     <motion.div
                         initial="hidden"
                         whileInView="visible"
@@ -176,16 +167,8 @@ const LandingPage2 = () => {
                     <RoyalsGroupConnection />
                 </div>
 
-                {/* Cricket Leadership Team (Reused) */}
-                <div className="bg-white py-12">
-                    <Coaches />
-                </div>
-
                 {/* Beyond 12 Weeks */}
                 <BeyondTwelveWeeks />
-
-                {/* Kumar Sangakkara Video */}
-                <KumarVideo />
 
                 {/* Your Investment */}
                 <YourInvestment />
