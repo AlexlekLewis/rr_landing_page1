@@ -137,42 +137,44 @@ const LandingPage2 = () => {
 
                 {/* Program At A Glance */}
                 <ProgramAtAGlance />
+                <AcceptInvitationCTA />
 
                 {/* The Royals Way Philosophy */}
                 <TheRoyalsWay />
+                <AcceptInvitationCTA />
 
                 {/* Phase Effectiveness */}
                 <PhaseEffectiveness />
-
-
+                <AcceptInvitationCTA />
 
                 {/* Program Overview */}
                 <ProgramOverviewDark />
+                <AcceptInvitationCTA />
 
                 {/* Player DNA Profile */}
                 <RrampDnaProfile />
+                <AcceptInvitationCTA />
 
                 {/* Specialist Coaching */}
                 <SpecialistCoaching />
+                <AcceptInvitationCTA />
 
                 {/* Individual Development Plan */}
                 <IndividualDevPlan />
-
-                {/* Accept Invitation CTA */}
                 <AcceptInvitationCTA />
 
                 {/* Royals Group Connection (Reused) */}
                 <div className="bg-slate-50 py-12">
                     <RoyalsGroupConnection />
                 </div>
+                <AcceptInvitationCTA />
 
                 {/* Beyond 12 Weeks */}
                 <BeyondTwelveWeeks />
+                <AcceptInvitationCTA />
 
                 {/* Your Investment */}
                 <YourInvestment />
-
-                {/* Accept Invitation CTA */}
                 <AcceptInvitationCTA />
 
                 {/* RSVP Section */}
