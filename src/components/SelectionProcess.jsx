@@ -150,7 +150,7 @@ const SelectionProcess = () => {
                         </div>
                         <div className="text-center mt-12">
                             <Button onClick={scrollToForm} variant="primary" className="text-base px-8 py-4 shadow-xl shadow-rr-blue/20">
-                                APPLY NOW
+                                REGISTER INTEREST
                             </Button>
                         </div>
                     </div>

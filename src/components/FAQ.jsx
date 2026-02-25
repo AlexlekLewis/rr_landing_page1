@@ -84,7 +84,7 @@ const FAQ = () => {
 
                 <div className="text-center mt-12">
                     <Button onClick={scrollToForm} variant="primary">
-                        APPLY NOW
+                        REGISTER INTEREST
                     </Button>
                 </div>
             </div>

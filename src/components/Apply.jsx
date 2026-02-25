@@ -36,8 +36,8 @@ const StatusModal = ({ type, isOpen, onClose }) => {
                         </h3>
                         <p className="text-slate-600 mb-8 leading-relaxed">
                             {isSuccess
-                                ? "Your application has been successfully received. We are currently assessing applications daily and as such invitations to our assessment session on Sunday March 1st will be extended by latest February 25th for those being considered for an Elite Program offer."
-                                : "Something went wrong submitting your application. Please check your internet connection and try again."}
+                                ? "Thank you for registering your interest. You have been added to our waiting list and we will be in touch with more information as it becomes available."
+                                : "Something went wrong submitting your details. Please check your internet connection and try again."}
                         </p>
                         <Button onClick={onClose} className="w-full">
                             {isSuccess ? 'AWESOME' : 'TRY AGAIN'}
@@ -241,10 +241,10 @@ const Apply = () => {
             <div className="container mx-auto px-6 max-w-2xl relative z-10">
                 <div className="text-center mb-12">
                     <h2 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue mb-6">
-                        START YOUR JOURNEY
+                        REGISTER YOUR INTEREST
                     </h2>
                     <p className="text-lg text-slate-600 font-medium">
-                        Ready to take your next step? Fill out the form below to apply for the Rajasthan Royals Academy Melbourne Elite Program.
+                        Registration for the Rajasthan Royals Academy Melbourne Elite Program is now closed. If you would like to join our waiting list and receive more information about future opportunities, please fill out the form below.
                     </p>
                 </div>
 
@@ -415,7 +415,7 @@ const Apply = () => {
                     </div>
 
                     <Button className="w-full py-4 text-xl" disabled={loading || !acceptTerms || !acceptComms}>
-                        {loading ? 'SUBMITTING...' : 'SUBMIT APPLICATION'}
+                        {loading ? 'SUBMITTING...' : 'JOIN WAITING LIST'}
                     </Button>
                 </form>
             </div>

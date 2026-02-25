@@ -45,7 +45,7 @@ const Director = () => {
 
                     <div className="mt-12">
                         <Button onClick={scrollToForm} variant="primary">
-                            APPLY NOW
+                            REGISTER INTEREST
                         </Button>
                     </div>
 

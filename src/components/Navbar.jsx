@@ -19,7 +19,7 @@ const Navbar = ({ variant = 'lp1' }) => {
 
     const isLP2 = variant === 'lp2';
     const navLinks = isLP2 ? LP2_NAV : LP1_NAV;
-    const ctaLabel = isLP2 ? 'ACCEPT INVITATION' : 'APPLY NOW';
+    const ctaLabel = isLP2 ? 'ACCEPT INVITATION' : 'REGISTER INTEREST';
     const ctaTarget = isLP2 ? 'rsvp' : 'apply-form';
 
     const scrollToForm = () => {
