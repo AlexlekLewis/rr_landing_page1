@@ -50,7 +50,7 @@ const FAQ = () => {
 
     const selectionFaqs = [
         { q: "Is entry guaranteed?", a: "No. Places are limited and based on merit, skills, and potential." },
-        { q: "What is the selection process?", a: "Invitation from a RR Academy Melbourne scout → Complete Application → Selection Team Reviews Applications → Assessment Session → Possible Offer and Acceptance. Even if not selected in the first intake, your details stay on file — the Royals are building something long-term and the Melbourne team will begin touch regarding future programs." },
+        { q: "What is the selection process?", a: "Register Your Interest → Get Assessed by Royals Coaching Staff → Join the Waiting List → Be Contacted with next steps and future opportunities. Even if not selected in the first intake, your details stay on file — the Royals are building something long-term and the Melbourne team will be in touch regarding future programs." },
         { q: "What pathway opportunities exist?", a: "Performance-based opportunities include: potential match play against external opposition, invitation to the Royals High Performance Centre in Nagpur, assessment opportunities with Rajasthan Royals (IPL), Paarl Royals (SA20), or Barbados Royals (CPL), and visits from franchise coaches and players." },
         { q: "Are assessments with IPL franchises guaranteed?", a: "No. Assessment opportunities are for players demonstrating exceptional skill. However, ALL members are tracked by Royals coaches." },
         { q: "Will I go to the High Performance Centre in Nagpur?", a: "Select players will be invited to attend camps at the High Performance facility in Nagpur, India." },

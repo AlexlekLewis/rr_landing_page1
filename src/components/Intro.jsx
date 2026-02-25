@@ -122,10 +122,10 @@ const Intro = () => {
                                         </div>
                                         <div>
                                             <div className="flex items-center gap-3 mb-2">
-                                                <span className="text-xs font-black text-rr-pink uppercase tracking-widest bg-rr-pink/10 px-3 py-1 rounded-full">Assessment Session</span>
+                                                <span className="text-xs font-black text-rr-pink uppercase tracking-widest bg-rr-pink/10 px-3 py-1 rounded-full">Assessment Process</span>
                                             </div>
                                             <p className="text-[17px] text-slate-600 leading-relaxed font-medium">
-                                                On the afternoon of <strong className="text-rr-dark">Sunday March 1st</strong>, Siddhartha Lahiri (Royals Head of International Player Development, Rajasthan Royals Performance Coach & Assistant Coach of Paarl and Barbados Royals) will be in Melbourne to hold an assessment session as a part of the selection process for the Elite Program. Siddhartha is a key person responsible for identifying talent across the Royals global network of franchises and Academy's, and as such this will be an important step in offers being made to players to join the foundation intake of the Elite Program.
+                                                Siddhartha Lahiri (Royals Head of International Player Development, Rajasthan Royals Performance Coach &amp; Assistant Coach of Paarl and Barbados Royals) oversees the assessment process for the Elite Program. Siddhartha is a key person responsible for identifying talent across the Royals global network of franchises and Academies, and registered players will be invited to an assessment session as part of the selection pathway.
                                             </p>
                                         </div>
                                     </div>

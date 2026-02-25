@@ -5,23 +5,23 @@ import Button from './Button';
 const steps = [
     {
         num: 1,
-        title: "Apply",
-        desc: "Complete the online application form below and our selection team will work through yours and all other applications.",
+        title: "Register Interest",
+        desc: "Complete the registration form below to express your interest in the Elite Program. Our team will review all submissions.",
     },
     {
         num: 2,
-        title: "Assess",
-        desc: "On Sunday March 1st, a select group of applicants will be invited to a skill assessment session led by Sid Lahiri.",
+        title: "Get Assessed",
+        desc: "Registered players will be invited to a skill assessment session led by Royals coaching staff to evaluate your potential.",
     },
     {
         num: 3,
-        title: "Offer",
-        desc: "Shortly following the session on Sunday March 1st, successful candidates will receive an official offer to join the Elite Program.",
+        title: "Waiting List",
+        desc: "Following assessment, you will be placed on the waiting list. We will keep you informed as places become available.",
     },
     {
         num: 4,
-        title: "Alternative",
-        desc: "Should you be unsuccessful, the road doesn't end. Your application details will remain with us and we will provide invitations to alternative suitable program options.",
+        title: "Be Contacted",
+        desc: "Our team will be in touch with more information, next steps, and future program opportunities as they arise.",
     },
 ];
 
