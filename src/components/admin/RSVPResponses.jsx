@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import useRealtimeSync from '../../hooks/useRealtimeSync';
 import {
     ClipboardList, Users, CheckCircle2, HelpCircle, XCircle, Clock,
-    Search, ChevronDown, ChevronUp, Mail, User, Filter
+    Search, ChevronDown, ChevronUp, Mail, User, Filter, Archive, ArchiveRestore
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
@@ -52,6 +52,8 @@ const RSVPResponses = () => {
     const [expandedRow, setExpandedRow] = useState(null);
     const [sortField, setSortField] = useState('created_at');
     const [sortDir, setSortDir] = useState('desc');
+    const [showArchived, setShowArchived] = useState(false);
+    const [archiving, setArchiving] = useState(null); // id being archived
 
     const fetchData = useCallback(async () => {
         const { data, error } = await supabase
@@ -67,24 +69,40 @@ const RSVPResponses = () => {
     useRealtimeSync('rsvp_responses', fetchData);
 
     // Computed stats
+    const handleArchive = async (id, currentArchived) => {
+        setArchiving(id);
+        const { error } = await supabase
+            .from('rsvp_responses')
+            .update({ archived: !currentArchived })
+            .eq('id', id);
+        if (!error) {
+            setResponses(prev => prev.map(r => r.id === id ? { ...r, archived: !currentArchived } : r));
+        }
+        setArchiving(null);
+    };
+
+    const activeResponses = useMemo(() => responses.filter(r => !r.archived), [responses]);
+    const archivedResponses = useMemo(() => responses.filter(r => r.archived), [responses]);
+
     const stats = useMemo(() => {
-        const total = responses.length;
+        const source = activeResponses;
+        const total = source.length;
         const byOption = { 1: 0, 2: 0, 3: 0, 4: 0 };
         const timeSlots = {};
 
-        responses.forEach(r => {
+        source.forEach(r => {
             byOption[r.selected_option] = (byOption[r.selected_option] || 0) + 1;
             if (r.selected_time) {
                 timeSlots[r.selected_time] = (timeSlots[r.selected_time] || 0) + 1;
             }
         });
 
-        return { total, byOption, timeSlots };
-    }, [responses]);
+        return { total, byOption, timeSlots, archivedCount: archivedResponses.length };
+    }, [activeResponses, archivedResponses]);
 
     // Filtered & sorted rows
     const filteredResponses = useMemo(() => {
-        let result = responses;
+        let result = showArchived ? archivedResponses : activeResponses;
 
         if (filterOption > 0) {
             result = result.filter(r => r.selected_option === filterOption);
@@ -107,7 +125,7 @@ const RSVPResponses = () => {
         });
 
         return result;
-    }, [responses, filterOption, searchQuery, sortField, sortDir]);
+    }, [activeResponses, archivedResponses, showArchived, filterOption, searchQuery, sortField, sortDir]);
 
     const toggleSort = (field) => {
         if (sortField === field) {
@@ -227,6 +245,16 @@ const RSVPResponses = () => {
                         </button>
                     ))}
                 </div>
+                <button
+                    onClick={() => setShowArchived(!showArchived)}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${showArchived
+                        ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20'
+                        : 'bg-white/5 text-slate-500 hover:text-slate-300'
+                        }`}
+                >
+                    <Archive className="w-3.5 h-3.5" />
+                    {showArchived ? `Archived (${stats.archivedCount})` : `Show Archived (${stats.archivedCount})`}
+                </button>
             </div>
 
             {/* Table */}
@@ -318,6 +346,25 @@ const RSVPResponses = () => {
                                                                     {renderDetailValue('Terms Accepted', row.accepted_terms ? 'Yes' : 'No')}
                                                                     {renderDetailValue('Comms Accepted', row.accepted_comms ? 'Yes' : 'No')}
                                                                     {renderDetailValue('Submitted', formatDate(row.created_at))}
+                                                                    <div className="md:col-span-3 pt-2 border-t border-white/10">
+                                                                        <button
+                                                                            onClick={(e) => { e.stopPropagation(); handleArchive(row.id, row.archived); }}
+                                                                            disabled={archiving === row.id}
+                                                                            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${row.archived
+                                                                                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20'
+                                                                                : 'bg-purple-500/10 text-purple-400 border border-purple-500/20 hover:bg-purple-500/20'
+                                                                                }`}
+                                                                        >
+                                                                            {archiving === row.id ? (
+                                                                                <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                                                                            ) : row.archived ? (
+                                                                                <ArchiveRestore className="w-3.5 h-3.5" />
+                                                                            ) : (
+                                                                                <Archive className="w-3.5 h-3.5" />
+                                                                            )}
+                                                                            {row.archived ? 'Restore from Archive' : 'Archive Response'}
+                                                                        </button>
+                                                                    </div>
                                                                 </div>
                                                             </motion.div>
                                                         </td>
