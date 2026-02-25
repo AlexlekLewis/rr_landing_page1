@@ -239,12 +239,12 @@ const Apply = () => {
     return (
         <section className="py-24 bg-gradient-to-br from-slate-50 to-slate-100 relative" id="apply-form">
             <div className="container mx-auto px-6 max-w-2xl relative z-10">
-                <div className="text-center mb-12">
+                <div className="text-center mb-12 border border-slate-200 rounded-2xl p-8 md:p-10 shadow-lg bg-white">
                     <h2 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue mb-6">
                         REGISTER YOUR INTEREST
                     </h2>
-                    <p className="text-lg text-slate-600 font-medium">
-                        Registration for the Rajasthan Royals Academy Melbourne Elite Program is now closed. If you would like to join our waiting list and receive more information about future opportunities, please fill out the form below.
+                    <p className="text-lg text-slate-600 font-medium leading-relaxed">
+                        Registration for the Rajasthan Royals Academy Melbourne Elite Program is <strong className="text-rr-dark">now closed</strong>. If you would like to <strong className="text-rr-dark">join our waiting list</strong> and receive more information about future opportunities, please fill out the form below.
                     </p>
                 </div>
 
