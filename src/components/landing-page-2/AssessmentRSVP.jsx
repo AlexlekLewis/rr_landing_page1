@@ -187,7 +187,7 @@ const AssessmentRSVP = () => {
                     {selectedOption === 1 ? (
                         <>
                             <h2 className="text-3xl font-bold text-rr-dark">Response Received</h2>
-                            <p className="text-slate-600 text-lg">Thank you for confirming your availability. We look forward to seeing you at the assessment session. Parents or guardians of players under 18 will receive a confirmation message by Friday February 27 with your assigned session time.</p>
+                            <p className="text-slate-600 text-lg">Thank you for confirming your availability. We have received your response and will be in touch shortly to confirm your place. Parents or guardians of players under 18 will receive a confirmation message by Friday February 27 with your assigned session time.</p>
                         </>
                     ) : selectedOption === 2 ? (
                         <>
@@ -223,10 +223,10 @@ const AssessmentRSVP = () => {
                     <motion.div variants={fadeIn} className="space-y-4 mb-12">
                         <h2 className="text-3xl md:text-5xl font-bold text-rr-dark tracking-tight">Secure Your Spot</h2>
                         <p className="text-rr-pink font-bold text-base md:text-lg">
-                            Spots for Sunday's free assessment session are capped.
+                            Only 20 spots remain for Sunday's assessment session — respond now to secure yours.
                         </p>
                         <p className="text-slate-600 font-medium text-lg max-w-2xl">
-                            Being offered a spot at the assessment session means our selection team are strongly considering offering you a place in the Elite Program. Which of these answers best reflects your position on the Elite Program?
+                            Being offered a spot at the assessment session means our selection team are strongly considering offering you a place in the Elite Program. As spots are limited, which of these answers best reflects your position?
                         </p>
                     </motion.div>
 

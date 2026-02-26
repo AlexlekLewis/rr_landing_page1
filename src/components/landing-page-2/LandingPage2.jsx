@@ -80,6 +80,10 @@ const LandingPage2 = () => {
                                 Thank you for your interest and application. You have progressed to the next stage of the <span className="text-white font-medium">Rajasthan Royals Elite Program</span> selection process — an exclusive assessment session.
                             </motion.p>
 
+                            <motion.p variants={fadeIn} className="text-base md:text-lg text-rr-pink font-bold max-w-2xl">
+                                However, places are now limited to 20 remaining spots for the assessment session.
+                            </motion.p>
+
                             {/* Key Info Highlights */}
                             <motion.div variants={fadeIn} className="flex flex-wrap gap-3">
                                 <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3">
@@ -129,7 +133,7 @@ const LandingPage2 = () => {
                         <motion.div variants={fadeIn} className="bg-white rounded-2xl p-8 md:p-10 shadow-xl border border-slate-100 relative overflow-hidden">
                             <div className="relative z-10 space-y-6 text-lg text-slate-700 leading-relaxed font-medium text-center">
                                 <p>
-                                    As you have been invited to attend the assessment session, you are one step closer to the Elite Program. Melbourne's Rajasthan Royals Academy team are considering you as a candidate with strong possibility of being offered a place.
+                                    As you have been invited to attend the assessment session, you are one step closer to the Elite Program. The Rajasthan Royals Academy Melbourne coaching and selection team are considering you as a candidate with a strong possibility of being offered a place — however, with only 20 spots remaining, we encourage you to respond as soon as possible to secure your position.
                                 </p>
                                 <p>
                                     So that you can begin to prepare for both the assessment session and the possibility of being offered a place, please find below details of the program including program content, program benefits, training days & times and the cost of this premium program.
