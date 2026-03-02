@@ -82,10 +82,10 @@ const AcceptanceHero = ({ acceptStatus, setAcceptStatus }) => {
                                         <div className="w-12 h-12 bg-rr-blue/20 rounded-xl flex items-center justify-center shrink-0 border border-rr-blue/40 shadow-inner">
                                             <svg className="w-6 h-6 text-rr-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                         </div>
-                                        <h4 className="font-black text-white uppercase tracking-wide text-lg">Bespoke<br /><span className="text-rr-blue">DNA Profiling</span></h4>
+                                        <h4 className="font-black text-white uppercase tracking-wide text-lg">RRAMS<br /><span className="text-rr-blue">DNA PROFILE</span></h4>
                                     </div>
                                     <p className="text-sm text-slate-200 font-medium leading-relaxed">
-                                        A proprietary <span className="font-bold text-white">Player Development Plan (IDP)</span> tracked via your own dedicated portal. We utilize Full Track video analysis and IPL-standard data metrics to accelerate your growth.
+                                        A proprietary <span className="font-bold text-white">Player Development Plan (IDP)</span> and actionable <span className="font-bold text-white">DNA Card</span> tracked via your dedicated portal. We utilize Full Track video analysis and IPL-standard metrics to explicitly map and accelerate your growth.
                                     </p>
                                 </div>
 
