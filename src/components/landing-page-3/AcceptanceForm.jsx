@@ -338,7 +338,7 @@ const AcceptanceForm = () => {
                         </p>
 
                         <div className="mb-12">
-                            <KumarVideoPlayer url="https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/Kumar%20Video%20Landing/Final%20Andy%20%26%20Kumar%20Edit.mov" />
+                            <KumarVideoPlayer url="https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/Kumar%20Video%20Landing/Kumar%20Interview.mp4" />
                         </div>
 
                         <div className="pt-8 border-t border-white/10">
