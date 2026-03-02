@@ -5,6 +5,18 @@ import { supabase } from '../../lib/supabase';
 // Provided by CEO
 const PAYMENT_LINK = 'https://buy.stripe.com/bJe14nbHP3ud91q8nN9Zm00';
 
+const SESSION_OPTIONS = {
+    weekday: [
+        { id: 'wd_tue_thu_5pm', time: '5:00 - 7:00pm', days: 'Tuesday & Thursday' },
+        { id: 'wd_tue_thu_7pm', time: '7:00 - 9:00pm', days: 'Tuesday & Thursday' }
+    ],
+    weekend: [
+        { id: 'we_sat_sun_8am', time: '8:00 - 10:00am', days: 'Saturday & Sunday' },
+        { id: 'we_sat_sun_2pm', time: '2:00 - 4:00pm', days: 'Saturday & Sunday' },
+        { id: 'we_sat_sun_4pm', time: '4:00 - 6:00pm', days: 'Saturday & Sunday' }
+    ]
+};
+
 const AcceptanceForm = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState('');
@@ -27,6 +39,15 @@ const AcceptanceForm = () => {
     const [phoneNumbers, setPhoneNumbers] = useState([{ id: 1, value: '' }]);
     const [preferredComms, setPreferredComms] = useState('');
 
+    // Session Availability
+    const [selectedSessions, setSelectedSessions] = useState([]);
+
+    const toggleSession = (id) => {
+        setSelectedSessions(prev =>
+            prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]
+        );
+    };
+
     // Consents
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [acceptPlayerCode, setAcceptPlayerCode] = useState(false);
@@ -44,7 +65,12 @@ const AcceptanceForm = () => {
         const hasComms = groupChatConsent === true ? phoneNumbers.some(p => p.value.trim()) : preferredComms.trim();
         const hasConsents = acceptTerms && acceptPlayerCode && acceptParentCode && acceptSocialMedia;
 
-        return hasCore && hasAdmin && hasComms && hasConsents;
+        const hasMinTotal = selectedSessions.length >= 3;
+        const hasWeekday = selectedSessions.some(id => id.startsWith('wd'));
+        const hasWeekend = selectedSessions.some(id => id.startsWith('we'));
+        const hasValidSessions = hasMinTotal && hasWeekday && hasWeekend;
+
+        return hasCore && hasAdmin && hasComms && hasConsents && hasValidSessions;
     };
 
     const addPhoneNumber = () => {
@@ -57,7 +83,7 @@ const AcceptanceForm = () => {
 
     const handlePaymentAction = async () => {
         if (!isFormValid()) {
-            setSubmitError('Please complete all required fields and accept all compliance documents before proceeding.');
+            setSubmitError('Please complete all required fields, select at least 3 session options (with min 1 weekday and 1 weekend), and accept all compliance documents.');
             // Scroll to top of form to see error
             document.getElementById('acceptance-form')?.scrollIntoView({ behavior: 'smooth' });
             return;
@@ -86,6 +112,13 @@ const AcceptanceForm = () => {
 
                 // Removed role field but setting it to empty to keep db compatibility if needed
                 player_role: '',
+
+                // Session availability
+                selected_sessions: selectedSessions.map(id => {
+                    const allOpts = [...SESSION_OPTIONS.weekday, ...SESSION_OPTIONS.weekend];
+                    const opt = allOpts.find(o => o.id === id);
+                    return opt ? `${opt.days} ${opt.time}` : id;
+                }).join(', '),
 
                 group_chat_consent: groupChatConsent,
                 phone_numbers: validPhones,
@@ -276,6 +309,60 @@ const AcceptanceForm = () => {
 
                     </div>
 
+                    {/* SESSION PREFERENCES */}
+                    <div className="space-y-6 mb-12">
+                        <h3 className="text-xl font-bold text-rr-dark border-b border-slate-100 pb-2">Session Preferences</h3>
+
+                        <div className="bg-white/50 border border-slate-200 rounded-2xl p-6 relative overflow-hidden">
+                            <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-rr-pink to-rr-blue"></div>
+                            <p className="text-sm text-slate-700 font-medium leading-relaxed">
+                                Please select a minimum of <span className="font-bold text-rr-pink">3 preferred options</span> for your weekly sessions.
+                                You <span className="font-bold underline">must</span> select at least <span className="font-bold">1 weekday</span> and <span className="font-bold">1 weekend</span> slot.
+                                <br /><span className="block mt-2 text-xs italic text-slate-500">Note: Regardless of how many you select, you will be allocated exactly one weekday and one weekend slot overall.</span>
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            {/* Weekday */}
+                            <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col items-center">
+                                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest text-center mb-1">Weekday Session</h4>
+                                <h5 className="text-xl font-black text-rr-dark text-center mb-6">Tuesday & Thursday</h5>
+                                <div className="space-y-3 w-full">
+                                    {SESSION_OPTIONS.weekday.map(session => (
+                                        <SessionCheckbox
+                                            key={session.id}
+                                            time={session.time}
+                                            checked={selectedSessions.includes(session.id)}
+                                            onChange={() => toggleSession(session.id)}
+                                        />
+                                    ))}
+                                </div>
+                                <div className="text-center mt-6">
+                                    <span className="text-xs font-bold text-slate-400 italic uppercase">Allocated one slot</span>
+                                </div>
+                            </div>
+
+                            {/* Weekend */}
+                            <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col items-center">
+                                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest text-center mb-1">Weekend Session</h4>
+                                <h5 className="text-xl font-black text-rr-dark text-center mb-6">Saturday & Sunday</h5>
+                                <div className="space-y-3 w-full">
+                                    {SESSION_OPTIONS.weekend.map(session => (
+                                        <SessionCheckbox
+                                            key={session.id}
+                                            time={session.time}
+                                            checked={selectedSessions.includes(session.id)}
+                                            onChange={() => toggleSession(session.id)}
+                                        />
+                                    ))}
+                                </div>
+                                <div className="text-center mt-6">
+                                    <span className="text-xs font-bold text-slate-400 italic uppercase">Allocated one slot</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* COMMS PREF */}
                     <div className="space-y-6 mb-12 bg-slate-50 p-6 rounded-2xl border border-slate-100">
                         <label className="block text-sm font-bold text-rr-dark">Are you happy to be added to a group chat as we get closer to the start of the Elite Program for regular communication? *</label>
@@ -368,6 +455,17 @@ const AcceptanceForm = () => {
         </section>
     );
 };
+
+// Session selection checkbox
+const SessionCheckbox = ({ time, checked, onChange }) => (
+    <label className={`flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer transition-all w-full ${checked ? 'border-rr-pink bg-rr-pink/5 scale-[1.02] shadow-sm' : 'border-slate-200 bg-white hover:border-slate-300'}`}>
+        <span className={`font-bold ${checked ? 'text-rr-dark' : 'text-slate-600'}`}>{time}</span>
+        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 ${checked ? 'border-rr-pink bg-rr-pink text-white' : 'border-slate-300 bg-slate-50'}`}>
+            {checked && <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+        </div>
+        <input type="checkbox" className="sr-only" checked={checked} onChange={onChange} />
+    </label>
+);
 
 // Reusable compliance checkbox purely for visual consistency
 const ComplianceCheckbox = ({ checked, onChange, children }) => (
