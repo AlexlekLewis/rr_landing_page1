@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 
 // Provided by CEO
-const PAYMENT_LINK = 'https://buy.stripe.com/eVq5kD5jrfcV91qeMb9Zm01';
+const PAYMENT_LINK = 'https://buy.stripe.com/bJe14nbHP3ud91q8nN9Zm00';
 
 const AcceptanceForm = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
