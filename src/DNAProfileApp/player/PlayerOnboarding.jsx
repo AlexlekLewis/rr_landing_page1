@@ -12,7 +12,7 @@ import {
 } from "../data/skillItems";
 import { FMTS, BAT_H, BWL_T } from "../data/competitionData";
 import { getAge, techItems } from "../engine/ratingEngine";
-import { savePlayerToDB } from "../db/playerDb";
+import { savePlayerToDB, loadPlayerDraft } from "../db/playerDb";
 import { PLAYER_DEFS } from "../data/skillDefinitions";
 import {
     Hdr, SecH, Inp, Sel, TArea, NumInp, Dots, AssGrid, CompLevelSel
@@ -38,11 +38,26 @@ export default function PlayerOnboarding() {
 
     const [pStep, setPStep] = useSessionState('rra_pStep', 0);
     const [showOnboardGuide, setShowOnboardGuide] = useSessionState('rra_obGuide', true);
+    const [isSaving, setIsSaving] = useState(false);
+    const [isLoadingDraft, setIsLoadingDraft] = useState(true);
 
     const [pd, setPd] = useState({ grades: [{}], topBat: [{}], topBowl: [{}] });
     const pu = (k, v) => setPd(d => ({ ...d, [k]: v }));
 
     const stepStartRef = useRef(Date.now());
+
+    useEffect(() => {
+        async function loadDraft() {
+            if (!session?.user?.id) return;
+            const draft = await loadPlayerDraft(session.user.id);
+            if (draft) {
+                setPd(draft);
+                // Advance step to max completed step if desired, for now we will just load the data.
+            }
+            setIsLoadingDraft(false);
+        }
+        loadDraft();
+    }, [session?.user?.id]);
 
     // ── Abandon tracking: fire SURVEY_ABANDON if player leaves mid-onboarding ──
     useEffect(() => {
@@ -65,19 +80,38 @@ export default function PlayerOnboarding() {
     const goTop = () => window.scrollTo(0, 0);
     const btnSty = (ok, full) => ({ padding: full ? "14px 20px" : "8px 16px", borderRadius: 8, border: "none", background: ok ? `linear-gradient(135deg,${B.bl},${B.pk})` : B.g200, color: ok ? B.w : B.g400, fontSize: 13, fontWeight: 800, fontFamily: F, cursor: ok ? "pointer" : "default", letterSpacing: .5, textTransform: "uppercase", width: full ? "100%" : "auto", marginTop: 6 });
 
-    // ── Onboarding step timer ──
-    const advanceStep = (next) => {
+    const doSignOut = async () => {
+        await signOut();
+        window.location.reload();
+    };
+
+    // ── Onboarding step timer & Auto-save ──
+    const advanceStep = async (next) => {
+        if (isSaving) return;
+        setIsSaving(true);
         const elapsed = Date.now() - stepStartRef.current;
         const progress = pd.onboardingProgress || { steps: {}, totalTimeMs: 0, lastStepReached: 0 };
         progress.steps[pStep] = { completed: true, durationMs: elapsed, completedAt: new Date().toISOString() };
         progress.totalTimeMs = (progress.totalTimeMs || 0) + elapsed;
         progress.lastStepReached = Math.max(progress.lastStepReached || 0, next);
         progress.percentComplete = Math.round((next / (stpN.length - 1)) * 100);
-        pu('onboardingProgress', progress);
+
+        // Prepare updated data with the new auto-save progress
+        const updatedPd = { ...pd, onboardingProgress: progress };
+
+        setPd(updatedPd);
         trackEvent(EVT.SURVEY_STEP || 'survey_step', { step: pStep, stepName: stpN[pStep], durationMs: elapsed });
+
+        // Auto-save the draft to the database
+        const savedPlayer = await savePlayerToDB(updatedPd, session?.user?.id);
+        if (savedPlayer && savedPlayer.id) {
+            setPd(prev => ({ ...prev, id: savedPlayer.id }));
+        }
+
         stepStartRef.current = Date.now();
         setPStep(next);
         goTop();
+        setIsSaving(false);
     };
 
     const renderP = () => {
@@ -393,12 +427,17 @@ export default function PlayerOnboarding() {
                 <SecH title="Review & Submit" />
                 <div style={sCard}><div style={{ fontSize: 12, fontWeight: 700, color: B.nvD, fontFamily: F }}>{pd.name || "—"}</div><div style={{ fontSize: 11, color: B.g400, fontFamily: F }}>{pd.dob || "—"} • {pd.club || "—"} • {gc} competition level(s){tb > 0 ? ` • ${tb} top score(s)` : ''}{tw > 0 ? ` • ${tw} bowling fig(s)` : ''}</div></div>
                 <button onClick={async () => {
-                    if (!pd.name || !pd.dob) return;
-                    const saved = await savePlayerToDB(pd, session?.user?.id);
+                    if (!pd.name || !pd.dob || isSaving) return;
+                    setIsSaving(true);
+                    const finalPd = { ...pd, submitted: true };
+                    const saved = await savePlayerToDB(finalPd, session?.user?.id);
                     // (Legacy: setPlayers used to be called here for Coach Portal, 
                     // now redundant as players reload from DB anyway).
+                    setIsSaving(false);
                     setPStep(7);
-                }} style={btnSty(pd.name && pd.dob, true)}>SUBMIT SURVEY</button>
+                }} style={btnSty(pd.name && pd.dob && !isSaving, true)}>
+                    {isSaving ? "SUBMITTING..." : "SUBMIT SURVEY"}
+                </button>
             </div>);
         }
 
@@ -412,12 +451,14 @@ export default function PlayerOnboarding() {
 
     return (<div style={{ minHeight: "100vh", fontFamily: F, background: B.g50 }}>
 
-        <Hdr label="PLAYER ONBOARDING" onLogoClick={signOut} />
+        <Hdr label="PLAYER ONBOARDING" onLogoClick={doSignOut} />
         {/* Sign-out bar */}
         <div style={{ padding: '4px 12px', background: B.g100, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ fontSize: 9, color: B.g400, fontFamily: F }}>{session?.user?.email}</div>
-            <button onClick={signOut} style={{ fontSize: 9, fontWeight: 600, color: B.red, background: 'none', border: 'none', cursor: 'pointer', fontFamily: F }}>Sign Out</button>
+            <button onClick={doSignOut} style={{ fontSize: 9, fontWeight: 600, color: B.red, background: 'none', border: 'none', cursor: 'pointer', fontFamily: F }}>Sign Out</button>
         </div>
+
+        {isLoadingDraft && pStep === 0 && <div style={{ padding: 40, textAlign: 'center', fontSize: 13, color: B.g600, fontFamily: F }}>Loading your profile...</div>}
 
         {/* ═══ PROFILE UPDATE BANNER (v1 → v2) ═══ */}
         {pd.profileVersion === 1 && pd.submitted && pStep === 0 && <div style={{ margin: '8px 12px', padding: '12px 16px', background: `${B.bl}12`, border: `1px solid ${B.bl}40`, borderRadius: 10 }}>
@@ -448,19 +489,49 @@ export default function PlayerOnboarding() {
             </div>
         </div>}
 
-        {pStep < 7 && <div style={{ padding: "6px 12px", background: B.w, borderBottom: `1px solid ${B.g200}`, display: "flex", alignItems: "center", gap: 6 }}>
-            <div style={{ fontSize: 10, fontWeight: 700, color: B.pk, fontFamily: F }}>STEP {pStep + 1}/7</div>
-            <div style={{ fontSize: 11, fontWeight: 600, color: B.nvD, fontFamily: F }}>{stpN[pStep]}</div>
-            <div style={{ flex: 1, height: 3, background: B.g200, borderRadius: 2, marginLeft: 6 }}>
-                <div style={{ width: `${((pStep + 1) / 7) * 100}%`, height: "100%", background: `linear-gradient(90deg,${B.bl},${B.pk})`, borderRadius: 2, transition: "width 0.3s" }} />
+        {pStep < 7 && <div style={{ background: B.w, borderBottom: `1px solid ${B.g200}` }}>
+            <div style={{ display: 'flex', overflowX: 'auto', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                <style>{`::-webkit-scrollbar { display: none; }`}</style>
+                {stpN.map((name, idx) => {
+                    const isCompleted = pd.onboardingProgress?.lastStepReached >= idx || idx < pStep || pStep === 7;
+                    const isCurrent = idx === pStep;
+                    const isClickable = isCompleted || isCurrent;
+                    return (
+                        <div
+                            key={idx}
+                            onClick={() => {
+                                if (isClickable && !isCurrent) {
+                                    setPStep(idx);
+                                    goTop();
+                                }
+                            }}
+                            style={{
+                                padding: "12px 16px",
+                                minWidth: "max-content",
+                                cursor: isClickable && !isCurrent ? "pointer" : "default",
+                                borderBottom: isCurrent ? `3px solid ${B.bl}` : "3px solid transparent",
+                                color: isCurrent ? B.bl : isCompleted ? B.nvD : B.g400,
+                                opacity: isClickable ? 1 : 0.5,
+                                userSelect: "none"
+                            }}
+                        >
+                            <div style={{ fontSize: 11, fontWeight: isCurrent ? 800 : 700, fontFamily: F, lineHeight: 1 }}>{idx + 1}. {name}</div>
+                        </div>
+                    );
+                })}
+            </div>
+            <div style={{ height: 3, background: B.g100, width: "100%" }}>
+                <div style={{ width: `${((pStep + 1) / 7) * 100}%`, height: "100%", background: `linear-gradient(90deg,${B.bl},${B.pk})`, transition: "width 0.3s" }} />
             </div>
         </div>}
 
-        <div style={{ padding: 12, paddingBottom: pStep < 7 ? 70 : 12, ...dkWrap }}>{renderP()}</div>
+        {!isLoadingDraft && <div style={{ padding: 12, paddingBottom: pStep < 7 ? 70 : 12, ...dkWrap }}>{renderP()}</div>}
 
-        {pStep < 7 && <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: B.w, borderTop: `1px solid ${B.g200}`, padding: "8px 12px", display: "flex", justifyContent: "space-between", zIndex: 100 }}>
-            <button onClick={() => { if (pStep > 0) { setPStep(s => s - 1); goTop(); } else signOut(); }} style={{ padding: "8px 14px", borderRadius: 6, border: `1px solid ${B.g200}`, background: "transparent", fontSize: 11, fontWeight: 600, color: B.g600, cursor: "pointer", fontFamily: F }}>← {pStep === 0 ? 'Sign Out' : 'Back'}</button>
-            <button onClick={() => advanceStep(Math.min(pStep + 1, 6))} style={{ padding: "8px 14px", borderRadius: 6, border: "none", background: `linear-gradient(135deg,${B.bl},${B.pk})`, fontSize: 11, fontWeight: 700, color: B.w, cursor: "pointer", fontFamily: F }}>Next →</button>
+        {pStep < 7 && !isLoadingDraft && <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: B.w, borderTop: `1px solid ${B.g200}`, padding: "8px 12px", display: "flex", justifyContent: "space-between", zIndex: 100 }}>
+            <button onClick={() => { if (pStep > 0) { setPStep(s => s - 1); goTop(); } else doSignOut(); }} style={{ padding: "8px 14px", borderRadius: 6, border: `1px solid ${B.g200}`, background: "transparent", fontSize: 11, fontWeight: 600, color: B.g600, cursor: "pointer", fontFamily: F }}>← {pStep === 0 ? 'Sign Out' : 'Back'}</button>
+            <button disabled={isSaving} onClick={() => advanceStep(Math.min(pStep + 1, 6))} style={{ padding: "8px 14px", borderRadius: 6, border: "none", background: isSaving ? B.g400 : `linear-gradient(135deg,${B.bl},${B.pk})`, fontSize: 11, fontWeight: 700, color: B.w, cursor: isSaving ? "default" : "pointer", fontFamily: F }}>
+                {isSaving ? "Saving..." : "Save & Continue →"}
+            </button>
         </div>}
     </div>);
 }

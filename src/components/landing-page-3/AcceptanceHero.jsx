@@ -41,11 +41,11 @@ const AcceptanceHero = ({ acceptStatus, setAcceptStatus }) => {
                         </h1>
                     </motion.div>
 
-                    <motion.div variants={fadeIn} className="flex justify-center mb-10">
+                    <motion.div variants={fadeIn} className="flex justify-center w-full mb-10">
                         <img
                             src="/assets/MELBOURNE_OFFICIAL.png"
                             alt="Rajasthan Royals Academy Melbourne"
-                            className="h-24 md:h-32 w-auto object-contain brightness-0 invert"
+                            className="h-32 md:h-40 lg:h-48 w-auto object-contain mx-auto brightness-0 invert"
                         />
                     </motion.div>
 
@@ -55,7 +55,7 @@ const AcceptanceHero = ({ acceptStatus, setAcceptStatus }) => {
                                 Following our selection process, we are delighted to be able to offer you a position in the inaugural Rajasthan Royals Academy Melbourne Elite Program.
                             </p>
                             <p className="font-semibold text-white text-xl md:text-2xl italic">
-                                In accepting this offer you will become a foundation member of this world first Royals program!
+                                In accepting this offer you will become a foundation member of this world first Royals program.
                             </p>
                         </div>
 
@@ -66,9 +66,6 @@ const AcceptanceHero = ({ acceptStatus, setAcceptStatus }) => {
                                 {/* Value Item 1 */}
                                 <div className="bg-white/5 backdrop-blur-md border border-white/20 p-6 rounded-2xl flex flex-col gap-4 shadow-xl hover:bg-white/10 transition-colors">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 bg-rr-pink/20 rounded-xl flex items-center justify-center shrink-0 border border-rr-pink/40 shadow-inner">
-                                            <svg className="w-6 h-6 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                                        </div>
                                         <h4 className="font-black text-white uppercase tracking-wide text-lg">World-Class<br /><span className="text-rr-pink">T20 Coaching</span></h4>
                                     </div>
                                     <p className="text-sm text-slate-200 font-medium leading-relaxed">
@@ -79,41 +76,45 @@ const AcceptanceHero = ({ acceptStatus, setAcceptStatus }) => {
                                 {/* Value Item 2 */}
                                 <div className="bg-white/5 backdrop-blur-md border border-white/20 p-6 rounded-2xl flex flex-col gap-4 shadow-xl hover:bg-white/10 transition-colors">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 bg-rr-blue/20 rounded-xl flex items-center justify-center shrink-0 border border-rr-blue/40 shadow-inner">
-                                            <svg className="w-6 h-6 text-rr-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                        </div>
-                                        <h4 className="font-black text-white uppercase tracking-wide text-lg">RRAM<br /><span className="text-rr-blue">DNA PROFILE</span></h4>
+                                        <h4 className="font-black text-white uppercase tracking-wide text-lg">The<br /><span className="text-rr-blue">DNA PROFILE</span></h4>
                                     </div>
                                     <p className="text-sm text-slate-200 font-medium leading-relaxed">
-                                        Your <span className="font-bold text-white">Rajasthan Royals Academy Melbourne DNA Profile</span> features a proprietary Player Development Plan (IDP) and actionable DNA Card tracked via your dedicated portal. We utilize Full Track video analysis and IPL-standard metrics to explicitly map and accelerate your growth.
+                                        Your <span className="font-bold text-white">Player DNA Profile</span> features a proprietary Player Development Plan (IDP) tracked via your dedicated portal. We utilize Full Track video analysis and IPL-standard metrics to explicitly map and accelerate your growth.
                                     </p>
                                 </div>
 
                                 {/* Value Item 3 */}
                                 <div className="bg-white/5 backdrop-blur-md border border-white/20 p-6 rounded-2xl flex flex-col gap-4 shadow-xl hover:bg-white/10 transition-colors">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 bg-rr-pink/20 rounded-xl flex items-center justify-center shrink-0 border border-rr-pink/40 shadow-inner">
-                                            <svg className="w-6 h-6 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                                        </div>
                                         <h4 className="font-black text-white uppercase tracking-wide text-lg">360° Player<br /><span className="text-rr-pink">Development</span></h4>
                                     </div>
                                     <p className="text-sm text-slate-200 font-medium leading-relaxed">
-                                        Look beyond the nets. Benefit from high-performance sessions in <span className="font-bold text-white">sports psychology, nutrition, and strength & conditioning</span>, building daily professional habits.
+                                        Look beyond the nets. Benefit from high-performance sessions in <span className="font-bold text-white">T20 mental performance, nutrition, and strength & conditioning</span>, building daily professional habits.
                                     </p>
                                 </div>
 
                                 {/* Value Item 4 */}
                                 <div className="bg-white/5 backdrop-blur-md border border-white/20 p-6 rounded-2xl flex flex-col gap-4 shadow-xl hover:bg-white/10 transition-colors">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 bg-rr-blue/20 rounded-xl flex items-center justify-center shrink-0 border border-rr-blue/40 shadow-inner">
-                                            <svg className="w-6 h-6 text-rr-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                                        </div>
                                         <h4 className="font-black text-white uppercase tracking-wide text-lg">Full Elite<br /><span className="text-rr-blue">Apparel Kit</span></h4>
                                     </div>
                                     <p className="text-sm text-slate-200 font-medium leading-relaxed">
                                         Look the part in official Rajasthan Royals Academy gear. You will receive a premium <span className="font-bold text-white">training shirt, functional shorts, and academy cap</span> upon induction.
                                     </p>
                                 </div>
+                            </div>
+                        </div>
+
+                        {/* Tech Partners / Powered By */}
+                        <div className="flex flex-col items-center justify-center pt-8 pb-4 border-t border-white/10 mt-8 mb-4">
+                            <p className="text-xs uppercase tracking-[0.2em] text-slate-400 font-bold mb-6">World-Class Technology Partners</p>
+                            <div className="flex flex-wrap items-center justify-center gap-10 md:gap-16">
+                                <a href="https://fulltrack.ai/" target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-opacity">
+                                    <img src="/assets/fulltrack-logo.png" alt="Fulltrack AI" className="h-24 md:h-32 lg:h-40 w-auto object-contain" />
+                                </a>
+                                <a href="https://www.str8bat.com/" target="_blank" rel="noopener noreferrer" className="brightness-0 invert opacity-70 hover:opacity-100 transition-opacity">
+                                    <img src="/assets/str8bat-logo.png" alt="str8bat" className="h-6 md:h-8 w-auto object-contain" />
+                                </a>
                             </div>
                         </div>
 

@@ -205,45 +205,70 @@ const AcceptanceForm = () => {
                                     <span className="text-xs font-bold text-slate-700 mb-1 block uppercase tracking-wider">T-Shirt Size</span>
                                     <select value={sizeTshirt} onChange={(e) => setSizeTshirt(e.target.value)} className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:border-rr-pink focus:ring-1 focus:ring-rr-pink transition-all">
                                         <option value="">Select...</option>
-                                        <option value="Youth Small (YS)">Youth Small (YS)</option>
-                                        <option value="Youth Medium (YM)">Youth Medium (YM)</option>
-                                        <option value="Youth Large (YL)">Youth Large (YL)</option>
-                                        <option value="Youth X-Large (YXL)">Youth X-Large (YXL)</option>
-                                        <option value="Small (S)">Small (S)</option>
-                                        <option value="Medium (M)">Medium (M)</option>
-                                        <option value="Large (L)">Large (L)</option>
-                                        <option value="X-Large (XL)">X-Large (XL)</option>
-                                        <option value="XX-Large (XXL)">XX-Large (XXL)</option>
+                                        <optgroup label="Junior Sizes">
+                                            <option value="Junior 18">Junior 18</option>
+                                            <option value="Junior 20">Junior 20</option>
+                                            <option value="Junior 22">Junior 22</option>
+                                            <option value="Junior 24">Junior 24</option>
+                                            <option value="Junior 26">Junior 26</option>
+                                            <option value="Junior 28">Junior 28</option>
+                                            <option value="Junior 30">Junior 30</option>
+                                            <option value="Junior 32">Junior 32</option>
+                                            <option value="Junior 34 (XXS)">Junior 34 (XXS)</option>
+                                        </optgroup>
+                                        <optgroup label="Senior Sizes">
+                                            <option value="Senior XS (36)">Senior XS (36)</option>
+                                            <option value="Senior S (38)">Senior S (38)</option>
+                                            <option value="Senior M (40)">Senior M (40)</option>
+                                            <option value="Senior L (42)">Senior L (42)</option>
+                                            <option value="Senior XL (44)">Senior XL (44)</option>
+                                            <option value="Senior 2XL (46)">Senior 2XL (46)</option>
+                                            <option value="Senior 3XL (48)">Senior 3XL (48)</option>
+                                            <option value="Senior 4XL (50)">Senior 4XL (50)</option>
+                                            <option value="Senior 5XL (52)">Senior 5XL (52)</option>
+                                        </optgroup>
                                     </select>
                                 </div>
                                 <div>
                                     <span className="text-xs font-bold text-slate-700 mb-1 block uppercase tracking-wider">Short Size</span>
                                     <select value={sizeShort} onChange={(e) => setSizeShort(e.target.value)} className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:border-rr-pink focus:ring-1 focus:ring-rr-pink transition-all">
                                         <option value="">Select...</option>
-                                        <option value="Youth Small (YS)">Youth Small (YS)</option>
-                                        <option value="Youth Medium (YM)">Youth Medium (YM)</option>
-                                        <option value="Youth Large (YL)">Youth Large (YL)</option>
-                                        <option value="Youth X-Large (YXL)">Youth X-Large (YXL)</option>
-                                        <option value="Small (S)">Small (S)</option>
-                                        <option value="Medium (M)">Medium (M)</option>
-                                        <option value="Large (L)">Large (L)</option>
-                                        <option value="X-Large (XL)">X-Large (XL)</option>
-                                        <option value="XX-Large (XXL)">XX-Large (XXL)</option>
+                                        <optgroup label="Junior Sizes">
+                                            <option value="Junior 8-10">Junior 8-10</option>
+                                            <option value="Junior 12-14">Junior 12-14</option>
+                                            <option value="Junior 15-16">Junior 15-16</option>
+                                        </optgroup>
+                                        <optgroup label="Senior Sizes">
+                                            <option value="Senior S">Senior S</option>
+                                            <option value="Senior M">Senior M</option>
+                                            <option value="Senior L">Senior L</option>
+                                            <option value="Senior XL">Senior XL</option>
+                                            <option value="Senior 2XL">Senior 2XL</option>
+                                        </optgroup>
                                     </select>
                                 </div>
                                 <div>
                                     <span className="text-xs font-bold text-slate-700 mb-1 block uppercase tracking-wider">Pants Size</span>
                                     <select value={sizePants} onChange={(e) => setSizePants(e.target.value)} className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:border-rr-pink focus:ring-1 focus:ring-rr-pink transition-all">
                                         <option value="">Select...</option>
-                                        <option value="Youth Small (YS)">Youth Small (YS)</option>
-                                        <option value="Youth Medium (YM)">Youth Medium (YM)</option>
-                                        <option value="Youth Large (YL)">Youth Large (YL)</option>
-                                        <option value="Youth X-Large (YXL)">Youth X-Large (YXL)</option>
-                                        <option value="Small (S)">Small (S)</option>
-                                        <option value="Medium (M)">Medium (M)</option>
-                                        <option value="Large (L)">Large (L)</option>
-                                        <option value="X-Large (XL)">X-Large (XL)</option>
-                                        <option value="XX-Large (XXL)">XX-Large (XXL)</option>
+                                        <optgroup label="Junior Sizes">
+                                            <option value="Junior 18">Junior 18</option>
+                                            <option value="Junior 20">Junior 20</option>
+                                            <option value="Junior 22">Junior 22</option>
+                                            <option value="Junior 24">Junior 24</option>
+                                            <option value="Junior 26">Junior 26</option>
+                                            <option value="Junior 28">Junior 28</option>
+                                        </optgroup>
+                                        <optgroup label="Senior Sizes">
+                                            <option value="Senior XS (28)">Senior XS (28)</option>
+                                            <option value="Senior S (30)">Senior S (30)</option>
+                                            <option value="Senior M (32)">Senior M (32)</option>
+                                            <option value="Senior L (34)">Senior L (34)</option>
+                                            <option value="Senior XL (36)">Senior XL (36)</option>
+                                            <option value="Senior 2XL (38)">Senior 2XL (38)</option>
+                                            <option value="Senior 3XL (40)">Senior 3XL (40)</option>
+                                            <option value="Senior 4XL (42)">Senior 4XL (42)</option>
+                                        </optgroup>
                                     </select>
                                 </div>
                             </div>
