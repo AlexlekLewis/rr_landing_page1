@@ -69,8 +69,8 @@ const AcceptanceHero = ({ acceptStatus, setAcceptStatus }) => {
                                         <svg className="w-6 h-6 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                     </div>
                                     <div>
-                                        <h4 className="font-bold text-white mb-1 uppercase tracking-wider">World-Class Coaching</h4>
-                                        <p className="text-sm text-slate-300">Access to IPL-standard methodologies, tactical development, and specialized guidance.</p>
+                                        <h4 className="font-bold text-white mb-1 uppercase tracking-wider">The Only T20 Elite Program</h4>
+                                        <p className="text-sm text-slate-300">An exclusive 12-week intensive dedicated uniquely to T20 development, unlike any other program in Victoria.</p>
                                     </div>
                                 </div>
                                 {/* Value Item 2 */}
@@ -79,8 +79,8 @@ const AcceptanceHero = ({ acceptStatus, setAcceptStatus }) => {
                                         <svg className="w-6 h-6 text-rr-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                     </div>
                                     <div>
-                                        <h4 className="font-bold text-white mb-1 uppercase tracking-wider">DNA Profiling</h4>
-                                        <p className="text-sm text-slate-300">A dedicated player portal tracking your bespoke data, analytics, and growth trajectory.</p>
+                                        <h4 className="font-bold text-white mb-1 uppercase tracking-wider">The Royals Way</h4>
+                                        <p className="text-sm text-slate-300">Learn to play boldly. We value courage over comfort, pushing you to explore new avenues to compete and win.</p>
                                     </div>
                                 </div>
                                 {/* Value Item 3 */}
@@ -89,8 +89,8 @@ const AcceptanceHero = ({ acceptStatus, setAcceptStatus }) => {
                                         <svg className="w-6 h-6 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
                                     </div>
                                     <div>
-                                        <h4 className="font-bold text-white mb-1 uppercase tracking-wider">Global Pathways</h4>
-                                        <p className="text-sm text-slate-300">Direct visibility to the Royals global network and exclusive international opportunities.</p>
+                                        <h4 className="font-bold text-white mb-1 uppercase tracking-wider">A High-Performance Environment</h4>
+                                        <p className="text-sm text-slate-300">Train alongside Victoria's best emerging talent in a strictly limited cohort that demands excellence.</p>
                                     </div>
                                 </div>
                                 {/* Value Item 4 */}
@@ -99,8 +99,8 @@ const AcceptanceHero = ({ acceptStatus, setAcceptStatus }) => {
                                         <svg className="w-6 h-6 text-rr-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                                     </div>
                                     <div>
-                                        <h4 className="font-bold text-white mb-1 uppercase tracking-wider">Exclusive Community</h4>
-                                        <p className="text-sm text-slate-300">Train alongside the best emerging talent in Victoria in a strictly limited cohort.</p>
+                                        <h4 className="font-bold text-white mb-1 uppercase tracking-wider">IPL-Standard Methodologies</h4>
+                                        <p className="text-sm text-slate-300">Expand your game using the same bespoke data, tactics, and DNA profiling used by the Royals global network.</p>
                                     </div>
                                 </div>
                             </div>
