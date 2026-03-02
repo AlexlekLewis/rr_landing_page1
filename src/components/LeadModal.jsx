@@ -198,11 +198,13 @@ const LeadModal = ({ isOpen, onClose }) => {
                         </div>
 
                         {/* Footer */}
-                        <div className="p-5 border-t border-slate-100 shrink-0">
-                            <Button type="submit" form="lead-form" className="w-full py-3.5" disabled={loading}>
-                                {loading ? 'SUBMITTING...' : 'LEARN MORE'}
-                            </Button>
-                        </div>
+                        {status !== 'success' && (
+                            <div className="p-5 border-t border-slate-100 shrink-0">
+                                <Button type="submit" form="lead-form" className="w-full py-3.5" disabled={loading}>
+                                    {loading ? 'SUBMITTING...' : 'LEARN MORE'}
+                                </Button>
+                            </div>
+                        )}
                     </motion.div>
                 </div>
             )}
