@@ -318,7 +318,7 @@ const AcceptanceForm = () => {
                             <p className="text-sm text-slate-700 font-medium leading-relaxed">
                                 Please select a minimum of <span className="font-bold text-rr-pink">3 preferred options</span> for your weekly sessions.
                                 You <span className="font-bold underline">must</span> select at least <span className="font-bold">1 weekday</span> and <span className="font-bold">1 weekend</span> slot.
-                                <br /><span className="block mt-2 text-xs italic text-slate-500">Note: Regardless of how many you select, you will be allocated exactly one weekday and one weekend slot overall.</span>
+                                <br /><span className="block mt-2 text-xs italic text-slate-500">We appreciate how busy weeknights and weekends can be for players and their families. While we need 3 preferences to help us balance the squads, our team will do our absolute best to work with you and lock in the times that suit you most.</span>
                             </p>
                         </div>
 
