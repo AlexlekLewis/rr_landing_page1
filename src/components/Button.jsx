@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const Button = ({ children, onClick, className = '', variant = 'primary', disabled = false }) => {
+const Button = ({ children, onClick, className = '', variant = 'primary', disabled = false, ...props }) => {
     const baseStyle = "px-8 py-3 rounded-full font-bold text-lg transition-transform transform shadow-lg";
     const variants = {
         primary: "bg-rr-pink text-white hover:bg-rr-light-pink shadow-rr-pink/30",
@@ -18,6 +18,7 @@ const Button = ({ children, onClick, className = '', variant = 'primary', disabl
             className={`${baseStyle} ${variants[variant]} ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'} ${className}`}
             onClick={onClick}
             disabled={disabled}
+            {...props}
         >
             {children}
         </motion.button>

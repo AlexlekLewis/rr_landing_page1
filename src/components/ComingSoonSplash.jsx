@@ -7,7 +7,7 @@ const ComingSoonSplash = () => {
 
     return (
         <>
-            <div className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden"
+            <div className="relative min-h-[100dvh] w-full flex flex-col items-center overflow-x-hidden"
                 style={{ background: 'linear-gradient(180deg, #001D48 0%, #000C1F 50%, #0A0A14 100%)' }}
             >
                 {/* Ambient glow behind logo */}
@@ -26,8 +26,11 @@ const ComingSoonSplash = () => {
                     }}
                 />
 
+                {/* Top spacer for vertical balance */}
+                <div className="flex-grow flex-shrink basis-8 md:basis-16"></div>
+
                 {/* Content */}
-                <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-3xl">
+                <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-3xl shrink-0">
 
                     {/* Logo */}
                     <motion.div
@@ -110,12 +113,15 @@ const ComingSoonSplash = () => {
                     />
                 </div>
 
+                {/* Bottom spacer for vertical balance */}
+                <div className="flex-grow flex-shrink basis-8 md:basis-16"></div>
+
                 {/* Bottom branding strip */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.6, delay: 1.2 }}
-                    className="absolute bottom-8 left-0 right-0 text-center"
+                    className="relative pb-6 md:pb-8 text-center shrink-0 z-10 w-full px-4"
                 >
                     <p className="text-[10px] md:text-xs tracking-[0.2em] uppercase text-white/20 font-medium">
                         Rajasthan Royals Academy Melbourne
