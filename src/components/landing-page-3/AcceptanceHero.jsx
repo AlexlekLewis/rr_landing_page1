@@ -49,15 +49,65 @@ const AcceptanceHero = ({ acceptStatus, setAcceptStatus }) => {
                         />
                     </motion.div>
 
-                    <motion.div variants={fadeIn} className="space-y-6 text-lg md:text-xl text-slate-200 leading-relaxed font-light max-w-3xl mx-auto bg-white/5 p-8 rounded-3xl backdrop-blur-sm border border-white/10 shadow-2xl">
-                        <p>
-                            Following our selection process, we are delighted to be able to offer you a position in the inaugural Rajasthan Royals Academy Melbourne Elite Program.
-                        </p>
-                        <p>
-                            In accepting this offer you will become a foundation member of this world first Royals program!
-                        </p>
-                        <p className="font-semibold text-white">
-                            Please take the time to work through the below information to secure and accept your place in the Elite Program.
+                    <motion.div variants={fadeIn} className="space-y-6 text-lg md:text-xl text-slate-200 leading-relaxed font-light max-w-4xl mx-auto">
+                        <div className="bg-white/5 p-8 rounded-3xl backdrop-blur-sm border border-white/10 shadow-2xl mb-12">
+                            <p className="mb-6">
+                                Following our selection process, we are delighted to be able to offer you a position in the inaugural Rajasthan Royals Academy Melbourne Elite Program.
+                            </p>
+                            <p className="font-semibold text-white text-xl md:text-2xl italic">
+                                In accepting this offer you will become a foundation member of this world first Royals program!
+                            </p>
+                        </div>
+
+                        {/* FOMO / Value Reaffirmation Section */}
+                        <div className="text-left mb-12">
+                            <h3 className="text-2xl font-black uppercase tracking-widest text-rr-pink mb-8 text-center">Securing Your Place Means:</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* Value Item 1 */}
+                                <div className="bg-rr-dark/50 border border-white/10 p-6 rounded-2xl flex items-start gap-4">
+                                    <div className="w-12 h-12 bg-rr-pink/20 rounded-xl flex items-center justify-center shrink-0 border border-rr-pink/30">
+                                        <svg className="w-6 h-6 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-white mb-1 uppercase tracking-wider">World-Class Coaching</h4>
+                                        <p className="text-sm text-slate-300">Access to IPL-standard methodologies, tactical development, and specialized guidance.</p>
+                                    </div>
+                                </div>
+                                {/* Value Item 2 */}
+                                <div className="bg-rr-dark/50 border border-white/10 p-6 rounded-2xl flex items-start gap-4">
+                                    <div className="w-12 h-12 bg-rr-blue/20 rounded-xl flex items-center justify-center shrink-0 border border-rr-blue/30">
+                                        <svg className="w-6 h-6 text-rr-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-white mb-1 uppercase tracking-wider">DNA Profiling</h4>
+                                        <p className="text-sm text-slate-300">A dedicated player portal tracking your bespoke data, analytics, and growth trajectory.</p>
+                                    </div>
+                                </div>
+                                {/* Value Item 3 */}
+                                <div className="bg-rr-dark/50 border border-white/10 p-6 rounded-2xl flex items-start gap-4">
+                                    <div className="w-12 h-12 bg-rr-pink/20 rounded-xl flex items-center justify-center shrink-0 border border-rr-pink/30">
+                                        <svg className="w-6 h-6 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-white mb-1 uppercase tracking-wider">Global Pathways</h4>
+                                        <p className="text-sm text-slate-300">Direct visibility to the Royals global network and exclusive international opportunities.</p>
+                                    </div>
+                                </div>
+                                {/* Value Item 4 */}
+                                <div className="bg-rr-dark/50 border border-white/10 p-6 rounded-2xl flex items-start gap-4">
+                                    <div className="w-12 h-12 bg-rr-blue/20 rounded-xl flex items-center justify-center shrink-0 border border-rr-blue/30">
+                                        <svg className="w-6 h-6 text-rr-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-white mb-1 uppercase tracking-wider">Exclusive Community</h4>
+                                        <p className="text-sm text-slate-300">Train alongside the best emerging talent in Victoria in a strictly limited cohort.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p className="font-semibold text-white mt-8 mb-4">
+                            Please take the time to work through the below information to confirm and accept your place in the Elite Program.
                         </p>
                     </motion.div>
                 </div>
@@ -69,8 +119,8 @@ const AcceptanceHero = ({ acceptStatus, setAcceptStatus }) => {
                     <button
                         onClick={() => setAcceptStatus('yes')}
                         className={`w-full py-6 px-10 rounded-2xl font-black tracking-wide uppercase text-xl md:text-2xl transition-all duration-300 border-2 ${acceptStatus === 'yes'
-                                ? 'bg-rr-pink border-rr-pink text-white shadow-xl shadow-rr-pink/20 scale-105'
-                                : 'bg-gradient-to-r from-rr-pink to-rr-blue border-transparent text-white hover:shadow-xl hover:shadow-rr-pink/20 hover:scale-105'
+                            ? 'bg-rr-pink border-rr-pink text-white shadow-xl shadow-rr-pink/20 scale-105'
+                            : 'bg-gradient-to-r from-rr-pink to-rr-blue border-transparent text-white hover:shadow-xl hover:shadow-rr-pink/20 hover:scale-105'
                             }`}
                     >
                         {acceptStatus === 'yes' ? 'OFFER ACCEPTED ✓' : 'YES, I ACCEPT'}
