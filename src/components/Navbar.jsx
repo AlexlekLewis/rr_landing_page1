@@ -18,7 +18,12 @@ const Navbar = ({ variant = 'lp1' }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const isLP2 = variant === 'lp2';
-    const navLinks = isLP2 ? LP2_NAV : LP1_NAV;
+    const isLP3 = variant === 'lp3';
+
+    // For LP3, we want an empty nav bar (no links)
+    const navLinks = isLP3 ? [] : (isLP2 ? LP2_NAV : LP1_NAV);
+
+    // LP3 does not need a CTA button
     const ctaLabel = isLP2 ? 'ACCEPT INVITATION' : 'REGISTER INTEREST';
     const ctaTarget = isLP2 ? 'rsvp' : 'apply-form';
 
@@ -64,19 +69,23 @@ const Navbar = ({ variant = 'lp1' }) => {
                                 {link.label}
                             </a>
                         ))}
-                        <Button onClick={scrollToForm} variant="blue" className="text-sm px-6 py-2">
-                            {ctaLabel}
-                        </Button>
+                        {!isLP3 && (
+                            <Button onClick={scrollToForm} variant="blue" className="text-sm px-6 py-2">
+                                {ctaLabel}
+                            </Button>
+                        )}
                     </div>
 
-                    {/* Mobile hamburger */}
-                    <button
-                        className="md:hidden text-white p-2 focus:outline-none"
-                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        aria-label="Toggle menu"
-                    >
-                        {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
-                    </button>
+                    {/* Mobile hamburger (hide on LP3 as there are no links) */}
+                    {!isLP3 && (
+                        <button
+                            className="md:hidden text-white p-2 focus:outline-none"
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            aria-label="Toggle menu"
+                        >
+                            {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+                        </button>
+                    )}
                 </div>
             </nav>
 

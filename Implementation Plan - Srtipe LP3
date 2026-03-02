@@ -1,0 +1,47 @@
+# Payment Landing Page (LP3) Implementation Plan
+
+## Goal Description
+Create a branded landing page (LP3) dedicated to accepting payments via Stripe. The page will adhere to the design rules of LP1 and LP2. It will track whether players have paid in full, are on a payment plan, or have paid a partial amount. It will enforce the rule that payments cannot be accepted unless the deposit minimum is paid.
+
+> [!WARNING]
+> **User Review Required: Stripe & Deposit Logic**
+> 1. **Stripe Integration Approach**: Since this is a frontend-only React application and there is no backend currently set up for Stripe Checkout, the fastest and most secure method is to use **Stripe Payment Links**. Users click a button, go to Stripe's hosted checkout, and a webhook (via Make.com or Zapier) updates the Supabase database. Are you okay with using Stripe Payment Links, or do you want a custom Stripe Checkout integration using Supabase Edge Functions?
+> 2. **Deposit Minimum Rule**: You mentioned "payments cannot be accepted unless they have paid the deposit minimum". Does this mean:
+>    - **Option A**: This new landing page is where they *make* that initial deposit (and choose full/plan/partial)?
+>    - **Option B**: They have already paid the deposit elsewhere, and we need to verify their email/ID against the database before showing them the payment options on this page?
+
+## Proposed Changes
+
+### Supabase Database
+#### [NEW] `supabase_payment_migration.sql`
+- Create a new table `player_payments` with the following columns:
+  - `id` (UUID, primary key)
+  - `created_at` (timestamp)
+  - `player_name` (text)
+  - `email` (text)
+  - `payment_status` (enum or text: 'full', 'plan', 'partial', 'deposit_only')
+  - `total_amount_paid` (numeric)
+- Set up appropriate Row Level Security (RLS) policies.
+
+---
+
+### React Frontend Components
+#### [MODIFY] `src/App.jsx`
+- Add a new public route for the payment page, e.g., `<Route path="/offer/payment" element={<LandingPage3 />} />`.
+
+#### [NEW] `src/components/landing-page-3/LandingPage3.jsx`
+- Create the main payment landing page.
+- Reuse `Navbar`, `Footer`, and `Hero` (styled similarly to `/offer/assessment`).
+- Include a specific section explaining the payment options (Pay in Full, Payment Plan, Partial / Deposit).
+
+#### [NEW] `src/components/landing-page-3/PaymentOptions.jsx`
+- A component to display the 3 pricing tiers/options.
+- If Option B (from questions above) is chosen, include an email verification step before showing the Stripe payment links.
+- Buttons will link to the respective Stripe Payment Links (to be provided by the user).
+
+## Verification Plan
+
+### Manual Verification
+1. User will navigate to the new `/offer/payment` route to verify the branding matches LP1 and LP2 perfectly.
+2. User will verify that the payment options display correctly and link to the correct Stripe checkouts.
+3. User will test the deposit minimum logic (either by making a test payment or verifying email restriction).

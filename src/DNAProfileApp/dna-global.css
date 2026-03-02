@@ -1,0 +1,57 @@
+/* ═══ GLOBAL DNA PROFILE SCOPED CSS ═══ */
+
+/* Font imports */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,400&display=swap');
+
+#dna-profile-root {
+  font-family: 'Montserrat', sans-serif;
+  overscroll-behavior: none;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+  
+  /* Inherit variables or background if needed */
+  min-height: 100vh;
+  background-color: #0f172a; /* Fallback dark bg */
+}
+
+/* Prevent iOS zoom on input focus — inputs must be >= 16px */
+#dna-profile-root input,
+#dna-profile-root select,
+#dna-profile-root textarea {
+  font-size: 16px !important;
+}
+
+/* Proper touch behavior on interactive elements */
+#dna-profile-root button,
+#dna-profile-root [role="button"],
+#dna-profile-root input,
+#dna-profile-root select,
+#dna-profile-root textarea {
+  touch-action: manipulation;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* Safe area for fixed bottom bars (notched iPhones) */
+#dna-profile-root .rra-fixed-bottom {
+  padding-bottom: max(8px, env(safe-area-inset-bottom, 8px)) !important;
+}
+
+/* Prevent text selection on buttons */
+#dna-profile-root button,
+#dna-profile-root [role="button"] {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Focus visible for accessibility */
+#dna-profile-root :focus-visible {
+  outline: 2px solid #e91e63;
+  outline-offset: 2px;
+}
+
+/* Additional Reset-like behavior to insulate from Tailwind if needed */
+#dna-profile-root * {
+  box-sizing: border-box;
+}

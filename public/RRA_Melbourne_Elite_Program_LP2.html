@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rajasthan Royals Academy Melbourne — Elite Program</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --rr-pink: #E50695;
+            --rr-blue: #1226AA;
+            --rr-dark: #111927;
+            --rr-slate-50: #F8FAFC;
+            --rr-slate-100: #F1F5F9;
+            --rr-slate-200: #E2E8F0;
+            --rr-slate-400: #94A3B8;
+            --rr-slate-500: #64748B;
+            --rr-slate-600: #475569;
+            --rr-slate-700: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--rr-dark);
+            background: #fff;
+            line-height: 1.6;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        @page {
+            margin: 0;
+            size: A4;
+        }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .page-break {
+                page-break-before: always;
+            }
+
+            .no-break {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* ===== COVER PAGE ===== */
+        .cover-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--rr-dark) 0%, #1a2744 50%, var(--rr-blue) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover-page::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(229, 6, 149, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .cover-page::after {
+            content: '';
+            position: absolute;
+            bottom: -20%;
+            left: -15%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(18, 38, 170, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .cover-logo {
+            width: 180px;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover-title {
+            font-size: 52px;
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+            line-height: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover-subtitle {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--rr-pink), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover-divider {
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, var(--rr-pink), var(--rr-blue));
+            margin: 0 auto 50px;
+            border-radius: 2px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover-details {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover-detail-item {
+            text-align: center;
+        }
+
+        .cover-detail-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--rr-slate-400);
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .cover-detail-value {
+            font-size: 14px;
+            color: white;
+            font-weight: 700;
+        }
+
+        .cover-footer {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .cover-footer p {
+            color: var(--rr-slate-400);
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        /* ===== CONTENT PAGES ===== */
+        .content-page {
+            padding: 60px 50px;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .content-page.bg-light {
+            background: var(--rr-slate-50);
+        }
+
+        .content-page.bg-dark {
+            background: var(--rr-dark);
+            color: white;
+        }
+
+        /* Page header with brand stripe */
+        .page-header {
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .page-header::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(to right, var(--rr-pink), var(--rr-blue));
+            margin-top: 12px;
+            border-radius: 2px;
+        }
+
+        .page-header.centered {
+            text-align: center;
+        }
+
+        .page-header.centered::after {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--rr-dark);
+        }
+
+        .section-title .accent {
+            background: linear-gradient(to right, var(--rr-pink), var(--rr-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            font-size: 15px;
+            color: var(--rr-slate-600);
+            font-weight: 500;
+            margin-top: 12px;
+            max-width: 600px;
+            line-height: 1.7;
+        }
+
+        .section-subtitle.centered {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: white;
+            border: 1px solid var(--rr-slate-200);
+            border-radius: 16px;
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(to right, var(--rr-pink), var(--rr-blue));
+            border-radius: 16px 16px 0 0;
+        }
+
+        .card.accent-reverse::before {
+            background: linear-gradient(to right, var(--rr-blue), var(--rr-pink));
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--rr-dark);
+            margin-bottom: 8px;
+        }
+
+        .card-subtitle {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--rr-pink);
+            margin-bottom: 6px;
+        }
+
+        .card-body {
+            font-size: 13px;
+            color: var(--rr-slate-600);
+            font-weight: 500;
+            line-height: 1.7;
+        }
+
+        /* ===== GRID LAYOUTS ===== */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 16px;
+        }
+
+        /* ===== NUMBERED ITEMS ===== */
+        .numbered-item {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .numbered-item .number {
+            font-size: 22px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--rr-pink), var(--rr-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            flex-shrink: 0;
+            line-height: 1;
+            min-width: 28px;
+        }
+
+        /* ===== QUOTE CARD ===== */
+        .quote-card {
+            background: white;
+            border: 1px solid var(--rr-slate-200);
+            border-radius: 20px;
+            padding: 36px 40px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .quote-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--rr-pink), var(--rr-blue));
+        }
+
+        .quote-card::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--rr-pink), var(--rr-blue));
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .badge-pink {
+            background: rgba(229, 6, 149, 0.1);
+            color: var(--rr-pink);
+        }
+
+        .badge-blue {
+            background: rgba(18, 38, 170, 0.1);
+            color: var(--rr-blue);
+        }
+
+        /* ===== ACCORDION / LIST SECTIONS ===== */
+        .accordion-section {
+            background: white;
+            border: 1px solid var(--rr-slate-200);
+            border-left: 4px solid var(--rr-pink);
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 16px;
+        }
+
+        .accordion-section.blue-accent {
+            border-left-color: var(--rr-blue);
+        }
+
+        .accordion-title {
+            font-size: 16px;
+            font-weight: 900;
+            color: var(--rr-dark);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        .accordion-item {
+            margin-bottom: 14px;
+        }
+
+        .accordion-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .accordion-item h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--rr-dark);
+            margin-bottom: 4px;
+        }
+
+        .accordion-item p {
+            font-size: 12px;
+            color: var(--rr-slate-600);
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        /* ===== VALUE GRID ===== */
+        .value-tile {
+            background: var(--rr-slate-50);
+            border: 1px solid var(--rr-slate-200);
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .value-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--rr-pink);
+            flex-shrink: 0;
+        }
+
+        .value-tile span {
+            font-size: 12px;
+            color: var(--rr-slate-600);
+            font-weight: 500;
+        }
+
+        /* ===== SCHEDULE TABLE ===== */
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .schedule-block {
+            background: var(--rr-slate-50);
+            border: 1px solid var(--rr-slate-200);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .schedule-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--rr-slate-400);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .schedule-days {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--rr-dark);
+            margin-bottom: 8px;
+        }
+
+        .schedule-time {
+            font-size: 12px;
+            color: var(--rr-slate-500);
+            margin-bottom: 2px;
+        }
+
+        .schedule-note {
+            font-size: 10px;
+            color: var(--rr-slate-400);
+            font-style: italic;
+            margin-top: 6px;
+        }
+
+        /* ===== PROMISE BOX ===== */
+        .promise-box {
+            background: linear-gradient(to right, var(--rr-pink), var(--rr-blue));
+            border-radius: 16px;
+            padding: 3px;
+        }
+
+        .promise-box-inner {
+            background: white;
+            border-radius: 14px;
+            padding: 30px 36px;
+            text-align: center;
+        }
+
+        .promise-box p {
+            font-size: 14px;
+            color: var(--rr-slate-700);
+            font-weight: 500;
+            line-height: 1.8;
+        }
+
+        .promise-box strong {
+            font-weight: 900;
+            color: var(--rr-dark);
+        }
+
+        /* ===== IDP SECTION ===== */
+        .idp-item {
+            margin-bottom: 20px;
+        }
+
+        .idp-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .idp-item h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--rr-pink);
+            margin-bottom: 6px;
+        }
+
+        .idp-item p {
+            font-size: 13px;
+            color: var(--rr-slate-600);
+            font-weight: 500;
+            line-height: 1.7;
+        }
+
+        /* ===== GLOBAL NETWORK ===== */
+        .franchise-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 16px;
+            margin-top: 30px;
+        }
+
+        .franchise-tile {
+            background: white;
+            border: 1px solid var(--rr-slate-200);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .franchise-tile .name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--rr-dark);
+            margin-bottom: 2px;
+        }
+
+        .franchise-tile .league {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--rr-pink);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* ===== FOOTER ===== */
+        .page-footer {
+            position: absolute;
+            bottom: 20px;
+            left: 50px;
+            right: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid var(--rr-slate-200);
+        }
+
+        .page-footer.on-dark {
+            border-top-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .page-footer span {
+            font-size: 9px;
+            color: var(--rr-slate-400);
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* ===== INTRO TEXT BLOCK ===== */
+        .intro-card {
+            background: white;
+            border: 1px solid var(--rr-slate-100);
+            border-radius: 16px;
+            padding: 32px 36px;
+        }
+
+        .intro-card p {
+            font-size: 14px;
+            color: var(--rr-slate-700);
+            font-weight: 500;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .intro-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ===== KEY INFO BOXES ===== */
+        .key-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 30px;
+        }
+
+        .key-info-box {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px;
+            padding: 18px 22px;
+        }
+
+        .key-info-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--rr-slate-400);
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .key-info-value {
+            font-size: 13px;
+            font-weight: 700;
+            color: white;
+        }
+
+        /* Specialist coaching 3-col layout */
+        .spec-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .spec-card {
+            background: white;
+            border: 1px solid var(--rr-slate-200);
+            border-radius: 14px;
+            padding: 22px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .spec-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(to right, var(--rr-pink), var(--rr-blue));
+        }
+
+        .spec-card:nth-child(even)::before {
+            background: linear-gradient(to right, var(--rr-blue), var(--rr-pink));
+        }
+
+        .spec-card h3 {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--rr-dark);
+            margin-bottom: 8px;
+        }
+
+        .spec-card p {
+            font-size: 11px;
+            color: var(--rr-slate-600);
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        /* ===== PHASE CARDS ===== */
+        .phase-card {
+            background: white;
+            border: 1px solid var(--rr-slate-200);
+            border-radius: 20px;
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .phase-card.pink-blue::before {
+            background: linear-gradient(to right, var(--rr-blue), var(--rr-pink));
+        }
+
+        .phase-card.blue-pink::before {
+            background: linear-gradient(to right, var(--rr-pink), var(--rr-blue));
+        }
+
+        .phase-number {
+            font-size: 36px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--rr-pink), var(--rr-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .phase-weeks {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--rr-pink);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .phase-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--rr-dark);
+            margin-bottom: 10px;
+        }
+
+        .phase-desc {
+            font-size: 12px;
+            color: var(--rr-slate-600);
+            font-weight: 500;
+            line-height: 1.7;
+        }
+
+        /* ===== HIGHLIGHT STAT ===== */
+        .stat-highlight {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--rr-blue);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 20px;
+        }
+
+        /* Beyond 12 weeks cards */
+        .beyond-card {
+            background: white;
+            border: 1px solid var(--rr-slate-200);
+            border-radius: 20px;
+            padding: 26px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .beyond-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(to right, var(--rr-blue), var(--rr-pink));
+        }
+
+        .beyond-card:nth-child(even)::before {
+            background: linear-gradient(to right, var(--rr-pink), var(--rr-blue));
+        }
+
+        .beyond-card h3 {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--rr-dark);
+            margin-bottom: 10px;
+        }
+
+        .beyond-card p {
+            font-size: 12px;
+            color: var(--rr-slate-600);
+            font-weight: 500;
+            line-height: 1.7;
+        }
+
+        /* ===== CLOSING PAGE ===== */
+        .closing-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--rr-dark) 0%, #1a2744 60%, var(--rr-blue) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .closing-page::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(229, 6, 149, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .closing-title {
+            font-size: 38px;
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            line-height: 1.2;
+            position: relative;
+            z-index: 1;
+        }
+
+        .closing-subtitle {
+            font-size: 16px;
+            color: var(--rr-slate-400);
+            font-weight: 500;
+            max-width: 500px;
+            line-height: 1.7;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .closing-contact {
+            position: relative;
+            z-index: 1;
+        }
+
+        .closing-contact p {
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .closing-contact .email {
+            color: var(--rr-pink);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== PAGE 1: COVER ===== -->
+    <div class="cover-page">
+        <img src="assets/Logo_White_Transparent.png" alt="RRA Melbourne Logo" class="cover-logo">
+        <h1 class="cover-title">Elite Program</h1>
+        <p class="cover-subtitle">Melbourne</p>
+        <div class="cover-divider"></div>
+        <div class="cover-details">
+            <div class="cover-detail-item">
+                <p class="cover-detail-label">When</p>
+                <p class="cover-detail-value">Sunday March 1st · 1:30–4:30pm</p>
+            </div>
+            <div class="cover-detail-item">
+                <p class="cover-detail-label">Where</p>
+                <p class="cover-detail-value">Cutting Edge Cricket Centre, Bundoora</p>
+            </div>
+            <div class="cover-detail-item">
+                <p class="cover-detail-label">Led By</p>
+                <p class="cover-detail-value">Siddhartha Lahiri — Head of Int'l Player Development</p>
+            </div>
+        </div>
+        <div class="cover-footer">
+            <p>Rajasthan Royals Academy Melbourne &bull; Confidential</p>
+        </div>
+    </div>
+
+
+    <!-- ===== PAGE 2: INTRODUCTION ===== -->
+    <div class="content-page bg-light page-break">
+        <div class="page-header centered">
+            <h2 class="section-title">It's Time <span class="accent">to Shine</span></h2>
+        </div>
+
+        <div style="max-width: 620px; margin: 0 auto;">
+            <div class="intro-card" style="margin-bottom: 24px;">
+                <p>Thank you for your interest and application. You have progressed to the next stage of the
+                    <strong>Rajasthan Royals Elite Program</strong> selection process — an exclusive assessment session.
+                </p>
+                <p style="color: var(--rr-pink); font-weight: 700;">However, places are now limited to 20 remaining
+                    spots for the assessment session.</p>
+            </div>
+
+            <div class="intro-card">
+                <p>As you have been invited to attend the assessment session, you are one step closer to the Elite
+                    Program. The Rajasthan Royals Academy Melbourne coaching and selection team are considering you as a
+                    candidate with a strong possibility of being offered a place — however, with only 20 spots
+                    remaining, we encourage you to respond as soon as possible to secure your position.</p>
+                <p>So that you can begin to prepare for both the assessment session and the possibility of being offered
+                    a place, please find below details of the program including program content, program benefits, and
+                    training days &amp; times.</p>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Rajasthan Royals Academy Melbourne</span>
+            <span>Elite Program</span>
+        </div>
+    </div>
+
+
+    <!-- ===== PAGE 3: PROGRAM AT A GLANCE ===== -->
+    <div class="content-page page-break">
+        <div class="page-header centered">
+            <h2 class="section-title">Program at a <span class="accent">Glance</span></h2>
+        </div>
+
+        <div style="max-width: 680px; margin: 0 auto;">
+            <div class="grid-2" style="margin-bottom: 28px;">
+                <div class="card" style="text-align: center;">
+                    <h3 class="card-title" style="font-size: 22px;">12 Weeks</h3>
+                    <p class="card-body">Comprehensive holistic development program designed for measurable growth.</p>
+                </div>
+                <div class="card accent-reverse" style="text-align: center;">
+                    <h3 class="card-title" style="font-size: 22px;">2 Sessions Per Week</h3>
+                    <p class="card-body" style="font-weight: 700; color: var(--rr-dark); margin-bottom: 4px;">1 Weekday
+                        Evening + 1 Weekend Session</p>
+                    <p class="card-body">Each player is allocated one 2-hour weekday session and one 2-hour weekend
+                        session per week.</p>
+                </div>
+            </div>
+
+            <div class="schedule-grid">
+                <div class="schedule-block">
+                    <p class="schedule-label">Weekday Session</p>
+                    <p class="schedule-days">Tuesday &amp; Thursday</p>
+                    <p class="schedule-time">5:00 – 7:00pm</p>
+                    <p class="schedule-time">7:00 – 9:00pm</p>
+                    <p class="schedule-note">Allocated one slot</p>
+                </div>
+                <div class="schedule-block">
+                    <p class="schedule-label">Weekend Session</p>
+                    <p class="schedule-days">Saturday &amp; Sunday</p>
+                    <p class="schedule-time">8:00 – 10:00am</p>
+                    <p class="schedule-time">2:00 – 4:00pm</p>
+                    <p class="schedule-time">4:00 – 6:00pm</p>
+                    <p class="schedule-note">Allocated one slot</p>
+                </div>
+            </div>
+
+            <p class="stat-highlight">48 hours of coaching across 12 weeks</p>
+        </div>
+
+        <div class="page-footer">
+            <span>Rajasthan Royals Academy Melbourne</span>
+            <span>Elite Program</span>
+        </div>
+    </div>
+
+
+    <!-- ===== PAGE 4: THE ROYALS WAY ===== -->
+    <div class="content-page bg-light page-break">
+        <div class="page-header centered">
+            <h2 class="section-title">The Royals <span class="accent">Way</span></h2>
+            <p class="section-subtitle centered" style="margin-top: 12px;">The philosophy that governs how we coach,
+                develop and deliver our program.</p>
+        </div>
+
+        <!-- Our Belief Quote Card -->
+        <div style="max-width: 600px; margin: 0 auto 36px;">
+            <div class="quote-card">
+                <span class="badge badge-pink" style="margin-bottom: 14px;">Our Belief</span>
+                <h3
+                    style="font-size: 18px; font-weight: 900; color: var(--rr-dark); line-height: 1.4; margin-bottom: 12px;">
+                    Cricket is a vehicle to shape confident, curious, resilient people.</h3>
+                <p style="font-size: 13px; color: var(--rr-slate-600); font-weight: 500; line-height: 1.7;">The Royals
+                    Way is a living philosophy that guides how we scout, coach, play, learn, and lead — <span
+                        style="background: linear-gradient(to right, var(--rr-pink), var(--rr-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700;">from
+                        backyard to stadium</span>.</p>
+            </div>
+        </div>
+
+        <!-- 7 Pillars Grid -->
+        <div style="max-width: 660px; margin: 0 auto;">
+            <p
+                style="text-align: center; font-size: 13px; color: var(--rr-slate-500); font-weight: 700; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 20px;">
+                The 7 Pillars</p>
+            <div class="grid-2" style="gap: 14px;">
+                <div class="card no-break">
+                    <div class="numbered-item">
+                        <span class="number">1.</span>
+                        <div>
+                            <div class="card-title">Talent First</div>
+                            <div class="card-subtitle">Discover · Back · Elevate</div>
+                            <p class="card-body">Identify potential before it's obvious and invest early. Selection
+                                skews toward growth, not pedigree.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card accent-reverse no-break">
+                    <div class="numbered-item">
+                        <span class="number">2.</span>
+                        <div>
+                            <div class="card-title">Play the Future</div>
+                            <div class="card-subtitle">Lead with Innovation</div>
+                            <p class="card-body">Technology and data inform decisions, not replace judgment. Short
+                                learning cycles. Experimentation is expected.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card no-break">
+                    <div class="numbered-item">
+                        <span class="number">3.</span>
+                        <div>
+                            <div class="card-title">Learn by Doing</div>
+                            <p class="card-body">Skills are forged in context — match simulations, scenarios, role
+                                reversals. "Mistake → Lesson → Adjustment" is the rhythm.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card accent-reverse no-break">
+                    <div class="numbered-item">
+                        <span class="number">4.</span>
+                        <div>
+                            <div class="card-title">Play Bold</div>
+                            <p class="card-body">Courage is a trainable skill. We reward intent and intelligent risk. We
+                                define "positive" by options created, not only outcomes.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card no-break">
+                    <div class="numbered-item">
+                        <span class="number">5.</span>
+                        <div>
+                            <div class="card-title">Joy, Curiosity &amp; Lifelong Learning</div>
+                            <p class="card-body">Keep the game fun and the mind open — curiosity accelerates mastery.
+                                Coaches stay students first.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card accent-reverse no-break">
+                    <div class="numbered-item">
+                        <span class="number">6.</span>
+                        <div>
+                            <div class="card-title">Holistic Development</div>
+                            <p class="card-body">Performance = Skills × Fitness × Mindset × Recovery × Life. We coach
+                                the person — nutrition, sleep, mental skills, character.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="max-width: 320px; margin: 14px auto 0;">
+                <div class="card no-break">
+                    <div class="numbered-item">
+                        <span class="number">7.</span>
+                        <div>
+                            <div class="card-title">Fairness, Respect &amp; Inclusion</div>
+                            <p class="card-body">Every learner gets dignity of attention. No favourites, no shortcuts.
+                                Diverse backgrounds make us better.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Rajasthan Royals Academy Melbourne</span>
+            <span>Elite Program</span>
+        </div>
+    </div>
+
+
+    <!-- ===== PAGE 5: OUR PROMISE + PHASE EFFECTIVENESS ===== -->
+    <div class="content-page page-break">
+        <!-- Our Promise -->
+        <div style="max-width: 580px; margin: 0 auto 50px;">
+            <div class="promise-box">
+                <div class="promise-box-inner">
+                    <span class="badge badge-blue" style="margin-bottom: 14px;">Our Promise</span>
+                    <p>We will discover potential early, develop it holistically, and elevate it with opportunity. We
+                        will keep cricket fun and futures open. <strong>That is the Royals Way.</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase Effectiveness -->
+        <div class="page-header centered">
+            <h2 class="section-title">Phase <span class="accent">Effectiveness</span></h2>
+            <p class="section-subtitle centered">The 12-week program is scientifically periodised into three distinct
+                phases to ensure skills are not just learned, but weaponised for competition.</p>
+        </div>
+
+        <div class="grid-3" style="max-width: 720px; margin: 0 auto;">
+            <div class="phase-card blue-pink no-break">
+                <div class="phase-number">01</div>
+                <div class="phase-weeks">Weeks 1-4</div>
+                <div class="phase-title">Foundation &amp; Execution</div>
+                <p class="phase-desc">Establishing technical baselines. Intense focus on repetitive skill execution
+                    under low-to-medium pressure to embed muscle memory and correct biomechanical inefficiencies.</p>
+            </div>
+            <div class="phase-card pink-blue no-break">
+                <div class="phase-number">02</div>
+                <div class="phase-weeks">Weeks 5-8</div>
+                <div class="phase-title">Pressure Testing</div>
+                <p class="phase-desc">Elevating the environment. Introduction of constrained match scenarios and
+                    higher-velocity challenges to stress-test skills and measure decision-making under genuine pressure.
+                </p>
+            </div>
+            <div class="phase-card blue-pink no-break">
+                <div class="phase-number">03</div>
+                <div class="phase-weeks">Weeks 9-12</div>
+                <div class="phase-title">Match Domination</div>
+                <p class="phase-desc">Full contextual immersion. High-intensity match simulations. Players are tested on
+                    their ability to read the game, execute the Royals Way, and influence outcomes.</p>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Rajasthan Royals Academy Melbourne</span>
+            <span>Elite Program</span>
+        </div>
+    </div>
+
+
+    <!-- ===== PAGE 6: WHAT'S INCLUDED OVERVIEW ===== -->
+    <div class="content-page bg-light page-break">
+        <div class="page-header centered">
+            <h2 class="section-title">What's Included <span class="accent">Overview</span></h2>
+            <p class="section-subtitle centered">48 hours of coaching contact time across 12 weeks — plus additional
+                development beyond the training sessions.</p>
+        </div>
+
+        <div style="max-width: 660px; margin: 0 auto;">
+            <!-- Cricket Coaching -->
+            <div class="accordion-section no-break">
+                <h3 class="accordion-title">Cricket Coaching &amp; Mentoring</h3>
+                <div class="accordion-item">
+                    <h4>2 on 1</h4>
+                    <p>Players will receive 2 on 1 coaching during particular training sessions to provide for both
+                        expert coaching and peer to peer learning, critical for the development of talented players.</p>
+                </div>
+                <div class="accordion-item">
+                    <h4>Squad Training</h4>
+                    <p>Each player will be allocated to a squad that is at a similar age and similar ability based on
+                        the assessment of the Academy selection team.</p>
+                </div>
+                <div class="accordion-item">
+                    <h4>Specialist (Masterclass)</h4>
+                    <p>Coaches and mentors with elite level skills will conduct masterclass sessions. The coaching team
+                        will monitor the skill set of the group and determine the appropriate masterclass.</p>
+                </div>
+                <div class="accordion-item">
+                    <h4>Performance Analysis</h4>
+                    <p>Primarily the Rajasthan Royals Academy Management System and Full Track, as well as other tech
+                        programs, will form the basis of our monitoring tools.</p>
+                </div>
+                <div class="accordion-item">
+                    <h4>Video Analysis</h4>
+                    <p>Video analysis is a cornerstone of the Elite Program, providing you with instant feedback on your
+                        development as a player.</p>
+                </div>
+            </div>
+
+            <!-- Match Play -->
+            <div class="accordion-section no-break">
+                <h3 class="accordion-title">Match Play / Simulation</h3>
+                <div class="accordion-item">
+                    <h4>Matches and Match Simulation</h4>
+                    <p>Players from the Elite Program may be invited to outdoor internal matches and match simulations,
+                        staged from time to time through the 2nd half of 2026.</p>
+                </div>
+                <div class="accordion-item">
+                    <h4>Scenario Simulation</h4>
+                    <p>Indoor scenario sessions will be held at Cutting Edge Cricket Centre to provide for assisting
+                        players in recognising and navigating their way through specific match situations.</p>
+                </div>
+                <div class="accordion-item">
+                    <h4>Power Hitting Sessions</h4>
+                    <p>The ability to switch into a power hitting mode is a huge part of the modern game and our expert
+                        coaches have built a program heavy on building this vital skillset.</p>
+                </div>
+            </div>
+
+            <!-- Additional Services -->
+            <div class="accordion-section blue-accent no-break">
+                <h3 class="accordion-title">Additional Services</h3>
+                <div class="accordion-item">
+                    <h4>Individual Development Plans (IDP)</h4>
+                    <p>Each player receives a personalised development plan that addresses the whole person: skills,
+                        fitness, mindset, recovery, and life.</p>
+                </div>
+                <div class="accordion-item">
+                    <h4>Career Mentorship</h4>
+                    <p>Critical to your development, our expert team will work with you on mapping out cricket career
+                        and development opportunities based on your skills and performance.</p>
+                </div>
+                <div class="accordion-item">
+                    <h4>360 Player Development</h4>
+                    <p>Sessions in nutrition, sports &amp; performance psychology, strength &amp; conditioning
+                        development and body management.</p>
+                </div>
+                <div class="accordion-item">
+                    <h4>Daily Player Essentials</h4>
+                    <p>Building routine and professional behaviours through discipline and repetition. We respect that
+                        the smaller things and the one percenters matter most.</p>
+                </div>
+            </div>
+
+            <!-- Apparel -->
+            <div class="accordion-section blue-accent no-break">
+                <h3 class="accordion-title">Apparel</h3>
+                <div class="accordion-item">
+                    <h4>Playing Apparel</h4>
+                    <p>Players will receive an apparel pack, consisting of a hat, a training shirt and training shorts.
+                    </p>
+                </div>
+                <div class="accordion-item">
+                    <h4>Additional Apparel</h4>
+                    <p>Additional apparel items can be purchased by Academy players, including jacket and training
+                        pants. Only those competing in matches are permitted to purchase playing apparel.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Rajasthan Royals Academy Melbourne</span>
+            <span>Elite Program</span>
+        </div>
+    </div>
+
+
+    <!-- ===== PAGE 7: ADDITIONAL VALUE + DNA PROFILE ===== -->
+    <div class="content-page page-break">
+        <!-- Additional Value -->
+        <div style="max-width: 620px; margin: 0 auto 50px;">
+            <p
+                style="font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--rr-slate-400); font-weight: 700; text-align: center; margin-bottom: 16px;">
+                Additional Value Beyond Indoor Coaching Hours</p>
+            <div class="grid-2" style="gap: 10px;">
+                <div class="value-tile no-break"><span class="value-dot"></span><span>Priority access to masterclasses
+                        with Rajasthan Royals Academy guests</span></div>
+                <div class="value-tile no-break"><span class="value-dot"></span><span>Guest online sessions with
+                        Rajasthan Royals Academy coaches</span></div>
+                <div class="value-tile no-break"><span class="value-dot"></span><span>Online mental skill development
+                        sessions</span></div>
+                <div class="value-tile no-break"><span class="value-dot"></span><span>Skill-specific fitness &amp;
+                        conditioning</span></div>
+                <div class="value-tile no-break"><span class="value-dot"></span><span>Outdoor fielding programs</span>
+                </div>
+                <div class="value-tile no-break"><span class="value-dot"></span><span>Priority access to further Academy
+                        programs</span></div>
+                <div class="value-tile no-break" style="grid-column: span 2; max-width: 320px; margin: 0 auto;"><span
+                        class="value-dot"></span><span>Priority access to Academy tours</span></div>
+            </div>
+        </div>
+
+        <!-- Player DNA Profile -->
+        <div class="page-header centered">
+            <h2 class="section-title">Player <span class="accent">DNA Profile</span></h2>
+            <p class="section-subtitle centered">The Player DNA Profile is your roadmap to elite performance — a
+                comprehensive, evidence-based assessment tool used to benchmark your current capabilities across the
+                critical dimensions of cricket.</p>
+        </div>
+
+        <div style="max-width: 680px; margin: 0 auto;">
+            <p
+                style="text-align: center; font-size: 13px; color: var(--rr-slate-600); font-weight: 500; margin-bottom: 24px;">
+                Throughout the 12 weeks, we track your progression across these 8 core pillars to build a
+                professional-grade blueprint of your T20 skillset.</p>
+
+            <div class="grid-4" style="gap: 14px;">
+                <div class="card no-break" style="padding: 20px; text-align: center;">
+                    <span class="number" style="font-size: 18px; display: block; margin-bottom: 6px;">01</span>
+                    <div class="card-title" style="font-size: 13px; margin-bottom: 4px;">Technical Mastery</div>
+                    <p class="card-body" style="font-size: 10px;">Biomechanical efficiency and repeatable core skills.
+                    </p>
+                </div>
+                <div class="card accent-reverse no-break" style="padding: 20px; text-align: center;">
+                    <span class="number" style="font-size: 18px; display: block; margin-bottom: 6px;">02</span>
+                    <div class="card-title" style="font-size: 13px; margin-bottom: 4px;">Tactical Execution</div>
+                    <p class="card-body" style="font-size: 10px;">Game awareness, field placement manipulation, and
+                        scenario planning.</p>
+                </div>
+                <div class="card no-break" style="padding: 20px; text-align: center;">
+                    <span class="number" style="font-size: 18px; display: block; margin-bottom: 6px;">03</span>
+                    <div class="card-title" style="font-size: 13px; margin-bottom: 4px;">Physical Conditioning</div>
+                    <p class="card-body" style="font-size: 10px;">Cricket-specific endurance, strength, and explosive
+                        power.</p>
+                </div>
+                <div class="card accent-reverse no-break" style="padding: 20px; text-align: center;">
+                    <span class="number" style="font-size: 18px; display: block; margin-bottom: 6px;">04</span>
+                    <div class="card-title" style="font-size: 13px; margin-bottom: 4px;">Mental Resilience</div>
+                    <p class="card-body" style="font-size: 10px;">Pressure management, routine building, and emotional
+                        control.</p>
+                </div>
+                <div class="card no-break" style="padding: 20px; text-align: center;">
+                    <span class="number" style="font-size: 18px; display: block; margin-bottom: 6px;">05</span>
+                    <div class="card-title" style="font-size: 13px; margin-bottom: 4px;">Athletic Fielding</div>
+                    <p class="card-body" style="font-size: 10px;">Ground coverage, throwing speed and accuracy, and
+                        catching reliability.</p>
+                </div>
+                <div class="card accent-reverse no-break" style="padding: 20px; text-align: center;">
+                    <span class="number" style="font-size: 18px; display: block; margin-bottom: 6px;">06</span>
+                    <div class="card-title" style="font-size: 13px; margin-bottom: 4px;">Match Impact</div>
+                    <p class="card-body" style="font-size: 10px;">Ability to influence the outcome of the game under
+                        pressure.</p>
+                </div>
+                <div class="card no-break" style="padding: 20px; text-align: center;">
+                    <span class="number" style="font-size: 18px; display: block; margin-bottom: 6px;">07</span>
+                    <div class="card-title" style="font-size: 13px; margin-bottom: 4px;">Power Hitting</div>
+                    <p class="card-body" style="font-size: 10px;">Range hitting, boundary maximization, and scoring
+                        intent.</p>
+                </div>
+                <div class="card accent-reverse no-break" style="padding: 20px; text-align: center;">
+                    <span class="number" style="font-size: 18px; display: block; margin-bottom: 6px;">08</span>
+                    <div class="card-title" style="font-size: 13px; margin-bottom: 4px;">Self-Awareness</div>
+                    <p class="card-body" style="font-size: 10px;">Understanding personal strengths, weaknesses, and
+                        learning styles.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Rajasthan Royals Academy Melbourne</span>
+            <span>Elite Program</span>
+        </div>
+    </div>
+
+
+    <!-- ===== PAGE 8: SPECIALIST COACHING ===== -->
+    <div class="content-page bg-light page-break">
+        <div class="page-header centered">
+            <h2 class="section-title">Specialist <span class="accent">Coaching</span></h2>
+            <p class="section-subtitle centered">Beyond core skills, the Elite Program provides access to highly
+                specialised disciplines necessary for dominating the modern game.</p>
+        </div>
+
+        <div style="max-width: 680px; margin: 0 auto;">
+            <div class="spec-grid">
+                <div class="spec-card no-break">
+                    <h3>Spin Mastery &amp; Variation</h3>
+                    <p>Effective spin is about control, deception, and taking the game away from a batter at the right
+                        moment. Stock ball accuracy, flight and loop, wrong'uns, arm balls — and the tactical
+                        intelligence to know when each variation is the right weapon.</p>
+                </div>
+                <div class="spec-card no-break">
+                    <h3>Wicketkeeping Craft</h3>
+                    <p>Modern keeping demands explosive athleticism, technical precision, and match intelligence. Stance
+                        and footwork, standing-up skills, glove work in high-pressure moments, and reading bowlers and
+                        batters.</p>
+                </div>
+                <div class="spec-card no-break">
+                    <h3>Game-Changing Fielding</h3>
+                    <p>Elite fielders don't just save runs — they change the momentum of matches. Ground coverage,
+                        long-barrier and sliding technique, direct-hit accuracy, and high-pressure catching that turns
+                        half-chances into wickets.</p>
+                </div>
+                <div class="spec-card no-break">
+                    <h3>Strength &amp; Conditioning</h3>
+                    <p>Cricket-specific athleticism built for elite performance: explosive power for hitting, bowling
+                        endurance, speed and agility in the field, and recovery management across a full 12 weeks.</p>
+                </div>
+                <div class="spec-card no-break">
+                    <h3>Mental Performance &amp; Mindset</h3>
+                    <p>Elite cricketers make better decisions faster, manage risk more accurately, and execute under
+                        pressure more consistently. Pre-performance routines, pressure management, and self-awareness to
+                        back your game when it matters most.</p>
+                </div>
+                <div class="spec-card no-break">
+                    <h3>Bowl to Control the Game</h3>
+                    <p>Bowling with intent is about more than taking wickets — it's about controlling pressure,
+                        manipulating scoring zones, and executing plans that suffocate the opposition. Accuracy under
+                        pressure, variation sequencing, and the ability to bowl to fields.</p>
+                </div>
+                <div class="spec-card no-break" style="grid-column: span 2;">
+                    <h3>Power and 360 Hitting</h3>
+                    <p>Modern T20 cricket demands batters who can score all around the ground, switch between gears, and
+                        accelerate at will. Range hitting, ramp shots, reverse sweeps, and the ability to manufacture
+                        boundaries under pressure from any position on the crease.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Rajasthan Royals Academy Melbourne</span>
+            <span>Elite Program</span>
+        </div>
+    </div>
+
+
+    <!-- ===== PAGE 9: IDP + ROYALS GROUP + BEYOND 12 WEEKS ===== -->
+    <div class="content-page page-break">
+        <!-- Individual Development Plan -->
+        <div style="max-width: 620px; margin: 0 auto 50px;">
+            <div class="accordion-section" style="border-left-color: var(--rr-pink);">
+                <h3 class="accordion-title">Individual Development Plan (IDP)</h3>
+                <div class="idp-item">
+                    <h4>The Blueprint</h4>
+                    <p>Your IDP is not a generic template. It is a strictly personalized roadmap built from your initial
+                        assessments, designed to target your specific growth areas and amplify your unique strengths.
+                    </p>
+                </div>
+                <div class="idp-item">
+                    <h4>Collaborative Goal Setting</h4>
+                    <p>We sit down with you to establish clear, measurable, and achievable goals for the 12-week block.
+                        You own the journey; we provide the expert navigation.</p>
+                </div>
+                <div class="idp-item">
+                    <h4>Continuous Feedback Loop</h4>
+                    <p>Your IDP is a living document. Through our Academy Management System, performance analytics, and
+                        regular coach check-ins, your plan adapts as you evolve.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Part of the Royals Group -->
+        <div style="text-align: center; margin-bottom: 50px;">
+            <p
+                style="font-size: 10px; text-transform: uppercase; letter-spacing: 4px; color: var(--rr-pink); font-weight: 700; margin-bottom: 20px;">
+                Part of the Royals Group</p>
+            <div class="franchise-grid" style="max-width: 580px; margin: 0 auto;">
+                <div class="franchise-tile no-break">
+                    <div class="name">Rajasthan Royals</div>
+                    <div class="league">IPL</div>
+                </div>
+                <div class="franchise-tile no-break">
+                    <div class="name">Paarl Royals</div>
+                    <div class="league">SA20</div>
+                </div>
+                <div class="franchise-tile no-break">
+                    <div class="name">Barbados Royals</div>
+                    <div class="league">CPL</div>
+                </div>
+                <div class="franchise-tile no-break">
+                    <div class="name">RR Academy</div>
+                    <div class="league">GLOBAL</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Beyond 12 Weeks -->
+        <div class="page-header centered">
+            <h2 class="section-title">Beyond <span class="accent">12 Weeks</span></h2>
+            <p class="section-subtitle centered">Completing the 12-week program marks the beginning of your connection
+                to the Rajasthan Royals ecosystem and Global Academy network — a connection that can grow with you.</p>
+        </div>
+
+        <div class="grid-3" style="max-width: 700px; margin: 0 auto;">
+            <div class="beyond-card no-break">
+                <h3>Priority Access</h3>
+                <p>As an Academy alumni, you receive priority access and "first dibs" on all future high-performance
+                    masterclasses, specialist clinics, and sessions hosted by Rajasthan Royals Academy Melbourne.</p>
+            </div>
+            <div class="beyond-card no-break">
+                <h3>Global Tours</h3>
+                <p>Inclusion in the selection pool for future academy tours. This includes potential visits to the
+                    Rajasthan Royals High Performance Centre in Nagpur, India, and other franchise locations.</p>
+            </div>
+            <div class="beyond-card no-break">
+                <h3>Match &amp; Simulation Opportunities</h3>
+                <p>Elite Program alumni will form the basis of teams and squads invited to take part in simulation and
+                    practice matches from time to time.</p>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Rajasthan Royals Academy Melbourne</span>
+            <span>Elite Program</span>
+        </div>
+    </div>
+
+
+    <!-- ===== PAGE 10: CLOSING ===== -->
+    <div class="closing-page page-break">
+        <img src="assets/Logo_White_Transparent.png" alt="RRA Melbourne Logo" class="cover-logo"
+            style="margin-bottom: 40px; position: relative; z-index: 1;">
+        <div class="cover-divider"></div>
+        <h2 class="closing-title">Your Journey<br>Starts Here</h2>
+        <p class="closing-subtitle">We look forward to welcoming you to the Rajasthan Royals Academy Melbourne Elite
+            Program assessment session and the opportunity to be part of something exceptional.</p>
+        <div class="closing-contact">
+            <p>Rajasthan Royals Academy Melbourne</p>
+            <p class="email">rramelbourne.com</p>
+        </div>
+        <div class="cover-footer">
+            <p>© 2026 Rajasthan Royals Academy Melbourne &bull; Confidential</p>
+        </div>
+    </div>
+
+</body>
+
+</html>
