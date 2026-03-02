@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 
 // Provided by CEO
-const PAYMENT_LINK = 'https://buy.stripe.com/bJe14nbHP3ud91q8nN9Zm00';
+const PAYMENT_LINK = 'https://buy.stripe.com/eVq5kD5jrfcV91qeMb9Zm01';
 
 const AcceptanceForm = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -313,11 +313,11 @@ const AcceptanceForm = () => {
                         </ComplianceCheckbox>
 
                         <ComplianceCheckbox checked={acceptPlayerCode} onChange={setAcceptPlayerCode}>
-                            I have read, understood, and agree to the <a href="/player-code-of-conduct" target="_blank" className="text-rr-pink hover:underline">Player Code of Conduct</a>.
+                            I have read, understood, and agree to the <a href="/assets/RRA_Player_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Player Code of Conduct</a>.
                         </ComplianceCheckbox>
 
                         <ComplianceCheckbox checked={acceptParentCode} onChange={setAcceptParentCode}>
-                            I have read, understood, and agree to the <a href="/parent-code-of-conduct" target="_blank" className="text-rr-pink hover:underline">Parent/Guardian Code of Conduct</a>.
+                            I have read, understood, and agree to the <a href="/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Parent/Guardian Code of Conduct</a>.
                         </ComplianceCheckbox>
 
                         <ComplianceCheckbox checked={acceptSocialMedia} onChange={setAcceptSocialMedia}>
@@ -371,15 +371,25 @@ const AcceptanceForm = () => {
 
 // Reusable compliance checkbox purely for visual consistency
 const ComplianceCheckbox = ({ checked, onChange, children }) => (
-    <label className="flex items-start gap-4 cursor-pointer group">
-        <div className="relative flex items-start mt-1 shrink-0">
+    <div className="flex items-start gap-4 group">
+        <label className="relative flex items-start mt-1 shrink-0 cursor-pointer">
             <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="sr-only" />
             <div className={`w-6 h-6 border-2 rounded transition-all flex items-center justify-center shadow-sm ${checked ? 'bg-rr-pink border-rr-pink' : 'bg-white border-slate-300 group-hover:border-slate-400'}`}>
                 {checked && <span className="text-xs text-white font-bold">✓</span>}
             </div>
-        </div>
-        <span className="text-sm text-slate-600 font-medium leading-relaxed">{children}</span>
-    </label>
+        </label>
+        <span className="text-sm text-slate-600 font-medium leading-relaxed">
+            {React.Children.map(children, child => {
+                if (React.isValidElement(child) && child.type === 'a') {
+                    return React.cloneElement(child, {
+                        ...child.props,
+                        onClick: (e) => e.stopPropagation()
+                    });
+                }
+                return child;
+            })}
+        </span>
+    </div>
 );
 
 const KumarVideoPlayer = ({ url }) => {

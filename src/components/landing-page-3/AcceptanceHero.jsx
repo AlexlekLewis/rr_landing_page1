@@ -1,5 +1,30 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
+
+const VideoPlayer = ({ url, poster }) => {
+    const [isPlaying, setIsPlaying] = useState(false);
+    const videoRef = useRef(null);
+
+    const handlePlay = () => {
+        setIsPlaying(true);
+        if (videoRef.current) {
+            videoRef.current.play();
+        }
+    };
+
+    return (
+        <div className="w-full aspect-video rounded-2xl border border-white/20 shadow-2xl relative overflow-hidden bg-black group">
+            <video ref={videoRef} src={url} className="absolute inset-0 w-full h-full object-cover" controls={isPlaying} playsInline poster={poster} onEnded={() => setIsPlaying(false)} />
+            {!isPlaying && (
+                <div className="absolute inset-0 flex items-center justify-center cursor-pointer z-10 bg-black/40 hover:bg-black/20 transition-all duration-300" onClick={handlePlay}>
+                    <div className="w-16 h-16 bg-rr-pink/90 border border-white/30 rounded-full flex items-center justify-center backdrop-blur-md group-hover:scale-110 shadow-lg transition-transform duration-300">
+                        <svg viewBox="0 0 24 24" fill="white" className="w-8 h-8 ml-1"><polygon points="5,3 19,12 5,21" /></svg>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
 
 const AcceptanceHero = ({ acceptStatus, setAcceptStatus }) => {
     const fadeIn = {
@@ -57,6 +82,23 @@ const AcceptanceHero = ({ acceptStatus, setAcceptStatus }) => {
                             <p className="font-semibold text-white text-xl md:text-2xl italic">
                                 In accepting this offer you will become a foundation member of this world first Royals program.
                             </p>
+                        </div>
+
+                        {/* Exclusive Videos */}
+                        <div className="mb-16 space-y-8">
+                            {/* Sid RR Intro */}
+                            <div className="bg-white/5 border border-white/20 p-4 md:p-6 rounded-3xl shadow-2xl backdrop-blur-sm relative overflow-hidden group">
+                                <h3 className="text-xl md:text-2xl font-black text-white uppercase tracking-wider mb-4">Welcome from <span className="text-rr-pink">Siddhartha Lahiri</span></h3>
+                                <p className="text-sm md:text-base text-slate-300 mb-6 max-w-2xl mx-auto">Head of Global Academies, Rajasthan Royals</p>
+                                <VideoPlayer url="https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/Kumar%20Video%20Landing/%20Sid%20RR%20Intro%20V2.mp4" />
+                            </div>
+
+                            {/* Kumar Interview */}
+                            <div className="bg-white/5 border border-white/20 p-4 md:p-6 rounded-3xl shadow-2xl backdrop-blur-sm relative overflow-hidden group">
+                                <h3 className="text-xl md:text-2xl font-black text-white uppercase tracking-wider mb-4">Insights from <span className="text-rr-pink">Kumar Sangakkara</span></h3>
+                                <p className="text-sm md:text-base text-slate-300 mb-6 max-w-2xl mx-auto">Director of Cricket, Rajasthan Royals</p>
+                                <VideoPlayer url="https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/Kumar%20Video%20Landing/Kumar%20Interview.mp4" poster="/assets/Kumar_Poster_Image.jpg" />
+                            </div>
                         </div>
 
                         {/* FOMO / Value Reaffirmation Section */}

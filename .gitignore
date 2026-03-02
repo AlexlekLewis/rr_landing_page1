@@ -43,3 +43,10 @@ Kumar_Final_Optimized.mp4
 input_video.mov
 Media/Kumar Interview V3.mov
 Media/LP2/Kumar Interview V3.mov
+
+# Video files
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
