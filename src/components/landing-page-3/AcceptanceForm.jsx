@@ -156,7 +156,15 @@ const AcceptanceForm = () => {
 
     return (
         <section className="py-24 px-6 lg:px-8 relative z-10 bg-slate-50 border-t border-slate-200" id="acceptance-form">
-            <motion.div initial="hidden" animate="visible" className="max-w-4xl mx-auto space-y-12">
+            <motion.form
+                initial="hidden"
+                animate="visible"
+                className="max-w-4xl mx-auto space-y-12"
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    handlePaymentAction();
+                }}
+            >
 
                 <div className="text-center mb-16 space-y-4">
                     <motion.h2 variants={fadeIn} className="text-3xl md:text-5xl font-black text-rr-dark tracking-tight uppercase">
@@ -205,11 +213,11 @@ const AcceptanceForm = () => {
                             <label className="block text-sm font-bold text-rr-dark">Do you play male or female cricket? *</label>
                             <div className="flex gap-4">
                                 <label className="flex items-center gap-2 cursor-pointer">
-                                    <input type="radio" name="gender" value="Male Cricket" onChange={(e) => setGender(e.target.value)} className="w-4 h-4 text-rr-pink" />
+                                    <input type="radio" name="gender" required value="Male Cricket" onChange={(e) => setGender(e.target.value)} className="w-4 h-4 text-rr-pink" />
                                     <span>Male Cricket</span>
                                 </label>
                                 <label className="flex items-center gap-2 cursor-pointer">
-                                    <input type="radio" name="gender" value="Female Cricket" onChange={(e) => setGender(e.target.value)} className="w-4 h-4 text-rr-pink" />
+                                    <input type="radio" name="gender" required value="Female Cricket" onChange={(e) => setGender(e.target.value)} className="w-4 h-4 text-rr-pink" />
                                     <span>Female Cricket</span>
                                 </label>
                             </div>
@@ -236,7 +244,7 @@ const AcceptanceForm = () => {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div>
                                     <span className="text-xs font-bold text-slate-700 mb-1 block uppercase tracking-wider">T-Shirt Size</span>
-                                    <select value={sizeTshirt} onChange={(e) => setSizeTshirt(e.target.value)} className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:border-rr-pink focus:ring-1 focus:ring-rr-pink transition-all">
+                                    <select required value={sizeTshirt} onChange={(e) => setSizeTshirt(e.target.value)} className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:border-rr-pink focus:ring-1 focus:ring-rr-pink transition-all">
                                         <option value="">Select...</option>
                                         <optgroup label="Junior Sizes">
                                             <option value="Junior 18">Junior 18</option>
@@ -264,7 +272,7 @@ const AcceptanceForm = () => {
                                 </div>
                                 <div>
                                     <span className="text-xs font-bold text-slate-700 mb-1 block uppercase tracking-wider">Short Size</span>
-                                    <select value={sizeShort} onChange={(e) => setSizeShort(e.target.value)} className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:border-rr-pink focus:ring-1 focus:ring-rr-pink transition-all">
+                                    <select required value={sizeShort} onChange={(e) => setSizeShort(e.target.value)} className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:border-rr-pink focus:ring-1 focus:ring-rr-pink transition-all">
                                         <option value="">Select...</option>
                                         <optgroup label="Junior Sizes">
                                             <option value="Junior 8-10">Junior 8-10</option>
@@ -282,7 +290,7 @@ const AcceptanceForm = () => {
                                 </div>
                                 <div>
                                     <span className="text-xs font-bold text-slate-700 mb-1 block uppercase tracking-wider">Pants Size</span>
-                                    <select value={sizePants} onChange={(e) => setSizePants(e.target.value)} className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:border-rr-pink focus:ring-1 focus:ring-rr-pink transition-all">
+                                    <select required value={sizePants} onChange={(e) => setSizePants(e.target.value)} className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:border-rr-pink focus:ring-1 focus:ring-rr-pink transition-all">
                                         <option value="">Select...</option>
                                         <optgroup label="Junior Sizes">
                                             <option value="Junior 18">Junior 18</option>
@@ -440,8 +448,7 @@ const AcceptanceForm = () => {
                             </div>
 
                             <button
-                                type="button"
-                                onClick={handlePaymentAction}
+                                type="submit"
                                 disabled={isSubmitting}
                                 className={`w-full py-5 rounded-xl font-black tracking-wide text-lg text-white transition-all duration-300 uppercase ${isSubmitting ? 'bg-slate-600 cursor-not-allowed' : 'bg-gradient-to-r from-rr-pink to-rr-blue hover:shadow-xl hover:shadow-rr-pink/20 hover:scale-[1.02]'}`}
                             >
@@ -451,7 +458,7 @@ const AcceptanceForm = () => {
                     </div>
                 </div>
 
-            </motion.div>
+            </motion.form>
         </section>
     );
 };
