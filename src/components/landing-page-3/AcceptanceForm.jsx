@@ -317,6 +317,39 @@ const AcceptanceForm = () => {
 
                     </div>
 
+                    {/* KEY DATES & PROGRAM START */}
+                    <div className="space-y-6 mb-12">
+                        <h3 className="text-xl font-bold text-rr-dark border-b border-slate-100 pb-2">Program Start & Key Dates</h3>
+
+                        <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm">
+                            <ul className="space-y-8">
+                                <li className="flex gap-5 items-start">
+                                    <div className="w-12 h-12 rounded-full bg-rr-pink/10 flex items-center justify-center shrink-0 border border-rr-pink/20">
+                                        <span className="text-rr-pink font-bold text-lg">1</span>
+                                    </div>
+                                    <div>
+                                        <h4 className="text-lg font-bold text-rr-dark mb-2">Week of April 13th: Onboarding Week</h4>
+                                        <p className="text-slate-600 leading-relaxed text-md">
+                                            This is when the program officially begins. Players will receive their uniform and attend online Zoom sessions with their squad coaches.<br />
+                                            We will cover everything you need to know: how the program runs day-to-day, the process for entering the center, and general daily operations.
+                                        </p>
+                                    </div>
+                                </li>
+                                <li className="flex gap-5 items-start">
+                                    <div className="w-12 h-12 rounded-full bg-rr-blue/10 flex items-center justify-center shrink-0 border border-rr-blue/20">
+                                        <span className="text-rr-blue font-bold text-lg">2</span>
+                                    </div>
+                                    <div>
+                                        <h4 className="text-lg font-bold text-rr-dark mb-2">Week of April 21st: First Training Session</h4>
+                                        <p className="text-slate-600 leading-relaxed text-md">
+                                            This marks the first official on-court training session of the 12-week block.
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
                     {/* SESSION PREFERENCES */}
                     <div className="space-y-6 mb-12">
                         <h3 className="text-xl font-bold text-rr-dark border-b border-slate-100 pb-2">Session Preferences</h3>

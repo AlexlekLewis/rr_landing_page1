@@ -26,7 +26,7 @@ const VideoPlayer = ({ url, poster }) => {
     );
 };
 
-const AcceptanceHero = ({ acceptStatus, setAcceptStatus }) => {
+const AcceptanceHero = () => {
     const fadeIn = {
         hidden: { opacity: 0, y: 20 },
         visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
@@ -159,31 +159,7 @@ const AcceptanceHero = ({ acceptStatus, setAcceptStatus }) => {
                     </motion.div>
                 </div>
 
-                {/* Offer Acceptance Toggle - No Decline */}
-                <motion.div variants={fadeIn} className="bg-white rounded-3xl p-8 md:p-12 shadow-2xl text-rr-dark max-w-2xl mx-auto">
-                    <h2 className="text-2xl md:text-3xl font-bold mb-8 uppercase tracking-wide">Do you accept the offer to the Rajasthan Royals Academy Melbourne Elite Program?</h2>
 
-                    <button
-                        onClick={() => setAcceptStatus('yes')}
-                        className={`w-full py-6 px-10 rounded-2xl font-black tracking-wide uppercase text-xl md:text-2xl transition-all duration-300 border-2 ${acceptStatus === 'yes'
-                            ? 'bg-rr-pink border-rr-pink text-white shadow-xl shadow-rr-pink/20 scale-105'
-                            : 'bg-gradient-to-r from-rr-pink to-rr-blue border-transparent text-white hover:shadow-xl hover:shadow-rr-pink/20 hover:scale-105'
-                            }`}
-                    >
-                        {acceptStatus === 'yes' ? 'OFFER ACCEPTED ✓' : 'YES, I ACCEPT'}
-                    </button>
-
-                    {/* Add celebration text when accepted */}
-                    {acceptStatus === 'yes' && (
-                        <motion.p
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="mt-6 text-rr-pink font-bold text-lg"
-                        >
-                            Scroll down to complete your Elite Program Administration details.
-                        </motion.p>
-                    )}
-                </motion.div>
             </motion.div>
         </section>
     );
