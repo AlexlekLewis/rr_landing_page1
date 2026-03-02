@@ -61,47 +61,58 @@ const AcceptanceHero = ({ acceptStatus, setAcceptStatus }) => {
 
                         {/* FOMO / Value Reaffirmation Section */}
                         <div className="text-left mb-12">
-                            <h3 className="text-2xl font-black uppercase tracking-widest text-rr-pink mb-8 text-center">Securing Your Place Means:</h3>
+                            <h3 className="text-2xl font-black uppercase tracking-widest text-rr-pink mb-8 text-center drop-shadow-sm">Your Elite Program Invitation Secures:</h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {/* Value Item 1 */}
-                                <div className="bg-rr-dark/50 border border-white/10 p-6 rounded-2xl flex items-start gap-4">
-                                    <div className="w-12 h-12 bg-rr-pink/20 rounded-xl flex items-center justify-center shrink-0 border border-rr-pink/30">
-                                        <svg className="w-6 h-6 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <div className="bg-white/5 backdrop-blur-md border border-white/20 p-6 rounded-2xl flex flex-col gap-4 shadow-xl hover:bg-white/10 transition-colors">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 bg-rr-pink/20 rounded-xl flex items-center justify-center shrink-0 border border-rr-pink/40 shadow-inner">
+                                            <svg className="w-6 h-6 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                                        </div>
+                                        <h4 className="font-black text-white uppercase tracking-wide text-lg">World-Class<br /><span className="text-rr-pink">T20 Coaching</span></h4>
                                     </div>
-                                    <div>
-                                        <h4 className="font-bold text-white mb-1 uppercase tracking-wider">The Only T20 Elite Program</h4>
-                                        <p className="text-sm text-slate-300">An exclusive 12-week intensive dedicated uniquely to T20 development, unlike any other program in Victoria.</p>
-                                    </div>
+                                    <p className="text-sm text-slate-200 font-medium leading-relaxed">
+                                        <span className="font-bold text-white">48 hours</span> of elite contact time across 12 weeks. Experience dedicated <span className="font-bold text-white">2-on-1 coaching</span>, intensive squad match simulations, and exclusive access to <span className="font-bold text-white">IPL Masterclasses</span>.
+                                    </p>
                                 </div>
+
                                 {/* Value Item 2 */}
-                                <div className="bg-rr-dark/50 border border-white/10 p-6 rounded-2xl flex items-start gap-4">
-                                    <div className="w-12 h-12 bg-rr-blue/20 rounded-xl flex items-center justify-center shrink-0 border border-rr-blue/30">
-                                        <svg className="w-6 h-6 text-rr-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                <div className="bg-white/5 backdrop-blur-md border border-white/20 p-6 rounded-2xl flex flex-col gap-4 shadow-xl hover:bg-white/10 transition-colors">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 bg-rr-blue/20 rounded-xl flex items-center justify-center shrink-0 border border-rr-blue/40 shadow-inner">
+                                            <svg className="w-6 h-6 text-rr-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        </div>
+                                        <h4 className="font-black text-white uppercase tracking-wide text-lg">Bespoke<br /><span className="text-rr-blue">DNA Profiling</span></h4>
                                     </div>
-                                    <div>
-                                        <h4 className="font-bold text-white mb-1 uppercase tracking-wider">The Royals Way</h4>
-                                        <p className="text-sm text-slate-300">Learn to play boldly. We value courage over comfort, pushing you to explore new avenues to compete and win.</p>
-                                    </div>
+                                    <p className="text-sm text-slate-200 font-medium leading-relaxed">
+                                        A proprietary <span className="font-bold text-white">Player Development Plan (IDP)</span> tracked via your own dedicated portal. We utilize Full Track video analysis and IPL-standard data metrics to accelerate your growth.
+                                    </p>
                                 </div>
+
                                 {/* Value Item 3 */}
-                                <div className="bg-rr-dark/50 border border-white/10 p-6 rounded-2xl flex items-start gap-4">
-                                    <div className="w-12 h-12 bg-rr-pink/20 rounded-xl flex items-center justify-center shrink-0 border border-rr-pink/30">
-                                        <svg className="w-6 h-6 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                                <div className="bg-white/5 backdrop-blur-md border border-white/20 p-6 rounded-2xl flex flex-col gap-4 shadow-xl hover:bg-white/10 transition-colors">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 bg-rr-pink/20 rounded-xl flex items-center justify-center shrink-0 border border-rr-pink/40 shadow-inner">
+                                            <svg className="w-6 h-6 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                                        </div>
+                                        <h4 className="font-black text-white uppercase tracking-wide text-lg">360° Player<br /><span className="text-rr-pink">Development</span></h4>
                                     </div>
-                                    <div>
-                                        <h4 className="font-bold text-white mb-1 uppercase tracking-wider">A High-Performance Environment</h4>
-                                        <p className="text-sm text-slate-300">Train alongside Victoria's best emerging talent in a strictly limited cohort that demands excellence.</p>
-                                    </div>
+                                    <p className="text-sm text-slate-200 font-medium leading-relaxed">
+                                        Look beyond the nets. Benefit from high-performance sessions in <span className="font-bold text-white">sports psychology, nutrition, and strength & conditioning</span>, building daily professional habits.
+                                    </p>
                                 </div>
+
                                 {/* Value Item 4 */}
-                                <div className="bg-rr-dark/50 border border-white/10 p-6 rounded-2xl flex items-start gap-4">
-                                    <div className="w-12 h-12 bg-rr-blue/20 rounded-xl flex items-center justify-center shrink-0 border border-rr-blue/30">
-                                        <svg className="w-6 h-6 text-rr-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                                <div className="bg-white/5 backdrop-blur-md border border-white/20 p-6 rounded-2xl flex flex-col gap-4 shadow-xl hover:bg-white/10 transition-colors">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 bg-rr-blue/20 rounded-xl flex items-center justify-center shrink-0 border border-rr-blue/40 shadow-inner">
+                                            <svg className="w-6 h-6 text-rr-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                                        </div>
+                                        <h4 className="font-black text-white uppercase tracking-wide text-lg">Full Elite<br /><span className="text-rr-blue">Apparel Kit</span></h4>
                                     </div>
-                                    <div>
-                                        <h4 className="font-bold text-white mb-1 uppercase tracking-wider">IPL-Standard Methodologies</h4>
-                                        <p className="text-sm text-slate-300">Expand your game using the same bespoke data, tactics, and DNA profiling used by the Royals global network.</p>
-                                    </div>
+                                    <p className="text-sm text-slate-200 font-medium leading-relaxed">
+                                        Look the part in official Rajasthan Royals Academy gear. You will receive a premium <span className="font-bold text-white">training shirt, functional shorts, and academy cap</span> upon induction.
+                                    </p>
                                 </div>
                             </div>
                         </div>
