@@ -72,7 +72,7 @@ const AcceptanceHero = ({ acceptStatus, setAcceptStatus }) => {
                                         <h4 className="font-black text-white uppercase tracking-wide text-lg">World-Class<br /><span className="text-rr-pink">T20 Coaching</span></h4>
                                     </div>
                                     <p className="text-sm text-slate-200 font-medium leading-relaxed">
-                                        <span className="font-bold text-white">48 hours</span> of elite contact time across 12 weeks. Experience dedicated <span className="font-bold text-white">2-on-1 coaching</span>, intensive squad match simulations, and exclusive access to <span className="font-bold text-white">IPL Masterclasses</span>.
+                                        <span className="font-bold text-white">48 hours+ (Extras)</span> of elite contact time across 12 weeks. Experience dedicated <span className="font-bold text-white">2-on-1 coaching</span>, intensive squad match simulations, and exclusive access to <span className="font-bold text-white">IPL Masterclasses</span>.
                                     </p>
                                 </div>
 
