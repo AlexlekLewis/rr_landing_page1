@@ -340,9 +340,9 @@ const AcceptanceForm = () => {
                                         <span className="text-rr-blue font-bold text-lg">2</span>
                                     </div>
                                     <div>
-                                        <h4 className="text-lg font-bold text-rr-dark mb-2">Week of April 21st: First Training Session</h4>
+                                        <h4 className="text-lg font-bold text-rr-dark mb-2">Tuesday 21st April: First Indoor Skill Session</h4>
                                         <p className="text-slate-600 leading-relaxed text-md">
-                                            This marks the first official on-court training session of the 12-week block.
+                                            This marks the first official indoor skill session of the 12-week block.
                                         </p>
                                     </div>
                                 </li>
