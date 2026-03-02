@@ -21,7 +21,6 @@ const AcceptanceForm = () => {
     const [sizeTshirt, setSizeTshirt] = useState('');
     const [sizeShort, setSizeShort] = useState('');
     const [sizePants, setSizePants] = useState('');
-    const [playerRole, setPlayerRole] = useState('');
 
     // Comms fields
     const [groupChatConsent, setGroupChatConsent] = useState(null);
@@ -41,7 +40,7 @@ const AcceptanceForm = () => {
 
     const isFormValid = () => {
         const hasCore = playerName.trim() && parentName.trim() && email.trim() && email.includes('@');
-        const hasAdmin = gender && suburb.trim() && shirtName.trim() && sizeTshirt && sizeShort && sizePants && playerRole;
+        const hasAdmin = gender && suburb.trim() && shirtName.trim() && sizeTshirt && sizeShort && sizePants;
         const hasComms = groupChatConsent === true ? phoneNumbers.some(p => p.value.trim()) : preferredComms.trim();
         const hasConsents = acceptTerms && acceptPlayerCode && acceptParentCode && acceptSocialMedia;
 
@@ -84,7 +83,10 @@ const AcceptanceForm = () => {
                 size_tshirt: sizeTshirt,
                 size_short: sizeShort,
                 size_pants: sizePants,
-                player_role: playerRole,
+
+                // Removed role field but setting it to empty to keep db compatibility if needed
+                player_role: '',
+
                 group_chat_consent: groupChatConsent,
                 phone_numbers: validPhones,
                 preferred_comms: preferredComms,
@@ -164,7 +166,7 @@ const AcceptanceForm = () => {
 
                     {/* ADMIN DETAILS */}
                     <div className="space-y-6 mb-12">
-                        <h3 className="text-xl font-bold text-rr-dark border-b border-slate-100 pb-2">Program Details</h3>
+                        <h3 className="text-xl font-bold text-rr-dark border-b border-slate-100 pb-2">Onboarding Information</h3>
 
                         <div className="space-y-3">
                             <label className="block text-sm font-bold text-rr-dark">Do you play male or female cricket? *</label>
@@ -186,48 +188,67 @@ const AcceptanceForm = () => {
                         </div>
 
                         <div className="space-y-2 max-w-md pt-4">
-                            <label className="block text-sm font-bold text-rr-dark">We will be ordering shirts immediately. Please confirm the last name that will appear on your shirt. *</label>
+                            <label className="block text-sm font-bold text-rr-dark">We will be ordering apparel immediately. Please confirm the last name that will appear on your shirt. *</label>
                             <input type="text" value={shirtName} onChange={(e) => setShirtName(e.target.value)} placeholder="e.g. SMITH" className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 uppercase" required />
                         </div>
 
                         <div className="space-y-3 pt-4">
-                            <label className="block text-sm font-bold text-rr-dark">Please confirm your sizes below: *</label>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <label className="block text-sm font-bold text-rr-dark mb-1">
+                                Please confirm your sizes below: *
+                            </label>
+                            <p className="text-sm font-medium text-slate-500 mb-3 bg-slate-100 p-3 rounded-xl border border-slate-200">
+                                <span className="text-rr-pink font-bold">Important:</span> All sizing is based on Men's fits. Please review the <a href="/assets/MENS SIZE CHART - EXPORT (2).pdf" target="_blank" className="text-rr-blue underline hover:text-rr-dark transition-colors font-bold">Apparel Size Chart</a> before selecting.
+                            </p>
+
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div>
-                                    <span className="text-xs text-slate-500 mb-1 block">T-Shirt Size</span>
-                                    <select value={sizeTshirt} onChange={(e) => setSizeTshirt(e.target.value)} className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50">
+                                    <span className="text-xs font-bold text-slate-700 mb-1 block uppercase tracking-wider">T-Shirt Size</span>
+                                    <select value={sizeTshirt} onChange={(e) => setSizeTshirt(e.target.value)} className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:border-rr-pink focus:ring-1 focus:ring-rr-pink transition-all">
                                         <option value="">Select...</option>
-                                        {['YS', 'YM', 'YL', 'YXL', 'S', 'M', 'L', 'XL', 'XXL'].map(s => <option key={s} value={s}>{s}</option>)}
+                                        <option value="Youth Small (YS)">Youth Small (YS)</option>
+                                        <option value="Youth Medium (YM)">Youth Medium (YM)</option>
+                                        <option value="Youth Large (YL)">Youth Large (YL)</option>
+                                        <option value="Youth X-Large (YXL)">Youth X-Large (YXL)</option>
+                                        <option value="Small (S)">Small (S)</option>
+                                        <option value="Medium (M)">Medium (M)</option>
+                                        <option value="Large (L)">Large (L)</option>
+                                        <option value="X-Large (XL)">X-Large (XL)</option>
+                                        <option value="XX-Large (XXL)">XX-Large (XXL)</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <span className="text-xs text-slate-500 mb-1 block">Short Size</span>
-                                    <select value={sizeShort} onChange={(e) => setSizeShort(e.target.value)} className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50">
+                                    <span className="text-xs font-bold text-slate-700 mb-1 block uppercase tracking-wider">Short Size</span>
+                                    <select value={sizeShort} onChange={(e) => setSizeShort(e.target.value)} className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:border-rr-pink focus:ring-1 focus:ring-rr-pink transition-all">
                                         <option value="">Select...</option>
-                                        {['YS', 'YM', 'YL', 'YXL', 'S', 'M', 'L', 'XL', 'XXL'].map(s => <option key={s} value={s}>{s}</option>)}
+                                        <option value="Youth Small (YS)">Youth Small (YS)</option>
+                                        <option value="Youth Medium (YM)">Youth Medium (YM)</option>
+                                        <option value="Youth Large (YL)">Youth Large (YL)</option>
+                                        <option value="Youth X-Large (YXL)">Youth X-Large (YXL)</option>
+                                        <option value="Small (S)">Small (S)</option>
+                                        <option value="Medium (M)">Medium (M)</option>
+                                        <option value="Large (L)">Large (L)</option>
+                                        <option value="X-Large (XL)">X-Large (XL)</option>
+                                        <option value="XX-Large (XXL)">XX-Large (XXL)</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <span className="text-xs text-slate-500 mb-1 block">Pants Size</span>
-                                    <select value={sizePants} onChange={(e) => setSizePants(e.target.value)} className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50">
+                                    <span className="text-xs font-bold text-slate-700 mb-1 block uppercase tracking-wider">Pants Size</span>
+                                    <select value={sizePants} onChange={(e) => setSizePants(e.target.value)} className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:border-rr-pink focus:ring-1 focus:ring-rr-pink transition-all">
                                         <option value="">Select...</option>
-                                        {['YS', 'YM', 'YL', 'YXL', 'S', 'M', 'L', 'XL', 'XXL'].map(s => <option key={s} value={s}>{s}</option>)}
+                                        <option value="Youth Small (YS)">Youth Small (YS)</option>
+                                        <option value="Youth Medium (YM)">Youth Medium (YM)</option>
+                                        <option value="Youth Large (YL)">Youth Large (YL)</option>
+                                        <option value="Youth X-Large (YXL)">Youth X-Large (YXL)</option>
+                                        <option value="Small (S)">Small (S)</option>
+                                        <option value="Medium (M)">Medium (M)</option>
+                                        <option value="Large (L)">Large (L)</option>
+                                        <option value="X-Large (XL)">X-Large (XL)</option>
+                                        <option value="XX-Large (XXL)">XX-Large (XXL)</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="space-y-3 pt-4">
-                            <label className="block text-sm font-bold text-rr-dark">So we can begin forming squads in preparation for the program, please confirm how you identify as a cricketer: *</label>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                {['Batsman', 'Pace Bowler', 'Spin Bowler', 'Pace Bowling Allrounder', 'Spin Bowling Allrounder', 'Wicketkeeper/Batsman', 'Other'].map(role => (
-                                    <label key={role} className="flex items-center gap-2 cursor-pointer bg-slate-50 p-3 rounded-xl border border-slate-200 hover:border-rr-pink transition-colors">
-                                        <input type="radio" name="role" value={role} onChange={(e) => setPlayerRole(e.target.value)} className="w-4 h-4 text-rr-pink" />
-                                        <span className="text-sm font-medium text-slate-700">{role}</span>
-                                    </label>
-                                ))}
-                            </div>
-                        </div>
                     </div>
 
                     {/* COMMS PREF */}
@@ -303,7 +324,7 @@ const AcceptanceForm = () => {
 
                             <div className="bg-white/10 p-6 rounded-2xl border border-white/20 mb-8 text-left">
                                 <span className="inline-block px-3 py-1 bg-rr-pink text-white text-xs font-bold uppercase tracking-wider rounded-full mb-3">Bonus Offer</span>
-                                <p className="text-sm font-medium">For those who pay in full and by card or Apple Pay, we will provide a 2nd training shirt and a pair of training pants, to accompany the training apparel provided as standard.</p>
+                                <p className="text-sm font-medium">For those who pay in full and by card or Apple Pay, we will provide a 2nd training shirt and a pair of training pants, <span className="font-bold text-rr-pink">FREE OF CHARGE</span>. This is in addition to the apparel they will get as part of their investment and provided as standard.</p>
                             </div>
 
                             <button
