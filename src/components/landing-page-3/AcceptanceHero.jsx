@@ -90,7 +90,7 @@ const AcceptanceHero = ({ acceptStatus, setAcceptStatus }) => {
                             <div className="bg-white/5 border border-white/20 p-4 md:p-6 rounded-3xl shadow-2xl backdrop-blur-sm relative overflow-hidden group">
                                 <h3 className="text-xl md:text-2xl font-black text-white uppercase tracking-wider mb-4">Welcome from <span className="text-rr-pink">Siddhartha Lahiri</span></h3>
                                 <p className="text-sm md:text-base text-slate-300 mb-6 max-w-2xl mx-auto">Head of Global Academies, Rajasthan Royals</p>
-                                <VideoPlayer url="https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/Kumar%20Video%20Landing/%20Sid%20RR%20Intro%20V2.mp4" poster="/assets/lahiri-pirag.jpg" />
+                                <VideoPlayer url="https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/Kumar%20Video%20Landing/%20Sid%20RR%20Intro%20V2.mp4#t=0.5" />
                             </div>
                         </div>
 
