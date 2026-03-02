@@ -7,13 +7,13 @@ const PAYMENT_LINK = 'https://buy.stripe.com/bJe14nbHP3ud91q8nN9Zm00';
 
 const SESSION_OPTIONS = {
     weekday: [
-        { id: 'wd_tue_thu_5pm', time: '5:00 - 7:00pm', days: 'Tuesday & Thursday' },
-        { id: 'wd_tue_thu_7pm', time: '7:00 - 9:00pm', days: 'Tuesday & Thursday' }
+        { id: 'wd_tue_thu_5pm', time: '5:00 - 7:00pm', days: 'Tuesday & Thursday', dayGroup: 'Weekday' },
+        { id: 'wd_tue_thu_7pm', time: '7:00 - 9:00pm', days: 'Tuesday & Thursday', dayGroup: 'Weekday' }
     ],
     weekend: [
-        { id: 'we_sat_sun_8am', time: '8:00 - 10:00am', days: 'Saturday & Sunday' },
-        { id: 'we_sat_sun_2pm', time: '2:00 - 4:00pm', days: 'Saturday & Sunday' },
-        { id: 'we_sat_sun_4pm', time: '4:00 - 6:00pm', days: 'Saturday & Sunday' }
+        { id: 'we_sat_sun_8am', time: '8:00 - 10:00am', days: 'Saturday & Sunday', dayGroup: 'Weekend' },
+        { id: 'we_sat_sun_2pm', time: '2:00 - 4:00pm', days: 'Saturday & Sunday', dayGroup: 'Weekend' },
+        { id: 'we_sat_sun_4pm', time: '4:00 - 6:00pm', days: 'Saturday & Sunday', dayGroup: 'Weekend' }
     ]
 };
 
@@ -113,12 +113,12 @@ const AcceptanceForm = () => {
                 // Removed role field but setting it to empty to keep db compatibility if needed
                 player_role: '',
 
-                // Session availability
+                // Session availability formatted clearly for Zapier/Spreadsheet
                 selected_sessions: selectedSessions.map(id => {
                     const allOpts = [...SESSION_OPTIONS.weekday, ...SESSION_OPTIONS.weekend];
                     const opt = allOpts.find(o => o.id === id);
-                    return opt ? `${opt.days} ${opt.time}` : id;
-                }).join(', '),
+                    return opt ? `[${opt.dayGroup}] ${opt.days}: ${opt.time}` : id;
+                }).join(' | '),
 
                 group_chat_consent: groupChatConsent,
                 phone_numbers: validPhones,
@@ -324,10 +324,10 @@ const AcceptanceForm = () => {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             {/* Weekday */}
-                            <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col items-center">
-                                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest text-center mb-1">Weekday Session</h4>
-                                <h5 className="text-xl font-black text-rr-dark text-center mb-6">Tuesday & Thursday</h5>
-                                <div className="space-y-3 w-full">
+                            <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm flex flex-col items-center">
+                                <h4 className="text-sm font-bold text-slate-500 uppercase tracking-widest text-center mb-2">Weekday Session</h4>
+                                <h5 className="text-2xl font-black text-rr-dark text-center mb-8 uppercase tracking-wide">Tuesday & Thursday</h5>
+                                <div className="space-y-4 w-full">
                                     {SESSION_OPTIONS.weekday.map(session => (
                                         <SessionCheckbox
                                             key={session.id}
@@ -337,16 +337,16 @@ const AcceptanceForm = () => {
                                         />
                                     ))}
                                 </div>
-                                <div className="text-center mt-6">
-                                    <span className="text-xs font-bold text-slate-400 italic uppercase">Allocated one slot</span>
+                                <div className="text-center mt-12 mb-2">
+                                    <span className="text-xs font-bold text-slate-400 italic uppercase tracking-wider">Allocated one slot</span>
                                 </div>
                             </div>
 
                             {/* Weekend */}
-                            <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col items-center">
-                                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest text-center mb-1">Weekend Session</h4>
-                                <h5 className="text-xl font-black text-rr-dark text-center mb-6">Saturday & Sunday</h5>
-                                <div className="space-y-3 w-full">
+                            <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm flex flex-col items-center">
+                                <h4 className="text-sm font-bold text-slate-500 uppercase tracking-widest text-center mb-2">Weekend Session</h4>
+                                <h5 className="text-2xl font-black text-rr-dark text-center mb-8 uppercase tracking-wide">Saturday & Sunday</h5>
+                                <div className="space-y-4 w-full">
                                     {SESSION_OPTIONS.weekend.map(session => (
                                         <SessionCheckbox
                                             key={session.id}
@@ -356,8 +356,8 @@ const AcceptanceForm = () => {
                                         />
                                     ))}
                                 </div>
-                                <div className="text-center mt-6">
-                                    <span className="text-xs font-bold text-slate-400 italic uppercase">Allocated one slot</span>
+                                <div className="text-center mt-12 mb-2">
+                                    <span className="text-xs font-bold text-slate-400 italic uppercase tracking-wider">Allocated one slot</span>
                                 </div>
                             </div>
                         </div>
@@ -456,11 +456,11 @@ const AcceptanceForm = () => {
     );
 };
 
-// Session selection checkbox
+// Session selection checkbox matching design
 const SessionCheckbox = ({ time, checked, onChange }) => (
-    <label className={`flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer transition-all w-full ${checked ? 'border-rr-pink bg-rr-pink/5 scale-[1.02] shadow-sm' : 'border-slate-200 bg-white hover:border-slate-300'}`}>
-        <span className={`font-bold ${checked ? 'text-rr-dark' : 'text-slate-600'}`}>{time}</span>
-        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 ${checked ? 'border-rr-pink bg-rr-pink text-white' : 'border-slate-300 bg-slate-50'}`}>
+    <label className={`flex items-center justify-between p-5 rounded-2xl border-2 cursor-pointer transition-all w-full bg-white ${checked ? 'border-rr-pink shadow-md shadow-rr-pink/10 scale-[1.02]' : 'border-slate-200 hover:border-slate-300 shadow-sm'}`}>
+        <span className={`font-bold text-lg md:text-xl ${checked ? 'text-rr-dark' : 'text-slate-600'}`}>{time}</span>
+        <div className={`w-7 h-7 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${checked ? 'border-rr-pink bg-rr-pink text-white' : 'border-slate-300 bg-slate-50'}`}>
             {checked && <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
         </div>
         <input type="checkbox" className="sr-only" checked={checked} onChange={onChange} />
