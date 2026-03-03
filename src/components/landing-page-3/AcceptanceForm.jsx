@@ -147,9 +147,14 @@ const AcceptanceForm = () => {
                 payment_status: 'pending'
             };
 
-            // Insert into Supabase
-            const { error } = await supabase.from('official_cohort_2026').insert(payload);
+            // Insert into Supabase and get the inserted row back
+            const { data, error } = await supabase.from('official_cohort_2026').insert(payload).select().single();
             if (error) throw error;
+
+            // Save the ID to local storage for the success page to pick up
+            if (data && data.id) {
+                localStorage.setItem('pending_registration_id', data.id);
+            }
 
             // Fire Zapier webhook
             const webhookUrl = import.meta.env.VITE_LP3_WEBHOOK_URL;

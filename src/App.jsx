@@ -20,6 +20,7 @@ import ComingSoonSplash from './components/ComingSoonSplash';
 import OfferResponsePage from './components/offer-response/OfferResponsePage';
 import LandingPage2 from './components/landing-page-2/LandingPage2';
 import LandingPage3 from './components/landing-page-3/LandingPage3';
+import StripeSuccess from './components/landing-page-3/StripeSuccess';
 import usePageAnalytics from './hooks/usePageAnalytics';
 
 // DNA Profile Import
@@ -83,6 +84,7 @@ function App() {
         <Route path="/eliteprogram/2026registrations" element={<LandingPage />} />
         <Route path="/offer/assessment" element={<LandingPage2 />} />
         <Route path="/offer/acceptance" element={<LandingPage3 />} />
+        <Route path="/lp3/success" element={<StripeSuccess />} />
         <Route path="/invite" element={<Navigate to="/offer/assessment" replace />} />
         <Route path="/landing_page2/Preview" element={<LandingPage2 />} />
         <Route path="/offer/:token" element={<OfferResponsePage />} />
