@@ -72,16 +72,6 @@ const ComingSoonSplash = () => {
                         TO MELBOURNE
                     </motion.h1>
 
-                    {/* Sub-copy */}
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.6, ease: 'easeOut' }}
-                        className="text-sm md:text-base lg:text-lg text-slate-300 font-medium max-w-2xl mb-10 leading-relaxed px-4 md:px-0"
-                    >
-                        The T20 game is evolving faster than ever, and the need for elite growth and development has never been greater. Now, the blueprint for success has arrived in Victoria. We are bringing our proven philosophy—the <strong className="text-white">Royals Way</strong>—to Melbourne. This is your exclusive opportunity to absorb a world-class methodology, learn how to play the modern game, and experience an innovative approach to coaching that redefines high performance. The revolution is here.
-                    </motion.p>
-
                     {/* Tagline */}
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
