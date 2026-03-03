@@ -109,7 +109,11 @@ const AcceptanceForm = () => {
         try {
             const validPhones = phoneNumbers.filter(p => p.value.trim()).map(p => p.value.trim());
 
+            // Generate UUID on the frontend to bypass RLS SELECT restrictions
+            const generatedId = crypto.randomUUID();
+
             const payload = {
+                id: generatedId,
                 accepted_offer: true,
                 player_name: playerName.trim(),
                 parent_name: parentName.trim(),
@@ -157,14 +161,12 @@ const AcceptanceForm = () => {
                 })
             };
 
-            // Insert into Supabase and get the inserted row back
-            const { data, error } = await supabase.from('official_cohort_2026').insert(payload).select().single();
+            // Insert into Supabase (No .select() because RLS blocks reads for anonymous users)
+            const { error } = await supabase.from('official_cohort_2026').insert(payload);
             if (error) throw error;
 
-            // Save the ID to local storage for the success page to pick up
-            if (data && data.id) {
-                localStorage.setItem('pending_registration_id', data.id);
-            }
+            // Save the pre-generated ID to local storage for the success page
+            localStorage.setItem('pending_registration_id', generatedId);
 
             // Fire Zapier webhook
             const webhookUrl = import.meta.env.VITE_LP3_WEBHOOK_URL;
