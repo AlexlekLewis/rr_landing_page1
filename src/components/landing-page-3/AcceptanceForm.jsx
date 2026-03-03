@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
+import AcceptanceFAQ from './AcceptanceFAQ';
 
 // Provided by CEO
 const PAYMENT_LINK = 'https://buy.stripe.com/bJe14nbHP3ud91q8nN9Zm00';
@@ -504,6 +505,9 @@ const AcceptanceForm = () => {
                         </div>
                     </div>
                 </div>
+
+                {/* FAQ SECTION */}
+                <AcceptanceFAQ />
 
             </motion.form>
         </section>
