@@ -121,7 +121,7 @@ const StripeSuccess = () => {
                             : "There was an issue updating your registration status. If your payment went through on Stripe, you are secured."}
                     </p>
                     <p className="text-sm font-medium text-slate-500 bg-slate-100 p-4 rounded-xl border border-slate-200 mb-8">
-                        If you have any concerns, please contact our team at <a href="mailto:info@rramelbourne.com" className="text-rr-pink hover:underline">info@rramelbourne.com</a> with your player name.
+                        If you have any concerns, please contact our team at <a href="mailto:eliteprogram@rramelbourne.com" className="text-rr-pink hover:underline">eliteprogram@rramelbourne.com</a> with your player name.
                     </p>
                     <Button variant="primary" onClick={() => window.location.href = 'https://rramelbourne.com'} className="w-full sm:w-auto px-12 py-4">
                         Return Home
