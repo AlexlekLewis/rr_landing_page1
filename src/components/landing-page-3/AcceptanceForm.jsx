@@ -144,7 +144,17 @@ const AcceptanceForm = () => {
                 preferred_comms: preferredComms,
 
                 payment_plan_selected: 'full_link_click',
-                payment_status: 'pending'
+                payment_status: 'pending',
+                created_at_melb: new Date().toLocaleString('en-AU', {
+                    timeZone: 'Australia/Melbourne',
+                    hour12: true,
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                })
             };
 
             // Insert into Supabase and get the inserted row back
