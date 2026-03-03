@@ -6,15 +6,28 @@ import { supabase } from '../../lib/supabase';
 const PAYMENT_LINK = 'https://buy.stripe.com/bJe14nbHP3ud91q8nN9Zm00';
 
 const SESSION_OPTIONS = {
-    weekday: [
-        { id: 'wd_tue_thu_5pm', time: '5:00 - 7:00pm', days: 'Tuesday & Thursday', dayGroup: 'Weekday' },
-        { id: 'wd_tue_thu_7pm', time: '7:00 - 9:00pm', days: 'Tuesday & Thursday', dayGroup: 'Weekday' }
-    ],
-    weekend: [
-        { id: 'we_sat_sun_8am', time: '8:00 - 10:00am', days: 'Saturday & Sunday', dayGroup: 'Weekend' },
-        { id: 'we_sat_sun_2pm', time: '2:00 - 4:00pm', days: 'Saturday & Sunday', dayGroup: 'Weekend' },
-        { id: 'we_sat_sun_4pm', time: '4:00 - 6:00pm', days: 'Saturday & Sunday', dayGroup: 'Weekend' }
-    ]
+    weekday: {
+        Tuesday: [
+            { id: 'wd_tue_5pm', time: '5:00 - 7:00pm', days: 'Tuesday', dayGroup: 'Weekday' },
+            { id: 'wd_tue_7pm', time: '7:00 - 9:00pm', days: 'Tuesday', dayGroup: 'Weekday' }
+        ],
+        Thursday: [
+            { id: 'wd_thu_5pm', time: '5:00 - 7:00pm', days: 'Thursday', dayGroup: 'Weekday' },
+            { id: 'wd_thu_7pm', time: '7:00 - 9:00pm', days: 'Thursday', dayGroup: 'Weekday' }
+        ]
+    },
+    weekend: {
+        Saturday: [
+            { id: 'we_sat_8am', time: '8:00 - 10:00am', days: 'Saturday', dayGroup: 'Weekend' },
+            { id: 'we_sat_2pm', time: '2:00 - 4:00pm', days: 'Saturday', dayGroup: 'Weekend' },
+            { id: 'we_sat_4pm', time: '4:00 - 6:00pm', days: 'Saturday', dayGroup: 'Weekend' }
+        ],
+        Sunday: [
+            { id: 'we_sun_8am', time: '8:00 - 10:00am', days: 'Sunday', dayGroup: 'Weekend' },
+            { id: 'we_sun_2pm', time: '2:00 - 4:00pm', days: 'Sunday', dayGroup: 'Weekend' },
+            { id: 'we_sun_4pm', time: '4:00 - 6:00pm', days: 'Sunday', dayGroup: 'Weekend' }
+        ]
+    }
 };
 
 const AcceptanceForm = () => {
@@ -115,7 +128,12 @@ const AcceptanceForm = () => {
 
                 // Session availability formatted clearly for Zapier/Spreadsheet
                 selected_sessions: selectedSessions.map(id => {
-                    const allOpts = [...SESSION_OPTIONS.weekday, ...SESSION_OPTIONS.weekend];
+                    const allOpts = [
+                        ...SESSION_OPTIONS.weekday.Tuesday,
+                        ...SESSION_OPTIONS.weekday.Thursday,
+                        ...SESSION_OPTIONS.weekend.Saturday,
+                        ...SESSION_OPTIONS.weekend.Sunday
+                    ];
                     const opt = allOpts.find(o => o.id === id);
                     return opt ? `[${opt.dayGroup}] ${opt.days}: ${opt.time}` : id;
                 }).join(' | '),
@@ -332,10 +350,12 @@ const AcceptanceForm = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             {/* Weekday */}
                             <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm flex flex-col items-center">
-                                <h4 className="text-sm font-bold text-slate-500 uppercase tracking-widest text-center mb-2">Weekday Session</h4>
-                                <h5 className="text-2xl font-black text-rr-dark text-center mb-8 uppercase tracking-wide">Tuesday & Thursday</h5>
-                                <div className="space-y-4 w-full">
-                                    {SESSION_OPTIONS.weekday.map(session => (
+                                <h4 className="text-sm font-bold text-slate-500 uppercase tracking-widest text-center mb-6">Weekday Session</h4>
+
+                                {/* Tuesday */}
+                                <h5 className="text-xl font-black text-rr-dark text-center mb-4 uppercase tracking-wide">Tuesday</h5>
+                                <div className="space-y-4 w-full mb-8">
+                                    {SESSION_OPTIONS.weekday.Tuesday.map(session => (
                                         <SessionCheckbox
                                             key={session.id}
                                             time={session.time}
@@ -344,17 +364,32 @@ const AcceptanceForm = () => {
                                         />
                                     ))}
                                 </div>
-                                <div className="text-center mt-12 mb-2">
+
+                                {/* Thursday */}
+                                <h5 className="text-xl font-black text-rr-dark text-center mb-4 uppercase tracking-wide">Thursday</h5>
+                                <div className="space-y-4 w-full">
+                                    {SESSION_OPTIONS.weekday.Thursday.map(session => (
+                                        <SessionCheckbox
+                                            key={session.id}
+                                            time={session.time}
+                                            checked={selectedSessions.includes(session.id)}
+                                            onChange={() => toggleSession(session.id)}
+                                        />
+                                    ))}
+                                </div>
+                                <div className="text-center mt-8 mb-2">
                                     <span className="text-xs font-bold text-slate-400 italic uppercase tracking-wider">Allocated one slot</span>
                                 </div>
                             </div>
 
                             {/* Weekend */}
                             <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm flex flex-col items-center">
-                                <h4 className="text-sm font-bold text-slate-500 uppercase tracking-widest text-center mb-2">Weekend Session</h4>
-                                <h5 className="text-2xl font-black text-rr-dark text-center mb-8 uppercase tracking-wide">Saturday & Sunday</h5>
-                                <div className="space-y-4 w-full">
-                                    {SESSION_OPTIONS.weekend.map(session => (
+                                <h4 className="text-sm font-bold text-slate-500 uppercase tracking-widest text-center mb-6">Weekend Session</h4>
+
+                                {/* Saturday */}
+                                <h5 className="text-xl font-black text-rr-dark text-center mb-4 uppercase tracking-wide">Saturday</h5>
+                                <div className="space-y-4 w-full mb-8">
+                                    {SESSION_OPTIONS.weekend.Saturday.map(session => (
                                         <SessionCheckbox
                                             key={session.id}
                                             time={session.time}
@@ -363,7 +398,20 @@ const AcceptanceForm = () => {
                                         />
                                     ))}
                                 </div>
-                                <div className="text-center mt-12 mb-2">
+
+                                {/* Sunday */}
+                                <h5 className="text-xl font-black text-rr-dark text-center mb-4 uppercase tracking-wide">Sunday</h5>
+                                <div className="space-y-4 w-full">
+                                    {SESSION_OPTIONS.weekend.Sunday.map(session => (
+                                        <SessionCheckbox
+                                            key={session.id}
+                                            time={session.time}
+                                            checked={selectedSessions.includes(session.id)}
+                                            onChange={() => toggleSession(session.id)}
+                                        />
+                                    ))}
+                                </div>
+                                <div className="text-center mt-8 mb-2">
                                     <span className="text-xs font-bold text-slate-400 italic uppercase tracking-wider">Allocated one slot</span>
                                 </div>
                             </div>
