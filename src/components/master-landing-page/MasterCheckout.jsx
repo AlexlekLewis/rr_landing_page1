@@ -151,19 +151,6 @@ const MasterCheckout = () => {
                     </div>
                 </div>
 
-                {/* Final Call to Action block */}
-                <div className="mt-16 text-center border-t border-white/10 pt-16">
-                    <p className="text-rr-pink font-bold uppercase tracking-widest text-sm mb-4">Want to learn more first?</p>
-                    <h3 className="text-2xl font-black text-white uppercase mb-4">
-                        ONLINE INFORMATION ZOOM NIGHT
-                    </h3>
-                    <p className="text-slate-300 mb-8 font-medium">
-                        Time and date: <span className="text-white bg-white/10 px-2 py-1 rounded">To Be Confirmed</span>
-                    </p>
-                    <button className="border-2 border-white/20 text-white hover:bg-white/10 font-bold uppercase tracking-wide px-8 py-4 rounded-full transition-colors">
-                        Register for the Zoom Link
-                    </button>
-                </div>
 
             </div>
         </section>
