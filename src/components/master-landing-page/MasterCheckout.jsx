@@ -42,7 +42,7 @@ const MasterCheckout = () => {
                     <h2 className="text-4xl font-black text-white uppercase tracking-wide mb-4">
                         COMPLETE YOUR APPLICATION
                     </h2>
-                    <p className="text-slate-300 font-medium">Secure your child's spot in the Season 1 Elite intake.</p>
+                    <p className="text-slate-300 font-medium">Secure your spot in the Season 1 Elite intake.</p>
                 </div>
 
                 <div className="bg-white rounded-2xl shadow-2xl overflow-hidden text-rr-dark">

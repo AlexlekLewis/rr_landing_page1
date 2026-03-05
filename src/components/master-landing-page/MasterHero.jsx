@@ -51,9 +51,6 @@ const MasterHero = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                     >
-                        <p className="inline-block px-4 py-1.5 rounded-full bg-rr-pink/20 border border-rr-pink/30 text-rr-pink font-bold text-xs tracking-wide uppercase mb-6 shadow-sm">
-                            THE FUTURE OF T20 DEVELOPMENT STARTS HERE
-                        </p>
                         <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-slate-200 mb-6 uppercase tracking-tighter leading-none drop-shadow-2xl">
                             READY TO DOMINATE<br />THE T20 GAME?
                         </h1>
@@ -77,7 +74,7 @@ const MasterHero = () => {
                             onClick={scrollToForm}
                             className="bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 md:px-10 py-4 rounded-full transition-colors duration-300 w-full sm:w-auto text-center"
                         >
-                            SECURE YOUR SPOT ON THE RAJASTHAN ROYALS ELITE PROGRAM
+                            SECURE YOUR PLACE NOW
                         </button>
                     </motion.div>
                 </div>

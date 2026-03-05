@@ -10,7 +10,7 @@ const TrustBar = () => {
                     <img
                         src="/assets/rr-logo-blue.png"
                         alt="Rajasthan Royals Logo"
-                        className="h-16 md:h-20 w-auto object-contain"
+                        className="h-20 sm:h-24 md:h-28 lg:h-32 w-auto object-contain"
                         onError={(e) => {
                             e.target.src = "/assets/Logos/RR-Logo-2.png";
                         }}

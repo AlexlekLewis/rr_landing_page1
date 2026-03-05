@@ -4,21 +4,21 @@ import { motion } from 'framer-motion';
 const leadershipCoaches = [
     {
         name: "Siddhartha Lahiri",
-        role: "Head of International Player Development",
+        role: "Rajasthan Royals Group Head of Int'l Player Development & Assistant Coach to Paarl, Rajasthan and Barbados Royals",
         image: "/assets/rra/headcoach-lahiri.png",
         bio: "Siddhartha runs the Rajasthan Royals' global talent network. He oversees player scouting and development across every Royals Academy in the world — meaning Melbourne's best young players have a direct line to one of the IPL's biggest franchises.",
     },
     {
-        name: "Alex Lewis",
-        role: "Head Coach",
-        image: "/assets/coaches/alex-lewis.jpg",
-        bio: "Over 20 years coaching cricketers through Premier Cricket and representative pathways. Alex is committed to getting the technique right and putting the player first — building not just better cricketers, but sharper athletes and tougher competitors.",
-    },
-    {
         name: "Andy Crook",
-        role: "Director of Cricket",
+        role: "Director of Cricket, Rajasthan Royals Academy Melbourne",
         image: "/assets/coaches/andy-crook.jpg",
         bio: "Andy runs the operations behind the program. His deep experience in cricket administration and coaching means every session is planned, every drill has a purpose, and every player gets the standard the Rajasthan Royals expect.",
+    },
+    {
+        name: "Alex Lewis",
+        role: "Rajasthan Royals Academy Melbourne Elite Program Head Coach",
+        image: "/assets/coaches/alex-lewis.jpg",
+        bio: "Over 20 years coaching cricketers through Premier Cricket and representative pathways. Alex is committed to getting the technique right and putting the player first — building not just better cricketers, but sharper athletes and tougher competitors.",
     },
 ];
 
@@ -66,7 +66,7 @@ const programTeam = [
         name: "Bret Cole",
         role: "Talent Scout",
         image: "/assets/coaches/bret-cole.jpg",
-        bio: "Decades of experience identifying and nurturing emerging talent across Victoria's cricket landscape. Bret's trained eye for potential means your child isn't just being coached — they're being watched by someone who knows exactly what pathways and selectors are looking for.",
+        bio: "Decades of experience identifying and nurturing emerging talent across Victoria's cricket landscape. Bret's trained eye for potential means every player isn't just being coached — they're being watched by someone who knows exactly what pathways and selectors are looking for.",
     },
     {
         name: "Zac Macciocca",
@@ -145,11 +145,10 @@ const CoachesSection = () => {
 
                 <div className="text-center mb-16">
                     <h2 className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-wide mb-6">
-                        COACHED BY THE BEST.<br />
-                        <span className="text-rr-blue">NO AMATEURS. NO VOLUNTEERS.</span>
+                        SPECIALIST COACHING
                     </h2>
                     <p className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium">
-                        Every coach in this program is a paid professional with real cricket credentials. Your child is coached by people who have played, coached, and competed at the highest levels.
+                        Every coach in this program is a paid professional with real cricket credentials. Players are coached by people who have played, coached, and competed at the highest levels.
                     </p>
                 </div>
 

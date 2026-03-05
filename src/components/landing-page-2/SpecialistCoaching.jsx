@@ -61,9 +61,9 @@ const SpecialistCoaching = () => {
     ];
 
     const leaders = [
-        { name: "Siddhartha Lahiri", role: "Global Head of International Player Talent Development" },
-        { name: "Alex Lewis", role: "Head Coach" },
-        { name: "Head Coach", role: "Head Coach" } // Using placeholder for 'Alex' as Head Coach as well, adjust as needed based on structure
+        { name: "Siddhartha Lahiri", role: "Rajasthan Royals Group Head of Int'l Player Development & Assistant Coach to Paarl, Rajasthan and Barbados Royals" },
+        { name: "Andy Crook", role: "Director of Cricket, Rajasthan Royals Academy Melbourne" },
+        { name: "Alex Lewis", role: "Rajasthan Royals Academy Melbourne Elite Program Head Coach" },
     ];
 
     return (
@@ -81,11 +81,7 @@ const SpecialistCoaching = () => {
                     </motion.h2>
                     <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full" />
 
-                    <motion.div variants={fadeIn} className="mt-6 mb-8 inline-block bg-rr-dark text-white font-bold uppercase tracking-wider text-sm px-6 py-2 rounded-full shadow-lg">
-                        Coached by the best, no mums, no volunteers
-                    </motion.div>
-
-                    <motion.p variants={fadeIn} className="text-lg text-slate-600 font-medium">
+                    <motion.p variants={fadeIn} className="mt-6 text-lg text-slate-600 font-medium">
                         Beyond the core work, players get access to specialist coaching across every discipline of the modern game — led by coaches who have done it at the highest level.
                     </motion.p>
                 </div>

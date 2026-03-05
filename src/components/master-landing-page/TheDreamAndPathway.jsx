@@ -25,7 +25,7 @@ const TheDreamAndPathway = () => {
                 <div className="flex-1 text-left">
                     <h2 className="text-3xl md:text-4xl font-black text-rr-dark uppercase mb-6 leading-tight">The Dream & Pathway</h2>
                     <p className="text-slate-600 font-medium text-lg leading-relaxed mb-6">
-                        Hear from Kumar Sangakkara, Director of Cricket at the Rajasthan Royals, on the vision behind the Academy and what it means for the next generation of elite cricketers coming through Melbourne.
+                        Hear from Kumar Sangakkara, Director of Cricket at the Rajasthan Royals, on the vision behind the Academy and what it means for aspirational cricketers in Melbourne.
                     </p>
                 </div>
 

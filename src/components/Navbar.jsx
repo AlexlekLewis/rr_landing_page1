@@ -11,7 +11,7 @@ const LP1_NAV = [
 
 const LP2_NAV = [
     { label: 'THE PROGRAM', id: 'program-at-a-glance' },
-    { label: 'YOUR INVESTMENT', id: 'your-investment' },
+    { label: 'YOUR INVESTMENT', id: 'value-stack' },
 ];
 
 const Navbar = ({ variant = 'lp1' }) => {
@@ -24,8 +24,8 @@ const Navbar = ({ variant = 'lp1' }) => {
     const navLinks = isLP3 ? [] : (isLP2 ? LP2_NAV : LP1_NAV);
 
     // LP3 does not need a CTA button
-    const ctaLabel = isLP2 ? 'ACCEPT INVITATION' : 'REGISTER INTEREST';
-    const ctaTarget = isLP2 ? 'rsvp' : 'apply-form';
+    const ctaLabel = isLP2 ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
+    const ctaTarget = isLP2 ? 'checkout' : 'apply-form';
 
     const scrollToForm = () => {
         document.getElementById(ctaTarget)?.scrollIntoView({ behavior: 'smooth' });
