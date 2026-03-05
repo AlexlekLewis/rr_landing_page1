@@ -116,13 +116,13 @@ const CoachCard = ({ coach, size = 'default' }) => {
             </div>
 
             {/* Hover State Overlay (Bio) */}
-            <div className="absolute inset-0 bg-rr-dark/90 backdrop-blur-sm p-8 flex flex-col justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out transform translate-y-8 group-hover:translate-y-0 text-center">
+            <div className="absolute inset-0 bg-rr-dark/90 backdrop-blur-sm p-6 flex flex-col justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out transform translate-y-8 group-hover:translate-y-0 text-center overflow-y-auto">
                 <h3 className="text-2xl font-black text-white uppercase tracking-wide mb-2">{coach.name}</h3>
                 <p className="text-rr-pink font-bold text-xs tracking-widest uppercase mb-4 pb-4 border-b border-white/20 inline-block mx-auto">{coach.role}</p>
                 <p className="text-white/90 text-sm leading-relaxed font-medium">
                     {coach.bio}
                 </p>
-                <div className="mt-6 flex justify-center">
+                <div className="mt-4 flex justify-center">
                     <span className="h-1 w-12 bg-rr-blue rounded-full"></span>
                 </div>
             </div>
