@@ -25,7 +25,7 @@ const TheDreamAndPathway = () => {
                 <div className="flex-1 text-left">
                     <h2 className="text-3xl md:text-4xl font-black text-rr-dark uppercase mb-6 leading-tight">The Dream & Pathway</h2>
                     <p className="text-slate-600 font-medium text-lg leading-relaxed mb-6">
-                        Hear directly from the coaching team about the vision behind the Rajasthan Royals Academy Melbourne — and the pathway it creates for emerging cricketers ready to take their game to the next level.
+                        Hear from Kumar Sangakkara, Director of Cricket at the Rajasthan Royals, on the vision behind the Academy and what it means for the next generation of elite cricketers coming through Melbourne.
                     </p>
                 </div>
 
@@ -37,6 +37,7 @@ const TheDreamAndPathway = () => {
                         controls={isPlaying}
                         playsInline
                         preload="metadata"
+                        poster="/assets/video-poster-sangakkara.jpg"
                         onPause={() => setIsPlaying(false)}
                         onPlay={() => setIsPlaying(true)}
                     >
