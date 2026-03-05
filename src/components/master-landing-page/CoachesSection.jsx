@@ -99,7 +99,7 @@ const CoachCard = ({ coach, size = 'default' }) => {
             <img
                 src={coach.image}
                 alt={coach.name}
-                className="absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-110 grayscale group-hover:grayscale-0"
+                className="absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-110"
                 onError={(e) => {
                     e.target.style.display = 'none';
                     e.target.parentElement.classList.add('bg-gradient-to-br', 'from-rr-dark', 'to-rr-blue/80');
@@ -196,7 +196,7 @@ const CoachesSection = () => {
                         <img
                             src="/assets/PANA0988.JPG"
                             alt="Training Facility"
-                            className="w-full h-full object-cover grayscale"
+                            className="w-full h-full object-cover"
                             onError={(e) => { e.target.style.display = 'none'; }}
                         />
                     </div>
