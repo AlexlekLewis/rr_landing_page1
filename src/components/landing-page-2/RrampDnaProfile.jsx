@@ -16,14 +16,14 @@ const RrampDnaProfile = () => {
     };
 
     const dnaBoxes = [
-        { title: "Technical Mastery", desc: "Biomechanical efficiency and repeatable core skills." },
-        { title: "Tactical Execution", desc: "Game awareness, field placement manipulation, and scenario planning." },
-        { title: "Physical Conditioning", desc: "Cricket-specific endurance, strength, and explosive power." },
-        { title: "Mental Resilience", desc: "Pressure management, routine building, and emotional control." },
-        { title: "Athletic Fielding", desc: "Ground coverage, throwing speed and accuracy, and catching reliability." },
-        { title: "Match Impact", desc: "Ability to influence the outcome of the game under pressure." },
-        { title: "Power Hitting", desc: "Range hitting, boundary maximization, and scoring intent." },
-        { title: "Self-Awareness", desc: "Understanding personal strengths, weaknesses, and learning styles." }
+        { title: "Technical Mastery", desc: "Consistent technique and repeatable core skills." },
+        { title: "Tactical Execution", desc: "Game awareness, reading the field, and knowing what to do in every situation." },
+        { title: "Physical Conditioning", desc: "Cricket-specific fitness, strength, and explosive power." },
+        { title: "Mental Resilience", desc: "Handling pressure, building good routines, and staying composed." },
+        { title: "Athletic Fielding", desc: "Ground coverage, throwing accuracy, and catching under pressure." },
+        { title: "Match Impact", desc: "The ability to step up and influence the game when it matters." },
+        { title: "Power Hitting", desc: "Range hitting, finding the boundary, and scoring with intent." },
+        { title: "Self-Awareness", desc: "Understanding your own strengths, areas to improve, and how you learn best." }
     ];
 
     return (
@@ -47,7 +47,7 @@ const RrampDnaProfile = () => {
                     <div className="mt-4">
                         <motion.div variants={fadeIn} className="text-center">
                             <p className="text-base text-slate-700 leading-relaxed font-medium">
-                                A comprehensive, evidence-based assessment tool used to benchmark your current capabilities across 8 critical dimensions.
+                                A detailed assessment that measures where your child sits right now across 8 key areas of the game.
                             </p>
                         </motion.div>
                     </div>

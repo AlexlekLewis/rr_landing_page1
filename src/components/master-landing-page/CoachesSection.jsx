@@ -6,19 +6,19 @@ const leadershipCoaches = [
         name: "Siddhartha Lahiri",
         role: "Head of International Player Development",
         image: "/assets/rra/headcoach-lahiri.png",
-        bio: "The architect behind the Rajasthan Royals' global talent pipeline. Siddhartha leads player identification and high-performance strategy across every Royals Academy worldwide — connecting Melbourne's brightest prospects directly to the IPL's most forward-thinking franchise.",
+        bio: "Siddhartha runs the Rajasthan Royals' global talent network. He oversees player scouting and development across every Royals Academy in the world — meaning Melbourne's best young players have a direct line to one of the IPL's biggest franchises.",
     },
     {
         name: "Alex Lewis",
         role: "Head Coach",
         image: "/assets/coaches/alex-lewis.jpg",
-        bio: "Over 20 years forging elite cricketers through Premier Cricket and representative pathways. Alex brings an unrelenting commitment to technical excellence and player-first development — building not just better cricketers, but sharper athletes and stronger competitors.",
+        bio: "Over 20 years coaching cricketers through Premier Cricket and representative pathways. Alex is committed to getting the technique right and putting the player first — building not just better cricketers, but sharper athletes and tougher competitors.",
     },
     {
         name: "Andy Crook",
         role: "Director of Cricket",
         image: "/assets/coaches/andy-crook.jpg",
-        bio: "The operational force behind RRA Melbourne's elite programs. Andy's deep experience in cricket administration and coaching strategy ensures every session, every drill, and every player interaction meets the standard the Rajasthan Royals demand.",
+        bio: "Andy runs the operations behind the program. His deep experience in cricket administration and coaching means every session is planned, every drill has a purpose, and every player gets the standard the Rajasthan Royals expect.",
     },
 ];
 
@@ -27,19 +27,19 @@ const eliteCoaches = [
         name: "Matthew Spoors",
         role: "Batting — Power Hitting & 360",
         image: "/assets/coaches/matthew-spoors.jpg",
-        bio: "BBL star and T20 International centurion. From Perth Scorchers to Melbourne Renegades, Matthew has dominated powerplay phases at the highest level. He brings firsthand elite match-day execution to your child's batting toolkit — the kind of knowledge you simply cannot get from textbooks.",
+        bio: "BBL star and T20 International centurion. From Perth Scorchers to Melbourne Renegades, Matthew has scored runs at the highest level under the most pressure. He brings firsthand knowledge of what it takes to perform on the big stage — the kind of experience you simply can't get from textbooks.",
     },
     {
         name: "Jarryd Rogers",
         role: "Batting — Power Hitting Mechanics",
         image: "/assets/coaches/jarryd-rogers.jpg",
-        bio: "Victorian State Baseball batting coach and power hitting mechanics specialist. Jarryd dissects bat speed, ball exit velocity, and strike-zone precision with a cross-sport scientific approach that gives players a measurable edge at the crease.",
+        bio: "Victorian State Baseball batting coach and power hitting specialist. Jarryd brings a unique cross-sport perspective on how to generate bat speed and hit the ball harder. His approach gives players a genuine, measurable edge at the crease.",
     },
     {
         name: "Harkirat Bajwa",
         role: "Bowling — Spin",
         image: "/assets/coaches/harkirat-bajwa.jpg",
-        bio: "Australian U19 representative and Premier Cricket competitor, Harkirat is a modern mystery spinner who turns the ball both ways with devastating accuracy. His deep understanding of spin biomechanics and tactical variation gives young bowlers a genuine competitive weapon.",
+        bio: "Australian U19 representative and Premier Cricket competitor, Harkirat is a modern spinner who turns the ball both ways with real accuracy. He understands how spin bowling works inside and out, and teaches young bowlers the variations and tactics that win matches.",
     },
     {
         name: "Adelaide Campion",
@@ -149,7 +149,7 @@ const CoachesSection = () => {
                         <span className="text-rr-blue">NO AMATEURS. NO VOLUNTEERS.</span>
                     </h2>
                     <p className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium">
-                        Your child's development is guided by elite professionals mapped directly to the Rajasthan Royals IPL coaching hierarchy.
+                        Every coach in this program is a paid professional with real cricket credentials. Your child is coached by people who have played, coached, and competed at the highest levels.
                     </p>
                 </div>
 

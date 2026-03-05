@@ -41,7 +41,7 @@ const BeyondTwelveWeeks = () => {
                     </motion.h2>
                     <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full mt-4" />
                     <motion.p variants={fadeIn} className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto mt-6 leading-relaxed font-medium">
-                        Completing the 12-week program marks the beginning of your connection to the Rajasthan Royals ecosystem and Global Academy network — a connection that can grow with you.
+                        Finishing the 12-week program is just the start. Your child stays connected to the Rajasthan Royals network and global Academy — and that connection only grows from here.
                     </motion.p>
                 </div>
 
@@ -51,7 +51,7 @@ const BeyondTwelveWeeks = () => {
                         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-blue to-rr-pink rounded-t-3xl" />
                         <h3 className="text-xl font-bold text-rr-dark mb-3">Year-Round Academy Placement</h3>
                         <p className="text-slate-600 leading-relaxed font-medium">
-                            Graduates of the Elite Program are fast-tracked for placement into our year-round Academy structure, ensuring continuous high-performance development and access to our facilities.
+                            Graduates of the Elite Program get priority access to our year-round Academy, ensuring continued development and access to our coaching and facilities.
                         </p>
                     </motion.div>
 
@@ -60,7 +60,7 @@ const BeyondTwelveWeeks = () => {
                         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-pink to-rr-blue rounded-t-3xl" />
                         <h3 className="text-xl font-bold text-rr-dark mb-3">Global Talent ID Network</h3>
                         <p className="text-slate-600 leading-relaxed font-medium">
-                            Your Player DNA Profile is entered into the global Rajasthan Royals Talent ID network. Standout performers will be continuously monitored for future progression and potential selection in international programs.
+                            Your child's Player DNA Profile goes into the global Rajasthan Royals talent database. Standout performers are tracked for future opportunities and potential selection into international programs.
                         </p>
                     </motion.div>
 
@@ -69,7 +69,7 @@ const BeyondTwelveWeeks = () => {
                         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-blue to-rr-pink rounded-t-3xl" />
                         <h3 className="text-xl font-bold text-rr-dark mb-3">Elite Squad Selection</h3>
                         <p className="text-slate-600 leading-relaxed font-medium">
-                            Elite Program alumni form the talent pool from which we select our premier squads representing the Academy in high-level external tournaments, showcase matches, and franchise testing events.
+                            Elite Program graduates form the pool we select from for our top squads — representing the Academy in external tournaments, showcase matches, and higher-level competitions.
                         </p>
                     </motion.div>
                 </div>

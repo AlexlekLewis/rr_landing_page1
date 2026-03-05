@@ -18,43 +18,43 @@ const SpecialistCoaching = () => {
     const specialties = [
         {
             title: "Power and 360 Hitting",
-            desc: "Modern T20 cricket demands batters who can score all around the ground, switch between gears, and accelerate at will. Range hitting, ramp shots, reverse sweeps, and the ability to manufacture boundaries under pressure from any position on the crease.",
+            desc: "Modern T20 cricket demands batters who can score all around the ground and change gears when they need to. Ramp shots, reverse sweeps, and the ability to find the boundary from any position — these are the shots that win games.",
             color: "from-rr-blue to-rr-pink",
             coach: "Matthew Spoors & Jarryd Rogers"
         },
         {
             title: "Bowl to Control the Game",
-            desc: "Bowling with intent is about more than taking wickets — it's about controlling pressure, manipulating scoring zones, and executing plans that suffocate the opposition. Accuracy under pressure, variation sequencing, and the ability to bowl to fields and force mistakes.",
+            desc: "Bowling with intent is about more than taking wickets — it's about controlling pressure, limiting runs, and sticking to a plan. Accuracy under pressure, smart use of variations, and the ability to bowl to a field and force mistakes.",
             color: "from-rr-pink to-rr-blue",
             coach: "Pace Staff"
         },
         {
             title: "Spin Mastery & Variation",
-            desc: "Effective spin is about control, deception, and taking the game away from a batter at the right moment. Stock ball accuracy, flight and loop, wrong'uns, arm balls — and the tactical intelligence to know when and where each variation is the right weapon.",
+            desc: "Effective spin is about control, deception, and taking the game away from the batter at the right moment. Consistent accuracy, flight and loop, wrong'uns, arm balls — and knowing exactly when to use each one.",
             color: "from-rr-blue to-rr-pink",
             coach: "Alex Lewis & Harkirat Bajwa"
         },
         {
             title: "Wicketkeeping Craft",
-            desc: "Modern keeping demands explosive athleticism, technical precision, and match intelligence. Stance and footwork, standing-up skills, glove work in high-pressure moments, and reading bowlers and batters — separating good keepers from exceptional ones.",
+            desc: "Modern keeping demands quick reflexes, clean technique, and smart decision-making. Stance and footwork, standing up to the stumps, clean glovework under pressure, and learning to read the game — the details that separate good keepers from great ones.",
             color: "from-rr-pink to-rr-blue",
             coach: "Wicketkeeping Specialist"
         },
         {
             title: "Game-Changing Fielding",
-            desc: "Elite fielders don't just save runs — they change the momentum of matches. Ground coverage, long-barrier and sliding technique, direct-hit accuracy, and high-pressure catching that turns half-chances into wickets. Millimetres matter and this is where they're trained.",
+            desc: "Elite fielders don't just save runs — they change matches. Ground coverage, sliding saves, accurate throwing, and high-pressure catching that turns half-chances into wickets. Small margins make big differences, and this is where they're trained.",
             color: "from-rr-blue to-rr-pink",
             coach: "Fielding Staff"
         },
         {
             title: "Strength & Conditioning",
-            desc: "Cricket-specific athleticism built for elite performance: explosive power for hitting, bowling endurance, speed and agility in the field, and recovery management across a full 12 weeks. S&C integrated to keep players performing at their peak throughout the program.",
+            desc: "Cricket-specific fitness built for real performance: explosive power for hitting, bowling endurance, speed and agility in the field, and proper recovery across the full 12 weeks. Fitness coaching is woven into the program to keep players performing at their best.",
             color: "from-rr-pink to-rr-blue",
             coach: "High Performance Unit"
         },
         {
             title: "Mental Performance & Mindset",
-            desc: "Elite cricketers make better decisions faster, manage risk more accurately, and execute under pressure more consistently. Pre-performance routines, pressure management, acceptable risk decision-making, and the self-awareness to back your game when it matters most.",
+            desc: "The best cricketers make better decisions faster and perform when it counts. Building pre-game routines, learning to handle pressure, knowing when to take risks, and having the confidence to trust your skills in the biggest moments.",
             color: "from-rr-blue to-rr-pink",
             coach: "Leadership Team"
         }
@@ -62,7 +62,7 @@ const SpecialistCoaching = () => {
 
     const leaders = [
         { name: "Siddhartha Lahiri", role: "Global Head of International Player Talent Development" },
-        { name: "Alex Lewis", role: "Director of Cricket" },
+        { name: "Alex Lewis", role: "Head Coach" },
         { name: "Head Coach", role: "Head Coach" } // Using placeholder for 'Alex' as Head Coach as well, adjust as needed based on structure
     ];
 
@@ -86,7 +86,7 @@ const SpecialistCoaching = () => {
                     </motion.div>
 
                     <motion.p variants={fadeIn} className="text-lg text-slate-600 font-medium">
-                        Beyond core skills, the Elite Program provides access to highly specialised disciplines necessary for dominating the modern game, led by a world-class coaching structure.
+                        Beyond the core work, players get access to specialist coaching across every discipline of the modern game — led by coaches who have done it at the highest level.
                     </motion.p>
                 </div>
 

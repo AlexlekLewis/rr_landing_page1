@@ -19,37 +19,37 @@ const TheRoyalsWay = () => {
         {
             title: "Talent First",
             subtitle: "Discover · Back · Elevate",
-            desc: "Identify potential before it's obvious and invest early. Selection skews toward growth, not pedigree. Stretch, then support."
+            desc: "Spot potential early and back it. We select players based on where they're headed, not just where they've been. Challenge them, then support them."
         },
         {
             title: "Play the Future",
             subtitle: "Lead with Innovation",
-            desc: "Technology and data inform decisions, not replace judgment. Short learning cycles. Experimentation is expected."
+            desc: "We use technology and data to guide decisions — but never replace good coaching judgment. We try new things, learn quickly, and keep improving."
         },
         {
             title: "Learn by Doing",
             subtitle: null,
-            desc: "Skills are forged in context — match simulations, scenarios, role reversals. \"Mistake → Lesson → Adjustment\" is the rhythm of our environment."
+            desc: "Players learn by doing, not just listening. Match simulations, real scenarios, and different roles. Make a mistake, learn from it, adjust — that's how real improvement happens."
         },
         {
             title: "Play Bold",
             subtitle: null,
-            desc: "Courage is a trainable skill. We reward intent and intelligent risk. We define \"positive\" by options created, not only outcomes achieved."
+            desc: "We teach players to back themselves. We reward smart intent and calculated risks — not just results, but the quality of the decisions behind them."
         },
         {
             title: "Joy, Curiosity & Lifelong Learning",
             subtitle: null,
-            desc: "Keep the game fun and the mind open — curiosity accelerates mastery. Coaches stay students first."
+            desc: "Keep the game enjoyable and the mind open — curious players improve faster. Our coaches never stop learning either."
         },
         {
             title: "Holistic Development",
             subtitle: null,
-            desc: "Performance = Skills × Fitness × Mindset × Recovery × Life. We coach the person — nutrition, sleep, mental skills, character."
+            desc: "Great performance comes from the whole picture — skills, fitness, mindset, recovery, and life off the field. We develop the person, not just the cricketer."
         },
         {
             title: "Fairness, Respect & Inclusion",
             subtitle: null,
-            desc: "Every learner gets dignity of attention. No favourites, no shortcuts. Diverse backgrounds make us better and braver."
+            desc: "Every player gets genuine attention. No favourites, no shortcuts. We believe diverse backgrounds make the group stronger."
         }
     ];
 
@@ -110,7 +110,7 @@ const TheRoyalsWay = () => {
                         The 7 Pillars
                     </motion.p>
                     <motion.p variants={fadeIn} className="text-base text-slate-600 mt-3 font-medium max-w-2xl mx-auto">
-                        The philosophy that governs how we coach, develop and deliver our program.
+                        The philosophy behind how we coach, develop players, and run our program.
                     </motion.p>
                 </div>
 

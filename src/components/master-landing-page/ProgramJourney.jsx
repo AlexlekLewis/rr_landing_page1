@@ -16,7 +16,7 @@ const ProgramJourney = () => {
                         THE 12-WEEK <span className="text-rr-pink">PROFESSIONAL JOURNEY</span>
                     </h2>
                     <p className="text-lg text-slate-300 max-w-2xl mx-auto">
-                        This isn't a drop-in clinic. It is a fully sequenced, data-driven development program designed to prepare players for representative selection and premier cricket.
+                        This isn't a drop-in clinic. It's a structured 12-week program built to give your child the skills, confidence, and coaching they need to push for representative selection and premier cricket.
                     </p>
                 </div>
 
@@ -35,11 +35,11 @@ const ProgramJourney = () => {
                                     <span className="text-rr-navy font-bold uppercase tracking-wider text-sm">Onboarding</span>
                                 </div>
                                 <p className="text-slate-600 leading-relaxed mb-4 text-sm md:text-base">
-                                    The crucial setup week where players and parents are introduced to the academy standards, the DNA Profiling system, and the coaching staff.
+                                    The setup week where players and parents meet the coaching staff, learn how the program works, and understand exactly what to expect over the next 12 weeks.
                                 </p>
                                 <ul className="text-sm text-slate-500 space-y-2">
-                                    <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Goal setting & baseline expectations</li>
-                                    <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Apparel sizing and distribution</li>
+                                    <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Meet your squad coach and set personal goals</li>
+                                    <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Collect your official Royals training kit</li>
                                 </ul>
                             </div>
                         </div>
@@ -55,12 +55,12 @@ const ProgramJourney = () => {
                                     <span className="text-rr-navy font-bold uppercase tracking-wider text-sm">Assessment</span>
                                 </div>
                                 <p className="text-slate-600 leading-relaxed mb-4 text-sm md:text-base">
-                                    A rigorous testing environment establishing your baseline DNA Profile. We gather objective data across biomechanics, cardiovascular fitness, and technical execution to build your Individual Development Plan (IDP).
+                                    We test every player across batting, bowling, fielding, fitness, and movement to build a clear picture of where they are now. This becomes their Player DNA Profile — the starting point for their personalised development plan.
                                 </p>
                                 <ul className="text-sm text-slate-500 space-y-2">
-                                    <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Biomechanical and 360-degree video analysis</li>
-                                    <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Fitness, speed, and agility benchmarking</li>
-                                    <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Data capture mapping directly to IDPs</li>
+                                    <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Full video analysis of batting and bowling technique</li>
+                                    <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Fitness, speed, and agility testing</li>
+                                    <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Results feed directly into your child's Individual Development Plan</li>
                                 </ul>
                             </div>
                         </div>
@@ -78,7 +78,7 @@ const ProgramJourney = () => {
                                     <span className="text-rr-navy font-bold uppercase tracking-wider text-sm">Explore (Wks 2-4)</span>
                                 </div>
                                 <p className="text-slate-600 leading-relaxed text-sm md:text-base">
-                                    Deconstructing current techniques and introducing advanced T20 concepts. Players are encouraged to step out of their comfort zones and experiment with new biomechanics without fear of failure.
+                                    Breaking down existing habits and introducing new T20 techniques. Players are encouraged to try new things, experiment with different approaches, and step outside their comfort zone without worrying about getting it wrong.
                                 </p>
                             </div>
                         </div>
@@ -93,7 +93,7 @@ const ProgramJourney = () => {
                                     <span className="text-rr-navy font-bold uppercase tracking-wider text-sm">Challenge (Wks 5-8)</span>
                                 </div>
                                 <p className="text-slate-600 leading-relaxed text-sm md:text-base">
-                                    Applying new skills under elevated pressure. We increase the intensity of net sessions, introducing constraints and match-scenario simulations to test decision-making under genuine stress.
+                                    Now we turn up the heat. Players apply their new skills under real pressure — tougher net sessions, game-like situations, and scenarios designed to test whether they can make the right decisions when it matters.
                                 </p>
                             </div>
                         </div>
@@ -108,7 +108,7 @@ const ProgramJourney = () => {
                                     <span className="text-rr-navy font-bold uppercase tracking-wider text-sm">Execute (Wks 9-12)</span>
                                 </div>
                                 <p className="text-slate-600 leading-relaxed text-sm md:text-base">
-                                    Full contextual immersion. Players are expected to consistently execute their refined skills within high-stakes, competitive scenarios, culminating in their final assessment and post-program pathway report.
+                                    Everything comes together. Players are expected to deliver their improved skills consistently in competitive, match-like conditions. The program finishes with a final assessment and a detailed report on where to go next.
                                 </p>
                             </div>
                         </div>
