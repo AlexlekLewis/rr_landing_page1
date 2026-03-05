@@ -13,9 +13,9 @@ const MasterHero = () => {
             <div className="absolute inset-0 w-full h-full z-0">
                 {/* Background Image */}
                 <img
-                    src="/assets/sooryavanchi-arms-raised.jpg"
+                    src="/assets/Hero.jpeg"
                     alt="RR Training"
-                    className="w-full h-full object-cover object-[center_20%] opacity-70"
+                    className="w-full h-full object-cover object-[center_top] opacity-70"
                 />
 
                 {/* Brand Gradients overlays per V2 blueprint */}
