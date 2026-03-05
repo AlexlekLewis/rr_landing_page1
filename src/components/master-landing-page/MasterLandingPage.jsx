@@ -3,23 +3,28 @@ import Navbar from '../Navbar';
 import Footer from '../Footer';
 import MasterHero from './MasterHero';
 import TrustBar from './TrustBar';
-import ProblemAgitation from './ProblemAgitation';
 import CoachesSection from './CoachesSection';
 import ProgramJourney from './ProgramJourney';
-import TechnologyEdge from './TechnologyEdge';
-import TransformationStories from './TransformationStories';
-import WhoThisIsFor from './WhoThisIsFor';
 import ValueStack from './ValueStack';
 import MasterFAQ from './MasterFAQ';
 import MasterCheckout from './MasterCheckout';
 import StickyCTA from './StickyCTA';
 
+import TheRoyalsWay from '../landing-page-2/TheRoyalsWay';
+import ProgramAtAGlance from '../landing-page-2/ProgramAtAGlance';
+import SpecialistCoaching from '../landing-page-2/SpecialistCoaching';
+import BeyondTwelveWeeks from '../landing-page-2/BeyondTwelveWeeks';
+import RrampDnaProfile from '../landing-page-2/RrampDnaProfile';
+import TheDreamAndPathway from './TheDreamAndPathway';
+import SessionWalkthrough from './SessionWalkthrough';
+import FacilityAndTestimonials from './FacilityAndTestimonials';
+
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
 const MASTER_SECTIONS = [
-    'hero', 'trust-bar', 'problem', 'coaches', 'program',
-    'technology', 'stories', 'qualifying', 'value-stack',
-    'faq', 'checkout'
+    'hero', 'trust-bar', 'dream-pathway', 'program-at-a-glance', 'program',
+    'specialist-coaching', 'the-royals-way', 'session-walkthrough', 'technology',
+    'coaches', 'facility', 'beyond-12-weeks', 'value-stack', 'faq', 'checkout'
 ];
 
 const MasterLandingPage = () => {
@@ -41,31 +46,34 @@ const MasterLandingPage = () => {
                 {/* 2. Trust Bar */}
                 <div id="trust-bar"><TrustBar /></div>
 
-                {/* 3. Problem Agitation */}
-                <div id="problem"><ProblemAgitation /></div>
+                {/* 3. The Dream & Pathway */}
+                <div id="dream-pathway"><TheDreamAndPathway /></div>
 
-                {/* 4. Coaches & Environment */}
-                <div id="coaches"><CoachesSection /></div>
+                {/* 4. The Methodology (The Science & The Setup) */}
+                <div id="program-at-a-glance"><ProgramAtAGlance /></div>
 
                 {/* 5. 12-Week Program Journey */}
                 <div id="program"><ProgramJourney /></div>
 
-                {/* 6. Technology Edge */}
-                <div id="technology"><TechnologyEdge /></div>
+                <div id="specialist-coaching"><SpecialistCoaching /></div>
+                <div id="the-royals-way"><TheRoyalsWay /></div>
+                <div id="session-walkthrough"><SessionWalkthrough /></div>
 
-                {/* 7. Transformation Stories */}
-                <div id="stories"><TransformationStories /></div>
+                {/* 6. Technology Edge (RRAM DNA PROFILE) */}
+                <div id="technology"><RrampDnaProfile /></div>
 
-                {/* 8. Who This Is For */}
-                <div id="qualifying"><WhoThisIsFor /></div>
+                {/* 7. The Environment & The Coaches */}
+                <div id="coaches"><CoachesSection /></div>
+                <div id="facility"><FacilityAndTestimonials /></div>
 
-                {/* 9. Pathway & Value Stack */}
+                {/* 8. The Value Stack & Investment */}
+                <div id="beyond-12-weeks"><BeyondTwelveWeeks /></div>
                 <div id="value-stack"><ValueStack /></div>
 
-                {/* 10. FAQ */}
+                {/* 9. FAQ */}
                 <div id="faq"><MasterFAQ /></div>
 
-                {/* 11. Checkout */}
+                {/* 10. Checkout */}
                 <div id="checkout"><MasterCheckout /></div>
             </main>
 

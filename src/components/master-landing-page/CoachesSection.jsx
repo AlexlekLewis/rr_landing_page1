@@ -3,31 +3,38 @@ import { motion } from 'framer-motion';
 
 const defaultCoaches = [
     {
-        name: "Kumar Sangakkara",
-        role: "Director of Cricket",
-        image: "/assets/Coaches/Kumar_Poster_Image.jpg",
-        bio: "[Pending User Input] Regarded as one of the greatest batters in the history of the game. Kumar oversees the entire philosophical and technical direction of the academy.",
+        name: "Siddhartha Lahiri",
+        role: "Head of Global Academies",
+        image: "/assets/Coaches/Sid_Lahiri.jpg",
+        bio: "Leading talent identification and performance globally for the Royals Group of franchises and the Royals Academy network.",
         tier: 1
     },
     {
         name: "Alex Lewis",
-        role: "Program Director",
+        role: "Head Coach",
         image: "/assets/Headshot.png",
-        bio: "[Pending User Input] Leads the day-to-day operations and coaching curriculum. Specialises in high-performance T20 biomechanics.",
+        bio: "An experienced Academy Director with over 20 years developing players for Premier Cricket and representative pathways.",
         tier: 1
     },
     {
-        name: "Andy Crook",
-        role: "Head Performance Coach",
-        image: "/assets/Coaches/Andy_Crook.jpg", // Placeholder
-        bio: "[Pending User Input] Former professional player with deep expertise in T20 match simulation and tactical awareness.",
+        name: "Matthew Spoors",
+        role: "Batting — Power Hitting & 360",
+        image: "/assets/placeholder-coach.jpg",
+        bio: "Globally experienced (BBL/International). Unpacks the mechanics of powerplay dominance with direct access to elite-level technical knowledge and match-day execution strategies.",
         tier: 1
     },
     {
-        name: "Siddhartha Lahiri",
-        role: "Head of Global Academy",
-        image: "/assets/Coaches/Sid_Lahiri.jpg", // Placeholder
-        bio: "[Pending User Input] Architect of the Royals global development pathway, linking Melbourne talent to the broader franchise network.",
+        name: "Jarryd Rogers",
+        role: "Batting — Power Hitting Mechanics",
+        image: "/assets/placeholder-coach.jpg",
+        bio: "Victorian State Baseball batting coach and power hitting mechanics expert, supporting foundation technical elements and testing key power metrics including bat speed and ball exit velocity.",
+        tier: 1
+    },
+    {
+        name: "Harkirat Bajwa",
+        role: "Bowling — Spin",
+        image: "/assets/placeholder-coach.jpg",
+        bio: "Australian U19 and Premier Cricket young gun, considered a modern 'mystery spinner' capable of spinning the ball both ways.",
         tier: 1
     }
 ];

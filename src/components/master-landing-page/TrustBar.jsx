@@ -37,19 +37,7 @@ const TrustBar = () => {
                         </span>
                     </div>
 
-                    {/* Mobile Divider */}
-                    <div className="w-full h-px bg-slate-100 block md:hidden"></div>
 
-                    {/* Item 3: Parent Testimonial Snippet */}
-                    <div className="max-w-xs text-center md:text-left italic text-rr-charcoal text-sm leading-relaxed relative">
-                        <span className="text-3xl text-slate-200 absolute -top-4 -left-4 font-serif">"</span>
-                        <p className="relative z-10 font-medium">
-                            The professionalism from day one was exceptional. My son hasn't stopped talking about it.
-                        </p>
-                        <p className="not-italic text-xs font-semibold text-rr-dark mt-2">
-                            — Sarah M., Glen Waverley
-                        </p>
-                    </div>
 
                 </div>
             </div>

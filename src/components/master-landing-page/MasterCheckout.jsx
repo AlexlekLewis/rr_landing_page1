@@ -105,7 +105,7 @@ const MasterCheckout = () => {
                                     <h4 className="font-bold text-lg mb-4">Order Summary</h4>
                                     <div className="flex justify-between items-center mb-2 pb-2 border-b border-slate-200">
                                         <span className="font-medium text-rr-charcoal">RRAA 12-Week Elite Program</span>
-                                        <span className="font-bold text-rr-dark">$1495.00</span>
+                                        <span className="font-bold text-rr-dark">$2995.00</span>
                                     </div>
                                     <div className="flex justify-between items-center text-sm text-slate-500">
                                         <span>Includes IDP, DNA Profile, and Training Kit</span>

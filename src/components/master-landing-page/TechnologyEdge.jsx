@@ -9,7 +9,7 @@ const TechnologyEdge = () => {
                 {/* Content Side */}
                 <div>
                     <h2 className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-wide mb-6">
-                        THE <span className="text-rr-blue">DNA PERFORMANCE</span> PROFILE
+                        THE <span className="text-rr-blue">PLAYER DNA</span> PROFILE
                     </h2>
                     <p className="text-lg text-rr-charcoal font-medium mb-8 leading-relaxed">
                         Say goodbye to vague feedback. Every player in the elite program receives a digital RRAA DNA Profile — a data-driven dashboard tracking their biomechanics, tactical awareness, and physical progression across 3 assessment points.
@@ -36,15 +36,7 @@ const TechnologyEdge = () => {
                             </div>
                         </div>
 
-                        <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm flex items-start gap-4">
-                            <div className="bg-rr-pink/10 p-3 rounded-lg text-rr-pink">
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                            </div>
-                            <div>
-                                <h3 className="text-lg font-bold text-rr-dark mb-1">Parent & Selector Reports</h3>
-                                <p className="text-sm text-rr-charcoal">Export comprehensive PDF reports at the end of the program to share with state selectors or premier club coaches.</p>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
 
@@ -78,7 +70,7 @@ const TechnologyEdge = () => {
                                 <div className="w-10 h-10 rounded-full bg-gradient-rr hidden sm:block"></div>
                                 <div>
                                     <p className="text-white font-bold text-sm">John Doe</p>
-                                    <p className="text-rr-pink text-[10px] uppercase font-bold tracking-wider">DNA Performance Profile</p>
+                                    <p className="text-rr-pink text-[10px] uppercase font-bold tracking-wider">Player DNA Profile</p>
                                 </div>
                             </div>
 

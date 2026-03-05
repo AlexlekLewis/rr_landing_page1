@@ -87,7 +87,7 @@ const ValueStack = () => {
                         </ul>
 
                         <div className="mt-8 flex items-end gap-6 mb-4">
-                            <p className="text-6xl font-black text-rr-pink tracking-tighter leading-none">$1495</p>
+                            <p className="text-6xl font-black text-rr-pink tracking-tighter leading-none">$2995</p>
                             <p className="pb-2 text-slate-400 text-sm font-medium uppercase tracking-wider">Total Investment</p>
                         </div>
 

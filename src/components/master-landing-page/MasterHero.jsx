@@ -11,22 +11,11 @@ const MasterHero = () => {
 
             {/* Background Video / Image Layer */}
             <div className="absolute inset-0 w-full h-full z-0">
-                {/* Desktop: Video (Fallback to image if needed) */}
-                <video
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="w-full h-full object-cover object-center hidden md:block opacity-70"
-                >
-                    <source src="https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/Kumar%20Video%20Landing/Final%20Andy%20%26%20Kumar%20Edit.mov" type="video/mp4" />
-                </video>
-
-                {/* Mobile Fallback Image */}
+                {/* Background Image */}
                 <img
                     src="/assets/sooryavanchi-arms-raised.jpg"
                     alt="RR Training"
-                    className="w-full h-full object-cover object-center block md:hidden opacity-70"
+                    className="w-full h-full object-cover object-center opacity-70"
                 />
 
                 {/* Brand Gradients overlays per V2 blueprint */}
@@ -51,30 +40,21 @@ const MasterHero = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                     >
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 uppercase tracking-wide leading-tight">
-                            MELBOURNE'S ONLY IPL-BACKED T20 PROGRAM
+                        <p className="inline-block px-4 py-1.5 rounded-full bg-rr-pink/20 border border-rr-pink/30 text-rr-pink font-bold text-xs tracking-wide uppercase mb-6 shadow-sm">
+                            THE FUTURE OF T20 DEVELOPMENT STARTS HERE
+                        </p>
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 uppercase tracking-wide leading-tight drop-shadow-lg">
+                            READY TO DOMINATE THE T20 GAME?
                         </h1>
-                        <p className="text-lg md:text-xl text-white/90 mb-8 font-normal leading-relaxed">
-                            A 12-week structured program for young cricketers ready to train with purpose. Specialist coaching. Individual performance tracking. A pathway beyond club cricket.
+                        <p className="text-xl md:text-2xl text-white shadow-black drop-shadow-md font-semibold mb-4 leading-relaxed">
+                            Modern cricket demands more than tradition. We develop explosive skills, sharp thinking and elite habits.
+                        </p>
+                        <p className="text-base md:text-lg text-white/90 mb-8 font-medium leading-relaxed max-w-2xl drop-shadow-md">
+                            Designed and guided by one of the biggest cricket brands on the planet, the Elite program draws on decades of global T20 experience. At Rajasthan Royals Academy, Melbourne, we deliver a one of a kind high performance training focused on developing complete cricketers.
                         </p>
                     </motion.div>
 
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                        className="mb-8"
-                    >
-                        {/* Urgency Element */}
-                        <div className="inline-block bg-rr-dark/60 backdrop-blur-md border border-white/10 rounded-xl px-5 py-3 mb-2 shadow-xl">
-                            <p className="text-white font-semibold text-sm md:text-base">
-                                Season 1 Intake: 40 players per cohort. <span className="text-rr-pink font-black">20</span> spots remaining.
-                            </p>
-                        </div>
-                        <p className="text-xs md:text-sm text-slate-300 ml-2">
-                            Applications close March 15th or when spots are filled — whichever comes first.
-                        </p>
-                    </motion.div>
+
 
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
