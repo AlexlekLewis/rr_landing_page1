@@ -2,7 +2,14 @@ import React from 'react';
 
 const TheDreamAndPathway = () => {
     return (
-        <section className="py-24 px-6 lg:px-8 bg-slate-50 relative z-10 text-center border-b border-slate-200" id="dream-pathway">
+        <section className="py-24 px-6 lg:px-8 bg-slate-50 relative z-10 text-center border-b border-slate-200 overflow-hidden" id="dream-pathway">
+            {/* Subtle Pink Logo Watermark */}
+            <img
+                src="/assets/rr-logo-pink.png"
+                alt=""
+                className="absolute -right-16 top-1/2 -translate-y-1/2 w-auto h-[80%] object-contain opacity-[0.03] pointer-events-none z-0"
+                aria-hidden="true"
+            />
             <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-12 items-center">
                 {/* Text Content */}
                 <div className="flex-1 text-left">

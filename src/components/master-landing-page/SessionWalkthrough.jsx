@@ -171,6 +171,14 @@ const SessionWalkthrough = () => {
             {/* Top gradient bar */}
             <div className="absolute top-0 right-0 w-full h-1 bg-image-gradient-rr"></div>
 
+            {/* Subtle Pink Logo Watermark */}
+            <img
+                src="/assets/rr-logo-pink.png"
+                alt=""
+                className="absolute -right-16 top-1/2 -translate-y-1/2 w-auto h-[70%] object-contain opacity-[0.04] pointer-events-none"
+                aria-hidden="true"
+            />
+
             <div className="max-w-6xl mx-auto px-6 relative z-10">
 
                 {/* Header */}

@@ -59,7 +59,7 @@ const ValueStack = () => {
 
                     <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 relative">
                         {/* Royals global logos for texture */}
-                        <div className="opacity-10 absolute top-4 right-4 flex gap-2 w-32 justify-end pointer-events-none grayscale">
+                        <div className="opacity-10 absolute top-4 right-4 flex gap-2 w-32 justify-end pointer-events-none">
                             <img src="/assets/rr-logo-blue.png" alt="" className="h-8 object-contain" />
                         </div>
 
