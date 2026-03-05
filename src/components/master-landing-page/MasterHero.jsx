@@ -7,20 +7,31 @@ const MasterHero = () => {
     };
 
     return (
-        <section className="relative min-h-[90vh] w-full flex items-center bg-rr-dark overflow-hidden pt-24 pb-16">
+        <section className="relative min-h-screen w-full flex items-center bg-rr-dark overflow-hidden">
 
             {/* Background Video / Image Layer */}
             <div className="absolute inset-0 w-full h-full z-0">
-                {/* Background Image */}
-                <img
-                    src="/assets/Hero.jpeg"
-                    alt="RR Training"
-                    className="w-full h-full object-cover object-[center_top] opacity-70"
-                />
+                {/* Background Image Layer - Mobile */}
+                <div
+                    className="absolute inset-0 w-full h-full bg-cover bg-no-repeat bg-[center_top] md:hidden"
+                    style={{
+                        backgroundImage: "url('/assets/Hero.jpeg')",
+                    }}
+                >
+                    <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/60 to-transparent" />
+                </div>
 
-                {/* Brand Gradients overlays per V2 blueprint */}
-                <div className="absolute inset-0 bg-gradient-rr opacity-60 mix-blend-multiply"></div>
-                <div className="absolute inset-0 bg-gradient-dark-overlay opacity-90"></div>
+                {/* Background Image Layer - Desktop */}
+                <div
+                    className="absolute inset-0 w-full h-full bg-cover bg-no-repeat hidden md:block"
+                    style={{
+                        backgroundImage: "url('/assets/hero-final.jpeg')",
+                        backgroundPosition: "center 20%"
+                    }}
+                >
+                    <div className="absolute inset-0 bg-gradient-to-r from-rr-dark via-rr-dark/80 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-transparent to-transparent" />
+                </div>
 
                 {/* Subtle Lion Watermark */}
                 <img
@@ -32,7 +43,7 @@ const MasterHero = () => {
             </div>
 
             {/* Content Container */}
-            <div className="relative z-20 w-full max-w-7xl mx-auto px-6 h-full flex flex-col justify-center">
+            <div className="relative z-20 w-full container mx-auto px-6 h-full flex flex-col justify-center text-left pt-32">
                 <div className="max-w-3xl">
 
                     <motion.div
@@ -43,8 +54,8 @@ const MasterHero = () => {
                         <p className="inline-block px-4 py-1.5 rounded-full bg-rr-pink/20 border border-rr-pink/30 text-rr-pink font-bold text-xs tracking-wide uppercase mb-6 shadow-sm">
                             THE FUTURE OF T20 DEVELOPMENT STARTS HERE
                         </p>
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-200 mb-4 uppercase tracking-tighter leading-none drop-shadow-2xl">
-                            READY TO DOMINATE THE T20 GAME?
+                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-slate-200 mb-6 uppercase tracking-tighter leading-none drop-shadow-2xl">
+                            READY TO DOMINATE<br />THE T20 GAME?
                         </h1>
                         <p className="text-xl md:text-2xl text-white shadow-black drop-shadow-md font-semibold mb-4 leading-relaxed mt-4">
                             Modern cricket demands more than tradition. We develop explosive skills, sharp thinking and elite habits.
@@ -60,7 +71,7 @@ const MasterHero = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.4 }}
-                        className="flex flex-col sm:flex-row gap-4 items-start sm:items-center"
+                        className="flex flex-col sm:flex-row gap-4 items-start pb-16 md:pb-24"
                     >
                         <button
                             onClick={scrollToForm}
