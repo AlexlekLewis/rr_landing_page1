@@ -47,29 +47,29 @@ const BeyondTwelveWeeks = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {/* Masterclasses */}
-                    <motion.div variants={fadeIn} className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 relative overflow-hidden group hover:border-rr-blue/30 transition-colors duration-500">
+                    <motion.div variants={fadeIn} className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 relative overflow-hidden group hover:border-rr-blue/30 transition-colors duration-500 flex flex-col items-center text-center">
                         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-blue to-rr-pink rounded-t-3xl" />
-                        <h3 className="text-xl font-bold text-rr-dark mb-3">Priority Access</h3>
+                        <h3 className="text-xl font-bold text-rr-dark mb-3">Year-Round Academy Placement</h3>
                         <p className="text-slate-600 leading-relaxed font-medium">
-                            As an Academy alumni, you receive priority access and "first dibs" on all future high-performance masterclasses, specialist clinics, and sessions hosted by Rajasthan Royals Academy Melbourne.
+                            Graduates of the Elite Program are fast-tracked for placement into our year-round Academy structure, ensuring continuous high-performance development and access to our facilities.
                         </p>
                     </motion.div>
 
                     {/* Tours */}
-                    <motion.div variants={fadeIn} className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 relative overflow-hidden group hover:border-rr-pink/30 transition-colors duration-500">
+                    <motion.div variants={fadeIn} className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 relative overflow-hidden group hover:border-rr-pink/30 transition-colors duration-500 flex flex-col items-center text-center">
                         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-pink to-rr-blue rounded-t-3xl" />
-                        <h3 className="text-xl font-bold text-rr-dark mb-3">Global Tours</h3>
+                        <h3 className="text-xl font-bold text-rr-dark mb-3">Global Talent ID Network</h3>
                         <p className="text-slate-600 leading-relaxed font-medium">
-                            Inclusion in the selection pool for future academy tours. This includes potential visits to the Rajasthan Royals High Performance Centre in Nagpur, India, and other franchise locations.
+                            Your Player DNA Profile is entered into the global Rajasthan Royals Talent ID network. Standout performers will be continuously monitored for future progression and potential selection in international programs.
                         </p>
                     </motion.div>
 
                     {/* Matches */}
-                    <motion.div variants={fadeIn} className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 relative overflow-hidden group hover:border-rr-blue/30 transition-colors duration-500">
+                    <motion.div variants={fadeIn} className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 relative overflow-hidden group hover:border-rr-blue/30 transition-colors duration-500 flex flex-col items-center text-center">
                         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-blue to-rr-pink rounded-t-3xl" />
-                        <h3 className="text-xl font-bold text-rr-dark mb-3">Match and Simulation Opportunities</h3>
+                        <h3 className="text-xl font-bold text-rr-dark mb-3">Elite Squad Selection</h3>
                         <p className="text-slate-600 leading-relaxed font-medium">
-                            While the core 12 weeks is training-focused, Elite Program alumni will form the basis of teams and squads that will be invited to take part in simulation and practice matches from time to time.
+                            Elite Program alumni form the talent pool from which we select our premier squads representing the Academy in high-level external tournaments, showcase matches, and franchise testing events.
                         </p>
                     </motion.div>
                 </div>

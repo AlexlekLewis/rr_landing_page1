@@ -15,7 +15,7 @@ const MasterHero = () => {
                 <img
                     src="/assets/sooryavanchi-arms-raised.jpg"
                     alt="RR Training"
-                    className="w-full h-full object-cover object-center opacity-70"
+                    className="w-full h-full object-cover object-[center_20%] opacity-70"
                 />
 
                 {/* Brand Gradients overlays per V2 blueprint */}
@@ -43,14 +43,14 @@ const MasterHero = () => {
                         <p className="inline-block px-4 py-1.5 rounded-full bg-rr-pink/20 border border-rr-pink/30 text-rr-pink font-bold text-xs tracking-wide uppercase mb-6 shadow-sm">
                             THE FUTURE OF T20 DEVELOPMENT STARTS HERE
                         </p>
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 uppercase tracking-wide leading-tight drop-shadow-lg">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-200 mb-4 uppercase tracking-tighter leading-none drop-shadow-2xl">
                             READY TO DOMINATE THE T20 GAME?
                         </h1>
-                        <p className="text-xl md:text-2xl text-white shadow-black drop-shadow-md font-semibold mb-4 leading-relaxed">
+                        <p className="text-xl md:text-2xl text-white shadow-black drop-shadow-md font-semibold mb-4 leading-relaxed mt-4">
                             Modern cricket demands more than tradition. We develop explosive skills, sharp thinking and elite habits.
                         </p>
                         <p className="text-base md:text-lg text-white/90 mb-8 font-medium leading-relaxed max-w-2xl drop-shadow-md">
-                            Designed and guided by one of the biggest cricket brands on the planet, the Elite program draws on decades of global T20 experience. At Rajasthan Royals Academy, Melbourne, we deliver a one of a kind high performance training focused on developing complete cricketers.
+                            Designed and guided by one of the biggest cricket brands on the planet, the Elite Program draws on decades of global T20 experience. At Rajasthan Royals Academy, Melbourne, we deliver a one of a kind high performance training focused on developing complete cricketers.
                         </p>
                     </motion.div>
 
@@ -66,11 +66,8 @@ const MasterHero = () => {
                             onClick={scrollToForm}
                             className="bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 md:px-10 py-4 rounded-full transition-colors duration-300 w-full sm:w-auto text-center"
                         >
-                            SECURE YOUR CHILD'S SPOT
+                            SECURE YOUR SPOT ON THE RAJASTHAN ROYALS ELITE PROGRAM
                         </button>
-                        <p className="text-sm text-white/80 font-medium ml-2 sm:ml-4">
-                            Join 35+ families already enrolled.
-                        </p>
                     </motion.div>
                 </div>
             </div>

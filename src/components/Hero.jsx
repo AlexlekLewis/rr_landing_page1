@@ -61,7 +61,7 @@ const Hero = () => {
                         className="space-y-6 text-lg md:text-xl text-slate-300 leading-relaxed font-light mb-10 max-w-2xl"
                     >
                         <p>
-                            Designed and guided by one of the <strong className="text-white">biggest cricket brands on the planet</strong>, the Elite program draws on decades of global T20 experience.
+                            Designed and guided by one of the <strong className="text-white">biggest cricket brands on the planet</strong>, the Elite Program draws on decades of global T20 experience.
                         </p>
                         <p>
                             At Rajasthan Royals Academy, Melbourne, we deliver a one of a kind high performance training focused on developing complete cricketers.

@@ -12,7 +12,7 @@ const TechnologyEdge = () => {
                         THE <span className="text-rr-blue">PLAYER DNA</span> PROFILE
                     </h2>
                     <p className="text-lg text-rr-charcoal font-medium mb-8 leading-relaxed">
-                        Say goodbye to vague feedback. Every player in the elite program receives a digital RRAA DNA Profile — a data-driven dashboard tracking their biomechanics, tactical awareness, and physical progression across 3 assessment points.
+                        Say goodbye to vague feedback. Every player in the Elite Program receives a digital RRAA DNA Profile — a data-driven dashboard tracking their biomechanics, tactical awareness, and physical progression across 3 assessment points.
                     </p>
 
                     <div className="space-y-6">

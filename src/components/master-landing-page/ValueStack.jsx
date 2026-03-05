@@ -86,9 +86,14 @@ const ValueStack = () => {
                             </li>
                         </ul>
 
-                        <div className="mt-8 flex items-end gap-6 mb-4">
-                            <p className="text-6xl font-black text-rr-pink tracking-tighter leading-none">$2995</p>
-                            <p className="pb-2 text-slate-400 text-sm font-medium uppercase tracking-wider">Total Investment</p>
+                        <div className="mt-8 flex flex-col gap-2 mb-4">
+                            <div className="flex items-end gap-6">
+                                <p className="text-6xl font-black text-rr-pink tracking-tighter leading-none">$2995</p>
+                                <p className="pb-2 text-slate-400 text-sm font-medium uppercase tracking-wider">Total Investment</p>
+                            </div>
+                            <p className="text-sm font-bold text-rr-blue mt-2">
+                                * Flexible payment plans available upon successful application.
+                            </p>
                         </div>
 
                         <div className="bg-rr-pink/10 border border-rr-pink/30 rounded-xl p-4 mt-6">

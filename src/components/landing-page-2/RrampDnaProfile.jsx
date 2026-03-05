@@ -27,52 +27,64 @@ const RrampDnaProfile = () => {
     ];
 
     return (
-        <section className="py-24 px-6 lg:px-8 relative z-10 bg-slate-50 border-t border-b border-slate-200">
+        <section className="py-16 px-6 lg:px-8 relative z-10 bg-slate-50 border-t border-b border-slate-200">
             <motion.div
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
                 variants={staggerContainer}
-                className="max-w-6xl mx-auto"
+                className="max-w-5xl mx-auto"
             >
                 {/* Hero Intro with Player Accent */}
-                <div className="mb-16 space-y-6 max-w-6xl mx-auto">
-                    <div className="text-center space-y-4">
-                        <motion.h2 variants={fadeIn} className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight">
+                <div className="mb-10 space-y-4 max-w-4xl mx-auto">
+                    <div className="text-center space-y-3">
+                        <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-black text-rr-dark uppercase tracking-tight">
                             PLAYER <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">DNA PROFILE</span>
                         </motion.h2>
-                        <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full" />
+                        <motion.div variants={fadeIn} className="w-16 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full" />
                     </div>
 
-                    <div className="grid grid-cols-1 gap-8 items-center mt-8">
-                        <motion.div variants={fadeIn} className="space-y-4 max-w-3xl mx-auto text-center">
-                            <p className="text-lg md:text-xl text-slate-700 leading-relaxed font-medium">
-                                The Player DNA Profile is your roadmap to elite performance. It is a comprehensive, evidence-based assessment tool used to benchmark your current capabilities across the critical dimensions of cricket.
-                            </p>
-                            <p className="text-lg text-slate-600 font-medium">
-                                Throughout the 12 weeks, we track your progression across these 8 core pillars to build a professional-grade blueprint of your T20 skillset.
+                    <div className="mt-4">
+                        <motion.div variants={fadeIn} className="text-center">
+                            <p className="text-base text-slate-700 leading-relaxed font-medium">
+                                A comprehensive, evidence-based assessment tool used to benchmark your current capabilities across 8 critical dimensions.
                             </p>
                         </motion.div>
                     </div>
                 </div>
 
-                {/* 8-Box Grid */}
-                <motion.div variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* 8-Box Grid - Compact version */}
+                <motion.div variants={staggerContainer} className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {dnaBoxes.map((box, index) => (
                         <motion.div
                             key={index}
                             variants={fadeIn}
-                            className="bg-white border border-slate-100 shadow-md rounded-2xl p-6 relative overflow-hidden group hover:-translate-y-1 hover:shadow-lg hover:border-rr-pink/30 transition-all duration-300 flex flex-col items-center text-center"
+                            className="bg-white border border-slate-100 shadow-sm rounded-xl p-4 relative overflow-hidden group hover:-translate-y-1 hover:shadow-md hover:border-rr-pink/30 transition-all duration-300 flex flex-col items-center text-center"
                         >
                             {/* Accent stripe */}
-                            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-pink to-rr-blue rounded-t-2xl" />
-                            <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue mb-3">
+                            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-pink to-rr-blue rounded-t-xl" />
+                            <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue mb-2">
                                 {String(index + 1).padStart(2, '0')}
                             </span>
-                            <h3 className="text-lg font-bold text-rr-dark mb-2">{box.title}</h3>
-                            <p className="text-sm text-slate-600 font-medium leading-relaxed">{box.desc}</p>
+                            <h3 className="text-sm font-bold text-rr-dark mb-1">{box.title}</h3>
+                            <p className="text-xs text-slate-500 font-medium leading-relaxed">{box.desc}</p>
                         </motion.div>
                     ))}
+                </motion.div>
+
+                {/* Action Image (to fulfill 'add photos of coaching/players' request inside this layout) */}
+                <motion.div
+                    variants={fadeIn}
+                    className="relative w-full h-32 md:h-48 mt-10 rounded-xl overflow-hidden shadow-lg"
+                >
+                    <img
+                        src="/assets/lp2/boy-stance.png"
+                        alt="Player Assessment Focus"
+                        className="w-full h-full object-cover object-center"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end p-4">
+                        <p className="text-white font-bold text-sm uppercase tracking-wider">Precision Data Capture</p>
+                    </div>
                 </motion.div>
             </motion.div>
         </section>

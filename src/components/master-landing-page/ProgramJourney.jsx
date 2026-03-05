@@ -20,78 +20,97 @@ const ProgramJourney = () => {
                     </p>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-6 md:space-y-8">
 
-                    {/* Week 0 - Onboarding */}
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row gap-6 relative group hover:bg-white/10 transition-colors">
-                        <div className="md:w-48 shrink-0">
-                            <span className="text-rr-pink font-black text-xl block mb-1">Week 0</span>
-                            <span className="text-white font-bold uppercase tracking-wider text-sm">Onboarding</span>
+                    {/* ROW 1: Week 0 -> Week 1 */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Week 0 - Onboarding */}
+                        <div className="bg-white rounded-2xl p-6 md:p-8 relative group border border-slate-200 hover:shadow-xl transition-all overflow-hidden">
+                            {/* Dotted Background Pattern */}
+                            <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #0F172A 1.5px, transparent 1.5px)', backgroundSize: '16px 16px' }}></div>
+
+                            <div className="relative z-10">
+                                <div className="mb-4">
+                                    <span className="text-rr-pink font-black text-xl block mb-1">Week 0</span>
+                                    <span className="text-rr-navy font-bold uppercase tracking-wider text-sm">Onboarding</span>
+                                </div>
+                                <p className="text-slate-600 leading-relaxed mb-4 text-sm md:text-base">
+                                    The crucial setup week where players and parents are introduced to the academy standards, the DNA Profiling system, and the coaching staff.
+                                </p>
+                                <ul className="text-sm text-slate-500 space-y-2">
+                                    <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Goal setting & baseline expectations</li>
+                                    <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Apparel sizing and distribution</li>
+                                </ul>
+                            </div>
                         </div>
-                        <div className="flex-1">
-                            <p className="text-slate-300 leading-relaxed mb-4">
-                                [Pending User Input] The crucial setup week where players and parents are introduced to the academy standards, the DNA Profiling system, and the coaching staff.
-                            </p>
-                            <ul className="text-sm text-slate-400 space-y-2">
-                                <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Goal setting & baseline expectations</li>
-                                <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Apparel sizing and distribution</li>
-                            </ul>
+
+                        {/* Week 1 - Assessment */}
+                        <div className="bg-white rounded-2xl p-6 md:p-8 relative group border border-slate-200 hover:shadow-xl transition-all overflow-hidden">
+                            {/* Dotted Background Pattern */}
+                            <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #0F172A 1.5px, transparent 1.5px)', backgroundSize: '16px 16px' }}></div>
+
+                            <div className="relative z-10">
+                                <div className="mb-4">
+                                    <span className="text-rr-pink font-black text-xl block mb-1">Week 1</span>
+                                    <span className="text-rr-navy font-bold uppercase tracking-wider text-sm">Assessment</span>
+                                </div>
+                                <p className="text-slate-600 leading-relaxed mb-4 text-sm md:text-base">
+                                    A rigorous testing environment establishing your baseline DNA Profile. We gather objective data across biomechanics, cardiovascular fitness, and technical execution to build your Individual Development Plan (IDP).
+                                </p>
+                                <ul className="text-sm text-slate-500 space-y-2">
+                                    <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Biomechanical and 360-degree video analysis</li>
+                                    <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Fitness, speed, and agility benchmarking</li>
+                                    <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Data capture mapping directly to IDPs</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
 
-                    {/* Week 1 - Assessment */}
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row gap-6 relative group hover:bg-white/10 transition-colors">
-                        <div className="md:w-48 shrink-0">
-                            <span className="text-rr-pink font-black text-xl block mb-1">Week 1</span>
-                            <span className="text-white font-bold uppercase tracking-wider text-sm">Assessment</span>
+                    {/* ROW 2: Phase 1 -> Phase 2 -> Phase 3 */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {/* Phase 1 */}
+                        <div className="bg-white rounded-2xl p-6 md:p-8 relative group border border-slate-200 hover:shadow-xl transition-all overflow-hidden">
+                            {/* Dotted Background Pattern */}
+                            <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #0F172A 1.5px, transparent 1.5px)', backgroundSize: '16px 16px' }}></div>
+                            <div className="relative z-10">
+                                <div className="mb-4">
+                                    <span className="text-rr-blue font-black text-xl block mb-1">Phase 1</span>
+                                    <span className="text-rr-navy font-bold uppercase tracking-wider text-sm">Explore (Wks 2-4)</span>
+                                </div>
+                                <p className="text-slate-600 leading-relaxed text-sm md:text-base">
+                                    Deconstructing current techniques and introducing advanced T20 concepts. Players are encouraged to step out of their comfort zones and experiment with new biomechanics without fear of failure.
+                                </p>
+                            </div>
                         </div>
-                        <div className="flex-1">
-                            <p className="text-slate-300 leading-relaxed mb-4">
-                                [Pending User Input] A rigorous testing environment where every player is benchmarked against elite metrics to form their baseline DNA Profile.
-                            </p>
-                            <ul className="text-sm text-slate-400 space-y-2">
-                                <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Biomechanical and skill-based analysis</li>
-                                <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Data capture for Individual Development Plans (IDPs)</li>
-                            </ul>
-                        </div>
-                    </div>
 
-                    {/* Weeks 2-4 */}
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row gap-6 relative group hover:bg-white/10 transition-colors">
-                        <div className="md:w-48 shrink-0">
-                            <span className="text-rr-blue font-black text-xl block mb-1">Phase 1</span>
-                            <span className="text-white font-bold uppercase tracking-wider text-sm">Explore (Wks 2-4)</span>
+                        {/* Phase 2 */}
+                        <div className="bg-white rounded-2xl p-6 md:p-8 relative group border border-slate-200 hover:shadow-xl transition-all overflow-hidden">
+                            {/* Dotted Background Pattern */}
+                            <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #0F172A 1.5px, transparent 1.5px)', backgroundSize: '16px 16px' }}></div>
+                            <div className="relative z-10">
+                                <div className="mb-4">
+                                    <span className="text-rr-blue font-black text-xl block mb-1">Phase 2</span>
+                                    <span className="text-rr-navy font-bold uppercase tracking-wider text-sm">Challenge (Wks 5-8)</span>
+                                </div>
+                                <p className="text-slate-600 leading-relaxed text-sm md:text-base">
+                                    Applying new skills under elevated pressure. We increase the intensity of net sessions, introducing constraints and match-scenario simulations to test decision-making under genuine stress.
+                                </p>
+                            </div>
                         </div>
-                        <div className="flex-1">
-                            <p className="text-slate-300 leading-relaxed mb-4">
-                                Deconstructing current techniques and introducing advanced T20 concepts. Players are encouraged to step out of their comfort zones and experiment with new biomechanics without fear of failure.
-                            </p>
-                        </div>
-                    </div>
 
-                    {/* Weeks 5-8 */}
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row gap-6 relative group hover:bg-white/10 transition-colors">
-                        <div className="md:w-48 shrink-0">
-                            <span className="text-rr-blue font-black text-xl block mb-1">Phase 2</span>
-                            <span className="text-white font-bold uppercase tracking-wider text-sm">Challenge (Wks 5-8)</span>
-                        </div>
-                        <div className="flex-1">
-                            <p className="text-slate-300 leading-relaxed mb-4">
-                                Applying new skills under elevated pressure. We increase the intensity of net sessions, introducing constraints and match-scenario simulations to test decision-making under genuine stress.
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Weeks 9-12 */}
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row gap-6 relative group hover:bg-white/10 transition-colors">
-                        <div className="md:w-48 shrink-0">
-                            <span className="text-rr-blue font-black text-xl block mb-1">Phase 3</span>
-                            <span className="text-white font-bold uppercase tracking-wider text-sm">Execute (Wks 9-12)</span>
-                        </div>
-                        <div className="flex-1">
-                            <p className="text-slate-300 leading-relaxed mb-4">
-                                Full contextual immersion. Players are expected to consistently execute their refined skills within high-stakes, competitive scenarios, culminating in their final assessment and post-program pathway report.
-                            </p>
+                        {/* Phase 3 */}
+                        <div className="bg-white rounded-2xl p-6 md:p-8 relative group border border-slate-200 hover:shadow-xl transition-all overflow-hidden">
+                            {/* Dotted Background Pattern */}
+                            <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #0F172A 1.5px, transparent 1.5px)', backgroundSize: '16px 16px' }}></div>
+                            <div className="relative z-10">
+                                <div className="mb-4">
+                                    <span className="text-rr-blue font-black text-xl block mb-1">Phase 3</span>
+                                    <span className="text-rr-navy font-bold uppercase tracking-wider text-sm">Execute (Wks 9-12)</span>
+                                </div>
+                                <p className="text-slate-600 leading-relaxed text-sm md:text-base">
+                                    Full contextual immersion. Players are expected to consistently execute their refined skills within high-stakes, competitive scenarios, culminating in their final assessment and post-program pathway report.
+                                </p>
+                            </div>
                         </div>
                     </div>
 

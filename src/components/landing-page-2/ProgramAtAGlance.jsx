@@ -20,7 +20,7 @@ const ProgramAtAGlance = () => {
             >
                 <motion.div variants={fadeIn} className="text-center mb-16 space-y-4">
                     <h2 className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight">
-                        Program at a Glance
+                        Elite Program at a Glance
                     </h2>
                     <div className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full" />
                 </motion.div>
@@ -28,9 +28,9 @@ const ProgramAtAGlance = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {/* Duration Tile */}
                     <motion.div variants={fadeIn} className="bg-white border border-slate-100 border-b-4 border-b-rr-pink shadow-xl rounded-2xl p-8 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300 text-center">
-                        <div className="relative z-10 flex flex-col items-center">
-                            <h3 className="text-2xl font-bold text-rr-dark mb-2">12 Weeks</h3>
-                            <p className="text-slate-600 font-medium">Comprehensive holistic development program designed for measurable growth.</p>
+                        <div className="relative z-10 flex flex-col items-center justify-center h-full">
+                            <h3 className="text-2xl font-bold text-rr-dark mb-4">12 Weeks</h3>
+                            <p className="text-slate-600 font-medium">A comprehensive holistic development program spanning a 12-week period, designed exclusively for measurable growth in your complete T20 skill set.</p>
                         </div>
                     </motion.div>
 
@@ -39,11 +39,11 @@ const ProgramAtAGlance = () => {
                         <div className="relative z-10 flex flex-col items-center">
                             <h3 className="text-2xl font-bold text-rr-dark mb-2">2 Sessions Per Week</h3>
                             <p className="text-rr-navy font-bold mb-3">1 Weekday Evening + 1 Weekend Session</p>
-                            <p className="text-slate-600 font-medium text-sm max-w-lg mb-5">Each player is allocated one 2-hour weekday session and one 2-hour weekend session per week.</p>
+                            <p className="text-slate-600 font-medium text-sm max-w-lg mb-5 text-center">Each player is allocated one 2-hour weekday session and one 2-hour weekend session per week.</p>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-lg">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-lg mb-6 text-center">
                                 {/* Weekday Block */}
-                                <div className="bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 text-center">
+                                <div className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-4">
                                     <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-2">Weekday Session</p>
                                     <p className="font-bold text-rr-dark text-sm mb-2">Tuesday & Thursday</p>
                                     <div className="space-y-1">
@@ -53,7 +53,7 @@ const ProgramAtAGlance = () => {
                                     <p className="text-slate-400 text-[10px] mt-2 italic">Allocated one slot</p>
                                 </div>
                                 {/* Weekend Block */}
-                                <div className="bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 text-center">
+                                <div className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-4">
                                     <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-2">Weekend Session</p>
                                     <p className="font-bold text-rr-dark text-sm mb-2">Saturday & Sunday</p>
                                     <div className="space-y-1">
@@ -65,7 +65,7 @@ const ProgramAtAGlance = () => {
                                 </div>
                             </div>
 
-                            <p className="text-sm font-bold text-rr-blue mt-5 uppercase tracking-wider">48 hours of coaching across 12 weeks</p>
+                            <p className="text-sm font-bold text-rr-blue mt-2 uppercase tracking-wider bg-rr-blue/10 px-4 py-2 rounded-lg">48+ hours of coaching across 12 weeks</p>
                         </div>
                     </motion.div>
                 </div>

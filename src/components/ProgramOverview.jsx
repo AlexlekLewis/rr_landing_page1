@@ -57,7 +57,7 @@ const ProgramOverview = () => {
                 { title: "Squad Training", content: "Each player will be allocated to a squad that is at a similar age and similar ability based on the assessment of the Academy selection team, and this squad will train together on a regular basis." },
                 { title: "Specialist (Masterclass)", content: "Coaches and mentors with elite level skills will conduct masterclass sessions. The coaching team will monitor the skill set of the group and determine the appropriate masterclass." },
                 { title: "Performance Analysis", content: "Primarily the Rajasthan Royals Academy Management System and Full Track, as well as other tech programs, will form the basis of our monitoring tools." },
-                { title: "Video Analysis", content: "Video analysis is a cornerstone of the Elite program, providing you with instant feedback on your development as a player." },
+                { title: "Video Analysis", content: "Video analysis is a cornerstone of the Elite Program, providing you with instant feedback on your development as a player." },
             ]
         },
         {
@@ -75,8 +75,8 @@ const ProgramOverview = () => {
             color: "border-rr-blue",
             defaultOpen: false,
             items: [
-                { title: "Rajasthan Royals High Performance Centre", content: "Each calendar year, talented cricketers from the Elite program may be invited to the Rajasthan Royals High Performance Centre in Nagpur, India." },
-                { title: "Visits by Royals Coaches and Scouts", content: "From time to time, Royals coaches, scouts and franchise players will visit the Elite program to facilitate opportunities for members." }
+                { title: "Rajasthan Royals High Performance Centre", content: "Each calendar year, talented cricketers from the Elite Program may be invited to the Rajasthan Royals High Performance Centre in Nagpur, India." },
+                { title: "Visits by Royals Coaches and Scouts", content: "From time to time, Royals coaches, scouts and franchise players will visit the Elite Program to facilitate opportunities for members." }
             ]
         },
         {
@@ -84,8 +84,8 @@ const ProgramOverview = () => {
             color: "border-rr-blue",
             defaultOpen: false,
             items: [
-                { title: "Intensive Period", content: "The Elite program is built for a specific purpose and as such is staged in a block of approximately 12-weeks. This high intensity program is a perfect launching pad into the 2026/27 club pre-season and representative assessment periods." },
-                { title: "Beyond the Elite Program", content: "The performance of players in the Elite program will be continually monitored and assessed during and after their time in the program. Depending on a player's development level and trajectory, the Rajasthan Royals Academy may make further offers to additional future programs." }
+                { title: "Intensive Period", content: "The Elite Program is built for a specific purpose and as such is staged in a block of approximately 12-weeks. This high intensity program is a perfect launching pad into the 2026/27 club pre-season and representative assessment periods." },
+                { title: "Beyond the Elite Program", content: "The performance of players in the Elite Program will be continually monitored and assessed during and after their time in the program. Depending on a player's development level and trajectory, the Rajasthan Royals Academy may make further offers to additional future programs." }
             ]
         },
         {
