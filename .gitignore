@@ -50,3 +50,13 @@ Media/LP2/Kumar Interview V3.mov
 *.avi
 *.mkv
 *.webm
+*.zip
+Master Landing Page/
+Media/
+test_*.cjs
+check_errors.cjs
+capture_state.cjs
+debug_dom*.html
+debug_screenshot.png
+dump_dom.cjs
+fetch_*.cjs

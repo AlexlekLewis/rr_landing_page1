@@ -51,8 +51,25 @@
                 page-break-before: always;
             }
 
-            .no-break {
-                page-break-inside: avoid;
+            .no-break,
+            .card,
+            .phase-card,
+            .spec-card,
+            .accordion-section,
+            .value-tile,
+            .beyond-card,
+            .schedule-grid,
+            .intro-card {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            .section-title .accent,
+            .phase-number,
+            .cover-subtitle {
+                background: none !important;
+                -webkit-text-fill-color: var(--rr-blue) !important;
+                color: var(--rr-blue) !important;
             }
         }
 
@@ -884,12 +901,8 @@
         <div class="cover-divider"></div>
         <div class="cover-details">
             <div class="cover-detail-item">
-                <p class="cover-detail-label">When</p>
-                <p class="cover-detail-value">Sunday March 1st · 1:30–4:30pm</p>
-            </div>
-            <div class="cover-detail-item">
-                <p class="cover-detail-label">Where</p>
-                <p class="cover-detail-value">Cutting Edge Cricket Centre, Bundoora</p>
+                <p class="cover-detail-label">Start</p>
+                <p class="cover-detail-value">April 2026</p>
             </div>
             <div class="cover-detail-item">
                 <p class="cover-detail-label">Led By</p>
@@ -902,29 +915,29 @@
     </div>
 
 
-    <!-- ===== PAGE 2: INTRODUCTION ===== -->
-    <div class="content-page bg-light page-break">
+    <!-- ===== PAGE 2: PROGRAM VISION ===== -->
+    <div class="content-page bg-light">
         <div class="page-header centered">
-            <h2 class="section-title">It's Time <span class="accent">to Shine</span></h2>
+            <h2 class="section-title">Program <span class="accent">Vision</span></h2>
         </div>
 
         <div style="max-width: 620px; margin: 0 auto;">
             <div class="intro-card" style="margin-bottom: 24px;">
-                <p>Thank you for your interest and application. You have progressed to the next stage of the
-                    <strong>Rajasthan Royals Elite Program</strong> selection process — an exclusive assessment session.
+                <p>The <strong>Rajasthan Royals Elite Program</strong> is a comprehensive, 12-week high-performance
+                    environment designed to discover, nurture, and elevate cricketing talent across Melbourne.
                 </p>
-                <p style="color: var(--rr-pink); font-weight: 700;">However, places are now limited to 20 remaining
-                    spots for the assessment session.</p>
+                <p>Guided by our global philosophy, the <strong style="color: var(--rr-pink);">Royals Way</strong>, we
+                    aim to bridge the gap between emerging potential and professional execution. This document outlines
+                    the fundamental structure of the program, setting the absolute standard for our coaching staff.</p>
             </div>
 
             <div class="intro-card">
-                <p>As you have been invited to attend the assessment session, you are one step closer to the Elite
-                    Program. The Rajasthan Royals Academy Melbourne coaching and selection team are considering you as a
-                    candidate with a strong possibility of being offered a place — however, with only 20 spots
-                    remaining, we encourage you to respond as soon as possible to secure your position.</p>
-                <p>So that you can begin to prepare for both the assessment session and the possibility of being offered
-                    a place, please find below details of the program including program content, program benefits, and
-                    training days &amp; times.</p>
+                <p>As a coach within this program, you will be instrumental in executing a scientifically periodised
+                    curriculum. Our focus is holistic: integrating technical mastery with tactical intelligence,
+                    physical conditioning, and mental resilience.</p>
+                <p>This resource acts as your foundational guide. It details the training rhythm, phase effectiveness
+                    goals, and the core pillars that ensure every player leaves the Elite Program better equipped to
+                    execute a T20 skillset regardless of where they are on their cricketing pathway.</p>
             </div>
         </div>
 
@@ -974,6 +987,25 @@
                 </div>
             </div>
 
+            <div
+                style="background: var(--rr-slate-50); border: 1px solid var(--rr-slate-200); border-radius: 14px; padding: 20px; text-align: center; margin-top: 20px;">
+                <p class="schedule-label" style="color: var(--rr-slate-600);">Key Dates</p>
+                <div style="display: flex; justify-content: center; gap: 40px; margin-top: 10px;">
+                    <div>
+                        <p class="schedule-time"
+                            style="color: var(--rr-pink); font-weight: 700; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; margin-bottom: 4px;">
+                            Week Zero (Orientation)</p>
+                        <p class="schedule-days" style="font-size: 14px; margin-bottom: 0;">Monday, 13th April</p>
+                    </div>
+                    <div>
+                        <p class="schedule-time"
+                            style="color: var(--rr-pink); font-weight: 700; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; margin-bottom: 4px;">
+                            Program Start (Week 1)</p>
+                        <p class="schedule-days" style="font-size: 14px; margin-bottom: 0;">Monday, 20th April</p>
+                    </div>
+                </div>
+            </div>
+
             <p class="stat-highlight">48 hours of coaching across 12 weeks</p>
         </div>
 
@@ -985,21 +1017,21 @@
 
 
     <!-- ===== PAGE 4: THE ROYALS WAY ===== -->
-    <div class="content-page bg-light page-break">
-        <div class="page-header centered">
+    <div class="content-page bg-light page-break" style="padding: 40px 50px; min-height: auto;">
+        <div class="page-header centered" style="margin-bottom: 20px;">
             <h2 class="section-title">The Royals <span class="accent">Way</span></h2>
-            <p class="section-subtitle centered" style="margin-top: 12px;">The philosophy that governs how we coach,
+            <p class="section-subtitle centered" style="margin-top: 8px;">The philosophy that governs how we coach,
                 develop and deliver our program.</p>
         </div>
 
         <!-- Our Belief Quote Card -->
-        <div style="max-width: 600px; margin: 0 auto 36px;">
-            <div class="quote-card">
-                <span class="badge badge-pink" style="margin-bottom: 14px;">Our Belief</span>
+        <div style="max-width: 600px; margin: 0 auto 20px;">
+            <div class="quote-card" style="padding: 24px 30px;">
+                <span class="badge badge-pink" style="margin-bottom: 10px;">Our Belief</span>
                 <h3
-                    style="font-size: 18px; font-weight: 900; color: var(--rr-dark); line-height: 1.4; margin-bottom: 12px;">
+                    style="font-size: 16px; font-weight: 900; color: var(--rr-dark); line-height: 1.4; margin-bottom: 8px;">
                     Cricket is a vehicle to shape confident, curious, resilient people.</h3>
-                <p style="font-size: 13px; color: var(--rr-slate-600); font-weight: 500; line-height: 1.7;">The Royals
+                <p style="font-size: 12px; color: var(--rr-slate-600); font-weight: 500; line-height: 1.6;">The Royals
                     Way is a living philosophy that guides how we scout, coach, play, learn, and lead — <span
                         style="background: linear-gradient(to right, var(--rr-pink), var(--rr-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700;">from
                         backyard to stadium</span>.</p>
@@ -1007,99 +1039,95 @@
         </div>
 
         <!-- 7 Pillars Grid -->
-        <div style="max-width: 660px; margin: 0 auto;">
+        <div style="max-width: 720px; margin: 0 auto;">
             <p
-                style="text-align: center; font-size: 13px; color: var(--rr-slate-500); font-weight: 700; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 20px;">
+                style="text-align: center; font-size: 11px; color: var(--rr-slate-500); font-weight: 700; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px;">
                 The 7 Pillars</p>
-            <div class="grid-2" style="gap: 14px;">
-                <div class="card no-break">
-                    <div class="numbered-item">
-                        <span class="number">1.</span>
+            <div class="grid-2" style="gap: 12px;">
+                <div class="card no-break" style="padding: 16px 20px;">
+                    <div class="numbered-item" style="gap: 12px;">
+                        <span class="number" style="font-size: 18px; min-width: 20px;">1.</span>
                         <div>
-                            <div class="card-title">Talent First</div>
-                            <div class="card-subtitle">Discover · Back · Elevate</div>
-                            <p class="card-body">Identify potential before it's obvious and invest early. Selection
-                                skews toward growth, not pedigree.</p>
+                            <div class="card-title" style="font-size: 14px; margin-bottom: 4px;">Talent First</div>
+                            <div class="card-subtitle" style="font-size: 10px; margin-bottom: 4px;">Discover · Back ·
+                                Elevate</div>
+                            <p class="card-body" style="font-size: 11px; line-height: 1.5;">Identify potential before
+                                it's obvious and invest early. Selection skews toward growth, not pedigree.</p>
                         </div>
                     </div>
                 </div>
-                <div class="card accent-reverse no-break">
-                    <div class="numbered-item">
-                        <span class="number">2.</span>
+                <div class="card accent-reverse no-break" style="padding: 16px 20px;">
+                    <div class="numbered-item" style="gap: 12px;">
+                        <span class="number" style="font-size: 18px; min-width: 20px;">2.</span>
                         <div>
-                            <div class="card-title">Play the Future</div>
-                            <div class="card-subtitle">Lead with Innovation</div>
-                            <p class="card-body">Technology and data inform decisions, not replace judgment. Short
-                                learning cycles. Experimentation is expected.</p>
+                            <div class="card-title" style="font-size: 14px; margin-bottom: 4px;">Play the Future</div>
+                            <div class="card-subtitle" style="font-size: 10px; margin-bottom: 4px;">Lead with Innovation
+                            </div>
+                            <p class="card-body" style="font-size: 11px; line-height: 1.5;">Technology/data inform
+                                decisions, not replace judgment. Experimentation expected.</p>
                         </div>
                     </div>
                 </div>
-                <div class="card no-break">
-                    <div class="numbered-item">
-                        <span class="number">3.</span>
+                <div class="card no-break" style="padding: 16px 20px;">
+                    <div class="numbered-item" style="gap: 12px;">
+                        <span class="number" style="font-size: 18px; min-width: 20px;">3.</span>
                         <div>
-                            <div class="card-title">Learn by Doing</div>
-                            <p class="card-body">Skills are forged in context — match simulations, scenarios, role
-                                reversals. "Mistake → Lesson → Adjustment" is the rhythm.</p>
+                            <div class="card-title" style="font-size: 14px; margin-bottom: 4px;">Learn by Doing</div>
+                            <p class="card-body" style="font-size: 11px; line-height: 1.5;">Skills forged in context —
+                                match simulations, scenarios. "Mistake → Lesson → Adjustment".</p>
                         </div>
                     </div>
                 </div>
-                <div class="card accent-reverse no-break">
-                    <div class="numbered-item">
-                        <span class="number">4.</span>
+                <div class="card accent-reverse no-break" style="padding: 16px 20px;">
+                    <div class="numbered-item" style="gap: 12px;">
+                        <span class="number" style="font-size: 18px; min-width: 20px;">4.</span>
                         <div>
-                            <div class="card-title">Play Bold</div>
-                            <p class="card-body">Courage is a trainable skill. We reward intent and intelligent risk. We
-                                define "positive" by options created, not only outcomes.</p>
+                            <div class="card-title" style="font-size: 14px; margin-bottom: 4px;">Play Bold</div>
+                            <p class="card-body" style="font-size: 11px; line-height: 1.5;">Courage is trainable. We
+                                reward intent and risk. "Positive" = options created, not just outcomes.</p>
                         </div>
                     </div>
                 </div>
-                <div class="card no-break">
-                    <div class="numbered-item">
-                        <span class="number">5.</span>
+                <div class="card no-break" style="padding: 16px 20px;">
+                    <div class="numbered-item" style="gap: 12px;">
+                        <span class="number" style="font-size: 18px; min-width: 20px;">5.</span>
                         <div>
-                            <div class="card-title">Joy, Curiosity &amp; Lifelong Learning</div>
-                            <p class="card-body">Keep the game fun and the mind open — curiosity accelerates mastery.
-                                Coaches stay students first.</p>
+                            <div class="card-title" style="font-size: 14px; margin-bottom: 4px;">Joy &amp; Curiosity
+                            </div>
+                            <p class="card-body" style="font-size: 11px; line-height: 1.5;">Keep the game fun and the
+                                mind open — curiosity accelerates mastery. Coaches are students first.</p>
                         </div>
                     </div>
                 </div>
-                <div class="card accent-reverse no-break">
-                    <div class="numbered-item">
-                        <span class="number">6.</span>
+                <div class="card accent-reverse no-break" style="padding: 16px 20px;">
+                    <div class="numbered-item" style="gap: 12px;">
+                        <span class="number" style="font-size: 18px; min-width: 20px;">6.</span>
                         <div>
-                            <div class="card-title">Holistic Development</div>
-                            <p class="card-body">Performance = Skills × Fitness × Mindset × Recovery × Life. We coach
-                                the person — nutrition, sleep, mental skills, character.</p>
+                            <div class="card-title" style="font-size: 14px; margin-bottom: 4px;">Holistic Development
+                            </div>
+                            <p class="card-body" style="font-size: 11px; line-height: 1.5;">Performance = Skills ×
+                                Fitness × Mindset × Recovery. We coach the person.</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div style="max-width: 320px; margin: 14px auto 0;">
-                <div class="card no-break">
-                    <div class="numbered-item">
-                        <span class="number">7.</span>
+            <div style="max-width: 350px; margin: 12px auto 0;">
+                <div class="card no-break" style="padding: 16px 20px;">
+                    <div class="numbered-item" style="gap: 12px;">
+                        <span class="number" style="font-size: 18px; min-width: 20px;">7.</span>
                         <div>
-                            <div class="card-title">Fairness, Respect &amp; Inclusion</div>
-                            <p class="card-body">Every learner gets dignity of attention. No favourites, no shortcuts.
-                                Diverse backgrounds make us better.</p>
+                            <div class="card-title" style="font-size: 14px; margin-bottom: 4px;">Respect &amp; Inclusion
+                            </div>
+                            <p class="card-body" style="font-size: 11px; line-height: 1.5;">Every learner gets dignity
+                                of attention. No shortcuts. Diverse backgrounds make us better.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="page-footer">
-            <span>Rajasthan Royals Academy Melbourne</span>
-            <span>Elite Program</span>
-        </div>
-    </div>
-
-
-    <!-- ===== PAGE 5: OUR PROMISE + PHASE EFFECTIVENESS ===== -->
-    <div class="content-page page-break">
         <!-- Our Promise -->
-        <div style="max-width: 580px; margin: 0 auto 50px;">
+        <div style="max-width: 580px; margin: 40px auto 30px;">
             <div class="promise-box">
                 <div class="promise-box-inner">
                     <span class="badge badge-blue" style="margin-bottom: 14px;">Our Promise</span>
@@ -1109,33 +1137,49 @@
             </div>
         </div>
 
+        <div class="page-footer" style="bottom: 10px;">
+            <span>Rajasthan Royals Academy Melbourne</span>
+            <span>Elite Program</span>
+        </div>
+    </div>
+
+
+    <!-- ===== PAGE 5: PHASE EFFECTIVENESS ===== -->
+    <div class="content-page page-break">
         <!-- Phase Effectiveness -->
-        <div class="page-header centered">
-            <h2 class="section-title">Phase <span class="accent">Effectiveness</span></h2>
-            <p class="section-subtitle centered">The 12-week program is scientifically periodised into three distinct
+        <div class="page-header centered" style="margin-bottom: 40px; padding-top: 20px;">
+            <h2 class="section-title" style="padding-bottom: 5px;">Phase <span class="accent">Effectiveness</span></h2>
+            <p class="section-subtitle centered" style="margin-top: 10px;">The 12-week program is scientifically
+                periodised into three distinct
                 phases to ensure skills are not just learned, but weaponised for competition.</p>
         </div>
 
         <div class="grid-3" style="max-width: 720px; margin: 0 auto;">
             <div class="phase-card blue-pink no-break">
                 <div class="phase-number">01</div>
-                <div class="phase-weeks">Weeks 1-4</div>
-                <div class="phase-title">Foundation &amp; Execution</div>
+                <div class="phase-weeks">Weeks 1-4 <span
+                        style="display: block; font-size: 9px; color: var(--rr-slate-500); margin-top: 4px;">Starts Mon
+                        20th April</span></div>
+                <div class="phase-title">Explore</div>
                 <p class="phase-desc">Establishing technical baselines. Intense focus on repetitive skill execution
                     under low-to-medium pressure to embed muscle memory and correct biomechanical inefficiencies.</p>
             </div>
             <div class="phase-card pink-blue no-break">
                 <div class="phase-number">02</div>
-                <div class="phase-weeks">Weeks 5-8</div>
-                <div class="phase-title">Pressure Testing</div>
+                <div class="phase-weeks">Weeks 5-8 <span
+                        style="display: block; font-size: 9px; color: var(--rr-slate-500); margin-top: 4px;">Starts Mon
+                        18th May</span></div>
+                <div class="phase-title">Challenge</div>
                 <p class="phase-desc">Elevating the environment. Introduction of constrained match scenarios and
                     higher-velocity challenges to stress-test skills and measure decision-making under genuine pressure.
                 </p>
             </div>
             <div class="phase-card blue-pink no-break">
                 <div class="phase-number">03</div>
-                <div class="phase-weeks">Weeks 9-12</div>
-                <div class="phase-title">Match Domination</div>
+                <div class="phase-weeks">Weeks 9-12 <span
+                        style="display: block; font-size: 9px; color: var(--rr-slate-500); margin-top: 4px;">Starts Mon
+                        15th June</span></div>
+                <div class="phase-title">Execute</div>
                 <p class="phase-desc">Full contextual immersion. High-intensity match simulations. Players are tested on
                     their ability to read the game, execute the Royals Way, and influence outcomes.</p>
             </div>
@@ -1248,6 +1292,37 @@
             </div>
         </div>
 
+        <!-- Additional Value -->
+        <div style="max-width: 620px; margin: 40px auto 30px;">
+            <p
+                style="font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--rr-slate-400); font-weight: 700; text-align: center; margin-bottom: 12px;">
+                Additional Value Beyond Indoor Coaching Hours</p>
+            <div class="grid-2" style="gap: 8px;">
+                <div class="value-tile no-break" style="padding: 10px 14px;"><span class="value-dot"></span><span
+                        style="font-size: 11px;">Priority access to masterclasses
+                        with Rajasthan Royals Academy guests</span></div>
+                <div class="value-tile no-break" style="padding: 10px 14px;"><span class="value-dot"></span><span
+                        style="font-size: 11px;">Guest online sessions with
+                        Rajasthan Royals Academy coaches</span></div>
+                <div class="value-tile no-break" style="padding: 10px 14px;"><span class="value-dot"></span><span
+                        style="font-size: 11px;">Online mental skill development
+                        sessions</span></div>
+                <div class="value-tile no-break" style="padding: 10px 14px;"><span class="value-dot"></span><span
+                        style="font-size: 11px;">Skill-specific fitness &amp;
+                        conditioning</span></div>
+                <div class="value-tile no-break" style="padding: 10px 14px;"><span class="value-dot"></span><span
+                        style="font-size: 11px;">Outdoor fielding programs</span>
+                </div>
+                <div class="value-tile no-break" style="padding: 10px 14px;"><span class="value-dot"></span><span
+                        style="font-size: 11px;">Priority access to further Academy
+                        programs</span></div>
+                <div class="value-tile no-break"
+                    style="grid-column: span 2; max-width: 320px; margin: 0 auto; padding: 10px 14px;"><span
+                        class="value-dot"></span><span style="font-size: 11px;">Priority access to Academy tours</span>
+                </div>
+            </div>
+        </div>
+
         <div class="page-footer">
             <span>Rajasthan Royals Academy Melbourne</span>
             <span>Elite Program</span>
@@ -1255,35 +1330,13 @@
     </div>
 
 
-    <!-- ===== PAGE 7: ADDITIONAL VALUE + DNA PROFILE ===== -->
+    <!-- ===== PAGE 7: PLAYER DNA PROFILE ===== -->
     <div class="content-page page-break">
-        <!-- Additional Value -->
-        <div style="max-width: 620px; margin: 0 auto 50px;">
-            <p
-                style="font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--rr-slate-400); font-weight: 700; text-align: center; margin-bottom: 16px;">
-                Additional Value Beyond Indoor Coaching Hours</p>
-            <div class="grid-2" style="gap: 10px;">
-                <div class="value-tile no-break"><span class="value-dot"></span><span>Priority access to masterclasses
-                        with Rajasthan Royals Academy guests</span></div>
-                <div class="value-tile no-break"><span class="value-dot"></span><span>Guest online sessions with
-                        Rajasthan Royals Academy coaches</span></div>
-                <div class="value-tile no-break"><span class="value-dot"></span><span>Online mental skill development
-                        sessions</span></div>
-                <div class="value-tile no-break"><span class="value-dot"></span><span>Skill-specific fitness &amp;
-                        conditioning</span></div>
-                <div class="value-tile no-break"><span class="value-dot"></span><span>Outdoor fielding programs</span>
-                </div>
-                <div class="value-tile no-break"><span class="value-dot"></span><span>Priority access to further Academy
-                        programs</span></div>
-                <div class="value-tile no-break" style="grid-column: span 2; max-width: 320px; margin: 0 auto;"><span
-                        class="value-dot"></span><span>Priority access to Academy tours</span></div>
-            </div>
-        </div>
-
         <!-- Player DNA Profile -->
-        <div class="page-header centered">
-            <h2 class="section-title">Player <span class="accent">DNA Profile</span></h2>
-            <p class="section-subtitle centered">The Player DNA Profile is your roadmap to elite performance — a
+        <div class="page-header centered" style="margin-bottom: 40px; padding-top: 20px;">
+            <h2 class="section-title" style="padding-bottom: 5px;">Player <span class="accent">DNA Profile</span></h2>
+            <p class="section-subtitle centered" style="margin-top: 15px;">The Player DNA Profile is your roadmap to
+                elite performance — a
                 comprehensive, evidence-based assessment tool used to benchmark your current capabilities across the
                 critical dimensions of cricket.</p>
         </div>
@@ -1294,52 +1347,52 @@
                 Throughout the 12 weeks, we track your progression across these 8 core pillars to build a
                 professional-grade blueprint of your T20 skillset.</p>
 
-            <div class="grid-4" style="gap: 14px;">
-                <div class="card no-break" style="padding: 20px; text-align: center;">
-                    <span class="number" style="font-size: 18px; display: block; margin-bottom: 6px;">01</span>
-                    <div class="card-title" style="font-size: 13px; margin-bottom: 4px;">Technical Mastery</div>
+            <div class="grid-4" style="gap: 12px;">
+                <div class="card no-break" style="padding: 14px; text-align: center;">
+                    <span class="number" style="font-size: 16px; display: block; margin-bottom: 4px;">01</span>
+                    <div class="card-title" style="font-size: 12px; margin-bottom: 4px;">Technical Mastery</div>
                     <p class="card-body" style="font-size: 10px;">Biomechanical efficiency and repeatable core skills.
                     </p>
                 </div>
-                <div class="card accent-reverse no-break" style="padding: 20px; text-align: center;">
-                    <span class="number" style="font-size: 18px; display: block; margin-bottom: 6px;">02</span>
-                    <div class="card-title" style="font-size: 13px; margin-bottom: 4px;">Tactical Execution</div>
+                <div class="card accent-reverse no-break" style="padding: 14px; text-align: center;">
+                    <span class="number" style="font-size: 16px; display: block; margin-bottom: 4px;">02</span>
+                    <div class="card-title" style="font-size: 12px; margin-bottom: 4px;">Tactical Execution</div>
                     <p class="card-body" style="font-size: 10px;">Game awareness, field placement manipulation, and
                         scenario planning.</p>
                 </div>
-                <div class="card no-break" style="padding: 20px; text-align: center;">
-                    <span class="number" style="font-size: 18px; display: block; margin-bottom: 6px;">03</span>
-                    <div class="card-title" style="font-size: 13px; margin-bottom: 4px;">Physical Conditioning</div>
+                <div class="card no-break" style="padding: 14px; text-align: center;">
+                    <span class="number" style="font-size: 16px; display: block; margin-bottom: 4px;">03</span>
+                    <div class="card-title" style="font-size: 12px; margin-bottom: 4px;">Physical Conditioning</div>
                     <p class="card-body" style="font-size: 10px;">Cricket-specific endurance, strength, and explosive
                         power.</p>
                 </div>
-                <div class="card accent-reverse no-break" style="padding: 20px; text-align: center;">
-                    <span class="number" style="font-size: 18px; display: block; margin-bottom: 6px;">04</span>
-                    <div class="card-title" style="font-size: 13px; margin-bottom: 4px;">Mental Resilience</div>
+                <div class="card accent-reverse no-break" style="padding: 14px; text-align: center;">
+                    <span class="number" style="font-size: 16px; display: block; margin-bottom: 4px;">04</span>
+                    <div class="card-title" style="font-size: 12px; margin-bottom: 4px;">Mental Resilience</div>
                     <p class="card-body" style="font-size: 10px;">Pressure management, routine building, and emotional
                         control.</p>
                 </div>
-                <div class="card no-break" style="padding: 20px; text-align: center;">
-                    <span class="number" style="font-size: 18px; display: block; margin-bottom: 6px;">05</span>
-                    <div class="card-title" style="font-size: 13px; margin-bottom: 4px;">Athletic Fielding</div>
+                <div class="card no-break" style="padding: 14px; text-align: center;">
+                    <span class="number" style="font-size: 16px; display: block; margin-bottom: 4px;">05</span>
+                    <div class="card-title" style="font-size: 12px; margin-bottom: 4px;">Athletic Fielding</div>
                     <p class="card-body" style="font-size: 10px;">Ground coverage, throwing speed and accuracy, and
                         catching reliability.</p>
                 </div>
-                <div class="card accent-reverse no-break" style="padding: 20px; text-align: center;">
-                    <span class="number" style="font-size: 18px; display: block; margin-bottom: 6px;">06</span>
-                    <div class="card-title" style="font-size: 13px; margin-bottom: 4px;">Match Impact</div>
+                <div class="card accent-reverse no-break" style="padding: 14px; text-align: center;">
+                    <span class="number" style="font-size: 16px; display: block; margin-bottom: 4px;">06</span>
+                    <div class="card-title" style="font-size: 12px; margin-bottom: 4px;">Match Impact</div>
                     <p class="card-body" style="font-size: 10px;">Ability to influence the outcome of the game under
                         pressure.</p>
                 </div>
-                <div class="card no-break" style="padding: 20px; text-align: center;">
-                    <span class="number" style="font-size: 18px; display: block; margin-bottom: 6px;">07</span>
-                    <div class="card-title" style="font-size: 13px; margin-bottom: 4px;">Power Hitting</div>
+                <div class="card no-break" style="padding: 14px; text-align: center;">
+                    <span class="number" style="font-size: 16px; display: block; margin-bottom: 4px;">07</span>
+                    <div class="card-title" style="font-size: 12px; margin-bottom: 4px;">Power Hitting</div>
                     <p class="card-body" style="font-size: 10px;">Range hitting, boundary maximization, and scoring
                         intent.</p>
                 </div>
-                <div class="card accent-reverse no-break" style="padding: 20px; text-align: center;">
-                    <span class="number" style="font-size: 18px; display: block; margin-bottom: 6px;">08</span>
-                    <div class="card-title" style="font-size: 13px; margin-bottom: 4px;">Self-Awareness</div>
+                <div class="card accent-reverse no-break" style="padding: 14px; text-align: center;">
+                    <span class="number" style="font-size: 16px; display: block; margin-bottom: 4px;">08</span>
+                    <div class="card-title" style="font-size: 12px; margin-bottom: 4px;">Self-Awareness</div>
                     <p class="card-body" style="font-size: 10px;">Understanding personal strengths, weaknesses, and
                         learning styles.</p>
                 </div>
@@ -1354,10 +1407,11 @@
 
 
     <!-- ===== PAGE 8: SPECIALIST COACHING ===== -->
-    <div class="content-page bg-light page-break">
-        <div class="page-header centered">
-            <h2 class="section-title">Specialist <span class="accent">Coaching</span></h2>
-            <p class="section-subtitle centered">Beyond core skills, the Elite Program provides access to highly
+    <div class="content-page bg-light page-break" style="padding-top: 60px;">
+        <div class="page-header centered" style="margin-bottom: 30px;">
+            <h2 class="section-title" style="padding-bottom: 5px;">Specialist <span class="accent">Coaching</span></h2>
+            <p class="section-subtitle centered" style="margin-top: 10px;">Beyond core skills, the Elite Program
+                provides access to highly
                 specialised disciplines necessary for dominating the modern game.</p>
         </div>
 
@@ -1417,7 +1471,7 @@
     <!-- ===== PAGE 9: IDP + ROYALS GROUP + BEYOND 12 WEEKS ===== -->
     <div class="content-page page-break">
         <!-- Individual Development Plan -->
-        <div style="max-width: 620px; margin: 0 auto 50px;">
+        <div style="max-width: 620px; margin: 0 auto 30px;">
             <div class="accordion-section" style="border-left-color: var(--rr-pink);">
                 <h3 class="accordion-title">Individual Development Plan (IDP)</h3>
                 <div class="idp-item">
@@ -1440,7 +1494,7 @@
         </div>
 
         <!-- Part of the Royals Group -->
-        <div style="text-align: center; margin-bottom: 50px;">
+        <div style="text-align: center; margin-bottom: 30px;">
             <p
                 style="font-size: 10px; text-transform: uppercase; letter-spacing: 4px; color: var(--rr-pink); font-weight: 700; margin-bottom: 20px;">
                 Part of the Royals Group</p>
@@ -1465,26 +1519,30 @@
         </div>
 
         <!-- Beyond 12 Weeks -->
-        <div class="page-header centered">
-            <h2 class="section-title">Beyond <span class="accent">12 Weeks</span></h2>
-            <p class="section-subtitle centered">Completing the 12-week program marks the beginning of your connection
+        <div class="page-header centered" style="margin-bottom: 20px; padding-top: 10px;">
+            <h2 class="section-title" style="padding-bottom: 5px;">Beyond <span class="accent">12 Weeks</span></h2>
+            <p class="section-subtitle centered" style="margin-top: 10px;">Completing the 12-week program marks the
+                beginning of your connection
                 to the Rajasthan Royals ecosystem and Global Academy network — a connection that can grow with you.</p>
         </div>
 
-        <div class="grid-3" style="max-width: 700px; margin: 0 auto;">
-            <div class="beyond-card no-break">
-                <h3>Priority Access</h3>
-                <p>As an Academy alumni, you receive priority access and "first dibs" on all future high-performance
+        <div class="grid-3" style="max-width: 720px; margin: 0 auto;">
+            <div class="beyond-card no-break" style="padding: 18px 16px;">
+                <h3 style="font-size: 14px; margin-bottom: 8px;">Priority Access</h3>
+                <p style="font-size: 10px; line-height: 1.5;">As an Academy alumni, you receive priority access and
+                    "first dibs" on all future high-performance
                     masterclasses, specialist clinics, and sessions hosted by Rajasthan Royals Academy Melbourne.</p>
             </div>
-            <div class="beyond-card no-break">
-                <h3>Global Tours</h3>
-                <p>Inclusion in the selection pool for future academy tours. This includes potential visits to the
+            <div class="beyond-card no-break" style="padding: 18px 16px;">
+                <h3 style="font-size: 14px; margin-bottom: 8px;">Global Tours</h3>
+                <p style="font-size: 10px; line-height: 1.5;">Inclusion in the selection pool for future academy tours.
+                    This includes potential visits to the
                     Rajasthan Royals High Performance Centre in Nagpur, India, and other franchise locations.</p>
             </div>
-            <div class="beyond-card no-break">
-                <h3>Match &amp; Simulation Opportunities</h3>
-                <p>Elite Program alumni will form the basis of teams and squads invited to take part in simulation and
+            <div class="beyond-card no-break" style="padding: 18px 16px;">
+                <h3 style="font-size: 14px; margin-bottom: 8px;">Match &amp; Simulation</h3>
+                <p style="font-size: 10px; line-height: 1.5;">Elite Program alumni will form the basis of teams and
+                    squads invited to take part in simulation and
                     practice matches from time to time.</p>
             </div>
         </div>
@@ -1501,9 +1559,7 @@
         <img src="assets/Logo_White_Transparent.png" alt="RRA Melbourne Logo" class="cover-logo"
             style="margin-bottom: 40px; position: relative; z-index: 1;">
         <div class="cover-divider"></div>
-        <h2 class="closing-title">Your Journey<br>Starts Here</h2>
-        <p class="closing-subtitle">We look forward to welcoming you to the Rajasthan Royals Academy Melbourne Elite
-            Program assessment session and the opportunity to be part of something exceptional.</p>
+        <h2 class="closing-title">Develop The<br>Future</h2>
         <div class="closing-contact">
             <p>Rajasthan Royals Academy Melbourne</p>
             <p class="email">rramelbourne.com</p>

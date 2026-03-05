@@ -5,26 +5,29 @@
   --font-sans: 'Montserrat', sans-serif;
   --font-display: 'Montserrat', sans-serif;
 
-  /* Brand Colors - Verified from BRAND_GUIDE.md */
-  --color-rr-pink: #E50695;
+  /* Brand Colors - Verified from BRAND_GUIDE.md & V2 Blueprint */
+  --color-rr-pink: #E11F8F;
   /* Pantone Rhodamine Red C */
   --color-rr-blue: #1226AA;
   /* Pantone 2736 C */
-  --color-rr-admiral-blue: #132485;
-  /* Admiral Blue - Jersey/Bus */
+  --color-rr-navy: #001D48;
+  /* GRADIENTS ONLY */
   --color-rr-dark: #111921;
   /* Pantone Black 6 C - Main Background */
-  --color-rr-light-pink: #F15AA2;
+  --color-rr-light-pink: #E96BB0;
   /* Web Highlight */
-  --color-rr-navy: #132485;
-  /* Usage for depth, mapped to Admiral Blue */
+  --color-rr-medium-blue: #0075C9;
+  /* Secondary Blue */
+  --color-rr-charcoal: #323E48;
+  /* Dark Charcoal */
 
   /* Functional Colors */
-  --color-royal-blue: var(--color-rr-blue);
+  --color-royal-blue: #1226AA;
 
   /* Gradients */
-  --image-gradient-rr: linear-gradient(to right, var(--color-rr-blue), var(--color-rr-pink));
-  --image-gradient-dark: linear-gradient(180deg, rgba(17, 25, 33, 0) 0%, var(--color-rr-dark) 100%);
+  --image-gradient-rr: linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%);
+  --image-gradient-reverse: linear-gradient(135deg, #E11F8F 0%, #1226AA 60%, #001D48 100%);
+  --image-gradient-dark: linear-gradient(180deg, rgba(17, 25, 33, 0) 0%, #111921 100%);
 }
 
 @layer base {

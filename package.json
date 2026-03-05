@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:pdf": "node generate_lp2_pdf.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.91.1",

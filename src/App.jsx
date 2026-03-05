@@ -21,10 +21,11 @@ import OfferResponsePage from './components/offer-response/OfferResponsePage';
 import LandingPage2 from './components/landing-page-2/LandingPage2';
 import LandingPage3 from './components/landing-page-3/LandingPage3';
 import StripeSuccess from './components/landing-page-3/StripeSuccess';
+import MasterLandingPage from './components/master-landing-page/MasterLandingPage';
 import usePageAnalytics from './hooks/usePageAnalytics';
 
 // DNA Profile Import
-import DNAProfileRoot from './DNAProfileApp/App.jsx';
+// import DNAProfileRoot from './DNAProfileApp/App.jsx';
 
 // Admin components
 import AdminLogin from './components/admin/AdminLogin';
@@ -76,10 +77,12 @@ function App() {
     <div className="font-sans antialiased text-rr-dark bg-white selection:bg-rr-pink selection:text-white">
       <Routes>
         {/* DNA Profile App Route (standalone portal) */}
-        <Route path="/Onboarding/DNAProfile/*" element={<DNAProfileRoot />} />
+        {/* <Route path="/Onboarding/DNAProfile/*" element={<DNAProfileRoot />} /> */}
 
         {/* Public routes */}
         <Route path="/" element={<ComingSoonSplash />} />
+        <Route path="/master-page" element={<MasterLandingPage />} />
+        <Route path="/eliteprogram2026" element={<MasterLandingPage />} />
         <Route path="/eliteprogram/2026registration" element={<LandingPage />} />
         <Route path="/eliteprogram/2026registrations" element={<LandingPage />} />
         <Route path="/offer/assessment" element={<LandingPage2 />} />
