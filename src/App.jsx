@@ -22,6 +22,7 @@ import LandingPage2 from './components/landing-page-2/LandingPage2';
 import LandingPage3 from './components/landing-page-3/LandingPage3';
 import StripeSuccess from './components/landing-page-3/StripeSuccess';
 import MasterLandingPage from './components/master-landing-page/MasterLandingPage';
+import MasterStripeSuccess from './components/master-landing-page/MasterStripeSuccess';
 import usePageAnalytics from './hooks/usePageAnalytics';
 
 // DNA Profile Import
@@ -83,6 +84,7 @@ function App() {
         <Route path="/" element={<ComingSoonSplash />} />
         <Route path="/master-page" element={<MasterLandingPage />} />
         <Route path="/eliteprogram2026" element={<MasterLandingPage />} />
+        <Route path="/eliteprogram2026/success" element={<MasterStripeSuccess />} />
         <Route path="/eliteprogram/2026registration" element={<LandingPage />} />
         <Route path="/eliteprogram/2026registrations" element={<LandingPage />} />
         <Route path="/offer/assessment" element={<LandingPage2 />} />
