@@ -98,15 +98,15 @@ const ValueStack = () => {
 
                             {/* Rate comparison */}
                             <div className="grid grid-cols-2 gap-4 mb-6">
-                                <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
-                                    <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest mb-2">Typical Private Coaching</p>
-                                    <p className="text-2xl font-black text-white/30 tracking-tight line-through">$90–$120<span className="text-base">/hr</span></p>
-                                    <p className="text-[10px] text-white/20 mt-1">Per single coach</p>
+                                <div className="bg-white/8 border border-white/20 rounded-xl p-4 text-center">
+                                    <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest mb-2">Typical Private Coaching</p>
+                                    <p className="text-2xl font-black text-white/50 tracking-tight line-through">$90–$120<span className="text-base">/hr</span></p>
+                                    <p className="text-[10px] text-white/40 mt-1">Per single coach</p>
                                 </div>
-                                <div className="bg-rr-pink/10 border border-rr-pink/30 rounded-xl p-4 text-center">
-                                    <p className="text-[10px] font-bold text-rr-pink/70 uppercase tracking-widest mb-2">Elite Program Rate</p>
+                                <div className="bg-rr-pink/15 border border-rr-pink/50 rounded-xl p-4 text-center">
+                                    <p className="text-[10px] font-bold text-rr-pink uppercase tracking-widest mb-2">Elite Program Rate</p>
                                     <p className="text-2xl font-black text-rr-pink tracking-tight">~$55<span className="text-base">/hr</span></p>
-                                    <p className="text-[10px] text-rr-pink/50 mt-1">Full coaching network</p>
+                                    <p className="text-[10px] text-rr-pink/70 mt-1">Full coaching network</p>
                                 </div>
                             </div>
 
