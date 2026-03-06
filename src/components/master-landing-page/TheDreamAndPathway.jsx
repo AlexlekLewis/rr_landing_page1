@@ -44,7 +44,7 @@ const TheDreamAndPathway = () => {
                         </h2>
                         <div className="w-12 h-px bg-gradient-to-r from-rr-pink to-rr-blue mb-6" />
                         <p className="text-white/60 font-medium text-base md:text-lg leading-relaxed">
-                            The Royals are in Melbourne! The Royals know how to uncover T20 talent like nobody else. Find your T20 skill set and apply it to the shortest format, and longer form of the game.
+                            We all play T20 cricket, so let's be great at it! The Royals know how to uncover and build T20 talent like nobody else, it's in our DNA. Find your T20 skill set and apply it to the shortest format, and relevant periods in longer forms of the game.
                         </p>
 
                     </motion.div>
