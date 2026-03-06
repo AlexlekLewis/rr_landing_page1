@@ -42,6 +42,17 @@ const ValueStack = () => {
                             </li>
                         </ul>
 
+                        {/* Value comparison block */}
+                        <div className="bg-white/5 border border-white/10 rounded-xl p-5 mb-8">
+                            <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.2em] mb-4">What You're Getting</p>
+                            <p className="text-white font-black text-sm uppercase tracking-wide mb-3">Premium development, one clear price.</p>
+                            <div className="space-y-3 text-sm text-white/60 leading-relaxed">
+                                <p>Private specialist cricket coaching in Melbourne typically runs between <span className="text-white font-bold">$90 to $120+ per hour</span> for a single coach.</p>
+                                <p>Our Elite Program breaks down to approximately <span className="text-rr-pink font-bold">$55 per hour</span> — including access to our international coaching network, premium facilities, data monitoring, mental performance training, and S&C programming.</p>
+                                <p>Our ecosystem is built around developing the skills that matter — helping cricketers of all ages become more proficient in winning the key moments that define modern cricket.</p>
+                            </div>
+                        </div>
+
                         <div className="mt-8 flex flex-wrap items-end gap-4 mb-6">
                             <p className="text-5xl md:text-6xl font-black text-rr-pink tracking-tighter leading-none">$2995</p>
                             <p className="pb-1 text-slate-400 text-sm font-medium uppercase tracking-wider">Total Investment</p>
