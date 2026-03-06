@@ -179,11 +179,12 @@ const SessionWalkthrough = () => {
 
                 {/* Header */}
                 <div className="text-center mb-16">
+                    <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Example Session</p>
                     <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-wide mb-6">
                         INSIDE A <span className="text-rr-pink">SESSION</span>
                     </h2>
                     <p className="text-lg text-slate-300 max-w-3xl mx-auto">
-                        Every session is structured, intentional, and built around your Individual Development Plan. Two hours of focused, professional-quality coaching — delivered with the same discipline and preparation you'd find at an IPL franchise academy.
+                        Below is an example of what a session within the program looks like. Session content rotates across the 12 weeks — this is one illustration of how a session is structured, not a format that repeats every time.
                     </p>
                 </div>
 
@@ -218,7 +219,7 @@ const SessionWalkthrough = () => {
                     transition={{ duration: 0.8, delay: 0.6 }}
                     className="text-center text-slate-500 text-sm mt-12 max-w-2xl mx-auto"
                 >
-                    The specialist focus rotates monthly — batting, bowling, fielding — ensuring well-rounded development across the full 12-week program. Hover over each block to understand why every element of the session exists.
+                    This is one example of a session within the program. The specialist focus rotates monthly — batting, bowling, fielding — ensuring well-rounded development across the full 12 weeks. Tap each block to understand why every element exists.
                 </motion.p>
 
                 {/* CTA */}
