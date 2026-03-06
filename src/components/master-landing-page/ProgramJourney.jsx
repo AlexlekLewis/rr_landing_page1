@@ -4,14 +4,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 const phases = [
     {
         index: 0,
-        week: 'Week 0',
+        week: 'Week 0 — From April 13th',
         phase: 'Pre-Program',
         title: 'Onboarding',
         tag: 'Foundation',
         accent: 'from-rr-pink to-rr-pink/60',
-        summary: 'Meet the squad, set your goals, collect your kit.',
-        description: 'The setup week where players and parents meet the coaching staff, learn how the program works, and understand exactly what to expect over the next 12 weeks.',
+        summary: 'Commencing April 13th — meet the squad, set your goals, collect your kit.',
+        description: 'Onboarding commences April 13th. The setup week where players and parents meet the coaching staff, learn how the program works, and understand exactly what to expect over the next 12 weeks.',
         bullets: [
+            'Commences Sunday April 13th',
             'Meet your squad coach and set personal goals',
             'Collect your official Royals training kit',
             'Program induction and expectations briefing',
