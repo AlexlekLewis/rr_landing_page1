@@ -552,7 +552,7 @@ const MasterCheckout = () => {
                     transition={{ duration: 0.4, delay: 0.25 }}
                     className="text-center text-white/40 text-xs font-medium mb-8"
                 >
-                    Afterpay also available at checkout. Questions about payments or other payment options?{' '}
+                    Afterpay also available at checkout. Questions or issues with payments or for tailored payment options?{' '}
                     <a href="mailto:eliteprogram@rramelbourne.com" className="text-rr-blue hover:text-white transition-colors underline underline-offset-2">Contact us.</a>
                 </motion.p>
 
