@@ -61,8 +61,8 @@ const SpecialistCoaching = () => {
     ];
 
     const leaders = [
-        { name: "Siddhartha Lahiri", role: "Rajasthan Royals Group Head of Int'l Player Development & Assistant Coach to Paarl, Rajasthan and Barbados Royals" },
         { name: "Andy Crook", role: "Director of Cricket, Rajasthan Royals Academy Melbourne" },
+        { name: "Siddhartha Lahiri", role: "Rajasthan Royals Group Head of Int'l Player Development and Assistant Coach to Paarl, Rajasthan and Barbados Royals" },
         { name: "Alex Lewis", role: "Rajasthan Royals Academy Melbourne Elite Program Head Coach" },
     ];
 
