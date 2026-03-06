@@ -47,13 +47,11 @@ const RrampDnaProfile = () => {
                     <div className="mt-4">
                         <motion.div variants={fadeIn} className="text-center">
                             <p className="text-base text-slate-700 leading-relaxed font-medium">
-                                A detailed assessment that measures where your child sits right now across 8 key areas of the game.
+                                Designed by some of the brightest minds in the modern game, we provide a detailed assessment that measures where your skills sit right now across 8 key areas of the game.
                             </p>
                         </motion.div>
                     </div>
                 </div>
-
-                {/* 8-Box Grid - Compact version */}
                 <motion.div variants={staggerContainer} className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {dnaBoxes.map((box, index) => (
                         <motion.div
@@ -72,20 +70,6 @@ const RrampDnaProfile = () => {
                     ))}
                 </motion.div>
 
-                {/* Action Image (to fulfill 'add photos of coaching/players' request inside this layout) */}
-                <motion.div
-                    variants={fadeIn}
-                    className="relative w-full h-32 md:h-48 mt-10 rounded-xl overflow-hidden shadow-lg"
-                >
-                    <img
-                        src="/assets/lp2/boy-stance.png"
-                        alt="Player Assessment Focus"
-                        className="w-full h-full object-cover object-center"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end p-4">
-                        <p className="text-white font-bold text-sm uppercase tracking-wider">Precision Data Capture</p>
-                    </div>
-                </motion.div>
             </motion.div>
         </section>
     );
