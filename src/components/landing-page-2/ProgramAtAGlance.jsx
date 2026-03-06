@@ -28,9 +28,14 @@ const ProgramAtAGlance = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {/* Duration Tile */}
                     <motion.div variants={fadeIn} className="bg-white border border-slate-100 border-b-4 border-b-rr-pink shadow-xl rounded-2xl p-8 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300 text-center">
-                        <div className="relative z-10 flex flex-col items-center justify-center h-full">
-                            <h3 className="text-2xl font-bold text-rr-dark mb-4">12 Weeks</h3>
+                        <div className="relative z-10 flex flex-col items-center justify-center h-full gap-5">
+                            <h3 className="text-2xl font-bold text-rr-dark">12 Weeks</h3>
                             <p className="text-slate-600 font-medium">A comprehensive holistic development program spanning a 12-week period, designed exclusively for measurable growth in your complete T20 skill set.</p>
+                            <div className="w-full border-t border-slate-100 pt-5">
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-1">First Scheduled Group Session</p>
+                                <p className="text-lg font-black text-rr-pink uppercase tracking-wide">Tuesday</p>
+                                <p className="text-2xl font-black text-rr-dark leading-tight">April 21st</p>
+                            </div>
                         </div>
                     </motion.div>
 
