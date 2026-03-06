@@ -43,9 +43,9 @@ const TheDreamAndPathway = () => {
                             onError={(e) => { e.target.src = '/assets/Logos/RR-Logo-2.png'; }}
                         />
                         <div className="flex items-center gap-3">
-                            <div className="h-px w-12 bg-gradient-to-r from-transparent to-rr-pink" />
-                            <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.3em]">Official Rajasthan Royals Academy</span>
-                            <div className="h-px w-12 bg-gradient-to-l from-transparent to-rr-blue" />
+                            <div className="h-px w-12 bg-gradient-to-r from-transparent to-rr-pink hidden sm:block" />
+                            <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.3em] text-center w-full sm:w-auto">Official Rajasthan Royals Academy</span>
+                            <div className="h-px w-12 bg-gradient-to-l from-transparent to-rr-blue hidden sm:block" />
                         </div>
                     </div>
                 </motion.div>
@@ -63,7 +63,7 @@ const TheDreamAndPathway = () => {
                         <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-4">The Vision</p>
                         <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight leading-none mb-6">
                             The Dream<br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">&amp; Pathway</span>
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">&amp; Purpose</span>
                         </h2>
                         <div className="w-12 h-px bg-gradient-to-r from-rr-pink to-rr-blue mb-6" />
                         <p className="text-white/60 font-medium text-base md:text-lg leading-relaxed">
