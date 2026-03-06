@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+<<<<<<< HEAD
 import { Check, AlertCircle, Loader2 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
+=======
+import { supabase } from '../../lib/supabase';
+
+// Provided by CEO
+const PAYMENT_LINK = 'https://buy.stripe.com/bJe14nbHP3ud91q8nN9Zm00';
+>>>>>>> fc99057 (fix: replace custom success page nav with shared Navbar component to match LP1/LP2 header)
 
 const DEPOSIT_URL = 'https://buy.stripe.com/6oU3cvfY58Ox91q9rR9Zm05';
 const FULL_URL    = 'https://buy.stripe.com/bJe14nbHP3ud91q8nN9Zm00';
@@ -78,6 +85,7 @@ const ComplianceCheckbox = ({ checked, onChange, children }) => (
 const MasterCheckout = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState('');
+<<<<<<< HEAD
     const [formSaved, setFormSaved] = useState(false);
 
     /* ── form state ── */
@@ -86,16 +94,34 @@ const MasterCheckout = () => {
         suburb: '', profileLink: '', club: '', history: '', bio: '', goals: '',
         parent1Name: '', parent1Email: '', parent1Phone: '',
         parent2Name: '', parent2Email: '', parent2Phone: '',
+=======
+
+    // Core Form state
+    const [formData, setFormData] = useState({
+        parentName: '',
+        phone: '',
+        email: '',
+        playerName: '',
+        dob: '',
+        role: '',
+        competition: '',
+        competitionHistory: ''
+>>>>>>> fc99057 (fix: replace custom success page nav with shared Navbar component to match LP1/LP2 header)
     });
     const [cricketGender, setCricketGender] = useState('');
     const [cvFile, setCvFile] = useState(null);
 
+<<<<<<< HEAD
     // Compliance
+=======
+    // Consents
+>>>>>>> fc99057 (fix: replace custom success page nav with shared Navbar component to match LP1/LP2 header)
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [acceptPlayerCode, setAcceptPlayerCode] = useState(false);
     const [acceptParentCode, setAcceptParentCode] = useState(false);
     const [acceptSocialMedia, setAcceptSocialMedia] = useState(false);
 
+<<<<<<< HEAD
     const age = formData.dob ? calculateAge(formData.dob) : null;
     const isUnder18 = age !== null && age < 18;
 
@@ -135,6 +161,37 @@ const MasterCheckout = () => {
         if (!isFormValid()) {
             setSubmitError('Please complete all required fields and accept all compliance documents before proceeding to payment.');
             document.getElementById('checkout')?.scrollIntoView({ behavior: 'smooth' });
+=======
+    // Zoom Modal State
+    const [showZoomModal, setShowZoomModal] = useState(false);
+    const [zoomSuccess, setZoomSuccess] = useState(false);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const isFormValid = () => {
+        return (
+            formData.parentName.trim() &&
+            formData.phone.trim() &&
+            formData.email.trim() &&
+            formData.playerName.trim() &&
+            formData.dob.trim() &&
+            formData.role &&
+            formData.competition &&
+            formData.competitionHistory.trim() &&
+            acceptTerms && acceptPlayerCode && acceptParentCode && acceptSocialMedia
+        );
+    };
+
+    const handleFullApplication = async (e) => {
+        e.preventDefault();
+
+        if (!isFormValid()) {
+            setSubmitError('Please complete all required fields and accept all compliance documents.');
+            document.getElementById('checkout-form')?.scrollIntoView({ behavior: 'smooth' });
+>>>>>>> fc99057 (fix: replace custom success page nav with shared Navbar component to match LP1/LP2 header)
             return;
         }
 
@@ -142,6 +199,7 @@ const MasterCheckout = () => {
         setSubmitError('');
 
         try {
+<<<<<<< HEAD
             let cvUrl = null;
 
             if (cvFile) {
@@ -188,6 +246,63 @@ const MasterCheckout = () => {
         } catch (err) {
             console.error('Error saving application:', err);
             setSubmitError('Something went wrong saving your details. Please try again.');
+=======
+            const payload = {
+                inquiry_type: 'full_application',
+                parent_name: formData.parentName.trim(),
+                phone: formData.phone.trim(),
+                email: formData.email.trim().toLowerCase(),
+                player_name: formData.playerName.trim(),
+                dob: formData.dob,
+                player_role: formData.role,
+                competition: formData.competition,
+                competition_history: formData.competitionHistory.trim(),
+                payment_status: 'pending'
+            };
+
+            const { error } = await supabase.from('master_inquiries').insert(payload);
+
+            // We ignore errors on insert if the table isn't created yet just for demo,
+            // but ideally we throw.
+            if (error) throw error;
+
+            // Redirect to Stripe Payment Link
+            window.location.href = PAYMENT_LINK;
+
+        } catch (err) {
+            console.error('Submission error:', err);
+            setSubmitError('Something went wrong preparing your registration. Please try again or contact support.');
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleZoomRegistration = async (e) => {
+        e.preventDefault();
+
+        if (!formData.parentName.trim() || !formData.email.trim() || !formData.playerName.trim()) {
+            alert('Please fill out Parent Name, Email, and Player Name to register for Zoom.');
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        try {
+            const payload = {
+                inquiry_type: 'zoom_only',
+                parent_name: formData.parentName.trim(),
+                email: formData.email.trim().toLowerCase(),
+                player_name: formData.playerName.trim(),
+                phone: formData.phone.trim(), // Optional
+            };
+
+            const { error } = await supabase.from('master_inquiries').insert(payload);
+            if (error) throw error;
+
+            setZoomSuccess(true);
+        } catch (err) {
+            console.error('Zoom reg error:', err);
+            alert('Something went wrong. Please try again later.');
+>>>>>>> fc99057 (fix: replace custom success page nav with shared Navbar component to match LP1/LP2 header)
         } finally {
             setIsSubmitting(false);
         }
@@ -216,6 +331,7 @@ const MasterCheckout = () => {
                     <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight mb-4">
                         Complete Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">Application</span>
                     </h2>
+<<<<<<< HEAD
                     <p className="text-white/50 font-medium max-w-xl mx-auto leading-relaxed">
                         Secure your spot in the Season 1 Elite intake. Complete all fields below, then select your preferred payment option to proceed.
                     </p>
@@ -479,6 +595,124 @@ const MasterCheckout = () => {
                         ) : (
                             'Save Application & Proceed to Payment'
                         )}
+=======
+                    <p className="text-slate-300 font-medium">Secure your child's spot in the Season 1 Elite intake.</p>
+                </div>
+
+                <div className="bg-white rounded-2xl shadow-2xl overflow-hidden text-rr-dark relative" id="checkout-form">
+                    <div className="p-8 md:p-10">
+                        {/* Error Message */}
+                        <AnimatePresence>
+                            {submitError && (
+                                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="mb-8 overflow-hidden">
+                                    <div className="p-4 bg-red-50 border border-red-200 text-red-600 rounded-xl font-medium text-sm flex items-start gap-3">
+                                        <span className="text-xl leading-none">⚠️</span>
+                                        <p>{submitError}</p>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
+                        <form onSubmit={handleFullApplication} className="space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label className="block text-sm font-bold mb-2">Parent Full Name *</label>
+                                    <input required type="text" name="parentName" value={formData.parentName} onChange={handleInputChange} className="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-blue focus:ring-1 focus:ring-rr-blue" placeholder="Jane Doe" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-bold mb-2">Best Contact Number *</label>
+                                    <input required type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-blue focus:ring-1 focus:ring-rr-blue" placeholder="0400 000 000" />
+                                </div>
+                                <div className="md:col-span-2">
+                                    <label className="block text-sm font-bold mb-2">Email Address *</label>
+                                    <input required type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-blue focus:ring-1 focus:ring-rr-blue" placeholder="jane@example.com" />
+                                </div>
+                            </div>
+
+                            <hr className="border-slate-200 my-6" />
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label className="block text-sm font-bold mb-2">Player Full Name *</label>
+                                    <input required type="text" name="playerName" value={formData.playerName} onChange={handleInputChange} className="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-blue focus:ring-1 focus:ring-rr-blue" placeholder="John Doe" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-bold mb-2">Date of Birth *</label>
+                                    <input required type="date" name="dob" value={formData.dob} onChange={handleInputChange} className="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-blue focus:ring-1 focus:ring-rr-blue" />
+                                </div>
+                                <div className="md:col-span-2">
+                                    <label className="block text-sm font-bold mb-2">Primary Playing Role *</label>
+                                    <select required name="role" value={formData.role} onChange={handleInputChange} className="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-blue focus:ring-1 focus:ring-rr-blue">
+                                        <option value="">Select Role...</option>
+                                        <option value="batsman">Batter</option>
+                                        <option value="bowler-pace">Pace Bowler</option>
+                                        <option value="bowler-spin">Spin Bowler</option>
+                                        <option value="all-rounder">All-Rounder</option>
+                                        <option value="wicket-keeper">Wicket-Keeper</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <hr className="border-slate-200 my-6" />
+
+                            <div className="grid grid-cols-1 gap-6">
+                                <div>
+                                    <label className="block text-sm font-bold mb-2">Competition played in (Male or Female)? *</label>
+                                    <select required name="competition" value={formData.competition} onChange={handleInputChange} className="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-blue focus:ring-1 focus:ring-rr-blue">
+                                        <option value="">Select Competition...</option>
+                                        <option value="male">Male Cricket</option>
+                                        <option value="female">Female Cricket</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-bold mb-2">Competition History *</label>
+                                    <p className="text-xs text-slate-500 mb-2 mt-[-4px]">Please list the clubs and teams the player played for this season.</p>
+                                    <textarea required name="competitionHistory" value={formData.competitionHistory} onChange={handleInputChange} rows={3} className="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-blue focus:ring-1 focus:ring-rr-blue" placeholder="e.g. Richmond CC - U16s Boys..."></textarea>
+                                </div>
+                            </div>
+
+                            <hr className="border-slate-200 my-6" />
+
+                            {/* CONSENTS & COMPLIANCE */}
+                            <div className="space-y-4 mb-8">
+                                <h3 className="text-xl font-bold text-rr-dark mb-4">Compliance & Policies</h3>
+
+                                <ComplianceCheckbox checked={acceptTerms} onChange={setAcceptTerms}>
+                                    I have read and agree to the <a href="/terms-conditions" target="_blank" className="text-rr-pink hover:underline">Terms &amp; Conditions</a> and <a href="/privacy-policy" target="_blank" className="text-rr-pink hover:underline">Privacy Policy</a>. I confirm all information provided is accurate.
+                                </ComplianceCheckbox>
+
+                                <ComplianceCheckbox checked={acceptPlayerCode} onChange={setAcceptPlayerCode}>
+                                    I have read, understood, and agree to the <a href="/assets/RRA_Player_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Player Code of Conduct</a>.
+                                </ComplianceCheckbox>
+
+                                <ComplianceCheckbox checked={acceptParentCode} onChange={setAcceptParentCode}>
+                                    I have read, understood, and agree to the <a href="/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Parent/Guardian Code of Conduct</a>.
+                                </ComplianceCheckbox>
+
+                                <ComplianceCheckbox checked={acceptSocialMedia} onChange={setAcceptSocialMedia}>
+                                    I am happy for photos and videos from the program featuring the player to be used on Rajasthan Royals Academy Melbourne's social media and marketing channels.
+                                </ComplianceCheckbox>
+                            </div>
+
+                            <button type="submit" disabled={isSubmitting} className={`w-full text-white font-bold uppercase tracking-widest px-8 py-5 rounded-lg transition-colors mt-8 ${isSubmitting ? 'bg-slate-400 cursor-not-allowed' : 'bg-rr-pink hover:bg-rr-light-pink'}`}>
+                                {isSubmitting ? 'Processing...' : 'Continue to Payment'}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                {/* Final Call to Action block */}
+                <div className="mt-16 text-center border-t border-white/10 pt-16">
+                    <p className="text-rr-pink font-bold uppercase tracking-widest text-sm mb-4">Want to learn more first?</p>
+                    <h3 className="text-2xl font-black text-white uppercase mb-4">
+                        ONLINE INFORMATION ZOOM NIGHT
+                    </h3>
+                    <p className="text-slate-300 mb-8 font-medium">
+                        Time and date: <span className="text-white bg-white/10 px-2 py-1 rounded">To Be Confirmed</span>
+                    </p>
+                    <button onClick={() => setShowZoomModal(true)} className="border-2 border-white/20 text-white hover:bg-white/10 font-bold uppercase tracking-wide px-8 py-4 rounded-full transition-colors">
+                        Register for the Zoom Link
+>>>>>>> fc99057 (fix: replace custom success page nav with shared Navbar component to match LP1/LP2 header)
                     </button>
                     {!formSaved && !submitError && (
                         <p className="text-center text-white/30 text-[10px] mt-2">
@@ -608,8 +842,90 @@ const MasterCheckout = () => {
                 </motion.div>
 
             </div>
+
+            {/* ZOOM MODAL */}
+            <AnimatePresence>
+                {showZoomModal && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 bg-rr-dark/80 backdrop-blur-sm"
+                            onClick={() => !isSubmitting && setShowZoomModal(false)}
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="bg-white rounded-3xl p-8 max-w-md w-full relative z-10 shadow-2xl"
+                        >
+                            <button
+                                onClick={() => setShowZoomModal(false)}
+                                className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors"
+                            >
+                                ✕
+                            </button>
+
+                            {zoomSuccess ? (
+                                <div className="text-center py-6">
+                                    <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                                    </div>
+                                    <h3 className="text-2xl font-black text-rr-dark uppercase mb-2">Registered!</h3>
+                                    <p className="text-slate-600">Thanks for registering. We will email you the Zoom link and details shortly when they are finalised.</p>
+                                    <button onClick={() => { setShowZoomModal(false); setZoomSuccess(false); }} className="mt-6 w-full bg-rr-dark text-white font-bold py-3 rounded-xl hover:bg-rr-charcoal transition-colors">
+                                        Close
+                                    </button>
+                                </div>
+                            ) : (
+                                <>
+                                    <div className="text-center mb-6">
+                                        <h3 className="text-2xl font-black text-rr-dark uppercase tracking-wide mb-2">Get the Zoom Link</h3>
+                                        <p className="text-sm font-medium text-slate-500">Enter your details below to register for the online information session.</p>
+                                    </div>
+
+                                    <form onSubmit={handleZoomRegistration} className="space-y-4">
+                                        <div>
+                                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1">Parent Name</label>
+                                            <input required type="text" name="parentName" value={formData.parentName} onChange={handleInputChange} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-rr-blue focus:ring-1 focus:ring-rr-blue" placeholder="Jane Doe" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1">Email Address</label>
+                                            <input required type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-rr-blue focus:ring-1 focus:ring-rr-blue" placeholder="jane@example.com" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1">Player Name</label>
+                                            <input required type="text" name="playerName" value={formData.playerName} onChange={handleInputChange} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-rr-blue focus:ring-1 focus:ring-rr-blue" placeholder="John Doe" />
+                                        </div>
+
+                                        <button type="submit" disabled={isSubmitting} className={`w-full mt-4 text-white font-bold tracking-widest uppercase px-6 py-4 rounded-xl transition-colors ${isSubmitting ? 'bg-slate-400 cursor-not-allowed' : 'bg-rr-blue hover:bg-rr-blue/90'}`}>
+                                            {isSubmitting ? 'Registering...' : 'Register Now'}
+                                        </button>
+                                    </form>
+                                </>
+                            )}
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </section>
     );
 };
+
+// Reusable compliance checkbox purely for visual consistency
+const ComplianceCheckbox = ({ checked, onChange, children }) => (
+    <div className="flex items-start gap-4 group">
+        <label className="relative flex items-start mt-1 shrink-0 cursor-pointer text-rr-dark">
+            <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="sr-only" />
+            <div className={`w-6 h-6 border-2 rounded transition-all flex items-center justify-center shadow-sm ${checked ? 'bg-rr-pink border-rr-pink' : 'bg-white border-slate-300 group-hover:border-slate-400'}`}>
+                {checked && <span className="text-xs text-white font-bold">✓</span>}
+            </div>
+        </label>
+        <span className="text-sm text-slate-600 font-medium leading-relaxed">
+            {children}
+        </span>
+    </div>
+);
 
 export default MasterCheckout;

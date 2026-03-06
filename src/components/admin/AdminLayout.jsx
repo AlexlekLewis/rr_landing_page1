@@ -11,6 +11,8 @@ const NAV_ITEMS = [
     { label: 'Dashboard', path: '/rramadmin_26/dashboard', icon: LayoutDashboard },
     { label: 'Pipeline', path: '/rramadmin_26/pipeline', icon: Kanban },
     { label: 'Applications', path: '/rramadmin_26/applications', icon: Table2 },
+    { label: 'Master Inquiries', path: '/rramadmin_26/master-inquiries', icon: Table2 },
+    { label: 'LP3 Acceptances', path: '/rramadmin_26/lp3-acceptances', icon: Table2 },
     { label: 'Selection', path: '/rramadmin_26/selection', icon: CheckCircle2 },
     { label: 'RSVP Responses', path: '/rramadmin_26/rsvp', icon: ClipboardList },
     { label: 'Analytics', path: '/rramadmin_26/analytics', icon: BarChart3 },

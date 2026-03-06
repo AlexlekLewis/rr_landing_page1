@@ -438,7 +438,7 @@ const AcceptanceForm = () => {
 
                     {/* COMMS PREF */}
                     <div className="space-y-6 mb-12 bg-slate-50 p-6 rounded-2xl border border-slate-100">
-                        <label className="block text-sm font-bold text-rr-dark">Are you happy to be added to a group chat as we get closer to the start of the Elite Program for regular communication? *</label>
+                        <label className="block text-sm font-bold text-rr-dark">As we approach the start of the Elite Program, we'll be using a group chat for regular communication and updates. Are you happy to be added, and if so, please nominate a mobile number below. *</label>
                         <div className="flex gap-4">
                             <button onClick={() => setGroupChatConsent(true)} className={`px-6 py-2 rounded-xl border font-bold ${groupChatConsent === true ? 'bg-rr-dark text-white border-rr-dark' : 'bg-white text-slate-600 border-slate-300'}`}>Yes</button>
                             <button onClick={() => setGroupChatConsent(false)} className={`px-6 py-2 rounded-xl border font-bold ${groupChatConsent === false ? 'bg-rr-dark text-white border-rr-dark' : 'bg-white text-slate-600 border-slate-300'}`}>No</button>

@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabase';
 import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import Button from '../Button';
 import Footer from '../Footer';
+import Navbar from '../Navbar';
 
 const StripeSuccess = () => {
     const [status, setStatus] = useState('processing');
@@ -52,24 +53,10 @@ const StripeSuccess = () => {
         confirmPayment();
     }, []);
 
-    // Minimal Navbar matches LP3 OfferResponsePage
-    const renderNav = () => (
-        <nav className="fixed top-0 w-full z-50 bg-rr-dark/90 backdrop-blur-md border-b border-white/10">
-            <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-center">
-                <img
-                    src="/rra-white.png"
-                    alt="Rajasthan Royals Academy"
-                    className="h-12 w-auto object-contain cursor-pointer transition-transform hover:scale-105"
-                    onClick={() => navigate('/')}
-                />
-            </div>
-        </nav>
-    );
-
     if (status === 'processing') {
         return (
             <div className="min-h-screen bg-white">
-                {renderNav()}
+                <Navbar variant="lp3" />
                 <main className="pt-20 min-h-[80vh] flex flex-col items-center justify-center px-6">
                     <Loader2 className="w-16 h-16 text-rr-pink animate-spin mb-6" />
                     <h2 className="text-2xl font-black text-rr-dark uppercase tracking-wide mb-2">Confirming Payment...</h2>
@@ -83,7 +70,7 @@ const StripeSuccess = () => {
     if (status === 'success') {
         return (
             <div className="min-h-screen bg-slate-50">
-                {renderNav()}
+                <Navbar variant="lp3" />
                 <main className="pt-32 pb-24 flex items-center justify-center px-6 min-h-[80vh]">
                     <div className="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 max-w-2xl w-full text-center shadow-xl shadow-slate-200/50 relative overflow-hidden">
                         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-rr-pink to-rr-blue"></div>
@@ -116,7 +103,7 @@ const StripeSuccess = () => {
     // fallback for error or not_found
     return (
         <div className="min-h-screen bg-slate-50">
-            {renderNav()}
+            <Navbar variant="lp3" />
             <main className="pt-32 pb-24 flex items-center justify-center px-6 min-h-[80vh]">
                 <div className="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 max-w-2xl w-full text-center shadow-xl shadow-slate-200/50">
                     <div className="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-8">
