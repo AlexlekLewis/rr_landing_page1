@@ -51,7 +51,7 @@ const MasterHero = () => {
                         <p className="text-lg md:text-2xl text-white shadow-black drop-shadow-md font-semibold mb-4 leading-relaxed mt-4">
                             Modern cricket demands more than tradition. We develop explosive skills, sharp thinking and elite habits.
                         </p>
-                        <p className="text-sm md:text-lg text-white/90 mb-8 font-medium leading-relaxed max-w-2xl drop-shadow-md">
+                        <p className="text-sm md:text-lg text-white/50 mb-8 font-medium leading-relaxed max-w-2xl drop-shadow-md">
                             Designed and guided by one of the biggest cricket brands on the planet, the Elite Program draws on decades of global T20 experience. At Rajasthan Royals Academy, Melbourne, the T20 Elite Program delivers a one of a kind performance training environment designed to develop a modern day skill set.
                         </p>
                     </motion.div>
