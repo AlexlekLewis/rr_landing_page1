@@ -20,14 +20,15 @@ const phases = [
     },
     {
         index: 1,
-        week: 'Week 1',
+        week: 'Week 1 — From April 21st',
         phase: 'Assessment',
         title: 'Player DNA Profile',
         tag: 'Baseline',
         accent: 'from-rr-pink/80 to-rr-blue/60',
-        summary: 'Full technical, physical and tactical baseline.',
-        description: 'We test every player across batting, bowling, fielding, fitness, and movement to build a clear picture of where they are now. This becomes the starting point for their personalised development plan.',
+        summary: 'Commencing April 21st — full technical, physical and tactical baseline.',
+        description: 'First session commences Tuesday April 21st. We test every player across batting, bowling, fielding, fitness, and movement to build a clear picture of where they are now. This becomes the starting point for their personalised development plan.',
         bullets: [
+            'Commences Tuesday April 21st',
             'Full video analysis of batting and bowling technique',
             'Fitness, speed, and agility testing',
             'Results feed directly into your Individual Development Plan',
