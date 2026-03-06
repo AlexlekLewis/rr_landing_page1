@@ -21,7 +21,7 @@ const preSessionSteps = [
 const sessionBlocks = [
     {
         step: 1,
-        title: "Daily Vitamin Skills",
+        title: "Daily Essential Skills",
         duration: "10 min",
         accent: "rr-pink",
         description: "Every session opens with the same routine — short, sharp drills covering the basics like rapid hands work and underarm drives. Once done, a quick squad coach briefing sets the plan for the session ahead.",
@@ -66,7 +66,7 @@ const sessionBlocks = [
         description: "The session closes the way it opened — with daily vitamin skills to reinforce fundamentals. Players then complete their development journals and diaries before a final debrief with their squad coach. Coaches use this time to prepare detailed session notes on each player for the next session.",
         why: "The best academies in the world don't just train bodies — they train minds. Reflection and journalling lock in what was learned, build self-awareness, and give coaches the data they need to optimise the next session. The repeated vitamin skills bookend the session, reinforcing that the quality of your preparation defines the quality of your performance.",
         bullets: [
-            "Daily vitamin skills to close",
+            "Daily essential skills to close",
             "Development journals and diary entries",
             "Squad coach debrief and next-session planning",
         ],
@@ -145,7 +145,7 @@ const SessionCard = ({ block, index }) => {
                     ))}
                 </ul>
 
-                <p className="text-xs text-rr-blue/60 font-semibold uppercase tracking-wider mt-4">Hover to learn why</p>
+                <p className="text-xs text-rr-blue/60 font-semibold uppercase tracking-wider mt-4">Click to learn why</p>
             </div>
 
             {/* WHY Hover State */}
