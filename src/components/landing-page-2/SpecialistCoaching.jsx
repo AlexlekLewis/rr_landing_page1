@@ -50,6 +50,12 @@ const tiers = [
                 bio: "Australian U19 representative and Premier Cricket competitor. A modern spinner who turns the ball both ways with real accuracy — teaching the variations and tactics that win matches.",
                 tag: "Spin Bowling",
             },
+            {
+                name: "Simon Feros",
+                role: "Bowling — Pace",
+                bio: "Founder of Bowlstrong, Simon is one of Australia's leading pace bowling specialists. He combines deep biomechanical knowledge with practical, high-performance coaching methods to help fast bowlers develop real pace, accuracy, and durability — the complete package for the modern game.",
+                tag: "Pace Bowling",
+            },
         ],
     },
     {
@@ -104,7 +110,7 @@ const tiers = [
 
 const specialties = [
     { title: "Power & 360 Hitting", coach: "Matthew Spoors & Jarryd Rogers", color: "from-rr-blue to-rr-pink", desc: "Ramp shots, reverse sweeps, and the ability to find the boundary from any position — the shots that win T20 games." },
-    { title: "Bowl to Control the Game", coach: "Pace Staff", color: "from-rr-pink to-rr-blue", desc: "Accuracy under pressure, smart variations, and the discipline to bowl to a field and force mistakes." },
+    { title: "Bowl to Control the Game", coach: "Simon Feros (Bowlstrong)", color: "from-rr-pink to-rr-blue", desc: "Accuracy under pressure, smart variations, and the discipline to bowl to a field and force mistakes." },
     { title: "Spin Mastery & Variation", coach: "Alex Lewis & Harkirat Bajwa", color: "from-rr-blue to-rr-pink", desc: "Control, deception, and flight — wrong'uns, arm balls, and knowing exactly when to use each one." },
     { title: "Wicketkeeping Craft", coach: "Wicketkeeping Specialist", color: "from-rr-pink to-rr-blue", desc: "Quick reflexes, clean technique, and smart decision-making — the details that separate good keepers from great ones." },
     { title: "Game-Changing Fielding", coach: "Fielding Staff", color: "from-rr-blue to-rr-pink", desc: "Ground coverage, sliding saves, accurate throwing, and high-pressure catching that turns half-chances into wickets." },
