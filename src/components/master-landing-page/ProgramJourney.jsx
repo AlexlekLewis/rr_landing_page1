@@ -66,17 +66,18 @@ const phases = [
     },
     {
         index: 4,
-        week: 'Weeks 9–12',
+        week: 'Weeks 9–12 — Finishing July 12th',
         phase: 'Phase 3',
         title: 'Execute',
         tag: 'Deliver',
         accent: 'from-rr-pink/70 to-rr-blue',
-        summary: 'Perform consistently. Get your final report.',
-        description: 'Everything comes together. Players are expected to deliver their improved skills consistently in competitive, match-like conditions. The program finishes with a final assessment and a detailed report on where to go next.',
+        summary: 'Perform consistently. Program concludes July 12th.',
+        description: 'Everything comes together. Players are expected to deliver their improved skills consistently in competitive, match-like conditions. The program concludes Saturday July 12th with a final assessment and a detailed report on where to go next.',
         bullets: [
             'Match-standard performance evaluation',
             'Final Player DNA re-assessment',
             'Detailed post-program pathway report',
+            'Program concludes Saturday July 12th',
         ],
     },
 ];
