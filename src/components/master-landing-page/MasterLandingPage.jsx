@@ -69,11 +69,11 @@ const MasterLandingPage = () => {
                 <div id="the-royals-way"><TheRoyalsWay /></div>
                 <div id="value-stack"><ValueStack /></div>
 
-                {/* 9. FAQ */}
-                <div id="faq"><MasterFAQ /></div>
-
-                {/* 10. Checkout */}
+                {/* 9. Checkout */}
                 <div id="checkout"><MasterCheckout /></div>
+
+                {/* 10. FAQ */}
+                <div id="faq"><MasterFAQ /></div>
             </main>
 
             <Footer />

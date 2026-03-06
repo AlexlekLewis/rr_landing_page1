@@ -1,152 +1,201 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 
-const MasterCheckout = () => {
-    const [step, setStep] = useState(1);
+const DEPOSIT_URL = 'https://buy.stripe.com/6oU3cvfY58Ox91q9rR9Zm05';
+const FULL_URL    = 'https://buy.stripe.com/bJe14nbHP3ud91q8nN9Zm00';
 
-    // Form state (mock for UI purposes)
-    const [formData, setFormData] = useState({
-        parentName: '',
-        email: '',
-        phone: '',
-        playerName: '',
-        dob: '',
-        role: ''
-    });
+const MasterCheckout = () => (
+    <section className="py-24 bg-rr-dark relative overflow-hidden" id="checkout">
 
-    const handleNext = (e) => {
-        e.preventDefault();
-        setStep(2);
-    };
+        {/* Ambient glows */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-rr-pink/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-rr-blue/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-rr-pink to-transparent" />
 
-    return (
-        <section className="py-24 bg-rr-dark relative overflow-hidden" id="checkout-section">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-rr-blue/20 rounded-full blur-3xl mix-blend-screen pointer-events-none"></div>
+        <div className="max-w-4xl mx-auto px-6 relative z-10">
 
-            <div className="max-w-4xl mx-auto px-6 relative z-10">
+            {/* Header */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-14"
+            >
+                <img src="/assets/Crest.png" alt="Royal Crest" className="h-16 mx-auto mb-6 brightness-0 invert opacity-80" />
+                <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Secure Your Place</p>
+                <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight mb-4">
+                    Complete Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">Application</span>
+                </h2>
+                <p className="text-white/50 font-medium max-w-xl mx-auto leading-relaxed">
+                    Secure your spot in the Season 1 Elite intake. Select your preferred payment option below to proceed.
+                </p>
+            </motion.div>
 
-                <div className="text-center mb-12">
-                    <img
-                        src="/assets/Crest.png"
-                        alt="Royal Crest"
-                        className="h-20 mx-auto mb-8 brightness-0 invert"
-                    />
-                    <h2 className="text-4xl font-black text-white uppercase tracking-wide mb-4">
-                        COMPLETE YOUR APPLICATION
-                    </h2>
-                    <p className="text-slate-300 font-medium">Secure your spot in the Season 1 Elite intake.</p>
-                </div>
-
-                <div className="bg-white rounded-2xl shadow-2xl overflow-hidden text-rr-dark">
-
-                    {/* Progress Indicator */}
-                    <div className="bg-slate-50 px-8 py-4 border-b border-slate-200 flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${step >= 1 ? 'bg-rr-pink text-white' : 'bg-slate-200 text-slate-400'}`}>1</div>
-                            <span className={`font-semibold text-sm ${step >= 1 ? 'text-rr-dark' : 'text-slate-400'}`}>Player Details</span>
-                        </div>
-                        <div className="flex-1 h-px bg-slate-200 mx-4"></div>
-                        <div className="flex items-center gap-3">
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${step >= 2 ? 'bg-rr-pink text-white' : 'bg-slate-200 text-slate-400'}`}>2</div>
-                            <span className={`font-semibold text-sm ${step >= 2 ? 'text-rr-dark' : 'text-slate-400'}`}>Review & Payment</span>
-                        </div>
-                    </div>
-
-                    <div className="p-8 md:p-10">
-                        {step === 1 ? (
-                            <form onSubmit={handleNext} className="space-y-6">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label className="block text-sm font-bold mb-2">Parent Full Name</label>
-                                        <input required type="text" className="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-blue focus:ring-1 focus:ring-rr-blue" placeholder="Jane Doe" />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-bold mb-2">Best Contact Number</label>
-                                        <input required type="tel" className="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-blue focus:ring-1 focus:ring-rr-blue" placeholder="0400 000 000" />
-                                    </div>
-                                    <div className="md:col-span-2">
-                                        <label className="block text-sm font-bold mb-2">Email Address</label>
-                                        <input required type="email" className="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-blue focus:ring-1 focus:ring-rr-blue" placeholder="jane@example.com" />
-                                    </div>
-                                </div>
-
-                                <hr className="border-slate-200 my-6" />
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label className="block text-sm font-bold mb-2">Player Full Name</label>
-                                        <input required type="text" className="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-blue focus:ring-1 focus:ring-rr-blue" placeholder="John Doe" />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-bold mb-2">Date of Birth</label>
-                                        <input required type="date" className="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-blue focus:ring-1 focus:ring-rr-blue" />
-                                    </div>
-                                    <div className="md:col-span-2">
-                                        <label className="block text-sm font-bold mb-2">Primary Playing Role</label>
-                                        <select required className="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:border-rr-blue focus:ring-1 focus:ring-rr-blue">
-                                            <option value="">Select Role...</option>
-                                            <option value="batsman">Batter</option>
-                                            <option value="bowler-pace">Pace Bowler</option>
-                                            <option value="bowler-spin">Spin Bowler</option>
-                                            <option value="all-rounder">All-Rounder</option>
-                                            <option value="wicket-keeper">Wicket-Keeper</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <button type="submit" className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 py-5 rounded-lg transition-colors mt-8">
-                                    Continue to Payment
-                                </button>
-                            </form>
-                        ) : (
-                            <div className="space-y-6">
-                                {/* Order Summary */}
-                                <div className="bg-slate-50 rounded-xl p-6 border border-slate-200 mb-8">
-                                    <h4 className="font-bold text-lg mb-4">Order Summary</h4>
-                                    <div className="flex justify-between items-center mb-2 pb-2 border-b border-slate-200">
-                                        <span className="font-medium text-rr-charcoal">RRAA 12-Week Elite Program</span>
-                                        <span className="font-bold text-rr-dark">$2995.00</span>
-                                    </div>
-                                    <div className="flex justify-between items-center text-sm text-slate-500">
-                                        <span>Includes IDP, DNA Profile, and Training Kit</span>
-                                        <span>GST Included</span>
-                                    </div>
-                                </div>
-
-                                {/* Mock Stripe UI */}
-                                <div className="space-y-4">
-                                    <div>
-                                        <label className="block text-sm font-bold mb-2">Card Information</label>
-                                        <div className="w-full h-12 bg-slate-50 border border-slate-300 rounded-lg px-4 flex items-center text-slate-400">
-                                            Stripe Element Placeholder
-                                        </div>
-                                    </div>
-                                    <p className="text-xs text-slate-500 flex items-center gap-1">
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                                        Payments are secure and encrypted.
-                                    </p>
-                                </div>
-
-                                <div className="flex items-start gap-4 mt-8">
-                                    <button onClick={() => setStep(1)} className="px-6 py-5 rounded-lg font-bold text-rr-charcoal hover:bg-slate-100 transition-colors">
-                                        Back
-                                    </button>
-                                    <button className="flex-1 bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 py-5 rounded-lg transition-colors flex flex-col items-center">
-                                        <span>Complete Enrolment</span>
-                                    </button>
-                                </div>
-                                <p className="text-center text-xs text-slate-500 mt-4">
-                                    Full refund available within first 2 sessions. <a href="#" className="underline text-rr-blue">See policy.</a>
-                                </p>
-                            </div>
-                        )}
+            {/* Please Note box */}
+            <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="bg-rr-blue/10 border border-rr-blue/30 rounded-2xl p-6 mb-8"
+            >
+                <div className="flex items-start gap-3">
+                    <svg className="w-5 h-5 text-rr-blue shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                        <h4 className="text-sm font-black text-white uppercase tracking-wide mb-2">Please Note — Program Eligibility</h4>
+                        <p className="text-sm text-white/60 leading-relaxed">
+                            The Rajasthan Royals Academy Elite Program is designed for cricketers <span className="text-white font-bold">11 years of age or older</span> who possess a demonstrated skill set and competitive playing experience. This is a high-performance environment, not a learn-to-play program.
+                        </p>
                     </div>
                 </div>
+            </motion.div>
 
+            {/* Highest level played */}
+            <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.15 }}
+                className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-8"
+            >
+                <h4 className="text-sm font-black text-white uppercase tracking-wide mb-4">
+                    Highest Level the Cricketer Has Played
+                </h4>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {[
+                        'School Cricket',
+                        'Club — Junior',
+                        'Club — Senior',
+                        'District / Representative',
+                        'State Age Group',
+                        'State / National',
+                    ].map((level) => (
+                        <label key={level} className="flex items-center gap-2 cursor-pointer group">
+                            <input type="radio" name="level" value={level}
+                                className="w-4 h-4 accent-rr-pink shrink-0" />
+                            <span className="text-xs font-medium text-white/60 group-hover:text-white/90 transition-colors leading-tight">{level}</span>
+                        </label>
+                    ))}
+                </div>
+            </motion.div>
 
-            </div>
-        </section>
-    );
-};
+            {/* Payment buttons */}
+            <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6"
+            >
+                {/* Pay in Full */}
+                <a
+                    href={FULL_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative flex flex-col items-center justify-center gap-1 bg-gradient-to-br from-rr-pink to-rr-blue p-px rounded-2xl overflow-hidden hover:shadow-[0_0_32px_rgba(229,6,149,0.4)] transition-shadow duration-300"
+                >
+                    <div className="w-full bg-rr-dark group-hover:bg-rr-dark/80 transition-colors rounded-2xl px-6 py-7 flex flex-col items-center gap-2 text-center">
+                        <span className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.25em]">Best Value</span>
+                        <span className="text-2xl font-black text-white uppercase tracking-tight">Pay in Full</span>
+                        <span className="text-white/50 text-sm font-medium">$2,995 — Includes free training kit</span>
+                        <div className="mt-2 flex items-center gap-2 bg-rr-pink/20 px-4 py-2 rounded-full">
+                            <svg className="w-4 h-4 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                            <span className="text-xs font-bold text-white uppercase tracking-wider">Secure Now</span>
+                        </div>
+                    </div>
+                </a>
+
+                {/* Deposit+ */}
+                <a
+                    href={DEPOSIT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative flex flex-col items-center justify-center gap-1 bg-gradient-to-br from-white/20 to-white/5 p-px rounded-2xl overflow-hidden hover:from-rr-blue hover:to-rr-pink hover:shadow-[0_0_32px_rgba(0,112,240,0.3)] transition-all duration-300"
+                >
+                    <div className="w-full bg-rr-dark group-hover:bg-rr-dark/80 transition-colors rounded-2xl px-6 py-7 flex flex-col items-center gap-2 text-center">
+                        <span className="text-[10px] font-bold text-rr-blue uppercase tracking-[0.25em]">Flexible</span>
+                        <span className="text-2xl font-black text-white uppercase tracking-tight">Deposit+</span>
+                        <span className="text-white/50 text-sm font-medium">50% now · 50% before first session</span>
+                        <div className="mt-2 flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full">
+                            <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                            <span className="text-xs font-bold text-white/60 uppercase tracking-wider">Secure Now</span>
+                        </div>
+                    </div>
+                </a>
+            </motion.div>
+
+            {/* Afterpay note */}
+            <motion.p
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.25 }}
+                className="text-center text-white/40 text-xs font-medium mb-8"
+            >
+                Afterpay also available at checkout. Questions about payment?{' '}
+                <a href="mailto:academy@rajasthanroyals.com" className="text-rr-blue hover:text-white transition-colors underline underline-offset-2">Contact us.</a>
+            </motion.p>
+
+            {/* Onboarding confirmation */}
+            <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-8 flex items-start gap-4"
+            >
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-rr-pink to-rr-blue flex items-center justify-center shrink-0">
+                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <div>
+                    <h4 className="text-sm font-black text-white uppercase tracking-wide mb-1">What Happens After Payment?</h4>
+                    <p className="text-sm text-white/55 leading-relaxed">
+                        Once payment has been made, you will be directed to our onboarding form to complete the onboarding process. This ensures we have everything we need to personalise your program from day one.
+                    </p>
+                </div>
+            </motion.div>
+
+            {/* FAQ link */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.35 }}
+                className="text-center mb-10"
+            >
+                <p className="text-white/40 text-sm">
+                    Have questions before you apply?{' '}
+                    <a href="#faq" className="text-rr-pink font-bold hover:text-white transition-colors underline underline-offset-2">
+                        View our Frequently Asked Questions ↓
+                    </a>
+                </p>
+            </motion.div>
+
+            {/* Disclaimer */}
+            <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="border border-white/10 rounded-2xl p-6"
+            >
+                <h4 className="text-xs font-black text-white/40 uppercase tracking-[0.2em] mb-3">Important Disclaimer</h4>
+                <p className="text-xs text-white/35 leading-relaxed">
+                    RRA Melbourne reserves the right to decline an application to the Elite Program if it is deemed that the applicant would not benefit from the program, or if there are safety concerns for the applicant or other participants. In such cases, the player or customer will receive a full refund of the amount paid, minus any third-party fees and charges applied at the time of transaction.
+                </p>
+            </motion.div>
+
+        </div>
+    </section>
+);
 
 export default MasterCheckout;
