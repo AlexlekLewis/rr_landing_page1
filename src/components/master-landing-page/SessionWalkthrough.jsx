@@ -6,7 +6,7 @@ const preSessionSteps = [
         label: "Pre-Session",
         title: "Session Plan Delivered",
         duration: "Day Before",
-        description: "The day before every session, your child receives a detailed session plan via the WhatsApp group chat — so they arrive knowing exactly what's ahead and what to prepare for.",
+        description: "The day before every session, you receive a detailed session plan via the WhatsApp group chat — so you arrive knowing exactly what's ahead and what to prepare for.",
         icon: "📋",
     },
     {
@@ -38,7 +38,7 @@ const sessionBlocks = [
         duration: "40 min",
         accent: "rr-blue",
         description: "The main part of this block is focused, repetitive drills designed to build and sharpen core cricket skills under close coaching. Players also get dedicated one-on-one technique time in small 2-on-1 groups, working on the specific areas identified in their Individual Development Plan. This personalised coaching time is spread across the month so every player gets proper attention.",
-        why: "Every player develops differently. The drill work builds a solid foundation — repeating the right movements so often they become automatic, even under pressure. The personalised technique time means coaching is tailored to your child, not a one-size-fits-all approach. With just two players per coach, there's nowhere to hide and constant feedback. Your child's development plan drives every session — so nothing gets missed.",
+        why: "Every player develops differently. The drill work builds a solid foundation — repeating the right movements so often they become automatic, even under pressure. The personalised technique time means coaching is tailored to you, not a one-size-fits-all approach. With just two players per coach, there's nowhere to hide and constant feedback. Your individual development plan drives every session — so nothing gets missed.",
         bullets: [
             "Focused drills to build and sharpen core skills",
             "Personalised 2-on-1 technique coaching",
@@ -179,7 +179,7 @@ const SessionWalkthrough = () => {
                         INSIDE A <span className="text-rr-pink">SESSION</span>
                     </h2>
                     <p className="text-lg text-slate-300 max-w-3xl mx-auto">
-                        Every session is structured, intentional, and built around your child's Individual Development Plan. Two hours of focused, professional-quality coaching — delivered with the same discipline and preparation you'd find at an IPL franchise academy.
+                        Every session is structured, intentional, and built around your Individual Development Plan. Two hours of focused, professional-quality coaching — delivered with the same discipline and preparation you'd find at an IPL franchise academy.
                     </p>
                 </div>
 
