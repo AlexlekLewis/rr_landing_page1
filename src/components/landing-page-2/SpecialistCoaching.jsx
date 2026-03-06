@@ -204,14 +204,14 @@ const SpecialistCoaching = () => (
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className="mb-16 max-w-3xl"
+                className="mb-16 text-center"
             >
                 <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-4">The Coaching Group</p>
                 <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-none mb-6">
-                    Specialist<br />
+                    Specialist{' '}
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">Coaching</span>
                 </h2>
-                <p className="text-lg text-white/60 font-medium leading-relaxed max-w-xl">
+                <p className="text-lg text-white/60 font-medium leading-relaxed max-w-2xl mx-auto">
                     Every coach is a paid professional with real cricket credentials — people who have played, coached, and competed at the highest levels.
                 </p>
             </motion.div>
