@@ -56,7 +56,6 @@ const MasterLandingPage = () => {
                 <div id="program"><ProgramJourney /></div>
 
                 <div id="specialist-coaching"><SpecialistCoaching /></div>
-                <div id="the-royals-way"><TheRoyalsWay /></div>
                 <div id="session-walkthrough"><SessionWalkthrough /></div>
 
                 {/* 6. Technology Edge (RRAM DNA PROFILE) */}
@@ -65,8 +64,9 @@ const MasterLandingPage = () => {
                 {/* 7. The Environment */}
                 <div id="facility"><FacilityAndTestimonials /></div>
 
-                {/* 8. The Value Stack & Investment */}
+                {/* 8. Beyond 12 Weeks + Royals Way + Investment */}
                 <div id="beyond-12-weeks"><BeyondTwelveWeeks /></div>
+                <div id="the-royals-way"><TheRoyalsWay /></div>
                 <div id="value-stack"><ValueStack /></div>
 
                 {/* 9. FAQ */}

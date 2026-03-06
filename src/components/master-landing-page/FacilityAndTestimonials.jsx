@@ -32,45 +32,7 @@ const FacilityAndTestimonials = () => {
                 variants={staggerContainer}
                 className="max-w-7xl mx-auto"
             >
-                {/* 1. Elite Environment (Facility) */}
-                <div className="mb-24">
-                    <div className="text-center mb-12 space-y-4">
-                        <motion.h2 variants={fadeIn} className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight">
-                            The Elite <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">Environment</span>
-                        </motion.h2>
-                        <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full mt-4" />
-                        <motion.p variants={fadeIn} className="text-lg text-slate-600 max-w-2xl mx-auto font-medium mt-6">
-                            Train at premium facilities designed to extract maximum performance, guided by coaching staff invested in your complete development.
-                        </motion.p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <motion.div variants={fadeIn} className="relative aspect-video md:aspect-[4/3] rounded-3xl overflow-hidden shadow-xl border border-slate-200 group">
-                            <img
-                                src="/assets/lp2/boy-stance.png"
-                                alt="High Performance Coaching"
-                                className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-8">
-                                <h3 className="text-white text-2xl font-bold uppercase mb-2">Elite Coaching Standard</h3>
-                                <p className="text-slate-200 font-medium">Direct interaction with global heads of development.</p>
-                            </div>
-                        </motion.div>
-                        <motion.div variants={fadeIn} className="relative aspect-video md:aspect-[4/3] rounded-3xl overflow-hidden shadow-xl border border-slate-200 group">
-                            <img
-                                src="/assets/lp2/sooryavanshi-century-walkoff.avif"
-                                alt="Premium Facilities"
-                                className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-8">
-                                <h3 className="text-white text-2xl font-bold uppercase mb-2">Professional Outcomes</h3>
-                                <p className="text-slate-200 font-medium">Training specifically built for the modern game.</p>
-                            </div>
-                        </motion.div>
-                    </div>
-                </div>
-
-                {/* 2. Testimonials */}
+                {/* Testimonials */}
                 <div>
                     <div className="text-center mb-12 space-y-4">
                         <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-black text-rr-dark uppercase tracking-tight">
