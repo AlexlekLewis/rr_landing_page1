@@ -17,7 +17,6 @@ import BeyondTwelveWeeks from '../landing-page-2/BeyondTwelveWeeks';
 import RrampDnaProfile from '../landing-page-2/RrampDnaProfile';
 import TheDreamAndPathway from './TheDreamAndPathway';
 import SessionWalkthrough from './SessionWalkthrough';
-import FacilityAndTestimonials from './FacilityAndTestimonials';
 
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
@@ -62,7 +61,6 @@ const MasterLandingPage = () => {
                 <div id="technology"><RrampDnaProfile /></div>
 
                 {/* 7. The Environment */}
-                <div id="facility"><FacilityAndTestimonials /></div>
 
                 {/* 8. Beyond 12 Weeks + Royals Way + Investment */}
                 <div id="beyond-12-weeks"><BeyondTwelveWeeks /></div>
