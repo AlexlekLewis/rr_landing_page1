@@ -103,8 +103,13 @@ const tiers = [
 ];
 
 const specialties = [
-    "Power & 360 Hitting", "Pace Bowling", "Spin Bowling", "Wicketkeeping",
-    "Fielding & Athletics", "Strength & Conditioning", "Mental Performance",
+    { title: "Power & 360 Hitting", coach: "Matthew Spoors & Jarryd Rogers", color: "from-rr-blue to-rr-pink", desc: "Ramp shots, reverse sweeps, and the ability to find the boundary from any position — the shots that win T20 games." },
+    { title: "Bowl to Control the Game", coach: "Pace Staff", color: "from-rr-pink to-rr-blue", desc: "Accuracy under pressure, smart variations, and the discipline to bowl to a field and force mistakes." },
+    { title: "Spin Mastery & Variation", coach: "Alex Lewis & Harkirat Bajwa", color: "from-rr-blue to-rr-pink", desc: "Control, deception, and flight — wrong'uns, arm balls, and knowing exactly when to use each one." },
+    { title: "Wicketkeeping Craft", coach: "Wicketkeeping Specialist", color: "from-rr-pink to-rr-blue", desc: "Quick reflexes, clean technique, and smart decision-making — the details that separate good keepers from great ones." },
+    { title: "Game-Changing Fielding", coach: "Fielding Staff", color: "from-rr-blue to-rr-pink", desc: "Ground coverage, sliding saves, accurate throwing, and high-pressure catching that turns half-chances into wickets." },
+    { title: "Strength & Conditioning", coach: "High Performance Unit", color: "from-rr-pink to-rr-blue", desc: "Cricket-specific fitness: explosive power, bowling endurance, speed, agility, and proper recovery." },
+    { title: "Mental Performance & Mindset", coach: "Leadership Team", color: "from-rr-blue to-rr-pink", desc: "Pre-game routines, pressure management, and the confidence to trust your skills in the biggest moments." },
 ];
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
@@ -362,29 +367,33 @@ const SpecialistCoaching = () => (
                 <MobileRoster />
             </motion.div>
 
-            {/* Specialist disciplines — pill tags */}
+            {/* Specialist Disciplines — full cards */}
             <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.15 }}
             >
-                <div className="flex items-center gap-3 mb-6">
+                <div className="flex items-center gap-3 mb-8">
                     <span className="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em] whitespace-nowrap">Specialist Disciplines</span>
                     <div className="flex-1 h-px bg-white/10" />
                 </div>
-                <div className="flex flex-wrap gap-2">
-                    {specialties.map((s, i) => (
-                        <motion.span
-                            key={s}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.3, delay: i * 0.05 }}
-                            className="px-4 py-2 rounded-full border border-white/10 text-xs font-bold text-white/50 uppercase tracking-widest hover:border-rr-pink/40 hover:text-white/80 transition-all duration-300 cursor-default"
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {specialties.map((item, i) => (
+                        <motion.div
+                            key={i}
+                            initial={{ opacity: 0, y: 16 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: '-30px' }}
+                            transition={{ duration: 0.4, delay: i * 0.06 }}
+                            className="bg-white/5 border border-white/10 rounded-xl p-5 hover:border-rr-pink/30 hover:bg-white/8 transition-all duration-300 relative overflow-hidden"
                         >
-                            {s}
-                        </motion.span>
+                            {/* Top gradient rule */}
+                            <div className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r ${item.color}`} />
+                            <h3 className="text-sm font-black text-white uppercase tracking-wide leading-tight mb-1">{item.title}</h3>
+                            <p className="text-[10px] font-bold text-rr-pink uppercase tracking-widest mb-3">Lead: {item.coach}</p>
+                            <p className="text-xs text-white/50 leading-relaxed">{item.desc}</p>
+                        </motion.div>
                     ))}
                 </div>
             </motion.div>
