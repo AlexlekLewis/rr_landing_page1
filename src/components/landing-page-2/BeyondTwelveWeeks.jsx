@@ -46,63 +46,33 @@ const BeyondTwelveWeeks = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {/* Masterclasses */}
+                    {/* Card 1 */}
                     <motion.div variants={fadeIn} className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 relative overflow-hidden group hover:border-rr-blue/30 transition-colors duration-500 flex flex-col items-center text-center">
                         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-blue to-rr-pink rounded-t-3xl" />
-                        <h3 className="text-xl font-bold text-rr-dark mb-3">Year-Round Academy Placement</h3>
+                        <h3 className="text-xl font-bold text-rr-dark mb-3">Post-Program Pathway Report</h3>
                         <p className="text-slate-600 leading-relaxed font-medium">
-                            Graduates of the Elite Program get priority access to our year-round Academy, ensuring continued development and access to our coaching and facilities.
+                            Comprehensive PDF detailing technical and tactical progression, engineered to be shared with selectors and club coaches.
                         </p>
                     </motion.div>
 
-                    {/* Tours */}
+                    {/* Card 2 */}
                     <motion.div variants={fadeIn} className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 relative overflow-hidden group hover:border-rr-pink/30 transition-colors duration-500 flex flex-col items-center text-center">
                         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-pink to-rr-blue rounded-t-3xl" />
-                        <h3 className="text-xl font-bold text-rr-dark mb-3">Global Talent ID Network</h3>
+                        <h3 className="text-xl font-bold text-rr-dark mb-3">"What Next" Consultation</h3>
                         <p className="text-slate-600 leading-relaxed font-medium">
-                            Your child's Player DNA Profile goes into the global Rajasthan Royals talent database. Standout performers are tracked for future opportunities and potential selection into international programs.
+                            Personalised sit-down at the conclusion of the program providing actionable steps for the next 12 months of development.
                         </p>
                     </motion.div>
 
-                    {/* Matches */}
+                    {/* Card 3 */}
                     <motion.div variants={fadeIn} className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 relative overflow-hidden group hover:border-rr-blue/30 transition-colors duration-500 flex flex-col items-center text-center">
                         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-blue to-rr-pink rounded-t-3xl" />
-                        <h3 className="text-xl font-bold text-rr-dark mb-3">Elite Squad Selection</h3>
+                        <h3 className="text-xl font-bold text-rr-dark mb-3">The Royals Network</h3>
                         <p className="text-slate-600 leading-relaxed font-medium">
-                            Elite Program graduates form the pool we select from for our top squads — representing the Academy in external tournaments, showcase matches, and higher-level competitions.
+                            Direct integration into the Rajasthan Royals international development database.
                         </p>
                     </motion.div>
                 </div>
-
-                {/* Post-Program Benefits */}
-                <motion.div
-                    variants={fadeIn}
-                    className="mt-12 bg-white border border-slate-200 rounded-2xl p-8 shadow-sm"
-                >
-                    <ul className="space-y-5">
-                        <li className="flex gap-4 items-start">
-                            <span className="mt-1 w-2 h-2 rounded-full bg-rr-pink shrink-0" />
-                            <div>
-                                <h4 className="font-bold text-rr-dark mb-1">Post-Program Pathway Report</h4>
-                                <p className="text-sm text-slate-600 leading-relaxed">Comprehensive PDF detailing technical and tactical progression, engineered to be shared with selectors and club coaches.</p>
-                            </div>
-                        </li>
-                        <li className="flex gap-4 items-start">
-                            <span className="mt-1 w-2 h-2 rounded-full bg-rr-pink shrink-0" />
-                            <div>
-                                <h4 className="font-bold text-rr-dark mb-1">"What Next" Consultation</h4>
-                                <p className="text-sm text-slate-600 leading-relaxed">Personalised sit-down at the conclusion of the program providing actionable steps for the next 12 months of development.</p>
-                            </div>
-                        </li>
-                        <li className="flex gap-4 items-start">
-                            <span className="mt-1 w-2 h-2 rounded-full bg-rr-pink shrink-0" />
-                            <div>
-                                <h4 className="font-bold text-rr-dark mb-1">The Royals Network</h4>
-                                <p className="text-sm text-slate-600 leading-relaxed">Direct integration into the Rajasthan Royals international development database.</p>
-                            </div>
-                        </li>
-                    </ul>
-                </motion.div>
             </motion.div>
         </section>
     );
