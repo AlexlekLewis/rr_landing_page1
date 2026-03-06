@@ -5,7 +5,7 @@ import { supabase } from '../../lib/supabase';
 import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import Footer from '../Footer';
 
-/* ───── Session options (matches LP3) ───── */
+/* --- Session options (matches LP3) --- */
 const SESSION_OPTIONS = {
     weekday: {
         Tuesday: [
@@ -31,7 +31,7 @@ const SESSION_OPTIONS = {
     }
 };
 
-/* ───── Shared sub-components ───── */
+/* --- Sub-components --- */
 const SessionCheckbox = ({ time, checked, onChange }) => (
     <label className={`flex items-center justify-between p-5 rounded-2xl border-2 cursor-pointer transition-all w-full bg-white ${checked ? 'border-rr-pink shadow-md shadow-rr-pink/10 scale-[1.02]' : 'border-slate-200 hover:border-slate-300 shadow-sm'}`}>
         <span className={`font-bold text-lg md:text-xl ${checked ? 'text-rr-dark' : 'text-slate-600'}`}>{time}</span>
@@ -42,61 +42,33 @@ const SessionCheckbox = ({ time, checked, onChange }) => (
     </label>
 );
 
-const ComplianceCheckbox = ({ checked, onChange, children }) => (
-    <label className="flex items-start gap-3 cursor-pointer group py-2">
-        <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="sr-only" />
-        <div className={`w-6 h-6 border-2 rounded transition-all flex items-center justify-center shadow-sm shrink-0 mt-0.5 ${checked ? 'bg-rr-pink border-rr-pink' : 'bg-white border-slate-300 group-hover:border-slate-400'}`}>
-            {checked && <span className="text-xs text-white font-bold">✓</span>}
-        </div>
-        <span className="text-sm text-slate-600 leading-relaxed">{children}</span>
-    </label>
-);
+const SIZE_OPTIONS = [
+    'Mens Extra Extra Small (XXS)',
+    'Mens Extra Small (XS)',
+    'Mens Small (S)',
+    'Mens Medium (M)',
+    'Mens Large (L)',
+    'Mens Extra Large (XL)',
+];
 
-/* ═══════════════════════════════════════════════════════════
-   MASTER STRIPE SUCCESS — ONBOARDING FORM
-   ═══════════════════════════════════════════════════════════ */
+/* ===================================================
+   MASTER STRIPE SUCCESS + ONBOARDING FORM
+   =================================================== */
 const MasterStripeSuccess = () => {
-    const navigate = useNavigate();
     const [paymentStatus, setPaymentStatus] = useState('processing');
+    const navigate = useNavigate();
 
-    /* ── Payment confirmation (same logic as LP3 StripeSuccess) ── */
-    useEffect(() => {
-        const confirmPayment = async () => {
-            try {
-                const registrationId = localStorage.getItem('pending_registration_id');
-                if (!registrationId) {
-                    // No pending ID — they may have come here directly or it was already processed
-                    setPaymentStatus('ready');
-                    return;
-                }
-                const { error } = await supabase
-                    .from('official_cohort_2026')
-                    .update({ payment_status: 'completed' })
-                    .eq('id', registrationId);
-
-                if (error) throw error;
-
-                setPaymentStatus('ready');
-                localStorage.removeItem('pending_registration_id');
-            } catch (err) {
-                console.error('Error confirming payment:', err);
-                setPaymentStatus('ready'); // Still show the form even if status update fails
-            }
-        };
-        confirmPayment();
-    }, []);
-
-    /* ── Onboarding form state (mirrors LP3 AcceptanceForm) ── */
+    // Onboarding form state
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState('');
-    const [formSubmitted, setFormSubmitted] = useState(false);
+    const [onboardingComplete, setOnboardingComplete] = useState(false);
 
     // Core details
     const [playerName, setPlayerName] = useState('');
     const [parentName, setParentName] = useState('');
     const [email, setEmail] = useState('');
 
-    // Administration fields
+    // Administration
     const [gender, setGender] = useState('');
     const [suburb, setSuburb] = useState('');
     const [shirtName, setShirtName] = useState('');
@@ -104,24 +76,17 @@ const MasterStripeSuccess = () => {
     const [sizeShort, setSizeShort] = useState('');
     const [sizePants, setSizePants] = useState('');
 
-    // Comms fields
+    // Comms
     const [groupChatConsent, setGroupChatConsent] = useState(null);
     const [phoneNumbers, setPhoneNumbers] = useState([{ id: 1, value: '' }]);
     const [preferredComms, setPreferredComms] = useState('');
 
-    // Session Availability
+    // Sessions
     const [selectedSessions, setSelectedSessions] = useState([]);
-    const toggleSession = (id) => {
-        setSelectedSessions(prev =>
-            prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]
-        );
-    };
 
-    // Consents
-    const [acceptTerms, setAcceptTerms] = useState(false);
-    const [acceptPlayerCode, setAcceptPlayerCode] = useState(false);
-    const [acceptParentCode, setAcceptParentCode] = useState(false);
-    const [acceptSocialMedia, setAcceptSocialMedia] = useState(false);
+    const toggleSession = (id) => {
+        setSelectedSessions(prev => prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]);
+    };
 
     const addPhoneNumber = () => {
         setPhoneNumbers([...phoneNumbers, { id: Date.now(), value: '' }]);
@@ -131,26 +96,58 @@ const MasterStripeSuccess = () => {
         setPhoneNumbers(phoneNumbers.map(p => p.id === id ? { ...p, value } : p));
     };
 
-    /* ── Validation ── */
+    const fadeIn = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+    };
+
+    /* -- Payment confirmation (same logic as StripeSuccess) -- */
+    useEffect(() => {
+        const confirmPayment = async () => {
+            try {
+                const registrationId = localStorage.getItem('pending_registration_id');
+                if (!registrationId) {
+                    setPaymentStatus('not_found');
+                    return;
+                }
+
+                const { error } = await supabase
+                    .from('official_cohort_2026')
+                    .update({ payment_status: 'completed' })
+                    .eq('id', registrationId);
+
+                if (error) throw error;
+
+                setPaymentStatus('success');
+                localStorage.removeItem('pending_registration_id');
+            } catch (err) {
+                console.error('Error confirming payment:', err);
+                setPaymentStatus('error');
+            }
+        };
+
+        confirmPayment();
+    }, []);
+
+    /* -- Form validation -- */
     const isFormValid = () => {
         const hasCore = playerName.trim() && parentName.trim() && email.trim() && email.includes('@');
         const hasAdmin = gender && suburb.trim() && shirtName.trim() && sizeTshirt && sizeShort && sizePants;
         const hasComms = groupChatConsent === true ? phoneNumbers.some(p => p.value.trim()) : (groupChatConsent === false ? preferredComms.trim() : false);
-        const hasConsents = acceptTerms && acceptPlayerCode && acceptParentCode && acceptSocialMedia;
 
         const hasMinTotal = selectedSessions.length >= 3;
         const hasWeekday = selectedSessions.some(id => id.startsWith('wd'));
         const hasWeekend = selectedSessions.some(id => id.startsWith('we'));
         const hasValidSessions = hasMinTotal && hasWeekday && hasWeekend;
 
-        return hasCore && hasAdmin && hasComms && hasConsents && hasValidSessions;
+        return hasCore && hasAdmin && hasComms && hasValidSessions;
     };
 
-    /* ── Submit ── */
-    const handleSubmit = async () => {
+    /* -- Submit onboarding to official_cohort_2026 -- */
+    const handleSubmitOnboarding = async () => {
         if (!isFormValid()) {
-            setSubmitError('Please complete all required fields, select at least 3 session options (with min 1 weekday and 1 weekend), and accept all compliance documents.');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setSubmitError('Please complete all required fields, select at least 3 session options (with min 1 weekday and 1 weekend).');
+            document.getElementById('onboarding-form')?.scrollIntoView({ behavior: 'smooth' });
             return;
         }
 
@@ -168,13 +165,16 @@ const MasterStripeSuccess = () => {
                 parent_name: parentName.trim(),
                 email: email.trim().toLowerCase(),
                 phone: validPhones[0] || '',
+
                 gender: gender,
                 suburb: suburb.trim(),
                 shirt_name: shirtName.trim(),
                 size_tshirt: sizeTshirt,
                 size_short: sizeShort,
                 size_pants: sizePants,
+
                 player_role: '',
+
                 selected_sessions: selectedSessions.map(id => {
                     const allOpts = [
                         ...SESSION_OPTIONS.weekday.Tuesday,
@@ -185,21 +185,19 @@ const MasterStripeSuccess = () => {
                     const opt = allOpts.find(o => o.id === id);
                     return opt ? `[${opt.dayGroup}] ${opt.days}: ${opt.time}` : id;
                 }).join(' | '),
+
                 group_chat_consent: groupChatConsent,
                 phone_numbers: validPhones,
                 preferred_comms: preferredComms,
+
                 payment_plan_selected: 'master_lp_purchase',
                 payment_status: 'completed',
                 source: 'master_landing_page',
                 created_at_melb: new Date().toLocaleString('en-AU', {
                     timeZone: 'Australia/Melbourne',
                     hour12: true,
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
+                    year: 'numeric', month: '2-digit', day: '2-digit',
+                    hour: '2-digit', minute: '2-digit', second: '2-digit'
                 })
             };
 
@@ -216,16 +214,16 @@ const MasterStripeSuccess = () => {
                 fetch(webhookUrl, { method: 'POST', body: formData }).catch(() => {});
             }
 
-            setFormSubmitted(true);
+            setOnboardingComplete(true);
         } catch (err) {
-            console.error('Onboarding submission error:', err);
-            setSubmitError('Something went wrong. Please try again or contact us at eliteprogram@rramelbourne.com.');
+            console.error('Error submitting onboarding:', err);
+            setSubmitError('Something went wrong. Please try again or contact eliteprogram@rramelbourne.com');
         } finally {
             setIsSubmitting(false);
         }
     };
 
-    /* ── Navbar ── */
+    /* -- Minimal Navbar -- */
     const renderNav = () => (
         <nav className="fixed top-0 w-full z-50 bg-rr-dark/90 backdrop-blur-md border-b border-white/10">
             <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-center">
@@ -239,12 +237,7 @@ const MasterStripeSuccess = () => {
         </nav>
     );
 
-    const fadeIn = {
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-    };
-
-    /* ── Loading state ── */
+    /* ------ PROCESSING STATE ------ */
     if (paymentStatus === 'processing') {
         return (
             <div className="min-h-screen bg-white">
@@ -252,15 +245,15 @@ const MasterStripeSuccess = () => {
                 <main className="pt-20 min-h-[80vh] flex flex-col items-center justify-center px-6">
                     <Loader2 className="w-16 h-16 text-rr-pink animate-spin mb-6" />
                     <h2 className="text-2xl font-black text-rr-dark uppercase tracking-wide mb-2">Confirming Payment...</h2>
-                    <p className="text-slate-500 text-lg">Please wait while we finalise your registration.</p>
+                    <p className="text-slate-500 text-lg">Please wait while we finalize your registration.</p>
                 </main>
                 <Footer />
             </div>
         );
     }
 
-    /* ── Form submitted success ── */
-    if (formSubmitted) {
+    /* ------ ONBOARDING COMPLETE STATE ------ */
+    if (onboardingComplete) {
         return (
             <div className="min-h-screen bg-slate-50">
                 {renderNav()}
@@ -272,7 +265,7 @@ const MasterStripeSuccess = () => {
                         </div>
                         <h2 className="text-3xl md:text-4xl font-black text-rr-dark uppercase tracking-tight mb-4">Onboarding Complete!</h2>
                         <p className="text-lg text-slate-600 leading-relaxed mb-8 font-medium">
-                            Your onboarding form has been submitted successfully. We now have everything we need to personalise your program from day one.
+                            Thank you for completing your onboarding. We have everything we need to personalise your program from day one. We are thrilled to welcome you to the Rajasthan Royals Academy Melbourne.
                         </p>
                         <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100 mb-10 text-left">
                             <h4 className="font-bold text-rr-dark mb-2">What happens next?</h4>
@@ -285,7 +278,7 @@ const MasterStripeSuccess = () => {
                         </div>
                         <button
                             onClick={() => window.location.href = 'https://rramelbourne.com'}
-                            className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-rr-pink to-rr-blue text-white font-bold uppercase tracking-wider px-12 py-4 rounded-xl hover:shadow-lg transition-shadow"
+                            className="bg-gradient-to-r from-rr-pink to-rr-blue text-white font-black uppercase tracking-wider px-12 py-4 rounded-2xl hover:shadow-[0_0_32px_rgba(229,6,149,0.4)] transition-shadow"
                         >
                             Return Home
                         </button>
@@ -296,48 +289,60 @@ const MasterStripeSuccess = () => {
         );
     }
 
-    /* ═══════ MAIN RENDER — ONBOARDING FORM ═══════ */
+    /* ------ ERROR / NOT FOUND - still show onboarding form ------ */
+    const showPaymentWarning = paymentStatus === 'error' || paymentStatus === 'not_found';
+
+    /* ------ MAIN: CONGRATULATIONS + ONBOARDING FORM ------ */
     return (
         <div className="min-h-screen bg-slate-50">
             {renderNav()}
+            <main className="pt-28 pb-24 px-6">
+                <div className="max-w-4xl mx-auto" id="onboarding-form">
 
-            <main className="pt-28 pb-24 px-6 lg:px-8">
-                <motion.div
-                    initial="hidden"
-                    animate="visible"
-                    className="max-w-4xl mx-auto space-y-12"
-                >
-                    {/* ── Congratulations Header ── */}
-                    <div className="text-center mb-8 space-y-4">
+                    {/* Payment warning if applicable */}
+                    {showPaymentWarning && (
+                        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 mb-8 flex items-start gap-3">
+                            <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+                            <div>
+                                <p className="text-sm text-amber-800 font-medium">
+                                    {paymentStatus === 'not_found'
+                                        ? "We couldn't locate your pending registration details. If you just completed your payment on Stripe, don't worry \u2014 your payment receipt is your confirmation."
+                                        : "There was an issue updating your registration status. If your payment went through on Stripe, you are secured."}
+                                </p>
+                                <p className="text-xs text-amber-600 mt-2">
+                                    If you have any concerns, contact <a href="mailto:eliteprogram@rramelbourne.com" className="text-rr-pink hover:underline font-bold">eliteprogram@rramelbourne.com</a>
+                                </p>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* -- Congratulations Header -- */}
+                    <motion.div initial="hidden" animate="visible" className="text-center mb-16 space-y-4">
                         <motion.div variants={fadeIn} className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
                             <CheckCircle2 className="w-12 h-12 text-green-500" />
                         </motion.div>
-                        <motion.p variants={fadeIn} className="text-lg md:text-xl font-bold text-rr-pink uppercase tracking-widest">
-                            Congratulations
+                        <motion.p variants={fadeIn} className="text-lg md:text-xl font-bold text-green-600 mb-2">
+                            Congratulations, you're a Rajasthan Royals Melbourne Academy Player!
                         </motion.p>
-                        <motion.h1 variants={fadeIn} className="text-3xl md:text-5xl font-black text-rr-dark tracking-tight uppercase leading-tight">
-                            You're a Rajasthan Royals<br />Melbourne Academy Player
-                        </motion.h1>
-                        <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full mt-4" />
-                    </div>
-
-                    {/* ── Form Title ── */}
-                    <div className="text-center mb-4">
-                        <motion.h2 variants={fadeIn} className="text-2xl md:text-4xl font-black text-rr-dark tracking-tight uppercase">
+                        <motion.h2 variants={fadeIn} className="text-3xl md:text-5xl font-black text-rr-dark tracking-tight uppercase">
                             Rajasthan Royals Melbourne{' '}
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">Onboarding Form</span>
                         </motion.h2>
-                    </div>
+                        <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full mt-4" />
+                        <motion.p variants={fadeIn} className="text-slate-500 max-w-xl mx-auto leading-relaxed mt-4">
+                            Please complete the form below so we can personalise your program and get you set up from day one.
+                        </motion.p>
+                    </motion.div>
 
-                    {/* ── Form Card ── */}
+                    {/* -- Form Card -- */}
                     <div className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 md:p-12">
 
-                        {/* Error */}
+                        {/* Error Message */}
                         <AnimatePresence>
                             {submitError && (
                                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="mb-8 overflow-hidden">
                                     <div className="p-4 bg-red-50 border border-red-200 text-red-600 rounded-xl font-medium text-sm flex items-start gap-3">
-                                        <span className="text-xl leading-none">⚠️</span>
+                                        <span className="text-xl leading-none">{'\u26A0\uFE0F'}</span>
                                         <p>{submitError}</p>
                                     </div>
                                 </motion.div>
@@ -363,7 +368,7 @@ const MasterStripeSuccess = () => {
                             </div>
                         </div>
 
-                        {/* ADMIN DETAILS */}
+                        {/* ONBOARDING INFO */}
                         <div className="space-y-6 mb-12">
                             <h3 className="text-xl font-bold text-rr-dark border-b border-slate-100 pb-2">Onboarding Information</h3>
 
@@ -371,11 +376,11 @@ const MasterStripeSuccess = () => {
                                 <label className="block text-sm font-bold text-rr-dark">Do you play male or female cricket? *</label>
                                 <div className="flex gap-4">
                                     <label className="flex items-center gap-2 cursor-pointer">
-                                        <input type="radio" name="gender" value="Male Cricket" checked={gender === 'Male Cricket'} onChange={(e) => setGender(e.target.value)} className="w-4 h-4 text-rr-pink accent-rr-pink" />
+                                        <input type="radio" name="gender" required value="Male Cricket" onChange={(e) => setGender(e.target.value)} className="w-4 h-4 text-rr-pink" />
                                         <span>Male Cricket</span>
                                     </label>
                                     <label className="flex items-center gap-2 cursor-pointer">
-                                        <input type="radio" name="gender" value="Female Cricket" checked={gender === 'Female Cricket'} onChange={(e) => setGender(e.target.value)} className="w-4 h-4 text-rr-pink accent-rr-pink" />
+                                        <input type="radio" name="gender" required value="Female Cricket" onChange={(e) => setGender(e.target.value)} className="w-4 h-4 text-rr-pink" />
                                         <span>Female Cricket</span>
                                     </label>
                                 </div>
@@ -396,55 +401,74 @@ const MasterStripeSuccess = () => {
                                 <p className="text-sm font-medium text-slate-500 mb-3 bg-slate-100 p-3 rounded-xl border border-slate-200">
                                     <span className="text-rr-pink font-bold">Important:</span> All sizing is based on Men's fits.
                                 </p>
-
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     <div>
                                         <span className="text-xs font-bold text-slate-700 mb-1 block uppercase tracking-wider">T-Shirt Size</span>
                                         <select required value={sizeTshirt} onChange={(e) => setSizeTshirt(e.target.value)} className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:border-rr-pink focus:ring-1 focus:ring-rr-pink transition-all">
                                             <option value="">Select...</option>
-                                            <option value="Mens Extra Extra Small (XXS)">Mens Extra Extra Small (XXS)</option>
-                                            <option value="Mens Extra Small (XS)">Mens Extra Small (XS)</option>
-                                            <option value="Mens Small (S)">Mens Small (S)</option>
-                                            <option value="Mens Medium (M)">Mens Medium (M)</option>
-                                            <option value="Mens Large (L)">Mens Large (L)</option>
-                                            <option value="Mens Extra Large (XL)">Mens Extra Large (XL)</option>
+                                            {SIZE_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
                                         </select>
                                     </div>
                                     <div>
                                         <span className="text-xs font-bold text-slate-700 mb-1 block uppercase tracking-wider">Short Size</span>
                                         <select required value={sizeShort} onChange={(e) => setSizeShort(e.target.value)} className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:border-rr-pink focus:ring-1 focus:ring-rr-pink transition-all">
                                             <option value="">Select...</option>
-                                            <option value="Mens Extra Extra Small (XXS)">Mens Extra Extra Small (XXS)</option>
-                                            <option value="Mens Extra Small (XS)">Mens Extra Small (XS)</option>
-                                            <option value="Mens Small (S)">Mens Small (S)</option>
-                                            <option value="Mens Medium (M)">Mens Medium (M)</option>
-                                            <option value="Mens Large (L)">Mens Large (L)</option>
-                                            <option value="Mens Extra Large (XL)">Mens Extra Large (XL)</option>
+                                            {SIZE_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
                                         </select>
                                     </div>
                                     <div>
-                                        <span className="text-xs font-bold text-slate-700 mb-1 block uppercase tracking-wider">Track Pants Size</span>
+                                        <span className="text-xs font-bold text-slate-700 mb-1 block uppercase tracking-wider">Pants Size</span>
                                         <select required value={sizePants} onChange={(e) => setSizePants(e.target.value)} className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:border-rr-pink focus:ring-1 focus:ring-rr-pink transition-all">
                                             <option value="">Select...</option>
-                                            <option value="Mens Extra Extra Small (XXS)">Mens Extra Extra Small (XXS)</option>
-                                            <option value="Mens Extra Small (XS)">Mens Extra Small (XS)</option>
-                                            <option value="Mens Small (S)">Mens Small (S)</option>
-                                            <option value="Mens Medium (M)">Mens Medium (M)</option>
-                                            <option value="Mens Large (L)">Mens Large (L)</option>
-                                            <option value="Mens Extra Large (XL)">Mens Extra Large (XL)</option>
+                                            {SIZE_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
                                         </select>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* SESSION AVAILABILITY */}
+                        {/* KEY DATES */}
                         <div className="space-y-6 mb-12">
-                            <h3 className="text-xl font-bold text-rr-dark border-b border-slate-100 pb-2">Session Availability</h3>
-                            <div className="bg-rr-dark text-white rounded-2xl p-6 text-center mb-4">
-                                <p className="text-sm font-medium leading-relaxed">
-                                    Each player will be allocated <strong>one weekday session</strong> and <strong>one weekend session</strong> per week for the duration of the Elite Program.
-                                    Please select <strong>at least 3 options</strong> below (minimum 1 weekday and 1 weekend) so we can allocate you the best possible schedule.
+                            <h3 className="text-xl font-bold text-rr-dark border-b border-slate-100 pb-2">Program Start & Key Dates</h3>
+                            <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm">
+                                <ul className="space-y-8">
+                                    <li className="flex gap-5 items-start">
+                                        <div className="w-12 h-12 rounded-full bg-rr-pink/10 flex items-center justify-center shrink-0 border border-rr-pink/20">
+                                            <span className="text-rr-pink font-bold text-lg">1</span>
+                                        </div>
+                                        <div>
+                                            <h4 className="text-lg font-bold text-rr-dark mb-2">Week of April 13th: Onboarding Week</h4>
+                                            <p className="text-slate-600 leading-relaxed text-md">
+                                                This is when the program officially begins. Players will receive their uniform and attend online Zoom sessions with their squad coaches.<br />
+                                                We will cover everything you need to know: how the program runs day-to-day, the process for entering the center, and general daily operations.
+                                            </p>
+                                        </div>
+                                    </li>
+                                    <li className="flex gap-5 items-start">
+                                        <div className="w-12 h-12 rounded-full bg-rr-blue/10 flex items-center justify-center shrink-0 border border-rr-blue/20">
+                                            <span className="text-rr-blue font-bold text-lg">2</span>
+                                        </div>
+                                        <div>
+                                            <h4 className="text-lg font-bold text-rr-dark mb-2">Tuesday 21st April: First Indoor Skill Session</h4>
+                                            <p className="text-slate-600 leading-relaxed text-md">
+                                                This marks the first official indoor skill session of the 12-week block.
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        {/* SESSION PREFERENCES */}
+                        <div className="space-y-6 mb-12">
+                            <h3 className="text-xl font-bold text-rr-dark border-b border-slate-100 pb-2">Session Preferences</h3>
+
+                            <div className="bg-white/50 border border-slate-200 rounded-2xl p-6 relative overflow-hidden">
+                                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-rr-pink to-rr-blue"></div>
+                                <p className="text-sm text-slate-700 font-medium leading-relaxed">
+                                    Please select a minimum of <span className="font-bold text-rr-pink">3 preferred options</span> for your weekly sessions.
+                                    You <span className="font-bold underline">must</span> select at least <span className="font-bold">1 weekday</span> and <span className="font-bold">1 weekend</span> slot.
+                                    <br /><span className="block mt-2 text-xs italic text-slate-500">We appreciate how busy weeknights and weekends can be for players and their families. While we need 3 preferences to help us balance the squads, our team will do our absolute best to work with you and lock in the times that suit you most.</span>
                                 </p>
                             </div>
 
@@ -495,7 +519,7 @@ const MasterStripeSuccess = () => {
                             </div>
                         </div>
 
-                        {/* COMMS PREF */}
+                        {/* COMMS PREFERENCES */}
                         <div className="space-y-6 mb-12 bg-slate-50 p-6 rounded-2xl border border-slate-100">
                             <label className="block text-sm font-bold text-rr-dark">Are you happy to be added to a group chat as we get closer to the start of the Elite Program for regular communication? *</label>
                             <div className="flex gap-4">
@@ -523,52 +547,23 @@ const MasterStripeSuccess = () => {
                             )}
                         </div>
 
-                        {/* CONSENTS & COMPLIANCE */}
-                        <div className="space-y-4 mb-12 border-t border-slate-100 pt-8">
-                            <h3 className="text-xl font-bold text-rr-dark mb-4">Compliance & Policies</h3>
-
-                            <ComplianceCheckbox checked={acceptTerms} onChange={setAcceptTerms}>
-                                I have read and agree to the <a href="/terms-conditions" target="_blank" className="text-rr-pink hover:underline">Terms &amp; Conditions</a> and <a href="/privacy-policy" target="_blank" className="text-rr-pink hover:underline">Privacy Policy</a>. I confirm all information provided is accurate.
-                            </ComplianceCheckbox>
-
-                            <ComplianceCheckbox checked={acceptPlayerCode} onChange={setAcceptPlayerCode}>
-                                I have read, understood, and agree to the <a href="/assets/RRA_Player_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Player Code of Conduct</a>.
-                            </ComplianceCheckbox>
-
-                            <ComplianceCheckbox checked={acceptParentCode} onChange={setAcceptParentCode}>
-                                I have read, understood, and agree to the <a href="/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Parent/Guardian Code of Conduct</a>.
-                            </ComplianceCheckbox>
-
-                            <ComplianceCheckbox checked={acceptSocialMedia} onChange={setAcceptSocialMedia}>
-                                I am happy for photos and videos from the program featuring the player to be used on Rajasthan Royals Academy Melbourne's social media and marketing channels.
-                            </ComplianceCheckbox>
-                        </div>
-
                         {/* SUBMIT */}
                         <button
-                            onClick={handleSubmit}
-                            disabled={!isFormValid() || isSubmitting}
-                            className={`w-full py-4 rounded-2xl font-black text-lg uppercase tracking-wide transition-all duration-300 flex items-center justify-center gap-3 ${isFormValid() && !isSubmitting
-                                ? 'bg-gradient-to-r from-rr-pink to-rr-blue text-white hover:shadow-lg cursor-pointer'
-                                : 'bg-slate-200 text-slate-400 cursor-not-allowed'
-                            }`}
+                            onClick={handleSubmitOnboarding}
+                            disabled={isSubmitting}
+                            className="w-full py-5 rounded-2xl font-black text-lg uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 bg-gradient-to-r from-rr-pink to-rr-blue text-white hover:shadow-[0_0_32px_rgba(229,6,149,0.4)] disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {isSubmitting ? (
-                                <>
-                                    <Loader2 className="w-5 h-5 animate-spin" />
-                                    Submitting...
-                                </>
+                                <><Loader2 className="w-5 h-5 animate-spin" /> Submitting...</>
                             ) : (
                                 'Complete Onboarding'
                             )}
                         </button>
-                        {!isFormValid() && (
-                            <p className="text-center text-xs text-slate-400 mt-3">Please complete all required fields and accept all compliance documents.</p>
-                        )}
-                    </div>
-                </motion.div>
-            </main>
 
+                    </div>
+
+                </div>
+            </main>
             <Footer />
         </div>
     );
