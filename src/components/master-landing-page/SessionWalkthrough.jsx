@@ -63,8 +63,8 @@ const sessionBlocks = [
         title: "Cool Down & Reflection",
         duration: "10 min",
         accent: "rr-blue",
-        description: "The session closes the way it opened — with daily vitamin skills to reinforce fundamentals. Players then complete their development journals and diaries before a final debrief with their squad coach. Coaches use this time to prepare detailed session notes on each player for the next session.",
-        why: "The best academies in the world don't just train bodies — they train minds. Reflection and journalling lock in what was learned, build self-awareness, and give coaches the data they need to optimise the next session. The repeated vitamin skills bookend the session, reinforcing that the quality of your preparation defines the quality of your performance.",
+        description: "The session closes the way it opened — with daily essential skills to reinforce fundamentals. Players then complete their development journals and diaries before a final debrief with their squad coach. Coaches use this time to prepare detailed session notes on each player for the next session.",
+        why: "The best academies in the world don't just train bodies — they train minds. Reflection and journalling lock in what was learned, build self-awareness, and give coaches the data they need to optimise the next session. The repeated essential skills bookend the session, reinforcing that the quality of your preparation defines the quality of your performance.",
         bullets: [
             "Daily essential skills to close",
             "Development journals and diary entries",
