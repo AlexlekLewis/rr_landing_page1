@@ -164,7 +164,13 @@ const MasterFAQ = () => {
                 </div>
 
                 <div className="mt-20 text-center">
-                    <p className="text-rr-charcoal mb-4 font-medium">Still have questions?</p>
+                    <p className="text-rr-charcoal mb-2 font-medium">Still have questions?</p>
+                    <p className="text-sm text-slate-500 mb-6">
+                        Contact us at{' '}
+                        <a href="mailto:eliteprogram@rramelbourne.com" className="text-rr-pink font-bold hover:text-rr-dark transition-colors underline underline-offset-2">
+                            eliteprogram@rramelbourne.com
+                        </a>
+                    </p>
                     <button
                         onClick={scrollToForm}
                         className="inline-block bg-white text-rr-blue border-2 border-rr-blue hover:bg-rr-blue hover:text-white font-bold uppercase tracking-wide px-10 py-4 rounded-full transition-colors shadow-sm"
