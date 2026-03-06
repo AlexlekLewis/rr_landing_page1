@@ -10,20 +10,20 @@ const tiers = [
         coaches: [
             {
                 name: "Siddhartha Lahiri",
-                role: "Rajasthan Royals Group Head of Int'l Player Development and Assistant Coach to Paarl, Rajasthan and Barbados Royals",
-                bio: "Performance coach of the Rajasthan Royals, as well as Assistant Coach of Paarl and Barbados Royals, Siddhartha runs the Rajasthan Royals' global talent network. He oversees player scouting and development across every Royals Academy in the world — meaning the Elite Program's best players have a direct line to one of the IPL's biggest franchises.",
+                role: "Head of International Player Development",
+                bio: "Performance coach of the Rajasthan Royals, as well as Assistant Coach of Paarl and Barbados Royals, Siddhartha runs the Rajasthan Royals' global talent network. He oversees player scouting and development across every Royals Academy in the world — meaning the Elite Program's best players have a direct line to one of the IPL's biggest franchises. Leading talent identification and performance globally for the Royals Group of franchises and the Royals Academy network.",
                 tag: "Global Development",
             },
             {
                 name: "Andy Crook",
-                role: "Director of Cricket, Rajasthan Royals Academy Melbourne",
-                bio: "Andy runs the operations behind the program. His deep experience in professional cricket, the business of sport and coaching means every session is planned, every drill has a purpose, and every player gets the standard the Rajasthan Royals expect.",
+                role: "Director of Cricket",
+                bio: "Andy brings to the Royals Academy decades of executive experience at the highest levels of sport, including leading such sports leagues as Australia's National Basketball League and Super Netball. A former professional who played for South Australia, Northamptonshire and Lancashire, Andy's connection with the game has remained strong, playing for Victoria at Masters level, and recently being a part of Australia's 2025 T20 Masters World Cup winning campaign in Pakistan. Charged with driving the Rajasthan Royals Academy in Australia, his network and vision for T20 cricket and player development has led to creating a world first pathway of opportunities for talented youngsters to put themselves in front of global leaders of the T20 game.",
                 tag: "Operations & Leadership",
             },
             {
                 name: "Alex Lewis",
-                role: "Rajasthan Royals Academy Melbourne Elite Program Head Coach",
-                bio: "Over 20 years coaching cricketers through representative pathways. Alex is committed to getting the technique right and putting the player first — building not just better cricketers, but sharper athletes and tougher competitors. Current premier cricket senior assistant coach, bowling coach and Academy director.",
+                role: "Head Coach",
+                bio: "For over 22 years, thousands of young cricketers have had their careers heavily and positively influenced by his coaching, tactical and player management skills. Alex is committed to getting the technique right and putting the player first — building not just better cricketers, but sharper athletes and tougher competitors. Current premier cricket senior assistant coach, bowling coach and Academy director.",
                 tag: "Head Coach",
             },
         ],
@@ -95,7 +95,7 @@ const Avatar = ({ name, tier, size = 'lg' }) => {
         : tier === 'Elite Coaching Staff'
             ? 'from-rr-blue to-rr-pink'
             : 'from-white/20 to-white/10';
-    const sz = size === 'lg' ? 'w-16 h-16 text-xl' : 'w-9 h-9 text-xs';
+    const sz = size === 'lg' ? 'w-12 h-12 text-base' : 'w-8 h-8 text-xs';
     return (
         <div className={`${sz} rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center shrink-0 font-black text-white`}>
             {initials}
