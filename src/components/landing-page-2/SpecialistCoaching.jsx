@@ -17,7 +17,7 @@ const tiers = [
             {
                 name: "Andy Crook",
                 role: "Director of Cricket, Rajasthan Royals Academy Melbourne",
-                bio: "Andy runs the operations behind the program. His deep experience in cricket administration and coaching means every session is planned, every drill has a purpose, and every player gets the standard the Rajasthan Royals expect.",
+                bio: "Andy runs the operations behind the program. His deep experience in professional cricket, the business of sport and coaching means every session is planned, every drill has a purpose, and every player gets the standard the Rajasthan Royals expect.",
                 tag: "Operations & Leadership",
             },
             {
