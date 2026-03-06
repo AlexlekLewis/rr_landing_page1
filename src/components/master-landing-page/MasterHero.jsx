@@ -45,7 +45,7 @@ const MasterHero = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                     >
-                        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-200 mb-6 uppercase tracking-tighter leading-none drop-shadow-2xl">
+                        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-slate-200 mb-6 uppercase tracking-tighter leading-none drop-shadow-2xl">
                             READY TO DOMINATE<br />THE T20 GAME?
                         </h1>
                         <p className="text-lg md:text-2xl text-white shadow-black drop-shadow-md font-semibold mb-4 leading-relaxed mt-4">
