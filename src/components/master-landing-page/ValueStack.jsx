@@ -37,7 +37,7 @@ const ValueStack = () => {
                                 <span className="text-slate-400 text-sm">Included</span>
                             </li>
                             <li className="flex justify-between items-end pb-2">
-                                <span className="text-white font-medium">Post-Program Pathway Report</span>
+                                <span className="text-white font-medium">Post-Program Report</span>
                                 <span className="text-slate-400 text-sm">Included</span>
                             </li>
                         </ul>
