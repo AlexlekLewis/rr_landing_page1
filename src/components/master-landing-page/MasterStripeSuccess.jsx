@@ -173,7 +173,6 @@ const MasterStripeSuccess = () => {
 
                 payment_plan_selected: 'master_lp_purchase',
                 payment_status: 'completed',
-                source: 'master_landing_page',
                 created_at_melb: new Date().toLocaleString('en-AU', {
                     timeZone: 'Australia/Melbourne',
                     hour12: true,

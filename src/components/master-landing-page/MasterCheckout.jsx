@@ -173,7 +173,7 @@ const MasterCheckout = () => {
                 parent2_name: formData.parent2Name.trim(),
                 parent2_email: formData.parent2Email.trim(),
                 parent2_phone: formData.parent2Phone.trim(),
-                cricket_gender: cricketGender,
+                cricket_type: cricketGender,
                 source: 'master_landing_page',
             };
 
