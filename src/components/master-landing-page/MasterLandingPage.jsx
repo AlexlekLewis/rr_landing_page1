@@ -3,7 +3,7 @@ import Navbar from '../Navbar';
 import Footer from '../Footer';
 import MasterHero from './MasterHero';
 import TrustBar from './TrustBar';
-import CoachesSection from './CoachesSection';
+
 import ProgramJourney from './ProgramJourney';
 import ValueStack from './ValueStack';
 import MasterFAQ from './MasterFAQ';
@@ -62,8 +62,7 @@ const MasterLandingPage = () => {
                 {/* 6. Technology Edge (RRAM DNA PROFILE) */}
                 <div id="technology"><RrampDnaProfile /></div>
 
-                {/* 7. The Environment & The Coaches */}
-                <div id="coaches"><CoachesSection /></div>
+                {/* 7. The Environment */}
                 <div id="facility"><FacilityAndTestimonials /></div>
 
                 {/* 8. The Value Stack & Investment */}
