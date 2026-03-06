@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import Footer from '../Footer';
+import Navbar from '../Navbar';
 
 /* --- Session options (matches LP3) --- */
 const SESSION_OPTIONS = {
@@ -203,25 +204,13 @@ const MasterStripeSuccess = () => {
         }
     };
 
-    /* -- Minimal Navbar -- */
-    const renderNav = () => (
-        <nav className="fixed top-0 w-full z-50 bg-rr-dark/90 backdrop-blur-md border-b border-white/10">
-            <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-center">
-                <img
-                    src="/assets/MELBOURNE_OFFICIAL.png"
-                    alt="Rajasthan Royals Academy Melbourne"
-                    className="h-16 w-auto object-contain brightness-0 invert cursor-pointer transition-transform hover:scale-105"
-                    onClick={() => navigate('/')}
-                />
-            </div>
-        </nav>
-    );
+
 
     /* ------ PROCESSING STATE ------ */
     if (paymentStatus === 'processing') {
         return (
             <div className="min-h-screen bg-white">
-                {renderNav()}
+                <Navbar variant="lp3" />
                 <main className="pt-20 min-h-[80vh] flex flex-col items-center justify-center px-6">
                     <Loader2 className="w-16 h-16 text-rr-pink animate-spin mb-6" />
                     <h2 className="text-2xl font-black text-rr-dark uppercase tracking-wide mb-2">Confirming Payment...</h2>
@@ -236,7 +225,7 @@ const MasterStripeSuccess = () => {
     if (onboardingComplete) {
         return (
             <div className="min-h-screen bg-slate-50">
-                {renderNav()}
+                <Navbar variant="lp3" />
                 <main className="pt-32 pb-24 flex items-center justify-center px-6 min-h-[80vh]">
                     <div className="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 max-w-2xl w-full text-center shadow-xl shadow-slate-200/50 relative overflow-hidden">
                         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-rr-pink to-rr-blue"></div>
@@ -275,7 +264,7 @@ const MasterStripeSuccess = () => {
     /* ------ MAIN: CONGRATULATIONS + ONBOARDING FORM ------ */
     return (
         <div className="min-h-screen bg-slate-50">
-            {renderNav()}
+            <Navbar variant="lp3" />
             <main className="pt-28 pb-24 px-6">
                 <div className="max-w-4xl mx-auto" id="onboarding-form">
 
