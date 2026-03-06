@@ -9,51 +9,7 @@ const ValueStack = () => {
 
             <div className="max-w-6xl mx-auto px-6 relative z-10 flex flex-col lg:flex-row gap-16">
 
-                {/* Column 1: The Pathway Forward */}
-                <div className="flex-1 lg:pr-8 lg:border-r border-white/10">
-                    <h2 className="text-3xl font-black text-white uppercase mb-8">BEYOND 12 WEEKS</h2>
-
-                    {/* Visual Pathway Map */}
-                    <div className="flex items-center gap-2 mb-10 text-sm md:text-base font-bold text-slate-300">
-                        <span className="bg-rr-pink text-white px-3 py-1 rounded">RRAA</span>
-                        <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 5l7 7-7 7"></path></svg>
-                        <span>Club Mastery</span>
-                        <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 5l7 7-7 7"></path></svg>
-                        <span className="text-rr-blue">Pathways & Premier</span>
-                    </div>
-
-                    <ul className="space-y-6">
-                        <li className="flex gap-4 items-start">
-                            <div className="bg-white/10 p-2 rounded text-rr-blue shrink-0 mt-1">
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            </div>
-                            <div>
-                                <h4 className="font-bold text-white mb-1">Post-Program Pathway Report</h4>
-                                <p className="text-sm text-slate-400">Comprehensive PDF detailing their technical and tactical progression, engineered to be shared with selectors and club coaches.</p>
-                            </div>
-                        </li>
-                        <li className="flex gap-4 items-start">
-                            <div className="bg-white/10 p-2 rounded text-rr-blue shrink-0 mt-1">
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
-                            </div>
-                            <div>
-                                <h4 className="font-bold text-white mb-1">"What Next" Consultation</h4>
-                                <p className="text-sm text-slate-400">Personalised sit-down at the conclusion of the program providing actionable steps for the next 12 months of their development.</p>
-                            </div>
-                        </li>
-                        <li className="flex gap-4 items-start">
-                            <div className="bg-white/10 p-2 rounded text-rr-blue shrink-0 mt-1">
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            </div>
-                            <div>
-                                <h4 className="font-bold text-white mb-1">The Royals Network</h4>
-                                <p className="text-sm text-slate-400">Direct integration into the Rajasthan Royals international development database.</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                {/* Column 2: Value Stack & Price */}
+                {/* Column: Value Stack & Price */}
                 <div className="flex-1">
                     <h2 className="text-3xl font-black text-white uppercase mb-8">THE INVESTMENT</h2>
 

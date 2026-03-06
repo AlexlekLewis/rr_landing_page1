@@ -73,6 +73,36 @@ const BeyondTwelveWeeks = () => {
                         </p>
                     </motion.div>
                 </div>
+
+                {/* Post-Program Benefits */}
+                <motion.div
+                    variants={fadeIn}
+                    className="mt-12 bg-white border border-slate-200 rounded-2xl p-8 shadow-sm"
+                >
+                    <ul className="space-y-5">
+                        <li className="flex gap-4 items-start">
+                            <span className="mt-1 w-2 h-2 rounded-full bg-rr-pink shrink-0" />
+                            <div>
+                                <h4 className="font-bold text-rr-dark mb-1">Post-Program Pathway Report</h4>
+                                <p className="text-sm text-slate-600 leading-relaxed">Comprehensive PDF detailing technical and tactical progression, engineered to be shared with selectors and club coaches.</p>
+                            </div>
+                        </li>
+                        <li className="flex gap-4 items-start">
+                            <span className="mt-1 w-2 h-2 rounded-full bg-rr-pink shrink-0" />
+                            <div>
+                                <h4 className="font-bold text-rr-dark mb-1">"What Next" Consultation</h4>
+                                <p className="text-sm text-slate-600 leading-relaxed">Personalised sit-down at the conclusion of the program providing actionable steps for the next 12 months of development.</p>
+                            </div>
+                        </li>
+                        <li className="flex gap-4 items-start">
+                            <span className="mt-1 w-2 h-2 rounded-full bg-rr-pink shrink-0" />
+                            <div>
+                                <h4 className="font-bold text-rr-dark mb-1">The Royals Network</h4>
+                                <p className="text-sm text-slate-600 leading-relaxed">Direct integration into the Rajasthan Royals international development database.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </motion.div>
             </motion.div>
         </section>
     );
