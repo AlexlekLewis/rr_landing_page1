@@ -60,6 +60,85 @@ const MasterCheckout = () => (
                 </div>
             </motion.div>
 
+            {/* Player Details Form */}
+            <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.12 }}
+                className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-8"
+            >
+                <h4 className="text-sm font-black text-white uppercase tracking-wide mb-1">Player Details</h4>
+                <p className="text-xs text-white/40 mb-6">Please complete before proceeding to payment.</p>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Parent Name */}
+                    <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-white/50 uppercase tracking-widest">Parent / Guardian Full Name</label>
+                        <input
+                            type="text"
+                            placeholder="Jane Doe"
+                            className="bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-rr-pink/60 focus:bg-white/8 transition-colors"
+                        />
+                    </div>
+
+                    {/* Contact Number */}
+                    <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-white/50 uppercase tracking-widest">Best Contact Number</label>
+                        <input
+                            type="tel"
+                            placeholder="0400 000 000"
+                            className="bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-rr-pink/60 focus:bg-white/8 transition-colors"
+                        />
+                    </div>
+
+                    {/* Email — full width */}
+                    <div className="flex flex-col gap-1.5 md:col-span-2">
+                        <label className="text-xs font-bold text-white/50 uppercase tracking-widest">Email Address</label>
+                        <input
+                            type="email"
+                            placeholder="jane@example.com"
+                            className="bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-rr-pink/60 focus:bg-white/8 transition-colors"
+                        />
+                    </div>
+
+                    {/* Divider */}
+                    <div className="md:col-span-2 border-t border-white/10 my-1" />
+
+                    {/* Player Name */}
+                    <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-white/50 uppercase tracking-widest">Player Full Name</label>
+                        <input
+                            type="text"
+                            placeholder="John Doe"
+                            className="bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-rr-pink/60 focus:bg-white/8 transition-colors"
+                        />
+                    </div>
+
+                    {/* Date of Birth */}
+                    <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-white/50 uppercase tracking-widest">Date of Birth</label>
+                        <input
+                            type="date"
+                            className="bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm text-white/70 focus:outline-none focus:border-rr-pink/60 focus:bg-white/8 transition-colors"
+                        />
+                    </div>
+
+                    {/* Primary Role — full width */}
+                    <div className="flex flex-col gap-1.5 md:col-span-2">
+                        <label className="text-xs font-bold text-white/50 uppercase tracking-widest">Primary Playing Role</label>
+                        <select className="bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm text-white/70 focus:outline-none focus:border-rr-pink/60 transition-colors appearance-none">
+                            <option value="" className="bg-rr-dark">Select Role…</option>
+                            <option value="batter" className="bg-rr-dark">Batter</option>
+                            <option value="pace-bowler" className="bg-rr-dark">Pace Bowler</option>
+                            <option value="spin-bowler" className="bg-rr-dark">Spin Bowler</option>
+                            <option value="all-rounder" className="bg-rr-dark">All-Rounder</option>
+                            <option value="wicket-keeper" className="bg-rr-dark">Wicket-Keeper</option>
+                        </select>
+                    </div>
+                </div>
+            </motion.div>
+
             {/* Highest level played */}
             <motion.div
                 initial={{ opacity: 0, y: 16 }}
