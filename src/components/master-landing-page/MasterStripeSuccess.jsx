@@ -191,7 +191,7 @@ const MasterStripeSuccess = () => {
                 Object.entries(payload).forEach(([key, value]) => {
                     formData.append(key, typeof value === 'object' ? JSON.stringify(value) : String(value ?? ''));
                 });
-                fetch(webhookUrl, { method: 'POST', body: formData }).catch(() => {});
+                fetch(webhookUrl, { method: 'POST', body: formData }).catch(() => { });
             }
 
             setOnboardingComplete(true);
@@ -240,8 +240,8 @@ const MasterStripeSuccess = () => {
                 <main className="pt-32 pb-24 flex items-center justify-center px-6 min-h-[80vh]">
                     <div className="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 max-w-2xl w-full text-center shadow-xl shadow-slate-200/50 relative overflow-hidden">
                         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-rr-pink to-rr-blue"></div>
-                        <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-8">
-                            <CheckCircle2 className="w-12 h-12 text-green-500" />
+                        <div className="w-24 h-24 bg-rr-pink/10 rounded-full flex items-center justify-center mx-auto mb-8">
+                            <CheckCircle2 className="w-12 h-12 text-rr-pink" />
                         </div>
                         <h2 className="text-3xl md:text-4xl font-black text-rr-dark uppercase tracking-tight mb-4">Onboarding Complete!</h2>
                         <p className="text-lg text-slate-600 leading-relaxed mb-8 font-medium">
@@ -298,10 +298,10 @@ const MasterStripeSuccess = () => {
 
                     {/* -- Congratulations Header -- */}
                     <motion.div initial="hidden" animate="visible" className="text-center mb-16 space-y-4">
-                        <motion.div variants={fadeIn} className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <CheckCircle2 className="w-12 h-12 text-green-500" />
+                        <motion.div variants={fadeIn} className="w-24 h-24 bg-rr-pink/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <CheckCircle2 className="w-12 h-12 text-rr-pink" />
                         </motion.div>
-                        <motion.p variants={fadeIn} className="text-lg md:text-xl font-bold text-green-600 mb-2">
+                        <motion.p variants={fadeIn} className="text-lg md:text-xl font-bold text-rr-pink mb-2">
                             Congratulations, you're a Rajasthan Royals Melbourne Academy Player!
                         </motion.p>
                         <motion.h2 variants={fadeIn} className="text-3xl md:text-5xl font-black text-rr-dark tracking-tight uppercase">
