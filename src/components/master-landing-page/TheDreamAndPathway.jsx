@@ -62,8 +62,8 @@ const TheDreamAndPathway = () => {
                     >
                         <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-4">The Vision</p>
                         <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight leading-none mb-6">
-                            The Dream<br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">&amp; Purpose</span>
+                            Uncovering{' '}
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">T20 Talent</span>
                         </h2>
                         <div className="w-12 h-px bg-gradient-to-r from-rr-pink to-rr-blue mb-6" />
                         <p className="text-white/60 font-medium text-base md:text-lg leading-relaxed">
