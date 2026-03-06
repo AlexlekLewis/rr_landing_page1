@@ -58,54 +58,6 @@ const tiers = [
             },
         ],
     },
-    {
-        id: 'program',
-        label: 'Program Team',
-        coaches: [
-            {
-                name: "Adelaide Campion",
-                role: "Program Coach",
-                bio: "Inaugural captain of Carlton CC. Premiership winner with Ringwood. Malaysian Super Slam title holder. Member of Australia's Indoor World Cup-winning squads. Currently Head Coach of the Australian U18 Indoor Cricket Team. 15+ years at the highest level.",
-                tag: "All-Format",
-            },
-            {
-                name: "Glenn Butterworth",
-                role: "Program Coach",
-                bio: "27 years of coaching excellence spanning two continents. Completed Level 2 Coaching at Lord's Cricket Ground and coached across Middlesex and the UK. Now driving female pathways development at Fitzroy Doncaster.",
-                tag: "Wicketkeeping",
-            },
-            {
-                name: "Joel Ried",
-                role: "Program Coach",
-                bio: "A passionate and technically sharp coach who thrives in developing young cricketers through structured, high-intensity sessions. Joel's energy on the training ground is infectious — he demands excellence and rewards effort in equal measure.",
-                tag: "High Intensity",
-            },
-            {
-                name: "Bret Cole",
-                role: "Talent Scout",
-                bio: "Decades of experience identifying and nurturing emerging talent across Victoria's cricket landscape. Bret's trained eye for potential means every player is being watched by someone who knows exactly what pathways and selectors are looking for.",
-                tag: "Talent ID",
-            },
-            {
-                name: "Zac Macciocca",
-                role: "Program Assistant Coach",
-                bio: "A Fitzroy Doncaster stalwart since 2017/18 and Dowling Shield coach for over six years. Zac combines club-cricket grit with genuine technical knowledge and a coaching presence that connects with young players from day one.",
-                tag: "Club Pathways",
-            },
-            {
-                name: "Ikroop Dhanoa",
-                role: "Program Assistant Coach",
-                bio: "A dynamic young coach whose passion for player development is matched by his deep understanding of modern T20 cricket. Ikroop brings cultural diversity and fresh tactical thinking to the coaching group.",
-                tag: "T20 Tactics",
-            },
-            {
-                name: "Rittin Raman",
-                role: "Program Assistant Coach",
-                bio: "Driven by a genuine love for developing cricketers at every level. Rittin brings high energy, technical precision, and an unwavering commitment to helping young players unlock their potential.",
-                tag: "Player Development",
-            },
-        ],
-    },
 ];
 
 const specialties = [
