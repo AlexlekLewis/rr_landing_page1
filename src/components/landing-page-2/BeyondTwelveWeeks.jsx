@@ -69,7 +69,7 @@ const BeyondTwelveWeeks = () => {
                         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-blue to-rr-pink rounded-t-3xl" />
                         <h3 className="text-xl font-bold text-rr-dark mb-3">Elite Squad Selection</h3>
                         <p className="text-slate-600 leading-relaxed font-medium">
-                            Elite Program graduates form the pool we select from for our top squads — representing the Academy in external tournaments, showcase matches, and higher-level competitions.
+                            Elite Program graduates form the pool we select from for our top squads — representing the Royals Academy in tournaments, showcase matches, and competitions.
                         </p>
                     </motion.div>
 
