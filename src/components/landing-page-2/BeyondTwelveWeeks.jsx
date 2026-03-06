@@ -99,6 +99,15 @@ const BeyondTwelveWeeks = () => {
                             Direct integration into the Rajasthan Royals international development database.
                         </p>
                     </motion.div>
+
+                    {/* HP Centre Card */}
+                    <motion.div variants={fadeIn} className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 relative overflow-hidden group hover:border-rr-blue/30 transition-colors duration-500 flex flex-col items-center text-center">
+                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-blue to-rr-pink rounded-t-3xl" />
+                        <h3 className="text-xl font-bold text-rr-dark mb-3">The Royals HP Centre</h3>
+                        <p className="text-slate-600 leading-relaxed font-medium">
+                            As a T20 Elite Program member, receive priority invitation to attend tours to Rajasthan Royals High Performance Centre in Nagpur, India.
+                        </p>
+                    </motion.div>
                 </div>
             </motion.div>
         </section>
