@@ -51,7 +51,7 @@ const BeyondTwelveWeeks = () => {
                         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-blue to-rr-pink rounded-t-3xl" />
                         <h3 className="text-xl font-bold text-rr-dark mb-3">Year-Round Academy Placement</h3>
                         <p className="text-slate-600 leading-relaxed font-medium">
-                            Graduates of the Elite Program get priority access to our year-round Academy, ensuring continued development and access to our coaching and facilities.
+                            Graduates of the Elite Program get priority access to our year-round Academy activities, ensuring continued development and access to our Royals coaching network.
                         </p>
                     </motion.div>
 
