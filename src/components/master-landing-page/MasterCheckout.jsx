@@ -180,6 +180,9 @@ const MasterCheckout = () => {
             const { error } = await supabase.from('applications').insert([payload]);
             if (error) throw error;
 
+            // Flag that purchase came from LP4 so StripeSuccess can redirect
+            localStorage.setItem('purchase_source', 'master_lp');
+
             setFormSaved(true);
             setSubmitError('');
         } catch (err) {

@@ -10,6 +10,14 @@ const StripeSuccess = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        // If purchaser came from LP4 (Master Landing Page), redirect to LP4 onboarding
+        const purchaseSource = localStorage.getItem('purchase_source');
+        if (purchaseSource === 'master_lp') {
+            localStorage.removeItem('purchase_source');
+            navigate('/eliteprogram2026/success', { replace: true });
+            return;
+        }
+
         const confirmPayment = async () => {
             try {
                 // Get the pending registration ID from local storage

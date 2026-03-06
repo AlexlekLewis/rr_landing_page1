@@ -103,30 +103,11 @@ const MasterStripeSuccess = () => {
 
     /* -- Payment confirmation (same logic as StripeSuccess) -- */
     useEffect(() => {
-        const confirmPayment = async () => {
-            try {
-                const registrationId = localStorage.getItem('pending_registration_id');
-                if (!registrationId) {
-                    setPaymentStatus('not_found');
-                    return;
-                }
-
-                const { error } = await supabase
-                    .from('official_cohort_2026')
-                    .update({ payment_status: 'completed' })
-                    .eq('id', registrationId);
-
-                if (error) throw error;
-
-                setPaymentStatus('success');
-                localStorage.removeItem('pending_registration_id');
-            } catch (err) {
-                console.error('Error confirming payment:', err);
-                setPaymentStatus('error');
-            }
-        };
-
-        confirmPayment();
+        // LP4 flow: application was already saved to 'applications' table before Stripe.
+        // No pending_registration_id to confirm — just show the onboarding form.
+        // Clean up the purchase_source flag if it hasn't been cleaned up yet.
+        localStorage.removeItem('purchase_source');
+        setPaymentStatus('success');
     }, []);
 
     /* -- Form validation -- */
@@ -228,9 +209,9 @@ const MasterStripeSuccess = () => {
         <nav className="fixed top-0 w-full z-50 bg-rr-dark/90 backdrop-blur-md border-b border-white/10">
             <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-center">
                 <img
-                    src="/rra-white.png"
-                    alt="Rajasthan Royals Academy"
-                    className="h-12 w-auto object-contain cursor-pointer transition-transform hover:scale-105"
+                    src="/assets/MELBOURNE_OFFICIAL.png"
+                    alt="Rajasthan Royals Academy Melbourne"
+                    className="h-16 w-auto object-contain brightness-0 invert cursor-pointer transition-transform hover:scale-105"
                     onClick={() => navigate('/')}
                 />
             </div>
