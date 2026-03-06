@@ -265,7 +265,7 @@ const MasterStripeSuccess = () => {
     return (
         <div className="min-h-screen bg-slate-50">
             <Navbar variant="lp3" />
-            <main className="pt-28 pb-24 px-6">
+            <main className="pt-36 pb-24 px-6">
                 <div className="max-w-4xl mx-auto" id="onboarding-form">
 
                     {/* Payment warning if applicable */}
