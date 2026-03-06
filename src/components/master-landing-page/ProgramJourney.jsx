@@ -108,7 +108,7 @@ const ProgramJourney = () => {
                         12 WEEK <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">PROGRAM PLAN OVERVIEW</span>
                     </h2>
                     <p className="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed">
-                        This isn't a drop-in clinic. It's a structured 12-week program built to give you the T20 skills, confidence, and coaching you need to push for representative selection and premier cricket.
+                        This isn't a drop-in clinic. It's a structured 12-week program built to give you the T20 skills, confidence, and coaching you need to push for representative selection and higher honours.
                     </p>
                 </motion.div>
 
