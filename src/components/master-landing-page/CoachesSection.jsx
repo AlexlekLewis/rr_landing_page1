@@ -33,7 +33,7 @@ const eliteCoaches = [
         name: "Jarryd Rogers",
         role: "Batting — Power Hitting Mechanics",
         image: "/assets/coaches/jarryd-rogers.jpg",
-        bio: "Victorian State Baseball batting coach and power hitting specialist. Jarryd brings a unique cross-sport perspective on how to generate bat speed and hit the ball harder. His approach gives players a genuine, measurable edge at the crease.",
+        bio: "Former Australian Baseball League (ABL) star and Victorian state baseball batting coach and power hitting specialist. Jarryd brings a unique cross-sport perspective on how to generate bat speed and hit the ball harder — giving players a genuine, measurable edge at the crease.",
     },
     {
         name: "Harkirat Bajwa",

@@ -41,7 +41,7 @@ const tiers = [
             {
                 name: "Jarryd Rogers",
                 role: "Batting — Power Hitting Mechanics",
-                bio: "Victorian State Baseball batting coach and power hitting specialist. Jarryd brings a unique cross-sport perspective on how to generate bat speed and hit the ball harder — giving players a genuine, measurable edge at the crease.",
+                bio: "Former Australian Baseball League (ABL) star and Victorian state baseball batting coach and power hitting specialist. Jarryd brings a unique cross-sport perspective on how to generate bat speed and hit the ball harder — giving players a genuine, measurable edge at the crease.",
                 tag: "Bat Speed",
             },
             {
