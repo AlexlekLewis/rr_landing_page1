@@ -23,7 +23,7 @@ const tiers = [
             {
                 name: "Alex Lewis",
                 role: "Rajasthan Royals Academy Melbourne Elite Program Head Coach",
-                bio: "Over 20 years coaching cricketers through Premier Cricket and representative pathways. Alex is committed to getting the technique right and putting the player first — building not just better cricketers, but sharper athletes and tougher competitors.",
+                bio: "Over 20 years coaching cricketers through representative pathways. Alex is committed to getting the technique right and putting the player first — building not just better cricketers, but sharper athletes and tougher competitors. Current premier cricket senior assistant coach, bowling coach and Academy director.",
                 tag: "Head Coach",
             },
         ],
