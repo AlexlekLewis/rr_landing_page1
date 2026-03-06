@@ -1,98 +1,171 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+const included = [
+    { label: '12 Weeks Elite T20 Coaching' },
+    { label: 'Full DNA Performance Profile' },
+    { label: 'Individual Development Plan' },
+    { label: 'Official Royals Training Kit' },
+    { label: 'Post-Program Report' },
+];
+
+const paymentOptions = [
+    {
+        title: 'Pay in Full',
+        tag: 'Best Value',
+        tagColor: 'text-rr-pink',
+        desc: 'Pay upfront before the closing date and receive an additional training shirt and pants — free of charge.',
+    },
+    {
+        title: 'Deposit+',
+        tag: 'Flexible',
+        tagColor: 'text-rr-blue',
+        desc: 'Pay 50% now to secure your place, with the remaining 50% due before the first scheduled session.',
+    },
+    {
+        title: 'Afterpay',
+        tag: 'Split It',
+        tagColor: 'text-white/50',
+        desc: 'Spread the cost with Afterpay — available at checkout with no extra steps.',
+    },
+];
+
 const ValueStack = () => {
     return (
-        <section className="py-24 bg-rr-dark text-white relative border-t-4 border-rr-pink">
-            {/* Background texture */}
-            <div className="absolute inset-0 bg-image-gradient-dark opacity-50 z-0"></div>
+        <section className="py-24 bg-rr-dark text-white relative overflow-hidden">
 
-            <div className="max-w-6xl mx-auto px-6 relative z-10 flex flex-col lg:flex-row gap-16">
+            {/* Ambient glows */}
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-rr-pink to-transparent" />
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-rr-pink/8 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-rr-blue/8 rounded-full blur-[120px] pointer-events-none" />
 
-                {/* Column: Value Stack & Price */}
-                <div className="flex-1">
-                    <h2 className="text-3xl font-black text-white uppercase mb-8">THE INVESTMENT</h2>
+            <div className="max-w-6xl mx-auto px-6 relative z-10">
 
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 relative">
-                        {/* Royals global logos for texture */}
-                        <div className="opacity-10 absolute top-4 right-4 flex gap-2 w-32 justify-end pointer-events-none">
-                            <img src="/assets/rr-logo-blue.png" alt="" className="h-8 object-contain" />
-                        </div>
+                {/* Section header */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="mb-16"
+                >
+                    <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Season 1 · 2026</p>
+                    <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-none mb-4">
+                        The Investment
+                    </h2>
+                    <div className="w-12 h-px bg-gradient-to-r from-rr-pink to-rr-blue" />
+                </motion.div>
 
-                        <div className="flex flex-col md:flex-row gap-6 mb-8">
+                {/* Main grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8">
 
-                            {/* What's included */}
-                            <ul className="space-y-4 flex-1">
-                                <li className="flex justify-between items-end border-b border-white/10 pb-2">
-                                    <span className="text-white font-medium">12 Weeks Elite T20 Coaching</span>
-                                    <span className="text-slate-400 text-sm shrink-0 ml-4">Included</span>
-                                </li>
-                                <li className="flex justify-between items-end border-b border-white/10 pb-2">
-                                    <span className="text-white font-medium">Full DNA Performance Profile</span>
-                                    <span className="text-slate-400 text-sm shrink-0 ml-4">Included</span>
-                                </li>
-                                <li className="flex justify-between items-end border-b border-white/10 pb-2">
-                                    <span className="text-white font-medium">Individual Development Plan</span>
-                                    <span className="text-slate-400 text-sm shrink-0 ml-4">Included</span>
-                                </li>
-                                <li className="flex justify-between items-end border-b border-white/10 pb-2">
-                                    <span className="text-white font-medium">Official Royals Training Kit</span>
-                                    <span className="text-slate-400 text-sm shrink-0 ml-4">Included</span>
-                                </li>
-                                <li className="flex justify-between items-end pb-2">
-                                    <span className="text-white font-medium">Post-Program Report</span>
-                                    <span className="text-slate-400 text-sm shrink-0 ml-4">Included</span>
-                                </li>
+                    {/* Left column */}
+                    <div className="space-y-6">
+
+                        {/* What's included */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5 }}
+                            className="bg-white/4 border border-white/10 rounded-2xl p-6 md:p-8"
+                        >
+                            <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em] mb-6">What's Included</p>
+                            <ul className="divide-y divide-white/8">
+                                {included.map((item, i) => (
+                                    <li key={i} className="flex items-center gap-4 py-4">
+                                        <span className="w-5 h-5 rounded-full bg-gradient-to-br from-rr-pink to-rr-blue flex items-center justify-center shrink-0">
+                                            <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </span>
+                                        <span className="text-white font-medium">{item.label}</span>
+                                    </li>
+                                ))}
                             </ul>
+                        </motion.div>
 
-                            {/* Value comparison */}
-                            <div className="bg-white/5 border border-white/10 rounded-xl p-5 flex-1">
-                                <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.2em] mb-4">What You're Getting</p>
-                                <p className="text-white font-black text-sm uppercase tracking-wide mb-3">Premium development, one clear price.</p>
-                                <div className="space-y-3 text-sm text-white/60 leading-relaxed">
-                                    <p>Private specialist cricket coaching in Melbourne typically runs between <span className="text-white font-bold">$90 to $120+ per hour</span> for a single coach.</p>
-                                    <p>Our Elite Program breaks down to approximately <span className="text-rr-pink font-bold">$55 per hour</span> — including access to our international coaching network, premium facilities, data monitoring, mental performance training, and S&C programming.</p>
-                                    <p>Our ecosystem is built around developing the skills that matter — helping cricketers of all ages become more proficient in winning the key moments that define modern cricket.</p>
+                        {/* Value comparison */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: 0.1 }}
+                            className="bg-white/4 border border-white/10 rounded-2xl p-6 md:p-8"
+                        >
+                            <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em] mb-6">What You're Getting</p>
+                            <p className="text-white font-black text-lg uppercase tracking-tight mb-5">Premium development, one clear price.</p>
+
+                            {/* Rate comparison */}
+                            <div className="grid grid-cols-2 gap-4 mb-6">
+                                <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+                                    <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest mb-2">Typical Private Coaching</p>
+                                    <p className="text-2xl font-black text-white/30 tracking-tight line-through">$90–$120<span className="text-base">/hr</span></p>
+                                    <p className="text-[10px] text-white/20 mt-1">Per single coach</p>
+                                </div>
+                                <div className="bg-rr-pink/10 border border-rr-pink/30 rounded-xl p-4 text-center">
+                                    <p className="text-[10px] font-bold text-rr-pink/70 uppercase tracking-widest mb-2">Elite Program Rate</p>
+                                    <p className="text-2xl font-black text-rr-pink tracking-tight">~$55<span className="text-base">/hr</span></p>
+                                    <p className="text-[10px] text-rr-pink/50 mt-1">Full coaching network</p>
                                 </div>
                             </div>
 
+                            <p className="text-sm text-white/50 leading-relaxed">
+                                Includes access to our international coaching network, premium facilities, data monitoring, mental performance training, and S&C programming. Built around developing the skills that matter — helping cricketers of all ages win the key moments that define modern cricket.
+                            </p>
+                        </motion.div>
+
+                    </div>
+
+                    {/* Right column — price + payment + CTA */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.15 }}
+                        className="flex flex-col gap-6"
+                    >
+
+                        {/* Price card */}
+                        <div className="bg-white/4 border border-white/10 rounded-2xl p-8 relative overflow-hidden">
+                            <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-rr-pink to-rr-blue" />
+                            <div className="absolute bottom-4 right-4 opacity-[0.06] pointer-events-none">
+                                <img src="/assets/rr-logo-blue.png" alt="" className="h-20 object-contain" />
+                            </div>
+                            <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em] mb-4">Total Investment</p>
+                            <p className="text-7xl font-black text-white tracking-tighter leading-none mb-1">$2995</p>
+                            <p className="text-white/30 text-xs font-medium uppercase tracking-widest">AUD · Season 1 · 2026</p>
                         </div>
 
-                        <div className="mt-8 flex flex-wrap items-end gap-4 mb-6">
-                            <p className="text-5xl md:text-6xl font-black text-rr-pink tracking-tighter leading-none">$2995</p>
-                            <p className="pb-1 text-slate-400 text-sm font-medium uppercase tracking-wider">Total Investment</p>
-                        </div>
-
-                        {/* Payment Options */}
-                        <div className="border-t border-white/10 pt-6">
-                            <p className="text-xs font-bold text-white/40 uppercase tracking-[0.2em] mb-4">Payment Options</p>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center hover:border-rr-pink/30 transition-colors duration-300">
-                                    <p className="text-white font-black text-sm uppercase tracking-wide mb-1">Pay in Full</p>
-                                    <p className="text-white/40 text-xs leading-relaxed">If you pay in full before the closing date of the program, receive an additional training shirt and training pants free of charge.</p>
-                                </div>
-                                <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center hover:border-rr-pink/30 transition-colors duration-300">
-                                    <p className="text-white font-black text-sm uppercase tracking-wide mb-1">Afterpay</p>
-                                    <p className="text-white/40 text-xs leading-relaxed">Don't want to pay for your car upfront? No worries, we have provided AfterPay as one option to ensure you can invest in the Elite Program.</p>
-                                </div>
-                                <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center hover:border-rr-pink/30 transition-colors duration-300">
-                                    <p className="text-white font-black text-sm uppercase tracking-wide mb-1">Deposit+</p>
-                                    <p className="text-white/40 text-xs leading-relaxed">Pay a 50% deposit and secure your place in the Elite Program, and pay the remaining 50% prior to the first scheduled program session.</p>
-                                </div>
+                        {/* Payment options */}
+                        <div className="bg-white/4 border border-white/10 rounded-2xl p-6">
+                            <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em] mb-5">Payment Options</p>
+                            <div className="space-y-0 divide-y divide-white/8">
+                                {paymentOptions.map((opt, i) => (
+                                    <div key={i} className="flex items-start gap-4 py-4 first:pt-0 last:pb-0">
+                                        <div className="shrink-0 w-16 mt-0.5">
+                                            <span className={`text-[10px] font-bold uppercase tracking-widest ${opt.tagColor}`}>{opt.tag}</span>
+                                        </div>
+                                        <div>
+                                            <p className="text-white font-black text-sm uppercase tracking-wide mb-1">{opt.title}</p>
+                                            <p className="text-white/40 text-xs leading-relaxed">{opt.desc}</p>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
 
                         {/* Deadline + CTA */}
-                        <div className="mt-8 pt-8 border-t border-white/10 flex flex-col items-center gap-4">
-                            <div className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2">
+                        <div className="flex flex-col items-center gap-4">
+                            <div className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 text-center">
                                 <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse shrink-0" />
-                                <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">
+                                <span className="text-[10px] sm:text-xs font-bold text-rr-pink uppercase tracking-widest">
                                     Entry closes 5pm · March 20 — or when full
                                 </span>
                             </div>
                             <a
                                 href="#checkout"
-                                className="group bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-10 py-5 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] text-sm flex items-center gap-3"
+                                className="group w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-8 py-5 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] text-sm flex items-center justify-center gap-3"
                             >
                                 Secure Your Place Now
                                 <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -100,10 +173,12 @@ const ValueStack = () => {
                                 </svg>
                             </a>
                         </div>
-                    </div>
-                </div>
 
+                    </motion.div>
+                </div>
             </div>
+
+            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-rr-blue to-transparent" />
         </section>
     );
 };
