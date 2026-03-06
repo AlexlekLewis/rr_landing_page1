@@ -147,7 +147,7 @@ const MasterCheckout = () => (
                 className="text-center text-white/40 text-xs font-medium mb-8"
             >
                 Afterpay also available at checkout. Questions about payment?{' '}
-                <a href="mailto:academy@rajasthanroyals.com" className="text-rr-blue hover:text-white transition-colors underline underline-offset-2">Contact us.</a>
+                <a href="mailto:eliteprogram@rramelbourne.com" className="text-rr-blue hover:text-white transition-colors underline underline-offset-2">Contact us.</a>
             </motion.p>
 
             {/* Onboarding confirmation */}
