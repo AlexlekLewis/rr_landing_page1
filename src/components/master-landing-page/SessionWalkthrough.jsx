@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 const preSessionSteps = [
@@ -106,6 +106,7 @@ const accentStyles = {
 };
 
 const SessionCard = ({ block, index }) => {
+    const [flipped, setFlipped] = useState(false);
     const styles = accentStyles[block.accent];
     return (
         <motion.div
@@ -113,21 +114,22 @@ const SessionCard = ({ block, index }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5, delay: index * 0.15 }}
-            className="group bg-white rounded-2xl p-6 md:p-8 relative border border-slate-200 hover:shadow-xl transition-all overflow-hidden"
+            onClick={() => setFlipped(f => !f)}
+            className="group bg-white rounded-2xl p-6 md:p-8 relative border border-slate-200 hover:shadow-xl transition-all overflow-hidden cursor-pointer"
         >
             {/* Dotted Background Pattern */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #0F172A 1.5px, transparent 1.5px)', backgroundSize: '16px 16px' }}></div>
 
             {/* Default State */}
-            <div className="relative z-10 transition-opacity duration-300 group-hover:opacity-0">
+            <div className={`relative z-10 transition-opacity duration-300 ${flipped ? 'opacity-0' : 'opacity-100'} group-hover:opacity-0`}>
                 <div className="flex items-center gap-3 mb-4">
                     <span className={`w-8 h-8 rounded-full ${styles.badge} flex items-center justify-center font-black text-sm flex-shrink-0`}>
                         {block.step}
                     </span>
-                    <div className="flex-1">
-                        <h4 className="text-rr-navy font-black text-lg uppercase tracking-wide leading-tight">{block.title}</h4>
+                    <div className="flex-1 min-w-0">
+                        <h4 className="text-rr-navy font-black text-base md:text-lg uppercase tracking-wide leading-tight">{block.title}</h4>
                     </div>
-                    <span className={`px-3 py-1 rounded-full ${styles.pill} text-xs font-bold uppercase tracking-wider flex-shrink-0`}>
+                    <span className={`px-2 py-1 rounded-full ${styles.pill} text-xs font-bold uppercase tracking-wider flex-shrink-0 hidden sm:block`}>
                         {block.duration}
                     </span>
                 </div>
@@ -139,7 +141,7 @@ const SessionCard = ({ block, index }) => {
                 <ul className="text-sm text-slate-500 space-y-2">
                     {block.bullets.map((bullet, i) => (
                         <li key={i} className="flex gap-2 items-start">
-                            <span className="text-rr-blue font-bold">✓</span>
+                            <span className="text-rr-blue font-bold shrink-0">✓</span>
                             {bullet}
                         </li>
                     ))}
@@ -148,12 +150,14 @@ const SessionCard = ({ block, index }) => {
                 <p className="text-xs text-rr-blue/60 font-semibold uppercase tracking-wider mt-4">Click to learn why</p>
             </div>
 
-            {/* WHY Hover State */}
-            <div className="absolute inset-0 bg-rr-dark/95 backdrop-blur-sm p-6 md:p-8 flex flex-col justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out transform translate-y-4 group-hover:translate-y-0 z-20">
+            {/* WHY Reveal State — click on mobile, hover on desktop */}
+            <div className={`absolute inset-0 bg-rr-dark/95 backdrop-blur-sm p-6 md:p-8 flex flex-col justify-center transition-all duration-500 ease-in-out z-20
+                ${flipped ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
+                group-hover:opacity-100 group-hover:translate-y-0`}>
                 <span className={`inline-block px-3 py-1 rounded-full ${styles.hoverPill} text-xs font-bold uppercase tracking-wider mb-3 self-start`}>
                     Why This Matters
                 </span>
-                <h4 className="text-white font-black text-lg uppercase tracking-wide mb-3">{block.title}</h4>
+                <h4 className="text-white font-black text-base md:text-lg uppercase tracking-wide mb-3">{block.title}</h4>
                 <p className="text-white/85 text-sm leading-relaxed">
                     {block.why}
                 </p>

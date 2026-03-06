@@ -31,10 +31,10 @@ const MasterCheckout = () => (
                     Secure your spot in the Season 1 Elite intake. Select your preferred payment option below to proceed.
                 </p>
                 {/* Deadline banner */}
-                <div className="inline-flex items-center gap-2 bg-rr-pink/15 border border-rr-pink/40 rounded-full px-5 py-2.5 mt-5">
+                <div className="inline-flex items-center gap-2 bg-rr-pink/15 border border-rr-pink/40 rounded-full px-4 py-2.5 mt-5">
                     <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse shrink-0" />
-                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">
-                        Entry closes 5pm · March 20, 2026 — unless program reaches capacity prior
+                    <span className="text-[10px] sm:text-xs font-bold text-rr-pink uppercase tracking-wide sm:tracking-widest">
+                        Entry closes 5pm · March 20, 2026 — or when full
                     </span>
                 </div>
             </motion.div>

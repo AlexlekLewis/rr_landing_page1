@@ -134,7 +134,7 @@ const MasterFAQ = () => {
                                                 onClick={() => toggleFaq(catIndex, itemIndex)}
                                                 aria-expanded={isOpen}
                                             >
-                                                <span className={`font-bold md:text-lg pr-8 transition-colors ${isOpen ? 'text-rr-pink' : 'text-rr-dark'}`}>
+                                                <span className={`font-bold text-base md:text-lg pr-4 transition-colors ${isOpen ? 'text-rr-pink' : 'text-rr-dark'}`}>
                                                     {faq.question}
                                                 </span>
                                                 <span className={`shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>

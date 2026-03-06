@@ -71,7 +71,7 @@ const TheDreamAndPathway = () => {
                         </p>
 
                         {/* Kumar credential card */}
-                        <div className="mt-8 flex items-center gap-4 bg-white/5 border border-white/10 rounded-xl px-5 py-4 w-fit">
+                        <div className="mt-8 flex items-center gap-4 bg-white/5 border border-white/10 rounded-xl px-4 py-4 w-full sm:w-fit">
                             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rr-pink to-rr-blue flex items-center justify-center shrink-0">
                                 <span className="text-white font-black text-sm">KS</span>
                             </div>
@@ -153,7 +153,7 @@ const TheDreamAndPathway = () => {
                     <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse shrink-0" />
                     <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Entry closes 5pm · March 20 — or when full</span>
                 </div>
-                <a href="#checkout" className="group bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-10 py-5 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] text-sm flex items-center gap-3">
+                <a href="#checkout" className="group bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-8 py-5 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] text-sm flex items-center gap-3 text-center justify-center w-full sm:w-auto">
                     Secure Your Place Now
                     <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                 </a>

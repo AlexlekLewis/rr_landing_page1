@@ -36,11 +36,11 @@ const FacilityAndTestimonials = () => {
                         <motion.div variants={fadeIn} className="w-16 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full mt-4" />
                     </div>
 
-                    <motion.div variants={fadeIn} className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl border border-slate-200 p-8 md:p-12 relative">
-                        <Quote className="absolute top-8 left-8 w-12 h-12 text-rr-pink/20" />
+                    <motion.div variants={fadeIn} className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl border border-slate-200 p-6 md:p-12 relative">
+                        <Quote className="absolute top-6 left-6 w-8 h-8 md:w-12 md:h-12 text-rr-pink/20" />
 
-                        <div className="relative z-10 pl-6 md:pl-12">
-                            <p className="text-xl md:text-2xl text-slate-700 font-medium italic leading-relaxed mb-8">
+                        <div className="relative z-10 pl-4 md:pl-12">
+                            <p className="text-base md:text-2xl text-slate-700 font-medium italic leading-relaxed mb-6 md:mb-8">
                                 "The professionalism and attention to detail in the Elite Program are unmatched. It isn't just a coaching clinic; it feels like a genuine high-performance setup where players are held to international standards from day one. The technical adjustments made in just a few weeks have entirely changed how my son approaches his game."
                             </p>
 
@@ -63,7 +63,7 @@ const FacilityAndTestimonials = () => {
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse shrink-0" />
                         <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Entry closes 5pm · March 20 — or when full</span>
                     </div>
-                    <a href="#checkout" className="group bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-10 py-5 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] text-sm flex items-center gap-3">
+                    <a href="#checkout" className="group bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-8 py-5 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] text-sm flex items-center gap-3 justify-center w-full sm:w-auto">
                         Secure Your Place Now
                         <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                     </a>
