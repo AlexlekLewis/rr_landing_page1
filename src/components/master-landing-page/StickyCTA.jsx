@@ -29,7 +29,7 @@ const StickyCTA = () => {
                 onClick={scrollToForm}
                 className="w-full max-w-sm bg-rr-pink text-white font-bold uppercase tracking-widest px-6 py-4 rounded-full shadow-lg active:scale-95 transition-transform"
             >
-                Secure Your Spot
+                Secure Your Place
             </button>
         </div>
     );
