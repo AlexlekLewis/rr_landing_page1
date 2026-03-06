@@ -23,6 +23,9 @@ const ProgramAtAGlance = () => {
                         Elite Program at a Glance
                     </h2>
                     <div className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full" />
+                    <p className="text-base md:text-lg text-slate-600 font-medium max-w-3xl mx-auto leading-relaxed pt-2">
+                        If you are tired of seeing other players dominate the most exciting form of the game, and you keep thinking <span className="text-rr-dark font-bold">'I can do that'</span>, then here is your chance to shine. Don't just drift into another pre-season, learn to dominate.
+                    </p>
                 </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
