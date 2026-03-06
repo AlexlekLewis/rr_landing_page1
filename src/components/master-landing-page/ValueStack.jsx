@@ -63,7 +63,7 @@ const ValueStack = () => {
                                 </div>
                                 <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center hover:border-rr-pink/30 transition-colors duration-300">
                                     <p className="text-white font-black text-sm uppercase tracking-wide mb-1">Deposit+</p>
-                                    <p className="text-white/40 text-xs leading-relaxed">Pay a 50% deposit and secure your place in the Elite Program, and pay again to complete your payment prior to the first session.</p>
+                                    <p className="text-white/40 text-xs leading-relaxed">Pay a 50% deposit and secure your place in the Elite Program, and pay the remaining 50% prior to the first scheduled program session.</p>
                                 </div>
                             </div>
                         </div>
