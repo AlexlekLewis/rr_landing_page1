@@ -9,16 +9,16 @@ const tiers = [
         label: 'Program Leadership',
         coaches: [
             {
-                name: "Andy Crook",
-                role: "Director of Cricket, Rajasthan Royals Academy Melbourne",
-                bio: "Andy runs the operations behind the program. His deep experience in cricket administration and coaching means every session is planned, every drill has a purpose, and every player gets the standard the Rajasthan Royals expect.",
-                tag: "Operations & Leadership",
-            },
-            {
                 name: "Siddhartha Lahiri",
                 role: "Rajasthan Royals Group Head of Int'l Player Development and Assistant Coach to Paarl, Rajasthan and Barbados Royals",
                 bio: "Siddhartha runs the Rajasthan Royals' global talent network. He oversees player scouting and development across every Royals Academy in the world — meaning Melbourne's best young players have a direct line to one of the IPL's biggest franchises.",
                 tag: "Global Development",
+            },
+            {
+                name: "Andy Crook",
+                role: "Director of Cricket, Rajasthan Royals Academy Melbourne",
+                bio: "Andy runs the operations behind the program. His deep experience in cricket administration and coaching means every session is planned, every drill has a purpose, and every player gets the standard the Rajasthan Royals expect.",
+                tag: "Operations & Leadership",
             },
             {
                 name: "Alex Lewis",
@@ -50,6 +50,12 @@ const tiers = [
                 bio: "Australian U19 representative and Premier Cricket competitor. A modern spinner who turns the ball both ways with real accuracy — teaching the variations and tactics that win matches.",
                 tag: "Spin Bowling",
             },
+        ],
+    },
+    {
+        id: 'program',
+        label: 'Program Team',
+        coaches: [
             {
                 name: "Adelaide Campion",
                 role: "Program Coach",
@@ -62,12 +68,6 @@ const tiers = [
                 bio: "27 years of coaching excellence spanning two continents. Completed Level 2 Coaching at Lord's Cricket Ground and coached across Middlesex and the UK. Now driving female pathways development at Fitzroy Doncaster.",
                 tag: "Wicketkeeping",
             },
-        ],
-    },
-    {
-        id: 'program',
-        label: 'Program Team',
-        coaches: [
             {
                 name: "Joel Ried",
                 role: "Program Coach",
