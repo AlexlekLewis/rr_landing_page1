@@ -67,7 +67,7 @@ const TheDreamAndPathway = () => {
                         </h2>
                         <div className="w-12 h-px bg-gradient-to-r from-rr-pink to-rr-blue mb-6" />
                         <p className="text-white/60 font-medium text-base md:text-lg leading-relaxed">
-                            Hear from Kumar Sangakkara, Director of Cricket at the Rajasthan Royals, on the vision behind the Academy and what it means for aspirational cricketers in Melbourne.
+                            The Royals are in Melbourne! The Royals know how to uncover T20 talent like nobody else. Find your T20 skill set and apply it to the shortest format, and longer form of the game.
                         </p>
 
                     </motion.div>
