@@ -52,7 +52,7 @@ const MasterHero = () => {
                             Modern cricket demands more than tradition. We develop explosive skills, sharp thinking and elite habits.
                         </p>
                         <p className="text-base md:text-lg text-white/90 mb-8 font-medium leading-relaxed max-w-2xl drop-shadow-md">
-                            Designed and guided by one of the biggest cricket brands on the planet, the Elite Program draws on decades of global T20 experience. At Rajasthan Royals Academy, Melbourne, we deliver a one of a kind high performance training focused on developing complete cricketers.
+                            Designed and guided by one of the biggest cricket brands on the planet, the Elite Program draws on decades of global T20 experience. At Rajasthan Royals Academy, Melbourne, the T20 Elite Program delivers a one of a kind performance training environment designed to develop a modern day skill set.
                         </p>
                     </motion.div>
 
