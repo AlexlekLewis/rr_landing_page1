@@ -19,38 +19,43 @@ const ValueStack = () => {
                             <img src="/assets/rr-logo-blue.png" alt="" className="h-8 object-contain" />
                         </div>
 
-                        <ul className="space-y-4 mb-8">
-                            <li className="flex justify-between items-end border-b border-white/10 pb-2">
-                                <span className="text-white font-medium">12 Weeks Elite T20 Coaching</span>
-                                <span className="text-slate-400 text-sm">Included</span>
-                            </li>
-                            <li className="flex justify-between items-end border-b border-white/10 pb-2">
-                                <span className="text-white font-medium">Full DNA Performance Profile</span>
-                                <span className="text-slate-400 text-sm">Included</span>
-                            </li>
-                            <li className="flex justify-between items-end border-b border-white/10 pb-2">
-                                <span className="text-white font-medium">Individual Development Plan</span>
-                                <span className="text-slate-400 text-sm">Included</span>
-                            </li>
-                            <li className="flex justify-between items-end border-b border-white/10 pb-2">
-                                <span className="text-white font-medium">Official Royals Training Kit</span>
-                                <span className="text-slate-400 text-sm">Included</span>
-                            </li>
-                            <li className="flex justify-between items-end pb-2">
-                                <span className="text-white font-medium">Post-Program Report</span>
-                                <span className="text-slate-400 text-sm">Included</span>
-                            </li>
-                        </ul>
+                        <div className="flex flex-col md:flex-row gap-6 mb-8">
 
-                        {/* Value comparison block */}
-                        <div className="bg-white/5 border border-white/10 rounded-xl p-5 mb-8">
-                            <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.2em] mb-4">What You're Getting</p>
-                            <p className="text-white font-black text-sm uppercase tracking-wide mb-3">Premium development, one clear price.</p>
-                            <div className="space-y-3 text-sm text-white/60 leading-relaxed">
-                                <p>Private specialist cricket coaching in Melbourne typically runs between <span className="text-white font-bold">$90 to $120+ per hour</span> for a single coach.</p>
-                                <p>Our Elite Program breaks down to approximately <span className="text-rr-pink font-bold">$55 per hour</span> — including access to our international coaching network, premium facilities, data monitoring, mental performance training, and S&C programming.</p>
-                                <p>Our ecosystem is built around developing the skills that matter — helping cricketers of all ages become more proficient in winning the key moments that define modern cricket.</p>
+                            {/* What's included */}
+                            <ul className="space-y-4 flex-1">
+                                <li className="flex justify-between items-end border-b border-white/10 pb-2">
+                                    <span className="text-white font-medium">12 Weeks Elite T20 Coaching</span>
+                                    <span className="text-slate-400 text-sm shrink-0 ml-4">Included</span>
+                                </li>
+                                <li className="flex justify-between items-end border-b border-white/10 pb-2">
+                                    <span className="text-white font-medium">Full DNA Performance Profile</span>
+                                    <span className="text-slate-400 text-sm shrink-0 ml-4">Included</span>
+                                </li>
+                                <li className="flex justify-between items-end border-b border-white/10 pb-2">
+                                    <span className="text-white font-medium">Individual Development Plan</span>
+                                    <span className="text-slate-400 text-sm shrink-0 ml-4">Included</span>
+                                </li>
+                                <li className="flex justify-between items-end border-b border-white/10 pb-2">
+                                    <span className="text-white font-medium">Official Royals Training Kit</span>
+                                    <span className="text-slate-400 text-sm shrink-0 ml-4">Included</span>
+                                </li>
+                                <li className="flex justify-between items-end pb-2">
+                                    <span className="text-white font-medium">Post-Program Report</span>
+                                    <span className="text-slate-400 text-sm shrink-0 ml-4">Included</span>
+                                </li>
+                            </ul>
+
+                            {/* Value comparison */}
+                            <div className="bg-white/5 border border-white/10 rounded-xl p-5 flex-1">
+                                <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.2em] mb-4">What You're Getting</p>
+                                <p className="text-white font-black text-sm uppercase tracking-wide mb-3">Premium development, one clear price.</p>
+                                <div className="space-y-3 text-sm text-white/60 leading-relaxed">
+                                    <p>Private specialist cricket coaching in Melbourne typically runs between <span className="text-white font-bold">$90 to $120+ per hour</span> for a single coach.</p>
+                                    <p>Our Elite Program breaks down to approximately <span className="text-rr-pink font-bold">$55 per hour</span> — including access to our international coaching network, premium facilities, data monitoring, mental performance training, and S&C programming.</p>
+                                    <p>Our ecosystem is built around developing the skills that matter — helping cricketers of all ages become more proficient in winning the key moments that define modern cricket.</p>
+                                </div>
                             </div>
+
                         </div>
 
                         <div className="mt-8 flex flex-wrap items-end gap-4 mb-6">
