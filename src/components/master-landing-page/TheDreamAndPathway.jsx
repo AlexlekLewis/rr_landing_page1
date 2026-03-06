@@ -27,29 +27,6 @@ const TheDreamAndPathway = () => {
 
             <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 md:py-28">
 
-                {/* Logo stamp — centred at top */}
-                <motion.div
-                    initial={{ opacity: 0, y: -12 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="flex justify-center mb-14"
-                >
-                    <div className="flex flex-col items-center gap-4">
-                        <img
-                            src="/assets/rr-logo-blue.png"
-                            alt="Rajasthan Royals"
-                            className="h-16 md:h-20 w-auto object-contain"
-                            onError={(e) => { e.target.src = '/assets/Logos/RR-Logo-2.png'; }}
-                        />
-                        <div className="flex items-center gap-3">
-                            <div className="h-px w-12 bg-gradient-to-r from-transparent to-rr-pink hidden sm:block" />
-                            <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.3em] text-center w-full sm:w-auto">Official Rajasthan Royals Academy</span>
-                            <div className="h-px w-12 bg-gradient-to-l from-transparent to-rr-blue hidden sm:block" />
-                        </div>
-                    </div>
-                </motion.div>
-
                 {/* Two-column: text left, video right */}
                 <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.6fr] gap-10 lg:gap-16 items-center">
 
