@@ -67,7 +67,7 @@ const BeyondTwelveWeeks = () => {
                     {/* Original Card 3 */}
                     <motion.div variants={fadeIn} className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 relative overflow-hidden group hover:border-rr-blue/30 transition-colors duration-500 flex flex-col items-center text-center">
                         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-blue to-rr-pink rounded-t-3xl" />
-                        <h3 className="text-xl font-bold text-rr-dark mb-3">Elite Squad Selection</h3>
+                        <h3 className="text-xl font-bold text-rr-dark mb-3">Elite Squad Match Selection</h3>
                         <p className="text-slate-600 leading-relaxed font-medium">
                             Elite Program graduates form the pool we select from for our top squads — representing the Royals Academy in tournaments, showcase matches, and competitions.
                         </p>
