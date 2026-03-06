@@ -113,7 +113,8 @@ const ProgramJourney = () => {
                 </motion.div>
 
                 {/* Desktop: Two-column timeline layout */}
-                <div className="hidden md:grid md:grid-cols-[280px_1fr] gap-0 items-start">
+                <div className="hidden md:flex md:justify-center">
+                <div className="grid md:grid-cols-[280px_1fr] gap-0 items-start w-full max-w-4xl">
 
                     {/* Left: Timeline nav */}
                     <div className="relative pr-8">
@@ -144,7 +145,7 @@ const ProgramJourney = () => {
                                     </div>
 
                                     <div className="flex-1 text-right">
-                                        <p className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${active === phase.index ? 'text-rr-pink' : 'text-white/30'}`}>
+                                        <p className="text-[10px] font-bold text-rr-pink uppercase tracking-widest">
                                             {phase.week}
                                         </p>
                                         <p className={`text-sm font-black uppercase tracking-wide transition-colors ${active === phase.index ? 'text-white' : 'text-white/50 group-hover:text-white/70'}`}>
@@ -175,7 +176,7 @@ const ProgramJourney = () => {
                                     <span className={`text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full bg-gradient-to-r ${current.accent} text-white`}>
                                         {current.phase}
                                     </span>
-                                    <span className="text-xs font-bold text-white/30 uppercase tracking-widest">{current.week}</span>
+                                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">{current.week}</span>
                                 </div>
 
                                 <h3 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight mb-3 leading-none">
@@ -216,6 +217,7 @@ const ProgramJourney = () => {
                         </AnimatePresence>
                     </div>
                 </div>
+                </div>
 
                 {/* Mobile: Vertical stacked cards */}
                 <div className="md:hidden space-y-3">
@@ -238,7 +240,6 @@ const ProgramJourney = () => {
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <p className="text-[10px] font-bold text-rr-pink uppercase tracking-widest">{phase.week}</p>
-                                    <p className="text-sm font-black text-white uppercase tracking-wide truncate">{phase.title}</p>
                                 </div>
                                 <span className={`text-white/30 text-lg transition-transform duration-300 ${active === phase.index ? 'rotate-45' : ''}`}>+</span>
                             </button>
