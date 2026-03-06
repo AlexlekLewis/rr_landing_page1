@@ -12,6 +12,7 @@ import StickyCTA from './StickyCTA';
 
 import TheRoyalsWay from '../landing-page-2/TheRoyalsWay';
 import ProgramAtAGlance from '../landing-page-2/ProgramAtAGlance';
+import UncoveringTalent from './UncoveringTalent';
 import SpecialistCoaching from '../landing-page-2/SpecialistCoaching';
 import BeyondTwelveWeeks from '../landing-page-2/BeyondTwelveWeeks';
 import RrampDnaProfile from '../landing-page-2/RrampDnaProfile';
@@ -50,6 +51,7 @@ const MasterLandingPage = () => {
 
                 {/* 4. The Methodology (The Science & The Setup) */}
                 <div id="program-at-a-glance"><ProgramAtAGlance /></div>
+                <UncoveringTalent />
 
                 {/* 5. 12-Week Program Journey */}
                 <div id="program"><ProgramJourney /></div>
