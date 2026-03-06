@@ -19,12 +19,7 @@ const FacilityAndTestimonials = () => {
     return (
         <section className="py-24 px-6 lg:px-8 bg-slate-50 relative z-10 border-t border-slate-200 overflow-hidden" id="facility-testimonials">
             {/* Subtle Pink Logo Watermark */}
-            <img
-                src="/assets/rr-logo-pink.png"
-                alt=""
-                className="absolute -right-16 bottom-20 w-auto h-[50%] object-contain opacity-[0.03] pointer-events-none z-0"
-                aria-hidden="true"
-            />
+
             <motion.div
                 initial="hidden"
                 whileInView="visible"

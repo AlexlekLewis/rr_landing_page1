@@ -193,8 +193,7 @@ const SpecialistCoaching = () => (
     <section className="py-24 px-6 lg:px-8 relative z-10 bg-rr-dark overflow-hidden">
 
         {/* Watermark */}
-        <img src="/assets/rr-lion-white.png" alt="" aria-hidden="true"
-            className="absolute -right-24 top-1/2 -translate-y-1/2 h-[80%] w-auto object-contain opacity-[0.03] pointer-events-none" />
+
 
         <div className="max-w-6xl mx-auto relative z-10">
 

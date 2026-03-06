@@ -23,9 +23,7 @@ const TheDreamAndPathway = () => {
                 <div className="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-rr-blue/5 rounded-full blur-[100px]" />
             </div>
 
-            {/* Lion watermark */}
-            <img src="/assets/rr-lion-white.png" alt="" aria-hidden="true"
-                className="absolute right-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain opacity-[0.03] pointer-events-none" />
+
 
             <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 md:py-28">
 
@@ -46,7 +44,7 @@ const TheDreamAndPathway = () => {
                         />
                         <div className="flex items-center gap-3">
                             <div className="h-px w-12 bg-gradient-to-r from-transparent to-rr-pink" />
-                            <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.3em]">Official Academy Partner</span>
+                            <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.3em]">Official Rajasthan Royals Academy</span>
                             <div className="h-px w-12 bg-gradient-to-l from-transparent to-rr-blue" />
                         </div>
                     </div>

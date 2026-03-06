@@ -33,13 +33,7 @@ const MasterHero = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-transparent to-transparent" />
                 </div>
 
-                {/* Subtle Lion Watermark */}
-                <img
-                    src="/assets/rr-lion-white.png"
-                    alt=""
-                    className="absolute inset-0 w-auto h-[120%] -top-[10%] -right-[10%] object-contain opacity-5 pointer-events-none"
-                    aria-hidden="true"
-                />
+
             </div>
 
             {/* Content Container */}

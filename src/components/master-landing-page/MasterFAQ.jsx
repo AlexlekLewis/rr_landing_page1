@@ -108,14 +108,6 @@ const MasterFAQ = () => {
 
     return (
         <section className="py-24 bg-slate-50 relative overflow-hidden">
-            {/* Subtle Pink Logo Watermark */}
-            <img
-                src="/assets/rr-logo-pink.png"
-                alt=""
-                className="absolute -left-12 top-1/2 -translate-y-1/2 w-auto h-[60%] object-contain opacity-[0.03] pointer-events-none z-0"
-                aria-hidden="true"
-            />
-
             <div className="max-w-4xl mx-auto px-6 relative z-10">
                 <div className="text-center mb-16">
                     <h2 className="text-4xl font-black text-rr-dark uppercase tracking-wide mb-6">COMMON QUESTIONS</h2>

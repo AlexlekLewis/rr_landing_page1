@@ -88,10 +88,7 @@ const ProgramJourney = () => {
             {/* Top accent bar */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-pink via-rr-blue to-rr-pink" />
 
-            {/* Lion watermark */}
-            <div className="absolute -right-32 top-1/2 -translate-y-1/2 opacity-[0.04] pointer-events-none">
-                <img src="/assets/rr-lion-white.png" alt="" className="w-[500px]" />
-            </div>
+
 
             <div className="max-w-6xl mx-auto px-6 relative z-10">
 
