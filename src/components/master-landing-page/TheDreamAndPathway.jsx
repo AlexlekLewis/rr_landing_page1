@@ -70,16 +70,6 @@ const TheDreamAndPathway = () => {
                             Hear from Kumar Sangakkara, Director of Cricket at the Rajasthan Royals, on the vision behind the Academy and what it means for aspirational cricketers in Melbourne.
                         </p>
 
-                        {/* Kumar credential card */}
-                        <div className="mt-8 flex items-center gap-4 bg-white/5 border border-white/10 rounded-xl px-4 py-4 w-full sm:w-fit">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rr-pink to-rr-blue flex items-center justify-center shrink-0">
-                                <span className="text-white font-black text-sm">KS</span>
-                            </div>
-                            <div>
-                                <p className="text-white font-bold text-sm leading-tight">Kumar Sangakkara</p>
-                                <p className="text-white/40 text-xs font-medium mt-0.5">Director of Cricket · Rajasthan Royals</p>
-                            </div>
-                        </div>
                     </motion.div>
 
                     {/* Right: Video */}
