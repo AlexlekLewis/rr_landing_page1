@@ -55,15 +55,15 @@ const ValueStack = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                 <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center hover:border-rr-pink/30 transition-colors duration-300">
                                     <p className="text-white font-black text-sm uppercase tracking-wide mb-1">Pay in Full</p>
-                                    <p className="text-white/40 text-xs leading-relaxed">Single upfront payment. Includes a complimentary training shirt and pants.</p>
+                                    <p className="text-white/40 text-xs leading-relaxed">If you pay in full before the closing date of the program, receive an additional training shirt and training pants free of charge.</p>
                                 </div>
                                 <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center hover:border-rr-pink/30 transition-colors duration-300">
                                     <p className="text-white font-black text-sm uppercase tracking-wide mb-1">Afterpay</p>
-                                    <p className="text-white/40 text-xs leading-relaxed">Split into four fortnightly instalments. No interest, no fees.</p>
+                                    <p className="text-white/40 text-xs leading-relaxed">Don't want to pay for your car upfront? No worries, we have provided AfterPay as one option to ensure you can invest in the Elite Program.</p>
                                 </div>
                                 <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center hover:border-rr-pink/30 transition-colors duration-300">
-                                    <p className="text-white font-black text-sm uppercase tracking-wide mb-1">Staged Plan</p>
-                                    <p className="text-white/40 text-xs leading-relaxed">Internal payment plan to spread the cost. Available upon application.</p>
+                                    <p className="text-white font-black text-sm uppercase tracking-wide mb-1">Deposit+</p>
+                                    <p className="text-white/40 text-xs leading-relaxed">Pay a 50% deposit and secure your place in the Elite Program, and pay again to complete your payment prior to the first session.</p>
                                 </div>
                             </div>
                         </div>
