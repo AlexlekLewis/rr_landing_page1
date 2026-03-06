@@ -299,7 +299,7 @@ const SpecialistCoaching = () => (
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">Coaching</span>
                 </h2>
                 <p className="text-lg text-white/50 font-medium leading-relaxed max-w-2xl mx-auto">
-                    Every coach is a professional with elite credentials — people who have played, coached, or competed at the highest levels. New coaches announced shortly.
+                    Our coaches are professionals with elite credentials — people who have played, coached, or competed at the highest levels. New coaches announced shortly.
                 </p>
             </motion.div>
 
