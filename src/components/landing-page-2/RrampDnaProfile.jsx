@@ -47,7 +47,10 @@ const RrampDnaProfile = () => {
                     <div className="mt-4">
                         <motion.div variants={fadeIn} className="text-center">
                             <p className="text-base text-slate-700 leading-relaxed font-medium">
-                                Designed by some of the brightest minds in the modern game, we provide a detailed assessment that measures where your skills sit right now across 8 key areas of the game.
+                                Designed by some of the brightest minds in the modern game, our world first Player DNA Profile is your roadmap to elite performance. It is a comprehensive, evidence-based assessment tool used to benchmark your current capabilities across the critical dimensions of cricket.
+                            </p>
+                            <p className="text-base text-slate-600 leading-relaxed font-medium mt-3">
+                                Throughout the 12 weeks, we track your progression across these 8 core pillars to build a professional-grade blueprint of your T20 skillset.
                             </p>
                         </motion.div>
                     </div>
