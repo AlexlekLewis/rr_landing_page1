@@ -160,7 +160,7 @@ const ValueStack = () => {
                             <div className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 text-center">
                                 <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse shrink-0" />
                                 <span className="text-[10px] sm:text-xs font-bold text-rr-pink uppercase tracking-widest">
-                                    Entry closes 5pm · March 20 — or when full
+                                    Entries close March 20 — or when full
                                 </span>
                             </div>
                             <a
