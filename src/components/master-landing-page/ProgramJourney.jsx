@@ -1,167 +1,275 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
 
 const phases = [
     {
-        label: 'Week 0',
-        labelColor: 'text-rr-pink',
+        index: 0,
+        week: 'Week 0',
+        phase: 'Pre-Program',
         title: 'Onboarding',
-        body: (
-            <>
-                <p className="text-slate-600 leading-relaxed mb-4 text-sm md:text-base">
-                    The setup week where players and parents meet the coaching staff, learn how the program works, and understand exactly what to expect over the next 12 weeks.
-                </p>
-                <ul className="text-sm text-slate-500 space-y-2">
-                    <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Meet your squad coach and set personal goals</li>
-                    <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Collect your official Royals training kit</li>
-                </ul>
-            </>
-        ),
+        tag: 'Foundation',
+        accent: 'from-rr-pink to-rr-pink/60',
+        summary: 'Meet the squad, set your goals, collect your kit.',
+        description: 'The setup week where players and parents meet the coaching staff, learn how the program works, and understand exactly what to expect over the next 12 weeks.',
+        bullets: [
+            'Meet your squad coach and set personal goals',
+            'Collect your official Royals training kit',
+            'Program induction and expectations briefing',
+        ],
     },
     {
-        label: 'Week 1',
-        labelColor: 'text-rr-pink',
-        title: 'Assessment',
-        body: (
-            <>
-                <p className="text-slate-600 leading-relaxed mb-4 text-sm md:text-base">
-                    We test every player across batting, bowling, fielding, fitness, and movement to build a clear picture of where they are now. This becomes their Player DNA Profile — the starting point for their personalised development plan.
-                </p>
-                <ul className="text-sm text-slate-500 space-y-2">
-                    <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Full video analysis of batting and bowling technique</li>
-                    <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Fitness, speed, and agility testing</li>
-                    <li className="flex gap-2 items-start"><span className="text-rr-blue font-bold">✓</span> Results feed directly into your Individual Development Plan</li>
-                </ul>
-            </>
-        ),
+        index: 1,
+        week: 'Week 1',
+        phase: 'Assessment',
+        title: 'Player DNA Profile',
+        tag: 'Baseline',
+        accent: 'from-rr-pink/80 to-rr-blue/60',
+        summary: 'Full technical, physical and tactical baseline.',
+        description: 'We test every player across batting, bowling, fielding, fitness, and movement to build a clear picture of where they are now. This becomes the starting point for their personalised development plan.',
+        bullets: [
+            'Full video analysis of batting and bowling technique',
+            'Fitness, speed, and agility testing',
+            'Results feed directly into your Individual Development Plan',
+        ],
     },
     {
-        label: 'Phase 1',
-        labelColor: 'text-rr-blue',
-        title: 'Explore (Wks 2–4)',
-        body: (
-            <p className="text-slate-600 leading-relaxed text-sm md:text-base">
-                Breaking down existing habits and introducing new T20 techniques. Players are encouraged to try new things, experiment with different approaches, and step outside their comfort zone without worrying about getting it wrong.
-            </p>
-        ),
+        index: 2,
+        week: 'Weeks 2–4',
+        phase: 'Phase 1',
+        title: 'Explore',
+        tag: 'Deconstruct',
+        accent: 'from-rr-blue/80 to-rr-blue/50',
+        summary: 'Break old habits. Build new ones.',
+        description: 'Breaking down existing habits and introducing new T20 techniques. Players are encouraged to try new things, experiment with different approaches, and step outside their comfort zone without worrying about getting it wrong.',
+        bullets: [
+            'Technique deconstruction and rebuild',
+            'Exposure to modern T20 shot-making',
+            'Low-pressure environment to experiment freely',
+        ],
     },
     {
-        label: 'Phase 2',
-        labelColor: 'text-rr-blue',
-        title: 'Challenge (Wks 5–8)',
-        body: (
-            <p className="text-slate-600 leading-relaxed text-sm md:text-base">
-                Now we turn up the heat. Players apply their new skills under real pressure — tougher net sessions, game-like situations, and scenarios designed to test whether they can make the right decisions when it matters.
-            </p>
-        ),
+        index: 3,
+        week: 'Weeks 5–8',
+        phase: 'Phase 2',
+        title: 'Challenge',
+        tag: 'Pressure',
+        accent: 'from-rr-blue to-rr-pink/70',
+        summary: 'Apply new skills under real match pressure.',
+        description: 'Now we turn up the heat. Players apply their new skills under real pressure — tougher net sessions, game-like situations, and scenarios designed to test whether they can make the right decisions when it matters.',
+        bullets: [
+            'High-intensity game-simulation sessions',
+            'Decision-making under fatigue and pressure',
+            'Competitive internal squad scenarios',
+        ],
     },
     {
-        label: 'Phase 3',
-        labelColor: 'text-rr-blue',
-        title: 'Execute (Wks 9–12)',
-        body: (
-            <p className="text-slate-600 leading-relaxed text-sm md:text-base">
-                Everything comes together. Players are expected to deliver their improved skills consistently in competitive, match-like conditions. The program finishes with a final assessment and a detailed report on where to go next.
-            </p>
-        ),
+        index: 4,
+        week: 'Weeks 9–12',
+        phase: 'Phase 3',
+        title: 'Execute',
+        tag: 'Deliver',
+        accent: 'from-rr-pink/70 to-rr-blue',
+        summary: 'Perform consistently. Get your final report.',
+        description: 'Everything comes together. Players are expected to deliver their improved skills consistently in competitive, match-like conditions. The program finishes with a final assessment and a detailed report on where to go next.',
+        bullets: [
+            'Match-standard performance evaluation',
+            'Final Player DNA re-assessment',
+            'Detailed post-program pathway report',
+        ],
     },
 ];
 
-const PhaseCard = ({ phase }) => {
-    const [open, setOpen] = useState(false);
-
-    return (
-        <div className="bg-white rounded-2xl relative border border-slate-200 hover:shadow-xl transition-all overflow-hidden">
-            <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #0F172A 1.5px, transparent 1.5px)', backgroundSize: '16px 16px' }}></div>
-            <button
-                className="relative z-10 w-full flex items-center justify-between p-6 md:p-8 text-left"
-                onClick={() => setOpen(!open)}
-                aria-expanded={open}
-            >
-                <div>
-                    <span className={`${phase.labelColor} font-black text-xl block mb-0.5`}>{phase.label}</span>
-                    <span className="text-rr-navy font-bold uppercase tracking-wider text-sm">{phase.title}</span>
-                </div>
-                <ChevronDown
-                    className={`w-5 h-5 text-slate-400 flex-shrink-0 ml-4 transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
-                />
-            </button>
-            <AnimatePresence initial={false}>
-                {open && (
-                    <motion.div
-                        key="content"
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: 'easeInOut' }}
-                        className="overflow-hidden"
-                    >
-                        <div className="relative z-10 px-6 pb-6 md:px-8 md:pb-8">
-                            {phase.body}
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </div>
-    );
-};
-
-const JourneyCard = ({ label, title, description, bullets, color = 'rr-pink' }) => {
-    return (
-        <div className="bg-white rounded-2xl p-6 md:p-8 relative group border border-slate-200 hover:shadow-xl transition-all overflow-hidden cursor-pointer">
-            {/* Dotted Background Pattern */}
-            <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #0F172A 1.5px, transparent 1.5px)', backgroundSize: '16px 16px' }}></div>
-
-            <div className="relative z-10">
-                <div className="mb-2 group-hover:mb-4 transition-all duration-300">
-                    <span className={`text-${color} font-black text-xl block mb-1`}>{label}</span>
-                    <span className="text-rr-navy font-bold uppercase tracking-wider text-sm">{title}</span>
-                </div>
-                {/* Expandable content - collapsed by default, expands on hover */}
-                <div className="max-h-0 group-hover:max-h-96 overflow-hidden transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                    <p className="text-slate-600 leading-relaxed mb-4 text-sm md:text-base">
-                        {description}
-                    </p>
-                    {bullets && (
-                        <ul className="text-sm text-slate-500 space-y-2">
-                            {bullets.map((bullet, i) => (
-                                <li key={i} className="flex gap-2 items-start">
-                                    <span className="text-rr-blue font-bold">✓</span> {bullet}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
-            </div>
-        </div>
-    );
-};
-
 const ProgramJourney = () => {
+    const [active, setActive] = useState(0);
+    const current = phases[active];
+
     return (
         <section className="py-24 bg-rr-dark text-white relative overflow-hidden">
-            {/* Background elements */}
-            <div className="absolute top-0 right-0 w-full h-1 bg-image-gradient-rr"></div>
-            <div className="absolute -left-40 top-40 opacity-5 pointer-events-none">
-                <img src="/assets/rr-lion-white.png" alt="" className="w-96" />
+            {/* Top accent bar */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-pink via-rr-blue to-rr-pink" />
+
+            {/* Lion watermark */}
+            <div className="absolute -right-32 top-1/2 -translate-y-1/2 opacity-[0.04] pointer-events-none">
+                <img src="/assets/rr-lion-white.png" alt="" className="w-[500px]" />
             </div>
 
             <div className="max-w-6xl mx-auto px-6 relative z-10">
-                <div className="text-center mb-16">
-                    <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-wide mb-6">
-                        12 WEEK <span className="text-rr-pink">PROGRAM PLAN OVERVIEW</span>
+
+                {/* Header */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="text-center mb-16"
+                >
+                    <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Structure & Progression</p>
+                    <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-wide mb-5">
+                        12 WEEK <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">PROGRAM PLAN OVERVIEW</span>
                     </h2>
-                    <p className="text-lg text-slate-300 max-w-2xl mx-auto">
+                    <p className="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed">
                         This isn't a drop-in clinic. It's a structured 12-week program built to give you the T20 skills, confidence, and coaching you need to push for representative selection and premier cricket.
                     </p>
+                </motion.div>
+
+                {/* Desktop: Two-column timeline layout */}
+                <div className="hidden md:grid md:grid-cols-[280px_1fr] gap-0 items-start">
+
+                    {/* Left: Timeline nav */}
+                    <div className="relative pr-8">
+                        {/* Spine line */}
+                        <div className="absolute right-8 top-4 bottom-4 w-px bg-white/10" />
+                        <div
+                            className="absolute right-8 top-4 w-px bg-gradient-to-b from-rr-pink to-rr-blue transition-all duration-500"
+                            style={{ height: `${((active + 0.5) / phases.length) * 100}%` }}
+                        />
+
+                        <div className="space-y-2">
+                            {phases.map((phase) => (
+                                <button
+                                    key={phase.index}
+                                    onClick={() => setActive(phase.index)}
+                                    className={`w-full text-left relative flex items-center gap-4 px-4 py-4 rounded-xl transition-all duration-300 group
+                                        ${active === phase.index ? 'bg-white/8' : 'hover:bg-white/4'}`}
+                                >
+                                    {/* Node */}
+                                    <div className={`relative z-10 w-8 h-8 rounded-full border-2 flex items-center justify-center shrink-0 transition-all duration-300 ml-auto order-last
+                                        ${active === phase.index
+                                            ? 'border-rr-pink bg-rr-pink shadow-[0_0_12px_rgba(229,6,149,0.5)]'
+                                            : 'border-white/20 bg-rr-dark group-hover:border-white/40'}`}
+                                    >
+                                        <span className={`text-[10px] font-black transition-colors ${active === phase.index ? 'text-white' : 'text-white/40'}`}>
+                                            {phase.index + 1}
+                                        </span>
+                                    </div>
+
+                                    <div className="flex-1 text-right">
+                                        <p className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${active === phase.index ? 'text-rr-pink' : 'text-white/30'}`}>
+                                            {phase.week}
+                                        </p>
+                                        <p className={`text-sm font-black uppercase tracking-wide transition-colors ${active === phase.index ? 'text-white' : 'text-white/50 group-hover:text-white/70'}`}>
+                                            {phase.title}
+                                        </p>
+                                        <p className={`text-[11px] font-medium transition-colors ${active === phase.index ? 'text-white/60' : 'text-white/20'}`}>
+                                            {phase.summary}
+                                        </p>
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Right: Detail panel */}
+                    <div className="pl-8 border-l border-white/10 min-h-[420px]">
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={active}
+                                initial={{ opacity: 0, x: 16 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -16 }}
+                                transition={{ duration: 0.3, ease: 'easeOut' }}
+                                className="h-full"
+                            >
+                                {/* Phase tag */}
+                                <div className="flex items-center gap-3 mb-6">
+                                    <span className={`text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full bg-gradient-to-r ${current.accent} text-white`}>
+                                        {current.phase}
+                                    </span>
+                                    <span className="text-xs font-bold text-white/30 uppercase tracking-widest">{current.week}</span>
+                                </div>
+
+                                <h3 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight mb-3 leading-none">
+                                    {current.title}
+                                </h3>
+                                <div className={`w-12 h-0.5 rounded-full bg-gradient-to-r ${current.accent} mb-6`} />
+
+                                <p className="text-white/70 leading-relaxed text-base mb-8 max-w-lg">
+                                    {current.description}
+                                </p>
+
+                                <ul className="space-y-3">
+                                    {current.bullets.map((b, i) => (
+                                        <motion.li
+                                            key={i}
+                                            initial={{ opacity: 0, x: 10 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ delay: 0.1 + i * 0.07, duration: 0.3 }}
+                                            className="flex items-start gap-3"
+                                        >
+                                            <span className="mt-1 w-1.5 h-1.5 rounded-full bg-rr-pink shrink-0" />
+                                            <span className="text-sm text-white/60 leading-relaxed">{b}</span>
+                                        </motion.li>
+                                    ))}
+                                </ul>
+
+                                {/* Progress indicator */}
+                                <div className="mt-10 flex items-center gap-2">
+                                    {phases.map((_, i) => (
+                                        <button
+                                            key={i}
+                                            onClick={() => setActive(i)}
+                                            className={`h-0.5 rounded-full transition-all duration-300 ${i === active ? 'w-8 bg-rr-pink' : 'w-3 bg-white/20 hover:bg-white/40'}`}
+                                        />
+                                    ))}
+                                </div>
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
                 </div>
 
-                <div className="space-y-4">
-                    {phases.map((phase, i) => (
-                        <PhaseCard key={i} phase={phase} />
+                {/* Mobile: Vertical stacked cards */}
+                <div className="md:hidden space-y-3">
+                    {phases.map((phase) => (
+                        <motion.div
+                            key={phase.index}
+                            initial={{ opacity: 0, y: 16 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: '-30px' }}
+                            transition={{ duration: 0.4, delay: phase.index * 0.07 }}
+                            className="border border-white/10 rounded-2xl overflow-hidden"
+                        >
+                            <button
+                                onClick={() => setActive(active === phase.index ? -1 : phase.index)}
+                                className="w-full flex items-center gap-4 p-5 text-left"
+                            >
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-[11px] font-black transition-all
+                                    ${active === phase.index ? 'bg-rr-pink text-white shadow-[0_0_12px_rgba(229,6,149,0.4)]' : 'border border-white/20 text-white/40'}`}>
+                                    {phase.index + 1}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-[10px] font-bold text-rr-pink uppercase tracking-widest">{phase.week}</p>
+                                    <p className="text-sm font-black text-white uppercase tracking-wide truncate">{phase.title}</p>
+                                </div>
+                                <span className={`text-white/30 text-lg transition-transform duration-300 ${active === phase.index ? 'rotate-45' : ''}`}>+</span>
+                            </button>
+
+                            <AnimatePresence initial={false}>
+                                {active === phase.index && (
+                                    <motion.div
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: 'auto', opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                        className="overflow-hidden"
+                                    >
+                                        <div className="px-5 pb-5 border-t border-white/10 pt-4">
+                                            <p className="text-white/60 text-sm leading-relaxed mb-4">{phase.description}</p>
+                                            <ul className="space-y-2">
+                                                {phase.bullets.map((b, i) => (
+                                                    <li key={i} className="flex items-start gap-2">
+                                                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-rr-pink shrink-0" />
+                                                        <span className="text-xs text-white/50 leading-relaxed">{b}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </motion.div>
                     ))}
                 </div>
+
             </div>
         </section>
     );
