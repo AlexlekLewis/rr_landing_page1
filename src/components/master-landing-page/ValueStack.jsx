@@ -42,24 +42,30 @@ const ValueStack = () => {
                             </li>
                         </ul>
 
-                        <div className="mt-8 flex flex-col gap-2 mb-4">
+                        <div className="mt-8 flex flex-col gap-2 mb-6">
                             <div className="flex items-end gap-6">
                                 <p className="text-6xl font-black text-rr-pink tracking-tighter leading-none">$2995</p>
                                 <p className="pb-2 text-slate-400 text-sm font-medium uppercase tracking-wider">Total Investment</p>
                             </div>
-                            <p className="text-sm font-bold text-rr-blue mt-2">
-                                * Flexible payment plans available upon successful application.
-                            </p>
                         </div>
 
-                        <div className="bg-rr-pink/10 border border-rr-pink/30 rounded-xl p-4 mt-6">
-                            <h4 className="flex items-center gap-2 font-bold text-rr-light-pink mb-2">
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                                The RRAA Guarantee
-                            </h4>
-                            <p className="text-sm text-slate-300 leading-relaxed">
-                                We offer this because we know the quality of what we deliver. If after the first two sessions you don't believe this program is the right environment for your child's development, we'll refund your investment in full — no questions asked.
-                            </p>
+                        {/* Payment Options */}
+                        <div className="border-t border-white/10 pt-6">
+                            <p className="text-xs font-bold text-white/40 uppercase tracking-[0.2em] mb-4">Payment Options</p>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center hover:border-rr-pink/30 transition-colors duration-300">
+                                    <p className="text-white font-black text-sm uppercase tracking-wide mb-1">Pay in Full</p>
+                                    <p className="text-white/40 text-xs leading-relaxed">Single upfront payment. Includes a complimentary training shirt and pants.</p>
+                                </div>
+                                <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center hover:border-rr-pink/30 transition-colors duration-300">
+                                    <p className="text-white font-black text-sm uppercase tracking-wide mb-1">Afterpay</p>
+                                    <p className="text-white/40 text-xs leading-relaxed">Split into four fortnightly instalments. No interest, no fees.</p>
+                                </div>
+                                <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center hover:border-rr-pink/30 transition-colors duration-300">
+                                    <p className="text-white font-black text-sm uppercase tracking-wide mb-1">Staged Plan</p>
+                                    <p className="text-white/40 text-xs leading-relaxed">Internal payment plan to spread the cost. Available upon application.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
