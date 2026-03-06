@@ -41,7 +41,7 @@ const BeyondTwelveWeeks = () => {
                     </motion.h2>
                     <motion.div variants={fadeIn} className="w-24 h-1 bg-gradient-to-r from-rr-pink to-rr-blue mx-auto rounded-full mt-4" />
                     <motion.p variants={fadeIn} className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto mt-6 leading-relaxed font-medium">
-                        Finishing the 12-week program is just the start. Your child stays connected to the Rajasthan Royals network and global Academy — and that connection only grows from here.
+                        Finishing the 12-week program is just the start. You stay connected to the Rajasthan Royals eco-system and global Academy network through matches, masterclasses, additional programs, travel opportunities - and more.
                     </motion.p>
                 </div>
 
