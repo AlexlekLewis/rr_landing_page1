@@ -4,9 +4,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     LayoutDashboard, Kanban, Users, BarChart3, FileText,
     Settings, LogOut, ChevronLeft, ChevronRight, Menu, X,
-    Send, CheckCircle2, Eye, ClipboardList, UserCheck, Shield
+    Send, CheckCircle2, Eye, ClipboardList, UserCheck, Shield, ChevronDown
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { ProgramProvider, useProgram } from './ProgramContext';
 
 const NAV_GROUPS = [
     {
@@ -47,7 +48,7 @@ const NAV_GROUPS = [
     },
 ];
 
-const AdminLayout = ({ children }) => {
+const AdminLayoutInner = ({ children }) => {
     const [collapsed, setCollapsed] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [user, setUser] = useState(null);
@@ -55,6 +56,7 @@ const AdminLayout = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const location = useLocation();
+    const { selectedProgram, setSelectedProgram, programs, programLabel } = useProgram();
 
     useEffect(() => {
         checkAuth();
@@ -127,6 +129,24 @@ const AdminLayout = ({ children }) => {
                     )}
                 </div>
             </div>
+
+            {/* Program Selector */}
+            {(!collapsed || mobile) && programs.length > 0 && (
+                <div className="px-3 pt-3">
+                    <div className="relative">
+                        <select
+                            value={selectedProgram}
+                            onChange={(e) => setSelectedProgram(e.target.value)}
+                            className="w-full appearance-none bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-xs font-bold focus:outline-none focus:border-rr-pink/50 cursor-pointer pr-8"
+                        >
+                            {programs.map(p => (
+                                <option key={p.slug} value={p.slug} className="bg-slate-900">{p.label}</option>
+                            ))}
+                        </select>
+                        <ChevronDown className="w-3 h-3 text-slate-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
+                </div>
+            )}
 
             {/* Navigation */}
             <nav className="flex-1 p-3 space-y-4 overflow-y-auto">
@@ -254,5 +274,12 @@ const AdminLayout = ({ children }) => {
         </div>
     );
 };
+
+// Wrap with ProgramProvider so all child components can use useProgram()
+const AdminLayout = ({ children }) => (
+    <ProgramProvider>
+        <AdminLayoutInner>{children}</AdminLayoutInner>
+    </ProgramProvider>
+);
 
 export default AdminLayout;
