@@ -4,7 +4,7 @@ import { Check, AlertCircle, Loader2 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
 
-const DEPOSIT_URL = 'https://buy.stripe.com/6oU3cvfY58Ox91q9rR9Zm05';
+const DEPOSIT_URL = 'https://buy.stripe.com/fZu8wPbHP9SB2D2bzZ9Zm06';
 const FULL_URL    = 'https://buy.stripe.com/bJe14nbHP3ud91q8nN9Zm00';
 
 /* ─── helpers ─── */
@@ -516,7 +516,7 @@ const MasterCheckout = () => {
                         </div>
                     </a>
 
-                    {/* Deposit+ */}
+                    {/* Flexi Pay */}
                     <a
                         href={formSaved ? DEPOSIT_URL : '#'}
                         target={formSaved ? '_blank' : undefined}
@@ -526,8 +526,8 @@ const MasterCheckout = () => {
                     >
                         <div className="w-full bg-rr-dark group-hover:bg-rr-dark/80 transition-colors rounded-2xl px-6 py-7 flex flex-col items-center gap-2 text-center">
                             <span className="text-[10px] font-bold text-rr-blue uppercase tracking-[0.25em]">Flexible</span>
-                            <span className="text-2xl font-black text-white uppercase tracking-tight">Deposit+</span>
-                            <span className="text-white/50 text-sm font-medium">50% now · 50% before first session</span>
+                            <span className="text-2xl font-black text-white uppercase tracking-tight">Flexi Pay</span>
+                            <span className="text-white/50 text-sm font-medium">4 equal payments — immediate plus 3 monthly</span>
                             <div className="mt-2 flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full">
                                 <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />

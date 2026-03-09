@@ -17,10 +17,10 @@ const paymentOptions = [
         desc: 'Pay upfront before the closing date and receive an additional training shirt and pants — free of charge.',
     },
     {
-        title: 'Deposit+',
+        title: 'Flexi Pay',
         tag: 'Flexible',
         tagColor: 'text-rr-blue',
-        desc: 'Pay 50% now to secure your place, with the remaining 50% due before the first scheduled session.',
+        desc: '4 equal payments — immediate plus 3 monthly payments.',
     },
     {
         title: 'Afterpay',
