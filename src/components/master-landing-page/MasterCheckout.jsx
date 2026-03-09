@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, AlertCircle, Loader2 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
@@ -79,6 +79,7 @@ const MasterCheckout = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState('');
     const [formSaved, setFormSaved] = useState(false);
+    const paymentRef = useRef(null);
 
     /* ── form state ── */
     const [formData, setFormData] = useState({
@@ -228,6 +229,11 @@ const MasterCheckout = () => {
 
             setFormSaved(true);
             setSubmitError('');
+
+            // Scroll to payment cards after a brief delay
+            setTimeout(() => {
+                paymentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 300);
         } catch (err) {
             console.error('Error saving application:', err);
             setSubmitError('Something went wrong saving your details. Please try again.');
@@ -543,10 +549,38 @@ const MasterCheckout = () => {
                             0%, 100% { box-shadow: 0 0 20px rgba(229,6,149,0.3); }
                             50% { box-shadow: 0 0 50px rgba(229,6,149,0.6), 0 0 80px rgba(229,6,149,0.2); }
                         }
+                        @keyframes shimmerBorder {
+                            0%   { background-position: 0% 50%; }
+                            50%  { background-position: 100% 50%; }
+                            100% { background-position: 0% 50%; }
+                        }
+                        .shimmer-border {
+                            background: linear-gradient(270deg, #e50695, #6366f1, #0070f0, #e50695);
+                            background-size: 300% 300%;
+                            animation: shimmerBorder 3s ease infinite;
+                        }
                     `}</style>
                 </motion.div>
 
                 {/* Payment buttons — only active after form is saved */}
+                <div ref={paymentRef} className="scroll-mt-8">
+                <AnimatePresence>
+                    {formSaved && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -8 }}
+                            transition={{ duration: 0.5, ease: 'easeOut' }}
+                            className="flex items-center justify-center gap-3 mb-5"
+                        >
+                            <span className="h-px w-8 bg-rr-pink/40" />
+                            <p className="text-[11px] font-bold text-rr-pink uppercase tracking-[0.25em] text-center">
+                                Step 2 — Choose your payment plan to secure your place
+                            </p>
+                            <span className="h-px w-8 bg-rr-pink/40" />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
                 <motion.div
                     initial={{ opacity: 0, y: 16 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -559,7 +593,7 @@ const MasterCheckout = () => {
                         href={formSaved ? FULL_URL : '#'}
                         rel="noopener noreferrer"
                         onClick={(e) => { e.preventDefault(); if (formSaved) handlePaymentClick('Paid in Full', FULL_URL); }}
-                        className="group relative flex flex-col items-center justify-center gap-1 bg-gradient-to-br from-rr-pink to-rr-blue p-px rounded-2xl overflow-hidden hover:shadow-[0_0_32px_rgba(229,6,149,0.4)] transition-shadow duration-300 cursor-pointer"
+                        className={`group relative flex flex-col items-center justify-center gap-1 p-px rounded-2xl overflow-hidden hover:shadow-[0_0_32px_rgba(229,6,149,0.4)] transition-shadow duration-300 cursor-pointer ${formSaved ? 'shimmer-border' : 'bg-gradient-to-br from-rr-pink to-rr-blue'}`}
                     >
                         <div className="w-full bg-rr-dark group-hover:bg-rr-dark/80 transition-colors rounded-2xl px-6 py-7 flex flex-col items-center gap-2 text-center">
                             <span className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.25em]">Best Value</span>
@@ -579,7 +613,7 @@ const MasterCheckout = () => {
                         href={formSaved ? DEPOSIT_URL : '#'}
                         rel="noopener noreferrer"
                         onClick={(e) => { e.preventDefault(); if (formSaved) handlePaymentClick('Flexi Pay', DEPOSIT_URL); }}
-                        className="group relative flex flex-col items-center justify-center gap-1 bg-gradient-to-br from-white/20 to-white/5 p-px rounded-2xl overflow-hidden hover:from-rr-blue hover:to-rr-pink hover:shadow-[0_0_32px_rgba(0,112,240,0.3)] transition-all duration-300 cursor-pointer"
+                        className={`group relative flex flex-col items-center justify-center gap-1 p-px rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer ${formSaved ? 'shimmer-border hover:shadow-[0_0_32px_rgba(0,112,240,0.3)]' : 'bg-gradient-to-br from-white/20 to-white/5 hover:from-rr-blue hover:to-rr-pink hover:shadow-[0_0_32px_rgba(0,112,240,0.3)]'}`}
                     >
                         <div className="w-full bg-rr-dark group-hover:bg-rr-dark/80 transition-colors rounded-2xl px-6 py-7 flex flex-col items-center gap-2 text-center">
                             <span className="text-[10px] font-bold text-rr-blue uppercase tracking-[0.25em]">Flexible</span>
@@ -594,6 +628,7 @@ const MasterCheckout = () => {
                         </div>
                     </a>
                 </motion.div>
+                </div>
 
                 {!formSaved && (
                     <p className="text-center text-white/30 text-xs mb-8 font-medium">
