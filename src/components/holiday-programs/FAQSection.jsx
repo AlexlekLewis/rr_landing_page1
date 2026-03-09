@@ -5,7 +5,7 @@ import { ChevronDown } from 'lucide-react';
 const faqs = [
     {
         q: 'What age groups are the clinics for?',
-        a: 'The clinics are open to players aged 7 to 16. Players are grouped by age to ensure appropriate coaching and competitive balance across sessions.',
+        a: 'The clinics are open to players aged 7 to 14. Players are grouped by age to ensure appropriate coaching and competitive balance across sessions.',
     },
     {
         q: 'Are the clinics available for both boys and girls?',
@@ -41,7 +41,7 @@ const faqs = [
     },
     {
         q: 'Is the clinic suitable for beginners?',
-        a: 'Yes. The clinic caters to all skill levels from 7 to 16. Coaches adapt sessions to each player\'s development stage — whether they\'re picking up a bat for the first time or playing representative cricket.',
+        a: 'Yes. The clinic caters to all skill levels from 7 to 14. Coaches adapt sessions to each player\'s development stage — whether they\'re picking up a bat for the first time or playing representative cricket.',
     },
 ];
 

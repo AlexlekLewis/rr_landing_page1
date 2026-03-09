@@ -8,7 +8,17 @@ const CAPACITY = {
     'hallam': 30,
 };
 
-const AGE_OPTIONS = Array.from({ length: 10 }, (_, i) => i + 7); // 7–16
+const AGE_OPTIONS = Array.from({ length: 8 }, (_, i) => i + 7); // 7–14
+
+const SHIRT_SIZES = [
+    { value: '6-8', label: 'Age 7–8 (Size 6–8)' },
+    { value: '8-10', label: 'Age 8–10 (Size 8–10)' },
+    { value: '10-12', label: 'Age 10–12 (Size 10–12)' },
+    { value: '12-14', label: 'Age 12–14 (Size 12–14)' },
+    { value: 'XS', label: 'Age 13–14 (Size XS)' },
+    { value: 'S', label: 'Size S' },
+    { value: 'M', label: 'Size M' },
+];
 
 const getUTMParams = () => {
     const params = new URLSearchParams(window.location.search);
@@ -37,6 +47,7 @@ const RegistrationForm = () => {
         primary_club: '',
         suburb: '',
         location: '',
+        shirt_size: '',
     });
 
     // Fetch live capacity counts on mount
@@ -79,6 +90,7 @@ const RegistrationForm = () => {
         if (!form.primary_club.trim()) newErrors.primary_club = 'Primary club is required.';
         if (!form.suburb.trim()) newErrors.suburb = 'Suburb is required.';
         if (!form.location) newErrors.location = 'Please select a clinic location.';
+        if (!form.shirt_size) newErrors.shirt_size = 'Please select a shirt size.';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -108,6 +120,7 @@ const RegistrationForm = () => {
             const utmParams = getUTMParams();
 
             const payload = {
+                shirt_size: form.shirt_size,
                 parent_name: form.parent_name.trim(),
                 parent_email: form.parent_email.trim(),
                 parent_phone: form.parent_phone.trim(),
@@ -277,6 +290,16 @@ const RegistrationForm = () => {
                                     <label className={labelClass}>Suburb Travelling From *</label>
                                     <input name="suburb" value={form.suburb} onChange={handleChange} className={inputClass('suburb')} placeholder="e.g. Doncaster East" />
                                     {errors.suburb && <p className="text-red-500 text-xs font-medium mt-1">{errors.suburb}</p>}
+                                </div>
+                                <div>
+                                    <label className={labelClass}>Shirt Size *</label>
+                                    <select name="shirt_size" value={form.shirt_size} onChange={handleChange} className={inputClass('shirt_size')}>
+                                        <option value="">Select size</option>
+                                        {SHIRT_SIZES.map(s => (
+                                            <option key={s.value} value={s.value}>{s.label}</option>
+                                        ))}
+                                    </select>
+                                    {errors.shirt_size && <p className="text-red-500 text-xs font-medium mt-1">{errors.shirt_size}</p>}
                                 </div>
                             </div>
                         </div>
