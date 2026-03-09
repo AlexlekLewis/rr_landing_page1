@@ -12,7 +12,7 @@ const locations = [
         gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
         mapsUrl: 'https://maps.google.com/?q=Cutting+Edge+Cricket+Bundoora+VIC',
         tag: 'cutting-edge',
-        image: '/assets/lp2/action/rr-vs-mi-action1.jpg',
+        image: '/assets/cec-lanes.jpg',
     },
     {
         name: 'Hallam Cricket Centre',
