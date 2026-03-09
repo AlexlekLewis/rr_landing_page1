@@ -9,8 +9,8 @@ const features = [
     },
     {
         icon: '⚡',
-        title: 'T20 Skills Focus',
-        desc: 'Modern game techniques — power hitting, smart bowling, and pressure-game scenarios.',
+        title: 'Traditional & T20 Skills',
+        desc: 'Practice and develop cricket basics and modern skills in a development environment.',
     },
     {
         icon: '👦👧',
