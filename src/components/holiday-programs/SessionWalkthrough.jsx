@@ -36,7 +36,12 @@ const slots = [
 
 const SessionWalkthrough = () => {
     return (
-        <section className="py-24 bg-rr-dark">
+        <section className="py-24 bg-rr-dark relative overflow-hidden">
+            {/* Subtle background image */}
+            <div
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.06]"
+                style={{ backgroundImage: "url('/assets/SectionPhoto.jpeg')" }}
+            />
             <div className="max-w-5xl mx-auto px-6">
                 <div className="text-center mb-16">
                     <motion.h2

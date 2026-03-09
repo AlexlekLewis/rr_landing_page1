@@ -18,7 +18,7 @@ const PricingSection = () => {
 
     return (
         <section className="py-24 bg-white border-t-8" style={{ borderImage: 'linear-gradient(90deg, #1226AA, #E11F8F) 1' }}>
-            <div className="max-w-5xl mx-auto px-6">
+            <div className="max-w-6xl mx-auto px-6">
                 <div className="text-center mb-16">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -31,7 +31,7 @@ const PricingSection = () => {
                     </motion.h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
                     {/* Price card */}
                     <motion.div
                         initial={{ opacity: 0, x: -30 }}
@@ -88,6 +88,21 @@ const PricingSection = () => {
                             <h4 className="text-base font-black text-rr-dark uppercase tracking-wide mb-2">Clothing Package</h4>
                             <p className="text-rr-charcoal text-sm font-medium">RRA training pants &amp; cap — subject to stock availability. Details provided at confirmation.</p>
                         </div>
+                    </motion.div>
+
+                    {/* Energy image */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.7 }}
+                        className="hidden lg:block rounded-2xl overflow-hidden h-full min-h-[480px]"
+                    >
+                        <img
+                            src="/assets/sooryavanchi-arms-raised.jpg"
+                            alt="Elite cricket performance"
+                            className="w-full h-full object-cover object-top"
+                        />
                     </motion.div>
                 </div>
             </div>

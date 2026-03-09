@@ -12,6 +12,7 @@ const locations = [
         gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
         mapsUrl: 'https://maps.google.com/?q=Cutting+Edge+Cricket+Bundoora+VIC',
         tag: 'cutting-edge',
+        image: '/assets/lp2/action/rr-vs-mi-action1.jpg',
     },
     {
         name: 'Hallam Cricket Centre',
@@ -22,6 +23,7 @@ const locations = [
         gradient: 'linear-gradient(135deg, #E11F8F 0%, #1226AA 60%, #001D48 100%)',
         mapsUrl: 'https://maps.google.com/?q=Hallam+Cricket+Centre+Hallam+VIC',
         tag: 'hallam',
+        image: '/assets/lp2/action/csk-vs-rr-action4.jpg',
     },
 ];
 
@@ -67,13 +69,13 @@ const LocationsSection = () => {
                             {/* Gradient header */}
                             <div className="h-4" style={{ background: loc.gradient }} />
 
-                            {/* Venue photo placeholder */}
-                            <div className="h-44 bg-slate-100 flex items-center justify-center">
-                                {/* ⚠️ Replace with real venue image */}
-                                <div className="flex flex-col items-center gap-2 text-slate-400">
-                                    <MapPin className="w-8 h-8" />
-                                    <span className="text-xs font-bold uppercase tracking-widest">Venue Photo Coming Soon</span>
-                                </div>
+                            {/* Venue photo */}
+                            <div className="h-44 overflow-hidden">
+                                <img
+                                    src={loc.image}
+                                    alt={loc.name}
+                                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                                />
                             </div>
 
                             <div className="p-8">
