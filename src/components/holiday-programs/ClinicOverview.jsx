@@ -5,7 +5,7 @@ const features = [
     {
         icon: '🏏',
         title: 'Expert Coaching',
-        desc: 'RRA-certified coaches delivering structured, high-performance sessions every day.',
+        desc: 'Royals Academy certified coaches delivering structured, fun and development sessions every day.',
     },
     {
         icon: '⚡',
