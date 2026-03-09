@@ -18,6 +18,7 @@ const SHIRT_SIZES = [
     { value: 'XS', label: 'Age 13–14 (Size XS)' },
     { value: 'S', label: 'Size S' },
     { value: 'M', label: 'Size M' },
+    { value: 'L', label: 'Size L' },
 ];
 
 const getUTMParams = () => {
