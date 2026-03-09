@@ -97,16 +97,18 @@ const ValueStack = () => {
                             <p className="text-white font-black text-lg uppercase tracking-tight mb-5">Premium development, one clear price.</p>
 
                             {/* Rate comparison */}
-                            <div className="grid grid-cols-2 gap-4 mb-6">
+                            <div className="grid grid-cols-2 gap-4 mb-6 items-stretch">
                                 <div className="bg-white/8 border border-white/20 rounded-xl p-4 text-center">
                                     <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest mb-2">Typical Private Coaching</p>
                                     <p className="text-2xl font-black text-white/50 tracking-tight line-through">$90–$120<span className="text-base">/hr</span></p>
                                     <p className="text-[10px] text-white/40 mt-1">Per single coach</p>
                                 </div>
-                                <div className="bg-rr-pink/15 border border-rr-pink/50 rounded-xl p-4 text-center">
-                                    <p className="text-[10px] font-bold text-rr-pink uppercase tracking-widest mb-2">Elite Program Rate</p>
-                                    <p className="text-2xl font-black text-rr-pink tracking-tight">~$55<span className="text-base">/hr</span></p>
-                                    <p className="text-[10px] text-rr-pink/70 mt-1">Full coaching network</p>
+                                <div className="relative rounded-xl p-[2px] text-center bg-gradient-to-br from-rr-pink via-rr-pink/80 to-rr-blue shadow-[0_0_30px_rgba(229,6,149,0.4),0_0_60px_rgba(229,6,149,0.15)] scale-[1.05]">
+                                    <div className="bg-rr-dark rounded-[10px] p-4 h-full flex flex-col items-center justify-center">
+                                        <p className="text-[10px] font-bold text-rr-pink uppercase tracking-widest mb-2">Elite Program Rate</p>
+                                        <p className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue tracking-tight">~$55<span className="text-lg">/hr</span></p>
+                                        <p className="text-[10px] text-rr-pink/80 mt-1 font-bold">Full coaching network</p>
+                                    </div>
                                 </div>
                             </div>
 

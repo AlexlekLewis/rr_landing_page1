@@ -453,20 +453,6 @@ const MasterCheckout = () => {
                         <TextAreaField label="Written Bio" name="bio" value={formData.bio} onChange={handleChange} placeholder="Tell us about yourself..." limit={150} />
                         <TextAreaField label="Career Goals" name="goals" value={formData.goals} onChange={handleChange} placeholder="Where do you want to be in 5 years?" limit={150} />
                     </div>
-
-                    {/* CV Upload */}
-                    <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-bold text-white/50 uppercase tracking-widest">
-                            Cricket CV / Resume <span className="text-white/30 normal-case">(Optional — PDF, DOC, DOCX)</span>
-                        </label>
-                        <input
-                            type="file"
-                            accept=".pdf,.doc,.docx"
-                            onChange={(e) => { if (e.target.files?.[0]) { setCvFile(e.target.files[0]); if (formSaved) setFormSaved(false); } }}
-                            className="text-sm text-white/50 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-white/10 file:text-white/70 hover:file:bg-white/15 file:cursor-pointer file:transition-colors"
-                        />
-                        {cvFile && <p className="text-[10px] text-white/40">Selected: {cvFile.name}</p>}
-                    </div>
                 </motion.div>
 
                 {/* ════════════════════════════════════════
@@ -520,21 +506,39 @@ const MasterCheckout = () => {
                     <button
                         onClick={handleSaveForm}
                         disabled={isSubmitting}
-                        className="w-full py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 bg-gradient-to-r from-rr-pink to-rr-blue text-white hover:shadow-[0_0_32px_rgba(229,6,149,0.4)] disabled:opacity-50 disabled:cursor-not-allowed"
+                        className={`w-full rounded-2xl font-black uppercase tracking-widest transition-all duration-500 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed ${
+                            formSaved
+                                ? 'py-5 text-base bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-[0_0_40px_rgba(16,185,129,0.5)] scale-[1.02]'
+                                : 'py-6 text-base bg-gradient-to-r from-rr-pink to-rr-blue text-white shadow-[0_0_30px_rgba(229,6,149,0.35)] hover:shadow-[0_0_50px_rgba(229,6,149,0.6)] hover:scale-[1.02] animate-[pulseGlow_2s_ease-in-out_infinite]'
+                        }`}
+                        style={!formSaved && !isSubmitting ? {
+                            animation: 'pulseGlow 2s ease-in-out infinite',
+                        } : {}}
                     >
                         {isSubmitting ? (
-                            <><Loader2 className="w-4 h-4 animate-spin" /> Saving...</>
+                            <><Loader2 className="w-5 h-5 animate-spin" /> Saving Your Application...</>
                         ) : formSaved ? (
-                            <><Check className="w-4 h-4" /> Application Saved — Choose Payment Below</>
+                            <><Check className="w-5 h-5" /> Application Saved — Choose Payment Below</>
                         ) : (
-                            'Save Application & Proceed to Payment'
+                            <>
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Save Application & Proceed to Payment
+                            </>
                         )}
                     </button>
                     {!formSaved && !submitError && (
-                        <p className="text-center text-white/30 text-[10px] mt-2">
+                        <p className="text-center text-white/40 text-xs mt-3 font-medium">
                             Your application will be saved before you are directed to Stripe for payment.
                         </p>
                     )}
+                    <style>{`
+                        @keyframes pulseGlow {
+                            0%, 100% { box-shadow: 0 0 20px rgba(229,6,149,0.3); }
+                            50% { box-shadow: 0 0 50px rgba(229,6,149,0.6), 0 0 80px rgba(229,6,149,0.2); }
+                        }
+                    `}</style>
                 </motion.div>
 
                 {/* Payment buttons — only active after form is saved */}
