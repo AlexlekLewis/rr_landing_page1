@@ -59,7 +59,7 @@ const ClinicOverview = () => {
                         transition={{ duration: 0.6, delay: 0.15 }}
                         className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium"
                     >
-                        Three days inside a genuine performance environment. The same coaching philosophy that drives the Rajasthan Royals — adapted for young cricketers.
+                        Three days inside a genuine development environment. The same coaching philosophy that drives the Rajasthan Royals — adapted for young and developing cricketers.
                     </motion.p>
                 </div>
 
