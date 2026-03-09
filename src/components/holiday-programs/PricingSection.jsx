@@ -27,7 +27,7 @@ const PricingSection = () => {
                         transition={{ duration: 0.6 }}
                         className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-wide mb-4"
                     >
-                        INVESTMENT &amp; <span className="text-rr-pink">INCLUSIONS</span>
+                        PRICE &amp; <span className="text-rr-pink">INCLUSIONS</span>
                     </motion.h2>
                 </div>
 
@@ -99,8 +99,8 @@ const PricingSection = () => {
                         className="hidden lg:block rounded-2xl overflow-hidden h-full min-h-[480px]"
                     >
                         <img
-                            src="/assets/sooryavanchi-arms-raised.jpg"
-                            alt="Elite cricket performance"
+                            src="/assets/lahiri-riyan-parag.jpg"
+                            alt="Royals coaching — Lahiri and Riyan Parag"
                             className="w-full h-full object-cover object-top"
                         />
                     </motion.div>
