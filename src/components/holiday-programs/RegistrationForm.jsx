@@ -319,7 +319,7 @@ const RegistrationForm = () => {
                                             Cutting Edge Cricket — Bundoora | Apr 8, 9 & 10 {isFull('cutting-edge') ? '(FULL — Waitlist)' : `(${CAPACITY['cutting-edge'] - counts['cutting-edge']} spots remaining)`}
                                         </option>
                                         <option value="hallam">
-                                            Hallam Cricket Centre — Hallam | Apr 14, 15 & 16 {isFull('hallam') ? '(FULL — Waitlist)' : `(${CAPACITY['hallam'] - counts['hallam']} spots remaining)`}
+                                            Cricket Connect — Hallam | Apr 14, 15 & 16 {isFull('hallam') ? '(FULL — Waitlist)' : `(${CAPACITY['hallam'] - counts['hallam']} spots remaining)`}
                                         </option>
                                     </select>
                                 )}
