@@ -132,8 +132,8 @@ const TokenGenerator = () => {
         <div className="space-y-8">
             <div className="flex justify-between items-start">
                 <div>
-                    <h1 className="text-2xl md:text-3xl font-black text-white tracking-wider">OFFER TOKENS</h1>
-                    <p className="text-slate-400 text-sm mt-1">Generate unique, secure links for the Assessment Invitation page.</p>
+                    <h1 className="text-2xl md:text-3xl font-black text-white tracking-wider">OFFER MANAGER</h1>
+                    <p className="text-slate-400 text-sm mt-1">Generate and track personalised offer links</p>
                 </div>
             </div>
 

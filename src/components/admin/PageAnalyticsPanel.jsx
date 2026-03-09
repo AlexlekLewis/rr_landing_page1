@@ -263,8 +263,8 @@ const PageAnalyticsPanel = () => {
             {/* Header */}
             <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl md:text-3xl font-black text-white tracking-wider">PAGE ANALYTICS</h1>
-                    <p className="text-slate-400 text-sm mt-1">Visitor tracking &amp; engagement insights</p>
+                    <h1 className="text-2xl md:text-3xl font-black text-white tracking-wider">SITE ANALYTICS</h1>
+                    <p className="text-slate-400 text-sm mt-1">Visitor tracking & engagement insights</p>
                 </div>
                 <div className="flex gap-3">
                     <select

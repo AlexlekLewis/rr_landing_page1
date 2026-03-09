@@ -126,13 +126,13 @@ const DashboardOverview = () => {
             {/* Header */}
             <div>
                 <h1 className="text-2xl md:text-3xl font-black text-white tracking-wider">DASHBOARD</h1>
-                <p className="text-slate-400 text-sm mt-1">Overview of applications and pipeline status</p>
+                <p className="text-slate-400 text-sm mt-1">Overview of players and pipeline status</p>
             </div>
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <StatCard
-                    label="Total Applications"
+                    label="Total Players"
                     value={stats.totalApplications}
                     icon={FileText}
                     color="#3B82F6"
@@ -143,7 +143,7 @@ const DashboardOverview = () => {
                     value={stats.thisWeek}
                     icon={TrendingUp}
                     color="#10B981"
-                    subtext="New applications"
+                    subtext="New players"
                 />
                 <StatCard
                     label="Conversion Rate"

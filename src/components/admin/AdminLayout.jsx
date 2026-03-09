@@ -2,24 +2,49 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    LayoutDashboard, Kanban, Table2, BarChart3, FileText,
-    Settings, LogOut, ChevronLeft, ChevronRight, Menu, X, Shield, CheckCircle2, Eye, ClipboardList
+    LayoutDashboard, Kanban, Users, BarChart3, FileText,
+    Settings, LogOut, ChevronLeft, ChevronRight, Menu, X,
+    Send, CheckCircle2, Eye, ClipboardList, UserCheck, Shield
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
-const NAV_ITEMS = [
-    { label: 'Dashboard', path: '/rramadmin_26/dashboard', icon: LayoutDashboard },
-    { label: 'Pipeline', path: '/rramadmin_26/pipeline', icon: Kanban },
-    { label: 'Applications', path: '/rramadmin_26/applications', icon: Table2 },
-    { label: 'Master Inquiries', path: '/rramadmin_26/master-inquiries', icon: Table2 },
-    { label: 'LP3 Acceptances', path: '/rramadmin_26/lp3-acceptances', icon: Table2 },
-    { label: 'Selection', path: '/rramadmin_26/selection', icon: CheckCircle2 },
-    { label: 'RSVP Responses', path: '/rramadmin_26/rsvp', icon: ClipboardList },
-    { label: 'Analytics', path: '/rramadmin_26/analytics', icon: BarChart3 },
-    { label: 'Page Analytics', path: '/rramadmin_26/page-analytics', icon: Eye },
-    { label: 'Offer Tokens', path: '/rramadmin_26/tokens', icon: Shield },
-    { label: 'Pages', path: '/rramadmin_26/pages', icon: FileText },
-    { label: 'Settings', path: '/rramadmin_26/settings', icon: Settings },
+const NAV_GROUPS = [
+    {
+        label: 'OVERVIEW',
+        items: [
+            { label: 'Dashboard', path: '/rramadmin_26/dashboard', icon: LayoutDashboard },
+        ],
+    },
+    {
+        label: 'PLAYER MANAGEMENT',
+        items: [
+            { label: 'All Players', path: '/rramadmin_26/applications', icon: Users },
+            { label: 'Pipeline', path: '/rramadmin_26/pipeline', icon: Kanban },
+            { label: 'Selection Board', path: '/rramadmin_26/selection', icon: CheckCircle2 },
+        ],
+    },
+    {
+        label: 'PROGRAM',
+        items: [
+            { label: 'Cohort 2026', path: '/rramadmin_26/lp3-acceptances', icon: UserCheck },
+            { label: 'Assessments', path: '/rramadmin_26/rsvp', icon: ClipboardList },
+        ],
+    },
+    {
+        label: 'INSIGHTS',
+        items: [
+            { label: 'Funnel & Demographics', path: '/rramadmin_26/analytics', icon: BarChart3 },
+            { label: 'Site Analytics', path: '/rramadmin_26/page-analytics', icon: Eye },
+        ],
+    },
+    {
+        label: 'TOOLS',
+        items: [
+            { label: 'Offer Manager', path: '/rramadmin_26/tokens', icon: Send },
+            { label: 'Site Pages', path: '/rramadmin_26/pages', icon: FileText },
+            { label: 'Settings', path: '/rramadmin_26/settings', icon: Settings },
+        ],
+    },
 ];
 
 const AdminLayout = ({ children }) => {
@@ -104,28 +129,42 @@ const AdminLayout = ({ children }) => {
             </div>
 
             {/* Navigation */}
-            <nav className="flex-1 p-3 space-y-1">
-                {NAV_ITEMS.map((item) => {
-                    const isActive = location.pathname === item.path;
-                    const Icon = item.icon;
-                    return (
-                        <Link
-                            key={item.path}
-                            to={item.path}
-                            onClick={() => setMobileOpen(false)}
-                            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm font-medium group ${isActive
-                                ? 'bg-gradient-to-r from-rr-pink/20 to-rr-blue/10 text-white'
-                                : 'text-slate-400 hover:text-white hover:bg-white/5'
-                                }`}
-                        >
-                            <Icon className={`w-5 h-5 shrink-0 ${isActive ? 'text-rr-pink' : 'text-slate-500 group-hover:text-slate-300'}`} />
-                            {(!collapsed || mobile) && <span className="truncate">{item.label}</span>}
-                            {isActive && (
-                                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-rr-pink shrink-0" />
-                            )}
-                        </Link>
-                    );
-                })}
+            <nav className="flex-1 p-3 space-y-4 overflow-y-auto">
+                {NAV_GROUPS.map((group) => (
+                    <div key={group.label}>
+                        {(!collapsed || mobile) && (
+                            <p className="px-3 mb-1.5 text-[10px] font-bold text-slate-600 uppercase tracking-widest">
+                                {group.label}
+                            </p>
+                        )}
+                        {collapsed && !mobile && (
+                            <div className="mx-auto mb-1.5 w-6 border-t border-white/5" />
+                        )}
+                        <div className="space-y-0.5">
+                            {group.items.map((item) => {
+                                const isActive = location.pathname === item.path;
+                                const Icon = item.icon;
+                                return (
+                                    <Link
+                                        key={item.path}
+                                        to={item.path}
+                                        onClick={() => setMobileOpen(false)}
+                                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm font-medium group ${isActive
+                                            ? 'bg-gradient-to-r from-rr-pink/20 to-rr-blue/10 text-white'
+                                            : 'text-slate-400 hover:text-white hover:bg-white/5'
+                                            }`}
+                                    >
+                                        <Icon className={`w-5 h-5 shrink-0 ${isActive ? 'text-rr-pink' : 'text-slate-500 group-hover:text-slate-300'}`} />
+                                        {(!collapsed || mobile) && <span className="truncate">{item.label}</span>}
+                                        {isActive && (
+                                            <div className="ml-auto w-1.5 h-1.5 rounded-full bg-rr-pink shrink-0" />
+                                        )}
+                                    </Link>
+                                );
+                            })}
+                        </div>
+                    </div>
+                ))}
             </nav>
 
             {/* User & Logout */}

@@ -176,8 +176,8 @@ const RSVPResponses = () => {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-black text-white tracking-tight">RSVP Responses</h1>
-                    <p className="text-slate-400 text-sm mt-1">LP2 Invitation RSVP submissions — read-only view</p>
+                    <h1 className="text-2xl font-black text-white tracking-tight">ASSESSMENTS</h1>
+                    <p className="text-slate-400 text-sm mt-1">Assessment day RSVP responses</p>
                 </div>
                 <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-xl border border-white/10">
                     <Users className="w-4 h-4 text-slate-400" />

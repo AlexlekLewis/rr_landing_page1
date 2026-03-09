@@ -78,7 +78,7 @@ const LP3Inquiries = () => {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `lp3_acceptances_${new Date().toISOString().split('T')[0]}.csv`;
+        a.download = `cohort_2026_${new Date().toISOString().split('T')[0]}.csv`;
         a.click();
         URL.revokeObjectURL(url);
     };
@@ -97,8 +97,8 @@ const LP3Inquiries = () => {
     return (
         <div className="space-y-6">
             <div>
-                <h1 className="text-2xl md:text-3xl font-black text-white tracking-wider">LP3 ACCEPTANCES (COHORT)</h1>
-                <p className="text-slate-400 text-sm mt-1">{filtered.length} total players registered via LP3 Acceptance</p>
+                <h1 className="text-2xl md:text-3xl font-black text-white tracking-wider">COHORT 2026</h1>
+                <p className="text-slate-400 text-sm mt-1">{filtered.length} enrolled players</p>
             </div>
 
             {/* Filters */}

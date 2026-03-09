@@ -182,8 +182,8 @@ const AnalyticsPanel = () => {
     return (
         <div className="space-y-8">
             <div>
-                <h1 className="text-2xl md:text-3xl font-black text-white tracking-wider">ANALYTICS</h1>
-                <p className="text-slate-400 text-sm mt-1">Application data insights and trends</p>
+                <h1 className="text-2xl md:text-3xl font-black text-white tracking-wider">FUNNEL & DEMOGRAPHICS</h1>
+                <p className="text-slate-400 text-sm mt-1">Player demographics, geography, and pipeline insights</p>
             </div>
 
             {/* Stats Row */}

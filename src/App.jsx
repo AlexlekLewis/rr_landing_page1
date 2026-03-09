@@ -41,7 +41,6 @@ import SettingsPanel from './components/admin/SettingsPanel';
 import SelectionAnalytics from './components/admin/SelectionAnalytics';
 import TokenGenerator from './components/admin/TokenGenerator';
 import RSVPResponses from './components/admin/RSVPResponses';
-import MasterInquiries from './components/admin/MasterInquiries';
 import LP3Inquiries from './components/admin/LP3Inquiries';
 
 const TRACKED_SECTIONS = [
@@ -103,7 +102,6 @@ function App() {
         <Route path="/rramadmin_26/dashboard" element={<AdminLayout><DashboardOverview /></AdminLayout>} />
         <Route path="/rramadmin_26/pipeline" element={<AdminLayout><KanbanBoard /></AdminLayout>} />
         <Route path="/rramadmin_26/applications" element={<AdminLayout><ApplicationsTable /></AdminLayout>} />
-        <Route path="/rramadmin_26/master-inquiries" element={<AdminLayout><MasterInquiries /></AdminLayout>} />
         <Route path="/rramadmin_26/lp3-acceptances" element={<AdminLayout><LP3Inquiries /></AdminLayout>} />
         <Route path="/rramadmin_26/analytics" element={<AdminLayout><AnalyticsPanel /></AdminLayout>} />
         <Route path="/rramadmin_26/page-analytics" element={<AdminLayout><PageAnalyticsPanel /></AdminLayout>} />

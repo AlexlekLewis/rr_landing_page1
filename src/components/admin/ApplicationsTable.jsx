@@ -151,7 +151,7 @@ const ApplicationsTable = () => {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `applications_${new Date().toISOString().split('T')[0]}.csv`;
+        a.download = `all_players_${new Date().toISOString().split('T')[0]}.csv`;
         a.click();
         URL.revokeObjectURL(url);
     };
@@ -184,8 +184,8 @@ const ApplicationsTable = () => {
     return (
         <div className="space-y-6">
             <div>
-                <h1 className="text-2xl md:text-3xl font-black text-white tracking-wider">APPLICATIONS</h1>
-                <p className="text-slate-400 text-sm mt-1">{filtered.length} of {viewMode === 'archived' ? archivedApps.length : activeApps.length} {viewMode === 'archived' ? 'archived' : 'active'} applications</p>
+                <h1 className="text-2xl md:text-3xl font-black text-white tracking-wider">ALL PLAYERS</h1>
+                <p className="text-slate-400 text-sm mt-1">{filtered.length} of {viewMode === 'archived' ? archivedApps.length : activeApps.length} {viewMode === 'archived' ? 'archived' : 'active'} players</p>
             </div>
 
             {/* Active / Archived toggle */}

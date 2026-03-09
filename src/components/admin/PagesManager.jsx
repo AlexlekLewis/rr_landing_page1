@@ -51,7 +51,7 @@ const PagesManager = () => {
     return (
         <div className="space-y-8">
             <div>
-                <h1 className="text-2xl md:text-3xl font-black text-white tracking-wider">PAGES</h1>
+                <h1 className="text-2xl md:text-3xl font-black text-white tracking-wider">SITE PAGES</h1>
                 <p className="text-slate-400 text-sm mt-1">All pages on rramelbourne.com</p>
             </div>
 
