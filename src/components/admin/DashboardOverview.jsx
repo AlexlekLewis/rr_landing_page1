@@ -54,6 +54,7 @@ const FunnelStep = ({ label, value, subtitle, color, conversionRate, isLast }) =
 const DashboardOverview = () => {
     const [stats, setStats] = useState({
         enquiries: 0,
+        applied: 0,
         totalPlayers: 0,
         archivedCount: 0,
         thisWeek: { enquiries: 0, applications: 0, cohort: 0, offers: 0 },
@@ -68,7 +69,6 @@ const DashboardOverview = () => {
     const fetchDashboardData = useCallback(async () => {
         try {
             // ── Fetch all data sources in parallel ──────────────────────
-            // Core tables (guaranteed to exist)
             const [appsRes, entriesRes, stagesRes, activityRes, cohortRes, tokensRes] = await Promise.all([
                 supabase.from('applications').select('id, created_at, first_name, last_name, archived, source').order('created_at', { ascending: false }),
                 supabase.from('pipeline_entries').select('stage_slug, application_id'),
@@ -77,13 +77,6 @@ const DashboardOverview = () => {
                 supabase.from('official_cohort_2026').select('id, created_at, player_name, payment_status, payment_option_selected'),
                 supabase.from('offer_tokens').select('id, created_at, status, applicant_name'),
             ]);
-
-            // Optional tables (may not exist yet — fail gracefully)
-            let splashLeads = [];
-            try {
-                const splashRes = await supabase.from('splash_leads').select('id, created_at, first_name, last_name');
-                if (!splashRes.error) splashLeads = splashRes.data || [];
-            } catch { /* table may not exist yet */ }
 
             const apps = appsRes.data || [];
             const entries = entriesRes.data || [];
@@ -95,8 +88,11 @@ const DashboardOverview = () => {
             const activeApps = apps.filter(a => !a.archived);
             const archivedCount = apps.length - activeApps.length;
 
-            // ── Funnel Metrics ──────────────────────────────────────────
-            const enquiries = splashLeads.length;
+            // ── Funnel Metrics (source-based) ─────────────────────────────
+            // Splash page leads: source = 'splash_page'
+            // LP4 applications: source = 'master_landing_page' (or any non-splash)
+            const enquiries = activeApps.filter(a => a.source === 'splash_page').length;
+            const applied = activeApps.filter(a => a.source !== 'splash_page').length;
             const totalPlayers = activeApps.length;
             const offeredCount = tokens.length;
             const enrolledCount = cohort.filter(c => c.payment_status && c.payment_status !== 'pending').length;
@@ -105,9 +101,10 @@ const DashboardOverview = () => {
             // ── This Week ───────────────────────────────────────────────
             const weekAgo = new Date();
             weekAgo.setDate(weekAgo.getDate() - 7);
+            const thisWeekApps = activeApps.filter(a => new Date(a.created_at) > weekAgo);
             const thisWeek = {
-                enquiries: splashLeads.filter(s => new Date(s.created_at) > weekAgo).length,
-                applications: activeApps.filter(a => new Date(a.created_at) > weekAgo).length,
+                enquiries: thisWeekApps.filter(a => a.source === 'splash_page').length,
+                applications: thisWeekApps.filter(a => a.source !== 'splash_page').length,
                 cohort: cohort.filter(c => new Date(c.created_at) > weekAgo).length,
                 offers: tokens.filter(t => new Date(t.created_at) > weekAgo).length,
             };
@@ -120,6 +117,7 @@ const DashboardOverview = () => {
 
             setStats({
                 enquiries,
+                applied,
                 totalPlayers,
                 archivedCount,
                 thisWeek,
@@ -153,8 +151,8 @@ const DashboardOverview = () => {
         fill: s.color,
     }));
 
-    const convEnqToApp = stats.enquiries > 0 ? Math.round((stats.totalPlayers / stats.enquiries) * 100) : null;
-    const convAppToOffer = stats.totalPlayers > 0 ? Math.round((stats.offeredCount / stats.totalPlayers) * 100) : null;
+    const convEnqToApp = stats.enquiries > 0 ? Math.round((stats.applied / stats.enquiries) * 100) : null;
+    const convAppToOffer = stats.applied > 0 ? Math.round((stats.offeredCount / stats.applied) * 100) : null;
     const convOfferToEnrol = stats.offeredCount > 0 ? Math.round((stats.enrolledCount / stats.offeredCount) * 100) : null;
 
     const cohortProgress = Math.min(100, Math.round((stats.enrolledCount / COHORT_TARGET) * 100));
@@ -182,8 +180,8 @@ const DashboardOverview = () => {
             <div>
                 <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-4">Player Funnel</h3>
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
-                    <FunnelStep label="Enquiries" value={stats.enquiries} subtitle="Splash leads" color="#3B82F6" conversionRate={convEnqToApp} />
-                    <FunnelStep label="Applied" value={stats.totalPlayers} subtitle={stats.archivedCount ? `${stats.archivedCount} archived` : 'Active players'} color="#8B5CF6" conversionRate={convAppToOffer} />
+                    <FunnelStep label="Enquiries" value={stats.enquiries} subtitle="Splash page leads" color="#3B82F6" conversionRate={convEnqToApp} />
+                    <FunnelStep label="Applied" value={stats.applied} subtitle={`${stats.totalPlayers} total incl. enquiries`} color="#8B5CF6" conversionRate={convAppToOffer} />
                     <FunnelStep label="Offered" value={stats.offeredCount} subtitle="Offers sent" color="#F59E0B" conversionRate={convOfferToEnrol} />
                     <FunnelStep label="Enrolled" value={stats.enrolledCount} subtitle={`${stats.cohortTotal} total in cohort`} color="#10B981" conversionRate={null} isLast />
                 </div>
