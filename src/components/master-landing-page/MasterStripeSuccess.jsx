@@ -125,7 +125,7 @@ const MasterStripeSuccess = () => {
         return hasCore && hasAdmin && hasComms && hasValidSessions;
     };
 
-    /* -- Submit onboarding to official_cohort_2026 -- */
+    /* -- Submit onboarding — UPDATE existing cohort record -- */
     const handleSubmitOnboarding = async () => {
         if (!isFormValid()) {
             setSubmitError('Please complete all required fields, select at least 3 session options (with min 1 weekday and 1 weekend).');
@@ -138,12 +138,10 @@ const MasterStripeSuccess = () => {
 
         try {
             const validPhones = phoneNumbers.filter(p => p.value.trim()).map(p => p.value.trim());
-            const generatedId = crypto.randomUUID();
+            const cohortId = localStorage.getItem('master_cohort_id');
 
-            const payload = {
-                id: generatedId,
+            const onboardingData = {
                 accepted_offer: true,
-                player_name: playerName.trim(),
                 parent_name: parentName.trim(),
                 email: email.trim().toLowerCase(),
                 phone: validPhones[0] || '',
@@ -172,7 +170,6 @@ const MasterStripeSuccess = () => {
                 phone_numbers: validPhones,
                 preferred_comms: preferredComms,
 
-                payment_plan_selected: 'master_lp_purchase',
                 payment_option_selected: localStorage.getItem('payment_option_selected') || null,
                 payment_status: 'completed',
                 created_at_melb: new Date().toLocaleString('en-AU', {
@@ -183,17 +180,41 @@ const MasterStripeSuccess = () => {
                 })
             };
 
-            const { error } = await supabase.from('official_cohort_2026').insert(payload);
+            let error;
+
+            if (cohortId) {
+                // UPDATE existing cohort record created at checkout
+                const result = await supabase
+                    .from('official_cohort_2026')
+                    .update(onboardingData)
+                    .eq('id', cohortId);
+                error = result.error;
+            } else {
+                // Fallback: INSERT if no cohort ID found (e.g. localStorage cleared)
+                const fallbackPayload = {
+                    ...onboardingData,
+                    id: crypto.randomUUID(),
+                    player_name: playerName.trim(),
+                    payment_plan_selected: 'master_lp_purchase',
+                    source: 'master_landing_page',
+                };
+                const result = await supabase.from('official_cohort_2026').insert([fallbackPayload]);
+                error = result.error;
+            }
+
             if (error) throw error;
 
-            // Clean up payment option from localStorage
+            // Clean up localStorage
             localStorage.removeItem('payment_option_selected');
+            localStorage.removeItem('master_cohort_id');
+            localStorage.removeItem('purchase_source');
 
             // Fire Zapier webhook if configured
             const webhookUrl = import.meta.env.VITE_LP3_WEBHOOK_URL;
             if (webhookUrl) {
+                const webhookData = { ...onboardingData, player_name: playerName.trim(), cohort_id: cohortId };
                 const formData = new URLSearchParams();
-                Object.entries(payload).forEach(([key, value]) => {
+                Object.entries(webhookData).forEach(([key, value]) => {
                     formData.append(key, typeof value === 'object' ? JSON.stringify(value) : String(value ?? ''));
                 });
                 fetch(webhookUrl, { method: 'POST', body: formData }).catch(() => { });

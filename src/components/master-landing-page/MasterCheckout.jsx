@@ -79,7 +79,6 @@ const MasterCheckout = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState('');
     const [formSaved, setFormSaved] = useState(false);
-    const [savedRecordId, setSavedRecordId] = useState(null);
 
     /* ── form state ── */
     const [formData, setFormData] = useState({
@@ -131,7 +130,7 @@ const MasterCheckout = () => {
         return hasCore && hasParent1 && hasClub && hasSuburb && hasGender && hasPlayerContact && hasConsents && withinWordLimits;
     };
 
-    /* ── submit to Supabase (applications table) ── */
+    /* ── submit to Supabase (applications + cohort master table) ── */
     const handleSaveForm = async () => {
         if (!isFormValid()) {
             setSubmitError('Please complete all required fields and accept all compliance documents before proceeding to payment.');
@@ -154,10 +153,10 @@ const MasterCheckout = () => {
                 cvUrl = data.publicUrl;
             }
 
-            const generatedId = crypto.randomUUID();
+            const cohortId = crypto.randomUUID();
 
-            const payload = {
-                id: generatedId,
+            // 1. Basic lead log to applications (lightweight)
+            const applicationsPayload = {
                 first_name: formData.firstName.trim(),
                 last_name: formData.lastName.trim(),
                 age: age,
@@ -181,13 +180,46 @@ const MasterCheckout = () => {
                 source: 'master_landing_page',
             };
 
-            const { error } = await supabase.from('applications').insert([payload]);
-            if (error) throw error;
+            const { error: appError } = await supabase.from('applications').insert([applicationsPayload]);
+            if (appError) throw appError;
 
-            // Store the record ID so we can update payment_option_selected on click
-            setSavedRecordId(generatedId);
+            // 2. Full record to official_cohort_2026 (master table for LP4)
+            const cohortPayload = {
+                id: cohortId,
+                // Application details
+                first_name: formData.firstName.trim(),
+                last_name: formData.lastName.trim(),
+                player_name: `${formData.firstName.trim()} ${formData.lastName.trim()}`,
+                age: age,
+                dob: formData.dob || null,
+                player_email: isUnder18 ? '' : formData.email.trim(),
+                player_phone: isUnder18 ? '' : formData.phone.trim(),
+                suburb: formData.suburb.trim(),
+                profile_link: formData.profileLink.trim(),
+                club: formData.club.trim(),
+                history: formData.history.trim(),
+                bio: formData.bio.trim(),
+                goals: formData.goals.trim(),
+                cv_url: cvUrl,
+                cricket_type: cricketGender,
+                // Parent/guardian details
+                parent1_name: formData.parent1Name.trim(),
+                parent1_email: formData.parent1Email.trim(),
+                parent1_phone: formData.parent1Phone.trim(),
+                parent2_name: formData.parent2Name.trim(),
+                parent2_email: formData.parent2Email.trim(),
+                parent2_phone: formData.parent2Phone.trim(),
+                // Status — pending until Stripe payment + onboarding
+                source: 'master_landing_page',
+                payment_plan_selected: 'master_lp_purchase',
+                payment_status: 'pending',
+            };
 
-            // Flag that purchase came from LP4 so StripeSuccess can redirect
+            const { error: cohortError } = await supabase.from('official_cohort_2026').insert([cohortPayload]);
+            if (cohortError) throw cohortError;
+
+            // Store cohort record ID so success page can UPDATE the same row
+            localStorage.setItem('master_cohort_id', cohortId);
             localStorage.setItem('purchase_source', 'master_lp');
 
             setFormSaved(true);
