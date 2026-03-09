@@ -79,6 +79,7 @@ const MasterCheckout = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState('');
     const [formSaved, setFormSaved] = useState(false);
+    const [savedRecordId, setSavedRecordId] = useState(null);
 
     /* ── form state ── */
     const [formData, setFormData] = useState({
@@ -153,7 +154,10 @@ const MasterCheckout = () => {
                 cvUrl = data.publicUrl;
             }
 
+            const generatedId = crypto.randomUUID();
+
             const payload = {
+                id: generatedId,
                 first_name: formData.firstName.trim(),
                 last_name: formData.lastName.trim(),
                 age: age,
@@ -180,6 +184,9 @@ const MasterCheckout = () => {
             const { error } = await supabase.from('applications').insert([payload]);
             if (error) throw error;
 
+            // Store the record ID so we can update payment_option_selected on click
+            setSavedRecordId(generatedId);
+
             // Flag that purchase came from LP4 so StripeSuccess can redirect
             localStorage.setItem('purchase_source', 'master_lp');
 
@@ -191,6 +198,23 @@ const MasterCheckout = () => {
         } finally {
             setIsSubmitting(false);
         }
+    };
+
+    /* ── record which payment option the lead clicked ── */
+    const handlePaymentClick = async (option, stripeUrl) => {
+        if (!formSaved || !savedRecordId) return;
+
+        // Fire-and-forget update — don't block the Stripe redirect
+        supabase
+            .from('applications')
+            .update({ payment_option_selected: option })
+            .eq('id', savedRecordId)
+            .then(({ error }) => {
+                if (error) console.error('Error updating payment option:', error);
+            });
+
+        // Open Stripe in a new tab
+        window.open(stripeUrl, '_blank', 'noopener,noreferrer');
     };
 
     return (
@@ -498,10 +522,9 @@ const MasterCheckout = () => {
                     {/* Pay in Full */}
                     <a
                         href={formSaved ? FULL_URL : '#'}
-                        target={formSaved ? '_blank' : undefined}
                         rel="noopener noreferrer"
-                        onClick={(e) => { if (!formSaved) e.preventDefault(); }}
-                        className="group relative flex flex-col items-center justify-center gap-1 bg-gradient-to-br from-rr-pink to-rr-blue p-px rounded-2xl overflow-hidden hover:shadow-[0_0_32px_rgba(229,6,149,0.4)] transition-shadow duration-300"
+                        onClick={(e) => { e.preventDefault(); if (formSaved) handlePaymentClick('pay_in_full', FULL_URL); }}
+                        className="group relative flex flex-col items-center justify-center gap-1 bg-gradient-to-br from-rr-pink to-rr-blue p-px rounded-2xl overflow-hidden hover:shadow-[0_0_32px_rgba(229,6,149,0.4)] transition-shadow duration-300 cursor-pointer"
                     >
                         <div className="w-full bg-rr-dark group-hover:bg-rr-dark/80 transition-colors rounded-2xl px-6 py-7 flex flex-col items-center gap-2 text-center">
                             <span className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.25em]">Best Value</span>
@@ -519,10 +542,9 @@ const MasterCheckout = () => {
                     {/* Flexi Pay */}
                     <a
                         href={formSaved ? DEPOSIT_URL : '#'}
-                        target={formSaved ? '_blank' : undefined}
                         rel="noopener noreferrer"
-                        onClick={(e) => { if (!formSaved) e.preventDefault(); }}
-                        className="group relative flex flex-col items-center justify-center gap-1 bg-gradient-to-br from-white/20 to-white/5 p-px rounded-2xl overflow-hidden hover:from-rr-blue hover:to-rr-pink hover:shadow-[0_0_32px_rgba(0,112,240,0.3)] transition-all duration-300"
+                        onClick={(e) => { e.preventDefault(); if (formSaved) handlePaymentClick('flexi_pay', DEPOSIT_URL); }}
+                        className="group relative flex flex-col items-center justify-center gap-1 bg-gradient-to-br from-white/20 to-white/5 p-px rounded-2xl overflow-hidden hover:from-rr-blue hover:to-rr-pink hover:shadow-[0_0_32px_rgba(0,112,240,0.3)] transition-all duration-300 cursor-pointer"
                     >
                         <div className="w-full bg-rr-dark group-hover:bg-rr-dark/80 transition-colors rounded-2xl px-6 py-7 flex flex-col items-center gap-2 text-center">
                             <span className="text-[10px] font-bold text-rr-blue uppercase tracking-[0.25em]">Flexible</span>
