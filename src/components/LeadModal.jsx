@@ -91,7 +91,8 @@ const LeadModal = ({ isOpen, onClose }) => {
                     age: formData.age ? parseInt(formData.age) : null,
                     suburb: formData.suburb,
                     club: formData.clubs,
-                    bio: `Gender: ${formData.gender} (Lead from Splash Page)`
+                    bio: `Gender: ${formData.gender} (Lead from Splash Page)`,
+                    source: 'splash_page'
                 }]);
 
             if (insertError) throw insertError;
