@@ -43,7 +43,7 @@ const HeroSection = () => {
                     className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-200 uppercase tracking-tighter leading-none mb-6"
                 >
                     SCHOOL HOLIDAYS.<br />
-                    <span className="text-rr-pink">ELITE CRICKET.</span>
+                    <span className="text-rr-pink">THE ROYALS WAY.</span>
                 </motion.h1>
 
                 {/* Subhead */}

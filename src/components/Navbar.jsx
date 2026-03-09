@@ -25,8 +25,8 @@ const Navbar = ({ variant = 'lp1' }) => {
     const navLinks = (isLP3 || isHoliday) ? [] : (isLP2 ? LP2_NAV : LP1_NAV);
 
     // LP3 does not need a CTA button
-    const ctaLabel = isLP2 ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
-    const ctaTarget = isLP2 ? 'checkout' : 'apply-form';
+    const ctaLabel = (isLP2 || isHoliday) ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
+    const ctaTarget = isLP2 ? 'checkout' : (isHoliday ? 'registration-form' : 'apply-form');
 
     const scrollToForm = () => {
         document.getElementById(ctaTarget)?.scrollIntoView({ behavior: 'smooth' });
