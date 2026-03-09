@@ -91,15 +91,6 @@ const BeyondTwelveWeeks = () => {
                         </p>
                     </motion.div>
 
-                    {/* Bullet Card 3 */}
-                    <motion.div variants={fadeIn} className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 relative overflow-hidden group hover:border-rr-pink/30 transition-colors duration-500 flex flex-col items-center text-center">
-                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-pink to-rr-blue rounded-t-3xl" />
-                        <h3 className="text-xl font-bold text-rr-dark mb-3">The Royals Network</h3>
-                        <p className="text-slate-600 leading-relaxed font-medium">
-                            Direct integration into the Rajasthan Royals international development database.
-                        </p>
-                    </motion.div>
-
                     {/* HP Centre Card */}
                     <motion.div variants={fadeIn} className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8 relative overflow-hidden group hover:border-rr-blue/30 transition-colors duration-500 flex flex-col items-center text-center">
                         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rr-blue to-rr-pink rounded-t-3xl" />
