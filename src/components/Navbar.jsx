@@ -19,9 +19,10 @@ const Navbar = ({ variant = 'lp1' }) => {
 
     const isLP2 = variant === 'lp2';
     const isLP3 = variant === 'lp3';
+    const isHoliday = variant === 'holiday';
 
-    // For LP3, we want an empty nav bar (no links)
-    const navLinks = isLP3 ? [] : (isLP2 ? LP2_NAV : LP1_NAV);
+    // For LP3 and Holiday, we want an empty nav bar (no links)
+    const navLinks = (isLP3 || isHoliday) ? [] : (isLP2 ? LP2_NAV : LP1_NAV);
 
     // LP3 does not need a CTA button
     const ctaLabel = isLP2 ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
