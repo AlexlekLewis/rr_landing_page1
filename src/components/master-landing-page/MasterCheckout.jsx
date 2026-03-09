@@ -220,7 +220,6 @@ const MasterCheckout = () => {
 
             // Store cohort record ID so success page can UPDATE the same row
             localStorage.setItem('master_cohort_id', cohortId);
-            localStorage.setItem('purchase_source', 'master_lp');
 
             setFormSaved(true);
             setSubmitError('');

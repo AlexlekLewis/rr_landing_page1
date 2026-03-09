@@ -102,12 +102,10 @@ const MasterStripeSuccess = () => {
         visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
     };
 
-    /* -- Payment confirmation (same logic as StripeSuccess) -- */
+    /* -- Payment confirmation -- */
     useEffect(() => {
-        // LP4 flow: application was already saved to 'applications' table before Stripe.
-        // No pending_registration_id to confirm — just show the onboarding form.
-        // Clean up the purchase_source flag if it hasn't been cleaned up yet.
-        localStorage.removeItem('purchase_source');
+        // LP4 flow: application + cohort record were already created at checkout.
+        // Stripe redirects here via /lp3/success — just show the onboarding form.
         setPaymentStatus('success');
     }, []);
 
@@ -207,7 +205,6 @@ const MasterStripeSuccess = () => {
             // Clean up localStorage
             localStorage.removeItem('payment_option_selected');
             localStorage.removeItem('master_cohort_id');
-            localStorage.removeItem('purchase_source');
 
             // Fire Zapier webhook if configured
             const webhookUrl = import.meta.env.VITE_LP3_WEBHOOK_URL;

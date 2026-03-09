@@ -90,7 +90,7 @@ function App() {
         <Route path="/eliteprogram/2026registration" element={<LandingPage />} />
         <Route path="/eliteprogram/2026registrations" element={<LandingPage />} />
         <Route path="/offer/assessment" element={<LandingPage2 />} />
-        <Route path="/offer/acceptance" element={<LandingPage3 />} />
+        <Route path="/offer/acceptance" element={<Navigate to="/eliteprogram2026" replace />} />
         <Route path="/lp3/success" element={<StripeSuccess />} />
         <Route path="/invite" element={<Navigate to="/offer/assessment" replace />} />
         <Route path="/landing_page2/Preview" element={<LandingPage2 />} />
