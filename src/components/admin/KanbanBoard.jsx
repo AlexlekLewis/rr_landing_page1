@@ -4,7 +4,7 @@ import { Plus, GripVertical, RefreshCw } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import useRealtimeSync from '../../hooks/useRealtimeSync';
 import KanbanCard from './KanbanCard';
-import ApplicationDetail from './ApplicationDetail';
+import UnifiedPlayerDetail from './UnifiedPlayerDetail';
 
 const KanbanBoard = () => {
     const [stages, setStages] = useState([]);
@@ -226,10 +226,10 @@ const KanbanBoard = () => {
                 })}
             </div>
 
-            {/* Application Detail Slide-out */}
+            {/* Player Detail Slide-out */}
             <AnimatePresence>
                 {selectedApp && (
-                    <ApplicationDetail
+                    <UnifiedPlayerDetail
                         application={selectedApp}
                         entry={entries.find(e => e.application_id === selectedApp.id)}
                         stages={stages}

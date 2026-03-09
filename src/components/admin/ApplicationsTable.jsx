@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, Download, ChevronDown, ChevronUp, Check, X, Archive, RotateCcw } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import useRealtimeSync from '../../hooks/useRealtimeSync';
-import ApplicationDetail from './ApplicationDetail';
+import UnifiedPlayerDetail from './UnifiedPlayerDetail';
 
 const ApplicationsTable = () => {
     const [applications, setApplications] = useState([]);
@@ -358,7 +358,7 @@ const ApplicationsTable = () => {
             {/* Detail panel */}
             <AnimatePresence>
                 {selectedApp && (
-                    <ApplicationDetail
+                    <UnifiedPlayerDetail
                         application={selectedApp}
                         entry={getEntry(selectedApp.id)}
                         stages={stages}
