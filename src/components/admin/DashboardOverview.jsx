@@ -68,21 +68,27 @@ const DashboardOverview = () => {
     const fetchDashboardData = useCallback(async () => {
         try {
             // ── Fetch all data sources in parallel ──────────────────────
-            const [appsRes, entriesRes, stagesRes, activityRes, splashRes, cohortRes, tokensRes] = await Promise.all([
+            // Core tables (guaranteed to exist)
+            const [appsRes, entriesRes, stagesRes, activityRes, cohortRes, tokensRes] = await Promise.all([
                 supabase.from('applications').select('id, created_at, first_name, last_name, archived, source').order('created_at', { ascending: false }),
                 supabase.from('pipeline_entries').select('stage_slug, application_id'),
                 supabase.from('pipeline_stages').select('*').order('sort_order'),
                 supabase.from('pipeline_activity_log').select('*').order('created_at', { ascending: false }).limit(20),
-                supabase.from('splash_leads').select('id, created_at, first_name, last_name'),
                 supabase.from('official_cohort_2026').select('id, created_at, player_name, payment_status, payment_option_selected'),
                 supabase.from('offer_tokens').select('id, created_at, status, applicant_name'),
             ]);
+
+            // Optional tables (may not exist yet — fail gracefully)
+            let splashLeads = [];
+            try {
+                const splashRes = await supabase.from('splash_leads').select('id, created_at, first_name, last_name');
+                if (!splashRes.error) splashLeads = splashRes.data || [];
+            } catch { /* table may not exist yet */ }
 
             const apps = appsRes.data || [];
             const entries = entriesRes.data || [];
             const stages = stagesRes.data || [];
             const activity = activityRes.data || [];
-            const splashLeads = splashRes.data || [];
             const cohort = cohortRes.data || [];
             const tokens = tokensRes.data || [];
 
@@ -137,7 +143,7 @@ const DashboardOverview = () => {
     // ── Real-time sync across all data sources ──────────────────────────
     useRealtimeSync([
         'applications', 'pipeline_entries', 'pipeline_activity_log',
-        'official_cohort_2026', 'splash_leads', 'offer_tokens'
+        'official_cohort_2026', 'offer_tokens'
     ], fetchDashboardData);
 
     // ── Derived ─────────────────────────────────────────────────────────
