@@ -13,3 +13,9 @@ FOR UPDATE
 TO public
 USING (true)
 WITH CHECK (true);
+
+-- Also add payment_option_selected to official_cohort_2026 (cohort tracking table)
+ALTER TABLE public.official_cohort_2026
+ADD COLUMN IF NOT EXISTS payment_option_selected TEXT DEFAULT NULL;
+
+COMMENT ON COLUMN public.official_cohort_2026.payment_option_selected IS 'Tracks which Stripe payment option the lead clicked from Master LP: pay_in_full or flexi_pay';

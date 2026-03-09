@@ -173,6 +173,7 @@ const MasterStripeSuccess = () => {
                 preferred_comms: preferredComms,
 
                 payment_plan_selected: 'master_lp_purchase',
+                payment_option_selected: localStorage.getItem('payment_option_selected') || null,
                 payment_status: 'completed',
                 created_at_melb: new Date().toLocaleString('en-AU', {
                     timeZone: 'Australia/Melbourne',
@@ -184,6 +185,9 @@ const MasterStripeSuccess = () => {
 
             const { error } = await supabase.from('official_cohort_2026').insert(payload);
             if (error) throw error;
+
+            // Clean up payment option from localStorage
+            localStorage.removeItem('payment_option_selected');
 
             // Fire Zapier webhook if configured
             const webhookUrl = import.meta.env.VITE_LP3_WEBHOOK_URL;

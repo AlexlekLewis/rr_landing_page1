@@ -201,17 +201,12 @@ const MasterCheckout = () => {
     };
 
     /* ── record which payment option the lead clicked ── */
-    const handlePaymentClick = async (option, stripeUrl) => {
-        if (!formSaved || !savedRecordId) return;
+    const handlePaymentClick = (option, stripeUrl) => {
+        if (!formSaved) return;
 
-        // Fire-and-forget update — don't block the Stripe redirect
-        supabase
-            .from('applications')
-            .update({ payment_option_selected: option })
-            .eq('id', savedRecordId)
-            .then(({ error }) => {
-                if (error) console.error('Error updating payment option:', error);
-            });
+        // Store the selection so MasterStripeSuccess can include it
+        // in the official_cohort_2026 insert
+        localStorage.setItem('payment_option_selected', option);
 
         // Open Stripe in a new tab
         window.open(stripeUrl, '_blank', 'noopener,noreferrer');
