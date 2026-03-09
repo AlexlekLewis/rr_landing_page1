@@ -1,7 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Upload, FileSpreadsheet, Copy, CheckCircle2, AlertCircle, RefreshCw, Lock } from 'lucide-react';
+import {
+    Upload, FileSpreadsheet, Copy, CheckCircle2, AlertCircle, RefreshCw, Lock,
+    Search, Clock, XCircle, HelpCircle, ChevronDown, ChevronUp, Send
+} from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import useRealtimeSync from '../../hooks/useRealtimeSync';
+
+const STATUS_CONFIG = {
+    pending: { label: 'Pending', color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20', icon: Clock },
+    accepted: { label: 'Accepted', color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', icon: CheckCircle2 },
+    declined: { label: 'Declined', color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20', icon: XCircle },
+    expired: { label: 'Expired', color: 'text-slate-500', bg: 'bg-white/5', border: 'border-white/10', icon: Clock },
+};
 
 const TokenGenerator = () => {
     const [inputText, setInputText] = useState('');
@@ -9,6 +20,62 @@ const TokenGenerator = () => {
     const [results, setResults] = useState([]);
     const [error, setError] = useState(null);
     const [copiedIndex, setCopiedIndex] = useState(null);
+
+    // ── Offer History ───────────────────────────────────────────────
+    const [allTokens, setAllTokens] = useState([]);
+    const [responses, setResponses] = useState([]);
+    const [historyLoading, setHistoryLoading] = useState(true);
+    const [historySearch, setHistorySearch] = useState('');
+    const [statusFilter, setStatusFilter] = useState('all');
+    const [sortDir, setSortDir] = useState('desc');
+
+    const fetchHistory = useCallback(async () => {
+        const [tokensRes, responsesRes] = await Promise.all([
+            supabase.from('offer_tokens').select('*').order('created_at', { ascending: false }),
+            supabase.from('offer_responses').select('*').order('created_at', { ascending: false }),
+        ]);
+        setAllTokens(tokensRes.data || []);
+        setResponses(responsesRes.data || []);
+        setHistoryLoading(false);
+    }, []);
+
+    useEffect(() => { fetchHistory(); }, [fetchHistory]);
+    useRealtimeSync(['offer_tokens', 'offer_responses'], fetchHistory);
+
+    // ── Merge tokens with responses ─────────────────────────────────
+    const mergedOffers = useMemo(() => {
+        return allTokens.map(token => {
+            const response = responses.find(r => r.token === token.token || r.offer_token_id === token.id);
+            const isExpired = !response && token.status === 'pending' && new Date(token.expires_at) < new Date();
+            return {
+                ...token,
+                response,
+                displayStatus: isExpired ? 'expired' : (token.status || 'pending'),
+            };
+        });
+    }, [allTokens, responses]);
+
+    const filteredOffers = useMemo(() => {
+        let result = mergedOffers;
+        if (statusFilter !== 'all') {
+            result = result.filter(o => o.displayStatus === statusFilter);
+        }
+        if (historySearch) {
+            const q = historySearch.toLowerCase();
+            result = result.filter(o =>
+                o.applicant_name?.toLowerCase().includes(q) ||
+                o.applicant_email?.toLowerCase().includes(q)
+            );
+        }
+        if (sortDir === 'asc') result = [...result].reverse();
+        return result;
+    }, [mergedOffers, statusFilter, historySearch, sortDir]);
+
+    const statusCounts = useMemo(() => {
+        const counts = { all: mergedOffers.length, pending: 0, accepted: 0, declined: 0, expired: 0 };
+        mergedOffers.forEach(o => { counts[o.displayStatus] = (counts[o.displayStatus] || 0) + 1; });
+        return counts;
+    }, [mergedOffers]);
 
     // Format expected: Name, Email
     const handleProcess = async () => {
@@ -265,6 +332,111 @@ const TokenGenerator = () => {
                         </div>
                     )}
                 </motion.div>
+            </div>
+
+            {/* ── Offer History ──────────────────────────────────────── */}
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <h2 className="text-lg font-bold text-white">Offer History</h2>
+                    <div className="flex items-center gap-3">
+                        <div className="relative">
+                            <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                            <input
+                                type="text"
+                                value={historySearch}
+                                onChange={(e) => setHistorySearch(e.target.value)}
+                                placeholder="Search offers..."
+                                className="bg-white/5 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-rr-pink/50 w-48"
+                            />
+                        </div>
+                        <button
+                            onClick={() => setSortDir(d => d === 'desc' ? 'asc' : 'desc')}
+                            className="p-2 rounded-lg bg-white/5 border border-white/10 text-slate-400 hover:text-white transition-colors"
+                            title="Toggle sort order"
+                        >
+                            {sortDir === 'desc' ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
+                        </button>
+                    </div>
+                </div>
+
+                {/* Status filter pills */}
+                <div className="flex items-center gap-2 flex-wrap mb-4">
+                    {['all', 'pending', 'accepted', 'declined', 'expired'].map(status => {
+                        const config = STATUS_CONFIG[status];
+                        const isActive = statusFilter === status;
+                        return (
+                            <button
+                                key={status}
+                                onClick={() => setStatusFilter(status)}
+                                className={`px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all border ${
+                                    isActive
+                                        ? (config ? `${config.bg} ${config.border} ${config.color}` : 'bg-rr-pink/20 border-rr-pink/30 text-rr-pink')
+                                        : 'bg-white/5 border-white/10 text-slate-500 hover:text-slate-300'
+                                }`}
+                            >
+                                {status === 'all' ? 'All' : config?.label} ({statusCounts[status] || 0})
+                            </button>
+                        );
+                    })}
+                </div>
+
+                {/* Offers list */}
+                {historyLoading ? (
+                    <div className="flex items-center justify-center py-8">
+                        <svg className="animate-spin w-6 h-6 text-rr-pink" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                    </div>
+                ) : filteredOffers.length === 0 ? (
+                    <p className="text-slate-600 text-sm text-center py-8">
+                        {allTokens.length === 0 ? 'No offers generated yet' : 'No offers match your filters'}
+                    </p>
+                ) : (
+                    <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1">
+                        {filteredOffers.map(offer => {
+                            const config = STATUS_CONFIG[offer.displayStatus] || STATUS_CONFIG.pending;
+                            const StatusIcon = config.icon;
+                            return (
+                                <div key={offer.id} className={`flex items-center gap-4 p-4 rounded-xl border ${config.border} ${config.bg} transition-all`}>
+                                    <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${config.bg}`}>
+                                        <StatusIcon className={`w-4 h-4 ${config.color}`} />
+                                    </div>
+                                    <div className="min-w-0 flex-1">
+                                        <div className="flex items-center gap-2">
+                                            <p className="text-white text-sm font-bold truncate">{offer.applicant_name}</p>
+                                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${config.bg} ${config.color}`}>
+                                                {config.label}
+                                            </span>
+                                        </div>
+                                        <p className="text-slate-500 text-xs truncate">{offer.applicant_email}</p>
+                                        <p className="text-slate-600 text-xs mt-0.5">
+                                            Sent {new Date(offer.created_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                            {offer.expires_at && ` · Expires ${new Date(offer.expires_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'short' })}`}
+                                        </p>
+                                        {offer.response?.selected_option && (
+                                            <p className="text-slate-400 text-xs mt-1">
+                                                Response: Option {offer.response.selected_option}
+                                                {offer.response.message && ` — "${offer.response.message}"`}
+                                            </p>
+                                        )}
+                                    </div>
+                                    <button
+                                        onClick={() => copyToClipboard(`${window.location.origin}/offer/${offer.token}`, `history-${offer.id}`)}
+                                        className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-500 hover:text-white transition-colors shrink-0"
+                                        title="Copy offer link"
+                                    >
+                                        {copiedIndex === `history-${offer.id}` ? (
+                                            <CheckCircle2 className="w-4 h-4 text-green-400" />
+                                        ) : (
+                                            <Copy className="w-4 h-4" />
+                                        )}
+                                    </button>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
             </div>
         </div>
     );
