@@ -52,7 +52,7 @@ const LocationsSection = () => {
                         transition={{ duration: 0.6, delay: 0.15 }}
                         className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium"
                     >
-                        North Melbourne and South-East Melbourne. Choose the clinic that works for your family.
+                        Northern Melbourne and South-East Melbourne. Choose the clinic that works for your family.
                     </motion.p>
                 </div>
 
