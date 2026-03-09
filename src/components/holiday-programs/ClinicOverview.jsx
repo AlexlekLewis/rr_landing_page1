@@ -79,30 +79,6 @@ const ClinicOverview = () => {
                         </motion.div>
                     ))}
                 </div>
-
-                {/* Action image strip */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="grid grid-cols-3 gap-3 mb-16 rounded-2xl overflow-hidden"
-                >
-                    {[
-                        "/assets/lp2/action/rr-vs-gt-action1.jpg",
-                        "/assets/lp2/action/rr-vs-gt-action5.jpg",
-                        "/assets/lp2/action/csk-vs-rr-action2.jpg",
-                    ].map((src, i) => (
-                        <div key={i} className="aspect-[4/3] overflow-hidden">
-                            <img
-                                src={src}
-                                alt="RRA cricket action"
-                                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                            />
-                        </div>
-                    ))}
-                </motion.div>
-
                 <div className="text-center">
                     <motion.button
                         initial={{ opacity: 0, y: 20 }}
