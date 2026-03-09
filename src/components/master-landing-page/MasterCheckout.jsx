@@ -209,6 +209,11 @@ const MasterCheckout = () => {
                 parent2_name: formData.parent2Name.trim(),
                 parent2_email: formData.parent2Email.trim(),
                 parent2_phone: formData.parent2Phone.trim(),
+                // Compliance
+                accept_terms: acceptTerms,
+                accept_player_code: acceptPlayerCode,
+                accept_parent_code: acceptParentCode,
+                accept_social_media: acceptSocialMedia,
                 // Status — pending until Stripe payment + onboarding
                 source: 'master_landing_page',
                 payment_plan_selected: 'master_lp_purchase',
