@@ -66,7 +66,7 @@ const RSVPResponses = () => {
     }, []);
 
     useEffect(() => { fetchData(); }, [fetchData]);
-    useRealtimeSync('rsvp_responses', fetchData);
+    useRealtimeSync(['rsvp_responses'], fetchData);
 
     // Computed stats
     const handleArchive = async (id, currentArchived) => {

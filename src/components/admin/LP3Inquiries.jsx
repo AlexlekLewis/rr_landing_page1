@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Download, ChevronDown, ChevronUp } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import useRealtimeSync from '../../hooks/useRealtimeSync';
 
 const LP3Inquiries = () => {
     const [inquiries, setInquiries] = useState([]);
@@ -29,6 +30,8 @@ const LP3Inquiries = () => {
     useEffect(() => {
         fetchData();
     }, [fetchData]);
+
+    useRealtimeSync(['official_cohort_2026'], fetchData);
 
     const filtered = useMemo(() => {
         let result = inquiries;

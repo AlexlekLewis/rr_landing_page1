@@ -155,7 +155,7 @@ const SelectionAnalytics = () => {
         fetchData();
     }, [fetchData]);
 
-    useRealtimeSync({ onApplicationChange: fetchData, onEntryChange: fetchData });
+    useRealtimeSync(['applications', 'pipeline_entries'], fetchData);
 
     const getEntry = (appId) => entries.find(e => e.application_id === appId);
     const getStage = (slug) => stages.find(s => s.slug === slug);

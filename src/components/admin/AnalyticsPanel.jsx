@@ -42,7 +42,7 @@ const AnalyticsPanel = () => {
         fetchData();
     }, [fetchData]);
 
-    useRealtimeSync({ onApplicationChange: fetchData, onEntryChange: fetchData });
+    useRealtimeSync(['applications', 'pipeline_entries', 'pipeline_stages'], fetchData);
 
     // ── Derived Analytics ──────────────────────────────────────────────────────
 

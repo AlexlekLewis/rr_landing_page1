@@ -3,14 +3,16 @@ import useRealtimeSync from '../../hooks/useRealtimeSync';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
-    Users, FileText, TrendingUp, Clock, ArrowRight,
-    Kanban, Activity, CheckCircle2
+    Users, FileText, TrendingUp, ArrowRight,
+    Kanban, Activity, CheckCircle2, Send, UserCheck, ChevronRight
 } from 'lucide-react';
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-    ResponsiveContainer, PieChart, Pie, Cell
+    ResponsiveContainer, Cell
 } from 'recharts';
 import { supabase } from '../../lib/supabase';
+
+const COHORT_TARGET = 20;
 
 const StatCard = ({ label, value, icon: Icon, color, subtext }) => (
     <motion.div
@@ -19,7 +21,7 @@ const StatCard = ({ label, value, icon: Icon, color, subtext }) => (
         className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all"
     >
         <div className="flex items-start justify-between mb-4">
-            <div className={`w-12 h-12 rounded-xl flex items-center justify-center`} style={{ backgroundColor: `${color}20` }}>
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${color}20` }}>
                 <Icon className="w-6 h-6" style={{ color }} />
             </div>
         </div>
@@ -29,10 +31,35 @@ const StatCard = ({ label, value, icon: Icon, color, subtext }) => (
     </motion.div>
 );
 
+const FunnelStep = ({ label, value, subtitle, color, conversionRate, isLast }) => (
+    <div className="flex-1 min-w-0">
+        <div className="relative">
+            <div className="rounded-2xl p-4 border transition-all" style={{ backgroundColor: `${color}10`, borderColor: `${color}30` }}>
+                <p className="text-3xl font-black text-white mb-0.5">{value}</p>
+                <p className="text-sm font-bold" style={{ color }}>{label}</p>
+                {subtitle && <p className="text-slate-500 text-xs mt-0.5">{subtitle}</p>}
+            </div>
+            {!isLast && conversionRate !== null && (
+                <div className="hidden lg:flex absolute -right-4 top-1/2 -translate-y-1/2 z-10 items-center">
+                    <div className="bg-slate-800 border border-white/10 rounded-lg px-1.5 py-0.5 text-[10px] font-bold text-slate-400">
+                        {conversionRate}%
+                    </div>
+                    <ChevronRight className="w-3 h-3 text-slate-600 -ml-0.5" />
+                </div>
+            )}
+        </div>
+    </div>
+);
+
 const DashboardOverview = () => {
     const [stats, setStats] = useState({
-        totalApplications: 0,
-        thisWeek: 0,
+        enquiries: 0,
+        totalPlayers: 0,
+        archivedCount: 0,
+        thisWeek: { enquiries: 0, applications: 0, cohort: 0, offers: 0 },
+        offeredCount: 0,
+        enrolledCount: 0,
+        cohortTotal: 0,
         stages: [],
         recentActivity: [],
     });
@@ -40,50 +67,61 @@ const DashboardOverview = () => {
 
     const fetchDashboardData = useCallback(async () => {
         try {
-            // Fetch all applications
-            const { data: apps } = await supabase
-                .from('applications')
-                .select('id, created_at, first_name, last_name, archived')
-                .order('created_at', { ascending: false });
+            // ── Fetch all data sources in parallel ──────────────────────
+            const [appsRes, entriesRes, stagesRes, activityRes, splashRes, cohortRes, tokensRes] = await Promise.all([
+                supabase.from('applications').select('id, created_at, first_name, last_name, archived, source').order('created_at', { ascending: false }),
+                supabase.from('pipeline_entries').select('stage_slug, application_id'),
+                supabase.from('pipeline_stages').select('*').order('sort_order'),
+                supabase.from('pipeline_activity_log').select('*').order('created_at', { ascending: false }).limit(20),
+                supabase.from('splash_leads').select('id, created_at, first_name, last_name'),
+                supabase.from('official_cohort_2026').select('id, created_at, player_name, payment_status, payment_option_selected'),
+                supabase.from('offer_tokens').select('id, created_at, status, applicant_name'),
+            ]);
 
-            const activeApps = (apps || []).filter(a => !a.archived);
-            const archivedCount = (apps || []).length - activeApps.length;
+            const apps = appsRes.data || [];
+            const entries = entriesRes.data || [];
+            const stages = stagesRes.data || [];
+            const activity = activityRes.data || [];
+            const splashLeads = splashRes.data || [];
+            const cohort = cohortRes.data || [];
+            const tokens = tokensRes.data || [];
 
-            // Fetch pipeline entries with stage info
-            const { data: entries } = await supabase
-                .from('pipeline_entries')
-                .select('stage_slug, application_id');
+            const activeApps = apps.filter(a => !a.archived);
+            const archivedCount = apps.length - activeApps.length;
 
-            // Fetch pipeline stages
-            const { data: stages } = await supabase
-                .from('pipeline_stages')
-                .select('*')
-                .order('sort_order');
+            // ── Funnel Metrics ──────────────────────────────────────────
+            const enquiries = splashLeads.length;
+            const totalPlayers = activeApps.length;
+            const offeredCount = tokens.length;
+            const enrolledCount = cohort.filter(c => c.payment_status && c.payment_status !== 'pending').length;
+            const cohortTotal = cohort.length;
 
-            // Fetch recent activity
-            const { data: activity } = await supabase
-                .from('pipeline_activity_log')
-                .select('*')
-                .order('created_at', { ascending: false })
-                .limit(15);
-
-            // Calculate this week's applications
+            // ── This Week ───────────────────────────────────────────────
             const weekAgo = new Date();
             weekAgo.setDate(weekAgo.getDate() - 7);
-            const thisWeek = activeApps.filter(a => new Date(a.created_at) > weekAgo).length;
+            const thisWeek = {
+                enquiries: splashLeads.filter(s => new Date(s.created_at) > weekAgo).length,
+                applications: activeApps.filter(a => new Date(a.created_at) > weekAgo).length,
+                cohort: cohort.filter(c => new Date(c.created_at) > weekAgo).length,
+                offers: tokens.filter(t => new Date(t.created_at) > weekAgo).length,
+            };
 
-            // Count per stage
-            const stageCounts = (stages || []).map(s => ({
+            // ── Pipeline Stages ─────────────────────────────────────────
+            const stageCounts = stages.map(s => ({
                 ...s,
-                count: (entries || []).filter(e => e.stage_slug === s.slug).length,
+                count: entries.filter(e => e.stage_slug === s.slug).length,
             }));
 
             setStats({
-                totalApplications: activeApps.length,
+                enquiries,
+                totalPlayers,
                 archivedCount,
                 thisWeek,
+                offeredCount,
+                enrolledCount,
+                cohortTotal,
                 stages: stageCounts,
-                recentActivity: activity || [],
+                recentActivity: activity,
             });
         } catch (err) {
             console.error('Error fetching dashboard data:', err);
@@ -96,19 +134,24 @@ const DashboardOverview = () => {
         fetchDashboardData();
     }, [fetchDashboardData]);
 
-    useRealtimeSync({ onApplicationChange: fetchDashboardData, onEntryChange: fetchDashboardData, onActivityChange: fetchDashboardData });
+    // ── Real-time sync across all data sources ──────────────────────────
+    useRealtimeSync([
+        'applications', 'pipeline_entries', 'pipeline_activity_log',
+        'official_cohort_2026', 'splash_leads', 'offer_tokens'
+    ], fetchDashboardData);
 
+    // ── Derived ─────────────────────────────────────────────────────────
     const pipelineChartData = stats.stages.map(s => ({
         name: s.name.length > 15 ? s.name.substring(0, 15) + '…' : s.name,
         count: s.count,
         fill: s.color,
     }));
 
-    const COLORS = stats.stages.map(s => s.color);
+    const convEnqToApp = stats.enquiries > 0 ? Math.round((stats.totalPlayers / stats.enquiries) * 100) : null;
+    const convAppToOffer = stats.totalPlayers > 0 ? Math.round((stats.offeredCount / stats.totalPlayers) * 100) : null;
+    const convOfferToEnrol = stats.offeredCount > 0 ? Math.round((stats.enrolledCount / stats.offeredCount) * 100) : null;
 
-    const conversionRate = stats.totalApplications > 0
-        ? ((stats.stages.find(s => s.slug === 'accepted')?.count || 0) / stats.totalApplications * 100).toFixed(1)
-        : 0;
+    const cohortProgress = Math.min(100, Math.round((stats.enrolledCount / COHORT_TARGET) * 100));
 
     if (loading) {
         return (
@@ -126,43 +169,94 @@ const DashboardOverview = () => {
             {/* Header */}
             <div>
                 <h1 className="text-2xl md:text-3xl font-black text-white tracking-wider">DASHBOARD</h1>
-                <p className="text-slate-400 text-sm mt-1">Overview of players and pipeline status</p>
+                <p className="text-slate-400 text-sm mt-1">Elite Program 2026 — complete funnel overview</p>
             </div>
 
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <StatCard
-                    label="Total Players"
-                    value={stats.totalApplications}
-                    icon={FileText}
-                    color="#3B82F6"
-                    subtext={stats.archivedCount ? `${stats.archivedCount} archived` : undefined}
-                />
-                <StatCard
-                    label="This Week"
-                    value={stats.thisWeek}
-                    icon={TrendingUp}
-                    color="#10B981"
-                    subtext="New players"
-                />
-                <StatCard
-                    label="Conversion Rate"
-                    value={`${conversionRate}%`}
-                    icon={CheckCircle2}
-                    color="#8B5CF6"
-                    subtext="Applied → Accepted"
-                />
-                <StatCard
-                    label="Pipeline Stages"
-                    value={stats.stages.length}
-                    icon={Kanban}
-                    color="#EC4899"
-                />
+            {/* ── Funnel ─────────────────────────────────────────────── */}
+            <div>
+                <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-4">Player Funnel</h3>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
+                    <FunnelStep label="Enquiries" value={stats.enquiries} subtitle="Splash leads" color="#3B82F6" conversionRate={convEnqToApp} />
+                    <FunnelStep label="Applied" value={stats.totalPlayers} subtitle={stats.archivedCount ? `${stats.archivedCount} archived` : 'Active players'} color="#8B5CF6" conversionRate={convAppToOffer} />
+                    <FunnelStep label="Offered" value={stats.offeredCount} subtitle="Offers sent" color="#F59E0B" conversionRate={convOfferToEnrol} />
+                    <FunnelStep label="Enrolled" value={stats.enrolledCount} subtitle={`${stats.cohortTotal} total in cohort`} color="#10B981" conversionRate={null} isLast />
+                </div>
             </div>
 
-            {/* Pipeline Breakdown + Quick Actions */}
+            {/* ── Cohort Target + This Week ──────────────────────────── */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {/* Cohort Target */}
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                    <div className="flex items-center justify-between mb-3">
+                        <h3 className="text-white font-bold text-sm uppercase tracking-wider">Cohort Target</h3>
+                        <span className="text-white font-black text-lg">{stats.enrolledCount} <span className="text-slate-500 font-normal text-sm">/ {COHORT_TARGET}</span></span>
+                    </div>
+                    <div className="w-full bg-white/5 rounded-full h-4 overflow-hidden">
+                        <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${cohortProgress}%` }}
+                            transition={{ duration: 1, ease: 'easeOut' }}
+                            className="h-full rounded-full"
+                            style={{ background: cohortProgress >= 100 ? '#10B981' : 'linear-gradient(90deg, #E50695, #1226AA)' }}
+                        />
+                    </div>
+                    <div className="flex justify-between mt-2">
+                        <p className="text-slate-500 text-xs">{cohortProgress}% of target</p>
+                        {stats.enrolledCount < COHORT_TARGET && (
+                            <p className="text-slate-500 text-xs">{COHORT_TARGET - stats.enrolledCount} more needed</p>
+                        )}
+                        {stats.enrolledCount >= COHORT_TARGET && (
+                            <p className="text-emerald-400 text-xs font-medium">Target reached!</p>
+                        )}
+                    </div>
+                </div>
+
+                {/* This Week Summary */}
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                    <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-4">This Week</h3>
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                                <Users className="w-4 h-4 text-blue-400" />
+                            </div>
+                            <div>
+                                <p className="text-white font-bold text-lg leading-tight">{stats.thisWeek.enquiries}</p>
+                                <p className="text-slate-500 text-xs">Enquiries</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                                <FileText className="w-4 h-4 text-purple-400" />
+                            </div>
+                            <div>
+                                <p className="text-white font-bold text-lg leading-tight">{stats.thisWeek.applications}</p>
+                                <p className="text-slate-500 text-xs">Applications</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
+                                <Send className="w-4 h-4 text-amber-400" />
+                            </div>
+                            <div>
+                                <p className="text-white font-bold text-lg leading-tight">{stats.thisWeek.offers}</p>
+                                <p className="text-slate-500 text-xs">Offers sent</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+                                <UserCheck className="w-4 h-4 text-emerald-400" />
+                            </div>
+                            <div>
+                                <p className="text-white font-bold text-lg leading-tight">{stats.thisWeek.cohort}</p>
+                                <p className="text-slate-500 text-xs">Enrolled</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* ── Pipeline Breakdown + Stage Summary ─────────────────── */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Pipeline Bar Chart */}
                 <div className="lg:col-span-2 bg-white/5 border border-white/10 rounded-2xl p-6">
                     <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-6">Pipeline Breakdown</h3>
                     <ResponsiveContainer width="100%" height={280}>
@@ -182,7 +276,6 @@ const DashboardOverview = () => {
                     </ResponsiveContainer>
                 </div>
 
-                {/* Stage Counts */}
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
                     <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-6">Stage Summary</h3>
                     <div className="space-y-3">
@@ -205,7 +298,7 @@ const DashboardOverview = () => {
                 </div>
             </div>
 
-            {/* Recent Activity */}
+            {/* ── Recent Activity ─────────────────────────────────────── */}
             <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
                 <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-6">Recent Activity</h3>
                 {stats.recentActivity.length === 0 ? (

@@ -37,8 +37,7 @@ const KanbanBoard = () => {
         fetchData();
     }, [fetchData, refreshKey]);
 
-    // Live-update on any data change
-    useRealtimeSync({ onApplicationChange: fetchData, onEntryChange: fetchData, onActivityChange: fetchData });
+    useRealtimeSync(['applications', 'pipeline_entries', 'pipeline_activity_log'], fetchData);
 
     const getEntriesForStage = (stageSlug) => {
         const stageEntryIds = entries

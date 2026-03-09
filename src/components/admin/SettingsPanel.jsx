@@ -5,6 +5,7 @@ import {
     UserPlus, Check, X, AlertTriangle
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import useRealtimeSync from '../../hooks/useRealtimeSync';
 
 const SUPER_ADMIN_EMAIL = 'alex.lewis@rramelbourne.com';
 
@@ -25,6 +26,8 @@ const SettingsPanel = () => {
     useEffect(() => {
         fetchData();
     }, []);
+
+    useRealtimeSync(['pipeline_stages', 'dashboard_users'], fetchData);
 
     const fetchData = async () => {
         const { data: { session } } = await supabase.auth.getSession();
