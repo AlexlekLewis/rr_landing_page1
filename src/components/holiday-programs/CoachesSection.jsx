@@ -6,7 +6,7 @@ const coaches = [
     {
         name: 'Alex Thornhill',
         role: 'Head Coach',
-        bio: 'Details to be confirmed prior to clinic. RRA-certified performance coach with elite program experience.',
+        bio: 'An experienced cricket coach in both the UK and Australia. Alex currently coaches within the Fitzroy Doncaster Academy, as well as leading the Year 9 and 10 cricket program at Xavier College. He specialises in batting coaching with the use of video analysis and has previously worked with county cricketers in the UK.',
         specialties: ['Batting', 'Game Strategy'],
         img: null,
     },
