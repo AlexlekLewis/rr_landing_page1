@@ -4,24 +4,10 @@ import { motion } from 'framer-motion';
 // ⚠️ ACTION REQUIRED: Replace placeholder data with real coach details before go-live
 const coaches = [
     {
-        name: 'Coach TBC',
+        name: 'Alex Thornhill',
         role: 'Head Coach',
         bio: 'Details to be confirmed prior to clinic. RRA-certified performance coach with elite program experience.',
         specialties: ['Batting', 'Game Strategy'],
-        img: null,
-    },
-    {
-        name: 'Coach TBC',
-        role: 'Bowling Specialist',
-        bio: 'Details to be confirmed prior to clinic. Specialist in pace development and T20 bowling tactics.',
-        specialties: ['Fast Bowling', 'T20 Tactics'],
-        img: null,
-    },
-    {
-        name: 'Coach TBC',
-        role: 'Skills Coach',
-        bio: 'Details to be confirmed prior to clinic. Focused on fielding, wicketkeeping, and game awareness.',
-        specialties: ['Fielding', 'Wicketkeeping'],
         img: null,
     },
 ];
@@ -38,7 +24,7 @@ const CoachesSection = () => {
                         transition={{ duration: 0.6 }}
                         className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-wide mb-6"
                     >
-                        YOUR <span className="text-rr-pink">COACHES</span>
+                        YOUR HEAD <span className="text-rr-pink">COACH</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -51,7 +37,7 @@ const CoachesSection = () => {
                     </motion.p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+                <div className="flex justify-center mb-10">
                     {coaches.map((coach, i) => (
                         <motion.div
                             key={coach.role + i}
@@ -59,7 +45,7 @@ const CoachesSection = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: i * 0.15 }}
-                            className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100"
+                            className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 w-full max-w-sm"
                         >
                             {/* Avatar */}
                             <div className="h-56 flex items-center justify-center bg-gradient-to-br from-rr-navy via-rr-blue to-rr-pink">
