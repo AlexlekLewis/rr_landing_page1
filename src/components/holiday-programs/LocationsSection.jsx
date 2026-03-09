@@ -23,7 +23,7 @@ const locations = [
         gradient: 'linear-gradient(135deg, #E11F8F 0%, #1226AA 60%, #001D48 100%)',
         mapsUrl: 'https://maps.google.com/?q=Hallam+Cricket+Centre+Hallam+VIC',
         tag: 'hallam',
-        image: '/assets/lp2/action/csk-vs-rr-action4.jpg',
+        image: '/assets/hallam-cricket-centre.png',
     },
 ];
 
