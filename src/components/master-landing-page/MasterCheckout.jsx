@@ -559,6 +559,13 @@ const MasterCheckout = () => {
                             background-size: 300% 300%;
                             animation: shimmerBorder 3s ease infinite;
                         }
+                        .shimmer-border-bright {
+                            background: linear-gradient(270deg, #ff0fa8, #a855f7, #e50695, #ff0fa8);
+                            background-size: 300% 300%;
+                            animation: shimmerBorder 2.5s ease infinite;
+                            filter: brightness(1.25) saturate(1.3);
+                            box-shadow: 0 0 18px rgba(229,6,149,0.35);
+                        }
                     `}</style>
                 </motion.div>
 
@@ -593,7 +600,7 @@ const MasterCheckout = () => {
                         href={formSaved ? FULL_URL : '#'}
                         rel="noopener noreferrer"
                         onClick={(e) => { e.preventDefault(); if (formSaved) handlePaymentClick('Paid in Full', FULL_URL); }}
-                        className={`group relative flex flex-col items-center justify-center gap-1 p-px rounded-2xl overflow-hidden hover:shadow-[0_0_32px_rgba(229,6,149,0.4)] transition-shadow duration-300 cursor-pointer ${formSaved ? 'shimmer-border' : 'bg-gradient-to-br from-rr-pink to-rr-blue'}`}
+                        className={`group relative flex flex-col items-center justify-center gap-1 p-px rounded-2xl overflow-hidden hover:shadow-[0_0_32px_rgba(229,6,149,0.4)] transition-shadow duration-300 cursor-pointer ${formSaved ? 'shimmer-border-bright' : 'bg-gradient-to-br from-rr-pink to-rr-blue'}`}
                     >
                         <div className="w-full bg-rr-dark group-hover:bg-rr-dark/80 transition-colors rounded-2xl px-6 py-7 flex flex-col items-center gap-2 text-center">
                             <span className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.25em]">Best Value</span>
