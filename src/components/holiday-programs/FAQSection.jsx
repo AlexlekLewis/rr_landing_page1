@@ -19,11 +19,6 @@ const faqs = [
         q: 'What\'s included in the $299 registration?',
         a: 'The $299 fee covers three full days of coaching (12 hours total) and an official Rajasthan Royals training shirt. There are no hidden costs.',
     },
-
-    {
-        q: 'What happens if I\'m placed on the waitlist?',
-        a: 'If a chosen location is full at the time of your submission, you\'ll be added to the waitlist. We\'ll contact you directly if a spot becomes available. No charge is taken until your place is confirmed.',
-    },
     {
         q: 'What is the cancellation policy?',
         a: 'If you cancel more than 3 days before the clinic start date, you\'ll receive a full refund minus payment processing fees. Cancellations within 3 days of the clinic are eligible for a 50% refund only.',
