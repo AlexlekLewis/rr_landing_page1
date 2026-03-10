@@ -20,7 +20,7 @@ const features = [
     {
         icon: '👕',
         title: 'Training Shirt Included',
-        desc: 'Every player receives an official Rajasthan Royals training shirt — $299 all in.',
+        desc: 'Every player receives an official Rajasthan Royals Academy training shirt — $299 all in.',
     },
     {
         icon: '📍',
