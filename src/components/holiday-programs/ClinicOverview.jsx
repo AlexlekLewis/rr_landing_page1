@@ -30,7 +30,7 @@ const features = [
     {
         icon: '⏰',
         title: '4 Hours Daily',
-        desc: '9:00 AM – 1:00 PM. Three consecutive days. 12 hours of elite development.',
+        desc: '9:00 AM – 1:00 PM. Three consecutive days. 12 hours of cricket development.',
     },
 ];
 
