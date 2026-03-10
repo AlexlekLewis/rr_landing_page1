@@ -173,6 +173,32 @@ const RegistrationForm = () => {
 
             if (insertError) throw insertError;
 
+            // Fire-and-forget Zapier webhook for Google Sheet sync
+            try {
+                fetch('https://hooks.zapier.com/hooks/catch/23705820/ux5vmcw/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        submitted_at: new Date().toISOString(),
+                        parent_name: payload.parent_name,
+                        parent_email: payload.parent_email,
+                        parent_phone: payload.parent_phone,
+                        player_name: payload.player_name,
+                        player_age: payload.player_age,
+                        player_gender: payload.player_gender,
+                        primary_club: payload.primary_club,
+                        suburb: payload.suburb,
+                        shirt_size: payload.shirt_size,
+                        location: payload.location,
+                        on_waitlist: isNowFull,
+                        utm_source: utmParams.utm_source,
+                        utm_medium: utmParams.utm_medium,
+                        utm_campaign: utmParams.utm_campaign,
+                        page_referrer: document.referrer || null,
+                    }),
+                }).catch(err => console.warn('Zapier webhook failed (non-blocking):', err));
+            } catch (_) { /* silent — Zapier is non-critical */ }
+
             setWaitlisted(isNowFull);
             setSubmitted(true);
         } catch (err) {
