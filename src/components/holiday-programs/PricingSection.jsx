@@ -4,11 +4,11 @@ import { Check } from 'lucide-react';
 
 const included = [
     '3 full days of elite coaching (12 hours total)',
-    'Official Rajasthan Royals training shirt',
-    'Structured T20 skills curriculum',
-    'Small-group sessions with certified coaches',
-    'Individual performance take-home notes',
-    'Entry to male or female age-group sessions',
+    'Official Rajasthan Royals Academy training shirt',
+    'Structured basic cricket & T20 skills curriculum',
+    'Small-group sessions with Royals certified coaches',
+    'Individual skill development to take away',
+    'Entry is for both male and female cricketers',
 ];
 
 const PricingSection = () => {
