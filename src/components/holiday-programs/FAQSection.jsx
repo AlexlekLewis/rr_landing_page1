@@ -9,7 +9,7 @@ const faqs = [
     },
     {
         q: 'Are the clinics available for both boys and girls?',
-        a: 'Yes. We run separate male and female cricket sessions. When you register, select your player\'s cricket type and they will be grouped accordingly.',
+        a: 'Yes. We will run separate male and female cricket sessions where possible during the 4-hour period. When you register, select your player\'s cricket type and our coaches will attempt to group participants accordingly.',
     },
     {
         q: 'What should my child bring to the clinic?',
