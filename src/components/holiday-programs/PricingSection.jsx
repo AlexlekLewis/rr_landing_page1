@@ -82,12 +82,6 @@ const PricingSection = () => {
                             </motion.div>
                         ))}
 
-                        {/* Optional add-on */}
-                        <div className="mt-8 bg-slate-50 border border-slate-200 rounded-xl p-5">
-                            <p className="text-xs font-bold text-rr-medium-blue uppercase tracking-widest mb-2">Optional Add-On</p>
-                            <h4 className="text-base font-black text-rr-dark uppercase tracking-wide mb-2">Clothing Package</h4>
-                            <p className="text-rr-charcoal text-sm font-medium">RRA training pants &amp; cap — subject to stock availability. Details provided at confirmation.</p>
-                        </div>
                     </motion.div>
 
                     {/* Energy image */}
