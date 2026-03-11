@@ -78,7 +78,21 @@ export default async function handler(req, res) {
             { timeout: TIMEOUT }
         ).catch(() => null);
 
-        // Extra wait for data to fully render
+        // Extra wait for data to fully render — PlayCricket stats widgets load late
+        await new Promise(r => setTimeout(r, 5000));
+
+        // Try clicking the "Career" tab if it exists
+        await page.evaluate(() => {
+            const tabs = document.querySelectorAll('a, button, [role="tab"]');
+            tabs.forEach(tab => {
+                const text = (tab.innerText || tab.textContent || '').toLowerCase();
+                if (text.includes('career') || text.includes('statistics')) {
+                    tab.click();
+                }
+            });
+        }).catch(() => null);
+
+        // Wait for stats to load after tab click
         await new Promise(r => setTimeout(r, 3000));
 
         // ── STEP 3: Extract stats from rendered page ───────
@@ -196,6 +210,9 @@ export default async function handler(req, res) {
             profile_private: statsData.profile_private,
             seasons: parsed.seasons,
             raw_tables: statsData.seasons, // Include raw data so admin can see what was extracted
+            raw_text: statsData.raw_text || '', // Page text for debugging
+            stat_values: statsData.stat_values || [],
+            overview_text: statsData.overview_text || '',
             message: statsData.profile_private
                 ? 'This player\'s profile is set to Private on PlayCricket. Stats cannot be extracted. Ask the player to make their profile public, or enter stats manually.'
                 : parsed.seasons.length > 0
