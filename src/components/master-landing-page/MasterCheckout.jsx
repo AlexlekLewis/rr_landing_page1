@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, AlertCircle, Loader2 } from 'lucide-react';
+import { AlertCircle, Loader2 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
 
@@ -78,7 +78,6 @@ const ComplianceCheckbox = ({ checked, onChange, children }) => (
 const MasterCheckout = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState('');
-    const [formSaved, setFormSaved] = useState(false);
     const paymentRef = useRef(null);
 
     /* ── form state ── */
@@ -103,12 +102,10 @@ const MasterCheckout = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
-        if (formSaved) setFormSaved(false);
     };
 
     const handleDobChange = (val) => {
         setFormData(prev => ({ ...prev, dob: val }));
-        if (formSaved) setFormSaved(false);
     };
 
     /* ── validation ── */
@@ -131,10 +128,10 @@ const MasterCheckout = () => {
         return hasCore && hasParent1 && hasClub && hasSuburb && hasGender && hasPlayerContact && hasConsents && withinWordLimits;
     };
 
-    /* ── submit to Supabase (applications + cohort master table) ── */
-    const handleSaveForm = async () => {
+    /* ── validate, save to Supabase, then redirect to Stripe ── */
+    const handlePaymentSelect = async (option, stripeUrl) => {
         if (!isFormValid()) {
-            setSubmitError('Please complete all required fields and accept all compliance documents before proceeding to payment.');
+            setSubmitError('Please complete all required fields and accept all compliance documents before selecting a payment option.');
             document.getElementById('checkout')?.scrollIntoView({ behavior: 'smooth' });
             return;
         }
@@ -187,7 +184,6 @@ const MasterCheckout = () => {
             // 2. Full record to official_cohort_2026 (master table for LP4)
             const cohortPayload = {
                 id: cohortId,
-                // Application details
                 first_name: formData.firstName.trim(),
                 last_name: formData.lastName.trim(),
                 player_name: `${formData.firstName.trim()} ${formData.lastName.trim()}`,
@@ -203,21 +199,18 @@ const MasterCheckout = () => {
                 goals: formData.goals.trim(),
                 cv_url: cvUrl,
                 cricket_type: cricketGender,
-                // Parent/guardian details
                 parent1_name: formData.parent1Name.trim(),
                 parent1_email: formData.parent1Email.trim(),
                 parent1_phone: formData.parent1Phone.trim(),
                 parent2_name: formData.parent2Name.trim(),
                 parent2_email: formData.parent2Email.trim(),
                 parent2_phone: formData.parent2Phone.trim(),
-                // Compliance
                 accept_terms: acceptTerms,
                 accept_player_code: acceptPlayerCode,
                 accept_parent_code: acceptParentCode,
                 accept_social_media: acceptSocialMedia,
-                // Status — pending until Stripe payment + onboarding
                 source: 'master_landing_page',
-                payment_plan_selected: 'master_lp_purchase',
+                payment_plan_selected: option,
                 payment_status: 'pending',
             };
 
@@ -226,32 +219,16 @@ const MasterCheckout = () => {
 
             // Store cohort record ID so success page can UPDATE the same row
             localStorage.setItem('master_cohort_id', cohortId);
+            localStorage.setItem('payment_option_selected', option);
 
-            setFormSaved(true);
-            setSubmitError('');
-
-            // Scroll to payment cards after a brief delay
-            setTimeout(() => {
-                paymentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 300);
+            // Redirect to Stripe in the same tab for a seamless experience
+            window.location.href = stripeUrl;
         } catch (err) {
             console.error('Error saving application:', err);
             setSubmitError('Something went wrong saving your details. Please try again.');
         } finally {
             setIsSubmitting(false);
         }
-    };
-
-    /* ── record which payment option the lead clicked ── */
-    const handlePaymentClick = (option, stripeUrl) => {
-        if (!formSaved) return;
-
-        // Store the selection so MasterStripeSuccess can include it
-        // in the official_cohort_2026 insert
-        localStorage.setItem('payment_option_selected', option);
-
-        // Open Stripe in a new tab
-        window.open(stripeUrl, '_blank', 'noopener,noreferrer');
     };
 
     return (
@@ -363,7 +340,7 @@ const MasterCheckout = () => {
                                     <input
                                         type="radio" name="cricketGender" value={opt}
                                         checked={cricketGender === opt}
-                                        onChange={(e) => { setCricketGender(e.target.value); if (formSaved) setFormSaved(false); }}
+                                        onChange={(e) => { setCricketGender(e.target.value); }}
                                         className="w-4 h-4 accent-rr-pink"
                                     />
                                     <span className="text-sm font-medium text-white/60 group-hover:text-white/90 transition-colors">{opt}</span>
@@ -479,7 +456,7 @@ const MasterCheckout = () => {
                     <h4 className="text-sm font-black text-white uppercase tracking-wide mb-6">Compliance & Policies</h4>
 
                     <div className="space-y-5">
-                        <ComplianceCheckbox checked={acceptTerms} onChange={(v) => { setAcceptTerms(v); if (formSaved) setFormSaved(false); }}>
+                        <ComplianceCheckbox checked={acceptTerms} onChange={(v) => { setAcceptTerms(v); }}>
                             I have read and agree to the <a href="/terms-conditions" target="_blank" className="text-rr-pink hover:underline">Terms &amp; Conditions</a> and <a href="/privacy-policy" target="_blank" className="text-rr-pink hover:underline">Privacy Policy</a>. I confirm all information provided is accurate.
                             {isUnder18 && (
                                 <strong className="text-rr-pink block mt-1 text-xs">
@@ -488,25 +465,25 @@ const MasterCheckout = () => {
                             )}
                         </ComplianceCheckbox>
 
-                        <ComplianceCheckbox checked={acceptPlayerCode} onChange={(v) => { setAcceptPlayerCode(v); if (formSaved) setFormSaved(false); }}>
+                        <ComplianceCheckbox checked={acceptPlayerCode} onChange={(v) => { setAcceptPlayerCode(v); }}>
                             I have read, understood, and agree to the <a href="/assets/RRA_Player_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Player Code of Conduct</a>.
                         </ComplianceCheckbox>
 
-                        <ComplianceCheckbox checked={acceptParentCode} onChange={(v) => { setAcceptParentCode(v); if (formSaved) setFormSaved(false); }}>
+                        <ComplianceCheckbox checked={acceptParentCode} onChange={(v) => { setAcceptParentCode(v); }}>
                             I have read, understood, and agree to the <a href="/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Parent/Guardian Code of Conduct</a>.
                         </ComplianceCheckbox>
 
-                        <ComplianceCheckbox checked={acceptSocialMedia} onChange={(v) => { setAcceptSocialMedia(v); if (formSaved) setFormSaved(false); }}>
+                        <ComplianceCheckbox checked={acceptSocialMedia} onChange={(v) => { setAcceptSocialMedia(v); }}>
                             I am happy for photos and videos from the program featuring the player to be used on Rajasthan Royals Academy Melbourne's social media and marketing channels.
                         </ComplianceCheckbox>
                     </div>
                 </motion.div>
 
                 {/* ════════════════════════════════════════
-                   SAVE & PAYMENT
+                   CONFIRM & PAY
                    ════════════════════════════════════════ */}
 
-                {/* Save button */}
+                {/* Instructional header */}
                 <motion.div
                     initial={{ opacity: 0, y: 16 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -514,36 +491,16 @@ const MasterCheckout = () => {
                     transition={{ duration: 0.5, delay: 0.2 }}
                     className="mb-6"
                 >
-                    <button
-                        onClick={handleSaveForm}
-                        disabled={isSubmitting}
-                        className={`w-full rounded-2xl font-black uppercase tracking-widest transition-all duration-500 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed ${
-                            formSaved
-                                ? 'py-5 text-base bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-[0_0_40px_rgba(16,185,129,0.5)] scale-[1.02]'
-                                : 'py-6 text-base bg-gradient-to-r from-rr-pink to-rr-blue text-white shadow-[0_0_30px_rgba(229,6,149,0.35)] hover:shadow-[0_0_50px_rgba(229,6,149,0.6)] hover:scale-[1.02] animate-[pulseGlow_2s_ease-in-out_infinite]'
-                        }`}
-                        style={!formSaved && !isSubmitting ? {
-                            animation: 'pulseGlow 2s ease-in-out infinite',
-                        } : {}}
-                    >
-                        {isSubmitting ? (
-                            <><Loader2 className="w-5 h-5 animate-spin" /> Saving Your Application...</>
-                        ) : formSaved ? (
-                            <><Check className="w-5 h-5" /> Application Saved — Choose Payment Below</>
-                        ) : (
-                            <>
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                Save Application & Proceed to Payment
-                            </>
-                        )}
-                    </button>
-                    {!formSaved && !submitError && (
-                        <p className="text-center text-white/40 text-xs mt-3 font-medium">
-                            Your application will be saved before you are directed to Stripe for payment.
+                    <div className="flex items-center justify-center gap-3 mb-4">
+                        <span className="h-px w-8 bg-rr-pink/40" />
+                        <p className="text-[11px] font-bold text-rr-pink uppercase tracking-[0.25em] text-center">
+                            Final Step — Confirm & Pay
                         </p>
-                    )}
+                        <span className="h-px w-8 bg-rr-pink/40" />
+                    </div>
+                    <p className="text-center text-white/50 text-sm font-medium max-w-lg mx-auto leading-relaxed">
+                        Select your preferred payment plan below to submit your application and secure your place. Your details will be saved automatically.
+                    </p>
                     <style>{`
                         @keyframes pulseGlow {
                             0%, 100% { box-shadow: 0 0 20px rgba(229,6,149,0.3); }
@@ -569,79 +526,66 @@ const MasterCheckout = () => {
                     `}</style>
                 </motion.div>
 
-                {/* Payment buttons — only active after form is saved */}
+                {/* Payment option cards — always visible, clicking triggers save + redirect */}
                 <div ref={paymentRef} className="scroll-mt-8">
-                <AnimatePresence>
-                    {formSaved && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -8 }}
-                            transition={{ duration: 0.5, ease: 'easeOut' }}
-                            className="flex items-center justify-center gap-3 mb-5"
-                        >
-                            <span className="h-px w-8 bg-rr-pink/40" />
-                            <p className="text-[11px] font-bold text-rr-pink uppercase tracking-[0.25em] text-center">
-                                Step 2 — Choose your payment plan to secure your place
-                            </p>
-                            <span className="h-px w-8 bg-rr-pink/40" />
-                        </motion.div>
-                    )}
-                </AnimatePresence>
                 <motion.div
                     initial={{ opacity: 0, y: 16 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: 0.22 }}
-                    className={`grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 transition-opacity duration-500 ${formSaved ? 'opacity-100' : 'opacity-30 pointer-events-none'}`}
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6"
                 >
                     {/* Pay in Full */}
-                    <a
-                        href={formSaved ? FULL_URL : '#'}
-                        rel="noopener noreferrer"
-                        onClick={(e) => { e.preventDefault(); if (formSaved) handlePaymentClick('Paid in Full', FULL_URL); }}
-                        className={`group relative flex flex-col items-center justify-center gap-1 p-px rounded-2xl overflow-hidden hover:shadow-[0_0_32px_rgba(229,6,149,0.4)] transition-shadow duration-300 cursor-pointer ${formSaved ? 'shimmer-border-bright' : 'bg-gradient-to-br from-rr-pink to-rr-blue'}`}
+                    <button
+                        onClick={() => handlePaymentSelect('Paid in Full', FULL_URL)}
+                        disabled={isSubmitting}
+                        className="group relative flex flex-col items-center justify-center gap-1 p-px rounded-2xl overflow-hidden hover:shadow-[0_0_32px_rgba(229,6,149,0.4)] transition-shadow duration-300 cursor-pointer shimmer-border-bright disabled:opacity-50 disabled:cursor-not-allowed text-left"
                     >
                         <div className="w-full bg-rr-dark group-hover:bg-rr-dark/80 transition-colors rounded-2xl px-6 py-7 flex flex-col items-center gap-2 text-center">
                             <span className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.25em]">Best Value</span>
                             <span className="text-2xl font-black text-white uppercase tracking-tight">Pay in Full</span>
                             <span className="text-white/50 text-sm font-medium">$2,995 — Includes free training kit</span>
                             <div className="mt-2 flex items-center gap-2 bg-rr-pink/20 px-4 py-2 rounded-full">
-                                <svg className="w-4 h-4 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                </svg>
-                                <span className="text-xs font-bold text-white uppercase tracking-wider">Secure Now</span>
+                                {isSubmitting ? (
+                                    <Loader2 className="w-4 h-4 text-rr-pink animate-spin" />
+                                ) : (
+                                    <svg className="w-4 h-4 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                    </svg>
+                                )}
+                                <span className="text-xs font-bold text-white uppercase tracking-wider">
+                                    {isSubmitting ? 'Submitting...' : 'Submit & Pay'}
+                                </span>
                             </div>
                         </div>
-                    </a>
+                    </button>
 
                     {/* Flexi Pay */}
-                    <a
-                        href={formSaved ? DEPOSIT_URL : '#'}
-                        rel="noopener noreferrer"
-                        onClick={(e) => { e.preventDefault(); if (formSaved) handlePaymentClick('Flexi Pay', DEPOSIT_URL); }}
-                        className={`group relative flex flex-col items-center justify-center gap-1 p-px rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer ${formSaved ? 'shimmer-border hover:shadow-[0_0_32px_rgba(0,112,240,0.3)]' : 'bg-gradient-to-br from-white/20 to-white/5 hover:from-rr-blue hover:to-rr-pink hover:shadow-[0_0_32px_rgba(0,112,240,0.3)]'}`}
+                    <button
+                        onClick={() => handlePaymentSelect('Flexi Pay', DEPOSIT_URL)}
+                        disabled={isSubmitting}
+                        className="group relative flex flex-col items-center justify-center gap-1 p-px rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer shimmer-border hover:shadow-[0_0_32px_rgba(0,112,240,0.3)] disabled:opacity-50 disabled:cursor-not-allowed text-left"
                     >
                         <div className="w-full bg-rr-dark group-hover:bg-rr-dark/80 transition-colors rounded-2xl px-6 py-7 flex flex-col items-center gap-2 text-center">
                             <span className="text-[10px] font-bold text-rr-blue uppercase tracking-[0.25em]">Flexible</span>
                             <span className="text-2xl font-black text-white uppercase tracking-tight">Flexi Pay</span>
                             <span className="text-white/50 text-sm font-medium">4 equal payments — immediate plus 3 monthly</span>
                             <div className="mt-2 flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full">
-                                <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                </svg>
-                                <span className="text-xs font-bold text-white/60 uppercase tracking-wider">Secure Now</span>
+                                {isSubmitting ? (
+                                    <Loader2 className="w-4 h-4 text-white/60 animate-spin" />
+                                ) : (
+                                    <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                    </svg>
+                                )}
+                                <span className="text-xs font-bold text-white/60 uppercase tracking-wider">
+                                    {isSubmitting ? 'Submitting...' : 'Submit & Pay'}
+                                </span>
                             </div>
                         </div>
-                    </a>
+                    </button>
                 </motion.div>
                 </div>
-
-                {!formSaved && (
-                    <p className="text-center text-white/30 text-xs mb-8 font-medium">
-                        Complete and save your application above to unlock payment options.
-                    </p>
-                )}
 
                 {/* Afterpay note */}
                 <motion.p
