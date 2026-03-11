@@ -14,7 +14,7 @@ import HomeStickyCTA from './HomeStickyCTA';
 import RegisterDrawer from './RegisterDrawer';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
-const SECTIONS = ['hero', 'trust', 'about', 'programs', 'video', 'coaches', 'faq', 'final-cta'];
+const SECTIONS = ['hero', 'trust', 'about', 'video', 'programs', 'coaches', 'faq', 'final-cta'];
 
 const HomePage = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -36,9 +36,9 @@ const HomePage = () => {
                 <div id="hero"><HomeHero onRegisterClick={openDrawer} /></div>
                 <div id="trust"><HomeTrustBar /></div>
                 <div id="about"><HomeAbout /></div>
+                <div id="video"><HomeVideo /></div>
                 <div id="programs"><HomeProgramCards onRegisterClick={openDrawer} /></div>
                 <HomeCinematicBreak onRegisterClick={openDrawer} />
-                <div id="video"><HomeVideo /></div>
                 <div id="coaches"><HomeCoaches /></div>
                 <div id="faq"><HomeFAQ /></div>
                 <div id="final-cta"><HomeFinalCTA onRegisterClick={openDrawer} /></div>
