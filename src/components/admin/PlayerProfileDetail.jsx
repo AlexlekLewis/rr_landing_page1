@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     X, User, Phone, Mail, MapPin, Calendar, ExternalLink,
-    FileText, Activity, RefreshCw, Plus, ChevronDown, ChevronRight,
+    FileText, Activity, Plus, ChevronDown, ChevronRight,
     Edit3, Trash2, Save, Loader2, AlertCircle, CheckCircle2,
     Target, Award, Shield
 } from 'lucide-react';
@@ -65,10 +65,6 @@ const PlayerProfileDetail = ({ player, onClose, onStatsUpdated }) => {
     const [showAddGame, setShowAddGame] = useState(null);    // team_id or null
     const [editingTeam, setEditingTeam] = useState(null);    // team object or null
     const [saving, setSaving] = useState(false);
-
-    // Fetch button
-    const [fetching, setFetching] = useState(false);
-    const [fetchMessage, setFetchMessage] = useState(null);
 
     /* ── Fetch all stats for this player ──────────────────── */
     const fetchStats = useCallback(async () => {
@@ -139,46 +135,6 @@ const PlayerProfileDetail = ({ player, onClose, onStatsUpdated }) => {
             else next.add(teamId);
             return next;
         });
-    };
-
-    /* ── PlayHQ Fetch ─────────────────────────────────────── */
-    const handleFetchPlayHQ = async () => {
-        if (!player.profile_link) {
-            setFetchMessage({ type: 'error', text: 'No PlayCricket profile link on this player\'s application. Add one manually or update their cohort record.' });
-            return;
-        }
-
-        setFetching(true);
-        setFetchMessage(null);
-
-        try {
-            // Attempt to call a Supabase Edge Function
-            const { data, error } = await supabase.functions.invoke('fetch-playhq-stats', {
-                body: {
-                    cohort_id: player.id,
-                    profile_url: player.profile_link,
-                    player_name: player.player_name,
-                },
-            });
-
-            if (error) throw error;
-
-            if (data?.success) {
-                setFetchMessage({ type: 'success', text: `Stats fetched successfully — ${data.seasons_found || 0} season(s) found.` });
-                await fetchStats();
-                onStatsUpdated?.();
-            } else {
-                setFetchMessage({ type: 'error', text: data?.message || 'Could not fetch stats. Profile may be private or the URL is not a valid PlayCricket profile. You can enter stats manually below.' });
-            }
-        } catch (err) {
-            console.error('PlayHQ fetch error:', err);
-            setFetchMessage({
-                type: 'error',
-                text: 'The PlayHQ fetch function is not deployed yet. For now, add stats manually using the forms below. The automated fetch will be available once the Edge Function is deployed.',
-            });
-        } finally {
-            setFetching(false);
-        }
     };
 
     /* ── CRUD: Add Season ─────────────────────────────────── */
@@ -446,9 +402,6 @@ const PlayerProfileDetail = ({ player, onClose, onStatsUpdated }) => {
                             expandedTeams={expandedTeams}
                             toggleTeamExpand={toggleTeamExpand}
                             loadingStats={loadingStats}
-                            fetching={fetching}
-                            fetchMessage={fetchMessage}
-                            onFetchPlayHQ={handleFetchPlayHQ}
                             onAddSeason={() => setShowAddSeason(true)}
                             onAddTeam={(seasonId) => setShowAddTeam(seasonId)}
                             onAddGame={(teamId) => setShowAddGame(teamId)}
@@ -569,8 +522,8 @@ const InfoTab = ({ player }) => (
 
 const StatsTab = ({
     player, seasons, activeSeasonId, setActiveSeasonId, activeTeams, gamesMap,
-    expandedTeams, toggleTeamExpand, loadingStats, fetching, fetchMessage,
-    onFetchPlayHQ, onAddSeason, onAddTeam, onAddGame, onEditTeam,
+    expandedTeams, toggleTeamExpand, loadingStats,
+    onAddSeason, onAddTeam, onAddGame, onEditTeam,
     onDeleteSeason, onDeleteTeam, onDeleteGame, activeSeason
 }) => {
 
@@ -584,28 +537,34 @@ const StatsTab = ({
 
     return (
         <div className="space-y-5">
-            {/* Fetch bar */}
+            {/* Action bar */}
             <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
                 <div className="flex flex-wrap items-center justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                        <button
-                            onClick={onFetchPlayHQ}
-                            disabled={fetching}
-                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-rr-pink/20 border border-rr-pink/30 text-rr-pink hover:bg-rr-pink/30 transition-all text-sm font-medium disabled:opacity-50"
-                        >
-                            {fetching ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
-                            Fetch from PlayHQ
-                        </button>
-                        {player.profile_link && (
+                    <div className="flex items-center gap-2 flex-wrap">
+                        {player.profile_link ? (
                             <a
                                 href={player.profile_link}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-slate-500 hover:text-rr-pink text-xs flex items-center gap-1 transition-colors"
+                                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-rr-pink/20 border border-rr-pink/30 text-rr-pink hover:bg-rr-pink/30 transition-all text-sm font-medium"
                             >
-                                View profile <ExternalLink className="w-3 h-3" />
+                                <ExternalLink className="w-4 h-4" />
+                                Open PlayCricket Profile
+                            </a>
+                        ) : (
+                            <a
+                                href="https://play.cricket.com.au/stats"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-rr-pink/20 border border-rr-pink/30 text-rr-pink hover:bg-rr-pink/30 transition-all text-sm font-medium"
+                            >
+                                <ExternalLink className="w-4 h-4" />
+                                Search PlayCricket Stats
                             </a>
                         )}
+                        <span className="text-slate-600 text-xs hidden sm:inline">
+                            Open profile → copy stats → add below
+                        </span>
                     </div>
                     <button
                         onClick={onAddSeason}
@@ -615,12 +574,10 @@ const StatsTab = ({
                         Add Season
                     </button>
                 </div>
-                {fetchMessage && (
-                    <div className={`mt-3 flex items-start gap-2 text-sm p-3 rounded-xl ${
-                        fetchMessage.type === 'success' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'
-                    }`}>
-                        {fetchMessage.type === 'success' ? <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" /> : <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />}
-                        <p>{fetchMessage.text}</p>
+                {!player.profile_link && (
+                    <div className="mt-3 flex items-start gap-2 text-xs p-3 rounded-xl bg-amber-500/10 text-amber-400/80">
+                        <AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                        <p>No PlayCricket profile link on file. Search by name at <a href="https://play.cricket.com.au/stats" target="_blank" rel="noopener noreferrer" className="underline hover:text-amber-300">play.cricket.com.au/stats</a> or in the PlayCricket app.</p>
                     </div>
                 )}
             </div>
@@ -630,7 +587,7 @@ const StatsTab = ({
                 <div className="text-center py-12 bg-white/5 border border-white/10 rounded-2xl">
                     <Target className="w-8 h-8 text-slate-600 mx-auto mb-3" />
                     <p className="text-slate-500 text-sm">No cricket stats yet</p>
-                    <p className="text-slate-600 text-xs mt-1">Use "Fetch from PlayHQ" or add stats manually</p>
+                    <p className="text-slate-600 text-xs mt-1">Open their PlayCricket profile and add stats manually using "Add Season" above</p>
                 </div>
             )}
 
