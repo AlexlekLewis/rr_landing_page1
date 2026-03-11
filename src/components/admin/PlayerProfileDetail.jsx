@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     X, User, Phone, Mail, MapPin, Calendar, ExternalLink,
-    FileText, Activity, Plus, ChevronDown, ChevronRight,
+    FileText, Activity, RefreshCw, Plus, ChevronDown, ChevronRight,
     Edit3, Trash2, Save, Loader2, AlertCircle, CheckCircle2,
     Target, Award, Shield
 } from 'lucide-react';
@@ -65,6 +65,10 @@ const PlayerProfileDetail = ({ player, onClose, onStatsUpdated }) => {
     const [showAddGame, setShowAddGame] = useState(null);    // team_id or null
     const [editingTeam, setEditingTeam] = useState(null);    // team object or null
     const [saving, setSaving] = useState(false);
+
+    // PlayHQ fetch
+    const [fetching, setFetching] = useState(false);
+    const [fetchResult, setFetchResult] = useState(null);  // full result from scraper
 
     /* ── Fetch all stats for this player ──────────────────── */
     const fetchStats = useCallback(async () => {
@@ -135,6 +139,100 @@ const PlayerProfileDetail = ({ player, onClose, onStatsUpdated }) => {
             else next.add(teamId);
             return next;
         });
+    };
+
+    /* ── PlayHQ Chrome Fetch ─────────────────────────────── */
+    const handleFetchPlayHQ = async () => {
+        setFetching(true);
+        setFetchResult(null);
+
+        try {
+            const response = await fetch('/api/fetch-playhq-stats', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    player_name: player.player_name,
+                    club: player.club,
+                    profile_url: player.profile_link || null,
+                }),
+            });
+
+            const data = await response.json();
+            setFetchResult(data);
+
+            // If we got seasons data, auto-save to Supabase
+            if (data.success && data.seasons?.length > 0) {
+                await saveFetchedStats(data.seasons);
+            }
+        } catch (err) {
+            console.error('Fetch error:', err);
+            setFetchResult({
+                success: false,
+                message: 'Could not connect to the stats service. This may mean the function hasn\'t been deployed yet, or there\'s a network issue. Try again or enter stats manually.',
+            });
+        } finally {
+            setFetching(false);
+        }
+    };
+
+    const saveFetchedStats = async (fetchedSeasons) => {
+        try {
+            for (const season of fetchedSeasons) {
+                // Upsert season
+                const { data: seasonRow, error: sErr } = await supabase
+                    .from('player_stats_seasons')
+                    .upsert({
+                        cohort_id: player.id,
+                        season_name: season.name || 'Unknown Season',
+                        season_year: season.year || new Date().getFullYear(),
+                        source: 'playhq_fetch',
+                        fetched_from_url: player.profile_link || null,
+                        last_fetched_at: new Date().toISOString(),
+                    }, { onConflict: 'cohort_id,season_name' })
+                    .select()
+                    .single();
+
+                if (sErr || !seasonRow) continue;
+
+                // Insert teams
+                for (const team of season.teams || []) {
+                    await supabase.from('player_stats_teams').insert({
+                        season_id: seasonRow.id,
+                        team_name: team.team_name || 'Unknown Team',
+                        club_name: team.club_name || null,
+                        grade: team.grade || null,
+                        level: team.level || null,
+                        bat_innings: team.batting?.innings || 0,
+                        bat_not_outs: team.batting?.not_outs || 0,
+                        bat_runs: team.batting?.runs || 0,
+                        bat_highest_score: team.batting?.highest_score || null,
+                        bat_average: team.batting?.average || null,
+                        bat_strike_rate: team.batting?.strike_rate || null,
+                        bat_fifties: team.batting?.fifties || 0,
+                        bat_hundreds: team.batting?.hundreds || 0,
+                        bat_fours: team.batting?.fours || 0,
+                        bat_sixes: team.batting?.sixes || 0,
+                        bowl_innings: team.bowling?.innings || 0,
+                        bowl_overs: team.bowling?.overs || 0,
+                        bowl_maidens: team.bowling?.maidens || 0,
+                        bowl_runs_conceded: team.bowling?.runs_conceded || 0,
+                        bowl_wickets: team.bowling?.wickets || 0,
+                        bowl_average: team.bowling?.average || null,
+                        bowl_economy: team.bowling?.economy || null,
+                        bowl_best_figures: team.bowling?.best_figures || null,
+                        field_catches: team.fielding?.catches || 0,
+                        field_run_outs: team.fielding?.run_outs || 0,
+                        field_stumpings: team.fielding?.stumpings || 0,
+                    });
+                }
+            }
+
+            // Refresh stats display
+            await fetchStats();
+            onStatsUpdated?.();
+        } catch (err) {
+            console.error('Error saving fetched stats:', err);
+        }
     };
 
     /* ── CRUD: Add Season ─────────────────────────────────── */
@@ -402,6 +500,9 @@ const PlayerProfileDetail = ({ player, onClose, onStatsUpdated }) => {
                             expandedTeams={expandedTeams}
                             toggleTeamExpand={toggleTeamExpand}
                             loadingStats={loadingStats}
+                            fetching={fetching}
+                            fetchResult={fetchResult}
+                            onFetchPlayHQ={handleFetchPlayHQ}
                             onAddSeason={() => setShowAddSeason(true)}
                             onAddTeam={(seasonId) => setShowAddTeam(seasonId)}
                             onAddGame={(teamId) => setShowAddGame(teamId)}
@@ -522,8 +623,8 @@ const InfoTab = ({ player }) => (
 
 const StatsTab = ({
     player, seasons, activeSeasonId, setActiveSeasonId, activeTeams, gamesMap,
-    expandedTeams, toggleTeamExpand, loadingStats,
-    onAddSeason, onAddTeam, onAddGame, onEditTeam,
+    expandedTeams, toggleTeamExpand, loadingStats, fetching, fetchResult,
+    onFetchPlayHQ, onAddSeason, onAddTeam, onAddGame, onEditTeam,
     onDeleteSeason, onDeleteTeam, onDeleteGame, activeSeason
 }) => {
 
@@ -541,30 +642,24 @@ const StatsTab = ({
             <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                     <div className="flex items-center gap-2 flex-wrap">
-                        {player.profile_link ? (
+                        <button
+                            onClick={onFetchPlayHQ}
+                            disabled={fetching}
+                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-rr-pink/20 border border-rr-pink/30 text-rr-pink hover:bg-rr-pink/30 transition-all text-sm font-medium disabled:opacity-50"
+                        >
+                            {fetching ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+                            {fetching ? 'Searching PlayCricket...' : 'Fetch from PlayCricket'}
+                        </button>
+                        {player.profile_link && (
                             <a
                                 href={player.profile_link}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-rr-pink/20 border border-rr-pink/30 text-rr-pink hover:bg-rr-pink/30 transition-all text-sm font-medium"
+                                className="text-slate-500 hover:text-rr-pink text-xs flex items-center gap-1 transition-colors"
                             >
-                                <ExternalLink className="w-4 h-4" />
-                                Open PlayCricket Profile
-                            </a>
-                        ) : (
-                            <a
-                                href="https://play.cricket.com.au/stats"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-rr-pink/20 border border-rr-pink/30 text-rr-pink hover:bg-rr-pink/30 transition-all text-sm font-medium"
-                            >
-                                <ExternalLink className="w-4 h-4" />
-                                Search PlayCricket Stats
+                                Open profile <ExternalLink className="w-3 h-3" />
                             </a>
                         )}
-                        <span className="text-slate-600 text-xs hidden sm:inline">
-                            Open profile → copy stats → add below
-                        </span>
                     </div>
                     <button
                         onClick={onAddSeason}
@@ -574,10 +669,18 @@ const StatsTab = ({
                         Add Season
                     </button>
                 </div>
-                {!player.profile_link && (
-                    <div className="mt-3 flex items-start gap-2 text-xs p-3 rounded-xl bg-amber-500/10 text-amber-400/80">
-                        <AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
-                        <p>No PlayCricket profile link on file. Search by name at <a href="https://play.cricket.com.au/stats" target="_blank" rel="noopener noreferrer" className="underline hover:text-amber-300">play.cricket.com.au/stats</a> or in the PlayCricket app.</p>
+                {fetching && (
+                    <div className="mt-3 flex items-center gap-2 text-xs p-3 rounded-xl bg-blue-500/10 text-blue-400">
+                        <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" />
+                        <p>Opening headless Chrome, navigating to PlayCricket, and extracting stats... This can take 15–30 seconds.</p>
+                    </div>
+                )}
+                {fetchResult && !fetching && (
+                    <div className={`mt-3 flex items-start gap-2 text-sm p-3 rounded-xl ${
+                        fetchResult.success ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'
+                    }`}>
+                        {fetchResult.success ? <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" /> : <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />}
+                        <p>{fetchResult.message}</p>
                     </div>
                 )}
             </div>
