@@ -51,16 +51,32 @@ const HomeAbout = () => {
                         transition={{ duration: 0.7, delay: 0.2 }}
                         className="space-y-6"
                     >
-                        {/* Facility image */}
+                        {/* Action image — Pretorius */}
                         <div className="relative rounded-2xl overflow-hidden aspect-video">
                             <img
-                                src="/assets/cec-lanes.jpg"
-                                alt="Cutting Edge Cricket facility — RRA training base"
-                                className="w-full h-full object-cover"
+                                src="/assets/pretorius-batting.jpg"
+                                alt="Rajasthan Royals — elite batting in action"
+                                className="w-full h-full object-cover object-top"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/60 to-transparent" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/70 to-transparent" />
                             <div className="absolute bottom-4 left-4">
-                                <span className="text-xs font-bold text-white/80 uppercase tracking-widest">Cutting Edge Cricket, Bundoora</span>
+                                <span className="text-xs font-bold text-white/80 uppercase tracking-widest">The Royals Way — Built to Win</span>
+                            </div>
+                        </div>
+
+                        {/* 2008 IPL win panel */}
+                        <div className="relative rounded-2xl overflow-hidden h-28">
+                            <img
+                                src="/assets/royals-2008-win.webp"
+                                alt="Rajasthan Royals — 2008 IPL Champions"
+                                className="w-full h-full object-cover object-center"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-r from-rr-dark/80 via-rr-dark/50 to-transparent" />
+                            <div className="absolute inset-0 flex items-center px-5 gap-4">
+                                <div>
+                                    <p className="text-white font-black uppercase tracking-wide text-sm">2008 IPL Champions</p>
+                                    <p className="text-white/60 text-xs font-medium mt-0.5">The winning T20 mindset — now in Melbourne</p>
+                                </div>
                             </div>
                         </div>
 

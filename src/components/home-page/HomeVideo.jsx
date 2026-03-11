@@ -48,7 +48,7 @@ const HomeVideo = () => {
                         <>
                             {/* Poster / placeholder */}
                             <img
-                                src="/assets/hero-celebration-new.jpg"
+                                src="/assets/on-off-pace.webp"
                                 alt="RRA Melbourne video poster"
                                 className="w-full h-full object-cover opacity-60"
                             />

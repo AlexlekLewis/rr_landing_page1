@@ -6,7 +6,7 @@ const coaches = [
         name: 'Siddhartha Lahiri',
         role: 'Head of Academy',
         bio: 'With deep roots in the Rajasthan Royals organisation, Siddhartha leads the RRA Melbourne vision — bridging IPL-level performance philosophy with grassroots cricket development across Victoria.',
-        image: null, // Replace with: '/assets/coaches/siddhartha-lahiri.jpg'
+        image: '/assets/lahiri-coaching.jpg',
         initials: 'SL',
     },
     {

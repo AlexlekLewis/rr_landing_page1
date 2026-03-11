@@ -6,6 +6,7 @@ import HomeTrustBar from './HomeTrustBar';
 import HomeAbout from './HomeAbout';
 import HomeProgramCards from './HomeProgramCards';
 import HomeVideo from './HomeVideo';
+import HomeCinematicBreak from './HomeCinematicBreak';
 import HomeCoaches from './HomeCoaches';
 import HomeFAQ from './HomeFAQ';
 import HomeFinalCTA from './HomeFinalCTA';
@@ -36,6 +37,7 @@ const HomePage = () => {
                 <div id="trust"><HomeTrustBar /></div>
                 <div id="about"><HomeAbout /></div>
                 <div id="programs"><HomeProgramCards onRegisterClick={openDrawer} /></div>
+                <HomeCinematicBreak onRegisterClick={openDrawer} />
                 <div id="video"><HomeVideo /></div>
                 <div id="coaches"><HomeCoaches /></div>
                 <div id="faq"><HomeFAQ /></div>
