@@ -43,6 +43,7 @@ import SelectionAnalytics from './components/admin/SelectionAnalytics';
 import TokenGenerator from './components/admin/TokenGenerator';
 import RSVPResponses from './components/admin/RSVPResponses';
 import LP3Inquiries from './components/admin/LP3Inquiries';
+import PlayerProfiles from './components/admin/PlayerProfiles';
 
 const TRACKED_SECTIONS = [
   'intro', 'success-stories', 'why-elite', 'program',
@@ -105,6 +106,7 @@ function App() {
         <Route path="/rramadmin_26/pipeline" element={<AdminLayout><KanbanBoard /></AdminLayout>} />
         <Route path="/rramadmin_26/applications" element={<AdminLayout><ApplicationsTable /></AdminLayout>} />
         <Route path="/rramadmin_26/lp3-acceptances" element={<AdminLayout><LP3Inquiries /></AdminLayout>} />
+                        <Route path="/rramadmin_26/player-profiles" element={<AdminLayout><PlayerProfiles /></AdminLayout>} />
         <Route path="/rramadmin_26/analytics" element={<AdminLayout><AnalyticsPanel /></AdminLayout>} />
         <Route path="/rramadmin_26/page-analytics" element={<AdminLayout><PageAnalyticsPanel /></AdminLayout>} />
         <Route path="/rramadmin_26/tokens" element={<AdminLayout><TokenGenerator /></AdminLayout>} />

@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     LayoutDashboard, Kanban, Users, BarChart3, FileText,
     Settings, LogOut, ChevronLeft, ChevronRight, Menu, X,
-    Send, CheckCircle2, Eye, ClipboardList, UserCheck, Shield, ChevronDown
+    Send, CheckCircle2, Eye, ClipboardList, UserCheck, Shield, ChevronDown,
+    UserCircle
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { ProgramProvider, useProgram } from './ProgramContext';
@@ -28,6 +29,7 @@ const NAV_GROUPS = [
         label: 'PROGRAM',
         items: [
             { label: 'Cohort 2026', path: '/rramadmin_26/lp3-acceptances', icon: UserCheck },
+            { label: 'Player Profiles', path: '/rramadmin_26/player-profiles', icon: UserCircle },
             { label: 'Assessments', path: '/rramadmin_26/rsvp', icon: ClipboardList },
         ],
     },
