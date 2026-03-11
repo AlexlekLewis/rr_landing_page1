@@ -1,0 +1,144 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+import { ChevronDown, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+const PROGRAMS = [
+    { label: 'Elite Program 2026', route: '/eliteprogram2026', badge: 'Limited Places', badgeColor: 'bg-rr-pink' },
+    { label: 'Holiday Programs', route: '/holiday-programs', badge: 'Registrations Open', badgeColor: 'bg-green-500' },
+];
+
+const HomeHero = ({ onRegisterClick }) => {
+    return (
+        <section className="relative min-h-screen flex items-end overflow-hidden bg-rr-dark">
+            {/* Mobile background */}
+            <div
+                className="absolute inset-0 bg-cover bg-[center_top] bg-no-repeat md:hidden"
+                style={{ backgroundImage: "url('/assets/hero-jaiswal.webp')" }}
+            />
+            {/* Desktop background */}
+            <div
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat hidden md:block"
+                style={{ backgroundImage: "url('/assets/hero-jaiswal.webp')" }}
+            />
+            {/* Gradient overlays */}
+            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/60 to-rr-dark/10 md:hidden" />
+            <div className="absolute inset-0 bg-gradient-to-r from-rr-dark via-rr-dark/75 to-transparent hidden md:block" />
+            <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-rr-dark to-transparent" />
+
+            <div className="relative z-20 w-full">
+                {/* Hero text */}
+                <div className="container mx-auto px-6 pt-36 pb-10 max-w-3xl">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6"
+                    >
+                        <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
+                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">2026 Programs Now Open</span>
+                    </motion.div>
+
+                    <motion.h1
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.15 }}
+                        className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-200 uppercase tracking-tighter leading-none mb-6"
+                    >
+                        PLAY THE<br />
+                        <span className="text-rr-pink">ROYALS WAY.</span>
+                    </motion.h1>
+
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.3 }}
+                        className="text-lg md:text-2xl text-white font-semibold mb-3"
+                    >
+                        Melbourne's official Rajasthan Royals cricket academy.
+                    </motion.p>
+
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.4 }}
+                        className="text-sm md:text-lg text-white/75 font-medium mb-8 max-w-xl"
+                    >
+                        Elite coaching. World-class methodology. The same performance environment that shaped IPL stars — now available to cricketers across Melbourne.
+                    </motion.p>
+                </div>
+
+                {/* ── Register Now panel ── */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.7, delay: 0.55 }}
+                    className="container mx-auto px-6 pb-16 max-w-3xl"
+                >
+                    <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5 md:p-6">
+                        <p className="text-xs font-black text-white/60 uppercase tracking-widest mb-4">Choose how to get started</p>
+
+                        {/* Program quick-links */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                            {PROGRAMS.map(p => (
+                                <Link
+                                    key={p.route}
+                                    to={p.route}
+                                    className="flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl px-4 py-3 transition-all group"
+                                    data-cta={`hero-program-${p.route}`}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <span className={`w-2 h-2 rounded-full ${p.badgeColor} shrink-0`} />
+                                        <div>
+                                            <p className="text-white font-bold text-sm uppercase tracking-wide leading-tight">{p.label}</p>
+                                            <p className="text-white/50 text-xs font-medium">{p.badge}</p>
+                                        </div>
+                                    </div>
+                                    <ArrowRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition-all shrink-0" />
+                                </Link>
+                            ))}
+                        </div>
+
+                        {/* Divider */}
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="flex-1 h-px bg-white/15" />
+                            <span className="text-xs font-bold text-white/40 uppercase tracking-widest">or</span>
+                            <div className="flex-1 h-px bg-white/15" />
+                        </div>
+
+                        {/* CTA row */}
+                        <div className="flex flex-col sm:flex-row gap-3">
+                            <button
+                                onClick={onRegisterClick}
+                                data-cta="hero-register-now"
+                                className="flex-1 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.5)] flex items-center justify-center gap-2 group text-sm"
+                            >
+                                Register Now
+                                <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                </svg>
+                            </button>
+                            <a
+                                href="#programs"
+                                className="flex-1 border border-white/30 hover:border-white/60 text-white font-bold uppercase tracking-widest py-4 rounded-full transition-all text-center text-sm"
+                            >
+                                Explore All Programs
+                            </a>
+                        </div>
+                    </div>
+                </motion.div>
+            </div>
+
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.4, duration: 0.6 }}
+                className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1 pointer-events-none"
+            >
+                <ChevronDown className="w-4 h-4 text-white/30 animate-bounce" />
+            </motion.div>
+        </section>
+    );
+};
+
+export default HomeHero;

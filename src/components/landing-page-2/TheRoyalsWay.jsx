@@ -37,7 +37,7 @@ const TheRoyalsWay = () => (
                     </div>
                     <a
                         href="#checkout"
-                        className="group mt-4 inline-flex items-center gap-3 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-8 py-5 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] text-sm w-full sm:w-auto justify-center sm:justify-start"
+                        className="group mt-4 inline-flex items-center gap-3 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wide sm:tracking-widest px-5 sm:px-8 py-4 sm:py-5 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] text-sm w-full sm:w-auto justify-center sm:justify-start"
                     >
                         Secure Your Place Now
                         <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
