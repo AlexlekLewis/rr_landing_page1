@@ -173,8 +173,14 @@ const RegistrationForm = () => {
 
             if (insertError) throw insertError;
 
-            setWaitlisted(isNowFull);
-            setSubmitted(true);
+            if (isNowFull) {
+                // Waitlisted — show holding screen, don't go to Stripe
+                setWaitlisted(true);
+                setSubmitted(true);
+            } else {
+                // Confirmed spot — redirect to Stripe checkout
+                window.location.href = 'https://buy.stripe.com/9B6dR93bjggZa5ugUj9Zm07';
+            }
         } catch (err) {
             console.error('Submission error:', err);
             setErrors({ form: 'Something went wrong. Please try again or email info@rramelbourne.com.au' });
