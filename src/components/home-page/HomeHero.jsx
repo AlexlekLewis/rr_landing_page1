@@ -8,12 +8,12 @@ const HomeHero = ({ onRegisterClick }) => {
             {/* Mobile background */}
             <div
                 className="absolute inset-0 bg-cover bg-[center_top] bg-no-repeat md:hidden"
-                style={{ backgroundImage: "url('/assets/vaibhav.png')" }}
+                style={{ backgroundImage: "url('/assets/hero-jaiswal.webp')" }}
             />
             {/* Desktop background */}
             <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat hidden md:block"
-                style={{ backgroundImage: "url('/assets/vaibhav.png')" }}
+                style={{ backgroundImage: "url('/assets/hero-jaiswal.webp')" }}
             />
             {/* Gradient overlays */}
             <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/60 to-rr-dark/20 md:hidden" />
