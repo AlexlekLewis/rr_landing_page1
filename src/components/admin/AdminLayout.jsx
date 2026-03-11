@@ -12,6 +12,12 @@ import { ProgramProvider, useProgram } from './ProgramContext';
 
 const NAV_GROUPS = [
     {
+        label: 'HOMEPAGE',
+        items: [
+            { label: 'Home Leads', path: '/rramadmin_26/home-leads', icon: Users },
+        ],
+    },
+    {
         label: 'OVERVIEW',
         items: [
             { label: 'Dashboard', path: '/rramadmin_26/dashboard', icon: LayoutDashboard },

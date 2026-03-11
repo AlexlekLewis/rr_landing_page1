@@ -14,21 +14,34 @@ const LP2_NAV = [
     { label: 'YOUR INVESTMENT', id: 'value-stack' },
 ];
 
-const Navbar = ({ variant = 'lp1' }) => {
+const HOME_NAV = [
+    { label: 'About', id: 'about' },
+    { label: 'Programs', id: 'programs' },
+    { label: 'Coaches', id: 'coaches' },
+    { label: 'FAQ', id: 'faq' },
+];
+
+const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const isLP2 = variant === 'lp2';
     const isLP3 = variant === 'lp3';
     const isHoliday = variant === 'holiday';
+    const isHome = variant === 'home';
 
     // For LP3 and Holiday, we want an empty nav bar (no links)
-    const navLinks = (isLP3 || isHoliday) ? [] : (isLP2 ? LP2_NAV : LP1_NAV);
+    const navLinks = (isLP3 || isHoliday) ? [] : isHome ? HOME_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
 
     // LP3 does not need a CTA button
-    const ctaLabel = (isLP2 || isHoliday) ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
+    const ctaLabel = isHome ? 'REGISTER NOW' : (isLP2 || isHoliday) ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
     const ctaTarget = isLP2 ? 'checkout' : (isHoliday ? 'registration-form' : 'apply-form');
 
     const scrollToForm = () => {
+        if (isHome && onRegisterClick) {
+            onRegisterClick();
+            setMobileMenuOpen(false);
+            return;
+        }
         document.getElementById(ctaTarget)?.scrollIntoView({ behavior: 'smooth' });
         setMobileMenuOpen(false);
     };

@@ -24,6 +24,7 @@ import StripeSuccess from './components/landing-page-3/StripeSuccess';
 import MasterLandingPage from './components/master-landing-page/MasterLandingPage';
 import HolidayPrograms from './components/holiday-programs/HolidayPrograms';
 import MasterStripeSuccess from './components/master-landing-page/MasterStripeSuccess';
+import HomePage from './components/home-page/HomePage';
 import usePageAnalytics from './hooks/usePageAnalytics';
 
 // DNA Profile Import
@@ -44,6 +45,7 @@ import TokenGenerator from './components/admin/TokenGenerator';
 import RSVPResponses from './components/admin/RSVPResponses';
 import LP3Inquiries from './components/admin/LP3Inquiries';
 import PlayerProfiles from './components/admin/PlayerProfiles';
+import HomeLeadsDashboard from './components/admin/HomeLeadsDashboard';
 
 const TRACKED_SECTIONS = [
   'intro', 'success-stories', 'why-elite', 'program',
@@ -84,7 +86,8 @@ function App() {
         {/* <Route path="/Onboarding/DNAProfile/*" element={<DNAProfileRoot />} /> */}
 
         {/* Public routes */}
-        <Route path="/" element={<ComingSoonSplash />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/splash" element={<ComingSoonSplash />} />
         <Route path="/master-page" element={<MasterLandingPage />} />
         <Route path="/eliteprogram2026" element={<MasterLandingPage />} />
         <Route path="/eliteprogram2026/success" element={<MasterStripeSuccess />} />
@@ -114,6 +117,7 @@ function App() {
         <Route path="/rramadmin_26/selection" element={<AdminLayout><SelectionAnalytics /></AdminLayout>} />
         <Route path="/rramadmin_26/settings" element={<AdminLayout><SettingsPanel /></AdminLayout>} />
         <Route path="/rramadmin_26/rsvp" element={<AdminLayout><RSVPResponses /></AdminLayout>} />
+        <Route path="/rramadmin_26/home-leads" element={<AdminLayout><HomeLeadsDashboard /></AdminLayout>} />
       </Routes>
     </div>
   );
