@@ -61,39 +61,44 @@ export default async function handler(req, res) {
         const statsUrl = ensureStatsTab(profileUrl);
         console.log('Navigating to:', statsUrl);
 
-        await page.goto(statsUrl, { waitUntil: 'networkidle2', timeout: NAV_TIMEOUT });
+        // Navigate and wait for the SPA to fully load
+        await page.goto(statsUrl, { waitUntil: 'networkidle0', timeout: NAV_TIMEOUT });
 
         // Wait for the page content to render (SPA)
-        await page.waitForFunction(
-            () => {
-                // Look for stats elements or a "no stats" indicator
+        // PlayCricket profiles load player name first, then stats async
+        const playerNameOnPage = await page.waitForFunction(
+            (name) => {
                 const body = document.body?.innerText || '';
-                return body.includes('Career') ||
-                       body.includes('Season') ||
-                       body.includes('Batting') ||
-                       body.includes('Innings') ||
-                       body.includes('No statistics') ||
-                       body.includes('Private');
+                // Check if we see the player's name or stats-related content
+                const nameParts = name.toLowerCase().split(' ');
+                const hasName = nameParts.some(p => body.toLowerCase().includes(p));
+                const hasStats = body.includes('Innings') || body.includes('Batting') ||
+                                 body.includes('Bowling') || body.includes('Runs') ||
+                                 body.includes('Wickets') || body.includes('Average');
+                const hasPrivate = body.includes('Private') || body.includes('No statistics');
+                return hasName || hasStats || hasPrivate;
             },
-            { timeout: TIMEOUT }
+            { timeout: TIMEOUT },
+            player_name || ''
         ).catch(() => null);
 
-        // Extra wait for data to fully render — PlayCricket stats widgets load late
-        await new Promise(r => setTimeout(r, 5000));
+        // Wait for stats widgets to fully load
+        await new Promise(r => setTimeout(r, 6000));
 
-        // Try clicking the "Career" tab if it exists
+        // Try clicking Career/Statistics tabs
         await page.evaluate(() => {
-            const tabs = document.querySelectorAll('a, button, [role="tab"]');
-            tabs.forEach(tab => {
-                const text = (tab.innerText || tab.textContent || '').toLowerCase();
-                if (text.includes('career') || text.includes('statistics')) {
-                    tab.click();
+            // Look for tab-like elements
+            const clickables = document.querySelectorAll('a, button, [role="tab"], [class*="tab"], nav a');
+            clickables.forEach(el => {
+                const text = (el.innerText || el.textContent || '').trim().toLowerCase();
+                if (text === 'career' || text === 'statistics' || text === 'stats') {
+                    el.click();
                 }
             });
         }).catch(() => null);
 
-        // Wait for stats to load after tab click
-        await new Promise(r => setTimeout(r, 3000));
+        // Wait after tab click for content to load
+        await new Promise(r => setTimeout(r, 4000));
 
         // ── STEP 3: Extract stats from rendered page ───────
         const statsData = await page.evaluate(() => {
