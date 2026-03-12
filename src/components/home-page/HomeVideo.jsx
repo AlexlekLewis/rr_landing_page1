@@ -126,23 +126,6 @@ const HomeVideo = () => {
                     </div>
                 </motion.div>
 
-                {/* Speaker credit */}
-                <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.3 }}
-                    className="flex items-center gap-4 mt-6"
-                >
-                    <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border-2 border-rr-pink/40">
-                        <img src="/assets/coaches/siddhartha-lahiri.jpg" alt="Siddhartha Lahiri" className="w-full h-full object-cover object-top" />
-                    </div>
-                    <div>
-                        <p className="text-white font-black uppercase tracking-wide text-sm">Siddhartha Lahiri</p>
-                        <p className="text-white/50 text-xs font-medium">Head of International Talent Development, Rajasthan Royals Group</p>
-                    </div>
-                </motion.div>
-
             </div>
         </section>
     );
