@@ -4,8 +4,8 @@ import { motion } from 'framer-motion';
 const coaches = [
     {
         name: 'Siddhartha Lahiri',
-        role: 'Head of Academy',
-        org: 'Rajasthan Royals Academy Melbourne',
+        role: 'Rajasthan & Paarl Royals Performance Coach, Head of Global Academies',
+        org: 'Rajasthan Royals Group',
         bio: 'With deep roots in the Rajasthan Royals organisation, Siddhartha leads the RRA Melbourne vision — bridging IPL-level performance philosophy with grassroots cricket development across Victoria.',
         image: '/assets/coaches/siddhartha-lahiri.jpg',
         initials: 'SL',
