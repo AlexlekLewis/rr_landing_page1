@@ -37,21 +37,6 @@ const TheDreamAndPathway = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.7, ease: 'easeOut' }}
                     >
-                        {/* Suryavanshi photo */}
-                        <div className="relative rounded-2xl overflow-hidden mb-8">
-                            <img
-                                src="/assets/hero-final.jpeg"
-                                alt="Vaibhav Suryavanshi — Discovered by the Royals"
-                                className="w-full object-cover object-top"
-                                style={{ maxHeight: '320px' }}
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/80 to-transparent" />
-                            <div className="absolute bottom-4 left-4 right-4">
-                                <p className="text-white font-black uppercase tracking-wide text-sm">Vaibhav Suryavanshi</p>
-                                <p className="text-rr-pink text-xs font-bold uppercase tracking-widest mt-0.5">Discovered by the Royals</p>
-                            </div>
-                        </div>
-
                         <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-4">The Vision</p>
                         <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight leading-none mb-6">
                             Finding your{' '}
