@@ -37,10 +37,7 @@ const HomeAbout = () => {
                             We believe every cricketer — regardless of age or current skill level — deserves access to an elite performance environment. Our programs are built around data, biomechanics, and the modern game, guided by coaches who live and breathe the Royals Way.
                         </p>
 
-                        <div className="flex items-center gap-3">
-                            <span className="text-sm font-bold text-rr-charcoal uppercase tracking-widest">Finding a way to win from anywhere</span>
-                            <span className="text-rr-pink font-black italic text-sm">WIN</span>
-                        </div>
+
                     </motion.div>
 
                     {/* Image + Stats */}
