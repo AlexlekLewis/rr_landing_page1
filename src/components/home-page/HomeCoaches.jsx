@@ -34,10 +34,10 @@ const HomeCoaches = () => {
                         <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Leadership</span>
                     </div>
                     <h2 className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-wide mb-4">
-                        THE PEOPLE BEHIND <span className="text-rr-pink">THE ROYALS WAY</span>
+                        LEADING THE <span className="text-rr-pink">ROYALS ACADEMY</span>
                     </h2>
                     <p className="text-lg text-rr-charcoal font-medium max-w-2xl mx-auto">
-                        Our leadership brings IPL franchise experience and elite coaching credentials directly to Melbourne cricketers.
+                        Our leadership team brings IPL franchise experience and elite playing and coaching credentials directly to Melbourne cricketers.
                     </p>
                 </motion.div>
 
