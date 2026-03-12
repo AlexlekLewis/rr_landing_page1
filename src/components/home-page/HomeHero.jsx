@@ -76,7 +76,7 @@ const HomeHero = ({ onRegisterClick }) => {
                     className="container mx-auto px-6 pb-16 max-w-3xl"
                 >
                     <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5 md:p-6">
-                        <p className="text-xs font-black text-white/60 uppercase tracking-widest mb-4">Choose how to get started</p>
+                        <p className="text-xs font-black text-white/60 uppercase tracking-widest mb-4">Choose a current program</p>
 
                         {/* Program quick-links */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
