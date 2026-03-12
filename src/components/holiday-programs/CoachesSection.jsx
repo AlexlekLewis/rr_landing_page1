@@ -7,7 +7,6 @@ const coaches = [
         name: 'Alex Thornhill',
         role: 'Head Coach',
         bio: 'An experienced cricket coach in both the UK and Australia. Alex currently coaches within the Fitzroy Doncaster Academy, as well as leading the Year 9 and 10 cricket program at Xavier College. He specialises in batting coaching with the use of video analysis and has previously worked with county cricketers in the UK.',
-        specialties: ['Batting', 'Game Strategy'],
         img: '/assets/coaches/alex-thornhill.jpg',
     },
 ];
@@ -65,11 +64,7 @@ const CoachesSection = () => {
                                 <h3 className="text-lg font-black text-rr-dark uppercase tracking-wide mb-1">{coach.name}</h3>
                                 <p className="text-rr-pink font-bold text-sm uppercase tracking-widest mb-4">{coach.role}</p>
                                 <p className="text-rr-charcoal text-sm font-medium leading-relaxed mb-4">{coach.bio}</p>
-                                <div className="flex flex-wrap gap-2">
-                                    {coach.specialties.map(s => (
-                                        <span key={s} className="text-xs font-bold text-rr-blue bg-rr-blue/10 border border-rr-blue/20 px-3 py-1 rounded-full uppercase tracking-wide">{s}</span>
-                                    ))}
-                                </div>
+
                             </div>
                         </motion.div>
                     ))}
