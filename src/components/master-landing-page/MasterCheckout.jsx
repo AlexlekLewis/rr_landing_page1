@@ -95,6 +95,7 @@ const MasterCheckout = () => {
     const [acceptPlayerCode, setAcceptPlayerCode] = useState(false);
     const [acceptParentCode, setAcceptParentCode] = useState(false);
     const [acceptSocialMedia, setAcceptSocialMedia] = useState(false);
+    const [acceptPlayingStandard, setAcceptPlayingStandard] = useState(false);
 
     const age = formData.dob ? calculateAge(formData.dob) : null;
     const isUnder18 = age !== null && age < 18;
@@ -122,7 +123,7 @@ const MasterCheckout = () => {
         // Over-18 players must supply their own email + phone
         const hasPlayerContact = isUnder18 ? true : (d.email.trim() && d.phone.trim());
 
-        const hasConsents = acceptTerms && acceptPlayerCode && acceptParentCode && acceptSocialMedia;
+        const hasConsents = acceptTerms && acceptPlayerCode && acceptParentCode && acceptSocialMedia && acceptPlayingStandard;
         const withinWordLimits = getWordCount(d.bio) <= 150 && getWordCount(d.goals) <= 150;
 
         return hasCore && hasParent1 && hasClub && hasSuburb && hasGender && hasPlayerContact && hasConsents && withinWordLimits;
@@ -209,6 +210,7 @@ const MasterCheckout = () => {
                 accept_player_code: acceptPlayerCode,
                 accept_parent_code: acceptParentCode,
                 accept_social_media: acceptSocialMedia,
+                accept_playing_standard: acceptPlayingStandard,
                 source: 'master_landing_page',
                 payment_plan_selected: option,
                 payment_status: 'pending',
@@ -456,6 +458,10 @@ const MasterCheckout = () => {
                     <h4 className="text-sm font-black text-white uppercase tracking-wide mb-6">Compliance & Policies</h4>
 
                     <div className="space-y-5">
+                        <ComplianceCheckbox checked={acceptPlayingStandard} onChange={(v) => { setAcceptPlayingStandard(v); }}>
+                            I understand the minimum playing standard for this program is VMCU / Country representative cricket or higher.
+                        </ComplianceCheckbox>
+
                         <ComplianceCheckbox checked={acceptTerms} onChange={(v) => { setAcceptTerms(v); }}>
                             I have read and agree to the <a href="/terms-conditions" target="_blank" className="text-rr-pink hover:underline">Terms &amp; Conditions</a> and <a href="/privacy-policy" target="_blank" className="text-rr-pink hover:underline">Privacy Policy</a>. I confirm all information provided is accurate.
                             {isUnder18 && (
