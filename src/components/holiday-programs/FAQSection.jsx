@@ -29,7 +29,7 @@ const faqs = [
     },
     {
         q: 'Where exactly are the venues?',
-        a: 'Cutting Edge Cricket is located in Bundoora, VIC (north Melbourne). Cricket Connect is in Hallam, VIC (south-east Melbourne). Exact addresses and directions are included in your confirmation email.',
+        a: 'Cutting Edge Cricket is located in Bundoora, VIC (northern Melbourne). Cricket Connect is in Hallam, VIC (south-eastern Melbourne). Exact addresses and directions are included in the information above.',
     },
     {
         q: 'Is the clinic suitable for beginners?',
