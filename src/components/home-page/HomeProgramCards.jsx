@@ -232,6 +232,29 @@ const HomeProgramCards = ({ onRegisterClick }) => {
                         </div>
                     </div>
 
+                    {/* Search button */}
+                    <div className="mt-4 pt-4 border-t border-slate-100 flex flex-col sm:flex-row gap-3 items-center justify-between">
+                        <button
+                            onClick={() => document.getElementById('program-results')?.scrollIntoView({ behavior: 'smooth' })}
+                            className="w-full sm:w-auto bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-10 py-3.5 rounded-full transition-all duration-300 hover:shadow-[0_0_24px_rgba(229,6,149,0.4)] flex items-center justify-center gap-2 group text-sm"
+                        >
+                            <Search className="w-4 h-4" />
+                            Search Programs
+                            <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                        </button>
+
+                        {(selectedAge !== 'All Ages' || selectedSkill !== 'All Skill Levels' || selectedGender !== 'All' || selectedProgram !== 'All Programs' || postcode) && (
+                            <button
+                                onClick={() => { setPostcode(''); setSelectedAge('All Ages'); setSelectedSkill('All Skill Levels'); setSelectedGender('All'); setSelectedProgram('All Programs'); }}
+                                className="text-xs font-bold text-rr-charcoal/50 hover:text-rr-pink underline transition-colors"
+                            >
+                                Clear all filters
+                            </button>
+                        )}
+                    </div>
+
                     {/* Active filter tags */}
                     {(selectedAge !== 'All Ages' || selectedSkill !== 'All Skill Levels' || selectedGender !== 'All' || selectedProgram !== 'All Programs' || postcode) && (
                         <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-slate-100">
@@ -252,6 +275,7 @@ const HomeProgramCards = ({ onRegisterClick }) => {
                 </motion.div>
 
                 {/* Cards grid */}
+                <div id="program-results">
                 {loading ? (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {[1, 2, 3].map(i => (
