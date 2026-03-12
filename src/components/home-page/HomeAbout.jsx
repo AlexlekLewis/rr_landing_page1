@@ -48,11 +48,11 @@ const HomeAbout = () => {
                         transition={{ duration: 0.7, delay: 0.2 }}
                         className="space-y-6"
                     >
-                        {/* Action image — Pretorius */}
+                        {/* Action image — Vaibhav Suryavanshi */}
                         <div className="relative rounded-2xl overflow-hidden aspect-video">
                             <img
-                                src="/assets/pretorius-batting.jpg"
-                                alt="Rajasthan Royals — elite batting in action"
+                                src="/assets/vaibhav-debut-six.jpg"
+                                alt="Vaibhav Suryavanshi — Rajasthan Royals"
                                 className="w-full h-full object-cover object-top"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/70 to-transparent" />
