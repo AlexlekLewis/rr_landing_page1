@@ -45,10 +45,10 @@ const HomeVideo = () => {
                         <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">From The Academy</span>
                     </div>
                     <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-wide mb-4">
-                        A MESSAGE FROM <span className="text-rr-pink">SIDDHARTHA</span>
+                        INTRODUCING <span className="text-rr-pink">RRA MELBOURNE</span>
                     </h2>
                     <p className="text-lg text-white/60 font-medium max-w-2xl mx-auto">
-                        Head of RRA Melbourne shares the vision behind the academy and what the Royals Way means for cricketers across Victoria.
+                        Hear from Sid Lahiri, Head of International Talent Development, and Performance Coach for the Rajasthan Royals Group.
                     </p>
                 </motion.div>
 
