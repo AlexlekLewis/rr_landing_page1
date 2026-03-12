@@ -307,6 +307,7 @@ const HomeProgramCards = ({ onRegisterClick }) => {
                         </button>
                     </motion.div>
                 )}
+                </div>
             </div>
         </section>
     );
