@@ -37,7 +37,6 @@ const HomePage = () => {
                 <div id="about"><HomeAbout /></div>
                 <div id="video"><HomeVideo /></div>
                 <div id="programs"><HomeProgramCards onRegisterClick={openDrawer} /></div>
-                <HomeCinematicBreak onRegisterClick={openDrawer} />
                 <div id="coaches"><HomeCoaches /></div>
                 <div id="faq"><HomeFAQ /></div>
                 <div id="final-cta"><HomeFinalCTA onRegisterClick={openDrawer} /></div>
