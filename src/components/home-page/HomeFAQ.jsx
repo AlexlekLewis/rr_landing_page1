@@ -20,10 +20,6 @@ const faqs = [
         q: 'Are there programs for girls and women\'s cricket?',
         a: 'Yes. RRA Melbourne is committed to developing both male and female cricketers. Use the gender filter on the programs section to find women\'s or mixed programs, and keep an eye out for new female-specific programs launching soon.',
     },
-    {
-        q: 'What happens after I register interest?',
-        a: 'Our team will contact you within 48 hours to confirm program availability, answer any questions, and guide you through the next steps — whether that\'s securing your spot in a current program or being added to the waitlist for an upcoming one.',
-    },
 ];
 
 const FAQItem = ({ item, isOpen, onToggle }) => (
@@ -54,7 +50,7 @@ const FAQItem = ({ item, isOpen, onToggle }) => (
 );
 
 const HomeFAQ = ({ onRegisterClick }) => {
-    const [openIndex, setOpenIndex] = useState(0);
+    const [openIndex, setOpenIndex] = useState(null);
 
     return (
         <section id="faq" className="py-24 bg-slate-50">
