@@ -5,14 +5,16 @@ const coaches = [
     {
         name: 'Siddhartha Lahiri',
         role: 'Head of Academy',
+        org: 'Rajasthan Royals Academy Melbourne',
         bio: 'With deep roots in the Rajasthan Royals organisation, Siddhartha leads the RRA Melbourne vision — bridging IPL-level performance philosophy with grassroots cricket development across Victoria.',
         image: '/assets/coaches/siddhartha-lahiri.jpg',
         initials: 'SL',
     },
     {
         name: 'Andy Crook',
-        role: 'Director of Coaching',
-        bio: 'An experienced elite cricket coach and administrator, Andy oversees the coaching standards and program delivery across all RRA Melbourne programs, ensuring every session reflects the Royals Way.',
+        role: 'Director of Cricket',
+        org: 'Rajasthan Royals Academy Melbourne',
+        bio: 'An experienced professional cricketer, coach and sports executive, Andy oversees the coaching standards and program delivery across all RRA Melbourne programs, ensuring every session reflects the Royals Way.',
         image: '/assets/coaches/andy-crook.jpg',
         initials: 'AC',
     },
@@ -55,7 +57,7 @@ const HomeCoaches = () => {
                                     <img
                                         src={coach.image}
                                         alt={coach.name}
-                                        className="w-20 h-20 rounded-full object-cover"
+                                        className="w-20 h-20 rounded-full object-cover object-center"
                                     />
                                 ) : (
                                     <div className="w-20 h-20 rounded-full flex items-center justify-center font-black text-2xl text-white"
@@ -67,7 +69,8 @@ const HomeCoaches = () => {
 
                             {/* Text */}
                             <div>
-                                <h3 className="text-xl font-black text-rr-dark uppercase tracking-wide mb-1">{coach.name}</h3>
+                                <h3 className="text-xl font-black text-rr-dark uppercase tracking-wide mb-0.5">{coach.name}</h3>
+                                <p className="text-xs font-bold text-rr-charcoal/50 uppercase tracking-widest mb-1">{coach.org}</p>
                                 <p className="text-sm font-bold text-rr-pink uppercase tracking-widest mb-3">{coach.role}</p>
                                 <p className="text-sm text-rr-charcoal/80 font-medium leading-relaxed">{coach.bio}</p>
                             </div>
