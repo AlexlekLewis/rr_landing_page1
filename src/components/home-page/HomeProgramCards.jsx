@@ -142,7 +142,7 @@ const HomeProgramCards = ({ onRegisterClick }) => {
         return true;
     });
 
-    const displayCards = [...filtered, { program_id: '__coming_soon__' }];
+    const displayCards = [...filtered];
 
     return (
         <section id="programs" className="py-24 bg-slate-50">
