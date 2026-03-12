@@ -53,7 +53,7 @@ const FAQItem = ({ item, isOpen, onToggle }) => (
     </div>
 );
 
-const HomeFAQ = () => {
+const HomeFAQ = ({ onRegisterClick }) => {
     const [openIndex, setOpenIndex] = useState(0);
 
     return (
@@ -90,14 +90,26 @@ const HomeFAQ = () => {
                     ))}
                 </motion.div>
 
-                <div className="text-center">
-                    <Link
-                        to="/faq"
-                        className="inline-flex items-center gap-2 font-bold text-rr-pink hover:text-rr-light-pink uppercase tracking-widest text-sm transition-colors group"
+                <div className="text-center space-y-4">
+                    <button
+                        onClick={onRegisterClick}
+                        data-cta="faq-register"
+                        className="bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-10 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] inline-flex items-center gap-2 group"
                     >
-                        View All FAQs
-                        <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                    </Link>
+                        Register Now
+                        <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </button>
+                    <div>
+                        <Link
+                            to="/faq"
+                            className="inline-flex items-center gap-2 font-bold text-rr-pink hover:text-rr-light-pink uppercase tracking-widest text-sm transition-colors group"
+                        >
+                            View All FAQs
+                            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                        </Link>
+                    </div>
                 </div>
             </div>
         </section>

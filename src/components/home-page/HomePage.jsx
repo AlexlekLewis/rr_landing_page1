@@ -34,14 +34,11 @@ const HomePage = () => {
 
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero"><HomeHero onRegisterClick={openDrawer} /></div>
-                <div id="trust"><HomeTrustBar /></div>
                 <div id="about"><HomeAbout /></div>
                 <div id="video"><HomeVideo /></div>
                 <div id="programs"><HomeProgramCards onRegisterClick={openDrawer} /></div>
-                <HomeCinematicBreak onRegisterClick={openDrawer} />
                 <div id="coaches"><HomeCoaches /></div>
-                <div id="faq"><HomeFAQ /></div>
-                <div id="final-cta"><HomeFinalCTA onRegisterClick={openDrawer} /></div>
+                <div id="faq"><HomeFAQ onRegisterClick={openDrawer} /></div>
             </main>
 
             <Footer />

@@ -55,7 +55,7 @@ const HomeHero = ({ onRegisterClick }) => {
                         transition={{ duration: 0.6, delay: 0.3 }}
                         className="text-lg md:text-2xl text-white font-semibold mb-3"
                     >
-                        Melbourne's official Rajasthan Royals cricket academy.
+                        Melbourne's Official Rajasthan Royals Academy.
                     </motion.p>
 
                     <motion.p
@@ -64,7 +64,7 @@ const HomeHero = ({ onRegisterClick }) => {
                         transition={{ duration: 0.6, delay: 0.4 }}
                         className="text-sm md:text-lg text-white/75 font-medium mb-8 max-w-xl"
                     >
-                        Elite coaching. World-class methodology. The same performance environment that shaped IPL stars — now available to cricketers across Melbourne.
+                        From elite players to beginners, we provide opportunities for male and female cricketers, players of all ages and abilities. The Royals Way has shaped IPL, global and local cricket stars — now available to cricketers across Melbourne.
                     </motion.p>
                 </div>
 
@@ -76,7 +76,7 @@ const HomeHero = ({ onRegisterClick }) => {
                     className="container mx-auto px-6 pb-16 max-w-3xl"
                 >
                     <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5 md:p-6">
-                        <p className="text-xs font-black text-white/60 uppercase tracking-widest mb-4">Choose how to get started</p>
+                        <p className="text-xs font-black text-white/60 uppercase tracking-widest mb-4">Choose a current program</p>
 
                         {/* Program quick-links */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
