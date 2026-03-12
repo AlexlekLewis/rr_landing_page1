@@ -281,7 +281,7 @@ const RegistrationForm = () => {
                         transition={{ delay: 0.2 }}
                         className="text-white/70 font-medium"
                     >
-                        Fill in your details below. We'll confirm your registration within 24 hours.
+                        Fill in your details below and complete payment to secure your place.
                     </motion.p>
                 </div>
 
