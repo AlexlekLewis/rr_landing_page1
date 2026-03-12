@@ -6,14 +6,14 @@ const coaches = [
         name: 'Siddhartha Lahiri',
         role: 'Head of Academy',
         bio: 'With deep roots in the Rajasthan Royals organisation, Siddhartha leads the RRA Melbourne vision — bridging IPL-level performance philosophy with grassroots cricket development across Victoria.',
-        image: '/assets/lahiri-coaching.jpg',
+        image: '/assets/coaches/siddhartha-lahiri.jpg',
         initials: 'SL',
     },
     {
         name: 'Andy Crook',
         role: 'Director of Coaching',
         bio: 'An experienced elite cricket coach and administrator, Andy oversees the coaching standards and program delivery across all RRA Melbourne programs, ensuring every session reflects the Royals Way.',
-        image: null, // Replace with: '/assets/coaches/andy-crook.jpg'
+        image: '/assets/coaches/andy-crook.jpg',
         initials: 'AC',
     },
 ];
