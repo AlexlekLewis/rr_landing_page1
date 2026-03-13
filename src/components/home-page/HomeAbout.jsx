@@ -65,7 +65,7 @@ const HomeAbout = () => {
                             <div className="absolute inset-0 flex items-center px-5">
                                 <div>
                                     <p className="text-white font-black uppercase tracking-wide text-sm">2008 IPL Champions</p>
-                                    <p className="text-white/60 text-xs font-medium mt-0.5">The winning T20 mindset — now in Melbourne</p>
+                                    <p className="text-white/60 text-xs font-medium mt-0.5">Led by #1 Royal — Shane Warne</p>
                                 </div>
                             </div>
                         </div>
