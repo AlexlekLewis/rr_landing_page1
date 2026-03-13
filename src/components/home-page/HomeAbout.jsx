@@ -26,15 +26,15 @@ const HomeAbout = () => {
 
                         <h2 className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-wide mb-6 leading-tight">
                             THE ROYALS WAY<br />
-                            <span className="text-rr-pink">COMES TO MELBOURNE</span>
+                            <span className="text-rr-pink">NOW IN MELBOURNE</span>
                         </h2>
 
                         <p className="text-lg text-rr-charcoal font-medium mb-6 leading-relaxed">
-                            Rajasthan Royals Academy Melbourne is the official cricket development arm of the Rajasthan Royals IPL franchise — bringing the same world-class coaching methodology, technology, and performance philosophy that has shaped some of cricket's most explosive T20 talents.
+                            Rajasthan Royals Academy Melbourne is the official cricket development arm of the Rajasthan Royals IPL franchise — bringing the same world-class coaching methodology and philosophy on the game that has shaped some of cricket's best players and most explosive T20 talents.
                         </p>
 
                         <p className="text-base text-rr-charcoal/80 font-medium mb-8 leading-relaxed">
-                            We believe every cricketer — regardless of age or current skill level — deserves access to an elite performance environment. Our programs are built around data, biomechanics, and the modern game, guided by coaches who live and breathe the Royals Way.
+                            We believe every cricketer — regardless of age or current skill level — deserves access to an environment such as the one the Royals Academy provides. Our programs are built from the basics of cricket and expand into techniques of the modern game, guided by Royals qualified coaches who live and breathe the Royals Way.
                         </p>
 
 
