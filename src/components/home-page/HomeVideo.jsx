@@ -104,7 +104,6 @@ const HomeVideo = () => {
                         </button>
 
                         <div className="flex items-center gap-3">
-                            <span className="text-xs font-bold text-white/60 uppercase tracking-widest hidden sm:block">Siddhartha Lahiri — Head of Academy</span>
                             <button
                                 onClick={handleMute}
                                 className="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center backdrop-blur-sm transition-colors"
