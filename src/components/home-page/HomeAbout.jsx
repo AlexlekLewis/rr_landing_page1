@@ -57,7 +57,7 @@ const HomeAbout = () => {
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/70 to-transparent" />
                             <div className="absolute bottom-4 left-4">
-                                <span className="text-xs font-bold text-white/80 uppercase tracking-widest">Vaibhav Suryavanshi — Discovered by the Rajasthan Royals</span>
+                                <span className="text-xs font-bold text-white/80 uppercase tracking-widest">Vaibhav Suryavanshi — Discovered by the Royals</span>
                             </div>
                         </div>
 
