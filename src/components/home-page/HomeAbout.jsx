@@ -51,7 +51,7 @@ const HomeAbout = () => {
                         {/* Action image — Vaibhav Suryavanshi */}
                         <div className="relative rounded-2xl overflow-hidden aspect-video">
                             <img
-                                src="/assets/vaibhav-debut-six.jpg"
+                                src="/assets/vaibhav-100-celebration.jpg"
                                 alt="Vaibhav Suryavanshi — Rajasthan Royals"
                                 className="w-full h-full object-cover object-top"
                             />
