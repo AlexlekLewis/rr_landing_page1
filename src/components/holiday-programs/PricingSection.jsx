@@ -53,7 +53,7 @@ const PricingSection = () => {
                             onClick={scrollToForm}
                             className="w-full bg-white text-rr-dark font-black uppercase tracking-widest py-4 rounded-full hover:bg-rr-light-pink hover:text-white transition-all duration-300"
                         >
-                            Secure Your Place Now
+                            Secure Place Now
                         </button>
                     </motion.div>
 
