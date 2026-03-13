@@ -93,8 +93,8 @@ const HomeCoaches = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/70 via-transparent to-transparent" />
                     <div className="absolute bottom-6 left-6 right-6">
-                        <p className="text-white font-black uppercase tracking-wide text-lg">Our Community</p>
-                        <p className="text-white/70 text-sm font-medium mt-1">The coaches, players and families that make RRA Melbourne what it is.</p>
+                        <p className="text-white font-black uppercase tracking-wide text-lg">March Junior Program Intake</p>
+                        <p className="text-white/70 text-sm font-medium mt-1">The coaches, players and families make RRA Melbourne what it is.</p>
                     </div>
                 </motion.div>
             </div>
