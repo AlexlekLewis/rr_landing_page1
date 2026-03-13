@@ -3,9 +3,9 @@ import { motion } from 'framer-motion';
 
 const HomeAbout = () => {
     return (
-        <section id="about" className="py-24 bg-white">
-            <div className="max-w-6xl mx-auto px-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <section id="about" className="py-16 md:py-24 bg-white">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
                     {/* Text */}
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
@@ -40,8 +40,8 @@ const HomeAbout = () => {
                         transition={{ duration: 0.7, delay: 0.2 }}
                         className="space-y-4"
                     >
-                        {/* Vaibhav Suryavanshi — tall image */}
-                        <div className="relative rounded-2xl overflow-hidden" style={{ height: '380px' }}>
+                        {/* Vaibhav Suryavanshi */}
+                        <div className="relative rounded-2xl overflow-hidden h-56 sm:h-72 lg:h-80">
                             <img
                                 src="/assets/vaibhav-100-celebration.jpg"
                                 alt="Vaibhav Suryavanshi — Rajasthan Royals"
@@ -54,8 +54,8 @@ const HomeAbout = () => {
                             </div>
                         </div>
 
-                        {/* 2008 IPL win — taller panel */}
-                        <div className="relative rounded-2xl overflow-hidden" style={{ height: '180px' }}>
+                        {/* 2008 IPL win */}
+                        <div className="relative rounded-2xl overflow-hidden h-32 sm:h-40 lg:h-44">
                             <img
                                 src="/assets/royals-2008-win.webp"
                                 alt="Rajasthan Royals — 2008 IPL Champions"

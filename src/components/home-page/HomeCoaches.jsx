@@ -22,8 +22,8 @@ const coaches = [
 
 const HomeCoaches = () => {
     return (
-        <section id="coaches" className="py-24 bg-white">
-            <div className="max-w-5xl mx-auto px-6">
+        <section id="coaches" className="py-16 md:py-24 bg-white">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -49,7 +49,7 @@ const HomeCoaches = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.15 }}
-                            className="flex flex-col sm:flex-row gap-6 p-8 bg-slate-50 rounded-2xl border border-slate-100"
+                            className="flex flex-col sm:flex-row gap-4 sm:gap-6 p-5 sm:p-8 bg-slate-50 rounded-2xl border border-slate-100"
                         >
                             {/* Avatar */}
                             <div className="shrink-0">
@@ -71,7 +71,7 @@ const HomeCoaches = () => {
                             <div>
                                 <h3 className="text-xl font-black text-rr-dark uppercase tracking-wide mb-0.5">{coach.name}</h3>
                                 <p className="text-xs font-bold text-rr-charcoal/50 uppercase tracking-widest mb-1">{coach.org}</p>
-                                <p className="text-sm font-bold text-rr-pink uppercase tracking-widest mb-3">{coach.role}</p>
+                                <p className="text-xs sm:text-sm font-bold text-rr-pink uppercase tracking-widest mb-3 leading-tight">{coach.role}</p>
                                 <p className="text-sm text-rr-charcoal/80 font-medium leading-relaxed">{coach.bio}</p>
                             </div>
                         </motion.div>

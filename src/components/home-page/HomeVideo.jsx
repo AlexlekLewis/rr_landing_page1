@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Play, Pause, Volume2, VolumeX } from 'lucide-react';
 
-const VIDEO_URL = 'https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/Kumar%20Video%20Landing/General_Coaching_RR_Sid_V2.mov';
+const VIDEO_URL = '/assets/intro-video.mp4';
 
 const HomeVideo = () => {
     const [playing, setPlaying] = useState(false);
@@ -31,9 +31,9 @@ const HomeVideo = () => {
     };
 
     return (
-        <section id="video" className="py-24 bg-rr-dark overflow-hidden">
-            <div className="max-w-6xl mx-auto px-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <section id="video" className="py-16 md:py-24 bg-rr-dark overflow-hidden">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
                     {/* Left: Text */}
                     <motion.div
@@ -81,9 +81,9 @@ const HomeVideo = () => {
                     >
                         <div className="absolute -inset-4 bg-gradient-to-br from-rr-pink/20 to-rr-blue/10 rounded-3xl blur-2xl opacity-50 pointer-events-none" />
 
-                        {/* 9:16 portrait container */}
+                        {/* 9:16 portrait container — constrained and centred on all screens */}
                         <div
-                            className="relative rounded-2xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.6)] group bg-black w-full max-w-xs sm:max-w-sm"
+                            className="relative rounded-2xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.6)] group bg-black mx-auto w-full max-w-[260px] sm:max-w-[300px] md:max-w-[340px] lg:max-w-sm"
                             style={{ aspectRatio: '9/16' }}
                         >
                             <video
@@ -94,7 +94,6 @@ const HomeVideo = () => {
                                 preload="metadata"
                                 poster="/assets/intro-video-poster.jpg"
                             >
-                                <source src={VIDEO_URL} type="video/quicktime" />
                                 <source src={VIDEO_URL} type="video/mp4" />
                             </video>
 
