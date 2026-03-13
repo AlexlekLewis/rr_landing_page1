@@ -209,7 +209,7 @@ const RegistrationForm = () => {
             }
         } catch (err) {
             console.error('Submission error:', err);
-            setErrors({ form: 'Something went wrong. Please try again or email info@rramelbourne.com.au' });
+            setErrors({ form: 'Something went wrong. Please try again or email andy.crook@rramelbourne.com' });
         } finally {
             setSubmitting(false);
         }
