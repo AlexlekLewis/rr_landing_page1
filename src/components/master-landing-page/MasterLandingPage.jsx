@@ -35,6 +35,35 @@ const MasterLandingPage = () => {
         window.scrollTo(0, 0);
     }, []);
 
+    // Meta Pixel
+    useEffect(() => {
+        if (window.fbq) return; // Already loaded
+
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+
+        window.fbq('init', '3125499870991789');
+        window.fbq('track', 'PageView');
+
+        // Add noscript fallback
+        const noscriptImg = document.createElement('img');
+        noscriptImg.height = 1;
+        noscriptImg.width = 1;
+        noscriptImg.style.display = 'none';
+        noscriptImg.src = 'https://www.facebook.com/tr?id=3125499870991789&ev=PageView&noscript=1';
+        document.body.appendChild(noscriptImg);
+
+        return () => {
+            if (noscriptImg.parentNode) noscriptImg.parentNode.removeChild(noscriptImg);
+        };
+    }, []);
+
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
             <Navbar variant="lp2" />
