@@ -145,8 +145,8 @@ const HomeProgramCards = ({ onRegisterClick }) => {
     const displayCards = [...filtered];
 
     return (
-        <section id="programs" className="py-24 bg-slate-50">
-            <div className="max-w-6xl mx-auto px-6">
+        <section id="programs" className="py-16 md:py-24 bg-slate-50">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6">
                 {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -170,7 +170,7 @@ const HomeProgramCards = ({ onRegisterClick }) => {
                     transition={{ delay: 0.1 }}
                     className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 mb-10"
                 >
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-3 sm:gap-4">
                         {/* Postcode */}
                         <div className="relative">
                             <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-rr-charcoal/40" />

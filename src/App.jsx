@@ -26,6 +26,7 @@ import HolidayPrograms from './components/holiday-programs/HolidayPrograms';
 import MasterStripeSuccess from './components/master-landing-page/MasterStripeSuccess';
 import HomePage from './components/home-page/HomePage';
 import usePageAnalytics from './hooks/usePageAnalytics';
+import PostHogPageviewTracker from './components/PostHogPageviewTracker';
 
 // DNA Profile Import
 // import DNAProfileRoot from './DNAProfileApp/App.jsx';
@@ -81,6 +82,7 @@ function LandingPage() {
 function App() {
   return (
     <div className="font-sans antialiased text-rr-dark bg-white selection:bg-rr-pink selection:text-white">
+      <PostHogPageviewTracker />
       <Routes>
         {/* DNA Profile App Route (standalone portal) */}
         {/* <Route path="/Onboarding/DNAProfile/*" element={<DNAProfileRoot />} /> */}

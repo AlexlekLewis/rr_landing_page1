@@ -53,8 +53,8 @@ const HomeFAQ = ({ onRegisterClick }) => {
     const [openIndex, setOpenIndex] = useState(null);
 
     return (
-        <section id="faq" className="py-24 bg-slate-50">
-            <div className="max-w-3xl mx-auto px-6">
+        <section id="faq" className="py-16 md:py-24 bg-slate-50">
+            <div className="max-w-3xl mx-auto px-4 sm:px-6">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -74,7 +74,7 @@ const HomeFAQ = ({ onRegisterClick }) => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.1 }}
-                    className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 mb-8"
+                    className="bg-white rounded-2xl p-5 sm:p-8 shadow-sm border border-slate-100 mb-8"
                 >
                     {faqs.map((item, i) => (
                         <FAQItem

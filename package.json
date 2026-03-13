@@ -11,6 +11,7 @@
     "build:pdf": "node generate_lp2_pdf.js"
   },
   "dependencies": {
+    "@posthog/react": "^1.8.2",
     "@sparticuz/chromium": "^143.0.4",
     "@supabase/supabase-js": "^2.91.1",
     "@tailwindcss/postcss": "^4.1.18",
@@ -19,6 +20,7 @@
     "jspdf": "^4.2.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.563.0",
+    "posthog-js": "^1.360.1",
     "puppeteer-core": "^24.39.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
