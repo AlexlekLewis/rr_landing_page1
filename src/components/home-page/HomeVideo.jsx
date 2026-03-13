@@ -64,7 +64,7 @@ const HomeVideo = () => {
                     {/* Video element */}
                     <video
                         ref={videoRef}
-                        src="/assets/intro-video.mp4"
+                        src="/assets/intro-video-web.mp4"
                         poster="/assets/intro-video-poster.jpg"
                         className="w-full h-full object-cover"
                         onEnded={handleVideoEnd}
