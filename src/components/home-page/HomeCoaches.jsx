@@ -57,7 +57,7 @@ const HomeCoaches = () => {
                                     <img
                                         src={coach.image}
                                         alt={coach.name}
-                                        className="w-20 h-20 rounded-full object-cover object-center"
+                                        className="w-20 h-20 rounded-full object-cover object-top"
                                     />
                                 ) : (
                                     <div className="w-20 h-20 rounded-full flex items-center justify-center font-black text-2xl text-white"
