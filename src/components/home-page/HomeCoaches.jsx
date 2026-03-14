@@ -52,12 +52,12 @@ const HomeCoaches = () => {
                             className="flex flex-col bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden"
                         >
                             {/* Photo */}
-                            <div className="relative w-full aspect-[4/3] overflow-hidden bg-slate-100">
+                            <div className="relative w-full aspect-square overflow-hidden bg-slate-100">
                                 {coach.image ? (
                                     <img
                                         src={coach.image}
                                         alt={coach.name}
-                                        className="w-full h-full object-cover object-top"
+                                        className="w-full h-full object-cover object-center"
                                     />
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center font-black text-5xl text-white"
