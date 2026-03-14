@@ -49,26 +49,27 @@ const HomeCoaches = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.15 }}
-                            className="flex flex-col sm:flex-row gap-4 sm:gap-6 p-5 sm:p-8 bg-slate-50 rounded-2xl border border-slate-100"
+                            className="flex flex-col bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden"
                         >
-                            {/* Avatar */}
-                            <div className="shrink-0">
+                            {/* Photo */}
+                            <div className="relative w-full aspect-[4/3] overflow-hidden bg-slate-100">
                                 {coach.image ? (
                                     <img
                                         src={coach.image}
                                         alt={coach.name}
-                                        className="w-20 h-20 rounded-full object-cover object-top"
+                                        className="w-full h-full object-cover object-top"
                                     />
                                 ) : (
-                                    <div className="w-20 h-20 rounded-full flex items-center justify-center font-black text-2xl text-white"
+                                    <div className="w-full h-full flex items-center justify-center font-black text-5xl text-white"
                                         style={{ background: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)' }}>
                                         {coach.initials}
                                     </div>
                                 )}
+                                <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/40 to-transparent" />
                             </div>
 
                             {/* Text */}
-                            <div>
+                            <div className="p-6">
                                 <h3 className="text-xl font-black text-rr-dark uppercase tracking-wide mb-0.5">{coach.name}</h3>
                                 <p className="text-xs font-bold text-rr-charcoal/50 uppercase tracking-widest mb-1">{coach.org}</p>
                                 <p className="text-xs sm:text-sm font-bold text-rr-pink uppercase tracking-widest mb-3 leading-tight">{coach.role}</p>
