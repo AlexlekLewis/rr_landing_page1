@@ -12,7 +12,7 @@ const leadershipCoaches = [
         name: "Andy Crook",
         role: "Director of Cricket, Rajasthan Royals Academy Melbourne",
         image: "/assets/coaches/andy-crook.jpg",
-        bio: "Andy runs the operations behind the program. His deep experience in professional cricket, the business of sport and coaching means every session is planned, every drill has a purpose, and every player gets the standard the Rajasthan Royals expect.",
+        bio: "Andy Crook has lived T20 cricket from the very beginning. A former AIS Commonwealth Bank Cricket Academy scholar, Andy played professionally for the South Australian Redbacks at the age of 17, and then went on to play for Lancashire County Cricket Club and Northamptonshire County Cricket Club. At Lancashire he played in a T20 Vitality Blast Final, held the List A highest score batting record for a decade and most recently was part of Australia's 2025 T20 Masters World Cup winning campaign in Pakistan. Andy was in English county grounds when T20 was first played and watched the game transform in real time after its 2003 launch. That experience shaped everything he believes about how the format should be developed and taught — that T20 is its own game, with its own skills, its own roles, and its own instincts, and that the best players are identified early and developed specifically for it. As the Director of Cricket at the Rajasthan Royals Academy in Australia, Andy combines his executive sports experience with working directly with players — supporting the reviewing footage, training and game play monitoring, and building individual development plans around each player's specific T20 role and skill set.",
     },
     {
         name: "Alex Lewis",
