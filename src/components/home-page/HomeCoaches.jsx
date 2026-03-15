@@ -37,7 +37,7 @@ const HomeCoaches = () => {
                         LEADING THE <span className="text-rr-pink">ROYALS ACADEMY</span>
                     </h2>
                     <p className="text-lg text-rr-charcoal font-medium max-w-2xl mx-auto">
-                        Our leadership team brings IPL franchise experience and elite playing and coaching credentials directly to Melbourne cricketers.
+                        Our leadership team brings a wealth of global cricket knowledge and IPL franchise experience as well as elite playing and coaching credentials directly to Melbourne cricketers. For more Rajasthan Royals Academy coaches, click on individual programs.
                     </p>
                 </motion.div>
 
