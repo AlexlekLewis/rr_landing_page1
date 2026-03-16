@@ -51,7 +51,7 @@ const ValueStack = () => {
                 >
                     <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Season 1 · 2026</p>
                     <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-none mb-4">
-                        The Investment
+                        Program Pricing
                     </h2>
                     <div className="w-12 h-px bg-gradient-to-r from-rr-pink to-rr-blue" />
                 </motion.div>
@@ -94,7 +94,7 @@ const ValueStack = () => {
                             className="bg-white/4 border border-white/10 rounded-2xl p-6 md:p-8"
                         >
                             <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em] mb-6">What You're Getting</p>
-                            <p className="text-white font-black text-lg uppercase tracking-tight mb-5">Premium development, one clear price.</p>
+                            <p className="text-white font-black text-lg uppercase tracking-tight mb-5">Elite development, one clear price.</p>
 
                             {/* Rate comparison */}
                             <div className="grid grid-cols-2 gap-4 mb-6 items-stretch">

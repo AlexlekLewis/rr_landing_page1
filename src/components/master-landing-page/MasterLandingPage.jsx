@@ -25,7 +25,7 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 const MASTER_SECTIONS = [
     'hero', 'trust-bar', 'dream-pathway', 'program-at-a-glance', 'program',
     'specialist-coaching', 'the-royals-way', 'session-walkthrough', 'technology',
-    'coaches', 'facility', 'beyond-12-weeks', 'value-stack', 'faq', 'checkout'
+    'coaches', 'facility', 'beyond-12-weeks', 'pricing', 'faq', 'checkout'
 ];
 
 const MasterLandingPage = () => {
@@ -94,10 +94,10 @@ const MasterLandingPage = () => {
 
                 {/* 7. The Environment */}
 
-                {/* 8. Beyond 12 Weeks + Royals Way + Investment */}
+                {/* 8. Beyond 12 Weeks + Royals Way + Pricing */}
                 <div id="beyond-12-weeks"><BeyondTwelveWeeks /></div>
                 <div id="the-royals-way"><TheRoyalsWay /></div>
-                <div id="value-stack"><ValueStack /></div>
+                <div id="pricing"><ValueStack /></div>
                 <ScreeningCallCTA />
 
                 {/* 9. Checkout */}
