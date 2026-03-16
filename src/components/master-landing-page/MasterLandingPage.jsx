@@ -97,7 +97,6 @@ const MasterLandingPage = () => {
                 {/* 8. Beyond 12 Weeks + Royals Way + Investment */}
                 <div id="beyond-12-weeks"><BeyondTwelveWeeks /></div>
                 <div id="the-royals-way"><TheRoyalsWay /></div>
-                <ScreeningCallCTA />
                 <div id="value-stack"><ValueStack /></div>
                 <ScreeningCallCTA />
 
