@@ -134,7 +134,7 @@ const ValueStack = () => {
                             <div className="absolute bottom-4 right-4 opacity-[0.06] pointer-events-none">
                                 <img src="/assets/rr-logo-blue.png" alt="" className="h-20 object-contain" />
                             </div>
-                            <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em] mb-4">Elite Program Price</p>
+                            <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em] mb-4">T20 Elite Program Price</p>
                             <p className="text-7xl font-black text-white tracking-tighter leading-none mb-1">$2995</p>
                             <p className="text-white/30 text-xs font-medium uppercase tracking-widest">AUD · Season 1 · 2026</p>
                         </div>
