@@ -18,7 +18,7 @@ const tiers = [
                 name: "Andy Crook",
                 role: "Director of Cricket",
                 bio: "Andy Crook has lived T20 cricket from the very beginning. A former AIS Commonwealth Bank Cricket Academy scholar, Andy played professionally for the South Australian Redbacks at the age of 17, and then went on to play for Lancashire County Cricket Club and Northamptonshire County Cricket Club. At Lancashire he played in a T20 Vitality Blast Final, held the List A highest score batting record for a decade and most recently was part of Australia's 2025 T20 Masters World Cup winning campaign in Pakistan. Andy was in English county grounds when T20 was first played and watched the game transform in real time after its 2003 launch. That experience shaped everything he believes about how the format should be developed and taught — that T20 is its own game, with its own skills, its own roles, and its own instincts, and that the best players are identified early and developed specifically for it. As the Director of Cricket at the Rajasthan Royals Academy in Australia, Andy combines his executive sports experience with working directly with players — supporting the reviewing footage, training and game play monitoring, and building individual development plans around each player's specific T20 role and skill set.",
-                tag: "Operations & Leadership",
+                tag: "T20 Specialist",
             },
             {
                 name: "Alex Lewis",
@@ -55,6 +55,12 @@ const tiers = [
                 role: "Bowling — Pace",
                 bio: "Founder of Bowlstrong, Simon is one of Australia's leading pace bowling specialists. He combines deep biomechanical knowledge with practical, high-performance coaching methods to help fast bowlers develop real pace, accuracy, and durability — the complete package for the modern game.",
                 tag: "Pace Bowling",
+            },
+            {
+                name: "Peter Hatzoglou",
+                role: "Bowling — Specialist Coach",
+                bio: "Melbourne-born leg-spinner Peter Hatzoglou is one of Australian cricket's true T20 specialists. From third-grade premier cricket to the global franchise circuit in just two years, Peter has played in the BBL, The Hundred, CPL, PSL, and T20 leagues across the UAE and the USA — winning two Big Bash titles along the way. Known for his unorthodox action, deceptive pace off the pitch, and an intelligent approach to the wrist-spin craft shaped by mentorship from Shane Warne, Peter brings a modern, tactical perspective to bowling that is perfectly aligned with the Elite Program's focus on developing T20-specific skills. His experience competing across conditions and cultures worldwide gives him a rare insight into what it takes to succeed as a bowler in the modern game.",
+                tag: "T20 Bowling",
             },
         ],
     },
