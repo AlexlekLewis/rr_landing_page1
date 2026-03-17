@@ -61,12 +61,10 @@ const HomeAbout = () => {
                                 alt="Rajasthan Royals — 2008 IPL Champions"
                                 className="w-full h-full object-cover object-center"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-r from-rr-dark/75 via-rr-dark/40 to-transparent" />
-                            <div className="absolute inset-0 flex items-center px-5">
-                                <div>
-                                    <p className="text-white font-black uppercase tracking-wide text-sm">2008 IPL Champions</p>
-                                    <p className="text-white/60 text-xs font-medium mt-0.5">Led by #1 Royal — Shane Warne</p>
-                                </div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/60 via-transparent to-transparent" />
+                            <div className="absolute bottom-4 left-4">
+                                <p className="text-white font-black uppercase tracking-wide text-sm">2008 IPL Champions</p>
+                                <p className="text-rr-pink text-xs font-bold uppercase tracking-widest mt-0.5">Led by #1 Royal — Shane Warne</p>
                             </div>
                         </div>
                     </motion.div>

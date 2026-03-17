@@ -85,16 +85,6 @@ const ProgramCard = ({ program, onRegisterClick }) => {
                 <h3 className="text-xl font-black text-rr-dark uppercase tracking-wide mb-2">{program.name}</h3>
                 <p className="text-sm text-rr-charcoal/80 font-medium leading-relaxed mb-4 flex-1">{program.description}</p>
 
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                    {program.age_groups?.map(ag => (
-                        <span key={ag} className="text-xs font-bold bg-slate-100 text-rr-charcoal rounded-full px-3 py-1 uppercase tracking-wide">{ag}</span>
-                    ))}
-                    {program.gender && program.gender !== 'mixed' && (
-                        <span className="text-xs font-bold bg-rr-pink/10 text-rr-pink rounded-full px-3 py-1 uppercase tracking-wide">{program.gender}</span>
-                    )}
-                </div>
-
                 {/* CTA */}
                 <Link
                     to={program.route}

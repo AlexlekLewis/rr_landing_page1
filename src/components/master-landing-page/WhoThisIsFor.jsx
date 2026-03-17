@@ -66,7 +66,7 @@ const WhoThisIsFor = () => {
                             </li>
                             <li className="flex items-start gap-3 text-rr-charcoal font-medium opacity-80">
                                 <span className="text-red-400 mt-1 shrink-0">✕</span>
-                                Families expecting guaranteed selection outcomes (we develop readiness; selection depends on many factors).
+                                Families expecting assured selection outcomes (we develop readiness; selection depends on many factors).
                             </li>
                             <li className="flex items-start gap-3 text-rr-charcoal font-medium opacity-80">
                                 <span className="text-red-400 mt-1 shrink-0">✕</span>

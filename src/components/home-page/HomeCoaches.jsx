@@ -37,7 +37,7 @@ const HomeCoaches = () => {
                         LEADING THE <span className="text-rr-pink">ROYALS ACADEMY</span>
                     </h2>
                     <p className="text-lg text-rr-charcoal font-medium max-w-2xl mx-auto">
-                        Our leadership team brings IPL franchise experience and elite playing and coaching credentials directly to Melbourne cricketers.
+                        Our leadership team brings a wealth of global cricket knowledge and IPL franchise experience as well as elite playing and coaching credentials directly to Melbourne cricketers. For more Rajasthan Royals Academy coaches, click on individual programs.
                     </p>
                 </motion.div>
 
@@ -49,18 +49,18 @@ const HomeCoaches = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.15 }}
-                            className="flex flex-col sm:flex-row gap-4 sm:gap-6 p-5 sm:p-8 bg-slate-50 rounded-2xl border border-slate-100"
+                            className="flex flex-col items-center text-center bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden p-8"
                         >
-                            {/* Avatar */}
-                            <div className="shrink-0">
+                            {/* Circle photo */}
+                            <div className="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-rr-pink/20 shrink-0">
                                 {coach.image ? (
                                     <img
                                         src={coach.image}
                                         alt={coach.name}
-                                        className="w-20 h-20 rounded-full object-cover object-center"
+                                        className="w-full h-full object-cover object-top"
                                     />
                                 ) : (
-                                    <div className="w-20 h-20 rounded-full flex items-center justify-center font-black text-2xl text-white"
+                                    <div className="w-full h-full flex items-center justify-center font-black text-2xl text-white"
                                         style={{ background: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)' }}>
                                         {coach.initials}
                                     </div>

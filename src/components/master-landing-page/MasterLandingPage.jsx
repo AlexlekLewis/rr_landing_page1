@@ -18,13 +18,14 @@ import BeyondTwelveWeeks from '../landing-page-2/BeyondTwelveWeeks';
 import RrampDnaProfile from '../landing-page-2/RrampDnaProfile';
 import TheDreamAndPathway from './TheDreamAndPathway';
 import SessionWalkthrough from './SessionWalkthrough';
+import ScreeningCallCTA from './ScreeningCallCTA';
 
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
 const MASTER_SECTIONS = [
     'hero', 'trust-bar', 'dream-pathway', 'program-at-a-glance', 'program',
     'specialist-coaching', 'the-royals-way', 'session-walkthrough', 'technology',
-    'coaches', 'facility', 'beyond-12-weeks', 'value-stack', 'faq', 'checkout'
+    'coaches', 'facility', 'beyond-12-weeks', 'pricing', 'faq', 'checkout'
 ];
 
 const MasterLandingPage = () => {
@@ -33,6 +34,35 @@ const MasterLandingPage = () => {
     useEffect(() => {
         // Scroll to top on mount
         window.scrollTo(0, 0);
+    }, []);
+
+    // Meta Pixel
+    useEffect(() => {
+        if (window.fbq) return; // Already loaded
+
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+
+        window.fbq('init', '3125499870991789');
+        window.fbq('track', 'PageView');
+
+        // Add noscript fallback
+        const noscriptImg = document.createElement('img');
+        noscriptImg.height = 1;
+        noscriptImg.width = 1;
+        noscriptImg.style.display = 'none';
+        noscriptImg.src = 'https://www.facebook.com/tr?id=3125499870991789&ev=PageView&noscript=1';
+        document.body.appendChild(noscriptImg);
+
+        return () => {
+            if (noscriptImg.parentNode) noscriptImg.parentNode.removeChild(noscriptImg);
+        };
     }, []);
 
     return (
@@ -64,10 +94,11 @@ const MasterLandingPage = () => {
 
                 {/* 7. The Environment */}
 
-                {/* 8. Beyond 12 Weeks + Royals Way + Investment */}
+                {/* 8. Beyond 12 Weeks + Royals Way + Pricing */}
                 <div id="beyond-12-weeks"><BeyondTwelveWeeks /></div>
                 <div id="the-royals-way"><TheRoyalsWay /></div>
-                <div id="value-stack"><ValueStack /></div>
+                <div id="pricing"><ValueStack /></div>
+                <ScreeningCallCTA />
 
                 {/* 9. Checkout */}
                 <div id="checkout"><MasterCheckout /></div>

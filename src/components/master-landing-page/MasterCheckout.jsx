@@ -4,7 +4,7 @@ import { AlertCircle, Loader2 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
 
-const DEPOSIT_URL = 'https://buy.stripe.com/fZu8wPbHP9SB2D2bzZ9Zm06';
+const FLEXIPAY_URL = 'https://buy.stripe.com/fZu8wPbHP9SB2D2bzZ9Zm06';
 const FULL_URL    = 'https://buy.stripe.com/bJe14nbHP3ud91q8nN9Zm00';
 
 /* ─── helpers ─── */
@@ -505,7 +505,7 @@ const MasterCheckout = () => {
                         <span className="h-px w-8 bg-rr-pink/40" />
                     </div>
                     <p className="text-center text-white/50 text-sm font-medium max-w-lg mx-auto leading-relaxed">
-                        Select your preferred payment plan below to submit your application and secure your place. Your details will be saved automatically.
+                        Select your preferred payment option below to submit your application and secure your place. Your details will be saved automatically.
                     </p>
                     <style>{`
                         @keyframes pulseGlow {
@@ -568,7 +568,7 @@ const MasterCheckout = () => {
 
                     {/* Flexi Pay */}
                     <button
-                        onClick={() => handlePaymentSelect('Flexi Pay', DEPOSIT_URL)}
+                        onClick={() => handlePaymentSelect('Flexi Pay', FLEXIPAY_URL)}
                         disabled={isSubmitting}
                         className="group relative flex flex-col items-center justify-center gap-1 p-px rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer shimmer-border hover:shadow-[0_0_32px_rgba(0,112,240,0.3)] disabled:opacity-50 disabled:cursor-not-allowed text-left"
                     >
@@ -652,7 +652,7 @@ const MasterCheckout = () => {
                 >
                     <h4 className="text-xs font-black text-white/40 uppercase tracking-[0.2em] mb-3">Important Disclaimer</h4>
                     <p className="text-xs text-white/35 leading-relaxed">
-                        RRA Melbourne reserves the right to decline an application to the Elite Program if it is deemed that the applicant would not benefit from the program, or if there are safety concerns for the applicant or other participants. In such cases, the player or customer will receive a full refund of the amount paid, minus any third-party fees and charges applied at the time of transaction.
+                        RRA Melbourne reserves the right to decline an application to the Elite Program if it is deemed that the applicant would not benefit from the program, or if there are safety concerns for the applicant or other participants. In such cases, the player or customer will receive a full reimbursement of the amount paid, minus any third-party fees and charges applied at the time of transaction.
                     </p>
                 </motion.div>
 

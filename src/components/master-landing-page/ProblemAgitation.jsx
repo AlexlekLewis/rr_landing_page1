@@ -76,7 +76,7 @@ const ProblemAgitation = () => {
                             The Data Deficit
                         </h3>
                         <p className="text-rr-charcoal leading-relaxed">
-                            After every session, you ask "How did it go?" and get a vague answer. There's no measurement, no benchmarking, no individual development plan. You're investing time and money with <strong className="text-rr-dark font-bold">no visibility into whether they're actually improving</strong> — or just maintaining.
+                            After every session, you ask "How did it go?" and get a vague answer. There's no measurement, no benchmarking, no individual development plan. You're spending time and money with <strong className="text-rr-dark font-bold">no visibility into whether they're actually improving</strong> — or just maintaining.
                         </p>
                     </motion.div>
                 </motion.div>

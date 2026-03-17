@@ -12,7 +12,7 @@ const LP1_NAV = [
 
 const LP2_NAV = [
     { label: 'THE PROGRAM', id: 'program-at-a-glance' },
-    { label: 'YOUR INVESTMENT', id: 'value-stack' },
+    { label: 'PRICING', id: 'pricing' },
 ];
 
 const HOME_NAV = [

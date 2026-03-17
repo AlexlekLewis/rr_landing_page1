@@ -17,8 +17,8 @@ const tiers = [
             {
                 name: "Andy Crook",
                 role: "Director of Cricket",
-                bio: "Andy brings to the Royals Academy decades of executive experience at the highest levels of sport, including leading such sports leagues as Australia's National Basketball League and Super Netball. A former professional who played for South Australia, Northamptonshire and Lancashire, Andy's connection with the game has remained strong, playing for Victoria at Masters level, and recently being a part of Australia's 2025 T20 Masters World Cup winning campaign in Pakistan. Charged with driving the Rajasthan Royals Academy in Australia, his network and vision for T20 cricket and player development has led to creating a world first pathway of opportunities for talented youngsters to put themselves in front of global leaders of the T20 game.",
-                tag: "Operations & Leadership",
+                bio: "Andy Crook has lived T20 cricket from the very beginning. A former AIS Commonwealth Bank Cricket Academy scholar, Andy played professionally for the South Australian Redbacks at the age of 17, and then went on to play for Lancashire County Cricket Club and Northamptonshire County Cricket Club. At Lancashire he played in a T20 Vitality Blast Final, held the List A highest score batting record for a decade and most recently was part of Australia's 2025 T20 Masters World Cup winning campaign in Pakistan. Andy was in English county grounds when T20 was first played and watched the game transform in real time after its 2003 launch. That experience shaped everything he believes about how the format should be developed and taught — that T20 is its own game, with its own skills, its own roles, and its own instincts, and that the best players are identified early and developed specifically for it. As the Director of Cricket at the Rajasthan Royals Academy in Australia, Andy combines his executive sports experience with working directly with players — supporting the reviewing footage, training and game play monitoring, and building individual development plans around each player's specific T20 role and skill set.",
+                tag: "T20 Specialist",
             },
             {
                 name: "Alex Lewis",
@@ -35,7 +35,7 @@ const tiers = [
             {
                 name: "Matthew Spoors",
                 role: "Batting — Power Hitting & 360",
-                bio: "BBL star and T20 International centurion. From Perth Scorchers to Melbourne Renegades, Matthew has scored runs at the highest level under the most pressure. He brings firsthand knowledge of what it takes to perform on the big stage.",
+                bio: "Matthew Spoors is the definition of a modern T20 cricketer. A right-handed top-order batter and attacking leg-spinner, Matthew announced himself on the international stage with an unbeaten 108 off 66 balls on his T20I debut for Canada — the highest individual score ever recorded on T20 International debut. From WA state age-group cricket and the Cricket Australia XI to the Big Bash League with the Perth Scorchers and Melbourne Renegades, and international franchise appearances in the Caribbean's Max60 League, Matthew has built his game around the demands of T20 cricket: clean ball-striking, explosive power, and the ability to finish innings under pressure. Using Rashid Khan as a blueprint for his leg-spin and continually refining his power-hitting craft, he represents exactly the kind of dual-threat, T20-specific player the Elite Program is designed to develop. His journey from WA Premier Cricket to the professional franchise circuit is a masterclass in reinvention, self-belief, and what happens when talent meets structured development.",
                 tag: "Power Hitting",
             },
             {
@@ -53,8 +53,14 @@ const tiers = [
             {
                 name: "Simon Feros",
                 role: "Bowling — Pace",
-                bio: "Founder of Bowlstrong, Simon is one of Australia's leading pace bowling specialists. He combines deep biomechanical knowledge with practical, high-performance coaching methods to help fast bowlers develop real pace, accuracy, and durability — the complete package for the modern game.",
+                bio: "Dr Simon Feros is one of Australia's most respected fast bowling coaches and the founder of Bowlstrong — a specialist coaching practice that has transformed pace bowlers from junior club level through to international cricket. A lecturer at Deakin University with a PhD in fast bowling performance, Simon brings over two decades of scientific research in biomechanics, physical preparation, and motor learning directly onto the training ground. His approach is unique: every technical change is grounded in evidence, every drill has a purpose, and every bowler receives a programme built around their body and their action. From run-up mechanics and front-leg bracing through to workload management and injury prevention, Simon's methods have helped fast bowlers add genuine pace, improve accuracy, and stay on the park longer. With over 32,000 followers on Instagram and endorsements from elite coaches and players across the country, he is widely regarded as a leading authority on what it takes to bowl fast and stay fit doing it.",
                 tag: "Pace Bowling",
+            },
+            {
+                name: "Peter Hatzoglou",
+                role: "Bowling — Specialist Coach",
+                bio: "Melbourne-born leg-spinner Peter Hatzoglou is one of Australian cricket's true T20 specialists. From third-grade premier cricket to the global franchise circuit in just two years, Peter has played in the BBL, The Hundred, CPL, PSL, and T20 leagues across the UAE and the USA — winning two Big Bash titles along the way. Known for his unorthodox action, deceptive pace off the pitch, and an intelligent approach to the wrist-spin craft shaped by mentorship from Shane Warne, Peter brings a modern, tactical perspective to bowling that is perfectly aligned with the Elite Program's focus on developing T20-specific skills. His experience competing across conditions and cultures worldwide gives him a rare insight into what it takes to succeed as a bowler in the modern game.",
+                tag: "T20 Bowling",
             },
         ],
     },

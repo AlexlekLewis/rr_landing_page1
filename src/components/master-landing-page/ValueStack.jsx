@@ -51,7 +51,7 @@ const ValueStack = () => {
                 >
                     <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Season 1 · 2026</p>
                     <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-none mb-4">
-                        The Investment
+                        Program Pricing
                     </h2>
                     <div className="w-12 h-px bg-gradient-to-r from-rr-pink to-rr-blue" />
                 </motion.div>
@@ -94,7 +94,7 @@ const ValueStack = () => {
                             className="bg-white/4 border border-white/10 rounded-2xl p-6 md:p-8"
                         >
                             <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em] mb-6">What You're Getting</p>
-                            <p className="text-white font-black text-lg uppercase tracking-tight mb-5">Premium development, one clear price.</p>
+                            <p className="text-white font-black text-lg uppercase tracking-tight mb-5">Elite development, one clear price.</p>
 
                             {/* Rate comparison */}
                             <div className="grid grid-cols-2 gap-4 mb-6 items-stretch">
@@ -134,7 +134,7 @@ const ValueStack = () => {
                             <div className="absolute bottom-4 right-4 opacity-[0.06] pointer-events-none">
                                 <img src="/assets/rr-logo-blue.png" alt="" className="h-20 object-contain" />
                             </div>
-                            <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em] mb-4">Total Investment</p>
+                            <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em] mb-4">T20 Elite Program Price</p>
                             <p className="text-7xl font-black text-white tracking-tighter leading-none mb-1">$2995</p>
                             <p className="text-white/30 text-xs font-medium uppercase tracking-widest">AUD · Season 1 · 2026</p>
                         </div>

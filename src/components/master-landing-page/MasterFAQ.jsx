@@ -55,7 +55,7 @@ const faqCategories = [
                 answer: "Register Your Interest → Get Assessed remotely or in-person by Royals Coaching Staff → Be Contacted with an Official Offer or next steps. Even if not selected in the first intake, your details stay on file."
             },
             {
-                question: "Is entry guaranteed?",
+                question: "Is entry assured?",
                 answer: "No. Places are strictly capped and selection is based entirely on merit, specific skills, and raw potential."
             },
             {
@@ -63,7 +63,7 @@ const faqCategories = [
                 answer: "Performance-based opportunities include match play against external opposition, potential invitations to the Royals High Performance Centre in Nagpur (India), and assessment opportunities with the wider Royals franchise network (Rajasthan, Paarl, Barbados)."
             },
             {
-                question: "Are assessments with IPL franchises guaranteed?",
+                question: "Are assessments with IPL franchises assured?",
                 answer: "No. Assessment opportunities are for players demonstrating exceptional skill. However, ALL program members have their data tracked and monitored by Royals coaches globally."
             },
             {
@@ -73,15 +73,15 @@ const faqCategories = [
         ]
     },
     {
-        category: "Fees & Investment",
+        category: "Fees & Pricing",
         items: [
             {
                 question: "Is there a cost involved?",
-                answer: "Yes, this is an elite investment. The program provides a premium performance experience with access to international coaching and extensive resources."
+                answer: "Yes, this is a premium elite program. The program provides a premium performance experience with access to international coaching and extensive resources."
             },
             {
                 question: "Are there payment options available?",
-                answer: "Yes — we want to make the program accessible. We offer AfterPay as well as internal staged payment plan options to spread the cost. Families who choose to pay in full upfront receive an additional training shirt and pants at no extra charge."
+                answer: "Yes — we want to make the program accessible. We offer AfterPay as well as internal staged payment options to spread the cost. Families who choose to pay in full upfront receive an additional training shirt and pants at no extra charge."
             },
             {
                 question: "Are there discounted rates or scholarships?",

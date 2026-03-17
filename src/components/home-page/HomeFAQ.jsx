@@ -86,7 +86,7 @@ const HomeFAQ = ({ onRegisterClick }) => {
                     ))}
                 </motion.div>
 
-                <div className="text-center space-y-4">
+                <div className="text-center">
                     <button
                         onClick={onRegisterClick}
                         data-cta="faq-register"
@@ -97,15 +97,6 @@ const HomeFAQ = ({ onRegisterClick }) => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
                     </button>
-                    <div>
-                        <Link
-                            to="/faq"
-                            className="inline-flex items-center gap-2 font-bold text-rr-pink hover:text-rr-light-pink uppercase tracking-widest text-sm transition-colors group"
-                        >
-                            View All FAQs
-                            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                        </Link>
-                    </div>
                 </div>
             </div>
         </section>
