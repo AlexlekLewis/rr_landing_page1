@@ -29,15 +29,15 @@ const ScreeningCallCTA = () => {
                     </div>
 
                     <p className="text-rr-pink font-bold uppercase tracking-widest text-xs mb-3">
-                        Not sure yet?
+                        Want to know more?
                     </p>
 
                     <h3 className="text-2xl md:text-3xl font-black text-rr-dark uppercase tracking-tight mb-4">
-                        Book an Application Screening Call
+                        Book a Pre-Application Call
                     </h3>
 
                     <p className="text-slate-600 font-medium leading-relaxed max-w-xl mx-auto mb-8">
-                        Before committing, speak with our team to find out if the Elite Program is the right fit. We'll walk you through the program structure, answer your questions, and help you make an informed decision.
+                        Before working through the application process, speak with our team to find out if the Elite Program is the right fit. We'll walk you through the program structure, answer your questions, and help you make an informed decision.
                     </p>
 
                     <a
