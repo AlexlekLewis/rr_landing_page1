@@ -6,7 +6,7 @@ const coaches = [
     {
         name: 'Alex Thornhill',
         role: 'Head Coach',
-        bio: 'An experienced cricket coach in both the UK and Australia. Alex currently coaches within the Fitzroy Doncaster Academy, as well as leading the Year 9 and 10 cricket program at Xavier College. He specialises in batting coaching with the use of video analysis and has previously worked with county cricketers in the UK.',
+        bio: 'A batting specialist with coaching experience across two continents — UK county cricket and the Australian premier system. Alex currently coaches within the Fitzroy Doncaster Academy and leads the cricket program at Xavier College. His technical approach combines video analysis with deep knowledge of what batting looks like at the next level.',
         img: '/assets/coaches/alex-thornhill.jpg',
     },
 ];
