@@ -27,7 +27,7 @@ const eliteCoaches = [
         name: "Matthew Spoors",
         role: "Batting — Power Hitting & 360",
         image: "/assets/coaches/matthew-spoors.jpg",
-        bio: "BBL star and T20 International centurion. From Perth Scorchers to Melbourne Renegades, Matthew has scored runs at the highest level under the most pressure. He brings firsthand knowledge of what it takes to perform on the big stage — the kind of experience you simply can't get from textbooks.",
+        bio: "Matthew Spoors is the definition of a modern T20 cricketer. A right-handed top-order batter and attacking leg-spinner, Matthew announced himself on the international stage with an unbeaten 108 off 66 balls on his T20I debut for Canada — the highest individual score ever recorded on T20 International debut. From WA state age-group cricket and the Cricket Australia XI to the Big Bash League with the Perth Scorchers and Melbourne Renegades, and international franchise appearances in the Caribbean's Max60 League, Matthew has built his game around the demands of T20 cricket: clean ball-striking, explosive power, and the ability to finish innings under pressure. His journey from WA Premier Cricket to the professional franchise circuit is a masterclass in reinvention, self-belief, and what happens when talent meets structured development.",
     },
     {
         name: "Jarryd Rogers",

@@ -35,7 +35,7 @@ const tiers = [
             {
                 name: "Matthew Spoors",
                 role: "Batting — Power Hitting & 360",
-                bio: "BBL star and T20 International centurion. From Perth Scorchers to Melbourne Renegades, Matthew has scored runs at the highest level under the most pressure. He brings firsthand knowledge of what it takes to perform on the big stage.",
+                bio: "Matthew Spoors is the definition of a modern T20 cricketer. A right-handed top-order batter and attacking leg-spinner, Matthew announced himself on the international stage with an unbeaten 108 off 66 balls on his T20I debut for Canada — the highest individual score ever recorded on T20 International debut. From WA state age-group cricket and the Cricket Australia XI to the Big Bash League with the Perth Scorchers and Melbourne Renegades, and international franchise appearances in the Caribbean's Max60 League, Matthew has built his game around the demands of T20 cricket: clean ball-striking, explosive power, and the ability to finish innings under pressure. Using Rashid Khan as a blueprint for his leg-spin and continually refining his power-hitting craft, he represents exactly the kind of dual-threat, T20-specific player the Elite Program is designed to develop. His journey from WA Premier Cricket to the professional franchise circuit is a masterclass in reinvention, self-belief, and what happens when talent meets structured development.",
                 tag: "Power Hitting",
             },
             {
@@ -53,7 +53,7 @@ const tiers = [
             {
                 name: "Simon Feros",
                 role: "Bowling — Pace",
-                bio: "Founder of Bowlstrong, Simon is one of Australia's leading pace bowling specialists. He combines deep biomechanical knowledge with practical, high-performance coaching methods to help fast bowlers develop real pace, accuracy, and durability — the complete package for the modern game.",
+                bio: "Dr Simon Feros is one of Australia's most respected fast bowling coaches and the founder of Bowlstrong — a specialist coaching practice that has transformed pace bowlers from junior club level through to international cricket. A lecturer at Deakin University with a PhD in fast bowling performance, Simon brings over two decades of scientific research in biomechanics, physical preparation, and motor learning directly onto the training ground. His approach is unique: every technical change is grounded in evidence, every drill has a purpose, and every bowler receives a programme built around their body and their action. From run-up mechanics and front-leg bracing through to workload management and injury prevention, Simon's methods have helped fast bowlers add genuine pace, improve accuracy, and stay on the park longer. With over 32,000 followers on Instagram and endorsements from elite coaches and players across the country, he is widely regarded as a leading authority on what it takes to bowl fast and stay fit doing it.",
                 tag: "Pace Bowling",
             },
             {
