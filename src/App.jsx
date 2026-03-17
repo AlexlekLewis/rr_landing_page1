@@ -23,6 +23,7 @@ import LandingPage3 from './components/landing-page-3/LandingPage3';
 import StripeSuccess from './components/landing-page-3/StripeSuccess';
 import MasterLandingPage from './components/master-landing-page/MasterLandingPage';
 import HolidayPrograms from './components/holiday-programs/HolidayPrograms';
+import HolidayProgramSuccess from './components/holiday-programs/HolidayProgramSuccess';
 import MasterStripeSuccess from './components/master-landing-page/MasterStripeSuccess';
 import HomePage from './components/home-page/HomePage';
 import usePageAnalytics from './hooks/usePageAnalytics';
@@ -104,6 +105,7 @@ function App() {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-conditions" element={<TermsConditions />} />
         <Route path="/holiday-programs" element={<HolidayPrograms />} />
+        <Route path="/holiday-programs/success" element={<HolidayProgramSuccess />} />
 
         {/* Admin routes */}
         <Route path="/rramadmin_26" element={<AdminLogin />} />
