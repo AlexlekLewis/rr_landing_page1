@@ -98,30 +98,46 @@ const OnlineSeminars = () => {
                     ))}
                 </div>
 
-                {/* Aspirational image strip */}
+                {/* Player faces — aspirational gallery */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
-                    className="mt-16 relative rounded-2xl overflow-hidden h-56 md:h-72"
+                    className="mt-16 grid grid-cols-3 gap-3 md:gap-4"
                 >
-                    <img
-                        src="/assets/fe-celebrate-2.jpeg"
-                        alt="Female cricketers celebrating a wicket"
-                        className="w-full h-full object-cover object-center"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-r from-rr-dark/80 via-rr-dark/40 to-transparent" />
-                    <div className="absolute inset-0 flex items-center px-8 md:px-12">
-                        <div className="max-w-md">
-                            <p className="text-xs font-black text-rr-pink uppercase tracking-widest mb-2">The Royals Way</p>
-                            <p className="text-white font-black text-xl md:text-2xl uppercase tracking-wide leading-tight">
-                                Champions develop off the field<br />
-                                <span className="text-rr-pink">before they win on it.</span>
-                            </p>
-                        </div>
-                    </div>
+                    {[
+                        { src: '/assets/fe-high-five.jpeg', alt: 'Players celebrating a wicket', pos: 'object-top' },
+                        { src: '/assets/fe-celebrate-2.jpeg', alt: 'Players celebrating batting', pos: 'object-top' },
+                        { src: '/assets/fe-bowling-celebrate.jpeg', alt: 'Players celebrating after bowling', pos: 'object-top' },
+                    ].map((img, i) => (
+                        <motion.div
+                            key={i}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: i * 0.12 }}
+                            className="relative rounded-2xl overflow-hidden h-48 md:h-64"
+                        >
+                            <img
+                                src={img.src}
+                                alt={img.alt}
+                                className={`w-full h-full object-cover ${img.pos} hover:scale-105 transition-transform duration-500`}
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/50 to-transparent" />
+                        </motion.div>
+                    ))}
                 </motion.div>
+
+                <motion.p
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                    className="text-center text-white/40 text-xs font-bold uppercase tracking-widest mt-4"
+                >
+                    Barbados Royals Women
+                </motion.p>
             </div>
         </section>
     );

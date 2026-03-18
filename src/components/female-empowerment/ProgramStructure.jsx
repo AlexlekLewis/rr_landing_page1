@@ -111,22 +111,6 @@ const ProgramStructure = () => {
                     >
                         Six performance pillars. Twelve weeks of structured, progressive development built for players who are already in the game and ready to elevate it.
                     </motion.p>
-
-                    {/* Action photo */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.25 }}
-                        className="mt-10 relative rounded-2xl overflow-hidden h-48 md:h-56 max-w-3xl mx-auto"
-                    >
-                        <img
-                            src="/assets/fe-batting-sweep.jpeg"
-                            alt="Female cricketer playing a sweep shot"
-                            className="w-full h-full object-cover object-center"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-rr-dark/50 to-transparent" />
-                    </motion.div>
                 </div>
 
                 {/* Desktop: grid of cards */}

@@ -113,8 +113,8 @@ const BenefitsSection = () => {
                     className="relative rounded-2xl overflow-hidden h-64 md:h-80 mb-12"
                 >
                     <img
-                        src="/assets/fe-batting-night.jpeg"
-                        alt="Female cricketer batting"
+                        src="/assets/fe-batting-drive.jpeg"
+                        alt="Female cricketer playing a drive shot"
                         className="w-full h-full object-cover object-center"
                     />
                     <div className="absolute inset-0 bg-gradient-to-l from-rr-dark/80 via-rr-dark/40 to-transparent" />
