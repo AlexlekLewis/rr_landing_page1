@@ -4,6 +4,7 @@ import Footer from '../Footer';
 import HeroSection from './HeroSection';
 import ProgramOverview from './ProgramOverview';
 import ProgramStructure from './ProgramStructure';
+import BenefitsSection from './BenefitsSection';
 import LocationsSection from './LocationsSection';
 import PricingSection from './PricingSection';
 import RegistrationForm from './RegistrationForm';
@@ -15,6 +16,7 @@ const SECTIONS = [
     'hero',
     'program-overview',
     'program-structure',
+    'benefits',
     'locations',
     'pricing',
     'registration-form',
@@ -40,6 +42,9 @@ const FemaleCricketIntroduction = () => {
                 </div>
                 <div id="program-structure">
                     <ProgramStructure />
+                </div>
+                <div id="benefits">
+                    <BenefitsSection />
                 </div>
                 <div id="locations">
                     <LocationsSection />
