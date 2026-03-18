@@ -23,7 +23,7 @@ const tiers = [
             {
                 name: "Alex Lewis",
                 role: "Head Coach",
-                bio: "For over 22 years, thousands of young cricketers have had their careers heavily and positively influenced by his coaching, tactical and player management skills. Alex is committed to getting the technique right and putting the player first — building not just better cricketers, but sharper athletes and tougher competitors. Current premier cricket senior assistant coach, bowling coach and Academy director.",
+                bio: "As Elite Program Head Coach, and a key part of the Rajasthan Royals Academy Leadership Group, Alex manages the day to day program and has pulled together an exceptional group of coaches to change your T20 skillset.\n\nAlex has a superb background, and since being appointed by the Rajasthan Royals Academy leadership team, has been instrumental in creating a program with individual player requirements at its heart.\n\nFor over 22 years, thousands of young cricketers have had their careers heavily and positively influenced by his coaching, tactical and player management skills. Alex is committed to getting the technique right and putting the player first — building not just better cricketers, but sharper athletes and tougher competitors.\n\nCurrent premier cricket senior assistant coach, bowling coach and Academy director.",
                 tag: "Head Coach",
             },
         ],
