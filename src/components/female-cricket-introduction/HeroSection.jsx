@@ -32,7 +32,7 @@ const HeroSection = () => {
                     className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6"
                 >
                     <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Female Cricket Program · Ages 7+ · Limited Spots</span>
+                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Girls Kickstart Program · Ages 7+ · Limited Spots</span>
                 </motion.div>
 
                 {/* Headline */}
@@ -55,7 +55,7 @@ const HeroSection = () => {
                     transition={{ duration: 0.6, delay: 0.3 }}
                     className="text-lg md:text-2xl text-white font-semibold mb-4"
                 >
-                    Cricket Her Way — Introduction to Cricket
+                    Girls Kickstart Program — Introduction to Cricket
                 </motion.p>
 
                 <motion.p

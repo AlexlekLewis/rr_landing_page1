@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 
-const SOURCE_TAG = 'cricket-her-way';
+const SOURCE_TAG = 'girls-kickstart';
 
 const AGE_OPTIONS = Array.from({ length: 12 }, (_, i) => i + 7); // 7–18
 
@@ -94,7 +94,7 @@ const RegistrationForm = () => {
             const payload = {
                 // Source tag — critical for filtering in /rramadmin_26/ dashboard
                 source: SOURCE_TAG,
-                program: 'Cricket Her Way — Introduction to Cricket',
+                program: 'Girls Kickstart Program — Introduction to Cricket',
 
                 // Parent / Guardian
                 parent_name: form.parent_name.trim(),
@@ -153,7 +153,7 @@ const RegistrationForm = () => {
                         </h2>
                         <div className="w-16 h-1 rounded-full bg-rr-pink mx-auto mb-6" />
                         <p className="text-rr-charcoal font-medium leading-relaxed mb-4">
-                            Thank you for registering for <strong>Cricket Her Way</strong>. We'll be in touch at <strong>{form.parent_email}</strong> with program dates, times, and everything you need to know before the first session.
+                            Thank you for registering for the <strong>Girls Kickstart Program</strong>. We'll be in touch at <strong>{form.parent_email}</strong> with program dates, times, and everything you need to know before the first session.
                         </p>
                         <p className="text-rr-charcoal/70 text-sm font-medium">
                             Questions? Email us at{' '}
@@ -183,7 +183,7 @@ const RegistrationForm = () => {
                         className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6"
                     >
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Female Cricket Program · Limited Spots</span>
+                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Girls Kickstart Program · Limited Spots</span>
                     </motion.div>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}

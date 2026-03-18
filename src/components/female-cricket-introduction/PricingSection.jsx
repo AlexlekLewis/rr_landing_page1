@@ -46,7 +46,7 @@ const PricingSection = () => {
                             <span className="text-8xl font-black leading-none">349</span>
                         </div>
                         <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2 mb-6">
-                            <span className="text-white font-bold text-sm">8-week program</span>
+                            <span className="text-white font-bold text-sm">Girls Kickstart Program</span>
                         </div>
                         <p className="text-white/80 text-sm font-medium mb-8">
                             All sessions delivered by qualified female coaches in a supportive, fun environment.

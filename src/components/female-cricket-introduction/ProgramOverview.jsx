@@ -50,7 +50,7 @@ const ProgramOverview = () => {
                         className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6"
                     >
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Part of the RRA Female Program</span>
+                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Girls Kickstart Program</span>
                     </motion.div>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -68,7 +68,7 @@ const ProgramOverview = () => {
                         transition={{ duration: 0.6, delay: 0.15 }}
                         className="text-lg text-rr-charcoal max-w-3xl mx-auto font-medium leading-relaxed"
                     >
-                        Cricket Her Way is an 8-week introductory cricket program designed specifically for females aged 7 and above with little to no prior experience. The program builds fundamental skills across batting, bowling, and fielding — while introducing participants to the rules, equipment, and structure of the game in a way that is fun, inclusive, and confidence-focused.
+                        The Girls Kickstart Program is an 8-week introductory cricket program designed specifically for females aged 7 and above with little to no prior experience. The program builds fundamental skills across batting, bowling, and fielding — while introducing participants to the rules, equipment, and structure of the game in a way that is fun, inclusive, and confidence-focused.
                     </motion.p>
                 </div>
 

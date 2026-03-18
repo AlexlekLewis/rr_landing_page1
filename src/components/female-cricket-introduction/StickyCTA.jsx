@@ -44,7 +44,7 @@ const StickyCTA = () => {
                         className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.45)] flex items-center justify-center gap-3 text-sm"
                     >
                         <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                        Register Now — Cricket Her Way
+                        Register Now — Girls Kickstart Program
                     </button>
                 </motion.div>
             )}

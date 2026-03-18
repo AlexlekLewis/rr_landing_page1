@@ -25,7 +25,7 @@ const faqs = [
     },
     {
         q: 'What happens after the 8 weeks?',
-        a: 'Participants completing the program will have a clear pathway into further development within the Rajasthan Royals Academy Melbourne female program. Coaches will outline next steps at the conclusion of the 8 weeks.',
+        a: 'Participants completing the program will have a clear pathway into further development through the RRA Girls Kickstart pathway. Coaches will outline next steps at the conclusion of the 8 weeks.',
     },
     {
         q: 'When do sessions start?',
