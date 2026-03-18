@@ -11,22 +11,22 @@ const included = [
 
 const paymentOptions = [
     {
-        title: 'Pay in Full',
-        tag: 'Best Value',
+        title: 'Flexi Pay',
+        tag: 'Most Popular',
         tagColor: 'text-rr-pink',
-        desc: 'Pay upfront before the closing date and receive an additional training shirt and pants — free of charge.',
+        desc: '4 payments of $749 — pay as you go with an initial payment plus 3 monthly instalments.',
     },
     {
-        title: 'Flexi Pay',
-        tag: 'Flexible',
+        title: 'Pay in Full',
+        tag: 'Best Value',
         tagColor: 'text-rr-blue',
-        desc: '4 equal payments — immediate plus 3 monthly payments.',
+        desc: 'Pay $2,995 upfront and receive an additional training shirt and training pants — free of charge.',
     },
     {
         title: 'Afterpay',
         tag: 'Split It',
         tagColor: 'text-white/50',
-        desc: 'Spread the cost with Afterpay — available at checkout with no extra steps.',
+        desc: 'Spread the cost further with Afterpay — available at checkout with no extra steps.',
     },
 ];
 
@@ -135,8 +135,22 @@ const ValueStack = () => {
                                 <img src="/assets/rr-logo-blue.png" alt="" className="h-20 object-contain" />
                             </div>
                             <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em] mb-4">T20 Elite Program Price</p>
-                            <p className="text-7xl font-black text-white tracking-tighter leading-none mb-1">$2995</p>
-                            <p className="text-white/30 text-xs font-medium uppercase tracking-widest">AUD · Season 1 · 2026</p>
+                            <div className="flex items-baseline gap-1 mb-1">
+                                <p className="text-7xl font-black text-white tracking-tighter leading-none">$749</p>
+                                <p className="text-white/40 text-lg font-bold tracking-tight">/payment</p>
+                            </div>
+                            <p className="text-white/50 text-sm font-medium mb-6">4 payments of $749 · Flexi Pay</p>
+
+                            <div className="bg-white/6 border border-white/10 rounded-xl p-4">
+                                <div className="flex items-center gap-2 mb-1.5">
+                                    <span className="text-[9px] font-bold text-rr-pink uppercase tracking-[0.2em] bg-rr-pink/15 px-2 py-0.5 rounded-full">Best Value</span>
+                                </div>
+                                <p className="text-white/70 text-sm font-medium leading-relaxed">
+                                    Or pay <span className="text-white font-black">$2,995</span> upfront and receive an additional training shirt and training pants.
+                                </p>
+                            </div>
+
+                            <p className="text-white/30 text-xs font-medium uppercase tracking-widest mt-4">AUD · Season 1 · 2026</p>
                         </div>
 
                         {/* Payment options */}

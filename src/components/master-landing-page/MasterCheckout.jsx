@@ -541,16 +541,16 @@ const MasterCheckout = () => {
                     transition={{ duration: 0.5, delay: 0.22 }}
                     className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6"
                 >
-                    {/* Pay in Full */}
+                    {/* Flexi Pay — Featured */}
                     <button
-                        onClick={() => handlePaymentSelect('Paid in Full', FULL_URL)}
+                        onClick={() => handlePaymentSelect('Flexi Pay', FLEXIPAY_URL)}
                         disabled={isSubmitting}
                         className="group relative flex flex-col items-center justify-center gap-1 p-px rounded-2xl overflow-hidden hover:shadow-[0_0_32px_rgba(229,6,149,0.4)] transition-shadow duration-300 cursor-pointer shimmer-border-bright disabled:opacity-50 disabled:cursor-not-allowed text-left"
                     >
                         <div className="w-full bg-rr-dark group-hover:bg-rr-dark/80 transition-colors rounded-2xl px-6 py-7 flex flex-col items-center gap-2 text-center">
-                            <span className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.25em]">Best Value</span>
-                            <span className="text-2xl font-black text-white uppercase tracking-tight">Pay in Full</span>
-                            <span className="text-white/50 text-sm font-medium">$2,995 — Includes free training kit</span>
+                            <span className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.25em]">Most Popular</span>
+                            <span className="text-2xl font-black text-white uppercase tracking-tight">Flexi Pay</span>
+                            <span className="text-white/50 text-sm font-medium">4 payments of $749</span>
                             <div className="mt-2 flex items-center gap-2 bg-rr-pink/20 px-4 py-2 rounded-full">
                                 {isSubmitting ? (
                                     <Loader2 className="w-4 h-4 text-rr-pink animate-spin" />
@@ -560,22 +560,22 @@ const MasterCheckout = () => {
                                     </svg>
                                 )}
                                 <span className="text-xs font-bold text-white uppercase tracking-wider">
-                                    {isSubmitting ? 'Submitting...' : 'Submit & Pay'}
+                                    {isSubmitting ? 'Submitting...' : 'Submit & Pay $749'}
                                 </span>
                             </div>
                         </div>
                     </button>
 
-                    {/* Flexi Pay */}
+                    {/* Pay in Full */}
                     <button
-                        onClick={() => handlePaymentSelect('Flexi Pay', FLEXIPAY_URL)}
+                        onClick={() => handlePaymentSelect('Paid in Full', FULL_URL)}
                         disabled={isSubmitting}
                         className="group relative flex flex-col items-center justify-center gap-1 p-px rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer shimmer-border hover:shadow-[0_0_32px_rgba(0,112,240,0.3)] disabled:opacity-50 disabled:cursor-not-allowed text-left"
                     >
                         <div className="w-full bg-rr-dark group-hover:bg-rr-dark/80 transition-colors rounded-2xl px-6 py-7 flex flex-col items-center gap-2 text-center">
-                            <span className="text-[10px] font-bold text-rr-blue uppercase tracking-[0.25em]">Flexible</span>
-                            <span className="text-2xl font-black text-white uppercase tracking-tight">Flexi Pay</span>
-                            <span className="text-white/50 text-sm font-medium">4 equal payments — immediate plus 3 monthly</span>
+                            <span className="text-[10px] font-bold text-rr-blue uppercase tracking-[0.25em]">Best Value</span>
+                            <span className="text-2xl font-black text-white uppercase tracking-tight">Pay in Full</span>
+                            <span className="text-white/50 text-sm font-medium">$2,995 — Includes free training kit</span>
                             <div className="mt-2 flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full">
                                 {isSubmitting ? (
                                     <Loader2 className="w-4 h-4 text-white/60 animate-spin" />
