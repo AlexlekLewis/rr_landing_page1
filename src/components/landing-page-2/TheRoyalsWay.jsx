@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BookCallButtonDark } from '../master-landing-page/BookCallButton';
+import { BookCallButtonLight } from '../master-landing-page/BookCallButton';
 
 const TheRoyalsWay = () => (
     <section className="py-24 bg-white text-rr-dark relative overflow-hidden">
@@ -46,7 +46,7 @@ const TheRoyalsWay = () => (
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                             </svg>
                         </a>
-                        <BookCallButtonDark />
+                        <BookCallButtonLight />
                     </div>
                 </motion.div>
 
