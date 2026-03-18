@@ -79,6 +79,9 @@ const MasterLandingPage = () => {
                 {/* 3. The Dream & Pathway */}
                 <div id="dream-pathway"><TheDreamAndPathway /></div>
 
+                {/* Specialist Coaching — elevated for visibility */}
+                <div id="specialist-coaching"><SpecialistCoaching /></div>
+
                 {/* 4. The Methodology (The Science & The Setup) */}
                 <div id="program-at-a-glance"><ProgramAtAGlance /></div>
                 <UncoveringTalent />
@@ -86,7 +89,6 @@ const MasterLandingPage = () => {
                 {/* 5. 12-Week Program Journey */}
                 <div id="program"><ProgramJourney /></div>
 
-                <div id="specialist-coaching"><SpecialistCoaching /></div>
                 <div id="session-walkthrough"><SessionWalkthrough /></div>
 
                 {/* 6. Technology Edge (RRAM DNA PROFILE) */}
