@@ -49,7 +49,7 @@ const PricingSection = () => {
                             <span className="text-white font-bold text-sm">Girls Kickstart Program</span>
                         </div>
                         <p className="text-white/80 text-sm font-medium mb-8">
-                            All sessions delivered by qualified female coaches in a supportive, fun environment.
+                            All sessions delivered by Royals accredited female coaches in a supportive, fun environment.
                         </p>
                         <button
                             onClick={scrollToForm}

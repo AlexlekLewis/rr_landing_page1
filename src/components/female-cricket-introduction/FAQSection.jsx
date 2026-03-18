@@ -13,7 +13,7 @@ const faqs = [
     },
     {
         q: 'Who are the coaches?',
-        a: 'All sessions are delivered by a qualified female cricket coach. Coaches are trained in a learn-through-play approach and are focused on creating a positive, inclusive environment for every participant.',
+        a: 'All sessions are delivered by a Royals accredited female coach. Coaches are trained in a learn-through-play approach and are focused on creating a positive, inclusive environment for every participant.',
     },
     {
         q: 'How many participants are in each session?',

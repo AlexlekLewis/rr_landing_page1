@@ -9,8 +9,8 @@ const features = [
     },
     {
         icon: '👩‍🏫',
-        title: 'Qualified Female Coach',
-        desc: 'Sessions are delivered by a qualified female coach in a safe, supportive, and encouraging environment.',
+        title: 'Royals Accredited Coach',
+        desc: 'Sessions are delivered by a Royals accredited female coach in a safe, supportive, and encouraging environment.',
     },
     {
         icon: '⚡',
