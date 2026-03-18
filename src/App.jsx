@@ -24,6 +24,7 @@ import StripeSuccess from './components/landing-page-3/StripeSuccess';
 import MasterLandingPage from './components/master-landing-page/MasterLandingPage';
 import HolidayPrograms from './components/holiday-programs/HolidayPrograms';
 import HolidayProgramSuccess from './components/holiday-programs/HolidayProgramSuccess';
+import FemaleCricketIntroduction from './components/female-cricket-introduction/FemaleCricketIntroduction';
 import MasterStripeSuccess from './components/master-landing-page/MasterStripeSuccess';
 import HomePage from './components/home-page/HomePage';
 import usePageAnalytics from './hooks/usePageAnalytics';
@@ -106,6 +107,8 @@ function App() {
         <Route path="/terms-conditions" element={<TermsConditions />} />
         <Route path="/holiday-programs" element={<HolidayPrograms />} />
         <Route path="/holiday-programs/success" element={<HolidayProgramSuccess />} />
+        {/* Female Cricket Introduction — DRAFT: not in nav, Vercel only until go-live instruction */}
+        <Route path="/femalecricketintroduction" element={<FemaleCricketIntroduction />} />
 
         {/* Admin routes */}
         <Route path="/rramadmin_26" element={<AdminLogin />} />
