@@ -12,16 +12,16 @@ const HeroSection = () => {
             {/* Mobile background */}
             <div
                 className="absolute inset-0 bg-cover bg-[center_top] bg-no-repeat md:hidden"
-                style={{ backgroundImage: "url('/assets/community-coaches.jpg')" }}
+                style={{ backgroundImage: "url('/assets/fe-trophy.jpeg')" }}
             />
             {/* Desktop background */}
             <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat hidden md:block"
-                style={{ backgroundImage: "url('/assets/community-coaches.jpg')" }}
+                style={{ backgroundImage: "url('/assets/fe-trophy.jpeg')" }}
             />
-            {/* Gradient overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/70 to-rr-dark/30 md:hidden" />
-            <div className="absolute inset-0 bg-gradient-to-r from-rr-dark via-rr-dark/80 to-transparent hidden md:block" />
+            {/* Gradient overlays — strong darkening so text is always legible */}
+            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/75 to-rr-dark/50 md:hidden" />
+            <div className="absolute inset-0 bg-gradient-to-r from-rr-dark via-rr-dark/80 to-rr-dark/40 hidden md:block" />
 
             <div className="relative z-20 container mx-auto px-6 pt-32 pb-24 max-w-4xl">
                 {/* Program tag */}

@@ -98,6 +98,25 @@ const PricingSection = () => {
                         ))}
                     </motion.div>
                 </div>
+
+                {/* Action photo strip */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="mt-16 relative rounded-2xl overflow-hidden h-56 md:h-64"
+                >
+                    <img
+                        src="/assets/fe-bowling-celebrate.jpeg"
+                        alt="Female cricketers celebrating a wicket"
+                        className="w-full h-full object-cover object-top"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/70 via-rr-dark/20 to-transparent" />
+                    <div className="absolute bottom-6 left-0 right-0 text-center">
+                        <p className="text-white font-black text-sm uppercase tracking-widest">Barbados Royals Women — The Standard You're Training For</p>
+                    </div>
+                </motion.div>
             </div>
         </section>
     );

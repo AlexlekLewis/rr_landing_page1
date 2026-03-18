@@ -90,6 +90,19 @@ const ProgramOverview = () => {
                 </div>
 
                 <div className="text-center">
+                    {/* Action photo */}
+                    <div className="relative rounded-2xl overflow-hidden mb-12 h-64 md:h-80">
+                        <img
+                            src="/assets/fe-high-five.jpeg"
+                            alt="Female cricketers celebrating"
+                            className="w-full h-full object-cover object-top"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/60 to-transparent" />
+                        <div className="absolute bottom-6 left-0 right-0 text-center">
+                            <span className="text-white font-black text-sm uppercase tracking-widest">Barbados Royals Women</span>
+                        </div>
+                    </div>
+
                     <motion.button
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}

@@ -104,6 +104,30 @@ const BenefitsSection = () => {
                     ))}
                 </div>
 
+                {/* Aspirational image */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="relative rounded-2xl overflow-hidden h-64 md:h-80 mb-12"
+                >
+                    <img
+                        src="/assets/fe-batting-night.jpeg"
+                        alt="Female cricketer batting"
+                        className="w-full h-full object-cover object-center"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-l from-rr-dark/80 via-rr-dark/40 to-transparent" />
+                    <div className="absolute inset-0 flex items-center justify-end px-8 md:px-16">
+                        <div className="max-w-xs text-right">
+                            <p className="text-white font-black text-lg md:text-xl uppercase tracking-wide leading-tight">
+                                Every shot tells a story.<br />
+                                <span className="text-rr-pink">Make yours count.</span>
+                            </p>
+                        </div>
+                    </div>
+                </motion.div>
+
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}

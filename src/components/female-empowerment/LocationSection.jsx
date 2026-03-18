@@ -44,9 +44,9 @@ const LocationSection = () => {
                     {/* Venue photo */}
                     <div className="h-56 overflow-hidden">
                         <img
-                            src="/assets/cec-lanes.jpg"
-                            alt="Bundoora Indoor Sports Centre"
-                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                            src="/assets/fe-batting-drive.jpeg"
+                            alt="Female cricketer batting"
+                            className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
                         />
                     </div>
 
