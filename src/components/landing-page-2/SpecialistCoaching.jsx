@@ -39,6 +39,12 @@ const tiers = [
                 tag: "Power Hitting",
             },
             {
+                name: "Peter Hatzoglou",
+                role: "Bowling — Specialist Coach",
+                bio: "Melbourne-born leg-spinner Peter Hatzoglou is one of Australian cricket's true T20 specialists. From third-grade premier cricket to the global franchise circuit in just two years, Peter has played in the BBL, The Hundred, CPL, PSL, and T20 leagues across the UAE and the USA — winning two Big Bash titles along the way. Known for his unorthodox action, deceptive pace off the pitch, and an intelligent approach to the wrist-spin craft shaped by mentorship from Shane Warne, Peter brings a modern, tactical perspective to bowling that is perfectly aligned with the Elite Program's focus on developing T20-specific skills. His experience competing across conditions and cultures worldwide gives him a rare insight into what it takes to succeed as a bowler in the modern game.",
+                tag: "T20 Bowling",
+            },
+            {
                 name: "Jarryd Rogers",
                 role: "Batting — Power Hitting Mechanics",
                 bio: "Former Australian Baseball League (ABL) star and Victorian state baseball batting coach and power hitting specialist. Jarryd brings a unique cross-sport perspective on how to generate bat speed and hit the ball harder — giving players a genuine, measurable edge at the crease.",
@@ -55,12 +61,6 @@ const tiers = [
                 role: "Bowling — Pace",
                 bio: "Dr Simon Feros is one of Australia's most respected fast bowling coaches and the founder of Bowlstrong — a specialist coaching practice that has transformed pace bowlers from junior club level through to international cricket. A lecturer at Deakin University with a PhD in fast bowling performance, Simon brings over two decades of scientific research in biomechanics, physical preparation, and motor learning directly onto the training ground. His approach is unique: every technical change is grounded in evidence, every drill has a purpose, and every bowler receives a programme built around their body and their action. From run-up mechanics and front-leg bracing through to workload management and injury prevention, Simon's methods have helped fast bowlers add genuine pace, improve accuracy, and stay on the park longer. With over 32,000 followers on Instagram and endorsements from elite coaches and players across the country, he is widely regarded as a leading authority on what it takes to bowl fast and stay fit doing it.",
                 tag: "Pace Bowling",
-            },
-            {
-                name: "Peter Hatzoglou",
-                role: "Bowling — Specialist Coach",
-                bio: "Melbourne-born leg-spinner Peter Hatzoglou is one of Australian cricket's true T20 specialists. From third-grade premier cricket to the global franchise circuit in just two years, Peter has played in the BBL, The Hundred, CPL, PSL, and T20 leagues across the UAE and the USA — winning two Big Bash titles along the way. Known for his unorthodox action, deceptive pace off the pitch, and an intelligent approach to the wrist-spin craft shaped by mentorship from Shane Warne, Peter brings a modern, tactical perspective to bowling that is perfectly aligned with the Elite Program's focus on developing T20-specific skills. His experience competing across conditions and cultures worldwide gives him a rare insight into what it takes to succeed as a bowler in the modern game.",
-                tag: "T20 Bowling",
             },
         ],
     },
