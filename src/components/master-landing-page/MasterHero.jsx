@@ -65,7 +65,7 @@ const MasterHero = () => {
                         <div className="inline-flex items-center gap-3 bg-white/5 border border-white/10 rounded-full px-5 py-2.5 backdrop-blur-sm">
                             <span className="text-base">🔒</span>
                             <span className="text-white/80 text-xs font-bold uppercase tracking-wide">
-                                Includes exclusive live Q&A with a Rajasthan Royals IPL star
+                                RRA Melbourne participants get an exclusive group Q&A session with a Rajasthan Royals IPL star
                             </span>
                         </div>
                     </motion.div>

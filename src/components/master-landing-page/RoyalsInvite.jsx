@@ -26,7 +26,7 @@ const RoyalsInvite = () => {
                 >
                     <div className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-5 py-2">
                         <Lock className="w-3 h-3 text-rr-pink" />
-                        <span className="text-xs font-black text-rr-pink uppercase tracking-widest">Exclusive to Rajasthan Royals Academy Participants</span>
+                        <span className="text-xs font-black text-rr-pink uppercase tracking-widest">Exclusive to Rajasthan Royals Academy Melbourne Participants</span>
                     </div>
                 </motion.div>
 
@@ -69,17 +69,17 @@ const RoyalsInvite = () => {
 
                         {/* Body copy */}
                         <p className="text-white/90 text-lg md:text-xl font-semibold leading-relaxed max-w-2xl mb-6">
-                            Register for the T20 Elite Program and unlock an exclusive invitation to a <span className="text-white font-black">live online Q&amp;A with a 2026 Rajasthan Royals IPL player.</span>
+                            Register for the T20 Elite Program and unlock an exclusive invitation to a <span className="text-white font-black">live group Q&amp;A session with a 2026 Rajasthan Royals IPL player.</span>
                         </p>
                         <p className="text-white/60 text-sm font-medium leading-relaxed max-w-xl mb-10">
-                            This invitation is not available to the general public. RRA participants only. Exclusively for those registered in the Season 1 2026 intake.
+                            This invitation is not available to the general public. Rajasthan Royals Academy Melbourne participants only. Exclusively for those registered in the Season 1 2026 intake.
                         </p>
 
                         {/* Feature pills */}
                         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center mb-10">
                             {[
-                                { icon: '🏏', text: 'Live Q&A with an IPL star' },
-                                { icon: '🔒', text: 'RRA participants only' },
+                                { icon: '🏏', text: 'Group Q&A session with an IPL star' },
+                                { icon: '🔒', text: 'RRA Melbourne participants only' },
                                 { icon: '⭐', text: 'Not available to the public' },
                             ].map((item, i) => (
                                 <div key={i} className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full px-5 py-2.5">
