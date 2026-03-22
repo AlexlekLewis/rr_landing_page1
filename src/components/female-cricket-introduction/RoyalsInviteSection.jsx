@@ -69,7 +69,7 @@ const RoyalsInviteSection = () => {
 
                         {/* Body copy */}
                         <p className="text-white/90 text-lg md:text-xl font-semibold leading-relaxed max-w-2xl mb-6">
-                            Register for the Girls Kickstart Program and join the RRA as a participant — unlocking an exclusive invitation to a <span className="text-white font-black">live online Q&amp;A with a 2026 Rajasthan Royals IPL star.</span>
+                            Register for the Girls Kickstart Program and unlock an exclusive invitation to a <span className="text-white font-black">live online Q&amp;A with a 2026 Rajasthan Royals IPL player.</span>
                         </p>
                         <p className="text-white/60 text-sm font-medium leading-relaxed max-w-xl mb-10">
                             This invitation is not available to the general public. RRA participants only. Exclusively for those registered in the April 21 intake.
