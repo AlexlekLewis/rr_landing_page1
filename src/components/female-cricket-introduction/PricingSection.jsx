@@ -94,7 +94,7 @@ const PricingSection = () => {
                         >
                             <span className="text-xl shrink-0">⭐</span>
                             <div>
-                                <p className="text-xs font-black text-rr-pink uppercase tracking-widest mb-1">RRA Members Only</p>
+                                <p className="text-xs font-black text-rr-pink uppercase tracking-widest mb-1">RRA Participants Only</p>
                                 <p className="text-rr-dark font-semibold text-sm leading-relaxed">Exclusive live Q&amp;A with a 2026 Rajasthan Royals IPL star — not available to the public.</p>
                             </div>
                         </motion.div>

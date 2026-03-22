@@ -26,7 +26,7 @@ const RoyalsInviteSection = () => {
                 >
                     <div className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-5 py-2">
                         <Lock className="w-3 h-3 text-rr-pink" />
-                        <span className="text-xs font-black text-rr-pink uppercase tracking-widest">Exclusive to Rajasthan Royals Academy Members</span>
+                        <span className="text-xs font-black text-rr-pink uppercase tracking-widest">Exclusive to Rajasthan Royals Academy Participants</span>
                     </div>
                 </motion.div>
 
@@ -69,17 +69,17 @@ const RoyalsInviteSection = () => {
 
                         {/* Body copy */}
                         <p className="text-white/90 text-lg md:text-xl font-semibold leading-relaxed max-w-2xl mb-6">
-                            Register for the Girls Kickstart Program and become an RRA member — unlocking an exclusive invitation to a <span className="text-white font-black">live online Q&amp;A with a 2026 Rajasthan Royals IPL star.</span>
+                            Register for the Girls Kickstart Program and join the RRA as a participant — unlocking an exclusive invitation to a <span className="text-white font-black">live online Q&amp;A with a 2026 Rajasthan Royals IPL star.</span>
                         </p>
                         <p className="text-white/60 text-sm font-medium leading-relaxed max-w-xl mb-10">
-                            This invitation is not available to the general public. RRA members only. Exclusively for participants registered in the April 21 intake.
+                            This invitation is not available to the general public. RRA participants only. Exclusively for those registered in the April 21 intake.
                         </p>
 
                         {/* Not available publicly lockup */}
                         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center mb-10">
                             {[
                                 { icon: '🏏', text: 'Live Q&A with an IPL star' },
-                                { icon: '🔒', text: 'RRA members only' },
+                                { icon: '🔒', text: 'RRA participants only' },
                                 { icon: '⭐', text: 'Not available to the public' },
                             ].map((item, i) => (
                                 <div key={i} className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full px-5 py-2.5">
@@ -92,10 +92,10 @@ const RoyalsInviteSection = () => {
                         {/* CTA */}
                         <button
                             onClick={scrollToForm}
-                            className="inline-flex items-center gap-3 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-10 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_32px_rgba(229,6,149,0.55)]"
+                            className="inline-flex items-center gap-3 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_32px_rgba(229,6,149,0.55)]"
                         >
-                            Secure Your Place &amp; Unlock the Invite
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            Secure Your Place
+                            <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                             </svg>
                         </button>
@@ -111,7 +111,7 @@ const RoyalsInviteSection = () => {
                     transition={{ delay: 0.4 }}
                     className="text-center text-white/30 text-xs font-medium mt-8"
                 >
-                    The Royals Invite is subject to availability and confirmation of the IPL participant. RRA will communicate full details to registered members ahead of the event.
+                    The Royals Invite is subject to availability and confirmation of the IPL participant. RRA will communicate full details to registered participants ahead of the event.
                 </motion.p>
 
             </div>
