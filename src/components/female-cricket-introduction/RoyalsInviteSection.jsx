@@ -47,8 +47,8 @@ const RoyalsInviteSection = () => {
                         {/* Logo + date row */}
                         <div className="flex flex-col sm:flex-row items-center gap-6 mb-10">
                             <img
-                                src="/assets/rajasthan-royals-logo.png"
-                                alt="Rajasthan Royals"
+                                src="/assets/MELBOURNE_OFFICIAL.png"
+                                alt="Rajasthan Royals Academy Melbourne"
                                 className="h-16 md:h-20 object-contain brightness-0 invert opacity-90"
                             />
                             <div className="h-px sm:h-16 w-16 sm:w-px bg-white/20" />
