@@ -7,6 +7,7 @@ import ProgramStructure from './ProgramStructure';
 import CoachesSection from './CoachesSection';
 import LocationsSection from './LocationsSection';
 import PricingSection from './PricingSection';
+import RoyalsInviteSection from './RoyalsInviteSection';
 import RegistrationForm from './RegistrationForm';
 import FAQSection from './FAQSection';
 import StickyCTA from './StickyCTA';
@@ -19,6 +20,7 @@ const SECTIONS = [
     'coaches',
     'locations',
     'pricing',
+    'royals-invite',
     'registration-form',
     'faq',
 ];
@@ -51,6 +53,9 @@ const FemaleCricketIntroduction = () => {
                 </div>
                 <div id="pricing">
                     <PricingSection />
+                </div>
+                <div id="royals-invite">
+                    <RoyalsInviteSection />
                 </div>
                 <div id="registration-form">
                     <RegistrationForm />

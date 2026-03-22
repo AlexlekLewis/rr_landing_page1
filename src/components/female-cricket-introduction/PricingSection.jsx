@@ -4,7 +4,7 @@ import { Check } from 'lucide-react';
 
 const included = [
     '8 weeks of structured cricket coaching',
-    'Qualified female coach in every session',
+    'Royals accredited female coaches in every session',
     'Batting, bowling, and fielding development',
     'Supportive, inclusive group environment',
     'Parent update at the end of every session',
@@ -83,6 +83,21 @@ const PricingSection = () => {
                                 <p className="text-rr-charcoal font-medium leading-relaxed">{item}</p>
                             </motion.div>
                         ))}
+
+                        {/* Bonus — IPL invite */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: included.length * 0.08 + 0.1 }}
+                            className="mt-6 bg-gradient-to-r from-rr-navy/10 to-rr-pink/10 border border-rr-pink/30 rounded-xl p-4 flex items-start gap-3"
+                        >
+                            <span className="text-xl shrink-0">⭐</span>
+                            <div>
+                                <p className="text-xs font-black text-rr-pink uppercase tracking-widest mb-1">RRA Members Only</p>
+                                <p className="text-rr-dark font-semibold text-sm leading-relaxed">Exclusive live Q&amp;A with a 2026 Rajasthan Royals IPL star — not available to the public.</p>
+                            </div>
+                        </motion.div>
                     </motion.div>
 
                     {/* Image */}

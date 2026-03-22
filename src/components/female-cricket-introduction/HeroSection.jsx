@@ -86,6 +86,10 @@ const HeroSection = () => {
                         <span className="text-rr-pink font-bold text-xs">🏏</span>
                         <span className="text-white text-xs font-semibold uppercase tracking-wide">8 Weeks · $349</span>
                     </div>
+                    <div className="flex items-center gap-2 bg-rr-pink/20 border border-rr-pink/40 rounded-full px-4 py-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
+                        <span className="text-rr-pink text-xs font-black uppercase tracking-wide">⭐ Includes Exclusive RRA IPL Invite</span>
+                    </div>
                 </motion.div>
 
                 {/* CTA */}
