@@ -5,7 +5,7 @@ const coaches = [
     {
         name: 'Carly Ray',
         role: 'Head Coach',
-        bio: 'An experienced and Rajasthan Royals Accredited coach, Carly is passionate about cricket and the development of females of all ages. A current player herself, Carly leads a team to ensure your daughter receives the coaching needed on her journey through the game.',
+        bio: 'With over a decade of experience as a player and coach, Carly brings strong leadership, a deep understanding of the game and a passion for helping players reach their full potential. Her extensive background in team sports has shaped her ability to develop skills, sharpen performance and drive players to compete with confidence. Carly works with players of all levels, with a clear understanding of the beginner experience. She focuses on building strong foundations and helping players grow in confidence at their own pace. Known for her clear communication and organised approach, Carly creates a supportive and enjoyable environment where players feel comfortable to learn, challenge themselves and continue to grow.',
         img: '/assets/coaches/carly-ray.png',
         credential: 'Royals Accredited',
     },
