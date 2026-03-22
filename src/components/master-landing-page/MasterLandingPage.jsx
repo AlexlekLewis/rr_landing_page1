@@ -19,6 +19,7 @@ import RrampDnaProfile from '../landing-page-2/RrampDnaProfile';
 import TheDreamAndPathway from './TheDreamAndPathway';
 import SessionWalkthrough from './SessionWalkthrough';
 import ScreeningCallCTA from './ScreeningCallCTA';
+import RoyalsInvite from './RoyalsInvite';
 
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
@@ -99,6 +100,7 @@ const MasterLandingPage = () => {
                 {/* 8. Beyond 12 Weeks + Royals Way + Pricing */}
                 <div id="beyond-12-weeks"><BeyondTwelveWeeks /></div>
                 <div id="the-royals-way"><TheRoyalsWay /></div>
+                <RoyalsInvite />
                 <div id="pricing"><ValueStack /></div>
                 <ScreeningCallCTA />
 
