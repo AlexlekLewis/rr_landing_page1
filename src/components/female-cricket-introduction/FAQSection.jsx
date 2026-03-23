@@ -4,10 +4,6 @@ import { ChevronDown } from 'lucide-react';
 
 const faqs = [
     {
-        q: 'Who is this program designed for?',
-        a: 'Cricket Her Way is designed specifically for females aged 7 and above with little to no prior cricket experience. If your daughter has never held a bat before, this is the perfect starting point.',
-    },
-    {
         q: 'Does my daughter need any cricket equipment?',
         a: 'No — all equipment is provided. Bats, balls, hitting cones, and wickets are supplied by the program. We encourage participants to wear comfortable sports clothes and appropriate footwear.',
     },
@@ -26,10 +22,6 @@ const faqs = [
     {
         q: 'What happens after the 8 weeks?',
         a: 'Participants completing the program will have a clear pathway into further development through the RRA Girls Kickstart pathway. Coaches will outline next steps at the conclusion of the 8 weeks.',
-    },
-    {
-        q: 'When do sessions start?',
-        a: 'Specific dates and times for both Bundoora and Hallam are currently being finalised. Register now to secure your place — you\'ll be contacted with all session details once confirmed.',
     },
     {
         q: 'Where exactly are the venues?',
