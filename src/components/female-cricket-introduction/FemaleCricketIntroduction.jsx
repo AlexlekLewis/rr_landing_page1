@@ -26,7 +26,7 @@ const SECTIONS = [
 ];
 
 const FemaleCricketIntroduction = () => {
-    usePageAnalytics('/femalecricketintroduction', { sections: SECTIONS });
+    usePageAnalytics('/female-cricket-kickstart', { sections: SECTIONS });
 
     useEffect(() => {
         window.scrollTo(0, 0);

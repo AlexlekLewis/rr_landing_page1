@@ -116,7 +116,7 @@ function App() {
         <Route path="/holiday-programs" element={<HolidayPrograms />} />
         <Route path="/holiday-programs/success" element={<HolidayProgramSuccess />} />
         {/* Female Cricket Introduction — DRAFT: not in nav, Vercel only until go-live instruction */}
-        <Route path="/femalecricketintroduction" element={<FemaleCricketIntroduction />} />
+        <Route path="/female-cricket-kickstart" element={<FemaleCricketIntroduction />} />
         <Route path="/female-empowerment" element={<FemaleEmpowerment />} />
 
         {/* Admin routes */}
