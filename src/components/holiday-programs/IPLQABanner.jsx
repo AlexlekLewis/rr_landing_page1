@@ -29,7 +29,7 @@ const IPLQABanner = () => (
                 <div className="flex-1 text-center md:text-left">
                     <span className="inline-flex items-center gap-2 bg-rr-pink/15 border border-rr-pink/30 rounded-full px-4 py-1.5 mb-4">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                        <span className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.25em]">Live &amp; Free — Clinic Attendees Only</span>
+                        <span className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.25em]">Live &amp; Free — Academy Participants Only</span>
                     </span>
                     <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight leading-tight mb-3">
                         Live Online Q&amp;A With a{' '}
