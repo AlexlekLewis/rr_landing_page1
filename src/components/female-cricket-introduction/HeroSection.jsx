@@ -12,12 +12,12 @@ const HeroSection = () => {
             {/* Mobile background */}
             <div
                 className="absolute inset-0 bg-cover bg-no-repeat md:hidden"
-                style={{ backgroundImage: "url('/assets/female-cricket-hero.png')", backgroundPosition: '70% 40%' }}
+                style={{ backgroundImage: "url('/assets/female-cricket-hero.png')", backgroundPosition: '75% 70%' }}
             />
             {/* Desktop background */}
             <div
                 className="absolute inset-0 bg-cover bg-no-repeat hidden md:block"
-                style={{ backgroundImage: "url('/assets/female-cricket-hero.png')", backgroundPosition: '70% 40%' }}
+                style={{ backgroundImage: "url('/assets/female-cricket-hero.png')", backgroundPosition: '75% 70%' }}
             />
             {/* Gradient overlays */}
             <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/65 to-rr-dark/25 md:hidden" />
