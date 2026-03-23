@@ -29,7 +29,7 @@ const IPLQABanner = () => (
                 <div className="flex-1 text-center md:text-left">
                     <span className="inline-flex items-center gap-2 bg-rr-pink/15 border border-rr-pink/30 rounded-full px-4 py-1.5 mb-4">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                        <span className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.25em]">Exclusive Bonus — Clinic Attendees Only</span>
+                        <span className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.25em]">Live &amp; Free — Clinic Attendees Only</span>
                     </span>
                     <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight leading-tight mb-3">
                         Live Online Q&amp;A With a{' '}
@@ -40,13 +40,6 @@ const IPLQABanner = () => (
                     <p className="text-white/55 font-medium text-sm md:text-base leading-relaxed max-w-xl mx-auto md:mx-0">
                         Every clinic attendee gets exclusive access to a live online Q&amp;A session with a current Rajasthan Royals IPL contracted player — ask your questions directly to someone playing at the highest level of T20 cricket in the world.
                     </p>
-                </div>
-
-                {/* Right: Badge */}
-                <div className="shrink-0 flex flex-col items-center justify-center bg-white/4 border border-white/10 rounded-2xl px-6 py-5 text-center min-w-[130px]">
-                    <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.25em] mb-2">Valued At</p>
-                    <p className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-br from-rr-pink to-rr-blue leading-none mb-1">FREE</p>
-                    <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Included</p>
                 </div>
             </motion.div>
         </div>
