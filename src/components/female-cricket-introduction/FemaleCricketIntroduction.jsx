@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import HeroSection from './HeroSection';
-import RoyalsInviteSection from './RoyalsInviteSection';
 import ProgramOverview from './ProgramOverview';
+import RoyalsInviteSection from './RoyalsInviteSection';
 import ProgramStructure from './ProgramStructure';
 import CoachesSection from './CoachesSection';
 import LocationsSection from './LocationsSection';
@@ -15,8 +15,8 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 
 const SECTIONS = [
     'hero',
-    'royals-invite',
     'program-overview',
+    'royals-invite',
     'program-structure',
     'coaches',
     'locations',
@@ -39,11 +39,11 @@ const FemaleCricketIntroduction = () => {
                 <div id="hero">
                     <HeroSection />
                 </div>
-                <div id="royals-invite">
-                    <RoyalsInviteSection />
-                </div>
                 <div id="program-overview">
                     <ProgramOverview />
+                </div>
+                <div id="royals-invite">
+                    <RoyalsInviteSection />
                 </div>
                 <div id="program-structure">
                     <ProgramStructure />
