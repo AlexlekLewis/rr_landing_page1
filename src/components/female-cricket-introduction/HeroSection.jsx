@@ -11,13 +11,13 @@ const HeroSection = () => {
         <section className="relative min-h-screen flex items-center overflow-hidden bg-rr-dark">
             {/* Mobile background */}
             <div
-                className="absolute inset-0 bg-cover bg-[center_20%] bg-no-repeat md:hidden"
-                style={{ backgroundImage: "url('/assets/female-cricket-hero.png')" }}
+                className="absolute inset-0 bg-cover bg-no-repeat md:hidden"
+                style={{ backgroundImage: "url('/assets/female-cricket-hero.png')", backgroundPosition: '70% 40%' }}
             />
             {/* Desktop background */}
             <div
-                className="absolute inset-0 bg-cover bg-[center_20%] bg-no-repeat hidden md:block"
-                style={{ backgroundImage: "url('/assets/female-cricket-hero.png')" }}
+                className="absolute inset-0 bg-cover bg-no-repeat hidden md:block"
+                style={{ backgroundImage: "url('/assets/female-cricket-hero.png')", backgroundPosition: '70% 40%' }}
             />
             {/* Gradient overlays */}
             <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/65 to-rr-dark/25 md:hidden" />
