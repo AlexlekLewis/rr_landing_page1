@@ -8,11 +8,11 @@ const RoyalsInvite = () => {
     };
 
     return (
-        <section className="py-24 bg-rr-dark relative overflow-hidden">
+        <section className="py-24 bg-white relative overflow-hidden">
 
             {/* Subtle background glow */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-rr-pink/5 blur-3xl pointer-events-none" />
-            <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-rr-blue/10 blur-3xl pointer-events-none" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-rr-pink/3 blur-3xl pointer-events-none" />
+            <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-rr-blue/5 blur-3xl pointer-events-none" />
 
             <div className="max-w-4xl mx-auto px-6 relative z-10">
 
@@ -109,7 +109,7 @@ const RoyalsInvite = () => {
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.4 }}
-                    className="text-center text-white/30 text-xs font-medium mt-8"
+                    className="text-center text-slate-400 text-xs font-medium mt-8"
                 >
                     The Royals Invite is subject to availability and confirmation of the IPL participant. RRA will communicate full details to registered participants ahead of the event.
                 </motion.p>

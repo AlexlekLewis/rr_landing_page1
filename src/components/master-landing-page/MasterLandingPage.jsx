@@ -74,6 +74,9 @@ const MasterLandingPage = () => {
                 {/* 1. The Hero */}
                 <div id="hero"><MasterHero /></div>
 
+                {/* Royals IPL Exclusive Offer */}
+                <RoyalsInvite />
+
                 {/* 2. Trust Bar */}
                 <div id="trust-bar"><TrustBar /></div>
 
@@ -100,7 +103,6 @@ const MasterLandingPage = () => {
                 {/* 8. Beyond 12 Weeks + Royals Way + Pricing */}
                 <div id="beyond-12-weeks"><BeyondTwelveWeeks /></div>
                 <div id="the-royals-way"><TheRoyalsWay /></div>
-                <RoyalsInvite />
                 <div id="pricing"><ValueStack /></div>
                 <ScreeningCallCTA />
 
