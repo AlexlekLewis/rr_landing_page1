@@ -12,6 +12,7 @@ const coaches = [
     {
         name: 'Lahiru Thirimanne',
         role: 'Specialist Coach',
+        location: 'Hallam Only',
         bio: 'Former Sri Lanka international and 2014 ICC World Twenty20 winner. A left-handed opening batter who represented Sri Lanka across all three formats, Lahiru brings firsthand experience of performing at the highest level of the game. Now based in Melbourne, he brings genuine international pedigree and a deep understanding of top-order batting to the RRA coaching environment.',
         img: '/assets/coaches/lahiru-thirimanne.jpg',
     },
@@ -68,7 +69,13 @@ const CoachesSection = () => {
 
                             <div className="p-6">
                                 <h3 className="text-lg font-black text-rr-dark uppercase tracking-wide mb-1">{coach.name}</h3>
-                                <p className="text-rr-pink font-bold text-sm uppercase tracking-widest mb-4">{coach.role}</p>
+                                <p className="text-rr-pink font-bold text-sm uppercase tracking-widest mb-2">{coach.role}</p>
+                                {coach.location && (
+                                    <span className="inline-flex items-center gap-1.5 bg-rr-blue/10 border border-rr-blue/20 text-rr-blue text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4">
+                                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                        {coach.location}
+                                    </span>
+                                )}
                                 <p className="text-rr-charcoal text-sm font-medium leading-relaxed mb-4">{coach.bio}</p>
 
                             </div>
