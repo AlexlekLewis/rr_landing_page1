@@ -88,7 +88,7 @@ function App() {
       <PostHogPageviewTracker />
       <Routes>
         {/* DNA Profile App — lazy-loaded portal at /eliteprogram/playerDNAprofile */}
-        <Route path="/eliteprogram/playerDNAprofile/*" element={
+        <Route path="/eliteprogram2026/playerDNAprofile/*" element={
           <React.Suspense fallback={
             <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#0a0a14,#1a1a2e)',display:'flex',alignItems:'center',justifyContent:'center'}}>
               <div style={{color:'rgba(255,255,255,0.5)',fontSize:13,fontFamily:"'Montserrat',sans-serif",fontWeight:600}}>Loading Player DNA Profile...</div>
