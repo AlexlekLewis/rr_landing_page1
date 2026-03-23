@@ -31,8 +31,8 @@ import HomePage from './components/home-page/HomePage';
 import usePageAnalytics from './hooks/usePageAnalytics';
 import PostHogPageviewTracker from './components/PostHogPageviewTracker';
 
-// DNA Profile Import
-// import DNAProfileRoot from './DNAProfileApp/App.jsx';
+// DNA Profile — lazy-loaded so it never impacts landing page bundle size
+const DNAProfileRoot = React.lazy(() => import('./DNAProfileApp/App.jsx'));
 
 // Admin components
 import AdminLogin from './components/admin/AdminLogin';
@@ -58,7 +58,7 @@ const TRACKED_SECTIONS = [
 ];
 
 function LandingPage() {
-  usePageAnalytics('/eliteprogram/2026registration', {
+  usePageAnalytics('/LP1/2026', {
     sections: TRACKED_SECTIONS,
   });
 
@@ -87,8 +87,16 @@ function App() {
     <div className="font-sans antialiased text-rr-dark bg-white selection:bg-rr-pink selection:text-white">
       <PostHogPageviewTracker />
       <Routes>
-        {/* DNA Profile App Route (standalone portal) */}
-        {/* <Route path="/Onboarding/DNAProfile/*" element={<DNAProfileRoot />} /> */}
+        {/* DNA Profile App — lazy-loaded portal at /eliteprogram/playerDNAprofile */}
+        <Route path="/eliteprogram/playerDNAprofile/*" element={
+          <React.Suspense fallback={
+            <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#0a0a14,#1a1a2e)',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <div style={{color:'rgba(255,255,255,0.5)',fontSize:13,fontFamily:"'Montserrat',sans-serif",fontWeight:600}}>Loading Player DNA Profile...</div>
+            </div>
+          }>
+            <DNAProfileRoot />
+          </React.Suspense>
+        } />
 
         {/* Public routes */}
         <Route path="/" element={<HomePage />} />
@@ -101,8 +109,7 @@ function App() {
         <Route path="/offer/assessment" element={<LandingPage2 />} />
         <Route path="/offer/acceptance" element={<Navigate to="/eliteprogram2026" replace />} />
         <Route path="/lp3/success" element={<StripeSuccess />} />
-        <Route path="/invite" element={<Navigate to="/offer/assessment" replace />} />
-        <Route path="/landing_page2/Preview" element={<LandingPage2 />} />
+        <Route path="/invite" element={<Navigate to="/LP2/2026" replace />} />
         <Route path="/offer/:token" element={<OfferResponsePage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-conditions" element={<TermsConditions />} />
@@ -118,11 +125,10 @@ function App() {
         <Route path="/rramadmin_26/pipeline" element={<AdminLayout><KanbanBoard /></AdminLayout>} />
         <Route path="/rramadmin_26/applications" element={<AdminLayout><ApplicationsTable /></AdminLayout>} />
         <Route path="/rramadmin_26/lp3-acceptances" element={<AdminLayout><LP3Inquiries /></AdminLayout>} />
-                        <Route path="/rramadmin_26/player-profiles" element={<AdminLayout><PlayerProfiles /></AdminLayout>} />
+        <Route path="/rramadmin_26/player-profiles" element={<AdminLayout><PlayerProfiles /></AdminLayout>} />
         <Route path="/rramadmin_26/analytics" element={<AdminLayout><AnalyticsPanel /></AdminLayout>} />
-        <Route path="/rramadmin_26/page-analytics" element={<AdminLayout><PageAnalyticsPanel /></AdminLayout>} />
+        <Route path="/rramadmin_26/page-analytics" element={<Navigate to="/rramadmin_26/analytics" replace />} />
         <Route path="/rramadmin_26/tokens" element={<AdminLayout><TokenGenerator /></AdminLayout>} />
-        <Route path="/rramadmin_26/pages" element={<AdminLayout><PagesManager /></AdminLayout>} />
         <Route path="/rramadmin_26/selection" element={<AdminLayout><SelectionAnalytics /></AdminLayout>} />
         <Route path="/rramadmin_26/settings" element={<AdminLayout><SettingsPanel /></AdminLayout>} />
         <Route path="/rramadmin_26/rsvp" element={<AdminLayout><RSVPResponses /></AdminLayout>} />
