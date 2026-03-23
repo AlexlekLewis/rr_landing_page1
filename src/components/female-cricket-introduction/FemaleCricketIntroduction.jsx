@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import HeroSection from './HeroSection';
+import RoyalsInviteSection from './RoyalsInviteSection';
 import ProgramOverview from './ProgramOverview';
 import ProgramStructure from './ProgramStructure';
 import CoachesSection from './CoachesSection';
 import LocationsSection from './LocationsSection';
 import PricingSection from './PricingSection';
-import RoyalsInviteSection from './RoyalsInviteSection';
 import RegistrationForm from './RegistrationForm';
 import FAQSection from './FAQSection';
 import StickyCTA from './StickyCTA';
@@ -15,12 +15,12 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 
 const SECTIONS = [
     'hero',
+    'royals-invite',
     'program-overview',
     'program-structure',
     'coaches',
     'locations',
     'pricing',
-    'royals-invite',
     'registration-form',
     'faq',
 ];
@@ -39,6 +39,9 @@ const FemaleCricketIntroduction = () => {
                 <div id="hero">
                     <HeroSection />
                 </div>
+                <div id="royals-invite">
+                    <RoyalsInviteSection />
+                </div>
                 <div id="program-overview">
                     <ProgramOverview />
                 </div>
@@ -53,9 +56,6 @@ const FemaleCricketIntroduction = () => {
                 </div>
                 <div id="pricing">
                     <PricingSection />
-                </div>
-                <div id="royals-invite">
-                    <RoyalsInviteSection />
                 </div>
                 <div id="registration-form">
                     <RegistrationForm />
