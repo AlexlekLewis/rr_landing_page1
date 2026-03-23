@@ -164,7 +164,7 @@ const ProgramStructure = () => {
                 >
                     <p className="text-xs font-black text-rr-pink uppercase tracking-widest mb-4">Program Outcome</p>
                     <p className="text-white/90 font-medium text-lg max-w-3xl mx-auto leading-relaxed">
-                        Participants will develop a <span className="text-white font-bold">foundational understanding of cricket</span>, improved coordination and confidence, and a clear pathway for continued participation within the RRA female program.
+                        Participants will develop a <span className="text-white font-bold">foundational understanding of cricket</span>, improved coordination and confidence, and a clear pathway for continued participation through the RRA Girls Kickstart pathway.
                     </p>
                 </motion.div>
             </div>

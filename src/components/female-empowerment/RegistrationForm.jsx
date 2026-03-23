@@ -1,0 +1,358 @@
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { supabase } from '../../lib/supabase';
+
+const SOURCE_TAG = 'female-empowerment';
+
+const PLAYING_ROLE_OPTIONS = [
+    { value: 'batter', label: 'Batter' },
+    { value: 'bowler', label: 'Bowler' },
+    { value: 'all-rounder', label: 'All-Rounder' },
+    { value: 'wicketkeeper', label: 'Wicketkeeper' },
+    { value: 'unsure', label: 'Not sure yet' },
+];
+
+const EXPERIENCE_OPTIONS = [
+    { value: 'recreational', label: 'Recreational — playing socially or at school' },
+    { value: 'club', label: 'Club — playing in a local competition' },
+    { value: 'rep', label: 'Representative — playing at district or state level' },
+];
+
+const getUTMParams = () => {
+    const params = new URLSearchParams(window.location.search);
+    return {
+        utm_source: params.get('utm_source') || null,
+        utm_medium: params.get('utm_medium') || null,
+        utm_campaign: params.get('utm_campaign') || null,
+    };
+};
+
+const ComplianceCheckbox = ({ checked, onChange, error, children }) => (
+    <div className="mb-4">
+        <label className="flex items-start gap-3 cursor-pointer group">
+            <div
+                onClick={() => onChange(!checked)}
+                className={`mt-0.5 w-5 h-5 rounded shrink-0 border-2 flex items-center justify-center transition-all duration-200 ${checked ? 'bg-rr-pink border-rr-pink' : 'border-slate-300 bg-white group-hover:border-rr-pink'}`}
+            >
+                {checked && (
+                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
+                )}
+            </div>
+            <span className="text-rr-charcoal text-sm font-medium leading-relaxed">{children}</span>
+        </label>
+        {error && <p className="text-red-500 text-xs font-medium mt-1 ml-8">{error}</p>}
+    </div>
+);
+
+const RegistrationForm = () => {
+    const [submitting, setSubmitting] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
+    const [errors, setErrors] = useState({});
+    const [acceptTerms, setAcceptTerms] = useState(false);
+    const [acceptPlayerCode, setAcceptPlayerCode] = useState(false);
+    const [acceptParentCode, setAcceptParentCode] = useState(false);
+
+    const [form, setForm] = useState({
+        parent_name: '',
+        parent_email: '',
+        parent_phone: '',
+        player_name: '',
+        player_dob: '',
+        suburb: '',
+        current_club: '',
+        playing_role: '',
+        experience_level: '',
+    });
+
+    const validate = () => {
+        const newErrors = {};
+        if (!form.parent_name.trim()) newErrors.parent_name = 'Parent/guardian name is required.';
+        if (!form.parent_email.trim() || !/\S+@\S+\.\S+/.test(form.parent_email)) newErrors.parent_email = 'Valid email is required.';
+        if (!form.parent_phone.trim()) newErrors.parent_phone = 'Phone number is required.';
+        if (!form.player_name.trim()) newErrors.player_name = 'Player name is required.';
+        if (!form.player_dob) newErrors.player_dob = 'Date of birth is required.';
+        if (!form.suburb.trim()) newErrors.suburb = 'Suburb is required.';
+        if (!form.playing_role) newErrors.playing_role = 'Please select a playing role.';
+        if (!form.experience_level) newErrors.experience_level = 'Please select an experience level.';
+        if (!acceptTerms) newErrors.acceptTerms = 'You must agree to the Terms & Conditions and Privacy Policy.';
+        if (!acceptPlayerCode) newErrors.acceptPlayerCode = 'You must agree to the Player Code of Conduct.';
+        if (!acceptParentCode) newErrors.acceptParentCode = 'You must agree to the Parent/Guardian Code of Conduct.';
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm(prev => ({ ...prev, [name]: value }));
+        if (errors[name]) setErrors(prev => ({ ...prev, [name]: undefined }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!validate()) return;
+        setSubmitting(true);
+
+        try {
+            const utmParams = getUTMParams();
+
+            const payload = {
+                // Source tag — critical for filtering in /rramadmin_26/ dashboard
+                source: SOURCE_TAG,
+                program: 'Female Empowerment & Skill Development — 12-Week Program',
+
+                // Parent / Guardian
+                parent_name: form.parent_name.trim(),
+                parent_email: form.parent_email.trim(),
+                parent_phone: form.parent_phone.trim(),
+
+                // Player
+                player_name: form.player_name.trim(),
+                player_dob: form.player_dob || null,
+                suburb: form.suburb.trim(),
+                player_gender: 'female',
+                program_type: 'female-empowerment',
+
+                // Program-specific
+                current_club: form.current_club.trim() || null,
+                playing_role: form.playing_role,
+                experience_level: form.experience_level,
+
+                // Compliance
+                accept_terms: acceptTerms,
+                accept_player_code: acceptPlayerCode,
+                accept_parent_code: acceptParentCode,
+
+                // Analytics
+                page_referrer: document.referrer || null,
+                ...utmParams,
+            };
+
+            const { error: insertError } = await supabase
+                .from('applications')
+                .insert([payload]);
+
+            if (insertError) throw insertError;
+
+            setSubmitted(true);
+        } catch (err) {
+            console.error('Submission error:', err);
+            setErrors({ form: 'Something went wrong. Please try again or email andy.crook@rramelbourne.com.' });
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    if (submitted) {
+        return (
+            <section id="registration-form" className="py-24 bg-rr-dark">
+                <div className="max-w-2xl mx-auto px-6">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.5 }}
+                        className="bg-white rounded-2xl p-10 text-center"
+                    >
+                        <div className="w-16 h-16 rounded-full bg-rr-pink/10 border border-rr-pink/30 flex items-center justify-center mx-auto mb-6">
+                            <svg className="w-8 h-8 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <h2 className="text-3xl font-black text-rr-dark uppercase tracking-wide mb-4">
+                            YOU'RE REGISTERED!
+                        </h2>
+                        <div className="w-16 h-1 rounded-full bg-rr-pink mx-auto mb-6" />
+                        <p className="text-rr-charcoal font-medium leading-relaxed mb-4">
+                            Thank you for registering for the <strong>Female Empowerment & Skill Development Program</strong>. We'll be in touch at <strong>{form.parent_email}</strong> with program dates, times, and everything you need to know before the first session.
+                        </p>
+                        <p className="text-rr-charcoal/70 text-sm font-medium">
+                            Questions? Email us at{' '}
+                            <a href="mailto:andy.crook@rramelbourne.com" className="text-rr-pink hover:underline font-bold">
+                                andy.crook@rramelbourne.com
+                            </a>
+                        </p>
+                    </motion.div>
+                </div>
+            </section>
+        );
+    }
+
+    const inputClass = (field) =>
+        `w-full bg-slate-50 border ${errors[field] ? 'border-red-400' : 'border-slate-200'} rounded-xl px-4 py-3 text-rr-dark font-medium focus:outline-none focus:border-rr-pink transition-colors duration-200 text-sm`;
+
+    const labelClass = 'block text-xs font-black text-rr-dark uppercase tracking-widest mb-2';
+
+    return (
+        <section id="registration-form" className="py-24 bg-rr-dark">
+            <div className="max-w-2xl mx-auto px-6">
+                <div className="text-center mb-12">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6"
+                    >
+                        <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
+                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Female Empowerment Program · Ages 12+ · Limited Spots</span>
+                    </motion.div>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.1 }}
+                        className="text-4xl md:text-5xl font-black text-white uppercase tracking-wide mb-4"
+                    >
+                        REGISTER <span className="text-rr-pink">NOW</span>
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 }}
+                        className="text-white/70 font-medium"
+                    >
+                        Fill in your details below. We'll confirm session dates and payment once the program schedule is finalised.
+                    </motion.p>
+                </div>
+
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.15 }}
+                    className="bg-white rounded-2xl p-8 md:p-10"
+                >
+                    <form onSubmit={handleSubmit} noValidate>
+
+                        {/* Parent / Guardian */}
+                        <div className="mb-8">
+                            <h3 className="text-base font-black text-rr-dark uppercase tracking-widest mb-6 pb-3 border-b border-slate-100">
+                                Parent / Guardian Details
+                            </h3>
+                            <div className="space-y-5">
+                                <div>
+                                    <label className={labelClass}>Full Name *</label>
+                                    <input name="parent_name" value={form.parent_name} onChange={handleChange} className={inputClass('parent_name')} placeholder="e.g. Jane Smith" />
+                                    {errors.parent_name && <p className="text-red-500 text-xs font-medium mt-1">{errors.parent_name}</p>}
+                                </div>
+                                <div>
+                                    <label className={labelClass}>Email Address *</label>
+                                    <input name="parent_email" type="email" value={form.parent_email} onChange={handleChange} className={inputClass('parent_email')} placeholder="e.g. jane@email.com" />
+                                    {errors.parent_email && <p className="text-red-500 text-xs font-medium mt-1">{errors.parent_email}</p>}
+                                </div>
+                                <div>
+                                    <label className={labelClass}>Phone Number *</label>
+                                    <input name="parent_phone" type="tel" value={form.parent_phone} onChange={handleChange} className={inputClass('parent_phone')} placeholder="e.g. 0412 345 678" />
+                                    {errors.parent_phone && <p className="text-red-500 text-xs font-medium mt-1">{errors.parent_phone}</p>}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Player Details */}
+                        <div className="mb-8">
+                            <h3 className="text-base font-black text-rr-dark uppercase tracking-widest mb-6 pb-3 border-b border-slate-100">
+                                Player Details
+                            </h3>
+                            <div className="space-y-5">
+                                <div>
+                                    <label className={labelClass}>Player Full Name *</label>
+                                    <input name="player_name" value={form.player_name} onChange={handleChange} className={inputClass('player_name')} placeholder="e.g. Sophie Smith" />
+                                    {errors.player_name && <p className="text-red-500 text-xs font-medium mt-1">{errors.player_name}</p>}
+                                </div>
+                                <div>
+                                    <label className={labelClass}>Date of Birth * <span className="normal-case font-medium text-rr-charcoal">(Ages 12+)</span></label>
+                                    <input name="player_dob" type="date" value={form.player_dob} onChange={handleChange} className={inputClass('player_dob')} />
+                                    {errors.player_dob && <p className="text-red-500 text-xs font-medium mt-1">{errors.player_dob}</p>}
+                                </div>
+                                <div>
+                                    <label className={labelClass}>Suburb Travelling From *</label>
+                                    <input name="suburb" value={form.suburb} onChange={handleChange} className={inputClass('suburb')} placeholder="e.g. Doncaster East" />
+                                    {errors.suburb && <p className="text-red-500 text-xs font-medium mt-1">{errors.suburb}</p>}
+                                </div>
+                                <div>
+                                    <label className={labelClass}>Current Club <span className="normal-case font-medium text-rr-charcoal">(optional)</span></label>
+                                    <input name="current_club" value={form.current_club} onChange={handleChange} className={inputClass('current_club')} placeholder="e.g. Box Hill CC, School team, etc." />
+                                </div>
+                                <div>
+                                    <label className={labelClass}>Playing Role *</label>
+                                    <select name="playing_role" value={form.playing_role} onChange={handleChange} className={inputClass('playing_role')}>
+                                        <option value="">Select playing role</option>
+                                        {PLAYING_ROLE_OPTIONS.map(o => (
+                                            <option key={o.value} value={o.value}>{o.label}</option>
+                                        ))}
+                                    </select>
+                                    {errors.playing_role && <p className="text-red-500 text-xs font-medium mt-1">{errors.playing_role}</p>}
+                                </div>
+                                <div>
+                                    <label className={labelClass}>Experience Level *</label>
+                                    <select name="experience_level" value={form.experience_level} onChange={handleChange} className={inputClass('experience_level')}>
+                                        <option value="">Select experience level</option>
+                                        {EXPERIENCE_OPTIONS.map(o => (
+                                            <option key={o.value} value={o.value}>{o.label}</option>
+                                        ))}
+                                    </select>
+                                    {errors.experience_level && <p className="text-red-500 text-xs font-medium mt-1">{errors.experience_level}</p>}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Compliance */}
+                        <div className="mb-8 pt-6 border-t border-slate-100">
+                            <h3 className="text-base font-black text-rr-dark uppercase tracking-widest mb-6">
+                                Agreements &amp; Consent
+                            </h3>
+                            <ComplianceCheckbox checked={acceptTerms} onChange={setAcceptTerms} error={errors.acceptTerms}>
+                                I have read and agree to the{' '}
+                                <a href="/terms-conditions" target="_blank" className="text-rr-pink hover:underline">Terms &amp; Conditions</a>{' '}
+                                and{' '}
+                                <a href="/privacy-policy" target="_blank" className="text-rr-pink hover:underline">Privacy Policy</a>.
+                                I confirm all information provided is accurate.
+                            </ComplianceCheckbox>
+                            <ComplianceCheckbox checked={acceptPlayerCode} onChange={setAcceptPlayerCode} error={errors.acceptPlayerCode}>
+                                I have read, understood, and agree to the{' '}
+                                <a href="/assets/RRA_Player_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Player Code of Conduct</a>.
+                            </ComplianceCheckbox>
+                            <ComplianceCheckbox checked={acceptParentCode} onChange={setAcceptParentCode} error={errors.acceptParentCode}>
+                                I have read, understood, and agree to the{' '}
+                                <a href="/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Parent/Guardian Code of Conduct</a>.
+                            </ComplianceCheckbox>
+                        </div>
+
+                        {/* Form-level error */}
+                        {errors.form && (
+                            <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+                                <p className="text-red-600 text-sm font-medium">{errors.form}</p>
+                            </div>
+                        )}
+
+                        <button
+                            type="submit"
+                            disabled={submitting}
+                            className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] flex items-center justify-center gap-3"
+                        >
+                            {submitting ? (
+                                <>
+                                    <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                                    </svg>
+                                    Submitting...
+                                </>
+                            ) : (
+                                <>
+                                    Complete Registration
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                    </svg>
+                                </>
+                            )}
+                        </button>
+                    </form>
+                </motion.div>
+            </div>
+        </section>
+    );
+};
+
+export default RegistrationForm;

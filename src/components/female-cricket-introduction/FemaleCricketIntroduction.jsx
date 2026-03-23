@@ -4,9 +4,10 @@ import Footer from '../Footer';
 import HeroSection from './HeroSection';
 import ProgramOverview from './ProgramOverview';
 import ProgramStructure from './ProgramStructure';
-import BenefitsSection from './BenefitsSection';
+import CoachesSection from './CoachesSection';
 import LocationsSection from './LocationsSection';
 import PricingSection from './PricingSection';
+import RoyalsInviteSection from './RoyalsInviteSection';
 import RegistrationForm from './RegistrationForm';
 import FAQSection from './FAQSection';
 import StickyCTA from './StickyCTA';
@@ -16,15 +17,16 @@ const SECTIONS = [
     'hero',
     'program-overview',
     'program-structure',
-    'benefits',
+    'coaches',
     'locations',
     'pricing',
+    'royals-invite',
     'registration-form',
     'faq',
 ];
 
 const FemaleCricketIntroduction = () => {
-    usePageAnalytics('/femalecricketintroduction', { sections: SECTIONS });
+    usePageAnalytics('/female-cricket-kickstart', { sections: SECTIONS });
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -43,14 +45,17 @@ const FemaleCricketIntroduction = () => {
                 <div id="program-structure">
                     <ProgramStructure />
                 </div>
-                <div id="benefits">
-                    <BenefitsSection />
+                <div id="coaches">
+                    <CoachesSection />
                 </div>
                 <div id="locations">
                     <LocationsSection />
                 </div>
                 <div id="pricing">
                     <PricingSection />
+                </div>
+                <div id="royals-invite">
+                    <RoyalsInviteSection />
                 </div>
                 <div id="registration-form">
                     <RegistrationForm />

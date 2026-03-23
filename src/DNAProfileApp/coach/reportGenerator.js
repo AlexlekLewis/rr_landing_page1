@@ -2,8 +2,14 @@
 // Renders the ReportCard component into the DOM, captures each page with html2canvas,
 // and assembles a multi-page A4 landscape PDF via jsPDF.
 
-import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
+// Lazy-loaded to avoid bundling ~400KB upfront when coaches are just doing attendance
+let _html2canvas = null;
+let _jsPDF = null;
+async function loadPdfDeps() {
+    if (!_html2canvas) _html2canvas = (await import('html2canvas')).default;
+    if (!_jsPDF) _jsPDF = (await import('jspdf')).jsPDF;
+    return { html2canvas: _html2canvas, jsPDF: _jsPDF };
+}
 
 const PW = 1123; // A4 landscape width at 96dpi
 const PH = 794;  // A4 landscape height at 96dpi
@@ -20,18 +26,21 @@ export async function generateReportPDF(containerEl, playerName = 'Player') {
     const pages = containerEl.querySelectorAll('[data-page]');
     if (pages.length === 0) throw new Error('No report pages found');
 
+    const { html2canvas, jsPDF } = await loadPdfDeps();
     const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [PW, PH], hotfixes: ['px_scaling'] });
 
     for (let i = 0; i < pages.length; i++) {
         const pageEl = pages[i];
 
-        // Temporarily make the page visible for capture
+        // Temporarily position the page for capture
         const origStyle = pageEl.style.cssText;
         pageEl.style.position = 'fixed';
         pageEl.style.left = '0';
         pageEl.style.top = '0';
         pageEl.style.zIndex = '-1';
-        document.body.appendChild(pageEl.cloneNode(true));
+
+        // Wait for layout to settle before capturing
+        await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
 
         const canvas = await html2canvas(pageEl, {
             width: PW,

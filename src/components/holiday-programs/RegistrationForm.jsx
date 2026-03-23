@@ -178,6 +178,7 @@ const RegistrationForm = () => {
                 fetch('https://hooks.zapier.com/hooks/catch/23705820/ux5vmcw/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
+                    keepalive: true,
                     body: JSON.stringify({
                         submitted_at: new Date().toISOString(),
                         parent_name: payload.parent_name,

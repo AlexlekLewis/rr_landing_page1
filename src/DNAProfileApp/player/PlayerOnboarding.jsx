@@ -3,34 +3,173 @@ import { trackEvent, EVT } from "../analytics/tracker";
 import { useAuth } from "../context/AuthContext";
 import { useEngine } from "../context/EngineContext";
 
-import { B, F, dkWrap, sCard } from "../data/theme";
+import { B, F, getDkWrap, sCard } from "../data/theme";
 import {
     ROLES, BAT_ARCH, BWL_ARCH, VOICE_QS, BAT_POSITIONS,
     BATTING_PHASE_PREFS, BOWLING_PHASE_PREFS, BOWLING_SPEEDS,
     GOTO_SHOTS, PACE_VARIATIONS, SPIN_VARIATIONS, PHASES, PH_MAP,
-    IQ_ITEMS, MN_ITEMS
+    IQ_ITEMS, MN_ITEMS, FLD_ITEMS,
+    BAT_QUESTIONS, BWL_QUESTIONS, BAT_QUESTIONS_JR, BWL_QUESTIONS_JR,
+    scoreBatArchetype, scoreBwlArchetype, scoreArchetypeAnswers,
+    getCricketAge, JUNIOR_AGE_CUTOFF,
+    BAT_ITEMS_JR, PACE_ITEMS_JR, SPIN_ITEMS_JR, KEEP_ITEMS_JR,
+    IQ_ITEMS_JR, MN_ITEMS_JR, PH_MAP_JR, FLD_ITEMS_JR,
+    JUNIOR_RATING_LABELS, SENIOR_RATING_LABELS,
+    CONFIDENCE_SCALE, FREQUENCY_SCALE, CONFIDENCE_SCALE_JR, FREQUENCY_SCALE_JR,
+    BAT_MATCHUPS, BWL_MATCHUPS, MENTAL_MATCHUPS,
 } from "../data/skillItems";
 import { FMTS, BAT_H, BWL_T } from "../data/competitionData";
 import { getAge, techItems } from "../engine/ratingEngine";
-import { savePlayerToDB, loadPlayerDraft } from "../db/playerDb";
+import { savePlayerToDB, saveDraftToDB, loadDraftFromDB } from "../db/playerDb";
+import { supabase, notifySlack } from "../supabaseClient";
 import { PLAYER_DEFS } from "../data/skillDefinitions";
 import {
     Hdr, SecH, Inp, Sel, TArea, NumInp, Dots, AssGrid, CompLevelSel
 } from "../shared/FormComponents";
+import { useSessionState } from "../shared/useSessionState";
 
-// Session state hook for persisting across reloads but not tabs
-function useSessionState(key, defaultValue) {
-    const [value, setValue] = useState(() => {
-        try {
-            const stored = sessionStorage.getItem(key);
-            return stored !== null ? JSON.parse(stored) : defaultValue;
-        } catch { return defaultValue; }
-    });
-    useEffect(() => {
-        try { sessionStorage.setItem(key, JSON.stringify(value)); } catch { }
-    }, [key, value]);
-    return [value, setValue];
-}
+// ── Extracted to module scope to avoid re-creation on every render ──
+const ChipSelect = ({ options, selected, onToggle, color }) => (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 4, marginBottom: 8 }}>
+        {options.map(o => {
+            const sel = (selected || []).includes(typeof o === 'string' ? o : o.id); return (
+                <button key={typeof o === 'string' ? o : o.id} onClick={() => { const id = typeof o === 'string' ? o : o.id; const cur = selected || []; onToggle(sel ? cur.filter(x => x !== id) : [...cur, id]); }}
+                    style={{ padding: '6px 12px', borderRadius: 20, border: `1.5px solid ${sel ? color : B.g200}`, background: sel ? `${color}18` : B.w, color: sel ? color : B.g600, fontSize: 10, fontWeight: sel ? 700 : 500, fontFamily: F, cursor: 'pointer', transition: 'all 0.15s' }}
+                >{typeof o === 'string' ? o : `${o.icon || ''} ${o.label}`.trim()}</button>
+            );
+        })}
+    </div>
+);
+
+const ArchQ = ({ questions, answers, onAnswer, color, label }) => {
+    const ans = answers || [];
+    const answered = ans.filter(a => a != null).length;
+    return (<div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color, fontFamily: F }}>YOUR {label} DNA</div>
+            <div style={{ fontSize: 9, color: B.g400, fontFamily: F }}>{answered}/{questions.length} answered</div>
+            <div style={{ flex: 1, height: 3, background: B.g200, borderRadius: 2 }}>
+                <div style={{ width: `${(answered / questions.length) * 100}%`, height: '100%', background: color, borderRadius: 2, transition: 'width 0.3s' }} />
+            </div>
+        </div>
+        {questions.map((q, qi) => (
+            <div key={qi} style={{ marginBottom: 14, background: ans[qi] != null ? `${color}06` : 'transparent', borderRadius: 10, padding: '8px 10px', border: `1px solid ${ans[qi] != null ? `${color}30` : B.g100}`, transition: 'all 0.2s' }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: B.nvD, fontFamily: F, marginBottom: 6 }}>
+                    <span style={{ color, marginRight: 6 }}>{qi + 1}.</span>{q.q}
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                    {q.opts.map((opt, oi) => (
+                        <button key={oi} onClick={() => {
+                            const next = [...(ans.length >= questions.length ? ans : Array(questions.length).fill(null))];
+                            next[qi] = next[qi] === oi ? null : oi;
+                            onAnswer(next);
+                        }} style={{
+                            padding: '10px 14px', borderRadius: 8, border: `1.5px solid ${ans[qi] === oi ? color : B.g200}`,
+                            background: ans[qi] === oi ? `${color}15` : B.w, color: ans[qi] === oi ? color : B.g700,
+                            fontSize: 11, fontWeight: ans[qi] === oi ? 700 : 500, fontFamily: F, cursor: 'pointer',
+                            textAlign: 'left', transition: 'all 0.15s', lineHeight: 1.4
+                        }}>{opt.text}</button>
+                    ))}
+                </div>
+            </div>
+        ))}
+    </div>);
+};
+
+const ArchReveal = ({ answers, scoreFn, archList, color, qCount }) => {
+    if (!answers || answers.filter(a => a != null).length < qCount) return null;
+    const result = scoreFn(answers);
+    const primary = archList.find(a => a.id === result.primary);
+    const secondary = result.secondary ? archList.find(a => a.id === result.secondary) : null;
+    if (!primary) return null;
+    return (<div style={{ background: `${color}08`, border: `2px solid ${color}40`, borderRadius: 12, padding: '16px 14px', marginTop: 12, textAlign: 'center' }}>
+        <div style={{ fontSize: 9, fontWeight: 700, color, fontFamily: F, letterSpacing: 1.5, marginBottom: 4 }}>YOUR T20 DNA</div>
+        <div style={{ fontSize: 16, fontWeight: 800, color: B.nvD, fontFamily: F }}>{primary.nm}</div>
+        <div style={{ fontSize: 10, color: B.g600, fontFamily: F, marginTop: 4, lineHeight: 1.5 }}>{primary.sub}</div>
+        {secondary && <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px solid ${color}30` }}>
+            <div style={{ fontSize: 9, color: B.g400, fontFamily: F }}>Secondary identity</div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: B.nvD, fontFamily: F }}>{secondary.nm}</div>
+        </div>}
+        <div style={{ display: 'flex', gap: 4, justifyContent: 'center', marginTop: 10, flexWrap: 'wrap' }}>
+            {archList.map(a => (<div key={a.id} style={{ flex: '1 0 0', minWidth: 50, maxWidth: 80 }}>
+                <div style={{ height: 40, background: B.g100, borderRadius: 4, position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: `${result.scores[a.id] || 0}%`, background: a.id === result.primary ? color : `${color}40`, borderRadius: 4, transition: 'height 0.5s' }} />
+                </div>
+                <div style={{ fontSize: 7, color: B.g500, fontFamily: F, marginTop: 2, textAlign: 'center' }}>{a.nm.split(' ').pop()}</div>
+                <div style={{ fontSize: 8, fontWeight: 700, color: a.id === result.primary ? color : B.g400, fontFamily: F, textAlign: 'center' }}>{result.scores[a.id] || 0}%</div>
+            </div>))}
+        </div>
+    </div>);
+};
+
+// ── Extracted to module scope to prevent scroll-reset on re-render ──
+const MatchUpRow = React.memo(({ matchup, domain, idx, confColor, freqColor, pd, pu, confScale, freqScale, isJunior }) => {
+    const ck = `sr_mc_${domain}_${idx}_c`;
+    const fk = `sr_mc_${domain}_${idx}_f`;
+    const cv = pd[ck] || 0;
+    const fv = pd[fk] || 0;
+    const confText = isJunior ? matchup.confJr : matchup.conf;
+    const freqText = isJunior ? matchup.freqJr : matchup.freq;
+    return (
+        <div style={{ padding: '12px 0', borderBottom: `1px solid ${B.g100}` }}>
+            <div style={{ marginBottom: 10 }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6, marginBottom: 6 }}>
+                    <div style={{ width: 18, height: 18, borderRadius: '50%', background: cv > 0 ? confColor : B.g200, color: cv > 0 ? B.w : B.g400, fontSize: 9, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>{cv > 0 ? '\u2713' : '\u2014'}</div>
+                    <div style={{ fontSize: 11, fontWeight: 600, color: B.g800, fontFamily: F, lineHeight: 1.4 }}>{confText}</div>
+                </div>
+                <div style={{ display: 'flex', gap: 3, marginLeft: 24 }}>
+                    {confScale.map((label, n) => {
+                        const val = n + 1; const sel = cv === val;
+                        return (<button key={n} onClick={() => pu(ck, cv === val ? 0 : val)} style={{ flex: 1, padding: '8px 2px', borderRadius: 8, border: `1.5px solid ${sel ? confColor : B.g200}`, background: sel ? `${confColor}15` : B.w, cursor: 'pointer', transition: 'all 0.15s' }}>
+                            <div style={{ fontSize: 12, fontWeight: 700, color: sel ? confColor : B.g400, fontFamily: F, textAlign: 'center' }}>{val}</div>
+                            <div style={{ fontSize: 7, fontWeight: 600, color: sel ? confColor : B.g400, fontFamily: F, textAlign: 'center', marginTop: 1, lineHeight: 1.1 }}>{label}</div>
+                        </button>);
+                    })}
+                </div>
+            </div>
+            <div>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6, marginBottom: 6 }}>
+                    <div style={{ width: 18, height: 18, borderRadius: '50%', background: fv > 0 ? freqColor : B.g200, color: fv > 0 ? B.w : B.g400, fontSize: 9, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>{fv > 0 ? '\u2713' : '\u2014'}</div>
+                    <div style={{ fontSize: 11, fontWeight: 500, color: B.g600, fontFamily: F, lineHeight: 1.4, fontStyle: 'italic' }}>{freqText}</div>
+                </div>
+                <div style={{ display: 'flex', gap: 3, marginLeft: 24 }}>
+                    {freqScale.map((label, n) => {
+                        const val = n + 1; const sel = fv === val;
+                        return (<button key={n} onClick={() => pu(fk, fv === val ? 0 : val)} style={{ flex: 1, padding: '8px 2px', borderRadius: 8, border: `1.5px solid ${sel ? freqColor : B.g200}`, background: sel ? `${freqColor}15` : B.w, cursor: 'pointer', transition: 'all 0.15s' }}>
+                            <div style={{ fontSize: 12, fontWeight: 700, color: sel ? freqColor : B.g400, fontFamily: F, textAlign: 'center' }}>{val}</div>
+                            <div style={{ fontSize: 7, fontWeight: 600, color: sel ? freqColor : B.g400, fontFamily: F, textAlign: 'center', marginTop: 1, lineHeight: 1.1 }}>{label}</div>
+                        </button>);
+                    })}
+                </div>
+            </div>
+        </div>
+    );
+});
+
+const MatchUpCard = React.memo(({ title, sub, matchups, domain, confColor, freqColor, pd, pu, confScale, freqScale, isJunior }) => {
+    const total = matchups.length * 2;
+    const done = matchups.reduce((s, _, i) => {
+        if (pd[`sr_mc_${domain}_${i}_c`] > 0) s++;
+        if (pd[`sr_mc_${domain}_${i}_f`] > 0) s++;
+        return s;
+    }, 0);
+    return (
+        <div style={{ ...sCard, borderLeft: `3px solid ${confColor}`, marginBottom: 10 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                <div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: confColor, fontFamily: F }}>{title}</div>
+                    {sub && <div style={{ fontSize: 9, color: B.g400, fontFamily: F, marginTop: 1 }}>{sub}</div>}
+                </div>
+                <div style={{ fontSize: 9, fontWeight: 600, color: done === total ? B.grn : B.g400, fontFamily: F, background: done === total ? `${B.grn}12` : B.g100, padding: '3px 8px', borderRadius: 10 }}>
+                    {done}/{total}
+                </div>
+            </div>
+            {matchups.map((m, i) => (
+                <MatchUpRow key={m.id} matchup={m} domain={domain} idx={i} confColor={confColor} freqColor={freqColor} pd={pd} pu={pu} confScale={confScale} freqScale={freqScale} isJunior={isJunior} />
+            ))}
+        </div>
+    );
+});
 
 export default function PlayerOnboarding() {
     const { session, signOut, portal } = useAuth();
@@ -38,80 +177,155 @@ export default function PlayerOnboarding() {
 
     const [pStep, setPStep] = useSessionState('rra_pStep', 0);
     const [showOnboardGuide, setShowOnboardGuide] = useSessionState('rra_obGuide', true);
-    const [isSaving, setIsSaving] = useState(false);
-    const [isLoadingDraft, setIsLoadingDraft] = useState(true);
 
-    const [pd, setPd] = useState({ grades: [{}], topBat: [{}], topBowl: [{}] });
+    const [pd, setPd] = useSessionState('rra_pd', { grades: [{}] });
     const pu = (k, v) => setPd(d => ({ ...d, [k]: v }));
+    const [submitting, setSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState('');
+    const [stepError, setStepError] = useState('');
+    const [draftId, setDraftId] = useState(null);
+    const [saving, setSaving] = useState(false);
+    const [saveStatus, setSaveStatus] = useState('idle'); // idle | saving | saved | error
+    const [draftLoading, setDraftLoading] = useState(!!session?.user?.id);
 
     const stepStartRef = useRef(Date.now());
+    const pdRef = useRef(pd);
+    const lastSavedRef = useRef(null);
+    useEffect(() => { pdRef.current = pd; }, [pd]);
 
+    // ── Load saved draft from database on mount ──
     useEffect(() => {
-        async function loadDraft() {
-            if (!session?.user?.id) return;
-            const draft = await loadPlayerDraft(session.user.id);
+        if (!session?.user?.id) { setDraftLoading(false); return; }
+        let cancelled = false;
+        loadDraftFromDB(session.user.id).then(draft => {
+            if (cancelled) return;
             if (draft) {
-                setPd(draft);
-                // Advance step to max completed step if desired, for now we will just load the data.
+                setPd(draft.pd);
+                setPStep(draft.step);
+                setDraftId(draft.draftId);
+                lastSavedRef.current = JSON.stringify(draft.pd);
             }
-            setIsLoadingDraft(false);
-        }
-        loadDraft();
-    }, [session?.user?.id]);
+            setDraftLoading(false);
+        }).catch(err => {
+            console.error('Load draft error:', err);
+            if (!cancelled) setDraftLoading(false);
+        });
+        return () => { cancelled = true; };
+    }, []);
 
-    // ── Abandon tracking: fire SURVEY_ABANDON if player leaves mid-onboarding ──
+    // ── Save draft to database ──
+    const saveDraft = async (pdOverride, stepOverride) => {
+        if (!session?.user?.id || saving) return;
+        setSaving(true);
+        setSaveStatus('saving');
+        try {
+            const toSave = pdOverride || pdRef.current;
+            const step = stepOverride != null ? stepOverride : pStep;
+            const saved = await saveDraftToDB(toSave, step, session.user.id);
+            setDraftId(saved.id);
+            lastSavedRef.current = JSON.stringify(toSave);
+            setSaveStatus('saved');
+            setTimeout(() => setSaveStatus(s => s === 'saved' ? 'idle' : s), 2000);
+        } catch (e) {
+            console.error('Save draft error:', e);
+            setSaveStatus('error');
+            setTimeout(() => setSaveStatus(s => s === 'error' ? 'idle' : s), 3000);
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    // ── Warn player if they try to close with unsaved changes ──
     useEffect(() => {
-        const handleUnload = () => {
-            if (portal === 'player' && pStep > 0 && pStep < 7) {
+        const handleUnload = (e) => {
+            if (pStep > 0 && pStep < 7) {
                 trackEvent(EVT.SURVEY_ABANDON, { step: pStep, elapsed: Date.now() - stepStartRef.current });
+                const hasChanges = lastSavedRef.current !== JSON.stringify(pdRef.current);
+                if (hasChanges) { e.preventDefault(); e.returnValue = ''; }
             }
         };
         window.addEventListener('beforeunload', handleUnload);
         return () => window.removeEventListener('beforeunload', handleUnload);
-    }, [portal, pStep]);
+    }, [pStep]);
 
     const stpN = ["Profile", "Competition History", "T20 Identity", "Self-Assessment", "Player Voice", "Medical & Goals", "Review"];
     const age = getAge(pd.dob);
     const show16 = age && age >= 16;
+    const cricketAge = getCricketAge(pd.dob);
+    const isJunior = cricketAge != null && cricketAge < JUNIOR_AGE_CUTOFF;
     const rid = ROLES.find(r => r.label === pd.role)?.id || 'batter';
     const hasBowling = ['pace', 'spin', 'allrounder'].includes(rid);
     const isPace = ['pace', 'allrounder'].includes(rid);
+    const batQs = isJunior ? BAT_QUESTIONS_JR : BAT_QUESTIONS;
+    const bwlQs = isJunior ? BWL_QUESTIONS_JR : BWL_QUESTIONS;
 
     const goTop = () => window.scrollTo(0, 0);
     const btnSty = (ok, full) => ({ padding: full ? "14px 20px" : "8px 16px", borderRadius: 8, border: "none", background: ok ? `linear-gradient(135deg,${B.bl},${B.pk})` : B.g200, color: ok ? B.w : B.g400, fontSize: 13, fontWeight: 800, fontFamily: F, cursor: ok ? "pointer" : "default", letterSpacing: .5, textTransform: "uppercase", width: full ? "100%" : "auto", marginTop: 6 });
 
-    const doSignOut = async () => {
-        await signOut();
-        window.location.reload();
+    const isValidDob = (dob) => {
+        if (!dob) return false;
+        const m = dob.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+        if (!m) return false;
+        const [, dd, mm, yyyy] = m;
+        const d = new Date(+yyyy, +mm - 1, +dd);
+        return d.getFullYear() === +yyyy && d.getMonth() === +mm - 1 && d.getDate() === +dd && d < new Date();
+    };
+    const dobInvalid = pd.dob && !isValidDob(pd.dob);
+
+    // ── Step validation ──
+    const countSelfRatings = (prefix) => Object.keys(pd).filter(k => k.startsWith(prefix) && pd[k] > 0).length;
+
+    const validateStep = (step) => {
+        if (step === 0) {
+            if (!pd.name?.trim()) return 'Please enter your full name';
+            if (!isValidDob(pd.dob)) return 'Please enter a valid date of birth (DD/MM/YYYY)';
+        }
+        if (step === 1) {
+            const gs = pd.grades || [{}];
+            if (!gs[0]?.level) return 'Please select at least one competition level';
+        }
+        if (step === 2) {
+            if (!pd.role) return 'Please select your primary role';
+            if (!pd.primarySkill) return 'Please select your primary skill';
+        }
+        // Steps 3-4: soft nudge — show message once, then allow skip on second tap
+        if (step === 3 && !pd._nudge3) {
+            const confCount = countSelfRatings('sr_c_');
+            const freqCount = countSelfRatings('sr_f_');
+            if (confCount < 3 || freqCount < 3) {
+                pu('_nudge3', true);
+                return 'Rate a few skills to help your coaches — or tap Next again to skip';
+            }
+        }
+        if (step === 4 && !pd._nudge4) {
+            const mcCount = countSelfRatings('sr_mc_');
+            if (mcCount < 2) {
+                pu('_nudge4', true);
+                return 'Answer a couple of match-up questions — or tap Next again to skip';
+            }
+        }
+        return null;
     };
 
-    // ── Onboarding step timer & Auto-save ──
-    const advanceStep = async (next) => {
-        if (isSaving) return;
-        setIsSaving(true);
+    // ── Onboarding step timer (auto-saves to database) ──
+    const advanceStep = (next) => {
+        const err = validateStep(pStep);
+        if (err) { setStepError(err); return; }
+        setStepError('');
         const elapsed = Date.now() - stepStartRef.current;
         const progress = pd.onboardingProgress || { steps: {}, totalTimeMs: 0, lastStepReached: 0 };
         progress.steps[pStep] = { completed: true, durationMs: elapsed, completedAt: new Date().toISOString() };
         progress.totalTimeMs = (progress.totalTimeMs || 0) + elapsed;
         progress.lastStepReached = Math.max(progress.lastStepReached || 0, next);
         progress.percentComplete = Math.round((next / (stpN.length - 1)) * 100);
-
-        // Prepare updated data with the new auto-save progress
         const updatedPd = { ...pd, onboardingProgress: progress };
-
-        setPd(updatedPd);
+        pu('onboardingProgress', progress);
         trackEvent(EVT.SURVEY_STEP || 'survey_step', { step: pStep, stepName: stpN[pStep], durationMs: elapsed });
-
-        // Auto-save the draft to the database
-        const savedPlayer = await savePlayerToDB(updatedPd, session?.user?.id);
-        if (savedPlayer && savedPlayer.id) {
-            setPd(prev => ({ ...prev, id: savedPlayer.id }));
-        }
-
         stepStartRef.current = Date.now();
         setPStep(next);
         goTop();
-        setIsSaving(false);
+        // Auto-save draft to database
+        saveDraft(updatedPd, next);
     };
 
     const renderP = () => {
@@ -120,7 +334,11 @@ export default function PlayerOnboarding() {
                 <SecH title="Player Profile" sub="Tell us about yourself" />
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0 12px" }}>
                     <Inp half label="Full Name *" value={pd.name} onChange={v => pu("name", v)} ph="Your full name" />
-                    <Inp half label="Date of Birth *" value={pd.dob} onChange={v => pu("dob", v)} ph="DD/MM/YYYY" />
+                    <div style={{ flex: 1, minWidth: 130, marginBottom: 8 }}>
+                        <div style={{ fontSize: 10, color: dobInvalid ? B.red : B.g600, fontFamily: F, marginBottom: 1 }}>Date of Birth *{dobInvalid ? ' (use DD/MM/YYYY)' : ''}</div>
+                        <input type="text" value={pd.dob || ""} onChange={e => pu("dob", e.target.value)} placeholder="DD/MM/YYYY"
+                            style={{ width: "100%", border: "none", borderBottom: `1.5px solid ${dobInvalid ? B.red : B.g200}`, padding: "5px 0", fontSize: 12, fontFamily: F, color: B.g800, outline: "none", background: "transparent", boxSizing: "border-box" }} />
+                    </div>
                     <Inp half label="Phone" value={pd.phone} onChange={v => pu("phone", v)} ph="Mobile" />
                     <Inp half label="Email" value={pd.email} onChange={v => pu("email", v)} ph="Email" />
                     <Inp half label="Club" value={pd.club} onChange={v => pu("club", v)} ph="e.g. Doncaster CC" />
@@ -152,7 +370,7 @@ export default function PlayerOnboarding() {
                             <div style={{ fontSize: 11, fontWeight: 800, color: B.nvD, fontFamily: F }}>COMPETITION LEVEL {gi + 1}</div>
                             {gs.length > 1 && <button onClick={() => pu("grades", gs.filter((_, i) => i !== gi))} style={{ fontSize: 9, color: B.red, background: "none", border: "none", cursor: "pointer", fontFamily: F }}>✕ Remove</button>}
                         </div>
-                        <CompLevelSel value={g.level} onChange={v => ug(gi, "level", v)} compTiers={compTiers} gender={pd.gender} assocComps={assocComps} vmcuAssocs={vmcuAssocs} />
+                        <CompLevelSel value={g.level} onChange={v => ug(gi, "level", v)} compTiers={compTiers} gender={pd.gender} assocComps={assocComps} vmcuAssocs={vmcuAssocs} playerAssoc={pd.assoc} playerDob={pd.dob} />
                         <div style={{ display: "flex", flexWrap: "wrap", gap: "0 8px", marginTop: 8 }}>
                             <Inp half label="Club / Team" value={g.team} onChange={v => ug(gi, "team", v)} ph="e.g. Doncaster U14" />
                             <Inp half label="Matches" value={g.matches} onChange={v => ug(gi, "matches", v)} type="number" ph="0" />
@@ -202,108 +420,74 @@ export default function PlayerOnboarding() {
                                 </div>
                             </div>
                         </div>
+                        {/* ── Best Individual Performances (nested inside grade card) ── */}
+                        {g.level && <div style={{ marginTop: 10, borderTop: `1px dashed ${B.g200}`, paddingTop: 10 }}>
+                            <div style={{ fontSize: 9, fontWeight: 700, color: B.g500, fontFamily: F, marginBottom: 8, letterSpacing: 0.5 }}>BEST INDIVIDUAL PERFORMANCE</div>
+                            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                                <div style={{ flex: "1 1 0", minWidth: 200, padding: "8px 10px", background: B.pkL, borderRadius: 6 }}>
+                                    <div style={{ fontSize: 9, fontWeight: 700, color: B.pk, fontFamily: F, marginBottom: 6 }}>BEST BATTING</div>
+                                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
+                                        <NumInp label="R" value={(g.topBat || {}).runs} onChange={v => ug(gi, "topBat", { ...(g.topBat || {}), runs: v })} w={44} />
+                                        <NumInp label="B" value={(g.topBat || {}).balls} onChange={v => ug(gi, "topBat", { ...(g.topBat || {}), balls: v })} w={44} />
+                                        <NumInp label="4s" value={(g.topBat || {}).fours} onChange={v => ug(gi, "topBat", { ...(g.topBat || {}), fours: v })} w={36} />
+                                        <NumInp label="6s" value={(g.topBat || {}).sixes} onChange={v => ug(gi, "topBat", { ...(g.topBat || {}), sixes: v })} w={36} />
+                                        <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                                            <input type="checkbox" checked={!!(g.topBat || {}).notOut} onChange={e => ug(gi, "topBat", { ...(g.topBat || {}), notOut: e.target.checked })} style={{ width: 14, height: 14, accentColor: B.pk }} />
+                                            <span style={{ fontSize: 9, fontWeight: 600, color: B.g600, fontFamily: F }}>NO</span>
+                                        </div>
+                                    </div>
+                                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 6 }}>
+                                        <div style={{ flex: "1 1 80px" }}><Inp label="vs" value={(g.topBat || {}).vs} onChange={v => ug(gi, "topBat", { ...(g.topBat || {}), vs: v })} ph="Opposition" /></div>
+                                        <div style={{ flex: "0 1 80px" }}><Sel label="Fmt" value={(g.topBat || {}).format} onChange={v => ug(gi, "topBat", { ...(g.topBat || {}), format: v })} opts={FMTS} /></div>
+                                    </div>
+                                </div>
+                                <div style={{ flex: "1 1 0", minWidth: 200, padding: "8px 10px", background: B.blL, borderRadius: 6 }}>
+                                    <div style={{ fontSize: 9, fontWeight: 700, color: B.bl, fontFamily: F, marginBottom: 6 }}>BEST BOWLING</div>
+                                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                                        <NumInp label="W" value={(g.topBowl || {}).wkts} onChange={v => ug(gi, "topBowl", { ...(g.topBowl || {}), wkts: v })} w={40} />
+                                        <NumInp label="R" value={(g.topBowl || {}).runs} onChange={v => ug(gi, "topBowl", { ...(g.topBowl || {}), runs: v })} w={44} />
+                                        <NumInp label="O" value={(g.topBowl || {}).overs} onChange={v => ug(gi, "topBowl", { ...(g.topBowl || {}), overs: v })} w={44} />
+                                        <NumInp label="M" value={(g.topBowl || {}).maidens} onChange={v => ug(gi, "topBowl", { ...(g.topBowl || {}), maidens: v })} w={36} />
+                                    </div>
+                                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 6 }}>
+                                        <div style={{ flex: "1 1 80px" }}><Inp label="vs" value={(g.topBowl || {}).vs} onChange={v => ug(gi, "topBowl", { ...(g.topBowl || {}), vs: v })} ph="Opposition" /></div>
+                                        <div style={{ flex: "0 1 80px" }}><Sel label="Fmt" value={(g.topBowl || {}).format} onChange={v => ug(gi, "topBowl", { ...(g.topBowl || {}), format: v })} opts={FMTS} /></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>}
                     </div>);
                 })}
                 {canAdd && <button onClick={() => pu("grades", [...gs, {}])} style={{ ...btnSty(true, true), background: B.bl, fontSize: 12 }}>+ ADD COMPETITION LEVEL ({3 - gs.length} remaining)</button>}
                 {!canAdd && <div style={{ fontSize: 10, color: B.g400, fontFamily: F, textAlign: "center", marginTop: 4 }}>Maximum 3 competition levels — choose your highest levels played</div>}
-
-                {/* ═══ TOP PERFORMANCES ═══ */}
-                <div style={{ marginTop: 20, borderTop: `2px solid ${B.g200}`, paddingTop: 16 }}>
-                    <SecH title="Top Performances" sub="Your best individual batting scores and bowling figures from the season. Up to 3 each — easily found on your PlayCricket match summary." />
-
-                    {/* ── TOP BATTING SCORES ── */}
-                    <div style={{ fontSize: 11, fontWeight: 800, color: B.pk, fontFamily: F, marginBottom: 6, marginTop: 10 }}>🏏 BEST BATTING SCORES</div>
-                    <div style={{ fontSize: 10, color: B.g400, fontFamily: F, marginBottom: 8, lineHeight: 1.4 }}>Enter your top innings — runs, balls faced, boundaries. Available from any playing stats page.</div>
-                    {(pd.topBat || [{}]).map((b, bi) => {
-                        const uB = (k, v) => { const n = [...(pd.topBat || [{}])]; n[bi] = { ...n[bi], [k]: v }; pu("topBat", n); };
-                        const compOpts = gs.filter(g => g.level).map(g => {
-                            const t = (compTiers || []).find(ct => ct.code === g.level);
-                            return t ? t.competition_name : g.level;
-                        });
-                        return (<div key={bi} style={{ background: B.pkL, borderRadius: 8, padding: 10, marginBottom: 6, borderLeft: `3px solid ${B.pk}` }}>
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-                                <div style={{ fontSize: 10, fontWeight: 700, color: B.pk, fontFamily: F }}>SCORE {bi + 1}</div>
-                                {(pd.topBat || []).length > 1 && <button onClick={() => pu("topBat", (pd.topBat || []).filter((_, i) => i !== bi))} style={{ fontSize: 9, color: B.red, background: "none", border: "none", cursor: "pointer", fontFamily: F }}>✕</button>}
-                            </div>
-                            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
-                                <NumInp label="R" value={b.runs} onChange={v => uB("runs", v)} w={44} />
-                                <NumInp label="B" value={b.balls} onChange={v => uB("balls", v)} w={44} />
-                                <NumInp label="4s" value={b.fours} onChange={v => uB("fours", v)} w={36} />
-                                <NumInp label="6s" value={b.sixes} onChange={v => uB("sixes", v)} w={36} />
-                                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                                    <input type="checkbox" checked={!!b.notOut} onChange={e => uB("notOut", e.target.checked)} style={{ width: 14, height: 14, accentColor: B.pk }} />
-                                    <span style={{ fontSize: 9, fontWeight: 600, color: B.g600, fontFamily: F }}>NO</span>
-                                </div>
-                            </div>
-                            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 6 }}>
-                                {compOpts.length > 0 && <div style={{ flex: "1 1 100px" }}><div style={{ fontSize: 8, fontWeight: 600, color: B.g400, fontFamily: F, marginBottom: 2 }}>Competition</div>
-                                    <select value={b.comp || ''} onChange={e => uB("comp", e.target.value)} style={{ width: "100%", border: `1px solid ${B.g200}`, borderRadius: 4, padding: "4px 6px", fontSize: 10, fontFamily: F, background: B.w }}>
-                                        <option value="">Select...</option>
-                                        {compOpts.map(c => <option key={c} value={c}>{c}</option>)}
-                                    </select>
-                                </div>}
-                                <div style={{ flex: "1 1 100px" }}><Inp label="vs" value={b.vs} onChange={v => uB("vs", v)} ph="Opposition" /></div>
-                                <div style={{ flex: "0 1 80px" }}><Sel label="Fmt" value={b.format} onChange={v => uB("format", v)} opts={FMTS} /></div>
-                            </div>
-                        </div>);
-                    })}
-                    {(pd.topBat || []).length < 3 && <button onClick={() => pu("topBat", [...(pd.topBat || []), {}])} style={{ ...btnSty(true, true), background: B.pk, fontSize: 11, marginTop: 2 }}>+ ADD BATTING SCORE ({3 - (pd.topBat || []).length} remaining)</button>}
-
-                    {/* ── TOP BOWLING FIGURES ── */}
-                    <div style={{ fontSize: 11, fontWeight: 800, color: B.bl, fontFamily: F, marginBottom: 6, marginTop: 16 }}>🎯 BEST BOWLING FIGURES</div>
-                    <div style={{ fontSize: 10, color: B.g400, fontFamily: F, marginBottom: 8, lineHeight: 1.4 }}>Enter your best bowling spells — wickets, runs, overs. Available from any playing stats page.</div>
-                    {(pd.topBowl || [{}]).map((b, bi) => {
-                        const uW = (k, v) => { const n = [...(pd.topBowl || [{}])]; n[bi] = { ...n[bi], [k]: v }; pu("topBowl", n); };
-                        const compOpts = gs.filter(g => g.level).map(g => {
-                            const t = (compTiers || []).find(ct => ct.code === g.level);
-                            return t ? t.competition_name : g.level;
-                        });
-                        return (<div key={bi} style={{ background: B.blL, borderRadius: 8, padding: 10, marginBottom: 6, borderLeft: `3px solid ${B.bl}` }}>
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-                                <div style={{ fontSize: 10, fontWeight: 700, color: B.bl, fontFamily: F }}>FIGURES {bi + 1}</div>
-                                {(pd.topBowl || []).length > 1 && <button onClick={() => pu("topBowl", (pd.topBowl || []).filter((_, i) => i !== bi))} style={{ fontSize: 9, color: B.red, background: "none", border: "none", cursor: "pointer", fontFamily: F }}>✕</button>}
-                            </div>
-                            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                                <NumInp label="W" value={b.wkts} onChange={v => uW("wkts", v)} w={40} />
-                                <NumInp label="R" value={b.runs} onChange={v => uW("runs", v)} w={44} />
-                                <NumInp label="O" value={b.overs} onChange={v => uW("overs", v)} w={44} />
-                                <NumInp label="M" value={b.maidens} onChange={v => uW("maidens", v)} w={36} />
-                            </div>
-                            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 6 }}>
-                                {compOpts.length > 0 && <div style={{ flex: "1 1 100px" }}><div style={{ fontSize: 8, fontWeight: 600, color: B.g400, fontFamily: F, marginBottom: 2 }}>Competition</div>
-                                    <select value={b.comp || ''} onChange={e => uW("comp", e.target.value)} style={{ width: "100%", border: `1px solid ${B.g200}`, borderRadius: 4, padding: "4px 6px", fontSize: 10, fontFamily: F, background: B.w }}>
-                                        <option value="">Select...</option>
-                                        {compOpts.map(c => <option key={c} value={c}>{c}</option>)}
-                                    </select>
-                                </div>}
-                                <div style={{ flex: "1 1 100px" }}><Inp label="vs" value={b.vs} onChange={v => uW("vs", v)} ph="Opposition" /></div>
-                                <div style={{ flex: "0 1 80px" }}><Sel label="Fmt" value={b.format} onChange={v => uW("format", v)} opts={FMTS} /></div>
-                            </div>
-                        </div>);
-                    })}
-                    {(pd.topBowl || []).length < 3 && <button onClick={() => pu("topBowl", [...(pd.topBowl || []), {}])} style={{ ...btnSty(true, true), background: B.bl, fontSize: 11, marginTop: 2 }}>+ ADD BOWLING FIGURES ({3 - (pd.topBowl || []).length} remaining)</button>}
-                </div>
             </div>);
         }
 
         if (pStep === 2) {
-            const ChipSelect = ({ options, selected, onToggle, color }) => (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 4, marginBottom: 8 }}>
-                    {options.map(o => {
-                        const sel = (selected || []).includes(typeof o === 'string' ? o : o.id); return (
-                            <button key={typeof o === 'string' ? o : o.id} onClick={() => { const id = typeof o === 'string' ? o : o.id; const cur = selected || []; onToggle(sel ? cur.filter(x => x !== id) : [...cur, id]); }}
-                                style={{ padding: '6px 12px', borderRadius: 20, border: `1.5px solid ${sel ? color : B.g200}`, background: sel ? `${color}18` : B.w, color: sel ? color : B.g600, fontSize: 10, fontWeight: sel ? 700 : 500, fontFamily: F, cursor: 'pointer', transition: 'all 0.15s' }}
-                            >{typeof o === 'string' ? o : `${o.icon || ''} ${o.label}`.trim()}</button>
-                        );
-                    })}
-                </div>
-            );
-            const ArchCard = ({ arch, selected, onSelect }) => (
-                <div onClick={() => onSelect(arch.id)} style={{ ...sCard, borderLeft: `3px solid ${selected === arch.id ? arch.c : B.g200}`, background: selected === arch.id ? `${arch.c}08` : B.w, cursor: 'pointer', padding: '10px 12px', transition: 'all 0.15s' }}>
-                    <div style={{ fontSize: 11, fontWeight: 800, color: selected === arch.id ? arch.c : B.nvD, fontFamily: F }}>{arch.nm}</div>
-                    <div style={{ fontSize: 9, color: B.g600, fontFamily: F, marginTop: 2 }}>{arch.sub}</div>
-                </div>
-            );
+            // Auto-compute archetype from questionnaire answers
+            const batAns = pd.batArchAnswers || [];
+            const bwlAns = pd.bwlArchAnswers || [];
+            const batIds = BAT_ARCH.map(a => a.id);
+            const bwlIds = BWL_ARCH.map(a => a.id);
+            const batComplete = batAns.filter(a => a != null).length === batQs.length;
+            const bwlComplete = bwlAns.filter(a => a != null).length === bwlQs.length;
+            const scoreBat = (ans) => scoreArchetypeAnswers(ans, batQs, batIds);
+            const scoreBwl = (ans) => scoreArchetypeAnswers(ans, bwlQs, bwlIds);
+
+            // Auto-set computed archetype when questionnaire is complete
+            if (batComplete && !pd._batArchComputed) {
+                const r = scoreBat(batAns);
+                pu('playerBatArch', r.primary);
+                pu('playerBatArchSecondary', r.secondary);
+                pu('_batArchComputed', true);
+            }
+            if (bwlComplete && hasBowling && !pd._bwlArchComputed) {
+                const r = scoreBwl(bwlAns);
+                pu('playerBwlArch', r.primary);
+                pu('playerBwlArchSecondary', r.secondary);
+                pu('_bwlArchComputed', true);
+            }
+
             return (<div>
                 <div style={sCard}>
                     <SecH title="Playing Style" />
@@ -318,10 +502,24 @@ export default function PlayerOnboarding() {
                     </div>
                 </div>
 
+                {/* ═══ PROMPT TO SELECT ROLE ═══ */}
+                {!pd.role && <div style={{ ...sCard, borderLeft: `3px solid ${B.g300}`, textAlign: 'center', padding: '24px 16px' }}>
+                    <div style={{ fontSize: 24, marginBottom: 8 }}>👆</div>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: B.nvD, fontFamily: F, marginBottom: 4 }}>Select your Primary Role above</div>
+                    <div style={{ fontSize: 10, color: B.g500, fontFamily: F }}>Once you choose your role, we'll show you questions tailored to your game.</div>
+                </div>}
+
                 {/* ═══ BATTING IDENTITY ═══ */}
-                <div style={{ ...sCard, borderLeft: `3px solid ${B.pk}` }}>
+                {pd.role && <div style={{ ...sCard, borderLeft: `3px solid ${B.pk}` }}>
                     <SecH title="Your Batting Game" sub="Help us understand your batting style and strengths" />
-                    <Sel half label="Batting Position" value={pd.batPosition} onChange={v => pu('batPosition', v)} opts={BAT_POSITIONS.map(p => p.label)} />
+                    <div style={{ flex: 1, minWidth: 130, marginBottom: 8 }}>
+                        <div style={{ fontSize: 10, color: B.g600, fontFamily: F, marginBottom: 1 }}>Batting Position</div>
+                        <select value={pd.batPosition || ""} onChange={e => pu('batPosition', e.target.value)}
+                            style={{ width: "100%", border: "none", borderBottom: `1.5px solid ${B.g200}`, padding: "5px 0", fontSize: 12, fontFamily: F, color: pd.batPosition ? B.g800 : B.g400, outline: "none", background: "transparent", boxSizing: "border-box" }}>
+                            <option value="">Select...</option>
+                            {BAT_POSITIONS.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
+                        </select>
+                    </div>
                     <div style={{ fontSize: 10, fontWeight: 700, color: B.pk, fontFamily: F, marginTop: 10, marginBottom: 4 }}>Preferred Batting Phases</div>
                     <div style={{ fontSize: 9, color: B.g400, fontFamily: F, marginBottom: 4 }}>When do you feel most dangerous?</div>
                     <ChipSelect options={BATTING_PHASE_PREFS} selected={pd.batPhases} onToggle={v => pu('batPhases', v)} color={B.pk} />
@@ -339,9 +537,14 @@ export default function PlayerOnboarding() {
                             <Dots value={pd.shortBallComfort} onChange={v => pu('shortBallComfort', v)} color={B.pk} />
                         </div>
                     </div>
-                    <div style={{ fontSize: 10, fontWeight: 700, color: B.pk, fontFamily: F, marginTop: 12, marginBottom: 6 }}>Which batting archetype best describes you?</div>
-                    {BAT_ARCH.map(a => <ArchCard key={a.id} arch={a} selected={pd.playerBatArch} onSelect={v => pu('playerBatArch', v)} />)}
-                </div>
+                </div>}
+
+                {/* ═══ BATTING ARCHETYPE QUESTIONNAIRE ═══ */}
+                {pd.role && <div style={{ ...sCard, borderLeft: `3px solid ${B.pk}` }}>
+                    <SecH title="Find Your Batting DNA" sub={isJunior ? "Just pick the answer that sounds most like you \u2014 there are no wrong answers!" : "Answer these questions honestly \u2014 there are no wrong answers. We'll work out your batting identity from your responses."} />
+                    <ArchQ questions={batQs} answers={pd.batArchAnswers} onAnswer={v => { pu('batArchAnswers', v); pu('_batArchComputed', false); }} color={B.pk} label="BATTING" />
+                    <ArchReveal answers={pd.batArchAnswers} scoreFn={scoreBat} archList={BAT_ARCH} color={B.pk} qCount={batQs.length} />
+                </div>}
 
                 {/* ═══ BOWLING IDENTITY (only if role includes bowling) ═══ */}
                 {hasBowling && <div style={{ ...sCard, borderLeft: `3px solid ${B.bl}` }}>
@@ -349,13 +552,25 @@ export default function PlayerOnboarding() {
                     <div style={{ fontSize: 10, fontWeight: 700, color: B.bl, fontFamily: F, marginTop: 4, marginBottom: 4 }}>Preferred Bowling Phases</div>
                     <div style={{ fontSize: 9, color: B.g400, fontFamily: F, marginBottom: 4 }}>When do you want the ball?</div>
                     <ChipSelect options={BOWLING_PHASE_PREFS} selected={pd.bwlPhases} onToggle={v => pu('bwlPhases', v)} color={B.bl} />
-                    {isPace && <Sel half label="Bowling Speed" value={pd.bwlSpeed} onChange={v => pu('bwlSpeed', v)} opts={BOWLING_SPEEDS.map(s => s.label)} />}
+                    {isPace && <div style={{ flex: 1, minWidth: 130, marginBottom: 8 }}>
+                        <div style={{ fontSize: 10, color: B.g600, fontFamily: F, marginBottom: 1 }}>Bowling Speed</div>
+                        <select value={pd.bwlSpeed || ""} onChange={e => pu('bwlSpeed', e.target.value)}
+                            style={{ width: "100%", border: "none", borderBottom: `1.5px solid ${B.g200}`, padding: "5px 0", fontSize: 12, fontFamily: F, color: pd.bwlSpeed ? B.g800 : B.g400, outline: "none", background: "transparent", boxSizing: "border-box" }}>
+                            <option value="">Select...</option>
+                            {BOWLING_SPEEDS.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
+                        </select>
+                    </div>}
                     <div style={{ fontSize: 10, fontWeight: 700, color: B.bl, fontFamily: F, marginTop: 8, marginBottom: 4 }}>Bowling Variations</div>
                     <div style={{ fontSize: 9, color: B.g400, fontFamily: F, marginBottom: 4 }}>Which deliveries do you have in your toolkit?</div>
                     <ChipSelect options={isPace ? PACE_VARIATIONS : SPIN_VARIATIONS} selected={pd.bwlVariations} onToggle={v => pu('bwlVariations', v)} color={B.bl} />
                     <Inp label="Shut-Down Delivery" value={pd.shutdownDelivery} onChange={v => pu('shutdownDelivery', v)} ph="What's your go-to delivery under pressure?" />
-                    <div style={{ fontSize: 10, fontWeight: 700, color: B.bl, fontFamily: F, marginTop: 12, marginBottom: 6 }}>Which bowling archetype best describes you?</div>
-                    {BWL_ARCH.map(a => <ArchCard key={a.id} arch={a} selected={pd.playerBwlArch} onSelect={v => pu('playerBwlArch', v)} />)}
+                </div>}
+
+                {/* ═══ BOWLING ARCHETYPE QUESTIONNAIRE ═══ */}
+                {hasBowling && <div style={{ ...sCard, borderLeft: `3px solid ${B.bl}` }}>
+                    <SecH title="Find Your Bowling DNA" sub="Answer these questions honestly — we'll work out your bowling identity from your responses." />
+                    <ArchQ questions={bwlQs} answers={pd.bwlArchAnswers} onAnswer={v => { pu('bwlArchAnswers', v); pu('_bwlArchComputed', false); }} color={B.bl} label="BOWLING" />
+                    <ArchReveal answers={pd.bwlArchAnswers} scoreFn={scoreBwl} archList={BWL_ARCH} color={B.bl} qCount={bwlQs.length} />
                 </div>}
 
                 {/* ═══ ABOUT YOU ═══ */}
@@ -367,43 +582,33 @@ export default function PlayerOnboarding() {
         }
 
         if (pStep === 3) {
-            const sT = techItems(rid);
-            const phItems = PH_MAP[rid] || PH_MAP.batter;
-            return (<div style={sCard}>
-                <SecH title="Self-Assessment" sub="There are no wrong answers here — just rate yourself honestly based on where you feel your game is right now. Tap the ⓘ button next to any item to see what each level means." />
-                <div style={{ background: B.g100, borderRadius: 8, padding: '8px 12px', marginBottom: 10, lineHeight: 1.6 }}>
-                    <div style={{ fontSize: 10, fontWeight: 700, color: B.nvD, fontFamily: F, marginBottom: 4 }}>Rating Guide</div>
-                    <div style={{ fontSize: 10, color: B.g600, fontFamily: F }}>
-                        <strong style={{ color: B.g800 }}>1 = Just Starting</strong> — I'm still learning what this is<br />
-                        <strong style={{ color: B.g800 }}>2 = Developing</strong> — I can do it sometimes, but not every time<br />
-                        <strong style={{ color: B.g800 }}>3 = Solid</strong> — I can do this most of the time<br />
-                        <strong style={{ color: B.g800 }}>4 = Strong</strong> — I do this well, even under pressure<br />
-                        <strong style={{ color: B.g800 }}>5 = Elite</strong> — This is one of the best parts of my game
+            const confScale = isJunior ? CONFIDENCE_SCALE_JR : CONFIDENCE_SCALE;
+            const freqScale = isJunior ? FREQUENCY_SCALE_JR : FREQUENCY_SCALE;
+            const mcProps = { pd, pu, confScale, freqScale, isJunior };
+
+            return (<div>
+                <div style={sCard}>
+                    <SecH title="Self-Assessment" sub={isJunior
+                        ? "For each statement, tell us how confident you feel and how often you pull it off. There are no wrong answers!"
+                        : "For each scenario, rate your confidence and how often you execute. Be honest \u2014 this helps your coaches understand where you are right now."
+                    } />
+                    <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', background: B.g100, borderRadius: 8, padding: '8px 12px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <div style={{ width: 10, height: 10, borderRadius: 2, background: B.pk }} />
+                            <div style={{ fontSize: 10, color: B.g600, fontFamily: F, fontWeight: 600 }}>Confidence \u2014 "I back myself"</div>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <div style={{ width: 10, height: 10, borderRadius: 2, background: B.bl }} />
+                            <div style={{ fontSize: 10, color: B.g600, fontFamily: F, fontWeight: 600 }}>Frequency \u2014 "I pull it off"</div>
+                        </div>
                     </div>
                 </div>
-                <div style={{ fontSize: 11, fontWeight: 700, color: B.pk, fontFamily: F, marginBottom: 6, marginTop: 10 }}>{sT.pL}</div>
-                <AssGrid items={sT.pri} values={pd} onRate={pu} color={B.pk} SKILL_DEFS={PLAYER_DEFS} keyPrefix="sr_t1" />
-                <div style={{ fontSize: 11, fontWeight: 700, color: B.bl, fontFamily: F, marginBottom: 6, marginTop: 16 }}>Game Intelligence</div>
-                <AssGrid items={IQ_ITEMS} values={pd} onRate={pu} color={B.sky} SKILL_DEFS={PLAYER_DEFS} keyPrefix="sr_iq" />
-                <div style={{ fontSize: 11, fontWeight: 700, color: B.prp, fontFamily: F, marginBottom: 6, marginTop: 16 }}>Mental & Character</div>
-                <AssGrid items={MN_ITEMS} values={pd} onRate={pu} color={B.prp} SKILL_DEFS={PLAYER_DEFS} keyPrefix="sr_mn" />
 
-                {/* ═══ PHYSICAL SELF-ASSESSMENT (v2) ═══ */}
-                <div style={{ borderTop: `2px solid ${B.g200}`, marginTop: 16, paddingTop: 12 }}>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: B.org, fontFamily: F, marginBottom: 6 }}>Physical & Athletic</div>
-                    <div style={{ fontSize: 9, color: B.g400, fontFamily: F, marginBottom: 6 }}>How would you rate your physical capabilities?</div>
-                    <AssGrid items={phItems} values={pd} onRate={pu} color={B.org} SKILL_DEFS={PLAYER_DEFS} keyPrefix="sr_ph" />
-                </div>
+                <MatchUpCard title="Batting" sub={isJunior ? "How you feel and perform with the bat" : "Your confidence and execution with the bat"} matchups={BAT_MATCHUPS} domain="bat" confColor={B.pk} freqColor={B.bl} {...mcProps} />
 
-                {/* ═══ PHASE SELF-ASSESSMENT (v2) ═══ */}
-                <div style={{ borderTop: `2px solid ${B.g200}`, marginTop: 16, paddingTop: 12 }}>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: B.grn, fontFamily: F, marginBottom: 6 }}>Phase Effectiveness</div>
-                    <div style={{ fontSize: 9, color: B.g400, fontFamily: F, marginBottom: 6 }}>Rate your effectiveness in each phase of the game (1-5)</div>
-                    <div style={{ fontSize: 10, fontWeight: 600, color: B.pk, fontFamily: F, marginTop: 8, marginBottom: 4 }}>Batting</div>
-                    <AssGrid items={PHASES.map(p => p.nm)} values={Object.fromEntries(PHASES.map((p, i) => [`sr_pb_${i}`, pd[`sr_pb_${p.id}`]]))} onRate={(k, v) => { const idx = parseInt(k.split('_').pop()); pu(`sr_pb_${PHASES[idx].id}`, v); }} color={B.pk} SKILL_DEFS={PLAYER_DEFS} keyPrefix="sr_pb" />
-                    {hasBowling && <><div style={{ fontSize: 10, fontWeight: 600, color: B.bl, fontFamily: F, marginTop: 8, marginBottom: 4 }}>Bowling</div>
-                        <AssGrid items={PHASES.map(p => p.nm)} values={Object.fromEntries(PHASES.map((p, i) => [`sr_pw_${i}`, pd[`sr_pw_${p.id}`]]))} onRate={(k, v) => { const idx = parseInt(k.split('_').pop()); pu(`sr_pw_${PHASES[idx].id}`, v); }} color={B.bl} SKILL_DEFS={PLAYER_DEFS} keyPrefix="sr_pw" /></>}
-                </div>
+                {hasBowling && <MatchUpCard title="Bowling" sub={isJunior ? "How you feel and perform with the ball" : "Your confidence and execution with the ball"} matchups={BWL_MATCHUPS} domain="bwl" confColor={B.sky} freqColor={B.nv} {...mcProps} />}
+
+                <MatchUpCard title="Mental & Character" sub={isJunior ? "How you handle the tough stuff" : "Your mindset and approach"} matchups={MENTAL_MATCHUPS} domain="mnt" confColor={B.prp} freqColor={B.org} {...mcProps} />
             </div>);
         }
 
@@ -426,18 +631,30 @@ export default function PlayerOnboarding() {
             return (<div>
                 <SecH title="Review & Submit" />
                 <div style={sCard}><div style={{ fontSize: 12, fontWeight: 700, color: B.nvD, fontFamily: F }}>{pd.name || "—"}</div><div style={{ fontSize: 11, color: B.g400, fontFamily: F }}>{pd.dob || "—"} • {pd.club || "—"} • {gc} competition level(s){tb > 0 ? ` • ${tb} top score(s)` : ''}{tw > 0 ? ` • ${tw} bowling fig(s)` : ''}</div></div>
-                <button onClick={async () => {
-                    if (!pd.name || !pd.dob || isSaving) return;
-                    setIsSaving(true);
-                    const finalPd = { ...pd, submitted: true };
-                    const saved = await savePlayerToDB(finalPd, session?.user?.id);
-                    // (Legacy: setPlayers used to be called here for Coach Portal, 
-                    // now redundant as players reload from DB anyway).
-                    setIsSaving(false);
-                    setPStep(7);
-                }} style={btnSty(pd.name && pd.dob && !isSaving, true)}>
-                    {isSaving ? "SUBMITTING..." : "SUBMIT SURVEY"}
-                </button>
+                {submitError && <div style={{ fontSize: 11, color: B.red, fontFamily: F, marginBottom: 8, fontWeight: 600 }}>{submitError}</div>}
+                <button disabled={submitting} onClick={async () => {
+                    if (!pd.name || !pd.dob) return;
+                    setSubmitting(true);
+                    setSubmitError('');
+                    try {
+                        const saved = await savePlayerToDB(pd, session?.user?.id, draftId);
+                        if (!saved) throw new Error('Save returned no data');
+                        // Mark user_profiles.submitted so portal routing works on refresh
+                        if (session?.user?.id) {
+                            const { error: upErr } = await supabase.from('user_profiles').update({ submitted: true }).eq('id', session.user.id);
+                            if (upErr) console.warn('user_profiles.submitted update failed:', upErr.message);
+                        }
+                        try { localStorage.removeItem('rra_pd'); localStorage.removeItem('rra_pStep'); localStorage.removeItem('rra_obGuide'); } catch {}
+                        notifySlack('submission', { name: pd.name, club: pd.club, role: pd.role, dob: pd.dob, association: pd.assoc });
+                        lastSavedRef.current = JSON.stringify(pd);
+                        setPStep(7);
+                    } catch (e) {
+                        console.error('Submit error:', e);
+                        setSubmitError('Failed to submit. Please check your connection and try again.');
+                    } finally {
+                        setSubmitting(false);
+                    }
+                }} style={btnSty(pd.name && pd.dob && !submitting, true)}>{submitting ? 'SUBMITTING...' : 'SUBMIT SURVEY'}</button>
             </div>);
         }
 
@@ -449,16 +666,29 @@ export default function PlayerOnboarding() {
         return null;
     };
 
+    // ── Confirm before sign-out if unsaved changes ──
+    const handleSignOut = () => {
+        const hasChanges = lastSavedRef.current !== JSON.stringify(pd);
+        if (pStep > 0 && pStep < 7 && hasChanges) {
+            if (!window.confirm('You have unsaved progress. Are you sure you want to sign out?')) return;
+        }
+        signOut();
+    };
+
+    if (draftLoading) return (<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: F, background: B.g50 }}>
+        <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: B.g600, fontFamily: F }}>Loading your progress...</div>
+        </div>
+    </div>);
+
     return (<div style={{ minHeight: "100vh", fontFamily: F, background: B.g50 }}>
 
-        <Hdr label="PLAYER ONBOARDING" onLogoClick={doSignOut} />
+        <Hdr label="PLAYER ONBOARDING" onLogoClick={handleSignOut} />
         {/* Sign-out bar */}
-        <div style={{ padding: '4px 12px', background: B.g100, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ padding: '4px 12px', background: B.g100, display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', zIndex: 10 }}>
             <div style={{ fontSize: 9, color: B.g400, fontFamily: F }}>{session?.user?.email}</div>
-            <button onClick={doSignOut} style={{ fontSize: 9, fontWeight: 600, color: B.red, background: 'none', border: 'none', cursor: 'pointer', fontFamily: F }}>Sign Out</button>
+            <button onClick={handleSignOut} style={{ fontSize: 9, fontWeight: 600, color: B.red, background: 'none', border: 'none', cursor: 'pointer', fontFamily: F, padding: '6px 8px', minHeight: 32, minWidth: 44 }}>Sign Out</button>
         </div>
-
-        {isLoadingDraft && pStep === 0 && <div style={{ padding: 40, textAlign: 'center', fontSize: 13, color: B.g600, fontFamily: F }}>Loading your profile...</div>}
 
         {/* ═══ PROFILE UPDATE BANNER (v1 → v2) ═══ */}
         {pd.profileVersion === 1 && pd.submitted && pStep === 0 && <div style={{ margin: '8px 12px', padding: '12px 16px', background: `${B.bl}12`, border: `1px solid ${B.bl}40`, borderRadius: 10 }}>
@@ -489,49 +719,25 @@ export default function PlayerOnboarding() {
             </div>
         </div>}
 
-        {pStep < 7 && <div style={{ background: B.w, borderBottom: `1px solid ${B.g200}` }}>
-            <div style={{ display: 'flex', overflowX: 'auto', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                <style>{`::-webkit-scrollbar { display: none; }`}</style>
-                {stpN.map((name, idx) => {
-                    const isCompleted = pd.onboardingProgress?.lastStepReached >= idx || idx < pStep || pStep === 7;
-                    const isCurrent = idx === pStep;
-                    const isClickable = isCompleted || isCurrent;
-                    return (
-                        <div
-                            key={idx}
-                            onClick={() => {
-                                if (isClickable && !isCurrent) {
-                                    setPStep(idx);
-                                    goTop();
-                                }
-                            }}
-                            style={{
-                                padding: "12px 16px",
-                                minWidth: "max-content",
-                                cursor: isClickable && !isCurrent ? "pointer" : "default",
-                                borderBottom: isCurrent ? `3px solid ${B.bl}` : "3px solid transparent",
-                                color: isCurrent ? B.bl : isCompleted ? B.nvD : B.g400,
-                                opacity: isClickable ? 1 : 0.5,
-                                userSelect: "none"
-                            }}
-                        >
-                            <div style={{ fontSize: 11, fontWeight: isCurrent ? 800 : 700, fontFamily: F, lineHeight: 1 }}>{idx + 1}. {name}</div>
-                        </div>
-                    );
-                })}
-            </div>
-            <div style={{ height: 3, background: B.g100, width: "100%" }}>
-                <div style={{ width: `${((pStep + 1) / 7) * 100}%`, height: "100%", background: `linear-gradient(90deg,${B.bl},${B.pk})`, transition: "width 0.3s" }} />
+        {pStep < 7 && <div style={{ padding: "6px 12px", background: B.w, borderBottom: `1px solid ${B.g200}`, display: "flex", alignItems: "center", gap: 6 }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color: B.pk, fontFamily: F }}>STEP {pStep + 1}/7</div>
+            <div style={{ fontSize: 11, fontWeight: 600, color: B.nvD, fontFamily: F }}>{stpN[pStep]}</div>
+            <div style={{ flex: 1, height: 3, background: B.g200, borderRadius: 2, marginLeft: 6 }}>
+                <div style={{ width: `${((pStep + 1) / 7) * 100}%`, height: "100%", background: `linear-gradient(90deg,${B.bl},${B.pk})`, borderRadius: 2, transition: "width 0.3s" }} />
             </div>
         </div>}
 
-        {!isLoadingDraft && <div style={{ padding: 12, paddingBottom: pStep < 7 ? 70 : 12, ...dkWrap }}>{renderP()}</div>}
+        <div style={{ padding: 12, paddingBottom: pStep < 7 ? 70 : 12, ...getDkWrap() }}>
+            {stepError && <div style={{ padding: '10px 14px', marginBottom: 8, borderRadius: 8, background: '#FEE2E2', border: '1px solid #FCA5A5', fontSize: 11, fontWeight: 700, color: '#DC2626', fontFamily: F }}>{stepError}</div>}
+            {renderP()}
+        </div>
 
-        {pStep < 7 && !isLoadingDraft && <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: B.w, borderTop: `1px solid ${B.g200}`, padding: "8px 12px", display: "flex", justifyContent: "space-between", zIndex: 100 }}>
-            <button onClick={() => { if (pStep > 0) { setPStep(s => s - 1); goTop(); } else doSignOut(); }} style={{ padding: "8px 14px", borderRadius: 6, border: `1px solid ${B.g200}`, background: "transparent", fontSize: 11, fontWeight: 600, color: B.g600, cursor: "pointer", fontFamily: F }}>← {pStep === 0 ? 'Sign Out' : 'Back'}</button>
-            <button disabled={isSaving} onClick={() => advanceStep(Math.min(pStep + 1, 6))} style={{ padding: "8px 14px", borderRadius: 6, border: "none", background: isSaving ? B.g400 : `linear-gradient(135deg,${B.bl},${B.pk})`, fontSize: 11, fontWeight: 700, color: B.w, cursor: isSaving ? "default" : "pointer", fontFamily: F }}>
-                {isSaving ? "Saving..." : "Save & Continue →"}
+        {pStep < 7 && <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: B.w, borderTop: `1px solid ${B.g200}`, padding: "8px 12px", display: "flex", justifyContent: "space-between", alignItems: "center", zIndex: 100 }}>
+            <button onClick={() => { if (pStep > 0) { setPStep(s => s - 1); goTop(); } else handleSignOut(); }} style={{ padding: "8px 14px", borderRadius: 6, border: `1px solid ${B.g200}`, background: "transparent", fontSize: 11, fontWeight: 600, color: B.g600, cursor: "pointer", fontFamily: F }}>← {pStep === 0 ? 'Sign Out' : 'Back'}</button>
+            <button disabled={saving} onClick={() => saveDraft()} style={{ padding: "8px 14px", borderRadius: 6, border: `1px solid ${saveStatus === 'saved' ? B.grn : saveStatus === 'error' ? B.red : B.g300}`, background: saveStatus === 'saved' ? `${B.grn}10` : saveStatus === 'error' ? '#FEE2E2' : 'transparent', fontSize: 11, fontWeight: 600, color: saveStatus === 'saved' ? B.grn : saveStatus === 'error' ? B.red : B.g600, cursor: saving ? 'default' : 'pointer', fontFamily: F, transition: 'all 0.2s' }}>
+                {saveStatus === 'saving' ? 'Saving...' : saveStatus === 'saved' ? 'Saved!' : saveStatus === 'error' ? 'Save Failed' : 'Save Progress'}
             </button>
+            <button onClick={() => advanceStep(Math.min(pStep + 1, 6))} style={{ padding: "8px 14px", borderRadius: 6, border: "none", background: `linear-gradient(135deg,${B.bl},${B.pk})`, fontSize: 11, fontWeight: 700, color: B.w, cursor: "pointer", fontFamily: F }}>Next →</button>
         </div>}
     </div>);
 }

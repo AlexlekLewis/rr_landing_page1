@@ -19,6 +19,7 @@ import RrampDnaProfile from '../landing-page-2/RrampDnaProfile';
 import TheDreamAndPathway from './TheDreamAndPathway';
 import SessionWalkthrough from './SessionWalkthrough';
 import ScreeningCallCTA from './ScreeningCallCTA';
+import RoyalsInvite from './RoyalsInvite';
 
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
@@ -79,6 +80,9 @@ const MasterLandingPage = () => {
                 {/* 3. The Dream & Pathway */}
                 <div id="dream-pathway"><TheDreamAndPathway /></div>
 
+                {/* Specialist Coaching — elevated for visibility */}
+                <div id="specialist-coaching"><SpecialistCoaching /></div>
+
                 {/* 4. The Methodology (The Science & The Setup) */}
                 <div id="program-at-a-glance"><ProgramAtAGlance /></div>
                 <UncoveringTalent />
@@ -86,7 +90,6 @@ const MasterLandingPage = () => {
                 {/* 5. 12-Week Program Journey */}
                 <div id="program"><ProgramJourney /></div>
 
-                <div id="specialist-coaching"><SpecialistCoaching /></div>
                 <div id="session-walkthrough"><SessionWalkthrough /></div>
 
                 {/* 6. Technology Edge (RRAM DNA PROFILE) */}
@@ -97,6 +100,7 @@ const MasterLandingPage = () => {
                 {/* 8. Beyond 12 Weeks + Royals Way + Pricing */}
                 <div id="beyond-12-weeks"><BeyondTwelveWeeks /></div>
                 <div id="the-royals-way"><TheRoyalsWay /></div>
+                <RoyalsInvite />
                 <div id="pricing"><ValueStack /></div>
                 <ScreeningCallCTA />
 

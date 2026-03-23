@@ -7,13 +7,14 @@ const locations = [
         name: 'Bundoora Indoor Sports Centre',
         suburb: 'Bundoora, VIC',
         area: 'Northern Melbourne',
-        dates: 'Dates TBC',
-        time: 'Times TBC',
+        dates: 'Starting Tuesday 21 April 2026',
+        time: '5:00 PM – 6:00 PM weekly',
         note: 'Full Court — indoor facility',
         gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
         mapsUrl: 'https://maps.google.com/?q=Bundoora+Indoor+Sports+Centre+VIC',
         tag: 'bundoora',
         image: '/assets/cec-lanes.jpg',
+        confirmed: true,
     },
     {
         name: 'Hallam Venue',
@@ -54,7 +55,7 @@ const LocationsSection = () => {
                         transition={{ duration: 0.6, delay: 0.15 }}
                         className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium"
                     >
-                        Northern Melbourne and south-eastern Melbourne. Session dates and times will be confirmed shortly — register your interest now to secure your place.
+                        Northern Melbourne and south-eastern Melbourne. Bundoora is confirmed — register now to secure your place. Hallam dates coming soon.
                     </motion.p>
                 </div>
 
@@ -100,12 +101,21 @@ const LocationsSection = () => {
                                     </div>
                                 </div>
 
-                                {/* TBC notice */}
-                                <div className="bg-rr-pink/5 border border-rr-pink/20 rounded-xl px-4 py-3 mb-6">
-                                    <p className="text-rr-pink text-xs font-bold uppercase tracking-wide">
-                                        Dates & times being finalised — register now to hold your spot.
-                                    </p>
-                                </div>
+                                {/* Confirmed or TBC notice */}
+                                {loc.confirmed ? (
+                                    <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-3 mb-6 flex items-center gap-2">
+                                        <span className="w-2 h-2 rounded-full bg-green-500 shrink-0" />
+                                        <p className="text-green-700 text-xs font-bold uppercase tracking-wide">
+                                            Dates & times confirmed
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div className="bg-rr-pink/5 border border-rr-pink/20 rounded-xl px-4 py-3 mb-6">
+                                        <p className="text-rr-pink text-xs font-bold uppercase tracking-wide">
+                                            Dates & times being finalised — register now to hold your spot.
+                                        </p>
+                                    </div>
+                                )}
 
                                 <div className="flex flex-col sm:flex-row gap-3">
                                     <button

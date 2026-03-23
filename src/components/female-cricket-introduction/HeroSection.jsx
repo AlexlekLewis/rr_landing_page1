@@ -11,13 +11,13 @@ const HeroSection = () => {
         <section className="relative min-h-screen flex items-center overflow-hidden bg-rr-dark">
             {/* Mobile background */}
             <div
-                className="absolute inset-0 bg-cover bg-[center_top] bg-no-repeat md:hidden"
-                style={{ backgroundImage: "url('/assets/community-coaches.jpg')" }}
+                className="absolute inset-0 bg-cover bg-no-repeat md:hidden"
+                style={{ backgroundImage: "url('/assets/female-cricket-hero.png')", backgroundPosition: '90% 10%' }}
             />
             {/* Desktop background */}
             <div
-                className="absolute inset-0 bg-cover bg-center bg-no-repeat hidden md:block"
-                style={{ backgroundImage: "url('/assets/community-coaches.jpg')" }}
+                className="absolute inset-0 bg-cover bg-no-repeat hidden md:block"
+                style={{ backgroundImage: "url('/assets/female-cricket-hero.png')", backgroundPosition: '90% 10%' }}
             />
             {/* Gradient overlays */}
             <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/65 to-rr-dark/25 md:hidden" />
@@ -32,7 +32,7 @@ const HeroSection = () => {
                     className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6"
                 >
                     <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Female Cricket Program · Ages 7+ · Limited Spots</span>
+                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Girls Kickstart Program · Ages 7+ · Limited Spots</span>
                 </motion.div>
 
                 {/* Headline */}
@@ -55,7 +55,7 @@ const HeroSection = () => {
                     transition={{ duration: 0.6, delay: 0.3 }}
                     className="text-lg md:text-2xl text-white font-semibold mb-4"
                 >
-                    Cricket Her Way — Introduction to Cricket
+                    Girls Kickstart Program — Introduction to Cricket
                 </motion.p>
 
                 <motion.p
@@ -64,7 +64,7 @@ const HeroSection = () => {
                     transition={{ duration: 0.6, delay: 0.4 }}
                     className="text-sm md:text-lg text-white/90 font-medium mb-8 max-w-xl"
                 >
-                    An 8-week introductory program for females aged 7 and above. Qualified female coaches. Supportive, inclusive environment. Two Melbourne locations.
+                    An 8-week introductory program for females aged 7 and above. Royals accredited female coaches. Supportive, inclusive environment. Two Melbourne locations.
                 </motion.p>
 
                 {/* Location pills */}
@@ -85,6 +85,10 @@ const HeroSection = () => {
                     <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2">
                         <span className="text-rr-pink font-bold text-xs">🏏</span>
                         <span className="text-white text-xs font-semibold uppercase tracking-wide">8 Weeks · $349</span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-rr-pink/20 border border-rr-pink/40 rounded-full px-4 py-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
+                        <span className="text-rr-pink text-xs font-black uppercase tracking-wide">⭐ Includes Exclusive RRA IPL Invite</span>
                     </div>
                 </motion.div>
 
