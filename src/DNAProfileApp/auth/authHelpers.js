@@ -24,7 +24,7 @@ export async function signInWithUsername(username, password) {
             .select('auth_user_id, role, active')
             .eq('username', cleanUsername)
             .limit(1)
-            .single();
+            .maybeSingle();
 
         if (!directError && directData) {
             member = directData;
@@ -43,7 +43,7 @@ export async function signInWithUsername(username, password) {
     localStorage.setItem('rra_pending_role', member.role);
 
     // Sign in using the internal email
-    const internalEmail = `${cleanUsername}@rra.internal`;
+    const internalEmail = `${cleanUsername}@rradna.app`;
     const { data, error } = await supabase.auth.signInWithPassword({
         email: internalEmail,
         password,
@@ -54,6 +54,81 @@ export async function signInWithUsername(username, password) {
     }
 
     return data;
+}
+
+/**
+ * Register a new user (player or coach) via invite link.
+ * Creates a Supabase Auth user, then registers them in program_members via RPC.
+ */
+export async function signUpNewUser(username, password, fullName, role, code) {
+    const cleanUsername = username.toLowerCase().trim();
+
+    // Validate username format
+    if (!/^[a-z0-9._]{3,30}$/.test(cleanUsername)) {
+        throw new Error('Username must be 3-30 characters: letters, numbers, dots, or underscores.');
+    }
+
+    // Validate role (defense in depth — RPC also validates)
+    if (!['player', 'coach'].includes(role)) {
+        throw new Error('Invalid role.');
+    }
+
+    // Validate password strength (must match frontend rules)
+    if (password.length < 8 || !/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password) || !/[^A-Za-z0-9]/.test(password)) {
+        throw new Error('Password must be at least 8 characters and include uppercase, lowercase, a number, and a special character.');
+    }
+
+    // Validate registration code
+    if (!code || !code.trim()) {
+        throw new Error('Please enter your registration code.');
+    }
+
+    // Pre-flight: check code is valid before creating the auth user
+    const { data: codeCheck, error: codeErr } = await supabase
+        .rpc('validate_registration_code', { p_code: code.trim(), p_role: role });
+
+    if (codeErr) {
+        throw new Error('Unable to verify registration code. Please try again.');
+    }
+    if (codeCheck && !codeCheck.valid) {
+        throw new Error(codeCheck.error || 'Invalid registration code.');
+    }
+
+    // Store role BEFORE signUp — signUp auto-signs-in which triggers onAuthStateChange → upsertUserProfile
+    localStorage.setItem('rra_pending_role', role);
+
+    // 1. Create Supabase Auth user
+    const internalEmail = `${cleanUsername}@rradna.app`;
+    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+        email: internalEmail,
+        password,
+        options: { data: { full_name: fullName } },
+    });
+
+    if (signUpError) {
+        if (signUpError.message?.includes('already registered')) {
+            throw new Error('This username is already taken.');
+        }
+        throw new Error(signUpError.message || 'Registration failed.');
+    }
+
+    if (!signUpData?.user) {
+        throw new Error('Registration failed — no user returned.');
+    }
+
+    // 2. Register in program_members via security-definer RPC
+    const { data: rpcResult, error: rpcError } = await supabase
+        .rpc('register_new_user', { p_username: cleanUsername, p_role: role, p_code: code.trim() });
+
+    if (rpcError) {
+        throw new Error('Registration failed. Please try again.');
+    }
+
+    if (rpcResult && !rpcResult.success) {
+        throw new Error(rpcResult.error || 'Registration failed.');
+    }
+
+    return signUpData;
 }
 
 /**
@@ -92,25 +167,36 @@ export function onAuthStateChange(callback) {
 export async function upsertUserProfile(user) {
     let role = localStorage.getItem('rra_pending_role');
 
+    // Check for existing profile first — preserves submitted flag and role
+    const { data: existing } = await supabase
+        .from('user_profiles')
+        .select('role, submitted')
+        .eq('id', user.id)
+        .maybeSingle();
+
     if (!role) {
-        const { data: existing } = await supabase
-            .from('user_profiles')
-            .select('role')
-            .eq('id', user.id)
-            .single();
         role = existing?.role || 'player';
+    }
+
+    const upsertPayload = {
+        id: user.id,
+        email: user.email,
+        full_name: user.user_metadata?.full_name || user.user_metadata?.name || '',
+        avatar_url: user.user_metadata?.avatar_url || '',
+        role,
+        updated_at: new Date().toISOString(),
+    };
+
+    // CRITICAL: Preserve submitted flag for returning players
+    // Only include submitted in upsert if profile already exists with submitted=true
+    // Otherwise let the database default (false) apply for new users
+    if (existing?.submitted) {
+        upsertPayload.submitted = true;
     }
 
     const { data, error } = await supabase
         .from('user_profiles')
-        .upsert({
-            id: user.id,
-            email: user.email,
-            full_name: user.user_metadata?.full_name || user.user_metadata?.name || '',
-            avatar_url: user.user_metadata?.avatar_url || '',
-            role,
-            updated_at: new Date().toISOString(),
-        }, { onConflict: 'id' })
+        .upsert(upsertPayload, { onConflict: 'id' })
         .select()
         .single();
 
@@ -130,8 +216,8 @@ export async function loadUserProfile(userId) {
         .from('user_profiles')
         .select('*')
         .eq('id', userId)
-        .single();
+        .maybeSingle();
 
-    if (error && error.code !== 'PGRST116') throw error;
+    if (error) throw error;
     return data;
 }

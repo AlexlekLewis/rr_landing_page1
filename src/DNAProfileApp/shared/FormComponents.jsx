@@ -1,7 +1,8 @@
 // ═══ SHARED UI COMPONENTS ═══
-import { useState } from 'react';
-import { B, F, LOGO, sGrad, sCard, _isDesktop, DSZ, DSF } from '../data/theme';
+import { useState, useEffect, useMemo } from 'react';
+import { B, F, LOGO, sGrad, sCard, isDesktop, getDSZ, getDSF } from '../data/theme';
 import { TIER_GROUPS, isCommunityGroup } from '../data/competitionData';
+import { getAge } from '../engine/ratingEngine';
 
 // ═══ HEADER ═══
 export function Hdr({ label, onLogoClick }) {
@@ -81,13 +82,13 @@ export function NumInp({ label, value, onChange, w = 52 }) {
 // ═══ DOTS (1-5 RATING — standalone, kept for other uses) ═══
 export function Dots({ value, onChange, color = B.pk }) {
     return (
-        <div style={{ display: "flex", gap: _isDesktop ? 6 : 5 }}>
+        <div style={{ display: "flex", gap: isDesktop() ? 6 : 5 }}>
             {[1, 2, 3, 4, 5].map(n => (
                 <button key={n} onClick={() => onChange(value === n ? 0 : n)}
                     style={{
-                        width: DSZ, height: DSZ, borderRadius: "50%", border: `2px solid ${value >= n ? color : B.g200}`,
+                        width: getDSZ(), height: getDSZ(), borderRadius: "50%", border: `2px solid ${value >= n ? color : B.g200}`,
                         background: value >= n ? color : "transparent", cursor: "pointer", transition: "all 0.2s",
-                        display: "flex", alignItems: "center", justifyContent: "center", fontSize: DSF, fontWeight: 700,
+                        display: "flex", alignItems: "center", justifyContent: "center", fontSize: getDSF(), fontWeight: 700,
                         color: value >= n ? B.w : B.g400, fontFamily: F
                     }}>{n}</button>
             ))}
@@ -101,8 +102,9 @@ const COACH_LABELS = ['', 'Novice', 'Developing', 'Competent', 'Advanced', 'Elit
 
 export function AssGrid({ items, values, onRate, color, SKILL_DEFS, keyPrefix }) {
     const [openIdx, setOpenIdx] = useState(null);
+    const mobile = !isDesktop();
     return (
-        <div style={{ display: 'grid', gridTemplateColumns: _isDesktop ? 'repeat(3, 1fr)' : '1fr', gap: 6 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isDesktop() ? 'repeat(3, 1fr)' : '1fr', gap: 6 }}>
             {items.map((item, i) => {
                 const k = `${keyPrefix}_${i}`;
                 const v = values[k] || 0;
@@ -116,142 +118,96 @@ export function AssGrid({ items, values, onRate, color, SKILL_DEFS, keyPrefix })
                         border: isOpen ? `2px solid ${color}40` : `1.5px solid ${done ? `${B.grn}50` : B.g200}`,
                         overflow: 'hidden',
                         transition: 'all 0.25s ease',
-                        gridColumn: isOpen && _isDesktop ? '1 / -1' : undefined,
+                        gridColumn: isOpen && isDesktop() ? '1 / -1' : undefined,
                         boxShadow: isOpen ? `0 4px 16px ${color}15` : 'none',
                     }}>
-                        {/* ── Collapsed tile header ── */}
-                        <div
-                            onClick={() => setOpenIdx(isOpen ? null : i)}
-                            style={{
-                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                                padding: isOpen ? '10px 14px' : '10px 12px',
-                                cursor: 'pointer', userSelect: 'none',
-                                background: isOpen ? `linear-gradient(135deg, ${color}08, ${color}03)` : 'transparent',
-                                transition: 'background 0.2s',
-                            }}
-                        >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flex: 1 }}>
-                                {/* Green completion ring */}
+                        {/* ── Tile header with inline rating ── */}
+                        <div style={{ padding: '8px 10px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+                                {/* Completion indicator */}
                                 <div style={{
-                                    width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
+                                    width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
                                     border: `2px solid ${done ? B.grn : B.g200}`,
                                     background: done ? `${B.grn}15` : 'transparent',
                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    transition: 'all 0.3s',
                                 }}>
-                                    {done ? (
-                                        <span style={{ fontSize: 11, color: B.grn, fontWeight: 800, lineHeight: 1 }}>✓</span>
-                                    ) : (
-                                        <span style={{ fontSize: 8, color: B.g400, fontWeight: 600 }}>—</span>
-                                    )}
+                                    {done ? <span style={{ fontSize: 10, color: B.grn, fontWeight: 800 }}>✓</span>
+                                         : <span style={{ fontSize: 7, color: B.g400 }}>—</span>}
                                 </div>
-                                <div style={{
-                                    fontSize: 11, fontWeight: 600, color: B.g800, fontFamily: F,
-                                    whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                                {/* Skill name — tap to expand definitions */}
+                                <div onClick={() => setOpenIdx(isOpen ? null : i)} style={{
+                                    flex: 1, fontSize: 11, fontWeight: 600, color: B.g800, fontFamily: F,
+                                    cursor: 'pointer', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
                                 }}>
                                     {item}
                                 </div>
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
-                                {done && !isOpen && (
-                                    <div style={{
-                                        fontSize: 9, fontWeight: 700, color: B.w, fontFamily: F,
-                                        background: color, borderRadius: 4, padding: '2px 6px',
-                                        lineHeight: 1.3,
-                                    }}>
-                                        {v}/5
-                                    </div>
-                                )}
-                                <span style={{
-                                    fontSize: 10, color: B.g400, transition: 'transform 0.25s',
+                                {defs && <span onClick={() => setOpenIdx(isOpen ? null : i)} style={{
+                                    fontSize: 10, color: B.g400, cursor: 'pointer', flexShrink: 0,
                                     transform: isOpen ? 'rotate(180deg)' : 'rotate(0)',
-                                    display: 'inline-block',
-                                }}>▾</span>
+                                    transition: 'transform 0.25s', display: 'inline-block',
+                                }}>▾</span>}
+                            </div>
+                            {/* ── Inline quick-rate buttons ── */}
+                            <div style={{ display: 'flex', gap: mobile ? 6 : 5, justifyContent: 'space-between' }}>
+                                {[1, 2, 3, 4, 5].map(n => {
+                                    const sel = v === n;
+                                    const labels = defs ? COACH_LABELS : RATING_LABELS;
+                                    return (
+                                        <button key={n} onClick={() => onRate(k, v === n ? 0 : n)}
+                                            style={{
+                                                flex: 1, minHeight: mobile ? 38 : 32, maxWidth: mobile ? 64 : 56,
+                                                border: sel ? `2px solid ${color}` : `1.5px solid ${B.g200}`,
+                                                borderRadius: 8,
+                                                background: sel ? `${color}15` : B.w,
+                                                cursor: 'pointer',
+                                                display: 'flex', flexDirection: 'column',
+                                                alignItems: 'center', justifyContent: 'center', gap: 1,
+                                                padding: '4px 2px',
+                                                transition: 'all 0.15s',
+                                                boxShadow: sel ? `0 1px 4px ${color}25` : 'none',
+                                            }}
+                                        >
+                                            <div style={{
+                                                fontSize: mobile ? 14 : 12, fontWeight: 800,
+                                                color: sel ? color : B.g400, fontFamily: F,
+                                            }}>{n}</div>
+                                            <div style={{
+                                                fontSize: 7, fontWeight: 600,
+                                                color: sel ? color : B.g400,
+                                                fontFamily: F, lineHeight: 1.1,
+                                                textAlign: 'center',
+                                            }}>{labels[n]}</div>
+                                        </button>
+                                    );
+                                })}
                             </div>
                         </div>
 
-                        {/* ── Expanded accordion body ── */}
-                        {isOpen && (
-                            <div style={{ padding: '0 14px 14px' }}>
-                                {/* Rating tiles */}
-                                <div style={{
-                                    display: 'grid',
-                                    gridTemplateColumns: _isDesktop ? 'repeat(5, 1fr)' : 'repeat(5, 1fr)',
-                                    gap: 6, marginBottom: defs ? 10 : 0,
-                                }}>
-                                    {[1, 2, 3, 4, 5].map(n => {
-                                        const sel = v === n;
-                                        const labels = defs ? COACH_LABELS : RATING_LABELS;
-                                        return (
-                                            <button key={n} onClick={() => onRate(k, v === n ? 0 : n)}
-                                                style={{
-                                                    border: sel ? `2px solid ${color}` : `1.5px solid ${B.g200}`,
-                                                    borderRadius: 8,
-                                                    background: sel ? `${color}12` : B.w,
-                                                    padding: '8px 4px',
-                                                    cursor: 'pointer',
-                                                    transition: 'all 0.2s',
-                                                    display: 'flex', flexDirection: 'column',
-                                                    alignItems: 'center', gap: 3,
-                                                    boxShadow: sel ? `0 2px 8px ${color}20` : 'none',
-                                                }}
-                                            >
-                                                <div style={{
-                                                    width: 26, height: 26, borderRadius: '50%',
-                                                    border: `2px solid ${sel ? color : B.g200}`,
-                                                    background: sel ? color : 'transparent',
-                                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                    fontSize: 11, fontWeight: 800,
-                                                    color: sel ? B.w : B.g400, fontFamily: F,
-                                                    transition: 'all 0.2s',
-                                                }}>{n}</div>
-                                                <div style={{
-                                                    fontSize: 8, fontWeight: 700, color: sel ? color : B.g400,
-                                                    fontFamily: F, textTransform: 'uppercase', letterSpacing: 0.3,
-                                                    lineHeight: 1.2, textAlign: 'center',
-                                                }}>{labels[n]}</div>
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-
-                                {/* Definition text for selected rating */}
-                                {defs && v > 0 && (
+                        {/* ── Expanded definition (tap skill name to toggle) ── */}
+                        {isOpen && defs && (
+                            <div style={{ padding: '0 10px 10px' }}>
+                                {v > 0 ? (
                                     <div style={{
                                         background: `${color}08`, borderRadius: 8,
                                         padding: '8px 12px', border: `1px solid ${color}20`,
-                                        marginBottom: 6,
                                     }}>
                                         <div style={{ fontSize: 10, color: color, fontWeight: 700, fontFamily: F, marginBottom: 2 }}>
-                                            Level {v} — {(defs === SKILL_DEFS?.[item] ? COACH_LABELS : RATING_LABELS)[v]}
+                                            Level {v} — {COACH_LABELS[v]}
                                         </div>
                                         <div style={{ fontSize: 10, color: B.g600, fontFamily: F, lineHeight: 1.5 }}>
                                             {defs[v]}
                                         </div>
                                     </div>
-                                )}
-
-                                {/* All definitions (collapsed by default, show on tap) */}
-                                {defs && v === 0 && (
-                                    <div style={{
-                                        background: B.g50, borderRadius: 8, padding: '8px 10px',
-                                        border: `1px solid ${B.g200}`,
-                                    }}>
+                                ) : (
+                                    <div style={{ background: B.g50, borderRadius: 8, padding: '8px 10px', border: `1px solid ${B.g200}` }}>
                                         <div style={{ fontSize: 9, fontWeight: 700, color: B.g400, fontFamily: F, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-                                            Tap a rating to see its definition
+                                            Scoring guide
                                         </div>
                                         {[1, 2, 3, 4, 5].map(n => (
-                                            <div key={n} style={{
-                                                display: 'flex', gap: 6, marginBottom: n < 5 ? 3 : 0,
-                                                alignItems: 'flex-start', opacity: 0.7,
-                                            }}>
-                                                <div style={{
-                                                    fontSize: 8, fontWeight: 800, color: B.g400, fontFamily: F,
-                                                    width: 12, flexShrink: 0, marginTop: 1,
-                                                }}>{n}.</div>
-                                                <div style={{
-                                                    fontSize: 9, color: B.g500, fontFamily: F, lineHeight: 1.4,
-                                                }}>{defs[n]}</div>
+                                            <div key={n} style={{ display: 'flex', gap: 6, marginBottom: n < 5 ? 3 : 0, alignItems: 'flex-start', opacity: 0.7 }}>
+                                                <div style={{ fontSize: 8, fontWeight: 800, color: B.g400, fontFamily: F, width: 12, flexShrink: 0, marginTop: 1 }}>{n}.</div>
+                                                <div style={{ fontSize: 9, color: B.g500, fontFamily: F, lineHeight: 1.4 }}>{defs[n]}</div>
                                             </div>
                                         ))}
                                     </div>
@@ -270,9 +226,9 @@ export function AssRow({ label, value, onR, color, SKILL_DEFS }) {
     const [showDefs, setShowDefs] = useState(false);
     const defs = SKILL_DEFS?.[label];
     return (
-        <div style={{ background: B.g100, borderRadius: 6, padding: _isDesktop ? '10px 14px' : '10px 12px', marginBottom: 5 }}>
-            <div style={{ ...(_isDesktop ? { display: 'flex', alignItems: 'center', justifyContent: 'space-between' } : {}) }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: _isDesktop ? 0 : 6 }}>
+        <div style={{ background: B.g100, borderRadius: 6, padding: isDesktop() ? '10px 14px' : '10px 12px', marginBottom: 5 }}>
+            <div style={{ ...(isDesktop() ? { display: 'flex', alignItems: 'center', justifyContent: 'space-between' } : {}) }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: isDesktop() ? 0 : 6 }}>
                     <div style={{ fontSize: 12, fontWeight: 600, color: B.g800, fontFamily: F }}>{label}</div>
                     {defs && <button onClick={(e) => { e.stopPropagation(); setShowDefs(s => !s); }}
                         style={{ width: 18, height: 18, borderRadius: '50%', border: `1.5px solid ${showDefs ? color : B.g300}`, background: showDefs ? `${color}15` : 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 800, color: showDefs ? color : B.g400, fontFamily: F, padding: 0, lineHeight: 1, flexShrink: 0 }}
@@ -312,30 +268,95 @@ export function Ring({ value, size = 100, color = B.pk, label }) {
 }
 
 // ═══ COMPETITION LEVEL SELECTOR ═══
-export function CompLevelSel({ value, onChange, compTiers, gender, assocComps, vmcuAssocs }) {
-    const [selGroup, setSelGroup] = useState(null);
-    const [selAssoc, setSelAssoc] = useState(null);
+export function CompLevelSel({ value, onChange, compTiers, gender, assocComps, vmcuAssocs, playerAssoc, playerDob }) {
+    const [selGroup, setSelGroup] = useState(() => {
+        if (!value) return null;
+        const tier = (compTiers || []).find(t => t.code === value);
+        if (!tier) return null;
+        return TIER_GROUPS.find(g => g.tiers.some(tg => tier.tier === tg)) || null;
+    });
+    const [selAssoc, setSelAssoc] = useState(() => {
+        if (!value) return null;
+        const tier = (compTiers || []).find(t => t.code === value);
+        if (!tier) return null;
+        const grp = TIER_GROUPS.find(g => g.tiers.some(tg => tier.tier === tg));
+        if (!grp || !isCommunityGroup(grp)) return null;
+        const ac = (assocComps || []).find(c => c.competition_tier_code === value);
+        return ac ? ac.association_abbrev : null;
+    });
+    const [autoAssoc, setAutoAssoc] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const playerAge = useMemo(() => getAge(playerDob), [playerDob]);
+
+    // Auto-select association when Community group is picked and playerAssoc matches
+    useEffect(() => {
+        if (!selGroup || !isCommunityGroup(selGroup) || selAssoc) return;
+        if (!playerAssoc) return;
+        const uniqueAssocs = [...new Set((assocComps || []).map(c => c.association_abbrev))];
+        if (uniqueAssocs.includes(playerAssoc)) {
+            setSelAssoc(playerAssoc);
+            setAutoAssoc(true);
+            setExpanded({});
+        }
+    }, [selGroup, playerAssoc, assocComps, selAssoc]);
 
     const tiersForGroup = selGroup && !isCommunityGroup(selGroup) ? (compTiers || []).filter(t => {
         const gMatch = !gender || t.gender === gender || t.gender === 'All' || t.gender === 'Mixed' || t.gender === 'M/F';
         return selGroup.tiers.includes(t.tier) && gMatch;
     }) : [];
 
-    const compsForAssoc = (selAssoc && isCommunityGroup(selGroup)) ? (assocComps || []).filter(c => {
+    const compsForAssoc = useMemo(() => (selAssoc && isCommunityGroup(selGroup)) ? (assocComps || []).filter(c => {
         if (c.association_abbrev !== selAssoc) return false;
         if (!gender) return true;
         return c.gender === gender || c.gender === 'All' || c.gender === 'Mixed';
-    }) : [];
+    }) : [], [selAssoc, selGroup, assocComps, gender]);
 
-    const selTier = value ? (compTiers || []).find(t => t.code === value) : null;
-    if (selTier && !selGroup) {
-        const grp = TIER_GROUPS.find(g => g.tiers.some(tg => selTier.tier === tg));
-        if (grp && grp !== selGroup) setTimeout(() => setSelGroup(grp), 0);
-        if (grp && isCommunityGroup(grp) && !selAssoc) {
-            const ac = (assocComps || []).find(c => c.competition_tier_code === value);
-            if (ac) setTimeout(() => setSelAssoc(ac.association_abbrev), 0);
+    // Group competitions into Senior / Junior / Girls sections
+    const sections = useMemo(() => {
+        if (!compsForAssoc.length) return [];
+        const senior = compsForAssoc.filter(c => c.age_group === 'Senior' && c.gender !== 'F');
+        const junior = compsForAssoc.filter(c => c.age_group && c.age_group.startsWith('U') && c.gender !== 'F');
+        const girls = compsForAssoc.filter(c => c.gender === 'F');
+        const groups = [];
+        if (senior.length) groups.push({ key: 'senior', label: 'Senior', icon: '🏏', comps: senior });
+        if (junior.length) groups.push({ key: 'junior', label: 'Junior', icon: '🌟', comps: junior });
+        if (girls.length) groups.push({ key: 'girls', label: "Girls / Women's", icon: '💜', comps: girls });
+        // Age-based ordering: juniors first if player is under 18
+        if (playerAge !== null && playerAge < 18 && groups.length > 1) {
+            const jIdx = groups.findIndex(g => g.key === 'junior');
+            if (jIdx > 0) { const [j] = groups.splice(jIdx, 1); groups.unshift(j); }
         }
-    }
+        return groups;
+    }, [compsForAssoc, playerAge]);
+
+    // Expanded sections state — default: first section open
+    const [expanded, setExpanded] = useState({});
+    useEffect(() => {
+        if (sections.length > 0 && Object.keys(expanded).length === 0) {
+            setExpanded({ [sections[0].key]: true });
+        }
+    }, [sections, expanded]);
+
+    // Search filtering
+    const filteredSections = useMemo(() => {
+        if (!searchTerm.trim()) return sections;
+        const q = searchTerm.toLowerCase();
+        return sections.map(s => ({
+            ...s,
+            comps: s.comps.filter(c => c.competition_label.toLowerCase().includes(q)),
+        })).filter(s => s.comps.length > 0);
+    }, [sections, searchTerm]);
+
+    // Auto-expand matching sections when searching
+    useEffect(() => {
+        if (searchTerm.trim()) {
+            const exp = {};
+            filteredSections.forEach(s => { exp[s.key] = true; });
+            setExpanded(exp);
+        }
+    }, [filteredSections, searchTerm]);
+
+    const toggleSection = key => setExpanded(prev => ({ ...prev, [key]: !prev[key] }));
 
     const assocFull = a => {
         const obj = (vmcuAssocs || []).find(v => v.abbrev === a);
@@ -365,7 +386,7 @@ export function CompLevelSel({ value, onChange, compTiers, gender, assocComps, v
             </div>
             <div style={{ fontSize: 10, color: B.g400, fontFamily: F, marginBottom: 4 }}>Select your association:</div>
             <div style={{ display: "grid", gap: 6, gridTemplateColumns: "repeat(3, 1fr)" }}>
-                {uniqueAssocs.map(a => (<button key={a} onClick={() => setSelAssoc(a)} style={{ ...btnStyle, padding: "8px 10px", flexDirection: "column", alignItems: "flex-start", gap: 2 }}>
+                {uniqueAssocs.map(a => (<button key={a} onClick={() => { setSelAssoc(a); setAutoAssoc(false); }} style={{ ...btnStyle, padding: "8px 10px", flexDirection: "column", alignItems: "flex-start", gap: 2 }}>
                     <span style={{ fontWeight: 700, color: B.bl, fontSize: 12 }}>{a}</span>
                     <span style={{ color: B.g600, fontSize: 9, lineHeight: 1.2 }}>{assocFull(a)}</span>
                 </button>))}
@@ -373,33 +394,102 @@ export function CompLevelSel({ value, onChange, compTiers, gender, assocComps, v
         </div>);
     }
 
+    // ── Community association view with grouped sections ──
+    if (isCommunityGroup(selGroup)) {
+        return (<div>
+            <div style={hdrStyle}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: B.bl, fontFamily: F }}>
+                    {selGroup.icon} {selGroup.label} — {selAssoc}
+                </div>
+                <button onClick={() => {
+                    setSelAssoc(null); setAutoAssoc(false); setSearchTerm(''); setExpanded({}); onChange('');
+                }} style={{ fontSize: 9, color: B.g400, background: "none", border: "none", cursor: "pointer", fontFamily: F }}>✕ Change</button>
+            </div>
+
+            {/* Search input */}
+            {compsForAssoc.length > 6 && (
+                <div style={{ position: 'relative', marginBottom: 6 }}>
+                    <input type="text" value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
+                        placeholder="Search competitions..." style={{
+                            width: '100%', padding: '7px 30px 7px 10px', borderRadius: 6,
+                            border: `1px solid ${B.g200}`, background: B.w, color: B.g800,
+                            fontSize: 11, fontFamily: F, outline: 'none', boxSizing: 'border-box',
+                        }} />
+                    {searchTerm && (
+                        <button onClick={() => setSearchTerm('')} style={{
+                            position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)',
+                            background: 'none', border: 'none', cursor: 'pointer', fontSize: 12,
+                            color: B.g400, fontFamily: F, padding: 2,
+                        }}>✕</button>
+                    )}
+                </div>
+            )}
+
+            {/* Grouped sections */}
+            {filteredSections.map(s => (
+                <div key={s.key} style={{ marginBottom: 6 }}>
+                    <button onClick={() => toggleSection(s.key)} style={{
+                        display: 'flex', alignItems: 'center', gap: 6, width: '100%',
+                        padding: '6px 8px', background: 'rgba(59,130,246,0.06)', border: `1px solid ${B.g200}`,
+                        borderRadius: 6, cursor: 'pointer', fontFamily: F, textAlign: 'left',
+                    }}>
+                        <span style={{ fontSize: 10, color: B.g400, transition: 'transform 0.15s', transform: expanded[s.key] ? 'rotate(90deg)' : 'rotate(0deg)' }}>▶</span>
+                        <span style={{ fontSize: 13 }}>{s.icon}</span>
+                        <span style={{ fontSize: 11, fontWeight: 700, color: B.bl }}>{s.label}</span>
+                        <span style={{ fontSize: 9, color: B.g400, marginLeft: 'auto' }}>{s.comps.length}</span>
+                    </button>
+                    {expanded[s.key] && (
+                        <div style={{ display: "grid", gap: 4, gridTemplateColumns: "repeat(3, 1fr)", marginTop: 4, paddingLeft: 4 }}>
+                            {s.comps.map(c => (
+                                <button key={c.id} onClick={() => onChange(c.competition_tier_code)} style={{
+                                    ...btnStyle, padding: "7px 8px",
+                                    background: value === c.competition_tier_code ? B.bl : B.w,
+                                    color: value === c.competition_tier_code ? B.w : B.g800,
+                                    borderColor: value === c.competition_tier_code ? B.bl : B.g200,
+                                    justifyContent: "center",
+                                }}>
+                                    <span style={{ fontWeight: 600, fontSize: 10 }}>{c.competition_label}</span>
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            ))}
+
+            {filteredSections.length === 0 && searchTerm && (
+                <div style={{ fontSize: 10, color: B.g400, fontFamily: F, padding: '8px 0', textAlign: 'center' }}>
+                    No competitions match "{searchTerm}"
+                </div>
+            )}
+
+            {/* Different association link */}
+            {autoAssoc && (
+                <div style={{ textAlign: 'center', marginTop: 6 }}>
+                    <button onClick={() => { setSelAssoc(null); setAutoAssoc(false); setSearchTerm(''); setExpanded({}); onChange(''); }}
+                        style={{ fontSize: 10, color: B.g400, background: 'none', border: 'none', cursor: 'pointer', fontFamily: F, textDecoration: 'underline' }}>
+                        Different association?
+                    </button>
+                </div>
+            )}
+        </div>);
+    }
+
+    // ── Non-community tier selection (unchanged) ──
     return (<div>
         <div style={hdrStyle}>
             <div style={{ fontSize: 10, fontWeight: 700, color: B.bl, fontFamily: F }}>
-                {selGroup.icon} {selGroup.label}{selAssoc ? ` — ${selAssoc}` : ''}
+                {selGroup.icon} {selGroup.label}
             </div>
-            <button onClick={() => {
-                if (isCommunityGroup(selGroup)) { setSelAssoc(null); onChange(''); }
-                else { setSelGroup(null); onChange(''); }
-            }} style={{ fontSize: 9, color: B.g400, background: "none", border: "none", cursor: "pointer", fontFamily: F }}>✕ Change</button>
+            <button onClick={() => { setSelGroup(null); onChange(''); }}
+                style={{ fontSize: 9, color: B.g400, background: "none", border: "none", cursor: "pointer", fontFamily: F }}>✕ Change</button>
         </div>
         <div style={{ fontSize: 10, color: B.g400, fontFamily: F, marginBottom: 4 }}>Select competition:</div>
-        {isCommunityGroup(selGroup) ? (
-            <div style={{ display: "grid", gap: 6, gridTemplateColumns: "repeat(3, 1fr)" }}>
-                {compsForAssoc.map(c => (
-                    <button key={c.id} onClick={() => onChange(c.competition_tier_code)} style={{ ...btnStyle, padding: "8px 10px", background: value === c.competition_tier_code ? B.bl : B.w, color: value === c.competition_tier_code ? B.w : B.g800, borderColor: value === c.competition_tier_code ? B.bl : B.g200, justifyContent: "center" }}>
-                        <span style={{ fontWeight: 600, fontSize: 11 }}>{c.competition_label}</span>
-                    </button>
-                ))}
-            </div>
-        ) : (
-            <div style={{ display: "grid", gap: 6, gridTemplateColumns: "repeat(3, 1fr)" }}>
-                {tiersForGroup.map(t => (
-                    <button key={t.code} onClick={() => onChange(t.code)} style={{ ...btnStyle, padding: "8px 10px", background: value === t.code ? B.bl : B.w, color: value === t.code ? B.w : B.g800, borderColor: value === t.code ? B.bl : B.g200, justifyContent: "center" }}>
-                        <span style={{ fontWeight: 600, fontSize: 11 }}>{t.competition_name}</span>
-                    </button>
-                ))}
-            </div>
-        )}
+        <div style={{ display: "grid", gap: 6, gridTemplateColumns: "repeat(3, 1fr)" }}>
+            {tiersForGroup.map(t => (
+                <button key={t.code} onClick={() => onChange(t.code)} style={{ ...btnStyle, padding: "8px 10px", background: value === t.code ? B.bl : B.w, color: value === t.code ? B.w : B.g800, borderColor: value === t.code ? B.bl : B.g200, justifyContent: "center" }}>
+                    <span style={{ fontWeight: 600, fontSize: 11 }}>{t.competition_name}</span>
+                </button>
+            ))}
+        </div>
     </div>);
 }
