@@ -173,12 +173,11 @@ const RegistrationForm = () => {
 
             if (insertError) throw insertError;
 
-            // Fire-and-forget Zapier webhook for Google Sheet sync
+            // Await Zapier webhook before redirect so it actually fires
             try {
-                fetch('https://hooks.zapier.com/hooks/catch/23705820/ux5vmcw/', {
+                await fetch('https://hooks.zapier.com/hooks/catch/23705820/ux5vmcw/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    keepalive: true,
                     body: JSON.stringify({
                         submitted_at: new Date().toISOString(),
                         parent_name: payload.parent_name,
@@ -197,8 +196,8 @@ const RegistrationForm = () => {
                         utm_campaign: utmParams.utm_campaign,
                         page_referrer: document.referrer || null,
                     }),
-                }).catch(err => console.warn('Zapier webhook failed (non-blocking):', err));
-            } catch (_) { /* silent — Zapier is non-critical */ }
+                });
+            } catch (_) { /* silent — Zapier failure must not block checkout */ }
 
             if (isNowFull) {
                 // Waitlisted — show holding screen, don't go to Stripe
