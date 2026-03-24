@@ -128,10 +128,11 @@ const RegistrationForm = () => {
 
             if (insertError) throw insertError;
 
-            setSubmitted(true);
+            // Redirect to Stripe checkout — only fires after successful data save
+            window.location.href = 'https://buy.stripe.com/aFa28r5jr2q92D26fF9Zm09';
         } catch (err) {
             console.error('Submission error:', err);
-            setErrors({ form: 'Something went wrong. Please try again or email andy.crook@rramelbourne.com' });
+            setErrors({ form: 'Something went wrong. Please try again or email femalecricket@rramelbourne.com' });
         } finally {
             setSubmitting(false);
         }
@@ -157,8 +158,8 @@ const RegistrationForm = () => {
                         </p>
                         <p className="text-rr-charcoal/70 text-sm font-medium">
                             Questions? Email us at{' '}
-                            <a href="mailto:andy.crook@rramelbourne.com" className="text-rr-pink hover:underline font-bold">
-                                andy.crook@rramelbourne.com
+                            <a href="mailto:femalecricket@rramelbourne.com" className="text-rr-pink hover:underline font-bold">
+                                femalecricket@rramelbourne.com
                             </a>
                         </p>
                     </motion.div>
