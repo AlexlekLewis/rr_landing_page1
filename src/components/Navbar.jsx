@@ -22,7 +22,7 @@ const HOME_NAV = [
 ];
 
 const PROGRAMS_DROPDOWN = [
-    { label: 'Elite Program 2026', route: '/eliteprogram2026', badge: 'Limited Places', badgeColor: 'bg-rr-pink' },
+    { label: 'Elite Program 2026', route: '/eliteprogram2026', badge: 'Nearly Full', badgeColor: 'bg-rr-pink' },
     { label: 'Holiday Programs', route: '/holiday-programs', badge: 'Open Now', badgeColor: 'bg-green-500' },
 ];
 

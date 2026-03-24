@@ -10,8 +10,8 @@ const GENDER_OPTIONS = ['All', 'Male', 'Female', 'Mixed'];
 
 // Urgency badge config
 const URGENCY_CONFIG = {
-    closing_soon: { text: 'Registration Closing Soon', bg: 'bg-orange-500/10', border: 'border-orange-500/30', dot: 'bg-orange-500', textColor: 'text-orange-500' },
-    limited_places: { text: 'Limited Places', bg: 'bg-rr-pink/10', border: 'border-rr-pink/30', dot: 'bg-rr-pink', textColor: 'text-rr-pink' },
+    closing_soon: { text: 'Closing Soon', bg: 'bg-orange-500/10', border: 'border-orange-500/30', dot: 'bg-orange-500', textColor: 'text-orange-500' },
+    limited_places: { text: 'Nearly Full', bg: 'bg-rr-pink/10', border: 'border-rr-pink/30', dot: 'bg-rr-pink', textColor: 'text-rr-pink' },
     spots_remaining: { text: '{n} Places Remaining', bg: 'bg-rr-pink/10', border: 'border-rr-pink/30', dot: 'bg-rr-pink', textColor: 'text-rr-pink' },
     open: { text: 'Now Open', bg: 'bg-green-500/10', border: 'border-green-500/30', dot: 'bg-green-500', textColor: 'text-green-600' },
     waitlist: { text: 'Join Waitlist', bg: 'bg-slate-200/50', border: 'border-slate-300', dot: 'bg-slate-400', textColor: 'text-slate-500' },

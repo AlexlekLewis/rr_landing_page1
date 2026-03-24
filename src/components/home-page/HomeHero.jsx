@@ -4,7 +4,7 @@ import { ChevronDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const PROGRAMS = [
-    { label: 'Elite Program 2026', route: '/eliteprogram2026', badge: 'Limited Places', badgeColor: 'bg-rr-pink' },
+    { label: 'Elite Program 2026', route: '/eliteprogram2026', badge: 'Nearly Full', badgeColor: 'bg-rr-pink' },
     { label: 'Holiday Programs', route: '/holiday-programs', badge: 'Registrations Open', badgeColor: 'bg-green-500' },
 ];
 

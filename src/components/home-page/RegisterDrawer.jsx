@@ -9,8 +9,8 @@ const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Advanced', 'Elite'];
 const GENDER_OPTIONS = ['Male Cricket', 'Female Cricket', 'No Preference'];
 
 const PROGRAMS = [
-    { label: 'Elite Program 2026', route: '/eliteprogram2026' },
-    { label: 'Holiday Programs', route: '/holiday-programs' },
+    { label: 'Elite Program 2026', route: '/eliteprogram2026', urgency: 'Less Than 10 Places Remaining' },
+    { label: 'Holiday Programs', route: '/holiday-programs', urgency: null },
 ];
 
 const InputField = ({ label, type = 'text', value, onChange, placeholder, required }) => (
@@ -76,8 +76,16 @@ const PathBuy = ({ onBack }) => (
                     to={p.route}
                     className="flex items-center justify-between w-full p-4 border border-slate-200 rounded-xl hover:border-rr-pink hover:bg-rr-pink/5 transition-all group"
                 >
-                    <span className="font-bold text-rr-dark text-sm uppercase tracking-wide">{p.label}</span>
-                    <ArrowRight className="w-4 h-4 text-rr-charcoal/40 group-hover:text-rr-pink group-hover:translate-x-1 transition-all" />
+                    <div>
+                        <span className="font-bold text-rr-dark text-sm uppercase tracking-wide block">{p.label}</span>
+                        {p.urgency && (
+                            <span className="text-xs font-bold text-rr-pink mt-0.5 flex items-center gap-1">
+                                <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse inline-block" />
+                                {p.urgency}
+                            </span>
+                        )}
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-rr-charcoal/40 group-hover:text-rr-pink group-hover:translate-x-1 transition-all shrink-0" />
                 </Link>
             ))}
         </div>
