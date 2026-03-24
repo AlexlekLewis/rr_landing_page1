@@ -13,7 +13,7 @@ const faqs = [
     },
     {
         q: 'What should my child bring to the clinic?',
-        a: 'Please bring a water bottle, morning snack, sunscreen, and appropriate cricket footwear. Cricket gear (bat, gloves, pads) is welcome but not required — shared equipment is available.',
+        a: 'Please bring a water bottle, morning snack and appropriate cricket footwear. Cricket gear (bat, gloves, pads) is required — shared equipment is not available.',
     },
     {
         q: 'What\'s included in the $299 registration?',
