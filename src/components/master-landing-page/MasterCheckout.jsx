@@ -154,6 +154,8 @@ const MasterCheckout = () => {
 
             const cohortId = crypto.randomUUID();
 
+            const utmParams = new URLSearchParams(window.location.search);
+
             // 1. Basic lead log to applications (lightweight)
             const applicationsPayload = {
                 first_name: formData.firstName.trim(),
@@ -177,6 +179,10 @@ const MasterCheckout = () => {
                 parent2_phone: formData.parent2Phone.trim(),
                 cricket_type: cricketGender,
                 source: 'master_landing_page',
+                utm_source: utmParams.get('utm_source') || null,
+                utm_medium: utmParams.get('utm_medium') || null,
+                utm_campaign: utmParams.get('utm_campaign') || null,
+                page_referrer: document.referrer || null,
             };
 
             const { error: appError } = await supabase.from('applications').insert([applicationsPayload]);
@@ -214,6 +220,10 @@ const MasterCheckout = () => {
                 source: 'master_landing_page',
                 payment_plan_selected: option,
                 payment_status: 'pending',
+                utm_source: utmParams.get('utm_source') || null,
+                utm_medium: utmParams.get('utm_medium') || null,
+                utm_campaign: utmParams.get('utm_campaign') || null,
+                page_referrer: document.referrer || null,
             };
 
             const { error: cohortError } = await supabase.from('official_cohort_2026').insert([cohortPayload]);

@@ -105,9 +105,12 @@ const PathUpcoming = ({ onBack, onSuccess }) => {
         setLoading(true);
         setError('');
         try {
+            const params = new URLSearchParams(window.location.search);
             const { error: err } = await supabase.from('upcoming_program_interest').insert([{
                 ...form,
-                utm_source: new URLSearchParams(window.location.search).get('utm_source') || null,
+                utm_source: params.get('utm_source') || null,
+                utm_medium: params.get('utm_medium') || null,
+                utm_campaign: params.get('utm_campaign') || null,
                 page_referrer: document.referrer || null,
             }]);
             if (err) throw err;
@@ -174,9 +177,12 @@ const PathMoreInfo = ({ onBack, onSuccess }) => {
         setLoading(true);
         setError('');
         try {
+            const params = new URLSearchParams(window.location.search);
             const { error: err } = await supabase.from('general_enquiries').insert([{
                 ...form,
-                utm_source: new URLSearchParams(window.location.search).get('utm_source') || null,
+                utm_source: params.get('utm_source') || null,
+                utm_medium: params.get('utm_medium') || null,
+                utm_campaign: params.get('utm_campaign') || null,
                 page_referrer: document.referrer || null,
             }]);
             if (err) throw err;
