@@ -150,10 +150,10 @@ const FemaleCricketSuccess = () => {
                             <p className="text-sm text-white/60 leading-relaxed">
                                 Reach out to our team at{' '}
                                 <a
-                                    href="mailto:andy.crook@rramelbourne.com"
+                                    href="mailto:femalecricket@rramelbourne.com"
                                     className="text-rr-pink font-bold hover:underline transition-all"
                                 >
-                                    andy.crook@rramelbourne.com
+                                    femalecricket@rramelbourne.com
                                 </a>
                             </p>
                         </div>
