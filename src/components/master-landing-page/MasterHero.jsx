@@ -83,6 +83,9 @@ const MasterHero = () => {
                                 Nearly Full — Less than 10 places remain
                             </span>
                         </div>
+                        <p className="text-white/40 text-xs font-medium">
+                            Female program now full — <a href="mailto:eliteprogram@rramelbourne.com" className="text-rr-pink hover:text-white underline underline-offset-2 transition-colors">join the waitlist</a>
+                        </p>
                         <button
                             onClick={scrollToForm}
                             className="group bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 md:px-10 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] flex items-center gap-3 w-full sm:w-auto justify-center"
