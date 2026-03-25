@@ -131,8 +131,9 @@ const RegistrationForm = () => {
 
             if (insertError) throw insertError;
 
-            // Send to Zapier webhook (flows to Google Sheet) — fire-and-forget
+            // Send to Zapier webhook (flows to Google Sheet)
             // Uses URLSearchParams to avoid CORS preflight (no OPTIONS request)
+            // Must await before redirect or browser kills the in-flight request
             const webhookData = new URLSearchParams({
                 parent_name: payload.parent1_name,
                 parent_email: payload.parent1_email,
@@ -146,12 +147,12 @@ const RegistrationForm = () => {
                 source: payload.source,
                 submitted_at: new Date().toISOString(),
             });
-            fetch('https://hooks.zapier.com/hooks/catch/23705820/upvtk83/', {
+            await fetch('https://hooks.zapier.com/hooks/catch/23705820/upvtk83/', {
                 method: 'POST',
                 body: webhookData,
             }).catch(() => {});
 
-            // Redirect to Stripe checkout — only fires after successful data save
+            // Redirect to Stripe checkout — only fires after webhook completes
             window.location.href = 'https://buy.stripe.com/aFa28r5jr2q92D26fF9Zm09';
         } catch (err) {
             console.error('Submission error:', err);
