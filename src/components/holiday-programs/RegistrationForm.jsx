@@ -5,7 +5,7 @@ import { supabase } from '../../lib/supabase';
 // ⚠️ Update these to adjust capacity per location
 const CAPACITY = {
     'cutting-edge': 40,
-    'hallam': 30,
+    'hallam': 60,
 };
 
 const AGE_OPTIONS = Array.from({ length: 8 }, (_, i) => i + 7); // 7–14
