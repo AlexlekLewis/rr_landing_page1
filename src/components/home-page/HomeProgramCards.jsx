@@ -67,7 +67,7 @@ const ProgramCard = ({ program, onRegisterClick }) => {
                 <img
                     src={program.image_url || '/assets/hero-celebration-new.jpg'}
                     alt={program.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${program.image_position === 'top' ? 'object-top' : 'object-center'}`}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/70 to-transparent" />
                 {/* Urgency badge on image */}
