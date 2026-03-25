@@ -210,7 +210,7 @@ const RegistrationForm = () => {
             }
         } catch (err) {
             console.error('Submission error:', err);
-            setErrors({ form: 'Something went wrong. Please try again or email andy.crook@rramelbourne.com' });
+            setErrors({ form: 'Something went wrong. Please try again or email holidayprograms@rramelbourne.com' });
         } finally {
             setSubmitting(false);
         }

@@ -150,10 +150,10 @@ const HolidayProgramSuccess = () => {
                             <p className="text-sm text-white/60 leading-relaxed">
                                 Reach out to our team at{' '}
                                 <a
-                                    href="mailto:andy.crook@rramelbourne.com"
+                                    href="mailto:holidayprograms@rramelbourne.com"
                                     className="text-rr-pink font-bold hover:underline transition-all"
                                 >
-                                    andy.crook@rramelbourne.com
+                                    holidayprograms@rramelbourne.com
                                 </a>
                             </p>
                         </div>
