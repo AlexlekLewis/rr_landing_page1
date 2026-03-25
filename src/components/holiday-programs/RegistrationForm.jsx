@@ -1,12 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
-
-// ⚠️ Update these to adjust capacity per location
-const CAPACITY = {
-    'cutting-edge': 40,
-    'hallam': 30,
-};
 
 const AGE_OPTIONS = Array.from({ length: 8 }, (_, i) => i + 7); // 7–14
 
@@ -50,11 +44,7 @@ const ComplianceCheckbox = ({ checked, onChange, error, children }) => (
 );
 
 const RegistrationForm = () => {
-    const [counts, setCounts] = useState({ 'cutting-edge': 0, hallam: 0 });
-    const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
-    const [submitted, setSubmitted] = useState(false);
-    const [waitlisted, setWaitlisted] = useState(false);
     const [errors, setErrors] = useState({});
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [acceptPlayerCode, setAcceptPlayerCode] = useState(false);
@@ -73,35 +63,6 @@ const RegistrationForm = () => {
         location: '',
         shirt_size: '',
     });
-
-    // Fetch live capacity counts on mount
-    useEffect(() => {
-        const fetchCounts = async () => {
-            try {
-                const { data, error } = await supabase
-                    .from('holiday_clinic_registrations')
-                    .select('location')
-                    .eq('on_waitlist', false);
-
-                if (!error && data) {
-                    const newCounts = { 'cutting-edge': 0, hallam: 0 };
-                    data.forEach(row => {
-                        if (newCounts[row.location] !== undefined) {
-                            newCounts[row.location]++;
-                        }
-                    });
-                    setCounts(newCounts);
-                }
-            } catch (err) {
-                console.error('Capacity fetch failed:', err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchCounts();
-    }, []);
-
-    const isFull = (loc) => loc && counts[loc] >= CAPACITY[loc];
 
     const validate = () => {
         const newErrors = {};
@@ -135,16 +96,6 @@ const RegistrationForm = () => {
         setSubmitting(true);
 
         try {
-            // Re-check capacity at submission time to prevent race conditions
-            const { data: freshData, error: freshError } = await supabase
-                .from('holiday_clinic_registrations')
-                .select('location')
-                .eq('location', form.location)
-                .eq('on_waitlist', false);
-
-            const freshCount = freshData ? freshData.length : 0;
-            const isNowFull = freshCount >= CAPACITY[form.location];
-
             const utmParams = getUTMParams();
 
             const payload = {
@@ -162,7 +113,7 @@ const RegistrationForm = () => {
                 primary_club: form.primary_club.trim(),
                 suburb: form.suburb.trim(),
                 location: form.location,
-                on_waitlist: isNowFull,
+                on_waitlist: false,
                 page_referrer: document.referrer || null,
                 ...utmParams,
             };
@@ -175,14 +126,8 @@ const RegistrationForm = () => {
 
             // Zapier webhook is handled by async pg_net database trigger on INSERT
 
-            if (isNowFull) {
-                // Waitlisted — show holding screen, don't go to Stripe
-                setWaitlisted(true);
-                setSubmitted(true);
-            } else {
-                // Confirmed spot — redirect to Stripe checkout
-                window.location.href = 'https://buy.stripe.com/9B6dR93bjggZa5ugUj9Zm07';
-            }
+            // Redirect to Stripe checkout
+            window.location.href = 'https://buy.stripe.com/9B6dR93bjggZa5ugUj9Zm07';
         } catch (err) {
             console.error('Submission error:', err);
             setErrors({ form: 'Something went wrong. Please try again or email andy.crook@rramelbourne.com' });
@@ -190,38 +135,6 @@ const RegistrationForm = () => {
             setSubmitting(false);
         }
     };
-
-    const selectedLocationFull = isFull(form.location);
-
-    if (submitted) {
-        return (
-            <section id="registration-form" className="py-24 bg-rr-dark">
-                <div className="max-w-2xl mx-auto px-6">
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.5 }}
-                        className="bg-white rounded-2xl p-12 text-center"
-                    >
-                        <div className="text-6xl mb-6">{waitlisted ? '📋' : '🏏'}</div>
-                        <h2 className="text-3xl font-black text-rr-dark uppercase tracking-wide mb-4">
-                            {waitlisted ? 'YOU\'RE ON THE WAITLIST' : 'YOU\'RE IN!'}
-                        </h2>
-                        <div className="w-16 h-1 rounded-full bg-rr-pink mx-auto mb-6" />
-                        {waitlisted ? (
-                            <p className="text-rr-charcoal font-medium leading-relaxed">
-                                That location just filled up — but don't stress. You're on the waitlist and we'll contact you at <strong>{form.parent_email}</strong> if a spot opens up.
-                            </p>
-                        ) : (
-                            <p className="text-rr-charcoal font-medium leading-relaxed">
-                                Spot secured. You'll receive a confirmation at <strong>{form.parent_email}</strong> with everything you need to know before the clinic. HALLA BOL!
-                            </p>
-                        )}
-                    </motion.div>
-                </div>
-            </section>
-        );
-    }
 
     const inputClass = (field) =>
         `w-full bg-slate-50 border ${errors[field] ? 'border-red-400' : 'border-slate-200'} rounded-xl px-4 py-3 text-rr-dark font-medium focus:outline-none focus:border-rr-pink transition-colors duration-200 text-sm`;
@@ -349,36 +262,16 @@ const RegistrationForm = () => {
                             <h3 className="text-base font-black text-rr-dark uppercase tracking-widest mb-6 pb-3 border-b border-slate-100">Clinic Selection</h3>
                             <div>
                                 <label className={labelClass}>Location *</label>
-                                {loading ? (
-                                    <div className="text-rr-charcoal text-sm font-medium">Loading availability...</div>
-                                ) : (
-                                    <select name="location" value={form.location} onChange={handleChange} className={inputClass('location')}>
-                                        <option value="">Select a location</option>
-                                        <option value="cutting-edge">
-                                            Cutting Edge Cricket — Bundoora | Apr 8, 9 & 10 {isFull('cutting-edge') ? '(FULL — Waitlist)' : `(${CAPACITY['cutting-edge'] - counts['cutting-edge']} spots remaining)`}
-                                        </option>
-                                        <option value="hallam">
-                                            Cricket Connect — Hallam | Apr 14, 15 & 16 {isFull('hallam') ? '(FULL — Waitlist)' : `(${CAPACITY['hallam'] - counts['hallam']} spots remaining)`}
-                                        </option>
-                                    </select>
-                                )}
+                                <select name="location" value={form.location} onChange={handleChange} className={inputClass('location')}>
+                                    <option value="">Select a location</option>
+                                    <option value="cutting-edge">
+                                        Cutting Edge Cricket — Bundoora | Apr 8, 9 &amp; 10
+                                    </option>
+                                    <option value="hallam">
+                                        Cricket Connect — Hallam | Apr 14, 15 &amp; 16
+                                    </option>
+                                </select>
                                 {errors.location && <p className="text-red-500 text-xs font-medium mt-1">{errors.location}</p>}
-
-                                {/* Waitlist notice */}
-                                <AnimatePresence>
-                                    {selectedLocationFull && (
-                                        <motion.div
-                                            initial={{ opacity: 0, height: 0 }}
-                                            animate={{ opacity: 1, height: 'auto' }}
-                                            exit={{ opacity: 0, height: 0 }}
-                                            className="mt-3 bg-amber-50 border border-amber-200 rounded-xl p-4"
-                                        >
-                                            <p className="text-amber-700 text-sm font-semibold">
-                                                This location is currently full. Submitting will add you to the waitlist — we'll contact you if a spot becomes available.
-                                            </p>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
                             </div>
                         </div>
 
@@ -419,8 +312,6 @@ const RegistrationForm = () => {
                                     </svg>
                                     Submitting...
                                 </>
-                            ) : selectedLocationFull ? (
-                                'Join the Waitlist'
                             ) : (
                                 <>
                                     Go to Checkout
