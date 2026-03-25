@@ -227,7 +227,7 @@ const SessionWalkthrough = () => {
                 <div className="flex flex-col items-center gap-4 pt-14 border-t border-slate-200 mt-14">
                     <div className="inline-flex items-center gap-2 bg-rr-pink/8 border border-rr-pink/25 rounded-full px-4 py-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse shrink-0" />
-                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Entries close March 27 — or when full</span>
+                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Nearly Full — Less than 5 places remain</span>
                     </div>
                     <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
                         <a href="#checkout" className="group bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wide sm:tracking-widest px-5 sm:px-10 py-4 sm:py-5 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.35)] text-xs sm:text-sm flex items-center gap-2 sm:gap-3">

@@ -1,10 +1,13 @@
 // ═══ SQUAD ASSIGNMENT — Auto-allocation engine UI ═══
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { B, F, sCard, getDkWrap } from "../data/theme";
 import { SecH } from "../shared/FormComponents";
 import { supabase } from "../supabaseClient";
 import { autoAssignSquads, getSquadSummary, parseSessionPrefs, WEEKDAY_SLOTS, WEEKEND_BLOCKS } from "../engine/squadEngine";
 import { loadSquadGroups, createSquadGroup, allocatePlayerToSquad } from "../db/adminDb";
+import { useEngine } from "../context/EngineContext";
+import { calcCCM, calcStatDomain } from "../engine/ratingEngine";
+import { loadPlayersFromDB } from "../db/playerDb";
 
 const ROLE_COLORS = { pace: B.bl, spin: B.prp, keeper: B.org, batter: B.pk, allrounder: '#14B8A6' };
 
@@ -14,52 +17,108 @@ export default function SquadAssignment() {
     const [result, setResult] = useState(null);
     const [saving, setSaving] = useState(false);
     const [saved, setSaved] = useState(false);
+    const { compTiers, engineConst, engineLoading } = useEngine();
 
-    // Load cohort data from all sources
+    // Load full player profiles (DNA source of truth), enriched with cohort + application data
     useEffect(() => {
+        if (engineLoading) return;
         async function loadCohort() {
             setLoading(true);
             try {
-                const [{ data: oc }, { data: players }, { data: apps }] = await Promise.all([
-                    supabase.from('official_cohort_2026').select('*').order('player_name'),
-                    supabase.from('players').select('id, name, dob, role, bowling_type, club, gender, self_ratings').eq('submitted', true),
-                    supabase.from('applications').select('first_name, last_name, email, suburb, history, bio, age, dob'),
+                // 1. DNA profiles (full data incl. grades, assessments, self_ratings)
+                // 2. Cohort data (suburb, session prefs, parent emails)
+                // 3. Application data (suburb, history, bio fallbacks)
+                const [dnaPlayers, { data: cohortData }, { data: appData }] = await Promise.all([
+                    loadPlayersFromDB(),
+                    supabase.from('official_cohort_2026').select('*'),
+                    supabase.from('applications').select('*'),
                 ]);
 
-                // Deduplicate cohort by player_name — keep the row with most data
-                const deduped = {};
-                (oc || []).filter(c => c.player_name && c.player_name.length > 3).forEach(c => {
-                    const key = c.player_name.toLowerCase().trim();
-                    if (!deduped[key]) { deduped[key] = c; return; }
-                    // Keep the row with more data (prefer one with dob, selected_sessions, age)
-                    const existing = deduped[key];
-                    const existingScore = (existing.dob ? 1 : 0) + (existing.selected_sessions ? 1 : 0) + (existing.age ? 1 : 0) + (existing.club ? 1 : 0);
-                    const newScore = (c.dob ? 1 : 0) + (c.selected_sessions ? 1 : 0) + (c.age ? 1 : 0) + (c.club ? 1 : 0);
-                    if (newScore > existingScore) deduped[key] = c;
+                // Build enrichment lookups
+                const cohortByName = {};
+                (cohortData || []).forEach(c => {
+                    if (c.player_name) cohortByName[c.player_name.toLowerCase().trim()] = c;
                 });
-                const uniqueCohort = Object.values(deduped);
+                const appsByName = {};
+                (appData || []).forEach(a => {
+                    const key = `${a.first_name || ''} ${a.last_name || ''}`.toLowerCase().trim();
+                    if (key.length > 3) appsByName[key] = a;
+                });
 
-                // Merge cohort with DNA player data and application data
-                const merged = uniqueCohort.map(c => {
-                    const dna = (players || []).find(p => p.name?.toLowerCase().trim() === c.player_name?.toLowerCase().trim());
-                    const app = (apps || []).find(a => a.email && c.email && a.email.toLowerCase() === c.email.toLowerCase());
+                // Primary source: submitted DNA players, enriched with cohort + app data
+                const merged = dnaPlayers.map(p => {
+                    const nameKey = p.name?.toLowerCase().trim();
+                    const c = cohortByName[nameKey] || {};
+                    const a = appsByName[nameKey] || {};
+
+                    // Compute competition context from grades
+                    const ccmR = calcCCM(p.grades, p.dob, compTiers, engineConst);
+                    const hasCd = Object.keys(p.cd || {}).some(k => k.startsWith('t1_'));
+
+                    // Squad ranking uses OBJECTIVE data only:
+                    // 1. Season stats scored against tier-relative benchmarks
+                    // 2. Peak performances scored against their tier
+                    // 3. ARM multiplier (younger playing up = boosted)
+                    // Self-ratings are excluded — too subjective for squad allocation
+                    const cti = ccmR?.cti || 0;
+                    const arm = ccmR?.arm || 1;
+                    const playerAge = c.age || a.age || null;
+                    const statResult = calcStatDomain(p.grades, p.role, cti, arm, playerAge, {}, p.topBat, p.topBowl, compTiers);
+                    const statScore = statResult?.css || 0;
+
+                    // Coach assessment average (if available — objective, verified data)
+                    let coachScore = 0;
+                    if (hasCd) {
+                        const coachVals = Object.entries(p.cd)
+                            .filter(([k, v]) => (k.startsWith('t1_') || k.startsWith('t2_') || k.startsWith('iq_') || k.startsWith('mn_') || k.startsWith('ph_') || k.startsWith('fld_')) && v > 0)
+                            .map(([, v]) => v);
+                        if (coachVals.length > 0) {
+                            coachScore = coachVals.reduce((s, v) => s + v, 0) / coachVals.length;
+                        }
+                    }
+
+                    // Final ability score for squad engine:
+                    // If coach assessed: blend coach (60%) + stats (40%)
+                    // If stats only: use stat score
+                    // If neither: score = 0 (unranked, placed by session preference only)
+                    let abilityScore = 0;
+                    if (coachScore > 0 && statScore > 0) {
+                        abilityScore = coachScore * 0.60 + statScore * 0.40;
+                    } else if (coachScore > 0) {
+                        abilityScore = coachScore;
+                    } else if (statScore > 0) {
+                        abilityScore = statScore;
+                    }
 
                     return {
-                        id: c.id,
-                        name: c.player_name,
-                        dob: c.dob || app?.dob || dna?.dob,
-                        age: c.age || app?.age,
-                        gender: c.gender,
-                        suburb: c.suburb,
-                        club: c.club || dna?.club,
-                        role: dna?.role || c.player_role,
+                        id: p.id,
+                        name: p.name,
+                        dob: p.dob || c.dob || a.dob,
+                        age: c.age || a.age,
+                        gender: p.gender || c.gender,
+                        suburb: c.suburb || a.suburb,
+                        club: p.club || c.club || a.club,
+                        role: p.role || c.player_role,
                         playerRole: c.player_role,
-                        bowlingType: dna?.bowling_type,
+                        bowlingType: p.bowl,
                         selectedSessions: c.selected_sessions,
-                        ccm: 0, // Will be calculated or loaded
-                        history: c.history || app?.history,
-                        bio: c.bio || app?.bio,
-                        dnaId: dna?.id,
+                        // Ability score drives squad ranking (objective data only)
+                        ccm: abilityScore,
+                        abilityScore,
+                        statScore,
+                        coachScore,
+                        ccmRaw: ccmR?.ccm || 0,
+                        ccmCode: ccmR?.code || null,
+                        history: c.history || a.history,
+                        bio: c.bio || a.bio,
+                        dnaId: p.id,
+                        parent1Email: c.parent1_email || a.parent1_email || null,
+                        parent2Email: c.parent2_email || a.parent2_email || null,
+                        playerBatArch: p.playerBatArch,
+                        playerBwlArch: p.playerBwlArch,
+                        heightCm: p.heightCm,
+                        assessed: hasCd,
+                        grades: p.grades,
                     };
                 });
 
@@ -70,7 +129,8 @@ export default function SquadAssignment() {
             setLoading(false);
         }
         loadCohort();
-    }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [engineLoading]);
 
     const handleAutoAssign = () => {
         const res = autoAssignSquads(cohort);
@@ -114,7 +174,7 @@ export default function SquadAssignment() {
 
     const MAX_SQUAD_SIZE = 12;
 
-    if (loading) return <div style={{ padding: 24, textAlign: 'center', color: B.g400, fontSize: 12, fontFamily: F }}>Loading cohort data...</div>;
+    if (loading || engineLoading) return <div style={{ padding: 24, textAlign: 'center', color: B.g400, fontSize: 12, fontFamily: F }}>Loading player data & engine...</div>;
 
     return (
         <div style={{ padding: 12, ...getDkWrap() }}>
@@ -125,11 +185,11 @@ export default function SquadAssignment() {
                     <div style={{ fontSize: 8, fontWeight: 700, color: B.g400, fontFamily: F }}>TOTAL</div>
                 </div>
                 <div style={{ ...sCard, padding: 12, flex: '1 1 80px', textAlign: 'center', marginBottom: 0 }}>
-                    <div style={{ fontSize: 20, fontWeight: 800, color: B.pk, fontFamily: F }}>{cohort.filter(p => p.gender?.toLowerCase().includes('female')).length}</div>
+                    <div style={{ fontSize: 20, fontWeight: 800, color: B.pk, fontFamily: F }}>{cohort.filter(p => { const g = p.gender?.toLowerCase().trim(); return g === 'f' || g?.includes('female'); }).length}</div>
                     <div style={{ fontSize: 8, fontWeight: 700, color: B.g400, fontFamily: F }}>FEMALE</div>
                 </div>
                 <div style={{ ...sCard, padding: 12, flex: '1 1 80px', textAlign: 'center', marginBottom: 0 }}>
-                    <div style={{ fontSize: 20, fontWeight: 800, color: B.bl, fontFamily: F }}>{cohort.filter(p => !p.gender?.toLowerCase().includes('female')).length}</div>
+                    <div style={{ fontSize: 20, fontWeight: 800, color: B.bl, fontFamily: F }}>{cohort.filter(p => { const g = p.gender?.toLowerCase().trim(); return g !== 'f' && !g?.includes('female'); }).length}</div>
                     <div style={{ fontSize: 8, fontWeight: 700, color: B.g400, fontFamily: F }}>MALE</div>
                 </div>
                 <div style={{ ...sCard, padding: 12, flex: '1 1 80px', textAlign: 'center', marginBottom: 0 }}>
@@ -157,7 +217,7 @@ export default function SquadAssignment() {
                                     <div>
                                         <div style={{ fontSize: 16, fontWeight: 800, color: B.nvD, fontFamily: F }}>{summary.name}</div>
                                         <div style={{ fontSize: 10, color: B.g400, fontFamily: F }}>
-                                            {summary.count} players · Avg CCM: {summary.avgCCM.toFixed(2)}
+                                            {summary.count} players · Avg DNA Index: {summary.avgCCM.toFixed(2)}
                                             {summary.ageRange && ` · Ages ${summary.ageRange.min}-${summary.ageRange.max}`}
                                         </div>
                                     </div>
@@ -192,7 +252,8 @@ export default function SquadAssignment() {
                                             <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
                                                 {p.age && <span style={{ fontSize: 9, color: B.g400, fontFamily: F }}>{p.age}yo</span>}
                                                 {p.suburb && <span style={{ fontSize: 8, color: B.g400, fontFamily: F }}>{p.suburb}</span>}
-                                                {p.ccm > 0 && <span style={{ fontSize: 8, fontWeight: 700, color: B.bl, fontFamily: F }}>CCM {p.ccm.toFixed(2)}</span>}
+                                                {p.abilityScore > 0 && <span style={{ fontSize: 8, fontWeight: 700, color: p.assessed ? B.grn : B.bl, fontFamily: F }}>{p.abilityScore.toFixed(2)}</span>}
+                                                {p.abilityScore === 0 && <span style={{ fontSize: 8, color: B.g300, fontFamily: F }}>no stats</span>}
                                             </div>
                                         </div>
                                     ))}

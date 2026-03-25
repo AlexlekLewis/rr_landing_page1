@@ -25,6 +25,7 @@ import MasterLandingPage from './components/master-landing-page/MasterLandingPag
 import HolidayPrograms from './components/holiday-programs/HolidayPrograms';
 import HolidayProgramSuccess from './components/holiday-programs/HolidayProgramSuccess';
 import FemaleCricketIntroduction from './components/female-cricket-introduction/FemaleCricketIntroduction';
+import FemaleCricketSuccess from './components/female-cricket-introduction/FemaleCricketSuccess';
 import FemaleEmpowerment from './components/female-empowerment/FemaleEmpowerment';
 import MasterStripeSuccess from './components/master-landing-page/MasterStripeSuccess';
 import HomePage from './components/home-page/HomePage';
@@ -117,6 +118,7 @@ function App() {
         <Route path="/holiday-programs/success" element={<HolidayProgramSuccess />} />
         {/* Female Cricket Introduction — DRAFT: not in nav, Vercel only until go-live instruction */}
         <Route path="/female-cricket-kickstart" element={<FemaleCricketIntroduction />} />
+        <Route path="/female-cricket-kickstart/success" element={<FemaleCricketSuccess />} />
         <Route path="/female-empowerment" element={<FemaleEmpowerment />} />
 
         {/* Admin routes */}

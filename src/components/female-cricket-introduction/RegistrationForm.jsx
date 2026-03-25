@@ -47,6 +47,7 @@ const RegistrationForm = () => {
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [acceptPlayerCode, setAcceptPlayerCode] = useState(false);
     const [acceptParentCode, setAcceptParentCode] = useState(false);
+    const [acceptSocialMedia, setAcceptSocialMedia] = useState(false);
 
     const [form, setForm] = useState({
         parent_name: '',
@@ -73,6 +74,7 @@ const RegistrationForm = () => {
         if (!acceptTerms) newErrors.acceptTerms = 'You must agree to the Terms & Conditions and Privacy Policy.';
         if (!acceptPlayerCode) newErrors.acceptPlayerCode = 'You must agree to the Player Code of Conduct.';
         if (!acceptParentCode) newErrors.acceptParentCode = 'You must agree to the Parent/Guardian Code of Conduct.';
+        if (!acceptSocialMedia) newErrors.acceptSocialMedia = 'You must confirm your consent for social media use.';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -96,14 +98,14 @@ const RegistrationForm = () => {
                 source: SOURCE_TAG,
                 program: 'Girls Kickstart Program — Introduction to Cricket',
 
-                // Parent / Guardian
-                parent_name: form.parent_name.trim(),
-                parent_email: form.parent_email.trim(),
-                parent_phone: form.parent_phone.trim(),
+                // Parent / Guardian (mapped to applications table columns)
+                parent1_name: form.parent_name.trim(),
+                parent1_email: form.parent_email.trim(),
+                parent1_phone: form.parent_phone.trim(),
 
-                // Player
-                player_name: form.player_name.trim(),
-                player_dob: form.player_dob || null,
+                // Player (mapped to applications table columns)
+                first_name: form.player_name.trim(),
+                dob: form.player_dob || null,
                 suburb: form.suburb.trim(),
 
                 // Program-specific
@@ -116,6 +118,7 @@ const RegistrationForm = () => {
                 accept_terms: acceptTerms,
                 accept_player_code: acceptPlayerCode,
                 accept_parent_code: acceptParentCode,
+                accept_social_media: acceptSocialMedia,
 
                 // Analytics
                 page_referrer: document.referrer || null,
@@ -128,10 +131,51 @@ const RegistrationForm = () => {
 
             if (insertError) throw insertError;
 
-            setSubmitted(true);
+            // Insert into dedicated Kickstart table
+            const { error: kickstartError } = await supabase
+                .from('female_kickstart_2026')
+                .insert([{
+                    parent_name: form.parent_name.trim(),
+                    parent_email: form.parent_email.trim(),
+                    parent_phone: form.parent_phone.trim(),
+                    player_name: form.player_name.trim(),
+                    player_dob: form.player_dob || null,
+                    suburb: form.suburb.trim(),
+                    location: form.location,
+                    experience_level: form.experience,
+                    accept_terms: acceptTerms,
+                    accept_player_code: acceptPlayerCode,
+                    accept_parent_code: acceptParentCode,
+                    accept_social_media: acceptSocialMedia,
+                    page_referrer: document.referrer || null,
+                    ...utmParams,
+                }]);
+
+            if (kickstartError) console.error('Kickstart table insert error:', kickstartError);
+
+            // Send to Zapier webhook (flows to Google Sheet)
+            // Uses sendBeacon — survives page navigation and bypasses CORS
+            const webhookData = new URLSearchParams({
+                parent_name: payload.parent1_name,
+                parent_email: payload.parent1_email,
+                parent_phone: payload.parent1_phone,
+                player_name: payload.first_name,
+                player_dob: payload.dob || '',
+                suburb: payload.suburb,
+                location: payload.location,
+                experience_level: payload.experience_level,
+                program: payload.program,
+                source: payload.source,
+                submitted_at: new Date().toISOString(),
+            });
+            const blob = new Blob([webhookData.toString()], { type: 'application/x-www-form-urlencoded' });
+            navigator.sendBeacon('https://hooks.zapier.com/hooks/catch/23705820/upvtk83/', blob);
+
+            // Redirect to Stripe checkout
+            window.location.href = 'https://buy.stripe.com/aFa28r5jr2q92D26fF9Zm09';
         } catch (err) {
             console.error('Submission error:', err);
-            setErrors({ form: 'Something went wrong. Please try again or email andy.crook@rramelbourne.com' });
+            setErrors({ form: 'Something went wrong. Please try again or email femalecricket@rramelbourne.com' });
         } finally {
             setSubmitting(false);
         }
@@ -157,8 +201,8 @@ const RegistrationForm = () => {
                         </p>
                         <p className="text-rr-charcoal/70 text-sm font-medium">
                             Questions? Email us at{' '}
-                            <a href="mailto:andy.crook@rramelbourne.com" className="text-rr-pink hover:underline font-bold">
-                                andy.crook@rramelbourne.com
+                            <a href="mailto:femalecricket@rramelbourne.com" className="text-rr-pink hover:underline font-bold">
+                                femalecricket@rramelbourne.com
                             </a>
                         </p>
                     </motion.div>
@@ -307,6 +351,9 @@ const RegistrationForm = () => {
                             <ComplianceCheckbox checked={acceptParentCode} onChange={setAcceptParentCode} error={errors.acceptParentCode}>
                                 I have read, understood, and agree to the{' '}
                                 <a href="/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Parent/Guardian Code of Conduct</a>.
+                            </ComplianceCheckbox>
+                            <ComplianceCheckbox checked={acceptSocialMedia} onChange={setAcceptSocialMedia} error={errors.acceptSocialMedia}>
+                                I am happy for photos and videos from the program featuring the player to be used on Rajasthan Royals Academy Melbourne's social media and marketing channels.
                             </ComplianceCheckbox>
                         </div>
 

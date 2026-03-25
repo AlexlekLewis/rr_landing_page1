@@ -11,7 +11,7 @@ const faqCategories = [
             },
             {
                 question: "Is it available for female cricketers?",
-                answer: "Absolutely. Talent is talent — the Royals back emerging cricketers regardless of gender. There is a specific focus on preparing U15–U18 girls for WBBL, Women's IPL, state, and premier opportunities."
+                answer: "The female intake for Season 1 is now full. If you would like to be considered should a place become available, or for future programs, please email eliteprogram@rramelbourne.com with the player's name, age, and a link to their Play-Cricket profile."
             },
             {
                 question: "When does the program start and what are the dates?",

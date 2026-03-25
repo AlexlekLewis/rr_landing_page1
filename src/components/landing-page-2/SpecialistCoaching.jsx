@@ -11,7 +11,7 @@ const tiers = [
             {
                 name: "Siddhartha Lahiri",
                 role: "Head of International Player Development",
-                bio: "Performance coach of the Rajasthan Royals, as well as Assistant Coach of Paarl and Barbados Royals, Siddhartha runs the Rajasthan Royals' global talent network. He oversees player scouting and development across every Royals Academy in the world — meaning the Elite Program's best players have a direct line to one of the IPL's biggest franchises. Leading talent identification and performance globally for the Royals Group of franchises and the Royals Academy network.",
+                bio: "Performance coach of the Rajasthan Royals, as well as Assistant Coach of Paarl and Barbados Royals, Siddhartha runs the Rajasthan Royals' global talent network. He oversees player scouting and development across every Royals Academy in the world — meaning the Elite Program's best players have a direct line to one of the IPL's biggest franchises. Leading talent identification and performance globally for the Royals Group of franchises and the Royals Academy network.\n\nSid will not be onsite during the 12-weeks however will visit the Melbourne Academy later in the year and monitor progress of the program.",
                 tag: "Global Development",
             },
             {
