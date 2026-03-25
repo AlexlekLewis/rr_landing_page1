@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const PROGRAMS = [
     { label: 'Elite Program 2026', route: '/eliteprogram2026', badge: 'Less Than 5 Places', badgeColor: 'bg-rr-pink' },
-    { label: 'Holiday Programs', route: '/holiday-programs', badge: 'Registrations Open', badgeColor: 'bg-green-500' },
+    { label: 'Holiday Programs', route: '/holiday-programs', badge: 'Filling Up Fast', badgeColor: 'bg-orange-500' },
     { label: 'Girls Kickstart', route: '/female-cricket-kickstart', badge: 'Registrations Open', badgeColor: 'bg-green-500' },
 ];
 
