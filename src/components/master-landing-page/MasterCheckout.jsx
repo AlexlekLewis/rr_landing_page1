@@ -269,11 +269,11 @@ const MasterCheckout = () => {
                     <p className="text-white/50 font-medium max-w-xl mx-auto leading-relaxed">
                         Secure your spot in the Season 1 Elite intake. Complete all fields below, then select your preferred payment option to proceed.
                     </p>
-                    {/* Deadline banner */}
+                    {/* Registration open — no capacity restriction */}
                     <div className="inline-flex items-center gap-2 bg-rr-pink/15 border border-rr-pink/40 rounded-full px-4 py-2.5 mt-5">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse shrink-0" />
                         <span className="text-[10px] sm:text-xs font-bold text-rr-pink uppercase tracking-wide sm:tracking-widest">
-                            Nearly Full — Less than 5 places remain
+                            Now Accepting Applications — Season 1, 2026
                         </span>
                     </div>
                 </motion.div>
@@ -495,71 +495,14 @@ const MasterCheckout = () => {
                     </div>
                 </motion.div>
 
-                {/* ════════════════════════════════════════
-                   FEMALE PROGRAM FULL — WAITLIST
-                   ════════════════════════════════════════ */}
-
-                {cricketGender === 'Female Cricket' && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 16 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="mb-10"
-                    >
-                        <div className="bg-white/5 border border-rr-pink/30 rounded-2xl p-8 md:p-10 text-center">
-                            <div className="inline-flex items-center gap-2 bg-rr-pink/15 border border-rr-pink/30 rounded-full px-5 py-2 mb-6">
-                                <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse shrink-0" />
-                                <span className="text-xs font-black text-rr-pink uppercase tracking-widest">Female Program — Now Full</span>
-                            </div>
-
-                            <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight mb-4">
-                                All Female Places Have Been Filled
-                            </h3>
-
-                            <p className="text-white/60 text-sm md:text-base font-medium leading-relaxed max-w-xl mx-auto mb-6">
-                                The female intake for Season 1 of the T20 Elite Program is now at capacity. If you would like to be considered should a place become available, or for future programs, please get in touch with us directly.
-                            </p>
-
-                            <div className="bg-white/5 border border-white/10 rounded-xl p-6 max-w-lg mx-auto mb-6">
-                                <p className="text-white/80 text-sm font-semibold mb-3">To join the waitlist, email:</p>
-                                <a href="mailto:eliteprogram@rramelbourne.com" className="text-rr-pink hover:text-rr-light-pink font-black text-lg transition-colors">
-                                    eliteprogram@rramelbourne.com
-                                </a>
-                                <div className="mt-4 text-left max-w-xs mx-auto space-y-2">
-                                    <p className="text-white/50 text-xs font-bold uppercase tracking-widest mb-2">Please include:</p>
-                                    <div className="flex items-center gap-2">
-                                        <span className="w-4 h-4 rounded-full bg-rr-pink/20 flex items-center justify-center shrink-0">
-                                            <span className="text-rr-pink text-[8px] font-black">1</span>
-                                        </span>
-                                        <span className="text-white/60 text-sm font-medium">Player's full name</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <span className="w-4 h-4 rounded-full bg-rr-pink/20 flex items-center justify-center shrink-0">
-                                            <span className="text-rr-pink text-[8px] font-black">2</span>
-                                        </span>
-                                        <span className="text-white/60 text-sm font-medium">Player's age</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <span className="w-4 h-4 rounded-full bg-rr-pink/20 flex items-center justify-center shrink-0">
-                                            <span className="text-rr-pink text-[8px] font-black">3</span>
-                                        </span>
-                                        <span className="text-white/60 text-sm font-medium">Link to Play-Cricket profile</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <p className="text-white/30 text-xs font-medium">
-                                We will review all waitlist enquiries and respond as soon as possible.
-                            </p>
-                        </div>
-                    </motion.div>
-                )}
+                {/* Female program block removed — Elite Program form is open for all genders.
+                   Female-specific waitlist lives on its own page: /female-cricket-kickstart */}
 
                 {/* ════════════════════════════════════════
                    CONFIRM & PAY
                    ════════════════════════════════════════ */}
 
-                {cricketGender !== 'Female Cricket' && (<>
+                {/* Payment section — open to all genders */}
                 {/* Instructional header */}
                 <motion.div
                     initial={{ opacity: 0, y: 16 }}
@@ -675,7 +618,6 @@ const MasterCheckout = () => {
                     Afterpay also available at checkout. Questions or issues with payments or for tailored payment options?{' '}
                     <a href="mailto:eliteprogram@rramelbourne.com" className="text-rr-blue hover:text-white transition-colors underline underline-offset-2">Contact us.</a>
                 </motion.p>
-                </>)}
 
                 {/* Onboarding confirmation */}
                 <motion.div
