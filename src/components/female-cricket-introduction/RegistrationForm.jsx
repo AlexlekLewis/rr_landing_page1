@@ -128,6 +128,25 @@ const RegistrationForm = () => {
 
             if (insertError) throw insertError;
 
+            // Send to Zapier webhook (flows to Google Sheet) — fire-and-forget so it doesn't block checkout
+            fetch('https://hooks.zapier.com/hooks/catch/23705820/upvtk83/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    parent_name: payload.parent_name,
+                    parent_email: payload.parent_email,
+                    parent_phone: payload.parent_phone,
+                    player_name: payload.player_name,
+                    player_dob: payload.player_dob,
+                    suburb: payload.suburb,
+                    location: payload.location,
+                    experience_level: payload.experience_level,
+                    program: payload.program,
+                    source: payload.source,
+                    submitted_at: new Date().toISOString(),
+                }),
+            }).catch(() => {});
+
             // Redirect to Stripe checkout — only fires after successful data save
             window.location.href = 'https://buy.stripe.com/aFa28r5jr2q92D26fF9Zm09';
         } catch (err) {
