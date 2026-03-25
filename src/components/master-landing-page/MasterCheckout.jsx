@@ -1,11 +1,49 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertCircle, Loader2 } from 'lucide-react';
+import { AlertCircle, Loader2, CheckCircle2, X } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
 
 const FLEXIPAY_URL = 'https://buy.stripe.com/fZu8wPbHP9SB2D2bzZ9Zm06';
 const FULL_URL    = 'https://buy.stripe.com/bJe14nbHP3ud91q8nN9Zm00';
+
+/* ─── Female cap ─── */
+const FEMALE_CAP = 17;
+
+/* ─── Onboarding session options (matches success page) ─── */
+const SESSION_OPTIONS = {
+    weekday: {
+        Tuesday: [
+            { id: 'wd_tue_5pm', time: '5:00 - 7:00pm', days: 'Tuesday', dayGroup: 'Weekday' },
+            { id: 'wd_tue_7pm', time: '7:00 - 9:00pm', days: 'Tuesday', dayGroup: 'Weekday' }
+        ],
+        Thursday: [
+            { id: 'wd_thu_5pm', time: '5:00 - 7:00pm', days: 'Thursday', dayGroup: 'Weekday' },
+            { id: 'wd_thu_7pm', time: '7:00 - 9:00pm', days: 'Thursday', dayGroup: 'Weekday' }
+        ]
+    },
+    weekend: {
+        Saturday: [
+            { id: 'we_sat_8am', time: '8:00 - 10:00am', days: 'Saturday', dayGroup: 'Weekend' },
+            { id: 'we_sat_2pm', time: '2:00 - 4:00pm', days: 'Saturday', dayGroup: 'Weekend' },
+            { id: 'we_sat_4pm', time: '4:00 - 6:00pm', days: 'Saturday', dayGroup: 'Weekend' }
+        ],
+        Sunday: [
+            { id: 'we_sun_8am', time: '8:00 - 10:00am', days: 'Sunday', dayGroup: 'Weekend' },
+            { id: 'we_sun_2pm', time: '2:00 - 4:00pm', days: 'Sunday', dayGroup: 'Weekend' },
+            { id: 'we_sun_4pm', time: '4:00 - 6:00pm', days: 'Sunday', dayGroup: 'Weekend' }
+        ]
+    }
+};
+
+const SIZE_OPTIONS = [
+    'Mens Extra Extra Small (XXS)',
+    'Mens Extra Small (XS)',
+    'Mens Small (S)',
+    'Mens Medium (M)',
+    'Mens Large (L)',
+    'Mens Extra Large (XL)',
+];
 
 /* ─── helpers ─── */
 const calculateAge = (dobString) => {
@@ -75,10 +113,65 @@ const ComplianceCheckbox = ({ checked, onChange, children }) => (
 /* ═══════════════════════════════════════════════
    MASTER CHECKOUT
    ═══════════════════════════════════════════════ */
+/* ─── Onboarding sub-components (for waitlist modal) ─── */
+const SessionCheckbox = ({ time, checked, onChange }) => (
+    <label className={`flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer transition-all w-full ${checked ? 'border-rr-pink bg-rr-pink/10 shadow-md shadow-rr-pink/10' : 'border-white/15 hover:border-white/30 bg-white/5'}`}>
+        <span className={`font-bold text-sm ${checked ? 'text-white' : 'text-white/60'}`}>{time}</span>
+        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${checked ? 'border-rr-pink bg-rr-pink text-white' : 'border-white/30 bg-white/5'}`}>
+            {checked && <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+        </div>
+        <input type="checkbox" className="sr-only" checked={checked} onChange={onChange} />
+    </label>
+);
+
 const MasterCheckout = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState('');
     const paymentRef = useRef(null);
+
+    /* ── Female cap state ── */
+    const [femaleCount, setFemaleCount] = useState(0);
+    const [femaleFull, setFemaleFull] = useState(false);
+
+    /* ── Waitlist modal state ── */
+    const [showWaitlistModal, setShowWaitlistModal] = useState(false);
+    const [waitlistOnboardingComplete, setWaitlistOnboardingComplete] = useState(false);
+    const [waitlistSubmitting, setWaitlistSubmitting] = useState(false);
+    const [waitlistError, setWaitlistError] = useState('');
+
+    /* ── Waitlist onboarding form fields (mirrors success page) ── */
+    const [wlPlayerName, setWlPlayerName] = useState('');
+    const [wlParentName, setWlParentName] = useState('');
+    const [wlEmail, setWlEmail] = useState('');
+    const [wlGender, setWlGender] = useState('');
+    const [wlSuburb, setWlSuburb] = useState('');
+    const [wlShirtName, setWlShirtName] = useState('');
+    const [wlSizeTshirt, setWlSizeTshirt] = useState('');
+    const [wlSizeShort, setWlSizeShort] = useState('');
+    const [wlSizePants, setWlSizePants] = useState('');
+    const [wlGroupChatConsent, setWlGroupChatConsent] = useState(null);
+    const [wlPhoneNumbers, setWlPhoneNumbers] = useState([{ id: 1, value: '' }]);
+    const [wlPreferredComms, setWlPreferredComms] = useState('');
+    const [wlSelectedSessions, setWlSelectedSessions] = useState([]);
+
+    /* ── Check female count on mount ── */
+    useEffect(() => {
+        const checkFemaleCount = async () => {
+            try {
+                const { count, error } = await supabase
+                    .from('official_cohort_2026')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('cricket_type', 'Female Cricket');
+                if (!error && count !== null) {
+                    setFemaleCount(count);
+                    setFemaleFull(count >= FEMALE_CAP);
+                }
+            } catch (err) {
+                console.error('Error checking female count:', err);
+            }
+        };
+        checkFemaleCount();
+    }, []);
 
     /* ── form state ── */
     const [formData, setFormData] = useState({
@@ -226,15 +319,31 @@ const MasterCheckout = () => {
                 page_referrer: document.referrer || null,
             };
 
+            // If female and cap reached → waitlist flow (no Stripe)
+            if (cricketGender === 'Female Cricket' && femaleFull) {
+                cohortPayload.payment_status = 'waitlist';
+                cohortPayload.payment_plan_selected = 'waitlist';
+            }
+
             const { error: cohortError } = await supabase.from('official_cohort_2026').insert([cohortPayload]);
             if (cohortError) throw cohortError;
 
-            // Store cohort record ID so success page can UPDATE the same row
+            // Store cohort record ID so onboarding can UPDATE the same row
             localStorage.setItem('master_cohort_id', cohortId);
             localStorage.setItem('payment_option_selected', option);
 
-            // Redirect to Stripe in the same tab for a seamless experience
-            window.location.href = stripeUrl;
+            // Branch: waitlist modal vs Stripe redirect
+            if (cricketGender === 'Female Cricket' && femaleFull) {
+                // Pre-fill what we know into the waitlist onboarding form
+                setWlPlayerName(`${formData.firstName.trim()} ${formData.lastName.trim()}`);
+                setWlParentName(formData.parent1Name.trim());
+                setWlEmail(formData.parent1Email.trim());
+                setWlSuburb(formData.suburb.trim());
+                setShowWaitlistModal(true);
+            } else {
+                // Normal flow — redirect to Stripe
+                window.location.href = stripeUrl;
+            }
         } catch (err) {
             console.error('Error saving application:', err);
             setSubmitError('Something went wrong saving your details. Please try again.');
@@ -671,6 +780,302 @@ const MasterCheckout = () => {
                 </motion.div>
 
             </div>
+
+            {/* ════════════════════════════════════════
+               WAITLIST ONBOARDING MODAL
+               ════════════════════════════════════════ */}
+            <AnimatePresence>
+                {showWaitlistModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+                        onClick={(e) => { if (e.target === e.currentTarget && waitlistOnboardingComplete) setShowWaitlistModal(false); }}
+                    >
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            transition={{ duration: 0.3 }}
+                            className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-rr-dark border border-white/15 shadow-2xl"
+                        >
+                            {/* Close button (only after completion) */}
+                            {waitlistOnboardingComplete && (
+                                <button
+                                    onClick={() => setShowWaitlistModal(false)}
+                                    className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors z-10"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            )}
+
+                            <div className="p-6 md:p-8">
+                                {waitlistOnboardingComplete ? (
+                                    /* ── Confirmation screen ── */
+                                    <div className="text-center py-8">
+                                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-rr-pink to-rr-blue flex items-center justify-center mx-auto mb-6">
+                                            <CheckCircle2 className="w-8 h-8 text-white" />
+                                        </div>
+                                        <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-3">
+                                            Thank You for Registering
+                                        </h3>
+                                        <p className="text-white/60 text-sm leading-relaxed max-w-md mx-auto mb-4">
+                                            Your application and preferences have been received. Our female program spots are currently full, but we have you on our priority waitlist.
+                                        </p>
+                                        <div className="bg-rr-pink/10 border border-rr-pink/30 rounded-xl p-4 max-w-md mx-auto mb-6">
+                                            <p className="text-rr-pink text-sm font-bold">
+                                                We will be in touch directly should a spot become available.
+                                            </p>
+                                        </div>
+                                        <p className="text-white/40 text-xs">
+                                            If you have any questions, please contact{' '}
+                                            <a href="mailto:eliteprogram@rramelbourne.com" className="text-rr-blue hover:text-white underline">
+                                                eliteprogram@rramelbourne.com
+                                            </a>
+                                        </p>
+                                    </div>
+                                ) : (
+                                    /* ── Onboarding form ── */
+                                    <>
+                                        <div className="text-center mb-6">
+                                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-rr-pink to-rr-blue flex items-center justify-center mx-auto mb-4">
+                                                <CheckCircle2 className="w-6 h-6 text-white" />
+                                            </div>
+                                            <h3 className="text-xl font-black text-white uppercase tracking-tight mb-2">
+                                                Application Received
+                                            </h3>
+                                            <p className="text-white/50 text-sm leading-relaxed max-w-md mx-auto">
+                                                We're currently at capacity for our female program, but we'd love to collect your session and apparel preferences so we're ready to onboard you if a spot opens up.
+                                            </p>
+                                        </div>
+
+                                        {/* Error */}
+                                        {waitlistError && (
+                                            <div className="mb-4 p-3 bg-red-500/15 border border-red-400/30 text-red-300 rounded-xl text-sm flex items-start gap-2">
+                                                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                                                <p>{waitlistError}</p>
+                                            </div>
+                                        )}
+
+                                        {/* Core details */}
+                                        <div className="space-y-4 mb-6">
+                                            <h4 className="text-xs font-black text-white/40 uppercase tracking-widest">Your Details</h4>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <InputField label="Player Name" value={wlPlayerName} onChange={(e) => setWlPlayerName(e.target.value)} required />
+                                                <InputField label="Parent/Guardian Name" value={wlParentName} onChange={(e) => setWlParentName(e.target.value)} required />
+                                            </div>
+                                            <InputField label="Email" type="email" value={wlEmail} onChange={(e) => setWlEmail(e.target.value)} required />
+                                        </div>
+
+                                        {/* Administration */}
+                                        <div className="space-y-4 mb-6">
+                                            <h4 className="text-xs font-black text-white/40 uppercase tracking-widest">Administration</h4>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div className="flex flex-col gap-1.5">
+                                                    <label className="text-xs font-bold text-white/50 uppercase tracking-widest">Gender <span className="text-rr-pink">*</span></label>
+                                                    <select value={wlGender} onChange={(e) => setWlGender(e.target.value)} className="bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rr-pink/60 transition-colors">
+                                                        <option value="">Select...</option>
+                                                        <option value="Female">Female</option>
+                                                        <option value="Male">Male</option>
+                                                        <option value="Non-binary">Non-binary</option>
+                                                        <option value="Prefer not to say">Prefer not to say</option>
+                                                    </select>
+                                                </div>
+                                                <InputField label="Suburb" value={wlSuburb} onChange={(e) => setWlSuburb(e.target.value)} required />
+                                            </div>
+                                            <InputField label="Name on Shirt" value={wlShirtName} onChange={(e) => setWlShirtName(e.target.value)} required placeholder="e.g. LEWIS" />
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                {[
+                                                    { label: 'T-Shirt Size', val: wlSizeTshirt, set: setWlSizeTshirt },
+                                                    { label: 'Short Size', val: wlSizeShort, set: setWlSizeShort },
+                                                    { label: 'Pants Size', val: wlSizePants, set: setWlSizePants },
+                                                ].map(({ label, val, set }) => (
+                                                    <div key={label} className="flex flex-col gap-1.5">
+                                                        <label className="text-xs font-bold text-white/50 uppercase tracking-widest">{label} <span className="text-rr-pink">*</span></label>
+                                                        <select value={val} onChange={(e) => set(e.target.value)} className="bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rr-pink/60 transition-colors">
+                                                            <option value="">Select size...</option>
+                                                            {SIZE_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
+                                                        </select>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* Session preferences */}
+                                        <div className="space-y-4 mb-6">
+                                            <h4 className="text-xs font-black text-white/40 uppercase tracking-widest">Session Preferences</h4>
+                                            <p className="text-xs text-white/40">Select at least 3 sessions (minimum 1 weekday and 1 weekend).</p>
+
+                                            {Object.entries(SESSION_OPTIONS).map(([groupKey, days]) => (
+                                                <div key={groupKey}>
+                                                    <p className="text-xs font-bold text-rr-pink uppercase tracking-wider mb-2">{groupKey === 'weekday' ? 'Weekday Sessions' : 'Weekend Sessions'}</p>
+                                                    {Object.entries(days).map(([day, sessions]) => (
+                                                        <div key={day} className="mb-3">
+                                                            <p className="text-xs text-white/50 font-bold mb-2">{day}</p>
+                                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                                                {sessions.map(s => (
+                                                                    <SessionCheckbox
+                                                                        key={s.id}
+                                                                        time={s.time}
+                                                                        checked={wlSelectedSessions.includes(s.id)}
+                                                                        onChange={() => setWlSelectedSessions(prev => prev.includes(s.id) ? prev.filter(x => x !== s.id) : [...prev, s.id])}
+                                                                    />
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {/* Comms */}
+                                        <div className="space-y-4 mb-6">
+                                            <h4 className="text-xs font-black text-white/40 uppercase tracking-widest">Communication</h4>
+                                            <div>
+                                                <p className="text-sm text-white/60 mb-3">Would you like to join the parent/guardian group chat?</p>
+                                                <div className="flex gap-4">
+                                                    {[{ label: 'Yes', val: true }, { label: 'No', val: false }].map(({ label, val }) => (
+                                                        <label key={label} className="flex items-center gap-2 cursor-pointer">
+                                                            <input type="radio" name="wlGroupChat" checked={wlGroupChatConsent === val} onChange={() => setWlGroupChatConsent(val)} className="w-4 h-4 accent-rr-pink" />
+                                                            <span className="text-sm text-white/60">{label}</span>
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            {wlGroupChatConsent === true && (
+                                                <div>
+                                                    <p className="text-xs text-white/40 mb-2">Phone number(s) for group chat:</p>
+                                                    {wlPhoneNumbers.map((p, idx) => (
+                                                        <div key={p.id} className="mb-2">
+                                                            <InputField
+                                                                label={`Phone ${idx + 1}`}
+                                                                type="tel"
+                                                                value={p.value}
+                                                                onChange={(e) => setWlPhoneNumbers(prev => prev.map(x => x.id === p.id ? { ...x, value: e.target.value } : x))}
+                                                                required
+                                                            />
+                                                        </div>
+                                                    ))}
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setWlPhoneNumbers(prev => [...prev, { id: Date.now(), value: '' }])}
+                                                        className="text-xs text-rr-pink hover:text-white transition-colors font-bold"
+                                                    >
+                                                        + Add another number
+                                                    </button>
+                                                </div>
+                                            )}
+
+                                            {wlGroupChatConsent === false && (
+                                                <div>
+                                                    <InputField
+                                                        label="Preferred communication method"
+                                                        value={wlPreferredComms}
+                                                        onChange={(e) => setWlPreferredComms(e.target.value)}
+                                                        placeholder="e.g. Email, SMS, etc."
+                                                        required
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Submit */}
+                                        <button
+                                            onClick={async () => {
+                                                // Validate
+                                                const hasCore = wlPlayerName.trim() && wlParentName.trim() && wlEmail.trim() && wlEmail.includes('@');
+                                                const hasAdmin = wlGender && wlSuburb.trim() && wlShirtName.trim() && wlSizeTshirt && wlSizeShort && wlSizePants;
+                                                const hasComms = wlGroupChatConsent === true
+                                                    ? wlPhoneNumbers.some(p => p.value.trim())
+                                                    : (wlGroupChatConsent === false ? wlPreferredComms.trim() : false);
+                                                const hasMinSessions = wlSelectedSessions.length >= 3;
+                                                const hasWeekday = wlSelectedSessions.some(id => id.startsWith('wd'));
+                                                const hasWeekend = wlSelectedSessions.some(id => id.startsWith('we'));
+
+                                                if (!hasCore || !hasAdmin || !hasComms || !hasMinSessions || !hasWeekday || !hasWeekend) {
+                                                    setWaitlistError('Please complete all required fields, select at least 3 sessions (min 1 weekday + 1 weekend).');
+                                                    return;
+                                                }
+
+                                                setWaitlistSubmitting(true);
+                                                setWaitlistError('');
+
+                                                try {
+                                                    const cohortId = localStorage.getItem('master_cohort_id');
+                                                    const validPhones = wlPhoneNumbers.filter(p => p.value.trim()).map(p => p.value.trim());
+
+                                                    const onboardingData = {
+                                                        accepted_offer: true,
+                                                        parent_name: wlParentName.trim(),
+                                                        email: wlEmail.trim().toLowerCase(),
+                                                        phone: validPhones[0] || '',
+                                                        gender: wlGender,
+                                                        suburb: wlSuburb.trim(),
+                                                        shirt_name: wlShirtName.trim(),
+                                                        size_tshirt: wlSizeTshirt,
+                                                        size_short: wlSizeShort,
+                                                        size_pants: wlSizePants,
+                                                        player_role: '',
+                                                        selected_sessions: wlSelectedSessions.map(id => {
+                                                            const allOpts = [
+                                                                ...SESSION_OPTIONS.weekday.Tuesday,
+                                                                ...SESSION_OPTIONS.weekday.Thursday,
+                                                                ...SESSION_OPTIONS.weekend.Saturday,
+                                                                ...SESSION_OPTIONS.weekend.Sunday
+                                                            ];
+                                                            const opt = allOpts.find(o => o.id === id);
+                                                            return opt ? `[${opt.dayGroup}] ${opt.days}: ${opt.time}` : id;
+                                                        }).join(' | '),
+                                                        group_chat_consent: wlGroupChatConsent,
+                                                        phone_numbers: validPhones,
+                                                        preferred_comms: wlPreferredComms,
+                                                        payment_status: 'waitlist',
+                                                        created_at_melb: new Date().toLocaleString('en-AU', {
+                                                            timeZone: 'Australia/Melbourne',
+                                                            hour12: true,
+                                                            year: 'numeric', month: '2-digit', day: '2-digit',
+                                                            hour: '2-digit', minute: '2-digit', second: '2-digit'
+                                                        })
+                                                    };
+
+                                                    if (cohortId) {
+                                                        const { error } = await supabase
+                                                            .from('official_cohort_2026')
+                                                            .update(onboardingData)
+                                                            .eq('id', cohortId);
+                                                        if (error) throw error;
+                                                    }
+
+                                                    setWaitlistOnboardingComplete(true);
+                                                } catch (err) {
+                                                    console.error('Waitlist onboarding error:', err);
+                                                    setWaitlistError('Something went wrong. Please try again.');
+                                                } finally {
+                                                    setWaitlistSubmitting(false);
+                                                }
+                                            }}
+                                            disabled={waitlistSubmitting}
+                                            className="w-full py-4 bg-gradient-to-r from-rr-pink to-rr-blue text-white font-black uppercase tracking-wider rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                        >
+                                            {waitlistSubmitting ? (
+                                                <>
+                                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                                    Submitting...
+                                                </>
+                                            ) : (
+                                                'Submit Preferences'
+                                            )}
+                                        </button>
+                                    </>
+                                )}
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
         </section>
     );
 };
