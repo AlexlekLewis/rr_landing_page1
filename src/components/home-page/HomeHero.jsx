@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 const PROGRAMS = [
     { label: 'Elite Program 2026', route: '/eliteprogram2026', badge: 'Nearly Full', badgeColor: 'bg-rr-pink' },
     { label: 'Holiday Programs', route: '/holiday-programs', badge: 'Registrations Open', badgeColor: 'bg-green-500' },
+    { label: 'Girls Kickstart', route: '/female-cricket-kickstart', badge: 'Registrations Open', badgeColor: 'bg-green-500' },
 ];
 
 const HomeHero = ({ onRegisterClick }) => {
