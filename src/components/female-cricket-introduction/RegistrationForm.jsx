@@ -96,14 +96,14 @@ const RegistrationForm = () => {
                 source: SOURCE_TAG,
                 program: 'Girls Kickstart Program — Introduction to Cricket',
 
-                // Parent / Guardian
-                parent_name: form.parent_name.trim(),
-                parent_email: form.parent_email.trim(),
-                parent_phone: form.parent_phone.trim(),
+                // Parent / Guardian (mapped to applications table columns)
+                parent1_name: form.parent_name.trim(),
+                parent1_email: form.parent_email.trim(),
+                parent1_phone: form.parent_phone.trim(),
 
-                // Player
-                player_name: form.player_name.trim(),
-                player_dob: form.player_dob || null,
+                // Player (mapped to applications table columns)
+                first_name: form.player_name.trim(),
+                dob: form.player_dob || null,
                 suburb: form.suburb.trim(),
 
                 // Program-specific
@@ -133,11 +133,11 @@ const RegistrationForm = () => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    parent_name: payload.parent_name,
-                    parent_email: payload.parent_email,
-                    parent_phone: payload.parent_phone,
-                    player_name: payload.player_name,
-                    player_dob: payload.player_dob,
+                    parent_name: payload.parent1_name,
+                    parent_email: payload.parent1_email,
+                    parent_phone: payload.parent1_phone,
+                    player_name: payload.first_name,
+                    player_dob: payload.dob,
                     suburb: payload.suburb,
                     location: payload.location,
                     experience_level: payload.experience_level,
