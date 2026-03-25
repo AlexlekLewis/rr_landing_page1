@@ -47,6 +47,7 @@ const RegistrationForm = () => {
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [acceptPlayerCode, setAcceptPlayerCode] = useState(false);
     const [acceptParentCode, setAcceptParentCode] = useState(false);
+    const [acceptSocialMedia, setAcceptSocialMedia] = useState(false);
 
     const [form, setForm] = useState({
         parent_name: '',
@@ -73,6 +74,7 @@ const RegistrationForm = () => {
         if (!acceptTerms) newErrors.acceptTerms = 'You must agree to the Terms & Conditions and Privacy Policy.';
         if (!acceptPlayerCode) newErrors.acceptPlayerCode = 'You must agree to the Player Code of Conduct.';
         if (!acceptParentCode) newErrors.acceptParentCode = 'You must agree to the Parent/Guardian Code of Conduct.';
+        if (!acceptSocialMedia) newErrors.acceptSocialMedia = 'You must confirm your consent for social media use.';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -116,6 +118,7 @@ const RegistrationForm = () => {
                 accept_terms: acceptTerms,
                 accept_player_code: acceptPlayerCode,
                 accept_parent_code: acceptParentCode,
+                accept_social_media: acceptSocialMedia,
 
                 // Analytics
                 page_referrer: document.referrer || null,
@@ -327,6 +330,9 @@ const RegistrationForm = () => {
                             <ComplianceCheckbox checked={acceptParentCode} onChange={setAcceptParentCode} error={errors.acceptParentCode}>
                                 I have read, understood, and agree to the{' '}
                                 <a href="/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Parent/Guardian Code of Conduct</a>.
+                            </ComplianceCheckbox>
+                            <ComplianceCheckbox checked={acceptSocialMedia} onChange={setAcceptSocialMedia} error={errors.acceptSocialMedia}>
+                                I am happy for photos and videos from the program featuring the player to be used on Rajasthan Royals Academy Melbourne's social media and marketing channels.
                             </ComplianceCheckbox>
                         </div>
 
