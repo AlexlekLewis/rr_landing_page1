@@ -273,7 +273,7 @@ const MasterCheckout = () => {
                     <div className="inline-flex items-center gap-2 bg-rr-pink/15 border border-rr-pink/40 rounded-full px-4 py-2.5 mt-5">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse shrink-0" />
                         <span className="text-[10px] sm:text-xs font-bold text-rr-pink uppercase tracking-wide sm:tracking-widest">
-                            Nearly Full — Less than 10 places remain
+                            Nearly Full — Less than 5 places remain
                         </span>
                     </div>
                 </motion.div>
