@@ -131,6 +131,28 @@ const RegistrationForm = () => {
 
             if (insertError) throw insertError;
 
+            // Insert into dedicated Kickstart table
+            const { error: kickstartError } = await supabase
+                .from('female_kickstart_2026')
+                .insert([{
+                    parent_name: form.parent_name.trim(),
+                    parent_email: form.parent_email.trim(),
+                    parent_phone: form.parent_phone.trim(),
+                    player_name: form.player_name.trim(),
+                    player_dob: form.player_dob || null,
+                    suburb: form.suburb.trim(),
+                    location: form.location,
+                    experience_level: form.experience,
+                    accept_terms: acceptTerms,
+                    accept_player_code: acceptPlayerCode,
+                    accept_parent_code: acceptParentCode,
+                    accept_social_media: acceptSocialMedia,
+                    page_referrer: document.referrer || null,
+                    ...utmParams,
+                }]);
+
+            if (kickstartError) console.error('Kickstart table insert error:', kickstartError);
+
             // Send to Zapier webhook (flows to Google Sheet)
             // Uses sendBeacon — survives page navigation and bypasses CORS
             const webhookData = new URLSearchParams({
