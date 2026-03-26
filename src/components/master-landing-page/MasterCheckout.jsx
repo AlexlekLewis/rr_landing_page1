@@ -8,8 +8,9 @@ import DateOfBirthInput from '../DateOfBirthInput';
 const FLEXIPAY_URL = 'https://buy.stripe.com/fZu8wPbHP9SB2D2bzZ9Zm06';
 const FULL_URL    = 'https://buy.stripe.com/bJe14nbHP3ud91q8nN9Zm00';
 
-/* ─── Zapier webhook for Elite 2026 Waitlist ─── */
-const ZAPIER_WAITLIST_WEBHOOK = 'https://hooks.zapier.com/hooks/catch/23705820/un2nilm/';
+/* ─── Zapier webhooks for Elite 2026 Waitlist ─── */
+const ZAPIER_APPLICATION_WEBHOOK = 'https://hooks.zapier.com/hooks/catch/23705820/un2nilm/';
+const ZAPIER_ONBOARDING_WEBHOOK  = 'https://hooks.zapier.com/hooks/catch/23705820/un27cu1/';
 
 /* ─── Female cap ─── */
 const FEMALE_CAP = 17;
@@ -321,9 +322,9 @@ const MasterCheckout = () => {
             const { error: waitlistInsertErr } = await supabase.from('elite_2026_waitlist').insert([waitlistPayload]);
             if (waitlistInsertErr) throw waitlistInsertErr;
 
-            // 3. Fire Zapier webhook (non-blocking — don't let webhook failure stop the flow)
+            // 3. Fire Zapier application webhook (non-blocking)
             try {
-                fetch(ZAPIER_WAITLIST_WEBHOOK, {
+                fetch(ZAPIER_APPLICATION_WEBHOOK, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -1021,9 +1022,9 @@ const MasterCheckout = () => {
                                                         if (error) throw error;
                                                     }
 
-                                                    // Fire Zapier webhook with onboarding data (non-blocking)
+                                                    // Fire Zapier onboarding webhook (non-blocking)
                                                     try {
-                                                        fetch(ZAPIER_WAITLIST_WEBHOOK, {
+                                                        fetch(ZAPIER_ONBOARDING_WEBHOOK, {
                                                             method: 'POST',
                                                             headers: { 'Content-Type': 'application/json' },
                                                             body: JSON.stringify({
