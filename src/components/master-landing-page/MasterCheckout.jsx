@@ -281,16 +281,16 @@ const MasterCheckout = () => {
             const { error: appError } = await supabase.from('applications').insert([applicationsPayload]);
             if (appError) throw appError;
 
-            // 2. Full record to official_cohort_2026 (master table for LP4)
-            const cohortPayload = {
+            // 2. Insert to elite_2026_waitlist (all genders go to waitlist now)
+            const waitlistPayload = {
                 id: cohortId,
                 first_name: formData.firstName.trim(),
                 last_name: formData.lastName.trim(),
                 player_name: `${formData.firstName.trim()} ${formData.lastName.trim()}`,
-                age: age,
                 dob: formData.dob || null,
-                player_email: isUnder18 ? '' : formData.email.trim(),
-                player_phone: isUnder18 ? '' : formData.phone.trim(),
+                age: age,
+                email: isUnder18 ? '' : formData.email.trim(),
+                phone: isUnder18 ? '' : formData.phone.trim(),
                 suburb: formData.suburb.trim(),
                 profile_link: formData.profileLink.trim(),
                 club: formData.club.trim(),
@@ -305,45 +305,33 @@ const MasterCheckout = () => {
                 parent2_name: formData.parent2Name.trim(),
                 parent2_email: formData.parent2Email.trim(),
                 parent2_phone: formData.parent2Phone.trim(),
-                accept_terms: acceptTerms,
-                accept_player_code: acceptPlayerCode,
-                accept_parent_code: acceptParentCode,
-                accept_social_media: acceptSocialMedia,
-                accept_playing_standard: acceptPlayingStandard,
+                second_email: formData.parent1Email.trim(),
                 source: 'master_landing_page',
-                payment_plan_selected: option,
-                payment_status: 'pending',
+                status: 'pending',
                 utm_source: utmParams.get('utm_source') || null,
                 utm_medium: utmParams.get('utm_medium') || null,
                 utm_campaign: utmParams.get('utm_campaign') || null,
                 page_referrer: document.referrer || null,
             };
 
-            // If female and cap reached → waitlist flow (no Stripe)
-            if (cricketGender === 'Female Cricket' && femaleFull) {
-                cohortPayload.payment_status = 'waitlist';
-                cohortPayload.payment_plan_selected = 'waitlist';
-            }
+            const { error: waitlistError } = await supabase.from('elite_2026_waitlist').insert([waitlistPayload]);
+            if (waitlistError) throw waitlistError;
 
-            const { error: cohortError } = await supabase.from('official_cohort_2026').insert([cohortPayload]);
-            if (cohortError) throw cohortError;
-
-            // Store cohort record ID so onboarding can UPDATE the same row
+            // Store waitlist record ID so onboarding modal can UPDATE the same row
             localStorage.setItem('master_cohort_id', cohortId);
-            localStorage.setItem('payment_option_selected', option);
+            localStorage.setItem('payment_option_selected', 'waitlist');
 
-            // Branch: waitlist modal vs Stripe redirect
-            if (cricketGender === 'Female Cricket' && femaleFull) {
-                // Pre-fill what we know into the waitlist onboarding form
-                setWlPlayerName(`${formData.firstName.trim()} ${formData.lastName.trim()}`);
-                setWlParentName(formData.parent1Name.trim());
-                setWlEmail(formData.parent1Email.trim());
-                setWlSuburb(formData.suburb.trim());
-                setShowWaitlistModal(true);
-            } else {
-                // Normal flow — redirect to Stripe
-                window.location.href = stripeUrl;
-            }
+            // All genders now go to waitlist onboarding modal (Stripe temporarily disabled)
+            // Pre-fill what we know into the waitlist onboarding form
+            setWlPlayerName(`${formData.firstName.trim()} ${formData.lastName.trim()}`);
+            setWlParentName(formData.parent1Name.trim());
+            setWlEmail(formData.parent1Email.trim());
+            setWlSuburb(formData.suburb.trim());
+            setShowWaitlistModal(true);
+
+            /* ── Stripe redirect temporarily disabled ──
+            window.location.href = stripeUrl;
+            ── end disabled ── */
         } catch (err) {
             console.error('Error saving application:', err);
             setSubmitError('Something went wrong saving your details. Please try again.');
@@ -655,25 +643,24 @@ const MasterCheckout = () => {
                     `}</style>
                 </motion.div>
 
-                {/* Payment option cards — always visible, clicking triggers save + redirect */}
+                {/* Submit Application button — all genders go to waitlist */}
                 <div ref={paymentRef} className="scroll-mt-8">
                 <motion.div
                     initial={{ opacity: 0, y: 16 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: 0.22 }}
-                    className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6"
+                    className="mb-6"
                 >
-                    {/* Flexi Pay — Featured */}
                     <button
-                        onClick={() => handlePaymentSelect('Flexi Pay', FLEXIPAY_URL)}
+                        onClick={() => handlePaymentSelect('waitlist', '')}
                         disabled={isSubmitting}
-                        className="group relative flex flex-col items-center justify-center gap-1 p-px rounded-2xl overflow-hidden hover:shadow-[0_0_32px_rgba(229,6,149,0.4)] transition-shadow duration-300 cursor-pointer shimmer-border-bright disabled:opacity-50 disabled:cursor-not-allowed text-left"
+                        className="group relative w-full flex flex-col items-center justify-center gap-1 p-px rounded-2xl overflow-hidden hover:shadow-[0_0_32px_rgba(229,6,149,0.4)] transition-shadow duration-300 cursor-pointer shimmer-border-bright disabled:opacity-50 disabled:cursor-not-allowed text-left"
                     >
                         <div className="w-full bg-rr-dark group-hover:bg-rr-dark/80 transition-colors rounded-2xl px-6 py-7 flex flex-col items-center gap-2 text-center">
-                            <span className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.25em]">Most Popular</span>
-                            <span className="text-2xl font-black text-white uppercase tracking-tight">Flexi Pay</span>
-                            <span className="text-white/50 text-sm font-medium">4 payments of $749</span>
+                            <span className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.25em]">Elite Program 2026</span>
+                            <span className="text-2xl font-black text-white uppercase tracking-tight">Submit Application</span>
+                            <span className="text-white/50 text-sm font-medium">Secure your place on the waitlist</span>
                             <div className="mt-2 flex items-center gap-2 bg-rr-pink/20 px-4 py-2 rounded-full">
                                 {isSubmitting ? (
                                     <Loader2 className="w-4 h-4 text-rr-pink animate-spin" />
@@ -683,32 +670,7 @@ const MasterCheckout = () => {
                                     </svg>
                                 )}
                                 <span className="text-xs font-bold text-white uppercase tracking-wider">
-                                    {isSubmitting ? 'Submitting...' : 'Submit & Pay $749'}
-                                </span>
-                            </div>
-                        </div>
-                    </button>
-
-                    {/* Pay in Full */}
-                    <button
-                        onClick={() => handlePaymentSelect('Paid in Full', FULL_URL)}
-                        disabled={isSubmitting}
-                        className="group relative flex flex-col items-center justify-center gap-1 p-px rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer shimmer-border hover:shadow-[0_0_32px_rgba(0,112,240,0.3)] disabled:opacity-50 disabled:cursor-not-allowed text-left"
-                    >
-                        <div className="w-full bg-rr-dark group-hover:bg-rr-dark/80 transition-colors rounded-2xl px-6 py-7 flex flex-col items-center gap-2 text-center">
-                            <span className="text-[10px] font-bold text-rr-blue uppercase tracking-[0.25em]">Best Value</span>
-                            <span className="text-2xl font-black text-white uppercase tracking-tight">Pay in Full</span>
-                            <span className="text-white/50 text-sm font-medium">$2,995 — Includes free training kit</span>
-                            <div className="mt-2 flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full">
-                                {isSubmitting ? (
-                                    <Loader2 className="w-4 h-4 text-white/60 animate-spin" />
-                                ) : (
-                                    <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                    </svg>
-                                )}
-                                <span className="text-xs font-bold text-white/60 uppercase tracking-wider">
-                                    {isSubmitting ? 'Submitting...' : 'Submit & Pay'}
+                                    {isSubmitting ? 'Submitting...' : 'Apply Now'}
                                 </span>
                             </div>
                         </div>
@@ -724,7 +686,7 @@ const MasterCheckout = () => {
                     transition={{ duration: 0.4, delay: 0.25 }}
                     className="text-center text-white/40 text-xs font-medium mb-8"
                 >
-                    Afterpay also available at checkout. Questions or issues with payments or for tailored payment options?{' '}
+                    Questions about the program or application process?{' '}
                     <a href="mailto:eliteprogram@rramelbourne.com" className="text-rr-blue hover:text-white transition-colors underline underline-offset-2">Contact us.</a>
                 </motion.p>
 
@@ -742,9 +704,9 @@ const MasterCheckout = () => {
                         </svg>
                     </div>
                     <div>
-                        <h4 className="text-sm font-black text-white uppercase tracking-wide mb-1">What Happens After Payment?</h4>
+                        <h4 className="text-sm font-black text-white uppercase tracking-wide mb-1">What Happens Next?</h4>
                         <p className="text-sm text-white/55 leading-relaxed">
-                            Once payment has been made, you will be directed to our onboarding form to complete the onboarding process. This ensures we have everything we need to personalise your program from day one.
+                            Once your application is submitted, you'll complete a short onboarding form so we can collect your session and apparel preferences. Our team will then be in touch to confirm your place and arrange payment.
                         </p>
                     </div>
                 </motion.div>
@@ -821,11 +783,11 @@ const MasterCheckout = () => {
                                             Thank You for Registering
                                         </h3>
                                         <p className="text-white/60 text-sm leading-relaxed max-w-md mx-auto mb-4">
-                                            Your application and preferences have been received. Our female program spots are currently full, but we have you on our priority waitlist.
+                                            Your application and preferences have been received. You have been placed on our priority waitlist.
                                         </p>
                                         <div className="bg-rr-pink/10 border border-rr-pink/30 rounded-xl p-4 max-w-md mx-auto mb-6">
                                             <p className="text-rr-pink text-sm font-bold">
-                                                We will be in touch directly should a spot become available.
+                                                We will be in touch shortly to confirm your place and arrange next steps.
                                             </p>
                                         </div>
                                         <p className="text-white/40 text-xs">
@@ -846,7 +808,7 @@ const MasterCheckout = () => {
                                                 Application Received
                                             </h3>
                                             <p className="text-white/50 text-sm leading-relaxed max-w-md mx-auto">
-                                                We're currently at capacity for our female program, but we'd love to collect your session and apparel preferences so we're ready to onboard you if a spot opens up.
+                                                Thank you for applying to the Elite Program 2026. We'd love to collect your session and apparel preferences so we're ready to onboard you as soon as possible.
                                             </p>
                                         </div>
 
@@ -1007,17 +969,15 @@ const MasterCheckout = () => {
                                                     const validPhones = wlPhoneNumbers.filter(p => p.value.trim()).map(p => p.value.trim());
 
                                                     const onboardingData = {
-                                                        accepted_offer: true,
-                                                        parent_name: wlParentName.trim(),
+                                                        parent1_name: wlParentName.trim(),
                                                         email: wlEmail.trim().toLowerCase(),
                                                         phone: validPhones[0] || '',
                                                         gender: wlGender,
                                                         suburb: wlSuburb.trim(),
                                                         shirt_name: wlShirtName.trim(),
-                                                        size_tshirt: wlSizeTshirt,
-                                                        size_short: wlSizeShort,
-                                                        size_pants: wlSizePants,
-                                                        player_role: '',
+                                                        shirt_size: wlSizeTshirt,
+                                                        short_size: wlSizeShort,
+                                                        pant_size: wlSizePants,
                                                         selected_sessions: wlSelectedSessions.map(id => {
                                                             const allOpts = [
                                                                 ...SESSION_OPTIONS.weekday.Tuesday,
@@ -1028,21 +988,17 @@ const MasterCheckout = () => {
                                                             const opt = allOpts.find(o => o.id === id);
                                                             return opt ? `[${opt.dayGroup}] ${opt.days}: ${opt.time}` : id;
                                                         }).join(' | '),
-                                                        group_chat_consent: wlGroupChatConsent,
-                                                        phone_numbers: validPhones,
-                                                        preferred_comms: wlPreferredComms,
-                                                        payment_status: 'waitlist',
-                                                        created_at_melb: new Date().toLocaleString('en-AU', {
-                                                            timeZone: 'Australia/Melbourne',
-                                                            hour12: true,
-                                                            year: 'numeric', month: '2-digit', day: '2-digit',
-                                                            hour: '2-digit', minute: '2-digit', second: '2-digit'
-                                                        })
+                                                        status: 'onboarded',
+                                                        notes: JSON.stringify({
+                                                            group_chat_consent: wlGroupChatConsent,
+                                                            phone_numbers: validPhones,
+                                                            preferred_comms: wlPreferredComms,
+                                                        }),
                                                     };
 
                                                     if (cohortId) {
                                                         const { error } = await supabase
-                                                            .from('official_cohort_2026')
+                                                            .from('elite_2026_waitlist')
                                                             .update(onboardingData)
                                                             .eq('id', cohortId);
                                                         if (error) throw error;
