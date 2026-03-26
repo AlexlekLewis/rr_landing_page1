@@ -4,8 +4,12 @@ import { AlertCircle, Loader2, CheckCircle2, X } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
 
+/* ─── Stripe URLs (temporarily disabled — waitlist mode) ─── */
 const FLEXIPAY_URL = 'https://buy.stripe.com/fZu8wPbHP9SB2D2bzZ9Zm06';
 const FULL_URL    = 'https://buy.stripe.com/bJe14nbHP3ud91q8nN9Zm00';
+
+/* ─── Zapier webhook for Elite 2026 Waitlist ─── */
+const ZAPIER_WAITLIST_WEBHOOK = 'https://hooks.zapier.com/hooks/catch/23705820/un2nilm/';
 
 /* ─── Female cap ─── */
 const FEMALE_CAP = 17;
@@ -314,8 +318,21 @@ const MasterCheckout = () => {
                 page_referrer: document.referrer || null,
             };
 
-            const { error: waitlistError } = await supabase.from('elite_2026_waitlist').insert([waitlistPayload]);
-            if (waitlistError) throw waitlistError;
+            const { error: waitlistInsertErr } = await supabase.from('elite_2026_waitlist').insert([waitlistPayload]);
+            if (waitlistInsertErr) throw waitlistInsertErr;
+
+            // 3. Fire Zapier webhook (non-blocking — don't let webhook failure stop the flow)
+            try {
+                fetch(ZAPIER_WAITLIST_WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        event: 'application_submitted',
+                        waitlist_id: cohortId,
+                        ...waitlistPayload,
+                    }),
+                }).catch(() => {}); // silent — webhook is best-effort
+            } catch (_) { /* ignore webhook errors */ }
 
             // Store waitlist record ID so onboarding modal can UPDATE the same row
             localStorage.setItem('master_cohort_id', cohortId);
@@ -364,13 +381,13 @@ const MasterCheckout = () => {
                         Complete Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">Application</span>
                     </h2>
                     <p className="text-white/50 font-medium max-w-xl mx-auto leading-relaxed">
-                        Secure your spot in the Season 1 Elite intake. Complete all fields below, then select your preferred payment option to proceed.
+                        Our Season 1 intake is filling fast and spots are limited. Submit your application below to join the waitlist — places do become available and we'll be in touch as soon as one opens up for you.
                     </p>
-                    {/* Registration open — no capacity restriction */}
+                    {/* Waitlist mode — limited spots messaging */}
                     <div className="inline-flex items-center gap-2 bg-rr-pink/15 border border-rr-pink/40 rounded-full px-4 py-2.5 mt-5">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse shrink-0" />
                         <span className="text-[10px] sm:text-xs font-bold text-rr-pink uppercase tracking-wide sm:tracking-widest">
-                            Now Accepting Applications — Season 1, 2026
+                            Limited Spots — Join the Waitlist Now
                         </span>
                     </div>
                 </motion.div>
@@ -660,7 +677,7 @@ const MasterCheckout = () => {
                         <div className="w-full bg-rr-dark group-hover:bg-rr-dark/80 transition-colors rounded-2xl px-6 py-7 flex flex-col items-center gap-2 text-center">
                             <span className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.25em]">Elite Program 2026</span>
                             <span className="text-2xl font-black text-white uppercase tracking-tight">Submit Application</span>
-                            <span className="text-white/50 text-sm font-medium">Secure your place on the waitlist</span>
+                            <span className="text-white/50 text-sm font-medium">Limited spots available — don't miss out</span>
                             <div className="mt-2 flex items-center gap-2 bg-rr-pink/20 px-4 py-2 rounded-full">
                                 {isSubmitting ? (
                                     <Loader2 className="w-4 h-4 text-rr-pink animate-spin" />
@@ -783,11 +800,11 @@ const MasterCheckout = () => {
                                             Thank You for Registering
                                         </h3>
                                         <p className="text-white/60 text-sm leading-relaxed max-w-md mx-auto mb-4">
-                                            Your application and preferences have been received. You have been placed on our priority waitlist.
+                                            Your application and preferences have been received. You're on our priority waitlist — spots do open up regularly and we'll reach out as soon as one is available for you.
                                         </p>
                                         <div className="bg-rr-pink/10 border border-rr-pink/30 rounded-xl p-4 max-w-md mx-auto mb-6">
                                             <p className="text-rr-pink text-sm font-bold">
-                                                We will be in touch shortly to confirm your place and arrange next steps.
+                                                We'll be in touch as soon as a spot becomes available to get you started.
                                             </p>
                                         </div>
                                         <p className="text-white/40 text-xs">
@@ -808,7 +825,7 @@ const MasterCheckout = () => {
                                                 Application Received
                                             </h3>
                                             <p className="text-white/50 text-sm leading-relaxed max-w-md mx-auto">
-                                                Thank you for applying to the Elite Program 2026. We'd love to collect your session and apparel preferences so we're ready to onboard you as soon as possible.
+                                                Thank you for applying to the Elite Program 2026. Spots open up regularly — let's collect your session and apparel preferences now so we're ready to get you started the moment a place becomes available.
                                             </p>
                                         </div>
 
@@ -1003,6 +1020,32 @@ const MasterCheckout = () => {
                                                             .eq('id', cohortId);
                                                         if (error) throw error;
                                                     }
+
+                                                    // Fire Zapier webhook with onboarding data (non-blocking)
+                                                    try {
+                                                        fetch(ZAPIER_WAITLIST_WEBHOOK, {
+                                                            method: 'POST',
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                            body: JSON.stringify({
+                                                                event: 'onboarding_completed',
+                                                                waitlist_id: cohortId,
+                                                                player_name: wlPlayerName.trim(),
+                                                                parent_name: wlParentName.trim(),
+                                                                email: wlEmail.trim().toLowerCase(),
+                                                                phone: validPhones[0] || '',
+                                                                gender: wlGender,
+                                                                suburb: wlSuburb.trim(),
+                                                                shirt_name: wlShirtName.trim(),
+                                                                shirt_size: wlSizeTshirt,
+                                                                short_size: wlSizeShort,
+                                                                pant_size: wlSizePants,
+                                                                selected_sessions: onboardingData.selected_sessions,
+                                                                group_chat_consent: wlGroupChatConsent,
+                                                                phone_numbers: validPhones,
+                                                                preferred_comms: wlPreferredComms,
+                                                            }),
+                                                        }).catch(() => {});
+                                                    } catch (_) { /* ignore webhook errors */ }
 
                                                     setWaitlistOnboardingComplete(true);
                                                 } catch (err) {
