@@ -383,13 +383,12 @@ const MasterCheckout = () => {
                         Complete Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">Application</span>
                     </h2>
                     <p className="text-white/50 font-medium max-w-xl mx-auto leading-relaxed">
-                        Our Season 1 intake is filling fast and spots are limited. Submit your application below to join the waitlist — places do become available and we'll be in touch as soon as one opens up for you.
+                        Submit your application below to register your interest in the Elite Program 2026. One of our team will be in contact with you shortly.
                     </p>
-                    {/* Waitlist mode — limited spots messaging */}
                     <div className="inline-flex items-center gap-2 bg-rr-pink/15 border border-rr-pink/40 rounded-full px-4 py-2.5 mt-5">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse shrink-0" />
                         <span className="text-[10px] sm:text-xs font-bold text-rr-pink uppercase tracking-wide sm:tracking-widest">
-                            Limited Spots — Join the Waitlist Now
+                            Applications Open — Register Your Interest
                         </span>
                     </div>
                 </motion.div>
@@ -679,7 +678,7 @@ const MasterCheckout = () => {
                         <div className="w-full bg-rr-dark group-hover:bg-rr-dark/80 transition-colors rounded-2xl px-6 py-7 flex flex-col items-center gap-2 text-center">
                             <span className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.25em]">Elite Program 2026</span>
                             <span className="text-2xl font-black text-white uppercase tracking-tight">Submit Application</span>
-                            <span className="text-white/50 text-sm font-medium">Limited spots available — don't miss out</span>
+                            <span className="text-white/50 text-sm font-medium">Secure your place in the Elite Program</span>
                             <div className="mt-2 flex items-center gap-2 bg-rr-pink/20 px-4 py-2 rounded-full">
                                 {isSubmitting ? (
                                     <Loader2 className="w-4 h-4 text-rr-pink animate-spin" />
@@ -802,11 +801,11 @@ const MasterCheckout = () => {
                                             Thank You for Registering
                                         </h3>
                                         <p className="text-white/60 text-sm leading-relaxed max-w-md mx-auto mb-4">
-                                            Your application and preferences have been received. You're on our priority waitlist — spots do open up regularly and we'll reach out as soon as one is available for you.
+                                            Your application and preferences have been received. One of our team will be in contact with you shortly.
                                         </p>
                                         <div className="bg-rr-pink/10 border border-rr-pink/30 rounded-xl p-4 max-w-md mx-auto mb-6">
                                             <p className="text-rr-pink text-sm font-bold">
-                                                We'll be in touch as soon as a spot becomes available to get you started.
+                                                Thank you for your interest in the Elite Program.
                                             </p>
                                         </div>
                                         <p className="text-white/40 text-xs">
@@ -827,7 +826,7 @@ const MasterCheckout = () => {
                                                 Application Received
                                             </h3>
                                             <p className="text-white/50 text-sm leading-relaxed max-w-md mx-auto">
-                                                Thank you for applying to the Elite Program 2026. Spots open up regularly — let's collect your session and apparel preferences now so we're ready to get you started the moment a place becomes available.
+                                                Thank you for applying to the Elite Program 2026. Let's collect your session and apparel preferences now so we're ready to get you started.
                                             </p>
                                         </div>
 
