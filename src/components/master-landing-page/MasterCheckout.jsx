@@ -322,11 +322,12 @@ const MasterCheckout = () => {
             const { error: waitlistInsertErr } = await supabase.from('elite_2026_waitlist').insert([waitlistPayload]);
             if (waitlistInsertErr) throw waitlistInsertErr;
 
-            // 3. Fire Zapier application webhook (non-blocking)
+            // 3. Fire Zapier application webhook (non-blocking, no-cors to avoid preflight)
             try {
                 fetch(ZAPIER_APPLICATION_WEBHOOK, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain' },
                     body: JSON.stringify({
                         event: 'application_submitted',
                         waitlist_id: cohortId,
@@ -1022,11 +1023,12 @@ const MasterCheckout = () => {
                                                         if (error) throw error;
                                                     }
 
-                                                    // Fire Zapier onboarding webhook (non-blocking)
+                                                    // Fire Zapier onboarding webhook (non-blocking, no-cors to avoid preflight)
                                                     try {
                                                         fetch(ZAPIER_ONBOARDING_WEBHOOK, {
                                                             method: 'POST',
-                                                            headers: { 'Content-Type': 'application/json' },
+                                                            mode: 'no-cors',
+                                                            headers: { 'Content-Type': 'text/plain' },
                                                             body: JSON.stringify({
                                                                 event: 'onboarding_completed',
                                                                 waitlist_id: cohortId,
