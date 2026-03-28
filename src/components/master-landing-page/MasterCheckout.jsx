@@ -876,12 +876,12 @@ const MasterCheckout = () => {
                                         {/* Competition History */}
                                         <div className="space-y-4 mb-6">
                                             <h4 className="text-xs font-black text-white/40 uppercase tracking-widest">Competition History</h4>
-                                            <p className="text-xs text-white/40">Enter your two highest levels of competitive cricket from last season (2024/25).</p>
+                                            <p className="text-xs text-white/40">Enter your best senior and junior cricket performances from the most recent season (2024/25).</p>
 
                                             {wlCompLevels.map((lvl, idx) => (
                                                 <div key={idx} className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
                                                     <p className="text-xs font-bold text-rr-pink uppercase tracking-wider">
-                                                        {idx === 0 ? 'Highest Level' : 'Second Highest Level'}
+                                                        {idx === 0 ? 'Best Senior Performance / Highest Level Played' : 'Best Junior Performance / Highest Junior Level Played'}
                                                         {idx === 0 && <span className="text-rr-pink"> *</span>}
                                                     </p>
                                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
