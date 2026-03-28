@@ -15,31 +15,18 @@ const ZAPIER_ONBOARDING_WEBHOOK  = 'https://hooks.zapier.com/hooks/catch/2370582
 /* ─── Female cap ─── */
 const FEMALE_CAP = 17;
 
-/* ─── Onboarding session options (matches success page) ─── */
-const SESSION_OPTIONS = {
-    weekday: {
-        Tuesday: [
-            { id: 'wd_tue_5pm', time: '5:00 - 7:00pm', days: 'Tuesday', dayGroup: 'Weekday' },
-            { id: 'wd_tue_7pm', time: '7:00 - 9:00pm', days: 'Tuesday', dayGroup: 'Weekday' }
-        ],
-        Thursday: [
-            { id: 'wd_thu_5pm', time: '5:00 - 7:00pm', days: 'Thursday', dayGroup: 'Weekday' },
-            { id: 'wd_thu_7pm', time: '7:00 - 9:00pm', days: 'Thursday', dayGroup: 'Weekday' }
-        ]
-    },
-    weekend: {
-        Saturday: [
-            { id: 'we_sat_8am', time: '8:00 - 10:00am', days: 'Saturday', dayGroup: 'Weekend' },
-            { id: 'we_sat_2pm', time: '2:00 - 4:00pm', days: 'Saturday', dayGroup: 'Weekend' },
-            { id: 'we_sat_4pm', time: '4:00 - 6:00pm', days: 'Saturday', dayGroup: 'Weekend' }
-        ],
-        Sunday: [
-            { id: 'we_sun_8am', time: '8:00 - 10:00am', days: 'Sunday', dayGroup: 'Weekend' },
-            { id: 'we_sun_2pm', time: '2:00 - 4:00pm', days: 'Sunday', dayGroup: 'Weekend' },
-            { id: 'we_sun_4pm', time: '4:00 - 6:00pm', days: 'Sunday', dayGroup: 'Weekend' }
-        ]
-    }
-};
+/* ─── Player role options ─── */
+const PLAYER_ROLES = [
+    'Batter',
+    'Keeper-Batter',
+    'All-Rounder (Pace)',
+    'All-Rounder (Spin)',
+    'Pace Bowler',
+    'Spin Bowler',
+];
+
+/* ─── Empty competition level template ─── */
+const EMPTY_COMP_LEVEL = { competition: '', club: '', grade: '', bestBat1: '', bestBat2: '', bestBowl1: '', bestBowl2: '' };
 
 const SIZE_OPTIONS = [
     'Mens Extra Extra Small (XXS)',
@@ -119,15 +106,6 @@ const ComplianceCheckbox = ({ checked, onChange, children }) => (
    MASTER CHECKOUT
    ═══════════════════════════════════════════════ */
 /* ─── Onboarding sub-components (for waitlist modal) ─── */
-const SessionCheckbox = ({ time, checked, onChange }) => (
-    <label className={`flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer transition-all w-full ${checked ? 'border-rr-pink bg-rr-pink/10 shadow-md shadow-rr-pink/10' : 'border-white/15 hover:border-white/30 bg-white/5'}`}>
-        <span className={`font-bold text-sm ${checked ? 'text-white' : 'text-white/60'}`}>{time}</span>
-        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${checked ? 'border-rr-pink bg-rr-pink text-white' : 'border-white/30 bg-white/5'}`}>
-            {checked && <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
-        </div>
-        <input type="checkbox" className="sr-only" checked={checked} onChange={onChange} />
-    </label>
-);
 
 const MasterCheckout = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -157,7 +135,8 @@ const MasterCheckout = () => {
     const [wlGroupChatConsent, setWlGroupChatConsent] = useState(null);
     const [wlPhoneNumbers, setWlPhoneNumbers] = useState([{ id: 1, value: '' }]);
     const [wlPreferredComms, setWlPreferredComms] = useState('');
-    const [wlSelectedSessions, setWlSelectedSessions] = useState([]);
+    const [wlPlayerRole, setWlPlayerRole] = useState('');
+    const [wlCompLevels, setWlCompLevels] = useState([{ ...EMPTY_COMP_LEVEL }, { ...EMPTY_COMP_LEVEL }]);
 
     /* ── Check female count on mount ── */
     useEffect(() => {
@@ -882,29 +861,78 @@ const MasterCheckout = () => {
                                             </div>
                                         </div>
 
-                                        {/* Session preferences */}
+                                        {/* Player Role */}
                                         <div className="space-y-4 mb-6">
-                                            <h4 className="text-xs font-black text-white/40 uppercase tracking-widest">Session Preferences</h4>
-                                            <p className="text-xs text-white/40">Select at least 3 sessions (minimum 1 weekday and 1 weekend).</p>
+                                            <h4 className="text-xs font-black text-white/40 uppercase tracking-widest">Player Role</h4>
+                                            <div className="flex flex-col gap-1.5">
+                                                <label className="text-xs font-bold text-white/50 uppercase tracking-widest">What best describes your role? <span className="text-rr-pink">*</span></label>
+                                                <select value={wlPlayerRole} onChange={(e) => setWlPlayerRole(e.target.value)} className="bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rr-pink/60 transition-colors">
+                                                    <option value="">Select role...</option>
+                                                    {PLAYER_ROLES.map(r => <option key={r} value={r}>{r}</option>)}
+                                                </select>
+                                            </div>
+                                        </div>
 
-                                            {Object.entries(SESSION_OPTIONS).map(([groupKey, days]) => (
-                                                <div key={groupKey}>
-                                                    <p className="text-xs font-bold text-rr-pink uppercase tracking-wider mb-2">{groupKey === 'weekday' ? 'Weekday Sessions' : 'Weekend Sessions'}</p>
-                                                    {Object.entries(days).map(([day, sessions]) => (
-                                                        <div key={day} className="mb-3">
-                                                            <p className="text-xs text-white/50 font-bold mb-2">{day}</p>
-                                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                                                {sessions.map(s => (
-                                                                    <SessionCheckbox
-                                                                        key={s.id}
-                                                                        time={s.time}
-                                                                        checked={wlSelectedSessions.includes(s.id)}
-                                                                        onChange={() => setWlSelectedSessions(prev => prev.includes(s.id) ? prev.filter(x => x !== s.id) : [...prev, s.id])}
-                                                                    />
-                                                                ))}
-                                                            </div>
-                                                        </div>
-                                                    ))}
+                                        {/* Competition History */}
+                                        <div className="space-y-4 mb-6">
+                                            <h4 className="text-xs font-black text-white/40 uppercase tracking-widest">Competition History</h4>
+                                            <p className="text-xs text-white/40">Enter your two highest levels of competitive cricket from last season (2024/25).</p>
+
+                                            {wlCompLevels.map((lvl, idx) => (
+                                                <div key={idx} className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
+                                                    <p className="text-xs font-bold text-rr-pink uppercase tracking-wider">
+                                                        {idx === 0 ? 'Highest Level' : 'Second Highest Level'}
+                                                        {idx === 0 && <span className="text-rr-pink"> *</span>}
+                                                    </p>
+                                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                                        <InputField
+                                                            label="Competition Level"
+                                                            placeholder="e.g. Premier Cricket"
+                                                            value={lvl.competition}
+                                                            onChange={(e) => setWlCompLevels(prev => prev.map((l, i) => i === idx ? { ...l, competition: e.target.value } : l))}
+                                                            required={idx === 0}
+                                                        />
+                                                        <InputField
+                                                            label="Club"
+                                                            placeholder="e.g. Doncaster CC"
+                                                            value={lvl.club}
+                                                            onChange={(e) => setWlCompLevels(prev => prev.map((l, i) => i === idx ? { ...l, club: e.target.value } : l))}
+                                                            required={idx === 0}
+                                                        />
+                                                        <InputField
+                                                            label="Grade"
+                                                            placeholder="e.g. 1st XI, U14 Shield"
+                                                            value={lvl.grade}
+                                                            onChange={(e) => setWlCompLevels(prev => prev.map((l, i) => i === idx ? { ...l, grade: e.target.value } : l))}
+                                                            required={idx === 0}
+                                                        />
+                                                    </div>
+                                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                                        <InputField
+                                                            label="Best Score 1"
+                                                            placeholder="e.g. 87*"
+                                                            value={lvl.bestBat1}
+                                                            onChange={(e) => setWlCompLevels(prev => prev.map((l, i) => i === idx ? { ...l, bestBat1: e.target.value } : l))}
+                                                        />
+                                                        <InputField
+                                                            label="Best Score 2"
+                                                            placeholder="e.g. 63"
+                                                            value={lvl.bestBat2}
+                                                            onChange={(e) => setWlCompLevels(prev => prev.map((l, i) => i === idx ? { ...l, bestBat2: e.target.value } : l))}
+                                                        />
+                                                        <InputField
+                                                            label="Best Bowling 1"
+                                                            placeholder="e.g. 4/22"
+                                                            value={lvl.bestBowl1}
+                                                            onChange={(e) => setWlCompLevels(prev => prev.map((l, i) => i === idx ? { ...l, bestBowl1: e.target.value } : l))}
+                                                        />
+                                                        <InputField
+                                                            label="Best Bowling 2"
+                                                            placeholder="e.g. 3/15"
+                                                            value={lvl.bestBowl2}
+                                                            onChange={(e) => setWlCompLevels(prev => prev.map((l, i) => i === idx ? { ...l, bestBowl2: e.target.value } : l))}
+                                                        />
+                                                    </div>
                                                 </div>
                                             ))}
                                         </div>
@@ -970,12 +998,12 @@ const MasterCheckout = () => {
                                                 const hasComms = wlGroupChatConsent === true
                                                     ? wlPhoneNumbers.some(p => p.value.trim())
                                                     : (wlGroupChatConsent === false ? wlPreferredComms.trim() : false);
-                                                const hasMinSessions = wlSelectedSessions.length >= 3;
-                                                const hasWeekday = wlSelectedSessions.some(id => id.startsWith('wd'));
-                                                const hasWeekend = wlSelectedSessions.some(id => id.startsWith('we'));
+                                                const hasRole = !!wlPlayerRole;
+                                                const lvl1 = wlCompLevels[0];
+                                                const hasComp = lvl1.competition.trim() && lvl1.club.trim() && lvl1.grade.trim();
 
-                                                if (!hasCore || !hasAdmin || !hasComms || !hasMinSessions || !hasWeekday || !hasWeekend) {
-                                                    setWaitlistError('Please complete all required fields, select at least 3 sessions (min 1 weekday + 1 weekend).');
+                                                if (!hasCore || !hasAdmin || !hasComms || !hasRole || !hasComp) {
+                                                    setWaitlistError('Please complete all required fields including your player role and at least your highest competition level.');
                                                     return;
                                                 }
 
@@ -996,30 +1024,46 @@ const MasterCheckout = () => {
                                                         shirt_size: wlSizeTshirt,
                                                         short_size: wlSizeShort,
                                                         pant_size: wlSizePants,
-                                                        selected_sessions: wlSelectedSessions.map(id => {
-                                                            const allOpts = [
-                                                                ...SESSION_OPTIONS.weekday.Tuesday,
-                                                                ...SESSION_OPTIONS.weekday.Thursday,
-                                                                ...SESSION_OPTIONS.weekend.Saturday,
-                                                                ...SESSION_OPTIONS.weekend.Sunday
-                                                            ];
-                                                            const opt = allOpts.find(o => o.id === id);
-                                                            return opt ? `[${opt.dayGroup}] ${opt.days}: ${opt.time}` : id;
-                                                        }).join(' | '),
                                                         status: 'onboarded',
                                                         notes: JSON.stringify({
                                                             group_chat_consent: wlGroupChatConsent,
                                                             phone_numbers: validPhones,
                                                             preferred_comms: wlPreferredComms,
+                                                            player_role: wlPlayerRole,
                                                         }),
                                                     };
 
                                                     if (cohortId) {
+                                                        // Update the waitlist row (no session data anymore)
                                                         const { error } = await supabase
                                                             .from('elite_2026_waitlist')
                                                             .update(onboardingData)
                                                             .eq('id', cohortId);
                                                         if (error) throw error;
+
+                                                        // Insert competition history rows into standalone table
+                                                        const compRows = wlCompLevels
+                                                            .map((lvl, idx) => ({
+                                                                waitlist_id: cohortId,
+                                                                player_name: wlPlayerName.trim(),
+                                                                player_role: wlPlayerRole,
+                                                                level_rank: idx + 1,
+                                                                competition: lvl.competition.trim(),
+                                                                club: lvl.club.trim(),
+                                                                grade: lvl.grade.trim(),
+                                                                best_bat_1: lvl.bestBat1.trim() || null,
+                                                                best_bat_2: lvl.bestBat2.trim() || null,
+                                                                best_bowl_1: lvl.bestBowl1.trim() || null,
+                                                                best_bowl_2: lvl.bestBowl2.trim() || null,
+                                                            }))
+                                                            .filter(r => r.competition); // only insert levels that were filled in
+
+                                                        if (compRows.length > 0) {
+                                                            const { error: compErr } = await supabase
+                                                                .from('onboarding_competition_history')
+                                                                .insert(compRows);
+                                                            if (compErr) console.error('Competition history save error:', compErr);
+                                                        }
                                                     }
 
                                                     // Fire Zapier onboarding webhook (non-blocking, no-cors to avoid preflight)
@@ -1041,7 +1085,21 @@ const MasterCheckout = () => {
                                                                 shirt_size: wlSizeTshirt,
                                                                 short_size: wlSizeShort,
                                                                 pant_size: wlSizePants,
-                                                                selected_sessions: onboardingData.selected_sessions,
+                                                                player_role: wlPlayerRole,
+                                                                competition_level_1: wlCompLevels[0]?.competition || '',
+                                                                club_1: wlCompLevels[0]?.club || '',
+                                                                grade_1: wlCompLevels[0]?.grade || '',
+                                                                best_bat_1_l1: wlCompLevels[0]?.bestBat1 || '',
+                                                                best_bat_2_l1: wlCompLevels[0]?.bestBat2 || '',
+                                                                best_bowl_1_l1: wlCompLevels[0]?.bestBowl1 || '',
+                                                                best_bowl_2_l1: wlCompLevels[0]?.bestBowl2 || '',
+                                                                competition_level_2: wlCompLevels[1]?.competition || '',
+                                                                club_2: wlCompLevels[1]?.club || '',
+                                                                grade_2: wlCompLevels[1]?.grade || '',
+                                                                best_bat_1_l2: wlCompLevels[1]?.bestBat1 || '',
+                                                                best_bat_2_l2: wlCompLevels[1]?.bestBat2 || '',
+                                                                best_bowl_1_l2: wlCompLevels[1]?.bestBowl1 || '',
+                                                                best_bowl_2_l2: wlCompLevels[1]?.bestBowl2 || '',
                                                                 group_chat_consent: wlGroupChatConsent,
                                                                 phone_numbers: validPhones,
                                                                 preferred_comms: wlPreferredComms,
