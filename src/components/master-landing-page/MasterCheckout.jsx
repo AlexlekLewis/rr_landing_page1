@@ -1,11 +1,41 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertCircle, Loader2 } from 'lucide-react';
+import { AlertCircle, Loader2, CheckCircle2, X } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
 
+/* ─── Stripe URLs (temporarily disabled — waitlist mode) ─── */
 const FLEXIPAY_URL = 'https://buy.stripe.com/fZu8wPbHP9SB2D2bzZ9Zm06';
 const FULL_URL    = 'https://buy.stripe.com/bJe14nbHP3ud91q8nN9Zm00';
+
+/* ─── Zapier webhooks for Elite 2026 Waitlist ─── */
+const ZAPIER_APPLICATION_WEBHOOK = 'https://hooks.zapier.com/hooks/catch/23705820/un2nilm/';
+const ZAPIER_ONBOARDING_WEBHOOK  = 'https://hooks.zapier.com/hooks/catch/23705820/un27cu1/';
+
+/* ─── Female cap ─── */
+const FEMALE_CAP = 17;
+
+/* ─── Player role options ─── */
+const PLAYER_ROLES = [
+    'Batter',
+    'Keeper-Batter',
+    'All-Rounder (Pace)',
+    'All-Rounder (Spin)',
+    'Pace Bowler',
+    'Spin Bowler',
+];
+
+/* ─── Empty competition level template ─── */
+const EMPTY_COMP_LEVEL = { competition: '', club: '', grade: '', bestBat1: '', bestBat2: '', bestBowl1: '', bestBowl2: '' };
+
+const SIZE_OPTIONS = [
+    'Mens Extra Extra Small (XXS)',
+    'Mens Extra Small (XS)',
+    'Mens Small (S)',
+    'Mens Medium (M)',
+    'Mens Large (L)',
+    'Mens Extra Large (XL)',
+];
 
 /* ─── helpers ─── */
 const calculateAge = (dobString) => {
@@ -75,10 +105,57 @@ const ComplianceCheckbox = ({ checked, onChange, children }) => (
 /* ═══════════════════════════════════════════════
    MASTER CHECKOUT
    ═══════════════════════════════════════════════ */
+/* ─── Onboarding sub-components (for waitlist modal) ─── */
+
 const MasterCheckout = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState('');
     const paymentRef = useRef(null);
+
+    /* ── Female cap state ── */
+    const [femaleCount, setFemaleCount] = useState(0);
+    const [femaleFull, setFemaleFull] = useState(false);
+
+    /* ── Waitlist modal state ── */
+    const [showWaitlistModal, setShowWaitlistModal] = useState(false);
+    const [waitlistOnboardingComplete, setWaitlistOnboardingComplete] = useState(false);
+    const [waitlistSubmitting, setWaitlistSubmitting] = useState(false);
+    const [waitlistError, setWaitlistError] = useState('');
+
+    /* ── Waitlist onboarding form fields (mirrors success page) ── */
+    const [wlPlayerName, setWlPlayerName] = useState('');
+    const [wlParentName, setWlParentName] = useState('');
+    const [wlEmail, setWlEmail] = useState('');
+    const [wlGender, setWlGender] = useState('');
+    const [wlSuburb, setWlSuburb] = useState('');
+    const [wlShirtName, setWlShirtName] = useState('');
+    const [wlSizeTshirt, setWlSizeTshirt] = useState('');
+    const [wlSizeShort, setWlSizeShort] = useState('');
+    const [wlSizePants, setWlSizePants] = useState('');
+    const [wlGroupChatConsent, setWlGroupChatConsent] = useState(null);
+    const [wlPhoneNumbers, setWlPhoneNumbers] = useState([{ id: 1, value: '' }]);
+    const [wlPreferredComms, setWlPreferredComms] = useState('');
+    const [wlPlayerRole, setWlPlayerRole] = useState('');
+    const [wlCompLevels, setWlCompLevels] = useState([{ ...EMPTY_COMP_LEVEL }, { ...EMPTY_COMP_LEVEL }]);
+
+    /* ── Check female count on mount ── */
+    useEffect(() => {
+        const checkFemaleCount = async () => {
+            try {
+                const { count, error } = await supabase
+                    .from('official_cohort_2026')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('cricket_type', 'Female Cricket');
+                if (!error && count !== null) {
+                    setFemaleCount(count);
+                    setFemaleFull(count >= FEMALE_CAP);
+                }
+            } catch (err) {
+                console.error('Error checking female count:', err);
+            }
+        };
+        checkFemaleCount();
+    }, []);
 
     /* ── form state ── */
     const [formData, setFormData] = useState({
@@ -188,16 +265,16 @@ const MasterCheckout = () => {
             const { error: appError } = await supabase.from('applications').insert([applicationsPayload]);
             if (appError) throw appError;
 
-            // 2. Full record to official_cohort_2026 (master table for LP4)
-            const cohortPayload = {
+            // 2. Insert to elite_2026_waitlist (all genders go to waitlist now)
+            const waitlistPayload = {
                 id: cohortId,
                 first_name: formData.firstName.trim(),
                 last_name: formData.lastName.trim(),
                 player_name: `${formData.firstName.trim()} ${formData.lastName.trim()}`,
-                age: age,
                 dob: formData.dob || null,
-                player_email: isUnder18 ? '' : formData.email.trim(),
-                player_phone: isUnder18 ? '' : formData.phone.trim(),
+                age: age,
+                email: isUnder18 ? '' : formData.email.trim(),
+                phone: isUnder18 ? '' : formData.phone.trim(),
                 suburb: formData.suburb.trim(),
                 profile_link: formData.profileLink.trim(),
                 club: formData.club.trim(),
@@ -212,29 +289,47 @@ const MasterCheckout = () => {
                 parent2_name: formData.parent2Name.trim(),
                 parent2_email: formData.parent2Email.trim(),
                 parent2_phone: formData.parent2Phone.trim(),
-                accept_terms: acceptTerms,
-                accept_player_code: acceptPlayerCode,
-                accept_parent_code: acceptParentCode,
-                accept_social_media: acceptSocialMedia,
-                accept_playing_standard: acceptPlayingStandard,
+                second_email: formData.parent1Email.trim(),
                 source: 'master_landing_page',
-                payment_plan_selected: option,
-                payment_status: 'pending',
+                status: 'pending',
                 utm_source: utmParams.get('utm_source') || null,
                 utm_medium: utmParams.get('utm_medium') || null,
                 utm_campaign: utmParams.get('utm_campaign') || null,
                 page_referrer: document.referrer || null,
             };
 
-            const { error: cohortError } = await supabase.from('official_cohort_2026').insert([cohortPayload]);
-            if (cohortError) throw cohortError;
+            const { error: waitlistInsertErr } = await supabase.from('elite_2026_waitlist').insert([waitlistPayload]);
+            if (waitlistInsertErr) throw waitlistInsertErr;
 
-            // Store cohort record ID so success page can UPDATE the same row
+            // 3. Fire Zapier application webhook (non-blocking, no-cors to avoid preflight)
+            try {
+                fetch(ZAPIER_APPLICATION_WEBHOOK, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({
+                        event: 'application_submitted',
+                        waitlist_id: cohortId,
+                        ...waitlistPayload,
+                    }),
+                }).catch(() => {}); // silent — webhook is best-effort
+            } catch (_) { /* ignore webhook errors */ }
+
+            // Store waitlist record ID so onboarding modal can UPDATE the same row
             localStorage.setItem('master_cohort_id', cohortId);
-            localStorage.setItem('payment_option_selected', option);
+            localStorage.setItem('payment_option_selected', 'waitlist');
 
-            // Redirect to Stripe in the same tab for a seamless experience
+            // All genders now go to waitlist onboarding modal (Stripe temporarily disabled)
+            // Pre-fill what we know into the waitlist onboarding form
+            setWlPlayerName(`${formData.firstName.trim()} ${formData.lastName.trim()}`);
+            setWlParentName(formData.parent1Name.trim());
+            setWlEmail(formData.parent1Email.trim());
+            setWlSuburb(formData.suburb.trim());
+            setShowWaitlistModal(true);
+
+            /* ── Stripe redirect temporarily disabled ──
             window.location.href = stripeUrl;
+            ── end disabled ── */
         } catch (err) {
             console.error('Error saving application:', err);
             setSubmitError('Something went wrong saving your details. Please try again.');
@@ -267,13 +362,12 @@ const MasterCheckout = () => {
                         Complete Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">Application</span>
                     </h2>
                     <p className="text-white/50 font-medium max-w-xl mx-auto leading-relaxed">
-                        Secure your spot in the Season 1 Elite intake. Complete all fields below, then select your preferred payment option to proceed.
+                        Our Season 1 intake is almost full with only 4 places remaining. Submit your application below to secure one of the final spots — we'll be in touch as soon as your application is reviewed.
                     </p>
-                    {/* Deadline banner */}
                     <div className="inline-flex items-center gap-2 bg-rr-pink/15 border border-rr-pink/40 rounded-full px-4 py-2.5 mt-5">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse shrink-0" />
                         <span className="text-[10px] sm:text-xs font-bold text-rr-pink uppercase tracking-wide sm:tracking-widest">
-                            Nearly Full — Less than 5 places remain
+                            Only 4 Places Remaining — Apply Now
                         </span>
                     </div>
                 </motion.div>
@@ -495,71 +589,14 @@ const MasterCheckout = () => {
                     </div>
                 </motion.div>
 
-                {/* ════════════════════════════════════════
-                   FEMALE PROGRAM FULL — WAITLIST
-                   ════════════════════════════════════════ */}
-
-                {cricketGender === 'Female Cricket' && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 16 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="mb-10"
-                    >
-                        <div className="bg-white/5 border border-rr-pink/30 rounded-2xl p-8 md:p-10 text-center">
-                            <div className="inline-flex items-center gap-2 bg-rr-pink/15 border border-rr-pink/30 rounded-full px-5 py-2 mb-6">
-                                <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse shrink-0" />
-                                <span className="text-xs font-black text-rr-pink uppercase tracking-widest">Female Program — Now Full</span>
-                            </div>
-
-                            <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight mb-4">
-                                All Female Places Have Been Filled
-                            </h3>
-
-                            <p className="text-white/60 text-sm md:text-base font-medium leading-relaxed max-w-xl mx-auto mb-6">
-                                The female intake for Season 1 of the T20 Elite Program is now at capacity. If you would like to be considered should a place become available, or for future programs, please get in touch with us directly.
-                            </p>
-
-                            <div className="bg-white/5 border border-white/10 rounded-xl p-6 max-w-lg mx-auto mb-6">
-                                <p className="text-white/80 text-sm font-semibold mb-3">To join the waitlist, email:</p>
-                                <a href="mailto:eliteprogram@rramelbourne.com" className="text-rr-pink hover:text-rr-light-pink font-black text-lg transition-colors">
-                                    eliteprogram@rramelbourne.com
-                                </a>
-                                <div className="mt-4 text-left max-w-xs mx-auto space-y-2">
-                                    <p className="text-white/50 text-xs font-bold uppercase tracking-widest mb-2">Please include:</p>
-                                    <div className="flex items-center gap-2">
-                                        <span className="w-4 h-4 rounded-full bg-rr-pink/20 flex items-center justify-center shrink-0">
-                                            <span className="text-rr-pink text-[8px] font-black">1</span>
-                                        </span>
-                                        <span className="text-white/60 text-sm font-medium">Player's full name</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <span className="w-4 h-4 rounded-full bg-rr-pink/20 flex items-center justify-center shrink-0">
-                                            <span className="text-rr-pink text-[8px] font-black">2</span>
-                                        </span>
-                                        <span className="text-white/60 text-sm font-medium">Player's age</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <span className="w-4 h-4 rounded-full bg-rr-pink/20 flex items-center justify-center shrink-0">
-                                            <span className="text-rr-pink text-[8px] font-black">3</span>
-                                        </span>
-                                        <span className="text-white/60 text-sm font-medium">Link to Play-Cricket profile</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <p className="text-white/30 text-xs font-medium">
-                                We will review all waitlist enquiries and respond as soon as possible.
-                            </p>
-                        </div>
-                    </motion.div>
-                )}
+                {/* Female program block removed — Elite Program form is open for all genders.
+                   Female-specific waitlist lives on its own page: /female-cricket-kickstart */}
 
                 {/* ════════════════════════════════════════
                    CONFIRM & PAY
                    ════════════════════════════════════════ */}
 
-                {cricketGender !== 'Female Cricket' && (<>
+                {/* Payment section — open to all genders */}
                 {/* Instructional header */}
                 <motion.div
                     initial={{ opacity: 0, y: 16 }}
@@ -603,25 +640,24 @@ const MasterCheckout = () => {
                     `}</style>
                 </motion.div>
 
-                {/* Payment option cards — always visible, clicking triggers save + redirect */}
+                {/* Submit Application button — all genders go to waitlist */}
                 <div ref={paymentRef} className="scroll-mt-8">
                 <motion.div
                     initial={{ opacity: 0, y: 16 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: 0.22 }}
-                    className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6"
+                    className="mb-6"
                 >
-                    {/* Flexi Pay — Featured */}
                     <button
-                        onClick={() => handlePaymentSelect('Flexi Pay', FLEXIPAY_URL)}
+                        onClick={() => handlePaymentSelect('waitlist', '')}
                         disabled={isSubmitting}
-                        className="group relative flex flex-col items-center justify-center gap-1 p-px rounded-2xl overflow-hidden hover:shadow-[0_0_32px_rgba(229,6,149,0.4)] transition-shadow duration-300 cursor-pointer shimmer-border-bright disabled:opacity-50 disabled:cursor-not-allowed text-left"
+                        className="group relative w-full flex flex-col items-center justify-center gap-1 p-px rounded-2xl overflow-hidden hover:shadow-[0_0_32px_rgba(229,6,149,0.4)] transition-shadow duration-300 cursor-pointer shimmer-border-bright disabled:opacity-50 disabled:cursor-not-allowed text-left"
                     >
                         <div className="w-full bg-rr-dark group-hover:bg-rr-dark/80 transition-colors rounded-2xl px-6 py-7 flex flex-col items-center gap-2 text-center">
-                            <span className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.25em]">Most Popular</span>
-                            <span className="text-2xl font-black text-white uppercase tracking-tight">Flexi Pay</span>
-                            <span className="text-white/50 text-sm font-medium">4 payments of $749</span>
+                            <span className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.25em]">Elite Program 2026</span>
+                            <span className="text-2xl font-black text-white uppercase tracking-tight">Submit Application</span>
+                            <span className="text-white/50 text-sm font-medium">Only 4 places remaining — secure yours now</span>
                             <div className="mt-2 flex items-center gap-2 bg-rr-pink/20 px-4 py-2 rounded-full">
                                 {isSubmitting ? (
                                     <Loader2 className="w-4 h-4 text-rr-pink animate-spin" />
@@ -631,32 +667,7 @@ const MasterCheckout = () => {
                                     </svg>
                                 )}
                                 <span className="text-xs font-bold text-white uppercase tracking-wider">
-                                    {isSubmitting ? 'Submitting...' : 'Submit & Pay $749'}
-                                </span>
-                            </div>
-                        </div>
-                    </button>
-
-                    {/* Pay in Full */}
-                    <button
-                        onClick={() => handlePaymentSelect('Paid in Full', FULL_URL)}
-                        disabled={isSubmitting}
-                        className="group relative flex flex-col items-center justify-center gap-1 p-px rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer shimmer-border hover:shadow-[0_0_32px_rgba(0,112,240,0.3)] disabled:opacity-50 disabled:cursor-not-allowed text-left"
-                    >
-                        <div className="w-full bg-rr-dark group-hover:bg-rr-dark/80 transition-colors rounded-2xl px-6 py-7 flex flex-col items-center gap-2 text-center">
-                            <span className="text-[10px] font-bold text-rr-blue uppercase tracking-[0.25em]">Best Value</span>
-                            <span className="text-2xl font-black text-white uppercase tracking-tight">Pay in Full</span>
-                            <span className="text-white/50 text-sm font-medium">$2,995 — Includes free training kit</span>
-                            <div className="mt-2 flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full">
-                                {isSubmitting ? (
-                                    <Loader2 className="w-4 h-4 text-white/60 animate-spin" />
-                                ) : (
-                                    <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                    </svg>
-                                )}
-                                <span className="text-xs font-bold text-white/60 uppercase tracking-wider">
-                                    {isSubmitting ? 'Submitting...' : 'Submit & Pay'}
+                                    {isSubmitting ? 'Submitting...' : 'Apply Now'}
                                 </span>
                             </div>
                         </div>
@@ -672,10 +683,9 @@ const MasterCheckout = () => {
                     transition={{ duration: 0.4, delay: 0.25 }}
                     className="text-center text-white/40 text-xs font-medium mb-8"
                 >
-                    Afterpay also available at checkout. Questions or issues with payments or for tailored payment options?{' '}
+                    Questions about the program or application process?{' '}
                     <a href="mailto:eliteprogram@rramelbourne.com" className="text-rr-blue hover:text-white transition-colors underline underline-offset-2">Contact us.</a>
                 </motion.p>
-                </>)}
 
                 {/* Onboarding confirmation */}
                 <motion.div
@@ -691,9 +701,9 @@ const MasterCheckout = () => {
                         </svg>
                     </div>
                     <div>
-                        <h4 className="text-sm font-black text-white uppercase tracking-wide mb-1">What Happens After Payment?</h4>
+                        <h4 className="text-sm font-black text-white uppercase tracking-wide mb-1">What Happens Next?</h4>
                         <p className="text-sm text-white/55 leading-relaxed">
-                            Once payment has been made, you will be directed to our onboarding form to complete the onboarding process. This ensures we have everything we need to personalise your program from day one.
+                            Once your application is submitted, you'll complete a short onboarding form so we can collect your session and apparel preferences. Our team will then be in touch to confirm your place and arrange payment.
                         </p>
                     </div>
                 </motion.div>
@@ -729,6 +739,402 @@ const MasterCheckout = () => {
                 </motion.div>
 
             </div>
+
+            {/* ════════════════════════════════════════
+               WAITLIST ONBOARDING MODAL
+               ════════════════════════════════════════ */}
+            <AnimatePresence>
+                {showWaitlistModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+                        onClick={(e) => { if (e.target === e.currentTarget && waitlistOnboardingComplete) setShowWaitlistModal(false); }}
+                    >
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            transition={{ duration: 0.3 }}
+                            className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-rr-dark border border-white/15 shadow-2xl"
+                        >
+                            {/* Close button (only after completion) */}
+                            {waitlistOnboardingComplete && (
+                                <button
+                                    onClick={() => setShowWaitlistModal(false)}
+                                    className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors z-10"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            )}
+
+                            <div className="p-6 md:p-8">
+                                {waitlistOnboardingComplete ? (
+                                    /* ── Confirmation screen ── */
+                                    <div className="text-center py-8">
+                                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-rr-pink to-rr-blue flex items-center justify-center mx-auto mb-6">
+                                            <CheckCircle2 className="w-8 h-8 text-white" />
+                                        </div>
+                                        <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-3">
+                                            Thank You for Registering
+                                        </h3>
+                                        <p className="text-white/60 text-sm leading-relaxed max-w-md mx-auto mb-4">
+                                            Your application and preferences have been received. One of our team will be in contact with you shortly.
+                                        </p>
+                                        <div className="bg-rr-pink/10 border border-rr-pink/30 rounded-xl p-4 max-w-md mx-auto mb-6">
+                                            <p className="text-rr-pink text-sm font-bold">
+                                                Thank you for your interest in the Elite Program.
+                                            </p>
+                                        </div>
+                                        <p className="text-white/40 text-xs">
+                                            If you have any questions, please contact{' '}
+                                            <a href="mailto:eliteprogram@rramelbourne.com" className="text-rr-blue hover:text-white underline">
+                                                eliteprogram@rramelbourne.com
+                                            </a>
+                                        </p>
+                                    </div>
+                                ) : (
+                                    /* ── Onboarding form ── */
+                                    <>
+                                        <div className="text-center mb-6">
+                                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-rr-pink to-rr-blue flex items-center justify-center mx-auto mb-4">
+                                                <CheckCircle2 className="w-6 h-6 text-white" />
+                                            </div>
+                                            <h3 className="text-xl font-black text-white uppercase tracking-tight mb-2">
+                                                Application Received
+                                            </h3>
+                                            <p className="text-white/50 text-sm leading-relaxed max-w-md mx-auto">
+                                                Thank you for applying to the Elite Program 2026. Let's collect your session and apparel preferences now so we're ready to get you started.
+                                            </p>
+                                        </div>
+
+                                        {/* Error */}
+                                        {waitlistError && (
+                                            <div className="mb-4 p-3 bg-red-500/15 border border-red-400/30 text-red-300 rounded-xl text-sm flex items-start gap-2">
+                                                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                                                <p>{waitlistError}</p>
+                                            </div>
+                                        )}
+
+                                        {/* Core details */}
+                                        <div className="space-y-4 mb-6">
+                                            <h4 className="text-xs font-black text-white/40 uppercase tracking-widest">Your Details</h4>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <InputField label="Player Name" value={wlPlayerName} onChange={(e) => setWlPlayerName(e.target.value)} required />
+                                                <InputField label="Parent/Guardian Name" value={wlParentName} onChange={(e) => setWlParentName(e.target.value)} required />
+                                            </div>
+                                            <InputField label="Email" type="email" value={wlEmail} onChange={(e) => setWlEmail(e.target.value)} required />
+                                        </div>
+
+                                        {/* Administration */}
+                                        <div className="space-y-4 mb-6">
+                                            <h4 className="text-xs font-black text-white/40 uppercase tracking-widest">Administration</h4>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div className="flex flex-col gap-1.5">
+                                                    <label className="text-xs font-bold text-white/50 uppercase tracking-widest">Gender <span className="text-rr-pink">*</span></label>
+                                                    <select value={wlGender} onChange={(e) => setWlGender(e.target.value)} className="bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rr-pink/60 transition-colors">
+                                                        <option value="">Select...</option>
+                                                        <option value="Female">Female</option>
+                                                        <option value="Male">Male</option>
+                                                        <option value="Non-binary">Non-binary</option>
+                                                        <option value="Prefer not to say">Prefer not to say</option>
+                                                    </select>
+                                                </div>
+                                                <InputField label="Suburb" value={wlSuburb} onChange={(e) => setWlSuburb(e.target.value)} required />
+                                            </div>
+                                            <InputField label="Name on Shirt" value={wlShirtName} onChange={(e) => setWlShirtName(e.target.value)} required placeholder="e.g. LEWIS" />
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                {[
+                                                    { label: 'T-Shirt Size', val: wlSizeTshirt, set: setWlSizeTshirt },
+                                                    { label: 'Short Size', val: wlSizeShort, set: setWlSizeShort },
+                                                    { label: 'Pants Size', val: wlSizePants, set: setWlSizePants },
+                                                ].map(({ label, val, set }) => (
+                                                    <div key={label} className="flex flex-col gap-1.5">
+                                                        <label className="text-xs font-bold text-white/50 uppercase tracking-widest">{label} <span className="text-rr-pink">*</span></label>
+                                                        <select value={val} onChange={(e) => set(e.target.value)} className="bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rr-pink/60 transition-colors">
+                                                            <option value="">Select size...</option>
+                                                            {SIZE_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
+                                                        </select>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* Player Role */}
+                                        <div className="space-y-4 mb-6">
+                                            <h4 className="text-xs font-black text-white/40 uppercase tracking-widest">Player Role</h4>
+                                            <div className="flex flex-col gap-1.5">
+                                                <label className="text-xs font-bold text-white/50 uppercase tracking-widest">What best describes your role? <span className="text-rr-pink">*</span></label>
+                                                <select value={wlPlayerRole} onChange={(e) => setWlPlayerRole(e.target.value)} className="bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rr-pink/60 transition-colors">
+                                                    <option value="">Select role...</option>
+                                                    {PLAYER_ROLES.map(r => <option key={r} value={r}>{r}</option>)}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        {/* Competition History */}
+                                        <div className="space-y-4 mb-6">
+                                            <h4 className="text-xs font-black text-white/40 uppercase tracking-widest">Competition History</h4>
+                                            <p className="text-xs text-white/40">Enter your best senior and junior cricket performances from the most recent season (2024/25).</p>
+
+                                            {wlCompLevels.map((lvl, idx) => (
+                                                <div key={idx} className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
+                                                    <p className="text-xs font-bold text-rr-pink uppercase tracking-wider">
+                                                        {idx === 0 ? 'Best Senior Performance / Highest Level Played' : 'Best Junior Performance / Highest Junior Level Played'}
+                                                        {idx === 0 && <span className="text-rr-pink"> *</span>}
+                                                    </p>
+                                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                                        <InputField
+                                                            label="Competition Level"
+                                                            placeholder="e.g. Premier Cricket"
+                                                            value={lvl.competition}
+                                                            onChange={(e) => setWlCompLevels(prev => prev.map((l, i) => i === idx ? { ...l, competition: e.target.value } : l))}
+                                                            required={idx === 0}
+                                                        />
+                                                        <InputField
+                                                            label="Club"
+                                                            placeholder="e.g. Doncaster CC"
+                                                            value={lvl.club}
+                                                            onChange={(e) => setWlCompLevels(prev => prev.map((l, i) => i === idx ? { ...l, club: e.target.value } : l))}
+                                                            required={idx === 0}
+                                                        />
+                                                        <InputField
+                                                            label="Grade"
+                                                            placeholder="e.g. 1st XI, U14 Shield"
+                                                            value={lvl.grade}
+                                                            onChange={(e) => setWlCompLevels(prev => prev.map((l, i) => i === idx ? { ...l, grade: e.target.value } : l))}
+                                                            required={idx === 0}
+                                                        />
+                                                    </div>
+                                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                                        <InputField
+                                                            label="Best Score 1"
+                                                            placeholder="e.g. 87*"
+                                                            value={lvl.bestBat1}
+                                                            onChange={(e) => setWlCompLevels(prev => prev.map((l, i) => i === idx ? { ...l, bestBat1: e.target.value } : l))}
+                                                        />
+                                                        <InputField
+                                                            label="Best Score 2"
+                                                            placeholder="e.g. 63"
+                                                            value={lvl.bestBat2}
+                                                            onChange={(e) => setWlCompLevels(prev => prev.map((l, i) => i === idx ? { ...l, bestBat2: e.target.value } : l))}
+                                                        />
+                                                        <InputField
+                                                            label="Best Bowling 1"
+                                                            placeholder="e.g. 4/22"
+                                                            value={lvl.bestBowl1}
+                                                            onChange={(e) => setWlCompLevels(prev => prev.map((l, i) => i === idx ? { ...l, bestBowl1: e.target.value } : l))}
+                                                        />
+                                                        <InputField
+                                                            label="Best Bowling 2"
+                                                            placeholder="e.g. 3/15"
+                                                            value={lvl.bestBowl2}
+                                                            onChange={(e) => setWlCompLevels(prev => prev.map((l, i) => i === idx ? { ...l, bestBowl2: e.target.value } : l))}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {/* Comms */}
+                                        <div className="space-y-4 mb-6">
+                                            <h4 className="text-xs font-black text-white/40 uppercase tracking-widest">Communication</h4>
+                                            <div>
+                                                <p className="text-sm text-white/60 mb-3">Would you like to join the parent/guardian group chat?</p>
+                                                <div className="flex gap-4">
+                                                    {[{ label: 'Yes', val: true }, { label: 'No', val: false }].map(({ label, val }) => (
+                                                        <label key={label} className="flex items-center gap-2 cursor-pointer">
+                                                            <input type="radio" name="wlGroupChat" checked={wlGroupChatConsent === val} onChange={() => setWlGroupChatConsent(val)} className="w-4 h-4 accent-rr-pink" />
+                                                            <span className="text-sm text-white/60">{label}</span>
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            {wlGroupChatConsent === true && (
+                                                <div>
+                                                    <p className="text-xs text-white/40 mb-2">Phone number(s) for group chat:</p>
+                                                    {wlPhoneNumbers.map((p, idx) => (
+                                                        <div key={p.id} className="mb-2">
+                                                            <InputField
+                                                                label={`Phone ${idx + 1}`}
+                                                                type="tel"
+                                                                value={p.value}
+                                                                onChange={(e) => setWlPhoneNumbers(prev => prev.map(x => x.id === p.id ? { ...x, value: e.target.value } : x))}
+                                                                required
+                                                            />
+                                                        </div>
+                                                    ))}
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setWlPhoneNumbers(prev => [...prev, { id: Date.now(), value: '' }])}
+                                                        className="text-xs text-rr-pink hover:text-white transition-colors font-bold"
+                                                    >
+                                                        + Add another number
+                                                    </button>
+                                                </div>
+                                            )}
+
+                                            {wlGroupChatConsent === false && (
+                                                <div>
+                                                    <InputField
+                                                        label="Preferred communication method"
+                                                        value={wlPreferredComms}
+                                                        onChange={(e) => setWlPreferredComms(e.target.value)}
+                                                        placeholder="e.g. Email, SMS, etc."
+                                                        required
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Submit */}
+                                        <button
+                                            onClick={async () => {
+                                                // Validate
+                                                const hasCore = wlPlayerName.trim() && wlParentName.trim() && wlEmail.trim() && wlEmail.includes('@');
+                                                const hasAdmin = wlGender && wlSuburb.trim() && wlShirtName.trim() && wlSizeTshirt && wlSizeShort && wlSizePants;
+                                                const hasComms = wlGroupChatConsent === true
+                                                    ? wlPhoneNumbers.some(p => p.value.trim())
+                                                    : (wlGroupChatConsent === false ? wlPreferredComms.trim() : false);
+                                                const hasRole = !!wlPlayerRole;
+                                                const lvl1 = wlCompLevels[0];
+                                                const hasComp = lvl1.competition.trim() && lvl1.club.trim() && lvl1.grade.trim();
+
+                                                if (!hasCore || !hasAdmin || !hasComms || !hasRole || !hasComp) {
+                                                    setWaitlistError('Please complete all required fields including your player role and at least your highest competition level.');
+                                                    return;
+                                                }
+
+                                                setWaitlistSubmitting(true);
+                                                setWaitlistError('');
+
+                                                try {
+                                                    const cohortId = localStorage.getItem('master_cohort_id');
+                                                    const validPhones = wlPhoneNumbers.filter(p => p.value.trim()).map(p => p.value.trim());
+
+                                                    const onboardingData = {
+                                                        parent1_name: wlParentName.trim(),
+                                                        email: wlEmail.trim().toLowerCase(),
+                                                        phone: validPhones[0] || '',
+                                                        gender: wlGender,
+                                                        suburb: wlSuburb.trim(),
+                                                        shirt_name: wlShirtName.trim(),
+                                                        shirt_size: wlSizeTshirt,
+                                                        short_size: wlSizeShort,
+                                                        pant_size: wlSizePants,
+                                                        status: 'onboarded',
+                                                        notes: JSON.stringify({
+                                                            group_chat_consent: wlGroupChatConsent,
+                                                            phone_numbers: validPhones,
+                                                            preferred_comms: wlPreferredComms,
+                                                            player_role: wlPlayerRole,
+                                                        }),
+                                                    };
+
+                                                    if (cohortId) {
+                                                        // Update the waitlist row (no session data anymore)
+                                                        const { error } = await supabase
+                                                            .from('elite_2026_waitlist')
+                                                            .update(onboardingData)
+                                                            .eq('id', cohortId);
+                                                        if (error) throw error;
+
+                                                        // Insert competition history rows into standalone table
+                                                        const compRows = wlCompLevels
+                                                            .map((lvl, idx) => ({
+                                                                waitlist_id: cohortId,
+                                                                player_name: wlPlayerName.trim(),
+                                                                player_role: wlPlayerRole,
+                                                                level_rank: idx + 1,
+                                                                competition: lvl.competition.trim(),
+                                                                club: lvl.club.trim(),
+                                                                grade: lvl.grade.trim(),
+                                                                best_bat_1: lvl.bestBat1.trim() || null,
+                                                                best_bat_2: lvl.bestBat2.trim() || null,
+                                                                best_bowl_1: lvl.bestBowl1.trim() || null,
+                                                                best_bowl_2: lvl.bestBowl2.trim() || null,
+                                                            }))
+                                                            .filter(r => r.competition); // only insert levels that were filled in
+
+                                                        if (compRows.length > 0) {
+                                                            const { error: compErr } = await supabase
+                                                                .from('onboarding_competition_history')
+                                                                .insert(compRows);
+                                                            if (compErr) console.error('Competition history save error:', compErr);
+                                                        }
+                                                    }
+
+                                                    // Fire Zapier onboarding webhook (non-blocking, no-cors to avoid preflight)
+                                                    try {
+                                                        fetch(ZAPIER_ONBOARDING_WEBHOOK, {
+                                                            method: 'POST',
+                                                            mode: 'no-cors',
+                                                            headers: { 'Content-Type': 'text/plain' },
+                                                            body: JSON.stringify({
+                                                                event: 'onboarding_completed',
+                                                                waitlist_id: cohortId,
+                                                                player_name: wlPlayerName.trim(),
+                                                                parent_name: wlParentName.trim(),
+                                                                email: wlEmail.trim().toLowerCase(),
+                                                                phone: validPhones[0] || '',
+                                                                gender: wlGender,
+                                                                suburb: wlSuburb.trim(),
+                                                                shirt_name: wlShirtName.trim(),
+                                                                shirt_size: wlSizeTshirt,
+                                                                short_size: wlSizeShort,
+                                                                pant_size: wlSizePants,
+                                                                player_role: wlPlayerRole,
+                                                                competition_level_1: wlCompLevels[0]?.competition || '',
+                                                                club_1: wlCompLevels[0]?.club || '',
+                                                                grade_1: wlCompLevels[0]?.grade || '',
+                                                                best_bat_1_l1: wlCompLevels[0]?.bestBat1 || '',
+                                                                best_bat_2_l1: wlCompLevels[0]?.bestBat2 || '',
+                                                                best_bowl_1_l1: wlCompLevels[0]?.bestBowl1 || '',
+                                                                best_bowl_2_l1: wlCompLevels[0]?.bestBowl2 || '',
+                                                                competition_level_2: wlCompLevels[1]?.competition || '',
+                                                                club_2: wlCompLevels[1]?.club || '',
+                                                                grade_2: wlCompLevels[1]?.grade || '',
+                                                                best_bat_1_l2: wlCompLevels[1]?.bestBat1 || '',
+                                                                best_bat_2_l2: wlCompLevels[1]?.bestBat2 || '',
+                                                                best_bowl_1_l2: wlCompLevels[1]?.bestBowl1 || '',
+                                                                best_bowl_2_l2: wlCompLevels[1]?.bestBowl2 || '',
+                                                                group_chat_consent: wlGroupChatConsent,
+                                                                phone_numbers: validPhones,
+                                                                preferred_comms: wlPreferredComms,
+                                                            }),
+                                                        }).catch(() => {});
+                                                    } catch (_) { /* ignore webhook errors */ }
+
+                                                    setWaitlistOnboardingComplete(true);
+                                                } catch (err) {
+                                                    console.error('Waitlist onboarding error:', err);
+                                                    setWaitlistError('Something went wrong. Please try again.');
+                                                } finally {
+                                                    setWaitlistSubmitting(false);
+                                                }
+                                            }}
+                                            disabled={waitlistSubmitting}
+                                            className="w-full py-4 bg-gradient-to-r from-rr-pink to-rr-blue text-white font-black uppercase tracking-wider rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                        >
+                                            {waitlistSubmitting ? (
+                                                <>
+                                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                                    Submitting...
+                                                </>
+                                            ) : (
+                                                'Submit Preferences'
+                                            )}
+                                        </button>
+                                    </>
+                                )}
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
         </section>
     );
 };

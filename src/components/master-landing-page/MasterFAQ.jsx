@@ -11,7 +11,7 @@ const faqCategories = [
             },
             {
                 question: "Is it available for female cricketers?",
-                answer: "The female intake for Season 1 is now full. If you would like to be considered should a place become available, or for future programs, please email eliteprogram@rramelbourne.com with the player's name, age, and a link to their Play-Cricket profile."
+                answer: "Both male and female cricketers are welcome to apply for the Elite Program. Register through the form on this page to secure your place."
             },
             {
                 question: "When does the program start and what are the dates?",
@@ -43,7 +43,7 @@ const faqCategories = [
             },
             {
                 question: "Will you open up more slots if the Academy fills?",
-                answer: "We have a firm cap on the number of players to protect the quality of the experience and ensure every player receives genuine coaching attention. If the program fills, we encourage you to join the waitlist for future intakes."
+                answer: "We manage squad sizes carefully to protect the quality of the experience and ensure every player receives genuine coaching attention. If demand exceeds our current capacity, we may expand squads or open additional intakes. Contact us at eliteprogram@rramelbourne.com if you have any questions."
             }
         ]
     },
