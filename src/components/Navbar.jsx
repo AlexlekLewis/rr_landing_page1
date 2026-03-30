@@ -23,7 +23,7 @@ const HOME_NAV = [
 
 const PROGRAMS_DROPDOWN = [
     { label: 'Elite Program 2026', route: '/eliteprogram2026', badge: 'Less Than 5 Places', badgeColor: 'bg-rr-pink' },
-    { label: 'Holiday Programs', route: '/holiday-programs', badge: 'Filling Up Fast', badgeColor: 'bg-orange-500' },
+    { label: 'Holiday Programs', route: '/holiday-programs', badge: 'Selling Fast', badgeColor: 'bg-orange-500' },
     { label: 'Girls Kickstart', route: '/female-cricket-kickstart', badge: 'Open Now', badgeColor: 'bg-green-500' },
 ];
 

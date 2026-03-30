@@ -10,7 +10,7 @@ const GENDER_OPTIONS = ['Male Cricket', 'Female Cricket', 'No Preference'];
 
 const PROGRAMS = [
     { label: 'Elite Program 2026', route: '/eliteprogram2026', urgency: 'Now Accepting Applications' },
-    { label: 'Holiday Programs', route: '/holiday-programs', urgency: null },
+    { label: 'Holiday Programs', route: '/holiday-programs', urgency: 'Bundoora Selling Fast · Hallam Waitlist Only' },
     { label: 'Girls Kickstart', route: '/female-cricket-kickstart', urgency: null },
 ];
 
