@@ -116,7 +116,7 @@ const RegistrationForm = () => {
                 primary_club: form.primary_club.trim(),
                 suburb: form.suburb.trim(),
                 location: form.location,
-                on_waitlist: false,
+                on_waitlist: form.location === "hallam",
                 page_referrer: document.referrer || null,
                 ...utmParams,
             };
@@ -306,8 +306,8 @@ const RegistrationForm = () => {
                                     <option value="cutting-edge">
                                         Cutting Edge Cricket — Bundoora | Apr 8, 9 &amp; 10
                                     </option>
-                                    <option value="hallam" disabled={HALLAM_SOLD_OUT}>
-                                        Cricket Connect — Hallam | Apr 14, 15 &amp; 16 {HALLAM_SOLD_OUT ? '(SOLD OUT — Waitlist)' : ''}
+                                    <option value="hallam">
+                                        Cricket Connect — Hallam | Apr 14, 15 &amp; 16 (Waitlist)
                                     </option>
                                 </select>
                                 {errors.location && <p className="text-red-500 text-xs font-medium mt-1">{errors.location}</p>}
