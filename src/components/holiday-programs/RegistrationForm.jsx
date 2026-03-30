@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 
+const HALLAM_SOLD_OUT = true;
+
 const AGE_OPTIONS = Array.from({ length: 8 }, (_, i) => i + 7); // 7–14
 
 const SHIRT_SIZES = [
@@ -45,6 +47,7 @@ const ComplianceCheckbox = ({ checked, onChange, error, children }) => (
 
 const RegistrationForm = () => {
     const [submitting, setSubmitting] = useState(false);
+    const [waitlistSuccess, setWaitlistSuccess] = useState(false);
     const [errors, setErrors] = useState({});
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [acceptPlayerCode, setAcceptPlayerCode] = useState(false);
@@ -126,7 +129,13 @@ const RegistrationForm = () => {
 
             // Zapier webhook is handled by async pg_net database trigger on INSERT
 
-            // Redirect to Stripe checkout
+            // Hallam is sold out — show waitlist confirmation instead of Stripe
+            if (form.location === 'hallam') {
+                setWaitlistSuccess(true);
+                return;
+            }
+
+            // Redirect to Stripe checkout (Bundoora)
             window.location.href = 'https://buy.stripe.com/9B6dR93bjggZa5ugUj9Zm07';
         } catch (err) {
             console.error('Submission error:', err);
@@ -140,6 +149,36 @@ const RegistrationForm = () => {
         `w-full bg-slate-50 border ${errors[field] ? 'border-red-400' : 'border-slate-200'} rounded-xl px-4 py-3 text-rr-dark font-medium focus:outline-none focus:border-rr-pink transition-colors duration-200 text-sm`;
 
     const labelClass = 'block text-xs font-black text-rr-dark uppercase tracking-widest mb-2';
+
+    if (waitlistSuccess) {
+        return (
+            <section id="registration-form" className="py-24 bg-slate-50">
+                <div className="max-w-xl mx-auto px-6 text-center">
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-10">
+                        <div className="w-16 h-16 rounded-full bg-rr-blue/10 flex items-center justify-center mx-auto mb-6">
+                            <svg className="w-8 h-8 text-rr-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <h2 className="text-2xl font-black text-rr-dark uppercase tracking-tight mb-4">You're on the Waitlist</h2>
+                        <p className="text-rr-charcoal font-medium leading-relaxed mb-6">
+                            Thank you for registering your interest in the Hallam clinic. Unfortunately this program is now full — but we've added you to our waitlist.
+                        </p>
+                        <p className="text-rr-charcoal font-medium leading-relaxed mb-8">
+                            We will be in touch if a place becomes available, or regarding future programs. If you have any questions, please contact us at{' '}
+                            <a href="mailto:holidayprograms@rramelbourne.com" className="text-rr-pink font-bold hover:underline">holidayprograms@rramelbourne.com</a>.
+                        </p>
+                        <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 text-left">
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Still want to attend a clinic?</p>
+                            <p className="text-rr-charcoal text-sm font-medium leading-relaxed">
+                                Places are still available at our <span className="font-black text-rr-dark">Bundoora clinic — April 8, 9 &amp; 10</span> at Cutting Edge Cricket. Scroll up and select Bundoora to secure your place.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section id="registration-form" className="py-24 bg-rr-dark">
@@ -267,8 +306,8 @@ const RegistrationForm = () => {
                                     <option value="cutting-edge">
                                         Cutting Edge Cricket — Bundoora | Apr 8, 9 &amp; 10
                                     </option>
-                                    <option value="hallam">
-                                        Cricket Connect — Hallam | Apr 14, 15 &amp; 16
+                                    <option value="hallam" disabled={HALLAM_SOLD_OUT}>
+                                        Cricket Connect — Hallam | Apr 14, 15 &amp; 16 {HALLAM_SOLD_OUT ? '(SOLD OUT — Waitlist)' : ''}
                                     </option>
                                 </select>
                                 {errors.location && <p className="text-red-500 text-xs font-medium mt-1">{errors.location}</p>}
