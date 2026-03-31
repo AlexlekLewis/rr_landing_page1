@@ -5,7 +5,7 @@ import LCHero from './LCHero';
 import LCOverview from './LCOverview';
 import LCPricing from './LCPricing';
 import LCRegistrationForm from './LCRegistrationForm';
-import usePageAnalytics from '../../hooks/usePageAnalytics';
+import LCStickyCTA from './LCStickyCTA';
 
 const SECTIONS = [
     'hero',
@@ -23,7 +23,7 @@ const LittleCrickets = () => {
 
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
-            <Navbar variant="lp2" />
+            <Navbar variant="little-crickets" />
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero">
                     <LCHero />
@@ -39,6 +39,7 @@ const LittleCrickets = () => {
                 </div>
             </main>
             <Footer />
+            <LCStickyCTA />
         </div>
     );
 };
