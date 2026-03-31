@@ -9,12 +9,19 @@ const LCHero = () => {
 
     return (
         <section className="relative min-h-screen flex items-center overflow-hidden bg-rr-dark">
-            {/* Ambient glows */}
-            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-rr-pink/8 rounded-full blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-rr-blue/8 rounded-full blur-[120px] pointer-events-none" />
-
-            {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-rr-dark via-rr-dark/95 to-rr-navy/60" />
+            {/* Background image — mobile */}
+            <div
+                className="absolute inset-0 bg-cover bg-[center_top] bg-no-repeat md:hidden"
+                style={{ backgroundImage: "url('/assets/little-crickets-hero.jpeg')" }}
+            />
+            {/* Background image — desktop */}
+            <div
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat hidden md:block"
+                style={{ backgroundImage: "url('/assets/little-crickets-hero.jpeg')" }}
+            />
+            {/* Gradient overlays */}
+            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/70 to-rr-dark/30 md:hidden" />
+            <div className="absolute inset-0 bg-gradient-to-r from-rr-dark via-rr-dark/80 to-transparent hidden md:block" />
 
             <div className="relative z-20 container mx-auto px-6 pt-32 pb-24 max-w-4xl">
                 {/* Status badge */}
