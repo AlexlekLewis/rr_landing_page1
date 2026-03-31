@@ -6,6 +6,7 @@ import LCOverview from './LCOverview';
 import LCPricing from './LCPricing';
 import LCRegistrationForm from './LCRegistrationForm';
 import LCStickyCTA from './LCStickyCTA';
+import usePageAnalytics from '../../hooks/usePageAnalytics';
 
 const SECTIONS = [
     'hero',
