@@ -6,6 +6,7 @@ import RoyalsInvite from './RoyalsInvite';
 import ClinicOverview from './ClinicOverview';
 import SessionWalkthrough from './SessionWalkthrough';
 import CoachesSection from './CoachesSection';
+import ActionImage from './ActionImage';
 import PricingSection from './PricingSection';
 import LocationsSection from './LocationsSection';
 import RegistrationForm from './RegistrationForm';
@@ -49,6 +50,7 @@ const HolidayPrograms = () => {
                     <CoachesSection />
                 </div>
                 <div id="pricing">
+                    <ActionImage />
                     <PricingSection />
                 </div>
                 <div id="locations">
