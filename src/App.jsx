@@ -22,6 +22,7 @@ import LandingPage2 from './components/landing-page-2/LandingPage2';
 import LandingPage3 from './components/landing-page-3/LandingPage3';
 import StripeSuccess from './components/landing-page-3/StripeSuccess';
 import MasterLandingPage from './components/master-landing-page/MasterLandingPage';
+import LittleCrickets from './components/little-crickets/LittleCrickets';
 import HolidayPrograms from './components/holiday-programs/HolidayPrograms';
 import HolidayProgramSuccess from './components/holiday-programs/HolidayProgramSuccess';
 import FemaleCricketIntroduction from './components/female-cricket-introduction/FemaleCricketIntroduction';
@@ -115,6 +116,8 @@ function App() {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-conditions" element={<TermsConditions />} />
         <Route path="/holiday-programs" element={<HolidayPrograms />} />
+        {/* Little Crickets Club — DRAFT: not in nav, Vercel only until go-live instruction */}
+        <Route path="/little-crickets" element={<LittleCrickets />} />
         <Route path="/holiday-programs/success" element={<HolidayProgramSuccess />} />
         {/* Female Cricket Introduction — DRAFT: not in nav, Vercel only until go-live instruction */}
         <Route path="/female-cricket-kickstart" element={<FemaleCricketIntroduction />} />
