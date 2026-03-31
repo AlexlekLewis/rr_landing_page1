@@ -15,6 +15,11 @@ const LP2_NAV = [
     { label: 'PRICING', id: 'pricing' },
 ];
 
+const LC_NAV = [
+    { label: 'PROGRAM', id: 'program-overview' },
+    { label: 'PRICING', id: 'pricing' },
+];
+
 const HOME_NAV = [
     { label: 'About', id: 'about' },
     { label: 'Coaches', id: 'coaches' },
@@ -38,11 +43,12 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
     const isHoliday = variant === 'holiday';
     const isHome = variant === 'home';
 
-    const navLinks = (isLP3 || isHoliday) ? [] : isHome ? HOME_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
+    const navLinks = (isLP3 || isHoliday) ? [] : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
     const showProgramsDropdown = isHome;
 
-    const ctaLabel = isHome ? 'REGISTER NOW' : (isLP2 || isHoliday) ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
-    const ctaTarget = isLP2 ? 'checkout' : (isHoliday ? 'registration-form' : 'apply-form');
+    const isLittleCrickets = variant === 'little-crickets';
+    const ctaLabel = isHome ? 'REGISTER NOW' : (isLP2 || isHoliday || isLittleCrickets) ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
+    const ctaTarget = isLP2 ? 'checkout' : (isHoliday || isLittleCrickets) ? 'registration-form' : 'apply-form';
 
     const scrollToForm = () => {
         if (isHome && onRegisterClick) {
