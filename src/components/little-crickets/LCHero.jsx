@@ -12,12 +12,12 @@ const LCHero = () => {
             {/* Background image — mobile */}
             <div
                 className="absolute inset-0 bg-cover bg-[center_top] bg-no-repeat md:hidden"
-                style={{ backgroundImage: "url('/assets/little-crickets-hero.jpeg')" }}
+                style={{ backgroundImage: "url('/assets/little-crickets-nets.jpeg')" }}
             />
             {/* Background image — desktop */}
             <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat hidden md:block"
-                style={{ backgroundImage: "url('/assets/little-crickets-hero.jpeg')" }}
+                style={{ backgroundImage: "url('/assets/little-crickets-nets.jpeg')" }}
             />
             {/* Gradient overlays */}
             <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/70 to-rr-dark/30 md:hidden" />

@@ -153,6 +153,45 @@ const LCOverview = () => {
                         </motion.div>
                     ))}
                 </div>
+
+                {/* Photo strip */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-12">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.1 }}
+                        className="relative overflow-hidden rounded-2xl aspect-video"
+                    >
+                        <img
+                            src="/assets/little-crickets-hero.jpeg"
+                            alt="Little Crickets coach with young players"
+                            className="w-full h-full object-cover object-center"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/60 to-transparent" />
+                        <div className="absolute bottom-4 left-4">
+                            <span className="text-xs font-bold text-white/80 uppercase tracking-widest">Warriors Group</span>
+                        </div>
+                    </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 }}
+                        className="relative overflow-hidden rounded-2xl aspect-video"
+                    >
+                        <img
+                            src="/assets/little-crickets-drills.jpeg"
+                            alt="Little Crickets agility drills session"
+                            className="w-full h-full object-cover object-center"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/60 to-transparent" />
+                        <div className="absolute bottom-4 left-4">
+                            <span className="text-xs font-bold text-white/80 uppercase tracking-widest">Skills &amp; Drills</span>
+                        </div>
+                    </motion.div>
+                </div>
+
             </div>
         </section>
     );
