@@ -111,7 +111,7 @@ const LocationsSection = () => {
                                     <div className="flex items-center gap-3">
                                         <Users className="w-4 h-4 text-rr-blue shrink-0" />
                                         <span className={`font-semibold text-sm ${loc.soldOut ? 'text-slate-400' : 'text-rr-charcoal'}`}>
-                                            {loc.soldOut ? '0 spots remaining — sold out' : `${loc.spots} spots available`}
+                                            {loc.soldOut ? '0 spots remaining — sold out' : loc.tag === "cutting-edge" ? "Less than 10 spots remaining" : `${loc.spots} spots available`}
                                         </span>
                                     </div>
                                 </div>
