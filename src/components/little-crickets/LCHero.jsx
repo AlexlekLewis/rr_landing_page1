@@ -20,9 +20,9 @@ const LCHero = () => {
                 style={{ backgroundImage: "url('/assets/little-crickets-nets.jpeg')" }}
             />
             {/* Gradient overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/85 to-rr-dark/60 md:hidden" />
-            <div className="absolute inset-0 bg-black/40 md:hidden" />
-            <div className="absolute inset-0 bg-gradient-to-r from-rr-dark via-rr-dark/85 to-rr-dark/40 hidden md:block" />
+            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/75 to-rr-dark/40 md:hidden" />
+            <div className="absolute inset-0 bg-black/25 md:hidden" />
+            <div className="absolute inset-0 bg-gradient-to-r from-rr-dark via-rr-dark/75 to-rr-dark/20 hidden md:block" />
 
             <div className="relative z-20 container mx-auto px-6 pt-32 pb-24 max-w-4xl">
                 {/* Status badge */}
