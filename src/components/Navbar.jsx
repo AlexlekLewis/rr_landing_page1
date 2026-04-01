@@ -42,11 +42,11 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
     const isLP3 = variant === 'lp3';
     const isHoliday = variant === 'holiday';
     const isHome = variant === 'home';
+    const isLittleCrickets = variant === 'little-crickets';
 
     const navLinks = (isLP3 || isHoliday) ? [] : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
     const showProgramsDropdown = isHome;
 
-    const isLittleCrickets = variant === 'little-crickets';
     const ctaLabel = isHome ? 'REGISTER NOW' : (isLP2 || isHoliday || isLittleCrickets) ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
     const ctaTarget = isLP2 ? 'checkout' : (isHoliday || isLittleCrickets) ? 'registration-form' : 'apply-form';
 

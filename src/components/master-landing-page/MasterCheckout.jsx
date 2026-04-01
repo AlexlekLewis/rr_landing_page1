@@ -362,7 +362,7 @@ const MasterCheckout = () => {
                         Complete Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">Application</span>
                     </h2>
                     <p className="text-white/50 font-medium max-w-xl mx-auto leading-relaxed">
-                        Our Season 1 intake is almost full with only 4 places remaining. Submit your application below to secure one of the final spots — we'll be in touch as soon as your application is reviewed.
+                        Our Season 1 intake is almost full with only 2 places remaining. Submit your application below to secure one of the final spots — we'll be in touch as soon as your application is reviewed.
                     </p>
                     <div className="inline-flex items-center gap-2 bg-rr-pink/15 border border-rr-pink/40 rounded-full px-4 py-2.5 mt-5">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse shrink-0" />
@@ -657,7 +657,7 @@ const MasterCheckout = () => {
                         <div className="w-full bg-rr-dark group-hover:bg-rr-dark/80 transition-colors rounded-2xl px-6 py-7 flex flex-col items-center gap-2 text-center">
                             <span className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.25em]">Elite Program 2026</span>
                             <span className="text-2xl font-black text-white uppercase tracking-tight">Submit Application</span>
-                            <span className="text-white/50 text-sm font-medium">Only 4 places remaining — secure yours now</span>
+                            <span className="text-white/50 text-sm font-medium">Only 2 places remaining — secure yours now</span>
                             <div className="mt-2 flex items-center gap-2 bg-rr-pink/20 px-4 py-2 rounded-full">
                                 {isSubmitting ? (
                                     <Loader2 className="w-4 h-4 text-rr-pink animate-spin" />
