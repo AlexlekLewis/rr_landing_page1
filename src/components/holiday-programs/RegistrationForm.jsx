@@ -139,7 +139,7 @@ const RegistrationForm = () => {
             window.location.href = 'https://buy.stripe.com/9B6dR93bjggZa5ugUj9Zm07';
         } catch (err) {
             console.error('Submission error:', err);
-            setErrors({ form: 'Something went wrong. Please try again or email holidayprograms@rramelbourne.com' });
+            setErrors({ form: 'Something went wrong. Please try again or email info@rramelbourne.com' });
         } finally {
             setSubmitting(false);
         }
@@ -166,7 +166,7 @@ const RegistrationForm = () => {
                         </p>
                         <p className="text-rr-charcoal font-medium leading-relaxed mb-8">
                             We will be in touch if a place becomes available, or regarding future programs. If you have any questions, please contact us at{' '}
-                            <a href="mailto:holidayprograms@rramelbourne.com" className="text-rr-pink font-bold hover:underline">holidayprograms@rramelbourne.com</a>.
+                            <a href="mailto:info@rramelbourne.com" className="text-rr-pink font-bold hover:underline">info@rramelbourne.com</a>.
                         </p>
                         <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 text-left">
                             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Still want to attend a clinic?</p>

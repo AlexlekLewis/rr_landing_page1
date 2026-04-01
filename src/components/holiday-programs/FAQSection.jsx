@@ -104,8 +104,8 @@ const FAQSection = () => {
                     className="text-center text-white/50 text-sm font-medium mt-10"
                 >
                     Still have questions?{' '}
-                    <a href="mailto:holidayprograms@rramelbourne.com" className="text-rr-pink hover:underline font-bold">
-                        holidayprograms@rramelbourne.com
+                    <a href="mailto:info@rramelbourne.com" className="text-rr-pink hover:underline font-bold">
+                        info@rramelbourne.com
                     </a>
                 </motion.p>
             </div>
