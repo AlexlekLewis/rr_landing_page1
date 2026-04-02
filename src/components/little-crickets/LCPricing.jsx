@@ -11,14 +11,14 @@ const groups = [
         ages: 'Ages 7–9',
         price: '$265',
         gradient: 'from-rr-pink to-rr-blue',
-        bundoora: ['Mondays 6:00pm – 7:00pm · From 20 Apr', 'Fridays 6:00pm – 7:00pm · From 24 Apr'],
+        bundoora: ['Mondays · From 20 Apr', 'Fridays · From 24 Apr'],
     },
     {
         name: 'Challengers',
         ages: 'Ages 10–12',
         price: '$290',
         gradient: 'from-rr-blue to-rr-pink',
-        bundoora: ['Mondays 7:00pm – 8:00pm · From 20 Apr', 'Fridays 7:00pm – 8:00pm · From 24 Apr'],
+        bundoora: ['Mondays · From 20 Apr', 'Fridays · From 24 Apr'],
     },
     {
         name: 'Juniors',
@@ -26,10 +26,10 @@ const groups = [
         price: '$310',
         gradient: 'from-rr-pink to-rr-blue',
         bundoora: [
-            'Mondays 6:00pm – 7:00pm · From 20 Apr',
-            'Mondays 7:00pm – 8:00pm · From 20 Apr',
-            'Wednesdays 6:00pm – 7:00pm · From 22 Apr',
-            'Wednesdays 7:00pm – 8:00pm · From 22 Apr',
+            'Mondays 6:00pm · From 20 Apr',
+            'Mondays 7:00pm · From 20 Apr',
+            'Wednesdays 6:00pm · From 22 Apr',
+            'Wednesdays 7:00pm · From 22 Apr',
         ],
     },
 ];
