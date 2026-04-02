@@ -2,7 +2,31 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 
-const AGE_OPTIONS = Array.from({ length: 6 }, (_, i) => i + 7); // 7–12
+const AGE_OPTIONS = Array.from({ length: 9 }, (_, i) => i + 7); // 7–15
+
+const SESSION_OPTIONS = {
+    bundoora: {
+        warriors: [
+            { value: 'mon-6pm', label: 'Mondays 6:00pm – 7:00pm (from 20 Apr)' },
+            { value: 'fri-6pm', label: 'Fridays 6:00pm – 7:00pm (from 24 Apr)' },
+        ],
+        challengers: [
+            { value: 'mon-7pm', label: 'Mondays 7:00pm – 8:00pm (from 20 Apr)' },
+            { value: 'fri-7pm', label: 'Fridays 7:00pm – 8:00pm (from 24 Apr)' },
+        ],
+        juniors: [
+            { value: 'mon-6pm', label: 'Mondays 6:00pm – 7:00pm (from 20 Apr)' },
+            { value: 'mon-7pm', label: 'Mondays 7:00pm – 8:00pm (from 20 Apr)' },
+            { value: 'wed-6pm', label: 'Wednesdays 6:00pm – 7:00pm (from 22 Apr)' },
+            { value: 'wed-7pm', label: 'Wednesdays 7:00pm – 8:00pm (from 22 Apr)' },
+        ],
+    },
+    hallam: {
+        warriors: [{ value: 'tbc', label: 'TBC — Details Coming Soon' }],
+        challengers: [{ value: 'tbc', label: 'TBC — Details Coming Soon' }],
+        juniors: [{ value: 'tbc', label: 'TBC — Details Coming Soon' }],
+    },
+};
 
 const getUTMParams = () => {
     const params = new URLSearchParams(window.location.search);
@@ -49,9 +73,29 @@ const LCRegistrationForm = () => {
         player_age: '',
         player_gender: '',
         suburb: '',
+        location: '',
         group_selection: '',
-        session_preference: '',
+        time_slot: '',
     });
+
+    // Derived: available session options based on location + group
+    const availableSessions =
+        form.location && form.group_selection
+            ? SESSION_OPTIONS[form.location]?.[form.group_selection] || []
+            : [];
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        // Reset dependent fields when location or group changes
+        if (name === 'location') {
+            setForm(prev => ({ ...prev, location: value, group_selection: '', time_slot: '' }));
+        } else if (name === 'group_selection') {
+            setForm(prev => ({ ...prev, group_selection: value, time_slot: '' }));
+        } else {
+            setForm(prev => ({ ...prev, [name]: value }));
+        }
+        if (errors[name]) setErrors(prev => ({ ...prev, [name]: undefined }));
+    };
 
     const validate = () => {
         const newErrors = {};
@@ -62,20 +106,15 @@ const LCRegistrationForm = () => {
         if (!form.player_age) newErrors.player_age = 'Player age is required.';
         if (!form.player_gender) newErrors.player_gender = 'Please select a cricket type.';
         if (!form.suburb.trim()) newErrors.suburb = 'Suburb is required.';
+        if (!form.location) newErrors.location = 'Please select a location.';
         if (!form.group_selection) newErrors.group_selection = 'Please select a group.';
-        if (!form.session_preference) newErrors.session_preference = 'Please select a session day.';
+        if (!form.time_slot) newErrors.time_slot = 'Please select a session time.';
         if (!acceptTerms) newErrors.acceptTerms = 'You must agree to the Terms & Conditions and Privacy Policy.';
         if (!acceptPlayerCode) newErrors.acceptPlayerCode = 'You must agree to the Player Code of Conduct.';
         if (!acceptParentCode) newErrors.acceptParentCode = 'You must agree to the Parent/Guardian Code of Conduct.';
         if (!acceptSocialMedia) newErrors.acceptSocialMedia = 'You must confirm your consent for social media use.';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setForm(prev => ({ ...prev, [name]: value }));
-        if (errors[name]) setErrors(prev => ({ ...prev, [name]: undefined }));
     };
 
     const handleSubmit = async (e) => {
@@ -98,8 +137,9 @@ const LCRegistrationForm = () => {
                 player_age: parseInt(form.player_age, 10),
                 player_gender: form.player_gender,
                 suburb: form.suburb.trim(),
+                location: form.location,
                 group_selection: form.group_selection,
-                session_preference: form.session_preference,
+                time_slot: form.time_slot,
                 source: 'junior-royals',
                 page_referrer: document.referrer || null,
                 ...utmParams,
@@ -198,7 +238,7 @@ const LCRegistrationForm = () => {
                         transition={{ delay: 0.2 }}
                         className="text-white/70 font-medium"
                     >
-                        Fill in your details below to register your child for Term 2.
+                        Fill in your details below to register for Term 2.
                     </motion.p>
                 </div>
 
@@ -275,24 +315,50 @@ const LCRegistrationForm = () => {
                         <div className="mb-8">
                             <h3 className="text-base font-black text-rr-dark uppercase tracking-widest mb-6 pb-3 border-b border-slate-100">Program Selection</h3>
                             <div className="space-y-5">
+
+                                {/* Location */}
                                 <div>
-                                    <label className={labelClass}>Group *</label>
-                                    <select name="group_selection" value={form.group_selection} onChange={handleChange} className={inputClass('group_selection')}>
-                                        <option value="">Select a group</option>
-                                        <option value="warriors">Warriors — Ages 7–9</option>
-                                        <option value="challengers">Challengers — Ages 10–12</option>
+                                    <label className={labelClass}>Location *</label>
+                                    <select name="location" value={form.location} onChange={handleChange} className={inputClass('location')}>
+                                        <option value="">Select a location</option>
+                                        <option value="bundoora">Bundoora — Cutting Edge Cricket</option>
+                                        <option value="hallam">Hallam — Cricket Connect</option>
                                     </select>
-                                    {errors.group_selection && <p className="text-red-500 text-xs font-medium mt-1">{errors.group_selection}</p>}
+                                    {errors.location && <p className="text-red-500 text-xs font-medium mt-1">{errors.location}</p>}
+                                    {form.location === 'hallam' && (
+                                        <p className="text-amber-600 text-xs font-medium mt-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+                                            Hallam session times are still being confirmed. We'll contact you with details once finalised.
+                                        </p>
+                                    )}
                                 </div>
-                                <div>
-                                    <label className={labelClass}>Preferred Session Day *</label>
-                                    <select name="session_preference" value={form.session_preference} onChange={handleChange} className={inputClass('session_preference')}>
-                                        <option value="">Select a day</option>
-                                        <option value="monday">Mondays — Starting 20 April</option>
-                                        <option value="friday">Fridays — Starting 24 April</option>
-                                    </select>
-                                    {errors.session_preference && <p className="text-red-500 text-xs font-medium mt-1">{errors.session_preference}</p>}
-                                </div>
+
+                                {/* Group — shown once location selected */}
+                                {form.location && (
+                                    <div>
+                                        <label className={labelClass}>Group *</label>
+                                        <select name="group_selection" value={form.group_selection} onChange={handleChange} className={inputClass('group_selection')}>
+                                            <option value="">Select a group</option>
+                                            <option value="warriors">Warriors — Ages 7–9 ($265)</option>
+                                            <option value="challengers">Challengers — Ages 10–12 ($290)</option>
+                                            <option value="juniors">Juniors — Ages 13–15 ($310)</option>
+                                        </select>
+                                        {errors.group_selection && <p className="text-red-500 text-xs font-medium mt-1">{errors.group_selection}</p>}
+                                    </div>
+                                )}
+
+                                {/* Session time — shown once group selected */}
+                                {form.location && form.group_selection && (
+                                    <div>
+                                        <label className={labelClass}>Session Time *</label>
+                                        <select name="time_slot" value={form.time_slot} onChange={handleChange} className={inputClass('time_slot')}>
+                                            <option value="">Select a time</option>
+                                            {availableSessions.map(s => (
+                                                <option key={s.value} value={s.value}>{s.label}</option>
+                                            ))}
+                                        </select>
+                                        {errors.time_slot && <p className="text-red-500 text-xs font-medium mt-1">{errors.time_slot}</p>}
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -313,7 +379,6 @@ const LCRegistrationForm = () => {
                             </ComplianceCheckbox>
                         </div>
 
-                        {/* Form error */}
                         {errors.form && (
                             <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
                                 <p className="text-red-600 text-sm font-medium">{errors.form}</p>
