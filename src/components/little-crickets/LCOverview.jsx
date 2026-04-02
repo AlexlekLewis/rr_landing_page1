@@ -108,45 +108,6 @@ const LCOverview = () => {
                     ))}
                 </motion.div>
 
-                {/* Location cards */}
-                <div className="mb-16">
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-6 text-center"
-                    >
-                        Locations
-                    </motion.p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-                        {[
-                            { name: 'Bundoora', venue: 'Cutting Edge Cricket', badge: 'Enrolling Now', badgeColor: 'bg-rr-pink', tbc: false },
-                            { name: 'Hallam', venue: 'Cricket Connect', badge: 'Coming Soon', badgeColor: 'bg-slate-400', tbc: true },
-                        ].map((loc, i) => (
-                            <motion.div
-                                key={loc.name}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: i * 0.1 }}
-                                className={`rounded-2xl border p-6 flex items-center gap-5 ${loc.tbc ? 'bg-slate-50 border-slate-200 opacity-70' : 'bg-white border-slate-200 shadow-sm'}`}
-                            >
-                                <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 text-xl ${loc.tbc ? 'bg-slate-100' : 'bg-rr-pink/10'}`}>
-                                    📍
-                                </div>
-                                <div>
-                                    <div className="flex items-center gap-2 mb-1">
-                                        <p className="font-black text-rr-dark uppercase tracking-tight">{loc.name}</p>
-                                        <span className={`text-xs font-bold text-white px-2 py-0.5 rounded-full ${loc.badgeColor}`}>{loc.badge}</span>
-                                    </div>
-                                    <p className="text-sm font-medium text-rr-charcoal">{loc.venue}</p>
-                                    {loc.tbc && <p className="text-xs text-slate-400 font-medium mt-0.5">Schedule TBC — details coming soon</p>}
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-
                 {/* Group cards */}
                 <motion.p
                     initial={{ opacity: 0, y: 20 }}

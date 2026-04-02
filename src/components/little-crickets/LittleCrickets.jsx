@@ -5,12 +5,15 @@ import LCHero from './LCHero';
 import LCOverview from './LCOverview';
 import LCPricing from './LCPricing';
 import LCRegistrationForm from './LCRegistrationForm';
-import LCStickyCTA from './LCStickyCTA';
+import LCLocations from './LCLocations';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
+
+import LCStickyCTA from './LCStickyCTA';
 
 const SECTIONS = [
     'hero',
     'program-overview',
+    'locations',
     'pricing',
     'registration-form',
 ];
@@ -31,6 +34,9 @@ const LittleCrickets = () => {
                 </div>
                 <div id="program-overview">
                     <LCOverview />
+                </div>
+                <div id="locations">
+                    <LCLocations />
                 </div>
                 <div id="pricing">
                     <LCPricing />

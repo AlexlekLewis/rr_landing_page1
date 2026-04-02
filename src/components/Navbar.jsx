@@ -17,6 +17,7 @@ const LP2_NAV = [
 
 const LC_NAV = [
     { label: 'PROGRAM', id: 'program-overview' },
+    { label: 'LOCATIONS', id: 'locations' },
     { label: 'PRICING', id: 'pricing' },
 ];
 
