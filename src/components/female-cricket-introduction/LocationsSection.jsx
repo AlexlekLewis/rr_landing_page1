@@ -13,20 +13,8 @@ const locations = [
         gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
         mapsUrl: 'https://maps.google.com/?q=Bundoora+Indoor+Sports+Centre+VIC',
         tag: 'bundoora',
-        image: '/assets/cec-lanes.jpg',
-        confirmed: true,
-    },
-    {
-        name: 'Hallam Venue',
-        suburb: 'Hallam, VIC',
-        area: 'South-Eastern Melbourne',
-        dates: 'Dates TBC',
-        time: 'Times TBC',
-        note: 'Venue details to be confirmed',
-        gradient: 'linear-gradient(135deg, #E11F8F 0%, #1226AA 60%, #001D48 100%)',
-        mapsUrl: 'https://maps.google.com/?q=Hallam+VIC',
-        tag: 'hallam',
         image: '/assets/hallam-cricket-centre.png',
+        confirmed: true,
     },
 ];
 
@@ -46,7 +34,7 @@ const LocationsSection = () => {
                         transition={{ duration: 0.6 }}
                         className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-wide mb-6"
                     >
-                        TWO <span className="text-rr-pink">LOCATIONS</span>
+                        OUR <span className="text-rr-pink">LOCATION</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -55,7 +43,7 @@ const LocationsSection = () => {
                         transition={{ duration: 0.6, delay: 0.15 }}
                         className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium"
                     >
-                        Northern Melbourne and south-eastern Melbourne. Bundoora is confirmed — register now to secure your place. Hallam dates coming soon.
+                        Register now to secure your place at Bundoora Indoor Sports Centre — Tuesdays from 21 April, 5:00–6:00 PM.
                     </motion.p>
                 </div>
 

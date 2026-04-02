@@ -326,7 +326,6 @@ const RegistrationForm = () => {
                                 <select name="location" value={form.location} onChange={handleChange} className={inputClass('location')}>
                                     <option value="">Select a location</option>
                                     <option value="bundoora">Bundoora Indoor Sports Centre — Northern Melbourne</option>
-                                    <option value="hallam">Hallam — South-Eastern Melbourne</option>
                                 </select>
                                 {errors.location && <p className="text-red-500 text-xs font-medium mt-1">{errors.location}</p>}
                             </div>
