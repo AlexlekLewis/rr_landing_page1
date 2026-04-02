@@ -100,13 +100,13 @@ const LCRegistrationForm = () => {
                 suburb: form.suburb.trim(),
                 group_selection: form.group_selection,
                 session_preference: form.session_preference,
-                source: 'little-crickets',
+                source: 'junior-royals',
                 page_referrer: document.referrer || null,
                 ...utmParams,
             };
 
             const { error: insertError } = await supabase
-                .from('little_crickets_registrations')
+                .from('junior_royals_registrations')
                 .insert([payload]);
 
             if (insertError) throw insertError;
@@ -118,8 +118,8 @@ const LCRegistrationForm = () => {
                     last_name: form.player_name.trim().split(' ').slice(1).join(' '),
                     email: form.parent_email.trim(),
                     phone: form.parent_phone.trim(),
-                    source: 'little-crickets',
-                    program_type: 'Little Crickets Club',
+                    source: 'junior-royals',
+                    program_type: 'Junior Royals',
                     ...utmParams,
                     page_referrer: document.referrer || null,
                 }]);
@@ -157,7 +157,7 @@ const LCRegistrationForm = () => {
                         </div>
                         <h2 className="text-2xl font-black text-rr-dark uppercase tracking-tight mb-4">Registration Received!</h2>
                         <p className="text-rr-charcoal font-medium leading-relaxed mb-4">
-                            Thank you for registering for the Little Crickets Club — Term 2, 2026. We'll be in touch shortly with next steps and payment details.
+                            Thank you for registering for the Junior Royals — Term 2, 2026. We'll be in touch shortly with next steps and payment details.
                         </p>
                         <p className="text-rr-charcoal font-medium leading-relaxed">
                             Questions? Email us at{' '}

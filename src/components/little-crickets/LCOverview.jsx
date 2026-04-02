@@ -64,7 +64,7 @@ const LCOverview = () => {
                         transition={{ delay: 0.2 }}
                         className="text-lg text-rr-charcoal font-medium max-w-3xl mx-auto leading-relaxed"
                     >
-                        The Little Crickets Club is a small group, term-based coaching program designed for participants to learn foundation cricket skills and build on those skills to prepare them to play cricket in a team.
+                        The Junior Royals is a small group, term-based coaching program designed for participants to learn foundation cricket skills and build on those skills to prepare them to play cricket in a team.
                         Programs run in Terms 1, 2 &amp; 4, with a limited program in Term 3.
                     </motion.p>
                 </div>
@@ -165,7 +165,7 @@ const LCOverview = () => {
                     >
                         <img
                             src="/assets/little-crickets-hero.jpeg"
-                            alt="Little Crickets coach with young players"
+                            alt="Junior Royals coach with young players"
                             className="w-full h-full object-cover object-center"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/60 to-transparent" />
@@ -182,7 +182,7 @@ const LCOverview = () => {
                     >
                         <img
                             src="/assets/little-crickets-drills.jpeg"
-                            alt="Little Crickets agility drills session"
+                            alt="Junior Royals agility drills session"
                             className="w-full h-full object-cover object-center"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/60 to-transparent" />
