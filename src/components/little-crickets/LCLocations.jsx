@@ -44,10 +44,7 @@ const GroupAccordion = ({ group, isBundoora }) => {
                 onClick={() => setOpen(o => !o)}
                 className="w-full flex items-center justify-between px-4 py-3 bg-slate-50 hover:bg-slate-100 transition-colors duration-200"
             >
-                <div className="flex items-center gap-3">
-                    <span className="font-black text-rr-dark text-sm uppercase tracking-wide">{group.name}</span>
-                    <span className="text-xs font-bold text-rr-pink">{group.price}</span>
-                </div>
+                <span className="font-black text-rr-dark text-sm uppercase tracking-wide">{group.name}</span>
                 <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
             </button>
             <AnimatePresence initial={false}>
@@ -60,6 +57,7 @@ const GroupAccordion = ({ group, isBundoora }) => {
                         className="overflow-hidden"
                     >
                         <div className="px-4 py-3 bg-white space-y-2">
+                            <p className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-2">{group.price} per child</p>
                             {isBundoora ? (
                                 sessions.map((s, i) => (
                                     <div key={i} className="flex items-center gap-2">
