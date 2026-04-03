@@ -238,7 +238,7 @@ const LCRegistrationForm = () => {
                         transition={{ delay: 0.2 }}
                         className="text-white/70 font-medium"
                     >
-                        Fill in your details below to register for Term 2.
+                        Fill in your details below, and to ensure you secure your place, payment for your preferred program is required.
                     </motion.p>
                 </div>
 
