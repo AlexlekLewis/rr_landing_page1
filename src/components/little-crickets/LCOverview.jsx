@@ -3,45 +3,39 @@ import { motion } from 'framer-motion';
 
 const groups = [
     {
-        name: 'Warriors',
-        ages: '7–9 years',
+        name: 'Ages 7–9',
         color: 'from-rr-pink to-rr-blue',
         points: [
             'Build on foundation cricket skills',
             'Incorporate game sense activities',
             'Prepare players to start playing junior cricket',
         ],
-        price: '$265',
         bundoora: [
             { day: 'Mondays', time: '6:00pm – 7:00pm', start: '20 Apr' },
             { day: 'Fridays', time: '6:00pm – 7:00pm', start: '24 Apr' },
         ],
     },
     {
-        name: 'Challengers',
-        ages: '10–12 years',
+        name: 'Ages 10–12',
         color: 'from-rr-blue to-rr-pink',
         points: [
             'Skill-focused sessions',
             'Use of bowling machine',
             'Secondary training for those already playing cricket',
         ],
-        price: '$290',
         bundoora: [
             { day: 'Mondays', time: '7:00pm – 8:00pm', start: '20 Apr' },
             { day: 'Fridays', time: '7:00pm – 8:00pm', start: '24 Apr' },
         ],
     },
     {
-        name: 'Juniors',
-        ages: '13–15 years',
+        name: 'Ages 13–15',
         color: 'from-rr-pink to-rr-blue',
         points: [
             'High-intensity, skill-focused sessions',
             'Use of bowling machine',
             'Ideal secondary training for competitive players',
         ],
-        price: '$310',
         bundoora: [
             { day: 'Mondays', time: '6:00pm – 7:00pm', start: '20 Apr' },
             { day: 'Mondays', time: '7:00pm – 8:00pm', start: '20 Apr' },
@@ -53,7 +47,7 @@ const groups = [
 
 const LCOverview = () => {
     return (
-        <section className="py-24 bg-white">
+        <section id="program-overview" className="py-24 bg-white">
             <div className="max-w-6xl mx-auto px-6">
 
                 {/* Section header */}
@@ -82,7 +76,7 @@ const LCOverview = () => {
                         transition={{ delay: 0.2 }}
                         className="text-lg text-rr-charcoal font-medium max-w-3xl mx-auto leading-relaxed"
                     >
-                        The Junior Royals is a small group, term-based coaching program designed for participants to learn foundation cricket skills and build on those skills to prepare them to play cricket in a team.
+                        The Junior Royals is a small group, term-based coaching program for players aged 7–15. Participants build foundation cricket skills and prepare to play cricket in a team — delivered by CA accredited coaches.
                         Programs run in Terms 1, 2 &amp; 4, with a limited program in Term 3.
                     </motion.p>
                 </div>
@@ -108,6 +102,24 @@ const LCOverview = () => {
                     ))}
                 </motion.div>
 
+                {/* Royals shirt notice */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="bg-gradient-to-r from-rr-pink/10 to-rr-blue/10 border border-rr-pink/30 rounded-2xl p-6 mb-16 flex items-start gap-4"
+                >
+                    <div className="w-10 h-10 rounded-full bg-rr-pink/20 flex items-center justify-center shrink-0 text-lg mt-0.5">
+                        👕
+                    </div>
+                    <div>
+                        <p className="font-black text-rr-dark uppercase tracking-tight mb-1">Royals Training Shirt Required</p>
+                        <p className="text-rr-charcoal font-medium text-sm leading-relaxed">
+                            A Rajasthan Royals training shirt is required at all Junior Royals group sessions. Shirts can be purchased as an addition to your program registration.
+                        </p>
+                    </div>
+                </motion.div>
+
                 {/* Group cards */}
                 <motion.p
                     initial={{ opacity: 0, y: 20 }}
@@ -115,7 +127,7 @@ const LCOverview = () => {
                     viewport={{ once: true }}
                     className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-6 text-center"
                 >
-                    Groups
+                    Age Groups
                 </motion.p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {groups.map((group, i) => (
@@ -129,17 +141,9 @@ const LCOverview = () => {
                         >
                             <div className={`h-2 bg-gradient-to-r ${group.color}`} />
                             <div className="p-6">
-                                <div className="flex items-start justify-between mb-5">
-                                    <div>
-                                        <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-1">Group</p>
-                                        <h3 className="text-2xl font-black text-white uppercase tracking-tight">{group.name}</h3>
-                                        <p className="text-white/60 font-medium text-sm mt-0.5">{group.ages}</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-1">From</p>
-                                        <p className="text-xl font-black text-rr-pink">{group.price}</p>
-                                        <p className="text-white/40 text-xs font-medium">per child</p>
-                                    </div>
+                                <div className="mb-5">
+                                    <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-1">Group</p>
+                                    <h3 className="text-2xl font-black text-white uppercase tracking-tight">{group.name}</h3>
                                 </div>
 
                                 <ul className="space-y-2 mb-6">
@@ -187,7 +191,7 @@ const LCOverview = () => {
                         <img src="/assets/little-crickets-hero.jpeg" alt="Junior Royals coach with young players" className="w-full h-full object-cover object-center" />
                         <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/60 to-transparent" />
                         <div className="absolute bottom-4 left-4">
-                            <span className="text-xs font-bold text-white/80 uppercase tracking-widest">Warriors Group</span>
+                            <span className="text-xs font-bold text-white/80 uppercase tracking-widest">Ages 7–9 Group</span>
                         </div>
                     </motion.div>
                     <motion.div

@@ -6,15 +6,15 @@ const AGE_OPTIONS = Array.from({ length: 9 }, (_, i) => i + 7); // 7–15
 
 const SESSION_OPTIONS = {
     bundoora: {
-        warriors: [
+        'ages-7-9': [
             { value: 'mon-6pm', label: 'Mondays 6:00pm – 7:00pm (from 20 Apr)' },
             { value: 'fri-6pm', label: 'Fridays 6:00pm – 7:00pm (from 24 Apr)' },
         ],
-        challengers: [
+        'ages-10-12': [
             { value: 'mon-7pm', label: 'Mondays 7:00pm – 8:00pm (from 20 Apr)' },
             { value: 'fri-7pm', label: 'Fridays 7:00pm – 8:00pm (from 24 Apr)' },
         ],
-        juniors: [
+        'ages-13-15': [
             { value: 'mon-6pm', label: 'Mondays 6:00pm – 7:00pm (from 20 Apr)' },
             { value: 'mon-7pm', label: 'Mondays 7:00pm – 8:00pm (from 20 Apr)' },
             { value: 'wed-6pm', label: 'Wednesdays 6:00pm – 7:00pm (from 22 Apr)' },
@@ -22,9 +22,9 @@ const SESSION_OPTIONS = {
         ],
     },
     hallam: {
-        warriors: [{ value: 'tbc', label: 'TBC — Details Coming Soon' }],
-        challengers: [{ value: 'tbc', label: 'TBC — Details Coming Soon' }],
-        juniors: [{ value: 'tbc', label: 'TBC — Details Coming Soon' }],
+        'ages-7-9': [{ value: 'tbc', label: 'TBC — Details Coming Soon' }],
+        'ages-10-12': [{ value: 'tbc', label: 'TBC — Details Coming Soon' }],
+        'ages-13-15': [{ value: 'tbc', label: 'TBC — Details Coming Soon' }],
     },
 };
 
@@ -338,9 +338,9 @@ const LCRegistrationForm = () => {
                                         <label className={labelClass}>Group *</label>
                                         <select name="group_selection" value={form.group_selection} onChange={handleChange} className={inputClass('group_selection')}>
                                             <option value="">Select a group</option>
-                                            <option value="warriors">Warriors — Ages 7–9 ($265)</option>
-                                            <option value="challengers">Challengers — Ages 10–12 ($290)</option>
-                                            <option value="juniors">Juniors — Ages 13–15 ($310)</option>
+                                            <option value="ages-7-9">Ages 7–9 ($265)</option>
+                                            <option value="ages-10-12">Ages 10–12 ($290)</option>
+                                            <option value="ages-13-15">Ages 13–15 ($310)</option>
                                         </select>
                                         {errors.group_selection && <p className="text-red-500 text-xs font-medium mt-1">{errors.group_selection}</p>}
                                     </div>
@@ -377,6 +377,14 @@ const LCRegistrationForm = () => {
                             <ComplianceCheckbox checked={acceptSocialMedia} onChange={setAcceptSocialMedia} error={errors.acceptSocialMedia}>
                                 I am happy for photos and videos from the program featuring the player to be used on Rajasthan Royals Academy Melbourne's social media and marketing channels.
                             </ComplianceCheckbox>
+                        </div>
+
+                        {/* Shirt notice */}
+                        <div className="bg-rr-pink/5 border border-rr-pink/20 rounded-xl p-4 mb-6 flex items-start gap-3">
+                            <span className="text-lg shrink-0">👕</span>
+                            <p className="text-rr-charcoal text-sm font-medium leading-relaxed">
+                                <span className="font-black text-rr-dark">Royals training shirt required.</span> A Rajasthan Royals training shirt must be worn at all Junior Royals sessions. Shirts can be purchased as an addition to your registration.
+                            </p>
                         </div>
 
                         {errors.form && (

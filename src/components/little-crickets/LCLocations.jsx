@@ -1,20 +1,105 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { MapPin, Calendar, Clock, Info } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { MapPin, Calendar, Clock, ChevronDown } from 'lucide-react';
+
+const GROUPS = [
+    {
+        name: 'Ages 7–9',
+        price: '$265',
+        bundoora: [
+            'Mondays 6:00pm – 7:00pm · From 20 Apr',
+            'Fridays 6:00pm – 7:00pm · From 24 Apr',
+        ],
+        hallam: null,
+    },
+    {
+        name: 'Ages 10–12',
+        price: '$290',
+        bundoora: [
+            'Mondays 7:00pm – 8:00pm · From 20 Apr',
+            'Fridays 7:00pm – 8:00pm · From 24 Apr',
+        ],
+        hallam: null,
+    },
+    {
+        name: 'Ages 13–15',
+        price: '$310',
+        bundoora: [
+            'Mondays 6:00pm – 7:00pm · From 20 Apr',
+            'Mondays 7:00pm – 8:00pm · From 20 Apr',
+            'Wednesdays 6:00pm – 7:00pm · From 22 Apr',
+            'Wednesdays 7:00pm – 8:00pm · From 22 Apr',
+        ],
+        hallam: null,
+    },
+];
+
+const GroupAccordion = ({ group, isBundoora }) => {
+    const [open, setOpen] = useState(false);
+    const sessions = isBundoora ? group.bundoora : group.hallam;
+
+    return (
+        <div className="border border-slate-200 rounded-xl overflow-hidden">
+            <button
+                onClick={() => setOpen(o => !o)}
+                className="w-full flex items-center justify-between px-4 py-3 bg-slate-50 hover:bg-slate-100 transition-colors duration-200"
+            >
+                <div className="flex items-center gap-3">
+                    <span className="font-black text-rr-dark text-sm uppercase tracking-wide">{group.name}</span>
+                    <span className="text-xs font-bold text-rr-pink">{group.price}</span>
+                </div>
+                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
+            </button>
+            <AnimatePresence initial={false}>
+                {open && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden"
+                    >
+                        <div className="px-4 py-3 bg-white space-y-2">
+                            {isBundoora ? (
+                                sessions.map((s, i) => (
+                                    <div key={i} className="flex items-center gap-2">
+                                        <Clock className="w-3.5 h-3.5 text-rr-blue shrink-0" />
+                                        <span className="text-sm font-medium text-rr-charcoal">{s}</span>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="flex items-center gap-2">
+                                    <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                    <span className="text-sm font-medium text-slate-400">Session times TBC — details coming soon</span>
+                                </div>
+                            )}
+                            {/* Shirt notice */}
+                            <div className="mt-3 pt-3 border-t border-slate-100 flex items-start gap-2">
+                                <span className="text-sm shrink-0">👕</span>
+                                <p className="text-xs text-slate-500 font-medium leading-relaxed">Royals training shirt required — available to purchase with your registration.</p>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    );
+};
 
 const locations = [
     {
         area: 'Northern Melbourne',
         name: 'Cutting Edge Cricket',
         suburb: 'Bundoora, VIC',
-        dates: 'Starting Monday 20 April or Friday 24 April',
-        time: '6:00 PM – 8:00 PM (group dependent)',
+        dates: 'Starting Monday 20 Apr or Friday 24 Apr',
+        time: 'Times vary by age group',
         note: 'Indoor cricket facility',
         confirmed: true,
         image: '/assets/jr-bundoora.png',
         gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
         mapsUrl: 'https://maps.google.com/?q=Cutting+Edge+Cricket+Bundoora+VIC',
         tag: 'bundoora',
+        isBundoora: true,
     },
     {
         area: 'South-Eastern Melbourne',
@@ -28,6 +113,7 @@ const locations = [
         gradient: 'linear-gradient(135deg, #323E48 0%, #1226AA 60%, #323E48 100%)',
         mapsUrl: 'https://maps.google.com/?q=Cricket+Connect+Hallam+VIC',
         tag: 'hallam',
+        isBundoora: false,
     },
 ];
 
@@ -37,7 +123,7 @@ const LCLocations = () => {
     };
 
     return (
-        <section id="locations" className="py-24 bg-white">
+        <section id="locations" className="py-24 bg-slate-50">
             <div className="max-w-6xl mx-auto px-6">
                 <div className="text-center mb-16">
                     <motion.p
@@ -64,7 +150,7 @@ const LCLocations = () => {
                         transition={{ duration: 0.6, delay: 0.15 }}
                         className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium"
                     >
-                        Junior Royals runs across two Melbourne venues. Bundoora is open for enrolment now — Hallam details coming soon.
+                        Programs from <span className="font-black text-rr-dark">$265</span>. Two Melbourne venues — select a location below to view age groups, times and pricing.
                     </motion.p>
                 </div>
 
@@ -90,19 +176,15 @@ const LCLocations = () => {
                                 />
                             </div>
 
-                            <div className="p-8">
+                            <div className="p-6">
                                 <p className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-1">{loc.area}</p>
                                 <h3 className="text-xl font-black text-rr-dark uppercase tracking-wide mb-1">{loc.name}</h3>
-                                <p className="text-rr-charcoal font-semibold text-sm mb-6">{loc.suburb}</p>
+                                <p className="text-rr-charcoal font-semibold text-sm mb-5">{loc.suburb}</p>
 
-                                <div className="space-y-3 mb-4">
+                                <div className="space-y-2 mb-5">
                                     <div className="flex items-center gap-3">
                                         <Calendar className="w-4 h-4 text-rr-blue shrink-0" />
                                         <span className="text-rr-charcoal font-semibold text-sm">{loc.dates}</span>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <Clock className="w-4 h-4 text-rr-blue shrink-0" />
-                                        <span className="text-rr-charcoal font-semibold text-sm">{loc.time}</span>
                                     </div>
                                     <div className="flex items-center gap-3">
                                         <MapPin className="w-4 h-4 text-rr-blue shrink-0" />
@@ -110,22 +192,27 @@ const LCLocations = () => {
                                     </div>
                                 </div>
 
-                                {/* Confirmed or TBC notice */}
+                                {/* Confirmed / TBC badge */}
                                 {loc.confirmed ? (
-                                    <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-3 mb-6 flex items-center gap-2">
+                                    <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-2.5 mb-5 flex items-center gap-2">
                                         <span className="w-2 h-2 rounded-full bg-green-500 shrink-0" />
-                                        <p className="text-green-700 text-xs font-bold uppercase tracking-wide">
-                                            Dates &amp; times confirmed
-                                        </p>
+                                        <p className="text-green-700 text-xs font-bold uppercase tracking-wide">Dates &amp; times confirmed</p>
                                     </div>
                                 ) : (
-                                    <div className="bg-rr-pink/5 border border-rr-pink/20 rounded-xl px-4 py-3 mb-6">
-                                        <p className="text-rr-pink text-xs font-bold uppercase tracking-wide">
-                                            Dates &amp; times being finalised — register now to hold your spot.
-                                        </p>
+                                    <div className="bg-rr-pink/5 border border-rr-pink/20 rounded-xl px-4 py-2.5 mb-5">
+                                        <p className="text-rr-pink text-xs font-bold uppercase tracking-wide">Dates &amp; times being finalised — register now to hold your spot.</p>
                                     </div>
                                 )}
 
+                                {/* Age group accordions */}
+                                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Age Groups &amp; Times</p>
+                                <div className="space-y-2 mb-6">
+                                    {GROUPS.map(group => (
+                                        <GroupAccordion key={group.name} group={group} isBundoora={loc.isBundoora} />
+                                    ))}
+                                </div>
+
+                                {/* CTAs */}
                                 <div className="flex flex-col sm:flex-row gap-3">
                                     <button
                                         onClick={scrollToForm}
