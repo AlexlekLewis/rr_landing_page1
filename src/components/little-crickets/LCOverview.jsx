@@ -10,10 +10,6 @@ const groups = [
             'Incorporate game sense activities',
             'Prepare players to start playing junior cricket',
         ],
-        bundoora: [
-            { day: 'Mondays', time: '6:00pm – 7:00pm', start: '20 Apr' },
-            { day: 'Fridays', time: '6:00pm – 7:00pm', start: '24 Apr' },
-        ],
     },
     {
         name: 'Ages 10–12',
@@ -23,10 +19,6 @@ const groups = [
             'Use of bowling machine',
             'Secondary training for those already playing cricket',
         ],
-        bundoora: [
-            { day: 'Mondays', time: '7:00pm – 8:00pm', start: '20 Apr' },
-            { day: 'Fridays', time: '7:00pm – 8:00pm', start: '24 Apr' },
-        ],
     },
     {
         name: 'Ages 13–15',
@@ -35,12 +27,6 @@ const groups = [
             'High-intensity, skill-focused sessions',
             'Use of bowling machine',
             'Ideal secondary training for competitive players',
-        ],
-        bundoora: [
-            { day: 'Mondays', time: '6:00pm – 7:00pm', start: '20 Apr' },
-            { day: 'Mondays', time: '7:00pm – 8:00pm', start: '20 Apr' },
-            { day: 'Wednesdays', time: '6:00pm – 7:00pm', start: '22 Apr' },
-            { day: 'Wednesdays', time: '7:00pm – 8:00pm', start: '22 Apr' },
         ],
     },
 ];
@@ -146,7 +132,7 @@ const LCOverview = () => {
                                     <h3 className="text-2xl font-black text-white uppercase tracking-tight">{group.name}</h3>
                                 </div>
 
-                                <ul className="space-y-2 mb-6">
+                                <ul className="space-y-2">
                                     {group.points.map((point, j) => (
                                         <li key={j} className="flex items-start gap-3">
                                             <span className="mt-0.5 w-4 h-4 rounded-full bg-gradient-to-br from-rr-pink to-rr-blue flex items-center justify-center shrink-0">
@@ -158,22 +144,6 @@ const LCOverview = () => {
                                         </li>
                                     ))}
                                 </ul>
-
-                                <div className="border-t border-white/10 pt-5">
-                                    <p className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-2">Bundoora Sessions</p>
-                                    <div className="space-y-1.5 mb-4">
-                                        {group.bundoora.map((s, k) => (
-                                            <div key={k} className="flex items-center justify-between bg-white/5 border border-white/10 rounded-lg px-3 py-2">
-                                                <p className="text-white/80 text-xs font-semibold">{s.day} · {s.time}</p>
-                                                <p className="text-white/40 text-xs">From {s.start}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Hallam Sessions</p>
-                                    <div className="bg-white/3 border border-white/8 rounded-lg px-3 py-2 text-center">
-                                        <p className="text-slate-500 text-xs font-semibold">TBC — Details Coming Soon</p>
-                                    </div>
-                                </div>
                             </div>
                         </motion.div>
                     ))}
