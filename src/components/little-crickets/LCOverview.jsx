@@ -67,45 +67,6 @@ const LCOverview = () => {
                     </motion.p>
                 </div>
 
-                {/* Credential bar */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.2 }}
-                    className="flex flex-wrap justify-center gap-4 mb-16"
-                >
-                    {[
-                        { icon: '✅', label: 'CA Accredited Coaches' },
-                        { icon: '🛡️', label: 'Working With Children Check' },
-                        { icon: '🏏', label: 'Small Group Coaching' },
-                        { icon: '📍', label: '2 Melbourne Locations' },
-                    ].map((item, i) => (
-                        <div key={i} className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-full px-5 py-3">
-                            <span className="text-sm">{item.icon}</span>
-                            <span className="text-sm font-bold text-rr-dark uppercase tracking-wide">{item.label}</span>
-                        </div>
-                    ))}
-                </motion.div>
-
-                {/* Royals shirt notice */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="bg-gradient-to-r from-rr-pink/10 to-rr-blue/10 border border-rr-pink/30 rounded-2xl p-6 mb-16 flex items-start gap-4"
-                >
-                    <div className="w-10 h-10 rounded-full bg-rr-pink/20 flex items-center justify-center shrink-0 text-lg mt-0.5">
-                        👕
-                    </div>
-                    <div>
-                        <p className="font-black text-rr-dark uppercase tracking-tight mb-1">Royals Training Shirt Required</p>
-                        <p className="text-rr-charcoal font-medium text-sm leading-relaxed">
-                            A Rajasthan Royals training shirt is required at all Junior Royals group sessions. Shirts can be purchased as an addition to your program registration.
-                        </p>
-                    </div>
-                </motion.div>
-
                 {/* Group cards */}
                 <motion.p
                     initial={{ opacity: 0, y: 20 }}
