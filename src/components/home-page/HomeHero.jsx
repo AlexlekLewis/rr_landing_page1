@@ -4,8 +4,8 @@ import { ChevronDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const PROGRAMS = [
-    { label: 'Elite Program 2026', route: '/eliteprogram2026', badge: 'Now Open', badgeColor: 'bg-green-500' },
-    { label: 'Holiday Programs', route: '/holiday-programs', badge: 'Selling Fast', badgeColor: 'bg-orange-500' },
+    { label: 'T20 Elite Program', route: '/eliteprogram2026', badge: 'Application Only', badgeColor: 'bg-rr-pink' },
+    { label: 'Holiday Programs', route: '/holiday-programs', badge: '2 Spots Left', badgeColor: 'bg-orange-500' },
     { label: 'Girls Kickstart', route: '/female-cricket-kickstart', badge: 'Registrations Open', badgeColor: 'bg-green-500' },
 ];
 

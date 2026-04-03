@@ -9,8 +9,8 @@ const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Advanced', 'Elite'];
 const GENDER_OPTIONS = ['Male Cricket', 'Female Cricket', 'No Preference'];
 
 const PROGRAMS = [
-    { label: 'Elite Program 2026', route: '/eliteprogram2026', urgency: 'Now Accepting Applications' },
-    { label: 'Holiday Programs', route: '/holiday-programs', urgency: 'Bundoora Selling Fast · Hallam Waitlist Only' },
+    { label: 'T20 Elite Program', route: '/eliteprogram2026', urgency: 'Application Only — contact us to apply' },
+    { label: 'Holiday Programs', route: '/holiday-programs', urgency: 'Only 2 Spots Remaining — Bundoora' },
     { label: 'Girls Kickstart', route: '/female-cricket-kickstart', urgency: null },
 ];
 
