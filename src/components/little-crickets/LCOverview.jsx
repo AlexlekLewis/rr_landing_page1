@@ -63,7 +63,7 @@ const LCOverview = () => {
                         className="text-lg text-rr-charcoal font-medium max-w-3xl mx-auto leading-relaxed"
                     >
                         The Junior Royals is a small group, term-based coaching program for players aged 7–15. Participants build foundation through to more advanced cricket skills and prepare to play cricket in a team and higher levels — delivered by ICC, Royals and CA accredited coaches. Program content also supports participant preparation for the Rajasthan Royals Academy T20 Elite programs.
-                    </p>
+                    </motion.p>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
