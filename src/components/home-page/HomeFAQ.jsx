@@ -14,7 +14,7 @@ const faqs = [
     },
     {
         q: 'How do I know which program is right for my child?',
-        a: 'Use the program search tool above to filter by age group, skill level, and location. If you\'re still unsure, register your interest via "Register Now" and our team will reach out to help match your child to the right program.',
+        a: 'Use the program search tool above to filter by age group, skill level, and location. If you\'re still unsure, register your interest via "Register Now" and our team will provide regular communication with upcoming programs.',
     },
     {
         q: 'Are there programs for girls and women\'s cricket?',
