@@ -130,7 +130,7 @@ const LCLocations = () => {
                         viewport={{ once: true }}
                         className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3"
                     >
-                        Where We Train
+                        Details
                     </motion.p>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -139,7 +139,7 @@ const LCLocations = () => {
                         transition={{ duration: 0.6, delay: 0.1 }}
                         className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-wide mb-6"
                     >
-                        OUR <span className="text-rr-pink">LOCATIONS</span>
+                        OUR <span className="text-rr-pink">LOCATIONS, TIMES &amp; PRICING</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -148,7 +148,7 @@ const LCLocations = () => {
                         transition={{ duration: 0.6, delay: 0.15 }}
                         className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium"
                     >
-                        Programs from <span className="font-black text-rr-dark">$265</span>. Two Melbourne venues — select a location below to view age groups, times and pricing.
+                        Programs priced from <span className="font-black text-rr-dark">$265</span>. Two Melbourne venues — select a location below to view age groups, times and pricing.
                     </motion.p>
                 </div>
 
