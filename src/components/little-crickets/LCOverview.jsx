@@ -11,11 +11,11 @@ const groups = [
             'Incorporate game sense activities',
             'Prepare players to start playing junior cricket',
         ],
-        schedule: [
+        price: '$265',
+        bundoora: [
             { day: 'Mondays', time: '6:00pm – 7:00pm', start: '20 Apr' },
             { day: 'Fridays', time: '6:00pm – 7:00pm', start: '24 Apr' },
         ],
-        price: '$265',
     },
     {
         name: 'Challengers',
@@ -26,11 +26,28 @@ const groups = [
             'Use of bowling machine',
             'Secondary training for those already playing cricket',
         ],
-        schedule: [
+        price: '$290',
+        bundoora: [
             { day: 'Mondays', time: '7:00pm – 8:00pm', start: '20 Apr' },
             { day: 'Fridays', time: '7:00pm – 8:00pm', start: '24 Apr' },
         ],
-        price: '$290',
+    },
+    {
+        name: 'Juniors',
+        ages: '13–15 years',
+        color: 'from-rr-pink to-rr-blue',
+        points: [
+            'High-intensity, skill-focused sessions',
+            'Use of bowling machine',
+            'Ideal secondary training for competitive players',
+        ],
+        price: '$310',
+        bundoora: [
+            { day: 'Mondays', time: '6:00pm – 7:00pm', start: '20 Apr' },
+            { day: 'Mondays', time: '7:00pm – 8:00pm', start: '20 Apr' },
+            { day: 'Wednesdays', time: '6:00pm – 7:00pm', start: '22 Apr' },
+            { day: 'Wednesdays', time: '7:00pm – 8:00pm', start: '22 Apr' },
+        ],
     },
 ];
 
@@ -38,6 +55,7 @@ const LCOverview = () => {
     return (
         <section className="py-24 bg-white">
             <div className="max-w-6xl mx-auto px-6">
+
                 {/* Section header */}
                 <div className="text-center mb-16">
                     <motion.p
@@ -64,7 +82,7 @@ const LCOverview = () => {
                         transition={{ delay: 0.2 }}
                         className="text-lg text-rr-charcoal font-medium max-w-3xl mx-auto leading-relaxed"
                     >
-                        The Little Crickets Club is a small group, term-based coaching program designed for participants to learn foundation cricket skills and build on those skills to prepare them to play cricket in a team.
+                        The Junior Royals is a small group, term-based coaching program designed for participants to learn foundation cricket skills and build on those skills to prepare them to play cricket in a team.
                         Programs run in Terms 1, 2 &amp; 4, with a limited program in Term 3.
                     </motion.p>
                 </div>
@@ -75,13 +93,13 @@ const LCOverview = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.2 }}
-                    className="flex flex-wrap justify-center gap-6 mb-16"
+                    className="flex flex-wrap justify-center gap-4 mb-16"
                 >
                     {[
                         { icon: '✅', label: 'CA Accredited Coaches' },
                         { icon: '🛡️', label: 'Working With Children Check' },
                         { icon: '🏏', label: 'Small Group Coaching' },
-                        { icon: '📍', label: 'Bundoora — Cutting Edge Cricket' },
+                        { icon: '📍', label: '2 Melbourne Locations' },
                     ].map((item, i) => (
                         <div key={i} className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-full px-5 py-3">
                             <span className="text-sm">{item.icon}</span>
@@ -91,38 +109,44 @@ const LCOverview = () => {
                 </motion.div>
 
                 {/* Group cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-6 text-center"
+                >
+                    Groups
+                </motion.p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {groups.map((group, i) => (
                         <motion.div
                             key={group.name}
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ delay: i * 0.15 }}
+                            transition={{ delay: i * 0.1 }}
                             className="bg-rr-dark rounded-2xl overflow-hidden"
                         >
-                            {/* Card header gradient */}
                             <div className={`h-2 bg-gradient-to-r ${group.color}`} />
-                            <div className="p-8">
-                                <div className="flex items-start justify-between mb-6">
+                            <div className="p-6">
+                                <div className="flex items-start justify-between mb-5">
                                     <div>
                                         <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-1">Group</p>
-                                        <h3 className="text-3xl font-black text-white uppercase tracking-tight">{group.name}</h3>
-                                        <p className="text-white/60 font-medium mt-1">{group.ages}</p>
+                                        <h3 className="text-2xl font-black text-white uppercase tracking-tight">{group.name}</h3>
+                                        <p className="text-white/60 font-medium text-sm mt-0.5">{group.ages}</p>
                                     </div>
                                     <div className="text-right">
                                         <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-1">From</p>
-                                        <p className="text-2xl font-black text-rr-pink">{group.price}</p>
+                                        <p className="text-xl font-black text-rr-pink">{group.price}</p>
                                         <p className="text-white/40 text-xs font-medium">per child</p>
                                     </div>
                                 </div>
 
-                                {/* Points */}
-                                <ul className="space-y-3 mb-8">
+                                <ul className="space-y-2 mb-6">
                                     {group.points.map((point, j) => (
-                                        <li key={j} className="flex items-center gap-4">
-                                            <span className="w-5 h-5 rounded-full bg-gradient-to-br from-rr-pink to-rr-blue flex items-center justify-center shrink-0">
-                                                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <li key={j} className="flex items-start gap-3">
+                                            <span className="mt-0.5 w-4 h-4 rounded-full bg-gradient-to-br from-rr-pink to-rr-blue flex items-center justify-center shrink-0">
+                                                <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                                                 </svg>
                                             </span>
@@ -131,22 +155,19 @@ const LCOverview = () => {
                                     ))}
                                 </ul>
 
-                                {/* Schedule */}
-                                <div className="border-t border-white/10 pt-6">
-                                    <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3">Session Options</p>
-                                    <div className="space-y-2">
-                                        {group.schedule.map((s, k) => (
-                                            <div key={k} className="flex items-center justify-between bg-white/5 border border-white/10 rounded-xl px-4 py-3">
-                                                <div>
-                                                    <p className="text-white font-bold text-sm">{s.day}</p>
-                                                    <p className="text-white/50 text-xs font-medium">{s.time}</p>
-                                                </div>
-                                                <div className="text-right">
-                                                    <p className="text-xs font-bold text-rr-pink uppercase tracking-wide">Starts</p>
-                                                    <p className="text-white/80 text-xs font-medium">{s.start}</p>
-                                                </div>
+                                <div className="border-t border-white/10 pt-5">
+                                    <p className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-2">Bundoora Sessions</p>
+                                    <div className="space-y-1.5 mb-4">
+                                        {group.bundoora.map((s, k) => (
+                                            <div key={k} className="flex items-center justify-between bg-white/5 border border-white/10 rounded-lg px-3 py-2">
+                                                <p className="text-white/80 text-xs font-semibold">{s.day} · {s.time}</p>
+                                                <p className="text-white/40 text-xs">From {s.start}</p>
                                             </div>
                                         ))}
+                                    </div>
+                                    <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Hallam Sessions</p>
+                                    <div className="bg-white/3 border border-white/8 rounded-lg px-3 py-2 text-center">
+                                        <p className="text-slate-500 text-xs font-semibold">TBC — Details Coming Soon</p>
                                     </div>
                                 </div>
                             </div>
@@ -163,11 +184,7 @@ const LCOverview = () => {
                         transition={{ delay: 0.1 }}
                         className="relative overflow-hidden rounded-2xl aspect-video"
                     >
-                        <img
-                            src="/assets/little-crickets-hero.jpeg"
-                            alt="Little Crickets coach with young players"
-                            className="w-full h-full object-cover object-center"
-                        />
+                        <img src="/assets/little-crickets-hero.jpeg" alt="Junior Royals coach with young players" className="w-full h-full object-cover object-center" />
                         <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/60 to-transparent" />
                         <div className="absolute bottom-4 left-4">
                             <span className="text-xs font-bold text-white/80 uppercase tracking-widest">Warriors Group</span>
@@ -180,11 +197,7 @@ const LCOverview = () => {
                         transition={{ delay: 0.2 }}
                         className="relative overflow-hidden rounded-2xl aspect-video"
                     >
-                        <img
-                            src="/assets/little-crickets-drills.jpeg"
-                            alt="Little Crickets agility drills session"
-                            className="w-full h-full object-cover object-center"
-                        />
+                        <img src="/assets/little-crickets-drills.jpeg" alt="Junior Royals agility drills session" className="w-full h-full object-cover object-center" />
                         <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/60 to-transparent" />
                         <div className="absolute bottom-4 left-4">
                             <span className="text-xs font-bold text-white/80 uppercase tracking-widest">Skills &amp; Drills</span>

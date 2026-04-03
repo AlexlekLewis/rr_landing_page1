@@ -1,40 +1,61 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Calendar, Clock, Users } from 'lucide-react';
+import { MapPin, Calendar, Clock, Info } from 'lucide-react';
 
 const locations = [
     {
-        name: 'Bundoora Indoor Sports Centre',
-        suburb: 'Bundoora, VIC',
         area: 'Northern Melbourne',
-        dates: 'Starting Tuesday 21 April 2026',
-        time: '5:00 PM – 6:00 PM weekly',
-        note: 'Full Court — indoor facility',
-        gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
-        mapsUrl: 'https://maps.google.com/?q=Bundoora+Indoor+Sports+Centre+VIC',
-        tag: 'bundoora',
-        image: '/assets/hallam-cricket-centre.png',
+        name: 'Cutting Edge Cricket',
+        suburb: 'Bundoora, VIC',
+        dates: 'Starting Monday 20 April or Friday 24 April',
+        time: '6:00 PM – 8:00 PM (group dependent)',
+        note: 'Indoor cricket facility',
         confirmed: true,
+        image: '/assets/jr-bundoora.png',
+        gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
+        mapsUrl: 'https://maps.google.com/?q=Cutting+Edge+Cricket+Bundoora+VIC',
+        tag: 'bundoora',
+    },
+    {
+        area: 'South-Eastern Melbourne',
+        name: 'Cricket Connect',
+        suburb: 'Hallam, VIC',
+        dates: 'TBC',
+        time: 'TBC',
+        note: 'Venue details to be confirmed',
+        confirmed: false,
+        image: '/assets/jr-hallam.png',
+        gradient: 'linear-gradient(135deg, #323E48 0%, #1226AA 60%, #323E48 100%)',
+        mapsUrl: 'https://maps.google.com/?q=Cricket+Connect+Hallam+VIC',
+        tag: 'hallam',
     },
 ];
 
-const LocationsSection = () => {
+const LCLocations = () => {
     const scrollToForm = () => {
         document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (
-        <section className="py-24 bg-white">
+        <section id="locations" className="py-24 bg-white">
             <div className="max-w-6xl mx-auto px-6">
                 <div className="text-center mb-16">
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3"
+                    >
+                        Where We Train
+                    </motion.p>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
+                        transition={{ duration: 0.6, delay: 0.1 }}
                         className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-wide mb-6"
                     >
-                        OUR <span className="text-rr-pink">LOCATION</span>
+                        OUR <span className="text-rr-pink">LOCATIONS</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -43,7 +64,7 @@ const LocationsSection = () => {
                         transition={{ duration: 0.6, delay: 0.15 }}
                         className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium"
                     >
-                        Register now to secure your place at Bundoora Indoor Sports Centre — Tuesdays from 21 April, 5:00–6:00 PM.
+                        Junior Royals runs across two Melbourne venues. Bundoora is open for enrolment now — Hallam details coming soon.
                     </motion.p>
                 </div>
 
@@ -94,13 +115,13 @@ const LocationsSection = () => {
                                     <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-3 mb-6 flex items-center gap-2">
                                         <span className="w-2 h-2 rounded-full bg-green-500 shrink-0" />
                                         <p className="text-green-700 text-xs font-bold uppercase tracking-wide">
-                                            Dates & times confirmed
+                                            Dates &amp; times confirmed
                                         </p>
                                     </div>
                                 ) : (
                                     <div className="bg-rr-pink/5 border border-rr-pink/20 rounded-xl px-4 py-3 mb-6">
                                         <p className="text-rr-pink text-xs font-bold uppercase tracking-wide">
-                                            Dates & times being finalised — register now to hold your spot.
+                                            Dates &amp; times being finalised — register now to hold your spot.
                                         </p>
                                     </div>
                                 )}
@@ -130,4 +151,4 @@ const LocationsSection = () => {
     );
 };
 
-export default LocationsSection;
+export default LCLocations;

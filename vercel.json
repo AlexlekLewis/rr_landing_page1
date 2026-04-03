@@ -21,6 +21,14 @@
             "destination": "/api/$1"
         },
         {
+            "source": "/RRACRMDashboard/(.*)",
+            "destination": "/RRACRMDashboard/$1"
+        },
+        {
+            "source": "/RRACRMDashboard",
+            "destination": "/RRACRMDashboard/index.html"
+        },
+        {
             "source": "/(.*)",
             "destination": "/index.html"
         }

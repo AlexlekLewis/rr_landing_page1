@@ -25,7 +25,7 @@ const faqs = [
     },
     {
         q: 'Where exactly are the venues?',
-        a: 'Bundoora Indoor Sports Centre is located in northern Melbourne. The Hallam venue is in south-eastern Melbourne. Full venue addresses and directions will be included in the pre-program information sent to registered families.',
+        a: 'The program runs at Bundoora Indoor Sports Centre in northern Melbourne. The full address and directions will be included in the pre-program information sent to registered families.',
     },
 ];
 

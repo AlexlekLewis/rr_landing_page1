@@ -43,8 +43,8 @@ const LCHero = () => {
                     transition={{ duration: 0.6, delay: 0.15 }}
                     className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-200 uppercase tracking-tighter leading-none mb-6"
                 >
-                    LITTLE CRICKETS<br />
-                    <span className="text-rr-pink">CLUB</span>
+                    JUNIOR<br />
+                    <span className="text-rr-pink">ROYALS</span>
                 </motion.h1>
 
                 {/* Subhead */}
@@ -63,7 +63,7 @@ const LCHero = () => {
                     transition={{ duration: 0.6, delay: 0.4 }}
                     className="text-sm md:text-lg text-white/80 font-medium mb-8 max-w-xl"
                 >
-                    Small group, term-based coaching for players aged 7–12. Build foundation skills, develop game sense, and prepare to play cricket in a team — delivered by CA accredited coaches.
+                    Small group, term-based coaching for players aged 7–15. Build foundation skills, develop game sense, and prepare to play cricket in a team — delivered by CA accredited coaches.
                 </motion.p>
 
                 {/* Info pills */}
@@ -76,6 +76,10 @@ const LCHero = () => {
                     <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2">
                         <span className="text-rr-pink font-bold text-xs">📍</span>
                         <span className="text-white text-xs font-semibold uppercase tracking-wide">Bundoora — Cutting Edge Cricket</span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2">
+                        <span className="text-rr-pink font-bold text-xs">📍</span>
+                        <span className="text-white text-xs font-semibold uppercase tracking-wide">Hallam — Cricket Connect</span>
                     </div>
                     <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2">
                         <span className="text-rr-pink font-bold text-xs">📅</span>
