@@ -4,6 +4,19 @@ import { supabase } from '../../lib/supabase';
 
 const AGE_OPTIONS = Array.from({ length: 9 }, (_, i) => i + 7); // 7–15
 
+const STRIPE_LINKS = {
+    bundoora: {
+        'ages-7-9':   'https://buy.stripe.com/6oUdR96nv9SBgtS6fF9Zm0d',
+        'ages-10-12': 'https://buy.stripe.com/3cI14neU15CldhGfQf9Zm0c',
+        'ages-13-15': 'https://buy.stripe.com/4gM28r27f7Kt1yY5bB9Zm0b',
+    },
+    hallam: {
+        'ages-7-9':   null, // TBC
+        'ages-10-12': null, // TBC
+        'ages-13-15': null, // TBC
+    },
+};
+
 const SESSION_OPTIONS = {
     bundoora: {
         'ages-7-9': [
@@ -22,17 +35,22 @@ const SESSION_OPTIONS = {
         ],
     },
     hallam: {
-        'ages-7-9': [{ value: 'tbc', label: 'TBC — Details Coming Soon' }],
+        'ages-7-9':   [{ value: 'tbc', label: 'TBC — Details Coming Soon' }],
         'ages-10-12': [{ value: 'tbc', label: 'TBC — Details Coming Soon' }],
         'ages-13-15': [{ value: 'tbc', label: 'TBC — Details Coming Soon' }],
     },
 };
 
+const SUPABASE_TABLE = {
+    bundoora: 'junior_royals_bundoora',
+    hallam:   'junior_royals_hallam',
+};
+
 const getUTMParams = () => {
     const params = new URLSearchParams(window.location.search);
     return {
-        utm_source: params.get('utm_source') || null,
-        utm_medium: params.get('utm_medium') || null,
+        utm_source:   params.get('utm_source')   || null,
+        utm_medium:   params.get('utm_medium')   || null,
         utm_campaign: params.get('utm_campaign') || null,
     };
 };
@@ -58,7 +76,6 @@ const ComplianceCheckbox = ({ checked, onChange, error, children }) => (
 
 const LCRegistrationForm = () => {
     const [submitting, setSubmitting] = useState(false);
-    const [success, setSuccess] = useState(false);
     const [errors, setErrors] = useState({});
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [acceptPlayerCode, setAcceptPlayerCode] = useState(false);
@@ -78,15 +95,20 @@ const LCRegistrationForm = () => {
         time_slot: '',
     });
 
-    // Derived: available session options based on location + group
     const availableSessions =
         form.location && form.group_selection
             ? SESSION_OPTIONS[form.location]?.[form.group_selection] || []
             : [];
 
+    const stripeLink =
+        form.location && form.group_selection
+            ? STRIPE_LINKS[form.location]?.[form.group_selection] || null
+            : null;
+
+    const isHallamNoStripe = form.location === 'hallam' && !stripeLink;
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        // Reset dependent fields when location or group changes
         if (name === 'location') {
             setForm(prev => ({ ...prev, location: value, group_selection: '', time_slot: '' }));
         } else if (name === 'group_selection') {
@@ -124,6 +146,7 @@ const LCRegistrationForm = () => {
 
         try {
             const utmParams = getUTMParams();
+            const table = SUPABASE_TABLE[form.location];
 
             const payload = {
                 accept_terms: acceptTerms,
@@ -140,38 +163,49 @@ const LCRegistrationForm = () => {
                 location: form.location,
                 group_selection: form.group_selection,
                 time_slot: form.time_slot,
-                source: 'junior-royals',
+                source: `junior-royals-${form.location}`,
                 page_referrer: document.referrer || null,
                 ...utmParams,
             };
 
-            const { error: insertError } = await supabase
-                .from('junior_royals_registrations')
-                .insert([payload]);
+            const { data, error: insertError } = await supabase
+                .from(table)
+                .insert([payload])
+                .select();
 
             if (insertError) throw insertError;
 
-            // Secondary insert to applications table (non-blocking)
+            // Secondary insert to applications (non-blocking)
             try {
                 await supabase.from('applications').insert([{
                     first_name: form.player_name.trim().split(' ')[0],
                     last_name: form.player_name.trim().split(' ').slice(1).join(' '),
                     email: form.parent_email.trim(),
                     phone: form.parent_phone.trim(),
-                    source: 'junior-royals',
+                    source: `junior-royals-${form.location}`,
                     program_type: 'Junior Royals',
                     ...utmParams,
                     page_referrer: document.referrer || null,
                 }]);
             } catch (_) { /* non-blocking */ }
 
-            setSuccess(true);
-            window.scrollTo({ top: document.getElementById('registration-form')?.offsetTop - 100, behavior: 'smooth' });
+            // Store record ID for success page payment status update
+            if (data?.[0]?.id) {
+                localStorage.setItem('jr_record_id', data[0].id);
+                localStorage.setItem('jr_location', form.location);
+            }
+
+            // Redirect to Stripe or show holding message for Hallam
+            if (stripeLink) {
+                window.location.href = stripeLink;
+            } else {
+                // Hallam — no Stripe yet, show success
+                window.location.href = '/junior-royals/success';
+            }
 
         } catch (err) {
             console.error('Submission error:', err);
             setErrors({ form: 'Something went wrong. Please try again or email andy.crook@rramelbourne.com' });
-        } finally {
             setSubmitting(false);
         }
     };
@@ -180,34 +214,6 @@ const LCRegistrationForm = () => {
         `w-full bg-slate-50 border ${errors[field] ? 'border-red-400' : 'border-slate-200'} rounded-xl px-4 py-3 text-rr-dark font-medium focus:outline-none focus:border-rr-pink transition-colors duration-200 text-sm`;
 
     const labelClass = 'block text-xs font-black text-rr-dark uppercase tracking-widest mb-2';
-
-    if (success) {
-        return (
-            <section id="registration-form" className="py-24 bg-rr-dark">
-                <div className="max-w-xl mx-auto px-6 text-center">
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="bg-white rounded-2xl p-10"
-                    >
-                        <div className="w-16 h-16 rounded-full bg-rr-pink/10 flex items-center justify-center mx-auto mb-6">
-                            <svg className="w-8 h-8 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                            </svg>
-                        </div>
-                        <h2 className="text-2xl font-black text-rr-dark uppercase tracking-tight mb-4">Registration Received!</h2>
-                        <p className="text-rr-charcoal font-medium leading-relaxed mb-4">
-                            Thank you for registering for the Junior Royals — Term 2, 2026. We'll be in touch shortly with next steps and payment details.
-                        </p>
-                        <p className="text-rr-charcoal font-medium leading-relaxed">
-                            Questions? Email us at{' '}
-                            <a href="mailto:andy.crook@rramelbourne.com" className="text-rr-pink font-bold hover:underline">andy.crook@rramelbourne.com</a>.
-                        </p>
-                    </motion.div>
-                </div>
-            </section>
-        );
-    }
 
     return (
         <section id="registration-form" className="py-24 bg-rr-dark">
@@ -316,7 +322,6 @@ const LCRegistrationForm = () => {
                             <h3 className="text-base font-black text-rr-dark uppercase tracking-widest mb-6 pb-3 border-b border-slate-100">Program Selection</h3>
                             <div className="space-y-5">
 
-                                {/* Location */}
                                 <div>
                                     <label className={labelClass}>Location *</label>
                                     <select name="location" value={form.location} onChange={handleChange} className={inputClass('location')}>
@@ -332,12 +337,11 @@ const LCRegistrationForm = () => {
                                     )}
                                 </div>
 
-                                {/* Group — shown once location selected */}
                                 {form.location && (
                                     <div>
-                                        <label className={labelClass}>Group *</label>
+                                        <label className={labelClass}>Age Group *</label>
                                         <select name="group_selection" value={form.group_selection} onChange={handleChange} className={inputClass('group_selection')}>
-                                            <option value="">Select a group</option>
+                                            <option value="">Select an age group</option>
                                             <option value="ages-7-9">Ages 7–9 ($265)</option>
                                             <option value="ages-10-12">Ages 10–12 ($290)</option>
                                             <option value="ages-13-15">Ages 13–15 ($310)</option>
@@ -346,7 +350,6 @@ const LCRegistrationForm = () => {
                                     </div>
                                 )}
 
-                                {/* Session time — shown once group selected */}
                                 {form.location && form.group_selection && (
                                     <div>
                                         <label className={labelClass}>Session Time *</label>
@@ -362,7 +365,7 @@ const LCRegistrationForm = () => {
                             </div>
                         </div>
 
-                        {/* Compliance checkboxes */}
+                        {/* Compliance */}
                         <div className="mb-8 pt-6 border-t border-slate-100">
                             <h3 className="text-base font-black text-rr-dark uppercase tracking-widest mb-6">Agreements &amp; Consent</h3>
                             <ComplianceCheckbox checked={acceptTerms} onChange={setAcceptTerms} error={errors.acceptTerms}>
@@ -393,6 +396,7 @@ const LCRegistrationForm = () => {
                             </div>
                         )}
 
+                        {/* Submit button — label changes based on location */}
                         <button
                             type="submit"
                             disabled={submitting}
@@ -408,7 +412,7 @@ const LCRegistrationForm = () => {
                                 </>
                             ) : (
                                 <>
-                                    Register Now
+                                    {isHallamNoStripe ? 'Register Interest — Hallam' : form.location === 'bundoora' ? 'Register & Pay — Bundoora' : form.location === 'hallam' ? 'Register & Pay — Hallam' : 'Register & Pay'}
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                     </svg>

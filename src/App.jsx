@@ -23,6 +23,7 @@ import LandingPage3 from './components/landing-page-3/LandingPage3';
 import StripeSuccess from './components/landing-page-3/StripeSuccess';
 import MasterLandingPage from './components/master-landing-page/MasterLandingPage';
 import LittleCrickets from './components/little-crickets/LittleCrickets';
+import JRSuccess from './components/little-crickets/JRSuccess';
 import HolidayPrograms from './components/holiday-programs/HolidayPrograms';
 import HolidayProgramSuccess from './components/holiday-programs/HolidayProgramSuccess';
 import FemaleCricketIntroduction from './components/female-cricket-introduction/FemaleCricketIntroduction';
@@ -118,6 +119,7 @@ function App() {
         <Route path="/holiday-programs" element={<HolidayPrograms />} />
         {/* Junior Royals — DRAFT: not in nav, Vercel only until go-live instruction */}
         <Route path="/junior-royals" element={<LittleCrickets />} />
+        <Route path="/junior-royals/success" element={<JRSuccess />} />
         <Route path="/holiday-programs/success" element={<HolidayProgramSuccess />} />
         {/* Female Cricket Introduction — DRAFT: not in nav, Vercel only until go-live instruction */}
         <Route path="/female-cricket-kickstart" element={<FemaleCricketIntroduction />} />
