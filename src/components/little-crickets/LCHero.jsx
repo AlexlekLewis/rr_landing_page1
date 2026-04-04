@@ -63,7 +63,7 @@ const LCHero = () => {
                     transition={{ duration: 0.6, delay: 0.4 }}
                     className="text-sm md:text-lg text-white/80 font-medium mb-8 max-w-xl"
                 >
-                    Small group, term-based coaching for players aged 7–15. Build foundation skills, develop game sense, and prepare to play cricket in a team — delivered by CA accredited coaches.
+                    Small group, term-based coaching for players aged 7–15. Build foundation skills, develop game sense, prepare to play cricket in a team or continue to take your game to the next level — delivered by Royals and CA accredited coaches.
                 </motion.p>
 
                 {/* Info pills */}
