@@ -57,7 +57,9 @@ const GroupAccordion = ({ group, isBundoora }) => {
                         className="overflow-hidden"
                     >
                         <div className="px-4 py-3 bg-white space-y-2">
-                            <p className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-2">{group.price} per child</p>
+                            {isBundoora && (
+                                <p className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-2">{group.price} per child</p>
+                            )}
                             {isBundoora ? (
                                 sessions.map((s, i) => (
                                     <div key={i} className="flex items-center gap-2">
