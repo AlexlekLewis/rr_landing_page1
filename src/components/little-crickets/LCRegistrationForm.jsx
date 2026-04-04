@@ -171,7 +171,8 @@ const LCRegistrationForm = () => {
             const { data, error: insertError } = await supabase
                 .from(table)
                 .insert([payload])
-                .select();
+                .select('id')
+                .single();
 
             if (insertError) throw insertError;
 
@@ -190,8 +191,8 @@ const LCRegistrationForm = () => {
             } catch (_) { /* non-blocking */ }
 
             // Store record ID for success page payment status update
-            if (data?.[0]?.id) {
-                localStorage.setItem('jr_record_id', data[0].id);
+            if (data?.id) {
+                localStorage.setItem('jr_record_id', data.id);
                 localStorage.setItem('jr_location', form.location);
             }
 
