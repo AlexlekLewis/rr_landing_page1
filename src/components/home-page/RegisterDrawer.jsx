@@ -10,7 +10,7 @@ const GENDER_OPTIONS = ['Male Cricket', 'Female Cricket', 'No Preference'];
 
 const PROGRAMS = [
     { label: 'T20 Elite Program', route: '/eliteprogram2026', urgency: 'Application Only — contact us to apply' },
-    { label: 'Holiday Programs', route: '/holiday-programs', urgency: 'Only 2 Spots Remaining — Bundoora' },
+    { label: 'Holiday Programs', route: '/holiday-programs', urgency: 'Sold Out — Join Waitlist' },
     { label: 'Girls Kickstart', route: '/female-cricket-kickstart', urgency: null },
 ];
 
