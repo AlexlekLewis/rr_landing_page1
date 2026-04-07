@@ -367,28 +367,70 @@ const MasterCheckout = () => {
                     <div className="inline-flex items-center gap-2 bg-rr-pink/15 border border-rr-pink/40 rounded-full px-4 py-2.5 mt-5">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse shrink-0" />
                         <span className="text-[10px] sm:text-xs font-bold text-rr-pink uppercase tracking-wide sm:tracking-widest">
-                            Only 4 Places Remaining — Apply Now
+                            Only 2 Places Remaining — Apply Now
                         </span>
                     </div>
                 </motion.div>
 
-                {/* ────── Please Note — Eligibility ────── */}
+                {/* ────── Program Summary & Pricing ────── */}
                 <motion.div
                     initial={{ opacity: 0, y: 16 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: 0.1 }}
-                    className="bg-rr-blue/10 border border-rr-blue/30 rounded-2xl p-6 mb-8"
+                    className="border border-white/15 rounded-2xl overflow-hidden mb-8"
                 >
-                    <div className="flex items-start gap-3">
-                        <svg className="w-5 h-5 text-rr-blue shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <div>
-                            <h4 className="text-sm font-black text-white uppercase tracking-wide mb-2">Please Note — Program Eligibility</h4>
-                            <p className="text-sm text-white/60 leading-relaxed">
-                                The Rajasthan Royals Academy Elite Program is designed for cricketers <span className="text-white font-bold">11 years of age or older</span> who possess a demonstrated skill set and competitive playing experience. This is a high-performance environment, not a learn-to-play program.
-                            </p>
+                    <div className="h-0.5 bg-gradient-to-r from-rr-pink to-rr-blue" />
+                    <div className="p-6 md:p-8">
+                        <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em] mb-5">T20 Elite Program — Season 1, 2026</p>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                            {/* Left — What you're applying for */}
+                            <div>
+                                <h4 className="text-sm font-black text-white uppercase tracking-wide mb-4">What You're Applying For</h4>
+                                <div className="space-y-3">
+                                    {[
+                                        '12-week professionally coached T20 development program',
+                                        'Delivered by Rajasthan Royals Academy Melbourne',
+                                        'Open to players aged 12 through to adults',
+                                        'Minimum requirement: representative-level cricket experience',
+                                        'This is an application — places are subject to review and acceptance by the selection panel',
+                                    ].map((item, i) => (
+                                        <div key={i} className="flex items-start gap-3">
+                                            <span className="w-4 h-4 rounded-full bg-gradient-to-br from-rr-pink to-rr-blue flex items-center justify-center shrink-0 mt-0.5">
+                                                <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                            </span>
+                                            <span className="text-white/60 text-sm font-medium leading-relaxed">{item}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Right — Program price */}
+                            <div className="bg-white/5 border border-white/10 rounded-xl p-5 md:p-6">
+                                <h4 className="text-sm font-black text-white uppercase tracking-wide mb-4">Program Price</h4>
+                                <div className="mb-4 pb-4 border-b border-white/10">
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <span className="text-[9px] font-bold text-rr-pink uppercase tracking-[0.2em] bg-rr-pink/15 px-2 py-0.5 rounded-full">Most Popular</span>
+                                    </div>
+                                    <div className="flex items-baseline gap-1">
+                                        <span className="text-3xl font-black text-white tracking-tight">$749</span>
+                                        <span className="text-white/40 text-sm font-bold">/payment</span>
+                                    </div>
+                                    <p className="text-white/50 text-xs font-medium mt-1">4 payments of $749 · Flexi Pay</p>
+                                </div>
+                                <div className="mb-4 pb-4 border-b border-white/10">
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <span className="text-[9px] font-bold text-rr-blue uppercase tracking-[0.2em] bg-rr-blue/15 px-2 py-0.5 rounded-full">Best Value</span>
+                                    </div>
+                                    <p className="text-white/70 text-sm font-medium leading-relaxed">
+                                        Or pay <span className="text-white font-black">$2,995</span> upfront — includes bonus training shirt and pants
+                                    </p>
+                                </div>
+                                <p className="text-white/40 text-xs font-medium">Afterpay also available at checkout</p>
+                            </div>
                         </div>
                     </div>
                 </motion.div>
@@ -593,54 +635,35 @@ const MasterCheckout = () => {
                    Female-specific waitlist lives on its own page: /female-cricket-kickstart */}
 
                 {/* ════════════════════════════════════════
-                   CONFIRM & PAY
+                   SUBMIT APPLICATION
                    ════════════════════════════════════════ */}
 
-                {/* Payment section — open to all genders */}
-                {/* Instructional header */}
-                <motion.div
-                    initial={{ opacity: 0, y: 16 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="mb-6"
-                >
-                    <div className="flex items-center justify-center gap-3 mb-4">
-                        <span className="h-px w-8 bg-rr-pink/40" />
-                        <p className="text-[11px] font-bold text-rr-pink uppercase tracking-[0.25em] text-center">
-                            Final Step — Confirm & Pay
-                        </p>
-                        <span className="h-px w-8 bg-rr-pink/40" />
-                    </div>
-                    <p className="text-center text-white/50 text-sm font-medium max-w-lg mx-auto leading-relaxed">
-                        Select your preferred payment option below to submit your application and secure your place. Your details will be saved automatically.
-                    </p>
-                    <style>{`
-                        @keyframes pulseGlow {
-                            0%, 100% { box-shadow: 0 0 20px rgba(229,6,149,0.3); }
-                            50% { box-shadow: 0 0 50px rgba(229,6,149,0.6), 0 0 80px rgba(229,6,149,0.2); }
-                        }
-                        @keyframes shimmerBorder {
-                            0%   { background-position: 0% 50%; }
-                            50%  { background-position: 100% 50%; }
-                            100% { background-position: 0% 50%; }
-                        }
-                        .shimmer-border {
-                            background: linear-gradient(270deg, #e50695, #6366f1, #0070f0, #e50695);
-                            background-size: 300% 300%;
-                            animation: shimmerBorder 3s ease infinite;
-                        }
-                        .shimmer-border-bright {
-                            background: linear-gradient(270deg, #ff0fa8, #a855f7, #e50695, #ff0fa8);
-                            background-size: 300% 300%;
-                            animation: shimmerBorder 2.5s ease infinite;
-                            filter: brightness(1.25) saturate(1.3);
-                            box-shadow: 0 0 18px rgba(229,6,149,0.35);
-                        }
-                    `}</style>
-                </motion.div>
+                {/* Payment animation styles */}
+                <style>{`
+                    @keyframes pulseGlow {
+                        0%, 100% { box-shadow: 0 0 20px rgba(229,6,149,0.3); }
+                        50% { box-shadow: 0 0 50px rgba(229,6,149,0.6), 0 0 80px rgba(229,6,149,0.2); }
+                    }
+                    @keyframes shimmerBorder {
+                        0%   { background-position: 0% 50%; }
+                        50%  { background-position: 100% 50%; }
+                        100% { background-position: 0% 50%; }
+                    }
+                    .shimmer-border {
+                        background: linear-gradient(270deg, #e50695, #6366f1, #0070f0, #e50695);
+                        background-size: 300% 300%;
+                        animation: shimmerBorder 3s ease infinite;
+                    }
+                    .shimmer-border-bright {
+                        background: linear-gradient(270deg, #ff0fa8, #a855f7, #e50695, #ff0fa8);
+                        background-size: 300% 300%;
+                        animation: shimmerBorder 2.5s ease infinite;
+                        filter: brightness(1.25) saturate(1.3);
+                        box-shadow: 0 0 18px rgba(229,6,149,0.35);
+                    }
+                `}</style>
 
-                {/* Submit Application button — all genders go to waitlist */}
+                {/* Submit Application button */}
                 <div ref={paymentRef} className="scroll-mt-8">
                 <motion.div
                     initial={{ opacity: 0, y: 16 }}
