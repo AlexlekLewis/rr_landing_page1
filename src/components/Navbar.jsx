@@ -30,6 +30,7 @@ const PROGRAMS_DROPDOWN = [
     { label: 'T20 Elite Program', route: '/eliteprogram2026', badge: 'Application Only', badgeColor: 'bg-rr-pink' },
     { label: 'Holiday Programs', route: '/holiday-programs', badge: 'Sold Out', badgeColor: 'bg-slate-500' },
     { label: 'Girls Kickstart', route: '/female-cricket-kickstart', badge: 'Open Now', badgeColor: 'bg-green-500' },
+    { label: 'Junior Royals', route: '/junior-royals', badge: 'Enrolling Now', badgeColor: 'bg-green-500' },
 ];
 
 const Navbar = ({ variant = 'lp1', onRegisterClick }) => {

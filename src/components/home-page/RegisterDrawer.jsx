@@ -12,6 +12,7 @@ const PROGRAMS = [
     { label: 'T20 Elite Program', route: '/eliteprogram2026', urgency: 'Application Only — contact us to apply' },
     { label: 'Holiday Programs', route: '/holiday-programs', urgency: 'Sold Out — Join Waitlist' },
     { label: 'Girls Kickstart', route: '/female-cricket-kickstart', urgency: null },
+    { label: 'Junior Royals', route: '/junior-royals', urgency: null },
 ];
 
 const InputField = ({ label, type = 'text', value, onChange, placeholder, required }) => (
