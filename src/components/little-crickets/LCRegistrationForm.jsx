@@ -20,18 +20,18 @@ const STRIPE_LINKS = {
 const SESSION_OPTIONS = {
     bundoora: {
         'ages-7-9': [
-            { value: 'mon-6pm', label: 'Mondays 6:00pm – 7:00pm (from 20 Apr)' },
-            { value: 'fri-6pm', label: 'Fridays 6:00pm – 7:00pm (from 24 Apr)' },
+            { value: 'mon-6pm', label: 'Mondays 6:00pm – 7:00pm (from 27 Apr)' },
+            { value: 'fri-6pm', label: 'Fridays 6:00pm – 7:00pm (from 1 May)' },
         ],
         'ages-10-12': [
-            { value: 'mon-7pm', label: 'Mondays 7:00pm – 8:00pm (from 20 Apr)' },
-            { value: 'fri-7pm', label: 'Fridays 7:00pm – 8:00pm (from 24 Apr)' },
+            { value: 'mon-7pm', label: 'Mondays 7:00pm – 8:00pm (from 27 Apr)' },
+            { value: 'fri-7pm', label: 'Fridays 7:00pm – 8:00pm (from 1 May)' },
         ],
         'ages-13-15': [
-            { value: 'mon-6pm', label: 'Mondays 6:00pm – 7:00pm (from 20 Apr)' },
-            { value: 'mon-7pm', label: 'Mondays 7:00pm – 8:00pm (from 20 Apr)' },
-            { value: 'wed-6pm', label: 'Wednesdays 6:00pm – 7:00pm (from 22 Apr)' },
-            { value: 'wed-7pm', label: 'Wednesdays 7:00pm – 8:00pm (from 22 Apr)' },
+            { value: 'mon-6pm', label: 'Mondays 6:00pm – 7:00pm (from 27 Apr)' },
+            { value: 'mon-7pm', label: 'Mondays 7:00pm – 8:00pm (from 27 Apr)' },
+            { value: 'wed-6pm', label: 'Wednesdays 6:00pm – 7:00pm (from 29 Apr)' },
+            { value: 'wed-7pm', label: 'Wednesdays 7:00pm – 8:00pm (from 29 Apr)' },
         ],
     },
     hallam: {
