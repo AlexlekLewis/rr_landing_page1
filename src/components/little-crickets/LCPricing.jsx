@@ -142,7 +142,7 @@ const LCPricing = () => {
                 >
                     <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center shrink-0 text-lg">📍</div>
                     <div>
-                        <p className="font-black text-rr-dark uppercase tracking-tight text-sm">Hallam — Cricket Connect</p>
+                        <p className="font-black text-rr-dark uppercase tracking-tight text-sm">Hallam — Venue TBC</p>
                         <p className="text-rr-charcoal text-sm font-medium mt-0.5">Session times and schedule are being finalised. Register your interest and we'll be in touch once details are confirmed.</p>
                     </div>
                 </motion.div>

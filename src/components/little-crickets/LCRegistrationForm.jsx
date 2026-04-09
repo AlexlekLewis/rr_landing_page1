@@ -328,7 +328,7 @@ const LCRegistrationForm = () => {
                                     <select name="location" value={form.location} onChange={handleChange} className={inputClass('location')}>
                                         <option value="">Select a location</option>
                                         <option value="bundoora">Bundoora — Cutting Edge Cricket</option>
-                                        <option value="hallam">Hallam — Cricket Connect</option>
+                                        <option value="hallam">Hallam — Venue TBC</option>
                                     </select>
                                     {errors.location && <p className="text-red-500 text-xs font-medium mt-1">{errors.location}</p>}
                                     {form.location === 'hallam' && (

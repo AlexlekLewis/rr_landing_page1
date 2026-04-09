@@ -103,7 +103,7 @@ const locations = [
     },
     {
         area: 'South-Eastern Melbourne',
-        name: 'Cricket Connect',
+        name: 'Venue TBC',
         suburb: 'Hallam, VIC',
         dates: 'TBC',
         time: 'TBC',
@@ -111,7 +111,7 @@ const locations = [
         confirmed: false,
         image: '/assets/jr-hallam.png',
         gradient: 'linear-gradient(135deg, #323E48 0%, #1226AA 60%, #323E48 100%)',
-        mapsUrl: 'https://maps.google.com/?q=Cricket+Connect+Hallam+VIC',
+        mapsUrl: 'https://maps.google.com/?q=Hallam+VIC',
         tag: 'hallam',
         isBundoora: false,
     },
