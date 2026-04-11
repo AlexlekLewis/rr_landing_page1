@@ -53,7 +53,7 @@ const RoyalsInviteSection = () => {
                             />
                             <div className="h-px sm:h-16 w-16 sm:w-px bg-white/20" />
                             <div className="text-center sm:text-left">
-                                <p className="text-white/50 text-xs font-bold uppercase tracking-widest mb-1">April 21 Intake</p>
+                                <p className="text-white/50 text-xs font-bold uppercase tracking-widest mb-1">May 5 Intake</p>
                                 <p className="text-white font-black text-lg uppercase tracking-wide">Girls Kickstart Program</p>
                             </div>
                         </div>
@@ -72,7 +72,7 @@ const RoyalsInviteSection = () => {
                             Register for the Girls Kickstart Program and unlock an exclusive invitation to a <span className="text-white font-black">live online Q&amp;A with a 2026 Rajasthan Royals IPL player.</span>
                         </p>
                         <p className="text-white/60 text-sm font-medium leading-relaxed max-w-xl mb-10">
-                            This invitation is not available to the general public. RRA participants only. Exclusively for those registered in the April 21 intake.
+                            This invitation is not available to the general public. RRA participants only. Exclusively for those registered in the May 5 intake.
                         </p>
 
                         {/* Not available publicly lockup */}
