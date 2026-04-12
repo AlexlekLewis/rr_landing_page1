@@ -93,6 +93,7 @@ const LCRegistrationForm = () => {
         location: '',
         group_selection: '',
         time_slot: '',
+        requires_shirt: '',
     });
 
     const availableSessions =
@@ -131,6 +132,7 @@ const LCRegistrationForm = () => {
         if (!form.location) newErrors.location = 'Please select a location.';
         if (!form.group_selection) newErrors.group_selection = 'Please select a group.';
         if (!form.time_slot) newErrors.time_slot = 'Please select a session time.';
+        if (form.requires_shirt === '') newErrors.requires_shirt = 'Please indicate whether you require a training shirt.';
         if (!acceptTerms) newErrors.acceptTerms = 'You must agree to the Terms & Conditions and Privacy Policy.';
         if (!acceptPlayerCode) newErrors.acceptPlayerCode = 'You must agree to the Player Code of Conduct.';
         if (!acceptParentCode) newErrors.acceptParentCode = 'You must agree to the Parent/Guardian Code of Conduct.';
@@ -163,6 +165,7 @@ const LCRegistrationForm = () => {
                 location: form.location,
                 group_selection: form.group_selection,
                 time_slot: form.time_slot,
+                requires_shirt: form.requires_shirt === 'yes',
                 source: `junior-royals-${form.location}`,
                 page_referrer: document.referrer || null,
                 ...utmParams,
@@ -383,12 +386,23 @@ const LCRegistrationForm = () => {
                             </ComplianceCheckbox>
                         </div>
 
-                        {/* Shirt notice */}
-                        <div className="bg-rr-pink/5 border border-rr-pink/20 rounded-xl p-4 mb-6 flex items-start gap-3">
-                            <span className="text-lg shrink-0">👕</span>
-                            <p className="text-rr-charcoal text-sm font-medium leading-relaxed">
-                                <span className="font-black text-rr-dark">Royals training shirt required.</span> A Rajasthan Royals training shirt must be worn at all Junior Royals sessions. Shirts can be purchased as an addition to your registration.
-                            </p>
+                        {/* Shirt notice + requirement dropdown */}
+                        <div className="bg-rr-pink/5 border border-rr-pink/20 rounded-xl p-4 mb-6">
+                            <div className="flex items-start gap-3 mb-4">
+                                <span className="text-lg shrink-0">👕</span>
+                                <p className="text-rr-charcoal text-sm font-medium leading-relaxed">
+                                    <span className="font-black text-rr-dark">Royals training shirt required.</span> A Rajasthan Royals training shirt must be worn at all Junior Royals sessions. Shirts can be purchased as an addition to your registration.
+                                </p>
+                            </div>
+                            <div>
+                                <label className={labelClass}>Do you require a Rajasthan Royals Academy Training Shirt? *</label>
+                                <select name="requires_shirt" value={form.requires_shirt} onChange={handleChange} className={inputClass('requires_shirt')}>
+                                    <option value="">Select</option>
+                                    <option value="yes">Yes — I need to purchase a shirt</option>
+                                    <option value="no">No — I already have one</option>
+                                </select>
+                                {errors.requires_shirt && <p className="text-red-500 text-xs font-medium mt-1">{errors.requires_shirt}</p>}
+                            </div>
                         </div>
 
                         {errors.form && (
