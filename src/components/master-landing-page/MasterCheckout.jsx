@@ -357,17 +357,17 @@ const MasterCheckout = () => {
                     className="text-center mb-14"
                 >
                     <img src="/assets/Crest.png" alt="Royal Crest" className="h-16 mx-auto mb-6 brightness-0 invert opacity-80" />
-                    <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Secure Your Place</p>
+                    <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Autumn T20 Elite Program</p>
                     <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight mb-4">
-                        Complete Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">Application</span>
+                        Applications <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">Closed</span>
                     </h2>
                     <p className="text-white/50 font-medium max-w-xl mx-auto leading-relaxed">
-                        Our Season 1 intake is almost full with only 2 places remaining. Submit your application below to secure one of the final spots — our selection team will review all applications and we will be in touch should you be successful in being offered a place.
+                        Applications for the Autumn T20 Elite Program are now closed. Stay connected to the Rajasthan Royals Academy Melbourne website for information about future elite programs.
                     </p>
                     <div className="inline-flex items-center gap-2 bg-rr-pink/15 border border-rr-pink/40 rounded-full px-4 py-2.5 mt-5">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse shrink-0" />
                         <span className="text-[10px] sm:text-xs font-bold text-rr-pink uppercase tracking-wide sm:tracking-widest">
-                            Only 2 Places Remaining — Apply Now
+                            Autumn Program — Applications Now Closed
                         </span>
                     </div>
                 </motion.div>
@@ -679,8 +679,8 @@ const MasterCheckout = () => {
                     >
                         <div className="w-full bg-rr-dark group-hover:bg-rr-dark/80 transition-colors rounded-2xl px-6 py-7 flex flex-col items-center gap-2 text-center">
                             <span className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.25em]">Elite Program 2026</span>
-                            <span className="text-2xl font-black text-white uppercase tracking-tight">Submit Application</span>
-                            <span className="text-white/50 text-sm font-medium">Only 2 places remaining — secure yours now</span>
+                            <span className="text-2xl font-black text-white uppercase tracking-tight">Applications Closed</span>
+                            <span className="text-white/50 text-sm font-medium">Stay connected for future programs</span>
                             <div className="mt-2 flex items-center gap-2 bg-rr-pink/20 px-4 py-2 rounded-full">
                                 {isSubmitting ? (
                                     <Loader2 className="w-4 h-4 text-rr-pink animate-spin" />
