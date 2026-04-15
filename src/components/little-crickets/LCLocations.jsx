@@ -2,41 +2,20 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Calendar, Clock, ChevronDown } from 'lucide-react';
 
-const GROUPS = [
-    {
-        name: 'Ages 7–9',
-        price: '$265',
-        bundoora: [
-            'Mondays 6:00pm – 7:00pm · From 27 Apr',
-            'Fridays 6:00pm – 7:00pm · From 1 May',
-        ],
-        hallam: null,
-    },
-    {
-        name: 'Ages 10–12',
-        price: '$290',
-        bundoora: [
-            'Mondays 7:00pm – 8:00pm · From 27 Apr',
-            'Fridays 7:00pm – 8:00pm · From 1 May',
-        ],
-        hallam: null,
-    },
-    {
-        name: 'Ages 13–15',
-        price: '$310',
-        bundoora: [
-            'Mondays 6:00pm – 7:00pm · From 27 Apr',
-            'Mondays 7:00pm – 8:00pm · From 27 Apr',
-            'Wednesdays 6:00pm – 7:00pm · From 29 Apr',
-            'Wednesdays 7:00pm – 8:00pm · From 29 Apr',
-        ],
-        hallam: null,
-    },
+const BUNDOORA_GROUPS = [
+    { name: 'Ages 7–9',   price: '$265', sessions: ['Mondays 6:00pm – 7:00pm · From 27 Apr', 'Fridays 6:00pm – 7:00pm · From 1 May'] },
+    { name: 'Ages 10–12', price: '$290', sessions: ['Mondays 7:00pm – 8:00pm · From 27 Apr', 'Fridays 7:00pm – 8:00pm · From 1 May'] },
+    { name: 'Ages 13–15', price: '$310', sessions: ['Mondays 6:00pm – 7:00pm · From 27 Apr', 'Mondays 7:00pm – 8:00pm · From 27 Apr', 'Wednesdays 6:00pm – 7:00pm · From 29 Apr', 'Wednesdays 7:00pm – 8:00pm · From 29 Apr'] },
 ];
 
-const GroupAccordion = ({ group, isBundoora }) => {
+const HALLAM_GROUPS = [
+    { name: 'Ages 7–9',   price: '$330', sessions: ['Wednesdays 5:30pm – 6:30pm · From 6 May'] },
+    { name: 'Ages 10–12', price: '$330', sessions: ['Wednesdays 6:30pm – 7:30pm · From 6 May'] },
+    { name: 'Ages 13–15', price: '$330', sessions: ['Wednesdays 7:30pm – 8:30pm · From 6 May'] },
+];
+
+const GroupAccordion = ({ group, showPrice }) => {
     const [open, setOpen] = useState(false);
-    const sessions = isBundoora ? group.bundoora : group.hallam;
 
     return (
         <div className="border border-slate-200 rounded-xl overflow-hidden">
@@ -57,23 +36,15 @@ const GroupAccordion = ({ group, isBundoora }) => {
                         className="overflow-hidden"
                     >
                         <div className="px-4 py-3 bg-white space-y-2">
-                            {isBundoora && (
+                            {showPrice && (
                                 <p className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-2">{group.price} per child</p>
                             )}
-                            {isBundoora ? (
-                                sessions.map((s, i) => (
-                                    <div key={i} className="flex items-center gap-2">
-                                        <Clock className="w-3.5 h-3.5 text-rr-blue shrink-0" />
-                                        <span className="text-sm font-medium text-rr-charcoal">{s}</span>
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="flex items-center gap-2">
-                                    <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                                    <span className="text-sm font-medium text-slate-400">Session times TBC — details coming soon</span>
+                            {group.sessions.map((s, i) => (
+                                <div key={i} className="flex items-center gap-2">
+                                    <Clock className="w-3.5 h-3.5 text-rr-blue shrink-0" />
+                                    <span className="text-sm font-medium text-rr-charcoal">{s}</span>
                                 </div>
-                            )}
-                            {/* Shirt notice */}
+                            ))}
                             <div className="mt-3 pt-3 border-t border-slate-100 flex items-start gap-2">
                                 <span className="text-sm shrink-0">👕</span>
                                 <p className="text-xs text-slate-500 font-medium leading-relaxed">Royals training shirt required — available to purchase with your registration.</p>
@@ -92,28 +63,26 @@ const locations = [
         name: 'Cutting Edge Cricket',
         suburb: 'Bundoora, VIC',
         dates: 'Starting Monday 27 Apr or Friday 1 May',
-        time: 'Times vary by age group',
         note: 'Indoor cricket facility',
         confirmed: true,
         image: '/assets/jr-bundoora.png',
         gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
         mapsUrl: 'https://maps.google.com/?q=Cutting+Edge+Cricket+Bundoora+VIC',
-        tag: 'bundoora',
-        isBundoora: true,
+        groups: BUNDOORA_GROUPS,
+        showPrice: true,
     },
     {
         area: 'South-Eastern Melbourne',
-        name: 'Venue TBC',
+        name: 'Cricket Connect',
         suburb: 'Hallam, VIC',
-        dates: 'TBC',
-        time: 'TBC',
-        note: 'Venue details to be confirmed',
-        confirmed: false,
+        dates: 'Starting Wednesday 6 May · 8 weeks',
+        note: 'Indoor cricket facility',
+        confirmed: true,
         image: '/assets/jr-hallam.png',
-        gradient: 'linear-gradient(135deg, #323E48 0%, #1226AA 60%, #323E48 100%)',
-        mapsUrl: 'https://maps.google.com/?q=Hallam+VIC',
-        tag: 'hallam',
-        isBundoora: false,
+        gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 60%, #E11F8F 100%)',
+        mapsUrl: 'https://maps.google.com/?q=Cricket+Connect+Hallam+VIC',
+        groups: HALLAM_GROUPS,
+        showPrice: true,
     },
 ];
 
@@ -157,17 +126,15 @@ const LCLocations = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {locations.map((loc, i) => (
                         <motion.div
-                            key={loc.tag}
+                            key={loc.name}
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: i * 0.15 }}
                             className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100"
                         >
-                            {/* Gradient header bar */}
                             <div className="h-4" style={{ background: loc.gradient }} />
 
-                            {/* Venue photo */}
                             <div className="h-44 overflow-hidden">
                                 <img
                                     src={loc.image}
@@ -192,27 +159,18 @@ const LCLocations = () => {
                                     </div>
                                 </div>
 
-                                {/* Confirmed / TBC badge */}
-                                {loc.confirmed ? (
-                                    <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-2.5 mb-5 flex items-center gap-2">
-                                        <span className="w-2 h-2 rounded-full bg-green-500 shrink-0" />
-                                        <p className="text-green-700 text-xs font-bold uppercase tracking-wide">Dates &amp; times confirmed</p>
-                                    </div>
-                                ) : (
-                                    <div className="bg-rr-pink/5 border border-rr-pink/20 rounded-xl px-4 py-2.5 mb-5">
-                                        <p className="text-rr-pink text-xs font-bold uppercase tracking-wide">Dates &amp; times being finalised — register now to hold your spot.</p>
-                                    </div>
-                                )}
+                                <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-2.5 mb-5 flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-green-500 shrink-0" />
+                                    <p className="text-green-700 text-xs font-bold uppercase tracking-wide">Dates &amp; times confirmed</p>
+                                </div>
 
-                                {/* Age group accordions */}
                                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Age Groups &amp; Times</p>
                                 <div className="space-y-2 mb-6">
-                                    {GROUPS.map(group => (
-                                        <GroupAccordion key={group.name} group={group} isBundoora={loc.isBundoora} />
+                                    {loc.groups.map(group => (
+                                        <GroupAccordion key={group.name} group={group} showPrice={loc.showPrice} />
                                     ))}
                                 </div>
 
-                                {/* CTAs */}
                                 <div className="flex flex-col sm:flex-row gap-3">
                                     <button
                                         onClick={scrollToForm}

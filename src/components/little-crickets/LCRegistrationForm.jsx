@@ -11,9 +11,9 @@ const STRIPE_LINKS = {
         'ages-13-15': 'https://buy.stripe.com/4gM28r27f7Kt1yY5bB9Zm0b',
     },
     hallam: {
-        'ages-7-9':   null, // TBC
-        'ages-10-12': null, // TBC
-        'ages-13-15': null, // TBC
+        'ages-7-9':   'https://buy.stripe.com/00waEX9zH8OxelKfQf9Zm0f',
+        'ages-10-12': 'https://buy.stripe.com/00waEX9zH8OxelKfQf9Zm0f',
+        'ages-13-15': 'https://buy.stripe.com/00waEX9zH8OxelKfQf9Zm0f',
     },
 };
 
@@ -35,9 +35,9 @@ const SESSION_OPTIONS = {
         ],
     },
     hallam: {
-        'ages-7-9':   [{ value: 'tbc', label: 'TBC — Details Coming Soon' }],
-        'ages-10-12': [{ value: 'tbc', label: 'TBC — Details Coming Soon' }],
-        'ages-13-15': [{ value: 'tbc', label: 'TBC — Details Coming Soon' }],
+        'ages-7-9':   [{ value: 'wed-530pm', label: 'Wednesdays 5:30pm – 6:30pm (from 6 May)' }],
+        'ages-10-12': [{ value: 'wed-630pm', label: 'Wednesdays 6:30pm – 7:30pm (from 6 May)' }],
+        'ages-13-15': [{ value: 'wed-730pm', label: 'Wednesdays 7:30pm – 8:30pm (from 6 May)' }],
     },
 };
 
@@ -331,14 +331,9 @@ const LCRegistrationForm = () => {
                                     <select name="location" value={form.location} onChange={handleChange} className={inputClass('location')}>
                                         <option value="">Select a location</option>
                                         <option value="bundoora">Bundoora — Cutting Edge Cricket</option>
-                                        <option value="hallam">Hallam — Venue TBC</option>
+                                        <option value="hallam">Hallam — Cricket Connect</option>
                                     </select>
                                     {errors.location && <p className="text-red-500 text-xs font-medium mt-1">{errors.location}</p>}
-                                    {form.location === 'hallam' && (
-                                        <p className="text-amber-600 text-xs font-medium mt-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
-                                            Hallam session times are still being confirmed. We'll contact you with details once finalised.
-                                        </p>
-                                    )}
                                 </div>
 
                                 {form.location && (
