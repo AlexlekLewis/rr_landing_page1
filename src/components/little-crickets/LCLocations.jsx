@@ -9,9 +9,9 @@ const BUNDOORA_GROUPS = [
 ];
 
 const HALLAM_GROUPS = [
-    { name: 'Ages 7–9',   price: '$330', sessions: ['Wednesdays 5:30pm – 6:30pm · From 6 May'] },
-    { name: 'Ages 10–12', price: '$330', sessions: ['Wednesdays 6:30pm – 7:30pm · From 6 May'] },
-    { name: 'Ages 13–15', price: '$330', sessions: ['Wednesdays 7:30pm – 8:30pm · From 6 May'] },
+    { name: 'Ages 7–9',   price: '$330', sessions: ['Mondays 5:30pm – 6:30pm · From 4 May'] },
+    { name: 'Ages 10–12', price: '$330', sessions: ['Mondays 6:30pm – 7:30pm · From 4 May'] },
+    { name: 'Ages 13–15', price: '$330', sessions: ['Mondays 7:30pm – 8:30pm · From 4 May'] },
 ];
 
 const GroupAccordion = ({ group, showPrice }) => {
@@ -75,7 +75,7 @@ const locations = [
         area: 'South-Eastern Melbourne',
         name: 'Cricket Connect',
         suburb: 'Hallam, VIC',
-        dates: 'Starting Wednesday 6 May · 8 weeks',
+        dates: 'Starting Monday 4 May · 8 weeks',
         note: 'Indoor cricket facility',
         confirmed: true,
         image: '/assets/jr-hallam.png',

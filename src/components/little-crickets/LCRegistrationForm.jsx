@@ -35,9 +35,9 @@ const SESSION_OPTIONS = {
         ],
     },
     hallam: {
-        'ages-7-9':   [{ value: 'wed-530pm', label: 'Wednesdays 5:30pm – 6:30pm (from 6 May)' }],
-        'ages-10-12': [{ value: 'wed-630pm', label: 'Wednesdays 6:30pm – 7:30pm (from 6 May)' }],
-        'ages-13-15': [{ value: 'wed-730pm', label: 'Wednesdays 7:30pm – 8:30pm (from 6 May)' }],
+        'ages-7-9':   [{ value: 'mon-530pm', label: 'Mondays 5:30pm – 6:30pm (from 4 May)' }],
+        'ages-10-12': [{ value: 'mon-630pm', label: 'Mondays 6:30pm – 7:30pm (from 4 May)' }],
+        'ages-13-15': [{ value: 'mon-730pm', label: 'Mondays 7:30pm – 8:30pm (from 4 May)' }],
     },
 };
 
