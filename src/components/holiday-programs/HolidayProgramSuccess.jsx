@@ -125,13 +125,35 @@ const HolidayProgramSuccess = () => {
                     animate="visible"
                     custom={0.5}
                     variants={fadeUp}
-                    className="text-base md:text-lg text-white/70 leading-relaxed mb-10 max-w-lg mx-auto font-medium"
+                    className="text-base md:text-lg text-white/70 leading-relaxed mb-6 max-w-lg mx-auto font-medium"
                 >
-                    Keep an eye on your inbox — our team will be in touch with everything
-                    you need to know closer to the start of the program.
+                    You are now enrolled and our team are looking forward to working with you as you continue your cricketing journey — the Royals Way.
                 </motion.p>
 
-                {/* Info card */}
+                {/* Info card — confirmation notice */}
+                <motion.div
+                    initial="hidden"
+                    animate="visible"
+                    custom={0.55}
+                    variants={fadeUp}
+                    className="bg-white/5 border border-white/10 rounded-2xl px-6 py-5 mb-6 text-left backdrop-blur-sm"
+                >
+                    <div className="flex items-start gap-4">
+                        <div className="w-8 h-8 rounded-full bg-rr-pink/20 flex items-center justify-center shrink-0 mt-0.5">
+                            <svg className="w-4 h-4 text-rr-pink" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p className="text-sm font-bold text-white/90 mb-1">Place Confirmation</p>
+                            <p className="text-sm text-white/60 leading-relaxed">
+                                A member of our team will confirm your place in the program via email within 24 hours of receipt, on the first business day following your online enrolment. Our office hours are Monday to Friday, 8:30am – 5:30pm.
+                            </p>
+                        </div>
+                    </div>
+                </motion.div>
+
+                {/* Info card — contact */}
                 <motion.div
                     initial="hidden"
                     animate="visible"

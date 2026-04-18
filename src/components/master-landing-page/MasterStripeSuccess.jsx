@@ -269,8 +269,11 @@ const MasterStripeSuccess = () => {
                             <CheckCircle2 className="w-12 h-12 text-rr-pink" />
                         </div>
                         <h2 className="text-3xl md:text-4xl font-black text-rr-dark uppercase tracking-tight mb-4">Onboarding Complete!</h2>
-                        <p className="text-lg text-slate-600 leading-relaxed mb-8 font-medium">
-                            Thank you for completing your onboarding. We have everything we need to personalise your program from day one. We are thrilled to welcome you to the Rajasthan Royals Academy Melbourne.
+                        <p className="text-lg text-slate-600 leading-relaxed mb-4 font-medium">
+                            You are now enrolled in the Rajasthan Royals Academy Melbourne Elite Program and our team are looking forward to working with you as you continue your cricketing journey — the Royals Way.
+                        </p>
+                        <p className="text-base text-slate-500 leading-relaxed mb-8">
+                            A member of our team will confirm your place via email within 24 hours of receipt, on the first business day following your online enrolment. Our office hours are Monday to Friday, 8:30am – 5:30pm.
                         </p>
                         <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100 mb-10 text-left">
                             <h4 className="font-bold text-rr-dark mb-2">What happens next?</h4>
