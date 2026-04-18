@@ -7,7 +7,7 @@ const locations = [
         name: 'Bundoora Indoor Sports Centre',
         suburb: 'Bundoora, VIC',
         area: 'Northern Melbourne',
-        dates: 'Starting Tuesday 5 May 2026 — finishing 23 June 2026',
+        dates: 'Starting Thursday 7 May 2026 — finishing 26 June 2026',
         time: '5:00 PM – 6:00 PM weekly',
         note: 'Full Court — indoor facility',
         gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
@@ -43,7 +43,7 @@ const LocationsSection = () => {
                         transition={{ duration: 0.6, delay: 0.15 }}
                         className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium"
                     >
-                        Register now to secure your place at Bundoora Indoor Sports Centre — Tuesdays from 5 May, 5:00–6:00 PM.
+                        Register now to secure your place at Bundoora Indoor Sports Centre — Thursdays from 7 May, 5:00–6:00 PM.
                     </motion.p>
                 </div>
 
