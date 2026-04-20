@@ -20,7 +20,7 @@ const STRIPE_LINKS = {
 const SESSION_OPTIONS = {
     bundoora: {
         'ages-7-9': [
-            { value: 'mon-6pm', label: 'Mondays 6:00pm – 7:00pm (from 27 Apr) — 2 Places Left', disabled: false },
+            { value: 'mon-6pm', label: 'Mondays 6:00pm – 7:00pm (from 27 Apr) — Sold Out', disabled: true },
             { value: 'fri-6pm', label: 'Fridays 6:00pm – 7:00pm (from 1 May) — Sold Out', disabled: true },
         ],
         'ages-10-12': [
