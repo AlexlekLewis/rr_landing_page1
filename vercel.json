@@ -15,6 +15,18 @@
             ]
         }
     ],
+    "redirects": [
+        {
+            "source": "/eliteprogram2026/playerDNAprofile",
+            "destination": "https://dna.rramelbourne.com",
+            "permanent": false
+        },
+        {
+            "source": "/eliteprogram2026/playerDNAprofile/:path*",
+            "destination": "https://dna.rramelbourne.com/:path*",
+            "permanent": false
+        }
+    ],
     "rewrites": [
         {
             "source": "/api/(.*)",
