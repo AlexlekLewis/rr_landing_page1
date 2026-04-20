@@ -54,21 +54,12 @@ const LCCoaches = () => {
                             className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 w-full"
                         >
                             {/* Avatar */}
-                            <div className="h-56 flex items-center justify-center bg-gradient-to-br from-rr-navy via-rr-blue to-rr-pink">
-                                {coach.img ? (
-                                    <img
-                                        src={coach.img}
-                                        alt={coach.name}
-                                        className="w-full h-full object-cover object-top"
-                                        onError={(e) => { e.target.style.display = 'none'; e.target.parentNode.querySelector('.fallback').style.display = 'flex'; }}
-                                    />
-                                ) : null}
-                                <div className="fallback flex-col items-center gap-3" style={{ display: coach.img ? 'none' : 'flex' }}>
-                                    <div className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center">
-                                        <span className="text-4xl">👤</span>
-                                    </div>
-                                    <span className="text-white/60 text-xs font-bold uppercase tracking-widest">Photo Coming Soon</span>
-                                </div>
+                            <div className="h-56 overflow-hidden bg-gradient-to-br from-rr-navy via-rr-blue to-rr-pink">
+                                <img
+                                    src={coach.img}
+                                    alt={coach.name}
+                                    className="w-full h-full object-cover object-top"
+                                />
                             </div>
 
                             <div className="p-6">
