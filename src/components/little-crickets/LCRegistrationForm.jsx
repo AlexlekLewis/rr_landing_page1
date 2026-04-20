@@ -20,18 +20,18 @@ const STRIPE_LINKS = {
 const SESSION_OPTIONS = {
     bundoora: {
         'ages-7-9': [
-            { value: 'mon-6pm', label: 'Mondays 6:00pm – 7:00pm (from 27 Apr)' },
-            { value: 'fri-6pm', label: 'Fridays 6:00pm – 7:00pm (from 1 May)' },
+            { value: 'mon-6pm', label: 'Mondays 6:00pm – 7:00pm (from 27 Apr) — 2 Places Left', disabled: false },
+            { value: 'fri-6pm', label: 'Fridays 6:00pm – 7:00pm (from 1 May) — Sold Out', disabled: true },
         ],
         'ages-10-12': [
-            { value: 'mon-7pm', label: 'Mondays 7:00pm – 8:00pm (from 27 Apr)' },
-            { value: 'fri-7pm', label: 'Fridays 7:00pm – 8:00pm (from 1 May)' },
+            { value: 'mon-7pm', label: 'Mondays 7:00pm – 8:00pm (from 27 Apr) — Sold Out', disabled: true },
+            { value: 'fri-7pm', label: 'Fridays 7:00pm – 8:00pm (from 1 May) — Sold Out', disabled: true },
         ],
         'ages-13-15': [
-            { value: 'mon-6pm', label: 'Mondays 6:00pm – 7:00pm (from 27 Apr)' },
-            { value: 'mon-7pm', label: 'Mondays 7:00pm – 8:00pm (from 27 Apr)' },
-            { value: 'wed-6pm', label: 'Wednesdays 6:00pm – 7:00pm (from 29 Apr)' },
-            { value: 'wed-7pm', label: 'Wednesdays 7:00pm – 8:00pm (from 29 Apr)' },
+            { value: 'mon-6pm', label: 'Mondays 6:00pm – 7:00pm (from 27 Apr) — 2 Places Left', disabled: false },
+            { value: 'mon-7pm', label: 'Mondays 7:00pm – 8:00pm (from 27 Apr) — Sold Out', disabled: true },
+            { value: 'wed-6pm', label: 'Wednesdays 6:00pm – 7:00pm (from 29 Apr) — 1 Place Left', disabled: false },
+            { value: 'wed-7pm', label: 'Wednesdays 7:00pm – 8:00pm (from 29 Apr) — Sold Out', disabled: true },
         ],
     },
     hallam: {
@@ -352,13 +352,22 @@ const LCRegistrationForm = () => {
                                 {form.location && form.group_selection && (
                                     <div>
                                         <label className={labelClass}>Session Time *</label>
-                                        <select name="time_slot" value={form.time_slot} onChange={handleChange} className={inputClass('time_slot')}>
-                                            <option value="">Select a time</option>
-                                            {availableSessions.map(s => (
-                                                <option key={s.value} value={s.value}>{s.label}</option>
-                                            ))}
-                                        </select>
-                                        {errors.time_slot && <p className="text-red-500 text-xs font-medium mt-1">{errors.time_slot}</p>}
+                                        {availableSessions.every(s => s.disabled) ? (
+                                            <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+                                                <p className="text-red-600 text-sm font-bold">All sessions for this age group at this location are currently sold out.</p>
+                                                <p className="text-red-500 text-xs font-medium mt-1">Please select a different age group or location, or contact us at <a href="mailto:info@rramelbourne.com" className="underline">info@rramelbourne.com</a> to join the waitlist.</p>
+                                            </div>
+                                        ) : (
+                                            <>
+                                                <select name="time_slot" value={form.time_slot} onChange={handleChange} className={inputClass('time_slot')}>
+                                                    <option value="">Select a time</option>
+                                                    {availableSessions.map(s => (
+                                                        <option key={s.value} value={s.value} disabled={s.disabled}>{s.label}</option>
+                                                    ))}
+                                                </select>
+                                                {errors.time_slot && <p className="text-red-500 text-xs font-medium mt-1">{errors.time_slot}</p>}
+                                            </>
+                                        )}
                                     </div>
                                 )}
                             </div>

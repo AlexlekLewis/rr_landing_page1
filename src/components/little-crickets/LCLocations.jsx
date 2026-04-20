@@ -3,9 +3,29 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Calendar, Clock, ChevronDown } from 'lucide-react';
 
 const BUNDOORA_GROUPS = [
-    { name: 'Ages 7–9',   price: '$265', sessions: ['Mondays 6:00pm – 7:00pm · From 27 Apr', 'Fridays 6:00pm – 7:00pm · From 1 May'] },
-    { name: 'Ages 10–12', price: '$290', sessions: ['Mondays 7:00pm – 8:00pm · From 27 Apr', 'Fridays 7:00pm – 8:00pm · From 1 May'] },
-    { name: 'Ages 13–15', price: '$310', sessions: ['Mondays 6:00pm – 7:00pm · From 27 Apr', 'Mondays 7:00pm – 8:00pm · From 27 Apr', 'Wednesdays 6:00pm – 7:00pm · From 29 Apr', 'Wednesdays 7:00pm – 8:00pm · From 29 Apr'] },
+    {
+        name: 'Ages 7–9', price: '$265',
+        sessions: [
+            { label: 'Mondays 6:00pm – 7:00pm · From 27 Apr', availability: 'limited', spots: 2 },
+            { label: 'Fridays 6:00pm – 7:00pm · From 1 May', availability: 'soldout' },
+        ],
+    },
+    {
+        name: 'Ages 10–12', price: '$290',
+        sessions: [
+            { label: 'Mondays 7:00pm – 8:00pm · From 27 Apr', availability: 'soldout' },
+            { label: 'Fridays 7:00pm – 8:00pm · From 1 May', availability: 'soldout' },
+        ],
+    },
+    {
+        name: 'Ages 13–15', price: '$310',
+        sessions: [
+            { label: 'Mondays 6:00pm – 7:00pm · From 27 Apr', availability: 'limited', spots: 2 },
+            { label: 'Mondays 7:00pm – 8:00pm · From 27 Apr', availability: 'soldout' },
+            { label: 'Wednesdays 6:00pm – 7:00pm · From 29 Apr', availability: 'limited', spots: 1 },
+            { label: 'Wednesdays 7:00pm – 8:00pm · From 29 Apr', availability: 'soldout' },
+        ],
+    },
 ];
 
 const HALLAM_GROUPS = [
@@ -14,8 +34,19 @@ const HALLAM_GROUPS = [
     { name: 'Ages 13–15', price: '$330', sessions: ['Mondays 7:30pm – 8:30pm · From 4 May'] },
 ];
 
+const AvailabilityBadge = ({ availability, spots }) => {
+    if (availability === 'soldout') {
+        return <span className="text-xs font-bold text-white bg-red-500 px-2 py-0.5 rounded-full shrink-0">Sold Out</span>;
+    }
+    if (availability === 'limited') {
+        return <span className="text-xs font-bold text-white bg-amber-500 px-2 py-0.5 rounded-full shrink-0">{spots} {spots === 1 ? 'Place' : 'Places'} Left</span>;
+    }
+    return <span className="text-xs font-bold text-white bg-green-500 px-2 py-0.5 rounded-full shrink-0">Available</span>;
+};
+
 const GroupAccordion = ({ group, showPrice }) => {
     const [open, setOpen] = useState(false);
+    const allSoldOut = Array.isArray(group.sessions) && group.sessions.every(s => s.availability === 'soldout');
 
     return (
         <div className="border border-slate-200 rounded-xl overflow-hidden">
@@ -23,7 +54,10 @@ const GroupAccordion = ({ group, showPrice }) => {
                 onClick={() => setOpen(o => !o)}
                 className="w-full flex items-center justify-between px-4 py-3 bg-slate-50 hover:bg-slate-100 transition-colors duration-200"
             >
-                <span className="font-black text-rr-dark text-sm uppercase tracking-wide">{group.name}</span>
+                <div className="flex items-center gap-2">
+                    <span className="font-black text-rr-dark text-sm uppercase tracking-wide">{group.name}</span>
+                    {allSoldOut && <span className="text-xs font-bold text-white bg-red-500 px-2 py-0.5 rounded-full">Sold Out</span>}
+                </div>
                 <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
             </button>
             <AnimatePresence initial={false}>
@@ -39,12 +73,24 @@ const GroupAccordion = ({ group, showPrice }) => {
                             {showPrice && (
                                 <p className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-2">{group.price} per child</p>
                             )}
-                            {group.sessions.map((s, i) => (
-                                <div key={i} className="flex items-center gap-2">
-                                    <Clock className="w-3.5 h-3.5 text-rr-blue shrink-0" />
-                                    <span className="text-sm font-medium text-rr-charcoal">{s}</span>
-                                </div>
-                            ))}
+                            {Array.isArray(group.sessions) && group.sessions[0]?.label !== undefined ? (
+                                group.sessions.map((s, i) => (
+                                    <div key={i} className="flex items-center justify-between gap-2">
+                                        <div className="flex items-center gap-2">
+                                            <Clock className={`w-3.5 h-3.5 shrink-0 ${s.availability === 'soldout' ? 'text-slate-300' : 'text-rr-blue'}`} />
+                                            <span className={`text-sm font-medium ${s.availability === 'soldout' ? 'text-slate-400 line-through' : 'text-rr-charcoal'}`}>{s.label}</span>
+                                        </div>
+                                        <AvailabilityBadge availability={s.availability} spots={s.spots} />
+                                    </div>
+                                ))
+                            ) : (
+                                group.sessions.map((s, i) => (
+                                    <div key={i} className="flex items-center gap-2">
+                                        <Clock className="w-3.5 h-3.5 text-rr-blue shrink-0" />
+                                        <span className="text-sm font-medium text-rr-charcoal">{s}</span>
+                                    </div>
+                                ))
+                            )}
                             <div className="mt-3 pt-3 border-t border-slate-100 flex items-start gap-2">
                                 <span className="text-sm shrink-0">👕</span>
                                 <p className="text-xs text-slate-500 font-medium leading-relaxed">Royals training shirt required — available to purchase with your registration.</p>
