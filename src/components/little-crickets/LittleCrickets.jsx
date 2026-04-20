@@ -3,6 +3,7 @@ import Navbar from '../Navbar';
 import Footer from '../Footer';
 import LCHero from './LCHero';
 import LCOverview from './LCOverview';
+import LCCoaches from './LCCoaches';
 import LCLocations from './LCLocations';
 import LCRegistrationForm from './LCRegistrationForm';
 import LCStickyCTA from './LCStickyCTA';
@@ -11,6 +12,7 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 const SECTIONS = [
     'hero',
     'program-overview',
+    'coaches',
     'locations',
     'registration-form',
 ];
@@ -31,6 +33,9 @@ const LittleCrickets = () => {
                 </div>
                 <div id="program-overview">
                     <LCOverview />
+                </div>
+                <div id="coaches">
+                    <LCCoaches />
                 </div>
                 <div id="locations">
                     <LCLocations />
