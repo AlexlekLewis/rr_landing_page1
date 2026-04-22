@@ -5,7 +5,7 @@ const coaches = [
     {
         name: 'Alex Thornhill',
         role: 'Head Coach',
-        bio: 'A high quality coach and a key part of the Rajasthan Royals Academy Elite Program, Alex oversees the curriculum and content development for each sessions across the year for the Junior Royals program. With well rounded coaching skill set, Alex is primarily a batting specialist with coaching experience across two continents — UK county cricket and the Australian premier system. Alex currently coaches within the Fitzroy Doncaster Academy and leads the cricket program at Xavier College. His technical approach combines video analysis with deep knowledge of what batting looks like at the next level.',
+        bio: 'A high quality coach and a key part of the Rajasthan Royals Academy Elite Program, Alex oversees the curriculum and content development for each sessions across the year for the Junior Royals program, assisted by experienced lead coaches who deliver the program in each location. With well rounded coaching skill set, Alex is primarily a batting specialist with coaching experience across two continents — UK county cricket and the Australian premier system. Alex currently coaches within the Fitzroy Doncaster Academy and leads the cricket program at Xavier College. His technical approach combines video analysis with deep knowledge of what batting looks like at the next level.',
         img: '/assets/coaches/alex-thornhill.jpg',
     },
 ];
