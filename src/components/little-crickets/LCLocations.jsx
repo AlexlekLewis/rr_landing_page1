@@ -6,24 +6,24 @@ const BUNDOORA_GROUPS = [
     {
         name: 'Ages 7–9', price: '$265',
         sessions: [
-            { label: 'Mondays 6:00pm – 7:00pm · From 27 Apr', availability: 'soldout' },
-            { label: 'Fridays 6:00pm – 7:00pm · From 1 May', availability: 'soldout' },
+            { label: 'Mondays 6:00pm – 7:00pm · From 27 Apr', availability: 'limited', spots: 2 },
+            { label: 'Fridays 6:00pm – 7:00pm · From 1 May', availability: 'limited', spots: 1 },
         ],
     },
     {
         name: 'Ages 10–12', price: '$290',
         sessions: [
-            { label: 'Mondays 7:00pm – 8:00pm · From 27 Apr', availability: 'soldout' },
-            { label: 'Fridays 7:00pm – 8:00pm · From 1 May', availability: 'soldout' },
+            { label: 'Mondays 7:00pm – 8:00pm · From 27 Apr', availability: 'limited', spots: 2 },
+            { label: 'Fridays 7:00pm – 8:00pm · From 1 May', availability: 'limited', spots: 4 },
         ],
     },
     {
         name: 'Ages 13–15', price: '$310',
         sessions: [
-            { label: 'Mondays 6:00pm – 7:00pm · From 27 Apr', availability: 'limited', spots: 1 },
-            { label: 'Mondays 7:00pm – 8:00pm · From 27 Apr', availability: 'soldout' },
-            { label: 'Wednesdays 6:00pm – 7:00pm · From 29 Apr', availability: 'limited', spots: 1 },
-            { label: 'Wednesdays 7:00pm – 8:00pm · From 29 Apr', availability: 'soldout' },
+            { label: 'Mondays 6:00pm – 7:00pm · From 27 Apr', availability: 'limited', spots: 3 },
+            { label: 'Mondays 7:00pm – 8:00pm · From 27 Apr', availability: 'limited', spots: 3 },
+            { label: 'Wednesdays 6:00pm – 7:00pm · From 29 Apr', availability: 'soldout' },
+            { label: 'Wednesdays 7:00pm – 8:00pm · From 29 Apr', availability: 'limited', spots: 1 },
         ],
     },
 ];
