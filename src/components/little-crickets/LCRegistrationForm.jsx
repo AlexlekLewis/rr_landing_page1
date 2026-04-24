@@ -28,8 +28,8 @@ const SESSION_OPTIONS = {
             { value: 'fri-7pm', label: 'Fridays 7:00pm – 8:00pm (from 1 May) — 1 Spot Left', disabled: false },
         ],
         'ages-13-15': [
-            { value: 'mon-6pm', label: 'Mondays 6:00pm – 7:00pm (from 27 Apr) — 3 Spots Left', disabled: false },
-            { value: 'mon-7pm', label: 'Mondays 7:00pm – 8:00pm (from 27 Apr) — 2 Spots Left', disabled: false },
+            { value: 'mon-6pm', label: 'Mondays 6:00pm – 7:00pm (from 27 Apr) — 4 Spots Left', disabled: false },
+            { value: 'mon-7pm', label: 'Mondays 7:00pm – 8:00pm (from 27 Apr) — 1 Spot Left', disabled: false },
             { value: 'wed-6pm', label: 'Wednesdays 6:00pm – 7:00pm (from 29 Apr) — Sold Out', disabled: true },
             { value: 'wed-7pm', label: 'Wednesdays 7:00pm – 8:00pm (from 29 Apr) — 1 Spot Left', disabled: false },
         ],
