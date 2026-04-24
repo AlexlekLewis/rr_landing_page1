@@ -14,7 +14,7 @@ const BUNDOORA_GROUPS = [
         name: 'Ages 10–12', price: '$290',
         sessions: [
             { label: 'Mondays 7:00pm – 8:00pm · From 27 Apr', availability: 'limited', spots: 1 },
-            { label: 'Fridays 7:00pm – 8:00pm · From 1 May', availability: 'limited', spots: 1 },
+            { label: 'Fridays 7:00pm – 8:00pm · From 1 May', availability: 'soldout' },
         ],
     },
     {

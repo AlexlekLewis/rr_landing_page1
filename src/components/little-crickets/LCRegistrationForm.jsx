@@ -25,7 +25,7 @@ const SESSION_OPTIONS = {
         ],
         'ages-10-12': [
             { value: 'mon-7pm', label: 'Mondays 7:00pm – 8:00pm (from 27 Apr) — 1 Spot Left', disabled: false },
-            { value: 'fri-7pm', label: 'Fridays 7:00pm – 8:00pm (from 1 May) — 1 Spot Left', disabled: false },
+            { value: 'fri-7pm', label: 'Fridays 7:00pm – 8:00pm (from 1 May) — Sold Out', disabled: true },
         ],
         'ages-13-15': [
             { value: 'mon-6pm', label: 'Mondays 6:00pm – 7:00pm (from 27 Apr) — 4 Spots Left', disabled: false },
