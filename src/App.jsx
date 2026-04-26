@@ -53,6 +53,9 @@ import RSVPResponses from './components/admin/RSVPResponses';
 import LP3Inquiries from './components/admin/LP3Inquiries';
 import PlayerProfiles from './components/admin/PlayerProfiles';
 import HomeLeadsDashboard from './components/admin/HomeLeadsDashboard';
+// Academy Shop — hidden from nav, accessible via direct URL only
+import AcademyShop from './components/academy-shop/AcademyShop';
+import ShopSuccess from './components/academy-shop/ShopSuccess';
 
 const TRACKED_SECTIONS = [
   'intro', 'success-stories', 'why-elite', 'program',
@@ -125,6 +128,9 @@ function App() {
         <Route path="/female-cricket-kickstart" element={<FemaleCricketIntroduction />} />
         <Route path="/female-cricket-kickstart/success" element={<FemaleCricketSuccess />} />
         <Route path="/female-empowerment" element={<FemaleEmpowerment />} />
+        {/* Academy Shop — hidden from nav. Share URL directly with participants only. */}
+        <Route path="/academy-shop" element={<AcademyShop />} />
+        <Route path="/academy-shop/success" element={<ShopSuccess />} />
 
         {/* Admin routes */}
         <Route path="/rramadmin_26" element={<AdminLogin />} />
