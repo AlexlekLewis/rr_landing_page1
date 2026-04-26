@@ -13,17 +13,17 @@ const BUNDOORA_GROUPS = [
     {
         name: 'Ages 10–12', price: '$290',
         sessions: [
-            { label: 'Mondays 7:00pm – 8:00pm · From 27 Apr', availability: 'limited', spots: 1 },
+            { label: 'Mondays 7:00pm – 8:00pm · From 27 Apr', availability: 'soldout' },
             { label: 'Fridays 7:00pm – 8:00pm · From 1 May', availability: 'soldout' },
         ],
     },
     {
         name: 'Ages 13–15', price: '$310',
         sessions: [
-            { label: 'Mondays 6:00pm – 7:00pm · From 27 Apr', availability: 'limited', spots: 4 },
-            { label: 'Mondays 7:00pm – 8:00pm · From 27 Apr', availability: 'limited', spots: 1 },
+            { label: 'Mondays 6:00pm – 7:00pm · From 27 Apr', availability: 'soldout' },
+            { label: 'Mondays 7:00pm – 8:00pm · From 27 Apr', availability: 'soldout' },
             { label: 'Wednesdays 6:00pm – 7:00pm · From 29 Apr', availability: 'soldout' },
-            { label: 'Wednesdays 7:00pm – 8:00pm · From 29 Apr', availability: 'limited', spots: 1 },
+            { label: 'Wednesdays 7:00pm – 8:00pm · From 29 Apr', availability: 'soldout' },
         ],
     },
 ];
@@ -209,6 +209,18 @@ const LCLocations = () => {
                                     <span className="w-2 h-2 rounded-full bg-green-500 shrink-0" />
                                     <p className="text-green-700 text-xs font-bold uppercase tracking-wide">Dates &amp; times confirmed</p>
                                 </div>
+                                {loc.tag === 'bundoora' && (
+                                    <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-2.5 mb-5 flex items-center gap-2">
+                                        <span className="w-2 h-2 rounded-full bg-red-500 shrink-0 animate-pulse" />
+                                        <p className="text-red-700 text-xs font-bold uppercase tracking-wide">Bundoora — Sold Out</p>
+                                    </div>
+                                )}
+                                {loc.tag === 'hallam' && (
+                                    <div className="bg-amber-50 border border-amber-300 rounded-xl px-4 py-2.5 mb-5 flex items-center gap-2">
+                                        <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0 animate-pulse" />
+                                        <p className="text-amber-700 text-xs font-bold uppercase tracking-wide">Enrolment closes Wednesday 5:00pm — register now</p>
+                                    </div>
+                                )}
 
                                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Age Groups &amp; Times</p>
                                 <div className="space-y-2 mb-6">

@@ -33,7 +33,7 @@ const LCHero = () => {
                     className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6"
                 >
                     <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Now Enrolling — Term 2, 2026</span>
+                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Bundoora Sold Out — Hallam Closes Wednesday 5pm</span>
                 </motion.div>
 
                 {/* Headline */}
