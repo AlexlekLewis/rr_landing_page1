@@ -11,7 +11,7 @@ const GENDER_OPTIONS = ['Male Cricket', 'Female Cricket', 'No Preference'];
 const PROGRAMS = [
     { label: 'T20 Elite Program', route: '/eliteprogram2026', urgency: 'Applications Closed — Waitlist Only' },
     { label: 'Girls Kickstart', route: '/female-cricket-kickstart', urgency: null },
-    { label: 'Junior Royals', route: '/junior-royals', urgency: 'Selling Fast' },
+    { label: 'Junior Royals', route: '/junior-royals', urgency: 'Bundoora Sold Out · Hallam Selling Fast' },
 ];
 
 const InputField = ({ label, type = 'text', value, onChange, placeholder, required }) => (
