@@ -43,8 +43,11 @@ export const PRODUCTS = [
     category: 'Shirts',
     badge: 'Academy Kit',
     badgeColor: 'bg-rr-blue',
-    imagePlaceholder: true,
-    images: null,
+    imagePlaceholder: false,
+    images: {
+      front: '/shop/training-shirt-front.png',
+      back: '/shop/training-shirt-back.png',
+    },
     stripePriceIds: {
       XS:  'price_PLACEHOLDER_tshirt_xs',
       S:   'price_PLACEHOLDER_tshirt_s',
@@ -85,8 +88,11 @@ export const PRODUCTS = [
     category: 'Bottoms',
     badge: 'Academy Kit',
     badgeColor: 'bg-rr-blue',
-    imagePlaceholder: true,
-    images: null,
+    imagePlaceholder: false,
+    images: {
+      front: '/shop/training-pants-front.png',
+      back: '/shop/training-pants-back.png',
+    },
     stripePriceIds: {
       XS:  'price_PLACEHOLDER_pants_xs',
       S:   'price_PLACEHOLDER_pants_s',
