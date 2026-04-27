@@ -341,9 +341,9 @@ const LCRegistrationForm = () => {
                                         <label className={labelClass}>Age Group *</label>
                                         <select name="group_selection" value={form.group_selection} onChange={handleChange} className={inputClass('group_selection')}>
                                             <option value="">Select an age group</option>
-                                            <option value="ages-7-9">Ages 7–9 ($265)</option>
-                                            <option value="ages-10-12">Ages 10–12 ($290)</option>
-                                            <option value="ages-13-15">Ages 13–15 ($310)</option>
+                                            <option value="ages-7-9">Ages 7–9</option>
+                                            <option value="ages-10-12">Ages 10–12</option>
+                                            <option value="ages-13-15">Ages 13–15</option>
                                         </select>
                                         {errors.group_selection && <p className="text-red-500 text-xs font-medium mt-1">{errors.group_selection}</p>}
                                     </div>
