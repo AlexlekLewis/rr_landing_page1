@@ -13,10 +13,6 @@ const faqs = [
         a: 'RRA Melbourne is the official cricket development arm of the Rajasthan Royals IPL franchise. That means our programs are built on the same methodology, technology, and performance philosophy used to develop world-class T20 cricketers — biomechanics analysis, data-driven coaching, and a modern game mindset.',
     },
     {
-        q: 'How do I know which program is right for my child?',
-        a: 'Use the program search tool above to filter by age group, skill level, and location. If you\'re still unsure, register your interest via "Register Now" and our team will provide regular communication with upcoming programs.',
-    },
-    {
         q: 'Are there programs for girls and women\'s cricket?',
         a: 'Yes. RRA Melbourne is committed to developing both male and female cricketers. Use the gender filter on the programs section to find women\'s or mixed programs, and keep an eye out for new female-specific programs launching soon.',
     },
