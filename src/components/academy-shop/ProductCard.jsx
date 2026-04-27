@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ShoppingBag, Plus, Minus, RotateCcw } from 'lucide-react';
-import { SIZES } from './shopConfig';
+import { PRODUCT_SIZE_MAP } from './sizeData';
 import { useCart } from './CartContext';
+import SizeGuide from './SizeGuide';
 
 const PlaceholderImage = ({ productId }) => {
   const gradients = {
@@ -22,22 +23,32 @@ const PlaceholderImage = ({ productId }) => {
 };
 
 const ProductCard = ({ product, index }) => {
+  const [ageGroup, setAgeGroup]       = useState('senior');
   const [selectedSize, setSelectedSize] = useState(null);
-  const [quantity, setQuantity] = useState(1);
-  const [added, setAdded] = useState(false);
-  const [sizeError, setSizeError] = useState(false);
-  const [showBack, setShowBack] = useState(false);
+  const [quantity, setQuantity]       = useState(1);
+  const [added, setAdded]             = useState(false);
+  const [sizeError, setSizeError]     = useState(false);
+  const [showBack, setShowBack]       = useState(false);
   const { addItem } = useCart();
 
+  const sizeConfig = PRODUCT_SIZE_MAP[product.id];
+  const availableSizes = sizeConfig?.sizes[ageGroup] ?? [];
   const hasRealImages = !product.imagePlaceholder && product.images;
+
+  // Reset selected size when age group changes
+  const handleAgeGroupChange = (group) => {
+    setAgeGroup(group);
+    setSelectedSize(null);
+    setSizeError(false);
+  };
 
   const handleAddToCart = () => {
     if (!selectedSize) {
       setSizeError(true);
-      setTimeout(() => setSizeError(false), 2000);
+      setTimeout(() => setSizeError(false), 2500);
       return;
     }
-    addItem(product, selectedSize, quantity);
+    addItem(product, `${ageGroup === 'junior' ? 'JNR' : 'SNR'} ${selectedSize}`, quantity);
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
@@ -50,7 +61,7 @@ const ProductCard = ({ product, index }) => {
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col group"
     >
-      {/* Product image */}
+      {/* ── Product image ── */}
       <div className="relative aspect-square bg-rr-dark overflow-hidden">
         {hasRealImages ? (
           <>
@@ -79,56 +90,93 @@ const ProductCard = ({ product, index }) => {
         </div>
       </div>
 
-      {/* Product info */}
-      <div className="p-6 flex flex-col flex-1 gap-4">
+      {/* ── Product info ── */}
+      <div className="p-5 flex flex-col flex-1 gap-3">
+
+        {/* Name & price */}
         <div>
           <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.25em] mb-1">{product.category}</p>
-          <h3 className="font-black text-rr-dark uppercase tracking-tight leading-tight text-base">{product.name}</h3>
-          <p className="text-2xl font-black text-rr-dark mt-2">
+          <h3 className="font-black text-rr-dark uppercase tracking-tight leading-tight text-sm">{product.name}</h3>
+          <p className="mt-1.5">
             {product.displayPrice === 'TBC'
-              ? <span className="text-slate-400 text-lg font-bold">Price TBC</span>
-              : `$${(product.price / 100).toFixed(2)}`
+              ? <span className="text-slate-400 text-sm font-bold">Price TBC</span>
+              : <span className="text-xl font-black text-rr-dark">${(product.price / 100).toFixed(2)}</span>
             }
           </p>
         </div>
 
-        <p className="text-sm text-rr-charcoal leading-relaxed">{product.description}</p>
+        <p className="text-xs text-rr-charcoal leading-relaxed">{product.description}</p>
 
-        {/* Size selector */}
+        {/* ── Age group toggle ── */}
+        <div>
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Age Group</p>
+          <div className="flex gap-2">
+            {['junior', 'senior'].map(group => (
+              <button
+                key={group}
+                onClick={() => handleAgeGroupChange(group)}
+                className={`flex-1 py-2 rounded-xl text-xs font-black uppercase tracking-widest border-2 transition-all duration-200
+                  ${ageGroup === group
+                    ? 'border-rr-pink bg-rr-pink text-white'
+                    : 'border-slate-200 text-slate-500 hover:border-rr-pink/50'
+                  }`}
+              >
+                {group === 'junior' ? '👦 Junior' : '🧑 Senior'}
+              </button>
+            ))}
+          </div>
+          {ageGroup === 'junior' && (
+            <p className="text-xs text-slate-400 mt-1.5 italic">Junior sizes are numbered (18–34). Use the size guide below to match by age or measurement.</p>
+          )}
+        </div>
+
+        {/* ── Size selector ── */}
         <div>
           <p className={`text-xs font-bold uppercase tracking-widest mb-2 ${sizeError ? 'text-red-500' : 'text-slate-500'}`}>
-            {sizeError ? '⚠ Please select a size' : 'Select Size'}
+            {sizeError ? '⚠ Please select a size first' : 'Select Size'}
           </p>
-          <div className="flex flex-wrap gap-2">
-            {SIZES.map(size => (
+          <div className="flex flex-wrap gap-1.5">
+            {availableSizes.map(size => (
               <button
-                key={size}
-                onClick={() => { setSelectedSize(size); setSizeError(false); }}
-                className={`w-10 h-10 rounded-lg text-xs font-bold uppercase border-2 transition-all duration-200
-                  ${selectedSize === size
+                key={size.label}
+                onClick={() => { setSelectedSize(size.label); setSizeError(false); }}
+                className={`px-2.5 py-2 rounded-lg text-xs font-bold border-2 transition-all duration-200 leading-tight text-center
+                  ${selectedSize === size.label
                     ? 'border-rr-pink bg-rr-pink text-white'
                     : sizeError
-                      ? 'border-red-300 text-slate-600 hover:border-rr-pink'
+                      ? 'border-red-200 text-slate-600 hover:border-rr-pink'
                       : 'border-slate-200 text-slate-600 hover:border-rr-pink'
                   }`}
               >
-                {size}
+                {size.label}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Quantity + Add to Cart */}
-        <div className="flex items-center gap-3 mt-auto">
+        {/* ── Size guide (expandable) ── */}
+        <SizeGuide productId={product.id} ageGroup={ageGroup} />
+
+        {/* ── Quantity + Add to cart ── */}
+        <div className="flex items-center gap-3 mt-auto pt-1">
+          {/* Quantity */}
           <div className="flex items-center border-2 border-slate-200 rounded-xl overflow-hidden">
-            <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="w-9 h-10 flex items-center justify-center text-slate-500 hover:bg-slate-100 transition-colors">
+            <button
+              onClick={() => setQuantity(q => Math.max(1, q - 1))}
+              className="w-9 h-10 flex items-center justify-center text-slate-500 hover:bg-slate-100 transition-colors"
+            >
               <Minus className="w-3 h-3" />
             </button>
             <span className="w-8 text-center font-bold text-sm text-rr-dark">{quantity}</span>
-            <button onClick={() => setQuantity(q => q + 1)} className="w-9 h-10 flex items-center justify-center text-slate-500 hover:bg-slate-100 transition-colors">
+            <button
+              onClick={() => setQuantity(q => q + 1)}
+              className="w-9 h-10 flex items-center justify-center text-slate-500 hover:bg-slate-100 transition-colors"
+            >
               <Plus className="w-3 h-3" />
             </button>
           </div>
+
+          {/* Add to cart */}
           <motion.button
             whileTap={{ scale: 0.97 }}
             onClick={handleAddToCart}
