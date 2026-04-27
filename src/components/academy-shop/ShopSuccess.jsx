@@ -4,7 +4,7 @@ import { CheckCircle, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
-import supabase from '../../lib/supabase';
+import { supabase } from '../../lib/supabase';
 
 const ShopSuccess = () => {
   const [updated, setUpdated] = useState(false);

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ShoppingBag, Plus, Minus, Trash2, Truck, MapPin } from 'lucide-react';
 import { useCart } from './CartContext';
-import supabase from '../../lib/supabase';
+import { supabase } from '../../lib/supabase';
 
 const FULFILLMENT_OPTIONS = [
   { id: 'pickup', label: 'Academy Pickup', description: 'Collect at your next training session', icon: MapPin, price: 0 },
