@@ -65,8 +65,6 @@ export const TOPS_SIZES = {
     { label: 'XL (44)',  halfChest: '23.5 – 24', length: '31' },
     { label: '2XL (46)', halfChest: '24.5 – 25', length: '32' },
     { label: '3XL (48)', halfChest: '25.5 – 26', length: '33' },
-    { label: '4XL (50)', halfChest: '26.5 – 27', length: '34' },
-    { label: '5XL (52)', halfChest: '27.5 – 28', length: '34' },
   ],
 };
 
@@ -110,7 +108,6 @@ export const PANTS_SIZES = {
     { label: 'XL',  waist: '36', length: '42' },
     { label: '2XL', waist: '38', length: '42' },
     { label: '3XL', waist: '40', length: '42' },
-    { label: '4XL', waist: '42', length: '42' },
   ],
 };
 
