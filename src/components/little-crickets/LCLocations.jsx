@@ -29,9 +29,9 @@ const BUNDOORA_GROUPS = [
 ];
 
 const HALLAM_GROUPS = [
-    { name: 'Ages 7–9',   price: '$330', sessions: ['Mondays 5:30pm – 6:30pm · From 4 May'] },
-    { name: 'Ages 10–12', price: '$330', sessions: ['Mondays 6:30pm – 7:30pm · From 4 May'] },
-    { name: 'Ages 13–15', price: '$330', sessions: ['Mondays 7:30pm – 8:30pm · From 4 May'] },
+    { name: 'Ages 7–9',   price: '$330', badge: 'Selling Fast', badgeColor: 'bg-amber-500', sessions: ['Mondays 5:30pm – 6:30pm · From 4 May'] },
+    { name: 'Ages 10–12', price: '$330', badge: 'Nearly Sold Out', badgeColor: 'bg-red-500', sessions: ['Mondays 6:30pm – 7:30pm · From 4 May'] },
+    { name: 'Ages 13–15', price: '$330', badge: 'Selling Fast', badgeColor: 'bg-amber-500', sessions: ['Mondays 7:30pm – 8:30pm · From 4 May'] },
 ];
 
 const AvailabilityBadge = ({ availability, spots }) => {
@@ -57,6 +57,9 @@ const GroupAccordion = ({ group, showPrice }) => {
                 <div className="flex items-center gap-2">
                     <span className="font-black text-rr-dark text-sm uppercase tracking-wide">{group.name}</span>
                     {allSoldOut && <span className="text-xs font-bold text-white bg-red-500 px-2 py-0.5 rounded-full">Sold Out</span>}
+                    {!allSoldOut && group.badge && (
+                        <span className={`text-xs font-bold text-white px-2 py-0.5 rounded-full ${group.badgeColor}`}>{group.badge}</span>
+                    )}
                 </div>
                 <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
             </button>
