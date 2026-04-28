@@ -15,9 +15,8 @@ export const SIZE_GROUPS = {
 // Source: VANY Size Guide (adults) — Custom T & Polo
 // A = half chest laid flat, B = length
 export const VANY_TOPS_ADULT = {
-  junior: null, // not applicable — adults use XXXXS–XXXL, kids use year sizing
+  junior: null, // not applicable — adults use XXXS–XXXL, kids use year sizing
   senior: [
-    { label: 'XXXXS', halfChest: '15 (30)', length: '23' },
     { label: 'XXXS',  halfChest: '16 (32)', length: '24' },
     { label: 'XXS',   halfChest: '17 (34)', length: '25' },
     { label: 'XS',    halfChest: '18 (36)', length: '26' },
