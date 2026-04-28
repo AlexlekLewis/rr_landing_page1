@@ -53,6 +53,7 @@ import RSVPResponses from './components/admin/RSVPResponses';
 import LP3Inquiries from './components/admin/LP3Inquiries';
 import PlayerProfiles from './components/admin/PlayerProfiles';
 import HomeLeadsDashboard from './components/admin/HomeLeadsDashboard';
+import TextUsButton from './components/TextUsButton';
 // Academy Shop — hidden from nav, accessible via direct URL only
 import AcademyShop from './components/academy-shop/AcademyShop';
 import ShopSuccess from './components/academy-shop/ShopSuccess';
@@ -147,6 +148,7 @@ function App() {
         <Route path="/rramadmin_26/rsvp" element={<AdminLayout><RSVPResponses /></AdminLayout>} />
         <Route path="/rramadmin_26/home-leads" element={<AdminLayout><HomeLeadsDashboard /></AdminLayout>} />
       </Routes>
+      <TextUsButton />
     </div>
   );
 }
