@@ -16,8 +16,10 @@ export const PRODUCTS = [
     price: 9995,
     displayPrice: '$99.95',
     category: 'Shirts',
-    badge: 'Official IPL',
-    badgeColor: 'bg-rr-pink',
+    badge: 'Made to Order',
+    badgeColor: 'bg-rr-blue',
+    madeToOrder: true,
+    madeToOrderNote: 'This item is made to order. Please allow 2–3 weeks for delivery after your order is placed.',
     imagePlaceholder: false,
     images: {
       front: '/shop/ipl-shirt-front.jpeg',
@@ -35,6 +37,7 @@ export const PRODUCTS = [
   },
   {
     id: 'training-shirt',
+    madeToOrder: false,
     name: 'RRA Melbourne Training Shirt',
     shortName: 'Training Shirt',
     description: 'High-performance training shirt in official Rajasthan Royals Academy Melbourne branding. Moisture-wicking fabric built for the Australian climate.',
@@ -59,6 +62,7 @@ export const PRODUCTS = [
   },
   {
     id: 'training-shorts',
+    madeToOrder: false,
     name: 'RRA Melbourne Training Shorts',
     shortName: 'Training Shorts',
     description: 'Lightweight, breathable training shorts in official academy colours. Designed for maximum mobility on the training ground.',
@@ -80,6 +84,7 @@ export const PRODUCTS = [
   },
   {
     id: 'training-pants',
+    madeToOrder: false,
     name: 'RRA Melbourne Training Pants',
     shortName: 'Training Pants',
     description: 'Full-length training pants in official academy colours. Perfect for warm-ups, cool conditions, and travel to and from the ground.',

@@ -24,9 +24,12 @@ const CartDrawer = () => {
     setCheckoutError(null);
 
     try {
-      // Log order to Supabase before redirecting to Stripe
-      const orderPayload = {
-        items: items.map(i => ({
+      // Split items by product type
+      const iplItems = items.filter(i => i.product.madeToOrder);
+      const trainingItems = items.filter(i => !i.product.madeToOrder);
+
+      const buildPayload = (lineItems) => ({
+        items: lineItems.map(i => ({
           product_id: i.product.id,
           product_name: i.product.name,
           size: i.size,
@@ -34,23 +37,34 @@ const CartDrawer = () => {
           unit_price: i.product.price,
         })),
         fulfillment_method: fulfillment,
-        subtotal: totalPrice,
+        subtotal: lineItems.reduce((s, i) => s + (i.product.price ?? 0) * i.quantity, 0),
         shipping_cost: fulfillmentCost,
         total: grandTotal,
         payment_status: 'pending',
-        source: 'academy-shop',
-      };
+      });
 
-      const { data: orderData, error: orderError } = await supabase
-        .from('shop_orders')
-        .insert([orderPayload])
-        .select('id')
-        .single();
+      // Log IPL shirt order to shop_orders_ipl
+      if (iplItems.length > 0) {
+        try {
+          const { data } = await supabase
+            .from('shop_orders_ipl')
+            .insert([{ ...buildPayload(iplItems), supplier_status: 'awaiting_bulk_order' }])
+            .select('id').single();
+          if (data?.id) localStorage.setItem('shop_order_ipl_id', data.id);
+        } catch (e) { console.warn('IPL order log failed:', e); }
+      }
 
-      if (orderError) {
-        console.warn('Supabase order log failed (non-blocking):', orderError);
-      } else if (orderData?.id) {
-        localStorage.setItem('shop_order_id', orderData.id);
+      // Log training kit order to shop_orders_training
+      let orderData = null;
+      if (trainingItems.length > 0) {
+        try {
+          const { data } = await supabase
+            .from('shop_orders_training')
+            .insert([{ ...buildPayload(trainingItems), fulfillment_status: 'unfulfilled' }])
+            .select('id').single();
+          orderData = data;
+          if (data?.id) localStorage.setItem('shop_order_id', data.id);
+        } catch (e) { console.warn('Training order log failed:', e); }
       }
 
       // Build Stripe line items from cart

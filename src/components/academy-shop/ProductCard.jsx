@@ -111,6 +111,16 @@ const ProductCard = ({ product, index }) => {
 
         <p className="text-xs text-rr-charcoal leading-relaxed">{product.description}</p>
 
+        {/* Made-to-order notice — customer facing only, no supplier info */}
+        {product.madeToOrder && (
+          <div className="flex items-start gap-2.5 bg-rr-blue/5 border border-rr-blue/20 rounded-xl px-3.5 py-3">
+            <svg className="w-4 h-4 text-rr-blue shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p className="text-xs text-rr-blue font-medium leading-relaxed">{product.madeToOrderNote}</p>
+          </div>
+        )}
+
         {/* ── Age group toggle ── */}
         <div>
           <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Age Group</p>
