@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ShoppingBag, Plus, Minus, RotateCcw } from 'lucide-react';
-import { PRODUCT_SIZE_MAP } from './sizeData';
+import { PRODUCT_SIZE_MAP, VANY_TOPS_KIDS } from './sizeData';
 import { useCart } from './CartContext';
 import SizeGuide from './SizeGuide';
 
@@ -32,7 +32,11 @@ const ProductCard = ({ product, index }) => {
   const { addItem } = useCart();
 
   const sizeConfig = PRODUCT_SIZE_MAP[product.id];
-  const availableSizes = sizeConfig?.sizes[ageGroup] ?? [];
+  const isVanyJunior = sizeConfig?.showVanyKids && ageGroup === 'junior';
+  // VANY junior = kids by year; VANY senior = XXXXS–XXXL; Omtex = numbered/lettered
+  const availableSizes = isVanyJunior
+    ? VANY_TOPS_KIDS
+    : (sizeConfig?.sizes[ageGroup] ?? []);
   const hasRealImages = !product.imagePlaceholder && product.images;
 
   // Reset selected size when age group changes
@@ -48,7 +52,7 @@ const ProductCard = ({ product, index }) => {
       setTimeout(() => setSizeError(false), 2500);
       return;
     }
-    addItem(product, `${ageGroup === 'junior' ? 'JNR' : 'SNR'} ${selectedSize}`, quantity);
+    addItem(product, isVanyJunior ? selectedSize : `${ageGroup === 'junior' ? 'JNR' : 'SNR'} ${selectedSize}`, quantity);
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
@@ -126,7 +130,11 @@ const ProductCard = ({ product, index }) => {
             ))}
           </div>
           {ageGroup === 'junior' && (
-            <p className="text-xs text-slate-400 mt-1.5 italic">Junior sizes are numbered (18–34). Use the size guide below to match by age or measurement.</p>
+            <p className="text-xs text-slate-400 mt-1.5 italic">
+              {isVanyJunior
+                ? 'Kids sized by age (2–14 years). Open the size guide below for chest measurements.'
+                : 'Junior sizes are numbered (18–34). Use the size guide below to match by age or measurement.'}
+            </p>
           )}
         </div>
 

@@ -3,13 +3,81 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Ruler, ChevronDown, ChevronUp, Info } from 'lucide-react';
 import { PRODUCT_SIZE_MAP, KIDS_AGE_CHART } from './sizeData';
 
+// ── Adult size table ──────────────────────────────────────────
+const SizeTable = ({ rows, measureKey, col1Label }) => (
+  <div className="overflow-x-auto">
+    <table className="w-full text-xs">
+      <thead>
+        <tr className="border-b border-slate-200">
+          <th className="text-left font-black text-rr-dark uppercase tracking-wider py-2 pr-3">Size</th>
+          <th className="text-left font-black text-rr-dark uppercase tracking-wider py-2 pr-3">{col1Label} (in)</th>
+          <th className="text-left font-black text-rr-dark uppercase tracking-wider py-2">Length (in)</th>
+        </tr>
+      </thead>
+      <tbody className="divide-y divide-slate-100">
+        {rows.map((row, i) => (
+          <tr key={i} className="hover:bg-white transition-colors">
+            <td className="py-1.5 pr-3 font-bold text-rr-dark">{row.label}</td>
+            <td className="py-1.5 pr-3 text-slate-600">{row[measureKey]}</td>
+            <td className="py-1.5 text-slate-600">{row.length}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
+
+// ── VANY Kids by-year table ───────────────────────────────────
+const VanyKidsTable = ({ rows }) => (
+  <div className="overflow-x-auto">
+    <p className="text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Kids Sizing — By Age (VANY)</p>
+    <table className="w-full text-xs">
+      <thead>
+        <tr className="border-b border-slate-200">
+          <th className="text-left font-black text-rr-dark uppercase tracking-wider py-2 pr-3">Age</th>
+          <th className="text-left font-black text-rr-dark uppercase tracking-wider py-2 pr-3">A — Chest (in)</th>
+          <th className="text-left font-black text-rr-dark uppercase tracking-wider py-2">B — Length (in)</th>
+        </tr>
+      </thead>
+      <tbody className="divide-y divide-slate-100">
+        {rows.map((row, i) => (
+          <tr key={i} className="hover:bg-white transition-colors">
+            <td className="py-1.5 pr-3 font-bold text-rr-dark">{row.label}</td>
+            <td className="py-1.5 pr-3 text-slate-600">{row.chest}</td>
+            <td className="py-1.5 text-slate-600">{row.length}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p className="text-xs text-slate-400 italic mt-2">
+      A = chest (lay flat), B = height. Numbers in brackets = full chest circumference.
+    </p>
+  </div>
+);
+
+// ── Omtex Kids age reference ──────────────────────────────────
+const OmtexKidsAgeChart = () => (
+  <div className="pt-2 border-t border-slate-200">
+    <p className="text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Age Guide (Junior)</p>
+    <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+      {KIDS_AGE_CHART.map((row, i) => (
+        <div key={i} className="flex justify-between text-xs text-slate-500">
+          <span>{row.age}</span>
+          <span className="font-bold text-rr-dark">Top {row.top} / Bottom {row.bottom}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+// ── Main SizeGuide component ──────────────────────────────────
 const SizeGuide = ({ productId, ageGroup }) => {
   const [open, setOpen] = useState(false);
   const config = PRODUCT_SIZE_MAP[productId];
   if (!config) return null;
 
-  const rows = config.sizes[ageGroup] || [];
-  const col1Key = config.measureKey; // 'halfChest' or 'waist'
+  const isVanyJunior = config.showVanyKids && ageGroup === 'junior';
+  const adultRows = config.sizes?.senior ?? [];
 
   return (
     <div className="mt-1">
@@ -31,52 +99,38 @@ const SizeGuide = ({ productId, ageGroup }) => {
             transition={{ duration: 0.25 }}
             className="overflow-hidden"
           >
-            <div className="mt-3 bg-slate-50 rounded-xl p-4 space-y-3">
+            <div className="mt-3 bg-slate-50 rounded-xl p-4 space-y-4">
+
+              {/* Manufacturer badge */}
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-black text-white bg-rr-blue px-2.5 py-1 rounded-full uppercase tracking-wider">
+                  {config.manufacturer}
+                </span>
+                <span className="text-xs text-slate-400">Official Size Guide</span>
+              </div>
+
               {/* Measurement tip */}
               <div className="flex items-start gap-2">
                 <Info className="w-3.5 h-3.5 text-rr-pink shrink-0 mt-0.5" />
                 <p className="text-xs text-slate-500 leading-relaxed">{config.tip}</p>
               </div>
 
-              {/* Size table */}
-              <div className="overflow-x-auto">
-                <table className="w-full text-xs">
-                  <thead>
-                    <tr className="border-b border-slate-200">
-                      <th className="text-left font-black text-rr-dark uppercase tracking-wider py-2 pr-3">Size</th>
-                      <th className="text-left font-black text-rr-dark uppercase tracking-wider py-2 pr-3">{config.col1Label} (in)</th>
-                      <th className="text-left font-black text-rr-dark uppercase tracking-wider py-2">Length (in)</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {rows.map((row, i) => (
-                      <tr key={i} className="hover:bg-white transition-colors">
-                        <td className="py-1.5 pr-3 font-bold text-rr-dark">{row.label}</td>
-                        <td className="py-1.5 pr-3 text-slate-600">{row[col1Key]}</td>
-                        <td className="py-1.5 text-slate-600">{row.length}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Kids age reference — tops only */}
-              {config.showKidsAgeChart && ageGroup === 'junior' && (
-                <div className="pt-2 border-t border-slate-200">
-                  <p className="text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Age Guide (Junior)</p>
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-                    {KIDS_AGE_CHART.map((row, i) => (
-                      <div key={i} className="flex justify-between text-xs text-slate-500">
-                        <span>{row.age}</span>
-                        <span className="font-bold text-rr-dark">Top {row.top} / Bottom {row.bottom}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+              {/* Size tables — VANY Junior shows kids by year, adults show full table */}
+              {isVanyJunior ? (
+                <VanyKidsTable rows={config.kidsYearSizes} />
+              ) : (
+                <SizeTable
+                  rows={ageGroup === 'junior' ? (config.sizes?.junior ?? []) : adultRows}
+                  measureKey={config.measureKey}
+                  col1Label={config.col1Label}
+                />
               )}
 
+              {/* Omtex kids age reference for training kit */}
+              {config.showKidsAgeChart && ageGroup === 'junior' && <OmtexKidsAgeChart />}
+
               <p className="text-xs text-slate-400 italic">
-                All measurements in inches · Source: Omtex official size chart
+                All measurements approx — allow for slight variation · Source: {config.manufacturer} official size guide
               </p>
             </div>
           </motion.div>

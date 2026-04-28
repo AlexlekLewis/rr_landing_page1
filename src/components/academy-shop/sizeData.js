@@ -1,6 +1,8 @@
 // ============================================================
-// RRA Melbourne — Omtex Size Data
-// Source: Official Omtex size charts (Men's & Kids)
+// RRA Melbourne — Size Data
+// Sources:
+//   - Omtex official size charts (training kit)
+//   - VANY official size guide (IPL replica shirt)
 // All measurements in inches
 // ============================================================
 
@@ -9,25 +11,58 @@ export const SIZE_GROUPS = {
   SENIOR: 'senior',
 };
 
-// ── TOPS (Shirts) ────────────────────────────────────────────
+// ── VANY IPL REPLICA SHIRT — Adults ─────────────────────────
+// Source: VANY Size Guide (adults) — Custom T & Polo
+// A = half chest laid flat, B = length
+export const VANY_TOPS_ADULT = {
+  junior: null, // not applicable — adults use XXXXS–XXXL, kids use year sizing
+  senior: [
+    { label: 'XXXXS', halfChest: '15 (30)', length: '23' },
+    { label: 'XXXS',  halfChest: '16 (32)', length: '24' },
+    { label: 'XXS',   halfChest: '17 (34)', length: '25' },
+    { label: 'XS',    halfChest: '18 (36)', length: '26' },
+    { label: 'S',     halfChest: '19 (38)', length: '27' },
+    { label: 'M',     halfChest: '20 (40)', length: '28' },
+    { label: 'L',     halfChest: '21 (42)', length: '29' },
+    { label: 'XL',    halfChest: '22 (44)', length: '30' },
+    { label: 'XXL',   halfChest: '23 (46)', length: '31' },
+    { label: 'XXXL',  halfChest: '24 (48)', length: '32' },
+  ],
+};
+
+// ── VANY IPL REPLICA SHIRT — Kids ───────────────────────────
+// Source: VANY Size Guide (kids) — Custom T & Polo
+// A = chest (lay flat), B = height/length
+export const VANY_TOPS_KIDS = [
+  { label: '2 Year',  chest: '12.75 (25.5)', length: '16.75' },
+  { label: '4 Year',  chest: '13.75 (27.5)', length: '18.25' },
+  { label: '6 Year',  chest: '14.5 (29)',    length: '19.75' },
+  { label: '8 Year',  chest: '15.25 (30.5)', length: '21.25' },
+  { label: '10 Year', chest: '16 (32)',       length: '22.75' },
+  { label: '12 Year', chest: '16.75 (33.5)', length: '24.25' },
+  { label: '14 Year', chest: '17.75 (35.5)', length: '25.25' },
+];
+
+// ── OMTEX TRAINING SHIRT — Adults & Junior ──────────────────
+// Source: Omtex Men's Export Size Chart — T-Shirts
 export const TOPS_SIZES = {
   junior: [
-    { label: '18', halfChest: '11 – 11.5', length: '16' },
-    { label: '20', halfChest: '11 – 12',   length: '17' },
-    { label: '22', halfChest: '12.5 – 13', length: '18' },
-    { label: '24', halfChest: '13.5 – 14', length: '19' },
-    { label: '26', halfChest: '14.5 – 15', length: '21' },
-    { label: '28', halfChest: '15.5 – 16', length: '22' },
-    { label: '30', halfChest: '16.5 – 17', length: '23' },
-    { label: '32', halfChest: '17.5 – 18', length: '24.5' },
+    { label: '18',       halfChest: '11 – 11.5', length: '16' },
+    { label: '20',       halfChest: '11 – 12',   length: '17' },
+    { label: '22',       halfChest: '12.5 – 13', length: '18' },
+    { label: '24',       halfChest: '13.5 – 14', length: '19' },
+    { label: '26',       halfChest: '14.5 – 15', length: '21' },
+    { label: '28',       halfChest: '15.5 – 16', length: '22' },
+    { label: '30',       halfChest: '16.5 – 17', length: '23' },
+    { label: '32',       halfChest: '17.5 – 18', length: '24.5' },
     { label: '34 (XXS)', halfChest: '18.5 – 19', length: '25' },
   ],
   senior: [
-    { label: 'SX (36)', halfChest: '19.5 – 20', length: '27' },
-    { label: 'S (38)',  halfChest: '20.5 – 21', length: '28' },
-    { label: 'M (40)',  halfChest: '21.5 – 22', length: '29' },
-    { label: 'L (42)',  halfChest: '22.5 – 23', length: '30' },
-    { label: 'XL (44)', halfChest: '23.5 – 24', length: '31' },
+    { label: 'SX (36)',  halfChest: '19.5 – 20', length: '27' },
+    { label: 'S (38)',   halfChest: '20.5 – 21', length: '28' },
+    { label: 'M (40)',   halfChest: '21.5 – 22', length: '29' },
+    { label: 'L (42)',   halfChest: '22.5 – 23', length: '30' },
+    { label: 'XL (44)',  halfChest: '23.5 – 24', length: '31' },
     { label: '2XL (46)', halfChest: '24.5 – 25', length: '32' },
     { label: '3XL (48)', halfChest: '25.5 – 26', length: '33' },
     { label: '4XL (50)', halfChest: '26.5 – 27', length: '34' },
@@ -35,10 +70,10 @@ export const TOPS_SIZES = {
   ],
 };
 
-export const TOPS_MEASURE_TIP = 'Measure around the fullest part of your chest (horizontal). Use half-chest column below.';
+export const TOPS_MEASURE_TIP = 'Lay a shirt flat and measure across the chest (A). Use the half-chest column below to find your size.';
 export const TOPS_MEASURE_FIELDS = ['Half Chest (in)', 'Length (in)'];
 
-// ── SHORTS ───────────────────────────────────────────────────
+// ── OMTEX SHORTS ─────────────────────────────────────────────
 export const SHORTS_SIZES = {
   junior: [
     { label: '8–10',  waist: '18 – 20', length: '12.5' },
@@ -54,10 +89,10 @@ export const SHORTS_SIZES = {
   ],
 };
 
-export const SHORTS_MEASURE_TIP = 'Measure around your waist (horizontal). Compare to the waist column below.';
+export const SHORTS_MEASURE_TIP = 'Measure around your waist where you tie the drawstring. Compare to the waist column below.';
 export const SHORTS_MEASURE_FIELDS = ['Waist (in)', 'Length (in)'];
 
-// ── PANTS / TROUSERS ─────────────────────────────────────────
+// ── OMTEX PANTS ──────────────────────────────────────────────
 export const PANTS_SIZES = {
   junior: [
     { label: '18', waist: '18', length: '26' },
@@ -79,10 +114,10 @@ export const PANTS_SIZES = {
   ],
 };
 
-export const PANTS_MEASURE_TIP = 'Measure around your waist (horizontal). Compare to the waist column below.';
+export const PANTS_MEASURE_TIP = 'Measure around your waist where you tie the belt. Compare to the waist column below.';
 export const PANTS_MEASURE_FIELDS = ['Waist (in)', 'Length (in)'];
 
-// ── KIDS AGE CHART (reference only — shown as info panel) ────
+// ── Omtex Kids age reference (training kit only) ─────────────
 export const KIDS_AGE_CHART = [
   { age: '1/2 yrs',   top: '20', bottom: '16' },
   { age: '3/4 yrs',   top: '22', bottom: '18' },
@@ -94,42 +129,53 @@ export const KIDS_AGE_CHART = [
   { age: '15/16 yrs', top: '34', bottom: '28' },
 ];
 
-// ── Map product ID → size data ───────────────────────────────
+// ── Product → size data map ───────────────────────────────────
 export const PRODUCT_SIZE_MAP = {
+  // IPL shirt uses VANY sizing (different manufacturer to training kit)
   'ipl-replica-shirt': {
-    sizes: TOPS_SIZES,
-    tip: TOPS_MEASURE_TIP,
-    fields: TOPS_MEASURE_FIELDS,
-    measureKey: 'halfChest', // key in junior/senior objects for col 1
-    col1Label: 'Half Chest',
-    col2Label: 'Length',
-    showKidsAgeChart: true,
-  },
-  'training-shirt': {
-    sizes: TOPS_SIZES,
-    tip: TOPS_MEASURE_TIP,
-    fields: TOPS_MEASURE_FIELDS,
+    manufacturer: 'VANY',
+    sizeType: 'vany-tops',
+    sizes: VANY_TOPS_ADULT,          // adult sizes (junior tab shows kids by year)
+    kidsYearSizes: VANY_TOPS_KIDS,   // kids sizes shown when Junior selected
+    tip: 'Lay a shirt you own flat and measure across the chest (A = half chest). Use the chart below to find your size. Numbers in brackets are full chest circumference.',
+    col1Label: 'A — Half Chest',
+    col2Label: 'B — Length',
     measureKey: 'halfChest',
+    showVanyKids: true,
+    showKidsAgeChart: false,
+  },
+  // Training kit uses Omtex sizing
+  'training-shirt': {
+    manufacturer: 'Omtex',
+    sizeType: 'omtex-tops',
+    sizes: TOPS_SIZES,
+    tip: TOPS_MEASURE_TIP,
     col1Label: 'Half Chest',
     col2Label: 'Length',
+    measureKey: 'halfChest',
+    showVanyKids: false,
     showKidsAgeChart: true,
   },
   'training-shorts': {
+    manufacturer: 'Omtex',
+    sizeType: 'omtex-shorts',
     sizes: SHORTS_SIZES,
     tip: SHORTS_MEASURE_TIP,
-    fields: SHORTS_MEASURE_FIELDS,
-    measureKey: 'waist',
     col1Label: 'Waist',
     col2Label: 'Length',
+    measureKey: 'waist',
+    showVanyKids: false,
     showKidsAgeChart: false,
   },
   'training-pants': {
+    manufacturer: 'Omtex',
+    sizeType: 'omtex-pants',
     sizes: PANTS_SIZES,
     tip: PANTS_MEASURE_TIP,
-    fields: PANTS_MEASURE_FIELDS,
-    measureKey: 'waist',
     col1Label: 'Waist',
     col2Label: 'Length',
+    measureKey: 'waist',
+    showVanyKids: false,
     showKidsAgeChart: false,
   },
 };
