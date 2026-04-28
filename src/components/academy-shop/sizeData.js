@@ -3,7 +3,7 @@
 // Sources:
 //   - Omtex official size charts (training kit)
 //   - VANY official size guide (IPL replica shirt)
-// All measurements in inches
+// All measurements in inches — max size: 3XL
 // ============================================================
 
 export const SIZE_GROUPS = {
