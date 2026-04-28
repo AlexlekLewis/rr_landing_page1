@@ -44,9 +44,12 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
     const isHoliday = variant === 'holiday';
     const isHome = variant === 'home';
     const isLittleCrickets = variant === 'junior-royals';
+    const isShop = variant === 'shop';
 
-    const navLinks = (isLP3 || isHoliday) ? [] : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
+    const navLinks = (isLP3 || isHoliday || isShop) ? [] : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
     const showProgramsDropdown = isHome;
+    const showCTA = !isShop;
+    const showHamburger = !isShop;
 
     const ctaLabel = isHome ? 'REGISTER NOW' : (isLP2 || isHoliday || isLittleCrickets) ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
     const ctaTarget = isLP2 ? 'checkout' : (isHoliday || isLittleCrickets) ? 'registration-form' : 'apply-form';
@@ -160,7 +163,7 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
                             </a>
                         ))}
 
-                        {!isLP3 && (
+                        {!isLP3 && showCTA && (
                             <Button onClick={scrollToForm} variant="blue" className="text-sm px-6 py-2">
                                 {ctaLabel}
                             </Button>
@@ -168,7 +171,7 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
                     </div>
 
                     {/* Mobile hamburger */}
-                    {!isLP3 && (
+                    {!isLP3 && showHamburger && (
                         <button
                             className="md:hidden text-white p-2 focus:outline-none"
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

@@ -12,7 +12,7 @@ const AcademyShopInner = () => {
 
   return (
     <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
-      <Navbar variant="lp2" />
+      <Navbar variant="shop" />
 
       <main className="flex-1 w-full overflow-hidden">
         <ShopHero />
