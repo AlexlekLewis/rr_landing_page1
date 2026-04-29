@@ -179,28 +179,22 @@ const ProductCard = ({ product, index }) => {
               )}
             </div>
 
-            {/* Size selector */}
+            {/* Size selector — dropdown */}
             <div>
               <p className={`text-xs font-bold uppercase tracking-widest mb-2 ${sizeError ? 'text-red-500' : 'text-slate-500'}`}>
                 {sizeError ? '⚠ Please select a size first' : 'Select Size'}
               </p>
-              <div className="flex flex-wrap gap-1.5">
+              <select
+                value={selectedSize || ''}
+                onChange={e => { setSelectedSize(e.target.value || null); setSizeError(false); }}
+                className={`w-full px-4 py-2.5 rounded-xl border-2 text-sm font-bold text-rr-dark bg-white transition-colors focus:outline-none
+                  ${sizeError ? 'border-red-300' : selectedSize ? 'border-rr-pink' : 'border-slate-200'}`}
+              >
+                <option value="">— Select a size —</option>
                 {availableSizes.map(size => (
-                  <button
-                    key={size.label}
-                    onClick={() => { setSelectedSize(size.label); setSizeError(false); }}
-                    className={`px-2.5 py-2 rounded-lg text-xs font-bold border-2 transition-all duration-200 leading-tight text-center
-                      ${selectedSize === size.label
-                        ? 'border-rr-pink bg-rr-pink text-white'
-                        : sizeError
-                          ? 'border-red-200 text-slate-600 hover:border-rr-pink'
-                          : 'border-slate-200 text-slate-600 hover:border-rr-pink'
-                      }`}
-                  >
-                    {size.label}
-                  </button>
+                  <option key={size.label} value={size.label}>{size.label}</option>
                 ))}
-              </div>
+              </select>
             </div>
 
             {/* Size guide */}

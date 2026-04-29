@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 // Order closes 10am Monday 4th May 2025 AEST (UTC+10)
-const ORDER_CLOSE = new Date('2025-05-04T10:00:00+10:00');
+const ORDER_CLOSE = new Date('2026-05-04T10:00:00+10:00');
 
 const pad = (n) => String(n).padStart(2, '0');
 
