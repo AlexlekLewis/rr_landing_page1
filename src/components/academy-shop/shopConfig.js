@@ -19,7 +19,7 @@ export const PRODUCTS = [
     badge: 'Made to Order',
     badgeColor: 'bg-rr-blue',
     madeToOrder: true,
-    madeToOrderNote: 'This item is made to order. Please allow 2–3 weeks for delivery after your order is placed.',
+    madeToOrderNote: 'Made to order. Available for pickup and postage approximately 18th May. You will be updated via text message on your order status.',
     imagePlaceholder: false,
     images: { front: '/shop/ipl-shirt-front.jpeg', back: null },
     // Stripe Price IDs — one per size (create in Stripe Dashboard → Products)
@@ -104,7 +104,7 @@ export const PRODUCTS = [
     badge: 'Made to Order',
     badgeColor: 'bg-rr-blue',
     madeToOrder: true,
-    madeToOrderNote: 'This item is made to order. Please allow 2–3 weeks for delivery after your order is placed.',
+    madeToOrderNote: 'Made to order. Available for pickup and postage approximately 18th May. You will be updated via text message on your order status.',
     imagePlaceholder: false,
     images: { front: '/shop/fleece-jacket-front.png', back: null },
     oneSize: false,

@@ -4,6 +4,7 @@ import { ShoppingBag, Plus, Minus, RotateCcw } from 'lucide-react';
 import { PRODUCT_SIZE_MAP, VANY_TOPS_KIDS } from './sizeData';
 import { useCart } from './CartContext';
 import SizeGuide from './SizeGuide';
+import IPLCountdown from './IPLCountdown';
 
 const PlaceholderImage = ({ productId }) => {
   const gradients = {
@@ -127,6 +128,9 @@ const ProductCard = ({ product, index }) => {
             <p className="text-xs text-rr-blue font-medium leading-relaxed">{product.madeToOrderNote}</p>
           </div>
         )}
+
+        {/* ── IPL order countdown ── */}
+        {product.id === 'ipl-replica-shirt' && <IPLCountdown />}
 
         {/* ── Sizing note (e.g. jacket runs small) ── */}
         {product.sizingNote && (
