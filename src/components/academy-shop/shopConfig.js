@@ -75,7 +75,7 @@ export const PRODUCTS = [
     imagePlaceholder: false,
     images: {
       front: '/shop/training-pants-front.png',
-      back: '/shop/training-pants-back.png',
+      back: null,
     },
     stripePriceId: 'price_1TRJt4Io52UEA50ydwZmfUKh',
   },
