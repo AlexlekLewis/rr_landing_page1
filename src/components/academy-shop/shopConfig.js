@@ -94,7 +94,7 @@ export const PRODUCTS = [
     imagePlaceholder: false,
     images: { front: '/shop/pink-cap-front.png', back: null },
     oneSize: true,
-    stripePriceId: 'price_PLACEHOLDER_cap',
+    stripePriceId: 'price_1TRNozIo52UEA50yEkWYWKAq',
   },
   {
     id: 'fleece-jacket',

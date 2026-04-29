@@ -15,7 +15,7 @@ const PRICE_MAP = {
   'training-shirt':    'price_1TRJinIo52UEA50yaIwEA8Ni',
   'training-shorts':   'price_1TRJqhIo52UEA50ycGPuIieZ',
   'training-pants':    'price_1TRJt4Io52UEA50ydwZmfUKh',
-  'pink-cap':          'price_PLACEHOLDER_cap',
+  'pink-cap':          'price_1TRNozIo52UEA50yEkWYWKAq',
   'fleece-jacket':     'price_PLACEHOLDER_jacket',
 };
 
