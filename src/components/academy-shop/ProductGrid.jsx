@@ -14,7 +14,7 @@ const ProductGrid = () => {
           </h2>
           <div className="w-12 h-px mt-4" style={{ background: 'linear-gradient(90deg, #E11F8F, #1226AA)' }} />
           <p className="text-rr-charcoal font-medium mt-4 max-w-xl">
-            Pricing will be confirmed shortly. Select your size and add items to your cart — complete your order once prices are live.
+            Kit up in official Rajasthan Royals colours. Select your size, add to cart, and check out in minutes.
           </p>
         </div>
 
