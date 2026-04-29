@@ -37,7 +37,8 @@ const ProductCard = ({ product, index }) => {
   const availableSizes = isVanyJunior
     ? VANY_TOPS_KIDS
     : (sizeConfig?.sizes[ageGroup] ?? []);
-  const hasRealImages = !product.imagePlaceholder && product.images;
+  const hasRealImages = !product.imagePlaceholder && product.images?.front;
+  const hasBackImage = hasRealImages && product.images?.back;
 
   // Reset selected size when age group changes
   const handleAgeGroupChange = (group) => {
@@ -78,13 +79,15 @@ const ProductCard = ({ product, index }) => {
               alt={`${product.name} ${showBack ? 'back' : 'front'}`}
               className="w-full h-full object-cover object-center"
             />
-            <button
-              onClick={() => setShowBack(v => !v)}
-              className="absolute bottom-3 right-3 bg-black/50 hover:bg-black/70 text-white text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full flex items-center gap-1.5 backdrop-blur-sm transition-colors"
-            >
-              <RotateCcw className="w-3 h-3" />
-              {showBack ? 'Front' : 'Back'}
-            </button>
+            {hasBackImage && (
+              <button
+                onClick={() => setShowBack(v => !v)}
+                className="absolute bottom-3 right-3 bg-black/50 hover:bg-black/70 text-white text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full flex items-center gap-1.5 backdrop-blur-sm transition-colors"
+              >
+                <RotateCcw className="w-3 h-3" />
+                {showBack ? 'Front' : 'Back'}
+              </button>
+            )}
           </>
         ) : (
           <PlaceholderImage productId={product.id} />

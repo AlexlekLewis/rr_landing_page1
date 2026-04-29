@@ -42,7 +42,7 @@ export const PRODUCTS = [
     imagePlaceholder: false,
     images: {
       front: '/shop/training-shirt-front.png',
-      back: '/shop/training-shirt-back.png',
+      back: null,
     },
     stripePriceId: 'price_1TRJinIo52UEA50yaIwEA8Ni',
   },
