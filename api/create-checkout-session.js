@@ -44,35 +44,15 @@ module.exports = async (req, res) => {
       };
     });
 
-    // Build shipping options based on fulfillment type
+    // Stripe Shipping Rate IDs
+    const STRIPE_SHIPPING_RATES = {
+      standard: 'shr_1TROdrIo52UEA50yMijZecJJ',
+      express:  'shr_1TROf8Io52UEA50yeADIIgxr',
+    };
+
     const { pickupVenue, mtoShippingCost } = req.body;
     let shippingOptions;
-    if (fulfillment === 'standard') {
-      shippingOptions = [{
-        shipping_rate_data: {
-          type: 'fixed_amount',
-          fixed_amount: { amount: 1200, currency: 'aud' },
-          display_name: 'Standard Shipping (5–7 business days)',
-          delivery_estimate: {
-            minimum: { unit: 'business_day', value: 5 },
-            maximum: { unit: 'business_day', value: 7 },
-          },
-        },
-      }];
-    } else if (fulfillment === 'express') {
-      shippingOptions = [{
-        shipping_rate_data: {
-          type: 'fixed_amount',
-          fixed_amount: { amount: 2000, currency: 'aud' },
-          display_name: 'Express Shipping (1–3 business days)',
-          delivery_estimate: {
-            minimum: { unit: 'business_day', value: 1 },
-            maximum: { unit: 'business_day', value: 3 },
-          },
-        },
-      }];
-    } else {
-      // Pickup
+    if (fulfillment === 'pickup') {
       const venueLabel = pickupVenue === 'bundoora'
         ? 'Academy Pickup — Bundoora (Tue & Thu, 5:00pm–9:00pm)'
         : pickupVenue === 'hallam'
@@ -85,21 +65,9 @@ module.exports = async (req, res) => {
           display_name: venueLabel,
         },
       }];
-    }
-
-    // Add MTO mandatory shipping as extra line item if applicable
-    if (mtoShippingCost && mtoShippingCost > 0) {
-      lineItems.push({
-        price_data: {
-          currency: 'aud',
-          unit_amount: mtoShippingCost,
-          product_data: {
-            name: 'Made-to-Order Delivery',
-            description: 'International delivery for made-to-order items',
-          },
-        },
-        quantity: 1,
-      });
+    } else {
+      // Standard or Express — use real Stripe Shipping Rate IDs
+      shippingOptions = [{ shipping_rate: STRIPE_SHIPPING_RATES[fulfillment] }];
     }
 
     // Create Stripe Checkout Session
