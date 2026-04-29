@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const SMS_NUMBER = '0421261825';
 const MOBILE_MESSAGE = 'Hi - Let us know if you have a question!';
@@ -6,6 +6,15 @@ const DESKTOP_MESSAGE = 'Hi, I have a question about RRA Melbourne programs';
 
 const TextUsButton = () => {
     const [tooltip, setTooltip] = useState(false);
+    const [cartOpen, setCartOpen] = useState(false);
+
+    useEffect(() => {
+        const sync = () => setCartOpen(document.body.classList.contains('cart-drawer-open'));
+        sync();
+        const observer = new MutationObserver(sync);
+        observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+        return () => observer.disconnect();
+    }, []);
 
     const handleClick = () => {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -15,6 +24,8 @@ const TextUsButton = () => {
         const separator = isIOS ? '&' : '?';
         window.open(`sms:${SMS_NUMBER}${separator}body=${encodeURIComponent(message)}`, '_self');
     };
+
+    if (cartOpen) return null;
 
     return (
         <div className="fixed bottom-24 right-4 z-50 flex flex-col items-end gap-2">

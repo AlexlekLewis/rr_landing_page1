@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ShoppingBag, Plus, Minus, Trash2, Truck, MapPin } from 'lucide-react';
 import { useCart } from './CartContext';
@@ -33,6 +33,12 @@ const CartDrawer = () => {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutError, setCheckoutError] = useState(null);
   const [venueError, setVenueError] = useState(false);
+
+  // Signal to floating widgets (e.g. TextUsButton) that the cart is open so they hide
+  useEffect(() => {
+    document.body.classList.toggle('cart-drawer-open', isOpen);
+    return () => document.body.classList.remove('cart-drawer-open');
+  }, [isOpen]);
 
   const hasMadeToOrderItems = items.some(i => i.product.madeToOrder);
   const mtoQty = items.filter(i => i.product.madeToOrder).reduce((s, i) => s + i.quantity, 0);
@@ -190,10 +196,17 @@ const CartDrawer = () => {
               ) : (
                 items.map(item => (
                   <div key={item.key} className="flex gap-4 bg-slate-50 rounded-xl p-4">
-                    {/* Mini placeholder image */}
-                    <div className="w-16 h-16 rounded-lg bg-rr-dark flex items-center justify-center shrink-0">
-                      <ShoppingBag className="w-6 h-6 text-white/30" />
-                    </div>
+                    {item.product.images?.front ? (
+                      <img
+                        src={item.product.images.front}
+                        alt={item.product.shortName}
+                        className="w-16 h-16 rounded-lg object-cover bg-white shrink-0"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 rounded-lg bg-rr-dark flex items-center justify-center shrink-0">
+                        <ShoppingBag className="w-6 h-6 text-white/30" />
+                      </div>
+                    )}
 
                     <div className="flex-1 min-w-0">
                       <p className="font-bold text-rr-dark text-sm leading-tight truncate">{item.product.shortName}</p>
