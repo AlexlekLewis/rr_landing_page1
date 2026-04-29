@@ -29,10 +29,22 @@ const CartDrawer = () => {
   const { items, isOpen, setIsOpen, removeItem, updateQuantity, totalItems, totalPrice, clearCart } = useCart();
   const [fulfillment, setFulfillment] = useState('pickup');
   const [pickupVenue, setPickupVenue] = useState(null);
+  // Auto-switch away from pickup if cart gains a made-to-order item
+  React.useEffect(() => {
+    if (hasMadeToOrderItems && fulfillment === 'pickup') {
+      setFulfillment('standard');
+      setPickupVenue(null);
+    }
+  }, [hasMadeToOrderItems]);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutError, setCheckoutError] = useState(null);
   const [venueError, setVenueError] = useState(false);
 
+  const hasMadeToOrderItems = items.some(i => i.product.madeToOrder);
+  // If cart has made-to-order items, pickup is not available — force shipping
+  const availableFulfillmentOptions = hasMadeToOrderItems
+    ? FULFILLMENT_OPTIONS.filter(o => o.id !== 'pickup')
+    : FULFILLMENT_OPTIONS;
   const fulfillmentCost = FULFILLMENT_OPTIONS.find(o => o.id === fulfillment)?.price ?? 0;
   const grandTotal = totalPrice + fulfillmentCost;
 
@@ -219,7 +231,7 @@ const CartDrawer = () => {
                 <div className="space-y-3">
                   <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Delivery Method</p>
                   <div className="space-y-2">
-                    {FULFILLMENT_OPTIONS.map(option => {
+                    {availableFulfillmentOptions.map(option => {
                       const Icon = option.icon;
                       return (
                         <button
@@ -242,6 +254,18 @@ const CartDrawer = () => {
                       );
                     })}
                   </div>
+
+                  {/* Notice when pickup unavailable */}
+                  {hasMadeToOrderItems && (
+                    <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5">
+                      <svg className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20A10 10 0 0012 2z" />
+                      </svg>
+                      <p className="text-xs text-amber-700 font-medium leading-relaxed">
+                        Your cart contains made-to-order items. Pickup is only available for in-stock items — please select a shipping option.
+                      </p>
+                    </div>
+                  )}
 
                   {/* Venue selector — shown only when pickup selected */}
                   {fulfillment === 'pickup' && (
