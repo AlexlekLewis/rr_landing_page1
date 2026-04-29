@@ -57,8 +57,8 @@ export const PRODUCTS = [
     category: 'Bottoms',
     badge: 'Academy Kit',
     badgeColor: 'bg-rr-blue',
-    imagePlaceholder: true,
-    images: null,
+    imagePlaceholder: false,
+    images: { front: '/shop/training-shorts-front.png', back: null },
     stripePriceId: 'price_1TRJqhIo52UEA50ycGPuIieZ',
   },
   {
