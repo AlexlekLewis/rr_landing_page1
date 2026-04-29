@@ -80,7 +80,7 @@ const ProductCard = ({ product, index }) => {
               transition={{ duration: 0.3 }}
               src={showBack ? product.images.back : product.images.front}
               alt={`${product.name} ${showBack ? 'back' : 'front'}`}
-              className="w-full h-full object-cover object-center"
+              className="w-full h-full object-cover object-top"
             />
             {hasBackImage && (
               <button

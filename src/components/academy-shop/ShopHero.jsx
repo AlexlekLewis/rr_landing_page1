@@ -7,7 +7,7 @@ const ShopHero = () => {
       {/* Background image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/shop/shop-hero-bg.jpeg')" }}
+        style={{ backgroundImage: "url('/shop/shop-hero-bg.jpeg')", backgroundPosition: 'center 20%' }}
       />
 
       {/* Dark overlays — bottom-heavy so text is readable */}
