@@ -104,6 +104,10 @@ const CartDrawer = () => {
         } catch (e) { console.warn('Training order log failed:', e); }
       }
 
+      // Save fulfillment details for success page
+      localStorage.setItem('shop_fulfillment', fulfillment);
+      if (pickupVenue) localStorage.setItem('shop_pickup_venue', pickupVenue);
+
       // Call Vercel serverless function to create Stripe Checkout Session
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',

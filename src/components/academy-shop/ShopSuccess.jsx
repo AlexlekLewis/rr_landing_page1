@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle, ArrowLeft } from 'lucide-react';
+import { CheckCircle, ArrowLeft, MapPin, Truck, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
@@ -8,32 +8,59 @@ import { supabase } from '../../lib/supabase';
 
 const ShopSuccess = () => {
   const [updated, setUpdated] = useState(false);
+  const [fulfillment, setFulfillment] = useState(null);
+  const [pickupVenue, setPickupVenue] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    const updateOrder = async () => {
-      const orderId = localStorage.getItem('shop_order_id');
-      if (!orderId) return;
+    // Read fulfillment details stored at checkout
+    const storedFulfillment = localStorage.getItem('shop_fulfillment');
+    const storedVenue = localStorage.getItem('shop_pickup_venue');
+    if (storedFulfillment) setFulfillment(storedFulfillment);
+    if (storedVenue) setPickupVenue(storedVenue);
 
-      try {
-        await supabase
-          .from('shop_orders')
-          .update({ payment_status: 'completed' })
-          .eq('id', orderId);
-        localStorage.removeItem('shop_order_id');
-        setUpdated(true);
-      } catch (err) {
-        console.warn('Could not update order status:', err);
+    const updateOrders = async () => {
+      const trainingId = localStorage.getItem('shop_order_id');
+      if (trainingId) {
+        try {
+          await supabase.from('shop_orders_training')
+            .update({ payment_status: 'completed' }).eq('id', trainingId);
+          localStorage.removeItem('shop_order_id');
+        } catch (e) { console.warn('Training order update failed:', e); }
       }
+
+      const iplId = localStorage.getItem('shop_order_ipl_id');
+      if (iplId) {
+        try {
+          await supabase.from('shop_orders_ipl')
+            .update({ payment_status: 'completed' }).eq('id', iplId);
+          localStorage.removeItem('shop_order_ipl_id');
+        } catch (e) { console.warn('IPL order update failed:', e); }
+      }
+
+      if (trainingId || iplId) setUpdated(true);
+
+      // Clear fulfillment details
+      localStorage.removeItem('shop_fulfillment');
+      localStorage.removeItem('shop_pickup_venue');
     };
 
-    updateOrder();
+    updateOrders();
   }, []);
+
+  const isPickup = fulfillment === 'pickup';
+  const isExpress = fulfillment === 'express';
+
+  const venueDetails = pickupVenue === 'bundoora'
+    ? { name: 'Bundoora', days: 'Tuesday & Thursday', hours: '5:00pm – 9:00pm' }
+    : pickupVenue === 'hallam'
+      ? { name: 'Hallam', days: 'Monday', hours: '5:30pm – 8:30pm' }
+      : null;
 
   return (
     <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white">
-      <Navbar variant="lp2" />
+      <Navbar variant="shop" />
 
       <main className="flex-1 flex items-center justify-center py-24 px-6">
         <motion.div
@@ -55,31 +82,86 @@ const ShopSuccess = () => {
           </div>
 
           <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-rr-dark mb-4">
-            You're all set!
+            You're kitted up!
           </h1>
 
           <p className="text-rr-charcoal text-lg font-medium leading-relaxed mb-8">
-            Thank you for your order. You'll receive a confirmation email from Stripe shortly with your order details.
+            Thank you for your order. A confirmation has been sent to your email from Stripe.
           </p>
 
-          <div className="bg-slate-50 rounded-2xl p-6 text-left mb-8 space-y-3">
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">What happens next</p>
-            {[
-              'Check your email for your Stripe order confirmation',
-              'Our team will process your order within 2 business days',
-              'Pickup orders: bring your confirmation to your next training session',
-              'Shipping orders: allow 5–7 business days for delivery',
-            ].map((step, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                  style={{ background: 'linear-gradient(135deg, #E11F8F, #1226AA)' }}>
-                  <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
-                  </svg>
-                </span>
-                <p className="text-sm text-rr-charcoal font-medium">{step}</p>
-              </div>
-            ))}
+          {/* Fulfillment card */}
+          <div className="bg-slate-50 rounded-2xl p-6 text-left mb-6 border border-slate-200">
+            {isPickup && venueDetails ? (
+              <>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                    style={{ background: 'linear-gradient(135deg, #E11F8F, #1226AA)' }}>
+                    <MapPin className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-black text-rr-dark uppercase tracking-tight">Academy Pickup</p>
+                    <p className="text-xs text-slate-400 font-medium">Collect at your chosen venue</p>
+                  </div>
+                </div>
+                <div className="space-y-2 pl-1">
+                  <div className="flex items-start gap-3">
+                    <MapPin className="w-4 h-4 text-rr-pink shrink-0 mt-0.5" />
+                    <p className="text-sm font-bold text-rr-dark">{venueDetails.name}</p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Clock className="w-4 h-4 text-rr-pink shrink-0 mt-0.5" />
+                    <p className="text-sm text-rr-charcoal font-medium">{venueDetails.days} · {venueDetails.hours}</p>
+                  </div>
+                  <p className="text-xs text-slate-400 mt-3 pl-7">
+                    In-stock items will be available at your next session. Made-to-order items will be ready for collection once they arrive from our supplier — we'll contact you directly.
+                  </p>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                    style={{ background: 'linear-gradient(135deg, #E11F8F, #1226AA)' }}>
+                    <Truck className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-black text-rr-dark uppercase tracking-tight">
+                      {isExpress ? 'Express Shipping' : 'Standard Shipping'}
+                    </p>
+                    <p className="text-xs text-slate-400 font-medium">Delivered to your address</p>
+                  </div>
+                </div>
+                <div className="space-y-3 pl-1">
+                  <div className="flex items-start gap-3">
+                    <Clock className="w-4 h-4 text-rr-pink shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-bold text-rr-dark">In-stock items</p>
+                      <p className="text-sm text-rr-charcoal font-medium">
+                        {isExpress ? '1–3 business days' : '5–7 business days'} from date of purchase
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Clock className="w-4 h-4 text-rr-blue shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-bold text-rr-dark">Made-to-order items</p>
+                      <p className="text-sm text-rr-charcoal font-medium">
+                        2–4 weeks to arrive in Australia, then {isExpress ? '1–3 business days' : '5–7 business days'} to your door
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Contact */}
+          <div className="bg-rr-pink/5 border border-rr-pink/20 rounded-2xl p-5 text-left mb-8">
+            <p className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-2">Questions about your order?</p>
+            <a href="mailto:info@rramelbourne.com"
+              className="text-sm font-bold text-rr-dark hover:text-rr-pink transition-colors">
+              info@rramelbourne.com
+            </a>
           </div>
 
           <Link
