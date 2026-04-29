@@ -219,9 +219,9 @@ const LCLocations = () => {
                                     </div>
                                 )}
                                 {loc.tag === 'hallam' && (
-                                    <div className="bg-amber-50 border border-amber-300 rounded-xl px-4 py-2.5 mb-5 flex items-center gap-2">
-                                        <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0 animate-pulse" />
-                                        <p className="text-amber-700 text-xs font-bold uppercase tracking-wide">Enrolment closes Wednesday 5:00pm — register now</p>
+                                    <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-2.5 mb-5 flex items-center gap-2">
+                                        <span className="w-2 h-2 rounded-full bg-red-500 shrink-0" />
+                                        <p className="text-red-700 text-xs font-bold uppercase tracking-wide">Hallam — Enrolments Now Closed</p>
                                     </div>
                                 )}
 
@@ -234,10 +234,11 @@ const LCLocations = () => {
 
                                 <div className="flex flex-col sm:flex-row gap-3">
                                     <button
-                                        onClick={scrollToForm}
-                                        className="flex-1 bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest py-3 rounded-full transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.4)] text-sm"
+                                        onClick={loc.tag === 'bundoora' || loc.tag === 'hallam' ? undefined : scrollToForm}
+                                        disabled={loc.tag === 'bundoora' || loc.tag === 'hallam'}
+                                        className={`flex-1 font-bold uppercase tracking-widest py-3 rounded-full transition-all duration-300 text-sm ${loc.tag === 'bundoora' || loc.tag === 'hallam' ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-rr-pink hover:bg-rr-light-pink text-white hover:shadow-[0_0_20px_rgba(229,6,149,0.4)]'}`}
                                     >
-                                        Secure Your Place
+                                        {loc.tag === 'bundoora' ? 'Sold Out' : loc.tag === 'hallam' ? 'Enrolments Closed' : 'Secure Your Place'}
                                     </button>
                                     <a
                                         href={loc.mapsUrl}
