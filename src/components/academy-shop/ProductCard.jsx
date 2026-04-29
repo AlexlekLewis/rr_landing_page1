@@ -48,12 +48,15 @@ const ProductCard = ({ product, index }) => {
   };
 
   const handleAddToCart = () => {
-    if (!selectedSize) {
+    if (!product.oneSize && !selectedSize) {
       setSizeError(true);
       setTimeout(() => setSizeError(false), 2500);
       return;
     }
-    addItem(product, isVanyJunior ? selectedSize : `${ageGroup === 'junior' ? 'JNR' : 'SNR'} ${selectedSize}`, quantity);
+    const sizeLabel = product.oneSize
+      ? 'One Size'
+      : isVanyJunior ? selectedSize : `${ageGroup === 'junior' ? 'JNR' : 'SNR'} ${selectedSize}`;
+    addItem(product, sizeLabel, quantity);
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
@@ -124,59 +127,81 @@ const ProductCard = ({ product, index }) => {
           </div>
         )}
 
-        {/* ── Age group toggle ── */}
-        <div>
-          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Age Group</p>
-          <div className="flex gap-2">
-            {['junior', 'senior'].map(group => (
-              <button
-                key={group}
-                onClick={() => handleAgeGroupChange(group)}
-                className={`flex-1 py-2 rounded-xl text-xs font-black uppercase tracking-widest border-2 transition-all duration-200
-                  ${ageGroup === group
-                    ? 'border-rr-pink bg-rr-pink text-white'
-                    : 'border-slate-200 text-slate-500 hover:border-rr-pink/50'
-                  }`}
-              >
-                {group === 'junior' ? '👦 Junior' : '🧑 Senior'}
-              </button>
-            ))}
+        {/* ── Sizing note (e.g. jacket runs small) ── */}
+        {product.sizingNote && (
+          <div className="flex items-start gap-2.5 bg-amber-50 border border-amber-200 rounded-xl px-3.5 py-3">
+            <svg className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+            </svg>
+            <p className="text-xs text-amber-700 font-medium leading-relaxed">{product.sizingNote}</p>
           </div>
-          {ageGroup === 'junior' && (
-            <p className="text-xs text-slate-400 mt-1.5 italic">
-              {isVanyJunior
-                ? 'Kids sized by age (2–14 years). Open the size guide below for chest measurements.'
-                : 'Junior sizes are numbered (18–34). Use the size guide below to match by age or measurement.'}
-            </p>
-          )}
-        </div>
+        )}
 
-        {/* ── Size selector ── */}
-        <div>
-          <p className={`text-xs font-bold uppercase tracking-widest mb-2 ${sizeError ? 'text-red-500' : 'text-slate-500'}`}>
-            {sizeError ? '⚠ Please select a size first' : 'Select Size'}
-          </p>
-          <div className="flex flex-wrap gap-1.5">
-            {availableSizes.map(size => (
-              <button
-                key={size.label}
-                onClick={() => { setSelectedSize(size.label); setSizeError(false); }}
-                className={`px-2.5 py-2 rounded-lg text-xs font-bold border-2 transition-all duration-200 leading-tight text-center
-                  ${selectedSize === size.label
-                    ? 'border-rr-pink bg-rr-pink text-white'
-                    : sizeError
-                      ? 'border-red-200 text-slate-600 hover:border-rr-pink'
-                      : 'border-slate-200 text-slate-600 hover:border-rr-pink'
-                  }`}
-              >
-                {size.label}
-              </button>
-            ))}
+        {/* ── One size OR age group + size selector ── */}
+        {product.oneSize ? (
+          <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
+            <svg className="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+            </svg>
+            <p className="text-xs font-bold text-slate-600 uppercase tracking-wider">One Size Fits All</p>
           </div>
-        </div>
+        ) : (
+          <>
+            {/* Age group toggle */}
+            <div>
+              <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Age Group</p>
+              <div className="flex gap-2">
+                {['junior', 'senior'].map(group => (
+                  <button
+                    key={group}
+                    onClick={() => handleAgeGroupChange(group)}
+                    className={`flex-1 py-2 rounded-xl text-xs font-black uppercase tracking-widest border-2 transition-all duration-200
+                      ${ageGroup === group
+                        ? 'border-rr-pink bg-rr-pink text-white'
+                        : 'border-slate-200 text-slate-500 hover:border-rr-pink/50'
+                      }`}
+                  >
+                    {group === 'junior' ? '👦 Junior' : '🧑 Senior'}
+                  </button>
+                ))}
+              </div>
+              {ageGroup === 'junior' && (
+                <p className="text-xs text-slate-400 mt-1.5 italic">
+                  {isVanyJunior
+                    ? 'Kids sized by age (2–14 years). Open the size guide below for chest measurements.'
+                    : 'Junior sizes are numbered (18–34). Use the size guide below to match by age or measurement.'}
+                </p>
+              )}
+            </div>
 
-        {/* ── Size guide (expandable) ── */}
-        <SizeGuide productId={product.id} ageGroup={ageGroup} />
+            {/* Size selector */}
+            <div>
+              <p className={`text-xs font-bold uppercase tracking-widest mb-2 ${sizeError ? 'text-red-500' : 'text-slate-500'}`}>
+                {sizeError ? '⚠ Please select a size first' : 'Select Size'}
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {availableSizes.map(size => (
+                  <button
+                    key={size.label}
+                    onClick={() => { setSelectedSize(size.label); setSizeError(false); }}
+                    className={`px-2.5 py-2 rounded-lg text-xs font-bold border-2 transition-all duration-200 leading-tight text-center
+                      ${selectedSize === size.label
+                        ? 'border-rr-pink bg-rr-pink text-white'
+                        : sizeError
+                          ? 'border-red-200 text-slate-600 hover:border-rr-pink'
+                          : 'border-slate-200 text-slate-600 hover:border-rr-pink'
+                      }`}
+                  >
+                    {size.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Size guide */}
+            <SizeGuide productId={product.id} ageGroup={ageGroup} />
+          </>
+        )}
 
         {/* ── Quantity + Add to cart ── */}
         <div className="mt-auto pt-2 space-y-2">

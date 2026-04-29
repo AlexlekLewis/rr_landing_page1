@@ -9,6 +9,21 @@
 export const SIZE_GROUPS = {
   JUNIOR: 'junior',
   SENIOR: 'senior',
+  // Cap — one size, no size guide needed
+  'pink-cap': null,
+
+  // Fleece jacket — S to XXXL with sizing warning
+  'fleece-jacket': {
+    manufacturer: 'Omtex',
+    sizeType: 'jacket',
+    sizes: { junior: null, senior: JACKET_SIZES.senior },
+    tip: JACKET_MEASURE_TIP,
+    col1Label: 'Half Chest',
+    col2Label: 'Length',
+    measureKey: 'halfChest',
+    showVanyKids: false,
+    showKidsAgeChart: false,
+  },
 };
 
 // ── VANY IPL REPLICA SHIRT — Adults ─────────────────────────
@@ -124,6 +139,21 @@ export const KIDS_AGE_CHART = [
   { age: '13/14 yrs', top: '32', bottom: '28' },
   { age: '15/16 yrs', top: '34', bottom: '28' },
 ];
+
+
+// ── JACKET SIZES ─────────────────────────────────────────────
+export const JACKET_SIZES = {
+  junior: null,
+  senior: [
+    { label: 'S',    halfChest: '19 – 20', length: '27' },
+    { label: 'M',    halfChest: '20 – 21', length: '28' },
+    { label: 'L',    halfChest: '21 – 22', length: '29' },
+    { label: 'XL',   halfChest: '22 – 23', length: '30' },
+    { label: 'XXL',  halfChest: '23 – 24', length: '31' },
+    { label: 'XXXL', halfChest: '24 – 25', length: '32' },
+  ],
+};
+export const JACKET_MEASURE_TIP = 'Lay a jacket flat and measure across the chest (A). This jacket runs small — order one size larger than usual.';
 
 // ── Product → size data map ───────────────────────────────────
 export const PRODUCT_SIZE_MAP = {
