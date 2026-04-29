@@ -21,10 +21,7 @@ export const PRODUCTS = [
     madeToOrder: true,
     madeToOrderNote: 'This item is made to order. Please allow 2–3 weeks for delivery after your order is placed.',
     imagePlaceholder: false,
-    images: {
-      front: '/shop/ipl-shirt-front.jpeg',
-      back: '/shop/ipl-shirt-back.jpeg',
-    },
+    images: { front: '/shop/ipl-shirt-front.jpeg', back: null },
     // Stripe Price IDs — one per size (create in Stripe Dashboard → Products)
     stripePriceId: 'price_1TRJe7Io52UEA50yZ4i5OPwH',
   },
