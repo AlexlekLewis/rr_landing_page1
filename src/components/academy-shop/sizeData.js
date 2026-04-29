@@ -106,6 +106,8 @@ export const PANTS_MEASURE_TIP = 'Measure around your waist where you tie the be
 export const JACKET_SIZES = {
   junior: null,
   senior: [
+    { label: 'XXS',  halfChest: '17 – 18', length: '25' },
+    { label: 'XS',   halfChest: '18 – 19', length: '26' },
     { label: 'S',    halfChest: '19 – 20', length: '27' },
     { label: 'M',    halfChest: '20 – 21', length: '28' },
     { label: 'L',    halfChest: '21 – 22', length: '29' },
