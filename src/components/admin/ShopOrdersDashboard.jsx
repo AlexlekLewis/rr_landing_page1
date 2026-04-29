@@ -345,7 +345,14 @@ const ShopOrdersDashboard = () => {
                                         </td>
                                         <td className="p-4 text-white font-bold whitespace-nowrap">{formatMoney(order.total)}</td>
                                         <td className="p-4">
-                                            <PaymentBadge status={order.payment_status} />
+                                            <div>
+                                                <PaymentBadge status={order.payment_status} />
+                                                {order.card_brand && order.card_last4 && (
+                                                    <div className="text-[10px] text-slate-500 mt-1 font-mono uppercase tracking-wider">
+                                                        {order.card_brand} •••• {order.card_last4}
+                                                    </div>
+                                                )}
+                                            </div>
                                         </td>
                                         <td className="p-4">
                                             <StatusBadge order={order} />
@@ -631,54 +638,54 @@ const OrderDetailDrawer = ({ order, stripeData, stripeLoading, stripeError, onCl
                         </p>
                     </Section>
 
-                    {/* Stripe */}
+                    {/* Stripe — prefer persisted DB columns, fall back to live fetch */}
                     <Section title="Stripe Payment" icon={CreditCard}>
                         {!order.stripe_session_id ? (
                             <p className="text-slate-500 text-sm italic">No Stripe session linked yet — order placed but payment not completed.</p>
-                        ) : stripeLoading ? (
-                            <div className="flex items-center gap-2 text-slate-400 text-sm">
-                                <RefreshCw className="w-4 h-4 animate-spin" />
-                                Loading Stripe data…
-                            </div>
-                        ) : stripeError ? (
-                            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3">
-                                <p className="text-red-400 text-xs">{stripeError}</p>
-                                <p className="text-slate-500 text-xs mt-1 font-mono break-all">Session: {order.stripe_session_id}</p>
-                            </div>
-                        ) : stripeData ? (
+                        ) : (
                             <>
-                                <Field label="Session ID" value={stripeData.session_id} copyable mono />
-                                {stripeData.payment && (
-                                    <>
-                                        <Field label="Charge ID" value={stripeData.payment.charge_id} copyable mono />
-                                        <Field label="Card" value={stripeData.payment.card_brand && stripeData.payment.card_last4
-                                            ? `${stripeData.payment.card_brand.toUpperCase()} •••• ${stripeData.payment.card_last4}${stripeData.payment.card_country ? ` (${stripeData.payment.card_country})` : ''}`
-                                            : '—'} />
-                                        <Field label="Status" value={stripeData.payment.status} />
-                                        {stripeData.payment.receipt_url && (
-                                            <a href={stripeData.payment.receipt_url} target="_blank" rel="noreferrer"
-                                                className="inline-flex items-center gap-1.5 text-rr-pink hover:text-rr-pink/80 text-xs font-bold mt-2">
-                                                View Stripe receipt <ExternalLink className="w-3 h-3" />
-                                            </a>
-                                        )}
-                                    </>
+                                <Field label="Session ID" value={order.stripe_session_id} copyable mono />
+                                <Field label="Charge ID" value={order.stripe_charge_id || stripeData?.payment?.charge_id} copyable mono />
+                                <Field label="Payment intent" value={order.stripe_payment_intent_id} copyable mono />
+                                <Field
+                                    label="Card"
+                                    value={
+                                        order.card_brand && order.card_last4
+                                            ? `${order.card_brand.toUpperCase()} •••• ${order.card_last4}${order.card_country ? ` (${order.card_country})` : ''}${order.card_funding ? ` · ${order.card_funding}` : ''}`
+                                            : stripeData?.payment?.card_brand
+                                                ? `${stripeData.payment.card_brand.toUpperCase()} •••• ${stripeData.payment.card_last4}`
+                                                : '—'
+                                    }
+                                />
+                                <Field label="Paid at" value={order.paid_at ? formatDateTime(order.paid_at) : '—'} />
+                                {(order.receipt_url || stripeData?.payment?.receipt_url) && (
+                                    <a href={order.receipt_url || stripeData.payment.receipt_url} target="_blank" rel="noreferrer"
+                                        className="inline-flex items-center gap-1.5 text-rr-pink hover:text-rr-pink/80 text-xs font-bold mt-2">
+                                        View Stripe receipt <ExternalLink className="w-3 h-3" />
+                                    </a>
                                 )}
+
                                 <div className="pt-3 mt-3 border-t border-white/5 grid grid-cols-2 gap-2">
-                                    <MiniField label="Subtotal" value={formatAUD(stripeData.amount_subtotal)} />
-                                    <MiniField label="Shipping" value={formatAUD(stripeData.amount_shipping)} />
-                                    <MiniField label="Total paid" value={formatAUD(stripeData.amount_total)} bold />
-                                    <MiniField label="Currency" value={(stripeData.currency || '').toUpperCase()} />
+                                    <MiniField label="Subtotal" value={formatAUD(order.amount_subtotal_cents ?? stripeData?.amount_subtotal)} />
+                                    <MiniField label="Shipping" value={formatAUD(order.amount_shipping_cents ?? stripeData?.amount_shipping)} />
+                                    <MiniField label="Tax" value={formatAUD(order.amount_tax_cents ?? 0)} />
+                                    <MiniField label="Total paid" value={formatAUD(order.amount_total_cents ?? stripeData?.amount_total)} bold />
                                 </div>
-                                <a
-                                    href={`https://dashboard.stripe.com/payments/${stripeData.payment?.charge_id || stripeData.session_id}`}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="mt-3 inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white"
-                                >
-                                    Open in Stripe Dashboard <ExternalLink className="w-3 h-3" />
-                                </a>
+
+                                <div className="flex items-center gap-3 mt-3">
+                                    <a
+                                        href={`https://dashboard.stripe.com/payments/${order.stripe_charge_id || order.stripe_session_id}`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white"
+                                    >
+                                        Open in Stripe Dashboard <ExternalLink className="w-3 h-3" />
+                                    </a>
+                                    {stripeLoading && <span className="text-xs text-slate-500"><RefreshCw className="w-3 h-3 inline animate-spin mr-1" />Refreshing live data…</span>}
+                                    {stripeError && <span className="text-xs text-red-400">{stripeError}</span>}
+                                </div>
                             </>
-                        ) : null}
+                        )}
                     </Section>
                 </div>
             </motion.div>
