@@ -112,7 +112,7 @@ export const PRODUCTS = [
     images: { front: '/shop/fleece-jacket-front.png', back: null },
     oneSize: false,
     sizingNote: '⚠️ This jacket runs small. We recommend ordering one size larger than usual — if you normally wear a L, order a XL.',
-    stripePriceId: 'price_PLACEHOLDER_jacket',
+    stripePriceId: 'price_1TRNwaIo52UEA50yIChLyg1J',
   },
 ];
 

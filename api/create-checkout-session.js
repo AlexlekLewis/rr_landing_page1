@@ -16,7 +16,7 @@ const PRICE_MAP = {
   'training-shorts':   'price_1TRJqhIo52UEA50ycGPuIieZ',
   'training-pants':    'price_1TRJt4Io52UEA50ydwZmfUKh',
   'pink-cap':          'price_1TRNozIo52UEA50yEkWYWKAq',
-  'fleece-jacket':     'price_PLACEHOLDER_jacket',
+  'fleece-jacket':     'price_1TRNwaIo52UEA50yIChLyg1J',
 };
 
 const BASE_URL = process.env.VITE_APP_URL || 'https://rramelbourne.com';
