@@ -12,6 +12,7 @@
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { createClient } = require('@supabase/supabase-js');
+const { sendOrderConfirmation } = require('./_lib/orderEmail');
 
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL,
@@ -110,6 +111,23 @@ module.exports = async (req, res) => {
         });
         console.log('Zapier fired successfully');
       } catch (e) { console.warn('Zapier failed (non-blocking):', e.message); }
+    }
+
+    // Fire Resend order-confirmation email (non-blocking, idempotent retries handled by Stripe)
+    try {
+      await sendOrderConfirmation({
+        to: customerEmail,
+        customerName,
+        items: lineItems.length ? lineItems : [],
+        fulfillmentMethod,
+        pickupVenue: session.metadata?.pickup_venue || null,
+        shippingAddress,
+        totalCents: session.amount_total,
+        orderRef: orderId || iplOrderId || session.id,
+      });
+      console.log('Confirmation email sent via Resend');
+    } catch (e) {
+      console.warn('Resend email failed (non-blocking):', e.message);
     }
   }
 

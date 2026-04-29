@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Search, Download, ChevronDown, ChevronUp, X, Truck, MapPin, CreditCard,
-    Package, CheckCircle2, Clock, ExternalLink, RefreshCw, DollarSign, ShoppingBag, AlertCircle
+    Package, CheckCircle2, Clock, ExternalLink, RefreshCw, DollarSign, ShoppingBag, AlertCircle, Mail
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import useRealtimeSync from '../../hooks/useRealtimeSync';
@@ -473,6 +473,27 @@ const OrderDetailDrawer = ({ order, stripeData, stripeLoading, stripeError, onCl
         : ['unfulfilled', 'fulfilled'];
     const currentStatus = order[statusField];
 
+    const [emailState, setEmailState] = useState({ status: 'idle', message: '' });
+    const sendConfirmation = async () => {
+        if (!order.customer_email) {
+            setEmailState({ status: 'error', message: 'No customer email on this order' });
+            return;
+        }
+        setEmailState({ status: 'sending', message: '' });
+        try {
+            const res = await fetch('/api/send-confirmation', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ order_id: order.id, source: order._source }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Send failed');
+            setEmailState({ status: 'sent', message: `Sent to ${order.customer_email}` });
+        } catch (err) {
+            setEmailState({ status: 'error', message: err.message });
+        }
+    };
+
     return (
         <>
             <motion.div
@@ -580,6 +601,34 @@ const OrderDetailDrawer = ({ order, stripeData, stripeLoading, stripeError, onCl
                         <div className="pt-2 mt-2 border-t border-white/5">
                             <Field label="Total" value={formatMoney(order.total)} bold />
                         </div>
+                    </Section>
+
+                    {/* Confirmation email */}
+                    <Section title="Confirmation Email" icon={Mail}>
+                        <div className="flex flex-wrap items-center gap-3">
+                            <button
+                                onClick={sendConfirmation}
+                                disabled={emailState.status === 'sending' || !order.customer_email}
+                                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-rr-pink to-rr-blue text-white text-xs font-bold uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
+                            >
+                                {emailState.status === 'sending' ? (
+                                    <><RefreshCw className="w-3.5 h-3.5 animate-spin" /> Sending…</>
+                                ) : emailState.status === 'sent' ? (
+                                    <><CheckCircle2 className="w-3.5 h-3.5" /> Sent</>
+                                ) : (
+                                    <><Mail className="w-3.5 h-3.5" /> Send confirmation email</>
+                                )}
+                            </button>
+                            {emailState.status === 'sent' && (
+                                <span className="text-green-400 text-xs">{emailState.message}</span>
+                            )}
+                            {emailState.status === 'error' && (
+                                <span className="text-red-400 text-xs">{emailState.message}</span>
+                            )}
+                        </div>
+                        <p className="text-slate-500 text-xs mt-2">
+                            The auto-confirmation already fires on payment. Use this to resend manually.
+                        </p>
                     </Section>
 
                     {/* Stripe */}
