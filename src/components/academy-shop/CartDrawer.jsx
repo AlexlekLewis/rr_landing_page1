@@ -5,21 +5,44 @@ import { useCart } from './CartContext';
 import { supabase } from '../../lib/supabase';
 
 const FULFILLMENT_OPTIONS = [
-  { id: 'pickup', label: 'Academy Pickup', description: 'Collect at your next training session', icon: MapPin, price: 0 },
-  { id: 'shipping', label: 'Standard Shipping', description: 'Delivered to your address (est. $10)', icon: Truck, price: 1000 },
+  { id: 'pickup',   label: 'Academy Pickup',    icon: MapPin,  price: 0 },
+  { id: 'standard', label: 'Standard Shipping', icon: Truck,   price: 1200, description: 'Delivered to your address (5–7 business days)' },
+  { id: 'express',  label: 'Express Shipping',  icon: Truck,   price: 2000, description: 'Delivered to your address (1–3 business days)' },
+];
+
+const PICKUP_VENUES = [
+  {
+    id: 'bundoora',
+    name: 'Bundoora',
+    days: 'Tuesday & Thursday',
+    hours: '5:00pm – 9:00pm',
+  },
+  {
+    id: 'hallam',
+    name: 'Hallam',
+    days: 'Monday only',
+    hours: '5:30pm – 8:30pm',
+  },
 ];
 
 const CartDrawer = () => {
   const { items, isOpen, setIsOpen, removeItem, updateQuantity, totalItems, totalPrice, clearCart } = useCart();
   const [fulfillment, setFulfillment] = useState('pickup');
+  const [pickupVenue, setPickupVenue] = useState(null);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutError, setCheckoutError] = useState(null);
+  const [venueError, setVenueError] = useState(false);
 
   const fulfillmentCost = FULFILLMENT_OPTIONS.find(o => o.id === fulfillment)?.price ?? 0;
   const grandTotal = totalPrice + fulfillmentCost;
 
   const handleCheckout = async () => {
     if (items.length === 0) return;
+    if (fulfillment === 'pickup' && !pickupVenue) {
+      setVenueError(true);
+      setTimeout(() => setVenueError(false), 2500);
+      return;
+    }
     setIsCheckingOut(true);
     setCheckoutError(null);
 
@@ -48,7 +71,7 @@ const CartDrawer = () => {
         try {
           const { data } = await supabase
             .from('shop_orders_ipl')
-            .insert([{ ...buildPayload(iplItems), supplier_status: 'awaiting_bulk_order' }])
+            .insert([{ ...buildPayload(iplItems), supplier_status: 'awaiting_bulk_order', pickup_venue: pickupVenue || null, pickup_day: pickupVenue ? PICKUP_VENUES.find(v => v.id === pickupVenue)?.days : null }])
             .select('id').single();
           if (data?.id) localStorage.setItem('shop_order_ipl_id', data.id);
         } catch (e) { console.warn('IPL order log failed:', e); }
@@ -60,7 +83,7 @@ const CartDrawer = () => {
         try {
           const { data } = await supabase
             .from('shop_orders_training')
-            .insert([{ ...buildPayload(trainingItems), fulfillment_status: 'unfulfilled' }])
+            .insert([{ ...buildPayload(trainingItems), fulfillment_status: 'unfulfilled', pickup_venue: pickupVenue || null, pickup_day: pickupVenue ? PICKUP_VENUES.find(v => v.id === pickupVenue)?.days : null }])
             .select('id').single();
           orderData = data;
           if (data?.id) localStorage.setItem('shop_order_id', data.id);
@@ -78,6 +101,7 @@ const CartDrawer = () => {
             size: i.size,
           })),
           fulfillment,
+          pickupVenue: pickupVenue || null,
           orderId: localStorage.getItem('shop_order_id') || '',
           iplOrderId: localStorage.getItem('shop_order_ipl_id') || '',
         }),
@@ -192,35 +216,61 @@ const CartDrawer = () => {
             {items.length > 0 && (
               <div className="border-t border-slate-100 px-6 py-6 space-y-4">
                 {/* Fulfillment */}
-                <div>
-                  <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Fulfillment</p>
+                <div className="space-y-3">
+                  <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Delivery Method</p>
                   <div className="space-y-2">
                     {FULFILLMENT_OPTIONS.map(option => {
                       const Icon = option.icon;
                       return (
                         <button
                           key={option.id}
-                          onClick={() => setFulfillment(option.id)}
+                          onClick={() => { setFulfillment(option.id); setPickupVenue(null); }}
                           className={`w-full flex items-center gap-3 p-3 rounded-xl border-2 transition-all text-left
-                            ${fulfillment === option.id
-                              ? 'border-rr-pink bg-rr-pink/5'
-                              : 'border-slate-200 hover:border-slate-300'
-                            }`}
+                            ${fulfillment === option.id ? 'border-rr-pink bg-rr-pink/5' : 'border-slate-200 hover:border-slate-300'}`}
                         >
                           <Icon className={`w-4 h-4 shrink-0 ${fulfillment === option.id ? 'text-rr-pink' : 'text-slate-400'}`} />
                           <div className="flex-1 min-w-0">
                             <p className={`text-xs font-bold uppercase tracking-wider ${fulfillment === option.id ? 'text-rr-pink' : 'text-rr-dark'}`}>
                               {option.label}
                             </p>
-                            <p className="text-xs text-slate-400 mt-0.5">{option.description}</p>
+                            {option.description && <p className="text-xs text-slate-400 mt-0.5">{option.description}</p>}
                           </div>
                           <span className="text-xs font-bold text-rr-dark">
-                            {option.price === 0 ? 'Free' : `+$${(option.price / 100).toFixed(0)}`}
+                            {option.price === 0 ? 'Free' : `+$${(option.price / 100).toFixed(2)}`}
                           </span>
                         </button>
                       );
                     })}
                   </div>
+
+                  {/* Venue selector — shown only when pickup selected */}
+                  {fulfillment === 'pickup' && (
+                    <div className="mt-1">
+                      <p className={`text-xs font-bold uppercase tracking-widest mb-2 ${venueError ? 'text-red-500' : 'text-slate-500'}`}>
+                        {venueError ? '⚠ Please select a pickup location' : 'Pickup Location'}
+                      </p>
+                      <div className="space-y-2">
+                        {PICKUP_VENUES.map(venue => (
+                          <button
+                            key={venue.id}
+                            onClick={() => { setPickupVenue(venue.id); setVenueError(false); }}
+                            className={`w-full text-left p-3 rounded-xl border-2 transition-all
+                              ${pickupVenue === venue.id
+                                ? 'border-rr-pink bg-rr-pink/5'
+                                : venueError
+                                  ? 'border-red-200 hover:border-rr-pink/50'
+                                  : 'border-slate-200 hover:border-slate-300'
+                              }`}
+                          >
+                            <p className={`text-xs font-black uppercase tracking-wider ${pickupVenue === venue.id ? 'text-rr-pink' : 'text-rr-dark'}`}>
+                              {venue.name}
+                            </p>
+                            <p className="text-xs text-slate-400 mt-0.5">{venue.days} · {venue.hours}</p>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Totals */}

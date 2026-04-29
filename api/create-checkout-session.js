@@ -44,26 +44,48 @@ module.exports = async (req, res) => {
       };
     });
 
-    // Build shipping options
-    const shippingOptions = fulfillment === 'shipping'
-      ? [{
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: { amount: 1000, currency: 'aud' },
-            display_name: 'Standard Shipping',
-            delivery_estimate: {
-              minimum: { unit: 'business_day', value: 5 },
-              maximum: { unit: 'business_day', value: 7 },
-            },
+    // Build shipping options based on fulfillment type
+    const { pickupVenue } = req.body;
+    let shippingOptions;
+    if (fulfillment === 'standard') {
+      shippingOptions = [{
+        shipping_rate_data: {
+          type: 'fixed_amount',
+          fixed_amount: { amount: 1200, currency: 'aud' },
+          display_name: 'Standard Shipping (5–7 business days)',
+          delivery_estimate: {
+            minimum: { unit: 'business_day', value: 5 },
+            maximum: { unit: 'business_day', value: 7 },
           },
-        }]
-      : [{
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: { amount: 0, currency: 'aud' },
-            display_name: 'Academy Pickup',
+        },
+      }];
+    } else if (fulfillment === 'express') {
+      shippingOptions = [{
+        shipping_rate_data: {
+          type: 'fixed_amount',
+          fixed_amount: { amount: 2000, currency: 'aud' },
+          display_name: 'Express Shipping (1–3 business days)',
+          delivery_estimate: {
+            minimum: { unit: 'business_day', value: 1 },
+            maximum: { unit: 'business_day', value: 3 },
           },
-        }];
+        },
+      }];
+    } else {
+      // Pickup
+      const venueLabel = pickupVenue === 'bundoora'
+        ? 'Academy Pickup — Bundoora (Tue & Thu, 5:00pm–9:00pm)'
+        : pickupVenue === 'hallam'
+          ? 'Academy Pickup — Hallam (Mon, 5:30pm–8:30pm)'
+          : 'Academy Pickup';
+      shippingOptions = [{
+        shipping_rate_data: {
+          type: 'fixed_amount',
+          fixed_amount: { amount: 0, currency: 'aud' },
+          display_name: venueLabel,
+        },
+      }];
+    }
 
     // Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
@@ -72,7 +94,7 @@ module.exports = async (req, res) => {
       shipping_options: shippingOptions,
       // Collect customer details
       billing_address_collection: 'auto',
-      shipping_address_collection: fulfillment === 'shipping'
+      shipping_address_collection: (fulfillment === 'standard' || fulfillment === 'express')
         ? { allowed_countries: ['AU'] }
         : undefined,
       phone_number_collection: { enabled: true },
