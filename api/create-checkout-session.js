@@ -56,9 +56,9 @@ export default async function handler(req, res) {
     let shippingOptions;
     if (fulfillment === 'pickup') {
       const venueLabel = pickupVenue === 'bundoora'
-        ? 'Academy Pickup — Bundoora (Tue & Thu, 5:00pm–9:00pm)'
+        ? 'Academy Pickup — Cutting Edge Cricket, Bundoora (Tue & Thu, 5:00pm–9:00pm)'
         : pickupVenue === 'hallam'
-          ? 'Academy Pickup — Hallam (Mon, 5:30pm–8:30pm)'
+          ? 'Academy Pickup — Cricket Connect, Hallam (Mon, 5:30pm–8:30pm)'
           : 'Academy Pickup';
       shippingOptions = [{
         shipping_rate_data: {

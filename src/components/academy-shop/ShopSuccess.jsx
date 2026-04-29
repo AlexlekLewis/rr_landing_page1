@@ -53,9 +53,9 @@ const ShopSuccess = () => {
   const isExpress = fulfillment === 'express';
 
   const venueDetails = pickupVenue === 'bundoora'
-    ? { name: 'Bundoora', days: 'Tuesday & Thursday', hours: '5:00pm – 9:00pm' }
+    ? { name: 'Cutting Edge Cricket — Bundoora', days: 'Tuesday & Thursday', hours: '5:00pm – 9:00pm' }
     : pickupVenue === 'hallam'
-      ? { name: 'Hallam', days: 'Monday', hours: '5:30pm – 8:30pm' }
+      ? { name: 'Cricket Connect — Hallam', days: 'Monday', hours: '5:30pm – 8:30pm' }
       : null;
 
   return (
