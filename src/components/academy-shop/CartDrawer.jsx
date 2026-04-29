@@ -67,41 +67,28 @@ const CartDrawer = () => {
         } catch (e) { console.warn('Training order log failed:', e); }
       }
 
-      // Build Stripe line items from cart
-      // NOTE: This requires a backend endpoint or Stripe Checkout Session API call.
-      // Until Stripe Price IDs are configured, show a placeholder message.
-      const hasPlaceholderPrices = items.some(i =>
-        Object.values(i.product.stripePriceIds).some(id => id.startsWith('price_PLACEHOLDER'))
-      );
-
-      if (hasPlaceholderPrices) {
-        setCheckoutError('Stripe is not yet configured for this store. Prices are coming soon — your cart has been saved.');
-        setIsCheckingOut(false);
-        return;
-      }
-
-      // Once Stripe is configured, redirect to Stripe Checkout
-      // This requires a small backend function (Vercel serverless or Supabase Edge Function)
-      // that creates a Checkout Session and returns the URL.
-      // Placeholder for that call:
+      // Call Vercel serverless function to create Stripe Checkout Session
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           items: items.map(i => ({
-            price: i.product.stripePriceIds[i.size],
+            product_id: i.product.id,
             quantity: i.quantity,
+            size: i.size,
           })),
           fulfillment,
-          orderId: orderData?.id,
+          orderId: localStorage.getItem('shop_order_id') || '',
+          iplOrderId: localStorage.getItem('shop_order_ipl_id') || '',
         }),
       });
 
-      const { url } = await response.json();
+      const { url, error: stripeError } = await response.json();
+      if (stripeError) throw new Error(stripeError);
       if (url) {
         window.location.href = url;
       } else {
-        throw new Error('No checkout URL returned');
+        throw new Error('No checkout URL returned from Stripe');
       }
     } catch (err) {
       console.error('Checkout error:', err);

@@ -26,14 +26,7 @@ export const PRODUCTS = [
       back: '/shop/ipl-shirt-back.jpeg',
     },
     // Stripe Price IDs — one per size (create in Stripe Dashboard → Products)
-    stripePriceIds: {
-      XS:  'price_PLACEHOLDER_ipl_xs',
-      S:   'price_PLACEHOLDER_ipl_s',
-      M:   'price_PLACEHOLDER_ipl_m',
-      L:   'price_PLACEHOLDER_ipl_l',
-      XL:  'price_PLACEHOLDER_ipl_xl',
-      XXL: 'price_PLACEHOLDER_ipl_xxl',
-    },
+    stripePriceId: 'price_1TRJe7Io52UEA50yZ4i5OPwH',
   },
   {
     id: 'training-shirt',
@@ -51,14 +44,7 @@ export const PRODUCTS = [
       front: '/shop/training-shirt-front.png',
       back: '/shop/training-shirt-back.png',
     },
-    stripePriceIds: {
-      XS:  'price_PLACEHOLDER_tshirt_xs',
-      S:   'price_PLACEHOLDER_tshirt_s',
-      M:   'price_PLACEHOLDER_tshirt_m',
-      L:   'price_PLACEHOLDER_tshirt_l',
-      XL:  'price_PLACEHOLDER_tshirt_xl',
-      XXL: 'price_PLACEHOLDER_tshirt_xxl',
-    },
+    stripePriceId: 'price_1TRJinIo52UEA50yaIwEA8Ni',
   },
   {
     id: 'training-shorts',
@@ -73,14 +59,7 @@ export const PRODUCTS = [
     badgeColor: 'bg-rr-blue',
     imagePlaceholder: true,
     images: null,
-    stripePriceIds: {
-      XS:  'price_PLACEHOLDER_shorts_xs',
-      S:   'price_PLACEHOLDER_shorts_s',
-      M:   'price_PLACEHOLDER_shorts_m',
-      L:   'price_PLACEHOLDER_shorts_l',
-      XL:  'price_PLACEHOLDER_shorts_xl',
-      XXL: 'price_PLACEHOLDER_shorts_xxl',
-    },
+    stripePriceId: 'price_1TRJqhIo52UEA50ycGPuIieZ',
   },
   {
     id: 'training-pants',
@@ -98,21 +77,14 @@ export const PRODUCTS = [
       front: '/shop/training-pants-front.png',
       back: '/shop/training-pants-back.png',
     },
-    stripePriceIds: {
-      XS:  'price_PLACEHOLDER_pants_xs',
-      S:   'price_PLACEHOLDER_pants_s',
-      M:   'price_PLACEHOLDER_pants_m',
-      L:   'price_PLACEHOLDER_pants_l',
-      XL:  'price_PLACEHOLDER_pants_xl',
-      XXL: 'price_PLACEHOLDER_pants_xxl',
-    },
+    stripePriceId: 'price_1TRJt4Io52UEA50ydwZmfUKh',
   },
 ];
 
 // ============================================================
 // Stripe Configuration
 // ============================================================
-export const STRIPE_PUBLISHABLE_KEY = 'pk_PLACEHOLDER_YOUR_STRIPE_KEY';
+export const STRIPE_PUBLISHABLE_KEY = 'pk_live_51T2jKFIo52UEA50ybPM7ljCN7kDOm1tli62jH5GVXMSCW5qjnPt3u7JjLcPhSdHpXJ2F8rnE5pTAahpRt4guTH9N00GROLNXZc';
 
 export const SHIPPING_RATES = {
   standard: 'shr_PLACEHOLDER_standard',
