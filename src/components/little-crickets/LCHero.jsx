@@ -33,7 +33,7 @@ const LCHero = () => {
                     className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6"
                 >
                     <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Bundoora Sold Out — Hallam Closes Wednesday 5pm</span>
+                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Bundoora & Hallam — Now Closed</span>
                 </motion.div>
 
                 {/* Headline */}
@@ -77,9 +77,9 @@ const LCHero = () => {
                         <span className="font-bold text-xs">🔴</span>
                         <span className="text-white text-xs font-semibold uppercase tracking-wide">Bundoora — Sold Out</span>
                     </div>
-                    <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2">
-                        <span className="text-rr-pink font-bold text-xs">📍</span>
-                        <span className="text-white text-xs font-semibold uppercase tracking-wide">Hallam — Cricket Connect</span>
+                    <div className="flex items-center gap-2 bg-red-500/20 border border-red-500/40 rounded-full px-4 py-2">
+                        <span className="font-bold text-xs">🔴</span>
+                        <span className="text-white text-xs font-semibold uppercase tracking-wide">Hallam — Closed</span>
                     </div>
                     <div className="flex items-center gap-2 bg-rr-pink/20 border border-rr-pink/40 rounded-full px-4 py-2">
                         <span className="text-rr-pink font-bold text-xs">💰</span>
