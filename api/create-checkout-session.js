@@ -50,7 +50,7 @@ module.exports = async (req, res) => {
       express:  'shr_1TROf8Io52UEA50yeADIIgxr',
     };
 
-    const { pickupVenue, mtoShippingCost } = req.body;
+    const { pickupVenue, mtoSurcharge, mtoQty } = req.body;
     let shippingOptions;
     if (fulfillment === 'pickup') {
       const venueLabel = pickupVenue === 'bundoora'
@@ -70,6 +70,24 @@ module.exports = async (req, res) => {
       shippingOptions = [{ shipping_rate: STRIPE_SHIPPING_RATES[fulfillment] }];
     }
 
+    // Collect shipping address for standard/express only
+    
+
+    // Add MTO per-item surcharge as line item when shipping (not pickup)
+    if (fulfillment !== 'pickup' && mtoSurcharge && mtoSurcharge > 0) {
+      lineItems.push({
+        price_data: {
+          currency: 'aud',
+          unit_amount: 1200,
+          product_data: {
+            name: 'Made-to-Order Delivery Surcharge',
+            description: `Separate international delivery for ${mtoQty} made-to-order item${mtoQty > 1 ? 's' : ''}`,
+          },
+        },
+        quantity: mtoQty,
+      });
+    }
+
     // Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
@@ -77,7 +95,7 @@ module.exports = async (req, res) => {
       shipping_options: shippingOptions,
       // Collect customer details
       billing_address_collection: 'auto',
-      shipping_address_collection: (fulfillment === 'standard' || fulfillment === 'express')
+      shipping_address_collection: fulfillment !== 'pickup'
         ? { allowed_countries: ['AU'] }
         : undefined,
       phone_number_collection: { enabled: true },

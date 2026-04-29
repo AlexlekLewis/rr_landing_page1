@@ -29,23 +29,19 @@ const CartDrawer = () => {
   const { items, isOpen, setIsOpen, removeItem, updateQuantity, totalItems, totalPrice, clearCart } = useCart();
   const [fulfillment, setFulfillment] = useState('pickup');
   const [pickupVenue, setPickupVenue] = useState(null);
-  // Auto-switch away from pickup if cart gains a made-to-order item
-  React.useEffect(() => {
-    if (hasMadeToOrderItems && fulfillment === 'pickup') {
-      setFulfillment('standard');
-      setPickupVenue(null);
-    }
-  }, [hasMadeToOrderItems]);
+
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutError, setCheckoutError] = useState(null);
   const [venueError, setVenueError] = useState(false);
 
   const hasMadeToOrderItems = items.some(i => i.product.madeToOrder);
-  // Pickup only available when no MTO items in cart
-  const availableFulfillmentOptions = hasMadeToOrderItems
-    ? FULFILLMENT_OPTIONS.filter(o => o.id !== 'pickup')
-    : FULFILLMENT_OPTIONS;
-  const fulfillmentCost = FULFILLMENT_OPTIONS.find(o => o.id === fulfillment)?.price ?? 0;
+  const mtoQty = items.filter(i => i.product.madeToOrder).reduce((s, i) => s + i.quantity, 0);
+  // All fulfillment options available for everything — pickup is always free
+  const availableFulfillmentOptions = FULFILLMENT_OPTIONS;
+  const baseFulfillmentCost = FULFILLMENT_OPTIONS.find(o => o.id === fulfillment)?.price ?? 0;
+  // MTO items incur $12 per item surcharge when shipping (not pickup)
+  const mtoSurcharge = fulfillment !== 'pickup' ? mtoQty * 1200 : 0;
+  const fulfillmentCost = baseFulfillmentCost + mtoSurcharge;
   const grandTotal = totalPrice + fulfillmentCost;
 
   const handleCheckout = async () => {
@@ -114,6 +110,8 @@ const CartDrawer = () => {
           })),
           fulfillment,
           pickupVenue: pickupVenue || null,
+          mtoSurcharge,
+          mtoQty,
           orderId: localStorage.getItem('shop_order_id') || '',
           iplOrderId: localStorage.getItem('shop_order_ipl_id') || '',
         }),
@@ -255,14 +253,14 @@ const CartDrawer = () => {
                     })}
                   </div>
 
-                  {/* Notice when pickup unavailable */}
-                  {hasMadeToOrderItems && (
+                  {/* MTO surcharge notice — shown when shipping selected and MTO items in cart */}
+                  {hasMadeToOrderItems && fulfillment !== 'pickup' && (
                     <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5">
                       <svg className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20A10 10 0 0012 2z" />
                       </svg>
                       <p className="text-xs text-amber-700 font-medium leading-relaxed">
-                        Your cart contains made-to-order items. Pickup is available for in-stock items only — please select a shipping option.
+                        Made-to-order items ship separately — a $12.00 delivery surcharge applies per item ({mtoQty} item{mtoQty > 1 ? 's' : ''} = ${(mtoQty * 12).toFixed(2)}).
                       </p>
                     </div>
                   )}
@@ -303,10 +301,16 @@ const CartDrawer = () => {
                     <span>Subtotal</span>
                     <span className="font-medium">{totalPrice === 0 ? 'TBC' : `$${(totalPrice / 100).toFixed(2)}`}</span>
                   </div>
-                  {fulfillmentCost > 0 && (
+                  {baseFulfillmentCost > 0 && (
                     <div className="flex justify-between text-sm text-slate-500">
                       <span>Shipping</span>
-                      <span className="font-medium">${(fulfillmentCost / 100).toFixed(2)}</span>
+                      <span className="font-medium">${(baseFulfillmentCost / 100).toFixed(2)}</span>
+                    </div>
+                  )}
+                  {mtoSurcharge > 0 && (
+                    <div className="flex justify-between text-sm text-slate-500">
+                      <span>Made-to-order surcharge ({mtoQty} item{mtoQty > 1 ? 's' : ''})</span>
+                      <span className="font-medium">${(mtoSurcharge / 100).toFixed(2)}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-base font-black text-rr-dark pt-2 border-t border-slate-100">
