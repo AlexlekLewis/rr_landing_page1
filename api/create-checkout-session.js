@@ -45,7 +45,7 @@ module.exports = async (req, res) => {
     });
 
     // Build shipping options based on fulfillment type
-    const { pickupVenue } = req.body;
+    const { pickupVenue, mtoShippingCost } = req.body;
     let shippingOptions;
     if (fulfillment === 'standard') {
       shippingOptions = [{
@@ -85,6 +85,21 @@ module.exports = async (req, res) => {
           display_name: venueLabel,
         },
       }];
+    }
+
+    // Add MTO mandatory shipping as extra line item if applicable
+    if (mtoShippingCost && mtoShippingCost > 0) {
+      lineItems.push({
+        price_data: {
+          currency: 'aud',
+          unit_amount: mtoShippingCost,
+          product_data: {
+            name: 'Made-to-Order Delivery',
+            description: 'International delivery for made-to-order items',
+          },
+        },
+        quantity: 1,
+      });
     }
 
     // Create Stripe Checkout Session

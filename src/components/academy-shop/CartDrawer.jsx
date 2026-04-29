@@ -41,11 +41,15 @@ const CartDrawer = () => {
   const [venueError, setVenueError] = useState(false);
 
   const hasMadeToOrderItems = items.some(i => i.product.madeToOrder);
-  // If cart has made-to-order items, pickup is not available — force shipping
+  const mtoItemCount = items.filter(i => i.product.madeToOrder).reduce((s, i) => s + i.quantity, 0);
+  // MTO items incur mandatory $12 shipping per item from India factory
+  const mtoShippingCost = mtoItemCount * 1200;
+  // Pickup only available when no MTO items in cart
   const availableFulfillmentOptions = hasMadeToOrderItems
     ? FULFILLMENT_OPTIONS.filter(o => o.id !== 'pickup')
     : FULFILLMENT_OPTIONS;
-  const fulfillmentCost = FULFILLMENT_OPTIONS.find(o => o.id === fulfillment)?.price ?? 0;
+  const baseFulfillmentCost = FULFILLMENT_OPTIONS.find(o => o.id === fulfillment)?.price ?? 0;
+  const fulfillmentCost = baseFulfillmentCost + mtoShippingCost;
   const grandTotal = totalPrice + fulfillmentCost;
 
   const handleCheckout = async () => {
@@ -114,6 +118,7 @@ const CartDrawer = () => {
           })),
           fulfillment,
           pickupVenue: pickupVenue || null,
+          mtoShippingCost,
           orderId: localStorage.getItem('shop_order_id') || '',
           iplOrderId: localStorage.getItem('shop_order_ipl_id') || '',
         }),
@@ -262,7 +267,7 @@ const CartDrawer = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20A10 10 0 0012 2z" />
                       </svg>
                       <p className="text-xs text-amber-700 font-medium leading-relaxed">
-                        Your cart contains made-to-order items. Pickup is only available for in-stock items — please select a shipping option.
+                        Made-to-order items are shipped directly to you — a $12.00 delivery fee applies per item. Pickup is available for in-stock items only.
                       </p>
                     </div>
                   )}
@@ -303,10 +308,16 @@ const CartDrawer = () => {
                     <span>Subtotal</span>
                     <span className="font-medium">{totalPrice === 0 ? 'TBC' : `$${(totalPrice / 100).toFixed(2)}`}</span>
                   </div>
-                  {fulfillmentCost > 0 && (
+                  {baseFulfillmentCost > 0 && (
                     <div className="flex justify-between text-sm text-slate-500">
                       <span>Shipping</span>
-                      <span className="font-medium">${(fulfillmentCost / 100).toFixed(2)}</span>
+                      <span className="font-medium">${(baseFulfillmentCost / 100).toFixed(2)}</span>
+                    </div>
+                  )}
+                  {mtoShippingCost > 0 && (
+                    <div className="flex justify-between text-sm text-slate-500">
+                      <span>Made-to-order delivery ({mtoItemCount} item{mtoItemCount > 1 ? 's' : ''})</span>
+                      <span className="font-medium">${(mtoShippingCost / 100).toFixed(2)}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-base font-black text-rr-dark pt-2 border-t border-slate-100">
