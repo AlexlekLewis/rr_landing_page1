@@ -4,6 +4,7 @@ import { B, F, getDkWrap, sCard } from "../data/theme";
 import Journal from "./Journal";
 import IDPView from "./IDPView";
 import PlayerDNA from "./PlayerDNA";
+import WeeklyReflection from "./WeeklyReflection";
 import { loadAttendanceForPlayer } from "../db/observationDb";
 import { supabase } from "../supabaseClient";
 
@@ -28,7 +29,7 @@ const PortalHeader = React.memo(({ title, showBack, onBack, onSignOut, userName 
 
 export default function PlayerPortal() {
     const { session, userProfile, signOut } = useAuth();
-    const [view, setView] = useState("home"); // home | journal | idp | dna
+    const [view, setView] = useState("home"); // home | journal | idp | dna | reflection
     const [recentAtt, setRecentAtt] = useState([]);
     const [playerId, setPlayerId] = useState(null);
     const [programInfo, setProgramInfo] = useState(null);
@@ -94,6 +95,13 @@ export default function PlayerPortal() {
         </div>
     );
 
+    if (view === "reflection") return (
+        <div style={{ minHeight: "100vh", background: B.g50, fontFamily: F }}>
+            <PortalHeader title="Weekly Review" showBack onBack={() => setView('home')} onSignOut={handleSignOut} userName={userProfile?.full_name} />
+            <WeeklyReflection session={session} userProfile={userProfile} />
+        </div>
+    );
+
     // HOME VIEW
     return (
         <div style={{ minHeight: "100vh", background: B.g50, fontFamily: F }}>
@@ -120,11 +128,16 @@ export default function PlayerPortal() {
                 </div>
 
                 {/* ═══ ACTION TILES ═══ */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 20 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 20 }}>
                     <div onClick={() => setView('dna')} style={{ ...sCard, cursor: 'pointer', padding: 20, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.2s' }}>
                         <div style={{ fontSize: 32, marginBottom: 12 }}>🧬</div>
                         <div style={{ fontSize: 14, fontWeight: 800, color: B.nvD, fontFamily: F }}>My DNA</div>
                         <div style={{ fontSize: 10, color: B.g400, fontFamily: F, textAlign: 'center', marginTop: 4 }}>Your T20 identity & report</div>
+                    </div>
+                    <div onClick={() => setView('reflection')} style={{ ...sCard, cursor: 'pointer', padding: 20, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.2s' }}>
+                        <div style={{ fontSize: 32, marginBottom: 12 }}>📋</div>
+                        <div style={{ fontSize: 14, fontWeight: 800, color: B.nvD, fontFamily: F }}>Weekly Review</div>
+                        <div style={{ fontSize: 10, color: B.g400, fontFamily: F, textAlign: 'center', marginTop: 4 }}>End of week reflection</div>
                     </div>
                     <div onClick={() => setView('journal')} style={{ ...sCard, cursor: 'pointer', padding: 20, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.2s' }}>
                         <div style={{ fontSize: 32, marginBottom: 12 }}>📔</div>
