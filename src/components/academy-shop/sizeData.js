@@ -52,7 +52,7 @@ export const TOPS_SIZES = {
     { label: '34 (XXS)', halfChest: '18.5 – 19', length: '25' },
   ],
   senior: [
-    { label: 'SX (36)',  halfChest: '19.5 – 20', length: '27' },
+    { label: 'XS (36)',  halfChest: '19.5 – 20', length: '27' },
     { label: 'S (38)',   halfChest: '20.5 – 21', length: '28' },
     { label: 'M (40)',   halfChest: '21.5 – 22', length: '29' },
     { label: 'L (42)',   halfChest: '22.5 – 23', length: '30' },
@@ -91,7 +91,7 @@ export const PANTS_SIZES = {
     { label: '28', waist: '28', length: '36' },
   ],
   senior: [
-    { label: 'SX',  waist: '28', length: '42' },
+    { label: 'XS',  waist: '28', length: '42' },
     { label: 'S',   waist: '30', length: '42' },
     { label: 'M',   waist: '32', length: '42' },
     { label: 'L',   waist: '34', length: '42' },
