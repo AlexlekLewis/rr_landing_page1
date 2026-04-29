@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle, ArrowLeft, MapPin, Truck, Clock } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import { supabase } from '../../lib/supabase';
 
 const ShopSuccess = () => {
   const [updated, setUpdated] = useState(false);
-  const [fulfillment, setFulfillment] = useState(null);
-  const [pickupVenue, setPickupVenue] = useState(null);
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const fulfillment = params.get('fulfillment') || localStorage.getItem('shop_fulfillment');
+  const pickupVenue = params.get('venue') || localStorage.getItem('shop_pickup_venue');
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
-    // Read fulfillment details stored at checkout
-    const storedFulfillment = localStorage.getItem('shop_fulfillment');
-    const storedVenue = localStorage.getItem('shop_pickup_venue');
-    if (storedFulfillment) setFulfillment(storedFulfillment);
-    if (storedVenue) setPickupVenue(storedVenue);
+    // Clear localStorage fallbacks
+    localStorage.removeItem('shop_fulfillment');
+    localStorage.removeItem('shop_pickup_venue');
 
     const updateOrders = async () => {
       const trainingId = localStorage.getItem('shop_order_id');

@@ -108,7 +108,7 @@ export default async function handler(req, res) {
         fulfillment_method: fulfillment,
       },
       // Redirect URLs
-      success_url: `${BASE_URL}/academy-shop/success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${BASE_URL}/academy-shop/success?session_id={CHECKOUT_SESSION_ID}&fulfillment=${fulfillment}&venue=${pickupVenue || ''}`,
       cancel_url: `${BASE_URL}/academy-shop`,
       // Payment settings
       payment_intent_data: {
