@@ -12,23 +12,38 @@ const ShopSuccess = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    const updateOrder = async () => {
-      const orderId = localStorage.getItem('shop_order_id');
-      if (!orderId) return;
+    // Stripe appends ?session_id={CHECKOUT_SESSION_ID} to the success URL.
+    // Capture it on each order row so we can cross-reference with the Stripe dashboard.
+    const sessionId = new URLSearchParams(window.location.search).get('session_id');
 
+    const trainingOrderId = localStorage.getItem('shop_order_id');
+    const iplOrderId = localStorage.getItem('shop_order_ipl_id');
+
+    const completedFields = {
+      payment_status: 'completed',
+      ...(sessionId ? { stripe_session_id: sessionId } : {}),
+    };
+
+    const markCompleted = async (table, id, key) => {
+      if (!id) return false;
       try {
-        await supabase
-          .from('shop_orders')
-          .update({ payment_status: 'completed' })
-          .eq('id', orderId);
-        localStorage.removeItem('shop_order_id');
-        setUpdated(true);
+        const { error } = await supabase.from(table).update(completedFields).eq('id', id);
+        if (error) throw error;
+        localStorage.removeItem(key);
+        return true;
       } catch (err) {
-        console.warn('Could not update order status:', err);
+        console.warn(`Could not update ${table}:`, err);
+        return false;
       }
     };
 
-    updateOrder();
+    (async () => {
+      const results = await Promise.all([
+        markCompleted('shop_orders_training', trainingOrderId, 'shop_order_id'),
+        markCompleted('shop_orders_ipl', iplOrderId, 'shop_order_ipl_id'),
+      ]);
+      if (results.some(Boolean)) setUpdated(true);
+    })();
   }, []);
 
   return (
