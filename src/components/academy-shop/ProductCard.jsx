@@ -95,9 +95,7 @@ const ProductCard = ({ product, index }) => {
         ) : (
           <PlaceholderImage productId={product.id} />
         )}
-        <div className={`absolute top-3 left-3 ${product.badgeColor} text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full`}>
-          {product.badge}
-        </div>
+
       </div>
 
       {/* ── Product info ── */}
@@ -107,12 +105,15 @@ const ProductCard = ({ product, index }) => {
         <div>
           <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.25em] mb-1">{product.category}</p>
           <h3 className="font-black text-rr-dark uppercase tracking-tight leading-tight text-sm">{product.name}</h3>
-          <p className="mt-1.5">
+          <div className="flex items-center gap-2 mt-1.5">
             {product.displayPrice === 'TBC'
               ? <span className="text-slate-400 text-sm font-bold">Price TBC</span>
               : <span className="text-xl font-black text-rr-dark">${(product.price / 100).toFixed(2)}</span>
             }
-          </p>
+            <span className={`${product.badgeColor} text-white text-xs font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-full`}>
+              {product.badge}
+            </span>
+          </div>
         </div>
 
         <p className="text-xs text-rr-charcoal leading-relaxed">{product.description}</p>
