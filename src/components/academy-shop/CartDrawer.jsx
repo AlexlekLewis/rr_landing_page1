@@ -14,12 +14,14 @@ const PICKUP_VENUES = [
   {
     id: 'bundoora',
     name: 'Cutting Edge Cricket — Bundoora',
+    address: 'Unit 7, Factory 19, Enterprise Drive, Bundoora VIC 3083',
     days: 'Tuesday & Thursday',
     hours: '5:00pm – 9:00pm',
   },
   {
     id: 'hallam',
     name: 'Cricket Connect — Hallam',
+    address: '22 Technology CCT, Hallam VIC 3803',
     days: 'Monday only',
     hours: '5:30pm – 8:30pm',
   },
@@ -304,10 +306,14 @@ const CartDrawer = () => {
                             <p className={`text-xs font-black uppercase tracking-wider ${pickupVenue === venue.id ? 'text-rr-pink' : 'text-rr-dark'}`}>
                               {venue.name}
                             </p>
+                            <p className="text-xs text-slate-500 mt-0.5">{venue.address}</p>
                             <p className="text-xs text-slate-400 mt-0.5">{venue.days} · {venue.hours}</p>
                           </button>
                         ))}
                       </div>
+                      <p className="text-xs text-slate-500 mt-3 leading-relaxed">
+                        We'll send you a text message when your order is ready for pickup.
+                      </p>
                     </div>
                   )}
                 </div>
