@@ -188,6 +188,24 @@ const ProgramRegistrationsDashboard = () => {
         return result;
     }, [ranged, search, statusFilter, programFilter, sortKey, sortDir]);
 
+    // When showing all programs, group rows by program so each section in the
+    // table gets its own subheader. Returns null when a specific program is
+    // already filtered (no need to subhead a single-program list).
+    const groupedFiltered = useMemo(() => {
+        if (programFilter !== 'all') return null;
+        const order = ['elite', 'holiday', 'female_kickstart', 'junior_royals'];
+        const buckets = new Map();
+        for (const reg of filtered) {
+            const key = reg.program || 'unknown';
+            if (!buckets.has(key)) buckets.set(key, []);
+            buckets.get(key).push(reg);
+        }
+        const ordered = [];
+        for (const k of order) if (buckets.has(k)) { ordered.push([k, buckets.get(k)]); buckets.delete(k); }
+        for (const [k, v] of buckets) ordered.push([k, v]);
+        return ordered;
+    }, [filtered, programFilter]);
+
     const toggleSort = (key) => {
         if (sortKey === key) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
         else { setSortKey(key); setSortDir('desc'); }
@@ -463,41 +481,64 @@ const ProgramRegistrationsDashboard = () => {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
-                            {filtered.map(reg => (
-                                <tr key={reg.id}
-                                    onClick={() => setSelected(reg)}
-                                    className="hover:bg-white/5 transition-colors cursor-pointer">
-                                    <td className="p-4 whitespace-nowrap">
-                                        <div className="text-slate-300">{formatDate(reg.created_at)}</div>
-                                        <div className="text-slate-500 text-xs">{formatTime(reg.created_at)}</div>
-                                    </td>
-                                    <td className="p-4">
-                                        <div className="text-white font-medium truncate max-w-[200px]">{reg.customer_name || '—'}</div>
-                                        <div className="text-slate-500 text-xs truncate max-w-[200px]">{reg.customer_email || '—'}</div>
-                                    </td>
-                                    <td className="p-4">
-                                        <ProgramBadge program={reg.program} />
-                                    </td>
-                                    <td className="p-4 text-slate-300 text-xs">
-                                        {reg.program_variant
-                                            ? <span className="font-mono">{reg.program_variant}</span>
-                                            : <span className="text-slate-500">—</span>}
-                                    </td>
-                                    <td className="p-4 text-white font-bold whitespace-nowrap">{formatAUD(reg.amount_total_cents)}</td>
-                                    <td className="p-4">
-                                        <PaymentBadge status={reg.payment_status} />
-                                    </td>
-                                    <td className="p-4">
-                                        {reg.card_brand && reg.card_last4 ? (
-                                            <div className="text-[11px] text-slate-400 font-mono uppercase tracking-wider">
-                                                {reg.card_brand} •••• {reg.card_last4}
-                                            </div>
-                                        ) : (
-                                            <span className="text-slate-500 text-xs">—</span>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
+                            {(() => {
+                                const renderRow = (reg) => (
+                                    <tr key={reg.id}
+                                        onClick={() => setSelected(reg)}
+                                        className="hover:bg-white/5 transition-colors cursor-pointer">
+                                        <td className="p-4 whitespace-nowrap">
+                                            <div className="text-slate-300">{formatDate(reg.created_at)}</div>
+                                            <div className="text-slate-500 text-xs">{formatTime(reg.created_at)}</div>
+                                        </td>
+                                        <td className="p-4">
+                                            <div className="text-white font-medium truncate max-w-[200px]">{reg.customer_name || '—'}</div>
+                                            <div className="text-slate-500 text-xs truncate max-w-[200px]">{reg.customer_email || '—'}</div>
+                                        </td>
+                                        <td className="p-4">
+                                            <ProgramBadge program={reg.program} />
+                                        </td>
+                                        <td className="p-4 text-slate-300 text-xs">
+                                            {reg.program_variant
+                                                ? <span className="font-mono">{reg.program_variant}</span>
+                                                : <span className="text-slate-500">—</span>}
+                                        </td>
+                                        <td className="p-4 text-white font-bold whitespace-nowrap">{formatAUD(reg.amount_total_cents)}</td>
+                                        <td className="p-4">
+                                            <PaymentBadge status={reg.payment_status} />
+                                        </td>
+                                        <td className="p-4">
+                                            {reg.card_brand && reg.card_last4 ? (
+                                                <div className="text-[11px] text-slate-400 font-mono uppercase tracking-wider">
+                                                    {reg.card_brand} •••• {reg.card_last4}
+                                                </div>
+                                            ) : (
+                                                <span className="text-slate-500 text-xs">—</span>
+                                            )}
+                                        </td>
+                                    </tr>
+                                );
+
+                                if (!groupedFiltered) return filtered.map(renderRow);
+
+                                return groupedFiltered.flatMap(([programKey, regs]) => {
+                                    const cfg = programDisplay(programKey);
+                                    return [
+                                        <tr key={`__header_${programKey}`} className="bg-white/[0.04]">
+                                            <td colSpan={7} className="px-4 py-2.5">
+                                                <div className="flex items-center gap-2">
+                                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest border ${cfg.accent}`}>
+                                                        {cfg.label}
+                                                    </span>
+                                                    <span className="text-[11px] text-slate-500">
+                                                        {regs.length} {regs.length === 1 ? 'registration' : 'registrations'}
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        </tr>,
+                                        ...regs.map(renderRow),
+                                    ];
+                                });
+                            })()}
                         </tbody>
                     </table>
                 </div>
