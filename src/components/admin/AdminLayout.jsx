@@ -5,7 +5,7 @@ import {
     LayoutDashboard, Kanban, Users, BarChart3, FileText,
     Settings, LogOut, ChevronLeft, ChevronRight, Menu, X,
     Send, CheckCircle2, Eye, ClipboardList, UserCheck, Shield, ChevronDown,
-    UserCircle, ShoppingBag
+    UserCircle, ShoppingBag, Trophy
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { ProgramProvider, useProgram } from './ProgramContext';
@@ -40,9 +40,10 @@ const NAV_GROUPS = [
         ],
     },
     {
-        label: 'SHOP',
+        label: 'REVENUE',
         items: [
-            { label: 'Orders', path: '/rramadmin_26/shop-orders', icon: ShoppingBag },
+            { label: 'Program Registrations', path: '/rramadmin_26/program-registrations', icon: Trophy },
+            { label: 'Shop Orders', path: '/rramadmin_26/shop-orders', icon: ShoppingBag },
         ],
     },
     {

@@ -78,6 +78,55 @@ const isShopSession = (session, lineItems) => {
   return lineItems.some(i => SHOP_PRICE_IDS.has(i.price_id));
 };
 
+// ============================================================
+// Program Registration routing — sessions that aren't shop orders
+// but ARE recognised programs land in program_registrations.
+// Keep PROGRAM_PRICE_IDS in sync with api/sync-programs-from-stripe.js.
+// ============================================================
+const PROGRAM_PRICE_IDS = {
+  'price_1TIOdNIo52UEA50yjRoWwDVt': { program: 'junior_royals', program_variant: 'ages_7_9_bundoora',     program_label: 'Junior Royals — Ages 7-9, Bundoora (Cutting Edge Cricket)' },
+  'price_1TIOerIo52UEA50ynRv5Mvwg': { program: 'junior_royals', program_variant: 'ages_10_12_bundoora',   program_label: 'Junior Royals — Ages 10-12, Bundoora (Cutting Edge Cricket)' },
+  'price_1TIOguIo52UEA50y5DGrBbsP': { program: 'junior_royals', program_variant: 'ages_13_15_bundoora',   program_label: 'Junior Royals — Ages 13-15, Bundoora (Cutting Edge Cricket)' },
+  'price_1TMFh5Io52UEA50yrjh0rz92': { program: 'junior_royals', program_variant: 'term_2_hallam',         program_label: 'Junior Royals — 2026 Term 2, Hallam (Cricket Connect)' },
+  'price_1THybpIo52UEA50yl5fCU1t8': { program: 'junior_royals', program_variant: 'training_shirt_addon', program_label: 'Junior Royals — Training Shirt (Participant ONLY)' },
+  'price_1TELBmIo52UEA50yebT4senm': { program: 'female_kickstart', program_variant: 'girls_kickstart',    program_label: 'Female Cricket — Girls Kickstart Program' },
+};
+
+const classifyByDescription = (description = '') => {
+  const d = description.toLowerCase();
+  if (!d) return null;
+  if (d.includes('elite program') || d.includes('royals elite') || d.includes('elite training programme') || d.includes('elite training program'))
+    return { program: 'elite', program_variant: null, program_label: description };
+  if (d.includes('holiday program') || d.includes('holiday camp') || d.includes('holiday clinic'))
+    return { program: 'holiday', program_variant: null, program_label: description };
+  if (d.includes('girls kickstart') || d.includes('female cricket') || d.includes('girls program'))
+    return { program: 'female_kickstart', program_variant: null, program_label: description };
+  if (d.includes('junior royals') || d.includes('cutting edge') || d.includes('cricket connect') || d.includes('royals academy'))
+    return { program: 'junior_royals', program_variant: null, program_label: description };
+  return null;
+};
+
+const classifyAsProgram = (session, lineItems) => {
+  if (session?.metadata?.source === 'academy-shop') return null;
+  if (lineItems.some(i => SHOP_PRICE_IDS.has(i.price_id))) return null;
+  if (session?.metadata?.source === 'program' && session?.metadata?.program) {
+    return {
+      program: session.metadata.program,
+      program_variant: session.metadata.program_variant || null,
+      program_label: session.metadata.program_label || null,
+    };
+  }
+  for (const item of lineItems) {
+    const match = PROGRAM_PRICE_IDS[item.price_id];
+    if (match) return match;
+  }
+  for (const item of lineItems) {
+    const match = classifyByDescription(item.description);
+    if (match) return match;
+  }
+  return null;
+};
+
 const inferFulfillmentMethod = (shippingLabel) => {
   const l = (shippingLabel || '').toLowerCase();
   if (l.includes('pickup')) return 'pickup';
@@ -167,15 +216,61 @@ export default async function handler(req, res) {
     total: i.amount_total,
   }));
 
-  // Skip non-shop sessions (program registrations, etc.) — they belong to other
-  // tables. Without this guard, every paid Stripe session would land in the
-  // shop dashboard.
-  if (!isShopSession(session, lineItems)) {
-    return res.status(200).json({ received: true, ignored: 'not_a_shop_order' });
-  }
-
   const charge = session.payment_intent?.latest_charge;
   const card = charge?.payment_method_details?.card;
+
+  // Route between shop orders and program registrations. The two systems are
+  // isolated — a session lands in exactly one of: shop_orders_*, program_registrations,
+  // or is ignored entirely.
+  if (!isShopSession(session, lineItems)) {
+    const programClass = classifyAsProgram(session, lineItems);
+    if (!programClass) {
+      return res.status(200).json({ received: true, ignored: 'unknown_session_kind' });
+    }
+
+    const programPayload = {
+      program:                  programClass.program,
+      program_variant:          programClass.program_variant,
+      program_label:            programClass.program_label,
+      customer_name:            customerName,
+      customer_email:           customerEmail,
+      customer_phone:           customerPhone,
+      shipping_address:         shippingAddress || session.customer_details?.address || null,
+      items:                    lineItems,
+      amount_subtotal_cents:    session.amount_subtotal ?? null,
+      amount_shipping_cents:    session.shipping_cost?.amount_total ?? 0,
+      amount_tax_cents:         session.total_details?.amount_tax ?? 0,
+      amount_total_cents:       session.amount_total ?? null,
+      currency:                 session.currency || 'aud',
+      payment_status:           'completed',
+      stripe_session_id:        session.id,
+      stripe_payment_intent_id: session.payment_intent?.id || null,
+      stripe_charge_id:         charge?.id || null,
+      card_brand:               card?.brand || null,
+      card_last4:               card?.last4 || null,
+      card_country:             card?.country || null,
+      card_funding:             card?.funding || null,
+      receipt_url:              charge?.receipt_url || null,
+      paid_at:                  charge?.created ? new Date(charge.created * 1000).toISOString() : new Date().toISOString(),
+      stripe_metadata:          session.metadata || null,
+    };
+
+    const supabase = getSupabase();
+    const { error: progErr } = await supabase
+      .from('program_registrations')
+      .upsert(programPayload, { onConflict: 'stripe_session_id' });
+    if (progErr) {
+      console.error('program_registrations upsert failed:', progErr);
+      return res.status(500).json({ error: progErr.message });
+    }
+
+    return res.status(200).json({
+      received: true,
+      routed_to: 'program_registrations',
+      program: programClass.program,
+      program_variant: programClass.program_variant,
+    });
+  }
 
   const stripePayloadShared = {
     payment_status:           'completed',
