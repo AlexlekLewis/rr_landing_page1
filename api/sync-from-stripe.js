@@ -37,10 +37,14 @@ const getStripe = () => {
 let _supabase = null;
 const getSupabase = () => {
   if (_supabase) return _supabase;
-  const url = process.env.VITE_SUPABASE_URL;
+  // Accept any of the common Supabase URL env var names so this works
+  // regardless of which one is present in Vercel.
+  const url = process.env.SUPABASE_URL
+           || process.env.VITE_SUPABASE_URL
+           || process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url) throw new Error('VITE_SUPABASE_URL is not set');
-  if (!key) throw new Error('SUPABASE_SERVICE_ROLE_KEY is not set in Vercel env vars for this deployment');
+  if (!url) throw new Error('Supabase URL not set. In Vercel project Settings → Environment Variables, add SUPABASE_URL (or VITE_SUPABASE_URL) for Production, then redeploy.');
+  if (!key) throw new Error('SUPABASE_SERVICE_ROLE_KEY not set in Vercel env vars for this deployment. Add it (Production) and redeploy.');
   _supabase = createClient(url, key);
   return _supabase;
 };
