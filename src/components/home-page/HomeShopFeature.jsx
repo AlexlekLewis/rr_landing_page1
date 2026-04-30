@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const HomeShopFeature = () => {
-    const [showBack, setShowBack] = useState(false);
 
     return (
         <section className="py-16 md:py-24 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #001D48 0%, #1226AA 50%, #001D48 100%)' }}>
@@ -33,38 +32,21 @@ const HomeShopFeature = () => {
                 {/* Featured product */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
 
-                    {/* Image — flip on hover */}
+                    {/* Image */}
                     <motion.div
                         initial={{ opacity: 0, x: -24 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
-                        className="relative group cursor-pointer"
-                        onMouseEnter={() => setShowBack(true)}
-                        onMouseLeave={() => setShowBack(false)}
-                        onClick={() => setShowBack(b => !b)}
+                        className="relative"
                     >
-                        {/* Glow effect */}
-                        <div className="absolute -inset-4 bg-rr-pink/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
+                        <div className="absolute -inset-4 bg-rr-pink/20 rounded-3xl blur-2xl opacity-40" />
                         <div className="relative rounded-2xl overflow-hidden bg-white/5 border border-white/10 aspect-square">
-                            {/* Front image */}
                             <img
                                 src="/shop/training-shirt-front.png"
-                                alt="RRA Melbourne Training Shirt — Front"
-                                className={`w-full h-full object-contain p-6 transition-all duration-500 ${showBack ? 'opacity-0 scale-95' : 'opacity-100 scale-100'} absolute inset-0`}
+                                alt="RRA Melbourne Training Shirt"
+                                className="w-full h-full object-contain p-6"
                             />
-                            {/* Back image */}
-                            <img
-                                src="/shop/training-shirt-back.png"
-                                alt="RRA Melbourne Training Shirt — Back"
-                                className={`w-full h-full object-contain p-6 transition-all duration-500 ${showBack ? 'opacity-100 scale-100' : 'opacity-0 scale-95'} absolute inset-0`}
-                            />
-
-                            {/* Flip hint */}
-                            <div className="absolute bottom-4 right-4 bg-black/40 text-white text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm opacity-100 group-hover:opacity-0 transition-opacity">
-                                Hover to flip →
-                            </div>
                         </div>
                     </motion.div>
 
