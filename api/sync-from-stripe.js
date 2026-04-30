@@ -19,13 +19,31 @@
 //   SUPABASE_SERVICE_ROLE_KEY
 // ============================================================
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const Stripe = require('stripe');
 const { createClient } = require('@supabase/supabase-js');
 
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+// Lazy-init so a missing env var returns a clean JSON error instead of
+// crashing the function at module load (which yields a "A server error
+// has occurred" HTML page that the dashboard can't parse).
+let _stripe = null;
+const getStripe = () => {
+  if (_stripe) return _stripe;
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) throw new Error('STRIPE_SECRET_KEY is not set in Vercel env vars for this deployment');
+  _stripe = Stripe(key);
+  return _stripe;
+};
+
+let _supabase = null;
+const getSupabase = () => {
+  if (_supabase) return _supabase;
+  const url = process.env.VITE_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url) throw new Error('VITE_SUPABASE_URL is not set');
+  if (!key) throw new Error('SUPABASE_SERVICE_ROLE_KEY is not set in Vercel env vars for this deployment');
+  _supabase = createClient(url, key);
+  return _supabase;
+};
 
 const IPL_PRICE_ID = 'price_1TRJe7Io52UEA50yZ4i5OPwH';
 
@@ -52,15 +70,18 @@ const verifyAdmin = async (req) => {
   const auth = req.headers.authorization || '';
   const token = auth.startsWith('Bearer ') ? auth.slice(7) : null;
   if (!token) throw new Error('Missing bearer token');
-  const { data: { user }, error } = await supabase.auth.getUser(token);
+  const sb = getSupabase();
+  const { data: { user }, error } = await sb.auth.getUser(token);
   if (error || !user) throw new Error('Invalid session');
-  const { data: dashUser } = await supabase
+  const { data: dashUser } = await sb
     .from('dashboard_users').select('email').eq('email', user.email).eq('active', true).single();
   if (!dashUser) throw new Error('Not authorised');
   return user.email;
 };
 
 const syncOneSession = async (sessionId) => {
+  const stripe = getStripe();
+  const supabase = getSupabase();
   const session = await stripe.checkout.sessions.retrieve(sessionId, {
     expand: ['line_items', 'line_items.data.price', 'payment_intent', 'payment_intent.latest_charge'],
   });
@@ -155,6 +176,7 @@ module.exports = async (req, res) => {
     }
 
     // Bulk sync: walk paid sessions in the last N days
+    const stripe = getStripe();
     const since = Math.floor(Date.now() / 1000) - days * 24 * 60 * 60;
     let lastId = null;
     let processed = 0;

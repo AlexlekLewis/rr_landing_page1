@@ -101,8 +101,19 @@ const ShopOrdersDashboard = () => {
                     },
                     body: JSON.stringify({ days: 14 }),
                 });
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error || 'Auto-sync failed');
+                const text = await res.text();
+                let data;
+                try { data = JSON.parse(text); } catch {
+                    setSyncState({
+                        status: 'error',
+                        message: `Auto-sync: server returned HTML (HTTP ${res.status}) — likely missing STRIPE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY env var on this deployment.`,
+                    });
+                    return;
+                }
+                if (!res.ok) {
+                    setSyncState({ status: 'error', message: `Auto-sync: ${data.error || 'failed'}` });
+                    return;
+                }
                 if (data.synced > 0) {
                     setSyncState({
                         status: 'done',
@@ -110,7 +121,6 @@ const ShopOrdersDashboard = () => {
                     });
                     fetchData();
                 } else {
-                    // Silent — nothing new to report
                     setSyncState({ status: 'idle', message: '' });
                 }
             } catch (err) {
@@ -266,26 +276,45 @@ const ShopOrdersDashboard = () => {
         );
     }
 
-    const syncFromStripe = async () => {
-        if (!confirm('Pull every paid Stripe Checkout from the last 30 days into this dashboard?\n\nUseful after a webhook outage or to backfill historical orders. Already-synced orders are updated in place, not duplicated.')) return;
-        setSyncState({ status: 'syncing', message: 'Querying Stripe…' });
+    const callSync = async (days, { silent = false } = {}) => {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) throw new Error('Not signed in');
+        const res = await fetch('/api/sync-from-stripe', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${session.access_token}`,
+            },
+            body: JSON.stringify({ days }),
+        });
+        const text = await res.text();
+        let data;
         try {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) throw new Error('Not signed in');
-            const res = await fetch('/api/sync-from-stripe', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${session.access_token}`,
-                },
-                body: JSON.stringify({ days: 30 }),
-            });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.error || 'Sync failed');
+            data = JSON.parse(text);
+        } catch {
+            // Server returned HTML (likely a Vercel crash page from a missing env var)
+            throw new Error(
+                `Server returned a non-JSON response (status ${res.status}). ` +
+                `This usually means STRIPE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY is not set ` +
+                `for this Vercel deployment. Check Project Settings → Environment Variables and ` +
+                `make sure both are enabled for the current environment (Production / Preview).`
+            );
+        }
+        if (!res.ok) throw new Error(data.error || `Sync failed (HTTP ${res.status})`);
+        if (!silent) {
             setSyncState({
                 status: 'done',
                 message: `Synced ${data.synced} of ${data.processed} sessions (${data.skipped} unpaid skipped${data.errors?.length ? `, ${data.errors.length} errors` : ''})`,
             });
+        }
+        return data;
+    };
+
+    const syncFromStripe = async () => {
+        if (!confirm('Pull every paid Stripe Checkout from the last 30 days into this dashboard?\n\nUseful after a webhook outage or to backfill historical orders. Already-synced orders are updated in place, not duplicated.')) return;
+        setSyncState({ status: 'syncing', message: 'Querying Stripe…' });
+        try {
+            await callSync(30);
             fetchData();
         } catch (err) {
             setSyncState({ status: 'error', message: err.message });
