@@ -29,6 +29,8 @@ const Footer = () => {
                         className="h-12 w-auto object-contain brightness-0 invert"
                     />
                     <div className="flex gap-6 text-xs text-white/80">
+                        <Link to="/academy-shop" className="hover:text-white transition-colors font-bold">Shop</Link>
+                        <span className="hidden md:inline">|</span>
                         <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
                         <span className="hidden md:inline">|</span>
                         <Link to="/terms-conditions" className="hover:text-white transition-colors">Terms &amp; Conditions</Link>

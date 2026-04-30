@@ -163,6 +163,14 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
                             </a>
                         ))}
 
+                        {/* Shop link */}
+                        <Link
+                            to="/academy-shop"
+                            className="flex items-center gap-1.5 text-sm font-black text-rr-pink hover:text-white border border-rr-pink/50 hover:border-white/50 hover:bg-white/10 px-4 py-1.5 rounded-full transition-all duration-200 uppercase tracking-widest"
+                        >
+                            🛒 Shop
+                        </Link>
+
                         {!isLP3 && showCTA && (
                             <Button onClick={scrollToForm} variant="blue" className="text-sm px-6 py-2">
                                 {ctaLabel}
@@ -245,6 +253,15 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
                                     {link.label.toUpperCase()}
                                 </a>
                             ))}
+
+                            {/* Shop link */}
+                            <Link
+                                to="/academy-shop"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="text-2xl font-black text-rr-pink tracking-wider"
+                            >
+                                🛒 SHOP
+                            </Link>
 
                             <Button onClick={scrollToForm} variant="blue" className="text-lg px-10 py-4 mt-4">
                                 {ctaLabel}
