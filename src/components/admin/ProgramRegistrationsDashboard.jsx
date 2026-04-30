@@ -95,76 +95,17 @@ const ProgramRegistrationsDashboard = () => {
     useRealtimeSync(['program_registrations'], fetchData);
 
     // ============================================================
-    // Auto-sync from Stripe on dashboard mount.
-    // First-load = 365-day backfill (one-shot historical pull).
-    // Subsequent loads = 14-day rolling window.
-    // 5-minute sessionStorage guard prevents thrash.
+    // ARCHITECTURE NOTE — this dashboard reads only from Supabase.
+    // Live data flow: customer pays on Stripe → /api/stripe-webhook →
+    // program_registrations table → realtime push to this dashboard.
+    //
+    // Auto-sync on mount has been removed deliberately: it masked webhook
+    // delivery failures and made the UI a Stripe client, which it shouldn't
+    // be. For a one-off historical backfill (e.g. seeding pre-webhook data
+    // or recovering a missed window) use the "Backfill from Stripe" button
+    // in the header — that's the only place this dashboard ever calls
+    // Stripe, and only when an admin explicitly clicks it.
     // ============================================================
-    useEffect(() => {
-        const SYNC_KEY = 'program_registrations_last_auto_sync';
-        const FIRST_KEY = 'program_registrations_first_sync_done';
-        const last = Number(sessionStorage.getItem(SYNC_KEY) || 0);
-        if (Date.now() - last < 5 * 60 * 1000) return;
-        sessionStorage.setItem(SYNC_KEY, String(Date.now()));
-
-        const isFirst = !localStorage.getItem(FIRST_KEY);
-        const days = isFirst ? 365 : 14;
-
-        (async () => {
-            try {
-                const { data: { session } } = await supabase.auth.getSession();
-                if (!session) return;
-                setSyncState({
-                    status: 'syncing',
-                    message: isFirst
-                        ? 'First-time backfill — pulling 365 days of program registrations from Stripe…'
-                        : 'Auto-syncing recent Stripe activity…',
-                });
-                const res = await fetch('/api/sync-programs-from-stripe', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${session.access_token}`,
-                    },
-                    body: JSON.stringify({ days }),
-                });
-                const text = await res.text();
-                let data;
-                try { data = JSON.parse(text); } catch {
-                    setSyncState({
-                        status: 'error',
-                        message: `Auto-sync: server returned HTML (HTTP ${res.status}) — likely missing STRIPE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY env var on this deployment.`,
-                    });
-                    return;
-                }
-                if (!res.ok) {
-                    setSyncState({ status: 'error', message: `Auto-sync: ${data.error || 'failed'}` });
-                    return;
-                }
-                if (isFirst) {
-                    localStorage.setItem(FIRST_KEY, String(Date.now()));
-                }
-                if (data.synced > 0) {
-                    const breakdown = data.by_program
-                        ? Object.entries(data.by_program)
-                            .filter(([, n]) => n > 0)
-                            .map(([k, n]) => `${programDisplay(k).short}: ${n}`)
-                            .join(', ')
-                        : '';
-                    setSyncState({
-                        status: 'done',
-                        message: `Synced ${data.synced} registration${data.synced === 1 ? '' : 's'}${breakdown ? ` (${breakdown})` : ''}`,
-                    });
-                    fetchData();
-                } else {
-                    setSyncState({ status: 'idle', message: '' });
-                }
-            } catch (err) {
-                console.warn('Stripe auto-sync failed:', err);
-                setSyncState({ status: 'idle', message: '' });
-            }
-        })();
-    }, [fetchData]);
 
     // ============================================================
     // Apply time-range filter before stats so the cards reflect the
