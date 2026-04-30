@@ -99,7 +99,7 @@ const ShopSuccess = () => {
                   </div>
                   <div>
                     <p className="font-black text-rr-dark uppercase tracking-tight">Academy Pickup</p>
-                    <p className="text-xs text-slate-400 font-medium">Collect at your chosen venue</p>
+                    <p className="text-xs text-slate-400 font-medium">Collect at your chosen location</p>
                   </div>
                 </div>
                 <div className="space-y-2 pl-1">

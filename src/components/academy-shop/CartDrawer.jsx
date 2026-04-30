@@ -5,7 +5,7 @@ import { useCart } from './CartContext';
 import { supabase } from '../../lib/supabase';
 
 const FULFILLMENT_OPTIONS = [
-  { id: 'pickup',   label: 'Academy Pickup',    icon: MapPin,  price: 0 },
+  { id: 'pickup',   label: 'Academy Pickup (Free)', icon: MapPin, price: 0, description: 'Cutting Edge Cricket — Bundoora or Cricket Connect — Hallam' },
   { id: 'standard', label: 'Standard Shipping', icon: Truck,   price: 1200, description: 'Delivered to your address (5–7 business days)' },
   { id: 'express',  label: 'Express Shipping',  icon: Truck,   price: 2000, description: 'Delivered to your address (1–3 business days)' },
 ];
@@ -13,13 +13,13 @@ const FULFILLMENT_OPTIONS = [
 const PICKUP_VENUES = [
   {
     id: 'bundoora',
-    name: 'Bundoora',
+    name: 'Cutting Edge Cricket — Bundoora',
     days: 'Tuesday & Thursday',
     hours: '5:00pm – 9:00pm',
   },
   {
     id: 'hallam',
-    name: 'Hallam',
+    name: 'Cricket Connect — Hallam',
     days: 'Monday only',
     hours: '5:30pm – 8:30pm',
   },
@@ -260,7 +260,7 @@ const CartDrawer = () => {
                             <p className={`text-xs font-bold uppercase tracking-wider ${fulfillment === option.id ? 'text-rr-pink' : 'text-rr-dark'}`}>
                               {option.label}
                             </p>
-                            {option.description && <p className="text-xs text-slate-400 mt-0.5">{option.description}</p>}
+                            <p className="text-xs text-slate-400 mt-0.5">{option.description || ''}</p>
                           </div>
                           <span className="text-xs font-bold text-rr-dark">
                             {option.price === 0 ? 'Free' : `+$${(option.price / 100).toFixed(2)}`}

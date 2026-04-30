@@ -19,7 +19,7 @@ export const PRODUCTS = [
     badge: 'Made to Order',
     badgeColor: 'bg-rr-blue',
     madeToOrder: true,
-    madeToOrderNote: 'Made to order. Available for pickup and postage approximately 18th May. You will be updated via text message on your order status.',
+    madeToOrderNote: 'Made to order. Available for pickup at Cutting Edge Cricket (Bundoora) and Cricket Connect (Hallam), and for postage, approximately 18th May. You will be updated via text message on your order status.',
     imagePlaceholder: false,
     images: { front: '/shop/ipl-shirt-front.jpeg', back: null },
     // Stripe Price IDs — one per size (create in Stripe Dashboard → Products)
@@ -104,7 +104,7 @@ export const PRODUCTS = [
     badge: 'Made to Order',
     badgeColor: 'bg-rr-blue',
     madeToOrder: true,
-    madeToOrderNote: 'Made to order. Available for pickup and postage approximately 18th May. You will be updated via text message on your order status.',
+    madeToOrderNote: 'Made to order. Available for pickup at Cutting Edge Cricket (Bundoora) and Cricket Connect (Hallam), and for postage, approximately 18th May. You will be updated via text message on your order status.',
     imagePlaceholder: false,
     images: { front: '/shop/fleece-jacket-front.png', back: null },
     oneSize: false,

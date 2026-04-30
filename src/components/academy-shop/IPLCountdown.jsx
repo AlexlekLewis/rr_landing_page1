@@ -77,7 +77,7 @@ const IPLCountdown = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
             <p className="text-xs text-slate-600 font-medium">
-              Available for pickup & postage <span className="font-black text-rr-dark">~18th May</span>
+              Available for pickup (Cutting Edge Cricket — Bundoora & Cricket Connect — Hallam) and postage <span className="font-black text-rr-dark">~18th May</span>
             </p>
           </div>
           <div className="flex items-start gap-2">
