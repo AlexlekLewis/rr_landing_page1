@@ -164,7 +164,7 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
                         ))}
 
                         {!isLP3 && showCTA && (
-                            <Button onClick={scrollToForm} variant="blue" className="text-sm px-6 py-2">
+                            <Button onClick={scrollToForm} variant={isHome ? "white" : "blue"} className="text-sm px-6 py-2">
                                 {ctaLabel}
                             </Button>
                         )}
