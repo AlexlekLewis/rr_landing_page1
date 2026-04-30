@@ -83,6 +83,7 @@ export const buildOrderConfirmationEmail = ({
     <tr><td align="center">
       <table width="100%" style="max-width:560px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.06)">
         <tr><td style="padding:32px;background:linear-gradient(135deg,#E11F8F,#1226AA);text-align:center">
+          <img src="https://rramelbourne.com/assets/Logo_White_Transparent.png" alt="Rajasthan Royals Academy Melbourne" width="120" height="120" style="display:inline-block;width:120px;height:auto;margin:0 0 12px" />
           <p style="margin:0;color:rgba(255,255,255,.85);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase">Royals Melbourne Academy</p>
           <h1 style="margin:8px 0 0;color:#fff;font-size:28px;font-weight:900;letter-spacing:-0.5px">You're kitted up.</h1>
         </td></tr>

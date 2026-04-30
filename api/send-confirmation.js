@@ -67,7 +67,7 @@ export default async function handler(req, res) {
       fulfillmentMethod: order.fulfillment_method,
       pickupVenue: order.pickup_venue,
       shippingAddress: order.shipping_address,
-      total: order.total,
+      totalCents: order.total,
       orderRef: order.id,
     });
 
