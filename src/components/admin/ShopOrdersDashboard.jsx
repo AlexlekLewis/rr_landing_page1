@@ -13,9 +13,9 @@ const formatAUD = (cents) => {
     return new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD' }).format(value);
 };
 
-const formatMoney = (amount) => {
-    if (amount == null) return '—';
-    return new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD' }).format(Number(amount));
+const formatMoney = (cents) => {
+    if (cents == null) return '—';
+    return new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD' }).format(Number(cents) / 100);
 };
 
 const formatDate = (iso) => {
@@ -199,9 +199,9 @@ const ShopOrdersDashboard = () => {
             o.fulfillment_method || '',
             o.pickup_venue ? VENUE_LABELS[o.pickup_venue] || o.pickup_venue : '',
             o.shipping_address ? `${o.shipping_address.line1 || ''}, ${o.shipping_address.city || ''} ${o.shipping_address.postal_code || ''}` : '',
-            o.subtotal || '',
-            o.shipping_cost || '',
-            o.total || '',
+            o.subtotal != null ? (Number(o.subtotal) / 100).toFixed(2) : '',
+            o.shipping_cost != null ? (Number(o.shipping_cost) / 100).toFixed(2) : '',
+            o.total != null ? (Number(o.total) / 100).toFixed(2) : '',
             o.payment_status || '',
             o.stripe_session_id || '',
             o._source === 'ipl' ? (o.supplier_status || '') : (o.fulfillment_status || ''),
