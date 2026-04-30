@@ -75,7 +75,7 @@ const MasterInquiries = () => {
     const exportCSV = () => {
         const headers = ['Inquiry Type', 'Player Name', 'Parent Name', 'Email', 'Phone', 'DOB', 'Role', 'Competition', 'History', 'Applied Date'];
         const rows = filtered.map(a => [
-            a.inquiry_type, a.player_name, a.parent_name, a.email, a.phone, a.dob, a.player_role, a.competition, a.competition_history, new Date(a.created_at).toLocaleDateString()
+            a.inquiry_type, a.player_name, a.parent_name, a.email, a.phone, a.dob, a.player_role, a.competition, a.competition_history, new Date(a.created_at).toLocaleDateString('en-AU', { timeZone: 'Australia/Melbourne', day: '2-digit', month: 'short', year: 'numeric' })
         ]);
 
         const csv = [headers, ...rows].map(r => r.map(c => `"${(c || '').toString().replace(/"/g, '""')}"`).join(',')).join('\n');
@@ -180,7 +180,7 @@ const MasterInquiries = () => {
                                     <td className="p-4 text-slate-400">{app.phone}</td>
                                     <td className="p-4 text-slate-400 capitalize">{app.competition || '-'}</td>
                                     <td className="p-4 text-slate-400">
-                                        {new Date(app.created_at).toLocaleDateString()}
+                                        {new Date(app.created_at).toLocaleDateString('en-AU', { timeZone: 'Australia/Melbourne', day: '2-digit', month: 'short', year: 'numeric' })}
                                     </td>
                                 </tr>
                             ))}
