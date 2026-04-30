@@ -41,16 +41,15 @@ const renderItemsHtml = (items = []) => items
 const renderFulfillmentHtml = ({ fulfillmentMethod, pickupVenue, shippingAddress }) => {
   if (fulfillmentMethod === 'pickup') {
     const venue = pickupVenue === 'bundoora'
-      ? { name: 'Cutting Edge Cricket — Bundoora', address: 'Unit 7, Factory 19, Enterprise Drive, Bundoora VIC 3083', hours: 'Tue & Thu, 5:00pm–9:00pm' }
+      ? { name: 'Cutting Edge Cricket — Bundoora', address: 'Unit 7, Factory 19, Enterprise Drive, Bundoora VIC 3083' }
       : pickupVenue === 'hallam'
-        ? { name: 'Cricket Connect — Hallam', address: '22 Technology CCT, Hallam VIC 3803', hours: 'Mon, 5:30pm–8:30pm' }
+        ? { name: 'Cricket Connect — Hallam', address: '22 Technology CCT, Hallam VIC 3803' }
         : null;
     return `
       <p style="margin:0 0 8px;color:#0a0a14;font-weight:700">Academy Pickup</p>
       ${venue ? `
         <p style="margin:0;color:#0a0a14;font-size:14px;font-weight:600">${venue.name}</p>
-        <p style="margin:4px 0 0;color:#555;font-size:14px">${venue.address}</p>
-        <p style="margin:4px 0 0;color:#888;font-size:13px">Pickup hours: ${venue.hours}</p>` : ''}
+        <p style="margin:4px 0 0;color:#555;font-size:14px">${venue.address}</p>` : ''}
       <p style="margin:12px 0 0;color:#0a0a14;font-size:13px;font-weight:600">We'll send you a text message when your order is ready for pickup.</p>
       <p style="margin:4px 0 0;color:#888;font-size:12px">Made-to-order items typically take 2–4 weeks to arrive from our supplier.</p>`;
   }

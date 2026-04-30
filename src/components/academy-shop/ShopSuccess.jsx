@@ -52,9 +52,9 @@ const ShopSuccess = () => {
   const isExpress = fulfillment === 'express';
 
   const venueDetails = pickupVenue === 'bundoora'
-    ? { name: 'Cutting Edge Cricket — Bundoora', address: 'Unit 7, Factory 19, Enterprise Drive, Bundoora VIC 3083', days: 'Tuesday & Thursday', hours: '5:00pm – 9:00pm' }
+    ? { name: 'Cutting Edge Cricket — Bundoora', address: 'Unit 7, Factory 19, Enterprise Drive, Bundoora VIC 3083' }
     : pickupVenue === 'hallam'
-      ? { name: 'Cricket Connect — Hallam', address: '22 Technology CCT, Hallam VIC 3803', days: 'Monday', hours: '5:30pm – 8:30pm' }
+      ? { name: 'Cricket Connect — Hallam', address: '22 Technology CCT, Hallam VIC 3803' }
       : null;
 
   return (
@@ -109,10 +109,6 @@ const ShopSuccess = () => {
                       <p className="text-sm font-bold text-rr-dark">{venueDetails.name}</p>
                       <p className="text-sm text-rr-charcoal font-medium mt-0.5">{venueDetails.address}</p>
                     </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <Clock className="w-4 h-4 text-rr-pink shrink-0 mt-0.5" />
-                    <p className="text-sm text-rr-charcoal font-medium">{venueDetails.days} · {venueDetails.hours}</p>
                   </div>
                   <p className="text-sm font-bold text-rr-dark mt-3 pl-7">
                     We'll send you a text message when your order is ready for pickup.
