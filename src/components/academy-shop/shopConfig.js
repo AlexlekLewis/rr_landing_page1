@@ -10,6 +10,7 @@ export const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 export const PRODUCTS = [
   {
     id: 'ipl-replica-shirt',
+    hidden: true, // Temporarily removed from shop — placeholder shown instead
     name: '2026 Rajasthan Royals IPL Replica Playing Shirt',
     shortName: 'IPL Replica Shirt',
     description: 'The official 2026 IPL season playing shirt worn by the Rajasthan Royals. Premium quality replica in authentic team colours.',
