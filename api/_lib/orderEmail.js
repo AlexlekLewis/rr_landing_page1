@@ -61,7 +61,7 @@ const renderFulfillmentHtml = ({ fulfillmentMethod, pickupVenue, shippingAddress
     <p style="margin:8px 0 0;color:#888;font-size:13px">In-stock items: ${eta} from purchase. Made-to-order items: 2–4 weeks to Australia, then ${eta} to your door.</p>`;
 };
 
-const buildOrderConfirmationEmail = ({
+export const buildOrderConfirmationEmail = ({
   customerName,
   items,
   fulfillmentMethod,
@@ -123,7 +123,7 @@ const buildOrderConfirmationEmail = ({
   return { subject, html };
 };
 
-const sendOrderConfirmation = async ({ to, ...orderData }) => {
+export const sendOrderConfirmation = async ({ to, ...orderData }) => {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     console.warn('RESEND_API_KEY not set — skipping email send');
@@ -160,5 +160,3 @@ const sendOrderConfirmation = async ({ to, ...orderData }) => {
 
   return res.json();
 };
-
-module.exports = { buildOrderConfirmationEmail, sendOrderConfirmation };
