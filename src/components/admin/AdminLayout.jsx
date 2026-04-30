@@ -5,7 +5,7 @@ import {
     LayoutDashboard, Kanban, Users, BarChart3, FileText,
     Settings, LogOut, ChevronLeft, ChevronRight, Menu, X,
     Send, CheckCircle2, Eye, ClipboardList, UserCheck, Shield, ChevronDown,
-    UserCircle, ShoppingBag, Trophy
+    UserCircle, ShoppingBag, Trophy, GraduationCap, Crown, Sun, Sparkles
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { ProgramProvider, useProgram } from './ProgramContext';
@@ -37,6 +37,10 @@ const NAV_GROUPS = [
             { label: 'Cohort 2026', path: '/rramadmin_26/lp3-acceptances', icon: UserCheck },
             { label: 'Player Profiles', path: '/rramadmin_26/player-profiles', icon: UserCircle },
             { label: 'Assessments', path: '/rramadmin_26/rsvp', icon: ClipboardList },
+            { label: 'Junior Royals', path: '/rramadmin_26/program-registrations?program=junior_royals', icon: GraduationCap },
+            { label: 'Elite Program', path: '/rramadmin_26/program-registrations?program=elite', icon: Crown },
+            { label: 'Holiday Programs', path: '/rramadmin_26/program-registrations?program=holiday', icon: Sun },
+            { label: 'Female Kickstart', path: '/rramadmin_26/program-registrations?program=female_kickstart', icon: Sparkles },
         ],
     },
     {
@@ -177,7 +181,11 @@ const AdminLayoutInner = ({ children }) => {
                         )}
                         <div className="space-y-0.5">
                             {group.items.map((item) => {
-                                const isActive = location.pathname === item.path;
+                                const [itemPath, itemQuery = ''] = item.path.split('?');
+                                const itemProgram = new URLSearchParams(itemQuery).get('program');
+                                const currentProgram = new URLSearchParams(location.search).get('program');
+                                const isActive = location.pathname === itemPath
+                                    && (itemProgram ? currentProgram === itemProgram : !currentProgram);
                                 const Icon = item.icon;
                                 return (
                                     <Link

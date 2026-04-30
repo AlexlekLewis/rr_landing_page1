@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Search, Download, ChevronDown, ChevronUp, X, MapPin, CreditCard,
@@ -74,7 +75,19 @@ const ProgramRegistrationsDashboard = () => {
     const [error, setError] = useState(null);
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
-    const [programFilter, setProgramFilter] = useState('all');
+    const location = useLocation();
+    const initialProgramFilter = (() => {
+        const p = new URLSearchParams(location.search).get('program');
+        return ['elite', 'holiday', 'female_kickstart', 'junior_royals'].includes(p) ? p : 'all';
+    })();
+    const [programFilter, setProgramFilter] = useState(initialProgramFilter);
+
+    // Sync filter with URL when the user navigates between sidebar program items
+    useEffect(() => {
+        const p = new URLSearchParams(location.search).get('program');
+        const next = ['elite', 'holiday', 'female_kickstart', 'junior_royals'].includes(p) ? p : 'all';
+        setProgramFilter(next);
+    }, [location.search]);
     const [timeRange, setTimeRange] = useState('all'); // 'all' | '30d' | '90d' | '365d'
     const [sortKey, setSortKey] = useState('created_at');
     const [sortDir, setSortDir] = useState('desc');
