@@ -101,8 +101,11 @@ export default async function handler(req, res) {
         ? { allowed_countries: ['AU'] }
         : undefined,
       phone_number_collection: { enabled: true },
-      // Pass order IDs through to success page via metadata
+      // Pass order IDs through to success page via metadata. The `source` tag
+      // is the primary signal used by the webhook + sync endpoints to
+      // distinguish shop orders from program registrations.
       metadata: {
+        source: 'academy-shop',
         order_id: orderId || '',
         ipl_order_id: iplOrderId || '',
         fulfillment_method: fulfillment,

@@ -54,6 +54,28 @@ const getSupabase = () => {
 
 const IPL_PRICE_ID = 'price_1TRJe7Io52UEA50yZ4i5OPwH';
 
+// The full set of Stripe Price IDs that belong to the Academy Shop. Any paid
+// Stripe session whose line items include AT LEAST ONE of these is a shop
+// order. Sessions with none of these (Junior Royals, Female Cricket, Elite
+// Program, etc.) are program registrations and must NOT be synced into the
+// shop_orders_* tables. Keep this list in sync with src/components/academy-shop/shopConfig.js
+// and api/create-checkout-session.js.
+const SHOP_PRICE_IDS = new Set([
+  'price_1TRJe7Io52UEA50yZ4i5OPwH', // ipl-replica-shirt
+  'price_1TRJinIo52UEA50yaIwEA8Ni', // training-shirt
+  'price_1TRJqhIo52UEA50ycGPuIieZ', // training-shorts
+  'price_1TRJt4Io52UEA50ydwZmfUKh', // training-pants
+  'price_1TRNozIo52UEA50yEkWYWKAq', // pink-cap
+  'price_1TRNwaIo52UEA50yIChLyg1J', // fleece-jacket
+]);
+
+const isShopSession = (session, lineItems) => {
+  // Primary signal: explicit metadata stamped at checkout creation.
+  if (session?.metadata?.source === 'academy-shop') return true;
+  // Fallback for legacy sessions without metadata: check price IDs.
+  return lineItems.some(i => SHOP_PRICE_IDS.has(i.price_id));
+};
+
 const inferFulfillmentMethod = (label) => {
   const l = (label || '').toLowerCase();
   if (l.includes('pickup')) return 'pickup';
@@ -95,6 +117,13 @@ const syncOneSession = async (sessionId) => {
 
   if (session.payment_status !== 'paid') {
     return { session_id: sessionId, skipped: true, reason: 'not_paid' };
+  }
+
+  const lineItemsRaw = (session.line_items?.data || []).map(i => ({
+    price_id: i.price?.id,
+  }));
+  if (!isShopSession(session, lineItemsRaw)) {
+    return { session_id: sessionId, skipped: true, reason: 'not_a_shop_order' };
   }
 
   const customerName    = session.customer_details?.name || '';
@@ -200,8 +229,9 @@ export default async function handler(req, res) {
         processed++;
         if (s.payment_status !== 'paid') { skipped++; continue; }
         try {
-          await syncOneSession(s.id);
-          synced++;
+          const out = await syncOneSession(s.id);
+          if (out?.skipped) skipped++;
+          else synced++;
         } catch (e) {
           errors.push({ session_id: s.id, error: e.message });
         }

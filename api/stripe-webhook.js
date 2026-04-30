@@ -61,6 +61,23 @@ const readRawBody = async (req) => {
 
 const IPL_PRICE_ID = 'price_1TRJe7Io52UEA50yZ4i5OPwH';
 
+// Academy Shop product Stripe Price IDs. Sessions that don't include any of
+// these (or aren't stamped with metadata.source = 'academy-shop') are program
+// registrations and must NOT be persisted to shop_orders_* tables.
+const SHOP_PRICE_IDS = new Set([
+  'price_1TRJe7Io52UEA50yZ4i5OPwH', // ipl-replica-shirt
+  'price_1TRJinIo52UEA50yaIwEA8Ni', // training-shirt
+  'price_1TRJqhIo52UEA50ycGPuIieZ', // training-shorts
+  'price_1TRJt4Io52UEA50ydwZmfUKh', // training-pants
+  'price_1TRNozIo52UEA50yEkWYWKAq', // pink-cap
+  'price_1TRNwaIo52UEA50yIChLyg1J', // fleece-jacket
+]);
+
+const isShopSession = (session, lineItems) => {
+  if (session?.metadata?.source === 'academy-shop') return true;
+  return lineItems.some(i => SHOP_PRICE_IDS.has(i.price_id));
+};
+
 const inferFulfillmentMethod = (shippingLabel) => {
   const l = (shippingLabel || '').toLowerCase();
   if (l.includes('pickup')) return 'pickup';
@@ -149,6 +166,13 @@ export default async function handler(req, res) {
     price_id: i.price?.id,
     total: i.amount_total,
   }));
+
+  // Skip non-shop sessions (program registrations, etc.) — they belong to other
+  // tables. Without this guard, every paid Stripe session would land in the
+  // shop dashboard.
+  if (!isShopSession(session, lineItems)) {
+    return res.status(200).json({ received: true, ignored: 'not_a_shop_order' });
+  }
 
   const charge = session.payment_intent?.latest_charge;
   const card = charge?.payment_method_details?.card;
