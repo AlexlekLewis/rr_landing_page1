@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Search, Download, ChevronDown, ChevronUp, X, Truck, MapPin, CreditCard,
-    Package, CheckCircle2, Clock, ExternalLink, RefreshCw, DollarSign, ShoppingBag, AlertCircle, Mail, CloudDownload
+    Package, CheckCircle2, Clock, ExternalLink, RefreshCw, DollarSign, ShoppingBag, AlertCircle, Mail
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import useRealtimeSync from '../../hooks/useRealtimeSync';
@@ -47,7 +47,6 @@ const ShopOrdersDashboard = () => {
     const [stripeData, setStripeData] = useState(null);
     const [stripeLoading, setStripeLoading] = useState(false);
     const [stripeError, setStripeError] = useState(null);
-    const [syncState, setSyncState] = useState({ status: 'idle', message: '' });
 
     const fetchData = useCallback(async () => {
         setError(null);
@@ -78,57 +77,12 @@ const ShopOrdersDashboard = () => {
     useEffect(() => { fetchData(); }, [fetchData]);
     useRealtimeSync(['shop_orders_training', 'shop_orders_ipl'], fetchData);
 
-    // Auto-sync from Stripe on dashboard open. Pulls the last 14 days of paid
-    // Checkout Sessions in the background. Idempotent — already-synced orders
-    // are upserted in place. Skips if a sync ran in the last 5 minutes
-    // (sessionStorage guard).
-    useEffect(() => {
-        const SYNC_KEY = 'shop_orders_last_auto_sync';
-        const last = Number(sessionStorage.getItem(SYNC_KEY) || 0);
-        if (Date.now() - last < 5 * 60 * 1000) return;
-        sessionStorage.setItem(SYNC_KEY, String(Date.now()));
-
-        (async () => {
-            try {
-                const { data: { session } } = await supabase.auth.getSession();
-                if (!session) return;
-                setSyncState({ status: 'syncing', message: 'Auto-syncing recent Stripe activity…' });
-                const res = await fetch('/api/sync-from-stripe', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${session.access_token}`,
-                    },
-                    body: JSON.stringify({ days: 14 }),
-                });
-                const text = await res.text();
-                let data;
-                try { data = JSON.parse(text); } catch {
-                    setSyncState({
-                        status: 'error',
-                        message: `Auto-sync: server returned HTML (HTTP ${res.status}) — likely missing STRIPE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY env var on this deployment.`,
-                    });
-                    return;
-                }
-                if (!res.ok) {
-                    setSyncState({ status: 'error', message: `Auto-sync: ${data.error || 'failed'}` });
-                    return;
-                }
-                if (data.synced > 0) {
-                    setSyncState({
-                        status: 'done',
-                        message: `Auto-sync: pulled ${data.synced} new/updated order${data.synced === 1 ? '' : 's'} from Stripe`,
-                    });
-                    fetchData();
-                } else {
-                    setSyncState({ status: 'idle', message: '' });
-                }
-            } catch (err) {
-                console.warn('Stripe auto-sync failed:', err);
-                setSyncState({ status: 'idle', message: '' });
-            }
-        })();
-    }, [fetchData]);
+    // ARCHITECTURE NOTE — this dashboard reads only from Supabase.
+    // Stripe → Supabase population happens server-side via the webhook at
+    // /api/stripe-webhook (driven by Stripe events). The dashboard never
+    // calls Stripe directly. If a row is missing, the issue is in the
+    // webhook or in Stripe's event delivery, not here. To recover a missed
+    // event, use Stripe Dashboard → Events → "Resend" on the relevant event.
 
     const stats = useMemo(() => {
         const completed = orders.filter(o => o.payment_status === 'completed');
@@ -276,51 +230,6 @@ const ShopOrdersDashboard = () => {
         );
     }
 
-    const callSync = async (days, { silent = false } = {}) => {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) throw new Error('Not signed in');
-        const res = await fetch('/api/sync-from-stripe', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${session.access_token}`,
-            },
-            body: JSON.stringify({ days }),
-        });
-        const text = await res.text();
-        let data;
-        try {
-            data = JSON.parse(text);
-        } catch {
-            // Server returned HTML (likely a Vercel crash page from a missing env var)
-            throw new Error(
-                `Server returned a non-JSON response (status ${res.status}). ` +
-                `This usually means STRIPE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY is not set ` +
-                `for this Vercel deployment. Check Project Settings → Environment Variables and ` +
-                `make sure both are enabled for the current environment (Production / Preview).`
-            );
-        }
-        if (!res.ok) throw new Error(data.error || `Sync failed (HTTP ${res.status})`);
-        if (!silent) {
-            setSyncState({
-                status: 'done',
-                message: `Synced ${data.synced} of ${data.processed} sessions (${data.skipped} unpaid skipped${data.errors?.length ? `, ${data.errors.length} errors` : ''})`,
-            });
-        }
-        return data;
-    };
-
-    const syncFromStripe = async () => {
-        if (!confirm('Pull every paid Stripe Checkout from the last 30 days into this dashboard?\n\nUseful after a webhook outage or to backfill historical orders. Already-synced orders are updated in place, not duplicated.')) return;
-        setSyncState({ status: 'syncing', message: 'Querying Stripe…' });
-        try {
-            await callSync(30);
-            fetchData();
-        } catch (err) {
-            setSyncState({ status: 'error', message: err.message });
-        }
-    };
-
     return (
         <div className="space-y-6">
             {/* Header */}
@@ -329,36 +238,13 @@ const ShopOrdersDashboard = () => {
                     <h1 className="text-2xl md:text-3xl font-black text-white tracking-wider">SHOP ORDERS</h1>
                     <p className="text-slate-400 text-sm mt-1">{filtered.length} of {orders.length} orders</p>
                 </div>
-                <div className="flex items-center gap-2">
-                    <button
-                        onClick={syncFromStripe}
-                        disabled={syncState.status === 'syncing'}
-                        className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-r from-rr-pink/20 to-rr-blue/20 border border-rr-pink/30 text-white hover:from-rr-pink/30 hover:to-rr-blue/30 transition-all text-xs font-bold uppercase tracking-wider disabled:opacity-50"
-                    >
-                        {syncState.status === 'syncing' ? (
-                            <><RefreshCw className="w-3.5 h-3.5 animate-spin" /> Syncing…</>
-                        ) : (
-                            <><CloudDownload className="w-3.5 h-3.5" /> Sync from Stripe</>
-                        )}
-                    </button>
-                    <button
-                        onClick={fetchData}
-                        className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all text-xs font-bold uppercase tracking-wider"
-                    >
-                        <RefreshCw className="w-3.5 h-3.5" /> Refresh
-                    </button>
-                </div>
+                <button
+                    onClick={fetchData}
+                    className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all text-xs font-bold uppercase tracking-wider"
+                >
+                    <RefreshCw className="w-3.5 h-3.5" /> Refresh
+                </button>
             </div>
-
-            {syncState.message && (
-                <div className={`rounded-xl border p-3 text-xs ${syncState.status === 'error'
-                    ? 'bg-red-500/10 border-red-500/30 text-red-400'
-                    : syncState.status === 'done'
-                        ? 'bg-green-500/10 border-green-500/30 text-green-400'
-                        : 'bg-blue-500/10 border-blue-500/30 text-blue-300'}`}>
-                    {syncState.message}
-                </div>
-            )}
 
             {error && (
                 <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 flex items-start gap-3">
