@@ -19,8 +19,8 @@
 //   SUPABASE_SERVICE_ROLE_KEY
 // ============================================================
 
-const Stripe = require('stripe');
-const { createClient } = require('@supabase/supabase-js');
+import Stripe from 'stripe';
+import { createClient } from '@supabase/supabase-js';
 
 // Lazy-init so a missing env var returns a clean JSON error instead of
 // crashing the function at module load (which yields a "A server error
@@ -30,7 +30,7 @@ const getStripe = () => {
   if (_stripe) return _stripe;
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) throw new Error('STRIPE_SECRET_KEY is not set in Vercel env vars for this deployment');
-  _stripe = Stripe(key);
+  _stripe = new Stripe(key);
   return _stripe;
 };
 
@@ -160,7 +160,7 @@ const syncOneSession = async (sessionId) => {
   return results;
 };
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
@@ -215,4 +215,4 @@ module.exports = async (req, res) => {
     return res.status(err.message?.includes('authoris') || err.message?.includes('session') || err.message?.includes('token') ? 401 : 500)
       .json({ error: err.message });
   }
-};
+}

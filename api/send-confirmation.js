@@ -13,15 +13,20 @@
 //   RESEND_FROM_EMAIL (optional)
 // ============================================================
 
-const { createClient } = require('@supabase/supabase-js');
-const { sendOrderConfirmation } = require('./_lib/orderEmail');
+import { createClient } from '@supabase/supabase-js';
+import { sendOrderConfirmation } from './_lib/orderEmail.js';
 
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+let _supabase = null;
+const getSupabase = () => {
+  if (_supabase) return _supabase;
+  const url = process.env.VITE_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) throw new Error('Supabase env vars not set in Vercel for this deployment');
+  _supabase = createClient(url, key);
+  return _supabase;
+};
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -35,6 +40,7 @@ module.exports = async (req, res) => {
   }
 
   try {
+    const supabase = getSupabase();
     const table = source === 'ipl' ? 'shop_orders_ipl' : 'shop_orders_training';
     const { data: order, error } = await supabase
       .from(table)
@@ -65,4 +71,4 @@ module.exports = async (req, res) => {
     console.error('send-confirmation error:', err);
     return res.status(500).json({ error: err.message });
   }
-};
+}

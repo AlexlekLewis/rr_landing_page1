@@ -16,17 +16,44 @@
 //   ZAPIER_SHOP_WEBHOOK_URL   = ...      (optional)
 // ============================================================
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const { createClient } = require('@supabase/supabase-js');
-const { sendOrderConfirmation } = require('./_lib/orderEmail');
+import Stripe from 'stripe';
+import { createClient } from '@supabase/supabase-js';
+import { sendOrderConfirmation } from './_lib/orderEmail.js';
 
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+// Stripe signature verification requires the *raw* request body. Vercel's
+// default body parser returns a parsed object, which would always fail
+// constructEvent. Disable it for this route.
+export const config = {
+  api: { bodyParser: false },
+};
 
-// Stripe Price ID for the IPL replica shirt — used to partition line items
-// into IPL-supplier vs training-kit fulfillment paths.
+let _stripe = null;
+const getStripe = () => {
+  if (_stripe) return _stripe;
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) throw new Error('STRIPE_SECRET_KEY is not set');
+  _stripe = new Stripe(key);
+  return _stripe;
+};
+
+let _supabase = null;
+const getSupabase = () => {
+  if (_supabase) return _supabase;
+  const url = process.env.VITE_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) throw new Error('Supabase env vars not set');
+  _supabase = createClient(url, key);
+  return _supabase;
+};
+
+const readRawBody = async (req) => {
+  const chunks = [];
+  for await (const chunk of req) {
+    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+  }
+  return Buffer.concat(chunks);
+};
+
 const IPL_PRICE_ID = 'price_1TRJe7Io52UEA50yZ4i5OPwH';
 
 const inferFulfillmentMethod = (shippingLabel) => {
@@ -51,8 +78,8 @@ const sumCents = (items) =>
 // Upsert by stripe_session_id. If a draft row exists (linked via metadata.order_id
 // from the cart pre-insert), we update it. Otherwise, we insert a new row.
 const upsertOrder = async (table, payload, draftId) => {
+  const supabase = getSupabase();
   if (draftId) {
-    // Try to update the draft row first (preserves the id used in localStorage).
     const { data, error } = await supabase
       .from(table)
       .update(payload)
@@ -60,9 +87,7 @@ const upsertOrder = async (table, payload, draftId) => {
       .select('id');
     if (error) console.error(`${table} update by id failed:`, error);
     if (data && data.length) return data[0];
-    // Draft row missing — fall through to upsert.
   }
-  // Upsert by stripe_session_id (unique partial index per migration).
   const { data, error } = await supabase
     .from(table)
     .upsert(payload, { onConflict: 'stripe_session_id' })
@@ -74,14 +99,17 @@ const upsertOrder = async (table, payload, draftId) => {
   return data?.[0] || null;
 };
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const sig = req.headers['stripe-signature'];
   let event;
+  let stripe;
 
   try {
-    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+    stripe = getStripe();
+    const rawBody = await readRawBody(req);
+    event = stripe.webhooks.constructEvent(rawBody, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
     console.error('Webhook signature failed:', err.message);
     return res.status(400).json({ error: err.message });
@@ -91,7 +119,6 @@ module.exports = async (req, res) => {
     return res.status(200).json({ received: true, ignored: event.type });
   }
 
-  // Re-fetch the session expanded so we get full payment + card details.
   let session;
   try {
     session = await stripe.checkout.sessions.retrieve(event.data.object.id, {
@@ -148,19 +175,17 @@ module.exports = async (req, res) => {
   const draftTrainingId = session.metadata?.order_id || null;
   const draftIplId      = session.metadata?.ipl_order_id || null;
 
-  // Partition line items so each table only stores what's relevant to its fulfillment path.
   const { training: trainingItems, ipl: iplItems } = partitionLineItems(lineItems);
 
   const totalsForSubset = (subset) => {
     const subtotal = sumCents(subset);
     return {
       subtotal: subtotal / 100,
-      shipping_cost: 0,                          // Stripe returns the combined shipping; per-bucket allocation not meaningful
+      shipping_cost: 0,
       total: (subtotal + (session.shipping_cost?.amount_total || 0)) / 100,
     };
   };
 
-  // Training path
   if (trainingItems.length > 0 || draftTrainingId) {
     await upsertOrder('shop_orders_training', {
       ...stripePayloadShared,
@@ -169,7 +194,6 @@ module.exports = async (req, res) => {
     }, draftTrainingId);
   }
 
-  // IPL path
   if (iplItems.length > 0 || draftIplId) {
     await upsertOrder('shop_orders_ipl', {
       ...stripePayloadShared,
@@ -179,11 +203,9 @@ module.exports = async (req, res) => {
     }, draftIplId);
   }
 
-  // Fire Zapier → Google Sheets (optional, non-blocking)
   const zapierUrl = process.env.ZAPIER_SHOP_WEBHOOK_URL;
   if (zapierUrl) {
     try {
-      const fetch = (...args) => import('node-fetch').then(({ default: f }) => f(...args));
       await fetch(zapierUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -211,7 +233,6 @@ module.exports = async (req, res) => {
     } catch (e) { console.warn('Zapier failed (non-blocking):', e.message); }
   }
 
-  // Resend confirmation email (non-blocking)
   try {
     await sendOrderConfirmation({
       to: customerEmail,
@@ -229,4 +250,4 @@ module.exports = async (req, res) => {
   }
 
   return res.status(200).json({ received: true });
-};
+}
