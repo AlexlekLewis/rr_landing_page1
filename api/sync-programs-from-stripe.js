@@ -133,8 +133,20 @@ const classifyByDescription = (description = '') => {
   const d = description.toLowerCase();
   if (!d) return null;
 
-  // Elite Program — flagship 12-week training
-  if (d.includes('elite program') || d.includes('royals elite') || d.includes('elite training programme') || d.includes('elite training program')) {
+  // Elite Program — flagship 12-week training. Match BEFORE the generic
+  // "royals academy" Junior Royals fallback, since the Elite product
+  // descriptions also contain "Royals Academy" (e.g. "T20 Elite Academy",
+  // "Tailored Payment Plan", "Ambassador Program").
+  if (
+    d.includes('elite program') ||
+    d.includes('royals elite') ||
+    d.includes('elite training programme') ||
+    d.includes('elite training program') ||
+    d.includes('elite academy') ||
+    d.includes('t20 elite') ||
+    d.includes('tailored payment plan') ||
+    d.includes('ambassador program')
+  ) {
     return { program: 'elite', program_variant: null, program_label: description };
   }
 

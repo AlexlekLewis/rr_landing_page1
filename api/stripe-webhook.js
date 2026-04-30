@@ -95,7 +95,14 @@ const PROGRAM_PRICE_IDS = {
 const classifyByDescription = (description = '') => {
   const d = description.toLowerCase();
   if (!d) return null;
-  if (d.includes('elite program') || d.includes('royals elite') || d.includes('elite training programme') || d.includes('elite training program'))
+  // Elite check runs first — Elite product descriptions also contain
+  // "Royals Academy", which would otherwise fall through to junior_royals.
+  if (
+    d.includes('elite program') || d.includes('royals elite') ||
+    d.includes('elite training programme') || d.includes('elite training program') ||
+    d.includes('elite academy') || d.includes('t20 elite') ||
+    d.includes('tailored payment plan') || d.includes('ambassador program')
+  )
     return { program: 'elite', program_variant: null, program_label: description };
   if (d.includes('holiday program') || d.includes('holiday camp') || d.includes('holiday clinic'))
     return { program: 'holiday', program_variant: null, program_label: description };
