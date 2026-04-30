@@ -5,7 +5,7 @@ import {
     LayoutDashboard, Kanban, Users, BarChart3, FileText,
     Settings, LogOut, ChevronLeft, ChevronRight, Menu, X,
     Send, CheckCircle2, Eye, ClipboardList, UserCheck, Shield, ChevronDown,
-    UserCircle
+    UserCircle, ShoppingBag, Trophy
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { ProgramProvider, useProgram } from './ProgramContext';
@@ -37,6 +37,13 @@ const NAV_GROUPS = [
             { label: 'Cohort 2026', path: '/rramadmin_26/lp3-acceptances', icon: UserCheck },
             { label: 'Player Profiles', path: '/rramadmin_26/player-profiles', icon: UserCircle },
             { label: 'Assessments', path: '/rramadmin_26/rsvp', icon: ClipboardList },
+        ],
+    },
+    {
+        label: 'REVENUE',
+        items: [
+            { label: 'Program Registrations', path: '/rramadmin_26/program-registrations', icon: Trophy },
+            { label: 'Shop Orders', path: '/rramadmin_26/shop-orders', icon: ShoppingBag },
         ],
     },
     {
