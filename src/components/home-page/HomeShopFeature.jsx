@@ -50,14 +50,14 @@ const HomeShopFeature = () => {
                         <div className="relative rounded-2xl overflow-hidden bg-white/5 border border-white/10 aspect-square">
                             {/* Front image */}
                             <img
-                                src="/shop/ipl-shirt-front.jpeg"
-                                alt="2026 Rajasthan Royals IPL Replica Playing Shirt — Front"
+                                src="/shop/training-shirt-front.png"
+                                alt="RRA Melbourne Training Shirt — Front"
                                 className={`w-full h-full object-contain p-6 transition-all duration-500 ${showBack ? 'opacity-0 scale-95' : 'opacity-100 scale-100'} absolute inset-0`}
                             />
                             {/* Back image */}
                             <img
-                                src="/shop/ipl-shirt-back.jpeg"
-                                alt="2026 Rajasthan Royals IPL Replica Playing Shirt — Back"
+                                src="/shop/training-shirt-back.png"
+                                alt="RRA Melbourne Training Shirt — Back"
                                 className={`w-full h-full object-contain p-6 transition-all duration-500 ${showBack ? 'opacity-100 scale-100' : 'opacity-0 scale-95'} absolute inset-0`}
                             />
 
@@ -77,24 +77,24 @@ const HomeShopFeature = () => {
                         className="flex flex-col"
                     >
                         {/* Badge */}
-                        <span className="inline-flex items-center gap-2 bg-rr-pink text-white text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-full w-fit mb-6">
-                            ⭐ Official IPL — Featured Item
+                        <span className="inline-flex items-center gap-2 bg-rr-blue text-white text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-full w-fit mb-6">
+                            ⭐ Academy Kit — Featured Item
                         </span>
 
                         <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-wide leading-tight mb-2">
-                            2026 Rajasthan Royals<br />
-                            <span className="text-rr-pink">IPL Replica Playing Shirt</span>
+                            RRA Melbourne<br />
+                            <span className="text-rr-pink">Training Shirt</span>
                         </h3>
 
-                        <p className="text-4xl font-black text-white mb-4">$89.95</p>
+                        <p className="text-4xl font-black text-white mb-4">$64.95</p>
 
                         <p className="text-white/60 font-medium leading-relaxed mb-8">
-                            The official 2026 IPL season playing shirt worn by the Rajasthan Royals. Premium quality replica in authentic team colours — the same shirt worn by your favourite Royals players.
+                            High-performance training shirt in official Rajasthan Royals Academy Melbourne branding. Moisture-wicking fabric built for the Australian climate — wear the colours on and off the training ground.
                         </p>
 
                         {/* Features */}
                         <div className="grid grid-cols-2 gap-3 mb-8">
-                            {['Official IPL Merchandise', 'Premium Fabric', 'Authentic Team Colours', 'All Sizes Available'].map(f => (
+                            {['Official Academy Branding', 'Moisture-Wicking Fabric', 'Built for Australian Climate', 'All Sizes Available'].map(f => (
                                 <div key={f} className="flex items-center gap-2">
                                     <span className="w-1.5 h-1.5 rounded-full bg-rr-pink shrink-0" />
                                     <span className="text-white/70 text-sm font-medium">{f}</span>
