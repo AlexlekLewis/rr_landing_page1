@@ -52,9 +52,9 @@ const ShopSuccess = () => {
   const isExpress = fulfillment === 'express';
 
   const venueDetails = pickupVenue === 'bundoora'
-    ? { name: 'Cutting Edge Cricket — Bundoora', days: 'Tuesday & Thursday', hours: '5:00pm – 9:00pm' }
+    ? { name: 'Cutting Edge Cricket — Bundoora', address: 'Unit 7, Factory 19, Enterprise Drive, Bundoora VIC 3083' }
     : pickupVenue === 'hallam'
-      ? { name: 'Cricket Connect — Hallam', days: 'Monday', hours: '5:30pm – 8:30pm' }
+      ? { name: 'Cricket Connect — Hallam', address: '22 Technology CCT, Hallam VIC 3803' }
       : null;
 
   return (
@@ -105,14 +105,16 @@ const ShopSuccess = () => {
                 <div className="space-y-2 pl-1">
                   <div className="flex items-start gap-3">
                     <MapPin className="w-4 h-4 text-rr-pink shrink-0 mt-0.5" />
-                    <p className="text-sm font-bold text-rr-dark">{venueDetails.name}</p>
+                    <div>
+                      <p className="text-sm font-bold text-rr-dark">{venueDetails.name}</p>
+                      <p className="text-sm text-rr-charcoal font-medium mt-0.5">{venueDetails.address}</p>
+                    </div>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <Clock className="w-4 h-4 text-rr-pink shrink-0 mt-0.5" />
-                    <p className="text-sm text-rr-charcoal font-medium">{venueDetails.days} · {venueDetails.hours}</p>
-                  </div>
-                  <p className="text-xs text-slate-400 mt-3 pl-7">
-                    In-stock items will be available at your next session. Made-to-order items will be ready for collection once they arrive from our supplier — we'll contact you directly.
+                  <p className="text-sm font-bold text-rr-dark mt-3 pl-7">
+                    We'll send you a text message when your order is ready for pickup.
+                  </p>
+                  <p className="text-xs text-slate-400 pl-7">
+                    Made-to-order items typically take 2–4 weeks to arrive from our supplier.
                   </p>
                 </div>
               </>

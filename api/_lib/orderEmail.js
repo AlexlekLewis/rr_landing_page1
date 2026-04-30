@@ -40,15 +40,18 @@ const renderItemsHtml = (items = []) => items
 
 const renderFulfillmentHtml = ({ fulfillmentMethod, pickupVenue, shippingAddress }) => {
   if (fulfillmentMethod === 'pickup') {
-    const venueLabel = pickupVenue === 'bundoora'
-      ? 'Cutting Edge Cricket — Bundoora (Tue & Thu, 5:00pm–9:00pm)'
+    const venue = pickupVenue === 'bundoora'
+      ? { name: 'Cutting Edge Cricket — Bundoora', address: 'Unit 7, Factory 19, Enterprise Drive, Bundoora VIC 3083' }
       : pickupVenue === 'hallam'
-        ? 'Cricket Connect — Hallam (Mon, 5:30pm–8:30pm)'
-        : 'Academy Pickup';
+        ? { name: 'Cricket Connect — Hallam', address: '22 Technology CCT, Hallam VIC 3803' }
+        : null;
     return `
       <p style="margin:0 0 8px;color:#0a0a14;font-weight:700">Academy Pickup</p>
-      <p style="margin:0;color:#555;font-size:14px">${venueLabel}</p>
-      <p style="margin:8px 0 0;color:#888;font-size:13px">In-stock items available at your next session. Made-to-order items: we'll contact you when ready.</p>`;
+      ${venue ? `
+        <p style="margin:0;color:#0a0a14;font-size:14px;font-weight:600">${venue.name}</p>
+        <p style="margin:4px 0 0;color:#555;font-size:14px">${venue.address}</p>` : ''}
+      <p style="margin:12px 0 0;color:#0a0a14;font-size:13px;font-weight:600">We'll send you a text message when your order is ready for pickup.</p>
+      <p style="margin:4px 0 0;color:#888;font-size:12px">Made-to-order items typically take 2–4 weeks to arrive from our supplier.</p>`;
   }
   const addr = shippingAddress
     ? `${shippingAddress.line1 || ''}${shippingAddress.line2 ? ', ' + shippingAddress.line2 : ''}<br>${shippingAddress.city || ''} ${shippingAddress.state || ''} ${shippingAddress.postal_code || ''}<br>${shippingAddress.country || ''}`

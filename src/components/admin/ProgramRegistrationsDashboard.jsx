@@ -20,14 +20,21 @@ const formatAUD = (cents) => {
     return new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD' }).format(value);
 };
 
+const TZ = 'Australia/Melbourne';
+
 const formatDate = (iso) => {
     if (!iso) return '—';
-    return new Date(iso).toLocaleDateString('en-AU', { day: '2-digit', month: 'short', year: 'numeric' });
+    return new Date(iso).toLocaleDateString('en-AU', { timeZone: TZ, day: '2-digit', month: 'short', year: 'numeric' });
 };
 
 const formatDateTime = (iso) => {
     if (!iso) return '—';
-    return new Date(iso).toLocaleString('en-AU', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    return new Date(iso).toLocaleString('en-AU', { timeZone: TZ, day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+};
+
+const formatTime = (iso) => {
+    if (!iso) return '';
+    return new Date(iso).toLocaleTimeString('en-AU', { timeZone: TZ, hour: '2-digit', minute: '2-digit' });
 };
 
 // Display config for each program key — drives badges, filter labels, stat cards.
@@ -460,7 +467,10 @@ const ProgramRegistrationsDashboard = () => {
                                 <tr key={reg.id}
                                     onClick={() => setSelected(reg)}
                                     className="hover:bg-white/5 transition-colors cursor-pointer">
-                                    <td className="p-4 text-slate-400 whitespace-nowrap">{formatDate(reg.created_at)}</td>
+                                    <td className="p-4 whitespace-nowrap">
+                                        <div className="text-slate-300">{formatDate(reg.created_at)}</div>
+                                        <div className="text-slate-500 text-xs">{formatTime(reg.created_at)}</div>
+                                    </td>
                                     <td className="p-4">
                                         <div className="text-white font-medium truncate max-w-[200px]">{reg.customer_name || '—'}</div>
                                         <div className="text-slate-500 text-xs truncate max-w-[200px]">{reg.customer_email || '—'}</div>

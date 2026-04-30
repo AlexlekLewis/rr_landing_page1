@@ -8,7 +8,7 @@ const TABS = [
     { key: 'enquiries', label: 'General Enquiries', icon: MessageSquare, table: 'general_enquiries' },
 ];
 
-const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-AU', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-AU', { timeZone: 'Australia/Melbourne', day: '2-digit', month: 'short', year: 'numeric' }) : '—';
 
 const SortIcon = ({ sortKey, column, sortDir }) => {
     if (sortKey !== column) return null;
