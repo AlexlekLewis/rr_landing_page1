@@ -301,12 +301,15 @@ export default async function handler(req, res) {
 
   const { training: trainingItems, ipl: iplItems } = partitionLineItems(lineItems);
 
+  // The shop_orders_* subtotal/shipping_cost/total columns are INTEGER
+  // (cents). DO NOT divide by 100 here — PostgREST will reject decimals
+  // like 38.5 with: invalid input syntax for type integer.
   const totalsForSubset = (subset) => {
     const subtotal = sumCents(subset);
     return {
-      subtotal: subtotal / 100,
+      subtotal,
       shipping_cost: 0,
-      total: (subtotal + (session.shipping_cost?.amount_total || 0)) / 100,
+      total: subtotal + (session.shipping_cost?.amount_total || 0),
     };
   };
 

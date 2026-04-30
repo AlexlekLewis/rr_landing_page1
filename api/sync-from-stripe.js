@@ -170,11 +170,17 @@ const syncOneSession = async (sessionId) => {
   };
 
   const { ipl, training } = partitionLineItems(lineItems);
-  const totalsFor = (subset) => ({
-    subtotal: sumCents(subset) / 100,
-    shipping_cost: 0,
-    total: (sumCents(subset) + (session.shipping_cost?.amount_total || 0)) / 100,
-  });
+  // shop_orders_* subtotal/shipping_cost/total are INTEGER (cents). Don't
+  // divide — PostgREST rejects decimals into integer columns with
+  // "invalid input syntax for type integer".
+  const totalsFor = (subset) => {
+    const subtotal = sumCents(subset);
+    return {
+      subtotal,
+      shipping_cost: 0,
+      total: subtotal + (session.shipping_cost?.amount_total || 0),
+    };
+  };
 
   const results = { session_id: session.id, training: null, ipl: null };
 
