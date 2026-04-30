@@ -47,6 +47,7 @@ const ShopOrdersDashboard = () => {
     const [stripeData, setStripeData] = useState(null);
     const [stripeLoading, setStripeLoading] = useState(false);
     const [stripeError, setStripeError] = useState(null);
+    const [syncState, setSyncState] = useState({ status: 'idle', message: '' });
 
     const fetchData = useCallback(async () => {
         setError(null);
@@ -76,6 +77,48 @@ const ShopOrdersDashboard = () => {
 
     useEffect(() => { fetchData(); }, [fetchData]);
     useRealtimeSync(['shop_orders_training', 'shop_orders_ipl'], fetchData);
+
+    // Auto-sync from Stripe on dashboard open. Pulls the last 14 days of paid
+    // Checkout Sessions in the background. Idempotent — already-synced orders
+    // are upserted in place. Skips if a sync ran in the last 5 minutes
+    // (sessionStorage guard).
+    useEffect(() => {
+        const SYNC_KEY = 'shop_orders_last_auto_sync';
+        const last = Number(sessionStorage.getItem(SYNC_KEY) || 0);
+        if (Date.now() - last < 5 * 60 * 1000) return;
+        sessionStorage.setItem(SYNC_KEY, String(Date.now()));
+
+        (async () => {
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                if (!session) return;
+                setSyncState({ status: 'syncing', message: 'Auto-syncing recent Stripe activity…' });
+                const res = await fetch('/api/sync-from-stripe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${session.access_token}`,
+                    },
+                    body: JSON.stringify({ days: 14 }),
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Auto-sync failed');
+                if (data.synced > 0) {
+                    setSyncState({
+                        status: 'done',
+                        message: `Auto-sync: pulled ${data.synced} new/updated order${data.synced === 1 ? '' : 's'} from Stripe`,
+                    });
+                    fetchData();
+                } else {
+                    // Silent — nothing new to report
+                    setSyncState({ status: 'idle', message: '' });
+                }
+            } catch (err) {
+                console.warn('Stripe auto-sync failed:', err);
+                setSyncState({ status: 'idle', message: '' });
+            }
+        })();
+    }, [fetchData]);
 
     const stats = useMemo(() => {
         const completed = orders.filter(o => o.payment_status === 'completed');
@@ -223,7 +266,6 @@ const ShopOrdersDashboard = () => {
         );
     }
 
-    const [syncState, setSyncState] = useState({ status: 'idle', message: '' });
     const syncFromStripe = async () => {
         if (!confirm('Pull every paid Stripe Checkout from the last 30 days into this dashboard?\n\nUseful after a webhook outage or to backfill historical orders. Already-synced orders are updated in place, not duplicated.')) return;
         setSyncState({ status: 'syncing', message: 'Querying Stripe…' });
