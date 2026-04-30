@@ -34,17 +34,20 @@ const getStripe = () => {
   return _stripe;
 };
 
+// Public Supabase project URL — same one already shipped in the frontend
+// JS bundle. Used as a final fallback if no env var is set in Vercel.
+// (The service role key, which IS a secret, must still come from env vars.)
+const SUPABASE_URL_FALLBACK = 'https://pudldzgmluwoocwxtzhw.supabase.co';
+
 let _supabase = null;
 const getSupabase = () => {
   if (_supabase) return _supabase;
-  // Accept any of the common Supabase URL env var names so this works
-  // regardless of which one is present in Vercel.
   const url = process.env.SUPABASE_URL
            || process.env.VITE_SUPABASE_URL
-           || process.env.NEXT_PUBLIC_SUPABASE_URL;
+           || process.env.NEXT_PUBLIC_SUPABASE_URL
+           || SUPABASE_URL_FALLBACK;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url) throw new Error('Supabase URL not set. In Vercel project Settings → Environment Variables, add SUPABASE_URL (or VITE_SUPABASE_URL) for Production, then redeploy.');
-  if (!key) throw new Error('SUPABASE_SERVICE_ROLE_KEY not set in Vercel env vars for this deployment. Add it (Production) and redeploy.');
+  if (!key) throw new Error('SUPABASE_SERVICE_ROLE_KEY is not set in Vercel env vars. In Vercel project Settings → Environment Variables, add it for Production (it is the long eyJ... JWT from your Supabase Dashboard → Settings → API → service_role), then redeploy.');
   _supabase = createClient(url, key);
   return _supabase;
 };
