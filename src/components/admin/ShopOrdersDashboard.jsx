@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Search, Download, ChevronDown, ChevronUp, X, Truck, MapPin, CreditCard,
-    Package, CheckCircle2, Clock, ExternalLink, RefreshCw, DollarSign, ShoppingBag, AlertCircle, Mail
+    Package, CheckCircle2, Clock, ExternalLink, RefreshCw, DollarSign, ShoppingBag, AlertCircle, Mail, CloudDownload
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import useRealtimeSync from '../../hooks/useRealtimeSync';
@@ -223,6 +223,33 @@ const ShopOrdersDashboard = () => {
         );
     }
 
+    const [syncState, setSyncState] = useState({ status: 'idle', message: '' });
+    const syncFromStripe = async () => {
+        if (!confirm('Pull every paid Stripe Checkout from the last 30 days into this dashboard?\n\nUseful after a webhook outage or to backfill historical orders. Already-synced orders are updated in place, not duplicated.')) return;
+        setSyncState({ status: 'syncing', message: 'Querying Stripe…' });
+        try {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) throw new Error('Not signed in');
+            const res = await fetch('/api/sync-from-stripe', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${session.access_token}`,
+                },
+                body: JSON.stringify({ days: 30 }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Sync failed');
+            setSyncState({
+                status: 'done',
+                message: `Synced ${data.synced} of ${data.processed} sessions (${data.skipped} unpaid skipped${data.errors?.length ? `, ${data.errors.length} errors` : ''})`,
+            });
+            fetchData();
+        } catch (err) {
+            setSyncState({ status: 'error', message: err.message });
+        }
+    };
+
     return (
         <div className="space-y-6">
             {/* Header */}
@@ -231,13 +258,36 @@ const ShopOrdersDashboard = () => {
                     <h1 className="text-2xl md:text-3xl font-black text-white tracking-wider">SHOP ORDERS</h1>
                     <p className="text-slate-400 text-sm mt-1">{filtered.length} of {orders.length} orders</p>
                 </div>
-                <button
-                    onClick={fetchData}
-                    className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all text-xs font-bold uppercase tracking-wider"
-                >
-                    <RefreshCw className="w-3.5 h-3.5" /> Refresh
-                </button>
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={syncFromStripe}
+                        disabled={syncState.status === 'syncing'}
+                        className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-r from-rr-pink/20 to-rr-blue/20 border border-rr-pink/30 text-white hover:from-rr-pink/30 hover:to-rr-blue/30 transition-all text-xs font-bold uppercase tracking-wider disabled:opacity-50"
+                    >
+                        {syncState.status === 'syncing' ? (
+                            <><RefreshCw className="w-3.5 h-3.5 animate-spin" /> Syncing…</>
+                        ) : (
+                            <><CloudDownload className="w-3.5 h-3.5" /> Sync from Stripe</>
+                        )}
+                    </button>
+                    <button
+                        onClick={fetchData}
+                        className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all text-xs font-bold uppercase tracking-wider"
+                    >
+                        <RefreshCw className="w-3.5 h-3.5" /> Refresh
+                    </button>
+                </div>
             </div>
+
+            {syncState.message && (
+                <div className={`rounded-xl border p-3 text-xs ${syncState.status === 'error'
+                    ? 'bg-red-500/10 border-red-500/30 text-red-400'
+                    : syncState.status === 'done'
+                        ? 'bg-green-500/10 border-green-500/30 text-green-400'
+                        : 'bg-blue-500/10 border-blue-500/30 text-blue-300'}`}>
+                    {syncState.message}
+                </div>
+            )}
 
             {error && (
                 <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 flex items-start gap-3">
