@@ -2,23 +2,31 @@
 // Vercel Serverless Function — Get Stripe Payment Details
 // GET /api/get-stripe-payment?session_id=cs_...
 // ============================================================
-// Returns enriched Stripe data for the admin shop dashboard:
-//   - line items (name, quantity, unit_price, total)
-//   - customer details (name, email, phone)
-//   - shipping address & cost
-//   - payment intent (charge id, card brand/last4, receipt URL, status)
-//   - amounts (subtotal, shipping, tax, total)
+// ADMIN-ONLY. Returns enriched Stripe data (customer email/phone,
+// card brand/last4, address) for a Checkout Session — used by the
+// admin shop dashboard to enrich displayed orders. Without auth,
+// anyone could enumerate session IDs and exfiltrate PII.
+//
 // Required env vars in Vercel:
-//   STRIPE_SECRET_KEY = sk_live_...
+//   STRIPE_SECRET_KEY        = sk_live_...
+//   SUPABASE_SERVICE_ROLE_KEY (for verifyAdmin)
 // ============================================================
 
 import Stripe from 'stripe';
+import { verifyAdmin } from './_lib/verifyAdmin.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  try {
+    await verifyAdmin(req);
+  } catch (err) {
+    const isAuth = err.code === 'AUTH';
+    return res.status(isAuth ? 401 : 500).json({ error: err.message });
   }
 
   const { session_id } = req.query;

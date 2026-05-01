@@ -1,19 +1,41 @@
 import chromium from '@sparticuz/chromium';
 import puppeteer from 'puppeteer-core';
+import { verifyAdmin } from './_lib/verifyAdmin.js';
 
 // ─── CONFIG ──────────────────────────────────────────────
 const PLAYCRICKET_BASE = 'https://play.cricket.com.au';
 const TIMEOUT = 45000; // 45s max for page operations
 const NAV_TIMEOUT = 30000;
 
+// ADMIN-ONLY. This endpoint spawns a headless Chrome instance per call
+// (~$ + cold-start cost). Without auth, anyone could grief us.
+// Locked CORS to admin origins only; admin dashboard sends a Bearer token.
+const ALLOWED_ORIGINS = new Set([
+    'https://rramelbourne.com',
+    'https://www.rramelbourne.com',
+    'https://rrlandingpage1.vercel.app',
+]);
+
 export default async function handler(req, res) {
-    // CORS
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    // CORS — restrict to production + canonical Vercel domain.
+    // Preview deployments (PR URLs) reach this same-origin, so wildcard isn't needed.
+    const origin = req.headers.origin || '';
+    if (ALLOWED_ORIGINS.has(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+        res.setHeader('Vary', 'Origin');
+    }
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
     if (req.method === 'OPTIONS') return res.status(200).end();
     if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
+
+    try {
+        await verifyAdmin(req);
+    } catch (err) {
+        const isAuth = err.code === 'AUTH';
+        return res.status(isAuth ? 401 : 500).json({ error: err.message });
+    }
 
     const { player_name, club, profile_url } = req.body || {};
 

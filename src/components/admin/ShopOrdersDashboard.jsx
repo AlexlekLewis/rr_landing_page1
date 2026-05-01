@@ -152,7 +152,11 @@ const ShopOrdersDashboard = () => {
         if (order.stripe_session_id) {
             setStripeLoading(true);
             try {
-                const res = await fetch(`/api/get-stripe-payment?session_id=${encodeURIComponent(order.stripe_session_id)}`);
+                const { data: { session } } = await supabase.auth.getSession();
+                if (!session) throw new Error('Not signed in');
+                const res = await fetch(`/api/get-stripe-payment?session_id=${encodeURIComponent(order.stripe_session_id)}`, {
+                    headers: { Authorization: `Bearer ${session.access_token}` },
+                });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Failed to load Stripe data');
                 setStripeData(data);
@@ -497,9 +501,14 @@ const OrderDetailDrawer = ({ order, stripeData, stripeLoading, stripeError, onCl
         }
         setEmailState({ status: 'sending', message: '' });
         try {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) throw new Error('Not signed in');
             const res = await fetch('/api/send-confirmation', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${session.access_token}`,
+                },
                 body: JSON.stringify({ order_id: order.id, source: order._source }),
             });
             const data = await res.json();

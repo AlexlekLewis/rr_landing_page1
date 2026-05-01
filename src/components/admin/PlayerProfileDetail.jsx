@@ -147,9 +147,14 @@ const PlayerProfileDetail = ({ player, onClose, onStatsUpdated }) => {
         setFetchResult(null);
 
         try {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) throw new Error('Not signed in');
             const response = await fetch('/api/fetch-playhq-stats', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${session.access_token}`,
+                },
                 body: JSON.stringify({
                     player_name: player.player_name,
                     club: player.club,

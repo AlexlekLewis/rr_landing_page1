@@ -3,9 +3,11 @@
 // POST /api/send-confirmation  { order_id, source }
 // source: 'training' | 'ipl'
 // ============================================================
-// Used by the admin dashboard "Send confirmation email" button.
-// Looks up the order in Supabase, then sends the same email template
-// the auto-webhook uses, via Resend.
+// ADMIN-ONLY. Used by the admin dashboard "Send confirmation email"
+// button. Looks up the order in Supabase, then sends the same email
+// template the auto-webhook uses, via Resend. Without auth, anyone
+// could spam customers via our verified Resend domain.
+//
 // Required env vars in Vercel:
 //   VITE_SUPABASE_URL
 //   SUPABASE_SERVICE_ROLE_KEY
@@ -15,6 +17,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 import { sendOrderConfirmation } from './_lib/orderEmail.js';
+import { verifyAdmin } from './_lib/verifyAdmin.js';
 
 const SUPABASE_URL_FALLBACK = 'https://pudldzgmluwoocwxtzhw.supabase.co';
 
@@ -34,6 +37,13 @@ const getSupabase = () => {
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  try {
+    await verifyAdmin(req);
+  } catch (err) {
+    const isAuth = err.code === 'AUTH';
+    return res.status(isAuth ? 401 : 500).json({ error: err.message });
   }
 
   const { order_id, source } = req.body || {};
