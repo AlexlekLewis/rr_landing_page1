@@ -93,6 +93,7 @@ export default async function handler(req, res) {
     // Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
+      allow_promotion_codes: true,
       line_items: lineItems,
       shipping_options: shippingOptions,
       // Collect customer details
