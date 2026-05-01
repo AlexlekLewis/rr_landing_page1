@@ -90,18 +90,23 @@ const PROGRAM_PRICE_IDS = {
   'price_1TMFh5Io52UEA50yrjh0rz92': { program: 'junior_royals', program_variant: 'term_2_hallam',         program_label: 'Junior Royals — 2026 Term 2, Hallam (Cricket Connect)' },
   'price_1THybpIo52UEA50yl5fCU1t8': { program: 'junior_royals', program_variant: 'training_shirt_addon', program_label: 'Junior Royals — Training Shirt (Participant ONLY)' },
   'price_1TELBmIo52UEA50yebT4senm': { program: 'female_kickstart', program_variant: 'girls_kickstart',    program_label: 'Female Cricket — Girls Kickstart Program' },
+  'price_1T7OxzIo52UEA50y2f9UvDSr': { program: 'elite',            program_variant: 'deposit_3_monthly', program_label: 'Elite Program — $2,995 Payment Plan (Deposit + 3 Monthly)' },
 };
 
 const classifyByDescription = (description = '') => {
   const d = description.toLowerCase();
   if (!d) return null;
+  // Internal/test products — explicitly skip so they don't pollute counts.
+  if (d.includes('test product')) return null;
   // Elite check runs first — Elite product descriptions also contain
   // "Royals Academy", which would otherwise fall through to junior_royals.
   if (
     d.includes('elite program') || d.includes('royals elite') ||
     d.includes('elite training programme') || d.includes('elite training program') ||
     d.includes('elite academy') || d.includes('t20 elite') ||
-    d.includes('tailored payment plan') || d.includes('ambassador program')
+    d.includes('tailored payment plan') || d.includes('ambassador program') ||
+    d.includes('$2995 payment plan') || d.includes('deposit + 3 monthly') ||
+    d.includes('deposit + monthly')
   )
     return { program: 'elite', program_variant: null, program_label: description };
   if (d.includes('holiday program') || d.includes('holiday camp') || d.includes('holiday clinic'))

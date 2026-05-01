@@ -108,6 +108,14 @@ const PROGRAM_PRICE_IDS = {
     program_variant: 'girls_kickstart',
     program_label: 'Female Cricket — Girls Kickstart Program',
   },
+
+  // Elite — explicit price ID for the $2,995 deposit + 3 monthly payments plan
+  // (description doesn't include "Elite" so the fuzzy fallback misses it)
+  'price_1T7OxzIo52UEA50y2f9UvDSr': {
+    program: 'elite',
+    program_variant: 'deposit_3_monthly',
+    program_label: 'Elite Program — $2,995 Payment Plan (Deposit + 3 Monthly)',
+  },
 };
 
 // Shop price IDs — kept in sync with sync-from-stripe.js. A session that
@@ -133,10 +141,15 @@ const classifyByDescription = (description = '') => {
   const d = description.toLowerCase();
   if (!d) return null;
 
+  // Internal/test products — explicitly skip so they don't pollute counts.
+  if (d.includes('test product')) return null;
+
   // Elite Program — flagship 12-week training. Match BEFORE the generic
   // "royals academy" Junior Royals fallback, since the Elite product
   // descriptions also contain "Royals Academy" (e.g. "T20 Elite Academy",
-  // "Tailored Payment Plan", "Ambassador Program").
+  // "Tailored Payment Plan", "Ambassador Program"). Also catch the
+  // "$2995 Payment Plan (Deposit + 3 Monthly Payments)" Elite variant
+  // whose description doesn't mention "Elite" at all.
   if (
     d.includes('elite program') ||
     d.includes('royals elite') ||
@@ -145,7 +158,10 @@ const classifyByDescription = (description = '') => {
     d.includes('elite academy') ||
     d.includes('t20 elite') ||
     d.includes('tailored payment plan') ||
-    d.includes('ambassador program')
+    d.includes('ambassador program') ||
+    d.includes('$2995 payment plan') ||
+    d.includes('deposit + 3 monthly') ||
+    d.includes('deposit + monthly')
   ) {
     return { program: 'elite', program_variant: null, program_label: description };
   }
