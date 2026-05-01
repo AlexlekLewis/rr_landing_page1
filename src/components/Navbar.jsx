@@ -166,7 +166,7 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
                         {/* Shop link */}
                         <Link
                             to="/academy-shop"
-                            className="flex items-center gap-1.5 text-sm font-black text-rr-pink hover:text-white border border-rr-pink/50 hover:border-white/50 hover:bg-white/10 px-4 py-1.5 rounded-full transition-all duration-200 uppercase tracking-widest"
+                            className="flex items-center gap-1.5 text-sm font-black text-white bg-rr-blue hover:bg-rr-dark px-4 py-1.5 rounded-full transition-all duration-200 uppercase tracking-widest"
                         >
                             🛒 Shop
                         </Link>
