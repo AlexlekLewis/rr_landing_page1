@@ -3,7 +3,8 @@ import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Search, Download, ChevronDown, ChevronUp, X, MapPin, CreditCard,
-    CheckCircle2, Clock, ExternalLink, RefreshCw, DollarSign, Trophy, AlertCircle, CloudDownload, Users
+    CheckCircle2, Clock, ExternalLink, RefreshCw, DollarSign, Trophy, AlertCircle, CloudDownload, Users,
+    Shuffle
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import useRealtimeSync from '../../hooks/useRealtimeSync';
@@ -677,6 +678,9 @@ const RegistrationDetailDrawer = ({ registration, onClose }) => {
                         </div>
                     </div>
 
+                    {/* Reclassify */}
+                    <ReclassifySection registration={r} />
+
                     {/* Customer */}
                     <Section title="Customer">
                         <Field label="Name" value={r.customer_name} />
@@ -797,6 +801,98 @@ const Section = ({ title, icon: Icon, children }) => (
         <div className="space-y-2">{children}</div>
     </div>
 );
+
+const ReclassifySection = ({ registration }) => {
+    const [open, setOpen] = useState(false);
+    const [target, setTarget] = useState(registration.program);
+    const [reason, setReason] = useState('');
+    const [state, setState] = useState({ status: 'idle', message: '' });
+
+    const submit = async () => {
+        if (target === registration.program) {
+            setState({ status: 'error', message: 'Pick a different program first' });
+            return;
+        }
+        setState({ status: 'saving', message: '' });
+        try {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) throw new Error('Not signed in');
+            const res = await fetch('/api/reclassify-registration', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${session.access_token}`,
+                },
+                body: JSON.stringify({ id: registration.id, new_program: target, reason: reason || null }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+            setState({ status: 'done', message: `Moved from ${data.from} → ${data.to}. Refresh to see updated list.` });
+        } catch (err) {
+            setState({ status: 'error', message: err.message });
+        }
+    };
+
+    const programOptions = [
+        { value: 'elite',            label: 'Elite Program' },
+        { value: 'junior_royals',    label: 'Junior Royals' },
+        { value: 'holiday',          label: 'Holiday Programs' },
+        { value: 'female_kickstart', label: 'Female Kickstart' },
+    ];
+
+    return (
+        <div>
+            <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                    <Shuffle className="w-4 h-4 text-rr-pink" />
+                    <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider">Reclassify</h3>
+                </div>
+                <button
+                    onClick={() => { setOpen(o => !o); setState({ status: 'idle', message: '' }); }}
+                    className="text-xs font-bold text-slate-400 hover:text-white px-2 py-1 rounded-md hover:bg-white/5"
+                >
+                    {open ? 'Cancel' : 'Move to different program'}
+                </button>
+            </div>
+            {open && (
+                <div className="bg-white/5 border border-white/10 rounded-xl p-3 space-y-2">
+                    <p className="text-[11px] text-slate-500">
+                        Currently classified as <span className="text-slate-300 font-bold">{registration.program}</span>.
+                        Cross-table moves (e.g. into shop_orders) are not yet supported here — re-run "Sync from Stripe" instead.
+                    </p>
+                    <select
+                        value={target}
+                        onChange={(e) => setTarget(e.target.value)}
+                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-rr-pink/50"
+                    >
+                        {programOptions.map(p => (
+                            <option key={p.value} value={p.value} className="bg-slate-900">{p.label}{p.value === registration.program ? ' (current)' : ''}</option>
+                        ))}
+                    </select>
+                    <input
+                        type="text"
+                        value={reason}
+                        onChange={(e) => setReason(e.target.value)}
+                        placeholder="Reason (optional, recorded in audit log)"
+                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-rr-pink/50"
+                    />
+                    <button
+                        onClick={submit}
+                        disabled={state.status === 'saving' || target === registration.program}
+                        className="w-full bg-rr-pink hover:bg-rr-pink/80 text-white text-xs font-bold uppercase tracking-widest py-2 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {state.status === 'saving' ? 'Saving…' : `Reclassify as ${target}`}
+                    </button>
+                    {state.message && (
+                        <p className={`text-xs ${state.status === 'error' ? 'text-red-400' : 'text-emerald-400'}`}>
+                            {state.message}
+                        </p>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+};
 
 const Field = ({ label, value, bold, mono, multiline, copyable }) => {
     const [copied, setCopied] = useState(false);

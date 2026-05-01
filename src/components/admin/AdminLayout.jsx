@@ -5,22 +5,24 @@ import {
     LayoutDashboard, Kanban, Users, BarChart3, FileText,
     Settings, LogOut, ChevronLeft, ChevronRight, Menu, X,
     Send, CheckCircle2, Eye, ClipboardList, UserCheck, Shield, ChevronDown,
-    UserCircle, ShoppingBag, Trophy, GraduationCap, Crown, Sun, Sparkles
+    UserCircle, ShoppingBag, Trophy, GraduationCap, Crown, Sun, Sparkles,
+    MessageCircle
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { ProgramProvider, useProgram } from './ProgramContext';
 
 const NAV_GROUPS = [
     {
-        label: 'HOMEPAGE',
-        items: [
-            { label: 'Home Leads', path: '/rramadmin_26/home-leads', icon: Users },
-        ],
-    },
-    {
         label: 'OVERVIEW',
         items: [
             { label: 'Dashboard', path: '/rramadmin_26/dashboard', icon: LayoutDashboard },
+        ],
+    },
+    {
+        label: 'INQUIRIES',
+        items: [
+            { label: 'All Inquiries', path: '/rramadmin_26/inquiries', icon: MessageCircle },
+            { label: 'Home Leads', path: '/rramadmin_26/home-leads', icon: Users },
         ],
     },
     {
@@ -34,7 +36,7 @@ const NAV_GROUPS = [
     {
         label: 'PROGRAM',
         items: [
-            { label: 'Cohort 2026', path: '/rramadmin_26/lp3-acceptances', icon: UserCheck },
+            { label: 'Academy Members 2026', path: '/rramadmin_26/academy-members', icon: UserCheck },
             { label: 'Player Profiles', path: '/rramadmin_26/player-profiles', icon: UserCircle },
             { label: 'Assessments', path: '/rramadmin_26/rsvp', icon: ClipboardList },
             { label: 'Junior Royals', path: '/rramadmin_26/program-registrations?program=junior_royals', icon: GraduationCap },

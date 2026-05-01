@@ -55,6 +55,8 @@ import PlayerProfiles from './components/admin/PlayerProfiles';
 import HomeLeadsDashboard from './components/admin/HomeLeadsDashboard';
 import ShopOrdersDashboard from './components/admin/ShopOrdersDashboard';
 import ProgramRegistrationsDashboard from './components/admin/ProgramRegistrationsDashboard';
+import AcademyMembersDashboard from './components/admin/AcademyMembersDashboard';
+import InquiriesDashboard from './components/admin/InquiriesDashboard';
 import TextUsButton from './components/TextUsButton';
 // Academy Shop — hidden from nav, accessible via direct URL only
 import AcademyShop from './components/academy-shop/AcademyShop';
@@ -151,6 +153,8 @@ function App() {
         <Route path="/rramadmin_26/home-leads" element={<AdminLayout><HomeLeadsDashboard /></AdminLayout>} />
         <Route path="/rramadmin_26/shop-orders" element={<AdminLayout><ShopOrdersDashboard /></AdminLayout>} />
         <Route path="/rramadmin_26/program-registrations" element={<AdminLayout><ProgramRegistrationsDashboard /></AdminLayout>} />
+        <Route path="/rramadmin_26/academy-members" element={<AdminLayout><AcademyMembersDashboard /></AdminLayout>} />
+        <Route path="/rramadmin_26/inquiries" element={<AdminLayout><InquiriesDashboard /></AdminLayout>} />
       </Routes>
       <TextUsButton />
     </div>

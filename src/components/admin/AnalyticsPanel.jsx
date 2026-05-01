@@ -7,6 +7,7 @@ import {
 } from 'recharts';
 import { supabase } from '../../lib/supabase';
 import useRealtimeSync from '../../hooks/useRealtimeSync';
+import MelbourneInquiryMap from './MelbourneInquiryMap';
 
 const COLORS = ['#E50695', '#1226AA', '#8B5CF6', '#10B981', '#F59E0B', '#EC4899', '#06B6D4', '#EF4444'];
 
@@ -185,6 +186,10 @@ const AnalyticsPanel = () => {
                 <h1 className="text-2xl md:text-3xl font-black text-white tracking-wider">FUNNEL & DEMOGRAPHICS</h1>
                 <p className="text-slate-400 text-sm mt-1">Player demographics, geography, and pipeline insights</p>
             </div>
+
+            {/* Melbourne Inquiry Map — live, geographic view of where leads come from
+                and how well each suburb converts. See docs/analytics-design.md. */}
+            <MelbourneInquiryMap />
 
             {/* Stats Row */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
