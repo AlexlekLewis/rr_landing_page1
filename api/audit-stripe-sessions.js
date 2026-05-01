@@ -44,6 +44,7 @@ const PROGRAM_PRICE_IDS = {
   'price_1TMFh5Io52UEA50yrjh0rz92': { program: 'junior_royals', variant: 'term_2_hallam',       label: 'Junior Royals — 2026 Term 2, Hallam' },
   'price_1THybpIo52UEA50yl5fCU1t8': { program: 'junior_royals', variant: 'training_shirt_addon', label: 'Junior Royals — Training Shirt Addon' },
   'price_1TELBmIo52UEA50yebT4senm': { program: 'female_kickstart', variant: 'girls_kickstart', label: 'Female Cricket — Girls Kickstart' },
+  'price_1T7OxzIo52UEA50y2f9UvDSr': { program: 'elite',            variant: 'deposit_3_monthly', label: 'Elite Program — $2,995 Payment Plan (Deposit + 3 Monthly)' },
 };
 
 const SHOP_PRICE_IDS = new Set([
@@ -58,11 +59,16 @@ const SHOP_PRICE_IDS = new Set([
 const classifyByDescription = (description = '') => {
   const d = description.toLowerCase();
   if (!d) return null;
+  // Internal/test products — surface as 'test' so they're visible in the
+  // audit but separate from real "unknown" classification failures.
+  if (d.includes('test product')) return { program: 'test', reason: 'test_product' };
   if (
     d.includes('elite program') || d.includes('royals elite') ||
     d.includes('elite training programme') || d.includes('elite training program') ||
     d.includes('elite academy') || d.includes('t20 elite') ||
-    d.includes('tailored payment plan') || d.includes('ambassador program')
+    d.includes('tailored payment plan') || d.includes('ambassador program') ||
+    d.includes('$2995 payment plan') || d.includes('deposit + 3 monthly') ||
+    d.includes('deposit + monthly')
   ) return { program: 'elite', reason: 'desc_match_elite' };
   if (d.includes('holiday program') || d.includes('holiday camp') || d.includes('holiday clinic'))
     return { program: 'holiday', reason: 'desc_match_holiday' };
