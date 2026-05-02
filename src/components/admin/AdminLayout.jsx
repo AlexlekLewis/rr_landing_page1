@@ -29,8 +29,9 @@ const NAV_GROUPS = [
         label: 'PLAYER MANAGEMENT',
         items: [
             { label: 'All Players', path: '/rramadmin_26/applications', icon: Users },
-            { label: 'Pipeline', path: '/rramadmin_26/pipeline', icon: Kanban },
-            { label: 'Selection Board', path: '/rramadmin_26/selection', icon: CheckCircle2 },
+            // Pipeline + Selection Board temporarily hidden (unused for now).
+            // Routes still exist in App.jsx so they can be re-added with a
+            // single line when needed again.
         ],
     },
     {

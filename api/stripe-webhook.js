@@ -263,7 +263,9 @@ export default async function handler(req, res) {
       card_country:             card?.country || null,
       card_funding:             card?.funding || null,
       receipt_url:              charge?.receipt_url || null,
-      paid_at:                  charge?.created ? new Date(charge.created * 1000).toISOString() : new Date().toISOString(),
+      paid_at:                  charge?.created
+                                  ? new Date(charge.created * 1000).toISOString()
+                                  : (session?.created ? new Date(session.created * 1000).toISOString() : new Date().toISOString()),
       stripe_metadata:          session.metadata || null,
     };
 

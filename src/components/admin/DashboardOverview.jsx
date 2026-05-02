@@ -1,161 +1,175 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import useRealtimeSync from '../../hooks/useRealtimeSync';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
-    Users, FileText, TrendingUp, ArrowRight,
-    Kanban, Activity, CheckCircle2, Send, UserCheck, ChevronRight
+    Users, DollarSign, MessageCircle, Trophy, ArrowRight, TrendingUp, Calendar,
 } from 'lucide-react';
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-    ResponsiveContainer, Cell
+    ResponsiveContainer, Cell, PieChart, Pie,
 } from 'recharts';
 import { supabase } from '../../lib/supabase';
 
-const COHORT_TARGET = 20;
+const TZ = 'Australia/Melbourne';
 
-const StatCard = ({ label, value, icon: Icon, color, subtext }) => (
-    <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all"
-    >
-        <div className="flex items-start justify-between mb-4">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${color}20` }}>
-                <Icon className="w-6 h-6" style={{ color }} />
-            </div>
-        </div>
-        <p className="text-3xl font-black text-white mb-1">{value}</p>
-        <p className="text-slate-400 text-sm font-medium">{label}</p>
-        {subtext && <p className="text-slate-500 text-xs mt-1">{subtext}</p>}
-    </motion.div>
-);
+const formatAUD = (cents) => {
+    if (cents == null) return '$0';
+    return new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', maximumFractionDigits: 0 }).format(Number(cents) / 100);
+};
 
-const FunnelStep = ({ label, value, subtitle, color, conversionRate, isLast }) => (
-    <div className="flex-1 min-w-0">
-        <div className="relative">
-            <div className="rounded-2xl p-4 border transition-all" style={{ backgroundColor: `${color}10`, borderColor: `${color}30` }}>
-                <p className="text-3xl font-black text-white mb-0.5">{value}</p>
-                <p className="text-sm font-bold" style={{ color }}>{label}</p>
-                {subtitle && <p className="text-slate-500 text-xs mt-0.5">{subtitle}</p>}
-            </div>
-            {!isLast && conversionRate !== null && (
-                <div className="hidden lg:flex absolute -right-4 top-1/2 -translate-y-1/2 z-10 items-center">
-                    <div className="bg-slate-800 border border-white/10 rounded-lg px-1.5 py-0.5 text-[10px] font-bold text-slate-400">
-                        {conversionRate}%
-                    </div>
-                    <ChevronRight className="w-3 h-3 text-slate-600 -ml-0.5" />
+const formatDate = (iso) => {
+    if (!iso) return '—';
+    return new Date(iso).toLocaleDateString('en-AU', { timeZone: TZ, day: '2-digit', month: 'short', year: 'numeric' });
+};
+
+const PROGRAM_DISPLAY = {
+    elite:            { label: 'Elite Program',    color: '#E11F8F' },
+    junior_royals:    { label: 'Junior Royals',    color: '#3B82F6' },
+    holiday:          { label: 'Holiday Programs', color: '#F59E0B' },
+    female_kickstart: { label: 'Female Kickstart', color: '#D946EF' },
+    shop:             { label: 'Shop Order',       color: '#10B981' },
+};
+
+const StatCard = ({ label, value, icon: Icon, color, subtext, to }) => {
+    const inner = (
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all h-full">
+            <div className="flex items-start justify-between mb-4">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${color}20` }}>
+                    <Icon className="w-6 h-6" style={{ color }} />
                 </div>
-            )}
+                {to && <ArrowRight className="w-4 h-4 text-slate-600" />}
+            </div>
+            <p className="text-3xl font-black text-white mb-1">{value}</p>
+            <p className="text-slate-400 text-sm font-medium">{label}</p>
+            {subtext && <p className="text-slate-500 text-xs mt-1">{subtext}</p>}
         </div>
-    </div>
-);
+    );
+    return to ? <Link to={to}>{inner}</Link> : <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>{inner}</motion.div>;
+};
 
 const DashboardOverview = () => {
-    const [stats, setStats] = useState({
-        enquiries: 0,
-        applied: 0,
-        totalPlayers: 0,
-        archivedCount: 0,
-        thisWeek: { enquiries: 0, applications: 0, cohort: 0, offers: 0 },
-        offeredCount: 0,
-        enrolledCount: 0,
-        cohortTotal: 0,
-        stages: [],
-        recentActivity: [],
-    });
+    const [registrations, setRegistrations] = useState([]);
+    const [shopTraining, setShopTraining] = useState([]);
+    const [shopIpl, setShopIpl] = useState([]);
+    const [leads, setLeads] = useState([]);
+    const [subsidies, setSubsidies] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const fetchDashboardData = useCallback(async () => {
+    const fetchData = useCallback(async () => {
         try {
-            // ── Fetch all data sources in parallel ──────────────────────
-            const [appsRes, entriesRes, stagesRes, activityRes, cohortRes, tokensRes] = await Promise.all([
-                supabase.from('applications').select('id, created_at, first_name, last_name, archived, source').order('created_at', { ascending: false }),
-                supabase.from('pipeline_entries').select('stage_slug, application_id'),
-                supabase.from('pipeline_stages').select('*').order('sort_order'),
-                supabase.from('pipeline_activity_log').select('*').order('created_at', { ascending: false }).limit(20),
-                supabase.from('official_cohort_2026').select('id, created_at, player_name, payment_status, payment_option_selected'),
-                supabase.from('offer_tokens').select('id, created_at, status, applicant_name'),
+            const [regsRes, shopTRes, shopIRes, leadsRes, subRes] = await Promise.all([
+                supabase.from('program_registrations').select('id, customer_email, program, amount_total_cents, paid_at').eq('payment_status', 'completed'),
+                supabase.from('shop_orders_training').select('id, customer_email, total, paid_at').eq('payment_status', 'completed'),
+                supabase.from('shop_orders_ipl').select('id, customer_email, total, paid_at').eq('payment_status', 'completed'),
+                supabase.from('crm_leads').select('id, source_type, stage, suburb, created_at, full_name, first_name, last_name, email').eq('is_archived', false),
+                supabase.from('academy_member_subsidies').select('id, player_name, program').eq('active', true),
             ]);
-
-            const apps = appsRes.data || [];
-            const entries = entriesRes.data || [];
-            const stages = stagesRes.data || [];
-            const activity = activityRes.data || [];
-            const cohort = cohortRes.data || [];
-            const tokens = tokensRes.data || [];
-
-            const activeApps = apps.filter(a => !a.archived);
-            const archivedCount = apps.length - activeApps.length;
-
-            // ── Funnel Metrics (source-based) ─────────────────────────────
-            // Splash page leads: source = 'splash_page'
-            // LP4 applications: source = 'master_landing_page' (or any non-splash)
-            const enquiries = activeApps.filter(a => a.source === 'splash_page').length;
-            const applied = activeApps.filter(a => a.source !== 'splash_page').length;
-            const totalPlayers = activeApps.length;
-            const offeredCount = tokens.length;
-            const enrolledCount = cohort.filter(c => c.payment_status && c.payment_status !== 'pending').length;
-            const cohortTotal = cohort.length;
-
-            // ── This Week ───────────────────────────────────────────────
-            const weekAgo = new Date();
-            weekAgo.setDate(weekAgo.getDate() - 7);
-            const thisWeekApps = activeApps.filter(a => new Date(a.created_at) > weekAgo);
-            const thisWeek = {
-                enquiries: thisWeekApps.filter(a => a.source === 'splash_page').length,
-                applications: thisWeekApps.filter(a => a.source !== 'splash_page').length,
-                cohort: cohort.filter(c => new Date(c.created_at) > weekAgo).length,
-                offers: tokens.filter(t => new Date(t.created_at) > weekAgo).length,
-            };
-
-            // ── Pipeline Stages ─────────────────────────────────────────
-            const stageCounts = stages.map(s => ({
-                ...s,
-                count: entries.filter(e => e.stage_slug === s.slug).length,
-            }));
-
-            setStats({
-                enquiries,
-                applied,
-                totalPlayers,
-                archivedCount,
-                thisWeek,
-                offeredCount,
-                enrolledCount,
-                cohortTotal,
-                stages: stageCounts,
-                recentActivity: activity,
-            });
+            setRegistrations(regsRes.data || []);
+            setShopTraining(shopTRes.data || []);
+            setShopIpl(shopIRes.data || []);
+            setLeads(leadsRes.data || []);
+            setSubsidies(subRes.data || []);
         } catch (err) {
-            console.error('Error fetching dashboard data:', err);
+            console.error('Dashboard fetch error:', err);
         } finally {
             setLoading(false);
         }
     }, []);
 
-    useEffect(() => {
-        fetchDashboardData();
-    }, [fetchDashboardData]);
+    useEffect(() => { fetchData(); }, [fetchData]);
+    useRealtimeSync(['program_registrations', 'shop_orders_training', 'shop_orders_ipl', 'crm_leads', 'academy_member_subsidies'], fetchData);
 
-    // ── Real-time sync across all data sources ──────────────────────────
-    useRealtimeSync([
-        'applications', 'pipeline_entries', 'pipeline_activity_log',
-        'official_cohort_2026', 'offer_tokens'
-    ], fetchDashboardData);
+    const metrics = useMemo(() => {
+        const now = Date.now();
+        const weekAgo = now - 7 * 24 * 60 * 60 * 1000;
+        const monthStart = (() => { const d = new Date(); d.setDate(1); d.setHours(0,0,0,0); return d.getTime(); })();
 
-    // ── Derived ─────────────────────────────────────────────────────────
-    const pipelineChartData = stats.stages.map(s => ({
-        name: s.name.length > 15 ? s.name.substring(0, 15) + '…' : s.name,
-        count: s.count,
-        fill: s.color,
-    }));
+        // Unique paid members across program_registrations + shop_orders_*, plus subsidies
+        const memberEmails = new Set();
+        for (const r of registrations) if (r.customer_email) memberEmails.add(r.customer_email.toLowerCase());
+        for (const s of shopTraining) if (s.customer_email) memberEmails.add(s.customer_email.toLowerCase());
+        for (const s of shopIpl) if (s.customer_email) memberEmails.add(s.customer_email.toLowerCase());
+        const totalMembers = memberEmails.size + subsidies.length;
 
-    const convEnqToApp = stats.enquiries > 0 ? Math.round((stats.applied / stats.enquiries) * 100) : null;
-    const convAppToOffer = stats.applied > 0 ? Math.round((stats.offeredCount / stats.applied) * 100) : null;
-    const convOfferToEnrol = stats.offeredCount > 0 ? Math.round((stats.enrolledCount / stats.offeredCount) * 100) : null;
+        // Revenue this month
+        const inMonth = (iso) => iso && new Date(iso).getTime() >= monthStart;
+        const revenueMonthCents =
+            registrations.filter(r => inMonth(r.paid_at)).reduce((s, r) => s + (r.amount_total_cents || 0), 0)
+            + shopTraining.filter(o => inMonth(o.paid_at)).reduce((s, o) => s + (o.total || 0), 0)
+            + shopIpl.filter(o => inMonth(o.paid_at)).reduce((s, o) => s + (o.total || 0), 0);
 
-    const cohortProgress = Math.min(100, Math.round((stats.enrolledCount / COHORT_TARGET) * 100));
+        // New paid members this week (by paid_at)
+        const inWeek = (iso) => iso && new Date(iso).getTime() >= weekAgo;
+        const newPaidWeekEmails = new Set();
+        for (const r of registrations) if (inWeek(r.paid_at) && r.customer_email) newPaidWeekEmails.add(r.customer_email.toLowerCase());
+        for (const s of shopTraining) if (inWeek(s.paid_at) && s.customer_email) newPaidWeekEmails.add(s.customer_email.toLowerCase());
+        for (const s of shopIpl) if (inWeek(s.paid_at) && s.customer_email) newPaidWeekEmails.add(s.customer_email.toLowerCase());
+
+        const newInquiriesWeek = leads.filter(l => l.created_at && new Date(l.created_at).getTime() >= weekAgo).length;
+
+        // Members per program (counts of paid registrations, with subsidies added)
+        const byProgram = {};
+        for (const r of registrations) {
+            const p = r.program || 'unknown';
+            byProgram[p] = byProgram[p] || new Set();
+            if (r.customer_email) byProgram[p].add(r.customer_email.toLowerCase());
+        }
+        for (const s of subsidies) {
+            byProgram[s.program] = byProgram[s.program] || new Set();
+            byProgram[s.program].add(`subsidy:${s.id}`);
+        }
+        const programChartData = Object.entries(byProgram)
+            .map(([p, set]) => ({
+                program: p,
+                label: PROGRAM_DISPLAY[p]?.label || p,
+                color: PROGRAM_DISPLAY[p]?.color || '#94A3B8',
+                count: set.size,
+            }))
+            .sort((a, b) => b.count - a.count);
+
+        // Inquiry sources for the side chart
+        const inquirySource = {};
+        for (const l of leads) {
+            const s = l.source_type || 'unknown';
+            inquirySource[s] = (inquirySource[s] || 0) + 1;
+        }
+        const inquirySourceData = Object.entries(inquirySource)
+            .map(([s, c]) => ({ source: s.replace(/_/g, ' '), count: c }))
+            .sort((a, b) => b.count - a.count)
+            .slice(0, 6);
+
+        // Latest paid + latest inquiries
+        const latestMembers = [...registrations]
+            .filter(r => r.paid_at)
+            .sort((a, b) => new Date(b.paid_at) - new Date(a.paid_at))
+            .slice(0, 5);
+        const latestInquiries = [...leads]
+            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+            .slice(0, 5);
+
+        // Inquiry → paid conversion
+        const paidEmails = new Set();
+        for (const r of registrations) if (r.customer_email) paidEmails.add(r.customer_email.toLowerCase());
+        const convertedInquiries = leads.filter(l =>
+            (l.email && paidEmails.has(l.email.toLowerCase())) ||
+            (l.parent_email && paidEmails.has(l.parent_email.toLowerCase()))
+        ).length;
+        const conversionRate = leads.length > 0 ? Math.round((convertedInquiries / leads.length) * 100) : 0;
+
+        return {
+            totalMembers,
+            revenueMonthCents,
+            newPaidWeek: newPaidWeekEmails.size,
+            newInquiriesWeek,
+            programChartData,
+            inquirySourceData,
+            latestMembers,
+            latestInquiries,
+            activePrograms: programChartData.filter(p => p.count > 0 && p.program !== 'shop').length,
+            conversionRate,
+        };
+    }, [registrations, shopTraining, shopIpl, leads, subsidies]);
 
     if (loading) {
         return (
@@ -168,163 +182,154 @@ const DashboardOverview = () => {
         );
     }
 
+    const monthName = new Date().toLocaleDateString('en-AU', { timeZone: TZ, month: 'long', year: 'numeric' });
+
     return (
         <div className="space-y-8">
             {/* Header */}
             <div>
                 <h1 className="text-2xl md:text-3xl font-black text-white tracking-wider">DASHBOARD</h1>
-                <p className="text-slate-400 text-sm mt-1">Elite Program 2026 — complete funnel overview</p>
+                <p className="text-slate-400 text-sm mt-1">Live snapshot — every figure sourced from Stripe payments + active subsidies.</p>
             </div>
 
-            {/* ── Funnel ─────────────────────────────────────────────── */}
-            <div>
-                <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-4">Player Funnel</h3>
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
-                    <FunnelStep label="Enquiries" value={stats.enquiries} subtitle="Splash page leads" color="#3B82F6" conversionRate={convEnqToApp} />
-                    <FunnelStep label="Applied" value={stats.applied} subtitle={`${stats.totalPlayers} total incl. enquiries`} color="#8B5CF6" conversionRate={convAppToOffer} />
-                    <FunnelStep label="Offered" value={stats.offeredCount} subtitle="Offers sent" color="#F59E0B" conversionRate={convOfferToEnrol} />
-                    <FunnelStep label="Enrolled" value={stats.enrolledCount} subtitle={`${stats.cohortTotal} total in cohort`} color="#10B981" conversionRate={null} isLast />
-                </div>
+            {/* Top KPI row */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <StatCard
+                    label="Academy Members"
+                    value={metrics.totalMembers}
+                    icon={Users}
+                    color="#E11F8F"
+                    subtext="Paid + active subsidies"
+                    to="/rramadmin_26/academy-members"
+                />
+                <StatCard
+                    label={`Revenue — ${monthName}`}
+                    value={formatAUD(metrics.revenueMonthCents)}
+                    icon={DollarSign}
+                    color="#10B981"
+                    subtext="Programs + shop"
+                />
+                <StatCard
+                    label="Inquiries this week"
+                    value={metrics.newInquiriesWeek}
+                    icon={MessageCircle}
+                    color="#3B82F6"
+                    subtext={`${metrics.conversionRate}% inquiry → paid overall`}
+                    to="/rramadmin_26/inquiries"
+                />
+                <StatCard
+                    label="New paid members this week"
+                    value={metrics.newPaidWeek}
+                    icon={TrendingUp}
+                    color="#F59E0B"
+                    subtext={`${metrics.activePrograms} active programs`}
+                />
             </div>
 
-            {/* ── Cohort Target + This Week ──────────────────────────── */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {/* Cohort Target */}
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                    <div className="flex items-center justify-between mb-3">
-                        <h3 className="text-white font-bold text-sm uppercase tracking-wider">Cohort Target</h3>
-                        <span className="text-white font-black text-lg">{stats.enrolledCount} <span className="text-slate-500 font-normal text-sm">/ {COHORT_TARGET}</span></span>
-                    </div>
-                    <div className="w-full bg-white/5 rounded-full h-4 overflow-hidden">
-                        <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: `${cohortProgress}%` }}
-                            transition={{ duration: 1, ease: 'easeOut' }}
-                            className="h-full rounded-full"
-                            style={{ background: cohortProgress >= 100 ? '#10B981' : 'linear-gradient(90deg, #E50695, #1226AA)' }}
-                        />
-                    </div>
-                    <div className="flex justify-between mt-2">
-                        <p className="text-slate-500 text-xs">{cohortProgress}% of target</p>
-                        {stats.enrolledCount < COHORT_TARGET && (
-                            <p className="text-slate-500 text-xs">{COHORT_TARGET - stats.enrolledCount} more needed</p>
-                        )}
-                        {stats.enrolledCount >= COHORT_TARGET && (
-                            <p className="text-emerald-400 text-xs font-medium">Target reached!</p>
-                        )}
-                    </div>
-                </div>
-
-                {/* This Week Summary */}
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                    <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-4">This Week</h3>
-                    <div className="grid grid-cols-2 gap-3">
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                                <Users className="w-4 h-4 text-blue-400" />
-                            </div>
-                            <div>
-                                <p className="text-white font-bold text-lg leading-tight">{stats.thisWeek.enquiries}</p>
-                                <p className="text-slate-500 text-xs">Enquiries</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center">
-                                <FileText className="w-4 h-4 text-purple-400" />
-                            </div>
-                            <div>
-                                <p className="text-white font-bold text-lg leading-tight">{stats.thisWeek.applications}</p>
-                                <p className="text-slate-500 text-xs">Applications</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
-                                <Send className="w-4 h-4 text-amber-400" />
-                            </div>
-                            <div>
-                                <p className="text-white font-bold text-lg leading-tight">{stats.thisWeek.offers}</p>
-                                <p className="text-slate-500 text-xs">Offers sent</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-                                <UserCheck className="w-4 h-4 text-emerald-400" />
-                            </div>
-                            <div>
-                                <p className="text-white font-bold text-lg leading-tight">{stats.thisWeek.cohort}</p>
-                                <p className="text-slate-500 text-xs">Enrolled</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* ── Pipeline Breakdown + Stage Summary ─────────────────── */}
+            {/* Members by Program + Inquiry sources */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 bg-white/5 border border-white/10 rounded-2xl p-6">
-                    <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-6">Pipeline Breakdown</h3>
-                    <ResponsiveContainer width="100%" height={280}>
-                        <BarChart data={pipelineChartData} layout="vertical" margin={{ left: 10, right: 20 }}>
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-white font-bold text-sm uppercase tracking-wider">Members by Program</h3>
+                        <Link to="/rramadmin_26/program-registrations" className="text-rr-pink text-xs font-bold hover:text-rr-light-pink">View all →</Link>
+                    </div>
+                    <ResponsiveContainer width="100%" height={260}>
+                        <BarChart data={metrics.programChartData} layout="vertical" margin={{ left: 20, right: 20 }}>
                             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
                             <XAxis type="number" stroke="#64748b" fontSize={12} />
-                            <YAxis dataKey="name" type="category" stroke="#64748b" fontSize={11} width={120} />
+                            <YAxis dataKey="label" type="category" stroke="#64748b" fontSize={12} width={140} />
                             <Tooltip
                                 contentStyle={{ backgroundColor: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: '#fff', fontSize: '13px' }}
+                                cursor={{ fill: 'rgba(255,255,255,0.04)' }}
                             />
                             <Bar dataKey="count" radius={[0, 8, 8, 0]}>
-                                {pipelineChartData.map((entry, index) => (
-                                    <Cell key={index} fill={entry.fill} />
-                                ))}
+                                {metrics.programChartData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
                             </Bar>
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
 
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                    <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-6">Stage Summary</h3>
-                    <div className="space-y-3">
-                        {stats.stages.map(stage => (
-                            <div key={stage.slug} className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: stage.color }} />
-                                    <span className="text-slate-300 text-sm truncate">{stage.name}</span>
-                                </div>
-                                <span className="text-white font-bold text-lg">{stage.count}</span>
-                            </div>
-                        ))}
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-white font-bold text-sm uppercase tracking-wider">Inquiry Sources</h3>
+                        <Link to="/rramadmin_26/inquiries" className="text-rr-pink text-xs font-bold hover:text-rr-light-pink">View →</Link>
                     </div>
-                    <Link
-                        to="/rramadmin_26/pipeline"
-                        className="mt-6 flex items-center justify-center gap-2 text-rr-pink hover:text-rr-light-pink text-sm font-medium transition-colors"
-                    >
-                        View Pipeline <ArrowRight className="w-4 h-4" />
-                    </Link>
+                    {metrics.inquirySourceData.length === 0 ? (
+                        <p className="text-slate-500 text-sm py-12 text-center">No inquiries yet.</p>
+                    ) : (
+                        <div className="space-y-2">
+                            {metrics.inquirySourceData.map((s, i) => {
+                                const max = metrics.inquirySourceData[0].count;
+                                const pct = (s.count / max) * 100;
+                                return (
+                                    <div key={s.source}>
+                                        <div className="flex justify-between text-xs mb-1">
+                                            <span className="text-slate-300 capitalize">{s.source}</span>
+                                            <span className="text-white font-bold">{s.count}</span>
+                                        </div>
+                                        <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                            <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: '#3B82F6' }} />
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
                 </div>
             </div>
 
-            {/* ── Recent Activity ─────────────────────────────────────── */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-6">Recent Activity</h3>
-                {stats.recentActivity.length === 0 ? (
-                    <p className="text-slate-500 text-sm text-center py-8">No pipeline activity yet. Drag cards in the pipeline to get started.</p>
-                ) : (
-                    <div className="space-y-3">
-                        {stats.recentActivity.map(item => (
-                            <div key={item.id} className="flex items-start gap-3 p-3 rounded-xl bg-white/5">
-                                <Activity className="w-4 h-4 text-slate-500 mt-0.5 shrink-0" />
-                                <div className="min-w-0">
-                                    <p className="text-slate-300 text-sm">
-                                        <span className="text-white font-medium">{item.action?.replace('_', ' ')}</span>
-                                        {item.from_stage && <span> from <span className="font-medium">{item.from_stage}</span></span>}
-                                        {' '}to <span className="font-medium">{item.to_stage}</span>
-                                    </p>
-                                    {item.notes && <p className="text-slate-500 text-xs mt-1">{item.notes}</p>}
-                                    <p className="text-slate-600 text-xs mt-1">{new Date(item.created_at).toLocaleString()}</p>
-                                </div>
-                            </div>
-                        ))}
+            {/* Latest activity */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-white font-bold text-sm uppercase tracking-wider">Latest Paid Members</h3>
+                        <Link to="/rramadmin_26/program-registrations" className="text-rr-pink text-xs font-bold hover:text-rr-light-pink">View all →</Link>
                     </div>
-                )}
+                    {metrics.latestMembers.length === 0 ? (
+                        <p className="text-slate-500 text-sm py-12 text-center">No paid registrations yet.</p>
+                    ) : (
+                        <div className="space-y-2">
+                            {metrics.latestMembers.map(r => (
+                                <div key={r.id} className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
+                                    <div className="min-w-0">
+                                        <p className="text-white font-medium text-sm truncate">{r.customer_email || '—'}</p>
+                                        <p className="text-slate-500 text-xs truncate">
+                                            <span className="capitalize">{(PROGRAM_DISPLAY[r.program]?.label || r.program || 'unknown')}</span> · {formatDate(r.paid_at)}
+                                        </p>
+                                    </div>
+                                    <span className="text-emerald-400 font-bold text-sm whitespace-nowrap ml-3">{formatAUD(r.amount_total_cents)}</span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-white font-bold text-sm uppercase tracking-wider">Latest Inquiries</h3>
+                        <Link to="/rramadmin_26/inquiries" className="text-rr-pink text-xs font-bold hover:text-rr-light-pink">View all →</Link>
+                    </div>
+                    {metrics.latestInquiries.length === 0 ? (
+                        <p className="text-slate-500 text-sm py-12 text-center">No inquiries yet.</p>
+                    ) : (
+                        <div className="space-y-2">
+                            {metrics.latestInquiries.map(l => (
+                                <div key={l.id} className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
+                                    <div className="min-w-0">
+                                        <p className="text-white font-medium text-sm truncate">
+                                            {l.full_name || `${l.first_name || ''} ${l.last_name || ''}`.trim() || l.email || '—'}
+                                        </p>
+                                        <p className="text-slate-500 text-xs truncate capitalize">
+                                            {(l.source_type || 'unknown').replace(/_/g, ' ')}
+                                            {l.suburb && ` · ${l.suburb}`}
+                                            · {formatDate(l.created_at)}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

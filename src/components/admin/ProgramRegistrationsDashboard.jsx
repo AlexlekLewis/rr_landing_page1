@@ -90,7 +90,7 @@ const ProgramRegistrationsDashboard = () => {
         setProgramFilter(next);
     }, [location.search]);
     const [timeRange, setTimeRange] = useState('all'); // 'all' | '30d' | '90d' | '365d'
-    const [sortKey, setSortKey] = useState('created_at');
+    const [sortKey, setSortKey] = useState('paid_at');
     const [sortDir, setSortDir] = useState('desc');
     const [selected, setSelected] = useState(null);
     const [syncState, setSyncState] = useState({ status: 'idle', message: '' });
@@ -473,7 +473,7 @@ const ProgramRegistrationsDashboard = () => {
                         <thead>
                             <tr className="border-b border-white/5">
                                 {[
-                                    { key: 'created_at', label: 'Date' },
+                                    { key: 'paid_at', label: 'Paid' },
                                     { key: 'customer_name', label: 'Customer' },
                                     { key: 'program', label: 'Program' },
                                     { key: 'program_variant', label: 'Variant' },
@@ -501,8 +501,8 @@ const ProgramRegistrationsDashboard = () => {
                                         onClick={() => setSelected(reg)}
                                         className="hover:bg-white/5 transition-colors cursor-pointer">
                                         <td className="p-4 whitespace-nowrap">
-                                            <div className="text-slate-300">{formatDate(reg.created_at)}</div>
-                                            <div className="text-slate-500 text-xs">{formatTime(reg.created_at)}</div>
+                                            <div className="text-slate-300">{reg.paid_at ? formatDate(reg.paid_at) : <span className="text-slate-600 italic">—</span>}</div>
+                                            <div className="text-slate-500 text-xs">{reg.paid_at ? formatTime(reg.paid_at) : 'unpaid'}</div>
                                         </td>
                                         <td className="p-4">
                                             <div className="text-white font-medium truncate max-w-[200px]">{reg.customer_name || '—'}</div>

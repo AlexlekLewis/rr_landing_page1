@@ -289,7 +289,12 @@ const syncOneSession = async (sessionId) => {
     card_country:             card?.country || null,
     card_funding:             card?.funding || null,
     receipt_url:              charge?.receipt_url || null,
-    paid_at:                  charge?.created ? new Date(charge.created * 1000).toISOString() : null,
+    // Prefer the actual charge timestamp; fall back to session.created so
+    // rows from subscription/payment-plan flows (where latest_charge isn't
+    // expanded) still get a meaningful timestamp instead of NULL.
+    paid_at:                  charge?.created
+                                ? new Date(charge.created * 1000).toISOString()
+                                : (session?.created ? new Date(session.created * 1000).toISOString() : null),
     stripe_metadata:          session.metadata || null,
   };
 
