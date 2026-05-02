@@ -5,6 +5,7 @@ import {
     FileText, ChevronRight, Clock, MessageSquare, Send, Tag
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { formatDateLong, formatDateTime } from './dateUtils';
 
 const DetailRow = ({ icon: Icon, label, value, isLink }) => {
     if (!value) return null;
@@ -122,7 +123,7 @@ const ApplicationDetail = ({ application, entry, stages, onClose, onStageChange 
                         <div>
                             <h2 className="text-xl font-black text-white">{name || 'Unknown'}</h2>
                             <p className="text-slate-400 text-sm mt-1">
-                                Applied {application.created_at ? new Date(application.created_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}
+                                Applied {application.created_at ? formatDateLong(application.created_at) : ''}
                             </p>
                         </div>
                         <button onClick={onClose} className="text-slate-400 hover:text-white transition-colors p-1">
@@ -290,7 +291,7 @@ const ApplicationDetail = ({ application, entry, stages, onClose, onStageChange 
                                                 </p>
                                             )}
                                             <p className="text-slate-600 text-xs mt-1">
-                                                {new Date(item.created_at).toLocaleString()} · {item.performed_by}
+                                                {formatDateTime(item.created_at)} · {item.performed_by}
                                             </p>
                                         </div>
                                     </div>

@@ -7,6 +7,7 @@ import {
     Target, Award, Shield
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { formatDate, formatDateShort } from './dateUtils';
 
 /* ════════════════════════════════════════════════════════════
    Shared UI helpers
@@ -559,7 +560,7 @@ const InfoTab = ({ player }) => (
             <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Player Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
                 <DetailRow icon={User} label="Full Name" value={player.player_name} />
-                <DetailRow icon={Calendar} label="Date of Birth" value={player.dob ? new Date(player.dob + 'T00:00:00').toLocaleDateString() : null} />
+                <DetailRow icon={Calendar} label="Date of Birth" value={player.dob ? formatDate(player.dob + 'T00:00:00') : null} />
                 <DetailRow icon={User} label="Age" value={player.age?.toString()} />
                 <DetailRow icon={MapPin} label="Suburb" value={player.suburb} />
                 <DetailRow icon={Activity} label="Club" value={player.club} />
@@ -616,7 +617,7 @@ const InfoTab = ({ player }) => (
                 <DetailRow icon={FileText} label="Source" value={player.source} />
                 <DetailRow icon={FileText} label="Payment Status" value={player.payment_status} />
                 <DetailRow icon={FileText} label="Payment Plan" value={player.payment_option_selected || player.payment_plan_selected} />
-                <DetailRow icon={Calendar} label="Enrolled" value={player.created_at ? new Date(player.created_at).toLocaleDateString() : null} />
+                <DetailRow icon={Calendar} label="Enrolled" value={player.created_at ? formatDate(player.created_at) : null} />
             </div>
         </div>
     </div>
@@ -727,7 +728,7 @@ const StatsTab = ({
                                     <h3 className="text-white font-bold text-sm">{activeSeason.season_name}</h3>
                                     <span className="text-slate-600 text-xs">
                                         {activeSeason.source === 'playhq_fetch' ? 'Fetched from PlayHQ' : 'Manual entry'}
-                                        {activeSeason.last_fetched_at && ` · ${new Date(activeSeason.last_fetched_at).toLocaleDateString()}`}
+                                        {activeSeason.last_fetched_at && ` · ${formatDate(activeSeason.last_fetched_at)}`}
                                     </span>
                                 </div>
                                 <div className="flex items-center gap-2">
@@ -896,7 +897,7 @@ const TeamCard = ({ team, games, expanded, onToggle, onEdit, onDelete, onAddGame
                                     {games.map(game => (
                                         <tr key={game.id} className="hover:bg-white/3 transition-colors">
                                             <td className="p-2 pl-4 text-slate-400 whitespace-nowrap">
-                                                {game.match_date ? new Date(game.match_date + 'T00:00:00').toLocaleDateString('en-AU', { day: 'numeric', month: 'short' }) : '—'}
+                                                {game.match_date ? formatDateShort(game.match_date + 'T00:00:00') : '—'}
                                             </td>
                                             <td className="p-2 text-white whitespace-nowrap">{game.opponent || '—'}</td>
                                             <td className="p-2">

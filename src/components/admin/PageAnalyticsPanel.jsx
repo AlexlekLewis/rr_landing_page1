@@ -126,7 +126,7 @@ const PageAnalyticsPanel = () => {
             if (key && days[key] !== undefined) days[key]++;
         });
         return Object.entries(days).map(([date, count]) => ({
-            date: new Date(date).toLocaleDateString('en-AU', { day: 'numeric', month: 'short' }),
+            date: new Date(date).toLocaleDateString('en-AU', { timeZone: 'Australia/Melbourne', day: 'numeric', month: 'short' }),
             views: count,
         }));
     }, [pageViews, dateRange]);

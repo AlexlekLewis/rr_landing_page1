@@ -6,7 +6,7 @@ const KanbanCard = ({ application, entry, onClick, onDragStart }) => {
     const name = `${application.first_name || ''} ${application.last_name || ''}`.trim() || 'Unknown';
     const labels = entry?.labels || [];
     const appliedDate = application.created_at
-        ? new Date(application.created_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'short' })
+        ? new Date(application.created_at).toLocaleDateString('en-AU', { timeZone: 'Australia/Melbourne', day: 'numeric', month: 'short' })
         : '';
 
     return (

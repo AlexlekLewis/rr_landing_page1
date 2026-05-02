@@ -103,7 +103,7 @@ const AnalyticsPanel = () => {
             if (days[key] !== undefined) days[key]++;
         });
         return Object.entries(days).map(([date, count]) => ({
-            date: new Date(date).toLocaleDateString('en-AU', { day: 'numeric', month: 'short' }),
+            date: new Date(date).toLocaleDateString('en-AU', { timeZone: 'Australia/Melbourne', day: 'numeric', month: 'short' }),
             applications: count,
         }));
     }, [applications]);
@@ -129,7 +129,7 @@ const AnalyticsPanel = () => {
         });
         return Object.entries(weeks)
             .map(([week, count]) => ({
-                week: new Date(week).toLocaleDateString('en-AU', { day: 'numeric', month: 'short' }),
+                week: new Date(week).toLocaleDateString('en-AU', { timeZone: 'Australia/Melbourne', day: 'numeric', month: 'short' }),
                 count,
             }))
             .slice(-12);

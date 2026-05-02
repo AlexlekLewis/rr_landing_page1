@@ -143,8 +143,9 @@ const RSVPResponses = () => {
 
     const formatDate = (d) => {
         if (!d) return '—';
-        return new Date(d).toLocaleDateString('en-AU', {
-            day: 'numeric', month: 'short', year: 'numeric',
+        return new Date(d).toLocaleString('en-AU', {
+            timeZone: 'Australia/Melbourne',
+            day: '2-digit', month: 'short', year: 'numeric',
             hour: '2-digit', minute: '2-digit',
         });
     };

@@ -492,7 +492,7 @@ const SelectionAnalytics = () => {
                                             </span>
                                         </td>
                                         <td className="p-4 text-slate-400">
-                                            {app.created_at ? new Date(app.created_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'short' }) : '—'}
+                                            {app.created_at ? new Date(app.created_at).toLocaleDateString('en-AU', { timeZone: 'Australia/Melbourne', day: 'numeric', month: 'short' }) : '—'}
                                         </td>
                                     </tr>
                                 );

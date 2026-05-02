@@ -4,6 +4,7 @@ import { Search, Download, ChevronDown, ChevronUp } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import useRealtimeSync from '../../hooks/useRealtimeSync';
 import { exportToSheet, todayISO } from './exportToSheet';
+import { formatDate } from './dateUtils';
 
 const LP3Inquiries = () => {
     const [inquiries, setInquiries] = useState([]);
@@ -75,7 +76,7 @@ const LP3Inquiries = () => {
     const exportToGoogleSheets = async () => {
         const headers = ['Player Name', 'Parent Name', 'Email', 'Phone', 'Gender', 'Suburb', 'T-Shirt', 'Shorts', 'Pants', 'Payment Status', 'Date'];
         const rows = filtered.map(a => [
-            a.player_name, a.parent_name, a.email, a.phone, a.gender, a.suburb, a.size_tshirt, a.size_short, a.size_pants, a.payment_status, new Date(a.created_at).toLocaleDateString()
+            a.player_name, a.parent_name, a.email, a.phone, a.gender, a.suburb, a.size_tshirt, a.size_short, a.size_pants, a.payment_status, formatDate(a.created_at)
         ]);
         setExportState({ status: 'exporting', message: '' });
         try {
@@ -176,7 +177,7 @@ const LP3Inquiries = () => {
                                         </span>
                                     </td>
                                     <td className="p-4 text-slate-400">
-                                        {new Date(app.created_at).toLocaleDateString()}
+                                        {formatDate(app.created_at)}
                                     </td>
                                 </tr>
                             ))}

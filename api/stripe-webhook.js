@@ -353,8 +353,8 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           order_id:       draftTrainingId || draftIplId || '',
           stripe_session: session.id,
-          order_date:     new Date().toLocaleDateString('en-AU'),
-          order_time:     new Date().toLocaleTimeString('en-AU'),
+          order_date:     new Date().toLocaleDateString('en-AU', { timeZone: 'Australia/Melbourne', day: '2-digit', month: 'short', year: 'numeric' }),
+          order_time:     new Date().toLocaleTimeString('en-AU', { timeZone: 'Australia/Melbourne', hour: '2-digit', minute: '2-digit' }),
           customer_name:  customerName,
           customer_email: customerEmail,
           customer_phone: customerPhone,

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, Download, ChevronDown, ChevronUp, Check, X, Archive, RotateCcw } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { exportToSheet, todayISO } from './exportToSheet';
+import { formatDate } from './dateUtils';
 import useRealtimeSync from '../../hooks/useRealtimeSync';
 import UnifiedPlayerDetail from './UnifiedPlayerDetail';
 
@@ -144,7 +145,7 @@ const ApplicationsTable = () => {
             const stage = getStage(entry?.stage_slug);
             return [
                 a.first_name, a.last_name, a.age, a.email, a.phone, a.club, a.suburb,
-                stage?.name || entry?.stage_slug || '', new Date(a.created_at).toLocaleDateString()
+                stage?.name || entry?.stage_slug || '', formatDate(a.created_at)
             ];
         });
         setExportState({ status: 'exporting', message: '' });
@@ -330,7 +331,7 @@ const ApplicationsTable = () => {
                                         <td className="p-4 text-slate-400 truncate max-w-[150px]">{app.club}</td>
                                         <td className="p-4 text-slate-400 truncate max-w-[200px]">{app.email}</td>
                                         <td className="p-4 text-slate-400">
-                                            {app.created_at ? new Date(app.created_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'short' }) : ''}
+                                            {app.created_at ? formatDate(app.created_at) : ''}
                                         </td>
                                         <td className="p-4">
                                             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: `${stage?.color}20`, color: stage?.color }}>

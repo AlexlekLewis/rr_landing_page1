@@ -7,6 +7,7 @@ import {
     Milestone
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { formatDate, formatDateLong, formatDateTime } from './dateUtils';
 
 const DetailRow = ({ icon: Icon, label, value, isLink }) => {
     if (!value) return null;
@@ -276,7 +277,7 @@ const UnifiedPlayerDetail = ({ application, entry, stages, onClose, onStageChang
                             <h2 className="text-xl font-black text-white">{name || 'Unknown'}</h2>
                             <div className="flex items-center gap-2 mt-1">
                                 <p className="text-slate-400 text-sm">
-                                    {application.created_at ? new Date(application.created_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}
+                                    {application.created_at ? formatDateLong(application.created_at) : ''}
                                 </p>
                                 {application.source && (
                                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/5 text-slate-500 uppercase tracking-wider">
@@ -465,7 +466,7 @@ const UnifiedPlayerDetail = ({ application, entry, stages, onClose, onStageChang
                                                             <p className="text-slate-400 text-xs mt-0.5">{event.detail}</p>
                                                         )}
                                                         <p className="text-slate-600 text-xs mt-0.5">
-                                                            {event.date.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                                            {formatDate(event.date)}
                                                             {event.performer && ` · ${event.performer}`}
                                                         </p>
                                                     </div>
@@ -599,7 +600,7 @@ const UnifiedPlayerDetail = ({ application, entry, stages, onClose, onStageChang
                                                 </p>
                                             )}
                                             <p className="text-slate-600 text-xs mt-1">
-                                                {new Date(item.created_at).toLocaleString()} · {item.performed_by}
+                                                {formatDateTime(item.created_at)} · {item.performed_by}
                                             </p>
                                         </div>
                                     </div>

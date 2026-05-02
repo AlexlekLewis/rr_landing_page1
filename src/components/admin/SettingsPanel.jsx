@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import useRealtimeSync from '../../hooks/useRealtimeSync';
+import { formatDate } from './dateUtils';
 
 const SUPER_ADMIN_EMAIL = 'alex.lewis@rramelbourne.com';
 
@@ -324,7 +325,7 @@ const SettingsPanel = () => {
                                 </div>
                             </div>
                             <p className="text-slate-600 text-xs mt-2 ml-13">
-                                Invited by {user.invited_by} · {new Date(user.created_at).toLocaleDateString()}
+                                Invited by {user.invited_by} · {formatDate(user.created_at)}
                             </p>
                         </div>
                     ))}

@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { exportToSheet, todayISO } from './exportToSheet';
+import { formatDate } from './dateUtils';
 import useRealtimeSync from '../../hooks/useRealtimeSync';
 import PlayerProfileDetail from './PlayerProfileDetail';
 
@@ -142,7 +143,7 @@ const PlayerProfiles = () => {
             p.profile_link,
             statsIndex[p.id]?.count || 0,
             p.payment_status,
-            new Date(p.created_at).toLocaleDateString(),
+            formatDate(p.created_at),
         ]);
         setExportState({ status: 'exporting', message: '' });
         try {

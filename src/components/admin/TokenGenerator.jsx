@@ -418,8 +418,8 @@ const TokenGenerator = () => {
                                         </div>
                                         <p className="text-slate-500 text-xs truncate">{offer.applicant_email}</p>
                                         <p className="text-slate-600 text-xs mt-0.5">
-                                            Sent {new Date(offer.created_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}
-                                            {offer.expires_at && ` · Expires ${new Date(offer.expires_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'short' })}`}
+                                            Sent {new Date(offer.created_at).toLocaleDateString('en-AU', { timeZone: 'Australia/Melbourne', day: '2-digit', month: 'short', year: 'numeric' })}
+                                            {offer.expires_at && ` · Expires ${new Date(offer.expires_at).toLocaleDateString('en-AU', { timeZone: 'Australia/Melbourne', day: '2-digit', month: 'short' })}`}
                                         </p>
                                         {offer.response?.selected_option && (
                                             <p className="text-slate-400 text-xs mt-1">
