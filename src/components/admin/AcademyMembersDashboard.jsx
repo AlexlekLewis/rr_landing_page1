@@ -6,6 +6,7 @@ import {
     ShoppingBag, GraduationCap, Sun, Sparkles, Calendar,
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { exportToSheet, todayISO } from './exportToSheet';
 
 const TZ = 'Australia/Melbourne';
 
@@ -114,7 +115,8 @@ const AcademyMembersDashboard = () => {
         return sortDir === 'asc' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />;
     };
 
-    const exportCSV = () => {
+    const [exportState, setExportState] = useState({ status: 'idle', message: '' });
+    const exportToGoogleSheets = async () => {
         const headers = ['Display Name', 'Stripe Payer Name', 'Email', 'Phone', 'Programs', 'Payment Types', 'Total Paid (AUD)', 'First Paid', 'Last Paid', '# Registrations', '# Shop Orders', 'Subsidised'];
         const lines = filtered.map(r => [
             r.display_name || '', r.customer_name || '', r.customer_email || '', r.customer_phone || '',
@@ -123,14 +125,19 @@ const AcademyMembersDashboard = () => {
             r.first_paid_at || '', r.last_paid_at || '',
             r.registrations_count, r.shop_orders_count, r.is_subsidised ? 'yes' : 'no',
         ]);
-        const csv = [headers, ...lines].map(r => r.map(c => `"${String(c == null ? '' : c).replace(/"/g, '""')}"`).join(',')).join('\n');
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `academy_members_${new Date().toISOString().split('T')[0]}.csv`;
-        a.click();
-        URL.revokeObjectURL(url);
+        setExportState({ status: 'exporting', message: '' });
+        try {
+            const { url } = await exportToSheet({
+                title: `Academy Members 2026 — ${todayISO()}`,
+                sheet_name: 'Members',
+                headers,
+                rows: lines,
+            });
+            setExportState({ status: 'done', message: 'Opened in new tab' });
+            window.open(url, '_blank', 'noopener');
+        } catch (err) {
+            setExportState({ status: 'error', message: err.message });
+        }
     };
 
     if (loading) {
@@ -244,10 +251,12 @@ const AcademyMembersDashboard = () => {
                 </select>
 
                 <button
-                    onClick={exportCSV}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all text-sm"
+                    onClick={exportToGoogleSheets}
+                    disabled={exportState.status === 'exporting'}
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all text-sm disabled:opacity-60"
+                    title={exportState.message}
                 >
-                    <Download className="w-4 h-4" /> Export CSV
+                    <Download className="w-4 h-4" /> {exportState.status === 'exporting' ? 'Exporting…' : 'Export to Google Sheets'}
                 </button>
             </div>
 

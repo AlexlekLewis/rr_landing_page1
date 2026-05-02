@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Download, ChevronDown, ChevronUp, Users, MessageSquare, Calendar } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { exportToSheet, todayISO } from './exportToSheet';
 
 const TABS = [
     { key: 'upcoming', label: 'Upcoming Program Interest', icon: Users, table: 'upcoming_program_interest' },
@@ -73,20 +74,25 @@ const LeadsTable = ({ data, columns, loading }) => {
         });
     }, [data, search, sortKey, sortDir]);
 
-    const exportCSV = () => {
+    const [exportState, setExportState] = useState({ status: 'idle', message: '' });
+    const exportToGoogleSheets = async () => {
         const headers = columns.map(c => c.label);
         const rows = filtered.map(r => columns.map(c => {
-            const v = c.key === 'created_at' ? formatDate(r[c.key]) : (r[c.key] || '');
-            return `"${v.toString().replace(/"/g, '""')}"`;
+            return c.key === 'created_at' ? formatDate(r[c.key]) : (r[c.key] || '');
         }));
-        const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `rra-leads-${Date.now()}.csv`;
-        a.click();
-        URL.revokeObjectURL(url);
+        setExportState({ status: 'exporting', message: '' });
+        try {
+            const { url } = await exportToSheet({
+                title: `Home leads — ${todayISO()}`,
+                sheet_name: 'Leads',
+                headers,
+                rows,
+            });
+            setExportState({ status: 'done', message: 'Opened in new tab' });
+            window.open(url, '_blank', 'noopener');
+        } catch (err) {
+            setExportState({ status: 'error', message: err.message });
+        }
     };
 
     return (
@@ -106,11 +112,13 @@ const LeadsTable = ({ data, columns, loading }) => {
                 <div className="flex items-center gap-3">
                     <span className="text-xs font-bold text-slate-400 uppercase tracking-wide">{filtered.length} records</span>
                     <button
-                        onClick={exportCSV}
-                        className="flex items-center gap-2 px-4 py-2.5 bg-rr-dark text-white text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-rr-charcoal transition-colors"
+                        onClick={exportToGoogleSheets}
+                        disabled={exportState.status === 'exporting'}
+                        className="flex items-center gap-2 px-4 py-2.5 bg-rr-dark text-white text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-rr-charcoal transition-colors disabled:opacity-60"
+                        title={exportState.message}
                     >
                         <Download className="w-3.5 h-3.5" />
-                        Export CSV
+                        {exportState.status === 'exporting' ? 'Exporting…' : 'Export to Google Sheets'}
                     </button>
                 </div>
             </div>

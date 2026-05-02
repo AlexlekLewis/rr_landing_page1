@@ -5,6 +5,7 @@ import {
     Search, Clock, XCircle, HelpCircle, ChevronDown, ChevronUp, Send
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { exportToSheet, todayISO } from './exportToSheet';
 import useRealtimeSync from '../../hooks/useRealtimeSync';
 
 const STATUS_CONFIG = {
@@ -179,20 +180,24 @@ const TokenGenerator = () => {
         setTimeout(() => setCopiedIndex(null), 2000);
     };
 
-    const exportToCSV = () => {
+    const [exportState, setExportState] = useState({ status: 'idle', message: '' });
+    const exportToGoogleSheets = async () => {
         if (results.length === 0) return;
-
-        const header = "Name,Email,Token URL,Status\n";
-        const rows = results.map(r => `"${r.name}","${r.email}","${r.url || ''}","${r.status}"`).join('\n');
-        const csvContent = "data:text/csv;charset=utf-8," + header + rows;
-
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "offer_links.csv");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        const headers = ['Name', 'Email', 'Token URL', 'Status'];
+        const rows = results.map(r => [r.name || '', r.email || '', r.url || '', r.status || '']);
+        setExportState({ status: 'exporting', message: '' });
+        try {
+            const { url } = await exportToSheet({
+                title: `Offer links — ${todayISO()}`,
+                sheet_name: 'Offer Links',
+                headers,
+                rows,
+            });
+            setExportState({ status: 'done', message: 'Opened in new tab' });
+            window.open(url, '_blank', 'noopener');
+        } catch (err) {
+            setExportState({ status: 'error', message: err.message });
+        }
     };
 
     return (
@@ -271,11 +276,13 @@ const TokenGenerator = () => {
                         <h2 className="text-lg font-bold text-white">Generated Links</h2>
                         {results.length > 0 && (
                             <button
-                                onClick={exportToCSV}
-                                className="text-xs bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg transition-colors flex items-center gap-2"
+                                onClick={exportToGoogleSheets}
+                                disabled={exportState.status === 'exporting'}
+                                className="text-xs bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg transition-colors flex items-center gap-2 disabled:opacity-60"
+                                title={exportState.message}
                             >
                                 <FileSpreadsheet className="w-4 h-4" />
-                                Export CSV
+                                {exportState.status === 'exporting' ? 'Exporting…' : 'Export to Google Sheets'}
                             </button>
                         )}
                     </div>

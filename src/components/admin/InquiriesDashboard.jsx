@@ -5,6 +5,7 @@ import {
     Users, MessageCircle, AlertCircle, Mail, Phone, MapPin, Calendar, Tag, Filter,
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { exportToSheet, todayISO } from './exportToSheet';
 
 const TZ = 'Australia/Melbourne';
 
@@ -153,7 +154,8 @@ const InquiriesDashboard = () => {
         return sortDir === 'asc' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />;
     };
 
-    const exportCSV = () => {
+    const [exportState, setExportState] = useState({ status: 'idle', message: '' });
+    const exportToGoogleSheets = async () => {
         const headers = ['Date', 'Source', 'Form', 'Stage', 'Name', 'Email', 'Phone', 'Parent Name', 'Parent Email', 'Parent Phone', 'Age', 'Suburb', 'Club', 'UTM Source', 'UTM Campaign', 'Last Contacted', 'Next Follow-up', 'Archived'];
         const lines = filtered.map(r => [
             r.created_at || '', r.source_type || '', r.source_form || '', r.stage || '',
@@ -165,14 +167,19 @@ const InquiriesDashboard = () => {
             r.last_contacted_at || '', r.next_follow_up_at || '',
             r.is_archived ? 'yes' : 'no',
         ]);
-        const csv = [headers, ...lines].map(r => r.map(c => `"${String(c == null ? '' : c).replace(/"/g, '""')}"`).join(',')).join('\n');
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `inquiries_${new Date().toISOString().split('T')[0]}.csv`;
-        a.click();
-        URL.revokeObjectURL(url);
+        setExportState({ status: 'exporting', message: '' });
+        try {
+            const { url } = await exportToSheet({
+                title: `Inquiries — ${todayISO()}`,
+                sheet_name: 'Inquiries',
+                headers,
+                rows: lines,
+            });
+            setExportState({ status: 'done', message: 'Opened in new tab' });
+            window.open(url, '_blank', 'noopener');
+        } catch (err) {
+            setExportState({ status: 'error', message: err.message });
+        }
     };
 
     if (loading) {
@@ -270,8 +277,8 @@ const InquiriesDashboard = () => {
                     {stageOptions.map(s => <option key={s} value={s} className="bg-slate-900">{STAGE_LABEL[s] || s}</option>)}
                 </select>
 
-                <button onClick={exportCSV} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 text-sm">
-                    <Download className="w-4 h-4" /> Export CSV
+                <button onClick={exportToGoogleSheets} disabled={exportState.status === 'exporting'} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 text-sm disabled:opacity-60" title={exportState.message}>
+                    <Download className="w-4 h-4" /> {exportState.status === 'exporting' ? 'Exporting…' : 'Export to Google Sheets'}
                 </button>
             </div>
 

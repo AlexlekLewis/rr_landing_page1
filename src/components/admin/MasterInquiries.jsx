@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Download, ChevronDown, ChevronUp } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { exportToSheet, todayISO } from './exportToSheet';
 
 const MasterInquiries = () => {
     const [inquiries, setInquiries] = useState([]);
@@ -72,20 +73,25 @@ const MasterInquiries = () => {
         return sortDir === 'asc' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />;
     };
 
-    const exportCSV = () => {
+    const [exportState, setExportState] = useState({ status: 'idle', message: '' });
+    const exportToGoogleSheets = async () => {
         const headers = ['Inquiry Type', 'Player Name', 'Parent Name', 'Email', 'Phone', 'DOB', 'Role', 'Competition', 'History', 'Applied Date'];
         const rows = filtered.map(a => [
             a.inquiry_type, a.player_name, a.parent_name, a.email, a.phone, a.dob, a.player_role, a.competition, a.competition_history, new Date(a.created_at).toLocaleDateString('en-AU', { timeZone: 'Australia/Melbourne', day: '2-digit', month: 'short', year: 'numeric' })
         ]);
-
-        const csv = [headers, ...rows].map(r => r.map(c => `"${(c || '').toString().replace(/"/g, '""')}"`).join(',')).join('\n');
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `master_inquiries_${new Date().toISOString().split('T')[0]}.csv`;
-        a.click();
-        URL.revokeObjectURL(url);
+        setExportState({ status: 'exporting', message: '' });
+        try {
+            const { url } = await exportToSheet({
+                title: `Master inquiries — ${todayISO()}`,
+                sheet_name: 'Inquiries',
+                headers,
+                rows,
+            });
+            setExportState({ status: 'done', message: 'Opened in new tab' });
+            window.open(url, '_blank', 'noopener');
+        } catch (err) {
+            setExportState({ status: 'error', message: err.message });
+        }
     };
 
     if (loading) {
@@ -130,11 +136,13 @@ const MasterInquiries = () => {
                 </select>
 
                 <button
-                    onClick={exportCSV}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all text-sm"
+                    onClick={exportToGoogleSheets}
+                    disabled={exportState.status === 'exporting'}
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all text-sm disabled:opacity-60"
+                    title={exportState.message}
                 >
                     <Download className="w-4 h-4" />
-                    Export CSV
+                    {exportState.status === 'exporting' ? 'Exporting…' : 'Export to Google Sheets'}
                 </button>
             </div>
 

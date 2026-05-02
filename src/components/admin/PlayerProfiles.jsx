@@ -5,6 +5,7 @@ import {
     Activity, AlertCircle, CheckCircle2, RefreshCw, X, User
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { exportToSheet, todayISO } from './exportToSheet';
 import useRealtimeSync from '../../hooks/useRealtimeSync';
 import PlayerProfileDetail from './PlayerProfileDetail';
 
@@ -129,7 +130,8 @@ const PlayerProfiles = () => {
     };
 
     /* ── CSV export ──────────────────────────────────────── */
-    const exportCSV = () => {
+    const [exportState, setExportState] = useState({ status: 'idle', message: '' });
+    const exportToGoogleSheets = async () => {
         const headers = ['Player Name', 'Age', 'Club', 'Suburb', 'Cricket Type', 'Profile Link', 'Stats Seasons', 'Payment Status', 'Enrolled'];
         const rows = filtered.map(p => [
             p.player_name,
@@ -142,15 +144,19 @@ const PlayerProfiles = () => {
             p.payment_status,
             new Date(p.created_at).toLocaleDateString(),
         ]);
-
-        const csv = [headers, ...rows].map(r => r.map(c => `"${(c || '').toString().replace(/"/g, '""')}"`).join(',')).join('\n');
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `player_profiles_${new Date().toISOString().split('T')[0]}.csv`;
-        a.click();
-        URL.revokeObjectURL(url);
+        setExportState({ status: 'exporting', message: '' });
+        try {
+            const { url } = await exportToSheet({
+                title: `Player profiles — ${todayISO()}`,
+                sheet_name: 'Players',
+                headers,
+                rows,
+            });
+            setExportState({ status: 'done', message: 'Opened in new tab' });
+            window.open(url, '_blank', 'noopener');
+        } catch (err) {
+            setExportState({ status: 'error', message: err.message });
+        }
     };
 
     /* ── Unique cricket types for filter ──────────────────── */
@@ -230,11 +236,13 @@ const PlayerProfiles = () => {
                 </div>
 
                 <button
-                    onClick={exportCSV}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all text-sm"
+                    onClick={exportToGoogleSheets}
+                    disabled={exportState.status === 'exporting'}
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all text-sm disabled:opacity-60"
+                    title={exportState.message}
                 >
                     <Download className="w-4 h-4" />
-                    Export
+                    {exportState.status === 'exporting' ? 'Exporting…' : 'Export to Google Sheets'}
                 </button>
             </div>
 

@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import useRealtimeSync from '../../hooks/useRealtimeSync';
+import { exportToSheet, todayISO } from './exportToSheet';
 
 // ============================================================
 // Money formatter — single source of truth.
@@ -276,7 +277,8 @@ const ProgramRegistrationsDashboard = () => {
         }
     };
 
-    const exportCSV = () => {
+    const [exportState, setExportState] = useState({ status: 'idle', message: '' });
+    const exportToGoogleSheets = async () => {
         const headers = [
             'Registration ID', 'Date', 'Paid At', 'Program', 'Variant', 'Program Label',
             'Customer Name', 'Email', 'Phone',
@@ -303,17 +305,19 @@ const ProgramRegistrationsDashboard = () => {
             r.stripe_charge_id || '',
             r.receipt_url || '',
         ]);
-
-        const csv = [headers, ...rows2]
-            .map(r => r.map(c => `"${(c == null ? '' : c).toString().replace(/"/g, '""')}"`).join(','))
-            .join('\n');
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `program_registrations_${new Date().toISOString().split('T')[0]}.csv`;
-        a.click();
-        URL.revokeObjectURL(url);
+        setExportState({ status: 'exporting', message: '' });
+        try {
+            const { url } = await exportToSheet({
+                title: `Program registrations — ${todayISO()}`,
+                sheet_name: 'Registrations',
+                headers,
+                rows: rows2,
+            });
+            setExportState({ status: 'done', message: 'Opened in new tab' });
+            window.open(url, '_blank', 'noopener');
+        } catch (err) {
+            setExportState({ status: 'error', message: err.message });
+        }
     };
 
     if (loading) {
@@ -459,10 +463,12 @@ const ProgramRegistrationsDashboard = () => {
                 ]} />
 
                 <button
-                    onClick={exportCSV}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all text-sm"
+                    onClick={exportToGoogleSheets}
+                    disabled={exportState.status === 'exporting'}
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all text-sm disabled:opacity-60"
+                    title={exportState.message}
                 >
-                    <Download className="w-4 h-4" /> Export CSV
+                    <Download className="w-4 h-4" /> {exportState.status === 'exporting' ? 'Exporting…' : 'Export to Google Sheets'}
                 </button>
             </div>
 

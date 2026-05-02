@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, Download, ChevronDown, ChevronUp, Check, X, Archive, RotateCcw } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { exportToSheet, todayISO } from './exportToSheet';
 import useRealtimeSync from '../../hooks/useRealtimeSync';
 import UnifiedPlayerDetail from './UnifiedPlayerDetail';
 
@@ -135,7 +136,8 @@ const ApplicationsTable = () => {
         setRefreshKey(p => p + 1);
     };
 
-    const exportCSV = () => {
+    const [exportState, setExportState] = useState({ status: 'idle', message: '' });
+    const exportToGoogleSheets = async () => {
         const headers = ['First Name', 'Last Name', 'Age', 'Email', 'Phone', 'Club', 'Suburb', 'Stage', 'Applied Date'];
         const rows = filtered.map(a => {
             const entry = getEntry(a.id);
@@ -145,15 +147,19 @@ const ApplicationsTable = () => {
                 stage?.name || entry?.stage_slug || '', new Date(a.created_at).toLocaleDateString()
             ];
         });
-
-        const csv = [headers, ...rows].map(r => r.map(c => `"${(c || '').toString().replace(/"/g, '""')}"`).join(',')).join('\n');
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `all_players_${new Date().toISOString().split('T')[0]}.csv`;
-        a.click();
-        URL.revokeObjectURL(url);
+        setExportState({ status: 'exporting', message: '' });
+        try {
+            const { url } = await exportToSheet({
+                title: `All players — ${todayISO()}`,
+                sheet_name: 'Players',
+                headers,
+                rows,
+            });
+            setExportState({ status: 'done', message: 'Opened in new tab' });
+            window.open(url, '_blank', 'noopener');
+        } catch (err) {
+            setExportState({ status: 'error', message: err.message });
+        }
     };
 
     const handleStageUpdate = async (appId, newStage) => {
@@ -230,11 +236,13 @@ const ApplicationsTable = () => {
                 </select>
 
                 <button
-                    onClick={exportCSV}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all text-sm"
+                    onClick={exportToGoogleSheets}
+                    disabled={exportState.status === 'exporting'}
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all text-sm disabled:opacity-60"
+                    title={exportState.message}
                 >
                     <Download className="w-4 h-4" />
-                    Export CSV
+                    {exportState.status === 'exporting' ? 'Exporting…' : 'Export to Google Sheets'}
                 </button>
             </div>
 

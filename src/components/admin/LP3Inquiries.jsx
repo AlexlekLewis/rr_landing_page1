@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Download, ChevronDown, ChevronUp } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import useRealtimeSync from '../../hooks/useRealtimeSync';
+import { exportToSheet, todayISO } from './exportToSheet';
 
 const LP3Inquiries = () => {
     const [inquiries, setInquiries] = useState([]);
@@ -70,20 +71,25 @@ const LP3Inquiries = () => {
         return sortDir === 'asc' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />;
     };
 
-    const exportCSV = () => {
+    const [exportState, setExportState] = useState({ status: 'idle', message: '' });
+    const exportToGoogleSheets = async () => {
         const headers = ['Player Name', 'Parent Name', 'Email', 'Phone', 'Gender', 'Suburb', 'T-Shirt', 'Shorts', 'Pants', 'Payment Status', 'Date'];
         const rows = filtered.map(a => [
             a.player_name, a.parent_name, a.email, a.phone, a.gender, a.suburb, a.size_tshirt, a.size_short, a.size_pants, a.payment_status, new Date(a.created_at).toLocaleDateString()
         ]);
-
-        const csv = [headers, ...rows].map(r => r.map(c => `"${(c || '').toString().replace(/"/g, '""')}"`).join(',')).join('\n');
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `cohort_2026_${new Date().toISOString().split('T')[0]}.csv`;
-        a.click();
-        URL.revokeObjectURL(url);
+        setExportState({ status: 'exporting', message: '' });
+        try {
+            const { url } = await exportToSheet({
+                title: `LP3 inquiries — ${todayISO()}`,
+                sheet_name: 'Inquiries',
+                headers,
+                rows,
+            });
+            setExportState({ status: 'done', message: 'Opened in new tab' });
+            window.open(url, '_blank', 'noopener');
+        } catch (err) {
+            setExportState({ status: 'error', message: err.message });
+        }
     };
 
     if (loading) {
@@ -118,11 +124,13 @@ const LP3Inquiries = () => {
                 </div>
 
                 <button
-                    onClick={exportCSV}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all text-sm"
+                    onClick={exportToGoogleSheets}
+                    disabled={exportState.status === 'exporting'}
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all text-sm disabled:opacity-60"
+                    title={exportState.message}
                 >
                     <Download className="w-4 h-4" />
-                    Export CSV
+                    {exportState.status === 'exporting' ? 'Exporting…' : 'Export to Google Sheets'}
                 </button>
             </div>
 
