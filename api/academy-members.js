@@ -52,8 +52,10 @@ export default async function handler(req, res) {
   try {
     const sb = getSupabase();
 
-    // Pull paid program registrations + paid shop orders + active subsidies.
-    const [progRes, shopTrainingRes, shopIplRes, subsidyRes] = await Promise.all([
+    // Pull paid program registrations + paid shop orders + active subsidies +
+    // every per-program roster (player_name <-> parent_email lookups).
+    const [progRes, shopTrainingRes, shopIplRes, subsidyRes,
+           eliteRosterRes, jrBundooraRes, jrHallamRes, holidayRes, kickstartRes] = await Promise.all([
       sb.from('program_registrations')
         .select('id, customer_name, customer_email, customer_phone, program, program_label, program_variant, items, amount_total_cents, paid_at, stripe_session_id')
         .eq('payment_status', 'completed'),
@@ -66,12 +68,59 @@ export default async function handler(req, res) {
       sb.from('academy_member_subsidies')
         .select('id, player_name, customer_name, customer_email, customer_phone, program, reason, created_at')
         .eq('active', true),
+      // Per-program rosters: player identity + parent emails. Used to resolve
+      // payer email -> player name on the way out.
+      sb.from('elite_program_2026_roster')
+        .select('player_name, parent_name, parent_email, parent2_email, parent3_email, is_female, is_ambassador')
+        .eq('active', true),
+      sb.from('junior_royals_bundoora').select('player_name, parent_name, parent_email'),
+      sb.from('junior_royals_hallam').select('player_name, parent_name, parent_email'),
+      sb.from('holiday_clinic_registrations').select('player_name, parent_name, parent_email'),
+      sb.from('female_kickstart_2026').select('player_name, parent_name, parent_email'),
     ]);
 
     if (progRes.error) throw new Error(`program_registrations: ${progRes.error.message}`);
     if (shopTrainingRes.error) throw new Error(`shop_orders_training: ${shopTrainingRes.error.message}`);
     if (shopIplRes.error) throw new Error(`shop_orders_ipl: ${shopIplRes.error.message}`);
     if (subsidyRes.error) throw new Error(`academy_member_subsidies: ${subsidyRes.error.message}`);
+    // Roster errors are warnings, not failures — don't block the whole view.
+    if (eliteRosterRes.error)  console.warn('elite roster:', eliteRosterRes.error.message);
+    if (jrBundooraRes.error)   console.warn('jr bundoora:', jrBundooraRes.error.message);
+    if (jrHallamRes.error)     console.warn('jr hallam:', jrHallamRes.error.message);
+    if (holidayRes.error)      console.warn('holiday:', holidayRes.error.message);
+    if (kickstartRes.error)    console.warn('kickstart:', kickstartRes.error.message);
+
+    // Build email -> { player_name, source_program } lookup. One email may
+    // match multiple kids (siblings), so values are arrays.
+    const emailToPlayers = new Map();
+    const addToLookup = (email, player_name, source_program) => {
+      if (!email || !player_name) return;
+      const k = email.toLowerCase().trim();
+      if (!k) return;
+      if (!emailToPlayers.has(k)) emailToPlayers.set(k, []);
+      const list = emailToPlayers.get(k);
+      if (!list.some(p => p.player_name === player_name)) {
+        list.push({ player_name, source_program });
+      }
+    };
+    for (const r of eliteRosterRes.data || []) {
+      addToLookup(r.parent_email, r.player_name, 'elite');
+      addToLookup(r.parent2_email, r.player_name, 'elite');
+      addToLookup(r.parent3_email, r.player_name, 'elite');
+    }
+    for (const r of jrBundooraRes.data || [])  addToLookup(r.parent_email, r.player_name, 'junior_royals');
+    for (const r of jrHallamRes.data || [])    addToLookup(r.parent_email, r.player_name, 'junior_royals');
+    for (const r of holidayRes.data || [])     addToLookup(r.parent_email, r.player_name, 'holiday');
+    for (const r of kickstartRes.data || [])   addToLookup(r.parent_email, r.player_name, 'female_kickstart');
+
+    const lookupPlayer = (email, program) => {
+      if (!email) return null;
+      const list = emailToPlayers.get(email.toLowerCase().trim());
+      if (!list || !list.length) return null;
+      // Prefer same-program match (siblings + multi-program parents disambiguate)
+      const exact = list.find(p => p.source_program === program);
+      return (exact || list[0]).player_name;
+    };
 
     // Bucket by lowercased email.
     const members = new Map();
@@ -119,6 +168,12 @@ export default async function handler(req, res) {
       m.payment_types.add(detectPaymentType(desc));
       m.total_paid_cents += Number(r.amount_total_cents) || 0;
       touchPaidWindow(m, r.paid_at);
+      // Resolve player_name from per-program rosters via parent email.
+      // Doesn't override an explicit subsidy name; first match wins per email.
+      if (!m.player_name_override) {
+        const playerName = lookupPlayer(r.customer_email, r.program);
+        if (playerName) m.player_name_override = playerName;
+      }
       m.registrations.push({
         id: r.id, program: r.program, label: r.program_label, variant: r.program_variant,
         amount_cents: r.amount_total_cents, paid_at: r.paid_at,
