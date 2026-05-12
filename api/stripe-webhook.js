@@ -163,9 +163,11 @@ const sumCents = (items) =>
 const upsertOrder = async (table, payload, draftId) => {
   const supabase = getSupabase();
   if (draftId) {
+    // Exclude 'items' from update — preserve original cart items which contain size info
+    const { items: _items, subtotal: _sub, total: _tot, ...updatePayload } = payload;
     const { data, error } = await supabase
       .from(table)
-      .update(payload)
+      .update(updatePayload)
       .eq('id', draftId)
       .select('id');
     if (error) console.error(`${table} update by id failed:`, error);
@@ -344,6 +346,18 @@ export default async function handler(req, res) {
     }, draftIplId);
   }
 
+  // Fetch original items from Supabase to get size info for Zapier
+  let originalItems = [];
+  try {
+    const supabase = getSupabase();
+    const orderId = draftTrainingId || draftIplId;
+    const table = draftTrainingId ? 'shop_orders_training' : 'shop_orders_ipl';
+    if (orderId) {
+      const { data } = await supabase.from(table).select('items').eq('id', orderId).single();
+      if (data?.items) originalItems = data.items;
+    }
+  } catch (e) { console.warn('Could not fetch original items:', e.message); }
+
   const zapierUrl = process.env.ZAPIER_SHOP_WEBHOOK_URL;
   if (zapierUrl) {
     try {
@@ -364,9 +378,11 @@ export default async function handler(req, res) {
           shipping_address: shippingAddress
             ? `${shippingAddress.line1 || ''}, ${shippingAddress.city || ''} ${shippingAddress.postal_code || ''}, ${shippingAddress.country || ''}`.trim()
             : '',
-          items: lineItems
+          items: (originalItems.length > 0 ? originalItems : lineItems)
             .filter(i => !i.name?.toLowerCase().includes('delivery') && !i.name?.toLowerCase().includes('shipping'))
-            .map(i => `${i.name} x${i.quantity}`)
+            .map(i => originalItems.length > 0
+              ? `${i.product_name || i.name} x${i.quantity} (${i.size || 'N/A'})`
+              : `${i.name} x${i.quantity}`)
             .join(' | '),
           total_paid: `$${(session.amount_total / 100).toFixed(2)} AUD`,
         }),

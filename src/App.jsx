@@ -29,6 +29,7 @@ import HolidayProgramSuccess from './components/holiday-programs/HolidayProgramS
 import FemaleCricketIntroduction from './components/female-cricket-introduction/FemaleCricketIntroduction';
 import FemaleCricketSuccess from './components/female-cricket-introduction/FemaleCricketSuccess';
 import FemaleEmpowerment from './components/female-empowerment/FemaleEmpowerment';
+import CoachingOpportunities from './components/coaching-opportunities/CoachingOpportunities';
 import MasterStripeSuccess from './components/master-landing-page/MasterStripeSuccess';
 import HomePage from './components/home-page/HomePage';
 import usePageAnalytics from './hooks/usePageAnalytics';
@@ -133,6 +134,8 @@ function App() {
         <Route path="/female-cricket-kickstart" element={<FemaleCricketIntroduction />} />
         <Route path="/female-cricket-kickstart/success" element={<FemaleCricketSuccess />} />
         <Route path="/female-empowerment" element={<FemaleEmpowerment />} />
+        {/* Coaching Opportunities — HIDDEN from nav, accessible via direct URL only */}
+        <Route path="/coaching-opportunities" element={<CoachingOpportunities />} />
         {/* Academy Shop — hidden from nav. Share URL directly with participants only. */}
         <Route path="/academy-shop" element={<AcademyShop />} />
         <Route path="/academy-shop/success" element={<ShopSuccess />} />

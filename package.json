@@ -21,7 +21,7 @@
     "jspdf": "^4.2.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.563.0",
-    "posthog-js": "^1.372.3",
+    "posthog-js": "^1.372.9",
     "puppeteer-core": "^24.39.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
