@@ -1,24 +1,56 @@
 import chromium from '@sparticuz/chromium';
 import puppeteer from 'puppeteer-core';
+import { verifyAdmin, setCors, sendError } from './_lib/auth.js';
 
 // ─── CONFIG ──────────────────────────────────────────────
 const PLAYCRICKET_BASE = 'https://play.cricket.com.au';
 const TIMEOUT = 45000; // 45s max for page operations
 const NAV_TIMEOUT = 30000;
 
-export default async function handler(req, res) {
-    // CORS
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+// Hosts the scraper is allowed to navigate to. profile_url is
+// user-supplied, so without an allowlist this endpoint is an
+// authenticated headless-chromium SSRF that can hit cloud metadata
+// (169.254.169.254), internal networks, and any third-party URL.
+const ALLOWED_HOSTS = new Set([
+    'play.cricket.com.au',
+    'www.play.cricket.com.au',
+    'playhq.com',
+    'www.playhq.com',
+]);
 
-    if (req.method === 'OPTIONS') return res.status(200).end();
-    if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
+function isAllowedProfileUrl(url) {
+    try {
+        const u = new URL(url);
+        if (u.protocol !== 'https:' && u.protocol !== 'http:') return false;
+        // Reject IP literals outright — keeps us off link-local and
+        // cloud-metadata addresses even if a DNS entry temporarily
+        // resolves to them.
+        if (/^\d+\.\d+\.\d+\.\d+$/.test(u.hostname)) return false;
+        if (u.hostname.includes(':')) return false; // ipv6 literal
+        return ALLOWED_HOSTS.has(u.hostname.toLowerCase());
+    } catch {
+        return false;
+    }
+}
+
+export default async function handler(req, res) {
+    setCors(req, res, { allowMethods: 'POST, OPTIONS' });
+    if (req.method === 'OPTIONS') return res.status(204).end();
+    if (req.method !== 'POST') return sendError(res, 405, 'Method not allowed');
+
+    try {
+        await verifyAdmin(req);
+    } catch (err) {
+        return sendError(res, 401, 'Unauthorised', err);
+    }
 
     const { player_name, club, profile_url } = req.body || {};
 
-    if (!player_name) {
-        return res.status(400).json({ success: false, message: 'player_name is required' });
+    if (!player_name || typeof player_name !== 'string') {
+        return sendError(res, 400, 'player_name is required');
+    }
+    if (profile_url && !isAllowedProfileUrl(profile_url)) {
+        return sendError(res, 400, 'profile_url must point to play.cricket.com.au or playhq.com');
     }
 
     let browser = null;
@@ -54,6 +86,13 @@ export default async function handler(req, res) {
                 success: false,
                 message: `Could not find a PlayCricket profile for "${player_name}"${club ? ` at ${club}` : ''}. The player may not have a public profile, or their name may be spelled differently on PlayCricket.`,
             });
+        }
+
+        // findPlayerProfile reads links out of HTML it scraped, so its
+        // output is technically untrusted. Re-check the allowlist before
+        // we let the headless browser navigate there.
+        if (!isAllowedProfileUrl(profileUrl)) {
+            return sendError(res, 400, 'Resolved profile URL is outside the allowlist');
         }
 
         // ── STEP 2: Navigate to profile and extract stats ──
@@ -231,7 +270,7 @@ export default async function handler(req, res) {
         console.error('Scraper error:', err);
         return res.status(200).json({
             success: false,
-            message: `Scraper error: ${err.message}. This might be a timeout — PlayCricket pages can be slow to load. Try again, or enter stats manually.`,
+            message: 'Scraper error — this might be a timeout. PlayCricket pages can be slow to load. Try again, or enter stats manually.',
         });
     } finally {
         if (browser) {
