@@ -7,6 +7,7 @@ import {
     Target, Award, Shield
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import CVLink from './CVLink';
 
 /* ════════════════════════════════════════════════════════════
    Shared UI helpers
@@ -562,7 +563,7 @@ const InfoTab = ({ player }) => (
                 <DetailRow icon={Mail} label="Player Email" value={player.player_email} />
                 <DetailRow icon={Phone} label="Player Phone" value={player.player_phone} />
                 <DetailRow icon={ExternalLink} label="PlayCricket Profile" value={player.profile_link} isLink />
-                <DetailRow icon={FileText} label="CV" value={player.cv_url} isLink />
+                <CVLink stored={player.cv_url} label="CV" />
             </div>
         </div>
 

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Check, AlertCircle } from 'lucide-react';
 import Button from './Button';
 import { supabase } from '../lib/supabase';
+import { uploadCV } from '../lib/storage';
 import DateOfBirthInput from './DateOfBirthInput';
 
 const StatusModal = ({ type, isOpen, onClose }) => {
@@ -177,16 +178,9 @@ const Apply = () => {
             let cvUrl = null;
 
             if (cvFile) {
-                const fileExt = cvFile.name.split('.').pop();
-                const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
-                const { error: uploadError } = await supabase.storage
-                    .from('cvs')
-                    .upload(fileName, cvFile);
-
-                if (uploadError) throw uploadError;
-
-                const { data } = supabase.storage.from('cvs').getPublicUrl(fileName);
-                cvUrl = data.publicUrl;
+                // Stores a storage path (UUID-based). Admin reads must
+                // resolve via getSignedCVUrl() — see src/lib/storage.js.
+                cvUrl = await uploadCV(cvFile);
             }
 
             // Enhanced data object with file URL

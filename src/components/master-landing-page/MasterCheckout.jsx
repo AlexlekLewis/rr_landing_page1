@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertCircle, Loader2, CheckCircle2, X } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { uploadCV } from '../../lib/storage';
 import DateOfBirthInput from '../DateOfBirthInput';
 
 /* ─── Stripe URLs (temporarily disabled — waitlist mode) ─── */
@@ -221,12 +222,9 @@ const MasterCheckout = () => {
             let cvUrl = null;
 
             if (cvFile) {
-                const fileExt = cvFile.name.split('.').pop();
-                const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
-                const { error: uploadError } = await supabase.storage.from('cvs').upload(fileName, cvFile);
-                if (uploadError) throw uploadError;
-                const { data } = supabase.storage.from('cvs').getPublicUrl(fileName);
-                cvUrl = data.publicUrl;
+                // Stores a storage path (UUID-based). Admin reads must
+                // resolve via getSignedCVUrl() — see src/lib/storage.js.
+                cvUrl = await uploadCV(cvFile);
             }
 
             const cohortId = crypto.randomUUID();

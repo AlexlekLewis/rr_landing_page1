@@ -7,6 +7,7 @@ import {
     Milestone
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import CVLink from './CVLink';
 
 const DetailRow = ({ icon: Icon, label, value, isLink }) => {
     if (!value) return null;
@@ -420,9 +421,7 @@ const UnifiedPlayerDetail = ({ application, entry, stages, onClose, onStageChang
                         <div className="space-y-1">
                             <DetailRow icon={User} label="Current Club(s)" value={application.club} />
                             <DetailRow icon={ExternalLink} label="Play Cricket Profile" value={application.profile_link} isLink={!!application.profile_link} />
-                            {application.cv_url && (
-                                <DetailRow icon={FileText} label="CV / Resume" value={application.cv_url} isLink />
-                            )}
+                            <CVLink stored={application.cv_url} />
                             {application.history && (
                                 <div className="pt-4 border-t border-white/5 mt-4">
                                     <p className="text-slate-500 text-xs uppercase tracking-wider mb-2">Representative History</p>
