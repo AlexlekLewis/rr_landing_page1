@@ -163,8 +163,12 @@ const sumCents = (items) =>
 const upsertOrder = async (table, payload, draftId) => {
   const supabase = getSupabase();
   if (draftId) {
-    // Exclude 'items' from update — preserve original cart items which contain size info
-    const { items: _items, subtotal: _sub, total: _tot, ...updatePayload } = payload;
+    // Preserve the draft row's `items` so size info captured at cart time
+    // (which Stripe does not echo back) survives. All money columns
+    // (subtotal, shipping_cost, total, amount_*_cents) and payment_status
+    // are intentionally written from this Stripe-derived payload — the
+    // browser draft no longer sets them.
+    const { items: _items, ...updatePayload } = payload;
     const { data, error } = await supabase
       .from(table)
       .update(updatePayload)

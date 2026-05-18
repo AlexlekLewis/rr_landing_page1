@@ -63,19 +63,19 @@ const CartDrawer = () => {
       const iplItems = items.filter(i => i.product.madeToOrder);
       const trainingItems = items.filter(i => !i.product.madeToOrder);
 
+      // Browser-controlled fields are limited to identification and choice.
+      // Money columns (unit_price, subtotal, shipping_cost, total) and
+      // payment_status are written authoritatively by api/stripe-webhook.js
+      // from the Stripe session — never from the browser, which could
+      // otherwise show a $1 order in the dashboard for a $200 Stripe charge.
       const buildPayload = (lineItems) => ({
         items: lineItems.map(i => ({
           product_id: i.product.id,
           product_name: i.product.name,
           size: i.size,
           quantity: i.quantity,
-          unit_price: i.product.price,
         })),
         fulfillment_method: fulfillment,
-        subtotal: lineItems.reduce((s, i) => s + (i.product.price ?? 0) * i.quantity, 0),
-        shipping_cost: fulfillmentCost,
-        total: grandTotal,
-        payment_status: 'pending',
       });
 
       // Log IPL shirt order to shop_orders_ipl
