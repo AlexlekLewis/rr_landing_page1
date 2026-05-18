@@ -5,18 +5,13 @@ import {
     LayoutDashboard, Kanban, Users, BarChart3, FileText,
     Settings, LogOut, ChevronLeft, ChevronRight, Menu, X,
     Send, CheckCircle2, Eye, ClipboardList, UserCheck, Shield, ChevronDown,
-    UserCircle, ShoppingBag, Trophy, GraduationCap, Crown, Sun, Sparkles
+    UserCircle, ShoppingBag, Trophy, GraduationCap, Crown, Sun, Sparkles,
+    MessageCircle, Plane
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { ProgramProvider, useProgram } from './ProgramContext';
 
 const NAV_GROUPS = [
-    {
-        label: 'HOMEPAGE',
-        items: [
-            { label: 'Home Leads', path: '/rramadmin_26/home-leads', icon: Users },
-        ],
-    },
     {
         label: 'OVERVIEW',
         items: [
@@ -24,23 +19,37 @@ const NAV_GROUPS = [
         ],
     },
     {
+        label: 'INQUIRIES',
+        items: [
+            { label: 'All Inquiries', path: '/rramadmin_26/inquiries', icon: MessageCircle },
+            { label: 'Home Leads', path: '/rramadmin_26/home-leads', icon: Users },
+        ],
+    },
+    {
         label: 'PLAYER MANAGEMENT',
         items: [
             { label: 'All Players', path: '/rramadmin_26/applications', icon: Users },
-            { label: 'Pipeline', path: '/rramadmin_26/pipeline', icon: Kanban },
-            { label: 'Selection Board', path: '/rramadmin_26/selection', icon: CheckCircle2 },
+            // Pipeline + Selection Board temporarily hidden (unused for now).
+            // Routes still exist in App.jsx so they can be re-added with a
+            // single line when needed again.
         ],
     },
     {
         label: 'PROGRAM',
         items: [
-            { label: 'Cohort 2026', path: '/rramadmin_26/lp3-acceptances', icon: UserCheck },
+            { label: 'Academy Members 2026', path: '/rramadmin_26/academy-members', icon: UserCheck },
             { label: 'Player Profiles', path: '/rramadmin_26/player-profiles', icon: UserCircle },
             { label: 'Assessments', path: '/rramadmin_26/rsvp', icon: ClipboardList },
             { label: 'Junior Royals', path: '/rramadmin_26/program-registrations?program=junior_royals', icon: GraduationCap },
             { label: 'Elite Program', path: '/rramadmin_26/program-registrations?program=elite', icon: Crown },
             { label: 'Holiday Programs', path: '/rramadmin_26/program-registrations?program=holiday', icon: Sun },
             { label: 'Female Kickstart', path: '/rramadmin_26/program-registrations?program=female_kickstart', icon: Sparkles },
+        ],
+    },
+    {
+        label: 'TOURS',
+        items: [
+            { label: 'India Tour 2026', path: '/rramadmin_26/india-tour-2026', icon: Plane },
         ],
     },
     {
