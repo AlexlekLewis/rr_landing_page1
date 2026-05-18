@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { supabase } from '../../lib/supabase';
 import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import Button from '../Button';
 
@@ -11,7 +10,7 @@ const DECISION_OPTIONS = [
     { id: 'yes_but_no_assess', label: 'I’m not able to attend the assessment session but I would definitely accept an offer' }
 ];
 
-const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
+const RSVPForm = ({ token, onSubmitSuccess }) => {
     const [decision, setDecision] = useState(null);
     const [formData, setFormData] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,33 +40,24 @@ const RSVPForm = ({ tokenData, onSubmitSuccess }) => {
         setError(null);
 
         try {
-            // 1. Insert detailed response
-            const { error: insertError } = await supabase
-                .from('offer_responses')
-                .insert([{
-                    token_id: tokenData.id,
-                    decision: decision,
-                    ...formData // spread all dynamic conditional fields
-                }]);
+            // All writes go through the server endpoint, which uses
+            // the service role and whitelists the response fields.
+            // The token STRING is the bearer credential — no row id
+            // is ever exposed to the browser.
+            const res = await fetch('/api/offer-token', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'respond',
+                    token,
+                    decision,
+                    fields: formData,
+                }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Could not save your response.');
 
-            if (insertError) throw insertError;
-
-            // 2. Mark token as used/responded
-            const newStatus = decision === 'yes' || decision === 'yes_but_no_assess' ? 'attended' : 'declined';
-
-            const { error: updateError } = await supabase
-                .from('offer_tokens')
-                .update({
-                    status: newStatus,
-                    responded_at: new Date().toISOString()
-                })
-                .eq('id', tokenData.id);
-
-            if (updateError) throw updateError;
-
-            // 3. Notify parent component to show confirmation screen
             onSubmitSuccess({ decision, ...formData });
-
         } catch (err) {
             console.error('Error submitting RSVP:', err);
             setError(err.message || 'An error occurred while saving your response. Please try again.');

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { supabase } from '../../lib/supabase';
 import { AlertCircle, Loader2 } from 'lucide-react';
 import Footer from '../Footer';
 
@@ -33,29 +32,24 @@ const OfferResponsePage = () => {
         }
 
         try {
-            const { data, error: fetchError } = await supabase
-                .from('offer_tokens')
-                .select('*')
-                .eq('token', token)
-                .single();
-
-            if (fetchError || !data) {
-                setError('We could not find this invitation. The link may be invalid.');
+            // Lookup goes through the server endpoint so the public
+            // anon key never touches offer_tokens. The server validates
+            // expiry and returns only the minimal applicant info.
+            const res = await fetch('/api/offer-token', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'lookup', token }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                setError(data.error || 'We could not find this invitation. The link may be invalid.');
                 return;
             }
 
-            // Check expiry
-            if (data.expires_at && new Date(data.expires_at) < new Date()) {
-                setError('This invitation link has expired.');
-                return;
-            }
-
-            // Check if already responded
+            // Already responded → show the confirmation screen.
             if (data.status !== 'pending') {
                 setIsSubmitted(true);
-                // We'll show the generic accepted/declined state based on status if we wanted, 
-                // but for now setting isSubmitted true hides the form.
-                setSubmissionResult(data.status); // e.g. 'attended', 'declined'
+                setSubmissionResult(data.status);
             }
 
             setTokenData(data);
@@ -120,7 +114,7 @@ const OfferResponsePage = () => {
                         <InvitationHero applicantName={tokenData.applicant_name} />
                         <ExclusiveVideo applicantName={tokenData.applicant_name} />
                         <ProgramDetails />
-                        <RSVPForm tokenData={tokenData} onSubmitSuccess={handleRSVPSubmit} />
+                        <RSVPForm token={token} tokenData={tokenData} onSubmitSuccess={handleRSVPSubmit} />
                     </>
                 ) : (
                     <ConfirmationScreen decision={submissionResult} applicantName={tokenData.applicant_name} />
