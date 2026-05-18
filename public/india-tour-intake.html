@@ -665,9 +665,8 @@ window.addEventListener("load", ()=>{
   }, 30000);
 });
 
-// ─── SUPABASE SUBMIT ─────────────────────────────────────────────
-const SUPABASE_URL  = "https://pudldzgmluwoocwxtzhw.supabase.co";
-const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB1ZGxkemdtbHV3b29jd3h0emh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0MTA0OTQsImV4cCI6MjA4NDk4NjQ5NH0.X-pDkxLGDGIpno_HVmPTURXf4IZ2jucZURXjj3si0gg";
+// ─── SERVER-SIDE INTAKE ENDPOINT (uses service role under the hood) ─────
+const INTAKE_API = "/api/india-tour-intake";
 
 // Fields stored in DB. Strings go through as-is. Map traveller_type radio + consents to DB shape.
 const STR_FIELDS = [
@@ -730,50 +729,23 @@ async function submitToRRA(){
   if (hp && hp.value){ setStatus("Submission blocked.", true); return; }
 
   const state = getFormState();
-  const nowIso = new Date().toISOString();
-
-  // Map state to DB columns
-  const row = {
-    traveller_type: ttype.value === "minor" ? "player" : "staff",
-    status: "intake_complete",
-    intake_started_at: nowIso,
-    intake_completed_at: nowIso,
-  };
-  STR_FIELDS.forEach(f => {
-    if (state[f] !== undefined && state[f] !== "") row[f] = state[f];
-  });
-  // Map visa_refused radio (yes/no string) to boolean
-  if (state.visa_refused === "yes") row.visa_refused = true;
-  else if (state.visa_refused === "no") row.visa_refused = false;
-  // Consent timestamps
-  if (state.c_conduct)        row.consent_conduct_at        = nowIso;
-  if (state.c_medical)        row.consent_medical_at        = nowIso;
-  if (state.c_medical_minor)  row.consent_medical_minor_at  = nowIso;
-  if (state.c_media)          row.consent_media_at          = nowIso;
-  if (state.c_privacy)        row.consent_privacy_at        = nowIso;
-  // Clean empty strings on date fields (Supabase rejects "" for DATE columns)
-  ["dob","passport_issue","passport_expiry","wwcc_expiry","sig_date","sig_date2"].forEach(f => {
-    if (row[f] === "") delete row[f];
-  });
+  // Send the form state directly to the server route — it does the column mapping + insert.
+  // We just pass through the raw form names + visa_refused + consent booleans.
+  const payload = { traveller_type: ttype.value, ...state };
 
   btn.disabled = true;
   btn.textContent = "Submitting…";
   setStatus("Sending your form securely…");
 
   try {
-    const r = await fetch(`${SUPABASE_URL}/rest/v1/india_tour_2026_travellers`, {
+    const r = await fetch(INTAKE_API, {
       method: "POST",
-      headers: {
-        apikey: SUPABASE_ANON,
-        Authorization: `Bearer ${SUPABASE_ANON}`,
-        "Content-Type": "application/json",
-        Prefer: "return=representation"
-      },
-      body: JSON.stringify(row)
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
     });
+    const result = await r.json().catch(() => ({}));
     if (!r.ok){
-      const errText = await r.text();
-      throw new Error(errText || `HTTP ${r.status}`);
+      throw new Error(result.error || result.detail || `HTTP ${r.status}`);
     }
     setStatus("✓ Submitted successfully", false);
     document.getElementById("submit-section").style.display = "none";
