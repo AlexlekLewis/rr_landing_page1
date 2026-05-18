@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>India Tour 2026 — Traveller Intake Form · RRA Melbourne</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500;1,800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rr-pink:#E11F8F;
+    --rr-blue:#1226AA;
+    --rr-navy:#001D48;
+    --rr-light-pink:#E96BB0;
+    --rr-charcoal:#323E48;
+    --rr-tint:#FCE4F0;
+    --ink:#1a1a1a;
+    --line:#dcd4d8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{font-family:'Montserrat',system-ui,-apple-system,sans-serif;color:var(--ink);background:#f4f0f2;-webkit-font-smoothing:antialiased}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(1200px 800px at 110% -10%, rgba(225,31,143,.18), transparent 60%),
+      radial-gradient(1000px 700px at -10% 110%, rgba(18,38,170,.28), transparent 60%),
+      linear-gradient(155deg, #001D48 0%, #1226AA 35%, #E11F8F 100%);
+    background-attachment:fixed;
+    padding:24px 12px 80px;
+  }
+  .shell{max-width:880px;margin:0 auto;background:#fff;border-radius:14px;box-shadow:0 24px 60px rgba(0,12,37,.4);overflow:hidden}
+
+  /* HERO */
+  .hero{
+    background:linear-gradient(155deg,#001D48 0%,#1226AA 60%,#E11F8F 100%);
+    color:#fff;padding:30px 38px;position:relative;overflow:hidden;
+  }
+  .hero::after{
+    content:"";position:absolute;right:-80px;top:-80px;width:240px;height:240px;border-radius:50%;
+    background:radial-gradient(circle,rgba(225,31,143,.7),transparent 65%);
+  }
+  .hero-row{display:flex;align-items:center;justify-content:space-between;gap:24px;position:relative;z-index:1}
+  .hero-left{display:flex;align-items:center;gap:18px}
+  .crown{
+    width:54px;height:54px;border-radius:12px;
+    background:linear-gradient(135deg,var(--rr-pink),var(--rr-light-pink));
+    display:flex;align-items:center;justify-content:center;
+    font-weight:900;font-size:24px;color:#fff;letter-spacing:-1px;
+    box-shadow:0 8px 24px rgba(225,31,143,.45);
+  }
+  .hero .eyebrow{
+    font-size:10.5px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:#FFD9EE;
+  }
+  .hero h1{
+    font-weight:900;font-size:24px;line-height:1.05;letter-spacing:-.5px;margin-top:3px;
+  }
+  .hero .meta{
+    margin-top:14px;font-size:11.5px;font-weight:500;color:#FFD9EE;line-height:1.55;
+  }
+  .hero-right{
+    background:rgba(0,0,0,.28);border-radius:10px;padding:12px 16px;text-align:right;
+    border:1px solid rgba(255,255,255,.12);min-width:170px;
+  }
+  .hero-right .l{font-size:9px;font-weight:800;letter-spacing:1.6px;color:#FFD9EE;text-transform:uppercase}
+  .hero-right .v{font-weight:900;font-size:16px;margin-top:2px}
+  .hero-right .v.small{font-size:12px;font-weight:700;margin-top:6px}
+
+  /* INTRO STRIP */
+  .intro{
+    background:var(--rr-tint);padding:14px 38px;border-bottom:1px solid var(--line);
+    color:var(--rr-charcoal);font-size:12.5px;line-height:1.55;
+  }
+  .intro strong{color:var(--rr-pink);font-weight:800}
+
+  /* TOOLBAR */
+  .toolbar{
+    display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+    padding:14px 38px;background:#fafafa;border-bottom:1px solid var(--line);
+  }
+  .btn{
+    background:var(--rr-pink);color:#fff;border:1px solid var(--rr-pink);
+    padding:8px 14px;border-radius:7px;font-family:inherit;font-weight:700;
+    font-size:11px;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;
+  }
+  .btn:hover{background:#c41a7c;border-color:#c41a7c}
+  .btn.ghost{background:transparent;color:var(--rr-charcoal);border-color:var(--line)}
+  .btn.ghost:hover{background:#f0eaee;border-color:var(--rr-pink);color:var(--rr-pink)}
+  .toolbar .saved{font-size:11px;font-weight:600;color:#0f8a4a;margin-left:auto}
+
+  /* SECTIONS */
+  .section{padding:24px 38px;border-bottom:1px solid var(--line)}
+  .section:last-child{border-bottom:none}
+  .section-head{
+    display:flex;align-items:baseline;gap:14px;margin-bottom:14px;
+    padding-bottom:10px;border-bottom:2px solid var(--rr-pink);
+  }
+  .section-head .num{
+    font-weight:900;font-size:13px;background:var(--rr-pink);color:#fff;
+    padding:4px 9px;border-radius:6px;letter-spacing:.4px;
+  }
+  .section-head h2{
+    font-weight:900;font-size:17px;color:var(--rr-navy);letter-spacing:-.3px;flex:1;
+  }
+  .section-head .hint{
+    font-size:10.5px;font-weight:600;color:#7a6470;font-style:italic;
+  }
+
+  /* MINOR-ONLY hide */
+  .minor-only{display:none}
+  body.is-minor .minor-only{display:block}
+  body.is-minor .adult-only{display:none}
+
+  /* GRID */
+  .grid{display:grid;gap:12px}
+  .grid-2{grid-template-columns:1fr 1fr}
+  .grid-3{grid-template-columns:1fr 1fr 1fr}
+  @media (max-width:680px){.grid-2,.grid-3{grid-template-columns:1fr}}
+
+  /* FIELDS */
+  .field{display:flex;flex-direction:column;gap:5px}
+  .field.span-2{grid-column:span 2}
+  .field.span-3{grid-column:span 3}
+  @media (max-width:680px){.field.span-2,.field.span-3{grid-column:span 1}}
+  .field label{
+    font-size:9.5px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;
+    color:var(--rr-charcoal);display:flex;align-items:center;gap:6px;
+  }
+  .req{color:var(--rr-pink);font-weight:900}
+  .helper{font-size:10.5px;font-weight:500;color:#7a6470;font-style:italic;margin-top:-1px}
+  .field input[type="text"],
+  .field input[type="email"],
+  .field input[type="tel"],
+  .field input[type="date"],
+  .field input[type="number"],
+  .field select,
+  .field textarea{
+    font-family:inherit;font-size:13px;color:var(--ink);
+    background:#fff;border:1.5px solid var(--line);border-radius:7px;
+    padding:9px 11px;outline:none;transition:border-color .12s,box-shadow .12s;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{
+    border-color:var(--rr-pink);box-shadow:0 0 0 3px rgba(225,31,143,.15);
+  }
+  .field textarea{min-height:64px;resize:vertical}
+  .field .row{display:flex;gap:10px;align-items:center}
+  .field .row label{font-size:12px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--ink);cursor:pointer}
+  .field .row input[type="radio"]{accent-color:var(--rr-pink);cursor:pointer}
+
+  /* CONSENT BLOCK */
+  .consent{
+    background:var(--rr-tint);border:1.5px solid #f2c8df;border-radius:9px;
+    padding:14px 16px;margin-top:14px;
+  }
+  .consent h3{font-size:11px;font-weight:900;letter-spacing:1.6px;text-transform:uppercase;color:var(--rr-pink);margin-bottom:6px}
+  .consent p{font-size:12px;line-height:1.55;color:var(--rr-charcoal);margin-bottom:8px}
+  .consent label.cb{display:flex;align-items:flex-start;gap:9px;font-size:12px;line-height:1.5;cursor:pointer;padding:6px 0;color:var(--rr-charcoal)}
+  .consent label.cb input{
+    appearance:none;-webkit-appearance:none;width:18px;height:18px;min-width:18px;
+    border:2px solid var(--rr-pink);border-radius:4px;cursor:pointer;background:#fff;margin-top:1px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .consent label.cb input:checked{background:var(--rr-pink)}
+  .consent label.cb input:checked::after{content:"✓";color:#fff;font-weight:900;font-size:12px;line-height:1}
+
+  /* SIGNATURE */
+  .sig{
+    display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;
+  }
+  .sig .field input{font-style:italic;font-family:'Montserrat',cursive;font-weight:600;font-size:15px}
+  @media (max-width:680px){.sig{grid-template-columns:1fr}}
+
+  /* CALL OUT */
+  .callout{
+    background:#FFF7EE;border-left:4px solid #E89B00;padding:12px 14px;border-radius:6px;
+    font-size:12px;line-height:1.55;color:#5a3a00;margin-top:10px;
+  }
+  .callout strong{color:#cc5a00}
+
+  /* FOOTER */
+  .foot{
+    background:#000814;color:#fff;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 24px;font-weight:900;font-size:9.5px;letter-spacing:1.5px;
+  }
+  .foot .l em{font-style:italic;color:var(--rr-pink)}
+  .foot .r{color:var(--rr-pink);font-style:italic;font-size:11px}
+
+  @media print{
+    body{background:#fff !important;padding:0}
+    .shell{box-shadow:none;border-radius:0}
+    .toolbar{display:none}
+    .hero::after{display:none}
+    .section{break-inside:avoid;padding:18px 28px}
+    .hero{padding:18px 28px}
+    .intro{padding:10px 28px}
+    body.is-minor .adult-only{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-row">
+      <div class="hero-left">
+        <div class="crown">RR</div>
+        <div>
+          <div class="eyebrow">Royals Way · India Tour 2026</div>
+          <h1>Traveller Intake Form</h1>
+          <div class="meta">Required for every traveller · India e-Tourist Visa + RRA tour record · Return by <strong style="color:#fff">Friday 29 May 2026</strong></div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="l">Tour Dates</div>
+        <div class="v">26 Jun → 7 Jul 2026</div>
+        <div class="l" style="margin-top:8px">Destination</div>
+        <div class="v small">Jaipur Academy, India</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="intro">
+    Complete every field marked <strong>*</strong>. This form captures every field the Indian e-Tourist Visa application requires plus the medical, dietary and emergency information RRA needs to look after your child on tour. <strong>If the traveller is under 18, the parent or legal guardian fills it out and signs the consent.</strong>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <button class="btn" onclick="window.print()">🖨 Print / Save as PDF</button>
+    <button class="btn ghost" onclick="saveDraft()">💾 Save draft to browser</button>
+    <button class="btn ghost" onclick="loadDraft()">↩ Load saved draft</button>
+    <button class="btn ghost" onclick="clearDraft()">🗑 Clear form</button>
+    <span class="saved" id="saved-msg"></span>
+  </div>
+
+  <!-- 1. TRAVELLER TYPE -->
+  <div class="section">
+    <div class="section-head"><span class="num">1</span><h2>Traveller</h2><span class="hint">Who is this form for?</span></div>
+    <div class="grid grid-2">
+      <div class="field">
+        <label>Traveller type <span class="req">*</span></label>
+        <div class="row">
+          <input type="radio" id="t_minor" name="traveller_type" value="minor" onchange="toggleMinor()"><label for="t_minor">Player (under 18)</label>
+          <input type="radio" id="t_adult" name="traveller_type" value="adult" onchange="toggleMinor()"><label for="t_adult">Staff (adult)</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Role on tour <span class="req">*</span></label>
+        <select name="role">
+          <option value="">— select —</option>
+          <option>Player</option>
+          <option>Head Coach</option>
+          <option>CEO, Royals Melbourne</option>
+          <option>Other staff</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. PERSONAL DETAILS -->
+  <div class="section">
+    <div class="section-head"><span class="num">2</span><h2>Personal details (as shown on passport)</h2></div>
+    <div class="grid grid-3">
+      <div class="field"><label>Surname / Family name <span class="req">*</span></label><input type="text" name="surname" required></div>
+      <div class="field span-2"><label>Given names <span class="req">*</span></label><input type="text" name="given_names" required></div>
+      <div class="field"><label>Other names ever used</label><div class="helper">Aliases, maiden name, religious names</div><input type="text" name="other_names"></div>
+      <div class="field"><label>Date of birth <span class="req">*</span></label><input type="date" name="dob" required></div>
+      <div class="field"><label>Gender <span class="req">*</span></label>
+        <select name="gender" required><option value="">— select —</option><option>Male</option><option>Female</option><option>Other</option></select>
+      </div>
+      <div class="field"><label>Place of birth (town/city) <span class="req">*</span></label><input type="text" name="pob_city" required></div>
+      <div class="field"><label>Country of birth <span class="req">*</span></label><input type="text" name="pob_country" required></div>
+      <div class="field"><label>Nationality <span class="req">*</span></label><input type="text" name="nationality" value="Australian" required></div>
+      <div class="field"><label>Previous nationality (if any)</label><input type="text" name="prev_nationality"></div>
+      <div class="field"><label>Religion <span class="req">*</span></label>
+        <div class="helper">Required by Indian visa</div>
+        <input type="text" name="religion" required>
+      </div>
+      <div class="field"><label>Visible identification marks</label>
+        <div class="helper">e.g. scar on left arm. Write 'None' if none.</div>
+        <input type="text" name="id_marks">
+      </div>
+      <div class="field"><label>Educational qualification <span class="req">*</span></label>
+        <div class="helper">"Below matriculation" for primary school students</div>
+        <input type="text" name="education" required>
+      </div>
+      <div class="field"><label>Occupation <span class="req">*</span></label>
+        <div class="helper">"Student" if at school</div>
+        <input type="text" name="occupation" required>
+      </div>
+      <div class="field adult-only"><label>Marital status <span class="req">*</span></label>
+        <select name="marital"><option value="">— select —</option><option>Single</option><option>Married</option><option>Divorced</option><option>Widowed</option></select>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. PASSPORT -->
+  <div class="section">
+    <div class="section-head"><span class="num">3</span><h2>Passport</h2><span class="hint">Must be valid past 7 January 2027</span></div>
+    <div class="grid grid-3">
+      <div class="field"><label>Passport number <span class="req">*</span></label><input type="text" name="passport_no" required></div>
+      <div class="field"><label>Type of passport <span class="req">*</span></label>
+        <select name="passport_type"><option>Ordinary</option><option>Diplomatic</option><option>Official</option></select>
+      </div>
+      <div class="field"><label>Country of issue <span class="req">*</span></label><input type="text" name="passport_country" value="Australia" required></div>
+      <div class="field"><label>Place of issue <span class="req">*</span></label><input type="text" name="passport_place" required></div>
+      <div class="field"><label>Date of issue <span class="req">*</span></label><input type="date" name="passport_issue" required></div>
+      <div class="field"><label>Date of expiry <span class="req">*</span></label><input type="date" name="passport_expiry" required></div>
+    </div>
+    <div class="callout"><strong>Action:</strong> attach a clear scan/photo of the passport bio page AND a recent passport photo (white background, 5×5cm, taken in the last 6 months) when returning this form.</div>
+  </div>
+
+  <!-- 4. ADDRESS & CONTACT -->
+  <div class="section">
+    <div class="section-head"><span class="num">4</span><h2>Current address & contact</h2></div>
+    <div class="grid grid-2">
+      <div class="field span-2"><label>Current home address <span class="req">*</span></label><input type="text" name="address_street" placeholder="Street address" required></div>
+      <div class="field"><label>Suburb <span class="req">*</span></label><input type="text" name="address_suburb" required></div>
+      <div class="field"><label>State <span class="req">*</span></label><input type="text" name="address_state" value="VIC" required></div>
+      <div class="field"><label>Postcode <span class="req">*</span></label><input type="text" name="address_postcode" required></div>
+      <div class="field"><label>Country <span class="req">*</span></label><input type="text" name="address_country" value="Australia" required></div>
+      <div class="field"><label>Years at this address</label><input type="number" name="address_years" min="0"></div>
+      <div class="field"><label>Mobile <span class="req">*</span></label>
+        <div class="helper">For parents of minors: enter the parent's mobile</div>
+        <input type="tel" name="mobile" required>
+      </div>
+      <div class="field"><label>Email <span class="req">*</span></label><input type="email" name="email" required></div>
+    </div>
+  </div>
+
+  <!-- 5. FAMILY DETAILS (required by India visa) -->
+  <div class="section">
+    <div class="section-head"><span class="num">5</span><h2>Family details</h2><span class="hint">Required by Indian visa for every applicant — even adults</span></div>
+    <div class="grid grid-2">
+      <div class="field"><label>Father's full name <span class="req">*</span></label><input type="text" name="father_name" required></div>
+      <div class="field"><label>Father's nationality <span class="req">*</span></label><input type="text" name="father_nationality" required></div>
+      <div class="field"><label>Father's previous nationality (if any)</label><input type="text" name="father_prev_nationality"></div>
+      <div class="field"><label>Father's place of birth <span class="req">*</span></label><input type="text" name="father_pob" required></div>
+      <div class="field"><label>Mother's full name <span class="req">*</span></label><input type="text" name="mother_name" required></div>
+      <div class="field"><label>Mother's nationality <span class="req">*</span></label><input type="text" name="mother_nationality" required></div>
+      <div class="field"><label>Mother's previous nationality (if any)</label><input type="text" name="mother_prev_nationality"></div>
+      <div class="field"><label>Mother's place of birth <span class="req">*</span></label><input type="text" name="mother_pob" required></div>
+    </div>
+
+    <div class="adult-only" style="margin-top:14px">
+      <div class="grid grid-2">
+        <div class="field"><label>Spouse's name (if married)</label><input type="text" name="spouse_name"></div>
+        <div class="field"><label>Spouse's nationality</label><input type="text" name="spouse_nationality"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. TRAVEL HISTORY -->
+  <div class="section">
+    <div class="section-head"><span class="num">6</span><h2>Travel history</h2><span class="hint">Indian visa requires both fields</span></div>
+    <div class="grid">
+      <div class="field"><label>Countries visited in the last 10 years <span class="req">*</span></label>
+        <div class="helper">Comma-separated. Write "None" if none.</div>
+        <textarea name="countries_10y" required></textarea>
+      </div>
+      <div class="field"><label>SAARC countries visited in the last 3 years <span class="req">*</span></label>
+        <div class="helper">Afghanistan, Bangladesh, Bhutan, India, Maldives, Nepal, Pakistan, Sri Lanka. Include dates if yes. Write "None" if none.</div>
+        <textarea name="saarc_3y" required></textarea>
+      </div>
+      <div class="field"><label>Have you ever been refused a visa, deported or expelled from any country? <span class="req">*</span></label>
+        <div class="row">
+          <input type="radio" id="ref_y" name="visa_refused" value="yes"><label for="ref_y">Yes</label>
+          <input type="radio" id="ref_n" name="visa_refused" value="no" checked><label for="ref_n">No</label>
+        </div>
+      </div>
+      <div class="field"><label>If yes, please give details</label><textarea name="visa_refused_details"></textarea></div>
+    </div>
+  </div>
+
+  <!-- 7. MEDICAL & DIETARY -->
+  <div class="section">
+    <div class="section-head"><span class="num">7</span><h2>Medical & dietary</h2><span class="hint">For RRA chaperones — kept confidential</span></div>
+    <div class="grid grid-2">
+      <div class="field span-2"><label>Medical conditions <span class="req">*</span></label>
+        <div class="helper">Asthma, diabetes, anaphylaxis, ADHD, anxiety, etc. Write "None" if none.</div>
+        <textarea name="medical" required></textarea>
+      </div>
+      <div class="field span-2"><label>Current medications <span class="req">*</span></label>
+        <div class="helper">Name + dose + when taken. Write "None" if none.</div>
+        <textarea name="medications" required></textarea>
+      </div>
+      <div class="field span-2"><label>Allergies <span class="req">*</span></label>
+        <div class="helper">Food, drug, environmental. Specify reaction + treatment (EpiPen, antihistamine, etc.). Write "None" if none.</div>
+        <textarea name="allergies" required></textarea>
+      </div>
+      <div class="field"><label>Blood group</label>
+        <select name="blood_group">
+          <option value="">— select / unknown —</option>
+          <option>A+</option><option>A−</option><option>B+</option><option>B−</option>
+          <option>AB+</option><option>AB−</option><option>O+</option><option>O−</option><option>Unknown</option>
+        </select>
+      </div>
+      <div class="field"><label>Dietary requirements <span class="req">*</span></label>
+        <select name="diet" required>
+          <option value="">— select —</option>
+          <option>No restrictions</option>
+          <option>Vegetarian</option>
+          <option>Vegan</option>
+          <option>Halal</option>
+          <option>Kosher</option>
+          <option>Gluten-free</option>
+          <option>Allergy-driven (specify below)</option>
+          <option>Other (specify below)</option>
+        </select>
+      </div>
+      <div class="field span-2"><label>Dietary notes / additional info</label><textarea name="diet_notes"></textarea></div>
+      <div class="field"><label>Medicare number</label><input type="text" name="medicare"></div>
+      <div class="field"><label>Private health fund + member #</label><input type="text" name="private_health"></div>
+      <div class="field"><label>GP / Family doctor name</label><input type="text" name="gp_name"></div>
+      <div class="field"><label>GP clinic phone</label><input type="tel" name="gp_phone"></div>
+      <div class="field span-2"><label>Vaccinations completed for the tour</label>
+        <div class="helper">List with dates. Hep A, Typhoid, Tetanus, Hep B, COVID, JE, etc.</div>
+        <textarea name="vaccinations"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. EMERGENCY CONTACTS -->
+  <div class="section">
+    <div class="section-head"><span class="num">8</span><h2>Emergency contacts</h2><span class="hint">Two contacts required</span></div>
+    <h3 style="font-size:11px;font-weight:800;letter-spacing:1.4px;color:var(--rr-pink);text-transform:uppercase;margin-bottom:10px">Primary contact <span style="color:var(--rr-pink)">*</span></h3>
+    <div class="grid grid-3">
+      <div class="field"><label>Full name <span class="req">*</span></label><input type="text" name="ec1_name" required></div>
+      <div class="field"><label>Relationship <span class="req">*</span></label><input type="text" name="ec1_relationship" placeholder="e.g. Mother" required></div>
+      <div class="field"><label>Mobile <span class="req">*</span></label><input type="tel" name="ec1_mobile" required></div>
+      <div class="field"><label>Alternate phone</label><input type="tel" name="ec1_alt"></div>
+      <div class="field"><label>Email <span class="req">*</span></label><input type="email" name="ec1_email" required></div>
+      <div class="field"><label>Best contactable hours (IST/AEST)</label><input type="text" name="ec1_hours"></div>
+    </div>
+    <h3 style="font-size:11px;font-weight:800;letter-spacing:1.4px;color:var(--rr-pink);text-transform:uppercase;margin:18px 0 10px">Secondary contact <span style="color:var(--rr-pink)">*</span></h3>
+    <div class="grid grid-3">
+      <div class="field"><label>Full name <span class="req">*</span></label><input type="text" name="ec2_name" required></div>
+      <div class="field"><label>Relationship <span class="req">*</span></label><input type="text" name="ec2_relationship" required></div>
+      <div class="field"><label>Mobile <span class="req">*</span></label><input type="tel" name="ec2_mobile" required></div>
+      <div class="field"><label>Alternate phone</label><input type="tel" name="ec2_alt"></div>
+      <div class="field"><label>Email</label><input type="email" name="ec2_email"></div>
+      <div class="field"><label>Best contactable hours</label><input type="text" name="ec2_hours"></div>
+    </div>
+  </div>
+
+  <!-- 9. FLIGHT & PROGRAM -->
+  <div class="section">
+    <div class="section-head"><span class="num">9</span><h2>Flight & program preferences</h2></div>
+    <div class="grid grid-2">
+      <div class="field"><label>Frequent flyer programme</label><input type="text" name="ff_program"></div>
+      <div class="field"><label>Frequent flyer number</label><input type="text" name="ff_number"></div>
+      <div class="field"><label>Airline meal preference</label>
+        <select name="meal"><option value="">— select —</option><option>Standard</option><option>Vegetarian (Asian)</option><option>Vegetarian (Western)</option><option>Hindu (non-veg)</option><option>Child meal</option><option>Gluten-free</option><option>Allergy-specific (specify)</option></select>
+      </div>
+      <div class="field"><label>Seat preference</label>
+        <select name="seat"><option value="">— select —</option><option>Window</option><option>Aisle</option><option>No preference</option></select>
+      </div>
+      <div class="field span-2"><label>T-shirt / training kit size</label>
+        <select name="kit_size"><option value="">— select —</option><option>YS</option><option>YM</option><option>YL</option><option>YXL</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option></select>
+      </div>
+      <div class="field span-2"><label>Cricket equipment notes</label>
+        <div class="helper">Bat size, glove size, anything we need to know about gear</div>
+        <textarea name="kit_notes"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. MINOR — PARENT/GUARDIAN -->
+  <div class="section minor-only">
+    <div class="section-head"><span class="num">10</span><h2>Parent / Guardian details</h2><span class="hint">For minors — both parents required by Indian visa</span></div>
+    <h3 style="font-size:11px;font-weight:800;letter-spacing:1.4px;color:var(--rr-pink);text-transform:uppercase;margin-bottom:10px">Parent / Guardian 1 <span style="color:var(--rr-pink)">*</span></h3>
+    <div class="grid grid-3">
+      <div class="field"><label>Full name <span class="req">*</span></label><input type="text" name="p1_name"></div>
+      <div class="field"><label>Relationship <span class="req">*</span></label><input type="text" name="p1_relationship"></div>
+      <div class="field"><label>Nationality <span class="req">*</span></label><input type="text" name="p1_nationality"></div>
+      <div class="field"><label>Passport / ID number <span class="req">*</span></label><input type="text" name="p1_id"></div>
+      <div class="field"><label>Mobile <span class="req">*</span></label><input type="tel" name="p1_mobile"></div>
+      <div class="field"><label>Email <span class="req">*</span></label><input type="email" name="p1_email"></div>
+    </div>
+
+    <h3 style="font-size:11px;font-weight:800;letter-spacing:1.4px;color:var(--rr-pink);text-transform:uppercase;margin:18px 0 10px">Parent / Guardian 2</h3>
+    <div class="grid grid-3">
+      <div class="field"><label>Full name</label><input type="text" name="p2_name"></div>
+      <div class="field"><label>Relationship</label><input type="text" name="p2_relationship"></div>
+      <div class="field"><label>Nationality</label><input type="text" name="p2_nationality"></div>
+      <div class="field"><label>Passport / ID number</label><input type="text" name="p2_id"></div>
+      <div class="field"><label>Mobile</label><input type="tel" name="p2_mobile"></div>
+      <div class="field"><label>Email</label><input type="email" name="p2_email"></div>
+    </div>
+    <div class="callout"><strong>Both parents must sign the notarised Parental Authorisation Form for the visa.</strong> If a parent is deceased, separated/absent, or sole guardian, attach the relevant certificate (death certificate / court order / sole-parent statutory declaration).</div>
+  </div>
+
+  <!-- 11. ADULT — WWCC -->
+  <div class="section adult-only">
+    <div class="section-head"><span class="num">11</span><h2>Working with Children Check</h2><span class="hint">Adults travelling with players</span></div>
+    <div class="grid grid-3">
+      <div class="field"><label>WWCC number <span class="req">*</span></label><input type="text" name="wwcc_number"></div>
+      <div class="field"><label>Expiry date <span class="req">*</span></label><input type="date" name="wwcc_expiry"></div>
+      <div class="field"><label>State / territory of issue <span class="req">*</span></label><input type="text" name="wwcc_state" value="VIC"></div>
+    </div>
+  </div>
+
+  <!-- 12. CONSENTS -->
+  <div class="section">
+    <div class="section-head"><span class="num">12</span><h2>Consents & declarations</h2><span class="hint">Read carefully — each tick is required</span></div>
+
+    <div class="consent">
+      <h3>Tour participation & code of conduct</h3>
+      <p>RRA Melbourne's Code of Conduct covers behaviour, curfew, phone/social media use, and the expectation that no traveller leaves the academy unaccompanied. Full Code of Conduct will be circulated with the pre-departure pack.</p>
+      <label class="cb"><input type="checkbox" name="c_conduct"><span>I agree (the traveller and, where applicable, the parent/guardian) to abide by the RRA Melbourne India Tour Code of Conduct. <span class="req">*</span></span></label>
+    </div>
+
+    <div class="consent">
+      <h3>Medical & emergency authority</h3>
+      <p>The information provided above is true and complete to the best of my knowledge.</p>
+      <label class="cb"><input type="checkbox" name="c_medical"><span>I authorise Alex Lewis (Head Coach) and the Royals Melbourne CEO to act in loco parentis on tour, including authorising medical treatment in an emergency where I cannot be reached in time. <span class="req">*</span></span></label>
+      <label class="cb minor-only"><input type="checkbox" name="c_medical_minor"><span>I confirm I am the parent / legal guardian of the named minor and authorise their participation in the tour. <span class="req">*</span></span></label>
+    </div>
+
+    <div class="consent">
+      <h3>Photography & media</h3>
+      <p>RRA and Royals Melbourne may photograph and film tour activities for internal records, social media, press and program promotion.</p>
+      <label class="cb"><input type="checkbox" name="c_media"><span>I consent to the traveller being photographed and filmed during tour activities and to those images being used by RRA Melbourne and the Royals Melbourne in their communications.</span></label>
+    </div>
+
+    <div class="consent">
+      <h3>Privacy</h3>
+      <p>The information on this form is collected to manage the India Tour 2026 and is stored in the RRA Supabase database (Australian-hosted, HTTPS, row-level access control). It is shared only with chaperones on tour, the Indian e-Visa portal, the airline at ticketing, the insurance provider, and treating medical staff in an emergency.</p>
+      <p><strong style="color:var(--rr-pink)">Retention:</strong> sensitive identity data (passport numbers, parent IDs) is <strong>automatically deleted from our database by 14 July 2026</strong>, one week after the tour ends. Non-sensitive trip records are kept for two years for insurance/follow-up.</p>
+      <p>You can ask to see, correct or delete your information at any time — email <strong>alex@rrmelbourne.com.au</strong>. The full privacy notice (a one-page PDF) is provided alongside this form.</p>
+      <label class="cb"><input type="checkbox" name="c_privacy"><span>I have read the India Tour 2026 Privacy Notice and agree to RRA Melbourne's handling of this information, including the 14 July 2026 deletion of sensitive identity data. <span class="req">*</span></span></label>
+    </div>
+
+    <!-- SIGNATURE -->
+    <div class="sig">
+      <div class="field"><label>Signed (full name, typed) <span class="req">*</span></label><input type="text" name="sig_name" required></div>
+      <div class="field"><label>Date <span class="req">*</span></label><input type="date" name="sig_date" required></div>
+      <div class="field minor-only"><label>Second parent (if both signing)</label><input type="text" name="sig_name2"></div>
+      <div class="field minor-only"><label>Date</label><input type="date" name="sig_date2"></div>
+    </div>
+  </div>
+
+  <!-- 13. SUBMIT -->
+  <div class="section" id="submit-section">
+    <div class="section-head"><span class="num">13</span><h2>Submit your form</h2><span class="hint">Returns directly to RRA Melbourne</span></div>
+
+    <!-- Honeypot field (hidden from humans; bots fill it; we discard those) -->
+    <div style="position:absolute;left:-9999px;opacity:0" aria-hidden="true">
+      <label>Do not fill this field<input type="text" name="hp_website" tabindex="-1" autocomplete="off"></label>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="field span-2">
+        <p style="font-size:13px;line-height:1.6;color:var(--rr-charcoal);margin-bottom:12px">
+          Once you click <strong style="color:var(--rr-pink)">Submit to RRA</strong>, your form is sent securely to the RRA Melbourne database (encrypted in transit, row-level access). You'll get a confirmation on this page. We'll be in touch within 48 hours.
+        </p>
+        <p style="font-size:12px;line-height:1.55;color:#7a6470;font-style:italic;margin-bottom:14px">
+          Having trouble? You can also print/save as PDF and email it to <strong>alex@rrmelbourne.com.au</strong> with passport scan attached.
+        </p>
+      </div>
+      <div class="field span-2" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:6px">
+        <button type="button" id="rra-submit-btn" class="btn" style="font-size:13px;padding:12px 22px"
+                onclick="submitToRRA()">📨 Submit to RRA</button>
+        <button type="button" class="btn ghost" onclick="saveDraft()">💾 Save draft to browser</button>
+        <span id="rra-submit-status" style="font-size:12px;font-weight:600;color:var(--rr-charcoal)"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS PANEL (hidden until submit succeeds) -->
+  <div class="section" id="success-panel" style="display:none">
+    <div class="section-head"><span class="num">✓</span><h2 style="color:#0f8a4a">Form submitted</h2></div>
+    <div class="grid">
+      <div class="field span-2">
+        <p style="font-size:14px;line-height:1.6;color:var(--rr-charcoal)">
+          <strong style="color:#0f8a4a">Thank you.</strong> Your intake form has been received by RRA Melbourne.
+          We'll review it within 48 hours and follow up via email with next steps (Indian e-Visa submission, payment instructions, parent info night details).
+        </p>
+        <p style="font-size:13px;line-height:1.55;color:var(--rr-charcoal);margin-top:10px">
+          <strong>What's next:</strong>
+        </p>
+        <ul style="font-size:13px;line-height:1.7;color:var(--rr-charcoal);margin-left:18px;margin-top:6px">
+          <li>Send a clear scan of the passport bio page and a recent passport photo (white background) to <strong>alex@rrmelbourne.com.au</strong>.</li>
+          <li>Book a GP travel-health appointment this week (vaccines need ~2 weeks to take effect).</li>
+          <li>Watch for the Tour Kickoff Email with deposit/balance invoice and the parent info night Zoom link.</li>
+        </ul>
+        <p style="font-size:12px;line-height:1.55;color:#7a6470;font-style:italic;margin-top:14px">
+          A copy of your responses has been saved in this browser. You can come back to update later if needed.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="l">FINDING A WAY TO <em>WIN</em> FROM ANYWHERE</div>
+    <div class="r">HALLA BOL!</div>
+  </div>
+
+</div>
+
+<script>
+const STORAGE_KEY = "rra_india_tour_2026_intake";
+
+function toggleMinor(){
+  const v = document.querySelector('input[name="traveller_type"]:checked');
+  if(!v) return;
+  document.body.classList.toggle("is-minor", v.value === "minor");
+}
+
+function getFormState(){
+  const out = {};
+  document.querySelectorAll("input,select,textarea").forEach(el=>{
+    if(!el.name) return;
+    if(el.type==="checkbox"){ out[el.name]=el.checked; }
+    else if(el.type==="radio"){ if(el.checked) out[el.name]=el.value; }
+    else { out[el.name]=el.value; }
+  });
+  return out;
+}
+function setFormState(s){
+  if(!s) return;
+  document.querySelectorAll("input,select,textarea").forEach(el=>{
+    if(!el.name) return;
+    const v = s[el.name];
+    if(v===undefined) return;
+    if(el.type==="checkbox"){ el.checked = !!v; }
+    else if(el.type==="radio"){ if(el.value===v) el.checked = true; }
+    else { el.value = v; }
+  });
+  toggleMinor();
+}
+function saveDraft(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(getFormState()));
+  const m = document.getElementById("saved-msg");
+  m.textContent = "✓ Draft saved to this browser";
+  setTimeout(()=>{m.textContent="";}, 2500);
+}
+function loadDraft(){
+  const s = localStorage.getItem(STORAGE_KEY);
+  if(!s){ alert("No saved draft on this browser."); return; }
+  setFormState(JSON.parse(s));
+}
+function clearDraft(){
+  if(!confirm("Clear the form and remove saved draft?")) return;
+  document.querySelectorAll("input,select,textarea").forEach(el=>{
+    if(el.type==="checkbox"||el.type==="radio") el.checked=false;
+    else el.value="";
+  });
+  document.querySelector('input[name="nationality"]').value="Australian";
+  document.querySelector('input[name="passport_country"]').value="Australia";
+  document.querySelector('input[name="address_state"]').value="VIC";
+  document.querySelector('input[name="address_country"]').value="Australia";
+  localStorage.removeItem(STORAGE_KEY);
+  document.body.classList.remove("is-minor");
+}
+window.addEventListener("load", ()=>{
+  const s = localStorage.getItem(STORAGE_KEY);
+  if(s) setFormState(JSON.parse(s));
+  /* autosave every 30s */
+  setInterval(()=>{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(getFormState()));
+  }, 30000);
+});
+
+// ─── SUPABASE SUBMIT ─────────────────────────────────────────────
+const SUPABASE_URL  = "https://pudldzgmluwoocwxtzhw.supabase.co";
+const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB1ZGxkemdtbHV3b29jd3h0emh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0MTA0OTQsImV4cCI6MjA4NDk4NjQ5NH0.X-pDkxLGDGIpno_HVmPTURXf4IZ2jucZURXjj3si0gg";
+
+// Fields stored in DB. Strings go through as-is. Map traveller_type radio + consents to DB shape.
+const STR_FIELDS = [
+  "role","surname","given_names","other_names","dob","gender","pob_city","pob_country",
+  "nationality","prev_nationality","religion","id_marks","education","occupation","marital_status",
+  "passport_no","passport_type","passport_country","passport_place","passport_issue","passport_expiry",
+  "address_street","address_suburb","address_state","address_postcode","address_country","mobile","email",
+  "father_name","father_nationality","father_prev_nationality","father_pob",
+  "mother_name","mother_nationality","mother_prev_nationality","mother_pob",
+  "spouse_name","spouse_nationality",
+  "countries_10y","saarc_3y","visa_refused_details",
+  "medical","medications","allergies","blood_group","diet","diet_notes",
+  "medicare","private_health","gp_name","gp_phone","vaccinations",
+  "ec1_name","ec1_relationship","ec1_mobile","ec1_alt","ec1_email","ec1_hours",
+  "ec2_name","ec2_relationship","ec2_mobile","ec2_alt","ec2_email","ec2_hours",
+  "ff_program","ff_number","meal","seat","kit_size","kit_notes",
+  "p1_name","p1_relationship","p1_nationality","p1_id","p1_mobile","p1_email",
+  "p2_name","p2_relationship","p2_nationality","p2_id","p2_mobile","p2_email",
+  "wwcc_number","wwcc_expiry","wwcc_state",
+  "sig_name","sig_date","sig_name2","sig_date2"
+];
+
+function setStatus(msg, isError){
+  const el = document.getElementById("rra-submit-status");
+  el.textContent = msg || "";
+  el.style.color = isError ? "#c40047" : (msg && msg.startsWith("✓") ? "#0f8a4a" : "var(--rr-charcoal)");
+}
+
+async function submitToRRA(){
+  const btn = document.getElementById("rra-submit-btn");
+  setStatus("");
+
+  // Marathon list of required fields. Use native HTML validity first.
+  const required = document.querySelectorAll("input[required], select[required], textarea[required]");
+  for (const el of required){
+    // Hide-skip: minor-only/adult-only fields not currently visible aren't required
+    if (el.offsetParent === null) continue;
+    if (!el.value || (el.type === "checkbox" && !el.checked)){
+      el.focus();
+      setStatus("Please complete the highlighted required fields before submitting.", true);
+      el.style.borderColor = "#c40047";
+      el.addEventListener("input", () => { el.style.borderColor = ""; }, { once: true });
+      return;
+    }
+  }
+  // Required consent checkboxes
+  for (const name of ["c_conduct","c_medical","c_privacy"]){
+    const cb = document.querySelector(`input[name="${name}"]`);
+    if (cb && !cb.checked){
+      cb.focus();
+      setStatus("Please tick the required consent boxes (Code of Conduct, Medical authority, Privacy).", true);
+      return;
+    }
+  }
+  const ttype = document.querySelector('input[name="traveller_type"]:checked');
+  if (!ttype){ setStatus("Please select Player (under 18) or Staff (adult).", true); return; }
+
+  // Honeypot — bots fill it; humans don't
+  const hp = document.querySelector('input[name="hp_website"]');
+  if (hp && hp.value){ setStatus("Submission blocked.", true); return; }
+
+  const state = getFormState();
+  const nowIso = new Date().toISOString();
+
+  // Map state to DB columns
+  const row = {
+    traveller_type: ttype.value === "minor" ? "player" : "staff",
+    status: "intake_complete",
+    intake_started_at: nowIso,
+    intake_completed_at: nowIso,
+  };
+  STR_FIELDS.forEach(f => {
+    if (state[f] !== undefined && state[f] !== "") row[f] = state[f];
+  });
+  // Map visa_refused radio (yes/no string) to boolean
+  if (state.visa_refused === "yes") row.visa_refused = true;
+  else if (state.visa_refused === "no") row.visa_refused = false;
+  // Consent timestamps
+  if (state.c_conduct)        row.consent_conduct_at        = nowIso;
+  if (state.c_medical)        row.consent_medical_at        = nowIso;
+  if (state.c_medical_minor)  row.consent_medical_minor_at  = nowIso;
+  if (state.c_media)          row.consent_media_at          = nowIso;
+  if (state.c_privacy)        row.consent_privacy_at        = nowIso;
+  // Clean empty strings on date fields (Supabase rejects "" for DATE columns)
+  ["dob","passport_issue","passport_expiry","wwcc_expiry","sig_date","sig_date2"].forEach(f => {
+    if (row[f] === "") delete row[f];
+  });
+
+  btn.disabled = true;
+  btn.textContent = "Submitting…";
+  setStatus("Sending your form securely…");
+
+  try {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/india_tour_2026_travellers`, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_ANON,
+        Authorization: `Bearer ${SUPABASE_ANON}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation"
+      },
+      body: JSON.stringify(row)
+    });
+    if (!r.ok){
+      const errText = await r.text();
+      throw new Error(errText || `HTTP ${r.status}`);
+    }
+    setStatus("✓ Submitted successfully", false);
+    document.getElementById("submit-section").style.display = "none";
+    document.getElementById("success-panel").style.display = "block";
+    document.getElementById("success-panel").scrollIntoView({ behavior: "smooth", block: "start" });
+  } catch (e) {
+    btn.disabled = false;
+    btn.textContent = "📨 Submit to RRA";
+    setStatus("Couldn't submit: " + (e.message || "unknown error") + ". You can also email the PDF to alex@rrmelbourne.com.au.", true);
+  }
+}
+</script>
+</body>
+</html>
