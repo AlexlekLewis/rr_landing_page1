@@ -3,24 +3,16 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
-import { supabase } from '../../lib/supabase';
 
 const JRSuccess = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
-
-        const recordId = localStorage.getItem('jr_record_id');
-        const location = localStorage.getItem('jr_location');
-        if (recordId && location) {
-            const table = location === 'bundoora' ? 'junior_royals_bundoora' : 'junior_royals_hallam';
-            supabase.from(table)
-                .update({ payment_status: 'completed' })
-                .eq('id', recordId)
-                .then(() => {
-                    localStorage.removeItem('jr_record_id');
-                    localStorage.removeItem('jr_location');
-                });
-        }
+        // payment_status on junior_royals_* is now flipped authoritatively
+        // by api/stripe-webhook.js based on the session's client_reference_id
+        // (set when redirecting to the Stripe payment link). Doing the update
+        // from the browser would let any visitor mark any record as paid.
+        localStorage.removeItem('jr_record_id');
+        localStorage.removeItem('jr_location');
     }, []);
 
     const fadeUp = {

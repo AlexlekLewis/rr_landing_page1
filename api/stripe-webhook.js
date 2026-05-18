@@ -278,6 +278,29 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: progErr.message });
     }
 
+    // Junior Royals legacy tables: flip payment_status using the
+    // client_reference_id stamped by LCRegistrationForm.jsx at redirect.
+    // Format: "jr:<location>:<record_id>". The browser used to do this
+    // update with the public anon key, which let anyone mark any row paid.
+    if (programClass.program === 'junior_royals' && session.client_reference_id) {
+      const parts = session.client_reference_id.split(':');
+      if (parts.length === 3 && parts[0] === 'jr') {
+        const [, jrLocation, jrRecordId] = parts;
+        const jrTable = jrLocation === 'bundoora'
+          ? 'junior_royals_bundoora'
+          : jrLocation === 'hallam'
+            ? 'junior_royals_hallam'
+            : null;
+        if (jrTable) {
+          const { error: jrErr } = await supabase
+            .from(jrTable)
+            .update({ payment_status: 'completed' })
+            .eq('id', jrRecordId);
+          if (jrErr) console.error(`${jrTable} payment_status update failed:`, jrErr);
+        }
+      }
+    }
+
     return res.status(200).json({
       received: true,
       routed_to: 'program_registrations',

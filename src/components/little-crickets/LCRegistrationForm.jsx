@@ -193,14 +193,23 @@ const LCRegistrationForm = () => {
                 }]);
             } catch (_) { /* non-blocking */ }
 
-            // Store record ID for success page payment status update
+            // Store record ID so the success page can clear it from localStorage.
+            // payment_status is flipped by the Stripe webhook using client_reference_id,
+            // not from the browser.
             if (data?.id) {
                 localStorage.setItem('jr_record_id', data.id);
                 localStorage.setItem('jr_location', form.location);
             }
 
-            // Redirect to Stripe or show holding message for Hallam
-            if (stripeLink) {
+            // Redirect to Stripe or show holding message for Hallam.
+            // client_reference_id is forwarded by Stripe Payment Links into the
+            // resulting Checkout Session and read by api/stripe-webhook.js so it
+            // can update the right junior_royals_* row server-side.
+            if (stripeLink && data?.id) {
+                const sep = stripeLink.includes('?') ? '&' : '?';
+                const ref = `jr:${form.location}:${data.id}`;
+                window.location.href = `${stripeLink}${sep}client_reference_id=${encodeURIComponent(ref)}`;
+            } else if (stripeLink) {
                 window.location.href = stripeLink;
             } else {
                 // Hallam — no Stripe yet, show success
