@@ -147,7 +147,37 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Database insert failed', detail: error.message });
     }
 
-    return res.status(201).json({ ok: true, id: data.id, traveller: data });
+    // If the form included uploaded file paths, create matching document rows.
+    // The actual files live in storage bucket "india-tour-passports" — file_url stores the path within the bucket.
+    const uploads = body.uploads && typeof body.uploads === 'object' ? body.uploads : {};
+    const UPLOAD_TO_DOC_TYPE = {
+      passport_bio:   'passport_scan',
+      passport_photo: 'passport_photo',
+      parent1_id:     'parent1_id',
+      parent2_id:     'parent2_id',
+    };
+    const docRows = Object.entries(uploads)
+      .filter(([k, v]) => v && typeof v === 'string' && UPLOAD_TO_DOC_TYPE[k])
+      .map(([k, path]) => ({
+        traveller_id: data.id,
+        doc_type:     UPLOAD_TO_DOC_TYPE[k],
+        status:       'received',
+        file_url:     path,
+        received_at:  nowIso,
+      }));
+
+    let documents_created = 0;
+    if (docRows.length) {
+      const { error: docErr } = await supabase.from('india_tour_2026_documents').insert(docRows);
+      if (docErr) {
+        // Don't fail the whole submission — the traveller row is in, just log the doc issue.
+        console.error('Document insert error', docErr);
+      } else {
+        documents_created = docRows.length;
+      }
+    }
+
+    return res.status(201).json({ ok: true, id: data.id, traveller: data, documents_created });
   } catch (e) {
     console.error('Handler error', e);
     return res.status(500).json({ error: e.message || 'Unknown error' });
