@@ -116,7 +116,7 @@ const HolidayProgramSuccess = () => {
                     variants={fadeUp}
                     className="text-xl md:text-2xl font-semibold text-white/90 leading-relaxed mb-6"
                 >
-                    Welcome to the RRA Holiday Program.
+                    Welcome to the Junior Royals Holiday Program.
                 </motion.p>
 
                 {/* Body copy */}

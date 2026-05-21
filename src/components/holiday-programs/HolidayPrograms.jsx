@@ -16,7 +16,7 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 
 const SECTIONS = [
     'hero',
-    'clinic-overview',
+    'program-overview',
     'session-walkthrough',
     'coaches',
     'pricing',
@@ -26,7 +26,7 @@ const SECTIONS = [
 ];
 
 const HolidayPrograms = () => {
-    usePageAnalytics('/holiday-programs', { sections: SECTIONS });
+    usePageAnalytics('/junior-royals-holiday', { sections: SECTIONS });
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -40,7 +40,7 @@ const HolidayPrograms = () => {
                     <HeroSection />
                 </div>
                 <RoyalsInvite />
-                <div id="clinic-overview">
+                <div id="program-overview">
                     <ClinicOverview />
                 </div>
                 <div id="session-walkthrough">

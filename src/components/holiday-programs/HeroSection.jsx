@@ -62,7 +62,7 @@ const HeroSection = () => {
                     transition={{ duration: 0.6, delay: 0.4 }}
                     className="text-sm md:text-lg text-white/90 font-medium mb-8 max-w-xl"
                 >
-                    April school holiday cricket clinics for boys and girls aged 7–14. Two Melbourne locations. Includes official Rajasthan Royals training shirt.
+                    The Junior Royals Holiday Program runs across the April school holidays for boys and girls aged 7–14. Two Melbourne locations. Includes official Rajasthan Royals training shirt.
                 </motion.p>
 
                 {/* Location pills */}

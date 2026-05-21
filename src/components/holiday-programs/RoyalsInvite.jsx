@@ -54,7 +54,7 @@ const RoyalsInvite = () => {
                             <div className="h-px sm:h-16 w-16 sm:w-px bg-white/20" />
                             <div className="text-center sm:text-left">
                                 <p className="text-white/50 text-xs font-bold uppercase tracking-widest mb-1">April 2026</p>
-                                <p className="text-white font-black text-lg uppercase tracking-wide">Holiday Clinic Program</p>
+                                <p className="text-white font-black text-lg uppercase tracking-wide">Junior Royals Holiday Program</p>
                             </div>
                         </div>
 
@@ -69,10 +69,10 @@ const RoyalsInvite = () => {
 
                         {/* Body copy */}
                         <p className="text-white/90 text-lg md:text-xl font-semibold leading-relaxed max-w-2xl mb-6">
-                            Register for the Holiday Clinic and unlock an exclusive invitation to a <span className="text-white font-black">live group Q&amp;A session with a 2026 Rajasthan Royals IPL player.</span>
+                            Register for the Junior Royals Holiday Program and unlock an exclusive invitation to a <span className="text-white font-black">live group Q&amp;A session with a 2026 Rajasthan Royals IPL player.</span>
                         </p>
                         <p className="text-white/60 text-sm font-medium leading-relaxed max-w-xl mb-10">
-                            This invitation is not available to the general public. Rajasthan Royals Academy Melbourne participants only. Exclusively for those registered in the April 2026 Holiday Clinic.
+                            This invitation is not available to the general public. Rajasthan Royals Academy Melbourne participants only. Exclusively for those registered in the April 2026 Junior Royals Holiday Program.
                         </p>
 
                         {/* Feature pills */}

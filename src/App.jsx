@@ -124,11 +124,11 @@ function App() {
         <Route path="/offer/:token" element={<OfferResponsePage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-conditions" element={<TermsConditions />} />
-        <Route path="/holiday-programs" element={<HolidayPrograms />} />
+        <Route path="/junior-royals-holiday" element={<HolidayPrograms />} />
         {/* Junior Royals — DRAFT: not in nav, Vercel only until go-live instruction */}
         <Route path="/junior-royals" element={<LittleCrickets />} />
         <Route path="/junior-royals/success" element={<JRSuccess />} />
-        <Route path="/holiday-programs/success" element={<HolidayProgramSuccess />} />
+        <Route path="/junior-royals-holiday/success" element={<HolidayProgramSuccess />} />
         {/* Female Cricket Introduction — DRAFT: not in nav, Vercel only until go-live instruction */}
         <Route path="/female-cricket-kickstart" element={<FemaleCricketIntroduction />} />
         <Route path="/female-cricket-kickstart/success" element={<FemaleCricketSuccess />} />

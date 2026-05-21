@@ -77,7 +77,7 @@ const RegistrationForm = () => {
         if (!form.player_gender) newErrors.player_gender = 'Please select cricket type.';
         if (!form.primary_club.trim()) newErrors.primary_club = 'Primary club is required.';
         if (!form.suburb.trim()) newErrors.suburb = 'Suburb is required.';
-        if (!form.location) newErrors.location = 'Please select a clinic location.';
+        if (!form.location) newErrors.location = 'Please select a program location.';
         if (!form.shirt_size) newErrors.shirt_size = 'Please select a shirt size.';
         if (!acceptTerms) newErrors.acceptTerms = 'You must agree to the Terms & Conditions and Privacy Policy.';
         if (!acceptPlayerCode) newErrors.acceptPlayerCode = 'You must agree to the Player Code of Conduct.';
@@ -162,16 +162,16 @@ const RegistrationForm = () => {
                         </div>
                         <h2 className="text-2xl font-black text-rr-dark uppercase tracking-tight mb-4">You're on the Waitlist</h2>
                         <p className="text-rr-charcoal font-medium leading-relaxed mb-6">
-                            Thank you for registering your interest in the Hallam clinic. Unfortunately this program is now full — but we've added you to our waitlist.
+                            Thank you for registering your interest in the Hallam program. Unfortunately this program is now full — but we've added you to our waitlist.
                         </p>
                         <p className="text-rr-charcoal font-medium leading-relaxed mb-8">
                             We will be in touch if a place becomes available, or regarding future programs. If you have any questions, please contact us at{' '}
                             <a href="mailto:info@rramelbourne.com" className="text-rr-pink font-bold hover:underline">info@rramelbourne.com</a>.
                         </p>
                         <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 text-left">
-                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Still want to attend a clinic?</p>
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Still want to attend a program?</p>
                             <p className="text-rr-charcoal text-sm font-medium leading-relaxed">
-                                Places are still available at our <span className="font-black text-rr-dark">Bundoora clinic — April 8, 9 &amp; 10</span> at Cutting Edge Cricket. Scroll up and select Bundoora to secure your place.
+                                Places are still available at our <span className="font-black text-rr-dark">Bundoora program — April 8, 9 &amp; 10</span> at Cutting Edge Cricket. Scroll up and select Bundoora to secure your place.
                             </p>
                         </div>
                     </div>
@@ -327,7 +327,7 @@ const RegistrationForm = () => {
                                 I have read, understood, and agree to the <a href="/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Parent/Guardian Code of Conduct</a>.
                             </ComplianceCheckbox>
                             <ComplianceCheckbox checked={acceptSocialMedia} onChange={setAcceptSocialMedia} error={errors.acceptSocialMedia}>
-                                I am happy for photos and videos from the clinic featuring the player to be used on Rajasthan Royals Academy Melbourne's social media and marketing channels.
+                                I am happy for photos and videos from the program featuring the player to be used on Rajasthan Royals Academy Melbourne's social media and marketing channels.
                             </ComplianceCheckbox>
                         </div>
 
