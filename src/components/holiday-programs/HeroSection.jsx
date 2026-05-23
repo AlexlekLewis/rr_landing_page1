@@ -32,7 +32,7 @@ const HeroSection = () => {
                     className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6"
                 >
                     <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Limited Spots — April 2026</span>
+                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">2 Spots Remaining — Bundoora Only</span>
                 </motion.div>
 
                 {/* Headline */}
@@ -62,7 +62,7 @@ const HeroSection = () => {
                     transition={{ duration: 0.6, delay: 0.4 }}
                     className="text-sm md:text-lg text-white/90 font-medium mb-8 max-w-xl"
                 >
-                    The Junior Royals Holiday Camp runs across the April school holidays for boys and girls aged 7–14. Two Melbourne locations. Includes official Rajasthan Royals training shirt.
+                    The Junior Royals Holiday Program runs across the July school holidays for boys and girls aged 7–14. Two Melbourne locations.
                 </motion.p>
 
                 {/* Location pills */}
