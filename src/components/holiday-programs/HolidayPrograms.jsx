@@ -54,13 +54,13 @@ const HolidayPrograms = () => {
                     <ActionImage />
                     <PricingSection />
                 </div>
+                <JoinTheFamily />
                 <div id="locations">
                     <LocationsSection />
                 </div>
                 <div id="registration-form">
                     <RegistrationComingSoon />
                 </div>
-                <JoinTheFamily />
                 <div id="faq">
                     <FAQSection />
                 </div>
