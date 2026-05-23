@@ -9,7 +9,7 @@ const locations = [
         region: 'Northern Melbourne',
         venue: 'Cutting Edge Cricket',
         tag: 'bundoora',
-        dates: 'Tuesday 30 June – Wednesday 2 July',
+        dates: 'Tuesday 30 June – Thursday 2 July',
         time: '9:00 AM – 1:00 PM',
     },
     {
