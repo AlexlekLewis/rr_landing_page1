@@ -9,6 +9,8 @@ const locations = [
         region: 'Northern Melbourne',
         venue: 'Cutting Edge Cricket',
         tag: 'bundoora',
+        dates: 'Tuesday 30 June – Wednesday 2 July',
+        time: '9:00 AM – 1:00 PM',
     },
     {
         name: 'Venue TBC',
@@ -103,11 +105,11 @@ const LocationsSection = () => (
                             <div className="space-y-2.5 mb-6">
                                 <div className="flex items-center gap-3">
                                     <Calendar className="w-4 h-4 text-slate-300 shrink-0" />
-                                    <span className="text-slate-400 font-semibold text-sm">Dates — TBC</span>
+                                    <span className="text-slate-400 font-semibold text-sm">{loc.dates ? loc.dates : 'Dates — TBC'}</span>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <Clock className="w-4 h-4 text-slate-300 shrink-0" />
-                                    <span className="text-slate-400 font-semibold text-sm">9:00 AM – 1:00 PM daily</span>
+                                    <span className="text-slate-400 font-semibold text-sm">{loc.time ? loc.time + ' daily' : 'Times — TBC'}</span>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <MapPin className="w-4 h-4 text-slate-300 shrink-0" />
