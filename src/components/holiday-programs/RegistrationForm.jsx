@@ -64,7 +64,6 @@ const RegistrationForm = () => {
         primary_club: '',
         suburb: '',
         location: '',
-        shirt_size: '',
     });
 
     const validate = () => {
@@ -78,7 +77,6 @@ const RegistrationForm = () => {
         if (!form.primary_club.trim()) newErrors.primary_club = 'Primary club is required.';
         if (!form.suburb.trim()) newErrors.suburb = 'Suburb is required.';
         if (!form.location) newErrors.location = 'Please select a program location.';
-        if (!form.shirt_size) newErrors.shirt_size = 'Please select a shirt size.';
         if (!acceptTerms) newErrors.acceptTerms = 'You must agree to the Terms & Conditions and Privacy Policy.';
         if (!acceptPlayerCode) newErrors.acceptPlayerCode = 'You must agree to the Player Code of Conduct.';
         if (!acceptParentCode) newErrors.acceptParentCode = 'You must agree to the Parent/Guardian Code of Conduct.';
@@ -102,7 +100,6 @@ const RegistrationForm = () => {
             const utmParams = getUTMParams();
 
             const payload = {
-                shirt_size: form.shirt_size,
                 accept_terms: acceptTerms,
                 accept_player_code: acceptPlayerCode,
                 accept_parent_code: acceptParentCode,

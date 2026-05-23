@@ -4,7 +4,6 @@ import { Check } from 'lucide-react';
 
 const included = [
     '3 full days of elite coaching (12 hours total)',
-    'Official Rajasthan Royals Academy training shirt',
     'Structured basic cricket & T20 skills curriculum',
     'Small-group sessions with Royals certified coaches',
     'Special guest coaching slots with Royals Elite Academy Coaches',
@@ -49,7 +48,6 @@ const PricingSection = () => {
                         <div className="inline-flex items-center gap-2 bg-rr-medium-blue/20 border border-white/20 rounded-full px-4 py-2 mb-6">
                             <span className="text-white font-bold text-sm">$27.50 / hour across 12 hours</span>
                         </div>
-                        <p className="text-white/80 text-sm font-medium mb-8">Official Rajasthan Royals training shirt included in every registration.</p>
                         <div className="w-full bg-white/20 border border-white/30 text-white/60 font-black uppercase tracking-widest py-4 rounded-full text-center text-sm">
                             Registration Opening Soon
                         </div>
