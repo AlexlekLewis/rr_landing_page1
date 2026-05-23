@@ -71,7 +71,7 @@ const LocationsSection = () => (
                     transition={{ delay: 0.2 }}
                     className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium"
                 >
-                    Junior Royals Holiday Camps are coming to five locations across Melbourne. Dates and venues to be confirmed shortly.
+                    The Junior Royals Holiday Program is coming to multiple locations across Melbourne — north, south, east and west. Dates and venues to be confirmed shortly.
                 </motion.p>
             </div>
 
