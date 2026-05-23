@@ -6,7 +6,7 @@ const coaches = [
     {
         name: 'Alex Thornhill',
         role: 'Senior Coach',
-        bio: 'A batting specialist with coaching experience across two continents — UK county cricket and the Australian premier system. Alex currently coaches within the Fitzroy Doncaster Academy and leads the cricket program at Xavier College. His technical approach combines video analysis with deep knowledge of what batting looks like at the next level.',
+        bio: 'Rajasthan Royals Academy Melbourne Elite Program Coach. A batting specialist with experience in England's County cricket and the Australian premier system. Alex coaches the Fitzroy Doncaster Academy and leads the cricket program at Xavier College. His technical approach combines practical coaching with deep knowledge of what it takes to excel at the next level.',
         img: '/assets/coaches/alex-thornhill.jpg',
     },
 
