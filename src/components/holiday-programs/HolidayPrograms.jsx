@@ -11,7 +11,8 @@ import PricingSection from './PricingSection';
 import LocationsSection from './LocationsSection';
 import RegistrationComingSoon from './RegistrationComingSoon';
 import JoinTheFamily from './JoinTheFamily';
-import FAQSection from './FAQSection';
+import GotAQuestion from './GotAQuestion';
+
 import StickyCTA from './StickyCTA';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
@@ -61,9 +62,7 @@ const HolidayPrograms = () => {
                 <div id="registration-form">
                     <RegistrationComingSoon />
                 </div>
-                <div id="faq">
-                    <FAQSection />
-                </div>
+                <GotAQuestion />
             </main>
             <Footer />
             <StickyCTA />
