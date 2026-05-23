@@ -3,28 +3,28 @@ import { motion } from 'framer-motion';
 
 const features = [
     {
-        icon: '🏏',
+        icon: 'cricket',
         title: 'Expert Coaching',
         desc: 'Royals Academy certified coaches delivering structured, fun and development sessions every day.',
     },
     {
-        icon: '⚡',
+        icon: 'bolt',
         title: 'Traditional & T20 Skills',
         desc: 'Practice and develop cricket basics and modern skills in a development environment.',
     },
     {
-        icon: '👦👧',
+        icon: 'users',
         title: 'Boys & Girls',
         desc: 'Separate age groups for male and female cricketers. Safe, inclusive environment.',
     },
 
     {
-        icon: '📍',
+        icon: 'pin',
         title: 'Two Locations',
         desc: 'Bundoora (north) and Hallam (south-east) — choose what works for your family.',
     },
     {
-        icon: '⏰',
+        icon: 'clock',
         title: '4 Hours Daily',
         desc: '9:00 AM – 1:00 PM. Three consecutive days. 12 hours of cricket development.',
     },
@@ -69,7 +69,13 @@ const ClinicOverview = () => {
                             transition={{ duration: 0.5, delay: i * 0.1 }}
                             className="group bg-slate-50 hover:bg-rr-dark rounded-2xl p-8 transition-all duration-300 border border-slate-100 hover:border-rr-pink/30"
                         >
-                            <div className="text-4xl mb-4">{f.icon}</div>
+                            <div className="w-10 h-10 mb-4 text-rr-pink">
+                                {f.icon === 'cricket' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21l12-12M7.5 7.5l9 9M15 3l6 6-3 3-6-6 3-3zM3 21l3-3"/></svg>}
+                                {f.icon === 'bolt' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>}
+                                {f.icon === 'users' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>}
+                                {f.icon === 'pin' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>}
+                                {f.icon === 'clock' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>}
+                            </div>
                             <h3 className="text-lg font-black text-rr-dark group-hover:text-rr-pink uppercase tracking-wide mb-3 transition-colors duration-300">{f.title}</h3>
                             <p className="text-rr-charcoal group-hover:text-white/70 text-sm font-medium leading-relaxed transition-colors duration-300">{f.desc}</p>
                         </motion.div>
