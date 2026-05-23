@@ -20,8 +20,8 @@ const features = [
 
     {
         icon: 'pin',
-        title: 'Two Locations',
-        desc: 'Bundoora (north) and Hallam (south-east) — choose what works for your family.',
+        title: 'Multiple Locations',
+        desc: 'Coming to multiple locations across Melbourne — find a program near you.',
     },
     {
         icon: 'clock',
