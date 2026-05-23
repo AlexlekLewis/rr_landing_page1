@@ -48,7 +48,7 @@ const HallaBol = () => (
                 <img
                     src="/assets/halla-bol-players.png"
                     alt="Rajasthan Royals IPL Players — Halla Bol!"
-                    className="relative z-10 w-full max-w-xl md:max-w-2xl lg:max-w-3xl object-contain"
+                    className="relative z-10 w-full max-w-full md:max-w-full object-contain"
                 />
             </motion.div>
 
