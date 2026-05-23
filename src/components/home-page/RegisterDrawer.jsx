@@ -9,9 +9,8 @@ const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Advanced', 'Elite'];
 const GENDER_OPTIONS = ['Male Cricket', 'Female Cricket', 'No Preference'];
 
 const PROGRAMS = [
-    { label: 'T20 Elite Program', route: '/eliteprogram2026', urgency: 'Applications Closed — Waitlist Only' },
-    { label: 'Girls Kickstart', route: '/female-cricket-kickstart', urgency: 'Program Closed — Join Waitlist' },
-    { label: 'Junior Royals', route: '/junior-royals', urgency: 'Current Intake Closed — Join Waitlist' },
+    { label: 'T20 Elite Program', route: '/eliteprogram2026', urgency: 'New Intake Coming Soon' },
+    { label: 'Junior Royals', route: '/junior-royals', urgency: 'New Intake Coming Soon' },
 ];
 
 const InputField = ({ label, type = 'text', value, onChange, placeholder, required }) => (

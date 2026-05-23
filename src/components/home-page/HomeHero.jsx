@@ -4,9 +4,8 @@ import { ChevronDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const PROGRAMS = [
-    { label: 'T20 Elite Program', route: '/eliteprogram2026', badge: 'Applications Closed', badgeColor: 'bg-slate-500' },
-    { label: 'Girls Kickstart', route: '/female-cricket-kickstart', badge: 'Program Closed', badgeColor: 'bg-slate-500' },
-    { label: 'Junior Royals', route: '/junior-royals', badge: 'Intake Closed', badgeColor: 'bg-slate-500' },
+    { label: 'T20 Elite Program', route: '/eliteprogram2026', badge: 'New Intake Coming Soon', badgeColor: 'bg-rr-blue' },
+    { label: 'Junior Royals', route: '/junior-royals', badge: 'New Intake Coming Soon', badgeColor: 'bg-rr-blue' },
 ];
 
 const HomeHero = ({ onRegisterClick }) => {
