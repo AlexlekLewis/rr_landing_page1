@@ -19,7 +19,7 @@ const HomeAbout = () => {
 
                         <h2 className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-wide mb-6 leading-tight">
                             THE ROYALS WAY<br />
-                            <span className="text-rr-pink">NOW IN MELBOURNE</span>
+                            <span className="text-rr-pink">IN MELBOURNE</span>
                         </h2>
 
                         <p className="text-lg text-rr-charcoal font-medium mb-6 leading-relaxed">
