@@ -38,14 +38,14 @@ const HallaBol = () => (
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: 0.1 }}
-                className="flex-1 flex justify-center md:justify-end relative"
+                className="flex-1 flex justify-center md:justify-end relative md:-ml-16"
             >
                 {/* Pink glow behind players */}
                 <div className="absolute inset-0 bg-rr-pink/10 blur-3xl rounded-full pointer-events-none" />
                 <img
                     src="/assets/halla-bol-players.png"
                     alt="Rajasthan Royals IPL Players — Halla Bol!"
-                    className="relative z-10 w-full max-w-md md:max-w-lg object-contain drop-shadow-2xl"
+                    className="relative z-10 w-full max-w-lg md:max-w-2xl object-contain drop-shadow-2xl"
                 />
             </motion.div>
 
