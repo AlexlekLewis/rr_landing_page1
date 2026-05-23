@@ -62,7 +62,7 @@ const HeroSection = () => {
                     transition={{ duration: 0.6, delay: 0.4 }}
                     className="text-sm md:text-lg text-white/90 font-medium mb-8 max-w-xl"
                 >
-                    The Junior Royals Holiday Program runs across the April school holidays for boys and girls aged 7–14. Two Melbourne locations. Includes official Rajasthan Royals training shirt.
+                    The Junior Royals Holiday Camp runs across the April school holidays for boys and girls aged 7–14. Two Melbourne locations. Includes official Rajasthan Royals training shirt.
                 </motion.p>
 
                 {/* Location pills */}
@@ -90,7 +90,7 @@ const HeroSection = () => {
                     onClick={scrollToForm}
                     className="inline-flex items-center gap-3 bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-10 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]"
                 >
-                    Secure Your Place
+                    Registration Opening Soon
                     <svg className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>

@@ -38,7 +38,7 @@ const IPLQABanner = () => (
                         </span>
                     </h2>
                     <p className="text-white/55 font-medium text-sm md:text-base leading-relaxed max-w-xl mx-auto md:mx-0">
-                        Every Junior Royals participant gets exclusive access to a live online Q&amp;A session with a current Rajasthan Royals IPL contracted player — ask questions and listen to the answers of someone playing at the highest level of T20 cricket in the world.
+                        Every Junior Royals camp participant gets exclusive access to a live online Q&amp;A session with a current Rajasthan Royals IPL contracted player — ask questions and listen to the answers of someone playing at the highest level of T20 cricket in the world.
                     </p>
                 </div>
             </motion.div>

@@ -4,15 +4,15 @@ import { ChevronDown } from 'lucide-react';
 
 const faqs = [
     {
-        q: 'What age groups are the program for?',
-        a: 'The program is open to players aged 7 to 14. Players are grouped by age to ensure appropriate coaching and competitive balance across sessions.',
+        q: 'What age groups are the camp for?',
+        a: 'The camp is open to players aged 7 to 14. Players are grouped by age to ensure appropriate coaching and competitive balance across sessions.',
     },
     {
-        q: 'Are the program available for both boys and girls?',
+        q: 'Are the camp available for both boys and girls?',
         a: 'Yes. We will run separate male and female cricket sessions where possible during the 4-hour period. When you register, select your player\'s cricket type and our coaches will attempt to group participants accordingly.',
     },
     {
-        q: 'What should my child bring to the program?',
+        q: 'What should my child bring to the camp?',
         a: 'Please bring a water bottle, morning snack and appropriate cricket footwear. Cricket gear (bat, gloves, pads) is required — shared equipment is not available.',
     },
     {
@@ -21,18 +21,18 @@ const faqs = [
     },
     {
         q: 'What is the cancellation policy?',
-        a: 'If you cancel more than 3 days before the program start date, you\'ll receive a full refund minus payment processing fees. Cancellations within 3 days of the program are eligible for a 50% refund only.',
+        a: 'If you cancel more than 3 days before the camp start date, you\'ll receive a full refund minus payment processing fees. Cancellations within 3 days of the camp are eligible for a 50% refund only.',
     },
     {
         q: 'Who are the coaches?',
-        a: 'The Junior Royals Holiday Program is run by certified coaches trained in the Royals Way methodology. Full coach profiles will be confirmed and communicated to registered families prior to each program.',
+        a: 'The Junior Royals Holiday Camp is run by certified coaches trained in the Royals Way methodology. Full coach profiles will be confirmed and communicated to registered families prior to each camp.',
     },
     {
         q: 'Where exactly are the venues?',
         a: 'Cutting Edge Cricket is located in Bundoora, VIC (northern Melbourne). Cricket Connect is in Hallam, VIC (south-eastern Melbourne). Exact addresses and directions are included in the information above.',
     },
     {
-        q: 'Is the program suitable for beginners?',
+        q: 'Is the camp suitable for beginners?',
         a: 'Yes. The clinic caters to all skill levels from 7 to 14. Coaches adapt sessions to each player\'s development stage — whether they\'re picking up a bat for the first time or playing representative cricket.',
     },
 ];

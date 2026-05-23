@@ -7,6 +7,7 @@ const included = [
     'Official Rajasthan Royals Academy training shirt',
     'Structured basic cricket & T20 skills curriculum',
     'Small-group sessions with Royals certified coaches',
+    'Special guest coaching slots with Royals Elite Academy Coaches',
     'Individual skill development to take away',
     'Entry is for both male and female cricketers',
 ];
@@ -43,18 +44,15 @@ const PricingSection = () => {
                         <p className="text-white/70 font-bold uppercase tracking-widest text-sm mb-4">Per Player</p>
                         <div className="flex items-start justify-center gap-1 mb-3">
                             <span className="text-3xl font-black mt-2">$</span>
-                            <span className="text-8xl font-black leading-none">299</span>
+                            <span className="text-8xl font-black leading-none">330</span>
                         </div>
                         <div className="inline-flex items-center gap-2 bg-rr-medium-blue/20 border border-white/20 rounded-full px-4 py-2 mb-6">
-                            <span className="text-white font-bold text-sm">$24.92 / hour across 12 hours</span>
+                            <span className="text-white font-bold text-sm">$27.50 / hour across 12 hours</span>
                         </div>
                         <p className="text-white/80 text-sm font-medium mb-8">Official Rajasthan Royals training shirt included in every registration.</p>
-                        <button
-                            onClick={scrollToForm}
-                            className="w-full bg-white text-rr-dark font-black uppercase tracking-widest py-4 rounded-full hover:bg-rr-light-pink hover:text-white transition-all duration-300"
-                        >
-                            Secure Place Now
-                        </button>
+                        <div className="w-full bg-white/20 border border-white/30 text-white/60 font-black uppercase tracking-widest py-4 rounded-full text-center text-sm">
+                            Registration Opening Soon
+                        </div>
                     </motion.div>
 
                     {/* Inclusions */}
