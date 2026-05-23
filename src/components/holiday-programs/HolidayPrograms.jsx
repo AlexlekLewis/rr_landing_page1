@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import HeroSection from './HeroSection';
+import HallaBol from './HallaBol';
 import ClinicOverview from './ClinicOverview';
 import SessionWalkthrough from './SessionWalkthrough';
 import CoachesSection from './CoachesSection';
@@ -38,6 +39,7 @@ const HolidayPrograms = () => {
                 <div id="hero">
                     <HeroSection />
                 </div>
+                <HallaBol />
                 <div id="program-overview">
                     <ClinicOverview />
                 </div>
