@@ -191,7 +191,7 @@ const RegistrationForm = () => {
                         className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6"
                     >
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Limited Spots — April 2026</span>
+                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Limited Spots — July 2026</span>
                     </motion.div>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -304,10 +304,10 @@ const RegistrationForm = () => {
                                 <select name="location" value={form.location} onChange={handleChange} className={inputClass('location')}>
                                     <option value="">Select a location</option>
                                     <option value="cutting-edge">
-                                        Cutting Edge Cricket — Bundoora | Apr 8, 9 &amp; 10
+                                        Cutting Edge Cricket — Bundoora | July dates TBC
                                     </option>
                                     <option value="hallam">
-                                        Cricket Connect — Hallam | Apr 14, 15 &amp; 16 (Waitlist)
+                                        Cricket Connect — Hallam | July dates TBC (Waitlist)
                                     </option>
                                 </select>
                                 {errors.location && <p className="text-red-500 text-xs font-medium mt-1">{errors.location}</p>}

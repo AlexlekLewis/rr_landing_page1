@@ -5,17 +5,11 @@ import { motion } from 'framer-motion';
 const coaches = [
     {
         name: 'Alex Thornhill',
-        role: 'Head Coach',
+        role: 'Senior Coach',
         bio: 'A batting specialist with coaching experience across two continents — UK county cricket and the Australian premier system. Alex currently coaches within the Fitzroy Doncaster Academy and leads the cricket program at Xavier College. His technical approach combines video analysis with deep knowledge of what batting looks like at the next level.',
         img: '/assets/coaches/alex-thornhill.jpg',
     },
-    {
-        name: 'Lahiru Thirimanne',
-        role: 'Specialist Coach',
-        location: 'Hallam Only',
-        bio: 'Former Sri Lanka international and 2014 ICC World Twenty20 winner. A left-handed opening batter who represented Sri Lanka across all three formats, Lahiru brings firsthand experience of performing at the highest level of the game. Now based in Melbourne, he brings genuine international pedigree and a deep understanding of top-order batting to the RRA coaching environment.',
-        img: '/assets/coaches/lahiru-thirimanne.jpg',
-    },
+
 ];
 
 const CoachesSection = () => {
@@ -30,7 +24,7 @@ const CoachesSection = () => {
                         transition={{ duration: 0.6 }}
                         className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-wide mb-6"
                     >
-                        YOUR <span className="text-rr-pink">COACHES</span>
+                        YOUR <span className="text-rr-pink">COACH</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -43,7 +37,7 @@ const CoachesSection = () => {
                     </motion.p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-2xl mx-auto mb-10">
+                <div className="flex justify-center mb-10">
                     {coaches.map((coach, i) => (
                         <motion.div
                             key={coach.role + i}
@@ -51,7 +45,7 @@ const CoachesSection = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: i * 0.15 }}
-                            className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 w-full"
+                            className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 w-full max-w-sm"
                         >
                             {/* Avatar */}
                             <div className="h-56 flex items-center justify-center bg-gradient-to-br from-rr-navy via-rr-blue to-rr-pink">

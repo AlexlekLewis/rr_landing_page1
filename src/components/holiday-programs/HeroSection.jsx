@@ -74,11 +74,11 @@ const HeroSection = () => {
                 >
                     <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2">
                         <span className="text-rr-pink font-bold text-xs">📍</span>
-                        <span className="text-white text-xs font-semibold uppercase tracking-wide">Bundoora — Apr 8, 9 &amp; 10</span>
+                        <span className="text-white text-xs font-semibold uppercase tracking-wide">Bundoora — July dates TBC</span>
                     </div>
                     <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 opacity-60">
                         <span className="text-slate-400 font-bold text-xs">📍</span>
-                        <span className="text-slate-400 text-xs font-semibold uppercase tracking-wide">Hallam — Apr 14, 15 &amp; 16 · Sold Out</span>
+                        <span className="text-slate-400 text-xs font-semibold uppercase tracking-wide">Hallam — July dates TBC · Sold Out</span>
                     </div>
                 </motion.div>
 
