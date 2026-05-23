@@ -17,7 +17,7 @@ const HeroSection = () => {
             {/* Desktop background */}
             <div
                 className="absolute inset-0 bg-cover bg-no-repeat hidden md:block"
-                style={{ backgroundImage: "url('/assets/hero-ipl-action.png')", backgroundPosition: '65% 40%' }}
+                style={{ backgroundImage: "url('/assets/hero-ipl-action.png')", backgroundPosition: '65% 60%' }}
             />
             {/* Gradient overlays */}
             <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/60 to-rr-dark/20 md:hidden" />
