@@ -26,7 +26,7 @@ const GotAQuestion = () => (
                 </p>
 
                 <a
-                    href="mailto:info@rramelbourne.com?subject=Junior Royals Holiday Program Enquiry"
+                    href="mailto:info@rramelbourne.com?subject=Junior Royals Holiday Camp Enquiry"
                     className="inline-flex items-center gap-3 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-10 py-5 rounded-full transition-all duration-300 hover:shadow-[0_0_40px_rgba(229,6,149,0.5)] text-sm"
                 >
                     <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -116,7 +116,7 @@ const HolidayProgramSuccess = () => {
                     variants={fadeUp}
                     className="text-xl md:text-2xl font-semibold text-white/90 leading-relaxed mb-6"
                 >
-                    Welcome to the Junior Royals Holiday Program.
+                    Welcome to the Junior Royals Holiday Camp.
                 </motion.p>
 
                 {/* Body copy */}
@@ -147,7 +147,7 @@ const HolidayProgramSuccess = () => {
                         <div>
                             <p className="text-sm font-bold text-white/90 mb-1">Place Confirmation</p>
                             <p className="text-sm text-white/60 leading-relaxed">
-                                A member of our team will confirm your place in the program via email within 24 hours of receipt, on the first business day following your online enrolment. Our office hours are Monday to Friday, 8:30am – 5:30pm.
+                                A member of our team will confirm your place in the camp via email within 24 hours of receipt, on the first business day following your online enrolment. Our office hours are Monday to Friday, 8:30am – 5:30pm.
                             </p>
                         </div>
                     </div>

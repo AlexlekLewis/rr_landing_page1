@@ -159,10 +159,10 @@ const RegistrationForm = () => {
                         </div>
                         <h2 className="text-2xl font-black text-rr-dark uppercase tracking-tight mb-4">You're on the Waitlist</h2>
                         <p className="text-rr-charcoal font-medium leading-relaxed mb-6">
-                            Thank you for registering your interest in the Hallam program. Unfortunately this program is now full — but we've added you to our waitlist.
+                            Thank you for registering your interest in the Hallam camp. Unfortunately this camp is now full — but we've added you to our waitlist.
                         </p>
                         <p className="text-rr-charcoal font-medium leading-relaxed mb-8">
-                            We will be in touch if a place becomes available, or regarding future programs. If you have any questions, please contact us at{' '}
+                            We will be in touch if a place becomes available, or regarding future camps. If you have any questions, please contact us at{' '}
                             <a href="mailto:info@rramelbourne.com" className="text-rr-pink font-bold hover:underline">info@rramelbourne.com</a>.
                         </p>
                         <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 text-left">
@@ -324,7 +324,7 @@ const RegistrationForm = () => {
                                 I have read, understood, and agree to the <a href="/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Parent/Guardian Code of Conduct</a>.
                             </ComplianceCheckbox>
                             <ComplianceCheckbox checked={acceptSocialMedia} onChange={setAcceptSocialMedia} error={errors.acceptSocialMedia}>
-                                I am happy for photos and videos from the program featuring the player to be used on Rajasthan Royals Academy Melbourne's social media and marketing channels.
+                                I am happy for photos and videos from the camp featuring the player to be used on Rajasthan Royals Academy Melbourne's social media and marketing channels.
                             </ComplianceCheckbox>
                         </div>
 
