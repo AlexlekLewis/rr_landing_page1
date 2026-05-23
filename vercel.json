@@ -17,6 +17,16 @@
     ],
     "redirects": [
         {
+            "source": "/holiday-programs",
+            "destination": "/junior-royals-holiday",
+            "permanent": true
+        },
+        {
+            "source": "/holiday-programs/:path*",
+            "destination": "/junior-royals-holiday/:path*",
+            "permanent": true
+        },
+        {
             "source": "/eliteprogram2026/playerDNAprofile",
             "destination": "https://rramsdnaprofile.vercel.app",
             "permanent": false
