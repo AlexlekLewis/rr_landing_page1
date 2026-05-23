@@ -17,11 +17,7 @@ const features = [
         title: 'Boys & Girls',
         desc: 'Separate age groups for male and female cricketers. Safe, inclusive environment.',
     },
-    {
-        icon: '👕',
-        title: 'Training Shirt Included',
-        desc: 'Every player receives an official Rajasthan Royals Academy training shirt — $299 all in.',
-    },
+
     {
         icon: '📍',
         title: 'Two Locations',
