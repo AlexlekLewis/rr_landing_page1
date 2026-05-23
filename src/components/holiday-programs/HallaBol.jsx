@@ -17,7 +17,7 @@ const HallaBol = () => (
                 className="flex-1 text-center md:text-left z-10 pb-0 md:pb-10"
             >
                 <p className="text-rr-pink text-xs font-black uppercase tracking-[0.3em] mb-5">
-                    Rajasthan Royals · IPL
+                    Official Rajasthan Royals Academy
                 </p>
 
                 {/* HALLA BOL — all one consistent stroke style */}
