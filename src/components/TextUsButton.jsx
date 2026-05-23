@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 const SMS_NUMBER = '0421261825';
 const MOBILE_MESSAGE = 'Hi - Let us know if you have a question!';
 const DESKTOP_MESSAGE = 'Hi, I have a question about RRA Melbourne programs';
-const CALENDLY_URL = 'https://calendly.com/whitewall-bys/royalsmelbourne-meeting';
 
 const TextUsButton = () => {
     const [tooltip, setTooltip] = useState(false);
@@ -29,29 +28,11 @@ const TextUsButton = () => {
 
     return (
         <div className="fixed bottom-24 right-4 z-50 flex flex-col items-end gap-3">
-
-            {/* Book a Call button */}
-            <a
-                href={CALENDLY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Book a call"
-                className="flex items-center gap-2 bg-rr-blue hover:bg-rr-dark text-white font-black uppercase tracking-widest text-xs px-4 py-3 rounded-full shadow-lg hover:shadow-[0_0_24px_rgba(18,38,170,0.5)] transition-all duration-300 hover:scale-105"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                Book a Call
-            </a>
-
-            {/* Tooltip */}
             {tooltip && (
                 <div className="bg-rr-dark text-white text-xs font-bold px-3 py-2 rounded-xl shadow-lg whitespace-nowrap">
                     Text us: {SMS_NUMBER}
                 </div>
             )}
-
-            {/* Text Us button */}
             <button
                 onClick={handleClick}
                 onMouseEnter={() => setTooltip(true)}
