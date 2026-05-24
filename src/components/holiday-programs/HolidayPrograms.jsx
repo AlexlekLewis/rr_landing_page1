@@ -9,7 +9,7 @@ import CoachesSection from './CoachesSection';
 import ActionImage from './ActionImage';
 import PricingSection from './PricingSection';
 import LocationsSection from './LocationsSection';
-import RegistrationComingSoon from './RegistrationComingSoon';
+import JulyRegistrationForm from './JulyRegistrationForm';
 import JoinTheFamily from './JoinTheFamily';
 import GotAQuestion from './GotAQuestion';
 
@@ -60,7 +60,7 @@ const HolidayPrograms = () => {
                     <LocationsSection />
                 </div>
                 <div id="registration-form">
-                    <RegistrationComingSoon />
+                    <JulyRegistrationForm />
                 </div>
                 <GotAQuestion />
             </main>
