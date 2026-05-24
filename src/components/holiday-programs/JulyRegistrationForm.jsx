@@ -97,7 +97,7 @@ const JulyRegistrationForm = () => {
         try {
             const utm = getUTM();
             const { error } = await supabase
-                .from('junior_royals_july_registrations')
+                .from('junior_royals_july_holidays_registrations')
                 .insert([{
                     parent_name:      form.parent_name.trim(),
                     parent_email:     form.parent_email.trim().toLowerCase(),
