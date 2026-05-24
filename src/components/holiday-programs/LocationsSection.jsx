@@ -97,12 +97,22 @@ const LocationsSection = () => {
                                 </div>
                             </div>
 
-                            <button
-                                onClick={() => document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' })}
-                                className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest py-3 rounded-full text-xs transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.4)]"
-                            >
-                                Register Now
-                            </button>
+                            {loc.tag === 'bundoora' ? (
+                                <a
+                                    href="#registration-form"
+                                    onClick={(e) => { e.preventDefault(); document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' }); }}
+                                    className="block w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest py-3 rounded-full text-xs transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.4)] text-center"
+                                >
+                                    Buy Now
+                                </a>
+                            ) : (
+                                <button
+                                    onClick={() => document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' })}
+                                    className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest py-3 rounded-full text-xs transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.4)]"
+                                >
+                                    Register Now
+                                </button>
+                            )}
                         </div>
                     </motion.div>
                 ))}
