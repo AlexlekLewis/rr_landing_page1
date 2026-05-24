@@ -304,7 +304,7 @@ const RegistrationForm = () => {
                                         Cutting Edge Cricket — Bundoora | July dates TBC
                                     </option>
                                     <option value="hallam">
-                                        Cricket Connect — Hallam | July dates TBC (Waitlist)
+                                        Hallam | July dates TBC (Waitlist)
                                     </option>
                                 </select>
                                 {errors.location && <p className="text-red-500 text-xs font-medium mt-1">{errors.location}</p>}
