@@ -246,7 +246,11 @@ const JulyRegistrationForm = () => {
                     </div>
 
                     {/* ── SHIRT ── */}
-                    <p className="text-xs font-black text-rr-pink uppercase tracking-widest mb-6 pb-2 border-b border-slate-100">Training Shirt — $29.95</p>
+                    <p className="text-xs font-black text-rr-pink uppercase tracking-widest mb-3 pb-2 border-b border-slate-100">Training Shirt — $29.95</p>
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl px-5 py-4 mb-6">
+                        <p className="text-amber-800 text-sm font-bold mb-1">⚠️ Please take care when selecting your shirt size</p>
+                        <p className="text-amber-700 text-xs font-medium leading-relaxed">Shirts are ordered specifically for each participant and cannot be exchanged after purchase. We strongly recommend using the Omtex size chart below to measure your child before selecting. Choosing the wrong size is a common mistake — please don't guess.</p>
+                    </div>
                     <div className="mb-8">
                         {/* Already have shirt checkbox */}
                         <label className="flex items-start gap-3 cursor-pointer mb-5">
