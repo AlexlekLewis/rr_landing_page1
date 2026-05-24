@@ -21,7 +21,7 @@ const TermsConditions = () => {
                         Back to Home
                     </Link>
                     <h1 className="text-4xl md:text-5xl font-black uppercase tracking-wide">Terms &amp; Conditions</h1>
-                    <p className="text-white/70 mt-4 text-sm">Last updated: February 2026</p>
+                    <p className="text-white/70 mt-4 text-sm">Last updated: May 2026</p>
                 </div>
             </div>
 
@@ -100,8 +100,10 @@ const TermsConditions = () => {
                             <li>Respect the intellectual property and brand of the Rajasthan Royals Academy Melbourne.</li>
                         </ul>
                         <p className="text-rr-dark/80 leading-relaxed mt-4">
-                            Failure to comply with these standards may result in immediate removal from the program
-                            without refund.
+                            Failure to comply with these standards may result in suspension or immediate removal from
+                            the program. Where a participant is removed for misconduct, fees for the remainder of the
+                            program are non-refundable. This does not limit any rights you may have under the
+                            Australian Consumer Law.
                         </p>
                     </section>
 
@@ -115,7 +117,7 @@ const TermsConditions = () => {
                             <li><strong>StemGuards:</strong> In alignment with Cricket Australia safety recommendations, the use of neck protectors (StemGuards) is strongly recommended for all players, and is enforced as mandatory for specific high-performance scenarios as directed by the coaching staff.</li>
                             <li><strong>Equipment Standard:</strong> Participants must provide their own personal protective equipment (pads, gloves, protectors) and ensure it is in good, safe working condition. Coaches reserve the right to prevent a player from participating if their equipment is deemed unsafe.</li>
                             <li><strong>Medical Conditions:</strong> It is the responsibility of the player (or parent/guardian if under 18) to disclose any pre-existing medical conditions, allergies, or injuries prior to participating.</li>
-                            <li><strong>Risk Acknowledgement:</strong> Cricket is an active sport with inherent risks. By participating in the high-performance assessment sessions or the Elite Program, you acknowledge and accept all risks of physical injury, and agree that the Academy and its coaching staff are not liable for injuries sustained during standard training activities.</li>
+                            <li><strong>Risk Acknowledgement:</strong> Cricket is an active sport with inherent risks. By participating in any Academy assessment session, training, camp, clinic, or program, you acknowledge and accept all risks of physical injury, and agree that the Academy and its coaching staff are not liable for injuries sustained during standard training activities.</li>
                         </ul>
                     </section>
 
@@ -162,7 +164,117 @@ const TermsConditions = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">12. Governing Law</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">12. Participant Withdrawal &amp; Refunds</h2>
+
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            This clause applies once a player has been offered and has accepted a place in any
+                            Rajasthan Royals Academy Melbourne program — including, without limitation, the Elite
+                            Program, the Holiday Programs, the Junior Royals camps, the Female Cricket Introduction
+                            and Female Empowerment programs, the Little Crickets program, and any other paid program,
+                            camp, or clinic operated by the Academy (each, an "<strong>Academy Program</strong>") —
+                            and fees have been paid or become payable. It governs withdrawals initiated by the
+                            participant or their family, and is separate from Clause 11, which governs changes or
+                            cancellation initiated by the Academy.
+                        </p>
+
+                        <div className="my-6 p-5 border-l-4 border-rr-pink bg-rr-navy/5 rounded-r-lg">
+                            <p className="font-bold uppercase tracking-wide text-rr-navy mb-2">Our position in plain terms</p>
+                            <p className="text-rr-dark/90 leading-relaxed">
+                                Program fees are <strong>non-refundable</strong> once a place in any Academy Program has been accepted.
+                                The Academy does not provide cash refunds where a participant or their family chooses to withdraw
+                                from an Academy Program. Where a participant withdraws, the Academy may — at its sole discretion
+                                and subject to the provisions below — offer a <strong>credit</strong> toward a future Academy Program
+                                or for transfer to a sibling. This reflects costs the Academy commits to and cannot recover, and,
+                                where relevant, the loss of a squad or camp position another applicant could otherwise have taken.
+                            </p>
+                        </div>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">12.1  Statutory framework</h3>
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            This clause operates under, and is to be read consistently with, the
+                            <strong> Australian Consumer Law</strong> (Schedule 2 of the
+                            <em> Competition and Consumer Act 2010</em> (Cth)) (the "<strong>ACL</strong>"). Under the ACL,
+                            a consumer is entitled to a refund only where a service fails to meet a consumer guarantee —
+                            for example, where the service is not supplied, is not rendered with due care and skill,
+                            is not of acceptable quality, or is not reasonably fit for its disclosed purpose.
+                            A withdrawal by the participant for personal reasons — including travel, relocation,
+                            scheduling, or a change of mind — is not a failure of a consumer guarantee and does not
+                            give rise to a refund entitlement under the ACL. Nothing in this clause is intended to
+                            limit, exclude, or modify any non-excludable right you may have under the ACL.
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">12.2  Committed costs</h3>
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            When a place in any Academy Program is confirmed, the Academy commits in advance to costs that
+                            cannot be recovered if a player later withdraws. These typically include coaching allocation,
+                            facility and lane bookings, equipment, kit, player resources, and administration. Where the
+                            Academy Program has a limited squad or camp capacity, a confirmed place also removes that
+                            position from the cohort, meaning another applicant who could have taken it is turned away.
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">12.3  Enrolment component (non-refundable)</h3>
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            A defined portion of the program fee — the Enrolment Component, specified on the enrolment
+                            form — is non-refundable once a place is accepted. This reflects the committed costs
+                            described above and represents a genuine pre-estimate of the loss the Academy incurs on a
+                            withdrawal.
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">12.4  Change-of-mind withdrawals — no cash refund</h3>
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            Withdrawals for reasons including travel, relocation, scheduling conflicts, family
+                            circumstances, or a decision not to continue are treated as a change of mind. The Academy
+                            is <strong>not obliged to provide, and will not provide, a cash refund</strong> in these circumstances. The only
+                            remedy available is a discretionary credit issued in accordance with clauses 12.5 and 12.6
+                            below.
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">12.5  Discretionary credit — before the program commences</h3>
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            If a participant withdraws before the first scheduled session of the Academy Program, the
+                            Academy may issue, at its discretion, a credit equal to the program fee less the Enrolment
+                            Component. The credit may be applied to a future Academy Program or transferred to a sibling,
+                            and is subject to such reasonable conditions (including expiry) as the Academy specifies at
+                            the time of issue.
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">12.6  Discretionary credit — after the program commences</h3>
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            If a participant withdraws after the Academy Program has commenced, the Academy may issue,
+                            at its discretion, a credit for the portion of the Academy Program not yet delivered, less
+                            the Enrolment Component, calculated on a pro-rata basis. No credit is available for
+                            withdrawals occurring after the midpoint of the Academy Program (or, for short-form programs
+                            such as single-day camps or clinics, after the program has commenced), as the substantial
+                            majority of committed costs have by then been incurred.
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">12.7  Genuine hardship</h3>
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            The Academy may, at its sole discretion, offer a cash refund or an enhanced credit where a
+                            participant withdraws due to genuine hardship — such as a serious medical condition or
+                            significant family emergency — supported by reasonable documentation. Any such arrangement
+                            is made on an exceptional, case-by-case basis, is not an admission of any refund obligation,
+                            and does not set a precedent.
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">12.8  Your rights under the Australian Consumer Law</h3>
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            Nothing in this clause limits or excludes any rights you may have under the Australian
+                            Consumer Law, including the consumer guarantees in Part 3-2, Division 1 of the ACL. If the
+                            Academy fails to deliver the program in accordance with the consumer guarantees, you may be
+                            entitled to remedies under the ACL independently of this clause, including a refund where
+                            the failure amounts to a major failure.
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">12.9  Requesting a withdrawal</h3>
+                        <p className="text-rr-dark/80 leading-relaxed">
+                            Withdrawal requests must be made in writing to <span className="font-semibold">eliteprogram@rramelbourne.com</span>.
+                            The effective date of withdrawal is the date the written request is received by the Academy.
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">13. Governing Law</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             These Terms shall be governed by and construed in accordance with the laws of the
                             State of Victoria, Australia. Any disputes arising in connection with these Terms
@@ -171,7 +283,7 @@ const TermsConditions = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">13. Amendments</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">14. Amendments</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             We reserve the right to amend these Terms at any time. Updated Terms will be posted
                             on this page with a revised date. Continued use of the website or participation in
@@ -180,7 +292,7 @@ const TermsConditions = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">14. Contact Us</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">15. Contact Us</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             If you have any questions regarding these Terms, please contact us at:
                         </p>

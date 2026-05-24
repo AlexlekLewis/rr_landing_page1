@@ -118,13 +118,17 @@ const RegistrationForm = () => {
                 ...utmParams,
             };
 
-            const { error: insertError } = await supabase
+            const { data: inserted, error: insertError } = await supabase
                 .from('holiday_clinic_registrations')
-                .insert([payload]);
+                .insert([payload])
+                .select('id')
+                .single();
 
             if (insertError) throw insertError;
 
-            // Zapier webhook is handled by async pg_net database trigger on INSERT
+            // Sheet sync is handled by a Supabase Database Webhook on this table
+            // → POSTs to /api/sync-holiday-row → writes directly to the workbook
+            // via Google Sheets API. No Zapier in the path.
 
             // Hallam is sold out — show waitlist confirmation instead of Stripe
             if (form.location === 'hallam') {
@@ -132,8 +136,16 @@ const RegistrationForm = () => {
                 return;
             }
 
-            // Redirect to Stripe checkout (Bundoora)
-            window.location.href = 'https://buy.stripe.com/9B6dR93bjggZa5ugUj9Zm07';
+            // Redirect to Stripe checkout (Bundoora).
+            // client_reference_id carries the registration UUID through to the
+            // Stripe webhook, which uses it to back-fill payment_status onto
+            // this row. Without it, the paid status will never link to this
+            // submission (see api/stripe-webhook.js → holiday back-fill).
+            const stripeBase = 'https://buy.stripe.com/9B6dR93bjggZa5ugUj9Zm07';
+            const stripeUrl = inserted?.id
+                ? `${stripeBase}?client_reference_id=${encodeURIComponent(inserted.id)}`
+                : stripeBase;
+            window.location.href = stripeUrl;
         } catch (err) {
             console.error('Submission error:', err);
             setErrors({ form: 'Something went wrong. Please try again or email info@rramelbourne.com' });
