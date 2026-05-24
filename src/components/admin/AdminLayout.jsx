@@ -82,12 +82,33 @@ const AdminLayoutInner = ({ children }) => {
     const [user, setUser] = useState(null);
     const [dashUser, setDashUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    // Auto-generated sub-items under "Holiday Programs" sidebar entry.
+    // Reads holiday_program_sheets so adding a new program is a config row,
+    // never a code change here.
+    const [holidaySubPrograms, setHolidaySubPrograms] = useState([]);
     const navigate = useNavigate();
     const location = useLocation();
     const { selectedProgram, setSelectedProgram, programs, programLabel } = useProgram();
 
     useEffect(() => {
         checkAuth();
+    }, []);
+
+    useEffect(() => {
+        let cancelled = false;
+        (async () => {
+            const { data, error } = await supabase
+                .from('holiday_program_sheets')
+                .select('program_slug, program_label, is_active')
+                .eq('is_active', true)
+                .order('created_at', { ascending: false });
+            if (error) {
+                console.warn('[admin sidebar] could not load holiday sub-programs:', error.message);
+                return;
+            }
+            if (!cancelled) setHolidaySubPrograms(data || []);
+        })();
+        return () => { cancelled = true; };
     }, []);
 
     const checkAuth = async () => {
@@ -196,22 +217,51 @@ const AdminLayoutInner = ({ children }) => {
                                 const isActive = location.pathname === itemPath
                                     && (itemProgram ? currentProgram === itemProgram : !currentProgram);
                                 const Icon = item.icon;
+                                // Detect Holiday Programs entry so we can render sub-items
+                                // under it (one row per active holiday_program_sheets config).
+                                const isHolidayParent = itemPath === '/rramadmin_26/program-registrations'
+                                    && itemProgram === 'holiday'
+                                    && holidaySubPrograms.length > 0;
                                 return (
-                                    <Link
-                                        key={item.path}
-                                        to={item.path}
-                                        onClick={() => setMobileOpen(false)}
-                                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm font-medium group ${isActive
-                                            ? 'bg-gradient-to-r from-rr-pink/20 to-rr-blue/10 text-white'
-                                            : 'text-slate-400 hover:text-white hover:bg-white/5'
-                                            }`}
-                                    >
-                                        <Icon className={`w-5 h-5 shrink-0 ${isActive ? 'text-rr-pink' : 'text-slate-500 group-hover:text-slate-300'}`} />
-                                        {(!collapsed || mobile) && <span className="truncate">{item.label}</span>}
-                                        {isActive && (
-                                            <div className="ml-auto w-1.5 h-1.5 rounded-full bg-rr-pink shrink-0" />
+                                    <React.Fragment key={item.path}>
+                                        <Link
+                                            to={item.path}
+                                            onClick={() => setMobileOpen(false)}
+                                            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm font-medium group ${isActive
+                                                ? 'bg-gradient-to-r from-rr-pink/20 to-rr-blue/10 text-white'
+                                                : 'text-slate-400 hover:text-white hover:bg-white/5'
+                                                }`}
+                                        >
+                                            <Icon className={`w-5 h-5 shrink-0 ${isActive ? 'text-rr-pink' : 'text-slate-500 group-hover:text-slate-300'}`} />
+                                            {(!collapsed || mobile) && <span className="truncate">{item.label}</span>}
+                                            {isActive && (
+                                                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-rr-pink shrink-0" />
+                                            )}
+                                        </Link>
+                                        {/* Holiday Programs sub-items: one per active holiday_program_sheets row */}
+                                        {isHolidayParent && (!collapsed || mobile) && (
+                                            <div className="ml-3 pl-3 border-l border-white/5 space-y-0.5">
+                                                {holidaySubPrograms.map((sp) => {
+                                                    const subPath = `/rramadmin_26/holiday/${sp.program_slug}`;
+                                                    const subActive = location.pathname === subPath;
+                                                    return (
+                                                        <Link
+                                                            key={sp.program_slug}
+                                                            to={subPath}
+                                                            onClick={() => setMobileOpen(false)}
+                                                            className={`flex items-center gap-3 px-3 py-2 rounded-xl transition-all text-xs font-medium ${subActive
+                                                                ? 'bg-rr-pink/15 text-white'
+                                                                : 'text-slate-500 hover:text-white hover:bg-white/5'
+                                                                }`}
+                                                        >
+                                                            <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${subActive ? 'bg-rr-pink' : 'bg-slate-600'}`} />
+                                                            <span className="truncate">{sp.program_label}</span>
+                                                        </Link>
+                                                    );
+                                                })}
+                                            </div>
                                         )}
-                                    </Link>
+                                    </React.Fragment>
                                 );
                             })}
                         </div>
