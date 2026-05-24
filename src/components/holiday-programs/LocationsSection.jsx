@@ -41,7 +41,7 @@ const LocationsSection = () => (
                     transition={{ delay: 0.1 }}
                     className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-wide mb-6"
                 >
-                    FIND YOUR <span className="text-rr-pink">NEAREST CAMP</span>
+                    NOW OPEN <span className="text-rr-pink">FOR REGISTRATION</span>
                 </motion.h2>
                 <motion.p
                     initial={{ opacity: 0, y: 20 }}
