@@ -116,7 +116,7 @@ const HolidayProgramSuccess = () => {
                     variants={fadeUp}
                     className="text-xl md:text-2xl font-semibold text-white/90 leading-relaxed mb-6"
                 >
-                    Welcome to the Junior Royals Holiday Camp.
+                    You're registered for the Junior Royals Holiday Camp!
                 </motion.p>
 
                 {/* Body copy */}
@@ -127,39 +127,42 @@ const HolidayProgramSuccess = () => {
                     variants={fadeUp}
                     className="text-base md:text-lg text-white/70 leading-relaxed mb-6 max-w-lg mx-auto font-medium"
                 >
-                    You are now enrolled and our team are looking forward to working with you as you continue your cricketing journey — the Royals Way.
+                    Your registration is confirmed. We can't wait to see you at the Junior Royals Holiday Camp!
                 </motion.p>
 
-                {/* Info card — confirmation notice */}
+                {/* What to bring */}
                 <motion.div
                     initial="hidden"
                     animate="visible"
                     custom={0.55}
                     variants={fadeUp}
-                    className="bg-white/5 border border-white/10 rounded-2xl px-6 py-5 mb-6 text-left backdrop-blur-sm"
+                    className="bg-white/5 border border-white/10 rounded-2xl px-6 py-5 mb-5 text-left backdrop-blur-sm"
                 >
                     <div className="flex items-start gap-4">
                         <div className="w-8 h-8 rounded-full bg-rr-pink/20 flex items-center justify-center shrink-0 mt-0.5">
                             <svg className="w-4 h-4 text-rr-pink" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                             </svg>
                         </div>
                         <div>
-                            <p className="text-sm font-bold text-white/90 mb-1">Place Confirmation</p>
-                            <p className="text-sm text-white/60 leading-relaxed">
-                                A member of our team will confirm your place in the camp via email within 24 hours of receipt, on the first business day following your online enrolment. Our office hours are Monday to Friday, 8:30am – 5:30pm.
-                            </p>
+                            <p className="text-sm font-bold text-white/90 mb-2">What to Bring</p>
+                            <ul className="text-sm text-white/60 leading-relaxed space-y-1">
+                                <li>• A drink bottle and water</li>
+                                <li>• Wear your cricket club training kit or a Royals shirt</li>
+                                <li>• If you ordered a shirt, it will be available to collect prior to your first session</li>
+                                <li>• Please arrive <span className="text-white font-bold">15 minutes early</span> for the first session</li>
+                            </ul>
                         </div>
                     </div>
                 </motion.div>
 
-                {/* Info card — contact */}
+                {/* Confirmation email */}
                 <motion.div
                     initial="hidden"
                     animate="visible"
                     custom={0.6}
                     variants={fadeUp}
-                    className="bg-white/5 border border-white/10 rounded-2xl px-6 py-5 mb-10 text-left backdrop-blur-sm"
+                    className="bg-white/5 border border-white/10 rounded-2xl px-6 py-5 mb-5 text-left backdrop-blur-sm"
                 >
                     <div className="flex items-start gap-4">
                         <div className="w-8 h-8 rounded-full bg-rr-pink/20 flex items-center justify-center shrink-0 mt-0.5">
@@ -168,13 +171,33 @@ const HolidayProgramSuccess = () => {
                             </svg>
                         </div>
                         <div>
-                            <p className="text-sm font-bold text-white/90 mb-1">Questions in the meantime?</p>
+                            <p className="text-sm font-bold text-white/90 mb-1">Confirmation Email</p>
+                            <p className="text-sm text-white/60 leading-relaxed">
+                                A full confirmation email with all camp details will be sent approximately 7 days prior to the start of the camp. Keep an eye on your inbox.
+                            </p>
+                        </div>
+                    </div>
+                </motion.div>
+
+                {/* Questions */}
+                <motion.div
+                    initial="hidden"
+                    animate="visible"
+                    custom={0.65}
+                    variants={fadeUp}
+                    className="bg-white/5 border border-white/10 rounded-2xl px-6 py-5 mb-10 text-left backdrop-blur-sm"
+                >
+                    <div className="flex items-start gap-4">
+                        <div className="w-8 h-8 rounded-full bg-rr-pink/20 flex items-center justify-center shrink-0 mt-0.5">
+                            <svg className="w-4 h-4 text-rr-pink" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p className="text-sm font-bold text-white/90 mb-1">Questions?</p>
                             <p className="text-sm text-white/60 leading-relaxed">
                                 Reach out to our team at{' '}
-                                <a
-                                    href="mailto:info@rramelbourne.com"
-                                    className="text-rr-pink font-bold hover:underline transition-all"
-                                >
+                                <a href="mailto:info@rramelbourne.com" className="text-rr-pink font-bold hover:underline">
                                     info@rramelbourne.com
                                 </a>
                             </p>
