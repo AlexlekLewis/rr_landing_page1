@@ -280,6 +280,53 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: progErr.message });
     }
 
+    // -----------------------------------------------------------
+    // Holiday-program ALSO writes back to the form-submitted row so
+    // a single holiday_clinic_* row reflects the full lifecycle
+    // (form submit → Stripe paid). Source-of-truth join is the
+    // client_reference_id passed to Stripe Checkout, which carries
+    // the UUID of the registration row.
+    // Tables linked this way must expose payment_status, stripe_session_id,
+    // stripe_payment_intent_id, amount_paid_cents, paid_at, receipt_url.
+    // -----------------------------------------------------------
+    if (programClass.program === 'holiday') {
+      const refId = session.client_reference_id || null;
+      const HOLIDAY_TABLES = [
+        'junior_royals_july_holidays_registrations',
+        'holiday_clinic_registrations',
+      ];
+      const isUuid = (v) => typeof v === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
+      if (isUuid(refId)) {
+        const updatePayload = {
+          payment_status:           'completed',
+          stripe_session_id:        session.id,
+          stripe_payment_intent_id: session.payment_intent?.id || null,
+          amount_paid_cents:        session.amount_total ?? null,
+          paid_at:                  charge?.created
+                                      ? new Date(charge.created * 1000).toISOString()
+                                      : new Date().toISOString(),
+          receipt_url:              charge?.receipt_url || null,
+        };
+        for (const table of HOLIDAY_TABLES) {
+          const { data, error } = await supabase
+            .from(table)
+            .update(updatePayload)
+            .eq('id', refId)
+            .select('id');
+          if (error) {
+            console.warn(`holiday-back-fill skipped for ${table}:`, error.message);
+            continue;
+          }
+          if (data && data.length) {
+            console.log(`holiday payment back-filled to ${table} (id=${refId})`);
+            break; // a UUID belongs to at most one table
+          }
+        }
+      } else {
+        console.warn('holiday session missing client_reference_id — back-fill skipped', { session_id: session.id });
+      }
+    }
+
     return res.status(200).json({
       received: true,
       routed_to: 'program_registrations',
