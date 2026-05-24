@@ -385,7 +385,7 @@ const JulyRegistrationForm = () => {
                         disabled={submitting}
                         className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 text-white font-black uppercase tracking-widest py-5 rounded-full transition-all duration-300 hover:shadow-[0_0_32px_rgba(229,6,149,0.5)] text-sm"
                     >
-                        {submitting ? 'Submitting...' : 'Register Now'}
+                        {submitting ? 'Submitting...' : 'Secure My Place — Go to Checkout'}
                     </button>
 
                     <p className="text-center text-slate-400 text-xs mt-4">
