@@ -117,7 +117,7 @@ const TermsConditions = () => {
                             <li><strong>StemGuards:</strong> In alignment with Cricket Australia safety recommendations, the use of neck protectors (StemGuards) is strongly recommended for all players, and is enforced as mandatory for specific high-performance scenarios as directed by the coaching staff.</li>
                             <li><strong>Equipment Standard:</strong> Participants must provide their own personal protective equipment (pads, gloves, protectors) and ensure it is in good, safe working condition. Coaches reserve the right to prevent a player from participating if their equipment is deemed unsafe.</li>
                             <li><strong>Medical Conditions:</strong> It is the responsibility of the player (or parent/guardian if under 18) to disclose any pre-existing medical conditions, allergies, or injuries prior to participating.</li>
-                            <li><strong>Risk Acknowledgement:</strong> Cricket is an active sport with inherent risks. By participating in the high-performance assessment sessions or the Elite Program, you acknowledge and accept all risks of physical injury, and agree that the Academy and its coaching staff are not liable for injuries sustained during standard training activities.</li>
+                            <li><strong>Risk Acknowledgement:</strong> Cricket is an active sport with inherent risks. By participating in any Academy assessment session, training, camp, clinic, or program, you acknowledge and accept all risks of physical injury, and agree that the Academy and its coaching staff are not liable for injuries sustained during standard training activities.</li>
                         </ul>
                     </section>
 
@@ -167,21 +167,25 @@ const TermsConditions = () => {
                         <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">12. Participant Withdrawal &amp; Refunds</h2>
 
                         <p className="text-rr-dark/80 leading-relaxed mb-4">
-                            This clause applies once a player has been offered and has accepted a place in the Elite
-                            Program and fees have been paid or become payable. It governs withdrawals initiated by
-                            the participant or their family, and is separate from Clause 11, which governs changes
-                            or cancellation initiated by the Academy.
+                            This clause applies once a player has been offered and has accepted a place in any
+                            Rajasthan Royals Academy Melbourne program — including, without limitation, the Elite
+                            Program, the Holiday Programs, the Junior Royals camps, the Female Cricket Introduction
+                            and Female Empowerment programs, the Little Crickets program, and any other paid program,
+                            camp, or clinic operated by the Academy (each, an "<strong>Academy Program</strong>") —
+                            and fees have been paid or become payable. It governs withdrawals initiated by the
+                            participant or their family, and is separate from Clause 11, which governs changes or
+                            cancellation initiated by the Academy.
                         </p>
 
                         <div className="my-6 p-5 border-l-4 border-rr-pink bg-rr-navy/5 rounded-r-lg">
                             <p className="font-bold uppercase tracking-wide text-rr-navy mb-2">Our position in plain terms</p>
                             <p className="text-rr-dark/90 leading-relaxed">
-                                Program fees are <strong>non-refundable</strong> once a place in the Elite Program has been accepted.
-                                The Academy does not provide cash refunds where a participant or their family chooses to withdraw.
-                                Where a participant withdraws, the Academy may — at its sole discretion and subject to the
-                                provisions below — offer a <strong>credit</strong> toward a future Academy intake or for transfer to a
-                                sibling. This reflects costs the Academy commits to and cannot recover, and the loss of a squad
-                                position another applicant could otherwise have taken.
+                                Program fees are <strong>non-refundable</strong> once a place in any Academy Program has been accepted.
+                                The Academy does not provide cash refunds where a participant or their family chooses to withdraw
+                                from an Academy Program. Where a participant withdraws, the Academy may — at its sole discretion
+                                and subject to the provisions below — offer a <strong>credit</strong> toward a future Academy Program
+                                or for transfer to a sibling. This reflects costs the Academy commits to and cannot recover, and,
+                                where relevant, the loss of a squad or camp position another applicant could otherwise have taken.
                             </p>
                         </div>
 
@@ -201,10 +205,11 @@ const TermsConditions = () => {
 
                         <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">12.2  Committed costs</h3>
                         <p className="text-rr-dark/80 leading-relaxed mb-4">
-                            When a place in the Elite Program is confirmed, the Academy commits in advance to costs that
-                            cannot be recovered if a player later withdraws. These include coaching allocation, facility
-                            and lane bookings, player resources, and administration. A confirmed place also removes that
-                            position from a limited squad, meaning another applicant who could have taken it is turned away.
+                            When a place in any Academy Program is confirmed, the Academy commits in advance to costs that
+                            cannot be recovered if a player later withdraws. These typically include coaching allocation,
+                            facility and lane bookings, equipment, kit, player resources, and administration. Where the
+                            Academy Program has a limited squad or camp capacity, a confirmed place also removes that
+                            position from the cohort, meaning another applicant who could have taken it is turned away.
                         </p>
 
                         <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">12.3  Enrolment component (non-refundable)</h3>
@@ -226,19 +231,21 @@ const TermsConditions = () => {
 
                         <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">12.5  Discretionary credit — before the program commences</h3>
                         <p className="text-rr-dark/80 leading-relaxed mb-4">
-                            If a participant withdraws before the first scheduled session, the Academy may issue, at its
-                            discretion, a credit equal to the program fee less the Enrolment Component. The credit may
-                            be applied to a future Academy intake or transferred to a sibling, and is subject to such
-                            reasonable conditions (including expiry) as the Academy specifies at the time of issue.
+                            If a participant withdraws before the first scheduled session of the Academy Program, the
+                            Academy may issue, at its discretion, a credit equal to the program fee less the Enrolment
+                            Component. The credit may be applied to a future Academy Program or transferred to a sibling,
+                            and is subject to such reasonable conditions (including expiry) as the Academy specifies at
+                            the time of issue.
                         </p>
 
                         <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">12.6  Discretionary credit — after the program commences</h3>
                         <p className="text-rr-dark/80 leading-relaxed mb-4">
-                            If a participant withdraws after the program has commenced, the Academy may issue, at its
-                            discretion, a credit for the portion of the program not yet delivered, less the Enrolment
-                            Component, calculated on a pro-rata basis. No credit is available for withdrawals occurring
-                            after the midpoint of the program block, as the substantial majority of committed costs have
-                            by then been incurred.
+                            If a participant withdraws after the Academy Program has commenced, the Academy may issue,
+                            at its discretion, a credit for the portion of the Academy Program not yet delivered, less
+                            the Enrolment Component, calculated on a pro-rata basis. No credit is available for
+                            withdrawals occurring after the midpoint of the Academy Program (or, for short-form programs
+                            such as single-day camps or clinics, after the program has commenced), as the substantial
+                            majority of committed costs have by then been incurred.
                         </p>
 
                         <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">12.7  Genuine hardship</h3>
