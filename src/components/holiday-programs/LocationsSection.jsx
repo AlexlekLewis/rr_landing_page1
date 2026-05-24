@@ -21,7 +21,8 @@ const locations = [
     },
 ];
 
-const LocationsSection = () => (
+const LocationsSection = () => {
+    return (
     <section className="py-24 bg-slate-50">
         <div className="max-w-6xl mx-auto px-6">
             <div className="text-center mb-16">
@@ -65,8 +66,8 @@ const LocationsSection = () => (
                         className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 relative"
                     >
                         {/* Opening Soon badge */}
-                        <div className="absolute top-4 right-4 z-10 bg-rr-blue text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full">
-                            Opening Soon
+                        <div className="absolute top-4 right-4 z-10 bg-rr-pink text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full">
+                            Now Open
                         </div>
 
                         {/* Gradient header */}
@@ -96,15 +97,19 @@ const LocationsSection = () => (
                                 </div>
                             </div>
 
-                            <div className="bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-center">
-                                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Registration opens soon</p>
-                            </div>
+                            <button
+                                onClick={() => document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' })}
+                                className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest py-3 rounded-full text-xs transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.4)]"
+                            >
+                                Register Now
+                            </button>
                         </div>
                     </motion.div>
                 ))}
             </div>
         </div>
     </section>
-);
+    );
+};
 
 export default LocationsSection;
