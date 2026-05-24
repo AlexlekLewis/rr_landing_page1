@@ -380,6 +380,10 @@ const JulyRegistrationForm = () => {
                         </div>
                     )}
 
+                    <div className="bg-rr-pink/10 border border-rr-pink/30 rounded-xl px-5 py-4 mb-5 text-center">
+                        <p className="text-rr-pink font-black text-sm uppercase tracking-wide">🏏 Early Bird Price — $299</p>
+                        <p className="text-rr-charcoal text-xs font-medium mt-1">Offer ends Midnight Sunday 8 June 2026. Price increases to $330 after.</p>
+                    </div>
                     <button
                         onClick={handleSubmit}
                         disabled={submitting}
