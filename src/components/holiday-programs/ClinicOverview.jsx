@@ -46,7 +46,7 @@ const ClinicOverview = () => {
                         transition={{ duration: 0.6 }}
                         className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-wide mb-6"
                     >
-                        WHAT YOUR PLAYER <span className="text-rr-pink">GETS</span>
+                        WHAT YOUR CHILD <span className="text-rr-pink">RECEIVES</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
