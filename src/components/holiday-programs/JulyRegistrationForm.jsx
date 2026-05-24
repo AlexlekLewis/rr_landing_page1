@@ -165,7 +165,7 @@ const JulyRegistrationForm = () => {
                         <span className="text-xs font-black text-rr-pink uppercase tracking-widest">Secure Your Place</span>
                     </span>
                     <h2 className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight mb-4">
-                        Register Now
+                        Secure Your Place Now
                     </h2>
                     <p className="text-rr-charcoal font-medium">Fill in your details below to secure your place in the Junior Royals Holiday Camp.</p>
                 </motion.div>
