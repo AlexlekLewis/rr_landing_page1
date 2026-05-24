@@ -13,32 +13,11 @@ const locations = [
         time: '9:00 AM – 1:00 PM',
     },
     {
-        name: 'Venue TBC',
+        name: 'Hallam',
         suburb: 'Hallam, VIC',
         region: 'South-East Melbourne',
-        venue: 'TBC',
+        venue: 'Hallam',
         tag: 'hallam',
-    },
-    {
-        name: 'Venue TBC',
-        suburb: 'Melbourne East',
-        region: 'Eastern Melbourne',
-        venue: 'TBC',
-        tag: 'east',
-    },
-    {
-        name: 'Venue TBC',
-        suburb: 'Melbourne West',
-        region: 'Western Melbourne',
-        venue: 'TBC',
-        tag: 'west',
-    },
-    {
-        name: 'Venue TBC',
-        suburb: 'Melbourne North-West',
-        region: 'North-West Melbourne',
-        venue: 'TBC',
-        tag: 'northwest',
     },
 ];
 
@@ -71,7 +50,7 @@ const LocationsSection = () => (
                     transition={{ delay: 0.2 }}
                     className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium"
                 >
-                    The Junior Royals Holiday Camp is coming to multiple locations across Melbourne — north, south, east and west. Dates and venues to be confirmed shortly.
+                    Northern and south-east Melbourne. Dates for Hallam to be confirmed shortly.
                 </motion.p>
             </div>
 
