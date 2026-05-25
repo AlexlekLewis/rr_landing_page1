@@ -51,7 +51,7 @@ const LocationsSection = () => {
                     transition={{ delay: 0.2 }}
                     className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium"
                 >
-                    Northern and south-east Melbourne. Register now and secure your Early Bird spot.
+                    Multiple Melbourne locations. Register now and secure your Early Bird spot.
                 </motion.p>
             </div>
 
