@@ -11,11 +11,22 @@ const PROGRAMS = [
 const HomeHero = ({ onRegisterClick }) => {
     return (
         <section className="relative min-h-screen flex items-end overflow-hidden bg-rr-dark">
-            <div className="absolute inset-0 bg-cover bg-no-repeat md:hidden" style={{ backgroundImage: "url('/assets/hero-vs-special.jpg')", backgroundPosition: 'right top' }} />
-            <div className="absolute inset-0 bg-no-repeat hidden md:block" style={{ backgroundImage: "url('/assets/hero-vs-special.jpg')", backgroundPosition: 'right top', backgroundSize: '80% auto' }} />
-            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/80 to-rr-dark/50 md:hidden" />
-            <div className="absolute inset-0 bg-gradient-to-r from-rr-dark via-rr-dark/75 to-transparent hidden md:block" />
-            <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-rr-dark to-transparent" />
+
+            {/* Dark base */}
+            <div className="absolute inset-0 bg-rr-dark" />
+
+            {/* Vaibhav — absolutely positioned right, top-aligned */}
+            <img
+                src="/assets/hero-vs-special.jpg"
+                alt=""
+                aria-hidden="true"
+                className="absolute top-0 right-0 h-full w-auto max-w-none object-cover object-top z-0 pointer-events-none select-none"
+                style={{ maxWidth: '75%' }}
+            />
+
+            {/* Gradient overlays — keep text readable on left */}
+            <div className="absolute inset-0 z-10 bg-gradient-to-r from-rr-dark from-30% via-rr-dark/80 via-50% to-transparent" />
+            <div className="absolute inset-0 z-10 bg-gradient-to-t from-rr-dark via-rr-dark/60 to-transparent" />
 
             <div className="relative z-20 w-full">
                 <div className="container mx-auto px-4 sm:px-6 pt-28 sm:pt-32 md:pt-36 pb-6 sm:pb-10 max-w-3xl">

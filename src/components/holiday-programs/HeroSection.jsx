@@ -9,19 +9,21 @@ const HeroSection = () => {
 
     return (
         <section className="relative min-h-screen flex items-center overflow-hidden bg-rr-dark">
-            {/* Mobile background */}
-            <div
-                className="absolute inset-0 bg-cover bg-no-repeat md:hidden"
-                style={{ backgroundImage: "url('/assets/hero-vs-special.jpg')", backgroundPosition: 'right top' }}
+            {/* Dark base */}
+            <div className="absolute inset-0 bg-rr-dark" />
+
+            {/* Vaibhav — positioned top right */}
+            <img
+                src="/assets/hero-vs-special.jpg"
+                alt=""
+                aria-hidden="true"
+                className="absolute top-0 right-0 h-full w-auto max-w-none object-cover object-top pointer-events-none select-none"
+                style={{ maxWidth: '75%' }}
             />
-            {/* Desktop background */}
-            <div
-                className="absolute inset-0 bg-no-repeat hidden md:block"
-                style={{ backgroundImage: "url('/assets/hero-vs-special.jpg')", backgroundPosition: 'right top', backgroundSize: '80% auto' }}
-            />
+
             {/* Gradient overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/60 to-rr-dark/20 md:hidden" />
-            <div className="absolute inset-0 bg-gradient-to-r from-rr-dark via-rr-dark/65 to-rr-dark/20 hidden md:block" />
+            <div className="absolute inset-0 bg-gradient-to-r from-rr-dark from-30% via-rr-dark/80 via-50% to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/40 to-transparent" />
 
             <div className="relative z-20 container mx-auto px-6 pt-32 pb-24 max-w-4xl">
                 {/* Urgency badge */}

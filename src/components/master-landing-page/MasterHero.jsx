@@ -11,31 +11,21 @@ const MasterHero = () => {
 
             {/* Background Video / Image Layer */}
             <div className="absolute inset-0 w-full h-full z-0">
-                {/* Background Image Layer - Mobile */}
-                <div
-                    className="absolute inset-0 w-full h-full bg-cover bg-no-repeat bg-[center_top] md:hidden"
-                    style={{
-                        backgroundImage: "url('/assets/hero-vs-special.jpg')",
-                        backgroundPosition: 'right top'
-                    }}
-                >
-                    <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/70 to-rr-dark/40" />
-                </div>
+                {/* Dark base */}
+                <div className="absolute inset-0 bg-rr-dark" />
 
-                {/* Background Image Layer - Desktop */}
-                <div
-                    className="absolute inset-0 w-full h-full bg-no-repeat hidden md:block"
-                    style={{
-                        backgroundImage: "url('/assets/hero-vs-special.jpg')",
-                        backgroundPosition: 'right top',
-                        backgroundSize: '80% auto'
-                    }}
-                >
-                    <div className="absolute inset-0 bg-gradient-to-r from-rr-dark via-rr-dark/75 to-transparent" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-transparent to-transparent" />
-                </div>
+                {/* Vaibhav — positioned top right */}
+                <img
+                    src="/assets/hero-vs-special.jpg"
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute top-0 right-0 h-full w-auto max-w-none object-cover object-top pointer-events-none select-none"
+                    style={{ maxWidth: '75%' }}
+                />
 
-
+                {/* Gradient overlays */}
+                <div className="absolute inset-0 bg-gradient-to-r from-rr-dark from-30% via-rr-dark/80 via-50% to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-transparent to-transparent" />
             </div>
 
             {/* Content Container */}
