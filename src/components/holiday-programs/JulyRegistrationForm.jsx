@@ -240,7 +240,7 @@ const JulyRegistrationForm = () => {
                         <select name="location" value={form.location} onChange={handleChange} className={inputClass(errors.location)}>
                             <option value="">Select a location</option>
                             <option value="bundoora">Cutting Edge Cricket — Bundoora | 30 June – 2 July</option>
-                            <option value="hallam">Hallam | Dates TBC</option>
+                            <option value="hallam">Hallam | 7 – 9 July</option>
                         </select>
                         {errors.location && <p className="text-red-500 text-xs mt-1">{errors.location}</p>}
                     </div>
