@@ -15,13 +15,21 @@ const HomeHero = ({ onRegisterClick }) => {
             {/* Dark base */}
             <div className="absolute inset-0 bg-rr-dark" />
 
-            {/* Vaibhav — absolutely positioned right, top-aligned */}
+            {/* Vaibhav — mobile: shifted left and up */}
             <img
                 src="/assets/hero-vs-special.jpg"
                 alt=""
                 aria-hidden="true"
-                className="absolute top-0 right-0 h-full w-auto max-w-none object-cover object-top z-0 pointer-events-none select-none"
-                style={{ maxWidth: '75%' }}
+                className="absolute h-full w-auto pointer-events-none select-none md:hidden"
+                style={{ maxWidth: '120%', top: '-8%', left: '-10%' }}
+            />
+            {/* Vaibhav — desktop: right side, shifted up */}
+            <img
+                src="/assets/hero-vs-special.jpg"
+                alt=""
+                aria-hidden="true"
+                className="absolute right-0 h-full w-auto pointer-events-none select-none hidden md:block"
+                style={{ maxWidth: '75%', top: '-8%' }}
             />
 
             {/* Gradient overlays — keep text readable on left */}
