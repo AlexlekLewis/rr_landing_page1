@@ -16,7 +16,7 @@ const MasterHero = () => {
                     className="absolute inset-0 w-full h-full bg-cover bg-no-repeat bg-[center_top] md:hidden"
                     style={{
                         backgroundImage: "url('/assets/hero-vs-special.jpg')",
-                        backgroundPosition: 'top right'
+                        backgroundPosition: 'right top'
                     }}
                 >
                     <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/70 to-rr-dark/40" />
@@ -24,10 +24,11 @@ const MasterHero = () => {
 
                 {/* Background Image Layer - Desktop */}
                 <div
-                    className="absolute inset-0 w-full h-full bg-cover bg-no-repeat hidden md:block"
+                    className="absolute inset-0 w-full h-full bg-no-repeat hidden md:block"
                     style={{
                         backgroundImage: "url('/assets/hero-vs-special.jpg')",
-                        backgroundPosition: 'top right'
+                        backgroundPosition: 'right top',
+                        backgroundSize: '80% auto'
                     }}
                 >
                     <div className="absolute inset-0 bg-gradient-to-r from-rr-dark via-rr-dark/75 to-transparent" />

@@ -12,12 +12,12 @@ const HeroSection = () => {
             {/* Mobile background */}
             <div
                 className="absolute inset-0 bg-cover bg-no-repeat md:hidden"
-                style={{ backgroundImage: "url('/assets/hero-vs-special.jpg')", backgroundPosition: 'top right' }}
+                style={{ backgroundImage: "url('/assets/hero-vs-special.jpg')", backgroundPosition: 'right top' }}
             />
             {/* Desktop background */}
             <div
-                className="absolute inset-0 bg-cover bg-no-repeat hidden md:block"
-                style={{ backgroundImage: "url('/assets/hero-vs-special.jpg')", backgroundPosition: 'top right' }}
+                className="absolute inset-0 bg-no-repeat hidden md:block"
+                style={{ backgroundImage: "url('/assets/hero-vs-special.jpg')", backgroundPosition: 'right top', backgroundSize: '80% auto' }}
             />
             {/* Gradient overlays */}
             <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/60 to-rr-dark/20 md:hidden" />
