@@ -19,16 +19,16 @@ const MasterHero = () => {
                     src="/assets/hero-vs-special.jpg"
                     alt=""
                     aria-hidden="true"
-                    className="absolute h-full w-auto pointer-events-none select-none md:hidden"
-                    style={{ maxWidth: '120%', top: '-8%', left: '-10%' }}
+                    className="absolute pointer-events-none select-none md:hidden"
+                    style={{ width: "120%", height: "auto", top: "-5%", left: "-10%" }}
                 />
                 {/* Vaibhav — desktop: right side, shifted up */}
                 <img
                     src="/assets/hero-vs-special.jpg"
                     alt=""
                     aria-hidden="true"
-                    className="absolute right-0 h-full w-auto pointer-events-none select-none hidden md:block"
-                    style={{ maxWidth: '75%', top: '-8%' }}
+                    className="absolute right-0 pointer-events-none select-none hidden md:block"
+                    style={{ width: "65%", height: "auto", top: "-5%" }}
                 />
 
                 {/* Gradient overlays */}
