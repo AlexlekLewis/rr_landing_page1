@@ -11,7 +11,7 @@ const PROGRAMS = [
 const HomeHero = ({ onRegisterClick }) => {
     return (
         <section className="relative min-h-screen flex items-end overflow-hidden bg-rr-dark">
-            <div className="absolute inset-0 bg-cover bg-no-repeat md:hidden" style={{ backgroundImage: "url('/assets/hero-vs-special.jpg')", backgroundPosition: '70% 20%' }} />
+            <div className="absolute inset-0 bg-cover bg-no-repeat md:hidden" style={{ backgroundImage: "url('/assets/hero-vs-special.jpg')", backgroundPosition: '80% 10%' }} />
             <div className="absolute inset-0 bg-cover bg-no-repeat hidden md:block" style={{ backgroundImage: "url('/assets/hero-vs-special.jpg')", backgroundPosition: '70% 20%' }} />
             <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/80 to-rr-dark/50 md:hidden" />
             <div className="absolute inset-0 bg-gradient-to-r from-rr-dark via-rr-dark/75 to-transparent hidden md:block" />
