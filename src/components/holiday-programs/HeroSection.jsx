@@ -12,22 +12,18 @@ const HeroSection = () => {
             {/* Dark base */}
             <div className="absolute inset-0 bg-rr-dark" />
 
-            {/* Vaibhav — mobile: shifted left and up */}
+            {/* Full image — Vaibhav top right on all screens */}
             <img
-                src="/assets/hero-vs-special.jpg"
+                src="/assets/hero-vs-full.jpg"
                 alt=""
                 aria-hidden="true"
-                className="absolute pointer-events-none select-none md:hidden"
-                style={{ width: "120%", height: "auto", top: "-5%", left: "-10%" }}
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+                style={{ objectPosition: '75% top' }}
             />
-            {/* Vaibhav — desktop: right side, shifted up */}
-            <img
-                src="/assets/hero-vs-special.jpg"
-                alt=""
-                aria-hidden="true"
-                className="absolute right-0 pointer-events-none select-none hidden md:block"
-                style={{ width: "65%", height: "auto", top: "-5%" }}
-            />
+
+            {/* Gradient overlays */}
+            <div className="absolute inset-0 bg-gradient-to-r from-rr-dark/95 from-30% via-rr-dark/70 via-50% to-rr-dark/20" />
+            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-transparent to-transparent" />
 
             {/* Gradient overlays */}
             <div className="absolute inset-0 bg-gradient-to-r from-rr-dark from-30% via-rr-dark/80 via-50% to-transparent" />

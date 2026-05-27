@@ -15,22 +15,18 @@ const HomeHero = ({ onRegisterClick }) => {
             {/* Dark base */}
             <div className="absolute inset-0 bg-rr-dark" />
 
-            {/* Vaibhav — mobile: natural size, shifted left and up */}
+            {/* Background image — full original, Vaibhav top right */}
             <img
-                src="/assets/hero-vs-special.jpg"
+                src="/assets/hero-vs-full.jpg"
                 alt=""
                 aria-hidden="true"
-                className="absolute pointer-events-none select-none md:hidden"
-                style={{ width: '120%', height: 'auto', top: '-5%', left: '-10%' }}
+                className="absolute inset-0 w-full h-full pointer-events-none select-none object-cover"
+                style={{ objectPosition: '75% top' }}
             />
-            {/* Vaibhav — desktop: natural size, right side, shifted up */}
-            <img
-                src="/assets/hero-vs-special.jpg"
-                alt=""
-                aria-hidden="true"
-                className="absolute right-0 pointer-events-none select-none hidden md:block"
-                style={{ width: '65%', height: 'auto', top: '-5%' }}
-            />
+
+            {/* Gradient — dark on left for text, clear on right for Vaibhav */}
+            <div className="absolute inset-0 bg-gradient-to-r from-rr-dark/95 via-rr-dark/70 to-rr-dark/20" />
+            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/80 via-transparent to-transparent" />
 
             {/* Gradient overlays — keep text readable on left */}
             <div className="absolute inset-0 z-10 bg-gradient-to-r from-rr-dark from-30% via-rr-dark/80 via-50% to-transparent" />
