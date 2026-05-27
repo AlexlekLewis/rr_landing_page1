@@ -20,8 +20,15 @@ const HomeHero = ({ onRegisterClick }) => {
                 src="/assets/hero-vs-full.jpg"
                 alt=""
                 aria-hidden="true"
-                className="absolute inset-0 w-full h-full pointer-events-none select-none object-cover"
-                style={{ objectPosition: '75% top' }}
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none md:hidden"
+                style={{ objectPosition: '90% top' }}
+            />
+            <img
+                src="/assets/hero-vs-full.jpg"
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none hidden md:block"
+                style={{ objectPosition: '80% top' }}
             />
 
             {/* Gradient — dark on left for text, clear on right for Vaibhav */}

@@ -18,7 +18,7 @@ const HeroSection = () => {
                 alt=""
                 aria-hidden="true"
                 className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
-                style={{ objectPosition: '75% top' }}
+                style={{ objectPosition: '80% top' }}
             />
 
             {/* Gradient overlays */}
