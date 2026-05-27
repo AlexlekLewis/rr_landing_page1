@@ -11,13 +11,17 @@ const locations = [
         tag: 'bundoora',
         dates: 'Tuesday 30 June – Thursday 2 July',
         time: '9:00 AM – 1:00 PM',
+        onSale: true,
     },
     {
-        name: 'Hallam',
+        name: 'Venue TBC',
         suburb: 'Hallam, VIC',
         region: 'South-East Melbourne',
-        venue: 'Hallam',
+        venue: 'TBC',
         tag: 'hallam',
+        dates: 'Tuesday 7 July – Thursday 9 July',
+        time: '9:00 AM – 1:00 PM',
+        onSale: true,
     },
 ];
 
@@ -67,7 +71,7 @@ const LocationsSection = () => {
                     >
                         {/* Opening Soon badge */}
                         <div className="absolute top-4 right-4 z-10 bg-rr-pink text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full">
-                            Now Open
+                            {loc.onSale ? 'On Sale' : 'Now Open'}
                         </div>
 
                         {/* Gradient header */}
