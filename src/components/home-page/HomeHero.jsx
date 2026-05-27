@@ -21,7 +21,7 @@ const HomeHero = ({ onRegisterClick }) => {
                 alt=""
                 aria-hidden="true"
                 className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none md:hidden"
-                style={{ objectPosition: '55% top' }}
+                style={{ objectPosition: '55% top', transform: 'translateY(-20%)' }}
             />
             <img
                 src="/assets/hero-vs-full.jpg"
