@@ -30,6 +30,7 @@ import FemaleCricketIntroduction from './components/female-cricket-introduction/
 import FemaleCricketSuccess from './components/female-cricket-introduction/FemaleCricketSuccess';
 import FemaleEmpowerment from './components/female-empowerment/FemaleEmpowerment';
 import CoachingOpportunities from './components/coaching-opportunities/CoachingOpportunities';
+import PowerGame from './components/power-game/PowerGame';
 import MasterStripeSuccess from './components/master-landing-page/MasterStripeSuccess';
 import HomePage from './components/home-page/HomePage';
 import usePageAnalytics from './hooks/usePageAnalytics';
@@ -136,6 +137,9 @@ function App() {
         <Route path="/female-empowerment" element={<FemaleEmpowerment />} />
         {/* Coaching Opportunities — HIDDEN from nav, accessible via direct URL only */}
         <Route path="/coaching-opportunities" element={<CoachingOpportunities />} />
+
+        {/* Power Game Program — hidden from nav, accessible via direct URL only */}
+        <Route path="/powergame" element={<PowerGame />} />
         {/* Academy Shop — hidden from nav. Share URL directly with participants only. */}
         <Route path="/academy-shop" element={<AcademyShop />} />
         <Route path="/academy-shop/success" element={<ShopSuccess />} />
