@@ -21,7 +21,7 @@ const SECTIONS = [
 ];
 
 const PowerGame = () => {
-    usePageAnalytics('/powergame', { sections: SECTIONS });
+    usePageAnalytics('/power-game-program', { sections: SECTIONS });
 
     useEffect(() => {
         window.scrollTo(0, 0);
