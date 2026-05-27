@@ -29,7 +29,7 @@ const HOME_NAV = [
 
 const PROGRAMS_DROPDOWN = [
     { label: 'T20 Elite Program', route: '/eliteprogram2026', badge: 'New Intake Coming Soon', badgeColor: 'bg-rr-blue' },
-    { label: 'Junior Royals', route: '/junior-royals', badge: 'New Intake Coming Soon', badgeColor: 'bg-rr-blue' },
+    { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Enrolling Now', badgeColor: 'bg-green-500' },
 ];
 
 const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
