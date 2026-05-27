@@ -60,7 +60,7 @@ const PowerGame = () => {
                         quote="Placeholder quote from Vaibhav — to be provided. This will be the centerpiece testimonial of the program, anchoring credibility and aspiration."
                         attribution="Vaibhav Suryavanshi"
                         role="Rajasthan Royals"
-                        image=""
+                        image="/assets/powergame/vaibhav.png"
                         imageAlt="Vaibhav Suryavanshi"
                     />
                 </div>

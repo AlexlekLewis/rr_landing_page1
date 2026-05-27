@@ -53,15 +53,23 @@ const QuoteBlock = ({
                         transition={{ duration: 0.7, ease: 'easeOut' }}
                         className="relative"
                     >
-                        <div className="aspect-[4/5] w-full bg-gradient-to-br from-rr-pink/20 to-rr-blue/20 rounded-2xl overflow-hidden border border-white/10 flex items-center justify-center">
+                        <div className="aspect-[4/5] w-full bg-gradient-to-br from-rr-navy via-rr-blue/40 to-rr-pink/40 rounded-2xl overflow-hidden border border-white/10 flex items-end justify-center relative">
+                            {/* radial highlight behind subject */}
+                            <div
+                                className="absolute inset-0 pointer-events-none"
+                                style={{
+                                    background:
+                                        'radial-gradient(circle at 50% 55%, rgba(225,31,143,0.35) 0%, rgba(0,0,0,0) 60%)',
+                                }}
+                            />
                             {image ? (
                                 <img
                                     src={image}
                                     alt={imageAlt}
-                                    className="w-full h-full object-cover"
+                                    className="relative z-10 w-full h-full object-contain object-bottom"
                                 />
                             ) : (
-                                <div className="text-center p-8">
+                                <div className="relative z-10 text-center p-8 m-auto">
                                     <div className="text-white/40 text-xs font-bold uppercase tracking-widest mb-2">
                                         Image Placeholder
                                     </div>
