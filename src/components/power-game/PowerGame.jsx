@@ -31,7 +31,7 @@ const PowerGame = () => {
 
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
-            <Navbar />
+            <Navbar variant="power-game" />
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero">
                     <HeroSection />
