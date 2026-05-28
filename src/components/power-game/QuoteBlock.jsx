@@ -20,6 +20,7 @@ const QuoteBlock = ({
     image,
     imageAlt = '',
     imagePosition = 'left',
+    imageFit = 'contain',
 }) => {
     const isDark = variant === 'dark';
     const isFeature = variant === 'feature';
@@ -122,7 +123,7 @@ const QuoteBlock = ({
                         <img
                             src={image}
                             alt={imageAlt}
-                            className="relative z-10 w-full h-full object-contain object-bottom"
+                            className={`relative z-10 w-full h-full ${imageFit === 'cover' ? 'object-cover object-center' : 'object-contain object-bottom'}`}
                         />
                     ) : (
                         <div className="relative z-10 text-center p-8 m-auto">
