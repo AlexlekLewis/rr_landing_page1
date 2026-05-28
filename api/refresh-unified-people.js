@@ -67,6 +67,33 @@ const fmtAUD = (cents) => {
   return '$' + (cents / 100).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 };
 
+// Normalise Australian mobile numbers to "04XX XXX XXX" format.
+// Handles every common input we see across the database:
+//   "0412345678", "412345678", "+61412345678", "61 412 345 678",
+//   "0412 345 678", "(04) 1234 5678", "0412-345-678", ...
+// Returns the number prefixed with an apostrophe so Google Sheets writes
+// it as text (otherwise it auto-coerces to a number and strips the leading 0).
+const fmtPhoneAU = (raw) => {
+  if (!raw) return '';
+  let digits = String(raw).replace(/\D/g, '');
+  if (!digits) return '';
+  // Strip leading country code(s)
+  if (digits.startsWith('0061')) digits = digits.slice(4);
+  else if (digits.startsWith('61') && digits.length === 11) digits = digits.slice(2);
+  // Ensure leading 0 on 9-digit numbers that start with 4
+  if (digits.length === 9 && digits.startsWith('4')) digits = '0' + digits;
+  // Pretty-print 10-digit mobile (04 XX XXX XXX) or landline (0X XXXX XXXX)
+  let pretty;
+  if (digits.length === 10 && digits.startsWith('04')) {
+    pretty = `${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7)}`;
+  } else if (digits.length === 10) {
+    pretty = `${digits.slice(0, 2)} ${digits.slice(2, 6)} ${digits.slice(6)}`;
+  } else {
+    pretty = digits;
+  }
+  return "'" + pretty;  // leading apostrophe forces Sheets to treat as text
+};
+
 const ALL_PEOPLE_HEADERS = [
   'Email', 'Contact Name', 'Phone', 'Suburb', 'Player Name',
   'Player Gender', 'Primary Club', 'DOB', 'Player Age',
@@ -111,7 +138,7 @@ export default async function handler(req, res) {
   const peopleRows = (people || []).map(p => [
     p.email || '',
     p.contact_name || '',
-    p.phone || '',
+    fmtPhoneAU(p.phone),
     p.suburb || '',
     p.player_name || '',
     p.player_gender || '',
