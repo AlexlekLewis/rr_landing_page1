@@ -148,23 +148,12 @@ export default async function handler(req, res) {
       else t.pending += 1;
     }
   }
-  // For revenue, we need per-program revenue — easiest: separate query
-  const { data: revenueRows } = await supabase.rpc('unified_revenue_by_program').catch(() => ({ data: null }));
-  // (Optional RPC — if it doesn't exist, skip per-program revenue)
-  const revMap = new Map();
-  if (Array.isArray(revenueRows)) {
-    for (const r of revenueRows) revMap.set(r.program_label, r.revenue_cents);
-  }
+  // Per-program revenue: not tracked at this level (amount_paid_cents is
+  // per-person total, not split by program). Left blank — admin can pivot
+  // on All People tab if needed.
   const byProgramRows = Array.from(programTotals.entries())
     .sort((a, b) => b[1].total - a[1].total)
-    .map(([program, t]) => [
-      program,
-      t.total,
-      t.paid,
-      t.pending,
-      t.waitlist,
-      fmtAUD(revMap.get(program) || 0),
-    ]);
+    .map(([program, t]) => [program, t.total, t.paid, t.pending, t.waitlist, '']);
 
   // 4. Build About tab
   const totalRevenueCents = (people || []).reduce((s, p) => s + (Number(p.total_paid_cents) || 0), 0);
