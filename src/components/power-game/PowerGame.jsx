@@ -39,10 +39,13 @@ const PowerGame = () => {
 
                 <div id="quote-1">
                     <QuoteBlock
-                        variant="light"
-                        quote="Placeholder quote one — a powerful statement from a coach or player about what the Power Game Program means for development."
-                        attribution="Coach Name TBC"
-                        role="Role / Title TBC"
+                        variant="feature"
+                        imagePosition="right"
+                        quote="Our job is to give players the tools to reach for power when the situation demands it — across any format of the game."
+                        attribution="Alex Lewis"
+                        role="Rajasthan Royals Academy Head Coach"
+                        image=""
+                        imageAlt="Alex Lewis"
                     />
                 </div>
 
