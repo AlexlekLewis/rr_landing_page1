@@ -23,6 +23,7 @@ const QuoteBlock = ({
 }) => {
     const isDark = variant === 'dark';
     const isFeature = variant === 'feature';
+    const isOverlay = variant === 'overlay';
 
     const bg = isDark
         ? 'bg-rr-dark'
@@ -33,6 +34,68 @@ const QuoteBlock = ({
     const textColor = isDark || isFeature ? 'text-white' : 'text-rr-dark';
     const attribColor = isDark || isFeature ? 'text-rr-pink' : 'text-rr-pink';
     const roleColor = isDark || isFeature ? 'text-white/70' : 'text-rr-charcoal';
+
+    // OVERLAY variant — full-bleed background image with dark gradient + quote on top
+    if (isOverlay) {
+        // imagePosition controls which side the gradient darkens toward / text aligns
+        const textRight = imagePosition === 'right';
+        return (
+            <section className="relative w-full min-h-[600px] md:min-h-[700px] flex items-center overflow-hidden bg-black">
+                {/* Background image */}
+                {image && (
+                    <img
+                        src={image}
+                        alt={imageAlt}
+                        className="absolute inset-0 w-full h-full object-cover"
+                        style={{ objectPosition: textRight ? 'left center' : 'center center' }}
+                    />
+                )}
+                {/* Dark gradient overlay for legibility */}
+                <div
+                    className="absolute inset-0"
+                    style={{
+                        background: textRight
+                            ? 'linear-gradient(270deg, rgba(17,25,33,0.92) 0%, rgba(17,25,33,0.75) 45%, rgba(17,25,33,0.25) 100%)'
+                            : 'linear-gradient(90deg, rgba(17,25,33,0.92) 0%, rgba(17,25,33,0.75) 45%, rgba(17,25,33,0.25) 100%)',
+                    }}
+                />
+                {/* Pink accent glow */}
+                <div
+                    className="absolute inset-0 pointer-events-none opacity-60"
+                    style={{
+                        background: textRight
+                            ? 'radial-gradient(circle at 85% 50%, rgba(225,31,143,0.25) 0%, rgba(0,0,0,0) 50%)'
+                            : 'radial-gradient(circle at 15% 50%, rgba(225,31,143,0.25) 0%, rgba(0,0,0,0) 50%)',
+                    }}
+                />
+
+                <div className="relative z-10 max-w-6xl mx-auto px-6 w-full">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.3 }}
+                        transition={{ duration: 0.7, ease: 'easeOut' }}
+                        className={`max-w-2xl ${textRight ? 'ml-auto text-right' : 'text-left'}`}
+                    >
+                        <div className="text-rr-pink text-6xl md:text-8xl font-black leading-none mb-2">
+                            &ldquo;
+                        </div>
+                        <blockquote className="text-white text-2xl md:text-4xl lg:text-5xl font-black uppercase tracking-tight leading-tight mb-8">
+                            {quote}
+                        </blockquote>
+                        <div className="text-rr-pink text-base md:text-lg font-black uppercase tracking-widest">
+                            {attribution}
+                        </div>
+                        {role && (
+                            <div className="text-white/70 text-xs md:text-sm font-medium uppercase tracking-wider mt-1">
+                                {role}
+                            </div>
+                        )}
+                    </motion.div>
+                </div>
+            </section>
+        );
+    }
 
     // FEATURE variant — image + quote side-by-side
     if (isFeature) {

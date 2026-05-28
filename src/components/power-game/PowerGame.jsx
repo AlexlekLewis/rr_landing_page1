@@ -39,13 +39,13 @@ const PowerGame = () => {
 
                 <div id="quote-1">
                     <QuoteBlock
-                        variant="feature"
-                        imagePosition="right"
+                        variant="overlay"
+                        imagePosition="left"
                         quote="Our job is to give players the tools to reach for power when the situation demands it — across any format of the game."
                         attribution="Alex Lewis"
                         role="Rajasthan Royals Academy Head Coach"
-                        image=""
-                        imageAlt="Alex Lewis"
+                        image="/assets/powergame/alex-lewis.jpg"
+                        imageAlt="Alex Lewis coaching at Rajasthan Royals Academy Melbourne"
                     />
                 </div>
 
