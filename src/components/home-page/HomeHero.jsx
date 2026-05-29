@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const PROGRAMS = [
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Enrolling Now', badgeColor: 'bg-green-500' },
-    { label: 'Power Game Program', route: null, badge: 'Coming Soon', badgeColor: 'bg-rr-blue' },
+    { label: 'Power Game Program', route: null, badge: 'Coming Soon', badgeColor: 'bg-rr-pink' },
 ];
 
 const HomeHero = ({ onRegisterClick }) => {

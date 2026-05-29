@@ -29,7 +29,7 @@ const HOME_NAV = [
 
 const PROGRAMS_DROPDOWN = [
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Enrolling Now', badgeColor: 'bg-green-500' },
-    { label: 'Power Game Program', route: '/power-game-program', badge: 'Coming Soon', badgeColor: 'bg-rr-blue' },
+    { label: 'Power Game Program', route: '/power-game-program', badge: 'Coming Soon', badgeColor: 'bg-rr-pink' },
 ];
 
 const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
