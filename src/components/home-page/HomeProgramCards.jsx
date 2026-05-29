@@ -11,7 +11,7 @@ const URGENCY_CONFIG = {
     spots_remaining: { text: '{n} Places Remaining', bg: 'bg-rr-pink/10', border: 'border-rr-pink/30', dot: 'bg-rr-pink', textColor: 'text-rr-pink' },
     open: { text: 'Now Open', bg: 'bg-green-500/10', border: 'border-green-500/30', dot: 'bg-green-500', textColor: 'text-green-600' },
     waitlist: { text: 'Join Waitlist', bg: 'bg-slate-200/50', border: 'border-slate-300', dot: 'bg-slate-400', textColor: 'text-slate-500' },
-    coming_soon: { text: 'Coming Soon', bg: 'bg-rr-blue/10', border: 'border-rr-blue/30', dot: 'bg-rr-blue', textColor: 'text-rr-blue' },
+    coming_soon: { text: 'Coming Soon', bg: 'bg-rr-pink/10', border: 'border-rr-pink/30', dot: 'bg-rr-pink', textColor: 'text-rr-pink' },
 };
 
 const UrgencyBadge = ({ type, spots, customText }) => {
