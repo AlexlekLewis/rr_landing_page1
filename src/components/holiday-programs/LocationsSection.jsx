@@ -23,6 +23,16 @@ const locations = [
         time: '9:00 AM – 1:00 PM',
         onSale: true,
     },
+    {
+        name: 'The Netz',
+        suburb: 'Williamstown North, VIC',
+        region: 'Western Melbourne',
+        venue: 'The Netz',
+        tag: 'the-netz',
+        dates: 'Monday 6 July – Wednesday 8 July',
+        time: '1:30 PM – 5:30 PM',
+        onSale: true,
+    },
 ];
 
 const LocationsSection = () => {
