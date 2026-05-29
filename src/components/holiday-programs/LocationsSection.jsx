@@ -14,10 +14,10 @@ const locations = [
         onSale: true,
     },
     {
-        name: 'Venue TBC',
+        name: 'Elite Cricket Centre',
         suburb: 'Hallam, VIC',
         region: 'South-East Melbourne',
-        venue: 'TBC',
+        venue: 'Elite Cricket Centre',
         tag: 'hallam',
         dates: 'Tuesday 7 July – Thursday 9 July',
         time: '9:00 AM – 1:00 PM',
