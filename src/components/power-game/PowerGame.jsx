@@ -21,7 +21,7 @@ const SECTIONS = [
 ];
 
 const PowerGame = () => {
-    usePageAnalytics('/power-game-program', { sections: SECTIONS });
+    usePageAnalytics('/PGP2026', { sections: SECTIONS });
 
     useEffect(() => {
         window.scrollTo(0, 0);
