@@ -30,7 +30,7 @@ const ProgramCard = ({ program, onRegisterClick }) => (
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="relative rounded-2xl overflow-hidden bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group"
+        className="relative w-full h-full rounded-2xl overflow-hidden bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group"
     >
         {/* Image */}
         <div className="relative h-48 overflow-hidden">
@@ -115,16 +115,18 @@ const HomeProgramCards = ({ onRegisterClick }) => {
 
                 {/* Cards grid */}
                 {loading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="flex flex-wrap justify-center gap-6">
                         {[1, 2, 3].map(i => (
-                            <div key={i} className="rounded-2xl bg-slate-100 animate-pulse h-80" />
+                            <div key={i} className="w-full sm:w-[360px] rounded-2xl bg-slate-100 animate-pulse h-80" />
                         ))}
                     </div>
                 ) : (
                     <AnimatePresence mode="wait">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="flex flex-wrap justify-center gap-6">
                             {programs.map(p => (
-                                <ProgramCard key={p.program_id} program={p} onRegisterClick={onRegisterClick} />
+                                <div key={p.program_id} className="w-full sm:w-[360px]">
+                                    <ProgramCard program={p} onRegisterClick={onRegisterClick} />
+                                </div>
                             ))}
                         </div>
                     </AnimatePresence>

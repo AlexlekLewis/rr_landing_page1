@@ -55,10 +55,9 @@ const HomePage = () => {
                 <div id="hero"><HomeHero onRegisterClick={openDrawer} /></div>
                 <div id="about"><HomeAbout /></div>
                 <div id="video"><HomeVideo /></div>
-                {/* Power Game card is owned by a teammate (in HomeProgramCards).
-                    onPowerGameClick opens the shared Power Game RegisterModal —
-                    wire the teammate's card button to this prop so "rego link is the same modal". */}
-                <div id="programs"><HomeProgramCards onRegisterClick={openDrawer} onPowerGameClick={openPgModal} /></div>
+                {/* The Power Game card (urgency_type 'coming_soon') fires onRegisterClick —
+                    point it at the shared Power Game RegisterModal. */}
+                <div id="programs"><HomeProgramCards onRegisterClick={openPgModal} /></div>
                 <div id="shop"><HomeShopFeature /></div>
                 <div id="coaches"><HomeCoaches /></div>
                 <div id="faq"><HomeFAQ onRegisterClick={openDrawer} /></div>
