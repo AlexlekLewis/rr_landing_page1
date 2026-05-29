@@ -12,7 +12,7 @@ const coaches = [
     },
     {
         name: 'Andy Crook',
-        role: 'Director of Cricket',
+        role: 'Academy Director',
         org: 'Rajasthan Royals Academy Melbourne',
         bio: 'An experienced professional cricketer, coach and sports executive, Andy oversees the coaching standards and program delivery across all RRA Melbourne programs, ensuring every session reflects the Royals Way.',
         image: '/assets/coaches/andy-crook.jpg',

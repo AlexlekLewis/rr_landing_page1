@@ -9,19 +9,25 @@ const HeroSection = () => {
 
     return (
         <section className="relative min-h-screen flex items-center overflow-hidden bg-rr-dark">
-            {/* Mobile background */}
-            <div
-                className="absolute inset-0 bg-cover bg-no-repeat md:hidden"
-                style={{ backgroundImage: "url('/assets/hero-ipl-action.png')", backgroundPosition: 'center 30%' }}
+            {/* Dark base */}
+            <div className="absolute inset-0 bg-rr-dark" />
+
+            {/* Full image — Vaibhav top right on all screens */}
+            <img
+                src="/assets/hero-vs-full.jpg"
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+                style={{ objectPosition: '60% top' }}
             />
-            {/* Desktop background */}
-            <div
-                className="absolute inset-0 bg-cover bg-no-repeat hidden md:block"
-                style={{ backgroundImage: "url('/assets/hero-ipl-action.png')", backgroundPosition: '65% 0%' }}
-            />
+
             {/* Gradient overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/60 to-rr-dark/20 md:hidden" />
-            <div className="absolute inset-0 bg-gradient-to-r from-rr-dark via-rr-dark/65 to-rr-dark/20 hidden md:block" />
+            <div className="absolute inset-0 bg-gradient-to-r from-rr-dark/95 from-30% via-rr-dark/70 via-50% to-rr-dark/20" />
+            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-transparent to-transparent" />
+
+            {/* Gradient overlays */}
+            <div className="absolute inset-0 bg-gradient-to-r from-rr-dark from-30% via-rr-dark/80 via-50% to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/40 to-transparent" />
 
             <div className="relative z-20 container mx-auto px-6 pt-32 pb-24 max-w-4xl">
                 {/* Urgency badge */}

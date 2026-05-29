@@ -6,7 +6,7 @@ import {
     Settings, LogOut, ChevronLeft, ChevronRight, Menu, X,
     Send, CheckCircle2, Eye, ClipboardList, UserCheck, Shield, ChevronDown,
     UserCircle, ShoppingBag, Trophy, GraduationCap, Crown, Sun, Sparkles,
-    MessageCircle, Plane
+    MessageCircle, Plane, Zap
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { ProgramProvider, useProgram } from './ProgramContext';
@@ -23,6 +23,7 @@ const NAV_GROUPS = [
         items: [
             { label: 'All Inquiries', path: '/rramadmin_26/inquiries', icon: MessageCircle },
             { label: 'Home Leads', path: '/rramadmin_26/home-leads', icon: Users },
+            { label: 'Power Game', path: '/rramadmin_26/power-game', icon: Zap },
         ],
     },
     {

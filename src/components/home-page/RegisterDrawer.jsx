@@ -9,8 +9,8 @@ const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Advanced', 'Elite'];
 const GENDER_OPTIONS = ['Male Cricket', 'Female Cricket', 'No Preference'];
 
 const PROGRAMS = [
-    { label: 'T20 Elite Program', route: '/eliteprogram2026', urgency: 'New Intake Coming Soon' },
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', urgency: null },
+    { label: 'Power Game Program', route: null, urgency: 'Coming Soon — Register Your Interest' },
 ];
 
 const InputField = ({ label, type = 'text', value, onChange, placeholder, required }) => (
@@ -70,9 +70,9 @@ const PathBuy = ({ onBack }) => (
         <h3 className="text-xl font-black text-rr-dark uppercase tracking-wide mb-2">Choose Your Program</h3>
         <p className="text-sm text-rr-charcoal font-medium mb-6">Select a program below to go to the registration and payment page.</p>
         <div className="space-y-3">
-            {PROGRAMS.map(p => (
+            {PROGRAMS.map(p => p.route ? (
                 <Link
-                    key={p.route}
+                    key={p.label}
                     to={p.route}
                     className="flex items-center justify-between w-full p-4 border border-slate-200 rounded-xl hover:border-rr-pink hover:bg-rr-pink/5 transition-all group"
                 >
@@ -87,6 +87,18 @@ const PathBuy = ({ onBack }) => (
                     </div>
                     <ArrowRight className="w-4 h-4 text-rr-charcoal/40 group-hover:text-rr-pink group-hover:translate-x-1 transition-all shrink-0" />
                 </Link>
+            ) : (
+                <div key={p.label} className="flex items-center justify-between w-full p-4 border border-rr-blue/30 bg-rr-blue/5 rounded-xl">
+                    <div>
+                        <span className="font-bold text-rr-dark text-sm uppercase tracking-wide block">{p.label}</span>
+                        {p.urgency && (
+                            <span className="text-xs font-bold text-rr-blue mt-0.5 flex items-center gap-1">
+                                <span className="w-1.5 h-1.5 rounded-full bg-rr-blue animate-pulse inline-block" />
+                                {p.urgency}
+                            </span>
+                        )}
+                    </div>
+                </div>
             ))}
         </div>
     </div>

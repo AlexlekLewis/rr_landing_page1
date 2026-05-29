@@ -30,6 +30,7 @@ import FemaleCricketIntroduction from './components/female-cricket-introduction/
 import FemaleCricketSuccess from './components/female-cricket-introduction/FemaleCricketSuccess';
 import FemaleEmpowerment from './components/female-empowerment/FemaleEmpowerment';
 import CoachingOpportunities from './components/coaching-opportunities/CoachingOpportunities';
+import PowerGame from './components/power-game/PowerGame';
 import MasterStripeSuccess from './components/master-landing-page/MasterStripeSuccess';
 import HomePage from './components/home-page/HomePage';
 import usePageAnalytics from './hooks/usePageAnalytics';
@@ -54,6 +55,7 @@ import RSVPResponses from './components/admin/RSVPResponses';
 import LP3Inquiries from './components/admin/LP3Inquiries';
 import PlayerProfiles from './components/admin/PlayerProfiles';
 import HomeLeadsDashboard from './components/admin/HomeLeadsDashboard';
+import PowerGameInquiries from './components/admin/PowerGameInquiries';
 import ShopOrdersDashboard from './components/admin/ShopOrdersDashboard';
 import ProgramRegistrationsDashboard from './components/admin/ProgramRegistrationsDashboard';
 import HolidaySubProgramDashboard from './components/admin/HolidaySubProgramDashboard';
@@ -136,6 +138,9 @@ function App() {
         <Route path="/female-empowerment" element={<FemaleEmpowerment />} />
         {/* Coaching Opportunities — HIDDEN from nav, accessible via direct URL only */}
         <Route path="/coaching-opportunities" element={<CoachingOpportunities />} />
+
+        {/* Power Game Program — hidden from nav, accessible via direct URL only */}
+        <Route path="/PGP2026" element={<PowerGame />} />
         {/* Academy Shop — hidden from nav. Share URL directly with participants only. */}
         <Route path="/academy-shop" element={<AcademyShop />} />
         <Route path="/academy-shop/success" element={<ShopSuccess />} />
@@ -154,6 +159,7 @@ function App() {
         <Route path="/rramadmin_26/settings" element={<AdminLayout><SettingsPanel /></AdminLayout>} />
         <Route path="/rramadmin_26/rsvp" element={<AdminLayout><RSVPResponses /></AdminLayout>} />
         <Route path="/rramadmin_26/home-leads" element={<AdminLayout><HomeLeadsDashboard /></AdminLayout>} />
+        <Route path="/rramadmin_26/power-game" element={<AdminLayout><PowerGameInquiries /></AdminLayout>} />
         <Route path="/rramadmin_26/shop-orders" element={<AdminLayout><ShopOrdersDashboard /></AdminLayout>} />
         <Route path="/rramadmin_26/program-registrations" element={<AdminLayout><ProgramRegistrationsDashboard /></AdminLayout>} />
         <Route path="/rramadmin_26/holiday/:programSlug" element={<AdminLayout><HolidaySubProgramDashboard /></AdminLayout>} />

@@ -4,18 +4,40 @@ import { ChevronDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const PROGRAMS = [
-    { label: 'T20 Elite Program', route: '/eliteprogram2026', badge: 'New Intake Coming Soon', badgeColor: 'bg-rr-blue' },
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Enrolling Now', badgeColor: 'bg-green-500' },
+    { label: 'Power Game Program', route: null, badge: 'Coming Soon', badgeColor: 'bg-rr-pink' },
 ];
 
 const HomeHero = ({ onRegisterClick }) => {
     return (
         <section className="relative min-h-screen flex items-end overflow-hidden bg-rr-dark">
-            <div className="absolute inset-0 bg-cover bg-no-repeat md:hidden" style={{ backgroundImage: "url('/assets/hero-vaibhav.png')", backgroundPosition: 'center 30%' }} />
-            <div className="absolute inset-0 bg-cover bg-no-repeat hidden md:block" style={{ backgroundImage: "url('/assets/hero-vaibhav.png')", backgroundPosition: '65% 40%' }} />
-            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/80 to-rr-dark/50 md:hidden" />
-            <div className="absolute inset-0 bg-gradient-to-r from-rr-dark via-rr-dark/75 to-transparent hidden md:block" />
-            <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-rr-dark to-transparent" />
+
+            {/* Dark base */}
+            <div className="absolute inset-0 bg-rr-dark" />
+
+            {/* Background image — full original, Vaibhav top right */}
+            <img
+                src="/assets/hero-vs-full.jpg"
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none md:hidden"
+                style={{ objectPosition: '55% top' }}
+            />
+            <img
+                src="/assets/hero-vs-full.jpg"
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none hidden md:block"
+                style={{ objectPosition: '60% top' }}
+            />
+
+            {/* Gradient — dark on left for text, clear on right for Vaibhav */}
+            <div className="absolute inset-0 bg-gradient-to-r from-rr-dark/95 via-rr-dark/70 to-rr-dark/20" />
+            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/80 via-transparent to-transparent" />
+
+            {/* Gradient overlays — keep text readable on left */}
+            <div className="absolute inset-0 z-10 bg-gradient-to-r from-rr-dark from-30% via-rr-dark/80 via-50% to-transparent" />
+            <div className="absolute inset-0 z-10 bg-gradient-to-t from-rr-dark via-rr-dark/60 to-transparent" />
 
             <div className="relative z-20 w-full">
                 <div className="container mx-auto px-4 sm:px-6 pt-28 sm:pt-32 md:pt-36 pb-6 sm:pb-10 max-w-3xl">
@@ -41,8 +63,8 @@ const HomeHero = ({ onRegisterClick }) => {
                     <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 sm:p-5 md:p-6">
                         <p className="text-xs font-black text-white/60 uppercase tracking-widest mb-3 sm:mb-4">Choose a current program</p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4">
-                            {PROGRAMS.map(p => (
-                                <Link key={p.route} to={p.route} className="flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 transition-all group" data-cta={`hero-program-${p.route}`}>
+                            {PROGRAMS.map(p => p.route ? (
+                                <Link key={p.label} to={p.route} className="flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 transition-all group" data-cta={`hero-program-${p.label}`}>
                                     <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                                         <span className={`w-2 h-2 rounded-full ${p.badgeColor} shrink-0`} />
                                         <div className="min-w-0">
@@ -52,6 +74,17 @@ const HomeHero = ({ onRegisterClick }) => {
                                     </div>
                                     <ArrowRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition-all shrink-0 ml-2" />
                                 </Link>
+                            ) : (
+                                <button key={p.label} onClick={onRegisterClick} className="flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 transition-all group w-full text-left">
+                                    <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                                        <span className={`w-2 h-2 rounded-full ${p.badgeColor} shrink-0 animate-pulse`} />
+                                        <div className="min-w-0">
+                                            <p className="text-white font-bold text-xs sm:text-sm uppercase tracking-wide leading-tight truncate">{p.label}</p>
+                                            <p className="text-white/50 text-xs font-medium">{p.badge}</p>
+                                        </div>
+                                    </div>
+                                    <ArrowRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+                                </button>
                             ))}
                         </div>
                         <div className="flex items-center gap-3 mb-3 sm:mb-4">

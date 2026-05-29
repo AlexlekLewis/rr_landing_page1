@@ -11,29 +11,21 @@ const MasterHero = () => {
 
             {/* Background Video / Image Layer */}
             <div className="absolute inset-0 w-full h-full z-0">
-                {/* Background Image Layer - Mobile */}
-                <div
-                    className="absolute inset-0 w-full h-full bg-cover bg-no-repeat bg-[center_top] md:hidden"
-                    style={{
-                        backgroundImage: "url('/assets/Hero.jpeg')",
-                    }}
-                >
-                    <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/60 to-transparent" />
-                </div>
+                {/* Dark base */}
+                <div className="absolute inset-0 bg-rr-dark" />
 
-                {/* Background Image Layer - Desktop */}
-                <div
-                    className="absolute inset-0 w-full h-full bg-cover bg-no-repeat hidden md:block"
-                    style={{
-                        backgroundImage: "url('/assets/hero-final.jpeg')",
-                        backgroundPosition: "center 20%"
-                    }}
-                >
-                    <div className="absolute inset-0 bg-gradient-to-r from-rr-dark via-rr-dark/80 to-transparent" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-transparent to-transparent" />
-                </div>
+                {/* Full image — Vaibhav top right on all screens */}
+                <img
+                    src="/assets/hero-vs-full.jpg"
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+                    style={{ objectPosition: '60% top' }}
+                />
 
-
+                {/* Gradient overlays */}
+                <div className="absolute inset-0 bg-gradient-to-r from-rr-dark/95 from-30% via-rr-dark/70 via-50% to-rr-dark/20" />
+                <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-transparent to-transparent" />
             </div>
 
             {/* Content Container */}
