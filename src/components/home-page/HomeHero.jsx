@@ -4,7 +4,6 @@ import { ChevronDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const PROGRAMS = [
-    { label: 'T20 Elite Program', route: '/eliteprogram2026', badge: 'New Intake Coming Soon', badgeColor: 'bg-rr-blue' },
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Enrolling Now', badgeColor: 'bg-green-500' },
     { label: 'Power Game Program', route: null, badge: 'Coming Soon', badgeColor: 'bg-rr-blue' },
 ];
