@@ -28,8 +28,8 @@ const HOME_NAV = [
 ];
 
 const PROGRAMS_DROPDOWN = [
-    { label: 'T20 Elite Program', route: '/eliteprogram2026', badge: 'New Intake Coming Soon', badgeColor: 'bg-rr-blue' },
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Enrolling Now', badgeColor: 'bg-green-500' },
+    { label: 'Power Game Program', route: '/power-game-program', badge: 'Coming Soon', badgeColor: 'bg-rr-pink' },
 ];
 
 const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
@@ -44,10 +44,11 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
     const isHome = variant === 'home';
     const isLittleCrickets = variant === 'junior-royals';
     const isShop = variant === 'shop';
+    const isPowerGame = variant === 'power-game';
 
-    const navLinks = (isLP3 || isHoliday || isShop) ? [] : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
+    const navLinks = (isLP3 || isHoliday || isShop || isPowerGame) ? [] : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
     const showProgramsDropdown = isHome;
-    const showCTA = !isShop;
+    const showCTA = !isShop && !isPowerGame;
     const showHamburger = !isShop;
 
     const ctaLabel = isHome ? 'REGISTER NOW' : (isLP2 || isHoliday || isLittleCrickets) ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
@@ -262,9 +263,11 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
                                 🛒 SHOP
                             </Link>
 
-                            <Button onClick={scrollToForm} variant="blue" className="text-lg px-10 py-4 mt-4">
-                                {ctaLabel}
-                            </Button>
+                            {showCTA && (
+                                <Button onClick={scrollToForm} variant="blue" className="text-lg px-10 py-4 mt-4">
+                                    {ctaLabel}
+                                </Button>
+                            )}
 
                             <a
                                 href="https://www.rajasthanroyals.com"

@@ -21,7 +21,7 @@ const SECTIONS = [
 ];
 
 const PowerGame = () => {
-    usePageAnalytics('/power-game-program', { sections: SECTIONS });
+    usePageAnalytics('/PGP2026', { sections: SECTIONS });
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -31,7 +31,7 @@ const PowerGame = () => {
 
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
-            <Navbar />
+            <Navbar variant="power-game" />
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero">
                     <HeroSection />
@@ -39,10 +39,13 @@ const PowerGame = () => {
 
                 <div id="quote-1">
                     <QuoteBlock
-                        variant="light"
-                        quote="Placeholder quote one — a powerful statement from a coach or player about what the Power Game Program means for development."
-                        attribution="Coach Name TBC"
-                        role="Role / Title TBC"
+                        variant="overlay"
+                        imagePosition="left"
+                        quote="Our job is to give players the tools to reach for power when the situation demands it — across any format of the game."
+                        attribution="Alex Lewis"
+                        role="Rajasthan Royals Academy Head Coach"
+                        image="/assets/powergame/alex-lewis.jpg"
+                        imageAlt="Alex Lewis coaching at Rajasthan Royals Academy Melbourne"
                     />
                 </div>
 
@@ -60,8 +63,9 @@ const PowerGame = () => {
                         quote="Placeholder quote from Vaibhav — to be provided. This will be the centerpiece testimonial of the program, anchoring credibility and aspiration."
                         attribution="Vaibhav Suryavanshi"
                         role="Rajasthan Royals"
-                        image="/assets/powergame/vaibhav.png"
+                        image="/assets/powergame/vaibhav.jpg"
                         imageAlt="Vaibhav Suryavanshi"
+                        imageFit="cover"
                     />
                 </div>
 

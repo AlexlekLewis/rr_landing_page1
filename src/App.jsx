@@ -140,7 +140,7 @@ function App() {
         <Route path="/coaching-opportunities" element={<CoachingOpportunities />} />
 
         {/* Power Game Program — hidden from nav, accessible via direct URL only */}
-        <Route path="/power-game-program" element={<PowerGame />} />
+        <Route path="/PGP2026" element={<PowerGame />} />
         {/* Academy Shop — hidden from nav. Share URL directly with participants only. */}
         <Route path="/academy-shop" element={<AcademyShop />} />
         <Route path="/academy-shop/success" element={<ShopSuccess />} />
