@@ -55,14 +55,24 @@ const ProgramCard = ({ program, onRegisterClick }) => (
             <p className="text-sm text-rr-charcoal/80 font-medium leading-relaxed mb-4 flex-1">{program.description}</p>
 
             {/* CTA */}
-            <Link
-                to={program.route}
-                className="bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-6 py-3 rounded-full transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.4)] flex items-center justify-center gap-2 group/btn text-sm"
-                data-cta={`program-card-${program.program_id}`}
-            >
-                {program.urgency_type === 'waitlist' ? 'Join Waitlist' : 'View Program'}
-                <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-            </Link>
+            {program.urgency_type === 'coming_soon' ? (
+                <button
+                    onClick={onRegisterClick}
+                    className="bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-6 py-3 rounded-full transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.4)] flex items-center justify-center gap-2 group/btn text-sm"
+                >
+                    Register Your Interest
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                </button>
+            ) : (
+                <Link
+                    to={program.route}
+                    className="bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-6 py-3 rounded-full transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.4)] flex items-center justify-center gap-2 group/btn text-sm"
+                    data-cta={`program-card-${program.program_id}`}
+                >
+                    {program.urgency_type === 'waitlist' ? 'Join Waitlist' : 'View Program'}
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                </Link>
+            )}
         </div>
     </motion.div>
 );

@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 const PROGRAMS = [
     { label: 'T20 Elite Program', route: '/eliteprogram2026', badge: 'New Intake Coming Soon', badgeColor: 'bg-rr-blue' },
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Enrolling Now', badgeColor: 'bg-green-500' },
+    { label: 'Power Game Program', route: null, badge: 'Coming Soon', badgeColor: 'bg-rr-blue' },
 ];
 
 const HomeHero = ({ onRegisterClick }) => {
@@ -63,8 +64,8 @@ const HomeHero = ({ onRegisterClick }) => {
                     <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 sm:p-5 md:p-6">
                         <p className="text-xs font-black text-white/60 uppercase tracking-widest mb-3 sm:mb-4">Choose a current program</p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4">
-                            {PROGRAMS.map(p => (
-                                <Link key={p.route} to={p.route} className="flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 transition-all group" data-cta={`hero-program-${p.route}`}>
+                            {PROGRAMS.map(p => p.route ? (
+                                <Link key={p.label} to={p.route} className="flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 transition-all group" data-cta={`hero-program-${p.label}`}>
                                     <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                                         <span className={`w-2 h-2 rounded-full ${p.badgeColor} shrink-0`} />
                                         <div className="min-w-0">
@@ -74,6 +75,17 @@ const HomeHero = ({ onRegisterClick }) => {
                                     </div>
                                     <ArrowRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition-all shrink-0 ml-2" />
                                 </Link>
+                            ) : (
+                                <button key={p.label} onClick={onRegisterClick} className="flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 transition-all group w-full text-left">
+                                    <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                                        <span className={`w-2 h-2 rounded-full ${p.badgeColor} shrink-0 animate-pulse`} />
+                                        <div className="min-w-0">
+                                            <p className="text-white font-bold text-xs sm:text-sm uppercase tracking-wide leading-tight truncate">{p.label}</p>
+                                            <p className="text-white/50 text-xs font-medium">{p.badge}</p>
+                                        </div>
+                                    </div>
+                                    <ArrowRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+                                </button>
                             ))}
                         </div>
                         <div className="flex items-center gap-3 mb-3 sm:mb-4">
