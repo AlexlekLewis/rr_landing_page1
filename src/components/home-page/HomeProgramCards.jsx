@@ -11,7 +11,7 @@ const URGENCY_CONFIG = {
     spots_remaining: { text: '{n} Places Remaining', bg: 'bg-rr-pink/10', border: 'border-rr-pink/30', dot: 'bg-rr-pink', textColor: 'text-rr-pink' },
     open: { text: 'Now Open', bg: 'bg-green-500/10', border: 'border-green-500/30', dot: 'bg-green-500', textColor: 'text-green-600' },
     waitlist: { text: 'Join Waitlist', bg: 'bg-slate-200/50', border: 'border-slate-300', dot: 'bg-slate-400', textColor: 'text-slate-500' },
-    coming_soon: { text: 'Coming Soon', bg: 'bg-rr-blue/10', border: 'border-rr-blue/30', dot: 'bg-rr-blue', textColor: 'text-rr-blue' },
+    coming_soon: { text: 'Coming Soon', bg: 'bg-rr-pink/10', border: 'border-rr-pink/30', dot: 'bg-rr-pink', textColor: 'text-rr-pink' },
 };
 
 const UrgencyBadge = ({ type, spots, customText }) => {
@@ -30,7 +30,7 @@ const ProgramCard = ({ program, onRegisterClick }) => (
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="relative rounded-2xl overflow-hidden bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group"
+        className="relative w-full h-full rounded-2xl overflow-hidden bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group"
     >
         {/* Image */}
         <div className="relative h-48 overflow-hidden">
@@ -55,14 +55,24 @@ const ProgramCard = ({ program, onRegisterClick }) => (
             <p className="text-sm text-rr-charcoal/80 font-medium leading-relaxed mb-4 flex-1">{program.description}</p>
 
             {/* CTA */}
-            <Link
-                to={program.route}
-                className="bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-6 py-3 rounded-full transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.4)] flex items-center justify-center gap-2 group/btn text-sm"
-                data-cta={`program-card-${program.program_id}`}
-            >
-                {program.urgency_type === 'waitlist' ? 'Join Waitlist' : 'View Program'}
-                <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-            </Link>
+            {program.urgency_type === 'coming_soon' ? (
+                <button
+                    onClick={onRegisterClick}
+                    className="bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-6 py-3 rounded-full transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.4)] flex items-center justify-center gap-2 group/btn text-sm"
+                >
+                    Register Your Interest
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                </button>
+            ) : (
+                <Link
+                    to={program.route}
+                    className="bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-6 py-3 rounded-full transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.4)] flex items-center justify-center gap-2 group/btn text-sm"
+                    data-cta={`program-card-${program.program_id}`}
+                >
+                    {program.urgency_type === 'waitlist' ? 'Join Waitlist' : 'View Program'}
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                </Link>
+            )}
         </div>
     </motion.div>
 );
@@ -105,16 +115,18 @@ const HomeProgramCards = ({ onRegisterClick }) => {
 
                 {/* Cards grid */}
                 {loading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="flex flex-wrap justify-center gap-6">
                         {[1, 2, 3].map(i => (
-                            <div key={i} className="rounded-2xl bg-slate-100 animate-pulse h-80" />
+                            <div key={i} className="w-full sm:w-[360px] rounded-2xl bg-slate-100 animate-pulse h-80" />
                         ))}
                     </div>
                 ) : (
                     <AnimatePresence mode="wait">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="flex flex-wrap justify-center gap-6">
                             {programs.map(p => (
-                                <ProgramCard key={p.program_id} program={p} onRegisterClick={onRegisterClick} />
+                                <div key={p.program_id} className="w-full sm:w-[360px]">
+                                    <ProgramCard program={p} onRegisterClick={onRegisterClick} />
+                                </div>
                             ))}
                         </div>
                     </AnimatePresence>

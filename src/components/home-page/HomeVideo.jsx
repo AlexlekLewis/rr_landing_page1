@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Play, Pause, Volume2, VolumeX } from 'lucide-react';
 
-const VIDEO_URL = 'https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/sign/RRAM%20MAIN/General%20Coaching%20Edit%20RR%20Sid%20V2.mov?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81YThjNjFiYi0yZDNiLTQ1OWUtOTcwMi0zMDU0Mjc4ODIwNWEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJSUkFNIE1BSU4vR2VuZXJhbCBDb2FjaGluZyBFZGl0IFJSIFNpZCBWMi5tb3YiLCJpYXQiOjE3NzMzODY4MzYsImV4cCI6MTc3Mzk5MTYzNn0.WNJaP8kjoybJICTjVbyB8t3kYVoHaXjD2sBJAj-khKM';
+const VIDEO_URL = 'https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/RRAM%20MAIN/General%20Coaching%20Edit%20RR%20Sid%20V2.mov';
 
 const HomeVideo = () => {
     const [playing, setPlaying] = useState(false);

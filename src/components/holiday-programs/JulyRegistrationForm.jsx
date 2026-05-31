@@ -241,6 +241,7 @@ const JulyRegistrationForm = () => {
                             <option value="">Select a location</option>
                             <option value="bundoora">Cutting Edge Cricket — Bundoora | 30 June – 2 July</option>
                             <option value="hallam">Hallam | 7 – 9 July</option>
+                            <option value="the-netz">The Netz — Williamstown North | 6 – 8 July (1:30 PM – 5:30 PM)</option>
                         </select>
                         {errors.location && <p className="text-red-500 text-xs mt-1">{errors.location}</p>}
                     </div>

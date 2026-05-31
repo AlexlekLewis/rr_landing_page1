@@ -28,8 +28,8 @@ const HOME_NAV = [
 ];
 
 const PROGRAMS_DROPDOWN = [
-    { label: 'T20 Elite Program', route: '/eliteprogram2026', badge: 'New Intake Coming Soon', badgeColor: 'bg-rr-blue' },
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Enrolling Now', badgeColor: 'bg-green-500' },
+    { label: 'Power Game Program', route: '/#register', badge: 'Coming Soon', badgeColor: 'bg-rr-pink', comingSoon: true },
 ];
 
 const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
@@ -120,23 +120,39 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
                                             transition={{ duration: 0.15 }}
                                             className="absolute top-full left-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden z-[60]"
                                         >
-                                            {PROGRAMS_DROPDOWN.map((p, i) => (
-                                                <Link
-                                                    key={p.route}
-                                                    to={p.route}
-                                                    onClick={() => setProgramsOpen(false)}
-                                                    className={`flex items-center justify-between px-5 py-4 hover:bg-slate-50 transition-colors group ${i < PROGRAMS_DROPDOWN.length - 1 ? 'border-b border-slate-100' : ''}`}
-                                                >
-                                                    <div>
-                                                        <p className="font-black text-rr-dark text-sm uppercase tracking-wide">{p.label}</p>
-                                                        <div className="flex items-center gap-1.5 mt-1">
-                                                            <span className={`w-1.5 h-1.5 rounded-full ${p.badgeColor}`} />
-                                                            <span className="text-xs font-bold text-rr-charcoal/60 uppercase tracking-wide">{p.badge}</span>
+                                            {PROGRAMS_DROPDOWN.map((p, i) => {
+                                                const borderClass = i < PROGRAMS_DROPDOWN.length - 1 ? 'border-b border-slate-100' : '';
+                                                if (p.comingSoon) {
+                                                    return (
+                                                        <div
+                                                            key={p.label}
+                                                            className={`flex items-center justify-between px-5 py-4 ${borderClass}`}
+                                                        >
+                                                            <p className="font-black text-rr-dark text-sm uppercase tracking-wide">{p.label}</p>
+                                                            <span className="shrink-0 px-2.5 py-1 rounded-full bg-rr-pink/10 text-rr-pink text-[10px] font-bold uppercase tracking-wider">
+                                                                {p.badge}
+                                                            </span>
                                                         </div>
-                                                    </div>
-                                                    <ChevronDown className="w-4 h-4 text-rr-charcoal/30 -rotate-90 group-hover:text-rr-pink group-hover:translate-x-1 transition-all" />
-                                                </Link>
-                                            ))}
+                                                    );
+                                                }
+                                                return (
+                                                    <Link
+                                                        key={p.route}
+                                                        to={p.route}
+                                                        onClick={() => setProgramsOpen(false)}
+                                                        className={`flex items-center justify-between px-5 py-4 hover:bg-slate-50 transition-colors group ${borderClass}`}
+                                                    >
+                                                        <div>
+                                                            <p className="font-black text-rr-dark text-sm uppercase tracking-wide">{p.label}</p>
+                                                            <div className="flex items-center gap-1.5 mt-1">
+                                                                <span className={`w-1.5 h-1.5 rounded-full ${p.badgeColor}`} />
+                                                                <span className="text-xs font-bold text-rr-charcoal/60 uppercase tracking-wide">{p.badge}</span>
+                                                            </div>
+                                                        </div>
+                                                        <ChevronDown className="w-4 h-4 text-rr-charcoal/30 -rotate-90 group-hover:text-rr-pink group-hover:translate-x-1 transition-all" />
+                                                    </Link>
+                                                );
+                                            })}
                                             <div className="px-5 py-3 bg-slate-50 border-t border-slate-100">
                                                 <Link
                                                     to="/#programs"
@@ -224,18 +240,30 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
                                                 className="overflow-hidden mt-4 space-y-3"
                                             >
                                                 {PROGRAMS_DROPDOWN.map(p => (
-                                                    <Link
-                                                        key={p.route}
-                                                        to={p.route}
-                                                        onClick={() => setMobileMenuOpen(false)}
-                                                        className="flex items-center justify-between bg-white/10 border border-white/20 rounded-xl px-4 py-3"
-                                                    >
-                                                        <div>
+                                                    p.comingSoon ? (
+                                                        <div
+                                                            key={p.label}
+                                                            className="flex items-center justify-between bg-white/10 border border-white/20 rounded-xl px-4 py-3"
+                                                        >
                                                             <p className="text-white font-bold text-sm uppercase tracking-wide">{p.label}</p>
-                                                            <p className="text-white/60 text-xs font-medium">{p.badge}</p>
+                                                            <span className="shrink-0 px-2.5 py-1 rounded-full bg-white/15 text-white text-[10px] font-bold uppercase tracking-wider">
+                                                                {p.badge}
+                                                            </span>
                                                         </div>
-                                                        <ChevronDown className="w-4 h-4 text-white/40 -rotate-90" />
-                                                    </Link>
+                                                    ) : (
+                                                        <Link
+                                                            key={p.route}
+                                                            to={p.route}
+                                                            onClick={() => setMobileMenuOpen(false)}
+                                                            className="flex items-center justify-between bg-white/10 border border-white/20 rounded-xl px-4 py-3"
+                                                        >
+                                                            <div>
+                                                                <p className="text-white font-bold text-sm uppercase tracking-wide">{p.label}</p>
+                                                                <p className="text-white/60 text-xs font-medium">{p.badge}</p>
+                                                            </div>
+                                                            <ChevronDown className="w-4 h-4 text-white/40 -rotate-90" />
+                                                        </Link>
+                                                    )
                                                 ))}
                                             </motion.div>
                                         )}
