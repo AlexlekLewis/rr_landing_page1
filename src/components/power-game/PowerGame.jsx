@@ -60,12 +60,13 @@ const PowerGame = () => {
                 <div id="quote-vaibhav">
                     <QuoteBlock
                         variant="feature"
-                        quote="Placeholder quote from Vaibhav — to be provided. This will be the centerpiece testimonial of the program, anchoring credibility and aspiration."
+                        quote="I want to score 200 in T20s. I want to break Gayle's record."
                         attribution="Vaibhav Suryavanshi"
                         role="Rajasthan Royals"
                         image="/assets/powergame/vaibhav.jpg"
                         imageAlt="Vaibhav Suryavanshi"
                         imageFit="cover"
+                        commentary="This statement, and the likelihood he will do it, has changed the game forever. There is now a new standard that every other team needs to find players to keep pace with this extraordinary talent."
                     />
                 </div>
 

@@ -21,6 +21,7 @@ const QuoteBlock = ({
     imageAlt = '',
     imagePosition = 'left',
     imageFit = 'contain',
+    commentary,
 }) => {
     const isDark = variant === 'dark';
     const isFeature = variant === 'feature';
@@ -160,6 +161,11 @@ const QuoteBlock = ({
                     <div className={`${roleColor} text-xs md:text-sm font-medium uppercase tracking-wider mt-1`}>
                         {role}
                     </div>
+                )}
+                {commentary && (
+                    <p className="mt-6 pt-6 border-t border-white/15 text-sm md:text-base text-white/75 font-medium leading-relaxed italic">
+                        {commentary}
+                    </p>
                 )}
             </motion.div>
         );
