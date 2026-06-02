@@ -154,13 +154,8 @@ const SquadsSection = () => {
                             >
                                 <MapPin className={`w-5 h-5 flex-shrink-0 ${active ? 'text-rr-pink' : 'text-rr-blue'}`} />
                                 <span>
-                                    <span className={`flex items-center gap-2 text-sm md:text-base font-black uppercase tracking-wide leading-tight ${active ? 'text-white' : 'text-rr-dark'}`}>
+                                    <span className={`block text-sm md:text-base font-black uppercase tracking-wide leading-tight ${active ? 'text-white' : 'text-rr-dark'}`}>
                                         {v.venue}
-                                        {v.flagship && (
-                                            <span className="text-[9px] font-black uppercase tracking-widest text-rr-pink bg-rr-pink/15 border border-rr-pink/30 rounded-full px-2 py-0.5">
-                                                Flagship
-                                            </span>
-                                        )}
                                     </span>
                                     <span className={`block text-xs font-bold uppercase tracking-widest ${active ? 'text-rr-pink' : 'text-rr-charcoal/60'}`}>
                                         {v.suburb}
