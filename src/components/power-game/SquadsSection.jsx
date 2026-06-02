@@ -1,50 +1,51 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Clock, Users, MapPin } from 'lucide-react';
+import { Clock, Users, MapPin, CalendarClock } from 'lucide-react';
 
-// Same 4 squads offered at each venue — only days/times differ per venue.
+// Same 4 squads offered at each venue. Bundoora is live; others coming soon.
+const SQUAD_TEMPLATE = [
+    { name: 'Pathway 14 · A', ages: 'Ages 14 – 16', players: '24 players', builtFor: 'JG Craig · U16 academy & district trials', tier: 'pathway' },
+    { name: 'Pathway 16-18', ages: 'Ages 16 – 18', players: '24 players', builtFor: 'Premier Academy · Vic U17/U19 · 1st XI', tier: 'pathway' },
+    { name: 'Pathway 14 · B', ages: 'Ages 14 – 16', players: '24 players', builtFor: 'JG Craig · U16 academy & district trials', tier: 'pathway' },
+    { name: 'Performance Squad', ages: 'Ages 18+', players: '24 players', builtFor: 'Premier Cricket · VMCU rep · senior club season', tier: 'performance' },
+];
+
 const VENUES = [
     {
         id: 'bundoora',
         venue: 'Cutting Edge Cricket',
         suburb: 'Bundoora',
         region: 'North Melbourne',
-        flagship: true,
-        squads: [
-            { name: 'Pathway 14 · A', day: 'Friday', time: '5:30 – 7:30 PM', ages: 'Ages 14 – 16', players: '24 players', builtFor: 'JG Craig · U16 academy & district trials', tier: 'pathway' },
-            { name: 'Pathway 16-18', day: 'Friday', time: '7:30 – 9:30 PM', ages: 'Ages 16 – 18', players: '24 players', builtFor: 'Premier Academy · Vic U17/U19 · 1st XI', tier: 'pathway' },
-            { name: 'Pathway 14 · B', day: 'Saturday', time: '2:00 – 4:00 PM', ages: 'Ages 14 – 16', players: '24 players', builtFor: 'JG Craig · U16 academy & district trials', tier: 'pathway' },
-            { name: 'Performance Squad', day: 'Saturday', time: '4:00 – 6:00 PM', ages: 'Ages 18+', players: '24 players', builtFor: 'Premier Cricket · VMCU rep · senior club season', tier: 'performance' },
-        ],
+        status: 'open',
+        // schedule keyed by squad name
+        schedule: {
+            'Pathway 14 · A': { day: 'Friday', time: '5:30 – 7:30 PM' },
+            'Pathway 16-18': { day: 'Friday', time: '7:30 – 9:30 PM' },
+            'Pathway 14 · B': { day: 'Saturday', time: '2:00 – 4:00 PM' },
+            'Performance Squad': { day: 'Saturday', time: '4:00 – 6:00 PM' },
+        },
     },
     {
         id: 'hallam',
         venue: 'Elite Cricket Centre',
         suburb: 'Hallam',
         region: 'South East Melbourne',
-        squads: [
-            { name: 'Pathway 14 · A', day: 'Day TBC', time: 'Time TBC', ages: 'Ages 14 – 16', players: '24 players', builtFor: 'JG Craig · U16 academy & district trials', tier: 'pathway' },
-            { name: 'Pathway 16-18', day: 'Day TBC', time: 'Time TBC', ages: 'Ages 16 – 18', players: '24 players', builtFor: 'Premier Academy · Vic U17/U19 · 1st XI', tier: 'pathway' },
-            { name: 'Pathway 14 · B', day: 'Day TBC', time: 'Time TBC', ages: 'Ages 14 – 16', players: '24 players', builtFor: 'JG Craig · U16 academy & district trials', tier: 'pathway' },
-            { name: 'Performance Squad', day: 'Day TBC', time: 'Time TBC', ages: 'Ages 18+', players: '24 players', builtFor: 'Premier Cricket · VMCU rep · senior club season', tier: 'performance' },
-        ],
+        status: 'coming-soon',
+        schedule: {},
     },
     {
         id: 'williamstown',
         venue: 'The Netz',
         suburb: 'Williamstown',
         region: 'West Melbourne',
-        squads: [
-            { name: 'Pathway 14 · A', day: 'Day TBC', time: 'Time TBC', ages: 'Ages 14 – 16', players: '24 players', builtFor: 'JG Craig · U16 academy & district trials', tier: 'pathway' },
-            { name: 'Pathway 16-18', day: 'Day TBC', time: 'Time TBC', ages: 'Ages 16 – 18', players: '24 players', builtFor: 'Premier Academy · Vic U17/U19 · 1st XI', tier: 'pathway' },
-            { name: 'Pathway 14 · B', day: 'Day TBC', time: 'Time TBC', ages: 'Ages 14 – 16', players: '24 players', builtFor: 'JG Craig · U16 academy & district trials', tier: 'pathway' },
-            { name: 'Performance Squad', day: 'Day TBC', time: 'Time TBC', ages: 'Ages 18+', players: '24 players', builtFor: 'Premier Cricket · VMCU rep · senior club season', tier: 'performance' },
-        ],
+        status: 'coming-soon',
+        schedule: {},
     },
 ];
 
-const SquadCard = ({ squad, idx }) => {
+const SquadCard = ({ squad, schedule, idx }) => {
     const isPerformance = squad.tier === 'performance';
+    const slot = schedule[squad.name];
     return (
         <motion.div
             className={`group relative rounded-2xl p-8 overflow-hidden transition-all duration-300 ${
@@ -65,7 +66,7 @@ const SquadCard = ({ squad, idx }) => {
             }`}>
                 <Clock className={`w-3.5 h-3.5 ${isPerformance ? 'text-white' : 'text-rr-pink'}`} />
                 <span className={`text-xs font-bold uppercase tracking-widest ${isPerformance ? 'text-white' : 'text-rr-pink'}`}>
-                    {squad.day} · {squad.time}
+                    {slot.day} · {slot.time}
                 </span>
             </div>
 
@@ -102,9 +103,39 @@ const SquadCard = ({ squad, idx }) => {
     );
 };
 
+// Compact squad row used in the Coming Soon panel — shows value without fake times.
+const ComingSoonSquadRow = ({ squad, idx }) => {
+    const isPerformance = squad.tier === 'performance';
+    return (
+        <motion.div
+            className={`flex items-center justify-between gap-4 rounded-xl px-5 py-4 border ${
+                isPerformance
+                    ? 'bg-gradient-to-r from-rr-navy/80 to-rr-blue/60 border-rr-pink/30'
+                    : 'bg-white border-slate-200'
+            }`}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.35, delay: idx * 0.07, ease: 'easeOut' }}
+        >
+            <div className="min-w-0">
+                <div className={`text-base md:text-lg font-black uppercase tracking-wide leading-tight ${isPerformance ? 'text-white' : 'text-rr-dark'}`}>
+                    {squad.name}
+                </div>
+                <div className={`text-xs font-bold uppercase tracking-widest mt-1 ${isPerformance ? 'text-rr-light-pink' : 'text-rr-blue'}`}>
+                    {squad.ages} · {squad.players}
+                </div>
+            </div>
+            <div className={`flex-shrink-0 text-xs font-bold uppercase tracking-widest ${isPerformance ? 'text-white/70' : 'text-rr-charcoal/50'}`}>
+                {squad.builtFor.split(' · ')[0]}
+            </div>
+        </motion.div>
+    );
+};
+
 const SquadsSection = () => {
     const [activeVenue, setActiveVenue] = useState('bundoora');
     const venue = VENUES.find((v) => v.id === activeVenue);
+    const isOpen = venue.status === 'open';
 
     return (
         <section className="bg-slate-50 py-24 md:py-32">
@@ -141,6 +172,7 @@ const SquadsSection = () => {
                 >
                     {VENUES.map((v) => {
                         const active = v.id === activeVenue;
+                        const open = v.status === 'open';
                         return (
                             <button
                                 key={v.id}
@@ -153,13 +185,28 @@ const SquadsSection = () => {
                                 }`}
                             >
                                 <MapPin className={`w-5 h-5 flex-shrink-0 ${active ? 'text-rr-pink' : 'text-rr-blue'}`} />
-                                <span>
+                                <span className="flex-1">
                                     <span className={`block text-sm md:text-base font-black uppercase tracking-wide leading-tight ${active ? 'text-white' : 'text-rr-dark'}`}>
                                         {v.venue}
                                     </span>
                                     <span className={`block text-xs font-bold uppercase tracking-widest ${active ? 'text-rr-pink' : 'text-rr-charcoal/60'}`}>
                                         {v.suburb}
                                     </span>
+                                </span>
+                                {/* status pill */}
+                                <span className={`flex-shrink-0 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-widest ${
+                                    open
+                                        ? (active ? 'bg-green-400/20 text-green-300' : 'bg-green-100 text-green-700')
+                                        : (active ? 'bg-white/15 text-white/70' : 'bg-slate-100 text-rr-charcoal/60')
+                                }`}>
+                                    {open ? (
+                                        <>
+                                            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                                            Open
+                                        </>
+                                    ) : (
+                                        'Soon'
+                                    )}
                                 </span>
                             </button>
                         );
@@ -175,25 +222,63 @@ const SquadsSection = () => {
                     <div className="h-px flex-1 bg-gradient-to-l from-transparent to-rr-blue/40" />
                 </div>
 
-                {/* Squad cards for the active venue */}
+                {/* Content — open venue shows full schedule; coming-soon shows panel */}
                 <AnimatePresence mode="wait">
-                    <motion.div
-                        key={venue.id}
-                        className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.25 }}
-                    >
-                        {venue.squads.map((squad, idx) => (
-                            <SquadCard key={venue.id + squad.name} squad={squad} idx={idx} />
-                        ))}
-                    </motion.div>
-                </AnimatePresence>
+                    {isOpen ? (
+                        <motion.div
+                            key={venue.id}
+                            className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.25 }}
+                        >
+                            {SQUAD_TEMPLATE.map((squad, idx) => (
+                                <SquadCard key={venue.id + squad.name} squad={squad} schedule={venue.schedule} idx={idx} />
+                            ))}
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            key={venue.id}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.25 }}
+                        >
+                            {/* Coming soon banner */}
+                            <div className="relative rounded-2xl overflow-hidden bg-rr-dark border border-rr-pink/30 p-8 md:p-10 mb-6">
+                                <div
+                                    className="absolute inset-0 opacity-40 pointer-events-none"
+                                    style={{ background: 'radial-gradient(circle at 80% 30%, rgba(225,31,143,0.25) 0%, rgba(0,0,0,0) 55%)' }}
+                                />
+                                <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-5">
+                                    <div className="w-14 h-14 rounded-full bg-rr-pink/15 border border-rr-pink/30 flex items-center justify-center flex-shrink-0">
+                                        <CalendarClock className="w-7 h-7 text-rr-pink" />
+                                    </div>
+                                    <div>
+                                        <div className="inline-flex items-center gap-2 bg-rr-pink/15 border border-rr-pink/30 rounded-full px-3 py-1 mb-3">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
+                                            <span className="text-[10px] font-black text-rr-pink uppercase tracking-widest">Coming Soon</span>
+                                        </div>
+                                        <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-wide leading-tight mb-2">
+                                            {venue.venue} · {venue.suburb}
+                                        </h3>
+                                        <p className="text-sm md:text-base text-white/75 font-medium max-w-2xl">
+                                            The full Power Game Program — three Pathway Squads and one Performance Squad — is coming to {venue.suburb}. Days and times are being finalised now.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
 
-                <p className="text-center text-xs md:text-sm text-rr-charcoal/60 mt-10 font-medium uppercase tracking-widest">
-                    Days &amp; times for Hallam and Williamstown to be confirmed
-                </p>
+                            {/* The squads that will run here */}
+                            <div className="grid grid-cols-1 gap-3">
+                                {SQUAD_TEMPLATE.map((squad, idx) => (
+                                    <ComingSoonSquadRow key={venue.id + squad.name} squad={squad} idx={idx} />
+                                ))}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </section>
     );
