@@ -6,7 +6,6 @@ import QuoteBlock from './QuoteBlock';
 import VideoSection from './VideoSection';
 import FeaturesBenefits from './FeaturesBenefits';
 import SquadsSection from './SquadsSection';
-import LocationsSection from './LocationsSection';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
 const SECTIONS = [
@@ -16,7 +15,6 @@ const SECTIONS = [
     'features-benefits',
     'quote-vaibhav',
     'squads',
-    'locations',
     'quote-3',
 ];
 
@@ -72,10 +70,6 @@ const PowerGame = () => {
 
                 <div id="squads">
                     <SquadsSection />
-                </div>
-
-                <div id="locations">
-                    <LocationsSection />
                 </div>
 
                 <div id="quote-3">

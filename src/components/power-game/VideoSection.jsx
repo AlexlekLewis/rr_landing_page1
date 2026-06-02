@@ -32,7 +32,7 @@ const VideoSection = () => {
                         </span>
                     </div>
                     <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-wide mb-6">
-                        SEE THE <span className="text-rr-pink">POWER</span> IN ACTION
+                        WHAT HAS <span className="text-rr-pink">SURYAVANSHI</span> DONE?
                     </h2>
                     <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto font-medium">
                         Let's hear from Andy Crook, Director of Rajasthan Royals Academy Melbourne, as well as T20 and Power Coach — on the impact of Vaibhav Suryavanshi, what the future of the game now looks like, and the Power Game Program, during a recent interview.
