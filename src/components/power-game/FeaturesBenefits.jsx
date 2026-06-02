@@ -22,7 +22,7 @@ const BENEFITS = [
 
 const FeaturesBenefits = () => {
     return (
-        <section className="bg-white py-24 md:py-32">
+        <section className="bg-white pt-8 md:pt-12 pb-24 md:pb-32">
             <div className="max-w-6xl mx-auto px-6">
                 <motion.div
                     className="text-center mb-16"
@@ -35,7 +35,7 @@ const FeaturesBenefits = () => {
                         WHAT YOU <span className="text-rr-pink">GET</span>
                     </h2>
                     <p className="text-base md:text-lg text-rr-charcoal max-w-2xl mx-auto font-medium">
-                        A program engineered to develop power across every discipline of the modern game.
+                        Inside the program — what each session delivers, and what you walk away with.
                     </p>
                 </motion.div>
 

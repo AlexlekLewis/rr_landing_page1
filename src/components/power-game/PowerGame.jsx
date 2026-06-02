@@ -4,17 +4,21 @@ import Footer from '../Footer';
 import HeroSection from './HeroSection';
 import QuoteBlock from './QuoteBlock';
 import VideoSection from './VideoSection';
+import OverviewSection from './OverviewSection';
 import FeaturesBenefits from './FeaturesBenefits';
 import SquadsSection from './SquadsSection';
+import PricingSection from './PricingSection';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
 const SECTIONS = [
     'hero',
     'quote-1',
     'video',
+    'overview',
     'features-benefits',
     'quote-vaibhav',
     'squads',
+    'pricing',
     'quote-3',
 ];
 
@@ -51,6 +55,10 @@ const PowerGame = () => {
                     <VideoSection />
                 </div>
 
+                <div id="overview">
+                    <OverviewSection />
+                </div>
+
                 <div id="features-benefits">
                     <FeaturesBenefits />
                 </div>
@@ -70,6 +78,10 @@ const PowerGame = () => {
 
                 <div id="squads">
                     <SquadsSection />
+                </div>
+
+                <div id="pricing">
+                    <PricingSection />
                 </div>
 
                 <div id="quote-3">
