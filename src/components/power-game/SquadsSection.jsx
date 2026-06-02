@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Clock, Users, MapPin, CalendarClock } from 'lucide-react';
+import { Clock, Users, MapPin, ChevronDown, CalendarClock, Target } from 'lucide-react';
 
-// Same 4 squads offered at each venue. Bundoora is live; others coming soon.
 const SQUAD_TEMPLATE = [
     { name: 'Pathway 14 · A', ages: 'Ages 14 – 16', players: '24 players', builtFor: 'JG Craig · U16 academy & district trials', tier: 'pathway' },
     { name: 'Pathway 16-18', ages: 'Ages 16 – 18', players: '24 players', builtFor: 'Premier Academy · Vic U17/U19 · 1st XI', tier: 'pathway' },
@@ -17,7 +16,6 @@ const VENUES = [
         suburb: 'Bundoora',
         region: 'North Melbourne',
         status: 'open',
-        // schedule keyed by squad name
         schedule: {
             'Pathway 14 · A': { day: 'Friday', time: '5:30 – 7:30 PM' },
             'Pathway 16-18': { day: 'Friday', time: '7:30 – 9:30 PM' },
@@ -43,103 +41,125 @@ const VENUES = [
     },
 ];
 
-const SquadCard = ({ squad, schedule, idx }) => {
+const SquadAccordionRow = ({ squad, slot, isOpen, onToggle, idx }) => {
     const isPerformance = squad.tier === 'performance';
-    const slot = schedule[squad.name];
+
     return (
         <motion.div
-            className={`group relative rounded-2xl p-8 overflow-hidden transition-all duration-300 ${
-                isPerformance
-                    ? 'bg-gradient-to-br from-rr-navy via-rr-blue to-rr-pink border border-rr-pink/40 hover:shadow-[0_10px_50px_rgba(225,31,143,0.35)]'
-                    : 'bg-white border border-slate-200 hover:border-rr-pink/40 hover:shadow-[0_10px_40px_rgba(225,31,143,0.12)]'
-            }`}
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, delay: idx * 0.08, ease: 'easeOut' }}
-        >
-            {!isPerformance && (
-                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-rr-blue to-rr-pink" />
-            )}
-
-            <div className={`inline-flex items-center gap-2 rounded-full px-4 py-2 mb-5 ${
-                isPerformance ? 'bg-white/15 border border-white/25' : 'bg-rr-pink/10 border border-rr-pink/30'
-            }`}>
-                <Clock className={`w-3.5 h-3.5 ${isPerformance ? 'text-white' : 'text-rr-pink'}`} />
-                <span className={`text-xs font-bold uppercase tracking-widest ${isPerformance ? 'text-white' : 'text-rr-pink'}`}>
-                    {slot.day} · {slot.time}
-                </span>
-            </div>
-
-            <h3 className={`text-2xl md:text-3xl font-black uppercase tracking-wide mb-3 ${
-                isPerformance ? 'text-white' : 'text-rr-dark'
-            }`}>
-                {squad.name}
-            </h3>
-
-            <div className={`flex items-center gap-4 mb-6 text-sm font-bold uppercase tracking-wide ${
-                isPerformance ? 'text-white/90' : 'text-rr-blue'
-            }`}>
-                <span>{squad.ages}</span>
-                <span className={isPerformance ? 'text-white/40' : 'text-slate-300'}>•</span>
-                <span className="inline-flex items-center gap-1.5">
-                    <Users className="w-4 h-4" />
-                    {squad.players}
-                </span>
-            </div>
-
-            <div className={`pt-5 border-t ${isPerformance ? 'border-white/20' : 'border-slate-100'}`}>
-                <div className={`text-xs font-bold uppercase tracking-widest mb-1.5 ${
-                    isPerformance ? 'text-white/60' : 'text-rr-charcoal/60'
-                }`}>
-                    Built for
-                </div>
-                <div className={`text-sm md:text-base font-semibold leading-snug ${
-                    isPerformance ? 'text-white' : 'text-rr-charcoal'
-                }`}>
-                    {squad.builtFor}
-                </div>
-            </div>
-        </motion.div>
-    );
-};
-
-// Compact squad row used in the Coming Soon panel — shows value without fake times.
-const ComingSoonSquadRow = ({ squad, idx }) => {
-    const isPerformance = squad.tier === 'performance';
-    return (
-        <motion.div
-            className={`flex items-center justify-between gap-4 rounded-xl px-5 py-4 border ${
-                isPerformance
-                    ? 'bg-gradient-to-r from-rr-navy/80 to-rr-blue/60 border-rr-pink/30'
-                    : 'bg-white border-slate-200'
+            transition={{ duration: 0.35, delay: idx * 0.06, ease: 'easeOut' }}
+            className={`rounded-xl overflow-hidden border transition-colors duration-300 ${
+                isOpen
+                    ? 'border-rr-pink/50 bg-white shadow-[0_8px_30px_rgba(225,31,143,0.12)]'
+                    : 'border-slate-200 bg-white hover:border-rr-pink/30'
             }`}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.35, delay: idx * 0.07, ease: 'easeOut' }}
         >
-            <div className="min-w-0">
-                <div className={`text-base md:text-lg font-black uppercase tracking-wide leading-tight ${isPerformance ? 'text-white' : 'text-rr-dark'}`}>
-                    {squad.name}
-                </div>
-                <div className={`text-xs font-bold uppercase tracking-widest mt-1 ${isPerformance ? 'text-rr-light-pink' : 'text-rr-blue'}`}>
-                    {squad.ages} · {squad.players}
-                </div>
-            </div>
-            <div className={`flex-shrink-0 text-xs font-bold uppercase tracking-widest ${isPerformance ? 'text-white/70' : 'text-rr-charcoal/50'}`}>
-                {squad.builtFor.split(' · ')[0]}
-            </div>
+            {/* Header row — always visible */}
+            <button
+                type="button"
+                onClick={onToggle}
+                className="w-full flex items-center gap-4 px-5 md:px-6 py-5 text-left"
+            >
+                {/* Tier accent bar */}
+                <span className={`flex-shrink-0 w-1.5 h-12 rounded-full ${isPerformance ? 'bg-gradient-to-b from-rr-pink to-rr-blue' : 'bg-gradient-to-b from-rr-blue to-rr-pink'}`} />
+
+                {/* Name + ages */}
+                <span className="flex-1 min-w-0">
+                    <span className="flex items-center gap-2 flex-wrap">
+                        <span className="text-lg md:text-xl font-black text-rr-dark uppercase tracking-wide leading-tight">
+                            {squad.name}
+                        </span>
+                        {isPerformance && (
+                            <span className="text-[9px] font-black uppercase tracking-widest text-rr-pink bg-rr-pink/10 border border-rr-pink/30 rounded-full px-2 py-0.5">
+                                Elite
+                            </span>
+                        )}
+                    </span>
+                    <span className="block text-xs font-bold text-rr-blue uppercase tracking-widest mt-1">
+                        {squad.ages}
+                    </span>
+                </span>
+
+                {/* Day/time (or coming soon) — hidden on small screens to keep tidy */}
+                <span className="hidden sm:flex flex-shrink-0 items-center gap-2 text-xs font-bold uppercase tracking-widest text-rr-charcoal/70">
+                    {slot ? (
+                        <>
+                            <Clock className="w-3.5 h-3.5 text-rr-pink" />
+                            <span>{slot.day} · {slot.time}</span>
+                        </>
+                    ) : (
+                        <span className="text-rr-charcoal/40">Schedule TBC</span>
+                    )}
+                </span>
+
+                {/* Chevron */}
+                <ChevronDown
+                    className={`flex-shrink-0 w-5 h-5 text-rr-pink transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+                />
+            </button>
+
+            {/* Expanded detail */}
+            <AnimatePresence initial={false}>
+                {isOpen && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                        className="overflow-hidden"
+                    >
+                        <div className="px-5 md:px-6 pb-6 pt-1">
+                            <div className="border-t border-slate-100 pt-5 grid grid-cols-1 sm:grid-cols-3 gap-5">
+                                {/* Schedule (also shown here for mobile) */}
+                                <div>
+                                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-rr-charcoal/50 mb-2">
+                                        <Clock className="w-3.5 h-3.5 text-rr-pink" /> Schedule
+                                    </div>
+                                    <div className="text-sm font-bold text-rr-dark uppercase tracking-wide">
+                                        {slot ? `${slot.day} · ${slot.time}` : 'To be confirmed'}
+                                    </div>
+                                </div>
+                                {/* Players */}
+                                <div>
+                                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-rr-charcoal/50 mb-2">
+                                        <Users className="w-3.5 h-3.5 text-rr-pink" /> Squad Size
+                                    </div>
+                                    <div className="text-sm font-bold text-rr-dark uppercase tracking-wide">
+                                        {squad.players}
+                                    </div>
+                                </div>
+                                {/* Built for */}
+                                <div>
+                                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-rr-charcoal/50 mb-2">
+                                        <Target className="w-3.5 h-3.5 text-rr-pink" /> Built For
+                                    </div>
+                                    <div className="text-sm font-semibold text-rr-charcoal leading-snug">
+                                        {squad.builtFor}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </motion.div>
     );
 };
 
 const SquadsSection = () => {
     const [activeVenue, setActiveVenue] = useState('bundoora');
+    const [openSquad, setOpenSquad] = useState(SQUAD_TEMPLATE[0].name); // first open by default
     const venue = VENUES.find((v) => v.id === activeVenue);
-    const isOpen = venue.status === 'open';
+
+    const handleVenueChange = (id) => {
+        setActiveVenue(id);
+        setOpenSquad(SQUAD_TEMPLATE[0].name); // reset to first squad open
+    };
 
     return (
         <section className="bg-slate-50 py-24 md:py-32">
-            <div className="max-w-6xl mx-auto px-6">
+            <div className="max-w-4xl mx-auto px-6">
                 {/* Header */}
                 <motion.div
                     className="text-center mb-12"
@@ -158,13 +178,13 @@ const SquadsSection = () => {
                         FIND YOUR SQUAD,<br className="hidden md:block" /> CLOSE TO <span className="text-rr-pink">HOME</span>
                     </h2>
                     <p className="text-base md:text-lg text-rr-charcoal max-w-2xl mx-auto font-medium">
-                        The same elite program runs across three Melbourne venues — three Pathway Squads and one Performance Squad at each. Pick your venue to see its days and times.
+                        The same elite program runs across three Melbourne venues. Pick your venue, then tap a squad to see the detail.
                     </p>
                 </motion.div>
 
                 {/* Venue tabs */}
                 <motion.div
-                    className="flex flex-col sm:flex-row gap-3 justify-center mb-12"
+                    className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-10"
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -177,107 +197,72 @@ const SquadsSection = () => {
                             <button
                                 key={v.id}
                                 type="button"
-                                onClick={() => setActiveVenue(v.id)}
-                                className={`flex items-center gap-3 px-6 py-4 rounded-xl border transition-all duration-300 text-left ${
+                                onClick={() => handleVenueChange(v.id)}
+                                className={`flex items-center gap-3 px-5 py-4 rounded-xl border transition-all duration-300 text-left ${
                                     active
                                         ? 'bg-rr-dark border-rr-pink shadow-[0_8px_30px_rgba(225,31,143,0.25)]'
                                         : 'bg-white border-slate-200 hover:border-rr-pink/40'
                                 }`}
                             >
                                 <MapPin className={`w-5 h-5 flex-shrink-0 ${active ? 'text-rr-pink' : 'text-rr-blue'}`} />
-                                <span className="flex-1">
-                                    <span className={`block text-sm md:text-base font-black uppercase tracking-wide leading-tight ${active ? 'text-white' : 'text-rr-dark'}`}>
+                                <span className="flex-1 min-w-0">
+                                    <span className={`block text-sm font-black uppercase tracking-wide leading-tight truncate ${active ? 'text-white' : 'text-rr-dark'}`}>
                                         {v.venue}
                                     </span>
-                                    <span className={`block text-xs font-bold uppercase tracking-widest ${active ? 'text-rr-pink' : 'text-rr-charcoal/60'}`}>
+                                    <span className={`block text-[11px] font-bold uppercase tracking-widest ${active ? 'text-rr-pink' : 'text-rr-charcoal/60'}`}>
                                         {v.suburb}
                                     </span>
                                 </span>
-                                {/* status pill */}
-                                <span className={`flex-shrink-0 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-widest ${
+                                <span className={`flex-shrink-0 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-black uppercase tracking-widest ${
                                     open
                                         ? (active ? 'bg-green-400/20 text-green-300' : 'bg-green-100 text-green-700')
                                         : (active ? 'bg-white/15 text-white/70' : 'bg-slate-100 text-rr-charcoal/60')
                                 }`}>
-                                    {open ? (
-                                        <>
-                                            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                                            Open
-                                        </>
-                                    ) : (
-                                        'Soon'
-                                    )}
+                                    {open ? (<><span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />Open</>) : 'Soon'}
                                 </span>
                             </button>
                         );
                     })}
                 </motion.div>
 
-                {/* Active venue label */}
-                <div className="flex items-center gap-4 mb-8">
-                    <div className="h-px flex-1 bg-gradient-to-r from-transparent to-rr-blue/40" />
-                    <span className="text-xs md:text-sm font-black text-rr-blue uppercase tracking-widest text-center">
-                        {venue.venue} · {venue.suburb} · {venue.region}
-                    </span>
-                    <div className="h-px flex-1 bg-gradient-to-l from-transparent to-rr-blue/40" />
-                </div>
+                {/* Coming soon banner (only for TBC venues) */}
+                {venue.status !== 'open' && (
+                    <div className="relative rounded-xl overflow-hidden bg-rr-dark border border-rr-pink/30 px-6 py-5 mb-5 flex items-center gap-4">
+                        <div
+                            className="absolute inset-0 opacity-40 pointer-events-none"
+                            style={{ background: 'radial-gradient(circle at 85% 30%, rgba(225,31,143,0.25) 0%, rgba(0,0,0,0) 55%)' }}
+                        />
+                        <div className="relative z-10 w-11 h-11 rounded-full bg-rr-pink/15 border border-rr-pink/30 flex items-center justify-center flex-shrink-0">
+                            <CalendarClock className="w-5 h-5 text-rr-pink" />
+                        </div>
+                        <p className="relative z-10 text-sm md:text-base text-white/85 font-medium">
+                            <span className="font-black text-white uppercase tracking-wide">Coming soon to {venue.suburb}.</span>{' '}
+                            The same four squads below — days &amp; times are being finalised now.
+                        </p>
+                    </div>
+                )}
 
-                {/* Content — open venue shows full schedule; coming-soon shows panel */}
+                {/* Squad accordion */}
                 <AnimatePresence mode="wait">
-                    {isOpen ? (
-                        <motion.div
-                            key={venue.id}
-                            className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.25 }}
-                        >
-                            {SQUAD_TEMPLATE.map((squad, idx) => (
-                                <SquadCard key={venue.id + squad.name} squad={squad} schedule={venue.schedule} idx={idx} />
-                            ))}
-                        </motion.div>
-                    ) : (
-                        <motion.div
-                            key={venue.id}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.25 }}
-                        >
-                            {/* Coming soon banner */}
-                            <div className="relative rounded-2xl overflow-hidden bg-rr-dark border border-rr-pink/30 p-8 md:p-10 mb-6">
-                                <div
-                                    className="absolute inset-0 opacity-40 pointer-events-none"
-                                    style={{ background: 'radial-gradient(circle at 80% 30%, rgba(225,31,143,0.25) 0%, rgba(0,0,0,0) 55%)' }}
-                                />
-                                <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-5">
-                                    <div className="w-14 h-14 rounded-full bg-rr-pink/15 border border-rr-pink/30 flex items-center justify-center flex-shrink-0">
-                                        <CalendarClock className="w-7 h-7 text-rr-pink" />
-                                    </div>
-                                    <div>
-                                        <div className="inline-flex items-center gap-2 bg-rr-pink/15 border border-rr-pink/30 rounded-full px-3 py-1 mb-3">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                                            <span className="text-[10px] font-black text-rr-pink uppercase tracking-widest">Coming Soon</span>
-                                        </div>
-                                        <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-wide leading-tight mb-2">
-                                            {venue.venue} · {venue.suburb}
-                                        </h3>
-                                        <p className="text-sm md:text-base text-white/75 font-medium max-w-2xl">
-                                            The full Power Game Program — three Pathway Squads and one Performance Squad — is coming to {venue.suburb}. Days and times are being finalised now.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* The squads that will run here */}
-                            <div className="grid grid-cols-1 gap-3">
-                                {SQUAD_TEMPLATE.map((squad, idx) => (
-                                    <ComingSoonSquadRow key={venue.id + squad.name} squad={squad} idx={idx} />
-                                ))}
-                            </div>
-                        </motion.div>
-                    )}
+                    <motion.div
+                        key={venue.id}
+                        className="flex flex-col gap-3"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        {SQUAD_TEMPLATE.map((squad, idx) => (
+                            <SquadAccordionRow
+                                key={venue.id + squad.name}
+                                squad={squad}
+                                slot={venue.schedule[squad.name]}
+                                isOpen={openSquad === squad.name}
+                                onToggle={() => setOpenSquad(openSquad === squad.name ? null : squad.name)}
+                                idx={idx}
+                            />
+                        ))}
+                    </motion.div>
                 </AnimatePresence>
             </div>
         </section>
