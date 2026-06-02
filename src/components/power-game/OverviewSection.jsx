@@ -24,10 +24,10 @@ const OverviewSection = () => {
 
                     <div className="space-y-5 text-base md:text-lg text-rr-charcoal font-medium leading-relaxed">
                         <p>
-                            The Power Game Program is an elite training environment built around one idea: developing the ability to generate power on demand, across every discipline of the modern game.
+                            The Power Game Program is an elite training environment built around one idea: developing the ability to generate power on demand, across every discipline and format of the modern game.
                         </p>
                         <p>
-                            Through power hitting, bowling with intent, and explosive fielding, players learn how to reach for power when the situation demands it — backed by biomechanics, data, and the coaching methodology that drives the Royals way.
+                            From 360 power hitting, full spectrum of bowling, and explosive fielding, players learn how to reach for power when the situation demands it — backed by biomechanics, data, and the coaching methodology that drives the Royals way.
                         </p>
                         <p className="text-rr-dark font-semibold">
                             This is where like-skilled, like-motivated players train together to find a way to win from anywhere.
