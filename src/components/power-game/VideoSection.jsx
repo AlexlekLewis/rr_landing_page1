@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Play } from 'lucide-react';
 
 const VideoSection = () => {
+    const videoRef = useRef(null);
+    const [playing, setPlaying] = useState(false);
+
+    const handlePlay = () => {
+        if (videoRef.current) {
+            videoRef.current.play();
+            setPlaying(true);
+        }
+    };
+
     return (
         <section className="bg-rr-dark py-24 md:py-32 relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-rr" />
@@ -25,33 +35,41 @@ const VideoSection = () => {
                         SEE THE <span className="text-rr-pink">POWER</span> IN ACTION
                     </h2>
                     <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto font-medium">
-                        Watch how we develop explosive skills across every discipline of the modern game.
+                        Let's hear from Rajasthan Royals Academy — as well as T20 and Power Coach Andy Crook — on the Power Game Program and its evolution, during a recent discussion.
                     </p>
                 </motion.div>
 
                 <motion.div
-                    className="relative aspect-video w-full rounded-2xl overflow-hidden border border-white/10 bg-black shadow-[0_0_60px_rgba(225,31,143,0.15)]"
+                    className="relative mx-auto w-full max-w-sm aspect-[9/16] rounded-2xl overflow-hidden border border-white/10 bg-black shadow-[0_0_60px_rgba(225,31,143,0.15)]"
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.2 }}
                     transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
                 >
-                    {/* Placeholder video poster */}
-                    <div
-                        className="absolute inset-0 bg-gradient-to-br from-rr-navy via-rr-blue to-rr-pink opacity-60"
-                    />
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <video
+                        ref={videoRef}
+                        className="absolute inset-0 w-full h-full object-cover"
+                        poster="/assets/powergame/andy-crook-poster.jpg"
+                        controls={playing}
+                        playsInline
+                        preload="metadata"
+                    >
+                        <source src="/assets/powergame/andy-crook-video.mp4" type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+
+                    {!playing && (
                         <button
                             type="button"
-                            className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-rr-pink hover:bg-rr-light-pink transition-all duration-300 flex items-center justify-center shadow-[0_0_40px_rgba(225,31,143,0.6)] hover:scale-110"
+                            onClick={handlePlay}
+                            className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 hover:bg-black/20 transition-all duration-300 group"
                             aria-label="Play video"
                         >
-                            <Play className="w-8 h-8 md:w-10 md:h-10 text-white ml-1" fill="white" />
+                            <span className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-rr-pink group-hover:bg-rr-light-pink transition-all duration-300 flex items-center justify-center shadow-[0_0_40px_rgba(225,31,143,0.6)] group-hover:scale-110">
+                                <Play className="w-8 h-8 md:w-10 md:h-10 text-white ml-1" fill="white" />
+                            </span>
                         </button>
-                        <div className="mt-6 text-white/70 text-xs font-bold uppercase tracking-widest">
-                            Video Placeholder — TBC
-                        </div>
-                    </div>
+                    )}
                 </motion.div>
             </div>
         </section>
