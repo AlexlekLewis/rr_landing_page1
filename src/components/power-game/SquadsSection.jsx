@@ -5,10 +5,11 @@ import { Clock, Users, MapPin } from 'lucide-react';
 // Same 4 squads offered at each venue — only days/times differ per venue.
 const VENUES = [
     {
-        id: 'hallam',
-        venue: 'Elite Cricket Centre',
-        suburb: 'Hallam',
-        region: 'South East Melbourne',
+        id: 'bundoora',
+        venue: 'Cutting Edge Cricket',
+        suburb: 'Bundoora',
+        region: 'North Melbourne',
+        flagship: true,
         squads: [
             { name: 'Pathway 14 · A', day: 'Friday', time: '5:30 – 7:30 PM', ages: 'Ages 14 – 16', players: '24 players', builtFor: 'JG Craig · U16 academy & district trials', tier: 'pathway' },
             { name: 'Pathway 16-18', day: 'Friday', time: '7:30 – 9:30 PM', ages: 'Ages 16 – 18', players: '24 players', builtFor: 'Premier Academy · Vic U17/U19 · 1st XI', tier: 'pathway' },
@@ -17,10 +18,10 @@ const VENUES = [
         ],
     },
     {
-        id: 'bundoora',
-        venue: 'Cutting Edge Cricket',
-        suburb: 'Bundoora',
-        region: 'North Melbourne',
+        id: 'hallam',
+        venue: 'Elite Cricket Centre',
+        suburb: 'Hallam',
+        region: 'South East Melbourne',
         squads: [
             { name: 'Pathway 14 · A', day: 'Day TBC', time: 'Time TBC', ages: 'Ages 14 – 16', players: '24 players', builtFor: 'JG Craig · U16 academy & district trials', tier: 'pathway' },
             { name: 'Pathway 16-18', day: 'Day TBC', time: 'Time TBC', ages: 'Ages 16 – 18', players: '24 players', builtFor: 'Premier Academy · Vic U17/U19 · 1st XI', tier: 'pathway' },
@@ -102,7 +103,7 @@ const SquadCard = ({ squad, idx }) => {
 };
 
 const SquadsSection = () => {
-    const [activeVenue, setActiveVenue] = useState(VENUES[0].id);
+    const [activeVenue, setActiveVenue] = useState('bundoora');
     const venue = VENUES.find((v) => v.id === activeVenue);
 
     return (
@@ -153,8 +154,13 @@ const SquadsSection = () => {
                             >
                                 <MapPin className={`w-5 h-5 flex-shrink-0 ${active ? 'text-rr-pink' : 'text-rr-blue'}`} />
                                 <span>
-                                    <span className={`block text-sm md:text-base font-black uppercase tracking-wide leading-tight ${active ? 'text-white' : 'text-rr-dark'}`}>
+                                    <span className={`flex items-center gap-2 text-sm md:text-base font-black uppercase tracking-wide leading-tight ${active ? 'text-white' : 'text-rr-dark'}`}>
                                         {v.venue}
+                                        {v.flagship && (
+                                            <span className="text-[9px] font-black uppercase tracking-widest text-rr-pink bg-rr-pink/15 border border-rr-pink/30 rounded-full px-2 py-0.5">
+                                                Flagship
+                                            </span>
+                                        )}
                                     </span>
                                     <span className={`block text-xs font-bold uppercase tracking-widest ${active ? 'text-rr-pink' : 'text-rr-charcoal/60'}`}>
                                         {v.suburb}
@@ -191,7 +197,7 @@ const SquadsSection = () => {
                 </AnimatePresence>
 
                 <p className="text-center text-xs md:text-sm text-rr-charcoal/60 mt-10 font-medium uppercase tracking-widest">
-                    Days &amp; times for Bundoora and Williamstown to be confirmed
+                    Days &amp; times for Hallam and Williamstown to be confirmed
                 </p>
             </div>
         </section>
