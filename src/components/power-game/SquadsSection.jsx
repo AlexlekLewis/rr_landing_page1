@@ -149,12 +149,12 @@ const SquadAccordionRow = ({ squad, slot, isOpen, onToggle, idx }) => {
 
 const SquadsSection = () => {
     const [activeVenue, setActiveVenue] = useState('bundoora');
-    const [openSquad, setOpenSquad] = useState(SQUAD_TEMPLATE[0].name); // first open by default
+    const [openSquad, setOpenSquad] = useState(null); // all closed by default
     const venue = VENUES.find((v) => v.id === activeVenue);
 
     const handleVenueChange = (id) => {
         setActiveVenue(id);
-        setOpenSquad(SQUAD_TEMPLATE[0].name); // reset to first squad open
+        setOpenSquad(null); // keep all closed
     };
 
     return (
