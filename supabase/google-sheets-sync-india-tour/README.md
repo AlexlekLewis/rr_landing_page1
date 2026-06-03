@@ -39,7 +39,7 @@ Done. To rotate the token later, change it in both `Code.gs` (`SYNC_TOKEN`) and 
 ## Columns
 
 `created_at` (Melbourne time), `player_name`, `player_dob`, `player_age`,
-`current_club`, `highest_level`, `is_over_18`, `player_email`, `player_phone`,
+`current_club`, `highest_level`, `primary_skill`, `secondary_skill`, `is_over_18`, `player_email`, `player_phone`,
 `guardian1_name`, `guardian1_relationship`, `guardian1_email`, `guardian1_phone`,
 `guardian2_name`, `guardian2_relationship`, `guardian2_email`, `guardian2_phone`,
 `consent_contact`, `referral_name`, `referral_code`, `utm_source`, `utm_medium`,

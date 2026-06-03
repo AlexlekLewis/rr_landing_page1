@@ -77,11 +77,12 @@ const IndiaTourEOIDashboard = () => {
     }, [eois, search]);
 
     const exportCSV = () => {
-        const headers = ['Submitted', 'Player', 'DOB', 'Age', 'Club', 'Highest Level', 'Over 18',
+        const headers = ['Submitted', 'Player', 'DOB', 'Age', 'Club', 'Highest Level', 'Primary Skill', 'Secondary Skill', 'Over 18',
             'Player Email', 'Player Phone', 'Guardian 1', 'G1 Relationship', 'G1 Email', 'G1 Phone',
             'Guardian 2', 'G2 Email', 'G2 Phone', 'Referred By', 'Referral Code'];
         const data = filteredEois.map(r => [
             fmtDate(r.created_at), r.player_name, r.player_dob, r.player_age, r.current_club, r.highest_level,
+            r.primary_skill, r.secondary_skill,
             r.is_over_18 ? 'Yes' : 'No', r.player_email, r.player_phone,
             r.guardian1_name, r.guardian1_relationship, r.guardian1_email, r.guardian1_phone,
             r.guardian2_name, r.guardian2_email, r.guardian2_phone, r.referral_name, r.referral_code,
@@ -198,7 +199,7 @@ const IndiaTourEOIDashboard = () => {
                             <table className="w-full text-sm text-left">
                                 <thead>
                                     <tr className="border-b border-white/5">
-                                        {['Player', 'Age', 'Club', 'Highest Level', 'Best Contact', 'Guardian', 'Referred By', 'Submitted'].map(h => (
+                                        {['Player', 'Age', 'Club', 'Highest Level', 'Skills', 'Best Contact', 'Guardian', 'Referred By', 'Submitted'].map(h => (
                                             <th key={h} className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">{h}</th>
                                         ))}
                                     </tr>
@@ -210,6 +211,10 @@ const IndiaTourEOIDashboard = () => {
                                             <td className="p-4 text-slate-400">{r.player_age ?? '-'}</td>
                                             <td className="p-4 text-slate-400 whitespace-nowrap">{r.current_club || '-'}</td>
                                             <td className="p-4 text-slate-400 max-w-[200px]">{r.highest_level || '-'}</td>
+                                            <td className="p-4 text-slate-400 whitespace-nowrap">
+                                                <div>{r.primary_skill || '-'}</div>
+                                                {r.secondary_skill && <div className="text-slate-500 text-xs">{r.secondary_skill}</div>}
+                                            </td>
                                             <td className="p-4 text-slate-400 whitespace-nowrap">
                                                 <div>{r.player_email || r.guardian1_email || '-'}</div>
                                                 <div className="text-slate-500 text-xs">{r.player_phone || r.guardian1_phone || ''}</div>

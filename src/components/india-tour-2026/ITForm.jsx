@@ -27,6 +27,7 @@ const calcAge = (dob) => {
 };
 
 const RELATIONSHIP_OPTIONS = ['Mother', 'Father', 'Guardian', 'Other'];
+const SKILL_OPTIONS = ['Batsman', 'Wicketkeeper', 'Fast bowler', 'Off spinner', 'Leg spinner'];
 
 const labelClass = 'block text-xs font-black text-rr-dark uppercase tracking-widest mb-2';
 const helperClass = 'text-xs text-rr-charcoal/60 font-medium mt-1';
@@ -76,6 +77,8 @@ const ITForm = ({ referralCode, referralName }) => {
         player_dob: '',
         current_club: '',
         highest_level: '',
+        primary_skill: '',
+        secondary_skill: '',
         player_email: '',
         player_phone: '',
         guardian1_name: '', guardian1_relationship: '', guardian1_email: '', guardian1_phone: '',
@@ -103,6 +106,7 @@ const ITForm = ({ referralCode, referralName }) => {
         if (!form.player_dob || age === null) next.player_dob = 'Please enter a valid date of birth.';
         if (!form.current_club.trim()) next.current_club = 'Current club is required.';
         if (!form.highest_level.trim()) next.highest_level = 'Highest level played is required.';
+        if (!form.primary_skill) next.primary_skill = 'Please select a primary skill.';
 
         if (isMinor) {
             if (!form.guardian1_name.trim()) next.guardian1_name = 'Parent/guardian name is required.';
@@ -138,6 +142,8 @@ const ITForm = ({ referralCode, referralName }) => {
                 player_age: age,
                 current_club: form.current_club.trim(),
                 highest_level: form.highest_level.trim(),
+                primary_skill: form.primary_skill || null,
+                secondary_skill: form.secondary_skill || null,
                 player_email: form.player_email.trim() || null,
                 player_phone: form.player_phone.trim() || null,
                 guardian1_name: form.guardian1_name.trim() || null,
@@ -298,6 +304,34 @@ const ITForm = ({ referralCode, referralName }) => {
                                     helper="Tell us the highest level where you've played more than six games."
                                     required
                                 />
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    <div data-error={!!errors.primary_skill}>
+                                        <label className={labelClass}>Primary Skill <span className="text-rr-pink">*</span></label>
+                                        <select
+                                            name="primary_skill"
+                                            value={form.primary_skill}
+                                            onChange={handleChange}
+                                            className={`w-full bg-slate-50 border ${errors.primary_skill ? 'border-red-400' : 'border-slate-200'} rounded-xl px-4 py-3 text-rr-dark font-medium focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-rr-pink/20 transition-all text-sm appearance-none cursor-pointer`}
+                                        >
+                                            <option value="">Select…</option>
+                                            {SKILL_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
+                                        </select>
+                                        {errors.primary_skill && <p className="text-red-500 text-xs font-medium mt-1">{errors.primary_skill}</p>}
+                                    </div>
+                                    <div>
+                                        <label className={labelClass}>Secondary Skill <span className="normal-case font-medium text-rr-charcoal/50">(optional)</span></label>
+                                        <select
+                                            name="secondary_skill"
+                                            value={form.secondary_skill}
+                                            onChange={handleChange}
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-rr-dark font-medium focus:outline-none focus:border-rr-pink focus:ring-2 focus:ring-rr-pink/20 transition-all text-sm appearance-none cursor-pointer"
+                                        >
+                                            <option value="">Select…</option>
+                                            {SKILL_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

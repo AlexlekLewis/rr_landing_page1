@@ -29,7 +29,7 @@ var SYNC_TOKEN    = 'it26_976803fcea81a687074b255fcb09402c62619d1f9711c51e';
 // Canonical column order — matches the sheet header row and the DB columns.
 var COLS = [
   'created_at', 'player_name', 'player_dob', 'player_age', 'current_club',
-  'highest_level', 'is_over_18', 'player_email', 'player_phone',
+  'highest_level', 'primary_skill', 'secondary_skill', 'is_over_18', 'player_email', 'player_phone',
   'guardian1_name', 'guardian1_relationship', 'guardian1_email', 'guardian1_phone',
   'guardian2_name', 'guardian2_relationship', 'guardian2_email', 'guardian2_phone',
   'consent_contact', 'referral_name', 'referral_code',
@@ -52,6 +52,12 @@ function syncIndiaTourEOIs() {
 
   var rows = JSON.parse(res.getContentText());          // sorted by created_at asc
   var sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName(SHEET_NAME);
+
+  // Ensure the header row matches COLS (idempotent — self-heals if columns change).
+  var headerRange = sheet.getRange(1, 1, 1, COLS.length);
+  var currentHeader = headerRange.getValues()[0];
+  var headerOk = currentHeader.length === COLS.length && COLS.every(function (c, i) { return currentHeader[i] === c; });
+  if (!headerOk) headerRange.setValues([COLS]);
 
   // Build a set of ids already in the sheet.
   var existing = {};
