@@ -27,7 +27,7 @@ const ITHero = ({ referralName }) => (
                 >
                     <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
                     <span className="text-xs font-bold text-white uppercase tracking-[0.25em]">
-                        {referralName ? `Invited by ${referralName}` : 'Private Invitation'}
+                        Exclusive Invite to Elite Players
                     </span>
                 </motion.div>
 
