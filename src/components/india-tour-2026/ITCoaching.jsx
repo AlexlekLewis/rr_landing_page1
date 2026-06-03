@@ -7,11 +7,13 @@ const COACHES = [
     {
         name: 'Siddhartha Lahiri',
         role: 'Head of International Player Development',
+        image: '/assets/rra/sid-lahiri-profile.png',
         bio: "Leads talent identification and player development across the Royals' global network of franchises and academies, and oversees the Rajasthan Royals Academy Melbourne.",
     },
     {
         name: 'Romi Bhinder',
         role: 'Head of High-Performance Operations · Rajasthan Royals',
+        image: '/assets/rra/romi-bhinder.png',
         bio: "The driving force behind the Royals' Nagpur High-Performance Centre, Romi oversees high-performance operations across the franchise, and has played representative cricket for Vidarbha, Maharashtra and Nagpur University.",
     },
 ];
@@ -59,8 +61,11 @@ const ITCoaching = () => (
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 + i * 0.08 }}
-                        className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8"
+                        className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 flex flex-col items-center text-center"
                     >
+                        <div className="w-28 h-28 rounded-full overflow-hidden mb-5 border-4 border-white shadow-md ring-1 ring-slate-200 bg-gradient-to-br from-rr-pink/15 to-rr-blue/15">
+                            <img src={c.image} alt={c.name} className="w-full h-full object-cover object-top" loading="lazy" />
+                        </div>
                         <h3 className="text-xl font-black text-rr-dark uppercase tracking-wide">{c.name}</h3>
                         <p className="text-xs font-bold text-rr-pink uppercase tracking-widest mt-1 mb-3">{c.role}</p>
                         <p className="text-sm md:text-base text-rr-charcoal font-medium leading-relaxed">{c.bio}</p>
