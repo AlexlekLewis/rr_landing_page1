@@ -5,6 +5,7 @@ import Footer from '../Footer';
 import ITHeader from './ITHeader';
 import ITHero from './ITHero';
 import ITAbout from './ITAbout';
+import ITCoaching from './ITCoaching';
 import ITAspiration from './ITAspiration';
 import ITForm from './ITForm';
 import ITInviteGate from './ITInviteGate';
@@ -15,7 +16,7 @@ const getRefFromUrl = () => {
 };
 
 const IndiaTour2026 = () => {
-    usePageAnalytics('/india-tour-2026', { sections: ['hero', 'about', 'aspiration', 'register'] });
+    usePageAnalytics('/india-tour-2026', { sections: ['hero', 'about', 'coaching', 'aspiration', 'register'] });
 
     // 'checking' | 'granted' | 'denied'
     const [access, setAccess] = useState('checking');
@@ -92,6 +93,7 @@ const IndiaTour2026 = () => {
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero"><ITHero referralName={referral.name} /></div>
                 <div id="about"><ITAbout /></div>
+                <div id="coaching"><ITCoaching /></div>
                 <div id="aspiration"><ITAspiration /></div>
                 <div id="register"><ITForm referralCode={referral.code} referralName={referral.name} /></div>
             </main>
