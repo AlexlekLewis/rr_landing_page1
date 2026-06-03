@@ -1,0 +1,4 @@
+User-agent: *
+# Private, invite-only pages — keep out of search engines.
+Disallow: /india-tour-2026
+Disallow: /rramadmin_26

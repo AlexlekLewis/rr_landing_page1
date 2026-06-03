@@ -51,6 +51,7 @@ const NAV_GROUPS = [
         label: 'TOURS',
         items: [
             { label: 'India Tour 2026', path: '/rramadmin_26/india-tour-2026', icon: Plane },
+            { label: 'India Tour EOIs', path: '/rramadmin_26/india-tour-eoi', icon: ClipboardList },
         ],
     },
     {
