@@ -2,8 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 // Brief coaching + venue section for the India Tour.
-// Lahiri's bio + the Nagpur HPC detail are from the Rajasthan Royals / RRA copy.
-// Ronnie Binder's line is intentionally brief pending his confirmed bio.
+// Bios are drawn from the Rajasthan Royals / RRA staff profiles.
 const COACHES = [
     {
         name: 'Siddhartha Lahiri',
@@ -11,9 +10,9 @@ const COACHES = [
         bio: "Leads talent identification and player development across the Royals' global network of franchises and academies, and oversees the Rajasthan Royals Academy Melbourne.",
     },
     {
-        name: 'Ronnie Binder',
-        role: 'Rajasthan Royals Academy Coach',
-        bio: 'Part of the touring coaching staff, guiding players through their development on the India experience.',
+        name: 'Romi Bhinder',
+        role: 'Head of High-Performance Operations · Rajasthan Royals',
+        bio: "The driving force behind the Royals' Nagpur High-Performance Centre, Romi oversees high-performance operations across the franchise, and has played representative cricket for Vidarbha, Maharashtra and Nagpur University.",
     },
 ];
 
