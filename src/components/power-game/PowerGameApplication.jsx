@@ -166,6 +166,50 @@ const PowerGameApplication = () => {
             const { error: appError } = await supabase.from('applications').insert([applicationsPayload]);
             if (appError) throw appError;
 
+            // 2. Dedicated Power Game table — drives the Google Sheet sync.
+            //    Independent try/catch so a failure here doesn't block the
+            //    dashboard insert above (dual-write pattern).
+            try {
+                const pgPayload = {
+                    first_name: formData.firstName.trim(),
+                    last_name: formData.lastName.trim(),
+                    player_name: `${formData.firstName.trim()} ${formData.lastName.trim()}`,
+                    dob: formData.dob || null,
+                    age,
+                    cricket_type: cricketGender,
+                    email: isUnder18 ? '' : formData.email.trim(),
+                    phone: isUnder18 ? '' : formData.phone.trim(),
+                    suburb: formData.suburb.trim(),
+                    profile_link: formData.profileLink.trim(),
+                    club: formData.club.trim(),
+                    bio: formData.bio.trim(),
+                    goals: formData.goals.trim(),
+                    cv_url: cvUrl,
+                    parent1_name: formData.parent1Name.trim(),
+                    parent1_email: formData.parent1Email.trim(),
+                    parent1_phone: formData.parent1Phone.trim(),
+                    parent2_name: formData.parent2Name.trim(),
+                    parent2_email: formData.parent2Email.trim(),
+                    parent2_phone: formData.parent2Phone.trim(),
+                    phase: 'Pre-Season Power Phase',
+                    accept_terms: acceptTerms,
+                    accept_player_code: acceptPlayerCode,
+                    accept_parent_code: acceptParentCode,
+                    accept_social_media: acceptSocialMedia,
+                    accept_playing_standard: acceptPlayingStandard,
+                    status: 'pending',
+                    source: 'power-game-program',
+                    utm_source: utmParams.get('utm_source') || null,
+                    utm_medium: utmParams.get('utm_medium') || null,
+                    utm_campaign: utmParams.get('utm_campaign') || null,
+                    page_referrer: document.referrer || null,
+                };
+                const { error: pgError } = await supabase.from('power_game_applications').insert([pgPayload]);
+                if (pgError) console.error('power_game_applications insert failed:', pgError);
+            } catch (pgErr) {
+                console.error('power_game_applications insert threw:', pgErr);
+            }
+
             setSubmitted(true);
             window.scrollTo({ top: document.getElementById('apply')?.offsetTop - 80, behavior: 'smooth' });
         } catch (err) {
