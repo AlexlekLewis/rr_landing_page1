@@ -31,6 +31,7 @@ import FemaleCricketSuccess from './components/female-cricket-introduction/Femal
 import FemaleEmpowerment from './components/female-empowerment/FemaleEmpowerment';
 import CoachingOpportunities from './components/coaching-opportunities/CoachingOpportunities';
 import PowerGame from './components/power-game/PowerGame';
+import IndiaTour2026 from './components/india-tour-2026/IndiaTour2026';
 import MasterStripeSuccess from './components/master-landing-page/MasterStripeSuccess';
 import HomePage from './components/home-page/HomePage';
 import usePageAnalytics from './hooks/usePageAnalytics';
@@ -60,6 +61,7 @@ import ShopOrdersDashboard from './components/admin/ShopOrdersDashboard';
 import ProgramRegistrationsDashboard from './components/admin/ProgramRegistrationsDashboard';
 import HolidaySubProgramDashboard from './components/admin/HolidaySubProgramDashboard';
 import IndiaTour2026Dashboard from './components/admin/IndiaTour2026Dashboard';
+import IndiaTourEOIDashboard from './components/admin/IndiaTourEOIDashboard';
 import TextUsButton from './components/TextUsButton';
 // Academy Shop — hidden from nav, accessible via direct URL only
 import AcademyShop from './components/academy-shop/AcademyShop';
@@ -141,6 +143,8 @@ function App() {
 
         {/* Power Game Program — hidden from nav, accessible via direct URL only */}
         <Route path="/PGP2026" element={<PowerGame />} />
+        {/* India Tour 2026 — PRIVATE, invite-only EOI. Not in nav; gated by a referral code (?ref=). */}
+        <Route path="/india-tour-2026" element={<IndiaTour2026 />} />
         {/* Academy Shop — hidden from nav. Share URL directly with participants only. */}
         <Route path="/academy-shop" element={<AcademyShop />} />
         <Route path="/academy-shop/success" element={<ShopSuccess />} />
@@ -164,6 +168,7 @@ function App() {
         <Route path="/rramadmin_26/program-registrations" element={<AdminLayout><ProgramRegistrationsDashboard /></AdminLayout>} />
         <Route path="/rramadmin_26/holiday/:programSlug" element={<AdminLayout><HolidaySubProgramDashboard /></AdminLayout>} />
         <Route path="/rramadmin_26/india-tour-2026" element={<AdminLayout><IndiaTour2026Dashboard /></AdminLayout>} />
+        <Route path="/rramadmin_26/india-tour-eoi" element={<AdminLayout><IndiaTourEOIDashboard /></AdminLayout>} />
       </Routes>
       <TextUsButton />
     </div>
