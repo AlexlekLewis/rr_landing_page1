@@ -167,7 +167,7 @@ const PricingSection = () => {
                         </span>
                     </div>
                     <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-wide mb-6">
-                        THE <span className="text-rr-pink">POWER</span> JOURNEY
+                        THE <span className="text-rr-pink">POWER GAME</span> JOURNEY
                     </h2>
                     <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto font-medium">
                         An ongoing program from late July through finals cricket in March. Two hours per week, every week of each training block — with breaks during school holidays so your player has time to rest, recover, and be a kid.
