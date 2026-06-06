@@ -8,6 +8,7 @@ import OverviewSection from './OverviewSection';
 import FeaturesBenefits from './FeaturesBenefits';
 import ProgramSelector from './ProgramSelector';
 import PricingSection from './PricingSection';
+import PowerGameApplication from './PowerGameApplication';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
 const SECTIONS = [
@@ -19,6 +20,7 @@ const SECTIONS = [
     'quote-vaibhav',
     'select-program',
     'pricing',
+    'apply',
     'quote-3',
 ];
 
@@ -83,6 +85,8 @@ const PowerGame = () => {
                 <div id="pricing">
                     <PricingSection />
                 </div>
+
+                <PowerGameApplication />
 
                 <div id="quote-3">
                     <QuoteBlock

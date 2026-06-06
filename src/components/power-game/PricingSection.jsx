@@ -8,7 +8,9 @@ const PHASES = [
         num: '01',
         name: 'Pre-Season Power Phase',
         weeks: '8 weeks',
-        price: 0, // TBC
+        price: 960,
+        rate: '$60 per hour',
+        onSale: true,
         description:
             'Build the engine. Eight weeks of foundational power development — strength, technique, and the movement patterns that underpin explosive performance before the season starts.',
         accent: 'from-rr-blue to-rr-medium-blue',
@@ -18,6 +20,7 @@ const PHASES = [
         name: 'In-Season Power Phase',
         weeks: '10 weeks',
         price: 0, // TBC
+        onSale: false,
         description:
             'Apply it under load. Ten weeks of in-season work that keeps power sharp while you compete — maintaining output, refining skills, and translating training into match performance.',
         accent: 'from-rr-pink to-rr-blue',
@@ -27,6 +30,7 @@ const PHASES = [
         name: 'Power League Phase',
         weeks: '6 weeks',
         price: 0, // TBC
+        onSale: false,
         description:
             'Prove it in the middle. Six weeks of competitive, scenario-based cricket where players express their power under pressure in a game environment.',
         accent: 'from-rr-pink to-rr-light-pink',
@@ -77,7 +81,11 @@ const PricingSection = () => {
                     {PHASES.map((phase, idx) => (
                         <motion.div
                             key={phase.name}
-                            className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 flex flex-col hover:bg-white/10 hover:border-rr-pink/40 transition-all duration-300 overflow-hidden"
+                            className={`relative backdrop-blur-sm rounded-2xl p-8 flex flex-col transition-all duration-300 overflow-hidden ${
+                                phase.onSale
+                                    ? 'bg-white/[0.07] border-2 border-rr-pink shadow-[0_10px_50px_rgba(225,31,143,0.3)] md:-translate-y-3'
+                                    : 'bg-white/5 border border-white/10 hover:bg-white/10 hover:border-rr-pink/40'
+                            }`}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, amount: 0.2 }}
@@ -85,16 +93,28 @@ const PricingSection = () => {
                         >
                             <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${phase.accent}`} />
 
+                            {phase.onSale && (
+                                <div className="absolute top-4 right-4 inline-flex items-center gap-1.5 bg-rr-pink rounded-full px-3 py-1">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                                    <span className="text-[10px] font-black text-white uppercase tracking-widest">On Sale Now</span>
+                                </div>
+                            )}
+
                             <div className="flex items-baseline justify-between mb-4">
                                 <span className="text-5xl font-black text-white/10 leading-none">{phase.num}</span>
-                                <span className="text-xs font-bold text-rr-pink uppercase tracking-widest bg-rr-pink/10 border border-rr-pink/30 rounded-full px-3 py-1">
-                                    {phase.weeks}
-                                </span>
+                                {!phase.onSale && (
+                                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest bg-rr-pink/10 border border-rr-pink/30 rounded-full px-3 py-1">
+                                        {phase.weeks}
+                                    </span>
+                                )}
                             </div>
 
-                            <h3 className="text-xl md:text-2xl font-black text-white uppercase tracking-wide leading-tight mb-4">
+                            <h3 className="text-xl md:text-2xl font-black text-white uppercase tracking-wide leading-tight mb-1">
                                 {phase.name}
                             </h3>
+                            <div className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-4">
+                                {phase.weeks}
+                            </div>
 
                             <p className="text-sm text-white/75 font-medium leading-relaxed mb-6 flex-1">
                                 {phase.description}
@@ -107,6 +127,17 @@ const PricingSection = () => {
                                 <div className="text-3xl font-black text-white">
                                     {formatPrice(phase.price)}
                                 </div>
+                                {phase.rate && (
+                                    <div className="text-xs font-medium text-white/50 mt-1">{phase.rate}</div>
+                                )}
+                                {phase.onSale && (
+                                    <a
+                                        href="#apply"
+                                        className="mt-5 w-full inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest text-sm px-6 py-3 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]"
+                                    >
+                                        Apply Now
+                                    </a>
+                                )}
                             </div>
                         </motion.div>
                     ))}
@@ -168,7 +199,7 @@ const PricingSection = () => {
                 </motion.div>
 
                 <p className="text-center text-xs md:text-sm text-white/50 mt-8 font-medium uppercase tracking-widest">
-                    Phase descriptions &amp; pricing — placeholder, to be confirmed
+                    In-Season &amp; Power League pricing to be confirmed
                 </p>
             </div>
         </section>
