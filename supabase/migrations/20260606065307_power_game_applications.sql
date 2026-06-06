@@ -42,6 +42,13 @@ CREATE TABLE IF NOT EXISTS public.power_game_applications (
     session_time         TEXT,
     phase                TEXT DEFAULT 'Pre-Season Power Phase',
 
+    -- Application routing: 'standard' (meets minimum standard, full app +
+    -- checkout) or 'capability' (does not meet standard, applying to be
+    -- considered). Capability requests also capture current level + statement.
+    application_type     TEXT NOT NULL DEFAULT 'standard',
+    current_level        TEXT,
+    capability_statement TEXT,
+
     -- Compliance
     accept_terms         BOOLEAN DEFAULT FALSE,
     accept_player_code   BOOLEAN DEFAULT FALSE,

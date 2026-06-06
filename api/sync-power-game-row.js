@@ -50,6 +50,7 @@ const getAuth = () => {
 const SHEET_HEADERS = [
   'Application ID',
   'Submitted At (Melbourne)',
+  'Application Type',
   'Player First Name',
   'Player Last Name',
   'Player Age',
@@ -58,6 +59,8 @@ const SHEET_HEADERS = [
   'Player Email',
   'Player Phone',
   'Suburb',
+  'Current Level',
+  'Capability Statement',
   'PlayCricket Profile',
   'Current Club(s)',
   'Bio',
@@ -112,6 +115,7 @@ const yesNo = (v) => (v === true ? 'Yes' : v === false ? 'No' : '');
 const buildRow = (r) => ([
   r.id || '',
   fmtMelb(r.created_at),
+  r.application_type === 'capability' ? 'Capability Request' : 'Standard',
   r.first_name || '',
   r.last_name || '',
   r.age ?? '',
@@ -120,6 +124,8 @@ const buildRow = (r) => ([
   r.email || '',
   r.phone || '',
   r.suburb || '',
+  r.current_level || '',
+  r.capability_statement || '',
   r.profile_link || '',
   r.club || '',
   r.bio || '',
@@ -154,6 +160,14 @@ const buildRow = (r) => ([
   r.utm_campaign || '',
   r.page_referrer || '',
 ]);
+
+// Route to a tab based on application type. Standard applications go to the
+// main tab; capability requests go to a clearly separated tab.
+const resolveTab = (record) => {
+  const standardTab = process.env.POWER_GAME_SHEET_TAB || 'Applications';
+  const capabilityTab = process.env.POWER_GAME_CAPABILITY_TAB || 'Capability Requests';
+  return record.application_type === 'capability' ? capabilityTab : standardTab;
+};
 
 // Ensure the header row exists exactly once at the top of the tab.
 const ensureHeader = async (sheets, spreadsheetId, tabName) => {
@@ -207,7 +221,7 @@ export default async function handler(req, res) {
   if (!record?.id) return res.status(400).json({ error: 'record.id required' });
 
   const spreadsheetId = process.env.POWER_GAME_SHEET_ID;
-  const tabName = process.env.POWER_GAME_SHEET_TAB || 'Applications';
+  const tabName = resolveTab(record);
   if (!spreadsheetId) {
     return res.status(503).json({ ignored: true, reason: 'POWER_GAME_SHEET_ID not configured' });
   }

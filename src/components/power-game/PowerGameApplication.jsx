@@ -77,6 +77,16 @@ const PowerGameApplication = () => {
     const [submitError, setSubmitError] = useState('');
     const [submitted, setSubmitted] = useState(false);
 
+    // Gate: null = choose pathway, 'standard' = full app, 'capability' = apply to be considered
+    const [pathway, setPathway] = useState(null);
+
+    // Capability pathway fields
+    const [capData, setCapData] = useState({
+        firstName: '', lastName: '', email: '', phone: '',
+        parentName: '', parentEmail: '', parentPhone: '',
+        currentLevel: '', club: '', profileLink: '', statement: '',
+    });
+
     const [formData, setFormData] = useState({
         firstName: '', lastName: '', dob: '', email: '', phone: '',
         suburb: '', profileLink: '', club: '', bio: '', goals: '',
@@ -192,6 +202,7 @@ const PowerGameApplication = () => {
                     parent2_email: formData.parent2Email.trim(),
                     parent2_phone: formData.parent2Phone.trim(),
                     phase: 'Preseason',
+                    application_type: 'standard',
                     accept_terms: acceptTerms,
                     accept_player_code: acceptPlayerCode,
                     accept_parent_code: acceptParentCode,
@@ -214,6 +225,62 @@ const PowerGameApplication = () => {
             window.scrollTo({ top: document.getElementById('apply')?.offsetTop - 80, behavior: 'smooth' });
         } catch (err) {
             console.error('Power Game application error:', err);
+            setSubmitError('Something went wrong submitting your application. Please try again or contact us.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    /* ── capability pathway submit ── */
+    const capChange = (e) => {
+        const { name, value } = e.target;
+        setCapData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const isCapValid = () => {
+        const d = capData;
+        return d.firstName.trim() && d.lastName.trim() && d.parentName.trim()
+            && d.parentEmail.trim() && d.parentPhone.trim() && d.currentLevel.trim()
+            && d.club.trim() && d.statement.trim();
+    };
+
+    const handleCapabilitySubmit = async () => {
+        if (!isCapValid()) {
+            setSubmitError('Please complete all required fields before submitting.');
+            return;
+        }
+        setIsSubmitting(true);
+        setSubmitError('');
+        try {
+            const utmParams = new URLSearchParams(window.location.search);
+            const payload = {
+                first_name: capData.firstName.trim(),
+                last_name: capData.lastName.trim(),
+                player_name: `${capData.firstName.trim()} ${capData.lastName.trim()}`,
+                email: capData.email.trim(),
+                phone: capData.phone.trim(),
+                parent1_name: capData.parentName.trim(),
+                parent1_email: capData.parentEmail.trim(),
+                parent1_phone: capData.parentPhone.trim(),
+                current_level: capData.currentLevel.trim(),
+                club: capData.club.trim(),
+                profile_link: capData.profileLink.trim(),
+                capability_statement: capData.statement.trim(),
+                phase: 'Preseason',
+                application_type: 'capability',
+                status: 'pending',
+                source: 'power-game-program',
+                utm_source: utmParams.get('utm_source') || null,
+                utm_medium: utmParams.get('utm_medium') || null,
+                utm_campaign: utmParams.get('utm_campaign') || null,
+                page_referrer: document.referrer || null,
+            };
+            const { error } = await supabase.from('power_game_applications').insert([payload]);
+            if (error) throw error;
+            setSubmitted(true);
+            window.scrollTo({ top: document.getElementById('apply')?.offsetTop - 80, behavior: 'smooth' });
+        } catch (err) {
+            console.error('Capability application error:', err);
             setSubmitError('Something went wrong submitting your application. Please try again or contact us.');
         } finally {
             setIsSubmitting(false);
@@ -272,6 +339,69 @@ const PowerGameApplication = () => {
                     </p>
                 </motion.div>
 
+                {/* ── Standard gate ── */}
+                {pathway === null && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, ease: 'easeOut' }}
+                        className="bg-white/[0.03] border border-white/10 rounded-2xl p-8 md:p-10"
+                    >
+                        <div className="text-center mb-8">
+                            <h3 className="text-xl md:text-2xl font-black text-white uppercase tracking-wide mb-3">
+                                The Minimum Standard
+                            </h3>
+                            <p className="text-white/70 font-medium leading-relaxed max-w-xl mx-auto">
+                                The minimum playing standard for this program is <span className="text-white font-bold">VMCU / Country representative cricket or higher</span>. Please confirm where you sit before applying.
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <button
+                                type="button"
+                                onClick={() => { setPathway('standard'); setSubmitError(''); }}
+                                className="group text-left p-6 rounded-xl border border-white/15 bg-white/5 hover:border-rr-pink hover:bg-white/[0.08] transition-all duration-300"
+                            >
+                                <div className="text-sm font-black text-white uppercase tracking-wide mb-2">
+                                    I meet the standard
+                                </div>
+                                <p className="text-xs text-white/60 font-medium leading-relaxed">
+                                    VMCU / Country representative cricket or higher. Continue to the full application and secure your place.
+                                </p>
+                                <span className="inline-block mt-4 text-xs font-bold text-rr-pink uppercase tracking-widest group-hover:translate-x-1 transition-transform">
+                                    Apply &amp; secure place →
+                                </span>
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() => { setPathway('capability'); setSubmitError(''); }}
+                                className="group text-left p-6 rounded-xl border border-white/15 bg-white/5 hover:border-rr-blue hover:bg-white/[0.08] transition-all duration-300"
+                            >
+                                <div className="text-sm font-black text-white uppercase tracking-wide mb-2">
+                                    I don't, but I want to apply
+                                </div>
+                                <p className="text-xs text-white/60 font-medium leading-relaxed">
+                                    You don't currently meet the standard but believe you have the capability. Apply to be considered and our coaches will review.
+                                </p>
+                                <span className="inline-block mt-4 text-xs font-bold text-rr-blue uppercase tracking-widest group-hover:translate-x-1 transition-transform">
+                                    Apply to be considered →
+                                </span>
+                            </button>
+                        </div>
+                    </motion.div>
+                )}
+
+                {/* ── Standard full application ── */}
+                {pathway === 'standard' && (
+                <>
+                <button
+                    type="button"
+                    onClick={() => { setPathway(null); setSubmitError(''); }}
+                    className="text-xs font-bold text-white/50 hover:text-white uppercase tracking-widest mb-4 transition-colors"
+                >
+                    ← Back to standard check
+                </button>
                 <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-6 md:p-10 space-y-12">
                     {/* ── Player Details ── */}
                     <div>
@@ -441,6 +571,91 @@ const PowerGameApplication = () => {
                         </p>
                     </div>
                 </div>
+                </>
+                )}
+
+                {/* ── Capability pathway (apply to be considered) ── */}
+                {pathway === 'capability' && (
+                <>
+                <button
+                    type="button"
+                    onClick={() => { setPathway(null); setSubmitError(''); }}
+                    className="text-xs font-bold text-white/50 hover:text-white uppercase tracking-widest mb-4 transition-colors"
+                >
+                    ← Back to standard check
+                </button>
+                <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-6 md:p-10 space-y-8">
+                    <div>
+                        <h4 className="text-sm font-black text-white uppercase tracking-wide mb-1">Apply to be Considered</h4>
+                        <p className="text-xs text-white/40 mb-2">All fields marked with * are required.</p>
+                        <p className="text-sm text-white/60 font-medium leading-relaxed">
+                            You don't currently meet the VMCU / Country representative standard, but believe you have the capability to be part of the program. Tell us about yourself and our coaches will review your application.
+                        </p>
+                    </div>
+
+                    {/* Player */}
+                    <div>
+                        <p className="text-xs font-bold text-rr-pink uppercase tracking-wider mb-3">Player</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <InputField label="Player First Name" name="firstName" value={capData.firstName} onChange={capChange} required />
+                            <InputField label="Player Last Name" name="lastName" value={capData.lastName} onChange={capChange} required />
+                            <InputField label="Player Email" type="email" name="email" value={capData.email} onChange={capChange} />
+                            <InputField label="Player Phone" type="tel" name="phone" value={capData.phone} onChange={capChange} />
+                        </div>
+                    </div>
+
+                    {/* Parent / Guardian */}
+                    <div>
+                        <p className="text-xs font-bold text-rr-pink uppercase tracking-wider mb-3">Parent / Guardian</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <InputField label="Name" name="parentName" value={capData.parentName} onChange={capChange} required />
+                            <InputField label="Email" type="email" name="parentEmail" value={capData.parentEmail} onChange={capChange} required />
+                            <InputField label="Phone" type="tel" name="parentPhone" value={capData.parentPhone} onChange={capChange} required />
+                        </div>
+                    </div>
+
+                    {/* Cricket background */}
+                    <div>
+                        <p className="text-xs font-bold text-rr-pink uppercase tracking-wider mb-3">Cricket Background</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <InputField label="Current Playing Level" name="currentLevel" value={capData.currentLevel} onChange={capChange} placeholder="e.g. Club 1st XI, district U16" required />
+                            <InputField label="Current Club(s)" name="club" value={capData.club} onChange={capChange} required />
+                        </div>
+                        <div className="mt-4">
+                            <InputField label="Play Cricket Profile Link" name="profileLink" value={capData.profileLink} onChange={capChange} placeholder="https://..." />
+                        </div>
+                        <div className="mt-4">
+                            <TextAreaField
+                                label="Why do you believe you have the capability for this program?"
+                                name="statement"
+                                value={capData.statement}
+                                onChange={capChange}
+                                placeholder="Tell us about your ability, potential, and why you'd thrive in an elite environment..."
+                                limit={200}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Submit */}
+                    <div>
+                        {submitError && (
+                            <p className="text-red-400 text-sm font-medium mb-4 text-center">{submitError}</p>
+                        )}
+                        <button
+                            type="button"
+                            onClick={handleCapabilitySubmit}
+                            disabled={isSubmitting}
+                            className="w-full flex items-center justify-center gap-2 bg-rr-blue hover:bg-rr-medium-blue text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {isSubmitting ? (<><Loader2 className="w-5 h-5 animate-spin" /> Submitting…</>) : 'Submit Application'}
+                        </button>
+                        <p className="text-[11px] text-white/40 text-center mt-4">
+                            Questions? <a href="mailto:eliteprogram@rramelbourne.com" className="text-rr-blue hover:text-white transition-colors underline underline-offset-2">Contact us.</a>
+                        </p>
+                    </div>
+                </div>
+                </>
+                )}
             </div>
         </section>
     );
