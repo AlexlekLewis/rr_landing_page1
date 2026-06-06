@@ -6,7 +6,7 @@ import QuoteBlock from './QuoteBlock';
 import VideoSection from './VideoSection';
 import OverviewSection from './OverviewSection';
 import FeaturesBenefits from './FeaturesBenefits';
-import SquadsSection from './SquadsSection';
+import ProgramSelector from './ProgramSelector';
 import PricingSection from './PricingSection';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
@@ -17,7 +17,7 @@ const SECTIONS = [
     'overview',
     'features-benefits',
     'quote-vaibhav',
-    'squads',
+    'select-program',
     'pricing',
     'quote-3',
 ];
@@ -76,8 +76,8 @@ const PowerGame = () => {
                     />
                 </div>
 
-                <div id="squads">
-                    <SquadsSection />
+                <div id="select-program">
+                    <ProgramSelector />
                 </div>
 
                 <div id="pricing">
