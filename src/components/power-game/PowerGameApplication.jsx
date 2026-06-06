@@ -191,7 +191,7 @@ const PowerGameApplication = () => {
                     parent2_name: formData.parent2Name.trim(),
                     parent2_email: formData.parent2Email.trim(),
                     parent2_phone: formData.parent2Phone.trim(),
-                    phase: 'Pre-Season Power Phase',
+                    phase: 'Preseason',
                     accept_terms: acceptTerms,
                     accept_player_code: acceptPlayerCode,
                     accept_parent_code: acceptParentCode,
@@ -263,7 +263,7 @@ const PowerGameApplication = () => {
                     viewport={{ once: true, amount: 0.3 }}
                     transition={{ duration: 0.6, ease: 'easeOut' }}
                 >
-                    <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Pre-Season Power Phase</p>
+                    <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Preseason</p>
                     <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight mb-4">
                         Apply <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">Now</span>
                     </h2>
