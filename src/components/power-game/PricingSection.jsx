@@ -62,15 +62,15 @@ const formatPrice = (n) => (n > 0 ? `$${n.toLocaleString()}` : 'TBC');
 
 const PhaseCard = ({ phase, idx }) => (
     <motion.div
-        className={`relative backdrop-blur-sm rounded-2xl p-7 md:p-8 overflow-hidden transition-all duration-300 ${
+        className={`relative backdrop-blur-sm rounded-2xl p-8 flex flex-col overflow-hidden transition-all duration-300 ${
             phase.onSale
-                ? 'bg-white/[0.07] border-2 border-rr-pink shadow-[0_10px_50px_rgba(225,31,143,0.3)]'
+                ? 'bg-white/[0.07] border-2 border-rr-pink shadow-[0_10px_50px_rgba(225,31,143,0.3)] md:-translate-y-3'
                 : 'bg-white/5 border border-white/10 hover:bg-white/10 hover:border-rr-pink/40'
         }`}
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.5, delay: idx * 0.05, ease: 'easeOut' }}
+        transition={{ duration: 0.5, delay: idx * 0.1, ease: 'easeOut' }}
     >
         <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${phase.accent}`} />
 
@@ -81,61 +81,53 @@ const PhaseCard = ({ phase, idx }) => (
             </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-[auto_1fr_auto] gap-6 md:gap-8 md:items-center">
-            {/* Number + name */}
-            <div className="flex items-center gap-4 md:block md:w-44">
-                <span className="text-5xl md:text-6xl font-black text-white/10 leading-none">{phase.num}</span>
-                <div className="md:mt-2">
-                    <div className="text-[10px] font-bold text-rr-pink uppercase tracking-widest mb-1">
-                        Phase {Number(phase.num)}
-                    </div>
-                    <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-wide leading-none">
-                        {phase.name}
-                    </h3>
-                    <div className="text-xs font-medium text-white/60 mt-2">{phase.window}</div>
-                    <div className="text-[11px] font-bold text-rr-blue uppercase tracking-widest mt-1">{phase.rate}</div>
-                </div>
-            </div>
+        <div className="flex items-baseline justify-between mb-4">
+            <span className="text-5xl font-black text-white/10 leading-none">{phase.num}</span>
+            <span className="text-[10px] font-bold text-rr-pink uppercase tracking-widest bg-rr-pink/10 border border-rr-pink/30 rounded-full px-3 py-1">
+                Phase {Number(phase.num)}
+            </span>
+        </div>
 
-            {/* Tagline + description */}
-            <div>
-                <div className="text-base md:text-lg font-black text-white uppercase tracking-wide mb-2">
-                    {phase.tagline}
-                </div>
-                <p className="text-sm text-white/75 font-medium leading-relaxed">
-                    {phase.description}
-                </p>
-            </div>
+        <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-wide leading-none mb-2">
+            {phase.name}
+        </h3>
+        <div className="text-xs font-medium text-white/60 mb-1">{phase.window}</div>
+        <div className="text-[11px] font-bold text-rr-blue uppercase tracking-widest mb-5">{phase.rate}</div>
 
-            {/* Price */}
-            <div className="md:text-right md:w-40">
-                <div className="text-xs font-bold text-white/50 uppercase tracking-widest mb-1">Phase Price</div>
-                <div className="text-3xl font-black text-white">{formatPrice(phase.price)}</div>
-                {phase.priceRate && (
-                    <div className="text-xs font-medium text-white/50 mt-1">{phase.priceRate}</div>
-                )}
-                {phase.onSale && (
-                    <a
-                        href="#apply"
-                        className="mt-4 inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest text-xs px-6 py-3 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]"
-                    >
-                        Apply Now
-                    </a>
-                )}
-            </div>
+        <div className="text-base md:text-lg font-black text-white uppercase tracking-wide mb-2">
+            {phase.tagline}
+        </div>
+        <p className="text-sm text-white/75 font-medium leading-relaxed mb-6 flex-1">
+            {phase.description}
+        </p>
+
+        <div className="pt-5 border-t border-white/10">
+            <div className="text-xs font-bold text-white/50 uppercase tracking-widest mb-1">Phase Price</div>
+            <div className="text-3xl font-black text-white">{formatPrice(phase.price)}</div>
+            {phase.priceRate && (
+                <div className="text-xs font-medium text-white/50 mt-1">{phase.priceRate}</div>
+            )}
+            {phase.onSale && (
+                <a
+                    href="#apply"
+                    className="mt-5 w-full inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest text-sm px-6 py-3 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]"
+                >
+                    Apply Now
+                </a>
+            )}
         </div>
     </motion.div>
 );
 
 const MatchBanner = ({ match }) => (
     <motion.div
-        className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-rr-navy via-rr-blue to-rr-pink p-6 md:p-7 border border-rr-pink/30 ml-0 md:ml-12"
-        initial={{ opacity: 0, x: -12 }}
-        whileInView={{ opacity: 1, x: 0 }}
+        className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-rr-navy via-rr-blue to-rr-pink p-6 md:p-7 border border-rr-pink/30"
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
     >
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 justify-center text-center md:text-left md:justify-start">
             <div className="w-11 h-11 rounded-full bg-white/15 border border-white/25 flex items-center justify-center flex-shrink-0">
                 <Trophy className="w-5 h-5 text-white" />
             </div>
@@ -182,18 +174,25 @@ const PricingSection = () => {
                     </p>
                 </motion.div>
 
-                {/* Timeline: phases interleaved with match periods */}
-                <div className="space-y-5">
-                    {PHASES.map((phase, idx) => {
-                        const phaseNum = Number(phase.num);
-                        const match = MATCH_PERIODS.afterPhase[phaseNum];
-                        return (
-                            <React.Fragment key={phase.name}>
-                                <PhaseCard phase={phase} idx={idx} />
-                                {match && <MatchBanner match={match} />}
-                            </React.Fragment>
-                        );
-                    })}
+                {/* Phases — vertical cards in a row */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-12">
+                    {PHASES.map((phase, idx) => (
+                        <PhaseCard key={phase.name} phase={phase} idx={idx} />
+                    ))}
+                </div>
+
+                {/* Match periods between the training blocks */}
+                <div className="flex items-center gap-4 mb-6">
+                    <div className="h-px flex-1 bg-gradient-to-r from-transparent to-rr-pink/40" />
+                    <span className="text-xs md:text-sm font-black text-rr-pink uppercase tracking-widest text-center">
+                        Two Match Periods
+                    </span>
+                    <div className="h-px flex-1 bg-gradient-to-l from-transparent to-rr-pink/40" />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {Object.values(MATCH_PERIODS.afterPhase).map((match) => (
+                        <MatchBanner key={match.name} match={match} />
+                    ))}
                 </div>
 
                 {/* All-in bundle */}

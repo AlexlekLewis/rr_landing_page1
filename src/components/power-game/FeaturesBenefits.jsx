@@ -12,12 +12,13 @@ const FEATURES = [
 ];
 
 const BENEFITS = [
-    'Hit further and clear the boundary with consistency',
+    'Hit further and clear the boundary with consistency in a 360 way',
     'Bowl faster with more intent across all phases',
     'Save runs and create wickets with elite fielding',
     'Build a body that holds up to elite training loads',
     'Develop the mindset to express power in big moments',
     'Walk away with clear data on your improvement',
+    'Learn to plan spin the Royals way',
 ];
 
 const FeaturesBenefits = () => {

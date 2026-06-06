@@ -5,6 +5,7 @@ import HeroSection from './HeroSection';
 import QuoteBlock from './QuoteBlock';
 import VideoSection from './VideoSection';
 import OverviewSection from './OverviewSection';
+import ProgramFamily from './ProgramFamily';
 import FeaturesBenefits from './FeaturesBenefits';
 import ProgramSelector from './ProgramSelector';
 import PricingSection from './PricingSection';
@@ -16,6 +17,7 @@ const SECTIONS = [
     'quote-1',
     'video',
     'overview',
+    'program-family',
     'features-benefits',
     'quote-vaibhav',
     'select-program',
@@ -59,6 +61,10 @@ const PowerGame = () => {
 
                 <div id="overview">
                     <OverviewSection />
+                </div>
+
+                <div id="program-family">
+                    <ProgramFamily />
                 </div>
 
                 <div id="features-benefits">
