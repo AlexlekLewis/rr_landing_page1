@@ -2,7 +2,13 @@ import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Play } from 'lucide-react';
 
-const VideoSection = () => {
+const VideoSection = ({
+    badge = "The Game's Changed",
+    heading = (<>WHAT HAS <span className="text-rr-pink">SURYAVANSHI</span> DONE?</>),
+    description = "Let's hear from Andy Crook, Director of Rajasthan Royals Academy Melbourne, as well as T20 and Power Coach — on the impact of Vaibhav Suryavanshi, what the future of the game now looks like, and the Power Game Program, during a recent interview.",
+    videoSrc = '/assets/powergame/andy-crook-video.mp4',
+    posterSrc = '/assets/powergame/andy-crook-poster.jpg',
+}) => {
     const videoRef = useRef(null);
     const [playing, setPlaying] = useState(false);
 
@@ -28,14 +34,14 @@ const VideoSection = () => {
                     <div className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
                         <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">
-                            The Game's Changed
+                            {badge}
                         </span>
                     </div>
                     <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-wide mb-6">
-                        WHAT HAS <span className="text-rr-pink">SURYAVANSHI</span> DONE?
+                        {heading}
                     </h2>
                     <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto font-medium">
-                        Let's hear from Andy Crook, Director of Rajasthan Royals Academy Melbourne, as well as T20 and Power Coach — on the impact of Vaibhav Suryavanshi, what the future of the game now looks like, and the Power Game Program, during a recent interview.
+                        {description}
                     </p>
                 </motion.div>
 
@@ -49,12 +55,12 @@ const VideoSection = () => {
                     <video
                         ref={videoRef}
                         className="absolute inset-0 w-full h-full object-cover"
-                        poster="/assets/powergame/andy-crook-poster.jpg"
+                        poster={posterSrc}
                         controls={playing}
                         playsInline
                         preload="metadata"
                     >
-                        <source src="/assets/powergame/andy-crook-video.mp4" type="video/mp4" />
+                        <source src={videoSrc} type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
 
