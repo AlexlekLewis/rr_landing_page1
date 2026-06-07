@@ -195,39 +195,7 @@ const PricingSection = () => {
                     ))}
                 </div>
 
-                {/* All-in bundle */}
-                <motion.div
-                    className="relative rounded-2xl overflow-hidden bg-white/[0.04] border border-white/10 p-8 md:p-10 mt-10"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.2 }}
-                    transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
-                >
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                        <div>
-                            <div className="inline-flex items-center gap-2 bg-rr-pink/15 border border-rr-pink/30 rounded-full px-3 py-1 mb-3">
-                                <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                                <span className="text-[10px] font-black text-rr-pink uppercase tracking-widest">The Full Journey</span>
-                            </div>
-                            <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-wide leading-tight mb-2">
-                                Late July → Finals, March
-                            </h3>
-                            <p className="text-sm md:text-base text-white/75 font-medium max-w-xl">
-                                Three training blocks and two match periods across the full season — one continuous pathway from foundation to finals.
-                            </p>
-                        </div>
-                        <div className="flex-shrink-0">
-                            <a
-                                href="#apply"
-                                className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]"
-                            >
-                                Apply Now
-                            </a>
-                        </div>
-                    </div>
-                </motion.div>
-
-                <p className="text-center text-xs md:text-sm text-white/50 mt-8 font-medium uppercase tracking-widest">
+                <p className="text-center text-xs md:text-sm text-white/50 mt-12 font-medium uppercase tracking-widest">
                     In-Season &amp; Post-Carnival pricing to be confirmed
                 </p>
             </div>
