@@ -24,13 +24,16 @@ const OverviewSection = () => {
 
                     <div className="space-y-5 text-base md:text-lg text-rr-charcoal font-medium leading-relaxed">
                         <p>
+                            Following the huge success of the Rajasthan Royals intensive 12-week T20 Elite Program, the Power Game Program is the next iteration of the elite program.
+                        </p>
+                        <p>
                             The Power Game Program is an elite training environment built around one idea: developing the ability to generate power on demand, across every discipline and format of the modern game.
                         </p>
                         <p>
-                            From 360 power hitting, full spectrum of bowling, and explosive fielding, players learn how to reach for power when the situation demands it — backed by biomechanics, data, and the coaching methodology that drives the Royals way.
+                            From 360 power hitting, full spectrum of bowling, and explosive fielding, players learn how to reach for power when the situation demands it — backed by biomechanics, data, and the coaching methodology that drives the Royals Way.
                         </p>
                         <p className="text-rr-dark font-semibold">
-                            This is where like-skilled, like-motivated players train together to find a way to win from anywhere.
+                            This is where like-skilled, like-motivated players train together to find a way to win from anywhere. Perfect for preparing for your best season yet, securing your place in a representative squad, moving up through the grades at your club or putting yourself on the radar of selectors.
                         </p>
                     </div>
                 </motion.div>
