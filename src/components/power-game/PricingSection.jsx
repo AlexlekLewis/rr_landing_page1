@@ -21,7 +21,7 @@ const PHASES = [
     {
         num: '02',
         name: 'In-Season',
-        window: 'October → Christmas school hols',
+        window: 'October → end of January',
         rate: '2 hours / week',
         price: 0, // TBC
         onSale: false,
