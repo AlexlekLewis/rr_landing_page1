@@ -176,7 +176,7 @@ const QuoteBlock = ({
                 <div className="text-rr-pink text-6xl md:text-8xl font-black leading-none mb-4">
                     &ldquo;
                 </div>
-                <blockquote className={`${textColor} text-xl md:text-3xl font-bold leading-snug mb-8`}>
+                <blockquote className={`${textColor} text-3xl md:text-5xl font-bold leading-snug mb-8`}>
                     {quote}
                 </blockquote>
                 <div className={`${attribColor} text-sm md:text-base font-black uppercase tracking-widest`}>

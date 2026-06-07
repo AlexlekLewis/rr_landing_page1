@@ -16,8 +16,8 @@ const SECTIONS = [
     'quote-1',
     'overview',
     'features-benefits',
-    'video',
     'quote-vaibhav',
+    'video',
     'select-program',
     'pricing',
     'apply',
@@ -61,10 +61,6 @@ const PowerGame = () => {
                     <FeaturesBenefits />
                 </div>
 
-                <div id="video">
-                    <VideoSection />
-                </div>
-
                 <div id="quote-vaibhav">
                     <QuoteBlock
                         variant="feature"
@@ -76,6 +72,10 @@ const PowerGame = () => {
                         imageFit="cover"
                         commentary="This statement, and the likelihood he will do it, has changed the game forever. There is now a new standard that every other team needs to find players to keep pace with this extraordinary talent."
                     />
+                </div>
+
+                <div id="video">
+                    <VideoSection />
                 </div>
 
                 <div id="select-program">
