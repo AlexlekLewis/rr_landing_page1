@@ -9,6 +9,7 @@ import FeaturesBenefits from './FeaturesBenefits';
 import ProgramSelector from './ProgramSelector';
 import PricingSection from './PricingSection';
 import PowerGameApplication from './PowerGameApplication';
+import PartnerStack from './PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
 const SECTIONS = [
@@ -22,6 +23,7 @@ const SECTIONS = [
     'academy-video',
     'select-program',
     'apply',
+    'partners',
     'quote-3',
 ];
 
@@ -98,6 +100,10 @@ const PowerGame = () => {
                 </div>
 
                 <PowerGameApplication />
+
+                <div id="partners">
+                    <PartnerStack />
+                </div>
 
                 <div id="quote-3">
                     <QuoteBlock
