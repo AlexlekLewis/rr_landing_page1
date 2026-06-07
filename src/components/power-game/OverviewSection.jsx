@@ -19,7 +19,7 @@ const OverviewSection = () => {
                     </div>
 
                     <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-rr-dark uppercase tracking-wide mb-8">
-                        WHAT IS THE <span className="text-rr-pink">POWER GAME</span>?
+                        WHAT IS THE <span className="text-rr-pink">POWER GAME</span> PROGRAM?
                     </h2>
 
                     <div className="space-y-5 text-base md:text-lg text-rr-charcoal font-medium leading-relaxed">
