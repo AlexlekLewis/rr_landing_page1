@@ -15,10 +15,10 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 const SECTIONS = [
     'hero',
     'quote-1',
-    'video',
     'overview',
-    'program-family',
     'features-benefits',
+    'video',
+    'program-family',
     'quote-vaibhav',
     'select-program',
     'pricing',
@@ -55,20 +55,20 @@ const PowerGame = () => {
                     />
                 </div>
 
-                <div id="video">
-                    <VideoSection />
-                </div>
-
                 <div id="overview">
                     <OverviewSection />
                 </div>
 
-                <div id="program-family">
-                    <ProgramFamily />
-                </div>
-
                 <div id="features-benefits">
                     <FeaturesBenefits />
+                </div>
+
+                <div id="video">
+                    <VideoSection />
+                </div>
+
+                <div id="program-family">
+                    <ProgramFamily />
                 </div>
 
                 <div id="quote-vaibhav">
