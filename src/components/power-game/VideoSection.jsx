@@ -28,7 +28,7 @@ const VideoSection = () => {
                     <div className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
                         <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">
-                            Watch the Program
+                            The Game's Changed
                         </span>
                     </div>
                     <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-wide mb-6">
