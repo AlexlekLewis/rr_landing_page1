@@ -16,6 +16,12 @@ const PHASES = [
         tagline: 'Foundation & Identity',
         description:
             "Establish strengths and archetype. Build the game-intelligence toolset and the technical foundations.",
+        points: [
+            'Establish your batting, bowling or keeping archetype',
+            'Build the game-intelligence toolset',
+            'Lay the technical and physical foundations',
+            'Prepare to perform in the September matches',
+        ],
         accent: 'from-rr-blue to-rr-medium-blue',
     },
     {
@@ -28,6 +34,12 @@ const PHASES = [
         tagline: 'Apply Under Pressure',
         description:
             "Live feedback loop. Work on what the weekend's club matches revealed and develop it in real time.",
+        points: [
+            'Apply the methodology in real club matches',
+            'Live feedback loop on what the weekend revealed',
+            'Develop your game in real time across the season',
+            'Build toward the Late January Carnival',
+        ],
         accent: 'from-rr-pink to-rr-blue',
     },
     {
@@ -40,6 +52,12 @@ const PHASES = [
         tagline: 'Sharpen for Finals',
         description:
             "Address what didn't hold up at carnival. Peak when it matters — finals cricket.",
+        points: [
+            'Address what didn\'t hold up at carnival',
+            'Fine-tune skills under finals pressure',
+            'Peak at the business end of the season',
+            'Finish ready for finals cricket',
+        ],
         accent: 'from-rr-pink to-rr-light-pink',
     },
 ];
@@ -97,9 +115,20 @@ const PhaseCard = ({ phase, idx }) => (
         <div className="text-base md:text-lg font-black text-white uppercase tracking-wide mb-2">
             {phase.tagline}
         </div>
-        <p className="text-sm text-white/75 font-medium leading-relaxed mb-6 flex-1">
+        <p className="text-sm text-white/75 font-medium leading-relaxed mb-5 flex-1">
             {phase.description}
         </p>
+
+        {phase.points && (
+            <ul className="space-y-2.5 mb-6">
+                {phase.points.map((pt) => (
+                    <li key={pt} className="flex items-start gap-2.5">
+                        <Check className="w-4 h-4 text-rr-pink flex-shrink-0 mt-0.5" />
+                        <span className="text-sm text-white/85 font-medium leading-snug">{pt}</span>
+                    </li>
+                ))}
+            </ul>
+        )}
 
         <div className="pt-5 border-t border-white/10">
             <div className="text-xs font-bold text-white/50 uppercase tracking-widest mb-1">Phase Price</div>
