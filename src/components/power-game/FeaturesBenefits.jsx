@@ -50,7 +50,7 @@ const FeaturesBenefits = () => {
         <section className="bg-white pt-8 md:pt-12 pb-24 md:pb-32">
             <div className="max-w-6xl mx-auto px-6">
                 <motion.div
-                    className="text-center mb-16"
+                    className="text-center mb-12 md:mb-16"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.3 }}
@@ -70,7 +70,37 @@ const FeaturesBenefits = () => {
                     </p>
                 </motion.div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+                {/* ===== Mobile: compact rows (icon + title + one-line desc) ===== */}
+                <div className="sm:hidden divide-y divide-slate-100 border border-slate-200 rounded-2xl overflow-hidden bg-slate-50">
+                    {INCLUSIONS.map((item, idx) => {
+                        const Icon = item.icon;
+                        return (
+                            <motion.div
+                                key={item.title}
+                                className="flex items-start gap-3.5 p-4"
+                                initial={{ opacity: 0, y: 8 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, amount: 0.2 }}
+                                transition={{ duration: 0.35, delay: Math.min(idx, 4) * 0.05, ease: 'easeOut' }}
+                            >
+                                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-rr-blue to-rr-pink flex items-center justify-center">
+                                    <Icon className="w-5 h-5 text-white" />
+                                </div>
+                                <div className="min-w-0">
+                                    <h3 className="text-sm font-black text-rr-dark uppercase tracking-wide leading-tight mb-1">
+                                        {item.title}
+                                    </h3>
+                                    <p className="text-[13px] text-rr-charcoal font-medium leading-snug">
+                                        {item.description}
+                                    </p>
+                                </div>
+                            </motion.div>
+                        );
+                    })}
+                </div>
+
+                {/* ===== Tablet / desktop: card grid ===== */}
+                <div className="hidden sm:grid grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
                     {INCLUSIONS.map((item, idx) => {
                         const Icon = item.icon;
                         return (
