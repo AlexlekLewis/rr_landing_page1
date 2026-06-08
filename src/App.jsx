@@ -40,6 +40,12 @@ import PostHogPageviewTracker from './components/PostHogPageviewTracker';
 // DNA Profile — lazy-loaded so it never impacts landing page bundle size
 const DNAProfileRoot = React.lazy(() => import('./DNAProfileApp/App.jsx'));
 
+// Power Game apply flow + dev tools — lazy so the scoring ladder never bloats the main bundle
+const PlacementPlayground = React.lazy(() => import('./components/power-game/apply/PlacementPlayground'));
+const ApplyFlow = React.lazy(() => import('./components/power-game/apply/ApplyFlow'));
+const PowerGameSuccess = React.lazy(() => import('./components/power-game/apply/PowerGameSuccess'));
+const PowerGameSquads = React.lazy(() => import('./components/power-game/apply/PowerGameSquads'));
+
 // Admin components
 import AdminLogin from './components/admin/AdminLogin';
 import AdminLayout from './components/admin/AdminLayout';
@@ -143,6 +149,13 @@ function App() {
 
         {/* Power Game Program — hidden from nav, accessible via direct URL only */}
         <Route path="/PGP2026" element={<PowerGame />} />
+        {/* Power Game placement playground — dev tool for stress-testing the scoring engine */}
+        <Route path="/PGP2026/playground" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PlacementPlayground /></React.Suspense>} />
+        {/* Power Game apply funnel — qualify → reveal → pick squad → pay */}
+        <Route path="/PGP2026/apply" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><ApplyFlow /></React.Suspense>} />
+        <Route path="/PGP2026/apply/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameSuccess /></React.Suspense>} />
+        {/* Power Game ops view — squad fills + coach review queue (local/dev) */}
+        <Route path="/PGP2026/admin" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameSquads /></React.Suspense>} />
         {/* India Tour 2026 — PRIVATE, invite-only EOI. Not in nav; gated by a referral code (?ref=). */}
         <Route path="/india-tour-2026" element={<IndiaTour2026 />} />
         {/* Academy Shop — hidden from nav. Share URL directly with participants only. */}
