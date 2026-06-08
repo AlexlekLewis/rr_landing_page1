@@ -44,19 +44,19 @@ const PHASES = [
     },
     {
         num: '03',
-        name: 'Post-Carnival',
+        name: 'Finish Strong',
         window: 'February → March',
         rate: '2 hours / week',
         price: 0, // TBC
         onSale: false,
-        tagline: 'Sharpen for Finals',
+        tagline: 'How You Finish Changes Everything',
         description:
-            "Address what didn't hold up at carnival. Peak when it matters — finals cricket.",
+            "How strong you finish the season can win finals, get you selected in squads, and kick-start an entire new level of cricket.",
         points: [
             'Address what didn\'t hold up at carnival',
-            'Fine-tune skills under finals pressure',
-            'Peak at the business end of the season',
-            'Finish ready for finals cricket',
+            'Peak when it matters — win finals cricket',
+            'Put yourself in front of squad selectors',
+            'Kick-start an entire new level of cricket',
         ],
         accent: 'from-rr-pink to-rr-light-pink',
     },
@@ -225,7 +225,7 @@ const PricingSection = () => {
                 </div>
 
                 <p className="text-center text-xs md:text-sm text-white/50 mt-12 font-medium uppercase tracking-widest">
-                    In-Season &amp; Post-Carnival pricing to be confirmed
+                    In-Season &amp; Finish Strong pricing to be confirmed
                 </p>
             </div>
         </section>
