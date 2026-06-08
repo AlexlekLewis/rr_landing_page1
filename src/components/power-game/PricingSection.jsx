@@ -136,13 +136,20 @@ const PhaseCard = ({ phase, idx }) => (
             {phase.priceRate && (
                 <div className="text-xs font-medium text-white/50 mt-1">{phase.priceRate}</div>
             )}
-            {phase.onSale && (
+            {phase.onSale ? (
                 <a
                     href="#apply"
                     className="mt-5 w-full inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest text-sm px-6 py-3 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]"
                 >
                     Apply Now
                 </a>
+            ) : (
+                <span
+                    aria-disabled="true"
+                    className="mt-5 w-full inline-flex items-center justify-center gap-2 bg-white/10 text-white/50 font-bold uppercase tracking-widest text-sm px-6 py-3 rounded-full cursor-not-allowed select-none"
+                >
+                    Coming Soon
+                </span>
             )}
         </div>
     </motion.div>
