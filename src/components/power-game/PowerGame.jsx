@@ -24,7 +24,6 @@ const SECTIONS = [
     'select-program',
     'apply',
     'partners',
-    'quote-3',
 ];
 
 const PowerGame = () => {
@@ -103,15 +102,6 @@ const PowerGame = () => {
 
                 <div id="partners">
                     <PartnerStack />
-                </div>
-
-                <div id="quote-3">
-                    <QuoteBlock
-                        variant="dark"
-                        quote="Placeholder quote three — a closing statement from a parent, player, or director that reinforces the impact of the program."
-                        attribution="Attribution TBC"
-                        role="Role TBC"
-                    />
                 </div>
             </main>
             <Footer />
