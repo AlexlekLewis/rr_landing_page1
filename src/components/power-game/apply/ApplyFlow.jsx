@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, ArrowRight, ArrowLeft, Clock, Users, Check, AlertCircle, Loader2 } from 'lucide-react';
 import DateOfBirthInput from '../../DateOfBirthInput';
@@ -8,6 +8,7 @@ import { inventory } from '../../../lib/booking/inventory';
 import { applications, applicationFromPlacement } from '../../../lib/booking/applications';
 import { BLANK_FORM, validateStep, computePlacement, isMinor, BLOCK_FEE, secondaryOptions } from './flow';
 import DnaRevealCard from './DnaRevealCard';
+import { submitApplication } from './submit';
 
 const INPUT_STEPS = ['centre', 'player', 'profile', 'history'];
 // Real Stripe checkout only when explicitly enabled (test/live keys + deployed fn).
@@ -45,10 +46,25 @@ export default function ApplyFlow() {
   const [hold, setHold] = useState(null); // { holdId }
   const [appId, setAppId] = useState(null); // persisted application id
   const [spotsTick, setSpotsTick] = useState(0); // force spots re-read
+  const [submitting, setSubmitting] = useState(false);
+  const reviewSavedRef = useRef(false);
 
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
 
   useEffect(() => { window.scrollTo(0, 0); }, [step]);
+
+  // Phase B: landing on the soft path (coach review or a coming-soon venue) persists
+  // the run as a capability/waitlist application in power_game_applications — once.
+  useEffect(() => {
+    if (step !== 'review' || !result || reviewSavedRef.current) return;
+    reviewSavedRef.current = true;
+    submitApplication(form, result.placement, null, {
+      kind: 'capability',
+      comingSoon: !!CENTRE_BY_SLUG[form.centre]?.comingSoon,
+      centreName: CENTRE_BY_SLUG[form.centre]?.name,
+    }).catch(() => { reviewSavedRef.current = false; });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step, result]);
 
   // QA deep-link: /PGP2026/apply?demo=perf|review|soldout jumps to the reveal with a sample case.
   useEffect(() => {
@@ -132,28 +148,39 @@ export default function ApplyFlow() {
   }
 
   async function secure() {
-    // Live path: create a Stripe Checkout session and redirect; the webhook confirms
-    // the booking on payment. Enabled via VITE_PG_LIVE_PAYMENTS=1.
-    if (LIVE_PAYMENTS) {
-      try {
+    if (submitting) return;
+    setSubmitting(true);
+    setErrors([]);
+    try {
+      // Phase B: persist the real application into power_game_applications (the
+      // canonical table the portal ingests). The id is generated client-side so we
+      // can link it into checkout without needing SELECT (anon is insert-only).
+      const { id } = await submitApplication(form, result.placement, selected, {
+        kind: 'standard',
+        centreName: CENTRE_BY_SLUG[form.centre]?.name,
+      });
+      // Live path: Stripe Checkout, then the webhook flips this row to paid.
+      // Enabled via VITE_PG_LIVE_PAYMENTS=1 + STRIPE keys.
+      if (LIVE_PAYMENTS) {
         const r = await fetch('/api/power-game-checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ applicationId: appId, bookingId: hold?.holdId, squadId: selected?.id, email: form.contact_email, playerName: form.player_name }),
+          body: JSON.stringify({ applicationId: id, bookingId: hold?.holdId, squadId: selected?.id, email: form.contact_email, playerName: form.player_name }),
         });
         const data = await r.json();
         if (data?.url) { window.location.href = data.url; return; }
-        setErrors(['Could not start checkout — please try again.']);
-        return;
-      } catch {
-        setErrors(['Could not reach checkout — please try again.']);
+        setErrors([data?.error || 'Could not start checkout — please try again.']);
         return;
       }
+      // No live-payment keys yet (preview): the application is captured; confirm locally.
+      if (hold) await inventory.confirm(hold.holdId);
+      if (appId) applications.setStatus(appId, 'booked', { squadId: selected?.id, bookingId: hold?.holdId });
+      setStep('confirmed');
+    } catch (_e) {
+      setErrors(['Could not save your application — please try again.']);
+    } finally {
+      setSubmitting(false);
     }
-    // Local path: confirm the held spot directly to demonstrate the end-to-end flow.
-    if (hold) await inventory.confirm(hold.holdId);
-    if (appId) applications.setStatus(appId, 'booked', { squadId: selected?.id, bookingId: hold?.holdId });
-    setStep('confirmed');
   }
 
   const matchingSquads = result && !result.placement.requiresReview
@@ -367,8 +394,8 @@ export default function ApplyFlow() {
                     <span className="text-3xl font-black text-white">${BLOCK_FEE}</span>
                   </div>
                 </div>
-                <button onClick={secure} className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
-                  Pay ${BLOCK_FEE} &amp; lock my spot
+                <button onClick={secure} disabled={submitting} className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
+                  {submitting ? 'Processing…' : `Pay $${BLOCK_FEE} & lock my spot`}
                 </button>
                 <p className="text-white/30 text-[10px] uppercase tracking-widest text-center mt-3">Your spot is held for 10 minutes while you pay · groups subject to change</p>
               </div>

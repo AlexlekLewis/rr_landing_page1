@@ -1,7 +1,7 @@
 // ============================================================
 // Vercel Serverless Function — Stripe webhook for Power Game payments.
-// Confirms the held booking (atomic pg_confirm_booking RPC) + marks the
-// application booked when checkout completes.
+// On checkout.session.completed, flips the linked power_game_applications row to
+// paid (payment_status=completed) — the "official player" signal the portal ingests.
 // Env: STRIPE_SECRET_KEY, STRIPE_PG_WEBHOOK_SECRET, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY.
 // Point a Stripe webhook endpoint (checkout.session.completed) at this route.
 // ============================================================
@@ -34,17 +34,20 @@ export default async function handler(req, res) {
   try {
     if (event.type === 'checkout.session.completed') {
       const s = event.data.object;
-      if (s.metadata?.source === 'power-game' && s.metadata.booking_id) {
-        // Atomic confirm of the held spot (survives the hold TTL once confirmed).
-        await supabase.rpc('pg_confirm_booking', {
-          p_booking: s.metadata.booking_id,
-          p_session: s.id,
-          p_pi: s.payment_intent,
-          p_amount: s.amount_total,
-        });
-        if (s.metadata.application_id) {
-          await supabase.from('pg_applications').update({ status: 'booked' }).eq('id', s.metadata.application_id);
-        }
+      const appId = s.metadata?.application_id;
+      // A paid checkout flips the canonical power_game_applications row to completed —
+      // this is what marks an "official player" the Elite Player Portal ingests.
+      if (s.metadata?.source === 'power-game' && appId) {
+        await supabase
+          .from('power_game_applications')
+          .update({
+            payment_status: 'completed',
+            status: 'paid',
+            amount_paid_cents: s.amount_total ?? null,
+            paid_at: new Date().toISOString(),
+            stripe_session_id: s.id,
+          })
+          .eq('id', appId);
       }
     }
     return res.status(200).json({ received: true });

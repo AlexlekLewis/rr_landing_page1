@@ -18,6 +18,12 @@ vi.mock("framer-motion", async () => {
   return { motion, AnimatePresence: ({ children }: { children: React.ReactNode }) => createElement(Fragment, null, children) };
 });
 
+// Phase B persistence is I/O — stub it so the funnel chain stays deterministic offline.
+vi.mock("./submit", () => ({
+  submitApplication: vi.fn(async () => ({ id: "test-app-id" })),
+  buildApplicationRow: vi.fn(() => ({})),
+}));
+
 import ApplyFlow from "./ApplyFlow";
 import { inventory } from "../../../lib/booking/inventory";
 
