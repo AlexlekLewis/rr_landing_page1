@@ -2,10 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 
-const EARLY_BIRD_PRICE = 299;
-const FULL_PRICE = 330;
-const DEADLINE = 'Midnight Sunday 8 June 2026';
-const HOURLY = '$24.90';
+const PRICE = 330;
+const HOURLY = '$27.50';
 
 const included = [
     '3 full days of elite coaching (12 hours total)',
@@ -45,25 +43,15 @@ const PricingSection = () => {
                         transition={{ duration: 0.6 }}
                         className="bg-gradient-to-br from-rr-navy via-rr-blue to-rr-pink rounded-2xl p-8 text-center text-white relative overflow-hidden"
                     >
-                        {/* Early bird badge */}
-                        <div className="absolute top-0 left-0 right-0 bg-rr-pink py-2 px-4">
-                            <p className="text-white text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                                Early Bird Offer — Ends {DEADLINE}
-                            </p>
-                        </div>
-
-                        <div className="mt-10">
+                        <div className="mt-4">
                             <p className="text-white/70 font-bold uppercase tracking-widest text-sm mb-3">Per Player</p>
 
                             {/* Early bird price */}
                             <div className="flex items-start justify-center gap-1 mb-1">
                                 <span className="text-3xl font-black mt-2">$</span>
-                                <span className="text-8xl font-black leading-none">{EARLY_BIRD_PRICE}</span>
+                                <span className="text-8xl font-black leading-none">{PRICE}</span>
                             </div>
 
-                            {/* Strikethrough full price */}
-                            <p className="text-white/40 text-sm font-bold line-through mb-3">${FULL_PRICE} after offer ends</p>
 
                             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2 mb-6">
                                 <span className="text-white font-bold text-sm">{HOURLY} / hour across 12 hours</span>
@@ -78,7 +66,7 @@ const PricingSection = () => {
 
                             {/* Fine print */}
                             <p className="text-white/40 text-xs mt-4 leading-relaxed">
-                                Early Bird price of ${EARLY_BIRD_PRICE} available until {DEADLINE}. Price increases to ${FULL_PRICE} after the Early Bird offer closes.
+                                Early Bird price of ${PRICE} available until {DEADLINE}. Price increases to ${FULL_PRICE} after the Early Bird offer closes.
                             </p>
                         </div>
                     </motion.div>
