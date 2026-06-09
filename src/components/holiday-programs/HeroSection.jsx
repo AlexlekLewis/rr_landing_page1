@@ -38,7 +38,7 @@ const HeroSection = () => {
                     className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6"
                 >
                     <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Early Bird $299 — Ends Midnight 8 June</span>
+                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Now Open — $330 Per Player</span>
                 </motion.div>
 
                 {/* Headline */}
