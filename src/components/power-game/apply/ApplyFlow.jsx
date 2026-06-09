@@ -110,7 +110,9 @@ export default function ApplyFlow() {
   }
 
   function afterReveal() {
-    if (result.placement.requiresReview) setStep('review');
+    // A coming-soon venue has no squads to book → capture interest (review path).
+    const comingSoon = CENTRE_BY_SLUG[form.centre]?.comingSoon;
+    if (result.placement.requiresReview || comingSoon) setStep('review');
     else setStep('slot');
   }
 
@@ -222,7 +224,9 @@ export default function ApplyFlow() {
                           <span className="block text-lg font-black uppercase tracking-wide">{c.name}</span>
                           <span className="block text-xs text-white/50 uppercase tracking-widest">{c.suburb}</span>
                         </span>
-                        {active && <Check className="w-5 h-5 text-rr-pink" />}
+                        {c.comingSoon
+                          ? <span className="flex-shrink-0 text-[10px] font-black uppercase tracking-widest text-rr-blue bg-rr-blue/15 border border-rr-blue/30 rounded-full px-2 py-1">Coming soon</span>
+                          : (active && <Check className="w-5 h-5 text-rr-pink" />)}
                       </button>
                     );
                   })}
@@ -375,7 +379,11 @@ export default function ApplyFlow() {
               <div className="text-center py-8">
                 <div className="w-16 h-16 rounded-full bg-rr-blue/20 border border-rr-blue/40 flex items-center justify-center mx-auto mb-5"><Check className="w-8 h-8 text-rr-blue" /></div>
                 <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-3">You're in our hands</h1>
-                <p className="text-white/60 text-sm max-w-sm mx-auto mb-6">Thanks {form.player_name?.split(' ')[0] || 'champ'} — a Power Game coach will personally review your cricket and be in touch about the best squad for you. No payment needed yet.</p>
+                <p className="text-white/60 text-sm max-w-sm mx-auto mb-6">
+                  {CENTRE_BY_SLUG[form.centre]?.comingSoon
+                    ? `Thanks ${form.player_name?.split(' ')[0] || 'champ'} — that venue's days & times are being locked in now. We've saved your details and your cricket profile, and we'll offer you a spot the moment it opens.`
+                    : `Thanks ${form.player_name?.split(' ')[0] || 'champ'} — a Power Game coach will personally review your cricket and be in touch about the best squad for you.`} No payment needed yet.
+                </p>
               </div>
             )}
 

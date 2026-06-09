@@ -4,7 +4,7 @@
 // ============================================================
 import { describe, it, expect } from "vitest";
 import { InMemoryInventory } from "./inventory";
-import { SQUADS, CENTRES, squadsForPlacement, teamCapacity } from "./squads";
+import { SQUADS, CENTRES, ACTIVE_CENTRES, squadsForPlacement, teamCapacity } from "./squads";
 
 const oneSquad = [
   { id: "x", centre: "c", band: "14-16" as const, stream: "performance" as const, day: "Sat", startTime: "2pm", endTime: "4pm", capacity: 10, blockLabel: "Sat 2-4", sortOrder: 1 },
@@ -13,7 +13,10 @@ const oneSquad = [
 describe("squad grid integrity", () => {
   it("capacity is lane-driven: 26 players / 7 lanes; team = 13 at 7 lanes, 9 at 5", () => {
     expect(SQUADS.length).toBe(12);
-    expect(CENTRES.length).toBe(2);
+    expect(CENTRES.length).toBe(3); // 2 active + 1 coming-soon
+    expect(ACTIVE_CENTRES.length).toBe(2);
+    expect(CENTRES.filter((c) => c.comingSoon).length).toBe(1);
+    expect(squadsForPlacement({ centre: "venue-3", band: "14-16", stream: "performance" }).length).toBe(0);
     expect(teamCapacity(7)).toBe(13);
     expect(teamCapacity(5)).toBe(9);
     expect(SQUADS.every((s) => s.capacity === teamCapacity(s.lanes))).toBe(true);

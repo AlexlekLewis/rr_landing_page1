@@ -26,6 +26,9 @@ export interface Centre {
   name: string;
   suburb: string;
   address: string;
+  /** A future venue whose name/location/times aren't confirmed yet — selectable on
+   *  the funnel to register interest, but it has no squads to book (routes to review). */
+  comingSoon?: boolean;
 }
 
 export interface Squad {
@@ -49,7 +52,12 @@ export interface Squad {
 export const CENTRES: Centre[] = [
   { slug: "williamstown", name: "The Netz", suburb: "Williamstown", address: "Williamstown VIC (address TBC)" },
   { slug: "hallam", name: "Elite Cricket Centre", suburb: "Hallam", address: "Hallam VIC (address TBC)" },
+  // Third venue — name/location/times not confirmed yet. Captures interest only.
+  { slug: "venue-3", name: "New Venue", suburb: "Location to be announced", address: "To be announced", comingSoon: true },
 ];
+
+/** Centres that are open for booking now (have squads). */
+export const ACTIVE_CENTRES = CENTRES.filter((c) => !c.comingSoon);
 
 export const CENTRE_BY_SLUG: Record<string, Centre> = Object.fromEntries(CENTRES.map((c) => [c.slug, c]));
 
