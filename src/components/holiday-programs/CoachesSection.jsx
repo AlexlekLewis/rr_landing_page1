@@ -4,6 +4,13 @@ import { motion } from 'framer-motion';
 // ⚠️ ACTION REQUIRED: Replace placeholder data with real coach details before go-live
 const coaches = [
     {
+        name: 'Andy Crook',
+        role: 'Guest Coach',
+        badge: 'T20 & Power Hitting',
+        bio: 'Academy Director and T20 specialist. An experienced professional cricketer, coach and sports executive, Andy will make guest appearances at the Junior Royals Holiday Camp to lead dedicated T20 and power hitting sessions — bringing the same coaching philosophy that underpins every RRA Melbourne program.',
+        img: '/assets/coaches/andy-crook.jpg',
+    },
+    {
         name: 'Alex Thornhill',
         role: 'Senior Coach',
         bio: 'Rajasthan Royals Academy Melbourne Elite Program Coach. A batting specialist with experience in England’s County cricket and the Australian premier system. Alex coaches the Fitzroy Doncaster Academy and leads the cricket program at Xavier College. His technical approach combines practical coaching with deep knowledge of what it takes to excel at the next level.',
@@ -24,7 +31,7 @@ const CoachesSection = () => {
                         transition={{ duration: 0.6 }}
                         className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-wide mb-6"
                     >
-                        YOUR <span className="text-rr-pink">COACH</span>
+                        YOUR <span className="text-rr-pink">COACHES</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -37,7 +44,7 @@ const CoachesSection = () => {
                     </motion.p>
                 </div>
 
-                <div className="flex justify-center mb-10">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-2xl mx-auto mb-10">
                     {coaches.map((coach, i) => (
                         <motion.div
                             key={coach.role + i}
@@ -45,7 +52,7 @@ const CoachesSection = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: i * 0.15 }}
-                            className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 w-full max-w-sm"
+                            className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 w-full"
                         >
                             {/* Avatar */}
                             <div className="h-56 flex items-center justify-center bg-gradient-to-br from-rr-navy via-rr-blue to-rr-pink">
@@ -64,6 +71,11 @@ const CoachesSection = () => {
                             <div className="p-6">
                                 <h3 className="text-lg font-black text-rr-dark uppercase tracking-wide mb-1">{coach.name}</h3>
                                 <p className="text-rr-pink font-bold text-sm uppercase tracking-widest mb-2">{coach.role}</p>
+                                {coach.badge && (
+                                    <span className="inline-flex items-center bg-rr-blue/10 border border-rr-blue/20 text-rr-blue text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3">
+                                        {coach.badge}
+                                    </span>
+                                )}
                                 {coach.location && (
                                     <span className="inline-flex items-center gap-1.5 bg-rr-blue/10 border border-rr-blue/20 text-rr-blue text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4">
                                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
