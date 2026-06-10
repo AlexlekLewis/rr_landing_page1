@@ -175,7 +175,7 @@ const PricingSection = () => {
                         THE <span className="text-rr-pink">POWER GAME</span> JOURNEY
                     </h2>
                     <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto font-medium">
-                        An ongoing program from late July through finals cricket in March. Two hours per week, every week of each training phase — with breaks during school holidays so your player has time to rest, recover, and be a kid.
+                        An ongoing program from late July through finals cricket in March. Two hours per week, every week of each training phase — with the ability to purchase one Phase at a time.
                     </p>
                 </motion.div>
 
