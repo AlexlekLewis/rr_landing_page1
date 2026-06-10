@@ -5,7 +5,7 @@ const leadershipCoaches = [
     {
         name: "Siddhartha Lahiri",
         role: "Performance Coach — Rajasthan & Paarl Royals",
-        image: "/assets/rra/headcoach-lahiri.png",
+        image: "/assets/coaches/siddhartha-lahiri.jpg",
         bio: "Performance coach for the Rajasthan and Paarl Royals, and head of the Royals' global talent network. He oversees player development across every Royals Academy worldwide — giving the program's best players a direct line to one of the IPL's biggest franchises.",
     },
     {
