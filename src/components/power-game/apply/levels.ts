@@ -21,10 +21,10 @@ export const REP_GROUPS: LevelGroup[] = [
   {
     label: "State & National pathway",
     options: [
-      { code: "VP-19M", label: "Vic U19 Emerging" },
-      { code: "VP-17M", label: "Vic U17 Emerging" },
-      { code: "VP-19F", label: "Vic U19 Female Emerging" },
-      { code: "VP-16F", label: "Vic U16 Female Emerging" },
+      { code: "VP-19M", label: "Vic U19 Emerging Players Program (EPP)" },
+      { code: "VP-17M", label: "Vic U17 Emerging Players Program (EPP)" },
+      { code: "VP-19F", label: "Vic U19 Female Emerging Players Program (EPP)" },
+      { code: "VP-16F", label: "Vic U16 Female Emerging Players Program (EPP)" },
       { code: "CA-19M", label: "U19 National Championships" },
       { code: "CA-17M", label: "U17 National Championships" },
       { code: "CA-16F", label: "U16 National Championships (F)" },

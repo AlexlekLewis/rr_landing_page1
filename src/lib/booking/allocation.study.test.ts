@@ -134,9 +134,12 @@ describe("Blind study — squad allocator over 100 random kids", () => {
     for (const s of states) expect(s.members.length).toBeLessThanOrEqual(s.def.capacity);
   });
 
-  it("SAFETY — no under-17 in a 17+ squad, and nobody more than one band from their age", () => {
+  it("SAFETY — only 16+ performance minors reach 17+; nobody more than one band from age", () => {
     for (const { p, band } of placed) {
-      if (band === "17+") expect(p.age, `${p.id} age ${p.age} in 17+`).toBeGreaterThanOrEqual(17);
+      if (band === "17+") {
+        expect(p.age, `${p.id} age ${p.age} in 17+`).toBeGreaterThanOrEqual(16); // 16 allowed if performance
+        if (p.age === 16) expect(p.engineTier, `${p.id} 16yo in 17+ must be performance`).toBeGreaterThanOrEqual(4);
+      }
       const dist = Math.abs(bandIndex(band) - bandIndex(chrono(p.age)));
       expect(dist, `${p.id} age ${p.age} → ${band}`).toBeLessThanOrEqual(1);
     }
@@ -164,4 +167,19 @@ describe("Blind study — squad allocator over 100 random kids", () => {
     for (const r of review) expect(placedIds.has(r.id)).toBe(false);
     expect(review.every((r) => r.tier === "review")).toBe(true);
   });
+});
+
+describe("16yo at performance level may train with adults (17+)", () => {
+  const at16 = (rep: string, club: string) => {
+    const form = {
+      ...BLANK_FORM, gender: "M", player_dob: "2010-01-15", skill: "batting", batting_hand: "right",
+      rep_level: rep, club_level: club, format: "t20", rep_bat_avg: "42", club_bat_avg: "42",
+    } as typeof BLANK_FORM;
+    return computePlacement(form).placement;
+  };
+  // Dowling is U16 cricket — a 16yo playing it is age-appropriate (NOT playing up), so the
+  // engine keeps them in the 14-16 top squad, not with adults. (A 15yo at Dowling is gun-for-age.)
+  it("Dowling Shield at 16 (U16, age-appropriate) → 14-16 top, not adults", () => { const p = at16("P16M", ""); expect(p.placedBand, JSON.stringify(p)).toBe("14-16"); expect(p.requiresReview).toBe(false); });
+  it("Vic U17 Emerging / EPP (rep) → 17+, no review", () => { const p = at16("VP-17M", ""); expect(p.placedBand, JSON.stringify(p)).toBe("17+"); expect(p.requiresReview).toBe(false); });
+  it("Premier 3rd XI (senior) → 17+, no review", () => { const p = at16("", "P3M"); expect(p.placedBand, JSON.stringify(p)).toBe("17+"); expect(p.requiresReview).toBe(false); });
 });
