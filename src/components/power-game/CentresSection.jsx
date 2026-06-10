@@ -14,6 +14,7 @@ const CENTRES = [
         region: 'West Melbourne',
         accent: 'bg-gradient-to-br from-rr-pink to-rr-blue',
         sessions: [
+            { day: 'Fri', time: '5:30 – 7:30pm' },
             { day: 'Fri', time: '7:30 – 9:30pm' },
             { day: 'Sat', time: '2:00 – 4:00pm' },
             { day: 'Sat', time: '4:00 – 6:00pm' },
