@@ -5,19 +5,19 @@ import { ChevronDown } from 'lucide-react';
 const leadershipCoaches = [
     {
         name: "Siddhartha Lahiri",
-        role: "Performance Coach — Rajasthan & Paarl Royals",
+        role: "Royals Group Performance Coach — Head of Global Academies",
         image: "/assets/coaches/siddhartha-lahiri.jpg",
         bio: "Performance coach for the Rajasthan and Paarl Royals, and head of the Royals' global talent network. He oversees player development across every Royals Academy worldwide — giving the program's best players a direct line to one of the IPL's biggest franchises.",
     },
     {
         name: "Andy Crook",
-        role: "Academy Director — T20 & Power Hitting Specialist",
+        role: "Rajasthan Royals Academy Director — T20 & Power Hitting Specialist",
         image: "/assets/coaches/andy-crook.jpg",
         bio: "Former South Australian Redback (debut at 17), Lancashire and Northamptonshire player, and part of Australia's 2025 T20 Masters World Cup-winning squad. Andy watched T20 transform from the inside and now builds individual development plans around each player's T20 role and skill set.",
     },
     {
         name: "Alex Lewis",
-        role: "Head Coach",
+        role: "Rajasthan Royals Academy — Head Coach",
         image: "/assets/coaches/alex-lewis.jpg",
         bio: "Over 20 years coaching cricketers through representative pathways. Alex puts technique and the player first — building better cricketers, sharper athletes and tougher competitors. Current premier cricket senior assistant coach, bowling coach and Academy director.",
     },
