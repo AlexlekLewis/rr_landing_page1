@@ -4,21 +4,21 @@ import { motion } from 'framer-motion';
 const leadershipCoaches = [
     {
         name: "Siddhartha Lahiri",
-        role: "Rajasthan Royals Group Head of Int'l Player Development & Assistant Coach to Paarl, Rajasthan and Barbados Royals",
+        role: "Performance Coach — Rajasthan & Paarl Royals",
         image: "/assets/rra/headcoach-lahiri.png",
-        bio: "Performance coach of the Rajasthan Royals, as well as Assistant Coach of Paarl and Barbados Royals, Siddhartha runs the Rajasthan Royals' global talent network. He oversees player scouting and development across every Royals Academy in the world — meaning the program's best players have a direct line to one of the IPL's biggest franchises.",
+        bio: "Performance coach for the Rajasthan and Paarl Royals, and head of the Royals' global talent network. He oversees player development across every Royals Academy worldwide — giving the program's best players a direct line to one of the IPL's biggest franchises.",
     },
     {
         name: "Andy Crook",
-        role: "Director of Cricket, Rajasthan Royals Academy Melbourne",
+        role: "Academy Director — T20 & Power Hitting Specialist",
         image: "/assets/coaches/andy-crook.jpg",
-        bio: "Andy Crook has lived T20 cricket from the very beginning. A former AIS Commonwealth Bank Cricket Academy scholar, Andy played professionally for the South Australian Redbacks at the age of 17, and then went on to play for Lancashire County Cricket Club and Northamptonshire County Cricket Club. At Lancashire he played in a T20 Vitality Blast Final, held the List A highest score batting record for a decade and most recently was part of Australia's 2025 T20 Masters World Cup winning campaign in Pakistan. Andy was in English county grounds when T20 was first played and watched the game transform in real time after its 2003 launch. That experience shaped everything he believes about how the format should be developed and taught — that T20 is its own game, with its own skills, its own roles, and its own instincts, and that the best players are identified early and developed specifically for it. As the Director of Cricket at the Rajasthan Royals Academy in Australia, Andy combines his executive sports experience with working directly with players — supporting the reviewing footage, training and game play monitoring, and building individual development plans around each player's specific T20 role and skill set.",
+        bio: "Former South Australian Redback (debut at 17), Lancashire and Northamptonshire player, and part of Australia's 2025 T20 Masters World Cup-winning squad. Andy watched T20 transform from the inside and now builds individual development plans around each player's T20 role and skill set.",
     },
     {
         name: "Alex Lewis",
-        role: "Rajasthan Royals Academy Melbourne Head Coach",
+        role: "Head Coach",
         image: "/assets/coaches/alex-lewis.jpg",
-        bio: "Over 20 years coaching cricketers through representative pathways. Alex is committed to getting the technique right and putting the player first — building not just better cricketers, but sharper athletes and tougher competitors. Current premier cricket senior assistant coach, bowling coach and Academy director.",
+        bio: "Over 20 years coaching cricketers through representative pathways. Alex puts technique and the player first — building better cricketers, sharper athletes and tougher competitors. Current premier cricket senior assistant coach, bowling coach and Academy director.",
     },
 ];
 
@@ -27,31 +27,37 @@ const eliteCoaches = [
         name: "Matthew Spoors",
         role: "Batting — Power Hitting & 360",
         image: "/assets/coaches/matthew-spoors.jpg",
-        bio: "Matthew Spoors is the definition of a modern T20 cricketer. A right-handed top-order batter and attacking leg-spinner, Matthew announced himself on the international stage with an unbeaten 108 off 66 balls on his T20I debut for Canada — the highest individual score ever recorded on T20 International debut. From WA state age-group cricket and the Cricket Australia XI to the Big Bash League with the Perth Scorchers and Melbourne Renegades, and international franchise appearances in the Caribbean's Max60 League, Matthew has built his game around the demands of T20 cricket: clean ball-striking, explosive power, and the ability to finish innings under pressure. His journey from WA Premier Cricket to the professional franchise circuit is a masterclass in reinvention, self-belief, and what happens when talent meets structured development.",
+        bio: "A modern T20 batter who scored an unbeaten 108 off 66 on T20I debut for Canada — the highest score ever on debut. BBL experience with the Perth Scorchers and Melbourne Renegades, built on clean ball-striking and explosive power.",
     },
     {
         name: "Jarryd Rogers",
         role: "Batting — Power Hitting Mechanics",
         image: "/assets/coaches/jarryd-rogers.jpg",
-        bio: "Former Australian Baseball League (ABL) star and Victorian state baseball batting coach and power hitting specialist. Jarryd brings a unique cross-sport perspective on how to generate bat speed and hit the ball harder — giving players a genuine, measurable edge at the crease.",
+        bio: "Former Australian Baseball League star and Victorian state baseball batting coach. Jarryd brings a cross-sport edge on generating bat speed and hitting the ball harder — a genuine, measurable advantage at the crease.",
+    },
+    {
+        name: "Alex Thornhill",
+        role: "Batting — Senior Coach",
+        image: "/assets/coaches/alex-thornhill.jpg",
+        bio: "A batting specialist with England County and Australian premier experience. Alex coaches the Fitzroy Doncaster Academy and leads the cricket program at Xavier College, combining practical coaching with deep technical knowledge.",
     },
     {
         name: "Harkirat Bajwa",
         role: "Bowling — Spin",
         image: "/assets/coaches/harkirat-bajwa.jpg",
-        bio: "Australian U19 representative and Premier Cricket competitor, Harkirat is a modern spinner who turns the ball both ways with real accuracy. He understands how spin bowling works inside and out, and teaches young bowlers the variations and tactics that win matches.",
+        bio: "Australian U19 representative and Premier Cricket competitor. A modern spinner who turns it both ways with accuracy, Harkirat teaches the variations and tactics that win matches.",
     },
     {
         name: "Adelaide Campion",
         role: "Program Coach",
         image: "/assets/coaches/adelaide-campion.jpg",
-        bio: "Inaugural captain of Carlton Cricket Club. Premiership winner with Ringwood. Malaysian Super Slam title holder. Member of Australia's Indoor World Cup-winning squads. Currently Head Coach of the Australian U18 Indoor Cricket Team and Victorian U18 Indoor Cricket Team. 15+ years of relentless commitment to the game at the highest level.",
+        bio: "Inaugural captain of Carlton CC, premiership winner, and member of Australia's Indoor World Cup-winning squads. Currently Head Coach of the Australian and Victorian U18 Indoor teams — 15+ years at the highest level.",
     },
     {
         name: "Glenn Butterworth",
         role: "Program Coach",
         image: "/assets/coaches/glenn-butterworth.jpg",
-        bio: "27 years of coaching excellence spanning two continents. A Collingwood CC wicket keeper-batsman who won two HDCA batting averages, Glenn completed his Level 2 Coaching at Lord's Cricket Ground and coached across Middlesex and the UK. Now driving female pathways development at Fitzroy Doncaster.",
+        bio: "27 years of coaching across two continents. Completed his Level 2 Coaching at Lord's and coached across Middlesex and the UK. Now driving female pathways development at Fitzroy Doncaster.",
     },
 ];
 
@@ -60,31 +66,25 @@ const programTeam = [
         name: "Joel Ried",
         role: "Program Coach",
         image: "/assets/coaches/joel-ried.jpg",
-        bio: "A passionate and technically sharp coach who thrives in developing young cricketers through structured, high-intensity sessions. Joel's energy on the training ground is infectious — he demands excellence and rewards effort in equal measure.",
-    },
-    {
-        name: "Bret Cole",
-        role: "Talent Scout",
-        image: "/assets/coaches/bret-cole.jpg",
-        bio: "Decades of experience identifying and nurturing emerging talent across Victoria's cricket landscape. Bret's trained eye for potential means every player isn't just being coached — they're being watched by someone who knows exactly what pathways and selectors are looking for.",
+        bio: "A technically sharp coach who thrives in high-intensity sessions. Joel's energy on the training ground is infectious — he demands excellence and rewards effort in equal measure.",
     },
     {
         name: "Zac Macciocca",
         role: "Program Assistant Coach",
         image: "/assets/coaches/zac-macciocca.jpg",
-        bio: "A Fitzroy Doncaster stalwart since 2017/18 and Dowling Shield coach for over six years. Zac combines club-cricket grit with genuine technical knowledge, bringing an energetic and relatable coaching presence that connects with young players from day one.",
+        bio: "A Fitzroy Doncaster stalwart and Dowling Shield coach of 6+ years. Zac combines club-cricket grit with technical knowledge and a relatable presence that connects with young players from day one.",
     },
     {
         name: "Ikroop Dhanoa",
         role: "Program Assistant Coach",
         image: "/assets/coaches/ikroop-dhanoa.jpg",
-        bio: "A dynamic young coach whose passion for player development is matched by his deep understanding of modern T20 cricket. Ikroop brings cultural diversity and fresh tactical thinking to the coaching group, helping every athlete feel seen and supported.",
+        bio: "A dynamic young coach with a deep understanding of modern T20 cricket. Ikroop brings fresh tactical thinking and helps every athlete feel seen and supported.",
     },
     {
         name: "Rittin Raman",
         role: "Program Assistant Coach",
         image: "/assets/coaches/rittin-raman.jpg",
-        bio: "Driven by a genuine love for developing cricketers at every level. Rittin's enthusiasm is contagious — he brings high energy, technical precision, and an unwavering commitment to helping young players unlock their potential on and off the pitch.",
+        bio: "Driven by a genuine love for developing cricketers. Rittin brings high energy, technical precision, and an unwavering commitment to helping young players unlock their potential.",
     },
 ];
 
@@ -157,7 +157,7 @@ const CoachesSection = () => {
                 </motion.div>
 
                 {/* Leadership */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mb-10 max-w-4xl mx-auto">
                     {leadershipCoaches.map((coach, index) => (
                         <CoachCard key={index} coach={coach} />
                     ))}
