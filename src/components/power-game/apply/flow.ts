@@ -25,8 +25,9 @@ export interface ApplyForm {
   suburb: string;
   skill: MainSkill | "";
   batting_hand: "right" | "left" | "";
-  bowling_type: "pace" | "spin" | "";
+  bowling_type: "pace" | "leg_spin" | "off_spin" | "";
   secondary_skill: "batting" | "bowling" | "wicketkeeping" | "none" | "";
+  secondary_bowling_type: "pace" | "leg_spin" | "off_spin" | "";
   rep_level: string; // PRIMARY — representative level (VMCU rep floor)
   club_level: string; // secondary — highest club grade
   format: "t20" | "od" | "multiday" | "";
@@ -67,6 +68,7 @@ export const BLANK_FORM: ApplyForm = {
   batting_hand: "",
   bowling_type: "",
   secondary_skill: "",
+  secondary_bowling_type: "",
   rep_level: "",
   club_level: "",
   format: "",
@@ -165,7 +167,7 @@ export function buildEngineInput(f: ApplyForm): ComputeDnaInput {
       isKeeper: keeps,
       battingPositionBand: bats ? "1-3" : null,
       bowlingRole: bowls ? "new_ball" : null,
-      bowlingType: f.bowling_type || null,
+      bowlingType: f.bowling_type === "pace" ? "pace" : f.bowling_type ? "spin" : null, // leg/off spin → spin for the engine
     },
     // Rep + club both inform the level; isRepresentativeHonour marks the rep one.
     history: ([f.rep_level, f.club_level].filter(Boolean) as string[]).map((code) => ({

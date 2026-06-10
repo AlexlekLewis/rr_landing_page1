@@ -329,10 +329,13 @@ export default function ApplyFlow() {
                   <Field label="Batting hand"><Choice value={form.batting_hand} onChange={(v) => set('batting_hand', v)} options={[{ value: 'right', label: 'Right' }, { value: 'left', label: 'Left' }]} /></Field>
                 )}
                 {(form.skill === 'bowling' || form.skill === 'all_rounder') && (
-                  <Field label="Bowling type"><Choice value={form.bowling_type} onChange={(v) => set('bowling_type', v)} options={[{ value: 'pace', label: 'Pace / Seam' }, { value: 'spin', label: 'Spin' }]} /></Field>
+                  <Field label="Bowling type"><Choice cols={3} value={form.bowling_type} onChange={(v) => set('bowling_type', v)} options={[{ value: 'pace', label: 'Pace / Seam' }, { value: 'leg_spin', label: 'Leg spin' }, { value: 'off_spin', label: 'Off spin' }]} /></Field>
                 )}
                 {form.skill && (
-                  <Field label="Secondary skill (optional)"><Choice cols={3} value={form.secondary_skill} onChange={(v) => set('secondary_skill', v)} options={secondaryOptions(form.skill)} /></Field>
+                  <Field label="Secondary skill (optional)"><Choice cols={3} value={form.secondary_skill} onChange={(v) => { set('secondary_skill', v); if (v !== 'bowling') set('secondary_bowling_type', ''); }} options={secondaryOptions(form.skill)} /></Field>
+                )}
+                {form.secondary_skill === 'bowling' && (
+                  <Field label="Secondary bowling type"><Choice cols={3} value={form.secondary_bowling_type} onChange={(v) => set('secondary_bowling_type', v)} options={[{ value: 'pace', label: 'Pace / Seam' }, { value: 'leg_spin', label: 'Leg spin' }, { value: 'off_spin', label: 'Off spin' }]} /></Field>
                 )}
               </div>
             )}
