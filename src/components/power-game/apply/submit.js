@@ -26,11 +26,20 @@ function splitName(full) {
   return { first: parts.slice(0, -1).join(" "), last: parts[parts.length - 1] };
 }
 
+function bowlLabel(t) {
+  return t === "leg_spin" ? "leg spin" : t === "off_spin" ? "off spin" : t === "pace" ? "pace/seam" : t;
+}
+
 function summarise(form) {
   const bits = [];
-  if (form.skill) bits.push(`Skill: ${form.skill}${form.secondary_skill && form.secondary_skill !== "none" ? ` (2nd: ${form.secondary_skill})` : ""}`);
+  if (form.skill) {
+    const sec = form.secondary_skill && form.secondary_skill !== "none"
+      ? ` (2nd: ${form.secondary_skill}${form.secondary_skill === "bowling" && form.secondary_bowling_type ? ` — ${bowlLabel(form.secondary_bowling_type)}` : ""})`
+      : "";
+    bits.push(`Skill: ${form.skill}${sec}`);
+  }
   if (form.batting_hand) bits.push(`Bats: ${form.batting_hand}`);
-  if (form.bowling_type) bits.push(`Bowls: ${form.bowling_type}`);
+  if (form.bowling_type) bits.push(`Bowls: ${bowlLabel(form.bowling_type)}`);
   if (form.format) bits.push(`Format: ${form.format}`);
   if (form.gender) bits.push(`Gender: ${form.gender}`);
   if (form.rep_level) bits.push(`Rep ${form.rep_level}: ${form.rep_games || 0} games, bat avg ${form.rep_bat_avg || "—"} (${form.rep_bat_runs || "—"} runs), bowl avg ${form.rep_bowl_avg || "—"} (${form.rep_bowl_wkts || "—"} wkts)`);
