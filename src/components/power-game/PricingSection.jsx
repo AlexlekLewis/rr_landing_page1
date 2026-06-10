@@ -32,7 +32,7 @@ const PHASES = [
     },
     {
         num: '02',
-        name: 'In-Season',
+        name: 'Power Season',
         window: 'October → end of January',
         rate: '2 hours / week',
         price: 0, // TBC
@@ -50,7 +50,7 @@ const PHASES = [
     },
     {
         num: '03',
-        name: 'Finish Strong',
+        name: 'Power Finish',
         window: 'February → March',
         rate: '2 hours / week',
         price: 0, // TBC
@@ -187,7 +187,7 @@ const PricingSection = () => {
                 </div>
 
                 <p className="text-center text-xs md:text-sm text-white/50 mt-2 font-medium uppercase tracking-widest">
-                    In-Season &amp; Finish Strong pricing to be confirmed
+                    Power Season &amp; Power Finish pricing to be confirmed
                 </p>
             </div>
         </section>
