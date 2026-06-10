@@ -36,16 +36,25 @@ const eliteCoaches = [
         bio: "Former Australian Baseball League star and Victorian state baseball batting coach. Jarryd brings a cross-sport edge on generating bat speed and hitting the ball harder — a genuine, measurable advantage at the crease.",
     },
     {
-        name: "Alex Thornhill",
-        role: "Batting — Senior Coach",
-        image: "/assets/coaches/alex-thornhill.jpg",
-        bio: "A batting specialist with England County and Australian premier experience. Alex coaches the Fitzroy Doncaster Academy and leads the cricket program at Xavier College, combining practical coaching with deep technical knowledge.",
-    },
-    {
         name: "Harkirat Bajwa",
         role: "Bowling — Spin",
         image: "/assets/coaches/harkirat-bajwa.jpg",
         bio: "Australian U19 representative and Premier Cricket competitor. A modern spinner who turns it both ways with accuracy, Harkirat teaches the variations and tactics that win matches.",
+    },
+];
+
+const programTeam = [
+    {
+        name: "Joel Ried",
+        role: "Program Coach",
+        image: "/assets/coaches/joel-ried.jpg",
+        bio: "A technically sharp coach who thrives in high-intensity sessions. Joel's energy on the training ground is infectious — he demands excellence and rewards effort in equal measure.",
+    },
+    {
+        name: "Alex Thornhill",
+        role: "Program Coach",
+        image: "/assets/coaches/alex-thornhill.jpg",
+        bio: "A batting specialist with England County and Australian premier experience. Alex coaches the Fitzroy Doncaster Academy and leads the cricket program at Xavier College, combining practical coaching with deep technical knowledge.",
     },
     {
         name: "Adelaide Campion",
@@ -58,15 +67,6 @@ const eliteCoaches = [
         role: "Program Coach",
         image: "/assets/coaches/glenn-butterworth.jpg",
         bio: "27 years of coaching across two continents. Completed his Level 2 Coaching at Lord's and coached across Middlesex and the UK. Now driving female pathways development at Fitzroy Doncaster.",
-    },
-];
-
-const programTeam = [
-    {
-        name: "Joel Ried",
-        role: "Program Coach",
-        image: "/assets/coaches/joel-ried.jpg",
-        bio: "A technically sharp coach who thrives in high-intensity sessions. Joel's energy on the training ground is infectious — he demands excellence and rewards effort in equal measure.",
     },
     {
         name: "Zac Macciocca",
