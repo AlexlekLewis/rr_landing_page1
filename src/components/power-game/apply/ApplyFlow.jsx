@@ -293,6 +293,9 @@ export default function ApplyFlow({ embedded = false }) {
                         <span className="flex-1">
                           <span className="block text-lg font-black uppercase tracking-wide">{c.name}</span>
                           <span className="block text-xs text-white/50 uppercase tracking-widest">{c.suburb}</span>
+                          {!c.comingSoon && (
+                            <span className="block text-[11px] text-white/40 mt-1 normal-case tracking-normal">{c.address}</span>
+                          )}
                         </span>
                         {c.comingSoon
                           ? <span className="flex-shrink-0 text-[10px] font-black uppercase tracking-widest text-rr-blue bg-rr-blue/15 border border-rr-blue/30 rounded-full px-2 py-1">Coming soon</span>

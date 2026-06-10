@@ -50,8 +50,8 @@ export interface Squad {
 }
 
 export const CENTRES: Centre[] = [
-  { slug: "williamstown", name: "The Netz", suburb: "Williamstown", address: "Williamstown VIC (address TBC)" },
-  { slug: "hallam", name: "Elite Cricket Centre", suburb: "Hallam", address: "Hallam VIC (address TBC)" },
+  { slug: "williamstown", name: "The Netz", suburb: "Williamstown", address: "37 Robbins Cct, Williamstown North VIC 3016" },
+  { slug: "hallam", name: "Elite Cricket Centre", suburb: "Hallam", address: "8-9 Becon Ct, Hallam VIC 3803" },
   // Third venue — name/location/times not confirmed yet. Captures interest only.
   { slug: "venue-3", name: "New Venue", suburb: "Location to be announced", address: "To be announced", comingSoon: true },
 ];
