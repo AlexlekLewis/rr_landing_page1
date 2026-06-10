@@ -36,7 +36,7 @@ const INCLUSIONS = [
     {
         icon: Trophy,
         title: 'Power League Selection',
-        description: 'Put yourself up for selection for our Power League series — held in September, November and late January.',
+        description: 'Put yourself up for selection for our Power League series — held at specific times from September through to April 2027.',
     },
     {
         icon: Search,
