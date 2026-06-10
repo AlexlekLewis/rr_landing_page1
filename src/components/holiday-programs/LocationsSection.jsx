@@ -65,7 +65,7 @@ const LocationsSection = () => {
                     transition={{ delay: 0.2 }}
                     className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium"
                 >
-                    Multiple Melbourne locations. Register now and secure your Early Bird spot.
+                    Multiple Melbourne locations. Register now and secure your place.
                 </motion.p>
             </div>
 
@@ -124,7 +124,7 @@ const LocationsSection = () => {
                                     onClick={() => document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' })}
                                     className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest py-3 rounded-full text-xs transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.4)]"
                                 >
-                                    Register Now
+                                    Buy Now
                                 </button>
                             )}
                         </div>

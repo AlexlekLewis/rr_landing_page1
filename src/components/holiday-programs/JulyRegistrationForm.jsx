@@ -118,7 +118,7 @@ const JulyRegistrationForm = () => {
                     ...utm,
                 }]);
             if (error) throw error;
-            window.location.href = 'https://buy.stripe.com/aFa8wPfY54yhfpO33t9Zm0h';
+            window.location.href = 'https://buy.stripe.com/14AaEX3bj7KtcdC33t9Zm0i';
         } catch (err) {
             setErrors({ form: `Something went wrong. Please try again or email info@rramelbourne.com` });
         } finally {
