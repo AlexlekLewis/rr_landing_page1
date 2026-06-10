@@ -66,7 +66,7 @@ const PricingSection = () => {
 
                             {/* Fine print */}
                             <p className="text-white/40 text-xs mt-4 leading-relaxed">
-                                Early Bird price of ${PRICE} available until {DEADLINE}. Price increases to ${FULL_PRICE} after the Early Bird offer closes.
+                                Price includes 12 hours of elite coaching across 3 days. Training shirt purchased separately at $29.95.
                             </p>
                         </div>
                     </motion.div>
