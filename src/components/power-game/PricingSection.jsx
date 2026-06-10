@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Check, Trophy } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 // Timeline of training phases (cards) interleaved with match periods (banners).
 // Update price/onSale as further phases go on sale.
@@ -64,20 +64,6 @@ const PHASES = [
         accent: 'from-rr-pink to-rr-light-pink',
     },
 ];
-
-// Match periods sit between phases: after Phase 1 and after Phase 2.
-const MATCH_PERIODS = {
-    afterPhase: {
-        1: {
-            name: 'September Matches',
-            description: 'During the September school holidays — the first competitive test of preseason work.',
-        },
-        2: {
-            name: 'Late January Carnival',
-            description: "The second match block — showcasing what's been built across the season.",
-        },
-    },
-};
 
 const formatPrice = (n) => (n > 0 ? `$${n.toLocaleString()}` : 'TBC');
 
@@ -158,29 +144,6 @@ const PhaseCard = ({ phase, idx }) => (
     </motion.div>
 );
 
-const MatchBanner = ({ match }) => (
-    <motion.div
-        className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-rr-navy via-rr-blue to-rr-pink p-6 md:p-7 border border-rr-pink/30"
-        initial={{ opacity: 0, y: 12 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
-    >
-        <div className="flex items-center gap-4 justify-center text-center md:text-left md:justify-start">
-            <div className="w-11 h-11 rounded-full bg-white/15 border border-white/25 flex items-center justify-center flex-shrink-0">
-                <Trophy className="w-5 h-5 text-white" />
-            </div>
-            <div>
-                <div className="text-[10px] font-black text-white/80 uppercase tracking-widest mb-1">Match Period</div>
-                <h4 className="text-lg md:text-xl font-black text-white uppercase tracking-wide leading-tight">
-                    {match.name}
-                </h4>
-                <p className="text-sm text-white/85 font-medium mt-1 max-w-2xl">{match.description}</p>
-            </div>
-        </div>
-    </motion.div>
-);
-
 const PricingSection = () => {
     return (
         <section className="bg-rr-dark py-24 md:py-32 relative overflow-hidden">
@@ -202,7 +165,7 @@ const PricingSection = () => {
                     <div className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
                         <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">
-                            Three Training Blocks · Two Match Periods
+                            Three Training Blocks
                         </span>
                     </div>
                     <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-wide mb-6">
@@ -220,21 +183,7 @@ const PricingSection = () => {
                     ))}
                 </div>
 
-                {/* Match periods between the training blocks */}
-                <div className="flex items-center gap-4 mb-6">
-                    <div className="h-px flex-1 bg-gradient-to-r from-transparent to-rr-pink/40" />
-                    <span className="text-xs md:text-sm font-black text-rr-pink uppercase tracking-widest text-center">
-                        Two Match Periods
-                    </span>
-                    <div className="h-px flex-1 bg-gradient-to-l from-transparent to-rr-pink/40" />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {Object.values(MATCH_PERIODS.afterPhase).map((match) => (
-                        <MatchBanner key={match.name} match={match} />
-                    ))}
-                </div>
-
-                <p className="text-center text-xs md:text-sm text-white/50 mt-12 font-medium uppercase tracking-widest">
+                <p className="text-center text-xs md:text-sm text-white/50 mt-2 font-medium uppercase tracking-widest">
                     In-Season &amp; Finish Strong pricing to be confirmed
                 </p>
             </div>
