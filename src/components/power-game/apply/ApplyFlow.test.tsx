@@ -39,12 +39,12 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     await screen.findByText(/you've earned your place/i);
     expect(screen.getByText(/performance squad/i)).toBeTruthy();
 
-    const before = inventory.spotsLeft("w-fri-perf-1416");
+    const before = inventory.spotsLeft("w-fri530-1416-perf");
 
     fireEvent.click(screen.getByRole("button", { name: /choose your training time/i }));
 
     // Slot step — pick the Friday Performance 14-16 squad.
-    const slot = await screen.findByTestId("slot-w-fri-perf-1416");
+    const slot = await screen.findByTestId("slot-w-fri530-1416-perf");
     fireEvent.click(slot);
 
     // Secure step — accept compliances, then pay.
@@ -57,7 +57,7 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     await screen.findByText(/you're in!/i);
 
     // The spot was actually taken.
-    expect(inventory.spotsLeft("w-fri-perf-1416")).toBe(before - 1);
+    expect(inventory.spotsLeft("w-fri530-1416-perf")).toBe(before - 1);
   });
 
   it("review path: below-floor player gets a no-payment submit form gated by consents", async () => {
@@ -78,7 +78,7 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
   });
 
   it("sold-out: when the matching squads are full, no slot is bookable", async () => {
-    for (const id of ["w-fri-perf-1416", "w-sat4-perf-1416"]) {
+    for (const id of ["w-fri530-1416-perf", "w-sat4-1416-perf"]) {
       for (let i = 0; i < 14; i++) await inventory.createHold({ squadId: id, ref: `fill-${id}-${i}` });
     }
     window.history.pushState({}, "", "/PGP2026/apply?demo=perf");
@@ -86,7 +86,7 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     await screen.findByText(/you've earned your place/i);
     fireEvent.click(screen.getByRole("button", { name: /choose your training time/i }));
     await screen.findByText(/choose your time/i);
-    const fri = screen.queryByTestId("slot-w-fri-perf-1416") as HTMLButtonElement | null;
+    const fri = screen.queryByTestId("slot-w-fri530-1416-perf") as HTMLButtonElement | null;
     expect(fri && fri.disabled).toBe(true);
     expect(screen.getAllByText(/full/i).length).toBeGreaterThan(0);
   });
