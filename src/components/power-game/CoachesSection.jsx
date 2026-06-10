@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 
 const leadershipCoaches = [
     {
@@ -123,6 +124,36 @@ const CoachCard = ({ coach }) => (
     </div>
 );
 
+const RosterDropdown = ({ title, coaches }) => {
+    const [open, setOpen] = useState(false);
+    return (
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 overflow-hidden">
+            <button
+                type="button"
+                onClick={() => setOpen((o) => !o)}
+                aria-expanded={open}
+                className="w-full flex items-center justify-between gap-4 px-6 py-4 text-left hover:bg-slate-100 transition-colors"
+            >
+                <span className="text-sm md:text-base font-black text-rr-dark uppercase tracking-widest">{title}</span>
+                <span className="flex items-center gap-3 flex-shrink-0">
+                    <span className="text-[11px] font-bold text-rr-charcoal/50 uppercase tracking-widest">{coaches.length} Coaches</span>
+                    <ChevronDown className={`w-5 h-5 text-rr-pink transition-transform duration-300 ${open ? 'rotate-180' : ''}`} />
+                </span>
+            </button>
+            {open && (
+                <div className="divide-y divide-slate-200 border-t border-slate-200">
+                    {coaches.map((coach, index) => (
+                        <div key={index} className="flex items-center justify-between gap-4 px-6 py-3.5">
+                            <span className="text-sm md:text-base font-black text-rr-dark uppercase tracking-wide">{coach.name}</span>
+                            <span className="text-xs font-bold text-rr-pink uppercase tracking-widest text-right">{coach.role}</span>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
+
 const CoachesSection = () => {
     return (
         <section className="py-24 md:py-32 bg-white relative overflow-hidden">
@@ -157,36 +188,17 @@ const CoachesSection = () => {
                 </motion.div>
 
                 {/* Leadership */}
+                <h3 className="text-xs font-bold text-rr-charcoal/50 uppercase tracking-[0.3em] mb-5 text-center">Leadership Team</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mb-10 max-w-4xl mx-auto">
                     {leadershipCoaches.map((coach, index) => (
                         <CoachCard key={index} coach={coach} />
                     ))}
                 </div>
 
-                {/* Specialist coaches — list */}
-                <div className="mb-10 max-w-4xl mx-auto">
-                    <h3 className="text-xs font-bold text-rr-charcoal/50 uppercase tracking-[0.3em] mb-5 text-center">Specialist Coaching Staff</h3>
-                    <div className="rounded-2xl border border-slate-200 bg-slate-50 divide-y divide-slate-200 overflow-hidden">
-                        {eliteCoaches.map((coach, index) => (
-                            <div key={index} className="flex items-center justify-between gap-4 px-5 py-4">
-                                <span className="text-base md:text-lg font-black text-rr-dark uppercase tracking-wide">{coach.name}</span>
-                                <span className="text-xs md:text-sm font-bold text-rr-pink uppercase tracking-widest text-right">{coach.role}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Program team — list */}
-                <div className="max-w-4xl mx-auto">
-                    <h3 className="text-xs font-bold text-rr-charcoal/50 uppercase tracking-[0.3em] mb-5 text-center">Program Team</h3>
-                    <div className="rounded-2xl border border-slate-200 bg-slate-50 divide-y divide-slate-200 overflow-hidden">
-                        {programTeam.map((coach, index) => (
-                            <div key={index} className="flex items-center justify-between gap-4 px-5 py-4">
-                                <span className="text-base md:text-lg font-black text-rr-dark uppercase tracking-wide">{coach.name}</span>
-                                <span className="text-xs md:text-sm font-bold text-rr-pink uppercase tracking-widest text-right">{coach.role}</span>
-                            </div>
-                        ))}
-                    </div>
+                {/* Rosters — collapsible */}
+                <div className="max-w-3xl mx-auto space-y-4">
+                    <RosterDropdown title="Specialist Coaching Roster" coaches={eliteCoaches} />
+                    <RosterDropdown title="Program Coaching Roster" coaches={programTeam} />
                 </div>
             </div>
         </section>
