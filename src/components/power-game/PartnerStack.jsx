@@ -17,7 +17,7 @@ const TIERS = [
         level: 'Performance Partners',
         size: 'medium',
         partners: [
-            { name: 'Full Track AI', logo: '' },
+            { name: 'Full Track AI', logo: '/assets/powergame/partners/full-track-ai.png' },
             { name: 'Shah NeuroVision', logo: '/assets/powergame/partners/shah-neurovision.webp', dark: true },
         ],
     },
