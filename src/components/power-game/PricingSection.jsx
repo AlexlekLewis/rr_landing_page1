@@ -17,10 +17,13 @@ const PHASES = [
         description:
             "Establish strengths and archetype. Build the game-intelligence toolset and the technical foundations.",
         points: [
-            'Establish your batting, bowling or keeping archetype',
-            'Build the game-intelligence toolset',
-            'Lay the technical and physical foundations',
-            'Prepare to perform in the September matches',
+            'Minimum 2 hours per week for 8 weeks in your allocated squad',
+            'Top Royals Academy coaches',
+            'Invite to the Royals High Performance Centre',
+            'Access to our world-first game & development management application: Match Centre',
+            'Performance tracking with our Performance Partners Full Track AI and Str8 Bat',
+            'Program content based on developing power with bat, ball and in the field',
+            'Access to the Australian-first NeuroVision program built for Royals Academy',
         ],
         accent: 'from-rr-blue to-rr-medium-blue',
     },
