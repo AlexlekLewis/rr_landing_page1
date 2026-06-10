@@ -421,6 +421,7 @@ export default function ApplyFlow({ embedded = false }) {
                       );
                     })}
                     <button onClick={() => setStep('review')} className="w-full text-center text-xs text-white/40 hover:text-white/70 uppercase tracking-widest pt-2">None of these times work →</button>
+                    <p className="text-white/25 text-[11px] text-center pt-1">*Squads are subject to change &mdash; we&apos;ll work with you if changes are needed.</p>
                   </div>
                 )}
               </div>
@@ -449,7 +450,7 @@ export default function ApplyFlow({ embedded = false }) {
                   Apply without paying — request a call first
                 </button>
                 {!consentsOk(form) && <p className="text-white/40 text-[11px] text-center mt-3">Please accept the compliances above to continue.</p>}
-                <p className="text-white/30 text-[10px] uppercase tracking-widest text-center mt-3">Paying holds your spot for the block · applying without paying does not secure a spot · groups subject to change</p>
+                <p className="text-white/25 text-[11px] text-center mt-3">Paying secures your spot for the 8-week block (applying without paying doesn&apos;t hold one). *Squads are subject to change &mdash; we&apos;ll work with you if changes are needed.</p>
               </div>
             )}
 
