@@ -23,7 +23,7 @@ const HOW_STEPS = [
     { Icon: User, title: 'Player details', sub: 'Who’s playing, and the best way to reach you.' },
     { Icon: ClipboardList, title: 'Playing history', sub: 'Tell us the highest level you’ve played in the last three years.', note: 'Honesty is required — applications may be rejected if false information is provided (refund less processing fees).' },
     { Icon: Sparkles, title: 'Get your offer', sub: 'Accept your squad offer and choose your time — or apply for a review / request a call for more information.' },
-    { Icon: ShieldCheck, title: 'Secure your spot', sub: 'Lock in your place for the 8-week block.' },
+    { Icon: ShieldCheck, title: 'Secure your spot', sub: 'Lock in your place for the 8-week phase.' },
 ];
 
 // The talent we're built to discover — examples of players the rep system can miss.
@@ -132,7 +132,7 @@ const PowerGame = () => {
                                 <div className="text-rr-pink font-black uppercase tracking-[0.3em] text-xs mb-3">Secure your place</div>
                                 <h2 className="text-3xl md:text-5xl font-black uppercase tracking-wide mb-4">Earn your place</h2>
                                 <p className="text-white/60 mb-2 max-w-xl mx-auto">Five steps to find the squad that&apos;s right for your development — about three minutes.</p>
-                                <p className="text-white/40 text-sm mb-12">The Power Game · 8-week block · <span className="text-white font-bold">$960</span></p>
+                                <p className="text-white/40 text-sm mb-12">The Power Game · 8-week phase · <span className="text-white font-bold">$960</span></p>
 
                                 <ol className="max-w-2xl mx-auto text-left">
                                     {HOW_STEPS.map((s, i) => (
