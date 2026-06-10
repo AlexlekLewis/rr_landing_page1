@@ -36,12 +36,6 @@ const PowerGame = () => {
         document.title = 'The Power Game Program | Rajasthan Royals Academy Melbourne';
     }, []);
 
-    // Lock background scroll while the apply overlay is open.
-    useEffect(() => {
-        document.body.style.overflow = showApply ? 'hidden' : '';
-        return () => { document.body.style.overflow = ''; };
-    }, [showApply]);
-
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
             <Navbar variant="power-game" />
@@ -102,17 +96,31 @@ const PowerGame = () => {
                 </div>
 
                 {/* Registration IS the ability funnel (qualify → place → pay) at /PGP2026/apply. */}
-                <div id="apply" className="py-20 md:py-28 bg-rr-dark text-white text-center px-5">
-                    <div className="max-w-2xl mx-auto">
-                        <div className="text-rr-pink font-black uppercase tracking-[0.3em] text-xs mb-3">Secure your place</div>
-                        <h2 className="text-3xl md:text-5xl font-black uppercase tracking-wide mb-4">Earn your place</h2>
-                        <p className="text-white/60 mb-2 max-w-xl mx-auto">Qualify on your cricket, get matched to a squad at your level &amp; venue, and lock in your spot — about three minutes.</p>
-                        <p className="text-white/40 text-sm mb-8">The Power Game · 8-week block · <span className="text-white font-bold">$960</span></p>
-                        <button onClick={() => setShowApply(true)} className="inline-block bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-8 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
-                            Start your application →
-                        </button>
-                        <p className="text-white/30 text-[11px] mt-4">Places are subject to meeting the program&apos;s minimum standard.</p>
-                    </div>
+                {/* Registration funnel — revealed INLINE in this section (applicant stays on /PGP2026). */}
+                <div id="apply" className="bg-rr-dark text-white scroll-mt-24">
+                    {!showApply ? (
+                        <div className="py-20 md:py-28 text-center px-5">
+                            <div className="max-w-2xl mx-auto">
+                                <div className="text-rr-pink font-black uppercase tracking-[0.3em] text-xs mb-3">Secure your place</div>
+                                <h2 className="text-3xl md:text-5xl font-black uppercase tracking-wide mb-4">Earn your place</h2>
+                                <p className="text-white/60 mb-2 max-w-xl mx-auto">Qualify on your cricket, get matched to a squad at your level &amp; venue, and lock in your spot — about three minutes.</p>
+                                <p className="text-white/40 text-sm mb-8">The Power Game · 8-week block · <span className="text-white font-bold">$960</span></p>
+                                <button onClick={() => setShowApply(true)} className="inline-block bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-8 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
+                                    Start your application →
+                                </button>
+                                <p className="text-white/30 text-[11px] mt-4">Places are subject to meeting the program&apos;s minimum standard.</p>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="relative border-t border-white/10">
+                            <div className="max-w-xl mx-auto px-5 pt-5">
+                                <button onClick={() => setShowApply(false)} className="text-xs text-white/40 hover:text-white/70 uppercase tracking-widest">← Close</button>
+                            </div>
+                            <React.Suspense fallback={<div className="min-h-[60vh]" />}>
+                                <ApplyFlow embedded />
+                            </React.Suspense>
+                        </div>
+                    )}
                 </div>
 
                 <div id="partners">
@@ -120,22 +128,6 @@ const PowerGame = () => {
                 </div>
             </main>
             <Footer />
-
-            {/* Apply funnel as a full-screen overlay — keeps the applicant on /PGP2026 (no navigation). */}
-            {showApply && (
-                <div className="fixed inset-0 z-[100] bg-rr-dark overflow-y-auto">
-                    <button
-                        onClick={() => setShowApply(false)}
-                        aria-label="Close application"
-                        className="fixed top-4 right-4 z-[110] w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-lg flex items-center justify-center transition-colors"
-                    >
-                        ✕
-                    </button>
-                    <React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}>
-                        <ApplyFlow />
-                    </React.Suspense>
-                </div>
-            )}
         </div>
     );
 };
