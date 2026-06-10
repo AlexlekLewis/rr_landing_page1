@@ -24,7 +24,7 @@ const OverviewSection = () => {
 
                     <div className="space-y-5 text-base md:text-lg text-rr-charcoal font-medium leading-relaxed">
                         <p>
-                            Following the huge success of the Rajasthan Royals intensive 12-week T20 Elite Program, the Power Game Program is the next iteration of the elite program.
+                            Following the huge success of the Rajasthan Royals Academy intensive 12-week T20 Elite Program, the Power Game Program is the evolution of the elite program.
                         </p>
                         <p>
                             The Power Game Program is an elite training environment built around one idea: developing the ability to generate power on demand, across every discipline and format of the modern game.
