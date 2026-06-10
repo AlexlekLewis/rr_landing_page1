@@ -12,6 +12,11 @@ export const CURRENT_SEASON = "2025/26";
 export const CURRENT_SEASON_START = 2025;
 export const BLOCK_FEE = 960; // $120/session × 8 weeks (from the planning sheet)
 
+// Match counts are no longer collected. A player who reached a level played a season,
+// so assume a typical volume — this keeps them off the engine's "thin_history" review
+// gate. Placement is level×age driven, so the exact number is neutral.
+const ASSUMED_MATCHES = 10;
+
 export type MainSkill = "batting" | "bowling" | "all_rounder" | "wicketkeeper";
 
 export interface ApplyForm {
@@ -32,16 +37,13 @@ export interface ApplyForm {
   club_level: string; // secondary — highest club grade
   format: "t20" | "od" | "multiday" | "";
   // Per-level stats for the PRIMARY skill — captured at BOTH rep and club level.
-  rep_games: string;
+  // (Total runs + games/matches were removed at Alex's request.)
   rep_bat_avg: string;
-  rep_bat_runs: string;
   rep_bowl_avg: string;
   rep_bowl_wkts: string;
   rep_catches: string;
   rep_stumpings: string;
-  club_games: string;
   club_bat_avg: string;
-  club_bat_runs: string;
   club_bowl_avg: string;
   club_bowl_wkts: string;
   club_catches: string;
@@ -72,16 +74,12 @@ export const BLANK_FORM: ApplyForm = {
   rep_level: "",
   club_level: "",
   format: "",
-  rep_games: "",
   rep_bat_avg: "",
-  rep_bat_runs: "",
   rep_bowl_avg: "",
   rep_bowl_wkts: "",
   rep_catches: "",
   rep_stumpings: "",
-  club_games: "",
   club_bat_avg: "",
-  club_bat_runs: "",
   club_bowl_avg: "",
   club_bowl_wkts: "",
   club_catches: "",
@@ -133,9 +131,7 @@ export function buildEngineInput(f: ApplyForm): ComputeDnaInput {
   // The player's numbers AT a given level → one stats row scored at that level's CTI.
   const levelRow = (
     code: string,
-    games: string,
     batAvg: string,
-    batRuns: string,
     bowlAvg: string,
     bowlWkts: string,
     catches: string,
@@ -144,11 +140,13 @@ export function buildEngineInput(f: ApplyForm): ComputeDnaInput {
     season: CURRENT_SEASON,
     format: fmt,
     competitionCode: code,
-    batMatches: n(games), // row match count (also drives keeping per-match)
-    batInnings: bats ? n(games) : null,
+    // Runs + matches are no longer collected; assume a season's volume so a player who
+    // reached this level isn't flagged "thin_history". Placement stays level×age driven.
+    batMatches: ASSUMED_MATCHES,
+    batInnings: bats ? ASSUMED_MATCHES : null,
     batAverage: bats ? n(batAvg) : null,
-    batRuns: bats ? n(batRuns) : null,
-    bowlMatches: bowls ? n(games) : null,
+    batRuns: null,
+    bowlMatches: bowls ? ASSUMED_MATCHES : null,
     bowlAverage: bowls ? n(bowlAvg) : null,
     bowlWickets: bowls ? n(bowlWkts) : null,
     fieldCatches: keeps ? n(catches) : null,
@@ -157,9 +155,9 @@ export function buildEngineInput(f: ApplyForm): ComputeDnaInput {
 
   const stats: ComputeDnaInput["stats"] = [];
   if (f.rep_level)
-    stats.push(levelRow(f.rep_level, f.rep_games, f.rep_bat_avg, f.rep_bat_runs, f.rep_bowl_avg, f.rep_bowl_wkts, f.rep_catches, f.rep_stumpings));
+    stats.push(levelRow(f.rep_level, f.rep_bat_avg, f.rep_bowl_avg, f.rep_bowl_wkts, f.rep_catches, f.rep_stumpings));
   if (f.club_level)
-    stats.push(levelRow(f.club_level, f.club_games, f.club_bat_avg, f.club_bat_runs, f.club_bowl_avg, f.club_bowl_wkts, f.club_catches, f.club_stumpings));
+    stats.push(levelRow(f.club_level, f.club_bat_avg, f.club_bowl_avg, f.club_bowl_wkts, f.club_catches, f.club_stumpings));
 
   return {
     profile: {
@@ -190,8 +188,8 @@ export interface PlacementResult {
 export function computePlacement(f: ApplyForm): PlacementResult {
   const dna = computeDna(buildEngineInput(f));
   let placement = placeFromDna(dna);
-  // Power Game floor: representative cricket (VMCU+) OR Premier/Sub-District clears it.
-  // Community/association club cricket alone is below the floor → coach review.
+  // Power Game floor: representative cricket, Premier/Sub-District, or association senior
+  // (2nd grade & up) clears it. Below 2nd grade / social cricket → coach review (no offer).
   if (!clearsFloor(f.rep_level) && !clearsFloor(f.club_level)) {
     placement = {
       ...placement,
@@ -229,10 +227,8 @@ export function validateStep(step: Step, f: ApplyForm): string[] {
     if ((f.skill === "bowling" || f.skill === "all_rounder") && !f.bowling_type) e.push("Select a bowling type.");
   }
   if (step === "history") {
-    if (!f.rep_level && !f.club_level) e.push("Select your representative level and/or your highest club grade.");
+    if (!f.rep_level && !f.club_level) e.push("Add your representative and/or senior cricket — pick at least one.");
     if (!f.format) e.push("Select the format you mostly played.");
-    if (f.rep_level && !f.rep_games) e.push("Enter your games at representative level.");
-    if (f.club_level && !f.club_games) e.push("Enter your games at club level.");
   }
   return e;
 }
