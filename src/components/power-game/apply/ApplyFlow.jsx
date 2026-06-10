@@ -366,10 +366,7 @@ export default function ApplyFlow({ embedded = false }) {
               <div className="space-y-4">
                 <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Your cricket — last 3 years</h1>
                 <p className="text-white/50 text-sm mb-3">Tell us the highest level you've played in the last <span className="text-white">three years</span>. Add <span className="text-rr-pink font-bold">representative</span> cricket, <span className="text-rr-pink font-bold">senior</span> cricket, or <span className="text-rr-pink font-bold">both</span> — whichever you've played.</p>
-                <div className="flex items-start gap-2 bg-amber-400/10 border border-amber-400/30 rounded-lg px-3 py-2.5 text-amber-200/90 text-xs leading-snug mb-1">
-                  <AlertCircle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
-                  <span><span className="font-bold text-amber-200">Honesty is required.</span> We may verify the levels you list. Applications can be rejected if false information is provided — refunds are made less processing fees.</span>
-                </div>
+                <p className="text-white/35 text-[11px] leading-snug mb-1">Levels may be verified with clubs &amp; associations — please keep them accurate.</p>
                 <Field label="Representative cricket — highest level">
                   <select className={inputCls} value={form.rep_level} onChange={(e) => set('rep_level', e.target.value)}>
                     <option value="">— none / haven't played rep —</option>
@@ -416,8 +413,8 @@ export default function ApplyFlow({ embedded = false }) {
                 <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Choose your time</h1>
                 <p className="text-white/50 text-sm mb-6">{result.placement.stream === 'performance' ? 'Performance' : 'Pathway'} · {result.placement.placedBand} · {CENTRE_BY_SLUG[form.centre]?.name}</p>
                 {matchingSquads.length === 0 ? (
-                  <Fallback onOther={() => { const other = CENTRES.find((c) => c.slug !== form.centre); if (other) { set('centre', other.slug); } setStep('slot'); }}
-                    onReview={() => setStep('review')} otherName={CENTRES.find((c) => c.slug !== form.centre)?.name} />
+                  <Fallback onOther={() => { const other = CENTRES.find((c) => c.slug !== form.centre && !c.comingSoon); if (other) { set('centre', other.slug); } setStep('slot'); }}
+                    onReview={() => setStep('review')} otherName={CENTRES.find((c) => c.slug !== form.centre && !c.comingSoon)?.name} />
                 ) : (
                   <div className="space-y-3">
                     {matchingSquads.map((sq) => {

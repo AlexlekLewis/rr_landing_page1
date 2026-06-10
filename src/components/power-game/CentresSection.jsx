@@ -31,16 +31,11 @@ const CENTRES = [
         ],
     },
     {
-        suburb: 'Mickleham',
-        venue: 'New for 2026',
+        suburb: 'TBC',
+        venue: 'New venue — coming soon',
         region: 'North Melbourne',
         accent: 'bg-rr-blue',
-        sessions: [
-            { day: 'Fri', time: '5:30 – 7:30pm' },
-            { day: 'Fri', time: '7:30 – 9:30pm' },
-            { day: 'Sat', time: '2:00 – 4:00pm' },
-            { day: 'Sat', time: '4:00 – 6:00pm' },
-        ],
+        sessions: [],
     },
 ];
 
@@ -103,6 +98,9 @@ const CentresSection = () => {
 
                             {/* Session times */}
                             <div className="mt-auto flex flex-col gap-2.5 border-t border-white/10 pt-5">
+                                {centre.sessions.length === 0 && (
+                                    <div className="text-sm font-bold text-white/40 uppercase tracking-wide">Days &amp; times to be confirmed</div>
+                                )}
                                 {centre.sessions.map((s, i) => (
                                     <div key={i} className="flex items-center gap-3">
                                         <span className="flex-shrink-0 w-12 text-center text-[11px] font-black uppercase tracking-widest text-rr-pink bg-rr-pink/10 border border-rr-pink/25 rounded-md py-1">
