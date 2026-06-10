@@ -45,9 +45,10 @@ export function buildApplicationRow(form, placement, squad, opts = {}) {
   const kind = opts.kind || (placement?.requiresReview ? "capability" : "standard");
   const comingSoon = !!opts.comingSoon;
   const status =
-    kind === "standard"
-      ? (squad ? "awaiting_payment" : "placed")
-      : (comingSoon ? "venue_waitlist" : "review");
+    opts.status ||
+    (kind === "standard"
+      ? (opts.intent === "callback" ? "callback_requested" : (squad ? "awaiting_payment" : "placed"))
+      : (comingSoon ? "venue_waitlist" : "review"));
 
   return {
     first_name: first,
@@ -75,6 +76,12 @@ export function buildApplicationRow(form, placement, squad, opts = {}) {
       kind === "capability"
         ? (comingSoon ? "venue_tbc_waitlist" : (placement?.reviewReasons?.join(", ") || "coach_review"))
         : "",
+    accept_terms: !!form.accept_terms,
+    accept_player_code: !!form.accept_player_code,
+    accept_parent_code: minor ? !!form.accept_parent_code : true,
+    accept_social_media: !!form.accept_social_media,
+    accept_playing_standard: !!form.accept_playing_standard,
+    needs_uniform: !!form.needs_uniform,
     payment_status: "pending",
     status,
     source: SOURCE,

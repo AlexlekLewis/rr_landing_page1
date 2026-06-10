@@ -45,6 +45,13 @@ export interface ApplyForm {
   club_bowl_wkts: string;
   club_catches: string;
   club_stumpings: string;
+  // Compliances & permissions (captured at submission).
+  accept_terms: boolean;
+  accept_player_code: boolean;
+  accept_parent_code: boolean;
+  accept_social_media: boolean;
+  accept_playing_standard: boolean;
+  needs_uniform: boolean;
 }
 
 export const BLANK_FORM: ApplyForm = {
@@ -77,6 +84,12 @@ export const BLANK_FORM: ApplyForm = {
   club_bowl_wkts: "",
   club_catches: "",
   club_stumpings: "",
+  accept_terms: false,
+  accept_player_code: false,
+  accept_parent_code: false,
+  accept_social_media: false,
+  accept_playing_standard: false,
+  needs_uniform: false,
 };
 
 const n = (v: string): number | null => (v === "" || v == null ? null : Number(v));
@@ -88,6 +101,12 @@ export function calcAge(dob: string): number | null {
 export function isMinor(dob: string): boolean {
   const a = calcAge(dob);
   return a != null && a < 18;
+}
+
+/** Required compliances/permissions all accepted (parent code only required for minors). */
+export function consentsOk(f: ApplyForm): boolean {
+  const base = f.accept_terms && f.accept_player_code && f.accept_social_media && f.accept_playing_standard;
+  return !!(base && (!isMinor(f.player_dob) || f.accept_parent_code));
 }
 
 /** Secondary skill options — never the same as primary; wicketkeeping is allowed. */

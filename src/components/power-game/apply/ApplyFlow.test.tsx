@@ -14,7 +14,8 @@ vi.mock("framer-motion", async () => {
     const { initial, animate, exit, transition, whileInView, whileHover, whileTap, viewport, layout, ...rest } = p;
     return rest;
   };
-  const motion = new Proxy({}, { get: (_t, tag: string) => forwardRef((props: Record<string, unknown>, ref) => createElement(typeof tag === "string" ? tag : "div", { ...strip(props), ref })) });
+  const motionCache: Record<string, unknown> = {};
+  const motion = new Proxy({}, { get: (_t, tag: string) => (motionCache[tag] ||= forwardRef((props: Record<string, unknown>, ref) => createElement(typeof tag === "string" ? tag : "div", { ...strip(props), ref }))) });
   return { motion, AnimatePresence: ({ children }: { children: React.ReactNode }) => createElement(Fragment, null, children) };
 });
 
@@ -46,8 +47,10 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     const slot = await screen.findByTestId("slot-w-fri-perf-1416");
     fireEvent.click(slot);
 
-    // Secure step.
-    const pay = await screen.findByRole("button", { name: /lock my spot/i });
+    // Secure step — accept compliances, then pay.
+    await screen.findByText(/secure your spot/i);
+    document.querySelectorAll('input[type="checkbox"]').forEach((b) => fireEvent.click(b));
+    const pay = screen.getByRole("button", { name: /secure my spot/i });
     fireEvent.click(pay);
 
     // Confirmed.
@@ -57,13 +60,21 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     expect(inventory.spotsLeft("w-fri-perf-1416")).toBe(before - 1);
   });
 
-  it("review path: a below-floor player routes to coach review with no payment", async () => {
+  it("review path: below-floor player gets a no-payment submit form gated by consents", async () => {
     window.history.pushState({}, "", "/PGP2026/apply?demo=review");
     render(<ApplyFlow />);
     await screen.findByText(/a coach will review it/i);
     fireEvent.click(screen.getByRole("button", { name: /what happens next/i }));
-    await screen.findByText(/you're in our hands/i);
-    expect(screen.queryByRole("button", { name: /lock my spot/i })).toBeNull();
+    await screen.findByText(/apply for coach review/i);
+    // no payment in this path
+    expect(screen.queryByRole("button", { name: /secure my spot|lock my spot/i })).toBeNull();
+    // submit is gated until compliances are accepted
+    const submit = screen.getByRole("button", { name: /submit my application/i }) as HTMLButtonElement;
+    expect(submit.disabled).toBe(true);
+    document.querySelectorAll('input[type="checkbox"]').forEach((b) => fireEvent.click(b));
+    expect(submit.disabled).toBe(false);
+    fireEvent.click(submit);
+    await screen.findByText(/in our hands/i);
   });
 
   it("sold-out: when the matching squads are full, no slot is bookable", async () => {

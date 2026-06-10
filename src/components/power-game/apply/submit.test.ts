@@ -69,4 +69,28 @@ describe("buildApplicationRow", () => {
     expect(r.bio).toContain("Skill: batting");
     expect(r.bio).toContain("Rep P16M");
   });
+
+  it("maps compliances + uniform; adult parent-code is N/A (true)", () => {
+    const f = { ...adult, accept_terms: true, accept_player_code: true, accept_social_media: true, accept_playing_standard: true, needs_uniform: true };
+    const r = buildApplicationRow(f, placement, squad, {});
+    expect(r.accept_terms).toBe(true);
+    expect(r.accept_player_code).toBe(true);
+    expect(r.accept_social_media).toBe(true);
+    expect(r.accept_playing_standard).toBe(true);
+    expect(r.accept_parent_code).toBe(true); // adult → not applicable, recorded true
+    expect(r.needs_uniform).toBe(true);
+  });
+
+  it("minor parent-code consent flows through; unticked consents default false", () => {
+    const r = buildApplicationRow({ ...minor, accept_parent_code: true }, placement, squad, {});
+    expect(r.accept_parent_code).toBe(true);
+    expect(r.accept_terms).toBe(false);
+    expect(r.needs_uniform).toBe(false);
+  });
+
+  it("apply-without-pay intent → callback_requested status", () => {
+    const r = buildApplicationRow(adult, placement, squad, { intent: "callback" });
+    expect(r.status).toBe("callback_requested");
+    expect(r.application_type).toBe("standard");
+  });
 });

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, ArrowRight, ArrowLeft, Clock, Users, Check, AlertCircle, Loader2 } from 'lucide-react';
 import DateOfBirthInput from '../../DateOfBirthInput';
@@ -6,7 +6,7 @@ import { REP_GROUPS, CLUB_GROUPS, groupsForGender } from './levels';
 import { CENTRES, CENTRE_BY_SLUG, squadsForPlacement } from '../../../lib/booking/squads';
 import { inventory } from '../../../lib/booking/inventory';
 import { applications, applicationFromPlacement } from '../../../lib/booking/applications';
-import { BLANK_FORM, validateStep, computePlacement, isMinor, BLOCK_FEE, secondaryOptions } from './flow';
+import { BLANK_FORM, validateStep, computePlacement, isMinor, BLOCK_FEE, secondaryOptions, consentsOk } from './flow';
 import DnaRevealCard from './DnaRevealCard';
 import { submitApplication } from './submit';
 
@@ -47,24 +47,10 @@ export default function ApplyFlow() {
   const [appId, setAppId] = useState(null); // persisted application id
   const [spotsTick, setSpotsTick] = useState(0); // force spots re-read
   const [submitting, setSubmitting] = useState(false);
-  const reviewSavedRef = useRef(false);
 
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
 
   useEffect(() => { window.scrollTo(0, 0); }, [step]);
-
-  // Phase B: landing on the soft path (coach review or a coming-soon venue) persists
-  // the run as a capability/waitlist application in power_game_applications — once.
-  useEffect(() => {
-    if (step !== 'review' || !result || reviewSavedRef.current) return;
-    reviewSavedRef.current = true;
-    submitApplication(form, result.placement, null, {
-      kind: 'capability',
-      comingSoon: !!CENTRE_BY_SLUG[form.centre]?.comingSoon,
-      centreName: CENTRE_BY_SLUG[form.centre]?.name,
-    }).catch(() => { reviewSavedRef.current = false; });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step, result]);
 
   // QA deep-link: /PGP2026/apply?demo=perf|review|soldout jumps to the reveal with a sample case.
   useEffect(() => {
@@ -183,6 +169,37 @@ export default function ApplyFlow() {
     }
   }
 
+  // Apply but DON'T pay — submit full details + request a call; the spot is not held.
+  async function applyWithoutPay() {
+    if (submitting) return;
+    setSubmitting(true);
+    setErrors([]);
+    try {
+      await submitApplication(form, result.placement, selected, { kind: 'standard', intent: 'callback', centreName: CENTRE_BY_SLUG[form.centre]?.name });
+      if (hold) await inventory.release(hold.holdId); // not securing — free the spot back up
+      setStep('submitted');
+    } catch (_e) {
+      setErrors(['Could not submit your application — please try again.']);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  // Soft path (below-floor review or coming-soon venue) — submit with consents, no payment.
+  async function submitReview() {
+    if (submitting) return;
+    setSubmitting(true);
+    setErrors([]);
+    try {
+      await submitApplication(form, result.placement, null, { kind: 'capability', comingSoon: !!CENTRE_BY_SLUG[form.centre]?.comingSoon, centreName: CENTRE_BY_SLUG[form.centre]?.name });
+      setStep('reviewed');
+    } catch (_e) {
+      setErrors(['Could not submit — please try again.']);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   const matchingSquads = result && !result.placement.requiresReview
     ? squadsForPlacement({ centre: form.centre, band: result.placement.placedBand, stream: result.placement.stream })
     : [];
@@ -191,6 +208,25 @@ export default function ApplyFlow() {
 
   const statField = (key, label, ph) => (
     <Field label={label}><input type="number" className={inputCls} value={form[key]} onChange={(e) => set(key, e.target.value)} placeholder={ph} /></Field>
+  );
+  const consentRow = (k, label) => (
+    <div className="flex items-start gap-3">
+      <input id={`c_${k}`} type="checkbox" checked={!!form[k]} onChange={(e) => set(k, e.target.checked)} className="mt-0.5 w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer" />
+      <label htmlFor={`c_${k}`} className="text-xs text-white/70 leading-relaxed cursor-pointer">{label}</label>
+    </div>
+  );
+  const renderConsents = () => (
+    <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3 text-left">
+      <div className="text-[11px] font-black uppercase tracking-widest text-rr-pink mb-1">Compliance &amp; permissions</div>
+      {consentRow('accept_playing_standard', <>I understand places are subject to meeting the program&apos;s minimum playing standard, and squads/times are subject to change.</>)}
+      {consentRow('accept_terms', <>I have read and agree to the <a href="/terms-conditions" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Terms &amp; Conditions</a> and <a href="/privacy-policy" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Privacy Policy</a>, and confirm all information provided is accurate.</>)}
+      {consentRow('accept_player_code', <>I have read, understood and agree to the <a href="/assets/RRA_Player_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Player Code of Conduct</a>.</>)}
+      {isMinor(form.player_dob) && consentRow('accept_parent_code', <>I have read, understood and agree to the <a href="/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Parent/Guardian Code of Conduct</a>.</>)}
+      {consentRow('accept_social_media', <>I&apos;m happy for photos/videos featuring the player to be used on RRA Melbourne&apos;s social media &amp; marketing channels.</>)}
+      <div className="border-t border-white/10 pt-3">
+        {consentRow('needs_uniform', <>I&apos;d like to order a Power Game playing uniform (a coach will confirm sizing &amp; details).</>)}
+      </div>
+    </div>
   );
   const levelStats = (prefix, title) => {
     const bats = form.skill === 'batting' || form.skill === 'all_rounder';
@@ -394,22 +430,46 @@ export default function ApplyFlow() {
                     <span className="text-3xl font-black text-white">${BLOCK_FEE}</span>
                   </div>
                 </div>
-                <button onClick={secure} disabled={submitting} className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
-                  {submitting ? 'Processing…' : `Pay $${BLOCK_FEE} & lock my spot`}
+                <div className="mb-5">{renderConsents()}</div>
+                <button onClick={secure} disabled={submitting || !consentsOk(form)} className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
+                  {submitting ? 'Processing…' : `Pay $${BLOCK_FEE} & secure my spot`}
                 </button>
-                <p className="text-white/30 text-[10px] uppercase tracking-widest text-center mt-3">Your spot is held for 10 minutes while you pay · groups subject to change</p>
+                <button onClick={applyWithoutPay} disabled={submitting || !consentsOk(form)} className="w-full mt-3 bg-transparent border border-white/20 hover:border-white/40 disabled:opacity-40 disabled:cursor-not-allowed text-white/80 font-bold uppercase tracking-widest text-[11px] rounded-full px-6 py-3.5 transition-all">
+                  Apply without paying — request a call first
+                </button>
+                {!consentsOk(form) && <p className="text-white/40 text-[11px] text-center mt-3">Please accept the compliances above to continue.</p>}
+                <p className="text-white/30 text-[10px] uppercase tracking-widest text-center mt-3">Paying holds your spot for the block · applying without paying does not secure a spot · groups subject to change</p>
               </div>
             )}
 
-            {/* ── REVIEW (soft path) ── */}
-            {step === 'review' && (
+            {/* ── REVIEW / WAITLIST (soft path) — submit with consents, no payment ── */}
+            {step === 'review' && result && (
+              <div>
+                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-2">{CENTRE_BY_SLUG[form.centre]?.comingSoon ? 'Register your interest' : 'Apply for coach review'}</h1>
+                <p className="text-white/50 text-sm mb-5 max-w-sm">
+                  {CENTRE_BY_SLUG[form.centre]?.comingSoon
+                    ? `This venue's days & times are being confirmed — submit your details and we'll offer you a spot the moment it opens. No payment needed yet.`
+                    : `Submit your details and a Power Game coach will personally review your cricket and be in touch about the best squad for you. No payment needed yet.`}
+                </p>
+                <div className="mb-5">{renderConsents()}</div>
+                <button onClick={submitReview} disabled={submitting || !consentsOk(form)} className="w-full bg-rr-blue hover:bg-rr-blue/80 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all">
+                  {submitting ? 'Submitting…' : 'Submit my application'}
+                </button>
+                {!consentsOk(form) && <p className="text-white/40 text-[11px] text-center mt-3">Please accept the compliances above to continue.</p>}
+              </div>
+            )}
+
+            {/* ── REVIEWED / SUBMITTED — soft-path thank-you (no payment taken) ── */}
+            {(step === 'reviewed' || step === 'submitted') && (
               <div className="text-center py-8">
                 <div className="w-16 h-16 rounded-full bg-rr-blue/20 border border-rr-blue/40 flex items-center justify-center mx-auto mb-5"><Check className="w-8 h-8 text-rr-blue" /></div>
-                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-3">You're in our hands</h1>
+                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-3">{step === 'submitted' ? 'Application received' : "You're in our hands"}</h1>
                 <p className="text-white/60 text-sm max-w-sm mx-auto mb-6">
-                  {CENTRE_BY_SLUG[form.centre]?.comingSoon
-                    ? `Thanks ${form.player_name?.split(' ')[0] || 'champ'} — that venue's days & times are being locked in now. We've saved your details and your cricket profile, and we'll offer you a spot the moment it opens.`
-                    : `Thanks ${form.player_name?.split(' ')[0] || 'champ'} — a Power Game coach will personally review your cricket and be in touch about the best squad for you.`} No payment needed yet.
+                  {step === 'submitted'
+                    ? `Thanks ${form.player_name?.split(' ')[0] || 'champ'} — we've got your full application. A Power Game coach will call you about your spot and answer any questions. No payment was taken.`
+                    : (CENTRE_BY_SLUG[form.centre]?.comingSoon
+                        ? `Thanks ${form.player_name?.split(' ')[0] || 'champ'} — we've saved your details and will offer you a spot the moment this venue opens.`
+                        : `Thanks ${form.player_name?.split(' ')[0] || 'champ'} — a coach will review your cricket and be in touch about the best squad for you.`)}
                 </p>
               </div>
             )}
