@@ -192,14 +192,22 @@ export default function ApplyFlow({ embedded = false }) {
     }
   }
 
-  // Soft path (below-floor review or coming-soon venue) — submit with consents, no payment.
+  // Soft path — submit with consents, no payment. Three audiences:
+  //  • placed player who wants a chat first → standard application + callback request
+  //  • below-floor / coming-soon → capability review or venue waitlist
   async function submitReview() {
     if (submitting) return;
     setSubmitting(true);
     setErrors([]);
     try {
-      await submitApplication(form, result.placement, null, { kind: 'capability', comingSoon: !!CENTRE_BY_SLUG[form.centre]?.comingSoon, centreName: CENTRE_BY_SLUG[form.centre]?.name });
-      setStep('reviewed');
+      if (reviewIsCallback) {
+        await submitApplication(form, result.placement, selected, { kind: 'standard', intent: 'callback', centreName: CENTRE_BY_SLUG[form.centre]?.name });
+        if (hold) await inventory.release(hold.holdId); // not paying now — free any held spot
+        setStep('submitted');
+      } else {
+        await submitApplication(form, result.placement, null, { kind: 'capability', comingSoon: comingSoonVenue, centreName: CENTRE_BY_SLUG[form.centre]?.name });
+        setStep('reviewed');
+      }
     } catch (_e) {
       setErrors(['Could not submit — please try again.']);
     } finally {
@@ -210,6 +218,11 @@ export default function ApplyFlow({ embedded = false }) {
   const matchingSquads = result && !result.placement.requiresReview
     ? squadsForPlacement({ centre: form.centre, band: result.placement.placedBand, stream: result.placement.stream })
     : [];
+  const comingSoonVenue = !!CENTRE_BY_SLUG[form.centre]?.comingSoon;
+  // The soft 'review' step serves three audiences: a below-floor coach review, a
+  // coming-soon venue waitlist, and a *placed* player who'd rather talk first — that
+  // last one is a callback request (qualified), not a capability review.
+  const reviewIsCallback = !!(result && !result.placement.requiresReview && !comingSoonVenue);
   // eslint-disable-next-line no-unused-vars
   const _tick = spotsTick; // dependency for live spot reads below
 
@@ -226,7 +239,7 @@ export default function ApplyFlow({ embedded = false }) {
     <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3 text-left">
       <div className="text-[11px] font-black uppercase tracking-widest text-rr-pink mb-1">Compliance &amp; permissions</div>
       {consentRow('accept_playing_standard', <>I understand places are subject to meeting the program&apos;s minimum playing standard, and squads/times are subject to change.</>)}
-      {consentRow('accept_terms', <>I have read and agree to the <a href="/terms-conditions" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Terms &amp; Conditions</a> and <a href="/privacy-policy" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Privacy Policy</a>, and confirm all information provided is accurate.</>)}
+      {consentRow('accept_terms', <>I have read and agree to the <a href="/terms-conditions" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Terms &amp; Conditions</a> and <a href="/privacy-policy" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Privacy Policy</a>, and confirm all information provided is accurate — I understand false information may void my application (refund less processing fees).</>)}
       {consentRow('accept_player_code', <>I have read, understood and agree to the <a href="/assets/RRA_Player_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Player Code of Conduct</a>.</>)}
       {isMinor(form.player_dob) && consentRow('accept_parent_code', <>I have read, understood and agree to the <a href="/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Parent/Guardian Code of Conduct</a>.</>)}
       {consentRow('accept_social_media', <>I&apos;m happy for photos/videos featuring the player to be used on RRA Melbourne&apos;s social media &amp; marketing channels.</>)}
@@ -353,6 +366,10 @@ export default function ApplyFlow({ embedded = false }) {
               <div className="space-y-4">
                 <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Your cricket — last 3 years</h1>
                 <p className="text-white/50 text-sm mb-3">Tell us the highest level you've played in the last <span className="text-white">three years</span>. Add <span className="text-rr-pink font-bold">representative</span> cricket, <span className="text-rr-pink font-bold">senior</span> cricket, or <span className="text-rr-pink font-bold">both</span> — whichever you've played.</p>
+                <div className="flex items-start gap-2 bg-amber-400/10 border border-amber-400/30 rounded-lg px-3 py-2.5 text-amber-200/90 text-xs leading-snug mb-1">
+                  <AlertCircle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+                  <span><span className="font-bold text-amber-200">Honesty is required.</span> We may verify the levels you list. Applications can be rejected if false information is provided — refunds are made less processing fees.</span>
+                </div>
                 <Field label="Representative cricket — highest level">
                   <select className={inputCls} value={form.rep_level} onChange={(e) => set('rep_level', e.target.value)}>
                     <option value="">— none / haven't played rep —</option>
@@ -388,7 +405,7 @@ export default function ApplyFlow({ embedded = false }) {
                     <div className="text-white/40 text-sm mt-2">Matching you to the right squad</div>
                   </div>
                 ) : (
-                  <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} onContinue={afterReveal} />
+                  <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} onContinue={afterReveal} onRequestReview={() => setStep('review')} />
                 )}
               </div>
             )}
@@ -457,15 +474,17 @@ export default function ApplyFlow({ embedded = false }) {
             {/* ── REVIEW / WAITLIST (soft path) — submit with consents, no payment ── */}
             {step === 'review' && result && (
               <div>
-                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-2">{CENTRE_BY_SLUG[form.centre]?.comingSoon ? 'Register your interest' : 'Apply for coach review'}</h1>
+                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-2">{comingSoonVenue ? 'Register your interest' : reviewIsCallback ? 'Request a call' : 'Apply for coach review'}</h1>
                 <p className="text-white/50 text-sm mb-5 max-w-sm">
-                  {CENTRE_BY_SLUG[form.centre]?.comingSoon
+                  {comingSoonVenue
                     ? `This venue's days & times are being confirmed — submit your details and we'll offer you a spot the moment it opens. No payment needed yet.`
-                    : `Submit your details and a Power Game coach will personally review your cricket and be in touch about the best squad for you. No payment needed yet.`}
+                    : reviewIsCallback
+                      ? `No rush. Submit your details and a Power Game coach will call you to talk through your offer and answer any questions before you commit. No payment needed yet.`
+                      : `Submit your details and a Power Game coach will personally review your cricket and be in touch about the best squad for you. No payment needed yet.`}
                 </p>
                 <div className="mb-5">{renderConsents()}</div>
                 <button onClick={submitReview} disabled={submitting || !consentsOk(form)} className="w-full bg-rr-blue hover:bg-rr-blue/80 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all">
-                  {submitting ? 'Submitting…' : 'Submit my application'}
+                  {submitting ? 'Submitting…' : reviewIsCallback ? 'Request my call' : 'Submit my application'}
                 </button>
                 {!consentsOk(form) && <p className="text-white/40 text-[11px] text-center mt-3">Please accept the compliances above to continue.</p>}
               </div>

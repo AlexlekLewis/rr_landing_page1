@@ -8,19 +8,28 @@ import OverviewSection from './OverviewSection';
 import FeaturesBenefits from './FeaturesBenefits';
 import PricingSection from './PricingSection';
 import CoachesSection from './CoachesSection';
+import CentresSection from './CentresSection';
 import PartnerStack from './PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
-import { ClipboardList, Sparkles, CalendarClock, ShieldCheck } from 'lucide-react';
+import { MapPin, User, ClipboardList, Sparkles, ShieldCheck, AlertTriangle, Telescope, Zap, Flame } from 'lucide-react';
 
 // The apply funnel renders inline in the #apply section so applicants never leave /PGP2026.
 const ApplyFlow = React.lazy(() => import('./apply/ApplyFlow'));
 
-// Visual "how it works" — icon-led so it reads at a glance (minimal text).
+// The application process — the real five steps a player moves through in the funnel
+// below. Step 3 carries the honesty warning; step 4 is the offer / review fork.
 const HOW_STEPS = [
-    { Icon: ClipboardList, title: 'Tell us your cricket', sub: 'A few quick questions — about 3 minutes.' },
-    { Icon: Sparkles, title: 'Get matched', sub: 'We place you by ability & age group.' },
-    { Icon: CalendarClock, title: 'Pick your time', sub: 'Choose a squad session at your centre.' },
-    { Icon: ShieldCheck, title: 'Secure your spot', sub: "Pay & you're in — places are limited." },
+    { Icon: MapPin, title: 'Choose your venue', sub: 'Pick the centre that suits you — Williamstown, Hallam or Mickleham.' },
+    { Icon: User, title: 'Player details', sub: 'Who’s playing, and the best way to reach you.' },
+    { Icon: ClipboardList, title: 'Playing history', sub: 'Tell us the highest level you’ve played in the last three years.', note: 'Honesty is required — applications may be rejected if false information is provided (refund less processing fees).' },
+    { Icon: Sparkles, title: 'Get your offer', sub: 'Accept your squad offer and choose your time — or apply for a review / request a call for more information.' },
+    { Icon: ShieldCheck, title: 'Secure your spot', sub: 'Lock in your place for the 8-week block.' },
+];
+
+// The talent we're built to discover — examples of players the rep system can miss.
+const DISCOVERY_EXAMPLES = [
+    { Icon: Zap, label: 'A fast bowler who needs structure' },
+    { Icon: Flame, label: 'A power hitter learning to play the future' },
 ];
 
 const SECTIONS = [
@@ -33,6 +42,7 @@ const SECTIONS = [
     'pricing',
     'academy-video',
     'coaches',
+    'centres',
     'apply',
     'partners',
 ];
@@ -110,6 +120,10 @@ const PowerGame = () => {
                     <CoachesSection />
                 </div>
 
+                <div id="centres">
+                    <CentresSection />
+                </div>
+
                 {/* Combined: Secure your place + How it works (process steps) + apply funnel inline */}
                 <div id="apply" className="bg-rr-dark text-white scroll-mt-24">
                     {!showApply ? (
@@ -117,25 +131,65 @@ const PowerGame = () => {
                             <div className="max-w-5xl mx-auto text-center">
                                 <div className="text-rr-pink font-black uppercase tracking-[0.3em] text-xs mb-3">Secure your place</div>
                                 <h2 className="text-3xl md:text-5xl font-black uppercase tracking-wide mb-4">Earn your place</h2>
-                                <p className="text-white/60 mb-2 max-w-xl mx-auto">Qualify on your cricket, get matched to a squad at your level &amp; venue, and lock in your spot — about three minutes.</p>
+                                <p className="text-white/60 mb-2 max-w-xl mx-auto">Five steps to find the squad that&apos;s right for your development — about three minutes.</p>
                                 <p className="text-white/40 text-sm mb-12">The Power Game · 8-week block · <span className="text-white font-bold">$960</span></p>
 
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                                <ol className="max-w-2xl mx-auto text-left">
                                     {HOW_STEPS.map((s, i) => (
-                                        <div key={i} className="relative bg-white/5 border border-white/10 rounded-2xl p-6 pt-8 flex flex-col items-center text-center">
-                                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-rr-pink text-white font-black text-sm flex items-center justify-center shadow-lg">{i + 1}</div>
-                                            <div className="w-16 h-16 rounded-2xl bg-rr-pink/10 text-rr-pink flex items-center justify-center mb-4"><s.Icon className="w-8 h-8" strokeWidth={2.2} /></div>
-                                            <div className="font-black uppercase tracking-wide text-white text-base mb-1">{s.title}</div>
-                                            <div className="text-white/60 text-sm leading-snug">{s.sub}</div>
-                                        </div>
+                                        <li key={i} className="relative flex gap-4 sm:gap-5 pb-8 last:pb-0">
+                                            {i < HOW_STEPS.length - 1 && (
+                                                <span aria-hidden className="absolute left-6 top-12 bottom-0 w-px bg-gradient-to-b from-rr-pink/40 to-white/5" />
+                                            )}
+                                            <div className="relative z-10 flex-shrink-0 w-12 h-12 rounded-full bg-rr-dark border-2 border-rr-pink/40 text-rr-pink flex items-center justify-center">
+                                                <s.Icon className="w-5 h-5" strokeWidth={2.3} />
+                                                <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-rr-pink text-white text-[10px] font-black flex items-center justify-center">{i + 1}</span>
+                                            </div>
+                                            <div className="flex-1 pt-1.5">
+                                                <h3 className="text-base md:text-lg font-black uppercase tracking-wide text-white leading-tight">{s.title}</h3>
+                                                <p className="text-white/55 text-sm mt-1 leading-snug">{s.sub}</p>
+                                                {s.note && (
+                                                    <div className="mt-2.5 flex items-start gap-2 bg-amber-400/10 border border-amber-400/25 rounded-lg px-3 py-2">
+                                                        <AlertTriangle className="w-3.5 h-3.5 text-amber-400 flex-shrink-0 mt-0.5" strokeWidth={2.4} />
+                                                        <span className="text-amber-200/90 text-xs leading-snug">{s.note}</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </li>
                                     ))}
+                                </ol>
+
+                                {/* Discovery / review path — for talent the rep system hasn't caught yet. */}
+                                <div className="mt-10 max-w-3xl mx-auto text-left bg-rr-blue/10 border border-rr-blue/30 rounded-2xl p-6 md:p-8">
+                                    <div className="flex flex-col sm:flex-row items-start gap-5">
+                                        <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-rr-blue to-rr-pink flex items-center justify-center shadow-lg">
+                                            <Telescope className="w-6 h-6 text-white" strokeWidth={2.2} />
+                                        </div>
+                                        <div>
+                                            <div className="text-rr-pink font-black uppercase tracking-[0.25em] text-[11px] mb-2">We&apos;re in the business of discovering talent</div>
+                                            <h3 className="text-xl md:text-2xl font-black uppercase tracking-wide text-white mb-2">Not caught by the rep system? Apply anyway.</h3>
+                                            <p className="text-white/60 text-sm leading-relaxed mb-5">
+                                                Reps and selections miss players every year. If your cricket doesn&apos;t meet the
+                                                standard yet, your application isn&apos;t rejected — it goes to a real coach review.
+                                                If a Power Game coach sees something, they&apos;ll be in touch about the right squad
+                                                for your development. No payment until your spot is confirmed.
+                                            </p>
+                                            <div className="flex flex-col sm:flex-row gap-2.5">
+                                                {DISCOVERY_EXAMPLES.map((ex, i) => (
+                                                    <div key={i} className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full pl-3 pr-4 py-2">
+                                                        <ex.Icon className="w-4 h-4 text-rr-pink flex-shrink-0" strokeWidth={2.4} />
+                                                        <span className="text-xs font-bold text-white/80">{ex.label}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div className="mt-12">
+                                <div className="mt-10">
                                     <button onClick={() => setShowApply(true)} className="inline-flex items-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-8 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
                                         Start your application →
                                     </button>
-                                    <p className="text-white/30 text-[11px] mt-4">Places are subject to meeting the program&apos;s minimum standard.</p>
+                                    <p className="text-white/30 text-[11px] mt-4">Every application is personally reviewed by our coaching team.</p>
                                 </div>
                             </div>
                         </div>
