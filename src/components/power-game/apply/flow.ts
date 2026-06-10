@@ -5,7 +5,7 @@
 import { computeDna, getAge, type ComputeDnaInput } from "../../../lib/scoring/engine";
 import { COMPETITION_TIERS } from "../../../lib/scoring/ladder";
 import { placeFromDna, type Placement } from "../../../lib/scoring/guardrail";
-import { clearsFloor } from "./levels";
+import { clearsFloor, isRepLevel } from "./levels";
 import type { DnaResult } from "../../../lib/scoring/engine";
 
 export const CURRENT_SEASON = "2025/26";
@@ -188,6 +188,25 @@ export interface PlacementResult {
 export function computePlacement(f: ApplyForm): PlacementResult {
   const dna = computeDna(buildEngineInput(f));
   let placement = placeFromDna(dna);
+
+  // Alex's placement rules (10 Jun 2026):
+  // 1) A strong-for-age player goes straight into the TOP tier of their own age group —
+  //    no review detour. (A coach may still offer the bottom tier of the band above;
+  //    that's a manual move, the flag is kept for the admin view.)
+  if (placement.playFlag === "play_up_review") {
+    placement = {
+      ...placement,
+      reviewReasons: placement.reviewReasons.filter((r) => r !== "play_up_review"),
+      requiresReview: dna.needsAdminReview || placement.stream === "review",
+    };
+  }
+  // 2) Making ANY representative level (VMCU and up) guarantees at least the lower
+  //    (Pathway) squad of their age group — playing rep AT your age never drops you
+  //    to review on tier alone.
+  if (placement.stream === "review" && placement.age != null && isRepLevel(f.rep_level) && dna.eligibilityStatus === "eligible") {
+    placement = { ...placement, stream: "pathway", requiresReview: dna.needsAdminReview };
+  }
+
   // Power Game floor: representative cricket, Premier/Sub-District, or association senior
   // (2nd grade & up) clears it. Below 2nd grade / social cricket → coach review (no offer).
   if (!clearsFloor(f.rep_level) && !clearsFloor(f.club_level)) {

@@ -108,6 +108,11 @@ const CLEARING_CLUB = new Set([
   "CS-1T", "CS-2T", "CS-1S", "CS-2S", "CW-1",
 ]);
 
+/** True when the code is a REPRESENTATIVE level (VMCU and up). */
+export function isRepLevel(code?: string | null): boolean {
+  return !!code && REP_CODES.has(code);
+}
+
 /**
  * Clears the Power Game floor if it's representative cricket, Premier, Sub-District, or
  * association senior at 2nd grade & up. Below 2nd grade / social cricket does NOT clear

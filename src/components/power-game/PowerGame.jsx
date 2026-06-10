@@ -19,7 +19,7 @@ const ApplyFlow = React.lazy(() => import('./apply/ApplyFlow'));
 // The application process — the real five steps a player moves through in the funnel
 // below. Step 3 carries the honesty warning; step 4 is the offer / review fork.
 const HOW_STEPS = [
-    { Icon: MapPin, title: 'Choose your venue', sub: 'Pick the centre that suits you — Williamstown, Hallam or Mickleham.' },
+    { Icon: MapPin, title: 'Choose your venue', sub: 'Pick the centre that suits you — Williamstown or Hallam, with a third venue coming soon.' },
     { Icon: User, title: 'Player details', sub: 'Who’s playing, and the best way to reach you.' },
     { Icon: ClipboardList, title: 'Playing history', sub: 'Tell us the highest level you’ve played in the last three years.', note: 'Honesty is required — applications may be rejected if false information is provided (refund less processing fees).' },
     { Icon: Sparkles, title: 'Get your offer', sub: 'Accept your squad offer and choose your time — or apply for a review / request a call for more information.' },

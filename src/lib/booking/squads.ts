@@ -12,16 +12,10 @@
 //   →  7 lanes 13/13 · 5 lanes 10/9 · 4 lanes 8/7   (matches the sheet's
 //      mini-squad capacities 13 / 10 / 8 and session totals 52 / 38 / 26 / 15)
 //
-// OFFICIAL grid (per the sheet):
+// OFFICIAL grid (per the sheet, Netz Friday = two 2-hour blocks CONFIRMED by Alex):
 //   Hallam     Sat 12–4pm (5 lanes, 2 squads) + Sat 4–6pm (4 lanes, 1 squad)
-//   The Netz   Fri (5 lanes, 2 squads) + Sat 2–4pm & 4–6pm (7 lanes, 1 each)
-//   Mickleham  Fri 5:30–9:30pm + Sat 2–6pm (7 lanes, 2 squads each)
-// ⚠ ASSUMPTION (Alex to confirm): the sheet labels the Netz Friday "7:30–9:30"
-//   but gives it 2 squads / 38 capacity / 4 session-hours — the capacity maths
-//   only works as two sequential 2-hour blocks, so it's modelled 5:30–7:30 +
-//   7:30–9:30 (mirroring Mickleham's Friday). Band→block mapping (older=later)
-//   is also Alex-confirmable.
-// ⚠ Mickleham's street address still needed from Alex.
+//   The Netz   Fri 5:30–9:30pm (5 lanes, 2 squads) + Sat 2–4pm & 4–6pm (7 lanes)
+//   Third venue (North): TBC — interest only, no squads yet.
 // ============================================================
 
 export type Stream = "performance" | "pathway";
@@ -68,8 +62,8 @@ export interface Squad {
 export const CENTRES: Centre[] = [
   { slug: "williamstown", name: "The Netz", suburb: "Williamstown", address: "37 Robbins Cct, Williamstown North VIC 3016" },
   { slug: "hallam", name: "Elite Cricket Centre", suburb: "Hallam", address: "8-9 Becon Ct, Hallam VIC 3803" },
-  // Officially scheduled (capacity sheet 10 Jun 2026) — street address TBC from Alex.
-  { slug: "mickleham", name: "Mickleham", suburb: "Mickleham", address: "Address to be confirmed" },
+  // Third venue (North) — not confirmed yet. Captures interest only; no bookable squads.
+  { slug: "venue-3", name: "New Venue", suburb: "Location to be announced", address: "To be announced", comingSoon: true },
 ];
 
 /** Centres that are open for booking now (have squads). */
@@ -91,7 +85,7 @@ interface RawBlock {
 }
 
 const BLOCKS: RawBlock[] = [
-  // ── The Netz — Williamstown (Fri 5 lanes · Sat 7 lanes) ──
+  // ── The Netz — Williamstown (Fri 5 lanes · Sat 7 lanes). Fri = 5:30–7:30 + 7:30–9:30 (confirmed). ──
   { idBase: "w-fri530-1416", centre: "williamstown", band: "14-16", day: "Friday", startTime: "5:30pm", endTime: "7:30pm", lanes: 5, blockLabel: "Fri 5:30–7:30pm", sortOrder: 1 },
   { idBase: "w-fri730-17", centre: "williamstown", band: "17+", day: "Friday", startTime: "7:30pm", endTime: "9:30pm", lanes: 5, blockLabel: "Fri 7:30–9:30pm", sortOrder: 2 },
   { idBase: "w-sat2-1214", centre: "williamstown", band: "12-14", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 7, blockLabel: "Sat 2–4pm", sortOrder: 3 },
@@ -101,12 +95,6 @@ const BLOCKS: RawBlock[] = [
   { idBase: "h-sat12-1214", centre: "hallam", band: "12-14", day: "Saturday", startTime: "12:00pm", endTime: "2:00pm", lanes: 5, blockLabel: "Sat 12–2pm", sortOrder: 1 },
   { idBase: "h-sat2-1416", centre: "hallam", band: "14-16", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 5, blockLabel: "Sat 2–4pm", sortOrder: 2 },
   { idBase: "h-sat4-17", centre: "hallam", band: "17+", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 4, blockLabel: "Sat 4–6pm", sortOrder: 3 },
-
-  // ── Mickleham (7 lanes throughout) ──
-  { idBase: "m-fri530-1416", centre: "mickleham", band: "14-16", day: "Friday", startTime: "5:30pm", endTime: "7:30pm", lanes: 7, blockLabel: "Fri 5:30–7:30pm", sortOrder: 1 },
-  { idBase: "m-fri730-17", centre: "mickleham", band: "17+", day: "Friday", startTime: "7:30pm", endTime: "9:30pm", lanes: 7, blockLabel: "Fri 7:30–9:30pm", sortOrder: 2 },
-  { idBase: "m-sat2-1214", centre: "mickleham", band: "12-14", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 7, blockLabel: "Sat 2–4pm", sortOrder: 3 },
-  { idBase: "m-sat4-1416", centre: "mickleham", band: "14-16", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 7, blockLabel: "Sat 4–6pm", sortOrder: 4 },
 ];
 
 export const SQUADS: Squad[] = BLOCKS.flatMap((b) =>

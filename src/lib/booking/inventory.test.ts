@@ -12,10 +12,10 @@ const oneSquad = [
 
 describe("squad grid integrity (official times, 10 Jun 2026)", () => {
   it("capacity is lane-driven: squad = round(lanes × 26/7), split perf-ceil / path-floor", () => {
-    expect(SQUADS.length).toBe(22); // 11 two-hour blocks × 2 teams
-    expect(CENTRES.length).toBe(3); // all three bookable (Mickleham now scheduled)
-    expect(ACTIVE_CENTRES.length).toBe(3);
-    expect(CENTRES.filter((c) => c.comingSoon).length).toBe(0);
+    expect(SQUADS.length).toBe(14); // 7 two-hour blocks × 2 teams
+    expect(CENTRES.length).toBe(3); // 2 bookable + 1 coming-soon (third venue TBC)
+    expect(ACTIVE_CENTRES.length).toBe(2);
+    expect(CENTRES.filter((c) => c.comingSoon).length).toBe(1);
     expect(squadsForPlacement({ centre: "venue-3", band: "14-16", stream: "performance" }).length).toBe(0);
     expect(teamCapacity(7, "performance")).toBe(13);
     expect(teamCapacity(7, "pathway")).toBe(13);
@@ -27,8 +27,8 @@ describe("squad grid integrity (official times, 10 Jun 2026)", () => {
     // session totals match the official sheet exactly
     expect(SQUADS.filter((s) => s.centre === "williamstown").reduce((s, q) => s + q.capacity, 0)).toBe(90); // 38 + 26 + 26
     expect(SQUADS.filter((s) => s.centre === "hallam").reduce((s, q) => s + q.capacity, 0)).toBe(53); // 38 + 15
-    expect(SQUADS.filter((s) => s.centre === "mickleham").reduce((s, q) => s + q.capacity, 0)).toBe(104); // 52 + 52
-    expect(SQUADS.reduce((s, q) => s + q.capacity, 0)).toBe(247);
+    expect(SQUADS.filter((s) => s.centre === "venue-3").length).toBe(0); // TBC venue has no squads
+    expect(SQUADS.reduce((s, q) => s + q.capacity, 0)).toBe(143);
   });
 
   it("two teams sharing a blockId make a full squad (26 at 7 lanes, 19 at 5, 15 at 4)", () => {
@@ -45,7 +45,7 @@ describe("squad grid integrity (official times, 10 Jun 2026)", () => {
   });
 
   it("every band has a 2-hour block at every centre; older bands run later", () => {
-    for (const centre of ["williamstown", "hallam", "mickleham"]) {
+    for (const centre of ["williamstown", "hallam"]) {
       for (const band of ["12-14", "14-16", "17+"]) {
         for (const stream of ["performance", "pathway"]) {
           expect(squadsForPlacement({ centre, band, stream }).length, `${centre} ${band} ${stream}`).toBeGreaterThan(0);
