@@ -46,7 +46,7 @@ const AUDIENCE = [
 
 const FeaturesBenefits = () => {
     return (
-        <section className="bg-white pt-8 md:pt-12 pb-24 md:pb-32">
+        <section className="bg-rr-page pt-8 md:pt-12 pb-24 md:pb-32">
             <div className="max-w-6xl mx-auto px-6">
                 <motion.div
                     className="text-center mb-12 md:mb-16"
@@ -61,10 +61,10 @@ const FeaturesBenefits = () => {
                             Who It's For
                         </span>
                     </div>
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-rr-dark uppercase tracking-wide mb-6">
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-wide mb-6">
                         IS THIS <span className="text-rr-pink">YOU</span>?
                     </h2>
-                    <p className="text-base md:text-lg text-rr-charcoal max-w-2xl mx-auto font-medium">
+                    <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto font-medium">
                         Built for representative-standard cricketers — from emerging 12-year-olds to established senior players — who want to add genuine power to their game. If you're playing VMCU / Country representative cricket or higher, this is for you.
                     </p>
                 </motion.div>
@@ -87,7 +87,7 @@ const FeaturesBenefits = () => {
                                 </div>
                                 <div className="min-w-0">
                                     <div className="text-[10px] font-black text-rr-pink uppercase tracking-widest mb-0.5">{item.tag}</div>
-                                    <h3 className="text-sm font-black text-rr-dark uppercase tracking-wide leading-tight mb-1">
+                                    <h3 className="text-sm font-black text-white uppercase tracking-wide leading-tight mb-1">
                                         {item.title}
                                     </h3>
                                     <p className="text-[13px] text-rr-charcoal font-medium leading-snug">
@@ -121,7 +121,7 @@ const FeaturesBenefits = () => {
                                         {item.tag}
                                     </span>
                                 </div>
-                                <h3 className="text-lg md:text-xl font-black text-rr-dark uppercase tracking-wide leading-tight mb-2">
+                                <h3 className="text-lg md:text-xl font-black text-white uppercase tracking-wide leading-tight mb-2">
                                     {item.title}
                                 </h3>
                                 <p className="text-sm text-rr-charcoal font-medium leading-relaxed">

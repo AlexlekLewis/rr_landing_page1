@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 const OverviewSection = () => {
     return (
-        <section className="bg-white pt-24 md:pt-32 pb-8 md:pb-12">
+        <section className="bg-rr-page pt-24 md:pt-32 pb-8 md:pb-12">
             <div className="max-w-4xl mx-auto px-6 text-center">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -18,18 +18,18 @@ const OverviewSection = () => {
                         </span>
                     </div>
 
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-rr-dark uppercase tracking-wide mb-8">
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-wide mb-8">
                         WHAT IS THE <span className="text-rr-pink">POWER GAME</span> PROGRAM?
                     </h2>
 
-                    <div className="space-y-5 text-base md:text-lg text-rr-charcoal font-medium leading-relaxed">
+                    <div className="space-y-5 text-base md:text-lg text-white/80 font-medium leading-relaxed">
                         <p>
                             Following the success of the Rajasthan Royals Academy's intensive 12-week T20 Elite Program, the Power Game Program is its evolution — an elite environment built around one idea: generating power on demand, across every discipline and format of the modern game.
                         </p>
                         <p>
                             Through 360 power hitting, the full spectrum of bowling, and explosive fielding, players learn to reach for power when the situation demands it — backed by biomechanics, data, and the coaching methodology that drives the Royals Way.
                         </p>
-                        <p className="text-rr-dark font-semibold">
+                        <p className="text-white font-semibold">
                             This is where like-skilled, like-motivated players train together to win from anywhere — preparing for your best season yet, earning a representative squad spot, moving up the grades, or landing on selectors' radars.
                         </p>
                     </div>

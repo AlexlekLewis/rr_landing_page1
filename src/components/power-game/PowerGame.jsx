@@ -49,7 +49,7 @@ const PowerGame = () => {
     }, []);
 
     return (
-        <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
+        <div className="min-h-screen bg-rr-page text-white font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
             <Navbar variant="power-game" />
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero">
@@ -112,18 +112,18 @@ const PowerGame = () => {
                 </div>
 
                 {/* How it works — icon-led process above the application (low-text for accessibility). */}
-                <div id="how-it-works" className="bg-white py-20 md:py-28 px-5 scroll-mt-24">
+                <div id="how-it-works" className="bg-rr-page py-20 md:py-28 px-5 scroll-mt-24">
                     <div className="max-w-5xl mx-auto text-center">
                         <div className="text-rr-pink font-black uppercase tracking-[0.3em] text-xs mb-3">How it works</div>
-                        <h2 className="text-3xl md:text-5xl font-black uppercase tracking-wide text-rr-dark mb-4">Four steps to your spot</h2>
-                        <p className="text-rr-dark/60 max-w-xl mx-auto mb-12">Apply online in a few minutes. If you qualify, you're offered a squad spot then and there — places are limited.</p>
+                        <h2 className="text-3xl md:text-5xl font-black uppercase tracking-wide text-white mb-4">Four steps to your spot</h2>
+                        <p className="text-white/60 max-w-xl mx-auto mb-12">Apply online in a few minutes. If you qualify, you're offered a squad spot then and there — places are limited.</p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                             {HOW_STEPS.map((s, i) => (
-                                <div key={i} className="relative bg-rr-dark/5 border border-rr-dark/10 rounded-2xl p-6 pt-8 flex flex-col items-center text-center">
+                                <div key={i} className="relative bg-white/5 border border-white/10 rounded-2xl p-6 pt-8 flex flex-col items-center text-center">
                                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-rr-pink text-white font-black text-sm flex items-center justify-center shadow-lg">{i + 1}</div>
                                     <div className="w-16 h-16 rounded-2xl bg-rr-pink/10 text-rr-pink flex items-center justify-center mb-4"><s.Icon className="w-8 h-8" strokeWidth={2.2} /></div>
-                                    <div className="font-black uppercase tracking-wide text-rr-dark text-base mb-1">{s.title}</div>
-                                    <div className="text-rr-dark/60 text-sm leading-snug">{s.sub}</div>
+                                    <div className="font-black uppercase tracking-wide text-white text-base mb-1">{s.title}</div>
+                                    <div className="text-white/60 text-sm leading-snug">{s.sub}</div>
                                 </div>
                             ))}
                         </div>
@@ -131,7 +131,7 @@ const PowerGame = () => {
                             <button onClick={() => setShowApply(true)} className="inline-flex items-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-8 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.4)]">
                                 Start your application →
                             </button>
-                            <div className="mt-4 flex items-center justify-center gap-2 text-rr-dark/50 font-bold uppercase tracking-widest text-[11px]">
+                            <div className="mt-4 flex items-center justify-center gap-2 text-white/50 font-bold uppercase tracking-widest text-[11px]">
                                 <ShieldCheck className="w-4 h-4 text-rr-pink" /> Spots are limited
                             </div>
                         </div>
