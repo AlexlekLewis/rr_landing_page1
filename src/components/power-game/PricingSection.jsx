@@ -19,7 +19,7 @@ const PHASES = [
         points: [
             'Minimum 2 hours per week for 8 weeks in your allocated squad',
             'Top Royals Academy coaches',
-            'Invite to the Royals High Performance Centre',
+            'Invite to the Royals High Performance Centre September and March Camps',
             'Access to our world-first game & development management application: Match Centre',
             'Performance tracking with our Performance Partners Full Track AI and Str8 Bat',
             'Program content based on developing power with bat, ball and in the field',
