@@ -16,8 +16,8 @@ const TIERS = [
         level: 'Venue Partners',
         size: 'medium',
         partners: [
-            { name: 'The Netz', logo: '' },
-            { name: 'Elite Cricket Centre', logo: '' },
+            { name: 'The Netz', logo: '/assets/powergame/partners/the-netz.svg' },
+            { name: 'Elite Cricket Centre', logo: '/assets/powergame/partners/elite-cricket-centre.webp' },
         ],
     },
     {
