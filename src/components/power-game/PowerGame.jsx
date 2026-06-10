@@ -17,7 +17,7 @@ const SECTIONS = [
     'hero',
     'quote-1',
     'overview',
-    'features-benefits',
+    'who-its-for',
     'quote-vaibhav',
     'video',
     'pricing',
@@ -60,7 +60,7 @@ const PowerGame = () => {
                     <OverviewSection />
                 </div>
 
-                <div id="features-benefits">
+                <div id="who-its-for">
                     <FeaturesBenefits />
                 </div>
 
