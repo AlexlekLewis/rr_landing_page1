@@ -13,12 +13,8 @@ const base: ApplyForm = {
   skill: "batting",
   batting_hand: "right",
   format: "t20",
-  rep_games: "12",
   rep_bat_avg: "40",
-  rep_bat_runs: "400",
-  club_games: "12",
   club_bat_avg: "35",
-  club_bat_runs: "350",
 };
 
 describe("two-layer level model + Power Game floor", () => {
@@ -31,10 +27,13 @@ describe("two-layer level model + Power Game floor", () => {
     expect(computePlacement({ ...base, club_level: "SD2" }).placement.reviewReasons).not.toContain("below_pg_floor");
   });
 
-  it("community association ALONE is below the floor → coach review", () => {
-    const { placement } = computePlacement({ ...base, club_level: "CS-2T" });
-    expect(placement.requiresReview).toBe(true);
-    expect(placement.reviewReasons).toContain("below_pg_floor");
+  it("association 2nd grade & up clears the floor; below 2nd grade → coach review", () => {
+    // 2nd-grade association now qualifies — no below-floor review
+    expect(computePlacement({ ...base, club_level: "CS-2T" }).placement.reviewReasons).not.toContain("below_pg_floor");
+    // below 2nd grade / social → review, no instant offer
+    const below = computePlacement({ ...base, club_level: "CS-BELOW" }).placement;
+    expect(below.requiresReview).toBe(true);
+    expect(below.reviewReasons).toContain("below_pg_floor");
   });
 
   it("captures one stats row PER level, rep flagged as the representative honour", () => {
@@ -47,14 +46,12 @@ describe("two-layer level model + Power Game floor", () => {
     expect(input.stats.find((s) => s.competitionCode === "P1M")!.batAverage).toBe(35);
   });
 
-  it("history step requires a rep and/or club level and games at each chosen level", () => {
+  it("history step requires at least one of rep / senior level (no games asked)", () => {
     expect(validateStep("history", { ...base, rep_level: "", club_level: "" })).toContain(
-      "Select your representative level and/or your highest club grade.",
+      "Add your representative and/or senior cricket — pick at least one.",
     );
-    expect(validateStep("history", { ...base, rep_level: "P16M", rep_games: "" })).toContain(
-      "Enter your games at representative level.",
-    );
-    expect(validateStep("history", { ...base, rep_level: "P16M" })).toEqual([]);
+    // a level + format is enough — match counts are no longer required
+    expect(validateStep("history", { ...base, rep_level: "P16M", club_level: "" })).toEqual([]);
   });
 });
 

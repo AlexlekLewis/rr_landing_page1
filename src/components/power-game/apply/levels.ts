@@ -90,18 +90,32 @@ export const CLUB_GROUPS: LevelGroup[] = [
       { code: "CW-1", label: "Women's Association — Top grade" },
     ],
   },
+  {
+    // Below the association floor → does NOT clear; routes to coach review (no instant offer / payment).
+    label: "Below 2nd grade — coach review",
+    options: [
+      { code: "CS-BELOW", label: "Association below 2nd grade / social cricket" },
+    ],
+  },
 ];
 
 const REP_CODES = new Set(REP_GROUPS.flatMap((g) => g.options.map((o) => o.code)));
-const PREMIER_SUBDIST = new Set(["P1M", "P2M", "P3M", "P4M", "P1F", "P2F", "SD1", "SD2", "SD3", "SD4", "SD-V1", "SD-V2", "SD-V3"]);
+// Club grades that clear the floor: Premier, Sub-District, AND association senior at
+// 2nd grade & up. Association BELOW 2nd grade (CS-BELOW) is deliberately excluded.
+const CLEARING_CLUB = new Set([
+  "P1M", "P2M", "P3M", "P4M", "P1F", "P2F",
+  "SD1", "SD2", "SD3", "SD4", "SD-V1", "SD-V2", "SD-V3",
+  "CS-1T", "CS-2T", "CS-1S", "CS-2S", "CW-1",
+]);
 
 /**
- * Clears the Power Game floor if it's representative cricket (VMCU+), Premier, or
- * Sub-District. Community/association club cricket alone does NOT clear it.
+ * Clears the Power Game floor if it's representative cricket, Premier, Sub-District, or
+ * association senior at 2nd grade & up. Below 2nd grade / social cricket does NOT clear
+ * it → coach review before any offer.
  */
 export function clearsFloor(code?: string | null): boolean {
   if (!code) return false;
-  return REP_CODES.has(code) || PREMIER_SUBDIST.has(code);
+  return REP_CODES.has(code) || CLEARING_CLUB.has(code);
 }
 
 /** Of the chosen rep/club codes, the highest-CTI one — where stats are scored. */

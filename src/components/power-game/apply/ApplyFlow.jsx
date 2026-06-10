@@ -68,8 +68,8 @@ export default function ApplyFlow({ embedded = false }) {
       setStep('history');
       return;
     }
-    const PERF = { ...BLANK_FORM, centre: 'williamstown', player_name: 'Sam Smith', player_dob: '2012-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'sam@example.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right', rep_level: 'P16M', format: 't20', rep_games: '10', rep_bat_avg: '38', rep_bat_runs: '420' };
-    const REVIEW = { ...BLANK_FORM, centre: 'williamstown', player_name: 'Alex Young', player_dob: '2011-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'alex@example.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right', club_level: 'CS-2T', format: 'od', club_games: '8', club_bat_avg: '22', club_bat_runs: '160' };
+    const PERF = { ...BLANK_FORM, centre: 'williamstown', player_name: 'Sam Smith', player_dob: '2012-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'sam@example.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right', rep_level: 'P16M', format: 't20', rep_bat_avg: '38' };
+    const REVIEW = { ...BLANK_FORM, centre: 'williamstown', player_name: 'Alex Young', player_dob: '2011-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'alex@example.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right', club_level: 'CS-BELOW', format: 'od', club_bat_avg: '22' };
     const demoForm = demo === 'review' ? REVIEW : PERF;
     if (demo === 'soldout') {
       (async () => { for (const id of ['w-fri-perf-1416', 'w-sat4-perf-1416']) for (let i = 0; i < 12; i++) await inventory.createHold({ squadId: id, ref: `seed-${id}-${i}` }); })();
@@ -243,9 +243,7 @@ export default function ApplyFlow({ embedded = false }) {
       <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
         <div className="text-[11px] font-black uppercase tracking-widest text-rr-pink">{title}</div>
         <div className="grid grid-cols-2 gap-3">
-          {statField(`${prefix}_games`, 'Games', 'e.g. 12')}
           {bats && statField(`${prefix}_bat_avg`, 'Batting average', 'e.g. 32')}
-          {bats && statField(`${prefix}_bat_runs`, 'Total runs', 'e.g. 420')}
           {bowls && statField(`${prefix}_bowl_avg`, 'Bowling average', 'e.g. 22')}
           {bowls && statField(`${prefix}_bowl_wkts`, 'Total wickets', 'e.g. 18')}
           {keeps && statField(`${prefix}_catches`, 'Catches', 'e.g. 14')}
@@ -353,9 +351,9 @@ export default function ApplyFlow({ embedded = false }) {
             {/* ── HISTORY ── */}
             {step === 'history' && (
               <div className="space-y-4">
-                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Your last two seasons</h1>
-                <p className="text-white/50 text-sm mb-3">Tell us the highest level you've played and your numbers there — it's how we place you.</p>
-                <Field label="Highest representative level (primary)">
+                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Your cricket — last 3 years</h1>
+                <p className="text-white/50 text-sm mb-3">Tell us the highest level you've played in the last <span className="text-white">three years</span>. Add <span className="text-rr-pink font-bold">representative</span> cricket, <span className="text-rr-pink font-bold">senior</span> cricket, or <span className="text-rr-pink font-bold">both</span> — whichever you've played.</p>
+                <Field label="Representative cricket — highest level">
                   <select className={inputCls} value={form.rep_level} onChange={(e) => set('rep_level', e.target.value)}>
                     <option value="">— none / haven't played rep —</option>
                     {repGroups.map((g) => (
@@ -363,20 +361,20 @@ export default function ApplyFlow({ embedded = false }) {
                     ))}
                   </select>
                 </Field>
-                <Field label="Highest club grade (optional)">
+                <Field label="Senior cricket — highest grade">
                   <select className={inputCls} value={form.club_level} onChange={(e) => set('club_level', e.target.value)}>
-                    <option value="">— none / below 2nd grade —</option>
+                    <option value="">— none / haven't played senior —</option>
                     {clubGroups.map((g) => (
                       <optgroup key={g.label} label={g.label}>{g.options.map((o) => <option key={o.code} value={o.code}>{o.label}</option>)}</optgroup>
                     ))}
                   </select>
                 </Field>
-                <p className="text-white/40 text-xs -mt-1">We place you on your <span className="text-rr-pink font-bold">representative</span> level — club grade adds context. Rep floor is VMCU; club is 2nd grade &amp; up.</p>
+                <p className="text-white/40 text-xs -mt-1">Representative cricket, or senior cricket at <span className="text-white">2nd grade &amp; above</span>, earns an instant squad offer. <span className="text-white">Below 2nd grade</span> (or none) goes to a quick coach review first — no payment until a coach confirms your spot.</p>
                 <Field label="Format you mostly played"><select className={inputCls} value={form.format} onChange={(e) => set('format', e.target.value)}>
                   <option value="">— select —</option><option value="t20">T20</option><option value="od">One-day</option><option value="multiday">Two/Multi-day</option>
                 </select></Field>
-                {form.rep_level && levelStats('rep', 'Your representative-level numbers')}
-                {form.club_level && levelStats('club', 'Your club-level numbers')}
+                {form.rep_level && levelStats('rep', 'Your representative numbers')}
+                {form.club_level && levelStats('club', 'Your senior cricket numbers')}
               </div>
             )}
 

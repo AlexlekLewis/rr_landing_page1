@@ -127,7 +127,6 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     fireEvent.change(levelSel, { target: { value: "P16M" } });
     const fmtSel = (screen.getAllByRole("combobox") as HTMLSelectElement[]).find((s) => [...s.options].some((o) => o.value === "t20"))!;
     fireEvent.change(fmtSel, { target: { value: "t20" } });
-    fireEvent.change(screen.getByPlaceholderText(/e\.g\. 12/), { target: { value: "10" } });
     fireEvent.change(screen.getByPlaceholderText(/e\.g\. 32/), { target: { value: "38" } });
     fireEvent.click(screen.getByText("Continue"));
 
