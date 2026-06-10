@@ -24,7 +24,6 @@ const PHASES = [
             'Performance tracking with our Performance Partners Full Track AI and Str8 Bat',
             'Program content based on developing power with bat, ball and in the field',
             'Access to the Australian-first NeuroVision program built for Royals Academy',
-            'Eligibility for the September Royals High Performance Camp in Nagpur',
             'Selection opportunities for our Power League match series played at various times from Sept 2026 - April 2027',
             'Exposure to clubs across Victoria scouting the next T20 talent',
         ],
