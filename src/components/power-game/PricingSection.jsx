@@ -107,7 +107,7 @@ const PhaseCard = ({ phase, idx }) => (
         <div className="text-base md:text-lg font-black text-white uppercase tracking-wide mb-2">
             {phase.tagline}
         </div>
-        <p className="text-sm text-white/75 font-medium leading-relaxed mb-5 flex-1">
+        <p className="text-sm text-white/75 font-medium leading-relaxed mb-5">
             {phase.description}
         </p>
 
@@ -180,7 +180,7 @@ const PricingSection = () => {
                 </motion.div>
 
                 {/* Phases — vertical cards in a row */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-12">
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-[1.3fr_1fr_1fr] gap-6 md:gap-8 lg:items-start mb-12">
                     {PHASES.map((phase, idx) => (
                         <PhaseCard key={phase.name} phase={phase} idx={idx} />
                     ))}
