@@ -7,6 +7,7 @@ import VideoSection from './VideoSection';
 import OverviewSection from './OverviewSection';
 import FeaturesBenefits from './FeaturesBenefits';
 import PricingSection from './PricingSection';
+import CoachesSection from './CoachesSection';
 import PartnerStack from './PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
@@ -22,6 +23,7 @@ const SECTIONS = [
     'video',
     'pricing',
     'academy-video',
+    'coaches',
     'apply',
     'partners',
 ];
@@ -93,6 +95,10 @@ const PowerGame = () => {
                         videoSrc="/assets/powergame/royals-academy-video.mp4"
                         posterSrc="/assets/powergame/royals-academy-poster.jpg"
                     />
+                </div>
+
+                <div id="coaches">
+                    <CoachesSection />
                 </div>
 
                 {/* Registration IS the ability funnel (qualify → place → pay) at /PGP2026/apply. */}
