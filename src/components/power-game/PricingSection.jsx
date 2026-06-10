@@ -13,9 +13,9 @@ const PHASES = [
         price: 960,
         priceRate: '$60 per hour',
         onSale: true,
-        tagline: 'Foundation & Identity',
+        tagline: 'A Powerful Start',
         description:
-            "Establish strengths and archetype. Build the game-intelligence toolset and the technical foundations.",
+            "Our Academy players demonstrate rapid growth in their game. This Phase 1 is perfect timing to kick-start your season and get off to a flyer.",
         points: [
             'Minimum 2 hours per week for 8 weeks in your allocated squad',
             'Top Royals Academy coaches',
