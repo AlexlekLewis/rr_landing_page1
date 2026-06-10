@@ -1,0 +1,122 @@
+// AUTO-GENERATED from Elite Player Portal migration 032_v2_reference_ladder.sql
+// CTI ladder = single source of truth for competition strength. Regenerate; do not hand-edit.
+
+export interface LadderEntry {
+  code: string;
+  name: string;
+  shield: string | null;
+  gender: string;
+  ageGroup: string | null;
+  category: string;
+  cti: number;
+  age: number | null;
+}
+
+export const LADDER: LadderEntry[] = [
+  { code: "CA-M", name: "Australian Men's Team", shield: null, gender: "M", ageGroup: "Open", category: "NATIONAL", cti: 1.0, age: 28.0 },
+  { code: "CA-F", name: "Australian Women's Team", shield: null, gender: "F", ageGroup: "Open", category: "NATIONAL", cti: 1.0, age: 26.0 },
+  { code: "CA-AM", name: "Australia A \u2014 Men's", shield: null, gender: "M", ageGroup: "Open", category: "NATIONAL", cti: 0.97, age: 24.0 },
+  { code: "CA-AF", name: "Australia A \u2014 Women's", shield: null, gender: "F", ageGroup: "Open", category: "NATIONAL", cti: 0.97, age: 23.0 },
+  { code: "CA-19M", name: "U19 National Championships \u2014 M", shield: null, gender: "M", ageGroup: "U19", category: "NATIONAL", cti: 0.9, age: 18.0 },
+  { code: "CA-19F", name: "U19 National Championships \u2014 F", shield: null, gender: "F", ageGroup: "U19", category: "NATIONAL", cti: 0.9, age: 17.5 },
+  { code: "CA-17M", name: "U17 National Championships", shield: null, gender: "M", ageGroup: "U17", category: "NATIONAL", cti: 0.85, age: 16.0 },
+  { code: "CA-16F", name: "U16 National Championships", shield: null, gender: "F", ageGroup: "U16", category: "NATIONAL", cti: 0.85, age: 15.0 },
+  { code: "CA-ACC", name: "Australian Country Championships", shield: null, gender: "M/F", ageGroup: "Open", category: "NATIONAL", cti: 0.75, age: 26.0 },
+  { code: "CA-SSA15", name: "SSA U15 Championships", shield: null, gender: "Mixed", ageGroup: "U15", category: "NATIONAL", cti: 0.7, age: 14.0 },
+  { code: "CA-SSA12", name: "SSA U12 Championships", shield: null, gender: "Mixed", ageGroup: "U12", category: "NATIONAL", cti: 0.6, age: 11.5 },
+  { code: "VIC-SS", name: "Sheffield Shield", shield: null, gender: "M", ageGroup: "Open", category: "STATE", cti: 0.98, age: 27.0 },
+  { code: "VIC-OD", name: "Marsh One-Day Cup", shield: null, gender: "M", ageGroup: "Open", category: "STATE", cti: 0.93, age: 27.0 },
+  { code: "VIC-BBL", name: "BBL (Stars / Renegades)", shield: null, gender: "M", ageGroup: "Open", category: "STATE", cti: 0.93, age: 27.0 },
+  { code: "VIC-WNCL", name: "WNCL", shield: null, gender: "F", ageGroup: "Open", category: "STATE", cti: 0.93, age: 25.0 },
+  { code: "VIC-WBBL", name: "WBBL (Stars / Renegades)", shield: null, gender: "F", ageGroup: "Open", category: "STATE", cti: 0.93, age: 24.0 },
+  { code: "VIC-2XI", name: "Victorian 2nd XI", shield: null, gender: "M", ageGroup: "Open", category: "STATE", cti: 0.88, age: 22.0 },
+  { code: "VP-19M", name: "VIC U19 Emerging (Metro)", shield: null, gender: "M", ageGroup: "U19", category: "STATE_PATHWAY", cti: 0.85, age: 18.0 },
+  { code: "VP-19MC", name: "VIC U19 Emerging (Country)", shield: null, gender: "M", ageGroup: "U19", category: "STATE_PATHWAY", cti: 0.85, age: 18.0 },
+  { code: "VP-17M", name: "VIC U17 Emerging (Metro)", shield: null, gender: "M", ageGroup: "U17", category: "STATE_PATHWAY", cti: 0.8, age: 16.0 },
+  { code: "VP-17MC", name: "VIC U17 Emerging (Country)", shield: null, gender: "M", ageGroup: "U17", category: "STATE_PATHWAY", cti: 0.8, age: 16.0 },
+  { code: "VP-19F", name: "VIC U19 Female Emerging", shield: null, gender: "F", ageGroup: "U19", category: "STATE_PATHWAY", cti: 0.85, age: 17.5 },
+  { code: "VP-16F", name: "VIC U16 Female Emerging", shield: null, gender: "F", ageGroup: "U16", category: "STATE_PATHWAY", cti: 0.8, age: 15.0 },
+  { code: "VP-CC16M", name: "Country Cup \u2014 U16 Male", shield: null, gender: "M", ageGroup: "U16", category: "STATE_PATHWAY", cti: 0.7, age: 15.0 },
+  { code: "VP-CC15F", name: "Country Cup \u2014 U15 Female", shield: null, gender: "F", ageGroup: "U15", category: "STATE_PATHWAY", cti: 0.7, age: 14.0 },
+  { code: "P1M", name: "Premier Cricket 1st XI \u2014 Men's", shield: null, gender: "M", ageGroup: "Open", category: "PREMIER", cti: 1.0, age: 24.0 },
+  { code: "P2M", name: "Premier Cricket 2nd XI \u2014 Men's", shield: null, gender: "M", ageGroup: "Open", category: "PREMIER", cti: 0.85, age: 22.0 },
+  { code: "P3M", name: "Premier Cricket 3rd XI \u2014 Men's", shield: null, gender: "M", ageGroup: "Open", category: "PREMIER", cti: 0.75, age: 21.0 },
+  { code: "P4M", name: "Premier Cricket 4th XI \u2014 Men's", shield: null, gender: "M", ageGroup: "Open", category: "PREMIER", cti: 0.65, age: 20.0 },
+  { code: "P1F", name: "Premier Cricket 1st XI \u2014 Women's", shield: null, gender: "F", ageGroup: "Open", category: "PREMIER", cti: 0.85, age: 22.0 },
+  { code: "P2F", name: "Premier Cricket 2nd XI \u2014 Women's", shield: null, gender: "F", ageGroup: "Open", category: "PREMIER", cti: 0.7, age: 20.0 },
+  { code: "P18M", name: "Premier U18 \u2014 Male", shield: null, gender: "M", ageGroup: "U18", category: "PREMIER_UAGE", cti: 0.75, age: 16.5 },
+  { code: "P18F", name: "Premier U18 \u2014 Female", shield: null, gender: "F", ageGroup: "U18", category: "PREMIER_UAGE", cti: 0.7, age: 16.0 },
+  { code: "P16M", name: "Dowling Shield", shield: "Dowling Shield", gender: "M", ageGroup: "U16", category: "PREMIER_UAGE", cti: 0.75, age: 14.5 },
+  { code: "P15F", name: "Marg Jennings Cup", shield: "Marg Jennings Cup", gender: "F", ageGroup: "U15", category: "PREMIER_UAGE", cti: 0.65, age: 13.0 },
+  { code: "PA", name: "Premier Academy Only", shield: null, gender: "Mixed", ageGroup: "Varies", category: "PREMIER_UAGE", cti: 0.55, age: 14.0 },
+  { code: "SD1", name: "VSDCA 1st XI", shield: null, gender: "M", ageGroup: "Open", category: "SUB_DISTRICT", cti: 0.7, age: 24.0 },
+  { code: "SD2", name: "VSDCA 2nd XI", shield: null, gender: "M", ageGroup: "Open", category: "SUB_DISTRICT", cti: 0.6, age: 22.0 },
+  { code: "SD3", name: "VSDCA 3rd XI", shield: null, gender: "M", ageGroup: "Open", category: "SUB_DISTRICT", cti: 0.55, age: 21.0 },
+  { code: "SD4", name: "VSDCA 4th XI", shield: null, gender: "M", ageGroup: "Open", category: "SUB_DISTRICT", cti: 0.5, age: 20.0 },
+  { code: "SD-15", name: "J.G. Craig Shield", shield: "J.G. Craig Shield", gender: "M", ageGroup: "U15", category: "SUB_DISTRICT", cti: 0.6, age: 14.0 },
+  { code: "SD-V1", name: "VTCA Senior Division", shield: "Turner Shield", gender: "M", ageGroup: "Open", category: "SUB_DISTRICT", cti: 0.7, age: 24.0 },
+  { code: "SD-V2", name: "VTCA Division 1", shield: null, gender: "M", ageGroup: "Open", category: "SUB_DISTRICT", cti: 0.6, age: 23.0 },
+  { code: "SD-V3", name: "VTCA Division 2+", shield: null, gender: "M", ageGroup: "Open", category: "SUB_DISTRICT", cti: 0.5, age: 22.0 },
+  { code: "CS-1T", name: "Association 1st XI \u2014 Turf", shield: null, gender: "M", ageGroup: "Open", category: "COMMUNITY_SR", cti: 0.55, age: 24.0 },
+  { code: "CS-2T", name: "Association 2nd XI \u2014 Turf", shield: null, gender: "M", ageGroup: "Open", category: "COMMUNITY_SR", cti: 0.5, age: 22.0 },
+  { code: "CS-3T", name: "Association 3rd-4th XI \u2014 Turf", shield: null, gender: "M", ageGroup: "Open", category: "COMMUNITY_SR", cti: 0.45, age: 21.0 },
+  { code: "CS-5T", name: "Association 5th+ XI \u2014 Turf", shield: null, gender: "M", ageGroup: "Open", category: "COMMUNITY_SR", cti: 0.4, age: 20.0 },
+  { code: "CS-1S", name: "Association 1st XI \u2014 Synthetic", shield: null, gender: "M", ageGroup: "Open", category: "COMMUNITY_SR", cti: 0.5, age: 23.0 },
+  { code: "CS-2S", name: "Association 2nd XI \u2014 Synthetic", shield: null, gender: "M", ageGroup: "Open", category: "COMMUNITY_SR", cti: 0.45, age: 22.0 },
+  { code: "CS-3S", name: "Association 3rd+ XI \u2014 Synthetic", shield: null, gender: "M", ageGroup: "Open", category: "COMMUNITY_SR", cti: 0.4, age: 21.0 },
+  { code: "CS-LOC", name: "Limited Overs Comp (top grade)", shield: null, gender: "M", ageGroup: "Open", category: "COMMUNITY_SR", cti: 0.45, age: 22.0 },
+  { code: "CS-SUN", name: "Sunday Turf Grades", shield: null, gender: "M", ageGroup: "Open", category: "COMMUNITY_SR", cti: 0.45, age: 22.0 },
+  { code: "RY-1T", name: "Country Assoc \u2014 Premier/1st Turf", shield: null, gender: "M", ageGroup: "Open", category: "COUNTRY_SR", cti: 0.55, age: 24.0 },
+  { code: "RY-2T", name: "Country Assoc \u2014 2nd Grade Turf", shield: null, gender: "M", ageGroup: "Open", category: "COUNTRY_SR", cti: 0.45, age: 22.0 },
+  { code: "RY-3T", name: "Country Assoc \u2014 3rd+ Turf", shield: null, gender: "M", ageGroup: "Open", category: "COUNTRY_SR", cti: 0.4, age: 21.0 },
+  { code: "RY-1S", name: "Country Assoc \u2014 1st Synthetic", shield: null, gender: "M", ageGroup: "Open", category: "COUNTRY_SR", cti: 0.45, age: 24.0 },
+  { code: "RY-2S", name: "Country Assoc \u2014 Lower Synthetic", shield: null, gender: "M", ageGroup: "Open", category: "COUNTRY_SR", cti: 0.35, age: 21.0 },
+  { code: "RY-1F", name: "Country Assoc \u2014 Women's Top", shield: null, gender: "F", ageGroup: "Open", category: "COUNTRY_SR", cti: 0.45, age: 22.0 },
+  { code: "RY-CW", name: "VCCL Country Week \u2014 Sr Men", shield: null, gender: "M", ageGroup: "Open", category: "COUNTRY_REP", cti: 0.6, age: 26.0 },
+  { code: "RY-CWF", name: "VCCL Country Week \u2014 Sr Women", shield: null, gender: "F", ageGroup: "Open", category: "COUNTRY_REP", cti: 0.55, age: 24.0 },
+  { code: "RY-JCW", name: "VCCL Junior Country Week", shield: null, gender: "Mixed", ageGroup: "U14-U16", category: "COUNTRY_REP", cti: 0.5, age: 14.0 },
+  { code: "RY-J18", name: "Country Assoc \u2014 U18/U17", shield: null, gender: "Mixed", ageGroup: "U17-U18", category: "COUNTRY_JR", cti: 0.4, age: 16.0 },
+  { code: "RY-J16", name: "Country Assoc \u2014 U16/U15", shield: null, gender: "Mixed", ageGroup: "U15-U16", category: "COUNTRY_JR", cti: 0.35, age: 14.5 },
+  { code: "RY-J14", name: "Country Assoc \u2014 U14/U13", shield: null, gender: "Mixed", ageGroup: "U13-U14", category: "COUNTRY_JR", cti: 0.3, age: 13.0 },
+  { code: "RY-J12", name: "Country Assoc \u2014 U12/U11", shield: null, gender: "Mixed", ageGroup: "U11-U12", category: "COUNTRY_JR", cti: 0.25, age: 11.0 },
+  { code: "CJ-18A", name: "Association U18 \u2014 A Grade", shield: null, gender: "M", ageGroup: "U18", category: "COMMUNITY_JR", cti: 0.45, age: 16.5 },
+  { code: "CJ-18B", name: "Association U18 \u2014 B/C", shield: null, gender: "M", ageGroup: "U18", category: "COMMUNITY_JR", cti: 0.35, age: 16.5 },
+  { code: "CJ-16A", name: "Association U16 \u2014 A Grade", shield: null, gender: "M", ageGroup: "U16", category: "COMMUNITY_JR", cti: 0.4, age: 15.0 },
+  { code: "CJ-16B", name: "Association U16 \u2014 B Grade", shield: null, gender: "M", ageGroup: "U16", category: "COMMUNITY_JR", cti: 0.35, age: 15.0 },
+  { code: "CJ-16C", name: "Association U16 \u2014 C+", shield: null, gender: "M", ageGroup: "U16", category: "COMMUNITY_JR", cti: 0.3, age: 15.0 },
+  { code: "CJ-14A", name: "Association U14 \u2014 A Grade", shield: null, gender: "M", ageGroup: "U14", category: "COMMUNITY_JR", cti: 0.35, age: 13.0 },
+  { code: "CJ-14B", name: "Association U14 \u2014 B", shield: null, gender: "M", ageGroup: "U14", category: "COMMUNITY_JR", cti: 0.3, age: 13.0 },
+  { code: "CJ-14C", name: "Association U14 \u2014 C+", shield: null, gender: "M", ageGroup: "U14", category: "COMMUNITY_JR", cti: 0.25, age: 13.0 },
+  { code: "CJ-12A", name: "Association U12 \u2014 A Grade", shield: null, gender: "M", ageGroup: "U12", category: "COMMUNITY_JR", cti: 0.3, age: 11.0 },
+  { code: "CJ-12B", name: "Association U12 \u2014 B", shield: null, gender: "M", ageGroup: "U12", category: "COMMUNITY_JR", cti: 0.25, age: 11.0 },
+  { code: "CJ-12C", name: "Association U12 \u2014 C+", shield: null, gender: "M", ageGroup: "U12", category: "COMMUNITY_JR", cti: 0.2, age: 11.0 },
+  { code: "CJ-10", name: "Association U10", shield: null, gender: "Mixed", ageGroup: "U10", category: "COMMUNITY_JR", cti: 0.18, age: 9.5 },
+  { code: "CW-1", name: "Association Sr Women \u2014 Top", shield: null, gender: "F", ageGroup: "Open", category: "COMMUNITY_WG", cti: 0.45, age: 22.0 },
+  { code: "CW-S", name: "Association Sr Women \u2014 Social", shield: null, gender: "F", ageGroup: "Open", category: "COMMUNITY_WG", cti: 0.35, age: 22.0 },
+  { code: "CG-1", name: "Girls Stage 1 (U18)", shield: null, gender: "F", ageGroup: "U18", category: "COMMUNITY_WG", cti: 0.35, age: 16.0 },
+  { code: "CG-2", name: "Girls Stage 2 (U15)", shield: null, gender: "F", ageGroup: "U15", category: "COMMUNITY_WG", cti: 0.3, age: 14.0 },
+  { code: "CG-3", name: "Girls Stage 3 (U12)", shield: null, gender: "F", ageGroup: "U12", category: "COMMUNITY_WG", cti: 0.25, age: 11.0 },
+  { code: "REP-17M", name: "Beitzel Shield (U17)", shield: "Beitzel Shield", gender: "M", ageGroup: "U17", category: "VMCU_REP", cti: 0.55, age: 15.5 },
+  { code: "REP-16M", name: "Keith Mackay Shield", shield: "Keith Mackay Shield", gender: "M", ageGroup: "U16", category: "VMCU_REP", cti: 0.45, age: 15.0 },
+  { code: "REP-14MT", name: "Russell Allen Shield", shield: "Russell Allen Shield", gender: "M", ageGroup: "U14", category: "VMCU_REP", cti: 0.5, age: 13.0 },
+  { code: "REP-13M", name: "Des Nolan Cup (U13)", shield: "Des Nolan Cup", gender: "M", ageGroup: "U13", category: "VMCU_REP", cti: 0.4, age: 12.5 },
+  { code: "REP-12M", name: "Keith Mitchell Shield", shield: "Keith Mitchell Shield", gender: "M", ageGroup: "U12", category: "VMCU_REP", cti: 0.35, age: 11.0 },
+  { code: "REP-12M2", name: "Josh Browne Plate", shield: "Josh Browne Plate", gender: "M", ageGroup: "U12", category: "VMCU_REP", cti: 0.3, age: 11.0 },
+  { code: "REP-17F", name: "Mel Jones Shield", shield: "Mel Jones Shield", gender: "F", ageGroup: "U17", category: "VMCU_REP", cti: 0.5, age: 15.5 },
+  { code: "REP-14F", name: "Julie Savage Shield", shield: "Julie Savage Shield", gender: "F", ageGroup: "U14", category: "VMCU_REP", cti: 0.4, age: 13.0 },
+  { code: "REP-12F", name: "Claudia Fatone Shield", shield: "Claudia Fatone Shield", gender: "F", ageGroup: "U12", category: "VMCU_REP", cti: 0.3, age: 11.0 },
+  { code: "EN-CB", name: "Woolworths Cricket Blast", shield: null, gender: "Mixed", ageGroup: "U7-U12", category: "ENTRY", cti: 0.12, age: 8.0 },
+  { code: "EN-SC", name: "School / In2Cricket", shield: null, gender: "Mixed", ageGroup: "Various", category: "ENTRY", cti: 0.12, age: 10.0 },
+  { code: "EN-NR", name: "No Recorded History", shield: null, gender: "Mixed", ageGroup: null, category: "ENTRY", cti: 0.1, age: 12.0 },
+];
+
+/** Shape the scoring engine expects for its `competitionTiers` input. */
+export const COMPETITION_TIERS = LADDER.map((e) => ({
+  code: e.code,
+  ctiValue: e.cti,
+  expectedMidpointAge: e.age,
+}));
+
+export const LADDER_BY_CODE: Record<string, LadderEntry> = Object.fromEntries(
+  LADDER.map((e) => [e.code, e]),
+);
