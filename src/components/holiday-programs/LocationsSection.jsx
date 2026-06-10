@@ -124,7 +124,7 @@ const LocationsSection = () => {
                                     onClick={() => document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' })}
                                     className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest py-3 rounded-full text-xs transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.4)]"
                                 >
-                                    Register Now
+                                    Buy Now
                                 </button>
                             )}
                         </div>
