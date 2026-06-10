@@ -40,6 +40,12 @@ import PostHogPageviewTracker from './components/PostHogPageviewTracker';
 // DNA Profile — lazy-loaded so it never impacts landing page bundle size
 const DNAProfileRoot = React.lazy(() => import('./DNAProfileApp/App.jsx'));
 
+// Power Game apply funnel — lazy-loaded (qualify → place → pay registration)
+const PowerGameApply = React.lazy(() => import('./components/power-game/apply/ApplyFlow'));
+const PowerGameApplySuccess = React.lazy(() => import('./components/power-game/apply/PowerGameSuccess'));
+const PowerGamePlayground = React.lazy(() => import('./components/power-game/apply/PlacementPlayground'));
+const PowerGameSquadsAdmin = React.lazy(() => import('./components/power-game/apply/PowerGameSquads'));
+
 // Admin components
 import AdminLogin from './components/admin/AdminLogin';
 import AdminLayout from './components/admin/AdminLayout';
@@ -143,6 +149,11 @@ function App() {
 
         {/* Power Game Program — hidden from nav, accessible via direct URL only */}
         <Route path="/PGP2026" element={<PowerGame />} />
+        {/* Power Game apply funnel — qualify → place → secure (the live registration + payment) */}
+        <Route path="/PGP2026/apply" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameApply /></React.Suspense>} />
+        <Route path="/PGP2026/apply/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameApplySuccess /></React.Suspense>} />
+        <Route path="/PGP2026/playground" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGamePlayground /></React.Suspense>} />
+        <Route path="/PGP2026/admin" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameSquadsAdmin /></React.Suspense>} />
         {/* India Tour 2026 — PRIVATE, invite-only EOI. Not in nav; gated by a referral code (?ref=). */}
         <Route path="/india-tour-2026" element={<IndiaTour2026 />} />
         {/* Academy Shop — hidden from nav. Share URL directly with participants only. */}
