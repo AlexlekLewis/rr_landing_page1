@@ -9,7 +9,7 @@ const STREAM_COPY = {
 };
 
 // The payoff moment — feels like an assessment that rewards the player.
-export default function DnaRevealCard({ dna, placement, centreName, onContinue }) {
+export default function DnaRevealCard({ dna, placement, centreName, onContinue, onRequestReview }) {
   const archetype = dna.primaryBattingArchetype || dna.primaryBowlingArchetype || null;
 
   if (placement.requiresReview) {
@@ -80,6 +80,11 @@ export default function DnaRevealCard({ dna, placement, centreName, onContinue }
           Choose your training time <ArrowRight className="w-4 h-4" />
         </button>
         <p className="text-white/30 text-[10px] uppercase tracking-widest mt-3">Squad groupings are indicative &amp; may be adjusted to stay balanced</p>
+        {onRequestReview && (
+          <button onClick={onRequestReview} className="mt-4 w-full text-center text-xs text-white/45 hover:text-white/80 uppercase tracking-widest transition-colors">
+            Prefer to talk first? Apply for a review or request a call
+          </button>
+        )}
       </div>
     </motion.div>
   );
