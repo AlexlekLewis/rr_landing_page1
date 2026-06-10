@@ -102,7 +102,7 @@ const PhaseCard = ({ phase, idx }) => (
             {phase.name}
         </h3>
         <div className="text-xs font-medium text-white/60 mb-1">{phase.window}</div>
-        <div className="text-[11px] font-bold text-rr-blue uppercase tracking-widest mb-5">{phase.rate}</div>
+        <div className="text-[11px] font-bold text-rr-pink uppercase tracking-widest mb-5">{phase.rate}</div>
 
         <div className="text-base md:text-lg font-black text-white uppercase tracking-wide mb-2">
             {phase.tagline}
