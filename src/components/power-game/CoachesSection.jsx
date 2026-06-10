@@ -152,7 +152,7 @@ const CoachesSection = () => {
                         MEET YOUR <span className="text-rr-pink">COACHES</span>
                     </h2>
                     <p className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium">
-                        This is coaching the Royals Way. Every coach is a paid professional connected to the Rajasthan Royals' global system — people who have played, coached, and competed at the highest levels, now developing the next generation with the same methodology that drives one of the IPL's most respected franchises.
+                        This is coaching the Royals Way. Every coach is connected to the Rajasthan Royals' global system — people who have played, coached, and competed at the highest levels, now developing the next generation with the same methodology that drives one of the IPL's most respected franchises.
                     </p>
                 </motion.div>
 
