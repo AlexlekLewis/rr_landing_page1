@@ -6,13 +6,6 @@ import { motion } from 'framer-motion';
 // `logo` path on each partner. Until then, a clean placeholder is shown.
 const TIERS = [
     {
-        level: 'Presenting Partner',
-        size: 'large',
-        partners: [
-            { name: 'Total Aluminium', logo: '' },
-        ],
-    },
-    {
         level: 'Venue Partners',
         size: 'medium',
         partners: [
@@ -24,7 +17,6 @@ const TIERS = [
         level: 'Performance Partners',
         size: 'medium',
         partners: [
-            { name: 'Str8ght Bat', logo: '' },
             { name: 'Full Track AI', logo: '' },
             { name: 'Shah NeuroVision', logo: '/assets/powergame/partners/shah-neurovision.webp', dark: true },
         ],
