@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, ArrowRight, ArrowLeft, Clock, Users, Check, AlertCircle, Loader2 } from 'lucide-react';
 import DateOfBirthInput from '../../DateOfBirthInput';
@@ -36,7 +36,7 @@ function Choice({ options, value, onChange, cols = 2 }) {
   );
 }
 
-export default function ApplyFlow() {
+export default function ApplyFlow({ embedded = false }) {
   const [form, setForm] = useState({ ...BLANK_FORM });
   const [step, setStep] = useState('centre');
   const [errors, setErrors] = useState([]);
@@ -50,7 +50,14 @@ export default function ApplyFlow() {
 
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
 
-  useEffect(() => { window.scrollTo(0, 0); }, [step]);
+  const rootRef = useRef(null);
+  useEffect(() => {
+    // Embedded (inline on the PGP page): keep the funnel section in view on each step.
+    // Standalone route: scroll the window to top.
+    if (embedded) rootRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    else window.scrollTo(0, 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
 
   // QA deep-link: /PGP2026/apply?demo=perf|review|soldout jumps to the reveal with a sample case.
   useEffect(() => {
@@ -249,9 +256,9 @@ export default function ApplyFlow() {
   };
 
   return (
-    <div className="min-h-screen bg-rr-dark text-white font-sans">
+    <div ref={rootRef} className="min-h-screen bg-rr-dark text-white font-sans scroll-mt-24">
       {/* progress bar */}
-      <div className="fixed top-0 inset-x-0 h-1 bg-white/10 z-50">
+      <div className={`${embedded ? 'relative' : 'fixed'} top-0 inset-x-0 h-1 bg-white/10 z-50`}>
         <motion.div className="h-full bg-gradient-rr" animate={{ width: `${progress}%` }} transition={{ duration: 0.4 }} />
       </div>
 
