@@ -53,6 +53,7 @@ Media/LP2/Kumar Interview V3.mov
 
 # Exception: compressed web video for Power Game page (needed for Vercel to serve)
 !public/assets/powergame/andy-crook-video.mp4
+!public/assets/powergame/royals-academy-video.mp4
 *.zip
 Master Landing Page/
 Media/
