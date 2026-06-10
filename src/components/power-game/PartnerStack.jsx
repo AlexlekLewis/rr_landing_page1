@@ -26,7 +26,7 @@ const TIERS = [
         partners: [
             { name: 'Str8ght Bat', logo: '' },
             { name: 'Full Track AI', logo: '' },
-            { name: 'Neuro Vision', logo: '' },
+            { name: 'Shah NeuroVision', logo: '/assets/powergame/partners/shah-neurovision.webp', dark: true },
         ],
     },
 ];
@@ -38,7 +38,7 @@ const sizeClasses = {
 
 const PartnerLogo = ({ partner, size }) => (
     <div
-        className={`flex items-center justify-center rounded-2xl bg-white border border-slate-200 ${sizeClasses[size]} min-w-[180px] md:min-w-[220px] transition-all duration-300 hover:border-rr-pink/40 hover:shadow-[0_8px_30px_rgba(225,31,143,0.10)]`}
+        className={`flex items-center justify-center rounded-2xl border ${sizeClasses[size]} min-w-[180px] md:min-w-[220px] transition-all duration-300 hover:border-rr-pink/40 hover:shadow-[0_8px_30px_rgba(225,31,143,0.10)] ${partner.dark ? 'bg-rr-dark border-white/10' : 'bg-white border-slate-200'}`}
     >
         {partner.logo ? (
             <img
