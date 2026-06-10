@@ -13,7 +13,7 @@ const leadershipCoaches = [
         name: "Andy Crook",
         role: "Rajasthan Royals Academy Director — T20 & Power Hitting Specialist",
         image: "/assets/coaches/andy-crook.jpg",
-        bio: "Former South Australian Redback (debut at 17), Lancashire and Northamptonshire player, and part of Australia's 2025 T20 Masters World Cup-winning squad. Andy watched T20 transform from the inside and now builds individual development plans around each player's T20 role and skill set.",
+        bio: "Former South Australian Redback (debut at 17), Lancashire and Northamptonshire player, and part of Australia's 2025 T20 Masters World Cup-winning squad. Experienced sports executive, now leading Royals Academy Australian operations.",
     },
     {
         name: "Alex Lewis",
