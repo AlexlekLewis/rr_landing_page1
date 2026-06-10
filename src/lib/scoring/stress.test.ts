@@ -89,8 +89,9 @@ describe("stress: structural invariants across a large synthetic intake", () => 
                 if (p.placedBand !== p.homeBand) violations.push(`${tag} play_up_review moved band`);
                 if (!p.requiresReview) violations.push(`${tag} play_up_review not flagged for review`);
               }
-              // I4 — SAFEGUARDING: a minor (<=16) is never placed in the open/adult band
-              if (p.age! <= 16 && p.placedBand === ADULT_BAND) violations.push(`${tag} minor placed in adult band`);
+              // I4 — SAFEGUARDING: an UNDER-16 is never placed in the open/adult band.
+              // (16yo performance players MAY train up with adults — Premier 3rd / Sub-District / State.)
+              if (p.age! < 16 && p.placedBand === ADULT_BAND) violations.push(`${tag} under-16 placed in adult band`);
               // I5 — ineligible (below_floor / no_history) always requires review
               if (dna.eligibilityStatus !== "eligible" && !p.requiresReview) violations.push(`${tag} ineligible not review`);
               // I6 — review stream always requires review

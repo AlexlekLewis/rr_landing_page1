@@ -38,6 +38,10 @@ export const PG_BANDS: AgeBandDef[] = [
 /** Must be Performance/Elite (engine tier ≥ this) to justify training up a band. */
 export const PLAY_UP_MIN_TIER = 4;
 
+/** A minor at performance level may train UP into the adult (17+) band from this age
+ *  (e.g. a 16yo playing Premier 3rd, Dowling Shield, State U / Emerging Players Program). */
+export const ADULT_PLAY_UP_MIN_AGE = 16;
+
 export type Stream = "performance" | "pathway" | "review";
 export type PlayFlag = "play_up" | "play_up_review" | null;
 
@@ -77,10 +81,15 @@ export function placeSquad(
   const next = bands[idx + 1];
   const nearTopOfBand = age >= home.hi - 1; // within ~1yr of the top → age-adjacent to next band
   if (next && tier != null && tier >= PLAY_UP_MIN_TIER) {
-    // SAFEGUARDING: never AUTO-place a minor into the open/adult band — a coach must
-    // confirm any minor training in an adult squad.
     const intoAdult = !!next.adult && age < 18;
     if (nearTopOfBand && !intoAdult) return { placedBand: next.name, playFlag: "play_up" };
+    // A 16+ minor at performance level (Premier 3rd, Dowling, State U / Emerging Players
+    // Program, etc.) MAY train with adults — auto-placed into the open band, no review.
+    if (nearTopOfBand && intoAdult && age >= ADULT_PLAY_UP_MIN_AGE) {
+      return { placedBand: next.name, playFlag: "play_up" };
+    }
+    // SAFEGUARDING: a younger prodigy (under 16) is NEVER auto-mixed with adults — a
+    // coach must confirm. Stays in the home band, flagged for review.
     if (tier === 5 || (nearTopOfBand && intoAdult)) {
       return { placedBand: home.name, playFlag: "play_up_review" };
     }
