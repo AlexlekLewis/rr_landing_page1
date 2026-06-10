@@ -33,7 +33,6 @@ const SECTIONS = [
     'pricing',
     'academy-video',
     'coaches',
-    'how-it-works',
     'apply',
     'partners',
 ];
@@ -111,47 +110,33 @@ const PowerGame = () => {
                     <CoachesSection />
                 </div>
 
-                {/* How it works — icon-led process above the application (low-text for accessibility). */}
-                <div id="how-it-works" className="bg-rr-page py-20 md:py-28 px-5 scroll-mt-24">
-                    <div className="max-w-5xl mx-auto text-center">
-                        <div className="text-rr-pink font-black uppercase tracking-[0.3em] text-xs mb-3">How it works</div>
-                        <h2 className="text-3xl md:text-5xl font-black uppercase tracking-wide text-white mb-4">Four steps to your spot</h2>
-                        <p className="text-white/60 max-w-xl mx-auto mb-12">Apply online in a few minutes. If you qualify, you're offered a squad spot then and there — places are limited.</p>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {HOW_STEPS.map((s, i) => (
-                                <div key={i} className="relative bg-white/5 border border-white/10 rounded-2xl p-6 pt-8 flex flex-col items-center text-center">
-                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-rr-pink text-white font-black text-sm flex items-center justify-center shadow-lg">{i + 1}</div>
-                                    <div className="w-16 h-16 rounded-2xl bg-rr-pink/10 text-rr-pink flex items-center justify-center mb-4"><s.Icon className="w-8 h-8" strokeWidth={2.2} /></div>
-                                    <div className="font-black uppercase tracking-wide text-white text-base mb-1">{s.title}</div>
-                                    <div className="text-white/60 text-sm leading-snug">{s.sub}</div>
-                                </div>
-                            ))}
-                        </div>
-                        <div className="mt-12">
-                            <button onClick={() => setShowApply(true)} className="inline-flex items-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-8 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.4)]">
-                                Start your application →
-                            </button>
-                            <div className="mt-4 flex items-center justify-center gap-2 text-white/50 font-bold uppercase tracking-widest text-[11px]">
-                                <ShieldCheck className="w-4 h-4 text-rr-pink" /> Spots are limited
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Registration IS the ability funnel (qualify → place → pay) at /PGP2026/apply. */}
-                {/* Registration funnel — revealed INLINE in this section (applicant stays on /PGP2026). */}
+                {/* Combined: Secure your place + How it works (process steps) + apply funnel inline */}
                 <div id="apply" className="bg-rr-dark text-white scroll-mt-24">
                     {!showApply ? (
-                        <div className="py-20 md:py-28 text-center px-5">
-                            <div className="max-w-2xl mx-auto">
+                        <div className="py-20 md:py-28 px-5">
+                            <div className="max-w-5xl mx-auto text-center">
                                 <div className="text-rr-pink font-black uppercase tracking-[0.3em] text-xs mb-3">Secure your place</div>
                                 <h2 className="text-3xl md:text-5xl font-black uppercase tracking-wide mb-4">Earn your place</h2>
                                 <p className="text-white/60 mb-2 max-w-xl mx-auto">Qualify on your cricket, get matched to a squad at your level &amp; venue, and lock in your spot — about three minutes.</p>
-                                <p className="text-white/40 text-sm mb-8">The Power Game · 8-week block · <span className="text-white font-bold">$960</span></p>
-                                <button onClick={() => setShowApply(true)} className="inline-block bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-8 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
-                                    Start your application →
-                                </button>
-                                <p className="text-white/30 text-[11px] mt-4">Places are subject to meeting the program&apos;s minimum standard.</p>
+                                <p className="text-white/40 text-sm mb-12">The Power Game · 8-week block · <span className="text-white font-bold">$960</span></p>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                                    {HOW_STEPS.map((s, i) => (
+                                        <div key={i} className="relative bg-white/5 border border-white/10 rounded-2xl p-6 pt-8 flex flex-col items-center text-center">
+                                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-rr-pink text-white font-black text-sm flex items-center justify-center shadow-lg">{i + 1}</div>
+                                            <div className="w-16 h-16 rounded-2xl bg-rr-pink/10 text-rr-pink flex items-center justify-center mb-4"><s.Icon className="w-8 h-8" strokeWidth={2.2} /></div>
+                                            <div className="font-black uppercase tracking-wide text-white text-base mb-1">{s.title}</div>
+                                            <div className="text-white/60 text-sm leading-snug">{s.sub}</div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="mt-12">
+                                    <button onClick={() => setShowApply(true)} className="inline-flex items-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-8 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
+                                        Start your application →
+                                    </button>
+                                    <p className="text-white/30 text-[11px] mt-4">Places are subject to meeting the program&apos;s minimum standard.</p>
+                                </div>
                             </div>
                         </div>
                     ) : (
