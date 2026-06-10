@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "build:pdf": "node generate_lp2_pdf.js"
+    "build:pdf": "node generate_lp2_pdf.js",
+    "test": "vitest run"
   },
   "dependencies": {
     "@posthog/react": "^1.8.2",
@@ -33,6 +34,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.3.0",
+    "jsdom": "^26.1.0",
+    "vitest": "^3.2.4",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
