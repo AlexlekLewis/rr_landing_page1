@@ -79,7 +79,7 @@ export default function DnaRevealCard({ dna, placement, centreName, onContinue }
         <button onClick={onContinue} className="w-full inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
           Choose your training time <ArrowRight className="w-4 h-4" />
         </button>
-        <p className="text-white/30 text-[10px] uppercase tracking-widest mt-3">Squad groupings are indicative &amp; may be adjusted to stay balanced</p>
+        <p className="text-white/25 text-[11px] mt-3">*Squads are subject to change &mdash; we&apos;ll work with you if anything needs adjusting.</p>
       </div>
     </motion.div>
   );
