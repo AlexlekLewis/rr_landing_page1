@@ -163,22 +163,28 @@ const CoachesSection = () => {
                     ))}
                 </div>
 
-                {/* Specialist coaches */}
-                <div className="mb-8">
-                    <h3 className="text-xs font-bold text-rr-charcoal/50 uppercase tracking-[0.3em] mb-6 text-center">Specialist Coaching Staff</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                {/* Specialist coaches — list */}
+                <div className="mb-10 max-w-4xl mx-auto">
+                    <h3 className="text-xs font-bold text-rr-charcoal/50 uppercase tracking-[0.3em] mb-5 text-center">Specialist Coaching Staff</h3>
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 divide-y divide-slate-200 overflow-hidden">
                         {eliteCoaches.map((coach, index) => (
-                            <CoachCard key={index} coach={coach} />
+                            <div key={index} className="flex items-center justify-between gap-4 px-5 py-4">
+                                <span className="text-base md:text-lg font-black text-rr-dark uppercase tracking-wide">{coach.name}</span>
+                                <span className="text-xs md:text-sm font-bold text-rr-pink uppercase tracking-widest text-right">{coach.role}</span>
+                            </div>
                         ))}
                     </div>
                 </div>
 
-                {/* Program team */}
-                <div>
-                    <h3 className="text-xs font-bold text-rr-charcoal/50 uppercase tracking-[0.3em] mb-6 text-center">Program Team</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                {/* Program team — list */}
+                <div className="max-w-4xl mx-auto">
+                    <h3 className="text-xs font-bold text-rr-charcoal/50 uppercase tracking-[0.3em] mb-5 text-center">Program Team</h3>
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 divide-y divide-slate-200 overflow-hidden">
                         {programTeam.map((coach, index) => (
-                            <CoachCard key={index} coach={coach} />
+                            <div key={index} className="flex items-center justify-between gap-4 px-5 py-4">
+                                <span className="text-base md:text-lg font-black text-rr-dark uppercase tracking-wide">{coach.name}</span>
+                                <span className="text-xs md:text-sm font-bold text-rr-pink uppercase tracking-widest text-right">{coach.role}</span>
+                            </div>
                         ))}
                     </div>
                 </div>
