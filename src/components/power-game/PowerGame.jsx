@@ -6,7 +6,6 @@ import QuoteBlock from './QuoteBlock';
 import VideoSection from './VideoSection';
 import OverviewSection from './OverviewSection';
 import FeaturesBenefits from './FeaturesBenefits';
-import ProgramSelector from './ProgramSelector';
 import PricingSection from './PricingSection';
 import PartnerStack from './PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
@@ -20,7 +19,6 @@ const SECTIONS = [
     'video',
     'pricing',
     'academy-video',
-    'select-program',
     'apply',
     'partners',
 ];
@@ -93,19 +91,17 @@ const PowerGame = () => {
                     />
                 </div>
 
-                <div id="select-program">
-                    <ProgramSelector />
-                </div>
-
-                {/* Registration is the apply funnel (qualify → place → pay) at /PGP2026/apply. */}
+                {/* Registration IS the ability funnel (qualify → place → pay) at /PGP2026/apply. */}
                 <div id="apply" className="py-20 md:py-28 bg-rr-dark text-white text-center px-5">
                     <div className="max-w-2xl mx-auto">
-                        <div className="text-rr-pink font-black uppercase tracking-[0.3em] text-xs mb-3">Apply now</div>
+                        <div className="text-rr-pink font-black uppercase tracking-[0.3em] text-xs mb-3">Secure your place</div>
                         <h2 className="text-3xl md:text-5xl font-black uppercase tracking-wide mb-4">Earn your place</h2>
-                        <p className="text-white/60 mb-8 max-w-xl mx-auto">Qualify on your cricket, get matched to a squad at your level, and secure your spot — it takes about three minutes.</p>
+                        <p className="text-white/60 mb-2 max-w-xl mx-auto">Qualify on your cricket, get matched to a squad at your level &amp; venue, and lock in your spot — about three minutes.</p>
+                        <p className="text-white/40 text-sm mb-8">The Power Game · 8-week block · <span className="text-white font-bold">$960</span></p>
                         <a href="/PGP2026/apply" className="inline-block bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-8 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
                             Start your application →
                         </a>
+                        <p className="text-white/30 text-[11px] mt-4">Places are subject to meeting the program&apos;s minimum standard.</p>
                     </div>
                 </div>
 
