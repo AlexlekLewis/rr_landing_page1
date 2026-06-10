@@ -185,10 +185,6 @@ const PricingSection = () => {
                         <PhaseCard key={phase.name} phase={phase} idx={idx} />
                     ))}
                 </div>
-
-                <p className="text-center text-xs md:text-sm text-white/50 mt-2 font-medium uppercase tracking-widest">
-                    Power Season &amp; Power Finish pricing to be confirmed
-                </p>
             </div>
         </section>
     );
