@@ -89,7 +89,7 @@ const PowerGame = () => {
                     <VideoSection
                         badge="Inside the Academy"
                         heading={<>THE ROYALS ACADEMY <span className="text-rr-pink">PROGRAM</span></>}
-                        description="Go inside the Rajasthan Royals Academy program — the methodology, the environment, and what it means to develop the Royals way."
+                        description="Go inside the Rajasthan Royals Academy program — the methodology, the environment, and what it means to develop the Royals Way."
                         videoSrc="/assets/powergame/royals-academy-video.mp4"
                         posterSrc="/assets/powergame/royals-academy-poster.jpg"
                     />
