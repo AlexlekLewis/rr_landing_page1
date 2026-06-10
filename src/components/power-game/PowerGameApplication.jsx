@@ -201,7 +201,7 @@ const PowerGameApplication = () => {
                     parent2_name: formData.parent2Name.trim(),
                     parent2_email: formData.parent2Email.trim(),
                     parent2_phone: formData.parent2Phone.trim(),
-                    phase: 'Preseason',
+                    phase: 'Power Pre-Season',
                     application_type: 'standard',
                     accept_terms: acceptTerms,
                     accept_player_code: acceptPlayerCode,
@@ -266,7 +266,7 @@ const PowerGameApplication = () => {
                 club: capData.club.trim(),
                 profile_link: capData.profileLink.trim(),
                 capability_statement: capData.statement.trim(),
-                phase: 'Preseason',
+                phase: 'Power Pre-Season',
                 application_type: 'capability',
                 status: 'pending',
                 source: 'power-game-program',
@@ -330,7 +330,7 @@ const PowerGameApplication = () => {
                     viewport={{ once: true, amount: 0.3 }}
                     transition={{ duration: 0.6, ease: 'easeOut' }}
                 >
-                    <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Preseason</p>
+                    <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Power Pre-Season</p>
                     <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight mb-4">
                         Apply <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">Now</span>
                     </h2>

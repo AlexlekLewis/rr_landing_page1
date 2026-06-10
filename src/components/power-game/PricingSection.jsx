@@ -7,7 +7,7 @@ import { Check } from 'lucide-react';
 const PHASES = [
     {
         num: '01',
-        name: 'Preseason',
+        name: 'Power Pre-Season',
         window: 'Late July → September school hols',
         rate: '2 hours / week',
         price: 960,
