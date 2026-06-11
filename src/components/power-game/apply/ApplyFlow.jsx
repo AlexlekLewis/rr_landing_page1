@@ -384,9 +384,6 @@ export default function ApplyFlow({ embedded = false }) {
                   </select>
                 </Field>
                 <p className="text-white/40 text-xs -mt-1">Representative cricket, or senior cricket at <span className="text-white">2nd grade &amp; above</span>, earns an instant squad offer. <span className="text-white">Below 2nd grade</span> (or none) goes to a quick coach review first — no payment until a coach confirms your spot.</p>
-                <Field label="Format you mostly played"><select className={inputCls} value={form.format} onChange={(e) => set('format', e.target.value)}>
-                  <option value="">— select —</option><option value="t20">T20</option><option value="od">One-day</option><option value="multiday">Two/Multi-day</option>
-                </select></Field>
                 {form.rep_level && levelStats('rep', 'Your representative numbers')}
                 {form.club_level && levelStats('club', 'Your senior cricket numbers')}
               </div>

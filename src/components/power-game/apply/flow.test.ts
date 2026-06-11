@@ -50,8 +50,8 @@ describe("two-layer level model + Power Game floor", () => {
     expect(validateStep("history", { ...base, rep_level: "", club_level: "" })).toContain(
       "Add your representative and/or senior cricket — pick at least one.",
     );
-    // a level + format is enough — match counts are no longer required
-    expect(validateStep("history", { ...base, rep_level: "P16M", club_level: "" })).toEqual([]);
+    // a level alone is enough — match counts and format are no longer required
+    expect(validateStep("history", { ...base, rep_level: "P16M", club_level: "", format: "" })).toEqual([]);
   });
 });
 
