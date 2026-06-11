@@ -8,7 +8,7 @@ import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const BASE_URL = process.env.VITE_APP_URL || 'https://rramelbourne.com';
-const BLOCK_FEE_CENTS = 96000; // $960 — $120/session × 8 weeks
+const BLOCK_FEE_CENTS = 98900; // $989 — 8-week phase
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });

@@ -10,8 +10,8 @@ const PHASES = [
         name: 'Power Pre-Season',
         window: 'Late July → September school hols',
         rate: '2 hours / week',
-        price: 960,
-        priceRate: '$60 per hour',
+        price: 989,
+        priceRate: '$62 per hour',
         onSale: true,
         tagline: 'A Powerful Start',
         description:

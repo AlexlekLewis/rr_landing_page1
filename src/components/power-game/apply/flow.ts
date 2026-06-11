@@ -10,7 +10,7 @@ import type { DnaResult } from "../../../lib/scoring/engine";
 
 export const CURRENT_SEASON = "2025/26";
 export const CURRENT_SEASON_START = 2025;
-export const BLOCK_FEE = 960; // $120/session × 8 weeks (from the planning sheet)
+export const BLOCK_FEE = 989; // 8-week phase (from the planning sheet)
 
 // Match counts are no longer collected. A player who reached a level played a season,
 // so assume a typical volume — this keeps them off the engine's "thin_history" review

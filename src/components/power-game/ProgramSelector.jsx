@@ -7,7 +7,7 @@ import { MapPin, Clock, Calendar, Check, ArrowRight, Loader2 } from 'lucide-reac
 // Set PROGRAM_PRICE_LABEL for display and STRIPE_PRICE_ID for the
 // Stripe Price the /api/create-pgp-checkout endpoint will charge.
 // ============================================================
-const PROGRAM_PRICE = 960;          // Preseason phase — $960 ($60/hr)
+const PROGRAM_PRICE = 989;          // Preseason phase — $989
 const STRIPE_PRICE_ID = '';         // e.g. 'price_xxx' from Stripe
 const priceLabel = PROGRAM_PRICE > 0 ? `$${PROGRAM_PRICE.toLocaleString()}` : 'TBC';
 

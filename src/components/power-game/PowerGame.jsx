@@ -184,8 +184,8 @@ const PowerGame = () => {
                                 <div className="mt-12 max-w-md mx-auto text-left bg-white/5 border border-white/10 rounded-2xl p-7">
                                     <div className="text-rr-pink font-black uppercase tracking-[0.2em] text-[11px] mb-2">Your 8-week investment</div>
                                     <div className="flex items-baseline gap-3 mb-1">
-                                        <div className="text-5xl font-black text-white leading-none">$960</div>
-                                        <div className="text-white/55 text-sm font-bold">the block · <span className="text-rr-light-pink">$120 a session</span></div>
+                                        <div className="text-5xl font-black text-white leading-none">$989</div>
+                                        <div className="text-white/55 text-sm font-bold">the block · <span className="text-rr-light-pink">$124 a session</span></div>
                                     </div>
                                     <div className="border-t border-white/10 my-5" />
                                     <div className="flex flex-col gap-3">
