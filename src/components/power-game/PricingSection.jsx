@@ -20,6 +20,7 @@ const PHASES = [
             'Minimum 2 hours per week for 8 weeks in your allocated squad',
             'Program content straight from the Royals development ecosystem designed to develop and understand power with bat, ball and in the field',
             'Top Royals Academy coaches',
+            'A mix of 1:1 up to 1:4 coaches, through to small and large groups depending on the plan and focus of the session',
             'Invite to the Royals High Performance Centre September and March Camps',
             'Access to our world-first game & development management application, our Player Performance Portal',
             'Access to performance tracking with our Performance Partners Full Track AI and Str8 Bat',
