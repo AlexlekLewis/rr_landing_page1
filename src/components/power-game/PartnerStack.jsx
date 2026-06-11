@@ -25,19 +25,19 @@ const TIERS = [
 ];
 
 const sizeClasses = {
-    large: 'h-24 md:h-28 px-10',
-    medium: 'h-20 md:h-24 px-8',
+    large: 'h-24 md:h-28 px-6',
+    medium: 'h-20 md:h-24 px-6',
 };
 
 const PartnerLogo = ({ partner, size }) => (
     <div
-        className={`flex items-center justify-center rounded-2xl border ${sizeClasses[size]} min-w-[180px] md:min-w-[220px] transition-all duration-300 hover:border-rr-pink/40 hover:shadow-[0_8px_30px_rgba(225,31,143,0.10)] ${partner.dark ? 'bg-rr-dark border-white/10' : 'bg-white border-slate-200'}`}
+        className={`w-full flex items-center justify-center rounded-2xl border ${sizeClasses[size]} py-4 transition-all duration-300 hover:border-rr-pink/40 hover:shadow-[0_8px_30px_rgba(225,31,143,0.10)] ${partner.dark ? 'bg-rr-dark border-white/10' : 'bg-white border-slate-200'}`}
     >
         {partner.logo ? (
             <img
                 src={partner.logo}
                 alt={partner.name}
-                className="max-h-full max-w-full object-contain"
+                className="max-h-full w-auto max-w-full object-contain"
             />
         ) : (
             <div className="text-center">
@@ -93,7 +93,7 @@ const PartnerStack = () => {
                                 </span>
                                 <div className="h-px flex-1 bg-gradient-to-l from-transparent to-slate-200" />
                             </div>
-                            <div className="flex flex-wrap items-center justify-center gap-5 md:gap-6">
+                            <div className={`grid grid-cols-1 sm:grid-cols-2 ${tier.partners.length >= 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-2'} gap-5 md:gap-6 ${tier.partners.length >= 3 ? 'max-w-4xl' : 'max-w-2xl'} mx-auto justify-items-center`}>
                                 {tier.partners.map((partner) => (
                                     <PartnerLogo key={partner.name} partner={partner} size={tier.size} />
                                 ))}
