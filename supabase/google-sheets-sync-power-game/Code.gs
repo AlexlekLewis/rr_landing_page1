@@ -34,7 +34,7 @@ var SHEET_ID = '18y5BxkTAEict_rlrlpYSzhXovf_5554Kv2G7L9A_uNs'; // Power Game 202
 var TAB_NAME = 'Power Game Players Phase 1';
 var SUPABASE_URL = 'https://pudldzgmluwoocwxtzhw.supabase.co';
 var PHASE = 'pgp2026';
-var INCLUDE_PREVIEW_ROWS = false; // test submissions have source like 'pgp2026-funnel-preview'
+var INCLUDE_PREVIEW_ROWS = false; // test submissions have source like 'pgp2026-funnel-preview' / 'pgp2026-e2e-test'
 
 var HEADERS = [
   'Submitted (Melb)', 'Player', 'Age', 'DOB', 'Gender', 'Parent/Guardian',
@@ -75,7 +75,7 @@ function fetchApplications_() {
   }
   var rows = JSON.parse(res.getContentText());
   if (!INCLUDE_PREVIEW_ROWS) {
-    rows = rows.filter(function (r) { return String(r.source || '').indexOf('preview') === -1; });
+    rows = rows.filter(function (r) { var src = String(r.source || ''); return src.indexOf('preview') === -1 && src.indexOf('test') === -1; });
   }
   return rows;
 }
