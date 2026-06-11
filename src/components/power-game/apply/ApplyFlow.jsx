@@ -180,7 +180,21 @@ export default function ApplyFlow({ embedded = false }) {
           body: JSON.stringify({ applicationId: id, bookingId: hold?.holdId, squadId: selected?.id, email: form.contact_email, playerName: form.player_name, uniformTotalCents: kitTotal, uniformSelection: kitSummary(kit).map((l) => `${l.name} (${l.size})`).join(', ') }),
         });
         const data = await r.json();
-        if (data?.url) { window.location.href = data.url; return; }
+        if (data?.url) {
+          // Hand the order details to the success page (it can't read the DB).
+          try {
+            sessionStorage.setItem('pgp_confirmation', JSON.stringify({
+              playerName: form.player_name,
+              centreName: CENTRE_BY_SLUG[form.centre]?.name || '',
+              slot: selected ? `${selected.day} ${selected.startTime}–${selected.endTime}` : '',
+              band: result.placement.placedBand,
+              kit: kitSummary(kit),
+              kitTotalCents: kitTotal,
+            }));
+          } catch (_) { /* private mode — page falls back gracefully */ }
+          window.location.href = data.url;
+          return;
+        }
         setErrors([data?.error || 'Could not start checkout — please try again.']);
         return;
       }
