@@ -18,8 +18,17 @@ const ApplyFlow = React.lazy(() => import('./apply/ApplyFlow'));
 
 // The application process — the real five steps a player moves through in the funnel
 // below. Step 3 carries the honesty warning; step 4 is the offer / review fork.
+import { ACTIVE_CENTRES as PG_ACTIVE_CENTRES, CENTRES as PG_CENTRES } from '../../lib/booking/squads';
+
+// Venue list derives from the booking grid so this copy can never go stale.
+const VENUE_LIST = (() => {
+    const names = PG_ACTIVE_CENTRES.map((c) => c.suburb);
+    const joined = names.length > 1 ? `${names.slice(0, -1).join(', ')} or ${names[names.length - 1]}` : names[0] || '';
+    return PG_CENTRES.some((c) => c.comingSoon) ? `${joined}, with a new venue coming soon` : joined;
+})();
+
 const HOW_STEPS = [
-    { Icon: MapPin, title: 'Choose your venue', sub: 'Pick the centre that suits you — Williamstown or Hallam, with a third venue coming soon.' },
+    { Icon: MapPin, title: 'Choose your venue', sub: `Pick the centre that suits you — ${VENUE_LIST}.` },
     { Icon: User, title: 'Player details', sub: 'Who’s playing, and the best way to reach you.' },
     { Icon: ClipboardList, title: 'Playing history', sub: 'Tell us the highest level you’ve played in the last three years.', note: 'Honesty is required — applications may be rejected if false information is provided (refund less processing fees).' },
     { Icon: Sparkles, title: 'Get your offer', sub: 'Accept your squad offer and choose your time — or apply for a review / request a call for more information.' },
