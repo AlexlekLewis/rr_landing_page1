@@ -58,6 +58,15 @@ const INVESTMENT_INCLUDES = [
     'Your own player DNA profile',
 ];
 
+// Do the maths — what an hour of coaching costs elsewhere vs here.
+// Other-program figures are typical local offers (not named); ours derives from
+// $989 across 8 weeks of 2-hour sessions = 16 coaching hours.
+const HOUR_MATHS = [
+    { who: 'Other programs', price: '$900', detail: '6 weeks × 1.5 hrs = 9 hrs of coaching', perHour: '$100', us: false },
+    { who: 'Other programs', price: '$800', detail: '7 weeks × 1 hr = 7 hrs of coaching', perHour: '$114', us: false },
+    { who: 'The Power Game', price: '$989', detail: '8 weeks × 2 hrs = 16 hrs of coaching', perHour: '$62', us: true },
+];
+
 const SECTIONS = [
     'hero',
     'quote-1',
@@ -211,6 +220,22 @@ const PowerGame = () => {
                                             </div>
                                         ))}
                                     </div>
+
+                                    {/* Do the maths — cost per hour vs typical programs. */}
+                                    <div className="border-t border-white/10 my-5" />
+                                    <div className="text-rr-pink font-black uppercase tracking-[0.2em] text-[11px] mb-3">Do the maths — cost per hour</div>
+                                    <div className="flex flex-col gap-2">
+                                        {HOUR_MATHS.map((r, i) => (
+                                            <div key={i} className={`flex items-center justify-between gap-3 rounded-xl px-4 py-3 border ${r.us ? 'bg-rr-pink/10 border-rr-pink/40' : 'bg-white/5 border-white/10'}`}>
+                                                <div>
+                                                    <div className={`text-sm font-black uppercase tracking-wide ${r.us ? 'text-white' : 'text-white/70'}`}>{r.who} · {r.price}</div>
+                                                    <div className="text-[11px] text-white/45">{r.detail}</div>
+                                                </div>
+                                                <div className={`text-2xl font-black ${r.us ? 'text-rr-light-pink' : 'text-white/55'}`}>{r.perHour}<span className="text-[10px] font-bold text-white/40">/hr</span></div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <p className="text-white/50 text-xs mt-3 font-medium">Nearly double the coaching hours — at the lowest cost per hour.</p>
                                 </div>
 
                                 {/* Discovery / review path — for talent the rep system hasn't caught yet. */}
