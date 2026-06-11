@@ -25,7 +25,7 @@ const PHASES = [
             'Program content based on developing power with bat, ball and in the field',
             'Access to the Australian-first NeuroVision program built for Royals Academy',
             'Selection opportunities for our Power League match series played at various times from Sept 2026 - April 2027',
-            'Exposure to clubs across Victoria scouting the next T20 talent',
+            'Exposure to clubs across Victoria scouting the next talent and marquee T20 player',
         ],
         accent: 'from-rr-blue to-rr-medium-blue',
     },
