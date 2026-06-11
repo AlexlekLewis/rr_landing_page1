@@ -49,14 +49,14 @@ const EASY_PILLS = [
     { Icon: ShieldCheck, label: 'No payment until confirmed' },
 ];
 
-// The offer reframed as an investment — what the block actually buys you.
-const INVESTMENT_INCLUDES = [
-    '8 weeks of elite, Royals-Way coaching',
-    'The baseball-power hitting system',
-    'Neuro-vision & match-play scenarios',
-    '1-to-1 cues from the academy coaches',
-    'Your own player DNA profile',
+// The 8 weeks as a measurable arc (from the preseason plan): test → develop → re-test.
+const PROGRAM_ARC = [
+    { wk: 'Wk 1', phase: 'Baseline', body: 'Match Centre testing maps your game — power, scoring zones, accuracy & speed.' },
+    { wk: 'Wk 2–7', phase: 'Develop', body: 'Reach for Power & 360°, then shot-range (batters) or technical work (bowlers).' },
+    { wk: 'Wk 8', phase: 'Re-test', body: 'Re-run the baseline and measure your gains — across all three formats.' },
 ];
+// Threaded through every session — shown as light chips, not a long list.
+const EVERY_SESSION = ['Neuro-vision training', '5/30 power mantra', 'Every rep tracked', 'Your player DNA profile'];
 
 // Do the maths — what an hour of coaching costs elsewhere vs here.
 // Other-program figures are typical local offers (not named); ours derives from
@@ -213,11 +213,30 @@ const PowerGame = () => {
                                         <div className="text-white/55 text-sm font-bold">the 8-week block</div>
                                     </div>
                                     <div className="border-t border-white/10 my-5" />
-                                    <div className="flex flex-col gap-3">
-                                        {INVESTMENT_INCLUDES.map((item, i) => (
-                                            <div key={i} className="flex items-start gap-3 text-sm text-white/85">
-                                                <Check className="w-4 h-4 text-rr-pink flex-shrink-0 mt-0.5" strokeWidth={3} /> {item}
+
+                                    {/* The 8-week arc — test, develop, re-test & prove the gains. */}
+                                    <div className="flex flex-col gap-4">
+                                        {PROGRAM_ARC.map((p, i) => (
+                                            <div key={i} className="flex gap-3.5">
+                                                <div className="flex flex-col items-center">
+                                                    <span className="flex-shrink-0 inline-flex items-center justify-center min-w-[3.25rem] h-7 px-2 rounded-full bg-rr-pink/15 border border-rr-pink/40 text-[11px] font-black text-rr-light-pink uppercase tracking-wide">{p.wk}</span>
+                                                    {i < PROGRAM_ARC.length - 1 && <span className="w-px flex-1 bg-white/10 my-1.5" />}
+                                                </div>
+                                                <div className="pb-0.5">
+                                                    <div className="text-white font-black text-sm uppercase tracking-wide leading-tight">{p.phase}</div>
+                                                    <div className="text-white/55 text-[13px] leading-snug mt-1">{p.body}</div>
+                                                </div>
                                             </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="border-t border-white/10 my-5" />
+                                    <div className="text-white/40 text-[11px] font-bold uppercase tracking-widest mb-2.5">In every session</div>
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {EVERY_SESSION.map((c, i) => (
+                                            <span key={i} className="inline-flex items-center gap-1.5 text-[11px] font-bold text-white/70 bg-white/5 border border-white/10 rounded-full px-2.5 py-1">
+                                                <Check className="w-3 h-3 text-rr-pink flex-shrink-0" strokeWidth={3.5} /> {c}
+                                            </span>
                                         ))}
                                     </div>
 
