@@ -22,7 +22,7 @@ const PHASES = [
             'Top Royals Academy coaches',
             'Invite to the Royals High Performance Centre September and March Camps',
             'Access to our world-first game & development management application: Match Centre',
-            'Performance tracking with our Performance Partners Full Track AI and Str8 Bat',
+            'Access to performance tracking with our Performance Partners Full Track AI and Str8 Bat',
             'Access to the Australian-first NeuroVision program built for Royals Academy',
             'Selection opportunities for our Power League match series played at various times from Sept 2026 - April 2027',
             'Exposure to clubs across Victoria scouting the next talent and marquee T20 player',
