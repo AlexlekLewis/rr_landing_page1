@@ -247,7 +247,6 @@ export function validateStep(step: Step, f: ApplyForm): string[] {
   }
   if (step === "history") {
     if (!f.rep_level && !f.club_level) e.push("Add your representative and/or senior cricket — pick at least one.");
-    if (!f.format) e.push("Select the format you mostly played.");
   }
   return e;
 }

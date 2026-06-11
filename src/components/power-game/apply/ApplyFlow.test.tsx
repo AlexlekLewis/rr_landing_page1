@@ -122,11 +122,9 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     fireEvent.click(screen.getByText("Right"));
     fireEvent.click(screen.getByText("Continue"));
 
-    // History — Dowling Shield, T20, 10 games, avg 38
+    // History — Dowling Shield, avg 38 (format is no longer collected)
     const levelSel = (screen.getAllByRole("combobox") as HTMLSelectElement[]).find((s) => [...s.options].some((o) => o.value === "P16M"))!;
     fireEvent.change(levelSel, { target: { value: "P16M" } });
-    const fmtSel = (screen.getAllByRole("combobox") as HTMLSelectElement[]).find((s) => [...s.options].some((o) => o.value === "t20"))!;
-    fireEvent.change(fmtSel, { target: { value: "t20" } });
     fireEvent.change(screen.getByPlaceholderText(/e\.g\. 32/), { target: { value: "38" } });
     fireEvent.click(screen.getByText("Continue"));
 
