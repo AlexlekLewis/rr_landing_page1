@@ -2,9 +2,10 @@
 // Vercel Serverless Function — Create Stripe Checkout Session for a Power Game spot.
 // POST /api/power-game-checkout  { applicationId, bookingId, squadId, email, playerName }
 // The held spot (bookingId) is confirmed by api/power-game-webhook.js on payment.
-// Env: STRIPE_SECRET_KEY, VITE_APP_URL.
+// Env: STRIPE_SECRET_KEY, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, VITE_APP_URL.
 // ============================================================
 import Stripe from 'stripe';
+import { createClient } from '@supabase/supabase-js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const BASE_URL = process.env.VITE_APP_URL || 'https://rramelbourne.com';
@@ -15,6 +16,26 @@ export default async function handler(req, res) {
   try {
     const { applicationId, bookingId, squadId, email, playerName, uniformTotalCents, uniformSelection } = req.body || {};
     if (!bookingId || !squadId) return res.status(400).json({ error: 'Missing booking or squad' });
+    if (!applicationId) return res.status(400).json({ error: 'Missing application' });
+
+    // No payment without the recorded consents — the UI gates this too, but the
+    // application row (written before checkout) is the source of truth. Fail closed.
+    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      return res.status(500).json({ error: 'Checkout is not configured.' });
+    }
+    const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+    const { data: app, error: appErr } = await supabase
+      .from('power_game_applications')
+      .select('accept_terms, accept_player_code, accept_parent_code, accept_social_media, accept_playing_standard')
+      .eq('id', applicationId)
+      .single();
+    if (appErr || !app) return res.status(400).json({ error: 'Application not found' });
+    const consentsAccepted =
+      app.accept_terms && app.accept_player_code && app.accept_parent_code &&
+      app.accept_social_media && app.accept_playing_standard;
+    if (!consentsAccepted) {
+      return res.status(403).json({ error: 'All compliance agreements must be accepted before payment.' });
+    }
 
     const lineItems = [
       {

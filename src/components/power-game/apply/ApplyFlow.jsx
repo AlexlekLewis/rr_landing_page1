@@ -158,6 +158,9 @@ export default function ApplyFlow({ embedded = false }) {
 
   async function secure() {
     if (submitting) return;
+    // Belt-and-braces: the button is disabled until consents pass, but never
+    // accept a payment attempt without them even if the DOM is tampered with.
+    if (!consentsOk(form)) { setErrors(['Please accept the compliances above to continue.']); return; }
     setSubmitting(true);
     setErrors([]);
     try {
@@ -212,6 +215,7 @@ export default function ApplyFlow({ embedded = false }) {
   // Apply but DON'T pay — submit full details + request a call; the spot is not held.
   async function applyWithoutPay() {
     if (submitting) return;
+    if (!consentsOk(form)) { setErrors(['Please accept the compliances above to continue.']); return; }
     setSubmitting(true);
     setErrors([]);
     try {
@@ -230,6 +234,7 @@ export default function ApplyFlow({ embedded = false }) {
   //  • below-floor / coming-soon → capability review or venue waitlist
   async function submitReview() {
     if (submitting) return;
+    if (!consentsOk(form)) { setErrors(['Please accept the compliances above to continue.']); return; }
     setSubmitting(true);
     setErrors([]);
     try {
