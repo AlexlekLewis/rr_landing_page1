@@ -51,6 +51,16 @@ export default function ApplyFlow({ embedded = false }) {
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
 
   const rootRef = useRef(null);
+  // Stripe cancel returns to /PGP2026/apply?cancelled=1 — tell the family nothing
+  // was charged instead of silently showing a fresh form.
+  useEffect(() => {
+    try {
+      if (new URLSearchParams(window.location.search).get('cancelled') === '1') {
+        setErrors(['Payment was cancelled — nothing was charged. Your application details were saved; go again below to pick your time and pay when you\u2019re ready.']);
+      }
+    } catch (_) { /* no-op */ }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     // Embedded (inline on the PGP page): keep the funnel section in view on each step.
     // Standalone route: scroll the window to top.
