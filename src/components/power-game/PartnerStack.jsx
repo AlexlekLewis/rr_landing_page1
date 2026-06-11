@@ -72,7 +72,7 @@ const PartnerStack = () => {
                         POWERED BY OUR <span className="text-rr-pink">PARTNERS</span>
                     </h2>
                     <p className="text-base md:text-lg text-rr-charcoal max-w-2xl mx-auto font-medium">
-                        The Power Game Program is proudly supported by a network of leading commercial, venue, and performance partners.
+                        The Rajasthan Royals Academy is proudly supported by a network of leading commercial, venue, and performance partners.
                     </p>
                 </motion.div>
 
