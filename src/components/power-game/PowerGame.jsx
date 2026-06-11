@@ -12,7 +12,7 @@ import CentresSection from './CentresSection';
 import AskThePlayers from './AskThePlayers';
 import PartnerStack from './PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
-import { MapPin, User, ClipboardList, Sparkles, ShieldCheck, AlertTriangle, Telescope, Zap, Flame, Clock, Check, ListChecks } from 'lucide-react';
+import { MapPin, User, ClipboardList, Sparkles, ShieldCheck, AlertTriangle, Telescope, Zap, Flame, Clock, ListChecks } from 'lucide-react';
 
 // The apply funnel renders inline in the #apply section so applicants never leave /PGP2026.
 const ApplyFlow = React.lazy(() => import('./apply/ApplyFlow'));
@@ -49,14 +49,21 @@ const EASY_PILLS = [
     { Icon: ShieldCheck, label: 'No payment until confirmed' },
 ];
 
-// The 8 weeks as a measurable arc (from the preseason plan): test → develop → re-test.
-const PROGRAM_ARC = [
-    { wk: 'Wk 1', phase: 'Baseline', body: 'Match Centre testing maps your game — power, scoring zones, accuracy & speed.' },
-    { wk: 'Wk 2–7', phase: 'Develop', body: 'Reach for Power & 360°, then shot-range (batters) or technical work (bowlers).' },
-    { wk: 'Wk 8', phase: 'Re-test', body: 'Re-run the baseline and measure your gains — across all three formats.' },
+// Prepare your game — what players sharpen to be ready for the season (this is
+// PRE-SEASON; lead on readiness, not just "skills added"). Written in the program's
+// own voice (warm, aspirational, selection-focused; matched to PricingSection /
+// OverviewSection, not AI house style). The week-by-week session plan — periodisation,
+// drill progressions and the testing protocol — stays OFF the public page (that's the
+// IP). Partner tools (Full Track, Str8 Bat, NeuroVision) are fine; Pricing lists them.
+const DEVELOP_PILLARS = [
+    { name: 'Power on demand', body: 'Learn to generate genuine power on demand, and reach for it the moment a game asks the question.' },
+    { name: '360° scoring', body: 'Score all around the ground so you’re never tied down or bowled to a plan — finding the boundary in every direction.' },
+    { name: 'Power under pressure', body: 'Hold your method when it matters most — the skills that win finals and put you on a selector’s radar.' },
 ];
-// Threaded through every session — shown as light chips, not a long list.
-const EVERY_SESSION = ['Neuro-vision training', '5/30 power mantra', 'Every rep tracked', 'Your player DNA profile'];
+const DEVELOP_TRACKS = [
+    { who: 'Batters', body: 'Sharpen a complete 360° shot range, orthodox through to innovative, so you walk into round one ready to score against pace and spin alike.' },
+    { who: 'Bowlers', body: 'Sharpen your bowling, seam or spin — a repeatable action, a stock ball you can trust and the variations to land your plans — ready to bowl with intent from round one.' },
+];
 
 // Do the maths — what an hour of coaching costs elsewhere vs here.
 // Other-program figures are typical local offers (not named); ours derives from
@@ -214,29 +221,26 @@ const PowerGame = () => {
                                     </div>
                                     <div className="border-t border-white/10 my-5" />
 
-                                    {/* The 8-week arc — test, develop, re-test & prove the gains. */}
-                                    <div className="flex flex-col gap-4">
-                                        {PROGRAM_ARC.map((p, i) => (
-                                            <div key={i} className="flex gap-3.5">
-                                                <div className="flex flex-col items-center">
-                                                    <span className="flex-shrink-0 inline-flex items-center justify-center min-w-[3.25rem] h-7 px-2 rounded-full bg-rr-pink/15 border border-rr-pink/40 text-[11px] font-black text-rr-light-pink uppercase tracking-wide">{p.wk}</span>
-                                                    {i < PROGRAM_ARC.length - 1 && <span className="w-px flex-1 bg-white/10 my-1.5" />}
-                                                </div>
-                                                <div className="pb-0.5">
-                                                    <div className="text-white font-black text-sm uppercase tracking-wide leading-tight">{p.phase}</div>
-                                                    <div className="text-white/55 text-[13px] leading-snug mt-1">{p.body}</div>
+                                    {/* Prepare your game — concept/outcome level so the actual
+                                        session plan (periodisation + drill progressions) stays ours. */}
+                                    <div className="text-white/40 text-[11px] font-bold uppercase tracking-widest mb-3">Prepare your game</div>
+                                    <div className="flex flex-col gap-3.5">
+                                        {DEVELOP_PILLARS.map((p, i) => (
+                                            <div key={i} className="flex gap-3">
+                                                <span className="mt-[7px] flex-shrink-0 w-1.5 h-1.5 rounded-full bg-rr-pink" />
+                                                <div>
+                                                    <div className="text-white font-black text-sm uppercase tracking-wide leading-tight">{p.name}</div>
+                                                    <div className="text-white/55 text-[13px] leading-snug mt-0.5">{p.body}</div>
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
-
-                                    <div className="border-t border-white/10 my-5" />
-                                    <div className="text-white/40 text-[11px] font-bold uppercase tracking-widest mb-2.5">In every session</div>
-                                    <div className="flex flex-wrap gap-1.5">
-                                        {EVERY_SESSION.map((c, i) => (
-                                            <span key={i} className="inline-flex items-center gap-1.5 text-[11px] font-bold text-white/70 bg-white/5 border border-white/10 rounded-full px-2.5 py-1">
-                                                <Check className="w-3 h-3 text-rr-pink flex-shrink-0" strokeWidth={3.5} /> {c}
-                                            </span>
+                                    <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                        {DEVELOP_TRACKS.map((t, i) => (
+                                            <div key={i} className="bg-white/[0.04] border border-white/10 rounded-xl px-3.5 py-3">
+                                                <div className="text-rr-light-pink font-black text-[11px] uppercase tracking-widest mb-1">{t.who}</div>
+                                                <div className="text-white/55 text-[12px] leading-snug">{t.body}</div>
+                                            </div>
                                         ))}
                                     </div>
 
