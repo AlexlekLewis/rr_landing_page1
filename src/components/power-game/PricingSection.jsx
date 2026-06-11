@@ -21,7 +21,7 @@ const PHASES = [
             'Program content straight from the Royals development ecosystem designed to develop and understand power with bat, ball and in the field',
             'Top Royals Academy coaches',
             'Invite to the Royals High Performance Centre September and March Camps',
-            'Access to our world-first game & development management application: Match Centre',
+            'Access to our world-first game & development management application, our Player Performance Portal',
             'Access to performance tracking with our Performance Partners Full Track AI and Str8 Bat',
             'Access to the Australian-first NeuroVision program built for Royals Academy',
             'Selection opportunities for our Power League match series played at various times from Sept 2026 - April 2027',
