@@ -267,7 +267,7 @@ const PowerGame = () => {
 
                                 <div className="mt-10">
                                     <button onClick={() => setShowApply(true)} className="inline-flex items-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-8 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
-                                        Start your application →
+                                        Secure your spot →
                                     </button>
                                     <p className="text-white/30 text-[11px] mt-4">Every application is personally reviewed by our coaching team.</p>
                                 </div>
