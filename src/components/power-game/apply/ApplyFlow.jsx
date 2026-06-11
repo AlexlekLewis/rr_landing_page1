@@ -158,6 +158,9 @@ export default function ApplyFlow({ embedded = false }) {
 
   async function secure() {
     if (submitting) return;
+    // Belt-and-braces: the button is disabled until consents pass, but never
+    // accept a payment attempt without them even if the DOM is tampered with.
+    if (!consentsOk(form)) { setErrors(['Please accept the compliances above to continue.']); return; }
     setSubmitting(true);
     setErrors([]);
     try {
@@ -180,7 +183,21 @@ export default function ApplyFlow({ embedded = false }) {
           body: JSON.stringify({ applicationId: id, bookingId: hold?.holdId, squadId: selected?.id, email: form.contact_email, playerName: form.player_name, uniformTotalCents: kitTotal, uniformSelection: kitSummary(kit).map((l) => `${l.name} (${l.size})`).join(', ') }),
         });
         const data = await r.json();
-        if (data?.url) { window.location.href = data.url; return; }
+        if (data?.url) {
+          // Hand the order details to the success page (it can't read the DB).
+          try {
+            sessionStorage.setItem('pgp_confirmation', JSON.stringify({
+              playerName: form.player_name,
+              centreName: CENTRE_BY_SLUG[form.centre]?.name || '',
+              slot: selected ? `${selected.day} ${selected.startTime}–${selected.endTime}` : '',
+              band: result.placement.placedBand,
+              kit: kitSummary(kit),
+              kitTotalCents: kitTotal,
+            }));
+          } catch (_) { /* private mode — page falls back gracefully */ }
+          window.location.href = data.url;
+          return;
+        }
         setErrors([data?.error || 'Could not start checkout — please try again.']);
         return;
       }
@@ -198,6 +215,7 @@ export default function ApplyFlow({ embedded = false }) {
   // Apply but DON'T pay — submit full details + request a call; the spot is not held.
   async function applyWithoutPay() {
     if (submitting) return;
+    if (!consentsOk(form)) { setErrors(['Please accept the compliances above to continue.']); return; }
     setSubmitting(true);
     setErrors([]);
     try {
@@ -216,6 +234,7 @@ export default function ApplyFlow({ embedded = false }) {
   //  • below-floor / coming-soon → capability review or venue waitlist
   async function submitReview() {
     if (submitting) return;
+    if (!consentsOk(form)) { setErrors(['Please accept the compliances above to continue.']); return; }
     setSubmitting(true);
     setErrors([]);
     try {
@@ -254,13 +273,22 @@ export default function ApplyFlow({ embedded = false }) {
       <label htmlFor={`c_${k}`} className="text-xs text-white/70 leading-relaxed cursor-pointer">{label}</label>
     </div>
   );
+  // One UI checkbox covers all mandatory agreements — the DB still records each
+  // consent column individually (the box sets them together).
+  const AGREEMENT_KEYS = ['accept_terms', 'accept_player_code', 'accept_parent_code', 'accept_playing_standard'];
+  const agreementsChecked = AGREEMENT_KEYS.every((k) => !!form[k]);
+  const setAgreements = (v) => setForm((p) => ({ ...p, accept_terms: v, accept_player_code: v, accept_parent_code: v, accept_playing_standard: v }));
+  const docLink = (href, label) => <a href={href} target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">{label}</a>;
   const renderConsents = () => (
     <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3 text-left">
       <div className="text-[11px] font-black uppercase tracking-widest text-rr-pink mb-1">Compliance &amp; permissions</div>
-      {consentRow('accept_playing_standard', <>I understand places are subject to meeting the program&apos;s minimum playing standard, and squads/times are subject to change.</>)}
-      {consentRow('accept_terms', <>I have read and agree to the <a href="/terms-conditions" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Terms &amp; Conditions</a> and <a href="/privacy-policy" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Privacy Policy</a>, and confirm all information provided is accurate — I understand false information may void my application (refund less processing fees).</>)}
-      {consentRow('accept_player_code', <>I have read, understood and agree to the <a href="/assets/RRA_Player_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Player Code of Conduct</a>.</>)}
-      {isMinor(form.player_dob) && consentRow('accept_parent_code', <>I have read, understood and agree to the <a href="/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Parent/Guardian Code of Conduct</a>.</>)}
+      <div className="flex items-start gap-3">
+        <input id="c_agreements" type="checkbox" checked={agreementsChecked} onChange={(e) => setAgreements(e.target.checked)} className="mt-0.5 w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer" />
+        <label htmlFor="c_agreements" className="text-xs text-white/70 leading-relaxed cursor-pointer">
+          I have read and agree to the {docLink('/terms-conditions', 'Terms & Conditions')}, {docLink('/privacy-policy', 'Privacy Policy')} and {docLink('/assets/RRA_Player_Code_of_Conduct.pdf', 'Player Code of Conduct')}
+          {isMinor(form.player_dob) && <> and the {docLink('/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf', 'Parent/Guardian Code of Conduct')}</>}; I understand places are subject to meeting the program&apos;s minimum playing standard (squads &amp; times may change); and I confirm all information provided is accurate — false information may void my application (refund less processing fees).
+        </label>
+      </div>
       {consentRow('accept_social_media', <>I&apos;m happy for photos/videos featuring the player to be used on RRA Melbourne&apos;s social media &amp; marketing channels.</>)}
       <div className="border-t border-white/10 pt-3">
         {consentRow('needs_uniform', <>I&apos;d like to order a Power Game playing uniform (a coach will confirm sizing &amp; details).</>)}
