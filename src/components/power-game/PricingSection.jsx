@@ -18,11 +18,11 @@ const PHASES = [
             "Our Academy players demonstrate rapid growth in their game. This Phase 1 is perfect timing to kick-start your season and get off to a flyer.",
         points: [
             'Minimum 2 hours per week for 8 weeks in your allocated squad',
+            'Program content straight from the Royals development ecosystem designed to develop and understand power with bat, ball and in the field',
             'Top Royals Academy coaches',
             'Invite to the Royals High Performance Centre September and March Camps',
             'Access to our world-first game & development management application: Match Centre',
             'Performance tracking with our Performance Partners Full Track AI and Str8 Bat',
-            'Program content straight from the Royals development ecosystem designed to develop and understand power with bat, ball and in the field',
             'Access to the Australian-first NeuroVision program built for Royals Academy',
             'Selection opportunities for our Power League match series played at various times from Sept 2026 - April 2027',
             'Exposure to clubs across Victoria scouting the next talent and marquee T20 player',
