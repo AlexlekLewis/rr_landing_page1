@@ -80,7 +80,7 @@ const HeroSection = () => {
                 >
                     <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2">
                         <span className="text-rr-pink font-bold text-xs">📍</span>
-                        <span className="text-white text-xs font-semibold uppercase tracking-wide">Bundoora — Last Place Remaining</span>
+                        <span className="text-white text-xs font-semibold uppercase tracking-wide">Bundoora — Last Places Remaining</span>
                     </div>
                     <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2">
                         <span className="text-rr-pink font-bold text-xs">📍</span>
