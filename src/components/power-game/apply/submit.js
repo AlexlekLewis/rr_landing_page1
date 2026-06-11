@@ -105,5 +105,16 @@ export async function submitApplication(form, placement, squad, opts = {}) {
   const { supabase } = await import("../../../lib/supabase");
   const { error } = await supabase.from("power_game_applications").insert([payload]);
   if (error) throw error;
+
+  // Meta Pixel — fire a Lead conversion on successful application submit.
+  try {
+    if (typeof window !== "undefined" && typeof window.fbq === "function") {
+      window.fbq("track", "Lead", {
+        content_name: "Power Game Program",
+        content_category: "power-game-application",
+      });
+    }
+  } catch (_) { /* never let analytics block the submit */ }
+
   return { id, row };
 }

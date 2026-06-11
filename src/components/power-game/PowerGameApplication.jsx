@@ -4,6 +4,18 @@ import { Loader2, CheckCircle2 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
 
+// Meta Pixel — fire a Lead conversion on successful application submit.
+const fireLeadEvent = () => {
+    try {
+        if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+            window.fbq('track', 'Lead', {
+                content_name: 'Power Game Program',
+                content_category: 'power-game-application',
+            });
+        }
+    } catch (_) { /* never let analytics block the submit */ }
+};
+
 /* ─── helpers ─── */
 const calculateAge = (dobString) => {
     if (!dobString) return null;
@@ -222,6 +234,7 @@ const PowerGameApplication = () => {
             }
 
             setSubmitted(true);
+            fireLeadEvent();
             window.scrollTo({ top: document.getElementById('apply')?.offsetTop - 80, behavior: 'smooth' });
         } catch (err) {
             console.error('Power Game application error:', err);
@@ -278,6 +291,7 @@ const PowerGameApplication = () => {
             const { error } = await supabase.from('power_game_applications').insert([payload]);
             if (error) throw error;
             setSubmitted(true);
+            fireLeadEvent();
             window.scrollTo({ top: document.getElementById('apply')?.offsetTop - 80, behavior: 'smooth' });
         } catch (err) {
             console.error('Capability application error:', err);
