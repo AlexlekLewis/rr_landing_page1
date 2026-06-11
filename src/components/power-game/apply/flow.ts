@@ -219,7 +219,7 @@ export function computePlacement(f: ApplyForm): PlacementResult {
   return { dna, placement };
 }
 
-export const STEPS = ["centre", "player", "profile", "history", "reveal", "slot", "secure"] as const;
+export const STEPS = ["centre", "player", "profile", "history", "reveal", "slot", "kit", "secure"] as const;
 export type Step = (typeof STEPS)[number];
 
 const emailOk = (e: string) => /\S+@\S+\.\S+/.test(e);

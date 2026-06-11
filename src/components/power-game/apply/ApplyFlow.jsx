@@ -7,6 +7,7 @@ import { CENTRES, CENTRE_BY_SLUG, squadsForPlacement } from '../../../lib/bookin
 import { inventory } from '../../../lib/booking/inventory';
 import { applications, applicationFromPlacement } from '../../../lib/booking/applications';
 import { BLANK_FORM, validateStep, computePlacement, isMinor, BLOCK_FEE, secondaryOptions, consentsOk } from './flow';
+import { KIT_ITEMS, BLANK_KIT, kitValid, kitTotalCents, kitSummary, fmtAud } from './kit';
 import DnaRevealCard from './DnaRevealCard';
 import { submitApplication } from './submit';
 
@@ -47,6 +48,10 @@ export default function ApplyFlow({ embedded = false }) {
   const [appId, setAppId] = useState(null); // persisted application id
   const [spotsTick, setSpotsTick] = useState(0); // force spots re-read
   const [submitting, setSubmitting] = useState(false);
+  const [kit, setKit] = useState({ ...BLANK_KIT });
+  const setKitSize = (id, size) => setKit((k) => ({ ...k, [id]: size }));
+  const kitTotal = kitTotalCents(kit);
+  const grandTotalCents = BLOCK_FEE * 100 + kitTotal;
 
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
 
@@ -115,7 +120,8 @@ export default function ApplyFlow({ embedded = false }) {
     const i = order.indexOf(step);
     if (i > 0) setStep(order[i - 1]);
     else if (step === 'slot') setStep('reveal');
-    else if (step === 'secure') setStep('slot');
+    else if (step === 'kit') setStep('slot');
+    else if (step === 'secure') setStep('kit');
   }
 
   function afterReveal() {
@@ -133,7 +139,7 @@ export default function ApplyFlow({ embedded = false }) {
       setHold({ holdId: res.holdId });
       if (appId) applications.update(appId, { squadId: squad.id, bookingId: res.holdId });
       setSpotsTick((t) => t + 1);
-      setStep('secure');
+      setStep('kit');
     } else {
       setSpotsTick((t) => t + 1); // refresh — it just filled
       setErrors(['That spot just filled — please pick another time.']);
@@ -151,6 +157,9 @@ export default function ApplyFlow({ embedded = false }) {
       const { id } = await submitApplication(form, result.placement, selected, {
         kind: 'standard',
         centreName: CENTRE_BY_SLUG[form.centre]?.name,
+        kit,
+        kitSummary: kitSummary(kit),
+        kitTotalCents: kitTotal,
       });
       // Live path: Stripe Checkout, then the webhook flips this row to paid.
       // Enabled via VITE_PG_LIVE_PAYMENTS=1 + STRIPE keys.
@@ -158,7 +167,7 @@ export default function ApplyFlow({ embedded = false }) {
         const r = await fetch('/api/power-game-checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ applicationId: id, bookingId: hold?.holdId, squadId: selected?.id, email: form.contact_email, playerName: form.player_name }),
+          body: JSON.stringify({ applicationId: id, bookingId: hold?.holdId, squadId: selected?.id, email: form.contact_email, playerName: form.player_name, uniformTotalCents: kitTotal, uniformSelection: kitSummary(kit).map((l) => `${l.name} (${l.size})`).join(', ') }),
         });
         const data = await r.json();
         if (data?.url) { window.location.href = data.url; return; }
@@ -438,7 +447,69 @@ export default function ApplyFlow({ embedded = false }) {
               </div>
             )}
 
-            {/* ── SECURE ── */}
+            {/* ── KIT (uniform requirement + sizing) ── */}
+            {step === 'kit' && (
+              <div>
+                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Your kit</h1>
+                <p className="text-white/50 text-sm mb-5">
+                  All participants are required to have a Royals Academy Training Shirt. Add training shorts or pants and other kit at special first-time prices. Sizes will be confirmed with your order.
+                </p>
+
+                <div className="space-y-3 mb-6">
+                  {KIT_ITEMS.map((item) => {
+                    const chosen = kit[item.id];
+                    const active = !!(chosen && chosen.trim());
+                    return (
+                      <div key={item.id} className={`rounded-2xl border p-4 transition-all ${active ? 'bg-white/[0.07] border-rr-pink/50' : 'bg-white/5 border-white/15'}`}>
+                        <div className="flex items-center justify-between gap-3 mb-2">
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="text-sm font-black text-white uppercase tracking-wide">{item.name}</span>
+                              {item.required ? (
+                                <span className="text-[9px] font-black text-rr-pink uppercase tracking-widest bg-rr-pink/15 border border-rr-pink/30 rounded-full px-2 py-0.5">Required</span>
+                              ) : (
+                                <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Optional</span>
+                              )}
+                            </div>
+                            {item.note && <p className="text-[11px] text-white/40 mt-1">{item.note}</p>}
+                          </div>
+                          <span className="text-sm font-black text-white flex-shrink-0">{fmtAud(item.priceCents)}</span>
+                        </div>
+
+                        {item.oneSize ? (
+                          <label className="flex items-center gap-2 text-xs text-white/70 cursor-pointer">
+                            <input type="checkbox" checked={chosen === 'OS'} onChange={(e) => setKitSize(item.id, e.target.checked ? 'OS' : '')} className="w-4 h-4 accent-rr-pink" />
+                            Add (one size fits all)
+                          </label>
+                        ) : (
+                          <div className="flex flex-wrap gap-2">
+                            {!item.required && (
+                              <button onClick={() => setKitSize(item.id, '')} className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest border transition-all ${!active ? 'bg-white/10 border-white/30 text-white' : 'bg-transparent border-white/15 text-white/40 hover:text-white/70'}`}>None</button>
+                            )}
+                            {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map((sz) => (
+                              <button key={sz} onClick={() => setKitSize(item.id, sz)} className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest border transition-all ${chosen === sz ? 'bg-rr-pink border-rr-pink text-white' : 'bg-white/5 border-white/15 text-white/70 hover:border-rr-pink/50'}`}>{sz}</button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="bg-white/5 border border-white/15 rounded-2xl p-4 mb-5 flex items-baseline justify-between">
+                  <span className="text-xs uppercase tracking-widest text-white/50">Kit subtotal</span>
+                  <span className="text-xl font-black text-white">{fmtAud(kitTotal)}</span>
+                </div>
+
+                {!kitValid(kit) && <p className="text-rr-pink text-[11px] mb-3">Please choose a size for the required Training Shirt to continue.</p>}
+
+                <button onClick={() => kitValid(kit) && setStep('secure')} disabled={!kitValid(kit)} className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
+                  Continue →
+                </button>
+              </div>
+            )}
+
+
             {step === 'secure' && selected && (
               <div>
                 <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-6">Secure your spot</h1>
@@ -447,15 +518,19 @@ export default function ApplyFlow({ embedded = false }) {
                   <SummaryRow k="Squad" v={`${result.placement.stream === 'performance' ? 'Performance' : 'Pathway'} · ${result.placement.placedBand}`} />
                   <SummaryRow k="Centre" v={CENTRE_BY_SLUG[form.centre]?.name} />
                   <SummaryRow k="Time" v={`${selected.day} ${selected.startTime}–${selected.endTime}`} />
-                  <SummaryRow k="Block" v="8-week Power Game block" />
+                  <SummaryRow k="Block" v="8-week Power Game phase" />
+                  <SummaryRow k="Program" v={`$${BLOCK_FEE}.00`} />
+                  {kitSummary(kit).map((line) => (
+                    <SummaryRow key={line.name} k={`${line.name} (${line.size})`} v={fmtAud(line.priceCents)} />
+                  ))}
                   <div className="border-t border-white/10 pt-3 flex items-baseline justify-between">
                     <span className="text-xs uppercase tracking-widest text-white/50">Total</span>
-                    <span className="text-3xl font-black text-white">${BLOCK_FEE}</span>
+                    <span className="text-3xl font-black text-white">{fmtAud(grandTotalCents)}</span>
                   </div>
                 </div>
                 <div className="mb-5">{renderConsents()}</div>
                 <button onClick={secure} disabled={submitting || !consentsOk(form)} className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
-                  {submitting ? 'Processing…' : `Pay $${BLOCK_FEE} & secure my spot`}
+                  {submitting ? 'Processing…' : `Pay ${fmtAud(grandTotalCents)} & secure my spot`}
                 </button>
                 <button onClick={applyWithoutPay} disabled={submitting || !consentsOk(form)} className="w-full mt-3 bg-transparent border border-white/20 hover:border-white/40 disabled:opacity-40 disabled:cursor-not-allowed text-white/80 font-bold uppercase tracking-widest text-[11px] rounded-full px-6 py-3.5 transition-all">
                   Apply without paying — request a call first
