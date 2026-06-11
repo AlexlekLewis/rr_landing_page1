@@ -652,7 +652,7 @@ const Fallback = ({ onOther, onReview, otherName }) => (
     <p className="text-white/70 text-sm mb-5">No squads for your group run at this centre right now. We don't want to lose you — let's find a fit.</p>
     <div className="space-y-2.5">
       {otherName && <button onClick={onOther} className="w-full bg-rr-blue/20 border border-rr-blue/40 text-white font-bold uppercase tracking-widest text-xs rounded-full px-5 py-3 hover:bg-rr-blue/30">Try {otherName} instead</button>}
-      <button onClick={onReview} className="w-full bg-white/10 border border-white/15 text-white font-bold uppercase tracking-widest text-xs rounded-full px-5 py-3 hover:bg-white/20">Apply anyway — coach will help</button>
+      <button onClick={onReview} className="w-full bg-white/10 border border-white/15 text-white font-bold uppercase tracking-widest text-xs rounded-full px-5 py-3 hover:bg-white/20">Apply via Wild Card — coach will review</button>
     </div>
   </div>
 );

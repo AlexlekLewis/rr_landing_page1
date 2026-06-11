@@ -268,13 +268,14 @@ const PowerGame = () => {
                                             <Telescope className="w-6 h-6 text-white" strokeWidth={2.2} />
                                         </div>
                                         <div>
-                                            <div className="text-rr-pink font-black uppercase tracking-[0.25em] text-[11px] mb-2">We&apos;re in the business of discovering talent</div>
-                                            <h3 className="text-xl md:text-2xl font-black uppercase tracking-wide text-white mb-2">Not caught by the rep system? Apply anyway.</h3>
+                                            <div className="text-rr-pink font-black uppercase tracking-[0.25em] text-[11px] mb-2">Wild Card Selection</div>
+                                            <h3 className="text-xl md:text-2xl font-black uppercase tracking-wide text-white mb-2">Think you've got it? Back yourself.</h3>
                                             <p className="text-white/60 text-sm leading-relaxed mb-5">
-                                                Reps and selections miss players every year. If your cricket doesn&apos;t meet the
-                                                standard yet, your application isn&apos;t rejected — it goes to a real coach review.
-                                                If a Power Game coach sees something, they&apos;ll be in touch about the right squad
-                                                for your development. No payment until your spot is confirmed.
+                                                Reps and selectors miss players every year — the right talent doesn&apos;t always show up on
+                                                paper. Our Wild Card pathway is your shot. If your cricket doesn&apos;t meet the standard yet,
+                                                your application isn&apos;t rejected — it goes to a real Power Game coach for review. See something
+                                                in you, and they&apos;ll be in touch about the right squad for your development. No payment until
+                                                your spot is confirmed.
                                             </p>
                                             <div className="flex flex-col sm:flex-row gap-2.5">
                                                 {DISCOVERY_EXAMPLES.map((ex, i) => (
