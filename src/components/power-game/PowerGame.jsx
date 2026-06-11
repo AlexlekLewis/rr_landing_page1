@@ -9,6 +9,7 @@ import FeaturesBenefits from './FeaturesBenefits';
 import PricingSection from './PricingSection';
 import CoachesSection from './CoachesSection';
 import CentresSection from './CentresSection';
+import AskThePlayers from './AskThePlayers';
 import PartnerStack from './PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { MapPin, User, ClipboardList, Sparkles, ShieldCheck, AlertTriangle, Telescope, Zap, Flame, Clock, Check, ListChecks } from 'lucide-react';
@@ -68,6 +69,7 @@ const SECTIONS = [
     'academy-video',
     'coaches',
     'centres',
+    'ask-the-players',
     'apply',
     'partners',
 ];
@@ -147,6 +149,11 @@ const PowerGame = () => {
 
                 <div id="centres">
                     <CentresSection />
+                </div>
+
+                {/* Player-voice social proof — right before the application so the quotes sell the apply. */}
+                <div id="ask-the-players">
+                    <AskThePlayers />
                 </div>
 
                 {/* Combined: Secure your place + How it works (process steps) + apply funnel inline */}
