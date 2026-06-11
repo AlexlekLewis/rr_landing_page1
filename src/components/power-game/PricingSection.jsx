@@ -8,7 +8,7 @@ const PHASES = [
     {
         num: '01',
         name: 'Power Pre-Season',
-        window: 'Late July → September school hols',
+        window: 'Late July → Mid September',
         rate: '2 hours / week',
         price: 989,
         priceRate: '$62 per hour',
