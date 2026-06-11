@@ -11,7 +11,7 @@ import CoachesSection from './CoachesSection';
 import CentresSection from './CentresSection';
 import PartnerStack from './PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
-import { MapPin, User, ClipboardList, Sparkles, ShieldCheck, AlertTriangle, Telescope, Zap, Flame } from 'lucide-react';
+import { MapPin, User, ClipboardList, Sparkles, ShieldCheck, AlertTriangle, Telescope, Zap, Flame, Clock, Check, ListChecks } from 'lucide-react';
 
 // The apply funnel renders inline in the #apply section so applicants never leave /PGP2026.
 const ApplyFlow = React.lazy(() => import('./apply/ApplyFlow'));
@@ -30,6 +30,22 @@ const HOW_STEPS = [
 const DISCOVERY_EXAMPLES = [
     { Icon: Zap, label: 'A fast bowler who needs structure' },
     { Icon: Flame, label: 'A power hitter learning to play the future' },
+];
+
+// "How easy it is" reassurance pills above the steps.
+const EASY_PILLS = [
+    { Icon: Clock, label: '~3 minutes' },
+    { Icon: ListChecks, label: '5 steps' },
+    { Icon: ShieldCheck, label: 'No payment until confirmed' },
+];
+
+// The offer reframed as an investment — what the block actually buys you.
+const INVESTMENT_INCLUDES = [
+    '8 weeks of elite, Royals-Way coaching',
+    'The baseball-power hitting system',
+    'Neuro-vision & match-play scenarios',
+    '1-to-1 cues from the academy coaches',
+    'Your own player DNA profile',
 ];
 
 const SECTIONS = [
@@ -129,10 +145,16 @@ const PowerGame = () => {
                     {!showApply ? (
                         <div className="py-20 md:py-28 px-5">
                             <div className="max-w-5xl mx-auto text-center">
-                                <div className="text-rr-pink font-black uppercase tracking-[0.3em] text-xs mb-3">Secure your place</div>
-                                <h2 className="text-3xl md:text-5xl font-black uppercase tracking-wide mb-4">Earn your place</h2>
-                                <p className="text-white/60 mb-2 max-w-xl mx-auto">Five steps to find the squad that&apos;s right for your development — about three minutes.</p>
-                                <p className="text-white/40 text-sm mb-12">The Power Game · 8-week phase · <span className="text-white font-bold">$960</span></p>
+                                <div className="text-rr-pink font-black uppercase tracking-[0.3em] text-xs mb-3">How to apply</div>
+                                <h2 className="text-3xl md:text-5xl font-black uppercase tracking-wide mb-4">Secure your <span className="text-rr-pink">spot</span></h2>
+                                <p className="text-white/60 mb-6 max-w-xl mx-auto">Five quick questions, about three minutes. You don&apos;t pay a cent until a coach confirms your place.</p>
+                                <div className="flex flex-wrap justify-center gap-2.5 mb-12">
+                                    {EASY_PILLS.map((p, i) => (
+                                        <span key={i} className="inline-flex items-center gap-2 bg-white/[0.06] border border-white/10 rounded-full px-4 py-2 text-xs font-bold text-white/80">
+                                            <p.Icon className="w-4 h-4 text-rr-pink" strokeWidth={2.4} /> {p.label}
+                                        </span>
+                                    ))}
+                                </div>
 
                                 <ol className="max-w-2xl mx-auto text-left">
                                     {HOW_STEPS.map((s, i) => (
@@ -157,6 +179,23 @@ const PowerGame = () => {
                                         </li>
                                     ))}
                                 </ol>
+
+                                {/* The offer, framed as an investment in development. */}
+                                <div className="mt-12 max-w-md mx-auto text-left bg-white/5 border border-white/10 rounded-2xl p-7">
+                                    <div className="text-rr-pink font-black uppercase tracking-[0.2em] text-[11px] mb-2">Your 8-week investment</div>
+                                    <div className="flex items-baseline gap-3 mb-1">
+                                        <div className="text-5xl font-black text-white leading-none">$960</div>
+                                        <div className="text-white/55 text-sm font-bold">the block · <span className="text-rr-light-pink">$120 a session</span></div>
+                                    </div>
+                                    <div className="border-t border-white/10 my-5" />
+                                    <div className="flex flex-col gap-3">
+                                        {INVESTMENT_INCLUDES.map((item, i) => (
+                                            <div key={i} className="flex items-start gap-3 text-sm text-white/85">
+                                                <Check className="w-4 h-4 text-rr-pink flex-shrink-0 mt-0.5" strokeWidth={3} /> {item}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
 
                                 {/* Discovery / review path — for talent the rep system hasn't caught yet. */}
                                 <div className="mt-10 max-w-3xl mx-auto text-left bg-rr-blue/10 border border-rr-blue/30 rounded-2xl p-6 md:p-8">
