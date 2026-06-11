@@ -173,7 +173,7 @@ const QuoteBlock = ({
                 transition={{ duration: 0.7, delay: 0.15, ease: 'easeOut' }}
                 className={imageOnRight ? 'md:order-1' : 'md:order-2'}
             >
-                <div className="text-rr-pink text-6xl md:text-8xl font-black leading-none mb-4">
+                <div className="text-rr-pink text-6xl md:text-8xl font-black leading-none mb-1">
                     &ldquo;
                 </div>
                 <blockquote className={`${textColor} text-3xl md:text-5xl font-bold leading-snug mb-8`}>

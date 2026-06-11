@@ -1,35 +1,38 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Check, Trophy } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 // Timeline of training phases (cards) interleaved with match periods (banners).
 // Update price/onSale as further phases go on sale.
 const PHASES = [
     {
         num: '01',
-        name: 'Preseason',
-        window: 'Late July → September school hols',
+        name: 'Power Pre-Season',
+        window: 'Late July → Mid September',
         rate: '2 hours / week',
-        price: 960,
-        priceRate: '$60 per hour',
+        price: 989,
+        priceRate: '$62 per hour',
         onSale: true,
-        tagline: 'Foundation & Identity',
+        tagline: 'A Powerful Start',
         description:
-            "Establish strengths and archetype. Build the game-intelligence toolset and the technical foundations.",
+            "Our Academy players demonstrate rapid growth in their game. This Phase 1 is perfect timing to kick-start your season and get off to a flyer.",
         points: [
             'Minimum 2 hours per week for 8 weeks in your allocated squad',
-            'Top Royals Academy coaches',
-            'Invite to the Royals High Performance Centre',
-            'Access to our world-first game & development management application: Match Centre',
-            'Performance tracking with our Performance Partners Full Track AI and Str8 Bat',
-            'Program content based on developing power with bat, ball and in the field',
+            'Program content straight from the Royals development ecosystem designed to develop and understand power with bat, ball and in the field',
+            'Top Royals Academy coaches with a mix of skills and experiences at the highest level, through to current players applying their skills in Melbourne and across the world',
+            'A mix of 1:1 up to 1:4 coaches, through to small and large groups depending on the plan and focus of the session',
+            'Invite to the Royals High Performance Centre September and March Camps',
+            'Access to our world-first game & development management application, our Player Performance Portal',
+            'Access to performance tracking with our Performance Partners Full Track AI and Str8 Bat',
             'Access to the Australian-first NeuroVision program built for Royals Academy',
+            'Selection opportunities for our Power League match series played at various times from Sept 2026 - April 2027',
+            'Exposure to clubs across Victoria scouting the next talent and marquee T20 player',
         ],
         accent: 'from-rr-blue to-rr-medium-blue',
     },
     {
         num: '02',
-        name: 'In-Season',
+        name: 'Power Season',
         window: 'October → end of January',
         rate: '2 hours / week',
         price: 0, // TBC
@@ -47,7 +50,7 @@ const PHASES = [
     },
     {
         num: '03',
-        name: 'Finish Strong',
+        name: 'Power Finish',
         window: 'February → March',
         rate: '2 hours / week',
         price: 0, // TBC
@@ -64,20 +67,6 @@ const PHASES = [
         accent: 'from-rr-pink to-rr-light-pink',
     },
 ];
-
-// Match periods sit between phases: after Phase 1 and after Phase 2.
-const MATCH_PERIODS = {
-    afterPhase: {
-        1: {
-            name: 'September Matches',
-            description: 'During the September school holidays — the first competitive test of preseason work.',
-        },
-        2: {
-            name: 'Late January Carnival',
-            description: "The second match block — showcasing what's been built across the season.",
-        },
-    },
-};
 
 const formatPrice = (n) => (n > 0 ? `$${n.toLocaleString()}` : 'TBC');
 
@@ -113,12 +102,12 @@ const PhaseCard = ({ phase, idx }) => (
             {phase.name}
         </h3>
         <div className="text-xs font-medium text-white/60 mb-1">{phase.window}</div>
-        <div className="text-[11px] font-bold text-rr-blue uppercase tracking-widest mb-5">{phase.rate}</div>
+        <div className="text-[11px] font-bold text-rr-pink uppercase tracking-widest mb-5">{phase.rate}</div>
 
         <div className="text-base md:text-lg font-black text-white uppercase tracking-wide mb-2">
             {phase.tagline}
         </div>
-        <p className="text-sm text-white/75 font-medium leading-relaxed mb-5 flex-1">
+        <p className="text-sm text-white/75 font-medium leading-relaxed mb-5">
             {phase.description}
         </p>
 
@@ -158,32 +147,9 @@ const PhaseCard = ({ phase, idx }) => (
     </motion.div>
 );
 
-const MatchBanner = ({ match }) => (
-    <motion.div
-        className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-rr-navy via-rr-blue to-rr-pink p-6 md:p-7 border border-rr-pink/30"
-        initial={{ opacity: 0, y: 12 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
-    >
-        <div className="flex items-center gap-4 justify-center text-center md:text-left md:justify-start">
-            <div className="w-11 h-11 rounded-full bg-white/15 border border-white/25 flex items-center justify-center flex-shrink-0">
-                <Trophy className="w-5 h-5 text-white" />
-            </div>
-            <div>
-                <div className="text-[10px] font-black text-white/80 uppercase tracking-widest mb-1">Match Period</div>
-                <h4 className="text-lg md:text-xl font-black text-white uppercase tracking-wide leading-tight">
-                    {match.name}
-                </h4>
-                <p className="text-sm text-white/85 font-medium mt-1 max-w-2xl">{match.description}</p>
-            </div>
-        </div>
-    </motion.div>
-);
-
 const PricingSection = () => {
     return (
-        <section className="bg-rr-dark py-24 md:py-32 relative overflow-hidden">
+        <section className="bg-rr-page py-24 md:py-32 relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-rr" />
             <div
                 className="absolute inset-0 opacity-30 pointer-events-none"
@@ -202,41 +168,23 @@ const PricingSection = () => {
                     <div className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
                         <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">
-                            Three Training Blocks · Two Match Periods
+                            Three Training Phases
                         </span>
                     </div>
                     <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-wide mb-6">
                         THE <span className="text-rr-pink">POWER GAME</span> JOURNEY
                     </h2>
                     <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto font-medium">
-                        An ongoing program from late July through finals cricket in March. Two hours per week, every week of each training block — with breaks during school holidays so your player has time to rest, recover, and be a kid.
+                        An ongoing program from late July through finals cricket in March. Two hours per week, every week of each training phase — with the ability to purchase one Phase at a time.
                     </p>
                 </motion.div>
 
                 {/* Phases — vertical cards in a row */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-12">
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-[1.3fr_1fr_1fr] gap-6 md:gap-8 lg:items-start mb-12">
                     {PHASES.map((phase, idx) => (
                         <PhaseCard key={phase.name} phase={phase} idx={idx} />
                     ))}
                 </div>
-
-                {/* Match periods between the training blocks */}
-                <div className="flex items-center gap-4 mb-6">
-                    <div className="h-px flex-1 bg-gradient-to-r from-transparent to-rr-pink/40" />
-                    <span className="text-xs md:text-sm font-black text-rr-pink uppercase tracking-widest text-center">
-                        Two Match Periods
-                    </span>
-                    <div className="h-px flex-1 bg-gradient-to-l from-transparent to-rr-pink/40" />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {Object.values(MATCH_PERIODS.afterPhase).map((match) => (
-                        <MatchBanner key={match.name} match={match} />
-                    ))}
-                </div>
-
-                <p className="text-center text-xs md:text-sm text-white/50 mt-12 font-medium uppercase tracking-widest">
-                    In-Season &amp; Finish Strong pricing to be confirmed
-                </p>
             </div>
         </section>
     );

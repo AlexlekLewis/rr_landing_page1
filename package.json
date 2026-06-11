@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "build:pdf": "node generate_lp2_pdf.js"
+    "build:pdf": "node generate_lp2_pdf.js",
+    "test": "vitest run"
   },
   "dependencies": {
     "@posthog/react": "^1.8.2",
@@ -21,7 +22,7 @@
     "jspdf": "^4.2.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.563.0",
-    "posthog-js": "^1.376.3",
+    "posthog-js": "^1.386.1",
     "puppeteer-core": "^24.39.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -33,6 +34,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.3.0",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
@@ -41,9 +44,11 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "jsdom": "^26.1.0",
     "playwright": "^1.58.2",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18",
-    "vite": "^7.2.4"
+    "vite": "^7.2.4",
+    "vitest": "^3.2.4"
   }
 }

@@ -6,27 +6,19 @@ import { motion } from 'framer-motion';
 // `logo` path on each partner. Until then, a clean placeholder is shown.
 const TIERS = [
     {
-        level: 'Presenting Partner',
-        size: 'large',
-        partners: [
-            { name: 'Total Aluminium', logo: '' },
-        ],
-    },
-    {
         level: 'Venue Partners',
         size: 'medium',
         partners: [
-            { name: 'The Netz', logo: '' },
-            { name: 'Elite Cricket Centre', logo: '' },
+            { name: 'The Netz', logo: '/assets/powergame/partners/the-netz.svg' },
+            { name: 'Elite Cricket Centre', logo: '/assets/powergame/partners/elite-cricket-centre.webp' },
         ],
     },
     {
         level: 'Performance Partners',
         size: 'medium',
         partners: [
-            { name: 'Str8ght Bat', logo: '' },
-            { name: 'Full Track AI', logo: '' },
-            { name: 'Neuro Vision', logo: '' },
+            { name: 'Full Track AI', logo: '/assets/powergame/partners/full-track-ai.png' },
+            { name: 'Shah NeuroVision', logo: '/assets/powergame/partners/shah-neurovision.webp', dark: true },
         ],
     },
 ];
@@ -38,7 +30,7 @@ const sizeClasses = {
 
 const PartnerLogo = ({ partner, size }) => (
     <div
-        className={`flex items-center justify-center rounded-2xl bg-white border border-slate-200 ${sizeClasses[size]} min-w-[180px] md:min-w-[220px] transition-all duration-300 hover:border-rr-pink/40 hover:shadow-[0_8px_30px_rgba(225,31,143,0.10)]`}
+        className={`flex items-center justify-center rounded-2xl border ${sizeClasses[size]} min-w-[180px] md:min-w-[220px] transition-all duration-300 hover:border-rr-pink/40 hover:shadow-[0_8px_30px_rgba(225,31,143,0.10)] ${partner.dark ? 'bg-rr-dark border-white/10' : 'bg-white border-slate-200'}`}
     >
         {partner.logo ? (
             <img
@@ -80,7 +72,7 @@ const PartnerStack = () => {
                         POWERED BY OUR <span className="text-rr-pink">PARTNERS</span>
                     </h2>
                     <p className="text-base md:text-lg text-rr-charcoal max-w-2xl mx-auto font-medium">
-                        The Power Game Program is proudly supported by a network of leading commercial, venue, and performance partners.
+                        The Rajasthan Royals Academy is proudly supported by a network of leading commercial, venue, and performance partners.
                     </p>
                 </motion.div>
 

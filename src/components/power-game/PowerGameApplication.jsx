@@ -4,6 +4,18 @@ import { Loader2, CheckCircle2 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
 
+// Meta Pixel — fire a Lead conversion on successful application submit.
+const fireLeadEvent = () => {
+    try {
+        if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+            window.fbq('track', 'Lead', {
+                content_name: 'Power Game Program',
+                content_category: 'power-game-application',
+            });
+        }
+    } catch (_) { /* never let analytics block the submit */ }
+};
+
 /* ─── helpers ─── */
 const calculateAge = (dobString) => {
     if (!dobString) return null;
@@ -201,7 +213,7 @@ const PowerGameApplication = () => {
                     parent2_name: formData.parent2Name.trim(),
                     parent2_email: formData.parent2Email.trim(),
                     parent2_phone: formData.parent2Phone.trim(),
-                    phase: 'Preseason',
+                    phase: 'Power Pre-Season',
                     application_type: 'standard',
                     accept_terms: acceptTerms,
                     accept_player_code: acceptPlayerCode,
@@ -222,6 +234,7 @@ const PowerGameApplication = () => {
             }
 
             setSubmitted(true);
+            fireLeadEvent();
             window.scrollTo({ top: document.getElementById('apply')?.offsetTop - 80, behavior: 'smooth' });
         } catch (err) {
             console.error('Power Game application error:', err);
@@ -266,7 +279,7 @@ const PowerGameApplication = () => {
                 club: capData.club.trim(),
                 profile_link: capData.profileLink.trim(),
                 capability_statement: capData.statement.trim(),
-                phase: 'Preseason',
+                phase: 'Power Pre-Season',
                 application_type: 'capability',
                 status: 'pending',
                 source: 'power-game-program',
@@ -278,6 +291,7 @@ const PowerGameApplication = () => {
             const { error } = await supabase.from('power_game_applications').insert([payload]);
             if (error) throw error;
             setSubmitted(true);
+            fireLeadEvent();
             window.scrollTo({ top: document.getElementById('apply')?.offsetTop - 80, behavior: 'smooth' });
         } catch (err) {
             console.error('Capability application error:', err);
@@ -290,7 +304,7 @@ const PowerGameApplication = () => {
     /* ── success state ── */
     if (submitted) {
         return (
-            <section id="apply" className="bg-rr-dark py-24 md:py-32 relative overflow-hidden">
+            <section id="apply" className="bg-rr-page py-24 md:py-32 relative overflow-hidden">
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-rr" />
                 <div className="max-w-2xl mx-auto px-6 text-center">
                     <motion.div
@@ -314,7 +328,7 @@ const PowerGameApplication = () => {
     }
 
     return (
-        <section id="apply" className="bg-rr-dark py-24 md:py-32 relative overflow-hidden">
+        <section id="apply" className="bg-rr-page py-24 md:py-32 relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-rr" />
             <div
                 className="absolute inset-0 opacity-30 pointer-events-none"
@@ -330,7 +344,7 @@ const PowerGameApplication = () => {
                     viewport={{ once: true, amount: 0.3 }}
                     transition={{ duration: 0.6, ease: 'easeOut' }}
                 >
-                    <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Preseason</p>
+                    <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Power Pre-Season</p>
                     <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight mb-4">
                         Apply <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">Now</span>
                     </h2>

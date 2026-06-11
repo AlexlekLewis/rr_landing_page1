@@ -20,7 +20,7 @@ const VideoSection = ({
     };
 
     return (
-        <section className="bg-rr-dark py-24 md:py-32 relative overflow-hidden">
+        <section className="bg-rr-page py-24 md:py-32 relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-rr" />
 
             <div className="max-w-5xl mx-auto px-6">
