@@ -11,6 +11,7 @@ const TIERS = [
         partners: [
             { name: 'The Netz', logo: '/assets/powergame/partners/the-netz.svg' },
             { name: 'Elite Cricket Centre', logo: '/assets/powergame/partners/elite-cricket-centre.webp' },
+            { name: 'Mickleham Indoor Sports Centre', logo: '/assets/powergame/partners/mickleham-isc.png' },
         ],
     },
     {
