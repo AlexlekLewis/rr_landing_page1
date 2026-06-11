@@ -26,9 +26,9 @@ const CENTRES = [
         region: 'South East Melbourne',
         accent: 'bg-rr-pink',
         sessions: [
+            { day: 'Thu', time: '8:00 – 10:00pm' },
             { day: 'Sat', time: '12:00 – 2:00pm' },
             { day: 'Sat', time: '2:00 – 4:00pm' },
-            { day: 'Sat', time: '4:00 – 6:00pm' },
         ],
     },
     {

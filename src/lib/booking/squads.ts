@@ -13,7 +13,7 @@
 //      mini-squad capacities 13 / 10 / 8 and session totals 52 / 38 / 26 / 15)
 //
 // OFFICIAL grid (per the sheet, Netz Friday = two 2-hour blocks CONFIRMED by Alex):
-//   Hallam     Sat 12–4pm (5 lanes, 2 squads) + Sat 4–6pm (4 lanes, 1 squad)
+//   Hallam     Thu 8–10pm (5 lanes, 17+) + Sat 12–2pm (5 lanes, 12-14) + Sat 2–4pm (4 lanes, 14-16)
 //   The Netz   Fri 5:30–9:30pm (5 lanes, 2 squads) + Sat 2–4pm & 4–6pm (7 lanes)
 //   Third venue (North): TBC — interest only, no squads yet.
 // ============================================================
@@ -91,10 +91,10 @@ const BLOCKS: RawBlock[] = [
   { idBase: "w-sat2-1214", centre: "williamstown", band: "12-14", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 7, blockLabel: "Sat 2–4pm", sortOrder: 3 },
   { idBase: "w-sat4-1416", centre: "williamstown", band: "14-16", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 7, blockLabel: "Sat 4–6pm", sortOrder: 4 },
 
-  // ── Elite Cricket Centre — Hallam (Sat 12–4 = 5 lanes · Sat 4–6 = 4 lanes) ──
-  { idBase: "h-sat12-1214", centre: "hallam", band: "12-14", day: "Saturday", startTime: "12:00pm", endTime: "2:00pm", lanes: 5, blockLabel: "Sat 12–2pm", sortOrder: 1 },
-  { idBase: "h-sat2-1416", centre: "hallam", band: "14-16", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 5, blockLabel: "Sat 2–4pm", sortOrder: 2 },
-  { idBase: "h-sat4-17", centre: "hallam", band: "17+", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 4, blockLabel: "Sat 4–6pm", sortOrder: 3 },
+  // ── Elite Cricket Centre — Hallam (Thu 8–10pm = 5 lanes · Sat 12–2pm = 5 lanes · Sat 2–4pm = 4 lanes) ──
+  { idBase: "h-thu8-17", centre: "hallam", band: "17+", day: "Thursday", startTime: "8:00pm", endTime: "10:00pm", lanes: 5, blockLabel: "Thu 8–10pm", sortOrder: 1 },
+  { idBase: "h-sat12-1214", centre: "hallam", band: "12-14", day: "Saturday", startTime: "12:00pm", endTime: "2:00pm", lanes: 5, blockLabel: "Sat 12–2pm", sortOrder: 2 },
+  { idBase: "h-sat2-1416", centre: "hallam", band: "14-16", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 4, blockLabel: "Sat 2–4pm", sortOrder: 3 },
 ];
 
 export const SQUADS: Squad[] = BLOCKS.flatMap((b) =>
