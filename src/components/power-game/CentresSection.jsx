@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Clock, ArrowDown } from 'lucide-react';
+import { MapPin, Clock, ArrowDown, Calendar } from 'lucide-react';
 
 // Centres & weekly session times — informational context only. The apply funnel
 // below matches each applicant to the sessions that fit their age group & ability,
@@ -32,6 +32,7 @@ const CENTRES = GRID_CENTRES.map((c) => {
         suburb: c.comingSoon ? 'TBC' : c.suburb,
         venue: c.comingSoon ? 'New venue — coming soon' : c.name,
         region: c.region,
+        dateRange: c.dateRange,
         accent: ACCENTS[c.slug] || DEFAULT_ACCENT,
         sessions,
     };
@@ -96,6 +97,12 @@ const CentresSection = () => {
 
                             {/* Session times */}
                             <div className="mt-auto flex flex-col gap-2.5 border-t border-white/10 pt-5">
+                                {centre.dateRange && (
+                                    <div className="inline-flex items-center gap-1.5 self-start bg-rr-blue/15 border border-rr-blue/30 rounded-full px-3 py-1 mb-1.5">
+                                        <Calendar className="w-3.5 h-3.5 text-rr-blue" />
+                                        <span className="text-[11px] font-black text-white uppercase tracking-widest">{centre.dateRange}</span>
+                                    </div>
+                                )}
                                 {centre.sessions.length === 0 && (
                                     <div className="text-sm font-bold text-white/40 uppercase tracking-wide">Days &amp; times to be confirmed</div>
                                 )}

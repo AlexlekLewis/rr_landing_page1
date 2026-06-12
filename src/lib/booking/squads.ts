@@ -38,6 +38,9 @@ export interface Centre {
   address: string;
   /** Display region for the page's Centres section (derived UI). */
   region: string;
+  /** Short, sweet program date range shown on the Centres section card,
+   *  e.g. "8 weeks · Jul 30 – Sep 19". Optional until confirmed per venue. */
+  dateRange?: string;
   /** A future venue whose name/location/times aren't confirmed yet — selectable on
    *  the funnel to register interest, but it has no squads to book (routes to review). */
   comingSoon?: boolean;
@@ -72,11 +75,8 @@ export interface Squad {
 // ════════════════════════════════════════════════════════════════════════════
 export const CENTRES: Centre[] = [
   { slug: "williamstown", name: "The Netz", suburb: "Williamstown", region: "West Melbourne", address: "37 Robbins Cct, Williamstown North VIC 3016" },
-  { slug: "hallam", name: "Elite Cricket Centre", suburb: "Hallam", region: "South East Melbourne", address: "8-9 Becon Ct, Hallam VIC 3803" },
-  // Third venue (North) — not confirmed yet. Captures interest only; no bookable squads.
-  // When Mickleham is confirmed: replace this line with the Mickleham entry, e.g.
-  // { slug: "mickleham", name: "<facility name>", suburb: "Mickleham", region: "North Melbourne", address: "<street address>" },
-  { slug: "venue-3", name: "New Venue", suburb: "Location to be announced", region: "North Melbourne", address: "To be announced", comingSoon: true },
+  { slug: "hallam", name: "Elite Cricket Centre", suburb: "Hallam", region: "South East Melbourne", address: "8-9 Becon Ct, Hallam VIC 3803", dateRange: "8 weeks · Jul 30 – Sep 19" },
+  { slug: "mickleham", name: "Mickleham Indoor Sports Centre", suburb: "Mickleham", region: "North Melbourne", address: "Mickleham VIC 3064" },
 ];
 
 /** Centres that are open for booking now (have squads). */
@@ -109,11 +109,11 @@ const BLOCKS: RawBlock[] = [
   { idBase: "h-sat12-1214", centre: "hallam", band: "12-14", day: "Saturday", startTime: "12:00pm", endTime: "2:00pm", lanes: 5, blockLabel: "Sat 12–2pm", sortOrder: 2 },
   { idBase: "h-sat2-1416", centre: "hallam", band: "14-16", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 4, blockLabel: "Sat 2–4pm", sortOrder: 3 },
 
-  // ── Mickleham — TEMPLATE (uncomment + set real days/times/lanes when confirmed) ──
-  // { idBase: "m-fri530-1416", centre: "mickleham", band: "14-16", day: "Friday", startTime: "5:30pm", endTime: "7:30pm", lanes: 7, blockLabel: "Fri 5:30–7:30pm", sortOrder: 1 },
-  // { idBase: "m-fri730-17", centre: "mickleham", band: "17+", day: "Friday", startTime: "7:30pm", endTime: "9:30pm", lanes: 7, blockLabel: "Fri 7:30–9:30pm", sortOrder: 2 },
-  // { idBase: "m-sat2-1214", centre: "mickleham", band: "12-14", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 7, blockLabel: "Sat 2–4pm", sortOrder: 3 },
-  // { idBase: "m-sat4-1416", centre: "mickleham", band: "14-16", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 7, blockLabel: "Sat 4–6pm", sortOrder: 4 },
+  // ── Mickleham Indoor Sports Centre — Mickleham (Fri 6–8pm + Fri 8–10pm · Sat 2–4pm + Sat 4–6pm) ──
+  { idBase: "m-fri6-1416", centre: "mickleham", band: "14-16", day: "Friday", startTime: "6:00pm", endTime: "8:00pm", lanes: 7, blockLabel: "Fri 6–8pm", sortOrder: 1 },
+  { idBase: "m-fri8-17", centre: "mickleham", band: "17+", day: "Friday", startTime: "8:00pm", endTime: "10:00pm", lanes: 7, blockLabel: "Fri 8–10pm", sortOrder: 2 },
+  { idBase: "m-sat2-1214", centre: "mickleham", band: "12-14", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 7, blockLabel: "Sat 2–4pm", sortOrder: 3 },
+  { idBase: "m-sat4-1416", centre: "mickleham", band: "14-16", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 7, blockLabel: "Sat 4–6pm", sortOrder: 4 },
 ];
 
 export const SQUADS: Squad[] = BLOCKS.flatMap((b) =>
