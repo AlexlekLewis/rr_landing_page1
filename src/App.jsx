@@ -1,27 +1,10 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Intro from './components/Intro';
-import WhyElite from './components/WhyElite';
-import Features from './components/Features';
-
-import ProgramOverview from './components/ProgramOverview';
-import Coaches from './components/Coaches';
-import SuccessStories from './components/SuccessStories';
-import SelectionProcess from './components/SelectionProcess';
-import BonusOffer from './components/BonusOffer';
-import FAQ from './components/FAQ';
-import Apply from './components/Apply';
-import Footer from './components/Footer';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsConditions from './components/TermsConditions';
 import ComingSoonSplash from './components/ComingSoonSplash';
 import OfferResponsePage from './components/offer-response/OfferResponsePage';
-import LandingPage2 from './components/landing-page-2/LandingPage2';
-import LandingPage3 from './components/landing-page-3/LandingPage3';
 import StripeSuccess from './components/landing-page-3/StripeSuccess';
-import MasterLandingPage from './components/master-landing-page/MasterLandingPage';
 import LittleCrickets from './components/little-crickets/LittleCrickets';
 import JRSuccess from './components/little-crickets/JRSuccess';
 import HolidayPrograms from './components/holiday-programs/HolidayPrograms';
@@ -32,9 +15,7 @@ import FemaleEmpowerment from './components/female-empowerment/FemaleEmpowerment
 import CoachingOpportunities from './components/coaching-opportunities/CoachingOpportunities';
 import PowerGame from './components/power-game/PowerGame';
 import IndiaTour2026 from './components/india-tour-2026/IndiaTour2026';
-import MasterStripeSuccess from './components/master-landing-page/MasterStripeSuccess';
 import HomePage from './components/home-page/HomePage';
-import usePageAnalytics from './hooks/usePageAnalytics';
 import PostHogPageviewTracker from './components/PostHogPageviewTracker';
 
 // DNA Profile — lazy-loaded so it never impacts landing page bundle size
@@ -73,37 +54,6 @@ import TextUsButton from './components/TextUsButton';
 import AcademyShop from './components/academy-shop/AcademyShop';
 import ShopSuccess from './components/academy-shop/ShopSuccess';
 
-const TRACKED_SECTIONS = [
-  'intro', 'success-stories', 'why-elite', 'program',
-  'coaches', 'program-overview', 'faq',
-  'bonus-offer', 'apply-form',
-];
-
-function LandingPage() {
-  usePageAnalytics('/LP1/2026', {
-    sections: TRACKED_SECTIONS,
-  });
-
-  return (
-    <>
-      <Navbar />
-      <Hero />
-      <Intro />
-      <SuccessStories />
-      <WhyElite />
-      <Features />
-
-      <Coaches />
-      <ProgramOverview />
-      <SelectionProcess />
-      <FAQ />
-      <BonusOffer />
-      <Apply />
-      <Footer />
-    </>
-  );
-}
-
 function App() {
   return (
     <div className="font-sans antialiased text-rr-dark bg-white selection:bg-rr-pink selection:text-white">
@@ -123,15 +73,12 @@ function App() {
         {/* Public routes */}
         <Route path="/" element={<HomePage />} />
         <Route path="/splash" element={<ComingSoonSplash />} />
-        <Route path="/master-page" element={<MasterLandingPage />} />
-        <Route path="/eliteprogram2026" element={<MasterLandingPage />} />
-        <Route path="/eliteprogram2026/success" element={<MasterStripeSuccess />} />
-        <Route path="/eliteprogram/2026registration" element={<LandingPage />} />
-        <Route path="/eliteprogram/2026registrations" element={<LandingPage />} />
-        <Route path="/offer/assessment" element={<LandingPage2 />} />
-        <Route path="/offer/acceptance" element={<Navigate to="/eliteprogram2026" replace />} />
+        {/* Elite Program 2026 — ARCHIVED (2026 intake closed). These routes were retired; the
+            URLs (/eliteprogram2026, /master-page, /eliteprogram2026/success,
+            /eliteprogram/2026registration[s], /offer/assessment, /invite) now return HTTP 410
+            Gone via api/gone.js — see vercel.json rewrites — so they can't be visited or indexed. */}
+        <Route path="/offer/acceptance" element={<Navigate to="/" replace />} />
         <Route path="/lp3/success" element={<StripeSuccess />} />
-        <Route path="/invite" element={<Navigate to="/LP2/2026" replace />} />
         <Route path="/offer/:token" element={<OfferResponsePage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-conditions" element={<TermsConditions />} />
