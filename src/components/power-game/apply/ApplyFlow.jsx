@@ -478,7 +478,6 @@ export default function ApplyFlow({ embedded = false }) {
                     ))}
                   </select>
                 </Field>
-                <p className="text-white/40 text-xs -mt-1">Representative cricket, or senior cricket at <span className="text-white">2nd grade &amp; above</span>, earns an instant squad offer. <span className="text-white">Below 2nd grade</span> (or none) goes to a quick coach review first — no payment until a coach confirms your spot.</p>
 
                 {/* Wild Card — for talent the rep system hasn't caught. Selecting it lets a
                     player through without a level; a coach then personally assesses them. */}
