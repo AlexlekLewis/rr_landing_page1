@@ -59,9 +59,10 @@ const CentresSection = () => {
                         TRAIN ACROSS <span className="text-rr-pink">MELBOURNE</span>
                     </h2>
                     <p className="text-base md:text-lg text-white/70 max-w-2xl mx-auto font-medium">
-                        These are our Power Game centres and their weekly session times. When you
-                        apply below, you&apos;ll be offered the sessions that fit your age group and
-                        ability — then you pick the centre and time that work for you.
+                        These are our Power Game centres and their weekly session times. Your place is one
+                        session a week — the <span className="text-white font-bold">same squad, same day, same time, every week for all 8 weeks</span>.
+                        When you apply below, you&apos;ll be offered the sessions that fit your age group and ability —
+                        then you pick the centre and time that work for you.
                     </p>
                 </motion.div>
 
@@ -98,10 +99,15 @@ const CentresSection = () => {
                             {/* Session times */}
                             <div className="mt-auto flex flex-col gap-2.5 border-t border-white/10 pt-5">
                                 {centre.dateRange && (
-                                    <div className="inline-flex items-center gap-1.5 self-start bg-rr-blue/15 border border-rr-blue/30 rounded-full px-3 py-1 mb-1.5">
+                                    <div className="inline-flex items-center gap-1.5 self-start bg-rr-blue/15 border border-rr-blue/30 rounded-full px-3 py-1 mb-1">
                                         <Calendar className="w-3.5 h-3.5 text-rr-blue" />
                                         <span className="text-[11px] font-black text-white uppercase tracking-widest">{centre.dateRange}</span>
                                     </div>
+                                )}
+                                {centre.sessions.length > 0 && (
+                                    <p className="text-[11px] text-white/45 font-medium leading-snug mb-1.5">
+                                        Choose one weekly slot — it&apos;s your squad, same time, every week.
+                                    </p>
                                 )}
                                 {centre.sessions.length === 0 && (
                                     <div className="text-sm font-bold text-white/40 uppercase tracking-wide">Days &amp; times to be confirmed</div>
