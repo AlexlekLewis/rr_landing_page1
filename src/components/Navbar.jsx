@@ -28,7 +28,7 @@ const HOME_NAV = [
 ];
 
 const PROGRAMS_DROPDOWN = [
-    { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Enrolling Now', badgeColor: 'bg-green-500' },
+    { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Selling Fast', badgeColor: 'bg-orange-500' },
     { label: 'Power Game Program', route: '/PGP2026', badge: 'Enrolling Now', badgeColor: 'bg-rr-pink' },
 ];
 
