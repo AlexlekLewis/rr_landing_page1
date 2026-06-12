@@ -2,16 +2,13 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Zap, ShieldCheck, ArrowRight, Sparkles } from 'lucide-react';
 
-const TIER_LABEL = { 5: 'Elite', 4: 'Performance', 3: 'Development', 2: 'Foundation', 1: 'Entry' };
 const STREAM_COPY = {
   performance: { title: 'Performance Squad', blurb: 'The elite stream — like-skilled players pushing each other every session.' },
   pathway: { title: 'Pathway Squad', blurb: 'The development stream — ambitious players building toward the top.' },
 };
 
 // The payoff moment — feels like an assessment that rewards the player.
-export default function DnaRevealCard({ dna, placement, centreName, onContinue, onRequestInfo }) {
-  const archetype = dna.primaryBattingArchetype || dna.primaryBowlingArchetype || null;
-
+export default function DnaRevealCard({ placement, centreName, onContinue, onRequestInfo }) {
   if (placement.requiresReview) {
     return (
       <motion.div
@@ -55,29 +52,9 @@ export default function DnaRevealCard({ dna, placement, centreName, onContinue, 
         <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight leading-none mb-2">{stream.title}</h2>
         <p className="text-white/60 text-sm mb-6">{stream.blurb}</p>
 
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          <Stat label="Level" value={`T${dna.abilityTier} ${TIER_LABEL[dna.abilityTier] ?? ''}`} />
-          <Stat label="Age group" value={placement.placedBand} />
-          <Stat label="Your lane" value={placement.lane ?? '—'} />
-        </div>
-
         {placement.playFlag === 'play_up' && (
           <div className="flex items-center justify-center gap-2 text-rr-pink text-xs font-bold uppercase tracking-widest mb-5">
             <Zap className="w-3.5 h-3.5" /> Playing up — your level earned an older group
-          </div>
-        )}
-
-        {archetype && (
-          <div className="mb-6">
-            <div className="text-[10px] uppercase tracking-widest text-white/40 mb-1">Your archetype</div>
-            <div className="text-lg font-black text-white">{archetype}</div>
-            {dna.styleTags.length > 0 && (
-              <div className="flex flex-wrap justify-center gap-1.5 mt-2">
-                {dna.styleTags.slice(0, 4).map((t) => (
-                  <span key={t} className="text-[10px] bg-white/10 rounded px-2 py-0.5 text-white/60 uppercase tracking-wide">{t.replace(/_/g, ' ')}</span>
-                ))}
-              </div>
-            )}
           </div>
         )}
 
@@ -94,10 +71,3 @@ export default function DnaRevealCard({ dna, placement, centreName, onContinue, 
     </motion.div>
   );
 }
-
-const Stat = ({ label, value }) => (
-  <div className="bg-white/5 border border-white/10 rounded-xl p-3">
-    <div className="text-[9px] uppercase tracking-widest text-white/40 mb-1">{label}</div>
-    <div className="text-sm font-black text-white leading-tight">{value}</div>
-  </div>
-);

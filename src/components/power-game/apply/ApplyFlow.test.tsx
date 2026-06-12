@@ -47,9 +47,8 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     const slot = await screen.findByTestId("slot-w-fri530-1416-perf");
     fireEvent.click(slot);
 
-    // kit step: the Training Shirt (first sized item) is required — pick a size, continue
-    await screen.findByText(/your kit/i);
-    fireEvent.click(screen.getAllByRole("button", { name: /^M$/ })[0]);
+    // uniform step: informational only (sizing/order handled at Stripe) — just continue
+    await screen.findByText(/your playing uniform/i);
     fireEvent.click(screen.getByRole("button", { name: /continue/i }));
 
     // Secure step — accept compliances, then pay.
@@ -136,11 +135,14 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     await screen.findByText(/is this correct/i);
     fireEvent.click(screen.getByRole("button", { name: /get my offer/i }));
 
-    // Reveal (after the ~1.6s analysing beat) — 14yo Dowling → Performance, played up to 14-16.
+    // Reveal (after the ~1.6s analysing beat) — 14yo Dowling → Performance, played up an
+    // age group. The offer card no longer prints the band (stats grid removed); the
+    // placed band is asserted at the unit level in flow.rules.test.ts. Here we confirm the
+    // offer renders + the play-up signal fired.
     await new Promise((r) => setTimeout(r, 2200));
     const body = document.body.textContent || "";
     expect(body, `SCREEN: ${body.slice(0, 500)}`).toMatch(/you've earned your place/i);
     expect(body).toMatch(/performance squad/i);
-    expect(body).toMatch(/14-16/);
+    expect(body).toMatch(/playing up/i);
   }, 12000);
 });

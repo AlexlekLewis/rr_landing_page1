@@ -7,7 +7,7 @@ import { CENTRES, CENTRE_BY_SLUG, squadsForPlacement } from '../../../lib/bookin
 import { inventory } from '../../../lib/booking/inventory';
 import { applications, applicationFromPlacement } from '../../../lib/booking/applications';
 import { BLANK_FORM, validateStep, computePlacement, isMinor, calcAge, BLOCK_FEE, secondaryOptions, consentsOk } from './flow';
-import { KIT_ITEMS, BLANK_KIT, kitTotalCents, kitSummary, fmtAud } from './kit';
+import { fmtAud } from './kit';
 import DnaRevealCard from './DnaRevealCard';
 import { submitApplication } from './submit';
 import UniformSizeGuideModal from '../UniformSizeGuideModal';
@@ -71,11 +71,10 @@ export default function ApplyFlow({ embedded = false }) {
   const [appId, setAppId] = useState(null); // persisted application id
   const [spotsTick, setSpotsTick] = useState(0); // force spots re-read
   const [submitting, setSubmitting] = useState(false);
-  const [kit, setKit] = useState({ ...BLANK_KIT });
   const [showSizeGuide, setShowSizeGuide] = useState(false);
-  const setKitSize = (id, size) => setKit((k) => ({ ...k, [id]: size }));
-  const kitTotal = kitTotalCents(kit);
-  const grandTotalCents = BLOCK_FEE * 100 + kitTotal;
+  // Uniform is informational only on-site — sizing/order/payment is handled at the Stripe
+  // checkout, so the program fee is the whole on-site total.
+  const blockFeeCents = BLOCK_FEE * 100;
 
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
 
@@ -208,21 +207,17 @@ export default function ApplyFlow({ embedded = false }) {
       const { id } = await submitApplication(form, result.placement, selected, {
         kind: 'standard',
         centreName: CENTRE_BY_SLUG[form.centre]?.name,
-        kit,
-        kitSummary: kitSummary(kit),
-        kitTotalCents: kitTotal,
       });
-      // Live path (VITE_PG_LIVE_PAYMENTS=1). Hand the order details to the success page
-      // first — it can't read the DB, so it shows the booking + kit from this stash.
-      if (LIVE_PAYMENTS) {
+      // Live path. On the deployed site (or with VITE_PG_LIVE_PAYMENTS=1) the Pay button
+      // sends the family to Stripe; in dev/preview/tests it confirms locally so no real
+      // payment is triggered. Stash the booking for the success page first (it can't read the DB).
+      if (LIVE_PAYMENTS || import.meta?.env?.PROD) {
         try {
           sessionStorage.setItem('pgp_confirmation', JSON.stringify({
             playerName: form.player_name,
             centreName: CENTRE_BY_SLUG[form.centre]?.name || '',
             slot: selected ? `${selected.day} ${selected.startTime}–${selected.endTime}` : '',
             band: result.placement.placedBand,
-            kit: kitSummary(kit),
-            kitTotalCents: kitTotal,
           }));
         } catch (_) { /* private mode — page falls back gracefully */ }
 
@@ -245,7 +240,7 @@ export default function ApplyFlow({ embedded = false }) {
         const r = await fetch('/api/power-game-checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ applicationId: id, bookingId: hold?.holdId, squadId: selected?.id, email: form.contact_email, playerName: form.player_name, uniformTotalCents: kitTotal, uniformSelection: kitSummary(kit).map((l) => `${l.name} (${l.size})`).join(', ') }),
+          body: JSON.stringify({ applicationId: id, bookingId: hold?.holdId, squadId: selected?.id, email: form.contact_email, playerName: form.player_name }),
         });
         const data = await r.json();
         if (data?.url) { window.location.href = data.url; return; }
@@ -581,58 +576,30 @@ export default function ApplyFlow({ embedded = false }) {
               </div>
             )}
 
-            {/* ── KIT (uniform requirement + sizing) ── */}
+            {/* ── UNIFORM (informational only — sizing + order handled at Stripe checkout) ── */}
             {step === 'kit' && (
               <div>
-                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Your kit</h1>
-                <p className="text-white/50 text-sm mb-3">
-                  The Power Game uniform is required to play, but it&apos;s <span className="text-white">optional here</span> — already have your gear? Skip any item. Otherwise pick what you&apos;d like and your sizes, and we&apos;ll confirm the details with you.
+                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Your playing uniform</h1>
+                <p className="text-white/55 text-sm mb-5">
+                  Every Power Game player trains in the Royals Academy uniform — a <span className="text-white">training shirt, shorts or pants, and a cap</span>. If you don&apos;t already have it, you&apos;ll need one for sessions.
                 </p>
+
+                <div className="space-y-3 mb-5">
+                  <div className="rounded-2xl border border-white/15 bg-white/5 p-4">
+                    <div className="text-white font-black text-sm uppercase tracking-wide mb-1">Need a uniform?</div>
+                    <p className="text-white/55 text-[13px] leading-snug">Check your size with the guide below, then add your uniform and choose your sizes at the Stripe checkout.</p>
+                  </div>
+                  <div className="rounded-2xl border border-white/15 bg-white/5 p-4">
+                    <div className="text-white font-black text-sm uppercase tracking-wide mb-1">Already have it?</div>
+                    <p className="text-white/55 text-[13px] leading-snug">You&apos;re all set — just leave the uniform off your order at the Stripe checkout.</p>
+                  </div>
+                </div>
+
                 <button type="button" onClick={() => setShowSizeGuide(true)} className="inline-flex items-center gap-1.5 text-rr-light-pink hover:text-white text-[12px] font-bold uppercase tracking-wide px-3.5 py-3 rounded-full border border-rr-light-pink/30 hover:border-rr-light-pink/60 mb-5 transition-colors">
                   <Ruler className="w-3.5 h-3.5" /> View the size guide
                 </button>
 
-                <div className="space-y-3 mb-6">
-                  {KIT_ITEMS.map((item) => {
-                    const chosen = kit[item.id];
-                    const active = !!(chosen && chosen.trim());
-                    return (
-                      <div key={item.id} className={`rounded-2xl border p-4 transition-all ${active ? 'bg-white/[0.07] border-rr-pink/50' : 'bg-white/5 border-white/15'}`}>
-                        <div className="flex items-center justify-between gap-3 mb-2">
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <span className="text-sm font-black text-white uppercase tracking-wide">{item.name}</span>
-                              {item.required ? (
-                                <span className="text-[9px] font-black text-rr-pink uppercase tracking-widest bg-rr-pink/15 border border-rr-pink/30 rounded-full px-2 py-0.5">Required</span>
-                              ) : (
-                                <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Optional</span>
-                              )}
-                            </div>
-                            {item.note && <p className="text-[11px] text-white/40 mt-1">{item.note}</p>}
-                          </div>
-                        </div>
-
-                        {item.oneSize ? (
-                          <label className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-white/70 cursor-pointer min-h-[44px] sm:min-h-0 -mx-1 px-1 sm:m-0 sm:p-0">
-                            <input type="checkbox" checked={chosen === 'OS'} onChange={(e) => setKitSize(item.id, e.target.checked ? 'OS' : '')} className="w-5 h-5 sm:w-4 sm:h-4 accent-rr-pink" />
-                            Add (one size fits all)
-                          </label>
-                        ) : (
-                          <div className="flex flex-wrap gap-2">
-                            {!item.required && (
-                              <button onClick={() => setKitSize(item.id, '')} className={`min-h-[44px] sm:min-h-0 px-3 py-2.5 sm:py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest border transition-all ${!active ? 'bg-white/10 border-white/30 text-white' : 'bg-transparent border-white/15 text-white/40 hover:text-white/70'}`}>None</button>
-                            )}
-                            {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map((sz) => (
-                              <button key={sz} onClick={() => setKitSize(item.id, sz)} className={`min-h-[44px] sm:min-h-0 min-w-[44px] sm:min-w-0 px-3 py-2.5 sm:py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest border transition-all ${chosen === sz ? 'bg-rr-pink border-rr-pink text-white' : 'bg-white/5 border-white/15 text-white/70 hover:border-rr-pink/50'}`}>{sz}</button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <p className="text-white/40 text-[11px] mb-5">We&apos;ll confirm uniform pricing &amp; payment with you separately — nothing for kit is charged now.</p>
+                <p className="text-white/35 text-[11px] mb-5">Uniform sizing &amp; payment are handled at the Stripe checkout — nothing for uniform is ordered or charged on this page.</p>
 
                 <button onClick={() => setStep('secure')} className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
                   Continue →
@@ -650,18 +617,15 @@ export default function ApplyFlow({ embedded = false }) {
                   <SummaryRow k="Centre" v={CENTRE_BY_SLUG[form.centre]?.name} />
                   <SummaryRow k="Time" v={`${selected.day} ${selected.startTime}–${selected.endTime}`} />
                   <SummaryRow k="Block" v="8-week Power Game phase" />
-                  <SummaryRow k="Program" v={`$${BLOCK_FEE}.00`} />
-                  {kitSummary(kit).map((line) => (
-                    <SummaryRow key={line.name} k={line.name} v={`Size ${line.size}`} />
-                  ))}
                   <div className="border-t border-white/10 pt-3 flex items-baseline justify-between">
-                    <span className="text-xs uppercase tracking-widest text-white/50">Total</span>
-                    <span className="text-3xl font-black text-white">{fmtAud(grandTotalCents)}</span>
+                    <span className="text-xs uppercase tracking-widest text-white/50">Program fee</span>
+                    <span className="text-3xl font-black text-white">{fmtAud(blockFeeCents)}</span>
                   </div>
                 </div>
+                <p className="text-white/35 text-[11px] -mt-3 mb-5">Uniform (if you need it) is added at the Stripe checkout — it&apos;s not part of this fee.</p>
                 <div className="mb-5">{renderConsents()}</div>
                 <button onClick={secure} disabled={submitting || !consentsOk(form)} className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
-                  {submitting ? 'Processing…' : `Pay ${fmtAud(grandTotalCents)} & secure my spot`}
+                  {submitting ? 'Processing…' : `Pay ${fmtAud(blockFeeCents)} & secure my spot`}
                 </button>
                 <button onClick={applyWithoutPay} disabled={submitting || !consentsOk(form)} className="w-full mt-3 bg-transparent border border-white/20 hover:border-white/40 disabled:opacity-40 disabled:cursor-not-allowed text-white/80 font-bold uppercase tracking-widest text-[11px] rounded-full px-6 py-3.5 transition-all">
                   Apply without paying — request a call first
