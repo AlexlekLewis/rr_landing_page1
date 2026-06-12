@@ -107,12 +107,12 @@ const HEADERS = [
 ];
 
 const SECTIONS = [
-  { key: 'paid',     label: '🟢 CONFIRMED PLAYERS - PAID (official time slot locked in)' },
-  { key: 'awaiting', label: '🟡 SECURED A TIME - AWAITING PAYMENT' },
-  { key: 'callback', label: '🔵 REQUESTED A CALL / MORE INFO' },
-  { key: 'review',   label: '⚪ COACH REVIEW (no payment until a coach confirms)' },
-  { key: 'waitlist', label: '⚫ VENUE WAITLIST (TBC venue)' },
-  { key: 'other',    label: '❓ UNRECOGNISED STATUS - check manually' }
+  { key: 'paid',     label: '[PAID] CONFIRMED PLAYERS - PAID (official time slot locked in)' },
+  { key: 'awaiting', label: '[AWAITING] SECURED A TIME - AWAITING PAYMENT' },
+  { key: 'callback', label: '[CALLBACK] REQUESTED A CALL / MORE INFO' },
+  { key: 'review',   label: '[REVIEW] COACH REVIEW (no payment until a coach confirms)' },
+  { key: 'waitlist', label: '[WAITLIST] VENUE WAITLIST (TBC venue)' },
+  { key: 'other',    label: '[OTHER] UNRECOGNISED STATUS - check manually' }
 ];
 
 function categorise(r) {
