@@ -37,13 +37,12 @@ export interface ApplyForm {
   club_level: string; // secondary — highest club grade
   format: "t20" | "od" | "multiday" | "";
   // Per-level stats for the PRIMARY skill — captured at BOTH rep and club level.
-  // (Total runs + games/matches were removed at Alex's request.)
-  rep_bat_avg: string;
+  // (Total runs + games/matches AND batting average were removed at Alex's request —
+  //  batters are placed on level + age; bowlers/keepers still give their numbers.)
   rep_bowl_avg: string;
   rep_bowl_wkts: string;
   rep_catches: string;
   rep_stumpings: string;
-  club_bat_avg: string;
   club_bowl_avg: string;
   club_bowl_wkts: string;
   club_catches: string;
@@ -55,6 +54,9 @@ export interface ApplyForm {
   accept_social_media: boolean;
   accept_playing_standard: boolean;
   needs_uniform: boolean;
+  // Wild Card — talent the rep system hasn't caught (no rep / graded senior cricket).
+  // Lets a player apply for a coach assessment instead of claiming a level they don't have.
+  wildcard?: boolean;
 }
 
 export const BLANK_FORM: ApplyForm = {
@@ -74,12 +76,10 @@ export const BLANK_FORM: ApplyForm = {
   rep_level: "",
   club_level: "",
   format: "",
-  rep_bat_avg: "",
   rep_bowl_avg: "",
   rep_bowl_wkts: "",
   rep_catches: "",
   rep_stumpings: "",
-  club_bat_avg: "",
   club_bowl_avg: "",
   club_bowl_wkts: "",
   club_catches: "",
@@ -90,6 +90,7 @@ export const BLANK_FORM: ApplyForm = {
   accept_social_media: false,
   accept_playing_standard: false,
   needs_uniform: false,
+  wildcard: false,
 };
 
 const n = (v: string): number | null => (v === "" || v == null ? null : Number(v));
@@ -131,7 +132,6 @@ export function buildEngineInput(f: ApplyForm): ComputeDnaInput {
   // The player's numbers AT a given level → one stats row scored at that level's CTI.
   const levelRow = (
     code: string,
-    batAvg: string,
     bowlAvg: string,
     bowlWkts: string,
     catches: string,
@@ -140,11 +140,12 @@ export function buildEngineInput(f: ApplyForm): ComputeDnaInput {
     season: CURRENT_SEASON,
     format: fmt,
     competitionCode: code,
-    // Runs + matches are no longer collected; assume a season's volume so a player who
-    // reached this level isn't flagged "thin_history". Placement stays level×age driven.
+    // Runs, matches AND batting average are no longer collected; assume a season's volume
+    // so a player who reached this level isn't flagged "thin_history". Batting is placed on
+    // level × age (a missing batAverage simply drops the performance modifier).
     batMatches: ASSUMED_MATCHES,
     batInnings: bats ? ASSUMED_MATCHES : null,
-    batAverage: bats ? n(batAvg) : null,
+    batAverage: null,
     batRuns: null,
     bowlMatches: bowls ? ASSUMED_MATCHES : null,
     bowlAverage: bowls ? n(bowlAvg) : null,
@@ -155,9 +156,9 @@ export function buildEngineInput(f: ApplyForm): ComputeDnaInput {
 
   const stats: ComputeDnaInput["stats"] = [];
   if (f.rep_level)
-    stats.push(levelRow(f.rep_level, f.rep_bat_avg, f.rep_bowl_avg, f.rep_bowl_wkts, f.rep_catches, f.rep_stumpings));
+    stats.push(levelRow(f.rep_level, f.rep_bowl_avg, f.rep_bowl_wkts, f.rep_catches, f.rep_stumpings));
   if (f.club_level)
-    stats.push(levelRow(f.club_level, f.club_bat_avg, f.club_bowl_avg, f.club_bowl_wkts, f.club_catches, f.club_stumpings));
+    stats.push(levelRow(f.club_level, f.club_bowl_avg, f.club_bowl_wkts, f.club_catches, f.club_stumpings));
 
   return {
     profile: {
@@ -216,6 +217,18 @@ export function computePlacement(f: ApplyForm): PlacementResult {
       reviewReasons: Array.from(new Set([...placement.reviewReasons, "below_pg_floor"])),
     };
   }
+
+  // Wild Card — talent the rep system hasn't caught. A player who self-selects this
+  // (typically with no clearing level) is sent for a personal coach assessment; the
+  // "wildcard" reason marks it in the review queue. A player who *also* holds a clearing
+  // level keeps their earned offer — the Wild Card never downgrades a real qualifier.
+  if (f.wildcard && !clearsFloor(f.rep_level) && !clearsFloor(f.club_level)) {
+    placement = {
+      ...placement,
+      requiresReview: true,
+      reviewReasons: Array.from(new Set([...placement.reviewReasons, "wildcard"])),
+    };
+  }
   return { dna, placement };
 }
 
@@ -233,7 +246,7 @@ export function validateStep(step: Step, f: ApplyForm): string[] {
   if (step === "player") {
     if (!f.player_name.trim()) e.push("Player name is required.");
     if (!f.player_dob) e.push("Date of birth is required.");
-    if (!f.gender) e.push("Select a gender.");
+    if (!f.gender) e.push("Let us know if you play male or female cricket.");
     if (isMinor(f.player_dob) && !f.parent_name.trim()) e.push("Parent/guardian name is required for under-18s.");
     if (!f.contact_phone.trim()) e.push("A contact mobile is required.");
     if (!emailOk(f.contact_email)) e.push("A valid contact email is required.");
@@ -246,7 +259,8 @@ export function validateStep(step: Step, f: ApplyForm): string[] {
     if ((f.skill === "bowling" || f.skill === "all_rounder") && !f.bowling_type) e.push("Select a bowling type.");
   }
   if (step === "history") {
-    if (!f.rep_level && !f.club_level) e.push("Add your representative and/or senior cricket — pick at least one.");
+    if (!f.rep_level && !f.club_level && !f.wildcard)
+      e.push("Add your representative and/or senior cricket — or apply as a Wild Card below.");
   }
   return e;
 }

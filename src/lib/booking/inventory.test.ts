@@ -15,11 +15,13 @@ const oneSquad = [
 // days/times/venues in squads.ts (everything else below is derived maths).
 // ════════════════════════════════════════════════════════════════════════════
 const SNAPSHOT = {
-  twoHourBlocks: 7,
-  activeCentres: 2, // williamstown + hallam (venue-3/Mickleham TBC)
-  comingSoonCentres: 1,
-  weeklyCapacity: 143,
-  perCentre: { williamstown: 90, hallam: 53 } as Record<string, number>,
+  twoHourBlocks: 11, // Netz 4 + Hallam 3 + Mickleham 4
+  activeCentres: 3, // williamstown + hallam + mickleham
+  comingSoonCentres: 0,
+  // Total squad places for the 8-WEEK BLOCK (lane ratio 7:26). Not a per-week number —
+  // each place is one player enrolled for the whole block.
+  blockCapacity: 247, // Netz 90 + Hallam 53 + Mickleham 104
+  perCentre: { williamstown: 90, hallam: 53, mickleham: 104 } as Record<string, number>,
 };
 
 describe("squad grid integrity (snapshot of the official schedule)", () => {
@@ -27,7 +29,7 @@ describe("squad grid integrity (snapshot of the official schedule)", () => {
     expect(SQUADS.length).toBe(SNAPSHOT.twoHourBlocks * 2); // 2 teams per block
     expect(ACTIVE_CENTRES.length).toBe(SNAPSHOT.activeCentres);
     expect(CENTRES.filter((c) => c.comingSoon).length).toBe(SNAPSHOT.comingSoonCentres);
-    expect(SQUADS.reduce((s, q) => s + q.capacity, 0)).toBe(SNAPSHOT.weeklyCapacity);
+    expect(SQUADS.reduce((s, q) => s + q.capacity, 0)).toBe(SNAPSHOT.blockCapacity);
     for (const [slug, cap] of Object.entries(SNAPSHOT.perCentre)) {
       expect(SQUADS.filter((s) => s.centre === slug).reduce((s, q) => s + q.capacity, 0), slug).toBe(cap);
     }

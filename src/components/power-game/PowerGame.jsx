@@ -11,8 +11,9 @@ import CoachesSection from './CoachesSection';
 import CentresSection from './CentresSection';
 import AskThePlayers from './AskThePlayers';
 import PartnerStack from './PartnerStack';
+import UniformSizeGuideModal from './UniformSizeGuideModal';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
-import { MapPin, User, ClipboardList, Sparkles, ShieldCheck, AlertTriangle, Telescope, Zap, Flame, Clock, ListChecks } from 'lucide-react';
+import { MapPin, User, ClipboardList, Sparkles, ShieldCheck, AlertTriangle, Telescope, Zap, Flame, Clock, ListChecks, Ruler, Shirt } from 'lucide-react';
 
 // The apply funnel renders inline in the #apply section so applicants never leave /PGP2026.
 const ApplyFlow = React.lazy(() => import('./apply/ApplyFlow'));
@@ -93,6 +94,7 @@ const SECTIONS = [
 const PowerGame = () => {
     usePageAnalytics('/PGP2026', { sections: SECTIONS });
     const [showApply, setShowApply] = useState(false);
+    const [showSizeGuide, setShowSizeGuide] = useState(false);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -219,6 +221,24 @@ const PowerGame = () => {
                                         <div className="text-5xl font-black text-white leading-none">$989</div>
                                         <div className="text-white/55 text-sm font-bold">the 8-week block</div>
                                     </div>
+
+                                    {/* Playing uniform is a separate, required purchase — make that unmissable,
+                                        with a size guide right next to it so they can choose before ordering. */}
+                                    <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
+                                        <span className="inline-flex items-center gap-2 bg-amber-400/10 border border-amber-400/25 rounded-lg px-3 py-1.5">
+                                            <Shirt className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" strokeWidth={2.4} />
+                                            <span className="text-amber-200/90 text-[12px] font-bold leading-snug">Playing uniform required<span className="text-amber-300">*</span> — not included</span>
+                                        </span>
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowSizeGuide(true)}
+                                            className="inline-flex items-center gap-1.5 text-rr-light-pink hover:text-white text-[12px] font-bold uppercase tracking-wide transition-colors"
+                                        >
+                                            <Ruler className="w-3.5 h-3.5" />
+                                            Size guide
+                                        </button>
+                                    </div>
+
                                     <div className="border-t border-white/10 my-5" />
 
                                     {/* Prepare your game — concept/outcome level so the actual
@@ -259,6 +279,15 @@ const PowerGame = () => {
                                         ))}
                                     </div>
                                     <p className="text-white/50 text-xs mt-3 font-medium">Nearly double the coaching hours — at the lowest cost per hour.</p>
+
+                                    {/* Asterisk footnote for the required-but-not-included uniform. */}
+                                    <p className="text-white/35 text-[11px] mt-4 leading-snug">
+                                        <span className="text-amber-300">*</span> Mandatory uniform, purchased separately: a training shirt, shorts or pants, and a cap. The fleece jacket is optional.{' '}
+                                        <button type="button" onClick={() => setShowSizeGuide(true)} className="underline decoration-white/30 underline-offset-2 hover:text-white transition-colors">
+                                            View the size guide
+                                        </button>{' '}
+                                        before you order.
+                                    </p>
                                 </div>
 
                                 {/* Discovery / review path — for talent the rep system hasn't caught yet. */}
@@ -314,6 +343,8 @@ const PowerGame = () => {
                 </div>
             </main>
             <Footer />
+
+            <UniformSizeGuideModal open={showSizeGuide} onClose={() => setShowSizeGuide(false)} />
         </div>
     );
 };

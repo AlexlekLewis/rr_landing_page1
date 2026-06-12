@@ -127,11 +127,14 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     fireEvent.click(screen.getByText("Right"));
     fireEvent.click(screen.getByText("Continue"));
 
-    // History — Dowling Shield, avg 38 (format is no longer collected)
+    // History — Dowling Shield (a pure batter has no numbers to add now)
     const levelSel = (screen.getAllByRole("combobox") as HTMLSelectElement[]).find((s) => [...s.options].some((o) => o.value === "P16M"))!;
     fireEvent.change(levelSel, { target: { value: "P16M" } });
-    fireEvent.change(screen.getByPlaceholderText(/e\.g\. 32/), { target: { value: "38" } });
     fireEvent.click(screen.getByText("Continue"));
+
+    // Confirm — "Is this correct?" review, then get the offer
+    await screen.findByText(/is this correct/i);
+    fireEvent.click(screen.getByRole("button", { name: /get my offer/i }));
 
     // Reveal (after the ~1.6s analysing beat) — 14yo Dowling → Performance, played up to 14-16.
     await new Promise((r) => setTimeout(r, 2200));

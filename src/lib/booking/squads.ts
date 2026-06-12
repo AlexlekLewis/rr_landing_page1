@@ -9,13 +9,14 @@
 // A squad = 2 mini-squads (teams): the PERFORMANCE team and the PATHWAY team.
 //   squad = round(lanes × 26/7)   →  7 lanes 26 · 5 lanes 19 · 4 lanes 15
 //   perf team = ceil(squad/2), pathway team = floor(squad/2)
-//   →  7 lanes 13/13 · 5 lanes 10/9 · 4 lanes 8/7   (matches the sheet's
-//      mini-squad capacities 13 / 10 / 8 and session totals 52 / 38 / 26 / 15)
+//   →  7 lanes 13/13 · 5 lanes 10/9 · 4 lanes 8/7   (lane ratio 7:26)
+// NB: a place = a seat in that mini-squad for the WHOLE 8-week block (one fixed
+//     roster), not a per-week spot. "Capacity" = the enrolled roster, filled once.
 //
 // OFFICIAL grid (per the sheet, Netz Friday = two 2-hour blocks CONFIRMED by Alex):
 //   Hallam     Thu 8–10pm (5 lanes, 17+) + Sat 12–2pm (5 lanes, 12-14) + Sat 2–4pm (4 lanes, 14-16)
 //   The Netz   Fri 5:30–9:30pm (5 lanes, 2 squads) + Sat 2–4pm & 4–6pm (7 lanes)
-//   Third venue (North): TBC — interest only, no squads yet.
+//   Mickleham  Fri 6–8pm & 8–10pm + Sat 2–4pm & 4–6pm (7 lanes) — confirmed (facility name/address TBC).
 // ============================================================
 
 export type Stream = "performance" | "pathway";
@@ -73,10 +74,9 @@ export interface Squad {
 export const CENTRES: Centre[] = [
   { slug: "williamstown", name: "The Netz", suburb: "Williamstown", region: "West Melbourne", address: "37 Robbins Cct, Williamstown North VIC 3016" },
   { slug: "hallam", name: "Elite Cricket Centre", suburb: "Hallam", region: "South East Melbourne", address: "8-9 Becon Ct, Hallam VIC 3803" },
-  // Third venue (North) — not confirmed yet. Captures interest only; no bookable squads.
-  // When Mickleham is confirmed: replace this line with the Mickleham entry, e.g.
-  // { slug: "mickleham", name: "<facility name>", suburb: "Mickleham", region: "North Melbourne", address: "<street address>" },
-  { slug: "venue-3", name: "New Venue", suburb: "Location to be announced", region: "North Melbourne", address: "To be announced", comingSoon: true },
+  // Mickleham — North (days/times confirmed by Alex 12 Jun 2026). Facility NAME +
+  // STREET ADDRESS still TBC — placeholders below; set the real ones before go-live.
+  { slug: "mickleham", name: "Mickleham", suburb: "Mickleham", region: "North Melbourne", address: "Address to be confirmed" },
 ];
 
 /** Centres that are open for booking now (have squads). */
@@ -109,11 +109,12 @@ const BLOCKS: RawBlock[] = [
   { idBase: "h-sat12-1214", centre: "hallam", band: "12-14", day: "Saturday", startTime: "12:00pm", endTime: "2:00pm", lanes: 5, blockLabel: "Sat 12–2pm", sortOrder: 2 },
   { idBase: "h-sat2-1416", centre: "hallam", band: "14-16", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 4, blockLabel: "Sat 2–4pm", sortOrder: 3 },
 
-  // ── Mickleham — TEMPLATE (uncomment + set real days/times/lanes when confirmed) ──
-  // { idBase: "m-fri530-1416", centre: "mickleham", band: "14-16", day: "Friday", startTime: "5:30pm", endTime: "7:30pm", lanes: 7, blockLabel: "Fri 5:30–7:30pm", sortOrder: 1 },
-  // { idBase: "m-fri730-17", centre: "mickleham", band: "17+", day: "Friday", startTime: "7:30pm", endTime: "9:30pm", lanes: 7, blockLabel: "Fri 7:30–9:30pm", sortOrder: 2 },
-  // { idBase: "m-sat2-1214", centre: "mickleham", band: "12-14", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 7, blockLabel: "Sat 2–4pm", sortOrder: 3 },
-  // { idBase: "m-sat4-1416", centre: "mickleham", band: "14-16", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 7, blockLabel: "Sat 4–6pm", sortOrder: 4 },
+  // ── Mickleham — North (7 lanes; confirmed Fri + Sat). Allocation (Option C): 17+ takes
+  //    the two LATE slots = its two options; 12-14 the young-friendly Sat afternoon; 14-16 Fri early. ──
+  { idBase: "m-fri6-1416", centre: "mickleham", band: "14-16", day: "Friday", startTime: "6:00pm", endTime: "8:00pm", lanes: 7, blockLabel: "Fri 6–8pm", sortOrder: 1 },
+  { idBase: "m-fri8-17", centre: "mickleham", band: "17+", day: "Friday", startTime: "8:00pm", endTime: "10:00pm", lanes: 7, blockLabel: "Fri 8–10pm", sortOrder: 2 },
+  { idBase: "m-sat2-1214", centre: "mickleham", band: "12-14", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 7, blockLabel: "Sat 2–4pm", sortOrder: 3 },
+  { idBase: "m-sat4-17", centre: "mickleham", band: "17+", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 7, blockLabel: "Sat 4–6pm", sortOrder: 4 },
 ];
 
 export const SQUADS: Squad[] = BLOCKS.flatMap((b) =>

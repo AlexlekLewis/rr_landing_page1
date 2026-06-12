@@ -1,21 +1,43 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, ArrowRight, ArrowLeft, Clock, Users, Check, AlertCircle, Loader2 } from 'lucide-react';
+import { MapPin, ArrowRight, ArrowLeft, Clock, Users, Check, AlertCircle, Loader2, Ruler, Phone, Mail, MessageSquare, Telescope } from 'lucide-react';
 import DateOfBirthInput from '../../DateOfBirthInput';
 import { REP_GROUPS, CLUB_GROUPS, groupsForGender } from './levels';
 import { CENTRES, CENTRE_BY_SLUG, squadsForPlacement } from '../../../lib/booking/squads';
 import { inventory } from '../../../lib/booking/inventory';
 import { applications, applicationFromPlacement } from '../../../lib/booking/applications';
-import { BLANK_FORM, validateStep, computePlacement, isMinor, BLOCK_FEE, secondaryOptions, consentsOk } from './flow';
-import { KIT_ITEMS, BLANK_KIT, kitValid, kitTotalCents, kitSummary, fmtAud } from './kit';
+import { BLANK_FORM, validateStep, computePlacement, isMinor, calcAge, BLOCK_FEE, secondaryOptions, consentsOk } from './flow';
+import { KIT_ITEMS, BLANK_KIT, kitTotalCents, kitSummary, fmtAud } from './kit';
 import DnaRevealCard from './DnaRevealCard';
 import { submitApplication } from './submit';
+import UniformSizeGuideModal from '../UniformSizeGuideModal';
 
 const INPUT_STEPS = ['centre', 'player', 'profile', 'history'];
 // Real Stripe checkout only when explicitly enabled (test/live keys + deployed fn).
 // Default: local confirm, so the funnel runs fully offline.
 const LIVE_PAYMENTS = !!(import.meta?.env?.VITE_PG_LIVE_PAYMENTS === '1');
+// Hosted Stripe Payment Link for the 8-week block. When set (default below, overridable
+// via VITE_PG_PAYMENT_LINK), the Pay button sends families here and Stripe "diverts" them
+// to the success page (where the Purchase pixel fires). We pass the application id
+// (client_reference_id) + email through so the payment reconciles back to the row. Falls
+// back to a dynamic /api/power-game-checkout session if the link is ever cleared.
+const PAYMENT_LINK = (import.meta?.env?.VITE_PG_PAYMENT_LINK || 'https://buy.stripe.com/3cIeVdbHPaWF7Xm1Zp9Zm0j').trim();
+// Enquiry channels for the "Request more information" path (we promise a 72-hour response).
+const ENQUIRY_EMAIL = 'eliteprogram@rramelbourne.com';
+const ENQUIRY_SMS = '0421261825';
 const inputCls = 'w-full bg-white/5 border border-white/15 rounded-lg px-3.5 py-3 text-sm text-white placeholder-white/30 focus:outline-none focus:border-rr-pink transition-colors';
+
+// Readable labels for the "Is this correct?" review summary.
+const SKILL_LABEL = { batting: 'Batter', bowling: 'Bowler', all_rounder: 'All-rounder', wicketkeeper: 'Wicketkeeper' };
+const BOWL_LABEL = { pace: 'Pace / Seam', leg_spin: 'Leg spin', off_spin: 'Off spin' };
+const levelLabel = (code) => {
+  if (!code) return null;
+  for (const g of [...REP_GROUPS, ...CLUB_GROUPS]) {
+    const o = g.options.find((x) => x.code === code);
+    if (o) return o.label;
+  }
+  return code;
+};
 
 const Label = ({ children }) => <span className="block text-[11px] font-bold uppercase tracking-widest text-white/50 mb-1.5">{children}</span>;
 const Field = ({ label, children }) => <label className="block">{label && <Label>{label}</Label>}{children}</label>;
@@ -49,6 +71,7 @@ export default function ApplyFlow({ embedded = false }) {
   const [spotsTick, setSpotsTick] = useState(0); // force spots re-read
   const [submitting, setSubmitting] = useState(false);
   const [kit, setKit] = useState({ ...BLANK_KIT });
+  const [showSizeGuide, setShowSizeGuide] = useState(false);
   const setKitSize = (id, size) => setKit((k) => ({ ...k, [id]: size }));
   const kitTotal = kitTotalCents(kit);
   const grandTotalCents = BLOCK_FEE * 100 + kitTotal;
@@ -83,8 +106,8 @@ export default function ApplyFlow({ embedded = false }) {
       setStep('history');
       return;
     }
-    const PERF = { ...BLANK_FORM, centre: 'williamstown', player_name: 'Sam Smith', player_dob: '2012-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'sam@example.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right', rep_level: 'P16M', format: 't20', rep_bat_avg: '38' };
-    const REVIEW = { ...BLANK_FORM, centre: 'williamstown', player_name: 'Alex Young', player_dob: '2011-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'alex@example.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right', club_level: 'CS-BELOW', format: 'od', club_bat_avg: '22' };
+    const PERF = { ...BLANK_FORM, centre: 'williamstown', player_name: 'Sam Smith', player_dob: '2012-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'sam@example.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right', rep_level: 'P16M', format: 't20' };
+    const REVIEW = { ...BLANK_FORM, centre: 'williamstown', player_name: 'Alex Young', player_dob: '2011-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'alex@example.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right', club_level: 'CS-BELOW', format: 'od' };
     const demoForm = demo === 'review' ? REVIEW : PERF;
     if (demo === 'soldout') {
       (async () => { for (const id of ['w-fri-perf-1416', 'w-sat4-perf-1416']) for (let i = 0; i < 12; i++) await inventory.createHold({ squadId: id, ref: `seed-${id}-${i}` }); })();
@@ -112,26 +135,38 @@ export default function ApplyFlow({ embedded = false }) {
     if (step === 'centre') return setStep('player');
     if (step === 'player') return setStep('profile');
     if (step === 'profile') return setStep('history');
-    if (step === 'history') {
-      // run the engine, persist the application, show the analysing beat, then reveal
-      const r = computePlacement(form);
-      setResult(r);
-      const app = applications.create(applicationFromPlacement(form, r, r.placement.requiresReview ? 'review' : 'auto'));
-      setAppId(app.id);
-      setAnalysing(true);
-      setStep('reveal');
-      setTimeout(() => setAnalysing(false), 1600);
-      return;
-    }
+    // History → a "Is this correct?" review of everything BEFORE we work out the offer.
+    if (step === 'history') return setStep('confirm');
   }
+  // Confirmed the details are right → run the engine, persist, show the analysing beat, reveal.
+  function confirmAndReveal() {
+    const r = computePlacement(form);
+    setResult(r);
+    const app = applications.create(applicationFromPlacement(form, r, r.placement.requiresReview ? 'review' : 'auto'));
+    setAppId(app.id);
+    setAnalysing(true);
+    setStep('reveal');
+    setTimeout(() => setAnalysing(false), 1600);
+  }
+  // Step back one stage from anywhere — lets a player change anything before paying.
   function back() {
     setErrors([]);
-    const order = ['centre', 'player', 'profile', 'history'];
-    const i = order.indexOf(step);
-    if (i > 0) setStep(order[i - 1]);
-    else if (step === 'slot') setStep('reveal');
-    else if (step === 'kit') setStep('slot');
-    else if (step === 'secure') setStep('kit');
+    switch (step) {
+      case 'player': return setStep('centre');
+      case 'profile': return setStep('player');
+      case 'history': return setStep('profile');
+      case 'confirm': return setStep('history');
+      case 'reveal': return setStep('confirm');
+      case 'slot':
+        // leaving the time picker — free any held spot so it isn't stuck
+        if (hold) { inventory.release(hold.holdId); setHold(null); setSelected(null); }
+        return setStep('reveal');
+      case 'kit': return setStep('slot');
+      case 'secure': return setStep('kit');
+      case 'review': return setStep('reveal');
+      case 'requestInfo': return setStep('reveal');
+      default: return;
+    }
   }
 
   function afterReveal() {
@@ -142,6 +177,8 @@ export default function ApplyFlow({ embedded = false }) {
   }
 
   async function pickSquad(squad) {
+    // Re-picking (e.g. after stepping back): free the previously held spot first.
+    if (hold) { await inventory.release(hold.holdId); setHold(null); }
     const ref = `${form.player_name || 'player'}-${Date.now()}`;
     const res = await inventory.createHold({ squadId: squad.id, ref });
     if (res.ok) {
@@ -174,30 +211,43 @@ export default function ApplyFlow({ embedded = false }) {
         kitSummary: kitSummary(kit),
         kitTotalCents: kitTotal,
       });
-      // Live path: Stripe Checkout, then the webhook flips this row to paid.
-      // Enabled via VITE_PG_LIVE_PAYMENTS=1 + STRIPE keys.
+      // Live path (VITE_PG_LIVE_PAYMENTS=1). Hand the order details to the success page
+      // first — it can't read the DB, so it shows the booking + kit from this stash.
       if (LIVE_PAYMENTS) {
+        try {
+          sessionStorage.setItem('pgp_confirmation', JSON.stringify({
+            playerName: form.player_name,
+            centreName: CENTRE_BY_SLUG[form.centre]?.name || '',
+            slot: selected ? `${selected.day} ${selected.startTime}–${selected.endTime}` : '',
+            band: result.placement.placedBand,
+            kit: kitSummary(kit),
+            kitTotalCents: kitTotal,
+          }));
+        } catch (_) { /* private mode — page falls back gracefully */ }
+
+        // Preferred: hosted Stripe Payment Link. Pass the application id (client_reference_id)
+        // + email so the payment reconciles back to the row; Stripe diverts to the success
+        // page after payment, where the Purchase pixel fires.
+        if (PAYMENT_LINK) {
+          let dest = PAYMENT_LINK;
+          try {
+            const url = new URL(PAYMENT_LINK);
+            if (id) url.searchParams.set('client_reference_id', id);
+            if (form.contact_email) url.searchParams.set('prefilled_email', form.contact_email);
+            dest = url.toString();
+          } catch (_) { /* malformed override — use the link as-is */ }
+          window.location.href = dest;
+          return;
+        }
+
+        // Fallback: a dynamic Stripe Checkout session, then the webhook flips this row to paid.
         const r = await fetch('/api/power-game-checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ applicationId: id, bookingId: hold?.holdId, squadId: selected?.id, email: form.contact_email, playerName: form.player_name, uniformTotalCents: kitTotal, uniformSelection: kitSummary(kit).map((l) => `${l.name} (${l.size})`).join(', ') }),
         });
         const data = await r.json();
-        if (data?.url) {
-          // Hand the order details to the success page (it can't read the DB).
-          try {
-            sessionStorage.setItem('pgp_confirmation', JSON.stringify({
-              playerName: form.player_name,
-              centreName: CENTRE_BY_SLUG[form.centre]?.name || '',
-              slot: selected ? `${selected.day} ${selected.startTime}–${selected.endTime}` : '',
-              band: result.placement.placedBand,
-              kit: kitSummary(kit),
-              kitTotalCents: kitTotal,
-            }));
-          } catch (_) { /* private mode — page falls back gracefully */ }
-          window.location.href = data.url;
-          return;
-        }
+        if (data?.url) { window.location.href = data.url; return; }
         setErrors([data?.error || 'Could not start checkout — please try again.']);
         return;
       }
@@ -290,20 +340,17 @@ export default function ApplyFlow({ embedded = false }) {
         </label>
       </div>
       {consentRow('accept_social_media', <>I&apos;m happy for photos/videos featuring the player to be used on RRA Melbourne&apos;s social media &amp; marketing channels.</>)}
-      <div className="border-t border-white/10 pt-3">
-        {consentRow('needs_uniform', <>I&apos;d like to order a Power Game playing uniform (a coach will confirm sizing &amp; details).</>)}
-      </div>
     </div>
   );
   const levelStats = (prefix, title) => {
-    const bats = form.skill === 'batting' || form.skill === 'all_rounder';
     const bowls = form.skill === 'bowling' || form.skill === 'all_rounder';
     const keeps = form.skill === 'wicketkeeper';
+    // Batting average is no longer collected — a pure batter has no numbers to add.
+    if (!bowls && !keeps) return null;
     return (
       <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
         <div className="text-[11px] font-black uppercase tracking-widest text-rr-pink">{title}</div>
         <div className="grid grid-cols-2 gap-3">
-          {bats && statField(`${prefix}_bat_avg`, 'Batting average', 'e.g. 32')}
           {bowls && statField(`${prefix}_bowl_avg`, 'Bowling average', 'e.g. 22')}
           {bowls && statField(`${prefix}_bowl_wkts`, 'Total wickets', 'e.g. 18')}
           {keeps && statField(`${prefix}_catches`, 'Catches', 'e.g. 14')}
@@ -371,7 +418,7 @@ export default function ApplyFlow({ embedded = false }) {
                 <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-2">Player details</h1>
                 <Field label="Player's full name"><input className={inputCls} value={form.player_name} onChange={(e) => set('player_name', e.target.value)} placeholder="e.g. Sam Smith" /></Field>
                 <Field label="Date of birth"><DateOfBirthInput value={form.player_dob} onChange={(v) => set('player_dob', v)} /></Field>
-                <Field label="Gender"><Choice value={form.gender} onChange={(v) => { set('gender', v); set('rep_level', ''); set('club_level', ''); }} options={[{ value: 'M', label: 'Male' }, { value: 'F', label: 'Female' }]} /></Field>
+                <Field label="Do you play Male or Female cricket?"><Choice value={form.gender} onChange={(v) => { set('gender', v); set('rep_level', ''); set('club_level', ''); }} options={[{ value: 'M', label: 'Male' }, { value: 'F', label: 'Female' }]} /></Field>
                 <AnimatePresence>
                   {isMinor(form.player_dob) && (
                     <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
@@ -433,6 +480,54 @@ export default function ApplyFlow({ embedded = false }) {
                 <p className="text-white/40 text-xs -mt-1">Representative cricket, or senior cricket at <span className="text-white">2nd grade &amp; above</span>, earns an instant squad offer. <span className="text-white">Below 2nd grade</span> (or none) goes to a quick coach review first — no payment until a coach confirms your spot.</p>
                 {form.rep_level && levelStats('rep', 'Your representative numbers')}
                 {form.club_level && levelStats('club', 'Your senior cricket numbers')}
+
+                {/* Wild Card — for talent the rep system hasn't caught. Selecting it lets a
+                    player through without a level; a coach then personally assesses them. */}
+                <div className="pt-2">
+                  <div className="flex items-center gap-2 mb-2.5">
+                    <div className="h-px flex-1 bg-white/10" />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-white/30">Not caught by the rep system?</span>
+                    <div className="h-px flex-1 bg-white/10" />
+                  </div>
+                  <button type="button" onClick={() => set('wildcard', !form.wildcard)}
+                    className={`w-full flex items-start gap-3 text-left px-4 py-3.5 rounded-2xl border transition-all ${form.wildcard ? 'bg-rr-pink/15 border-rr-pink shadow-[0_0_20px_rgba(225,31,143,0.18)]' : 'bg-white/5 border-white/15 hover:border-rr-pink/40'}`}>
+                    <Telescope className={`w-5 h-5 mt-0.5 flex-shrink-0 ${form.wildcard ? 'text-rr-pink' : 'text-rr-blue'}`} />
+                    <span className="flex-1">
+                      <span className="block text-sm font-black uppercase tracking-wide text-white">Apply as a Wild Card</span>
+                      <span className="block text-[12px] text-white/55 mt-0.5 leading-snug">Haven&apos;t played rep or graded senior cricket but know you can mix it? A coach will personally assess you — no payment until they confirm your spot.</span>
+                    </span>
+                    {form.wildcard && <Check className="w-5 h-5 text-rr-pink flex-shrink-0" />}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* ── CONFIRM — "Is this correct?" before we work out the offer ── */}
+            {step === 'confirm' && (
+              <div>
+                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Is this correct?</h1>
+                <p className="text-white/50 text-sm mb-6">Have a quick look. You can go back and change anything before we work out your offer.</p>
+                <div className="bg-white/5 border border-white/15 rounded-2xl p-6 mb-6 space-y-3">
+                  <SummaryRow k="Player" v={form.player_name} />
+                  <SummaryRow k="Date of birth" v={`${form.player_dob || '—'}${calcAge(form.player_dob) != null ? ` · ${calcAge(form.player_dob)} yrs` : ''}`} />
+                  <SummaryRow k="Cricket" v={form.gender === 'F' ? 'Female' : 'Male'} />
+                  {isMinor(form.player_dob) && form.parent_name && <SummaryRow k="Parent / guardian" v={form.parent_name} />}
+                  <SummaryRow k="Mobile" v={form.contact_phone} />
+                  <SummaryRow k="Email" v={form.contact_email} />
+                  <SummaryRow k="Suburb" v={form.suburb} />
+                  <SummaryRow k="Centre" v={CENTRE_BY_SLUG[form.centre]?.name} />
+                  <SummaryRow k="Main skill" v={`${SKILL_LABEL[form.skill] || form.skill}${form.batting_hand ? ` · ${form.batting_hand === 'left' ? 'Left' : 'Right'}-hand bat` : ''}${form.bowling_type ? ` · ${BOWL_LABEL[form.bowling_type]}` : ''}`} />
+                  {form.secondary_skill && form.secondary_skill !== 'none' && (
+                    <SummaryRow k="Secondary" v={form.secondary_skill === 'bowling' && form.secondary_bowling_type ? `Bowling · ${BOWL_LABEL[form.secondary_bowling_type]}` : form.secondary_skill.charAt(0).toUpperCase() + form.secondary_skill.slice(1)} />
+                  )}
+                  {form.rep_level && <SummaryRow k="Representative" v={levelLabel(form.rep_level)} />}
+                  {form.club_level && <SummaryRow k="Senior cricket" v={levelLabel(form.club_level)} />}
+                  {form.wildcard && <SummaryRow k="Wild Card" v="Coach to assess" />}
+                  {!form.rep_level && !form.club_level && !form.wildcard && <SummaryRow k="Cricket" v="None added" />}
+                </div>
+                <button onClick={confirmAndReveal} className="w-full inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]">
+                  Yes, this is correct — get my offer <ArrowRight className="w-4 h-4" />
+                </button>
               </div>
             )}
 
@@ -446,7 +541,7 @@ export default function ApplyFlow({ embedded = false }) {
                     <div className="text-white/40 text-sm mt-2">Matching you to the right squad</div>
                   </div>
                 ) : (
-                  <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} onContinue={afterReveal} onRequestReview={() => setStep('review')} />
+                  <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} onContinue={afterReveal} onRequestReview={() => setStep('review')} onRequestInfo={() => setStep('requestInfo')} />
                 )}
               </div>
             )}
@@ -489,9 +584,12 @@ export default function ApplyFlow({ embedded = false }) {
             {step === 'kit' && (
               <div>
                 <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Your kit</h1>
-                <p className="text-white/50 text-sm mb-5">
-                  All participants are required to have a Royals Academy Training Shirt. Add training shorts or pants and other kit at special first-time prices. Sizes will be confirmed with your order.
+                <p className="text-white/50 text-sm mb-3">
+                  The Power Game uniform is required to play, but it&apos;s <span className="text-white">optional here</span> — already have your gear? Skip any item. Otherwise pick what you&apos;d like and your sizes, and we&apos;ll confirm the details with you.
                 </p>
+                <button type="button" onClick={() => setShowSizeGuide(true)} className="inline-flex items-center gap-1.5 text-rr-light-pink hover:text-white text-[12px] font-bold uppercase tracking-wide mb-5 transition-colors">
+                  <Ruler className="w-3.5 h-3.5" /> View the size guide
+                </button>
 
                 <div className="space-y-3 mb-6">
                   {KIT_ITEMS.map((item) => {
@@ -511,7 +609,6 @@ export default function ApplyFlow({ embedded = false }) {
                             </div>
                             {item.note && <p className="text-[11px] text-white/40 mt-1">{item.note}</p>}
                           </div>
-                          <span className="text-sm font-black text-white flex-shrink-0">{fmtAud(item.priceCents)}</span>
                         </div>
 
                         {item.oneSize ? (
@@ -534,14 +631,9 @@ export default function ApplyFlow({ embedded = false }) {
                   })}
                 </div>
 
-                <div className="bg-white/5 border border-white/15 rounded-2xl p-4 mb-5 flex items-baseline justify-between">
-                  <span className="text-xs uppercase tracking-widest text-white/50">Kit subtotal</span>
-                  <span className="text-xl font-black text-white">{fmtAud(kitTotal)}</span>
-                </div>
+                <p className="text-white/40 text-[11px] mb-5">We&apos;ll confirm uniform pricing &amp; payment with you separately — nothing for kit is charged now.</p>
 
-                {!kitValid(kit) && <p className="text-rr-pink text-[11px] mb-3">Please choose a size for the required Training Shirt to continue.</p>}
-
-                <button onClick={() => kitValid(kit) && setStep('secure')} disabled={!kitValid(kit)} className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
+                <button onClick={() => setStep('secure')} className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
                   Continue →
                 </button>
               </div>
@@ -559,7 +651,7 @@ export default function ApplyFlow({ embedded = false }) {
                   <SummaryRow k="Block" v="8-week Power Game phase" />
                   <SummaryRow k="Program" v={`$${BLOCK_FEE}.00`} />
                   {kitSummary(kit).map((line) => (
-                    <SummaryRow key={line.name} k={`${line.name} (${line.size})`} v={fmtAud(line.priceCents)} />
+                    <SummaryRow key={line.name} k={line.name} v={`Size ${line.size}`} />
                   ))}
                   <div className="border-t border-white/10 pt-3 flex items-baseline justify-between">
                     <span className="text-xs uppercase tracking-widest text-white/50">Total</span>
@@ -594,6 +686,52 @@ export default function ApplyFlow({ embedded = false }) {
                   {submitting ? 'Submitting…' : reviewIsCallback ? 'Request my call' : 'Submit my application'}
                 </button>
                 {!consentsOk(form) && <p className="text-white/40 text-[11px] text-center mt-3">Please accept the compliances above to continue.</p>}
+                <button onClick={() => setStep('requestInfo')} className="mt-4 w-full text-center text-xs text-white/45 hover:text-white/80 uppercase tracking-widest transition-colors">Just want more info first? &rarr;</button>
+              </div>
+            )}
+
+            {/* ── REQUEST MORE INFO — three ways to reach us, 72-hour response ── */}
+            {step === 'requestInfo' && (
+              <div>
+                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-2">Want more information?</h1>
+                <p className="text-white/50 text-sm mb-5 max-w-sm">No rush. Pick how you&apos;d like to hear from us — we respond to every enquiry within <span className="text-white font-bold">72 hours</span>.</p>
+
+                {/* Email + Text are instant — no form, no consents needed. */}
+                <div className="space-y-3 mb-5">
+                  <a href={`mailto:${ENQUIRY_EMAIL}?subject=${encodeURIComponent('Power Game Program enquiry')}`}
+                    className="flex items-center gap-4 px-5 py-4 rounded-2xl border bg-white/5 border-white/15 hover:border-rr-pink/50 transition-all">
+                    <Mail className="w-5 h-5 text-rr-pink flex-shrink-0" />
+                    <span className="flex-1 min-w-0">
+                      <span className="block text-sm font-black uppercase tracking-wide text-white">Email us</span>
+                      <span className="block text-[12px] text-white/55 truncate">{ENQUIRY_EMAIL}</span>
+                    </span>
+                    <ArrowRight className="w-4 h-4 text-white/30 flex-shrink-0" />
+                  </a>
+                  <a href={`sms:${ENQUIRY_SMS}`}
+                    className="flex items-center gap-4 px-5 py-4 rounded-2xl border bg-white/5 border-white/15 hover:border-rr-pink/50 transition-all">
+                    <MessageSquare className="w-5 h-5 text-rr-pink flex-shrink-0" />
+                    <span className="flex-1 min-w-0">
+                      <span className="block text-sm font-black uppercase tracking-wide text-white">Text us</span>
+                      <span className="block text-[12px] text-white/55">0421 261 825</span>
+                    </span>
+                    <ArrowRight className="w-4 h-4 text-white/30 flex-shrink-0" />
+                  </a>
+                </div>
+
+                {/* Callback — high demand, so set the 72h expectation. It stores their details,
+                    so it needs the same consents as any other submit. */}
+                <div className="rounded-2xl border border-rr-blue/30 bg-rr-blue/[0.06] p-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Phone className="w-4 h-4 text-rr-blue flex-shrink-0" />
+                    <span className="text-sm font-black uppercase tracking-wide text-white">Request a callback</span>
+                  </div>
+                  <p className="text-[12px] text-white/55 leading-snug mb-3">We&apos;re getting a lot of interest right now — leave it with us and a coach will call you back within 72 hours.</p>
+                  <div className="mb-4">{renderConsents()}</div>
+                  <button onClick={applyWithoutPay} disabled={submitting || !consentsOk(form)} className="w-full bg-rr-blue hover:bg-rr-blue/80 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-3.5 transition-all">
+                    {submitting ? 'Submitting…' : 'Request my callback'}
+                  </button>
+                  {!consentsOk(form) && <p className="text-white/40 text-[11px] text-center mt-2.5">Please accept the compliances above to request a callback.</p>}
+                </div>
               </div>
             )}
 
@@ -635,7 +773,17 @@ export default function ApplyFlow({ embedded = false }) {
             </button>
           </div>
         )}
+
+        {/* Back for the post-input steps — their forward action lives in the step body, so
+            this lets a player return and change anything (details, time, kit) before paying. */}
+        {['confirm', 'reveal', 'slot', 'kit', 'secure', 'review', 'requestInfo'].includes(step) && !analysing && (
+          <div className="mt-6 flex justify-center">
+            <button onClick={back} className="inline-flex items-center gap-1.5 text-white/40 hover:text-white/70 text-xs font-bold uppercase tracking-widest px-4 py-2"><ArrowLeft className="w-3.5 h-3.5" /> Back</button>
+          </div>
+        )}
       </div>
+
+      <UniformSizeGuideModal open={showSizeGuide} onClose={() => setShowSizeGuide(false)} />
     </div>
   );
 }

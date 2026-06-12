@@ -9,7 +9,7 @@ const STREAM_COPY = {
 };
 
 // The payoff moment — feels like an assessment that rewards the player.
-export default function DnaRevealCard({ dna, placement, centreName, onContinue, onRequestReview }) {
+export default function DnaRevealCard({ dna, placement, centreName, onContinue, onRequestReview, onRequestInfo }) {
   const archetype = dna.primaryBattingArchetype || dna.primaryBowlingArchetype || null;
 
   if (placement.requiresReview) {
@@ -29,6 +29,11 @@ export default function DnaRevealCard({ dna, placement, centreName, onContinue, 
         <button onClick={onContinue} className="inline-flex items-center gap-2 bg-white text-rr-dark font-black uppercase tracking-widest text-sm rounded-full px-6 py-3 hover:bg-rr-pink hover:text-white transition-colors">
           What happens next <ArrowRight className="w-4 h-4" />
         </button>
+        {onRequestInfo && (
+          <button onClick={onRequestInfo} className="mt-4 w-full text-center text-xs text-white/45 hover:text-white/80 uppercase tracking-widest transition-colors">
+            Want more information first?
+          </button>
+        )}
       </motion.div>
     );
   }
@@ -80,10 +85,19 @@ export default function DnaRevealCard({ dna, placement, centreName, onContinue, 
           Choose your training time <ArrowRight className="w-4 h-4" />
         </button>
         <p className="text-white/25 text-[11px] mt-3">*Squads are subject to change &mdash; we&apos;ll work with you if anything needs adjusting.</p>
-        {onRequestReview && (
-          <button onClick={onRequestReview} className="mt-4 w-full text-center text-xs text-white/45 hover:text-white/80 uppercase tracking-widest transition-colors">
-            Prefer to talk first? Apply for a review or request a call
-          </button>
+        {(onRequestReview || onRequestInfo) && (
+          <div className="mt-4 space-y-2">
+            {onRequestReview && (
+              <button onClick={onRequestReview} className="w-full text-center text-xs text-white/45 hover:text-white/80 uppercase tracking-widest transition-colors">
+                Prefer a coach to review your application?
+              </button>
+            )}
+            {onRequestInfo && (
+              <button onClick={onRequestInfo} className="w-full text-center text-xs text-white/45 hover:text-white/80 uppercase tracking-widest transition-colors">
+                Just want more information first?
+              </button>
+            )}
+          </div>
         )}
       </div>
     </motion.div>

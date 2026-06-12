@@ -42,8 +42,9 @@ function summarise(form) {
   if (form.bowling_type) bits.push(`Bowls: ${bowlLabel(form.bowling_type)}`);
   if (form.format) bits.push(`Format: ${form.format}`);
   if (form.gender) bits.push(`Gender: ${form.gender}`);
-  if (form.rep_level) bits.push(`Rep ${form.rep_level}: ${form.rep_games || 0} games, bat avg ${form.rep_bat_avg || "—"} (${form.rep_bat_runs || "—"} runs), bowl avg ${form.rep_bowl_avg || "—"} (${form.rep_bowl_wkts || "—"} wkts)`);
-  if (form.club_level) bits.push(`Club ${form.club_level}: ${form.club_games || 0} games, bat avg ${form.club_bat_avg || "—"} (${form.club_bat_runs || "—"} runs), bowl avg ${form.club_bowl_avg || "—"} (${form.club_bowl_wkts || "—"} wkts)`);
+  if (form.rep_level) bits.push(`Rep ${form.rep_level}${form.rep_bowl_avg ? `: bowl avg ${form.rep_bowl_avg} (${form.rep_bowl_wkts || "—"} wkts)` : ""}`);
+  if (form.club_level) bits.push(`Club ${form.club_level}${form.club_bowl_avg ? `: bowl avg ${form.club_bowl_avg} (${form.club_bowl_wkts || "—"} wkts)` : ""}`);
+  if (form.wildcard) bits.push("Wild Card — applied without a rep / graded senior level");
   return bits.join(" · ");
 }
 

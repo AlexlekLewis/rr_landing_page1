@@ -34,10 +34,13 @@ export default async function handler(req, res) {
   try {
     if (event.type === 'checkout.session.completed') {
       const s = event.data.object;
-      const appId = s.metadata?.application_id;
+      // Dynamic checkout sets metadata.application_id (+ source: 'power-game'); the hosted
+      // Payment Link passes the row id via client_reference_id instead. Accept either.
+      const appId = s.client_reference_id || s.metadata?.application_id;
+      const isPowerGame = s.metadata?.source === 'power-game' || !!s.client_reference_id;
       // A paid checkout flips the canonical power_game_applications row to completed —
       // this is what marks an "official player" the Elite Player Portal ingests.
-      if (s.metadata?.source === 'power-game' && appId) {
+      if (isPowerGame && appId) {
         await supabase
           .from('power_game_applications')
           .update({
