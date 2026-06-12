@@ -91,10 +91,9 @@ export function buildApplicationRow(form, placement, squad, opts = {}) {
     accept_parent_code: minor ? !!form.accept_parent_code : true,
     accept_social_media: !!form.accept_social_media,
     accept_playing_standard: !!form.accept_playing_standard,
-    needs_uniform: !!(opts.kitSummary && opts.kitSummary.length) || !!form.needs_uniform,
-    uniform_selection: opts.kitSummary && opts.kitSummary.length
-      ? opts.kitSummary.map((l) => `${l.name} (${l.size})`).join(", ")
-      : "",
+    needs_uniform: !!(opts.uniformSelection) || !!(opts.kitSummary && opts.kitSummary.length) || !!form.needs_uniform,
+    uniform_selection: opts.uniformSelection
+      || (opts.kitSummary && opts.kitSummary.length ? opts.kitSummary.map((l) => `${l.name} (${l.size})`).join(", ") : ""),
     uniform_total_cents: opts.kitTotalCents || 0,
     payment_status: "pending",
     status,

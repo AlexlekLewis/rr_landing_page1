@@ -11,6 +11,7 @@ import { fmtAud } from './kit';
 import DnaRevealCard from './DnaRevealCard';
 import { submitApplication } from './submit';
 import UniformSizeGuideModal from '../UniformSizeGuideModal';
+import { TOPS_SIZES, SHORTS_SIZES, PANTS_SIZES, KIDS_AGE_CHART } from '../../academy-shop/sizeData';
 
 const INPUT_STEPS = ['centre', 'player', 'profile', 'history'];
 // Real Stripe checkout only when explicitly enabled (test/live keys + deployed fn).
@@ -73,9 +74,12 @@ export default function ApplyFlow({ embedded = false }) {
   const [submitting, setSubmitting] = useState(false);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [hasUniform, setHasUniform] = useState(null); // null=unanswered · true=already has · false=needs one
-  // Uniform is informational only on-site — sizing/order/payment is handled at the Stripe
-  // checkout, so the program fee is the whole on-site total.
+  const [shirtSize, setShirtSize] = useState('');
+  const [bottomType, setBottomType] = useState(''); // 'shorts' | 'pants'
+  const [bottomSize, setBottomSize] = useState('');
   const blockFeeCents = BLOCK_FEE * 100;
+  const isJunior = calcAge(form.player_dob) != null && calcAge(form.player_dob) < 16;
+  const sizeGroup = isJunior ? 'junior' : 'senior';
 
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
 
@@ -196,20 +200,25 @@ export default function ApplyFlow({ embedded = false }) {
     }
   }
 
+  function buildUniformOpts() {
+    if (!form.needs_uniform || hasUniform !== false) return {};
+    const parts = [];
+    if (shirtSize) parts.push(`Training Shirt (${shirtSize})`);
+    if (bottomType && bottomSize) parts.push(`${bottomType === 'shorts' ? 'Shorts' : 'Pants'} (${bottomSize})`);
+    parts.push('Cap (OS)');
+    return { uniformSelection: parts.join(', ') };
+  }
+
   async function secure() {
     if (submitting) return;
-    // Belt-and-braces: the button is disabled until consents pass, but never
-    // accept a payment attempt without them even if the DOM is tampered with.
     if (!consentsOk(form)) { setErrors(['Please accept the compliances above to continue.']); return; }
     setSubmitting(true);
     setErrors([]);
     try {
-      // Phase B: persist the real application into power_game_applications (the
-      // canonical table the portal ingests). The id is generated client-side so we
-      // can link it into checkout without needing SELECT (anon is insert-only).
       const { id } = await submitApplication(form, result.placement, selected, {
         kind: 'standard',
         centreName: CENTRE_BY_SLUG[form.centre]?.name,
+        ...buildUniformOpts(),
       });
       // Live path. On the deployed site (or with VITE_PG_LIVE_PAYMENTS=1) the Pay button
       // sends the family to Stripe; in dev/preview/tests it confirms locally so no real
@@ -268,8 +277,8 @@ export default function ApplyFlow({ embedded = false }) {
     setSubmitting(true);
     setErrors([]);
     try {
-      await submitApplication(form, result.placement, selected, { kind: 'standard', intent: 'callback', centreName: CENTRE_BY_SLUG[form.centre]?.name });
-      if (hold) await inventory.release(hold.holdId); // not securing — free the spot back up
+      await submitApplication(form, result.placement, selected, { kind: 'standard', intent: 'callback', centreName: CENTRE_BY_SLUG[form.centre]?.name, ...buildUniformOpts() });
+      if (hold) await inventory.release(hold.holdId);
       setStep('submitted');
     } catch (_e) {
       setErrors(['Could not submit your application — please try again.']);
@@ -288,11 +297,11 @@ export default function ApplyFlow({ embedded = false }) {
     setErrors([]);
     try {
       if (reviewIsCallback) {
-        await submitApplication(form, result.placement, selected, { kind: 'standard', intent: 'callback', centreName: CENTRE_BY_SLUG[form.centre]?.name });
-        if (hold) await inventory.release(hold.holdId); // not paying now — free any held spot
+        await submitApplication(form, result.placement, selected, { kind: 'standard', intent: 'callback', centreName: CENTRE_BY_SLUG[form.centre]?.name, ...buildUniformOpts() });
+        if (hold) await inventory.release(hold.holdId);
         setStep('submitted');
       } else {
-        await submitApplication(form, result.placement, null, { kind: 'capability', comingSoon: comingSoonVenue, centreName: CENTRE_BY_SLUG[form.centre]?.name });
+        await submitApplication(form, result.placement, null, { kind: 'capability', comingSoon: comingSoonVenue, centreName: CENTRE_BY_SLUG[form.centre]?.name, ...buildUniformOpts() });
         setStep('reviewed');
       }
     } catch (_e) {
@@ -336,6 +345,10 @@ export default function ApplyFlow({ embedded = false }) {
         </label>
       </div>
       {consentRow('accept_social_media', <>I&apos;m happy for photos/videos featuring the player to be used on RRA Melbourne&apos;s social media &amp; marketing channels.</>)}
+      <div className="flex items-start gap-3">
+        <input id="c_needs_uniform" type="checkbox" checked={!!form.needs_uniform} onChange={(e) => { set('needs_uniform', e.target.checked); setHasUniform(e.target.checked ? false : null); }} className="mt-0.5 w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer" />
+        <label htmlFor="c_needs_uniform" className="text-xs text-white/70 leading-relaxed cursor-pointer">I&apos;ll need a Power Game program uniform — I&apos;ll choose my size at the checkout.</label>
+      </div>
     </div>
   );
   return (
@@ -557,7 +570,7 @@ export default function ApplyFlow({ embedded = false }) {
               </div>
             )}
 
-            {/* ── UNIFORM (informational only — sizing + order handled at Stripe checkout) ── */}
+            {/* ── UNIFORM — capture sizing when the player needs one ── */}
             {step === 'kit' && (
               <div>
                 <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Your playing uniform</h1>
@@ -567,25 +580,63 @@ export default function ApplyFlow({ embedded = false }) {
 
                 <Choice
                   value={hasUniform === null ? '' : hasUniform ? 'yes' : 'no'}
-                  onChange={(v) => { setHasUniform(v === 'yes'); set('needs_uniform', v === 'no'); }}
+                  onChange={(v) => { setHasUniform(v === 'yes'); set('needs_uniform', v === 'no'); if (v === 'yes') { setShirtSize(''); setBottomType(''); setBottomSize(''); } }}
                   options={[{ value: 'yes', label: 'Yes, I have it' }, { value: 'no', label: 'I need one' }]}
                 />
 
                 {hasUniform === false && (
-                  <div className="mt-5">
-                    <p className="text-white/55 text-[13px] leading-snug mb-3">No problem — check your size with the guide, then add your uniform and choose your sizes at the Stripe checkout.</p>
+                  <div className="mt-5 space-y-5">
+                    <p className="text-white/55 text-[13px] leading-snug">No problem — select your sizes below so we can have your uniform ready. <span className="text-white/30 text-[11px]">({isJunior ? 'Junior' : 'Senior / Adult'} sizes based on player age)</span></p>
+
                     <button type="button" onClick={() => setShowSizeGuide(true)} className="inline-flex items-center gap-1.5 text-rr-light-pink hover:text-white text-[12px] font-bold uppercase tracking-wide px-3.5 py-3 rounded-full border border-rr-light-pink/30 hover:border-rr-light-pink/60 transition-colors">
                       <Ruler className="w-3.5 h-3.5" /> View the size guide
                     </button>
-                    <p className="text-white/35 text-[11px] mt-4">Uniform sizing &amp; payment are handled at the Stripe checkout — nothing for uniform is ordered or charged on this page.</p>
+
+                    {/* Training Shirt size */}
+                    <Field label="Training shirt size">
+                      <select className={inputCls} value={shirtSize} onChange={(e) => setShirtSize(e.target.value)}>
+                        <option value="">— select size —</option>
+                        {(TOPS_SIZES[sizeGroup] || []).map((s) => <option key={s.label} value={s.label}>{s.label}</option>)}
+                      </select>
+                    </Field>
+
+                    {/* Bottom type */}
+                    <Field label="Shorts or pants?">
+                      <Choice
+                        value={bottomType}
+                        onChange={(v) => { setBottomType(v); setBottomSize(''); }}
+                        options={[{ value: 'shorts', label: 'Shorts' }, { value: 'pants', label: 'Pants' }]}
+                      />
+                    </Field>
+
+                    {/* Bottom size */}
+                    {bottomType && (
+                      <Field label={`${bottomType === 'shorts' ? 'Shorts' : 'Pants'} size`}>
+                        <select className={inputCls} value={bottomSize} onChange={(e) => setBottomSize(e.target.value)}>
+                          <option value="">— select size —</option>
+                          {((bottomType === 'shorts' ? SHORTS_SIZES : PANTS_SIZES)[sizeGroup] || []).map((s) => <option key={s.label} value={s.label}>{s.label}</option>)}
+                        </select>
+                      </Field>
+                    )}
+
+                    {/* Cap — one size, no selector needed */}
+                    <div className="bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+                      <span className="text-xs font-bold uppercase tracking-widest text-white/50">Cap</span>
+                      <span className="text-sm text-white/70 ml-2">One size — adjustable strap</span>
+                    </div>
+
+                    <p className="text-white/35 text-[11px]">Uniform payment is handled at the Stripe checkout — nothing for uniform is charged on this page.</p>
                   </div>
                 )}
 
                 {hasUniform === true && (
-                  <p className="text-white/55 text-[13px] leading-snug mt-5">Great — you&apos;re all set. Just leave the uniform off your order at the Stripe checkout.</p>
+                  <p className="text-white/55 text-[13px] leading-snug mt-5">Great — you&apos;re all set.</p>
                 )}
 
-                <button onClick={() => setStep('secure')} className="w-full mt-7 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
+                <button
+                  onClick={() => setStep('secure')}
+                  disabled={hasUniform === null || (hasUniform === false && (!shirtSize || !bottomType || !bottomSize))}
+                  className="w-full mt-7 bg-rr-pink hover:bg-rr-light-pink disabled:opacity-40 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
                   Continue →
                 </button>
               </div>
@@ -601,12 +652,15 @@ export default function ApplyFlow({ embedded = false }) {
                   <SummaryRow k="Centre" v={CENTRE_BY_SLUG[form.centre]?.name} />
                   <SummaryRow k="Time" v={`${selected.day} ${selected.startTime}–${selected.endTime}`} />
                   <SummaryRow k="Block" v="8-week Power Game phase" />
+                  {form.needs_uniform && hasUniform === false && (
+                    <SummaryRow k="Uniform" v={[shirtSize && `Shirt ${shirtSize}`, bottomType && bottomSize && `${bottomType === 'shorts' ? 'Shorts' : 'Pants'} ${bottomSize}`, 'Cap'].filter(Boolean).join(' · ')} />
+                  )}
                   <div className="border-t border-white/10 pt-3 flex items-baseline justify-between">
                     <span className="text-xs uppercase tracking-widest text-white/50">Program fee</span>
                     <span className="text-3xl font-black text-white">{fmtAud(blockFeeCents)}</span>
                   </div>
                 </div>
-                <p className="text-white/35 text-[11px] -mt-3 mb-5">Uniform (if you need it) is added at the Stripe checkout — it&apos;s not part of this fee.</p>
+                <p className="text-white/35 text-[11px] -mt-3 mb-5">{form.needs_uniform ? 'Your uniform sizes have been recorded — uniform payment is added at the Stripe checkout.' : 'Uniform (if you need it) is added at the Stripe checkout — it’s not part of this fee.'}</p>
                 <button onClick={secure} disabled={submitting || !consentsOk(form)} className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
                   {submitting ? 'Processing…' : `Pay ${fmtAud(blockFeeCents)} & secure my spot`}
                 </button>

@@ -47,8 +47,9 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     const slot = await screen.findByTestId("slot-w-fri530-1416-perf");
     fireEvent.click(slot);
 
-    // uniform step: informational only (sizing/order handled at Stripe) — just continue
+    // uniform step: pick "Yes, I have it" so Continue is enabled
     await screen.findByText(/your playing uniform/i);
+    fireEvent.click(screen.getByText("Yes, I have it"));
     fireEvent.click(screen.getByRole("button", { name: /continue/i }));
 
     // Secure step — accept compliances, then pay.
