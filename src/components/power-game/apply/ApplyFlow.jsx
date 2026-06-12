@@ -11,7 +11,7 @@ import { fmtAud } from './kit';
 import DnaRevealCard from './DnaRevealCard';
 import { submitApplication } from './submit';
 import UniformSizeGuideModal from '../UniformSizeGuideModal';
-import { TOPS_SIZES, SHORTS_SIZES, PANTS_SIZES, KIDS_AGE_CHART } from '../../academy-shop/sizeData';
+import { TOPS_SIZES, SHORTS_SIZES, PANTS_SIZES, JACKET_SIZES, KIDS_AGE_CHART } from '../../academy-shop/sizeData';
 
 const INPUT_STEPS = ['centre', 'player', 'profile', 'history'];
 // Real Stripe checkout only when explicitly enabled (test/live keys + deployed fn).
@@ -74,12 +74,25 @@ export default function ApplyFlow({ embedded = false }) {
   const [submitting, setSubmitting] = useState(false);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [hasUniform, setHasUniform] = useState(null); // null=unanswered · true=already has · false=needs one
-  const [shirtSize, setShirtSize] = useState('');
-  const [bottomType, setBottomType] = useState(''); // 'shorts' | 'pants'
-  const [bottomSize, setBottomSize] = useState('');
+  const [kitPicks, setKitPicks] = useState({ shirt: '', shorts: '', pants: '', cap: '', jacket: '' });
   const blockFeeCents = BLOCK_FEE * 100;
   const isJunior = calcAge(form.player_dob) != null && calcAge(form.player_dob) < 16;
   const sizeGroup = isJunior ? 'junior' : 'senior';
+  const KIT_ITEMS_UI = [
+    { key: 'shirt',   label: 'Training Shirt',  sizes: TOPS_SIZES[sizeGroup] || [] },
+    { key: 'shorts',  label: 'Training Shorts', sizes: SHORTS_SIZES[sizeGroup] || [] },
+    { key: 'pants',   label: 'Training Pants',  sizes: PANTS_SIZES[sizeGroup] || [] },
+    { key: 'cap',     label: 'Cap',             sizes: null, oneSize: true },
+    { key: 'jacket',  label: 'Fleece Jacket',   sizes: JACKET_SIZES[sizeGroup] || [], note: 'Optional — runs small, consider one size up' },
+  ];
+  const setKit = (key, val) => setKitPicks(p => ({ ...p, [key]: val }));
+  const anyKitSelected = Object.values(kitPicks).some(v => v);
+  const kitSizesComplete = anyKitSelected && Object.entries(kitPicks).every(([k, v]) => {
+    if (!v) return true; // not selected — fine
+    const item = KIT_ITEMS_UI.find(i => i.key === k);
+    if (item?.oneSize) return true; // one size — no dropdown needed
+    return typeof v === 'string' && v !== '' && v !== 'pending'; // real size chosen
+  });
 
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
 
@@ -202,10 +215,9 @@ export default function ApplyFlow({ embedded = false }) {
 
   function buildUniformOpts() {
     if (!form.needs_uniform || hasUniform !== false) return {};
-    const parts = [];
-    if (shirtSize) parts.push(`Training Shirt (${shirtSize})`);
-    if (bottomType && bottomSize) parts.push(`${bottomType === 'shorts' ? 'Shorts' : 'Pants'} (${bottomSize})`);
-    parts.push('Cap (OS)');
+    const labels = { shirt: 'Training Shirt', shorts: 'Shorts', pants: 'Pants', cap: 'Cap', jacket: 'Fleece Jacket' };
+    const parts = Object.entries(kitPicks).filter(([, v]) => v && v !== 'pending').map(([k, v]) => `${labels[k]} (${v})`);
+    if (!parts.length) return {};
     return { uniformSelection: parts.join(', ') };
   }
 
@@ -570,7 +582,7 @@ export default function ApplyFlow({ embedded = false }) {
               </div>
             )}
 
-            {/* ── UNIFORM — capture sizing when the player needs one ── */}
+            {/* ── UNIFORM — capture which items + sizes the player needs ── */}
             {step === 'kit' && (
               <div>
                 <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Your playing uniform</h1>
@@ -580,52 +592,54 @@ export default function ApplyFlow({ embedded = false }) {
 
                 <Choice
                   value={hasUniform === null ? '' : hasUniform ? 'yes' : 'no'}
-                  onChange={(v) => { setHasUniform(v === 'yes'); set('needs_uniform', v === 'no'); if (v === 'yes') { setShirtSize(''); setBottomType(''); setBottomSize(''); } }}
+                  onChange={(v) => { setHasUniform(v === 'yes'); set('needs_uniform', v === 'no'); if (v === 'yes') setKitPicks({ shirt: '', shorts: '', pants: '', cap: '', jacket: '' }); }}
                   options={[{ value: 'yes', label: 'Yes, I have it' }, { value: 'no', label: 'I need one' }]}
                 />
 
                 {hasUniform === false && (
-                  <div className="mt-5 space-y-5">
-                    <p className="text-white/55 text-[13px] leading-snug">No problem — select your sizes below so we can have your uniform ready. <span className="text-white/30 text-[11px]">({isJunior ? 'Junior' : 'Senior / Adult'} sizes based on player age)</span></p>
+                  <div className="mt-5 space-y-4">
+                    <p className="text-white/55 text-[13px] leading-snug">Select the items you need and pick your size. You&apos;ll add them to your order at the Stripe checkout. <span className="text-white/30 text-[11px]">({isJunior ? 'Junior' : 'Senior / Adult'} sizes)</span></p>
 
                     <button type="button" onClick={() => setShowSizeGuide(true)} className="inline-flex items-center gap-1.5 text-rr-light-pink hover:text-white text-[12px] font-bold uppercase tracking-wide px-3.5 py-3 rounded-full border border-rr-light-pink/30 hover:border-rr-light-pink/60 transition-colors">
                       <Ruler className="w-3.5 h-3.5" /> View the size guide
                     </button>
 
-                    {/* Training Shirt size */}
-                    <Field label="Training shirt size">
-                      <select className={inputCls} value={shirtSize} onChange={(e) => setShirtSize(e.target.value)}>
-                        <option value="">— select size —</option>
-                        {(TOPS_SIZES[sizeGroup] || []).map((s) => <option key={s.label} value={s.label}>{s.label}</option>)}
-                      </select>
-                    </Field>
-
-                    {/* Bottom type */}
-                    <Field label="Shorts or pants?">
-                      <Choice
-                        value={bottomType}
-                        onChange={(v) => { setBottomType(v); setBottomSize(''); }}
-                        options={[{ value: 'shorts', label: 'Shorts' }, { value: 'pants', label: 'Pants' }]}
-                      />
-                    </Field>
-
-                    {/* Bottom size */}
-                    {bottomType && (
-                      <Field label={`${bottomType === 'shorts' ? 'Shorts' : 'Pants'} size`}>
-                        <select className={inputCls} value={bottomSize} onChange={(e) => setBottomSize(e.target.value)}>
-                          <option value="">— select size —</option>
-                          {((bottomType === 'shorts' ? SHORTS_SIZES : PANTS_SIZES)[sizeGroup] || []).map((s) => <option key={s.label} value={s.label}>{s.label}</option>)}
-                        </select>
-                      </Field>
-                    )}
-
-                    {/* Cap — one size, no selector needed */}
-                    <div className="bg-white/5 border border-white/10 rounded-xl px-4 py-3">
-                      <span className="text-xs font-bold uppercase tracking-widest text-white/50">Cap</span>
-                      <span className="text-sm text-white/70 ml-2">One size — adjustable strap</span>
+                    <div className="space-y-3">
+                      {KIT_ITEMS_UI.map((item) => {
+                        const picked = !!kitPicks[item.key];
+                        const noSizes = !item.sizes || item.sizes.length === 0;
+                        return (
+                          <div key={item.key} className={`rounded-xl border transition-all ${picked ? 'bg-rr-pink/10 border-rr-pink/40' : 'bg-white/5 border-white/10'} p-4`}>
+                            <div className="flex items-center gap-3">
+                              <input
+                                type="checkbox"
+                                checked={picked}
+                                onChange={(e) => setKit(item.key, e.target.checked ? (item.oneSize ? 'OS' : 'pending') : '')}
+                                className="w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer"
+                              />
+                              <div className="flex-1 min-w-0">
+                                <span className="text-sm font-bold text-white">{item.label}</span>
+                                {item.note && <span className="block text-[11px] text-white/40 mt-0.5">{item.note}</span>}
+                                {item.oneSize && picked && <span className="block text-[11px] text-white/50 mt-0.5">One size — adjustable strap</span>}
+                                {picked && !item.oneSize && noSizes && <span className="block text-[11px] text-rr-pink mt-0.5">No {sizeGroup} sizes available for this item</span>}
+                              </div>
+                            </div>
+                            {picked && !item.oneSize && !noSizes && (
+                              <select
+                                className={`${inputCls} mt-3`}
+                                value={kitPicks[item.key] === 'pending' ? '' : kitPicks[item.key]}
+                                onChange={(e) => setKit(item.key, e.target.value || 'pending')}
+                              >
+                                <option value="">— select size —</option>
+                                {item.sizes.map((s) => <option key={s.label} value={s.label}>{s.label}</option>)}
+                              </select>
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
 
-                    <p className="text-white/35 text-[11px]">Uniform payment is handled at the Stripe checkout — nothing for uniform is charged on this page.</p>
+                    <p className="text-white/35 text-[11px]">Uniform payment is handled at the Stripe checkout — nothing is charged on this page.</p>
                   </div>
                 )}
 
@@ -635,7 +649,7 @@ export default function ApplyFlow({ embedded = false }) {
 
                 <button
                   onClick={() => setStep('secure')}
-                  disabled={hasUniform === null || (hasUniform === false && (!shirtSize || !bottomType || !bottomSize))}
+                  disabled={hasUniform === null || (hasUniform === false && !kitSizesComplete)}
                   className="w-full mt-7 bg-rr-pink hover:bg-rr-light-pink disabled:opacity-40 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
                   Continue →
                 </button>
@@ -652,8 +666,8 @@ export default function ApplyFlow({ embedded = false }) {
                   <SummaryRow k="Centre" v={CENTRE_BY_SLUG[form.centre]?.name} />
                   <SummaryRow k="Time" v={`${selected.day} ${selected.startTime}–${selected.endTime}`} />
                   <SummaryRow k="Block" v="8-week Power Game phase" />
-                  {form.needs_uniform && hasUniform === false && (
-                    <SummaryRow k="Uniform" v={[shirtSize && `Shirt ${shirtSize}`, bottomType && bottomSize && `${bottomType === 'shorts' ? 'Shorts' : 'Pants'} ${bottomSize}`, 'Cap'].filter(Boolean).join(' · ')} />
+                  {form.needs_uniform && hasUniform === false && anyKitSelected && (
+                    <SummaryRow k="Uniform" v={Object.entries(kitPicks).filter(([,v]) => v && v !== 'pending').map(([k,v]) => `${k === 'cap' ? 'Cap' : k.charAt(0).toUpperCase() + k.slice(1)} ${v === 'OS' ? '' : v}`.trim()).join(' · ')} />
                   )}
                   <div className="border-t border-white/10 pt-3 flex items-baseline justify-between">
                     <span className="text-xs uppercase tracking-widest text-white/50">Program fee</span>
