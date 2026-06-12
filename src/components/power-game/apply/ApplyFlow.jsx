@@ -72,6 +72,7 @@ export default function ApplyFlow({ embedded = false }) {
   const [spotsTick, setSpotsTick] = useState(0); // force spots re-read
   const [submitting, setSubmitting] = useState(false);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
+  const [hasUniform, setHasUniform] = useState(null); // null=unanswered · true=already has · false=needs one
   // Uniform is informational only on-site — sizing/order/payment is handled at the Stripe
   // checkout, so the program fee is the whole on-site total.
   const blockFeeCents = BLOCK_FEE * 100;
@@ -106,8 +107,10 @@ export default function ApplyFlow({ embedded = false }) {
       setStep('history');
       return;
     }
-    const PERF = { ...BLANK_FORM, centre: 'williamstown', player_name: 'Sam Smith', player_dob: '2012-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'sam@example.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right', rep_level: 'P16M', format: 't20' };
-    const REVIEW = { ...BLANK_FORM, centre: 'williamstown', player_name: 'Alex Young', player_dob: '2011-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'alex@example.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right', club_level: 'CS-BELOW', format: 'od' };
+    // The QA shortcut skips the contact step where consents are now captured — pre-consent so the demo can complete.
+    const CONSENTED = { accept_terms: true, accept_player_code: true, accept_parent_code: true, accept_social_media: true, accept_playing_standard: true };
+    const PERF = { ...BLANK_FORM, ...CONSENTED, centre: 'williamstown', player_name: 'Sam Smith', player_dob: '2012-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'sam@example.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right', rep_level: 'P16M', format: 't20' };
+    const REVIEW = { ...BLANK_FORM, ...CONSENTED, centre: 'williamstown', player_name: 'Alex Young', player_dob: '2011-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'alex@example.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right', club_level: 'CS-BELOW', format: 'od' };
     const demoForm = demo === 'review' ? REVIEW : PERF;
     if (demo === 'soldout') {
       (async () => { for (const id of ['w-fri-perf-1416', 'w-sat4-perf-1416']) for (let i = 0; i < 12; i++) await inventory.createHold({ squadId: id, ref: `seed-${id}-${i}` }); })();
@@ -310,9 +313,6 @@ export default function ApplyFlow({ embedded = false }) {
   // eslint-disable-next-line no-unused-vars
   const _tick = spotsTick; // dependency for live spot reads below
 
-  const statField = (key, label, ph) => (
-    <Field label={label}><input type="number" className={inputCls} value={form[key]} onChange={(e) => set(key, e.target.value)} placeholder={ph} /></Field>
-  );
   const consentRow = (k, label) => (
     <div className="flex items-start gap-3">
       <input id={`c_${k}`} type="checkbox" checked={!!form[k]} onChange={(e) => set(k, e.target.checked)} className="mt-0.5 w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer" />
@@ -338,24 +338,6 @@ export default function ApplyFlow({ embedded = false }) {
       {consentRow('accept_social_media', <>I&apos;m happy for photos/videos featuring the player to be used on RRA Melbourne&apos;s social media &amp; marketing channels.</>)}
     </div>
   );
-  const levelStats = (prefix, title) => {
-    const bowls = form.skill === 'bowling' || form.skill === 'all_rounder';
-    const keeps = form.skill === 'wicketkeeper';
-    // Batting average is no longer collected — a pure batter has no numbers to add.
-    if (!bowls && !keeps) return null;
-    return (
-      <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
-        <div className="text-[11px] font-black uppercase tracking-widest text-rr-pink">{title}</div>
-        <div className="grid grid-cols-2 gap-3">
-          {bowls && statField(`${prefix}_bowl_avg`, 'Bowling average', 'e.g. 22')}
-          {bowls && statField(`${prefix}_bowl_wkts`, 'Total wickets', 'e.g. 18')}
-          {keeps && statField(`${prefix}_catches`, 'Catches', 'e.g. 14')}
-          {keeps && statField(`${prefix}_stumpings`, 'Stumpings', 'e.g. 6')}
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div ref={rootRef} className="min-h-screen bg-rr-dark text-white font-sans scroll-mt-24">
       {/* progress bar */}
@@ -427,6 +409,7 @@ export default function ApplyFlow({ embedded = false }) {
                   <Field label="Suburb"><input className={inputCls} value={form.suburb} onChange={(e) => set('suburb', e.target.value)} placeholder="e.g. Hallam" /></Field>
                 </div>
                 <Field label="Best contact email"><input className={inputCls} value={form.contact_email} onChange={(e) => set('contact_email', e.target.value)} placeholder="jane@email.com" /></Field>
+                <div className="pt-1">{renderConsents()}</div>
               </div>
             )}
 
@@ -474,8 +457,6 @@ export default function ApplyFlow({ embedded = false }) {
                   </select>
                 </Field>
                 <p className="text-white/40 text-xs -mt-1">Representative cricket, or senior cricket at <span className="text-white">2nd grade &amp; above</span>, earns an instant squad offer. <span className="text-white">Below 2nd grade</span> (or none) goes to a quick coach review first — no payment until a coach confirms your spot.</p>
-                {form.rep_level && levelStats('rep', 'Your representative numbers')}
-                {form.club_level && levelStats('club', 'Your senior cricket numbers')}
 
                 {/* Wild Card — for talent the rep system hasn't caught. Selecting it lets a
                     player through without a level; a coach then personally assesses them. */}
@@ -581,27 +562,30 @@ export default function ApplyFlow({ embedded = false }) {
               <div>
                 <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Your playing uniform</h1>
                 <p className="text-white/55 text-sm mb-5">
-                  Every Power Game player trains in the Royals Academy uniform — a <span className="text-white">training shirt, shorts or pants, and a cap</span>. If you don&apos;t already have it, you&apos;ll need one for sessions.
+                  Every Power Game player trains in the Royals Academy uniform — a <span className="text-white">training shirt, shorts or pants, and a cap</span>. Do you already have it?
                 </p>
 
-                <div className="space-y-3 mb-5">
-                  <div className="rounded-2xl border border-white/15 bg-white/5 p-4">
-                    <div className="text-white font-black text-sm uppercase tracking-wide mb-1">Need a uniform?</div>
-                    <p className="text-white/55 text-[13px] leading-snug">Check your size with the guide below, then add your uniform and choose your sizes at the Stripe checkout.</p>
+                <Choice
+                  value={hasUniform === null ? '' : hasUniform ? 'yes' : 'no'}
+                  onChange={(v) => { setHasUniform(v === 'yes'); set('needs_uniform', v === 'no'); }}
+                  options={[{ value: 'yes', label: 'Yes, I have it' }, { value: 'no', label: 'I need one' }]}
+                />
+
+                {hasUniform === false && (
+                  <div className="mt-5">
+                    <p className="text-white/55 text-[13px] leading-snug mb-3">No problem — check your size with the guide, then add your uniform and choose your sizes at the Stripe checkout.</p>
+                    <button type="button" onClick={() => setShowSizeGuide(true)} className="inline-flex items-center gap-1.5 text-rr-light-pink hover:text-white text-[12px] font-bold uppercase tracking-wide px-3.5 py-3 rounded-full border border-rr-light-pink/30 hover:border-rr-light-pink/60 transition-colors">
+                      <Ruler className="w-3.5 h-3.5" /> View the size guide
+                    </button>
+                    <p className="text-white/35 text-[11px] mt-4">Uniform sizing &amp; payment are handled at the Stripe checkout — nothing for uniform is ordered or charged on this page.</p>
                   </div>
-                  <div className="rounded-2xl border border-white/15 bg-white/5 p-4">
-                    <div className="text-white font-black text-sm uppercase tracking-wide mb-1">Already have it?</div>
-                    <p className="text-white/55 text-[13px] leading-snug">You&apos;re all set — just leave the uniform off your order at the Stripe checkout.</p>
-                  </div>
-                </div>
+                )}
 
-                <button type="button" onClick={() => setShowSizeGuide(true)} className="inline-flex items-center gap-1.5 text-rr-light-pink hover:text-white text-[12px] font-bold uppercase tracking-wide px-3.5 py-3 rounded-full border border-rr-light-pink/30 hover:border-rr-light-pink/60 mb-5 transition-colors">
-                  <Ruler className="w-3.5 h-3.5" /> View the size guide
-                </button>
+                {hasUniform === true && (
+                  <p className="text-white/55 text-[13px] leading-snug mt-5">Great — you&apos;re all set. Just leave the uniform off your order at the Stripe checkout.</p>
+                )}
 
-                <p className="text-white/35 text-[11px] mb-5">Uniform sizing &amp; payment are handled at the Stripe checkout — nothing for uniform is ordered or charged on this page.</p>
-
-                <button onClick={() => setStep('secure')} className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
+                <button onClick={() => setStep('secure')} className="w-full mt-7 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
                   Continue →
                 </button>
               </div>
@@ -623,14 +607,12 @@ export default function ApplyFlow({ embedded = false }) {
                   </div>
                 </div>
                 <p className="text-white/35 text-[11px] -mt-3 mb-5">Uniform (if you need it) is added at the Stripe checkout — it&apos;s not part of this fee.</p>
-                <div className="mb-5">{renderConsents()}</div>
                 <button onClick={secure} disabled={submitting || !consentsOk(form)} className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
                   {submitting ? 'Processing…' : `Pay ${fmtAud(blockFeeCents)} & secure my spot`}
                 </button>
                 <button onClick={applyWithoutPay} disabled={submitting || !consentsOk(form)} className="w-full mt-3 bg-transparent border border-white/20 hover:border-white/40 disabled:opacity-40 disabled:cursor-not-allowed text-white/80 font-bold uppercase tracking-widest text-[11px] rounded-full px-6 py-3.5 transition-all">
                   Apply without paying — request a call first
                 </button>
-                {!consentsOk(form) && <p className="text-white/40 text-[11px] text-center mt-3">Please accept the compliances above to continue.</p>}
                 <p className="text-white/25 text-[11px] text-center mt-3">Paying secures your spot for the 8-week block (applying without paying doesn&apos;t hold one). *Squads are subject to change &mdash; we&apos;ll work with you if changes are needed.</p>
               </div>
             )}
@@ -646,11 +628,9 @@ export default function ApplyFlow({ embedded = false }) {
                       ? `No rush. Submit your details and a Power Game coach will call you to talk through your offer and answer any questions before you commit. No payment needed yet.`
                       : `Submit your details and a Power Game coach will personally review your cricket and be in touch about the best squad for you. No payment needed yet.`}
                 </p>
-                <div className="mb-5">{renderConsents()}</div>
-                <button onClick={submitReview} disabled={submitting || !consentsOk(form)} className="w-full bg-rr-blue hover:bg-rr-blue/80 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all">
+                <button onClick={submitReview} disabled={submitting} className="w-full bg-rr-blue hover:bg-rr-blue/80 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all">
                   {submitting ? 'Submitting…' : reviewIsCallback ? 'Request my call' : 'Submit my application'}
                 </button>
-                {!consentsOk(form) && <p className="text-white/40 text-[11px] text-center mt-3">Please accept the compliances above to continue.</p>}
                 <button onClick={() => setStep('requestInfo')} className="mt-4 w-full text-center text-xs text-white/45 hover:text-white/80 uppercase tracking-widest transition-colors">Just want more info first? &rarr;</button>
               </div>
             )}
@@ -683,19 +663,17 @@ export default function ApplyFlow({ embedded = false }) {
                   </a>
                 </div>
 
-                {/* Callback — high demand, so set the 72h expectation. It stores their details,
-                    so it needs the same consents as any other submit. */}
+                {/* Callback — high demand, so set the 72h expectation. (Consents were captured
+                    on the contact step; applyWithoutPay still guards against missing ones.) */}
                 <div className="rounded-2xl border border-rr-blue/30 bg-rr-blue/[0.06] p-4">
                   <div className="flex items-center gap-2 mb-1">
                     <Phone className="w-4 h-4 text-rr-blue flex-shrink-0" />
                     <span className="text-sm font-black uppercase tracking-wide text-white">Request a callback</span>
                   </div>
                   <p className="text-[12px] text-white/55 leading-snug mb-3">We&apos;re getting a lot of interest right now — leave it with us and a coach will call you back within 72 hours.</p>
-                  <div className="mb-4">{renderConsents()}</div>
-                  <button onClick={applyWithoutPay} disabled={submitting || !consentsOk(form)} className="w-full bg-rr-blue hover:bg-rr-blue/80 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-3.5 transition-all">
+                  <button onClick={applyWithoutPay} disabled={submitting} className="w-full bg-rr-blue hover:bg-rr-blue/80 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-3.5 transition-all">
                     {submitting ? 'Submitting…' : 'Request my callback'}
                   </button>
-                  {!consentsOk(form) && <p className="text-white/40 text-[11px] text-center mt-2.5">Please accept the compliances above to request a callback.</p>}
                 </div>
               </div>
             )}

@@ -36,17 +36,8 @@ export interface ApplyForm {
   rep_level: string; // PRIMARY — representative level (VMCU rep floor)
   club_level: string; // secondary — highest club grade
   format: "t20" | "od" | "multiday" | "";
-  // Per-level stats for the PRIMARY skill — captured at BOTH rep and club level.
-  // (Total runs + games/matches AND batting average were removed at Alex's request —
-  //  batters are placed on level + age; bowlers/keepers still give their numbers.)
-  rep_bowl_avg: string;
-  rep_bowl_wkts: string;
-  rep_catches: string;
-  rep_stumpings: string;
-  club_bowl_avg: string;
-  club_bowl_wkts: string;
-  club_catches: string;
-  club_stumpings: string;
+  // No performance numbers are collected (batting, bowling or keeping) — Alex's call.
+  // Placement is purely level × age.
   // Compliances & permissions (captured at submission).
   accept_terms: boolean;
   accept_player_code: boolean;
@@ -76,14 +67,6 @@ export const BLANK_FORM: ApplyForm = {
   rep_level: "",
   club_level: "",
   format: "",
-  rep_bowl_avg: "",
-  rep_bowl_wkts: "",
-  rep_catches: "",
-  rep_stumpings: "",
-  club_bowl_avg: "",
-  club_bowl_wkts: "",
-  club_catches: "",
-  club_stumpings: "",
   accept_terms: false,
   accept_player_code: false,
   accept_parent_code: false,
@@ -92,8 +75,6 @@ export const BLANK_FORM: ApplyForm = {
   needs_uniform: false,
   wildcard: false,
 };
-
-const n = (v: string): number | null => (v === "" || v == null ? null : Number(v));
 
 export function calcAge(dob: string): number | null {
   return getAge(dob || null);
@@ -129,36 +110,26 @@ export function buildEngineInput(f: ApplyForm): ComputeDnaInput {
   const keeps = f.skill === "wicketkeeper";
   const fmt = (f.format || "t20") as ComputeDnaInput["stats"][number]["format"];
 
-  // The player's numbers AT a given level → one stats row scored at that level's CTI.
-  const levelRow = (
-    code: string,
-    bowlAvg: string,
-    bowlWkts: string,
-    catches: string,
-    stumpings: string,
-  ): ComputeDnaInput["stats"][number] => ({
+  // No performance numbers are collected — placement is purely level × age. We still send a
+  // season's assumed volume so a player who reached a level isn't flagged "thin_history".
+  const levelRow = (code: string): ComputeDnaInput["stats"][number] => ({
     season: CURRENT_SEASON,
     format: fmt,
     competitionCode: code,
-    // Runs, matches AND batting average are no longer collected; assume a season's volume
-    // so a player who reached this level isn't flagged "thin_history". Batting is placed on
-    // level × age (a missing batAverage simply drops the performance modifier).
     batMatches: ASSUMED_MATCHES,
     batInnings: bats ? ASSUMED_MATCHES : null,
     batAverage: null,
     batRuns: null,
     bowlMatches: bowls ? ASSUMED_MATCHES : null,
-    bowlAverage: bowls ? n(bowlAvg) : null,
-    bowlWickets: bowls ? n(bowlWkts) : null,
-    fieldCatches: keeps ? n(catches) : null,
-    fieldStumpings: keeps ? n(stumpings) : null,
+    bowlAverage: null,
+    bowlWickets: null,
+    fieldCatches: null,
+    fieldStumpings: null,
   });
 
   const stats: ComputeDnaInput["stats"] = [];
-  if (f.rep_level)
-    stats.push(levelRow(f.rep_level, f.rep_bowl_avg, f.rep_bowl_wkts, f.rep_catches, f.rep_stumpings));
-  if (f.club_level)
-    stats.push(levelRow(f.club_level, f.club_bowl_avg, f.club_bowl_wkts, f.club_catches, f.club_stumpings));
+  if (f.rep_level) stats.push(levelRow(f.rep_level));
+  if (f.club_level) stats.push(levelRow(f.club_level));
 
   return {
     profile: {
@@ -251,6 +222,7 @@ export function validateStep(step: Step, f: ApplyForm): string[] {
     if (!f.contact_phone.trim()) e.push("A contact mobile is required.");
     if (!emailOk(f.contact_email)) e.push("A valid contact email is required.");
     if (!f.suburb.trim()) e.push("Suburb is required.");
+    if (!consentsOk(f)) e.push("Please accept the compliances to continue.");
   }
   if (step === "profile") {
     if (!f.skill) e.push("Select a main skill.");

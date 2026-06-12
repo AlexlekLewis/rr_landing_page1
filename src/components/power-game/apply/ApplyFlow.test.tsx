@@ -64,7 +64,7 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     expect(inventory.spotsLeft("w-fri530-1416-perf")).toBe(before - 1);
   });
 
-  it("review path: below-floor player gets a no-payment submit form gated by consents", async () => {
+  it("review path: below-floor player gets a no-payment submit form", async () => {
     window.history.pushState({}, "", "/PGP2026/apply?demo=review");
     render(<ApplyFlow />);
     await screen.findByText(/a coach will review it/i);
@@ -72,10 +72,8 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     await screen.findByText(/apply for coach review/i);
     // no payment in this path
     expect(screen.queryByRole("button", { name: /secure my spot|lock my spot/i })).toBeNull();
-    // submit is gated until compliances are accepted
+    // consents are captured on the contact step (pre-set in the demo), so submit is ready
     const submit = screen.getByRole("button", { name: /submit my application/i }) as HTMLButtonElement;
-    expect(submit.disabled).toBe(true);
-    document.querySelectorAll('input[type="checkbox"]').forEach((b) => fireEvent.click(b));
     expect(submit.disabled).toBe(false);
     fireEvent.click(submit);
     await screen.findByText(/in our hands/i);
@@ -119,6 +117,8 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     fireEvent.change(screen.getByPlaceholderText(/0412/), { target: { value: "0400000000" } });
     fireEvent.change(screen.getByPlaceholderText(/hallam/i), { target: { value: "Williamstown" } });
     fireEvent.change(screen.getByPlaceholderText(/jane@/i), { target: { value: "t@e.com" } });
+    // compliance now lives on the contact step — accept both checkboxes to continue
+    document.querySelectorAll('input[type="checkbox"]').forEach((b) => fireEvent.click(b));
     fireEvent.click(screen.getByText("Continue"));
 
     // Profile

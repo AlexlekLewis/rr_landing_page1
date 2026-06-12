@@ -74,9 +74,8 @@ export interface Squad {
 export const CENTRES: Centre[] = [
   { slug: "williamstown", name: "The Netz", suburb: "Williamstown", region: "West Melbourne", address: "37 Robbins Cct, Williamstown North VIC 3016" },
   { slug: "hallam", name: "Elite Cricket Centre", suburb: "Hallam", region: "South East Melbourne", address: "8-9 Becon Ct, Hallam VIC 3803" },
-  // Mickleham — North (days/times confirmed by Alex 12 Jun 2026). Facility NAME +
-  // STREET ADDRESS still TBC — placeholders below; set the real ones before go-live.
-  { slug: "mickleham", name: "Mickleham", suburb: "Mickleham", region: "North Melbourne", address: "Address to be confirmed" },
+  // Mickleham — North (days/times + venue confirmed by Alex 12 Jun 2026).
+  { slug: "mickleham", name: "Mickleham Indoor Sports Centre", suburb: "Mickleham", region: "North Melbourne", address: "3 Eclipse Drive, Mickleham VIC 3064" },
 ];
 
 /** Centres that are open for booking now (have squads). */
