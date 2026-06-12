@@ -176,12 +176,10 @@ export default function ApplyFlow({ embedded = false }) {
       case 'profile': return setStep('player');
       case 'history': return setStep('profile');
       case 'confirm': return setStep('history');
-      case 'reveal': return setStep('confirm');
-      case 'slot':
-        // leaving the time picker — free any held spot so it isn't stuck
+      case 'reveal':
         if (hold) { inventory.release(hold.holdId); setHold(null); setSelected(null); }
-        return setStep('reveal');
-      case 'kit': return setStep('slot');
+        return setStep('confirm');
+      case 'kit': return setStep('reveal');
       case 'secure': return setStep('kit');
       case 'review': return setStep('reveal');
       case 'requestInfo': return setStep('reveal');
@@ -190,7 +188,6 @@ export default function ApplyFlow({ embedded = false }) {
   }
 
   function afterReveal() {
-    // A coming-soon venue has no squads to book → capture interest (review path).
     const comingSoon = CENTRE_BY_SLUG[form.centre]?.comingSoon;
     if (result.placement.requiresReview || comingSoon) setStep('review');
     else setStep('slot');
@@ -533,7 +530,7 @@ export default function ApplyFlow({ embedded = false }) {
               </div>
             )}
 
-            {/* ── REVEAL ── */}
+            {/* ── REVEAL + SLOT (merged) ── */}
             {step === 'reveal' && (
               <div>
                 {analysing ? (
@@ -542,42 +539,42 @@ export default function ApplyFlow({ embedded = false }) {
                     <div className="text-lg font-black uppercase tracking-widest text-white">Analysing your cricket…</div>
                     <div className="text-white/40 text-sm mt-2">Matching you to the right squad</div>
                   </div>
-                ) : (
+                ) : result.placement.requiresReview || CENTRE_BY_SLUG[form.centre]?.comingSoon ? (
                   <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} onContinue={afterReveal} onRequestInfo={() => setStep('requestInfo')} />
-                )}
-              </div>
-            )}
-
-            {/* ── SLOT ── */}
-            {step === 'slot' && result && (
-              <div>
-                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Choose your time</h1>
-                <p className="text-white/50 text-sm mb-6">{result.placement.stream === 'performance' ? 'Performance' : 'Pathway'} · {result.placement.placedBand} · {CENTRE_BY_SLUG[form.centre]?.name}</p>
-                {matchingSquads.length === 0 ? (
-                  <Fallback onOther={() => { const other = CENTRES.find((c) => c.slug !== form.centre && !c.comingSoon); if (other) { set('centre', other.slug); } setStep('slot'); }}
-                    onReview={() => setStep('review')} otherName={CENTRES.find((c) => c.slug !== form.centre && !c.comingSoon)?.name} />
                 ) : (
-                  <div className="space-y-3">
-                    {matchingSquads.map((sq) => {
-                      const left = inventory.spotsLeft(sq.id);
-                      const full = left <= 0;
-                      return (
-                        <button key={sq.id} data-testid={`slot-${sq.id}`} disabled={full} onClick={() => pickSquad(sq)}
-                          className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl border text-left transition-all ${full ? 'bg-white/5 border-white/10 opacity-50 cursor-not-allowed' : 'bg-white/5 border-white/15 hover:border-rr-pink active:scale-[0.99]'}`}>
-                          <Clock className="w-5 h-5 text-rr-pink flex-shrink-0" />
-                          <span className="flex-1">
-                            <span className="block text-base font-black uppercase tracking-wide">{sq.day} · {sq.startTime}–{sq.endTime}</span>
-                            <span className="block text-xs text-white/40 uppercase tracking-widest">{sq.blockLabel}</span>
-                          </span>
-                          <span className={`text-xs font-black uppercase tracking-widest ${full ? 'text-white/40' : left <= 3 ? 'text-rr-pink' : 'text-green-400'}`}>
-                            {full ? 'Full' : `${left} left`}
-                          </span>
-                        </button>
-                      );
-                    })}
-                    <button onClick={() => setStep('review')} className="w-full text-center text-xs text-white/40 hover:text-white/70 uppercase tracking-widest pt-2">None of these times work →</button>
-                    <p className="text-white/25 text-[11px] text-center pt-1">*Squads are subject to change &mdash; we&apos;ll work with you if changes are needed.</p>
-                  </div>
+                  <>
+                    <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} onContinue={null} onRequestInfo={() => setStep('requestInfo')} />
+
+                    <div className="mt-8">
+                      <h2 className="text-xl md:text-2xl font-black uppercase tracking-wide mb-1">Choose your time</h2>
+                      <p className="text-white/50 text-sm mb-5">{result.placement.stream === 'performance' ? 'Performance' : 'Pathway'} · {result.placement.placedBand} · {CENTRE_BY_SLUG[form.centre]?.name}</p>
+                      {matchingSquads.length === 0 ? (
+                        <Fallback onOther={() => { const other = CENTRES.find((c) => c.slug !== form.centre && !c.comingSoon); if (other) { set('centre', other.slug); } }} onReview={() => setStep('review')} otherName={CENTRES.find((c) => c.slug !== form.centre && !c.comingSoon)?.name} />
+                      ) : (
+                        <div className="space-y-3">
+                          {matchingSquads.map((sq) => {
+                            const left = inventory.spotsLeft(sq.id);
+                            const full = left <= 0;
+                            return (
+                              <button key={sq.id} data-testid={`slot-${sq.id}`} disabled={full} onClick={() => pickSquad(sq)}
+                                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl border text-left transition-all ${full ? 'bg-white/5 border-white/10 opacity-50 cursor-not-allowed' : 'bg-white/5 border-white/15 hover:border-rr-pink active:scale-[0.99]'}`}>
+                                <Clock className="w-5 h-5 text-rr-pink flex-shrink-0" />
+                                <span className="flex-1">
+                                  <span className="block text-base font-black uppercase tracking-wide">{sq.day} · {sq.startTime}–{sq.endTime}</span>
+                                  <span className="block text-xs text-white/40 uppercase tracking-widest">{sq.blockLabel}</span>
+                                </span>
+                                <span className={`text-xs font-black uppercase tracking-widest ${full ? 'text-white/40' : left <= 3 ? 'text-rr-pink' : 'text-green-400'}`}>
+                                  {full ? 'Full' : `${left} left`}
+                                </span>
+                              </button>
+                            );
+                          })}
+                          <button onClick={() => setStep('review')} className="w-full text-center text-xs text-white/40 hover:text-white/70 uppercase tracking-widest pt-2">None of these times work →</button>
+                          <p className="text-white/25 text-[11px] text-center pt-1">*Squads are subject to change &mdash; we&apos;ll work with you if changes are needed.</p>
+                        </div>
+                      )}
+                    </div>
+                  </>
                 )}
               </div>
             )}
@@ -787,7 +784,7 @@ export default function ApplyFlow({ embedded = false }) {
 
         {/* Back for the post-input steps — their forward action lives in the step body, so
             this lets a player return and change anything (details, time, kit) before paying. */}
-        {['confirm', 'reveal', 'slot', 'kit', 'secure', 'review', 'requestInfo'].includes(step) && !analysing && (
+        {['confirm', 'reveal', 'kit', 'secure', 'review', 'requestInfo'].includes(step) && !analysing && (
           <div className="mt-6 flex justify-center">
             <button onClick={back} className="inline-flex items-center gap-1.5 text-white/40 hover:text-white/70 text-xs font-bold uppercase tracking-widest px-4 py-2"><ArrowLeft className="w-3.5 h-3.5" /> Back</button>
           </div>

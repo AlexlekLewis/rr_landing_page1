@@ -35,15 +35,13 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     window.history.pushState({}, "", "/PGP2026/apply?demo=1");
     render(<ApplyFlow />);
 
-    // Demo jumps to the reveal for a 14yo Dowling gun → Performance.
+    // Demo jumps to the reveal — time slots are shown inline below the offer card.
     await screen.findByText(/you've earned your place/i);
     expect(screen.getByText(/performance squad/i)).toBeTruthy();
 
     const before = inventory.spotsLeft("w-fri530-1416-perf");
 
-    fireEvent.click(screen.getByRole("button", { name: /choose your training time/i }));
-
-    // Slot step — pick the Friday Performance 14-16 squad.
+    // Slots are on the same screen — pick the Friday Performance 14-16 squad.
     const slot = await screen.findByTestId("slot-w-fri530-1416-perf");
     fireEvent.click(slot);
 
@@ -87,8 +85,7 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     window.history.pushState({}, "", "/PGP2026/apply?demo=perf");
     render(<ApplyFlow />);
     await screen.findByText(/you've earned your place/i);
-    fireEvent.click(screen.getByRole("button", { name: /choose your training time/i }));
-    await screen.findByText(/choose your time/i);
+    // Slots are inline on the reveal screen — no separate step to navigate to.
     const fri = screen.queryByTestId("slot-w-fri530-1416-perf") as HTMLButtonElement | null;
     expect(fri && fri.disabled).toBe(true);
     expect(screen.getAllByText(/full/i).length).toBeGreaterThan(0);
