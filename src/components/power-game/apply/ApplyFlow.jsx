@@ -1,21 +1,45 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, ArrowRight, ArrowLeft, Clock, Users, Check, AlertCircle, Loader2 } from 'lucide-react';
+import { MapPin, ArrowRight, ArrowLeft, Clock, Users, Check, AlertCircle, Loader2, Ruler, Phone, Mail, MessageSquare, Telescope } from 'lucide-react';
 import DateOfBirthInput from '../../DateOfBirthInput';
 import { REP_GROUPS, CLUB_GROUPS, groupsForGender } from './levels';
 import { CENTRES, CENTRE_BY_SLUG, squadsForPlacement } from '../../../lib/booking/squads';
 import { inventory } from '../../../lib/booking/inventory';
 import { applications, applicationFromPlacement } from '../../../lib/booking/applications';
-import { BLANK_FORM, validateStep, computePlacement, isMinor, BLOCK_FEE, secondaryOptions, consentsOk } from './flow';
-import { KIT_ITEMS, BLANK_KIT, kitValid, kitTotalCents, kitSummary, fmtAud } from './kit';
+import { BLANK_FORM, validateStep, computePlacement, isMinor, calcAge, BLOCK_FEE, secondaryOptions, consentsOk } from './flow';
+import { fmtAud } from './kit';
 import DnaRevealCard from './DnaRevealCard';
 import { submitApplication } from './submit';
+import UniformSizeGuideModal from '../UniformSizeGuideModal';
+import { TOPS_SIZES, SHORTS_SIZES, PANTS_SIZES, JACKET_SIZES, KIDS_AGE_CHART } from '../../academy-shop/sizeData';
 
 const INPUT_STEPS = ['centre', 'player', 'profile', 'history'];
 // Real Stripe checkout only when explicitly enabled (test/live keys + deployed fn).
 // Default: local confirm, so the funnel runs fully offline.
 const LIVE_PAYMENTS = !!(import.meta?.env?.VITE_PG_LIVE_PAYMENTS === '1');
-const inputCls = 'w-full bg-white/5 border border-white/15 rounded-lg px-3.5 py-3 text-sm text-white placeholder-white/30 focus:outline-none focus:border-rr-pink transition-colors';
+// Hosted Stripe Payment Link for the 8-week block. When set (default below, overridable
+// via VITE_PG_PAYMENT_LINK), the Pay button sends families here and Stripe "diverts" them
+// to the success page (where the Purchase pixel fires). We pass the application id
+// (client_reference_id) + email through so the payment reconciles back to the row. Falls
+// back to a dynamic /api/power-game-checkout session if the link is ever cleared.
+const PAYMENT_LINK = (import.meta?.env?.VITE_PG_PAYMENT_LINK || 'https://buy.stripe.com/3cIeVdbHPaWF7Xm1Zp9Zm0j').trim();
+// Enquiry channels for the "Request more information" path (we promise a 72-hour response).
+const ENQUIRY_EMAIL = 'eliteprogram@rramelbourne.com';
+const ENQUIRY_SMS = '0421261825';
+// 16px text on mobile so iOS Safari doesn't auto-zoom into the field on focus.
+const inputCls = 'w-full bg-white/5 border border-white/15 rounded-lg px-3.5 py-3 text-base sm:text-sm text-white placeholder-white/30 focus:outline-none focus:border-rr-pink transition-colors';
+
+// Readable labels for the "Is this correct?" review summary.
+const SKILL_LABEL = { batting: 'Batter', bowling: 'Bowler', all_rounder: 'All-rounder', wicketkeeper: 'Wicketkeeper' };
+const BOWL_LABEL = { pace: 'Pace / Seam', leg_spin: 'Leg spin', off_spin: 'Off spin' };
+const levelLabel = (code) => {
+  if (!code) return null;
+  for (const g of [...REP_GROUPS, ...CLUB_GROUPS]) {
+    const o = g.options.find((x) => x.code === code);
+    if (o) return o.label;
+  }
+  return code;
+};
 
 const Label = ({ children }) => <span className="block text-[11px] font-bold uppercase tracking-widest text-white/50 mb-1.5">{children}</span>;
 const Field = ({ label, children }) => <label className="block">{label && <Label>{label}</Label>}{children}</label>;
@@ -48,10 +72,27 @@ export default function ApplyFlow({ embedded = false }) {
   const [appId, setAppId] = useState(null); // persisted application id
   const [spotsTick, setSpotsTick] = useState(0); // force spots re-read
   const [submitting, setSubmitting] = useState(false);
-  const [kit, setKit] = useState({ ...BLANK_KIT });
-  const setKitSize = (id, size) => setKit((k) => ({ ...k, [id]: size }));
-  const kitTotal = kitTotalCents(kit);
-  const grandTotalCents = BLOCK_FEE * 100 + kitTotal;
+  const [showSizeGuide, setShowSizeGuide] = useState(false);
+  const [hasUniform, setHasUniform] = useState(null); // null=unanswered · true=already has · false=needs one
+  const [kitPicks, setKitPicks] = useState({ shirt: '', shorts: '', pants: '', cap: '', jacket: '' });
+  const blockFeeCents = BLOCK_FEE * 100;
+  const isJunior = calcAge(form.player_dob) != null && calcAge(form.player_dob) < 16;
+  const sizeGroup = isJunior ? 'junior' : 'senior';
+  const KIT_ITEMS_UI = [
+    { key: 'shirt',   label: 'Training Shirt',  sizes: TOPS_SIZES[sizeGroup] || [] },
+    { key: 'shorts',  label: 'Training Shorts', sizes: SHORTS_SIZES[sizeGroup] || [] },
+    { key: 'pants',   label: 'Training Pants',  sizes: PANTS_SIZES[sizeGroup] || [] },
+    { key: 'cap',     label: 'Cap',             sizes: null, oneSize: true },
+    { key: 'jacket',  label: 'Fleece Jacket',   sizes: JACKET_SIZES[sizeGroup] || [], note: 'Optional — runs small, consider one size up' },
+  ];
+  const setKit = (key, val) => setKitPicks(p => ({ ...p, [key]: val }));
+  const anyKitSelected = Object.values(kitPicks).some(v => v);
+  const kitSizesComplete = anyKitSelected && Object.entries(kitPicks).every(([k, v]) => {
+    if (!v) return true; // not selected — fine
+    const item = KIT_ITEMS_UI.find(i => i.key === k);
+    if (item?.oneSize) return true; // one size — no dropdown needed
+    return typeof v === 'string' && v !== '' && v !== 'pending'; // real size chosen
+  });
 
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
 
@@ -83,8 +124,10 @@ export default function ApplyFlow({ embedded = false }) {
       setStep('history');
       return;
     }
-    const PERF = { ...BLANK_FORM, centre: 'williamstown', player_name: 'Sam Smith', player_dob: '2012-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'sam@example.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right', rep_level: 'P16M', format: 't20', rep_bat_avg: '38' };
-    const REVIEW = { ...BLANK_FORM, centre: 'williamstown', player_name: 'Alex Young', player_dob: '2011-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'alex@example.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right', club_level: 'CS-BELOW', format: 'od', club_bat_avg: '22' };
+    // The QA shortcut skips the contact step where consents are now captured — pre-consent so the demo can complete.
+    const CONSENTED = { accept_terms: true, accept_player_code: true, accept_parent_code: true, accept_social_media: true, accept_playing_standard: true };
+    const PERF = { ...BLANK_FORM, ...CONSENTED, centre: 'williamstown', player_name: 'Sam Smith', player_dob: '2012-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'sam@example.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right', rep_level: 'P16M', format: 't20' };
+    const REVIEW = { ...BLANK_FORM, ...CONSENTED, centre: 'williamstown', player_name: 'Alex Young', player_dob: '2011-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'alex@example.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right', club_level: 'CS-BELOW', format: 'od' };
     const demoForm = demo === 'review' ? REVIEW : PERF;
     if (demo === 'soldout') {
       (async () => { for (const id of ['w-fri-perf-1416', 'w-sat4-perf-1416']) for (let i = 0; i < 12; i++) await inventory.createHold({ squadId: id, ref: `seed-${id}-${i}` }); })();
@@ -112,36 +155,47 @@ export default function ApplyFlow({ embedded = false }) {
     if (step === 'centre') return setStep('player');
     if (step === 'player') return setStep('profile');
     if (step === 'profile') return setStep('history');
-    if (step === 'history') {
-      // run the engine, persist the application, show the analysing beat, then reveal
-      const r = computePlacement(form);
-      setResult(r);
-      const app = applications.create(applicationFromPlacement(form, r, r.placement.requiresReview ? 'review' : 'auto'));
-      setAppId(app.id);
-      setAnalysing(true);
-      setStep('reveal');
-      setTimeout(() => setAnalysing(false), 1600);
-      return;
-    }
+    // History → a "Is this correct?" review of everything BEFORE we work out the offer.
+    if (step === 'history') return setStep('confirm');
   }
+  // Confirmed the details are right → run the engine, persist, show the analysing beat, reveal.
+  function confirmAndReveal() {
+    const r = computePlacement(form);
+    setResult(r);
+    const app = applications.create(applicationFromPlacement(form, r, r.placement.requiresReview ? 'review' : 'auto'));
+    setAppId(app.id);
+    setAnalysing(true);
+    setStep('reveal');
+    setTimeout(() => setAnalysing(false), 1600);
+  }
+  // Step back one stage from anywhere — lets a player change anything before paying.
   function back() {
     setErrors([]);
-    const order = ['centre', 'player', 'profile', 'history'];
-    const i = order.indexOf(step);
-    if (i > 0) setStep(order[i - 1]);
-    else if (step === 'slot') setStep('reveal');
-    else if (step === 'kit') setStep('slot');
-    else if (step === 'secure') setStep('kit');
+    switch (step) {
+      case 'player': return setStep('centre');
+      case 'profile': return setStep('player');
+      case 'history': return setStep('profile');
+      case 'confirm': return setStep('history');
+      case 'reveal':
+        if (hold) { inventory.release(hold.holdId); setHold(null); setSelected(null); }
+        return setStep('confirm');
+      case 'kit': return setStep('reveal');
+      case 'secure': return setStep('kit');
+      case 'review': return setStep('reveal');
+      case 'requestInfo': return setStep('reveal');
+      default: return;
+    }
   }
 
   function afterReveal() {
-    // A coming-soon venue has no squads to book → capture interest (review path).
     const comingSoon = CENTRE_BY_SLUG[form.centre]?.comingSoon;
     if (result.placement.requiresReview || comingSoon) setStep('review');
     else setStep('slot');
   }
 
   async function pickSquad(squad) {
+    // Re-picking (e.g. after stepping back): free the previously held spot first.
+    if (hold) { await inventory.release(hold.holdId); setHold(null); }
     const ref = `${form.player_name || 'player'}-${Date.now()}`;
     const res = await inventory.createHold({ squadId: squad.id, ref });
     if (res.ok) {
@@ -156,48 +210,61 @@ export default function ApplyFlow({ embedded = false }) {
     }
   }
 
+  function buildUniformOpts() {
+    if (!form.needs_uniform || hasUniform !== false) return {};
+    const labels = { shirt: 'Training Shirt', shorts: 'Shorts', pants: 'Pants', cap: 'Cap', jacket: 'Fleece Jacket' };
+    const parts = Object.entries(kitPicks).filter(([, v]) => v && v !== 'pending').map(([k, v]) => `${labels[k]} (${v})`);
+    if (!parts.length) return {};
+    return { uniformSelection: parts.join(', ') };
+  }
+
   async function secure() {
     if (submitting) return;
-    // Belt-and-braces: the button is disabled until consents pass, but never
-    // accept a payment attempt without them even if the DOM is tampered with.
     if (!consentsOk(form)) { setErrors(['Please accept the compliances above to continue.']); return; }
     setSubmitting(true);
     setErrors([]);
     try {
-      // Phase B: persist the real application into power_game_applications (the
-      // canonical table the portal ingests). The id is generated client-side so we
-      // can link it into checkout without needing SELECT (anon is insert-only).
       const { id } = await submitApplication(form, result.placement, selected, {
         kind: 'standard',
         centreName: CENTRE_BY_SLUG[form.centre]?.name,
-        kit,
-        kitSummary: kitSummary(kit),
-        kitTotalCents: kitTotal,
+        ...buildUniformOpts(),
       });
-      // Live path: Stripe Checkout, then the webhook flips this row to paid.
-      // Enabled via VITE_PG_LIVE_PAYMENTS=1 + STRIPE keys.
-      if (LIVE_PAYMENTS) {
+      // Live path. On the deployed site (or with VITE_PG_LIVE_PAYMENTS=1) the Pay button
+      // sends the family to Stripe; in dev/preview/tests it confirms locally so no real
+      // payment is triggered. Stash the booking for the success page first (it can't read the DB).
+      if (LIVE_PAYMENTS || import.meta?.env?.PROD) {
+        try {
+          sessionStorage.setItem('pgp_confirmation', JSON.stringify({
+            playerName: form.player_name,
+            centreName: CENTRE_BY_SLUG[form.centre]?.name || '',
+            slot: selected ? `${selected.day} ${selected.startTime}–${selected.endTime}` : '',
+            band: result.placement.placedBand,
+          }));
+        } catch (_) { /* private mode — page falls back gracefully */ }
+
+        // Preferred: hosted Stripe Payment Link. Pass the application id (client_reference_id)
+        // + email so the payment reconciles back to the row; Stripe diverts to the success
+        // page after payment, where the Purchase pixel fires.
+        if (PAYMENT_LINK) {
+          let dest = PAYMENT_LINK;
+          try {
+            const url = new URL(PAYMENT_LINK);
+            if (id) url.searchParams.set('client_reference_id', id);
+            if (form.contact_email) url.searchParams.set('prefilled_email', form.contact_email);
+            dest = url.toString();
+          } catch (_) { /* malformed override — use the link as-is */ }
+          window.location.href = dest;
+          return;
+        }
+
+        // Fallback: a dynamic Stripe Checkout session, then the webhook flips this row to paid.
         const r = await fetch('/api/power-game-checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ applicationId: id, bookingId: hold?.holdId, squadId: selected?.id, email: form.contact_email, playerName: form.player_name, uniformTotalCents: kitTotal, uniformSelection: kitSummary(kit).map((l) => `${l.name} (${l.size})`).join(', ') }),
+          body: JSON.stringify({ applicationId: id, bookingId: hold?.holdId, squadId: selected?.id, email: form.contact_email, playerName: form.player_name }),
         });
         const data = await r.json();
-        if (data?.url) {
-          // Hand the order details to the success page (it can't read the DB).
-          try {
-            sessionStorage.setItem('pgp_confirmation', JSON.stringify({
-              playerName: form.player_name,
-              centreName: CENTRE_BY_SLUG[form.centre]?.name || '',
-              slot: selected ? `${selected.day} ${selected.startTime}–${selected.endTime}` : '',
-              band: result.placement.placedBand,
-              kit: kitSummary(kit),
-              kitTotalCents: kitTotal,
-            }));
-          } catch (_) { /* private mode — page falls back gracefully */ }
-          window.location.href = data.url;
-          return;
-        }
+        if (data?.url) { window.location.href = data.url; return; }
         setErrors([data?.error || 'Could not start checkout — please try again.']);
         return;
       }
@@ -219,8 +286,8 @@ export default function ApplyFlow({ embedded = false }) {
     setSubmitting(true);
     setErrors([]);
     try {
-      await submitApplication(form, result.placement, selected, { kind: 'standard', intent: 'callback', centreName: CENTRE_BY_SLUG[form.centre]?.name });
-      if (hold) await inventory.release(hold.holdId); // not securing — free the spot back up
+      await submitApplication(form, result.placement, selected, { kind: 'standard', intent: 'callback', centreName: CENTRE_BY_SLUG[form.centre]?.name, ...buildUniformOpts() });
+      if (hold) await inventory.release(hold.holdId);
       setStep('submitted');
     } catch (_e) {
       setErrors(['Could not submit your application — please try again.']);
@@ -239,11 +306,11 @@ export default function ApplyFlow({ embedded = false }) {
     setErrors([]);
     try {
       if (reviewIsCallback) {
-        await submitApplication(form, result.placement, selected, { kind: 'standard', intent: 'callback', centreName: CENTRE_BY_SLUG[form.centre]?.name });
-        if (hold) await inventory.release(hold.holdId); // not paying now — free any held spot
+        await submitApplication(form, result.placement, selected, { kind: 'standard', intent: 'callback', centreName: CENTRE_BY_SLUG[form.centre]?.name, ...buildUniformOpts() });
+        if (hold) await inventory.release(hold.holdId);
         setStep('submitted');
       } else {
-        await submitApplication(form, result.placement, null, { kind: 'capability', comingSoon: comingSoonVenue, centreName: CENTRE_BY_SLUG[form.centre]?.name });
+        await submitApplication(form, result.placement, null, { kind: 'capability', comingSoon: comingSoonVenue, centreName: CENTRE_BY_SLUG[form.centre]?.name, ...buildUniformOpts() });
         setStep('reviewed');
       }
     } catch (_e) {
@@ -264,9 +331,6 @@ export default function ApplyFlow({ embedded = false }) {
   // eslint-disable-next-line no-unused-vars
   const _tick = spotsTick; // dependency for live spot reads below
 
-  const statField = (key, label, ph) => (
-    <Field label={label}><input type="number" className={inputCls} value={form[key]} onChange={(e) => set(key, e.target.value)} placeholder={ph} /></Field>
-  );
   const consentRow = (k, label) => (
     <div className="flex items-start gap-3">
       <input id={`c_${k}`} type="checkbox" checked={!!form[k]} onChange={(e) => set(k, e.target.checked)} className="mt-0.5 w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer" />
@@ -290,29 +354,12 @@ export default function ApplyFlow({ embedded = false }) {
         </label>
       </div>
       {consentRow('accept_social_media', <>I&apos;m happy for photos/videos featuring the player to be used on RRA Melbourne&apos;s social media &amp; marketing channels.</>)}
-      <div className="border-t border-white/10 pt-3">
-        {consentRow('needs_uniform', <>I&apos;d like to order a Power Game playing uniform (a coach will confirm sizing &amp; details).</>)}
+      <div className="flex items-start gap-3">
+        <input id="c_needs_uniform" type="checkbox" checked={!!form.needs_uniform} onChange={(e) => { set('needs_uniform', e.target.checked); setHasUniform(e.target.checked ? false : null); }} className="mt-0.5 w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer" />
+        <label htmlFor="c_needs_uniform" className="text-xs text-white/70 leading-relaxed cursor-pointer">I&apos;ll need a Power Game program uniform — I&apos;ll choose my size at the checkout.</label>
       </div>
     </div>
   );
-  const levelStats = (prefix, title) => {
-    const bats = form.skill === 'batting' || form.skill === 'all_rounder';
-    const bowls = form.skill === 'bowling' || form.skill === 'all_rounder';
-    const keeps = form.skill === 'wicketkeeper';
-    return (
-      <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
-        <div className="text-[11px] font-black uppercase tracking-widest text-rr-pink">{title}</div>
-        <div className="grid grid-cols-2 gap-3">
-          {bats && statField(`${prefix}_bat_avg`, 'Batting average', 'e.g. 32')}
-          {bowls && statField(`${prefix}_bowl_avg`, 'Bowling average', 'e.g. 22')}
-          {bowls && statField(`${prefix}_bowl_wkts`, 'Total wickets', 'e.g. 18')}
-          {keeps && statField(`${prefix}_catches`, 'Catches', 'e.g. 14')}
-          {keeps && statField(`${prefix}_stumpings`, 'Stumpings', 'e.g. 6')}
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div ref={rootRef} className="min-h-screen bg-rr-dark text-white font-sans scroll-mt-24">
       {/* progress bar */}
@@ -371,7 +418,7 @@ export default function ApplyFlow({ embedded = false }) {
                 <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-2">Player details</h1>
                 <Field label="Player's full name"><input className={inputCls} value={form.player_name} onChange={(e) => set('player_name', e.target.value)} placeholder="e.g. Sam Smith" /></Field>
                 <Field label="Date of birth"><DateOfBirthInput value={form.player_dob} onChange={(v) => set('player_dob', v)} /></Field>
-                <Field label="Gender"><Choice value={form.gender} onChange={(v) => { set('gender', v); set('rep_level', ''); set('club_level', ''); }} options={[{ value: 'M', label: 'Male' }, { value: 'F', label: 'Female' }]} /></Field>
+                <Field label="Do you play Male or Female cricket?"><Choice value={form.gender} onChange={(v) => { set('gender', v); set('rep_level', ''); set('club_level', ''); }} options={[{ value: 'M', label: 'Male' }, { value: 'F', label: 'Female' }]} /></Field>
                 <AnimatePresence>
                   {isMinor(form.player_dob) && (
                     <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
@@ -384,6 +431,7 @@ export default function ApplyFlow({ embedded = false }) {
                   <Field label="Suburb"><input className={inputCls} value={form.suburb} onChange={(e) => set('suburb', e.target.value)} placeholder="e.g. Hallam" /></Field>
                 </div>
                 <Field label="Best contact email"><input className={inputCls} value={form.contact_email} onChange={(e) => set('contact_email', e.target.value)} placeholder="jane@email.com" /></Field>
+                <div className="pt-1">{renderConsents()}</div>
               </div>
             )}
 
@@ -430,13 +478,58 @@ export default function ApplyFlow({ embedded = false }) {
                     ))}
                   </select>
                 </Field>
-                <p className="text-white/40 text-xs -mt-1">Representative cricket, or senior cricket at <span className="text-white">2nd grade &amp; above</span>, earns an instant squad offer. <span className="text-white">Below 2nd grade</span> (or none) goes to a quick coach review first — no payment until a coach confirms your spot.</p>
-                {form.rep_level && levelStats('rep', 'Your representative numbers')}
-                {form.club_level && levelStats('club', 'Your senior cricket numbers')}
+
+                {/* Wild Card — for talent the rep system hasn't caught. Selecting it lets a
+                    player through without a level; a coach then personally assesses them. */}
+                <div className="pt-2">
+                  <div className="flex items-center gap-2 mb-2.5">
+                    <div className="h-px flex-1 bg-white/10" />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-white/30">Not caught by the rep system?</span>
+                    <div className="h-px flex-1 bg-white/10" />
+                  </div>
+                  <button type="button" onClick={() => set('wildcard', !form.wildcard)}
+                    className={`w-full flex items-start gap-3 text-left px-4 py-3.5 rounded-2xl border transition-all ${form.wildcard ? 'bg-rr-pink/15 border-rr-pink shadow-[0_0_20px_rgba(225,31,143,0.18)]' : 'bg-white/5 border-white/15 hover:border-rr-pink/40'}`}>
+                    <Telescope className={`w-5 h-5 mt-0.5 flex-shrink-0 ${form.wildcard ? 'text-rr-pink' : 'text-rr-blue'}`} />
+                    <span className="flex-1">
+                      <span className="block text-sm font-black uppercase tracking-wide text-white">Apply as a Wild Card</span>
+                      <span className="block text-[12px] text-white/55 mt-0.5 leading-snug">Haven&apos;t played rep or graded senior cricket but know you can mix it? A coach will personally assess you — no payment until they confirm your spot.</span>
+                    </span>
+                    {form.wildcard && <Check className="w-5 h-5 text-rr-pink flex-shrink-0" />}
+                  </button>
+                </div>
               </div>
             )}
 
-            {/* ── REVEAL ── */}
+            {/* ── CONFIRM — "Is this correct?" before we work out the offer ── */}
+            {step === 'confirm' && (
+              <div>
+                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Is this correct?</h1>
+                <p className="text-white/50 text-sm mb-6">Have a quick look. You can go back and change anything before we work out your offer.</p>
+                <div className="bg-white/5 border border-white/15 rounded-2xl p-6 mb-6 space-y-3">
+                  <SummaryRow k="Player" v={form.player_name} />
+                  <SummaryRow k="Date of birth" v={`${form.player_dob || '—'}${calcAge(form.player_dob) != null ? ` · ${calcAge(form.player_dob)} yrs` : ''}`} />
+                  <SummaryRow k="Cricket" v={form.gender === 'F' ? 'Female' : 'Male'} />
+                  {isMinor(form.player_dob) && form.parent_name && <SummaryRow k="Parent / guardian" v={form.parent_name} />}
+                  <SummaryRow k="Mobile" v={form.contact_phone} />
+                  <SummaryRow k="Email" v={form.contact_email} />
+                  <SummaryRow k="Suburb" v={form.suburb} />
+                  <SummaryRow k="Centre" v={CENTRE_BY_SLUG[form.centre]?.name} />
+                  <SummaryRow k="Main skill" v={`${SKILL_LABEL[form.skill] || form.skill}${form.batting_hand ? ` · ${form.batting_hand === 'left' ? 'Left' : 'Right'}-hand bat` : ''}${form.bowling_type ? ` · ${BOWL_LABEL[form.bowling_type]}` : ''}`} />
+                  {form.secondary_skill && form.secondary_skill !== 'none' && (
+                    <SummaryRow k="Secondary" v={form.secondary_skill === 'bowling' && form.secondary_bowling_type ? `Bowling · ${BOWL_LABEL[form.secondary_bowling_type]}` : form.secondary_skill.charAt(0).toUpperCase() + form.secondary_skill.slice(1)} />
+                  )}
+                  {form.rep_level && <SummaryRow k="Representative" v={levelLabel(form.rep_level)} />}
+                  {form.club_level && <SummaryRow k="Senior cricket" v={levelLabel(form.club_level)} />}
+                  {form.wildcard && <SummaryRow k="Wild Card" v="Coach to assess" />}
+                  {!form.rep_level && !form.club_level && !form.wildcard && <SummaryRow k="Cricket" v="None added" />}
+                </div>
+                <button onClick={confirmAndReveal} className="w-full inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]">
+                  Yes, this is correct — get my offer <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+
+            {/* ── REVEAL + SLOT (merged) ── */}
             {step === 'reveal' && (
               <div>
                 {analysing ? (
@@ -445,103 +538,115 @@ export default function ApplyFlow({ embedded = false }) {
                     <div className="text-lg font-black uppercase tracking-widest text-white">Analysing your cricket…</div>
                     <div className="text-white/40 text-sm mt-2">Matching you to the right squad</div>
                   </div>
+                ) : result.placement.requiresReview || CENTRE_BY_SLUG[form.centre]?.comingSoon ? (
+                  <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} onContinue={afterReveal} onRequestInfo={() => setStep('requestInfo')} />
                 ) : (
-                  <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} onContinue={afterReveal} onRequestReview={() => setStep('review')} />
+                  <>
+                    <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} onContinue={null} onRequestInfo={() => setStep('requestInfo')} />
+
+                    <div className="mt-8">
+                      <h2 className="text-xl md:text-2xl font-black uppercase tracking-wide mb-1">Choose your time</h2>
+                      <p className="text-white/50 text-sm mb-5">{result.placement.stream === 'performance' ? 'Performance' : 'Pathway'} · {result.placement.placedBand} · {CENTRE_BY_SLUG[form.centre]?.name}</p>
+                      {matchingSquads.length === 0 ? (
+                        <Fallback onOther={() => { const other = CENTRES.find((c) => c.slug !== form.centre && !c.comingSoon); if (other) { set('centre', other.slug); } }} onReview={() => setStep('review')} otherName={CENTRES.find((c) => c.slug !== form.centre && !c.comingSoon)?.name} />
+                      ) : (
+                        <div className="space-y-3">
+                          {matchingSquads.map((sq) => {
+                            const left = inventory.spotsLeft(sq.id);
+                            const full = left <= 0;
+                            return (
+                              <button key={sq.id} data-testid={`slot-${sq.id}`} disabled={full} onClick={() => pickSquad(sq)}
+                                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl border text-left transition-all ${full ? 'bg-white/5 border-white/10 opacity-50 cursor-not-allowed' : 'bg-white/5 border-white/15 hover:border-rr-pink active:scale-[0.99]'}`}>
+                                <Clock className="w-5 h-5 text-rr-pink flex-shrink-0" />
+                                <span className="flex-1">
+                                  <span className="block text-base font-black uppercase tracking-wide">{sq.day} · {sq.startTime}–{sq.endTime}</span>
+                                  <span className="block text-xs text-white/40 uppercase tracking-widest">{sq.blockLabel}</span>
+                                </span>
+                                <span className={`text-xs font-black uppercase tracking-widest ${full ? 'text-white/40' : left <= 3 ? 'text-rr-pink' : 'text-green-400'}`}>
+                                  {full ? 'Full' : `${left} left`}
+                                </span>
+                              </button>
+                            );
+                          })}
+                          <button onClick={() => setStep('review')} className="w-full text-center text-xs text-white/40 hover:text-white/70 uppercase tracking-widest pt-2">None of these times work →</button>
+                          <p className="text-white/25 text-[11px] text-center pt-1">*Squads are subject to change &mdash; we&apos;ll work with you if changes are needed.</p>
+                        </div>
+                      )}
+                    </div>
+                  </>
                 )}
               </div>
             )}
 
-            {/* ── SLOT ── */}
-            {step === 'slot' && result && (
-              <div>
-                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Choose your time</h1>
-                <p className="text-white/50 text-sm mb-6">{result.placement.stream === 'performance' ? 'Performance' : 'Pathway'} · {result.placement.placedBand} · {CENTRE_BY_SLUG[form.centre]?.name}</p>
-                {matchingSquads.length === 0 ? (
-                  <Fallback onOther={() => { const other = CENTRES.find((c) => c.slug !== form.centre && !c.comingSoon); if (other) { set('centre', other.slug); } setStep('slot'); }}
-                    onReview={() => setStep('review')} otherName={CENTRES.find((c) => c.slug !== form.centre && !c.comingSoon)?.name} />
-                ) : (
-                  <div className="space-y-3">
-                    {matchingSquads.map((sq) => {
-                      const left = inventory.spotsLeft(sq.id);
-                      const full = left <= 0;
-                      return (
-                        <button key={sq.id} data-testid={`slot-${sq.id}`} disabled={full} onClick={() => pickSquad(sq)}
-                          className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl border text-left transition-all ${full ? 'bg-white/5 border-white/10 opacity-50 cursor-not-allowed' : 'bg-white/5 border-white/15 hover:border-rr-pink active:scale-[0.99]'}`}>
-                          <Clock className="w-5 h-5 text-rr-pink flex-shrink-0" />
-                          <span className="flex-1">
-                            <span className="block text-base font-black uppercase tracking-wide">{sq.day} · {sq.startTime}–{sq.endTime}</span>
-                            <span className="block text-xs text-white/40 uppercase tracking-widest">{sq.blockLabel}</span>
-                          </span>
-                          <span className={`text-xs font-black uppercase tracking-widest ${full ? 'text-white/40' : left <= 3 ? 'text-rr-pink' : 'text-green-400'}`}>
-                            {full ? 'Full' : `${left} left`}
-                          </span>
-                        </button>
-                      );
-                    })}
-                    <button onClick={() => setStep('review')} className="w-full text-center text-xs text-white/40 hover:text-white/70 uppercase tracking-widest pt-2">None of these times work →</button>
-                    <p className="text-white/25 text-[11px] text-center pt-1">*Squads are subject to change &mdash; we&apos;ll work with you if changes are needed.</p>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* ── KIT (uniform requirement + sizing) ── */}
+            {/* ── UNIFORM — capture which items + sizes the player needs ── */}
             {step === 'kit' && (
               <div>
-                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Your kit</h1>
-                <p className="text-white/50 text-sm mb-5">
-                  All participants are required to have a Royals Academy Training Shirt. Add training shorts or pants and other kit at special first-time prices. Sizes will be confirmed with your order.
+                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Your playing uniform</h1>
+                <p className="text-white/55 text-sm mb-5">
+                  Every Power Game player trains in the Royals Academy uniform — a <span className="text-white">training shirt, shorts or pants, and a cap</span>. Do you already have it?
                 </p>
 
-                <div className="space-y-3 mb-6">
-                  {KIT_ITEMS.map((item) => {
-                    const chosen = kit[item.id];
-                    const active = !!(chosen && chosen.trim());
-                    return (
-                      <div key={item.id} className={`rounded-2xl border p-4 transition-all ${active ? 'bg-white/[0.07] border-rr-pink/50' : 'bg-white/5 border-white/15'}`}>
-                        <div className="flex items-center justify-between gap-3 mb-2">
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <span className="text-sm font-black text-white uppercase tracking-wide">{item.name}</span>
-                              {item.required ? (
-                                <span className="text-[9px] font-black text-rr-pink uppercase tracking-widest bg-rr-pink/15 border border-rr-pink/30 rounded-full px-2 py-0.5">Required</span>
-                              ) : (
-                                <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Optional</span>
-                              )}
+                <Choice
+                  value={hasUniform === null ? '' : hasUniform ? 'yes' : 'no'}
+                  onChange={(v) => { setHasUniform(v === 'yes'); set('needs_uniform', v === 'no'); if (v === 'yes') setKitPicks({ shirt: '', shorts: '', pants: '', cap: '', jacket: '' }); }}
+                  options={[{ value: 'yes', label: 'Yes, I have it' }, { value: 'no', label: 'I need one' }]}
+                />
+
+                {hasUniform === false && (
+                  <div className="mt-5 space-y-4">
+                    <p className="text-white/55 text-[13px] leading-snug">Select the items you need and pick your size. You&apos;ll add them to your order at the Stripe checkout. <span className="text-white/30 text-[11px]">({isJunior ? 'Junior' : 'Senior / Adult'} sizes)</span></p>
+
+                    <button type="button" onClick={() => setShowSizeGuide(true)} className="inline-flex items-center gap-1.5 text-rr-light-pink hover:text-white text-[12px] font-bold uppercase tracking-wide px-3.5 py-3 rounded-full border border-rr-light-pink/30 hover:border-rr-light-pink/60 transition-colors">
+                      <Ruler className="w-3.5 h-3.5" /> View the size guide
+                    </button>
+
+                    <div className="space-y-3">
+                      {KIT_ITEMS_UI.map((item) => {
+                        const picked = !!kitPicks[item.key];
+                        const noSizes = !item.sizes || item.sizes.length === 0;
+                        return (
+                          <div key={item.key} className={`rounded-xl border transition-all ${picked ? 'bg-rr-pink/10 border-rr-pink/40' : 'bg-white/5 border-white/10'} p-4`}>
+                            <div className="flex items-center gap-3">
+                              <input
+                                type="checkbox"
+                                checked={picked}
+                                onChange={(e) => setKit(item.key, e.target.checked ? (item.oneSize ? 'OS' : 'pending') : '')}
+                                className="w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer"
+                              />
+                              <div className="flex-1 min-w-0">
+                                <span className="text-sm font-bold text-white">{item.label}</span>
+                                {item.note && <span className="block text-[11px] text-white/40 mt-0.5">{item.note}</span>}
+                                {item.oneSize && picked && <span className="block text-[11px] text-white/50 mt-0.5">One size — adjustable strap</span>}
+                                {picked && !item.oneSize && noSizes && <span className="block text-[11px] text-rr-pink mt-0.5">No {sizeGroup} sizes available for this item</span>}
+                              </div>
                             </div>
-                            {item.note && <p className="text-[11px] text-white/40 mt-1">{item.note}</p>}
-                          </div>
-                          <span className="text-sm font-black text-white flex-shrink-0">{fmtAud(item.priceCents)}</span>
-                        </div>
-
-                        {item.oneSize ? (
-                          <label className="flex items-center gap-2 text-xs text-white/70 cursor-pointer">
-                            <input type="checkbox" checked={chosen === 'OS'} onChange={(e) => setKitSize(item.id, e.target.checked ? 'OS' : '')} className="w-4 h-4 accent-rr-pink" />
-                            Add (one size fits all)
-                          </label>
-                        ) : (
-                          <div className="flex flex-wrap gap-2">
-                            {!item.required && (
-                              <button onClick={() => setKitSize(item.id, '')} className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest border transition-all ${!active ? 'bg-white/10 border-white/30 text-white' : 'bg-transparent border-white/15 text-white/40 hover:text-white/70'}`}>None</button>
+                            {picked && !item.oneSize && !noSizes && (
+                              <select
+                                className={`${inputCls} mt-3`}
+                                value={kitPicks[item.key] === 'pending' ? '' : kitPicks[item.key]}
+                                onChange={(e) => setKit(item.key, e.target.value || 'pending')}
+                              >
+                                <option value="">— select size —</option>
+                                {item.sizes.map((s) => <option key={s.label} value={s.label}>{s.label}</option>)}
+                              </select>
                             )}
-                            {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map((sz) => (
-                              <button key={sz} onClick={() => setKitSize(item.id, sz)} className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest border transition-all ${chosen === sz ? 'bg-rr-pink border-rr-pink text-white' : 'bg-white/5 border-white/15 text-white/70 hover:border-rr-pink/50'}`}>{sz}</button>
-                            ))}
                           </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+                        );
+                      })}
+                    </div>
 
-                <div className="bg-white/5 border border-white/15 rounded-2xl p-4 mb-5 flex items-baseline justify-between">
-                  <span className="text-xs uppercase tracking-widest text-white/50">Kit subtotal</span>
-                  <span className="text-xl font-black text-white">{fmtAud(kitTotal)}</span>
-                </div>
+                    <p className="text-white/35 text-[11px]">Uniform payment is handled at the Stripe checkout — nothing is charged on this page.</p>
+                  </div>
+                )}
 
-                {!kitValid(kit) && <p className="text-rr-pink text-[11px] mb-3">Please choose a size for the required Training Shirt to continue.</p>}
+                {hasUniform === true && (
+                  <p className="text-white/55 text-[13px] leading-snug mt-5">Great — you&apos;re all set.</p>
+                )}
 
-                <button onClick={() => kitValid(kit) && setStep('secure')} disabled={!kitValid(kit)} className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
+                <button
+                  onClick={() => setStep('secure')}
+                  disabled={hasUniform === null || (hasUniform === false && !kitSizesComplete)}
+                  className="w-full mt-7 bg-rr-pink hover:bg-rr-light-pink disabled:opacity-40 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
                   Continue →
                 </button>
               </div>
@@ -557,23 +662,21 @@ export default function ApplyFlow({ embedded = false }) {
                   <SummaryRow k="Centre" v={CENTRE_BY_SLUG[form.centre]?.name} />
                   <SummaryRow k="Time" v={`${selected.day} ${selected.startTime}–${selected.endTime}`} />
                   <SummaryRow k="Block" v="8-week Power Game phase" />
-                  <SummaryRow k="Program" v={`$${BLOCK_FEE}.00`} />
-                  {kitSummary(kit).map((line) => (
-                    <SummaryRow key={line.name} k={`${line.name} (${line.size})`} v={fmtAud(line.priceCents)} />
-                  ))}
+                  {form.needs_uniform && hasUniform === false && anyKitSelected && (
+                    <SummaryRow k="Uniform" v={Object.entries(kitPicks).filter(([,v]) => v && v !== 'pending').map(([k,v]) => `${k === 'cap' ? 'Cap' : k.charAt(0).toUpperCase() + k.slice(1)} ${v === 'OS' ? '' : v}`.trim()).join(' · ')} />
+                  )}
                   <div className="border-t border-white/10 pt-3 flex items-baseline justify-between">
-                    <span className="text-xs uppercase tracking-widest text-white/50">Total</span>
-                    <span className="text-3xl font-black text-white">{fmtAud(grandTotalCents)}</span>
+                    <span className="text-xs uppercase tracking-widest text-white/50">Program fee</span>
+                    <span className="text-3xl font-black text-white">{fmtAud(blockFeeCents)}</span>
                   </div>
                 </div>
-                <div className="mb-5">{renderConsents()}</div>
+                <p className="text-white/35 text-[11px] -mt-3 mb-5">{form.needs_uniform ? 'Your uniform sizes have been recorded — uniform payment is added at the Stripe checkout.' : 'Uniform (if you need it) is added at the Stripe checkout — it’s not part of this fee.'}</p>
                 <button onClick={secure} disabled={submitting || !consentsOk(form)} className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
-                  {submitting ? 'Processing…' : `Pay ${fmtAud(grandTotalCents)} & secure my spot`}
+                  {submitting ? 'Processing…' : `Pay ${fmtAud(blockFeeCents)} & secure my spot`}
                 </button>
                 <button onClick={applyWithoutPay} disabled={submitting || !consentsOk(form)} className="w-full mt-3 bg-transparent border border-white/20 hover:border-white/40 disabled:opacity-40 disabled:cursor-not-allowed text-white/80 font-bold uppercase tracking-widest text-[11px] rounded-full px-6 py-3.5 transition-all">
                   Apply without paying — request a call first
                 </button>
-                {!consentsOk(form) && <p className="text-white/40 text-[11px] text-center mt-3">Please accept the compliances above to continue.</p>}
                 <p className="text-white/25 text-[11px] text-center mt-3">Paying secures your spot for the 8-week block (applying without paying doesn&apos;t hold one). *Squads are subject to change &mdash; we&apos;ll work with you if changes are needed.</p>
               </div>
             )}
@@ -589,11 +692,53 @@ export default function ApplyFlow({ embedded = false }) {
                       ? `No rush. Submit your details and a Power Game coach will call you to talk through your offer and answer any questions before you commit. No payment needed yet.`
                       : `Submit your details and a Power Game coach will personally review your cricket and be in touch about the best squad for you. No payment needed yet.`}
                 </p>
-                <div className="mb-5">{renderConsents()}</div>
-                <button onClick={submitReview} disabled={submitting || !consentsOk(form)} className="w-full bg-rr-blue hover:bg-rr-blue/80 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all">
+                <button onClick={submitReview} disabled={submitting} className="w-full bg-rr-blue hover:bg-rr-blue/80 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all">
                   {submitting ? 'Submitting…' : reviewIsCallback ? 'Request my call' : 'Submit my application'}
                 </button>
-                {!consentsOk(form) && <p className="text-white/40 text-[11px] text-center mt-3">Please accept the compliances above to continue.</p>}
+                <button onClick={() => setStep('requestInfo')} className="mt-4 w-full text-center text-xs text-white/45 hover:text-white/80 uppercase tracking-widest transition-colors">Just want more info first? &rarr;</button>
+              </div>
+            )}
+
+            {/* ── REQUEST MORE INFO — three ways to reach us, 72-hour response ── */}
+            {step === 'requestInfo' && (
+              <div>
+                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-2">Want more information?</h1>
+                <p className="text-white/50 text-sm mb-5 max-w-sm">No rush. Pick how you&apos;d like to hear from us — we respond to every enquiry within <span className="text-white font-bold">72 hours</span>.</p>
+
+                {/* Email + Text are instant — no form, no consents needed. */}
+                <div className="space-y-3 mb-5">
+                  <a href={`mailto:${ENQUIRY_EMAIL}?subject=${encodeURIComponent('Power Game Program enquiry')}`}
+                    className="flex items-center gap-4 px-5 py-4 rounded-2xl border bg-white/5 border-white/15 hover:border-rr-pink/50 transition-all">
+                    <Mail className="w-5 h-5 text-rr-pink flex-shrink-0" />
+                    <span className="flex-1 min-w-0">
+                      <span className="block text-sm font-black uppercase tracking-wide text-white">Email us</span>
+                      <span className="block text-[12px] text-white/55 truncate">{ENQUIRY_EMAIL}</span>
+                    </span>
+                    <ArrowRight className="w-4 h-4 text-white/30 flex-shrink-0" />
+                  </a>
+                  <a href={`sms:${ENQUIRY_SMS}`}
+                    className="flex items-center gap-4 px-5 py-4 rounded-2xl border bg-white/5 border-white/15 hover:border-rr-pink/50 transition-all">
+                    <MessageSquare className="w-5 h-5 text-rr-pink flex-shrink-0" />
+                    <span className="flex-1 min-w-0">
+                      <span className="block text-sm font-black uppercase tracking-wide text-white">Text us</span>
+                      <span className="block text-[12px] text-white/55">0421 261 825</span>
+                    </span>
+                    <ArrowRight className="w-4 h-4 text-white/30 flex-shrink-0" />
+                  </a>
+                </div>
+
+                {/* Callback — high demand, so set the 72h expectation. (Consents were captured
+                    on the contact step; applyWithoutPay still guards against missing ones.) */}
+                <div className="rounded-2xl border border-rr-blue/30 bg-rr-blue/[0.06] p-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Phone className="w-4 h-4 text-rr-blue flex-shrink-0" />
+                    <span className="text-sm font-black uppercase tracking-wide text-white">Request a callback</span>
+                  </div>
+                  <p className="text-[12px] text-white/55 leading-snug mb-3">We&apos;re getting a lot of interest right now — leave it with us and a coach will call you back within 72 hours.</p>
+                  <button onClick={applyWithoutPay} disabled={submitting} className="w-full bg-rr-blue hover:bg-rr-blue/80 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-3.5 transition-all">
+                    {submitting ? 'Submitting…' : 'Request my callback'}
+                  </button>
+                </div>
               </div>
             )}
 
@@ -635,7 +780,17 @@ export default function ApplyFlow({ embedded = false }) {
             </button>
           </div>
         )}
+
+        {/* Back for the post-input steps — their forward action lives in the step body, so
+            this lets a player return and change anything (details, time, kit) before paying. */}
+        {['confirm', 'reveal', 'kit', 'secure', 'review', 'requestInfo'].includes(step) && !analysing && (
+          <div className="mt-6 flex justify-center">
+            <button onClick={back} className="inline-flex items-center gap-1.5 text-white/40 hover:text-white/70 text-xs font-bold uppercase tracking-widest px-4 py-2"><ArrowLeft className="w-3.5 h-3.5" /> Back</button>
+          </div>
+        )}
       </div>
+
+      <UniformSizeGuideModal open={showSizeGuide} onClose={() => setShowSizeGuide(false)} />
     </div>
   );
 }

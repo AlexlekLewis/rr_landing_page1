@@ -6,7 +6,7 @@ const adult = {
   player_name: "Sam Taylor Smith", player_dob: "1998-01-01", gender: "M",
   contact_email: "sam@e.com", contact_phone: "0400000000", suburb: "Williamstown",
   skill: "batting", secondary_skill: "none", format: "t20",
-  rep_level: "P16M", rep_games: "10", rep_bat_avg: "38", rep_bat_runs: "420",
+  rep_level: "P16M",
   club_level: "", parent_name: "",
 };
 const minor = { ...adult, player_name: "Jo Young", player_dob: "2013-01-01", parent_name: "Pat Young", contact_email: "pat@e.com", contact_phone: "0411111111" };

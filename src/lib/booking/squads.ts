@@ -9,13 +9,14 @@
 // A squad = 2 mini-squads (teams): the PERFORMANCE team and the PATHWAY team.
 //   squad = round(lanes × 26/7)   →  7 lanes 26 · 5 lanes 19 · 4 lanes 15
 //   perf team = ceil(squad/2), pathway team = floor(squad/2)
-//   →  7 lanes 13/13 · 5 lanes 10/9 · 4 lanes 8/7   (matches the sheet's
-//      mini-squad capacities 13 / 10 / 8 and session totals 52 / 38 / 26 / 15)
+//   →  7 lanes 13/13 · 5 lanes 10/9 · 4 lanes 8/7   (lane ratio 7:26)
+// NB: a place = a seat in that mini-squad for the WHOLE 8-week block (one fixed
+//     roster), not a per-week spot. "Capacity" = the enrolled roster, filled once.
 //
 // OFFICIAL grid (per the sheet, Netz Friday = two 2-hour blocks CONFIRMED by Alex):
 //   Hallam     Thu 8–10pm (5 lanes, 17+) + Sat 12–2pm (5 lanes, 12-14) + Sat 2–4pm (4 lanes, 14-16)
 //   The Netz   Fri 5:30–9:30pm (5 lanes, 2 squads) + Sat 2–4pm & 4–6pm (7 lanes)
-//   Third venue (North): TBC — interest only, no squads yet.
+//   Mickleham  Fri 6–8pm & 8–10pm + Sat 2–4pm & 4–6pm (7 lanes) — confirmed (facility name/address TBC).
 // ============================================================
 
 export type Stream = "performance" | "pathway";

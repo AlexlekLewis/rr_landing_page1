@@ -35,21 +35,19 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     window.history.pushState({}, "", "/PGP2026/apply?demo=1");
     render(<ApplyFlow />);
 
-    // Demo jumps to the reveal for a 14yo Dowling gun → Performance.
+    // Demo jumps to the reveal — time slots are shown inline below the offer card.
     await screen.findByText(/you've earned your place/i);
     expect(screen.getByText(/performance squad/i)).toBeTruthy();
 
     const before = inventory.spotsLeft("w-fri530-1416-perf");
 
-    fireEvent.click(screen.getByRole("button", { name: /choose your training time/i }));
-
-    // Slot step — pick the Friday Performance 14-16 squad.
+    // Slots are on the same screen — pick the Friday Performance 14-16 squad.
     const slot = await screen.findByTestId("slot-w-fri530-1416-perf");
     fireEvent.click(slot);
 
-    // kit step: the Training Shirt (first sized item) is required — pick a size, continue
-    await screen.findByText(/your kit/i);
-    fireEvent.click(screen.getAllByRole("button", { name: /^M$/ })[0]);
+    // uniform step: pick "Yes, I have it" so Continue is enabled
+    await screen.findByText(/your playing uniform/i);
+    fireEvent.click(screen.getByText("Yes, I have it"));
     fireEvent.click(screen.getByRole("button", { name: /continue/i }));
 
     // Secure step — accept compliances, then pay.
@@ -65,7 +63,7 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     expect(inventory.spotsLeft("w-fri530-1416-perf")).toBe(before - 1);
   });
 
-  it("review path: below-floor player gets a no-payment submit form gated by consents", async () => {
+  it("review path: below-floor player gets a no-payment submit form", async () => {
     window.history.pushState({}, "", "/PGP2026/apply?demo=review");
     render(<ApplyFlow />);
     await screen.findByText(/a coach will review it/i);
@@ -73,10 +71,8 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     await screen.findByText(/apply for coach review/i);
     // no payment in this path
     expect(screen.queryByRole("button", { name: /secure my spot|lock my spot/i })).toBeNull();
-    // submit is gated until compliances are accepted
+    // consents are captured on the contact step (pre-set in the demo), so submit is ready
     const submit = screen.getByRole("button", { name: /submit my application/i }) as HTMLButtonElement;
-    expect(submit.disabled).toBe(true);
-    document.querySelectorAll('input[type="checkbox"]').forEach((b) => fireEvent.click(b));
     expect(submit.disabled).toBe(false);
     fireEvent.click(submit);
     await screen.findByText(/in our hands/i);
@@ -89,8 +85,7 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     window.history.pushState({}, "", "/PGP2026/apply?demo=perf");
     render(<ApplyFlow />);
     await screen.findByText(/you've earned your place/i);
-    fireEvent.click(screen.getByRole("button", { name: /choose your training time/i }));
-    await screen.findByText(/choose your time/i);
+    // Slots are inline on the reveal screen — no separate step to navigate to.
     const fri = screen.queryByTestId("slot-w-fri530-1416-perf") as HTMLButtonElement | null;
     expect(fri && fri.disabled).toBe(true);
     expect(screen.getAllByText(/full/i).length).toBeGreaterThan(0);
@@ -120,6 +115,8 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     fireEvent.change(screen.getByPlaceholderText(/0412/), { target: { value: "0400000000" } });
     fireEvent.change(screen.getByPlaceholderText(/hallam/i), { target: { value: "Williamstown" } });
     fireEvent.change(screen.getByPlaceholderText(/jane@/i), { target: { value: "t@e.com" } });
+    // compliance now lives on the contact step — accept both checkboxes to continue
+    document.querySelectorAll('input[type="checkbox"]').forEach((b) => fireEvent.click(b));
     fireEvent.click(screen.getByText("Continue"));
 
     // Profile
@@ -127,17 +124,23 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     fireEvent.click(screen.getByText("Right"));
     fireEvent.click(screen.getByText("Continue"));
 
-    // History — Dowling Shield, avg 38 (format is no longer collected)
+    // History — Dowling Shield (a pure batter has no numbers to add now)
     const levelSel = (screen.getAllByRole("combobox") as HTMLSelectElement[]).find((s) => [...s.options].some((o) => o.value === "P16M"))!;
     fireEvent.change(levelSel, { target: { value: "P16M" } });
-    fireEvent.change(screen.getByPlaceholderText(/e\.g\. 32/), { target: { value: "38" } });
     fireEvent.click(screen.getByText("Continue"));
 
-    // Reveal (after the ~1.6s analysing beat) — 14yo Dowling → Performance, played up to 14-16.
+    // Confirm — "Is this correct?" review, then get the offer
+    await screen.findByText(/is this correct/i);
+    fireEvent.click(screen.getByRole("button", { name: /get my offer/i }));
+
+    // Reveal (after the ~1.6s analysing beat) — 14yo Dowling → Performance, played up an
+    // age group. The offer card no longer prints the band (stats grid removed); the
+    // placed band is asserted at the unit level in flow.rules.test.ts. Here we confirm the
+    // offer renders + the play-up signal fired.
     await new Promise((r) => setTimeout(r, 2200));
     const body = document.body.textContent || "";
     expect(body, `SCREEN: ${body.slice(0, 500)}`).toMatch(/you've earned your place/i);
     expect(body).toMatch(/performance squad/i);
-    expect(body).toMatch(/14-16/);
+    expect(body).toMatch(/playing up/i);
   }, 12000);
 });

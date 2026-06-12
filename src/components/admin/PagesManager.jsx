@@ -13,15 +13,15 @@ const PAGES = [
     {
         name: 'Elite Program Registration',
         path: '/eliteprogram/2026registration',
-        status: 'live',
-        description: 'Full landing page with application form',
+        status: 'archived',
+        description: 'ARCHIVED — 2026 intake closed. Returns HTTP 410 Gone (de-indexed).',
         icon: FileText,
     },
     {
         name: 'Elite Program Registration (Alt)',
         path: '/eliteprogram/2026registrations',
-        status: 'live',
-        description: 'Alternate URL for the registration page',
+        status: 'archived',
+        description: 'ARCHIVED — 2026 intake closed. Returns HTTP 410 Gone (de-indexed).',
         icon: FileText,
     },
     {
@@ -78,13 +78,20 @@ const PagesManager = () => {
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-3 shrink-0">
-                                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${page.status === 'live'
-                                        ? 'bg-green-500/20 text-green-400'
-                                        : 'bg-yellow-500/20 text-yellow-400'
-                                        }`}>
-                                        <span className={`w-1.5 h-1.5 rounded-full ${page.status === 'live' ? 'bg-green-400' : 'bg-yellow-400'}`} />
-                                        {page.status === 'live' ? 'Live' : 'Draft'}
-                                    </span>
+                                    {(() => {
+                                        const styles = {
+                                            live: { wrap: 'bg-green-500/20 text-green-400', dot: 'bg-green-400', label: 'Live' },
+                                            draft: { wrap: 'bg-yellow-500/20 text-yellow-400', dot: 'bg-yellow-400', label: 'Draft' },
+                                            archived: { wrap: 'bg-slate-500/20 text-slate-400', dot: 'bg-slate-400', label: 'Archived' },
+                                        };
+                                        const s = styles[page.status] || styles.draft;
+                                        return (
+                                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${s.wrap}`}>
+                                                <span className={`w-1.5 h-1.5 rounded-full ${s.dot}`} />
+                                                {s.label}
+                                            </span>
+                                        );
+                                    })()}
                                     <a
                                         href={page.path}
                                         target="_blank"

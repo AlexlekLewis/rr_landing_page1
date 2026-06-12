@@ -10,7 +10,7 @@ const GENDER_OPTIONS = ['Male Cricket', 'Female Cricket', 'No Preference'];
 
 const PROGRAMS = [
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', urgency: null },
-    { label: 'Power Game Program', route: null, urgency: 'Coming Soon — Register Your Interest' },
+    { label: 'Power Game Program', route: '/PGP2026', urgency: 'Enrolling Now — Secure Your Place' },
 ];
 
 const InputField = ({ label, type = 'text', value, onChange, placeholder, required }) => (

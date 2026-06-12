@@ -51,6 +51,34 @@
             "destination": "/RRACRMDashboard/index.html"
         },
         {
+            "source": "/eliteprogram2026",
+            "destination": "/api/gone"
+        },
+        {
+            "source": "/eliteprogram2026/success",
+            "destination": "/api/gone"
+        },
+        {
+            "source": "/master-page",
+            "destination": "/api/gone"
+        },
+        {
+            "source": "/eliteprogram/2026registration",
+            "destination": "/api/gone"
+        },
+        {
+            "source": "/eliteprogram/2026registrations",
+            "destination": "/api/gone"
+        },
+        {
+            "source": "/offer/assessment",
+            "destination": "/api/gone"
+        },
+        {
+            "source": "/invite",
+            "destination": "/api/gone"
+        },
+        {
             "source": "/(.*)",
             "destination": "/index.html"
         }
