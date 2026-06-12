@@ -542,7 +542,7 @@ export default function ApplyFlow({ embedded = false }) {
                     <div className="text-white/40 text-sm mt-2">Matching you to the right squad</div>
                   </div>
                 ) : (
-                  <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} onContinue={afterReveal} onRequestReview={() => setStep('review')} onRequestInfo={() => setStep('requestInfo')} />
+                  <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} onContinue={afterReveal} onRequestInfo={() => setStep('requestInfo')} />
                 )}
               </div>
             )}
