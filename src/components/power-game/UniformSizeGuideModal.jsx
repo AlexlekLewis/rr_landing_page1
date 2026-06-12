@@ -133,7 +133,7 @@ const UniformSizeGuideModal = ({ open, onClose }) => {
                                 <button
                                     key={g}
                                     onClick={() => setGroup(g)}
-                                    className={`flex-1 text-xs font-black uppercase tracking-wider py-2 rounded-full transition-all ${
+                                    className={`flex-1 text-xs font-black uppercase tracking-wider min-h-[44px] sm:min-h-0 py-3 sm:py-2 rounded-full transition-all ${
                                         group === g ? 'bg-rr-pink text-white shadow' : 'text-slate-500 hover:text-rr-dark'
                                     }`}
                                 >
@@ -149,7 +149,7 @@ const UniformSizeGuideModal = ({ open, onClose }) => {
                             <button
                                 key={g.key}
                                 onClick={() => setGarmentKey(g.key)}
-                                className={`text-xs font-bold uppercase tracking-wide px-3.5 py-1.5 rounded-full border transition-all ${
+                                className={`text-xs font-bold uppercase tracking-wide min-h-[44px] sm:min-h-0 px-3.5 py-2.5 sm:py-1.5 rounded-full border transition-all ${
                                     garmentKey === g.key
                                         ? 'bg-rr-dark text-white border-rr-dark'
                                         : 'bg-white text-slate-500 border-slate-200 hover:border-rr-pink hover:text-rr-pink'

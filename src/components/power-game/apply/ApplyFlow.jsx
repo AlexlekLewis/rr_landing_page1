@@ -25,7 +25,8 @@ const PAYMENT_LINK = (import.meta?.env?.VITE_PG_PAYMENT_LINK || 'https://buy.str
 // Enquiry channels for the "Request more information" path (we promise a 72-hour response).
 const ENQUIRY_EMAIL = 'eliteprogram@rramelbourne.com';
 const ENQUIRY_SMS = '0421261825';
-const inputCls = 'w-full bg-white/5 border border-white/15 rounded-lg px-3.5 py-3 text-sm text-white placeholder-white/30 focus:outline-none focus:border-rr-pink transition-colors';
+// 16px text on mobile so iOS Safari doesn't auto-zoom into the field on focus.
+const inputCls = 'w-full bg-white/5 border border-white/15 rounded-lg px-3.5 py-3 text-base sm:text-sm text-white placeholder-white/30 focus:outline-none focus:border-rr-pink transition-colors';
 
 // Readable labels for the "Is this correct?" review summary.
 const SKILL_LABEL = { batting: 'Batter', bowling: 'Bowler', all_rounder: 'All-rounder', wicketkeeper: 'Wicketkeeper' };
@@ -587,7 +588,7 @@ export default function ApplyFlow({ embedded = false }) {
                 <p className="text-white/50 text-sm mb-3">
                   The Power Game uniform is required to play, but it&apos;s <span className="text-white">optional here</span> — already have your gear? Skip any item. Otherwise pick what you&apos;d like and your sizes, and we&apos;ll confirm the details with you.
                 </p>
-                <button type="button" onClick={() => setShowSizeGuide(true)} className="inline-flex items-center gap-1.5 text-rr-light-pink hover:text-white text-[12px] font-bold uppercase tracking-wide mb-5 transition-colors">
+                <button type="button" onClick={() => setShowSizeGuide(true)} className="inline-flex items-center gap-1.5 text-rr-light-pink hover:text-white text-[12px] font-bold uppercase tracking-wide px-3.5 py-3 rounded-full border border-rr-light-pink/30 hover:border-rr-light-pink/60 mb-5 transition-colors">
                   <Ruler className="w-3.5 h-3.5" /> View the size guide
                 </button>
 
@@ -612,17 +613,17 @@ export default function ApplyFlow({ embedded = false }) {
                         </div>
 
                         {item.oneSize ? (
-                          <label className="flex items-center gap-2 text-xs text-white/70 cursor-pointer">
-                            <input type="checkbox" checked={chosen === 'OS'} onChange={(e) => setKitSize(item.id, e.target.checked ? 'OS' : '')} className="w-4 h-4 accent-rr-pink" />
+                          <label className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-white/70 cursor-pointer min-h-[44px] sm:min-h-0 -mx-1 px-1 sm:m-0 sm:p-0">
+                            <input type="checkbox" checked={chosen === 'OS'} onChange={(e) => setKitSize(item.id, e.target.checked ? 'OS' : '')} className="w-5 h-5 sm:w-4 sm:h-4 accent-rr-pink" />
                             Add (one size fits all)
                           </label>
                         ) : (
                           <div className="flex flex-wrap gap-2">
                             {!item.required && (
-                              <button onClick={() => setKitSize(item.id, '')} className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest border transition-all ${!active ? 'bg-white/10 border-white/30 text-white' : 'bg-transparent border-white/15 text-white/40 hover:text-white/70'}`}>None</button>
+                              <button onClick={() => setKitSize(item.id, '')} className={`min-h-[44px] sm:min-h-0 px-3 py-2.5 sm:py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest border transition-all ${!active ? 'bg-white/10 border-white/30 text-white' : 'bg-transparent border-white/15 text-white/40 hover:text-white/70'}`}>None</button>
                             )}
                             {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map((sz) => (
-                              <button key={sz} onClick={() => setKitSize(item.id, sz)} className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest border transition-all ${chosen === sz ? 'bg-rr-pink border-rr-pink text-white' : 'bg-white/5 border-white/15 text-white/70 hover:border-rr-pink/50'}`}>{sz}</button>
+                              <button key={sz} onClick={() => setKitSize(item.id, sz)} className={`min-h-[44px] sm:min-h-0 min-w-[44px] sm:min-w-0 px-3 py-2.5 sm:py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest border transition-all ${chosen === sz ? 'bg-rr-pink border-rr-pink text-white' : 'bg-white/5 border-white/15 text-white/70 hover:border-rr-pink/50'}`}>{sz}</button>
                             ))}
                           </div>
                         )}

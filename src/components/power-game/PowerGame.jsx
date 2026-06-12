@@ -232,7 +232,7 @@ const PowerGame = () => {
                                         <button
                                             type="button"
                                             onClick={() => setShowSizeGuide(true)}
-                                            className="inline-flex items-center gap-1.5 text-rr-light-pink hover:text-white text-[12px] font-bold uppercase tracking-wide transition-colors"
+                                            className="inline-flex items-center gap-1.5 text-rr-light-pink hover:text-white text-[12px] font-bold uppercase tracking-wide px-3.5 py-3 rounded-full border border-rr-light-pink/30 hover:border-rr-light-pink/60 transition-colors"
                                         >
                                             <Ruler className="w-3.5 h-3.5" />
                                             Size guide
