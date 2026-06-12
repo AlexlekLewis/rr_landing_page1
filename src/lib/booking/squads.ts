@@ -75,9 +75,9 @@ export interface Squad {
 // template BLOCKS rows below.
 // ════════════════════════════════════════════════════════════════════════════
 export const CENTRES: Centre[] = [
-  { slug: "williamstown", name: "The Netz", suburb: "Williamstown", region: "West Melbourne", address: "37 Robbins Cct, Williamstown North VIC 3016" },
+  { slug: "williamstown", name: "The Netz", suburb: "Williamstown", region: "West Melbourne", address: "37 Robbins Cct, Williamstown North VIC 3016", dateRange: "8 weeks · Jul 31 – Sep 19" },
   { slug: "hallam", name: "Elite Cricket Centre", suburb: "Hallam", region: "South East Melbourne", address: "8-9 Becon Ct, Hallam VIC 3803", dateRange: "8 weeks · Jul 30 – Sep 19" },
-  { slug: "mickleham", name: "Mickleham Indoor Sports Centre", suburb: "Mickleham", region: "North Melbourne", address: "Mickleham VIC 3064" },
+  { slug: "mickleham", name: "Mickleham Indoor Sports Centre", suburb: "Mickleham", region: "North Melbourne", address: "Mickleham VIC 3064", dateRange: "8 weeks · Jul 31 – Sep 19" },
 ];
 
 /** Centres that are open for booking now (have squads). */
