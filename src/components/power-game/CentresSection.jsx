@@ -106,7 +106,7 @@ const CentresSection = () => {
                                 )}
                                 {centre.sessions.length > 0 && (
                                     <p className="text-[11px] text-white/45 font-medium leading-snug mb-1.5">
-                                        Choose one weekly slot — it&apos;s your squad, same time, every week.
+                                        2 hours per week, at a defined location of your choice, and at a time of your choosing.
                                     </p>
                                 )}
                                 {centre.sessions.length === 0 && (
