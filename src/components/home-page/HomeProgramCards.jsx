@@ -25,7 +25,7 @@ const UrgencyBadge = ({ type, spots, customText }) => {
     );
 };
 
-const ProgramCard = ({ program, onRegisterClick }) => (
+const ProgramCard = ({ program }) => (
     <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -55,29 +55,19 @@ const ProgramCard = ({ program, onRegisterClick }) => (
             <p className="text-sm text-rr-charcoal/80 font-medium leading-relaxed mb-4 flex-1">{program.description}</p>
 
             {/* CTA */}
-            {program.urgency_type === 'coming_soon' ? (
-                <button
-                    onClick={onRegisterClick}
-                    className="bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-6 py-3 rounded-full transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.4)] flex items-center justify-center gap-2 group/btn text-sm"
-                >
-                    Register Your Interest
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-                </button>
-            ) : (
-                <Link
-                    to={program.route}
-                    className="bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-6 py-3 rounded-full transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.4)] flex items-center justify-center gap-2 group/btn text-sm"
-                    data-cta={`program-card-${program.program_id}`}
-                >
-                    {program.urgency_type === 'waitlist' ? 'Join Waitlist' : 'View Program'}
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-                </Link>
-            )}
+            <Link
+                to={program.route}
+                className="bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-6 py-3 rounded-full transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.4)] flex items-center justify-center gap-2 group/btn text-sm"
+                data-cta={`program-card-${program.program_id}`}
+            >
+                {program.urgency_type === 'waitlist' ? 'Join Waitlist' : 'View Program'}
+                <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+            </Link>
         </div>
     </motion.div>
 );
 
-const HomeProgramCards = ({ onRegisterClick }) => {
+const HomeProgramCards = () => {
     const [programs, setPrograms] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -125,7 +115,7 @@ const HomeProgramCards = ({ onRegisterClick }) => {
                         <div className="flex flex-wrap justify-center gap-6">
                             {programs.map(p => (
                                 <div key={p.program_id} className="w-full sm:w-[360px]">
-                                    <ProgramCard program={p} onRegisterClick={onRegisterClick} />
+                                    <ProgramCard program={p} />
                                 </div>
                             ))}
                         </div>

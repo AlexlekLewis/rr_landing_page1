@@ -1,44 +1,42 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Clock, ArrowDown } from 'lucide-react';
+import { MapPin, Clock, ArrowDown, Calendar } from 'lucide-react';
 
 // Centres & weekly session times — informational context only. The apply funnel
 // below matches each applicant to the sessions that fit their age group & ability,
 // so these are shown to set expectations, not as a picker.
-// Sessions run in 2-hour blocks; 4-hour windows from the "8 Week Power Game
-// Program Planning" sheet are listed as consecutive 2-hour blocks.
-const CENTRES = [
-    {
-        suburb: 'Williamstown',
-        venue: 'The Netz',
-        region: 'West Melbourne',
-        accent: 'bg-gradient-to-br from-rr-pink to-rr-blue',
-        sessions: [
-            { day: 'Fri', time: '5:30 – 7:30pm' },
-            { day: 'Fri', time: '7:30 – 9:30pm' },
-            { day: 'Sat', time: '2:00 – 4:00pm' },
-            { day: 'Sat', time: '4:00 – 6:00pm' },
-        ],
-    },
-    {
-        suburb: 'Hallam',
-        venue: 'Elite Cricket Centre',
-        region: 'South East Melbourne',
-        accent: 'bg-rr-pink',
-        sessions: [
-            { day: 'Thu', time: '8:00 – 10:00pm' },
-            { day: 'Sat', time: '12:00 – 2:00pm' },
-            { day: 'Sat', time: '2:00 – 4:00pm' },
-        ],
-    },
-    {
-        suburb: 'TBC',
-        venue: 'New venue — coming soon',
-        region: 'North Melbourne',
-        accent: 'bg-rr-blue',
-        sessions: [],
-    },
-];
+//
+// DERIVED from src/lib/booking/squads.ts (single source of truth) — this section
+// can never disagree with the funnel's selector again. To change days/times or
+// add a venue, edit squads.ts only.
+import { CENTRES as GRID_CENTRES, SQUADS } from '../../lib/booking/squads';
+
+const ACCENTS = {
+    williamstown: 'bg-gradient-to-br from-rr-pink to-rr-blue',
+    hallam: 'bg-rr-pink',
+};
+const DEFAULT_ACCENT = 'bg-rr-blue';
+
+const shortDay = (d) => (d || '').slice(0, 3);
+// "5:30pm" + "7:30pm" → "5:30 – 7:30pm" (matches the existing chip style)
+const blockTime = (start, end) => `${String(start).replace(/am|pm/i, '')} – ${end}`;
+
+const CENTRES = GRID_CENTRES.map((c) => {
+    const seen = new Set();
+    const sessions = SQUADS
+        .filter((s) => s.centre === c.slug)
+        .sort((a, b) => a.sortOrder - b.sortOrder)
+        .filter((s) => (seen.has(s.blockId) ? false : (seen.add(s.blockId), true)))
+        .map((s) => ({ day: shortDay(s.day), time: blockTime(s.startTime, s.endTime) }));
+    return {
+        suburb: c.comingSoon ? 'TBC' : c.suburb,
+        venue: c.comingSoon ? 'New venue — coming soon' : c.name,
+        region: c.region,
+        dateRange: c.dateRange,
+        accent: ACCENTS[c.slug] || DEFAULT_ACCENT,
+        sessions,
+    };
+});
 
 const CentresSection = () => {
     return (
@@ -61,9 +59,10 @@ const CentresSection = () => {
                         TRAIN ACROSS <span className="text-rr-pink">MELBOURNE</span>
                     </h2>
                     <p className="text-base md:text-lg text-white/70 max-w-2xl mx-auto font-medium">
-                        These are our Power Game centres and their weekly session times. When you
-                        apply below, you&apos;ll be offered the sessions that fit your age group and
-                        ability — then you pick the centre and time that work for you.
+                        These are our Power Game centres and their weekly session times. Your place is one
+                        session a week — the <span className="text-white font-bold">same squad, same day, same time, every week for all 8 weeks</span>.
+                        When you apply below, you&apos;ll be offered the sessions that fit your age group and ability —
+                        then you pick the centre and time that work for you.
                     </p>
                 </motion.div>
 
@@ -99,6 +98,17 @@ const CentresSection = () => {
 
                             {/* Session times */}
                             <div className="mt-auto flex flex-col gap-2.5 border-t border-white/10 pt-5">
+                                {centre.dateRange && (
+                                    <div className="inline-flex items-center gap-1.5 self-start bg-rr-blue/15 border border-rr-blue/30 rounded-full px-3 py-1 mb-1">
+                                        <Calendar className="w-3.5 h-3.5 text-rr-blue" />
+                                        <span className="text-[11px] font-black text-white uppercase tracking-widest">{centre.dateRange}</span>
+                                    </div>
+                                )}
+                                {centre.sessions.length > 0 && (
+                                    <p className="text-[11px] text-white/45 font-medium leading-snug mb-1.5">
+                                        2 hours per week, at a defined location of your choice, and at a time of your choosing.
+                                    </p>
+                                )}
                                 {centre.sessions.length === 0 && (
                                     <div className="text-sm font-bold text-white/40 uppercase tracking-wide">Days &amp; times to be confirmed</div>
                                 )}

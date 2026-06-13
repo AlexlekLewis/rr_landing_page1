@@ -10,13 +10,32 @@ const oneSquad = [
   { id: "x", centre: "c", band: "14-16" as const, stream: "performance" as const, day: "Sat", startTime: "2pm", endTime: "4pm", capacity: 10, blockLabel: "Sat 2-4", sortOrder: 1 },
 ];
 
-describe("squad grid integrity (official times, 10 Jun 2026)", () => {
+// ════════════════════════════════════════════════════════════════════════════
+// OFFICIAL SCHEDULE SNAPSHOT — update ONLY this block when Alex confirms new
+// days/times/venues in squads.ts (everything else below is derived maths).
+// ════════════════════════════════════════════════════════════════════════════
+const SNAPSHOT = {
+  twoHourBlocks: 11, // Netz 4 + Hallam 3 + Mickleham 4
+  activeCentres: 3, // williamstown + hallam + mickleham
+  comingSoonCentres: 0,
+  // Total squad places for the 8-WEEK BLOCK (lane ratio 7:26). Not a per-week number —
+  // each place is one player enrolled for the whole block.
+  blockCapacity: 247, // Netz 90 + Hallam 53 + Mickleham 104
+  perCentre: { williamstown: 90, hallam: 53, mickleham: 104 } as Record<string, number>,
+};
+
+describe("squad grid integrity (snapshot of the official schedule)", () => {
+  it("matches the official schedule snapshot", () => {
+    expect(SQUADS.length).toBe(SNAPSHOT.twoHourBlocks * 2); // 2 teams per block
+    expect(ACTIVE_CENTRES.length).toBe(SNAPSHOT.activeCentres);
+    expect(CENTRES.filter((c) => c.comingSoon).length).toBe(SNAPSHOT.comingSoonCentres);
+    expect(SQUADS.reduce((s, q) => s + q.capacity, 0)).toBe(SNAPSHOT.blockCapacity);
+    for (const [slug, cap] of Object.entries(SNAPSHOT.perCentre)) {
+      expect(SQUADS.filter((s) => s.centre === slug).reduce((s, q) => s + q.capacity, 0), slug).toBe(cap);
+    }
+  });
+
   it("capacity is lane-driven: squad = round(lanes × 26/7), split perf-ceil / path-floor", () => {
-    expect(SQUADS.length).toBe(14); // 7 two-hour blocks × 2 teams
-    expect(CENTRES.length).toBe(3); // 2 bookable + 1 coming-soon (third venue TBC)
-    expect(ACTIVE_CENTRES.length).toBe(2);
-    expect(CENTRES.filter((c) => c.comingSoon).length).toBe(1);
-    expect(squadsForPlacement({ centre: "venue-3", band: "14-16", stream: "performance" }).length).toBe(0);
     expect(teamCapacity(7, "performance")).toBe(13);
     expect(teamCapacity(7, "pathway")).toBe(13);
     expect(teamCapacity(5, "performance")).toBe(10); // squad 19 → 10 + 9 (sheet's mini cap 10)
@@ -24,11 +43,11 @@ describe("squad grid integrity (official times, 10 Jun 2026)", () => {
     expect(teamCapacity(4, "performance")).toBe(8); // squad 15 → 8 + 7 (sheet's mini cap 8)
     expect(teamCapacity(4, "pathway")).toBe(7);
     expect(SQUADS.every((s) => s.capacity === teamCapacity(s.lanes, s.stream))).toBe(true);
-    // session totals match the official sheet exactly
-    expect(SQUADS.filter((s) => s.centre === "williamstown").reduce((s, q) => s + q.capacity, 0)).toBe(90); // 38 + 26 + 26
-    expect(SQUADS.filter((s) => s.centre === "hallam").reduce((s, q) => s + q.capacity, 0)).toBe(53); // 38 + 15
-    expect(SQUADS.filter((s) => s.centre === "venue-3").length).toBe(0); // TBC venue has no squads
-    expect(SQUADS.reduce((s, q) => s + q.capacity, 0)).toBe(143);
+    // coming-soon centres never have bookable squads
+    for (const c of CENTRES.filter((x) => x.comingSoon)) {
+      expect(SQUADS.filter((s) => s.centre === c.slug).length, c.slug).toBe(0);
+      expect(squadsForPlacement({ centre: c.slug, band: "14-16", stream: "performance" }).length).toBe(0);
+    }
   });
 
   it("two teams sharing a blockId make a full squad (26 at 7 lanes, 19 at 5, 15 at 4)", () => {
@@ -44,8 +63,8 @@ describe("squad grid integrity (official times, 10 Jun 2026)", () => {
     }
   });
 
-  it("every band has a 2-hour block at every centre; older bands run later", () => {
-    for (const centre of ["williamstown", "hallam"]) {
+  it("every band has a 2-hour block at every ACTIVE centre (derived)", () => {
+    for (const centre of ACTIVE_CENTRES.map((c) => c.slug)) {
       for (const band of ["12-14", "14-16", "17+"]) {
         for (const stream of ["performance", "pathway"]) {
           expect(squadsForPlacement({ centre, band, stream }).length, `${centre} ${band} ${stream}`).toBeGreaterThan(0);

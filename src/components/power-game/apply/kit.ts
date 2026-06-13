@@ -23,7 +23,7 @@ export interface KitItem {
 
 // Order: required item first, then optional add-ons.
 export const KIT_ITEMS: KitItem[] = [
-  { id: 'shirt',  name: 'Royals Academy Training Shirt',  priceCents: 0, required: true,  note: 'Required for all participants.' },
+  { id: 'shirt',  name: 'Royals Academy Training Shirt',  priceCents: 0, required: false, note: 'The core training top — skip it if you already have one.' },
   { id: 'shorts', name: 'Royals Academy Training Shorts', priceCents: 0, required: false },
   { id: 'pants',  name: 'Royals Academy Training Pants',  priceCents: 0, required: false },
   { id: 'hat',    name: 'Royals Academy Cap',             priceCents: 0, required: false, oneSize: true },
@@ -37,9 +37,9 @@ export type KitSelection = Record<string, string>;
 
 export const BLANK_KIT: KitSelection = { shirt: '', shorts: '', pants: '', hat: '', jacket: '' };
 
-/** Shirt with a size is required. */
-export function kitValid(sel: KitSelection): boolean {
-  return !!(sel.shirt && sel.shirt.trim());
+/** Kit is optional — players who already own their gear can skip every item. */
+export function kitValid(_sel: KitSelection): boolean {
+  return true;
 }
 
 /** Sum of selected items (only items with a chosen size are counted). */

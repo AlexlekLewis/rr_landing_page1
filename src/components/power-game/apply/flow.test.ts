@@ -13,8 +13,6 @@ const base: ApplyForm = {
   skill: "batting",
   batting_hand: "right",
   format: "t20",
-  rep_bat_avg: "40",
-  club_bat_avg: "35",
 };
 
 describe("two-layer level model + Power Game floor", () => {
@@ -41,17 +39,30 @@ describe("two-layer level model + Power Game floor", () => {
     expect(input.stats.map((s) => s.competitionCode).sort()).toEqual(["P1M", "REP-16M"]);
     expect(input.history.find((h) => h.competitionCode === "REP-16M")!.isRepresentativeHonour).toBe(true);
     expect(input.history.find((h) => h.competitionCode === "P1M")!.isRepresentativeHonour).toBe(false);
-    // rep row carries the rep numbers; club row carries the club numbers
-    expect(input.stats.find((s) => s.competitionCode === "REP-16M")!.batAverage).toBe(40);
-    expect(input.stats.find((s) => s.competitionCode === "P1M")!.batAverage).toBe(35);
+    // batting average is no longer collected — batters are placed on level + age
+    expect(input.stats.find((s) => s.competitionCode === "REP-16M")!.batAverage).toBeNull();
   });
 
-  it("history step requires at least one of rep / senior level (no games asked)", () => {
+  it("history step requires at least one of rep / senior level, or a Wild Card", () => {
     expect(validateStep("history", { ...base, rep_level: "", club_level: "" })).toContain(
-      "Add your representative and/or senior cricket — pick at least one.",
+      "Add your representative and/or senior cricket — or apply as a Wild Card below.",
     );
     // a level alone is enough — match counts and format are no longer required
     expect(validateStep("history", { ...base, rep_level: "P16M", club_level: "", format: "" })).toEqual([]);
+    // Wild Card clears the requirement without any level (talent the rep system hasn't caught)
+    expect(validateStep("history", { ...base, rep_level: "", club_level: "", wildcard: true })).toEqual([]);
+  });
+
+  it("Wild Card with no clearing level → coach review with a 'wildcard' reason", () => {
+    const { placement } = computePlacement({ ...base, rep_level: "", club_level: "", wildcard: true });
+    expect(placement.requiresReview).toBe(true);
+    expect(placement.reviewReasons).toContain("wildcard");
+  });
+
+  it("Wild Card never downgrades a real qualifier (rep level still clears)", () => {
+    const { placement } = computePlacement({ ...base, rep_level: "P16M", club_level: "", wildcard: true });
+    expect(placement.reviewReasons).not.toContain("wildcard");
+    expect(placement.reviewReasons).not.toContain("below_pg_floor");
   });
 });
 
