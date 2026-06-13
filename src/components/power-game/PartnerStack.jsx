@@ -19,6 +19,7 @@ const TIERS = [
         size: 'medium',
         partners: [
             { name: 'Full Track AI', logo: '/assets/powergame/partners/full-track-ai.png' },
+            { name: 'str8bat', logo: '/assets/powergame/partners/str8bat.png' },
             { name: 'Shah NeuroVision', logo: '/assets/powergame/partners/shah-neurovision.webp', dark: true },
         ],
     },
