@@ -11,6 +11,12 @@ const coaches = [
         img: '/assets/coaches/andy-crook.jpg',
     },
     {
+        name: 'Jinang Shah',
+        role: 'Junior Royals Program Coach',
+        bio: 'A current RRA Melbourne Elite Program participant and high-quality cricketer with hands-on experience coaching young and developing players. Jinang brings energy, technical knowledge and a genuine connection to the development pathway — coaching from the inside.',
+        img: '/assets/coaches/jinang-shah.png',
+    },
+    {
         name: 'Alex Thornhill',
         role: 'Senior Coach',
         bio: 'Rajasthan Royals Academy Melbourne Elite Program Coach. A batting specialist with experience in England’s County cricket and the Australian premier system. Alex coaches the Fitzroy Doncaster Academy and leads the cricket program at Xavier College. His technical approach combines practical coaching with deep knowledge of what it takes to excel at the next level.',
