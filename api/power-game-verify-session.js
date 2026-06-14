@@ -27,12 +27,15 @@ export default async function handler(req, res) {
     }
 
     const s = await stripe.checkout.sessions.retrieve(sessionId);
-    if (s?.metadata?.source !== 'power-game') {
+    // Accept BOTH paths: the dynamic checkout (metadata.source='power-game') and the
+    // hosted payment link, which carries the application row UUID via client_reference_id.
+    const isUuid = (v) => typeof v === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
+    if (s?.metadata?.source !== 'power-game' && !isUuid(s?.client_reference_id)) {
       return res.status(404).json({ error: 'Not a Power Game session' });
     }
 
     const paid = s.payment_status === 'paid';
-    const appId = s.metadata?.application_id || null;
+    const appId = s.metadata?.application_id || s.client_reference_id || null;
 
     if (paid) {
       // Audit row (idempotent on stripe_session_id).

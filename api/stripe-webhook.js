@@ -233,6 +233,49 @@ export default async function handler(req, res) {
   const charge = session.payment_intent?.latest_charge;
   const card = charge?.payment_method_details?.card;
 
+  // ── Power Game reconciliation ──────────────────────────────────────────────
+  // The Power Game funnel writes the canonical power_game_applications row, then
+  // sends the buyer to a hosted Stripe Payment Link carrying that row's UUID via
+  // client_reference_id (the dynamic checkout uses metadata.application_id). Only
+  // Power Game application ids exist in that table, so a *matched* update is a
+  // definitive Power Game payment; every other flow (shop/program/holiday) carries
+  // a non-matching id and harmlessly falls through to the routing below.
+  {
+    const pgId = session.client_reference_id || session.metadata?.application_id || null;
+    const isUuid = (v) => typeof v === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
+    if (isUuid(pgId)) {
+      const supabase = getSupabase();
+      const paidAt = charge?.created ? new Date(charge.created * 1000).toISOString() : new Date().toISOString();
+      const { data: pgRows, error: pgErr } = await supabase
+        .from('power_game_applications')
+        .update({
+          payment_status:    'completed',
+          status:            'paid',
+          amount_paid_cents: session.amount_total ?? null,
+          paid_at:           paidAt,
+          stripe_session_id: session.id,
+        })
+        .eq('id', pgId)
+        .neq('payment_status', 'completed')
+        .select('id');
+      if (pgErr) {
+        console.error('power_game_applications reconcile failed:', pgErr.message);
+      } else if (pgRows && pgRows.length) {
+        // Idempotent audit/pixel log (keyed on stripe_session_id).
+        await supabase.from('power_game_payment_confirmations').upsert({
+          stripe_session_id: session.id,
+          application_id:     pgId,
+          amount_cents:       session.amount_total ?? null,
+          currency:           session.currency || 'aud',
+          payment_status:     session.payment_status || 'paid',
+          player_name:        session.metadata?.player_name || customerName || null,
+        }, { onConflict: 'stripe_session_id' });
+        console.log(`power_game payment reconciled (id=${pgId}, session=${session.id})`);
+        return res.status(200).json({ received: true, routed_to: 'power_game_applications', id: pgId });
+      }
+    }
+  }
+
   // Route between shop orders and program registrations. The two systems are
   // isolated — a session lands in exactly one of: shop_orders_*, program_registrations,
   // or is ignored entirely.
