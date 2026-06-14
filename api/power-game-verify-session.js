@@ -14,9 +14,24 @@
 // ============================================================
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { unpackApplication, buildPaidRow } from './_lib/pgpCheckout.js';
+import { sendPgpConfirmation } from './_lib/pgpEmail.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+
+const refOf = (sid) => (sid ? String(sid).slice(-8).toUpperCase() : '');
+async function emailFor(row, session) {
+  try {
+    if (!row?.email) return;
+    await sendPgpConfirmation({
+      to: row.email, playerName: row.player_name, centreName: row.venue,
+      sessionDay: row.session_day, sessionTime: row.session_time, ageGroup: row.age_group,
+      amountCents: session?.amount_total ?? row.amount_paid_cents ?? null,
+      ref: refOf(session?.id || row.stripe_session_id),
+    });
+  } catch (e) { console.error('verify-session: confirmation email failed (non-fatal):', e.message); }
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
@@ -35,7 +50,7 @@ export default async function handler(req, res) {
     }
 
     const paid = s.payment_status === 'paid';
-    const appId = s.metadata?.application_id || s.client_reference_id || null;
+    let appId = s.metadata?.application_id || s.client_reference_id || null;
 
     if (paid) {
       // Audit row (idempotent on stripe_session_id).
@@ -52,9 +67,30 @@ export default async function handler(req, res) {
         { onConflict: 'stripe_session_id' },
       );
 
-      // Backstop: make sure the application row reflects the payment even if the
-      // Stripe webhook was missed. Same fields the webhook writes — idempotent.
-      if (appId) {
+      const application = unpackApplication(s.metadata);
+      if (application) {
+        // Create-on-payment BACKSTOP: if the webhook hasn't created the paid row yet,
+        // create it now (idempotent on stripe_session_id). Whichever path inserts
+        // first sends the one confirmation email.
+        const row = buildPaidRow(application, s);
+        const { data, error } = await supabase
+          .from('power_game_applications')
+          .upsert(row, { onConflict: 'stripe_session_id', ignoreDuplicates: true })
+          .select('id, email, player_name, venue, session_day, session_time, age_group, amount_paid_cents, stripe_session_id');
+        if (!error && Array.isArray(data) && data.length > 0) {
+          appId = data[0].id;
+          await emailFor(data[0], s);
+        } else if (!appId) {
+          // Row already existed (webhook won the race) — resolve its id for the response.
+          const { data: existing } = await supabase
+            .from('power_game_applications')
+            .select('id')
+            .eq('stripe_session_id', s.id)
+            .maybeSingle();
+          appId = existing?.id || null;
+        }
+      } else if (appId) {
+        // Legacy backstop: pre-created row — flip to paid even if the webhook was missed.
         await supabase
           .from('power_game_applications')
           .update({

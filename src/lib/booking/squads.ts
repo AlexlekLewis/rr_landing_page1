@@ -85,6 +85,30 @@ export const ACTIVE_CENTRES = CENTRES.filter((c) => !c.comingSoon);
 
 export const CENTRE_BY_SLUG: Record<string, Centre> = Object.fromEntries(CENTRES.map((c) => [c.slug, c]));
 
+// ── Program schedule ─────────────────────────────────────────────────────────
+// 8 weekly sessions, every squad finishing the week of Sat 19 Sep 2026, so each
+// weekday runs its OWN 8-week window (first → last occurrence). Single source for
+// the page's Centres section AND the funnel's time picker — they can never disagree.
+// If the program window moves, edit here only.
+export interface SessionWindow {
+  start: string;
+  end: string;
+  order: number; // Mon=1 … Sun=7, for a centre's earliest start / latest end
+}
+export const SESSION_DATES: Record<string, SessionWindow> = {
+  Mon: { start: "Jul 27", end: "Sep 14", order: 1 },
+  Tue: { start: "Jul 28", end: "Sep 15", order: 2 },
+  Wed: { start: "Jul 29", end: "Sep 16", order: 3 },
+  Thu: { start: "Jul 30", end: "Sep 17", order: 4 },
+  Fri: { start: "Jul 31", end: "Sep 18", order: 5 },
+  Sat: { start: "Aug 1", end: "Sep 19", order: 6 },
+  Sun: { start: "Aug 2", end: "Sep 20", order: 7 },
+};
+/** The 8-week window for a given day. Accepts "Friday" or "Fri". */
+export function sessionWindow(day: string): SessionWindow | null {
+  return SESSION_DATES[(day || "").slice(0, 3)] || null;
+}
+
 // Each RAW row is one 2-hour block (band + lanes); both stream teams are derived.
 interface RawBlock {
   idBase: string;

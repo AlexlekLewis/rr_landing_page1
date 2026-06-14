@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import HeroSection from './HeroSection';
-import QuoteBlock from './QuoteBlock';
+import ManifestoSection from './ManifestoSection';
 import VideoSection from './VideoSection';
 import OverviewSection from './OverviewSection';
 import FeaturesBenefits from './FeaturesBenefits';
@@ -34,7 +34,7 @@ const HOW_STEPS = [
     { Icon: User, title: 'Player details', sub: 'Who’s playing, and the best way to reach you.' },
     { Icon: ClipboardList, title: 'Playing history', sub: 'Tell us the highest level you’ve played in the last three years.', note: 'Honesty is required — applications may be rejected if false information is provided (refund less processing fees).' },
     { Icon: Sparkles, title: 'Get your offer', sub: 'Accept your squad offer and choose your time — or apply for a review / request a call for more information.' },
-    { Icon: ShieldCheck, title: 'Secure your spot', sub: 'Lock in your place for the 8-week phase.' },
+    { Icon: ShieldCheck, title: 'Secure your spot', sub: 'Lock in your place for the 8-week Power Pre-Season.' },
 ];
 
 // The talent we're built to discover — examples of players the rep system can miss.
@@ -50,43 +50,23 @@ const EASY_PILLS = [
     { Icon: ShieldCheck, label: 'No payment until confirmed' },
 ];
 
-// Prepare your game — what players sharpen to be ready for the season (this is
-// PRE-SEASON; lead on readiness, not just "skills added"). Written in the program's
-// own voice (warm, aspirational, selection-focused; matched to PricingSection /
-// OverviewSection, not AI house style). The week-by-week session plan — periodisation,
-// drill progressions and the testing protocol — stays OFF the public page (that's the
-// IP). Partner tools (Full Track, Str8 Bat, NeuroVision) are fine; Pricing lists them.
-const DEVELOP_PILLARS = [
-    { name: 'Power on demand', body: 'Learn to generate genuine power on demand, and reach for it the moment a game asks the question.' },
-    { name: '360° scoring', body: 'Score all around the ground so you’re never tied down or bowled to a plan — finding the boundary in every direction.' },
-    { name: 'Power under pressure', body: 'Hold your method when it matters most — the skills that win finals and put you on a selector’s radar.' },
-];
-const DEVELOP_TRACKS = [
-    { who: 'Batters', body: 'Sharpen a complete 360° shot range, orthodox through to innovative, so you walk into round one ready to score against pace and spin alike.' },
-    { who: 'Bowlers', body: 'Sharpen your bowling, seam or spin — a repeatable action, a stock ball you can trust and the variations to land your plans — ready to bowl with intent from round one.' },
-];
-
-// Do the maths — what an hour of coaching costs elsewhere vs here.
-// Other-program figures are typical local offers (not named); ours derives from
-// $989 across 8 weeks of 2-hour sessions = 16 coaching hours.
-const HOUR_MATHS = [
-    { who: 'Other programs', price: '$900', detail: '6 weeks × 1.5 hrs = 9 hrs of coaching', perHour: '$100', us: false },
-    { who: 'Other programs', price: '$800', detail: '7 weeks × 1 hr = 7 hrs of coaching', perHour: '$114', us: false },
-    { who: 'The Power Game', price: '$989', detail: '8 weeks × 2 hrs = 16 hrs of coaching', perHour: '$62', us: true },
-];
+// NOTE: what players develop (the power pillars + batter/bowler tracks) and the
+// cost-per-hour "Do the maths" comparison now live ONCE in PricingSection — the
+// value case is made there, so the apply block below doesn't re-pitch it. The
+// week-by-week session plan (periodisation, drills, testing) stays OFF the public
+// page (that's the IP).
 
 const SECTIONS = [
     'hero',
-    'quote-1',
+    'manifesto',
     'overview',
     'who-its-for',
-    'quote-vaibhav',
+    'ask-the-players',
     'video',
     'pricing',
     'academy-video',
     'coaches',
     'centres',
-    'ask-the-players',
     'apply',
     'partners',
 ];
@@ -95,6 +75,13 @@ const PowerGame = () => {
     usePageAnalytics('/PGP2026', { sections: SECTIONS });
     const [showApply, setShowApply] = useState(false);
     const [showSizeGuide, setShowSizeGuide] = useState(false);
+
+    // Open the inline funnel and jump to it — used by the hero CTA and the sticky bar
+    // so applying is one tap from anywhere (no scroll-hunt, no second "reveal" click).
+    const openApply = () => {
+        setShowApply(true);
+        requestAnimationFrame(() => document.getElementById('apply')?.scrollIntoView({ behavior: 'smooth' }));
+    };
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -105,21 +92,16 @@ const PowerGame = () => {
     return (
         <div className="min-h-screen bg-rr-page text-white font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
             <Navbar variant="power-game" />
-            <main className="flex-1 w-full overflow-hidden">
+            <main className="flex-1 w-full overflow-hidden pb-16 sm:pb-0">
                 <div id="hero">
-                    <HeroSection />
+                    <HeroSection
+                        onApply={openApply}
+                        onHowItWorks={() => document.getElementById('manifesto')?.scrollIntoView({ behavior: 'smooth' })}
+                    />
                 </div>
 
-                <div id="quote-1">
-                    <QuoteBlock
-                        variant="overlay"
-                        imagePosition="left"
-                        quote="Our job is to give players the tools to reach for power when the situation demands it — across any format of the game."
-                        attribution="Alex Lewis"
-                        role="Rajasthan Royals Academy Head Coach"
-                        image="/assets/powergame/alex-lewis.jpg"
-                        imageAlt="Alex Lewis coaching at Rajasthan Royals Academy Melbourne"
-                    />
+                <div id="manifesto">
+                    <ManifestoSection onApply={openApply} />
                 </div>
 
                 <div id="overview">
@@ -130,17 +112,9 @@ const PowerGame = () => {
                     <FeaturesBenefits />
                 </div>
 
-                <div id="quote-vaibhav">
-                    <QuoteBlock
-                        variant="feature"
-                        quote="I want to score 200 in T20s. I want to break Gayle's record."
-                        attribution="Vaibhav Suryavanshi"
-                        role="Rajasthan Royals"
-                        image="/assets/powergame/vaibhav.jpg"
-                        imageAlt="Vaibhav Suryavanshi"
-                        imageFit="cover"
-                        commentary="This statement, and the likelihood he will do it, has changed the game forever. There is now a new standard that every other team needs to find players to keep pace with this extraordinary talent."
-                    />
+                {/* Player-voice social proof, promoted high — real cohort quotes, un-named. */}
+                <div id="ask-the-players">
+                    <AskThePlayers />
                 </div>
 
                 <div id="video">
@@ -167,11 +141,6 @@ const PowerGame = () => {
 
                 <div id="centres">
                     <CentresSection />
-                </div>
-
-                {/* Player-voice social proof — right before the application so the quotes sell the apply. */}
-                <div id="ask-the-players">
-                    <AskThePlayers />
                 </div>
 
                 {/* Combined: Secure your place + How it works (process steps) + apply funnel inline */}
@@ -214,17 +183,25 @@ const PowerGame = () => {
                                     ))}
                                 </ol>
 
-                                {/* The offer, framed as an investment in development. */}
+                                {/* The offer — the SAME Phase 1 product priced in the section above,
+                                    restated lean at the point of action: price, risk reversal, the one
+                                    separate cost (uniform), and a pointer back to the full inclusions.
+                                    The value case (pillars, tracks, cost-per-hour) lives in Pricing —
+                                    not re-pitched here, so applying stays the focus. */}
                                 <div className="mt-12 max-w-md mx-auto text-left bg-white/5 border border-white/10 rounded-2xl p-7">
-                                    <div className="text-rr-pink font-black uppercase tracking-[0.2em] text-[11px] mb-2">Your 8-week investment</div>
-                                    <div className="flex items-baseline gap-3 mb-1">
+                                    <div className="text-rr-pink font-black uppercase tracking-[0.2em] text-[11px] mb-2">Power Pre-Season · Phase 1</div>
+                                    <div className="flex items-baseline gap-3 mb-2">
                                         <div className="text-5xl font-black text-white leading-none">$989</div>
                                         <div className="text-white/55 text-sm font-bold">the 8-week block</div>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-white/85 text-[13px] font-bold">
+                                        <ShieldCheck className="w-4 h-4 text-rr-pink flex-shrink-0" strokeWidth={2.5} />
+                                        No payment until a coach confirms your spot
                                     </div>
 
                                     {/* Playing uniform is a separate, required purchase — make that unmissable,
                                         with a size guide right next to it so they can choose before ordering. */}
-                                    <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
+                                    <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">
                                         <span className="inline-flex items-center gap-2 bg-amber-400/10 border border-amber-400/25 rounded-lg px-3 py-1.5">
                                             <Shirt className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" strokeWidth={2.4} />
                                             <span className="text-amber-200/90 text-[12px] font-bold leading-snug">Playing uniform required<span className="text-amber-300">*</span> — not included</span>
@@ -241,44 +218,10 @@ const PowerGame = () => {
 
                                     <div className="border-t border-white/10 my-5" />
 
-                                    {/* Prepare your game — concept/outcome level so the actual
-                                        session plan (periodisation + drill progressions) stays ours. */}
-                                    <div className="text-white/40 text-[11px] font-bold uppercase tracking-widest mb-3">Prepare your game</div>
-                                    <div className="flex flex-col gap-3.5">
-                                        {DEVELOP_PILLARS.map((p, i) => (
-                                            <div key={i} className="flex gap-3">
-                                                <span className="mt-[7px] flex-shrink-0 w-1.5 h-1.5 rounded-full bg-rr-pink" />
-                                                <div>
-                                                    <div className="text-white font-black text-sm uppercase tracking-wide leading-tight">{p.name}</div>
-                                                    <div className="text-white/55 text-[13px] leading-snug mt-0.5">{p.body}</div>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                                        {DEVELOP_TRACKS.map((t, i) => (
-                                            <div key={i} className="bg-white/[0.04] border border-white/10 rounded-xl px-3.5 py-3">
-                                                <div className="text-rr-light-pink font-black text-[11px] uppercase tracking-widest mb-1">{t.who}</div>
-                                                <div className="text-white/55 text-[12px] leading-snug">{t.body}</div>
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    {/* Do the maths — cost per hour vs typical programs. */}
-                                    <div className="border-t border-white/10 my-5" />
-                                    <div className="text-rr-pink font-black uppercase tracking-[0.2em] text-[11px] mb-3">Do the maths — cost per hour</div>
-                                    <div className="flex flex-col gap-2">
-                                        {HOUR_MATHS.map((r, i) => (
-                                            <div key={i} className={`flex items-center justify-between gap-3 rounded-xl px-4 py-3 border ${r.us ? 'bg-rr-pink/10 border-rr-pink/40' : 'bg-white/5 border-white/10'}`}>
-                                                <div>
-                                                    <div className={`text-sm font-black uppercase tracking-wide ${r.us ? 'text-white' : 'text-white/70'}`}>{r.who} · {r.price}</div>
-                                                    <div className="text-[11px] text-white/45">{r.detail}</div>
-                                                </div>
-                                                <div className={`text-2xl font-black ${r.us ? 'text-rr-light-pink' : 'text-white/55'}`}>{r.perHour}<span className="text-[10px] font-bold text-white/40">/hr</span></div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <p className="text-white/50 text-xs mt-3 font-medium">Nearly double the coaching hours — at the lowest cost per hour.</p>
+                                    {/* One-line reminder, not a re-list — points back to Phase 1 above. */}
+                                    <p className="text-white/60 text-[13px] leading-relaxed">
+                                        That&apos;s the full <span className="text-white font-bold">Power Pre-Season</span> — 16 hours of Royals coaching across 8 weeks, the Player Performance Portal, performance tracking and every inclusion listed in <span className="text-white font-bold">Phase 1</span> above.
+                                    </p>
 
                                     {/* Asterisk footnote for the required-but-not-included uniform. */}
                                     <p className="text-white/35 text-[11px] mt-4 leading-snug">
@@ -342,6 +285,20 @@ const PowerGame = () => {
                     <PartnerStack />
                 </div>
             </main>
+
+            {/* Sticky mobile apply bar — applying is always one tap away on phones */}
+            <button
+                onClick={openApply}
+                className="sm:hidden fixed bottom-0 inset-x-0 z-40 flex items-center justify-between gap-3 bg-rr-pink hover:bg-rr-light-pink text-white px-5 py-3 shadow-[0_-6px_24px_rgba(0,0,0,0.45)]"
+                style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
+            >
+                <span className="flex flex-col text-left leading-tight">
+                    <span className="font-black uppercase tracking-widest text-sm">Apply now</span>
+                    <span className="text-[10px] font-semibold text-white/85">From $989 · no payment until confirmed</span>
+                </span>
+                <span className="inline-flex items-center gap-1 font-black uppercase tracking-widest text-sm bg-white/20 rounded-full px-4 py-2">Start →</span>
+            </button>
+
             <Footer />
 
             <UniformSizeGuideModal open={showSizeGuide} onClose={() => setShowSizeGuide(false)} />

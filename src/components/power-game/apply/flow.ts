@@ -35,6 +35,7 @@ export interface ApplyForm {
   secondary_bowling_type: "pace" | "leg_spin" | "off_spin" | "";
   rep_level: string; // PRIMARY — representative level (VMCU rep floor)
   club_level: string; // secondary — highest club grade
+  current_club: string; // the player's actual current cricket club name(s)
   format: "t20" | "od" | "multiday" | "";
   // No performance numbers are collected (batting, bowling or keeping) — Alex's call.
   // Placement is purely level × age.
@@ -66,6 +67,7 @@ export const BLANK_FORM: ApplyForm = {
   secondary_bowling_type: "",
   rep_level: "",
   club_level: "",
+  current_club: "",
   format: "",
   accept_terms: false,
   accept_player_code: false,
@@ -203,7 +205,9 @@ export function computePlacement(f: ApplyForm): PlacementResult {
   return { dna, placement };
 }
 
-export const STEPS = ["centre", "player", "profile", "history", "reveal", "slot", "kit", "secure"] as const;
+// "profile" now carries BOTH the player's game AND their last-3-years cricket
+// history (merged into one submission — Alex's call). No separate "history" step.
+export const STEPS = ["centre", "player", "profile", "reveal", "slot", "kit", "secure"] as const;
 export type Step = (typeof STEPS)[number];
 
 const emailOk = (e: string) => /\S+@\S+\.\S+/.test(e);
@@ -225,12 +229,13 @@ export function validateStep(step: Step, f: ApplyForm): string[] {
     if (!consentsOk(f)) e.push("Please accept the compliances to continue.");
   }
   if (step === "profile") {
+    // Game
     if (!f.skill) e.push("Select a main skill.");
     if ((f.skill === "batting" || f.skill === "all_rounder" || f.skill === "wicketkeeper") && !f.batting_hand)
       e.push("Select a batting hand.");
     if ((f.skill === "bowling" || f.skill === "all_rounder") && !f.bowling_type) e.push("Select a bowling type.");
-  }
-  if (step === "history") {
+    // Cricket — last 3 years (merged in)
+    if (!f.current_club.trim()) e.push("Enter your current cricket club.");
     if (!f.rep_level && !f.club_level && !f.wildcard)
       e.push("Add your representative and/or senior cricket — or apply as a Wild Card below.");
   }

@@ -64,11 +64,6 @@ export default function DnaRevealCard({ placement, centreName, onContinue, onReq
           </button>
         )}
         <p className="text-white/25 text-[11px] mt-3">*Squads are subject to change &mdash; we&apos;ll work with you if anything needs adjusting.</p>
-        {onRequestInfo && (
-          <button onClick={onRequestInfo} className="mt-4 w-full text-center text-xs text-white/45 hover:text-white/80 uppercase tracking-widest transition-colors">
-            Want more information first?
-          </button>
-        )}
       </div>
     </motion.div>
   );

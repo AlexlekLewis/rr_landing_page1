@@ -12,6 +12,7 @@ const base: ApplyForm = {
   suburb: "X",
   skill: "batting",
   batting_hand: "right",
+  current_club: "Williamstown CC",
   format: "t20",
 };
 
@@ -43,14 +44,20 @@ describe("two-layer level model + Power Game floor", () => {
     expect(input.stats.find((s) => s.competitionCode === "REP-16M")!.batAverage).toBeNull();
   });
 
-  it("history step requires at least one of rep / senior level, or a Wild Card", () => {
-    expect(validateStep("history", { ...base, rep_level: "", club_level: "" })).toContain(
+  it("profile (cricket) step requires at least one of rep / senior level, or a Wild Card", () => {
+    // The game + last-3-years cricket are now ONE merged "profile" step.
+    expect(validateStep("profile", { ...base, rep_level: "", club_level: "" })).toContain(
       "Add your representative and/or senior cricket — or apply as a Wild Card below.",
     );
     // a level alone is enough — match counts and format are no longer required
-    expect(validateStep("history", { ...base, rep_level: "P16M", club_level: "", format: "" })).toEqual([]);
+    expect(validateStep("profile", { ...base, rep_level: "P16M", club_level: "", format: "" })).toEqual([]);
     // Wild Card clears the requirement without any level (talent the rep system hasn't caught)
-    expect(validateStep("history", { ...base, rep_level: "", club_level: "", wildcard: true })).toEqual([]);
+    expect(validateStep("profile", { ...base, rep_level: "", club_level: "", wildcard: true })).toEqual([]);
+  });
+
+  it("profile step requires the current cricket club", () => {
+    expect(validateStep("profile", { ...base, current_club: "" })).toContain("Enter your current cricket club.");
+    expect(validateStep("profile", { ...base, current_club: "Footscray CC", rep_level: "P16M" })).toEqual([]);
   });
 
   it("Wild Card with no clearing level → coach review with a 'wildcard' reason", () => {

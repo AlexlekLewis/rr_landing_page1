@@ -3,26 +3,27 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, ArrowRight, ArrowLeft, Clock, Users, Check, AlertCircle, Loader2, Ruler, Phone, Mail, MessageSquare, Telescope } from 'lucide-react';
 import DateOfBirthInput from '../../DateOfBirthInput';
 import { REP_GROUPS, CLUB_GROUPS, groupsForGender } from './levels';
-import { CENTRES, CENTRE_BY_SLUG, squadsForPlacement } from '../../../lib/booking/squads';
+import { CENTRES, CENTRE_BY_SLUG, squadsForPlacement, sessionWindow } from '../../../lib/booking/squads';
 import { inventory } from '../../../lib/booking/inventory';
 import { applications, applicationFromPlacement } from '../../../lib/booking/applications';
 import { BLANK_FORM, validateStep, computePlacement, isMinor, calcAge, BLOCK_FEE, secondaryOptions, consentsOk } from './flow';
 import { fmtAud } from './kit';
 import DnaRevealCard from './DnaRevealCard';
-import { submitApplication } from './submit';
+import { submitApplication, buildApplicationRow } from './submit';
 import UniformSizeGuideModal from '../UniformSizeGuideModal';
 import { TOPS_SIZES, SHORTS_SIZES, PANTS_SIZES, JACKET_SIZES, KIDS_AGE_CHART } from '../../academy-shop/sizeData';
 
-const INPUT_STEPS = ['centre', 'player', 'profile', 'history'];
+const INPUT_STEPS = ['centre', 'player', 'profile'];
+// Visible progress stepper — the internal steps collapse into 4 phases families
+// always see. "profile" carries BOTH the player's game and their last-3-years
+// cricket history in one submission, so the "Cricket" stage is a single screen.
+// Branch/terminal steps (review, requestInfo, submitted, confirmed…) have no phase
+// and the stepper hides for them.
+const PHASES = ['Details', 'Cricket', 'Offer', 'Secure'];
+const STEP_PHASE = { centre: 0, player: 0, profile: 1, confirm: 1, reveal: 2, kit: 3, secure: 3 };
 // Real Stripe checkout only when explicitly enabled (test/live keys + deployed fn).
 // Default: local confirm, so the funnel runs fully offline.
 const LIVE_PAYMENTS = !!(import.meta?.env?.VITE_PG_LIVE_PAYMENTS === '1');
-// Hosted Stripe Payment Link for the 8-week block. When set (default below, overridable
-// via VITE_PG_PAYMENT_LINK), the Pay button sends families here and Stripe "diverts" them
-// to the success page (where the Purchase pixel fires). We pass the application id
-// (client_reference_id) + email through so the payment reconciles back to the row. Falls
-// back to a dynamic /api/power-game-checkout session if the link is ever cleared.
-const PAYMENT_LINK = (import.meta?.env?.VITE_PG_PAYMENT_LINK || 'https://buy.stripe.com/3cIeVdbHPaWF7Xm1Zp9Zm0j').trim();
 // Enquiry channels for the "Request more information" path (we promise a 72-hour response).
 const ENQUIRY_EMAIL = 'eliteprogram@rramelbourne.com';
 const ENQUIRY_SMS = '0421261825';
@@ -61,6 +62,28 @@ function Choice({ options, value, onChange, cols = 2 }) {
   );
 }
 
+function PhaseStepper({ phase }) {
+  const last = PHASES.length - 1;
+  return (
+    <div className="relative flex justify-between mb-8" role="group" aria-label={`Step ${phase + 1} of ${PHASES.length}: ${PHASES[phase]}`}>
+      <div className="absolute top-3 left-[12.5%] right-[12.5%] h-0.5 bg-white/10" aria-hidden />
+      <div className="absolute top-3 left-[12.5%] h-0.5 bg-rr-pink transition-all duration-500" style={{ width: `${(phase / last) * 75}%` }} aria-hidden />
+      {PHASES.map((label, i) => {
+        const done = i < phase;
+        const active = i === phase;
+        return (
+          <div key={label} className="relative z-10 flex flex-col items-center flex-1">
+            <span className={`flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-black transition-colors ${active ? 'bg-rr-pink text-white ring-4 ring-rr-pink/20' : done ? 'bg-rr-pink text-white' : 'bg-rr-dark border border-white/25 text-white/40'}`}>
+              {done ? <Check className="w-3 h-3" strokeWidth={3} /> : i + 1}
+            </span>
+            <span className={`mt-1.5 text-[9px] sm:text-[11px] font-bold uppercase tracking-wide text-center leading-none ${active ? 'text-white' : done ? 'text-white/55' : 'text-white/30'}`}>{label}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function ApplyFlow({ embedded = false }) {
   const [form, setForm] = useState({ ...BLANK_FORM });
   const [step, setStep] = useState('centre');
@@ -73,7 +96,6 @@ export default function ApplyFlow({ embedded = false }) {
   const [spotsTick, setSpotsTick] = useState(0); // force spots re-read
   const [submitting, setSubmitting] = useState(false);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
-  const [hasUniform, setHasUniform] = useState(null); // null=unanswered · true=already has · false=needs one
   const [kitPicks, setKitPicks] = useState({ shirt: '', shorts: '', pants: '', cap: '', jacket: '' });
   const blockFeeCents = BLOCK_FEE * 100;
   const isJunior = calcAge(form.player_dob) != null && calcAge(form.player_dob) < 16;
@@ -121,7 +143,7 @@ export default function ApplyFlow({ embedded = false }) {
     if (!demo) return;
     if (demo === 'history') {
       setForm({ ...BLANK_FORM, centre: 'williamstown', player_name: 'Sam Smith', player_dob: '2012-01-01', gender: 'M', parent_name: 'Parent Name', contact_phone: '0400000000', contact_email: 's@e.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right' });
-      setStep('history');
+      setStep('profile');
       return;
     }
     // The QA shortcut skips the contact step where consents are now captured — pre-consent so the demo can complete.
@@ -143,8 +165,8 @@ export default function ApplyFlow({ embedded = false }) {
   const repGroups = useMemo(() => groupsForGender(REP_GROUPS, form.gender), [form.gender]);
   const clubGroups = useMemo(() => groupsForGender(CLUB_GROUPS, form.gender), [form.gender]);
 
-  const idx = INPUT_STEPS.indexOf(step);
-  const progress = idx >= 0 ? (idx / INPUT_STEPS.length) * 100 : step === 'centre' ? 0 : 100;
+  const phase = STEP_PHASE[step];
+  const progress = phase !== undefined ? ((phase + 1) / PHASES.length) * 100 : 100;
 
   function next() {
     if (INPUT_STEPS.includes(step)) {
@@ -154,9 +176,9 @@ export default function ApplyFlow({ embedded = false }) {
     }
     if (step === 'centre') return setStep('player');
     if (step === 'player') return setStep('profile');
-    if (step === 'profile') return setStep('history');
-    // History → a "Is this correct?" review of everything BEFORE we work out the offer.
-    if (step === 'history') return setStep('confirm');
+    // Profile (game + last-3-years cricket, merged) → a "Is this correct?" review
+    // of everything BEFORE we work out the offer.
+    if (step === 'profile') return setStep('confirm');
   }
   // Confirmed the details are right → run the engine, persist, show the analysing beat, reveal.
   function confirmAndReveal() {
@@ -174,13 +196,14 @@ export default function ApplyFlow({ embedded = false }) {
     switch (step) {
       case 'player': return setStep('centre');
       case 'profile': return setStep('player');
-      case 'history': return setStep('profile');
-      case 'confirm': return setStep('history');
+      case 'confirm': return setStep('profile');
       case 'reveal':
         if (hold) { inventory.release(hold.holdId); setHold(null); setSelected(null); }
         return setStep('confirm');
       case 'kit': return setStep('reveal');
-      case 'secure': return setStep('kit');
+      // Secure goes back to the kit step only if a uniform was requested; otherwise
+      // the kit step was skipped, so step back to the time/offer.
+      case 'secure': return setStep(form.needs_uniform ? 'kit' : 'reveal');
       case 'review': return setStep('reveal');
       case 'requestInfo': return setStep('reveal');
       default: return;
@@ -203,7 +226,9 @@ export default function ApplyFlow({ embedded = false }) {
       setHold({ holdId: res.holdId });
       if (appId) applications.update(appId, { squadId: squad.id, bookingId: res.holdId });
       setSpotsTick((t) => t + 1);
-      setStep('kit');
+      // Only collect uniform sizing if they flagged needing one at the details step;
+      // otherwise skip straight to checkout.
+      setStep(form.needs_uniform ? 'kit' : 'secure');
     } else {
       setSpotsTick((t) => t + 1); // refresh — it just filled
       setErrors(['That spot just filled — please pick another time.']);
@@ -211,7 +236,7 @@ export default function ApplyFlow({ embedded = false }) {
   }
 
   function buildUniformOpts() {
-    if (!form.needs_uniform || hasUniform !== false) return {};
+    if (!form.needs_uniform) return {};
     const labels = { shirt: 'Training Shirt', shorts: 'Shorts', pants: 'Pants', cap: 'Cap', jacket: 'Fleece Jacket' };
     const parts = Object.entries(kitPicks).filter(([, v]) => v && v !== 'pending').map(([k, v]) => `${labels[k]} (${v})`);
     if (!parts.length) return {};
@@ -224,15 +249,17 @@ export default function ApplyFlow({ embedded = false }) {
     setSubmitting(true);
     setErrors([]);
     try {
-      const { id } = await submitApplication(form, result.placement, selected, {
-        kind: 'standard',
-        centreName: CENTRE_BY_SLUG[form.centre]?.name,
-        ...buildUniformOpts(),
-      });
-      // Live path. On the deployed site (or with VITE_PG_LIVE_PAYMENTS=1) the Pay button
-      // sends the family to Stripe; in dev/preview/tests it confirms locally so no real
-      // payment is triggered. Stash the booking for the success page first (it can't read the DB).
       if (LIVE_PAYMENTS || import.meta?.env?.PROD) {
+        // Build the application payload — but DO NOT write it to the database. The
+        // power_game_applications row (the "locked spot") is created ONLY after Stripe
+        // confirms payment (api/power-game-webhook, with api/power-game-verify-session as
+        // the success-page backstop). So an unpaid applicant never locks a spot in the DB
+        // or the Google Sheet. The full payload travels in the Stripe session metadata.
+        const application = buildApplicationRow(form, result.placement, selected, {
+          kind: 'standard',
+          centreName: CENTRE_BY_SLUG[form.centre]?.name,
+          ...buildUniformOpts(),
+        });
         try {
           sessionStorage.setItem('pgp_confirmation', JSON.stringify({
             playerName: form.player_name,
@@ -242,38 +269,32 @@ export default function ApplyFlow({ embedded = false }) {
           }));
         } catch (_) { /* private mode — page falls back gracefully */ }
 
-        // Preferred: hosted Stripe Payment Link. Pass the application id (client_reference_id)
-        // + email so the payment reconciles back to the row; Stripe diverts to the success
-        // page after payment, where the Purchase pixel fires.
-        if (PAYMENT_LINK) {
-          let dest = PAYMENT_LINK;
-          try {
-            const url = new URL(PAYMENT_LINK);
-            if (id) url.searchParams.set('client_reference_id', id);
-            if (form.contact_email) url.searchParams.set('prefilled_email', form.contact_email);
-            dest = url.toString();
-          } catch (_) { /* malformed override — use the link as-is */ }
-          window.location.href = dest;
-          return;
-        }
-
-        // Fallback: a dynamic Stripe Checkout session, then the webhook flips this row to paid.
         const r = await fetch('/api/power-game-checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ applicationId: id, bookingId: hold?.holdId, squadId: selected?.id, email: form.contact_email, playerName: form.player_name }),
+          body: JSON.stringify({
+            application,
+            email: form.contact_email,
+            playerName: form.player_name,
+            squadId: selected?.id,
+            // Kit is size-capture only — not charged on the fixed $989 link.
+            uniformTotalCents: 0,
+            uniformSelection: application.uniform_selection || '',
+          }),
         });
         const data = await r.json();
         if (data?.url) { window.location.href = data.url; return; }
         setErrors([data?.error || 'Could not start checkout — please try again.']);
         return;
       }
-      // No live-payment keys yet (preview): the application is captured; confirm locally.
+      // Preview/offline (no live-payment keys): confirm the held spot LOCALLY so the
+      // funnel can be walked end-to-end. Nothing is written to the database — there is
+      // no payment, so there is no locked spot.
       if (hold) await inventory.confirm(hold.holdId);
       if (appId) applications.setStatus(appId, 'booked', { squadId: selected?.id, bookingId: hold?.holdId });
       setStep('confirmed');
     } catch (_e) {
-      setErrors(['Could not save your application — please try again.']);
+      setErrors(['Could not start your payment — please try again.']);
     } finally {
       setSubmitting(false);
     }
@@ -355,8 +376,8 @@ export default function ApplyFlow({ embedded = false }) {
       </div>
       {consentRow('accept_social_media', <>I&apos;m happy for photos/videos featuring the player to be used on RRA Melbourne&apos;s social media &amp; marketing channels.</>)}
       <div className="flex items-start gap-3">
-        <input id="c_needs_uniform" type="checkbox" checked={!!form.needs_uniform} onChange={(e) => { set('needs_uniform', e.target.checked); setHasUniform(e.target.checked ? false : null); }} className="mt-0.5 w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer" />
-        <label htmlFor="c_needs_uniform" className="text-xs text-white/70 leading-relaxed cursor-pointer">I&apos;ll need a Power Game program uniform — I&apos;ll choose my size at the checkout.</label>
+        <input id="c_needs_uniform" type="checkbox" checked={!!form.needs_uniform} onChange={(e) => { set('needs_uniform', e.target.checked); if (!e.target.checked) setKitPicks({ shirt: '', shorts: '', pants: '', cap: '', jacket: '' }); }} className="mt-0.5 w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer" />
+        <label htmlFor="c_needs_uniform" className="text-xs text-white/70 leading-relaxed cursor-pointer">I&apos;ll need a Royals playing uniform — I&apos;ll pick my sizes next and pay for it at the checkout.</label>
       </div>
     </div>
   );
@@ -368,10 +389,12 @@ export default function ApplyFlow({ embedded = false }) {
       </div>
 
       <div className="max-w-xl mx-auto px-5 py-12 md:py-16">
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <div className="text-rr-pink font-black uppercase tracking-[0.3em] text-xs mb-1">The Power Game Program</div>
           <div className="text-white/40 text-xs uppercase tracking-widest">Secure your squad spot</div>
         </div>
+
+        {phase !== undefined && <PhaseStepper phase={phase} />}
 
         {errors.length > 0 && (
           <div className="mb-5 bg-red-500/15 border border-red-500/40 rounded-xl px-4 py-3 text-red-200 text-sm flex items-start gap-2">
@@ -435,10 +458,10 @@ export default function ApplyFlow({ embedded = false }) {
               </div>
             )}
 
-            {/* ── PROFILE ── */}
+            {/* ── PROFILE — your game + last-3-years cricket, in ONE submission ── */}
             {step === 'profile' && (
               <div className="space-y-5">
-                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-2">Your game</h1>
+                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Your game</h1>
                 <Field label="Main skill"><Choice cols={2} value={form.skill} onChange={(v) => { set('skill', v); set('secondary_skill', ''); }}
                   options={[{ value: 'batting', label: 'Batter' }, { value: 'bowling', label: 'Bowler' }, { value: 'all_rounder', label: 'All-rounder' }, { value: 'wicketkeeper', label: 'Wicketkeeper' }]} /></Field>
                 {(form.skill === 'batting' || form.skill === 'all_rounder' || form.skill === 'wicketkeeper') && (
@@ -453,49 +476,52 @@ export default function ApplyFlow({ embedded = false }) {
                 {form.secondary_skill === 'bowling' && (
                   <Field label="Secondary bowling type"><Choice cols={3} value={form.secondary_bowling_type} onChange={(v) => set('secondary_bowling_type', v)} options={[{ value: 'pace', label: 'Pace / Seam' }, { value: 'leg_spin', label: 'Leg spin' }, { value: 'off_spin', label: 'Off spin' }]} /></Field>
                 )}
-              </div>
-            )}
 
-            {/* ── HISTORY ── */}
-            {step === 'history' && (
-              <div className="space-y-4">
-                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Your cricket — last 3 years</h1>
-                <p className="text-white/50 text-sm mb-3">Tell us the highest level you've played in the last <span className="text-white">three years</span>. Add <span className="text-rr-pink font-bold">representative</span> cricket, <span className="text-rr-pink font-bold">senior</span> cricket, or <span className="text-rr-pink font-bold">both</span> — whichever you've played.</p>
-                <p className="text-white/35 text-[11px] leading-snug mb-1">Levels may be verified with clubs &amp; associations — please keep them accurate.</p>
-                <Field label="Representative cricket — highest level">
-                  <select className={inputCls} value={form.rep_level} onChange={(e) => set('rep_level', e.target.value)}>
-                    <option value="">— none / haven't played rep —</option>
-                    {repGroups.map((g) => (
-                      <optgroup key={g.label} label={g.label}>{g.options.map((o) => <option key={o.code} value={o.code}>{o.label}</option>)}</optgroup>
-                    ))}
-                  </select>
-                </Field>
-                <Field label="Senior cricket — highest grade">
-                  <select className={inputCls} value={form.club_level} onChange={(e) => set('club_level', e.target.value)}>
-                    <option value="">— none / haven't played senior —</option>
-                    {clubGroups.map((g) => (
-                      <optgroup key={g.label} label={g.label}>{g.options.map((o) => <option key={o.code} value={o.code}>{o.label}</option>)}</optgroup>
-                    ))}
-                  </select>
-                </Field>
-
-                {/* Wild Card — for talent the rep system hasn't caught. Selecting it lets a
-                    player through without a level; a coach then personally assesses them. */}
-                <div className="pt-2">
-                  <div className="flex items-center gap-2 mb-2.5">
-                    <div className="h-px flex-1 bg-white/10" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-white/30">Not caught by the rep system?</span>
-                    <div className="h-px flex-1 bg-white/10" />
+                {/* ── Cricket — last 3 years (merged in, same submission) ── */}
+                <div className="pt-5 mt-1 border-t border-white/10 space-y-4">
+                  <div>
+                    <h2 className="text-xl md:text-2xl font-black uppercase tracking-wide mb-1">Your cricket — last 3 years</h2>
+                    <p className="text-white/50 text-sm">Tell us the highest level you've played in the last <span className="text-white">three years</span>. Add <span className="text-rr-pink font-bold">representative</span> cricket, <span className="text-rr-pink font-bold">senior</span> cricket, or <span className="text-rr-pink font-bold">both</span> — whichever you've played.</p>
+                    <p className="text-white/35 text-[11px] leading-snug mt-1">Levels may be verified with clubs &amp; associations — please keep them accurate.</p>
                   </div>
-                  <button type="button" onClick={() => set('wildcard', !form.wildcard)}
-                    className={`w-full flex items-start gap-3 text-left px-4 py-3.5 rounded-2xl border transition-all ${form.wildcard ? 'bg-rr-pink/15 border-rr-pink shadow-[0_0_20px_rgba(225,31,143,0.18)]' : 'bg-white/5 border-white/15 hover:border-rr-pink/40'}`}>
-                    <Telescope className={`w-5 h-5 mt-0.5 flex-shrink-0 ${form.wildcard ? 'text-rr-pink' : 'text-rr-blue'}`} />
-                    <span className="flex-1">
-                      <span className="block text-sm font-black uppercase tracking-wide text-white">Apply as a Wild Card</span>
-                      <span className="block text-[12px] text-white/55 mt-0.5 leading-snug">Haven&apos;t played rep or graded senior cricket but know you can mix it? A coach will personally assess you — no payment until they confirm your spot.</span>
-                    </span>
-                    {form.wildcard && <Check className="w-5 h-5 text-rr-pink flex-shrink-0" />}
-                  </button>
+                  <Field label="Current cricket club(s)">
+                    <input className={inputCls} value={form.current_club} onChange={(e) => set('current_club', e.target.value)} placeholder="e.g. Footscray CC (add a second club if you play more than one)" />
+                  </Field>
+                  <Field label="Representative cricket — highest level">
+                    <select className={inputCls} value={form.rep_level} onChange={(e) => set('rep_level', e.target.value)}>
+                      <option value="">— none / haven't played rep —</option>
+                      {repGroups.map((g) => (
+                        <optgroup key={g.label} label={g.label}>{g.options.map((o) => <option key={o.code} value={o.code}>{o.label}</option>)}</optgroup>
+                      ))}
+                    </select>
+                  </Field>
+                  <Field label="Senior cricket — highest grade">
+                    <select className={inputCls} value={form.club_level} onChange={(e) => set('club_level', e.target.value)}>
+                      <option value="">— none / haven't played senior —</option>
+                      {clubGroups.map((g) => (
+                        <optgroup key={g.label} label={g.label}>{g.options.map((o) => <option key={o.code} value={o.code}>{o.label}</option>)}</optgroup>
+                      ))}
+                    </select>
+                  </Field>
+
+                  {/* Wild Card — for talent the rep system hasn't caught. Selecting it lets a
+                      player through without a level; a coach then personally assesses them. */}
+                  <div className="pt-1">
+                    <div className="flex items-center gap-2 mb-2.5">
+                      <div className="h-px flex-1 bg-white/10" />
+                      <span className="text-[10px] font-black uppercase tracking-widest text-white/30">Not caught by the rep system?</span>
+                      <div className="h-px flex-1 bg-white/10" />
+                    </div>
+                    <button type="button" onClick={() => set('wildcard', !form.wildcard)}
+                      className={`w-full flex items-start gap-3 text-left px-4 py-3.5 rounded-2xl border transition-all ${form.wildcard ? 'bg-rr-pink/15 border-rr-pink shadow-[0_0_20px_rgba(225,31,143,0.18)]' : 'bg-white/5 border-white/15 hover:border-rr-pink/40'}`}>
+                      <Telescope className={`w-5 h-5 mt-0.5 flex-shrink-0 ${form.wildcard ? 'text-rr-pink' : 'text-rr-blue'}`} />
+                      <span className="flex-1">
+                        <span className="block text-sm font-black uppercase tracking-wide text-white">Apply as a Wild Card</span>
+                        <span className="block text-[12px] text-white/55 mt-0.5 leading-snug">Haven&apos;t played rep or graded senior cricket but know you can mix it? A coach will personally assess you — no payment until they confirm your spot.</span>
+                      </span>
+                      {form.wildcard && <Check className="w-5 h-5 text-rr-pink flex-shrink-0" />}
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
@@ -518,6 +544,7 @@ export default function ApplyFlow({ embedded = false }) {
                   {form.secondary_skill && form.secondary_skill !== 'none' && (
                     <SummaryRow k="Secondary" v={form.secondary_skill === 'bowling' && form.secondary_bowling_type ? `Bowling · ${BOWL_LABEL[form.secondary_bowling_type]}` : form.secondary_skill.charAt(0).toUpperCase() + form.secondary_skill.slice(1)} />
                   )}
+                  {form.current_club && <SummaryRow k="Current club" v={form.current_club} />}
                   {form.rep_level && <SummaryRow k="Representative" v={levelLabel(form.rep_level)} />}
                   {form.club_level && <SummaryRow k="Senior cricket" v={levelLabel(form.club_level)} />}
                   {form.wildcard && <SummaryRow k="Wild Card" v="Coach to assess" />}
@@ -560,7 +587,9 @@ export default function ApplyFlow({ embedded = false }) {
                                 <Clock className="w-5 h-5 text-rr-pink flex-shrink-0" />
                                 <span className="flex-1">
                                   <span className="block text-base font-black uppercase tracking-wide">{sq.day} · {sq.startTime}–{sq.endTime}</span>
-                                  <span className="block text-xs text-white/40 uppercase tracking-widest">{sq.blockLabel}</span>
+                                  {sessionWindow(sq.day) && (
+                                    <span className="block text-[11px] font-bold text-rr-medium-blue uppercase tracking-widest mt-0.5">Starts {sessionWindow(sq.day).start} · 8 weeks</span>
+                                  )}
                                 </span>
                                 <span className={`text-xs font-black uppercase tracking-widest ${full ? 'text-white/40' : left <= 3 ? 'text-rr-pink' : 'text-green-400'}`}>
                                   {full ? 'Full' : `${left} left`}
@@ -578,74 +607,59 @@ export default function ApplyFlow({ embedded = false }) {
               </div>
             )}
 
-            {/* ── UNIFORM — capture which items + sizes the player needs ── */}
+            {/* ── ROYALS UNIFORM — only reached when "I need a uniform" was ticked at the
+                 Details step. Capture which items + sizes; payment happens at Stripe. ── */}
             {step === 'kit' && (
               <div>
-                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Your playing uniform</h1>
+                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Your Royals uniform</h1>
                 <p className="text-white/55 text-sm mb-5">
-                  Every Power Game player trains in the Royals Academy uniform — a <span className="text-white">training shirt, shorts or pants, and a cap</span>. Do you already have it?
+                  Every player trains in the Royals Academy uniform — a <span className="text-white">training shirt, shorts or pants, and a cap</span>. Pick the items and sizes you need; you&apos;ll pay for them at the Stripe checkout. <span className="text-white/30 text-[11px]">({isJunior ? 'Junior' : 'Senior / Adult'} sizes)</span>
                 </p>
 
-                <Choice
-                  value={hasUniform === null ? '' : hasUniform ? 'yes' : 'no'}
-                  onChange={(v) => { setHasUniform(v === 'yes'); set('needs_uniform', v === 'no'); if (v === 'yes') setKitPicks({ shirt: '', shorts: '', pants: '', cap: '', jacket: '' }); }}
-                  options={[{ value: 'yes', label: 'Yes, I have it' }, { value: 'no', label: 'I need one' }]}
-                />
+                <button type="button" onClick={() => setShowSizeGuide(true)} className="inline-flex items-center gap-1.5 text-rr-light-pink hover:text-white text-[12px] font-bold uppercase tracking-wide px-3.5 py-3 rounded-full border border-rr-light-pink/30 hover:border-rr-light-pink/60 transition-colors">
+                  <Ruler className="w-3.5 h-3.5" /> View the size guide
+                </button>
 
-                {hasUniform === false && (
-                  <div className="mt-5 space-y-4">
-                    <p className="text-white/55 text-[13px] leading-snug">Select the items you need and pick your size. You&apos;ll add them to your order at the Stripe checkout. <span className="text-white/30 text-[11px]">({isJunior ? 'Junior' : 'Senior / Adult'} sizes)</span></p>
-
-                    <button type="button" onClick={() => setShowSizeGuide(true)} className="inline-flex items-center gap-1.5 text-rr-light-pink hover:text-white text-[12px] font-bold uppercase tracking-wide px-3.5 py-3 rounded-full border border-rr-light-pink/30 hover:border-rr-light-pink/60 transition-colors">
-                      <Ruler className="w-3.5 h-3.5" /> View the size guide
-                    </button>
-
-                    <div className="space-y-3">
-                      {KIT_ITEMS_UI.map((item) => {
-                        const picked = !!kitPicks[item.key];
-                        const noSizes = !item.sizes || item.sizes.length === 0;
-                        return (
-                          <div key={item.key} className={`rounded-xl border transition-all ${picked ? 'bg-rr-pink/10 border-rr-pink/40' : 'bg-white/5 border-white/10'} p-4`}>
-                            <div className="flex items-center gap-3">
-                              <input
-                                type="checkbox"
-                                checked={picked}
-                                onChange={(e) => setKit(item.key, e.target.checked ? (item.oneSize ? 'OS' : 'pending') : '')}
-                                className="w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer"
-                              />
-                              <div className="flex-1 min-w-0">
-                                <span className="text-sm font-bold text-white">{item.label}</span>
-                                {item.note && <span className="block text-[11px] text-white/40 mt-0.5">{item.note}</span>}
-                                {item.oneSize && picked && <span className="block text-[11px] text-white/50 mt-0.5">One size — adjustable strap</span>}
-                                {picked && !item.oneSize && noSizes && <span className="block text-[11px] text-rr-pink mt-0.5">No {sizeGroup} sizes available for this item</span>}
-                              </div>
-                            </div>
-                            {picked && !item.oneSize && !noSizes && (
-                              <select
-                                className={`${inputCls} mt-3`}
-                                value={kitPicks[item.key] === 'pending' ? '' : kitPicks[item.key]}
-                                onChange={(e) => setKit(item.key, e.target.value || 'pending')}
-                              >
-                                <option value="">— select size —</option>
-                                {item.sizes.map((s) => <option key={s.label} value={s.label}>{s.label}</option>)}
-                              </select>
-                            )}
+                <div className="space-y-3 mt-4">
+                  {KIT_ITEMS_UI.map((item) => {
+                    const picked = !!kitPicks[item.key];
+                    const noSizes = !item.sizes || item.sizes.length === 0;
+                    return (
+                      <div key={item.key} className={`rounded-xl border transition-all ${picked ? 'bg-rr-pink/10 border-rr-pink/40' : 'bg-white/5 border-white/10'} p-4`}>
+                        <div className="flex items-center gap-3">
+                          <input
+                            type="checkbox"
+                            checked={picked}
+                            onChange={(e) => setKit(item.key, e.target.checked ? (item.oneSize ? 'OS' : 'pending') : '')}
+                            className="w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <span className="text-sm font-bold text-white">{item.label}</span>
+                            {item.note && <span className="block text-[11px] text-white/40 mt-0.5">{item.note}</span>}
+                            {item.oneSize && picked && <span className="block text-[11px] text-white/50 mt-0.5">One size — adjustable strap</span>}
+                            {picked && !item.oneSize && noSizes && <span className="block text-[11px] text-rr-pink mt-0.5">No {sizeGroup} sizes available for this item</span>}
                           </div>
-                        );
-                      })}
-                    </div>
+                        </div>
+                        {picked && !item.oneSize && !noSizes && (
+                          <select
+                            className={`${inputCls} mt-3`}
+                            value={kitPicks[item.key] === 'pending' ? '' : kitPicks[item.key]}
+                            onChange={(e) => setKit(item.key, e.target.value || 'pending')}
+                          >
+                            <option value="">— select size —</option>
+                            {item.sizes.map((s) => <option key={s.label} value={s.label}>{s.label}</option>)}
+                          </select>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
 
-                    <p className="text-white/35 text-[11px]">Uniform payment is handled at the Stripe checkout — nothing is charged on this page.</p>
-                  </div>
-                )}
-
-                {hasUniform === true && (
-                  <p className="text-white/55 text-[13px] leading-snug mt-5">Great — you&apos;re all set.</p>
-                )}
+                <p className="text-white/35 text-[11px] mt-4">Uniform payment is handled at the Stripe checkout — nothing is charged on this page.</p>
 
                 <button
                   onClick={() => setStep('secure')}
-                  disabled={hasUniform === null || (hasUniform === false && !kitSizesComplete)}
+                  disabled={!kitSizesComplete}
                   className="w-full mt-7 bg-rr-pink hover:bg-rr-light-pink disabled:opacity-40 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
                   Continue →
                 </button>
@@ -662,7 +676,7 @@ export default function ApplyFlow({ embedded = false }) {
                   <SummaryRow k="Centre" v={CENTRE_BY_SLUG[form.centre]?.name} />
                   <SummaryRow k="Time" v={`${selected.day} ${selected.startTime}–${selected.endTime}`} />
                   <SummaryRow k="Block" v="8-week Power Game phase" />
-                  {form.needs_uniform && hasUniform === false && anyKitSelected && (
+                  {form.needs_uniform && anyKitSelected && (
                     <SummaryRow k="Uniform" v={Object.entries(kitPicks).filter(([,v]) => v && v !== 'pending').map(([k,v]) => `${k === 'cap' ? 'Cap' : k.charAt(0).toUpperCase() + k.slice(1)} ${v === 'OS' ? '' : v}`.trim()).join(' · ')} />
                   )}
                   <div className="border-t border-white/10 pt-3 flex items-baseline justify-between">
@@ -674,10 +688,7 @@ export default function ApplyFlow({ embedded = false }) {
                 <button onClick={secure} disabled={submitting || !consentsOk(form)} className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
                   {submitting ? 'Processing…' : `Pay ${fmtAud(blockFeeCents)} & secure my spot`}
                 </button>
-                <button onClick={applyWithoutPay} disabled={submitting || !consentsOk(form)} className="w-full mt-3 bg-transparent border border-white/20 hover:border-white/40 disabled:opacity-40 disabled:cursor-not-allowed text-white/80 font-bold uppercase tracking-widest text-[11px] rounded-full px-6 py-3.5 transition-all">
-                  Apply without paying — request a call first
-                </button>
-                <p className="text-white/25 text-[11px] text-center mt-3">Paying secures your spot for the 8-week block (applying without paying doesn&apos;t hold one). *Squads are subject to change &mdash; we&apos;ll work with you if changes are needed.</p>
+                <p className="text-white/25 text-[11px] text-center mt-3">Your spot is <span className="text-white/45 font-bold">only secured once payment is confirmed</span> — your held time is released if payment isn&apos;t completed. *Squads are subject to change &mdash; we&apos;ll work with you if changes are needed.</p>
               </div>
             )}
 
