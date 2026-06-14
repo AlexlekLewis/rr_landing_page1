@@ -44,6 +44,7 @@ function summarise(form) {
   if (form.gender) bits.push(`Gender: ${form.gender}`);
   if (form.rep_level) bits.push(`Rep ${form.rep_level}`);
   if (form.club_level) bits.push(`Club ${form.club_level}`);
+  if (form.current_club) bits.push(`Current club: ${form.current_club}`);
   if (form.wildcard) bits.push("Wild Card — applied without a rep / graded senior level");
   return bits.join(" · ");
 }
@@ -71,6 +72,7 @@ export function buildApplicationRow(form, placement, squad, opts = {}) {
     phone: minor ? "" : (form.contact_phone || ""),
     suburb: form.suburb || "",
     club: form.club_level || "",
+    current_club: form.current_club || "",
     bio: summarise(form),
     parent1_name: minor ? (form.parent_name || "") : "",
     parent1_email: minor ? (form.contact_email || "") : "",

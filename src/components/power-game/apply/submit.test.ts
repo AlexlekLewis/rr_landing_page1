@@ -70,6 +70,12 @@ describe("buildApplicationRow", () => {
     expect(r.bio).toContain("Rep P16M");
   });
 
+  it("captures the player's current cricket club", () => {
+    const r = buildApplicationRow({ ...adult, current_club: "Williamstown CC" }, placement, squad, {});
+    expect(r.current_club).toBe("Williamstown CC");
+    expect(r.bio).toContain("Current club: Williamstown CC");
+  });
+
   it("maps compliances + uniform; adult parent-code is N/A (true)", () => {
     const f = { ...adult, accept_terms: true, accept_player_code: true, accept_social_media: true, accept_playing_standard: true, needs_uniform: true };
     const r = buildApplicationRow(f, placement, squad, {});

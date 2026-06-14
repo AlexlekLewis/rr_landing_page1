@@ -45,12 +45,7 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     const slot = await screen.findByTestId("slot-w-fri530-1416-perf");
     fireEvent.click(slot);
 
-    // uniform step: pick "Yes, I have it" so Continue is enabled
-    await screen.findByText(/your playing uniform/i);
-    fireEvent.click(screen.getByText("Yes, I have it"));
-    fireEvent.click(screen.getByRole("button", { name: /continue/i }));
-
-    // Secure step — accept compliances, then pay.
+    // No uniform flagged (demo = PERF, needs_uniform false) → the kit step is skipped; straight to Secure.
     await screen.findByText(/secure your spot/i);
     document.querySelectorAll('input[type="checkbox"]').forEach((b) => fireEvent.click(b));
     const pay = screen.getByRole("button", { name: /secure my spot/i });
@@ -91,7 +86,7 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     expect(screen.getAllByText(/full/i).length).toBeGreaterThan(0);
   });
 
-  it("real journey: centre → player → profile → history → reveal (no demo shortcut)", async () => {
+  it("real journey: centre → player → profile (game + cricket) → confirm → reveal (no demo shortcut)", async () => {
     window.history.pushState({}, "", "/PGP2026/apply");
     render(<ApplyFlow />);
     const yr = String(new Date().getFullYear() - 14); // 14yo
@@ -119,12 +114,11 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     document.querySelectorAll('input[type="checkbox"]').forEach((b) => fireEvent.click(b));
     fireEvent.click(screen.getByText("Continue"));
 
-    // Profile
+    // Profile — game + last-3-years cricket are now ONE merged step.
     fireEvent.click(screen.getByText("Batter"));
     fireEvent.click(screen.getByText("Right"));
-    fireEvent.click(screen.getByText("Continue"));
-
-    // History — Dowling Shield (a pure batter has no numbers to add now)
+    fireEvent.change(screen.getByPlaceholderText(/footscray/i), { target: { value: "Williamstown CC" } });
+    // Dowling Shield (a pure batter has no numbers to add now)
     const levelSel = (screen.getAllByRole("combobox") as HTMLSelectElement[]).find((s) => [...s.options].some((o) => o.value === "P16M"))!;
     fireEvent.change(levelSel, { target: { value: "P16M" } });
     fireEvent.click(screen.getByText("Continue"));

@@ -129,7 +129,7 @@ const buildRow = (r) => ([
   r.current_level || '',
   r.capability_statement || '',
   r.profile_link || '',
-  r.club || '',
+  r.current_club || r.club || '',
   r.bio || '',
   r.goals || '',
   r.cv_url || '',

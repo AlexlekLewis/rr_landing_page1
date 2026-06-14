@@ -11,6 +11,11 @@ const OverviewSection = () => {
                     viewport={{ once: true, amount: 0.3 }}
                     transition={{ duration: 0.6, ease: 'easeOut' }}
                 >
+                    <img
+                        src="/assets/powergame/power-game-logo-transparent.png"
+                        alt="The Power Game"
+                        className="h-16 md:h-24 w-auto mx-auto mb-7"
+                    />
                     <div className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
                         <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">
@@ -30,7 +35,7 @@ const OverviewSection = () => {
                             Through 360 power hitting, the full spectrum of bowling, and explosive fielding, players learn to reach for power when the situation demands it — backed by biomechanics, data, and the coaching methodology that drives the Royals Way.
                         </p>
                         <p className="text-white font-semibold">
-                            This is where like-skilled, like-motivated players train together to win from anywhere — preparing for your best season yet, earning a representative squad spot, moving up the grades, or landing on selectors' radars.
+                            This is where like-skilled, like-motivated players train together to win from anywhere — preparing for your best season yet, earning a representative squad spot, moving up the grades, or landing on selectors' radars. It begins with the 8-week <span className="text-rr-pink">Power Pre-Season</span>.
                         </p>
                     </div>
                 </motion.div>
