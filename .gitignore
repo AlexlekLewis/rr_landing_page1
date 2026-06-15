@@ -17,6 +17,10 @@ dist-ssr
 .env.local
 .env.*.local
 
+# PII exports — never commit these
+exports/*.csv
+exports/*.xlsx
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
