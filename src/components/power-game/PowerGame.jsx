@@ -13,11 +13,14 @@ import CentresSection from './CentresSection';
 import AskThePlayers from './AskThePlayers';
 import PartnerStack from './PartnerStack';
 import UniformSizeGuideModal from './UniformSizeGuideModal';
+// Eager-imported (NOT React.lazy): opening the funnel must never trigger a separate chunk
+// fetch — a stale chunk after a deploy was crashing the whole page (white screen) with no
+// error boundary to catch it. It's small next to the main bundle and is the core conversion path.
+import ApplyFlow from './apply/ApplyFlow';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { MapPin, User, ClipboardList, Sparkles, ShieldCheck, AlertTriangle, Telescope, Zap, Flame, Clock, ListChecks, Ruler, Shirt } from 'lucide-react';
 
 // The apply funnel renders inline in the #apply section so applicants never leave /PGP2026.
-const ApplyFlow = React.lazy(() => import('./apply/ApplyFlow'));
 
 // The application process — the real five steps a player moves through in the funnel
 // below. Step 3 carries the honesty warning; step 4 is the offer / review fork.
@@ -82,7 +85,9 @@ const PowerGame = () => {
     // so applying is one tap from anywhere (no scroll-hunt, no second "reveal" click).
     const openApply = () => {
         setShowApply(true);
-        requestAnimationFrame(() => document.getElementById('apply')?.scrollIntoView({ behavior: 'smooth' }));
+        // ApplyFlow scrolls itself into view on mount (its [step] effect). Don't add a second,
+        // competing scroll here — that (plus the old lazy-load delay) made the funnel jump to
+        // the bottom of the page and then back up.
     };
 
     useEffect(() => {
@@ -291,9 +296,7 @@ const PowerGame = () => {
                             <div className="max-w-xl mx-auto px-5 pt-5">
                                 <button onClick={() => setShowApply(false)} className="text-xs text-white/40 hover:text-white/70 uppercase tracking-widest">← Close</button>
                             </div>
-                            <React.Suspense fallback={<div className="min-h-[60vh]" />}>
-                                <ApplyFlow embedded />
-                            </React.Suspense>
+                            <ApplyFlow embedded />
                         </div>
                     )}
                 </div>
