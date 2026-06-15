@@ -110,17 +110,17 @@ const LeaderCard = ({ coach }) => {
             <img
                 src={coach.image}
                 alt={coach.name}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out ${open ? 'scale-110' : ''}`}
                 onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.classList.add('bg-gradient-to-br', 'from-rr-blue/80', 'to-rr-dark'); }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/20 to-transparent opacity-85" />
 
-            <div className={`absolute bottom-0 left-0 p-4 md:p-5 w-full transition-opacity duration-300 ${open ? 'opacity-0' : 'group-hover:opacity-0'}`}>
+            <div className={`absolute bottom-0 left-0 p-4 md:p-5 w-full transition-opacity duration-300 ${open ? 'opacity-0' : 'opacity-100'}`}>
                 <h4 className="text-lg md:text-2xl font-black text-white uppercase tracking-wide leading-none">{coach.name}</h4>
                 <p className="text-rr-pink font-bold text-[10px] md:text-xs tracking-widest uppercase mt-1.5">{coach.role}</p>
             </div>
 
-            <div className={`absolute inset-0 bg-rr-dark/92 backdrop-blur-sm p-4 md:p-5 flex flex-col justify-center transition-opacity duration-300 overflow-y-auto ${open ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+            <div className={`absolute inset-0 bg-rr-dark/92 backdrop-blur-sm p-4 md:p-5 flex flex-col justify-center transition-opacity duration-300 overflow-y-auto ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
                 <h4 className="text-lg md:text-xl font-black text-white uppercase tracking-wide leading-tight">{coach.name}</h4>
                 <p className="text-rr-pink font-bold text-[10px] tracking-widest uppercase mt-1.5 mb-3 pb-3 border-b border-white/15">{coach.role}</p>
                 <p className="text-white/85 text-xs md:text-sm leading-relaxed font-medium">{coach.bio}</p>
@@ -133,7 +133,7 @@ const LeaderCard = ({ coach }) => {
 const CompactRow = ({ coach }) => {
     const [open, setOpen] = useState(false);
     return (
-        <div className="group border-b border-white/10">
+        <div className="border-b border-white/10">
             <button
                 type="button"
                 onClick={() => setOpen((o) => !o)}
@@ -141,12 +141,12 @@ const CompactRow = ({ coach }) => {
                 className="w-full flex items-center justify-between gap-3 py-3 text-left"
             >
                 <span className="min-w-0">
-                    <span className="block text-base sm:text-lg font-black text-white uppercase tracking-wide leading-tight transition-colors duration-200 group-hover:text-rr-pink">{coach.name}</span>
+                    <span className={`block text-base sm:text-lg font-black uppercase tracking-wide leading-tight transition-colors duration-200 ${open ? 'text-rr-pink' : 'text-white'}`}>{coach.name}</span>
                     <span className="block text-[10px] font-bold text-rr-pink/90 uppercase tracking-[0.12em] mt-1">{coach.role}</span>
                 </span>
-                <ChevronDown className={`w-4 h-4 text-rr-pink flex-shrink-0 transition-transform duration-300 ${open ? 'rotate-180' : ''} group-hover:rotate-180`} strokeWidth={2.5} />
+                <ChevronDown className={`w-4 h-4 text-rr-pink flex-shrink-0 transition-transform duration-300 ${open ? 'rotate-180' : ''}`} strokeWidth={2.5} />
             </button>
-            <div className={`overflow-hidden transition-all duration-300 ease-out ${open ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'} group-hover:max-h-80 group-hover:opacity-100`}>
+            <div className={`overflow-hidden transition-all duration-300 ease-out ${open ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'}`}>
                 <p className="text-white/65 text-[13px] leading-relaxed font-medium pb-4 pr-1">{coach.bio}</p>
             </div>
         </div>
