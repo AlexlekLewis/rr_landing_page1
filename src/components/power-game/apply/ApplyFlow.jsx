@@ -390,7 +390,7 @@ export default function ApplyFlow({ embedded = false }) {
 
       <div className="max-w-xl mx-auto px-5 py-12 md:py-16">
         <div className="text-center mb-6">
-          <div className="text-rr-pink font-black uppercase tracking-[0.3em] text-xs mb-1">The Power Game Program</div>
+          <div className="text-rr-pink font-black uppercase tracking-[0.3em] text-xs mb-1">Power Pre-Season</div>
           <div className="text-white/40 text-xs uppercase tracking-widest">Secure your squad spot</div>
         </div>
 
@@ -675,7 +675,7 @@ export default function ApplyFlow({ embedded = false }) {
                   <SummaryRow k="Squad" v={`${result.placement.stream === 'performance' ? 'Performance' : 'Pathway'} · ${result.placement.placedBand}`} />
                   <SummaryRow k="Centre" v={CENTRE_BY_SLUG[form.centre]?.name} />
                   <SummaryRow k="Time" v={`${selected.day} ${selected.startTime}–${selected.endTime}`} />
-                  <SummaryRow k="Block" v="8-week Power Game phase" />
+                  <SummaryRow k="Block" v="8-week Power Pre-Season" />
                   {form.needs_uniform && anyKitSelected && (
                     <SummaryRow k="Uniform" v={Object.entries(kitPicks).filter(([,v]) => v && v !== 'pending').map(([k,v]) => `${k === 'cap' ? 'Cap' : k.charAt(0).toUpperCase() + k.slice(1)} ${v === 'OS' ? '' : v}`.trim()).join(' · ')} />
                   )}
@@ -700,8 +700,8 @@ export default function ApplyFlow({ embedded = false }) {
                   {comingSoonVenue
                     ? `This venue's days & times are being confirmed — submit your details and we'll offer you a spot the moment it opens. No payment needed yet.`
                     : reviewIsCallback
-                      ? `No rush. Submit your details and a Power Game coach will call you to talk through your offer and answer any questions before you commit. No payment needed yet.`
-                      : `Submit your details and a Power Game coach will personally review your cricket and be in touch about the best squad for you. No payment needed yet.`}
+                      ? `No rush. Submit your details and a Royals coach will call you to talk through your offer and answer any questions before you commit. No payment needed yet.`
+                      : `Submit your details and a Royals coach will personally review your cricket and be in touch about the best squad for you. No payment needed yet.`}
                 </p>
                 <button onClick={submitReview} disabled={submitting} className="w-full bg-rr-blue hover:bg-rr-blue/80 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all">
                   {submitting ? 'Submitting…' : reviewIsCallback ? 'Request my call' : 'Submit my application'}
@@ -718,7 +718,7 @@ export default function ApplyFlow({ embedded = false }) {
 
                 {/* Email + Text are instant — no form, no consents needed. */}
                 <div className="space-y-3 mb-5">
-                  <a href={`mailto:${ENQUIRY_EMAIL}?subject=${encodeURIComponent('Power Game Program enquiry')}`}
+                  <a href={`mailto:${ENQUIRY_EMAIL}?subject=${encodeURIComponent('Power Pre-Season enquiry')}`}
                     className="flex items-center gap-4 px-5 py-4 rounded-2xl border bg-white/5 border-white/15 hover:border-rr-pink/50 transition-all">
                     <Mail className="w-5 h-5 text-rr-pink flex-shrink-0" />
                     <span className="flex-1 min-w-0">
@@ -760,7 +760,7 @@ export default function ApplyFlow({ embedded = false }) {
                 <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-3">{step === 'submitted' ? 'Application received' : "You're in our hands"}</h1>
                 <p className="text-white/60 text-sm max-w-sm mx-auto mb-6">
                   {step === 'submitted'
-                    ? `Thanks ${form.player_name?.split(' ')[0] || 'champ'} — we've got your full application. A Power Game coach will call you about your spot and answer any questions. No payment was taken.`
+                    ? `Thanks ${form.player_name?.split(' ')[0] || 'champ'} — we've got your full application. A Royals coach will call you about your spot and answer any questions. No payment was taken.`
                     : (CENTRE_BY_SLUG[form.centre]?.comingSoon
                         ? `Thanks ${form.player_name?.split(' ')[0] || 'champ'} — we've saved your details and will offer you a spot the moment this venue opens.`
                         : `Thanks ${form.player_name?.split(' ')[0] || 'champ'} — a coach will review your cricket and be in touch about the best squad for you.`)}

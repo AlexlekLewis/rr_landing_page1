@@ -5,6 +5,7 @@ import HeroSection from './HeroSection';
 import ManifestoSection from './ManifestoSection';
 import VideoSection from './VideoSection';
 import OverviewSection from './OverviewSection';
+import QuoteBlock from './QuoteBlock';
 import FeaturesBenefits from './FeaturesBenefits';
 import PricingSection from './PricingSection';
 import CoachesSection from './CoachesSection';
@@ -62,6 +63,7 @@ const SECTIONS = [
     'overview',
     'who-its-for',
     'ask-the-players',
+    'quote-vaibhav',
     'video',
     'pricing',
     'academy-video',
@@ -86,7 +88,7 @@ const PowerGame = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
         // Set page title for browser tab + SEO (page is hidden from nav)
-        document.title = 'The Power Game Program | Rajasthan Royals Academy Melbourne';
+        document.title = 'Power Pre-Season | Rajasthan Royals Academy Elite Program';
     }, []);
 
     return (
@@ -115,6 +117,21 @@ const PowerGame = () => {
                 {/* Player-voice social proof, promoted high — real cohort quotes, un-named. */}
                 <div id="ask-the-players">
                     <AskThePlayers />
+                </div>
+
+                {/* Vaibhav Sooryavanshi — the proof the standard has moved (restored). His
+                    stated ambition sets up the "What Has Sooryavanshi Done?" video that follows. */}
+                <div id="quote-vaibhav">
+                    <QuoteBlock
+                        variant="feature"
+                        quote="I want to score 200 in T20s. I want to break Gayle's record."
+                        attribution="Vaibhav Sooryavanshi"
+                        role="Rajasthan Royals"
+                        image="/assets/powergame/vaibhav.jpg"
+                        imageAlt="Vaibhav Sooryavanshi batting for the Rajasthan Royals"
+                        imageFit="cover"
+                        commentary="He said this at fifteen — and the frightening part is how likely he is to do it. A teenager has moved the ceiling of the game for good, and there's no going back. There's a new standard now, and every player chasing the top has to find that kind of power just to keep pace."
+                    />
                 </div>
 
                 <div id="video">
@@ -245,7 +262,7 @@ const PowerGame = () => {
                                             <p className="text-white/60 text-sm leading-relaxed mb-5">
                                                 Reps and selectors miss players every year — the right talent doesn&apos;t always show up on
                                                 paper. Our Wild Card pathway is your shot. If your cricket doesn&apos;t meet the standard yet,
-                                                your application isn&apos;t rejected — it goes to a real Power Game coach for review. See something
+                                                your application isn&apos;t rejected — it goes to a real Royals coach for review. See something
                                                 in you, and they&apos;ll be in touch about the right squad for your development. No payment until
                                                 your spot is confirmed.
                                             </p>
