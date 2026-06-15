@@ -24,7 +24,7 @@ const OverviewSection = () => {
 
                     <div className="space-y-5 text-base md:text-lg text-white/80 font-medium leading-relaxed">
                         <p>
-                            The Power Pre-Season is the latest evolution of the Rajasthan Royals Academy Elite Program — an 8-week intensive built around one idea: generating power on demand, across every discipline and format of the modern game. Designed in partnership with Power Game.
+                            The Power Pre-Season is the Rajasthan Royals Academy Elite Program's 8-week pre-season — built around one idea: the power to win the modern game, with bat and ball. Batters learn to generate power on demand and find ways to win games; bowlers learn to attack with pace, control and skill and do the same. Designed in partnership with Power Game.
                         </p>
                         <p>
                             Through 360 power hitting, the full spectrum of bowling, and explosive fielding, players learn to reach for power when the situation demands it — backed by biomechanics, data, and the coaching methodology that drives the Royals Way.
