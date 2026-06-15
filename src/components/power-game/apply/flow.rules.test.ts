@@ -58,3 +58,24 @@ describe("rule 2 — strong-for-age goes to the top tier of their own age group"
     expect(placement.requiresReview).toBe(false);
   });
 });
+
+// An adult who reached a junior rep honour years ago AND plays age-appropriate senior
+// cricket must not be sent to review just because the junior honour (P18M, expected ~16.5)
+// ties the senior level (P3M, expected ~21) on CTI and wins the age reference. The senior
+// cricket is at-age — no age_outlier, no review.
+describe("rule 3 — age-appropriate senior cricket clears the age-outlier review", () => {
+  it("21yo Premier U18 rep + Premier 3rd XI senior → no review", () => {
+    const { placement, dna } = computePlacement(
+      form({ player_dob: dob(21), gender: "M", rep_level: "P18M", club_level: "P3M" }),
+    );
+    expect(dna.reviewFlags).not.toContain("age_outlier");
+    expect(placement.requiresReview).toBe(false);
+  });
+  it("21yo whose ONLY level is a (now-stale) Premier U18 rep honour → still review", () => {
+    const { placement } = computePlacement(
+      form({ player_dob: dob(21), gender: "M", rep_level: "P18M", club_level: "" }),
+    );
+    expect(placement.reviewReasons).toContain("age_outlier");
+    expect(placement.requiresReview).toBe(true);
+  });
+});

@@ -668,12 +668,22 @@ export function computeDna(input: ComputeDnaInput): DnaResult {
   let overallCti = 0;
   let overallExpectedAge: number | null = null;
   let overallCode: string | null = null;
+  // Oldest level the player plays (highest expected midpoint age), regardless of CTI. Used
+  // ONLY for the age-outlier flag: a player is an outlier when they're too old for even the
+  // most age-appropriate level they play — NOT when a lower-age (e.g. junior rep) honour
+  // happens to tie/outrank a current senior level on CTI. A 21yo in Premier 3rd XI (expected
+  // ~21) who also holds a Premier U18 rep honour (expected ~16.5) is not an age outlier.
+  let maxExpectedAge: number | null = null;
   const considerCode = (code: string | null) => {
     const t = tierFor(code, tiers);
-    if (t && t.ctiValue > overallCti) {
+    if (!t) return;
+    if (t.ctiValue > overallCti) {
       overallCti = t.ctiValue;
       overallExpectedAge = t.expectedMidpointAge;
       overallCode = t.code;
+    }
+    if (t.expectedMidpointAge != null && (maxExpectedAge == null || t.expectedMidpointAge > maxExpectedAge)) {
+      maxExpectedAge = t.expectedMidpointAge;
     }
   };
   for (const h of history) considerCode(h.competitionCode);
@@ -766,7 +776,9 @@ export function computeDna(input: ComputeDnaInput): DnaResult {
   if (eligibilityStatus !== "no_history" && totalMatches < THIN_HISTORY_MATCHES) {
     reviewFlags.push("thin_history");
   }
-  if (age != null && overallExpectedAge != null && age > overallExpectedAge + AGE_OUTLIER_YEARS) {
+  // Outlier vs the OLDEST level played (maxExpectedAge), not the highest-CTI one — so an
+  // age-appropriate senior level clears the flag even when a junior rep honour ties it on CTI.
+  if (age != null && maxExpectedAge != null && age > maxExpectedAge + AGE_OUTLIER_YEARS) {
     reviewFlags.push("age_outlier");
   }
   // §4.5: the volume gate actually bit a *scored* secondary skill → flag for admin eyes.
