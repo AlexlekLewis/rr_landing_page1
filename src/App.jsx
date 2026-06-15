@@ -54,10 +54,56 @@ import TextUsButton from './components/TextUsButton';
 import AcademyShop from './components/academy-shop/AcademyShop';
 import ShopSuccess from './components/academy-shop/ShopSuccess';
 
+// Recover from a stale lazy-chunk load after a deploy (an already-open tab requests an old
+// chunk hash that no longer exists). Without a boundary, a failed dynamic import unmounts the
+// whole React tree → blank white screen. On a chunk error we reload ONCE to pull the fresh
+// build; a sessionStorage guard prevents a reload loop if the failure isn't transient.
+class ChunkReloadBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { failed: false };
+  }
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  componentDidCatch(error) {
+    const msg = String((error && (error.message || error.toString())) || '');
+    const isChunkError = /dynamically imported module|Importing a module script failed|ChunkLoadError|Loading (chunk|CSS chunk)|error loading dynamically|Failed to fetch/i.test(msg);
+    if (isChunkError) {
+      try {
+        if (!sessionStorage.getItem('chunk_reloaded')) {
+          sessionStorage.setItem('chunk_reloaded', '1');
+          window.location.reload();
+        }
+      } catch (_) { /* sessionStorage blocked — fall through to the fallback UI */ }
+    }
+  }
+  render() {
+    if (this.state.failed) {
+      return (
+        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#111921', color: '#fff', fontFamily: 'sans-serif', textAlign: 'center', padding: 24 }}>
+          <div>
+            <p style={{ fontWeight: 800, fontSize: 18, marginBottom: 4 }}>Sorry — something went wrong loading the page.</p>
+            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, marginBottom: 16 }}>A quick refresh usually fixes it.</p>
+            <button
+              onClick={() => { try { sessionStorage.removeItem('chunk_reloaded'); } catch (_) { /* ignore */ } window.location.reload(); }}
+              style={{ background: '#E50695', color: '#fff', border: 'none', borderRadius: 9999, padding: '12px 28px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer' }}
+            >
+              Reload
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 function App() {
   return (
     <div className="font-sans antialiased text-rr-dark bg-white selection:bg-rr-pink selection:text-white">
       <PostHogPageviewTracker />
+      <ChunkReloadBoundary>
       <Routes>
         {/* DNA Profile App — lazy-loaded portal at /eliteprogram/playerDNAprofile */}
         <Route path="/eliteprogram2026/playerDNAprofile/*" element={
@@ -128,6 +174,7 @@ function App() {
         <Route path="/rramadmin_26/india-tour-2026" element={<AdminLayout><IndiaTour2026Dashboard /></AdminLayout>} />
         <Route path="/rramadmin_26/india-tour-eoi" element={<AdminLayout><IndiaTourEOIDashboard /></AdminLayout>} />
       </Routes>
+      </ChunkReloadBoundary>
       <TextUsButton />
     </div>
   );
