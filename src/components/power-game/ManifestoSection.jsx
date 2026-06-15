@@ -34,7 +34,7 @@ const ManifestoSection = ({ onApply }) => {
                             it. Warner did it. And they&apos;re only the tip of the iceberg of the modern cricketer.
                         </p>
                         <p>
-                            The Power Game is where you build it — <span className="text-white font-semibold">power on demand, a 360&deg;
+                            This is where you build it — <span className="text-white font-semibold">power on demand, a 360&deg;
                             game, and the confidence to use it when it matters.</span> The Royals way. Eight weeks of Power Pre-Season, while
                             everyone else is still waiting for the season to start.
                         </p>

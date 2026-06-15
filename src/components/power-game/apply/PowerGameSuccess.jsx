@@ -16,7 +16,7 @@ export default function PowerGameSuccess() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "You're in — The Power Game Program";
+    document.title = "You're in — Power Pre-Season";
 
     let sid = '';
     try {
@@ -127,7 +127,7 @@ export default function PowerGameSuccess() {
               {order?.playerName ? <>You&apos;re in, {order.playerName.split(' ')[0]}!</> : <>You&apos;re in!</>}
             </h1>
             <p className="text-white/65 text-base leading-relaxed max-w-lg mx-auto">
-              Your place in <span className="text-white font-bold">The Power Game Program</span> is locked in. Welcome to the Royals Academy — we can&apos;t wait to see you train.
+              Your place in <span className="text-white font-bold">the Power Pre-Season</span> is locked in. Welcome to the Royals Academy — we can&apos;t wait to see you train.
             </p>
             {verify.state === 'unpaid' && (
               <p className="text-amber-300/80 text-sm mt-4 max-w-md mx-auto">
@@ -196,7 +196,7 @@ export default function PowerGameSuccess() {
               href="/PGP2026"
               className="inline-flex items-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-8 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.45)]"
             >
-              Back to the Power Game <ArrowRight className="w-4 h-4" />
+              Back to the Pre-Season <ArrowRight className="w-4 h-4" />
             </a>
           </div>
         </div>

@@ -74,7 +74,7 @@ const PHASES = [
 const HOUR_MATHS = [
     { who: 'Other programs', price: '$900', detail: '6 weeks × 1.5 hrs = 9 hrs of coaching', perHour: '$100', us: false },
     { who: 'Other programs', price: '$800', detail: '7 weeks × 1 hr = 7 hrs of coaching', perHour: '$114', us: false },
-    { who: 'The Power Game', price: '$989', detail: '8 weeks × 2 hrs = 16 hrs of coaching', perHour: '$62', us: true },
+    { who: 'Power Pre-Season', price: '$989', detail: '8 weeks × 2 hrs = 16 hrs of coaching', perHour: '$62', us: true },
 ];
 
 const formatPrice = (n) => (n > 0 ? `$${n.toLocaleString()}` : 'TBC');

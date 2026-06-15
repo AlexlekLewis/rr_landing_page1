@@ -5,7 +5,7 @@ import { Play } from 'lucide-react';
 const VideoSection = ({
     badge = "The Game's Changed",
     heading = (<>WHAT HAS <span className="text-rr-pink">SOORYAVANSHI</span> DONE?</>),
-    description = "Let's hear from Andy Crook, Director of Rajasthan Royals Academy Melbourne, as well as T20 and Power Coach — on the impact of Vaibhav Sooryavanshi, what the future of the game now looks like, and the Power Game Program, during a recent interview.",
+    description = "Let's hear from Andy Crook, Director of Rajasthan Royals Academy Melbourne, as well as T20 and Power Coach — on the impact of Vaibhav Sooryavanshi, what the future of the game now looks like, and the Power Pre-Season, during a recent interview.",
     videoSrc = '/assets/powergame/andy-crook-video.mp4',
     posterSrc = '/assets/powergame/andy-crook-poster.jpg',
 }) => {
