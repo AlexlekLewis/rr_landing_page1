@@ -1,24 +1,27 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 
-// Name-first roster — no headshots. Each coach opens to their bio on hover
-// (desktop) or tap (mobile — ~96% of this page's traffic). Three tiers:
-// Royals leadership, the specialist pros, and the Elite Performance team.
+// Leadership keeps headshot cards (the marquee trio). The rest of the roster —
+// a lot of coaches — is a compact two-column list of name rows that open to a
+// bio on hover (desktop) or tap (mobile, ~96% of this page's traffic).
 
 const leadership = [
     {
         name: "Siddhartha Lahiri",
         role: "Royals Group Performance Coach — Head of Global Academies",
+        image: "/assets/coaches/siddhartha-lahiri.jpg",
         bio: "Performance coach for the Rajasthan and Paarl Royals and head of the Royals' global talent network — he oversees player development across every Royals Academy worldwide, giving our best players a direct line to one of the IPL's biggest franchises.",
     },
     {
         name: "Andy Crook",
         role: "Director of Cricket — T20 & Power Hitting",
+        image: "/assets/coaches/andy-crook.jpg",
         bio: "Former South Australian Redback (debut at 17), Lancashire and Northamptonshire player, and part of Australia's 2025 T20 Masters World Cup-winning squad. He was in county grounds when T20 was born and has built his coaching around it ever since.",
     },
     {
         name: "Alex Lewis",
         role: "Rajasthan Royals Academy — Head Coach",
+        image: "/assets/coaches/alex-lewis.jpg",
         bio: "Over 20 years coaching cricketers through representative pathways. A current premier-cricket senior assistant and bowling coach — technique-first, player-first, building sharper athletes and tougher competitors.",
     },
 ];
@@ -94,56 +97,88 @@ const performance = [
     },
 ];
 
-const CoachRow = ({ coach, lead }) => {
+// Leadership — headshot card with name/role default, bio on hover or tap.
+const LeaderCard = ({ coach }) => {
     const [open, setOpen] = useState(false);
-    const nameSize = lead ? 'text-2xl sm:text-3xl md:text-4xl' : 'text-xl sm:text-2xl md:text-3xl';
     return (
-        <div className="group border-t border-white/10 last:border-b last:border-white/10">
+        <button
+            type="button"
+            onClick={() => setOpen((o) => !o)}
+            aria-expanded={open}
+            className="group relative w-full aspect-[3/4] rounded-2xl overflow-hidden text-left shadow-lg"
+        >
+            <img
+                src={coach.image}
+                alt={coach.name}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.classList.add('bg-gradient-to-br', 'from-rr-blue/80', 'to-rr-dark'); }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/20 to-transparent opacity-85" />
+
+            <div className={`absolute bottom-0 left-0 p-4 md:p-5 w-full transition-opacity duration-300 ${open ? 'opacity-0' : 'group-hover:opacity-0'}`}>
+                <h4 className="text-lg md:text-2xl font-black text-white uppercase tracking-wide leading-none">{coach.name}</h4>
+                <p className="text-rr-pink font-bold text-[10px] md:text-xs tracking-widest uppercase mt-1.5">{coach.role}</p>
+            </div>
+
+            <div className={`absolute inset-0 bg-rr-dark/92 backdrop-blur-sm p-4 md:p-5 flex flex-col justify-center transition-opacity duration-300 overflow-y-auto ${open ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                <h4 className="text-lg md:text-xl font-black text-white uppercase tracking-wide leading-tight">{coach.name}</h4>
+                <p className="text-rr-pink font-bold text-[10px] tracking-widest uppercase mt-1.5 mb-3 pb-3 border-b border-white/15">{coach.role}</p>
+                <p className="text-white/85 text-xs md:text-sm leading-relaxed font-medium">{coach.bio}</p>
+            </div>
+        </button>
+    );
+};
+
+// Roster — compact name row, bio opens on hover or tap.
+const CompactRow = ({ coach }) => {
+    const [open, setOpen] = useState(false);
+    return (
+        <div className="group border-b border-white/10">
             <button
                 type="button"
                 onClick={() => setOpen((o) => !o)}
                 aria-expanded={open}
-                className="w-full flex items-center justify-between gap-4 py-4 md:py-5 text-left"
+                className="w-full flex items-center justify-between gap-3 py-3 text-left"
             >
                 <span className="min-w-0">
-                    <span className={`block ${nameSize} font-black text-white uppercase tracking-wide leading-none transition-colors duration-200 group-hover:text-rr-pink`}>
-                        {coach.name}
-                    </span>
-                    <span className="block text-[10px] sm:text-[11px] font-bold text-rr-pink uppercase tracking-[0.15em] mt-2">
-                        {coach.role}
-                    </span>
+                    <span className="block text-base sm:text-lg font-black text-white uppercase tracking-wide leading-tight transition-colors duration-200 group-hover:text-rr-pink">{coach.name}</span>
+                    <span className="block text-[10px] font-bold text-rr-pink/90 uppercase tracking-[0.12em] mt-1">{coach.role}</span>
                 </span>
-                <ChevronDown
-                    className={`w-5 h-5 md:w-6 md:h-6 text-rr-pink flex-shrink-0 transition-transform duration-300 ${open ? 'rotate-180' : ''} group-hover:rotate-180`}
-                    strokeWidth={2.5}
-                />
+                <ChevronDown className={`w-4 h-4 text-rr-pink flex-shrink-0 transition-transform duration-300 ${open ? 'rotate-180' : ''} group-hover:rotate-180`} strokeWidth={2.5} />
             </button>
-            <div className={`overflow-hidden transition-all duration-300 ease-out ${open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'} group-hover:max-h-96 group-hover:opacity-100`}>
-                <p className="text-white/70 text-sm md:text-base leading-relaxed font-medium pb-5 max-w-3xl">
-                    {coach.bio}
-                </p>
+            <div className={`overflow-hidden transition-all duration-300 ease-out ${open ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'} group-hover:max-h-80 group-hover:opacity-100`}>
+                <p className="text-white/65 text-[13px] leading-relaxed font-medium pb-4 pr-1">{coach.bio}</p>
             </div>
         </div>
     );
 };
 
-const Tier = ({ label, coaches, lead }) => (
-    <div className="mb-10 last:mb-0">
-        <h3 className="text-[11px] font-bold text-white/40 uppercase tracking-[0.3em] mb-2">
-            {label} <span className="text-white/25">· {coaches.length}</span>
-        </h3>
-        <div>
-            {coaches.map((coach, i) => (
-                <CoachRow key={i} coach={coach} lead={lead} />
-            ))}
+// A tier of compact rows, split into two independent columns so expanding one
+// never pushes the other column around.
+const RowTier = ({ label, coaches }) => {
+    const mid = Math.ceil(coaches.length / 2);
+    const columns = [coaches.slice(0, mid), coaches.slice(mid)];
+    return (
+        <div className="mb-12 last:mb-0">
+            <h3 className="text-[11px] font-bold text-white/40 uppercase tracking-[0.3em] mb-1 border-b border-white/10 pb-3">
+                {label} <span className="text-white/25">· {coaches.length}</span>
+            </h3>
+            <div className="grid md:grid-cols-2 md:gap-x-12">
+                {columns.map((col, ci) => (
+                    <div key={ci}>
+                        {col.map((coach, i) => (
+                            <CompactRow key={i} coach={coach} />
+                        ))}
+                    </div>
+                ))}
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 const CoachesSection = () => {
     return (
         <section className="py-24 md:py-32 bg-rr-dark relative overflow-hidden">
-            {/* Subtle logo watermark */}
             <img
                 src="/assets/rr-logo-pink.png"
                 alt=""
@@ -151,7 +186,7 @@ const CoachesSection = () => {
                 aria-hidden="true"
             />
 
-            <div className="max-w-4xl mx-auto px-6 relative z-10">
+            <div className="max-w-5xl mx-auto px-6 relative z-10">
                 <div className="text-center mb-14">
                     <div className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
@@ -161,13 +196,21 @@ const CoachesSection = () => {
                         MEET YOUR <span className="text-rr-pink">COACHES</span>
                     </h2>
                     <p className="text-lg text-white/70 max-w-2xl mx-auto font-medium">
-                        Coaching the Royals Way. Every coach is connected to the Rajasthan Royals' global system — people who have played, coached and competed at the highest levels, now developing the next generation. <span className="text-white/90 font-bold">Tap any name to meet them.</span>
+                        Coaching the Royals Way. Every coach is connected to the Rajasthan Royals' global system — people who have played, coached and competed at the highest levels. <span className="text-white/90 font-bold">Tap any name to meet them.</span>
                     </p>
                 </div>
 
-                <Tier label="Leadership" coaches={leadership} lead />
-                <Tier label="Specialist Coaches" coaches={specialists} />
-                <Tier label="Elite Performance Coaches" coaches={performance} />
+                {/* Leadership — headshots */}
+                <h3 className="text-[11px] font-bold text-white/40 uppercase tracking-[0.3em] mb-5 text-center">Leadership</h3>
+                <div className="grid grid-cols-3 gap-3 md:gap-5 max-w-3xl mx-auto mb-14">
+                    {leadership.map((coach, i) => (
+                        <LeaderCard key={i} coach={coach} />
+                    ))}
+                </div>
+
+                {/* Roster — compact two-column rows */}
+                <RowTier label="Specialist Coaches" coaches={specialists} />
+                <RowTier label="Elite Performance Coaches" coaches={performance} />
             </div>
         </section>
     );
