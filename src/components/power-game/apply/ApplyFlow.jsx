@@ -6,7 +6,7 @@ import { REP_GROUPS, CLUB_GROUPS, groupsForGender } from './levels';
 import { CENTRES, CENTRE_BY_SLUG, squadsForPlacement, sessionWindow } from '../../../lib/booking/squads';
 import { inventory } from '../../../lib/booking/inventory';
 import { applications, applicationFromPlacement } from '../../../lib/booking/applications';
-import { BLANK_FORM, validateStep, computePlacement, isMinor, calcAge, BLOCK_FEE, secondaryOptions, consentsOk } from './flow';
+import { BLANK_FORM, validateStep, computePlacement, isMinor, calcAge, BLOCK_FEE, consentsOk } from './flow';
 import { fmtAud } from './kit';
 import DnaRevealCard from './DnaRevealCard';
 import { submitApplication, buildApplicationRow } from './submit';
@@ -31,8 +31,6 @@ const ENQUIRY_SMS = '0421261825';
 const inputCls = 'w-full bg-white/5 border border-white/15 rounded-lg px-3.5 py-3 text-base sm:text-sm text-white placeholder-white/30 focus:outline-none focus:border-rr-pink transition-colors';
 
 // Readable labels for the "Is this correct?" review summary.
-const SKILL_LABEL = { batting: 'Batter', bowling: 'Bowler', all_rounder: 'All-rounder', wicketkeeper: 'Wicketkeeper' };
-const BOWL_LABEL = { pace: 'Pace / Seam', leg_spin: 'Leg spin', off_spin: 'Off spin' };
 const levelLabel = (code) => {
   if (!code) return null;
   for (const g of [...REP_GROUPS, ...CLUB_GROUPS]) {
@@ -466,29 +464,14 @@ export default function ApplyFlow({ embedded = false }) {
               </div>
             )}
 
-            {/* ── PROFILE — your game + last-3-years cricket, in ONE submission ── */}
+            {/* ── PROFILE — last-3-years cricket. (Game profile — skill, batting hand,
+                 bowling type — is captured at onboarding, not in the application.) ── */}
             {step === 'profile' && (
               <div className="space-y-5">
-                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Your game</h1>
-                <Field label="Main skill"><Choice cols={2} value={form.skill} onChange={(v) => { set('skill', v); set('secondary_skill', ''); }}
-                  options={[{ value: 'batting', label: 'Batter' }, { value: 'bowling', label: 'Bowler' }, { value: 'all_rounder', label: 'All-rounder' }, { value: 'wicketkeeper', label: 'Wicketkeeper' }]} /></Field>
-                {(form.skill === 'batting' || form.skill === 'all_rounder' || form.skill === 'wicketkeeper') && (
-                  <Field label="Batting hand"><Choice value={form.batting_hand} onChange={(v) => set('batting_hand', v)} options={[{ value: 'right', label: 'Right' }, { value: 'left', label: 'Left' }]} /></Field>
-                )}
-                {(form.skill === 'bowling' || form.skill === 'all_rounder') && (
-                  <Field label="Bowling type"><Choice cols={3} value={form.bowling_type} onChange={(v) => set('bowling_type', v)} options={[{ value: 'pace', label: 'Pace / Seam' }, { value: 'leg_spin', label: 'Leg spin' }, { value: 'off_spin', label: 'Off spin' }]} /></Field>
-                )}
-                {form.skill && (
-                  <Field label="Secondary skill (optional)"><Choice cols={3} value={form.secondary_skill} onChange={(v) => { set('secondary_skill', v); if (v !== 'bowling') set('secondary_bowling_type', ''); }} options={secondaryOptions(form.skill)} /></Field>
-                )}
-                {form.secondary_skill === 'bowling' && (
-                  <Field label="Secondary bowling type"><Choice cols={3} value={form.secondary_bowling_type} onChange={(v) => set('secondary_bowling_type', v)} options={[{ value: 'pace', label: 'Pace / Seam' }, { value: 'leg_spin', label: 'Leg spin' }, { value: 'off_spin', label: 'Off spin' }]} /></Field>
-                )}
-
-                {/* ── Cricket — last 3 years (merged in, same submission) ── */}
-                <div className="pt-5 mt-1 border-t border-white/10 space-y-4">
+                {/* ── Cricket — last 3 years ── */}
+                <div className="space-y-4">
                   <div>
-                    <h2 className="text-xl md:text-2xl font-black uppercase tracking-wide mb-1">Your cricket — last 3 years</h2>
+                    <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Your cricket — last 3 years</h1>
                     <p className="text-white/50 text-sm">Tell us the highest level you've played in the last <span className="text-white">three years</span>. Add <span className="text-rr-pink font-bold">representative</span> cricket, <span className="text-rr-pink font-bold">senior</span> cricket, or <span className="text-rr-pink font-bold">both</span> — whichever you've played.</p>
                     <p className="text-white/35 text-[11px] leading-snug mt-1">Levels may be verified with clubs &amp; associations — please keep them accurate.</p>
                   </div>
@@ -548,10 +531,6 @@ export default function ApplyFlow({ embedded = false }) {
                   <SummaryRow k="Email" v={form.contact_email} />
                   <SummaryRow k="Suburb" v={form.suburb} />
                   <SummaryRow k="Centre" v={CENTRE_BY_SLUG[form.centre]?.name} />
-                  <SummaryRow k="Main skill" v={`${SKILL_LABEL[form.skill] || form.skill}${form.batting_hand ? ` · ${form.batting_hand === 'left' ? 'Left' : 'Right'}-hand bat` : ''}${form.bowling_type ? ` · ${BOWL_LABEL[form.bowling_type]}` : ''}`} />
-                  {form.secondary_skill && form.secondary_skill !== 'none' && (
-                    <SummaryRow k="Secondary" v={form.secondary_skill === 'bowling' && form.secondary_bowling_type ? `Bowling · ${BOWL_LABEL[form.secondary_bowling_type]}` : form.secondary_skill.charAt(0).toUpperCase() + form.secondary_skill.slice(1)} />
-                  )}
                   {form.current_club && <SummaryRow k="Current club" v={form.current_club} />}
                   {form.rep_level && <SummaryRow k="Representative" v={levelLabel(form.rep_level)} />}
                   {form.club_level && <SummaryRow k="Senior cricket" v={levelLabel(form.club_level)} />}
