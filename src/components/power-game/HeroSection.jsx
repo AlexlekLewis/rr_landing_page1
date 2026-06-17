@@ -39,7 +39,7 @@ const HeroSection = ({ onApply, onHowItWorks }) => {
                 {/* Offer + risk reversal */}
                 <div className="flex items-center justify-center sm:justify-start gap-2 text-white/90 text-sm font-bold mb-5">
                     <ShieldCheck className="w-4 h-4 text-rr-pink flex-shrink-0" strokeWidth={2.5} />
-                    <span>From <span className="text-white">$989</span> · No payment until a coach confirms your spot</span>
+                    <span>From <span className="text-white">$989</span> incl. GST · No payment until a coach confirms your spot</span>
                 </div>
 
                 {/* CTAs */}

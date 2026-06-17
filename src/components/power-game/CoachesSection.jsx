@@ -52,6 +52,16 @@ const specialists = [
         role: "Bowling — Spin",
         bio: "Australian U19 representative and Premier Cricket competitor. A modern spinner who turns it both ways with accuracy, Harkirat teaches the variations and tactics that win matches.",
     },
+    {
+        name: "Simon Feros",
+        role: "Fast-Bowling Biomechanics · Bowlstrong",
+        bio: "Dr Simon Feros is the founder of Bowlstrong and one of Australia's most respected fast-bowling coaches — a Deakin University lecturer with a PhD in fast bowling performance. Two decades of biomechanics, physical preparation and motor-learning research, brought onto the training ground: every technical change grounded in evidence, built to add genuine pace, sharpen accuracy and keep bowlers on the park.",
+    },
+    {
+        name: "Andrew Cronwright",
+        role: "Fast-Bowling Biomechanics · Bowlstrong",
+        bio: "A Bowlstrong fast-bowling coach specialising in biomechanics — developing pace, technique and durability through the same evidence-based method.",
+    },
 ];
 
 const performance = [

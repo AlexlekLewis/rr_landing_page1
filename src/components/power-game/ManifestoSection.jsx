@@ -53,8 +53,8 @@ const ManifestoSection = ({ onApply }) => {
                 <div className="order-1 md:order-2">
                     <div className="relative rounded-2xl overflow-hidden border border-white/10 max-w-sm mx-auto md:max-w-none">
                         <img
-                            src="/assets/vaibhav-100-celebration.jpg"
-                            alt="Vaibhav Sooryavanshi celebrating a century for the Rajasthan Royals"
+                            src="/assets/vaibhav-2026.webp"
+                            alt="Vaibhav Sooryavanshi raising his bat for the Rajasthan Royals, IPL 2026"
                             className="w-full object-cover aspect-[4/5]"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/20 to-transparent" />
