@@ -1,8 +1,9 @@
 // ============================================================
 // ReturningSignup — fast, link-only re-signup for players ALREADY in the Academy
-// Elite system. They're known + qualified, so this SKIPS the qualify→place→squad
-// funnel: just identity details, a uniform yes/no, the compliance agreements, and
-// straight to the same $989 Stripe checkout.
+// Elite system. They're known, qualified AND already consented (compliance was
+// captured at their original enrolment), so this SKIPS the qualify→place funnel:
+// identity details, pick an age-appropriate centre + session, a uniform yes/no,
+// and straight to the same $989 Stripe checkout.
 //
 // Reuses the live create-on-payment plumbing verbatim: buildApplicationRow shapes
 // the row, /api/power-game-checkout packs it into the Stripe session metadata, and
@@ -10,24 +11,46 @@
 // (api/power-game-webhook + api/power-game-verify-session). Rows are tagged
 // source='pgp2026-returning' so they're distinguishable from the public funnel.
 //
+// The five compliance consents are set on the payload automatically — these
+// players agreed to them when they first joined the Academy. The checkout API
+// still requires them server-side, so they travel as true on the application.
+//
+// Session filter: a player only ever sees their AGE-APPROPRIATE band OR HIGHER
+// (older) bands at the chosen centre — never a younger band. Band logic is the
+// same PG_BANDS / homeBandIdx used by the public funnel, so they can't disagree.
+//
 // Gating: a soft shared passcode (VITE_PGP_RETURNING_CODE, default below). The
 // page is unlisted (not in any nav) and noindex. A client-side code only deters
-// casual link-sharing — it is NOT real access control. For known, vetted players
-// that's the intended trade-off; if real gating is ever needed it must move
-// server-side.
+// casual link-sharing — it is NOT real access control.
 // ============================================================
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { AlertCircle, Lock, ShieldCheck, Ruler, ArrowRight } from 'lucide-react';
+import { AlertCircle, Lock, ShieldCheck, Ruler, ArrowRight, MapPin, Clock, Check } from 'lucide-react';
 import { calcAge, isMinor, BLANK_FORM } from '../apply/flow';
 import { buildApplicationRow } from '../apply/submit';
 import UniformSizeGuideModal from '../UniformSizeGuideModal';
 import { fmtAud } from '../apply/kit';
+import { SQUADS, CENTRE_BY_SLUG, ACTIVE_CENTRES } from '../../../lib/booking/squads';
+import { PG_BANDS, homeBandIdx } from '../../../lib/scoring/guardrail';
 
 const ACCESS_CODE = String(import.meta?.env?.VITE_PGP_RETURNING_CODE || 'ROYALS2026').trim().toUpperCase();
 const LIVE_PAYMENTS = !!(import.meta?.env?.VITE_PG_LIVE_PAYMENTS === '1');
 const BLOCK_FEE_CENTS = 98900; // $989 — 8-week Power Pre-Season (matches api/power-game-checkout)
 const GATE_KEY = 'pgp_returning_unlocked';
+
+// One entry per 2-hour session block (the SQUADS list has two stream-teams per
+// block — dedupe to the block; the coach assigns the team after payment).
+const ALL_BLOCKS = (() => {
+  const seen = new Set();
+  const out = [];
+  for (const s of SQUADS) {
+    if (seen.has(s.blockId)) continue;
+    seen.add(s.blockId);
+    out.push({ blockId: s.blockId, centre: s.centre, band: s.band, day: s.day, startTime: s.startTime, endTime: s.endTime, blockLabel: s.blockLabel, sortOrder: s.sortOrder });
+  }
+  return out;
+})();
+const bandIdx = (band) => PG_BANDS.findIndex((b) => b.name === band);
 
 const BLANK = {
   player_name: '',
@@ -37,13 +60,8 @@ const BLANK = {
   parent_name: '',
   contact_email: '',
   contact_phone: '',
+  centre: '',
   needs_uniform: false,
-  // Compliance — same five consents the public funnel records.
-  accept_terms: false,
-  accept_player_code: false,
-  accept_parent_code: false,
-  accept_social_media: false,
-  accept_playing_standard: false,
 };
 
 const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v || '').trim());
@@ -54,6 +72,7 @@ export default function ReturningSignup() {
   const [gateError, setGateError] = useState('');
 
   const [form, setForm] = useState(BLANK);
+  const [sessionId, setSessionId] = useState('');
   const [errors, setErrors] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
@@ -62,10 +81,16 @@ export default function ReturningSignup() {
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
   const minor = isMinor(form.player_dob);
   const age = calcAge(form.player_dob);
+  const homeIdx = age != null ? homeBandIdx(age) : null;
+
+  // Age-appropriate-or-higher sessions at the chosen centre (never a younger band).
+  const sessions = (form.centre && homeIdx != null)
+    ? ALL_BLOCKS.filter((b) => b.centre === form.centre && bandIdx(b.band) >= homeIdx).sort((a, b) => a.sortOrder - b.sortOrder)
+    : [];
+  const selectedSession = sessions.find((s) => s.blockId === sessionId) || null;
 
   useEffect(() => {
     document.title = 'Re-sign up — Power Pre-Season';
-    // Keep this page out of search indexes (it's a private, link-only page).
     const meta = document.createElement('meta');
     meta.name = 'robots';
     meta.content = 'noindex,nofollow';
@@ -75,6 +100,11 @@ export default function ReturningSignup() {
     } catch (_) { /* private mode — gate stays up, no harm */ }
     return () => { try { document.head.removeChild(meta); } catch (_) { /* no-op */ } };
   }, []);
+
+  // If the selected session stops being eligible (centre or DOB changed), drop it.
+  useEffect(() => {
+    if (sessionId && !sessions.some((s) => s.blockId === sessionId)) setSessionId('');
+  }, [sessionId, sessions]);
 
   function submitGate(e) {
     e.preventDefault();
@@ -87,12 +117,6 @@ export default function ReturningSignup() {
     }
   }
 
-  // One UI checkbox covers all mandatory agreements; the DB still records each
-  // consent column individually (mirrors the public funnel).
-  const setAgreements = (v) =>
-    setForm((p) => ({ ...p, accept_terms: v, accept_player_code: v, accept_parent_code: v, accept_playing_standard: v }));
-  const agreementsChecked = form.accept_terms && form.accept_player_code && form.accept_playing_standard && (!minor || form.accept_parent_code);
-
   function validate() {
     const e = [];
     if (!form.player_name.trim()) e.push('Please enter the player’s full name.');
@@ -102,21 +126,31 @@ export default function ReturningSignup() {
     if (minor && !form.parent_name.trim()) e.push('Parent/guardian name is required for under-18s.');
     if (!emailOk(form.contact_email)) e.push('Please enter a valid contact email.');
     if (!form.contact_phone.trim()) e.push('Please enter a contact phone number.');
-    if (!(form.accept_terms && form.accept_player_code && form.accept_social_media && form.accept_playing_standard && (!minor || form.accept_parent_code))) {
-      e.push('Please accept the compliance agreements to continue.');
-    }
+    if (!form.centre) e.push('Please choose a centre.');
+    else if (!selectedSession) e.push('Please choose a session time.');
     return e;
   }
 
   function buildPayload() {
-    // Reuse the proven row builder, then tag/override the bits that are specific
-    // to a returning player (no placement/squad — the team assigns those).
-    const apForm = { ...BLANK_FORM, ...form };
-    const row = buildApplicationRow(apForm, null, null, { kind: 'standard', status: 'awaiting_payment' });
+    // Reuse the proven row builder. These players already consented at enrolment,
+    // so the five compliance flags travel as true (the checkout API requires them).
+    const apForm = {
+      ...BLANK_FORM, ...form,
+      accept_terms: true, accept_player_code: true, accept_parent_code: true,
+      accept_social_media: true, accept_playing_standard: true,
+    };
+    const centre = CENTRE_BY_SLUG[form.centre];
+    const placement = selectedSession ? { placedBand: selectedSession.band } : null;
+    const squad = selectedSession
+      ? { id: selectedSession.blockId, day: selectedSession.day, startTime: selectedSession.startTime, endTime: selectedSession.endTime }
+      : null;
+    const row = buildApplicationRow(apForm, placement, squad, {
+      kind: 'standard', status: 'awaiting_payment', centreName: centre?.name,
+    });
     return {
       ...row,
       source: 'pgp2026-returning',
-      bio: 'Returning Academy Elite player — express re-signup (placement assigned by coaches).',
+      bio: 'Returning Academy Elite player — express re-signup (compliance on file from original enrolment).',
     };
   }
 
@@ -128,11 +162,15 @@ export default function ReturningSignup() {
     setSubmitting(true);
     try {
       const application = buildPayload();
-      // On the deployed site, go to real Stripe checkout. In dev/preview there is no
-      // serverless API, so confirm locally so the flow can be walked end-to-end.
+      const centre = CENTRE_BY_SLUG[form.centre];
       if (LIVE_PAYMENTS || import.meta?.env?.PROD) {
         try {
-          sessionStorage.setItem('pgp_confirmation', JSON.stringify({ playerName: form.player_name }));
+          sessionStorage.setItem('pgp_confirmation', JSON.stringify({
+            playerName: form.player_name,
+            centreName: centre?.name || '',
+            slot: selectedSession ? `${selectedSession.day} ${selectedSession.startTime}–${selectedSession.endTime}` : '',
+            band: selectedSession?.band || '',
+          }));
         } catch (_) { /* no-op */ }
         const r = await fetch('/api/power-game-checkout', {
           method: 'POST',
@@ -141,6 +179,7 @@ export default function ReturningSignup() {
             application,
             email: form.contact_email,
             playerName: form.player_name,
+            squadId: selectedSession?.blockId,
             uniformTotalCents: 0, // uniform sizing + payment handled at Stripe
             uniformSelection: '',
           }),
@@ -235,7 +274,7 @@ export default function ReturningSignup() {
           <div className="text-rr-pink font-black uppercase tracking-[0.3em] text-xs mb-1">Power Pre-Season</div>
           <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-2">Re-sign up</h1>
           <p className="text-white/55 text-sm leading-relaxed max-w-md mx-auto">
-            You’re already in the Academy Elite system — no need to re-qualify. Confirm your details below and secure your place for the 8-week Power Pre-Season.
+            You’re already in the Academy Elite system — no need to re-qualify. Confirm your details, choose your centre &amp; session, and secure your place for the 8-week Power Pre-Season.
           </p>
         </div>
 
@@ -301,6 +340,67 @@ export default function ReturningSignup() {
             <input type="text" value={form.suburb} onChange={(e) => set('suburb', e.target.value)} placeholder="e.g. Point Cook" className={fieldCls} />
           </div>
 
+          {/* Centre + session */}
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+            <div className="text-[11px] font-black uppercase tracking-widest text-rr-pink mb-3">Choose your centre</div>
+            <div className="space-y-2">
+              {ACTIVE_CENTRES.map((c) => {
+                const on = form.centre === c.slug;
+                return (
+                  <button
+                    key={c.slug}
+                    type="button"
+                    onClick={() => { set('centre', c.slug); setSessionId(''); }}
+                    className={`w-full text-left rounded-xl px-4 py-3 border transition-colors flex items-start gap-3 ${on ? 'bg-rr-pink/20 border-rr-pink' : 'bg-white/5 border-white/15 hover:border-white/30'}`}
+                  >
+                    <MapPin className={`w-4 h-4 mt-0.5 flex-shrink-0 ${on ? 'text-rr-pink' : 'text-white/40'}`} />
+                    <span>
+                      <span className="block text-sm font-bold text-white">{c.name}</span>
+                      <span className="block text-white/45 text-[12px]">{c.suburb} · {c.region}</span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {form.centre && (
+              <div className="mt-4">
+                <div className="text-[11px] font-black uppercase tracking-widest text-rr-pink mb-3">Choose your session</div>
+                {homeIdx == null ? (
+                  <p className="text-white/40 text-xs">Enter the player’s date of birth above to see age-appropriate sessions.</p>
+                ) : sessions.length === 0 ? (
+                  <p className="text-white/40 text-xs">No sessions match this age at this centre — please <a href="/PGP2026#contact" className="text-rr-pink hover:underline">get in touch</a> and we’ll sort it out.</p>
+                ) : (
+                  <div className="space-y-2">
+                    {sessions.map((s) => {
+                      const on = sessionId === s.blockId;
+                      const playUp = bandIdx(s.band) > homeIdx;
+                      return (
+                        <button
+                          key={s.blockId}
+                          type="button"
+                          onClick={() => setSessionId(s.blockId)}
+                          className={`w-full text-left rounded-xl px-4 py-3 border transition-colors flex items-center gap-3 ${on ? 'bg-rr-pink/20 border-rr-pink' : 'bg-white/5 border-white/15 hover:border-white/30'}`}
+                        >
+                          <span className={`w-5 h-5 rounded-full border flex items-center justify-center flex-shrink-0 ${on ? 'bg-rr-pink border-rr-pink' : 'border-white/30'}`}>
+                            {on && <Check className="w-3 h-3 text-white" />}
+                          </span>
+                          <Clock className="w-4 h-4 text-white/40 flex-shrink-0" />
+                          <span className="flex-1">
+                            <span className="block text-sm font-bold text-white">{s.blockLabel}</span>
+                            <span className="block text-white/45 text-[12px]">Age group {s.band}</span>
+                          </span>
+                          {playUp && <span className="text-[10px] font-black uppercase tracking-wider text-rr-light-pink bg-rr-pink/10 border border-rr-pink/30 rounded-full px-2 py-1">Playing up</span>}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+                <p className="text-white/30 text-[11px] mt-3 leading-relaxed">You only see sessions appropriate for the player’s age (or older). Your coach confirms the final squad after payment.</p>
+              </div>
+            )}
+          </div>
+
           {/* Uniform */}
           <div className="bg-white/5 border border-white/10 rounded-xl p-4">
             <div className="text-[11px] font-black uppercase tracking-widest text-rr-pink mb-3">Playing uniform</div>
@@ -315,24 +415,6 @@ export default function ReturningSignup() {
             </button>
           </div>
 
-          {/* Compliance */}
-          <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
-            <div className="text-[11px] font-black uppercase tracking-widest text-rr-pink mb-1">Compliance &amp; permissions</div>
-            <div className="flex items-start gap-3">
-              <input id="c_agreements" type="checkbox" checked={agreementsChecked} onChange={(e) => setAgreements(e.target.checked)} className="mt-0.5 w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer" />
-              <label htmlFor="c_agreements" className="text-xs text-white/70 leading-relaxed cursor-pointer">
-                I have read and agree to the <a href="/terms-conditions" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Terms &amp; Conditions</a>, <a href="/privacy-policy" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Privacy Policy</a> and <a href="/assets/RRA_Player_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Player Code of Conduct</a>
-                {minor && <> and the <a href="/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Parent/Guardian Code of Conduct</a></>}; I understand squads &amp; times may change, and I confirm all information provided is accurate.
-              </label>
-            </div>
-            <div className="flex items-start gap-3">
-              <input id="c_social" type="checkbox" checked={form.accept_social_media} onChange={(e) => set('accept_social_media', e.target.checked)} className="mt-0.5 w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer" />
-              <label htmlFor="c_social" className="text-xs text-white/70 leading-relaxed cursor-pointer">
-                I’m happy for photos/videos featuring the player to be used on RRA Melbourne’s social media &amp; marketing channels.
-              </label>
-            </div>
-          </div>
-
           {/* Pay */}
           <div className="pt-1">
             <button
@@ -343,7 +425,7 @@ export default function ReturningSignup() {
               {submitting ? 'Processing…' : <>Pay {fmtAud(BLOCK_FEE_CENTS)} &amp; secure my spot <ArrowRight className="w-4 h-4" /></>}
             </button>
             <p className="text-white/30 text-[11px] text-center mt-3 leading-relaxed">
-              Secure payment via Stripe. Your coach will confirm your squad, day &amp; time after payment.
+              Secure payment via Stripe. Your coach will confirm your squad after payment.
             </p>
           </div>
         </div>
