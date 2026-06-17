@@ -52,6 +52,15 @@ const ALL_BLOCKS = (() => {
 })();
 const bandIdx = (band) => PG_BANDS.findIndex((b) => b.name === band);
 
+// Day / Month / Year capture — same as the rest of the site (DateOfBirthInput),
+// re-themed for the dark page. Emits "YYYY-MM-DD" so calcAge/isMinor work as-is.
+const DOB_DAYS = Array.from({ length: 31 }, (_, i) => String(i + 1).padStart(2, '0'));
+const DOB_MONTHS = [
+  ['01', 'Jan'], ['02', 'Feb'], ['03', 'Mar'], ['04', 'Apr'], ['05', 'May'], ['06', 'Jun'],
+  ['07', 'Jul'], ['08', 'Aug'], ['09', 'Sep'], ['10', 'Oct'], ['11', 'Nov'], ['12', 'Dec'],
+];
+const DOB_YEARS = Array.from({ length: 100 }, (_, i) => String(new Date().getFullYear() - i));
+
 const BLANK = {
   player_name: '',
   player_dob: '',
@@ -72,6 +81,7 @@ export default function ReturningSignup() {
   const [gateError, setGateError] = useState('');
 
   const [form, setForm] = useState(BLANK);
+  const [dob, setDob] = useState({ d: '', m: '', y: '' }); // partial DOB parts (preserve incomplete picks)
   const [sessionId, setSessionId] = useState('');
   const [errors, setErrors] = useState([]);
   const [submitting, setSubmitting] = useState(false);
@@ -79,6 +89,12 @@ export default function ReturningSignup() {
   const [localDone, setLocalDone] = useState(false);
 
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
+  // Day/Month/Year → form.player_dob only once all three are chosen (else empty).
+  const setDobPart = (part, val) => {
+    const next = { ...dob, [part]: val };
+    setDob(next);
+    set('player_dob', (next.d && next.m && next.y) ? `${next.y}-${next.m}-${next.d}` : '');
+  };
   const minor = isMinor(form.player_dob);
   const age = calcAge(form.player_dob);
   const homeIdx = age != null ? homeBandIdx(age) : null;
@@ -292,28 +308,42 @@ export default function ReturningSignup() {
             <input type="text" value={form.player_name} onChange={(e) => set('player_name', e.target.value)} placeholder="e.g. Aarav Sharma" className={fieldCls} />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className={labelCls}>Date of birth</label>
-              <input type="date" value={form.player_dob} onChange={(e) => set('player_dob', e.target.value)} className={`${fieldCls} [color-scheme:dark]`} />
-              {age != null && (
-                <p className="text-white/35 text-[11px] mt-1.5">{age} years old{minor ? ' · under 18' : ''}</p>
-              )}
+          {/* Date of birth — Day / Month / Year (same capture as the rest of the site) */}
+          <div>
+            <label className={labelCls}>Date of birth</label>
+            <div className="grid grid-cols-3 gap-3">
+              <select value={dob.d} onChange={(e) => setDobPart('d', e.target.value)} className={`${fieldCls} appearance-none cursor-pointer`}>
+                <option value="" className="text-rr-dark">Day</option>
+                {DOB_DAYS.map((d) => <option key={d} value={d} className="text-rr-dark">{d}</option>)}
+              </select>
+              <select value={dob.m} onChange={(e) => setDobPart('m', e.target.value)} className={`${fieldCls} appearance-none cursor-pointer`}>
+                <option value="" className="text-rr-dark">Month</option>
+                {DOB_MONTHS.map(([v, l]) => <option key={v} value={v} className="text-rr-dark">{l}</option>)}
+              </select>
+              <select value={dob.y} onChange={(e) => setDobPart('y', e.target.value)} className={`${fieldCls} appearance-none cursor-pointer`}>
+                <option value="" className="text-rr-dark">Year</option>
+                {DOB_YEARS.map((y) => <option key={y} value={y} className="text-rr-dark">{y}</option>)}
+              </select>
             </div>
-            <div>
-              <label className={labelCls}>Cricket</label>
-              <div className="grid grid-cols-2 gap-2">
-                {[{ v: 'M', l: 'Male' }, { v: 'F', l: 'Female' }].map((g) => (
-                  <button
-                    key={g.v}
-                    type="button"
-                    onClick={() => set('gender', g.v)}
-                    className={`rounded-xl px-3 py-3 text-sm font-bold uppercase tracking-wide border transition-colors ${form.gender === g.v ? 'bg-rr-pink/20 border-rr-pink text-white' : 'bg-white/5 border-white/15 text-white/60 hover:border-white/30'}`}
-                  >
-                    {g.l}
-                  </button>
-                ))}
-              </div>
+            {age != null && (
+              <p className="text-white/35 text-[11px] mt-1.5">{age} years old{minor ? ' · under 18' : ''}</p>
+            )}
+          </div>
+
+          {/* Cricket */}
+          <div>
+            <label className={labelCls}>Cricket</label>
+            <div className="grid grid-cols-2 gap-3">
+              {[{ v: 'M', l: 'Male' }, { v: 'F', l: 'Female' }].map((g) => (
+                <button
+                  key={g.v}
+                  type="button"
+                  onClick={() => set('gender', g.v)}
+                  className={`rounded-xl px-3 py-3 text-sm font-bold uppercase tracking-wide border transition-colors ${form.gender === g.v ? 'bg-rr-pink/20 border-rr-pink text-white' : 'bg-white/5 border-white/15 text-white/60 hover:border-white/30'}`}
+                >
+                  {g.l}
+                </button>
+              ))}
             </div>
           </div>
 
