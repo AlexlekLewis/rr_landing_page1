@@ -28,6 +28,8 @@ const PowerGamePlayground = React.lazy(() => import('./components/power-game/app
 const PowerGameSquadsAdmin = React.lazy(() => import('./components/power-game/apply/PowerGameSquads'));
 // Returning Elite players — private, passcode-gated express re-signup (details + pay).
 const PowerGameReturning = React.lazy(() => import('./components/power-game/returning/ReturningSignup'));
+// Accepted review/callback players — private, passcode-gated express spot confirmation.
+const PowerGameConfirm = React.lazy(() => import('./components/power-game/returning/AcceptedSignup'));
 
 // Admin components
 import AdminLogin from './components/admin/AdminLogin';
@@ -149,6 +151,8 @@ function App() {
         <Route path="/PGP2026/apply/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameApplySuccess /></React.Suspense>} />
         {/* Returning players — passcode-gated express re-signup. Not in nav; share the link directly. */}
         <Route path="/PGP2026/returning" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameReturning /></React.Suspense>} />
+        {/* Accepted review/callback players — passcode-gated express confirmation. Not in nav; share the link directly. */}
+        <Route path="/PGP2026/confirm" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameConfirm /></React.Suspense>} />
         <Route path="/PGP2026/playground" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGamePlayground /></React.Suspense>} />
         <Route path="/PGP2026/admin" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameSquadsAdmin /></React.Suspense>} />
         {/* India Tour 2026 — PRIVATE, invite-only EOI. Not in nav; gated by a referral code (?ref=). */}
