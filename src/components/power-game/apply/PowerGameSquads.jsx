@@ -42,7 +42,7 @@ export default function PowerGameSquads() {
                     <div key={q.id} className="bg-white/5 border border-white/10 rounded-xl px-4 py-3">
                       <div className="flex items-center justify-between mb-2 text-sm">
                         <span className="font-bold">
-                          <span className={`inline-block text-[10px] font-black uppercase tracking-widest rounded px-1.5 py-0.5 mr-2 ${q.combined ? 'bg-white/10 text-white/70' : q.stream === 'performance' ? 'bg-rr-pink/20 text-rr-pink' : 'bg-rr-blue/20 text-rr-blue'}`}>{q.combined ? 'Squad' : q.stream}</span>
+                          <span className="inline-block text-[10px] font-black uppercase tracking-widest rounded px-1.5 py-0.5 mr-2 bg-white/10 text-white/70">Squad</span>
                           {q.band} · {q.day} {q.startTime}–{q.endTime}
                         </span>
                         <span className={`text-xs font-black uppercase tracking-widest ${spotsLeft <= 0 ? 'text-white/40' : spotsLeft <= 3 ? 'text-rr-pink' : 'text-green-400'}`}>{taken}/{q.capacity}</span>

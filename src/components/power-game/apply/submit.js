@@ -73,7 +73,7 @@ export function buildApplicationRow(form, placement, squad, opts = {}) {
     suburb: form.suburb || "",
     club: form.club_level || "",
     current_club: form.current_club || "",
-    bio: summarise(form),
+    bio: (placement?.playFlag === "play_up" ? "⬆ PLAY-UP CANDIDATE (rep + senior) — coach to confirm · " : "") + summarise(form),
     parent1_name: minor ? (form.parent_name || "") : "",
     parent1_email: minor ? (form.contact_email || "") : "",
     parent1_phone: minor ? (form.contact_phone || "") : "",

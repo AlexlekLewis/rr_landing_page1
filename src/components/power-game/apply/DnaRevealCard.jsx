@@ -59,7 +59,7 @@ export default function DnaRevealCard({ placement, centreName, combined, onConti
 
         {placement.playFlag === 'play_up' && (
           <div className="flex items-center justify-center gap-2 text-rr-pink text-xs font-bold uppercase tracking-widest mb-5">
-            <Zap className="w-3.5 h-3.5" /> Playing up — your level earned an older group
+            <Zap className="w-3.5 h-3.5" /> Strong for your age — a coach may invite you to train up
           </div>
         )}
 

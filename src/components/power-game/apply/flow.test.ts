@@ -5,7 +5,7 @@ const base: ApplyForm = {
   ...BLANK_FORM,
   centre: "williamstown",
   player_name: "X",
-  player_dob: "2009-01-01",
+  player_dob: "2013-01-01", // ~13yo → 12-14 band
   gender: "M",
   contact_phone: "04",
   contact_email: "a@b.com",
@@ -16,67 +16,52 @@ const base: ApplyForm = {
   format: "t20",
 };
 
-describe("two-layer level model + Power Game floor", () => {
-  it("representative level clears the floor", () => {
-    expect(computePlacement({ ...base, rep_level: "P16M" }).placement.reviewReasons).not.toContain("below_pg_floor");
+describe("open-program age-based placement", () => {
+  it("places every player in their HOME age band, no review — even with no rep/senior", () => {
+    const { placement } = computePlacement({ ...base, rep_level: "", club_level: "" });
+    expect(placement.placedBand).toBe(placement.homeBand);
+    expect(placement.requiresReview).toBe(false);
+    expect(placement.reviewReasons).toEqual([]);
+    expect(["12-14", "14-16", "17+"]).toContain(placement.placedBand);
   });
 
-  it("Premier / Sub-District club clears the floor", () => {
-    expect(computePlacement({ ...base, club_level: "P1M" }).placement.reviewReasons).not.toContain("below_pg_floor");
-    expect(computePlacement({ ...base, club_level: "SD2" }).placement.reviewReasons).not.toContain("below_pg_floor");
+  it("never auto-moves a player up — placedBand always equals homeBand", () => {
+    const strong = computePlacement({ ...base, rep_level: "REP-16M", club_level: "P1M" }).placement;
+    expect(strong.placedBand).toBe(strong.homeBand);
+    expect(strong.requiresReview).toBe(false);
   });
 
-  it("association 2nd grade & up clears the floor; below 2nd grade → coach review", () => {
-    // 2nd-grade association now qualifies — no below-floor review
-    expect(computePlacement({ ...base, club_level: "CS-2T" }).placement.reviewReasons).not.toContain("below_pg_floor");
-    // below 2nd grade / social → review, no instant offer
-    const below = computePlacement({ ...base, club_level: "CS-BELOW" }).placement;
-    expect(below.requiresReview).toBe(true);
-    expect(below.reviewReasons).toContain("below_pg_floor");
+  it("flags play_up ONLY when the player has rep AND graded senior (2nd grade & up)", () => {
+    // rep + Premier senior → flagged
+    expect(computePlacement({ ...base, rep_level: "REP-16M", club_level: "P1M" }).placement.playFlag).toBe("play_up");
+    // rep + 2nd-grade association senior → flagged
+    expect(computePlacement({ ...base, rep_level: "REP-16M", club_level: "CS-2T" }).placement.playFlag).toBe("play_up");
+    // rep alone → not flagged
+    expect(computePlacement({ ...base, rep_level: "REP-16M", club_level: "" }).placement.playFlag).toBeNull();
+    // senior alone → not flagged
+    expect(computePlacement({ ...base, rep_level: "", club_level: "P1M" }).placement.playFlag).toBeNull();
+    // rep + below-2nd-grade social senior → NOT flagged (doesn't clear the senior bar)
+    expect(computePlacement({ ...base, rep_level: "REP-16M", club_level: "CS-BELOW" }).placement.playFlag).toBeNull();
+    // nothing → not flagged
+    expect(computePlacement({ ...base, rep_level: "", club_level: "" }).placement.playFlag).toBeNull();
   });
 
-  it("captures one stats row PER level, rep flagged as the representative honour", () => {
+  it("captures one engine stats row PER level (rep flagged as the representative honour)", () => {
     const input = buildEngineInput({ ...base, rep_level: "REP-16M", club_level: "P1M" });
     expect(input.stats.map((s) => s.competitionCode).sort()).toEqual(["P1M", "REP-16M"]);
     expect(input.history.find((h) => h.competitionCode === "REP-16M")!.isRepresentativeHonour).toBe(true);
     expect(input.history.find((h) => h.competitionCode === "P1M")!.isRepresentativeHonour).toBe(false);
-    // batting average is no longer collected — batters are placed on level + age
-    expect(input.stats.find((s) => s.competitionCode === "REP-16M")!.batAverage).toBeNull();
   });
 
-  it("profile (cricket) step requires at least one of rep / senior level, or a Wild Card", () => {
-    // The game + last-3-years cricket are now ONE merged "profile" step.
-    expect(validateStep("profile", { ...base, rep_level: "", club_level: "" })).toContain(
-      "Add your representative and/or senior cricket — or apply as a Wild Card below.",
-    );
-    // a level alone is enough — match counts and format are no longer required
-    expect(validateStep("profile", { ...base, rep_level: "P16M", club_level: "", format: "" })).toEqual([]);
-    // Wild Card clears the requirement without any level (talent the rep system hasn't caught)
-    expect(validateStep("profile", { ...base, rep_level: "", club_level: "", wildcard: true })).toEqual([]);
-  });
-
-  it("profile step requires the current cricket club", () => {
-    expect(validateStep("profile", { ...base, current_club: "" })).toContain("Enter your current cricket club.");
-    expect(validateStep("profile", { ...base, current_club: "Footscray CC", rep_level: "P16M" })).toEqual([]);
-  });
-
-  it("Wild Card with no clearing level → coach review with a 'wildcard' reason", () => {
-    const { placement } = computePlacement({ ...base, rep_level: "", club_level: "", wildcard: true });
-    expect(placement.requiresReview).toBe(true);
-    expect(placement.reviewReasons).toContain("wildcard");
-  });
-
-  it("Wild Card never downgrades a real qualifier (rep level still clears)", () => {
-    const { placement } = computePlacement({ ...base, rep_level: "P16M", club_level: "", wildcard: true });
-    expect(placement.reviewReasons).not.toContain("wildcard");
-    expect(placement.reviewReasons).not.toContain("below_pg_floor");
+  it("profile step requires nothing — rep/senior/club are optional (open program)", () => {
+    expect(validateStep("profile", { ...base, rep_level: "", club_level: "", current_club: "" })).toEqual([]);
+    expect(validateStep("profile", { ...base, rep_level: "REP-16M" })).toEqual([]);
   });
 });
 
 describe("secondary skill options never duplicate the primary", () => {
   it("batter → bowling/wicketkeeping/none (no batting)", () => {
-    const v = secondaryOptions("batting").map((o) => o.value);
-    expect(v).toEqual(["bowling", "wicketkeeping", "none"]);
+    expect(secondaryOptions("batting").map((o) => o.value)).toEqual(["bowling", "wicketkeeping", "none"]);
   });
   it("bowler → batting/wicketkeeping/none (no bowling)", () => {
     expect(secondaryOptions("bowling").map((o) => o.value)).toEqual(["batting", "wicketkeeping", "none"]);

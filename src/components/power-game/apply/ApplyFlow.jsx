@@ -339,17 +339,12 @@ export default function ApplyFlow({ embedded = false }) {
     }
   }
 
+  // Age-based model: a squad = an age group; squadsForPlacement returns that band's
+  // day options at the centre (no perf/pathway stream). Strength is sorted inside the squad.
   const matchingSquads = result && !result.placement.requiresReview
-    ? squadsForPlacement({ centre: form.centre, band: result.placement.placedBand, stream: result.placement.stream })
+    ? squadsForPlacement({ centre: form.centre, band: result.placement.placedBand })
     : [];
-  // Hallam Sat 4–6pm 12-14 runs as ONE combined squad (no perf/pathway split) — present it
-  // as "<band> Squad", not a Performance/Pathway team. All other slots are unchanged.
-  const isCombinedSquad = matchingSquads.some((s) => s.combined) || !!selected?.combined;
-  const squadLabel = result?.placement
-    ? (isCombinedSquad
-        ? `${result.placement.placedBand} Squad`
-        : `${result.placement.stream === 'performance' ? 'Performance' : 'Pathway'} · ${result.placement.placedBand}`)
-    : '';
+  const squadLabel = result?.placement ? `${result.placement.placedBand} Squad` : '';
   const comingSoonVenue = !!CENTRE_BY_SLUG[form.centre]?.comingSoon;
   // The soft 'review' step serves three audiences: a below-floor coach review, a
   // coming-soon venue waitlist, and a *placed* player who'd rather talk first — that
@@ -553,10 +548,10 @@ export default function ApplyFlow({ embedded = false }) {
                     <div className="text-white/40 text-sm mt-2">Matching you to the right squad</div>
                   </div>
                 ) : result.placement.requiresReview || CENTRE_BY_SLUG[form.centre]?.comingSoon ? (
-                  <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} combined={isCombinedSquad} onContinue={afterReveal} onRequestInfo={() => setStep('requestInfo')} />
+                  <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} combined={true} onContinue={afterReveal} onRequestInfo={() => setStep('requestInfo')} />
                 ) : (
                   <>
-                    <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} combined={isCombinedSquad} onContinue={null} onRequestInfo={() => setStep('requestInfo')} />
+                    <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} combined={true} onContinue={null} onRequestInfo={() => setStep('requestInfo')} />
 
                     <div className="mt-8">
                       <h2 className="text-xl md:text-2xl font-black uppercase tracking-wide mb-1">Choose your time</h2>

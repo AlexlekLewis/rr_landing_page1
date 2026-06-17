@@ -1,81 +1,55 @@
 // ============================================================
-// flow.rules.test.ts — Alex's placement rules (10 Jun 2026), funnel level.
-//   1) Any rep level (VMCU+) guarantees at least the Pathway squad of their age group.
-//   2) A strong-for-age player goes straight into the top tier of their own age group
-//      (no review detour); moving to the band above stays a coach decision.
+// flow.rules.test.ts — open-program placement rules (18 Jun 2026, funnel level).
+//   • Every player is placed in their HOME age band — no auto play-up, no review.
+//   • play_up is a COACH FLAG, set only for rep + graded senior; it never moves anyone.
+//   Age bands (PG_BANDS): ≤14 → 12-14 · 15-16 → 14-16 · ≥17 → 17+
 // ============================================================
 import { describe, it, expect } from "vitest";
 import { BLANK_FORM, computePlacement, type ApplyForm } from "./flow";
 
-const form = (over: Partial<ApplyForm>): ApplyForm => ({
+const mk = (dob: string, extra: Partial<ApplyForm> = {}): ApplyForm => ({
   ...BLANK_FORM,
-  player_name: "T", suburb: "x", contact_phone: "0", contact_email: "a@b.co",
-  batting_hand: "right", skill: "batting", format: "t20",
-  ...over,
-} as ApplyForm);
-const dob = (age: number) => `${new Date().getFullYear() - age}-01-01`;
-
-describe("rule 1 — at-age rep guarantees at least Pathway", () => {
-  it("13yo Des Nolan U13 rep → 12-14 Pathway, no review", () => {
-    const { placement } = computePlacement(form({ player_dob: dob(13), gender: "M", rep_level: "REP-13M" }));
-    expect(placement.stream).toBe("pathway");
-    expect(placement.placedBand).toBe("12-14");
-    expect(placement.requiresReview).toBe(false);
-  });
-  it("14yo girl U12 rep ×2 → 12-14 Pathway, no review", () => {
-    const { placement } = computePlacement(form({ player_dob: dob(14), gender: "F", rep_level: "REP-12F" }));
-    expect(placement.stream).toBe("pathway");
-    expect(placement.requiresReview).toBe(false);
-  });
-  it("club-only below 2nd grade still goes to coach review", () => {
-    const { placement } = computePlacement(form({ player_dob: dob(13), gender: "M", club_level: "CS-BELOW" }));
-    expect(placement.requiresReview).toBe(true);
-  });
-  it("no levels at all still goes to coach review", () => {
-    const { placement } = computePlacement(form({ player_dob: dob(13), gender: "M" }));
-    expect(placement.requiresReview).toBe(true);
-  });
+  centre: "williamstown",
+  player_name: "X",
+  player_dob: dob,
+  gender: "M",
+  contact_phone: "04",
+  contact_email: "a@b.com",
+  suburb: "X",
+  skill: "batting",
+  batting_hand: "right",
+  current_club: "CC",
+  format: "t20",
+  ...extra,
 });
 
-describe("rule 2 — strong-for-age goes to the top tier of their own age group", () => {
-  it("15yo girl in Women's Premier 1st + Premier U18 → 14-16 Performance, no review", () => {
-    const { placement, dna } = computePlacement(form({ player_dob: dob(15), gender: "F", rep_level: "P18F", club_level: "P1F" }));
-    expect(dna.abilityTier).toBeGreaterThanOrEqual(4);
-    expect(placement.placedBand).toBe("14-16");
-    expect(placement.stream).toBe("performance");
-    expect(placement.requiresReview).toBe(false);
+describe("age-based placement (open program)", () => {
+  it("places strictly by age band", () => {
+    expect(computePlacement(mk("2013-01-01")).placement.placedBand).toBe("12-14"); // 13
+    expect(computePlacement(mk("2012-01-01")).placement.placedBand).toBe("12-14"); // 14
+    expect(computePlacement(mk("2011-01-01")).placement.placedBand).toBe("14-16"); // 15
+    expect(computePlacement(mk("2010-01-01")).placement.placedBand).toBe("14-16"); // 16
+    expect(computePlacement(mk("2009-01-01")).placement.placedBand).toBe("17+"); // 17
+    expect(computePlacement(mk("2001-01-01")).placement.placedBand).toBe("17+"); // 25
   });
-  it("15yo boy Dowling + Sub-District 1st XI → 14-16 Performance, no review", () => {
-    const { placement, dna } = computePlacement(form({ player_dob: dob(15), gender: "M", rep_level: "P16M", club_level: "SD1" }));
-    expect(dna.abilityTier).toBeGreaterThanOrEqual(4);
-    expect(placement.placedBand).toBe("14-16");
-    expect(placement.stream).toBe("performance");
-    expect(placement.requiresReview).toBe(false);
-  });
-  it("16+ performance minor still auto-joins the adults (unchanged)", () => {
-    const { placement } = computePlacement(form({ player_dob: dob(16), gender: "M", club_level: "P3M", rep_level: "" }));
-    expect(placement.placedBand).toBe("17+");
-    expect(placement.requiresReview).toBe(false);
-  });
-});
 
-// An adult who reached a junior rep honour years ago AND plays age-appropriate senior
-// cricket must not be sent to review just because the junior honour (P18M, expected ~16.5)
-// ties the senior level (P3M, expected ~21) on CTI and wins the age reference. The senior
-// cricket is at-age — no age_outlier, no review.
-describe("rule 3 — age-appropriate senior cricket clears the age-outlier review", () => {
-  it("21yo Premier U18 rep + Premier 3rd XI senior → no review", () => {
-    const { placement, dna } = computePlacement(
-      form({ player_dob: dob(21), gender: "M", rep_level: "P18M", club_level: "P3M" }),
-    );
-    expect(dna.reviewFlags).not.toContain("age_outlier");
-    expect(placement.requiresReview).toBe(false);
+  it("never auto-moves a player up a band, however strong — placedBand === homeBand", () => {
+    const p = computePlacement(mk("2012-01-01", { rep_level: "REP-16M", club_level: "P1M" })).placement;
+    expect(p.placedBand).toBe("12-14");
+    expect(p.placedBand).toBe(p.homeBand);
+    expect(p.requiresReview).toBe(false);
   });
-  it("21yo whose ONLY level is a (now-stale) Premier U18 rep honour → still review", () => {
-    const { placement } = computePlacement(
-      form({ player_dob: dob(21), gender: "M", rep_level: "P18M", club_level: "" }),
-    );
-    expect(placement.reviewReasons).toContain("age_outlier");
-    expect(placement.requiresReview).toBe(true);
+
+  it("no player is sent to review for being below a level — everyone is placed by age", () => {
+    const noHistory = computePlacement(mk("2013-01-01", { rep_level: "", club_level: "" })).placement;
+    expect(noHistory.requiresReview).toBe(false);
+    expect(noHistory.reviewReasons).toEqual([]);
+    expect(noHistory.placedBand).toBe("12-14");
+  });
+
+  it("play_up is a coach FLAG (rep + graded senior), not a move", () => {
+    const flagged = computePlacement(mk("2012-01-01", { rep_level: "REP-16M", club_level: "P1M" })).placement;
+    expect(flagged.playFlag).toBe("play_up");
+    expect(flagged.placedBand).toBe("12-14"); // still their home band — coach decides any move
   });
 });

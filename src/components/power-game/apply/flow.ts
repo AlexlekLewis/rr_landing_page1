@@ -4,7 +4,7 @@
 // ============================================================
 import { computeDna, getAge, type ComputeDnaInput } from "../../../lib/scoring/engine";
 import { COMPETITION_TIERS } from "../../../lib/scoring/ladder";
-import { placeFromDna, type Placement } from "../../../lib/scoring/guardrail";
+import { placeFromDna, PG_BANDS, homeBandIdx, type Placement } from "../../../lib/scoring/guardrail";
 import { clearsFloor, isRepLevel } from "./levels";
 import type { DnaResult } from "../../../lib/scoring/engine";
 
@@ -160,48 +160,25 @@ export interface PlacementResult {
 }
 
 export function computePlacement(f: ApplyForm): PlacementResult {
+  // OPEN PROGRAM (18 Jun 2026): every player is placed in their HOME AGE BAND — period.
+  // Ability is sorted INSIDE the squad by the coach; there is no Performance/Pathway gate
+  // and no below-floor review. A player with BOTH representative honours AND graded senior
+  // cricket (2nd grade & up) is flagged `play_up` so a coach can consider moving them up a
+  // band — but the system NEVER moves them automatically and never blocks anyone.
   const dna = computeDna(buildEngineInput(f));
-  let placement = placeFromDna(dna);
-
-  // Alex's placement rules (10 Jun 2026):
-  // 1) A strong-for-age player goes straight into the TOP tier of their own age group —
-  //    no review detour. (A coach may still offer the bottom tier of the band above;
-  //    that's a manual move, the flag is kept for the admin view.)
-  if (placement.playFlag === "play_up_review") {
-    placement = {
-      ...placement,
-      reviewReasons: placement.reviewReasons.filter((r) => r !== "play_up_review"),
-      requiresReview: dna.needsAdminReview || placement.stream === "review",
-    };
-  }
-  // 2) Making ANY representative level (VMCU and up) guarantees at least the lower
-  //    (Pathway) squad of their age group — playing rep AT your age never drops you
-  //    to review on tier alone.
-  if (placement.stream === "review" && placement.age != null && isRepLevel(f.rep_level) && dna.eligibilityStatus === "eligible") {
-    placement = { ...placement, stream: "pathway", requiresReview: dna.needsAdminReview };
-  }
-
-  // Power Game floor: representative cricket, Premier/Sub-District, or association senior
-  // (2nd grade & up) clears it. Below 2nd grade / social cricket → coach review (no offer).
-  if (!clearsFloor(f.rep_level) && !clearsFloor(f.club_level)) {
-    placement = {
-      ...placement,
-      requiresReview: true,
-      reviewReasons: Array.from(new Set([...placement.reviewReasons, "below_pg_floor"])),
-    };
-  }
-
-  // Wild Card — talent the rep system hasn't caught. A player who self-selects this
-  // (typically with no clearing level) is sent for a personal coach assessment; the
-  // "wildcard" reason marks it in the review queue. A player who *also* holds a clearing
-  // level keeps their earned offer — the Wild Card never downgrades a real qualifier.
-  if (f.wildcard && !clearsFloor(f.rep_level) && !clearsFloor(f.club_level)) {
-    placement = {
-      ...placement,
-      requiresReview: true,
-      reviewReasons: Array.from(new Set([...placement.reviewReasons, "wildcard"])),
-    };
-  }
+  const eng = placeFromDna(dna); // reused only to keep a complete, type-valid Placement object
+  const age = calcAge(f.player_dob);
+  const band = age != null ? PG_BANDS[homeBandIdx(age)].name : eng.homeBand;
+  const playUp = isRepLevel(f.rep_level) && clearsFloor(f.club_level);
+  const placement: Placement = {
+    ...eng,
+    age,
+    homeBand: band,
+    placedBand: band, // ALWAYS the home age band — no automatic play-up
+    playFlag: playUp ? "play_up" : null,
+    requiresReview: age == null,
+    reviewReasons: age == null ? ["no_dob"] : [],
+  };
   return { dna, placement };
 }
 
@@ -229,11 +206,9 @@ export function validateStep(step: Step, f: ApplyForm): string[] {
     if (!consentsOk(f)) e.push("Please accept the compliances to continue.");
   }
   if (step === "profile") {
-    // Cricket — last 3 years. (Game profile — skill, batting hand, bowling type —
-    // is no longer collected in the application; it's captured at onboarding.)
-    if (!f.current_club.trim()) e.push("Enter your current cricket club.");
-    if (!f.rep_level && !f.club_level && !f.wildcard)
-      e.push("Add your representative and/or senior cricket — or apply as a Wild Card below.");
+    // OPEN PROGRAM: representative / senior / club details are OPTIONAL — captured only to
+    // flag play-up candidates (rep + senior). Nothing here is required to apply, so any
+    // player can proceed and be placed in their home age band.
   }
   return e;
 }

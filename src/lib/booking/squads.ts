@@ -5,18 +5,21 @@
 // 2-HOUR BLOCK; a 4-hour session window is two sequential blocks, younger band
 // first ("older players schedule to later times").
 //
-// CAPACITY RATIO (Alex): a SQUAD = 26 players per 7 lanes in a 2-hour block.
-// A squad = 2 mini-squads (teams): the PERFORMANCE team and the PATHWAY team.
-//   squad = round(lanes × 26/7)   →  7 lanes 26 · 5 lanes 19 · 4 lanes 15
-//   perf team = ceil(squad/2), pathway team = floor(squad/2)
-//   →  7 lanes 13/13 · 5 lanes 10/9 · 4 lanes 8/7   (lane ratio 7:26)
-// NB: a place = a seat in that mini-squad for the WHOLE 8-week block (one fixed
-//     roster), not a per-week spot. "Capacity" = the enrolled roster, filled once.
+// CAPACITY RATIO (Alex): 26 players per 7 lanes in a 2-hour block.
+//   squad capacity = round(lanes × 26/7) → 7→26 · 5→19 · 4→15 · 3→11 · 2→7
 //
-// OFFICIAL grid (per the sheet, Netz Friday = two 2-hour blocks CONFIRMED by Alex):
-//   Hallam     Thu 8–10pm (5 lanes, 17+) + Sat 2–4pm (4 lanes, 14-16) + Sat 4–6pm (4 lanes, 12-14, ONE combined squad)
-//   The Netz   Fri 5:30–9:30pm (5 lanes, 2 squads) + Sat 2–4pm & 4–6pm (7 lanes)
-//   Mickleham  Fri 6–8pm & 8–10pm + Sat 2–4pm & 4–6pm (7 lanes) — confirmed (facility name/address TBC).
+// MODEL (locked 18 Jun 2026): a SQUAD = one age group (12-14 / 14-16 / 17+).
+// A 2-hour SLOT (centre + day + time) is split across TWO DIFFERENT-age squads on
+// separate lanes — they share the centre but never train together. Strength is
+// sorted INSIDE a squad on the day; there is NO Performance/Pathway booking split.
+// Players are placed by AGE; rep+senior players are flagged for a coach play-up call.
+// Time-of-day: youngest squads in the earliest slots, 17+ only in the latest, 14-16 bridges.
+// NB: a place = a seat in that squad for the WHOLE 8-week block (one fixed roster).
+//
+// OFFICIAL grid:
+//   Williamstown  Fri 5:30 (12-14 + 14-16) · Fri 7:30 (14-16 + 17+) · Sat 2–4 (12-14 + 14-16) · Sat 4–6 (14-16 + 17+)
+//   Hallam        Thu 8–10 (14-16 + 17+) · Sat 2–4 (12-14 + 14-16) · Sat 4–6 (12-14 + 17+)   [12-14 = Saturday only]
+//   Mickleham     Fri 6–8 (12-14 + 14-16) · Fri 8–10 (14-16 + 17+) · Sat 2–4 (12-14 + 14-16) · Sat 4–6 (14-16 + 17+)
 // ============================================================
 
 export type Stream = "performance" | "pathway";
@@ -50,22 +53,21 @@ export interface Centre {
 export interface Squad {
   id: string;
   centre: string;
-  /** Groups the two teams that share one 2-hour block (= a full squad). */
+  /** All squads sharing one 2-hour slot (centre+day+time) share this blockId. */
   blockId: string;
   band: AgeBand;
-  stream: Stream;
-  /** True when this block runs as ONE combined squad (no perf/pathway split) — e.g.
-   *  Hallam Sat 4–6pm 12-14. A combined squad matches placements of either stream. */
-  combined?: boolean;
   day: string;
   startTime: string;
   endTime: string;
-  /** Lanes available to this team's block. */
+  /** Lanes this squad trains on (its share of the slot). */
   lanes: number;
-  /** Bookable capacity: a split team = perf ceil / pathway floor half; a combined squad = the full squad. */
+  /** Bookable capacity = round(lanes × 26/7). */
   capacity: number;
   blockLabel: string;
   sortOrder: number;
+  /** @deprecated legacy perf/pathway fields — kept optional for back-compat only. */
+  stream?: Stream;
+  combined?: boolean;
 }
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -112,8 +114,11 @@ export function sessionWindow(day: string): SessionWindow | null {
   return SESSION_DATES[(day || "").slice(0, 3)] || null;
 }
 
-// Each RAW row is one 2-hour block (band + lanes); both stream teams are derived.
-interface RawBlock {
+// Each row is ONE squad = one age group on its share of a slot's lanes. A 2-hour
+// SLOT (centre+day+time) holds TWO different-age squads on separate lanes. Lanes
+// split per slot: 7 → 4+3 · 5 → 3+2 · 4 → 2+2. capacity = round(lanes × 26/7).
+// To change days/times/ages: edit SQUAD_GRID below — NOTHING ELSE derives elsewhere.
+interface RawSquad {
   idBase: string;
   centre: string;
   band: AgeBand;
@@ -123,71 +128,57 @@ interface RawBlock {
   lanes: number;
   blockLabel: string;
   sortOrder: number;
-  /** When true, this block runs as ONE combined squad (no perf/pathway split). */
-  combined?: boolean;
 }
 
-const BLOCKS: RawBlock[] = [
-  // ── The Netz — Williamstown (Fri 5 lanes · Sat 7 lanes). Fri = 5:30–7:30 + 7:30–9:30 (confirmed). ──
-  { idBase: "w-fri530-1416", centre: "williamstown", band: "14-16", day: "Friday", startTime: "5:30pm", endTime: "7:30pm", lanes: 5, blockLabel: "Fri 5:30–7:30pm", sortOrder: 1 },
-  { idBase: "w-fri730-17", centre: "williamstown", band: "17+", day: "Friday", startTime: "7:30pm", endTime: "9:30pm", lanes: 5, blockLabel: "Fri 7:30–9:30pm", sortOrder: 2 },
-  { idBase: "w-sat2-1214", centre: "williamstown", band: "12-14", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 7, blockLabel: "Sat 2–4pm", sortOrder: 3 },
-  { idBase: "w-sat4-1416", centre: "williamstown", band: "14-16", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 7, blockLabel: "Sat 4–6pm", sortOrder: 4 },
+const SQUAD_GRID: RawSquad[] = [
+  // ── The Netz — Williamstown (Fri 5 lanes · Sat 7 lanes) ──
+  { idBase: "w-fri530-1214", centre: "williamstown", band: "12-14", day: "Friday",   startTime: "5:30pm", endTime: "7:30pm", lanes: 3, blockLabel: "Fri 5:30–7:30pm", sortOrder: 1 },
+  { idBase: "w-fri530-1416", centre: "williamstown", band: "14-16", day: "Friday",   startTime: "5:30pm", endTime: "7:30pm", lanes: 2, blockLabel: "Fri 5:30–7:30pm", sortOrder: 2 },
+  { idBase: "w-fri730-1416", centre: "williamstown", band: "14-16", day: "Friday",   startTime: "7:30pm", endTime: "9:30pm", lanes: 3, blockLabel: "Fri 7:30–9:30pm", sortOrder: 3 },
+  { idBase: "w-fri730-17",   centre: "williamstown", band: "17+",   day: "Friday",   startTime: "7:30pm", endTime: "9:30pm", lanes: 2, blockLabel: "Fri 7:30–9:30pm", sortOrder: 4 },
+  { idBase: "w-sat2-1214",   centre: "williamstown", band: "12-14", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 4, blockLabel: "Sat 2–4pm", sortOrder: 5 }, // PURCHASED slot — keep id
+  { idBase: "w-sat2-1416",   centre: "williamstown", band: "14-16", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 3, blockLabel: "Sat 2–4pm", sortOrder: 6 },
+  { idBase: "w-sat4-1416",   centre: "williamstown", band: "14-16", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 4, blockLabel: "Sat 4–6pm", sortOrder: 7 },
+  { idBase: "w-sat4-17",     centre: "williamstown", band: "17+",   day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 3, blockLabel: "Sat 4–6pm", sortOrder: 8 },
 
-  // ── Elite Cricket Centre — Hallam (Thu 8–10pm = 5 lanes · Sat 2–4pm = 4 lanes · Sat 4–6pm = 4 lanes).
-  //    Sat 4–6pm 12-14 runs as ONE combined squad (no perf/pathway split). idBase "h-sat12-1214"
-  //    is kept as an opaque booking key for continuity (it now denotes the 4–6pm slot). ──
-  { idBase: "h-thu8-17", centre: "hallam", band: "17+", day: "Thursday", startTime: "8:00pm", endTime: "10:00pm", lanes: 5, blockLabel: "Thu 8–10pm", sortOrder: 1 },
-  { idBase: "h-sat2-1416", centre: "hallam", band: "14-16", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 4, blockLabel: "Sat 2–4pm", sortOrder: 2 },
-  { idBase: "h-sat12-1214", centre: "hallam", band: "12-14", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 4, blockLabel: "Sat 4–6pm", sortOrder: 3, combined: true },
+  // ── Elite Cricket Centre — Hallam (Thu 5 lanes · Sat 4 lanes). 12-14 = Saturday only (Thu is too late for juniors). ──
+  { idBase: "h-thu8-1416", centre: "hallam", band: "14-16", day: "Thursday", startTime: "8:00pm", endTime: "10:00pm", lanes: 3, blockLabel: "Thu 8–10pm", sortOrder: 1 },
+  { idBase: "h-thu8-17",   centre: "hallam", band: "17+",   day: "Thursday", startTime: "8:00pm", endTime: "10:00pm", lanes: 2, blockLabel: "Thu 8–10pm", sortOrder: 2 },
+  { idBase: "h-sat2-1214", centre: "hallam", band: "12-14", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 2, blockLabel: "Sat 2–4pm", sortOrder: 3 },
+  { idBase: "h-sat2-1416", centre: "hallam", band: "14-16", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 2, blockLabel: "Sat 2–4pm", sortOrder: 4 },
+  { idBase: "h-sat4-1214", centre: "hallam", band: "12-14", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 2, blockLabel: "Sat 4–6pm", sortOrder: 5 },
+  { idBase: "h-sat4-17",   centre: "hallam", band: "17+",   day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 2, blockLabel: "Sat 4–6pm", sortOrder: 6 },
 
-  // ── Mickleham Indoor Sports Centre — Mickleham (Fri 6–8pm + Fri 8–10pm · Sat 2–4pm + Sat 4–6pm) ──
-  { idBase: "m-fri6-1416", centre: "mickleham", band: "14-16", day: "Friday", startTime: "6:00pm", endTime: "8:00pm", lanes: 7, blockLabel: "Fri 6–8pm", sortOrder: 1 },
-  { idBase: "m-fri8-17", centre: "mickleham", band: "17+", day: "Friday", startTime: "8:00pm", endTime: "10:00pm", lanes: 7, blockLabel: "Fri 8–10pm", sortOrder: 2 },
-  { idBase: "m-sat2-1214", centre: "mickleham", band: "12-14", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 7, blockLabel: "Sat 2–4pm", sortOrder: 3 },
-  { idBase: "m-sat4-1416", centre: "mickleham", band: "14-16", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 7, blockLabel: "Sat 4–6pm", sortOrder: 4 },
+  // ── Mickleham Indoor Sports Centre — Mickleham (Fri 7 lanes · Sat 7 lanes) ──
+  { idBase: "m-fri6-1214", centre: "mickleham", band: "12-14", day: "Friday",   startTime: "6:00pm", endTime: "8:00pm",  lanes: 4, blockLabel: "Fri 6–8pm", sortOrder: 1 },
+  { idBase: "m-fri6-1416", centre: "mickleham", band: "14-16", day: "Friday",   startTime: "6:00pm", endTime: "8:00pm",  lanes: 3, blockLabel: "Fri 6–8pm", sortOrder: 2 },
+  { idBase: "m-fri8-1416", centre: "mickleham", band: "14-16", day: "Friday",   startTime: "8:00pm", endTime: "10:00pm", lanes: 4, blockLabel: "Fri 8–10pm", sortOrder: 3 },
+  { idBase: "m-fri8-17",   centre: "mickleham", band: "17+",   day: "Friday",   startTime: "8:00pm", endTime: "10:00pm", lanes: 3, blockLabel: "Fri 8–10pm", sortOrder: 4 },
+  { idBase: "m-sat2-1214", centre: "mickleham", band: "12-14", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm",  lanes: 4, blockLabel: "Sat 2–4pm", sortOrder: 5 }, // PURCHASED slot — keep id
+  { idBase: "m-sat2-1416", centre: "mickleham", band: "14-16", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm",  lanes: 3, blockLabel: "Sat 2–4pm", sortOrder: 6 },
+  { idBase: "m-sat4-1416", centre: "mickleham", band: "14-16", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm",  lanes: 4, blockLabel: "Sat 4–6pm", sortOrder: 7 },
+  { idBase: "m-sat4-17",   centre: "mickleham", band: "17+",   day: "Saturday", startTime: "4:00pm", endTime: "6:00pm",  lanes: 3, blockLabel: "Sat 4–6pm", sortOrder: 8 },
 ];
 
-export const SQUADS: Squad[] = BLOCKS.flatMap((b) => {
-  // A `combined` block is ONE squad (the whole age group trains together) at full
-  // squad capacity — NOT split into Performance + Pathway teams like every other block.
-  if (b.combined) {
-    return [{
-      id: b.idBase,
-      centre: b.centre,
-      blockId: `${b.centre}-${b.day}-${b.startTime}`,
-      band: b.band,
-      stream: "performance" as Stream, // nominal; combined squads match either stream (see squadsForPlacement)
-      combined: true,
-      day: b.day,
-      startTime: b.startTime,
-      endTime: b.endTime,
-      lanes: b.lanes,
-      capacity: squadCapacity(b.lanes),
-      blockLabel: b.blockLabel,
-      sortOrder: b.sortOrder * 2,
-    }];
-  }
-  return (["performance", "pathway"] as Stream[]).map((stream, i) => ({
-    id: `${b.idBase}-${stream === "performance" ? "perf" : "path"}`,
-    centre: b.centre,
-    blockId: `${b.centre}-${b.day}-${b.startTime}`,
-    band: b.band,
-    stream,
-    day: b.day,
-    startTime: b.startTime,
-    endTime: b.endTime,
-    lanes: b.lanes,
-    capacity: teamCapacity(b.lanes, stream),
-    blockLabel: b.blockLabel,
-    sortOrder: b.sortOrder * 2 + i,
-  }));
-});
+export const SQUADS: Squad[] = SQUAD_GRID.map((r) => ({
+  id: r.idBase,
+  centre: r.centre,
+  blockId: `${r.centre}-${r.day}-${r.startTime}`,
+  band: r.band,
+  day: r.day,
+  startTime: r.startTime,
+  endTime: r.endTime,
+  lanes: r.lanes,
+  capacity: squadCapacity(r.lanes),
+  blockLabel: r.blockLabel,
+  sortOrder: r.sortOrder,
+}));
 
-/** Squads (teams) matching a player's placement (band + stream) at an optional centre.
- *  A `combined` squad matches either stream — the whole band books into the one squad. */
-export function squadsForPlacement(opts: { centre?: string; band: string; stream: string }): Squad[] {
+/** Squads matching a player's AGE BAND at an optional centre — i.e. the day/time
+ *  options for that squad. Strength is sorted inside the squad, so there's no
+ *  stream filter; the optional `stream` arg is accepted but ignored (back-compat). */
+export function squadsForPlacement(opts: { centre?: string; band: string; stream?: string }): Squad[] {
   return SQUADS.filter(
-    (s) => s.band === opts.band && (s.combined || s.stream === opts.stream) && (!opts.centre || s.centre === opts.centre),
+    (s) => s.band === opts.band && (!opts.centre || s.centre === opts.centre),
   ).sort((a, b) => a.sortOrder - b.sortOrder);
 }
