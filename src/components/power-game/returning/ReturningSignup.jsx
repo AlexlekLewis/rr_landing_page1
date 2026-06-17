@@ -133,9 +133,22 @@ export default function ReturningSignup() {
     meta.name = 'robots';
     meta.content = 'noindex,nofollow';
     document.head.appendChild(meta);
+    // Auto-unlock from the share link: ?key=<code> (matches the access code) opens
+    // the page directly, so a single link IS the access. Falls back to the manual
+    // passcode prompt for anyone who arrives without (or with a wrong) key.
+    let keyOk = false;
     try {
-      if (sessionStorage.getItem(GATE_KEY) === '1') setUnlocked(true);
-    } catch (_) { /* private mode — gate stays up, no harm */ }
+      const k = (new URLSearchParams(window.location.search).get('key') || '').trim().toUpperCase();
+      keyOk = !!k && k === ACCESS_CODE;
+    } catch (_) { /* no-op */ }
+    try {
+      if (keyOk || sessionStorage.getItem(GATE_KEY) === '1') {
+        setUnlocked(true);
+        if (keyOk) sessionStorage.setItem(GATE_KEY, '1');
+      }
+    } catch (_) {
+      if (keyOk) setUnlocked(true); // private mode — still honour a valid key link
+    }
     return () => { try { document.head.removeChild(meta); } catch (_) { /* no-op */ } };
   }, []);
 
