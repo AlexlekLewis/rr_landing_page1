@@ -7,6 +7,8 @@ import VideoSection from './VideoSection';
 import OverviewSection from './OverviewSection';
 import QuoteBlock from './QuoteBlock';
 import FeaturesBenefits from './FeaturesBenefits';
+import WhatRoyalsLookingFor from './WhatRoyalsLookingFor';
+import DevelopmentSystem from './DevelopmentSystem';
 import PricingSection from './PricingSection';
 import CoachesSection from './CoachesSection';
 import CentresSection from './CentresSection';
@@ -65,6 +67,8 @@ const SECTIONS = [
     'manifesto',
     'overview',
     'who-its-for',
+    'royals-looking-for',
+    'development-system',
     'ask-the-players',
     'quote-vaibhav',
     'video',
@@ -117,6 +121,15 @@ const PowerGame = () => {
 
                 <div id="who-its-for">
                     <FeaturesBenefits />
+                </div>
+
+                {/* What the next level rewards (brochure framing) + how we build it. */}
+                <div id="royals-looking-for">
+                    <WhatRoyalsLookingFor />
+                </div>
+
+                <div id="development-system">
+                    <DevelopmentSystem />
                 </div>
 
                 {/* Player-voice social proof, promoted high — real cohort quotes, un-named. */}
