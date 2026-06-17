@@ -142,8 +142,10 @@ export default function PowerGameSuccess() {
             )}
           </div>
 
-          {/* Booking + kit order summary (handed over by the funnel) */}
-          {order && (
+          {/* Booking + kit order summary (handed over by the funnel). Only render when
+              there's something to show — the returning-player flow stashes just the
+              player name (no centre/slot/band), so the card would otherwise be empty. */}
+          {order && (order.centreName || order.slot || order.band || (Array.isArray(order.kit) && order.kit.length > 0)) && (
             <div className="bg-white/[0.04] border border-white/10 rounded-2xl p-6 md:p-8 mb-8">
               <h2 className="text-xs font-black text-white/50 uppercase tracking-[0.3em] mb-5 text-center">Your booking</h2>
               <div className="space-y-2 text-sm">

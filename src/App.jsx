@@ -26,6 +26,8 @@ const PowerGameApply = React.lazy(() => import('./components/power-game/apply/Ap
 const PowerGameApplySuccess = React.lazy(() => import('./components/power-game/apply/PowerGameSuccess'));
 const PowerGamePlayground = React.lazy(() => import('./components/power-game/apply/PlacementPlayground'));
 const PowerGameSquadsAdmin = React.lazy(() => import('./components/power-game/apply/PowerGameSquads'));
+// Returning Elite players — private, passcode-gated express re-signup (details + pay).
+const PowerGameReturning = React.lazy(() => import('./components/power-game/returning/ReturningSignup'));
 
 // Admin components
 import AdminLogin from './components/admin/AdminLogin';
@@ -145,6 +147,8 @@ function App() {
         {/* Power Game apply funnel — qualify → place → secure (the live registration + payment) */}
         <Route path="/PGP2026/apply" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameApply /></React.Suspense>} />
         <Route path="/PGP2026/apply/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameApplySuccess /></React.Suspense>} />
+        {/* Returning players — passcode-gated express re-signup. Not in nav; share the link directly. */}
+        <Route path="/PGP2026/returning" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameReturning /></React.Suspense>} />
         <Route path="/PGP2026/playground" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGamePlayground /></React.Suspense>} />
         <Route path="/PGP2026/admin" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameSquadsAdmin /></React.Suspense>} />
         {/* India Tour 2026 — PRIVATE, invite-only EOI. Not in nav; gated by a referral code (?ref=). */}
