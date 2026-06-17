@@ -32,11 +32,25 @@ import UniformSizeGuideModal from '../UniformSizeGuideModal';
 import { fmtAud } from '../apply/kit';
 import { SQUADS, CENTRE_BY_SLUG, ACTIVE_CENTRES } from '../../../lib/booking/squads';
 import { PG_BANDS, homeBandIdx } from '../../../lib/scoring/guardrail';
+import { TOPS_SIZES, SHORTS_SIZES, PANTS_SIZES, JACKET_SIZES } from '../../academy-shop/sizeData';
 
 const ACCESS_CODE = String(import.meta?.env?.VITE_PGP_RETURNING_CODE || 'ROYALS2026').trim().toUpperCase();
 const LIVE_PAYMENTS = !!(import.meta?.env?.VITE_PG_LIVE_PAYMENTS === '1');
 const BLOCK_FEE_CENTS = 98900; // $989 — 8-week Power Pre-Season (matches api/power-game-checkout)
 const GATE_KEY = 'pgp_returning_unlocked';
+
+// Uniform catalog — prices MUST match api/_lib/uniformPricing.js (server charges
+// from there; this drives the on-page size pickers + display total). Sizes reuse
+// the academy-shop size tables so they match the size guide.
+const UNIFORM = [
+  { key: 'shirt',  label: 'Training Shirt',  priceCents: 2995, sizes: TOPS_SIZES },
+  { key: 'shorts', label: 'Training Shorts', priceCents: 3500, sizes: SHORTS_SIZES },
+  { key: 'pants',  label: 'Training Pants',  priceCents: 3700, sizes: PANTS_SIZES },
+  { key: 'cap',    label: 'Cap',             priceCents: 2500, oneSize: true },
+  { key: 'jacket', label: 'Fleece Jacket',   priceCents: 4900, sizes: JACKET_SIZES },
+];
+const BLANK_KIT = { shirt: '', shorts: '', pants: '', cap: '', jacket: '' };
+const sizeLabels = (sizes, group) => (sizes && Array.isArray(sizes[group]) ? sizes[group].map((s) => s.label) : []);
 
 // One entry per 2-hour session block (the SQUADS list has two stream-teams per
 // block — dedupe to the block; the coach assigns the team after payment).
@@ -82,6 +96,7 @@ export default function ReturningSignup() {
 
   const [form, setForm] = useState(BLANK);
   const [dob, setDob] = useState({ d: '', m: '', y: '' }); // partial DOB parts (preserve incomplete picks)
+  const [kit, setKit] = useState(BLANK_KIT); // uniform sizes (item key -> size; '' = not chosen)
   const [sessionId, setSessionId] = useState('');
   const [errors, setErrors] = useState([]);
   const [submitting, setSubmitting] = useState(false);
@@ -89,6 +104,13 @@ export default function ReturningSignup() {
   const [localDone, setLocalDone] = useState(false);
 
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
+  const setKitSize = (key, size) => setKit((p) => ({ ...p, [key]: size }));
+  // Selected uniform items (a sized garment counts once a size is chosen; cap is one-size).
+  const kitPicks = UNIFORM.filter((u) => (u.oneSize ? kit[u.key] === 'one' : !!kit[u.key]));
+  const kitItems = kitPicks.map((u) => ({ key: u.key, size: u.oneSize ? 'One size' : kit[u.key] }));
+  const kitTotalCents = kitPicks.reduce((s, u) => s + u.priceCents, 0);
+  const kitSummaryText = kitPicks.map((u) => `${u.label} (${u.oneSize ? 'One size' : kit[u.key]})`).join(', ');
+  const kitLines = kitPicks.map((u) => ({ name: u.label, size: u.oneSize ? 'One size' : kit[u.key], priceCents: u.priceCents }));
   // Day/Month/Year → form.player_dob only once all three are chosen (else empty).
   const setDobPart = (part, val) => {
     const next = { ...dob, [part]: val };
@@ -162,6 +184,9 @@ export default function ReturningSignup() {
       : null;
     const row = buildApplicationRow(apForm, placement, squad, {
       kind: 'standard', status: 'awaiting_payment', centreName: centre?.name,
+      // Record the kit on the row (the actual CHARGE is built server-side from uniformItems).
+      uniformSelection: form.needs_uniform ? kitSummaryText : '',
+      kitTotalCents: form.needs_uniform ? kitTotalCents : 0,
     });
     return {
       ...row,
@@ -179,6 +204,7 @@ export default function ReturningSignup() {
     try {
       const application = buildPayload();
       const centre = CENTRE_BY_SLUG[form.centre];
+      const wantsKit = form.needs_uniform && kitItems.length > 0;
       if (LIVE_PAYMENTS || import.meta?.env?.PROD) {
         try {
           sessionStorage.setItem('pgp_confirmation', JSON.stringify({
@@ -186,6 +212,7 @@ export default function ReturningSignup() {
             centreName: centre?.name || '',
             slot: selectedSession ? `${selectedSession.day} ${selectedSession.startTime}–${selectedSession.endTime}` : '',
             band: selectedSession?.band || '',
+            kit: wantsKit ? kitLines : [],
           }));
         } catch (_) { /* no-op */ }
         const r = await fetch('/api/power-game-checkout', {
@@ -196,8 +223,9 @@ export default function ReturningSignup() {
             email: form.contact_email,
             playerName: form.player_name,
             squadId: selectedSession?.blockId,
-            uniformTotalCents: 0, // uniform sizing + payment handled at Stripe
-            uniformSelection: '',
+            // Server prices each item from api/_lib/uniformPricing.js — these are
+            // just the picks; the client-sent total is not trusted for the charge.
+            uniformItems: wantsKit ? kitItems : [],
           }),
         });
         const data = await r.json().catch(() => null);
@@ -435,14 +463,59 @@ export default function ReturningSignup() {
           <div className="bg-white/5 border border-white/10 rounded-xl p-4">
             <div className="text-[11px] font-black uppercase tracking-widest text-rr-pink mb-3">Playing uniform</div>
             <div className="flex items-start gap-3">
-              <input id="needs_uniform" type="checkbox" checked={form.needs_uniform} onChange={(e) => set('needs_uniform', e.target.checked)} className="mt-0.5 w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer" />
+              <input id="needs_uniform" type="checkbox" checked={form.needs_uniform} onChange={(e) => { set('needs_uniform', e.target.checked); if (!e.target.checked) setKit(BLANK_KIT); }} className="mt-0.5 w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer" />
               <label htmlFor="needs_uniform" className="text-xs text-white/70 leading-relaxed cursor-pointer">
-                I need a Royals playing uniform. I’ll choose my sizes and pay for it at the checkout. <span className="text-white/40">(Already have your kit? Leave this unticked.)</span>
+                I need Royals playing kit. <span className="text-white/40">(Already have your kit? Leave this unticked.)</span>
               </label>
             </div>
-            <button type="button" onClick={() => setShowSizeGuide(true)} className="mt-3 inline-flex items-center gap-1.5 text-rr-light-pink hover:text-white text-[12px] font-bold uppercase tracking-wide px-3.5 py-2.5 rounded-full border border-rr-light-pink/30 hover:border-rr-light-pink/60 transition-colors">
-              <Ruler className="w-3.5 h-3.5" /> View the size guide
-            </button>
+
+            {form.needs_uniform && (
+              <div className="mt-4 space-y-3">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-white/55 text-xs leading-relaxed">Let’s confirm your sizing — pick a size for each item you need and we’ll add it to your payment.</p>
+                  <button type="button" onClick={() => setShowSizeGuide(true)} className="flex-shrink-0 inline-flex items-center gap-1.5 text-rr-light-pink hover:text-white text-[11px] font-bold uppercase tracking-wide px-3 py-2 rounded-full border border-rr-light-pink/30 hover:border-rr-light-pink/60 transition-colors">
+                    <Ruler className="w-3.5 h-3.5" /> Size guide
+                  </button>
+                </div>
+
+                {UNIFORM.map((u) => (
+                  <div key={u.key} className="flex items-center gap-3">
+                    <div className="flex-1 min-w-0">
+                      <span className="block text-sm font-bold text-white truncate">{u.label}</span>
+                      <span className="block text-white/40 text-[11px]">{fmtAud(u.priceCents)}{u.oneSize ? ' · one size' : ''}</span>
+                    </div>
+                    {u.oneSize ? (
+                      <label className="flex items-center gap-2 cursor-pointer select-none">
+                        <input type="checkbox" checked={kit[u.key] === 'one'} onChange={(e) => setKitSize(u.key, e.target.checked ? 'one' : '')} className="w-4 h-4 accent-rr-pink cursor-pointer" />
+                        <span className="text-white/60 text-xs">Add</span>
+                      </label>
+                    ) : (
+                      <select value={kit[u.key]} onChange={(e) => setKitSize(u.key, e.target.value)} className={`w-36 ${fieldCls} py-2.5 text-sm appearance-none cursor-pointer`}>
+                        <option value="" className="text-rr-dark">Not needed</option>
+                        {sizeLabels(u.sizes, 'junior').length > 0 && (
+                          <optgroup label="Junior">
+                            {sizeLabels(u.sizes, 'junior').map((s) => <option key={`j-${s}`} value={s} className="text-rr-dark">{s}</option>)}
+                          </optgroup>
+                        )}
+                        {sizeLabels(u.sizes, 'senior').length > 0 && (
+                          <optgroup label="Senior">
+                            {sizeLabels(u.sizes, 'senior').map((s) => <option key={`s-${s}`} value={s} className="text-rr-dark">{s}</option>)}
+                          </optgroup>
+                        )}
+                      </select>
+                    )}
+                  </div>
+                ))}
+
+                {kitTotalCents > 0 && (
+                  <div className="flex items-center justify-between border-t border-white/10 pt-3 text-sm">
+                    <span className="text-white/55">Kit subtotal</span>
+                    <span className="font-black text-white">{fmtAud(kitTotalCents)}</span>
+                  </div>
+                )}
+                <p className="text-white/30 text-[11px] leading-relaxed">We’ll double-check sizing with you before anything is made.</p>
+              </div>
+            )}
           </div>
 
           {/* Pay */}
@@ -452,10 +525,10 @@ export default function ReturningSignup() {
               disabled={submitting}
               className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)] inline-flex items-center justify-center gap-2"
             >
-              {submitting ? 'Processing…' : <>Pay {fmtAud(BLOCK_FEE_CENTS)} &amp; secure my spot <ArrowRight className="w-4 h-4" /></>}
+              {submitting ? 'Processing…' : <>Pay {fmtAud(BLOCK_FEE_CENTS + (form.needs_uniform ? kitTotalCents : 0))} &amp; secure my spot <ArrowRight className="w-4 h-4" /></>}
             </button>
             <p className="text-white/30 text-[11px] text-center mt-3 leading-relaxed">
-              Secure payment via Stripe. Your coach will confirm your squad after payment.
+              Secure payment via Stripe{form.needs_uniform && kitTotalCents > 0 ? <> — {fmtAud(BLOCK_FEE_CENTS)} program + {fmtAud(kitTotalCents)} kit</> : ''}. Your coach will confirm your squad after payment.
             </p>
           </div>
         </div>

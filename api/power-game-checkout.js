@@ -11,6 +11,7 @@
 // ============================================================
 import Stripe from 'stripe';
 import { packApplication } from './_lib/pgpCheckout.js';
+import { buildUniformLineItems } from './_lib/uniformPricing.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const BASE_URL = process.env.VITE_APP_URL || 'https://rramelbourne.com';
@@ -19,7 +20,7 @@ const BLOCK_FEE_CENTS = 98900; // $989 — 8-week phase
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   try {
-    const { application, email, playerName, squadId, uniformTotalCents, uniformSelection } = req.body || {};
+    const { application, email, playerName, squadId, uniformItems, uniformTotalCents, uniformSelection } = req.body || {};
     if (!application || typeof application !== 'object') {
       return res.status(400).json({ error: 'Missing application payload' });
     }
@@ -48,21 +49,34 @@ export default async function handler(req, res) {
       },
     ];
 
-    // Kit/uniform is size-capture only by default (not charged on the fixed $989 link);
-    // a positive uniformTotalCents would bundle it into the same payment.
-    const kitCents = Number(uniformTotalCents) || 0;
-    if (kitCents > 0) {
-      lineItems.push({
-        price_data: {
-          currency: 'aud',
-          product_data: {
-            name: 'Royals Academy Kit',
-            description: (uniformSelection || '').slice(0, 250) || undefined,
+    // Uniform/kit. Preferred path: the browser sends an array of { key, size } picks
+    // and we build one Stripe line item PER garment at SERVER-decided prices (a
+    // tampered request can't change what's charged). Legacy fallback: a single
+    // client-sent uniformTotalCents (the original funnel path — left untouched).
+    const uniform = buildUniformLineItems(uniformItems);
+    let kitCents = 0;
+    let kitSummary = '';
+    if (uniform.lineItems.length > 0) {
+      lineItems.push(...uniform.lineItems);
+      kitCents = uniform.totalCents;
+      kitSummary = uniform.summary;
+    } else {
+      const legacyCents = Number(uniformTotalCents) || 0;
+      if (legacyCents > 0) {
+        lineItems.push({
+          price_data: {
+            currency: 'aud',
+            product_data: {
+              name: 'Royals Academy Kit',
+              description: (uniformSelection || '').slice(0, 250) || undefined,
+            },
+            unit_amount: legacyCents,
           },
-          unit_amount: kitCents,
-        },
-        quantity: 1,
-      });
+          quantity: 1,
+        });
+        kitCents = legacyCents;
+        kitSummary = uniformSelection || '';
+      }
     }
 
     const session = await stripe.checkout.sessions.create({
@@ -74,7 +88,7 @@ export default async function handler(req, res) {
         source: 'power-game',
         player_name: (playerName || a.player_name || '').slice(0, 200),
         squad_id: squadId || '',
-        uniform_selection: (uniformSelection || a.uniform_selection || '').slice(0, 480),
+        uniform_selection: (kitSummary || a.uniform_selection || '').slice(0, 480),
         uniform_total_cents: String(kitCents),
         // Full application payload, packed across app_0..app_{n-1} (+ app_n count).
         ...packApplication(a),
