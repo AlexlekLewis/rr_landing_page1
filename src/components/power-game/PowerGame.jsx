@@ -7,14 +7,18 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 // Any "Apply" CTA opens the REAL Stripe apply funnel (ApplyFlow) as an overlay.
 const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
 
-  :root{
+  /* Design tokens + base styles live on :host, NOT :root/body — inside a shadow
+     root a :root selector matches the (unreachable) document <html>, so the tokens
+     would resolve to empty and every var(--pink/--dark/…) colour would break. :host
+     is the shadow tree's own root; custom properties set here inherit into all of it. */
+  :host{
     --pink:#E11F8F; --pink-l:#E96BB0; --blue:#1226AA; --navy:#001D48;
     --dark:#111921; --charcoal:#323E48; --slate:#5b6770;
     --s50:#F8FAFC; --s100:#F1F5F9; --green:#0F6E56;
+    display:block; font-family:'Montserrat',sans-serif; -webkit-font-smoothing:antialiased;
+    color:var(--dark); background:#fff; padding-bottom:72px;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
-  body{font-family:'Montserrat',sans-serif; -webkit-font-smoothing:antialiased; color:var(--dark); background:#fff; padding-bottom:72px;}
   .wrap{max-width:1080px; margin:0 auto; padding:0 22px;}
   .narrow{max-width:760px; margin:0 auto;}
   section{padding:56px 0;}
