@@ -344,6 +344,14 @@ export default function ApplyFlow({ embedded = false }) {
   const matchingSquads = result && !result.placement.requiresReview
     ? squadsForPlacement({ centre: form.centre, band: result.placement.placedBand, stream: result.placement.stream })
     : [];
+  // Hallam Sat 4–6pm 12-14 runs as ONE combined squad (no perf/pathway split) — present it
+  // as "<band> Squad", not a Performance/Pathway team. All other slots are unchanged.
+  const isCombinedSquad = matchingSquads.some((s) => s.combined) || !!selected?.combined;
+  const squadLabel = result?.placement
+    ? (isCombinedSquad
+        ? `${result.placement.placedBand} Squad`
+        : `${result.placement.stream === 'performance' ? 'Performance' : 'Pathway'} · ${result.placement.placedBand}`)
+    : '';
   const comingSoonVenue = !!CENTRE_BY_SLUG[form.centre]?.comingSoon;
   // The soft 'review' step serves three audiences: a below-floor coach review, a
   // coming-soon venue waitlist, and a *placed* player who'd rather talk first — that
@@ -566,14 +574,14 @@ export default function ApplyFlow({ embedded = false }) {
                     <div className="text-white/40 text-sm mt-2">Matching you to the right squad</div>
                   </div>
                 ) : result.placement.requiresReview || CENTRE_BY_SLUG[form.centre]?.comingSoon ? (
-                  <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} onContinue={afterReveal} onRequestInfo={() => setStep('requestInfo')} />
+                  <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} combined={isCombinedSquad} onContinue={afterReveal} onRequestInfo={() => setStep('requestInfo')} />
                 ) : (
                   <>
-                    <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} onContinue={null} onRequestInfo={() => setStep('requestInfo')} />
+                    <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} combined={isCombinedSquad} onContinue={null} onRequestInfo={() => setStep('requestInfo')} />
 
                     <div className="mt-8">
                       <h2 className="text-xl md:text-2xl font-black uppercase tracking-wide mb-1">Choose your time</h2>
-                      <p className="text-white/50 text-sm mb-5">{result.placement.stream === 'performance' ? 'Performance' : 'Pathway'} · {result.placement.placedBand} · {CENTRE_BY_SLUG[form.centre]?.name}</p>
+                      <p className="text-white/50 text-sm mb-5">{squadLabel} · {CENTRE_BY_SLUG[form.centre]?.name}</p>
                       {matchingSquads.length === 0 ? (
                         <Fallback onOther={() => { const other = CENTRES.find((c) => c.slug !== form.centre && !c.comingSoon); if (other) { set('centre', other.slug); } }} onReview={() => setStep('review')} otherName={CENTRES.find((c) => c.slug !== form.centre && !c.comingSoon)?.name} />
                       ) : (
@@ -672,7 +680,7 @@ export default function ApplyFlow({ embedded = false }) {
                 <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-6">Secure your spot</h1>
                 <div className="bg-white/5 border border-white/15 rounded-2xl p-6 mb-6 space-y-3">
                   <SummaryRow k="Player" v={form.player_name} />
-                  <SummaryRow k="Squad" v={`${result.placement.stream === 'performance' ? 'Performance' : 'Pathway'} · ${result.placement.placedBand}`} />
+                  <SummaryRow k="Squad" v={squadLabel} />
                   <SummaryRow k="Centre" v={CENTRE_BY_SLUG[form.centre]?.name} />
                   <SummaryRow k="Time" v={`${selected.day} ${selected.startTime}–${selected.endTime}`} />
                   <SummaryRow k="Block" v="8-week Power Pre-Season" />
@@ -773,7 +781,7 @@ export default function ApplyFlow({ embedded = false }) {
               <div className="text-center py-8">
                 <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 200 }} className="w-20 h-20 rounded-full bg-green-500/20 border border-green-500/40 flex items-center justify-center mx-auto mb-5"><Check className="w-10 h-10 text-green-400" /></motion.div>
                 <h1 className="text-3xl font-black uppercase tracking-wide mb-2">You're in!</h1>
-                <p className="text-white/60 text-sm max-w-sm mx-auto mb-6">{form.player_name?.split(' ')[0]}'s spot is locked: <span className="text-white font-bold">{result.placement.stream === 'performance' ? 'Performance' : 'Pathway'} · {result.placement.placedBand}</span>, {selected.day} {selected.startTime}–{selected.endTime} at {CENTRE_BY_SLUG[form.centre]?.name}. A confirmation email is on its way.</p>
+                <p className="text-white/60 text-sm max-w-sm mx-auto mb-6">{form.player_name?.split(' ')[0]}'s spot is locked: <span className="text-white font-bold">{squadLabel}</span>, {selected.day} {selected.startTime}–{selected.endTime} at {CENTRE_BY_SLUG[form.centre]?.name}. A confirmation email is on its way.</p>
               </div>
             )}
 

@@ -8,7 +8,7 @@ const STREAM_COPY = {
 };
 
 // The payoff moment — feels like an assessment that rewards the player.
-export default function DnaRevealCard({ placement, centreName, onContinue, onRequestInfo }) {
+export default function DnaRevealCard({ placement, centreName, combined, onContinue, onRequestInfo }) {
   if (placement.requiresReview) {
     return (
       <motion.div
@@ -36,6 +36,11 @@ export default function DnaRevealCard({ placement, centreName, onContinue, onReq
   }
 
   const stream = STREAM_COPY[placement.stream] ?? STREAM_COPY.pathway;
+  // A combined squad is presented as one group ("<band> Squad"), not a Performance/Pathway stream.
+  const title = combined ? `${placement.placedBand} Squad` : stream.title;
+  const blurb = combined
+    ? 'One squad — the whole age group trains together, no Performance/Pathway split.'
+    : stream.blurb;
 
   return (
     <motion.div
@@ -49,8 +54,8 @@ export default function DnaRevealCard({ placement, centreName, onContinue, onReq
           <span className="text-[11px] font-black text-rr-pink uppercase tracking-widest">You've earned your place</span>
         </motion.div>
 
-        <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight leading-none mb-2">{stream.title}</h2>
-        <p className="text-white/60 text-sm mb-6">{stream.blurb}</p>
+        <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight leading-none mb-2">{title}</h2>
+        <p className="text-white/60 text-sm mb-6">{blurb}</p>
 
         {placement.playFlag === 'play_up' && (
           <div className="flex items-center justify-center gap-2 text-rr-pink text-xs font-bold uppercase tracking-widest mb-5">

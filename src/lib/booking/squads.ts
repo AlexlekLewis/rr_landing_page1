@@ -14,7 +14,7 @@
 //     roster), not a per-week spot. "Capacity" = the enrolled roster, filled once.
 //
 // OFFICIAL grid (per the sheet, Netz Friday = two 2-hour blocks CONFIRMED by Alex):
-//   Hallam     Thu 8–10pm (5 lanes, 17+) + Sat 12–2pm (5 lanes, 12-14) + Sat 2–4pm (4 lanes, 14-16)
+//   Hallam     Thu 8–10pm (5 lanes, 17+) + Sat 2–4pm (4 lanes, 14-16) + Sat 4–6pm (4 lanes, 12-14, ONE combined squad)
 //   The Netz   Fri 5:30–9:30pm (5 lanes, 2 squads) + Sat 2–4pm & 4–6pm (7 lanes)
 //   Mickleham  Fri 6–8pm & 8–10pm + Sat 2–4pm & 4–6pm (7 lanes) — confirmed (facility name/address TBC).
 // ============================================================
@@ -54,12 +54,15 @@ export interface Squad {
   blockId: string;
   band: AgeBand;
   stream: Stream;
+  /** True when this block runs as ONE combined squad (no perf/pathway split) — e.g.
+   *  Hallam Sat 4–6pm 12-14. A combined squad matches placements of either stream. */
+  combined?: boolean;
   day: string;
   startTime: string;
   endTime: string;
   /** Lanes available to this team's block. */
   lanes: number;
-  /** Bookable team capacity (perf = ceil half, pathway = floor half of the squad). */
+  /** Bookable capacity: a split team = perf ceil / pathway floor half; a combined squad = the full squad. */
   capacity: number;
   blockLabel: string;
   sortOrder: number;
@@ -120,6 +123,8 @@ interface RawBlock {
   lanes: number;
   blockLabel: string;
   sortOrder: number;
+  /** When true, this block runs as ONE combined squad (no perf/pathway split). */
+  combined?: boolean;
 }
 
 const BLOCKS: RawBlock[] = [
@@ -129,10 +134,12 @@ const BLOCKS: RawBlock[] = [
   { idBase: "w-sat2-1214", centre: "williamstown", band: "12-14", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 7, blockLabel: "Sat 2–4pm", sortOrder: 3 },
   { idBase: "w-sat4-1416", centre: "williamstown", band: "14-16", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 7, blockLabel: "Sat 4–6pm", sortOrder: 4 },
 
-  // ── Elite Cricket Centre — Hallam (Thu 8–10pm = 5 lanes · Sat 12–2pm = 5 lanes · Sat 2–4pm = 4 lanes) ──
+  // ── Elite Cricket Centre — Hallam (Thu 8–10pm = 5 lanes · Sat 2–4pm = 4 lanes · Sat 4–6pm = 4 lanes).
+  //    Sat 4–6pm 12-14 runs as ONE combined squad (no perf/pathway split). idBase "h-sat12-1214"
+  //    is kept as an opaque booking key for continuity (it now denotes the 4–6pm slot). ──
   { idBase: "h-thu8-17", centre: "hallam", band: "17+", day: "Thursday", startTime: "8:00pm", endTime: "10:00pm", lanes: 5, blockLabel: "Thu 8–10pm", sortOrder: 1 },
-  { idBase: "h-sat12-1214", centre: "hallam", band: "12-14", day: "Saturday", startTime: "12:00pm", endTime: "2:00pm", lanes: 5, blockLabel: "Sat 12–2pm", sortOrder: 2 },
-  { idBase: "h-sat2-1416", centre: "hallam", band: "14-16", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 4, blockLabel: "Sat 2–4pm", sortOrder: 3 },
+  { idBase: "h-sat2-1416", centre: "hallam", band: "14-16", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 4, blockLabel: "Sat 2–4pm", sortOrder: 2 },
+  { idBase: "h-sat12-1214", centre: "hallam", band: "12-14", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 4, blockLabel: "Sat 4–6pm", sortOrder: 3, combined: true },
 
   // ── Mickleham Indoor Sports Centre — Mickleham (Fri 6–8pm + Fri 8–10pm · Sat 2–4pm + Sat 4–6pm) ──
   { idBase: "m-fri6-1416", centre: "mickleham", band: "14-16", day: "Friday", startTime: "6:00pm", endTime: "8:00pm", lanes: 7, blockLabel: "Fri 6–8pm", sortOrder: 1 },
@@ -141,8 +148,27 @@ const BLOCKS: RawBlock[] = [
   { idBase: "m-sat4-1416", centre: "mickleham", band: "14-16", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 7, blockLabel: "Sat 4–6pm", sortOrder: 4 },
 ];
 
-export const SQUADS: Squad[] = BLOCKS.flatMap((b) =>
-  (["performance", "pathway"] as Stream[]).map((stream, i) => ({
+export const SQUADS: Squad[] = BLOCKS.flatMap((b) => {
+  // A `combined` block is ONE squad (the whole age group trains together) at full
+  // squad capacity — NOT split into Performance + Pathway teams like every other block.
+  if (b.combined) {
+    return [{
+      id: b.idBase,
+      centre: b.centre,
+      blockId: `${b.centre}-${b.day}-${b.startTime}`,
+      band: b.band,
+      stream: "performance" as Stream, // nominal; combined squads match either stream (see squadsForPlacement)
+      combined: true,
+      day: b.day,
+      startTime: b.startTime,
+      endTime: b.endTime,
+      lanes: b.lanes,
+      capacity: squadCapacity(b.lanes),
+      blockLabel: b.blockLabel,
+      sortOrder: b.sortOrder * 2,
+    }];
+  }
+  return (["performance", "pathway"] as Stream[]).map((stream, i) => ({
     id: `${b.idBase}-${stream === "performance" ? "perf" : "path"}`,
     centre: b.centre,
     blockId: `${b.centre}-${b.day}-${b.startTime}`,
@@ -155,12 +181,13 @@ export const SQUADS: Squad[] = BLOCKS.flatMap((b) =>
     capacity: teamCapacity(b.lanes, stream),
     blockLabel: b.blockLabel,
     sortOrder: b.sortOrder * 2 + i,
-  })),
-);
+  }));
+});
 
-/** Squads (teams) matching a player's placement (band + stream) at an optional centre. */
+/** Squads (teams) matching a player's placement (band + stream) at an optional centre.
+ *  A `combined` squad matches either stream — the whole band books into the one squad. */
 export function squadsForPlacement(opts: { centre?: string; band: string; stream: string }): Squad[] {
   return SQUADS.filter(
-    (s) => s.band === opts.band && s.stream === opts.stream && (!opts.centre || s.centre === opts.centre),
+    (s) => s.band === opts.band && (s.combined || s.stream === opts.stream) && (!opts.centre || s.centre === opts.centre),
   ).sort((a, b) => a.sortOrder - b.sortOrder);
 }
