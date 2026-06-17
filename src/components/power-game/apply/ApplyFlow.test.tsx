@@ -86,7 +86,7 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     expect(screen.getAllByText(/full/i).length).toBeGreaterThan(0);
   });
 
-  it("real journey: centre → player → profile (game + cricket) → confirm → reveal (no demo shortcut)", async () => {
+  it("real journey: centre → player → profile (cricket history) → confirm → reveal (no demo shortcut)", async () => {
     window.history.pushState({}, "", "/PGP2026/apply");
     render(<ApplyFlow />);
     const yr = String(new Date().getFullYear() - 14); // 14yo
@@ -114,9 +114,7 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     document.querySelectorAll('input[type="checkbox"]').forEach((b) => fireEvent.click(b));
     fireEvent.click(screen.getByText("Continue"));
 
-    // Profile — game + last-3-years cricket are now ONE merged step.
-    fireEvent.click(screen.getByText("Batter"));
-    fireEvent.click(screen.getByText("Right"));
+    // Profile — last-3-years cricket only (game profile moved to onboarding).
     fireEvent.change(screen.getByPlaceholderText(/footscray/i), { target: { value: "Williamstown CC" } });
     // Dowling Shield (a pure batter has no numbers to add now)
     const levelSel = (screen.getAllByRole("combobox") as HTMLSelectElement[]).find((s) => [...s.options].some((o) => o.value === "P16M"))!;

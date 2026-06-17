@@ -229,12 +229,8 @@ export function validateStep(step: Step, f: ApplyForm): string[] {
     if (!consentsOk(f)) e.push("Please accept the compliances to continue.");
   }
   if (step === "profile") {
-    // Game
-    if (!f.skill) e.push("Select a main skill.");
-    if ((f.skill === "batting" || f.skill === "all_rounder" || f.skill === "wicketkeeper") && !f.batting_hand)
-      e.push("Select a batting hand.");
-    if ((f.skill === "bowling" || f.skill === "all_rounder") && !f.bowling_type) e.push("Select a bowling type.");
-    // Cricket — last 3 years (merged in)
+    // Cricket — last 3 years. (Game profile — skill, batting hand, bowling type —
+    // is no longer collected in the application; it's captured at onboarding.)
     if (!f.current_club.trim()) e.push("Enter your current cricket club.");
     if (!f.rep_level && !f.club_level && !f.wildcard)
       e.push("Add your representative and/or senior cricket — or apply as a Wild Card below.");
