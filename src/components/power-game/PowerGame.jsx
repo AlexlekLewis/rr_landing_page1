@@ -87,12 +87,15 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
   .avail > summary .alabel{flex:1; line-height:1.2;}
   .avail > summary .chev{flex:none; color:var(--pink); font-weight:900; font-size:15px; line-height:1; transition:transform .2s ease;}
   .avail[open] > summary .chev{transform:rotate(180deg);}
-  .abrief{font-size:11px; color:var(--slate); font-weight:500; line-height:1.45; padding:13px 16px 0;}
-  .aboxes{display:grid; grid-template-columns:repeat(auto-fit,minmax(112px,1fr)); gap:7px; padding:13px 14px;}
-  .abox{border:1px solid #e7ebef; background:var(--s50); border-radius:10px; padding:8px 10px; text-align:left;}
-  .abox .aday{display:block; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--pink);}
-  .abox .atime{display:block; font-size:12.5px; font-weight:800; color:var(--dark); margin:2px 0 6px; letter-spacing:-.01em; white-space:nowrap;}
-  .abox .aband{display:inline-block; font-size:9.5px; font-weight:800; text-transform:uppercase; letter-spacing:.04em; color:var(--slate); background:#fff; border:1px solid #e7ebef; border-radius:5px; padding:2px 6px;}
+  .abrief{font-size:11px; color:var(--slate); font-weight:500; line-height:1.45; padding:13px 14px 2px;}
+  .adays{padding:2px 14px 14px;}
+  .aday-h{font-size:9.5px; font-weight:900; letter-spacing:1.4px; text-transform:uppercase; color:var(--blue); margin:13px 0 7px; display:flex; align-items:center; gap:8px;}
+  .aday-h:first-child{margin-top:4px;}
+  .aday-h::after{content:""; flex:1; height:1px; background:#e7ebef;}
+  .aboxes{display:grid; grid-template-columns:repeat(auto-fit,minmax(118px,1fr)); gap:7px;}
+  .abox{border:1px solid #e7ebef; background:var(--s50); border-radius:10px; padding:9px 10px; text-align:left;}
+  .abox .atime{display:block; font-size:13px; font-weight:800; color:var(--dark); letter-spacing:-.01em; white-space:nowrap;}
+  .abox .aage{display:inline-block; margin-top:5px; font-size:9px; font-weight:900; text-transform:uppercase; letter-spacing:.04em; color:var(--slate); background:#fff; border:1px solid #e7ebef; border-radius:5px; padding:2px 6px;}
   </style>
 
 <!-- NAV -->
@@ -436,15 +439,21 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
         <details class="avail" open>
           <summary><span class="alabel">View squads &amp; times</span><span class="chev">⌄</span></summary>
           <div class="abrief">Every squad runs <strong>2 hours, once a week, for 8 weeks</strong> — pick the day, time &amp; age group that suit you.</div>
-          <div class="aboxes">
-            <div class="abox"><span class="aday">Fri</span><span class="atime">5:30–7:30pm</span><span class="aband">12–14</span></div>
-            <div class="abox"><span class="aday">Fri</span><span class="atime">5:30–7:30pm</span><span class="aband">14–16</span></div>
-            <div class="abox"><span class="aday">Fri</span><span class="atime">7:30–9:30pm</span><span class="aband">14–16</span></div>
-            <div class="abox"><span class="aday">Fri</span><span class="atime">7:30–9:30pm</span><span class="aband">17+</span></div>
-            <div class="abox"><span class="aday">Sat</span><span class="atime">2:00–4:00pm</span><span class="aband">12–14</span></div>
-            <div class="abox"><span class="aday">Sat</span><span class="atime">2:00–4:00pm</span><span class="aband">14–16</span></div>
-            <div class="abox"><span class="aday">Sat</span><span class="atime">4:00–6:00pm</span><span class="aband">14–16</span></div>
-            <div class="abox"><span class="aday">Sat</span><span class="atime">4:00–6:00pm</span><span class="aband">17+</span></div>
+          <div class="adays">
+            <div class="aday-h">Friday</div>
+            <div class="aboxes">
+              <div class="abox"><span class="atime">5:30–7:30pm</span><span class="aage">Ages 12–14</span></div>
+              <div class="abox"><span class="atime">5:30–7:30pm</span><span class="aage">Ages 14–16</span></div>
+              <div class="abox"><span class="atime">7:30–9:30pm</span><span class="aage">Ages 14–16</span></div>
+              <div class="abox"><span class="atime">7:30–9:30pm</span><span class="aage">Ages 17+</span></div>
+            </div>
+            <div class="aday-h">Saturday</div>
+            <div class="aboxes">
+              <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 12–14</span></div>
+              <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 14–16</span></div>
+              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 14–16</span></div>
+              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 17+</span></div>
+            </div>
           </div>
         </details>
         <div class="winnote">8 weeks · Jul 31 – Sep 19</div>
@@ -457,13 +466,19 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
         <details class="avail">
           <summary><span class="alabel">View squads &amp; times</span><span class="chev">⌄</span></summary>
           <div class="abrief">Every squad runs <strong>2 hours, once a week, for 8 weeks</strong> — pick the day, time &amp; age group that suit you.</div>
-          <div class="aboxes">
-            <div class="abox"><span class="aday">Thu</span><span class="atime">8:00–10:00pm</span><span class="aband">14–16</span></div>
-            <div class="abox"><span class="aday">Thu</span><span class="atime">8:00–10:00pm</span><span class="aband">17+</span></div>
-            <div class="abox"><span class="aday">Sat</span><span class="atime">2:00–4:00pm</span><span class="aband">12–14</span></div>
-            <div class="abox"><span class="aday">Sat</span><span class="atime">2:00–4:00pm</span><span class="aband">14–16</span></div>
-            <div class="abox"><span class="aday">Sat</span><span class="atime">4:00–6:00pm</span><span class="aband">12–14</span></div>
-            <div class="abox"><span class="aday">Sat</span><span class="atime">4:00–6:00pm</span><span class="aband">17+</span></div>
+          <div class="adays">
+            <div class="aday-h">Thursday</div>
+            <div class="aboxes">
+              <div class="abox"><span class="atime">8:00–10:00pm</span><span class="aage">Ages 14–16</span></div>
+              <div class="abox"><span class="atime">8:00–10:00pm</span><span class="aage">Ages 17+</span></div>
+            </div>
+            <div class="aday-h">Saturday</div>
+            <div class="aboxes">
+              <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 12–14</span></div>
+              <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 14–16</span></div>
+              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 12–14</span></div>
+              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 17+</span></div>
+            </div>
           </div>
         </details>
         <div class="winnote">8 weeks · Jul 30 – Sep 19</div>
@@ -476,15 +491,21 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
         <details class="avail">
           <summary><span class="alabel">View squads &amp; times</span><span class="chev">⌄</span></summary>
           <div class="abrief">Every squad runs <strong>2 hours, once a week, for 8 weeks</strong> — pick the day, time &amp; age group that suit you.</div>
-          <div class="aboxes">
-            <div class="abox"><span class="aday">Fri</span><span class="atime">6:00–8:00pm</span><span class="aband">12–14</span></div>
-            <div class="abox"><span class="aday">Fri</span><span class="atime">6:00–8:00pm</span><span class="aband">14–16</span></div>
-            <div class="abox"><span class="aday">Fri</span><span class="atime">8:00–10:00pm</span><span class="aband">14–16</span></div>
-            <div class="abox"><span class="aday">Fri</span><span class="atime">8:00–10:00pm</span><span class="aband">17+</span></div>
-            <div class="abox"><span class="aday">Sat</span><span class="atime">2:00–4:00pm</span><span class="aband">12–14</span></div>
-            <div class="abox"><span class="aday">Sat</span><span class="atime">2:00–4:00pm</span><span class="aband">14–16</span></div>
-            <div class="abox"><span class="aday">Sat</span><span class="atime">4:00–6:00pm</span><span class="aband">14–16</span></div>
-            <div class="abox"><span class="aday">Sat</span><span class="atime">4:00–6:00pm</span><span class="aband">17+</span></div>
+          <div class="adays">
+            <div class="aday-h">Friday</div>
+            <div class="aboxes">
+              <div class="abox"><span class="atime">6:00–8:00pm</span><span class="aage">Ages 12–14</span></div>
+              <div class="abox"><span class="atime">6:00–8:00pm</span><span class="aage">Ages 14–16</span></div>
+              <div class="abox"><span class="atime">8:00–10:00pm</span><span class="aage">Ages 14–16</span></div>
+              <div class="abox"><span class="atime">8:00–10:00pm</span><span class="aage">Ages 17+</span></div>
+            </div>
+            <div class="aday-h">Saturday</div>
+            <div class="aboxes">
+              <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 12–14</span></div>
+              <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 14–16</span></div>
+              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 14–16</span></div>
+              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 17+</span></div>
+            </div>
           </div>
         </details>
         <div class="winnote">8 weeks · Jul 31 – Sep 19</div>
