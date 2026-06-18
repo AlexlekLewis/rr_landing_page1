@@ -16,6 +16,7 @@ import CoachingOpportunities from './components/coaching-opportunities/CoachingO
 import PowerGame from './components/power-game/PowerGame';
 import IndiaTour2026 from './components/india-tour-2026/IndiaTour2026';
 import HomePage from './components/home-page/HomePage';
+import InductionPage from './components/induction/InductionPage';
 import PostHogPageviewTracker from './components/PostHogPageviewTracker';
 
 // DNA Profile — lazy-loaded so it never impacts landing page bundle size
@@ -143,6 +144,9 @@ function App() {
         <Route path="/female-empowerment" element={<FemaleEmpowerment />} />
         {/* Coaching Opportunities — HIDDEN from nav, accessible via direct URL only */}
         <Route path="/coaching-opportunities" element={<CoachingOpportunities />} />
+        {/* Player Induction — generic, reusable form for ad-hoc program launches. Hidden from
+            nav; share the link directly (optionally /induction?program=Name). Writes to program_inductions. */}
+        <Route path="/induction" element={<InductionPage />} />
 
         {/* Power Game Program — hidden from nav, accessible via direct URL only */}
         <Route path="/PGP2026" element={<PowerGame />} />
