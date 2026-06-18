@@ -412,7 +412,7 @@ export default function ApplyFlow({ embedded = false }) {
             {step === 'centre' && (
               <div>
                 <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-2">Where do you want to train?</h1>
-                <p className="text-white/50 text-sm mb-6">Pick your centre — we'll show the squads &amp; times that fit you once we know your cricket.</p>
+                <p className="text-white/50 text-sm mb-6">Pick your centre — see its squads &amp; times below, and choose the one that suits you.</p>
                 <div className="space-y-3">
                   {CENTRES.map((c) => {
                     const active = form.centre === c.slug;
@@ -434,6 +434,17 @@ export default function ApplyFlow({ embedded = false }) {
                     );
                   })}
                 </div>
+
+                {form.centre && !CENTRE_BY_SLUG[form.centre]?.comingSoon && (
+                  <div className="mt-7 pt-6 border-t border-white/10">
+                    <div className="flex items-baseline justify-between gap-3 mb-3">
+                      <h2 className="text-sm font-black uppercase tracking-widest text-white">Squads &amp; times at {CENTRE_BY_SLUG[form.centre]?.name}</h2>
+                      <span className="hidden sm:block text-[11px] text-white/40 font-bold uppercase tracking-widest">Day · Time · Age</span>
+                    </div>
+                    <CentreAvailabilityGrid centreSlug={form.centre} />
+                    <p className="text-white/35 text-[11px] mt-3">Prefer a different night? Tap another centre above to compare — we'll highlight the squads that fit you once we know your cricket.</p>
+                  </div>
+                )}
               </div>
             )}
 
