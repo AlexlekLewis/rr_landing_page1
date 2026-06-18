@@ -80,6 +80,22 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
   .starrow{color:var(--pink); font-weight:900; font-size:11px; margin:0 1px;}
   .stagebody{padding:13px 16px; display:flex; flex-wrap:wrap; gap:6px; align-items:center;}
   @media(min-width:760px){ .g2quote{grid-template-columns:1.2fr .8fr;} }
+  /* Centre availability grid — tap a centre to see every squad (day · time · age) */
+  #centres .g3 > .card{min-width:0;} /* keep the 3 columns equal when one card is expanded */
+  .avail{margin-top:12px;}
+  .avail > summary{font-size:12px; letter-spacing:.02em; gap:10px; padding:13px 15px;}
+  .avail > summary .alabel{flex:1; line-height:1.2;}
+  .avail > summary .chev{flex:none; color:var(--pink); font-weight:900; font-size:15px; line-height:1; transition:transform .2s ease;}
+  .avail[open] > summary .chev{transform:rotate(180deg);}
+  .abrief{font-size:11px; color:var(--slate); font-weight:500; line-height:1.45; padding:13px 14px 2px;}
+  .adays{padding:2px 14px 14px;}
+  .aday-h{font-size:9.5px; font-weight:900; letter-spacing:1.4px; text-transform:uppercase; color:var(--blue); margin:13px 0 7px; display:flex; align-items:center; gap:8px;}
+  .aday-h:first-child{margin-top:4px;}
+  .aday-h::after{content:""; flex:1; height:1px; background:#e7ebef;}
+  .aboxes{display:grid; grid-template-columns:repeat(auto-fit,minmax(118px,1fr)); gap:7px;}
+  .abox{border:1px solid #e7ebef; background:var(--s50); border-radius:10px; padding:9px 10px; text-align:left;}
+  .abox .atime{display:block; font-size:13px; font-weight:800; color:var(--dark); letter-spacing:-.01em; white-space:nowrap;}
+  .abox .aage{display:inline-block; margin-top:5px; font-size:9px; font-weight:900; text-transform:uppercase; letter-spacing:.04em; color:var(--slate); background:#fff; border:1px solid #e7ebef; border-radius:5px; padding:2px 6px;}
   </style>
 
 <!-- NAV -->
@@ -412,18 +428,34 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
       <div style="display:flex; flex-wrap:wrap; gap:9px; justify-content:center; margin:14px 0 16px;">
         <span class="tag">8-week pre-season</span><span class="tag">Once a week</span><span class="tag">2 hours each</span>
       </div>
-      <p class="lead">Same squad, same day, same time, every week. Each centre card below shows its session times and dates. Apply and we'll offer you the sessions that fit your age and ability — then you pick the centre and time that suit you.</p>
+      <p class="lead">Same squad, same day, same time, every week. Tap any centre to see <strong>every squad — day, time &amp; age group</strong>. Apply and we'll highlight the ones that fit your age &amp; ability — then you pick the time that suits you.</p>
     </div>
-    <div class="grid g3">
+    <div class="grid g3" style="align-items:start;">
       <div class="card">
         <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--pink);">West Melbourne</div>
         <h3 style="font-size:18px; margin:6px 0 2px;">Williamstown</h3>
         <div style="font-size:13px; color:var(--slate); font-weight:700;">The Netz</div>
         <div style="font-size:11.5px; color:var(--slate); font-weight:500; margin-bottom:10px;">37 Robbins Cct, Williamstown North</div>
-        <div class="sess"><span class="day">Fri</span> 5:30 – 7:30pm</div>
-        <div class="sess"><span class="day">Fri</span> 7:30 – 9:30pm</div>
-        <div class="sess"><span class="day">Sat</span> 2:00 – 4:00pm</div>
-        <div class="sess"><span class="day">Sat</span> 4:00 – 6:00pm</div>
+        <details class="avail" open>
+          <summary><span class="alabel">View squads &amp; times</span><span class="chev">⌄</span></summary>
+          <div class="abrief">Every squad runs <strong>2 hours, once a week, for 8 weeks</strong> — pick the day, time &amp; age group that suit you.</div>
+          <div class="adays">
+            <div class="aday-h">Friday</div>
+            <div class="aboxes">
+              <div class="abox"><span class="atime">5:30–7:30pm</span><span class="aage">Ages 12–14</span></div>
+              <div class="abox"><span class="atime">5:30–7:30pm</span><span class="aage">Ages 14–16</span></div>
+              <div class="abox"><span class="atime">7:30–9:30pm</span><span class="aage">Ages 14–16</span></div>
+              <div class="abox"><span class="atime">7:30–9:30pm</span><span class="aage">Ages 17+</span></div>
+            </div>
+            <div class="aday-h">Saturday</div>
+            <div class="aboxes">
+              <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 12–14</span></div>
+              <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 14–16</span></div>
+              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 14–16</span></div>
+              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 17+</span></div>
+            </div>
+          </div>
+        </details>
         <div class="winnote">8 weeks · Jul 31 – Sep 19</div>
       </div>
       <div class="card">
@@ -431,9 +463,24 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
         <h3 style="font-size:18px; margin:6px 0 2px;">Hallam</h3>
         <div style="font-size:13px; color:var(--slate); font-weight:700;">Elite Cricket Centre</div>
         <div style="font-size:11.5px; color:var(--slate); font-weight:500; margin-bottom:10px;">8-9 Becon Ct, Hallam</div>
-        <div class="sess"><span class="day">Thu</span> 8:00 – 10:00pm</div>
-        <div class="sess"><span class="day">Sat</span> 2:00 – 4:00pm</div>
-        <div class="sess"><span class="day">Sat</span> 4:00 – 6:00pm</div>
+        <details class="avail">
+          <summary><span class="alabel">View squads &amp; times</span><span class="chev">⌄</span></summary>
+          <div class="abrief">Every squad runs <strong>2 hours, once a week, for 8 weeks</strong> — pick the day, time &amp; age group that suit you.</div>
+          <div class="adays">
+            <div class="aday-h">Thursday</div>
+            <div class="aboxes">
+              <div class="abox"><span class="atime">8:00–10:00pm</span><span class="aage">Ages 14–16</span></div>
+              <div class="abox"><span class="atime">8:00–10:00pm</span><span class="aage">Ages 17+</span></div>
+            </div>
+            <div class="aday-h">Saturday</div>
+            <div class="aboxes">
+              <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 12–14</span></div>
+              <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 14–16</span></div>
+              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 12–14</span></div>
+              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 17+</span></div>
+            </div>
+          </div>
+        </details>
         <div class="winnote">8 weeks · Jul 30 – Sep 19</div>
       </div>
       <div class="card">
@@ -441,10 +488,26 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
         <h3 style="font-size:18px; margin:6px 0 2px;">Mickleham</h3>
         <div style="font-size:13px; color:var(--slate); font-weight:700;">Mickleham Indoor Sports Centre</div>
         <div style="font-size:11.5px; color:var(--slate); font-weight:500; margin-bottom:10px;">Mickleham VIC 3064</div>
-        <div class="sess"><span class="day">Fri</span> 6:00 – 8:00pm</div>
-        <div class="sess"><span class="day">Fri</span> 8:00 – 10:00pm</div>
-        <div class="sess"><span class="day">Sat</span> 2:00 – 4:00pm</div>
-        <div class="sess"><span class="day">Sat</span> 4:00 – 6:00pm</div>
+        <details class="avail">
+          <summary><span class="alabel">View squads &amp; times</span><span class="chev">⌄</span></summary>
+          <div class="abrief">Every squad runs <strong>2 hours, once a week, for 8 weeks</strong> — pick the day, time &amp; age group that suit you.</div>
+          <div class="adays">
+            <div class="aday-h">Friday</div>
+            <div class="aboxes">
+              <div class="abox"><span class="atime">6:00–8:00pm</span><span class="aage">Ages 12–14</span></div>
+              <div class="abox"><span class="atime">6:00–8:00pm</span><span class="aage">Ages 14–16</span></div>
+              <div class="abox"><span class="atime">8:00–10:00pm</span><span class="aage">Ages 14–16</span></div>
+              <div class="abox"><span class="atime">8:00–10:00pm</span><span class="aage">Ages 17+</span></div>
+            </div>
+            <div class="aday-h">Saturday</div>
+            <div class="aboxes">
+              <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 12–14</span></div>
+              <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 14–16</span></div>
+              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 14–16</span></div>
+              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 17+</span></div>
+            </div>
+          </div>
+        </details>
         <div class="winnote">8 weeks · Jul 31 – Sep 19</div>
       </div>
     </div>

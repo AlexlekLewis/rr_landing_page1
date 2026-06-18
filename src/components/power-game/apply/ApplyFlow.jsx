@@ -9,6 +9,7 @@ import { applications, applicationFromPlacement } from '../../../lib/booking/app
 import { BLANK_FORM, validateStep, computePlacement, isMinor, calcAge, BLOCK_FEE, consentsOk } from './flow';
 import { fmtAud } from './kit';
 import DnaRevealCard from './DnaRevealCard';
+import CentreAvailabilityGrid from '../CentreAvailabilityGrid';
 import { submitApplication, buildApplicationRow } from './submit';
 import UniformSizeGuideModal from '../UniformSizeGuideModal';
 import { TOPS_SIZES, SHORTS_SIZES, PANTS_SIZES, JACKET_SIZES, KIDS_AGE_CHART } from '../../academy-shop/sizeData';
@@ -411,7 +412,7 @@ export default function ApplyFlow({ embedded = false }) {
             {step === 'centre' && (
               <div>
                 <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-2">Where do you want to train?</h1>
-                <p className="text-white/50 text-sm mb-6">Pick your centre — we'll show the squads &amp; times that fit you once we know your cricket.</p>
+                <p className="text-white/50 text-sm mb-6">Pick your centre — see its squads &amp; times below, and choose the one that suits you.</p>
                 <div className="space-y-3">
                   {CENTRES.map((c) => {
                     const active = form.centre === c.slug;
@@ -433,6 +434,17 @@ export default function ApplyFlow({ embedded = false }) {
                     );
                   })}
                 </div>
+
+                {form.centre && !CENTRE_BY_SLUG[form.centre]?.comingSoon && (
+                  <div className="mt-7 pt-6 border-t border-white/10">
+                    <div className="flex items-baseline justify-between gap-3 mb-3">
+                      <h2 className="text-sm font-black uppercase tracking-widest text-white">Squads &amp; times at {CENTRE_BY_SLUG[form.centre]?.name}</h2>
+                      <span className="hidden sm:block text-[11px] text-white/40 font-bold uppercase tracking-widest">Day · Time · Age</span>
+                    </div>
+                    <CentreAvailabilityGrid centreSlug={form.centre} />
+                    <p className="text-white/35 text-[11px] mt-3">Prefer a different night? Tap another centre above to compare — we'll highlight the squads that fit you once we know your cricket.</p>
+                  </div>
+                )}
               </div>
             )}
 
@@ -555,30 +567,18 @@ export default function ApplyFlow({ embedded = false }) {
 
                     <div className="mt-8">
                       <h2 className="text-xl md:text-2xl font-black uppercase tracking-wide mb-1">Choose your time</h2>
-                      <p className="text-white/50 text-sm mb-5">{squadLabel} · {CENTRE_BY_SLUG[form.centre]?.name}</p>
+                      <p className="text-white/50 text-sm mb-5">Your <span className="text-rr-pink font-bold">{squadLabel}</span> at {CENTRE_BY_SLUG[form.centre]?.name} is highlighted — other age groups are greyed out.</p>
                       {matchingSquads.length === 0 ? (
                         <Fallback onOther={() => { const other = CENTRES.find((c) => c.slug !== form.centre && !c.comingSoon); if (other) { set('centre', other.slug); } }} onReview={() => setStep('review')} otherName={CENTRES.find((c) => c.slug !== form.centre && !c.comingSoon)?.name} />
                       ) : (
                         <div className="space-y-3">
-                          {matchingSquads.map((sq) => {
-                            const left = inventory.spotsLeft(sq.id);
-                            const full = left <= 0;
-                            return (
-                              <button key={sq.id} data-testid={`slot-${sq.id}`} disabled={full} onClick={() => pickSquad(sq)}
-                                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl border text-left transition-all ${full ? 'bg-white/5 border-white/10 opacity-50 cursor-not-allowed' : 'bg-white/5 border-white/15 hover:border-rr-pink active:scale-[0.99]'}`}>
-                                <Clock className="w-5 h-5 text-rr-pink flex-shrink-0" />
-                                <span className="flex-1">
-                                  <span className="block text-base font-black uppercase tracking-wide">{sq.day} · {sq.startTime}–{sq.endTime}</span>
-                                  {sessionWindow(sq.day) && (
-                                    <span className="block text-[11px] font-bold text-rr-medium-blue uppercase tracking-widest mt-0.5">Starts {sessionWindow(sq.day).start} · 8 weeks</span>
-                                  )}
-                                </span>
-                                <span className={`text-xs font-black uppercase tracking-widest ${full ? 'text-white/40' : left <= 3 ? 'text-rr-pink' : 'text-green-400'}`}>
-                                  {full ? 'Full' : `${left} left`}
-                                </span>
-                              </button>
-                            );
-                          })}
+                          <CentreAvailabilityGrid
+                            centreSlug={form.centre}
+                            eligibleBand={result.placement.placedBand}
+                            selectedId={selected?.id}
+                            onPick={pickSquad}
+                            spotsLeftFor={(id) => inventory.spotsLeft(id)}
+                          />
                           <button onClick={() => setStep('review')} className="w-full text-center text-xs text-white/40 hover:text-white/70 uppercase tracking-widest pt-2">None of these times work →</button>
                           <p className="text-white/25 text-[11px] text-center pt-1">*Squads are subject to change &mdash; we&apos;ll work with you if changes are needed.</p>
                         </div>
