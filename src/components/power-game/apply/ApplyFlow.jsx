@@ -6,7 +6,7 @@ import { REP_GROUPS, CLUB_GROUPS, groupsForGender } from './levels';
 import { CENTRES, CENTRE_BY_SLUG, squadsForPlacement, sessionWindow } from '../../../lib/booking/squads';
 import { inventory } from '../../../lib/booking/inventory';
 import { applications, applicationFromPlacement } from '../../../lib/booking/applications';
-import { BLANK_FORM, validateStep, computePlacement, isMinor, calcAge, BLOCK_FEE, consentsOk } from './flow';
+import { BLANK_FORM, validateStep, computePlacement, isMinor, calcAge, BLOCK_FEE, consentsOk, REFERRAL_CODE } from './flow';
 import { fmtAud } from './kit';
 import DnaRevealCard from './DnaRevealCard';
 import CentreAvailabilityGrid from '../CentreAvailabilityGrid';
@@ -467,6 +467,27 @@ export default function ApplyFlow({ embedded = false }) {
                   <Field label="Suburb"><input className={inputCls} value={form.suburb} onChange={(e) => set('suburb', e.target.value)} placeholder="e.g. Hallam" /></Field>
                 </div>
                 <Field label="Best contact email"><input className={inputCls} value={form.contact_email} onChange={(e) => set('contact_email', e.target.value)} placeholder="jane@email.com" /></Field>
+
+                {/* ── REFERRAL (optional) — applicant credits the coach / talent scout / player who referred them ── */}
+                <div className="pt-3 mt-1 border-t border-white/10">
+                  <p className="text-[11px] font-black uppercase tracking-widest text-rr-pink mt-2">Were you referred? <span className="text-white/40 font-semibold normal-case tracking-normal">— optional</span></p>
+                  <p className="text-white/45 text-xs mb-3 mt-0.5">If a Royals coach, talent scout or player referred you, add their code and name so they get the credit. It won&apos;t change your application or fee.</p>
+                  <div className="grid grid-cols-2 gap-3">
+                    <Field label="Referral code"><input className={inputCls} value={form.referral_code || ''} onChange={(e) => set('referral_code', e.target.value)} placeholder="e.g. ROYALS26" /></Field>
+                    <Field label="Who referred you?"><input className={inputCls} value={form.referred_by_name || ''} onChange={(e) => set('referred_by_name', e.target.value)} placeholder="Their full name" /></Field>
+                  </div>
+                  <div className="mt-3">
+                    <Field label="Their role"><Choice cols={3} value={form.referred_by_role || ''} onChange={(v) => set('referred_by_role', v)} options={[{ value: 'coach', label: 'Coach' }, { value: 'talent_scout', label: 'Talent scout' }, { value: 'elite_player', label: 'Player' }]} /></Field>
+                  </div>
+                  {!!(form.referral_code || '').trim() && (
+                    <p className={`text-xs mt-2 ${(form.referral_code || '').trim().toUpperCase() === REFERRAL_CODE.toUpperCase() ? 'text-emerald-400' : 'text-white/40'}`}>
+                      {(form.referral_code || '').trim().toUpperCase() === REFERRAL_CODE.toUpperCase()
+                        ? '✓ Code recognised — add your referrer’s name and we’ll credit them once confirmed.'
+                        : 'Enter the code exactly as your referrer gave it to you.'}
+                    </p>
+                  )}
+                </div>
+
                 <div className="pt-1">{renderConsents()}</div>
               </div>
             )}

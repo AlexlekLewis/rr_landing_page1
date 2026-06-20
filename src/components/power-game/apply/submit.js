@@ -12,7 +12,7 @@
 // test data is trivially distinguishable and purgeable. Set VITE_PGP_SOURCE to
 // "pgp2026" at production go-live.
 // ============================================================
-import { calcAge, isMinor } from "./flow";
+import { calcAge, isMinor, REFERRAL_CODE } from "./flow";
 // NOTE: the supabase client is imported lazily inside submitApplication() so that
 // buildApplicationRow (pure) stays importable in tests without instantiating a
 // client (createClient throws when env vars are absent).
@@ -103,6 +103,16 @@ export function buildApplicationRow(form, placement, squad, opts = {}) {
     status,
     // INTERNAL-only — coach lane allocation flag. NEVER surface in user UI.
     internal_stream: placement?.internalStream || null,
+    // Referral (optional) — applicant-credits-referrer. referral_valid is a convenience
+    // flag (code matches the shared code AND a referrer name was given); Alex still
+    // confirms manually before any reward. Never affects placement or payment.
+    referral_code: (form.referral_code || "").trim(),
+    referred_by_name: (form.referred_by_name || "").trim(),
+    referred_by_role: form.referred_by_role || "",
+    referral_valid: !!(
+      (form.referral_code || "").trim().toUpperCase() === REFERRAL_CODE.toUpperCase() &&
+      (form.referred_by_name || "").trim()
+    ),
     source: SOURCE,
   };
 }

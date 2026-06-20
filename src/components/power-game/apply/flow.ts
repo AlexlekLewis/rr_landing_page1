@@ -12,6 +12,12 @@ export const CURRENT_SEASON = "2025/26";
 export const CURRENT_SEASON_START = 2025;
 export const BLOCK_FEE = 989; // 8-week phase (from the planning sheet)
 
+// Single SHARED referral code — hand this out to coaches/members who refer.
+// The applicant enters it + their referrer's name when applying; it NEVER blocks
+// the application. Alex confirms referrals manually before any reward is given.
+// To change the code, edit this one value.
+export const REFERRAL_CODE = "ROYALS26";
+
 // Match counts are no longer collected. A player who reached a level played a season,
 // so assume a typical volume — this keeps them off the engine's "thin_history" review
 // gate. Placement is level×age driven, so the exact number is neutral.
@@ -49,6 +55,12 @@ export interface ApplyForm {
   // Wild Card — talent the rep system hasn't caught (no rep / graded senior cricket).
   // Lets a player apply for a coach assessment instead of claiming a level they don't have.
   wildcard?: boolean;
+  // Referral (OPTIONAL) — applicant credits the coach / talent scout / player who
+  // referred them. referral_code is a soft check against REFERRAL_CODE; it never blocks
+  // the application or the purchase. Alex confirms manually before crediting the referrer.
+  referral_code?: string;
+  referred_by_name?: string;
+  referred_by_role?: "elite_player" | "talent_scout" | "coach" | "";
 }
 
 export const BLANK_FORM: ApplyForm = {
@@ -76,6 +88,9 @@ export const BLANK_FORM: ApplyForm = {
   accept_playing_standard: false,
   needs_uniform: false,
   wildcard: false,
+  referral_code: "",
+  referred_by_name: "",
+  referred_by_role: "",
 };
 
 export function calcAge(dob: string): number | null {
