@@ -160,24 +160,33 @@ export interface PlacementResult {
 }
 
 export function computePlacement(f: ApplyForm): PlacementResult {
-  // OPEN PROGRAM (18 Jun 2026): every player is placed in their HOME AGE BAND — period.
-  // Ability is sorted INSIDE the squad by the coach; there is no Performance/Pathway gate
-  // and no below-floor review. A player with BOTH representative honours AND graded senior
-  // cricket (2nd grade & up) is flagged `play_up` so a coach can consider moving them up a
-  // band — but the system NEVER moves them automatically and never blocks anyone.
+  // OPEN PROGRAM (17 Jun 2026): the program is built for 12-16. Anyone in that band
+  // is placed in their HOME AGE BAND, full stop — they get a slot picker and pay
+  // normally, regardless of cricket history. Coaches sort lanes by ability on the
+  // day using the INTERNAL stream flag below (never user-visible).
+  //   12-16, rep / graded senior   → internalStream='qualified'
+  //   12-16, Wild Card / no history → internalStream='review'  (still pays, still books)
+  //   17+                          → requiresReview=true, manual coach allocation
+  //   no DOB                       → requiresReview=true (data gap)
   const dna = computeDna(buildEngineInput(f));
   const eng = placeFromDna(dna); // reused only to keep a complete, type-valid Placement object
   const age = calcAge(f.player_dob);
   const band = age != null ? PG_BANDS[homeBandIdx(age)].name : eng.homeBand;
   const playUp = isRepLevel(f.rep_level) && clearsFloor(f.club_level);
+  const isAdult = age != null && age >= 17;
+  const qualified = clearsFloor(f.rep_level) || clearsFloor(f.club_level);
+  const internalStream: Placement["internalStream"] =
+    isAdult ? "senior_review" : qualified ? "qualified" : "review";
   const placement: Placement = {
     ...eng,
     age,
     homeBand: band,
     placedBand: band, // ALWAYS the home age band — no automatic play-up
     playFlag: playUp ? "play_up" : null,
-    requiresReview: age == null,
-    reviewReasons: age == null ? ["no_dob"] : [],
+    internalStream,
+    requiresReview: age == null || isAdult,
+    reviewReasons:
+      age == null ? ["no_dob"] : isAdult ? ["senior_review"] : [],
   };
   return { dna, placement };
 }
