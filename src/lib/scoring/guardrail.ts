@@ -106,6 +106,13 @@ export interface Placement {
   playFlag: PlayFlag;
   /** Sellable ability stream (Performance/Pathway), independent of review status. */
   stream: Stream;
+  /**
+   * INTERNAL-only ability flag — coach lane allocation, NEVER user-visible.
+   *   qualified     — rep OR graded senior cricket cleared the floor
+   *   review        — Wild Card / CS-BELOW / no history (still gets a slot in the OPEN program)
+   *   senior_review — 17+ adult, routes to manual coach review
+   */
+  internalStream: "qualified" | "review" | "senior_review" | null;
   /** Best skill → which net/lane they stream into. */
   lane: "Batting" | "Bowling" | "Keeping" | null;
   /** true → coach review queue, NO instant payment (soft path). */
@@ -134,6 +141,7 @@ export function placeFromDna(dna: DnaResult): Placement {
       placedBand: "Unknown",
       playFlag: null,
       stream: "review",
+      internalStream: null,
       lane: laneFromDna(dna),
       requiresReview: true,
       reviewReasons: ["no_dob"],
@@ -156,6 +164,7 @@ export function placeFromDna(dna: DnaResult): Placement {
     placedBand,
     playFlag,
     stream,
+    internalStream: null, // form-derived; set in flow.ts computePlacement
     lane: laneFromDna(dna),
     requiresReview,
     reviewReasons,

@@ -2,13 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Zap, ShieldCheck, ArrowRight, Sparkles } from 'lucide-react';
 
-const STREAM_COPY = {
-  performance: { title: 'Performance Squad', blurb: 'The elite stream — like-skilled players pushing each other every session.' },
-  pathway: { title: 'Pathway Squad', blurb: 'The development stream — ambitious players building toward the top.' },
-};
-
 // The payoff moment — feels like an assessment that rewards the player.
-export default function DnaRevealCard({ placement, centreName, combined, onContinue, onRequestInfo }) {
+// OPEN PROGRAM: every 12-16 player sees the same neutral "<band> Squad" welcome.
+// 17+ players see the coach-review screen (manual allocation). Never reference
+// "Performance / Pathway / Review" — that's internal-only and would offend.
+export default function DnaRevealCard({ placement, centreName, onContinue, onRequestInfo }) {
   if (placement.requiresReview) {
     return (
       <motion.div
@@ -18,11 +16,11 @@ export default function DnaRevealCard({ placement, centreName, combined, onConti
         <div className="w-16 h-16 rounded-full bg-rr-blue/20 border border-rr-blue/40 flex items-center justify-center mx-auto mb-5">
           <ShieldCheck className="w-8 h-8 text-rr-blue" />
         </div>
-        <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-wide mb-3">Profile received — a coach will review it</h2>
+        <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-wide mb-3">Profile received — a coach will be in touch</h2>
         <p className="text-white/70 text-sm md:text-base mb-6">
-          Your cricket history puts you right on the line for a squad, so one of our coaches will personally confirm the best fit and reach out. No payment needed yet.
+          Thanks for applying. One of our coaches will personally talk through the best session for you and confirm the next step. No payment needed yet.
         </p>
-        <div className="text-xs text-white/40 uppercase tracking-widest mb-6">Indicative: {placement.stream} · {placement.placedBand} · {centreName}</div>
+        <div className="text-xs text-white/40 uppercase tracking-widest mb-6">{centreName}</div>
         <button onClick={onContinue} className="inline-flex items-center gap-2 bg-white text-rr-dark font-black uppercase tracking-widest text-sm rounded-full px-6 py-3 hover:bg-rr-pink hover:text-white transition-colors">
           What happens next <ArrowRight className="w-4 h-4" />
         </button>
@@ -35,12 +33,8 @@ export default function DnaRevealCard({ placement, centreName, combined, onConti
     );
   }
 
-  const stream = STREAM_COPY[placement.stream] ?? STREAM_COPY.pathway;
-  // A combined squad is presented as one group ("<band> Squad"), not a Performance/Pathway stream.
-  const title = combined ? `${placement.placedBand} Squad` : stream.title;
-  const blurb = combined
-    ? 'One squad — the whole age group trains together, no Performance/Pathway split.'
-    : stream.blurb;
+  const title = `${placement.placedBand} Squad`;
+  const blurb = 'One squad — the whole age group trains together at your centre.';
 
   return (
     <motion.div

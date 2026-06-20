@@ -560,10 +560,10 @@ export default function ApplyFlow({ embedded = false }) {
                     <div className="text-white/40 text-sm mt-2">Matching you to the right squad</div>
                   </div>
                 ) : result.placement.requiresReview || CENTRE_BY_SLUG[form.centre]?.comingSoon ? (
-                  <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} combined={true} onContinue={afterReveal} onRequestInfo={() => setStep('requestInfo')} />
+                  <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} onContinue={afterReveal} onRequestInfo={() => setStep('requestInfo')} />
                 ) : (
                   <>
-                    <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} combined={true} onContinue={null} onRequestInfo={() => setStep('requestInfo')} />
+                    <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} onContinue={null} onRequestInfo={() => setStep('requestInfo')} />
 
                     <div className="mt-8">
                       <h2 className="text-xl md:text-2xl font-black uppercase tracking-wide mb-1">Choose your time</h2>

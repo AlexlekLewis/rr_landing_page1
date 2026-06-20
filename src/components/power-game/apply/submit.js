@@ -31,6 +31,7 @@ function bowlLabel(t) {
 }
 
 function summarise(form) {
+  // bio is internal-only — admin / sheet sync read it. Never user-facing.
   const bits = [];
   if (form.skill) {
     const sec = form.secondary_skill && form.secondary_skill !== "none"
@@ -45,7 +46,8 @@ function summarise(form) {
   if (form.rep_level) bits.push(`Rep ${form.rep_level}`);
   if (form.club_level) bits.push(`Club ${form.club_level}`);
   if (form.current_club) bits.push(`Current club: ${form.current_club}`);
-  if (form.wildcard) bits.push("Wild Card — applied without a rep / graded senior level");
+  // Wild Card flag stays in admin bio for lane allocation, but with neutral wording.
+  if (form.wildcard) bits.push("WC flag");
   return bits.join(" · ");
 }
 
@@ -99,6 +101,8 @@ export function buildApplicationRow(form, placement, squad, opts = {}) {
     uniform_total_cents: opts.kitTotalCents || 0,
     payment_status: "pending",
     status,
+    // INTERNAL-only — coach lane allocation flag. NEVER surface in user UI.
+    internal_stream: placement?.internalStream || null,
     source: SOURCE,
   };
 }
