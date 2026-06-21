@@ -16,7 +16,7 @@ export const BLOCK_FEE = 989; // 8-week phase (from the planning sheet)
 // The applicant enters it + their referrer's name when applying; it NEVER blocks
 // the application. Alex confirms referrals manually before any reward is given.
 // To change the code, edit this one value.
-export const REFERRAL_CODE = "ROYALS26";
+export const REFERRAL_CODE = "NEXTROYAL26";
 
 // Match counts are no longer collected. A player who reached a level played a season,
 // so assume a typical volume — this keeps them off the engine's "thin_history" review
