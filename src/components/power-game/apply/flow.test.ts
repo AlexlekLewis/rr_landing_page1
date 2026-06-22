@@ -88,15 +88,15 @@ describe("overlapping age bands — a 14yo is eligible for BOTH 12-14 and 14-16"
   });
 });
 
-describe("upper age limit — players over 25 are blocked, 14yo and 25yo are not", () => {
-  const hasAgeError = (errs: string[]) => errs.some((m) => /25 and under/.test(m));
+describe(`upper age limit — players over ${MAX_AGE} are blocked, 14yo and ${MAX_AGE}yo are not`, () => {
+  const hasAgeError = (errs: string[]) => errs.some((m) => new RegExp(`${MAX_AGE} and under`).test(m));
 
-  it("blocks 26+ at the player step", () => {
-    expect(hasAgeError(validateStep("player", { ...base, player_dob: dobForAge(26) }))).toBe(true);
+  it(`blocks anyone over the cap (${MAX_AGE + 1}+) at the player step`, () => {
+    expect(hasAgeError(validateStep("player", { ...base, player_dob: dobForAge(MAX_AGE + 1) }))).toBe(true);
     expect(hasAgeError(validateStep("player", { ...base, player_dob: dobForAge(50) }))).toBe(true);
   });
 
-  it("allows everyone up to and including 25 (and 14yos)", () => {
+  it(`allows everyone up to and including ${MAX_AGE} (and 14yos)`, () => {
     expect(hasAgeError(validateStep("player", { ...base, player_dob: dobForAge(MAX_AGE) }))).toBe(false);
     expect(hasAgeError(validateStep("player", { ...base, player_dob: dobForAge(14) }))).toBe(false);
     expect(hasAgeError(validateStep("player", { ...base, player_dob: dobForAge(12) }))).toBe(false);

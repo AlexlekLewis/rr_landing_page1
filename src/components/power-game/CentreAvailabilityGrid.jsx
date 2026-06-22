@@ -12,8 +12,8 @@ import { SQUADS } from '../../lib/booking/squads';
 const enDash = '–';
 const DAY_FULL = { Mon: 'Monday', Tue: 'Tuesday', Wed: 'Wednesday', Thu: 'Thursday', Fri: 'Friday', Sat: 'Saturday', Sun: 'Sunday' };
 const fullDay = (d) => DAY_FULL[(d || '').slice(0, 3)] || d;
-// "12-14" → "Ages 12–14" · "17+" → "Ages 17–25" (the senior band is capped at 25).
-const fmtAge = (b) => (String(b) === '17+' ? `Ages 17${enDash}25` : `Ages ${String(b).replace('-', enDash)}`);
+// "12-14" → "Ages 12–14" · "17+" → "Ages 17–26" (the senior band is capped at 26).
+const fmtAge = (b) => (String(b) === '17+' ? `Ages 17${enDash}26` : `Ages ${String(b).replace('-', enDash)}`);
 // "5:30pm"+"7:30pm" → "5:30–7:30pm" · drop the start meridiem when it matches the end.
 const fmtTime = (start, end) => {
     const sM = (String(start).match(/am|pm/i) || [''])[0];
@@ -57,8 +57,8 @@ export default function CentreAvailabilityGrid({
     // Accept a single band or an array of bands; an empty list means "browse mode".
     const eligibleList = eligibleBand == null ? [] : (Array.isArray(eligibleBand) ? eligibleBand : [eligibleBand]);
     const filtering = eligibleList.length > 0;
-    // Legend label: "17+" reads "17–25" (capped senior band); join overlap bands with " / ".
-    const bandLabel = (b) => (String(b) === '17+' ? `17${enDash}25` : String(b).replace('-', enDash));
+    // Legend label: "17+" reads "17–26" (capped senior band); join overlap bands with " / ".
+    const bandLabel = (b) => (String(b) === '17+' ? `17${enDash}26` : String(b).replace('-', enDash));
     const days = groupByDay(squads);
 
     return (

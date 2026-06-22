@@ -20,7 +20,7 @@ const AUDIENCE = [
     },
     {
         icon: Crown,
-        tag: 'Ages 17–25',
+        tag: 'Ages 17–26',
         title: 'The Senior Performer',
         description: 'Premier and senior club players adding power dimensions to a proven game — and chasing the next level of cricket.',
     },

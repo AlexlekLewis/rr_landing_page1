@@ -11,9 +11,9 @@ import type { DnaResult } from "../../../lib/scoring/engine";
 export const CURRENT_SEASON = "2025/26";
 export const CURRENT_SEASON_START = 2025;
 export const BLOCK_FEE = 989; // 8-week phase (from the planning sheet)
-// Hard upper age limit — the Power Pre-Season is for players UP TO 25. Anyone OVER 25
-// (26+) is blocked from applying (a 50yo slipped through before this gate existed).
-export const MAX_AGE = 25;
+// Hard upper age limit — the Power Pre-Season is capped at age 26. Anyone OVER 26
+// (27+) is blocked from applying (a 50yo slipped through before this gate existed).
+export const MAX_AGE = 26;
 
 // Single SHARED referral code — hand this out to coaches/members who refer.
 // The applicant enters it + their referrer's name when applying; it NEVER blocks

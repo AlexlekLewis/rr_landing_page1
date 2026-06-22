@@ -265,7 +265,7 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
     <div class="grid g3">
       <div class="card"><span class="tag">Ages 12–14</span><h3 style="font-size:16px; margin:11px 0 7px;">The Emerging Talent</h3><p style="font-size:13px; color:var(--slate); line-height:1.5; font-weight:500;">Young representative players ready to discover their archetype and build genuine power foundations early in their journey.</p></div>
       <div class="card"><span class="tag">Ages 14–16</span><h3 style="font-size:16px; margin:11px 0 7px;">The Pathway Player</h3><p style="font-size:13px; color:var(--slate); line-height:1.5; font-weight:500;">Rep cricketers pushing for academy, district and state-age honours who want to separate themselves with elite power skills.</p></div>
-      <div class="card"><span class="tag">Ages 17–25</span><h3 style="font-size:16px; margin:11px 0 7px;">The Senior Performer</h3><p style="font-size:13px; color:var(--slate); line-height:1.5; font-weight:500;">Premier and senior club players adding power dimensions to a proven game — and chasing the next level of cricket.</p></div>
+      <div class="card"><span class="tag">Ages 17–26</span><h3 style="font-size:16px; margin:11px 0 7px;">The Senior Performer</h3><p style="font-size:13px; color:var(--slate); line-height:1.5; font-weight:500;">Premier and senior club players adding power dimensions to a proven game — and chasing the next level of cricket.</p></div>
       <div class="card"><span class="tag">Every Discipline</span><h3 style="font-size:16px; margin:11px 0 7px;">Batters, Bowlers &amp; Keepers</h3><p style="font-size:13px; color:var(--slate); line-height:1.5; font-weight:500;">Whatever your role, the program develops power your way — 360 hitting, power bowling with intent, and explosive fielding.</p></div>
       <div class="card"><span class="tag">All-Rounders</span><h3 style="font-size:16px; margin:11px 0 7px;">The Complete Cricketer</h3><p style="font-size:13px; color:var(--slate); line-height:1.5; font-weight:500;">Multi-skilled players who want to build power across every facet of their game and become impossible to leave out.</p></div>
       <div class="card"><span class="tag">Driven to Compete</span><h3 style="font-size:16px; margin:11px 0 7px;">The Ambitious Player</h3><p style="font-size:13px; color:var(--slate); line-height:1.5; font-weight:500;">Representative-standard cricketers who want exposure, selection opportunities, and a clear pathway to perform when it counts.</p></div>
@@ -445,14 +445,14 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
               <div class="abox"><span class="atime">5:30–7:30pm</span><span class="aage">Ages 12–14</span></div>
               <div class="abox"><span class="atime">5:30–7:30pm</span><span class="aage">Ages 14–16</span></div>
               <div class="abox"><span class="atime">7:30–9:30pm</span><span class="aage">Ages 14–16</span></div>
-              <div class="abox"><span class="atime">7:30–9:30pm</span><span class="aage">Ages 17–25</span></div>
+              <div class="abox"><span class="atime">7:30–9:30pm</span><span class="aage">Ages 17–26</span></div>
             </div>
             <div class="aday-h">Saturday</div>
             <div class="aboxes">
               <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 12–14</span></div>
               <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 14–16</span></div>
               <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 14–16</span></div>
-              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 17–25</span></div>
+              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 17–26</span></div>
             </div>
           </div>
         </details>
@@ -470,14 +470,14 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
             <div class="aday-h">Thursday</div>
             <div class="aboxes">
               <div class="abox"><span class="atime">8:00–10:00pm</span><span class="aage">Ages 14–16</span></div>
-              <div class="abox"><span class="atime">8:00–10:00pm</span><span class="aage">Ages 17–25</span></div>
+              <div class="abox"><span class="atime">8:00–10:00pm</span><span class="aage">Ages 17–26</span></div>
             </div>
             <div class="aday-h">Saturday</div>
             <div class="aboxes">
               <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 12–14</span></div>
               <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 14–16</span></div>
               <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 12–14</span></div>
-              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 17–25</span></div>
+              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 17–26</span></div>
             </div>
           </div>
         </details>
@@ -497,14 +497,14 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
               <div class="abox"><span class="atime">6:00–8:00pm</span><span class="aage">Ages 12–14</span></div>
               <div class="abox"><span class="atime">6:00–8:00pm</span><span class="aage">Ages 14–16</span></div>
               <div class="abox"><span class="atime">8:00–10:00pm</span><span class="aage">Ages 14–16</span></div>
-              <div class="abox"><span class="atime">8:00–10:00pm</span><span class="aage">Ages 17–25</span></div>
+              <div class="abox"><span class="atime">8:00–10:00pm</span><span class="aage">Ages 17–26</span></div>
             </div>
             <div class="aday-h">Saturday</div>
             <div class="aboxes">
               <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 12–14</span></div>
               <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 14–16</span></div>
               <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 14–16</span></div>
-              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 17–25</span></div>
+              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 17–26</span></div>
             </div>
           </div>
         </details>

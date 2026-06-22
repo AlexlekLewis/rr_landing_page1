@@ -152,7 +152,7 @@ export default function ExpressSignup({ config }) {
     if (!form.player_name.trim()) e.push('Please enter the player’s full name.');
     if (!form.player_dob) e.push('Please enter the player’s date of birth.');
     else if (age == null || age < 5) e.push('Please check the date of birth.');
-    else if (age > 25) e.push('The Power Pre-Season is for players aged 25 and under.');
+    else if (age > 26) e.push('The Power Pre-Season is for players aged 26 and under.');
     if (FIELDS.gender && !form.gender) e.push('Please select Male or Female cricket.');
     if (FIELDS.parentName && minor && !form.parent_name.trim()) e.push('Parent/guardian name is required for under-18s.');
     if (!emailOk(form.contact_email)) e.push('Please enter a valid contact email.');
@@ -405,7 +405,7 @@ export default function ExpressSignup({ config }) {
                           <Clock className="w-4 h-4 text-white/40 flex-shrink-0" />
                           <span className="flex-1">
                             <span className="block text-sm font-bold text-white">{s.blockLabel}</span>
-                            <span className="block text-white/45 text-[12px]">Age group {s.band === '17+' ? '17–25' : s.band}</span>
+                            <span className="block text-white/45 text-[12px]">Age group {s.band === '17+' ? '17–26' : s.band}</span>
                           </span>
                         </button>
                       );
