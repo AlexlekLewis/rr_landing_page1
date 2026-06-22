@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { BLANK_FORM, computePlacement, validateStep, buildEngineInput, secondaryOptions, type ApplyForm } from "./flow";
+import { BLANK_FORM, computePlacement, validateStep, buildEngineInput, secondaryOptions, MAX_AGE, type ApplyForm } from "./flow";
+import { eligibleBands } from "../../../lib/scoring/guardrail";
+
+// Today is mocked-free, so derive DOBs from the current year to keep ages stable.
+const dobForAge = (age: number) => `${new Date().getFullYear() - age}-01-01`;
 
 const base: ApplyForm = {
   ...BLANK_FORM,
@@ -56,6 +60,46 @@ describe("open-program age-based placement", () => {
   it("profile step requires nothing — rep/senior/club are optional (open program)", () => {
     expect(validateStep("profile", { ...base, rep_level: "", club_level: "", current_club: "" })).toEqual([]);
     expect(validateStep("profile", { ...base, rep_level: "REP-16M" })).toEqual([]);
+  });
+});
+
+describe("overlapping age bands — a 14yo is eligible for BOTH 12-14 and 14-16", () => {
+  it("eligibleBands(age) overlaps only on the boundary year (14)", () => {
+    expect(eligibleBands(13).map((b) => b.name)).toEqual(["12-14"]);
+    expect(eligibleBands(14).map((b) => b.name)).toEqual(["12-14", "14-16"]);
+    expect(eligibleBands(15).map((b) => b.name)).toEqual(["14-16"]);
+    expect(eligibleBands(16).map((b) => b.name)).toEqual(["14-16"]);
+    expect(eligibleBands(17).map((b) => b.name)).toEqual(["17+"]);
+    // below the youngest band → still gets one option (youngest band)
+    expect(eligibleBands(10).map((b) => b.name)).toEqual(["12-14"]);
+  });
+
+  it("computePlacement gives a 14yo both bands' session options, home band stays 12-14", () => {
+    const p14 = computePlacement({ ...base, player_dob: dobForAge(14) }).placement;
+    expect(p14.homeBand).toBe("12-14");
+    expect(p14.placedBand).toBe("12-14");
+    expect(p14.eligibleBands).toEqual(["12-14", "14-16"]);
+
+    const p13 = computePlacement({ ...base, player_dob: dobForAge(13) }).placement;
+    expect(p13.eligibleBands).toEqual(["12-14"]);
+
+    const p15 = computePlacement({ ...base, player_dob: dobForAge(15) }).placement;
+    expect(p15.eligibleBands).toEqual(["14-16"]);
+  });
+});
+
+describe("upper age limit — players over 25 are blocked, 14yo and 25yo are not", () => {
+  const hasAgeError = (errs: string[]) => errs.some((m) => /25 and under/.test(m));
+
+  it("blocks 26+ at the player step", () => {
+    expect(hasAgeError(validateStep("player", { ...base, player_dob: dobForAge(26) }))).toBe(true);
+    expect(hasAgeError(validateStep("player", { ...base, player_dob: dobForAge(50) }))).toBe(true);
+  });
+
+  it("allows everyone up to and including 25 (and 14yos)", () => {
+    expect(hasAgeError(validateStep("player", { ...base, player_dob: dobForAge(MAX_AGE) }))).toBe(false);
+    expect(hasAgeError(validateStep("player", { ...base, player_dob: dobForAge(14) }))).toBe(false);
+    expect(hasAgeError(validateStep("player", { ...base, player_dob: dobForAge(12) }))).toBe(false);
   });
 });
 

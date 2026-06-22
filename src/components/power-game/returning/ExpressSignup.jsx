@@ -29,7 +29,7 @@ import { buildApplicationRow } from '../apply/submit';
 import UniformSizeGuideModal from '../UniformSizeGuideModal';
 import { fmtAud } from '../apply/kit';
 import { squadsForPlacement, CENTRE_BY_SLUG, ACTIVE_CENTRES } from '../../../lib/booking/squads';
-import { PG_BANDS, homeBandIdx } from '../../../lib/scoring/guardrail';
+import { PG_BANDS, homeBandIdx, eligibleBands as eligibleBandsFor } from '../../../lib/scoring/guardrail';
 import { TOPS_SIZES, SHORTS_SIZES, PANTS_SIZES, JACKET_SIZES } from '../../academy-shop/sizeData';
 
 const LIVE_PAYMENTS = !!(import.meta?.env?.VITE_PG_LIVE_PAYMENTS === '1');
@@ -96,10 +96,16 @@ export default function ExpressSignup({ config }) {
   const minor = isMinor(form.player_dob);
   const age = calcAge(form.player_dob);
   const homeBand = age != null ? (PG_BANDS[homeBandIdx(age)]?.name || null) : null;
+  // Overlap-aware bands: a 14yo is eligible for BOTH "12-14" and "14-16"; most ages get one.
+  const bands = age != null ? eligibleBandsFor(age).map((b) => b.name) : [];
 
-  // The day/time options for the player's OWN age band at the chosen centre (same
+  // The day/time options for the player's eligible age band(s) at the chosen centre (same
   // helper the public funnel uses — keeps the two in lockstep with the grid).
-  const sessions = (form.centre && homeBand) ? squadsForPlacement({ centre: form.centre, band: homeBand }) : [];
+  const sessions = (form.centre && bands.length)
+    ? bands
+        .flatMap((b) => squadsForPlacement({ centre: form.centre, band: b }))
+        .sort((a, b) => a.sortOrder - b.sortOrder)
+    : [];
   const selectedSession = sessions.find((s) => s.id === sessionId) || null;
 
   useEffect(() => {
@@ -145,7 +151,8 @@ export default function ExpressSignup({ config }) {
     const e = [];
     if (!form.player_name.trim()) e.push('Please enter the player’s full name.');
     if (!form.player_dob) e.push('Please enter the player’s date of birth.');
-    else if (age == null || age < 5 || age > 70) e.push('Please check the date of birth.');
+    else if (age == null || age < 5) e.push('Please check the date of birth.');
+    else if (age > 25) e.push('The Power Pre-Season is for players aged 25 and under.');
     if (FIELDS.gender && !form.gender) e.push('Please select Male or Female cricket.');
     if (FIELDS.parentName && minor && !form.parent_name.trim()) e.push('Parent/guardian name is required for under-18s.');
     if (!emailOk(form.contact_email)) e.push('Please enter a valid contact email.');
@@ -398,7 +405,7 @@ export default function ExpressSignup({ config }) {
                           <Clock className="w-4 h-4 text-white/40 flex-shrink-0" />
                           <span className="flex-1">
                             <span className="block text-sm font-bold text-white">{s.blockLabel}</span>
-                            <span className="block text-white/45 text-[12px]">Age group {s.band}</span>
+                            <span className="block text-white/45 text-[12px]">Age group {s.band === '17+' ? '17–25' : s.band}</span>
                           </span>
                         </button>
                       );

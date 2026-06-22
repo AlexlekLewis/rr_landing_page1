@@ -55,16 +55,19 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     expect(inventory.spotsLeft("w-fri530-1214")).toBe(before - 1);
   });
 
-  it("sold-out: when the matching squads are full, no slot is bookable", async () => {
-    // Fill both 12-14 day options at The Netz (Fri 5:30 cap 11, Sat 2-4 cap 15).
-    for (const id of ["w-fri530-1214", "w-sat2-1214"]) {
-      for (let i = 0; i < 16; i++) await inventory.createHold({ squadId: id, ref: `fill-${id}-${i}` });
+  it("sold-out: when ALL the player's eligible squads are full, no slot is bookable", async () => {
+    // The PERF demo is a 14yo → eligible for BOTH 12-14 AND 14-16 at The Netz. Fill
+    // every one of those squads so there is genuinely nothing left to book. (Full slots
+    // render as non-interactive — they carry no `slot-` test id — and show "Full".)
+    const netzEligible = ["w-fri530-1214", "w-sat2-1214", "w-fri530-1416", "w-fri730-1416", "w-sat2-1416", "w-sat4-1416"];
+    for (const id of netzEligible) {
+      for (let i = 0; i < 30; i++) await inventory.createHold({ squadId: id, ref: `fill-${id}-${i}` });
     }
     window.history.pushState({}, "", "/PGP2026/apply?demo=perf");
     render(<ApplyFlow />);
     await screen.findByText(/you've earned your place/i);
-    const fri = screen.queryByTestId("slot-w-fri530-1214") as HTMLButtonElement | null;
-    expect(fri && fri.disabled).toBe(true);
+    expect(screen.queryByTestId("slot-w-fri530-1214")).toBeNull(); // a full 12-14 slot is not bookable
+    expect(screen.queryByTestId("slot-w-sat4-1416")).toBeNull(); // nor a full 14-16 slot
     expect(screen.getAllByText(/full/i).length).toBeGreaterThan(0);
   });
 

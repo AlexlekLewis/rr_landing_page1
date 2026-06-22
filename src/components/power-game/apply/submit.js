@@ -80,7 +80,9 @@ export function buildApplicationRow(form, placement, squad, opts = {}) {
     parent1_email: minor ? (form.contact_email || "") : "",
     parent1_phone: minor ? (form.contact_phone || "") : "",
     venue: opts.centreName || form.centre || "",
-    age_group: placement?.placedBand || "",
+    // Record the band of the ACTUALLY-PICKED squad (a 14yo may pick a 12-14 OR a 14-16
+    // session); fall back to the placed home band when no squad was chosen (review path).
+    age_group: squad?.band || placement?.placedBand || "",
     session_day: squad?.day || "",
     session_time: squad ? `${squad.startTime}–${squad.endTime}` : "",
     phase: "pgp2026",

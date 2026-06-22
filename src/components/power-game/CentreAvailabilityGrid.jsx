@@ -12,7 +12,8 @@ import { SQUADS } from '../../lib/booking/squads';
 const enDash = '–';
 const DAY_FULL = { Mon: 'Monday', Tue: 'Tuesday', Wed: 'Wednesday', Thu: 'Thursday', Fri: 'Friday', Sat: 'Saturday', Sun: 'Sunday' };
 const fullDay = (d) => DAY_FULL[(d || '').slice(0, 3)] || d;
-const fmtAge = (b) => `Ages ${String(b).replace('-', enDash)}`; // "12-14" → "Ages 12–14" · "17+" → "Ages 17+"
+// "12-14" → "Ages 12–14" · "17+" → "Ages 17–25" (the senior band is capped at 25).
+const fmtAge = (b) => (String(b) === '17+' ? `Ages 17${enDash}25` : `Ages ${String(b).replace('-', enDash)}`);
 // "5:30pm"+"7:30pm" → "5:30–7:30pm" · drop the start meridiem when it matches the end.
 const fmtTime = (start, end) => {
     const sM = (String(start).match(/am|pm/i) || [''])[0];
@@ -34,6 +35,7 @@ function groupByDay(squads) {
 
 export default function CentreAvailabilityGrid({
     centreSlug,
+    // One band ("14-16") OR several ("12-14"/"14-16" for a 14yo) the player may pick from.
     eligibleBand = null,
     selectedId = null,
     onPick = null,
@@ -52,7 +54,11 @@ export default function CentreAvailabilityGrid({
         );
     }
 
-    const filtering = !!eligibleBand;
+    // Accept a single band or an array of bands; an empty list means "browse mode".
+    const eligibleList = eligibleBand == null ? [] : (Array.isArray(eligibleBand) ? eligibleBand : [eligibleBand]);
+    const filtering = eligibleList.length > 0;
+    // Legend label: "17+" reads "17–25" (capped senior band); join overlap bands with " / ".
+    const bandLabel = (b) => (String(b) === '17+' ? `17${enDash}25` : String(b).replace('-', enDash));
     const days = groupByDay(squads);
 
     return (
@@ -60,7 +66,7 @@ export default function CentreAvailabilityGrid({
             {filtering && (
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mb-4 text-[10px] font-black uppercase tracking-widest">
                     <span className="inline-flex items-center gap-1.5 text-rr-pink">
-                        <span className="w-2.5 h-2.5 rounded-sm bg-rr-pink" /> Your age group ({String(eligibleBand).replace('-', enDash)})
+                        <span className="w-2.5 h-2.5 rounded-sm bg-rr-pink" /> Your age group{eligibleList.length > 1 ? 's' : ''} ({eligibleList.map(bandLabel).join(' / ')})
                     </span>
                     <span className="inline-flex items-center gap-1.5 text-white/35">
                         <span className="w-2.5 h-2.5 rounded-sm bg-white/15" /> Other age groups
@@ -77,7 +83,7 @@ export default function CentreAvailabilityGrid({
                         </div>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                             {group.items.map((s) => {
-                                const eligible = !filtering || s.band === eligibleBand;
+                                const eligible = !filtering || eligibleList.includes(s.band);
                                 const left = eligible && spotsLeftFor ? spotsLeftFor(s.id) : null;
                                 const full = left != null && left <= 0;
                                 const selected = selectedId === s.id;

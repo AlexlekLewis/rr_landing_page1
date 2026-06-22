@@ -4,13 +4,16 @@
 // ============================================================
 import { computeDna, getAge, type ComputeDnaInput } from "../../../lib/scoring/engine";
 import { COMPETITION_TIERS } from "../../../lib/scoring/ladder";
-import { placeFromDna, PG_BANDS, homeBandIdx, type Placement } from "../../../lib/scoring/guardrail";
+import { placeFromDna, PG_BANDS, homeBandIdx, eligibleBands, type Placement } from "../../../lib/scoring/guardrail";
 import { clearsFloor, isRepLevel } from "./levels";
 import type { DnaResult } from "../../../lib/scoring/engine";
 
 export const CURRENT_SEASON = "2025/26";
 export const CURRENT_SEASON_START = 2025;
 export const BLOCK_FEE = 989; // 8-week phase (from the planning sheet)
+// Hard upper age limit — the Power Pre-Season is for players UP TO 25. Anyone OVER 25
+// (26+) is blocked from applying (a 50yo slipped through before this gate existed).
+export const MAX_AGE = 25;
 
 // Single SHARED referral code — hand this out to coaches/members who refer.
 // The applicant enters it + their referrer's name when applying; it NEVER blocks
@@ -197,6 +200,9 @@ export function computePlacement(f: ApplyForm): PlacementResult {
     age,
     homeBand: band,
     placedBand: band, // ALWAYS the home age band — no automatic play-up
+    // Overlap-aware: a 14yo is eligible for BOTH "12-14" and "14-16" and is shown the
+    // session times for both groups at the slot step (most ages get a single band).
+    eligibleBands: age != null ? eligibleBands(age).map((b) => b.name) : [],
     playFlag: playUp ? "play_up" : null,
     internalStream,
     requiresReview: age == null || isAdult,
@@ -222,6 +228,11 @@ export function validateStep(step: Step, f: ApplyForm): string[] {
   if (step === "player") {
     if (!f.player_name.trim()) e.push("Player name is required.");
     if (!f.player_dob) e.push("Date of birth is required.");
+    else {
+      const a = calcAge(f.player_dob);
+      if (a != null && a > MAX_AGE)
+        e.push(`The Power Pre-Season is for players aged ${MAX_AGE} and under — please get in touch if you think this is an error.`);
+    }
     if (!f.gender) e.push("Let us know if you play male or female cricket.");
     if (isMinor(f.player_dob) && !f.parent_name.trim()) e.push("Parent/guardian name is required for under-18s.");
     if (!f.contact_phone.trim()) e.push("A contact mobile is required.");

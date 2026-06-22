@@ -264,7 +264,7 @@ export default function ApplyFlow({ embedded = false }) {
             playerName: form.player_name,
             centreName: CENTRE_BY_SLUG[form.centre]?.name || '',
             slot: selected ? `${selected.day} ${selected.startTime}–${selected.endTime}` : '',
-            band: result.placement.placedBand,
+            band: selected?.band || result.placement.placedBand,
           }));
         } catch (_) { /* private mode — page falls back gracefully */ }
 
@@ -342,10 +342,19 @@ export default function ApplyFlow({ embedded = false }) {
 
   // Age-based model: a squad = an age group; squadsForPlacement returns that band's
   // day options at the centre (no perf/pathway stream). Strength is sorted inside the squad.
+  // Overlap-aware: a 14yo gets BOTH "12-14" and "14-16" sessions (eligibleBands), so they
+  // can pick a time in either group; most ages have a single eligible band.
+  const eligBands = result?.placement?.eligibleBands?.length
+    ? result.placement.eligibleBands
+    : (result?.placement?.placedBand ? [result.placement.placedBand] : []);
   const matchingSquads = result && !result.placement.requiresReview
-    ? squadsForPlacement({ centre: form.centre, band: result.placement.placedBand })
+    ? eligBands
+        .flatMap((b) => squadsForPlacement({ centre: form.centre, band: b }))
+        .sort((a, b) => a.sortOrder - b.sortOrder)
     : [];
-  const squadLabel = result?.placement ? `${result.placement.placedBand} Squad` : '';
+  const squadLabel = eligBands.length
+    ? `${eligBands.join(' / ')} Squad${eligBands.length > 1 ? 's' : ''}`
+    : '';
   const comingSoonVenue = !!CENTRE_BY_SLUG[form.centre]?.comingSoon;
   // The soft 'review' step serves three audiences: a below-floor coach review, a
   // coming-soon venue waitlist, and a *placed* player who'd rather talk first — that
@@ -595,7 +604,7 @@ export default function ApplyFlow({ embedded = false }) {
                         <div className="space-y-3">
                           <CentreAvailabilityGrid
                             centreSlug={form.centre}
-                            eligibleBand={result.placement.placedBand}
+                            eligibleBand={eligBands}
                             selectedId={selected?.id}
                             onPick={pickSquad}
                             spotsLeftFor={(id) => inventory.spotsLeft(id)}
