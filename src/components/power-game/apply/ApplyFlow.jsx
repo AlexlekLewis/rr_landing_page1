@@ -495,6 +495,10 @@ export default function ApplyFlow({ embedded = false }) {
                         : 'Enter the code exactly as your referrer gave it to you.'}
                     </p>
                   )}
+
+                  <p className="text-white/35 text-[11px] leading-snug mt-3">
+                    <span className="text-white/55 font-semibold">Referral terms:</span> any reward is issued to the referring member as a <span className="text-white/55">credit toward a future RRA program</span>, once the referral is confirmed and fully paid — future programs only. Payments already made for a program are not eligible, credits are not redeemable for cash, and <span className="text-white/55">no refunds or return of money of any kind</span> apply. RRA reserves the right to refuse or withdraw any referral or credit at its sole discretion. See our {docLink('/terms-conditions', 'Terms & Conditions')}.
+                  </p>
                 </div>
 
                 <div className="pt-1">{renderConsents()}</div>

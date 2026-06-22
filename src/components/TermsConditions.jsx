@@ -274,7 +274,25 @@ const TermsConditions = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">13. Governing Law</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">13. Referral Program</h2>
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            From time to time the Academy may operate a referral program under which an existing
+                            participant (the referring member) may receive a benefit when a person they refer applies,
+                            is accepted, and pays in full for a program. Participation in the referral program is subject
+                            to the following terms:
+                        </p>
+                        <ul className="list-disc pl-6 space-y-2 text-rr-dark/80">
+                            <li>To be eligible, the referred applicant must enter the current referral code together with the name of the referring member at the time of application, and must be confirmed by the Academy and pay their program fee in full.</li>
+                            <li>Any referral benefit is issued to the referring member as a <strong>credit toward a future Academy program only</strong>. It has no cash value, is not transferable, and is not redeemable for cash.</li>
+                            <li><strong>Payments already made</strong> for a current or past program are <strong>not eligible</strong> for the referral benefit, and the benefit cannot be applied retrospectively to fees that have already been paid.</li>
+                            <li>The referral benefit does not give rise to any <strong>refund or return of money of any kind</strong>.</li>
+                            <li>The Academy <strong>reserves the right to refuse, vary, withhold or withdraw</strong> any referral, code, or benefit, and to amend or discontinue the referral program, at its sole discretion and at any time.</li>
+                            <li>Each referral is confirmed by the Academy before any benefit is applied. A benefit will not be applied where, in the reasonable opinion of the Academy, the program has been misused or the information provided is inaccurate.</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">14. Governing Law</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             These Terms shall be governed by and construed in accordance with the laws of the
                             State of Victoria, Australia. Any disputes arising in connection with these Terms
@@ -283,7 +301,7 @@ const TermsConditions = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">14. Amendments</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">15. Amendments</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             We reserve the right to amend these Terms at any time. Updated Terms will be posted
                             on this page with a revised date. Continued use of the website or participation in
@@ -292,7 +310,7 @@ const TermsConditions = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">15. Contact Us</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">16. Contact Us</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             If you have any questions regarding these Terms, please contact us at:
                         </p>
