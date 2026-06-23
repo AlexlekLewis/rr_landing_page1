@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ApplyFlow from './apply/ApplyFlow';
-import { SQUADS } from '../../lib/booking/squads';
+import { SQUADS, CENTRE_BY_SLUG } from '../../lib/booking/squads';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
 // /PGP2026 renders the boss-approved design verbatim (the "PGP2026 Preview" mock),
@@ -575,6 +575,34 @@ const PowerGame = () => {
         if (!host) return;
         const shadow = host.shadowRoot || host.attachShadow({ mode: 'open' });
         shadow.innerHTML = SHADOW_HTML;
+
+        // Honest availability — show the REAL remaining (capacity − paid) per session,
+        // but ONLY when it's genuinely low; "Full" at capacity. No fake urgency. Fail-open
+        // (leaves the default "Select →") so the page never breaks if it can't load.
+        (async () => {
+            try {
+                const { counts } = await (await fetch('/api/pgp-availability')).json();
+                if (!counts) return;
+                const LOW = 6;
+                const normKey = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+                for (const sq of SQUADS) {
+                    const name = CENTRE_BY_SLUG[sq.centre]?.name || '';
+                    const paid = counts[normKey(`${name}|${sq.day}|${sq.startTime}–${sq.endTime}`)] || 0;
+                    const left = sq.capacity - paid;
+                    const box = shadow.querySelector(`[data-session="${sq.id}"]`);
+                    if (!box) continue;
+                    const tag = box.querySelector('.aage');
+                    if (left <= 0) {
+                        if (tag) { tag.textContent = 'Full'; tag.style.color = '#9aa3ad'; }
+                        box.style.opacity = '0.55';
+                        box.style.pointerEvents = 'none';
+                    } else if (left <= LOW && tag) {
+                        tag.textContent = `Only ${left} left →`;
+                    }
+                }
+            } catch (_) { /* fail-open: keep the default labels */ }
+        })();
+
         const onClick = (e) => {
             const a = e.target && e.target.closest ? e.target.closest('a') : null;
             if (!a) return;
