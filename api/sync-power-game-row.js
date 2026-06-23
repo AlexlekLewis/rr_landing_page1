@@ -167,12 +167,17 @@ const buildRow = (r) => ([
   r.page_referrer || '',
 ]);
 
-// Route to a tab based on application type. Standard applications go to the
-// main tab; capability requests go to a clearly separated tab.
+// Route to a tab. With create-on-payment every row here is PAID, so paid rows go to
+// the "Paid players" tab. (Leads/incomplete are handled separately by api/sync-pgp-leads
+// straight from Stripe.) Legacy non-paid rows fall back to the old tabs.
 const resolveTab = (record) => {
+  const paidTab = process.env.POWER_GAME_PAID_TAB || 'Paid players';
   const standardTab = process.env.POWER_GAME_SHEET_TAB || 'Applications';
   const capabilityTab = process.env.POWER_GAME_CAPABILITY_TAB || 'Capability Requests';
-  return record.application_type === 'capability' ? capabilityTab : standardTab;
+  const isPaid = record.payment_status === 'completed' || record.status === 'paid';
+  if (isPaid) return paidTab;
+  if (record.application_type === 'capability') return capabilityTab;
+  return standardTab;
 };
 
 // Ensure the header row exists exactly once at the top of the tab.

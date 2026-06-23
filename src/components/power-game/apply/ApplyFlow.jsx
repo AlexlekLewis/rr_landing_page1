@@ -99,12 +99,13 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
   const blockFeeCents = BLOCK_FEE * 100;
   const isJunior = calcAge(form.player_dob) != null && calcAge(form.player_dob) < 16;
   const sizeGroup = isJunior ? 'junior' : 'senior';
+  // priceCents MUST match api/_lib/uniformPricing.js — the server charges those amounts.
   const KIT_ITEMS_UI = [
-    { key: 'shirt',   label: 'Training Shirt',  sizes: TOPS_SIZES[sizeGroup] || [] },
-    { key: 'shorts',  label: 'Training Shorts', sizes: SHORTS_SIZES[sizeGroup] || [] },
-    { key: 'pants',   label: 'Training Pants',  sizes: PANTS_SIZES[sizeGroup] || [] },
-    { key: 'cap',     label: 'Cap',             sizes: null, oneSize: true },
-    { key: 'jacket',  label: 'Fleece Jacket',   sizes: JACKET_SIZES[sizeGroup] || [], note: 'Optional — runs small, consider one size up' },
+    { key: 'shirt',   label: 'Training Shirt',  priceCents: 2995, sizes: TOPS_SIZES[sizeGroup] || [] },
+    { key: 'shorts',  label: 'Training Shorts', priceCents: 3500, sizes: SHORTS_SIZES[sizeGroup] || [] },
+    { key: 'pants',   label: 'Training Pants',  priceCents: 3700, sizes: PANTS_SIZES[sizeGroup] || [] },
+    { key: 'cap',     label: 'Cap',             priceCents: 2500, sizes: null, oneSize: true },
+    { key: 'jacket',  label: 'Fleece Jacket',   priceCents: 4900, sizes: JACKET_SIZES[sizeGroup] || [], note: 'Optional — runs small, consider one size up' },
   ];
   const setKit = (key, val) => setKitPicks(p => ({ ...p, [key]: val }));
   const anyKitSelected = Object.values(kitPicks).some(v => v);
@@ -114,6 +115,9 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
     if (item?.oneSize) return true; // one size — no dropdown needed
     return typeof v === 'string' && v !== '' && v !== 'pending'; // real size chosen
   });
+  // Kit subtotal shown to the player; the server charges the same via uniformPricing.js.
+  const kitTotalCents = KIT_ITEMS_UI.reduce((s, item) => (kitPicks[item.key] ? s + item.priceCents : s), 0);
+  const totalDueCents = blockFeeCents + (form.needs_uniform ? kitTotalCents : 0);
 
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
 
@@ -256,8 +260,13 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
             email: form.contact_email,
             playerName: form.player_name,
             squadId: selected?.id,
-            // Kit is size-capture only — not charged on the fixed $989 link.
-            uniformTotalCents: 0,
+            // Selected kit → [{ key, size }]; the server prices each garment from the
+            // authoritative catalog (uniformPricing.js) and charges it on top of the $989.
+            uniformItems: form.needs_uniform
+              ? Object.entries(kitPicks)
+                  .filter(([, v]) => v && v !== 'pending')
+                  .map(([key, size]) => ({ key, size: size === 'OS' ? 'One size' : size }))
+              : [],
             uniformSelection: application.uniform_selection || '',
           }),
         });
@@ -539,7 +548,7 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
                             className="w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer"
                           />
                           <div className="flex-1 min-w-0">
-                            <span className="text-sm font-bold text-white">{item.label}</span>
+                            <span className="text-sm font-bold text-white">{item.label}</span> <span className="text-sm font-bold text-rr-light-pink">{fmtAud(item.priceCents)}</span>
                             {item.note && <span className="block text-[11px] text-white/40 mt-0.5">{item.note}</span>}
                             {item.oneSize && picked && <span className="block text-[11px] text-white/50 mt-0.5">One size — adjustable strap</span>}
                             {picked && !item.oneSize && noSizes && <span className="block text-[11px] text-rr-pink mt-0.5">No {sizeGroup} sizes available for this item</span>}
@@ -560,7 +569,14 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
                   })}
                 </div>
 
-                <p className="text-white/35 text-[11px] mt-4">Uniform payment is handled at the Stripe checkout — nothing is charged on this page.</p>
+                {anyKitSelected && (
+                  <div className="flex items-baseline justify-between mt-4 pt-3 border-t border-white/10">
+                    <span className="text-xs uppercase tracking-widest text-white/50">Kit subtotal</span>
+                    <span className="text-xl font-black text-white">{fmtAud(kitTotalCents)}</span>
+                  </div>
+                )}
+
+                <p className="text-white/35 text-[11px] mt-4">Your kit is added to the $989 program fee and paid together at the secure Stripe checkout.</p>
 
                 <button
                   onClick={() => setStep('secure')}
@@ -585,14 +601,26 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
                   {form.needs_uniform && anyKitSelected && (
                     <SummaryRow k="Uniform" v={Object.entries(kitPicks).filter(([,v]) => v && v !== 'pending').map(([k,v]) => `${k === 'cap' ? 'Cap' : k.charAt(0).toUpperCase() + k.slice(1)} ${v === 'OS' ? '' : v}`.trim()).join(' · ')} />
                   )}
-                  <div className="border-t border-white/10 pt-3 flex items-baseline justify-between">
-                    <span className="text-xs uppercase tracking-widest text-white/50">Program fee</span>
-                    <span className="text-3xl font-black text-white">{fmtAud(blockFeeCents)}</span>
+                  <div className="border-t border-white/10 pt-3 space-y-1.5">
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-xs uppercase tracking-widest text-white/50">Program fee</span>
+                      <span className="text-lg font-bold text-white/80">{fmtAud(blockFeeCents)}</span>
+                    </div>
+                    {form.needs_uniform && kitTotalCents > 0 && (
+                      <div className="flex items-baseline justify-between">
+                        <span className="text-xs uppercase tracking-widest text-white/50">Royals uniform</span>
+                        <span className="text-lg font-bold text-white/80">{fmtAud(kitTotalCents)}</span>
+                      </div>
+                    )}
+                    <div className="flex items-baseline justify-between pt-1.5 border-t border-white/10">
+                      <span className="text-xs uppercase tracking-widest text-white/50">Total today</span>
+                      <span className="text-3xl font-black text-white">{fmtAud(totalDueCents)}</span>
+                    </div>
                   </div>
                 </div>
-                <p className="text-white/35 text-[11px] -mt-3 mb-5">{form.needs_uniform ? 'Your uniform sizes have been recorded — uniform payment is added at the Stripe checkout.' : 'Uniform (if you need it) is added at the Stripe checkout — it’s not part of this fee.'}</p>
+                <p className="text-white/35 text-[11px] -mt-3 mb-5">{form.needs_uniform && kitTotalCents > 0 ? 'Program fee + your selected kit, charged together at the secure Stripe checkout.' : 'Uniform (if you need it) can be added — it’s not part of this fee.'}</p>
                 <button onClick={secure} disabled={submitting || !consentsOk(form)} className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
-                  {submitting ? 'Processing…' : `Pay ${fmtAud(blockFeeCents)} & secure my spot`}
+                  {submitting ? 'Processing…' : `Pay ${fmtAud(totalDueCents)} & secure my spot`}
                 </button>
                 <p className="text-white/25 text-[11px] text-center mt-3">Your spot is <span className="text-white/45 font-bold">only secured once payment is confirmed</span> — your held time is released if payment isn&apos;t completed. *Squads are subject to change &mdash; we&apos;ll work with you if changes are needed.</p>
               </div>

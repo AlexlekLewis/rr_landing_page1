@@ -46,5 +46,9 @@ export function buildPaidRow(application, session) {
     amount_paid_cents: session?.amount_total ?? null,
     paid_at: new Date().toISOString(),
     stripe_session_id: session?.id || null,
+    // Record the SERVER-priced kit total/selection (from the checkout metadata) so the
+    // row reflects what was actually charged — not the funnel's size-only placeholder.
+    uniform_total_cents: Number(session?.metadata?.uniform_total_cents) || application?.uniform_total_cents || 0,
+    uniform_selection: session?.metadata?.uniform_selection || application?.uniform_selection || '',
   };
 }
