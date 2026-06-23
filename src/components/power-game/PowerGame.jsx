@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ApplyFlow from './apply/ApplyFlow';
+import { SQUADS } from '../../lib/booking/squads';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
 // /PGP2026 renders the boss-approved design verbatim (the "PGP2026 Preview" mock),
@@ -114,6 +115,7 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
       <span style="display:inline-block; font-size:11px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.22); border-radius:999px; padding:7px 14px;">Rajasthan Royals Academy · Melbourne</span>
       <h1 style="font-size:clamp(34px,8vw,58px); margin:18px 0 18px;">Start your pre-season the <span class="pink">Royals way</span> — with real <span class="pink">power.</span></h1>
       <p style="font-size:16px; line-height:1.55; color:rgba(255,255,255,.86); font-weight:500; max-width:560px;">The 8-week Power Pre-Season for elite cricketers — whether you're chasing VMCU selection, Dowling Shield, Marg Jennings or Premier cricket and beyond. Build genuine power with bat, ball and in the field, and walk into round one ahead of the rest.</p>
+      <p style="font-size:13px; line-height:1.5; color:rgba(255,255,255,.72); font-weight:500; max-width:560px; margin-top:12px;">A representative-standard pre-season — <strong style="color:#fff;">not a beginner program</strong>. New to cricket or still building the basics? <a href="/junior-royals" style="color:var(--pink); font-weight:800; text-decoration:none;">Our Junior Royals program is built for you →</a></p>
       <div style="margin:20px 0 8px; display:flex; align-items:center; gap:9px; font-size:15px; font-weight:700;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E96BB0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> From <span class="pink">$989</span> incl. GST
       </div>
@@ -260,7 +262,7 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
     <div class="head">
       <span class="kick"><span class="dot"></span> Who It's For</span>
       <h2>Is this <span class="pink">you?</span></h2>
-      <p class="lead">Built for representative-standard cricketers — from emerging 12-year-olds to established senior players — who want to add genuine power to their game. If you're playing VMCU / Country representative cricket or higher, this is for you.</p>
+      <p class="lead">Built for representative-standard cricketers — from emerging 12-year-olds to established senior players — who want to add genuine power to their game. If you're playing VMCU / Country representative cricket or higher, this is for you. <strong>Not rep-standard yet?</strong> Start with <a href="/junior-royals" style="color:var(--pink); font-weight:800; text-decoration:none;">Junior Royals →</a></p>
     </div>
     <div class="grid g3">
       <div class="card"><span class="tag">Ages 12–14</span><h3 style="font-size:16px; margin:11px 0 7px;">The Emerging Talent</h3><p style="font-size:13px; color:var(--slate); line-height:1.5; font-weight:500;">Young representative players ready to discover their archetype and build genuine power foundations early in their journey.</p></div>
@@ -428,7 +430,7 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
       <div style="display:flex; flex-wrap:wrap; gap:9px; justify-content:center; margin:14px 0 16px;">
         <span class="tag">8-week pre-season</span><span class="tag">Once a week</span><span class="tag">2 hours each</span>
       </div>
-      <p class="lead">Same squad, same day, same time, every week. Tap any centre to see <strong>every squad — day, time &amp; age group</strong>. Apply and we'll highlight the ones that fit your age &amp; ability — then you pick the time that suits you.</p>
+      <p class="lead">Same session, same day, same time, every week. Tap any centre to see <strong>every session — day &amp; time</strong>, then tap one to apply. Open to any player aged 12–26.</p>
     </div>
     <div class="grid g3" style="align-items:start;">
       <div class="card">
@@ -437,22 +439,18 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
         <div style="font-size:13px; color:var(--slate); font-weight:700;">The Netz</div>
         <div style="font-size:11.5px; color:var(--slate); font-weight:500; margin-bottom:10px;">37 Robbins Cct, Williamstown North</div>
         <details class="avail" open>
-          <summary><span class="alabel">View squads &amp; times</span><span class="chev">⌄</span></summary>
-          <div class="abrief">Every squad runs <strong>2 hours, once a week, for 8 weeks</strong> — pick the day, time &amp; age group that suit you.</div>
+          <summary><span class="alabel">View sessions &amp; times</span><span class="chev">⌄</span></summary>
+          <div class="abrief">Every session runs <strong>2 hours, once a week, for 8 weeks</strong>. Open to any player aged 12–26 — tap a session to apply.</div>
           <div class="adays">
             <div class="aday-h">Friday</div>
             <div class="aboxes">
-              <div class="abox"><span class="atime">5:30–7:30pm</span><span class="aage">Ages 12–14</span></div>
-              <div class="abox"><span class="atime">5:30–7:30pm</span><span class="aage">Ages 14–16</span></div>
-              <div class="abox"><span class="atime">7:30–9:30pm</span><span class="aage">Ages 14–16</span></div>
-              <div class="abox"><span class="atime">7:30–9:30pm</span><span class="aage">Ages 17–26</span></div>
+              <a class="abox" href="#apply" data-session="w-fri530" style="cursor:pointer;text-decoration:none;"><span class="atime">5:30–7:30pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
+              <a class="abox" href="#apply" data-session="w-fri730" style="cursor:pointer;text-decoration:none;"><span class="atime">7:30–9:30pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
             </div>
             <div class="aday-h">Saturday</div>
             <div class="aboxes">
-              <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 12–14</span></div>
-              <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 14–16</span></div>
-              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 14–16</span></div>
-              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 17–26</span></div>
+              <a class="abox" href="#apply" data-session="w-sat2" style="cursor:pointer;text-decoration:none;"><span class="atime">2:00–4:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
+              <a class="abox" href="#apply" data-session="w-sat4" style="cursor:pointer;text-decoration:none;"><span class="atime">4:00–6:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
             </div>
           </div>
         </details>
@@ -464,20 +462,17 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
         <div style="font-size:13px; color:var(--slate); font-weight:700;">Elite Cricket Centre</div>
         <div style="font-size:11.5px; color:var(--slate); font-weight:500; margin-bottom:10px;">8-9 Becon Ct, Hallam</div>
         <details class="avail">
-          <summary><span class="alabel">View squads &amp; times</span><span class="chev">⌄</span></summary>
-          <div class="abrief">Every squad runs <strong>2 hours, once a week, for 8 weeks</strong> — pick the day, time &amp; age group that suit you.</div>
+          <summary><span class="alabel">View sessions &amp; times</span><span class="chev">⌄</span></summary>
+          <div class="abrief">Every session runs <strong>2 hours, once a week, for 8 weeks</strong>. Open to any player aged 12–26 — tap a session to apply.</div>
           <div class="adays">
             <div class="aday-h">Thursday</div>
             <div class="aboxes">
-              <div class="abox"><span class="atime">8:00–10:00pm</span><span class="aage">Ages 14–16</span></div>
-              <div class="abox"><span class="atime">8:00–10:00pm</span><span class="aage">Ages 17–26</span></div>
+              <a class="abox" href="#apply" data-session="h-thu8" style="cursor:pointer;text-decoration:none;"><span class="atime">8:00–10:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
             </div>
             <div class="aday-h">Saturday</div>
             <div class="aboxes">
-              <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 12–14</span></div>
-              <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 14–16</span></div>
-              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 12–14</span></div>
-              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 17–26</span></div>
+              <a class="abox" href="#apply" data-session="h-sat2" style="cursor:pointer;text-decoration:none;"><span class="atime">2:00–4:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
+              <a class="abox" href="#apply" data-session="h-sat4" style="cursor:pointer;text-decoration:none;"><span class="atime">4:00–6:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
             </div>
           </div>
         </details>
@@ -489,29 +484,25 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
         <div style="font-size:13px; color:var(--slate); font-weight:700;">Mickleham Indoor Sports Centre</div>
         <div style="font-size:11.5px; color:var(--slate); font-weight:500; margin-bottom:10px;">Mickleham VIC 3064</div>
         <details class="avail">
-          <summary><span class="alabel">View squads &amp; times</span><span class="chev">⌄</span></summary>
-          <div class="abrief">Every squad runs <strong>2 hours, once a week, for 8 weeks</strong> — pick the day, time &amp; age group that suit you.</div>
+          <summary><span class="alabel">View sessions &amp; times</span><span class="chev">⌄</span></summary>
+          <div class="abrief">Every session runs <strong>2 hours, once a week, for 8 weeks</strong>. Open to any player aged 12–26 — tap a session to apply.</div>
           <div class="adays">
             <div class="aday-h">Friday</div>
             <div class="aboxes">
-              <div class="abox"><span class="atime">6:00–8:00pm</span><span class="aage">Ages 12–14</span></div>
-              <div class="abox"><span class="atime">6:00–8:00pm</span><span class="aage">Ages 14–16</span></div>
-              <div class="abox"><span class="atime">8:00–10:00pm</span><span class="aage">Ages 14–16</span></div>
-              <div class="abox"><span class="atime">8:00–10:00pm</span><span class="aage">Ages 17–26</span></div>
+              <a class="abox" href="#apply" data-session="m-fri6" style="cursor:pointer;text-decoration:none;"><span class="atime">6:00–8:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
+              <a class="abox" href="#apply" data-session="m-fri8" style="cursor:pointer;text-decoration:none;"><span class="atime">8:00–10:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
             </div>
             <div class="aday-h">Saturday</div>
             <div class="aboxes">
-              <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 12–14</span></div>
-              <div class="abox"><span class="atime">2:00–4:00pm</span><span class="aage">Ages 14–16</span></div>
-              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 14–16</span></div>
-              <div class="abox"><span class="atime">4:00–6:00pm</span><span class="aage">Ages 17–26</span></div>
+              <a class="abox" href="#apply" data-session="m-sat2" style="cursor:pointer;text-decoration:none;"><span class="atime">2:00–4:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
+              <a class="abox" href="#apply" data-session="m-sat4" style="cursor:pointer;text-decoration:none;"><span class="atime">4:00–6:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
             </div>
           </div>
         </details>
         <div class="winnote">8 weeks · Jul 31 – Sep 19</div>
       </div>
     </div>
-    <div style="text-align:center; margin-top:22px; font-size:13px; font-weight:700; color:var(--charcoal);">Your matched options appear when you apply below.</div>
+    <div style="text-align:center; margin-top:22px; font-size:13px; font-weight:700; color:var(--charcoal);">Tap any session above to apply — open to any player aged 12–26.</div>
   </div>
 </section>
 
@@ -581,6 +572,8 @@ const PowerGame = () => {
     usePageAnalytics('/PGP2026');
     const hostRef = useRef(null);
     const [showApply, setShowApply] = useState(false);
+    // Session chosen from the Locations picker (null = generic Apply → pick inside the flow).
+    const [pickedSession, setPickedSession] = useState(null);
 
     useEffect(() => {
         document.title = 'Power Pre-Season | Rajasthan Royals Academy Elite Program';
@@ -603,8 +596,17 @@ const PowerGame = () => {
             if (!a) return;
             const href = a.getAttribute('href') || '';
             const txt = (a.textContent || '').toLowerCase();
+            // Locations picker: a specific session was chosen — seed the apply flow with it.
+            const sessionId = a.getAttribute('data-session');
+            if (sessionId) {
+                e.preventDefault();
+                setPickedSession(SQUADS.find((s) => s.id === sessionId) || null);
+                setShowApply(true);
+                return;
+            }
             if (href === '#apply' || (href === '#' && txt.includes('apply'))) {
                 e.preventDefault();
+                setPickedSession(null); // generic Apply — they'll pick the session in the flow
                 setShowApply(true);
                 return;
             }
@@ -626,7 +628,7 @@ const PowerGame = () => {
                     <div style={{ maxWidth: '640px', margin: '0 auto', padding: '14px 16px 0' }}>
                         <button onClick={() => setShowApply(false)} style={{ color: 'rgba(255,255,255,0.55)', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer' }}>← Close</button>
                     </div>
-                    <ApplyFlow embedded />
+                    <ApplyFlow embedded initialSession={pickedSession} />
                 </div>
             )}
         </div>

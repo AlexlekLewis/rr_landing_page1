@@ -15,12 +15,12 @@ const oneSquad = [
 // days/times/venues in squads.ts (everything else below is derived maths).
 // ════════════════════════════════════════════════════════════════════════════
 const SNAPSHOT = {
-  totalSquads: 22, // Williamstown 8 + Hallam 6 + Mickleham 8 (each squad = one age group on its lanes)
+  totalSquads: 11, // 11 open sessions: Williamstown 4 + Hallam 3 + Mickleham 4
   activeCentres: 3, // williamstown + hallam + mickleham
   comingSoonCentres: 0,
   // Total places for the 8-WEEK BLOCK (26:7 ratio). Each squad = round(lanes × 26/7).
-  blockCapacity: 238, // Williamstown 88 + Hallam 46 + Mickleham 104
-  perCentre: { williamstown: 88, hallam: 46, mickleham: 104 } as Record<string, number>,
+  blockCapacity: 261, // Williamstown 104 + Hallam 53 + Mickleham 104
+  perCentre: { williamstown: 104, hallam: 53, mickleham: 104 } as Record<string, number>,
 };
 
 describe("squad grid integrity (snapshot of the official schedule)", () => {
@@ -47,51 +47,40 @@ describe("squad grid integrity (snapshot of the official schedule)", () => {
     }
   });
 
-  it("each slot holds up to TWO squads, always of DIFFERENT age bands", () => {
-    const bySlot = new Map<string, string[]>();
-    for (const s of SQUADS) {
-      const arr = bySlot.get(s.blockId) ?? [];
-      arr.push(s.band);
-      bySlot.set(s.blockId, arr);
-    }
-    for (const [slot, bands] of bySlot) {
-      expect(bands.length, slot).toBeLessThanOrEqual(2);
-      expect(new Set(bands).size, slot).toBe(bands.length); // no slot pairs two of the same age
-    }
+  it("each slot is exactly one open session (no age-band split)", () => {
+    const bySlot = new Map<string, number>();
+    for (const s of SQUADS) bySlot.set(s.blockId, (bySlot.get(s.blockId) ?? 0) + 1);
+    for (const [slot, n] of bySlot) expect(n, slot).toBe(1);
+    expect(bySlot.size).toBe(SQUADS.length); // every session is its own slot
   });
 
-  it("every age band is offered at every active centre, with day options", () => {
+  it("every active centre offers open sessions with day options", () => {
     for (const centre of ACTIVE_CENTRES.map((c) => c.slug)) {
-      for (const band of ["12-14", "14-16", "17+"]) {
-        expect(squadsForPlacement({ centre, band }).length, `${centre} ${band}`).toBeGreaterThan(0);
-      }
+      expect(squadsForPlacement({ centre }).length, centre).toBeGreaterThan(0);
     }
     expect(SQUADS.every((s) => s.blockLabel.includes("–"))).toBe(true);
   });
 
-  it("squadsForPlacement returns a band's day options; 14-16 at Williamstown spans 2 days", () => {
-    const m = squadsForPlacement({ centre: "williamstown", band: "14-16" });
-    expect(m.every((s) => s.band === "14-16" && s.centre === "williamstown")).toBe(true);
+  it("squadsForPlacement returns all of a centre's open sessions; Williamstown spans Fri + Sat", () => {
+    const m = squadsForPlacement({ centre: "williamstown" });
+    expect(m.every((s) => s.centre === "williamstown")).toBe(true);
+    expect(m.length).toBe(4);
     expect(new Set(m.map((s) => s.day)).size).toBe(2); // Friday + Saturday
   });
 
-  it("Hallam 12-14 is Saturday-only (locked constraint); other Hallam bands get 2 days", () => {
-    const distinctDays = (centre: string, band: string) =>
-      new Set(squadsForPlacement({ centre, band }).map((s) => s.day)).size;
-    expect(distinctDays("hallam", "12-14")).toBe(1); // Saturday only — Thu 8–10pm is too late for juniors
-    expect(distinctDays("hallam", "14-16")).toBe(2); // Thu + Sat
-    expect(distinctDays("hallam", "17+")).toBe(2); // Thu + Sat
+  it("Hallam runs Thursday + Saturday open sessions", () => {
+    const hallam = squadsForPlacement({ centre: "hallam" });
+    expect(hallam.length).toBe(3);
+    expect(new Set(hallam.map((s) => s.day))).toEqual(new Set(["Thursday", "Saturday"]));
   });
 
-  it("honors the 3 existing purchases: a 12-14 Sat 2–4pm squad exists at The Netz & Mickleham", () => {
+  it("the purchased Sat 2–4pm sessions exist at The Netz & Mickleham", () => {
     for (const centre of ["williamstown", "mickleham"]) {
-      const sat24 = SQUADS.find(
-        (s) => s.centre === centre && s.band === "12-14" && s.day === "Saturday" && s.startTime === "2:00pm",
-      );
+      const sat24 = SQUADS.find((s) => s.centre === centre && s.day === "Saturday" && s.startTime === "2:00pm");
       expect(sat24, centre).toBeTruthy();
     }
-    expect(SQUADS.some((s) => s.id === "w-sat2-1214")).toBe(true);
-    expect(SQUADS.some((s) => s.id === "m-sat2-1214")).toBe(true);
+    expect(SQUADS.some((s) => s.id === "w-sat2")).toBe(true);
+    expect(SQUADS.some((s) => s.id === "m-sat2")).toBe(true);
   });
 });
 

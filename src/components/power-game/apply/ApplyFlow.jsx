@@ -83,13 +83,14 @@ function PhaseStepper({ phase }) {
   );
 }
 
-export default function ApplyFlow({ embedded = false }) {
-  const [form, setForm] = useState({ ...BLANK_FORM });
-  const [step, setStep] = useState('centre');
+export default function ApplyFlow({ embedded = false, initialSession = null }) {
+  const [seeded] = useState(!!initialSession); // chosen up front via the Locations picker
+  const [form, setForm] = useState({ ...BLANK_FORM, ...(initialSession ? { centre: initialSession.centre } : {}) });
+  const [step, setStep] = useState(initialSession ? 'player' : 'centre');
   const [errors, setErrors] = useState([]);
   const [analysing, setAnalysing] = useState(false);
   const [result, setResult] = useState(null); // { dna, placement }
-  const [selected, setSelected] = useState(null); // squad
+  const [selected, setSelected] = useState(initialSession || null); // chosen session
   const [hold, setHold] = useState(null); // { holdId }
   const [appId, setAppId] = useState(null); // persisted application id
   const [spotsTick, setSpotsTick] = useState(0); // force spots re-read
@@ -146,7 +147,7 @@ export default function ApplyFlow({ embedded = false }) {
       return;
     }
     // The QA shortcut skips the contact step where consents are now captured — pre-consent so the demo can complete.
-    const CONSENTED = { accept_terms: true, accept_player_code: true, accept_parent_code: true, accept_social_media: true, accept_playing_standard: true };
+    const CONSENTED = { accept_terms: true, accept_player_code: true, accept_parent_code: true, accept_social_media: true, accept_playing_standard: true, accept_ability_standard: true };
     const PERF = { ...BLANK_FORM, ...CONSENTED, centre: 'williamstown', player_name: 'Sam Smith', player_dob: '2012-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'sam@example.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right', rep_level: 'P16M', format: 't20' };
     const REVIEW = { ...BLANK_FORM, ...CONSENTED, centre: 'williamstown', player_name: 'Alex Young', player_dob: '2011-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'alex@example.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right', club_level: 'CS-BELOW', format: 'od' };
     const demoForm = demo === 'review' ? REVIEW : PERF;
@@ -180,11 +181,24 @@ export default function ApplyFlow({ embedded = false }) {
     if (step === 'profile') return setStep('confirm');
   }
   // Confirmed the details are right → run the engine, persist, show the analysing beat, reveal.
-  function confirmAndReveal() {
+  async function confirmAndReveal() {
     const r = computePlacement(form);
     setResult(r);
     const app = applications.create(applicationFromPlacement(form, r, r.placement.requiresReview ? 'review' : 'auto'));
     setAppId(app.id);
+    // Seeded from the Locations picker (and a valid DOB): the session is already chosen,
+    // so hold it and go straight to kit/checkout — no in-funnel session picker.
+    if (selected && !r.placement.requiresReview) {
+      let ok = !!hold;
+      if (!hold) {
+        const ref = `${form.player_name || 'player'}-${Date.now()}`;
+        const res = await inventory.createHold({ squadId: selected.id, ref });
+        ok = res.ok;
+        if (res.ok) { setHold({ holdId: res.holdId }); if (app?.id) applications.update(app.id, { squadId: selected.id, bookingId: res.holdId }); }
+      }
+      if (ok) { setStep(form.needs_uniform ? 'kit' : 'secure'); return; }
+      setSelected(null); // session filled since they picked it — fall back to the picker
+    }
     setAnalysing(true);
     setStep('reveal');
     setTimeout(() => setAnalysing(false), 1600);
@@ -199,10 +213,10 @@ export default function ApplyFlow({ embedded = false }) {
       case 'reveal':
         if (hold) { inventory.release(hold.holdId); setHold(null); setSelected(null); }
         return setStep('confirm');
-      case 'kit': return setStep('reveal');
+      case 'kit': return setStep(seeded ? 'confirm' : 'reveal');
       // Secure goes back to the kit step only if a uniform was requested; otherwise
-      // the kit step was skipped, so step back to the time/offer.
-      case 'secure': return setStep(form.needs_uniform ? 'kit' : 'reveal');
+      // the kit step was skipped, so step back to the picker (or confirm, if seeded).
+      case 'secure': return setStep(form.needs_uniform ? 'kit' : (seeded ? 'confirm' : 'reveal'));
       case 'review': return setStep('reveal');
       case 'requestInfo': return setStep('reveal');
       default: return;
@@ -340,21 +354,12 @@ export default function ApplyFlow({ embedded = false }) {
     }
   }
 
-  // Age-based model: a squad = an age group; squadsForPlacement returns that band's
-  // day options at the centre (no perf/pathway stream). Strength is sorted inside the squad.
-  // Overlap-aware: a 14yo gets BOTH "12-14" and "14-16" sessions (eligibleBands), so they
-  // can pick a time in either group; most ages have a single eligible band.
-  const eligBands = result?.placement?.eligibleBands?.length
-    ? result.placement.eligibleBands
-    : (result?.placement?.placedBand ? [result.placement.placedBand] : []);
+  // Open-session model: any 12–26 player may pick any session at the centre — no age
+  // filtering. squadsForPlacement returns all of a centre's sessions (day/time options).
   const matchingSquads = result && !result.placement.requiresReview
-    ? eligBands
-        .flatMap((b) => squadsForPlacement({ centre: form.centre, band: b }))
-        .sort((a, b) => a.sortOrder - b.sortOrder)
+    ? squadsForPlacement({ centre: form.centre })
     : [];
-  const squadLabel = eligBands.length
-    ? `${eligBands.join(' / ')} Squad${eligBands.length > 1 ? 's' : ''}`
-    : '';
+  const sessionLabel = selected ? `${selected.day} ${selected.startTime}–${selected.endTime}` : '';
   const comingSoonVenue = !!CENTRE_BY_SLUG[form.centre]?.comingSoon;
   // The soft 'review' step serves three audiences: a below-floor coach review, a
   // coming-soon venue waitlist, and a *placed* player who'd rather talk first — that
@@ -386,6 +391,7 @@ export default function ApplyFlow({ embedded = false }) {
         </label>
       </div>
       {consentRow('accept_social_media', <>I&apos;m happy for photos/videos featuring the player to be used on RRA Melbourne&apos;s social media &amp; marketing channels.</>)}
+      {consentRow('accept_ability_standard', <>I understand the Power Game Program is for <span className="text-white font-semibold">representative-standard cricketers (VMCU level or higher)</span>. If the coaching team assesses a player isn&apos;t yet at this standard, they may be moved to a more suitable session, or guided toward another Royals program better matched to their development. <a href="/junior-royals" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Not there yet? Start with Junior Royals →</a></>)}
       <div className="flex items-start gap-3">
         <input id="c_needs_uniform" type="checkbox" checked={!!form.needs_uniform} onChange={(e) => { set('needs_uniform', e.target.checked); if (!e.target.checked) setKitPicks({ shirt: '', shorts: '', pants: '', cap: '', jacket: '' }); }} className="mt-0.5 w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer" />
         <label htmlFor="c_needs_uniform" className="text-xs text-white/70 leading-relaxed cursor-pointer">I&apos;ll need a Royals playing uniform — I&apos;ll pick my sizes next and pay for it at the checkout.</label>
@@ -402,7 +408,12 @@ export default function ApplyFlow({ embedded = false }) {
       <div className="max-w-xl mx-auto px-5 py-12 md:py-16">
         <div className="text-center mb-6">
           <div className="text-rr-pink font-black uppercase tracking-[0.3em] text-xs mb-1">Power Pre-Season</div>
-          <div className="text-white/40 text-xs uppercase tracking-widest">Secure your squad spot</div>
+          <div className="text-white/40 text-xs uppercase tracking-widest">Secure your session spot</div>
+        </div>
+
+        {/* Standard disclaimer — visible on every step, before anyone pays. */}
+        <div className="mb-5 rounded-xl border border-rr-pink/30 bg-rr-pink/[0.07] px-4 py-3 text-[12px] text-white/75 leading-snug">
+          <span className="font-bold text-white">Power Game is a representative-standard pre-season (VMCU level or higher).</span> If a player isn&apos;t yet at this standard, our coaches may move them to a more suitable session or recommend a better-matched Royals program. New to cricket or still building the basics? <a href="/junior-royals" target="_blank" rel="noreferrer" className="text-rr-pink font-bold hover:underline">Junior Royals is built for you →</a>
         </div>
 
         {phase !== undefined && <PhaseStepper phase={phase} />}
@@ -447,11 +458,11 @@ export default function ApplyFlow({ embedded = false }) {
                 {form.centre && !CENTRE_BY_SLUG[form.centre]?.comingSoon && (
                   <div className="mt-7 pt-6 border-t border-white/10">
                     <div className="flex items-baseline justify-between gap-3 mb-3">
-                      <h2 className="text-sm font-black uppercase tracking-widest text-white">Squads &amp; times at {CENTRE_BY_SLUG[form.centre]?.name}</h2>
-                      <span className="hidden sm:block text-[11px] text-white/40 font-bold uppercase tracking-widest">Day · Time · Age</span>
+                      <h2 className="text-sm font-black uppercase tracking-widest text-white">Sessions &amp; times at {CENTRE_BY_SLUG[form.centre]?.name}</h2>
+                      <span className="hidden sm:block text-[11px] text-white/40 font-bold uppercase tracking-widest">Day · Time</span>
                     </div>
                     <CentreAvailabilityGrid centreSlug={form.centre} />
-                    <p className="text-white/35 text-[11px] mt-3">Prefer a different night? Tap another centre above to compare — we'll highlight the squads that fit you once we know your cricket.</p>
+                    <p className="text-white/35 text-[11px] mt-3">Any 12–26 player can pick any session — choose the day &amp; time that suits you. Prefer a different night? Tap another centre above to compare.</p>
                   </div>
                 )}
               </div>
@@ -600,15 +611,14 @@ export default function ApplyFlow({ embedded = false }) {
                     <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} onContinue={null} onRequestInfo={() => setStep('requestInfo')} />
 
                     <div className="mt-8">
-                      <h2 className="text-xl md:text-2xl font-black uppercase tracking-wide mb-1">Choose your time</h2>
-                      <p className="text-white/50 text-sm mb-5">Your <span className="text-rr-pink font-bold">{squadLabel}</span> at {CENTRE_BY_SLUG[form.centre]?.name} is highlighted — other age groups are greyed out.</p>
+                      <h2 className="text-xl md:text-2xl font-black uppercase tracking-wide mb-1">Choose your session</h2>
+                      <p className="text-white/50 text-sm mb-5">Pick the day &amp; time that suits you at {CENTRE_BY_SLUG[form.centre]?.name}.</p>
                       {matchingSquads.length === 0 ? (
                         <Fallback onOther={() => { const other = CENTRES.find((c) => c.slug !== form.centre && !c.comingSoon); if (other) { set('centre', other.slug); } }} onReview={() => setStep('review')} otherName={CENTRES.find((c) => c.slug !== form.centre && !c.comingSoon)?.name} />
                       ) : (
                         <div className="space-y-3">
                           <CentreAvailabilityGrid
                             centreSlug={form.centre}
-                            eligibleBand={eligBands}
                             selectedId={selected?.id}
                             onPick={pickSquad}
                             spotsLeftFor={(id) => inventory.spotsLeft(id)}
@@ -688,9 +698,8 @@ export default function ApplyFlow({ embedded = false }) {
                 <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-6">Secure your spot</h1>
                 <div className="bg-white/5 border border-white/15 rounded-2xl p-6 mb-6 space-y-3">
                   <SummaryRow k="Player" v={form.player_name} />
-                  <SummaryRow k="Squad" v={squadLabel} />
                   <SummaryRow k="Centre" v={CENTRE_BY_SLUG[form.centre]?.name} />
-                  <SummaryRow k="Time" v={`${selected.day} ${selected.startTime}–${selected.endTime}`} />
+                  <SummaryRow k="Session" v={sessionLabel} />
                   <SummaryRow k="Block" v="8-week Power Pre-Season" />
                   {form.needs_uniform && anyKitSelected && (
                     <SummaryRow k="Uniform" v={Object.entries(kitPicks).filter(([,v]) => v && v !== 'pending').map(([k,v]) => `${k === 'cap' ? 'Cap' : k.charAt(0).toUpperCase() + k.slice(1)} ${v === 'OS' ? '' : v}`.trim()).join(' · ')} />
@@ -789,7 +798,7 @@ export default function ApplyFlow({ embedded = false }) {
               <div className="text-center py-8">
                 <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 200 }} className="w-20 h-20 rounded-full bg-green-500/20 border border-green-500/40 flex items-center justify-center mx-auto mb-5"><Check className="w-10 h-10 text-green-400" /></motion.div>
                 <h1 className="text-3xl font-black uppercase tracking-wide mb-2">You're in!</h1>
-                <p className="text-white/60 text-sm max-w-sm mx-auto mb-6">{form.player_name?.split(' ')[0]}'s spot is locked: <span className="text-white font-bold">{squadLabel}</span>, {selected.day} {selected.startTime}–{selected.endTime} at {CENTRE_BY_SLUG[form.centre]?.name}. A confirmation email is on its way.</p>
+                <p className="text-white/60 text-sm max-w-sm mx-auto mb-6">{form.player_name?.split(' ')[0]}'s spot is locked: <span className="text-white font-bold">{selected.day} {selected.startTime}–{selected.endTime}</span> at {CENTRE_BY_SLUG[form.centre]?.name}. A confirmation email is on its way.</p>
               </div>
             )}
 
