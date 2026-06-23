@@ -33,7 +33,7 @@ export default async function handler(req, res) {
     const a = application;
     const consentsAccepted =
       a.accept_terms && a.accept_player_code && a.accept_parent_code &&
-      a.accept_social_media && a.accept_playing_standard;
+      a.accept_social_media && a.accept_playing_standard && a.accept_ability_standard;
     if (!consentsAccepted) {
       return res.status(403).json({ error: 'All compliance agreements must be accepted before payment.' });
     }

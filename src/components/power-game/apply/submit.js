@@ -80,9 +80,9 @@ export function buildApplicationRow(form, placement, squad, opts = {}) {
     parent1_email: minor ? (form.contact_email || "") : "",
     parent1_phone: minor ? (form.contact_phone || "") : "",
     venue: opts.centreName || form.centre || "",
-    // Record the band of the ACTUALLY-PICKED squad (a 14yo may pick a 12-14 OR a 14-16
-    // session); fall back to the placed home band when no squad was chosen (review path).
-    age_group: squad?.band || placement?.placedBand || "",
+    // Open sessions carry no band — record the player's home age band (DOB-derived) as
+    // info only; it no longer gates which session they may pick.
+    age_group: placement?.placedBand || squad?.band || "",
     session_day: squad?.day || "",
     session_time: squad ? `${squad.startTime}–${squad.endTime}` : "",
     phase: "pgp2026",
@@ -97,6 +97,7 @@ export function buildApplicationRow(form, placement, squad, opts = {}) {
     accept_parent_code: minor ? !!form.accept_parent_code : true,
     accept_social_media: !!form.accept_social_media,
     accept_playing_standard: !!form.accept_playing_standard,
+    accept_ability_standard: !!form.accept_ability_standard,
     needs_uniform: !!(opts.uniformSelection) || !!(opts.kitSummary && opts.kitSummary.length) || !!form.needs_uniform,
     uniform_selection: opts.uniformSelection
       || (opts.kitSummary && opts.kitSummary.length ? opts.kitSummary.map((l) => `${l.name} (${l.size})`).join(", ") : ""),

@@ -14,6 +14,7 @@ export const BLOCK_FEE = 989; // 8-week phase (from the planning sheet)
 // Hard upper age limit — the Power Pre-Season is capped at age 26. Anyone OVER 26
 // (27+) is blocked from applying (a 50yo slipped through before this gate existed).
 export const MAX_AGE = 26;
+export const MIN_AGE = 12; // 11-and-under are directed to Junior Royals
 
 // Single SHARED referral code — hand this out to coaches/members who refer.
 // The applicant enters it + their referrer's name when applying; it NEVER blocks
@@ -54,6 +55,10 @@ export interface ApplyForm {
   accept_parent_code: boolean;
   accept_social_media: boolean;
   accept_playing_standard: boolean;
+  // Open-program guardrail (the ONE ability gate): the applicant acknowledges this is a
+  // representative-standard (VMCU+) program and that if they aren't at that standard the
+  // coaches may move them to a more suitable session or recommend another Royals program.
+  accept_ability_standard: boolean;
   needs_uniform: boolean;
   // Wild Card — talent the rep system hasn't caught (no rep / graded senior cricket).
   // Lets a player apply for a coach assessment instead of claiming a level they don't have.
@@ -89,6 +94,7 @@ export const BLANK_FORM: ApplyForm = {
   accept_parent_code: false,
   accept_social_media: false,
   accept_playing_standard: false,
+  accept_ability_standard: false,
   needs_uniform: false,
   wildcard: false,
   referral_code: "",
@@ -107,7 +113,7 @@ export function isMinor(dob: string): boolean {
 
 /** Required compliances/permissions all accepted (parent code only required for minors). */
 export function consentsOk(f: ApplyForm): boolean {
-  const base = f.accept_terms && f.accept_player_code && f.accept_social_media && f.accept_playing_standard;
+  const base = f.accept_terms && f.accept_player_code && f.accept_social_media && f.accept_playing_standard && f.accept_ability_standard;
   return !!(base && (!isMinor(f.player_dob) || f.accept_parent_code));
 }
 
@@ -205,9 +211,10 @@ export function computePlacement(f: ApplyForm): PlacementResult {
     eligibleBands: age != null ? eligibleBands(age).map((b) => b.name) : [],
     playFlag: playUp ? "play_up" : null,
     internalStream,
-    requiresReview: age == null || isAdult,
-    reviewReasons:
-      age == null ? ["no_dob"] : isAdult ? ["senior_review"] : [],
+    // OPEN PROGRAM (23 Jun 2026): every 12–26 player books and pays directly — no
+    // 17+/below-floor review gate. Only a missing DOB still needs manual handling.
+    requiresReview: age == null,
+    reviewReasons: age == null ? ["no_dob"] : [],
   };
   return { dna, placement };
 }
@@ -230,8 +237,10 @@ export function validateStep(step: Step, f: ApplyForm): string[] {
     if (!f.player_dob) e.push("Date of birth is required.");
     else {
       const a = calcAge(f.player_dob);
-      if (a != null && a > MAX_AGE)
-        e.push(`The Power Pre-Season is for players aged ${MAX_AGE} and under — please get in touch if you think this is an error.`);
+      if (a != null && a < MIN_AGE)
+        e.push(`The Power Game Program is for ages ${MIN_AGE}–${MAX_AGE}. Players ${MIN_AGE - 1} and under should join our Junior Royals program — visit rramelbourne.com/junior-royals.`);
+      else if (a != null && a > MAX_AGE)
+        e.push(`The Power Game Program is for ages ${MIN_AGE}–${MAX_AGE} — please get in touch if you think this is an error.`);
     }
     if (!f.gender) e.push("Let us know if you play male or female cricket.");
     if (isMinor(f.player_dob) && !f.parent_name.trim()) e.push("Parent/guardian name is required for under-18s.");
