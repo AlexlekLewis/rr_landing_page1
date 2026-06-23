@@ -28,7 +28,7 @@ const VENUES = [
         region: 'South East Melbourne',
         schedule: {
             '17-open': { day: 'Thursdays', time: '8:00 – 10:00 PM', dates: ['Thu 30 Jul', 'Thu 6 Aug', 'Thu 13 Aug', 'Thu 20 Aug', 'Thu 27 Aug', 'Thu 3 Sep', 'Thu 10 Sep', 'Thu 17 Sep'] },
-            '12-14': { day: 'Saturdays', time: '12:00 – 2:00 PM', dates: ['Sat 1 Aug', 'Sat 8 Aug', 'Sat 15 Aug', 'Sat 22 Aug', 'Sat 29 Aug', 'Sat 5 Sep', 'Sat 12 Sep', 'Sat 19 Sep'] },
+            '12-14': { day: 'Saturdays', time: '4:00 – 6:00 PM', dates: ['Sat 1 Aug', 'Sat 8 Aug', 'Sat 15 Aug', 'Sat 22 Aug', 'Sat 29 Aug', 'Sat 5 Sep', 'Sat 12 Sep', 'Sat 19 Sep'] },
             '14-16': { day: 'Saturdays', time: '2:00 – 4:00 PM', dates: ['Sat 1 Aug', 'Sat 8 Aug', 'Sat 15 Aug', 'Sat 22 Aug', 'Sat 29 Aug', 'Sat 5 Sep', 'Sat 12 Sep', 'Sat 19 Sep'] },
         },
     },

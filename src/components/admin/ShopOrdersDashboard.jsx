@@ -497,9 +497,13 @@ const OrderDetailDrawer = ({ order, stripeData, stripeLoading, stripeError, onCl
         }
         setEmailState({ status: 'sending', message: '' });
         try {
+            const { data: { session } } = await supabase.auth.getSession();
             const res = await fetch('/api/send-confirmation', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+                },
                 body: JSON.stringify({ order_id: order.id, source: order._source }),
             });
             const data = await res.json();

@@ -19,6 +19,8 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import { sendOrderConfirmation } from './_lib/orderEmail.js';
+import { unpackApplication, buildPaidRow } from './_lib/pgpCheckout.js';
+import { sendPgpConfirmation } from './_lib/pgpEmail.js';
 
 // Stripe signature verification requires the *raw* request body. Vercel's
 // default body parser returns a parsed object, which would always fail
@@ -232,6 +234,82 @@ export default async function handler(req, res) {
 
   const charge = session.payment_intent?.latest_charge;
   const card = charge?.payment_method_details?.card;
+
+  // ── Power Game (create-on-payment) ─────────────────────────────────────────
+  // No power_game_applications row is written until payment is confirmed. The
+  // funnel packs the FULL application into the Stripe session metadata; here we
+  // CREATE the paid row (idempotent on stripe_session_id) and send the one
+  // confirmation email. A legacy pre-created row (linked by client_reference_id /
+  // metadata.application_id) is still flipped to paid for back-compat. Only a real
+  // PG session is claimed — shop/program/holiday sessions (whose UUIDs don't match
+  // and which carry no packed payload) fall through to the routing below.
+  {
+    const supabase = getSupabase();
+    const isUuid = (v) => typeof v === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
+    const paidAt = charge?.created ? new Date(charge.created * 1000).toISOString() : new Date().toISOString();
+    const pgCols = 'id, email, player_name, venue, session_day, session_time, age_group, amount_paid_cents, stripe_session_id';
+    const application = unpackApplication(session.metadata);
+
+    const finalisePg = async (row) => {
+      if (row) {
+        await supabase.from('power_game_payment_confirmations').upsert({
+          stripe_session_id: session.id,
+          application_id:     row.id,
+          amount_cents:       session.amount_total ?? null,
+          currency:           session.currency || 'aud',
+          payment_status:     session.payment_status || 'paid',
+          player_name:        session.metadata?.player_name || customerName || null,
+        }, { onConflict: 'stripe_session_id' });
+        try {
+          if (row.email) await sendPgpConfirmation({
+            to: row.email, playerName: row.player_name, centreName: row.venue,
+            sessionDay: row.session_day, sessionTime: row.session_time, ageGroup: row.age_group,
+            amountCents: session.amount_total ?? row.amount_paid_cents ?? null,
+            ref: String(session.id).slice(-8).toUpperCase(),
+          });
+        } catch (e) { console.warn('PGP confirmation email failed (non-blocking):', e.message); }
+      }
+    };
+
+    if (application) {
+      // New flow — a packed payload only ever exists for Power Game → definitively PG.
+      const row = buildPaidRow(application, session);
+      row.paid_at = paidAt;
+      const { data, error } = await supabase
+        .from('power_game_applications')
+        .upsert(row, { onConflict: 'stripe_session_id', ignoreDuplicates: true })
+        .select(pgCols);
+      if (error) console.error('power_game create-on-payment failed:', error.message);
+      else if (data && data.length) await finalisePg(data[0]); // [] = another path already created it
+      console.log(`power_game create-on-payment (session=${session.id})`);
+      return res.status(200).json({ received: true, routed_to: 'power_game_applications', id: data?.[0]?.id || null });
+    }
+
+    // Legacy flow — only a MATCHED update counts as PG (a bare UUID may belong to
+    // holiday/another table, which must keep falling through to its own routing).
+    const pgId = session.client_reference_id || session.metadata?.application_id || null;
+    if (isUuid(pgId)) {
+      const { data: pgRows, error: pgErr } = await supabase
+        .from('power_game_applications')
+        .update({
+          payment_status:    'completed',
+          status:            'paid',
+          amount_paid_cents: session.amount_total ?? null,
+          paid_at:           paidAt,
+          stripe_session_id: session.id,
+        })
+        .eq('id', pgId)
+        .neq('payment_status', 'completed')
+        .select(pgCols);
+      if (pgErr) {
+        console.error('power_game_applications reconcile failed:', pgErr.message);
+      } else if (pgRows && pgRows.length) {
+        await finalisePg(pgRows[0]);
+        console.log(`power_game payment reconciled (id=${pgId}, session=${session.id})`);
+        return res.status(200).json({ received: true, routed_to: 'power_game_applications', id: pgId });
+      }
+    }
+  }
 
   // Route between shop orders and program registrations. The two systems are
   // isolated — a session lands in exactly one of: shop_orders_*, program_registrations,

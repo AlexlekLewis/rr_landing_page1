@@ -94,7 +94,7 @@ function isTestRow_(r) {
 // --Players -----------------------------------------------------------
 
 const HEADERS = [
-  'Submitted (Melb)', 'Player', 'Age', 'DOB', 'Gender', 'Club',
+  'Submitted (Melb)', 'Player', 'Age', 'DOB', 'Gender', 'Cricket club',
   'Parent/Guardian', 'Email', 'Phone',
   'Parent 2', 'Parent 2 Email', 'Parent 2 Phone',
   'Suburb', 'Level entered', 'Venue', 'Age group',
@@ -142,7 +142,7 @@ function toRow_(r) {
     r.age != null ? r.age : '',
     r.dob || '',
     r.cricket_type || '',
-    r.club || '',
+    r.current_club || r.club || '',
     r.parent1_name || '',
     minorContact ? (r.parent1_email || '') : r.email,
     minorContact ? (r.parent1_phone || '') : r.phone,

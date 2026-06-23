@@ -18,6 +18,9 @@ import type { DnaResult } from "./engine";
 export interface AgeBandDef {
   /** Display name of the band. */
   name: string;
+  /** Inclusive bottom age of the band. Bands deliberately OVERLAP at the shared
+   *  boundary (e.g. 12-14 and 14-16 both include age 14). */
+  lo: number;
   /** Inclusive top age of the band. */
   hi: number;
   /** true = open/adult band (includes 18+); minors are never AUTO-played-up into it. */
@@ -27,12 +30,14 @@ export interface AgeBandDef {
 /**
  * Power Game sellable age bands (from the centre planning sheet + applicant demand).
  * Collapses the portal's U17-U19 + U20+ into a single "17+" open band.
+ * Ranges OVERLAP on purpose: age 14 belongs to BOTH "12-14" and "14-16", so a player
+ * on the boundary can pick a session in either group (see eligibleBands).
  * Edit here to re-band; tests in placement.test.ts pin the behaviour.
  */
 export const PG_BANDS: AgeBandDef[] = [
-  { name: "12-14", hi: 14 },
-  { name: "14-16", hi: 16 },
-  { name: "17+", hi: 200, adult: true },
+  { name: "12-14", lo: 12, hi: 14 },
+  { name: "14-16", lo: 14, hi: 16 },
+  { name: "17+", lo: 17, hi: 200, adult: true },
 ];
 
 /** Must be Performance/Elite (engine tier ≥ this) to justify training up a band. */
@@ -57,10 +62,22 @@ export function streamForTier(tier: number | null): Stream {
   return "review";
 }
 
-/** Index of the band a given age falls into (clamped to the last band). */
+/** Index of the band a given age falls into (clamped to the last band). For overlap
+ *  ages (e.g. 14) this is the FIRST/younger band — use eligibleBands for all options. */
 export function homeBandIdx(age: number, bands: AgeBandDef[] = PG_BANDS): number {
   const i = bands.findIndex((b) => age <= b.hi);
   return i === -1 ? bands.length - 1 : i;
+}
+
+/**
+ * Every band whose age-range INCLUDES this age. Bands overlap on the boundary, so a
+ * 14yo gets BOTH "12-14" and "14-16" (they may pick a session in either group), a
+ * 13yo gets only "12-14", a 16yo only "14-16", a 17+ only "17+". An under-age player
+ * (below the youngest band) falls back to the youngest band so they always have one.
+ */
+export function eligibleBands(age: number, bands: AgeBandDef[] = PG_BANDS): AgeBandDef[] {
+  const matches = bands.filter((b) => age >= b.lo && age <= b.hi);
+  return matches.length ? matches : [bands[0]];
 }
 
 /**
@@ -103,9 +120,19 @@ export interface Placement {
   homeBand: string;
   /** Band the player is placed in after the guardrail (only ever ≥ homeBand). */
   placedBand: string;
+  /** Every band the player may pick a session in (overlap-aware; ≥ 1 when age known).
+   *  A 14yo gets ["12-14","14-16"]; most ages get a single band. */
+  eligibleBands: string[];
   playFlag: PlayFlag;
   /** Sellable ability stream (Performance/Pathway), independent of review status. */
   stream: Stream;
+  /**
+   * INTERNAL-only ability flag — coach lane allocation, NEVER user-visible.
+   *   qualified     — rep OR graded senior cricket cleared the floor
+   *   review        — Wild Card / CS-BELOW / no history (still gets a slot in the OPEN program)
+   *   senior_review — 17+ adult, routes to manual coach review
+   */
+  internalStream: "qualified" | "review" | "senior_review" | null;
   /** Best skill → which net/lane they stream into. */
   lane: "Batting" | "Bowling" | "Keeping" | null;
   /** true → coach review queue, NO instant payment (soft path). */
@@ -132,8 +159,10 @@ export function placeFromDna(dna: DnaResult): Placement {
       age: null,
       homeBand: "Unknown",
       placedBand: "Unknown",
+      eligibleBands: [],
       playFlag: null,
       stream: "review",
+      internalStream: null,
       lane: laneFromDna(dna),
       requiresReview: true,
       reviewReasons: ["no_dob"],
@@ -154,8 +183,10 @@ export function placeFromDna(dna: DnaResult): Placement {
     age,
     homeBand,
     placedBand,
+    eligibleBands: eligibleBands(age).map((b) => b.name),
     playFlag,
     stream,
+    internalStream: null, // form-derived; set in flow.ts computePlacement
     lane: laneFromDna(dna),
     requiresReview,
     reviewReasons,

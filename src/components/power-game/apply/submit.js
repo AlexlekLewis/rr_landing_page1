@@ -12,7 +12,7 @@
 // test data is trivially distinguishable and purgeable. Set VITE_PGP_SOURCE to
 // "pgp2026" at production go-live.
 // ============================================================
-import { calcAge, isMinor } from "./flow";
+import { calcAge, isMinor, REFERRAL_CODE } from "./flow";
 // NOTE: the supabase client is imported lazily inside submitApplication() so that
 // buildApplicationRow (pure) stays importable in tests without instantiating a
 // client (createClient throws when env vars are absent).
@@ -31,6 +31,7 @@ function bowlLabel(t) {
 }
 
 function summarise(form) {
+  // bio is internal-only — admin / sheet sync read it. Never user-facing.
   const bits = [];
   if (form.skill) {
     const sec = form.secondary_skill && form.secondary_skill !== "none"
@@ -44,7 +45,9 @@ function summarise(form) {
   if (form.gender) bits.push(`Gender: ${form.gender}`);
   if (form.rep_level) bits.push(`Rep ${form.rep_level}`);
   if (form.club_level) bits.push(`Club ${form.club_level}`);
-  if (form.wildcard) bits.push("Wild Card — applied without a rep / graded senior level");
+  if (form.current_club) bits.push(`Current club: ${form.current_club}`);
+  // Wild Card flag stays in admin bio for lane allocation, but with neutral wording.
+  if (form.wildcard) bits.push("WC flag");
   return bits.join(" · ");
 }
 
@@ -71,12 +74,15 @@ export function buildApplicationRow(form, placement, squad, opts = {}) {
     phone: minor ? "" : (form.contact_phone || ""),
     suburb: form.suburb || "",
     club: form.club_level || "",
-    bio: summarise(form),
+    current_club: form.current_club || "",
+    bio: (placement?.playFlag === "play_up" ? "⬆ PLAY-UP CANDIDATE (rep + senior) — coach to confirm · " : "") + summarise(form),
     parent1_name: minor ? (form.parent_name || "") : "",
     parent1_email: minor ? (form.contact_email || "") : "",
     parent1_phone: minor ? (form.contact_phone || "") : "",
     venue: opts.centreName || form.centre || "",
-    age_group: placement?.placedBand || "",
+    // Open sessions carry no band — record the player's home age band (DOB-derived) as
+    // info only; it no longer gates which session they may pick.
+    age_group: placement?.placedBand || squad?.band || "",
     session_day: squad?.day || "",
     session_time: squad ? `${squad.startTime}–${squad.endTime}` : "",
     phase: "pgp2026",
@@ -91,12 +97,25 @@ export function buildApplicationRow(form, placement, squad, opts = {}) {
     accept_parent_code: minor ? !!form.accept_parent_code : true,
     accept_social_media: !!form.accept_social_media,
     accept_playing_standard: !!form.accept_playing_standard,
+    accept_ability_standard: !!form.accept_ability_standard,
     needs_uniform: !!(opts.uniformSelection) || !!(opts.kitSummary && opts.kitSummary.length) || !!form.needs_uniform,
     uniform_selection: opts.uniformSelection
       || (opts.kitSummary && opts.kitSummary.length ? opts.kitSummary.map((l) => `${l.name} (${l.size})`).join(", ") : ""),
     uniform_total_cents: opts.kitTotalCents || 0,
     payment_status: "pending",
     status,
+    // INTERNAL-only — coach lane allocation flag. NEVER surface in user UI.
+    internal_stream: placement?.internalStream || null,
+    // Referral (optional) — applicant-credits-referrer. referral_valid is a convenience
+    // flag (code matches the shared code AND a referrer name was given); Alex still
+    // confirms manually before any reward. Never affects placement or payment.
+    referral_code: (form.referral_code || "").trim(),
+    referred_by_name: (form.referred_by_name || "").trim(),
+    referred_by_role: form.referred_by_role || "",
+    referral_valid: !!(
+      (form.referral_code || "").trim().toUpperCase() === REFERRAL_CODE.toUpperCase() &&
+      (form.referred_by_name || "").trim()
+    ),
     source: SOURCE,
   };
 }

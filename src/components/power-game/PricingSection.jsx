@@ -68,6 +68,15 @@ const PHASES = [
     },
 ];
 
+// Do the maths — what an hour of coaching costs elsewhere vs here. Anchors the
+// Phase 1 "$62 per hour" claim with proof, in one place. Other-program figures are
+// typical local offers (not named); ours derives from $989 ÷ (8 weeks × 2 hrs) = 16 hrs.
+const HOUR_MATHS = [
+    { who: 'Other programs', price: '$900', detail: '6 weeks × 1.5 hrs = 9 hrs of coaching', perHour: '$100', us: false },
+    { who: 'Other programs', price: '$800', detail: '7 weeks × 1 hr = 7 hrs of coaching', perHour: '$114', us: false },
+    { who: 'Power Pre-Season', price: '$989', detail: '8 weeks × 2 hrs = 16 hrs of coaching', perHour: '$62', us: true },
+];
+
 const formatPrice = (n) => (n > 0 ? `$${n.toLocaleString()}` : 'TBC');
 
 const PhaseCard = ({ phase, idx }) => (
@@ -172,10 +181,10 @@ const PricingSection = () => {
                         </span>
                     </div>
                     <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-wide mb-6">
-                        THE <span className="text-rr-pink">POWER GAME</span> JOURNEY
+                        THE <span className="text-rr-pink">ROYALS</span> JOURNEY
                     </h2>
                     <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto font-medium">
-                        An ongoing program from late July through finals cricket in March. Two hours per week, every week of each training phase — with the ability to purchase one Phase at a time.
+                        An ongoing program from late July through finals cricket in March — two hours a week, bought one phase at a time. You start with <span className="text-white font-bold">Phase 1, the Power Pre-Season</span> (on sale now); Phases 2 and 3 open as the season unfolds.
                     </p>
                 </motion.div>
 
@@ -185,6 +194,29 @@ const PricingSection = () => {
                         <PhaseCard key={phase.name} phase={phase} idx={idx} />
                     ))}
                 </div>
+
+                {/* Do the maths — the value case for Phase 1, made once, right here. */}
+                <motion.div
+                    className="max-w-3xl mx-auto"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.5, ease: 'easeOut' }}
+                >
+                    <div className="text-center text-rr-pink font-black uppercase tracking-[0.25em] text-[11px] mb-4">Do the maths — cost per hour</div>
+                    <div className="flex flex-col gap-2.5">
+                        {HOUR_MATHS.map((r, i) => (
+                            <div key={i} className={`flex items-center justify-between gap-3 rounded-xl px-5 py-3.5 border ${r.us ? 'bg-rr-pink/10 border-rr-pink/40' : 'bg-white/5 border-white/10'}`}>
+                                <div>
+                                    <div className={`text-sm md:text-base font-black uppercase tracking-wide ${r.us ? 'text-white' : 'text-white/70'}`}>{r.who} · {r.price}</div>
+                                    <div className="text-[11px] md:text-xs text-white/45">{r.detail}</div>
+                                </div>
+                                <div className={`text-2xl md:text-3xl font-black ${r.us ? 'text-rr-light-pink' : 'text-white/55'}`}>{r.perHour}<span className="text-[10px] font-bold text-white/40">/hr</span></div>
+                            </div>
+                        ))}
+                    </div>
+                    <p className="text-white/55 text-sm text-center mt-4 font-medium">Nearly double the coaching hours — at the lowest cost per hour.</p>
+                </motion.div>
             </div>
         </section>
     );

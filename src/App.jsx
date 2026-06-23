@@ -16,6 +16,7 @@ import CoachingOpportunities from './components/coaching-opportunities/CoachingO
 import PowerGame from './components/power-game/PowerGame';
 import IndiaTour2026 from './components/india-tour-2026/IndiaTour2026';
 import HomePage from './components/home-page/HomePage';
+import InductionPage from './components/induction/InductionPage';
 import PostHogPageviewTracker from './components/PostHogPageviewTracker';
 
 // DNA Profile — lazy-loaded so it never impacts landing page bundle size
@@ -26,6 +27,10 @@ const PowerGameApply = React.lazy(() => import('./components/power-game/apply/Ap
 const PowerGameApplySuccess = React.lazy(() => import('./components/power-game/apply/PowerGameSuccess'));
 const PowerGamePlayground = React.lazy(() => import('./components/power-game/apply/PlacementPlayground'));
 const PowerGameSquadsAdmin = React.lazy(() => import('./components/power-game/apply/PowerGameSquads'));
+// Returning Elite players — private, passcode-gated express re-signup (details + pay).
+const PowerGameReturning = React.lazy(() => import('./components/power-game/returning/ReturningSignup'));
+// Accepted review/callback players — private, passcode-gated express spot confirmation.
+const PowerGameConfirm = React.lazy(() => import('./components/power-game/returning/AcceptedSignup'));
 
 // Admin components
 import AdminLogin from './components/admin/AdminLogin';
@@ -54,10 +59,56 @@ import TextUsButton from './components/TextUsButton';
 import AcademyShop from './components/academy-shop/AcademyShop';
 import ShopSuccess from './components/academy-shop/ShopSuccess';
 
+// Recover from a stale lazy-chunk load after a deploy (an already-open tab requests an old
+// chunk hash that no longer exists). Without a boundary, a failed dynamic import unmounts the
+// whole React tree → blank white screen. On a chunk error we reload ONCE to pull the fresh
+// build; a sessionStorage guard prevents a reload loop if the failure isn't transient.
+class ChunkReloadBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { failed: false };
+  }
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  componentDidCatch(error) {
+    const msg = String((error && (error.message || error.toString())) || '');
+    const isChunkError = /dynamically imported module|Importing a module script failed|ChunkLoadError|Loading (chunk|CSS chunk)|error loading dynamically|Failed to fetch/i.test(msg);
+    if (isChunkError) {
+      try {
+        if (!sessionStorage.getItem('chunk_reloaded')) {
+          sessionStorage.setItem('chunk_reloaded', '1');
+          window.location.reload();
+        }
+      } catch (_) { /* sessionStorage blocked — fall through to the fallback UI */ }
+    }
+  }
+  render() {
+    if (this.state.failed) {
+      return (
+        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#111921', color: '#fff', fontFamily: 'sans-serif', textAlign: 'center', padding: 24 }}>
+          <div>
+            <p style={{ fontWeight: 800, fontSize: 18, marginBottom: 4 }}>Sorry — something went wrong loading the page.</p>
+            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, marginBottom: 16 }}>A quick refresh usually fixes it.</p>
+            <button
+              onClick={() => { try { sessionStorage.removeItem('chunk_reloaded'); } catch (_) { /* ignore */ } window.location.reload(); }}
+              style={{ background: '#E50695', color: '#fff', border: 'none', borderRadius: 9999, padding: '12px 28px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer' }}
+            >
+              Reload
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 function App() {
   return (
     <div className="font-sans antialiased text-rr-dark bg-white selection:bg-rr-pink selection:text-white">
       <PostHogPageviewTracker />
+      <ChunkReloadBoundary>
       <Routes>
         {/* DNA Profile App — lazy-loaded portal at /eliteprogram/playerDNAprofile */}
         <Route path="/eliteprogram2026/playerDNAprofile/*" element={
@@ -93,12 +144,19 @@ function App() {
         <Route path="/female-empowerment" element={<FemaleEmpowerment />} />
         {/* Coaching Opportunities — HIDDEN from nav, accessible via direct URL only */}
         <Route path="/coaching-opportunities" element={<CoachingOpportunities />} />
+        {/* Player Induction — generic, reusable form for ad-hoc program launches. Hidden from
+            nav; share the link directly (optionally /induction?program=Name). Writes to program_inductions. */}
+        <Route path="/induction" element={<InductionPage />} />
 
         {/* Power Game Program — hidden from nav, accessible via direct URL only */}
         <Route path="/PGP2026" element={<PowerGame />} />
         {/* Power Game apply funnel — qualify → place → secure (the live registration + payment) */}
         <Route path="/PGP2026/apply" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameApply /></React.Suspense>} />
         <Route path="/PGP2026/apply/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameApplySuccess /></React.Suspense>} />
+        {/* Returning players — passcode-gated express re-signup. Not in nav; share the link directly. */}
+        <Route path="/PGP2026/returning" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameReturning /></React.Suspense>} />
+        {/* Accepted review/callback players — passcode-gated express confirmation. Not in nav; share the link directly. */}
+        <Route path="/PGP2026/confirm" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameConfirm /></React.Suspense>} />
         <Route path="/PGP2026/playground" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGamePlayground /></React.Suspense>} />
         <Route path="/PGP2026/admin" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameSquadsAdmin /></React.Suspense>} />
         {/* India Tour 2026 — PRIVATE, invite-only EOI. Not in nav; gated by a referral code (?ref=). */}
@@ -128,6 +186,7 @@ function App() {
         <Route path="/rramadmin_26/india-tour-2026" element={<AdminLayout><IndiaTour2026Dashboard /></AdminLayout>} />
         <Route path="/rramadmin_26/india-tour-eoi" element={<AdminLayout><IndiaTourEOIDashboard /></AdminLayout>} />
       </Routes>
+      </ChunkReloadBoundary>
       <TextUsButton />
     </div>
   );

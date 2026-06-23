@@ -1,75 +1,117 @@
 import { describe, it, expect } from "vitest";
-import { BLANK_FORM, computePlacement, validateStep, buildEngineInput, secondaryOptions, type ApplyForm } from "./flow";
+import { BLANK_FORM, computePlacement, validateStep, buildEngineInput, secondaryOptions, MAX_AGE, type ApplyForm } from "./flow";
+import { eligibleBands } from "../../../lib/scoring/guardrail";
+
+// Today is mocked-free, so derive DOBs from the current year to keep ages stable.
+const dobForAge = (age: number) => `${new Date().getFullYear() - age}-01-01`;
 
 const base: ApplyForm = {
   ...BLANK_FORM,
   centre: "williamstown",
   player_name: "X",
-  player_dob: "2009-01-01",
+  player_dob: "2013-01-01", // ~13yo → 12-14 band
   gender: "M",
   contact_phone: "04",
   contact_email: "a@b.com",
   suburb: "X",
   skill: "batting",
   batting_hand: "right",
+  current_club: "Williamstown CC",
   format: "t20",
 };
 
-describe("two-layer level model + Power Game floor", () => {
-  it("representative level clears the floor", () => {
-    expect(computePlacement({ ...base, rep_level: "P16M" }).placement.reviewReasons).not.toContain("below_pg_floor");
+describe("open-program age-based placement", () => {
+  it("places every player in their HOME age band, no review — even with no rep/senior", () => {
+    const { placement } = computePlacement({ ...base, rep_level: "", club_level: "" });
+    expect(placement.placedBand).toBe(placement.homeBand);
+    expect(placement.requiresReview).toBe(false);
+    expect(placement.reviewReasons).toEqual([]);
+    expect(["12-14", "14-16", "17+"]).toContain(placement.placedBand);
   });
 
-  it("Premier / Sub-District club clears the floor", () => {
-    expect(computePlacement({ ...base, club_level: "P1M" }).placement.reviewReasons).not.toContain("below_pg_floor");
-    expect(computePlacement({ ...base, club_level: "SD2" }).placement.reviewReasons).not.toContain("below_pg_floor");
+  it("never auto-moves a player up — placedBand always equals homeBand", () => {
+    const strong = computePlacement({ ...base, rep_level: "REP-16M", club_level: "P1M" }).placement;
+    expect(strong.placedBand).toBe(strong.homeBand);
+    expect(strong.requiresReview).toBe(false);
   });
 
-  it("association 2nd grade & up clears the floor; below 2nd grade → coach review", () => {
-    // 2nd-grade association now qualifies — no below-floor review
-    expect(computePlacement({ ...base, club_level: "CS-2T" }).placement.reviewReasons).not.toContain("below_pg_floor");
-    // below 2nd grade / social → review, no instant offer
-    const below = computePlacement({ ...base, club_level: "CS-BELOW" }).placement;
-    expect(below.requiresReview).toBe(true);
-    expect(below.reviewReasons).toContain("below_pg_floor");
+  it("flags play_up ONLY when the player has rep AND graded senior (2nd grade & up)", () => {
+    // rep + Premier senior → flagged
+    expect(computePlacement({ ...base, rep_level: "REP-16M", club_level: "P1M" }).placement.playFlag).toBe("play_up");
+    // rep + 2nd-grade association senior → flagged
+    expect(computePlacement({ ...base, rep_level: "REP-16M", club_level: "CS-2T" }).placement.playFlag).toBe("play_up");
+    // rep alone → not flagged
+    expect(computePlacement({ ...base, rep_level: "REP-16M", club_level: "" }).placement.playFlag).toBeNull();
+    // senior alone → not flagged
+    expect(computePlacement({ ...base, rep_level: "", club_level: "P1M" }).placement.playFlag).toBeNull();
+    // rep + below-2nd-grade social senior → NOT flagged (doesn't clear the senior bar)
+    expect(computePlacement({ ...base, rep_level: "REP-16M", club_level: "CS-BELOW" }).placement.playFlag).toBeNull();
+    // nothing → not flagged
+    expect(computePlacement({ ...base, rep_level: "", club_level: "" }).placement.playFlag).toBeNull();
   });
 
-  it("captures one stats row PER level, rep flagged as the representative honour", () => {
+  it("captures one engine stats row PER level (rep flagged as the representative honour)", () => {
     const input = buildEngineInput({ ...base, rep_level: "REP-16M", club_level: "P1M" });
     expect(input.stats.map((s) => s.competitionCode).sort()).toEqual(["P1M", "REP-16M"]);
     expect(input.history.find((h) => h.competitionCode === "REP-16M")!.isRepresentativeHonour).toBe(true);
     expect(input.history.find((h) => h.competitionCode === "P1M")!.isRepresentativeHonour).toBe(false);
-    // batting average is no longer collected — batters are placed on level + age
-    expect(input.stats.find((s) => s.competitionCode === "REP-16M")!.batAverage).toBeNull();
   });
 
-  it("history step requires at least one of rep / senior level, or a Wild Card", () => {
-    expect(validateStep("history", { ...base, rep_level: "", club_level: "" })).toContain(
-      "Add your representative and/or senior cricket — or apply as a Wild Card below.",
-    );
-    // a level alone is enough — match counts and format are no longer required
-    expect(validateStep("history", { ...base, rep_level: "P16M", club_level: "", format: "" })).toEqual([]);
-    // Wild Card clears the requirement without any level (talent the rep system hasn't caught)
-    expect(validateStep("history", { ...base, rep_level: "", club_level: "", wildcard: true })).toEqual([]);
+  it("profile step requires nothing — rep/senior/club are optional (open program)", () => {
+    expect(validateStep("profile", { ...base, rep_level: "", club_level: "", current_club: "" })).toEqual([]);
+    expect(validateStep("profile", { ...base, rep_level: "REP-16M" })).toEqual([]);
+  });
+});
+
+describe("overlapping age bands — a 14yo is eligible for BOTH 12-14 and 14-16", () => {
+  it("eligibleBands(age) overlaps only on the boundary year (14)", () => {
+    expect(eligibleBands(13).map((b) => b.name)).toEqual(["12-14"]);
+    expect(eligibleBands(14).map((b) => b.name)).toEqual(["12-14", "14-16"]);
+    expect(eligibleBands(15).map((b) => b.name)).toEqual(["14-16"]);
+    expect(eligibleBands(16).map((b) => b.name)).toEqual(["14-16"]);
+    expect(eligibleBands(17).map((b) => b.name)).toEqual(["17+"]);
+    // below the youngest band → still gets one option (youngest band)
+    expect(eligibleBands(10).map((b) => b.name)).toEqual(["12-14"]);
   });
 
-  it("Wild Card with no clearing level → coach review with a 'wildcard' reason", () => {
-    const { placement } = computePlacement({ ...base, rep_level: "", club_level: "", wildcard: true });
-    expect(placement.requiresReview).toBe(true);
-    expect(placement.reviewReasons).toContain("wildcard");
+  it("computePlacement gives a 14yo both bands' session options, home band stays 12-14", () => {
+    const p14 = computePlacement({ ...base, player_dob: dobForAge(14) }).placement;
+    expect(p14.homeBand).toBe("12-14");
+    expect(p14.placedBand).toBe("12-14");
+    expect(p14.eligibleBands).toEqual(["12-14", "14-16"]);
+
+    const p13 = computePlacement({ ...base, player_dob: dobForAge(13) }).placement;
+    expect(p13.eligibleBands).toEqual(["12-14"]);
+
+    const p15 = computePlacement({ ...base, player_dob: dobForAge(15) }).placement;
+    expect(p15.eligibleBands).toEqual(["14-16"]);
+  });
+});
+
+describe(`upper age limit — players over ${MAX_AGE} are blocked, 14yo and ${MAX_AGE}yo are not`, () => {
+  const hasAgeError = (errs: string[]) => errs.some((m) => /ages 12/.test(m));
+
+  it(`blocks anyone over the cap (${MAX_AGE + 1}+) at the player step`, () => {
+    expect(hasAgeError(validateStep("player", { ...base, player_dob: dobForAge(MAX_AGE + 1) }))).toBe(true);
+    expect(hasAgeError(validateStep("player", { ...base, player_dob: dobForAge(50) }))).toBe(true);
   });
 
-  it("Wild Card never downgrades a real qualifier (rep level still clears)", () => {
-    const { placement } = computePlacement({ ...base, rep_level: "P16M", club_level: "", wildcard: true });
-    expect(placement.reviewReasons).not.toContain("wildcard");
-    expect(placement.reviewReasons).not.toContain("below_pg_floor");
+  it(`allows everyone up to and including ${MAX_AGE} (and 14yos)`, () => {
+    expect(hasAgeError(validateStep("player", { ...base, player_dob: dobForAge(MAX_AGE) }))).toBe(false);
+    expect(hasAgeError(validateStep("player", { ...base, player_dob: dobForAge(14) }))).toBe(false);
+    expect(hasAgeError(validateStep("player", { ...base, player_dob: dobForAge(12) }))).toBe(false);
+  });
+
+  it("blocks 11-and-under and points them to Junior Royals", () => {
+    const errs = validateStep("player", { ...base, player_dob: dobForAge(11) });
+    expect(hasAgeError(errs)).toBe(true);
+    expect(errs.some((m) => /junior royals/i.test(m))).toBe(true);
   });
 });
 
 describe("secondary skill options never duplicate the primary", () => {
   it("batter → bowling/wicketkeeping/none (no batting)", () => {
-    const v = secondaryOptions("batting").map((o) => o.value);
-    expect(v).toEqual(["bowling", "wicketkeeping", "none"]);
+    expect(secondaryOptions("batting").map((o) => o.value)).toEqual(["bowling", "wicketkeeping", "none"]);
   });
   it("bowler → batting/wicketkeeping/none (no bowling)", () => {
     expect(secondaryOptions("bowling").map((o) => o.value)).toEqual(["batting", "wicketkeeping", "none"]);

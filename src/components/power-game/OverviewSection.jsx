@@ -14,23 +14,23 @@ const OverviewSection = () => {
                     <div className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
                         <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">
-                            The Program
+                            The Pre-Season
                         </span>
                     </div>
 
                     <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-wide mb-8">
-                        WHAT IS THE <span className="text-rr-pink">POWER GAME</span> PROGRAM?
+                        WHAT IS THE <span className="text-rr-pink">POWER PRE-SEASON</span>?
                     </h2>
 
                     <div className="space-y-5 text-base md:text-lg text-white/80 font-medium leading-relaxed">
                         <p>
-                            Following the success of the Rajasthan Royals Academy's intensive 12-week T20 Elite Program, the Power Game Program is its evolution — an elite environment built around one idea: generating power on demand, across every discipline and format of the modern game.
+                            The Power Pre-Season is the Rajasthan Royals Academy Elite Program's 8-week pre-season — built around one idea: the power to win the modern game, with bat and ball. Batters learn to generate power on demand and find ways to win games; bowlers learn to attack with pace, control and skill and do the same. Designed in partnership with Power Game.
                         </p>
                         <p>
                             Through 360 power hitting, the full spectrum of bowling, and explosive fielding, players learn to reach for power when the situation demands it — backed by biomechanics, data, and the coaching methodology that drives the Royals Way.
                         </p>
                         <p className="text-white font-semibold">
-                            This is where like-skilled, like-motivated players train together to win from anywhere — preparing for your best season yet, earning a representative squad spot, moving up the grades, or landing on selectors' radars.
+                            This is where like-skilled, like-motivated players train together to win from anywhere — preparing for your best season yet, earning a representative squad spot, moving up the grades, or landing on selectors' radars — eight weeks of elite preparation while everyone else is still waiting for the season to start.
                         </p>
                     </div>
                 </motion.div>

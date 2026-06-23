@@ -4,13 +4,23 @@
 // ============================================================
 import { computeDna, getAge, type ComputeDnaInput } from "../../../lib/scoring/engine";
 import { COMPETITION_TIERS } from "../../../lib/scoring/ladder";
-import { placeFromDna, type Placement } from "../../../lib/scoring/guardrail";
+import { placeFromDna, PG_BANDS, homeBandIdx, eligibleBands, type Placement } from "../../../lib/scoring/guardrail";
 import { clearsFloor, isRepLevel } from "./levels";
 import type { DnaResult } from "../../../lib/scoring/engine";
 
 export const CURRENT_SEASON = "2025/26";
 export const CURRENT_SEASON_START = 2025;
 export const BLOCK_FEE = 989; // 8-week phase (from the planning sheet)
+// Hard upper age limit — the Power Pre-Season is capped at age 26. Anyone OVER 26
+// (27+) is blocked from applying (a 50yo slipped through before this gate existed).
+export const MAX_AGE = 26;
+export const MIN_AGE = 12; // 11-and-under are directed to Junior Royals
+
+// Single SHARED referral code — hand this out to coaches/members who refer.
+// The applicant enters it + their referrer's name when applying; it NEVER blocks
+// the application. Alex confirms referrals manually before any reward is given.
+// To change the code, edit this one value.
+export const REFERRAL_CODE = "NEXTROYAL26";
 
 // Match counts are no longer collected. A player who reached a level played a season,
 // so assume a typical volume — this keeps them off the engine's "thin_history" review
@@ -35,6 +45,7 @@ export interface ApplyForm {
   secondary_bowling_type: "pace" | "leg_spin" | "off_spin" | "";
   rep_level: string; // PRIMARY — representative level (VMCU rep floor)
   club_level: string; // secondary — highest club grade
+  current_club: string; // the player's actual current cricket club name(s)
   format: "t20" | "od" | "multiday" | "";
   // No performance numbers are collected (batting, bowling or keeping) — Alex's call.
   // Placement is purely level × age.
@@ -44,10 +55,20 @@ export interface ApplyForm {
   accept_parent_code: boolean;
   accept_social_media: boolean;
   accept_playing_standard: boolean;
+  // Open-program guardrail (the ONE ability gate): the applicant acknowledges this is a
+  // representative-standard (VMCU+) program and that if they aren't at that standard the
+  // coaches may move them to a more suitable session or recommend another Royals program.
+  accept_ability_standard: boolean;
   needs_uniform: boolean;
   // Wild Card — talent the rep system hasn't caught (no rep / graded senior cricket).
   // Lets a player apply for a coach assessment instead of claiming a level they don't have.
   wildcard?: boolean;
+  // Referral (OPTIONAL) — applicant credits the coach / talent scout / player who
+  // referred them. referral_code is a soft check against REFERRAL_CODE; it never blocks
+  // the application or the purchase. Alex confirms manually before crediting the referrer.
+  referral_code?: string;
+  referred_by_name?: string;
+  referred_by_role?: "elite_player" | "talent_scout" | "coach" | "";
 }
 
 export const BLANK_FORM: ApplyForm = {
@@ -66,14 +87,19 @@ export const BLANK_FORM: ApplyForm = {
   secondary_bowling_type: "",
   rep_level: "",
   club_level: "",
+  current_club: "",
   format: "",
   accept_terms: false,
   accept_player_code: false,
   accept_parent_code: false,
   accept_social_media: false,
   accept_playing_standard: false,
+  accept_ability_standard: false,
   needs_uniform: false,
   wildcard: false,
+  referral_code: "",
+  referred_by_name: "",
+  referred_by_role: "",
 };
 
 export function calcAge(dob: string): number | null {
@@ -87,7 +113,7 @@ export function isMinor(dob: string): boolean {
 
 /** Required compliances/permissions all accepted (parent code only required for minors). */
 export function consentsOk(f: ApplyForm): boolean {
-  const base = f.accept_terms && f.accept_player_code && f.accept_social_media && f.accept_playing_standard;
+  const base = f.accept_terms && f.accept_player_code && f.accept_social_media && f.accept_playing_standard && f.accept_ability_standard;
   return !!(base && (!isMinor(f.player_dob) || f.accept_parent_code));
 }
 
@@ -158,52 +184,44 @@ export interface PlacementResult {
 }
 
 export function computePlacement(f: ApplyForm): PlacementResult {
+  // OPEN PROGRAM (17 Jun 2026): the program is built for 12-16. Anyone in that band
+  // is placed in their HOME AGE BAND, full stop — they get a slot picker and pay
+  // normally, regardless of cricket history. Coaches sort lanes by ability on the
+  // day using the INTERNAL stream flag below (never user-visible).
+  //   12-16, rep / graded senior   → internalStream='qualified'
+  //   12-16, Wild Card / no history → internalStream='review'  (still pays, still books)
+  //   17+                          → requiresReview=true, manual coach allocation
+  //   no DOB                       → requiresReview=true (data gap)
   const dna = computeDna(buildEngineInput(f));
-  let placement = placeFromDna(dna);
-
-  // Alex's placement rules (10 Jun 2026):
-  // 1) A strong-for-age player goes straight into the TOP tier of their own age group —
-  //    no review detour. (A coach may still offer the bottom tier of the band above;
-  //    that's a manual move, the flag is kept for the admin view.)
-  if (placement.playFlag === "play_up_review") {
-    placement = {
-      ...placement,
-      reviewReasons: placement.reviewReasons.filter((r) => r !== "play_up_review"),
-      requiresReview: dna.needsAdminReview || placement.stream === "review",
-    };
-  }
-  // 2) Making ANY representative level (VMCU and up) guarantees at least the lower
-  //    (Pathway) squad of their age group — playing rep AT your age never drops you
-  //    to review on tier alone.
-  if (placement.stream === "review" && placement.age != null && isRepLevel(f.rep_level) && dna.eligibilityStatus === "eligible") {
-    placement = { ...placement, stream: "pathway", requiresReview: dna.needsAdminReview };
-  }
-
-  // Power Game floor: representative cricket, Premier/Sub-District, or association senior
-  // (2nd grade & up) clears it. Below 2nd grade / social cricket → coach review (no offer).
-  if (!clearsFloor(f.rep_level) && !clearsFloor(f.club_level)) {
-    placement = {
-      ...placement,
-      requiresReview: true,
-      reviewReasons: Array.from(new Set([...placement.reviewReasons, "below_pg_floor"])),
-    };
-  }
-
-  // Wild Card — talent the rep system hasn't caught. A player who self-selects this
-  // (typically with no clearing level) is sent for a personal coach assessment; the
-  // "wildcard" reason marks it in the review queue. A player who *also* holds a clearing
-  // level keeps their earned offer — the Wild Card never downgrades a real qualifier.
-  if (f.wildcard && !clearsFloor(f.rep_level) && !clearsFloor(f.club_level)) {
-    placement = {
-      ...placement,
-      requiresReview: true,
-      reviewReasons: Array.from(new Set([...placement.reviewReasons, "wildcard"])),
-    };
-  }
+  const eng = placeFromDna(dna); // reused only to keep a complete, type-valid Placement object
+  const age = calcAge(f.player_dob);
+  const band = age != null ? PG_BANDS[homeBandIdx(age)].name : eng.homeBand;
+  const playUp = isRepLevel(f.rep_level) && clearsFloor(f.club_level);
+  const isAdult = age != null && age >= 17;
+  const qualified = clearsFloor(f.rep_level) || clearsFloor(f.club_level);
+  const internalStream: Placement["internalStream"] =
+    isAdult ? "senior_review" : qualified ? "qualified" : "review";
+  const placement: Placement = {
+    ...eng,
+    age,
+    homeBand: band,
+    placedBand: band, // ALWAYS the home age band — no automatic play-up
+    // Overlap-aware: a 14yo is eligible for BOTH "12-14" and "14-16" and is shown the
+    // session times for both groups at the slot step (most ages get a single band).
+    eligibleBands: age != null ? eligibleBands(age).map((b) => b.name) : [],
+    playFlag: playUp ? "play_up" : null,
+    internalStream,
+    // OPEN PROGRAM (23 Jun 2026): every 12–26 player books and pays directly — no
+    // 17+/below-floor review gate. Only a missing DOB still needs manual handling.
+    requiresReview: age == null,
+    reviewReasons: age == null ? ["no_dob"] : [],
+  };
   return { dna, placement };
 }
 
-export const STEPS = ["centre", "player", "profile", "history", "reveal", "slot", "kit", "secure"] as const;
+// "profile" now carries BOTH the player's game AND their last-3-years cricket
+// history (merged into one submission — Alex's call). No separate "history" step.
+export const STEPS = ["centre", "player", "profile", "reveal", "slot", "kit", "secure"] as const;
 export type Step = (typeof STEPS)[number];
 
 const emailOk = (e: string) => /\S+@\S+\.\S+/.test(e);
@@ -217,6 +235,13 @@ export function validateStep(step: Step, f: ApplyForm): string[] {
   if (step === "player") {
     if (!f.player_name.trim()) e.push("Player name is required.");
     if (!f.player_dob) e.push("Date of birth is required.");
+    else {
+      const a = calcAge(f.player_dob);
+      if (a != null && a < MIN_AGE)
+        e.push(`The Power Game Program is for ages ${MIN_AGE}–${MAX_AGE}. Players ${MIN_AGE - 1} and under should join our Junior Royals program — visit rramelbourne.com/junior-royals.`);
+      else if (a != null && a > MAX_AGE)
+        e.push(`The Power Game Program is for ages ${MIN_AGE}–${MAX_AGE} — please get in touch if you think this is an error.`);
+    }
     if (!f.gender) e.push("Let us know if you play male or female cricket.");
     if (isMinor(f.player_dob) && !f.parent_name.trim()) e.push("Parent/guardian name is required for under-18s.");
     if (!f.contact_phone.trim()) e.push("A contact mobile is required.");
@@ -225,14 +250,9 @@ export function validateStep(step: Step, f: ApplyForm): string[] {
     if (!consentsOk(f)) e.push("Please accept the compliances to continue.");
   }
   if (step === "profile") {
-    if (!f.skill) e.push("Select a main skill.");
-    if ((f.skill === "batting" || f.skill === "all_rounder" || f.skill === "wicketkeeper") && !f.batting_hand)
-      e.push("Select a batting hand.");
-    if ((f.skill === "bowling" || f.skill === "all_rounder") && !f.bowling_type) e.push("Select a bowling type.");
-  }
-  if (step === "history") {
-    if (!f.rep_level && !f.club_level && !f.wildcard)
-      e.push("Add your representative and/or senior cricket — or apply as a Wild Card below.");
+    // OPEN PROGRAM: representative / senior / club details are OPTIONAL — captured only to
+    // flag play-up candidates (rep + senior). Nothing here is required to apply, so any
+    // player can proceed and be placed in their home age band.
   }
   return e;
 }

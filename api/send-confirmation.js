@@ -36,6 +36,28 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // ── Auth gate: caller must be an active dashboard admin. We verify the
+  // Supabase access token (sent by the dashboard) and confirm the email is an
+  // active row in dashboard_users. Without this, anyone could POST an order_id
+  // and trigger a Resend email (cost + customer harassment via id enumeration).
+  const authz = req.headers.authorization || '';
+  const token = authz.startsWith('Bearer ') ? authz.slice(7) : null;
+  if (!token) return res.status(401).json({ error: 'unauthorized' });
+  try {
+    const sb = getSupabase();
+    const { data: { user } = {}, error: uErr } = await sb.auth.getUser(token);
+    if (uErr || !user?.email) return res.status(401).json({ error: 'unauthorized' });
+    const { data: adminRow } = await sb
+      .from('dashboard_users')
+      .select('email')
+      .eq('email', user.email)
+      .eq('active', true)
+      .maybeSingle();
+    if (!adminRow) return res.status(403).json({ error: 'forbidden' });
+  } catch {
+    return res.status(401).json({ error: 'unauthorized' });
+  }
+
   const { order_id, source } = req.body || {};
   if (!order_id || !source) {
     return res.status(400).json({ error: 'order_id and source required' });

@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Sprout, TrendingUp, Crown, Repeat, Trophy, Target } from 'lucide-react';
 
-// Who the Power Game Program is for — spanning emerging juniors through to
+// Who the Power Pre-Season is for — spanning emerging juniors through to
 // established senior players. Language assumes players meet the minimum
 // standard (VMCU / Country representative cricket or higher).
 const AUDIENCE = [
@@ -20,7 +20,7 @@ const AUDIENCE = [
     },
     {
         icon: Crown,
-        tag: 'Ages 17–Open',
+        tag: 'Ages 17–26',
         title: 'The Senior Performer',
         description: 'Premier and senior club players adding power dimensions to a proven game — and chasing the next level of cricket.',
     },

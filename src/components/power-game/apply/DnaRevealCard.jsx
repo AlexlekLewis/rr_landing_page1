@@ -2,12 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Zap, ShieldCheck, ArrowRight, Sparkles } from 'lucide-react';
 
-const STREAM_COPY = {
-  performance: { title: 'Performance Squad', blurb: 'The elite stream — like-skilled players pushing each other every session.' },
-  pathway: { title: 'Pathway Squad', blurb: 'The development stream — ambitious players building toward the top.' },
-};
-
 // The payoff moment — feels like an assessment that rewards the player.
+// OPEN PROGRAM: every 12-16 player sees the same neutral "<band> Squad" welcome.
+// 17+ players see the coach-review screen (manual allocation). Never reference
+// "Performance / Pathway / Review" — that's internal-only and would offend.
 export default function DnaRevealCard({ placement, centreName, onContinue, onRequestInfo }) {
   if (placement.requiresReview) {
     return (
@@ -18,11 +16,11 @@ export default function DnaRevealCard({ placement, centreName, onContinue, onReq
         <div className="w-16 h-16 rounded-full bg-rr-blue/20 border border-rr-blue/40 flex items-center justify-center mx-auto mb-5">
           <ShieldCheck className="w-8 h-8 text-rr-blue" />
         </div>
-        <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-wide mb-3">Profile received — a coach will review it</h2>
+        <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-wide mb-3">Profile received — a coach will be in touch</h2>
         <p className="text-white/70 text-sm md:text-base mb-6">
-          Your cricket history puts you right on the line for a squad, so one of our coaches will personally confirm the best fit and reach out. No payment needed yet.
+          Thanks for applying. One of our coaches will personally talk through the best session for you and confirm the next step. No payment needed yet.
         </p>
-        <div className="text-xs text-white/40 uppercase tracking-widest mb-6">Indicative: {placement.stream} · {placement.placedBand} · {centreName}</div>
+        <div className="text-xs text-white/40 uppercase tracking-widest mb-6">{centreName}</div>
         <button onClick={onContinue} className="inline-flex items-center gap-2 bg-white text-rr-dark font-black uppercase tracking-widest text-sm rounded-full px-6 py-3 hover:bg-rr-pink hover:text-white transition-colors">
           What happens next <ArrowRight className="w-4 h-4" />
         </button>
@@ -35,7 +33,8 @@ export default function DnaRevealCard({ placement, centreName, onContinue, onReq
     );
   }
 
-  const stream = STREAM_COPY[placement.stream] ?? STREAM_COPY.pathway;
+  const title = `${placement.placedBand} Squad`;
+  const blurb = 'One squad — the whole age group trains together at your centre.';
 
   return (
     <motion.div
@@ -49,12 +48,12 @@ export default function DnaRevealCard({ placement, centreName, onContinue, onReq
           <span className="text-[11px] font-black text-rr-pink uppercase tracking-widest">You've earned your place</span>
         </motion.div>
 
-        <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight leading-none mb-2">{stream.title}</h2>
-        <p className="text-white/60 text-sm mb-6">{stream.blurb}</p>
+        <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight leading-none mb-2">{title}</h2>
+        <p className="text-white/60 text-sm mb-6">{blurb}</p>
 
         {placement.playFlag === 'play_up' && (
           <div className="flex items-center justify-center gap-2 text-rr-pink text-xs font-bold uppercase tracking-widest mb-5">
-            <Zap className="w-3.5 h-3.5" /> Playing up — your level earned an older group
+            <Zap className="w-3.5 h-3.5" /> Strong for your age — a coach may invite you to train up
           </div>
         )}
 
@@ -64,11 +63,6 @@ export default function DnaRevealCard({ placement, centreName, onContinue, onReq
           </button>
         )}
         <p className="text-white/25 text-[11px] mt-3">*Squads are subject to change &mdash; we&apos;ll work with you if anything needs adjusting.</p>
-        {onRequestInfo && (
-          <button onClick={onRequestInfo} className="mt-4 w-full text-center text-xs text-white/45 hover:text-white/80 uppercase tracking-widest transition-colors">
-            Want more information first?
-          </button>
-        )}
       </div>
     </motion.div>
   );

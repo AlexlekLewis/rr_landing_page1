@@ -4,10 +4,10 @@
 // ============================================================
 import { describe, it, expect } from "vitest";
 import { InMemoryInventory } from "./inventory";
-import { SQUADS, CENTRES, ACTIVE_CENTRES, squadsForPlacement, teamCapacity } from "./squads";
+import { SQUADS, CENTRES, ACTIVE_CENTRES, squadsForPlacement, squadCapacity } from "./squads";
 
 const oneSquad = [
-  { id: "x", centre: "c", band: "14-16" as const, stream: "performance" as const, day: "Sat", startTime: "2pm", endTime: "4pm", capacity: 10, blockLabel: "Sat 2-4", sortOrder: 1 },
+  { id: "x", centre: "c", band: "14-16" as const, day: "Sat", startTime: "2pm", endTime: "4pm", capacity: 10, blockLabel: "Sat 2-4", sortOrder: 1 },
 ];
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -15,18 +15,17 @@ const oneSquad = [
 // days/times/venues in squads.ts (everything else below is derived maths).
 // ════════════════════════════════════════════════════════════════════════════
 const SNAPSHOT = {
-  twoHourBlocks: 11, // Netz 4 + Hallam 3 + Mickleham 4
+  totalSquads: 11, // 11 open sessions: Williamstown 4 + Hallam 3 + Mickleham 4
   activeCentres: 3, // williamstown + hallam + mickleham
   comingSoonCentres: 0,
-  // Total squad places for the 8-WEEK BLOCK (lane ratio 7:26). Not a per-week number —
-  // each place is one player enrolled for the whole block.
-  blockCapacity: 247, // Netz 90 + Hallam 53 + Mickleham 104
-  perCentre: { williamstown: 90, hallam: 53, mickleham: 104 } as Record<string, number>,
+  // Total places for the 8-WEEK BLOCK (26:7 ratio). Each squad = round(lanes × 26/7).
+  blockCapacity: 261, // Williamstown 104 + Hallam 53 + Mickleham 104
+  perCentre: { williamstown: 104, hallam: 53, mickleham: 104 } as Record<string, number>,
 };
 
 describe("squad grid integrity (snapshot of the official schedule)", () => {
   it("matches the official schedule snapshot", () => {
-    expect(SQUADS.length).toBe(SNAPSHOT.twoHourBlocks * 2); // 2 teams per block
+    expect(SQUADS.length).toBe(SNAPSHOT.totalSquads);
     expect(ACTIVE_CENTRES.length).toBe(SNAPSHOT.activeCentres);
     expect(CENTRES.filter((c) => c.comingSoon).length).toBe(SNAPSHOT.comingSoonCentres);
     expect(SQUADS.reduce((s, q) => s + q.capacity, 0)).toBe(SNAPSHOT.blockCapacity);
@@ -35,50 +34,53 @@ describe("squad grid integrity (snapshot of the official schedule)", () => {
     }
   });
 
-  it("capacity is lane-driven: squad = round(lanes × 26/7), split perf-ceil / path-floor", () => {
-    expect(teamCapacity(7, "performance")).toBe(13);
-    expect(teamCapacity(7, "pathway")).toBe(13);
-    expect(teamCapacity(5, "performance")).toBe(10); // squad 19 → 10 + 9 (sheet's mini cap 10)
-    expect(teamCapacity(5, "pathway")).toBe(9);
-    expect(teamCapacity(4, "performance")).toBe(8); // squad 15 → 8 + 7 (sheet's mini cap 8)
-    expect(teamCapacity(4, "pathway")).toBe(7);
-    expect(SQUADS.every((s) => s.capacity === teamCapacity(s.lanes, s.stream))).toBe(true);
-    // coming-soon centres never have bookable squads
+  it("capacity is lane-driven: squad = round(lanes × 26/7)", () => {
+    expect(squadCapacity(7)).toBe(26);
+    expect(squadCapacity(5)).toBe(19);
+    expect(squadCapacity(4)).toBe(15);
+    expect(squadCapacity(3)).toBe(11);
+    expect(squadCapacity(2)).toBe(7);
+    expect(SQUADS.every((s) => s.capacity === squadCapacity(s.lanes))).toBe(true);
     for (const c of CENTRES.filter((x) => x.comingSoon)) {
       expect(SQUADS.filter((s) => s.centre === c.slug).length, c.slug).toBe(0);
-      expect(squadsForPlacement({ centre: c.slug, band: "14-16", stream: "performance" }).length).toBe(0);
+      expect(squadsForPlacement({ centre: c.slug, band: "14-16" }).length).toBe(0);
     }
   });
 
-  it("two teams sharing a blockId make a full squad (26 at 7 lanes, 19 at 5, 15 at 4)", () => {
-    const blocks = new Map<string, number>();
-    for (const s of SQUADS) blocks.set(s.blockId, (blocks.get(s.blockId) ?? 0) + s.capacity);
-    // every block has exactly two teams (performance + pathway)
-    const counts = new Map<string, number>();
-    for (const s of SQUADS) counts.set(s.blockId, (counts.get(s.blockId) ?? 0) + 1);
-    expect([...counts.values()].every((c) => c === 2)).toBe(true);
-    for (const s of SQUADS) {
-      const expected = s.lanes === 7 ? 26 : s.lanes === 5 ? 19 : 15;
-      expect(blocks.get(s.blockId), s.blockId).toBe(expected);
-    }
+  it("each slot is exactly one open session (no age-band split)", () => {
+    const bySlot = new Map<string, number>();
+    for (const s of SQUADS) bySlot.set(s.blockId, (bySlot.get(s.blockId) ?? 0) + 1);
+    for (const [slot, n] of bySlot) expect(n, slot).toBe(1);
+    expect(bySlot.size).toBe(SQUADS.length); // every session is its own slot
   });
 
-  it("every band has a 2-hour block at every ACTIVE centre (derived)", () => {
+  it("every active centre offers open sessions with day options", () => {
     for (const centre of ACTIVE_CENTRES.map((c) => c.slug)) {
-      for (const band of ["12-14", "14-16", "17+"]) {
-        for (const stream of ["performance", "pathway"]) {
-          expect(squadsForPlacement({ centre, band, stream }).length, `${centre} ${band} ${stream}`).toBeGreaterThan(0);
-        }
-      }
+      expect(squadsForPlacement({ centre }).length, centre).toBeGreaterThan(0);
     }
-    // every block is exactly 2 hours and 12-14 never runs after 4pm starts
     expect(SQUADS.every((s) => s.blockLabel.includes("–"))).toBe(true);
   });
 
-  it("maps a placement to the right squads", () => {
-    const m = squadsForPlacement({ centre: "williamstown", band: "14-16", stream: "performance" });
-    expect(m.length).toBe(2); // Fri 5:30-7:30 + Sat 4-6
-    expect(m.every((s) => s.band === "14-16" && s.stream === "performance" && s.centre === "williamstown")).toBe(true);
+  it("squadsForPlacement returns all of a centre's open sessions; Williamstown spans Fri + Sat", () => {
+    const m = squadsForPlacement({ centre: "williamstown" });
+    expect(m.every((s) => s.centre === "williamstown")).toBe(true);
+    expect(m.length).toBe(4);
+    expect(new Set(m.map((s) => s.day)).size).toBe(2); // Friday + Saturday
+  });
+
+  it("Hallam runs Thursday + Saturday open sessions", () => {
+    const hallam = squadsForPlacement({ centre: "hallam" });
+    expect(hallam.length).toBe(3);
+    expect(new Set(hallam.map((s) => s.day))).toEqual(new Set(["Thursday", "Saturday"]));
+  });
+
+  it("the purchased Sat 2–4pm sessions exist at The Netz & Mickleham", () => {
+    for (const centre of ["williamstown", "mickleham"]) {
+      const sat24 = SQUADS.find((s) => s.centre === centre && s.day === "Saturday" && s.startTime === "2:00pm");
+      expect(sat24, centre).toBeTruthy();
+    }
+    expect(SQUADS.some((s) => s.id === "w-sat2")).toBe(true);
+    expect(SQUADS.some((s) => s.id === "m-sat2")).toBe(true);
   });
 });
 

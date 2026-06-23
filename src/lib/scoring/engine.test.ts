@@ -428,6 +428,46 @@ describe("computeDna — review flags", () => {
     );
     expect(res.reviewFlags).toContain("thin_history");
   });
+
+  // age_outlier is measured against the OLDEST level played (max expected age), not the
+  // highest-CTI level. A player with an age-appropriate senior level is not an outlier even
+  // when a younger-age honour ties it on CTI and is considered first.
+  const dobForAge = (age: number) => `${new Date().getFullYear() - age}-06-01`;
+  it("does NOT flag age_outlier when an age-appropriate senior level ties the junior honour on CTI", () => {
+    const tiers: CompetitionTierInput[] = [
+      { code: "JR-U18", ctiValue: 0.75, expectedMidpointAge: 16.5 }, // junior rep — young
+      { code: "SR-3XI", ctiValue: 0.75, expectedMidpointAge: 21 }, // senior club — at-age, same CTI
+    ];
+    const res = computeDna(
+      baseInput({
+        profile: { dob: dobForAge(21) },
+        competitionTiers: tiers,
+        history: [
+          { competitionCode: "JR-U18", mostRecentSeason: "2025/26", isRepresentativeHonour: true }, // considered first
+          { competitionCode: "SR-3XI", mostRecentSeason: "2025/26", isRepresentativeHonour: false },
+        ],
+        stats: [
+          { season: "2025/26", format: "t20", competitionCode: "SR-3XI", batMatches: 10, batAverage: 35, batStrikeRate: 130 },
+        ],
+      }),
+    );
+    expect(res.reviewFlags).not.toContain("age_outlier");
+  });
+
+  it("flags age_outlier when too old for even the oldest level played", () => {
+    const tiers: CompetitionTierInput[] = [{ code: "JR-U18", ctiValue: 0.75, expectedMidpointAge: 16.5 }];
+    const res = computeDna(
+      baseInput({
+        profile: { dob: dobForAge(21) },
+        competitionTiers: tiers,
+        history: [{ competitionCode: "JR-U18", mostRecentSeason: "2025/26", isRepresentativeHonour: true }],
+        stats: [
+          { season: "2025/26", format: "t20", competitionCode: "JR-U18", batMatches: 10, batAverage: 35, batStrikeRate: 130 },
+        ],
+      }),
+    );
+    expect(res.reviewFlags).toContain("age_outlier");
+  });
 });
 
 describe("computeDna — archetypes (outputs of the data)", () => {
