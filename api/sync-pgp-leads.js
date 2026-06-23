@@ -1,25 +1,33 @@
 // ============================================================
-// Vercel Serverless Function — reconcile Power Game LEADS (incomplete) from Stripe.
+// Vercel Serverless Function — reconcile the Power Game workbook (hourly cron).
 // GET (Vercel Cron, hourly) or POST (admin manual run).
 // ============================================================
-// Stripe is the source of truth. We walk every Power Game Checkout Session and write
-// the ones that DID NOT complete payment (started checkout, abandoned/expired) to the
-// "Leads (incomplete)" tab of the Power Game workbook. Paid sessions are EXCLUDED here
-// — paid players land in the "Paid players" tab in real time via the create-on-payment
-// sync (api/sync-power-game-row). A person who has any PAID session is never a lead.
+// Rebuilds BOTH operational tabs in the Power Game workbook each run. It is the
+// single, self-contained source of truth for the sheet — no Supabase DB webhook
+// required, and it never touches the live payment path.
 //
-// The tab is REBUILT each run, so a lead who later pays simply drops off the list. No
-// DB rows are written for leads (no bot/abandon pollution of power_game_applications).
+//   "Paid players"        ← UPSERT-by-Application-ID from power_game_applications
+//                            paid rows (idempotent; backfills existing payments;
+//                            preserves any manual columns/notes you add).
+//   "Leads (incomplete)"  ← REBUILT from Stripe Checkout Sessions that started but
+//                            did NOT pay (paid emails excluded; a lead who later
+//                            pays drops off automatically). No DB rows written for
+//                            leads — no bot/abandon pollution.
+//
+// Both tabs are SELF-HEALING: created automatically if missing (ensureTab).
 //
 // Auth: Vercel Cron sends `Authorization: Bearer ${CRON_SECRET}` (GET); a dashboard
 // admin can also POST with their Supabase JWT to run it on demand.
 // Env: STRIPE_SECRET_KEY, SUPABASE_URL/VITE_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY,
-//      GOOGLE_SERVICE_ACCOUNT_JSON, POWER_GAME_SHEET_ID, POWER_GAME_LEADS_TAB, CRON_SECRET.
+//      GOOGLE_SERVICE_ACCOUNT_JSON, POWER_GAME_SHEET_ID, POWER_GAME_PAID_TAB,
+//      POWER_GAME_LEADS_TAB, CRON_SECRET.
 // ============================================================
 import Stripe from 'stripe';
-import { google } from 'googleapis';
 import { createClient } from '@supabase/supabase-js';
 import { unpackApplication } from './_lib/pgpCheckout.js';
+import {
+  getSheets, PAID_HEADERS, buildPaidRow, ensureTab, ensureHeader, findRowById,
+} from './_lib/pgpSheets.js';
 
 export const config = { api: { bodyParser: { sizeLimit: '256kb' } } };
 
@@ -32,16 +40,6 @@ const getSupabase = () => {
   const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://pudldzgmluwoocwxtzhw.supabase.co';
   _supabase = createClient(url, process.env.SUPABASE_SERVICE_ROLE_KEY);
   return _supabase;
-};
-
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
-let _auth = null;
-const getAuth = () => {
-  if (_auth) return _auth;
-  const raw = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
-  if (!raw) throw new Error('GOOGLE_SERVICE_ACCOUNT_JSON env var missing');
-  _auth = new google.auth.GoogleAuth({ credentials: JSON.parse(raw), scopes: SCOPES });
-  return _auth;
 };
 
 const LEADS_HEADERS = [
@@ -94,6 +92,111 @@ async function authorise(req) {
   return user.email;
 }
 
+// ------------------------------------------------------------
+// "Paid players" tab — upsert every paid DB row by Application ID. Idempotent:
+// re-running just refreshes existing rows and appends any new ones. Preserves the
+// order already in the sheet and any extra (manual) columns to the right.
+// ------------------------------------------------------------
+async function reconcilePaid(sheets, spreadsheetId) {
+  const tabName = process.env.POWER_GAME_PAID_TAB || 'Paid players';
+  const sb = getSupabase();
+  const { data, error } = await sb
+    .from('power_game_applications')
+    .select('*')
+    .or('payment_status.eq.completed,status.eq.paid')
+    .order('paid_at', { ascending: true });
+  if (error) throw error;
+  const paid = data || [];
+
+  await ensureTab(sheets, spreadsheetId, tabName);
+  await ensureHeader(sheets, spreadsheetId, tabName, PAID_HEADERS);
+
+  // Read existing Application IDs (col A) once → map id → 1-based row number.
+  const idRes = await sheets.spreadsheets.values.get({
+    spreadsheetId, range: `${tabName}!A:A`, majorDimension: 'COLUMNS',
+  });
+  const ids = idRes.data.values?.[0] || [];
+  const rowById = new Map();
+  for (let i = 1; i < ids.length; i++) if (ids[i]) rowById.set(ids[i], i + 1);
+
+  const updates = [];   // { range, values }
+  const appends = [];   // row arrays
+  for (const r of paid) {
+    const row = buildPaidRow(r);
+    const at = rowById.get(r.id);
+    if (at) updates.push({ range: `${tabName}!A${at}`, values: [row] });
+    else appends.push(row);
+  }
+
+  if (updates.length) {
+    await sheets.spreadsheets.values.batchUpdate({
+      spreadsheetId,
+      requestBody: { valueInputOption: 'USER_ENTERED', data: updates },
+    });
+  }
+  if (appends.length) {
+    await sheets.spreadsheets.values.append({
+      spreadsheetId, range: `${tabName}!A1`, valueInputOption: 'USER_ENTERED',
+      insertDataOption: 'INSERT_ROWS', requestBody: { values: appends },
+    });
+  }
+  return { paid: paid.length, updated: updates.length, appended: appends.length };
+}
+
+// ------------------------------------------------------------
+// "Leads (incomplete)" tab — rebuilt from Stripe (started-but-not-paid sessions).
+// ------------------------------------------------------------
+async function reconcileLeads(sheets, spreadsheetId, days) {
+  const tabName = process.env.POWER_GAME_LEADS_TAB || 'Leads (incomplete)';
+  const stripe = getStripe();
+  const since = Math.floor(Date.now() / 1000) - days * 24 * 60 * 60;
+
+  // Walk every Stripe Checkout Session in the window; keep Power Game ones.
+  const paidEmails = new Set();
+  const incomplete = []; // { s, app, email, created }
+  let startingAfter = null;
+  for (let guard = 0; guard < 100; guard++) {
+    const params = { limit: 100, created: { gte: since } };
+    if (startingAfter) params.starting_after = startingAfter;
+    const page = await stripe.checkout.sessions.list(params);
+    for (const s of page.data) {
+      if (s?.metadata?.source !== 'power-game') continue;
+      const email = (s.customer_details?.email || s.metadata?.email || '').toLowerCase();
+      if (s.payment_status === 'paid') { if (email) paidEmails.add(email); continue; }
+      const app = unpackApplication(s.metadata) || {};
+      incomplete.push({ s, app, email, created: s.created });
+    }
+    if (!page.has_more) break;
+    startingAfter = page.data[page.data.length - 1]?.id;
+  }
+
+  // Drop anyone who also has a PAID session, and de-dupe to the most recent attempt per email.
+  const byEmail = new Map();
+  for (const lead of incomplete) {
+    if (lead.email && paidEmails.has(lead.email)) continue;
+    const key = lead.email || lead.s.id; // no-email sessions stay distinct
+    const prev = byEmail.get(key);
+    if (!prev || lead.created > prev.created) byEmail.set(key, lead);
+  }
+  const leads = [...byEmail.values()].sort((a, b) => b.created - a.created);
+  const rows = leads.map(({ s, app }) => leadRow(s, app));
+
+  // Rebuild the tab: header + current incomplete leads (paid leads drop off).
+  await ensureTab(sheets, spreadsheetId, tabName);
+  await sheets.spreadsheets.values.update({
+    spreadsheetId, range: `${tabName}!A1`, valueInputOption: 'USER_ENTERED',
+    requestBody: { values: [LEADS_HEADERS] },
+  });
+  await sheets.spreadsheets.values.clear({ spreadsheetId, range: `${tabName}!A2:Z100000` });
+  if (rows.length > 0) {
+    await sheets.spreadsheets.values.update({
+      spreadsheetId, range: `${tabName}!A2`, valueInputOption: 'USER_ENTERED',
+      requestBody: { values: rows },
+    });
+  }
+  return { leads: rows.length, paidExcluded: paidEmails.size };
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'GET' && req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   try {
@@ -103,62 +206,33 @@ export default async function handler(req, res) {
   }
 
   const spreadsheetId = process.env.POWER_GAME_SHEET_ID;
-  const tabName = process.env.POWER_GAME_LEADS_TAB || 'Leads (incomplete)';
   if (!spreadsheetId) return res.status(503).json({ error: 'POWER_GAME_SHEET_ID not configured' });
 
+  const days = Math.min(Number(req.body?.days) || 180, 365);
+  const out = { ok: true };
+
+  let sheets;
   try {
-    const stripe = getStripe();
-    const days = Math.min(Number(req.body?.days) || 180, 365);
-    const since = Math.floor(Date.now() / 1000) - days * 24 * 60 * 60;
-
-    // Walk every Stripe Checkout Session in the window; keep Power Game ones.
-    const paidEmails = new Set();
-    const incomplete = []; // { s, app, email, created }
-    let startingAfter = null;
-    for (let guard = 0; guard < 100; guard++) {
-      const params = { limit: 100, created: { gte: since } };
-      if (startingAfter) params.starting_after = startingAfter;
-      const page = await stripe.checkout.sessions.list(params);
-      for (const s of page.data) {
-        if (s?.metadata?.source !== 'power-game') continue;
-        const email = (s.customer_details?.email || s.metadata?.email || '').toLowerCase();
-        if (s.payment_status === 'paid') { if (email) paidEmails.add(email); continue; }
-        const app = unpackApplication(s.metadata) || {};
-        incomplete.push({ s, app, email, created: s.created });
-      }
-      if (!page.has_more) break;
-      startingAfter = page.data[page.data.length - 1]?.id;
-    }
-
-    // Drop anyone who also has a PAID session, and de-dupe to the most recent attempt per email.
-    const byEmail = new Map();
-    for (const lead of incomplete) {
-      if (lead.email && paidEmails.has(lead.email)) continue;
-      const key = lead.email || lead.s.id; // no-email sessions stay distinct
-      const prev = byEmail.get(key);
-      if (!prev || lead.created > prev.created) byEmail.set(key, lead);
-    }
-    const leads = [...byEmail.values()].sort((a, b) => b.created - a.created);
-    const rows = leads.map(({ s, app }) => leadRow(s, app));
-
-    // Rebuild the tab: header + current incomplete leads (self-healing — paid leads drop off).
-    const auth = getAuth();
-    const sheets = google.sheets({ version: 'v4', auth });
-    await sheets.spreadsheets.values.update({
-      spreadsheetId, range: `${tabName}!A1`, valueInputOption: 'USER_ENTERED',
-      requestBody: { values: [LEADS_HEADERS] },
-    });
-    await sheets.spreadsheets.values.clear({ spreadsheetId, range: `${tabName}!A2:Z100000` });
-    if (rows.length > 0) {
-      await sheets.spreadsheets.values.update({
-        spreadsheetId, range: `${tabName}!A2`, valueInputOption: 'USER_ENTERED',
-        requestBody: { values: rows },
-      });
-    }
-
-    return res.status(200).json({ ok: true, leads: rows.length, paidExcluded: paidEmails.size });
+    sheets = getSheets();
   } catch (err) {
-    console.error('sync-pgp-leads error:', err);
     return res.status(500).json({ error: err.message });
   }
+
+  // Run both reconciles independently — one failing must not block the other.
+  try {
+    out.paidPlayers = await reconcilePaid(sheets, spreadsheetId);
+  } catch (err) {
+    console.error('sync-pgp-leads: paid reconcile failed:', err);
+    out.paidPlayers = { error: err.message };
+    out.ok = false;
+  }
+  try {
+    out.leadsTab = await reconcileLeads(sheets, spreadsheetId, days);
+  } catch (err) {
+    console.error('sync-pgp-leads: leads reconcile failed:', err);
+    out.leadsTab = { error: err.message };
+    out.ok = false;
+  }
+
+  return res.status(out.ok ? 200 : 500).json(out);
 }
