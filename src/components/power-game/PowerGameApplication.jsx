@@ -149,7 +149,7 @@ const PowerGameApplication = () => {
             let cvUrl = null;
             if (cvFile) {
                 const fileExt = cvFile.name.split('.').pop();
-                const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+                const fileName = `${crypto.randomUUID()}.${fileExt}`;
                 const { error: uploadError } = await supabase.storage.from('cvs').upload(fileName, cvFile);
                 if (uploadError) throw uploadError;
                 const { data } = supabase.storage.from('cvs').getPublicUrl(fileName);
