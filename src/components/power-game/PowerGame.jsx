@@ -231,12 +231,14 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
     </div>
     <div style="text-align:center; margin-top:22px; font-size:13px; font-weight:700; color:var(--charcoal);">Tap any session above to apply — open to any player aged 12–26.</div>
     <div style="text-align:center; margin-top:16px;">
-      <a href="#learn-more" style="display:inline-block; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--blue); border:1.5px solid #d9dee4; border-radius:999px; padding:11px 24px; text-decoration:none;">Learn more about the program ↓</a>
+      <a href="#learn-more" data-reveal="more-content" style="display:inline-block; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--blue); border:2px solid var(--blue); border-radius:999px; padding:15px 40px; text-decoration:none;">Learn more about the program ↓</a>
     </div>
   </div>
 </section>
 
-<!-- COACH QUOTE / MANIFESTO (start of "learn more" content) -->
+<!-- LEARN-MORE REVEAL — everything below is hidden until the "Learn more" button is tapped (keeps the landing to hero + locations; no aimless scrolling). The nav, hero, price strip, session picker and sticky apply bar stay visible. -->
+<div id="more-content" style="display:none;">
+<!-- COACH QUOTE / MANIFESTO -->
 <section id="learn-more" class="dark">
   <div class="wrap">
     <div class="g2quote grid" style="align-items:center;">
@@ -537,6 +539,8 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
 
 <div style="background:var(--navy); padding:22px 0; color:rgba(255,255,255,.55); font-size:11px; font-weight:600; text-align:center;">Rajasthan Royals Academy Melbourne · Power Pre-Season 2026</div>
 
+</div><!-- /more-content -->
+
 <!-- STICKY APPLY BAR -->
 <div class="stick"><div class="wrap">
   <div style="flex:1;">
@@ -582,6 +586,15 @@ const PowerGame = () => {
                 e.preventDefault();
                 setPickedSession(SQUADS.find((s) => s.id === sessionId) || null);
                 setShowApply(true);
+                return;
+            }
+            // "Learn more" — reveal the hidden brochure block in place, then hide the button.
+            const revealId = a.getAttribute('data-reveal');
+            if (revealId) {
+                e.preventDefault();
+                const el = shadow.getElementById(revealId);
+                if (el) { el.style.display = 'block'; el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+                a.style.display = 'none';
                 return;
             }
             if (href === '#apply' || (href === '#' && txt.includes('apply'))) {
