@@ -1,6 +1,6 @@
 import React from 'react';
 import { Check } from 'lucide-react';
-import { SQUADS } from '../../lib/booking/squads';
+import { SQUADS, sessionWindow } from '../../lib/booking/squads';
 
 // Availability for ONE centre — OPEN SESSIONS grouped BY DAY, each a small box
 // with its TIME (and spots-left when in picker mode). No age bands: any 12–26
@@ -60,6 +60,9 @@ export default function CentreAvailabilityGrid({
                     <div key={group.day}>
                         <div className="flex items-center gap-2.5 mb-2">
                             <span className="text-[11px] font-black uppercase tracking-[0.15em] text-rr-medium-blue">{fullDay(group.day)}</span>
+                            {sessionWindow(group.day) && (
+                                <span className="text-[10px] font-bold text-white/40 tracking-wide whitespace-nowrap">{sessionWindow(group.day).start} – {sessionWindow(group.day).end} · 8 wks</span>
+                            )}
                             <span className="flex-1 h-px bg-white/10" />
                         </div>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
