@@ -131,20 +131,20 @@ interface RawSquad {
 }
 
 const SQUAD_GRID: RawSquad[] = [
-  // ── The Netz — Williamstown (Fri 5 lanes · Sat 7 lanes) ──
-  { idBase: "w-fri530-1214", centre: "williamstown", band: "12-14", day: "Friday",   startTime: "5:30pm", endTime: "7:30pm", lanes: 3, blockLabel: "Fri 5:30–7:30pm", sortOrder: 1 },
-  { idBase: "w-fri530-1416", centre: "williamstown", band: "14-16", day: "Friday",   startTime: "5:30pm", endTime: "7:30pm", lanes: 2, blockLabel: "Fri 5:30–7:30pm", sortOrder: 2 },
-  { idBase: "w-fri730-1416", centre: "williamstown", band: "14-16", day: "Friday",   startTime: "7:30pm", endTime: "9:30pm", lanes: 3, blockLabel: "Fri 7:30–9:30pm", sortOrder: 3 },
-  { idBase: "w-fri730-17",   centre: "williamstown", band: "17+",   day: "Friday",   startTime: "7:30pm", endTime: "9:30pm", lanes: 2, blockLabel: "Fri 7:30–9:30pm", sortOrder: 4 },
+  // ── The Netz — Williamstown (Fri 7 lanes · Sat 7 lanes) ──
+  { idBase: "w-fri530-1214", centre: "williamstown", band: "12-14", day: "Friday",   startTime: "5:30pm", endTime: "7:30pm", lanes: 4, blockLabel: "Fri 5:30–7:30pm", sortOrder: 1 },
+  { idBase: "w-fri530-1416", centre: "williamstown", band: "14-16", day: "Friday",   startTime: "5:30pm", endTime: "7:30pm", lanes: 3, blockLabel: "Fri 5:30–7:30pm", sortOrder: 2 },
+  { idBase: "w-fri730-1416", centre: "williamstown", band: "14-16", day: "Friday",   startTime: "7:30pm", endTime: "9:30pm", lanes: 4, blockLabel: "Fri 7:30–9:30pm", sortOrder: 3 },
+  { idBase: "w-fri730-17",   centre: "williamstown", band: "17+",   day: "Friday",   startTime: "7:30pm", endTime: "9:30pm", lanes: 3, blockLabel: "Fri 7:30–9:30pm", sortOrder: 4 },
   { idBase: "w-sat2-1214",   centre: "williamstown", band: "12-14", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 4, blockLabel: "Sat 2–4pm", sortOrder: 5 }, // PURCHASED slot — keep id
   { idBase: "w-sat2-1416",   centre: "williamstown", band: "14-16", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 3, blockLabel: "Sat 2–4pm", sortOrder: 6 },
   { idBase: "w-sat4-1416",   centre: "williamstown", band: "14-16", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 4, blockLabel: "Sat 4–6pm", sortOrder: 7 },
   { idBase: "w-sat4-17",     centre: "williamstown", band: "17+",   day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 3, blockLabel: "Sat 4–6pm", sortOrder: 8 },
 
-  // ── Elite Cricket Centre — Hallam (Thu 5 lanes · Sat 4 lanes). 12-14 = Saturday only (Thu is too late for juniors). ──
+  // ── Elite Cricket Centre — Hallam (Thu 5 lanes · Sat 2–4 = 5 lanes · Sat 4–6 = 4 lanes). 12-14 = Saturday only (Thu is too late for juniors). ──
   { idBase: "h-thu8-1416", centre: "hallam", band: "14-16", day: "Thursday", startTime: "8:00pm", endTime: "10:00pm", lanes: 3, blockLabel: "Thu 8–10pm", sortOrder: 1 },
   { idBase: "h-thu8-17",   centre: "hallam", band: "17+",   day: "Thursday", startTime: "8:00pm", endTime: "10:00pm", lanes: 2, blockLabel: "Thu 8–10pm", sortOrder: 2 },
-  { idBase: "h-sat2-1214", centre: "hallam", band: "12-14", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 2, blockLabel: "Sat 2–4pm", sortOrder: 3 },
+  { idBase: "h-sat2-1214", centre: "hallam", band: "12-14", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 3, blockLabel: "Sat 2–4pm", sortOrder: 3 },
   { idBase: "h-sat2-1416", centre: "hallam", band: "14-16", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 2, blockLabel: "Sat 2–4pm", sortOrder: 4 },
   { idBase: "h-sat4-1214", centre: "hallam", band: "12-14", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 2, blockLabel: "Sat 4–6pm", sortOrder: 5 },
   { idBase: "h-sat4-17",   centre: "hallam", band: "17+",   day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 2, blockLabel: "Sat 4–6pm", sortOrder: 6 },

@@ -19,8 +19,8 @@ const SNAPSHOT = {
   activeCentres: 3, // williamstown + hallam + mickleham
   comingSoonCentres: 0,
   // Total places for the 8-WEEK BLOCK (26:7 ratio). Each squad = round(lanes × 26/7).
-  blockCapacity: 238, // Williamstown 88 + Hallam 46 + Mickleham 104
-  perCentre: { williamstown: 88, hallam: 46, mickleham: 104 } as Record<string, number>,
+  blockCapacity: 258, // Williamstown 104 + Hallam 50 + Mickleham 104
+  perCentre: { williamstown: 104, hallam: 50, mickleham: 104 } as Record<string, number>,
 };
 
 describe("squad grid integrity (snapshot of the official schedule)", () => {
