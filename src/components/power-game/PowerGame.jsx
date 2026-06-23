@@ -230,11 +230,14 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
       </div>
     </div>
     <div style="text-align:center; margin-top:22px; font-size:13px; font-weight:700; color:var(--charcoal);">Tap any session above to apply — open to any player aged 12–26.</div>
+    <div style="text-align:center; margin-top:16px;">
+      <a href="#learn-more" style="display:inline-block; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--blue); border:1.5px solid #d9dee4; border-radius:999px; padding:11px 24px; text-decoration:none;">Learn more about the program ↓</a>
+    </div>
   </div>
 </section>
 
-<!-- COACH QUOTE / MANIFESTO -->
-<section class="dark">
+<!-- COACH QUOTE / MANIFESTO (start of "learn more" content) -->
+<section id="learn-more" class="dark">
   <div class="wrap">
     <div class="g2quote grid" style="align-items:center;">
       <div>

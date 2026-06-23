@@ -391,7 +391,7 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
         </label>
       </div>
       {consentRow('accept_social_media', <>I&apos;m happy for photos/videos featuring the player to be used on RRA Melbourne&apos;s social media &amp; marketing channels.</>)}
-      {consentRow('accept_ability_standard', <>I understand the Power Game Program is for <span className="text-white font-semibold">representative-standard cricketers (VMCU level or higher)</span>. If the coaching team assesses a player isn&apos;t yet at this standard, they may be moved to a more suitable session, or guided toward another Royals program better matched to their development. <a href="/junior-royals" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Not there yet? Start with Junior Royals →</a></>)}
+      {consentRow('accept_ability_standard', <>I understand the Power Game Program is for <span className="text-white font-semibold">representative-standard cricketers (VMCU level or higher)</span>. If the coaching team assesses a player isn&apos;t yet at this standard, they may be moved to a more suitable session, guided toward another Royals program, or — if I&apos;d prefer not to continue — offered a <span className="text-white font-semibold">refund of the program fee less a $50 administration fee</span>. <a href="/junior-royals" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Not there yet? Start with Junior Royals →</a></>)}
       <div className="flex items-start gap-3">
         <input id="c_needs_uniform" type="checkbox" checked={!!form.needs_uniform} onChange={(e) => { set('needs_uniform', e.target.checked); if (!e.target.checked) setKitPicks({ shirt: '', shorts: '', pants: '', cap: '', jacket: '' }); }} className="mt-0.5 w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer" />
         <label htmlFor="c_needs_uniform" className="text-xs text-white/70 leading-relaxed cursor-pointer">I&apos;ll need a Royals playing uniform — I&apos;ll pick my sizes next and pay for it at the checkout.</label>
@@ -413,7 +413,7 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
 
         {/* Standard disclaimer — visible on every step, before anyone pays. */}
         <div className="mb-5 rounded-xl border border-rr-pink/30 bg-rr-pink/[0.07] px-4 py-3 text-[12px] text-white/75 leading-snug">
-          <span className="font-bold text-white">Power Game is a representative-standard pre-season (VMCU level or higher).</span> If a player isn&apos;t yet at this standard, our coaches may move them to a more suitable session or recommend a better-matched Royals program. New to cricket or still building the basics? <a href="/junior-royals" target="_blank" rel="noreferrer" className="text-rr-pink font-bold hover:underline">Junior Royals is built for you →</a>
+          <span className="font-bold text-white">Power Game is a representative-standard pre-season (VMCU level or higher).</span> If a player isn&apos;t yet at this standard, our coaches may move them to a more suitable session, recommend a better-matched program, or offer a refund less a $50 admin fee if you&apos;d prefer not to continue. New to cricket or still building the basics? <a href="/junior-royals" target="_blank" rel="noreferrer" className="text-rr-pink font-bold hover:underline">Junior Royals is built for you →</a>
         </div>
 
         {phase !== undefined && <PhaseStepper phase={phase} />}

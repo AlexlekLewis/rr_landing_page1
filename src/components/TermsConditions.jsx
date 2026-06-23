@@ -271,6 +271,20 @@ const TermsConditions = () => {
                             Withdrawal requests must be made in writing to <span className="font-semibold">eliteprogram@rramelbourne.com</span>.
                             The effective date of withdrawal is the date the written request is received by the Academy.
                         </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">12.10  Players who do not meet the playing standard</h3>
+                        <p className="text-rr-dark/80 leading-relaxed">
+                            The Power Game Program is built for representative-standard cricketers (VMCU representative
+                            level or higher). A place may be secured by any eligible player, including a player who has
+                            not yet played representative cricket. If, after a place is secured, the coaching team assesses
+                            that a player does not meet the program's minimum playing standard, the Academy will first offer
+                            to move the player to a more suitable session within the program, or recommend another Academy
+                            program better matched to their development. If the player (or their parent/guardian) would prefer
+                            not to continue on that basis, then <strong>notwithstanding clauses 12.3 and 12.4</strong> they may
+                            request a refund of the program fee <strong>less a $50 administration fee</strong> (which covers
+                            payment processing and administration). This goodwill remedy applies only to genuine
+                            playing-standard mismatches and does not otherwise vary this clause 12.
+                        </p>
                     </section>
 
                     <section>
