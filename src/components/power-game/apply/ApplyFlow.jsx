@@ -256,8 +256,13 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
             email: form.contact_email,
             playerName: form.player_name,
             squadId: selected?.id,
-            // Kit is size-capture only — not charged on the fixed $989 link.
-            uniformTotalCents: 0,
+            // Selected kit → [{ key, size }]; the server prices each garment from the
+            // authoritative catalog (uniformPricing.js) and charges it on top of the $989.
+            uniformItems: form.needs_uniform
+              ? Object.entries(kitPicks)
+                  .filter(([, v]) => v && v !== 'pending')
+                  .map(([key, size]) => ({ key, size: size === 'OS' ? 'One size' : size }))
+              : [],
             uniformSelection: application.uniform_selection || '',
           }),
         });
