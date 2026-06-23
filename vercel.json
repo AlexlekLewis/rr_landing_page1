@@ -3,8 +3,14 @@
         "api/fetch-playhq-stats.js": {
             "maxDuration": 60,
             "memory": 1024
+        },
+        "api/sync-pgp-leads.js": {
+            "maxDuration": 60
         }
     },
+    "crons": [
+        { "path": "/api/sync-pgp-leads", "schedule": "0 * * * *" }
+    ],
     "headers": [
         {
             "source": "/assets/(.*).mp4",
