@@ -148,26 +148,88 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
   </div>
 </section>
 
-<!-- WHERE YOU'LL TRAIN (slim locations strip, high up) -->
-<section style="background:#fff; padding:34px 0;">
-  <div class="wrap" style="text-align:center;">
-    <span class="kick"><span class="dot"></span> Where you'll train</span>
-    <h2 style="font-size:clamp(20px,4vw,26px); margin:12px 0 18px;">Three centres across <span class="pink">Melbourne</span></h2>
-    <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center;">
-      <div style="border:1px solid #eef0f3; border-radius:12px; padding:13px 22px; min-width:150px;">
-        <div style="font-size:16px; font-weight:900; text-transform:uppercase; color:var(--dark);">Williamstown</div>
-        <div style="font-size:11px; font-weight:800; color:var(--pink); text-transform:uppercase; letter-spacing:.07em; margin-top:2px;">West Melbourne</div>
+<!-- CENTRES & SESSIONS (moved to the top — choosing a session is the primary action) -->
+<section id="centres" style="background:var(--s50);">
+  <div class="wrap">
+    <div class="head">
+      <span class="kick"><span class="dot"></span> Centres &amp; Sessions</span>
+      <h2>Train across <span class="pink">Melbourne</span></h2>
+      <div style="display:flex; flex-wrap:wrap; gap:9px; justify-content:center; margin:14px 0 16px;">
+        <span class="tag">8-week pre-season</span><span class="tag">Once a week</span><span class="tag">2 hours each</span>
       </div>
-      <div style="border:1px solid #eef0f3; border-radius:12px; padding:13px 22px; min-width:150px;">
-        <div style="font-size:16px; font-weight:900; text-transform:uppercase; color:var(--dark);">Hallam</div>
-        <div style="font-size:11px; font-weight:800; color:var(--pink); text-transform:uppercase; letter-spacing:.07em; margin-top:2px;">South East Melbourne</div>
+      <p class="lead">Three centres across Melbourne — train at whichever suits you, wherever you live. Same session, same day, same time, every week. Tap any centre to see <strong>every session — day &amp; time</strong>, then tap one to apply. Open to any player aged 12–26.</p>
+    </div>
+    <div class="grid g3" style="align-items:start;">
+      <div class="card">
+        <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--pink);">West Melbourne</div>
+        <h3 style="font-size:18px; margin:6px 0 2px;">Williamstown</h3>
+        <div style="font-size:13px; color:var(--slate); font-weight:700;">The Netz</div>
+        <div style="font-size:11.5px; color:var(--slate); font-weight:500; margin-bottom:10px;">37 Robbins Cct, Williamstown North</div>
+        <details class="avail" open>
+          <summary><span class="alabel">View sessions &amp; times</span><span class="chev">⌄</span></summary>
+          <div class="abrief">Every session runs <strong>2 hours, once a week, for 8 weeks</strong>. Open to any player aged 12–26 — tap a session to apply.</div>
+          <div class="adays">
+            <div class="aday-h">Friday</div>
+            <div class="aboxes">
+              <a class="abox" href="#apply" data-session="w-fri530" style="cursor:pointer;text-decoration:none;"><span class="atime">5:30–7:30pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
+              <a class="abox" href="#apply" data-session="w-fri730" style="cursor:pointer;text-decoration:none;"><span class="atime">7:30–9:30pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
+            </div>
+            <div class="aday-h">Saturday</div>
+            <div class="aboxes">
+              <a class="abox" href="#apply" data-session="w-sat2" style="cursor:pointer;text-decoration:none;"><span class="atime">2:00–4:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
+              <a class="abox" href="#apply" data-session="w-sat4" style="cursor:pointer;text-decoration:none;"><span class="atime">4:00–6:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
+            </div>
+          </div>
+        </details>
+        <div class="winnote">8 weeks · Jul 31 – Sep 19</div>
       </div>
-      <div style="border:1px solid #eef0f3; border-radius:12px; padding:13px 22px; min-width:150px;">
-        <div style="font-size:16px; font-weight:900; text-transform:uppercase; color:var(--dark);">Mickleham</div>
-        <div style="font-size:11px; font-weight:800; color:var(--pink); text-transform:uppercase; letter-spacing:.07em; margin-top:2px;">North Melbourne</div>
+      <div class="card">
+        <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--pink);">South East Melbourne</div>
+        <h3 style="font-size:18px; margin:6px 0 2px;">Hallam</h3>
+        <div style="font-size:13px; color:var(--slate); font-weight:700;">Elite Cricket Centre</div>
+        <div style="font-size:11.5px; color:var(--slate); font-weight:500; margin-bottom:10px;">8-9 Becon Ct, Hallam</div>
+        <details class="avail">
+          <summary><span class="alabel">View sessions &amp; times</span><span class="chev">⌄</span></summary>
+          <div class="abrief">Every session runs <strong>2 hours, once a week, for 8 weeks</strong>. Open to any player aged 12–26 — tap a session to apply.</div>
+          <div class="adays">
+            <div class="aday-h">Thursday</div>
+            <div class="aboxes">
+              <a class="abox" href="#apply" data-session="h-thu8" style="cursor:pointer;text-decoration:none;"><span class="atime">8:00–10:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
+            </div>
+            <div class="aday-h">Saturday</div>
+            <div class="aboxes">
+              <a class="abox" href="#apply" data-session="h-sat2" style="cursor:pointer;text-decoration:none;"><span class="atime">2:00–4:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
+              <a class="abox" href="#apply" data-session="h-sat4" style="cursor:pointer;text-decoration:none;"><span class="atime">4:00–6:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
+            </div>
+          </div>
+        </details>
+        <div class="winnote">8 weeks · Jul 30 – Sep 19</div>
+      </div>
+      <div class="card">
+        <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--pink);">North Melbourne</div>
+        <h3 style="font-size:18px; margin:6px 0 2px;">Mickleham</h3>
+        <div style="font-size:13px; color:var(--slate); font-weight:700;">Mickleham Indoor Sports Centre</div>
+        <div style="font-size:11.5px; color:var(--slate); font-weight:500; margin-bottom:10px;">Mickleham VIC 3064</div>
+        <details class="avail">
+          <summary><span class="alabel">View sessions &amp; times</span><span class="chev">⌄</span></summary>
+          <div class="abrief">Every session runs <strong>2 hours, once a week, for 8 weeks</strong>. Open to any player aged 12–26 — tap a session to apply.</div>
+          <div class="adays">
+            <div class="aday-h">Friday</div>
+            <div class="aboxes">
+              <a class="abox" href="#apply" data-session="m-fri6" style="cursor:pointer;text-decoration:none;"><span class="atime">6:00–8:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
+              <a class="abox" href="#apply" data-session="m-fri8" style="cursor:pointer;text-decoration:none;"><span class="atime">8:00–10:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
+            </div>
+            <div class="aday-h">Saturday</div>
+            <div class="aboxes">
+              <a class="abox" href="#apply" data-session="m-sat2" style="cursor:pointer;text-decoration:none;"><span class="atime">2:00–4:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
+              <a class="abox" href="#apply" data-session="m-sat4" style="cursor:pointer;text-decoration:none;"><span class="atime">4:00–6:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
+            </div>
+          </div>
+        </details>
+        <div class="winnote">8 weeks · Jul 31 – Sep 19</div>
       </div>
     </div>
-    <div style="margin-top:16px;"><a href="#centres" style="font-size:12px; font-weight:800; color:var(--pink); text-decoration:underline; text-underline-offset:3px; text-transform:uppercase; letter-spacing:.04em;">See session times →</a></div>
+    <div style="text-align:center; margin-top:22px; font-size:13px; font-weight:700; color:var(--charcoal);">Tap any session above to apply — open to any player aged 12–26.</div>
   </div>
 </section>
 
@@ -418,91 +480,6 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
         <div class="rosterrow"><span class="nm">Zac Macciocca</span><span class="rl">Performance Coach</span></div>
       </details>
     </div>
-  </div>
-</section>
-
-<!-- CENTRES -->
-<section id="centres" style="background:var(--s50);">
-  <div class="wrap">
-    <div class="head">
-      <span class="kick"><span class="dot"></span> Centres &amp; Sessions</span>
-      <h2>Train across <span class="pink">Melbourne</span></h2>
-      <div style="display:flex; flex-wrap:wrap; gap:9px; justify-content:center; margin:14px 0 16px;">
-        <span class="tag">8-week pre-season</span><span class="tag">Once a week</span><span class="tag">2 hours each</span>
-      </div>
-      <p class="lead">Same session, same day, same time, every week. Tap any centre to see <strong>every session — day &amp; time</strong>, then tap one to apply. Open to any player aged 12–26.</p>
-    </div>
-    <div class="grid g3" style="align-items:start;">
-      <div class="card">
-        <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--pink);">West Melbourne</div>
-        <h3 style="font-size:18px; margin:6px 0 2px;">Williamstown</h3>
-        <div style="font-size:13px; color:var(--slate); font-weight:700;">The Netz</div>
-        <div style="font-size:11.5px; color:var(--slate); font-weight:500; margin-bottom:10px;">37 Robbins Cct, Williamstown North</div>
-        <details class="avail" open>
-          <summary><span class="alabel">View sessions &amp; times</span><span class="chev">⌄</span></summary>
-          <div class="abrief">Every session runs <strong>2 hours, once a week, for 8 weeks</strong>. Open to any player aged 12–26 — tap a session to apply.</div>
-          <div class="adays">
-            <div class="aday-h">Friday</div>
-            <div class="aboxes">
-              <a class="abox" href="#apply" data-session="w-fri530" style="cursor:pointer;text-decoration:none;"><span class="atime">5:30–7:30pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
-              <a class="abox" href="#apply" data-session="w-fri730" style="cursor:pointer;text-decoration:none;"><span class="atime">7:30–9:30pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
-            </div>
-            <div class="aday-h">Saturday</div>
-            <div class="aboxes">
-              <a class="abox" href="#apply" data-session="w-sat2" style="cursor:pointer;text-decoration:none;"><span class="atime">2:00–4:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
-              <a class="abox" href="#apply" data-session="w-sat4" style="cursor:pointer;text-decoration:none;"><span class="atime">4:00–6:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
-            </div>
-          </div>
-        </details>
-        <div class="winnote">8 weeks · Jul 31 – Sep 19</div>
-      </div>
-      <div class="card">
-        <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--pink);">South East Melbourne</div>
-        <h3 style="font-size:18px; margin:6px 0 2px;">Hallam</h3>
-        <div style="font-size:13px; color:var(--slate); font-weight:700;">Elite Cricket Centre</div>
-        <div style="font-size:11.5px; color:var(--slate); font-weight:500; margin-bottom:10px;">8-9 Becon Ct, Hallam</div>
-        <details class="avail">
-          <summary><span class="alabel">View sessions &amp; times</span><span class="chev">⌄</span></summary>
-          <div class="abrief">Every session runs <strong>2 hours, once a week, for 8 weeks</strong>. Open to any player aged 12–26 — tap a session to apply.</div>
-          <div class="adays">
-            <div class="aday-h">Thursday</div>
-            <div class="aboxes">
-              <a class="abox" href="#apply" data-session="h-thu8" style="cursor:pointer;text-decoration:none;"><span class="atime">8:00–10:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
-            </div>
-            <div class="aday-h">Saturday</div>
-            <div class="aboxes">
-              <a class="abox" href="#apply" data-session="h-sat2" style="cursor:pointer;text-decoration:none;"><span class="atime">2:00–4:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
-              <a class="abox" href="#apply" data-session="h-sat4" style="cursor:pointer;text-decoration:none;"><span class="atime">4:00–6:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
-            </div>
-          </div>
-        </details>
-        <div class="winnote">8 weeks · Jul 30 – Sep 19</div>
-      </div>
-      <div class="card">
-        <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--pink);">North Melbourne</div>
-        <h3 style="font-size:18px; margin:6px 0 2px;">Mickleham</h3>
-        <div style="font-size:13px; color:var(--slate); font-weight:700;">Mickleham Indoor Sports Centre</div>
-        <div style="font-size:11.5px; color:var(--slate); font-weight:500; margin-bottom:10px;">Mickleham VIC 3064</div>
-        <details class="avail">
-          <summary><span class="alabel">View sessions &amp; times</span><span class="chev">⌄</span></summary>
-          <div class="abrief">Every session runs <strong>2 hours, once a week, for 8 weeks</strong>. Open to any player aged 12–26 — tap a session to apply.</div>
-          <div class="adays">
-            <div class="aday-h">Friday</div>
-            <div class="aboxes">
-              <a class="abox" href="#apply" data-session="m-fri6" style="cursor:pointer;text-decoration:none;"><span class="atime">6:00–8:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
-              <a class="abox" href="#apply" data-session="m-fri8" style="cursor:pointer;text-decoration:none;"><span class="atime">8:00–10:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
-            </div>
-            <div class="aday-h">Saturday</div>
-            <div class="aboxes">
-              <a class="abox" href="#apply" data-session="m-sat2" style="cursor:pointer;text-decoration:none;"><span class="atime">2:00–4:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
-              <a class="abox" href="#apply" data-session="m-sat4" style="cursor:pointer;text-decoration:none;"><span class="atime">4:00–6:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
-            </div>
-          </div>
-        </details>
-        <div class="winnote">8 weeks · Jul 31 – Sep 19</div>
-      </div>
-    </div>
-    <div style="text-align:center; margin-top:22px; font-size:13px; font-weight:700; color:var(--charcoal);">Tap any session above to apply — open to any player aged 12–26.</div>
   </div>
 </section>
 
