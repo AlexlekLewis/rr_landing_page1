@@ -44,7 +44,7 @@ const StickyCTA = () => {
                         className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.45)] flex items-center justify-center gap-3 text-sm"
                     >
                         <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                        Last Places — Bundoora | 60% Sold — Hallam & Williamstown
+                        Bundoora Closes 11pm Wed 24 Jun · 2 Left Hallam · 7 Left Williamstown
                     </button>
                 </motion.div>
             )}

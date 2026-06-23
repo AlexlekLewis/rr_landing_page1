@@ -12,7 +12,7 @@ const locations = [
         dates: 'Tuesday 30 June – Thursday 2 July',
         time: '9:00 AM – 1:00 PM',
         onSale: true,
-        urgency: 'Last Remaining Places',
+        urgency: 'Closes 11pm Wednesday 24 June',
         urgencyColor: 'bg-red-500',
     },
     {
@@ -24,8 +24,8 @@ const locations = [
         dates: 'Tuesday 7 July – Thursday 9 July',
         time: '9:00 AM – 1:00 PM',
         onSale: true,
-        urgency: '60% Sold — Act Fast',
-        urgencyColor: 'bg-amber-500',
+        urgency: '2 Places Remaining',
+        urgencyColor: 'bg-red-500',
     },
     {
         name: 'The Netz',
@@ -36,7 +36,7 @@ const locations = [
         dates: 'Monday 6 July – Wednesday 8 July',
         time: '1:30 PM – 5:30 PM',
         onSale: true,
-        urgency: '60% Sold — Act Fast',
+        urgency: '7 Places Remaining',
         urgencyColor: 'bg-amber-500',
     },
 ];
