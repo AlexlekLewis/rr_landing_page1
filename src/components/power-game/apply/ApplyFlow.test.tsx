@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
 // ============================================================
-// ApplyFlow.test.tsx — drives the funnel end-to-end (reveal → slot → pay →
+// ApplyFlow.test.tsx — drives the funnel end-to-end (reveal → session → pay →
 // confirmed) deterministically, and asserts the chosen spot is decremented.
-// Age-based model: a squad = an age group; the PERF demo is a 14yo → "12-14 Squad".
-// framer-motion is mocked to plain elements so AnimatePresence timing can't flake.
+// OPEN-SESSION model: no age-band squads — any 12–26 player picks any session at
+// the centre. framer-motion is mocked to plain elements so timing can't flake.
 // ============================================================
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
@@ -32,49 +32,47 @@ import { inventory } from "../../../lib/booking/inventory";
 beforeEach(() => cleanup());
 
 describe("ApplyFlow — full booking chain (demo deep-link)", () => {
-  it("reveal → choose time → pay → confirmed, and decrements the spot", async () => {
+  it("reveal → choose session → pay → confirmed, and decrements the spot", async () => {
     window.history.pushState({}, "", "/PGP2026/apply?demo=1");
     render(<ApplyFlow />);
 
-    // Demo jumps to the reveal — a 14yo is placed in the 12-14 squad (age-based).
+    // Demo jumps to the reveal — sessions are open (any 12–26 player picks any time).
     await screen.findByText(/you've earned your place/i);
-    expect(screen.getAllByText(/12-14 squad/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/choose your session/i).length).toBeGreaterThan(0);
 
-    const before = inventory.spotsLeft("w-fri530-1214");
+    const before = inventory.spotsLeft("w-fri530");
 
-    // Slots are inline below the offer — pick the Friday 5:30 (12-14) day option.
-    const slot = await screen.findByTestId("slot-w-fri530-1214");
+    // Sessions are inline below the offer — pick the Friday 5:30 session at The Netz.
+    const slot = await screen.findByTestId("slot-w-fri530");
     fireEvent.click(slot);
 
     // Demo player flagged no uniform → kit step skipped → straight to Secure.
     await screen.findByText(/secure your spot/i);
-    document.querySelectorAll('input[type="checkbox"]').forEach((b) => fireEvent.click(b));
     fireEvent.click(screen.getByRole("button", { name: /secure my spot/i }));
 
     await screen.findByText(/you're in!/i);
-    expect(inventory.spotsLeft("w-fri530-1214")).toBe(before - 1);
+    expect(inventory.spotsLeft("w-fri530")).toBe(before - 1);
   });
 
-  it("sold-out: when ALL the player's eligible squads are full, no slot is bookable", async () => {
-    // The PERF demo is a 14yo → eligible for BOTH 12-14 AND 14-16 at The Netz. Fill
-    // every one of those squads so there is genuinely nothing left to book. (Full slots
-    // render as non-interactive — they carry no `slot-` test id — and show "Full".)
-    const netzEligible = ["w-fri530-1214", "w-sat2-1214", "w-fri530-1416", "w-fri730-1416", "w-sat2-1416", "w-sat4-1416"];
-    for (const id of netzEligible) {
+  it("sold-out: when every session at the centre is full, no slot is bookable", async () => {
+    // Fill every session at The Netz so there is genuinely nothing left to book.
+    // (Full sessions render non-interactive — no `slot-` test id — and show "Full".)
+    const netzSessions = ["w-fri530", "w-fri730", "w-sat2", "w-sat4"];
+    for (const id of netzSessions) {
       for (let i = 0; i < 30; i++) await inventory.createHold({ squadId: id, ref: `fill-${id}-${i}` });
     }
     window.history.pushState({}, "", "/PGP2026/apply?demo=perf");
     render(<ApplyFlow />);
     await screen.findByText(/you've earned your place/i);
-    expect(screen.queryByTestId("slot-w-fri530-1214")).toBeNull(); // a full 12-14 slot is not bookable
-    expect(screen.queryByTestId("slot-w-sat4-1416")).toBeNull(); // nor a full 14-16 slot
+    expect(screen.queryByTestId("slot-w-fri530")).toBeNull(); // a full session is not bookable
+    expect(screen.queryByTestId("slot-w-sat4")).toBeNull();
     expect(screen.getAllByText(/full/i).length).toBeGreaterThan(0);
   });
 
-  it("real journey: centre → player → profile → reveal, placed in their age squad", async () => {
+  it("real journey: centre → player → profile → reveal → open session picker", async () => {
     window.history.pushState({}, "", "/PGP2026/apply");
     render(<ApplyFlow />);
-    const yr = String(new Date().getFullYear() - 14); // 14yo → 12-14 band
+    const yr = String(new Date().getFullYear() - 14); // 14yo — any 12–26 age is fine
 
     // Centre
     fireEvent.click(screen.getByRole("button", { name: /the netz/i }));
@@ -97,17 +95,17 @@ describe("ApplyFlow — full booking chain (demo deep-link)", () => {
     document.querySelectorAll('input[type="checkbox"]').forEach((b) => fireEvent.click(b));
     fireEvent.click(screen.getByText("Continue"));
 
-    // Profile — cricket history is OPTIONAL now (open program); leave it blank and continue.
+    // Profile — cricket history is OPTIONAL (open program); leave it blank and continue.
     fireEvent.click(screen.getByText("Continue"));
 
     // Confirm → get the offer
     await screen.findByText(/is this correct/i);
     fireEvent.click(screen.getByRole("button", { name: /get my offer/i }));
 
-    // Reveal (after the ~1.6s analysing beat) — 14yo placed in their 12-14 squad.
+    // Reveal (after the ~1.6s analysing beat) — open session picker, no age band.
     await new Promise((r) => setTimeout(r, 2200));
     const body = document.body.textContent || "";
     expect(body, `SCREEN: ${body.slice(0, 500)}`).toMatch(/you've earned your place/i);
-    expect(body).toMatch(/12-14 squad/i);
+    expect(body).toMatch(/choose your session/i);
   }, 12000);
 });

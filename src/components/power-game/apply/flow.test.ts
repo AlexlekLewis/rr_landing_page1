@@ -89,7 +89,7 @@ describe("overlapping age bands — a 14yo is eligible for BOTH 12-14 and 14-16"
 });
 
 describe(`upper age limit — players over ${MAX_AGE} are blocked, 14yo and ${MAX_AGE}yo are not`, () => {
-  const hasAgeError = (errs: string[]) => errs.some((m) => new RegExp(`${MAX_AGE} and under`).test(m));
+  const hasAgeError = (errs: string[]) => errs.some((m) => /ages 12/.test(m));
 
   it(`blocks anyone over the cap (${MAX_AGE + 1}+) at the player step`, () => {
     expect(hasAgeError(validateStep("player", { ...base, player_dob: dobForAge(MAX_AGE + 1) }))).toBe(true);
@@ -100,6 +100,12 @@ describe(`upper age limit — players over ${MAX_AGE} are blocked, 14yo and ${MA
     expect(hasAgeError(validateStep("player", { ...base, player_dob: dobForAge(MAX_AGE) }))).toBe(false);
     expect(hasAgeError(validateStep("player", { ...base, player_dob: dobForAge(14) }))).toBe(false);
     expect(hasAgeError(validateStep("player", { ...base, player_dob: dobForAge(12) }))).toBe(false);
+  });
+
+  it("blocks 11-and-under and points them to Junior Royals", () => {
+    const errs = validateStep("player", { ...base, player_dob: dobForAge(11) });
+    expect(hasAgeError(errs)).toBe(true);
+    expect(errs.some((m) => /junior royals/i.test(m))).toBe(true);
   });
 });
 
