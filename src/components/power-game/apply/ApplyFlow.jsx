@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, ArrowRight, ArrowLeft, Clock, Users, Check, AlertCircle, Loader2, Ruler, Phone, Mail, MessageSquare, Telescope } from 'lucide-react';
 import DateOfBirthInput from '../../DateOfBirthInput';
 import { REP_GROUPS, CLUB_GROUPS, groupsForGender } from './levels';
-import { CENTRES, CENTRE_BY_SLUG, squadsForPlacement, sessionWindow } from '../../../lib/booking/squads';
+import { CENTRES, CENTRE_BY_SLUG, squadsForPlacement, sessionWindow, SQUADS } from '../../../lib/booking/squads';
 import { inventory } from '../../../lib/booking/inventory';
 import { applications, applicationFromPlacement } from '../../../lib/booking/applications';
 import { BLANK_FORM, validateStep, computePlacement, isMinor, calcAge, BLOCK_FEE, consentsOk, REFERRAL_CODE } from './flow';
@@ -14,14 +14,14 @@ import { submitApplication, buildApplicationRow } from './submit';
 import UniformSizeGuideModal from '../UniformSizeGuideModal';
 import { TOPS_SIZES, SHORTS_SIZES, PANTS_SIZES, JACKET_SIZES, KIDS_AGE_CHART } from '../../academy-shop/sizeData';
 
-const INPUT_STEPS = ['centre', 'player', 'profile'];
+const INPUT_STEPS = ['player'];
 // Visible progress stepper — the internal steps collapse into 4 phases families
 // always see. "profile" carries BOTH the player's game and their last-3-years
 // cricket history in one submission, so the "Cricket" stage is a single screen.
 // Branch/terminal steps (review, requestInfo, submitted, confirmed…) have no phase
 // and the stepper hides for them.
-const PHASES = ['Details', 'Cricket', 'Offer', 'Secure'];
-const STEP_PHASE = { centre: 0, player: 0, profile: 1, confirm: 1, reveal: 2, kit: 3, secure: 3 };
+const PHASES = ['Your details', 'Secure'];
+const STEP_PHASE = { centre: 0, player: 0, kit: 0, secure: 1 };
 // Real Stripe checkout only when explicitly enabled (test/live keys + deployed fn).
 // Default: local confirm, so the funnel runs fully offline.
 const LIVE_PAYMENTS = !!(import.meta?.env?.VITE_PG_LIVE_PAYMENTS === '1');
@@ -88,7 +88,6 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
   const [form, setForm] = useState({ ...BLANK_FORM, ...(initialSession ? { centre: initialSession.centre } : {}) });
   const [step, setStep] = useState(initialSession ? 'player' : 'centre');
   const [errors, setErrors] = useState([]);
-  const [analysing, setAnalysing] = useState(false);
   const [result, setResult] = useState(null); // { dna, placement }
   const [selected, setSelected] = useState(initialSession || null); // chosen session
   const [hold, setHold] = useState(null); // { holdId }
@@ -137,29 +136,21 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
 
-  // QA deep-link: /PGP2026/apply?demo=perf|review|soldout jumps to the reveal with a sample case.
+  // QA deep-link: /PGP2026/apply?demo=1 pre-fills the form with a chosen session so the
+  // funnel can be walked form → (kit) → pay deterministically.
   useEffect(() => {
     const demo = new URLSearchParams(window.location.search).get('demo');
     if (!demo) return;
-    if (demo === 'history') {
-      setForm({ ...BLANK_FORM, centre: 'williamstown', player_name: 'Sam Smith', player_dob: '2012-01-01', gender: 'M', parent_name: 'Parent Name', contact_phone: '0400000000', contact_email: 's@e.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right' });
-      setStep('profile');
-      return;
-    }
-    // The QA shortcut skips the contact step where consents are now captured — pre-consent so the demo can complete.
     const CONSENTED = { accept_terms: true, accept_player_code: true, accept_parent_code: true, accept_social_media: true, accept_playing_standard: true, accept_ability_standard: true };
-    const PERF = { ...BLANK_FORM, ...CONSENTED, centre: 'williamstown', player_name: 'Sam Smith', player_dob: '2012-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'sam@example.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right', rep_level: 'P16M', format: 't20' };
-    const REVIEW = { ...BLANK_FORM, ...CONSENTED, centre: 'williamstown', player_name: 'Alex Young', player_dob: '2011-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'alex@example.com', suburb: 'Williamstown', skill: 'batting', batting_hand: 'right', club_level: 'CS-BELOW', format: 'od' };
-    const demoForm = demo === 'review' ? REVIEW : PERF;
-    if (demo === 'soldout') {
-      (async () => { for (const id of ['w-fri-perf-1416', 'w-sat4-perf-1416']) for (let i = 0; i < 12; i++) await inventory.createHold({ squadId: id, ref: `seed-${id}-${i}` }); })();
-    }
+    const demoForm = { ...BLANK_FORM, ...CONSENTED, centre: 'williamstown', player_name: 'Sam Smith', player_dob: '2002-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'sam@example.com', suburb: 'Williamstown' };
+    const session = SQUADS.find((s) => s.id === 'w-fri530') || null;
     const r = computePlacement(demoForm);
     setForm(demoForm);
     setResult(r);
-    const app = applications.create(applicationFromPlacement(demoForm, r, r.placement.requiresReview ? 'review' : 'auto'));
+    setSelected(session);
+    const app = applications.create(applicationFromPlacement(demoForm, r, 'auto'));
     setAppId(app.id);
-    setStep('reveal');
+    setStep('player');
   }, []);
 
   const repGroups = useMemo(() => groupsForGender(REP_GROUPS, form.gender), [form.gender]);
@@ -174,63 +165,40 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
       setErrors(errs);
       if (errs.length) return;
     }
-    if (step === 'centre') return setStep('player');
-    if (step === 'player') return setStep('profile');
-    // Profile (game + last-3-years cricket, merged) → a "Is this correct?" review
-    // of everything BEFORE we work out the offer.
-    if (step === 'profile') return setStep('confirm');
+    if (step === 'player') return proceedToSecure();
   }
-  // Confirmed the details are right → run the engine, persist, show the analysing beat, reveal.
-  async function confirmAndReveal() {
+
+  // One clean form is done → build the application payload, hold the chosen session, then
+  // go to uniform sizing (only if requested) or straight to the pay screen.
+  async function proceedToSecure() {
     const r = computePlacement(form);
     setResult(r);
-    const app = applications.create(applicationFromPlacement(form, r, r.placement.requiresReview ? 'review' : 'auto'));
+    const app = applications.create(applicationFromPlacement(form, r, 'auto'));
     setAppId(app.id);
-    // Seeded from the Locations picker (and a valid DOB): the session is already chosen,
-    // so hold it and go straight to kit/checkout — no in-funnel session picker.
-    if (selected && !r.placement.requiresReview) {
-      let ok = !!hold;
-      if (!hold) {
-        const ref = `${form.player_name || 'player'}-${Date.now()}`;
-        const res = await inventory.createHold({ squadId: selected.id, ref });
-        ok = res.ok;
-        if (res.ok) { setHold({ holdId: res.holdId }); if (app?.id) applications.update(app.id, { squadId: selected.id, bookingId: res.holdId }); }
-      }
-      if (ok) { setStep(form.needs_uniform ? 'kit' : 'secure'); return; }
-      setSelected(null); // session filled since they picked it — fall back to the picker
+    if (selected && !hold) {
+      const ref = `${form.player_name || 'player'}-${Date.now()}`;
+      const res = await inventory.createHold({ squadId: selected.id, ref });
+      if (!res.ok) { setErrors(['That session just filled — please pick another time.']); return; }
+      setHold({ holdId: res.holdId });
+      if (app?.id) applications.update(app.id, { squadId: selected.id, bookingId: res.holdId });
     }
-    setAnalysing(true);
-    setStep('reveal');
-    setTimeout(() => setAnalysing(false), 1600);
+    setStep(form.needs_uniform ? 'kit' : 'secure');
   }
-  // Step back one stage from anywhere — lets a player change anything before paying.
+
+  // Step back one stage. Flow is: (centre →) player → (kit) → secure.
   function back() {
     setErrors([]);
     switch (step) {
       case 'player': return setStep('centre');
-      case 'profile': return setStep('player');
-      case 'confirm': return setStep('profile');
-      case 'reveal':
-        if (hold) { inventory.release(hold.holdId); setHold(null); setSelected(null); }
-        return setStep('confirm');
-      case 'kit': return setStep(seeded ? 'confirm' : 'reveal');
-      // Secure goes back to the kit step only if a uniform was requested; otherwise
-      // the kit step was skipped, so step back to the picker (or confirm, if seeded).
-      case 'secure': return setStep(form.needs_uniform ? 'kit' : (seeded ? 'confirm' : 'reveal'));
-      case 'review': return setStep('reveal');
-      case 'requestInfo': return setStep('reveal');
+      case 'kit': return setStep('player');
+      case 'secure': return setStep(form.needs_uniform ? 'kit' : 'player');
       default: return;
     }
   }
 
-  function afterReveal() {
-    const comingSoon = CENTRE_BY_SLUG[form.centre]?.comingSoon;
-    if (result.placement.requiresReview || comingSoon) setStep('review');
-    else setStep('slot');
-  }
-
+  // Non-seeded entry: a session was chosen from the in-flow centre picker → hold it and
+  // go to the form. (Seeded entries arrive with `selected` already set from Locations.)
   async function pickSquad(squad) {
-    // Re-picking (e.g. after stepping back): free the previously held spot first.
     if (hold) { await inventory.release(hold.holdId); setHold(null); }
     const ref = `${form.player_name || 'player'}-${Date.now()}`;
     const res = await inventory.createHold({ squadId: squad.id, ref });
@@ -239,12 +207,10 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
       setHold({ holdId: res.holdId });
       if (appId) applications.update(appId, { squadId: squad.id, bookingId: res.holdId });
       setSpotsTick((t) => t + 1);
-      // Only collect uniform sizing if they flagged needing one at the details step;
-      // otherwise skip straight to checkout.
-      setStep(form.needs_uniform ? 'kit' : 'secure');
+      setStep('player');
     } else {
       setSpotsTick((t) => t + 1); // refresh — it just filled
-      setErrors(['That spot just filled — please pick another time.']);
+      setErrors(['That session just filled — please pick another time.']);
     }
   }
 
@@ -354,11 +320,6 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
     }
   }
 
-  // Open-session model: any 12–26 player may pick any session at the centre — no age
-  // filtering. squadsForPlacement returns all of a centre's sessions (day/time options).
-  const matchingSquads = result && !result.placement.requiresReview
-    ? squadsForPlacement({ centre: form.centre })
-    : [];
   const sessionLabel = selected ? `${selected.day} ${selected.startTime}–${selected.endTime}` : '';
   const comingSoonVenue = !!CENTRE_BY_SLUG[form.centre]?.comingSoon;
   // The soft 'review' step serves three audiences: a below-floor coach review, a
@@ -461,8 +422,13 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
                       <h2 className="text-sm font-black uppercase tracking-widest text-white">Sessions &amp; times at {CENTRE_BY_SLUG[form.centre]?.name}</h2>
                       <span className="hidden sm:block text-[11px] text-white/40 font-bold uppercase tracking-widest">Day · Time</span>
                     </div>
-                    <CentreAvailabilityGrid centreSlug={form.centre} />
-                    <p className="text-white/35 text-[11px] mt-3">Any 12–26 player can pick any session — choose the day &amp; time that suits you. Prefer a different night? Tap another centre above to compare.</p>
+                    <CentreAvailabilityGrid
+                      centreSlug={form.centre}
+                      selectedId={selected?.id}
+                      onPick={pickSquad}
+                      spotsLeftFor={(id) => inventory.spotsLeft(id)}
+                    />
+                    <p className="text-white/35 text-[11px] mt-3">Tap a session to continue — any 12–26 player can pick any time. Prefer a different night? Tap another centre above.</p>
                   </div>
                 )}
               </div>
@@ -471,7 +437,12 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
             {/* ── PLAYER ── */}
             {step === 'player' && (
               <div className="space-y-4">
-                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-2">Player details</h1>
+                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-2">Your details</h1>
+                {selected && (
+                  <div className="rounded-xl border border-rr-pink/30 bg-rr-pink/[0.07] px-4 py-3 text-[12px] text-white/80">
+                    You&apos;re applying for <span className="font-bold text-white">{CENTRE_BY_SLUG[form.centre]?.name}</span> · {selected.day} {selected.startTime}–{selected.endTime}{sessionWindow(selected.day) ? ` · ${sessionWindow(selected.day).start}–${sessionWindow(selected.day).end}` : ''}
+                  </div>
+                )}
                 <Field label="Player's full name"><input className={inputCls} value={form.player_name} onChange={(e) => set('player_name', e.target.value)} placeholder="e.g. Sam Smith" /></Field>
                 <Field label="Date of birth"><DateOfBirthInput value={form.player_dob} onChange={(v) => set('player_dob', v)} /></Field>
                 <Field label="Do you play Male or Female cricket?"><Choice value={form.gender} onChange={(v) => { set('gender', v); set('rep_level', ''); set('club_level', ''); }} options={[{ value: 'M', label: 'Male' }, { value: 'F', label: 'Female' }]} /></Field>
@@ -487,6 +458,31 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
                   <Field label="Suburb"><input className={inputCls} value={form.suburb} onChange={(e) => set('suburb', e.target.value)} placeholder="e.g. Hallam" /></Field>
                 </div>
                 <Field label="Best contact email"><input className={inputCls} value={form.contact_email} onChange={(e) => set('contact_email', e.target.value)} placeholder="jane@email.com" /></Field>
+
+                {/* ── CRICKET (optional) — last-3-years highest level, for our coaches' context only ── */}
+                <div className="pt-3 mt-1 border-t border-white/10">
+                  <p className="text-[11px] font-black uppercase tracking-widest text-rr-pink mt-2">Your cricket <span className="text-white/40 font-semibold normal-case tracking-normal">— optional</span></p>
+                  <p className="text-white/45 text-xs mb-3 mt-0.5">Played representative or senior cricket in the last 3 years? Add it — it helps our coaches place you. It won&apos;t change your application or fee. <span className="text-white/35">Levels may be verified.</span></p>
+                  <Field label="Current cricket club(s)">
+                    <input className={inputCls} value={form.current_club} onChange={(e) => set('current_club', e.target.value)} placeholder="e.g. Footscray CC" />
+                  </Field>
+                  <div className="mt-3">
+                    <Field label="Representative cricket — highest level">
+                      <select className={inputCls} value={form.rep_level} onChange={(e) => set('rep_level', e.target.value)}>
+                        <option value="">— none / haven&apos;t played rep —</option>
+                        {repGroups.map((g) => (<optgroup key={g.label} label={g.label}>{g.options.map((o) => <option key={o.code} value={o.code}>{o.label}</option>)}</optgroup>))}
+                      </select>
+                    </Field>
+                  </div>
+                  <div className="mt-3">
+                    <Field label="Senior cricket — highest grade">
+                      <select className={inputCls} value={form.club_level} onChange={(e) => set('club_level', e.target.value)}>
+                        <option value="">— none / haven&apos;t played senior —</option>
+                        {clubGroups.map((g) => (<optgroup key={g.label} label={g.label}>{g.options.map((o) => <option key={o.code} value={o.code}>{o.label}</option>)}</optgroup>))}
+                      </select>
+                    </Field>
+                  </div>
+                </div>
 
                 {/* ── REFERRAL (optional) — applicant credits the coach / talent scout / player who referred them ── */}
                 <div className="pt-3 mt-1 border-t border-white/10">
@@ -513,123 +509,6 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
                 </div>
 
                 <div className="pt-1">{renderConsents()}</div>
-              </div>
-            )}
-
-            {/* ── PROFILE — last-3-years cricket. (Game profile — skill, batting hand,
-                 bowling type — is captured at onboarding, not in the application.) ── */}
-            {step === 'profile' && (
-              <div className="space-y-5">
-                {/* ── Cricket — last 3 years ── */}
-                <div className="space-y-4">
-                  <div>
-                    <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Your cricket — last 3 years</h1>
-                    <p className="text-white/50 text-sm">Tell us the highest level you've played in the last <span className="text-white">three years</span>. Add <span className="text-rr-pink font-bold">representative</span> cricket, <span className="text-rr-pink font-bold">senior</span> cricket, or <span className="text-rr-pink font-bold">both</span> — whichever you've played.</p>
-                    <p className="text-white/35 text-[11px] leading-snug mt-1">Levels may be verified with clubs &amp; associations — please keep them accurate.</p>
-                  </div>
-                  <Field label="Current cricket club(s)">
-                    <input className={inputCls} value={form.current_club} onChange={(e) => set('current_club', e.target.value)} placeholder="e.g. Footscray CC (add a second club if you play more than one)" />
-                  </Field>
-                  <Field label="Representative cricket — highest level">
-                    <select className={inputCls} value={form.rep_level} onChange={(e) => set('rep_level', e.target.value)}>
-                      <option value="">— none / haven't played rep —</option>
-                      {repGroups.map((g) => (
-                        <optgroup key={g.label} label={g.label}>{g.options.map((o) => <option key={o.code} value={o.code}>{o.label}</option>)}</optgroup>
-                      ))}
-                    </select>
-                  </Field>
-                  <Field label="Senior cricket — highest grade">
-                    <select className={inputCls} value={form.club_level} onChange={(e) => set('club_level', e.target.value)}>
-                      <option value="">— none / haven't played senior —</option>
-                      {clubGroups.map((g) => (
-                        <optgroup key={g.label} label={g.label}>{g.options.map((o) => <option key={o.code} value={o.code}>{o.label}</option>)}</optgroup>
-                      ))}
-                    </select>
-                  </Field>
-
-                  {/* Wild Card — for talent the rep system hasn't caught. Selecting it lets a
-                      player through without a level; a coach then personally assesses them. */}
-                  <div className="pt-1">
-                    <div className="flex items-center gap-2 mb-2.5">
-                      <div className="h-px flex-1 bg-white/10" />
-                      <span className="text-[10px] font-black uppercase tracking-widest text-white/30">Not caught by the rep system?</span>
-                      <div className="h-px flex-1 bg-white/10" />
-                    </div>
-                    <button type="button" onClick={() => set('wildcard', !form.wildcard)}
-                      className={`w-full flex items-start gap-3 text-left px-4 py-3.5 rounded-2xl border transition-all ${form.wildcard ? 'bg-rr-pink/15 border-rr-pink shadow-[0_0_20px_rgba(225,31,143,0.18)]' : 'bg-white/5 border-white/15 hover:border-rr-pink/40'}`}>
-                      <Telescope className={`w-5 h-5 mt-0.5 flex-shrink-0 ${form.wildcard ? 'text-rr-pink' : 'text-rr-blue'}`} />
-                      <span className="flex-1">
-                        <span className="block text-sm font-black uppercase tracking-wide text-white">Apply as a Wild Card</span>
-                        <span className="block text-[12px] text-white/55 mt-0.5 leading-snug">Haven&apos;t played rep or graded senior cricket but know you can mix it? A coach will personally assess you — no payment until they confirm your spot.</span>
-                      </span>
-                      {form.wildcard && <Check className="w-5 h-5 text-rr-pink flex-shrink-0" />}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* ── CONFIRM — "Is this correct?" before we work out the offer ── */}
-            {step === 'confirm' && (
-              <div>
-                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide mb-1">Is this correct?</h1>
-                <p className="text-white/50 text-sm mb-6">Have a quick look. You can go back and change anything before we work out your offer.</p>
-                <div className="bg-white/5 border border-white/15 rounded-2xl p-6 mb-6 space-y-3">
-                  <SummaryRow k="Player" v={form.player_name} />
-                  <SummaryRow k="Date of birth" v={`${form.player_dob || '—'}${calcAge(form.player_dob) != null ? ` · ${calcAge(form.player_dob)} yrs` : ''}`} />
-                  <SummaryRow k="Cricket" v={form.gender === 'F' ? 'Female' : 'Male'} />
-                  {isMinor(form.player_dob) && form.parent_name && <SummaryRow k="Parent / guardian" v={form.parent_name} />}
-                  <SummaryRow k="Mobile" v={form.contact_phone} />
-                  <SummaryRow k="Email" v={form.contact_email} />
-                  <SummaryRow k="Suburb" v={form.suburb} />
-                  <SummaryRow k="Centre" v={CENTRE_BY_SLUG[form.centre]?.name} />
-                  {form.current_club && <SummaryRow k="Current club" v={form.current_club} />}
-                  {form.rep_level && <SummaryRow k="Representative" v={levelLabel(form.rep_level)} />}
-                  {form.club_level && <SummaryRow k="Senior cricket" v={levelLabel(form.club_level)} />}
-                  {form.wildcard && <SummaryRow k="Wild Card" v="Coach to assess" />}
-                  {!form.rep_level && !form.club_level && !form.wildcard && <SummaryRow k="Cricket" v="None added" />}
-                </div>
-                <button onClick={confirmAndReveal} className="w-full inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]">
-                  Yes, this is correct — get my offer <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-            )}
-
-            {/* ── REVEAL + SLOT (merged) ── */}
-            {step === 'reveal' && (
-              <div>
-                {analysing ? (
-                  <div className="text-center py-16">
-                    <Loader2 className="w-10 h-10 text-rr-pink animate-spin mx-auto mb-5" />
-                    <div className="text-lg font-black uppercase tracking-widest text-white">Analysing your cricket…</div>
-                    <div className="text-white/40 text-sm mt-2">Matching you to the right squad</div>
-                  </div>
-                ) : result.placement.requiresReview || CENTRE_BY_SLUG[form.centre]?.comingSoon ? (
-                  <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} onContinue={afterReveal} onRequestInfo={() => setStep('requestInfo')} />
-                ) : (
-                  <>
-                    <DnaRevealCard dna={result.dna} placement={result.placement} centreName={CENTRE_BY_SLUG[form.centre]?.name} onContinue={null} onRequestInfo={() => setStep('requestInfo')} />
-
-                    <div className="mt-8">
-                      <h2 className="text-xl md:text-2xl font-black uppercase tracking-wide mb-1">Choose your session</h2>
-                      <p className="text-white/50 text-sm mb-5">Pick the day &amp; time that suits you at {CENTRE_BY_SLUG[form.centre]?.name}.</p>
-                      {matchingSquads.length === 0 ? (
-                        <Fallback onOther={() => { const other = CENTRES.find((c) => c.slug !== form.centre && !c.comingSoon); if (other) { set('centre', other.slug); } }} onReview={() => setStep('review')} otherName={CENTRES.find((c) => c.slug !== form.centre && !c.comingSoon)?.name} />
-                      ) : (
-                        <div className="space-y-3">
-                          <CentreAvailabilityGrid
-                            centreSlug={form.centre}
-                            selectedId={selected?.id}
-                            onPick={pickSquad}
-                            spotsLeftFor={(id) => inventory.spotsLeft(id)}
-                          />
-                          <button onClick={() => setStep('review')} className="w-full text-center text-xs text-white/40 hover:text-white/70 uppercase tracking-widest pt-2">None of these times work →</button>
-                          <p className="text-white/25 text-[11px] text-center pt-1">*Squads are subject to change &mdash; we&apos;ll work with you if changes are needed.</p>
-                        </div>
-                      )}
-                    </div>
-                  </>
-                )}
               </div>
             )}
 
@@ -821,7 +700,7 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
 
         {/* Back for the post-input steps — their forward action lives in the step body, so
             this lets a player return and change anything (details, time, kit) before paying. */}
-        {['confirm', 'reveal', 'kit', 'secure', 'review', 'requestInfo'].includes(step) && !analysing && (
+        {['kit', 'secure', 'review', 'requestInfo'].includes(step) && (
           <div className="mt-6 flex justify-center">
             <button onClick={back} className="inline-flex items-center gap-1.5 text-white/40 hover:text-white/70 text-xs font-bold uppercase tracking-widest px-4 py-2"><ArrowLeft className="w-3.5 h-3.5" /> Back</button>
           </div>
