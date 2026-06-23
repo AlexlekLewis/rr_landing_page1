@@ -700,7 +700,9 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
                   <SummaryRow k="Player" v={form.player_name} />
                   <SummaryRow k="Centre" v={CENTRE_BY_SLUG[form.centre]?.name} />
                   <SummaryRow k="Session" v={sessionLabel} />
-                  <SummaryRow k="Block" v="8-week Power Pre-Season" />
+                  {sessionWindow(selected.day) && (
+                    <SummaryRow k="Dates" v={`${sessionWindow(selected.day).start} – ${sessionWindow(selected.day).end} · 8 weeks`} />
+                  )}
                   {form.needs_uniform && anyKitSelected && (
                     <SummaryRow k="Uniform" v={Object.entries(kitPicks).filter(([,v]) => v && v !== 'pending').map(([k,v]) => `${k === 'cap' ? 'Cap' : k.charAt(0).toUpperCase() + k.slice(1)} ${v === 'OS' ? '' : v}`.trim()).join(' · ')} />
                   )}
