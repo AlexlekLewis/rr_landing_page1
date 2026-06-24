@@ -590,6 +590,13 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
                   className="w-full mt-7 bg-rr-pink hover:bg-rr-light-pink disabled:opacity-40 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
                   Continue →
                 </button>
+                {!kitSizesComplete && (
+                  <p className="text-center text-[12px] text-rr-light-pink mt-3">
+                    {anyKitSelected
+                      ? 'Pick a size for each item you’ve ticked to continue.'
+                      : 'Tick the items you need and choose a size — or go back if you don’t need a uniform.'}
+                  </p>
+                )}
               </div>
             )}
 
