@@ -7,6 +7,8 @@ import OfferResponsePage from './components/offer-response/OfferResponsePage';
 import StripeSuccess from './components/landing-page-3/StripeSuccess';
 import LittleCrickets from './components/little-crickets/LittleCrickets';
 import JRSuccess from './components/little-crickets/JRSuccess';
+import JuniorRoyalsT3 from './components/junior-royals-t3/JuniorRoyalsT3';
+import JRT3Success from './components/junior-royals-t3/JRT3Success';
 import HolidayPrograms from './components/holiday-programs/HolidayPrograms';
 import HolidayProgramSuccess from './components/holiday-programs/HolidayProgramSuccess';
 import FemaleCricketIntroduction from './components/female-cricket-introduction/FemaleCricketIntroduction';
@@ -137,6 +139,9 @@ function App() {
         {/* Junior Royals — DRAFT: not in nav, Vercel only until go-live instruction */}
         <Route path="/junior-royals" element={<LittleCrickets />} />
         <Route path="/junior-royals/success" element={<JRSuccess />} />
+        {/* Junior Royals Term 3 — DRAFT: Vercel only until go-live instruction */}
+        <Route path="/junior-royals-t3" element={<JuniorRoyalsT3 />} />
+        <Route path="/junior-royals-t3/success" element={<JRT3Success />} />
         <Route path="/junior-royals-holiday/success" element={<HolidayProgramSuccess />} />
         {/* Female Cricket Introduction — DRAFT: not in nav, Vercel only until go-live instruction */}
         <Route path="/female-cricket-kickstart" element={<FemaleCricketIntroduction />} />
