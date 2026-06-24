@@ -136,12 +136,12 @@ function App() {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-conditions" element={<TermsConditions />} />
         <Route path="/junior-royals-holiday" element={<HolidayPrograms />} />
-        {/* Junior Royals — DRAFT: not in nav, Vercel only until go-live instruction */}
-        <Route path="/junior-royals" element={<LittleCrickets />} />
-        <Route path="/junior-royals/success" element={<JRSuccess />} />
-        {/* Junior Royals Term 3 — DRAFT: Vercel only until go-live instruction */}
-        <Route path="/juniorroyals" element={<JuniorRoyalsT3 />} />
-        <Route path="/juniorroyals/success" element={<JRT3Success />} />
+        {/* Junior Royals Term 2 — archived */}
+        <Route path="/junior-royals-term2" element={<LittleCrickets />} />
+        <Route path="/junior-royals-term2/success" element={<JRSuccess />} />
+        {/* Junior Royals Term 3 — active */}
+        <Route path="/junior-royals" element={<JuniorRoyalsT3 />} />
+        <Route path="/junior-royals/success" element={<JRT3Success />} />
         <Route path="/junior-royals-holiday/success" element={<HolidayProgramSuccess />} />
         {/* Female Cricket Introduction — DRAFT: not in nav, Vercel only until go-live instruction */}
         <Route path="/female-cricket-kickstart" element={<FemaleCricketIntroduction />} />

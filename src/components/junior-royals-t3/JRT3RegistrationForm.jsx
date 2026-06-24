@@ -195,7 +195,7 @@ const JRT3RegistrationForm = () => {
             } catch (_) {}
             if (data?.id) { localStorage.setItem('jr_record_id', data.id); localStorage.setItem('jr_location_t3', form.location); }
             const stripeLink = STRIPE_LINKS[form.location]?.all;
-            window.location.href = stripeLink || '/juniorroyals/success';
+            window.location.href = stripeLink || '/junior-royals/success';
         } catch (err) {
             console.error(err);
             setErrors({ form: 'Something went wrong. Please try again or email info@rramelbourne.com' });

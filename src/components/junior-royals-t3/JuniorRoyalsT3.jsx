@@ -13,7 +13,7 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 const SECTIONS = ['hero', 'program-overview', 'coaches', 'app', 'locations', 'registration-form'];
 
 const JuniorRoyalsT3 = () => {
-    usePageAnalytics('/juniorroyals', { sections: SECTIONS });
+    usePageAnalytics('/junior-royals', { sections: SECTIONS });
     useEffect(() => { window.scrollTo(0, 0); }, []);
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
