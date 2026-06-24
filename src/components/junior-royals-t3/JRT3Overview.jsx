@@ -3,31 +3,26 @@ import { motion } from 'framer-motion';
 
 const groups = [
     {
-        name: 'Minis',
         ages: '5–6 years',
         color: 'from-rr-pink to-rr-blue',
         points: ['Introduction to cricket fundamentals', 'Fun, game-based learning environment', 'Build coordination and movement skills'],
     },
     {
-        name: 'Warriors',
         ages: '7–9 years',
         color: 'from-rr-blue to-rr-pink',
         points: ['Build on foundation cricket skills', 'Incorporate game sense activities', 'Prepare players to start playing junior cricket'],
     },
     {
-        name: 'Challengers',
         ages: '10–12 years',
         color: 'from-rr-pink to-rr-blue',
         points: ['Skill-focused sessions', 'Use of bowling machine', 'Secondary training for those already playing cricket'],
     },
     {
-        name: 'Juniors',
         ages: '13–15 years',
         color: 'from-rr-blue to-rr-pink',
         points: ['High-intensity, skill-focused sessions', 'Use of bowling machine', 'Ideal secondary training for competitive players'],
     },
     {
-        name: 'Seniors',
         ages: '16–17 years',
         color: 'from-rr-pink to-rr-blue',
         points: ['Advanced technical development', 'Bowling machine & video analysis', 'Preparation for senior/representative cricket'],
@@ -53,14 +48,12 @@ const JRT3Overview = () => (
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {groups.map((group, i) => (
-                    <motion.div key={group.name} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+                    <motion.div key={group.ages} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }} transition={{ delay: i * 0.08 }}
                         className="bg-rr-dark rounded-2xl overflow-hidden">
                         <div className={`h-2 bg-gradient-to-r ${group.color}`} />
                         <div className="p-6">
-                            <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-1">Group</p>
-                            <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-0.5">{group.name}</h3>
-                            <p className="text-white/60 font-medium text-sm mb-5">{group.ages}</p>
+                            <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-5">{group.ages}</h3>
                             <ul className="space-y-2">
                                 {group.points.map((point, j) => (
                                     <li key={j} className="flex items-start gap-3">
