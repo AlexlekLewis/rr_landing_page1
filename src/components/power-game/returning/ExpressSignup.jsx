@@ -60,6 +60,20 @@ const BLANK = {
   contact_email: '', contact_phone: '', centre: '', needs_uniform: false,
 };
 
+// EVERY consent the checkout API (api/power-game-checkout) gates on. Express players
+// (offered / returning) already consented in their original application, so all of
+// these travel true. This MUST stay in sync with the server's consent gate — if a new
+// flag is added there and omitted here, the server 403s and the player can't pay.
+// (Guarded by ExpressSignup.consents.test.ts.)
+export const EXPRESS_CONSENTS = {
+  accept_terms: true,
+  accept_player_code: true,
+  accept_parent_code: true,
+  accept_social_media: true,
+  accept_playing_standard: true,
+  accept_ability_standard: true,
+};
+
 const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v || '').trim());
 
 export default function ExpressSignup({ config }) {
@@ -165,11 +179,7 @@ export default function ExpressSignup({ config }) {
   function buildPayload() {
     // These players already consented (original application), so the five compliance
     // flags travel as true (the checkout API requires them server-side).
-    const apForm = {
-      ...BLANK_FORM, ...form,
-      accept_terms: true, accept_player_code: true, accept_parent_code: true,
-      accept_social_media: true, accept_playing_standard: true,
-    };
+    const apForm = { ...BLANK_FORM, ...form, ...EXPRESS_CONSENTS };
     const centre = CENTRE_BY_SLUG[form.centre];
     const placement = selectedSession ? { placedBand: selectedSession.band } : null;
     const squad = selectedSession
