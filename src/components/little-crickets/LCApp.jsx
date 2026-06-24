@@ -1,20 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 
 const LCApp = () => {
-    const videoRef = useRef(null);
-    const [playing, setPlaying] = useState(false);
-
-    const handlePlay = () => {
-        if (videoRef.current) {
-            videoRef.current.play();
-            setPlaying(true);
-        }
-    };
-
-    const handlePause = () => {
-        setPlaying(false);
-    };
 
     return (
         <section id="app" className="py-24 bg-rr-dark relative overflow-hidden">
@@ -58,42 +45,24 @@ const LCApp = () => {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
-                    {/* Video */}
+                    {/* YouTube embed */}
                     <motion.div
                         initial={{ opacity: 0, x: -30 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.15 }}
-                        className="relative rounded-2xl overflow-hidden bg-black shadow-[0_0_60px_rgba(225,31,143,0.2)]"
+                        className="relative rounded-2xl overflow-hidden shadow-[0_0_60px_rgba(225,31,143,0.2)]"
+                        style={{ paddingBottom: '56.25%', height: 0 }}
                     >
-                        {/* Gradient border */}
                         <div className="absolute inset-0 rounded-2xl p-[2px] bg-gradient-to-br from-rr-pink via-rr-pink/60 to-rr-blue pointer-events-none z-10" />
-
-                        <video
-                            ref={videoRef}
-                            src="/assets/jr-app-intro.mp4"
-                            className="w-full rounded-2xl"
-                            controls
-                            playsInline
-                            poster=""
-                            onPlay={() => setPlaying(true)}
-                            onPause={handlePause}
-                            onEnded={handlePause}
+                        <iframe
+                            className="absolute top-0 left-0 w-full h-full rounded-2xl"
+                            src="https://www.youtube.com/embed/s8gXspAQ9jw"
+                            title="Junior Royals App Introduction"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
                         />
-
-                        {/* Play overlay — shown before first play */}
-                        {!playing && (
-                            <div
-                                className="absolute inset-0 flex items-center justify-center bg-rr-dark/60 cursor-pointer z-20 rounded-2xl"
-                                onClick={handlePlay}
-                            >
-                                <div className="w-20 h-20 rounded-full bg-rr-pink flex items-center justify-center shadow-[0_0_40px_rgba(225,31,143,0.6)] hover:scale-110 transition-transform duration-300">
-                                    <svg className="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M8 5v14l11-7z" />
-                                    </svg>
-                                </div>
-                            </div>
-                        )}
                     </motion.div>
 
                     {/* Content */}
