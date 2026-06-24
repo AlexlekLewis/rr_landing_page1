@@ -7,21 +7,21 @@ const scrollToForm = () => {
 
 const groups = [
     {
-        name: 'Warriors',
+        name: 'Ages 7–9',
         ages: 'Ages 7–9',
         price: '$265',
         gradient: 'from-rr-pink to-rr-blue',
         bundoora: ['Mondays · From 27 Apr', 'Fridays · From 1 May'],
     },
     {
-        name: 'Challengers',
+        name: 'Ages 10–12',
         ages: 'Ages 10–12',
         price: '$290',
         gradient: 'from-rr-blue to-rr-pink',
         bundoora: ['Mondays · From 27 Apr', 'Fridays · From 1 May'],
     },
     {
-        name: 'Juniors',
+        name: 'Ages 13–15',
         ages: 'Ages 13–15',
         price: '$310',
         gradient: 'from-rr-pink to-rr-blue',

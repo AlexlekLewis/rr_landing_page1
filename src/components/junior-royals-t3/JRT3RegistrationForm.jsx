@@ -284,11 +284,11 @@ const JRT3RegistrationForm = () => {
                                         <label className={lc}>Age Group *</label>
                                         <select name="group_selection" value={form.group_selection} onChange={handleChange} className={ic('group_selection')}>
                                             <option value="">Select an age group</option>
-                                            <option value="ages-5-6">Ages 5–6 (Minis)</option>
-                                            <option value="ages-7-9">Ages 7–9 (Warriors)</option>
-                                            <option value="ages-10-12">Ages 10–12 (Challengers)</option>
-                                            <option value="ages-13-15">Ages 13–15 (Juniors)</option>
-                                            <option value="ages-16-17">Ages 16–17 (Seniors)</option>
+                                            <option value="ages-5-6">Ages 5–6</option>
+                                            <option value="ages-7-9">Ages 7–9</option>
+                                            <option value="ages-10-12">Ages 10–12</option>
+                                            <option value="ages-13-15">Ages 13–15</option>
+                                            <option value="ages-16-17">Ages 16–17</option>
                                         </select>
                                         {errors.group_selection && <p className="text-red-500 text-xs mt-1">{errors.group_selection}</p>}
                                     </div>

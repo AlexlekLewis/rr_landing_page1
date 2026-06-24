@@ -6,11 +6,11 @@ const EARLY_BIRD_END = new Date('2026-07-12T13:00:00Z');
 const isEarlyBird = () => new Date() < EARLY_BIRD_END;
 
 const AGE_GROUPS = [
-    { name: 'Minis (Ages 5–6)',      key: 'ages-5-6',   price: isEarlyBird() ? '$299' : '$330' },
-    { name: 'Warriors (Ages 7–9)',   key: 'ages-7-9',   price: isEarlyBird() ? '$299' : '$330' },
-    { name: 'Challengers (Ages 10–12)', key: 'ages-10-12', price: isEarlyBird() ? '$299' : '$330' },
-    { name: 'Juniors (Ages 13–15)', key: 'ages-13-15', price: isEarlyBird() ? '$299' : '$330' },
-    { name: 'Seniors (Ages 16–17)', key: 'ages-16-17', price: isEarlyBird() ? '$299' : '$330' },
+    { name: 'Ages 5–6',      key: 'ages-5-6',   price: isEarlyBird() ? '$299' : '$330' },
+    { name: 'Ages 7–9',   key: 'ages-7-9',   price: isEarlyBird() ? '$299' : '$330' },
+    { name: 'Ages 10–12', key: 'ages-10-12', price: isEarlyBird() ? '$299' : '$330' },
+    { name: 'Ages 13–15', key: 'ages-13-15', price: isEarlyBird() ? '$299' : '$330' },
+    { name: 'Ages 16–17', key: 'ages-16-17', price: isEarlyBird() ? '$299' : '$330' },
 ];
 
 const GroupAccordion = ({ group }) => {
