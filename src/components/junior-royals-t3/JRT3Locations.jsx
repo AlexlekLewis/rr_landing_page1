@@ -30,7 +30,7 @@ const GroupAccordion = ({ group }) => {
                             <p className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-2">{group.price} per child</p>
                             <div className="flex items-center gap-2">
                                 <Clock className="w-3.5 h-3.5 text-rr-blue shrink-0" />
-                                <span className="text-sm font-medium text-rr-charcoal">Session times — TBC, confirmation coming soon</span>
+                                <span className="text-sm font-medium text-rr-charcoal">Session times coming soon — we will notify you by email</span>
                             </div>
                             <div className="mt-3 pt-3 border-t border-slate-100 flex items-start gap-2">
                                 <span className="text-sm shrink-0">👕</span>
@@ -49,19 +49,7 @@ const locations = [
         area: 'Northern Melbourne',
         name: 'Mickleham Indoor Sports Centre',
         suburb: 'Mickleham, VIC',
-        dates: 'Term 3, 2026 — Dates TBC',
-        note: 'Indoor cricket facility',
-        confirmed: false,
-        image: '/assets/jr-bundoora.png',
-        gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
-        mapsUrl: 'https://maps.google.com/?q=Mickleham+Indoor+Sports+Centre+VIC',
-        tag: 'mickleham',
-    },
-    {
-        area: 'South-Eastern Melbourne',
-        name: 'Elite Cricket Centre',
-        suburb: 'Hallam, VIC',
-        dates: 'Term 3, 2026 — Dates TBC',
+        dates: 'Session dates — Coming Soon',
         note: 'Indoor cricket facility',
         confirmed: false,
         image: '/assets/jr-hallam.png',
@@ -73,7 +61,7 @@ const locations = [
         area: 'Western Melbourne',
         name: 'The Netz',
         suburb: 'Williamstown, VIC',
-        dates: 'Term 3, 2026 — Dates TBC',
+        dates: 'Session dates — Coming Soon',
         note: 'Indoor cricket facility',
         confirmed: false,
         image: '/assets/jr-bundoora.png',
@@ -134,7 +122,7 @@ const JRT3Locations = () => {
                                 </div>
 
                                 <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5 mb-4">
-                                    <p className="text-amber-700 text-xs font-bold uppercase tracking-wide">Session times being finalised — register now to secure your spot</p>
+                                    <p className="text-amber-700 text-xs font-bold uppercase tracking-wide">⏰ Session times & dates coming soon — register now to lock in your place</p>
                                 </div>
 
                                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Age Groups &amp; Pricing</p>

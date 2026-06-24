@@ -294,8 +294,9 @@ const JRT3RegistrationForm = () => {
                                     </div>
                                 )}
                                 {form.location && form.group_selection && (
-                                    <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
-                                        <p className="text-amber-700 text-sm font-medium">Session times for this venue are being finalised. We will confirm your session time via email after registration.</p>
+                                    <div className="bg-amber-50 border border-amber-300 rounded-xl px-4 py-3">
+                                        <p className="text-amber-700 text-sm font-bold">⏰ Session times &amp; dates are coming soon.</p>
+                                        <p className="text-amber-600 text-sm font-medium mt-1">Register now to secure your place. We will confirm your session time and start date via email once finalised.</p>
                                     </div>
                                 )}
                             </div>

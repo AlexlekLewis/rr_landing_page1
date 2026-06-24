@@ -133,7 +133,18 @@ const JRT3Hero = () => {
                     </motion.div>
                 )}
 
-                {/* CTA */}
+                    {/* Coming soon notice */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.58 }}
+                        className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 rounded-full px-4 py-2 mb-8"
+                    >
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                        <span className="text-amber-300 text-xs font-bold uppercase tracking-widest">Session times &amp; dates coming soon — register now to secure your spot</span>
+                    </motion.div>
+
+                    {/* CTA */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
