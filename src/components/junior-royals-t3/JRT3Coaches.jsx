@@ -20,7 +20,7 @@ const coaches = [
         name: 'Andrew Walton',
         role: 'Head Coach — The Netz',
         location: 'Western Melbourne',
-        bio: 'Bio coming soon.',
+        bio: 'A Cricket Australia Level 3 High Performance accredited coach with over a decade of Premier Cricket Head Coach experience, Andrew has led athlete development programs at Melbourne Cricket Club and Prahran Cricket Club — overseeing Sheffield Shield and BBL player debuts, and working directly with the development of players including Glenn Maxwell, Chris Rogers and Sam Harper. Currently Director of Coaching at Scotch College and a specialist coach at the Karnataka Institute of Cricket in India, Andrew brings a rare blend of technical excellence and data-driven performance methodology to the Junior Royals program.',
         img: null,
     },
 ];
@@ -48,7 +48,7 @@ const JRT3Coaches = () => (
                         className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100">
                         <div className="h-56 flex items-center justify-center bg-gradient-to-br from-rr-navy via-rr-blue to-rr-pink">
                             {coach.img ? (
-                                <img src={coach.img} alt={coach.name} className="w-full h-full object-cover object-top" />
+                                <img src={coach.img} alt={coach.name} className="w-full h-full object-cover object-center" />
                             ) : (
                                 <div className="flex flex-col items-center gap-3">
                                     <div className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center">
