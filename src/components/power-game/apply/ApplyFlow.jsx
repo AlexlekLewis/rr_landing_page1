@@ -106,13 +106,19 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
     { key: 'pants',   label: 'Training Pants',  priceCents: 3700, sizes: PANTS_SIZES[sizeGroup] || [] },
     { key: 'cap',     label: 'Cap',             priceCents: 2500, sizes: null, oneSize: true },
     { key: 'jacket',  label: 'Fleece Jacket',   priceCents: 4900, sizes: JACKET_SIZES[sizeGroup] || [], note: 'Optional — runs small, consider one size up' },
-  ];
+  ].filter((it) => it.oneSize || (Array.isArray(it.sizes) && it.sizes.length > 0));
+  // ^ Only offer garments that actually have sizes for this age group. Juniors have no
+  //   Fleece Jacket sizing (JACKET_SIZES.junior === null), so it's hidden for them. Without
+  //   this, ticking the jacket dead-ended the "Continue" button — no size could ever be
+  //   chosen, so kitSizesComplete stayed false and the player was trapped on the kit step.
   const setKit = (key, val) => setKitPicks(p => ({ ...p, [key]: val }));
-  const anyKitSelected = Object.values(kitPicks).some(v => v);
-  const kitSizesComplete = anyKitSelected && Object.entries(kitPicks).every(([k, v]) => {
+  // Drive selection state off the OFFERED items only — an item that isn't shown for this
+  // age group (e.g. the junior Fleece Jacket) can never block "Continue".
+  const anyKitSelected = KIT_ITEMS_UI.some((item) => kitPicks[item.key]);
+  const kitSizesComplete = anyKitSelected && KIT_ITEMS_UI.every((item) => {
+    const v = kitPicks[item.key];
     if (!v) return true; // not selected — fine
-    const item = KIT_ITEMS_UI.find(i => i.key === k);
-    if (item?.oneSize) return true; // one size — no dropdown needed
+    if (item.oneSize) return true; // one size — no dropdown needed
     return typeof v === 'string' && v !== '' && v !== 'pending'; // real size chosen
   });
   // Kit subtotal shown to the player; the server charges the same via uniformPricing.js.
@@ -263,9 +269,9 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
             // Selected kit → [{ key, size }]; the server prices each garment from the
             // authoritative catalog (uniformPricing.js) and charges it on top of the $989.
             uniformItems: form.needs_uniform
-              ? Object.entries(kitPicks)
-                  .filter(([, v]) => v && v !== 'pending')
-                  .map(([key, size]) => ({ key, size: size === 'OS' ? 'One size' : size }))
+              ? KIT_ITEMS_UI
+                  .filter((it) => kitPicks[it.key] && kitPicks[it.key] !== 'pending')
+                  .map((it) => ({ key: it.key, size: kitPicks[it.key] === 'OS' ? 'One size' : kitPicks[it.key] }))
               : [],
             uniformSelection: application.uniform_selection || '',
           }),
