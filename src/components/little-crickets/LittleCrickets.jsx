@@ -4,6 +4,7 @@ import Footer from '../Footer';
 import LCHero from './LCHero';
 import LCOverview from './LCOverview';
 import LCCoaches from './LCCoaches';
+import LCApp from './LCApp';
 import LCLocations from './LCLocations';
 import LCRegistrationForm from './LCRegistrationForm';
 import LCStickyCTA from './LCStickyCTA';
@@ -13,6 +14,7 @@ const SECTIONS = [
     'hero',
     'program-overview',
     'coaches',
+    'app',
     'locations',
     'registration-form',
 ];
@@ -36,6 +38,9 @@ const LittleCrickets = () => {
                 </div>
                 <div id="coaches">
                     <LCCoaches />
+                </div>
+                <div id="app">
+                    <LCApp />
                 </div>
                 <div id="locations">
                     <LCLocations />
