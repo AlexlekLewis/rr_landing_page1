@@ -8,9 +8,7 @@ const coaches = [
         location: 'Northern Melbourne',
         bio: 'For over 22 years, thousands of young cricketers have had their careers heavily and positively influenced by his coaching, tactical and player management skills. Alex is committed to getting the technique right and putting the player first — building not just better cricketers, but sharper athletes and tougher competitors. Current premier cricket senior assistant coach, bowling coach and Academy director.',
         img: '/assets/coaches/alex-lewis.jpg',
-    },
-    {
-        name: 'Alex Thornhill',
+        portrait: true,
         role: 'Head Coach — Elite Cricket Centre',
         location: 'South-Eastern Melbourne',
         bio: 'A high quality coach and a key part of the Rajasthan Royals Academy Elite Program, Alex oversees the curriculum and content development for the Junior Royals program, assisted by experienced lead coaches who deliver the program in each location. A batting specialist with coaching experience across two continents — UK county cricket and the Australian premier system. Alex currently coaches within the Fitzroy Doncaster Academy and leads the cricket program at Xavier College.',
@@ -48,7 +46,10 @@ const JRT3Coaches = () => (
                         className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100">
                         <div className="h-56 flex items-center justify-center bg-gradient-to-br from-rr-navy via-rr-blue to-rr-pink">
                             {coach.img ? (
-                                <img src={coach.img} alt={coach.name} className="w-full h-full object-cover object-center" />
+                                <img src={coach.img} alt={coach.name}
+                                    className="w-full h-full object-cover"
+                                    style={{ objectPosition: coach.portrait ? 'center 15%' : 'center center' }}
+                                />
                             ) : (
                                 <div className="flex flex-col items-center gap-3">
                                     <div className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center">
