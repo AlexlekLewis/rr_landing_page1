@@ -12,7 +12,7 @@ const locations = [
         dates: 'Tuesday 30 June – Thursday 2 July',
         time: '9:00 AM – 1:00 PM',
         onSale: true,
-        urgency: 'Closes 11pm Wednesday 24 June',
+        urgency: '1 Spot Remaining',
         urgencyColor: 'bg-red-500',
     },
     {
@@ -24,7 +24,7 @@ const locations = [
         dates: 'Tuesday 7 July – Thursday 9 July',
         time: '9:00 AM – 1:00 PM',
         onSale: true,
-        urgency: '2 Places Remaining',
+        urgency: '1 Spot Remaining',
         urgencyColor: 'bg-red-500',
     },
     {
