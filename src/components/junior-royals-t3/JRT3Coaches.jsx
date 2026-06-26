@@ -7,7 +7,7 @@ const coaches = [
         role: 'Head Coach — Mickleham Indoor Sports Centre',
         location: 'Northern Melbourne',
         bio: 'For over 22 years, thousands of young cricketers have had their careers heavily and positively influenced by his coaching, tactical and player management skills. Alex is committed to getting the technique right and putting the player first — building not just better cricketers, but sharper athletes and tougher competitors. Current premier cricket senior assistant coach, bowling coach and Academy director.',
-        img: '/assets/coaches/alex-lewis.jpg',
+        img: '/assets/rra/headcoach-alex.png',
         portrait: true,
         role: 'Head Coach — Elite Cricket Centre',
         location: 'South-Eastern Melbourne',
