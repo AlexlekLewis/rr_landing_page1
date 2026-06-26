@@ -23,66 +23,60 @@ const MicklehamOpenDay = () => {
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero"><MicklehamHero /></div>
 
-                {/* ── WHAT'S ON — the two-part split ── */}
-                <section id="whats-on" className="py-24 bg-slate-50">
-                    <div className="max-w-6xl mx-auto px-6">
-                        <div className="text-center mb-14">
-                            <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Sunday 5 July · 9:00am–12:00pm</p>
-                            <h2 className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight mb-4">Two ways to join us</h2>
-                            <p className="text-lg text-rr-charcoal font-medium max-w-2xl mx-auto">
-                                Come for the open play, the Elite trial, or both. Here's how the morning runs.
+                {/* ── WHAT'S ON — intro + diagonal image split ── */}
+                <section id="whats-on">
+                    <div className="bg-rr-dark text-center pt-20 pb-14 px-6">
+                        <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Sunday 5 July · 9am–12pm · 3 Eclipse Drive, Mickleham</p>
+                        <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight mb-4">Two ways to join us</h2>
+                        <p className="text-lg text-white/70 font-medium max-w-2xl mx-auto">
+                            Come for the fun, the trial, or both — here's how to tell which one is you.
+                        </p>
+                    </div>
+
+                    {/* JUNIOR — turn up & play */}
+                    <div className="relative overflow-hidden min-h-[480px] md:min-h-[560px] flex" style={{ clipPath: 'polygon(0 0, 100% 0, 100% calc(100% - 7vw), 0 100%)' }}>
+                        <img src="/assets/holiday-program-group.jpg" alt="Junior Royals players having fun" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: 'center 28%' }} />
+                        <div className="absolute inset-0" style={{ background: 'linear-gradient(100deg, rgba(0,12,40,0.93) 0%, rgba(0,17,62,0.82) 42%, rgba(12,32,120,0.5) 74%, rgba(18,38,170,0.22) 100%)' }} />
+                        <div className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-10 flex flex-col justify-center" style={{ paddingTop: '4rem', paddingBottom: 'calc(7vw + 3rem)' }}>
+                            <p className="text-sm font-black uppercase tracking-[0.2em] mb-3" style={{ color: '#9DB6FF' }}>9:00 – 10:30am · Everyone welcome</p>
+                            <p className="text-base font-bold italic text-white/80 mb-1">Just want to come and have a go?</p>
+                            <h3 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none">Junior Royals</h3>
+                            <p className="text-xl md:text-2xl font-black text-white uppercase tracking-tight mt-2">Turn up &amp; play</p>
+                            <p className="text-white/85 font-medium leading-relaxed mt-5 max-w-xl">
+                                Open doors for <strong className="text-white">everyone</strong>. Come have a hit, have fun and meet the coaches. Bring the family — no pressure, no commitment.
                             </p>
+                            <div className="flex items-center gap-3 mt-6">
+                                <svg className="w-6 h-6 shrink-0" style={{ color: '#9DB6FF' }} fill="none" stroke="currentColor" strokeWidth="3.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                                <span className="text-white font-black uppercase tracking-wide text-lg">No need to register — just turn up ready to have fun</span>
+                            </div>
                         </div>
+                    </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-stretch">
-                            {/* Turn up & play */}
-                            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 md:p-10 flex flex-col">
-                                <div className="inline-flex items-center gap-2 bg-rr-blue/10 border border-rr-blue/25 rounded-full px-4 py-2 self-start mb-6">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-rr-blue" />
-                                    <span className="text-xs font-bold text-rr-blue uppercase tracking-widest">Open to everyone · No sign-up</span>
-                                </div>
-                                <p className="text-3xl font-black text-rr-dark uppercase tracking-tight leading-none">9:00 – 10:30<span className="text-xl align-top">am</span></p>
-                                <h3 className="text-2xl font-black text-rr-dark uppercase tracking-tight mt-3 mb-4">Turn up &amp; play</h3>
-                                <p className="text-rr-charcoal font-medium leading-relaxed mb-6">
-                                    Open doors for <strong>everyone</strong>. Come and try <strong>Junior Royals</strong>, have a hit, have fun and meet our coaches. Bring the family — <strong>no registration, no commitment</strong>. Just show up.
-                                </p>
-                                <ul className="mt-auto space-y-3">
-                                    {['All ages welcome', 'Junior Royals fun & games', 'Meet the coaching team', 'No booking — just come along'].map((t) => (
-                                        <li key={t} className="flex items-center gap-3">
-                                            <span className="w-5 h-5 rounded-full bg-rr-blue/15 flex items-center justify-center shrink-0">
-                                                <svg className="w-3 h-3 text-rr-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-                                            </span>
-                                            <span className="text-rr-dark font-semibold text-sm">{t}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
+                    {/* pink diagonal seam accent */}
+                    <div aria-hidden="true" className="relative" style={{ marginTop: '-7vw', height: 'calc(7vw + 5px)', background: 'var(--color-rr-pink, #E11F8F)', clipPath: 'polygon(0 7vw, 100% 0, 100% calc(7vw + 5px), 0 100%)', zIndex: 1 }} />
 
-                            {/* Elite trial */}
-                            <div className="relative rounded-2xl p-8 md:p-10 flex flex-col text-white overflow-hidden" style={{ background: 'linear-gradient(155deg, #001D48 0%, #1226AA 45%, #E11F8F 130%)' }}>
-                                <div className="absolute -top-16 -right-16 w-60 h-60 bg-rr-pink/30 rounded-full blur-[90px] pointer-events-none" />
-                                <div className="relative z-10 flex flex-col h-full">
-                                    <div className="inline-flex items-center gap-2 bg-white/15 border border-white/30 rounded-full px-4 py-2 self-start mb-6">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                                        <span className="text-xs font-bold text-white uppercase tracking-widest">Ages 12+ · Registration required</span>
-                                    </div>
-                                    <p className="text-3xl font-black text-white uppercase tracking-tight leading-none">10:30 – 12:00<span className="text-xl align-top">pm</span></p>
-                                    <h3 className="text-2xl font-black text-white uppercase tracking-tight mt-3 mb-4">Elite Program trial</h3>
-                                    <p className="text-white/90 font-medium leading-relaxed mb-6">
-                                        Chasing a spot in the <strong className="text-white">Elite Program</strong>? This is your trial. Meet the <strong className="text-white">Head Coach and the Elite coaching team</strong>, get put through your paces, and show us what you've got.
-                                    </p>
-                                    <div className="bg-white/10 border border-white/20 rounded-xl px-4 py-3 mb-6">
-                                        <p className="text-white font-bold text-sm">👉 You must register to take part in the trial.</p>
-                                    </div>
-                                    <button
-                                        onClick={scrollToRegister}
-                                        className="mt-auto group bg-white text-rr-navy font-black uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(255,255,255,0.35)] flex items-center justify-center gap-3"
-                                    >
-                                        Register for the Trial
-                                        <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                                    </button>
-                                </div>
-                            </div>
+                    {/* ELITE — trial */}
+                    <div className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex" style={{ marginTop: '-7vw', clipPath: 'polygon(0 7vw, 100% 0, 100% 100%, 0 100%)' }}>
+                        <img src="/assets/junior-royals-card.jpg" alt="Elite Program coaching at the academy" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: 'center 32%' }} />
+                        <div className="absolute inset-0" style={{ background: 'linear-gradient(100deg, rgba(8,0,26,0.93) 0%, rgba(64,6,56,0.85) 40%, rgba(150,18,110,0.52) 74%, rgba(225,31,143,0.24) 100%)' }} />
+                        <div className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-10 flex flex-col justify-center" style={{ paddingTop: 'calc(7vw + 4rem)', paddingBottom: '4rem' }}>
+                            <p className="text-sm font-black uppercase tracking-[0.2em] mb-3" style={{ color: '#F7A8D6' }}>10:30am – 12:00pm · Ages 12+</p>
+                            <p className="text-base font-bold italic text-white/80 mb-1">Serious about your cricket?</p>
+                            <h3 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none">Elite Trial</h3>
+                            <p className="text-xl md:text-2xl font-black text-white uppercase tracking-tight mt-2">Trial for the Elite Program</p>
+                            <p className="text-white/85 font-medium leading-relaxed mt-5 max-w-xl">
+                                Meet the <strong className="text-white">Head Coach &amp; Elite coaching team</strong>, get put through your paces and show us what you've got.
+                            </p>
+                            <p className="text-white font-bold leading-relaxed mt-5 max-w-xl border-l-4 border-rr-pink pl-4">
+                                Registering is <strong>specifically to trial for the Elite Program</strong> (our Power Game Pre-Season). Here for Junior Royals? You don't need to register.
+                            </p>
+                            <button
+                                onClick={scrollToRegister}
+                                className="group bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 mt-7 self-start flex items-center gap-3"
+                            >
+                                Register for the Elite Trial
+                                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                            </button>
                         </div>
                     </div>
                 </section>

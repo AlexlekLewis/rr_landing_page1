@@ -158,7 +158,7 @@ const MicklehamForm = () => {
                         </p>
                         <div className="bg-slate-50 rounded-xl p-5 text-left inline-block mb-6">
                             <p className="text-rr-dark font-bold uppercase tracking-wide text-sm mb-1">Sunday 5 July · 10:30am–12:00pm</p>
-                            <p className="text-rr-charcoal text-sm font-medium">Mickleham Indoor Sports Centre</p>
+                            <p className="text-rr-charcoal text-sm font-medium">Mickleham Indoor Sports Centre · 3 Eclipse Drive, Mickleham VIC 3064</p>
                             <p className="text-rr-charcoal/70 text-xs font-medium mt-1">Arrive 10–15 minutes early in cricket gear. Bring your own bat if you have one.</p>
                         </div>
                         <p className="text-rr-charcoal/70 text-sm font-medium">
@@ -187,7 +187,7 @@ const MicklehamForm = () => {
                         Register for the <span className="text-rr-pink">Elite Trial</span>
                     </h2>
                     <p className="text-white/70 font-medium max-w-lg mx-auto">
-                        Only the Elite Program trial needs registration. Turning up for the 9:00–10:30am open play? You don't need this form — just come along.
+                        Registering here is <strong className="text-white">specifically to trial for the Elite Program</strong> — our Power Game Pre-Season. Here for <strong className="text-white">Junior Royals</strong>? You don't need this form — just turn up between 9:00–10:30am ready to have fun.
                     </p>
                 </div>
 
