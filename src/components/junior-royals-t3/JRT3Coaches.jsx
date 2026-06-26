@@ -9,7 +9,7 @@ const coaches = [
         bio: 'For over 22 years, thousands of young cricketers have had their careers heavily and positively influenced by his coaching, tactical and player management skills.',
         fullBio: 'For over 22 years, thousands of young cricketers have had their careers heavily and positively influenced by his coaching, tactical and player management skills. Alex is committed to getting the technique right and putting the player first — building not just better cricketers, but sharper athletes and tougher competitors. Current premier cricket senior assistant coach, bowling coach and Academy director.',
         img: '/assets/coaches/alex-lewis.jpg',
-        imgPosition: 'object-[center_15%]',
+        imgPosition: 'object-center',
     },
     {
         name: 'Alex Thornhill',
@@ -18,7 +18,7 @@ const coaches = [
         bio: 'A high quality coach and a key part of the Rajasthan Royals Academy Elite Program, Alex oversees the curriculum and content development for the Junior Royals program.',
         fullBio: 'A high quality coach and a key part of the Rajasthan Royals Academy Elite Program, Alex oversees the curriculum and content development for the Junior Royals program, assisted by experienced lead coaches who deliver the program in each location. A batting specialist with coaching experience across two continents — UK county cricket and the Australian premier system. Alex currently coaches within the Fitzroy Doncaster Academy and leads the cricket program at Xavier College.',
         img: '/assets/coaches/alex-thornhill.jpg',
-        imgPosition: 'object-[center_10%]',
+        imgPosition: 'object-center',
     },
     {
         name: 'Andrew Walton',
@@ -27,7 +27,7 @@ const coaches = [
         bio: 'A Cricket Australia Level 3 High Performance accredited coach with over a decade of Premier Cricket Head Coach experience.',
         fullBio: 'A Cricket Australia Level 3 High Performance accredited coach with over a decade of Premier Cricket Head Coach experience. Andrew has developed players through to Sheffield Shield, BBL and international honours, working with the likes of Glenn Maxwell, Chris Rogers and Sam Harper. Currently Director of Coaching at Scotch College, Andrew brings a rare blend of technical excellence and data-driven performance thinking to the Rajasthan Royals Academy.',
         img: '/assets/coaches/andrew-walton.jpg',
-        imgPosition: 'object-[center_10%]',
+        imgPosition: 'object-center',
     },
 ];
 
