@@ -26,7 +26,8 @@ const MicklehamOpenDay = () => {
                 {/* ── WHAT'S ON — intro + diagonal image split ── */}
                 <section id="whats-on">
                     <div className="bg-rr-dark text-center pt-20 pb-14 px-6">
-                        <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Sunday 5 July · 9am–12pm · 3 Eclipse Drive, Mickleham</p>
+                        <p className="text-2xl md:text-4xl font-black text-rr-pink uppercase tracking-tight leading-none mb-2">Sunday 5 July · 9am–12pm</p>
+                        <p className="text-xs md:text-sm font-bold text-white/60 uppercase tracking-[0.25em] mb-7">Mickleham Indoor Sports Centre · 3 Eclipse Drive</p>
                         <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight mb-4">Two ways to join us</h2>
                         <p className="text-lg text-white/70 font-medium max-w-2xl mx-auto">
                             Come for the fun, the trial, or both — here's how to tell which one is you.

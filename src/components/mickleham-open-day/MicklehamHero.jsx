@@ -19,7 +19,7 @@ const MicklehamHero = () => {
                     initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
                     className="text-xs md:text-sm font-bold text-rr-light-pink uppercase tracking-[0.3em] mb-5"
                 >
-                    Sunday 5 July · Mickleham · Our new Northern home 🏠
+                    Our new Northern home 🏠 · Mickleham
                 </motion.p>
                 <motion.h1
                     initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.05 }}
@@ -27,6 +27,12 @@ const MicklehamHero = () => {
                 >
                     Mickleham<br /><span className="text-rr-pink">Open Day</span>
                 </motion.h1>
+                <motion.h2
+                    initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.12 }}
+                    className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mt-6"
+                >
+                    Sunday 5 July <span className="text-rr-pink">·</span> 9am–12pm
+                </motion.h2>
                 <motion.p
                     initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.15 }}
                     className="text-base md:text-xl text-white/85 font-medium leading-relaxed max-w-2xl mx-auto mt-6"
