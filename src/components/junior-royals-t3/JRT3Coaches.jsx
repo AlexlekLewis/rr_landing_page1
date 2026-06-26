@@ -22,7 +22,7 @@ const coaches = [
         name: 'Andrew Walton',
         role: 'Head Coach — The Netz',
         location: 'Western Melbourne',
-        bio: 'A Cricket Australia Level 3 High Performance accredited coach with over a decade of Premier Cricket Head Coach experience, Andrew has led athlete development programs at Melbourne Cricket Club and Prahran Cricket Club — overseeing Sheffield Shield and BBL player debuts, and working directly with the development of players including Glenn Maxwell, Chris Rogers and Sam Harper. Currently Director of Coaching at Scotch College and a specialist coach at the Karnataka Institute of Cricket in India, Andrew brings a rare blend of technical excellence and data-driven performance methodology to the Junior Royals program.',
+        bio: 'A Cricket Australia Level 3 High Performance accredited coach with over a decade of Premier Cricket Head Coach experience. Andrew has developed players through to Sheffield Shield, BBL and international honours, working with the likes of Glenn Maxwell, Chris Rogers and Sam Harper. Currently Director of Coaching at Scotch College, Andrew brings a rare blend of technical excellence and data-driven performance thinking to the Rajasthan Royals Academy.',
         img: '/assets/coaches/andrew-walton.jpg',
         portrait: true,
     },
