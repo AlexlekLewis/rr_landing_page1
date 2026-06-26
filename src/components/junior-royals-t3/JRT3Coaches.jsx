@@ -44,11 +44,12 @@ const JRT3Coaches = () => (
                     <motion.div key={coach.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.15 }}
                         className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100">
-                        <div className="h-56 flex items-center justify-center bg-gradient-to-br from-rr-navy via-rr-blue to-rr-pink">
+                        <div className="overflow-hidden bg-gradient-to-br from-rr-navy via-rr-blue to-rr-pink"
+                            style={{ height: coach.portrait ? '320px' : '224px' }}>
                             {coach.img ? (
                                 <img src={coach.img} alt={coach.name}
                                     className="w-full h-full object-cover"
-                                    style={{ objectPosition: coach.portrait ? 'center 15%' : 'center center' }}
+                                    style={{ objectPosition: 'center top' }}
                                 />
                             ) : (
                                 <div className="flex flex-col items-center gap-3">
