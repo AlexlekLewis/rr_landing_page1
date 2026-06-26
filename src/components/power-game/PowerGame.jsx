@@ -192,10 +192,6 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
           <summary><span class="alabel">View sessions &amp; times</span><span class="chev">⌄</span></summary>
           <div class="abrief">Every session runs <strong>2 hours, once a week, for 8 weeks</strong>. Open to any player aged 12–26 — tap a session to apply.</div>
           <div class="adays">
-            <div class="aday-h">Thursday<span style="text-transform:none;letter-spacing:.2px;font-weight:700;color:var(--slate);margin-left:8px;">Jul 30 – Sep 17 · 8 wks</span></div>
-            <div class="aboxes">
-              <a class="abox" href="#apply" data-session="h-thu8" style="cursor:pointer;text-decoration:none;"><span class="atime">8:00–10:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
-            </div>
             <div class="aday-h">Saturday<span style="text-transform:none;letter-spacing:.2px;font-weight:700;color:var(--slate);margin-left:8px;">Aug 1 – Sep 19 · 8 wks</span></div>
             <div class="aboxes">
               <a class="abox" href="#apply" data-session="h-sat2" style="cursor:pointer;text-decoration:none;"><span class="atime">2:00–4:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
@@ -203,7 +199,7 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
             </div>
           </div>
         </details>
-        <div class="winnote">8 weeks · Jul 30 – Sep 19</div>
+        <div class="winnote">8 weeks · Aug 1 – Sep 19</div>
       </div>
       <div class="card">
         <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--pink);">North Melbourne</div>
@@ -214,11 +210,6 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
           <summary><span class="alabel">View sessions &amp; times</span><span class="chev">⌄</span></summary>
           <div class="abrief">Every session runs <strong>2 hours, once a week, for 8 weeks</strong>. Open to any player aged 12–26 — tap a session to apply.</div>
           <div class="adays">
-            <div class="aday-h">Friday<span style="text-transform:none;letter-spacing:.2px;font-weight:700;color:var(--slate);margin-left:8px;">Jul 31 – Sep 18 · 8 wks</span></div>
-            <div class="aboxes">
-              <a class="abox" href="#apply" data-session="m-fri6" style="cursor:pointer;text-decoration:none;"><span class="atime">6:00–8:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
-              <a class="abox" href="#apply" data-session="m-fri8" style="cursor:pointer;text-decoration:none;"><span class="atime">8:00–10:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
-            </div>
             <div class="aday-h">Saturday<span style="text-transform:none;letter-spacing:.2px;font-weight:700;color:var(--slate);margin-left:8px;">Aug 1 – Sep 19 · 8 wks</span></div>
             <div class="aboxes">
               <a class="abox" href="#apply" data-session="m-sat2" style="cursor:pointer;text-decoration:none;"><span class="atime">2:00–4:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
@@ -226,7 +217,7 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
             </div>
           </div>
         </details>
-        <div class="winnote">8 weeks · Jul 31 – Sep 19</div>
+        <div class="winnote">8 weeks · Aug 1 – Sep 19</div>
       </div>
     </div>
     <div style="text-align:center; margin-top:22px; font-size:13px; font-weight:700; color:var(--charcoal);">Tap any session above to apply — open to any player aged 12–26.</div>

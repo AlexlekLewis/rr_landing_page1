@@ -15,12 +15,12 @@ const oneSquad = [
 // days/times/venues in squads.ts (everything else below is derived maths).
 // ════════════════════════════════════════════════════════════════════════════
 const SNAPSHOT = {
-  totalSquads: 11, // 11 open sessions: Williamstown 4 + Hallam 3 + Mickleham 4
+  totalSquads: 8, // 8 open sessions: Williamstown 4 + Hallam 2 + Mickleham 2
   activeCentres: 3, // williamstown + hallam + mickleham
   comingSoonCentres: 0,
   // Total places for the 8-WEEK BLOCK (26:7 ratio). Each squad = round(lanes × 26/7).
-  blockCapacity: 261, // Williamstown 104 + Hallam 53 + Mickleham 104
-  perCentre: { williamstown: 104, hallam: 53, mickleham: 104 } as Record<string, number>,
+  blockCapacity: 190, // Williamstown 104 + Hallam 34 + Mickleham 52
+  perCentre: { williamstown: 104, hallam: 34, mickleham: 52 } as Record<string, number>,
 };
 
 describe("squad grid integrity (snapshot of the official schedule)", () => {
@@ -68,10 +68,13 @@ describe("squad grid integrity (snapshot of the official schedule)", () => {
     expect(new Set(m.map((s) => s.day)).size).toBe(2); // Friday + Saturday
   });
 
-  it("Hallam runs Thursday + Saturday open sessions", () => {
+  it("Hallam & Mickleham run Saturday-only open sessions", () => {
     const hallam = squadsForPlacement({ centre: "hallam" });
-    expect(hallam.length).toBe(3);
-    expect(new Set(hallam.map((s) => s.day))).toEqual(new Set(["Thursday", "Saturday"]));
+    expect(hallam.length).toBe(2);
+    expect(new Set(hallam.map((s) => s.day))).toEqual(new Set(["Saturday"]));
+    const mickleham = squadsForPlacement({ centre: "mickleham" });
+    expect(mickleham.length).toBe(2);
+    expect(new Set(mickleham.map((s) => s.day))).toEqual(new Set(["Saturday"]));
   });
 
   it("the purchased Sat 2–4pm sessions exist at The Netz & Mickleham", () => {

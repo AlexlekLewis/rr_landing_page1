@@ -15,8 +15,8 @@
 //
 // OFFICIAL grid (total lanes per session):
 //   Williamstown  Fri 5:30 (7) · Fri 7:30 (7) · Sat 2–4 (7) · Sat 4–6 (7)
-//   Hallam        Thu 8–10 (5) · Sat 2–4 (5) · Sat 4–6 (4)
-//   Mickleham     Fri 6–8 (7) · Fri 8–10 (7) · Sat 2–4 (7) · Sat 4–6 (7)
+//   Hallam        Sat 2–4 (5) · Sat 4–6 (4)
+//   Mickleham     Sat 2–4 (7) · Sat 4–6 (7)
 // ============================================================
 
 export type Stream = "performance" | "pathway";
@@ -77,8 +77,8 @@ export interface Squad {
 // ════════════════════════════════════════════════════════════════════════════
 export const CENTRES: Centre[] = [
   { slug: "williamstown", name: "The Netz", suburb: "Williamstown", region: "West Melbourne", address: "37 Robbins Cct, Williamstown North VIC 3016", dateRange: "8 weeks · Jul 31 – Sep 19" },
-  { slug: "hallam", name: "Elite Cricket Centre", suburb: "Hallam", region: "South East Melbourne", address: "8-9 Becon Ct, Hallam VIC 3803", dateRange: "8 weeks · Jul 30 – Sep 19" },
-  { slug: "mickleham", name: "Mickleham Indoor Sports Centre", suburb: "Mickleham", region: "North Melbourne", address: "Mickleham VIC 3064", dateRange: "8 weeks · Jul 31 – Sep 19" },
+  { slug: "hallam", name: "Elite Cricket Centre", suburb: "Hallam", region: "South East Melbourne", address: "8-9 Becon Ct, Hallam VIC 3803", dateRange: "8 weeks · Aug 1 – Sep 19" },
+  { slug: "mickleham", name: "Mickleham Indoor Sports Centre", suburb: "Mickleham", region: "North Melbourne", address: "Mickleham VIC 3064", dateRange: "8 weeks · Aug 1 – Sep 19" },
 ];
 
 /** Centres that are open for booking now (have sessions). */
@@ -130,16 +130,13 @@ const SESSION_GRID: RawSession[] = [
   { idBase: "w-sat2",   centre: "williamstown", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 7, blockLabel: "Sat 2–4pm", sortOrder: 3 },
   { idBase: "w-sat4",   centre: "williamstown", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 7, blockLabel: "Sat 4–6pm", sortOrder: 4 },
 
-  // ── Elite Cricket Centre — Hallam (Thu 5 lanes · Sat 2–4 = 5 lanes · Sat 4–6 = 4 lanes) ──
-  { idBase: "h-thu8", centre: "hallam", day: "Thursday", startTime: "8:00pm", endTime: "10:00pm", lanes: 5, blockLabel: "Thu 8–10pm", sortOrder: 1 },
-  { idBase: "h-sat2", centre: "hallam", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm",  lanes: 5, blockLabel: "Sat 2–4pm", sortOrder: 2 },
-  { idBase: "h-sat4", centre: "hallam", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm",  lanes: 4, blockLabel: "Sat 4–6pm", sortOrder: 3 },
+  // ── Elite Cricket Centre — Hallam (Sat 2–4 = 5 lanes · Sat 4–6 = 4 lanes) ──
+  { idBase: "h-sat2", centre: "hallam", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm",  lanes: 5, blockLabel: "Sat 2–4pm", sortOrder: 1 },
+  { idBase: "h-sat4", centre: "hallam", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm",  lanes: 4, blockLabel: "Sat 4–6pm", sortOrder: 2 },
 
-  // ── Mickleham Indoor Sports Centre — Mickleham (Fri 7 lanes · Sat 7 lanes) ──
-  { idBase: "m-fri6", centre: "mickleham", day: "Friday",   startTime: "6:00pm", endTime: "8:00pm",  lanes: 7, blockLabel: "Fri 6–8pm", sortOrder: 1 },
-  { idBase: "m-fri8", centre: "mickleham", day: "Friday",   startTime: "8:00pm", endTime: "10:00pm", lanes: 7, blockLabel: "Fri 8–10pm", sortOrder: 2 },
-  { idBase: "m-sat2", centre: "mickleham", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm",  lanes: 7, blockLabel: "Sat 2–4pm", sortOrder: 3 },
-  { idBase: "m-sat4", centre: "mickleham", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm",  lanes: 7, blockLabel: "Sat 4–6pm", sortOrder: 4 },
+  // ── Mickleham Indoor Sports Centre — Mickleham (Sat 7 lanes) ──
+  { idBase: "m-sat2", centre: "mickleham", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm",  lanes: 7, blockLabel: "Sat 2–4pm", sortOrder: 1 },
+  { idBase: "m-sat4", centre: "mickleham", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm",  lanes: 7, blockLabel: "Sat 4–6pm", sortOrder: 2 },
 ];
 
 export const SQUADS: Squad[] = SESSION_GRID.map((r) => ({
