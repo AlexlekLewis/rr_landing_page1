@@ -50,7 +50,7 @@ const JRT3Coaches = () => (
                         viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.15 }}
                         className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100">
                         <div className="overflow-hidden bg-gradient-to-br from-rr-navy via-rr-blue to-rr-pink"
-                            style={{ height: coach.portrait ? '320px' : '224px' }}>
+                            style={{ height: '280px' }}>
                             {coach.img ? (
                                 <img src={coach.img} alt={coach.name}
                                     className="w-full h-full object-cover"
