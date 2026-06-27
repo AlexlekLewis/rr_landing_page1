@@ -99,7 +99,9 @@ const micklehamRow = (r) => ([
   r.player_dob || '',
   r.parent_name || '',
   r.parent_email || '',
-  r.parent_phone || '',
+  // Leading apostrophe forces Sheets to store as text, so USER_ENTERED can't
+  // numeric-coerce the number and strip the leading 0 (un-diallable otherwise).
+  r.parent_phone ? `'${r.parent_phone}` : '',
   r.suburb || '',
   r.current_club || '',
   r.current_grade || '',
