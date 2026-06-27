@@ -13,8 +13,12 @@
 //                            did NOT pay (paid emails excluded; a lead who later
 //                            pays drops off automatically). No DB rows written for
 //                            leads — no bot/abandon pollution.
+//   "Mickleham Open Day"  ← REBUILT from the standalone
+//                            mickleham_open_day_registrations table (Elite Trial
+//                            sign-ups for the 5 Jul 2026 open day). Full rebuild
+//                            each run; chronological sign-up log.
 //
-// Both tabs are SELF-HEALING: created automatically if missing (ensureTab).
+// All tabs are SELF-HEALING: created automatically if missing (ensureTab).
 //
 // Auth: Vercel Cron sends `Authorization: Bearer ${CRON_SECRET}` (GET); a dashboard
 // admin can also POST with their Supabase JWT to run it on demand.
@@ -77,6 +81,72 @@ const leadRow = (s, a) => ([
   s.amount_total != null ? `$${(s.amount_total / 100).toFixed(2)}` : '',
   String(s.id).slice(-8).toUpperCase(),
 ]);
+
+const MICKLEHAM_HEADERS = [
+  'Registered (Melbourne)', 'Player Name', 'Age', 'Gender', 'Date of Birth',
+  'Parent/Guardian Name', 'Parent Email', 'Parent Phone', 'Suburb',
+  'Current Club', 'Current Grade', 'Years Playing', 'Primary Role',
+  'Batting Hand', 'Bowling Type', 'Honours', 'Session',
+  'Terms', 'Social Media Consent', 'Source',
+  'UTM Source', 'UTM Medium', 'UTM Campaign', 'Referrer',
+];
+
+const micklehamRow = (r) => ([
+  fmtMelb(r.created_at),
+  r.player_name || '',
+  r.player_age ?? '',
+  r.player_gender || '',
+  r.player_dob || '',
+  r.parent_name || '',
+  r.parent_email || '',
+  r.parent_phone || '',
+  r.suburb || '',
+  r.current_club || '',
+  r.current_grade || '',
+  r.years_playing || '',
+  r.primary_role || '',
+  r.batting_hand || '',
+  r.bowling_type || '',
+  r.honours || '',
+  r.session || '',
+  r.accept_terms === true ? 'Yes' : r.accept_terms === false ? 'No' : '',
+  r.accept_social_media === true ? 'Yes' : r.accept_social_media === false ? 'No' : '',
+  r.source || '',
+  r.utm_source || '',
+  r.utm_medium || '',
+  r.utm_campaign || '',
+  r.page_referrer || '',
+]);
+
+// ------------------------------------------------------------
+// "Mickleham Open Day" tab — full rebuild from the standalone registrations table.
+// Chronological sign-up log (oldest first). Tiny table; full rebuild is fine and
+// idempotent. Every row is kept (no dedup) so the sheet is a faithful record.
+// ------------------------------------------------------------
+async function reconcileMickleham(sheets, spreadsheetId) {
+  const tabName = process.env.POWER_GAME_MICKLEHAM_TAB || 'Mickleham Open Day';
+  const sb = getSupabase();
+  const { data, error } = await sb
+    .from('mickleham_open_day_registrations')
+    .select('*')
+    .order('created_at', { ascending: true });
+  if (error) throw error;
+  const rows = (data || []).map(micklehamRow);
+
+  await ensureTab(sheets, spreadsheetId, tabName);
+  await sheets.spreadsheets.values.update({
+    spreadsheetId, range: `${tabName}!A1`, valueInputOption: 'USER_ENTERED',
+    requestBody: { values: [MICKLEHAM_HEADERS] },
+  });
+  await sheets.spreadsheets.values.clear({ spreadsheetId, range: `${tabName}!A2:Z100000` });
+  if (rows.length > 0) {
+    await sheets.spreadsheets.values.update({
+      spreadsheetId, range: `${tabName}!A2`, valueInputOption: 'USER_ENTERED',
+      requestBody: { values: rows },
+    });
+  }
+  return { registrations: rows.length };
+}
 
 // Authorise: a Vercel Cron call (shared CRON_SECRET) or an active dashboard admin (JWT).
 async function authorise(req) {
@@ -231,6 +301,13 @@ export default async function handler(req, res) {
   } catch (err) {
     console.error('sync-pgp-leads: leads reconcile failed:', err);
     out.leadsTab = { error: err.message };
+    out.ok = false;
+  }
+  try {
+    out.micklehamTab = await reconcileMickleham(sheets, spreadsheetId);
+  } catch (err) {
+    console.error('sync-pgp-leads: mickleham reconcile failed:', err);
+    out.micklehamTab = { error: err.message };
     out.ok = false;
   }
 
