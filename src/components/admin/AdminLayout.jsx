@@ -6,7 +6,7 @@ import {
     Settings, LogOut, ChevronLeft, ChevronRight, Menu, X,
     Send, CheckCircle2, Eye, ClipboardList, UserCheck, Shield, ChevronDown,
     UserCircle, ShoppingBag, Trophy, GraduationCap, Crown, Sun, Sparkles,
-    MessageCircle, Plane, Zap
+    MessageCircle, Plane, Zap, Star
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { ProgramProvider, useProgram } from './ProgramContext';
@@ -66,6 +66,7 @@ const NAV_GROUPS = [
         items: [
             { label: 'Funnel & Demographics', path: '/rramadmin_26/analytics', icon: BarChart3 },
             { label: 'Site Analytics', path: '/rramadmin_26/page-analytics', icon: Eye },
+            { label: 'Reviews', path: '/rramadmin_26/reviews', icon: Star },
         ],
     },
     {
