@@ -4,8 +4,9 @@ import { ChevronDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const PROGRAMS = [
-    { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Selling Fast', badgeColor: 'bg-orange-500' },
-    { label: 'Power Game Program', route: '/PGP2026', badge: 'Enrolling Now', badgeColor: 'bg-rr-pink' },
+    { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Closing Soon', badgeColor: 'bg-orange-500' },
+    { label: 'Elite Program', route: '/PGP2026', badge: 'Coming Soon', badgeColor: 'bg-rr-pink' },
+    { label: 'Junior Royals Term 3', route: null, badge: 'Coming Soon', badgeColor: 'bg-rr-pink' },
 ];
 
 const HomeHero = ({ onRegisterClick }) => {
