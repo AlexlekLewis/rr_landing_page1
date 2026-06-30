@@ -8,19 +8,19 @@ const price = () => isEarlyBird() ? '$299' : '$330';
 
 const VENUE_GROUPS = {
     mickleham: [
-        { name: 'Ages 7–9',   sessions: ['Tuesdays 6:00pm – 7:00pm', 'Fridays 6:00pm – 7:00pm'] },
-        { name: 'Ages 10–12', sessions: ['Tuesdays 7:00pm – 8:00pm', 'Fridays 7:00pm – 8:00pm'] },
-        { name: 'Ages 13–15', sessions: ['Tuesdays 8:00pm – 9:00pm', 'Fridays 8:00pm – 9:00pm'] },
+        { name: 'Ages 7–9',   sessions: ['Tuesdays 6:00pm – 7:00pm · 28 Jul – 15 Sep', 'Fridays 6:00pm – 7:00pm · 31 Jul – 18 Sep'] },
+        { name: 'Ages 10–12', sessions: ['Tuesdays 7:00pm – 8:00pm · 28 Jul – 15 Sep', 'Fridays 7:00pm – 8:00pm · 31 Jul – 18 Sep'] },
+        { name: 'Ages 13–15', sessions: ['Tuesdays 8:00pm – 9:00pm · 28 Jul – 15 Sep', 'Fridays 8:00pm – 9:00pm · 31 Jul – 18 Sep'] },
     ],
     hallam: [
-        { name: 'Ages 7–9',   sessions: ['Saturdays 12:00pm – 1:00pm'] },
-        { name: 'Ages 10–12', sessions: ['Saturdays 12:00pm – 1:00pm (Group 1)', 'Saturdays 1:00pm – 2:00pm (Group 2)'] },
-        { name: 'Ages 13–15', sessions: ['Saturdays 1:00pm – 2:00pm'] },
+        { name: 'Ages 7–9',   sessions: ['Saturdays 12:00pm – 1:00pm · 1 Aug – 19 Sep'] },
+        { name: 'Ages 10–12', sessions: ['Saturdays 12:00pm – 1:00pm (Group 1) · 1 Aug – 19 Sep', 'Saturdays 1:00pm – 2:00pm (Group 2) · 1 Aug – 19 Sep'] },
+        { name: 'Ages 13–15', sessions: ['Saturdays 1:00pm – 2:00pm · 1 Aug – 19 Sep'] },
     ],
     williamstown: [
-        { name: 'Ages 7–9',   sessions: ['Saturdays 2:00pm – 3:00pm'] },
-        { name: 'Ages 10–12', sessions: ['Saturdays 3:00pm – 4:00pm (Group 1)', 'Saturdays 4:00pm – 5:00pm (Group 2)'] },
-        { name: 'Ages 13–15', sessions: ['Saturdays 5:00pm – 6:00pm'] },
+        { name: 'Ages 7–9',   sessions: ['Saturdays 2:00pm – 3:00pm · 1 Aug – 19 Sep'] },
+        { name: 'Ages 10–12', sessions: ['Saturdays 3:00pm – 4:00pm (Group 1) · 1 Aug – 19 Sep', 'Saturdays 4:00pm – 5:00pm (Group 2) · 1 Aug – 19 Sep'] },
+        { name: 'Ages 13–15', sessions: ['Saturdays 5:00pm – 6:00pm · 1 Aug – 19 Sep'] },
     ],
 };
 
@@ -70,7 +70,7 @@ const locations = [
         area: 'Northern Melbourne',
         name: 'Mickleham Indoor Sports Centre',
         suburb: 'Mickleham, VIC',
-        dates: 'Starting Tuesday 22 July · Tuesdays & Fridays',
+        dates: '28 Jul – 18 Sep · Tuesdays & Fridays',
         note: 'Indoor cricket facility',
         confirmed: true,
         image: '/assets/jr-bundoora.png',
@@ -82,7 +82,7 @@ const locations = [
         area: 'South-Eastern Melbourne',
         name: 'Elite Cricket Centre',
         suburb: 'Hallam, VIC',
-        dates: 'Saturdays · Starting July 2026',
+        dates: '1 Aug – 19 Sep · Saturdays',
         note: 'Indoor cricket facility',
         confirmed: true,
         image: '/assets/jr-hallam.png',
@@ -94,7 +94,7 @@ const locations = [
         area: 'Western Melbourne',
         name: 'The Netz',
         suburb: 'Williamstown, VIC',
-        dates: 'Starting Saturday 19 July · Saturdays',
+        dates: '1 Aug – 19 Sep · Saturdays',
         note: 'Indoor cricket facility',
         confirmed: true,
         image: '/assets/jr-bundoora.png',

@@ -8,37 +8,37 @@ const isEarlyBird = () => new Date() < EARLY_BIRD_END;
 const SESSION_OPTIONS = {
     mickleham: {
         'ages-7-9':   [
-            { value: 'tue-6pm', label: 'Tuesdays 6:00pm – 7:00pm' },
-            { value: 'fri-6pm', label: 'Fridays 6:00pm – 7:00pm' },
+            { value: 'tue-6pm', label: 'Tuesdays 6:00pm – 7:00pm (28 Jul – 15 Sep)' },
+            { value: 'fri-6pm', label: 'Fridays 6:00pm – 7:00pm (31 Jul – 18 Sep)' },
         ],
         'ages-10-12': [
-            { value: 'tue-7pm', label: 'Tuesdays 7:00pm – 8:00pm' },
-            { value: 'fri-7pm', label: 'Fridays 7:00pm – 8:00pm' },
+            { value: 'tue-7pm', label: 'Tuesdays 7:00pm – 8:00pm (28 Jul – 15 Sep)' },
+            { value: 'fri-7pm', label: 'Fridays 7:00pm – 8:00pm (31 Jul – 18 Sep)' },
         ],
         'ages-13-15': [
-            { value: 'tue-8pm', label: 'Tuesdays 8:00pm – 9:00pm' },
-            { value: 'fri-8pm', label: 'Fridays 8:00pm – 9:00pm' },
+            { value: 'tue-8pm', label: 'Tuesdays 8:00pm – 9:00pm (28 Jul – 15 Sep)' },
+            { value: 'fri-8pm', label: 'Fridays 8:00pm – 9:00pm (31 Jul – 18 Sep)' },
         ],
         'ages-5-6':   [{ value: 'tbc', label: 'Session times coming soon' }],
         'ages-16-17': [{ value: 'tbc', label: 'Session times coming soon' }],
     },
     hallam: {
-        'ages-7-9':   [{ value: 'sat-12pm', label: 'Saturdays 12:00pm – 1:00pm' }],
+        'ages-7-9':   [{ value: 'sat-12pm', label: 'Saturdays 12:00pm – 1:00pm (1 Aug – 19 Sep)' }],
         'ages-10-12': [
-            { value: 'sat-12pm-g1', label: 'Saturdays 12:00pm – 1:00pm (Group 1)' },
-            { value: 'sat-1pm-g2',  label: 'Saturdays 1:00pm – 2:00pm (Group 2)' },
+            { value: 'sat-12pm-g1', label: 'Saturdays 12:00pm – 1:00pm Group 1 (1 Aug – 19 Sep)' },
+            { value: 'sat-1pm-g2',  label: 'Saturdays 1:00pm – 2:00pm Group 2 (1 Aug – 19 Sep)' },
         ],
-        'ages-13-15': [{ value: 'sat-1pm', label: 'Saturdays 1:00pm – 2:00pm' }],
+        'ages-13-15': [{ value: 'sat-1pm', label: 'Saturdays 1:00pm – 2:00pm (1 Aug – 19 Sep)' }],
         'ages-5-6':   [{ value: 'tbc', label: 'Session times coming soon' }],
         'ages-16-17': [{ value: 'tbc', label: 'Session times coming soon' }],
     },
     williamstown: {
-        'ages-7-9':   [{ value: 'sat-2pm', label: 'Saturdays 2:00pm – 3:00pm' }],
+        'ages-7-9':   [{ value: 'sat-2pm', label: 'Saturdays 2:00pm – 3:00pm (1 Aug – 19 Sep)' }],
         'ages-10-12': [
-            { value: 'sat-3pm', label: 'Saturdays 3:00pm – 4:00pm (Group 1)' },
-            { value: 'sat-4pm', label: 'Saturdays 4:00pm – 5:00pm (Group 2)' },
+            { value: 'sat-3pm', label: 'Saturdays 3:00pm – 4:00pm Group 1 (1 Aug – 19 Sep)' },
+            { value: 'sat-4pm', label: 'Saturdays 4:00pm – 5:00pm Group 2 (1 Aug – 19 Sep)' },
         ],
-        'ages-13-15': [{ value: 'sat-5pm', label: 'Saturdays 5:00pm – 6:00pm' }],
+        'ages-13-15': [{ value: 'sat-5pm', label: 'Saturdays 5:00pm – 6:00pm (1 Aug – 19 Sep)' }],
         'ages-5-6':   [{ value: 'tbc', label: 'Session times coming soon' }],
         'ages-16-17': [{ value: 'tbc', label: 'Session times coming soon' }],
     },
