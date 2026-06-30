@@ -23,10 +23,13 @@ const SESSION_OPTIONS = {
         'ages-16-17': [{ value: 'tbc', label: 'Session times coming soon' }],
     },
     hallam: {
+        'ages-7-9':   [{ value: 'sat-12pm', label: 'Saturdays 12:00pm – 1:00pm' }],
+        'ages-10-12': [
+            { value: 'sat-12pm-g1', label: 'Saturdays 12:00pm – 1:00pm (Group 1)' },
+            { value: 'sat-1pm-g2',  label: 'Saturdays 1:00pm – 2:00pm (Group 2)' },
+        ],
+        'ages-13-15': [{ value: 'sat-1pm', label: 'Saturdays 1:00pm – 2:00pm' }],
         'ages-5-6':   [{ value: 'tbc', label: 'Session times coming soon' }],
-        'ages-7-9':   [{ value: 'tbc', label: 'Session times coming soon' }],
-        'ages-10-12': [{ value: 'tbc', label: 'Session times coming soon' }],
-        'ages-13-15': [{ value: 'tbc', label: 'Session times coming soon' }],
         'ages-16-17': [{ value: 'tbc', label: 'Session times coming soon' }],
     },
     williamstown: {
@@ -43,7 +46,7 @@ const SESSION_OPTIONS = {
 
 const STRIPE_LINKS = {
     mickleham:    { all: 'https://buy.stripe.com/6oUdR96nv9SBgtS6fF9Zm0d' },
-    hallam:       { all: 'https://buy.stripe.com/00waEX9zH8OxelKfQf9Zm0f' },
+    hallam:       { all: 'https://buy.stripe.com/00waEX9zH8OxelKfQf9Zm0f' }, // confirmed
     williamstown: { all: 'https://buy.stripe.com/6oUdR96nv9SBgtS6fF9Zm0d' },
 };
 

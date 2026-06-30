@@ -13,9 +13,9 @@ const VENUE_GROUPS = {
         { name: 'Ages 13–15', sessions: ['Tuesdays 8:00pm – 9:00pm', 'Fridays 8:00pm – 9:00pm'] },
     ],
     hallam: [
-        { name: 'Ages 7–9',   sessions: null },
-        { name: 'Ages 10–12', sessions: null },
-        { name: 'Ages 13–15', sessions: null },
+        { name: 'Ages 7–9',   sessions: ['Saturdays 12:00pm – 1:00pm'] },
+        { name: 'Ages 10–12', sessions: ['Saturdays 12:00pm – 1:00pm (Group 1)', 'Saturdays 1:00pm – 2:00pm (Group 2)'] },
+        { name: 'Ages 13–15', sessions: ['Saturdays 1:00pm – 2:00pm'] },
     ],
     williamstown: [
         { name: 'Ages 7–9',   sessions: ['Saturdays 2:00pm – 3:00pm'] },
@@ -82,8 +82,9 @@ const locations = [
         area: 'South-Eastern Melbourne',
         name: 'Elite Cricket Centre',
         suburb: 'Hallam, VIC',
-        dates: 'Session dates — Coming Soon',
+        dates: 'Saturdays · Starting July 2026',
         note: 'Indoor cricket facility',
+        confirmed: true,
         image: '/assets/jr-hallam.png',
         gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 60%, #E11F8F 100%)',
         mapsUrl: 'https://maps.google.com/?q=Elite+Cricket+Centre+Hallam+VIC',
