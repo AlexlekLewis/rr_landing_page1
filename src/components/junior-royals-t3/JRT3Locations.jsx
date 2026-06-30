@@ -4,17 +4,29 @@ import { MapPin, Calendar, Clock, ChevronDown } from 'lucide-react';
 
 const EARLY_BIRD_END = new Date('2026-07-12T13:00:00Z');
 const isEarlyBird = () => new Date() < EARLY_BIRD_END;
+const price = () => isEarlyBird() ? '$299' : '$330';
 
-const AGE_GROUPS = [
-    { name: 'Ages 5–6',      key: 'ages-5-6',   price: isEarlyBird() ? '$299' : '$330' },
-    { name: 'Ages 7–9',   key: 'ages-7-9',   price: isEarlyBird() ? '$299' : '$330' },
-    { name: 'Ages 10–12', key: 'ages-10-12', price: isEarlyBird() ? '$299' : '$330' },
-    { name: 'Ages 13–15', key: 'ages-13-15', price: isEarlyBird() ? '$299' : '$330' },
-    { name: 'Ages 16–17', key: 'ages-16-17', price: isEarlyBird() ? '$299' : '$330' },
-];
+const VENUE_GROUPS = {
+    mickleham: [
+        { name: 'Ages 7–9',   sessions: ['Tuesdays 6:00pm – 7:00pm', 'Fridays 6:00pm – 7:00pm'] },
+        { name: 'Ages 10–12', sessions: ['Tuesdays 7:00pm – 8:00pm', 'Fridays 7:00pm – 8:00pm'] },
+        { name: 'Ages 13–15', sessions: ['Tuesdays 8:00pm – 9:00pm', 'Fridays 8:00pm – 9:00pm'] },
+    ],
+    hallam: [
+        { name: 'Ages 7–9',   sessions: null },
+        { name: 'Ages 10–12', sessions: null },
+        { name: 'Ages 13–15', sessions: null },
+    ],
+    williamstown: [
+        { name: 'Ages 7–9',   sessions: ['Saturdays 2:00pm – 3:00pm'] },
+        { name: 'Ages 10–12', sessions: ['Saturdays 3:00pm – 4:00pm (Group 1)', 'Saturdays 4:00pm – 5:00pm (Group 2)'] },
+        { name: 'Ages 13–15', sessions: ['Saturdays 5:00pm – 6:00pm'] },
+    ],
+};
 
 const GroupAccordion = ({ group }) => {
     const [open, setOpen] = useState(false);
+    const hasSessions = group.sessions && group.sessions.length > 0;
     return (
         <div className="border border-slate-200 rounded-xl overflow-hidden">
             <button onClick={() => setOpen(o => !o)}
@@ -27,11 +39,20 @@ const GroupAccordion = ({ group }) => {
                     <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
                         <div className="px-4 py-3 bg-white space-y-2">
-                            <p className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-2">{group.price} per child</p>
-                            <div className="flex items-center gap-2">
-                                <Clock className="w-3.5 h-3.5 text-rr-blue shrink-0" />
-                                <span className="text-sm font-medium text-rr-charcoal">Session times coming soon — we will notify you by email</span>
-                            </div>
+                            <p className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-2">{price()} per child</p>
+                            {hasSessions ? (
+                                group.sessions.map((s, i) => (
+                                    <div key={i} className="flex items-center gap-2">
+                                        <Clock className="w-3.5 h-3.5 text-rr-blue shrink-0" />
+                                        <span className="text-sm font-medium text-rr-charcoal">{s}</span>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="flex items-center gap-2">
+                                    <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                    <span className="text-sm font-medium text-slate-400">Session times coming soon — we will notify you by email</span>
+                                </div>
+                            )}
                             <div className="mt-3 pt-3 border-t border-slate-100 flex items-start gap-2">
                                 <span className="text-sm shrink-0">👕</span>
                                 <p className="text-xs text-slate-500 font-medium leading-relaxed">Royals training shirt required — available to purchase with your registration.</p>
@@ -49,8 +70,9 @@ const locations = [
         area: 'Northern Melbourne',
         name: 'Mickleham Indoor Sports Centre',
         suburb: 'Mickleham, VIC',
-        dates: 'Session dates — Coming Soon',
+        dates: 'Starting Tuesday 22 July · Tuesdays & Fridays',
         note: 'Indoor cricket facility',
+        confirmed: true,
         image: '/assets/jr-bundoora.png',
         gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
         mapsUrl: 'https://maps.google.com/?q=Mickleham+Indoor+Sports+Centre+VIC',
@@ -71,8 +93,9 @@ const locations = [
         area: 'Western Melbourne',
         name: 'The Netz',
         suburb: 'Williamstown, VIC',
-        dates: 'Session dates — Coming Soon',
+        dates: 'Starting Saturday 19 July · Saturdays',
         note: 'Indoor cricket facility',
+        confirmed: true,
         image: '/assets/jr-bundoora.png',
         gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
         mapsUrl: 'https://maps.google.com/?q=The+Netz+Williamstown+VIC',
@@ -130,14 +153,21 @@ const JRT3Locations = () => {
                                     </div>
                                 </div>
 
-                                <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5 mb-4">
-                                    <p className="text-amber-700 text-xs font-bold uppercase tracking-wide">⏰ Session times & dates coming soon — register now to lock in your place</p>
-                                </div>
+                                {loc.confirmed ? (
+                                    <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-2.5 mb-4 flex items-center gap-2">
+                                        <span className="w-2 h-2 rounded-full bg-green-500 shrink-0" />
+                                        <p className="text-green-700 text-xs font-bold uppercase tracking-wide">Dates &amp; times confirmed</p>
+                                    </div>
+                                ) : (
+                                    <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5 mb-4">
+                                        <p className="text-amber-700 text-xs font-bold uppercase tracking-wide">⏰ Session times &amp; dates coming soon — register now to lock in your place</p>
+                                    </div>
+                                )}
 
-                                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Age Groups &amp; Pricing</p>
+                                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Age Groups &amp; Times</p>
                                 <div className="space-y-2 mb-5">
-                                    {AGE_GROUPS.map(group => (
-                                        <GroupAccordion key={group.key} group={group} />
+                                    {(VENUE_GROUPS[loc.tag] || []).map(group => (
+                                        <GroupAccordion key={group.name} group={group} />
                                     ))}
                                 </div>
 

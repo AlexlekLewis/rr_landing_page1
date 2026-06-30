@@ -5,6 +5,42 @@ import { supabase } from '../../lib/supabase';
 const EARLY_BIRD_END = new Date('2026-07-12T13:00:00Z');
 const isEarlyBird = () => new Date() < EARLY_BIRD_END;
 
+const SESSION_OPTIONS = {
+    mickleham: {
+        'ages-7-9':   [
+            { value: 'tue-6pm', label: 'Tuesdays 6:00pm – 7:00pm' },
+            { value: 'fri-6pm', label: 'Fridays 6:00pm – 7:00pm' },
+        ],
+        'ages-10-12': [
+            { value: 'tue-7pm', label: 'Tuesdays 7:00pm – 8:00pm' },
+            { value: 'fri-7pm', label: 'Fridays 7:00pm – 8:00pm' },
+        ],
+        'ages-13-15': [
+            { value: 'tue-8pm', label: 'Tuesdays 8:00pm – 9:00pm' },
+            { value: 'fri-8pm', label: 'Fridays 8:00pm – 9:00pm' },
+        ],
+        'ages-5-6':   [{ value: 'tbc', label: 'Session times coming soon' }],
+        'ages-16-17': [{ value: 'tbc', label: 'Session times coming soon' }],
+    },
+    hallam: {
+        'ages-5-6':   [{ value: 'tbc', label: 'Session times coming soon' }],
+        'ages-7-9':   [{ value: 'tbc', label: 'Session times coming soon' }],
+        'ages-10-12': [{ value: 'tbc', label: 'Session times coming soon' }],
+        'ages-13-15': [{ value: 'tbc', label: 'Session times coming soon' }],
+        'ages-16-17': [{ value: 'tbc', label: 'Session times coming soon' }],
+    },
+    williamstown: {
+        'ages-7-9':   [{ value: 'sat-2pm', label: 'Saturdays 2:00pm – 3:00pm' }],
+        'ages-10-12': [
+            { value: 'sat-3pm', label: 'Saturdays 3:00pm – 4:00pm (Group 1)' },
+            { value: 'sat-4pm', label: 'Saturdays 4:00pm – 5:00pm (Group 2)' },
+        ],
+        'ages-13-15': [{ value: 'sat-5pm', label: 'Saturdays 5:00pm – 6:00pm' }],
+        'ages-5-6':   [{ value: 'tbc', label: 'Session times coming soon' }],
+        'ages-16-17': [{ value: 'tbc', label: 'Session times coming soon' }],
+    },
+};
+
 const STRIPE_LINKS = {
     mickleham:    { all: 'https://buy.stripe.com/6oUdR96nv9SBgtS6fF9Zm0d' },
     hallam:       { all: 'https://buy.stripe.com/00waEX9zH8OxelKfQf9Zm0f' },
@@ -131,6 +167,11 @@ const JRT3RegistrationForm = () => {
         location: '', group_selection: '', time_slot: '',
         requires_shirt: '', shirt_size: '',
     });
+
+    const availableSessions = form.location && form.group_selection
+        ? (SESSION_OPTIONS[form.location]?.[form.group_selection] || [])
+        : [];
+    const allTBC = availableSessions.every(s => s.value === 'tbc');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -294,10 +335,23 @@ const JRT3RegistrationForm = () => {
                                     </div>
                                 )}
                                 {form.location && form.group_selection && (
-                                    <div className="bg-amber-50 border border-amber-300 rounded-xl px-4 py-3">
-                                        <p className="text-amber-700 text-sm font-bold">⏰ Session times &amp; dates are coming soon.</p>
-                                        <p className="text-amber-600 text-sm font-medium mt-1">Register now to secure your place. We will confirm your session time and start date via email once finalised.</p>
-                                    </div>
+                                    allTBC ? (
+                                        <div className="bg-amber-50 border border-amber-300 rounded-xl px-4 py-3">
+                                            <p className="text-amber-700 text-sm font-bold">⏰ Session times &amp; dates are coming soon.</p>
+                                            <p className="text-amber-600 text-sm font-medium mt-1">Register now to secure your place. We will confirm your session time and start date via email once finalised.</p>
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <label className={lc}>Session Time *</label>
+                                            <select name="time_slot" value={form.time_slot} onChange={handleChange} className={ic('time_slot')}>
+                                                <option value="">Select a session</option>
+                                                {availableSessions.map(s => (
+                                                    <option key={s.value} value={s.value}>{s.label}</option>
+                                                ))}
+                                            </select>
+                                            {errors.time_slot && <p className="text-red-500 text-xs mt-1">{errors.time_slot}</p>}
+                                        </div>
+                                    )
                                 )}
                             </div>
                         </div>
