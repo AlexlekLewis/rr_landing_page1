@@ -44,10 +44,16 @@ const SESSION_OPTIONS = {
     },
 };
 
+const EARLY_BIRD_STRIPE_LINK = 'https://buy.stripe.com/9B6dR93bjggZa5ugUj9Zm07';
+const STANDARD_STRIPE_LINKS = {
+    mickleham:    'https://buy.stripe.com/6oUdR96nv9SBgtS6fF9Zm0d',
+    hallam:       'https://buy.stripe.com/00waEX9zH8OxelKfQf9Zm0f',
+    williamstown: 'https://buy.stripe.com/6oUdR96nv9SBgtS6fF9Zm0d',
+};
 const STRIPE_LINKS = {
-    mickleham:    { all: 'https://buy.stripe.com/6oUdR96nv9SBgtS6fF9Zm0d' },
-    hallam:       { all: 'https://buy.stripe.com/00waEX9zH8OxelKfQf9Zm0f' }, // confirmed
-    williamstown: { all: 'https://buy.stripe.com/6oUdR96nv9SBgtS6fF9Zm0d' },
+    mickleham:    { all: isEarlyBird() ? EARLY_BIRD_STRIPE_LINK : STANDARD_STRIPE_LINKS.mickleham },
+    hallam:       { all: isEarlyBird() ? EARLY_BIRD_STRIPE_LINK : STANDARD_STRIPE_LINKS.hallam },
+    williamstown: { all: isEarlyBird() ? EARLY_BIRD_STRIPE_LINK : STANDARD_STRIPE_LINKS.williamstown },
 };
 
 const SUPABASE_TABLE = {
