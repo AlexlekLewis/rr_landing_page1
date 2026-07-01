@@ -31,7 +31,7 @@ const HOME_NAV = [
 const PROGRAMS_DROPDOWN = [
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Closing Soon', badgeColor: 'bg-orange-500' },
     { label: 'Elite Program', route: '/PGP2026', badge: 'Enrolling Now · Selling Fast', badgeColor: 'bg-orange-500' },
-    { label: 'Junior Royals Term 3', route: '/#register', badge: 'Coming Soon', badgeColor: 'bg-rr-pink' },
+    { label: 'Junior Royals Term 3', route: '/junior-royals', badge: 'Early Bird Now Open', badgeColor: 'bg-green-500' },
 ];
 
 const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
