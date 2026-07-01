@@ -159,6 +159,7 @@ function App() {
         <Route path="/reviews" element={<Reviews />} />
 
         {/* Power Game Program — hidden from nav, accessible via direct URL only */}
+        <Route path="/elite-royals" element={<PowerGame />} />
         <Route path="/PGP2026" element={<PowerGame />} />
         {/* Mickleham Open Day — turn-up-and-play + Elite Program trial registration */}
         <Route path="/PGP2026/mickleham" element={<MicklehamOpenDay />} />

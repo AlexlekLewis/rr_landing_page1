@@ -13,7 +13,7 @@ const PowerGameTopBanner = () => {
                     The Power<span className="text-rr-pink">Game</span> Program — Melbourne, July 2026
                 </span>
                 <Link
-                    to="/PGP2026"
+                    to="/elite-royals"
                     className="group inline-flex items-center gap-2 bg-white text-rr-pink hover:bg-rr-dark hover:text-white font-black uppercase tracking-widest text-sm sm:text-base px-6 py-2.5 rounded-full shadow-md transition-all duration-300 hover:shadow-[0_0_22px_rgba(255,255,255,0.35)]"
                 >
                     Secure Your Place

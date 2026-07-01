@@ -553,12 +553,26 @@ const PowerGame = () => {
     useEffect(() => {
         document.title = 'Power Pre-Season | Rajasthan Royals Academy Elite Program';
         window.scrollTo(0, 0);
+        // Canonical URL — this page serves at both /elite-royals (primary) and /PGP2026.
+        // Point search engines at the single /elite-royals URL to avoid duplicate content.
+        let canonical = document.querySelector('link[rel="canonical"][data-pgp]');
+        if (!canonical) {
+            canonical = document.createElement('link');
+            canonical.rel = 'canonical';
+            canonical.setAttribute('data-pgp', '');
+            document.head.appendChild(canonical);
+        }
+        canonical.href = 'https://rramelbourne.com/elite-royals';
         if (!document.getElementById('pgpv2-font')) {
             const l = document.createElement('link');
             l.id = 'pgpv2-font'; l.rel = 'stylesheet';
             l.href = 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap';
             document.head.appendChild(l);
         }
+        return () => {
+            const c = document.querySelector('link[rel="canonical"][data-pgp]');
+            if (c) c.remove();
+        };
     }, []);
 
     useEffect(() => {
