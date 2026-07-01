@@ -112,9 +112,18 @@ const JRT3Success = () => {
                             </svg>
                         </div>
                         <div>
-                            <p className="text-sm font-bold text-white/90 mb-1">Place Confirmation</p>
-                            <p className="text-sm text-white/60 leading-relaxed">
-                                A member of our team will confirm your place and session time via email within 24 hours of receipt, on the first business day following your online enrolment. Our office hours are Monday to Friday, 8:30am – 5:30pm.
+                            <p className="text-sm font-bold text-white/90 mb-2">Place Confirmation</p>
+                            <p className="text-sm text-white/70 leading-relaxed mb-2">
+                                This payment confirms your place in the Junior Royals program. A member of our team will be in touch within <span className="font-bold text-white">24–72 hours</span> to confirm your place and session details.
+                            </p>
+                            <p className="text-sm text-white/60 leading-relaxed mb-2">
+                                Please check your email inbox, including your <span className="font-bold text-white/80">junk, spam and promotions folders</span>, as our confirmation may be filtered.
+                            </p>
+                            <p className="text-sm text-white/60 leading-relaxed mb-2">
+                                You will also receive a follow-up email in the days prior to your first session with everything you need to know before the program begins.
+                            </p>
+                            <p className="text-xs text-white/40 leading-relaxed">
+                                Office hours: Monday – Friday, 8:30am – 5:30pm. Confirmation will be sent on the first business day following your enrolment.
                             </p>
                         </div>
                     </div>
