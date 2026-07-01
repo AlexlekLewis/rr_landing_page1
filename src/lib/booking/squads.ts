@@ -14,7 +14,7 @@
 // A place = a seat in that session for the WHOLE 8-week block (one fixed roster).
 //
 // OFFICIAL grid (total lanes per session):
-//   Williamstown  Fri 5:30 (7) · Fri 7:30 (7) · Sat 2–4 (7) · Sat 4–6 (7)
+//   Williamstown  Sat 2–4 (7) · Sat 4–6 (7)
 //   Hallam        Sat 2–4 (5) · Sat 4–6 (4)
 //   Mickleham     Sat 2–4 (7) · Sat 4–6 (7)
 // ============================================================
@@ -76,7 +76,7 @@ export interface Squad {
 // top of src/lib/booking/inventory.test.ts and run `npx vitest run`.
 // ════════════════════════════════════════════════════════════════════════════
 export const CENTRES: Centre[] = [
-  { slug: "williamstown", name: "The Netz", suburb: "Williamstown", region: "West Melbourne", address: "37 Robbins Cct, Williamstown North VIC 3016", dateRange: "8 weeks · Jul 31 – Sep 19" },
+  { slug: "williamstown", name: "The Netz", suburb: "Williamstown", region: "West Melbourne", address: "37 Robbins Cct, Williamstown North VIC 3016", dateRange: "8 weeks · Aug 1 – Sep 19" },
   { slug: "hallam", name: "Elite Cricket Centre", suburb: "Hallam", region: "South East Melbourne", address: "8-9 Becon Ct, Hallam VIC 3803", dateRange: "8 weeks · Aug 1 – Sep 19" },
   { slug: "mickleham", name: "Mickleham Indoor Sports Centre", suburb: "Mickleham", region: "North Melbourne", address: "Mickleham VIC 3064", dateRange: "8 weeks · Aug 1 – Sep 19" },
 ];
@@ -124,11 +124,9 @@ interface RawSession {
 }
 
 const SESSION_GRID: RawSession[] = [
-  // ── The Netz — Williamstown (Fri 7 lanes · Sat 7 lanes) ──
-  { idBase: "w-fri530", centre: "williamstown", day: "Friday",   startTime: "5:30pm", endTime: "7:30pm", lanes: 7, blockLabel: "Fri 5:30–7:30pm", sortOrder: 1 },
-  { idBase: "w-fri730", centre: "williamstown", day: "Friday",   startTime: "7:30pm", endTime: "9:30pm", lanes: 7, blockLabel: "Fri 7:30–9:30pm", sortOrder: 2 },
-  { idBase: "w-sat2",   centre: "williamstown", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 7, blockLabel: "Sat 2–4pm", sortOrder: 3 },
-  { idBase: "w-sat4",   centre: "williamstown", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 7, blockLabel: "Sat 4–6pm", sortOrder: 4 },
+  // ── The Netz — Williamstown (Sat 7 lanes) ──
+  { idBase: "w-sat2",   centre: "williamstown", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 7, blockLabel: "Sat 2–4pm", sortOrder: 1 },
+  { idBase: "w-sat4",   centre: "williamstown", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 7, blockLabel: "Sat 4–6pm", sortOrder: 2 },
 
   // ── Elite Cricket Centre — Hallam (Sat 2–4 = 5 lanes · Sat 4–6 = 4 lanes) ──
   { idBase: "h-sat2", centre: "hallam", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm",  lanes: 5, blockLabel: "Sat 2–4pm", sortOrder: 1 },

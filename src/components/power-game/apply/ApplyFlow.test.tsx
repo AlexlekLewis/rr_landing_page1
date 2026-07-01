@@ -37,7 +37,7 @@ describe("ApplyFlow — clean form → pay flow", () => {
 
     // Demo lands straight on the single form, with the session pre-seeded.
     await screen.findByRole("heading", { name: /your details/i });
-    const before = inventory.spotsLeft("w-fri530");
+    const before = inventory.spotsLeft("w-sat2");
 
     // No uniform needed → Continue goes straight to the pay screen (no offer/confirm step).
     fireEvent.click(screen.getByText("Continue"));
@@ -45,12 +45,12 @@ describe("ApplyFlow — clean form → pay flow", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /secure my spot/i }));
     await screen.findByText(/you're in!/i);
-    expect(inventory.spotsLeft("w-fri530")).toBe(before - 1);
+    expect(inventory.spotsLeft("w-sat2")).toBe(before - 1);
   });
 
   it("seeded session is full → the form can't proceed and surfaces an error", async () => {
-    // Fill the seeded session (w-fri530) so the hold at checkout fails.
-    for (let i = 0; i < 30; i++) await inventory.createHold({ squadId: "w-fri530", ref: `fill-${i}` });
+    // Fill the seeded session (w-sat2) so the hold at checkout fails.
+    for (let i = 0; i < 30; i++) await inventory.createHold({ squadId: "w-sat2", ref: `fill-${i}` });
     window.history.pushState({}, "", "/PGP2026/apply?demo=1");
     render(<ApplyFlow />);
     await screen.findByRole("heading", { name: /your details/i });
@@ -64,7 +64,7 @@ describe("ApplyFlow — clean form → pay flow", () => {
 
     // Centre step (no session chosen up front) — pick The Netz, then tap a session.
     fireEvent.click(screen.getByRole("button", { name: /the netz/i }));
-    const slot = await screen.findByTestId("slot-w-sat2");
+    const slot = await screen.findByTestId("slot-w-sat4");
     fireEvent.click(slot);
 
     // Tapping a session takes them straight to the single form.
