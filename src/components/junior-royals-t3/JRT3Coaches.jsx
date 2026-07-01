@@ -114,7 +114,7 @@ const JRT3Coaches = () => (
                 </motion.h2>
                 <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}
                     className="text-lg text-white/70 max-w-2xl mx-auto font-medium">
-                    Each Junior Royals venue is led by a dedicated Head Coach — certified, experienced, and committed to the Royals Way. Tap a coach to read more.
+                    Each Junior Royals venue and program content is led by a dedicated Head Coach — certified, experienced, and committed to the Royals Way. They lead a team of dedicated coaches there to support your cricket growth. Tap a Head Coach to read more.
                 </motion.p>
             </div>
 
