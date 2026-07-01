@@ -162,6 +162,19 @@ const getUTMParams = () => {
     return { utm_source: p.get('utm_source') || null, utm_medium: p.get('utm_medium') || null, utm_campaign: p.get('utm_campaign') || null };
 };
 
+// Meta Pixel — fire a Lead conversion on successful registration submit, so Junior Royals Term 3
+// sign-ups are attributable/optimisable in Meta Ads (same pattern as the Power Game funnel).
+const fireLeadEvent = (location) => {
+    try {
+        if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+            window.fbq('track', 'Lead', {
+                content_name: 'Junior Royals Term 3',
+                content_category: location ? `junior-royals-term3-${location}` : 'junior-royals-term3',
+            });
+        }
+    } catch (_) { /* never let analytics block the submit */ }
+};
+
 const JRT3RegistrationForm = () => {
     const earlyBird = isEarlyBird();
     const [submitting, setSubmitting] = useState(false);
@@ -244,6 +257,7 @@ const JRT3RegistrationForm = () => {
                 }]);
             } catch (_) {}
             if (data?.id) { localStorage.setItem('jr_record_id', data.id); localStorage.setItem('jr_location_t3', form.location); }
+            fireLeadEvent(form.location);
             const stripeLink = STRIPE_LINKS[form.location]?.all;
             window.location.href = stripeLink || '/junior-royals/success';
         } catch (err) {
