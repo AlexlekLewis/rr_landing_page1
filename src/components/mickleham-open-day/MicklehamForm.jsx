@@ -164,7 +164,7 @@ const MicklehamForm = () => {
         );
 
         return (
-            <section id="register" className="relative overflow-hidden bg-rr-dark text-white min-h-screen flex items-center justify-center px-6 py-20 selection:bg-rr-pink selection:text-white">
+            <section id="register" className="fixed inset-0 z-[100] overflow-y-auto overflow-x-hidden bg-rr-dark text-white selection:bg-rr-pink selection:text-white">
 
                 {/* Background gradient orbs */}
                 <div className="absolute inset-0 pointer-events-none">
@@ -182,7 +182,7 @@ const MicklehamForm = () => {
                     }}
                 />
 
-                <div className="relative z-10 max-w-2xl w-full mx-auto text-center">
+                <div className="relative z-10 min-h-full flex flex-col justify-center max-w-2xl w-full mx-auto text-center px-6 py-16">
 
                     {/* Logo */}
                     <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: 'easeOut' }} className="mb-8">

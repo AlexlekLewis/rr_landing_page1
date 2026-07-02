@@ -28,6 +28,12 @@ const HOME_NAV = [
     { label: 'FAQ', id: 'faq' },
 ];
 
+// Mickleham Open Day — real on-page sections (anchors that exist on the page)
+const MICKLEHAM_NAV = [
+    { label: 'THE DAY', id: 'whats-on' },
+    { label: 'THE PROGRAM', id: 'elite-info' },
+];
+
 const PROGRAMS_DROPDOWN = [
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Closing Soon', badgeColor: 'bg-orange-500' },
     { label: 'Elite Program', route: '/elite-royals', badge: 'Enrolling Now · Selling Fast', badgeColor: 'bg-orange-500' },
@@ -47,14 +53,17 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
     const isLittleCrickets = variant === 'junior-royals';
     const isShop = variant === 'shop';
     const isPowerGame = variant === 'power-game';
+    const isMickleham = variant === 'mickleham';
 
-    const navLinks = (isLP3 || isHoliday || isShop || isPowerGame) ? [] : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
-    const showProgramsDropdown = isHome;
+    const navLinks = (isLP3 || isHoliday || isShop || isPowerGame) ? [] : isMickleham ? MICKLEHAM_NAV : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
+    // Standalone pages (Mickleham) get the full site nav: Home + the Programs dropdown of live pages.
+    const showProgramsDropdown = isHome || isMickleham;
+    const showHomeLink = isMickleham;
     const showCTA = !isShop && !isPowerGame;
     const showHamburger = !isShop;
 
-    const ctaLabel = isHome ? 'REGISTER NOW' : (isLP2 || isHoliday || isLittleCrickets) ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
-    const ctaTarget = isLP2 ? 'checkout' : (isHoliday || isLittleCrickets) ? 'registration-form' : 'apply-form';
+    const ctaLabel = isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : (isLP2 || isHoliday || isLittleCrickets) ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
+    const ctaTarget = isMickleham ? 'register' : isLP2 ? 'checkout' : (isHoliday || isLittleCrickets) ? 'registration-form' : 'apply-form';
 
     const scrollToForm = () => {
         if (isHome && onRegisterClick) {
@@ -102,6 +111,13 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
 
                     {/* Desktop nav */}
                     <div className="hidden md:flex items-center space-x-6">
+                        {/* Home link (standalone pages) */}
+                        {showHomeLink && (
+                            <Link to="/" className="text-sm font-semibold text-white hover:text-pink-200 transition-colors">
+                                HOME
+                            </Link>
+                        )}
+
                         {/* Programs dropdown */}
                         {showProgramsDropdown && (
                             <div className="relative" ref={dropdownRef}>
@@ -223,6 +239,17 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
                         }}
                     >
                         <div className="flex flex-col items-center space-y-6 pt-10 px-6">
+                            {/* Home link (standalone pages) */}
+                            {showHomeLink && (
+                                <Link
+                                    to="/"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="text-2xl font-bold text-white hover:text-pink-300 transition-colors tracking-wider"
+                                >
+                                    HOME
+                                </Link>
+                            )}
+
                             {/* Programs section in mobile */}
                             {showProgramsDropdown && (
                                 <div className="w-full max-w-xs">
