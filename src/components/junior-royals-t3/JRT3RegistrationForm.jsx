@@ -62,7 +62,7 @@ const SUPABASE_TABLE = {
     williamstown: 'jr_term3_williamstown',
 };
 
-const AGE_OPTIONS = Array.from({ length: 13 }, (_, i) => i + 5); // 5–17
+const AGE_OPTIONS = Array.from({ length: 9 }, (_, i) => i + 7); // 7–15
 
 // Omtex sizing data
 const SHIRT_SIZES_JUNIOR = [

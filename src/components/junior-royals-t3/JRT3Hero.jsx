@@ -77,7 +77,7 @@ const JRT3Hero = () => {
                     transition={{ delay: 0.4 }}
                     className="text-sm md:text-lg text-white/80 font-medium mb-8 max-w-xl"
                 >
-                    Small group, term-based coaching for players aged 5–17. Build foundation skills, develop game sense, prepare to play cricket in a team or continue to take your game to the next level — delivered by Royals and CA accredited coaches.
+                    Small group, term-based coaching for players aged 7–15. Build foundation skills, develop game sense, prepare to play cricket in a team or continue to take your game to the next level — delivered by Royals and CA accredited coaches.
                 </motion.p>
 
                 {/* Venue pills */}
@@ -91,7 +91,7 @@ const JRT3Hero = () => {
                         { label: 'Mickleham Indoor Sports Centre', icon: '📍' },
                         { label: 'Elite Cricket Centre, Hallam', icon: '📍' },
                         { label: 'The Netz, Williamstown', icon: '📍' },
-                        { label: 'Ages 5–17', icon: '👦' },
+                        { label: 'Ages 7–15', icon: '👦' },
                     ].map((p, i) => (
                         <div key={i} className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2">
                             <span className="text-rr-pink font-bold text-xs">{p.icon}</span>
@@ -134,15 +134,7 @@ const JRT3Hero = () => {
                 )}
 
                     {/* Coming soon notice */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.58 }}
-                        className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 rounded-full px-4 py-2 mb-8"
-                    >
-                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
-                        <span className="text-amber-300 text-xs font-bold uppercase tracking-widest">Session times &amp; dates coming soon — register now to secure your spot</span>
-                    </motion.div>
+
 
                     {/* CTA */}
                 <motion.div
