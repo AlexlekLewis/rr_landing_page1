@@ -30,7 +30,7 @@ const JRT3Hero = () => {
     const countdown = useCountdown(EARLY_BIRD_END);
 
     const scrollToForm = () =>
-        document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('locations')?.scrollIntoView({ behavior: 'smooth' });
 
     return (
         <section className="relative min-h-screen flex items-center overflow-hidden bg-rr-dark">
