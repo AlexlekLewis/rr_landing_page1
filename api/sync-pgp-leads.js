@@ -13,10 +13,10 @@
 //                            did NOT pay (paid emails excluded; a lead who later
 //                            pays drops off automatically). No DB rows written for
 //                            leads — no bot/abandon pollution.
-//   "Mickleham Open Day"  ← REBUILT from the standalone
-//                            mickleham_open_day_registrations table (Elite Trial
-//                            sign-ups for the 5 Jul 2026 open day). Full rebuild
-//                            each run; chronological sign-up log.
+//   "Mickleham Open Day"     ← REBUILT from the standalone
+//   "Williamstown Open Day"     {centre}_open_day_registrations tables (Elite
+//   "Hallam Open Day"           Trial sign-ups for each open day). Full rebuild
+//                               each run; chronological sign-up log.
 //
 // All tabs are SELF-HEALING: created automatically if missing (ensureTab).
 //
@@ -82,7 +82,7 @@ const leadRow = (s, a) => ([
   String(s.id).slice(-8).toUpperCase(),
 ]);
 
-const MICKLEHAM_HEADERS = [
+const OPEN_DAY_HEADERS = [
   'Registered (Melbourne)', 'Player Name', 'Age', 'Gender', 'Date of Birth',
   'Parent/Guardian Name', 'Parent Email', 'Parent Phone', 'Suburb',
   'Current Club', 'Current Grade', 'Years Playing', 'Primary Role',
@@ -91,7 +91,7 @@ const MICKLEHAM_HEADERS = [
   'UTM Source', 'UTM Medium', 'UTM Campaign', 'Referrer',
 ];
 
-const micklehamRow = (r) => ([
+const openDayRow = (r) => ([
   fmtMelb(r.created_at),
   r.player_name || '',
   r.player_age ?? '',
@@ -121,24 +121,25 @@ const micklehamRow = (r) => ([
 ]);
 
 // ------------------------------------------------------------
-// "Mickleham Open Day" tab — full rebuild from the standalone registrations table.
-// Chronological sign-up log (oldest first). Tiny table; full rebuild is fine and
-// idempotent. Every row is kept (no dedup) so the sheet is a faithful record.
+// Open Day tabs (Mickleham / Williamstown / Hallam) — full rebuild from each
+// standalone registrations table (they share the same schema, so one reconcile
+// serves all three). Chronological sign-up log (oldest first). Tiny tables; full
+// rebuild is fine and idempotent. Every row is kept (no dedup) so the sheet is a
+// faithful record.
 // ------------------------------------------------------------
-async function reconcileMickleham(sheets, spreadsheetId) {
-  const tabName = process.env.POWER_GAME_MICKLEHAM_TAB || 'Mickleham Open Day';
+async function reconcileOpenDay(sheets, spreadsheetId, table, tabName) {
   const sb = getSupabase();
   const { data, error } = await sb
-    .from('mickleham_open_day_registrations')
+    .from(table)
     .select('*')
     .order('created_at', { ascending: true });
   if (error) throw error;
-  const rows = (data || []).map(micklehamRow);
+  const rows = (data || []).map(openDayRow);
 
   await ensureTab(sheets, spreadsheetId, tabName);
   await sheets.spreadsheets.values.update({
     spreadsheetId, range: `${tabName}!A1`, valueInputOption: 'USER_ENTERED',
-    requestBody: { values: [MICKLEHAM_HEADERS] },
+    requestBody: { values: [OPEN_DAY_HEADERS] },
   });
   await sheets.spreadsheets.values.clear({ spreadsheetId, range: `${tabName}!A2:Z100000` });
   if (rows.length > 0) {
@@ -346,12 +347,19 @@ export default async function handler(req, res) {
     out.leadsTab = { error: err.message };
     out.ok = false;
   }
-  try {
-    out.micklehamTab = await reconcileMickleham(sheets, spreadsheetId);
-  } catch (err) {
-    console.error('sync-pgp-leads: mickleham reconcile failed:', err);
-    out.micklehamTab = { error: err.message };
-    out.ok = false;
+  const openDays = [
+    { key: 'micklehamTab', table: 'mickleham_open_day_registrations', tab: process.env.POWER_GAME_MICKLEHAM_TAB || 'Mickleham Open Day' },
+    { key: 'williamstownTab', table: 'williamstown_open_day_registrations', tab: process.env.POWER_GAME_WILLIAMSTOWN_TAB || 'Williamstown Open Day' },
+    { key: 'hallamTab', table: 'hallam_open_day_registrations', tab: process.env.POWER_GAME_HALLAM_TAB || 'Hallam Open Day' },
+  ];
+  for (const od of openDays) {
+    try {
+      out[od.key] = await reconcileOpenDay(sheets, spreadsheetId, od.table, od.tab);
+    } catch (err) {
+      console.error(`sync-pgp-leads: ${od.tab} reconcile failed:`, err);
+      out[od.key] = { error: err.message };
+      out.ok = false;
+    }
   }
 
   return res.status(out.ok ? 200 : 500).json(out);
