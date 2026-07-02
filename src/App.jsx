@@ -17,6 +17,7 @@ import FemaleEmpowerment from './components/female-empowerment/FemaleEmpowerment
 import CoachingOpportunities from './components/coaching-opportunities/CoachingOpportunities';
 import PowerGame from './components/power-game/PowerGame';
 import MicklehamOpenDay from './components/mickleham-open-day/MicklehamOpenDay';
+import MicklehamSuccess from './components/mickleham-open-day/MicklehamSuccess';
 import IndiaTour2026 from './components/india-tour-2026/IndiaTour2026';
 import HomePage from './components/home-page/HomePage';
 import InductionPage from './components/induction/InductionPage';
@@ -163,6 +164,7 @@ function App() {
         <Route path="/PGP2026" element={<PowerGame />} />
         {/* Mickleham Open Day — turn-up-and-play + Elite Program trial registration */}
         <Route path="/PGP2026/mickleham" element={<MicklehamOpenDay />} />
+        <Route path="/PGP2026/mickleham/success" element={<MicklehamSuccess />} />
         {/* Power Game apply funnel — qualify → place → secure (the live registration + payment) */}
         <Route path="/PGP2026/apply" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameApply /></React.Suspense>} />
         <Route path="/PGP2026/apply/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameApplySuccess /></React.Suspense>} />
