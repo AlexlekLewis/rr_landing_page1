@@ -41,9 +41,11 @@ const BOWL_OPTIONS = [
 
 const ComplianceCheckbox = ({ checked, onChange, error, children }) => (
     <div className="mb-4">
-        <label className="flex items-start gap-3 cursor-pointer group">
+        <label
+            onClick={(e) => { if (!e.target.closest('a')) onChange(!checked); }}
+            className="flex items-start gap-3 cursor-pointer group"
+        >
             <div
-                onClick={() => onChange(!checked)}
                 className={`mt-0.5 w-5 h-5 rounded shrink-0 border-2 flex items-center justify-center transition-all duration-200 ${checked ? 'bg-rr-pink border-rr-pink' : 'border-slate-300 bg-white group-hover:border-rr-pink'}`}
             >
                 {checked && (
