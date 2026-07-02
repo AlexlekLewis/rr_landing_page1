@@ -164,26 +164,29 @@ async function authorise(req) {
   return user.email;
 }
 
-// ------------------------------------------------------------
-// "Paid players" tab — upsert every paid DB row by Application ID. Idempotent:
-// re-running just refreshes existing rows and appends any new ones. Preserves the
-// order already in the sheet and any extra (manual) columns to the right.
-// ------------------------------------------------------------
-async function reconcilePaid(sheets, spreadsheetId) {
-  const tabName = process.env.POWER_GAME_PAID_TAB || 'Paid players';
-  const sb = getSupabase();
-  const { data, error } = await sb
-    .from('power_game_applications')
-    .select('*')
-    .or('payment_status.eq.completed,status.eq.paid')
-    .order('paid_at', { ascending: true });
-  if (error) throw error;
-  const paid = data || [];
+// Map a power_game_applications.venue string to one of the three centres.
+// Substring match keeps it robust to minor venue-label changes in squads.ts.
+//   The Netz                        → Williamstown
+//   Elite Cricket Centre            → Hallam
+//   Mickleham Indoor Sports Centre  → Mickleham
+const PAID_CENTRES = [
+  { key: 'Williamstown', tab: 'Paid — Williamstown', match: (v) => v.includes('netz') || v.includes('williamstown') },
+  { key: 'Hallam',       tab: 'Paid — Hallam',       match: (v) => v.includes('elite cricket') || v.includes('hallam') },
+  { key: 'Mickleham',    tab: 'Paid — Mickleham',    match: (v) => v.includes('mickleham') },
+];
+const centreForVenue = (venue) => {
+  const v = String(venue || '').toLowerCase();
+  return PAID_CENTRES.find((c) => c.match(v)) || null;
+};
 
+// Upsert a set of paid DB rows into a tab by Application ID (column A). Self-healing:
+// creates the tab + header if missing, refreshes existing rows in place (preserving
+// any manual columns/notes added to the right), and appends new ones. Shared by the
+// master "Paid players" tab and each per-centre tab.
+async function upsertPaidTab(sheets, spreadsheetId, tabName, rows) {
   await ensureTab(sheets, spreadsheetId, tabName);
   await ensureHeader(sheets, spreadsheetId, tabName, PAID_HEADERS);
 
-  // Read existing Application IDs (col A) once → map id → 1-based row number.
   const idRes = await sheets.spreadsheets.values.get({
     spreadsheetId, range: `${tabName}!A:A`, majorDimension: 'COLUMNS',
   });
@@ -193,13 +196,12 @@ async function reconcilePaid(sheets, spreadsheetId) {
 
   const updates = [];   // { range, values }
   const appends = [];   // row arrays
-  for (const r of paid) {
+  for (const r of rows) {
     const row = buildPaidRow(r);
     const at = rowById.get(r.id);
     if (at) updates.push({ range: `${tabName}!A${at}`, values: [row] });
     else appends.push(row);
   }
-
   if (updates.length) {
     await sheets.spreadsheets.values.batchUpdate({
       spreadsheetId,
@@ -212,7 +214,46 @@ async function reconcilePaid(sheets, spreadsheetId) {
       insertDataOption: 'INSERT_ROWS', requestBody: { values: appends },
     });
   }
-  return { paid: paid.length, updated: updates.length, appended: appends.length };
+  return { rows: rows.length, updated: updates.length, appended: appends.length };
+}
+
+// ------------------------------------------------------------
+// Paid players — the master "Paid players" tab (ALL centres) PLUS one roster tab
+// per centre (Paid — Williamstown / Hallam / Mickleham), split by venue. Every tab
+// is an upsert-by-Application-ID so it self-heals, flows new paid players in, and
+// keeps any manual columns/notes. NOTE: upsert adds/refreshes but does not delete —
+// if a paid player is ever re-assigned to a different venue they'd need to be
+// removed from the old centre tab by hand (rare; matches the master tab's behaviour).
+// ------------------------------------------------------------
+async function reconcilePaid(sheets, spreadsheetId) {
+  const masterTab = process.env.POWER_GAME_PAID_TAB || 'Paid players';
+  const sb = getSupabase();
+  const { data, error } = await sb
+    .from('power_game_applications')
+    .select('*')
+    .or('payment_status.eq.completed,status.eq.paid')
+    .order('paid_at', { ascending: true });
+  if (error) throw error;
+  const paid = data || [];
+
+  // Master tab — every paid player.
+  const master = await upsertPaidTab(sheets, spreadsheetId, masterTab, paid);
+
+  // Split by centre and write each per-centre roster tab.
+  const byCentre = {};
+  let unassigned = 0;
+  for (const r of paid) {
+    const c = centreForVenue(r.venue);
+    if (c) (byCentre[c.key] ||= []).push(r);
+    else unassigned++;
+  }
+  const centres = {};
+  for (const c of PAID_CENTRES) {
+    centres[c.key] = await upsertPaidTab(sheets, spreadsheetId, c.tab, byCentre[c.key] || []);
+  }
+  if (unassigned) console.warn(`sync-pgp-leads: ${unassigned} paid player(s) had an unrecognised venue (master tab only)`);
+
+  return { paid: paid.length, master, centres, unassigned };
 }
 
 // ------------------------------------------------------------
