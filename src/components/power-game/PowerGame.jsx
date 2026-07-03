@@ -646,7 +646,7 @@ const PowerGame = () => {
 
     return (
         <div className="min-h-screen bg-rr-dark pt-20 md:pt-28">
-            <div ref={hostRef} />
+            <div ref={hostRef} data-shadow-host />
             {showApply && (
                 <div style={{ position: 'fixed', inset: 0, zIndex: 200, background: '#111921', overflowY: 'auto' }}>
                     <div style={{ maxWidth: '640px', margin: '0 auto', padding: '14px 16px 0' }}>

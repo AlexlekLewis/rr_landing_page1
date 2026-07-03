@@ -34,6 +34,21 @@ const MICKLEHAM_NAV = [
     { label: 'THE PROGRAM', id: 'elite-info' },
 ];
 
+// Holiday + Elite section anchors, so the FULL nav (not just the Programs dropdown)
+// shows on those pages too. Elite's ids live inside its shadow root — handleNavClick
+// falls back to the shadow host to reach them.
+const HOLIDAY_NAV = [
+    { label: 'The Camp', id: 'program-overview' },
+    { label: 'Coaches', id: 'coaches' },
+    { label: 'Pricing', id: 'pricing' },
+    { label: 'Locations', id: 'locations' },
+];
+const ELITE_NAV = [
+    { label: 'The Program', id: 'program' },
+    { label: 'Pricing', id: 'price' },
+    { label: 'Centres', id: 'centres' },
+];
+
 // Ordered by the value ladder: Junior Royals (core) → Power Game / Elite → Holiday.
 const PROGRAMS_DROPDOWN = [
     { label: 'Junior Royals Term 3', route: '/junior-royals', badge: 'Early Bird Now Open', badgeColor: 'bg-green-500' },
@@ -46,6 +61,7 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
     const [programsOpen, setProgramsOpen] = useState(false);
     const [mobileProgramsOpen, setMobileProgramsOpen] = useState(false);
     const dropdownRef = useRef(null);
+    const navigate = useNavigate();
 
     const isLP2 = variant === 'lp2';
     const isLP3 = variant === 'lp3';
@@ -56,15 +72,15 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
     const isPowerGame = variant === 'power-game';
     const isMickleham = variant === 'mickleham';
 
-    const navLinks = (isLP3 || isHoliday || isShop || isPowerGame) ? [] : isMickleham ? MICKLEHAM_NAV : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
+    const navLinks = (isLP3 || isShop) ? [] : isMickleham ? MICKLEHAM_NAV : isHome ? HOME_NAV : isHoliday ? HOLIDAY_NAV : isPowerGame ? ELITE_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
     // The Programs dropdown (value ladder) is part of the PRIMARY nav — show it on every
     // core site page so the top nav is identical everywhere, not just on home.
     const showProgramsDropdown = isHome || isMickleham || isHoliday || isLittleCrickets || isPowerGame;
     const showHomeLink = isMickleham;
-    const showCTA = !isShop && !isPowerGame;
+    const showCTA = !isShop;
     const showHamburger = !isShop;
 
-    const ctaLabel = isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : (isLP2 || isHoliday || isLittleCrickets) ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
+    const ctaLabel = isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isPowerGame ? 'APPLY NOW' : (isLP2 || isHoliday || isLittleCrickets) ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
     const ctaTarget = isMickleham ? 'register' : isLP2 ? 'checkout' : (isHoliday || isLittleCrickets) ? 'registration-form' : 'apply-form';
 
     const scrollToForm = () => {
@@ -73,12 +89,25 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
             setMobileMenuOpen(false);
             return;
         }
+        if (isPowerGame) {
+            // Elite's apply is the real Stripe funnel route.
+            navigate('/PGP2026/apply');
+            setMobileMenuOpen(false);
+            return;
+        }
         document.getElementById(ctaTarget)?.scrollIntoView({ behavior: 'smooth' });
         setMobileMenuOpen(false);
     };
 
     const handleNavClick = (id) => {
-        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+        // Look in the light DOM first; fall back to the Elite page's shadow root
+        // (its sections live inside a shadow tree) so those nav links still scroll.
+        let el = document.getElementById(id);
+        if (!el) {
+            const host = document.querySelector('[data-shadow-host]');
+            if (host && host.shadowRoot) el = host.shadowRoot.getElementById(id);
+        }
+        el?.scrollIntoView({ behavior: 'smooth' });
         setMobileMenuOpen(false);
     };
 
