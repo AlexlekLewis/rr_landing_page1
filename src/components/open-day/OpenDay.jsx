@@ -20,10 +20,10 @@ const OpenDay = ({ config }) => {
 
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
+            <Navbar variant="mickleham" />
             {config.announcement && (
                 <AnnouncementBanner text={config.announcement.text} cta={config.announcement.cta} ctaTarget={config.announcement.ctaTarget} />
             )}
-            <Navbar variant="mickleham" />
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero"><OpenDayHero config={config} /></div>
 

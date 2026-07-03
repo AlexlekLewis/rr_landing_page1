@@ -12,7 +12,7 @@ const scrollTo = (id) => {
 // straight away (Junior Royal → see turn-up time · Elite Royal → jump to the form).
 const OpenDayHero = ({ config }) => {
     return (
-        <section className="relative overflow-hidden pt-24 pb-16 md:pt-28 md:pb-20"
+        <section className="relative overflow-hidden pt-12 pb-16 md:pt-16 md:pb-20"
             style={{ background: 'linear-gradient(178deg,#00112f 0%,#071a53 24%,#2a1063 52%,#7c1668 76%,#c11f83 100%)' }}>
             {/* ambient glows */}
             <div className="absolute -top-24 right-0 w-[26rem] h-[26rem] bg-rr-pink/25 rounded-full blur-[150px] pointer-events-none" />
