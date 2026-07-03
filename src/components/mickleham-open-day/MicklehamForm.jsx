@@ -171,7 +171,7 @@ const MicklehamForm = () => {
                         Register for the <span className="text-rr-pink">Elite Trial</span>
                     </h2>
                     <p className="text-white/70 font-medium max-w-lg mx-auto">
-                        Registering here is <strong className="text-white">specifically to trial for the Elite Program</strong> — our Power Game Pre-Season. Here for <strong className="text-white">Junior Royals</strong>? You don't need this form — just turn up between 9:00–10:30am ready to have fun.
+                        This form is <strong className="text-white">specifically to trial for the Elite Program</strong> — our Power Game Pre-Season. Here for <strong className="text-white">Junior Royals</strong>? Use the Junior Royals form above — register now, or on the day.
                     </p>
                 </div>
 
@@ -211,8 +211,8 @@ const MicklehamForm = () => {
                                 </div>
                                 {tooYoung && (
                                     <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-                                        <p className="text-amber-700 text-sm font-semibold">Under 12? No need to register! 🎉</p>
-                                        <p className="text-amber-700/90 text-sm font-medium mt-1">The Elite trial is for ages 12+. Younger players are very welcome to just <strong>turn up between 9:00–10:30am</strong> for open play, fun and a hit with the coaches.</p>
+                                        <p className="text-amber-700 text-sm font-semibold">Under 12? You're a Junior Royal! 🎉</p>
+                                        <p className="text-amber-700/90 text-sm font-medium mt-1">The Elite trial is for ages 12+. Younger players are very welcome as <strong>Junior Royals</strong> — use the Junior Royals form above (register now, or on the day) for open play, fun and a hit with the coaches.</p>
                                     </div>
                                 )}
                                 <div>

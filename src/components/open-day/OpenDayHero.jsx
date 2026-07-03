@@ -80,7 +80,7 @@ const OpenDayHero = ({ config }) => {
                     >
                         <span className="block text-[10px] font-black uppercase tracking-[0.2em] text-rr-light-pink mb-1">Junior Royal · {config.juniorTime}</span>
                         <span className="block text-base font-black text-white uppercase tracking-tight leading-tight">Register for Junior Royals →</span>
-                        <span className="block text-xs font-medium text-white/70 mt-0.5">Now required · ages 5–15</span>
+                        <span className="block text-xs font-medium text-white/70 mt-0.5">{config.juniorHint || 'Now required · ages 5–15'}</span>
                     </button>
                     <button
                         onClick={() => scrollTo('register')}
@@ -88,7 +88,7 @@ const OpenDayHero = ({ config }) => {
                     >
                         <span className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/90 mb-1">Elite Royal · {config.eliteTime}</span>
                         <span className="block text-base font-black text-white uppercase tracking-tight leading-tight">Register for the trial →</span>
-                        <span className="block text-xs font-medium text-white/80 mt-0.5">Registration required · ages 11+</span>
+                        <span className="block text-xs font-medium text-white/80 mt-0.5">{config.eliteHint || 'Registration required · ages 11+'}</span>
                     </button>
                 </motion.div>
             </div>
