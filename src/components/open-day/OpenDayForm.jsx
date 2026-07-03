@@ -74,13 +74,13 @@ const OpenDayForm = ({ config }) => {
     });
 
     const age = ageFromDob(form.player_dob);
-    const tooYoung = age !== null && age < 12;
+    const tooYoung = age !== null && age < 10;
 
     const validate = () => {
         const e = {};
         if (!form.player_name.trim()) e.player_name = 'Player name is required.';
         if (!form.player_dob) e.player_dob = 'Date of birth is required.';
-        else if (tooYoung) e.player_dob = 'The Elite trial is for players turning 12 and over.';
+        else if (tooYoung) e.player_dob = 'The Elite Royals trial is for players aged 10 and over.';
         if (!form.player_gender) e.player_gender = 'Please select an option.';
         if (!form.parent_name.trim()) e.parent_name = 'Parent/guardian name is required.';
         if (!form.parent_email.trim() || !/\S+@\S+\.\S+/.test(form.parent_email)) e.parent_email = 'Valid email is required.';
@@ -160,13 +160,13 @@ const OpenDayForm = ({ config }) => {
                 <div className="text-center mb-12">
                     <div className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Elite Trial · {config.part2Time} · Ages 12+</span>
+                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Elite Royals · {config.eliteTime} · Ages 10–25</span>
                     </div>
                     <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-wide mb-4">
-                        Register for the <span className="text-rr-pink">Elite Trial</span>
+                        Register for the <span className="text-rr-pink">Elite Royals</span> trial
                     </h2>
                     <p className="text-white/70 font-medium max-w-lg mx-auto">
-                        Registering here is <strong className="text-white">specifically to trial for the Elite Program</strong> — our Power Game Pre-Season. Here for <strong className="text-white">Junior Royals</strong>? You don't need this form — just turn up between {config.part1Window} ready to have fun.
+                        This form is <strong className="text-white">only for Elite Royals</strong> — the trial session where the coaches put you through your paces and one player wins a scholarship. Here as a <strong className="text-white">Junior Royal</strong>? You don't need this form — just turn up at <strong className="text-white">{config.juniorTime}</strong> ready to have fun.
                     </p>
                 </div>
 
@@ -206,8 +206,8 @@ const OpenDayForm = ({ config }) => {
                                 </div>
                                 {tooYoung && (
                                     <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-                                        <p className="text-amber-700 text-sm font-semibold">Under 12? No need to register! 🎉</p>
-                                        <p className="text-amber-700/90 text-sm font-medium mt-1">The Elite trial is for ages 12+. Younger players are very welcome to just <strong>turn up between {config.part1Window}</strong> for open play, fun and a hit with the coaches.</p>
+                                        <p className="text-amber-700 text-sm font-semibold">Under 10? You're a Junior Royal! 🎉</p>
+                                        <p className="text-amber-700/90 text-sm font-medium mt-1">The Elite Royals trial is for ages 10+. Younger players are very welcome as <strong>Junior Royals</strong> — just <strong>turn up at {config.juniorTime}</strong> for open play, fun and a hit with the coaches. No booking needed.</p>
                                     </div>
                                 )}
                                 <div>

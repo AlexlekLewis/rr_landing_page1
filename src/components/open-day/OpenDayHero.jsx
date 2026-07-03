@@ -6,59 +6,89 @@ const scrollTo = (id) => {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
 };
 
+// Web replica of the official "OPEN TRAINING DAY" poster hero — same hierarchy:
+// crest → HALLA BOL → OPEN TRAINING DAY / SPECIAL EVENT → date → venue → address →
+// "celebrate the opening…" line, then two clear path buttons so a visitor can act
+// straight away (Junior Royal → see turn-up time · Elite Royal → jump to the form).
 const OpenDayHero = ({ config }) => {
     return (
-        <section className="relative overflow-hidden bg-rr-dark pt-28 pb-20 md:pt-36 md:pb-28">
-            {/* brand gradient wash + glows */}
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, #001D48 0%, #0b1f6b 42%, #6d1566 100%)' }} />
-            <div className="absolute -top-24 -right-24 w-96 h-96 bg-rr-pink/25 rounded-full blur-[130px] pointer-events-none" />
-            <div className="absolute -bottom-32 -left-24 w-96 h-96 bg-rr-blue/30 rounded-full blur-[130px] pointer-events-none" />
+        <section className="relative overflow-hidden pt-24 pb-16 md:pt-28 md:pb-20"
+            style={{ background: 'linear-gradient(178deg,#00112f 0%,#071a53 24%,#2a1063 52%,#7c1668 76%,#c11f83 100%)' }}>
+            {/* ambient glows */}
+            <div className="absolute -top-24 right-0 w-[26rem] h-[26rem] bg-rr-pink/25 rounded-full blur-[150px] pointer-events-none" />
+            <div className="absolute top-40 -left-24 w-[24rem] h-[24rem] bg-rr-blue/30 rounded-full blur-[150px] pointer-events-none" />
 
             <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
+                {/* Crest + org */}
+                <motion.div
+                    initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
+                    className="flex flex-col items-center mb-7"
+                >
+                    <img src="/assets/MELBOURNE_OFFICIAL.png" alt="Rajasthan Royals Academy Melbourne"
+                        className="h-16 md:h-20 brightness-0 invert" />
+                </motion.div>
+
+                {/* HALLA BOL tag */}
                 <motion.p
-                    initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
-                    className="text-xs md:text-sm font-bold text-rr-light-pink uppercase tracking-[0.3em] mb-5"
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.1 }}
+                    className="text-lg md:text-xl font-black italic text-white/90 tracking-tight mb-4 -rotate-2"
+                    style={{ textShadow: '0 2px 12px rgba(0,0,0,0.35)' }}
                 >
-                    {config.heroKicker}
-                </motion.p>
-                <motion.h1
-                    initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.05 }}
-                    className="text-5xl md:text-7xl lg:text-8xl font-black text-white uppercase tracking-tighter leading-none"
-                >
-                    {config.titleTop}<br /><span className="text-rr-pink">Open Day</span>
-                </motion.h1>
-                <motion.h2
-                    initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.12 }}
-                    className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mt-6"
-                >
-                    {config.dateLine} <span className="text-rr-pink">·</span> {config.timeRange}
-                </motion.h2>
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.15 }}
-                    className="text-base md:text-xl text-white/85 font-medium leading-relaxed max-w-2xl mx-auto mt-6"
-                >
-                    Everyone's welcome. <strong className="text-white">{config.heroTurnUpLine}</strong> — no sign-up needed.
-                    Chasing the <strong className="text-white">Elite Program</strong> and aged 12+? Register for the trial.
+                    HALLA BOL!
                 </motion.p>
 
+                {/* OPEN TRAINING DAY */}
+                <motion.h1
+                    initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.12 }}
+                    className="text-5xl md:text-7xl lg:text-8xl font-black text-white uppercase tracking-tighter leading-[0.9]"
+                >
+                    Open Training Day
+                </motion.h1>
+                <motion.p
+                    initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
+                    className="text-xl md:text-3xl font-black text-rr-pink uppercase tracking-[0.2em] mt-2"
+                >
+                    Special Event
+                </motion.p>
+
+                {/* Date · Venue · Address */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.25 }}
-                    className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10"
+                    initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.28 }}
+                    className="mt-7"
+                >
+                    <p className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight leading-none">{config.dateHeadline}</p>
+                    <p className="text-lg md:text-2xl font-black text-white uppercase tracking-tight mt-3 leading-tight">{config.venueHeadline}</p>
+                    <p className="text-sm md:text-base font-medium text-white/80 mt-2">{config.address}</p>
+                </motion.div>
+
+                {/* Celebrate line */}
+                <motion.p
+                    initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.36 }}
+                    className="text-sm md:text-lg font-black uppercase tracking-wide text-rr-light-pink mt-7 max-w-2xl mx-auto leading-snug"
+                >
+                    Celebrate the opening of our new Royals Academy centre in Melbourne's {config.region}
+                </motion.p>
+
+                {/* Two path buttons — "which one are you?" */}
+                <motion.div
+                    initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.46 }}
+                    className="flex flex-col sm:flex-row items-stretch justify-center gap-3 mt-10 max-w-2xl mx-auto"
                 >
                     <button
-                        onClick={() => scrollTo('register')}
-                        className="group bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 md:px-10 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] flex items-center gap-3 w-full sm:w-auto justify-center"
+                        onClick={() => scrollTo('sessions')}
+                        className="group flex-1 bg-white/10 hover:bg-white/15 border border-white/25 hover:border-white/50 rounded-2xl px-6 py-4 transition-all duration-300 text-left"
                     >
-                        Register for the Elite Trial
-                        <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
+                        <span className="block text-[10px] font-black uppercase tracking-[0.2em] text-rr-light-pink mb-1">Junior Royal · {config.juniorTime}</span>
+                        <span className="block text-base font-black text-white uppercase tracking-tight leading-tight">Just turn up &amp; play →</span>
+                        <span className="block text-xs font-medium text-white/70 mt-0.5">No booking needed</span>
                     </button>
                     <button
-                        onClick={() => scrollTo('whats-on')}
-                        className="text-white/90 hover:text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full border border-white/25 hover:border-white/50 transition-all duration-300 w-full sm:w-auto"
+                        onClick={() => scrollTo('register')}
+                        className="group flex-1 bg-rr-pink hover:bg-rr-light-pink rounded-2xl px-6 py-4 transition-all duration-300 text-left hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]"
                     >
-                        Just turning up? See the plan
+                        <span className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/90 mb-1">Elite Royal · {config.eliteTime}</span>
+                        <span className="block text-base font-black text-white uppercase tracking-tight leading-tight">Register for the trial →</span>
+                        <span className="block text-xs font-medium text-white/80 mt-0.5">Registration required · ages 10+</span>
                     </button>
                 </motion.div>
             </div>
