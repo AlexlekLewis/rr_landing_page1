@@ -27,7 +27,7 @@ const MICKLEHAM = {
     juniorHint: 'Register now or on the day · ages 5–15',
     eliteHint: 'Registration required · ages 12+',
     announcement: {
-        text: 'Junior Royals: register now to save time — or just register on the day.',
+        text: 'Junior Royals — due to high interest, we ask that you register now, but you can still register on the day.',
         cta: 'Register',
         ctaTarget: 'register-junior',
     },
