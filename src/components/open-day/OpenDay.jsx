@@ -25,7 +25,7 @@ const OpenDay = ({ config }) => {
                 <AnnouncementBanner text={config.announcement.text} cta={config.announcement.cta} ctaTarget={config.announcement.ctaTarget} />
             )}
             <main className="flex-1 w-full overflow-hidden">
-                <div id="hero"><OpenDayHero config={config} /></div>
+                <div id="hero"><OpenDayHero config={config} hasBanner={!!config.announcement} /></div>
 
                 {/* ── WHICH ONE ARE YOU? — the two royals, side by side ── */}
                 <SessionsSplit config={config} />

@@ -10,9 +10,13 @@ const scrollTo = (id) => {
 // crest → HALLA BOL → OPEN TRAINING DAY / SPECIAL EVENT → date → venue → address →
 // "celebrate the opening…" line, then two clear path buttons so a visitor can act
 // straight away (Junior Royal → see turn-up time · Elite Royal → jump to the form).
-const OpenDayHero = ({ config }) => {
+// hasBanner: when an AnnouncementBanner sits above the hero it already clears the
+// fixed navbar, so the hero uses less top padding; without one, the hero itself
+// must clear the navbar (full top padding).
+const OpenDayHero = ({ config, hasBanner }) => {
+    const topPad = hasBanner ? 'pt-12 md:pt-16' : 'pt-24 md:pt-28';
     return (
-        <section className="relative overflow-hidden pt-12 pb-16 md:pt-16 md:pb-20"
+        <section className={`relative overflow-hidden ${topPad} pb-16 md:pb-20`}
             style={{ background: 'linear-gradient(178deg,#00112f 0%,#071a53 24%,#2a1063 52%,#7c1668 76%,#c11f83 100%)' }}>
             {/* ambient glows */}
             <div className="absolute -top-24 right-0 w-[26rem] h-[26rem] bg-rr-pink/25 rounded-full blur-[150px] pointer-events-none" />

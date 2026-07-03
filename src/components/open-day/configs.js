@@ -47,11 +47,9 @@ export const WILLIAMSTOWN_OPEN_DAY = {
         suburbPlaceholder: 'e.g. Newport',
         mode: 'required',
     },
-    announcement: {
-        text: 'Due to popular demand, you now need to register for the Junior Royals open day.',
-        cta: 'Register',
-        ctaTarget: 'register-junior',
-    },
+    // No top announcement banner on W/H — they launched with registration as the
+    // norm, so there's nothing "special" to announce. The banner is Mickleham-only
+    // (Mickleham was promoted as turn-up-and-play, so "you can now register" is news).
 };
 
 export const HALLAM_OPEN_DAY = {
@@ -89,11 +87,9 @@ export const HALLAM_OPEN_DAY = {
         suburbPlaceholder: 'e.g. Narre Warren',
         mode: 'required',
     },
-    announcement: {
-        text: 'Due to popular demand, you now need to register for the Junior Royals open day.',
-        cta: 'Register',
-        ctaTarget: 'register-junior',
-    },
+    // No top announcement banner on W/H — they launched with registration as the
+    // norm, so there's nothing "special" to announce. The banner is Mickleham-only
+    // (Mickleham was promoted as turn-up-and-play, so "you can now register" is news).
 };
 
 // Shared session definitions — identical across centres (straight from the poster).

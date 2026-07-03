@@ -55,7 +55,7 @@ const MicklehamOpenDay = () => {
                 ctaTarget={MICKLEHAM.announcement.ctaTarget}
             />
             <main className="flex-1 w-full overflow-hidden">
-                <div id="hero"><OpenDayHero config={MICKLEHAM} /></div>
+                <div id="hero"><OpenDayHero config={MICKLEHAM} hasBanner /></div>
 
                 {/* ── WHICH ONE ARE YOU? — the two royals, side by side ── */}
                 <SessionsSplit config={MICKLEHAM} eliteAges="Ages 12+" />
