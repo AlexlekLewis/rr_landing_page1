@@ -53,6 +53,8 @@ const HomePage = () => {
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
             <Navbar variant="home" onRegisterClick={openDrawer} />
             <PowerGameTopBanner />
+            {/* Open-days ticket banner — sits under the nav once the modal is closed */}
+            <OpenDaysTicket show={openDaysTicket && !openDaysModal} onOpen={reopenOpenDays} onDismiss={dismissTicket} />
 
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero"><HomeHero onRegisterClick={openDrawer} /></div>
@@ -68,7 +70,6 @@ const HomePage = () => {
             <HomeStickyCTA onRegisterClick={openDrawer} />
             <RegisterDrawer isOpen={drawerOpen} onClose={closeDrawer} />
             <OpenDaysModal open={openDaysModal} onClose={closeOpenDays} />
-            <OpenDaysTicket show={openDaysTicket && !openDaysModal} onOpen={reopenOpenDays} onDismiss={dismissTicket} />
         </div>
     );
 };

@@ -1,58 +1,65 @@
 import React from 'react';
 
-// Ticket-style reminder that appears once the visitor closes the OpenDaysModal.
-// Fixed bottom-left (clears the full-width sticky CTA and the bottom-right Text-Us
-// button). Clicking it re-opens the modal; the little × dismisses it for the session.
-// Shaped like a ticket: pink stub + dashed perforation + dark body, with notch
-// cut-outs punched via a CSS mask (degrades gracefully to a plain rounded ticket).
+// Ticket-style banner that appears under the nav once the visitor closes the
+// OpenDaysModal. Rendered in normal flow directly beneath PowerGameTopBanner (so
+// it sits "under the nav", like that banner). A horizontal ticket — pink stub +
+// dashed perforation + white body — clicking it re-opens the modal; the × dismisses
+// it for the session. Notches are punched via a CSS mask (graceful fallback).
 const NOTCH = {
     WebkitMaskImage:
-        'radial-gradient(circle 7px at 52px 0, transparent 98%, #000 100%), radial-gradient(circle 7px at 52px 100%, transparent 98%, #000 100%)',
+        'radial-gradient(circle 8px at 58px 0, transparent 98%, #000 100%), radial-gradient(circle 8px at 58px 100%, transparent 98%, #000 100%)',
     WebkitMaskComposite: 'source-in',
     maskImage:
-        'radial-gradient(circle 7px at 52px 0, transparent 98%, #000 100%), radial-gradient(circle 7px at 52px 100%, transparent 98%, #000 100%)',
+        'radial-gradient(circle 8px at 58px 0, transparent 98%, #000 100%), radial-gradient(circle 8px at 58px 100%, transparent 98%, #000 100%)',
     maskComposite: 'intersect',
 };
 
 const OpenDaysTicket = ({ show, onOpen, onDismiss }) => {
     if (!show) return null;
     return (
-        <div className="fixed bottom-24 left-4 z-40 print:hidden">
+        <div className="relative w-full bg-rr-dark px-4 py-3 flex items-center justify-center print:hidden">
             <style>{`
-              @keyframes ticketGlow { 0%,100% { box-shadow: 0 8px 24px rgba(0,0,0,0.35), 0 0 0 0 rgba(225,31,143,0); } 50% { box-shadow: 0 8px 24px rgba(0,0,0,0.35), 0 0 22px 2px rgba(225,31,143,0.7); } }
+              @keyframes odTicketGlow { 0%,100% { box-shadow: 0 6px 20px rgba(0,0,0,0.35), 0 0 0 0 rgba(225,31,143,0); } 50% { box-shadow: 0 6px 20px rgba(0,0,0,0.35), 0 0 20px 2px rgba(225,31,143,0.65); } }
               @media (prefers-reduced-motion: reduce) { .od-ticket { animation: none !important; } }
             `}</style>
-            <div className="relative">
-                {/* dismiss */}
-                <button
-                    onClick={onDismiss}
-                    aria-label="Dismiss"
-                    className="absolute -top-2 -right-2 z-10 w-6 h-6 rounded-full bg-rr-dark text-white border border-white/25 flex items-center justify-center shadow-lg hover:bg-black transition-colors"
-                >
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
 
-                <button
-                    onClick={onOpen}
-                    className="od-ticket flex items-stretch overflow-hidden rounded-xl text-left"
-                    style={{ ...NOTCH, animation: 'ticketGlow 2.2s ease-in-out infinite' }}
-                >
-                    {/* pink stub */}
-                    <span className="flex items-center justify-center px-3 shrink-0" style={{ background: 'linear-gradient(160deg,#E11F8F,#a3126b)' }}>
-                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M4 8a2 2 0 012-2h12a2 2 0 012 2 2 2 0 000 4 2 2 0 010 4 2 2 0 01-2 2H6a2 2 0 01-2-2 2 2 0 000-4 2 2 0 010-4z" />
-                        </svg>
+            <button
+                onClick={onOpen}
+                aria-label="See open training day dates"
+                className="od-ticket group flex items-stretch overflow-hidden rounded-xl text-left w-full max-w-2xl"
+                style={{ ...NOTCH, animation: 'odTicketGlow 2.4s ease-in-out infinite' }}
+            >
+                {/* pink stub */}
+                <span className="flex items-center justify-center px-4 shrink-0" style={{ background: 'linear-gradient(160deg,#E11F8F,#a3126b)' }}>
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 8a2 2 0 012-2h12a2 2 0 012 2 2 2 0 000 4 2 2 0 010 4 2 2 0 01-2 2H6a2 2 0 01-2-2 2 2 0 000-4 2 2 0 010-4z" />
+                    </svg>
+                </span>
+                {/* perforation */}
+                <span className="w-px border-l-2 border-dashed border-slate-300 self-stretch" />
+                {/* body */}
+                <span className="flex-1 flex items-center justify-between gap-3 bg-white pl-4 pr-4 py-2.5">
+                    <span className="min-w-0">
+                        <span className="block text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-rr-pink leading-none mb-1">Open Training Days · Free</span>
+                        <span className="block text-sm sm:text-base font-black text-rr-dark uppercase tracking-tight leading-none truncate">
+                            Mickleham this Sunday <span className="text-rr-charcoal/60">· +2 more</span>
+                        </span>
                     </span>
-                    {/* perforation */}
-                    <span className="w-px border-l-2 border-dashed border-white/25 self-stretch" />
-                    {/* body */}
-                    <span className="flex flex-col justify-center pl-3 pr-4 py-2.5 bg-rr-dark">
-                        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-rr-light-pink leading-none mb-1">Open Training Days</span>
-                        <span className="text-sm font-black text-white uppercase tracking-tight leading-none">Mickleham this Sun<span className="text-white/50"> +2 more</span></span>
-                        <span className="text-[10px] font-bold text-white/60 mt-1 leading-none">Tap for dates &amp; venues →</span>
+                    <span className="shrink-0 inline-flex items-center gap-1.5 bg-rr-pink group-hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-[10px] sm:text-xs px-3 sm:px-4 py-2 rounded-full transition-colors">
+                        See dates
+                        <svg className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
                     </span>
-                </button>
-            </div>
+                </span>
+            </button>
+
+            {/* dismiss */}
+            <button
+                onClick={onDismiss}
+                aria-label="Dismiss"
+                className="ml-2 shrink-0 w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white/80 transition-colors"
+            >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
         </div>
     );
 };
