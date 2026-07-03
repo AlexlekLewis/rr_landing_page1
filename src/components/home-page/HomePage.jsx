@@ -5,6 +5,7 @@ import HomeHero from './HomeHero';
 import HomeTrustBar from './HomeTrustBar';
 import HomeAbout from './HomeAbout';
 import HomeProgramCards from './HomeProgramCards';
+import HomePathway from './HomePathway';
 import HomeVideo from './HomeVideo';
 import HomeShopFeature from './HomeShopFeature';
 import HomeCinematicBreak from './HomeCinematicBreak';
@@ -30,12 +31,12 @@ const HomePage = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        // Show the open-days modal to every visitor once per session; after they
-        // close it, a ticket-style reminder persists (and re-opens it on tap).
+        // The open-days ticker is persistent on the page (like the club's match ticker).
+        // First-time visitors also get the modal once per session, over the top of it.
+        setOpenDaysTicket(true);
         let dismissed = false;
         try { dismissed = !!sessionStorage.getItem(OPEN_DAYS_KEY); } catch (_) { /* ignore */ }
-        if (dismissed) setOpenDaysTicket(true);
-        else setOpenDaysModal(true);
+        if (!dismissed) setOpenDaysModal(true);
     }, []);
 
     const openDrawer = () => setDrawerOpen(true);
@@ -61,6 +62,7 @@ const HomePage = () => {
                 <div id="about"><HomeAbout /></div>
                 <div id="video"><HomeVideo /></div>
                 <div id="programs"><HomeProgramCards /></div>
+                <div id="pathway"><HomePathway /></div>
                 <div id="shop"><HomeShopFeature /></div>
                 <div id="coaches"><HomeCoaches /></div>
                 <div id="faq"><HomeFAQ onRegisterClick={openDrawer} /></div>
