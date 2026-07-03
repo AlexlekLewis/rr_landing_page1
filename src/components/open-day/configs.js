@@ -81,7 +81,7 @@ export const JUNIOR_ROYALS = {
 };
 
 export const ELITE_ROYALS = {
-    ages: 'Ages 10–25',
+    ages: 'Ages 11–25',
     tagline: 'Trial session',
     blurb: 'Serious about your cricket? Get put through your paces by the Head Coach — one player wins a scholarship.',
     points: [
