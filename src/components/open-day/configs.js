@@ -2,9 +2,10 @@
 // the official "OPEN TRAINING DAY" poster: same hierarchy, same JUNIOR ROYALS vs
 // ELITE ROYALS split, same copy — only date / venue / times / region change.
 //
-// Every open day is two sessions back-to-back:
-//   1. JUNIOR ROYALS  — free come-and-try, all skill levels, NO registration.
-//   2. ELITE ROYALS   — trial session (scholarship on offer), registration REQUIRED.
+// Every open day is two sessions back-to-back. Registration is now REQUIRED for
+// BOTH (Junior Royals added "due to popular demand"):
+//   1. JUNIOR ROYALS  — come-and-try, all skill levels, register (Ages 5–15).
+//   2. ELITE ROYALS   — trial session, scholarship on offer, register (Ages 11–25).
 
 export const WILLIAMSTOWN_OPEN_DAY = {
     slug: 'williamstown',
@@ -29,12 +30,28 @@ export const WILLIAMSTOWN_OPEN_DAY = {
     suburbPlaceholder: 'e.g. Newport',
     clubPlaceholder: 'e.g. Williamstown CC',
 
-    // ── Success page / Meta Pixel ──
+    // ── Success page / Meta Pixel (Elite) ──
     pixelName: 'Williamstown Open Day',
     pixelCategory: 'williamstown-open-day-elite-trial',
     docTitle: "You're in — Williamstown Open Day",
     successSessionLine: 'Friday 10 July · 10:30am – 12:00pm',
     successVenueLine: 'The Netz · 37 Robbins Cct, Williamstown North VIC 3016',
+
+    // ── Junior Royals registration (now required, due to popular demand) ──
+    junior: {
+        table: 'williamstown_junior_registrations',
+        sourceTag: 'williamstown-junior-royals',
+        pixelName: 'Williamstown Junior Royals',
+        pixelCategory: 'williamstown-junior-royals',
+        time: '9:00 – 10:30am',
+        suburbPlaceholder: 'e.g. Newport',
+        mode: 'required',
+    },
+    announcement: {
+        text: 'Due to popular demand, you now need to register for the Junior Royals open day.',
+        cta: 'Register',
+        ctaTarget: 'register-junior',
+    },
 };
 
 export const HALLAM_OPEN_DAY = {
@@ -62,13 +79,28 @@ export const HALLAM_OPEN_DAY = {
     docTitle: "You're in — Hallam Open Day",
     successSessionLine: 'Friday 10 July · 2:30 – 4:00pm',
     successVenueLine: 'Elite Cricket Centre · 8-9 Becon Ct, Hallam VIC 3803',
+
+    junior: {
+        table: 'hallam_junior_registrations',
+        sourceTag: 'hallam-junior-royals',
+        pixelName: 'Hallam Junior Royals',
+        pixelCategory: 'hallam-junior-royals',
+        time: '1:00 – 2:30pm',
+        suburbPlaceholder: 'e.g. Narre Warren',
+        mode: 'required',
+    },
+    announcement: {
+        text: 'Due to popular demand, you now need to register for the Junior Royals open day.',
+        cta: 'Register',
+        ctaTarget: 'register-junior',
+    },
 };
 
 // Shared session definitions — identical across centres (straight from the poster).
 export const JUNIOR_ROYALS = {
     ages: 'Ages 5–15',
-    tagline: 'Turn up & play',
-    blurb: 'Come and have a go. All skill levels, boys and girls — just turn up and meet the coaches.',
+    tagline: 'Come & try',
+    blurb: 'Come and have a go. All skill levels, boys and girls — meet the coaches and show us your skills.',
     points: [
         'All skill levels welcome',
         'Boys and girls',

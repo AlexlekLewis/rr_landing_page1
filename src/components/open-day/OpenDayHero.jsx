@@ -75,12 +75,12 @@ const OpenDayHero = ({ config }) => {
                     className="flex flex-col sm:flex-row items-stretch justify-center gap-3 mt-10 max-w-2xl mx-auto"
                 >
                     <button
-                        onClick={() => scrollTo('sessions')}
+                        onClick={() => scrollTo('register-junior')}
                         className="group flex-1 bg-white/10 hover:bg-white/15 border border-white/25 hover:border-white/50 rounded-2xl px-6 py-4 transition-all duration-300 text-left"
                     >
                         <span className="block text-[10px] font-black uppercase tracking-[0.2em] text-rr-light-pink mb-1">Junior Royal · {config.juniorTime}</span>
-                        <span className="block text-base font-black text-white uppercase tracking-tight leading-tight">Just turn up &amp; play →</span>
-                        <span className="block text-xs font-medium text-white/70 mt-0.5">No booking needed</span>
+                        <span className="block text-base font-black text-white uppercase tracking-tight leading-tight">Register for Junior Royals →</span>
+                        <span className="block text-xs font-medium text-white/70 mt-0.5">Now required · ages 5–15</span>
                     </button>
                     <button
                         onClick={() => scrollTo('register')}

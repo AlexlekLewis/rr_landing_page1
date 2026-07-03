@@ -5,12 +5,14 @@ import Footer from '../Footer';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import OpenDayHero from './OpenDayHero';
 import OpenDayForm from './OpenDayForm';
+import JuniorRegisterForm from './JuniorRegisterForm';
+import AnnouncementBanner from './AnnouncementBanner';
 import { JUNIOR_ROYALS, ELITE_ROYALS } from './configs';
 
-const SECTIONS = ['hero', 'sessions', 'register'];
+const SECTIONS = ['hero', 'sessions', 'register-junior', 'register'];
 
-const scrollToRegister = () => {
-    const el = document.getElementById('register');
+const scrollTo = (id) => {
+    const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
 };
 
@@ -20,15 +22,19 @@ const Tick = ({ tone }) => (
     </svg>
 );
 
-// Web replica of the official poster. Two crystal-clear audiences:
-//   JUNIOR ROYALS (blue) — free come-and-try, just turn up, NO registration.
-//   ELITE ROYALS  (pink) — trial for a scholarship, registration REQUIRED (form below).
+// Web replica of the official poster. Two crystal-clear audiences — BOTH now
+// register (Junior Royals registration added "due to popular demand"):
+//   JUNIOR ROYALS (blue) — come-and-try, all skill levels, register (Ages 5–15).
+//   ELITE ROYALS  (pink) — trial for a scholarship, register (Ages 11–25).
 const OpenDay = ({ config }) => {
     usePageAnalytics(config.route, { sections: SECTIONS });
     useEffect(() => { window.scrollTo(0, 0); }, []);
 
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
+            {config.announcement && (
+                <AnnouncementBanner text={config.announcement.text} cta={config.announcement.cta} ctaTarget={config.announcement.ctaTarget} />
+            )}
             <Navbar variant="mickleham" />
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero"><OpenDayHero config={config} /></div>
@@ -41,8 +47,9 @@ const OpenDay = ({ config }) => {
                             <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-none">Which one are you?</h2>
                         </div>
                         <p className="text-center text-white/60 font-medium max-w-2xl mx-auto mb-14">
-                            Not sure? If you just want to <strong className="text-white">come and have a go</strong>, you're a Junior Royal — turn up, no booking.
-                            If you're <strong className="text-white">serious about your cricket and want to be tested</strong>, you're an Elite Royal — register below.
+                            If you just want to <strong className="text-white">come and have a go</strong>, you're a Junior Royal.
+                            If you're <strong className="text-white">serious about your cricket and want to be tested</strong>, you're an Elite Royal.
+                            <span className="block mt-1 text-white/80">Both need to register — pick your session below.</span>
                         </p>
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -68,9 +75,18 @@ const OpenDay = ({ config }) => {
                                         </li>
                                     ))}
                                 </ul>
-                                <div className="mx-7 mb-7 rounded-2xl bg-white/5 border border-white/15 px-5 py-4 text-center">
-                                    <p className="text-lg font-black text-white uppercase tracking-tight leading-tight">No booking needed</p>
-                                    <p className="text-sm font-bold uppercase tracking-widest mt-1" style={{ color: '#9DB6FF' }}>Just turn up · {config.juniorTime}</p>
+                                <div className="px-7 pb-7">
+                                    <div className="rounded-2xl bg-white/5 border border-white/15 px-5 py-3 text-center mb-4">
+                                        <p className="text-sm font-black text-white uppercase tracking-widest">Registration required</p>
+                                    </div>
+                                    <button
+                                        onClick={() => scrollTo('register-junior')}
+                                        className="group w-full text-white font-black uppercase tracking-widest px-6 py-4 rounded-full transition-all duration-300 flex items-center justify-center gap-3"
+                                        style={{ background: '#1226AA' }}
+                                    >
+                                        Register for Junior Royals
+                                        <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                                    </button>
                                 </div>
                             </motion.div>
 
@@ -102,7 +118,7 @@ const OpenDay = ({ config }) => {
                                         <p className="text-sm font-black text-white uppercase tracking-widest">Registration required</p>
                                     </div>
                                     <button
-                                        onClick={scrollToRegister}
+                                        onClick={() => scrollTo('register')}
                                         className="group w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-6 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] flex items-center justify-center gap-3"
                                     >
                                         Register for the trial
@@ -114,7 +130,8 @@ const OpenDay = ({ config }) => {
                     </div>
                 </section>
 
-                {/* ── REGISTER (Elite Royals only) ── */}
+                {/* ── REGISTER — Junior Royals (blue) then Elite Royals (pink) ── */}
+                <JuniorRegisterForm cfg={config.junior} />
                 <OpenDayForm config={config} />
             </main>
             <Footer />

@@ -5,11 +5,26 @@ import Footer from '../Footer';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import MicklehamHero from './MicklehamHero';
 import MicklehamForm from './MicklehamForm';
+import JuniorRegisterForm from '../open-day/JuniorRegisterForm';
+import AnnouncementBanner from '../open-day/AnnouncementBanner';
 
-const SECTIONS = ['hero', 'whats-on', 'elite-info', 'register'];
+const SECTIONS = ['hero', 'whats-on', 'register-junior', 'elite-info', 'register'];
 
-const scrollToRegister = () => {
-    const el = document.getElementById('register');
+// Mickleham has already been promoted as turn-up-and-play, so Junior Royals
+// registration here is FLEXIBLE — "register now, or on the day" — not required
+// (unlike Williamstown/Hallam). Same standalone Junior Royals table + pixel.
+const MICKLEHAM_JUNIOR = {
+    table: 'mickleham_junior_registrations',
+    sourceTag: 'mickleham-junior-royals',
+    pixelName: 'Mickleham Junior Royals',
+    pixelCategory: 'mickleham-junior-royals',
+    time: '9:00 – 10:30am',
+    suburbPlaceholder: 'e.g. Craigieburn',
+    mode: 'flexible',
+};
+
+const scrollTo = (id) => {
+    const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
 };
 
@@ -19,6 +34,11 @@ const MicklehamOpenDay = () => {
 
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
+            <AnnouncementBanner
+                text="Junior Royals: register now to save time — or just register on the day."
+                cta="Register"
+                ctaTarget="register-junior"
+            />
             <Navbar variant="mickleham" />
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero"><MicklehamHero /></div>
@@ -34,7 +54,7 @@ const MicklehamOpenDay = () => {
                         </p>
                     </div>
 
-                    {/* JUNIOR — turn up & play */}
+                    {/* JUNIOR — come & try */}
                     <div className="relative overflow-hidden min-h-[480px] md:min-h-[560px] flex" style={{ clipPath: 'polygon(0 0, 100% 0, 100% calc(100% - 7vw), 0 100%)' }}>
                         <img src="/assets/holiday-program-group.jpg" alt="Junior Royals players having fun" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: 'center 28%' }} />
                         <div className="absolute inset-0" style={{ background: 'linear-gradient(100deg, rgba(0,12,40,0.93) 0%, rgba(0,17,62,0.82) 42%, rgba(12,32,120,0.5) 74%, rgba(18,38,170,0.22) 100%)' }} />
@@ -42,14 +62,22 @@ const MicklehamOpenDay = () => {
                             <p className="text-sm font-black uppercase tracking-[0.2em] mb-3" style={{ color: '#9DB6FF' }}>9:00 – 10:30am · Everyone welcome</p>
                             <p className="text-base font-bold italic text-white/80 mb-1">Just want to come and have a go?</p>
                             <h3 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none">Junior Royals</h3>
-                            <p className="text-xl md:text-2xl font-black text-white uppercase tracking-tight mt-2">Turn up &amp; play</p>
+                            <p className="text-xl md:text-2xl font-black text-white uppercase tracking-tight mt-2">Come &amp; try</p>
                             <p className="text-white/85 font-medium leading-relaxed mt-5 max-w-xl">
-                                Open doors for <strong className="text-white">everyone</strong>. Come have a hit, have fun and meet the coaches. Bring the family — no pressure, no commitment.
+                                Open doors for <strong className="text-white">everyone</strong>. Come have a hit, have fun and meet the coaches. Bring the family — all skill levels welcome.
                             </p>
                             <div className="flex items-center gap-3 mt-6">
                                 <svg className="w-6 h-6 shrink-0" style={{ color: '#9DB6FF' }} fill="none" stroke="currentColor" strokeWidth="3.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                                <span className="text-white font-black uppercase tracking-wide text-lg">No need to register — just turn up ready to have fun</span>
+                                <span className="text-white font-black uppercase tracking-wide text-lg">Register now — or just register on the day</span>
                             </div>
+                            <button
+                                onClick={() => scrollTo('register-junior')}
+                                className="group text-white font-black uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 mt-7 self-start flex items-center gap-3"
+                                style={{ background: '#1226AA' }}
+                            >
+                                Register for Junior Royals
+                                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                            </button>
                         </div>
                     </div>
 
@@ -69,10 +97,10 @@ const MicklehamOpenDay = () => {
                                 Meet the <strong className="text-white">Head Coach &amp; Elite coaching team</strong>, get put through your paces and show us what you've got.
                             </p>
                             <p className="text-white font-bold leading-relaxed mt-5 max-w-xl border-l-4 border-rr-pink pl-4">
-                                Registering is <strong>specifically to trial for the Elite Program</strong> (our Power Game Pre-Season). Here for Junior Royals? You don't need to register.
+                                This form is <strong>specifically to trial for the Elite Program</strong> (our Power Game Pre-Season). Here for Junior Royals? Use the Junior Royals form above.
                             </p>
                             <button
-                                onClick={scrollToRegister}
+                                onClick={() => scrollTo('register')}
                                 className="group bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 mt-7 self-start flex items-center gap-3"
                             >
                                 Register for the Elite Trial
@@ -81,6 +109,9 @@ const MicklehamOpenDay = () => {
                         </div>
                     </div>
                 </section>
+
+                {/* ── REGISTER — Junior Royals (register now or on the day) ── */}
+                <JuniorRegisterForm cfg={MICKLEHAM_JUNIOR} />
 
                 {/* ── ABOUT THE ELITE PROGRAM ── */}
                 <section id="elite-info" className="py-20 bg-white">

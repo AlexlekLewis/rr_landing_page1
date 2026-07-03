@@ -127,26 +127,59 @@ const openDayRow = (r) => ([
   r.page_referrer || '',
 ]);
 
+// Junior Royals tabs — leaner (no cricket-skill fields) and carry all four
+// compliance flags (T&Cs, photo/media, medical & liability, marketing opt-in).
+const JUNIOR_HEADERS = [
+  'Registered (Melbourne)', 'Player Name', 'Age', 'Gender', 'Date of Birth',
+  'Parent/Guardian Name', 'Parent Email', 'Parent Phone', 'Suburb', 'Current Club',
+  'T&Cs + Privacy', 'Photo/Media Consent', 'Medical & Liability', 'Marketing Opt-in',
+  'Source', 'UTM Source', 'UTM Medium', 'UTM Campaign', 'Referrer',
+];
+
+const yesNo = (v) => (v === true ? 'Yes' : v === false ? 'No' : '');
+
+const juniorRow = (r) => ([
+  fmtMelb(r.created_at),
+  r.player_name || '',
+  r.player_age ?? '',
+  r.player_gender || '',
+  r.player_dob || '',
+  r.parent_name || '',
+  r.parent_email || '',
+  r.parent_phone ? `'${r.parent_phone}` : '',
+  r.suburb || '',
+  r.current_club || '',
+  yesNo(r.accept_terms),
+  yesNo(r.accept_social_media),
+  yesNo(r.accept_medical),
+  yesNo(r.accept_marketing),
+  r.source || '',
+  r.utm_source || '',
+  r.utm_medium || '',
+  r.utm_campaign || '',
+  r.page_referrer || '',
+]);
+
 // ------------------------------------------------------------
-// Open Day tabs (Mickleham / Williamstown / Hallam) — full rebuild from each
-// standalone registrations table (they share the same schema, so one reconcile
-// serves all three). Chronological sign-up log (oldest first). Tiny tables; full
-// rebuild is fine and idempotent. Every row is kept (no dedup) so the sheet is a
-// faithful record.
+// Open-day tabs — full rebuild from each standalone registrations table.
+// Elite tabs (Mickleham / Williamstown / Hallam) and Junior Royals tabs share
+// this reconcile; the caller passes the matching headers + row mapper.
+// Chronological sign-up log (oldest first). Tiny tables; full rebuild is fine
+// and idempotent. Every row is kept (no dedup) so the sheet is a faithful record.
 // ------------------------------------------------------------
-async function reconcileOpenDay(sheets, spreadsheetId, table, tabName) {
+async function reconcileOpenDay(sheets, spreadsheetId, table, tabName, headers = OPEN_DAY_HEADERS, rowFn = openDayRow) {
   const sb = getSupabase();
   const { data, error } = await sb
     .from(table)
     .select('*')
     .order('created_at', { ascending: true });
   if (error) throw error;
-  const rows = (data || []).map(openDayRow);
+  const rows = (data || []).map(rowFn);
 
   await ensureTab(sheets, spreadsheetId, tabName);
   await sheets.spreadsheets.values.update({
     spreadsheetId, range: `${tabName}!A1`, valueInputOption: 'USER_ENTERED',
-    requestBody: { values: [OPEN_DAY_HEADERS] },
+    requestBody: { values: [headers] },
   });
   await sheets.spreadsheets.values.clear({ spreadsheetId, range: `${tabName}!A2:AD100000` });
   if (rows.length > 0) {
@@ -355,13 +388,20 @@ export default async function handler(req, res) {
     out.ok = false;
   }
   const openDays = [
+    // Elite open-day tabs
     { key: 'micklehamTab', table: 'mickleham_open_day_registrations', tab: process.env.POWER_GAME_MICKLEHAM_TAB || 'Mickleham Open Day' },
     { key: 'williamstownTab', table: 'williamstown_open_day_registrations', tab: process.env.POWER_GAME_WILLIAMSTOWN_TAB || 'Williamstown Open Day' },
     { key: 'hallamTab', table: 'hallam_open_day_registrations', tab: process.env.POWER_GAME_HALLAM_TAB || 'Hallam Open Day' },
+    // Junior Royals tabs (leaner columns + the four compliance flags)
+    { key: 'micklehamJuniorTab', table: 'mickleham_junior_registrations', tab: process.env.POWER_GAME_MICKLEHAM_JUNIOR_TAB || 'Mickleham Junior Royals', junior: true },
+    { key: 'williamstownJuniorTab', table: 'williamstown_junior_registrations', tab: process.env.POWER_GAME_WILLIAMSTOWN_JUNIOR_TAB || 'Williamstown Junior Royals', junior: true },
+    { key: 'hallamJuniorTab', table: 'hallam_junior_registrations', tab: process.env.POWER_GAME_HALLAM_JUNIOR_TAB || 'Hallam Junior Royals', junior: true },
   ];
   for (const od of openDays) {
     try {
-      out[od.key] = await reconcileOpenDay(sheets, spreadsheetId, od.table, od.tab);
+      out[od.key] = od.junior
+        ? await reconcileOpenDay(sheets, spreadsheetId, od.table, od.tab, JUNIOR_HEADERS, juniorRow)
+        : await reconcileOpenDay(sheets, spreadsheetId, od.table, od.tab);
     } catch (err) {
       console.error(`sync-pgp-leads: ${od.tab} reconcile failed:`, err);
       out[od.key] = { error: err.message };
