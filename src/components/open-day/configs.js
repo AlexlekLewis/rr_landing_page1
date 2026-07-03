@@ -104,6 +104,20 @@ export const HALLAM_OPEN_DAY = {
     // (Mickleham was promoted as turn-up-and-play, so "you can now register" is news).
 };
 
+// Mickleham ELITE success config — lets the shared OpenDaySuccess serve Mickleham's
+// Elite Trial too (its own MicklehamForm still stashes 'mickleham_confirmation' and
+// navigates to /PGP2026/mickleham/success). Keeps the existing pixel unchanged so
+// all six flows (3 centres × Junior/Elite) use ONE unified success component.
+export const MICKLEHAM_ELITE = {
+    successRoute: '/PGP2026/mickleham/success',
+    storageKey: 'mickleham_confirmation',
+    pixelName: 'Mickleham Open Day',
+    pixelCategory: 'mickleham-open-day-elite-trial',
+    docTitle: "You're in — Mickleham Open Day",
+    successSessionLine: 'Sunday 5 July · 10:30am – 12:00pm',
+    successVenueLine: 'Mickleham Indoor Sports Centre · 3 Eclipse Drive, Mickleham VIC 3064',
+};
+
 // Mickleham Junior Royals config (Mickleham uses its own page components, so this
 // is exported here for both the page and its dedicated success route). Flexible
 // mode — "register now, or on the day".
