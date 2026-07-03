@@ -21,6 +21,8 @@ import MicklehamSuccess from './components/mickleham-open-day/MicklehamSuccess';
 import OpenDay from './components/open-day/OpenDay';
 import OpenDaySuccess from './components/open-day/OpenDaySuccess';
 import { WILLIAMSTOWN_OPEN_DAY, HALLAM_OPEN_DAY } from './components/open-day/configs';
+import EntryPage from './components/open-day/EntryPage';
+import { MICKLEHAM_ENTRY, WILLIAMSTOWN_ENTRY, HALLAM_ENTRY } from './components/open-day/entryConfigs';
 import IndiaTour2026 from './components/india-tour-2026/IndiaTour2026';
 import HomePage from './components/home-page/HomePage';
 import InductionPage from './components/induction/InductionPage';
@@ -174,6 +176,13 @@ function App() {
         <Route path="/PGP2026/williamstown/success" element={<OpenDaySuccess config={WILLIAMSTOWN_OPEN_DAY} />} />
         <Route path="/PGP2026/hallam" element={<OpenDay config={HALLAM_OPEN_DAY} />} />
         <Route path="/PGP2026/hallam/success" element={<OpenDaySuccess config={HALLAM_OPEN_DAY} />} />
+
+        {/* Onsite "Register for Entry" QR check-in — one fast form for EVERY attendee
+            (Junior + Elite), capturing details + all three compliances. Writes into the
+            same per-centre {centre}_open_day_registrations table (source=*-entry). */}
+        <Route path="/PGP2026/mickleham/entry" element={<EntryPage config={MICKLEHAM_ENTRY} />} />
+        <Route path="/PGP2026/williamstown/entry" element={<EntryPage config={WILLIAMSTOWN_ENTRY} />} />
+        <Route path="/PGP2026/hallam/entry" element={<EntryPage config={HALLAM_ENTRY} />} />
         {/* Power Game apply funnel — qualify → place → secure (the live registration + payment) */}
         <Route path="/PGP2026/apply" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameApply /></React.Suspense>} />
         <Route path="/PGP2026/apply/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameApplySuccess /></React.Suspense>} />

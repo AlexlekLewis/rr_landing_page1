@@ -67,6 +67,7 @@ const MicklehamForm = () => {
     const [errors, setErrors] = useState({});
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [acceptSocialMedia, setAcceptSocialMedia] = useState(false);
+    const [acceptLiability, setAcceptLiability] = useState(false);
 
     const [form, setForm] = useState({
         player_name: '', player_dob: '', player_gender: '',
@@ -91,6 +92,7 @@ const MicklehamForm = () => {
         if (!form.primary_role) e.primary_role = 'Please select a role.';
         if (!acceptTerms) e.acceptTerms = 'You must agree to the Terms & Conditions and Privacy Policy.';
         if (!acceptSocialMedia) e.acceptSocialMedia = 'You must confirm photo/media consent.';
+        if (!acceptLiability) e.acceptLiability = 'You must acknowledge the liability & risk waiver.';
         setErrors(e);
         return Object.keys(e).length === 0;
     };
@@ -128,6 +130,7 @@ const MicklehamForm = () => {
                     session: 'elite-trial-1030-1200',
                     accept_terms: acceptTerms,
                     accept_social_media: acceptSocialMedia,
+                    accept_liability: acceptLiability,
                     source: SOURCE_TAG,
                     page_referrer: document.referrer || null,
                     ...utm,
@@ -311,6 +314,9 @@ const MicklehamForm = () => {
                             </ComplianceCheckbox>
                             <ComplianceCheckbox checked={acceptSocialMedia} onChange={setAcceptSocialMedia} error={errors.acceptSocialMedia}>
                                 I consent to photos/videos featuring the player being used on Rajasthan Royals Academy Melbourne's social media and marketing channels.
+                            </ComplianceCheckbox>
+                            <ComplianceCheckbox checked={acceptLiability} onChange={setAcceptLiability} error={errors.acceptLiability}>
+                                I acknowledge that cricket activities carry inherent risks. I accept responsibility for the player's participation and release Rajasthan Royals Academy Melbourne and its staff from liability for injury, loss or damage, except to the extent caused by their negligence, and I consent to first aid or emergency treatment if required.
                             </ComplianceCheckbox>
                         </div>
 

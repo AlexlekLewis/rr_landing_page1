@@ -83,16 +83,22 @@ const leadRow = (s, a) => ([
 ]);
 
 const OPEN_DAY_HEADERS = [
-  'Registered (Melbourne)', 'Player Name', 'Age', 'Gender', 'Date of Birth',
+  'Registered (Melbourne)', 'Type', 'Here For', 'Player Name', 'Age', 'Gender', 'Date of Birth',
   'Parent/Guardian Name', 'Parent Email', 'Parent Phone', 'Suburb',
   'Current Club', 'Current Grade', 'Years Playing', 'Primary Role',
   'Batting Hand', 'Bowling Type', 'Honours', 'Session',
-  'Terms', 'Social Media Consent', 'Source',
+  'Terms', 'Social Media Consent', 'Liability', 'Source',
   'UTM Source', 'UTM Medium', 'UTM Campaign', 'Referrer',
 ];
 
+// Entry check-ins (source '{centre}-open-day-entry') vs detailed Elite Trial regos.
+const rowType = (r) => (String(r.source || '').endsWith('-entry') ? 'Entry (door)' : 'Elite Trial');
+const ATTENDING_LABELS = { junior: 'Junior Royals', elite: 'Elite Royals', both: 'Both / Not sure' };
+
 const openDayRow = (r) => ([
   fmtMelb(r.created_at),
+  rowType(r),
+  ATTENDING_LABELS[r.attending] || '',
   r.player_name || '',
   r.player_age ?? '',
   r.player_gender || '',
@@ -113,6 +119,7 @@ const openDayRow = (r) => ([
   r.session || '',
   r.accept_terms === true ? 'Yes' : r.accept_terms === false ? 'No' : '',
   r.accept_social_media === true ? 'Yes' : r.accept_social_media === false ? 'No' : '',
+  r.accept_liability === true ? 'Yes' : r.accept_liability === false ? 'No' : '',
   r.source || '',
   r.utm_source || '',
   r.utm_medium || '',
@@ -141,7 +148,7 @@ async function reconcileOpenDay(sheets, spreadsheetId, table, tabName) {
     spreadsheetId, range: `${tabName}!A1`, valueInputOption: 'USER_ENTERED',
     requestBody: { values: [OPEN_DAY_HEADERS] },
   });
-  await sheets.spreadsheets.values.clear({ spreadsheetId, range: `${tabName}!A2:Z100000` });
+  await sheets.spreadsheets.values.clear({ spreadsheetId, range: `${tabName}!A2:AD100000` });
   if (rows.length > 0) {
     await sheets.spreadsheets.values.update({
       spreadsheetId, range: `${tabName}!A2`, valueInputOption: 'USER_ENTERED',
