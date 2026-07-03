@@ -75,13 +75,11 @@ const OpenDayForm = ({ config }) => {
     });
 
     const age = ageFromDob(form.player_dob);
-    const tooYoung = age !== null && age < 11;
 
     const validate = () => {
         const e = {};
         if (!form.player_name.trim()) e.player_name = 'Player name is required.';
         if (!form.player_dob) e.player_dob = 'Date of birth is required.';
-        else if (tooYoung) e.player_dob = 'The Elite Royals trial is for players aged 11 and over.';
         if (!form.player_gender) e.player_gender = 'Please select an option.';
         if (!form.parent_name.trim()) e.parent_name = 'Parent/guardian name is required.';
         if (!form.parent_email.trim() || !/\S+@\S+\.\S+/.test(form.parent_email)) e.parent_email = 'Valid email is required.';
@@ -194,7 +192,7 @@ const OpenDayForm = ({ config }) => {
                                         <label className={labelClass}>Date of Birth *</label>
                                         <input name="player_dob" type="date" value={form.player_dob} onChange={handleChange} className={inputClass('player_dob')} />
                                         {errors.player_dob && <p className="text-red-500 text-xs font-medium mt-1">{errors.player_dob}</p>}
-                                        {age !== null && !tooYoung && <p className="text-rr-charcoal/60 text-xs font-medium mt-1">Age: {age}</p>}
+                                        {age !== null && <p className="text-rr-charcoal/60 text-xs font-medium mt-1">Age: {age}</p>}
                                     </div>
                                     <div>
                                         <label className={labelClass}>Gender *</label>
@@ -207,12 +205,6 @@ const OpenDayForm = ({ config }) => {
                                         {errors.player_gender && <p className="text-red-500 text-xs font-medium mt-1">{errors.player_gender}</p>}
                                     </div>
                                 </div>
-                                {tooYoung && (
-                                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-                                        <p className="text-amber-700 text-sm font-semibold">Under 11? You're a Junior Royal! 🎉</p>
-                                        <p className="text-amber-700/90 text-sm font-medium mt-1">The Elite Royals trial is for ages 11+. Younger players are very welcome as <strong>Junior Royals</strong> — just <strong>turn up at {config.juniorTime}</strong> for open play, fun and a hit with the coaches. No booking needed.</p>
-                                    </div>
-                                )}
                                 <div>
                                     <label className={labelClass}>Suburb *</label>
                                     <input name="suburb" value={form.suburb} onChange={handleChange} className={inputClass('suburb')} placeholder={config.suburbPlaceholder} />
@@ -326,7 +318,7 @@ const OpenDayForm = ({ config }) => {
 
                         <button
                             type="submit"
-                            disabled={submitting || tooYoung}
+                            disabled={submitting}
                             className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] flex items-center justify-center gap-3"
                         >
                             {submitting ? (
