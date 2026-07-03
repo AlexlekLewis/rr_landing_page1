@@ -10,7 +10,7 @@ const PowerGameTopBanner = () => {
                     Enrolling Now
                 </span>
                 <span className="font-bold uppercase tracking-wide text-xs sm:text-sm">
-                    The Power<span className="text-rr-pink">Game</span> Program — Melbourne, July 2026
+                    Elite Academy — Power <span className="text-rr-pink">Pre-Season</span> Program · Melbourne, July 2026
                 </span>
                 <Link
                     to="/elite-royals"
