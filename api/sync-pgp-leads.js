@@ -100,9 +100,12 @@ const openDayRow = (r) => ([
   rowType(r),
   ATTENDING_LABELS[r.attending] || '',
   r.player_name || '',
-  r.player_age ?? '',
+  // Leading apostrophe forces text so Sheets can't read the age NUMBER as a date
+  // serial and render it as a ~1900 date (e.g. age 15 → "1900-01-14").
+  r.player_age != null && r.player_age !== '' ? `'${r.player_age}` : '',
   r.player_gender || '',
-  r.player_dob || '',
+  // DOB as text too — preserves the exact YYYY-MM-DD and dodges locale/date coercion.
+  r.player_dob ? `'${r.player_dob}` : '',
   r.parent_name || '',
   r.parent_email || '',
   // Leading apostrophe forces Sheets to store as text, so USER_ENTERED can't
@@ -141,9 +144,12 @@ const yesNo = (v) => (v === true ? 'Yes' : v === false ? 'No' : '');
 const juniorRow = (r) => ([
   fmtMelb(r.created_at),
   r.player_name || '',
-  r.player_age ?? '',
+  // Leading apostrophe forces text so Sheets can't read the age NUMBER as a date
+  // serial and render it as a ~1900 date (e.g. age 15 → "1900-01-14").
+  r.player_age != null && r.player_age !== '' ? `'${r.player_age}` : '',
   r.player_gender || '',
-  r.player_dob || '',
+  // DOB as text too — preserves the exact YYYY-MM-DD and dodges locale/date coercion.
+  r.player_dob ? `'${r.player_dob}` : '',
   r.parent_name || '',
   r.parent_email || '',
   r.parent_phone ? `'${r.parent_phone}` : '',
