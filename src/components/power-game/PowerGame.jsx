@@ -575,6 +575,9 @@ const PowerGame = () => {
         if (!host) return;
         const shadow = host.shadowRoot || host.attachShadow({ mode: 'open' });
         shadow.innerHTML = SHADOW_HTML;
+        // This page now lives inside the global site shell, which provides the top nav.
+        // Drop the page's own internal nav so there aren't two nav bars.
+        shadow.querySelector('.nav')?.remove();
 
         // Honest availability — show the REAL remaining (capacity − paid) per session,
         // but ONLY when it's genuinely low; "Full" at capacity. No fake urgency. Fail-open
@@ -642,7 +645,7 @@ const PowerGame = () => {
     }, []);
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-rr-dark pt-20 md:pt-28">
             <div ref={hostRef} />
             {showApply && (
                 <div style={{ position: 'fixed', inset: 0, zIndex: 200, background: '#111921', overflowY: 'auto' }}>

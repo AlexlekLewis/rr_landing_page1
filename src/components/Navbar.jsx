@@ -57,8 +57,9 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
     const isMickleham = variant === 'mickleham';
 
     const navLinks = (isLP3 || isHoliday || isShop || isPowerGame) ? [] : isMickleham ? MICKLEHAM_NAV : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
-    // Standalone pages (Mickleham) get the full site nav: Home + the Programs dropdown of live pages.
-    const showProgramsDropdown = isHome || isMickleham;
+    // The Programs dropdown (value ladder) is part of the PRIMARY nav — show it on every
+    // core site page so the top nav is identical everywhere, not just on home.
+    const showProgramsDropdown = isHome || isMickleham || isHoliday || isLittleCrickets || isPowerGame;
     const showHomeLink = isMickleham;
     const showCTA = !isShop && !isPowerGame;
     const showHamburger = !isShop;

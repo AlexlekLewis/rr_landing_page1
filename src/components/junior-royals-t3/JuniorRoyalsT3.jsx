@@ -1,6 +1,4 @@
 import React, { useEffect } from 'react';
-import Navbar from '../Navbar';
-import Footer from '../Footer';
 import JRT3Hero from './JRT3Hero';
 import JRT3Overview from './JRT3Overview';
 import JRT3Coaches from './JRT3Coaches';
@@ -16,8 +14,7 @@ const JuniorRoyalsT3 = () => {
     usePageAnalytics('/junior-royals', { sections: SECTIONS });
     useEffect(() => { window.scrollTo(0, 0); }, []);
     return (
-        <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
-            <Navbar variant="junior-royals" />
+        <div className="bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero"><JRT3Hero /></div>
                 <div id="program-overview"><JRT3Overview /></div>
@@ -26,7 +23,6 @@ const JuniorRoyalsT3 = () => {
                 <div id="locations"><JRT3Locations /></div>
                 <div id="registration-form"><JRT3RegistrationForm /></div>
             </main>
-            <Footer />
             <JRT3StickyCTA />
         </div>
     );

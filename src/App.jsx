@@ -24,6 +24,7 @@ import EntryPage from './components/open-day/EntryPage';
 import { MICKLEHAM_ENTRY, WILLIAMSTOWN_ENTRY, HALLAM_ENTRY } from './components/open-day/entryConfigs';
 import IndiaTour2026 from './components/india-tour-2026/IndiaTour2026';
 import HomePage from './components/home-page/HomePage';
+import SiteLayout from './components/SiteLayout';
 import InductionPage from './components/induction/InductionPage';
 import Reviews from './components/reviews/Reviews';
 import PostHogPageviewTracker from './components/PostHogPageviewTracker';
@@ -132,7 +133,15 @@ function App() {
         } />
 
         {/* Public routes */}
-        <Route path="/" element={<HomePage />} />
+        {/* Core site pages share ONE persistent shell — the global nav + footer are mounted
+            once here and stay put; only the page content inside <Outlet/> changes on navigation. */}
+        <Route element={<SiteLayout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/junior-royals" element={<JuniorRoyalsT3 />} />
+          <Route path="/junior-royals-holiday" element={<HolidayPrograms />} />
+          <Route path="/elite-royals" element={<PowerGame />} />
+          <Route path="/PGP2026" element={<PowerGame />} />
+        </Route>
         <Route path="/splash" element={<ComingSoonSplash />} />
         {/* Elite Program 2026 — ARCHIVED (2026 intake closed). These routes were retired; the
             URLs (/eliteprogram2026, /master-page, /eliteprogram2026/success,
@@ -143,12 +152,10 @@ function App() {
         <Route path="/offer/:token" element={<OfferResponsePage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-conditions" element={<TermsConditions />} />
-        <Route path="/junior-royals-holiday" element={<HolidayPrograms />} />
         {/* Junior Royals Term 2 — archived */}
         <Route path="/junior-royals-term2" element={<LittleCrickets />} />
         <Route path="/junior-royals-term2/success" element={<JRSuccess />} />
-        {/* Junior Royals Term 3 — active */}
-        <Route path="/junior-royals" element={<JuniorRoyalsT3 />} />
+        {/* Junior Royals Term 3 — page is in the shell above; success stays standalone */}
         <Route path="/junior-royals/success" element={<JRT3Success />} />
         <Route path="/junior-royals-holiday/success" element={<HolidayProgramSuccess />} />
         {/* Female Cricket Introduction — DRAFT: not in nav, Vercel only until go-live instruction */}
@@ -163,9 +170,7 @@ function App() {
         {/* Reviews — public, moderated testimonial wall + submit form. Linkable from anywhere. */}
         <Route path="/reviews" element={<Reviews />} />
 
-        {/* Power Game Program — hidden from nav, accessible via direct URL only */}
-        <Route path="/elite-royals" element={<PowerGame />} />
-        <Route path="/PGP2026" element={<PowerGame />} />
+        {/* Power Game / Elite — page is in the shell above; its open-day + funnel sub-routes stay standalone */}
         {/* Mickleham Open Day — turn-up-and-play + Elite Program trial registration */}
         <Route path="/PGP2026/mickleham" element={<MicklehamOpenDay />} />
         <Route path="/PGP2026/mickleham/success" element={<OpenDaySuccess config={MICKLEHAM_ELITE} />} />
