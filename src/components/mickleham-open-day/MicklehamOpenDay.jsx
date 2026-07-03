@@ -25,7 +25,7 @@ const MICKLEHAM = {
     juniorTime: '9:00 – 10:30am',
     eliteTime: '10:30am – 12:00pm',
     juniorHint: 'Register now or on the day · ages 5–15',
-    eliteHint: 'Registration required · ages 12+',
+    eliteHint: 'Registration required · ages 11+',
     announcement: {
         text: 'Junior Royals — due to high interest, we ask that you register now, but you can still register on the day.',
         cta: 'Register',
@@ -58,7 +58,7 @@ const MicklehamOpenDay = () => {
                 <div id="hero"><OpenDayHero config={MICKLEHAM} hasBanner /></div>
 
                 {/* ── WHICH ONE ARE YOU? — the two royals, side by side ── */}
-                <SessionsSplit config={MICKLEHAM} eliteAges="Ages 12+" />
+                <SessionsSplit config={MICKLEHAM} eliteAges="Ages 11+" />
 
                 {/* ── REGISTER — Junior Royals (flexible) then Elite Trial ── */}
                 <JuniorRegisterForm cfg={MICKLEHAM.junior} />

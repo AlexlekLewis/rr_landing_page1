@@ -77,11 +77,15 @@ const MicklehamForm = () => {
     });
 
     const age = ageFromDob(form.player_dob);
+    // Under 11s aren't eligible for the Elite trial — they're routed to Junior
+    // Royals (registered there, not turned away). 11+ can register for Elite.
+    const notEligible = age !== null && age < 11;
 
     const validate = () => {
         const e = {};
         if (!form.player_name.trim()) e.player_name = 'Player name is required.';
         if (!form.player_dob) e.player_dob = 'Date of birth is required.';
+        else if (notEligible) e.player_dob = 'The Elite trial is for ages 11+ — please register for Junior Royals above.';
         if (!form.player_gender) e.player_gender = 'Please select an option.';
         if (!form.parent_name.trim()) e.parent_name = 'Parent/guardian name is required.';
         if (!form.parent_email.trim() || !/\S+@\S+\.\S+/.test(form.parent_email)) e.parent_email = 'Valid email is required.';
@@ -163,7 +167,7 @@ const MicklehamForm = () => {
                 <div className="text-center mb-12">
                     <div className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Elite Trial · 10:30am–12:00pm · Ages 12+</span>
+                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Elite Trial · 10:30am–12:00pm · Ages 11+</span>
                     </div>
                     <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-wide mb-4">
                         Register for the <span className="text-rr-pink">Elite Trial</span>
@@ -207,6 +211,16 @@ const MicklehamForm = () => {
                                         {errors.player_gender && <p className="text-red-500 text-xs font-medium mt-1">{errors.player_gender}</p>}
                                     </div>
                                 </div>
+                                {notEligible && (
+                                    <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                                        <p className="text-rr-dark text-sm font-black uppercase tracking-wide">Under 11? You're a Junior Royal! 🎉</p>
+                                        <p className="text-rr-charcoal text-sm font-medium mt-1">The Elite trial is for ages 11+. Please register for <strong>Junior Royals</strong> instead — same quick form, just above. Everyone's welcome to play.</p>
+                                        <button type="button" onClick={() => { const el = document.getElementById('register-junior'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }} className="mt-3 inline-flex items-center gap-2 bg-rr-blue hover:bg-rr-pink text-white font-black uppercase tracking-widest text-xs px-5 py-2.5 rounded-full transition-colors">
+                                            Register for Junior Royals
+                                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                                        </button>
+                                    </div>
+                                )}
                                 <div>
                                     <label className={labelClass}>Suburb *</label>
                                     <input name="suburb" value={form.suburb} onChange={handleChange} className={inputClass('suburb')} placeholder="e.g. Craigieburn" />
@@ -320,7 +334,7 @@ const MicklehamForm = () => {
 
                         <button
                             type="submit"
-                            disabled={submitting}
+                            disabled={submitting || notEligible}
                             className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] flex items-center justify-center gap-3"
                         >
                             {submitting ? (

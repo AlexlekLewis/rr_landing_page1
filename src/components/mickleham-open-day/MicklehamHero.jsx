@@ -38,7 +38,7 @@ const MicklehamHero = () => {
                     className="text-base md:text-xl text-white/85 font-medium leading-relaxed max-w-2xl mx-auto mt-6"
                 >
                     Everyone's welcome. <strong className="text-white">Turn up and play from 9am</strong> — no sign-up needed.
-                    Chasing the <strong className="text-white">Elite Program</strong> and aged 12+? Register for the trial.
+                    Chasing the <strong className="text-white">Elite Program</strong> and aged 11+? Register for the trial.
                 </motion.p>
 
                 <motion.div

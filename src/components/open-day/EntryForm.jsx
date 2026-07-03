@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { ATTENDING_OPTIONS } from './entryConfigs';
 
 const getUTMParams = () => {
     const params = new URLSearchParams(window.location.search);
@@ -44,6 +43,13 @@ const EntryForm = ({ config }) => {
     const [acceptSocialMedia, setAcceptSocialMedia] = useState(false);
     const [acceptLiability, setAcceptLiability] = useState(false);
 
+    // Age-driven program routing: under 11s automatically register for Junior
+    // Royals; 11+ choose Junior Royals or Elite. Everyone still registers.
+    const ageNum = parseInt(form.player_age, 10);
+    const hasAge = Number.isInteger(ageNum) && ageNum >= 1 && ageNum <= 99;
+    const under11 = hasAge && ageNum < 11;
+    const program = under11 ? 'junior' : attending;
+
     const resetAll = () => {
         setForm(emptyForm);
         setAttending('');
@@ -63,7 +69,7 @@ const EntryForm = ({ config }) => {
         if (!form.parent_name.trim()) e.parent_name = 'Parent/guardian name is required.';
         if (!form.parent_email.trim() || !/\S+@\S+\.\S+/.test(form.parent_email)) e.parent_email = 'Valid email is required.';
         if (!form.parent_phone.trim()) e.parent_phone = 'Mobile number is required.';
-        if (!attending) e.attending = 'Please choose one.';
+        if (!under11 && !attending) e.attending = 'Please choose one.';
         if (!acceptTerms) e.acceptTerms = 'Required to enter.';
         if (!acceptSocialMedia) e.acceptSocialMedia = 'Required to enter.';
         if (!acceptLiability) e.acceptLiability = 'Required to enter.';
@@ -92,7 +98,7 @@ const EntryForm = ({ config }) => {
                     parent_name: form.parent_name.trim(),
                     parent_email: form.parent_email.trim(),
                     parent_phone: form.parent_phone.trim(),
-                    attending,
+                    attending: program,
                     session: null,
                     accept_terms: acceptTerms,
                     accept_social_media: acceptSocialMedia,
@@ -177,24 +183,34 @@ const EntryForm = ({ config }) => {
                     </div>
 
                     <div>
-                        <label className={labelClass}>Who are you here for today? *</label>
-                        <div className="grid grid-cols-3 gap-2.5">
-                            {ATTENDING_OPTIONS.map((opt) => {
-                                const active = attending === opt.value;
-                                return (
-                                    <button
-                                        type="button"
-                                        key={opt.value}
-                                        onClick={() => { setAttending(opt.value); if (errors.attending) setErrors((p) => ({ ...p, attending: undefined })); }}
-                                        className={`rounded-xl border-2 px-2 py-3 text-center transition-all duration-150 ${active ? 'border-rr-pink bg-rr-pink/5' : 'border-slate-200 bg-white hover:border-rr-pink/50'}`}
-                                    >
-                                        <span className={`block text-sm font-black uppercase tracking-tight leading-tight ${active ? 'text-rr-pink' : 'text-rr-dark'}`}>{opt.label}</span>
-                                        <span className="block text-[11px] font-semibold text-rr-charcoal/60 mt-0.5">{opt.hint}</span>
-                                    </button>
-                                );
-                            })}
-                        </div>
-                        {errors.attending && <p className="text-red-500 text-xs font-medium mt-1">{errors.attending}</p>}
+                        <label className={labelClass}>Which program? *</label>
+                        {under11 ? (
+                            <div className="rounded-xl border-2 border-[#1226AA]/30 bg-[#1226AA]/5 px-4 py-4">
+                                <p className="text-sm font-black uppercase tracking-tight text-[#1226AA]">Junior Royals 🎉</p>
+                                <p className="text-[13px] font-semibold text-rr-charcoal/70 mt-1">Under 11s register as Junior Royals — you're all set. Just finish your details below.</p>
+                            </div>
+                        ) : (
+                            <>
+                                <div className="grid grid-cols-2 gap-2.5">
+                                    {[{ value: 'junior', label: 'Junior Royals', hint: 'Come & play' }, { value: 'elite', label: 'Elite', hint: 'Trial · ages 11+' }].map((opt) => {
+                                        const active = attending === opt.value;
+                                        return (
+                                            <button
+                                                type="button"
+                                                key={opt.value}
+                                                onClick={() => { setAttending(opt.value); if (errors.attending) setErrors((p) => ({ ...p, attending: undefined })); }}
+                                                className={`rounded-xl border-2 px-2 py-3 text-center transition-all duration-150 ${active ? 'border-rr-pink bg-rr-pink/5' : 'border-slate-200 bg-white hover:border-rr-pink/50'}`}
+                                            >
+                                                <span className={`block text-sm font-black uppercase tracking-tight leading-tight ${active ? 'text-rr-pink' : 'text-rr-dark'}`}>{opt.label}</span>
+                                                <span className="block text-[11px] font-semibold text-rr-charcoal/60 mt-0.5">{opt.hint}</span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                                {!hasAge && <p className="text-rr-charcoal/50 text-xs font-medium mt-1.5">Enter an age above — under 11s are automatically Junior Royals.</p>}
+                                {errors.attending && <p className="text-red-500 text-xs font-medium mt-1">{errors.attending}</p>}
+                            </>
+                        )}
                     </div>
                 </div>
 
