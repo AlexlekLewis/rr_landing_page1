@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 
 // Reusable Junior Royals registration form, shared by every open-day centre
@@ -56,9 +57,8 @@ const ComplianceCheckbox = ({ checked, onChange, error, children }) => (
 );
 
 const JuniorRegisterForm = ({ cfg }) => {
+    const navigate = useNavigate();
     const [submitting, setSubmitting] = useState(false);
-    const [submitted, setSubmitted] = useState(false);
-    const [confName, setConfName] = useState('');
     const [errors, setErrors] = useState({});
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [acceptSocialMedia, setAcceptSocialMedia] = useState(false);
@@ -94,14 +94,6 @@ const JuniorRegisterForm = ({ cfg }) => {
         if (errors[name]) setErrors((p) => ({ ...p, [name]: undefined }));
     };
 
-    const fireLead = () => {
-        try {
-            if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
-                window.fbq('track', 'Lead', { content_name: cfg.pixelName, content_category: cfg.pixelCategory });
-            }
-        } catch (_) { /* never let analytics break the flow */ }
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validate()) return;
@@ -130,13 +122,14 @@ const JuniorRegisterForm = ({ cfg }) => {
                     ...utm,
                 }]);
             if (insertError) throw insertError;
-            setConfName((form.player_name || '').trim().split(' ')[0] || 'your child');
-            fireLead();
-            setSubmitted(true);
-            requestAnimationFrame(() => {
-                const el = document.getElementById('register-junior');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-            });
+            // Stash the confirmation for the dedicated success URL, then navigate.
+            // The success page reads this one-shot stash and fires the Meta Lead pixel
+            // (so the junior sign-up has its own thank-you URL, like the Elite flow).
+            const firstName = (form.player_name || '').trim().split(' ')[0] || 'You';
+            try {
+                sessionStorage.setItem(cfg.storageKey, JSON.stringify({ firstName, email: form.parent_email.trim() }));
+            } catch (_) { /* success page falls back to generic copy */ }
+            navigate(cfg.successRoute);
         } catch (err) {
             console.error(`${cfg.sourceTag} submission error:`, err);
             setErrors({ form: 'Something went wrong. Please try again, or email eliteprogram@rramelbourne.com' });
@@ -171,18 +164,7 @@ const JuniorRegisterForm = ({ cfg }) => {
                     </p>
                 </div>
 
-                {submitted ? (
-                    <div className="bg-white rounded-2xl p-8 md:p-10 text-center">
-                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-rr-blue to-rr-pink flex items-center justify-center mx-auto mb-6">
-                            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                        </div>
-                        <h3 className="text-3xl font-black text-rr-dark uppercase tracking-tight mb-3">You're registered!</h3>
-                        <p className="text-rr-charcoal font-medium max-w-md mx-auto">
-                            Thanks — <strong>{confName}</strong> is booked in for Junior Royals at <strong>{cfg.time}</strong>. Come along in cricket gear ready to have fun. We'll see you there!
-                        </p>
-                    </div>
-                ) : (
-                    <motion.div
+                <motion.div
                         initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
                         className="bg-white rounded-2xl p-8 md:p-10"
                     >
@@ -299,8 +281,7 @@ const JuniorRegisterForm = ({ cfg }) => {
                             </button>
                             <p className="text-center text-rr-charcoal/50 text-xs font-medium mt-4">Free to attend · all skill levels welcome</p>
                         </form>
-                    </motion.div>
-                )}
+                </motion.div>
             </div>
         </section>
     );

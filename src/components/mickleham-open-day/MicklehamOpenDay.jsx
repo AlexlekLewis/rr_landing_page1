@@ -6,6 +6,7 @@ import OpenDayHero from '../open-day/OpenDayHero';
 import SessionsSplit from '../open-day/SessionsSplit';
 import JuniorRegisterForm from '../open-day/JuniorRegisterForm';
 import AnnouncementBanner from '../open-day/AnnouncementBanner';
+import { MICKLEHAM_JUNIOR } from '../open-day/configs';
 import MicklehamForm from './MicklehamForm';
 
 const SECTIONS = ['hero', 'sessions', 'register-junior', 'register'];
@@ -31,15 +32,7 @@ const MICKLEHAM = {
         cta: 'Register',
         ctaTarget: 'register-junior',
     },
-    junior: {
-        table: 'mickleham_junior_registrations',
-        sourceTag: 'mickleham-junior-royals',
-        pixelName: 'Mickleham Junior Royals',
-        pixelCategory: 'mickleham-junior-royals',
-        time: '9:00 – 10:30am',
-        suburbPlaceholder: 'e.g. Craigieburn',
-        mode: 'flexible',
-    },
+    junior: MICKLEHAM_JUNIOR,
 };
 
 const MicklehamOpenDay = () => {

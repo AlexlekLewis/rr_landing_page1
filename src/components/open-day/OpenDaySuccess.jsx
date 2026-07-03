@@ -47,9 +47,10 @@ const fireMetaConversion = (config) => {
     } catch (_) { /* never let analytics break the page */ }
 };
 
-const OpenDaySuccess = ({ config }) => {
+const OpenDaySuccess = ({ config, audience = 'elite' }) => {
     usePageAnalytics(config.successRoute);
     const [conf, setConf] = useState(null);
+    const isJunior = audience === 'junior';
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -126,10 +127,14 @@ const OpenDaySuccess = ({ config }) => {
 
                 {/* Welcome + body */}
                 <motion.p initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: 'easeOut', delay: 0.4 }} className="text-xl md:text-2xl font-semibold text-white/90 leading-relaxed mb-6">
-                    You're booked into the Elite Trial.
+                    {isJunior ? "You're registered for Junior Royals." : "You're booked into the Elite Trial."}
                 </motion.p>
                 <motion.p initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: 'easeOut', delay: 0.5 }} className="text-base md:text-lg text-white/70 leading-relaxed mb-8 max-w-lg mx-auto font-medium">
-                    Thanks <span className="text-white font-bold">{firstName}</span> — you're registered to trial for the <span className="text-white font-bold">Elite Program</span> (our Power Game Pre-Season) at the {config.pixelName}. Come ready to show us what you've got.
+                    {isJunior ? (
+                        <>Thanks <span className="text-white font-bold">{firstName}</span> — you're all set for <span className="text-white font-bold">Junior Royals</span>. Come and have a go — all skill levels welcome. We can't wait to see you there!</>
+                    ) : (
+                        <>Thanks <span className="text-white font-bold">{firstName}</span> — you're registered to trial for the <span className="text-white font-bold">Elite Program</span> (our Power Game Pre-Season) at the {config.pixelName}. Come ready to show us what you've got.</>
+                    )}
                 </motion.p>
 
                 {/* Your session */}

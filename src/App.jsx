@@ -20,7 +20,7 @@ import MicklehamOpenDay from './components/mickleham-open-day/MicklehamOpenDay';
 import MicklehamSuccess from './components/mickleham-open-day/MicklehamSuccess';
 import OpenDay from './components/open-day/OpenDay';
 import OpenDaySuccess from './components/open-day/OpenDaySuccess';
-import { WILLIAMSTOWN_OPEN_DAY, HALLAM_OPEN_DAY } from './components/open-day/configs';
+import { WILLIAMSTOWN_OPEN_DAY, HALLAM_OPEN_DAY, MICKLEHAM_JUNIOR } from './components/open-day/configs';
 import EntryPage from './components/open-day/EntryPage';
 import { MICKLEHAM_ENTRY, WILLIAMSTOWN_ENTRY, HALLAM_ENTRY } from './components/open-day/entryConfigs';
 import IndiaTour2026 from './components/india-tour-2026/IndiaTour2026';
@@ -170,12 +170,15 @@ function App() {
         {/* Mickleham Open Day — turn-up-and-play + Elite Program trial registration */}
         <Route path="/PGP2026/mickleham" element={<MicklehamOpenDay />} />
         <Route path="/PGP2026/mickleham/success" element={<MicklehamSuccess />} />
+        <Route path="/PGP2026/mickleham/junior/success" element={<OpenDaySuccess config={MICKLEHAM_JUNIOR} audience="junior" />} />
 
         {/* Williamstown + Hallam Open Days (Fri 10 July) — same two-part format, shared components */}
         <Route path="/PGP2026/williamstown" element={<OpenDay config={WILLIAMSTOWN_OPEN_DAY} />} />
         <Route path="/PGP2026/williamstown/success" element={<OpenDaySuccess config={WILLIAMSTOWN_OPEN_DAY} />} />
+        <Route path="/PGP2026/williamstown/junior/success" element={<OpenDaySuccess config={WILLIAMSTOWN_OPEN_DAY.junior} audience="junior" />} />
         <Route path="/PGP2026/hallam" element={<OpenDay config={HALLAM_OPEN_DAY} />} />
         <Route path="/PGP2026/hallam/success" element={<OpenDaySuccess config={HALLAM_OPEN_DAY} />} />
+        <Route path="/PGP2026/hallam/junior/success" element={<OpenDaySuccess config={HALLAM_OPEN_DAY.junior} audience="junior" />} />
 
         {/* Onsite "Register for Entry" QR check-in — one fast form for EVERY attendee
             (Junior + Elite), capturing details + all three compliances. Writes into the

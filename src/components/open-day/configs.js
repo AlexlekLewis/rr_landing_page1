@@ -46,6 +46,13 @@ export const WILLIAMSTOWN_OPEN_DAY = {
         time: '9:00 – 10:30am',
         suburbPlaceholder: 'e.g. Newport',
         mode: 'required',
+        // Dedicated success page (same design as the Elite success) so the Junior
+        // sign-up has its own thank-you URL for Meta tracking + visual consistency.
+        successRoute: '/PGP2026/williamstown/junior/success',
+        storageKey: 'williamstown_junior_confirmation',
+        docTitle: "You're registered — Williamstown Junior Royals",
+        successSessionLine: 'Friday 10 July · 9:00 – 10:30am',
+        successVenueLine: 'The Netz · 37 Robbins Cct, Williamstown North VIC 3016',
     },
     // No top announcement banner on W/H — they launched with registration as the
     // norm, so there's nothing "special" to announce. The banner is Mickleham-only
@@ -86,10 +93,33 @@ export const HALLAM_OPEN_DAY = {
         time: '1:00 – 2:30pm',
         suburbPlaceholder: 'e.g. Narre Warren',
         mode: 'required',
+        successRoute: '/PGP2026/hallam/junior/success',
+        storageKey: 'hallam_junior_confirmation',
+        docTitle: "You're registered — Hallam Junior Royals",
+        successSessionLine: 'Friday 10 July · 1:00 – 2:30pm',
+        successVenueLine: 'Elite Cricket Centre · 8-9 Becon Ct, Hallam VIC 3803',
     },
     // No top announcement banner on W/H — they launched with registration as the
     // norm, so there's nothing "special" to announce. The banner is Mickleham-only
     // (Mickleham was promoted as turn-up-and-play, so "you can now register" is news).
+};
+
+// Mickleham Junior Royals config (Mickleham uses its own page components, so this
+// is exported here for both the page and its dedicated success route). Flexible
+// mode — "register now, or on the day".
+export const MICKLEHAM_JUNIOR = {
+    table: 'mickleham_junior_registrations',
+    sourceTag: 'mickleham-junior-royals',
+    pixelName: 'Mickleham Junior Royals',
+    pixelCategory: 'mickleham-junior-royals',
+    time: '9:00 – 10:30am',
+    suburbPlaceholder: 'e.g. Craigieburn',
+    mode: 'flexible',
+    successRoute: '/PGP2026/mickleham/junior/success',
+    storageKey: 'mickleham_junior_confirmation',
+    docTitle: "You're registered — Mickleham Junior Royals",
+    successSessionLine: 'Sunday 5 July · 9:00 – 10:30am',
+    successVenueLine: 'Mickleham Indoor Sports Centre · 3 Eclipse Drive, Mickleham VIC 3064',
 };
 
 // Shared session definitions — identical across centres (straight from the poster).
