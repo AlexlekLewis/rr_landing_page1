@@ -239,8 +239,8 @@ const JulyRegistrationForm = () => {
                         <label className={labelClass}>Select Location</label>
                         <select name="location" value={form.location} onChange={handleChange} className={inputClass(errors.location)}>
                             <option value="">Select a location</option>
-                            <option value="bundoora">Cutting Edge Cricket — Bundoora | 30 June – 2 July</option>
-                            <option value="hallam">Hallam | 7 – 9 July</option>
+                            <option value="bundoora" disabled>Cutting Edge Cricket — Bundoora | 30 June – 2 July (Closed)</option>
+                            <option value="hallam" disabled>Hallam | 7 – 9 July (Closed)</option>
                             <option value="the-netz">The Netz — Williamstown North | 6 – 8 July (1:30 PM – 5:30 PM)</option>
                         </select>
                         {errors.location && <p className="text-red-500 text-xs mt-1">{errors.location}</p>}

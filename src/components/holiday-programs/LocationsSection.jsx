@@ -36,7 +36,7 @@ const locations = [
         dates: 'Monday 6 July – Wednesday 8 July',
         time: '1:30 PM – 5:30 PM',
         onSale: true,
-        urgency: '7 Places Remaining',
+        urgency: '2 Places Remaining',
         urgencyColor: 'bg-amber-500',
     },
 ];
