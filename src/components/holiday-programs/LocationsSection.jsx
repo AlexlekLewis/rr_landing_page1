@@ -12,7 +12,7 @@ const locations = [
         dates: 'Tuesday 30 June – Thursday 2 July',
         time: '9:00 AM – 1:00 PM',
         onSale: true,
-        urgency: 'Registrations Closed',
+        urgency: 'Sold Out',
         urgencyColor: 'bg-slate-600',
     },
     {
