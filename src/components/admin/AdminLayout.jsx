@@ -67,6 +67,7 @@ const NAV_GROUPS = [
             { label: 'Funnel & Demographics', path: '/rramadmin_26/analytics', icon: BarChart3 },
             { label: 'Site Analytics', path: '/rramadmin_26/page-analytics', icon: Eye },
             { label: 'Reviews', path: '/rramadmin_26/reviews', icon: Star },
+            { label: 'Elite Feedback', path: '/rramadmin_26/feedback', icon: ClipboardList },
         ],
     },
     {

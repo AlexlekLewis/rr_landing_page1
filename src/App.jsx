@@ -26,6 +26,7 @@ import IndiaTour2026 from './components/india-tour-2026/IndiaTour2026';
 import HomePage from './components/home-page/HomePage';
 import InductionPage from './components/induction/InductionPage';
 import Reviews from './components/reviews/Reviews';
+import ProgramFeedback from './components/program-feedback/ProgramFeedback';
 import PostHogPageviewTracker from './components/PostHogPageviewTracker';
 
 // DNA Profile — lazy-loaded so it never impacts landing page bundle size
@@ -64,6 +65,7 @@ import HolidaySubProgramDashboard from './components/admin/HolidaySubProgramDash
 import IndiaTour2026Dashboard from './components/admin/IndiaTour2026Dashboard';
 import IndiaTourEOIDashboard from './components/admin/IndiaTourEOIDashboard';
 import ReviewsModeration from './components/admin/ReviewsModeration';
+import ProgramFeedbackDashboard from './components/admin/ProgramFeedbackDashboard';
 import TextUsButton from './components/TextUsButton';
 // Academy Shop — hidden from nav, accessible via direct URL only
 import AcademyShop from './components/academy-shop/AcademyShop';
@@ -162,6 +164,9 @@ function App() {
         <Route path="/induction" element={<InductionPage />} />
         {/* Reviews — public, moderated testimonial wall + submit form. Linkable from anywhere. */}
         <Route path="/reviews" element={<Reviews />} />
+        {/* Elite Program feedback + win-back survey — private link shared with the 2026 cohort.
+            Not in nav; writes to program_feedback via the service-role /api/program-feedback. */}
+        <Route path="/elite-feedback" element={<ProgramFeedback />} />
 
         {/* Power Game Program — hidden from nav, accessible via direct URL only */}
         <Route path="/elite-royals" element={<PowerGame />} />
@@ -221,6 +226,7 @@ function App() {
         <Route path="/rramadmin_26/india-tour-2026" element={<AdminLayout><IndiaTour2026Dashboard /></AdminLayout>} />
         <Route path="/rramadmin_26/india-tour-eoi" element={<AdminLayout><IndiaTourEOIDashboard /></AdminLayout>} />
         <Route path="/rramadmin_26/reviews" element={<AdminLayout><ReviewsModeration /></AdminLayout>} />
+        <Route path="/rramadmin_26/feedback" element={<AdminLayout><ProgramFeedbackDashboard /></AdminLayout>} />
       </Routes>
       </ChunkReloadBoundary>
       <TextUsButton />
