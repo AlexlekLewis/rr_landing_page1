@@ -232,16 +232,16 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
 
 <!-- LEARN-MORE REVEAL — everything below is hidden until the "Learn more" button is tapped (keeps the landing to hero + locations; no aimless scrolling). The nav, hero, price strip, session picker and sticky apply bar stay visible. -->
 <div id="more-content" style="display:none;">
-<!-- VIDEO — Andy Crook (moved to top of Learn-more content) -->
-<section style="background:#fff;">
+<!-- VIDEO — Royals Academy Elite Program (Inside the Academy), first video in the reveal -->
+<section class="dark">
   <div class="wrap">
     <div class="head">
-      <span class="kick"><span class="dot"></span> The Game's Changed</span>
-      <h2>What has <span class="pink">Sooryavanshi</span> done?</h2>
-      <p class="lead">Let's hear from Andy Crook, Director of Rajasthan Royals Academy Melbourne, as well as T20 and Power Coach — on the impact of Vaibhav Sooryavanshi, what the future of the game now looks like, and the Power Pre-Season, during a recent interview.</p>
+      <span class="kick" style="color:var(--pink-l);"><span class="dot"></span> Inside the Academy</span>
+      <h2 style="color:#fff;">The Royals Academy <span class="pinkl">program</span></h2>
+      <p class="lead">Go inside the Rajasthan Royals Academy Elite Program — the methodology, the environment, and what it means to develop the Royals Way.</p>
     </div>
-    <video controls preload="metadata" playsinline poster="/assets/powergame/andy-crook-poster.jpg" style="display:block; width:100%; max-width:300px; margin:0 auto; aspect-ratio:9/16; object-fit:cover; border-radius:16px; border:1px solid #e7ebef; background:#000;">
-      <source src="/assets/powergame/andy-crook-video.mp4" type="video/mp4">
+    <video controls preload="metadata" playsinline poster="/assets/powergame/royals-academy-poster.jpg" style="display:block; width:100%; max-width:300px; margin:0 auto; aspect-ratio:9/16; object-fit:cover; border-radius:16px; border:1px solid rgba(255,255,255,.12); background:#000;">
+      <source src="/assets/powergame/royals-academy-video.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
   </div>
@@ -368,6 +368,21 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
   </div>
 </section>
 
+<!-- VIDEO — Sooryavanshi / Andy Crook (placed mid-content to break up the reading run) -->
+<section style="background:#fff;">
+  <div class="wrap">
+    <div class="head">
+      <span class="kick"><span class="dot"></span> The Game's Changed</span>
+      <h2>What has <span class="pink">Sooryavanshi</span> done?</h2>
+      <p class="lead">Let's hear from Andy Crook, Director of Rajasthan Royals Academy Melbourne, as well as T20 and Power Coach — on the impact of Vaibhav Sooryavanshi, what the future of the game now looks like, and the Power Pre-Season, during a recent interview.</p>
+    </div>
+    <video controls preload="metadata" playsinline poster="/assets/powergame/andy-crook-poster.jpg" style="display:block; width:100%; max-width:300px; margin:0 auto; aspect-ratio:9/16; object-fit:cover; border-radius:16px; border:1px solid #e7ebef; background:#000;">
+      <source src="/assets/powergame/andy-crook-video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</section>
+
 <!-- THE DEVELOPMENT SYSTEM (brochure: how we build it) -->
 <section style="background:#fff;">
   <div class="wrap">
@@ -415,21 +430,6 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
       <p style="font-size:15px; font-style:italic; line-height:1.5; color:#fff; font-weight:600; margin-top:12px;">"Before, I was tentative and worried I'd top-edge the pull shot. Now I'm confident hitting anyone for six over square leg."</p>
     </div>
     <div style="text-align:center; margin-top:24px;"><a class="btn btn--pink" href="#apply">Apply now →</a></div>
-  </div>
-</section>
-
-<!-- VIDEO 2 — Inside the Academy -->
-<section class="dark">
-  <div class="wrap">
-    <div class="head">
-      <span class="kick" style="color:var(--pink-l);"><span class="dot"></span> Inside the Academy</span>
-      <h2 style="color:#fff;">The Royals Academy <span class="pinkl">program</span></h2>
-      <p class="lead">Go inside the Rajasthan Royals Academy elite program — the methodology, the environment, and what it means to develop the Royals Way.</p>
-    </div>
-    <video controls preload="metadata" playsinline poster="/assets/powergame/royals-academy-poster.jpg" style="display:block; width:100%; max-width:300px; margin:0 auto; aspect-ratio:9/16; object-fit:cover; border-radius:16px; border:1px solid rgba(255,255,255,.12); background:#000;">
-      <source src="/assets/powergame/royals-academy-video.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
   </div>
 </section>
 
