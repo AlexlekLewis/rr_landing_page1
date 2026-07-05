@@ -3,11 +3,6 @@ import { motion } from 'framer-motion';
 
 const groups = [
     {
-        ages: '5–6 years',
-        color: 'from-rr-pink to-rr-blue',
-        points: ['Introduction to cricket fundamentals', 'Fun, game-based learning environment', 'Build coordination and movement skills'],
-    },
-    {
         ages: '7–9 years',
         color: 'from-rr-blue to-rr-pink',
         points: ['Build on foundation cricket skills', 'Incorporate game sense activities', 'Prepare players to start playing junior cricket'],
@@ -21,11 +16,6 @@ const groups = [
         ages: '13–15 years',
         color: 'from-rr-blue to-rr-pink',
         points: ['High-intensity, skill-focused sessions', 'Use of bowling machine', 'Ideal secondary training for competitive players'],
-    },
-    {
-        ages: '16–17 years',
-        color: 'from-rr-pink to-rr-blue',
-        points: ['Advanced technical development', 'Bowling machine & video analysis', 'Preparation for senior/representative cricket'],
     },
 ];
 
