@@ -161,7 +161,7 @@ const EMPTY = {
   rating_overall: 0, improvement: 0, enjoyment: 0,
   explore_rating: 0, explore_comment: '', challenge_rating: 0, challenge_comment: '', execute_rating: 0, execute_comment: '',
   format_fit: '', times_rating: 0, times_better: '', location_rating: 0, value_rating: 0,
-  coaching_rating: 0, communication_rating: 0, pathway_clarity: 0,
+  coaching_rating: 0, guests_rating: 0, communication_rating: 0, pathway_clarity: 0,
   nps: -1, continue_next: '', stay_reasons: [], stay_reason_other: '', barriers: [], barrier_other: '', change_mind: '',
   love_most: '', would_change: '', anything_else: '',
   consent_contact: false, hp_website: '',
@@ -316,21 +316,25 @@ const ProgramFeedback = () => {
               </Section>
 
               {/* ── Core elements ── */}
-              <Section eyebrow="The three core elements" title="Explore · Challenge · Execute">
+              <Section eyebrow="The three phases · weeks 2–12" title="Explore · Challenge · Execute">
+                <p className="text-sm text-slate-500 -mt-1">After the opening assessment week, your 12 weeks moved through three phases. Rate how each one landed.</p>
                 <RatedQ
-                  label="Explore — discovering & learning new skills"
+                  label="Explore — the foundation phase"
+                  hint="Closed-skill work (ramps, sweeps, playing spin mats), short-ball training with the plastic balls, power-hitting with Jaryd Rogers, and getting comfortable making mistakes in order to learn."
                   value={f.explore_rating} onChange={(v) => up('explore_rating', v)}
                   comment={f.explore_comment} onComment={(v) => up('explore_comment', v)}
                   commentPlaceholder="What stood out, or what was missing? (optional)"
                 />
                 <RatedQ
-                  label="Challenge — being pushed & tested at the right level"
+                  label="Challenge — being tested"
+                  hint="The challenge cards (Beat the Spin, Power Play, Beat the Yorker), the bowlers' technical block, and building the fundamental base on weekends."
                   value={f.challenge_rating} onChange={(v) => up('challenge_rating', v)}
                   comment={f.challenge_comment} onComment={(v) => up('challenge_comment', v)}
                   commentPlaceholder="Too easy? Too hard? Just right? (optional)"
                 />
                 <RatedQ
-                  label="Execute — applying it under pressure / in match-play"
+                  label="Execute — putting it into the game"
+                  hint="Bat v Ball match-ups & the match centre, and the tactical + mental-performance side of the game."
                   value={f.execute_rating} onChange={(v) => up('execute_rating', v)}
                   comment={f.execute_comment} onComment={(v) => up('execute_comment', v)}
                   commentPlaceholder="Did it translate to their game? (optional)"
@@ -339,7 +343,7 @@ const ProgramFeedback = () => {
 
               {/* ── Format & value ── */}
               <Section eyebrow="How it ran" title="Format & value">
-                <Field label="The program ran as two 2-hour sessions a week. Was that the right amount?">
+                <Field label="The program ran as two 2-hour sessions a week — one weekday + one weekend — across 12 weeks. Was that the right amount?">
                   <Choice
                     options={[{ value: 'too_much', label: 'Too much' }, { value: 'just_right', label: 'Just right' }, { value: 'not_enough', label: 'Not enough' }]}
                     value={f.format_fit}
@@ -356,10 +360,15 @@ const ProgramFeedback = () => {
                 <RatedQ label="Value for money, for what was included?" value={f.value_rating} onChange={(v) => up('value_rating', v)} low="Poor value" high="Great value" />
               </Section>
 
-              {/* ── Coaching & pathway ── */}
-              <Section eyebrow="Coaching & what's next" title="Coaching, communication & pathway">
+              {/* ── Coaching, guests & pathway ── */}
+              <Section eyebrow="Coaching & what's next" title="Coaching, guests & pathway">
                 <RatedQ label="Quality of the coaching" value={f.coaching_rating} onChange={(v) => up('coaching_rating', v)} />
-                <RatedQ label={`Communication & feedback on ${childWord}'s progress`} value={f.communication_rating} onChange={(v) => up('communication_rating', v)} low="Poor" high="Excellent" />
+                <RatedQ
+                  label="The guest coaches & masterclasses"
+                  hint="e.g. Bolstrong bowling assessments, Jaryd Rogers (power hitting), and mindset & mentoring with Kyle Hogg and Rajasthan Royals' Lhuan-dre Pretorius."
+                  value={f.guests_rating} onChange={(v) => up('guests_rating', v)} low="Not valuable" high="Loved them"
+                />
+                <RatedQ label={`Communication & feedback on ${childWord}'s progress`} hint="Including the assessment week and the player DNA profile." value={f.communication_rating} onChange={(v) => up('communication_rating', v)} low="Poor" high="Excellent" />
                 <RatedQ
                   label="How clear are you on the pathway ahead — the Performance Squad, what's next, how they progress?"
                   value={f.pathway_clarity} onChange={(v) => up('pathway_clarity', v)} low="Not clear" high="Very clear"

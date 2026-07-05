@@ -30,6 +30,7 @@ const RATING_FIELDS = [
   ['location_rating', 'Location'],
   ['value_rating', 'Value for money'],
   ['coaching_rating', 'Coaching'],
+  ['guests_rating', 'Guest coaches'],
   ['communication_rating', 'Communication'],
   ['pathway_clarity', 'Pathway clarity'],
 ];
@@ -122,7 +123,7 @@ const ProgramFeedbackDashboard = () => {
       'rating_overall', 'improvement', 'enjoyment',
       'explore_rating', 'explore_comment', 'challenge_rating', 'challenge_comment', 'execute_rating', 'execute_comment',
       'format_fit', 'times_rating', 'times_better', 'location_rating', 'value_rating',
-      'coaching_rating', 'communication_rating', 'pathway_clarity',
+      'coaching_rating', 'guests_rating', 'communication_rating', 'pathway_clarity',
       'nps', 'continue_next', 'stay_reasons', 'stay_reason_other', 'barriers', 'barrier_other', 'change_mind',
       'love_most', 'would_change', 'anything_else', 'consent_contact', 'id',
     ];

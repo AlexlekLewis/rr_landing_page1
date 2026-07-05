@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS public.program_feedback (
 
   -- ── Coaching & pathway ──
   coaching_rating      smallint CHECK (coaching_rating    BETWEEN 1 AND 5),
+  guests_rating        smallint CHECK (guests_rating      BETWEEN 1 AND 5),   -- guest coaches / masterclasses
   communication_rating smallint CHECK (communication_rating BETWEEN 1 AND 5),
   pathway_clarity      smallint CHECK (pathway_clarity    BETWEEN 1 AND 5),
 

@@ -92,7 +92,7 @@ const SHEET_HEADERS = [
   'Overall', 'Improvement', 'Enjoyment',
   'Explore', 'Explore note', 'Challenge', 'Challenge note', 'Execute', 'Execute note',
   'Format fit', 'Times', 'Times better', 'Location', 'Value',
-  'Coaching', 'Communication', 'Pathway clarity',
+  'Coaching', 'Guest coaches', 'Communication', 'Pathway clarity',
   'Recommend (NPS)', 'Continue next?', 'Stay reasons', 'Barriers', 'What would change mind',
   'Loves most', 'Would change', 'Anything else', 'Consent', 'Lead source', 'Record ID',
 ];
@@ -124,7 +124,7 @@ const sheetRow = (r) => ([
   r.explore_rating ?? '', r.explore_comment || '', r.challenge_rating ?? '', r.challenge_comment || '',
   r.execute_rating ?? '', r.execute_comment || '',
   r.format_fit || '', r.times_rating ?? '', r.times_better || '', r.location_rating ?? '', r.value_rating ?? '',
-  r.coaching_rating ?? '', r.communication_rating ?? '', r.pathway_clarity ?? '',
+  r.coaching_rating ?? '', r.guests_rating ?? '', r.communication_rating ?? '', r.pathway_clarity ?? '',
   r.nps ?? '', r.continue_next || '',
   Array.isArray(r.stay_reasons) ? r.stay_reasons.join(', ') + (r.stay_reason_other ? '; ' + r.stay_reason_other : '') : (r.stay_reason_other || ''),
   Array.isArray(r.barriers) ? r.barriers.join(', ') + (r.barrier_other ? '; ' + r.barrier_other : '') : (r.barrier_other || ''),
@@ -212,6 +212,7 @@ export default async function handler(req, res) {
     value_rating: rating(body.value_rating),
 
     coaching_rating: rating(body.coaching_rating),
+    guests_rating: rating(body.guests_rating),
     communication_rating: rating(body.communication_rating),
     pathway_clarity: rating(body.pathway_clarity),
 
