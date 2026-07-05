@@ -105,6 +105,14 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
   <a class="applybtn" href="#apply">Apply now</a>
 </div></div>
 
+<!-- ROUND 1 DEADLINE BANNER -->
+<div style="background:#001D48; border-bottom:2px solid var(--pink);">
+  <div class="wrap" style="display:flex; align-items:center; justify-content:center; gap:10px; text-align:center; flex-wrap:wrap; padding:9px 22px;">
+    <span style="width:8px; height:8px; border-radius:999px; background:var(--pink); flex:none; box-shadow:0 0 9px 1px rgba(225,31,143,.85);"></span>
+    <span id="pg-r1-text" style="font-size:13px; font-weight:800; letter-spacing:.01em; color:#fff; line-height:1.45;"><span style="text-transform:uppercase; letter-spacing:.13em; font-size:11px; color:var(--pink-l); font-weight:900;">Round 1 intake closes</span>&nbsp; 11:00pm AEST · Sunday 12 July</span>
+  </div>
+</div>
+
 <!-- HERO -->
 <section style="position:relative; padding:0; min-height:92vh; display:flex; align-items:center; color:#fff; overflow:hidden;">
   <img src="/assets/jaiswal-power.webp" alt="Rajasthan Royals batter hitting with power under lights" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
@@ -125,7 +133,7 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
       </div>
       <div style="margin-top:22px; max-width:560px; background:rgba(225,31,143,.14); border:1px solid rgba(225,31,143,.4); border-radius:12px; padding:13px 15px; font-size:13px; line-height:1.5; color:#fff; font-weight:600; display:flex; gap:10px; align-items:flex-start;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E96BB0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none; margin-top:2px;"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
-        <span>Squad spots are limited at each centre — squads are filling now, so apply early to lock yours in.</span>
+        <span id="pg-r1-hero"><strong style="color:#fff;">Round 1 intake closes 11pm Sunday 12 July.</strong> Round 2 will only open if places remain after Round 1 — apply now to lock in your spot.</span>
       </div>
     </div>
   </div>
@@ -601,6 +609,17 @@ const PowerGame = () => {
                     }
                 }
             } catch (_) { /* fail-open: keep the default labels */ }
+        })();
+
+        // Round 1 deadline — static line now; after 11:00pm AEST Sun 12 Jul 2026 it
+        // auto-swaps to the Round 2 message so the page never shows a passed date.
+        (() => {
+            const R1_CLOSE = new Date('2026-07-12T23:00:00+10:00');
+            if (Date.now() < R1_CLOSE.getTime()) return;
+            const banner = shadow.getElementById('pg-r1-text');
+            if (banner) banner.innerHTML = '<span style="text-transform:uppercase; letter-spacing:.13em; font-size:11px; color:var(--pink-l); font-weight:900;">Round 1 intake closed</span>&nbsp; Round 2 places subject to availability';
+            const hero = shadow.getElementById('pg-r1-hero');
+            if (hero) hero.innerHTML = '<strong style="color:#fff;">Round 1 intake has closed.</strong> Round 2 will only open if places remain — apply now and we\'ll be in touch about availability.';
         })();
 
         const onClick = (e) => {
