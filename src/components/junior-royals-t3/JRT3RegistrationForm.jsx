@@ -275,7 +275,7 @@ const JRT3RegistrationForm = () => {
                         className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6">
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
                         <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">
-                            {earlyBird ? 'Early Bird — $299 Until 11pm 12 July' : 'Now Enrolling — Term 3, 2026'}
+                            {earlyBird ? 'Early Bird — $299 · Increases to $330 After 11pm 12 July' : 'Now Enrolling — Term 3, 2026'}
                         </span>
                     </motion.div>
                     <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}

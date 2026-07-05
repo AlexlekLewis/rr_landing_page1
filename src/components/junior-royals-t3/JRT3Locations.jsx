@@ -123,8 +123,8 @@ const JRT3Locations = () => {
                     <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}
                         className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium">
                         {earlyBird
-                            ? <>Early bird pricing at <span className="font-black text-rr-dark">$299</span> — three Melbourne venues, select a location to view age groups and pricing.</>
-                            : <>Programs from <span className="font-black text-rr-dark">$330</span> — three Melbourne venues, select a location to view age groups and pricing.</>
+                            ? <>Early bird pricing at <span className="font-black text-rr-dark">$299</span> — increasing to <span className="font-black text-rr-dark">$330</span> once the early bird offer concludes at 11pm 12 July. Small group sessions, one hour per week for 8 consecutive weeks at your preferred time. Select a location to view age groups and times.</>
+                            : <>Programs at <span className="font-black text-rr-dark">$330</span> — small group sessions, one hour per week for 8 consecutive weeks at your preferred time. Select a location to view age groups and times.</>
                         }
                     </motion.p>
                 </div>
