@@ -319,21 +319,21 @@ const ProgramFeedback = () => {
               <Section eyebrow="The three phases · weeks 2–12" title="Explore · Challenge · Execute">
                 <p className="text-sm text-slate-500 -mt-1">After the opening assessment week, your 12 weeks moved through three phases. Rate how each one landed.</p>
                 <RatedQ
-                  label="Explore — the foundation phase"
+                  label="Explore phase"
                   hint="Closed-skill work (ramps, sweeps, playing spin mats), short-ball training with the plastic balls, power-hitting with Jarryd Rogers, and getting comfortable making mistakes in order to learn."
                   value={f.explore_rating} onChange={(v) => up('explore_rating', v)}
                   comment={f.explore_comment} onComment={(v) => up('explore_comment', v)}
                   commentPlaceholder="What stood out, or what was missing? (optional)"
                 />
                 <RatedQ
-                  label="Challenge — being tested"
+                  label="Challenge phase"
                   hint="The challenge cards (Beat the Spin, Power Play, Beat the Yorker), the bowlers' technical block, and building the fundamental base on weekends."
                   value={f.challenge_rating} onChange={(v) => up('challenge_rating', v)}
                   comment={f.challenge_comment} onComment={(v) => up('challenge_comment', v)}
                   commentPlaceholder="Too easy? Too hard? Just right? (optional)"
                 />
                 <RatedQ
-                  label="Execute — putting it into the game"
+                  label="Execute phase"
                   hint="Bat v Ball match-ups & the match centre, and the tactical + mental-performance side of the game."
                   value={f.execute_rating} onChange={(v) => up('execute_rating', v)}
                   comment={f.execute_comment} onComment={(v) => up('execute_comment', v)}
@@ -370,7 +370,7 @@ const ProgramFeedback = () => {
                 />
                 <RatedQ label={`Communication & feedback on ${childWord}'s progress`} hint="Including the assessment week and the player DNA profile." value={f.communication_rating} onChange={(v) => up('communication_rating', v)} low="Poor" high="Excellent" />
                 <RatedQ
-                  label="How clear are you on the pathway ahead — the Performance Squad, what's next, how they progress?"
+                  label="How clear are you on the pathway ahead — the Power Game Pre-Season, what's next, and how they progress?"
                   value={f.pathway_clarity} onChange={(v) => up('pathway_clarity', v)} low="Not clear" high="Very clear"
                 />
               </Section>
