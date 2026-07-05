@@ -320,7 +320,7 @@ const ProgramFeedback = () => {
                 <p className="text-sm text-slate-500 -mt-1">After the opening assessment week, your 12 weeks moved through three phases. Rate how each one landed.</p>
                 <RatedQ
                   label="Explore — the foundation phase"
-                  hint="Closed-skill work (ramps, sweeps, playing spin mats), short-ball training with the plastic balls, power-hitting with Jaryd Rogers, and getting comfortable making mistakes in order to learn."
+                  hint="Closed-skill work (ramps, sweeps, playing spin mats), short-ball training with the plastic balls, power-hitting with Jarryd Rogers, and getting comfortable making mistakes in order to learn."
                   value={f.explore_rating} onChange={(v) => up('explore_rating', v)}
                   comment={f.explore_comment} onComment={(v) => up('explore_comment', v)}
                   commentPlaceholder="What stood out, or what was missing? (optional)"
@@ -365,7 +365,7 @@ const ProgramFeedback = () => {
                 <RatedQ label="Quality of the coaching" value={f.coaching_rating} onChange={(v) => up('coaching_rating', v)} />
                 <RatedQ
                   label="The guest coaches & masterclasses"
-                  hint="e.g. Bolstrong bowling assessments, Jaryd Rogers (power hitting), and mindset & mentoring with Kyle Hogg and Rajasthan Royals' Lhuan-dre Pretorius."
+                  hint="e.g. BowlStrong bowling assessments, Jarryd Rogers (power hitting), and mindset & mentoring with Kyle Hogg and Rajasthan Royals' Lhuan-dre Pretorius."
                   value={f.guests_rating} onChange={(v) => up('guests_rating', v)} low="Not valuable" high="Loved them"
                 />
                 <RatedQ label={`Communication & feedback on ${childWord}'s progress`} hint="Including the assessment week and the player DNA profile." value={f.communication_rating} onChange={(v) => up('communication_rating', v)} low="Poor" high="Excellent" />
