@@ -95,9 +95,9 @@ export default function CentreAvailabilityGrid({
                                         <div className="text-[13px] font-bold tracking-tight leading-none text-white">
                                             {fmtTime(s.startTime, s.endTime)}
                                         </div>
-                                        {picker && left != null && (
-                                            <div className={`mt-1.5 text-[9px] font-black uppercase tracking-widest ${full ? 'text-white/40' : left <= 3 ? 'text-rr-pink' : 'text-green-400'}`}>
-                                                {full ? 'Full' : `${left} left`}
+                                        {picker && full && (
+                                            <div className="mt-1.5 text-[9px] font-black uppercase tracking-widest text-white/40">
+                                                Full
                                             </div>
                                         )}
                                         {selected && (

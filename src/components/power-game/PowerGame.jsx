@@ -584,32 +584,11 @@ const PowerGame = () => {
         const shadow = host.shadowRoot || host.attachShadow({ mode: 'open' });
         shadow.innerHTML = SHADOW_HTML;
 
-        // Honest availability — show the REAL remaining (capacity − paid) per session,
-        // but ONLY when it's genuinely low; "Full" at capacity. No fake urgency. Fail-open
-        // (leaves the default "Select →") so the page never breaks if it can't load.
-        (async () => {
-            try {
-                const { counts } = await (await fetch('/api/pgp-availability')).json();
-                if (!counts) return;
-                const LOW = 6;
-                const normKey = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-                for (const sq of SQUADS) {
-                    const name = CENTRE_BY_SLUG[sq.centre]?.name || '';
-                    const paid = counts[normKey(`${name}|${sq.day}|${sq.startTime}–${sq.endTime}`)] || 0;
-                    const left = sq.capacity - paid;
-                    const box = shadow.querySelector(`[data-session="${sq.id}"]`);
-                    if (!box) continue;
-                    const tag = box.querySelector('.aage');
-                    if (left <= 0) {
-                        if (tag) { tag.textContent = 'Full'; tag.style.color = '#9aa3ad'; }
-                        box.style.opacity = '0.55';
-                        box.style.pointerEvents = 'none';
-                    } else if (left <= LOW && tag) {
-                        tag.textContent = `Only ${left} left →`;
-                    }
-                }
-            } catch (_) { /* fail-open: keep the default labels */ }
-        })();
+        // Availability counts are intentionally NOT shown on this page. The marketing
+        // focus is the Round 1 deadline, not per-session spot numbers, so every session
+        // keeps its default "Select →". Sold-out sessions are still gated inside the apply
+        // funnel and at checkout (inventory holds), so this doesn't allow over-booking.
+
 
         // Round 1 deadline — static line now; after 11:00pm AEST Sun 12 Jul 2026 it
         // auto-swaps to the Round 2 message so the page never shows a passed date.
