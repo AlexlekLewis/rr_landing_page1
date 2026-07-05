@@ -46,15 +46,12 @@ const SESSION_OPTIONS = {
 
 const EARLY_BIRD_STRIPE_LINK = 'https://buy.stripe.com/aFa8wPfY54yhfpO33t9Zm0h';
 const STANDARD_STRIPE_LINKS = {
-    mickleham:    'https://buy.stripe.com/6oUdR96nv9SBgtS6fF9Zm0d',
+    mickleham:    'https://buy.stripe.com/00waEX9zH8OxelKfQf9Zm0f',
     hallam:       'https://buy.stripe.com/00waEX9zH8OxelKfQf9Zm0f',
-    williamstown: 'https://buy.stripe.com/6oUdR96nv9SBgtS6fF9Zm0d',
+    williamstown: 'https://buy.stripe.com/00waEX9zH8OxelKfQf9Zm0f',
 };
-const STRIPE_LINKS = {
-    mickleham:    { all: isEarlyBird() ? EARLY_BIRD_STRIPE_LINK : STANDARD_STRIPE_LINKS.mickleham },
-    hallam:       { all: isEarlyBird() ? EARLY_BIRD_STRIPE_LINK : STANDARD_STRIPE_LINKS.hallam },
-    williamstown: { all: isEarlyBird() ? EARLY_BIRD_STRIPE_LINK : STANDARD_STRIPE_LINKS.williamstown },
-};
+const getStripeLink = (location) =>
+    isEarlyBird() ? EARLY_BIRD_STRIPE_LINK : STANDARD_STRIPE_LINKS[location];
 
 const SUPABASE_TABLE = {
     mickleham:    'jr_term3_mickleham',
@@ -258,7 +255,7 @@ const JRT3RegistrationForm = () => {
             } catch (_) {}
             if (data?.id) { localStorage.setItem('jr_record_id', data.id); localStorage.setItem('jr_location_t3', form.location); }
             fireLeadEvent(form.location);
-            const stripeLink = STRIPE_LINKS[form.location]?.all;
+            const stripeLink = getStripeLink(form.location);
             window.location.href = stripeLink || '/junior-royals/success';
         } catch (err) {
             console.error(err);
