@@ -44,7 +44,7 @@ const SESSION_OPTIONS = {
     },
 };
 
-const EARLY_BIRD_STRIPE_LINK = 'https://buy.stripe.com/9B6dR93bjggZa5ugUj9Zm07';
+const EARLY_BIRD_STRIPE_LINK = 'https://buy.stripe.com/aFa8wPfY54yhfpO33t9Zm0h';
 const STANDARD_STRIPE_LINKS = {
     mickleham:    'https://buy.stripe.com/6oUdR96nv9SBgtS6fF9Zm0d',
     hallam:       'https://buy.stripe.com/00waEX9zH8OxelKfQf9Zm0f',
