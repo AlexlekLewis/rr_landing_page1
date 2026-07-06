@@ -11,7 +11,7 @@
 // ============================================================
 import Stripe from 'stripe';
 import { packApplication } from './_lib/pgpCheckout.js';
-import { buildUniformLineItems } from './_lib/uniformPricing.js';
+import { buildUniformLineItems, freeKeysForOffer } from './_lib/uniformPricing.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const BASE_URL = process.env.VITE_APP_URL || 'https://rramelbourne.com';
@@ -20,7 +20,10 @@ const BLOCK_FEE_CENTS = 98900; // $989 — 8-week phase
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   try {
-    const { application, email, playerName, squadId, uniformItems, uniformTotalCents, uniformSelection } = req.body || {};
+    const { application, email, playerName, squadId, uniformItems, uniformTotalCents, uniformSelection, giftOffer } = req.body || {};
+    // Early-bird gift offer (shared link). Server owns which garments are free —
+    // the client only names an offer id, validated here against GIFT_OFFERS.
+    const gift = freeKeysForOffer(giftOffer);
     if (!application || typeof application !== 'object') {
       return res.status(400).json({ error: 'Missing application payload' });
     }
@@ -53,7 +56,7 @@ export default async function handler(req, res) {
     // and we build one Stripe line item PER garment at SERVER-decided prices (a
     // tampered request can't change what's charged). Legacy fallback: a single
     // client-sent uniformTotalCents (the original funnel path — left untouched).
-    const uniform = buildUniformLineItems(uniformItems);
+    const uniform = buildUniformLineItems(uniformItems, gift.keys);
     let kitCents = 0;
     let kitSummary = '';
     if (uniform.lineItems.length > 0) {
@@ -90,6 +93,8 @@ export default async function handler(req, res) {
         squad_id: squadId || '',
         uniform_selection: (kitSummary || a.uniform_selection || '').slice(0, 480),
         uniform_total_cents: String(kitCents),
+        gift_offer: gift.id || '',
+        free_kit: (uniform.giftSummary || '').slice(0, 240),
         // Full application payload, packed across app_0..app_{n-1} (+ app_n count).
         ...packApplication(a),
       },

@@ -46,6 +46,11 @@ const UNIFORM = [
   { key: 'jacket', label: 'Fleece Jacket',   priceCents: 4900, sizes: JACKET_SIZES },
 ];
 const BLANK_KIT = { shirt: '', shorts: '', pants: '', cap: '', jacket: '' };
+
+// Early-bird gift offers — MUST mirror api/_lib/uniformPricing.js (GIFT_OFFERS).
+// A shared offer link carries ?gift=<id>; these garment keys then show as free on
+// the page and are sent to the server, which is the authority that zeroes them.
+const GIFT_OFFERS = { mickleham: ['shirt', 'shorts'] };
 const sizeLabels = (sizes, group) => (sizes && Array.isArray(sizes[group]) ? sizes[group].map((s) => s.label) : []);
 
 const DOB_DAYS = Array.from({ length: 31 }, (_, i) => String(i + 1).padStart(2, '0'));
@@ -93,14 +98,17 @@ export default function ExpressSignup({ config }) {
   const [submitting, setSubmitting] = useState(false);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [localDone, setLocalDone] = useState(false);
+  const [giftOffer, setGiftOffer] = useState('');
 
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
   const setKitSize = (key, size) => setKit((p) => ({ ...p, [key]: size }));
+  const freeKeys = giftOffer ? (GIFT_OFFERS[giftOffer] || []) : [];
+  const isFreeKit = (key) => freeKeys.includes(key);
   const kitPicks = UNIFORM.filter((u) => (u.oneSize ? kit[u.key] === 'one' : !!kit[u.key]));
   const kitItems = kitPicks.map((u) => ({ key: u.key, size: u.oneSize ? 'One size' : kit[u.key] }));
-  const kitTotalCents = kitPicks.reduce((s, u) => s + u.priceCents, 0);
+  const kitTotalCents = kitPicks.reduce((s, u) => s + (isFreeKit(u.key) ? 0 : u.priceCents), 0);
   const kitSummaryText = kitPicks.map((u) => `${u.label} (${u.oneSize ? 'One size' : kit[u.key]})`).join(', ');
-  const kitLines = kitPicks.map((u) => ({ name: u.label, size: u.oneSize ? 'One size' : kit[u.key], priceCents: u.priceCents }));
+  const kitLines = kitPicks.map((u) => ({ name: u.label, size: u.oneSize ? 'One size' : kit[u.key], priceCents: isFreeKit(u.key) ? 0 : u.priceCents }));
 
   const setDobPart = (part, val) => {
     const next = { ...dob, [part]: val };
@@ -133,6 +141,12 @@ export default function ExpressSignup({ config }) {
     try {
       const k = (new URLSearchParams(window.location.search).get('key') || '').trim().toUpperCase();
       keyOk = !!k && k === ACCESS_CODE;
+    } catch (_) { /* no-op */ }
+    // ?gift=<id> — a shared early-bird link that gifts certain garments. Pre-tick
+    // the kit box so the player just picks sizes to claim their free items.
+    try {
+      const g = (new URLSearchParams(window.location.search).get('gift') || '').trim().toLowerCase();
+      if (GIFT_OFFERS[g]) { setGiftOffer(g); setForm((p) => ({ ...p, needs_uniform: true })); }
     } catch (_) { /* no-op */ }
     try {
       if (keyOk || sessionStorage.getItem(GATE_KEY) === '1') {
@@ -222,6 +236,7 @@ export default function ExpressSignup({ config }) {
             playerName: form.player_name,
             squadId: selectedSession?.id,
             uniformItems: wantsKit ? kitItems : [],
+            giftOffer: giftOffer || undefined,
           }),
         });
         const data = await r.json().catch(() => null);
@@ -430,6 +445,11 @@ export default function ExpressSignup({ config }) {
           {/* Uniform */}
           <div className="bg-white/5 border border-white/10 rounded-xl p-4">
             <div className="text-[11px] font-black uppercase tracking-widest text-rr-pink mb-3">Playing uniform</div>
+            {giftOffer && (
+              <div className="mb-3 rounded-lg bg-green-500/10 border border-green-500/30 px-3 py-2 text-[12px] text-green-200 leading-relaxed">
+                Your early-bird offer includes a <span className="font-bold">free shirt + shorts</span>. Pick your sizes below and they’re added at no charge — anything extra you need is added at the usual price.
+              </div>
+            )}
             <div className="flex items-start gap-3">
               <input id="needs_uniform" type="checkbox" checked={form.needs_uniform} onChange={(e) => { set('needs_uniform', e.target.checked); if (!e.target.checked) setKit(BLANK_KIT); }} className="mt-0.5 w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer" />
               <label htmlFor="needs_uniform" className="text-xs text-white/70 leading-relaxed cursor-pointer">
@@ -450,7 +470,12 @@ export default function ExpressSignup({ config }) {
                   <div key={u.key} className="flex items-center gap-3">
                     <div className="flex-1 min-w-0">
                       <span className="block text-sm font-bold text-white truncate">{u.label}</span>
-                      <span className="block text-white/40 text-[11px]">{fmtAud(u.priceCents)}{u.oneSize ? ' · one size' : ''}</span>
+                      <span className="block text-[11px]">
+                        {isFreeKit(u.key)
+                          ? <span className="text-green-300 font-bold">Free · early-bird gift</span>
+                          : <span className="text-white/40">{fmtAud(u.priceCents)}</span>}
+                        <span className="text-white/40">{u.oneSize ? ' · one size' : ''}</span>
+                      </span>
                     </div>
                     {u.oneSize ? (
                       <label className="flex items-center gap-2 cursor-pointer select-none">
