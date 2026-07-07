@@ -212,6 +212,7 @@ const JRT3RegistrationForm = () => {
         if (!form.suburb.trim()) e.suburb = 'Required.';
         if (!form.location) e.location = 'Please select a location.';
         if (!form.group_selection) e.group_selection = 'Please select an age group.';
+        if (availableSessions.length > 0 && !allTBC && !form.time_slot) e.time_slot = 'Please select a session time.';
         if (!form.requires_shirt) e.requires_shirt = 'Please indicate whether you require a training shirt.';
         if (form.requires_shirt === 'yes' && !form.shirt_size) e.shirt_size = 'Please select a shirt size.';
         if (!acceptTerms) e.acceptTerms = 'Required.';
@@ -236,7 +237,7 @@ const JRT3RegistrationForm = () => {
                 parent_phone: form.parent_phone.trim(), player_name: form.player_name.trim(),
                 player_age: parseInt(form.player_age, 10), player_gender: form.player_gender,
                 suburb: form.suburb.trim(), location: form.location,
-                group_selection: form.group_selection, time_slot: 'tbc',
+                group_selection: form.group_selection, time_slot: form.time_slot || 'tbc',
                 requires_shirt: form.requires_shirt === 'yes',
                 shirt_size: form.shirt_size || null,
                 source: `junior-royals-term3-${form.location}`,
