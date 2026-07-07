@@ -85,6 +85,7 @@ export default function ExpressSignup({ config }) {
   const ACCESS_CODE = String(config.accessCode || '').trim().toUpperCase();
   const GATE_KEY = config.gateKey;
   const FIELDS = config.fields || {};
+  const requireKit = !!config.requireKit; // scholarship mode: shirt + shorts are mandatory (paid)
 
   const [unlocked, setUnlocked] = useState(false);
   const [codeInput, setCodeInput] = useState('');
@@ -148,6 +149,10 @@ export default function ExpressSignup({ config }) {
       const g = (new URLSearchParams(window.location.search).get('gift') || '').trim().toLowerCase();
       if (GIFT_OFFERS[g]) { setGiftOffer(g); setForm((p) => ({ ...p, needs_uniform: true })); }
     } catch (_) { /* no-op */ }
+    // Scholarship mode: kit (shirt + shorts) is mandatory — always show the picker,
+    // no opt-out. Prices are the usual full price; the scholarship discount applies
+    // to the program only, via the promo code the player enters at Stripe checkout.
+    if (requireKit) setForm((p) => ({ ...p, needs_uniform: true }));
     try {
       if (keyOk || sessionStorage.getItem(GATE_KEY) === '1') {
         setUnlocked(true);
@@ -187,6 +192,10 @@ export default function ExpressSignup({ config }) {
     if (FIELDS.phone && !form.contact_phone.trim()) e.push('Please enter a contact phone number.');
     if (!form.centre) e.push('Please choose a centre.');
     else if (!selectedSession) e.push('Please choose a session time.');
+    if (requireKit) {
+      if (!kit.shirt) e.push('Please choose a training shirt size.');
+      if (!kit.shorts) e.push('Please choose a training shorts size.');
+    }
     return e;
   }
 
@@ -455,12 +464,18 @@ export default function ExpressSignup({ config }) {
                 Your early-bird offer includes a <span className="font-bold">free shirt + shorts</span>. Pick your sizes below and they’re added at no charge. Anything extra you need is added at the usual price.
               </div>
             )}
-            <div className="flex items-start gap-3">
-              <input id="needs_uniform" type="checkbox" checked={form.needs_uniform} onChange={(e) => { set('needs_uniform', e.target.checked); if (!e.target.checked) setKit(BLANK_KIT); }} className="mt-0.5 w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer" />
-              <label htmlFor="needs_uniform" className="text-xs text-white/70 leading-relaxed cursor-pointer">
-                I need Royals playing kit. <span className="text-white/40">(Already have your kit? Leave this unticked.)</span>
-              </label>
-            </div>
+            {requireKit ? (
+              <p className="text-xs text-white/70 leading-relaxed">
+                Your scholarship place includes your Royals playing kit — <span className="text-white font-semibold">choose your shirt &amp; shorts sizes below</span>. Add anything else you need at the usual price.
+              </p>
+            ) : (
+              <div className="flex items-start gap-3">
+                <input id="needs_uniform" type="checkbox" checked={form.needs_uniform} onChange={(e) => { set('needs_uniform', e.target.checked); if (!e.target.checked) setKit(BLANK_KIT); }} className="mt-0.5 w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer" />
+                <label htmlFor="needs_uniform" className="text-xs text-white/70 leading-relaxed cursor-pointer">
+                  I need Royals playing kit. <span className="text-white/40">(Already have your kit? Leave this unticked.)</span>
+                </label>
+              </div>
+            )}
 
             {form.needs_uniform && (
               <div className="mt-4 space-y-3">
@@ -489,7 +504,7 @@ export default function ExpressSignup({ config }) {
                       </label>
                     ) : (
                       <select value={kit[u.key]} onChange={(e) => setKitSize(u.key, e.target.value)} className="w-36 flex-none bg-white/5 border border-white/15 focus:border-rr-pink/60 rounded-xl px-4 py-2.5 text-sm text-white outline-none transition-colors appearance-none cursor-pointer">
-                        <option value="" className="text-rr-dark">{isFreeKit(u.key) ? 'Select size' : 'Not needed'}</option>
+                        <option value="" className="text-rr-dark">{(isFreeKit(u.key) || (requireKit && (u.key === 'shirt' || u.key === 'shorts'))) ? 'Select size' : 'Not needed'}</option>
                         {sizeLabels(u.sizes, 'junior').length > 0 && (
                           <optgroup label="Junior">
                             {sizeLabels(u.sizes, 'junior').map((s) => <option key={`j-${s}`} value={s} className="text-rr-dark">{s}</option>)}
@@ -525,6 +540,11 @@ export default function ExpressSignup({ config }) {
             <p className="text-white/30 text-[11px] text-center mt-3 leading-relaxed">
               Secure payment via Stripe{form.needs_uniform && kitTotalCents > 0 ? <> — {fmtAud(BLOCK_FEE_CENTS)} program + {fmtAud(kitTotalCents)} kit</> : ''}. Your coach will confirm your squad after payment.
             </p>
+            {requireKit && (
+              <p className="text-rr-light-pink/80 text-[11px] text-center mt-2 leading-relaxed">
+                Have a scholarship code? Enter it at the payment step to apply your discount.
+              </p>
+            )}
           </div>
         </div>
       </div>
