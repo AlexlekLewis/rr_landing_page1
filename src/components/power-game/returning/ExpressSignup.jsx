@@ -237,6 +237,11 @@ export default function ExpressSignup({ config }) {
             squadId: selectedSession?.id,
             uniformItems: wantsKit ? kitItems : [],
             giftOffer: giftOffer || undefined,
+            // Private link-only flow (confirm / accepted / returning) — let Stripe
+            // show the "Add promotion code" box so an offered player can apply a
+            // coupon (e.g. a scholarship discount). The public funnel never sends
+            // this, so its checkout stays clean (no code-hunting abandonment).
+            allowPromo: true,
           }),
         });
         const data = await r.json().catch(() => null);

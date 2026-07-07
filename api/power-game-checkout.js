@@ -20,7 +20,7 @@ const BLOCK_FEE_CENTS = 98900; // $989 — 8-week phase
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   try {
-    const { application, email, playerName, squadId, uniformItems, uniformTotalCents, uniformSelection, giftOffer } = req.body || {};
+    const { application, email, playerName, squadId, uniformItems, uniformTotalCents, uniformSelection, giftOffer, allowPromo } = req.body || {};
     // Early-bird gift offer (shared link). Server owns which garments are free —
     // the client only names an offer id, validated here against GIFT_OFFERS.
     const gift = freeKeysForOffer(giftOffer);
@@ -87,6 +87,12 @@ export default async function handler(req, res) {
       payment_method_types: ['card'],
       customer_email: email || undefined,
       line_items: lineItems,
+      // Promo/coupon box on Stripe's hosted checkout. Only enabled for the private
+      // link-only flows (confirm / accepted / returning), which send allowPromo:true.
+      // The public funnel omits it, so its checkout shows no code field. NOTE: a
+      // percent coupon discounts the WHOLE order — fine here because on a gift link
+      // (e.g. ?gift=mickleham) the kit is already $0, so it only reduces the $989.
+      allow_promotion_codes: allowPromo === true,
       metadata: {
         source: 'power-game',
         player_name: (playerName || a.player_name || '').slice(0, 200),
