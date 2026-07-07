@@ -447,7 +447,7 @@ export default function ExpressSignup({ config }) {
             <div className="text-[11px] font-black uppercase tracking-widest text-rr-pink mb-3">Playing uniform</div>
             {giftOffer && (
               <div className="mb-3 rounded-lg bg-green-500/10 border border-green-500/30 px-3 py-2 text-[12px] text-green-200 leading-relaxed">
-                Your early-bird offer includes a <span className="font-bold">free shirt + shorts</span>. Pick your sizes below and they’re added at no charge — anything extra you need is added at the usual price.
+                Your early-bird offer includes a <span className="font-bold">free shirt + shorts</span>. Pick your sizes below and they’re added at no charge. Anything extra you need is added at the usual price.
               </div>
             )}
             <div className="flex items-start gap-3">
@@ -483,8 +483,8 @@ export default function ExpressSignup({ config }) {
                         <span className="text-white/60 text-xs">Add</span>
                       </label>
                     ) : (
-                      <select value={kit[u.key]} onChange={(e) => setKitSize(u.key, e.target.value)} className={`w-36 ${fieldCls} py-2.5 text-sm appearance-none cursor-pointer`}>
-                        <option value="" className="text-rr-dark">Not needed</option>
+                      <select value={kit[u.key]} onChange={(e) => setKitSize(u.key, e.target.value)} className="w-36 flex-none bg-white/5 border border-white/15 focus:border-rr-pink/60 rounded-xl px-4 py-2.5 text-sm text-white outline-none transition-colors appearance-none cursor-pointer">
+                        <option value="" className="text-rr-dark">{isFreeKit(u.key) ? 'Select size' : 'Not needed'}</option>
                         {sizeLabels(u.sizes, 'junior').length > 0 && (
                           <optgroup label="Junior">
                             {sizeLabels(u.sizes, 'junior').map((s) => <option key={`j-${s}`} value={s} className="text-rr-dark">{s}</option>)}
