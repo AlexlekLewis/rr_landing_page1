@@ -277,8 +277,9 @@ const DepositForm = ({ accessKey }) => {
                                 </span>
                                 <span className="text-rr-charcoal text-sm font-medium leading-relaxed">
                                     I understand this <strong>$2,000 (+GST)</strong> deposit secures a place on the
-                                    Rajasthan Royals Academy Melbourne India Tour 2026 and is applied to the total tour cost,
-                                    and I agree to be contacted about this booking.
+                                    Rajasthan Royals Academy Melbourne India Tour 2026 and is applied to the total tour cost.
+                                    Because places are committed against fixed costs (flights and on-ground costs), the
+                                    deposit is <strong>non-refundable</strong>. I agree to be contacted about this booking.
                                 </span>
                             </label>
                             {errors.consent && <p className="text-red-500 text-xs font-medium mt-1 ml-8">{errors.consent}</p>}
@@ -315,6 +316,7 @@ const DepositForm = ({ accessKey }) => {
                         </button>
                         <p className="text-center text-xs text-rr-charcoal/50 font-medium mt-4">
                             Secure payment by Stripe · Card details are never stored by RRA Melbourne.
+                            This deposit is <strong className="text-rr-charcoal/70">non-refundable</strong> (it secures flights and on-ground costs).
                             Full tour terms and the balance schedule are provided with your booking confirmation.
                         </p>
                     </form>

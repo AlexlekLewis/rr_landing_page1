@@ -135,8 +135,9 @@ const IndiaTourDeposit = () => {
                                     <span className="block text-rr-pink">Touring Spot</span>
                                 </h2>
                                 <p className="text-lg text-rr-charcoal font-medium leading-relaxed mb-8">
-                                    A deposit confirms your intent to travel and holds your place while we finalise the
-                                    touring squad. It comes straight off your total tour cost — nothing is lost.
+                                    A deposit confirms your intent to travel and secures your place while we finalise the
+                                    touring squad. It comes straight off your total tour cost — it's part of the tour
+                                    price, not an added fee.
                                 </p>
                                 <ul className="space-y-3">
                                     {SECURES.map((s) => (
@@ -173,7 +174,10 @@ const IndiaTourDeposit = () => {
                                 >
                                     Pay Deposit
                                 </button>
-                                <p className="text-center text-xs text-rr-charcoal/60 font-medium mt-4">
+                                <p className="text-center text-xs text-rr-charcoal/70 font-semibold mt-4">
+                                    Deposit is non-refundable — it secures your flights &amp; on-ground costs.
+                                </p>
+                                <p className="text-center text-xs text-rr-charcoal/60 font-medium mt-1">
                                     After your deposit we'll send the full traveller form (passport &amp; travel details).
                                 </p>
                             </div>
