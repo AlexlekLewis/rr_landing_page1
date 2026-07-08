@@ -23,6 +23,8 @@ import { WILLIAMSTOWN_OPEN_DAY, HALLAM_OPEN_DAY, MICKLEHAM_ELITE, MICKLEHAM_JUNI
 import EntryPage from './components/open-day/EntryPage';
 import { MICKLEHAM_ENTRY, WILLIAMSTOWN_ENTRY, HALLAM_ENTRY } from './components/open-day/entryConfigs';
 import IndiaTour2026 from './components/india-tour-2026/IndiaTour2026';
+import IndiaTourDeposit from './components/india-tour-deposit/IndiaTourDeposit';
+import DepositSuccess from './components/india-tour-deposit/DepositSuccess';
 import HomePage from './components/home-page/HomePage';
 import InductionPage from './components/induction/InductionPage';
 import Reviews from './components/reviews/Reviews';
@@ -205,6 +207,9 @@ function App() {
         <Route path="/PGP2026/admin" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameSquadsAdmin /></React.Suspense>} />
         {/* India Tour 2026 — PRIVATE, invite-only EOI. Not in nav; gated by a referral code (?ref=). */}
         <Route path="/india-tour-2026" element={<IndiaTour2026 />} />
+        {/* India Tour 2026 — PRIVATE deposit ($2,000 + GST = $2,200). Not in nav; gated by ?key=. */}
+        <Route path="/india-tour-2026/deposit" element={<IndiaTourDeposit />} />
+        <Route path="/india-tour-2026/deposit/success" element={<DepositSuccess />} />
         {/* Academy Shop — hidden from nav. Share URL directly with participants only. */}
         <Route path="/academy-shop" element={<AcademyShop />} />
         <Route path="/academy-shop/success" element={<ShopSuccess />} />
