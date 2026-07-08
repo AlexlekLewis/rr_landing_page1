@@ -30,6 +30,23 @@ export function freeKeysForOffer(offerId) {
   return GIFT_OFFERS[id] ? { id, keys: GIFT_OFFERS[id] } : { id: '', keys: [] };
 }
 
+// ── Scholarship offers ──────────────────────────────────────────────────────
+// A UNIQUE per-player link (?s=<token>) that discounts the PROGRAM only. The
+// token travels from the client, but the SERVER owns the discounted program
+// price here — a tampered request can only name a token, never set its own
+// price. Kit is charged at full price on top. Delete a token to revoke that
+// scholarship link. Keep in sync with the client mirror in ExpressSignup.jsx.
+export const SCHOLARSHIPS = {
+  // Arnav Thakur — 50% off the Power Pre-Season program ($989 → $494.50).
+  'arnav-6qz9m4': { programCents: 49450, label: 'Arnav — 50% program scholarship' },
+};
+
+// Resolve a client-supplied token → { token, programCents, label }, or null.
+export function scholarshipForToken(token) {
+  const t = typeof token === 'string' ? token.trim() : '';
+  return SCHOLARSHIPS[t] ? { token: t, ...SCHOLARSHIPS[t] } : null;
+}
+
 /**
  * uniformItems: [{ key, size }] → Stripe line_items + total (server prices only).
  * Unknown keys, duplicates, and non-one-size items without a size are dropped.
