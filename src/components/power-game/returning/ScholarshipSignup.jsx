@@ -25,7 +25,7 @@ const SCHOLARSHIP_CONFIG = {
   gateTitle: 'Accept your scholarship',
   gateBlurb: 'This is the private page to accept your scholarship place in the Power Pre-Season. Enter the access code from your email to continue.',
   headerTitle: 'Accept your scholarship',
-  headerLead: 'You’ve been offered a scholarship place in the Power Pre-Season. We’ve pre-filled your details — just check they’re right, choose your playing kit, and secure your spot. Your 50% discount is already applied.',
+  headerLead: 'You’ve been offered a scholarship place in the Power Pre-Season. Please confirm the player’s name and date of birth, choose your playing kit, and secure your spot. Your 50% discount is already applied.',
   sessionNote: 'These are the session times for the player’s age group at this centre. Your coach confirms the final squad after payment.',
   fields: { gender: false, phone: false, suburb: false, parentName: false },
 };

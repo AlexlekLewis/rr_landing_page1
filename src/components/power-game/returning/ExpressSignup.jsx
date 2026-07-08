@@ -156,10 +156,10 @@ export default function ExpressSignup({ config }) {
       const g = (new URLSearchParams(window.location.search).get('gift') || '').trim().toLowerCase();
       if (GIFT_OFFERS[g]) { setGiftOffer(g); setForm((p) => ({ ...p, needs_uniform: true })); }
     } catch (_) { /* no-op */ }
-    // ?s=<token> — a UNIQUE scholarship link. Fetch the discounted program price +
-    // the player's saved details from the server (PII never ships in the bundle),
-    // then pre-fill the form so they just confirm. All best-effort: any failure
-    // leaves the player to type their details in as before.
+    // ?s=<token> — a UNIQUE, single-use scholarship link. Fetch the discounted program
+    // price + the non-identity fields to pre-fill. Name + DOB are deliberately NOT
+    // pre-filled — the player confirms those. Best-effort: any failure just leaves the
+    // player to type everything in as before.
     try {
       const s = (new URLSearchParams(window.location.search).get('s') || '').trim();
       if (s) {
@@ -172,15 +172,9 @@ export default function ExpressSignup({ config }) {
             if (p) {
               setForm((prev) => ({
                 ...prev,
-                player_name: p.player_name || prev.player_name,
                 contact_email: p.contact_email || prev.contact_email,
                 centre: p.centre || prev.centre,
-                player_dob: p.player_dob || prev.player_dob,
               }));
-              if (typeof p.player_dob === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(p.player_dob)) {
-                const [yy, mm, dd] = p.player_dob.split('-');
-                setDob({ d: dd, m: mm, y: yy });
-              }
             }
           })
           .catch(() => { /* no-op */ });
