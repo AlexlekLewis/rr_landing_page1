@@ -11,7 +11,7 @@
 // ============================================================
 import Stripe from 'stripe';
 import { packApplication } from './_lib/pgpCheckout.js';
-import { buildUniformLineItems, freeKeysForOffer } from './_lib/uniformPricing.js';
+import { buildUniformLineItems, freeKeysForOffer, scholarshipForToken } from './_lib/uniformPricing.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const BASE_URL = process.env.VITE_APP_URL || 'https://rramelbourne.com';
@@ -20,10 +20,15 @@ const BLOCK_FEE_CENTS = 98900; // $989 — 8-week phase
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   try {
-    const { application, email, playerName, squadId, uniformItems, uniformTotalCents, uniformSelection, giftOffer, allowPromo } = req.body || {};
+    const { application, email, playerName, squadId, uniformItems, uniformTotalCents, uniformSelection, giftOffer, allowPromo, scholarshipToken } = req.body || {};
     // Early-bird gift offer (shared link). Server owns which garments are free —
     // the client only names an offer id, validated here against GIFT_OFFERS.
     const gift = freeKeysForOffer(giftOffer);
+    // Scholarship link (?s=<token>). The SERVER owns the discounted program price —
+    // an unknown/absent token just falls through to the full fee. Kit is unaffected
+    // (still charged at full price below), so the discount lands on the program only.
+    const scholarship = scholarshipForToken(scholarshipToken);
+    const programCents = scholarship ? scholarship.programCents : BLOCK_FEE_CENTS;
     if (!application || typeof application !== 'object') {
       return res.status(400).json({ error: 'Missing application payload' });
     }
@@ -45,8 +50,12 @@ export default async function handler(req, res) {
       {
         price_data: {
           currency: 'aud',
-          product_data: { name: 'The Power Game Program — 8-week Power Pre-Season (Phase 1)' },
-          unit_amount: BLOCK_FEE_CENTS,
+          product_data: {
+            name: scholarship
+              ? 'The Power Game Program — 8-week Power Pre-Season (Scholarship place)'
+              : 'The Power Game Program — 8-week Power Pre-Season (Phase 1)',
+          },
+          unit_amount: programCents,
         },
         quantity: 1,
       },
@@ -101,6 +110,8 @@ export default async function handler(req, res) {
         uniform_total_cents: String(kitCents),
         gift_offer: gift.id || '',
         free_kit: (uniform.giftSummary || '').slice(0, 240),
+        scholarship_token: scholarship ? scholarship.token : '',
+        program_cents: String(programCents),
         // Full application payload, packed across app_0..app_{n-1} (+ app_n count).
         ...packApplication(a),
       },

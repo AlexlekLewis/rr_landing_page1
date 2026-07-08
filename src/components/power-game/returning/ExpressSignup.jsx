@@ -51,6 +51,10 @@ const BLANK_KIT = { shirt: '', shorts: '', pants: '', cap: '', jacket: '' };
 // A shared offer link carries ?gift=<id>; these garment keys then show as free on
 // the page and are sent to the server, which is the authority that zeroes them.
 const GIFT_OFFERS = { mickleham: ['shirt', 'shorts'] };
+// Scholarship links — MUST mirror api/_lib/uniformPricing.js (SCHOLARSHIPS). A unique
+// per-player link carries ?s=<token>; this maps it to the discounted PROGRAM price for
+// on-page display. The server is the authority that actually charges this amount.
+const SCHOLARSHIPS = { 'arnav-6qz9m4': { programCents: 49450 } };
 const sizeLabels = (sizes, group) => (sizes && Array.isArray(sizes[group]) ? sizes[group].map((s) => s.label) : []);
 
 const DOB_DAYS = Array.from({ length: 31 }, (_, i) => String(i + 1).padStart(2, '0'));
@@ -100,7 +104,10 @@ export default function ExpressSignup({ config }) {
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [localDone, setLocalDone] = useState(false);
   const [giftOffer, setGiftOffer] = useState('');
+  const [scholarship, setScholarship] = useState(null); // { token, programCents } from ?s=<token>
 
+  // The program fee to charge/show — a valid scholarship link discounts it (kit stays full price).
+  const programCents = scholarship ? scholarship.programCents : BLOCK_FEE_CENTS;
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
   const setKitSize = (key, size) => setKit((p) => ({ ...p, [key]: size }));
   const freeKeys = giftOffer ? (GIFT_OFFERS[giftOffer] || []) : [];
@@ -148,6 +155,12 @@ export default function ExpressSignup({ config }) {
     try {
       const g = (new URLSearchParams(window.location.search).get('gift') || '').trim().toLowerCase();
       if (GIFT_OFFERS[g]) { setGiftOffer(g); setForm((p) => ({ ...p, needs_uniform: true })); }
+    } catch (_) { /* no-op */ }
+    // ?s=<token> — a UNIQUE scholarship link. Maps to the discounted program price
+    // for display; the server re-validates the token and is the authority on price.
+    try {
+      const s = (new URLSearchParams(window.location.search).get('s') || '').trim();
+      if (SCHOLARSHIPS[s]) setScholarship({ token: s, ...SCHOLARSHIPS[s] });
     } catch (_) { /* no-op */ }
     // Scholarship mode: kit (shirt + shorts) is mandatory — always show the picker,
     // no opt-out. Prices are the usual full price; the scholarship discount applies
@@ -246,11 +259,12 @@ export default function ExpressSignup({ config }) {
             squadId: selectedSession?.id,
             uniformItems: wantsKit ? kitItems : [],
             giftOffer: giftOffer || undefined,
+            scholarshipToken: scholarship?.token || undefined,
             // Private link-only flow (confirm / accepted / returning) — let Stripe
             // show the "Add promotion code" box so an offered player can apply a
-            // coupon (e.g. a scholarship discount). The public funnel never sends
-            // this, so its checkout stays clean (no code-hunting abandonment).
-            allowPromo: true,
+            // coupon. The public funnel never sends this (no code-hunting), and a
+            // baked scholarship link suppresses it too (discount already applied).
+            allowPromo: scholarship ? false : true,
           }),
         });
         const data = await r.json().catch(() => null);
@@ -308,7 +322,7 @@ export default function ExpressSignup({ config }) {
           </div>
           <h1 className="text-xl font-black uppercase tracking-wide mb-2">You’re set, {form.player_name.split(' ')[0]}</h1>
           <p className="text-white/55 text-sm leading-relaxed">
-            On the live site this opens secure Stripe checkout for the {fmtAud(BLOCK_FEE_CENTS + (form.needs_uniform ? kitTotalCents : 0))} total. (Payments only run on the deployed site — nothing was charged here.)
+            On the live site this opens secure Stripe checkout for the {fmtAud(programCents + (form.needs_uniform ? kitTotalCents : 0))} total. (Payments only run on the deployed site — nothing was charged here.)
           </p>
         </div>
       </div>
@@ -466,7 +480,7 @@ export default function ExpressSignup({ config }) {
             )}
             {requireKit ? (
               <p className="text-xs text-white/70 leading-relaxed">
-                Your scholarship place includes your Royals playing kit — <span className="text-white font-semibold">choose your shirt &amp; shorts sizes below</span>. Add anything else you need at the usual price.
+                Your scholarship covers 50% of the program fee. Your shirt &amp; shorts are part of your playing kit — <span className="text-white font-semibold">choose your sizes below</span> (added at the usual price).
               </p>
             ) : (
               <div className="flex items-start gap-3">
@@ -535,14 +549,14 @@ export default function ExpressSignup({ config }) {
           <div className="pt-1">
             <button onClick={pay} disabled={submitting}
               className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)] inline-flex items-center justify-center gap-2">
-              {submitting ? 'Processing…' : <>Pay {fmtAud(BLOCK_FEE_CENTS + (form.needs_uniform ? kitTotalCents : 0))} &amp; secure my spot <ArrowRight className="w-4 h-4" /></>}
+              {submitting ? 'Processing…' : <>Pay {fmtAud(programCents + (form.needs_uniform ? kitTotalCents : 0))} &amp; secure my spot <ArrowRight className="w-4 h-4" /></>}
             </button>
             <p className="text-white/30 text-[11px] text-center mt-3 leading-relaxed">
-              Secure payment via Stripe{form.needs_uniform && kitTotalCents > 0 ? <> — {fmtAud(BLOCK_FEE_CENTS)} program + {fmtAud(kitTotalCents)} kit</> : ''}. Your coach will confirm your squad after payment.
+              Secure payment via Stripe{form.needs_uniform && kitTotalCents > 0 ? <> — {fmtAud(programCents)} program + {fmtAud(kitTotalCents)} kit</> : ''}. Your coach will confirm your squad after payment.
             </p>
-            {requireKit && (
+            {scholarship && (
               <p className="text-rr-light-pink/80 text-[11px] text-center mt-2 leading-relaxed">
-                Have a scholarship code? Enter it at the payment step to apply your discount.
+                Your 50% program scholarship is already applied above — nothing to enter.
               </p>
             )}
           </div>
