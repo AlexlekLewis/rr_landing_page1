@@ -35,10 +35,12 @@ export function freeKeysForOffer(offerId) {
 // token travels from the client, but the SERVER owns the discounted program
 // price here — a tampered request can only name a token, never set its own
 // price. Kit is charged at full price on top. Delete a token to revoke that
-// scholarship link. Keep in sync with the client mirror in ExpressSignup.jsx.
+// scholarship link. Token is opaque/random (it also keys the player's pre-fill
+// row in Supabase, so it must not be guessable). Price lives here; PII lives in
+// the pgp_scholarship_prefill table, served by /api/pgp-scholarship.
 export const SCHOLARSHIPS = {
   // Arnav Thakur — 50% off the Power Pre-Season program ($989 → $494.50).
-  'arnav-6qz9m4': { programCents: 49450, label: 'Arnav — 50% program scholarship' },
+  'sch-c8b1101ee7c664ac437e': { programCents: 49450, label: 'Arnav — 50% program scholarship' },
 };
 
 // Resolve a client-supplied token → { token, programCents, label }, or null.

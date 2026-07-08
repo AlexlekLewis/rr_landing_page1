@@ -51,10 +51,10 @@ const BLANK_KIT = { shirt: '', shorts: '', pants: '', cap: '', jacket: '' };
 // A shared offer link carries ?gift=<id>; these garment keys then show as free on
 // the page and are sent to the server, which is the authority that zeroes them.
 const GIFT_OFFERS = { mickleham: ['shirt', 'shorts'] };
-// Scholarship links — MUST mirror api/_lib/uniformPricing.js (SCHOLARSHIPS). A unique
-// per-player link carries ?s=<token>; this maps it to the discounted PROGRAM price for
-// on-page display. The server is the authority that actually charges this amount.
-const SCHOLARSHIPS = { 'arnav-6qz9m4': { programCents: 49450 } };
+// Scholarship links — a unique per-player link carries ?s=<token>. We do NOT hardcode
+// tokens here (they key a player's saved PII server-side, so they must stay off the
+// public bundle). On mount we fetch /api/pgp-scholarship?token=<token>, which returns
+// the discounted program price + the player's details to pre-fill ("confirm your info").
 const sizeLabels = (sizes, group) => (sizes && Array.isArray(sizes[group]) ? sizes[group].map((s) => s.label) : []);
 
 const DOB_DAYS = Array.from({ length: 31 }, (_, i) => String(i + 1).padStart(2, '0'));
@@ -156,11 +156,35 @@ export default function ExpressSignup({ config }) {
       const g = (new URLSearchParams(window.location.search).get('gift') || '').trim().toLowerCase();
       if (GIFT_OFFERS[g]) { setGiftOffer(g); setForm((p) => ({ ...p, needs_uniform: true })); }
     } catch (_) { /* no-op */ }
-    // ?s=<token> — a UNIQUE scholarship link. Maps to the discounted program price
-    // for display; the server re-validates the token and is the authority on price.
+    // ?s=<token> — a UNIQUE scholarship link. Fetch the discounted program price +
+    // the player's saved details from the server (PII never ships in the bundle),
+    // then pre-fill the form so they just confirm. All best-effort: any failure
+    // leaves the player to type their details in as before.
     try {
       const s = (new URLSearchParams(window.location.search).get('s') || '').trim();
-      if (SCHOLARSHIPS[s]) setScholarship({ token: s, ...SCHOLARSHIPS[s] });
+      if (s) {
+        fetch(`/api/pgp-scholarship?token=${encodeURIComponent(s)}`)
+          .then((r) => r.json())
+          .then((d) => {
+            if (!d || !d.scholarship) return;
+            setScholarship({ token: s, programCents: d.programCents });
+            const p = d.prefill;
+            if (p) {
+              setForm((prev) => ({
+                ...prev,
+                player_name: p.player_name || prev.player_name,
+                contact_email: p.contact_email || prev.contact_email,
+                centre: p.centre || prev.centre,
+                player_dob: p.player_dob || prev.player_dob,
+              }));
+              if (typeof p.player_dob === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(p.player_dob)) {
+                const [yy, mm, dd] = p.player_dob.split('-');
+                setDob({ d: dd, m: mm, y: yy });
+              }
+            }
+          })
+          .catch(() => { /* no-op */ });
+      }
     } catch (_) { /* no-op */ }
     // Scholarship mode: kit (shirt + shorts) is mandatory — always show the picker,
     // no opt-out. Prices are the usual full price; the scholarship discount applies
