@@ -69,6 +69,10 @@ async function getDepositProductId() {
   return _productIdCache;
 }
 
+// Coerce to a positive-or-zero integer, or null (avoids `+null === 0` storing 0 for a missing age).
+const toIntOrNull = (v) =>
+  v === null || v === undefined || v === '' || !Number.isFinite(+v) ? null : Math.trunc(+v);
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   try {
@@ -105,9 +109,9 @@ export default async function handler(req, res) {
         mobile: String(b.mobile || '').trim() || null,
         player_name: playerName,
         player_dob: b.player_dob || null,
-        player_age: Number.isFinite(+b.player_age) ? +b.player_age : null,
+        player_age: toIntOrNull(b.player_age),
         current_club: String(b.current_club || '').trim() || null,
-        traveller_count: Number.isFinite(+b.traveller_count) ? +b.traveller_count : null,
+        traveller_count: toIntOrNull(b.traveller_count),
         accompanying: String(b.accompanying || '').trim() || null,
         notes: String(b.notes || '').trim() || null,
         consent_terms: true,
