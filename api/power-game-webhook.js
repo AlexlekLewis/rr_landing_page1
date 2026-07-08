@@ -62,6 +62,18 @@ export default async function handler(req, res) {
   try {
     if (event.type === 'checkout.session.completed') {
       const s = event.data.object;
+
+      // Single-use scholarship link: mark the token consumed so it can't be reused.
+      // Idempotent; api/power-game-verify-session (success page) does the same.
+      const schToken = s.metadata?.scholarship_token;
+      if (schToken) {
+        await supabase
+          .from('pgp_scholarship_prefill')
+          .update({ redeemed_at: new Date().toISOString() })
+          .eq('token', schToken)
+          .is('redeemed_at', null);
+      }
+
       const application = unpackApplication(s.metadata);
 
       if (application) {

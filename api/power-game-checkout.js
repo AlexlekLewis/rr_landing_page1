@@ -10,10 +10,12 @@
 // Env: STRIPE_SECRET_KEY, VITE_APP_URL.
 // ============================================================
 import Stripe from 'stripe';
+import { createClient } from '@supabase/supabase-js';
 import { packApplication } from './_lib/pgpCheckout.js';
 import { buildUniformLineItems, freeKeysForOffer, scholarshipForToken } from './_lib/uniformPricing.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 const BASE_URL = process.env.VITE_APP_URL || 'https://rramelbourne.com';
 const BLOCK_FEE_CENTS = 98900; // $989 — 8-week phase
 
@@ -29,6 +31,20 @@ export default async function handler(req, res) {
     // (still charged at full price below), so the discount lands on the program only.
     const scholarship = scholarshipForToken(scholarshipToken);
     const programCents = scholarship ? scholarship.programCents : BLOCK_FEE_CENTS;
+    // Single-use: a scholarship link already used to complete a payment is dead.
+    // (Primary gate is the page/endpoint hiding the discount; this is the backstop.)
+    if (scholarship) {
+      try {
+        const { data: sch } = await supabase
+          .from('pgp_scholarship_prefill')
+          .select('redeemed_at')
+          .eq('token', scholarship.token)
+          .maybeSingle();
+        if (sch?.redeemed_at) {
+          return res.status(409).json({ error: 'This scholarship link has already been used — please contact us if you need a hand.' });
+        }
+      } catch (_) { /* fail-open: success-page + webhook still enforce single-use */ }
+    }
     if (!application || typeof application !== 'object') {
       return res.status(400).json({ error: 'Missing application payload' });
     }

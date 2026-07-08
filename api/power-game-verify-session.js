@@ -67,6 +67,17 @@ export default async function handler(req, res) {
         { onConflict: 'stripe_session_id' },
       );
 
+      // Single-use scholarship link: mark the token consumed so it can't be reused.
+      // Idempotent (only flips a not-yet-redeemed token); the webhook does the same.
+      const schToken = s.metadata?.scholarship_token;
+      if (schToken) {
+        await supabase
+          .from('pgp_scholarship_prefill')
+          .update({ redeemed_at: new Date().toISOString() })
+          .eq('token', schToken)
+          .is('redeemed_at', null);
+      }
+
       const application = unpackApplication(s.metadata);
       if (application) {
         // Create-on-payment BACKSTOP: if the webhook hasn't created the paid row yet,

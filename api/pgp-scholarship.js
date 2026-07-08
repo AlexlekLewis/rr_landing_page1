@@ -22,18 +22,21 @@ export default async function handler(req, res) {
   const sch = scholarshipForToken(token); // price authority (also validates the token)
   if (!sch) return res.status(200).json({ scholarship: false });
 
-  // Pre-fill is best-effort: if the lookup fails, the discount still applies and the
-  // player just types their details in as before.
+  // Look up the token's row to (a) enforce single-use — a redeemed/inactive link is
+  // dead — and (b) return only the NON-identity fields to pre-fill. Name + DOB are
+  // deliberately NOT pre-filled: the player confirms those themselves.
   let prefill = null;
   try {
     const { data } = await supabase
       .from('pgp_scholarship_prefill')
-      .select('player_name, player_dob, contact_email, centre')
+      .select('contact_email, centre, redeemed_at, active')
       .eq('token', token)
-      .eq('active', true)
       .maybeSingle();
-    if (data) prefill = data;
-  } catch (_) { /* no-op */ }
+    if (data && (data.active === false || data.redeemed_at)) {
+      return res.status(200).json({ scholarship: false, redeemed: !!data.redeemed_at });
+    }
+    if (data) prefill = { contact_email: data.contact_email, centre: data.centre };
+  } catch (_) { /* best-effort: discount still applies; the player types their details in */ }
 
   return res.status(200).json({ scholarship: true, programCents: sch.programCents, prefill });
 }
