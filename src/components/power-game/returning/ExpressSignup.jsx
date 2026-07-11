@@ -563,7 +563,7 @@ export default function ExpressSignup({ config }) {
             {form.needs_uniform && (
               <div className="mt-4 space-y-3">
                 <div className="flex items-center justify-between gap-3">
-                  <p className="text-white/55 text-xs leading-relaxed">Let’s confirm your sizing — pick a size for each item you need and we’ll add it to your payment.</p>
+                  <p className="text-white/55 text-xs leading-relaxed">Let’s confirm your sizing — pick a size for each item you need and we’ll add it to your {fullRide ? 'kit' : 'payment'}.</p>
                   <button type="button" onClick={() => setShowSizeGuide(true)} className="flex-shrink-0 inline-flex items-center gap-1.5 text-rr-light-pink hover:text-white text-[11px] font-bold uppercase tracking-wide px-3 py-2 rounded-full border border-rr-light-pink/30 hover:border-rr-light-pink/60 transition-colors">
                     <Ruler className="w-3.5 h-3.5" /> Size guide
                   </button>
@@ -575,7 +575,7 @@ export default function ExpressSignup({ config }) {
                       <span className="block text-sm font-bold text-white truncate">{u.label}</span>
                       <span className="block text-[11px]">
                         {isFreeKit(u.key)
-                          ? <span className="text-green-300 font-bold">Free · early-bird gift</span>
+                          ? <span className="text-green-300 font-bold">Free{fullRide ? '' : ' · early-bird gift'}</span>
                           : <span className="text-white/40">{fmtAud(u.priceCents)}</span>}
                         <span className="text-white/40">{u.oneSize ? ' · one size' : ''}</span>
                       </span>
