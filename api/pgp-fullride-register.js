@@ -74,10 +74,11 @@ export default async function handler(req, res) {
 
     // Confirmation email (best-effort; amount omitted since it's a full scholarship).
     const r = inserted || row;
+    const recipient = r?.email || r?.parent1_email; // under-18s carry the email on the parent field
     try {
-      if (r?.email) {
+      if (recipient) {
         await sendPgpConfirmation({
-          to: r.email, playerName: r.player_name, centreName: r.venue,
+          to: recipient, playerName: r.player_name, centreName: r.venue,
           sessionDay: r.session_day, sessionTime: r.session_time, ageGroup: r.age_group,
           amountCents: null, ref: `FR-${token.slice(-6).toUpperCase()}`,
         });
