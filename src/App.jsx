@@ -27,6 +27,7 @@ import IndiaTourDeposit from './components/india-tour-deposit/IndiaTourDeposit';
 import DepositSuccess from './components/india-tour-deposit/DepositSuccess';
 import HomePage from './components/home-page/HomePage';
 import InductionPage from './components/induction/InductionPage';
+import CoachesDay from './components/coaches-day/CoachesDay';
 import Reviews from './components/reviews/Reviews';
 import ProgramFeedback from './components/program-feedback/ProgramFeedback';
 import PostHogPageviewTracker from './components/PostHogPageviewTracker';
@@ -167,6 +168,10 @@ function App() {
         {/* Player Induction — generic, reusable form for ad-hoc program launches. Hidden from
             nav; share the link directly (optionally /induction?program=Name). Writes to program_inductions. */}
         <Route path="/induction" element={<InductionPage />} />
+
+        {/* The Coaches Session — free coaching day for local coaches (Sun 26 Jul 2026).
+            Standalone registration, writes to coaches_day_registrations. Share the link directly. */}
+        <Route path="/coaches-day" element={<CoachesDay />} />
         {/* Reviews — public, moderated testimonial wall + submit form. Linkable from anywhere. */}
         <Route path="/reviews" element={<Reviews />} />
         {/* Elite Program feedback + win-back survey — private link shared with the 2026 cohort.
