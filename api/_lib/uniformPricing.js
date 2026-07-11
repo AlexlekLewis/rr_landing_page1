@@ -39,8 +39,8 @@ export function freeKeysForOffer(offerId) {
 // row in Supabase, so it must not be guessable). Price lives here; PII lives in
 // the pgp_scholarship_prefill table, served by /api/pgp-scholarship.
 export const SCHOLARSHIPS = {
-  // Arnav Thakur — 50% off the Power Pre-Season program ($989 → $494.50).
-  'sch-c8b1101ee7c664ac437e': { programCents: 49450, label: 'Arnav — 50% program scholarship' },
+  // (Arnav Thakur's 50% scholarship completed 2026-07-08 and was cleaned out.)
+  // Add future 50%-style scholarships here: 'token': { programCents, label }.
 };
 
 // Resolve a client-supplied token → { token, programCents, label }, or null.
