@@ -90,6 +90,7 @@ export default function ExpressSignup({ config }) {
   const GATE_KEY = config.gateKey;
   const FIELDS = config.fields || {};
   const requireKit = !!config.requireKit; // scholarship mode: shirt + shorts are mandatory (paid)
+  const fullRide = !!config.fullRide;     // 100% full-ride: program + kit all free, NO payment
 
   const [unlocked, setUnlocked] = useState(false);
   const [codeInput, setCodeInput] = useState('');
@@ -105,13 +106,14 @@ export default function ExpressSignup({ config }) {
   const [localDone, setLocalDone] = useState(false);
   const [giftOffer, setGiftOffer] = useState('');
   const [scholarship, setScholarship] = useState(null); // { token, programCents } from ?s=<token>
+  const [fullRideInfo, setFullRideInfo] = useState(null); // { token, centre } from a full-ride ?s=<token>
 
-  // The program fee to charge/show — a valid scholarship link discounts it (kit stays full price).
-  const programCents = scholarship ? scholarship.programCents : BLOCK_FEE_CENTS;
+  // The program fee to charge/show. Full-ride = $0; a 50% link discounts it; else full fee.
+  const programCents = fullRide ? 0 : (scholarship ? scholarship.programCents : BLOCK_FEE_CENTS);
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
   const setKitSize = (key, size) => setKit((p) => ({ ...p, [key]: size }));
   const freeKeys = giftOffer ? (GIFT_OFFERS[giftOffer] || []) : [];
-  const isFreeKit = (key) => freeKeys.includes(key);
+  const isFreeKit = (key) => fullRide || freeKeys.includes(key); // full-ride: every garment is free
   const kitPicks = UNIFORM.filter((u) => (u.oneSize ? kit[u.key] === 'one' : !!kit[u.key]));
   const kitItems = kitPicks.map((u) => ({ key: u.key, size: u.oneSize ? 'One size' : kit[u.key] }));
   const kitTotalCents = kitPicks.reduce((s, u) => s + (isFreeKit(u.key) ? 0 : u.priceCents), 0);
@@ -162,7 +164,17 @@ export default function ExpressSignup({ config }) {
     // player to type everything in as before.
     try {
       const s = (new URLSearchParams(window.location.search).get('s') || '').trim();
-      if (s) {
+      if (s && fullRide) {
+        // Full-ride link: validate the token and LOCK IN its centre. Everything is free.
+        fetch(`/api/pgp-fullride?token=${encodeURIComponent(s)}`)
+          .then((r) => r.json())
+          .then((d) => {
+            if (!d || !d.valid) return;
+            setFullRideInfo({ token: s, centre: d.centre });
+            setForm((prev) => ({ ...prev, centre: d.centre || prev.centre, needs_uniform: true }));
+          })
+          .catch(() => { /* no-op */ });
+      } else if (s) {
         fetch(`/api/pgp-scholarship?token=${encodeURIComponent(s)}`)
           .then((r) => r.json())
           .then((d) => {
@@ -257,6 +269,34 @@ export default function ExpressSignup({ config }) {
       const application = buildPayload();
       const centre = CENTRE_BY_SLUG[form.centre];
       const wantsKit = form.needs_uniform && kitItems.length > 0;
+      // Full-ride (100% scholarship): NO payment — register directly, then confirm inline.
+      if (fullRide) {
+        try {
+          sessionStorage.setItem('pgp_confirmation', JSON.stringify({
+            playerName: form.player_name,
+            centreName: centre?.name || '',
+            slot: selectedSession ? `${selectedSession.day} ${selectedSession.startTime}–${selectedSession.endTime}` : '',
+            band: selectedSession?.band || '',
+            kit: kitLines,
+          }));
+        } catch (_) { /* no-op */ }
+        const r = await fetch('/api/pgp-fullride-register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            application,
+            email: form.contact_email,
+            playerName: form.player_name,
+            squadId: selectedSession?.id,
+            uniformItems: kitItems,
+            fullRideToken: fullRideInfo?.token,
+          }),
+        });
+        const data = await r.json().catch(() => null);
+        if (data?.ok) { setLocalDone(true); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+        setErrors([data?.error || 'Could not complete your registration — please try again.']);
+        return;
+      }
       if (LIVE_PAYMENTS || import.meta?.env?.PROD) {
         try {
           sessionStorage.setItem('pgp_confirmation', JSON.stringify({
@@ -338,10 +378,16 @@ export default function ExpressSignup({ config }) {
           <div className="w-16 h-16 rounded-full bg-green-500/15 border border-green-500/40 flex items-center justify-center mx-auto mb-5">
             <ShieldCheck className="w-8 h-8 text-green-400" />
           </div>
-          <h1 className="text-xl font-black uppercase tracking-wide mb-2">You’re set, {form.player_name.split(' ')[0]}</h1>
-          <p className="text-white/55 text-sm leading-relaxed">
-            On the live site this opens secure Stripe checkout for the {fmtAud(programCents + (form.needs_uniform ? kitTotalCents : 0))} total. (Payments only run on the deployed site — nothing was charged here.)
-          </p>
+          <h1 className="text-xl font-black uppercase tracking-wide mb-2">You’re in, {form.player_name.split(' ')[0]}!</h1>
+          {fullRide ? (
+            <p className="text-white/55 text-sm leading-relaxed">
+              Your full-ride scholarship is confirmed — your place, playing kit and fees are all covered. We’ve emailed your confirmation, and your coach will be in touch about your first session.
+            </p>
+          ) : (
+            <p className="text-white/55 text-sm leading-relaxed">
+              On the live site this opens secure Stripe checkout for the {fmtAud(programCents + (form.needs_uniform ? kitTotalCents : 0))} total. (Payments only run on the deployed site — nothing was charged here.)
+            </p>
+          )}
         </div>
       </div>
     );
@@ -439,12 +485,12 @@ export default function ExpressSignup({ config }) {
 
           {/* Centre + session */}
           <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-            <div className="text-[11px] font-black uppercase tracking-widest text-rr-pink mb-3">Choose your centre</div>
+            <div className="text-[11px] font-black uppercase tracking-widest text-rr-pink mb-3">{fullRide ? 'Your centre' : 'Choose your centre'}</div>
             <div className="space-y-2">
-              {ACTIVE_CENTRES.map((c) => {
+              {ACTIVE_CENTRES.filter((c) => !fullRide || c.slug === form.centre).map((c) => {
                 const on = form.centre === c.slug;
                 return (
-                  <button key={c.slug} type="button" onClick={() => { set('centre', c.slug); setSessionId(''); }}
+                  <button key={c.slug} type="button" onClick={() => { if (fullRide) return; set('centre', c.slug); setSessionId(''); }}
                     className={`w-full text-left rounded-xl px-4 py-3 border transition-colors flex items-start gap-3 ${on ? 'bg-rr-pink/20 border-rr-pink' : 'bg-white/5 border-white/15 hover:border-white/30'}`}>
                     <MapPin className={`w-4 h-4 mt-0.5 flex-shrink-0 ${on ? 'text-rr-pink' : 'text-white/40'}`} />
                     <span>
@@ -496,7 +542,12 @@ export default function ExpressSignup({ config }) {
                 Your early-bird offer includes a <span className="font-bold">free shirt + shorts</span>. Pick your sizes below and they’re added at no charge. Anything extra you need is added at the usual price.
               </div>
             )}
-            {requireKit ? (
+            {fullRide && (
+              <div className="mb-3 rounded-lg bg-green-500/10 border border-green-500/30 px-3 py-2 text-[12px] text-green-200 leading-relaxed">
+                Your full-ride scholarship includes <span className="font-bold">all your playing kit, free</span>. Pick your sizes below — shirt and shorts are required; add a cap, pants or jacket too if you’d like.
+              </div>
+            )}
+            {fullRide ? null : requireKit ? (
               <p className="text-xs text-white/70 leading-relaxed">
                 Your scholarship covers 50% of the program fee. Your shirt &amp; shorts are part of your playing kit — <span className="text-white font-semibold">choose your sizes below</span> (added at the usual price).
               </p>
@@ -567,14 +618,21 @@ export default function ExpressSignup({ config }) {
           <div className="pt-1">
             <button onClick={pay} disabled={submitting}
               className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)] inline-flex items-center justify-center gap-2">
-              {submitting ? 'Processing…' : <>Pay {fmtAud(programCents + (form.needs_uniform ? kitTotalCents : 0))} &amp; secure my spot <ArrowRight className="w-4 h-4" /></>}
+              {submitting ? 'Processing…' : fullRide ? <>Register &amp; secure my spot <ArrowRight className="w-4 h-4" /></> : <>Pay {fmtAud(programCents + (form.needs_uniform ? kitTotalCents : 0))} &amp; secure my spot <ArrowRight className="w-4 h-4" /></>}
             </button>
             <p className="text-white/30 text-[11px] text-center mt-3 leading-relaxed">
-              Secure payment via Stripe{form.needs_uniform && kitTotalCents > 0 ? <> — {fmtAud(programCents)} program + {fmtAud(kitTotalCents)} kit</> : ''}. Your coach will confirm your squad after payment.
+              {fullRide
+                ? <>No payment required — your full-ride scholarship covers your place, kit and fees. Your coach will confirm your squad.</>
+                : <>Secure payment via Stripe{form.needs_uniform && kitTotalCents > 0 ? <> — {fmtAud(programCents)} program + {fmtAud(kitTotalCents)} kit</> : ''}. Your coach will confirm your squad after payment.</>}
             </p>
             {scholarship && (
               <p className="text-rr-light-pink/80 text-[11px] text-center mt-2 leading-relaxed">
                 Your 50% program scholarship is already applied above — nothing to enter.
+              </p>
+            )}
+            {fullRide && (
+              <p className="text-rr-light-pink/80 text-[11px] text-center mt-2 leading-relaxed">
+                100% full-ride scholarship — your place, playing kit and fees are all free.
               </p>
             )}
           </div>
