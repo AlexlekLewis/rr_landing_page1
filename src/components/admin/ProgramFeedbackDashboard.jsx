@@ -23,7 +23,11 @@ const OWNTIME_LABELS = { yes: 'Yes — definitely', maybe: 'Maybe', no: 'Probabl
 
 const RATING_FIELDS = [
   ['rating_overall', 'Overall'],
-  ['improvement', 'Improvement'],
+  ['imp_shot_range', 'Improved — shot range'],
+  ['imp_batting_smart', 'Improved — smart batting'],
+  ['imp_bowling_smart', 'Improved — smart bowling'],
+  ['imp_power', 'Improved — power'],
+  ['imp_game_understanding', 'Improved — game sense'],
   ['enjoyment', 'Enjoyment'],
   ['explore_rating', 'Explore'],
   ['challenge_rating', 'Challenge'],
@@ -130,7 +134,7 @@ const ProgramFeedbackDashboard = () => {
   const exportCsv = () => {
     const cols = [
       'created_at', 'program', 'respondent_name', 'respondent_role', 'respondent_email', 'player_name', 'centre',
-      'rating_overall', 'improvement', 'enjoyment',
+      'rating_overall', 'enjoyment', 'imp_shot_range', 'imp_batting_smart', 'imp_bowling_smart', 'imp_power', 'imp_game_understanding',
       'explore_rating', 'explore_comment', 'challenge_rating', 'challenge_comment', 'execute_rating', 'execute_comment',
       'matchcentre_rating', 'matchcentre_unique', 'matchcentre_comment', 'scouting_reports_use', 'matchcentre_own_time',
       'format_fit', 'times_rating', 'times_better', 'location_rating', 'value_rating',
