@@ -158,7 +158,7 @@ const EMPTY = {
   respondent_name: '', respondent_email: '', player_name: '', respondent_role: 'Parent',
   rating_overall: 0, improvement: 0, enjoyment: 0,
   explore_rating: 0, explore_comment: '', challenge_rating: 0, challenge_comment: '', execute_rating: 0, execute_comment: '',
-  matchcentre_rating: 0, matchcentre_comment: '', scouting_reports_use: '', matchcentre_own_time: '',
+  matchcentre_rating: 0, matchcentre_unique: 0, matchcentre_comment: '', scouting_reports_use: '', matchcentre_own_time: '',
   format_fit: '', times_rating: 0, times_better: '', location_rating: 0, value_rating: 0,
   coaching_rating: 0, specialist_jarryd: 0, specialist_bowlstrong: 0, specialist_callum: 0, specialist_bajwa: 0, specialist_zach: 0,
   neuro_fitness_rating: 0, guests_rating: 0, communication_rating: 0, pathway_clarity: 0,
@@ -183,9 +183,13 @@ const ProgramFeedback = () => {
   const staying = f.continue_next === 'signed_up' || f.continue_next === 'intend';
   const leaving = f.continue_next === 'unsure' || f.continue_next === 'no';
 
-  const childWord = f.respondent_role === 'Player' ? 'you' : 'your child';
-  const theyWord = f.respondent_role === 'Player' ? 'you' : 'they';
-  const theirWord = f.respondent_role === 'Player' ? 'your' : 'their';
+  // Language adapts to who's answering: Player (you), Parent (your child), Both (the player).
+  const isPlayer = f.respondent_role === 'Player';
+  const isBoth = f.respondent_role === 'Both';
+  const childWord = isPlayer ? 'you' : isBoth ? 'the player' : 'your child';   // subject noun
+  const theyWord = isPlayer ? 'you' : 'they';                                   // subject pronoun
+  const themWord = isPlayer ? 'you' : 'them';                                   // object pronoun
+  const theirWord = isPlayer ? 'your' : 'their';                                // possessive
 
   const submit = async (e) => {
     e.preventDefault();
@@ -343,7 +347,12 @@ const ProgramFeedback = () => {
                     value={f.matchcentre_rating} onChange={(v) => up('matchcentre_rating', v)}
                     low="Not valuable" high="Extremely valuable"
                     comment={f.matchcentre_comment} onComment={(v) => up('matchcentre_comment', v)}
-                    commentPlaceholder={`How did it help ${theyWord === 'you' ? 'you' : 'them'} build context? (optional)`}
+                    commentPlaceholder={`How did it help ${themWord} build context? (optional)`}
+                  />
+                  <RatedQ
+                    label="Compared to other cricket training, how unique were the Match Centre match-ups?"
+                    value={f.matchcentre_unique} onChange={(v) => up('matchcentre_unique', v)}
+                    low="Not unique" high="One of a kind"
                   />
                   <Field label={`Did ${childWord} use the scouting reports to better understand the opposition before the evening's match-ups?`}>
                     <Choice
@@ -389,7 +398,7 @@ const ProgramFeedback = () => {
                 <div className="pt-2 space-y-5 border-t border-slate-100">
                   <div className="pt-3">
                     <p className="text-[11px] font-black uppercase tracking-[0.25em] text-rr-pink">The specialists</p>
-                    <p className="mt-1.5 text-xs text-slate-400">Rate each from 1 (not valuable) to 5 (loved it). Skip any {childWord === 'you' ? 'you' : 'your child'} didn't work with.</p>
+                    <p className="mt-1.5 text-xs text-slate-400">Rate each from 1 (not valuable) to 5 (loved it). Skip any that {theyWord} didn't work with.</p>
                   </div>
                   <RatedQ label="Jarryd Rogers — power hitting" value={f.specialist_jarryd} onChange={(v) => up('specialist_jarryd', v)} low="" high="" />
                   <RatedQ label="BowlStrong — bowling assessments" value={f.specialist_bowlstrong} onChange={(v) => up('specialist_bowlstrong', v)} low="" high="" />
