@@ -89,7 +89,8 @@ const fmtMelb = (iso) => {
 // Order MUST match the header row installed on the sheet. Append-only (one row per response).
 const SHEET_HEADERS = [
   'Submitted (Melb)', 'Program', 'Respondent', 'Role', 'Email', 'Player', 'Centre',
-  'Overall', 'Improvement', 'Enjoyment',
+  'Overall', 'Enjoyment',
+  'Imp: shot range', 'Imp: smart batting', 'Imp: smart bowling', 'Imp: power', 'Imp: game sense',
   'Explore', 'Explore note', 'Challenge', 'Challenge note', 'Execute', 'Execute note',
   'Match Centre', 'Match Centre note', 'Match Centre unique', 'Scouting reports', 'App in own time',
   'Format fit', 'Times', 'Times better', 'Location', 'Value',
@@ -122,7 +123,8 @@ const leadSource = (r) => {
 const sheetRow = (r) => ([
   fmtMelb(r.created_at), r.program || '', r.respondent_name || '', r.respondent_role || '',
   r.respondent_email || '', r.player_name || '', r.centre || '',
-  r.rating_overall ?? '', r.improvement ?? '', r.enjoyment ?? '',
+  r.rating_overall ?? '', r.enjoyment ?? '',
+  r.imp_shot_range ?? '', r.imp_batting_smart ?? '', r.imp_bowling_smart ?? '', r.imp_power ?? '', r.imp_game_understanding ?? '',
   r.explore_rating ?? '', r.explore_comment || '', r.challenge_rating ?? '', r.challenge_comment || '',
   r.execute_rating ?? '', r.execute_comment || '',
   r.matchcentre_rating ?? '', r.matchcentre_comment || '', r.matchcentre_unique ?? '', r.scouting_reports_use || '', r.matchcentre_own_time || '',
@@ -200,8 +202,12 @@ export default async function handler(req, res) {
     centre: clip(body.centre, 60) || null,
 
     rating_overall: rating(body.rating_overall),
-    improvement: rating(body.improvement),
     enjoyment: rating(body.enjoyment),
+    imp_shot_range: rating(body.imp_shot_range),
+    imp_batting_smart: rating(body.imp_batting_smart),
+    imp_bowling_smart: rating(body.imp_bowling_smart),
+    imp_power: rating(body.imp_power),
+    imp_game_understanding: rating(body.imp_game_understanding),
 
     explore_rating: rating(body.explore_rating),
     explore_comment: clip(body.explore_comment, 1000) || null,

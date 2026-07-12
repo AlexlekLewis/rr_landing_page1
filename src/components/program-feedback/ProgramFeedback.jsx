@@ -156,7 +156,8 @@ const MultiChoice = ({ options, values, onToggle }) => (
 
 const EMPTY = {
   respondent_name: '', respondent_email: '', player_name: '', respondent_role: 'Parent',
-  rating_overall: 0, improvement: 0, enjoyment: 0,
+  rating_overall: 0, enjoyment: 0,
+  imp_shot_range: 0, imp_batting_smart: 0, imp_bowling_smart: 0, imp_power: 0, imp_game_understanding: 0,
   explore_rating: 0, explore_comment: '', challenge_rating: 0, challenge_comment: '', execute_rating: 0, execute_comment: '',
   matchcentre_rating: 0, matchcentre_unique: 0, matchcentre_comment: '', scouting_reports_use: '', matchcentre_own_time: '',
   format_fit: '', times_rating: 0, times_better: '', location_rating: 0, value_rating: 0,
@@ -190,6 +191,15 @@ const ProgramFeedback = () => {
   const theyWord = isPlayer ? 'you' : 'they';                                   // subject pronoun
   const themWord = isPlayer ? 'you' : 'them';                                   // object pronoun
   const theirWord = isPlayer ? 'your' : 'their';                                // possessive
+
+  // Specific improvement dimensions (replaces the single generic "did they improve" question).
+  const IMPROVEMENTS = [
+    ['imp_shot_range', 'A wider shot range — more ways to score'],
+    ['imp_batting_smart', 'Smarter batting — better decisions at the crease'],
+    ['imp_bowling_smart', `Smarter bowling (if ${theyWord} bowl)`],
+    ['imp_power', 'More power — hitting the ball harder'],
+    ['imp_game_understanding', 'A better understanding of the game'],
+  ];
 
   const submit = async (e) => {
     e.preventDefault();
@@ -310,8 +320,15 @@ const ProgramFeedback = () => {
               {/* ── Overall ── */}
               <Section eyebrow="The big picture" title="Overall experience">
                 <RatedQ label="Overall, how would you rate the Elite Program?" value={f.rating_overall} onChange={(v) => up('rating_overall', v)} low="Poor" high="Excellent" />
-                <RatedQ label={`How much did ${childWord} improve over the 12 weeks?`} value={f.improvement} onChange={(v) => up('improvement', v)} low="Not at all" high="Hugely" />
                 <RatedQ label={`How much did ${childWord} enjoy it?`} value={f.enjoyment} onChange={(v) => up('enjoyment', v)} low="Not much" high="Loved it" />
+              </Section>
+
+              {/* ── Specific improvement gains (replaces the single "did they improve?" question) ── */}
+              <Section eyebrow="Specific gains" title={`How did ${childWord} improve?`}>
+                <p className="text-sm text-slate-500 -mt-1">Rate the change over the 12 weeks — 1 (no change) to 5 (big improvement). Skip any that don't apply.</p>
+                {IMPROVEMENTS.map(([key, label]) => (
+                  <RatedQ key={key} label={label} low="" high="" value={f[key]} onChange={(v) => up(key, v)} />
+                ))}
               </Section>
 
               {/* ── Core elements ── */}
