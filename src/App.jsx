@@ -72,6 +72,7 @@ import IndiaTour2026Dashboard from './components/admin/IndiaTour2026Dashboard';
 import IndiaTourEOIDashboard from './components/admin/IndiaTourEOIDashboard';
 import ReviewsModeration from './components/admin/ReviewsModeration';
 import ProgramFeedbackDashboard from './components/admin/ProgramFeedbackDashboard';
+import ProgramFeedbackResponses from './components/admin/ProgramFeedbackResponses';
 import TextUsButton from './components/TextUsButton';
 // Academy Shop — hidden from nav, accessible via direct URL only
 import AcademyShop from './components/academy-shop/AcademyShop';
@@ -243,6 +244,7 @@ function App() {
         <Route path="/rramadmin_26/india-tour-eoi" element={<AdminLayout><IndiaTourEOIDashboard /></AdminLayout>} />
         <Route path="/rramadmin_26/reviews" element={<AdminLayout><ReviewsModeration /></AdminLayout>} />
         <Route path="/rramadmin_26/feedback" element={<AdminLayout><ProgramFeedbackDashboard /></AdminLayout>} />
+        <Route path="/rramadmin_26/feedback/responses" element={<AdminLayout><ProgramFeedbackResponses /></AdminLayout>} />
       </Routes>
       </ChunkReloadBoundary>
       <TextUsButton />
