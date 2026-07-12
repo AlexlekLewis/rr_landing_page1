@@ -32,6 +32,7 @@ import { unpackApplication } from './_lib/pgpCheckout.js';
 import {
   getSheets, PAID_HEADERS, buildPaidRow, ensureTab, ensureHeader, findRowById,
 } from './_lib/pgpSheets.js';
+import { reconcileCoaches } from './_lib/coachesSheet.js';
 
 export const config = { api: { bodyParser: { sizeLimit: '256kb' } } };
 
@@ -413,6 +414,16 @@ export default async function handler(req, res) {
       out[od.key] = { error: err.message };
       out.ok = false;
     }
+  }
+
+  // The Coaches Session — independent workbook (self-provisioning). Fully isolated:
+  // its own sheet id + auth, so a failure here can never affect the Power Game sync.
+  try {
+    out.coachesTab = await reconcileCoaches(getSupabase());
+  } catch (err) {
+    console.error('sync-pgp-leads: coaches reconcile failed:', err);
+    out.coachesTab = { error: err.message };
+    out.ok = false;
   }
 
   return res.status(out.ok ? 200 : 500).json(out);
