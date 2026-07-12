@@ -15,8 +15,6 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 // Posts to the service-role /api/program-feedback (anon key never touches this table).
 // ─────────────────────────────────────────────────────────────────────────────
 
-const CENTRES = ['Williamstown', 'Hallam', 'Mickleham', 'Other'];
-
 const BARRIERS = [
   'Cost — too expensive',
   'Not clear what the next program (Power Game) involves',
@@ -157,11 +155,13 @@ const MultiChoice = ({ options, values, onToggle }) => (
 );
 
 const EMPTY = {
-  respondent_name: '', respondent_email: '', player_name: '', respondent_role: 'Parent', centre: '',
+  respondent_name: '', respondent_email: '', player_name: '', respondent_role: 'Parent',
   rating_overall: 0, improvement: 0, enjoyment: 0,
   explore_rating: 0, explore_comment: '', challenge_rating: 0, challenge_comment: '', execute_rating: 0, execute_comment: '',
+  matchcentre_rating: 0, matchcentre_comment: '', scouting_reports_use: '', matchcentre_own_time: '',
   format_fit: '', times_rating: 0, times_better: '', location_rating: 0, value_rating: 0,
-  coaching_rating: 0, guests_rating: 0, communication_rating: 0, pathway_clarity: 0,
+  coaching_rating: 0, specialist_jarryd: 0, specialist_bowlstrong: 0, specialist_callum: 0, specialist_bajwa: 0, specialist_zach: 0,
+  neuro_fitness_rating: 0, guests_rating: 0, communication_rating: 0, pathway_clarity: 0,
   nps: -1, continue_next: '', stay_reasons: [], stay_reason_other: '', barriers: [], barrier_other: '', change_mind: '',
   love_most: '', would_change: '', anything_else: '',
   consent_contact: false, hp_website: '',
@@ -184,6 +184,8 @@ const ProgramFeedback = () => {
   const leaving = f.continue_next === 'unsure' || f.continue_next === 'no';
 
   const childWord = f.respondent_role === 'Player' ? 'you' : 'your child';
+  const theyWord = f.respondent_role === 'Player' ? 'you' : 'they';
+  const theirWord = f.respondent_role === 'Player' ? 'your' : 'their';
 
   const submit = async (e) => {
     e.preventDefault();
@@ -243,11 +245,12 @@ const ProgramFeedback = () => {
               Rajasthan Royals Academy · Elite Program 2026
             </p>
             <h1 className="text-4xl md:text-6xl font-black uppercase tracking-wide leading-tight">
-              How did we do?
+              Congratulations!
             </h1>
             <p className="mt-5 text-base md:text-lg text-white/85 leading-relaxed">
-              You just finished our 12-week Elite Program. Tell us honestly what worked and what didn't —
-              it takes about 3 minutes, and it directly shapes what we build next.
+              You've finished the Rajasthan Royals Academy Melbourne Elite Program — 12 weeks of Explore,
+              Challenge and Execute. Now tell us honestly what worked and what didn't — it takes around
+              five minutes, and it directly shapes what we build next.
             </p>
             <a
               href="#form"
@@ -279,7 +282,7 @@ const ProgramFeedback = () => {
               />
 
               {/* ── Identity ── */}
-              <Section eyebrow="A couple of quick details" title="About you">
+              <Section eyebrow="Confirm your details" title="About you">
                 <div className="grid sm:grid-cols-2 gap-4">
                   <Field label="Your name" required>
                     <input value={f.respondent_name} onChange={(e) => up('respondent_name', e.target.value)} placeholder="e.g. Priya" className={inputCls} required />
@@ -288,17 +291,9 @@ const ProgramFeedback = () => {
                     <input value={f.player_name} onChange={(e) => up('player_name', e.target.value)} placeholder="Your child's name" className={inputCls} required />
                   </Field>
                 </div>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <Field label="Email" required hint="So we can follow up if you'd like us to.">
-                    <input type="email" value={f.respondent_email} onChange={(e) => up('respondent_email', e.target.value)} placeholder="you@email.com" className={inputCls} required />
-                  </Field>
-                  <Field label="Which centre?">
-                    <select value={f.centre} onChange={(e) => up('centre', e.target.value)} className={`${inputCls} bg-white`}>
-                      <option value="">Select…</option>
-                      {CENTRES.map((c) => <option key={c}>{c}</option>)}
-                    </select>
-                  </Field>
-                </div>
+                <Field label="Email" required hint="So we can follow up if you'd like us to.">
+                  <input type="email" value={f.respondent_email} onChange={(e) => up('respondent_email', e.target.value)} placeholder="you@email.com" className={inputCls} required />
+                </Field>
                 <Field label="Who's filling this in?">
                   <Choice
                     options={[{ value: 'Parent', label: 'Parent / guardian' }, { value: 'Player', label: 'Player' }, { value: 'Both', label: 'Both together' }]}
@@ -311,8 +306,8 @@ const ProgramFeedback = () => {
               {/* ── Overall ── */}
               <Section eyebrow="The big picture" title="Overall experience">
                 <RatedQ label="Overall, how would you rate the Elite Program?" value={f.rating_overall} onChange={(v) => up('rating_overall', v)} low="Poor" high="Excellent" />
-                <RatedQ label={`How much has ${childWord} improved since starting?`} value={f.improvement} onChange={(v) => up('improvement', v)} low="Not at all" high="Hugely" />
-                <RatedQ label={`How much does ${childWord} enjoy it?`} value={f.enjoyment} onChange={(v) => up('enjoyment', v)} low="Not much" high="Loves it" />
+                <RatedQ label={`How much did ${childWord} improve over the 12 weeks?`} value={f.improvement} onChange={(v) => up('improvement', v)} low="Not at all" high="Hugely" />
+                <RatedQ label={`How much did ${childWord} enjoy it?`} value={f.enjoyment} onChange={(v) => up('enjoyment', v)} low="Not much" high="Loved it" />
               </Section>
 
               {/* ── Core elements ── */}
@@ -327,18 +322,44 @@ const ProgramFeedback = () => {
                 />
                 <RatedQ
                   label="Challenge phase"
-                  hint="The challenge cards (Beat the Spin, Power Play, Beat the Yorker), the bowlers' technical block, and building the fundamental base on weekends."
+                  hint="The challenge cards (Beat the Spin, Power Play, Beat the Yorker), the bowling technical block, and building the fundamental base on weekends."
                   value={f.challenge_rating} onChange={(v) => up('challenge_rating', v)}
                   comment={f.challenge_comment} onComment={(v) => up('challenge_comment', v)}
                   commentPlaceholder="Too easy? Too hard? Just right? (optional)"
                 />
                 <RatedQ
                   label="Execute phase"
-                  hint="Bat v Ball match-ups & the match centre, and the tactical + mental-performance side of the game."
+                  hint="Bat v Ball match-ups in the Match Centre, and the tactical + mental-performance side of the game."
                   value={f.execute_rating} onChange={(v) => up('execute_rating', v)}
                   comment={f.execute_comment} onComment={(v) => up('execute_comment', v)}
                   commentPlaceholder="Did it translate to their game? (optional)"
                 />
+
+                {/* The Match Centre — the iPad match-up tool introduced in the Execute phase */}
+                <div className="pt-2 space-y-6 border-t border-slate-100">
+                  <p className="text-[11px] font-black uppercase tracking-[0.25em] text-rr-pink pt-3">The Match Centre</p>
+                  <RatedQ
+                    label={`How valuable were the Match Centre match-ups — using the iPad to visualise the field, the scenario, where ${theyWord} bowled, where the ball went, and the ground dimensions?`}
+                    value={f.matchcentre_rating} onChange={(v) => up('matchcentre_rating', v)}
+                    low="Not valuable" high="Extremely valuable"
+                    comment={f.matchcentre_comment} onComment={(v) => up('matchcentre_comment', v)}
+                    commentPlaceholder={`How did it help ${theyWord === 'you' ? 'you' : 'them'} build context? (optional)`}
+                  />
+                  <Field label={`Did ${childWord} use the scouting reports to better understand the opposition before the evening's match-ups?`}>
+                    <Choice
+                      options={[{ value: 'yes', label: 'Yes — most sessions' }, { value: 'sometimes', label: 'A few times' }, { value: 'no', label: "No / didn't know about them" }]}
+                      value={f.scouting_reports_use}
+                      onChange={(v) => up('scouting_reports_use', v)}
+                    />
+                  </Field>
+                  <Field label={`Would ${childWord} want to use the Match Centre app in ${theirWord} own time, outside the program?`}>
+                    <Choice
+                      options={[{ value: 'yes', label: 'Yes — definitely' }, { value: 'maybe', label: 'Maybe' }, { value: 'no', label: 'Probably not' }]}
+                      value={f.matchcentre_own_time}
+                      onChange={(v) => up('matchcentre_own_time', v)}
+                    />
+                  </Field>
+                </div>
               </Section>
 
               {/* ── Format & value ── */}
@@ -360,14 +381,31 @@ const ProgramFeedback = () => {
                 <RatedQ label="Value for money, for what was included?" value={f.value_rating} onChange={(v) => up('value_rating', v)} low="Poor value" high="Great value" />
               </Section>
 
-              {/* ── Coaching, guests & pathway ── */}
-              <Section eyebrow="Coaching & what's next" title="Coaching, guests & pathway">
-                <RatedQ label="Quality of the coaching" value={f.coaching_rating} onChange={(v) => up('coaching_rating', v)} />
-                <RatedQ
-                  label="The guest coaches & masterclasses"
-                  hint="e.g. BowlStrong bowling assessments, Jarryd Rogers (power hitting), and mindset & mentoring with Kyle Hogg and Rajasthan Royals' Lhuan-dre Pretorius."
-                  value={f.guests_rating} onChange={(v) => up('guests_rating', v)} low="Not valuable" high="Loved them"
-                />
+              {/* ── Coaching, specialists & pathway ── */}
+              <Section eyebrow="Coaching & what's next" title="Coaching, specialists & pathway">
+                <RatedQ label="How would you rate the quality of the coaching?" value={f.coaching_rating} onChange={(v) => up('coaching_rating', v)} />
+
+                {/* Per-specialist ratings — who to bring back next time */}
+                <div className="pt-2 space-y-5 border-t border-slate-100">
+                  <div className="pt-3">
+                    <p className="text-[11px] font-black uppercase tracking-[0.25em] text-rr-pink">The specialists</p>
+                    <p className="mt-1.5 text-xs text-slate-400">Rate each from 1 (not valuable) to 5 (loved it). Skip any {childWord === 'you' ? 'you' : 'your child'} didn't work with.</p>
+                  </div>
+                  <RatedQ label="Jarryd Rogers — power hitting" value={f.specialist_jarryd} onChange={(v) => up('specialist_jarryd', v)} low="" high="" />
+                  <RatedQ label="BowlStrong — bowling assessments" value={f.specialist_bowlstrong} onChange={(v) => up('specialist_bowlstrong', v)} low="" high="" />
+                  <RatedQ label="Callum Stow" value={f.specialist_callum} onChange={(v) => up('specialist_callum', v)} low="" high="" />
+                  <RatedQ label="Harkirat Bajwa" value={f.specialist_bajwa} onChange={(v) => up('specialist_bajwa', v)} low="" high="" />
+                  <RatedQ label="Zach Parr" value={f.specialist_zach} onChange={(v) => up('specialist_zach', v)} low="" high="" />
+                  <RatedQ
+                    label="The NeuroVision training and the fitness program & assessments"
+                    value={f.neuro_fitness_rating} onChange={(v) => up('neuro_fitness_rating', v)} low="Not valuable" high="Extremely valuable"
+                  />
+                  <RatedQ
+                    label="The guest speakers"
+                    hint="Mindset & mentoring sessions with Kyle Hogg and Lhuan-dre Pretorius from the Rajasthan Royals."
+                    value={f.guests_rating} onChange={(v) => up('guests_rating', v)} low="Not valuable" high="Loved them"
+                  />
+                </div>
                 <RatedQ label={`Communication & feedback on ${childWord}'s progress`} hint="Including the assessment week and the player DNA profile." value={f.communication_rating} onChange={(v) => up('communication_rating', v)} low="Poor" high="Excellent" />
                 <RatedQ
                   label="How clear are you on the pathway ahead — the Power Game Pre-Season, what's next, and how they progress?"

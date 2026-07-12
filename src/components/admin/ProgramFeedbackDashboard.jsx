@@ -18,6 +18,8 @@ const CONTINUE_LABELS = {
   no: 'Not this time',
 };
 const FORMAT_LABELS = { too_much: 'Too much', just_right: 'Just right', not_enough: 'Not enough' };
+const SCOUTING_LABELS = { yes: 'Yes — most sessions', sometimes: 'A few times', no: "No / didn't know" };
+const OWNTIME_LABELS = { yes: 'Yes — definitely', maybe: 'Maybe', no: 'Probably not' };
 
 const RATING_FIELDS = [
   ['rating_overall', 'Overall'],
@@ -26,11 +28,18 @@ const RATING_FIELDS = [
   ['explore_rating', 'Explore'],
   ['challenge_rating', 'Challenge'],
   ['execute_rating', 'Execute'],
+  ['matchcentre_rating', 'Match Centre'],
   ['times_rating', 'Days & times'],
   ['location_rating', 'Location'],
   ['value_rating', 'Value for money'],
   ['coaching_rating', 'Coaching'],
-  ['guests_rating', 'Guest coaches'],
+  ['specialist_jarryd', 'Jarryd Rogers'],
+  ['specialist_bowlstrong', 'BowlStrong'],
+  ['specialist_callum', 'Callum Stow'],
+  ['specialist_bajwa', 'Harkirat Bajwa'],
+  ['specialist_zach', 'Zach Parr'],
+  ['neuro_fitness_rating', 'NeuroVision & fitness'],
+  ['guests_rating', 'Guest speakers'],
   ['communication_rating', 'Communication'],
   ['pathway_clarity', 'Pathway clarity'],
 ];
@@ -122,8 +131,10 @@ const ProgramFeedbackDashboard = () => {
       'created_at', 'program', 'respondent_name', 'respondent_role', 'respondent_email', 'player_name', 'centre',
       'rating_overall', 'improvement', 'enjoyment',
       'explore_rating', 'explore_comment', 'challenge_rating', 'challenge_comment', 'execute_rating', 'execute_comment',
+      'matchcentre_rating', 'matchcentre_comment', 'scouting_reports_use', 'matchcentre_own_time',
       'format_fit', 'times_rating', 'times_better', 'location_rating', 'value_rating',
-      'coaching_rating', 'guests_rating', 'communication_rating', 'pathway_clarity',
+      'coaching_rating', 'specialist_jarryd', 'specialist_bowlstrong', 'specialist_callum', 'specialist_bajwa', 'specialist_zach',
+      'neuro_fitness_rating', 'guests_rating', 'communication_rating', 'pathway_clarity',
       'nps', 'continue_next', 'stay_reasons', 'stay_reason_other', 'barriers', 'barrier_other', 'change_mind',
       'love_most', 'would_change', 'anything_else', 'consent_contact', 'id',
     ];
@@ -229,6 +240,17 @@ const ProgramFeedbackDashboard = () => {
                 return <RatingBar key={key} label={label} value={v} n={n} />;
               })}
             </div>
+            {(() => {
+              const c = { yes: 0, maybe: 0, no: 0 };
+              rows.forEach((r) => { if (c[r.matchcentre_own_time] != null) c[r.matchcentre_own_time]++; });
+              const total = c.yes + c.maybe + c.no;
+              return total > 0 ? (
+                <p className="mt-5 pt-4 border-t border-white/10 text-sm text-slate-400">
+                  Would use the Match Centre app in their own time:&nbsp;
+                  <span className="text-green-400 font-bold">{c.yes} yes</span> · <span className="text-amber-400 font-bold">{c.maybe} maybe</span> · <span className="text-slate-300 font-bold">{c.no} no</span>
+                </p>
+              ) : null;
+            })()}
           </div>
 
           {/* WIN-BACK LIST — contactable, with reasons */}
@@ -307,7 +329,9 @@ const ProgramFeedbackDashboard = () => {
                       </div>
                     ))}
                     {r.format_fit && <div className="flex justify-between border-b border-white/5 py-0.5"><span className="text-slate-400">Format</span><span className="text-white font-semibold">{FORMAT_LABELS[r.format_fit]}</span></div>}
-                    {[['explore_comment', 'Explore'], ['challenge_comment', 'Challenge'], ['execute_comment', 'Execute'], ['times_better', 'Better times'], ['love_most', 'Loved most'], ['would_change', 'Would change'], ['anything_else', 'Anything else'], ['change_mind', 'Change mind']].map(([key, label]) =>
+                    {r.scouting_reports_use && <div className="flex justify-between border-b border-white/5 py-0.5"><span className="text-slate-400">Scouting reports</span><span className="text-white font-semibold">{SCOUTING_LABELS[r.scouting_reports_use]}</span></div>}
+                    {r.matchcentre_own_time && <div className="flex justify-between border-b border-white/5 py-0.5"><span className="text-slate-400">App in own time</span><span className="text-white font-semibold">{OWNTIME_LABELS[r.matchcentre_own_time]}</span></div>}
+                    {[['explore_comment', 'Explore'], ['challenge_comment', 'Challenge'], ['execute_comment', 'Execute'], ['matchcentre_comment', 'Match Centre'], ['times_better', 'Better times'], ['love_most', 'Loved most'], ['would_change', 'Would change'], ['anything_else', 'Anything else'], ['change_mind', 'Change mind']].map(([key, label]) =>
                       r[key] ? <p key={key} className="sm:col-span-2 text-slate-300 mt-1"><span className="text-slate-500">{label}: </span>{r[key]}</p> : null
                     )}
                     {r.stay_reasons?.length ? <p className="sm:col-span-2 text-slate-300"><span className="text-slate-500">Staying because: </span>{r.stay_reasons.join(', ')}</p> : null}
