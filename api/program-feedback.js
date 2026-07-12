@@ -93,7 +93,7 @@ const SHEET_HEADERS = [
   'Explore', 'Explore note', 'Challenge', 'Challenge note', 'Execute', 'Execute note',
   'Match Centre', 'Match Centre note', 'Scouting reports', 'App in own time',
   'Format fit', 'Times', 'Times better', 'Location', 'Value',
-  'Coaching', 'Jarryd Rogers', 'BowlStrong', 'Callum Stow', 'Harkirat Bajwa', 'Zach Parr',
+  'Coaching', 'Jarryd Rogers', 'BowlStrong', 'Callum Stow', 'Harkirat Bajwa', 'Zac Parr',
   'NeuroVision & fitness', 'Guest speakers', 'Communication', 'Pathway clarity',
   'Recommend (NPS)', 'Continue next?', 'Stay reasons', 'Barriers', 'What would change mind',
   'Loves most', 'Would change', 'Anything else', 'Consent', 'Lead source', 'Record ID',

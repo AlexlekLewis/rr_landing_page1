@@ -395,7 +395,7 @@ const ProgramFeedback = () => {
                   <RatedQ label="BowlStrong — bowling assessments" value={f.specialist_bowlstrong} onChange={(v) => up('specialist_bowlstrong', v)} low="" high="" />
                   <RatedQ label="Callum Stow" value={f.specialist_callum} onChange={(v) => up('specialist_callum', v)} low="" high="" />
                   <RatedQ label="Harkirat Bajwa" value={f.specialist_bajwa} onChange={(v) => up('specialist_bajwa', v)} low="" high="" />
-                  <RatedQ label="Zach Parr" value={f.specialist_zach} onChange={(v) => up('specialist_zach', v)} low="" high="" />
+                  <RatedQ label="Zac Parr" value={f.specialist_zach} onChange={(v) => up('specialist_zach', v)} low="" high="" />
                   <RatedQ
                     label="The NeuroVision training and the fitness program & assessments"
                     value={f.neuro_fitness_rating} onChange={(v) => up('neuro_fitness_rating', v)} low="Not valuable" high="Extremely valuable"
