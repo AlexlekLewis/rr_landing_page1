@@ -37,7 +37,7 @@ const RATING_FIELDS = [
   ['specialist_bowlstrong', 'BowlStrong'],
   ['specialist_callum', 'Callum Stow'],
   ['specialist_bajwa', 'Harkirat Bajwa'],
-  ['specialist_zach', 'Zach Parr'],
+  ['specialist_zach', 'Zac Parr'],
   ['neuro_fitness_rating', 'NeuroVision & fitness'],
   ['guests_rating', 'Guest speakers'],
   ['communication_rating', 'Communication'],
