@@ -85,6 +85,54 @@
             "destination": "/api/gone"
         },
         {
+            "source": "/PGP2026/mickleham",
+            "destination": "/api/gone"
+        },
+        {
+            "source": "/PGP2026/mickleham/success",
+            "destination": "/api/gone"
+        },
+        {
+            "source": "/PGP2026/mickleham/junior/success",
+            "destination": "/api/gone"
+        },
+        {
+            "source": "/PGP2026/mickleham/entry",
+            "destination": "/api/gone"
+        },
+        {
+            "source": "/PGP2026/williamstown",
+            "destination": "/api/gone"
+        },
+        {
+            "source": "/PGP2026/williamstown/success",
+            "destination": "/api/gone"
+        },
+        {
+            "source": "/PGP2026/williamstown/junior/success",
+            "destination": "/api/gone"
+        },
+        {
+            "source": "/PGP2026/williamstown/entry",
+            "destination": "/api/gone"
+        },
+        {
+            "source": "/PGP2026/hallam",
+            "destination": "/api/gone"
+        },
+        {
+            "source": "/PGP2026/hallam/success",
+            "destination": "/api/gone"
+        },
+        {
+            "source": "/PGP2026/hallam/junior/success",
+            "destination": "/api/gone"
+        },
+        {
+            "source": "/PGP2026/hallam/entry",
+            "destination": "/api/gone"
+        },
+        {
             "source": "/(.*)",
             "destination": "/index.html"
         }

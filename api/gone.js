@@ -1,8 +1,11 @@
 // Returns HTTP 410 Gone for retired pages so search engines drop them from the
 // index and they can no longer be visited. Wired up via rewrites in vercel.json.
 //
-// Currently retiring: the 2026 Elite Program intake pages (main + legacy LP1/LP2).
-// 410 (not 404) is a deliberate, stronger "this is permanently gone" signal to Google.
+// Currently retiring: the 2026 Elite Program intake pages (main + legacy LP1/LP2)
+// and the July 2026 open training day pages (/PGP2026/{mickleham,williamstown,hallam}
+// + their success/junior/entry sub-pages). 410 (not 404) is a deliberate, stronger
+// "this is permanently gone" signal to Google. Kept program-agnostic so it can serve
+// any retired page.
 export default function handler(req, res) {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('X-Robots-Tag', 'noindex, nofollow');
@@ -31,7 +34,7 @@ export default function handler(req, res) {
 <body>
   <div class="card">
     <h1>This page is no longer available</h1>
-    <p>The 2026 Elite Program intake has closed and this page has been retired. You can explore our current programs on the main site.</p>
+    <p>This event or program has ended and the page has been retired. You can explore our current programs on the main site.</p>
     <a href="/">Go to the home page</a>
   </div>
 </body>
