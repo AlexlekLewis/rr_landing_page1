@@ -237,7 +237,11 @@ export default function ExpressSignup({ config }) {
     else if (!selectedSession) e.push('Please choose a session time.');
     if (requireKit) {
       if (!kit.shirt) e.push('Please choose a training shirt size.');
-      if (!kit.shorts) e.push('Please choose a training shorts size.');
+      if (fullRide) {
+        if (!kit.shorts && !kit.pants) e.push('Please choose your shorts or pants size.');
+      } else if (!kit.shorts) {
+        e.push('Please choose a training shorts size.');
+      }
     }
     return e;
   }
@@ -544,7 +548,7 @@ export default function ExpressSignup({ config }) {
             )}
             {fullRide && (
               <div className="mb-3 rounded-lg bg-green-500/10 border border-green-500/30 px-3 py-2 text-[12px] text-green-200 leading-relaxed">
-                Your full-ride scholarship includes <span className="font-bold">all your playing kit, free</span>. Pick your sizes below — shirt and shorts are required; add a cap, pants or jacket too if you’d like.
+                Your full-ride scholarship includes your <span className="font-bold">playing kit, free</span> — a training shirt and your choice of shorts or pants. Pick your sizes below.
               </div>
             )}
             {fullRide ? null : requireKit ? (
@@ -569,7 +573,7 @@ export default function ExpressSignup({ config }) {
                   </button>
                 </div>
 
-                {UNIFORM.map((u) => (
+                {UNIFORM.filter((u) => !fullRide || ['shirt', 'shorts', 'pants'].includes(u.key)).map((u) => (
                   <div key={u.key} className="flex items-center gap-3">
                     <div className="flex-1 min-w-0">
                       <span className="block text-sm font-bold text-white truncate">{u.label}</span>
