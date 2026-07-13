@@ -171,7 +171,7 @@ function App() {
             nav; share the link directly (optionally /induction?program=Name). Writes to program_inductions. */}
         <Route path="/induction" element={<InductionPage />} />
 
-        {/* The Coaches Session — free coaching day for local coaches (Sun 26 Jul 2026).
+        {/* An Afternoon for Coaches — free coaches afternoon, junior & senior (Sun 26 Jul 2026).
             Standalone registration, writes to coaches_day_registrations. Share the link directly. */}
         <Route path="/coaches-day" element={<CoachesDay />} />
         {/* Reviews — public, moderated testimonial wall + submit form. Linkable from anywhere. */}

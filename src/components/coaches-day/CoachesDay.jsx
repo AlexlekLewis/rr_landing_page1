@@ -6,7 +6,7 @@ import CoachesDayDetails from './CoachesDayDetails';
 import CoachesDayForm from './CoachesDayForm';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
-const SECTIONS = ['hero', 'from-the-coach', 'details', 'registration-form'];
+const SECTIONS = ['hero', 'details', 'registration-form'];
 
 const CoachesDay = () => {
     usePageAnalytics('/coaches-day', { sections: SECTIONS });
