@@ -73,6 +73,7 @@ import IndiaTourEOIDashboard from './components/admin/IndiaTourEOIDashboard';
 import ReviewsModeration from './components/admin/ReviewsModeration';
 import ProgramFeedbackDashboard from './components/admin/ProgramFeedbackDashboard';
 import ProgramFeedbackResponses from './components/admin/ProgramFeedbackResponses';
+import PowerLeagueDashboard from './components/admin/PowerLeagueDashboard';
 import TextUsButton from './components/TextUsButton';
 // Academy Shop — hidden from nav, accessible via direct URL only
 import AcademyShop from './components/academy-shop/AcademyShop';
@@ -245,6 +246,7 @@ function App() {
         <Route path="/rramadmin_26/reviews" element={<AdminLayout><ReviewsModeration /></AdminLayout>} />
         <Route path="/rramadmin_26/feedback" element={<AdminLayout><ProgramFeedbackDashboard /></AdminLayout>} />
         <Route path="/rramadmin_26/feedback/responses" element={<AdminLayout><ProgramFeedbackResponses /></AdminLayout>} />
+        <Route path="/rramadmin_26/power-league" element={<AdminLayout><PowerLeagueDashboard /></AdminLayout>} />
       </Routes>
       </ChunkReloadBoundary>
       <TextUsButton />

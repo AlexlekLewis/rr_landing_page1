@@ -43,6 +43,7 @@ const NAV_GROUPS = [
             { label: 'Assessments', path: '/rramadmin_26/rsvp', icon: ClipboardList },
             { label: 'Junior Royals', path: '/rramadmin_26/program-registrations?program=junior_royals', icon: GraduationCap },
             { label: 'Elite Program', path: '/rramadmin_26/program-registrations?program=elite', icon: Crown },
+            { label: 'Power League', path: '/rramadmin_26/power-league', icon: Trophy },
             { label: 'Holiday Programs', path: '/rramadmin_26/program-registrations?program=holiday', icon: Sun },
             { label: 'Female Kickstart', path: '/rramadmin_26/program-registrations?program=female_kickstart', icon: Sparkles },
         ],
