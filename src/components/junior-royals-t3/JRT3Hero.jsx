@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 
-const EARLY_BIRD_END = new Date('2026-07-12T13:00:00Z'); // 11pm AEST = 1pm UTC
+const EARLY_BIRD_END = new Date('2026-07-15T13:00:00Z'); // 11pm AEST = 1pm UTC
 
 const useCountdown = (target) => {
     const [timeLeft, setTimeLeft] = useState({});

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const EARLY_BIRD_END = new Date('2026-07-12T13:00:00Z');
+const EARLY_BIRD_END = new Date('2026-07-15T13:00:00Z');
 
 const JRT3StickyCTA = () => {
     const [visible, setVisible] = useState(false);
