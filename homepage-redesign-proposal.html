@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RRA Melbourne — Homepage Redesign Proposal</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+  :root{
+    --pink:#E11F8F; --blue:#1226AA; --navy:#001D48; --dark:#111921;
+    --light-pink:#F63FAA;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif;}
+  body{background:#0a0e14;color:#fff;line-height:1.5;}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 20px;}
+
+  /* Annotation banner */
+  .note{background:linear-gradient(90deg,var(--pink),var(--blue));padding:14px 20px;text-align:center;font-size:13px;font-weight:700;letter-spacing:.5px;position:sticky;top:0;z-index:100;}
+
+  .compare-head{text-align:center;padding:40px 20px 10px;}
+  .compare-head h1{font-size:30px;font-weight:900;text-transform:uppercase;letter-spacing:1px;}
+  .compare-head p{color:rgba(255,255,255,.55);font-size:14px;margin-top:8px;max-width:640px;margin-left:auto;margin-right:auto;}
+
+  .toggle{display:flex;gap:8px;justify-content:center;margin:24px 0;}
+  .toggle button{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;padding:10px 22px;border-radius:99px;font-weight:700;font-size:13px;cursor:pointer;text-transform:uppercase;letter-spacing:.5px;transition:.2s;}
+  .toggle button.active{background:var(--pink);border-color:var(--pink);}
+
+  section.demo{margin:0 auto;}
+  .device{max-width:1000px;margin:0 auto 40px;border:1px solid rgba(255,255,255,.12);border-radius:16px;overflow:hidden;background:#fff;color:var(--dark);}
+
+  /* ---- Mock homepage sections ---- */
+  .m-nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:var(--pink);}
+  .m-nav .logo{font-weight:900;color:#fff;font-size:15px;letter-spacing:1px;}
+  .m-nav .links{display:flex;gap:18px;align-items:center;}
+  .m-nav .links span{color:#fff;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;opacity:.9;}
+  .m-nav .shopbtn{background:var(--blue);padding:6px 14px;border-radius:99px;font-size:11px;}
+
+  .m-hero{position:relative;background:linear-gradient(120deg,var(--navy),var(--blue));min-height:300px;display:flex;align-items:center;padding:40px;overflow:hidden;}
+  .m-hero .lion{position:absolute;right:-40px;top:-20px;font-size:280px;opacity:.06;font-weight:900;}
+  .m-hero-content{position:relative;z-index:2;max-width:60%;}
+  .m-hero .badge{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:9px;font-weight:700;padding:5px 12px;border-radius:99px;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;}
+  .m-hero h2{color:#fff;font-size:38px;font-weight:900;text-transform:uppercase;line-height:1;letter-spacing:.5px;}
+  .m-hero h2 .p{color:var(--pink);}
+  .m-hero p{color:rgba(255,255,255,.7);font-size:12px;margin:12px 0 18px;max-width:340px;}
+  .m-hero .cta{display:inline-flex;gap:10px;}
+  .m-hero .cta a{padding:10px 20px;border-radius:99px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;}
+  .m-hero .cta .primary{background:var(--pink);color:#fff;}
+  .m-hero .cta .ghost{border:1px solid rgba(255,255,255,.4);color:#fff;}
+
+  .lbl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:var(--pink);text-align:center;padding-top:34px;}
+  .h2{font-size:26px;font-weight:900;text-transform:uppercase;text-align:center;letter-spacing:.5px;color:var(--dark);margin:6px 0 6px;}
+  .sub{text-align:center;color:#667;font-size:12px;max-width:460px;margin:0 auto 26px;}
+
+  /* NEW quick-nav chips */
+  .chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:16px 24px 6px;background:#f6f7f9;}
+  .chips a{background:#fff;border:1px solid #e3e6ea;border-radius:99px;padding:9px 16px;font-size:11px;font-weight:700;color:var(--dark);text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:7px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  .chips a .dot{width:7px;height:7px;border-radius:99px;background:var(--pink);}
+
+  /* FEATURES section (NEW) */
+  .features{background:#f6f7f9;padding:10px 24px 40px;}
+  .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:900px;margin:0 auto;}
+  .feat{background:#fff;border:1px solid #eceef1;border-radius:14px;padding:22px;text-align:left;}
+  .feat .ic{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,var(--navy),var(--pink));display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;}
+  .feat h4{font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;margin-bottom:6px;color:var(--dark);}
+  .feat p{font-size:11.5px;color:#667;line-height:1.6;}
+
+  /* programs */
+  .prog-wrap{padding:10px 24px 40px;}
+  .prog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:900px;margin:0 auto;}
+  .card{border:1px solid #eceef1;border-radius:14px;overflow:hidden;background:#fff;}
+  .card .img{height:96px;background:linear-gradient(135deg,var(--blue),var(--pink));position:relative;}
+  .card .img .tag{position:absolute;bottom:8px;left:8px;background:rgba(255,255,255,.9);color:var(--pink);font-size:8px;font-weight:800;padding:3px 8px;border-radius:99px;text-transform:uppercase;letter-spacing:.5px;}
+  .card .body{padding:14px;}
+  .card .body h4{font-size:13px;font-weight:800;text-transform:uppercase;margin-bottom:5px;}
+  .card .body p{font-size:10.5px;color:#778;line-height:1.5;margin-bottom:12px;}
+  .card .body .btn{background:var(--pink);color:#fff;text-align:center;padding:8px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;}
+
+  /* video redesigned */
+  .video{background:var(--dark);padding:40px 24px;}
+  .video-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:center;}
+  .video .player{aspect-ratio:16/10;border-radius:14px;background:linear-gradient(135deg,#1a2433,#0d1420);display:flex;align-items:center;justify-content:center;position:relative;border:1px solid rgba(255,255,255,.08);}
+  .video .player .play{width:54px;height:54px;border-radius:99px;background:var(--pink);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;}
+  .video .txt .lbl{text-align:left;padding:0;}
+  .video .txt h3{color:#fff;font-size:22px;font-weight:900;text-transform:uppercase;margin:6px 0 10px;line-height:1.1;}
+  .video .txt p{color:rgba(255,255,255,.55);font-size:12px;}
+
+  /* shop redesigned - horizontal strip */
+  .shop{background:linear-gradient(135deg,var(--navy),var(--blue));padding:40px 24px;}
+  .shop-inner{max-width:900px;margin:0 auto;}
+  .shop-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px;}
+  .shop-item{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px;text-align:center;}
+  .shop-item .ph{aspect-ratio:1;background:rgba(255,255,255,.08);border-radius:8px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:30px;}
+  .shop-item h5{color:#fff;font-size:11px;font-weight:800;text-transform:uppercase;margin-bottom:3px;}
+  .shop-item .price{color:var(--pink);font-weight:900;font-size:13px;}
+  .shop .viewall{text-align:center;margin-top:22px;}
+  .shop .viewall a{background:var(--pink);color:#fff;padding:10px 24px;border-radius:99px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;display:inline-block;}
+
+  /* coaches strip */
+  .coaches{padding:40px 24px;background:#fff;}
+  .coach-grid{display:flex;gap:20px;justify-content:center;max-width:700px;margin:0 auto;}
+  .coach{text-align:center;}
+  .coach .av{width:74px;height:74px;border-radius:99px;background:linear-gradient(135deg,var(--navy),var(--pink));margin:0 auto 10px;border:3px solid rgba(225,31,143,.2);}
+  .coach h5{font-size:12px;font-weight:800;text-transform:uppercase;}
+  .coach span{font-size:9px;color:var(--pink);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+
+  /* faq */
+  .faq{background:#f6f7f9;padding:40px 24px;}
+  .faq-inner{max-width:640px;margin:0 auto;}
+  .faq-item{background:#fff;border:1px solid #eceef1;border-radius:10px;padding:14px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;}
+  .faq-item span{font-size:12px;font-weight:700;color:var(--dark);}
+  .faq-item .plus{color:var(--pink);font-weight:900;font-size:16px;}
+
+  .m-foot{background:linear-gradient(90deg,var(--pink),var(--navy));padding:22px 24px;display:flex;justify-content:space-between;align-items:center;}
+  .m-foot .logo{color:#fff;font-weight:900;font-size:12px;letter-spacing:1px;}
+  .m-foot .social{display:flex;gap:10px;}
+  .m-foot .social span{width:26px;height:26px;border-radius:99px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:12px;}
+
+  /* callout labels overlaid */
+  .why{max-width:900px;margin:30px auto;padding:0 24px;}
+  .why h3{font-size:16px;font-weight:900;text-transform:uppercase;color:var(--pink);margin-bottom:14px;letter-spacing:.5px;}
+  .why .item{display:flex;gap:14px;margin-bottom:16px;align-items:flex-start;}
+  .why .item .num{flex-shrink:0;width:26px;height:26px;border-radius:8px;background:var(--pink);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:#fff;}
+  .why .item p{font-size:13px;color:rgba(255,255,255,.7);line-height:1.6;}
+  .why .item b{color:#fff;}
+
+  .newtag{display:inline-block;background:#16a34a;color:#fff;font-size:8px;font-weight:800;padding:2px 7px;border-radius:99px;text-transform:uppercase;letter-spacing:.5px;vertical-align:middle;margin-left:8px;}
+  .redesigntag{display:inline-block;background:var(--blue);color:#fff;font-size:8px;font-weight:800;padding:2px 7px;border-radius:99px;text-transform:uppercase;letter-spacing:.5px;vertical-align:middle;margin-left:8px;}
+
+  @media(max-width:720px){
+    .feat-grid,.prog-grid,.shop-row{grid-template-columns:1fr;}
+    .video-inner{grid-template-columns:1fr;}
+    .m-hero-content{max-width:100%;}
+    .m-nav .links{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="note">📐 DESIGN PROPOSAL ONLY — Nothing on the live site has changed. This is a visual mockup for your review & approval.</div>
+
+<div class="compare-head">
+  <h1>Homepage Redesign — Visual Proposal</h1>
+  <p>A simpler, more consumer-friendly flow with a new Features section, cleaner Shop and Video blocks, and a quick-nav bar so visitors can jump straight to what they want.</p>
+</div>
+
+<div class="toggle">
+  <button class="active" onclick="show('new',this)">✨ Proposed Design</button>
+  <button onclick="show('current',this)">Current Layout</button>
+</div>
+
+<!-- PROPOSED -->
+<section class="demo" id="new">
+  <div class="device">
+    <!-- nav -->
+    <div class="m-nav">
+      <div class="logo">👑 RRA MELBOURNE</div>
+      <div class="links">
+        <span>Programs</span><span>Coaches</span><span>Shop</span>
+        <span class="shopbtn">🛒 Shop</span>
+      </div>
+    </div>
+
+    <!-- hero -->
+    <div class="m-hero">
+      <div class="lion">👑</div>
+      <div class="m-hero-content">
+        <span class="badge">● Melbourne's Official Rajasthan Royals Academy</span>
+        <h2>PLAY THE<br><span class="p">ROYALS WAY.</span></h2>
+        <p>From elite players to beginners — coaching for male & female cricketers of all ages and abilities.</p>
+        <div class="cta">
+          <a class="primary">Register Now →</a>
+          <a class="ghost">Explore Programs</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEW quick-nav chips -->
+    <div class="chips">
+      <a><span class="dot"></span>Programs</a>
+      <a><span class="dot" style="background:#16a34a"></span>Why RRA</a>
+      <a><span class="dot" style="background:var(--blue)"></span>Watch</a>
+      <a><span class="dot"></span>Shop</a>
+      <a><span class="dot" style="background:var(--navy)"></span>Coaches</a>
+      <a><span class="dot"></span>FAQ</a>
+    </div>
+
+    <!-- FEATURES (NEW) -->
+    <div class="features">
+      <div class="lbl">Why RRA Melbourne <span class="newtag">New Section</span></div>
+      <div class="h2">The Royals Advantage</div>
+      <div class="sub">Everything that makes us different — presented clearly so parents and players understand the value at a glance.</div>
+      <div class="feat-grid">
+        <div class="feat"><div class="ic">🏆</div><h4>IPL Methodology</h4><p>The same coaching philosophy that shaped IPL and global T20 stars, brought to Melbourne.</p></div>
+        <div class="feat"><div class="ic">🎯</div><h4>All Ages & Abilities</h4><p>Structured pathways from first-time juniors to elite performance players, 7–18+.</p></div>
+        <div class="feat"><div class="ic">👥</div><h4>Small Group Coaching</h4><p>Royals & CA accredited coaches deliver focused, personalised development.</p></div>
+        <div class="feat"><div class="ic">📈</div><h4>Proven Results</h4><p>Hundreds of players developed across Melbourne with measurable improvement.</p></div>
+        <div class="feat"><div class="ic">📍</div><h4>Multiple Venues</h4><p>Convenient locations across Melbourne — Bundoora, Hallam, Williamstown & more.</p></div>
+        <div class="feat"><div class="ic">💜</div><h4>Girls & Women's Cricket</h4><p>Dedicated female programs in a supportive, inclusive environment.</p></div>
+      </div>
+    </div>
+
+    <!-- programs -->
+    <div class="prog-wrap">
+      <div class="lbl">Our Programs</div>
+      <div class="h2">Find Your Program</div>
+      <div class="sub">Clear cards, live availability badges — no confusing search filters.</div>
+      <div class="prog-grid">
+        <div class="card"><div class="img"><span class="tag">● Early Bird Open</span></div><div class="body"><h4>Junior Royals T3</h4><p>Small group coaching for players 7–15, the Royals Way.</p><div class="btn">Join Now →</div></div></div>
+        <div class="card"><div class="img"><span class="tag" style="color:#c2410c">● Selling Fast</span></div><div class="body"><h4>Elite Program</h4><p>The follow-on power game program for advanced players.</p><div class="btn">Register →</div></div></div>
+        <div class="card"><div class="img"><span class="tag" style="color:#c2410c">● Closing Soon</span></div><div class="body"><h4>Holiday Camps</h4><p>High-energy school holiday cricket across Melbourne.</p><div class="btn">View →</div></div></div>
+      </div>
+    </div>
+
+    <!-- video redesigned -->
+    <div class="video">
+      <div class="video-inner">
+        <div class="player"><div class="play">▶</div></div>
+        <div class="txt">
+          <div class="lbl" style="text-align:left">Watch <span class="redesigntag">Simplified</span></div>
+          <h3>Introducing<br>RRA Melbourne</h3>
+          <p>One clear play button, poster frame, and a short intro from Sid Lahiri. No clutter — just press play.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- shop redesigned -->
+    <div class="shop">
+      <div class="shop-inner">
+        <div class="lbl" style="color:#fff">Royals Shop <span class="redesigntag">Simplified</span></div>
+        <div class="h2" style="color:#fff">Wear The Royals Colours</div>
+        <div class="shop-row">
+          <div class="shop-item"><div class="ph">👕</div><h5>Supporter Shirt</h5><div class="price">$99.95</div></div>
+          <div class="shop-item"><div class="ph">🎽</div><h5>Training Shirt</h5><div class="price">$64.95</div></div>
+          <div class="shop-item"><div class="ph">🧢</div><h5>Academy Cap</h5><div class="price">$34.95</div></div>
+        </div>
+        <div class="viewall"><a>Visit The Shop →</a></div>
+      </div>
+    </div>
+
+    <!-- coaches -->
+    <div class="coaches">
+      <div class="lbl">Leadership</div>
+      <div class="h2">Leading The Academy</div>
+      <div class="coach-grid" style="margin-top:20px">
+        <div class="coach"><div class="av"></div><h5>Siddhartha Lahiri</h5><span>Head of Global Academies</span></div>
+        <div class="coach"><div class="av"></div><h5>Andy Crook</h5><span>Academy Director</span></div>
+      </div>
+    </div>
+
+    <!-- faq -->
+    <div class="faq">
+      <div class="lbl">Questions</div>
+      <div class="h2">Common Questions</div>
+      <div class="faq-inner" style="margin-top:20px">
+        <div class="faq-item"><span>What makes RRA different?</span><span class="plus">+</span></div>
+        <div class="faq-item"><span>What ages do you cater for?</span><span class="plus">+</span></div>
+        <div class="faq-item"><span>Where are your venues?</span><span class="plus">+</span></div>
+      </div>
+    </div>
+
+    <!-- footer -->
+    <div class="m-foot">
+      <div class="logo">👑 RRA MELBOURNE</div>
+      <div class="social"><span>📷</span><span>👍</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CURRENT -->
+<section class="demo" id="current" style="display:none">
+  <div class="device">
+    <div class="m-nav"><div class="logo">👑 RRA MELBOURNE</div><div class="links"><span>About</span><span>Coaches</span><span>FAQ</span><span class="shopbtn">🛒 Shop</span></div></div>
+    <div class="m-hero"><div class="lion">👑</div><div class="m-hero-content"><span class="badge">● Official Rajasthan Royals Academy</span><h2>PLAY THE<br><span class="p">ROYALS WAY.</span></h2><p>From elite players to beginners...</p><div class="cta"><a class="primary">Register Now →</a></div></div></div>
+    <div style="padding:34px 24px;background:#fff;text-align:center;"><div class="lbl">About</div><div class="h2">The Royals Way In Melbourne</div><div class="sub">Long about section with 2 image panels...</div></div>
+    <div class="video"><div class="video-inner"><div class="txt"><h3 style="font-size:20px">Introducing RRA Melbourne</h3><p>Video with custom play/pause/mute controls</p></div><div class="player"><div class="play">▶</div></div></div></div>
+    <div class="prog-wrap"><div class="h2">Find Your Program</div><div class="sub">Program cards</div><div class="prog-grid"><div class="card"><div class="img"></div><div class="body"><h4>Program</h4><p>...</p><div class="btn">View →</div></div></div><div class="card"><div class="img"></div><div class="body"><h4>Program</h4><p>...</p><div class="btn">View →</div></div></div><div class="card"><div class="img"></div><div class="body"><h4>Program</h4><p>...</p><div class="btn">View →</div></div></div></div></div>
+    <div class="shop"><div class="shop-inner"><div class="h2" style="color:#fff">Wear The Royals Colours</div><div style="background:rgba(255,255,255,.06);border-radius:12px;padding:30px;text-align:center;margin-top:16px;color:rgba(255,255,255,.5);font-size:12px">Single large featured product, 2-column layout</div></div></div>
+    <div class="coaches"><div class="h2">Leading The Academy</div><div class="coach-grid" style="margin-top:20px"><div class="coach"><div class="av"></div><h5>S. Lahiri</h5><span>Head of Academy</span></div><div class="coach"><div class="av"></div><h5>A. Crook</h5><span>Academy Director</span></div></div></div>
+    <div class="faq"><div class="h2">Common Questions</div><div class="faq-inner" style="margin-top:20px"><div class="faq-item"><span>Question 1</span><span class="plus">+</span></div><div class="faq-item"><span>Question 2</span><span class="plus">+</span></div></div></div>
+    <div class="m-foot"><div class="logo">👑 RRA MELBOURNE</div><div class="social"><span>📷</span><span>👍</span></div></div>
+  </div>
+  <p style="text-align:center;color:rgba(255,255,255,.4);font-size:12px;padding:0 24px 20px;">Current flow: Hero → About → Video → Programs → Shop → Coaches → FAQ. No features section, no quick-nav, heavier video controls, single-product shop.</p>
+</section>
+
+<!-- WHY -->
+<div class="why">
+  <h3>Why These Changes</h3>
+  <div class="item"><div class="num">1</div><p><b>New Features section ("The Royals Advantage").</b> Right now a visitor has to piece together why RRA is worth it from scattered copy. Six clear feature tiles — IPL methodology, all ages, small groups, results, venues, girls' cricket — communicate value in five seconds. This is the single biggest conversion lever.</p></div>
+  <div class="item"><div class="num">2</div><p><b>Quick-nav chip bar under the hero.</b> One tap jumps to Programs, Why RRA, Watch, Shop, Coaches or FAQ. Mobile visitors stop endlessly scrolling — they self-select and get where they want faster.</p></div>
+  <div class="item"><div class="num">3</div><p><b>Simplified Shop block.</b> Instead of one big featured product, show three compact product tiles + a single "Visit The Shop" button. Feels like a real store preview, less like an ad, and surfaces more range.</p></div>
+  <div class="item"><div class="num">4</div><p><b>Cleaner Video block.</b> Strip the custom play/pause/mute cluster down to one obvious play button over a poster frame. Less to think about, fewer things to break.</p></div>
+  <div class="item"><div class="num">5</div><p><b>Tighter, benefit-led ordering.</b> Hero → Why RRA (hook) → Programs (action) → Watch (trust) → Shop → Coaches → FAQ. The "why" comes before the "what", so visitors are sold before they browse.</p></div>
+</div>
+
+<div style="text-align:center;padding:20px 24px 60px;color:rgba(255,255,255,.5);font-size:12px;max-width:640px;margin:0 auto;">
+  This is a proposal only — no code on the live site has been touched. Tell me what you'd like to change (sections, order, wording, feature tiles) and once it's fully agreed, I'll build it for real.
+</div>
+
+<script>
+function show(id,btn){
+  document.getElementById('new').style.display = id==='new'?'block':'none';
+  document.getElementById('current').style.display = id==='current'?'block':'none';
+  document.querySelectorAll('.toggle button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

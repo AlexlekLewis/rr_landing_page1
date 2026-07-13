@@ -37,7 +37,7 @@ const MICKLEHAM_NAV = [
 const PROGRAMS_DROPDOWN = [
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Closing Soon', badgeColor: 'bg-orange-500' },
     { label: 'Elite Program', route: '/elite-royals', badge: 'Enrolling Now · Selling Fast', badgeColor: 'bg-orange-500' },
-    { label: 'Junior Royals Term 3', route: '/junior-royals', badge: 'Early Bird Now Open', badgeColor: 'bg-green-500' },
+    { label: 'Junior Royals Term 3', route: '/junior-royals', badge: 'Selling Fast', badgeColor: 'bg-orange-500' },
 ];
 
 const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
