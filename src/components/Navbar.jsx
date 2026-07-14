@@ -1,8 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, LogIn } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from './Button';
+
+// The Elite Player Performance Portal is a separate app. Link out to its login
+// (opens in a new tab; rel=noopener so the portal never gets a handle back).
+const PORTAL_URL = 'https://portal.rramelbourne.com/login';
 
 const LP1_NAV = [
     { label: 'PROGRAM OVERVIEW', id: 'program-overview' },
@@ -170,6 +174,16 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
                             🛒 Shop
                         </Link>
 
+                        {/* Performance Portal login — external link to the player/coach portal */}
+                        <a
+                            href={PORTAL_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 text-sm font-bold text-white border-2 border-white/70 hover:bg-white/10 px-4 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap"
+                        >
+                            <LogIn className="w-4 h-4" /> Performance Portal Login
+                        </a>
+
                         {!isLP3 && showCTA && (
                             <Button onClick={scrollToForm} variant={isHome ? "white" : "blue"} className="text-sm px-6 py-2">
                                 {ctaLabel}
@@ -261,6 +275,17 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
                             >
                                 🛒 SHOP
                             </Link>
+
+                            {/* Performance Portal login */}
+                            <a
+                                href={PORTAL_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="flex items-center gap-2 text-xl font-bold text-white tracking-wide border-2 border-white/70 rounded-full px-6 py-3"
+                            >
+                                <LogIn className="w-5 h-5" /> Performance Portal Login
+                            </a>
 
                             <Button onClick={scrollToForm} variant="blue" className="text-lg px-10 py-4 mt-4">
                                 {ctaLabel}
