@@ -31,23 +31,11 @@ export function freeKeysForOffer(offerId) {
 }
 
 // ── Scholarship offers ──────────────────────────────────────────────────────
-// A UNIQUE per-player link (?s=<token>) that discounts the PROGRAM only. The
-// token travels from the client, but the SERVER owns the discounted program
-// price here — a tampered request can only name a token, never set its own
-// price. Kit is charged at full price on top. Delete a token to revoke that
-// scholarship link. Token is opaque/random (it also keys the player's pre-fill
-// row in Supabase, so it must not be guessable). Price lives here; PII lives in
-// the pgp_scholarship_prefill table, served by /api/pgp-scholarship.
-export const SCHOLARSHIPS = {
-  // (Arnav Thakur's 50% scholarship completed 2026-07-08 and was cleaned out.)
-  // Add future 50%-style scholarships here: 'token': { programCents, label }.
-};
-
-// Resolve a client-supplied token → { token, programCents, label }, or null.
-export function scholarshipForToken(token) {
-  const t = typeof token === 'string' ? token.trim() : '';
-  return SCHOLARSHIPS[t] ? { token: t, ...SCHOLARSHIPS[t] } : null;
-}
+// A UNIQUE per-player link (?s=<token>) discounts the PROGRAM only (any tier —
+// 20%, 50%, …). The token's discounted price AND single-use state live entirely
+// in the pgp_scholarship_prefill table (Supabase), read server-side by
+// api/pgp-scholarship + api/power-game-checkout. Adding a scholarship is a data
+// insert, no code change. Kit is always charged at full price on top.
 
 /**
  * uniformItems: [{ key, size }] → Stripe line_items + total (server prices only).

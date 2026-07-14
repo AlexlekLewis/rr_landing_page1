@@ -10,8 +10,6 @@
 // Env: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY.
 // ============================================================
 import { createClient } from '@supabase/supabase-js';
-import { scholarshipForToken } from './_lib/uniformPricing.js';
-
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 export default async function handler(req, res) {
@@ -19,24 +17,26 @@ export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
   const token = typeof req.query?.token === 'string' ? req.query.token.trim() : '';
-  const sch = scholarshipForToken(token); // price authority (also validates the token)
-  if (!sch) return res.status(200).json({ scholarship: false });
+  if (!token) return res.status(200).json({ scholarship: false });
 
-  // Look up the token's row to (a) enforce single-use — a redeemed/inactive link is
-  // dead — and (b) return only the NON-identity fields to pre-fill. Name + DOB are
-  // deliberately NOT pre-filled: the player confirms those themselves.
-  let prefill = null;
+  // The DB owns the discounted price + single-use state. A missing / inactive / redeemed
+  // token, or one with no price, offers no discount. Pre-fill is email + centre only —
+  // the player confirms name + DOB themselves.
   try {
     const { data } = await supabase
       .from('pgp_scholarship_prefill')
-      .select('contact_email, centre, redeemed_at, active')
+      .select('program_cents, contact_email, centre, redeemed_at, active')
       .eq('token', token)
       .maybeSingle();
-    if (data && (data.active === false || data.redeemed_at)) {
-      return res.status(200).json({ scholarship: false, redeemed: !!data.redeemed_at });
+    if (!data || data.active === false || data.redeemed_at || data.program_cents == null) {
+      return res.status(200).json({ scholarship: false, redeemed: !!data?.redeemed_at });
     }
-    if (data) prefill = { contact_email: data.contact_email, centre: data.centre };
-  } catch (_) { /* best-effort: discount still applies; the player types their details in */ }
-
-  return res.status(200).json({ scholarship: true, programCents: sch.programCents, prefill });
+    return res.status(200).json({
+      scholarship: true,
+      programCents: data.program_cents,
+      prefill: { contact_email: data.contact_email, centre: data.centre },
+    });
+  } catch (_) {
+    return res.status(200).json({ scholarship: false });
+  }
 }
