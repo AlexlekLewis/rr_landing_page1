@@ -108,8 +108,10 @@ export default function ExpressSignup({ config }) {
   const [scholarship, setScholarship] = useState(null); // { token, programCents } from ?s=<token>
   const [fullRideInfo, setFullRideInfo] = useState(null); // { token, centre } from a full-ride ?s=<token>
 
-  // The program fee to charge/show. Full-ride = $0; a 50% link discounts it; else full fee.
+  // The program fee to charge/show. Full-ride = $0; a scholarship link discounts it; else full fee.
   const programCents = fullRide ? 0 : (scholarship ? scholarship.programCents : BLOCK_FEE_CENTS);
+  // The discount % on the program (derived from the token's price) — drives the wording.
+  const scholarshipPct = scholarship ? Math.round((1 - scholarship.programCents / BLOCK_FEE_CENTS) * 100) : 0;
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
   const setKitSize = (key, size) => setKit((p) => ({ ...p, [key]: size }));
   const freeKeys = giftOffer ? (GIFT_OFFERS[giftOffer] || []) : [];
@@ -553,7 +555,7 @@ export default function ExpressSignup({ config }) {
             )}
             {fullRide ? null : requireKit ? (
               <p className="text-xs text-white/70 leading-relaxed">
-                Your scholarship covers 50% of the program fee. Your shirt &amp; shorts are part of your playing kit — <span className="text-white font-semibold">choose your sizes below</span> (added at the usual price).
+                Your scholarship covers {scholarshipPct}% of the program fee. Your shirt &amp; shorts are part of your playing kit — <span className="text-white font-semibold">choose your sizes below</span> (added at the usual price).
               </p>
             ) : (
               <div className="flex items-start gap-3">
@@ -631,7 +633,7 @@ export default function ExpressSignup({ config }) {
             </p>
             {scholarship && (
               <p className="text-rr-light-pink/80 text-[11px] text-center mt-2 leading-relaxed">
-                Your 50% program scholarship is already applied above — nothing to enter.
+                Your {scholarshipPct}% program scholarship is already applied above — nothing to enter.
               </p>
             )}
             {fullRide && (

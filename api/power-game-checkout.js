@@ -12,7 +12,7 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import { packApplication } from './_lib/pgpCheckout.js';
-import { buildUniformLineItems, freeKeysForOffer, scholarshipForToken } from './_lib/uniformPricing.js';
+import { buildUniformLineItems, freeKeysForOffer } from './_lib/uniformPricing.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
@@ -29,21 +29,27 @@ export default async function handler(req, res) {
     // Scholarship link (?s=<token>). The SERVER owns the discounted program price —
     // an unknown/absent token just falls through to the full fee. Kit is unaffected
     // (still charged at full price below), so the discount lands on the program only.
-    const scholarship = scholarshipForToken(scholarshipToken);
-    const programCents = scholarship ? scholarship.programCents : BLOCK_FEE_CENTS;
-    // Single-use: a scholarship link already used to complete a payment is dead.
-    // (Primary gate is the page/endpoint hiding the discount; this is the backstop.)
-    if (scholarship) {
-      try {
-        const { data: sch } = await supabase
-          .from('pgp_scholarship_prefill')
-          .select('redeemed_at')
-          .eq('token', scholarship.token)
-          .maybeSingle();
-        if (sch?.redeemed_at) {
+    // The DB owns the discounted PROGRAM price AND the single-use state for a token.
+    // Any discount tier (20%, 50%, …) is just a program_cents value; kit stays full price.
+    let scholarship = null;
+    let programCents = BLOCK_FEE_CENTS;
+    if (scholarshipToken) {
+      const { data: sch, error: schErr } = await supabase
+        .from('pgp_scholarship_prefill')
+        .select('program_cents, redeemed_at, active')
+        .eq('token', scholarshipToken)
+        .maybeSingle();
+      if (schErr) {
+        return res.status(503).json({ error: 'Couldn’t verify your scholarship — please try again in a moment.' });
+      }
+      if (sch && sch.active !== false && sch.program_cents != null) {
+        if (sch.redeemed_at) {
           return res.status(409).json({ error: 'This scholarship link has already been used — please contact us if you need a hand.' });
         }
-      } catch (_) { /* fail-open: success-page + webhook still enforce single-use */ }
+        scholarship = { token: scholarshipToken };
+        programCents = sch.program_cents;
+      }
+      // else: unknown / inactive / priceless token → no discount (full fee).
     }
     if (!application || typeof application !== 'object') {
       return res.status(400).json({ error: 'Missing application payload' });
