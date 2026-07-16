@@ -50,7 +50,7 @@ const BLANK_KIT = { shirt: '', shorts: '', pants: '', cap: '', jacket: '' };
 // Early-bird gift offers — MUST mirror api/_lib/uniformPricing.js (GIFT_OFFERS).
 // A shared offer link carries ?gift=<id>; these garment keys then show as free on
 // the page and are sent to the server, which is the authority that zeroes them.
-const GIFT_OFFERS = { mickleham: ['shirt', 'shorts'] };
+const GIFT_OFFERS = { mickleham: ['shirt', 'shorts'], williamstown: ['shirt', 'shorts'], hallam: ['shirt', 'shorts'] };
 // Scholarship links — a unique per-player link carries ?s=<token>. We do NOT hardcode
 // tokens here (they key a player's saved PII server-side, so they must stay off the
 // public bundle). On mount we fetch /api/pgp-scholarship?token=<token>, which returns
@@ -158,7 +158,13 @@ export default function ExpressSignup({ config }) {
     // the kit box so the player just picks sizes to claim their free items.
     try {
       const g = (new URLSearchParams(window.location.search).get('gift') || '').trim().toLowerCase();
-      if (GIFT_OFFERS[g]) { setGiftOffer(g); setForm((p) => ({ ...p, needs_uniform: true })); }
+      // The gift key doubles as the centre slug — pre-select that centre so the link is
+      // "relative to the centre they attended" (they can still change it).
+      if (GIFT_OFFERS[g]) {
+        setGiftOffer(g);
+        const preCentre = ['mickleham', 'williamstown', 'hallam'].includes(g) ? g : '';
+        setForm((p) => ({ ...p, needs_uniform: true, centre: preCentre || p.centre }));
+      }
     } catch (_) { /* no-op */ }
     // ?s=<token> — a UNIQUE, single-use scholarship link. Fetch the discounted program
     // price + the non-identity fields to pre-fill. Name + DOB are deliberately NOT

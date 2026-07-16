@@ -21,7 +21,11 @@ export const UNIFORM_CATALOG = {
 // free, so a tampered request can only ask for a known offer — never invent one.
 // Keep this map in sync with the client mirror in ExpressSignup.jsx (GIFT_OFFERS).
 export const GIFT_OFFERS = {
-  mickleham: ['shirt', 'shorts'], // Mickleham early-bird offer: free shirt + shorts
+  // Open-day "sign up anyway" offer — full-price program + FREE shirt + shorts, one key
+  // per centre (the key doubles as the centre slug so the form can pre-select it).
+  mickleham: ['shirt', 'shorts'],
+  williamstown: ['shirt', 'shorts'],
+  hallam: ['shirt', 'shorts'],
 };
 
 // Resolve a client-supplied offer id to { id, keys }. Unknown/blank → no gift.
