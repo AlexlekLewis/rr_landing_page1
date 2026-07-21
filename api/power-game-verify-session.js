@@ -42,10 +42,13 @@ export default async function handler(req, res) {
     }
 
     const s = await stripe.checkout.sessions.retrieve(sessionId);
-    // Accept BOTH paths: the dynamic checkout (metadata.source='power-game') and the
-    // hosted payment link, which carries the application row UUID via client_reference_id.
+    // Accept ALL Power Game session shapes: the dynamic checkout
+    // (metadata.source='power-game'), the legacy create-pgp-checkout sessions
+    // ('power-game-program' — no packed application, so only the audit row is
+    // written for them), and the hosted payment link, which carries the
+    // application row UUID via client_reference_id.
     const isUuid = (v) => typeof v === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
-    if (s?.metadata?.source !== 'power-game' && !isUuid(s?.client_reference_id)) {
+    if (!['power-game', 'power-game-program'].includes(s?.metadata?.source) && !isUuid(s?.client_reference_id)) {
       return res.status(404).json({ error: 'Not a Power Game session' });
     }
 

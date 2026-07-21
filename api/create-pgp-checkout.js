@@ -48,7 +48,11 @@ export default async function handler(req, res) {
                 session_day: day || '',
                 session_time: time || '',
             },
-            success_url: `${BASE_URL}/PGP2026?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
+            // Land on the real confirmation page (PowerGameSuccess), which verifies the
+            // session server-side and fires the Purchase pixel. The old target,
+            // /PGP2026?checkout=success, is handled by nothing — payers saw the plain
+            // landing page with no confirmation.
+            success_url: `${BASE_URL}/PGP2026/apply/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${BASE_URL}/PGP2026?checkout=cancelled`,
         });
 
