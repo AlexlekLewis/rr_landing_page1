@@ -25,6 +25,7 @@
 
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { isJrT3Session, classifyJrT3, completeJrT3Registration } from './_lib/jrTerm3.js';
 
 let _stripe = null;
 const getStripe = () => {
@@ -202,6 +203,10 @@ const classifySession = (session, lineItems) => {
     };
   }
 
+  // Junior Royals Term 3 — must run BEFORE the price allowlist: the T3 Payment
+  // Links reuse the Term 2 Hallam price ID (keep in sync with stripe-webhook.js).
+  if (isJrT3Session(session, lineItems)) return classifyJrT3(lineItems);
+
   // Allowlist match — first line item with a known program price ID wins.
   for (const item of lineItems) {
     const match = PROGRAM_PRICE_IDS[item.price_id];
@@ -301,10 +306,22 @@ const syncOneSession = async (sessionId) => {
     return { session_id: session.id, error: error.message, program: classification.program };
   }
 
+  // Junior Royals Term 3 — also flip the matching jr_term3_* registration row
+  // (same completion path as stripe-webhook.js; idempotent).
+  let jrMatch = null;
+  if (classification.program === 'junior_royals' && classification.program_variant === 'term_3') {
+    try {
+      jrMatch = await completeJrT3Registration(supabase, session, lineItems, 'sync-programs-from-stripe');
+    } catch (e) {
+      console.warn('jr_term3 completion failed (non-blocking):', e.message);
+    }
+  }
+
   return {
     session_id: session.id,
     program: classification.program,
     program_variant: classification.program_variant,
+    jr_term3: jrMatch,
     upserted: true,
   };
 };
