@@ -20,6 +20,8 @@ const mkRow = (over: Record<string, unknown>) => ({
   phone: null,
   email: null,
   source_programs: ["elite_2026"],
+  skill_role: null,
+  bowling_type: null,
   ...over,
 });
 
@@ -28,7 +30,7 @@ const ROWS = [
   ...Array.from({ length: 9 }, (_, i) =>
     mkRow({ player_name: `W Yes ${i + 1}`, centre: "Williamstown", whatsapp_status: "yes" })),
   mkRow({ player_name: "Mick Pending", centre: "Mickleham", whatsapp_status: "pending" }),
-  mkRow({ player_name: "Hallam No", centre: "Hallam", whatsapp_status: "no", age_bracket: "15 – 17.5", age_years: 16 }),
+  mkRow({ player_name: "Hallam No", centre: "Hallam", whatsapp_status: "no", age_bracket: "15 – 17.5", age_years: 16, skill_role: "pace", bowling_type: "Right-Arm Fast" }),
   mkRow({ player_name: "Lost Soul", centre: null, centre_source: "unassigned", whatsapp_status: "check", status_note: "ambiguous vote" }),
 ];
 
@@ -71,6 +73,8 @@ describe("PowerLeagueDashboard", () => {
     const hallamCol = screen.getByText("Hallam").closest("div")!.parentElement!.parentElement!;
     expect(within(hallamCol).getByText("15 – 17.5")).toBeTruthy();
     expect(within(hallamCol).getByText("Hallam No")).toBeTruthy();
+    // role chip renders next to the name
+    expect(within(hallamCol).getByText("PACE")).toBeTruthy();
   });
 
   it("surfaces unassigned players in their own strip", async () => {

@@ -18,6 +18,22 @@ const STATUS_META = {
   check: { label: 'CHECK', color: '#f59e0b', next: 'yes' },
 };
 
+// Playing roles from the Elite portal data (power_league_players.skill_role).
+const ROLE_META = {
+  batter: { label: 'BAT', color: '#38bdf8' },
+  allrounder: { label: 'ALL-R', color: '#a78bfa' },
+  bowlrounder: { label: 'BWL-R', color: '#f472b6' },
+  pace: { label: 'PACE', color: '#fb923c' },
+  spin: { label: 'SPIN', color: '#34d399' },
+  keeper: { label: 'WK', color: '#facc15' },
+};
+
+const roleTally = (players) => {
+  const counts = {};
+  for (const p of players) if (p.skill_role && ROLE_META[p.skill_role]) counts[p.skill_role] = (counts[p.skill_role] || 0) + 1;
+  return Object.keys(ROLE_META).filter((r) => counts[r]).map((r) => `${counts[r]} ${ROLE_META[r].label}`).join(' · ');
+};
+
 const csvEscape = (v) => {
   const s = v == null ? '' : String(v);
   return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
@@ -49,6 +65,15 @@ const PlayerRow = ({ p, onStatus, onCentre }) => {
       <div className="min-w-0 flex-1">
         <p className="text-white text-sm font-medium truncate leading-tight">
           {p.player_name}
+          {p.skill_role && ROLE_META[p.skill_role] && (
+            <span
+              className="inline-block text-[9px] font-black tracking-wide rounded px-1 ml-1.5 border align-middle"
+              style={{ color: ROLE_META[p.skill_role].color, borderColor: `${ROLE_META[p.skill_role].color}55`, backgroundColor: `${ROLE_META[p.skill_role].color}12` }}
+              title={p.bowling_type && p.bowling_type !== 'N/A' ? p.bowling_type : undefined}
+            >
+              {ROLE_META[p.skill_role].label}
+            </span>
+          )}
           {p.status_note && (
             <AlertTriangle className="inline w-3 h-3 text-amber-400 ml-1 -mt-0.5" title={p.status_note} />
           )}
@@ -102,7 +127,9 @@ const CentreColumn = ({ name, players, teamSize, onStatus, onCentre }) => {
         {BRACKETS.map((b) => {
           const bp = players.filter((r) => (r.age_bracket || 'Age TBC') === b);
           if (!bp.length) return null;
-          const by = bp.filter((r) => r.whatsapp_status === 'yes').length;
+          const yesRows = bp.filter((r) => r.whatsapp_status === 'yes');
+          const by = yesRows.length;
+          const tally = roleTally(yesRows);
           return (
             <div key={b}>
               <div className="flex items-center justify-between px-2 mb-1">
@@ -112,6 +139,7 @@ const CentreColumn = ({ name, players, teamSize, onStatus, onCentre }) => {
                   {by >= teamSize && <span className="text-rr-pink font-bold"> · {Math.floor(by / teamSize)} team{Math.floor(by / teamSize) > 1 ? 's' : ''}</span>}
                 </p>
               </div>
+              {tally && <p className="px-2 mb-1 text-[9px] text-slate-600">Yes roles: {tally}</p>}
               <div className="rounded-xl border border-white/5 divide-y divide-white/5">
                 {bp.map((p) => <PlayerRow key={p.id} p={p} onStatus={onStatus} onCentre={onCentre} />)}
               </div>
@@ -171,9 +199,10 @@ const PowerLeagueDashboard = () => {
   }), [rows]);
 
   const exportCsv = () => {
-    const header = ['Player', 'Centre', 'Centre source', 'Age bracket', 'Age (1 Sep 26)', 'Availability', 'Note', 'Programs', 'Suburb', 'Phone', 'Email'];
+    const header = ['Player', 'Centre', 'Centre source', 'Age bracket', 'Age (1 Sep 26)', 'Role', 'Bowling', 'Availability', 'Note', 'Programs', 'Suburb', 'Phone', 'Email'];
     const lines = rows.map((r) => [
       r.player_name, r.centre || 'Unassigned', r.centre_source, r.age_bracket, r.age_years ?? '',
+      r.skill_role ?? '', r.bowling_type ?? '',
       r.whatsapp_status, r.status_note ?? '', (r.source_programs || []).join(' + '), r.suburb ?? '', r.phone ?? '', r.email ?? '',
     ].map(csvEscape).join(','));
     const blob = new Blob([[header.join(','), ...lines].join('\n')], { type: 'text/csv' });
