@@ -28,6 +28,7 @@ import DepositSuccess from './components/india-tour-deposit/DepositSuccess';
 import HomePage from './components/home-page/HomePage';
 import InductionPage from './components/induction/InductionPage';
 import CoachesDay from './components/coaches-day/CoachesDay';
+import CoachesPage from './components/coaches/CoachesPage';
 import Reviews from './components/reviews/Reviews';
 import ProgramFeedback from './components/program-feedback/ProgramFeedback';
 import PostHogPageviewTracker from './components/PostHogPageviewTracker';
@@ -171,6 +172,8 @@ function App() {
             nav; share the link directly (optionally /induction?program=Name). Writes to program_inductions. */}
         <Route path="/induction" element={<InductionPage />} />
 
+        {/* The Coaches — leadership tiers, coaching mission + full bios. Info page, no form. */}
+        <Route path="/coaches" element={<CoachesPage />} />
         {/* An Afternoon for Coaches — free coaches afternoon, junior & senior (Sun 26 Jul 2026).
             Standalone registration, writes to coaches_day_registrations. Share the link directly. */}
         <Route path="/coaches-day" element={<CoachesDay />} />

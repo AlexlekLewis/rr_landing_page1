@@ -34,6 +34,13 @@ const MICKLEHAM_NAV = [
     { label: 'THE PROGRAM', id: 'elite-info' },
 ];
 
+// The Coaches page — on-page section anchors
+const COACHES_NAV = [
+    { label: 'LEADERSHIP', id: 'leadership' },
+    { label: 'OUR MISSION', id: 'mission' },
+    { label: 'THE COACHES', id: 'bios' },
+];
+
 const PROGRAMS_DROPDOWN = [
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Closing Soon', badgeColor: 'bg-orange-500' },
     { label: 'Elite Program', route: '/elite-royals', badge: 'Enrolling Now · Selling Fast', badgeColor: 'bg-orange-500' },
@@ -54,16 +61,17 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
     const isShop = variant === 'shop';
     const isPowerGame = variant === 'power-game';
     const isMickleham = variant === 'mickleham';
+    const isCoaches = variant === 'coaches';
 
-    const navLinks = (isLP3 || isHoliday || isShop || isPowerGame) ? [] : isMickleham ? MICKLEHAM_NAV : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
-    // Standalone pages (Mickleham) get the full site nav: Home + the Programs dropdown of live pages.
-    const showProgramsDropdown = isHome || isMickleham;
-    const showHomeLink = isMickleham;
+    const navLinks = (isLP3 || isHoliday || isShop || isPowerGame) ? [] : isCoaches ? COACHES_NAV : isMickleham ? MICKLEHAM_NAV : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
+    // Standalone pages (Mickleham, Coaches) get the full site nav: Home + the Programs dropdown of live pages.
+    const showProgramsDropdown = isHome || isMickleham || isCoaches;
+    const showHomeLink = isMickleham || isCoaches;
     const showCTA = !isShop && !isPowerGame;
     const showHamburger = !isShop;
 
-    const ctaLabel = isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : (isLP2 || isHoliday || isLittleCrickets) ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
-    const ctaTarget = isMickleham ? 'register' : isLP2 ? 'checkout' : (isHoliday || isLittleCrickets) ? 'registration-form' : 'apply-form';
+    const ctaLabel = isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : (isLP2 || isHoliday || isLittleCrickets) ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
+    const ctaTarget = isMickleham ? 'register' : isCoaches ? 'join' : isLP2 ? 'checkout' : (isHoliday || isLittleCrickets) ? 'registration-form' : 'apply-form';
 
     const scrollToForm = () => {
         if (isHome && onRegisterClick) {
