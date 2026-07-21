@@ -25,7 +25,7 @@ const coaches = [
         role: 'Head Coach — Williamstown · Regional Manager, East & West',
         location: 'East & West Melbourne',
         bio: 'A Cricket Australia Level 3 High Performance accredited coach with over a decade of Premier Cricket Head Coach experience.',
-        fullBio: 'A Cricket Australia Level 3 High Performance accredited coach with over a decade of Premier Cricket Head Coach experience. Andrew has developed players through to Sheffield Shield, BBL and international honours, working with the likes of Glenn Maxwell, Chris Rogers and Sam Harper. Currently Director of Coaching at Scotch College, Andrew brings a rare blend of technical excellence and data-driven performance thinking to the Rajasthan Royals Academy.',
+        fullBio: 'A Cricket Australia Level 3 High Performance accredited coach with over a decade of Premier Cricket Head Coach experience. Andrew has developed players through to Sheffield Shield, BBL and international honours, working with the likes of Glenn Maxwell, Chris Rogers and Sam Harper, and has completed 15 visits to India as a specialist coach at high-performance academies in Bangalore, Mysore and Mumbai. Currently Director of Coaching at Scotch College, Andrew brings a rare blend of technical excellence and data-driven performance thinking to the Rajasthan Royals Academy.',
         img: '/assets/coaches/andrew-walton.jpg',
         imgPosition: 'object-center',
     },

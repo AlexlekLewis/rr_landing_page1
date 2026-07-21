@@ -51,9 +51,10 @@ export const REGIONAL_COACHES = [
         imgPosition: 'object-center',
         tagline:
             'Cricket Australia Level 3 High Performance coach who has developed players through to Sheffield Shield, BBL and international honours.',
-        credentials: ['CA Level 3 High Performance', 'Scotch College Director of Coaching', '10+ Years Premier Cricket Head Coach'],
+        credentials: ['CA Level 3 High Performance', '15 India HP Academy Visits', 'Scotch College Director of Coaching', '10+ Years Premier Cricket Head Coach'],
         bio: [
             'A Cricket Australia Level 3 High Performance accredited coach with over a decade of Premier Cricket Head Coach experience, Andrew has developed players through to Sheffield Shield, BBL and international honours — working with the likes of Glenn Maxwell, Chris Rogers and Sam Harper.',
+            'Andrew has completed 15 visits to India as a specialist coach at high-performance cricket academies in Bangalore, Mysore and Mumbai.',
             'Currently Director of Coaching at Scotch College, Andrew leads the Williamstown centre as Head Coach and manages the Academy’s East and West regions — bringing a rare blend of technical excellence and data-driven performance thinking to the Royals Academy.',
         ],
     },
