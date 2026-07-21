@@ -53,6 +53,21 @@ const STANDARD_STRIPE_LINKS = {
 const getStripeLink = (location) =>
     isEarlyBird() ? EARLY_BIRD_STRIPE_LINK : STANDARD_STRIPE_LINKS[location];
 
+// Stamp the payment link with client_reference_id (jrt3-{centre}-{recordId}) and
+// the parent's email. The Stripe webhook uses the reference to flip the exact
+// jr_term3_* row to completed — the links don't redirect back to our success
+// page, so payment tracking can't rely on the browser returning.
+const buildStripeUrl = (baseUrl, recordId, location, email) => {
+    try {
+        const u = new URL(baseUrl);
+        if (recordId && location) u.searchParams.set('client_reference_id', `jrt3-${location}-${recordId}`);
+        if (email) u.searchParams.set('prefilled_email', email);
+        return u.toString();
+    } catch {
+        return baseUrl;
+    }
+};
+
 const SUPABASE_TABLE = {
     mickleham:    'jr_term3_mickleham',
     hallam:       'jr_term3_hallam',
@@ -257,7 +272,9 @@ const JRT3RegistrationForm = () => {
             if (data?.id) { localStorage.setItem('jr_record_id', data.id); localStorage.setItem('jr_location_t3', form.location); }
             fireLeadEvent(form.location);
             const stripeLink = getStripeLink(form.location);
-            window.location.href = stripeLink || '/junior-royals/success';
+            window.location.href = stripeLink
+                ? buildStripeUrl(stripeLink, data?.id, form.location, form.parent_email.trim())
+                : '/junior-royals/success';
         } catch (err) {
             console.error(err);
             setErrors({ form: 'Something went wrong. Please try again or email info@rramelbourne.com' });

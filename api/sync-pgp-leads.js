@@ -33,6 +33,7 @@ import {
   getSheets, PAID_HEADERS, buildPaidRow, ensureTab, ensureHeader, findRowById,
 } from './_lib/pgpSheets.js';
 import { reconcileCoaches } from './_lib/coachesSheet.js';
+import { isJrT3Session, completeJrT3Registration, JR_T3_SINCE } from './_lib/jrTerm3.js';
 
 export const config = { api: { bodyParser: { sizeLimit: '256kb' } } };
 
@@ -196,6 +197,60 @@ async function reconcileOpenDay(sheets, spreadsheetId, table, tabName, headers =
     });
   }
   return { registrations: rows.length };
+}
+
+// ------------------------------------------------------------
+// Junior Royals Term 3 — reconcile Payment Link payments → jr_term3_* tables.
+// The T3 Stripe Payment Links never redirect back to the site, so row
+// completion can't rely on the success page. This walks paid Checkout
+// Sessions since the 27 Jun launch and flips the matching row
+// (client_reference_id first, else newest pending row by payer email) via the
+// shared completeJrT3Registration. The first run after deploy IS the
+// historical backfill; later runs pick up anything the webhook missed and
+// re-try previously unmatched payments. Fully idempotent.
+// ------------------------------------------------------------
+async function reconcileJrT3(days) {
+  const stripe = getStripe();
+  const sb = getSupabase();
+  const since = Math.max(JR_T3_SINCE, Math.floor(Date.now() / 1000) - days * 86400);
+
+  // Sessions already matched to a row can be skipped without a Stripe retrieve.
+  const { data: done, error: doneErr } = await sb
+    .from('jr_term3_payment_confirmations')
+    .select('stripe_session_id')
+    .not('matched_record_id', 'is', null)
+    .not('stripe_session_id', 'is', null);
+  if (doneErr) throw doneErr;
+  const settled = new Set((done || []).map((r) => r.stripe_session_id));
+
+  let scanned = 0, flipped = 0, alreadyComplete = 0, unmatched = 0;
+  let startingAfter = null;
+  for (let guard = 0; guard < 100; guard++) {
+    const params = { limit: 100, created: { gte: since } };
+    if (startingAfter) params.starting_after = startingAfter;
+    const page = await stripe.checkout.sessions.list(params);
+    for (const s of page.data) {
+      if (s.payment_status !== 'paid' || settled.has(s.id)) continue;
+      const src = s?.metadata?.source;
+      if (src === 'power-game' || src === 'academy-shop' || src === 'program') continue;
+      // JR T3 pays via Payment Link only — skip non-link sessions unless they
+      // carry our client_reference_id stamp.
+      if (!s.payment_link && !String(s.client_reference_id || '').startsWith('jrt3-')) continue;
+      const full = await stripe.checkout.sessions.retrieve(s.id, { expand: ['line_items'] });
+      const lineItems = (full.line_items?.data || []).map((i) => ({
+        description: i.description, price_id: i.price?.id, quantity: i.quantity,
+      }));
+      if (!isJrT3Session(full, lineItems)) continue;
+      scanned++;
+      const out = await completeJrT3Registration(sb, full, lineItems, 'sync-pgp-leads');
+      if (out.method === 'client_ref' || out.method === 'email') flipped++;
+      else if (out.method === 'already') alreadyComplete++;
+      else unmatched++;
+    }
+    if (!page.has_more) break;
+    startingAfter = page.data[page.data.length - 1]?.id;
+  }
+  return { scanned, flipped, alreadyComplete, unmatched };
 }
 
 // Authorise: a Vercel Cron call (shared CRON_SECRET) or an active dashboard admin (JWT).
@@ -423,6 +478,17 @@ export default async function handler(req, res) {
   } catch (err) {
     console.error('sync-pgp-leads: coaches reconcile failed:', err);
     out.coachesTab = { error: err.message };
+    out.ok = false;
+  }
+
+  // Junior Royals Term 3 payment reconcile — DB only (the hourly Apps Script
+  // mirrors jr_term3_* into the "Junior Royals" workbook, so the sheet heals
+  // itself once payment_status is right here).
+  try {
+    out.jrTerm3 = await reconcileJrT3(days);
+  } catch (err) {
+    console.error('sync-pgp-leads: JR T3 reconcile failed:', err);
+    out.jrTerm3 = { error: err.message };
     out.ok = false;
   }
 

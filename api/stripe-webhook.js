@@ -21,6 +21,7 @@ import { createClient } from '@supabase/supabase-js';
 import { sendOrderConfirmation } from './_lib/orderEmail.js';
 import { unpackApplication, buildPaidRow } from './_lib/pgpCheckout.js';
 import { sendPgpConfirmation } from './_lib/pgpEmail.js';
+import { isJrT3Session, classifyJrT3, completeJrT3Registration } from './_lib/jrTerm3.js';
 
 // Stripe signature verification requires the *raw* request body. Vercel's
 // default body parser returns a parsed object, which would always fail
@@ -130,6 +131,10 @@ const classifyAsProgram = (session, lineItems) => {
       program_label: session.metadata.program_label || null,
     };
   }
+  // Junior Royals Term 3 — must run BEFORE the price allowlist: the T3 Payment
+  // Links reuse the Term 2 Hallam price ID, so the allowlist would file these
+  // sessions as term_2_hallam (which is what happened 16–21 Jul 2026).
+  if (isJrT3Session(session, lineItems)) return classifyJrT3(lineItems);
   for (const item of lineItems) {
     const match = PROGRAM_PRICE_IDS[item.price_id];
     if (match) return match;
@@ -354,6 +359,20 @@ export default async function handler(req, res) {
     if (progErr) {
       console.error('program_registrations upsert failed:', progErr);
       return res.status(500).json({ error: progErr.message });
+    }
+
+    // Junior Royals Term 3 — flip the matching jr_term3_* row to completed.
+    // The static Payment Links never send the parent back to
+    // /junior-royals/success, so the success page's localStorage flow can't be
+    // relied on; this webhook is the authoritative completion path
+    // (client_reference_id first, else newest pending row by payer email).
+    if (programClass.program === 'junior_royals' && programClass.program_variant === 'term_3') {
+      try {
+        const jr = await completeJrT3Registration(supabase, session, lineItems, 'stripe-webhook');
+        console.log(`jr_term3 completion via ${jr.method}${jr.table ? ` → ${jr.table}/${jr.id}` : ''} (session=${session.id})`);
+      } catch (e) {
+        console.warn('jr_term3 completion failed (non-blocking):', e.message);
+      }
     }
 
     // -----------------------------------------------------------
