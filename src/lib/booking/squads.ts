@@ -16,7 +16,7 @@
 // OFFICIAL grid (total lanes per session):
 //   Williamstown  Sat 2–4 (7) · Sat 4–6 (7)
 //   Hallam        Sat 2–4 (5) · Sat 4–6 (4)
-//   Mickleham     Sat 2–4 (7) · Sat 4–6 (7)
+//   Mickleham     Sat 2–4 (7) — consolidated to the single 2–4pm session 22 Jul 2026
 // ============================================================
 
 export type Stream = "performance" | "pathway";
@@ -133,8 +133,10 @@ const SESSION_GRID: RawSession[] = [
   { idBase: "h-sat4", centre: "hallam", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm",  lanes: 4, blockLabel: "Sat 4–6pm", sortOrder: 2 },
 
   // ── Mickleham Indoor Sports Centre — Mickleham (Sat 7 lanes) ──
+  // Sat 4–6pm (m-sat4) retired 22 Jul 2026: all Mickleham players consolidated into
+  // the single 2–4pm session. Existing paid m-sat4 rows in the DB are unaffected
+  // (inventory answers unknown_squad; sheet sync matches by venue, not session id).
   { idBase: "m-sat2", centre: "mickleham", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm",  lanes: 7, blockLabel: "Sat 2–4pm", sortOrder: 1 },
-  { idBase: "m-sat4", centre: "mickleham", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm",  lanes: 7, blockLabel: "Sat 4–6pm", sortOrder: 2 },
 ];
 
 export const SQUADS: Squad[] = SESSION_GRID.map((r) => ({

@@ -15,12 +15,12 @@ const oneSquad = [
 // days/times/venues in squads.ts (everything else below is derived maths).
 // ════════════════════════════════════════════════════════════════════════════
 const SNAPSHOT = {
-  totalSquads: 6, // 6 open sessions: Williamstown 2 + Hallam 2 + Mickleham 2
+  totalSquads: 5, // 5 open sessions: Williamstown 2 + Hallam 2 + Mickleham 1 (Sat 2–4pm only, consolidated 22 Jul 2026)
   activeCentres: 3, // williamstown + hallam + mickleham
   comingSoonCentres: 0,
   // Total places for the 8-WEEK BLOCK (26:7 ratio). Each squad = round(lanes × 26/7).
-  blockCapacity: 138, // Williamstown 52 + Hallam 34 + Mickleham 52
-  perCentre: { williamstown: 52, hallam: 34, mickleham: 52 } as Record<string, number>,
+  blockCapacity: 112, // Williamstown 52 + Hallam 34 + Mickleham 26
+  perCentre: { williamstown: 52, hallam: 34, mickleham: 26 } as Record<string, number>,
 };
 
 describe("squad grid integrity (snapshot of the official schedule)", () => {
@@ -73,7 +73,7 @@ describe("squad grid integrity (snapshot of the official schedule)", () => {
     expect(hallam.length).toBe(2);
     expect(new Set(hallam.map((s) => s.day))).toEqual(new Set(["Saturday"]));
     const mickleham = squadsForPlacement({ centre: "mickleham" });
-    expect(mickleham.length).toBe(2);
+    expect(mickleham.length).toBe(1); // Sat 2–4pm only since the 22 Jul 2026 consolidation
     expect(new Set(mickleham.map((s) => s.day))).toEqual(new Set(["Saturday"]));
   });
 
