@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { DIRECTOR, REGIONAL_COACHES } from './coachData';
 
 const LocationChip = ({ children }) => (
@@ -60,6 +61,22 @@ const CoachesLeadership = () => {
                                         {c}
                                     </span>
                                 ))}
+                            </div>
+
+                            {/* CTA — private coaching runs at Alex's Mickleham centre */}
+                            <div className="mt-8 pt-6 border-t border-slate-100">
+                                <p className="text-sm text-rr-charcoal font-medium mb-4">
+                                    Alex runs one-on-one and small-group private coaching out of the Mickleham centre.
+                                </p>
+                                <Link
+                                    to="/private-coaching"
+                                    className="group inline-flex items-center gap-2.5 bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest text-sm px-6 py-3 rounded-full transition-all duration-300 hover:shadow-[0_0_24px_rgba(229,6,149,0.4)]"
+                                >
+                                    Private Coaching at Mickleham
+                                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                    </svg>
+                                </Link>
                             </div>
                         </div>
                     </div>
