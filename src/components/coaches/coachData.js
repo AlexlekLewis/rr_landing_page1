@@ -26,7 +26,7 @@ export const DIRECTOR = {
         'The future of the game belongs to the brave — good cricketers, talented kids with the courage to express who they really are. Our goal is to build players brave enough to be the best version of themselves, and good enough to back it up.',
     credentials: ['22+ Years Coaching', 'Premier Cricket Senior Assistant Coach', 'Bowling Coach'],
     bio: [
-        'For over 22 years, thousands of young cricketers have had their careers heavily and positively influenced by Alex’s coaching, tactical and player management skills. He is committed to getting the technique right and putting the player first — building not just better cricketers, but sharper athletes and tougher competitors.',
+        'For over 22 years, hundreds of young cricketers have had their careers heavily and positively influenced by Alex’s coaching, tactical and player management skills. He is committed to getting the technique right and putting the player first — building not just better cricketers, but sharper athletes and tougher competitors.',
         'As Director of Cricket he shapes how the Royals develop players across all three centres — but he coaches it himself, from the floor of the nets, not from behind a desk. A current Premier Cricket senior assistant and bowling coach, his method is simple: get the technique right, put the player first, and build cricketers brave enough to back themselves.',
     ],
 };
