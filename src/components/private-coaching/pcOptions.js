@@ -1,16 +1,15 @@
 // ============================================================
 // pcOptions.js — Private Coaching product + EOI form options (Mickleham).
 //
-// Pricing per Alex 22 Jul 2026 (customer-facing, inc GST) — 1:1 priced
-// HIGH deliberately to push players toward groups:
-// $160 first consultation (session 1 for everyone) · 1-on-1 $140/hr
-// academy coach, $160/hr Leadership (6+ blocks only) · 30-min $70
-// (UNDER-14s ONLY — half the 1:1 rate) · groups $70pp (2) / $60pp (3)
-// / $50pp (4). Blocks: 3-session starter $420 (academy coaches only)
-// or 6+. Weekly packages carry a 10% DISCOUNT: 10-wk term
-// $1,260/$1,440, 40-wk season $5,040/$5,760. Booking 6+ FULL HOURS
-// makes the player eligible for Power League T20 selection + the
-// India Tour to the HPC.
+// Pricing per Alex 22 Jul 2026 (customer-facing, inc GST):
+// $160 first consultation (session 1 for everyone) · 1-on-1 $120/hr
+// PROFESSIONAL coach ("110 to 120, call it 120"), $160/hr Leadership
+// (6+ blocks only) · 30-min $70 (UNDER-14s ONLY) · groups $70pp (2) /
+// $60pp (3) / $50pp (4) — groups deliberately undercut solo to push
+// players toward them. Blocks: 3-session starter $360 (professional
+// coaches only) or 6+. Weekly packages carry a 10% DISCOUNT: 10-wk
+// term $1,080/$1,440, 40-wk season $4,320/$5,760. Booking 6+ FULL
+// HOURS = eligible for Power League T20 selection + India Tour HPC.
 // Time bands are a first draft — adjust here when the Head Coach locks
 // the Mickleham lane windows.
 // ============================================================
@@ -39,7 +38,7 @@ export const YEARS_PLAYED = [
 
 // Blocks, not one-offs: 3-session starter (academy coach) or 6+.
 export const SESSION_COUNTS = [
-    { value: '3', label: '3 sessions — starter block (academy coach)' },
+    { value: '3', label: '3 sessions — starter block (professional coach)' },
     { value: '6', label: '6 sessions' },
     { value: '8', label: '8 sessions' },
     { value: '10', label: '10 sessions' },
@@ -75,8 +74,8 @@ export const PROGRAM_TYPES = [
 // Price hints the form shows once a program + length is chosen.
 // Packages carry a 10% discount (set by Alex 22 Jul).
 export const PROGRAM_PRICE_HINTS = {
-    'term-10': '10 weekly sessions with 10% off — $1,260 with an academy coach · $1,440 Leadership ($630 for the under-14 30-min option)',
-    'season-40': '40 term-time weeks with 10% off — $5,040 with an academy coach · $5,760 Leadership. Locked weekly slot, first pick of times.',
+    'term-10': '10 weekly sessions with 10% off — $1,080 with a professional coach · $1,440 Leadership ($630 for the under-14 30-min option)',
+    'season-40': '40 term-time weeks with 10% off — $4,320 with a professional coach · $5,760 Leadership. Locked weekly slot, first pick of times.',
 };
 
 // 6+ full hours unlock the pathway (Power League + India Tour) — casual blocks
@@ -97,10 +96,10 @@ export const PRICING = [
     },
     {
         key: 'academy',
-        label: '1-on-1 · Academy Coach',
-        price: '$140',
+        label: '1-on-1 · Professional Coach',
+        price: '$120',
         unit: '/ hour',
-        detail: 'Your assigned coach, a dedicated lane. Start with the 3-session block ($420) or go straight to 6+.',
+        detail: 'Your assigned coach, a dedicated lane. Start with the 3-session block ($360) or go straight to 6+.',
     },
     {
         key: 'leadership',
@@ -111,10 +110,10 @@ export const PRICING = [
     },
     {
         key: 'group',
-        label: 'Train With A Mate — Pay Half',
+        label: 'Train With A Mate — Save $50',
         price: '$70',
         unit: '/ player / hr (2 players)',
-        detail: 'Same coach, same lane, half the 1:1 price each. 3 players $60 each · 4 players $50 each per hour.',
+        detail: 'Same coach, same lane — $50 less than solo, each. 3 players $60 each · 4 players $50 each per hour.',
     },
     {
         key: 'junior30',
@@ -126,16 +125,16 @@ export const PRICING = [
     {
         key: 'term',
         label: '10-Week Term Package · 10% Off',
-        price: '$1,260',
-        unit: 'academy · $1,440 leadership',
+        price: '$1,080',
+        unit: 'professional · $1,440 leadership',
         detail: 'One session every week for a school term — 10% off, effectively your tenth session free. Locked weekly slot, pathway unlocked.',
         accent: 'blue',
     },
     {
         key: 'season',
         label: '40-Week Season Package · 10% Off',
-        price: '$5,040',
-        unit: 'academy · $5,760 leadership',
+        price: '$4,320',
+        unit: 'professional · $5,760 leadership',
         detail: 'The full year, every term-time week — school holidays excluded, 10% off all year. Locked slot, first pick of times, pathway unlocked.',
         accent: 'blue',
     },

@@ -76,7 +76,7 @@ const PCPricing = () => {
                 </div>
 
                 <p className="text-center text-rr-charcoal/60 text-xs font-medium mt-10">
-                    3-session starter blocks run with academy coaches. Leadership programs are 6+
+                    3-session starter blocks run with professional coaches. Leadership programs are 6+
                     sessions. 30-minute sessions are available to under-14s only.
                 </p>
             </div>
