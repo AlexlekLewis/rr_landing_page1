@@ -22,7 +22,7 @@ const leadership = [
         name: "Alex Lewis",
         role: "Rajasthan Royals Academy — Head Coach",
         image: "/assets/coaches/alex-lewis.jpg",
-        bio: "Over 20 years coaching cricketers through representative pathways. A current premier-cricket senior assistant and bowling coach — technique-first, player-first, building sharper athletes and tougher competitors.",
+        bio: "Over 20 years coaching cricketers through representative pathways. A current premier-cricket senior assistant and bowling coach who coaches the individual’s game, not a template — building sharper athletes and tougher competitors.",
     },
 ];
 

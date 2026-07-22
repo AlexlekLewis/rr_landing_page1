@@ -452,7 +452,7 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
       </div>
       <div class="card" style="padding:0; overflow:hidden;">
         <img src="/assets/coaches/alex-lewis.jpg" alt="Alex Lewis" style="width:100%; aspect-ratio:3/4; object-fit:cover;">
-        <div style="padding:15px;"><div style="font-weight:900; font-size:15px;">Alex Lewis</div><div style="font-size:11.5px; color:var(--pink); font-weight:700; margin:3px 0 8px;">Rajasthan Royals Academy — Head Coach</div><p style="font-size:12px; color:var(--slate); line-height:1.5; font-weight:500;">Over 20 years coaching cricketers through representative pathways. A current premier-cricket senior assistant and bowling coach — technique-first, player-first, building sharper athletes and tougher competitors.</p></div>
+        <div style="padding:15px;"><div style="font-weight:900; font-size:15px;">Alex Lewis</div><div style="font-size:11.5px; color:var(--pink); font-weight:700; margin:3px 0 8px;">Rajasthan Royals Academy — Head Coach</div><p style="font-size:12px; color:var(--slate); line-height:1.5; font-weight:500;">Over 20 years coaching cricketers through representative pathways. A current premier-cricket senior assistant and bowling coach who coaches the individual’s game, not a template — building sharper athletes and tougher competitors.</p></div>
       </div>
     </div>
     <div class="narrow" style="margin-top:24px;">

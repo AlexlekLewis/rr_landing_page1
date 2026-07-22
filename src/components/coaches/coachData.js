@@ -32,7 +32,7 @@ export const DIRECTOR = {
     // inherited generic "getting the technique right / player first" line Alex flagged.
     bio: [
         'For over 22 years, hundreds of young cricketers have had their game shaped by Alex’s coaching through representative pathways — built into better cricketers, sharper athletes and tougher competitors. He coaches against the grain of rep cricket: where the game has long been played around the fear of getting out, Alex coaches the opposite — courage, intent, and the skill to find a way to win from anywhere.',
-        'As Director of Cricket he shapes how the Royals develop players across all three centres, but he coaches it himself — from the floor of the nets, not from behind a desk. His development is built, not guessed: players are measured in and measured out, building power on demand and a 360° game, and the confidence to use it when it matters. A current Premier Cricket senior assistant and bowling coach — technique-first, player-first, because individuality done well is what the modern game rewards.',
+        'As Director of Cricket he shapes how the Royals develop players across all three centres, but he coaches it himself — from the floor of the nets, not from behind a desk. His development is built, not guessed: players are measured in and measured out, building power on demand and a 360° game, and the confidence to use it when it matters. A current Premier Cricket senior assistant and bowling coach who coaches the individual’s game, not a template — because individuality, done well, is what the modern game rewards.',
     ],
 };
 
