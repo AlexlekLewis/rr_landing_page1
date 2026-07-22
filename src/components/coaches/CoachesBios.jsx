@@ -45,6 +45,13 @@ const CoachesBios = () => {
                             <div className="md:[direction:ltr]">
                                 <h3 className="text-3xl font-black text-rr-dark uppercase tracking-tight mb-2">{coach.name}</h3>
                                 <p className="text-sm font-bold text-rr-pink uppercase tracking-widest mb-6">{coach.role}</p>
+                                {coach.quote && (
+                                    <blockquote className="border-l-[3px] border-rr-pink pl-5 md:pl-6 mb-6">
+                                        <p className="text-lg md:text-xl font-bold text-rr-dark leading-snug">
+                                            “{coach.quote}”
+                                        </p>
+                                    </blockquote>
+                                )}
                                 {coach.bio.map((para, j) => (
                                     <p key={j} className="text-rr-charcoal font-medium leading-relaxed mb-4">
                                         {para}

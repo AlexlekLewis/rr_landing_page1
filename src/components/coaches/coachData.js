@@ -16,11 +16,17 @@ export const DIRECTOR = {
     img: '/assets/coaches/alex-lewis.jpg',
     imgPosition: 'object-center',
     tagline:
-        'Sets the coaching standard across all three Academy centres — what we teach, how we teach it, and what a Royals cricketer looks like at every age.',
+        'A coach first — technique-first, player-first. Twenty-two years building cricketers through representative pathways, still leading from the floor of the nets.',
+    // Alex's coaching manifesto, adapted from the Power Game head-coach quote he's
+    // used and signed off across the PGP iterations. Rendered as a pull-quote on
+    // his profile. (Program-specific sell and the "fifteen years" figure trimmed
+    // so it doesn't clash with the 22+ years credential.)
+    quote:
+        'The future of the game belongs to the brave. There’s an epidemic of conservative players — good cricketers, talented kids — who never become who they could be, because they’re too afraid of getting out to express who they really are. My job is to change that: to build players brave enough to be the best version of themselves, and good enough to back it up.',
     credentials: ['22+ Years Coaching', 'Premier Cricket Senior Assistant Coach', 'Bowling Coach'],
     bio: [
         'For over 22 years, thousands of young cricketers have had their careers heavily and positively influenced by Alex’s coaching, tactical and player management skills. He is committed to getting the technique right and putting the player first — building not just better cricketers, but sharper athletes and tougher competitors.',
-        'As Director of Cricket, Alex sets the curriculum and the coaching standard across every Academy centre, and as Academy Head Coach he still leads from the floor of the nets — not from behind a desk. He is a current Premier Cricket senior assistant coach and bowling coach.',
+        'As Director of Cricket he shapes how the Royals develop players across all three centres — but he coaches it himself, from the floor of the nets, not from behind a desk. A current Premier Cricket senior assistant and bowling coach, his method is simple: get the technique right, put the player first, and build cricketers brave enough to back themselves.',
     ],
 };
 

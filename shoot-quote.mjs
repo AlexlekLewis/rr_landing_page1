@@ -1,0 +1,24 @@
+import { createServer } from 'node:http';
+import { readFile } from 'node:fs/promises';
+import { extname, join } from 'node:path';
+import { chromium } from 'playwright-core';
+const DIST = new URL('./dist', import.meta.url).pathname;
+const OUT = '/private/tmp/claude-501/-Users-alexlewis-Documents-Claude-Projects-Master-Landing-Page/e4555bec-f367-494e-bf1b-786cdeffa52f/scratchpad';
+const MIME = { '.html':'text/html','.js':'text/javascript','.css':'text/css','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml' };
+const server = createServer(async (req,res)=>{const p=decodeURIComponent(req.url.split('?')[0]);try{const b=await readFile(join(DIST,p));res.writeHead(200,{'content-type':MIME[extname(p)]||'application/octet-stream'});res.end(b);}catch{res.writeHead(200,{'content-type':'text/html'});res.end(await readFile(join(DIST,'index.html')));}});
+await new Promise(r=>server.listen(0,'127.0.0.1',r));
+const browser = await chromium.launch({ executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless:true });
+const page = await browser.newPage({ viewport:{width:1440,height:900} });
+await page.goto(`http://127.0.0.1:${server.address().port}/coaches`, { waitUntil:'networkidle' });
+await page.evaluate(async()=>{for(let y=0;y<=document.body.scrollHeight;y+=500){window.scrollTo(0,y);await new Promise(r=>setTimeout(r,80));}window.scrollTo(0,0);});
+await page.waitForTimeout(800);
+// Alex bio block = first coach in "Meet the Coaches"
+const quoteVisible = await page.getByText(/future of the game belongs to the brave/i).count() > 0;
+const oldRoleGone = await page.getByText(/sets the coaching standard/i).count() === 0;
+console.log(JSON.stringify({ quoteVisible, oldRoleGone }));
+const bios = page.locator('#bios');
+const box = await bios.boundingBox();
+await page.evaluate((y)=>window.scrollTo(0,y), Math.round(box.y - 20));
+await page.waitForTimeout(400);
+await page.screenshot({ path:`${OUT}/coaches-alex-quote.png`, clip:{x:0,y:Math.round(box.y),width:1440,height:720} });
+await browser.close(); server.close(); console.log('done');
