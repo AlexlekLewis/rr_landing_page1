@@ -2,12 +2,11 @@ import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import PCHero from './PCHero';
-import PCPricing from './PCPricing';
-import PCHowItWorks from './PCHowItWorks';
+import PCAlex from './PCAlex';
 import PCForm from './PCForm';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
-const SECTIONS = ['hero', 'pricing', 'how-it-works', 'eoi-form'];
+const SECTIONS = ['hero', 'meet', 'eoi-form'];
 
 const PrivateCoaching = () => {
     usePageAnalytics('/private-coaching', { sections: SECTIONS });
@@ -24,11 +23,8 @@ const PrivateCoaching = () => {
                 <div id="hero">
                     <PCHero />
                 </div>
-                <div id="pricing">
-                    <PCPricing />
-                </div>
-                <div id="how-it-works">
-                    <PCHowItWorks />
+                <div id="meet">
+                    <PCAlex />
                 </div>
                 <div id="eoi-form">
                     <PCForm />

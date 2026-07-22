@@ -25,7 +25,7 @@ const LC_NAV = [
 const HOME_NAV = [
     { label: 'About', id: 'about' },
     { label: 'Coaches', id: 'coaches' },
-    { label: 'Private Coaching', route: '/private-coaching' },
+    { label: 'Private Coaching', route: '/private-coaching', tag: 'Mickleham' },
     { label: 'FAQ', id: 'faq' },
 ];
 
@@ -44,8 +44,7 @@ const COACHES_NAV = [
 
 // Private Coaching page — on-page section anchors
 const PC_NAV = [
-    { label: 'PRICING', id: 'pricing' },
-    { label: 'HOW IT WORKS', id: 'how-it-works' },
+    { label: 'HOW IT WORKS', id: 'meet' },
 ];
 
 const PROGRAMS_DROPDOWN = [
@@ -208,9 +207,15 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
                                 <Link
                                     key={link.route}
                                     to={link.route}
-                                    className="text-sm font-semibold text-white hover:text-pink-300 transition-colors"
+                                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-white hover:text-pink-300 transition-colors"
                                 >
                                     {link.label.toUpperCase()}
+                                    {link.tag && (
+                                        <span className="inline-flex items-center gap-1 text-green-300 font-bold">
+                                            ({link.tag.toUpperCase()})
+                                            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                                        </span>
+                                    )}
                                 </Link>
                             ) : (
                                 <a
@@ -333,9 +338,15 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
                                         key={link.route}
                                         to={link.route}
                                         onClick={() => setMobileMenuOpen(false)}
-                                        className="text-2xl font-bold text-white hover:text-pink-300 transition-colors tracking-wider"
+                                        className="inline-flex items-center gap-2 text-2xl font-bold text-white hover:text-pink-300 transition-colors tracking-wider"
                                     >
                                         {link.label.toUpperCase()}
+                                        {link.tag && (
+                                            <span className="inline-flex items-center gap-1.5 text-green-300">
+                                                ({link.tag.toUpperCase()})
+                                                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                                            </span>
+                                        )}
                                     </Link>
                                 ) : (
                                     <a

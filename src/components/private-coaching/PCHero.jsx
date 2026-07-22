@@ -58,9 +58,9 @@ const PCHero = () => {
                         Private<br />Coaching
                     </h1>
                     <p className="text-base md:text-lg text-white/80 font-medium leading-relaxed max-w-2xl mb-10">
-                        One coach. One player. A development journey built around your game — a
-                        first consultation, then a three or six-session block — planned and
-                        overseen by the centre's Head Coach at {CENTRE.name}.
+                        One-on-one and small-group coaching at {CENTRE.name} — led personally by
+                        Academy Head Coach Alex Lewis. Register your interest and Alex will be in
+                        contact to organise your consultation.
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4">
@@ -74,30 +74,11 @@ const PCHero = () => {
                             </svg>
                         </button>
                         <button
-                            onClick={() => scrollTo('pricing')}
+                            onClick={() => scrollTo('meet')}
                             className="text-white/80 hover:text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full border-2 border-white/25 hover:border-white/60 transition-colors w-full sm:w-auto"
                         >
-                            See Pricing
+                            How It Works
                         </button>
-                    </div>
-
-                    {/* The value stack — 6+ full hours opens the Royals pathway */}
-                    <div className="mt-10 pt-6 border-t border-white/15 max-w-2xl">
-                        <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.25em] mb-3">
-                            Book 6+ full hours and you're eligible for
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-8">
-                            {['Power League selection — T20 matches', 'The India Tour — High Performance Centre'].map((t) => (
-                                <span key={t} className="flex items-center gap-2.5">
-                                    <span className="w-5 h-5 rounded-full bg-gradient-to-br from-rr-pink to-rr-blue flex items-center justify-center shrink-0">
-                                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </span>
-                                    <span className="text-white font-bold text-sm">{t}</span>
-                                </span>
-                            ))}
-                        </div>
                     </div>
                 </motion.div>
             </div>
