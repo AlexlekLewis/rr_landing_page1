@@ -17,12 +17,13 @@ export const DIRECTOR = {
     imgPosition: 'object-center',
     tagline:
         'A coach first — technique-first, player-first. Twenty-two years building cricketers through representative pathways, still leading from the floor of the nets.',
-    // Alex's coaching manifesto, adapted from the Power Game head-coach quote he's
-    // used and signed off across the PGP iterations. Rendered as a pull-quote on
-    // his profile. (Program-specific sell and the "fifteen years" figure trimmed
-    // so it doesn't clash with the 22+ years credential.)
+    // Alex's coaching manifesto, adapted from the Power Game head-coach quote.
+    // Reframed 22 Jul to an optimistic, inclusive tone: keep "the future of the
+    // game belongs to the brave" + "good cricketers, talented kids" as a positive,
+    // drop the "epidemic of conservative players / too afraid" framing, and use
+    // "our goal" rather than "my job".
     quote:
-        'The future of the game belongs to the brave. There’s an epidemic of conservative players — good cricketers, talented kids — who never become who they could be, because they’re too afraid of getting out to express who they really are. My job is to change that: to build players brave enough to be the best version of themselves, and good enough to back it up.',
+        'The future of the game belongs to the brave — good cricketers, talented kids with the courage to express who they really are. Our goal is to build players brave enough to be the best version of themselves, and good enough to back it up.',
     credentials: ['22+ Years Coaching', 'Premier Cricket Senior Assistant Coach', 'Bowling Coach'],
     bio: [
         'For over 22 years, thousands of young cricketers have had their careers heavily and positively influenced by Alex’s coaching, tactical and player management skills. He is committed to getting the technique right and putting the player first — building not just better cricketers, but sharper athletes and tougher competitors.',
