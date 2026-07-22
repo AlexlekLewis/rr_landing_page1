@@ -145,6 +145,18 @@
             "destination": "/api/gone"
         },
         {
+            "source": "/female-cricket-kickstart",
+            "destination": "/api/gone"
+        },
+        {
+            "source": "/female-cricket-kickstart/success",
+            "destination": "/api/gone"
+        },
+        {
+            "source": "/female-empowerment",
+            "destination": "/api/gone"
+        },
+        {
             "source": "/(.*)",
             "destination": "/index.html"
         }
