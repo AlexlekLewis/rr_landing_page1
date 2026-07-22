@@ -1,10 +1,13 @@
 // ============================================================
-// pcOptions.js — Private Coaching EOI form options (Mickleham launch).
+// pcOptions.js — Private Coaching product + EOI form options (Mickleham).
 //
-// Set by Alex (22 Jul 2026): every journey starts with a $160 first
-// consultation; blocks are a 3-session starter (academy coaches only)
-// or 6+ sessions (Leadership programs are 6+ only); Tuesday/Friday;
-// specialisms exactly as dictated (all-rounders split by bowling type).
+// Pricing SIGNED OFF by Alex 22 Jul 2026 (customer-facing, inc GST):
+// $160 first consultation (session 1 for everyone) · 1-on-1 $120/hr
+// academy coach, $140/hr Leadership (6+ blocks only) · 30-min $70
+// (UNDER-14s ONLY — players 14+ train full hours) · groups $65pp (2)
+// / $50pp (3–4). Blocks: 3-session starter (academy coaches only) or
+// 6+. Booking 6+ FULL HOURS makes the player eligible for Power League
+// T20 selection + the India Tour to the High Performance Centre.
 // Time bands are a first draft — adjust here when the Head Coach locks
 // the Mickleham lane windows.
 // ============================================================
@@ -38,6 +41,100 @@ export const SESSION_COUNTS = [
     { value: '8', label: '8 sessions' },
     { value: '10', label: '10 sessions' },
     { value: '12+', label: '12+ sessions' },
+];
+
+export const BOOKING_TYPES = [
+    { value: 'private', label: 'Private 1-on-1' },
+    { value: 'group', label: 'Small group (2–4 players)' },
+];
+
+export const GROUP_SIZES = [
+    { value: 2, label: '2 players — $65 per player / hr' },
+    { value: 3, label: '3 players — $50 per player / hr' },
+    { value: 4, label: '4 players — $50 per player / hr' },
+];
+
+// 30-minute sessions are for under-14s only; 14+ train full hours.
+export const UNDER_14_CUTOFF = 14;
+export const SESSION_LENGTHS = [
+    { value: '60', label: 'Full hour — 60 minutes' },
+    { value: '30', label: '30 minutes — under-14s option ($70)' },
+];
+
+// Programs: casual block, or weekly packages (term = 10 weeks; season = 40
+// term-time weeks, Victorian school holidays excluded).
+export const PROGRAM_TYPES = [
+    { value: 'block', label: 'Casual session block (choose sessions below)' },
+    { value: 'term-10', label: '10-Week Term Package — one session every week' },
+    { value: 'season-40', label: '40-Week Season Package — weekly, school holidays off' },
+];
+
+// Price hints the form shows once a program + length is chosen.
+export const PROGRAM_PRICE_HINTS = {
+    'term-10': '10 weekly sessions — $1,200 with an academy coach · $1,400 Leadership ($700 for the under-14 30-min option)',
+    'season-40': '40 term-time weeks — $4,800 with an academy coach · $5,600 Leadership. Locked weekly slot, first pick of times.',
+};
+
+// 6+ full hours unlock the pathway (Power League + India Tour) — casual blocks
+// of 6+ full-hour sessions, or either weekly package at full-hour length.
+export const ELIGIBLE_COUNTS = ['6', '8', '10', '12+'];
+export const qualifiesForPathway = (sessionLength, sessionsRequested, packageType = 'none') =>
+    sessionLength === '60' &&
+    (['term-10', 'season-40'].includes(packageType) || ELIGIBLE_COUNTS.includes(sessionsRequested));
+
+// Customer-facing price card (inc GST) — rendered on the page, used in copy.
+export const PRICING = [
+    {
+        key: 'consult',
+        label: 'First Consultation',
+        price: '$160',
+        unit: 'session 1 · everyone',
+        detail: 'Every journey starts here — a full one-on-one assessment with your development plan and coach assignment coming out of it.',
+    },
+    {
+        key: 'academy',
+        label: '1-on-1 · Academy Coach',
+        price: '$120',
+        unit: '/ hour',
+        detail: 'Your assigned coach, a dedicated lane. Start with the 3-session block ($360) or go straight to 6+.',
+    },
+    {
+        key: 'leadership',
+        label: '1-on-1 · Leadership',
+        price: '$140',
+        unit: '/ hour',
+        detail: 'Train under the Head Coach tier. Leadership programs run as 6+ session blocks only.',
+    },
+    {
+        key: 'junior30',
+        label: 'Junior 30-Minute',
+        price: '$70',
+        unit: '/ 30 min · under-14s',
+        detail: 'Parents of under-14s can opt for focused half-hour sessions. Players 14 and over train full hours.',
+    },
+    {
+        key: 'group',
+        label: 'Small Groups',
+        price: '$50–65',
+        unit: '/ player / hour',
+        detail: 'Train with mates, same coach-led structure: 2 players $65 each · 3–4 players $50 each per hour.',
+    },
+    {
+        key: 'term',
+        label: '10-Week Term Package',
+        price: '$1,200',
+        unit: 'academy · $1,400 leadership',
+        detail: 'One session every week for a school term. Locked weekly slot with your coach — and it unlocks the Royals pathway.',
+        accent: 'blue',
+    },
+    {
+        key: 'season',
+        label: '40-Week Season Package',
+        price: '$4,800',
+        unit: 'academy · $5,600 leadership',
+        detail: 'The full year, every term-time week — school holidays excluded. Locked slot, first pick of times, pathway unlocked.',
+        accent: 'blue',
+    },
 ];
 
 export const DAYS = [

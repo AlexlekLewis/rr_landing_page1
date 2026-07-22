@@ -44,6 +44,7 @@ const COACHES_NAV = [
 
 // Private Coaching page — on-page section anchors
 const PC_NAV = [
+    { label: 'PRICING', id: 'pricing' },
     { label: 'HOW IT WORKS', id: 'how-it-works' },
 ];
 

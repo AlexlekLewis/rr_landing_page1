@@ -2,11 +2,12 @@ import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import PCHero from './PCHero';
+import PCPricing from './PCPricing';
 import PCHowItWorks from './PCHowItWorks';
 import PCForm from './PCForm';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
-const SECTIONS = ['hero', 'how-it-works', 'eoi-form'];
+const SECTIONS = ['hero', 'pricing', 'how-it-works', 'eoi-form'];
 
 const PrivateCoaching = () => {
     usePageAnalytics('/private-coaching', { sections: SECTIONS });
@@ -22,6 +23,9 @@ const PrivateCoaching = () => {
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero">
                     <PCHero />
+                </div>
+                <div id="pricing">
+                    <PCPricing />
                 </div>
                 <div id="how-it-works">
                     <PCHowItWorks />
