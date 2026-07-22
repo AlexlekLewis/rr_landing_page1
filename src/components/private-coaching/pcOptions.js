@@ -8,10 +8,11 @@
 // groups deliberately undercut solo to push players toward them.
 // Blocks: 3-session starter $390 (professional coaches only) or 6+.
 // Weekly packages carry a 10% DISCOUNT: 10-wk term $1,170/$1,440,
-// 40-wk season $4,680/$5,760. LAUNCH SPECIAL: 10% off all private
-// coaching booked in the first 30 days (conditions apply; not
-// stacked on package discounts). Booking 6+ FULL HOURS = eligible
-// for Power League T20 selection + India Tour HPC.
+// 40-wk season $4,680/$5,760. LAUNCH SPECIAL: 10% off GROUP
+// SESSIONS ONLY booked in the first 30 days (NOT 1:1s, NOT
+// consultations — Alex 22 Jul: "the margin just isn't there").
+// Booking 6+ FULL HOURS = eligible for Power League T20 selection
+// + India Tour HPC.
 // Time bands are a first draft — adjust here when the Head Coach locks
 // the Mickleham lane windows.
 // ============================================================
@@ -144,8 +145,8 @@ export const PRICING = [
 
 // Launch offer — shown on the pricing section + form footer.
 export const LAUNCH_OFFER = {
-    headline: 'Launch Special — 10% off all private coaching',
-    detail: 'Book in within the first 30 days of launch and take 10% off. Conditions apply; packages already carry their own 10% discount.',
+    headline: 'Launch Special — 10% off group sessions',
+    detail: 'Book a group in within the first 30 days: 2 players $63 each · 3 players $54 · 4 players $45 per hour. Conditions apply.',
 };
 
 export const DAYS = [
