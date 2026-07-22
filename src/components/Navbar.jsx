@@ -25,6 +25,7 @@ const LC_NAV = [
 const HOME_NAV = [
     { label: 'About', id: 'about' },
     { label: 'Coaches', id: 'coaches' },
+    { label: 'Private Coaching', route: '/private-coaching' },
     { label: 'FAQ', id: 'faq' },
 ];
 
@@ -41,10 +42,16 @@ const COACHES_NAV = [
     { label: 'THE COACHES', id: 'bios' },
 ];
 
+// Private Coaching page — on-page section anchors
+const PC_NAV = [
+    { label: 'HOW IT WORKS', id: 'how-it-works' },
+];
+
 const PROGRAMS_DROPDOWN = [
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Closing Soon', badgeColor: 'bg-orange-500' },
     { label: 'Elite Program', route: '/elite-royals', badge: 'Enrolling Now · Selling Fast', badgeColor: 'bg-orange-500' },
     { label: 'Junior Royals Term 3', route: '/junior-royals', badge: 'Selling Fast', badgeColor: 'bg-orange-500' },
+    { label: 'Private Coaching', route: '/private-coaching', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },
 ];
 
 const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
@@ -62,16 +69,17 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
     const isPowerGame = variant === 'power-game';
     const isMickleham = variant === 'mickleham';
     const isCoaches = variant === 'coaches';
+    const isPrivateCoaching = variant === 'private-coaching';
 
-    const navLinks = (isLP3 || isHoliday || isShop || isPowerGame) ? [] : isCoaches ? COACHES_NAV : isMickleham ? MICKLEHAM_NAV : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
-    // Standalone pages (Mickleham, Coaches) get the full site nav: Home + the Programs dropdown of live pages.
-    const showProgramsDropdown = isHome || isMickleham || isCoaches;
-    const showHomeLink = isMickleham || isCoaches;
+    const navLinks = (isLP3 || isHoliday || isShop || isPowerGame) ? [] : isPrivateCoaching ? PC_NAV : isCoaches ? COACHES_NAV : isMickleham ? MICKLEHAM_NAV : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
+    // Standalone pages (Mickleham, Coaches, Private Coaching) get the full site nav: Home + the Programs dropdown of live pages.
+    const showProgramsDropdown = isHome || isMickleham || isCoaches || isPrivateCoaching;
+    const showHomeLink = isMickleham || isCoaches || isPrivateCoaching;
     const showCTA = !isShop && !isPowerGame;
     const showHamburger = !isShop;
 
     const ctaLabel = isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : (isLP2 || isHoliday || isLittleCrickets) ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
-    const ctaTarget = isMickleham ? 'register' : isCoaches ? 'join' : isLP2 ? 'checkout' : (isHoliday || isLittleCrickets) ? 'registration-form' : 'apply-form';
+    const ctaTarget = isMickleham ? 'register' : isCoaches ? 'join' : isPrivateCoaching ? 'eoi-form' : isLP2 ? 'checkout' : (isHoliday || isLittleCrickets) ? 'registration-form' : 'apply-form';
 
     const scrollToForm = () => {
         if (isHome && onRegisterClick) {
@@ -195,14 +203,24 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
                         )}
 
                         {navLinks.map((link) => (
-                            <a
-                                key={link.id}
-                                href={`#${link.id}`}
-                                onClick={(e) => { e.preventDefault(); handleNavClick(link.id); }}
-                                className="text-sm font-semibold text-white hover:text-pink-300 transition-colors"
-                            >
-                                {link.label.toUpperCase()}
-                            </a>
+                            link.route ? (
+                                <Link
+                                    key={link.route}
+                                    to={link.route}
+                                    className="text-sm font-semibold text-white hover:text-pink-300 transition-colors"
+                                >
+                                    {link.label.toUpperCase()}
+                                </Link>
+                            ) : (
+                                <a
+                                    key={link.id}
+                                    href={`#${link.id}`}
+                                    onClick={(e) => { e.preventDefault(); handleNavClick(link.id); }}
+                                    className="text-sm font-semibold text-white hover:text-pink-300 transition-colors"
+                                >
+                                    {link.label.toUpperCase()}
+                                </a>
+                            )
                         ))}
 
                         {/* Shop link */}
@@ -309,14 +327,25 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
                             )}
 
                             {navLinks.map((link) => (
-                                <a
-                                    key={link.id}
-                                    href={`#${link.id}`}
-                                    onClick={(e) => { e.preventDefault(); handleNavClick(link.id); }}
-                                    className="text-2xl font-bold text-white hover:text-pink-300 transition-colors tracking-wider"
-                                >
-                                    {link.label.toUpperCase()}
-                                </a>
+                                link.route ? (
+                                    <Link
+                                        key={link.route}
+                                        to={link.route}
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        className="text-2xl font-bold text-white hover:text-pink-300 transition-colors tracking-wider"
+                                    >
+                                        {link.label.toUpperCase()}
+                                    </Link>
+                                ) : (
+                                    <a
+                                        key={link.id}
+                                        href={`#${link.id}`}
+                                        onClick={(e) => { e.preventDefault(); handleNavClick(link.id); }}
+                                        className="text-2xl font-bold text-white hover:text-pink-300 transition-colors tracking-wider"
+                                    >
+                                        {link.label.toUpperCase()}
+                                    </a>
+                                )
                             ))}
 
                             {/* Shop link */}
