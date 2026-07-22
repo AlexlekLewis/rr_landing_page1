@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { PRICING } from './pcOptions';
+import { PRICING, LAUNCH_OFFER } from './pcOptions';
 
 const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
@@ -17,6 +17,10 @@ const PCPricing = () => {
                         All prices include GST. Nothing is charged until the Head Coach has confirmed
                         your coach, your times and your plan.
                     </p>
+                    <div className="mt-6 inline-flex flex-col sm:flex-row items-center gap-2 sm:gap-3 bg-rr-pink/10 border border-rr-pink/30 rounded-2xl px-5 py-3">
+                        <span className="text-xs font-black text-rr-pink uppercase tracking-widest">{LAUNCH_OFFER.headline}</span>
+                        <span className="text-xs font-semibold text-rr-charcoal">{LAUNCH_OFFER.detail}</span>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
