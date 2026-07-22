@@ -205,6 +205,8 @@ function App() {
         {/* Power Game apply funnel — qualify → place → secure (the live registration + payment) */}
         <Route path="/PGP2026/apply" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameApply /></React.Suspense>} />
         <Route path="/PGP2026/apply/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameApplySuccess /></React.Suspense>} />
+        <Route path="/PGP2026/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameApplySuccess /></React.Suspense>} />
+        <Route path="/elite-royals/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameApplySuccess /></React.Suspense>} />
         {/* Returning players — passcode-gated express re-signup. Not in nav; share the link directly. */}
         <Route path="/PGP2026/returning" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameReturning /></React.Suspense>} />
         {/* Accepted review/callback players — passcode-gated express confirmation. Not in nav; share the link directly. */}
