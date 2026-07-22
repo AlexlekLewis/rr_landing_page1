@@ -6,8 +6,9 @@
 // academy coach, $140/hr Leadership (6+ blocks only) · 30-min $70
 // (UNDER-14s ONLY — players 14+ train full hours) · groups $65pp (2)
 // / $50pp (3–4). Blocks: 3-session starter (academy coaches only) or
-// 6+. Booking 6+ FULL HOURS makes the player eligible for Power League
-// T20 selection + the India Tour to the High Performance Centre.
+// 6+. Weekly packages carry a 10% DISCOUNT: 10-wk term $1,080/$1,260,
+// 40-wk season $4,320/$5,040. Booking 6+ FULL HOURS makes the player
+// eligible for Power League T20 selection + the India Tour to the HPC.
 // Time bands are a first draft — adjust here when the Head Coach locks
 // the Mickleham lane windows.
 // ============================================================
@@ -70,9 +71,10 @@ export const PROGRAM_TYPES = [
 ];
 
 // Price hints the form shows once a program + length is chosen.
+// Packages carry a 10% discount (set by Alex 22 Jul).
 export const PROGRAM_PRICE_HINTS = {
-    'term-10': '10 weekly sessions — $1,200 with an academy coach · $1,400 Leadership ($700 for the under-14 30-min option)',
-    'season-40': '40 term-time weeks — $4,800 with an academy coach · $5,600 Leadership. Locked weekly slot, first pick of times.',
+    'term-10': '10 weekly sessions with 10% off — $1,080 with an academy coach · $1,260 Leadership ($630 for the under-14 30-min option)',
+    'season-40': '40 term-time weeks with 10% off — $4,320 with an academy coach · $5,040 Leadership. Locked weekly slot, first pick of times.',
 };
 
 // 6+ full hours unlock the pathway (Power League + India Tour) — casual blocks
@@ -121,18 +123,18 @@ export const PRICING = [
     },
     {
         key: 'term',
-        label: '10-Week Term Package',
-        price: '$1,200',
-        unit: 'academy · $1,400 leadership',
-        detail: 'One session every week for a school term. Locked weekly slot with your coach — and it unlocks the Royals pathway.',
+        label: '10-Week Term Package · 10% Off',
+        price: '$1,080',
+        unit: 'academy · $1,260 leadership',
+        detail: 'One session every week for a school term — 10% off, effectively your tenth session free. Locked weekly slot, pathway unlocked.',
         accent: 'blue',
     },
     {
         key: 'season',
-        label: '40-Week Season Package',
-        price: '$4,800',
-        unit: 'academy · $5,600 leadership',
-        detail: 'The full year, every term-time week — school holidays excluded. Locked slot, first pick of times, pathway unlocked.',
+        label: '40-Week Season Package · 10% Off',
+        price: '$4,320',
+        unit: 'academy · $5,040 leadership',
+        detail: 'The full year, every term-time week — school holidays excluded, 10% off all year. Locked slot, first pick of times, pathway unlocked.',
         accent: 'blue',
     },
 ];
