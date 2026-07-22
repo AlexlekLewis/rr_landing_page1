@@ -34,8 +34,9 @@ const PCHero = () => {
                         Private<br />Coaching
                     </h1>
                     <p className="text-base md:text-lg text-white/80 font-medium leading-relaxed max-w-2xl mb-10">
-                        One coach. One player. A six-session development journey built around your
-                        game — planned and overseen by the centre's Head Coach at {CENTRE.name}.
+                        One coach. One player. A development journey built around your game — a
+                        first consultation, then a three or six-session block — planned and
+                        overseen by the centre's Head Coach at {CENTRE.name}.
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4">

@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CENTRE } from './pcOptions';
 
 const STEPS = [
     {
@@ -15,16 +14,16 @@ const STEPS = [
     },
     {
         n: '03',
-        title: 'Your Coach Is Assigned',
-        body: 'You\'re matched with the Academy coach best suited to your development journey — batting, pace, spin or keeping — and your six-session block is scheduled.',
+        title: 'Consultation, Then Your Block',
+        body: 'You\'re matched with the Academy coach best suited to your development journey. Your first session is a one-on-one consultation, then your block — a 3-session starter or 6+ — is scheduled.',
     },
 ];
 
 const FACTS = [
     { label: 'Format', value: '1-on-1 in a dedicated lane' },
-    { label: 'Block', value: 'Minimum 6 sessions' },
+    { label: 'First Session', value: '$160 Consultation' },
+    { label: 'Blocks', value: '3 or 6+ sessions' },
     { label: 'Days', value: 'Tuesday & Friday' },
-    { label: 'Where', value: CENTRE.name },
 ];
 
 const PCHowItWorks = () => {

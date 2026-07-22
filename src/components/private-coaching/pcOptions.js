@@ -1,7 +1,9 @@
 // ============================================================
 // pcOptions.js — Private Coaching EOI form options (Mickleham launch).
 //
-// Set by Alex (22 Jul 2026): minimum 6 sessions; Tuesday/Friday only;
+// Set by Alex (22 Jul 2026): every journey starts with a $160 first
+// consultation; blocks are a 3-session starter (academy coaches only)
+// or 6+ sessions (Leadership programs are 6+ only); Tuesday/Friday;
 // specialisms exactly as dictated (all-rounders split by bowling type).
 // Time bands are a first draft — adjust here when the Head Coach locks
 // the Mickleham lane windows.
@@ -29,9 +31,10 @@ export const YEARS_PLAYED = [
     { value: '10+', label: 'More than 10 years' },
 ];
 
-// Minimum 6 — the journey is a block, not a one-off.
+// Blocks, not one-offs: 3-session starter (academy coach) or 6+.
 export const SESSION_COUNTS = [
-    { value: '6', label: '6 sessions (minimum)' },
+    { value: '3', label: '3 sessions — starter block (academy coach)' },
+    { value: '6', label: '6 sessions' },
     { value: '8', label: '8 sessions' },
     { value: '10', label: '10 sessions' },
     { value: '12+', label: '12+ sessions' },

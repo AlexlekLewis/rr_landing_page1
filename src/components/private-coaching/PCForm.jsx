@@ -55,7 +55,7 @@ const PCForm = () => {
         if (!form.player_name.trim()) return 'Please enter the player\'s name.';
         if (Number.isNaN(ageNum) || ageNum < 4 || ageNum > 99) return 'Please enter a valid age.';
         if (!form.years_played) return 'Please select how many years they\'ve played.';
-        if (!form.sessions_requested) return 'Please select how many sessions you\'re after (minimum 6).';
+        if (!form.sessions_requested) return 'Please select a session block — the 3-session starter or 6+.';
         if (!form.specialism) return 'Please select the specialist coaching you\'re looking for.';
         if (!form.preferred_day) return 'Please choose a preferred day — Tuesday or Friday.';
         if (!form.preferred_time) return 'Please choose a preferred time.';
@@ -139,9 +139,10 @@ const PCForm = () => {
                     </p>
                     <p className="text-white/60 font-medium leading-relaxed">
                         Expect a call to talk through your game. From there you'll be assigned the
-                        coach best suited to your development journey, and your{' '}
-                        {form.sessions_requested === '6' ? 'six' : form.sessions_requested}-session
-                        block will be locked in on your preferred{' '}
+                        coach best suited to your development journey — starting with your first
+                        consultation session, with your{' '}
+                        {form.sessions_requested === '3' ? 'three' : form.sessions_requested === '6' ? 'six' : form.sessions_requested}-session
+                        block locked in on your preferred{' '}
                         {form.preferred_day === 'tuesday' ? 'Tuesday' : 'Friday'} time.
                     </p>
                 </div>
@@ -183,7 +184,7 @@ const PCForm = () => {
                                 {YEARS_PLAYED.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                             </select>
                         </Field>
-                        <Field label="Sessions Wanted — Minimum 6">
+                        <Field label="Session Block — 3-Session Starter or 6+">
                             <select className={selectCls} value={form.sessions_requested} onChange={set('sessions_requested')}>
                                 <option value="" disabled>Select…</option>
                                 {SESSION_COUNTS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
@@ -254,8 +255,9 @@ const PCForm = () => {
                     </button>
 
                     <p className="text-center text-white/40 text-xs font-medium leading-relaxed">
-                        No payment now. The {CENTRE.name} Head Coach will contact you to confirm your
-                        coach, times and the six-session block before anything is booked.
+                        No payment now. Every journey starts with a $160 first consultation — the{' '}
+                        {CENTRE.name} Head Coach will contact you to confirm your coach, times and
+                        session block before anything is booked.
                     </p>
                 </form>
             </div>
