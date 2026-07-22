@@ -16,7 +16,7 @@ export const DIRECTOR = {
     img: '/assets/coaches/alex-lewis.jpg',
     imgPosition: 'object-center',
     tagline:
-        'Coaches the opposite of fear — courage, intent, and finding a way to win from anywhere. Twenty-two years through rep pathways, still leading from the floor of the nets.',
+        'Alex leads the Academy’s program development, talent identification and the running of all three centres, and is Head Coach at the Mickleham centre. His focus is giving young players a safe place to chase their growth, without the fear of failure or judgement.',
     // Alex's coaching manifesto, adapted from the Power Game head-coach quote.
     // Reframed 22 Jul to an optimistic, inclusive tone: keep "the future of the
     // game belongs to the brave" + "good cricketers, talented kids" as a positive,
@@ -25,14 +25,14 @@ export const DIRECTOR = {
     quote:
         'The future of the game belongs to the brave — good cricketers, talented kids with the courage to express who they really are. Our goal is to build players brave enough to be the best version of themselves, and good enough to back it up.',
     credentials: ['22+ Years Coaching', 'Premier Cricket Senior Assistant Coach', 'Bowling Coach'],
-    // Rewritten 22 Jul from Alex's authentic coaching material (Power Game manifesto
-    // + "Royals Way" philosophy): rep cricket built around the fear of getting out →
-    // he coaches the opposite (courage, intent, win from anywhere); power on demand +
-    // 360° game used under pressure; measured in/out, built not guessed. Replaces the
-    // inherited generic "getting the technique right / player first" line Alex flagged.
+    // Rewritten 22 Jul to Alex's own direction: plain and honest, no slogans (he
+    // rejected the "coaches the opposite of fear" framing). States his actual role —
+    // Director of Cricket (program development, talent ID, all three centres) + Head
+    // Coach at Mickleham — and his real focus: safe environments to grow without fear
+    // of failure or judgement. See [[dont-sloganize]].
     bio: [
-        'For over 22 years, hundreds of young cricketers have had their game shaped by Alex’s coaching through representative pathways — built into better cricketers, sharper athletes and tougher competitors. He coaches against the grain of rep cricket: where the game has long been played around the fear of getting out, Alex coaches the opposite — courage, intent, and the skill to find a way to win from anywhere.',
-        'As Director of Cricket he shapes how the Royals develop players across all three centres, but he coaches it himself — from the floor of the nets, not from behind a desk. His development is built, not guessed: players are measured in and measured out, building power on demand and a 360° game, and the confidence to use it when it matters. A current Premier Cricket senior assistant and bowling coach who coaches the individual’s game, not a template — because individuality, done well, is what the modern game rewards.',
+        'Alex has spent over 22 years coaching young cricketers through the representative pathways — hundreds of them. As Director of Cricket he leads the Academy’s program development, its talent identification systems, and the coaching across all three centres; at Mickleham, he’s the Head Coach, coaching in the nets himself.',
+        'What matters most to Alex is the environment he creates — one where young players feel free to have a go, get it wrong, and get better. He’s a current Premier Cricket senior assistant and bowling coach, and he coaches to the individual player, not to a template.',
     ],
 };
 
