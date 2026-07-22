@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
-import { CENTRE } from './pcOptions';
+import { CENTRE, DAY_AVAILABILITY } from './pcOptions';
 
 const getUTMParams = () => {
     const p = new URLSearchParams(window.location.search);
@@ -14,6 +14,7 @@ const getUTMParams = () => {
 
 const inputCls =
     'w-full bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-rr-pink/60 focus:bg-white/8 transition-colors';
+const selectCls = `${inputCls} appearance-none [&>option]:text-rr-dark`;
 const labelCls = 'block text-xs font-bold text-white/70 uppercase tracking-widest mb-2';
 
 const Field = ({ label, required = true, children }) => (
@@ -32,6 +33,7 @@ const EMPTY = {
     email: '',
     phone: '',
     suburb: '',
+    preferred_day: '',
     notes: '',
 };
 
@@ -50,6 +52,7 @@ const PCForm = () => {
         if (!form.player_name.trim()) return 'Please enter the player\'s name.';
         if (Number.isNaN(ageNum) || ageNum < 4 || ageNum > 99) return 'Please enter a valid age.';
         if (isMinor && !form.parent_name.trim()) return 'Please enter a parent/guardian name for players under 18.';
+        if (!form.preferred_day) return 'Please choose an available day — Tuesday, Friday, or either.';
         if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim())) return 'Please enter a valid email address.';
         if (form.phone.replace(/\D/g, '').length < 8) return 'Please enter a valid phone number.';
         return '';
@@ -74,6 +77,7 @@ const PCForm = () => {
             email: form.email.trim().toLowerCase(),
             phone: form.phone.trim(),
             suburb: form.suburb.trim() || null,
+            preferred_day: form.preferred_day,
             notes: form.notes.trim() || null,
             page_referrer: document.referrer || null,
             ...utmParams,
@@ -174,13 +178,20 @@ const PCForm = () => {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <Field label="Available Day — Tuesday or Friday">
+                            <select className={selectCls} value={form.preferred_day} onChange={set('preferred_day')}>
+                                <option value="" disabled>Select…</option>
+                                {DAY_AVAILABILITY.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                            </select>
+                        </Field>
                         <Field label="Suburb" required={false}>
                             <input className={inputCls} value={form.suburb} onChange={set('suburb')} placeholder="e.g. Craigieburn" />
                         </Field>
-                        <Field label="Anything We Should Know?" required={false}>
-                            <input className={inputCls} value={form.notes} onChange={set('notes')} placeholder="Optional — goals, experience, questions" />
-                        </Field>
                     </div>
+
+                    <Field label="Anything We Should Know?" required={false}>
+                        <input className={inputCls} value={form.notes} onChange={set('notes')} placeholder="Optional — goals, experience, questions" />
+                    </Field>
 
                     {error && (
                         <motion.p

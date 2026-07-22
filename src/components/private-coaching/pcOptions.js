@@ -154,6 +154,13 @@ export const DAYS = [
     { value: 'friday', label: 'Friday' },
 ];
 
+// Which night(s) the player can train — Mickleham private coaching runs Tue & Fri.
+export const DAY_AVAILABILITY = [
+    { value: 'tuesday', label: 'Tuesday' },
+    { value: 'friday', label: 'Friday' },
+    { value: 'either', label: 'Either — I’m flexible' },
+];
+
 export const TIME_SLOTS = [
     { value: '4-5pm', label: '4:00 – 5:00 pm' },
     { value: '5-6pm', label: '5:00 – 6:00 pm' },
