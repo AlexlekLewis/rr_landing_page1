@@ -14,8 +14,8 @@
 // A place = a seat in that session for the WHOLE 8-week block (one fixed roster).
 //
 // OFFICIAL grid (total lanes per session):
-//   Williamstown  Sat 2–4 (7) · Sat 4–6 (7)
-//   Hallam        Sat 2–4 (5) · Sat 4–6 (4)
+//   Williamstown  Sat 3–5 (7) — consolidated to the single 3–5pm session 25 Jul 2026
+//   Hallam        Sat 3–5 (5) — consolidated to the single 3–5pm session 25 Jul 2026
 //   Mickleham     Sat 2–4 (7) — consolidated to the single 2–4pm session 22 Jul 2026
 // ============================================================
 
@@ -125,12 +125,16 @@ interface RawSession {
 
 const SESSION_GRID: RawSession[] = [
   // ── The Netz — Williamstown (Sat 7 lanes) ──
-  { idBase: "w-sat2",   centre: "williamstown", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm", lanes: 7, blockLabel: "Sat 2–4pm", sortOrder: 1 },
-  { idBase: "w-sat4",   centre: "williamstown", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm", lanes: 7, blockLabel: "Sat 4–6pm", sortOrder: 2 },
+  // Sat 2–4pm (w-sat2) + Sat 4–6pm (w-sat4) retired 25 Jul 2026: all Williamstown
+  // players consolidated into the single Sat 3–5pm session. Existing paid rows keep
+  // their old session strings (inventory answers unknown_squad; sheet sync matches
+  // by venue, not session id).
+  { idBase: "w-sat3", centre: "williamstown", day: "Saturday", startTime: "3:00pm", endTime: "5:00pm", lanes: 7, blockLabel: "Sat 3–5pm", sortOrder: 1 },
 
-  // ── Elite Cricket Centre — Hallam (Sat 2–4 = 5 lanes · Sat 4–6 = 4 lanes) ──
-  { idBase: "h-sat2", centre: "hallam", day: "Saturday", startTime: "2:00pm", endTime: "4:00pm",  lanes: 5, blockLabel: "Sat 2–4pm", sortOrder: 1 },
-  { idBase: "h-sat4", centre: "hallam", day: "Saturday", startTime: "4:00pm", endTime: "6:00pm",  lanes: 4, blockLabel: "Sat 4–6pm", sortOrder: 2 },
+  // ── Elite Cricket Centre — Hallam (Sat 5 lanes) ──
+  // Sat 2–4pm (h-sat2, 5 lanes) + Sat 4–6pm (h-sat4, 4 lanes) retired 25 Jul 2026:
+  // all Hallam players consolidated into the single Sat 3–5pm session.
+  { idBase: "h-sat3", centre: "hallam", day: "Saturday", startTime: "3:00pm", endTime: "5:00pm",  lanes: 5, blockLabel: "Sat 3–5pm", sortOrder: 1 },
 
   // ── Mickleham Indoor Sports Centre — Mickleham (Sat 7 lanes) ──
   // Sat 4–6pm (m-sat4) retired 22 Jul 2026: all Mickleham players consolidated into

@@ -179,8 +179,7 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
           <div class="adays">
             <div class="aday-h">Saturday<span style="text-transform:none;letter-spacing:.2px;font-weight:700;color:var(--slate);margin-left:8px;">Aug 1 – Sep 19 · 8 wks</span></div>
             <div class="aboxes">
-              <a class="abox" href="#apply" data-session="w-sat2" style="cursor:pointer;text-decoration:none;"><span class="atime">2:00–4:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
-              <a class="abox" href="#apply" data-session="w-sat4" style="cursor:pointer;text-decoration:none;"><span class="atime">4:00–6:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
+              <a class="abox" href="#apply" data-session="w-sat3" style="cursor:pointer;text-decoration:none;"><span class="atime">3:00–5:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
             </div>
           </div>
         </details>
@@ -197,8 +196,7 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
           <div class="adays">
             <div class="aday-h">Saturday<span style="text-transform:none;letter-spacing:.2px;font-weight:700;color:var(--slate);margin-left:8px;">Aug 1 – Sep 19 · 8 wks</span></div>
             <div class="aboxes">
-              <a class="abox" href="#apply" data-session="h-sat2" style="cursor:pointer;text-decoration:none;"><span class="atime">2:00–4:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
-              <a class="abox" href="#apply" data-session="h-sat4" style="cursor:pointer;text-decoration:none;"><span class="atime">4:00–6:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
+              <a class="abox" href="#apply" data-session="h-sat3" style="cursor:pointer;text-decoration:none;"><span class="atime">3:00–5:00pm</span><span class="aage" style="color:var(--pink);font-weight:800;">Select →</span></a>
             </div>
           </div>
         </details>

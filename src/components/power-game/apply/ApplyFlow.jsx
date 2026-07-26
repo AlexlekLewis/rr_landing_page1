@@ -153,7 +153,7 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
     if (!demo) return;
     const CONSENTED = { accept_terms: true, accept_player_code: true, accept_parent_code: true, accept_social_media: true, accept_playing_standard: true, accept_ability_standard: true };
     const demoForm = { ...BLANK_FORM, ...CONSENTED, centre: 'williamstown', player_name: 'Sam Smith', player_dob: '2002-01-01', gender: 'M', contact_phone: '0400000000', contact_email: 'sam@example.com', suburb: 'Williamstown' };
-    const session = SQUADS.find((s) => s.id === 'w-sat2') || null;
+    const session = SQUADS.find((s) => s.id === 'w-sat3') || null;
     const r = computePlacement(demoForm);
     setForm(demoForm);
     setResult(r);

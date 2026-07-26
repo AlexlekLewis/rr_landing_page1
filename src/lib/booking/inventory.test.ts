@@ -15,12 +15,12 @@ const oneSquad = [
 // days/times/venues in squads.ts (everything else below is derived maths).
 // ════════════════════════════════════════════════════════════════════════════
 const SNAPSHOT = {
-  totalSquads: 5, // 5 open sessions: Williamstown 2 + Hallam 2 + Mickleham 1 (Sat 2–4pm only, consolidated 22 Jul 2026)
+  totalSquads: 3, // one session per centre: W Sat 3–5 + H Sat 3–5 (both 25 Jul 2026) + M Sat 2–4 (22 Jul 2026)
   activeCentres: 3, // williamstown + hallam + mickleham
   comingSoonCentres: 0,
   // Total places for the 8-WEEK BLOCK (26:7 ratio). Each squad = round(lanes × 26/7).
-  blockCapacity: 112, // Williamstown 52 + Hallam 34 + Mickleham 26
-  perCentre: { williamstown: 52, hallam: 34, mickleham: 26 } as Record<string, number>,
+  blockCapacity: 71, // Williamstown 26 + Hallam 19 + Mickleham 26
+  perCentre: { williamstown: 26, hallam: 19, mickleham: 26 } as Record<string, number>,
 };
 
 describe("squad grid integrity (snapshot of the official schedule)", () => {
@@ -64,26 +64,29 @@ describe("squad grid integrity (snapshot of the official schedule)", () => {
   it("squadsForPlacement returns all of a centre's open sessions; Williamstown is Saturday-only", () => {
     const m = squadsForPlacement({ centre: "williamstown" });
     expect(m.every((s) => s.centre === "williamstown")).toBe(true);
-    expect(m.length).toBe(2);
+    expect(m.length).toBe(1); // Sat 3–5pm only since the 25 Jul 2026 consolidation
     expect(new Set(m.map((s) => s.day))).toEqual(new Set(["Saturday"]));
   });
 
   it("Hallam & Mickleham run Saturday-only open sessions", () => {
     const hallam = squadsForPlacement({ centre: "hallam" });
-    expect(hallam.length).toBe(2);
+    expect(hallam.length).toBe(1); // Sat 3–5pm only since the 25 Jul 2026 consolidation
     expect(new Set(hallam.map((s) => s.day))).toEqual(new Set(["Saturday"]));
     const mickleham = squadsForPlacement({ centre: "mickleham" });
     expect(mickleham.length).toBe(1); // Sat 2–4pm only since the 22 Jul 2026 consolidation
     expect(new Set(mickleham.map((s) => s.day))).toEqual(new Set(["Saturday"]));
   });
 
-  it("the purchased Sat 2–4pm sessions exist at The Netz & Mickleham", () => {
-    for (const centre of ["williamstown", "mickleham"]) {
-      const sat24 = SQUADS.find((s) => s.centre === centre && s.day === "Saturday" && s.startTime === "2:00pm");
-      expect(sat24, centre).toBeTruthy();
+  it("the on-sale sessions exist: Mickleham Sat 2–4pm, Williamstown & Hallam Sat 3–5pm", () => {
+    const mick = SQUADS.find((s) => s.centre === "mickleham" && s.day === "Saturday" && s.startTime === "2:00pm");
+    expect(mick).toBeTruthy();
+    for (const centre of ["williamstown", "hallam"]) {
+      const sat35 = SQUADS.find((s) => s.centre === centre && s.day === "Saturday" && s.startTime === "3:00pm");
+      expect(sat35, centre).toBeTruthy();
     }
-    expect(SQUADS.some((s) => s.id === "w-sat2")).toBe(true);
     expect(SQUADS.some((s) => s.id === "m-sat2")).toBe(true);
+    expect(SQUADS.some((s) => s.id === "w-sat3")).toBe(true);
+    expect(SQUADS.some((s) => s.id === "h-sat3")).toBe(true);
   });
 });
 
