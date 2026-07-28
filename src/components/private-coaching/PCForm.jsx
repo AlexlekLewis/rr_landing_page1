@@ -128,9 +128,9 @@ const PCForm = () => {
                         contact personally in the coming days.
                     </p>
                     <p className="text-white/60 font-medium leading-relaxed">
-                        From there you'll book your <b className="text-white">$160 consultation</b> —
-                        a one-on-one with the Head Coach where your coach, your nights and your plan
-                        all get locked in.
+                        From there you'll book your <b className="text-white">$50 consultation</b>{' '}
+                        (normally $160) — a one-on-one with the Head Coach where your coach, your
+                        nights and your plan all get locked in.
                     </p>
                 </div>
             </section>
@@ -150,7 +150,7 @@ const PCForm = () => {
                     </h2>
                     <p className="text-white/70 font-medium max-w-xl mx-auto">
                         Two minutes, no payment. Alex Lewis will be in contact personally in the
-                        coming days to organise your $160 Head Coach consultation.
+                        coming days to organise your $50 launch-offer Head Coach consultation.
                     </p>
                 </div>
 
@@ -217,8 +217,8 @@ const PCForm = () => {
                     </button>
 
                     <p className="text-center text-white/40 text-xs font-medium leading-relaxed">
-                        No payment now. The first step is a $160 consultation with the Head Coach at{' '}
-                        {CENTRE.name} — everything else gets decided there.
+                        No payment now. The first step is a $50 launch-offer consultation (normally
+                        $160) with the Head Coach at {CENTRE.name} — everything else gets decided there.
                     </p>
                 </form>
             </div>
