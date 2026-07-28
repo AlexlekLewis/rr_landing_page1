@@ -27,6 +27,7 @@ import { AlertCircle, Lock, ShieldCheck, Ruler, ArrowRight, MapPin, Clock, Check
 import { calcAge, isMinor, BLANK_FORM } from '../apply/flow';
 import { buildApplicationRow } from '../apply/submit';
 import UniformSizeGuideModal from '../UniformSizeGuideModal';
+import SessionChangeNotice from '../../SessionChangeNotice';
 import { fmtAud } from '../apply/kit';
 import { squadsForPlacement, CENTRE_BY_SLUG, ACTIVE_CENTRES } from '../../../lib/booking/squads';
 import { PG_BANDS, homeBandIdx, eligibleBands as eligibleBandsFor } from '../../../lib/scoring/guardrail';
@@ -542,6 +543,7 @@ export default function ExpressSignup({ config }) {
                   </div>
                 )}
                 <p className="text-white/30 text-[11px] mt-3 leading-relaxed">{config.sessionNote}</p>
+                <SessionChangeNotice tone="dark" className="mt-1.5" />
               </div>
             )}
           </div>

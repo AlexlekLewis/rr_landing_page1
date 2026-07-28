@@ -21,7 +21,7 @@ const TermsConditions = () => {
                         Back to Home
                     </Link>
                     <h1 className="text-4xl md:text-5xl font-black uppercase tracking-wide">Terms &amp; Conditions</h1>
-                    <p className="text-white/70 mt-4 text-sm">Last updated: May 2026</p>
+                    <p className="text-white/70 mt-4 text-sm">Last updated: July 2026</p>
                 </div>
             </div>
 
@@ -154,7 +154,102 @@ const TermsConditions = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">11. Program Changes &amp; Cancellation</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">11. Session Times, Session Allocation &amp; Program Changes</h2>
+
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            This clause explains two things every family should understand before they enrol:
+                            (a) the session day and time shown when you book is our planned schedule, not a fixed
+                            guarantee for the length of the program; and (b) the Academy may ask a player to move
+                            to a different session, and the reasons we would do that. It applies to every Academy
+                            Program, including the Junior Royals programs and the Elite Royals / Power Game
+                            programs.
+                        </p>
+
+                        <div className="my-6 p-5 border-l-4 border-rr-pink bg-rr-navy/5 rounded-r-lg">
+                            <p className="font-bold uppercase tracking-wide text-rr-navy mb-2">Our position in plain terms</p>
+                            <p className="text-rr-dark/90 leading-relaxed">
+                                Enrolling secures a player a <strong>place in the program</strong> — it does not
+                                permanently reserve one specific day, time, squad, coach, or venue. Session times can
+                                change, and from time to time the coaching team will ask a player to move to an
+                                earlier or later session. We do this to keep every group a <strong>safe, enjoyable
+                                learning environment where a player can confidently grow</strong> — the Royals Way.
+                                We will <strong>always speak with the player and their parent/guardian before any
+                                move</strong> and work with the family to land on a session that works.
+                            </p>
+                        </div>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">11.1  Session times and venues are indicative</h3>
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            The session day, time, start date, duration and venue displayed at the point of booking,
+                            on the website, or in any marketing material are the Academy's planned schedule as at
+                            the time of publication. They are <strong>indicative and subject to change</strong>.
+                            Changes may be required for reasons including, without limitation: venue or facility
+                            availability, coach availability, group sizes and coach-to-player ratios, weather,
+                            public holidays or school-holiday scheduling, safety requirements, or the number of
+                            players who enrol in a given age group. Where a session day, time, start date or venue
+                            changes, the Academy will notify affected families in writing (by email and/or SMS) as
+                            early as reasonably practicable before the change takes effect.
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">11.2  Selecting a session at booking is a preference, not a guarantee</h3>
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            Where the enrolment form allows a family to select a session day and time, that selection
+                            records the family's preference and reserves a place in the program at that centre. It
+                            does not constitute a guarantee that the player will train in that specific session, with
+                            that specific group, or under a specific coach, for the whole of the program. Final squad
+                            and session allocation is made by the Academy's coaching team, and squads may be
+                            reviewed and adjusted at any point during a program.
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">11.3  Moving a player to a different session</h3>
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            The Academy may, at its discretion, request that a player move to an earlier or later
+                            session, to a different squad or group, or (where more than one is operating) to a
+                            different venue. The Academy will do so only where, in the reasonable opinion of the
+                            coaching team, the move is warranted on one or more of the following grounds:
+                        </p>
+                        <ul className="list-disc pl-6 space-y-2 text-rr-dark/80 mb-4">
+                            <li><strong>Safety of the player or of others.</strong> For example, where a player's age, physical size, or stage of development means the intensity or pace of a session presents a risk to them or to other participants, or where a safer coach-to-player ratio is required.</li>
+                            <li><strong>The benefit and development of the player.</strong> For example, where a different session better matches a player's current skill level, confidence, or learning needs, so they are challenged appropriately rather than overwhelmed or under-stretched.</li>
+                            <li><strong>The balance of each squad.</strong> For example, to keep group sizes, age spread, and ability range workable across all sessions at a centre, so that every group can be coached properly and every player gets meaningful time, feedback, and repetitions.</li>
+                        </ul>
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            These grounds reflect the Academy's coaching philosophy — the Royals Way — that players
+                            develop best in a safe, enjoyable environment matched to their stage, where they can
+                            train with confidence. A request to move a session is a coaching and safety decision.
+                            It is <strong>not</strong> a disciplinary measure, a demotion, or a statement about a
+                            player's worth, and it does not of itself indicate any fault on the part of the player.
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">11.4  Consultation with families</h3>
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            Before any session change under clause 11.3 takes effect, the Academy will contact the
+                            player and, where the player is under 18, their parent or guardian. The Academy will
+                            explain the reason for the proposed move, set out the alternative session or sessions
+                            available, and work with the family to agree an arrangement that suits them. Where the
+                            alternatives offered do not suit a family's circumstances, the Academy will make
+                            reasonable efforts to find another workable option — which may include a different day,
+                            a different time, or (where available) another Academy centre or program.
+                        </p>
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            Where, after that consultation, no alternative can be agreed, the final decision on
+                            session and squad allocation rests with the Academy. In that event the Academy may, at
+                            its discretion, issue a credit in accordance with clauses 12.5 and 12.6. A change of
+                            session made in accordance with this clause 11 does not, of itself, constitute a failure
+                            to supply the program or a failure of a consumer guarantee, and does not of itself give
+                            rise to an entitlement to a refund. Nothing in this clause limits your rights under the
+                            Australian Consumer Law (see clause 12.8).
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">11.5  Make-up and missed sessions</h3>
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            Where a player is unable to attend their allocated session, any make-up or catch-up
+                            session is offered at the Academy's discretion, subject to capacity, coach availability,
+                            and the age-appropriateness of the alternative session. Attending a make-up session in
+                            another group does not change a player's ongoing session allocation.
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">11.6  Program changes and cancellation</h3>
                         <p className="text-rr-dark/80 leading-relaxed">
                             The Academy reserves the right to modify, postpone, or cancel any aspect of the program,
                             including schedules, locations, coaching staff, and program structure, at its discretion.
@@ -173,8 +268,9 @@ const TermsConditions = () => {
                             and Female Empowerment programs, the Little Crickets program, and any other paid program,
                             camp, or clinic operated by the Academy (each, an "<strong>Academy Program</strong>") —
                             and fees have been paid or become payable. It governs withdrawals initiated by the
-                            participant or their family, and is separate from Clause 11, which governs changes or
-                            cancellation initiated by the Academy.
+                            participant or their family, and is separate from Clause 11, which governs session
+                            times, session and squad allocation, and changes or cancellation initiated by the
+                            Academy.
                         </p>
 
                         <div className="my-6 p-5 border-l-4 border-rr-pink bg-rr-navy/5 rounded-r-lg">

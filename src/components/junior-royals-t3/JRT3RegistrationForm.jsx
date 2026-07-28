@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
+import SessionChangeNotice from '../SessionChangeNotice';
 
 const EARLY_BIRD_END = new Date('2026-07-15T13:00:00Z');
 const isEarlyBird = () => new Date() < EARLY_BIRD_END;
@@ -389,6 +390,9 @@ const JRT3RegistrationForm = () => {
                                         </div>
                                     )
                                 )}
+                                {form.location && form.group_selection && (
+                                    <SessionChangeNotice tone="light" />
+                                )}
                             </div>
                         </div>
 
@@ -435,7 +439,7 @@ const JRT3RegistrationForm = () => {
                         <div className="mb-8 pt-6 border-t border-slate-100">
                             <h3 className="text-base font-black text-rr-dark uppercase tracking-widest mb-6">Agreements &amp; Consent</h3>
                             <ComplianceCheckbox checked={acceptTerms} onChange={setAcceptTerms} error={errors.acceptTerms}>
-                                I have read and agree to the <a href="/terms-conditions" target="_blank" className="text-rr-pink hover:underline">Terms &amp; Conditions</a> and <a href="/privacy-policy" target="_blank" className="text-rr-pink hover:underline">Privacy Policy</a>. I confirm all information provided is accurate.
+                                I have read and agree to the <a href="/terms-conditions" target="_blank" className="text-rr-pink hover:underline">Terms &amp; Conditions</a> and <a href="/privacy-policy" target="_blank" className="text-rr-pink hover:underline">Privacy Policy</a>. I confirm all information provided is accurate. I understand session times and session allocation may change in line with clause 11 of those terms.
                             </ComplianceCheckbox>
                             <ComplianceCheckbox checked={acceptPlayerCode} onChange={setAcceptPlayerCode} error={errors.acceptPlayerCode}>
                                 I have read and agree to the <a href="/assets/RRA_Player_Code_of_Conduct.pdf" target="_blank" className="text-rr-pink hover:underline">Player Code of Conduct</a>.

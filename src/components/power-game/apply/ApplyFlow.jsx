@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, ArrowRight, ArrowLeft, Clock, Users, Check, AlertCircle, Loader2, Ruler, Phone, Mail, MessageSquare, Telescope } from 'lucide-react';
 import DateOfBirthInput from '../../DateOfBirthInput';
+import SessionChangeNotice from '../../SessionChangeNotice';
 import { REP_GROUPS, CLUB_GROUPS, groupsForGender } from './levels';
 import { CENTRES, CENTRE_BY_SLUG, squadsForPlacement, sessionWindow, SQUADS } from '../../../lib/booking/squads';
 import { inventory } from '../../../lib/booking/inventory';
@@ -363,7 +364,7 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
         <input id="c_agreements" type="checkbox" checked={agreementsChecked} onChange={(e) => setAgreements(e.target.checked)} className="mt-0.5 w-4 h-4 accent-rr-pink flex-shrink-0 cursor-pointer" />
         <label htmlFor="c_agreements" className="text-xs text-white/70 leading-relaxed cursor-pointer">
           I have read and agree to the {docLink('/terms-conditions', 'Terms & Conditions')}, {docLink('/privacy-policy', 'Privacy Policy')} and {docLink('/assets/RRA_Player_Code_of_Conduct.pdf', 'Player Code of Conduct')}
-          {isMinor(form.player_dob) && <> and the {docLink('/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf', 'Parent/Guardian Code of Conduct')}</>}; I understand places are subject to meeting the program&apos;s minimum playing standard (squads &amp; times may change); and I confirm all information provided is accurate — false information may void my application (refund less processing fees).
+          {isMinor(form.player_dob) && <> and the {docLink('/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf', 'Parent/Guardian Code of Conduct')}</>}; I understand places are subject to meeting the program&apos;s minimum playing standard, and that session times and squad allocation may change in line with clause 11 of those terms; and I confirm all information provided is accurate — false information may void my application (refund less processing fees).
         </label>
       </div>
       {consentRow('accept_social_media', <>I&apos;m happy for photos/videos featuring the player to be used on RRA Melbourne&apos;s social media &amp; marketing channels.</>)}
@@ -444,6 +445,7 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
                       spotsLeftFor={(id) => inventory.spotsLeft(id)}
                     />
                     <p className="text-white/35 text-[11px] mt-3">Tap a session to continue — any 12–26 player can pick any time. Prefer a different night? Tap another centre above.</p>
+                    <SessionChangeNotice tone="dark" className="mt-2" />
                   </div>
                 )}
               </div>
@@ -635,7 +637,7 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
                 <button onClick={secure} disabled={submitting || !consentsOk(form)} className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-50 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-sm rounded-full px-6 py-4 transition-all hover:shadow-[0_0_30px_rgba(229,6,149,0.5)]">
                   {submitting ? 'Processing…' : `Pay ${fmtAud(totalDueCents)} & secure my spot`}
                 </button>
-                <p className="text-white/25 text-[11px] text-center mt-3">Your spot is <span className="text-white/45 font-bold">only secured once payment is confirmed</span> — your held time is released if payment isn&apos;t completed. *Squads are subject to change &mdash; we&apos;ll work with you if changes are needed.</p>
+                <p className="text-white/25 text-[11px] text-center mt-3">Your spot is <span className="text-white/45 font-bold">only secured once payment is confirmed</span> — your held time is released if payment isn&apos;t completed. Session times are subject to change in line with our <a href="/terms-conditions" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Terms &amp; Conditions</a>.</p>
               </div>
             )}
 
