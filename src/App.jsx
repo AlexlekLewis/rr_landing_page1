@@ -180,8 +180,10 @@ function App() {
             Writes to private_coaching_eoi (anon insert only). */}
         <Route path="/private-coaching" element={<PrivateCoaching />} />
         {/* Mickleham 30-Day Launch Special — campaign page for the front-desk flyer
-            QR code + Instagram link. Short alias /launch points at the same page. */}
+            QR code + Instagram link. /Mickleham_Launch is the published short link;
+            /launch kept as a fallback so nothing already shared breaks. */}
         <Route path="/mickleham-launch" element={<MicklehamLaunch />} />
+        <Route path="/Mickleham_Launch" element={<MicklehamLaunch />} />
         <Route path="/launch" element={<MicklehamLaunch />} />
         {/* An Afternoon for Coaches — free coaches afternoon, junior & senior (Sun 26 Jul 2026).
             Standalone registration, writes to coaches_day_registrations. Share the link directly. */}
