@@ -30,6 +30,7 @@ import InductionPage from './components/induction/InductionPage';
 import CoachesDay from './components/coaches-day/CoachesDay';
 import CoachesPage from './components/coaches/CoachesPage';
 import PrivateCoaching from './components/private-coaching/PrivateCoaching';
+import MicklehamLaunch from './components/mickleham-launch/MicklehamLaunch';
 import Reviews from './components/reviews/Reviews';
 import ProgramFeedback from './components/program-feedback/ProgramFeedback';
 import PostHogPageviewTracker from './components/PostHogPageviewTracker';
@@ -178,6 +179,10 @@ function App() {
         {/* Private Coaching — Mickleham launch. EOI form → Head Coach assigns a coach.
             Writes to private_coaching_eoi (anon insert only). */}
         <Route path="/private-coaching" element={<PrivateCoaching />} />
+        {/* Mickleham 30-Day Launch Special — campaign page for the front-desk flyer
+            QR code + Instagram link. Short alias /launch points at the same page. */}
+        <Route path="/mickleham-launch" element={<MicklehamLaunch />} />
+        <Route path="/launch" element={<MicklehamLaunch />} />
         {/* An Afternoon for Coaches — free coaches afternoon, junior & senior (Sun 26 Jul 2026).
             Standalone registration, writes to coaches_day_registrations. Share the link directly. */}
         <Route path="/coaches-day" element={<CoachesDay />} />
