@@ -50,7 +50,7 @@ const PC_NAV = [
 const PROGRAMS_DROPDOWN = [
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Closing Soon', badgeColor: 'bg-orange-500' },
     { label: 'Elite Program', route: '/elite-royals', badge: 'Enrolling Now · Selling Fast', badgeColor: 'bg-orange-500' },
-    { label: 'Junior Royals Term 3', route: '/junior-royals', badge: 'Selling Fast', badgeColor: 'bg-orange-500' },
+    { label: 'Junior Royals Term 3', route: '/junior-royals', badge: 'Sold Out', badgeColor: 'bg-red-500' },
     { label: 'Private Coaching', route: '/private-coaching', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },
 ];
 
@@ -78,7 +78,9 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
     const showCTA = !isShop && !isPowerGame;
     const showHamburger = !isShop;
 
-    const ctaLabel = isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : (isLP2 || isHoliday || isLittleCrickets) ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
+    // Junior Royals (isLittleCrickets) is sold out for Term 3 — the CTA points
+    // at the sold-out panel, which explains how to register Term 4 interest.
+    const ctaLabel = isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : isLittleCrickets ? 'TERM 4 — REGISTER INTEREST' : (isLP2 || isHoliday) ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
     const ctaTarget = isMickleham ? 'register' : isCoaches ? 'join' : isPrivateCoaching ? 'eoi-form' : isLP2 ? 'checkout' : (isHoliday || isLittleCrickets) ? 'registration-form' : 'apply-form';
 
     const scrollToForm = () => {
