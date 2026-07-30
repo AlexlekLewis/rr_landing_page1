@@ -79,31 +79,145 @@ const SUPABASE_TABLE = {
 // false (and update the Stripe links/pricing) when Term 4 registration opens.
 const TERM3_SOLD_OUT = true;
 
-const SoldOutPanel = () => (
-    <section id="registration-form" className="py-24 bg-rr-dark">
-        <div className="max-w-2xl mx-auto px-6 text-center">
-            <div className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-rr-pink" />
-                <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Term 3, 2026 — Sold Out</span>
+// Sold-out panel with the Term 4 waitlist. Rows land in jr_term4_waitlist
+// (anon INSERT only — parents can join the list but nobody can read it back
+// without an admin login).
+const WAITLIST_CENTRES = [
+    { value: 'mickleham',    label: 'Mickleham Indoor Sports Centre' },
+    { value: 'hallam',       label: 'Elite Cricket Centre — Hallam' },
+    { value: 'williamstown', label: 'The Netz — Williamstown' },
+    { value: 'any',          label: 'Any centre — happy to travel' },
+];
+
+const SoldOutPanel = () => {
+    const [submitting, setSubmitting] = useState(false);
+    const [done, setDone] = useState(false);
+    const [errors, setErrors] = useState({});
+    const [form, setForm] = useState({
+        parent_name: '', parent_email: '', parent_phone: '',
+        player_name: '', player_age: '', preferred_centre: '',
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm(p => ({ ...p, [name]: value }));
+        if (errors[name]) setErrors(p => ({ ...p, [name]: undefined }));
+    };
+
+    const validate = () => {
+        const e = {};
+        if (!form.parent_name.trim()) e.parent_name = 'Required.';
+        if (!form.parent_email.trim() || !/\S+@\S+\.\S+/.test(form.parent_email)) e.parent_email = 'Valid email required.';
+        if (!form.player_name.trim()) e.player_name = 'Required.';
+        if (!form.player_age) e.player_age = 'Required.';
+        if (!form.preferred_centre) e.preferred_centre = 'Please pick a centre.';
+        setErrors(e);
+        return Object.keys(e).length === 0;
+    };
+
+    const handleSubmit = async (ev) => {
+        ev.preventDefault();
+        if (!validate()) return;
+        setSubmitting(true);
+        try {
+            const utm = getUTMParams();
+            const { error } = await supabase.from('jr_term4_waitlist').insert([{
+                parent_name: form.parent_name.trim(),
+                parent_email: form.parent_email.trim(),
+                parent_phone: form.parent_phone.trim() || null,
+                player_name: form.player_name.trim(),
+                player_age: parseInt(form.player_age, 10),
+                preferred_centre: form.preferred_centre,
+                page_referrer: document.referrer || null,
+                ...utm,
+            }]);
+            if (error) throw error;
+            setDone(true);
+        } catch (err) {
+            console.error(err);
+            setErrors({ form: 'Something went wrong — please try again, or email info@rramelbourne.com and we\'ll add you to the list.' });
+            setSubmitting(false);
+        }
+    };
+
+    const ic = (field) => `w-full bg-slate-50 border ${errors[field] ? 'border-red-400' : 'border-slate-200'} rounded-xl px-4 py-3 text-rr-dark font-medium focus:outline-none focus:border-rr-pink transition-colors duration-200 text-sm`;
+    const lc = 'block text-xs font-black text-rr-dark uppercase tracking-widest mb-2';
+
+    return (
+        <section id="registration-form" className="py-24 bg-rr-dark">
+            <div className="max-w-2xl mx-auto px-6">
+                <div className="text-center mb-10">
+                    <div className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6">
+                        <span className="w-1.5 h-1.5 rounded-full bg-rr-pink" />
+                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Term 3, 2026 — Sold Out</span>
+                    </div>
+                    <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-wide mb-6">
+                        TERM 3 IS <span className="text-rr-pink">SOLD OUT</span>
+                    </h2>
+                    <p className="text-white/80 font-medium leading-relaxed mb-4">
+                        Every place at all three centres — Mickleham, Hallam and Williamstown — has been filled for Term 3 (July – September 2026), and registrations are now closed.
+                    </p>
+                    <p className="text-white/80 font-medium leading-relaxed">
+                        Already registered? You don't need to do anything — your place is secure, and your session day and time are in your confirmation email.
+                    </p>
+                </div>
+
+                <div className="bg-white rounded-2xl p-8 md:p-10">
+                    {done ? (
+                        <div className="text-center py-6">
+                            <div className="w-16 h-16 rounded-full bg-rr-pink/10 border-2 border-rr-pink flex items-center justify-center mx-auto mb-5">
+                                <svg className="w-8 h-8 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <h3 className="text-2xl font-black text-rr-dark uppercase tracking-wide mb-3">You're on the list</h3>
+                            <p className="text-rr-charcoal text-sm font-medium leading-relaxed max-w-md mx-auto">
+                                We've added {form.player_name.trim() || 'your player'} to the Junior Royals Term 4 waitlist. You'll get an email from our team before Term 4 registration opens to the public — waitlist families get first choice of session times.
+                            </p>
+                        </div>
+                    ) : (
+                        <form onSubmit={handleSubmit} noValidate>
+                            <h3 className="text-base font-black text-rr-dark uppercase tracking-widest mb-2">Join the Term 4 Waitlist</h3>
+                            <p className="text-rr-charcoal text-sm font-medium leading-relaxed mb-6">
+                                Term 4 runs in October – December 2026. Join the waitlist and we'll email you before registration opens to the public — no payment now, no obligation.
+                            </p>
+                            <div className="space-y-5">
+                                <div><label className={lc}>Parent / Guardian Full Name *</label><input name="parent_name" value={form.parent_name} onChange={handleChange} className={ic('parent_name')} placeholder="e.g. Jane Smith" />{errors.parent_name && <p className="text-red-500 text-xs mt-1">{errors.parent_name}</p>}</div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div><label className={lc}>Email Address *</label><input name="parent_email" type="email" value={form.parent_email} onChange={handleChange} className={ic('parent_email')} placeholder="e.g. jane@email.com" />{errors.parent_email && <p className="text-red-500 text-xs mt-1">{errors.parent_email}</p>}</div>
+                                    <div><label className={lc}>Phone Number</label><input name="parent_phone" type="tel" value={form.parent_phone} onChange={handleChange} className={ic('parent_phone')} placeholder="e.g. 0412 345 678" /></div>
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div><label className={lc}>Player Full Name *</label><input name="player_name" value={form.player_name} onChange={handleChange} className={ic('player_name')} placeholder="e.g. Liam Smith" />{errors.player_name && <p className="text-red-500 text-xs mt-1">{errors.player_name}</p>}</div>
+                                    <div><label className={lc}>Player Age *</label>
+                                        <select name="player_age" value={form.player_age} onChange={handleChange} className={ic('player_age')}>
+                                            <option value="">Select age</option>
+                                            {Array.from({ length: 13 }, (_, i) => i + 5).map(a => <option key={a} value={a}>{a} years old</option>)}
+                                        </select>{errors.player_age && <p className="text-red-500 text-xs mt-1">{errors.player_age}</p>}
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className={lc}>Preferred Centre *</label>
+                                    <select name="preferred_centre" value={form.preferred_centre} onChange={handleChange} className={ic('preferred_centre')}>
+                                        <option value="">Select a centre</option>
+                                        {WAITLIST_CENTRES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+                                    </select>
+                                    {errors.preferred_centre && <p className="text-red-500 text-xs mt-1">{errors.preferred_centre}</p>}
+                                </div>
+                            </div>
+                            {errors.form && <div className="bg-red-50 border border-red-200 rounded-xl p-4 mt-6"><p className="text-red-600 text-sm font-medium">{errors.form}</p></div>}
+                            <button type="submit" disabled={submitting}
+                                className="mt-8 w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]">
+                                {submitting ? 'Adding you to the list…' : 'Join the Term 4 Waitlist'}
+                            </button>
+                            <p className="text-slate-400 text-xs text-center mt-4">Joining the waitlist doesn't lock you in — it just means you hear first.</p>
+                        </form>
+                    )}
+                </div>
             </div>
-            <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-wide mb-6">
-                TERM 3 IS <span className="text-rr-pink">SOLD OUT</span>
-            </h2>
-            <p className="text-white/80 font-medium leading-relaxed mb-4">
-                Every place at all three centres — Mickleham, Hallam and Williamstown — has been filled for Term 3 (July – September 2026), and registrations are now closed.
-            </p>
-            <p className="text-white/80 font-medium leading-relaxed mb-8">
-                Already registered? You don't need to do anything — your place is secure, and your session day and time are in your confirmation email.
-            </p>
-            <div className="bg-white/5 border border-white/10 rounded-2xl px-6 py-6 text-left">
-                <p className="text-sm font-bold text-white/90 mb-2">Want a place in Term 4?</p>
-                <p className="text-sm text-white/70 leading-relaxed">
-                    Email <a href="mailto:info@rramelbourne.com?subject=Junior%20Royals%20Term%204%20%E2%80%94%20Register%20My%20Interest" className="text-rr-pink font-bold hover:underline">info@rramelbourne.com</a> with your player's name, age and preferred centre, and we'll contact you before Term 4 registration opens to the public.
-                </p>
-            </div>
-        </div>
-    </section>
-);
+        </section>
+    );
+};
 
 const AGE_OPTIONS = Array.from({ length: 9 }, (_, i) => i + 7); // 7–15
 
