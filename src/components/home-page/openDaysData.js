@@ -22,7 +22,7 @@ export const ANNOUNCEMENTS = [
         tag: 'Weekly coaching at 3 venues',
         detail: 'Mickleham · Williamstown · Hallam',
         href: '/junior-royals',
-        badge: 'Now open',
+        badge: 'Sold out',
     },
     {
         key: 'india-tour',

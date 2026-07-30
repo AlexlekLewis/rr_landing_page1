@@ -3,6 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const EARLY_BIRD_END = new Date('2026-07-15T13:00:00Z');
 
+// Term 3 is sold out (30 Jul 2026) — no floating register nudge on an
+// informational page. Flip back when Term 4 opens.
+const TERM3_SOLD_OUT = true;
+
 const JRT3StickyCTA = () => {
     const [visible, setVisible] = useState(false);
     const [pastForm, setPastForm] = useState(false);
@@ -19,6 +23,8 @@ const JRT3StickyCTA = () => {
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    if (TERM3_SOLD_OUT) return null;
 
     return (
         <AnimatePresence>

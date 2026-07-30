@@ -75,6 +75,36 @@ const SUPABASE_TABLE = {
     williamstown: 'jr_term3_williamstown',
 };
 
+// Term 3 filled every place across all three centres (30 Jul 2026). Flip to
+// false (and update the Stripe links/pricing) when Term 4 registration opens.
+const TERM3_SOLD_OUT = true;
+
+const SoldOutPanel = () => (
+    <section id="registration-form" className="py-24 bg-rr-dark">
+        <div className="max-w-2xl mx-auto px-6 text-center">
+            <div className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-rr-pink" />
+                <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Term 3, 2026 — Sold Out</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-wide mb-6">
+                TERM 3 IS <span className="text-rr-pink">SOLD OUT</span>
+            </h2>
+            <p className="text-white/80 font-medium leading-relaxed mb-4">
+                Every place at all three centres — Mickleham, Hallam and Williamstown — has been filled for Term 3 (July – September 2026), and registrations are now closed.
+            </p>
+            <p className="text-white/80 font-medium leading-relaxed mb-8">
+                Already registered? You don't need to do anything — your place is secure, and your session day and time are in your confirmation email.
+            </p>
+            <div className="bg-white/5 border border-white/10 rounded-2xl px-6 py-6 text-left">
+                <p className="text-sm font-bold text-white/90 mb-2">Want a place in Term 4?</p>
+                <p className="text-sm text-white/70 leading-relaxed">
+                    Email <a href="mailto:info@rramelbourne.com?subject=Junior%20Royals%20Term%204%20%E2%80%94%20Register%20My%20Interest" className="text-rr-pink font-bold hover:underline">info@rramelbourne.com</a> with your player's name, age and preferred centre, and we'll contact you before Term 4 registration opens to the public.
+                </p>
+            </div>
+        </div>
+    </section>
+);
+
 const AGE_OPTIONS = Array.from({ length: 9 }, (_, i) => i + 7); // 7–15
 
 // Omtex sizing data
@@ -190,6 +220,7 @@ const fireLeadEvent = (location) => {
 
 const JRT3RegistrationForm = () => {
     const earlyBird = isEarlyBird();
+    if (TERM3_SOLD_OUT) return <SoldOutPanel />;
     const [submitting, setSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
     const [acceptTerms, setAcceptTerms] = useState(false);
