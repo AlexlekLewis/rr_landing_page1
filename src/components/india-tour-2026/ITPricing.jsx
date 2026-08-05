@@ -100,7 +100,7 @@ const ITPricing = ({ copy }) => {
                     initial={{ opacity: 0, y: 24 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="mt-12 bg-rr-dark rounded-2xl p-8 md:p-10"
+                    className="mt-12 bg-rr-navy rounded-2xl p-8 md:p-10"
                 >
                     <p className="text-[11px] font-bold text-rr-pink uppercase tracking-[0.2em]">
                         {c.flightsEyebrow}

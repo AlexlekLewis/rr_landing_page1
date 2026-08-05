@@ -4,7 +4,7 @@ import React from 'react';
 // when the URL already carries ?read= (see useReadingMode), so a member of the
 // public arriving at /india-tour-2026 never sees it.
 const ITReadingToggle = ({ simple, onChange }) => (
-    <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-[70] flex items-center gap-1 bg-rr-dark rounded-full p-1 shadow-2xl border border-white/15">
+    <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-[70] flex items-center gap-1 bg-rr-navy rounded-full p-1 shadow-2xl border border-white/15">
         <span className="pl-3 pr-1 text-[10px] font-bold text-white/50 uppercase tracking-widest select-none">
             Preview
         </span>

@@ -43,6 +43,15 @@ export const FLIGHT_ESTIMATE_AUD = { min: 1500, max: 2000 };
 // read from it.
 export const REGISTRATIONS_CLOSE_AT = '2026-08-12T23:59:00+10:00';
 
+// The official camp document, served from /public. Size is stated on the page —
+// it is a 26 MB export, which is a lot on mobile data, so nobody should be
+// ambushed by it. (A lighter Canva export would fix that at source.)
+export const CAMP_PDF = {
+    href: '/rra-high-performance-camp-2026.pdf',
+    filename: 'RRA High Performance Camp 2026.pdf',
+    sizeLabel: '26 MB',
+};
+
 export const fmtAUD = (n) => `$${Number(n).toLocaleString('en-AU')}`;
 // "$1,500–$2,000" — en dash, both sides signed so neither number reads as a total.
 export const fmtRangeAUD = (r) => `${fmtAUD(r.min)}–${fmtAUD(r.max)}`;
@@ -52,12 +61,12 @@ export const fmtRangeAUD = (r) => `${fmtAUD(r.min)}–${fmtAUD(r.max)}`;
 const STANDARD = {
     hero: {
         badge: 'Registrations Open · Limited Places',
-        dateline: '19–26 September · Nagpur',
+        dateline: '20–26 September · Nagpur',
         lead:
-            'A Rajasthan Royals Academy Melbourne squad, living and training for eight days at the ' +
-            'Rajasthan Royals High Performance Centre in Nagpur — six full days of coaching and a ' +
-            'practice match. Open to register, but places on the touring squad are limited and ' +
-            'confirmed by our coaches.',
+            'A Rajasthan Royals Academy Melbourne squad, living and training at the Rajasthan Royals ' +
+            'High Performance Centre in Nagpur — six full days of coaching and a practice match, at the ' +
+            'centre where the Royals develop players like Vaibhav Sooryavanshi. Open to register, but ' +
+            'places on the touring squad are limited and confirmed by our coaches.',
         costLabel: 'What it costs — per player',
         flights:
             'We book the whole squad on the same flights and send you a group booking link to pay for ' +
@@ -66,6 +75,8 @@ const STANDARD = {
         // Rendered only when FLIGHT_ESTIMATE_AUD is set.
         flightsEstimate: (r) => `Allow roughly ${fmtRangeAUD(r)} per player on top for the return airfare.`,
         seeIncluded: "See exactly what's included",
+        downloadLabel: 'Download the camp document',
+        downloadSub: (size) => `PDF, ${size} — the full programme, coaches and itinerary`,
         cta: 'Register Your Interest',
         countdownLabel: 'Registrations close in',
         countdownUnits: { days: 'Days', hours: 'Hrs', minutes: 'Mins', seconds: 'Secs' },
@@ -89,10 +100,11 @@ const STANDARD = {
             'with everything you need to know.',
         points: [
             {
-                title: 'Train & Play in India',
+                title: 'Where the Royals build players',
                 body:
-                    'Turf nets, centre-wicket practice and a match on grass, at the Royals\' own high ' +
-                    'performance centre in Nagpur.',
+                    'Turf nets, centre-wicket practice and a match on grass at the Royals\' own high ' +
+                    'performance centre in Nagpur — the centre behind the games of Vaibhav Sooryavanshi ' +
+                    'and Luhan-dre Pretorius.',
             },
             {
                 title: 'Coached the Royals Way',
@@ -170,10 +182,11 @@ const STANDARD = {
         includedNote: 'Identical for both prices. Once you are in Nagpur, everything below is already paid for.',
         included: [
             {
-                title: 'Seven nights at the Royals HPC',
+                title: 'A bed inside the Royals HPC',
                 body:
                     'Shared air-conditioned rooms inside the Rajasthan Royals High Performance Centre in ' +
-                    'Nagpur. You arrive Saturday 19 September and fly home Saturday 26 September 2026.',
+                    'Nagpur, for the whole camp. The camp runs 20–26 September 2026; we confirm your exact ' +
+                    'arrival and departure days, and the flights that match them, with your offer.',
             },
             {
                 title: 'All meals, every day',
@@ -188,11 +201,14 @@ const STANDARD = {
                     'training grounds, gym and indoor facilities.',
             },
             {
-                title: 'The Royals coaching panel',
+                title: 'The resident Royals coaching team',
                 body:
-                    'Batting and leadership with Faiz Fazal — a former India international and Ranji ' +
-                    'Trophy-winning captain — and with Romi Bhinder, the Rajasthan Royals team manager. ' +
-                    'Bowling with Somi Bhinder, the HPC ground curator and a former bowler and coach.',
+                    'Sid Lahiri, Head of Global Academies and a Royals performance coach, leads the camp. ' +
+                    'Batting and leadership with Romi Bhinder — the Rajasthan Royals team manager, who ' +
+                    'lives at the centre and trains the Royals players there all year round — and with ' +
+                    'Faiz Fazal, a former India international and Ranji Trophy-winning captain. Fast ' +
+                    'bowling with Somi Bhinder, the centre\'s resident fast-bowling coach. Mental ' +
+                    'performance with Dr Neeta Adhau.',
             },
             {
                 title: 'Individual video analysis and a written plan',
@@ -258,16 +274,19 @@ const STANDARD = {
 const SIMPLE = {
     hero: {
         badge: 'Open Now · Only A Few Spots',
-        dateline: '19–26 September · Nagpur, India',
+        dateline: '20–26 September · Nagpur, India',
         lead:
-            'Eight days in India. You train at the Rajasthan Royals cricket centre, the same place their ' +
-            'pros use. Six days of coaching. One real match. You come home with a plan to get better. ' +
-            'Anyone can sign up, but there are only a few spots and our coaches pick the team.',
+            'Six days of coaching in India. You live and train at the Rajasthan Royals cricket centre in ' +
+            'Nagpur — the same place their stars train, including Vaibhav Sooryavanshi. You play one real ' +
+            'match. You come home with a plan to get better. Anyone can sign up, but there are only a few ' +
+            'spots and our coaches pick the team.',
         costLabel: 'What it costs',
         flights: 'We book the whole team on the same plane. Then we send you a link to pay for your seat.',
         flightsLead: 'Flights cost extra.',
         flightsEstimate: (r) => `Plan for about ${fmtRangeAUD(r)} more for the return flight.`,
         seeIncluded: 'See what you get',
+        downloadLabel: 'Download the camp booklet',
+        downloadSub: (size) => `PDF, ${size} — everything about the camp in one file`,
         cta: 'Put My Name Down',
         countdownLabel: 'Sign-ups close in',
         countdownUnits: { days: 'Days', hours: 'Hrs', minutes: 'Mins', seconds: 'Secs' },
@@ -290,7 +309,9 @@ const SIMPLE = {
         points: [
             {
                 title: 'Train where the pros train',
-                body: 'Real grass pitches. Real nets. A gym and a pool. All in one place.',
+                body:
+                    'Real grass pitches. Real nets. A gym and a pool. This is the centre where the Royals ' +
+                    'built Vaibhav Sooryavanshi and Luhan-dre Pretorius.',
             },
             {
                 title: 'Coaches who have played for India',
@@ -353,10 +374,11 @@ const SIMPLE = {
         includedNote: 'The same for both prices. Once you land, all of this is already paid for.',
         included: [
             {
-                title: 'A bed for 7 nights',
+                title: 'A bed at the centre',
                 body:
-                    'You share an air-conditioned room at the cricket centre. You fly in Saturday 19 ' +
-                    'September and fly home Saturday 26 September.',
+                    'You share an air-conditioned room at the cricket centre for the whole camp. The camp ' +
+                    'runs 20–26 September. We will tell you the exact days you fly in and out when we send ' +
+                    'you your offer.',
             },
             {
                 title: 'All your food',
@@ -369,8 +391,10 @@ const SIMPLE = {
             {
                 title: 'Top coaches',
                 body:
-                    'Faiz Fazal played for India and captained a title-winning team. He coaches batting. ' +
-                    'Romi Bhinder is the Rajasthan Royals team manager. Somi Bhinder coaches bowling.',
+                    'Sid Lahiri runs the Royals academies around the world. He leads the camp. Romi ' +
+                    'Bhinder is the Rajasthan Royals team manager — he lives at the centre and coaches ' +
+                    'their players all year. Faiz Fazal played for India and captained a title-winning ' +
+                    'team. Somi Bhinder coaches fast bowling. Dr Neeta Adhau helps you with the mental side.',
             },
             {
                 title: 'A video of you and a plan',
