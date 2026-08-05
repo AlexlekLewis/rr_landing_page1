@@ -97,10 +97,10 @@ const STANDARD = {
         heading: 'A Cricket Journey',
         headingAccent: 'Like No Other',
         lead:
-            'This September a Rajasthan Royals Academy Melbourne squad tours India to train, compete ' +
-            'and grow. Eight days inside a professional high-performance centre, coached by people who ' +
-            'develop players for the next level. Register your interest and our team will be in touch ' +
-            'with everything you need to know.',
+            'This September a Rajasthan Royals Academy Melbourne squad travels to India to train, ' +
+            'compete and grow. Seven nights inside a professional high-performance centre, six of them ' +
+            'full coaching days, with people who develop players for the next level. Register your ' +
+            'interest and our team will be in touch with everything you need to know.',
         points: [
             {
                 title: 'Where the Royals build players',
@@ -181,6 +181,36 @@ const STANDARD = {
             'So your total outlay for the tour is the program fee above plus the airfare, and then the ' +
             'few personal items listed under "what it does not cover". There is nothing else coming from us.',
 
+
+        pillarsEyebrow: 'Beyond The Boundary',
+        pillarsHeading: 'The Pro-Athlete',
+        pillarsHeadingAccent: 'Support System',
+        pillarsLead:
+            'A professional set-up does not just coach your batting. Four things are worked on at the ' +
+            'centre, every day, alongside the cricket.',
+        pillars: [
+            { title: 'Physical', body: 'Strength and conditioning, injury management, and physio-led rehabilitation fundamentals.' },
+            { title: 'Mental', body: 'Focus, resilience, and handling match-day pressure under competitive stress.' },
+            { title: 'Nutritional', body: 'Professional education on hydration, pre-game fuelling and recovery diets.' },
+            { title: 'Tactical', body: 'Video analysis, player evaluation and individual tactical feedback.' },
+        ],
+
+        itineraryEyebrow: 'Day By Day',
+        itineraryHeading: 'What The Week',
+        itineraryHeadingAccent: 'Actually Looks Like',
+        itineraryLead:
+            'Six full coaching days between arrival and departure. Mornings build the skill, afternoons ' +
+            'apply it, and the evenings cover the things that keep a player on the field.',
+        itineraryDays: [
+            { when: 'Sat 19 Sep', title: 'Arrival', body: 'You land in Nagpur, get picked up, and settle in at the centre. Welcome and orientation.' },
+            { when: 'Sun 20 Sep', title: 'Day 1 — Foundation', body: 'Morning: performance testing (speed, agility, coordination) and a skill assessment across batting, bowling and fielding. Afternoon: player evaluation and video analysis, one-on-one with a coach. Evening: physio-led injury management.' },
+            { when: 'Mon 21 Sep', title: 'Day 2 — Nets & Skill', body: 'Morning: technical batting and bowling drills, plus core fielding. Afternoon: extended net sessions against varied bowling. Evening: mental strength session one — focus, confidence and handling pressure.' },
+            { when: 'Tue 22 Sep', title: 'Day 3 — Centre Wicket', body: 'Morning: warm-up, skill reinforcement and match-situation fielding. Afternoon: structured centre-wicket practice in a game-like environment. Evening: nutrition and hydration.' },
+            { when: 'Wed 23 Sep', title: 'Day 4 — Centre Wicket', body: 'A second full day in the middle, building on day three under direct coach guidance.' },
+            { when: 'Thu 24 Sep', title: 'Day 5 — Match Day', body: 'Morning: a practice match on turf wickets. Afternoon: post-match feedback and skill work. Evening: mental strength session two — game pressure and decision-making.' },
+            { when: 'Fri 25 Sep', title: 'Day 6 — Closing & Evaluation', body: 'Morning: a light optional net session. Afternoon: group reflection and your individual development plan. Evening: closing huddle.' },
+            { when: 'Sat 26 Sep', title: 'Departure', body: 'Farewell and transfer back to Nagpur airport for the flight home.' },
+        ],
         includedHeading: 'What your fee covers',
         includedNote: 'Identical for both prices. Once you are in Nagpur, everything below is already paid for.',
         included: [
@@ -306,12 +336,12 @@ const SIMPLE = {
 
     about: {
         eyebrow: 'What This Is',
-        heading: 'Eight Days',
+        heading: 'Seven Nights',
         headingAccent: 'In India',
         lead:
-            'This September, a team from our academy flies to India. You live at the Rajasthan Royals ' +
-            'cricket centre in Nagpur. You train there every day. You play a match on grass. Put your ' +
-            'name down below and we will tell you everything.',
+            'This September, a team from our academy flies to India. You stay seven nights at the ' +
+            'Rajasthan Royals cricket centre in Nagpur. Six of those days are full training days. You ' +
+            'play a match on grass. Put your name down below and we will tell you everything.',
         points: [
             {
                 title: 'Train where the pros train',
@@ -376,6 +406,32 @@ const SIMPLE = {
             'So you pay two things: the price above, and the flight. Plus a few small things on the list ' +
             'below. That is all.',
 
+
+        pillarsEyebrow: 'More Than Cricket',
+        pillarsHeading: 'The Team',
+        pillarsHeadingAccent: 'Around You',
+        pillarsLead: 'A real pro set-up works on four things, not just your batting. You get all four.',
+        pillars: [
+            { title: 'Your body', body: 'Fitness training. A physio to keep you safe and fix niggles.' },
+            { title: 'Your head', body: 'How to stay calm, focused and brave when the game gets tight.' },
+            { title: 'Your food', body: 'What to eat and drink before you play, and after, so you recover.' },
+            { title: 'Your game plan', body: 'Video of you, an honest assessment, and a plan of what to fix.' },
+        ],
+
+        itineraryEyebrow: 'Day By Day',
+        itineraryHeading: 'What You Do',
+        itineraryHeadingAccent: 'Each Day',
+        itineraryLead: 'Six full days of cricket between the day you land and the day you fly home.',
+        itineraryDays: [
+            { when: 'Sat 19 Sep', title: 'You arrive', body: 'You land in Nagpur. We pick you up. You settle in and meet everyone.' },
+            { when: 'Sun 20 Sep', title: 'Day 1 — Testing', body: 'Morning: we test how fast and agile you are, and watch you bat, bowl and field. Afternoon: you watch video of yourself with a coach. Evening: a physio shows you how to avoid injuries.' },
+            { when: 'Mon 21 Sep', title: 'Day 2 — Nets', body: 'Morning: batting and bowling drills, plus catching and throwing. Afternoon: long net sessions against different bowlers. Evening: how to stay focused under pressure.' },
+            { when: 'Tue 22 Sep', title: 'Day 3 — Middle practice', body: 'Morning: warm-up and fielding in match situations. Afternoon: batting in the middle, like a real game. Evening: what to eat and drink.' },
+            { when: 'Wed 23 Sep', title: 'Day 4 — Middle practice', body: 'Another full day batting and bowling in the middle, with coaches watching every ball.' },
+            { when: 'Thu 24 Sep', title: 'Day 5 — Match day', body: 'Morning: you play a real match on grass. Afternoon: the coaches tell you what they saw. Evening: handling pressure in a game.' },
+            { when: 'Fri 25 Sep', title: 'Day 6 — Last day', body: 'Morning: an easy net if you want one. Afternoon: you get your own written plan. Evening: the closing huddle.' },
+            { when: 'Sat 26 Sep', title: 'You fly home', body: 'We take you back to Nagpur airport for your flight.' },
+        ],
         includedHeading: 'What you get',
         includedNote: 'The same for both prices. Once you land, all of this is already paid for.',
         included: [

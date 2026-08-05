@@ -26,6 +26,7 @@ const LC_NAV = [
 const IT_NAV = [
     { label: 'THE CAMP', id: 'about' },
     { label: 'COACHES', id: 'coaching' },
+    { label: 'DAY BY DAY', id: 'itinerary' },
     { label: 'WHAT IT COSTS', id: 'pricing' },
 ];
 
