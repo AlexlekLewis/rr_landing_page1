@@ -86,6 +86,14 @@ const STANDARD = {
         countdownNote:
             'Once the clock runs out we close the list and our coaches pick the touring squad from ' +
             'everyone who registered.',
+        ctaAfterCoaches: {
+            heading: 'Six days with these coaches',
+            body: 'Places are limited and the squad is confirmed by our coaches. Registering costs nothing and takes about two minutes.',
+        },
+        ctaAfterPricing: {
+            heading: 'Ready to put your player forward?',
+            body: 'Register your interest and we will come back to you in writing with your price, your place, and the flight booking link.',
+        },
         countdownClosed: 'Registrations for the India Tour 2026 have now closed.',
         countdownClosedNote:
             'If you still want to be considered, email info@rramelbourne.com and we will tell you ' +
@@ -312,10 +320,10 @@ const SIMPLE = {
         kicker: 'Rajasthan Royals Academy',
         dateline: '19–26 September 2026 · Nagpur, India',
         lead:
-            'Six days of coaching in India. You live and train at the Rajasthan Royals cricket centre in ' +
-            'Nagpur — the same place their stars train, including Vaibhav Sooryavanshi. You play one real ' +
-            'match. You come home with a plan to get better. Anyone can sign up, but there are only a few ' +
-            'spots and our coaches pick the team.',
+            'Six days of coaching in India. You live and train inside the Rajasthan Royals High Performance ' +
+            'Centre in Nagpur — the same place their stars train, including Vaibhav Sooryavanshi. You play ' +
+            'one real match. You come home with a plan to get better. Anyone can sign up, but there are only ' +
+            'a few spots and our coaches pick the team.',
         costLabel: 'What it costs',
         flights: 'We book the whole team on the same plane. Then we send you a link to pay for your seat.',
         flightsLead: 'Flights cost extra.',
@@ -329,6 +337,14 @@ const SIMPLE = {
         countdownNote:
             'When the clock hits zero we shut the list. Then our coaches pick the team from everyone ' +
             'who signed up.',
+        ctaAfterCoaches: {
+            heading: 'Six days with these coaches',
+            body: 'There are only a few spots and the coaches pick the team. Signing up is free and takes about two minutes.',
+        },
+        ctaAfterPricing: {
+            heading: 'Want a spot?',
+            body: 'Put your name down and we will write back with your price, whether you have a spot, and the flight link.',
+        },
         countdownClosed: 'Sign-ups are now closed.',
         countdownClosedNote:
             'You can still email info@rramelbourne.com to ask if there are any spots left.',
@@ -340,8 +356,8 @@ const SIMPLE = {
         headingAccent: 'In India',
         lead:
             'This September, a team from our academy flies to India. You stay seven nights at the ' +
-            'Rajasthan Royals cricket centre in Nagpur. Six of those days are full training days. You ' +
-            'play a match on grass. Put your name down below and we will tell you everything.',
+            'Rajasthan Royals High Performance Centre in Nagpur. Six of those days are full training days. ' +
+            'You play a match on grass. Put your name down below and we will tell you everything.',
         points: [
             {
                 title: 'Train where the pros train',
@@ -438,7 +454,7 @@ const SIMPLE = {
             {
                 title: 'A bed for 7 nights',
                 body:
-                    'You share an air-conditioned room at the cricket centre. You fly in on Saturday 19 ' +
+                    'You share an air-conditioned room inside the Rajasthan Royals High Performance Centre. You fly in on Saturday 19 ' +
                     'September, train for six days from the 20th to the 25th, and fly home on Saturday ' +
                     '26 September.',
             },

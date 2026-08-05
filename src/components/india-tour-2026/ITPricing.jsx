@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { getTiers, fmtAUD, FLIGHT_ESTIMATE_AUD } from './itCopy';
+import ITCtaBand from './ITCtaBand';
 
 // ---------------------------------------------------------------------------
 // India Tour 2026 — what it costs.
@@ -202,6 +203,15 @@ const ITPricing = ({ copy }) => {
                             </ol>
                         </motion.div>
                     </div>
+                </div>
+
+                <div className="mt-12">
+                    <ITCtaBand
+                        copy={copy}
+                        tone="navy"
+                        heading={c.ctaAfterPricingHeading || copy.hero.ctaAfterPricing.heading}
+                        body={copy.hero.ctaAfterPricing.body}
+                    />
                 </div>
             </div>
         </section>

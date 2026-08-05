@@ -26,8 +26,8 @@ const LC_NAV = [
 const IT_NAV = [
     { label: 'THE CAMP', id: 'about' },
     { label: 'COACHES', id: 'coaching' },
-    { label: 'DAY BY DAY', id: 'itinerary' },
-    { label: 'WHAT IT COSTS', id: 'pricing' },
+    { label: 'ITINERARY', id: 'itinerary' },
+    { label: 'COSTS', id: 'pricing' },
 ];
 
 const HOME_NAV = [
@@ -153,7 +153,7 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
                                     onClick={() => setProgramsOpen(o => !o)}
                                     className="flex items-center gap-1.5 text-sm font-semibold text-white hover:text-pink-200 transition-colors"
                                 >
-                                    PROGRAMS
+                                    <span className="whitespace-nowrap">PROGRAMS</span>
                                     <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${programsOpen ? 'rotate-180' : ''}`} />
                                 </button>
 
@@ -219,7 +219,7 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
                                 <Link
                                     key={link.route}
                                     to={link.route}
-                                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-white hover:text-pink-300 transition-colors"
+                                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-white hover:text-pink-300 transition-colors whitespace-nowrap"
                                 >
                                     {link.label.toUpperCase()}
                                     {link.tag && (
@@ -234,7 +234,7 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
                                     key={link.id}
                                     href={`#${link.id}`}
                                     onClick={(e) => { e.preventDefault(); handleNavClick(link.id); }}
-                                    className="text-sm font-semibold text-white hover:text-pink-300 transition-colors"
+                                    className="text-sm font-semibold text-white hover:text-pink-300 transition-colors whitespace-nowrap"
                                 >
                                     {link.label.toUpperCase()}
                                 </a>

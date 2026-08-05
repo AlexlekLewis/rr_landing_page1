@@ -59,7 +59,7 @@ const IndiaTour2026 = () => {
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero"><ITHero copy={copy} /></div>
                 <div id="about"><ITAbout copy={copy} /></div>
-                <div id="coaching"><ITCoaching /></div>
+                <div id="coaching"><ITCoaching copy={copy} /></div>
                 <div id="itinerary"><ITItinerary copy={copy} /></div>
                 <div id="aspiration"><ITAspiration /></div>
                 <div id="pricing"><ITPricing copy={copy} /></div>

@@ -62,7 +62,7 @@ const ITHero = ({ copy }) => {
             <button
                 onClick={scrollToPricing}
                 data-cta="hero-see-pricing"
-                className="mt-4 text-sm font-bold text-rr-pink hover:text-white uppercase tracking-widest inline-flex items-center gap-2 transition-colors"
+                className="mt-3 -ml-1 px-1 py-3 text-sm font-bold text-rr-pink hover:text-white uppercase tracking-widest inline-flex items-center gap-2 transition-colors"
             >
                 {c.seeIncluded}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,10 +83,10 @@ const ITHero = ({ copy }) => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: 'easeOut' }}
-                className="order-1 inline-flex items-center gap-2 bg-rr-pink/15 border border-rr-pink/40 rounded-full px-4 py-2 mb-4 md:mb-6 self-start"
+                className="order-1 inline-flex items-center gap-2 bg-rr-pink rounded-full px-4 py-2.5 mb-4 md:mb-6 self-start shadow-lg"
             >
-                <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                <span className="text-xs font-bold text-white uppercase tracking-[0.25em]">{c.badge}</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                <span className="text-xs font-black text-white uppercase tracking-[0.2em]">{c.badge}</span>
             </motion.div>
 
             <motion.h1
@@ -218,7 +218,7 @@ const ITHero = ({ copy }) => {
 
             <div className="hidden md:block absolute -top-24 -left-24 w-96 h-96 bg-rr-pink/20 rounded-full blur-[120px] pointer-events-none" />
 
-            <div className="relative px-6 pt-6 pb-14 md:container md:mx-auto md:py-24">{content}</div>
+            <div className="relative px-6 pt-6 pb-14 md:container md:mx-auto md:pt-40 md:pb-24">{content}</div>
         </section>
     );
 };
