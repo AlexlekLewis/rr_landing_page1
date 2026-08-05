@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { getTiers, fmtAUD, FLIGHT_ESTIMATE_AUD, DEPOSIT_AUD } from './itCopy';
+import { getTiers, fmtAUD, FLIGHT_ESTIMATE_AUD } from './itCopy';
 
 // ---------------------------------------------------------------------------
 // India Tour 2026 — what it costs.
@@ -17,7 +17,7 @@ import { getTiers, fmtAUD, FLIGHT_ESTIMATE_AUD, DEPOSIT_AUD } from './itCopy';
 const ITPricing = ({ copy }) => {
     const c = copy.pricing;
     const tiers = getTiers(copy);
-    const steps = c.steps(DEPOSIT_AUD);
+    const steps = c.steps;
 
     return (
         <section className="py-24 bg-slate-50">
