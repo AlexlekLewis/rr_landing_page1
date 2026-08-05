@@ -52,6 +52,19 @@ export const CAMP_PDF = {
     sizeLabel: '26 MB',
 };
 
+// Players the Rajasthan Royals High Performance Centre is documented as having
+// developed. Samson / Jaiswal / Jurel / Parag are sourced to Forbes India's
+// reporting on the centre; Sooryavanshi and Pretorius come from the camp document.
+// Do NOT add a name here without a source — this is public, about real people.
+export const PRODUCED_HERE = [
+    { name: 'Sanju Samson', note: 'India international · Royals captain' },
+    { name: 'Yashasvi Jaiswal', note: 'India Test opener' },
+    { name: 'Dhruv Jurel', note: 'India wicketkeeper-batter' },
+    { name: 'Riyan Parag', note: 'India international' },
+    { name: 'Vaibhav Sooryavanshi', note: 'trains at the centre today' },
+    { name: 'Luhan-dre Pretorius', note: 'Royals top order' },
+];
+
 export const fmtAUD = (n) => `$${Number(n).toLocaleString('en-AU')}`;
 // "$1,500–$2,000" — en dash, both sides signed so neither number reads as a total.
 export const fmtRangeAUD = (r) => `${fmtAUD(r.min)}–${fmtAUD(r.max)}`;
@@ -66,11 +79,11 @@ const STANDARD = {
         kicker: 'Rajasthan Royals Academy',
         dateline: '19–26 September 2026 · Nagpur, India',
         lead:
-            'Six days inside the Rajasthan Royals\' own High Performance Centre in Nagpur — the IPL ' +
-            'franchise\'s private base, where their contracted players prepare. You are coached by the ' +
-            'Royals\' own high performance staff, including the team manager who lives at the centre and ' +
-            'trains Vaibhav Sooryavanshi there year round. No Australian squad has trained here before. ' +
-            'Places are capped, and the touring squad is confirmed by our coaches.',
+            'Six days inside the Rajasthan Royals\' talent factory in Nagpur — the franchise\'s own High ' +
+            'Performance Centre, and the place that built the games of Sanju Samson, Yashasvi Jaiswal, ' +
+            'Dhruv Jurel and Riyan Parag. It is where Vaibhav Sooryavanshi trains today, alongside the ' +
+            'coach who is his legal guardian. Every session is taken by the Royals\' own high performance ' +
+            'staff. No Australian squad has trained here before, and places are capped.',
         costLabel: 'What it costs — per player',
         flights:
             'We book the whole squad on the same flights and send you a group booking link to pay for ' +
@@ -103,20 +116,21 @@ const STANDARD = {
 
     about: {
         eyebrow: 'Why This Is Rare',
-        heading: 'Inside An IPL Club\'s',
-        headingAccent: 'Own Academy',
+        heading: 'The Royals\'',
+        headingAccent: 'Talent Factory',
         lead:
             'Academies run tours. Almost none of them get inside the building an IPL franchise actually ' +
             'uses. This September a Rajasthan Royals Academy Melbourne squad spends seven nights at the ' +
             'Royals\' High Performance Centre in Nagpur — six full coaching days, taken by the club\'s own ' +
             'high performance staff. It is the first time an Australian group has been brought in.',
+        producedHereLabel: 'Built at this centre',
         points: [
             {
-                title: 'The building, not a hire',
+                title: 'A factory with a record',
                 body:
                     'This is the Royals\' own centre, used by their contracted players — not a facility ' +
-                    'booked for the week. It is the centre behind the games of Vaibhav Sooryavanshi and ' +
-                    'Luhan-dre Pretorius.',
+                    'booked for the week. Sanju Samson, Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag all ' +
+                    'rebuilt their games here before playing for India.',
             },
             {
                 title: 'The club\'s coaches, not ours',
@@ -326,10 +340,10 @@ const SIMPLE = {
         kicker: 'Rajasthan Royals Academy',
         dateline: '19–26 September 2026 · Nagpur, India',
         lead:
-            'Six days inside the Rajasthan Royals\' own high performance centre in Nagpur. This is an IPL ' +
-            'club\'s private base — the ground where their own stars train. You are coached by the Royals\' ' +
-            'coaches, not ours: the same people who work with Vaibhav Sooryavanshi every day. No team from ' +
-            'Australia has ever trained here. There are only a few spots and our coaches pick the team.',
+            'Six days inside the Rajasthan Royals\' talent factory in Nagpur. This is the centre that ' +
+            'built Sanju Samson, Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag — and where Vaibhav ' +
+            'Sooryavanshi trains today. The Royals\' own coaches take every session, not ours. No team ' +
+            'from Australia has ever trained here. Only a few spots, and our coaches pick the team.',
         costLabel: 'What it costs',
         flights: 'We book the whole team on the same plane. Then we send you a link to pay for your seat.',
         flightsLead: 'Flights cost extra.',
@@ -358,19 +372,20 @@ const SIMPLE = {
 
     about: {
         eyebrow: 'Why This Is Special',
-        heading: 'Inside An IPL',
-        headingAccent: 'Club\'s Academy',
+        heading: 'The Royals\'',
+        headingAccent: 'Talent Factory',
         lead:
             'Lots of academies run trips to India. Almost none of them get inside the building an IPL ' +
             'club really uses. You stay seven nights at the Rajasthan Royals\' own centre in Nagpur. Six ' +
             'of those days are full training days, taken by the club\'s own coaches. No team from ' +
             'Australia has ever been in. Put your name down below and we will tell you everything.',
+        producedHereLabel: 'Built at this centre',
         points: [
             {
-                title: 'Not a hired ground — theirs',
+                title: 'This place makes India players',
                 body:
-                    'This is the Royals\' own centre, where their real players train. Grass pitches, nets, ' +
-                    'a gym and a pool. It is where the Royals built Vaibhav Sooryavanshi.',
+                    'Sanju Samson, Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag all trained here before ' +
+                    'they played for India. It is the Royals\' own centre, not a ground we hired.',
             },
             {
                 title: 'The club\'s own coaches',

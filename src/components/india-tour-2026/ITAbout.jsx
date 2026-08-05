@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import coachingImg from '../../assets/india-tour-2026/coaching-mentoring.jpg';
+import { PRODUCED_HERE } from './itCopy';
 
 const ITAbout = ({ copy }) => {
   const c = copy.about;
@@ -37,6 +38,30 @@ const ITAbout = ({ copy }) => {
                     >
                         {c.lead}
                     </motion.p>
+
+                    {c.producedHereLabel && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.14 }}
+                            className="mb-8 -mt-2"
+                        >
+                            <p className="text-[11px] font-bold text-rr-pink uppercase tracking-[0.25em] mb-4">
+                                {c.producedHereLabel}
+                            </p>
+                            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+                                {PRODUCED_HERE.map((p) => (
+                                    <li key={p.name} className="flex items-baseline gap-2 border-b border-slate-200 pb-2">
+                                        <span className="text-sm font-black text-rr-dark uppercase tracking-wide">
+                                            {p.name}
+                                        </span>
+                                        <span className="text-xs text-rr-charcoal/70 font-medium">{p.note}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </motion.div>
+                    )}
 
                     <div className="space-y-5">
                         {POINTS.map((p, i) => (
