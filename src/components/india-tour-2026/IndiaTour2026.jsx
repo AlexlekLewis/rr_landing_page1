@@ -12,9 +12,9 @@ import ITReadingToggle from './ITReadingToggle';
 import { getCopy, useReadingMode } from './itCopy';
 
 const META_DESCRIPTION =
-    'India Tour 2026 — a Rajasthan Royals Academy Melbourne squad trains for eight days at the ' +
-    'Rajasthan Royals High Performance Centre in Nagpur, 19–26 September. $2,100 for current academy ' +
-    'players, $2,700 for new players, plus flights. Register your interest.';
+    'High Performance Centre Camp — a Rajasthan Royals Academy Melbourne squad trains at the Royals ' +
+    'High Performance Centre in Nagpur, 19–26 September 2026. Six full days of coaching. $2,100 for ' +
+    'current academy players, $2,700 for players new to us, plus flights. Register your interest.';
 
 // Any ?ref= code is still captured for attribution, but it no longer gates the
 // page — this is a public program page now.
@@ -35,7 +35,7 @@ const IndiaTour2026 = () => {
     // Public and indexable. Sets the title + description; cleans up the
     // description on unmount so it does not leak onto the next route.
     useEffect(() => {
-        document.title = 'India Tour 2026 | Rajasthan Royals Academy Melbourne';
+        document.title = 'High Performance Centre Camp, India 2026 | Rajasthan Royals Academy Melbourne';
         let meta = document.querySelector('meta[name="description"]');
         const created = !meta;
         if (!meta) {

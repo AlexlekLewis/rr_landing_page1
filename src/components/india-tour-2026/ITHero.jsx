@@ -93,10 +93,13 @@ const ITHero = ({ copy }) => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: 'easeOut', delay: 0.05 }}
-                className="order-2 text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white uppercase tracking-tighter leading-none"
+                className="order-2 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none"
             >
-                India Tour
-                <span className="block text-rr-pink">2026</span>
+                <span className="block text-xs md:text-sm font-bold text-white/60 tracking-[0.25em] mb-3">
+                    {c.kicker}
+                </span>
+                {c.h1}
+                <span className="block text-rr-pink">{c.h1Accent}</span>
             </motion.h1>
 
             <motion.div
