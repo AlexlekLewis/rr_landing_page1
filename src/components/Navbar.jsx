@@ -22,6 +22,13 @@ const LC_NAV = [
     { label: 'LOCATIONS', id: 'locations' },
 ];
 
+// India Tour 2026 — on-page section anchors (ids set in IndiaTour2026.jsx)
+const IT_NAV = [
+    { label: 'THE CAMP', id: 'about' },
+    { label: 'COACHES', id: 'coaching' },
+    { label: 'WHAT IT COSTS', id: 'pricing' },
+];
+
 const HOME_NAV = [
     { label: 'About', id: 'about' },
     { label: 'Coaches', id: 'coaches' },
@@ -48,6 +55,7 @@ const PC_NAV = [
 ];
 
 const PROGRAMS_DROPDOWN = [
+    { label: 'India Tour 2026', route: '/india-tour-2026', badge: 'Registering Now · September', badgeColor: 'bg-green-500' },
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Closing Soon', badgeColor: 'bg-orange-500' },
     { label: 'Elite Program', route: '/elite-royals', badge: 'Enrolling Now · Selling Fast', badgeColor: 'bg-orange-500' },
     { label: 'Junior Royals Term 3', route: '/junior-royals', badge: 'Sold Out', badgeColor: 'bg-red-500' },
@@ -70,18 +78,19 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
     const isMickleham = variant === 'mickleham';
     const isCoaches = variant === 'coaches';
     const isPrivateCoaching = variant === 'private-coaching';
+    const isIndiaTour = variant === 'india-tour';
 
-    const navLinks = (isLP3 || isHoliday || isShop || isPowerGame) ? [] : isPrivateCoaching ? PC_NAV : isCoaches ? COACHES_NAV : isMickleham ? MICKLEHAM_NAV : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
-    // Standalone pages (Mickleham, Coaches, Private Coaching) get the full site nav: Home + the Programs dropdown of live pages.
-    const showProgramsDropdown = isHome || isMickleham || isCoaches || isPrivateCoaching;
-    const showHomeLink = isMickleham || isCoaches || isPrivateCoaching;
+    const navLinks = (isLP3 || isHoliday || isShop || isPowerGame) ? [] : isIndiaTour ? IT_NAV : isPrivateCoaching ? PC_NAV : isCoaches ? COACHES_NAV : isMickleham ? MICKLEHAM_NAV : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
+    // Standalone pages (Mickleham, Coaches, Private Coaching, India Tour) get the full site nav: Home + the Programs dropdown of live pages.
+    const showProgramsDropdown = isHome || isMickleham || isCoaches || isPrivateCoaching || isIndiaTour;
+    const showHomeLink = isMickleham || isCoaches || isPrivateCoaching || isIndiaTour;
     const showCTA = !isShop && !isPowerGame;
     const showHamburger = !isShop;
 
     // Junior Royals (isLittleCrickets) is sold out for Term 3 — the CTA points
     // at the sold-out panel, which explains how to register Term 4 interest.
     const ctaLabel = isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : isLittleCrickets ? 'TERM 4 — REGISTER INTEREST' : (isLP2 || isHoliday) ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
-    const ctaTarget = isMickleham ? 'register' : isCoaches ? 'join' : isPrivateCoaching ? 'eoi-form' : isLP2 ? 'checkout' : (isHoliday || isLittleCrickets) ? 'registration-form' : 'apply-form';
+    const ctaTarget = isIndiaTour ? 'register' : isMickleham ? 'register' : isCoaches ? 'join' : isPrivateCoaching ? 'eoi-form' : isLP2 ? 'checkout' : (isHoliday || isLittleCrickets) ? 'registration-form' : 'apply-form';
 
     const scrollToForm = () => {
         if (isHome && onRegisterClick) {

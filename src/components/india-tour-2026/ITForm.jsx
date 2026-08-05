@@ -2,14 +2,10 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
-import { TIERS } from './ITPricing';
+import { getTiers, TIER_PRICES } from './itCopy';
 
 const SOURCE_TAG = 'india-tour-2026-eoi';
 const PROGRAM_LABEL = 'India Tour 2026';
-
-// The two pricing tiers, keyed for lookup. Prices live in ITPricing so the
-// page and the form can never drift apart.
-const TIER_BY_KEY = TIERS.reduce((acc, t) => ({ ...acc, [t.key]: t }), {});
 
 const getUTMParams = () => {
     const params = new URLSearchParams(window.location.search);
@@ -76,7 +72,10 @@ const GuardianFields = ({ idx, data, onChange, errors, required }) => {
     );
 };
 
-const ITForm = ({ referralCode, referralName }) => {
+const ITForm = ({ copy, referralCode, referralName }) => {
+    const fc = copy.form;
+    const TIERS = getTiers(copy);
+    const TIER_BY_KEY = TIERS.reduce((acc, t) => ({ ...acc, [t.key]: t }), {});
     const [form, setForm] = useState({
         player_type: '',
         player_name: '',
@@ -143,10 +142,9 @@ const ITForm = ({ referralCode, referralName }) => {
 
         try {
             const utm = getUTMParams();
-            const tier = TIER_BY_KEY[form.player_type] || null;
             const payload = {
                 player_type: form.player_type || null,
-                program_fee_aud: tier ? tier.price : null,
+                program_fee_aud: TIER_PRICES[form.player_type] ?? null,
                 player_name: form.player_name.trim(),
                 player_dob: form.player_dob || null,
                 player_age: age,
@@ -263,7 +261,7 @@ const ITForm = ({ referralCode, referralName }) => {
                         className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6"
                     >
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Expression of Interest</span>
+                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">{fc.badge}</span>
                     </motion.div>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -272,7 +270,7 @@ const ITForm = ({ referralCode, referralName }) => {
                         transition={{ delay: 0.05 }}
                         className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mb-4"
                     >
-                        Register Your <span className="text-rr-pink">Interest</span>
+{fc.heading} <span className="text-rr-pink">{fc.headingAccent}</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -281,7 +279,7 @@ const ITForm = ({ referralCode, referralName }) => {
                         transition={{ delay: 0.1 }}
                         className="text-white/70 font-medium"
                     >
-                        A few quick details and we'll be in touch with everything you need to know.
+{fc.lead}
                     </motion.p>
                 </div>
 
@@ -295,10 +293,9 @@ const ITForm = ({ referralCode, referralName }) => {
                     <form onSubmit={handleSubmit} noValidate>
                         {/* Which price applies — drives the fee we quote back. */}
                         <div className="mb-8" data-error={!!errors.player_type}>
-                            <h3 className={sectionHeading}>Which Price Applies</h3>
+                            <h3 className={sectionHeading}>{fc.tierHeading}</h3>
                             <p className="text-sm text-rr-charcoal font-medium leading-relaxed -mt-2 mb-5">
-                                Pick the one that describes your player. This is what sets your program fee —
-                                we will confirm it in writing before you pay anything.
+{fc.tierLead}
                             </p>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {TIERS.map((t) => {
@@ -339,7 +336,7 @@ const ITForm = ({ referralCode, referralName }) => {
                                                 </span>
                                             </span>
                                             <span className="block text-xs text-rr-charcoal/70 font-medium mt-1">
-                                                plus flights, booked through our group link
+{fc.tierFootnote}
                                             </span>
                                             <span className="block text-sm text-rr-charcoal font-medium leading-relaxed mt-3">
                                                 {t.who}
