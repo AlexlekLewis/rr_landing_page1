@@ -1,15 +1,17 @@
 // ---------------------------------------------------------------------------
 // India Tour 2026 — page copy, in two reading levels.
 //
-//   standard : the club voice. Full sentences, adult reader.
-//   simple   : written so a 10-year-old can read it and a busy parent can scan
+//   simple   : *** THE LIVE COPY — Alex picked this one, 5 Aug 2026. ***
+//              Written so a 10-year-old can read it and a busy parent can scan
 //              it in about twenty seconds. Short sentences, one idea each,
 //              common words, the point first. Same facts, same value — only
 //              the language changes. Nothing is dumbed down or dropped.
+//   standard : the club voice. Full sentences, adult reader. Kept for
+//              comparison and in case we want it back.
 //
-// Switch with ?read=simple / ?read=standard on the URL. When either is present
-// a small toggle appears so the two can be compared side by side; the public
-// URL with no parameter always gets `standard`.
+// The public URL with no parameter gets `simple`. ?read=standard shows the club
+// voice; ?read=simple forces simple. When either parameter is present a small
+// toggle appears so the two can still be compared side by side.
 //
 // PRICES LIVE HERE ONCE. Both variants and the form read them, so a price can
 // never be updated in one place and stale in another.
@@ -245,7 +247,7 @@ const SIMPLE = {
         flights: 'We book the whole team on the same plane. Then we send you a link to pay for your seat.',
         flightsLead: 'Flights cost extra.',
         seeIncluded: 'See what you get',
-        cta: 'Sign Up Your Interest',
+        cta: 'Put My Name Down',
     },
 
     about: {
@@ -253,9 +255,9 @@ const SIMPLE = {
         heading: 'Eight Days',
         headingAccent: 'In India',
         lead:
-            'This September, a team from our academy flies to India. You live at a real cricket centre. ' +
-            'You train there every day. You play a match on grass. Sign up below and we will tell you ' +
-            'everything.',
+            'This September, a team from our academy flies to India. You live at the Rajasthan Royals ' +
+            'cricket centre in Nagpur. You train there every day. You play a match on grass. Put your ' +
+            'name down below and we will tell you everything.',
         points: [
             {
                 title: 'Train where the pros train',
@@ -278,7 +280,7 @@ const SIMPLE = {
         headingAccent: "Here's Yours.",
         intro:
             'There are two prices. Which one you pay depends on one thing: do you already train with us? ' +
-            'If you do, you pay less. That is because you already pay us during the year.',
+            'If you do, you pay less, because you already pay for our programs during the year.',
         introEmphasis: 'Both groups get the same camp',
         introTail: '— same rooms, same coaches, same training. Nobody misses out on anything.',
         notSure: 'Not sure which one you are? Just tell us in the form. We will check it for you.',
@@ -368,7 +370,7 @@ const SIMPLE = {
             'The flight — see above; we book the group together',
             'A passport and an India visa — everyone needs both',
             'Travel insurance — you must have this before you fly',
-            'Any shots or doctor costs',
+            'Any vaccinations or doctor costs',
             'Spending money and gifts',
             'Extra washing past the six items',
         ],
@@ -383,10 +385,12 @@ const SIMPLE = {
     },
 
     form: {
-        badge: 'Sign Up',
-        heading: 'Sign Up Your',
-        headingAccent: 'Interest',
-        lead: 'Fill this in and we will be in touch with everything you need to know.',
+        badge: 'Enquiry · No Payment Today',
+        heading: 'Put Your Name',
+        headingAccent: 'Down',
+        lead:
+            'Fill this in and we will get back to you with your price and everything else you need to ' +
+            'know. You are not paying or promising anything yet.',
         tierHeading: 'Which Price Is Yours',
         tierLead: 'Pick the one that is you. This sets your price. We will check it and confirm it.',
         tierFootnote: 'plus the flight, booked through our group link',
@@ -399,9 +403,9 @@ export const getCopy = (simple) => (simple ? SIMPLE : STANDARD);
 
 /**
  * Reading-level mode from the URL.
- *   ?read=simple   → simple copy
- *   ?read=standard → standard copy
- *   (absent)       → standard, and no toggle is shown to the public
+ *   (absent)       → SIMPLE (the live copy), and no toggle is shown to the public
+ *   ?read=simple   → simple copy, with the review toggle
+ *   ?read=standard → club-voice copy, with the review toggle
  * Returns { simple, showToggle, setMode }.
  */
 export const useReadingMode = () => {
@@ -427,7 +431,8 @@ export const useReadingMode = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    return { simple: mode === 'simple', showToggle: mode !== null, setMode: apply };
+    // Simple is the default: only an explicit ?read=standard opts into the club voice.
+    return { simple: mode !== 'standard', showToggle: mode !== null, setMode: apply };
 };
 
 /** Tier list for rendering, merging the shared prices with the chosen variant. */
