@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import heroImg from '../../assets/india-tour-2026/hero-coaching.jpg';
-import { getTiers, fmtAUD } from './itCopy';
+import { getTiers, fmtAUD, FLIGHT_ESTIMATE_AUD } from './itCopy';
 
 const scrollToRegister = () =>
     document.getElementById('register')?.scrollIntoView({ behavior: 'smooth' });
@@ -52,6 +52,9 @@ const ITHero = ({ copy }) => {
 
             <p className="text-sm text-white/70 font-medium leading-relaxed mt-5">
                 <strong className="text-white">{c.flightsLead}</strong> {c.flights}
+                {FLIGHT_ESTIMATE_AUD && c.flightsEstimate && (
+                    <> <span className="text-white">{c.flightsEstimate(FLIGHT_ESTIMATE_AUD)}</span></>
+                )}
             </p>
 
             <button
