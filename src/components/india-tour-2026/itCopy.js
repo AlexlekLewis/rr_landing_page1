@@ -24,11 +24,16 @@ export const TIER_PRICES = {
     external: 2700,
 };
 
-// Indicative return airfare per player, AUD (e.g. 1450). Null → the page says
-// we will confirm it, rather than quoting a number nobody has agreed to.
+// Rough return airfare per player, in dollars — e.g. change null to 1450 and
+// the page will say "budget roughly $1,450". While it is null the page instead
+// says we will confirm the airfare when the group flight link goes out, so we
+// never quote a flight price nobody has agreed to.
 export const FLIGHT_ESTIMATE_AUD = null;
-// Deposit that confirms a place, AUD incl GST (e.g. 500).
-export const DEPOSIT_AUD = null;
+
+// NOTE: there is deliberately no deposit here. Players pay their high
+// performance costs ($2,100 / $2,700) IN FULL UP FRONT once a place is
+// confirmed. Flights are paid separately via the group booking link when that
+// is sorted. Do not reintroduce deposit language on this page.
 
 export const fmtAUD = (n) => `$${Number(n).toLocaleString('en-AU')}`;
 
@@ -116,8 +121,9 @@ const STANDARD = {
             },
         },
         priceNote:
-            'That is the total program fee — there is no tax or booking fee added on top. Flights are ' +
-            'separate and are explained below.',
+            'That is the total program fee — there is no tax or booking fee added on top. It is paid in ' +
+            'full, up front, once your player\'s place is confirmed. Flights are separate and are ' +
+            'explained below.',
         perPlayer: 'per player, including GST',
         thisIsYou: 'This is you if…',
 
@@ -202,14 +208,12 @@ const STANDARD = {
             'Extra laundry beyond the six items included',
         ],
 
-        howHeading: 'How paying works',
-        steps: (deposit) => [
-            'Register your interest using the form below. It costs nothing and does not commit you to the tour.',
-            'We come back to you in writing with your confirmed price, the payment dates, and the group flight booking link.',
-            deposit
-                ? `A ${fmtAUD(deposit)} deposit confirms your player's place in the touring squad, and comes off the program fee — it is not an extra charge.`
-                : "A deposit confirms your player's place in the touring squad. It comes off the program fee — it is not an extra charge — and we will tell you the amount and the due date in that same email.",
-            'The balance of the program fee is due before departure, on the dates set out in your confirmation.',
+        howHeading: 'What happens next',
+        steps: [
+            'Register your interest using the form below. There is nothing to pay today — at this stage we are only collecting enquiries, and registering does not commit you to the tour.',
+            'We come back to you in writing to confirm which of the two prices applies to your player, and whether they have a place in the touring squad.',
+            'Once the place is confirmed, the program fee is paid in full, up front. That single payment covers everything at the high performance centre listed above.',
+            'Flights are handled separately. As soon as the squad flights are locked in we send you the group booking link, and you pay for your own player\'s seat then.',
         ],
     },
 
@@ -292,7 +296,9 @@ const SIMPLE = {
                 who: 'You do not train with us yet. You join the team for this trip and train with our players.',
             },
         },
-        priceNote: 'This is the full price. Nothing is added on top. Flights cost extra — see below.',
+        priceNote:
+            'This is the whole price. Nothing is added on top. You pay it all at once, up front, when ' +
+            'you get a spot. The flight costs extra — see below.',
         perPlayer: 'per player, GST included',
         thisIsYou: 'This is you if…',
 
@@ -367,14 +373,12 @@ const SIMPLE = {
             'Extra washing past the six items',
         ],
 
-        howHeading: 'How you pay',
-        steps: (deposit) => [
-            'Fill in the form below. It is free. It does not lock you in.',
-            'We write back with your price, the dates you pay, and the flight link.',
-            deposit
-                ? `You pay ${fmtAUD(deposit)} to hold your spot. It comes off the price — it is not extra.`
-                : 'You pay a deposit to hold your spot. It comes off the price — it is not extra. We will tell you how much and when.',
-            'You pay the rest before you fly. We give you the dates.',
+        howHeading: 'What happens next',
+        steps: [
+            'Fill in the form below. You pay nothing today. Right now we are just taking names.',
+            'We write back and tell you your price, and if you have a spot.',
+            'When you get a spot, you pay the full price up front. That one payment covers everything at the camp.',
+            'The flight is separate. When we have booked the team flights, we send you a link. You pay for your seat then.',
         ],
     },
 
