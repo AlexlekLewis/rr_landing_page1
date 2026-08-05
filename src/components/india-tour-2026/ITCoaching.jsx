@@ -9,8 +9,9 @@ import ITCtaBand from './ITCtaBand';
 // the document: Sid Lahiri as "Head of International Player Development" and Romi
 // Bhinder as "Head of High-Performance Operations". Both are corrected below, and
 // the three missing coaches — Faiz Fazal, Somi Bhinder and Dr Neeta Adhau — are
-// added. We only hold photographs for Sid and Romi; the rest render a monogram
-// rather than a broken image or a stock face.
+// added. Headshots for Faiz, Somi and Dr Adhau were lifted out of the camp
+// document itself (cropped from the coaching-panel page), so all five now have a
+// face. The monogram fallback stays for any future coach added without a photo.
 // ---------------------------------------------------------------------------
 
 const COACHES = [
@@ -38,6 +39,7 @@ const COACHES = [
     {
         name: 'Faiz Fazal',
         role: 'Batting & Leadership',
+        image: '/assets/rra/faiz-fazal.jpg',
         bio:
             'A former India international and a Ranji Trophy-winning captain. He brings a long ' +
             'first-class career to the panel, with batting and leadership his focus.',
@@ -45,6 +47,7 @@ const COACHES = [
     {
         name: 'Somi Bhinder',
         role: 'Resident Fast Bowling Coach',
+        image: '/assets/rra/somi-bhinder.jpg',
         bio:
             'A former fast bowler and coach, Somi is the centre\'s resident fast bowling coach — there ' +
             'every day, not flown in for the week.',
@@ -52,6 +55,7 @@ const COACHES = [
     {
         name: 'Dr Neeta Adhau',
         role: 'Performance Psychology',
+        image: '/assets/rra/neeta-adhau.jpg',
         bio:
             'A performance psychology specialist focused on emotional resilience and athlete ' +
             'development — a core pillar of the High Performance Centre, not an add-on.',
