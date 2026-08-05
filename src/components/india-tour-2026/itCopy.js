@@ -37,6 +37,12 @@ export const FLIGHT_ESTIMATE_AUD = { min: 1500, max: 2000 };
 // confirmed. Flights are paid separately via the group booking link when that
 // is sorted. Do not reintroduce deposit language on this page.
 
+// Registrations close seven days after going live (Alex, 5 Aug 2026: "we're gonna
+// close it in seven days"). Melbourne time, end of day. CHANGE THIS ONE LINE to
+// move or extend the deadline — the hero clock, the form and the closed state all
+// read from it.
+export const REGISTRATIONS_CLOSE_AT = '2026-08-12T23:59:00+10:00';
+
 export const fmtAUD = (n) => `$${Number(n).toLocaleString('en-AU')}`;
 // "$1,500–$2,000" — en dash, both sides signed so neither number reads as a total.
 export const fmtRangeAUD = (r) => `${fmtAUD(r.min)}–${fmtAUD(r.max)}`;
@@ -61,6 +67,15 @@ const STANDARD = {
         flightsEstimate: (r) => `Allow roughly ${fmtRangeAUD(r)} per player on top for the return airfare.`,
         seeIncluded: "See exactly what's included",
         cta: 'Register Your Interest',
+        countdownLabel: 'Registrations close in',
+        countdownUnits: { days: 'Days', hours: 'Hrs', minutes: 'Mins', seconds: 'Secs' },
+        countdownNote:
+            'Once the clock runs out we close the list and our coaches pick the touring squad from ' +
+            'everyone who registered.',
+        countdownClosed: 'Registrations for the India Tour 2026 have now closed.',
+        countdownClosedNote:
+            'If you still want to be considered, email info@rramelbourne.com and we will tell you ' +
+            'whether any places are left.',
     },
 
     about: {
@@ -254,6 +269,14 @@ const SIMPLE = {
         flightsEstimate: (r) => `Plan for about ${fmtRangeAUD(r)} more for the return flight.`,
         seeIncluded: 'See what you get',
         cta: 'Put My Name Down',
+        countdownLabel: 'Sign-ups close in',
+        countdownUnits: { days: 'Days', hours: 'Hrs', minutes: 'Mins', seconds: 'Secs' },
+        countdownNote:
+            'When the clock hits zero we shut the list. Then our coaches pick the team from everyone ' +
+            'who signed up.',
+        countdownClosed: 'Sign-ups are now closed.',
+        countdownClosedNote:
+            'You can still email info@rramelbourne.com to ask if there are any spots left.',
     },
 
     about: {

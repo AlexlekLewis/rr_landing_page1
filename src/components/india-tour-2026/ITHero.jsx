@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import heroImg from '../../assets/india-tour-2026/hero-coaching.jpg';
 import { getTiers, fmtAUD, FLIGHT_ESTIMATE_AUD } from './itCopy';
+import ITCountdown from './ITCountdown';
 
 const scrollToRegister = () =>
     document.getElementById('register')?.scrollIntoView({ behavior: 'smooth' });
@@ -11,13 +12,14 @@ const scrollToPricing = () =>
 
 // The source is a 1280x720 video frame, so how much we stretch it decides how
 // soft it looks. On phones we DON'T use it as a full-bleed background behind
-// ~1200px of copy (that meant blowing 720px up to ~3600 device px). Instead the
-// mobile hero is a contained 16:10 block: a 375pt-wide phone at 3x needs about
-// 1125x703 device px, which the source covers almost 1:1.
+// ~1200px of copy (that meant blowing 720px up to ~3600 device px, hence the
+// blur). Instead the mobile hero is a contained 4:3 block sitting below the
+// fixed navbar, so the source is barely scaled at all.
 //
 // object-position keeps the demonstrating coach in the pink Royals top — the
-// subject of the shot, sitting about a third of the way across — centred once
-// the frame is cropped narrower than 16:9.
+// subject of the shot, about a third of the way across — in frame once the
+// image is cropped. The 4:3 box IS narrower than the 16:9 source, so this
+// crops the sides and shows the full height of the photo: heads included.
 const FOCAL = '34% 42%';
 
 const HERO_IMG_ALT =
@@ -109,11 +111,20 @@ const ITHero = ({ copy }) => {
                 </span>
             </motion.div>
 
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
+                className="order-4 mt-6"
+            >
+                <ITCountdown copy={copy} />
+            </motion.div>
+
             <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: 'easeOut', delay: 0.25 }}
-                className="order-5 md:order-4 text-base md:text-xl text-white/80 font-medium leading-relaxed mt-5 max-w-xl"
+                className="order-6 md:order-5 text-base md:text-xl text-white/80 font-medium leading-relaxed mt-5 max-w-xl"
             >
                 {c.lead}
             </motion.p>
@@ -124,7 +135,7 @@ const ITHero = ({ copy }) => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: 'easeOut', delay: 0.32 }}
-                className="order-4 md:order-5 mt-6 md:mt-7 pt-5 md:pt-6 border-t border-white/20 max-w-xl"
+                className="order-5 md:order-6 mt-6 md:mt-7 pt-5 md:pt-6 border-t border-white/20 max-w-xl"
             >
                 {priceBand}
             </motion.div>
@@ -133,7 +144,7 @@ const ITHero = ({ copy }) => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: 'easeOut', delay: 0.4 }}
-                className="order-6 mt-7 md:mt-8 self-start w-full sm:w-auto"
+                className="order-7 mt-7 md:mt-8 self-start w-full sm:w-auto"
             >
                 <button
                     onClick={scrollToRegister}
@@ -156,7 +167,13 @@ const ITHero = ({ copy }) => {
     // readers even when one copy is display:none.
     return (
         <section className="relative bg-rr-dark overflow-hidden md:flex md:items-center md:min-h-[88vh]">
-            <div className="relative w-full aspect-[16/10] overflow-hidden md:absolute md:inset-0 md:w-auto md:h-full md:aspect-auto">
+            {/* The site navbar is position:fixed and 80px tall. This block starts at
+                top:0, so the nav was covering the top 80px of a ~258px image — which is
+                exactly where the players' heads are, leaving only legs visible. Push the
+                image down clear of the nav on phones (mt-20 = the nav's 80px) and give it
+                a little more height so the full bodies have room. Desktop is unaffected:
+                there the image is a full-bleed background and the nav only overlaps sky. */}
+            <div className="relative w-full mt-20 aspect-[4/3] overflow-hidden md:mt-0 md:absolute md:inset-0 md:w-auto md:h-full md:aspect-auto">
                 <img
                     src={heroImg}
                     alt={HERO_IMG_ALT}
