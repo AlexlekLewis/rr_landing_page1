@@ -157,6 +157,14 @@
             "destination": "/api/gone"
         },
         {
+            "source": "/india-tour-2026/deposit",
+            "destination": "/api/gone"
+        },
+        {
+            "source": "/india-tour-2026/deposit/success",
+            "destination": "/api/gone"
+        },
+        {
             "source": "/(.*)",
             "destination": "/index.html"
         }

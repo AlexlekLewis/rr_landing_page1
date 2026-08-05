@@ -23,8 +23,9 @@ import { WILLIAMSTOWN_OPEN_DAY, HALLAM_OPEN_DAY, MICKLEHAM_ELITE, MICKLEHAM_JUNI
 import EntryPage from './components/open-day/EntryPage';
 import { MICKLEHAM_ENTRY, WILLIAMSTOWN_ENTRY, HALLAM_ENTRY } from './components/open-day/entryConfigs';
 import IndiaTour2026 from './components/india-tour-2026/IndiaTour2026';
-import IndiaTourDeposit from './components/india-tour-deposit/IndiaTourDeposit';
-import DepositSuccess from './components/india-tour-deposit/DepositSuccess';
+// India Tour deposit pages retired 2026-08-05 — routes now 410 via api/gone.js.
+// Components left in src/components/india-tour-deposit/ in case the flow is ever
+// revived, but they are no longer imported or reachable.
 import HomePage from './components/home-page/HomePage';
 import InductionPage from './components/induction/InductionPage';
 import CoachesDay from './components/coaches-day/CoachesDay';
@@ -230,11 +231,15 @@ function App() {
         <Route path="/PGP2026/fullride" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameFullRide /></React.Suspense>} />
         <Route path="/PGP2026/playground" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGamePlayground /></React.Suspense>} />
         <Route path="/PGP2026/admin" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameSquadsAdmin /></React.Suspense>} />
-        {/* India Tour 2026 — PRIVATE, invite-only EOI. Not in nav; gated by a referral code (?ref=). */}
+        {/* India Tour 2026 — PUBLIC program page, in the Programs nav. Any ?ref= is captured
+            for attribution only; it no longer gates access. */}
         <Route path="/india-tour-2026" element={<IndiaTour2026 />} />
-        {/* India Tour 2026 — PRIVATE deposit ($2,000 + GST = $2,200). Not in nav; gated by ?key=. */}
-        <Route path="/india-tour-2026/deposit" element={<IndiaTourDeposit />} />
-        <Route path="/india-tour-2026/deposit/success" element={<DepositSuccess />} />
+        {/* India Tour 2026 deposit — RETIRED 2026-08-05 (Alex: "that page is redundant").
+            It charged a $2,200 "deposit", but the tour is not sold that way: the high performance
+            cost ($2,100 / $2,700) is paid IN FULL UP FRONT once a place is confirmed, and flights
+            are paid separately via the group booking link. /india-tour-2026/deposit and
+            .../deposit/success now return HTTP 410 Gone via api/gone.js — see vercel.json rewrites.
+            The india_tour_2026_deposits table and its data are deliberately KEPT. */}
         {/* Academy Shop — hidden from nav. Share URL directly with participants only. */}
         <Route path="/academy-shop" element={<AcademyShop />} />
         <Route path="/academy-shop/success" element={<ShopSuccess />} />
