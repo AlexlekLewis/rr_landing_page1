@@ -26,11 +26,11 @@ export const TIER_PRICES = {
     external: 2700,
 };
 
-// Rough return airfare per player, in dollars — e.g. change null to 1450 and
-// the page will say "budget roughly $1,450". While it is null the page instead
-// says we will confirm the airfare when the group flight link goes out, so we
-// never quote a flight price nobody has agreed to.
-export const FLIGHT_ESTIMATE_AUD = null;
+// Rough return airfare per player, as a RANGE (Alex, 5 Aug 2026: "between
+// fifteen hundred and two thousand"). Set to null to go back to the page saying
+// it will be confirmed later. It is always presented as an estimate, never as a
+// quote — the real figure lands with the group booking link.
+export const FLIGHT_ESTIMATE_AUD = { min: 1500, max: 2000 };
 
 // NOTE: there is deliberately no deposit here. Players pay their high
 // performance costs ($2,100 / $2,700) IN FULL UP FRONT once a place is
@@ -38,6 +38,8 @@ export const FLIGHT_ESTIMATE_AUD = null;
 // is sorted. Do not reintroduce deposit language on this page.
 
 export const fmtAUD = (n) => `$${Number(n).toLocaleString('en-AU')}`;
+// "$1,500–$2,000" — en dash, both sides signed so neither number reads as a total.
+export const fmtRangeAUD = (r) => `${fmtAUD(r.min)}–${fmtAUD(r.max)}`;
 
 // --- standard -------------------------------------------------------------
 
@@ -55,6 +57,8 @@ const STANDARD = {
             'We book the whole squad on the same flights and send you a group booking link to pay for ' +
             'your own player\'s seat.',
         flightsLead: 'Flights are not included in either price.',
+        // Rendered only when FLIGHT_ESTIMATE_AUD is set.
+        flightsEstimate: (r) => `Allow roughly ${fmtRangeAUD(r)} per player on top for the return airfare.`,
         seeIncluded: "See exactly what's included",
         cta: 'Register Your Interest',
     },
@@ -139,9 +143,10 @@ const STANDARD = {
         flightsBody2Unknown:
             'We will confirm the exact return airfare, per player, at the same time as we send the group ' +
             'booking link — so you will have the real number in front of you before you commit to it.',
-        flightsBody2Known: (n) =>
-            `Budget roughly ${fmtAUD(n)} per player for the return airfare Melbourne–Nagpur. We will ` +
-            'confirm the exact figure when the group booking link goes out.',
+        flightsBody2Known: (r) =>
+            `As a guide, budget ${fmtRangeAUD(r)} per player for the return airfare between Melbourne ` +
+            'and Nagpur. That is an estimate, not a quote — airfares move, and we confirm the exact ' +
+            'figure when the group booking link goes out.',
         flightsBody3:
             'So your total outlay for the tour is the program fee above plus the airfare, and then the ' +
             'few personal items listed under "what it does not cover". There is nothing else coming from us.',
@@ -246,6 +251,7 @@ const SIMPLE = {
         costLabel: 'What it costs',
         flights: 'We book the whole team on the same plane. Then we send you a link to pay for your seat.',
         flightsLead: 'Flights cost extra.',
+        flightsEstimate: (r) => `Plan for about ${fmtRangeAUD(r)} more for the return flight.`,
         seeIncluded: 'See what you get',
         cta: 'Put My Name Down',
     },
@@ -313,9 +319,9 @@ const SIMPLE = {
         flightsBody2Unknown:
             'We will tell you the exact price of the flight when we send you the link. You will see the ' +
             'real number before you say yes.',
-        flightsBody2Known: (n) =>
-            `Plan for about ${fmtAUD(n)} for the return flight. We will confirm the exact price when we ` +
-            'send the link.',
+        flightsBody2Known: (r) =>
+            `Plan for about ${fmtRangeAUD(r)} for the return flight. That is a guess, not a final price ` +
+            '— flights go up and down. We will tell you the real price when we send you the link.',
         flightsBody3:
             'So you pay two things: the price above, and the flight. Plus a few small things on the list ' +
             'below. That is all.',
