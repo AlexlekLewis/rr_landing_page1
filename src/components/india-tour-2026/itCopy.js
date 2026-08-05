@@ -61,7 +61,10 @@ export const fmtRangeAUD = (r) => `${fmtAUD(r.min)}–${fmtAUD(r.max)}`;
 const STANDARD = {
     hero: {
         badge: 'Registrations Open · Limited Places',
-        dateline: '20–26 September · Nagpur',
+        h1: 'High Performance',
+        h1Accent: 'Centre Camp',
+        kicker: 'Rajasthan Royals Academy Melbourne',
+        dateline: '19–26 September 2026 · Nagpur, India',
         lead:
             'A Rajasthan Royals Academy Melbourne squad, living and training at the Rajasthan Royals ' +
             'High Performance Centre in Nagpur — six full days of coaching and a practice match, at the ' +
@@ -182,11 +185,11 @@ const STANDARD = {
         includedNote: 'Identical for both prices. Once you are in Nagpur, everything below is already paid for.',
         included: [
             {
-                title: 'A bed inside the Royals HPC',
+                title: 'Seven nights inside the Royals HPC',
                 body:
                     'Shared air-conditioned rooms inside the Rajasthan Royals High Performance Centre in ' +
-                    'Nagpur, for the whole camp. The camp runs 20–26 September 2026; we confirm your exact ' +
-                    'arrival and departure days, and the flights that match them, with your offer.',
+                    'Nagpur. You fly in on Saturday 19 September, train across six full camp days from the ' +
+                    '20th to the 25th, and fly home on Saturday 26 September 2026.',
             },
             {
                 title: 'All meals, every day',
@@ -274,7 +277,10 @@ const STANDARD = {
 const SIMPLE = {
     hero: {
         badge: 'Open Now · Only A Few Spots',
-        dateline: '20–26 September · Nagpur, India',
+        h1: 'High Performance',
+        h1Accent: 'Centre Camp',
+        kicker: 'Rajasthan Royals Academy Melbourne',
+        dateline: '19–26 September 2026 · Nagpur, India',
         lead:
             'Six days of coaching in India. You live and train at the Rajasthan Royals cricket centre in ' +
             'Nagpur — the same place their stars train, including Vaibhav Sooryavanshi. You play one real ' +
@@ -374,11 +380,11 @@ const SIMPLE = {
         includedNote: 'The same for both prices. Once you land, all of this is already paid for.',
         included: [
             {
-                title: 'A bed at the centre',
+                title: 'A bed for 7 nights',
                 body:
-                    'You share an air-conditioned room at the cricket centre for the whole camp. The camp ' +
-                    'runs 20–26 September. We will tell you the exact days you fly in and out when we send ' +
-                    'you your offer.',
+                    'You share an air-conditioned room at the cricket centre. You fly in on Saturday 19 ' +
+                    'September, train for six days from the 20th to the 25th, and fly home on Saturday ' +
+                    '26 September.',
             },
             {
                 title: 'All your food',
