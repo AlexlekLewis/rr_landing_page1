@@ -2,9 +2,14 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
+import { TIERS } from './ITPricing';
 
 const SOURCE_TAG = 'india-tour-2026-eoi';
 const PROGRAM_LABEL = 'India Tour 2026';
+
+// The two pricing tiers, keyed for lookup. Prices live in ITPricing so the
+// page and the form can never drift apart.
+const TIER_BY_KEY = TIERS.reduce((acc, t) => ({ ...acc, [t.key]: t }), {});
 
 const getUTMParams = () => {
     const params = new URLSearchParams(window.location.search);
@@ -73,6 +78,7 @@ const GuardianFields = ({ idx, data, onChange, errors, required }) => {
 
 const ITForm = ({ referralCode, referralName }) => {
     const [form, setForm] = useState({
+        player_type: '',
         player_name: '',
         player_dob: '',
         current_club: '',
@@ -102,6 +108,7 @@ const ITForm = ({ referralCode, referralName }) => {
 
     const validate = () => {
         const next = {};
+        if (!form.player_type) next.player_type = 'Please tell us which one describes your player.';
         if (!form.player_name.trim()) next.player_name = "Player's full name is required.";
         if (!form.player_dob || age === null) next.player_dob = 'Please enter a valid date of birth.';
         if (!form.current_club.trim()) next.current_club = 'Current club is required.';
@@ -136,7 +143,10 @@ const ITForm = ({ referralCode, referralName }) => {
 
         try {
             const utm = getUTMParams();
+            const tier = TIER_BY_KEY[form.player_type] || null;
             const payload = {
+                player_type: form.player_type || null,
+                program_fee_aud: tier ? tier.price : null,
                 player_name: form.player_name.trim(),
                 player_dob: form.player_dob || null,
                 player_age: age,
@@ -224,6 +234,18 @@ const ITForm = ({ referralCode, referralName }) => {
                             India Tour 2026 has been registered. Our team will be in touch with more
                             information as the touring squad takes shape.
                         </p>
+                        {TIER_BY_KEY[form.player_type] && (
+                            <p className="text-rr-charcoal font-medium leading-relaxed mt-4">
+                                You told us your player is an{' '}
+                                <strong>{TIER_BY_KEY[form.player_type].heading}</strong>, so the program fee
+                                we will quote is{' '}
+                                <strong>
+                                    ${TIER_BY_KEY[form.player_type].price.toLocaleString('en-AU')} including GST
+                                </strong>
+                                , plus flights. We will confirm that in writing — you have not been charged
+                                anything today.
+                            </p>
+                        )}
                     </motion.div>
                 </div>
             </section>
@@ -271,6 +293,64 @@ const ITForm = ({ referralCode, referralName }) => {
                     className="bg-white rounded-2xl p-8 md:p-10"
                 >
                     <form onSubmit={handleSubmit} noValidate>
+                        {/* Which price applies — drives the fee we quote back. */}
+                        <div className="mb-8" data-error={!!errors.player_type}>
+                            <h3 className={sectionHeading}>Which Price Applies</h3>
+                            <p className="text-sm text-rr-charcoal font-medium leading-relaxed -mt-2 mb-5">
+                                Pick the one that describes your player. This is what sets your program fee —
+                                we will confirm it in writing before you pay anything.
+                            </p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {TIERS.map((t) => {
+                                    const selected = form.player_type === t.key;
+                                    return (
+                                        <button
+                                            type="button"
+                                            key={t.key}
+                                            onClick={() => {
+                                                setForm(prev => ({ ...prev, player_type: t.key }));
+                                                if (errors.player_type) setErrors(prev => ({ ...prev, player_type: undefined }));
+                                            }}
+                                            aria-pressed={selected}
+                                            className={`text-left rounded-xl border-2 p-5 transition-all ${
+                                                selected
+                                                    ? 'border-rr-pink bg-rr-pink/5'
+                                                    : errors.player_type
+                                                        ? 'border-red-300 bg-slate-50 hover:border-rr-pink/60'
+                                                        : 'border-slate-200 bg-slate-50 hover:border-rr-pink/60'
+                                            }`}
+                                        >
+                                            <span className="flex items-center gap-3">
+                                                <span
+                                                    className={`w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center ${
+                                                        selected ? 'border-rr-pink' : 'border-slate-300'
+                                                    }`}
+                                                >
+                                                    {selected && <span className="w-2.5 h-2.5 rounded-full bg-rr-pink" />}
+                                                </span>
+                                                <span className="text-sm font-black text-rr-dark uppercase tracking-wide">
+                                                    {t.heading}
+                                                </span>
+                                            </span>
+                                            <span className="block text-2xl font-black text-rr-dark mt-3">
+                                                ${t.price.toLocaleString('en-AU')}
+                                                <span className="text-xs font-bold text-rr-charcoal/70 uppercase tracking-wide ml-2">
+                                                    incl GST
+                                                </span>
+                                            </span>
+                                            <span className="block text-xs text-rr-charcoal/70 font-medium mt-1">
+                                                plus flights, booked through our group link
+                                            </span>
+                                            <span className="block text-sm text-rr-charcoal font-medium leading-relaxed mt-3">
+                                                {t.who}
+                                            </span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                            {errors.player_type && <p className="text-red-500 text-xs font-medium mt-2">{errors.player_type}</p>}
+                        </div>
+
                         {/* Player details */}
                         <div className="mb-8">
                             <h3 className={sectionHeading}>Player Details</h3>

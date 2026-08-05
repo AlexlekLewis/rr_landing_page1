@@ -27,13 +27,24 @@ var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 var SYNC_TOKEN    = 'it26_976803fcea81a687074b255fcb09402c62619d1f9711c51e';
 
 // Canonical column order — matches the sheet header row and the DB columns.
+//
+// IMPORTANT: only ever ADD to the end of this list, never insert mid-list.
+// Dedupe reads the 'id' column by its position, so moving 'id' would make every
+// existing sheet row look new and duplicate the whole table on the next run.
+// That is why player_type/program_fee_aud sit after 'id' rather than in a
+// prettier spot next to player_name.
 var COLS = [
   'created_at', 'player_name', 'player_dob', 'player_age', 'current_club',
   'highest_level', 'primary_skill', 'secondary_skill', 'is_over_18', 'player_email', 'player_phone',
   'guardian1_name', 'guardian1_relationship', 'guardian1_email', 'guardian1_phone',
   'guardian2_name', 'guardian2_relationship', 'guardian2_email', 'guardian2_phone',
   'consent_contact', 'referral_name', 'referral_code',
-  'utm_source', 'utm_medium', 'utm_campaign', 'page_referrer', 'id'
+  'utm_source', 'utm_medium', 'utm_campaign', 'page_referrer', 'id',
+  // Two-tier pricing (added 2026-08-05). player_type is 'royals_program'
+  // ($2,100 incl GST) or 'external' ($2,700 incl GST); both exclude flights.
+  // Blank on the rows registered before the tiers existed — classify those by
+  // hand. Self-declared on the form, so verify before invoicing.
+  'player_type', 'program_fee_aud'
 ];
 
 /** Pulls all EOIs and appends any new ones. Returns count appended. */
