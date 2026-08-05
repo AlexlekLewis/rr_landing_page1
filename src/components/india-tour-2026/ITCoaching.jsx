@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import ITCtaBand from './ITCtaBand';
 
 // ---------------------------------------------------------------------------
 // The resident coaching team, taken from the camp document (source of truth).
@@ -60,7 +61,7 @@ const COACHES = [
 const initials = (name) =>
     name.replace(/^Dr\s+/, '').split(' ').map((w) => w[0]).join('').slice(0, 2);
 
-const ITCoaching = () => (
+const ITCoaching = ({ copy }) => (
     <section className="py-24 bg-slate-50">
         <div className="max-w-6xl mx-auto px-6">
             <div className="text-center max-w-3xl mx-auto mb-14">
@@ -131,6 +132,15 @@ const ITCoaching = () => (
                         )}
                     </motion.div>
                 ))}
+            </div>
+
+            <div className="mt-14">
+                <ITCtaBand
+                    copy={copy}
+                    tone="light"
+                    heading={copy.hero.ctaAfterCoaches.heading}
+                    body={copy.hero.ctaAfterCoaches.body}
+                />
             </div>
         </div>
     </section>
