@@ -63,7 +63,7 @@ const STANDARD = {
         badge: 'Registrations Open · Limited Places',
         h1: 'High Performance',
         h1Accent: 'Centre Camp',
-        kicker: 'Rajasthan Royals Academy Melbourne',
+        kicker: 'Rajasthan Royals Academy',
         dateline: '19–26 September 2026 · Nagpur, India',
         lead:
             'A Rajasthan Royals Academy Melbourne squad, living and training at the Rajasthan Royals ' +
@@ -279,7 +279,7 @@ const SIMPLE = {
         badge: 'Open Now · Only A Few Spots',
         h1: 'High Performance',
         h1Accent: 'Centre Camp',
-        kicker: 'Rajasthan Royals Academy Melbourne',
+        kicker: 'Rajasthan Royals Academy',
         dateline: '19–26 September 2026 · Nagpur, India',
         lead:
             'Six days of coaching in India. You live and train at the Rajasthan Royals cricket centre in ' +
