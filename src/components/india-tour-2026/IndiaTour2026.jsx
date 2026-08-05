@@ -6,6 +6,7 @@ import ITHero from './ITHero';
 import ITAbout from './ITAbout';
 import ITCoaching from './ITCoaching';
 import ITAspiration from './ITAspiration';
+import ITItinerary from './ITItinerary';
 import ITPricing from './ITPricing';
 import ITForm from './ITForm';
 import ITReadingToggle from './ITReadingToggle';
@@ -25,7 +26,7 @@ const getRefFromUrl = () => {
 
 const IndiaTour2026 = () => {
     usePageAnalytics('/india-tour-2026', {
-        sections: ['hero', 'about', 'coaching', 'aspiration', 'pricing', 'register'],
+        sections: ['hero', 'about', 'coaching', 'itinerary', 'aspiration', 'pricing', 'register'],
     });
 
     const { simple, showToggle, setMode } = useReadingMode();
@@ -59,6 +60,7 @@ const IndiaTour2026 = () => {
                 <div id="hero"><ITHero copy={copy} /></div>
                 <div id="about"><ITAbout copy={copy} /></div>
                 <div id="coaching"><ITCoaching /></div>
+                <div id="itinerary"><ITItinerary copy={copy} /></div>
                 <div id="aspiration"><ITAspiration /></div>
                 <div id="pricing"><ITPricing copy={copy} /></div>
                 <div id="register"><ITForm copy={copy} referralCode={referralCode} /></div>
