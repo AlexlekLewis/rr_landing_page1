@@ -75,7 +75,7 @@ const ITCoaching = ({ copy }) => (
                     viewport={{ once: true }}
                     className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3"
                 >
-                    Coaching &amp; High Performance
+                    The Royals’ Own High Performance Staff
                 </motion.p>
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
@@ -84,7 +84,7 @@ const ITCoaching = ({ copy }) => (
                     transition={{ delay: 0.05 }}
                     className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none"
                 >
-                    The Resident <span className="text-rr-pink">Coaching Team</span>
+                    Coached By The <span className="text-rr-pink">Club Itself</span>
                 </motion.h2>
                 <div className="w-12 h-px bg-gradient-to-r from-rr-pink to-rr-blue mx-auto my-5" />
                 <motion.p
@@ -94,9 +94,9 @@ const ITCoaching = ({ copy }) => (
                     transition={{ delay: 0.1 }}
                     className="text-base md:text-lg text-rr-charcoal font-medium leading-relaxed"
                 >
-                    These are not guest coaches brought in for a week. Most of them work at the Rajasthan
-                    Royals High Performance Centre in Nagpur year round — turf wickets, indoor nets, a gym,
-                    pool and residential facilities, in the home of the Royals.
+                    These are not academy staff, and they are not guests brought in for the week. This is
+                    the Rajasthan Royals&rsquo; own high performance team — the people who prepare an IPL
+                    squad, and who are at the Nagpur centre year round. For six days they coach your player.
                 </motion.p>
             </div>
 

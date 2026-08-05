@@ -60,16 +60,17 @@ export const fmtRangeAUD = (r) => `${fmtAUD(r.min)}–${fmtAUD(r.max)}`;
 
 const STANDARD = {
     hero: {
-        badge: 'Registrations Open · Limited Places',
+        badge: 'The First Australian Squad · Limited Places',
         h1: 'High Performance',
         h1Accent: 'Centre Camp',
         kicker: 'Rajasthan Royals Academy',
         dateline: '19–26 September 2026 · Nagpur, India',
         lead:
-            'A Rajasthan Royals Academy Melbourne squad, living and training at the Rajasthan Royals ' +
-            'High Performance Centre in Nagpur — six full days of coaching and a practice match, at the ' +
-            'centre where the Royals develop players like Vaibhav Sooryavanshi. Open to register, but ' +
-            'places on the touring squad are limited and confirmed by our coaches.',
+            'Six days inside the Rajasthan Royals\' own High Performance Centre in Nagpur — the IPL ' +
+            'franchise\'s private base, where their contracted players prepare. You are coached by the ' +
+            'Royals\' own high performance staff, including the team manager who lives at the centre and ' +
+            'trains Vaibhav Sooryavanshi there year round. No Australian squad has trained here before. ' +
+            'Places are capped, and the touring squad is confirmed by our coaches.',
         costLabel: 'What it costs — per player',
         flights:
             'We book the whole squad on the same flights and send you a group booking link to pay for ' +
@@ -101,33 +102,35 @@ const STANDARD = {
     },
 
     about: {
-        eyebrow: 'The Opportunity',
-        heading: 'A Cricket Journey',
-        headingAccent: 'Like No Other',
+        eyebrow: 'Why This Is Rare',
+        heading: 'Inside An IPL Club\'s',
+        headingAccent: 'Own Academy',
         lead:
-            'This September a Rajasthan Royals Academy Melbourne squad travels to India to train, ' +
-            'compete and grow. Seven nights inside a professional high-performance centre, six of them ' +
-            'full coaching days, with people who develop players for the next level. Register your ' +
-            'interest and our team will be in touch with everything you need to know.',
+            'Academies run tours. Almost none of them get inside the building an IPL franchise actually ' +
+            'uses. This September a Rajasthan Royals Academy Melbourne squad spends seven nights at the ' +
+            'Royals\' High Performance Centre in Nagpur — six full coaching days, taken by the club\'s own ' +
+            'high performance staff. It is the first time an Australian group has been brought in.',
         points: [
             {
-                title: 'Where the Royals build players',
+                title: 'The building, not a hire',
                 body:
-                    'Turf nets, centre-wicket practice and a match on grass at the Royals\' own high ' +
-                    'performance centre in Nagpur — the centre behind the games of Vaibhav Sooryavanshi ' +
-                    'and Luhan-dre Pretorius.',
+                    'This is the Royals\' own centre, used by their contracted players — not a facility ' +
+                    'booked for the week. It is the centre behind the games of Vaibhav Sooryavanshi and ' +
+                    'Luhan-dre Pretorius.',
             },
             {
-                title: 'Coached the Royals Way',
+                title: 'The club\'s coaches, not ours',
                 body:
-                    'You work directly with Rajasthan Royals Academy coaches and specialists who develop ' +
-                    'players for the next level.',
+                    'The Rajasthan Royals team manager. A former India international and Ranji ' +
+                    'Trophy-winning captain. The centre\'s resident fast bowling coach. The Royals\' ' +
+                    'performance psychologist. These are the people who coach the club\'s own players.',
             },
             {
-                title: 'A Limited Touring Squad',
+                title: 'A first, and a small one',
                 body:
-                    'Anyone can register, but places are capped and the squad is confirmed by our ' +
-                    'coaches. Registering early gives you the best chance.',
+                    'No Australian squad has done this before, and the group is deliberately small so ' +
+                    'every player gets seen. Anyone can register; our coaches confirm the squad. ' +
+                    'Registering early gives you the best chance.',
             },
         ],
     },
@@ -142,7 +145,10 @@ const STANDARD = {
             'Players already with us pay the lower of the two, because they pay into the academy across ' +
             'the year.',
         introEmphasis: 'Both groups do exactly the same camp',
-        introTail: '— same accommodation, same coaches, same sessions, same analysis. Nobody gets a lesser version.',
+        introTail:
+            '— same accommodation, same IPL coaching staff, same sessions, same analysis. Nobody gets a ' +
+            'lesser version. What you are buying is not a camp fee; it is six days of access to a place ' +
+            'and a group of coaches that are otherwise closed.',
         notSure:
             'Not sure which one you are? Tell us in the form below and we will confirm your price in ' +
             'writing before you pay anything.',
@@ -314,16 +320,16 @@ const STANDARD = {
 
 const SIMPLE = {
     hero: {
-        badge: 'Open Now · Only A Few Spots',
+        badge: 'The First Aussie Squad · Only A Few Spots',
         h1: 'High Performance',
         h1Accent: 'Centre Camp',
         kicker: 'Rajasthan Royals Academy',
         dateline: '19–26 September 2026 · Nagpur, India',
         lead:
-            'Six days of coaching in India. You live and train inside the Rajasthan Royals High Performance ' +
-            'Centre in Nagpur — the same place their stars train, including Vaibhav Sooryavanshi. You play ' +
-            'one real match. You come home with a plan to get better. Anyone can sign up, but there are only ' +
-            'a few spots and our coaches pick the team.',
+            'Six days inside the Rajasthan Royals\' own high performance centre in Nagpur. This is an IPL ' +
+            'club\'s private base — the ground where their own stars train. You are coached by the Royals\' ' +
+            'coaches, not ours: the same people who work with Vaibhav Sooryavanshi every day. No team from ' +
+            'Australia has ever trained here. There are only a few spots and our coaches pick the team.',
         costLabel: 'What it costs',
         flights: 'We book the whole team on the same plane. Then we send you a link to pay for your seat.',
         flightsLead: 'Flights cost extra.',
@@ -351,27 +357,33 @@ const SIMPLE = {
     },
 
     about: {
-        eyebrow: 'What This Is',
-        heading: 'Seven Nights',
-        headingAccent: 'In India',
+        eyebrow: 'Why This Is Special',
+        heading: 'Inside An IPL',
+        headingAccent: 'Club\'s Academy',
         lead:
-            'This September, a team from our academy flies to India. You stay seven nights at the ' +
-            'Rajasthan Royals High Performance Centre in Nagpur. Six of those days are full training days. ' +
-            'You play a match on grass. Put your name down below and we will tell you everything.',
+            'Lots of academies run trips to India. Almost none of them get inside the building an IPL ' +
+            'club really uses. You stay seven nights at the Rajasthan Royals\' own centre in Nagpur. Six ' +
+            'of those days are full training days, taken by the club\'s own coaches. No team from ' +
+            'Australia has ever been in. Put your name down below and we will tell you everything.',
         points: [
             {
-                title: 'Train where the pros train',
+                title: 'Not a hired ground — theirs',
                 body:
-                    'Real grass pitches. Real nets. A gym and a pool. This is the centre where the Royals ' +
-                    'built Vaibhav Sooryavanshi and Luhan-dre Pretorius.',
+                    'This is the Royals\' own centre, where their real players train. Grass pitches, nets, ' +
+                    'a gym and a pool. It is where the Royals built Vaibhav Sooryavanshi.',
             },
             {
-                title: 'Coaches who have played for India',
-                body: 'They watch you bat and bowl. Then they tell you how to get better.',
+                title: 'The club\'s own coaches',
+                body:
+                    'The Rajasthan Royals team manager. A man who played for India and captained a ' +
+                    'title-winning side. These are the coaches who work with the club\'s players — and ' +
+                    'for six days, with you.',
             },
             {
-                title: 'Only a few spots',
-                body: 'Anyone can sign up. Our coaches pick the team. Sign up early to get the best chance.',
+                title: 'A first — and a small group',
+                body:
+                    'No Australian team has ever done this. The group is kept small so every player gets ' +
+                    'seen. Anyone can sign up; our coaches pick the team. Sign up early.',
             },
         ],
     },
@@ -384,7 +396,9 @@ const SIMPLE = {
             'There are two prices. Which one you pay depends on one thing: do you already train with us? ' +
             'If you do, you pay less, because you already pay for our programs during the year.',
         introEmphasis: 'Both groups get the same camp',
-        introTail: '— same rooms, same coaches, same training. Nobody misses out on anything.',
+        introTail:
+            '— same rooms, same coaches, same training. Nobody misses out. And what you are paying for is ' +
+            'not really a camp. It is six days somewhere almost nobody gets to go.',
         notSure: 'Not sure which one you are? Just tell us in the form. We will check it for you.',
         tiers: {
             royals_program: {
