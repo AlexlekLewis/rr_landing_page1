@@ -2,22 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import coachingImg from '../../assets/india-tour-2026/coaching-mentoring.jpg';
 
-const POINTS = [
-    {
-        title: 'Train & Play in India',
-        body: 'Experience cricket at its source — quality grounds, match play and immersion in the home of the Royals.',
-    },
-    {
-        title: 'Coached the Royals Way',
-        body: 'Work directly with Rajasthan Royals Academy coaches and specialists who develop players for the next level.',
-    },
-    {
-        title: 'A Limited Touring Squad',
-        body: 'Selection is invitation-based and places are capped. Registering your interest is the first step.',
-    },
-];
-
-const ITAbout = () => (
+const ITAbout = ({ copy }) => {
+  const c = copy.about;
+  const POINTS = c.points;
+  return (
     <section className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -29,7 +17,7 @@ const ITAbout = () => (
                         viewport={{ once: true }}
                         className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3"
                     >
-                        The Opportunity
+                        {c.eyebrow}
                     </motion.p>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -38,7 +26,7 @@ const ITAbout = () => (
                         transition={{ delay: 0.05 }}
                         className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-5"
                     >
-                        A Cricket Journey <span className="text-rr-pink">Like No Other</span>
+                        {c.heading} <span className="text-rr-pink">{c.headingAccent}</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -47,10 +35,7 @@ const ITAbout = () => (
                         transition={{ delay: 0.1 }}
                         className="text-base md:text-lg text-rr-charcoal font-medium leading-relaxed mb-8"
                     >
-                        This September, a select Rajasthan Royals Academy Melbourne squad will tour
-                        India to train, compete and grow. It's a once-in-a-pathway experience built
-                        around elite coaching and genuine match exposure. If you'd like more
-                        information, register your interest and our team will be in touch.
+                        {c.lead}
                     </motion.p>
 
                     <div className="space-y-5">
@@ -97,6 +82,7 @@ const ITAbout = () => (
             </div>
         </div>
     </section>
-);
+  );
+};
 
 export default ITAbout;
