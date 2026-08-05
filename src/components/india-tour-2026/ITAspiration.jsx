@@ -6,13 +6,13 @@ const scrollToRegister = () =>
     document.getElementById('register')?.scrollIntoView({ behavior: 'smooth' });
 
 const ITAspiration = () => (
-    <section className="relative overflow-hidden bg-rr-dark">
+    <section className="relative overflow-hidden bg-rr-navy">
         <img
             src={aspirationImg}
             alt="A young Rajasthan Royals batter celebrating a century"
             className="absolute inset-0 w-full h-full object-cover object-top opacity-40"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-rr-dark via-rr-dark/85 to-rr-dark/50" />
+        <div className="absolute inset-0 bg-gradient-to-r from-rr-navy via-rr-navy/85 to-rr-navy/50" />
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-rr-pink to-transparent" />
 
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-28">

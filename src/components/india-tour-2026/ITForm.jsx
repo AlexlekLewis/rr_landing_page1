@@ -212,7 +212,7 @@ const ITForm = ({ copy, referralCode, referralName }) => {
 
     if (submitted) {
         return (
-            <section className="py-24 bg-rr-dark">
+            <section className="py-24 bg-rr-navy">
                 <div className="max-w-2xl mx-auto px-6">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
@@ -251,7 +251,7 @@ const ITForm = ({ copy, referralCode, referralName }) => {
     }
 
     return (
-        <section className="py-24 bg-rr-dark">
+        <section className="py-24 bg-rr-navy">
             <div className="max-w-3xl mx-auto px-6">
                 <div className="text-center mb-12">
                     <motion.div

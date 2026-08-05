@@ -72,7 +72,7 @@ const ITAbout = ({ copy }) => {
                 >
                     <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                         <img src={coachingImg} alt="A Rajasthan Royals coach mentoring a player" className="w-full h-full object-cover" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/40 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-rr-navy/40 to-transparent" />
                     </div>
                     <div className="absolute -bottom-5 -left-5 hidden md:block bg-rr-pink text-white rounded-2xl px-6 py-4 shadow-xl">
                         <p className="text-3xl font-black leading-none">SEP</p>

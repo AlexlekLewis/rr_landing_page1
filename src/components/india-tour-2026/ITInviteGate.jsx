@@ -16,7 +16,7 @@ const ITInviteGate = ({ onTryCode, checking }) => {
     };
 
     return (
-        <div className="min-h-screen bg-rr-dark text-white font-sans flex flex-col items-center justify-center px-6 relative overflow-hidden selection:bg-rr-pink selection:text-white">
+        <div className="min-h-screen bg-rr-navy text-white font-sans flex flex-col items-center justify-center px-6 relative overflow-hidden selection:bg-rr-pink selection:text-white">
             <div className="absolute -top-24 -left-24 w-96 h-96 bg-rr-pink/15 rounded-full blur-[120px] pointer-events-none" />
             <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-rr-blue/20 rounded-full blur-[120px] pointer-events-none" />
 
