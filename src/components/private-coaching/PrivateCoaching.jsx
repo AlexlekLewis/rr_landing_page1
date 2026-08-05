@@ -9,7 +9,7 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 const SECTIONS = ['hero', 'meet', 'eoi-form'];
 
 const PrivateCoaching = () => {
-    usePageAnalytics('/private-coaching', { sections: SECTIONS });
+    usePageAnalytics('/mickleham', { sections: SECTIONS });
 
     useEffect(() => {
         window.scrollTo(0, 0);

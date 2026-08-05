@@ -69,7 +69,7 @@ const CoachesLeadership = () => {
                                     Alex runs one-on-one and small-group private coaching out of the Mickleham centre.
                                 </p>
                                 <Link
-                                    to="/private-coaching"
+                                    to="/mickleham"
                                     className="group inline-flex items-center gap-2.5 bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest text-sm px-6 py-3 rounded-full transition-all duration-300 hover:shadow-[0_0_24px_rgba(229,6,149,0.4)]"
                                 >
                                     Private Coaching at Mickleham

@@ -45,6 +45,11 @@
             "permanent": true
         },
         {
+            "source": "/private-coaching",
+            "destination": "/mickleham",
+            "permanent": true
+        },
+        {
             "source": "/eliteprogram2026/playerDNAprofile",
             "destination": "https://rramsdnaprofile.vercel.app",
             "permanent": false

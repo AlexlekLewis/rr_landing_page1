@@ -176,9 +176,13 @@ function App() {
 
         {/* The Coaches — leadership tiers, coaching mission + full bios. Info page, no form. */}
         <Route path="/coaches" element={<CoachesPage />} />
-        {/* Private Coaching — Mickleham launch. EOI form → Head Coach assigns a coach.
-            Writes to private_coaching_eoi (anon insert only). */}
-        <Route path="/private-coaching" element={<PrivateCoaching />} />
+        {/* Private Coaching at Mickleham. EOI form → Head Coach assigns a coach.
+            Writes to private_coaching_eoi (anon insert only). Canonical URL is
+            /mickleham (per Alex); /private-coaching 308s in vercel.json, with a
+            client redirect here for any in-app navigations. */}
+        <Route path="/mickleham" element={<PrivateCoaching />} />
+        <Route path="/Mickleham" element={<PrivateCoaching />} />
+        <Route path="/private-coaching" element={<Navigate to="/mickleham" replace />} />
         {/* Mickleham 30-Day Launch Special — campaign page for the front-desk flyer
             QR code + Instagram link. /Mickleham_Launch is the published short link;
             /launch kept as a fallback so nothing already shared breaks. */}

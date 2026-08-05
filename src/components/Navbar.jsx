@@ -25,7 +25,7 @@ const LC_NAV = [
 const HOME_NAV = [
     { label: 'About', id: 'about' },
     { label: 'Coaches', id: 'coaches' },
-    { label: 'Private Coaching', route: '/private-coaching', tag: 'Mickleham' },
+    { label: 'Private Coaching', route: '/mickleham', tag: 'Mickleham' },
     { label: 'FAQ', id: 'faq' },
 ];
 
@@ -51,7 +51,7 @@ const PROGRAMS_DROPDOWN = [
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Closing Soon', badgeColor: 'bg-orange-500' },
     { label: 'Elite Program', route: '/elite-royals', badge: 'Enrolling Now · Selling Fast', badgeColor: 'bg-orange-500' },
     { label: 'Junior Royals Term 3', route: '/junior-royals', badge: 'Sold Out', badgeColor: 'bg-red-500' },
-    { label: 'Private Coaching', route: '/private-coaching', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },
+    { label: 'Private Coaching', route: '/mickleham', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },
 ];
 
 const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
