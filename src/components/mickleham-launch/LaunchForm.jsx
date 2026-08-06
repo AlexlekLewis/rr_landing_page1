@@ -116,10 +116,10 @@ const LaunchForm = () => {
                     <p className="text-white/80 font-medium leading-relaxed mb-4">
                         Thanks {form.player_name.split(' ')[0]} — your spot in the launch special is
                         locked in with <b className="text-white">Alex Lewis, Academy Head Coach</b>.
-                        He’ll call you personally in the coming days.
+                        Our administration team will contact you in the coming days to organise a time.
                     </p>
                     <p className="text-white/60 font-medium leading-relaxed">
-                        From there you’ll book your <b className="text-white">{OFFER.price} consultation</b>{' '}
+                        That first session is your <b className="text-white">{OFFER.price} assessment</b>{' '}
                         (normally {OFFER.wasPrice}) at {CENTRE.name} — where your coach, your nights and
                         your plan all get sorted.
                     </p>
@@ -140,7 +140,7 @@ const LaunchForm = () => {
                         Register Your Interest
                     </h2>
                     <p className="text-white/70 font-medium">
-                        Two minutes. No payment now — Alex will be in touch personally.
+                        Two minutes. No payment now — our admin team will be in touch to book your time.
                     </p>
                 </div>
 

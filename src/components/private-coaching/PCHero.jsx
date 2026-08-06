@@ -59,8 +59,8 @@ const PCHero = () => {
                     </h1>
                     <p className="text-base md:text-lg text-white/80 font-medium leading-relaxed max-w-2xl mb-6">
                         One-on-one and small-group coaching at {CENTRE.name} — led personally by
-                        Academy Head Coach Alex Lewis. Register your interest and Alex will be in
-                        contact to organise your consultation.
+                        Academy Head Coach Alex Lewis. Register your interest and our administration
+                        team will be in touch to organise a time.
                     </p>
 
                     {/* Why this venue — the centre is the Academy's high-performance home in the north. */}

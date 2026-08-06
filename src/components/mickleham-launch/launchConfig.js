@@ -36,8 +36,8 @@ export const INCLUDES = [
 
 export const STEPS = [
     { n: '01', t: 'Register below', d: 'Two minutes. No payment, no obligation.' },
-    { n: '02', t: 'Alex calls you', d: 'Personally, in the coming days — to talk through the player.' },
-    { n: '03', t: 'Book your consultation', d: '$50 while the launch special runs. Then you\'re away.' },
+    { n: '02', t: 'We call you', d: 'Our admin team contacts you in the coming days to organise a time.' },
+    { n: '03', t: 'Your session with Alex', d: '$50 while the launch special runs. Then you\'re away.' },
 ];
 
 // Days remaining, floored at 0. Computed client-side against END_DATE.

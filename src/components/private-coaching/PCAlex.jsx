@@ -46,11 +46,11 @@ const PCAlex = () => {
                         </p>
                         <p className="text-rr-charcoal font-medium leading-relaxed mb-4">
                             Every private coaching journey at Mickleham starts with Alex. Register your
-                            interest below and he'll be in contact <b className="text-rr-dark">personally in the
-                            coming days</b> to organise your consultation.
+                            interest below and our <b className="text-rr-dark">administration team will be in
+                            touch in the coming days</b> to organise a time for your first session with him.
                         </p>
                         <p className="text-rr-charcoal font-medium leading-relaxed mb-8">
-                            That consultation is where everything gets decided — which coach suits your
+                            That session is where everything gets decided — which coach suits your
                             game, which nights work for your family, and what the journey looks like
                             from there.
                         </p>

@@ -123,14 +123,14 @@ const PCForm = () => {
                         You're In
                     </h2>
                     <p className="text-white/80 font-medium leading-relaxed mb-4">
-                        Thanks {form.player_name.split(' ')[0]} — your inquiry is with{' '}
-                        <b className="text-white">Alex Lewis, Academy Head Coach</b>. He'll be in
-                        contact personally in the coming days.
+                        Thanks {form.player_name.split(' ')[0]} — your inquiry has gone through to{' '}
+                        <b className="text-white">Alex Lewis, Academy Head Coach</b>. Our administration
+                        team will contact you in the coming days to organise a time.
                     </p>
                     <p className="text-white/60 font-medium leading-relaxed">
-                        From there you'll book your <b className="text-white">$50 consultation</b>{' '}
-                        (normally $160) — a one-on-one with the Head Coach where your coach, your
-                        nights and your plan all get locked in.
+                        That first session is your <b className="text-white">$50 assessment</b>{' '}
+                        (normally $160) — an hour one-on-one with the Head Coach, where your coach,
+                        your nights and your plan all get locked in.
                     </p>
                 </div>
             </section>
@@ -149,8 +149,9 @@ const PCForm = () => {
                         Register Your Interest
                     </h2>
                     <p className="text-white/70 font-medium max-w-xl mx-auto">
-                        Two minutes, no payment. Alex Lewis will be in contact personally in the
-                        coming days to organise your $50 launch-offer Head Coach consultation.
+                        Two minutes, no payment. Our administration team will contact you in the
+                        coming days to organise a time for your $50 assessment session with Head
+                        Coach Alex Lewis.
                     </p>
                 </div>
 
@@ -217,8 +218,8 @@ const PCForm = () => {
                     </button>
 
                     <p className="text-center text-white/40 text-xs font-medium leading-relaxed">
-                        No payment now. The first step is a $50 launch-offer consultation (normally
-                        $160) with the Head Coach at {CENTRE.name} — everything else gets decided there.
+                        No payment now. The first step is a $50 assessment session (normally $160)
+                        with the Head Coach at {CENTRE.name} — everything else gets decided there.
                     </p>
                 </form>
             </div>

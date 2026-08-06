@@ -114,8 +114,8 @@ const PCPricing = () => {
                     className="text-center"
                 >
                     <p className="text-rr-charcoal font-medium mb-6 max-w-2xl mx-auto">
-                        Nothing is paid online. Register your interest, talk it through with Alex on the
-                        phone, and decide on your block after the assessment session.
+                        Nothing is paid online. Register your interest, our administration team will
+                        organise your time, and you decide on your block after the assessment session.
                     </p>
                     <button
                         onClick={() => scrollTo('eoi-form')}

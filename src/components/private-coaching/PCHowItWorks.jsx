@@ -14,8 +14,8 @@ const STEPS = [
     },
     {
         n: '02',
-        title: 'Alex calls you',
-        body: 'Alex Lewis, the Academy Head Coach, phones you personally within a few days. You talk through where the player is at, what they want to work on, and which night works for your family.',
+        title: 'Our admin team books your time',
+        body: 'Someone from the Academy’s administration team contacts you within a few days to organise a time for your first session. They will confirm the night, the start time and what to bring — you do not need to chase anyone.',
     },
     {
         n: '03',
