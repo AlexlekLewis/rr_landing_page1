@@ -3,14 +3,14 @@ import { motion } from 'framer-motion';
 import { ChevronDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-// Keep these badges true to what is actually open. Power Game Pre-Season closed
-// in Aug 2026 while this list still read "Enrolling Now · Selling Fast" — the
-// Elite badge is now a plain description, not an urgency claim, until there is a
-// confirmed open Elite intake to point at.
+// Only list programs a visitor can act on today, and only ones whose page sits
+// inside the site's navigation. "Elite Program" was dropped in Aug 2026: it
+// pointed at /elite-royals, which renders the closed Power Game sales page with
+// no Navbar — a dead end. Put Elite back when there is an open intake AND a page
+// with the site chrome on it.
 const PROGRAMS = [
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Sept/Oct Holidays — Register Interest', badgeColor: 'bg-green-500' },
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 Entries Open', badgeColor: 'bg-green-500' },
-    { label: 'Elite Program', route: '/elite-royals', badge: 'Ages 12+ · Our elite pathway', badgeColor: 'bg-slate-400' },
 ];
 
 const HomeHero = ({ onRegisterClick }) => {

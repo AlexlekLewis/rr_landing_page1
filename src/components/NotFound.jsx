@@ -8,9 +8,9 @@ import Footer from './Footer';
 const LINKS = [
     { label: 'Home', to: '/' },
     { label: 'Junior Royals', to: '/junior-royals' },
-    { label: 'Elite · Power Pre-Season', to: '/elite-royals' },
-    { label: 'Private Coaching', to: '/mickleham' },
     { label: 'Holiday Camps', to: '/junior-royals-holiday' },
+    { label: 'Private Coaching', to: '/mickleham' },
+    { label: 'Elite Program', to: '/elite-royals' },
     { label: 'Our Coaches', to: '/coaches' },
 ];
 

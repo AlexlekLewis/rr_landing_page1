@@ -57,13 +57,15 @@ const PC_NAV = [
 ];
 
 // This dropdown appears on EVERY page, so a stale badge here is wrong everywhere.
-// Only claim "now open"/"enrolling" for something a visitor can actually join today.
+// Two rules: only claim "now open"/"enrolling" for something a visitor can join
+// today, and only link to pages that render this Navbar. "Elite Program" was
+// removed in Aug 2026 on both counts — /elite-royals is the closed Power Game
+// page, and it renders no Navbar, so it dead-ends the visitor.
 const PROGRAMS_DROPDOWN = [
     { label: 'High Performance Camp · India', route: '/tours', badge: 'Registering Now · September', badgeColor: 'bg-green-500' },
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Sept/Oct — Register Interest', badgeColor: 'bg-green-500' },
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 Entries Open', badgeColor: 'bg-green-500' },
     { label: 'Private Coaching', route: '/mickleham', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },
-    { label: 'Elite Program', route: '/elite-royals', badge: 'Ages 12+ · Our elite pathway', badgeColor: 'bg-slate-400' },
 ];
 
 const Navbar = ({ variant = 'lp1', onRegisterClick }) => {

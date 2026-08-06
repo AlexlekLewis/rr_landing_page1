@@ -16,11 +16,15 @@ const FacebookIcon = () => (
 // Sitewide footer navigation. Every public page renders this, so these links form
 // the site's internal-linking backbone (and rescue otherwise-orphaned pages).
 // Use canonical URLs only: /mickleham (not the /private-coaching 308), /elite-royals (not /PGP2026).
+// NOTE: "Power Pre-Season" closed in Aug 2026, so this links to the Elite pathway
+// by name rather than to a closed offering. It is kept here (and only here) so the
+// page is not fully orphaned — it is deliberately NOT in the program pickers,
+// because /elite-royals renders without a Navbar and dead-ends the visitor.
 const PROGRAMS = [
     { label: 'Junior Royals', to: '/junior-royals' },
-    { label: 'Elite · Power Pre-Season', to: '/elite-royals' },
-    { label: 'Private Coaching', to: '/mickleham' },
     { label: 'Holiday Camps', to: '/junior-royals-holiday' },
+    { label: 'Private Coaching', to: '/mickleham' },
+    { label: 'Elite Program', to: '/elite-royals' },
 ];
 
 const ACADEMY = [
