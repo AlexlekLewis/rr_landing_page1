@@ -170,10 +170,12 @@ export const LAUNCH_OFFER = {
 // Written for a parent who has never heard of any of these bodies, so every
 // club, association and accreditation carries a plain-English gloss.
 //
-// NOTE ON TENSE: his resume lists the Preston roles as current, but Alex names
-// Fitzroy Doncaster as where he is now. The Preston entries are therefore
-// stated by DURATION ("for over ten years") rather than claimed as finished —
-// true either way. Confirm with Alex before changing.
+// NOTE ON TENSE (6 Aug 2026): Alex's resume is roughly three years old — it
+// lists his age as 35 and he is now 38 — so everything it marks "current" is
+// unreliable. He has confirmed ONLY the Fitzroy Doncaster roles as current;
+// Preston ended around three years ago. So "Where he coaches now" holds the
+// confirmed-current roles only, and everything else sits under a past-tense
+// career heading. Promote an item back up only when Alex confirms it is live.
 export const ALEX_RECORD = [
     {
         heading: 'Where he coaches now',
@@ -183,17 +185,13 @@ export const ALEX_RECORD = [
                 detail: 'Runs the junior academy at a Victorian Premier Cricket club — the top grade of club cricket in the state. He is also the club’s Head Bowling Coach and a Senior Assistant Coach with the senior side, and coaches their under-18s.',
             },
             {
-                title: 'Junior Director of Coaching, Northern Falcons',
-                detail: 'A Cricket Victoria appointment. He leads junior coaching across the Northern Falcons region — the representative pathway that sits above club cricket in Melbourne’s north.',
-            },
-            {
-                title: 'Coach educator, Cricket Victoria',
-                detail: 'Cricket Victoria uses him to train and develop other coaches, not just players.',
+                title: 'Director of Cricket, Rajasthan Royals Academy Melbourne',
+                detail: 'He leads coaching and player development across all three Academy centres, and is Head Coach here at Mickleham.',
             },
         ],
     },
     {
-        heading: 'What he has built',
+        heading: 'Twenty years before that',
         items: [
             {
                 title: 'Founder and head coach, Preston Academy — over ten years',
@@ -201,7 +199,11 @@ export const ALEX_RECORD = [
             },
             {
                 title: 'Director of Cricket and senior head coach, Preston Cricket Club',
-                detail: 'Responsible for the whole cricket program at the club, and head coach of its senior side.',
+                detail: 'He ran the entire cricket program at the club and was head coach of its senior side.',
+            },
+            {
+                title: 'Junior Director of Coaching, Northern Falcons',
+                detail: 'A Cricket Victoria appointment leading junior coaching across the Northern Falcons region — the representative pathway that sits above club cricket in Melbourne’s north. Cricket Victoria has also used him as a coach educator, training other coaches rather than players.',
             },
             {
                 title: 'Representative head coach across Melbourne’s north',
