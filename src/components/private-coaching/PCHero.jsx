@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { CENTRE } from './pcOptions';
+import { CENTRE, VENUE_FACTS } from './pcOptions';
 
 const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
@@ -57,11 +57,29 @@ const PCHero = () => {
                     <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white uppercase tracking-tighter leading-none mb-6">
                         Private<br />Coaching
                     </h1>
-                    <p className="text-base md:text-lg text-white/80 font-medium leading-relaxed max-w-2xl mb-10">
+                    <p className="text-base md:text-lg text-white/80 font-medium leading-relaxed max-w-2xl mb-6">
                         One-on-one and small-group coaching at {CENTRE.name} — led personally by
                         Academy Head Coach Alex Lewis. Register your interest and Alex will be in
                         contact to organise your consultation.
                     </p>
+
+                    {/* Why this venue — the centre is the Academy's high-performance home in the north. */}
+                    <p className="text-base md:text-lg text-white font-semibold leading-relaxed max-w-2xl mb-6">
+                        This is the Academy’s high-performance home in Melbourne’s north. Our Elite
+                        squad, our Junior Royals and our Power League squads all train here — the same
+                        floor, the same lanes and the same coaches your player would be working with.
+                    </p>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-4 max-w-3xl mb-10">
+                        {VENUE_FACTS.map((f) => (
+                            <div key={f.title} className="border-t border-white/25 pt-3">
+                                <p className="text-white text-sm font-black uppercase tracking-wide leading-tight mb-1.5">
+                                    {f.title}
+                                </p>
+                                <p className="text-white/65 text-[13px] font-medium leading-snug">{f.detail}</p>
+                            </div>
+                        ))}
+                    </div>
 
                     <div className="flex flex-col sm:flex-row gap-4">
                         <button
@@ -74,7 +92,7 @@ const PCHero = () => {
                             </svg>
                         </button>
                         <button
-                            onClick={() => scrollTo('meet')}
+                            onClick={() => scrollTo('how-it-works')}
                             className="text-white/80 hover:text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full border-2 border-white/25 hover:border-white/60 transition-colors w-full sm:w-auto"
                         >
                             How It Works

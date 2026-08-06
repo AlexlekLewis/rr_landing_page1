@@ -52,7 +52,8 @@ const COACHES_NAV = [
 
 // Private Coaching page — on-page section anchors
 const PC_NAV = [
-    { label: 'HOW IT WORKS', id: 'meet' },
+    { label: 'HOW IT WORKS', id: 'how-it-works' },
+    { label: 'PRICING', id: 'pricing' },
 ];
 
 const PROGRAMS_DROPDOWN = [

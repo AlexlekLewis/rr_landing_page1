@@ -4,11 +4,8 @@ import { CENTRE } from './pcOptions';
 
 const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
-const STEPS = [
-    { n: '01', text: 'Register your interest below — two minutes, no payment.' },
-    { n: '02', text: 'Alex will be in contact personally in the coming days.' },
-    { n: '03', text: 'Your $50 consultation locks in your coach, your nights and your plan.' },
-];
+// The step-by-step lives in PCHowItWorks — this section is who Alex is and what
+// the assessment costs, then it hands off to that section.
 
 const PCAlex = () => {
     return (
@@ -75,24 +72,23 @@ const PCAlex = () => {
                             </div>
                         </div>
 
-                        <div className="space-y-3 mb-8">
-                            {STEPS.map((s) => (
-                                <div key={s.n} className="flex items-start gap-4">
-                                    <span className="text-sm font-black text-rr-pink/60 mt-0.5">{s.n}</span>
-                                    <p className="text-rr-charcoal text-sm font-semibold leading-relaxed">{s.text}</p>
-                                </div>
-                            ))}
+                        <div className="flex flex-col sm:flex-row gap-4">
+                            <button
+                                onClick={() => scrollTo('eoi-form')}
+                                className="group bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] flex items-center justify-center gap-3"
+                            >
+                                Register Your Interest
+                                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </button>
+                            <button
+                                onClick={() => scrollTo('how-it-works')}
+                                className="text-rr-dark hover:text-rr-pink font-bold uppercase tracking-widest px-8 py-4 rounded-full border-2 border-slate-200 hover:border-rr-pink/50 transition-colors"
+                            >
+                                See how it works
+                            </button>
                         </div>
-
-                        <button
-                            onClick={() => scrollTo('eoi-form')}
-                            className="group bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] flex items-center gap-3"
-                        >
-                            Register Your Interest
-                            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
-                        </button>
                     </motion.div>
                 </div>
             </div>

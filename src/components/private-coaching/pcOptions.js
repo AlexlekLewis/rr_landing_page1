@@ -89,65 +89,101 @@ export const qualifiesForPathway = (sessionLength, sessionsRequested, packageTyp
     (['term-10', 'season-40'].includes(packageType) || ELIGIBLE_COUNTS.includes(sessionsRequested));
 
 // Customer-facing price card (inc GST) — rendered on the page, used in copy.
+// `minimum` states the smallest booking we accept for that product, in plain
+// words, because "from $130/hr" means nothing to a parent who then discovers
+// they cannot buy a single hour.
 export const PRICING = [
     {
         key: 'consult',
-        label: 'First Consultation',
-        price: '$160',
-        unit: 'session 1 · everyone',
-        detail: 'Every journey starts here — a full one-on-one assessment with your development plan and coach assignment coming out of it.',
+        label: 'Assessment session with the Head Coach',
+        price: '$50',
+        wasPrice: '$160',
+        unit: 'one hour · every player starts here',
+        detail: 'One hour, one-on-one with Academy Head Coach Alex Lewis. He assesses the player, writes the development plan you keep, and decides which coach they go on to train with. The launch price is $50 until 28 August 2026; after that it returns to its standard price of $160.',
+        minimum: 'Everyone does this first. You cannot skip it, and you can stop after it if you choose.',
     },
     {
         key: 'academy',
-        label: '1-on-1 · Professional Coach',
+        label: 'One-on-one with a professional coach',
         price: '$130',
-        unit: '/ hour',
-        detail: 'Your assigned coach, a dedicated lane. Start with the 3-session block ($390) or go straight to 6+.',
+        unit: 'per hour · one player, one coach, one lane',
+        detail: 'Your player and their assigned coach in a dedicated lane for a full hour, working through the plan set at the assessment.',
+        minimum: 'Smallest booking is a 3-session starter block — $390. Most families then continue on 6 or more.',
     },
     {
         key: 'leadership',
-        label: '1-on-1 · Leadership',
+        label: 'One-on-one with a leadership coach',
         price: '$160',
-        unit: '/ hour',
-        detail: 'Train under the Head Coach tier. Leadership programs run as 6+ session blocks only.',
+        unit: 'per hour · our most senior coaches',
+        detail: 'The same hour, but with one of the Academy’s leadership-tier coaches — the people who run our elite programs.',
+        minimum: 'Leadership coaches are booked in blocks of 6 sessions or more. There is no 3-session option at this tier.',
     },
     {
         key: 'group',
-        label: 'Train With A Mate — Save $60',
+        label: 'Small group — train with mates',
         price: '$70',
-        unit: '/ player / hr (2 players)',
-        detail: 'Same coach, same lane — $60 less than solo, each. 3 players $60 each · 4 players $50 each per hour.',
+        unit: 'per player per hour, with 2 players',
+        detail: 'Same coach, same lane, shared between friends or teammates. Three players is $60 each per hour; four players is $50 each per hour. The more players share the lane, the less each family pays.',
+        minimum: 'Same as one-on-one: a 3-session starter block at the least. You bring your own group of 2 to 4 players.',
     },
     {
         key: 'junior30',
-        label: 'Junior 30-Minute',
+        label: 'Half-hour session for under-14s',
         price: '$70',
-        unit: '/ 30 min · under-14s',
-        detail: 'Parents of under-14s can opt for focused half-hour sessions. Players 14 and over train full hours.',
+        unit: 'per 30 minutes · under-14s only',
+        detail: 'A shorter, sharper session for younger players whose concentration is better served by half an hour than a full one.',
+        minimum: 'Only available to players aged 13 and under. From 14 up, players train in full hours.',
     },
     {
         key: 'term',
-        label: '10-Week Term Package · 10% Off',
+        label: '10-week term package',
         price: '$1,170',
-        unit: 'professional · $1,440 leadership',
-        detail: 'One session every week for a school term — 10% off, effectively your tenth session free. Locked weekly slot, pathway unlocked.',
+        unit: 'with a professional coach · $1,440 leadership',
+        detail: 'One session every week for a full school term, paid up front, with 10% taken off the hourly rate — in effect your tenth session is free. Your night and time are locked in for the term.',
+        minimum: 'Ten sessions, one per week. Booked as a whole term.',
         accent: 'blue',
     },
     {
         key: 'season',
-        label: '40-Week Season Package · 10% Off',
+        label: '40-week season package',
         price: '$4,680',
-        unit: 'professional · $5,760 leadership',
-        detail: 'The full year, every term-time week — school holidays excluded, 10% off all year. Locked slot, first pick of times, pathway unlocked.',
+        unit: 'with a professional coach · $5,760 leadership',
+        detail: 'A weekly session across the whole season — 40 term-time weeks, with Victorian school holidays off — at 10% below the hourly rate. You get first pick of nights and times before anyone else.',
+        minimum: 'Forty sessions across the year. Booked as a full season.',
         accent: 'blue',
+    },
+];
+
+// The rules that apply across every product above. Stated plainly because they
+// are the questions every parent asks on the phone.
+export const BOOKING_RULES = [
+    {
+        title: 'We do not sell single sessions',
+        body: 'After your assessment, the smallest booking is a block of 3 sessions. Cricket skills do not change in one hour — a block is what makes the coaching worth paying for.',
+    },
+    {
+        title: 'Tuesday or Friday evenings',
+        body: 'Private coaching at Mickleham runs on Tuesday and Friday nights. You choose the night that suits your family and keep that slot.',
+    },
+    {
+        title: 'Book 6 or more full hours and the pathway opens up',
+        body: 'Players who commit to 6 or more full-hour sessions become eligible for selection in Power League — our own Twenty20 competition — and for a place on the Academy tour to the Rajasthan Royals High Performance Centre in India.',
     },
 ];
 
 // Launch offer — shown on the pricing section + form footer.
 export const LAUNCH_OFFER = {
-    headline: 'Launch Special — 10% off group sessions',
-    detail: 'Book a group in within the first 30 days: 2 players $63 each · 3 players $54 · 4 players $45 per hour. Conditions apply.',
+    headline: 'Launch offer — 10% off small-group sessions',
+    detail: 'Book a small group before 28 August 2026 and every player saves a further 10% on the group rates above: two players pay $63 each per hour, three pay $54 each, four pay $45 each. This discount applies to small-group sessions only — one-on-one hours, half-hour sessions and packages stay at their listed price.',
 };
+
+// Venue credentials for the hero — every claim here is drawn from our own
+// bookings at the centre, not marketing copy.
+export const VENUE_FACTS = [
+    { title: 'Seven indoor lanes', detail: 'enough to run a full squad session and private lanes side by side' },
+    { title: 'Full-length run-ups', detail: 'quicks bowl off their real run, not a shortened one' },
+    { title: 'Bowling machines on site', detail: 'repeatable deliveries at a set pace, line and length' },
+];
 
 export const DAYS = [
     { value: 'tuesday', label: 'Tuesday' },

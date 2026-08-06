@@ -3,10 +3,16 @@ import Navbar from '../Navbar';
 import Footer from '../Footer';
 import PCHero from './PCHero';
 import PCAlex from './PCAlex';
+import PCHowItWorks from './PCHowItWorks';
+import PCPricing from './PCPricing';
 import PCForm from './PCForm';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
-const SECTIONS = ['hero', 'meet', 'eoi-form'];
+const SECTIONS = ['hero', 'meet', 'how-it-works', 'pricing', 'eoi-form'];
+
+// Anchored sections sit under a fixed navbar — offset them so a jumped-to
+// heading lands below the bar instead of behind it.
+const ANCHOR = 'scroll-mt-28 md:scroll-mt-32';
 
 const PrivateCoaching = () => {
     usePageAnalytics('/mickleham', { sections: SECTIONS });
@@ -23,10 +29,16 @@ const PrivateCoaching = () => {
                 <div id="hero">
                     <PCHero />
                 </div>
-                <div id="meet">
+                <div id="meet" className={ANCHOR}>
                     <PCAlex />
                 </div>
-                <div id="eoi-form">
+                <div id="how-it-works" className={ANCHOR}>
+                    <PCHowItWorks />
+                </div>
+                <div id="pricing" className={ANCHOR}>
+                    <PCPricing />
+                </div>
+                <div id="eoi-form" className={ANCHOR}>
                     <PCForm />
                 </div>
             </main>
