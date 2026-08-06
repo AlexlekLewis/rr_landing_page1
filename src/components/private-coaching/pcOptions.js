@@ -182,7 +182,7 @@ export const ALEX_RECORD = [
         items: [
             {
                 title: 'Head of Academy, Fitzroy Doncaster Cricket Club',
-                detail: 'Runs the junior academy at a Victorian Premier Cricket club — the top grade of club cricket in the state. He is also the club’s Head Bowling Coach and a Senior Assistant Coach with the senior side, and coaches their under-18s.',
+                detail: 'Now in his fourth season there. He runs the junior academy at a Victorian Premier Cricket club — the top grade of club cricket in the state — and is also the club’s Head Bowling Coach and a Senior Assistant Coach with the senior side, as well as coaching their under-18s.',
             },
             {
                 title: 'Director of Cricket, Rajasthan Royals Academy Melbourne',
@@ -194,8 +194,8 @@ export const ALEX_RECORD = [
         heading: 'Twenty years before that',
         items: [
             {
-                title: 'Founder and head coach, Preston Academy — over ten years',
-                detail: 'He started his own junior academy and ran it for more than a decade, coaching squads from under-13s to under-19s, boys and girls.',
+                title: 'Founder and head coach, Preston Academy — ten years',
+                detail: 'He started his own junior academy in 2013 and ran it for a decade, coaching squads from under-13s to under-19s, boys and girls.',
             },
             {
                 title: 'Director of Cricket and senior head coach, Preston Cricket Club',
