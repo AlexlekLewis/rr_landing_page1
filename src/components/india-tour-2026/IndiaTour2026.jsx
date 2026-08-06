@@ -25,7 +25,7 @@ const getRefFromUrl = () => {
 };
 
 const IndiaTour2026 = () => {
-    usePageAnalytics('/india-tour-2026', {
+    usePageAnalytics('/tours', {
         sections: ['hero', 'about', 'coaching', 'itinerary', 'aspiration', 'pricing', 'register'],
     });
 

@@ -235,9 +235,16 @@ function App() {
         <Route path="/PGP2026/fullride" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameFullRide /></React.Suspense>} />
         <Route path="/PGP2026/playground" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGamePlayground /></React.Suspense>} />
         <Route path="/PGP2026/admin" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PowerGameSquadsAdmin /></React.Suspense>} />
-        {/* India Tour 2026 — PUBLIC program page, in the Programs nav. Any ?ref= is captured
-            for attribution only; it no longer gates access. */}
-        <Route path="/india-tour-2026" element={<IndiaTour2026 />} />
+        {/* High Performance Centre Camp — PUBLIC program page at the canonical /tours.
+            Any ?ref= is captured for attribution only; it no longer gates access.
+            /india-tour-2026 was the old URL and has been shared, so it redirects here
+            (308 in vercel.json for direct hits, Navigate for in-app navigation). The
+            search string is carried across so referral attribution survives. */}
+        <Route path="/tours" element={<IndiaTour2026 />} />
+        <Route
+          path="/india-tour-2026"
+          element={<Navigate to={{ pathname: '/tours', search: window.location.search }} replace />}
+        />
         {/* India Tour 2026 deposit — RETIRED 2026-08-05 (Alex: "that page is redundant").
             It charged a $2,200 "deposit", but the tour is not sold that way: the high performance
             cost ($2,100 / $2,700) is paid IN FULL UP FRONT once a place is confirmed, and flights

@@ -50,6 +50,11 @@
             "permanent": true
         },
         {
+            "source": "/india-tour-2026",
+            "destination": "/tours",
+            "permanent": true
+        },
+        {
             "source": "/eliteprogram2026/playerDNAprofile",
             "destination": "https://rramsdnaprofile.vercel.app",
             "permanent": false

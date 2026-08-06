@@ -56,7 +56,7 @@ const PC_NAV = [
 ];
 
 const PROGRAMS_DROPDOWN = [
-    { label: 'High Performance Camp · India', route: '/india-tour-2026', badge: 'Registering Now · September', badgeColor: 'bg-green-500' },
+    { label: 'High Performance Camp · India', route: '/tours', badge: 'Registering Now · September', badgeColor: 'bg-green-500' },
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Closing Soon', badgeColor: 'bg-orange-500' },
     { label: 'Elite Program', route: '/elite-royals', badge: 'Enrolling Now · Selling Fast', badgeColor: 'bg-orange-500' },
     { label: 'Junior Royals Term 3', route: '/junior-royals', badge: 'Sold Out', badgeColor: 'bg-red-500' },
