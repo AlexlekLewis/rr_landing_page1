@@ -50,7 +50,7 @@ const JRT3Hero = () => {
                 >
                     <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
                     <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">
-                        {TERM3_SOLD_OUT ? 'Term 3, 2026 — Sold Out at All Centres' : countdown.expired ? 'Now Enrolling — Term 3, 2026' : 'Early Bird — $299 · Term 3, 2026'}
+                        {TERM3_SOLD_OUT ? 'Term 3 Sold Out — Term 4 Entries Now Open' : countdown.expired ? 'Now Enrolling — Term 3, 2026' : 'Early Bird — $299 · Term 3, 2026'}
                     </span>
                 </motion.div>
 
@@ -104,7 +104,7 @@ const JRT3Hero = () => {
                     <div className="flex items-center gap-2 bg-rr-pink/20 border border-rr-pink/40 rounded-full px-4 py-2">
                         <span className="text-rr-pink font-bold text-xs">💰</span>
                         <span className="text-white text-xs font-semibold uppercase tracking-wide">
-                            {TERM3_SOLD_OUT ? 'Term 3 Sold Out' : countdown.expired ? 'Programs from $330' : 'Early Bird from $299'}
+                            {TERM3_SOLD_OUT ? 'Term 4 — Mondays & Wednesdays' : countdown.expired ? 'Programs from $330' : 'Early Bird from $299'}
                         </span>
                     </div>
                 </motion.div>
@@ -149,7 +149,7 @@ const JRT3Hero = () => {
                         onClick={scrollToForm}
                         className="inline-flex items-center gap-3 bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-10 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]"
                     >
-                        {TERM3_SOLD_OUT ? 'Sold Out — Join the Term 4 List' : countdown.expired ? 'Register Now' : 'Secure Early Bird Spot'}
+                        {TERM3_SOLD_OUT ? 'Enter Now for Term 4' : countdown.expired ? 'Register Now' : 'Secure Early Bird Spot'}
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>

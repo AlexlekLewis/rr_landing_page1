@@ -75,13 +75,17 @@ const SUPABASE_TABLE = {
     williamstown: 'jr_term3_williamstown',
 };
 
-// Term 3 filled every place across all three centres (30 Jul 2026). Flip to
-// false (and update the Stripe links/pricing) when Term 4 registration opens.
+// Term 3 filled every place across all three centres (30 Jul 2026). While
+// true, the page shows the Term 4 entry panel (no-payment entries into
+// jr_term4_waitlist) instead of the paid Term 3 form. Flip to false (and
+// update the Stripe links/pricing/session options) when Term 4 paid
+// registration opens.
 const TERM3_SOLD_OUT = true;
 
-// Sold-out panel with the Term 4 waitlist. Rows land in jr_term4_waitlist
-// (anon INSERT only — parents can join the list but nobody can read it back
-// without an admin login).
+// Term 4 entry panel. Entries land in jr_term4_waitlist (anon INSERT only —
+// parents can enter but nobody can read the list back without an admin login).
+// Term 4 runs Mondays AND Wednesdays at every centre — the family picks a day
+// now, and the team confirms exact session time + payment by email.
 const WAITLIST_CENTRES = [
     { value: 'mickleham',    label: 'Mickleham Indoor Sports Centre' },
     { value: 'hallam',       label: 'Elite Cricket Centre — Hallam' },
@@ -89,13 +93,18 @@ const WAITLIST_CENTRES = [
     { value: 'any',          label: 'Any centre — happy to travel' },
 ];
 
-const SoldOutPanel = () => {
+const TERM4_DAYS = [
+    { value: 'monday',    label: 'Mondays' },
+    { value: 'wednesday', label: 'Wednesdays' },
+];
+
+const Term4EntryPanel = () => {
     const [submitting, setSubmitting] = useState(false);
     const [done, setDone] = useState(false);
     const [errors, setErrors] = useState({});
     const [form, setForm] = useState({
         parent_name: '', parent_email: '', parent_phone: '',
-        player_name: '', player_age: '', preferred_centre: '',
+        player_name: '', player_age: '', preferred_centre: '', preferred_day: '',
     });
 
     const handleChange = (e) => {
@@ -111,6 +120,7 @@ const SoldOutPanel = () => {
         if (!form.player_name.trim()) e.player_name = 'Required.';
         if (!form.player_age) e.player_age = 'Required.';
         if (!form.preferred_centre) e.preferred_centre = 'Please pick a centre.';
+        if (!form.preferred_day) e.preferred_day = 'Please pick Mondays or Wednesdays.';
         setErrors(e);
         return Object.keys(e).length === 0;
     };
@@ -128,14 +138,24 @@ const SoldOutPanel = () => {
                 player_name: form.player_name.trim(),
                 player_age: parseInt(form.player_age, 10),
                 preferred_centre: form.preferred_centre,
+                preferred_day: form.preferred_day,
+                source: 'junior-royals-term4-entry',
                 page_referrer: document.referrer || null,
                 ...utm,
             }]);
             if (error) throw error;
+            try {
+                if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+                    window.fbq('track', 'Lead', {
+                        content_name: 'Junior Royals Term 4 Entry',
+                        content_category: `junior-royals-term4-${form.preferred_centre}`,
+                    });
+                }
+            } catch (_) { /* never let analytics block the submit */ }
             setDone(true);
         } catch (err) {
             console.error(err);
-            setErrors({ form: 'Something went wrong — please try again, or email info@rramelbourne.com and we\'ll add you to the list.' });
+            setErrors({ form: 'Something went wrong — please try again, or email info@rramelbourne.com and we\'ll enter you manually.' });
             setSubmitting(false);
         }
     };
@@ -143,22 +163,25 @@ const SoldOutPanel = () => {
     const ic = (field) => `w-full bg-slate-50 border ${errors[field] ? 'border-red-400' : 'border-slate-200'} rounded-xl px-4 py-3 text-rr-dark font-medium focus:outline-none focus:border-rr-pink transition-colors duration-200 text-sm`;
     const lc = 'block text-xs font-black text-rr-dark uppercase tracking-widest mb-2';
 
+    const centreLabel = WAITLIST_CENTRES.find(c => c.value === form.preferred_centre)?.label || 'your preferred centre';
+    const dayLabel = TERM4_DAYS.find(d => d.value === form.preferred_day)?.label || 'your preferred day';
+
     return (
         <section id="registration-form" className="py-24 bg-rr-dark">
             <div className="max-w-2xl mx-auto px-6">
                 <div className="text-center mb-10">
                     <div className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6">
-                        <span className="w-1.5 h-1.5 rounded-full bg-rr-pink" />
-                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Term 3, 2026 — Sold Out</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
+                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Junior Royals — Term 4, 2026</span>
                     </div>
                     <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-wide mb-6">
-                        TERM 3 IS <span className="text-rr-pink">SOLD OUT</span>
+                        TERM 4 ENTRIES <span className="text-rr-pink">NOW OPEN</span>
                     </h2>
                     <p className="text-white/80 font-medium leading-relaxed mb-4">
-                        Every place at all three centres — Mickleham, Hallam and Williamstown — has been filled for Term 3 (July – September 2026), and registrations are now closed.
+                        Term 3 sold out at all three centres and is now underway. If you're already registered for Term 3, you don't need to do anything — your place is secure, and your session day and time are in your confirmation email.
                     </p>
                     <p className="text-white/80 font-medium leading-relaxed">
-                        Already registered? You don't need to do anything — your place is secure, and your session day and time are in your confirmation email.
+                        Term 4 runs October – December 2026, and entries are now being accepted. In Term 4, every centre — Mickleham, Hallam and Williamstown — runs sessions on both <span className="font-black text-white">Mondays and Wednesdays</span>, so you choose the training day that suits your family.
                     </p>
                 </div>
 
@@ -170,16 +193,16 @@ const SoldOutPanel = () => {
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
-                            <h3 className="text-2xl font-black text-rr-dark uppercase tracking-wide mb-3">You're on the list</h3>
+                            <h3 className="text-2xl font-black text-rr-dark uppercase tracking-wide mb-3">Your Term 4 entry is in</h3>
                             <p className="text-rr-charcoal text-sm font-medium leading-relaxed max-w-md mx-auto">
-                                We've added {form.player_name.trim() || 'your player'} to the Junior Royals Term 4 waitlist. You'll get an email from our team before Term 4 registration opens to the public — waitlist families get first choice of session times.
+                                We've received {form.player_name.trim() || 'your player'}'s entry for Junior Royals Term 4 — {dayLabel} at {centreLabel}. Our team will email you to confirm the place, exact session time and payment before Term 4 begins in October. No payment has been taken today.
                             </p>
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit} noValidate>
-                            <h3 className="text-base font-black text-rr-dark uppercase tracking-widest mb-2">Join the Term 4 Waitlist</h3>
+                            <h3 className="text-base font-black text-rr-dark uppercase tracking-widest mb-2">Enter for Term 4</h3>
                             <p className="text-rr-charcoal text-sm font-medium leading-relaxed mb-6">
-                                Term 4 runs in October – December 2026. Join the waitlist and we'll email you before registration opens to the public — no payment now, no obligation.
+                                Fill in the details below and pick your preferred centre and training day — Mondays or Wednesdays. No payment is taken now: our team will email you to confirm your player's place, exact session time and payment before the term starts.
                             </p>
                             <div className="space-y-5">
                                 <div><label className={lc}>Parent / Guardian Full Name *</label><input name="parent_name" value={form.parent_name} onChange={handleChange} className={ic('parent_name')} placeholder="e.g. Jane Smith" />{errors.parent_name && <p className="text-red-500 text-xs mt-1">{errors.parent_name}</p>}</div>
@@ -196,21 +219,34 @@ const SoldOutPanel = () => {
                                         </select>{errors.player_age && <p className="text-red-500 text-xs mt-1">{errors.player_age}</p>}
                                     </div>
                                 </div>
-                                <div>
-                                    <label className={lc}>Preferred Centre *</label>
-                                    <select name="preferred_centre" value={form.preferred_centre} onChange={handleChange} className={ic('preferred_centre')}>
-                                        <option value="">Select a centre</option>
-                                        {WAITLIST_CENTRES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
-                                    </select>
-                                    {errors.preferred_centre && <p className="text-red-500 text-xs mt-1">{errors.preferred_centre}</p>}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label className={lc}>Preferred Centre *</label>
+                                        <select name="preferred_centre" value={form.preferred_centre} onChange={handleChange} className={ic('preferred_centre')}>
+                                            <option value="">Select a centre</option>
+                                            {WAITLIST_CENTRES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+                                        </select>
+                                        {errors.preferred_centre && <p className="text-red-500 text-xs mt-1">{errors.preferred_centre}</p>}
+                                    </div>
+                                    <div>
+                                        <label className={lc}>Preferred Training Day *</label>
+                                        <select name="preferred_day" value={form.preferred_day} onChange={handleChange} className={ic('preferred_day')}>
+                                            <option value="">Select a day</option>
+                                            {TERM4_DAYS.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
+                                        </select>
+                                        {errors.preferred_day && <p className="text-red-500 text-xs mt-1">{errors.preferred_day}</p>}
+                                    </div>
                                 </div>
+                                <p className="text-slate-500 text-xs font-medium leading-relaxed -mt-1">
+                                    Every centre runs Term 4 sessions on both Mondays and Wednesdays — pick whichever day works best. We'll confirm your exact session time by email.
+                                </p>
                             </div>
                             {errors.form && <div className="bg-red-50 border border-red-200 rounded-xl p-4 mt-6"><p className="text-red-600 text-sm font-medium">{errors.form}</p></div>}
                             <button type="submit" disabled={submitting}
                                 className="mt-8 w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]">
-                                {submitting ? 'Adding you to the list…' : 'Join the Term 4 Waitlist'}
+                                {submitting ? 'Submitting your entry…' : 'Submit My Term 4 Entry'}
                             </button>
-                            <p className="text-slate-400 text-xs text-center mt-4">Joining the waitlist doesn't lock you in — it just means you hear first.</p>
+                            <p className="text-slate-400 text-xs text-center mt-4">No payment now — submitting an entry doesn't lock you in, and we confirm every place by email.</p>
                         </form>
                     )}
                 </div>
@@ -334,7 +370,7 @@ const fireLeadEvent = (location) => {
 
 const JRT3RegistrationForm = () => {
     const earlyBird = isEarlyBird();
-    if (TERM3_SOLD_OUT) return <SoldOutPanel />;
+    if (TERM3_SOLD_OUT) return <Term4EntryPanel />;
     const [submitting, setSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
     const [acceptTerms, setAcceptTerms] = useState(false);

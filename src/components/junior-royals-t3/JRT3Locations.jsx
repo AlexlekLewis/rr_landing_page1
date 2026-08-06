@@ -6,6 +6,11 @@ const EARLY_BIRD_END = new Date('2026-07-15T13:00:00Z');
 const isEarlyBird = () => new Date() < EARLY_BIRD_END;
 const price = () => isEarlyBird() ? '$299' : '$330';
 
+// Term 3 filled every place (30 Jul 2026). The session times listed below are
+// Term 3's — kept for current families — while the CTAs point at the Term 4
+// entry form (Mondays & Wednesdays at every centre). Flip when Term 4 opens.
+const TERM3_SOLD_OUT = true;
+
 const VENUE_GROUPS = {
     mickleham: [
         { name: 'Ages 7–9',   sessions: ['Tuesdays 6:00pm – 7:00pm · 28 Jul – 15 Sep', 'Fridays 6:00pm – 7:00pm · 31 Jul – 18 Sep'] },
@@ -39,7 +44,7 @@ const GroupAccordion = ({ group }) => {
                     <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
                         <div className="px-4 py-3 bg-white space-y-2">
-                            <p className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-2">{price()} per child</p>
+                            <p className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-2">{TERM3_SOLD_OUT ? 'Term 3 — Sold Out' : `${price()} per child`}</p>
                             {hasSessions ? (
                                 group.sessions.map((s, i) => (
                                     <div key={i} className="flex items-center gap-2">
@@ -122,7 +127,9 @@ const JRT3Locations = () => {
                     </motion.h2>
                     <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}
                         className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium">
-                        {earlyBird
+                        {TERM3_SOLD_OUT
+                            ? <>The session times below are <span className="font-black text-rr-dark">Term 3's</span>, which is sold out and now underway. In <span className="font-black text-rr-dark">Term 4 (October – December 2026)</span>, every centre runs sessions on <span className="font-black text-rr-dark">Mondays and Wednesdays</span> — enter now and pick your day, and we'll confirm your exact session time by email.</>
+                            : earlyBird
                             ? <>Early bird pricing at <span className="font-black text-rr-dark">$299</span> — increasing to <span className="font-black text-rr-dark">$330</span> once the early bird offer concludes at 11pm 15 July. Small group sessions, one hour per week for 8 consecutive weeks at your preferred time. Select a location to view age groups and times.</>
                             : <>Programs at <span className="font-black text-rr-dark">$330</span> — small group sessions, one hour per week for 8 consecutive weeks at your preferred time. Select a location to view age groups and times.</>
                         }
@@ -146,15 +153,26 @@ const JRT3Locations = () => {
                                 <div className="space-y-2 mb-4">
                                     <div className="flex items-center gap-3">
                                         <Calendar className="w-4 h-4 text-rr-blue shrink-0" />
-                                        <span className="text-rr-charcoal font-semibold text-sm">{loc.dates}</span>
+                                        <span className="text-rr-charcoal font-semibold text-sm">{TERM3_SOLD_OUT ? `Term 3: ${loc.dates}` : loc.dates}</span>
                                     </div>
+                                    {TERM3_SOLD_OUT && (
+                                        <div className="flex items-center gap-3">
+                                            <Calendar className="w-4 h-4 text-rr-pink shrink-0" />
+                                            <span className="text-rr-dark font-black text-sm">Term 4: Mondays &amp; Wednesdays · Oct – Dec</span>
+                                        </div>
+                                    )}
                                     <div className="flex items-center gap-3">
                                         <MapPin className="w-4 h-4 text-rr-blue shrink-0" />
                                         <span className="text-rr-charcoal font-semibold text-sm">{loc.note}</span>
                                     </div>
                                 </div>
 
-                                {loc.confirmed ? (
+                                {TERM3_SOLD_OUT ? (
+                                    <div className="bg-rr-pink/5 border border-rr-pink/25 rounded-xl px-4 py-2.5 mb-4 flex items-center gap-2">
+                                        <span className="w-2 h-2 rounded-full bg-rr-pink shrink-0" />
+                                        <p className="text-rr-pink text-xs font-bold uppercase tracking-wide">Term 3 sold out — Term 4 entries open</p>
+                                    </div>
+                                ) : loc.confirmed ? (
                                     <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-2.5 mb-4 flex items-center gap-2">
                                         <span className="w-2 h-2 rounded-full bg-green-500 shrink-0" />
                                         <p className="text-green-700 text-xs font-bold uppercase tracking-wide">Dates &amp; times confirmed</p>
@@ -165,7 +183,7 @@ const JRT3Locations = () => {
                                     </div>
                                 )}
 
-                                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Age Groups &amp; Times</p>
+                                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">{TERM3_SOLD_OUT ? 'Term 3 Age Groups & Times (Sold Out)' : 'Age Groups & Times'}</p>
                                 <div className="space-y-2 mb-5">
                                     {(VENUE_GROUPS[loc.tag] || []).map(group => (
                                         <GroupAccordion key={group.name} group={group} />
@@ -175,7 +193,7 @@ const JRT3Locations = () => {
                                 <div className="flex flex-col gap-3">
                                     <button onClick={scrollToForm}
                                         className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest py-3 rounded-full transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.4)] text-sm">
-                                        {earlyBird ? 'Secure Early Bird Spot' : 'Secure Your Place'}
+                                        {TERM3_SOLD_OUT ? 'Enter for Term 4' : earlyBird ? 'Secure Early Bird Spot' : 'Secure Your Place'}
                                     </button>
                                     <a href={loc.mapsUrl} target="_blank" rel="noopener noreferrer"
                                         className="w-full bg-slate-100 hover:bg-slate-200 text-rr-dark font-bold uppercase tracking-widest py-3 rounded-full transition-all duration-300 text-sm text-center">

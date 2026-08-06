@@ -3,8 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const EARLY_BIRD_END = new Date('2026-07-15T13:00:00Z');
 
-// Term 3 is sold out (30 Jul 2026) — no floating register nudge on an
-// informational page. Flip back when Term 4 opens.
+// Term 3 is sold out (30 Jul 2026); the floating nudge now points at the
+// Term 4 entry form instead of the paid Term 3 registration. Flip back when
+// Term 4 paid registration opens.
 const TERM3_SOLD_OUT = true;
 
 const JRT3StickyCTA = () => {
@@ -24,8 +25,6 @@ const JRT3StickyCTA = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    if (TERM3_SOLD_OUT) return null;
-
     return (
         <AnimatePresence>
             {visible && !pastForm && (
@@ -34,7 +33,7 @@ const JRT3StickyCTA = () => {
                     <div className="max-w-lg mx-auto">
                         <button onClick={() => document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' })}
                             className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] flex items-center justify-center gap-3 text-sm">
-                            {earlyBird ? 'Secure Early Bird Spot — $299' : 'Register Now — Term 3, 2026'}
+                            {TERM3_SOLD_OUT ? 'Term 4 Entries Open — Enter Now' : earlyBird ? 'Secure Early Bird Spot — $299' : 'Register Now — Term 3, 2026'}
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                             </svg>

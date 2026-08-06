@@ -18,11 +18,11 @@ export const ANNOUNCEMENTS = [
     },
     {
         key: 'junior-royals-t3',
-        name: 'Junior Royals · Term 3',
-        tag: 'Weekly coaching at 3 venues',
+        name: 'Junior Royals · Term 4',
+        tag: 'Mondays & Wednesdays · Oct – Dec',
         detail: 'Mickleham · Williamstown · Hallam',
         href: '/junior-royals',
-        badge: 'Sold out',
+        badge: 'Entries open',
     },
     {
         key: 'india-tour',
