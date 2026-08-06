@@ -1,5 +1,7 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import RouteSeo from './seo/RouteSeo';
+import NotFound from './components/NotFound';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsConditions from './components/TermsConditions';
 import ComingSoonSplash from './components/ComingSoonSplash';
@@ -132,6 +134,7 @@ function App() {
   return (
     <div className="font-sans antialiased text-rr-dark bg-white selection:bg-rr-pink selection:text-white">
       <PostHogPageviewTracker />
+      <RouteSeo />
       <ChunkReloadBoundary>
       <Routes>
         {/* DNA Profile App — lazy-loaded portal at /eliteprogram/playerDNAprofile */}
@@ -279,6 +282,9 @@ function App() {
         <Route path="/rramadmin_26/feedback" element={<AdminLayout><ProgramFeedbackDashboard /></AdminLayout>} />
         <Route path="/rramadmin_26/feedback/responses" element={<AdminLayout><ProgramFeedbackResponses /></AdminLayout>} />
         <Route path="/rramadmin_26/power-league" element={<AdminLayout><PowerLeagueDashboard /></AdminLayout>} />
+
+        {/* 404 — MUST be last. Unknown URLs render NotFound (full nav + footer + links home). */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
       </ChunkReloadBoundary>
       <TextUsButton />

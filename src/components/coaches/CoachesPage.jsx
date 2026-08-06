@@ -15,7 +15,7 @@ const CoachesPage = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        document.title = 'The Coaches | Rajasthan Royals Academy Melbourne';
+        // <title> managed centrally by <RouteSeo/> (src/seo/pageSeo.js)
     }, []);
 
     return (

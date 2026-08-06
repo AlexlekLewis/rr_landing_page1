@@ -19,7 +19,7 @@ const PrivateCoaching = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        document.title = 'Private Coaching | Rajasthan Royals Academy Melbourne';
+        // <title> managed centrally by <RouteSeo/> (src/seo/pageSeo.js)
     }, []);
 
     return (

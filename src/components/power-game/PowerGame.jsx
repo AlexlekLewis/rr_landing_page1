@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import ApplyFlow from './apply/ApplyFlow';
 import { SQUADS, CENTRE_BY_SLUG } from '../../lib/booking/squads';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
+import Footer from '../Footer';
 
 // /PGP2026 renders the boss-approved design verbatim (the "PGP2026 Preview" mock),
 // isolated in a shadow root so its self-contained CSS can't collide with the app.
@@ -551,28 +552,15 @@ const PowerGame = () => {
     const [pickedSession, setPickedSession] = useState(null);
 
     useEffect(() => {
-        document.title = 'Power Pre-Season | Rajasthan Royals Academy Elite Program';
         window.scrollTo(0, 0);
-        // Canonical URL — this page serves at both /elite-royals (primary) and /PGP2026.
-        // Point search engines at the single /elite-royals URL to avoid duplicate content.
-        let canonical = document.querySelector('link[rel="canonical"][data-pgp]');
-        if (!canonical) {
-            canonical = document.createElement('link');
-            canonical.rel = 'canonical';
-            canonical.setAttribute('data-pgp', '');
-            document.head.appendChild(canonical);
-        }
-        canonical.href = 'https://rramelbourne.com/elite-royals';
+        // <title> + canonical are managed centrally by <RouteSeo/> (see src/seo/pageSeo.js):
+        // /PGP2026 canonicalises to /elite-royals there, so this page no longer sets them.
         if (!document.getElementById('pgpv2-font')) {
             const l = document.createElement('link');
             l.id = 'pgpv2-font'; l.rel = 'stylesheet';
             l.href = 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap';
             document.head.appendChild(l);
         }
-        return () => {
-            const c = document.querySelector('link[rel="canonical"][data-pgp]');
-            if (c) c.remove();
-        };
     }, []);
 
     useEffect(() => {
@@ -639,6 +627,7 @@ const PowerGame = () => {
     return (
         <div className="min-h-screen bg-white">
             <div ref={hostRef} />
+            <Footer />
             {showApply && (
                 <div style={{ position: 'fixed', inset: 0, zIndex: 200, background: '#111921', overflowY: 'auto' }}>
                     <div style={{ maxWidth: '640px', margin: '0 auto', padding: '14px 16px 0' }}>
