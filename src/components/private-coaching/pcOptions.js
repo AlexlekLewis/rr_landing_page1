@@ -3,9 +3,12 @@
 //
 // Pricing HELD by Alex 22 Jul 2026 (customer-facing, inc GST):
 // $160 first consultation (session 1 for everyone) · 1-on-1 $130/hr
-// PROFESSIONAL coach · $160/hr Leadership (6+ blocks only) · 30-min
-// $70 (UNDER-14s ONLY) · groups $70pp (2) / $60pp (3) / $50pp (4) —
+// PROFESSIONAL coach · $160/hr Leadership (6+ blocks only) ·
+// groups $70pp (2) / $60pp (3) / $50pp (4) —
 // groups deliberately undercut solo to push players toward them.
+// NO 30-MINUTE / HALF-HOUR PRODUCT — killed by Alex 6 Aug 2026
+// ("we're not doing 30-minute products"). Every session is a full
+// hour, every age. Do not reintroduce it anywhere.
 // Blocks: 3-session starter $390 (professional coaches only) or 6+.
 // Weekly packages carry a 10% DISCOUNT: 10-wk term $1,170/$1,440,
 // 40-wk season $4,680/$5,760. LAUNCH SPECIAL: 10% off GROUP
@@ -59,12 +62,7 @@ export const GROUP_SIZES = [
     { value: 4, label: '4 players — $50 per player / hr' },
 ];
 
-// 30-minute sessions are for under-14s only; 14+ train full hours.
-export const UNDER_14_CUTOFF = 14;
-export const SESSION_LENGTHS = [
-    { value: '60', label: 'Full hour — 60 minutes' },
-    { value: '30', label: '30 minutes — under-14s option ($70)' },
-];
+// Every session is a full hour, at every age. There is no half-hour product.
 
 // Programs: casual block, or weekly packages (term = 10 weeks; season = 40
 // term-time weeks, Victorian school holidays excluded).
@@ -77,16 +75,15 @@ export const PROGRAM_TYPES = [
 // Price hints the form shows once a program + length is chosen.
 // Packages carry a 10% discount (set by Alex 22 Jul).
 export const PROGRAM_PRICE_HINTS = {
-    'term-10': '10 weekly sessions with 10% off — $1,170 with a professional coach · $1,440 Leadership ($630 for the under-14 30-min option)',
+    'term-10': '10 weekly sessions with 10% off — $1,170 with a professional coach · $1,440 Leadership',
     'season-40': '40 term-time weeks with 10% off — $4,680 with a professional coach · $5,760 Leadership. Locked weekly slot, first pick of times.',
 };
 
-// 6+ full hours unlock the pathway (Power League + India Tour) — casual blocks
-// of 6+ full-hour sessions, or either weekly package at full-hour length.
+// 6+ hours unlock the pathway (Power League + India Tour) — casual blocks of 6+
+// sessions, or either weekly package. All sessions are full hours.
 export const ELIGIBLE_COUNTS = ['6', '8', '10', '12+'];
-export const qualifiesForPathway = (sessionLength, sessionsRequested, packageType = 'none') =>
-    sessionLength === '60' &&
-    (['term-10', 'season-40'].includes(packageType) || ELIGIBLE_COUNTS.includes(sessionsRequested));
+export const qualifiesForPathway = (sessionsRequested, packageType = 'none') =>
+    ['term-10', 'season-40'].includes(packageType) || ELIGIBLE_COUNTS.includes(sessionsRequested);
 
 // Customer-facing price card (inc GST) — rendered on the page, used in copy.
 // `minimum` states the smallest booking we accept for that product, in plain
@@ -125,14 +122,6 @@ export const PRICING = [
         unit: 'per player per hour, with 2 players',
         detail: 'Same coach, same lane, shared between friends or teammates. Three players is $60 each per hour; four players is $50 each per hour. The more players share the lane, the less each family pays.',
         minimum: 'Same as one-on-one: a 3-session starter block at the least. You bring your own group of 2 to 4 players.',
-    },
-    {
-        key: 'junior30',
-        label: 'Half-hour session for under-14s',
-        price: '$70',
-        unit: 'per 30 minutes · under-14s only',
-        detail: 'A shorter, sharper session for younger players whose concentration is better served by half an hour than a full one.',
-        minimum: 'Only available to players aged 13 and under. From 14 up, players train in full hours.',
     },
     {
         key: 'term',
@@ -174,7 +163,7 @@ export const BOOKING_RULES = [
 // Launch offer — shown on the pricing section + form footer.
 export const LAUNCH_OFFER = {
     headline: 'Launch offer — 10% off small-group sessions',
-    detail: 'Book a small group before 28 August 2026 and every player saves a further 10% on the group rates above: two players pay $63 each per hour, three pay $54 each, four pay $45 each. This discount applies to small-group sessions only — one-on-one hours, half-hour sessions and packages stay at their listed price.',
+    detail: 'Book a small group before 28 August 2026 and every player saves a further 10% on the group rates above: two players pay $63 each per hour, three pay $54 each, four pay $45 each. This discount applies to small-group sessions only — one-on-one hours and packages stay at their listed price.',
 };
 
 // Venue credentials for the hero — every claim here is drawn from our own
