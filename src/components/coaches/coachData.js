@@ -24,7 +24,7 @@ export const DIRECTOR = {
     // "our goal" rather than "my job".
     quote:
         'The future of the game belongs to the brave — good cricketers, talented kids with the courage to express who they really are. Our goal is to build players brave enough to be the best version of themselves, and good enough to back it up.',
-    credentials: ['22+ Years Coaching', 'Premier Cricket Senior Assistant Coach', 'Bowling Coach'],
+    credentials: ['Cricket Australia Level 2', 'Premier Cricket Head of Academy', 'Cricket Victoria Coach Educator'],
     // Rewritten 22 Jul to Alex's own direction: plain and honest, no slogans (he
     // rejected the "coaches the opposite of fear" framing). States his actual role —
     // Director of Cricket (program development, talent ID, all three centres) + Head
@@ -32,7 +32,8 @@ export const DIRECTOR = {
     // of failure or judgement. See [[dont-sloganize]].
     bio: [
         'Alex has spent over 22 years coaching young cricketers through the representative pathways — hundreds of them. As Director of Cricket he leads the Academy’s program development, its talent identification systems, and the coaching across all three centres; at Mickleham, he’s the Head Coach, coaching in the nets himself.',
-        'What matters most to Alex is the environment he creates — one where young players feel free to have a go, get it wrong, and get better. He’s a current Premier Cricket senior assistant and bowling coach, and he coaches to the individual player, not to a template.',
+        'Outside the Academy he is Head of Academy at Fitzroy Doncaster, a Victorian Premier Cricket club — the top grade of club cricket in the state — where he is also Head Bowling Coach and a Senior Assistant Coach with the senior side. Cricket Victoria appointed him Junior Director of Coaching for the Northern Falcons region, and uses him as a coach educator training other coaches. He founded his own junior academy at Preston and ran it for over ten years, and has been a representative head coach across the Diamond Valley and North Metro associations.',
+        'What matters most to Alex is the environment he creates — one where young players feel free to have a go, get it wrong, and get better. In his own words: let the player play, explore, make mistakes and learn. He coaches to the individual player, not to a template.',
     ],
 };
 

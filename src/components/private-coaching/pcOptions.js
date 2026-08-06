@@ -166,6 +166,64 @@ export const LAUNCH_OFFER = {
     detail: 'Book a small group before 28 August 2026 and every player saves a further 10% on the group rates above: two players pay $63 each per hour, three pay $54 each, four pay $45 each. This discount applies to small-group sessions only — one-on-one hours and packages stay at their listed price.',
 };
 
+// Alex's coaching record, taken from his own coaching resume (Aug 2026).
+// Written for a parent who has never heard of any of these bodies, so every
+// club, association and accreditation carries a plain-English gloss.
+//
+// NOTE ON TENSE: his resume lists the Preston roles as current, but Alex names
+// Fitzroy Doncaster as where he is now. The Preston entries are therefore
+// stated by DURATION ("for over ten years") rather than claimed as finished —
+// true either way. Confirm with Alex before changing.
+export const ALEX_RECORD = [
+    {
+        heading: 'Where he coaches now',
+        items: [
+            {
+                title: 'Head of Academy, Fitzroy Doncaster Cricket Club',
+                detail: 'Runs the junior academy at a Victorian Premier Cricket club — the top grade of club cricket in the state. He is also the club’s Head Bowling Coach and a Senior Assistant Coach with the senior side, and coaches their under-18s.',
+            },
+            {
+                title: 'Junior Director of Coaching, Northern Falcons',
+                detail: 'A Cricket Victoria appointment. He leads junior coaching across the Northern Falcons region — the representative pathway that sits above club cricket in Melbourne’s north.',
+            },
+            {
+                title: 'Coach educator, Cricket Victoria',
+                detail: 'Cricket Victoria uses him to train and develop other coaches, not just players.',
+            },
+        ],
+    },
+    {
+        heading: 'What he has built',
+        items: [
+            {
+                title: 'Founder and head coach, Preston Academy — over ten years',
+                detail: 'He started his own junior academy and ran it for more than a decade, coaching squads from under-13s to under-19s, boys and girls.',
+            },
+            {
+                title: 'Director of Cricket and senior head coach, Preston Cricket Club',
+                detail: 'Responsible for the whole cricket program at the club, and head coach of its senior side.',
+            },
+            {
+                title: 'Representative head coach across Melbourne’s north',
+                detail: 'Head coach and assistant roles with the Diamond Valley and North Metro cricket associations and the Northern Falcons pathway squads, from under-14s to under-18s, boys and girls.',
+            },
+        ],
+    },
+];
+
+export const ALEX_ACCREDITATION = {
+    title: 'Cricket Australia Level 2 accredited coach',
+    detail: 'Cricket Australia’s advanced coaching accreditation, and more than twenty years coaching juniors through the representative pathway.',
+};
+
+// Alex's coaching philosophy, in his own words from his coaching resume.
+// Typos in the source ("perpetration") corrected; wording otherwise his, not
+// rewritten into slogans — see the dont-sloganize note.
+export const ALEX_PHILOSOPHY = {
+    quote: 'Let the player play, explore, make mistakes and learn.',
+    body: 'A coach is there to encourage and support growth — to develop the athlete as a person, and to build an environment where players are challenged and still feel safe enough to explore their game. Good coaching is a balance of the technical, the mental and the physical, and every player prepares differently. What I am really doing is creating an environment where players can coach themselves, driven by their own desire to compete.',
+};
+
 // Venue credentials for the hero — every claim here is drawn from our own
 // bookings at the centre, not marketing copy.
 export const VENUE_FACTS = [
