@@ -13,7 +13,7 @@ import HomeFAQ from './HomeFAQ';
 import HomeFinalCTA from './HomeFinalCTA';
 import HomeStickyCTA from './HomeStickyCTA';
 import RegisterDrawer from './RegisterDrawer';
-import PowerGameTopBanner from './PowerGameTopBanner';
+import HomeTopBanner from './HomeTopBanner';
 import OpenDaysModal from './OpenDaysModal';
 import OpenDaysTicket from './OpenDaysTicket';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
@@ -52,8 +52,8 @@ const HomePage = () => {
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
             <Navbar variant="home" onRegisterClick={openDrawer} />
-            <PowerGameTopBanner />
-            {/* Open-days ticket banner — sits under the nav once the modal is closed */}
+            <HomeTopBanner />
+            {/* "What's On" ticker — sits under the nav once the modal is closed */}
             <OpenDaysTicket show={openDaysTicket && !openDaysModal} onOpen={reopenOpenDays} onDismiss={dismissTicket} />
 
             <main className="flex-1 w-full overflow-hidden">

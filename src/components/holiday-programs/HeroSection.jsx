@@ -38,7 +38,7 @@ const HeroSection = () => {
                     className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6"
                 >
                     <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Now Open — $330 Per Player</span>
+                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">September / October Holidays — Interest Now Open</span>
                 </motion.div>
 
                 {/* Headline */}
@@ -59,7 +59,7 @@ const HeroSection = () => {
                     transition={{ duration: 0.6, delay: 0.3 }}
                     className="text-lg md:text-2xl text-white font-semibold mb-4"
                 >
-                    3 days. 12 hours. Real Royals coaching.
+                    Three days. 12 hours of coaching. Three Melbourne centres.
                 </motion.p>
 
                 <motion.p
@@ -68,7 +68,10 @@ const HeroSection = () => {
                     transition={{ duration: 0.6, delay: 0.4 }}
                     className="text-sm md:text-lg text-white/90 font-medium mb-8 max-w-xl"
                 >
-                    The Junior Royals Holiday Camp runs across the July school holidays for boys and girls aged 7–15. Multiple Melbourne locations.
+                    The Junior Royals Holiday Camp is back for the September / October school holidays, for boys
+                    and girls aged 7–15, at Mickleham, Hallam and Williamstown. We are setting the dates around
+                    where the demand is — register your interest below and we will email you the days, times and
+                    cost before the camp opens to anyone else.
                 </motion.p>
 
                 {/* Location pills */}
@@ -80,15 +83,15 @@ const HeroSection = () => {
                 >
                     <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2">
                         <span className="text-rr-pink font-bold text-xs">📍</span>
-                        <span className="text-white text-xs font-semibold uppercase tracking-wide">Bundoora — Sold Out</span>
+                        <span className="text-white text-xs font-semibold uppercase tracking-wide">Mickleham — North</span>
                     </div>
                     <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2">
                         <span className="text-rr-pink font-bold text-xs">📍</span>
-                        <span className="text-white text-xs font-semibold uppercase tracking-wide">Hallam — Sold Out</span>
+                        <span className="text-white text-xs font-semibold uppercase tracking-wide">Hallam — South-East</span>
                     </div>
                     <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2">
                         <span className="text-rr-pink font-bold text-xs">📍</span>
-                        <span className="text-white text-xs font-semibold uppercase tracking-wide">Williamstown North — 2 Places Remaining</span>
+                        <span className="text-white text-xs font-semibold uppercase tracking-wide">Williamstown — West</span>
                     </div>
                 </motion.div>
 
@@ -100,7 +103,7 @@ const HeroSection = () => {
                     onClick={scrollToForm}
                     className="inline-flex items-center gap-3 bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-10 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]"
                 >
-                    Now Open — $330 Per Player
+                    Register Your Interest
                     <svg className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>

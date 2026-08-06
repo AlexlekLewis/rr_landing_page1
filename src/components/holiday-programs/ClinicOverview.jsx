@@ -20,13 +20,13 @@ const features = [
 
     {
         icon: 'pin',
-        title: 'Multiple Locations',
-        desc: 'Coming to multiple locations across Melbourne — find a program near you.',
+        title: 'Three Melbourne Centres',
+        desc: 'Mickleham in the north, Hallam in the south-east, Williamstown in the west. Pick whichever you can get to.',
     },
     {
         icon: 'clock',
-        title: '4 Hours Daily',
-        desc: '9:00 AM – 1:00 PM. Three consecutive days. 12 hours of cricket development.',
+        title: 'Three Days, 12 Hours',
+        desc: 'Four hours a day across three consecutive days. The exact days and start times are confirmed by email once we set them.',
     },
 ];
 
@@ -90,7 +90,7 @@ const ClinicOverview = () => {
                         onClick={scrollToForm}
                         className="inline-flex items-center gap-3 bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-10 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]"
                     >
-                        Secure Your Place Now
+                        Register Your Interest
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>

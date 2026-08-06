@@ -2,9 +2,9 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 
-const PRICE = 330;
-const HOURLY = '$27.50';
-
+// No price is shown while the camp is at the expression-of-interest stage — the
+// cost is confirmed by email along with the dates, and nothing is charged on this
+// page. Put the price card back when the camp goes on sale.
 const included = [
     '3 full days of elite coaching (12 hours total)',
     'Structured basic cricket & T20 skills curriculum',
@@ -30,7 +30,7 @@ const PricingSection = () => {
                         transition={{ duration: 0.6 }}
                         className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-wide mb-4"
                     >
-                        PRICE &amp; <span className="text-rr-pink">INCLUSIONS</span>
+                        WHAT YOU <span className="text-rr-pink">GET</span>
                     </motion.h2>
                 </div>
 
@@ -43,30 +43,46 @@ const PricingSection = () => {
                         transition={{ duration: 0.6 }}
                         className="bg-gradient-to-br from-rr-navy via-rr-blue to-rr-pink rounded-2xl p-8 text-center text-white relative overflow-hidden"
                     >
-                        <div className="mt-4">
-                            <p className="text-white/70 font-bold uppercase tracking-widest text-sm mb-3">Per Player</p>
+                        <div className="mt-4 text-left">
+                            <p className="text-white/70 font-bold uppercase tracking-widest text-sm mb-4 text-center">How it works</p>
 
-                            {/* Early bird price */}
-                            <div className="flex items-start justify-center gap-1 mb-1">
-                                <span className="text-3xl font-black mt-2">$</span>
-                                <span className="text-8xl font-black leading-none">{PRICE}</span>
-                            </div>
-
-
-                            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2 mb-6">
-                                <span className="text-white font-bold text-sm">{HOURLY} / hour across 12 hours</span>
-                            </div>
+                            <ol className="space-y-4 mb-7">
+                                <li className="flex gap-3">
+                                    <span className="shrink-0 w-6 h-6 rounded-full bg-white/15 border border-white/30 flex items-center justify-center text-xs font-black">1</span>
+                                    <span className="text-white/90 text-sm font-medium leading-relaxed">
+                                        You register your interest below. It takes a minute, costs nothing, and does not book a place.
+                                    </span>
+                                </li>
+                                <li className="flex gap-3">
+                                    <span className="shrink-0 w-6 h-6 rounded-full bg-white/15 border border-white/30 flex items-center justify-center text-xs font-black">2</span>
+                                    <span className="text-white/90 text-sm font-medium leading-relaxed">
+                                        We set the dates around where the interest is — which centre, and which week of the holidays.
+                                    </span>
+                                </li>
+                                <li className="flex gap-3">
+                                    <span className="shrink-0 w-6 h-6 rounded-full bg-white/15 border border-white/30 flex items-center justify-center text-xs font-black">3</span>
+                                    <span className="text-white/90 text-sm font-medium leading-relaxed">
+                                        We email you first, with the exact days, the daily start and finish times, the cost, and a link to book.
+                                    </span>
+                                </li>
+                                <li className="flex gap-3">
+                                    <span className="shrink-0 w-6 h-6 rounded-full bg-white/15 border border-white/30 flex items-center justify-center text-xs font-black">4</span>
+                                    <span className="text-white/90 text-sm font-medium leading-relaxed">
+                                        You book if it suits. If it doesn't, you reply and we take you off the list — no obligation either way.
+                                    </span>
+                                </li>
+                            </ol>
 
                             <button
                                 onClick={scrollToForm}
                                 className="w-full bg-white text-rr-pink font-black uppercase tracking-widest py-4 rounded-full text-sm hover:bg-white/90 transition-all duration-300"
                             >
-                                Secure Your Place Now
+                                Register Your Interest
                             </button>
 
                             {/* Fine print */}
-                            <p className="text-white/40 text-xs mt-4 leading-relaxed">
-                                Price includes 12 hours of elite coaching across 3 days. Training shirt purchased separately at $29.95.
+                            <p className="text-white/50 text-xs mt-4 leading-relaxed text-center">
+                                No payment is taken on this page. The cost is confirmed in that email, before you commit to anything.
                             </p>
                         </div>
                     </motion.div>

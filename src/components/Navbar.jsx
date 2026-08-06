@@ -56,12 +56,14 @@ const PC_NAV = [
     { label: 'PRICING', id: 'pricing' },
 ];
 
+// This dropdown appears on EVERY page, so a stale badge here is wrong everywhere.
+// Only claim "now open"/"enrolling" for something a visitor can actually join today.
 const PROGRAMS_DROPDOWN = [
     { label: 'High Performance Camp · India', route: '/tours', badge: 'Registering Now · September', badgeColor: 'bg-green-500' },
-    { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Closing Soon', badgeColor: 'bg-orange-500' },
-    { label: 'Elite Program', route: '/elite-royals', badge: 'Enrolling Now · Selling Fast', badgeColor: 'bg-orange-500' },
+    { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Sept/Oct — Register Interest', badgeColor: 'bg-green-500' },
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 Entries Open', badgeColor: 'bg-green-500' },
     { label: 'Private Coaching', route: '/mickleham', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },
+    { label: 'Elite Program', route: '/elite-royals', badge: 'Ages 12+ · Our elite pathway', badgeColor: 'bg-slate-400' },
 ];
 
 const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
@@ -91,7 +93,8 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
 
     // Junior Royals (isLittleCrickets): Term 3 is sold out — the CTA points at
     // the Term 4 entry form (Mondays & Wednesdays, no payment now).
-    const ctaLabel = isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : isLittleCrickets ? 'TERM 4 — ENTER NOW' : (isLP2 || isHoliday) ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
+    // The holiday camp takes interest, not payment — don't promise a booked place.
+    const ctaLabel = isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : isLittleCrickets ? 'TERM 4 — ENTER NOW' : isLP2 ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
     const ctaTarget = isIndiaTour ? 'register' : isMickleham ? 'register' : isCoaches ? 'join' : isPrivateCoaching ? 'eoi-form' : isLP2 ? 'checkout' : (isHoliday || isLittleCrickets) ? 'registration-form' : 'apply-form';
 
     const scrollToForm = () => {

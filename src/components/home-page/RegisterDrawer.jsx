@@ -8,10 +8,11 @@ const AGE_GROUPS = ['U10', 'U12', 'U14', 'U16', 'U18', 'Adult'];
 const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Advanced', 'Elite'];
 const GENDER_OPTIONS = ['Male Cricket', 'Female Cricket', 'No Preference'];
 
+// Same rule as the home-page hero list: no urgency claim unless it is true today.
 const PROGRAMS = [
-    { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', urgency: 'Williamstown Closing Soon · Hallam Full' },
-    { label: 'Elite Program', route: '/elite-royals', urgency: 'Enrolling Now · Selling Fast' },
+    { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', urgency: 'Sept/Oct school holidays — register your interest' },
     { label: 'Junior Royals', route: '/junior-royals', urgency: 'Term 4 entries open — Mondays & Wednesdays' },
+    { label: 'Elite Program', route: '/elite-royals', urgency: 'Ages 12+ — our elite pathway' },
 ];
 
 const InputField = ({ label, type = 'text', value, onChange, placeholder, required }) => (

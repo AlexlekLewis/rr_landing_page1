@@ -2,7 +2,7 @@ import React from 'react';
 import { ANNOUNCEMENTS } from './openDaysData';
 
 // News-style ticker under the nav announcing our current programs. Shows once the
-// visitor closes the OpenDaysModal (rendered in flow beneath PowerGameTopBanner).
+// visitor closes the OpenDaysModal (rendered in flow beneath HomeTopBanner).
 // A fixed "WHAT'S ON" label + a seamless right-to-left crawl (two identical copies
 // so it loops without a seam) + See More CTA + dismiss. Clicking it re-opens the
 // modal. CSS keyframes (pauses on hover / prefers-reduced-motion).

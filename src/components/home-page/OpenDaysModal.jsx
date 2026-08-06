@@ -2,8 +2,9 @@ import React, { useEffect } from 'react';
 import { ANNOUNCEMENTS } from './openDaysData';
 
 // Home-page "What's On" modal announcing our current programs to every visitor.
-// Power Game sits first and is visually highlighted. Each row is a full-page
-// <a href> to its landing page so the Meta Pixel PageView fires on arrival.
+// Content comes from ANNOUNCEMENTS — the first entry is visually highlighted.
+// Each row is a full-page <a href> to its landing page so the Meta Pixel
+// PageView fires on arrival.
 const OpenDaysModal = ({ open, onClose }) => {
     useEffect(() => {
         if (!open) return;

@@ -1,39 +1,43 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+// Timings are shown as elapsed time from the start of the day, not as clock
+// times — the daily start time differs by centre (July 2026 ran 9:00am at two
+// centres and 1:30pm at the third) and is confirmed to each family by email.
+// The four blocks add up to the full four-hour day.
 const slots = [
     {
-        time: '9:00 – 9:15 AM',
+        time: 'First 15 minutes',
         title: 'Warm-Up',
         desc: 'Dynamic warm-up to get every player moving, activated, and ready. Sets the tone for the day ahead.',
         tag: 'Physical Prep',
     },
     {
-        time: '9:15 – 10:00 AM',
+        time: 'Next 45 minutes',
         title: 'First Station',
         desc: 'Players rotate through their first skill station — batting, bowling, or fielding. Small groups, focused coaching, individual attention.',
         tag: 'Skill Station 1',
     },
     {
-        time: '10:00 – 10:45 AM',
+        time: 'Next 45 minutes',
         title: 'Second Station',
         desc: 'Rotation to the second skill station. Every player works across all three disciplines across the day.',
         tag: 'Skill Station 2',
     },
     {
-        time: '10:45 – 11:30 AM',
+        time: 'Next 45 minutes',
         title: 'Third Station',
         desc: 'Final skill station rotation. Coaches provide real-time feedback and individual focus points throughout.',
         tag: 'Skill Station 3',
     },
     {
-        time: '11:30 AM – 12:45 PM',
+        time: 'Next 75 minutes',
         title: 'Match Scenarios & Gameplay',
         desc: 'Players put everything into practice in match situations — run chases, last-over finishes, and pressure gameplay. The best part of the day.',
         tag: 'Game Time',
     },
     {
-        time: '12:45 – 1:00 PM',
+        time: 'Last 15 minutes',
         title: 'Wrap-Up & Presentations',
         desc: 'Coaches wrap up the day, recognise standout performances, and present daily awards. Players leave with clear take-home focus points.',
         tag: 'Presentations',
@@ -66,14 +70,14 @@ const SessionWalkthrough = () => {
                         transition={{ duration: 0.6, delay: 0.15 }}
                         className="text-lg text-white/80 max-w-2xl mx-auto font-medium"
                     >
-                        9:00 AM – 1:00 PM. Every minute structured. Every player challenged.
+                        Four hours a day, three days running. Every minute structured, every player challenged. Your centre&rsquo;s start and finish times come in your confirmation email.
                     </motion.p>
                 </div>
 
                 <div className="space-y-0">
                     {slots.map((slot, i) => (
                         <motion.div
-                            key={slot.time}
+                            key={slot.title}
                             initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
