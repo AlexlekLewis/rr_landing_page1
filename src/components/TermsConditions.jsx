@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Footer from './Footer';
 
 const TermsConditions = () => {
     return (
@@ -444,6 +445,7 @@ const TermsConditions = () => {
                     </Link>
                 </div>
             </div>
+            <Footer />
         </div>
     );
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Footer from './Footer';
 
 const PrivacyPolicy = () => {
     return (
@@ -185,6 +186,7 @@ const PrivacyPolicy = () => {
                     </Link>
                 </div>
             </div>
+            <Footer />
         </div>
     );
 };
