@@ -202,12 +202,19 @@ export const ALEX_RECORD = [
                 detail: 'He ran the entire cricket program at the club and was head coach of its senior side.',
             },
             {
-                title: 'Junior Director of Coaching, Northern Falcons',
-                detail: 'A Cricket Victoria appointment leading junior coaching across the Northern Falcons region — the representative pathway that sits above club cricket in Melbourne’s north. Cricket Victoria has also used him as a coach educator, training other coaches rather than players.',
+                title: 'Head coach, Northern Falcons — Youth Premier League',
+                detail: 'He coached the region’s under-16s, under-17 girls and under-18s in the Youth Premier League. At the time, that was the competition players had to come through to reach Premier Cricket or state cricket.',
+            },
+            {
+                // NOT the same job as the Falcons coaching above — Alex, 6 Aug:
+                // the Junior Director of Coaching role was coach EDUCATION, run for
+                // Cricket Victoria, delivering Level 1 courses to community coaches.
+                title: 'Coach educator for Cricket Victoria',
+                detail: 'As Junior Director of Coaching for the Northern Falcons region he taught coaches, not players — delivering the Level 1 accreditation courses that qualify community coaches across the region.',
             },
             {
                 title: 'Representative head coach across Melbourne’s north',
-                detail: 'Head coach and assistant roles with the Diamond Valley and North Metro cricket associations and the Northern Falcons pathway squads, from under-14s to under-18s, boys and girls.',
+                detail: 'Head coach and assistant roles with the Diamond Valley and North Metro cricket associations, from under-14s to under-18s, boys and girls.',
             },
         ],
     },

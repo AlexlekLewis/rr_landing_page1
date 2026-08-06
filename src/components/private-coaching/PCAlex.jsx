@@ -57,9 +57,9 @@ const PCAlex = () => {
                         <p className="text-rr-charcoal font-medium leading-relaxed mb-8">
                             Alex has spent more than twenty years coaching juniors through Melbourne’s
                             representative pathway. He runs the academy at a Premier Cricket club, has
-                            led junior coaching for Cricket Victoria across Melbourne’s north, and
-                            built and ran his own junior academy for over a decade. His full record is
-                            below.
+                            coached Youth Premier League squads, has trained other coaches for Cricket
+                            Victoria, and built and ran his own junior academy for over a decade. His
+                            full record is below.
                         </p>
 
                         {/* The one number on the page */}
