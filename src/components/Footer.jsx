@@ -13,57 +13,103 @@ const FacebookIcon = () => (
     </svg>
 );
 
+// Sitewide footer navigation. Every public page renders this, so these links form
+// the site's internal-linking backbone (and rescue otherwise-orphaned pages).
+// Use canonical URLs only: /mickleham (not the /private-coaching 308), /elite-royals (not /PGP2026).
+const PROGRAMS = [
+    { label: 'Junior Royals', to: '/junior-royals' },
+    { label: 'Elite · Power Pre-Season', to: '/elite-royals' },
+    { label: 'Private Coaching', to: '/mickleham' },
+    { label: 'Holiday Camps', to: '/junior-royals-holiday' },
+];
+
+const ACADEMY = [
+    { label: 'Our Coaches', to: '/coaches' },
+    { label: 'Coaching Jobs', to: '/coaching-opportunities' },
+    { label: 'Academy Shop', to: '/academy-shop' },
+    { label: 'Reviews', to: '/reviews' },
+];
+
+const COMPANY = [
+    { label: 'Home', to: '/' },
+    { label: 'Privacy Policy', to: '/privacy-policy' },
+    { label: 'Terms & Conditions', to: '/terms-conditions' },
+];
+
+const FooterCol = ({ title, links }) => (
+    <div>
+        <h3 className="text-white font-black uppercase tracking-widest text-xs mb-4">{title}</h3>
+        <ul className="space-y-2.5">
+            {links.map((l) => (
+                <li key={l.to}>
+                    <Link to={l.to} className="text-white/75 hover:text-white transition-colors text-sm">
+                        {l.label}
+                    </Link>
+                </li>
+            ))}
+        </ul>
+    </div>
+);
+
 const Footer = () => {
     return (
         <footer
-            className="text-white py-6 relative overflow-hidden"
-            style={{
-                background: 'linear-gradient(90deg, var(--color-rr-pink) 0%, var(--color-rr-navy) 100%)'
-            }}
+            className="text-white relative overflow-hidden"
+            style={{ background: 'linear-gradient(90deg, var(--color-rr-pink) 0%, var(--color-rr-navy) 100%)' }}
         >
-            <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-                <div className="flex flex-col md:flex-row items-center gap-8">
-                    <img
-                        src="/assets/MELBOURNE_OFFICIAL.png"
-                        alt="Rajasthan Royals Academy Melbourne"
-                        className="h-12 w-auto object-contain brightness-0 invert"
-                    />
-                    <div className="flex gap-6 text-xs text-white/80">
-                        <Link to="/academy-shop" className="hover:text-white transition-colors font-bold">Shop</Link>
-                        <span className="hidden md:inline">|</span>
-                        <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
-                        <span className="hidden md:inline">|</span>
-                        <Link to="/terms-conditions" className="hover:text-white transition-colors">Terms &amp; Conditions</Link>
-                        <span className="hidden md:inline">|</span>
-                        <a href="mailto:info@rramelbourne.com" className="hover:text-white transition-colors">info@rramelbourne.com</a>
+            <div className="container mx-auto px-6 py-12">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10">
+                    {/* Brand */}
+                    <div className="col-span-2 md:col-span-1">
+                        <Link to="/" aria-label="Rajasthan Royals Academy Melbourne — home">
+                            <img
+                                src="/assets/MELBOURNE_OFFICIAL.png"
+                                alt="Rajasthan Royals Academy Melbourne"
+                                className="h-14 w-auto object-contain brightness-0 invert"
+                            />
+                        </Link>
+                        <p className="text-white/70 text-sm mt-4 max-w-xs leading-relaxed">
+                            Melbourne's Rajasthan Royals cricket academy — junior programs, elite squads,
+                            private coaching and holiday camps.
+                        </p>
+                        <div className="flex items-center gap-4 mt-5">
+                            <a
+                                href="https://www.instagram.com/rramelbourne?igsh=MXA3OGx4b3JocTdvcA%3D%3D&utm_source=qr"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-white/80 hover:text-white transition-colors hover:scale-110 transform duration-200"
+                                aria-label="Follow RRA Melbourne on Instagram"
+                            >
+                                <InstagramIcon />
+                            </a>
+                            <a
+                                href="https://www.facebook.com/share/1HsxoaRXWP/?mibextid=wwXIfr"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-white/80 hover:text-white transition-colors hover:scale-110 transform duration-200"
+                                aria-label="Follow RRA Melbourne on Facebook"
+                            >
+                                <FacebookIcon />
+                            </a>
+                        </div>
                     </div>
+
+                    <FooterCol title="Programs" links={PROGRAMS} />
+                    <FooterCol title="Academy" links={ACADEMY} />
+                    <FooterCol title="Company" links={COMPANY} />
                 </div>
 
-                {/* Social icons */}
-                <div className="flex items-center gap-4">
+                <div className="mt-10 pt-6 border-t border-white/15 flex flex-col md:flex-row justify-between items-center gap-4">
                     <a
-                        href="https://www.instagram.com/rramelbourne?igsh=MXA3OGx4b3JocTdvcA%3D%3D&utm_source=qr"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-white/80 hover:text-white transition-colors hover:scale-110 transform duration-200"
-                        aria-label="Follow RRA Melbourne on Instagram"
+                        href="mailto:info@rramelbourne.com"
+                        className="text-white/75 hover:text-white text-sm transition-colors"
                     >
-                        <InstagramIcon />
+                        info@rramelbourne.com
                     </a>
-                    <a
-                        href="https://www.facebook.com/share/1HsxoaRXWP/?mibextid=wwXIfr"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-white/80 hover:text-white transition-colors hover:scale-110 transform duration-200"
-                        aria-label="Follow RRA Melbourne on Facebook"
-                    >
-                        <FacebookIcon />
-                    </a>
+                    <p className="text-xs text-white/60 text-center md:text-right">
+                        &copy; {new Date().getFullYear()} Rajasthan Royals Academy Melbourne. All rights reserved.
+                    </p>
                 </div>
-
-                <p className="text-xs text-white/60 text-center md:text-right">
-                    &copy; {new Date().getFullYear()} Rajasthan Royals Academy Melbourne. All rights reserved.
-                </p>
             </div>
         </footer>
     );
