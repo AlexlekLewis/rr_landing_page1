@@ -59,7 +59,7 @@ const PCHowItWorks = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: i * 0.06 }}
-                            className="border-t-2 border-slate-100 pt-5"
+                            className="border-t-2 border-slate-200 pt-4"
                         >
                             <div className="flex items-baseline gap-3 mb-2">
                                 <span className="text-sm font-black text-rr-pink">{s.n}</span>

@@ -117,15 +117,24 @@ const PCAlex = () => {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-14 gap-y-12">
-                        {ALEX_RECORD.map((group) => (
-                            <div key={group.heading}>
-                                <h3 className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-6">
-                                    {group.heading}
-                                </h3>
-                                <div className="space-y-6">
-                                    {group.items.map((item) => (
-                                        <div key={item.title} className="border-t-2 border-slate-200 pt-4">
+                    {/* Each group is full width with its own even 2-up grid, so the
+                        columns can never end ragged when one group has more entries
+                        than the other. */}
+                    {ALEX_RECORD.map((group, gi) => (
+                        <div key={group.heading} className={gi > 0 ? 'mt-14' : ''}>
+                            <h3 className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-6">
+                                {group.heading}
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-14 gap-y-8">
+                                {group.items.map((item, i) => {
+                                    // Odd number of entries would leave a half-width
+                                    // orphan on the last row — run it full width instead.
+                                    const orphan = group.items.length % 2 === 1 && i === group.items.length - 1;
+                                    return (
+                                        <div
+                                            key={item.title}
+                                            className={`border-t-2 border-slate-200 pt-4 ${orphan ? 'md:col-span-2' : ''}`}
+                                        >
                                             <p className="text-[15px] font-black text-rr-dark uppercase tracking-tight leading-snug mb-1.5">
                                                 {item.title}
                                             </p>
@@ -133,11 +142,11 @@ const PCAlex = () => {
                                                 {item.detail}
                                             </p>
                                         </div>
-                                    ))}
-                                </div>
+                                    );
+                                })}
                             </div>
-                        ))}
-                    </div>
+                        </div>
+                    ))}
 
                     <div className="mt-12 bg-rr-dark rounded-2xl px-7 py-6">
                         <p className="text-white font-black uppercase tracking-tight text-lg leading-tight mb-1.5">

@@ -4,6 +4,58 @@ import { PRICING, BOOKING_RULES, LAUNCH_OFFER } from './pcOptions';
 
 const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
+// Laid out in even rows so no row is left with an orphan card: the assessment
+// runs full width because everyone starts there, then three per-session rates,
+// then the two weekly packages. Grouping also matches how a parent decides.
+const byKey = (k) => PRICING.find((p) => p.key === k);
+const FEATURED = byKey('consult');
+const PER_SESSION = ['academy', 'leadership', 'group'].map(byKey).filter(Boolean);
+const PACKAGES = ['term', 'season'].map(byKey).filter(Boolean);
+
+const Card = ({ p, featured = false, delay = 0 }) => (
+    <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.45, delay }}
+        className={`bg-white rounded-2xl border shadow-sm p-7 flex flex-col ${
+            featured ? 'border-rr-pink' : 'border-slate-200'
+        }`}
+    >
+        <div className="flex flex-wrap items-start justify-between gap-4 mb-3">
+            <h3 className="text-lg md:text-xl font-black text-rr-dark uppercase tracking-tight leading-tight max-w-sm">
+                {p.label}
+            </h3>
+            <div className="flex items-end gap-2.5 shrink-0">
+                <span className={`text-3xl font-black tracking-tight leading-none ${p.accent === 'blue' ? 'text-rr-blue' : 'text-rr-pink'}`}>
+                    {p.price}
+                </span>
+                {p.wasPrice && (
+                    <span className="text-xl font-bold text-slate-400 line-through leading-none mb-0.5">
+                        {p.wasPrice}
+                    </span>
+                )}
+            </div>
+        </div>
+
+        <p className="text-[11px] font-bold text-rr-charcoal/60 uppercase tracking-widest mb-4">
+            {p.unit}
+        </p>
+
+        <p className="text-rr-charcoal text-[15px] font-medium leading-relaxed mb-5">
+            {p.detail}
+        </p>
+
+        <p className="mt-auto text-sm font-semibold text-rr-dark border-t border-slate-100 pt-4">
+            <span className="text-rr-pink">Minimum booking:</span> {p.minimum}
+        </p>
+    </motion.div>
+);
+
+const RowLabel = ({ children }) => (
+    <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-5">{children}</p>
+);
+
 const PCPricing = () => {
     return (
         <section className="bg-slate-50 py-24">
@@ -27,47 +79,29 @@ const PCPricing = () => {
                     </p>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
-                    {PRICING.map((p, i) => (
-                        <motion.div
-                            key={p.key}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.45, delay: Math.min(i, 4) * 0.05 }}
-                            className={`bg-white rounded-2xl border p-7 flex flex-col ${
-                                p.key === 'consult' ? 'border-rr-pink md:col-span-2' : 'border-slate-200'
-                            }`}
-                        >
-                            <div className="flex flex-wrap items-start justify-between gap-4 mb-3">
-                                <h3 className="text-lg md:text-xl font-black text-rr-dark uppercase tracking-tight leading-tight max-w-sm">
-                                    {p.label}
-                                </h3>
-                                <div className="flex items-end gap-2.5 shrink-0">
-                                    <span className={`text-3xl font-black tracking-tight leading-none ${p.accent === 'blue' ? 'text-rr-blue' : 'text-rr-pink'}`}>
-                                        {p.price}
-                                    </span>
-                                    {p.wasPrice && (
-                                        <span className="text-xl font-bold text-slate-400 line-through leading-none mb-0.5">
-                                            {p.wasPrice}
-                                        </span>
-                                    )}
-                                </div>
-                            </div>
+                {FEATURED && (
+                    <div className="mb-12">
+                        <RowLabel>Start here — every player</RowLabel>
+                        <Card p={FEATURED} featured />
+                    </div>
+                )}
 
-                            <p className="text-[11px] font-bold text-rr-charcoal/60 uppercase tracking-widest mb-4">
-                                {p.unit}
-                            </p>
+                <div className="mb-12">
+                    <RowLabel>Then, per session</RowLabel>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        {PER_SESSION.map((p, i) => (
+                            <Card key={p.key} p={p} delay={i * 0.05} />
+                        ))}
+                    </div>
+                </div>
 
-                            <p className="text-rr-charcoal text-[15px] font-medium leading-relaxed mb-5">
-                                {p.detail}
-                            </p>
-
-                            <p className="mt-auto text-sm font-semibold text-rr-dark border-t border-slate-100 pt-4">
-                                <span className="text-rr-pink">Minimum booking:</span> {p.minimum}
-                            </p>
-                        </motion.div>
-                    ))}
+                <div className="mb-12">
+                    <RowLabel>Or book by the term or season</RowLabel>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        {PACKAGES.map((p, i) => (
+                            <Card key={p.key} p={p} delay={i * 0.05} />
+                        ))}
+                    </div>
                 </div>
 
                 {/* Launch offer on groups — separate from the $50 assessment offer. */}
@@ -94,7 +128,7 @@ const PCPricing = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.45, delay: i * 0.06 }}
-                            className="border-t-2 border-rr-pink/30 pt-5"
+                            className="border-t-2 border-slate-200 pt-4"
                         >
                             <h3 className="text-base font-black text-rr-dark uppercase tracking-tight leading-tight mb-2.5">
                                 {r.title}
@@ -119,7 +153,7 @@ const PCPricing = () => {
                     </p>
                     <button
                         onClick={() => scrollTo('eoi-form')}
-                        className="group bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-10 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] inline-flex items-center gap-3"
+                        className="group bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] inline-flex items-center gap-3"
                     >
                         Register Your Interest
                         <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

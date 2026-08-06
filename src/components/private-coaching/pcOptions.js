@@ -185,8 +185,8 @@ export const ALEX_RECORD = [
                 detail: 'Now in his fourth season there. He runs the junior academy at a Victorian Premier Cricket club — the top grade of club cricket in the state — and is also the club’s Head Bowling Coach and a Senior Assistant Coach with the senior side, as well as coaching their under-18s.',
             },
             {
-                title: 'Director of Cricket, Rajasthan Royals Academy Melbourne',
-                detail: 'He leads coaching and player development across all three Academy centres, and is Head Coach here at Mickleham.',
+                title: 'Director of Cricket and Academy Head Coach, Rajasthan Royals Academy Melbourne',
+                detail: 'He leads cricket for the Royals network in Melbourne. That means the talent pathway — identifying talented cricketers, managing their development and deciding how they progress — the design of the Academy’s programs across all three centres, and the standard of coaching itself, including how the coaching team is recruited and developed. He is also Head Coach at Mickleham, in the nets each week.',
             },
         ],
     },
