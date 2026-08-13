@@ -62,7 +62,7 @@ const PC_NAV = [
 // removed in Aug 2026 on both counts — /elite-royals is the closed Power Game
 // page, and it renders no Navbar, so it dead-ends the visitor.
 const PROGRAMS_DROPDOWN = [
-    { label: 'High Performance Camp · India', route: '/tours', badge: 'Registering Now · September', badgeColor: 'bg-green-500' },
+    { label: 'High Performance Camp · India', route: '/tours', badge: 'Applications Closed', badgeColor: 'bg-red-500' },
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Sept/Oct — Register Interest', badgeColor: 'bg-green-500' },
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 Entries Open', badgeColor: 'bg-green-500' },
     { label: 'Private Coaching', route: '/mickleham', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },

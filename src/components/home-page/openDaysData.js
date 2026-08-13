@@ -33,8 +33,8 @@ export const ANNOUNCEMENTS = [
         key: 'india-camp',
         name: 'India High Performance Camp',
         tag: 'Train in Nagpur at the Royals’ own academy · 19–26 September',
-        detail: 'Ages 14+ · Places limited · Fee excludes flights',
+        detail: 'Applications closed — a new tour will be announced soon',
         href: '/tours',
-        badge: 'Ages 14+',
+        badge: 'Applications closed',
     },
 ];
