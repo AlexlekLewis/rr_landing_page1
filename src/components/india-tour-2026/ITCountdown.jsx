@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { REGISTRATIONS_CLOSE_AT } from './itCopy';
+import { REGISTRATIONS_CLOSE_AT, TOUR_STATUS } from './itCopy';
 
 // Seven-day clock on the India Tour registrations. Reads the single deadline in
 // itCopy.js, ticks every second, and swaps to a plain "closed" message once it
@@ -45,7 +45,7 @@ const ITCountdown = ({ copy }) => {
     const c = copy.hero;
     const t = useTimeLeft(REGISTRATIONS_CLOSE_AT);
 
-    if (t.expired) {
+    if (TOUR_STATUS === 'closed' || t.expired) {
         return (
             <div className="border border-white/20 rounded-2xl px-5 py-4">
                 <p className="text-sm font-black text-white uppercase tracking-wide">{c.countdownClosed}</p>

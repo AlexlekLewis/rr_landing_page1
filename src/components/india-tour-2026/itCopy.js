@@ -41,6 +41,11 @@ export const FLIGHT_ESTIMATE_AUD = { min: 1500, max: 2000 };
 // close it in seven days"). Melbourne time, end of day. CHANGE THIS ONE LINE to
 // move or extend the deadline — the hero clock, the form and the closed state all
 // read from it.
+// Master switch for the page. 'open' takes applications and runs the clock;
+// 'closed' shuts the form, drops the register CTAs and shows the closed notice.
+// Flip this ONE value to reopen — nothing else needs touching.
+export const TOUR_STATUS = 'closed';
+
 export const REGISTRATIONS_CLOSE_AT = '2026-08-12T23:59:00+10:00';
 
 // The official camp document, served from /public. Size is stated on the page —
@@ -108,7 +113,13 @@ const STANDARD = {
             heading: 'Ready to put your player forward?',
             body: 'Register your interest and we will come back to you in writing with your price, your place, and the flight booking link.',
         },
-        countdownClosed: 'Registrations for the India Tour 2026 have now closed.',
+        closedBadge: 'Applications Closed',
+        closedHeading: 'Applications for this tour have closed',
+        closedBody:
+            'The September High Performance Centre Camp is now closed to new applications, and our ' +
+            'coaches are confirming the touring squad. A new tour will be announced shortly.',
+        closedNext: 'New tour announcement coming soon.',
+        countdownClosed: 'Applications for this tour have closed.',
         countdownClosedNote:
             'If you still want to be considered, email info@rramelbourne.com and we will tell you ' +
             'whether any places are left.',
@@ -365,7 +376,13 @@ const SIMPLE = {
             heading: 'Want a spot?',
             body: 'Put your name down and we will write back with your price, whether you have a spot, and the flight link.',
         },
-        countdownClosed: 'Sign-ups are now closed.',
+        closedBadge: 'Applications Closed',
+        closedHeading: 'Sign-ups for this tour are closed',
+        closedBody:
+            'You can no longer put your name down for the September camp. Our coaches are picking the ' +
+            'team now. We will announce a new tour soon.',
+        closedNext: 'New tour announcement coming soon.',
+        countdownClosed: 'Sign-ups for this tour are closed.',
         countdownClosedNote:
             'You can still email info@rramelbourne.com to ask if there are any spots left.',
     },

@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { TOUR_STATUS } from './itCopy';
 
 // Reusable mid-page call to action. The page is long — coaches, pillars, a
 // day-by-day timeline, inclusions, pricing — and previously a reader who was sold
@@ -13,6 +14,9 @@ const ITCtaBand = ({ copy, heading, body, tone = 'navy' }) => {
         document.getElementById('register')?.scrollIntoView({ behavior: 'smooth' });
 
     const isNavy = tone === 'navy';
+
+    // Every band is a register prompt, so none of them belong on a closed page.
+    if (TOUR_STATUS === 'closed') return null;
 
     return (
         <motion.div

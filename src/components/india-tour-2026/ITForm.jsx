@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
-import { getTiers, TIER_PRICES } from './itCopy';
+import { getTiers, TIER_PRICES, TOUR_STATUS } from './itCopy';
 
 const SOURCE_TAG = 'india-tour-2026-eoi';
 const PROGRAM_LABEL = 'India Tour 2026';
@@ -74,6 +74,40 @@ const GuardianFields = ({ idx, data, onChange, errors, required }) => {
 
 const ITForm = ({ copy, referralCode, referralName }) => {
     const fc = copy.form;
+
+    // Applications closed: the form must not accept anything. Returned before any
+    // form state is set up, so there is no way to submit from this page.
+    if (TOUR_STATUS === 'closed') {
+        const c = copy.hero;
+        return (
+            <section className="py-24 bg-rr-navy">
+                <div className="max-w-3xl mx-auto px-6 text-center">
+                    <span className="inline-flex items-center gap-2 bg-rr-pink rounded-full px-4 py-2.5 mb-6">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white" />
+                        <span className="text-xs font-black text-white uppercase tracking-[0.2em]">
+                            {c.closedBadge}
+                        </span>
+                    </span>
+                    <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight leading-none">
+                        {c.closedHeading}
+                    </h2>
+                    <p className="text-base md:text-lg text-white/75 font-medium leading-relaxed mt-5">
+                        {c.closedBody}
+                    </p>
+                    <p className="text-lg md:text-xl font-black text-rr-pink uppercase tracking-wide mt-8">
+                        {c.closedNext}
+                    </p>
+                    <p className="text-sm text-white/60 font-medium mt-6">
+                        Questions in the meantime? Email{' '}
+                        <a href="mailto:info@rramelbourne.com" className="text-white underline">
+                            info@rramelbourne.com
+                        </a>
+                    </p>
+                </div>
+            </section>
+        );
+    }
+
     const TIERS = getTiers(copy);
     const TIER_BY_KEY = TIERS.reduce((acc, t) => ({ ...acc, [t.key]: t }), {});
     const [form, setForm] = useState({

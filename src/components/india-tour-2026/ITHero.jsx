@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import heroImg from '../../assets/india-tour-2026/hero-coaching.jpg';
-import { getTiers, fmtAUD, FLIGHT_ESTIMATE_AUD, CAMP_PDF } from './itCopy';
+import { getTiers, fmtAUD, FLIGHT_ESTIMATE_AUD, CAMP_PDF, TOUR_STATUS } from './itCopy';
 import ITCountdown from './ITCountdown';
 
 const scrollToRegister = () =>
@@ -29,6 +29,7 @@ const HERO_IMG_ALT =
 const ITHero = ({ copy }) => {
     const tiers = getTiers(copy);
     const c = copy.hero;
+    const closed = TOUR_STATUS === 'closed';
 
     const priceBand = (
         <>
@@ -86,7 +87,7 @@ const ITHero = ({ copy }) => {
                 className="order-1 inline-flex items-center gap-2 bg-rr-pink rounded-full px-4 py-2.5 mb-4 md:mb-6 self-start shadow-lg"
             >
                 <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                <span className="text-xs font-black text-white uppercase tracking-[0.2em]">{c.badge}</span>
+                <span className="text-xs font-black text-white uppercase tracking-[0.2em]">{closed ? c.closedBadge : c.badge}</span>
             </motion.div>
 
             <motion.h1
@@ -150,7 +151,7 @@ const ITHero = ({ copy }) => {
                 className="order-7 mt-7 md:mt-8 self-start w-full"
             >
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                    <button
+                    {!closed && <button
                         onClick={scrollToRegister}
                         data-cta="hero-register"
                         className="group bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 md:px-10 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] flex items-center gap-3 w-full sm:w-auto justify-center"
@@ -159,7 +160,7 @@ const ITHero = ({ copy }) => {
                         <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
-                    </button>
+                    </button>}
 
                     {/* The official camp document. Size is stated up front — it is a big
                         file and a parent on mobile data deserves the warning. */}
