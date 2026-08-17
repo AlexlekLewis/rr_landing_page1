@@ -1,0 +1,78 @@
+import React, { useEffect } from 'react';
+import HeroSection from './HeroSection';
+import HallaBol from './HallaBol';
+import ClinicOverview from './ClinicOverview';
+import SessionWalkthrough from './SessionWalkthrough';
+import CoachesSection from './CoachesSection';
+import RoyalsPathway from './RoyalsPathway';
+import ActionImage from './ActionImage';
+import PricingSection from './PricingSection';
+import LocationsSection from './LocationsSection';
+import HolidayInterestForm from './HolidayInterestForm';
+import JoinTheFamily from './JoinTheFamily';
+import GotAQuestion from './GotAQuestion';
+
+import StickyCTA from './StickyCTA';
+import usePageAnalytics from '../../hooks/usePageAnalytics';
+
+const SECTIONS = [
+    'hero',
+    'program-overview',
+    'session-walkthrough',
+    'coaches',
+    'pricing',
+    'locations',
+    'registration-form',
+    'faq',
+];
+
+const SeptemberHoliday = () => {
+    React.useEffect(() => {
+        const meta = document.createElement('meta');
+        meta.name = 'robots';
+        meta.content = 'noindex, nofollow';
+        document.head.appendChild(meta);
+        return () => { document.head.removeChild(meta); };
+    }, []);
+    usePageAnalytics('/junior-royals-holiday', { sections: SECTIONS });
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    return (
+        <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
+                        <main className="flex-1 w-full overflow-hidden">
+                <div id="hero">
+                    <HeroSection />
+                </div>
+                <HallaBol />
+                <div id="program-overview">
+                    <ClinicOverview />
+                </div>
+                <div id="session-walkthrough">
+                    <SessionWalkthrough />
+                </div>
+                <div id="coaches">
+                    <CoachesSection />
+                </div>
+                <RoyalsPathway />
+                <div id="pricing">
+                    <ActionImage />
+                    <PricingSection />
+                </div>
+                <JoinTheFamily />
+                <div id="locations">
+                    <LocationsSection />
+                </div>
+                <div id="registration-form">
+                    <HolidayInterestForm />
+                </div>
+                <GotAQuestion />
+            </main>
+                        <StickyCTA />
+        </div>
+    );
+};
+
+export default SeptemberHoliday;
