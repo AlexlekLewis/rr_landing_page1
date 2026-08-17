@@ -112,8 +112,7 @@ const HolidayInterestForm = () => {
                     </h2>
                     <p className="text-white/80 font-medium leading-relaxed">
                         We are running the Junior Royals Holiday Camp again over the September / October school
-                        holidays, at our centres across Melbourne. We have not
-                        locked the exact dates yet, because we set them around where the demand is. Tell us which
+                        holidays, at our centres across Melbourne. Tell us which
                         centre you would come to and which week suits your family, and that is what we build the
                         schedule from.
                     </p>

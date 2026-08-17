@@ -71,9 +71,8 @@ const HeroSection = () => {
                     className="text-sm md:text-lg text-white/90 font-medium mb-8 max-w-xl"
                 >
                     The Junior Royals Holiday Camp is back for the September / October school holidays, for boys
-                    and girls aged 7–15, at our centres across Melbourne. We are setting the dates around
-                    where the demand is — register your interest below and we will email you the days, times and
-                    cost before the camp opens to anyone else.
+                    and girls aged 7–15, at our centres across Melbourne. Register your interest below and we
+                    will email you the days, times and cost before the camp opens to anyone else.
                 </motion.p>
 
                 {/* Location pills */}
