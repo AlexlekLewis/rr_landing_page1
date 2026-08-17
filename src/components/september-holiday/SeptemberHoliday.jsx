@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import PromoBanner from './PromoBanner';
 import HeroSection from './HeroSection';
 import HallaBol from './HallaBol';
 import ClinicOverview from './ClinicOverview';
@@ -44,6 +45,7 @@ const SeptemberHoliday = () => {
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
                         <main className="flex-1 w-full overflow-hidden">
+                <PromoBanner />
                 <div id="hero">
                     <HeroSection />
                 </div>

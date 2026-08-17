@@ -178,7 +178,7 @@ const SeptRegistrationForm = () => {
                 if (error) throw error;
                 inserted = data;
             }
-            const stripeUrl = new URL('https://buy.stripe.com/14AaEX3bj7KtcdC33t9Zm0i');
+            const stripeUrl = new URL('https://buy.stripe.com/00w8wP8vD4yhb9y9rR9Zm0t');
             if (inserted?.id) stripeUrl.searchParams.set('client_reference_id', inserted.id);
             stripeUrl.searchParams.set('prefilled_email', form.parent_email.trim().toLowerCase());
             window.location.href = stripeUrl.toString();
