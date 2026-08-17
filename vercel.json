@@ -76,6 +76,28 @@
             "source": "/eliteprogram2026/playerDNAprofile/:path*",
             "destination": "https://rramsdnaprofile.vercel.app/:path*",
             "permanent": false
+        },
+        {
+            "source": "/power-preview-k7x2q9.html",
+            "has": [
+                {
+                    "type": "host",
+                    "value": "rramelbourne.com"
+                }
+            ],
+            "destination": "/",
+            "permanent": false
+        },
+        {
+            "source": "/power-preview-k7x2q9.html",
+            "has": [
+                {
+                    "type": "host",
+                    "value": "www.rramelbourne.com"
+                }
+            ],
+            "destination": "/",
+            "permanent": false
         }
     ],
     "rewrites": [
