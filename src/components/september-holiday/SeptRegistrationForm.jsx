@@ -51,6 +51,50 @@ const SeptRegistrationForm = () => {
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [showSizeChart, setShowSizeChart] = useState(false);
+    const [leadId, setLeadId] = useState(null);
+    const [partialSaved, setPartialSaved] = useState(false);
+
+    // Prefill from hero quick-register
+    useEffect(() => {
+        try {
+            const stored = sessionStorage.getItem('jr_sept_lead');
+            if (stored) {
+                const lead = JSON.parse(stored);
+                setForm(f => ({
+                    ...f,
+                    parent_name: lead.parent_name || f.parent_name,
+                    parent_email: lead.parent_email || f.parent_email,
+                    parent_phone: lead.parent_phone || f.parent_phone,
+                    location: lead.location || f.location,
+                }));
+                if (lead.id) setLeadId(lead.id);
+            }
+        } catch (e) { /* ignore */ }
+    }, []);
+
+    // Progressive capture — silently save a partial lead once contact details are valid
+    useEffect(() => {
+        const valid = form.parent_name.trim() && /\S+@\S+\.\S+/.test(form.parent_email) && form.parent_phone.trim();
+        if (!valid || partialSaved || leadId) return;
+        const t = setTimeout(async () => {
+            try {
+                const { data: inserted } = await supabase
+                    .from('junior_royals_sept_holidays_registrations')
+                    .insert([{
+                        parent_name: form.parent_name.trim(),
+                        parent_email: form.parent_email.trim().toLowerCase(),
+                        parent_phone: form.parent_phone.trim(),
+                        location: form.location || null,
+                        status: 'partial',
+                        ...getUTM(),
+                    }])
+                    .select('id')
+                    .single();
+                if (inserted?.id) { setLeadId(inserted.id); setPartialSaved(true); }
+            } catch (e) { /* silent */ }
+        }, 1500);
+        return () => clearTimeout(t);
+    }, [form.parent_name, form.parent_email, form.parent_phone, form.location, partialSaved, leadId]);
 
     // Capture UTM params from URL
     const getUTM = () => {
@@ -96,9 +140,7 @@ const SeptRegistrationForm = () => {
         setSubmitting(true);
         try {
             const utm = getUTM();
-            const { data: inserted, error } = await supabase
-                .from('junior_royals_sept_holidays_registrations')
-                .insert([{
+            const payload = {
                     parent_name:      form.parent_name.trim(),
                     parent_email:     form.parent_email.trim().toLowerCase(),
                     parent_phone:     form.parent_phone.trim(),
@@ -116,8 +158,26 @@ const SeptRegistrationForm = () => {
                     accept_social_media: form.accept_social_media,
                     on_waitlist:      false,
                     ...utm,
-                }]).select('id').single();
-            if (error) throw error;
+                };
+            let inserted = null;
+            if (leadId) {
+                const { data, error } = await supabase
+                    .from('junior_royals_sept_holidays_registrations')
+                    .update({ ...payload, status: 'complete' })
+                    .eq('id', leadId)
+                    .select('id')
+                    .single();
+                if (error) throw error;
+                inserted = data;
+            } else {
+                const { data, error } = await supabase
+                    .from('junior_royals_sept_holidays_registrations')
+                    .insert([{ ...payload, status: 'complete' }])
+                    .select('id')
+                    .single();
+                if (error) throw error;
+                inserted = data;
+            }
             const stripeUrl = new URL('https://buy.stripe.com/14AaEX3bj7KtcdC33t9Zm0i');
             if (inserted?.id) stripeUrl.searchParams.set('client_reference_id', inserted.id);
             stripeUrl.searchParams.set('prefilled_email', form.parent_email.trim().toLowerCase());
@@ -377,7 +437,7 @@ const SeptRegistrationForm = () => {
                         disabled={submitting}
                         className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 text-white font-black uppercase tracking-widest py-5 rounded-full transition-all duration-300 hover:shadow-[0_0_32px_rgba(229,6,149,0.5)] text-sm"
                     >
-                        {submitting ? 'Submitting...' : 'Secure My Place — Go to Checkout'}
+                        {submitting ? 'Submitting...' : 'Register Now'}
                     </button>
 
                     <p className="text-center text-slate-400 text-xs mt-4">
