@@ -31,6 +31,19 @@
                     "value": "public, max-age=31536000"
                 }
             ]
+        },
+        {
+            "source": "/power-preview-k7x2q9.html",
+            "headers": [
+                {
+                    "key": "X-Robots-Tag",
+                    "value": "noindex, nofollow, noarchive, nosnippet"
+                },
+                {
+                    "key": "Cache-Control",
+                    "value": "no-store"
+                }
+            ]
         }
     ],
     "redirects": [
