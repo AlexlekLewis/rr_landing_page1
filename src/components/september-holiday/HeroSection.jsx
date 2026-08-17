@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import QuickRegister from './QuickRegister';
+import DualCTA from './DualCTA';
 import { ChevronDown } from 'lucide-react';
 
 const HeroSection = () => {

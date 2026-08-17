@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Calendar, Clock, Users } from 'lucide-react';
+import DualCTA from './DualCTA';
 
 // The three centres the Academy currently runs. Exact camp dates and daily times
 // are deliberately NOT stated — they are set once we see where the interest is,

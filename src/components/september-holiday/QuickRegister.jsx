@@ -45,11 +45,11 @@ const QuickRegister = () => {
             if (insErr) throw insErr;
             // Hand details to the full form
             sessionStorage.setItem('jr_sept_lead', JSON.stringify({ id: inserted.id, ...form }));
-            document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('secure-form')?.scrollIntoView({ behavior: 'smooth' });
         } catch (e) {
             // Even on failure, still take them to the form
             sessionStorage.setItem('jr_sept_lead', JSON.stringify({ id: null, ...form }));
-            document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('secure-form')?.scrollIntoView({ behavior: 'smooth' });
         } finally {
             setSaving(false);
         }

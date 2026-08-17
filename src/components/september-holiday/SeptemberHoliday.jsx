@@ -9,6 +9,7 @@ import ActionImage from './ActionImage';
 import PricingSection from './PricingSection';
 import LocationsSection from './LocationsSection';
 import HolidayInterestForm from './HolidayInterestForm';
+import SeptRegistrationForm from './SeptRegistrationForm';
 import JoinTheFamily from './JoinTheFamily';
 import GotAQuestion from './GotAQuestion';
 
@@ -65,7 +66,10 @@ const SeptemberHoliday = () => {
                 <div id="locations">
                     <LocationsSection />
                 </div>
-                <div id="registration-form">
+                <div id="secure-form">
+                    <SeptRegistrationForm />
+                </div>
+                <div id="interest-form">
                     <HolidayInterestForm />
                 </div>
                 <GotAQuestion />

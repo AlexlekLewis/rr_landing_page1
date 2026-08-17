@@ -7,7 +7,7 @@ const StickyCTA = () => {
     useEffect(() => {
         const handleScroll = () => {
             const hero = document.getElementById('hero');
-            const form = document.getElementById('registration-form');
+            const form = document.getElementById('secure-form');
 
             if (!hero || !form) return;
 
@@ -26,7 +26,7 @@ const StickyCTA = () => {
     }, []);
 
     const scrollToForm = () => {
-        document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('secure-form')?.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (
