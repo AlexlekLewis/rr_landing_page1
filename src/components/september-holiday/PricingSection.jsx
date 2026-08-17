@@ -16,7 +16,7 @@ const included = [
 
 const PricingSection = () => {
     const scrollToForm = () => {
-        document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('secure-form')?.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (
@@ -50,7 +50,7 @@ const PricingSection = () => {
                                 <li className="flex gap-3">
                                     <span className="shrink-0 w-6 h-6 rounded-full bg-white/15 border border-white/30 flex items-center justify-center text-xs font-black">1</span>
                                     <span className="text-white/90 text-sm font-medium leading-relaxed">
-                                        You register your interest below. It takes a minute, costs nothing, and does not book a place.
+                                        You complete the registration form below with your details and preferred centre.
                                     </span>
                                 </li>
                                 <li className="flex gap-3">
@@ -77,7 +77,7 @@ const PricingSection = () => {
                                 onClick={scrollToForm}
                                 className="w-full bg-white text-rr-pink font-black uppercase tracking-widest py-4 rounded-full text-sm hover:bg-white/90 transition-all duration-300"
                             >
-                                Register Your Interest
+                                Secure Your Place Now
                             </button>
 
                             {/* Fine print */}

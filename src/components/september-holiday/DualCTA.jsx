@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Elite dual-path CTA: primary "Secure Your Place" (buy) + secondary "Register Interest" (no payment).
+// Primary CTA: "Secure Your Place" — scrolls to the registration form (#secure-form).
 // variant: 'dark' for dark backgrounds, 'light' for white/slate backgrounds. size: 'lg' | 'sm'.
 const DualCTA = ({ variant = 'dark', size = 'lg', className = '' }) => {
     const go = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -15,9 +15,6 @@ const DualCTA = ({ variant = 'dark', size = 'lg', className = '' }) => {
         <div className={`flex flex-col sm:flex-row gap-3 ${className}`}>
             <button onClick={() => go('secure-form')} className={primary}>
                 Secure Your Place
-            </button>
-            <button onClick={() => go('interest-form')} className={secondary}>
-                Register Interest — Free
             </button>
         </div>
     );

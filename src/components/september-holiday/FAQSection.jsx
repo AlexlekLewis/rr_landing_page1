@@ -41,7 +41,7 @@ const faqs = [
     },
     {
         q: 'Is Hallam still available?',
-        a: 'The Hallam venue is currently sold out for this program. You can still register your interest and you will be added to the waitlist. We will be in touch if a place becomes available, or regarding future programs.',
+        a: 'Registrations are open for Mickleham (Sept 23-25) and Cranbourne North (Sept 30 - Oct 2). Secure your place via the registration form above.',
     },
 ];
 

@@ -1,12 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import QuickRegister from './QuickRegister';
 import DualCTA from './DualCTA';
 import { ChevronDown } from 'lucide-react';
 
 const HeroSection = () => {
     const scrollToForm = () => {
-        document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('secure-form')?.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (
@@ -71,8 +70,7 @@ const HeroSection = () => {
                     className="text-sm md:text-lg text-white/90 font-medium mb-8 max-w-xl"
                 >
                     The Junior Royals Holiday Camp is back for the September / October school holidays, for boys
-                    and girls aged 7–15, at our centres across Melbourne. Register your interest below and we
-                    will email you the days, times and cost before the camp opens to anyone else.
+                    and girls aged 7–15, at our centres across Melbourne. Secure your place below — Early Bird pricing ends 11pm Sunday 30 August.
                 </motion.p>
 
                 {/* Location pills */}
@@ -104,7 +102,7 @@ const HeroSection = () => {
                     onClick={scrollToForm}
                     className="inline-flex items-center gap-3 bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-10 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]"
                 >
-                    Register Your Interest
+                    Secure Your Place Now
                     <svg className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
