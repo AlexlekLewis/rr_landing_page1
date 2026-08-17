@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { supabase } from '../../lib/supabase';
 
 // Expression-of-interest form for the September/October school holiday camp at
-// Mickleham, Hallam and Williamstown. NO payment is taken here — the camp dates,
+// Centres across Melbourne. NO payment is taken here — the camp dates,
 // daily times and cost are not locked yet, so this form exists to (a) let families
 // put their hand up and (b) tell us which centre and which week they want, which
 // is what decides the final schedule. Entries land in holiday_camp_interest
@@ -12,7 +12,7 @@ import { supabase } from '../../lib/supabase';
 
 const CENTRES = [
     { value: 'mickleham',    label: 'Mickleham Indoor Sports Centre (northern Melbourne)' },
-    { value: 'hallam',       label: 'Elite Cricket Centre — Hallam (south-east Melbourne)' },
+    { value: 'cranbourne-north', label: 'Elite Cricket Centre — Cranbourne North (south-east Melbourne)' },
     { value: 'williamstown', label: 'The Netz — Williamstown (western Melbourne)' },
     { value: 'any',          label: 'Any of the three — we can travel' },
 ];
@@ -112,7 +112,7 @@ const HolidayInterestForm = () => {
                     </h2>
                     <p className="text-white/80 font-medium leading-relaxed">
                         We are running the Junior Royals Holiday Camp again over the September / October school
-                        holidays, at all three of our centres — Mickleham, Hallam and Williamstown. We have not
+                        holidays, at our centres across Melbourne. We have not
                         locked the exact dates yet, because we set them around where the demand is. Tell us which
                         centre you would come to and which week suits your family, and that is what we build the
                         schedule from.

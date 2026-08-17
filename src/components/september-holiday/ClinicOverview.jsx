@@ -21,7 +21,7 @@ const features = [
     {
         icon: 'pin',
         title: 'Three Melbourne Centres',
-        desc: 'Mickleham in the north, Hallam in the south-east, Williamstown in the west. Pick whichever you can get to.',
+        desc: 'Centres across Melbourne — north, south-east and west. Pick whichever you can get to.',
     },
     {
         icon: 'clock',

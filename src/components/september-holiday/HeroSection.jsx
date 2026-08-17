@@ -70,7 +70,7 @@ const HeroSection = () => {
                     className="text-sm md:text-lg text-white/90 font-medium mb-8 max-w-xl"
                 >
                     The Junior Royals Holiday Camp is back for the September / October school holidays, for boys
-                    and girls aged 7–15, at Mickleham, Hallam and Williamstown. We are setting the dates around
+                    and girls aged 7–15, at our centres across Melbourne. We are setting the dates around
                     where the demand is — register your interest below and we will email you the days, times and
                     cost before the camp opens to anyone else.
                 </motion.p>
@@ -88,7 +88,7 @@ const HeroSection = () => {
                     </div>
                     <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2">
                         <span className="text-rr-pink font-bold text-xs">📍</span>
-                        <span className="text-white text-xs font-semibold uppercase tracking-wide">Hallam — South-East</span>
+                        <span className="text-white text-xs font-semibold uppercase tracking-wide">Cranbourne North — South-East</span>
                     </div>
                     <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2">
                         <span className="text-rr-pink font-bold text-xs">📍</span>

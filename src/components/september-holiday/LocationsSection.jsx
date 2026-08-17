@@ -80,7 +80,7 @@ const LocationsSection = () => {
                     transition={{ delay: 0.2 }}
                     className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium"
                 >
-                    The camp runs at all three of our centres. Tell us which one you would come to — the centre
+                    The camp runs at our centres across Melbourne. Tell us which one you would come to — the centre
                     with the most interest gets scheduled first, and we email you the dates before anyone else.
                 </motion.p>
             </div>
