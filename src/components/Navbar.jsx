@@ -63,7 +63,7 @@ const PC_NAV = [
 // page, and it renders no Navbar, so it dead-ends the visitor.
 const PROGRAMS_DROPDOWN = [
     { label: 'High Performance Camp · India', route: '/tours', badge: 'Applications Closed', badgeColor: 'bg-red-500' },
-    { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Sept/Oct — Register Interest', badgeColor: 'bg-green-500' },
+    { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Early Bird $299 — Ends 30 Aug', badgeColor: 'bg-rr-pink' },
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 Entries Open', badgeColor: 'bg-green-500' },
     { label: 'Private Coaching', route: '/mickleham', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },
 ];
@@ -95,9 +95,8 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
 
     // Junior Royals (isLittleCrickets): Term 3 is sold out — the CTA points at
     // the Term 4 entry form (Mondays & Wednesdays, no payment now).
-    // The holiday camp takes interest, not payment — don't promise a booked place.
     const ctaLabel = isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : isLittleCrickets ? 'TERM 4 — ENTER NOW' : isLP2 ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
-    const ctaTarget = isIndiaTour ? 'register' : isMickleham ? 'register' : isCoaches ? 'join' : isPrivateCoaching ? 'eoi-form' : isLP2 ? 'checkout' : (isHoliday || isLittleCrickets) ? 'registration-form' : 'apply-form';
+    const ctaTarget = isIndiaTour ? 'register' : isMickleham ? 'register' : isCoaches ? 'join' : isPrivateCoaching ? 'eoi-form' : isLP2 ? 'checkout' : isHoliday ? 'secure-form' : isLittleCrickets ? 'registration-form' : 'apply-form';
 
     const scrollToForm = () => {
         if (isHome && onRegisterClick) {

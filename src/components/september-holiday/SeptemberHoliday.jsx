@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import Navbar from '../Navbar';
+import Footer from '../Footer';
 import PromoBanner from './PromoBanner';
 import HeroSection from './HeroSection';
 import HallaBol from './HallaBol';
@@ -28,13 +30,6 @@ const SECTIONS = [
 ];
 
 const SeptemberHoliday = () => {
-    React.useEffect(() => {
-        const meta = document.createElement('meta');
-        meta.name = 'robots';
-        meta.content = 'noindex, nofollow';
-        document.head.appendChild(meta);
-        return () => { document.head.removeChild(meta); };
-    }, []);
     usePageAnalytics('/junior-royals-holiday', { sections: SECTIONS });
 
     useEffect(() => {
@@ -45,6 +40,7 @@ const SeptemberHoliday = () => {
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
                         <main className="flex-1 w-full overflow-hidden">
                 <PromoBanner />
+                <Navbar variant="holiday" />
                 <div id="hero">
                     <HeroSection />
                 </div>
@@ -73,6 +69,7 @@ const SeptemberHoliday = () => {
                 <GotAQuestion />
             </main>
                         <StickyCTA />
+                <Footer />
         </div>
     );
 };

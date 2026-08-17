@@ -11,7 +11,6 @@ import LittleCrickets from './components/little-crickets/LittleCrickets';
 import JRSuccess from './components/little-crickets/JRSuccess';
 import JuniorRoyalsT3 from './components/junior-royals-t3/JuniorRoyalsT3';
 import JRT3Success from './components/junior-royals-t3/JRT3Success';
-import HolidayPrograms from './components/holiday-programs/HolidayPrograms';
 import SeptemberHoliday from './components/september-holiday/SeptemberHoliday';
 import HolidayProgramSuccess from './components/holiday-programs/HolidayProgramSuccess';
 import FemaleCricketIntroduction from './components/female-cricket-introduction/FemaleCricketIntroduction';
@@ -161,8 +160,7 @@ function App() {
         <Route path="/offer/:token" element={<OfferResponsePage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-conditions" element={<TermsConditions />} />
-        <Route path="/junior-royals-holiday" element={<HolidayPrograms />} />
-        <Route path="/jr-sept26-x9k4-preview" element={<SeptemberHoliday />} />
+        <Route path="/junior-royals-holiday" element={<SeptemberHoliday />} />
         {/* Junior Royals Term 2 — archived */}
         <Route path="/junior-royals-term2" element={<LittleCrickets />} />
         <Route path="/junior-royals-term2/success" element={<JRSuccess />} />

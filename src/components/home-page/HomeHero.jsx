@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 // no Navbar — a dead end. Put Elite back when there is an open intake AND a page
 // with the site chrome on it.
 const PROGRAMS = [
-    { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Sept/Oct Holidays — Register Interest', badgeColor: 'bg-green-500' },
+    { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Early Bird $299 — Sept/Oct', badgeColor: 'bg-rr-pink' },
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 Entries Open', badgeColor: 'bg-green-500' },
 ];
 
