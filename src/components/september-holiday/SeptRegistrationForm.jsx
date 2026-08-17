@@ -96,7 +96,7 @@ const SeptRegistrationForm = () => {
         setSubmitting(true);
         try {
             const utm = getUTM();
-            const { error } = await supabase
+            const { data: inserted, error } = await supabase
                 .from('junior_royals_sept_holidays_registrations')
                 .insert([{
                     parent_name:      form.parent_name.trim(),
@@ -116,9 +116,12 @@ const SeptRegistrationForm = () => {
                     accept_social_media: form.accept_social_media,
                     on_waitlist:      false,
                     ...utm,
-                }]);
+                }]).select('id').single();
             if (error) throw error;
-            window.location.href = 'https://buy.stripe.com/14AaEX3bj7KtcdC33t9Zm0i';
+            const stripeUrl = new URL('https://buy.stripe.com/14AaEX3bj7KtcdC33t9Zm0i');
+            if (inserted?.id) stripeUrl.searchParams.set('client_reference_id', inserted.id);
+            stripeUrl.searchParams.set('prefilled_email', form.parent_email.trim().toLowerCase());
+            window.location.href = stripeUrl.toString();
         } catch (err) {
             setErrors({ form: `Something went wrong. Please try again or email info@rramelbourne.com` });
         } finally {
