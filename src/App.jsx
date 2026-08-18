@@ -11,13 +11,15 @@ import LittleCrickets from './components/little-crickets/LittleCrickets';
 import JRSuccess from './components/little-crickets/JRSuccess';
 import JuniorRoyalsT3 from './components/junior-royals-t3/JuniorRoyalsT3';
 import JRT3Success from './components/junior-royals-t3/JRT3Success';
-import HolidayPrograms from './components/holiday-programs/HolidayPrograms';
+import SeptemberHoliday from './components/september-holiday/SeptemberHoliday';
 import HolidayProgramSuccess from './components/holiday-programs/HolidayProgramSuccess';
 import FemaleCricketIntroduction from './components/female-cricket-introduction/FemaleCricketIntroduction';
 import FemaleCricketSuccess from './components/female-cricket-introduction/FemaleCricketSuccess';
 import FemaleEmpowerment from './components/female-empowerment/FemaleEmpowerment';
 import CoachingOpportunities from './components/coaching-opportunities/CoachingOpportunities';
 import PowerGame from './components/power-game/PowerGame';
+import PowerGameMasterclass from './components/power-game-masterclass/PowerGameMasterclass';
+import MasterclassSuccess from './components/power-game-masterclass/MasterclassSuccess';
 import MicklehamOpenDay from './components/mickleham-open-day/MicklehamOpenDay';
 import OpenDay from './components/open-day/OpenDay';
 import OpenDaySuccess from './components/open-day/OpenDaySuccess';
@@ -160,7 +162,7 @@ function App() {
         <Route path="/offer/:token" element={<OfferResponsePage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-conditions" element={<TermsConditions />} />
-        <Route path="/junior-royals-holiday" element={<HolidayPrograms />} />
+        <Route path="/junior-royals-holiday" element={<SeptemberHoliday />} />
         {/* Junior Royals Term 2 — archived */}
         <Route path="/junior-royals-term2" element={<LittleCrickets />} />
         <Route path="/junior-royals-term2/success" element={<JRSuccess />} />
@@ -201,6 +203,11 @@ function App() {
         {/* Elite Program feedback + win-back survey — private link shared with the 2026 cohort.
             Not in nav; writes to program_feedback via the service-role /api/program-feedback. */}
         <Route path="/elite-feedback" element={<ProgramFeedback />} />
+
+        {/* Power Game Masterclass (Sept 6 & 13, Cranbourne North) — hidden from nav,
+            noindex, direct URL only until Andy approves go-live */}
+        <Route path="/power-game-masterclass" element={<PowerGameMasterclass />} />
+        <Route path="/power-game-masterclass/success" element={<MasterclassSuccess />} />
 
         {/* Power Game Program — hidden from nav, accessible via direct URL only */}
         <Route path="/elite-royals" element={<PowerGame />} />

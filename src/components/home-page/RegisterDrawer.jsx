@@ -12,7 +12,7 @@ const GENDER_OPTIONS = ['Male Cricket', 'Female Cricket', 'No Preference'];
 // and nothing that lands on a page without the site's navigation. Elite Program
 // removed Aug 2026 — /elite-royals is the closed Power Game page and has no Navbar.
 const PROGRAMS = [
-    { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', urgency: 'Sept/Oct school holidays — register your interest' },
+    { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', urgency: 'Early Bird $299 — ends 11pm Sun 30 Aug' },
     { label: 'Junior Royals', route: '/junior-royals', urgency: 'Term 4 entries open — Mondays & Wednesdays' },
 ];
 
