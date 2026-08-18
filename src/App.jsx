@@ -18,6 +18,8 @@ import FemaleCricketSuccess from './components/female-cricket-introduction/Femal
 import FemaleEmpowerment from './components/female-empowerment/FemaleEmpowerment';
 import CoachingOpportunities from './components/coaching-opportunities/CoachingOpportunities';
 import PowerGame from './components/power-game/PowerGame';
+import PowerGameMasterclass from './components/power-game-masterclass/PowerGameMasterclass';
+import MasterclassSuccess from './components/power-game-masterclass/MasterclassSuccess';
 import MicklehamOpenDay from './components/mickleham-open-day/MicklehamOpenDay';
 import OpenDay from './components/open-day/OpenDay';
 import OpenDaySuccess from './components/open-day/OpenDaySuccess';
@@ -201,6 +203,11 @@ function App() {
         {/* Elite Program feedback + win-back survey — private link shared with the 2026 cohort.
             Not in nav; writes to program_feedback via the service-role /api/program-feedback. */}
         <Route path="/elite-feedback" element={<ProgramFeedback />} />
+
+        {/* Power Game Masterclass (Sept 6 & 13, Cranbourne North) — hidden from nav,
+            noindex, direct URL only until Andy approves go-live */}
+        <Route path="/power-game-masterclass" element={<PowerGameMasterclass />} />
+        <Route path="/power-game-masterclass/success" element={<MasterclassSuccess />} />
 
         {/* Power Game Program — hidden from nav, accessible via direct URL only */}
         <Route path="/elite-royals" element={<PowerGame />} />
