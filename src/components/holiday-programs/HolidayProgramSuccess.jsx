@@ -127,7 +127,7 @@ const HolidayProgramSuccess = () => {
                     variants={fadeUp}
                     className="text-base md:text-lg text-white/70 leading-relaxed mb-6 max-w-lg mx-auto font-medium"
                 >
-                    Your registration is confirmed. We can't wait to see you at the Junior Royals Holiday Camp!
+                    Your place is secured for the September / October school holidays. We can't wait to see you at the Junior Royals Holiday Camp!
                 </motion.p>
 
                 {/* What to bring */}
@@ -171,9 +171,9 @@ const HolidayProgramSuccess = () => {
                             </svg>
                         </div>
                         <div>
-                            <p className="text-sm font-bold text-white/90 mb-1">Confirmation Email</p>
+                            <p className="text-sm font-bold text-white/90 mb-1">Keep an Eye on Your Inbox</p>
                             <p className="text-sm text-white/60 leading-relaxed">
-                                A full confirmation email with all camp details will be sent approximately 7 days prior to the start of the camp. Keep an eye on your inbox.
+                                You will receive an email in the days leading into the camps with further details — including your exact session times, venue information and everything you need for day one.
                             </p>
                         </div>
                     </div>
