@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Zap, CalendarDays, MapPin, Users, Clock, ShieldCheck } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import HallaBol from '../holiday-programs/HallaBol';
 
 // ─────────────────────────────────────────────────────────────
 // POWER GAME MASTERCLASS — Sept 6 & 13, 2026
@@ -187,6 +188,68 @@ const PowerGameMasterclass = () => {
                 </div>
             </section>
 
+            {/* ───────────── WHAT YOU'LL MASTER ───────────── */}
+            <section className="relative py-16 sm:py-20 px-5 bg-white/[0.03] border-b border-white/10">
+                <div className="max-w-4xl mx-auto">
+                    <motion.h2
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.4 }}
+                        variants={fadeUp}
+                        className="text-2xl sm:text-4xl font-black tracking-tight text-center mb-3"
+                    >
+                        What You&apos;ll <span className="text-rr-pink">Master</span>
+                    </motion.h2>
+                    <motion.p
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.4 }}
+                        variants={fadeUp}
+                        custom={0.05}
+                        className="text-white/70 text-sm sm:text-base font-medium text-center mb-10 max-w-2xl mx-auto"
+                    >
+                        Four hours dedicated to one thing — turning you into a genuine power hitter.
+                    </motion.p>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {[
+                            'Power hitting mechanics',
+                            'Bat swing',
+                            'Video analysis',
+                            'Exit velocity testing',
+                            'Use of pro-velocity bats',
+                            'Develop the ability to mis-hit sixes',
+                        ].map((item, i) => (
+                            <motion.div
+                                key={item}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true, amount: 0.4 }}
+                                variants={fadeUp}
+                                custom={i * 0.07}
+                                className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-2xl p-5"
+                            >
+                                <div className="w-10 h-10 rounded-xl bg-rr-pink/15 flex items-center justify-center flex-shrink-0">
+                                    <Zap className="w-5 h-5 text-rr-pink" strokeWidth={2.25} />
+                                </div>
+                                <p className="text-[15px] sm:text-base font-bold text-white leading-snug">{item}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    <motion.p
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.4 }}
+                        variants={fadeUp}
+                        custom={0.45}
+                        className="text-center mt-8 text-lg sm:text-xl font-black uppercase tracking-[0.2em] text-rr-pink"
+                    >
+                        And More!
+                    </motion.p>
+                </div>
+            </section>
+
             {/* ───────────── DETAILS ───────────── */}
             <section className="relative py-16 sm:py-20 px-5">
                 <div className="max-w-4xl mx-auto">
@@ -266,8 +329,8 @@ const PowerGameMasterclass = () => {
                         className="sm:w-2/5 mb-8 sm:mb-0"
                     >
                         <img
-                            src="/assets/masterclass/suryavanshi-bat-raise.webp"
-                            alt="Royals batter raising the bat"
+                            src="/assets/coaches/alex-thornhill.jpg"
+                            alt="Alex Thornhill — Head Coach, South-East Region"
                             className="w-full rounded-2xl border border-white/10 object-cover"
                         />
                     </motion.div>
@@ -288,6 +351,9 @@ const PowerGameMasterclass = () => {
                     </motion.div>
                 </div>
             </section>
+
+            {/* ───────────── HALLA BOL ───────────── */}
+            <HallaBol />
 
             {/* ───────────── REGISTRATION ───────────── */}
             <section id="register" className="relative py-16 sm:py-24 px-5">
