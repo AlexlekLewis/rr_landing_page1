@@ -22,6 +22,27 @@ const fadeUp = {
     }),
 };
 
+const SHIRT_SIZES = ['Youth 12-14', 'XS', 'S', 'M', 'L', 'XL', '2XL'];
+
+const ComplianceCheckbox = ({ checked, onChange, error, children }) => (
+    <div className="mb-4">
+        <label className="flex items-start gap-3 cursor-pointer group">
+            <div
+                onClick={() => onChange(!checked)}
+                className={`mt-0.5 w-5 h-5 rounded shrink-0 border-2 flex items-center justify-center transition-all duration-200 ${checked ? 'bg-rr-pink border-rr-pink' : 'border-white/30 bg-white/5 group-hover:border-rr-pink'}`}
+            >
+                {checked && (
+                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
+                )}
+            </div>
+            <span className="text-white/75 text-sm font-medium leading-relaxed text-left">{children}</span>
+        </label>
+        {error && <p className="text-rr-pink text-xs font-bold mt-1 ml-8 text-left">{error}</p>}
+    </div>
+);
+
 const DETAILS = [
     { icon: MapPin, label: 'Venue', value: 'Cranbourne North Elite Cricket Centre' },
     { icon: CalendarDays, label: 'Dates', value: 'Sunday 6 Sept & Sunday 13 Sept' },
@@ -36,7 +57,12 @@ const PowerGameMasterclass = () => {
         phone: '',
         player_age: '',
         club: '',
+        shirt_size: '',
     });
+    const [acceptTerms, setAcceptTerms] = useState(false);
+    const [acceptPlayerCode, setAcceptPlayerCode] = useState(false);
+    const [acceptParentCode, setAcceptParentCode] = useState(false);
+    const [acceptSocialMedia, setAcceptSocialMedia] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
 
@@ -64,6 +90,10 @@ const PowerGameMasterclass = () => {
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) next.email = 'Valid email required';
         if (!form.phone.trim()) next.phone = 'Phone number is required';
         if (!form.player_age.trim()) next.player_age = 'Player age is required';
+        if (!form.shirt_size) next.shirt_size = 'Training shirt size is required';
+        if (!acceptTerms) next.acceptTerms = 'You must agree to the Terms & Conditions and Privacy Policy.';
+        if (!acceptPlayerCode) next.acceptPlayerCode = 'You must agree to the Player Code of Conduct.';
+        if (!acceptParentCode) next.acceptParentCode = 'You must agree to the Parent/Guardian Code of Conduct.';
         return next;
     };
 
@@ -88,6 +118,11 @@ const PowerGameMasterclass = () => {
                     phone: form.phone.trim(),
                     player_age: form.player_age.trim(),
                     club: form.club.trim() || null,
+                    shirt_size: form.shirt_size,
+                    accept_terms: acceptTerms,
+                    accept_player_code: acceptPlayerCode,
+                    accept_parent_code: acceptParentCode,
+                    accept_social_media: acceptSocialMedia,
                     page_referrer: document.referrer || null,
                     ...utm,
                 },
@@ -298,6 +333,7 @@ const PowerGameMasterclass = () => {
                         </p>
                         <p className="text-white/70 text-sm font-medium mt-1">
                             $60 per hour of specialist power-hitting development. One registration covers both Sundays.
+                            Official training shirt ($29.95) is required and added at registration.
                         </p>
                     </motion.div>
                 </div>
@@ -331,7 +367,7 @@ const PowerGameMasterclass = () => {
                         <img
                             src="/assets/coaches/alex-thornhill.jpg"
                             alt="Alex Thornhill — Head Coach, South-East Region"
-                            className="w-full rounded-2xl border border-white/10 object-cover"
+                            className="w-full max-w-xs sm:max-w-none mx-auto aspect-square object-cover object-center rounded-2xl border border-white/10"
                         />
                     </motion.div>
                     <motion.div
@@ -424,6 +460,46 @@ const PowerGameMasterclass = () => {
                             />
                         </div>
 
+                        {/* Training Shirt — mandatory */}
+                        <div className="pt-4 border-t border-white/10">
+                            <p className="text-xs font-black text-rr-pink uppercase tracking-widest mb-3">
+                                Training Shirt — $29.95 (Required)
+                            </p>
+                            <p className="text-white/60 text-xs font-medium mb-3">
+                                The official training shirt is required at all masterclass sessions and is added to your registration.
+                            </p>
+                            <select
+                                value={form.shirt_size}
+                                onChange={setField('shirt_size')}
+                                className={`${inputClass('shirt_size')} appearance-none ${form.shirt_size ? '' : 'text-white/40'}`}
+                            >
+                                <option value="" className="bg-rr-dark">Select shirt size *</option>
+                                {SHIRT_SIZES.map((sz) => (
+                                    <option key={sz} value={sz} className="bg-rr-dark">{sz}</option>
+                                ))}
+                            </select>
+                            {errors.shirt_size && <p className="text-rr-pink text-xs font-bold mt-1.5">{errors.shirt_size}</p>}
+                        </div>
+
+                        {/* Agreements & Consent */}
+                        <div className="pt-4 border-t border-white/10">
+                            <p className="text-xs font-black text-white uppercase tracking-widest mb-4">
+                                Agreements &amp; Consent
+                            </p>
+                            <ComplianceCheckbox checked={acceptTerms} onChange={setAcceptTerms} error={errors.acceptTerms}>
+                                I have read and agree to the <a href="/terms-conditions" target="_blank" className="text-rr-pink hover:underline">Terms &amp; Conditions</a> and <a href="/privacy-policy" target="_blank" className="text-rr-pink hover:underline">Privacy Policy</a>. I confirm all information provided is accurate.
+                            </ComplianceCheckbox>
+                            <ComplianceCheckbox checked={acceptPlayerCode} onChange={setAcceptPlayerCode} error={errors.acceptPlayerCode}>
+                                I have read, understood, and agree to the <a href="/assets/RRA_Player_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Player Code of Conduct</a>.
+                            </ComplianceCheckbox>
+                            <ComplianceCheckbox checked={acceptParentCode} onChange={setAcceptParentCode} error={errors.acceptParentCode}>
+                                I have read, understood, and agree to the <a href="/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Parent/Guardian Code of Conduct</a> (applies where the player is under 18).
+                            </ComplianceCheckbox>
+                            <ComplianceCheckbox checked={acceptSocialMedia} onChange={setAcceptSocialMedia} error={errors.acceptSocialMedia}>
+                                I am happy for photos and videos from the masterclass featuring the player to be used on Rajasthan Royals Academy Melbourne's social media and marketing channels.
+                            </ComplianceCheckbox>
+                        </div>
+
                         {errors.form && (
                             <p className="text-rr-pink text-sm font-bold text-center">{errors.form}</p>
                         )}
@@ -433,7 +509,7 @@ const PowerGameMasterclass = () => {
                             disabled={submitting}
                             className="w-full inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 text-white font-black uppercase tracking-widest text-sm rounded-full px-8 py-4 transition-all hover:shadow-[0_0_30px_rgba(225,31,143,0.5)]"
                         >
-                            {submitting ? 'Registering…' : 'Register & Pay $240'}
+                            {submitting ? 'Registering…' : 'Register & Pay $269.95'}
                             {!submitting && <ArrowRight className="w-4 h-4" strokeWidth={2.5} />}
                         </button>
 

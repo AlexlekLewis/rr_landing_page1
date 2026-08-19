@@ -34,3 +34,11 @@ create policy "Allow anon insert masterclass registrations"
     for insert
     to anon
     with check (true);
+
+-- 19 Aug: mandatory training shirt + compliance checkboxes
+alter table public.masterclass_registrations
+    add column if not exists shirt_size text,
+    add column if not exists accept_terms boolean default false,
+    add column if not exists accept_player_code boolean default false,
+    add column if not exists accept_parent_code boolean default false,
+    add column if not exists accept_social_media boolean default false;
