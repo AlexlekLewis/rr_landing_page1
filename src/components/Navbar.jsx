@@ -85,18 +85,19 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
     const isCoaches = variant === 'coaches';
     const isPrivateCoaching = variant === 'private-coaching';
     const isIndiaTour = variant === 'india-tour';
+    const isPerformanceSquads = variant === 'performance-squads';
 
-    const navLinks = (isLP3 || isHoliday || isShop || isPowerGame) ? [] : isIndiaTour ? IT_NAV : isPrivateCoaching ? PC_NAV : isCoaches ? COACHES_NAV : isMickleham ? MICKLEHAM_NAV : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
+    const navLinks = (isLP3 || isHoliday || isShop || isPowerGame || isPerformanceSquads) ? [] : isIndiaTour ? IT_NAV : isPrivateCoaching ? PC_NAV : isCoaches ? COACHES_NAV : isMickleham ? MICKLEHAM_NAV : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
     // Standalone pages (Mickleham, Coaches, Private Coaching, India Tour) get the full site nav: Home + the Programs dropdown of live pages.
-    const showProgramsDropdown = isHome || isMickleham || isCoaches || isPrivateCoaching || isIndiaTour;
-    const showHomeLink = isMickleham || isCoaches || isPrivateCoaching || isIndiaTour;
+    const showProgramsDropdown = isHome || isMickleham || isCoaches || isPrivateCoaching || isIndiaTour || isPerformanceSquads;
+    const showHomeLink = isMickleham || isCoaches || isPrivateCoaching || isIndiaTour || isPerformanceSquads;
     const showCTA = !isShop && !isPowerGame;
     const showHamburger = !isShop;
 
     // Junior Royals (isLittleCrickets): Term 3 is sold out — the CTA points at
     // the Term 4 entry form (Mondays & Wednesdays, no payment now).
-    const ctaLabel = isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : isLittleCrickets ? 'TERM 4 — ENTER NOW' : isLP2 ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
-    const ctaTarget = isIndiaTour ? 'register' : isMickleham ? 'register' : isCoaches ? 'join' : isPrivateCoaching ? 'eoi-form' : isLP2 ? 'checkout' : isHoliday ? 'secure-form' : isLittleCrickets ? 'registration-form' : 'apply-form';
+    const ctaLabel = isPerformanceSquads ? 'REGISTER INTEREST' : isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : isLittleCrickets ? 'TERM 4 — ENTER NOW' : isLP2 ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
+    const ctaTarget = isPerformanceSquads ? 'registration-form' : isIndiaTour ? 'register' : isMickleham ? 'register' : isCoaches ? 'join' : isPrivateCoaching ? 'eoi-form' : isLP2 ? 'checkout' : isHoliday ? 'secure-form' : isLittleCrickets ? 'registration-form' : 'apply-form';
 
     const scrollToForm = () => {
         if (isHome && onRegisterClick) {
