@@ -29,7 +29,7 @@ const CENTRES = [
         suburb: 'Mickleham',
         coach: 'Alex Lewis',
         coachTitle: 'Head Coach',
-        trialDates: [], // empty → "Trial dates announced soon"
+        trialDates: [], // empty → "Trials Coming Soon" (Mickleham not live for trials yet)
         active: true,
     },
     {
@@ -351,7 +351,7 @@ const PerformanceSquads = () => {
                                                 ))}
                                             </div>
                                         ) : (
-                                            <span className="text-white/75 text-sm font-medium">Trial dates announced soon</span>
+                                            <span className="text-white/75 text-sm font-medium">Trials Coming Soon</span>
                                         )}
                                     </div>
                                 </div>
