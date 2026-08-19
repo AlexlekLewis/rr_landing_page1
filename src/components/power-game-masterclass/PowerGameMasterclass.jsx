@@ -246,7 +246,7 @@ const PowerGameMasterclass = () => {
                         custom={0.1}
                         className="text-[2.4rem] leading-[0.98] sm:text-6xl lg:text-7xl font-black tracking-tight mb-4"
                     >
-                        POWER GAME<br />
+                        POWER HITTING<br />
                         <span className="text-rr-pink">MASTERCLASS</span>
                     </motion.h1>
 
