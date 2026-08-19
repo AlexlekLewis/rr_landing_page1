@@ -118,8 +118,8 @@ const PowerGameMasterclass = () => {
             {/* ───────────── HERO ───────────── */}
             <section className="relative min-h-[94svh] w-full overflow-hidden flex items-end">
                 <img
-                    src="/assets/lp2/vaibhav-suryavanshi.png"
-                    alt="Power hitting under lights"
+                    src="/assets/masterclass/suryavanshi-six.webp"
+                    alt="Suryavanshi hitting a six under lights"
                     className="absolute inset-0 w-full h-full object-cover object-top"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/80 to-rr-dark/10" />
@@ -240,9 +240,37 @@ const PowerGameMasterclass = () => {
                 </div>
             </section>
 
+            {/* ───────────── CREATIVE BREAK ───────────── */}
+            <section className="relative w-full overflow-hidden">
+                <img
+                    src="/assets/masterclass/jaiswal-power.webp"
+                    alt="Power hitting through the off side"
+                    className="w-full h-[280px] sm:h-[420px] object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-transparent to-rr-dark/40" />
+                <div className="absolute bottom-5 left-0 right-0 text-center px-5">
+                    <p className="text-lg sm:text-2xl font-black uppercase tracking-[0.15em] text-white drop-shadow-lg">
+                        Hit it <span className="text-rr-pink">harder.</span> Hit it <span className="text-rr-pink">further.</span>
+                    </p>
+                </div>
+            </section>
+
             {/* ───────────── COACH ───────────── */}
             <section className="relative py-16 sm:py-20 px-5 bg-white/[0.03] border-y border-white/10">
                 <div className="max-w-4xl mx-auto text-center sm:text-left sm:flex sm:items-center sm:gap-10">
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.3 }}
+                        variants={fadeUp}
+                        className="sm:w-2/5 mb-8 sm:mb-0"
+                    >
+                        <img
+                            src="/assets/masterclass/suryavanshi-bat-raise.webp"
+                            alt="Royals batter raising the bat"
+                            className="w-full rounded-2xl border border-white/10 object-cover"
+                        />
+                    </motion.div>
                     <motion.div
                         initial="hidden"
                         whileInView="visible"
