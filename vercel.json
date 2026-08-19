@@ -6,12 +6,19 @@
         },
         "api/sync-pgp-leads.js": {
             "maxDuration": 300
+        },
+        "api/sync-masterclass.js": {
+            "maxDuration": 60
         }
     },
     "crons": [
         {
             "path": "/api/sync-pgp-leads",
             "schedule": "*/30 * * * *"
+        },
+        {
+            "path": "/api/sync-masterclass",
+            "schedule": "0 */4 * * *"
         }
     ],
     "headers": [
