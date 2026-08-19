@@ -29,7 +29,7 @@ const CENTRES = [
         suburb: 'Mickleham',
         coach: 'Alex Lewis',
         coachTitle: 'Head Coach',
-        trialDate: null, // e.g. 'Sunday 12 Oct · 4:00–6:00 PM'
+        trialDates: [], // empty → "Trial dates announced soon"
         active: true,
     },
     {
@@ -39,12 +39,16 @@ const CENTRES = [
         suburb: 'Cranbourne North',
         coach: 'Alex Thornhill',
         coachTitle: 'Head Coach',
-        trialDate: null,
+        trialDates: [
+            'Trial 1 — Sunday 6 September · 7:00–8:30 PM',
+            'Trial 2 — Friday 11 September · 8:00–9:30 PM',
+            'Trial 3 — Sunday 13 September · 7:00–8:30 PM',
+        ],
         active: true,
     },
     // Future squads — displayed as "Coming 2027", not selectable.
-    { slug: 'west-melbourne', name: 'West Melbourne', venue: 'Venue to be announced', suburb: '', coach: null, trialDate: null, active: false },
-    { slug: 'east-melbourne', name: 'East Melbourne', venue: 'Venue to be announced', suburb: '', coach: null, trialDate: null, active: false },
+    { slug: 'west-melbourne', name: 'West Melbourne', venue: 'Venue to be announced', suburb: '', coach: null, trialDates: [], active: false },
+    { slug: 'east-melbourne', name: 'East Melbourne', venue: 'Venue to be announced', suburb: '', coach: null, trialDates: [], active: false },
 ];
 
 const ACTIVE_CENTRES = CENTRES.filter((c) => c.active);
@@ -333,9 +337,22 @@ const PerformanceSquads = () => {
                                     </div>
                                     <div className="flex items-start gap-3">
                                         <CalendarDays className="w-4 h-4 text-rr-pink shrink-0 mt-0.5" />
-                                        <span className="text-white/75 text-sm font-medium">
-                                            {c.trialDate || 'Trial dates announced soon'}
-                                        </span>
+                                        {c.trialDates.length ? (
+                                            <div className="space-y-1.5">
+                                                {c.trialDates.map((d) => (
+                                                    <div key={d} className="text-white/75 text-sm font-medium">
+                                                        {d.includes('—') ? (
+                                                            <>
+                                                                <span className="text-rr-light-pink font-bold">{d.split('—')[0].trim()}</span>
+                                                                {' — '}{d.split('—')[1].trim()}
+                                                            </>
+                                                        ) : d}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <span className="text-white/75 text-sm font-medium">Trial dates announced soon</span>
+                                        )}
                                     </div>
                                 </div>
                                 <button
