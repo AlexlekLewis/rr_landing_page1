@@ -55,6 +55,9 @@ const PowerGameConfirm = React.lazy(() => import('./components/power-game/return
 // Scholarship players — private express confirmation; program discount via promo code, kit mandatory.
 const PowerGameScholarship = React.lazy(() => import('./components/power-game/returning/ScholarshipSignup'));
 const PowerGameFullRide = React.lazy(() => import('./components/power-game/returning/FullRideSignup'));
+// Performance Squads — representative pathway (trial or invite; North Melbourne + South-East
+// Melbourne). HIDDEN page: noindex, not linked from nav/homepage/sitemap. Direct URL only.
+const PerformanceSquads = React.lazy(() => import('./components/performance-squads/PerformanceSquads'));
 
 // Admin components
 import AdminLogin from './components/admin/AdminLogin';
@@ -208,6 +211,10 @@ function App() {
             noindex, direct URL only until Andy approves go-live */}
         <Route path="/power-game-masterclass" element={<PowerGameMasterclass />} />
         <Route path="/power-game-masterclass/success" element={<MasterclassSuccess />} />
+
+        {/* Performance Squads — trial/invite representative pathway. HIDDEN: noindex,
+            not in nav or sitemap, direct URL only until Andy approves go-live. */}
+        <Route path="/performance-squads" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquads /></React.Suspense>} />
 
         {/* Power Game Program — hidden from nav, accessible via direct URL only */}
         <Route path="/elite-royals" element={<PowerGame />} />
