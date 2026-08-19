@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
     ArrowRight, MapPin, Users, Trophy, Shield, ChevronDown,
-    ClipboardCheck, Mail, Swords, CalendarDays, Star, CreditCard,
+    ClipboardCheck, Mail, CalendarDays, Star, CreditCard,
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
@@ -366,13 +366,21 @@ const PerformanceSquads = () => {
             {/* Reserved explanation section — placeholder copy, refine with Andy. */}
             <section id="power-league" className="py-20 px-5 scroll-mt-8">
                 <div className="max-w-4xl mx-auto">
-                    <SectionHeading
-                        eyebrow="Where Squads Compete"
-                        title="The Power League"
-                    />
+                    {/* Official Power League logo (same asset as the Power Cricket page) —
+                        white/pink on transparent, designed for dark backgrounds. */}
+                    <div className="max-w-3xl mx-auto text-center mb-12">
+                        <span className="inline-block text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] text-rr-pink mb-5">
+                            Where Squads Compete
+                        </span>
+                        <h2 className="sr-only">The Power League</h2>
+                        <img
+                            src="/assets/power-league-logo.png"
+                            alt="The Power League"
+                            className="h-24 sm:h-32 lg:h-36 w-auto mx-auto drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]"
+                        />
+                    </div>
                     <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}
                         className="bg-gradient-to-br from-rr-navy to-rr-dark border border-white/10 rounded-2xl p-7 sm:p-10">
-                        <Swords className="w-9 h-9 text-rr-pink mb-5" />
                         <p className="text-white/75 text-[15px] sm:text-base font-medium leading-relaxed mb-4">
                             The Power League is the Academy's own match series — the competitive stage where
                             Performance Squad teams from each centre go head-to-head, played at various times
