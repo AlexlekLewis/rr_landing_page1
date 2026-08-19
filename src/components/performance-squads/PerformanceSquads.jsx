@@ -11,6 +11,7 @@ import RegistrationForm from './RegistrationForm';
 import PaymentsSection from './PaymentsSection';
 import FAQSection from './FAQSection';
 import StickyCTA from './StickyCTA';
+import PartnerStack from '../power-game/PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { scrollTo } from './shared';
 
@@ -36,6 +37,7 @@ const SECTIONS = [
     'registration-form',
     'payments',
     'faq',
+    'partners',
 ];
 
 const PerformanceSquads = () => {
@@ -90,6 +92,10 @@ const PerformanceSquads = () => {
                 </div>
                 <div id="faq" className="scroll-mt-28 lg:scroll-mt-32">
                     <FAQSection />
+                </div>
+                {/* Shared tiered partner stack (same source of truth as /elite-royals) */}
+                <div id="partners" className="scroll-mt-28 lg:scroll-mt-32">
+                    <PartnerStack theme="dark" />
                 </div>
             </main>
             <Footer />
