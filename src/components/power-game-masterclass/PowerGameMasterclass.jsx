@@ -75,14 +75,6 @@ const PowerGameMasterclass = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
         document.title = 'Power Game Masterclass | Sept 2026';
-        // noindex while page is undiscoverable
-        const meta = document.createElement('meta');
-        meta.name = 'robots';
-        meta.content = 'noindex, nofollow';
-        document.head.appendChild(meta);
-        return () => {
-            document.head.removeChild(meta);
-        };
     }, []);
 
     const setField = (key) => (e) => {
@@ -162,11 +154,17 @@ const PowerGameMasterclass = () => {
                     alt="Suryavanshi hitting a six under lights"
                     className="absolute inset-0 w-full h-full object-cover object-top"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/80 to-rr-dark/10" />
-                <div className="absolute inset-0 bg-gradient-to-r from-rr-dark/60 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-rr-dark/35" />
+                <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/85 to-rr-dark/30" />
+                <div className="absolute inset-0 bg-gradient-to-r from-rr-dark/70 via-transparent to-transparent" />
 
                 <div className="relative z-10 w-full max-w-2xl mx-auto sm:mx-0 px-5 pb-24 pt-28 sm:pb-16 sm:pt-36 sm:pl-10 lg:pl-16 text-center sm:text-left">
                     <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}>
+                        <img
+                            src="/assets/powergame/power-game-logo-transparent.png"
+                            alt="The Power Game"
+                            className="h-20 sm:h-28 w-auto mx-auto sm:mx-0 mb-5 drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]"
+                        />
                         <span className="inline-block text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] text-white bg-rr-pink rounded-full px-4 py-1.5 mb-5">
                             Strictly Limited Numbers
                         </span>
