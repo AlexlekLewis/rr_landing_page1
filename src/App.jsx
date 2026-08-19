@@ -207,8 +207,8 @@ function App() {
             Not in nav; writes to program_feedback via the service-role /api/program-feedback. */}
         <Route path="/elite-feedback" element={<ProgramFeedback />} />
 
-        {/* Power Game Masterclass (Sept 6 & 13, Cranbourne North) — hidden from nav,
-            noindex, direct URL only until Andy approves go-live */}
+        {/* Power Game Masterclass (Sun 6 & 13 Sept, 5-7pm, Cranbourne North) — PUBLIC
+            since 20 Aug 2026: in the nav, the home What's On widget and the sitemap. */}
         <Route path="/power-game-masterclass" element={<PowerGameMasterclass />} />
         <Route path="/power-game-masterclass/success" element={<MasterclassSuccess />} />
 

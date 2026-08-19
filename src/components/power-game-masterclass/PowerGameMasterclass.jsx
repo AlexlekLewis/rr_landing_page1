@@ -4,11 +4,15 @@ import { ArrowRight, Zap, CalendarDays, MapPin, Users, Clock, ShieldCheck, Ruler
 import { TOPS_SIZES, TOPS_MEASURE_TIP } from '../academy-shop/sizeData';
 import { supabase } from '../../lib/supabase';
 import Navbar from '../Navbar';
+import Footer from '../Footer';
+import PartnerStack from '../power-game/PartnerStack';
 import HallaBol from '../holiday-programs/HallaBol';
 
 // ─────────────────────────────────────────────────────────────
 // POWER GAME MASTERCLASS — Sept 6 & 13, 2026
-// Hidden page: not linked from nav/homepage, noindex.
+// PUBLIC since 20 Aug 2026: linked from the nav Programs dropdown, the home
+// What's On widget, the home hero and the register drawer. In the sitemap
+// and pageSeo.
 // Stripe link: paste live URL below when Andy provides it.
 // While null, registrants are captured in Supabase and sent to
 // the success page with a "we'll be in touch to complete payment" note.
@@ -140,9 +144,10 @@ const PowerGameMasterclass = () => {
     const [submitting, setSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
 
+    // Title/description come from <RouteSeo/> (see src/seo/pageSeo.js) — setting
+    // the title here would overwrite it.
     useEffect(() => {
         window.scrollTo(0, 0);
-        document.title = 'Power Game Masterclass | Sept 2026';
     }, []);
 
     const setField = (key) => (e) => {
@@ -214,7 +219,7 @@ const PowerGameMasterclass = () => {
 
     return (
         <div className="min-h-screen bg-rr-dark text-white font-sans selection:bg-rr-pink selection:text-white">
-            <Navbar variant="power-game" />
+            <Navbar variant="masterclass" />
 
             {/* ───────────── HERO ───────────── */}
             <section className="relative min-h-[94svh] w-full overflow-hidden flex items-end">
@@ -641,15 +646,10 @@ const PowerGameMasterclass = () => {
                 </div>
             </section>
 
-            {/* ───────────── FOOTER ───────────── */}
-            <footer className="border-t border-white/10 py-8 px-5 text-center">
-                <p className="text-[11px] uppercase tracking-[0.2em] font-black text-white/40 mb-1">
-                    Power Game
-                </p>
-                <p className="text-white/40 text-xs font-medium">
-                    Proud Partners of the Rajasthan Royals Academy · info@rramelbourne.com
-                </p>
-            </footer>
+            {/* Shared tiered partner stack + sitewide footer, so the page carries the
+                site's internal-link backbone instead of dead-ending the visitor. */}
+            <PartnerStack theme="dark" />
+            <Footer />
         </div>
     );
 };

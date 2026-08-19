@@ -5,7 +5,14 @@
 // KEEP THIS HONEST: anything listed here is being actively promoted to every
 // visitor who lands on the home page, so a closed or finished program must come
 // out the moment it closes. Power Game Pre-Season was removed on 6 Aug 2026
-// because enrolment had closed and the modal was still selling it.
+// because enrolment had closed and the modal was still selling it. The India
+// High Performance Camp came out on 20 Aug 2026 for the same reason —
+// applications had closed. It still sits in the nav Programs dropdown and the
+// sitemap, which is where a closed-but-real program belongs.
+//
+// ORDER = nearest real deadline first. Review dates:
+//   Holiday Camp early bird — 30 Aug 2026
+//   Masterclass             — 13 Sep 2026 (remove after the second session)
 //
 // Each item links via a full-page <a href> so the global Meta Pixel PageView
 // fires on arrival at the destination. Every line has to make sense to someone
@@ -22,19 +29,19 @@ export const ANNOUNCEMENTS = [
         highlight: true,
     },
     {
+        key: 'power-game-masterclass',
+        name: 'Power Game Masterclass',
+        tag: 'Two evening sessions on hitting the ball harder and further · Sun 6 & Sun 13 September',
+        detail: 'Ages 14 and up · 5–7pm · Cranbourne North · $240 for both evenings',
+        href: '/power-game-masterclass',
+        badge: 'Book now',
+    },
+    {
         key: 'junior-royals-t4',
         name: 'Junior Royals · Term 4',
         tag: 'Weekly coaching, Mondays or Wednesdays · October – December',
         detail: 'Boys & girls 5–17 · Mickleham, Hallam & Williamstown',
         href: '/junior-royals',
         badge: 'Entries open',
-    },
-    {
-        key: 'india-camp',
-        name: 'India High Performance Camp',
-        tag: 'Train in Nagpur at the Royals’ own academy · 19–26 September',
-        detail: 'Applications closed — a new tour will be announced soon',
-        href: '/tours',
-        badge: 'Applications closed',
     },
 ];
