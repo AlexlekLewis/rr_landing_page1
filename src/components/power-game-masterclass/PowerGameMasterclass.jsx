@@ -228,7 +228,7 @@ const PowerGameMasterclass = () => {
                 <div className="relative z-10 w-full max-w-2xl mx-auto sm:mx-0 px-5 pb-24 pt-28 sm:pb-16 sm:pt-36 sm:pl-10 lg:pl-16 text-center sm:text-left">
                     <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}>
                         <img
-                            src="/assets/powergame/power-game-logo-transparent.png"
+                            src="/assets/masterclass/power-game-logo-notagline.png"
                             alt="The Power Game"
                             className="h-32 sm:h-44 lg:h-52 w-auto mx-auto sm:mx-0 mb-6 drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]"
                         />
