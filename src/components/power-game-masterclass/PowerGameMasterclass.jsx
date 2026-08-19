@@ -163,7 +163,7 @@ const PowerGameMasterclass = () => {
                         <img
                             src="/assets/powergame/power-game-logo-transparent.png"
                             alt="The Power Game"
-                            className="h-20 sm:h-28 w-auto mx-auto sm:mx-0 mb-5 drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]"
+                            className="h-32 sm:h-44 lg:h-52 w-auto mx-auto sm:mx-0 mb-6 drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]"
                         />
                         <span className="inline-block text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] text-white bg-rr-pink rounded-full px-4 py-1.5 mb-5">
                             Strictly Limited Numbers
