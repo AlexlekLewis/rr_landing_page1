@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Zap, CalendarDays, MapPin, Users, Clock, ShieldCheck, Ruler, ChevronDown } from 'lucide-react';
 import { TOPS_SIZES, TOPS_MEASURE_TIP } from '../academy-shop/sizeData';
 import { supabase } from '../../lib/supabase';
+import Navbar from '../Navbar';
 import HallaBol from '../holiday-programs/HallaBol';
 
 // ─────────────────────────────────────────────────────────────
@@ -213,6 +214,7 @@ const PowerGameMasterclass = () => {
 
     return (
         <div className="min-h-screen bg-rr-dark text-white font-sans selection:bg-rr-pink selection:text-white">
+            <Navbar variant="power-game" />
 
             {/* ───────────── HERO ───────────── */}
             <section className="relative min-h-[94svh] w-full overflow-hidden flex items-end">
