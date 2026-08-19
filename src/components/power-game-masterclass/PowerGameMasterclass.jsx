@@ -12,8 +12,8 @@ import HallaBol from '../holiday-programs/HallaBol';
 // While null, registrants are captured in Supabase and sent to
 // the success page with a "we'll be in touch to complete payment" note.
 // ─────────────────────────────────────────────────────────────
-const STRIPE_URL_NO_SHIRT = null;   // TODO: paste Stripe link — $240 (already has shirt)
-const STRIPE_URL_WITH_SHIRT = null; // TODO: paste Stripe link — $269.95 ($240 + $29.95 shirt)
+// Single Stripe link — shirt is an optional line item customers can untick at checkout
+const STRIPE_CHECKOUT_URL = 'https://buy.stripe.com/5kQ9AT4fne8RdhG5bB9Zm0u';
 
 const fadeUp = {
     hidden: { opacity: 0, y: 24 },
@@ -137,12 +137,7 @@ const PowerGameMasterclass = () => {
             ]);
             if (error) throw error;
 
-            const stripeUrl = hasShirt ? STRIPE_URL_NO_SHIRT : STRIPE_URL_WITH_SHIRT;
-            if (stripeUrl) {
-                window.location.href = stripeUrl;
-            } else {
-                window.location.href = '/power-game-masterclass/success?pending=1';
-            }
+            window.location.href = STRIPE_CHECKOUT_URL;
         } catch (err) {
             console.error('Masterclass registration error:', err);
             setErrors({ form: 'Something went wrong. Please try again or email info@rramelbourne.com' });
@@ -486,12 +481,16 @@ const PowerGameMasterclass = () => {
                                     )}
                                 </div>
                                 <span className="text-white/75 text-sm font-medium leading-relaxed text-left">
-                                    I already have an official RRA training shirt — <span className="text-white font-bold">untick this box if you don&apos;t have one</span> and a shirt (<span className="text-white font-bold">$29.95</span>) will be added to your registration.
+                                    I already have an official RRA training shirt — <span className="text-white font-bold">untick this box if you don&apos;t have one</span> and you&apos;ll purchase a shirt (<span className="text-white font-bold">$29.95</span>) at checkout.
                                 </span>
                             </label>
-                            {!hasShirt && (
+                            {hasShirt ? (
+                                <p className="text-white/50 text-xs font-medium mb-3">
+                                    Since you already have a shirt, simply <span className="text-white font-bold">untick the training shirt option on the payment page</span> — your total will be $240.
+                                </p>
+                            ) : (
                                 <p className="text-rr-pink text-xs font-bold mb-3">
-                                    Training shirt ($29.95) will be added — total $269.95.
+                                    Keep the training shirt ticked on the payment page — total $269.95.
                                 </p>
                             )}
 
