@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { CreditCard } from 'lucide-react';
 import { fadeUp, SectionHeading, Label, Chevron, selectClass } from './shared';
-import { ACTIVE_CENTRES, PAYMENT_LINKS, PAYMENT_OPTIONS } from './data';
+import { ACTIVE_CENTRES, PAYMENT_LINKS, PAYMENT_OPTIONS, FINANCIAL_CONDITION } from './data';
 
 const PaymentsSection = () => {
     const [payCentre, setPayCentre] = useState(ACTIVE_CENTRES[0].slug);
@@ -20,7 +20,7 @@ const PaymentsSection = () => {
                 <SectionHeading
                     eyebrow="Step 2"
                     title="Payments"
-                    sub="Choose your centre and what you're paying for — trials, game fees, or squad training."
+                    sub="Choose your centre and what you're paying for — trial fees, match fees, or your annual fee."
                 />
                 <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}
                     className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-9">

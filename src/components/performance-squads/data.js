@@ -45,21 +45,25 @@ export const PAYMENT_LINKS = {
     'north-melbourne': {
         trial: null,    // e.g. 'https://buy.stripe.com/xxxx'
         games: null,
-        training: null,
+        annual: null,
     },
     'south-east-melbourne': {
         trial: null,
         games: null,
-        training: null,
+        annual: null,
     },
 };
 
-// PLACEHOLDER prices — swap for real amounts before public launch.
+// Prices confirmed Aug 2026. Stripe links still to come.
 export const PAYMENT_OPTIONS = [
-    { key: 'trial', label: 'Trial Fee', price: 'TBC', desc: 'One-off fee to take part in your centre’s trial session.' },
-    { key: 'games', label: 'Game Fee', price: 'TBC', desc: 'Match-day fee for Power League rounds and external fixtures.' },
-    { key: 'training', label: 'Training Fee', price: 'TBC', desc: 'Ongoing squad training at your home centre.' },
+    { key: 'trial', label: 'Trial Fee', price: '$15', desc: 'Per session. Charged for each trial session you attend.' },
+    { key: 'games', label: 'Match Fee', price: 'Format dependent', desc: 'Match fees vary by format. Confirmed ahead of each fixture.' },
+    { key: 'annual', label: 'Annual Fee', price: '$30 / week', desc: 'Ongoing squad fee at your home centre.' },
 ];
+
+// Selection condition — shown beneath the fee cards and in the FAQ.
+export const FINANCIAL_CONDITION =
+    'All players must remain financial to be eligible for selection.';
 
 export const PLAYING_ROLES = ['Batter', 'Bowler', 'All-Rounder', 'Wicket-Keeper', 'Wicket-Keeper Batter'];
 
@@ -105,7 +109,7 @@ export const FAQS = [
     },
     {
         q: 'What does it cost?',
-        a: 'There are three separate fees: a trial fee, a game fee for Power League and external fixtures, and a training fee for ongoing squad sessions. Final amounts are being confirmed and will be published here before trials open.',
+        a: 'Three fees. A $15 trial fee per session, match fees which vary by format, and a $30 per week annual fee. All players must remain financial to be eligible for selection.',
     },
     {
         q: 'What is the Power League?',

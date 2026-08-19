@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Check } from 'lucide-react';
 import { fadeUp, scrollTo, SectionHeading } from './shared';
-import { PAYMENT_OPTIONS } from './data';
+import { PAYMENT_OPTIONS, FINANCIAL_CONDITION } from './data';
 
 // What every squad place includes — DRAFT copy for Andy's review.
 const INCLUDED = [
@@ -20,9 +20,9 @@ const PricingSection = () => (
             <SectionHeading
                 eyebrow="Fees"
                 title="What It Costs"
-                sub="Performance Squads run on three separate fees. Final amounts are being confirmed and will be published here before trials open."
+                sub="Performance Squads run on three fees — a trial fee, match fees, and an ongoing annual fee."
             />
-            <div className="grid sm:grid-cols-3 gap-5 mb-10">
+            <div className="grid sm:grid-cols-3 gap-5 mb-8">
                 {PAYMENT_OPTIONS.map((o, i) => (
                     <motion.div
                         key={o.key}
@@ -36,11 +36,24 @@ const PricingSection = () => (
                         <h3 className="text-sm font-black uppercase tracking-wider text-white/70 mb-3">
                             {o.label}
                         </h3>
-                        <p className="text-4xl font-black text-rr-light-pink mb-4">{o.price}</p>
+                        <p className={`font-black text-rr-light-pink mb-4 ${o.price.startsWith('$') ? 'text-4xl' : 'text-2xl'}`}>
+                            {o.price}
+                        </p>
                         <p className="text-white/60 text-sm font-medium leading-relaxed">{o.desc}</p>
                     </motion.div>
                 ))}
             </div>
+
+            <motion.p
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeUp}
+                custom={0}
+                className="text-center text-white/70 text-sm sm:text-[15px] font-bold max-w-2xl mx-auto mb-12"
+            >
+                <span className="text-rr-light-pink">{FINANCIAL_CONDITION}</span>
+            </motion.p>
 
             <motion.div
                 initial="hidden"
