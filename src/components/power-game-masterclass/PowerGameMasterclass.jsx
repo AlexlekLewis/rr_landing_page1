@@ -25,6 +25,73 @@ const fadeUp = {
 };
 
 // Ages 14+ — larger junior sizes plus full senior range, sourced from academy-shop sizeData
+// ── Bespoke thin-line cricket iconography ──────────────────
+const iconProps = {
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 1.5,
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+};
+
+const MechanicsIcon = (props) => (
+    <svg {...iconProps} {...props}>
+        <circle cx="12" cy="12" r="7" />
+        <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3" />
+        <circle cx="12" cy="12" r="1" fill="currentColor" stroke="none" />
+    </svg>
+);
+
+const SwingIcon = (props) => (
+    <svg {...iconProps} {...props}>
+        <path d="M5 19a11.5 11.5 0 0 1 13.2-11.6" strokeDasharray="1.5 3.5" />
+        <path d="M15.2 6.1l3.6.4-1.3 3.4" />
+        <path d="M4.2 20.5l1.6-1.6" strokeWidth="2" />
+    </svg>
+);
+
+const VideoIcon = (props) => (
+    <svg {...iconProps} {...props}>
+        <path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2" />
+        <path d="M10 9.2l5 2.8-5 2.8z" />
+    </svg>
+);
+
+const VelocityIcon = (props) => (
+    <svg {...iconProps} {...props}>
+        <path d="M4 15a8 8 0 0 1 16 0" />
+        <path d="M12 15l4.2-4.2" />
+        <circle cx="12" cy="15" r="1.1" fill="currentColor" stroke="none" />
+        <path d="M6.2 10.4l.9.7M17.8 10.4l-.9.7M12 6.8v1.2" />
+    </svg>
+);
+
+const ProBatIcon = (props) => (
+    <svg {...iconProps} {...props}>
+        <path d="M13 8.5h5v8a2.5 2.5 0 0 1-5 0z" />
+        <path d="M15.5 8.5V3.5" />
+        <path d="M3 8h3.5M2 12h3.5M3 16h3.5" />
+    </svg>
+);
+
+const SixIcon = (props) => (
+    <svg {...iconProps} {...props}>
+        <path d="M3 18.5C6.5 8.5 13 5.5 18.2 5.9" strokeDasharray="24" />
+        <circle cx="20.2" cy="6" r="1.4" />
+        <path d="M3 21.5h18" strokeDasharray="2 3" />
+    </svg>
+);
+
+const MASTER_ITEMS = [
+    { icon: MechanicsIcon, label: 'Power hitting mechanics' },
+    { icon: SwingIcon, label: 'Bat swing' },
+    { icon: VideoIcon, label: 'Video analysis' },
+    { icon: VelocityIcon, label: 'Exit velocity testing' },
+    { icon: ProBatIcon, label: 'Use of pro-velocity bats' },
+    { icon: SixIcon, label: 'Develop the ability to mis-hit sixes' },
+];
+
 const SHIRT_SIZE_ROWS = [...TOPS_SIZES.junior.slice(-2), ...TOPS_SIZES.senior];
 const SHIRT_SIZES = SHIRT_SIZE_ROWS.map((r) => r.label);
 
@@ -199,7 +266,7 @@ const PowerGameMasterclass = () => {
                         custom={0.3}
                         className="flex items-center justify-center sm:justify-start gap-2 text-white/90 text-sm font-bold mb-6"
                     >
-                        <Zap className="w-4 h-4 text-rr-pink flex-shrink-0" strokeWidth={2.5} />
+                        <Zap className="w-4 h-4 text-rr-pink flex-shrink-0" strokeWidth={1.75} />
                         <span>$240 total · Both weeks included · Ages 14 to Open</span>
                     </motion.div>
 
@@ -248,28 +315,21 @@ const PowerGameMasterclass = () => {
                         Four hours dedicated to one thing — turning you into a genuine power hitter.
                     </motion.p>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {[
-                            'Power hitting mechanics',
-                            'Bat swing',
-                            'Video analysis',
-                            'Exit velocity testing',
-                            'Use of pro-velocity bats',
-                            'Develop the ability to mis-hit sixes',
-                        ].map((item, i) => (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-12">
+                        {MASTER_ITEMS.map(({ icon: Icon, label }, i) => (
                             <motion.div
-                                key={item}
+                                key={label}
                                 initial="hidden"
                                 whileInView="visible"
                                 viewport={{ once: true, amount: 0.4 }}
                                 variants={fadeUp}
                                 custom={i * 0.07}
-                                className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-2xl p-5"
+                                className="group flex items-center gap-5 py-5 border-t border-white/10"
                             >
-                                <div className="w-10 h-10 rounded-xl bg-rr-pink/15 flex items-center justify-center flex-shrink-0">
-                                    <Zap className="w-5 h-5 text-rr-pink" strokeWidth={2.25} />
+                                <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center flex-shrink-0 transition-colors duration-300 group-hover:border-rr-pink/60">
+                                    <Icon className="w-[22px] h-[22px] text-rr-pink" />
                                 </div>
-                                <p className="text-[15px] sm:text-base font-bold text-white leading-snug">{item}</p>
+                                <p className="text-[15px] sm:text-base font-bold text-white leading-snug">{label}</p>
                             </motion.div>
                         ))}
                     </div>
@@ -311,8 +371,8 @@ const PowerGameMasterclass = () => {
                                 custom={i * 0.08}
                                 className="flex items-start gap-4 bg-white/5 border border-white/10 rounded-2xl p-5"
                             >
-                                <div className="w-11 h-11 rounded-xl bg-rr-pink/15 flex items-center justify-center flex-shrink-0">
-                                    <Icon className="w-5 h-5 text-rr-pink" strokeWidth={2.25} />
+                                <div className="w-11 h-11 rounded-full border border-white/20 flex items-center justify-center flex-shrink-0">
+                                    <Icon className="w-5 h-5 text-rr-pink" strokeWidth={1.5} />
                                 </div>
                                 <div>
                                     <p className="text-[11px] uppercase tracking-[0.2em] font-black text-white/50 mb-1">{label}</p>
