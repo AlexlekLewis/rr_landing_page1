@@ -42,3 +42,8 @@ alter table public.masterclass_registrations
     add column if not exists accept_player_code boolean default false,
     add column if not exists accept_parent_code boolean default false,
     add column if not exists accept_social_media boolean default false;
+
+-- 19 Aug: shirt ownership — purchase only if they don't already own one
+alter table public.masterclass_registrations
+    add column if not exists has_shirt boolean default false,
+    add column if not exists purchase_shirt boolean default false;

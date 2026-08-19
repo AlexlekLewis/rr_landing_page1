@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Zap, CalendarDays, MapPin, Users, Clock, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Zap, CalendarDays, MapPin, Users, Clock, ShieldCheck, Ruler, ChevronDown } from 'lucide-react';
+import { TOPS_SIZES, TOPS_MEASURE_TIP } from '../academy-shop/sizeData';
 import { supabase } from '../../lib/supabase';
 import HallaBol from '../holiday-programs/HallaBol';
 
@@ -11,7 +12,8 @@ import HallaBol from '../holiday-programs/HallaBol';
 // While null, registrants are captured in Supabase and sent to
 // the success page with a "we'll be in touch to complete payment" note.
 // ─────────────────────────────────────────────────────────────
-const STRIPE_CHECKOUT_URL = null; // TODO: paste Stripe payment link ($240)
+const STRIPE_URL_NO_SHIRT = null;   // TODO: paste Stripe link — $240 (already has shirt)
+const STRIPE_URL_WITH_SHIRT = null; // TODO: paste Stripe link — $269.95 ($240 + $29.95 shirt)
 
 const fadeUp = {
     hidden: { opacity: 0, y: 24 },
@@ -22,7 +24,9 @@ const fadeUp = {
     }),
 };
 
-const SHIRT_SIZES = ['Youth 12-14', 'XS', 'S', 'M', 'L', 'XL', '2XL'];
+// Ages 14+ — larger junior sizes plus full senior range, sourced from academy-shop sizeData
+const SHIRT_SIZE_ROWS = [...TOPS_SIZES.junior.slice(-2), ...TOPS_SIZES.senior];
+const SHIRT_SIZES = SHIRT_SIZE_ROWS.map((r) => r.label);
 
 const ComplianceCheckbox = ({ checked, onChange, error, children }) => (
     <div className="mb-4">
@@ -59,6 +63,8 @@ const PowerGameMasterclass = () => {
         club: '',
         shirt_size: '',
     });
+    const [hasShirt, setHasShirt] = useState(true);
+    const [showSizeGuide, setShowSizeGuide] = useState(false);
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [acceptPlayerCode, setAcceptPlayerCode] = useState(false);
     const [acceptParentCode, setAcceptParentCode] = useState(false);
@@ -119,6 +125,8 @@ const PowerGameMasterclass = () => {
                     player_age: form.player_age.trim(),
                     club: form.club.trim() || null,
                     shirt_size: form.shirt_size,
+                    has_shirt: hasShirt,
+                    purchase_shirt: !hasShirt,
                     accept_terms: acceptTerms,
                     accept_player_code: acceptPlayerCode,
                     accept_parent_code: acceptParentCode,
@@ -129,8 +137,9 @@ const PowerGameMasterclass = () => {
             ]);
             if (error) throw error;
 
-            if (STRIPE_CHECKOUT_URL) {
-                window.location.href = STRIPE_CHECKOUT_URL;
+            const stripeUrl = hasShirt ? STRIPE_URL_NO_SHIRT : STRIPE_URL_WITH_SHIRT;
+            if (stripeUrl) {
+                window.location.href = stripeUrl;
             } else {
                 window.location.href = '/power-game-masterclass/success?pending=1';
             }
@@ -333,7 +342,7 @@ const PowerGameMasterclass = () => {
                         </p>
                         <p className="text-white/70 text-sm font-medium mt-1">
                             $60 per hour of specialist power-hitting development. One registration covers both Sundays.
-                            Official training shirt ($29.95) is required and added at registration.
+                            The official training shirt is required at all sessions — already have one? No need to buy again ($29.95 if you need one, added at registration).
                         </p>
                     </motion.div>
                 </div>
@@ -460,14 +469,32 @@ const PowerGameMasterclass = () => {
                             />
                         </div>
 
-                        {/* Training Shirt — mandatory */}
+                        {/* Training Shirt — required at sessions; purchase only if they don't own one */}
                         <div className="pt-4 border-t border-white/10">
                             <p className="text-xs font-black text-rr-pink uppercase tracking-widest mb-3">
-                                Training Shirt — $29.95 (Required)
+                                Official Training Shirt (Required at all sessions)
                             </p>
-                            <p className="text-white/60 text-xs font-medium mb-3">
-                                The official training shirt is required at all masterclass sessions and is added to your registration.
-                            </p>
+                            <label className="flex items-start gap-3 cursor-pointer group mb-3">
+                                <div
+                                    onClick={() => setHasShirt(!hasShirt)}
+                                    className={`mt-0.5 w-5 h-5 rounded shrink-0 border-2 flex items-center justify-center transition-all duration-200 ${hasShirt ? 'bg-rr-pink border-rr-pink' : 'border-white/30 bg-white/5 group-hover:border-rr-pink'}`}
+                                >
+                                    {hasShirt && (
+                                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    )}
+                                </div>
+                                <span className="text-white/75 text-sm font-medium leading-relaxed text-left">
+                                    I already have an official RRA training shirt — <span className="text-white font-bold">untick this box if you don&apos;t have one</span> and a shirt (<span className="text-white font-bold">$29.95</span>) will be added to your registration.
+                                </span>
+                            </label>
+                            {!hasShirt && (
+                                <p className="text-rr-pink text-xs font-bold mb-3">
+                                    Training shirt ($29.95) will be added — total $269.95.
+                                </p>
+                            )}
+
                             <select
                                 value={form.shirt_size}
                                 onChange={setField('shirt_size')}
@@ -479,6 +506,40 @@ const PowerGameMasterclass = () => {
                                 ))}
                             </select>
                             {errors.shirt_size && <p className="text-rr-pink text-xs font-bold mt-1.5">{errors.shirt_size}</p>}
+
+                            {/* Size guide — ages 14+ */}
+                            <button
+                                type="button"
+                                onClick={() => setShowSizeGuide(!showSizeGuide)}
+                                className="mt-3 inline-flex items-center gap-1.5 text-rr-pink hover:text-rr-light-pink text-xs font-black uppercase tracking-widest transition-colors"
+                            >
+                                <Ruler className="w-3.5 h-3.5" strokeWidth={2.5} />
+                                {showSizeGuide ? 'Hide size guide' : 'View size guide (ages 14+)'}
+                                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showSizeGuide ? 'rotate-180' : ''}`} strokeWidth={2.5} />
+                            </button>
+                            {showSizeGuide && (
+                                <div className="mt-3 bg-white/5 border border-white/10 rounded-xl p-4 overflow-x-auto">
+                                    <p className="text-[11px] text-white/50 font-medium mb-3">{TOPS_MEASURE_TIP}</p>
+                                    <table className="w-full text-xs text-left">
+                                        <thead>
+                                            <tr className="border-b border-white/15">
+                                                <th className="font-black text-white uppercase tracking-wider py-2 pr-3">Size</th>
+                                                <th className="font-black text-white uppercase tracking-wider py-2 pr-3">Half Chest (in)</th>
+                                                <th className="font-black text-white uppercase tracking-wider py-2">Length (in)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-white/10">
+                                            {SHIRT_SIZE_ROWS.map((row) => (
+                                                <tr key={row.label}>
+                                                    <td className="py-1.5 pr-3 font-bold text-white">{row.label}</td>
+                                                    <td className="py-1.5 pr-3 text-white/60">{row.halfChest}</td>
+                                                    <td className="py-1.5 text-white/60">{row.length}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
                         </div>
 
                         {/* Agreements & Consent */}
@@ -509,7 +570,7 @@ const PowerGameMasterclass = () => {
                             disabled={submitting}
                             className="w-full inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 text-white font-black uppercase tracking-widest text-sm rounded-full px-8 py-4 transition-all hover:shadow-[0_0_30px_rgba(225,31,143,0.5)]"
                         >
-                            {submitting ? 'Registering…' : 'Register & Pay $269.95'}
+                            {submitting ? 'Registering…' : `Register & Pay ${hasShirt ? '$240' : '$269.95'}`}
                             {!submitting && <ArrowRight className="w-4 h-4" strokeWidth={2.5} />}
                         </button>
 
