@@ -38,7 +38,7 @@ const CoachesSection = () => {
                         transition={{ duration: 0.6, delay: 0.15 }}
                         className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium"
                     >
-                        The Junior Royals Holiday Camp is run by certified coaches trained in the Royals Way — high standards, genuine feedback, no filler.
+                        The Junior Royals Holiday Program is run by certified coaches trained in the Royals Way — high standards, genuine feedback, no filler.
                     </motion.p>
                 </div>
 
@@ -94,7 +94,7 @@ const CoachesSection = () => {
                     viewport={{ once: true }}
                     className="text-center text-rr-charcoal/60 text-xs font-medium"
                 >
-                    Full coach details will be confirmed and updated prior to each camp date.
+                    Full coach details will be confirmed and updated prior to the program date.
                 </motion.p>
             </div>
         </section>

@@ -205,7 +205,7 @@ const SeptRegistrationForm = () => {
                         </div>
                         <h2 className="text-2xl font-black text-rr-dark uppercase tracking-tight mb-4">Registration Received</h2>
                         <p className="text-rr-charcoal font-medium leading-relaxed mb-6">
-                            Thanks for registering for the Junior Royals Holiday Camp. We'll be in touch shortly with payment details and everything you need ahead of the camp.
+                            Thanks for registering for the Junior Royals Holiday Program. We'll be in touch shortly with payment details and everything you need ahead of the program.
                         </p>
                         <p className="text-slate-400 text-sm">Questions? <a href="mailto:info@rramelbourne.com" className="text-rr-pink font-bold hover:underline">info@rramelbourne.com</a></p>
                     </motion.div>
@@ -230,7 +230,7 @@ const SeptRegistrationForm = () => {
                     <h2 className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight mb-4">
                         Secure Your Place Now
                     </h2>
-                    <p className="text-rr-charcoal font-medium">Fill in your details below to secure your place in the Junior Royals Holiday Camp.</p>
+                    <p className="text-rr-charcoal font-medium">Fill in your details below to secure your place in the Junior Royals Holiday Program.</p>
                 </motion.div>
 
                 <motion.div
@@ -297,7 +297,7 @@ const SeptRegistrationForm = () => {
                     </div>
 
                     {/* ── LOCATION ── */}
-                    <p className="text-xs font-black text-rr-pink uppercase tracking-widest mb-6 pb-2 border-b border-slate-100">Camp Location</p>
+                    <p className="text-xs font-black text-rr-pink uppercase tracking-widest mb-6 pb-2 border-b border-slate-100">Program Location</p>
                     <div className="mb-8">
                         <label className={labelClass}>Select Location</label>
                         <select name="location" value={form.location} onChange={handleChange} className={inputClass(errors.location)}>

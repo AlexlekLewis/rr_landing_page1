@@ -22,7 +22,7 @@ const FacebookIcon = () => (
 // because /elite-royals renders without a Navbar and dead-ends the visitor.
 const PROGRAMS = [
     { label: 'Junior Royals', to: '/junior-royals' },
-    { label: 'Holiday Camps', to: '/junior-royals-holiday' },
+    { label: 'Holiday Program', to: '/junior-royals-holiday' },
     { label: 'Private Coaching', to: '/mickleham' },
     { label: 'Elite Program', to: '/elite-royals' },
 ];
@@ -74,7 +74,7 @@ const Footer = () => {
                         </Link>
                         <p className="text-white/70 text-sm mt-4 max-w-xs leading-relaxed">
                             Melbourne's Rajasthan Royals cricket academy — junior programs, elite squads,
-                            private coaching and holiday camps.
+                            private coaching and holiday program.
                         </p>
                         <div className="flex items-center gap-4 mt-5">
                             <a

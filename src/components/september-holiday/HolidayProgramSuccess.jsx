@@ -116,7 +116,7 @@ const HolidayProgramSuccess = () => {
                     variants={fadeUp}
                     className="text-xl md:text-2xl font-semibold text-white/90 leading-relaxed mb-6"
                 >
-                    You're registered for the Junior Royals Holiday Camp!
+                    You're registered for the Junior Royals Holiday Program!
                 </motion.p>
 
                 {/* Body copy */}
@@ -127,7 +127,7 @@ const HolidayProgramSuccess = () => {
                     variants={fadeUp}
                     className="text-base md:text-lg text-white/70 leading-relaxed mb-6 max-w-lg mx-auto font-medium"
                 >
-                    Your registration is confirmed. We can't wait to see you at the Junior Royals Holiday Camp!
+                    Your registration is confirmed. We can't wait to see you at the Junior Royals Holiday Program!
                 </motion.p>
 
                 {/* What to bring */}
@@ -173,7 +173,7 @@ const HolidayProgramSuccess = () => {
                         <div>
                             <p className="text-sm font-bold text-white/90 mb-1">Confirmation Email</p>
                             <p className="text-sm text-white/60 leading-relaxed">
-                                A full confirmation email with all camp details will be sent approximately 7 days prior to the start of the camp. Keep an eye on your inbox.
+                                A full confirmation email with all program details will be sent approximately 7 days prior to the start of the program. Keep an eye on your inbox.
                             </p>
                         </div>
                     </div>

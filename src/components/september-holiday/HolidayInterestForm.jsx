@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { supabase } from '../../lib/supabase';
 
-// Expression-of-interest form for the September/October school holiday camp at
-// Centres across Melbourne. NO payment is taken here — the camp dates,
+// Expression-of-interest form for the September/October school holiday program at
+// Centres across Melbourne. NO payment is taken here — the program dates,
 // daily times and cost are not locked yet, so this form exists to (a) let families
 // put their hand up and (b) tell us which centre and which week they want, which
 // is what decides the final schedule. Entries land in holiday_camp_interest
@@ -81,7 +81,7 @@ const HolidayInterestForm = () => {
             try {
                 if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
                     window.fbq('track', 'Lead', {
-                        content_name: 'Junior Royals Holiday Camp — Interest',
+                        content_name: 'Junior Royals Holiday Program — Interest',
                         content_category: `holiday-camp-${form.preferred_centre}`,
                     });
                 }
@@ -111,7 +111,7 @@ const HolidayInterestForm = () => {
                         REGISTER YOUR <span className="text-rr-pink">INTEREST</span>
                     </h2>
                     <p className="text-white/80 font-medium leading-relaxed">
-                        We are running the Junior Royals Holiday Camp again over the September / October school
+                        We are running the Junior Royals Holiday Program again over the September / October school
                         holidays, at our centres across Melbourne. Tell us which
                         centre you would come to and which week suits your family, and that is what we build the
                         schedule from.
@@ -128,7 +128,7 @@ const HolidayInterestForm = () => {
                             </div>
                             <h3 className="text-2xl font-black text-rr-dark uppercase tracking-wide mb-3">You're on the list</h3>
                             <p className="text-rr-charcoal text-sm font-medium leading-relaxed max-w-md mx-auto">
-                                We have {form.player_name.trim() || 'your player'} down for the holiday camp at {centreLabel}.
+                                We have {form.player_name.trim() || 'your player'} down for the holiday program at {centreLabel}.
                                 No payment has been taken and no place is booked yet — this tells us you want in.
                                 Once we lock the dates we will email you first, with the exact days, the daily start
                                 and finish times, the cost, and a link to book. If your plans change before then,
@@ -142,7 +142,7 @@ const HolidayInterestForm = () => {
                                 This takes about a minute. <span className="font-black text-rr-dark">No payment is taken now
                                 and this does not book a place.</span> When the dates are confirmed we email everyone on
                                 this list first — with the days, the times, the cost, and a booking link — before the
-                                camp goes on sale to anyone else.
+                                program goes on sale to anyone else.
                             </p>
                             <div className="space-y-5">
                                 <div>
@@ -191,7 +191,7 @@ const HolidayInterestForm = () => {
                                         {WEEKS.map(w => <option key={w.value} value={w.value}>{w.label}</option>)}
                                     </select>
                                     <p className="text-rr-charcoal/70 text-xs font-medium mt-2">
-                                        Victorian school holidays run Saturday 19 September to Sunday 4 October 2026. The camp
+                                        Victorian school holidays run Saturday 19 September to Sunday 4 October 2026. The program
                                         runs on three days inside one of those two weeks — your answer helps us choose which.
                                     </p>
                                     {errors.preferred_week && <p className="text-red-500 text-xs mt-1">{errors.preferred_week}</p>}
@@ -204,7 +204,7 @@ const HolidayInterestForm = () => {
                                         onChange={handleChange}
                                         rows={3}
                                         className={ic('notes')}
-                                        placeholder="A question about the camp, a sibling you'd like to bring, days you definitely can't do, an injury or medical need — anything at all."
+                                        placeholder="A question about the program, a sibling you'd like to bring, days you definitely can't do, an injury or medical need — anything at all."
                                     />
                                 </div>
                             </div>
@@ -219,7 +219,7 @@ const HolidayInterestForm = () => {
                                 {submitting ? 'Sending…' : 'Register My Interest'}
                             </button>
                             <p className="text-center text-rr-charcoal/60 text-xs font-medium mt-4 leading-relaxed">
-                                No payment now. We use these details only to contact you about the holiday camp.
+                                No payment now. We use these details only to contact you about the holiday program.
                                 Questions in the meantime: <a href="mailto:info@rramelbourne.com" className="text-rr-pink font-bold hover:underline">info@rramelbourne.com</a>
                             </p>
                         </form>

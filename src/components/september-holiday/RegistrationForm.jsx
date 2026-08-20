@@ -299,7 +299,7 @@ const RegistrationForm = () => {
                                 I have read, understood, and agree to the <a href="/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-pink hover:underline">Parent/Guardian Code of Conduct</a>.
                             </ComplianceCheckbox>
                             <ComplianceCheckbox checked={acceptSocialMedia} onChange={setAcceptSocialMedia} error={errors.acceptSocialMedia}>
-                                I am happy for photos and videos from the camp featuring the player to be used on Rajasthan Royals Academy Melbourne's social media and marketing channels.
+                                I am happy for photos and videos from the program featuring the player to be used on Rajasthan Royals Academy Melbourne's social media and marketing channels.
                             </ComplianceCheckbox>
                         </div>
 

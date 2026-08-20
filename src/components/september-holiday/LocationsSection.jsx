@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { MapPin, Calendar, Clock, Users } from 'lucide-react';
 import DualCTA from './DualCTA';
 
-// The three centres the Academy currently runs. Exact camp dates and daily times
+// The three centres the Academy currently runs. Exact program dates and daily times
 // are deliberately NOT stated — they are set once we see where the interest is,
 // and every family on the interest list is emailed them first.
 const locations = [
@@ -81,7 +81,7 @@ const LocationsSection = () => {
                     transition={{ delay: 0.2 }}
                     className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium"
                 >
-                    The camp runs at our centres across Melbourne. Tell us which one you would come to — the centre
+                    The program runs at our centres across Melbourne. Tell us which one you would come to — the centre
                     with the most interest gets scheduled first, and we email you the dates before anyone else.
                 </motion.p>
             </div>

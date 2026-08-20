@@ -47,7 +47,7 @@ const RoyalsPathway = () => (
                     transition={{ delay: 0.15 }}
                     className="text-white/60 font-medium text-lg max-w-2xl mx-auto leading-relaxed"
                 >
-                    The Junior Royals Holiday Camp puts your player inside the Royals system — with genuine pathways beyond the camp itself.
+                    The Junior Royals Holiday Program puts your player inside the Royals system — with genuine pathways beyond the program itself.
                 </motion.p>
             </div>
 

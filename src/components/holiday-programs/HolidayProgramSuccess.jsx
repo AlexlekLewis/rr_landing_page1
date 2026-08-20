@@ -116,7 +116,7 @@ const HolidayProgramSuccess = () => {
                     variants={fadeUp}
                     className="text-xl md:text-2xl font-semibold text-white/90 leading-relaxed mb-6"
                 >
-                    You're registered for the Junior Royals Holiday Camp!
+                    You're registered for the Junior Royals Holiday Program!
                 </motion.p>
 
                 {/* Body copy */}
@@ -127,7 +127,7 @@ const HolidayProgramSuccess = () => {
                     variants={fadeUp}
                     className="text-base md:text-lg text-white/70 leading-relaxed mb-6 max-w-lg mx-auto font-medium"
                 >
-                    Your place is secured for the September / October school holidays. We can't wait to see you at the Junior Royals Holiday Camp!
+                    Your place is secured for the September / October school holidays. We can't wait to see you at the Junior Royals Holiday Program!
                 </motion.p>
 
                 {/* What to bring */}
@@ -173,7 +173,7 @@ const HolidayProgramSuccess = () => {
                         <div>
                             <p className="text-sm font-bold text-white/90 mb-1">Keep an Eye on Your Inbox</p>
                             <p className="text-sm text-white/60 leading-relaxed">
-                                You will receive an email in the days leading into the camps with further details — including your exact session times, venue information and everything you need for day one.
+                                You will receive an email in the days leading into the program with further details — including your exact session times, venue information and everything you need for day one.
                             </p>
                         </div>
                     </div>

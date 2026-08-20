@@ -27,7 +27,7 @@ const RegistrationComingSoon = () => (
                     </h2>
 
                     <p className="text-white/60 font-medium leading-relaxed mb-10 max-w-md mx-auto">
-                        Junior Royals Holiday Camps are coming to five Melbourne locations. Full details — including dates, venues, and registration — will be announced shortly.
+                        Junior Royals Holiday Program are coming to five Melbourne locations. Full details — including dates, venues, and registration — will be announced shortly.
                     </p>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10 text-left">
