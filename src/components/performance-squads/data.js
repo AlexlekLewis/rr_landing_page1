@@ -48,16 +48,22 @@ export const ACTIVE_CENTRES = CENTRES.filter((c) => c.active);
 // Stripe payment links — PASTE LIVE URLs when created in Stripe.
 // While null, the pay button shows "Payment link coming soon" and is disabled.
 export const PAYMENT_LINKS = {
-    // One link per centre/type. Trial links must have "Adjustable quantity"
-    // enabled in Stripe (min 1, max 2) — the page passes ?quantity=N so the
-    // checkout opens pre-set to the number of sessions the player chose.
+    // Stripe Payment Links cannot have their quantity prefilled from a URL, so
+    // each trial quantity needs its own fixed-price link. That keeps the amount
+    // charged locked to what the player registered for.
     'north-melbourne': {
-        trial: null,    // e.g. 'https://buy.stripe.com/xxxx'
+        trial: {
+            1: null,    // $30  — 1 session
+            2: null,    // $60  — 2 sessions
+        },
         games: null,
         annual: null,
     },
     'south-east-melbourne': {
-        trial: null,
+        trial: {
+            1: null,    // $30  — 1 session
+            2: null,    // $60  — 2 sessions
+        },
         games: null,
         annual: null,
     },
@@ -77,13 +83,13 @@ export const getCentre = (slug) => CENTRES.find((c) => c.slug === slug);
 export const getTrialSessions = (slug) => getCentre(slug)?.trialSessions || [];
 export const getMaxTrialSessions = (slug) => getCentre(slug)?.maxTrialSessions || 0;
 
-// Resolves the Stripe link for a centre/type. Trial links carry ?quantity=N
-// so checkout opens with the right number of sessions already selected.
+// Resolves the Stripe link for a centre/type. Trial links are keyed by the
+// number of sessions; everything else is a single link. Null until set.
 export const resolvePaymentLink = (centre, type, sessions = 1) => {
-    const link = PAYMENT_LINKS[centre]?.[type];
-    if (!link) return null;
-    if (type !== 'trial' || sessions <= 1) return link;
-    return `${link}${link.includes('?') ? '&' : '?'}quantity=${sessions}`;
+    const entry = PAYMENT_LINKS[centre]?.[type];
+    if (!entry) return null;
+    if (typeof entry === 'object') return entry[sessions] || null;
+    return entry;
 };
 
 // Selection condition — shown beneath the fee cards and in the FAQ.
