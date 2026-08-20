@@ -96,9 +96,8 @@ const LocationsSection = () => {
                         transition={{ duration: 0.5, delay: i * 0.1 }}
                         className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 relative"
                     >
-                        {/* Every centre is at the same stage: taking interest, dates not yet set */}
-                        <div className="absolute top-4 right-4 z-10 bg-rr-pink text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full">
-                            Taking Interest
+                        <div className={`absolute top-4 right-4 z-10 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full ${loc.onSale ? 'bg-rr-pink' : 'bg-rr-blue'}`}>
+                            {loc.onSale ? 'On Sale' : 'Taking Interest'}
                         </div>
 
                         {/* Gradient header */}
@@ -120,19 +119,32 @@ const LocationsSection = () => {
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <Calendar className="w-4 h-4 text-slate-300 shrink-0" />
-                                    <span className="text-slate-500 font-semibold text-sm">Three days in the September / October holidays</span>
+                                    <span className="text-slate-500 font-semibold text-sm">{loc.dates ? loc.dates : 'Three days in the September / October holidays'}</span>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <Clock className="w-4 h-4 text-slate-300 shrink-0" />
-                                    <span className="text-slate-500 font-semibold text-sm">Exact days and times emailed to you once set</span>
+                                    <span className="text-slate-500 font-semibold text-sm">{loc.time ? loc.time + ' daily' : 'Exact days and times emailed to you once set'}</span>
                                 </div>
+                                {loc.coach && (
+                                <div className="flex items-center gap-3">
+                                    <Users className="w-4 h-4 text-rr-pink shrink-0" />
+                                    <span className="text-rr-dark font-bold text-sm">Lead Coach: {loc.coach}</span>
+                                </div>
+                                )}
                             </div>
+
+                            {loc.onSale && loc.urgency && (
+                                <div className={`${loc.urgencyColor} rounded-xl px-4 py-2.5 mb-4 flex items-center justify-center gap-2`}>
+                                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                                    <p className="text-white font-black text-[11px] uppercase tracking-widest text-center">{loc.urgency}</p>
+                                </div>
+                            )}
 
                             <button
                                 onClick={() => document.getElementById('secure-form')?.scrollIntoView({ behavior: 'smooth' })}
-                                className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest py-3 rounded-full text-xs transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.4)]"
+                                className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest py-3.5 rounded-full text-xs transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.4)]"
                             >
-                                Secure Your Place
+                                {loc.onSale ? 'Secure Your Place Now' : 'Secure Your Place'}
                             </button>
                         </div>
                     </motion.div>
