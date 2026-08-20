@@ -60,7 +60,7 @@ const HeroSection = () => {
                     transition={{ duration: 0.6, delay: 0.3 }}
                     className="text-lg md:text-2xl text-white font-semibold mb-4"
                 >
-                    Three days. 12 hours of coaching. Three Melbourne centres.
+                    Three days. 12 hours of coaching. Centres across Melbourne.
                 </motion.p>
 
                 <motion.p

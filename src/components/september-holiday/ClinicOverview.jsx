@@ -20,7 +20,7 @@ const features = [
 
     {
         icon: 'pin',
-        title: 'Three Melbourne Centres',
+        title: 'Centres Across Melbourne',
         desc: 'Centres across Melbourne — north, south-east and west. Pick whichever you can get to.',
     },
     {
