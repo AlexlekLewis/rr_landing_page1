@@ -7,11 +7,12 @@ import { PAYMENT_OPTIONS, FINANCIAL_CONDITION } from './data';
 // What every squad place includes — DRAFT copy for Andy's review.
 const INCLUDED = [
     'A place in your centre’s Performance Squad',
-    'Squad training led by a Royals accredited Head Coach',
+    'Weekly training with your squad led by your Head Coach',
     'Selection for Power League rounds, Sept 2026 – April 2027',
-    'Fixtures against external opposition',
-    'First XI selection pathway',
+    'Selection for fixtures against external opposition',
+    'Rajasthan Royals Academy First XI selection pathway',
     'Ongoing performance feedback from your coaching staff',
+    'Royals Group global performance opportunities (High Performance Centre/Training Partners)',
 ];
 
 const PricingSection = () => (
