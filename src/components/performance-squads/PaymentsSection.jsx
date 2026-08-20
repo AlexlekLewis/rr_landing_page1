@@ -1,16 +1,43 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { CreditCard } from 'lucide-react';
 import { fadeUp, SectionHeading, Label, Chevron, selectClass } from './shared';
-import { ACTIVE_CENTRES, PAYMENT_LINKS, PAYMENT_OPTIONS, FINANCIAL_CONDITION } from './data';
+import {
+    ACTIVE_CENTRES,
+    PAYMENT_OPTIONS,
+    TRIAL_PRICE,
+    TRIAL_SESSION_CENTRES,
+    FINANCIAL_CONDITION,
+    resolvePaymentLink,
+} from './data';
 
 const PaymentsSection = () => {
     const [payCentre, setPayCentre] = useState(ACTIVE_CENTRES[0].slug);
     const [payType, setPayType] = useState('trial');
+    const [sessions, setSessions] = useState(1);
 
-    const payLink = PAYMENT_LINKS[payCentre]?.[payType] || null;
+    // Session options only apply to trials, and only at centres that run
+    // multiple trial sessions (currently Cranbourne North).
+    const sessionOptions = TRIAL_SESSION_CENTRES[payCentre] || null;
+    const showSessions = payType === 'trial' && !!sessionOptions;
+
+    // Reset the count whenever session choice stops being relevant, so a
+    // stale quantity can't leak into another centre or payment type.
+    useEffect(() => {
+        if (!showSessions) setSessions(1);
+    }, [showSessions, payCentre, payType]);
+
+    const payLink = resolvePaymentLink(payCentre, payType, sessions);
     const payOption = useMemo(() => PAYMENT_OPTIONS.find((o) => o.key === payType), [payType]);
-    const payCentreName = useMemo(() => ACTIVE_CENTRES.find((c) => c.slug === payCentre)?.name, [payCentre]);
+    const payCentreName = useMemo(
+        () => ACTIVE_CENTRES.find((c) => c.slug === payCentre)?.name,
+        [payCentre],
+    );
+
+    const displayPrice = showSessions ? `$${TRIAL_PRICE * sessions}` : payOption.price;
+    const displayLabel = showSessions
+        ? `${payOption.label} — ${sessions} session${sessions > 1 ? 's' : ''}`
+        : payOption.label;
 
     const sc = (key) => selectClass({}, key);
 
@@ -24,7 +51,7 @@ const PaymentsSection = () => {
                 />
                 <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}
                     className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-9">
-                    <div className="grid sm:grid-cols-2 gap-4 mb-6">
+                    <div className="grid sm:grid-cols-2 gap-4 mb-4">
                         <div>
                             <Label required>Centre</Label>
                             <div className="relative">
@@ -48,13 +75,43 @@ const PaymentsSection = () => {
                             </div>
                         </div>
                     </div>
+
+                    {showSessions && (
+                        <div className="mb-6">
+                            <Label required>How many trial sessions?</Label>
+                            <div className="grid grid-cols-3 gap-3">
+                                {sessionOptions.map((n) => (
+                                    <button
+                                        type="button"
+                                        key={n}
+                                        onClick={() => setSessions(n)}
+                                        aria-pressed={sessions === n}
+                                        className={`rounded-xl px-4 py-3.5 border transition-colors ${sessions === n
+                                            ? 'bg-rr-pink border-rr-pink text-white'
+                                            : 'bg-white/5 border-white/15 text-white/60 hover:border-rr-pink/50'}`}
+                                    >
+                                        <span className="block text-lg font-black leading-none">{n}</span>
+                                        <span className="block text-[10px] font-bold uppercase tracking-wider mt-1">
+                                            {n > 1 ? 'Sessions' : 'Session'}
+                                        </span>
+                                    </button>
+                                ))}
+                            </div>
+                            <p className="text-white/45 text-xs font-medium mt-2.5">
+                                ${TRIAL_PRICE} per player, per session.
+                            </p>
+                        </div>
+                    )}
+                    {!showSessions && <div className="mb-2" />}
+
                     <div className="bg-white/5 border border-white/10 rounded-xl p-5 mb-6">
-                        <div className="flex items-center justify-between mb-1.5">
-                            <span className="text-sm font-black uppercase tracking-wider">{payCentreName} — {payOption.label}</span>
-                            <span className="text-rr-light-pink font-black text-lg">{payOption.price}</span>
+                        <div className="flex items-center justify-between gap-4 mb-1.5">
+                            <span className="text-sm font-black uppercase tracking-wider">{payCentreName} — {displayLabel}</span>
+                            <span className="text-rr-light-pink font-black text-lg shrink-0">{displayPrice}</span>
                         </div>
                         <p className="text-white/55 text-xs font-medium leading-relaxed">{payOption.desc}</p>
                     </div>
+
                     {payLink ? (
                         <a
                             href={payLink}
@@ -74,6 +131,7 @@ const PaymentsSection = () => {
                     )}
                     <p className="text-white/40 text-xs font-medium text-center mt-4">
                         Payments are processed securely by Stripe. Register first if you haven't already.
+                        {' '}{FINANCIAL_CONDITION}
                     </p>
                 </motion.div>
             </div>

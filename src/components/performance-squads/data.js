@@ -43,12 +43,15 @@ export const ACTIVE_CENTRES = CENTRES.filter((c) => c.active);
 // While null, the pay button shows "Payment link coming soon" and is disabled.
 export const PAYMENT_LINKS = {
     'north-melbourne': {
+        // Single link — North Melbourne trial dates aren't set yet.
         trial: null,    // e.g. 'https://buy.stripe.com/xxxx'
         games: null,
         annual: null,
     },
     'south-east-melbourne': {
-        trial: null,
+        // Cranbourne North runs three trial sessions, so players choose
+        // how many they're paying for. One Stripe link per quantity.
+        trial: { 1: null, 2: null, 3: null },
         games: null,
         annual: null,
     },
@@ -56,10 +59,25 @@ export const PAYMENT_LINKS = {
 
 // Prices confirmed Aug 2026. Stripe links still to come.
 export const PAYMENT_OPTIONS = [
-    { key: 'trial', label: 'Trial Fee', price: '$15', desc: 'Per session. Charged for each trial session you attend.' },
+    { key: 'trial', label: 'Trial Fee', price: '$30', desc: 'Per player, per session. Charged for each trial session you attend.' },
     { key: 'games', label: 'Match Fee', price: 'Format dependent', desc: 'Match fees vary by format. Confirmed ahead of each fixture.' },
     { key: 'annual', label: 'Annual Fee', price: '$30 / week', desc: 'Ongoing squad fee at your home centre.' },
 ];
+
+// Trial pricing. Centres listed here let players pick how many trial
+// sessions they're paying for; centres not listed bill a single session.
+export const TRIAL_PRICE = 30;
+export const TRIAL_SESSION_CENTRES = {
+    'south-east-melbourne': [1, 2, 3],
+};
+
+// Resolves the right Stripe link for a centre/type, accounting for
+// quantity-based trial links. Returns null while links are unset.
+export const resolvePaymentLink = (centre, type, sessions = 1) => {
+    const entry = PAYMENT_LINKS[centre]?.[type];
+    if (entry && typeof entry === 'object') return entry[sessions] || null;
+    return entry || null;
+};
 
 // Selection condition — shown beneath the fee cards and in the FAQ.
 export const FINANCIAL_CONDITION =
@@ -109,7 +127,7 @@ export const FAQS = [
     },
     {
         q: 'What does it cost?',
-        a: 'Three fees. A $15 trial fee per session, match fees which vary by format, and a $30 per week annual fee. All players must remain financial to be eligible for selection.',
+        a: 'Three fees. A $30 trial fee per player per session, match fees which vary by format, and a $30 per week annual fee. All players must remain financial to be eligible for selection.',
     },
     {
         q: 'What is the Power League?',
