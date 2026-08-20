@@ -53,8 +53,8 @@ export const PAYMENT_LINKS = {
     // charged locked to what the player registered for.
     'north-melbourne': {
         trial: {
-            1: null,    // $30  — 1 session
-            2: null,    // $60  — 2 sessions
+            1: 'https://buy.stripe.com/4gMcN56nvggZ2D233t9Zm0z',    // $30  — 1 session
+            2: 'https://buy.stripe.com/8x2bJ17rz2q9elKeMb9Zm0A',    // $60  — 2 sessions
         },
         games: null,
         annual: null,
