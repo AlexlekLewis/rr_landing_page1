@@ -53,6 +53,11 @@ export const PAGE_SEO = {
     description:
       'School-holiday cricket camps in Melbourne — skills, games and fun for young cricketers, run by Rajasthan Royals Academy.',
   },
+  '/power-game-masterclass': {
+    title: 'Power Hitting Masterclass Melbourne | Rajasthan Royals',
+    description:
+      'A two-session power-hitting masterclass in Melbourne for cricketers aged 14 and up — mechanics, bat swing, video analysis and exit velocity testing.',
+  },
   '/coaches': {
     title: 'Our Cricket Coaches | Rajasthan Royals Academy',
     description:

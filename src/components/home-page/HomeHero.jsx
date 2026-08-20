@@ -8,8 +8,10 @@ import { Link } from 'react-router-dom';
 // pointed at /elite-royals, which renders the closed Power Game sales page with
 // no Navbar — a dead end. Put Elite back when there is an open intake AND a page
 // with the site chrome on it.
+// Review date: the Masterclass badge expires 13 Sep 2026.
 const PROGRAMS = [
     { label: 'Junior Royals Holiday Camps', route: '/junior-royals-holiday', badge: 'Early Bird $299 — Sept/Oct', badgeColor: 'bg-rr-pink' },
+    { label: 'Power Game Masterclass', route: '/power-game-masterclass', badge: '6 & 13 Sept · Ages 14+', badgeColor: 'bg-green-500' },
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 Entries Open', badgeColor: 'bg-green-500' },
 ];
 

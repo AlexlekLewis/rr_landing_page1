@@ -18,6 +18,8 @@ import FemaleCricketSuccess from './components/female-cricket-introduction/Femal
 import FemaleEmpowerment from './components/female-empowerment/FemaleEmpowerment';
 import CoachingOpportunities from './components/coaching-opportunities/CoachingOpportunities';
 import PowerGame from './components/power-game/PowerGame';
+import PowerGameMasterclass from './components/power-game-masterclass/PowerGameMasterclass';
+import MasterclassSuccess from './components/power-game-masterclass/MasterclassSuccess';
 import MicklehamOpenDay from './components/mickleham-open-day/MicklehamOpenDay';
 import OpenDay from './components/open-day/OpenDay';
 import OpenDaySuccess from './components/open-day/OpenDaySuccess';
@@ -53,6 +55,9 @@ const PowerGameConfirm = React.lazy(() => import('./components/power-game/return
 // Scholarship players — private express confirmation; program discount via promo code, kit mandatory.
 const PowerGameScholarship = React.lazy(() => import('./components/power-game/returning/ScholarshipSignup'));
 const PowerGameFullRide = React.lazy(() => import('./components/power-game/returning/FullRideSignup'));
+// Performance Squads — representative pathway (trial or invite; North Melbourne + South-East
+// Melbourne). HIDDEN page: noindex, not linked from nav/homepage/sitemap. Direct URL only.
+const PerformanceSquads = React.lazy(() => import('./components/performance-squads/PerformanceSquads'));
 
 // Admin components
 import AdminLogin from './components/admin/AdminLogin';
@@ -201,6 +206,15 @@ function App() {
         {/* Elite Program feedback + win-back survey — private link shared with the 2026 cohort.
             Not in nav; writes to program_feedback via the service-role /api/program-feedback. */}
         <Route path="/elite-feedback" element={<ProgramFeedback />} />
+
+        {/* Power Game Masterclass (Sun 6 & 13 Sept, 5-7pm, Cranbourne North) — PUBLIC
+            since 20 Aug 2026: in the nav, the home What's On widget and the sitemap. */}
+        <Route path="/power-game-masterclass" element={<PowerGameMasterclass />} />
+        <Route path="/power-game-masterclass/success" element={<MasterclassSuccess />} />
+
+        {/* Performance Squads — trial/invite representative pathway. HIDDEN: noindex,
+            not in nav or sitemap, direct URL only until Andy approves go-live. */}
+        <Route path="/performance-squads" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquads /></React.Suspense>} />
 
         {/* Power Game Program — hidden from nav, accessible via direct URL only */}
         <Route path="/elite-royals" element={<PowerGame />} />

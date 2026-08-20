@@ -55,9 +55,13 @@ const PartnerLogo = ({ partner, size }) => (
     </div>
 );
 
-const PartnerStack = () => {
+// theme: 'light' (default — white section, used on /elite-royals) or 'dark'
+// (transparent over a dark page, used on /performance-squads). Tier data is
+// shared, so adding a partner updates every page that renders this component.
+const PartnerStack = ({ theme = 'light' }) => {
+    const isDark = theme === 'dark';
     return (
-        <section className="bg-white py-24 md:py-32">
+        <section className={isDark ? 'py-20 px-5' : 'bg-white py-24 md:py-32'}>
             <div className="max-w-5xl mx-auto px-6">
                 <motion.div
                     className="text-center mb-16"
@@ -72,10 +76,10 @@ const PartnerStack = () => {
                             Our Partners
                         </span>
                     </div>
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-rr-dark uppercase tracking-wide mb-6">
+                    <h2 className={`text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-wide mb-6 ${isDark ? 'text-white' : 'text-rr-dark'}`}>
                         POWERED BY OUR <span className="text-rr-pink">PARTNERS</span>
                     </h2>
-                    <p className="text-base md:text-lg text-rr-charcoal max-w-2xl mx-auto font-medium">
+                    <p className={`text-base md:text-lg max-w-2xl mx-auto font-medium ${isDark ? 'text-white/65' : 'text-rr-charcoal'}`}>
                         The Rajasthan Royals Academy is proudly supported by a network of leading commercial, venue, and performance partners.
                     </p>
                 </motion.div>
@@ -90,11 +94,11 @@ const PartnerStack = () => {
                             transition={{ duration: 0.5, delay: idx * 0.1, ease: 'easeOut' }}
                         >
                             <div className="flex items-center gap-4 mb-7">
-                                <div className="h-px flex-1 bg-gradient-to-r from-transparent to-slate-200" />
-                                <span className="text-xs md:text-sm font-black text-rr-blue uppercase tracking-widest text-center">
+                                <div className={`h-px flex-1 bg-gradient-to-r from-transparent ${isDark ? 'to-white/15' : 'to-slate-200'}`} />
+                                <span className={`text-xs md:text-sm font-black uppercase tracking-widest text-center ${isDark ? 'text-rr-light-pink' : 'text-rr-blue'}`}>
                                     {tier.level}
                                 </span>
-                                <div className="h-px flex-1 bg-gradient-to-l from-transparent to-slate-200" />
+                                <div className={`h-px flex-1 bg-gradient-to-l from-transparent ${isDark ? 'to-white/15' : 'to-slate-200'}`} />
                             </div>
                             <div className={`grid grid-cols-1 sm:grid-cols-2 ${tier.partners.length >= 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-2'} gap-5 md:gap-6 ${tier.partners.length >= 3 ? 'max-w-4xl' : 'max-w-2xl'} mx-auto justify-items-center`}>
                                 {tier.partners.map((partner) => (
