@@ -53,9 +53,9 @@ const CoachesSection = () => {
                             className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 w-full"
                         >
                             {/* Avatar */}
-                            <div className="h-56 flex items-center justify-center bg-gradient-to-br from-rr-navy via-rr-blue to-rr-pink">
+                            <div className="aspect-square flex items-center justify-center bg-gradient-to-br from-rr-navy via-rr-blue to-rr-pink">
                                 {coach.img ? (
-                                    <img src={coach.img} alt={coach.name} className="w-full h-full object-cover object-top" />
+                                    <img src={coach.img} alt={coach.name} className="w-full h-full object-cover" />
                                 ) : (
                                     <div className="flex flex-col items-center gap-3">
                                         <div className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center">
