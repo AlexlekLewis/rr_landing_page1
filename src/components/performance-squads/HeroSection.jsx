@@ -34,10 +34,10 @@ const HeroSection = () => (
                     Performance<br />Squads
                 </h1>
                 <p className="text-lg sm:text-2xl font-bold text-rr-light-pink mb-4">
-                    Trial. Earn your spot. Represent the Royals.
+                    Trial. Earn your spot. Represent the Royals Academy.
                 </p>
                 <p className="text-white/70 text-[15px] sm:text-lg font-medium leading-relaxed mb-10">
-                    Our Performance Squads are the representative arm of the Academy — squads of
+                    Our Performance Squads are the representative arm of the Rajasthan Royals Academy — squads of
                     like-skilled, like-motivated players who train together and compete together.
                     Players either <span className="text-white font-bold">trial</span> for their place
                     or are <span className="text-white font-bold">invited</span> by our coaching staff.
