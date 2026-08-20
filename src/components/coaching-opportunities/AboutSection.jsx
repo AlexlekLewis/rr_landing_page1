@@ -22,7 +22,7 @@ const BENEFITS = [
     },
     {
         title: 'A Real Pathway',
-        body: 'Cadet → Assistant → Lead → Elite. Coaches who deliver at a high standard progress through a defined structure.',
+        body: 'Work experience → casual → part-time → full-time. Team members who deliver at a high standard progress through a defined structure.',
         icon: (
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -56,8 +56,8 @@ const AboutSection = () => {
                         transition={{ duration: 0.5, delay: 0.1 }}
                         className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-6"
                     >
-                        More Than a Coaching Role.<br />
-                        <span className="text-rr-pink">A Coaching Education.</span>
+                        More Than a Job.<br />
+                        <span className="text-rr-pink">A Royals Education.</span>
                     </motion.h2>
                     <motion.div
                         initial={{ opacity: 0, scaleX: 0 }}
@@ -73,7 +73,7 @@ const AboutSection = () => {
                         transition={{ duration: 0.5, delay: 0.3 }}
                         className="text-base md:text-lg text-rr-charcoal font-medium leading-relaxed"
                     >
-                        Coaching at RRA Melbourne means joining a program that's directly connected to one of cricket's most innovative global brands. Our coaches deliver to a defined philosophy — <em className="text-rr-dark font-bold not-italic">the Royals Way</em> — built on technical sharpness, evidence-based practice, and player-first development. You'll be supported by a structured onboarding program, ongoing mentoring from our Head Coach, and free access to the Royals Coaching Hub: the same education platform used across the global Royals network.
+                        Working at RRA Melbourne means joining a program that's directly connected to one of cricket's most innovative global brands. Whether you're on the pitch, behind the camera, or running the show behind the scenes, our whole team delivers to a defined philosophy — <em className="text-rr-dark font-bold not-italic">the Royals Way</em> — built on technical sharpness, evidence-based practice, and player-first development. You'll be supported by structured onboarding, ongoing mentoring from our leadership team, and free access to the Royals Coaching Hub: the same education platform used across the global Royals network.
                     </motion.p>
                 </div>
 

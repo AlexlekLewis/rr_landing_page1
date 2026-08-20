@@ -70,7 +70,7 @@ const StandardsSection = () => {
                         className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight leading-none mb-6"
                     >
                         The Bar We Set.<br />
-                        <span className="text-rr-pink">The Coaches We Look For.</span>
+                        <span className="text-rr-pink">The People We Look For.</span>
                     </motion.h2>
                     <motion.div
                         initial={{ opacity: 0, scaleX: 0 }}
@@ -86,7 +86,7 @@ const StandardsSection = () => {
                         transition={{ delay: 0.3 }}
                         className="text-base md:text-lg text-white/70 font-medium leading-relaxed"
                     >
-                        We run two coaching streams — Elite Program and Junior Royals — each with different demands. Below is a guide to what we look for. If you don't tick every box but believe in our approach, we still want to hear from you.
+                        We run two coaching streams — Elite Program and Junior Royals — each with different demands. Below is a guide to what we look for in coaches; operations, admin, and media roles are assessed on merit through the application form. If you don't tick every box but believe in our approach, we still want to hear from you.
                     </motion.p>
                 </div>
 
@@ -114,7 +114,7 @@ const StandardsSection = () => {
                     transition={{ delay: 0.4 }}
                     className="text-xs md:text-sm text-white/40 font-medium text-center max-w-2xl mx-auto"
                 >
-                    All coaches sign the RRA Code of Conduct and complete a structured onboarding process before delivering independently.
+                    All team members sign the RRA Code of Conduct and complete a structured onboarding process before working independently. A Working With Children Check is required for every role.
                 </motion.p>
             </div>
         </section>

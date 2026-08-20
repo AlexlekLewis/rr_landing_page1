@@ -8,7 +8,7 @@ const DEVELOPMENT = [
     },
     {
         title: 'Shadow & Co-Deliver',
-        body: 'Minimum 2 shadow sessions plus 1 co-delivered session before you lead solo.',
+        body: 'Coaches complete a minimum of 2 shadow sessions plus 1 co-delivered session before leading solo. Other roles get a structured, supported handover.',
     },
     {
         title: 'Termly Reviews',
@@ -16,7 +16,7 @@ const DEVELOPMENT = [
     },
     {
         title: 'Annual Recertification',
-        body: 'Stay current. Working With Children Check and Royals Coaching Hub modules refreshed annually.',
+        body: 'Stay current. Working With Children Check and role-relevant Royals Coaching Hub modules refreshed annually.',
     },
 ];
 
@@ -32,7 +32,7 @@ const DevelopmentSection = () => {
                         viewport={{ once: true }}
                         className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-4"
                     >
-                        Coach Development
+                        Your Development
                     </motion.p>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -48,9 +48,40 @@ const DevelopmentSection = () => {
                         whileInView={{ opacity: 1, scaleX: 1 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.2 }}
-                        className="w-12 h-px bg-gradient-to-r from-rr-pink to-rr-blue origin-left"
+                        className="w-12 h-px bg-gradient-to-r from-rr-pink to-rr-blue mb-8 origin-left"
                     />
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.25 }}
+                        className="text-base md:text-lg text-rr-charcoal font-medium leading-relaxed"
+                    >
+                        However you start — work experience, volunteering, or a casual role — there's a supported route towards part-time and full-time positions for people who deliver.
+                    </motion.p>
                 </div>
+
+                {/* Pathway strip */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.3 }}
+                    className="flex flex-wrap items-center gap-2 md:gap-3 mb-12"
+                >
+                    {['Work Experience', 'Volunteer', 'Casual', 'Part-Time', 'Full-Time'].map((stage, i, arr) => (
+                        <React.Fragment key={stage}>
+                            <span className="bg-white border border-slate-200 text-rr-dark text-[11px] md:text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-sm">
+                                {stage}
+                            </span>
+                            {i < arr.length - 1 && (
+                                <svg className="w-4 h-4 text-rr-pink shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            )}
+                        </React.Fragment>
+                    ))}
+                </motion.div>
 
                 {/* 4-card grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">

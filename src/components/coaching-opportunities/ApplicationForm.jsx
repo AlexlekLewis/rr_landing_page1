@@ -2,7 +2,25 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 
-const SOURCE_TAG = 'coaching-opportunities';
+const SOURCE_TAG = 'careers';
+
+const ROLE_INTEREST_OPTIONS = [
+    { value: 'cricket-coach', label: 'Cricket Coach' },
+    { value: 'junior-assistant-coach', label: 'Junior / Assistant Coach' },
+    { value: 'operations-admin', label: 'Operations & Admin' },
+    { value: 'media-content', label: 'Media & Content' },
+    { value: 'other', label: 'Other / Pitch Us' },
+];
+
+const ENGAGEMENT_TYPE_OPTIONS = [
+    { value: 'volunteer', label: 'Volunteer' },
+    { value: 'work-experience', label: 'Work Experience' },
+    { value: 'casual', label: 'Casual' },
+    { value: 'part-time', label: 'Part-Time' },
+    { value: 'full-time', label: 'Full-Time' },
+];
+
+const COACHING_ROLES = ['cricket-coach', 'junior-assistant-coach'];
 
 const EMPLOYMENT_OPTIONS = [
     { value: 'full-time', label: 'Employed full-time' },
@@ -126,9 +144,23 @@ const ApplicationForm = () => {
     });
 
     const [ageGroups, setAgeGroups] = useState([]);
+    const [roleInterest, setRoleInterest] = useState([]);
+    const [engagementTypes, setEngagementTypes] = useState([]);
+
+    const isCoachingApplicant = roleInterest.some(r => COACHING_ROLES.includes(r));
 
     const toggleAgeGroup = (val) => {
         setAgeGroups(prev => prev.includes(val) ? prev.filter(v => v !== val) : [...prev, val]);
+    };
+
+    const toggleRoleInterest = (val) => {
+        setRoleInterest(prev => prev.includes(val) ? prev.filter(v => v !== val) : [...prev, val]);
+        setErrors(prev => ({ ...prev, roleInterest: undefined }));
+    };
+
+    const toggleEngagementType = (val) => {
+        setEngagementTypes(prev => prev.includes(val) ? prev.filter(v => v !== val) : [...prev, val]);
+        setErrors(prev => ({ ...prev, engagementTypes: undefined }));
     };
 
     const validate = () => {
@@ -140,7 +172,9 @@ const ApplicationForm = () => {
         if (!form.age || isNaN(Number(form.age))) newErrors.age = 'Age is required.';
         if (!form.employment_status) newErrors.employment_status = 'Please select your employment status.';
         if (!form.wwc_status) newErrors.wwc_status = 'Please select your WWC status.';
-        if (!form.preferred_tier) newErrors.preferred_tier = 'Please select your preferred coaching stream.';
+        if (!roleInterest.length) newErrors.roleInterest = 'Please select at least one area of interest.';
+        if (!engagementTypes.length) newErrors.engagementTypes = 'Please select at least one engagement type.';
+        if (isCoachingApplicant && !form.preferred_tier) newErrors.preferred_tier = 'Please select your preferred coaching stream.';
         if (!acceptAccuracy) newErrors.acceptAccuracy = 'Please confirm the information is accurate.';
         if (!acceptContact) newErrors.acceptContact = 'Please agree to be contacted.';
         setErrors(newErrors);
@@ -178,7 +212,9 @@ const ApplicationForm = () => {
                 linkedin_url: form.linkedin_url.trim() || null,
                 wwc_status: form.wwc_status,
                 referral_source: form.referral_source || null,
-                preferred_tier: form.preferred_tier,
+                role_interest: roleInterest,
+                engagement_types: engagementTypes,
+                preferred_tier: isCoachingApplicant ? form.preferred_tier : null,
                 highest_playing_level: form.highest_playing_level || null,
                 years_playing: form.years_playing ? parseInt(form.years_playing, 10) : null,
                 current_club: form.current_club.trim() || null,
@@ -212,8 +248,8 @@ const ApplicationForm = () => {
                     email: form.email.trim(),
                     phone: form.phone.trim(),
                     source: SOURCE_TAG,
-                    program: 'Coaching Opportunities',
-                    program_type: 'coaching-opportunities',
+                    program: 'Careers',
+                    program_type: 'careers',
                     suburb: form.suburb.trim(),
                     page_referrer: document.referrer || null,
                     ...utmParams,
@@ -249,7 +285,7 @@ const ApplicationForm = () => {
                         </h2>
                         <div className="w-16 h-1 rounded-full bg-rr-pink mx-auto mb-6" />
                         <p className="text-rr-charcoal font-medium leading-relaxed mb-4">
-                            Thanks <strong>{form.full_name.split(' ')[0]}</strong> — your application has been received. Our Head Coach personally reviews every application and will be in touch within 5 business days at <strong>{form.email}</strong>.
+                            Thanks <strong>{form.full_name.split(' ')[0]}</strong> — your application has been received. Our leadership team personally reviews every application and will be in touch within 5 business days at <strong>{form.email}</strong>.
                         </p>
                         <p className="text-rr-charcoal/70 text-sm font-medium">
                             Questions in the meantime? Email{' '}
@@ -300,7 +336,7 @@ const ApplicationForm = () => {
                         transition={{ delay: 0.2 }}
                         className="text-white/70 font-medium"
                     >
-                        Tell us about yourself. Our Head Coach personally reviews every application.
+                        Tell us about yourself. Our leadership team personally reviews every application.
                     </motion.p>
                 </div>
 
@@ -375,7 +411,53 @@ const ApplicationForm = () => {
                             </div>
                         </div>
 
-                        {/* Preferred Tier */}
+                        {/* Role & Availability */}
+                        <div className="mb-8">
+                            <h3 className={sectionHeading}>Role & Availability</h3>
+                            <div className="space-y-6">
+                                <div data-error={!!errors.roleInterest}>
+                                    <label className={labelClass}>Which area interests you? * <span className="normal-case font-medium text-rr-charcoal">(select all that apply)</span></label>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-2">
+                                        {ROLE_INTEREST_OPTIONS.map(o => {
+                                            const checked = roleInterest.includes(o.value);
+                                            return (
+                                                <button
+                                                    type="button"
+                                                    key={o.value}
+                                                    onClick={() => toggleRoleInterest(o.value)}
+                                                    className={`px-3 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${checked ? 'bg-rr-pink text-white border-2 border-rr-pink' : 'bg-slate-50 text-rr-charcoal border-2 border-slate-200 hover:border-rr-pink/50'}`}
+                                                >
+                                                    {o.label}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                    {errors.roleInterest && <p className="text-red-500 text-xs font-medium mt-2">{errors.roleInterest}</p>}
+                                </div>
+                                <div data-error={!!errors.engagementTypes}>
+                                    <label className={labelClass}>What kind of engagement are you looking for? * <span className="normal-case font-medium text-rr-charcoal">(select all that apply)</span></label>
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-2">
+                                        {ENGAGEMENT_TYPE_OPTIONS.map(o => {
+                                            const checked = engagementTypes.includes(o.value);
+                                            return (
+                                                <button
+                                                    type="button"
+                                                    key={o.value}
+                                                    onClick={() => toggleEngagementType(o.value)}
+                                                    className={`px-3 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${checked ? 'bg-rr-pink text-white border-2 border-rr-pink' : 'bg-slate-50 text-rr-charcoal border-2 border-slate-200 hover:border-rr-pink/50'}`}
+                                                >
+                                                    {o.label}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                    {errors.engagementTypes && <p className="text-red-500 text-xs font-medium mt-2">{errors.engagementTypes}</p>}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Preferred Tier — coaching applicants only */}
+                        {isCoachingApplicant && (
                         <div className="mb-8">
                             <h3 className={sectionHeading}>Preferred Coaching Stream</h3>
                             <div data-error={!!errors.preferred_tier}>
@@ -388,8 +470,10 @@ const ApplicationForm = () => {
                                 {errors.preferred_tier && <p className="text-red-500 text-xs font-medium mt-1">{errors.preferred_tier}</p>}
                             </div>
                         </div>
+                        )}
 
-                        {/* Cricket CV */}
+                        {/* Cricket CV — coaching applicants only */}
+                        {isCoachingApplicant && (
                         <div className="mb-8">
                             <h3 className={sectionHeading}>Cricket CV</h3>
                             <div className="space-y-5">
@@ -424,11 +508,13 @@ const ApplicationForm = () => {
                                 </div>
                             </div>
                         </div>
+                        )}
 
-                        {/* Coaching CV & Ambitions */}
+                        {/* Experience & Ambitions */}
                         <div className="mb-8">
-                            <h3 className={sectionHeading}>Coaching CV & Ambitions</h3>
+                            <h3 className={sectionHeading}>{isCoachingApplicant ? 'Coaching CV & Ambitions' : 'Experience & Ambitions'}</h3>
                             <div className="space-y-5">
+                                {isCoachingApplicant && (<>
                                 <div>
                                     <label className={labelClass}>Highest Coaching Accreditation</label>
                                     <select name="coaching_accreditation" value={form.coaching_accreditation} onChange={handleChange} className={inputClass('coaching_accreditation')}>
@@ -463,8 +549,16 @@ const ApplicationForm = () => {
                                     <textarea name="coaching_cv" value={form.coaching_cv} onChange={handleChange} maxLength={1500} rows={5} className={inputClass('coaching_cv')} placeholder="Walk us through your coaching journey — programs, age groups, roles, achievements." />
                                     <p className={helperClass}>{form.coaching_cv.length}/1500</p>
                                 </div>
+                                </>)}
+                                {!isCoachingApplicant && (
                                 <div>
-                                    <label className={labelClass}>Goals & Ambitions as a Coach</label>
+                                    <label className={labelClass}>Relevant Experience & Skills</label>
+                                    <textarea name="coaching_cv" value={form.coaching_cv} onChange={handleChange} maxLength={1500} rows={5} className={inputClass('coaching_cv')} placeholder="Tell us about your relevant experience — study, work, volunteering, projects, or skills you'd bring to the academy." />
+                                    <p className={helperClass}>{form.coaching_cv.length}/1500</p>
+                                </div>
+                                )}
+                                <div>
+                                    <label className={labelClass}>{isCoachingApplicant ? 'Goals & Ambitions as a Coach' : 'Goals & Ambitions'}</label>
                                     <textarea name="goals_ambitions" value={form.goals_ambitions} onChange={handleChange} maxLength={1500} rows={5} className={inputClass('goals_ambitions')} placeholder="Why RRA Melbourne? What do you want to develop? Where do you want to be in 3 years?" />
                                     <p className={helperClass}>{form.goals_ambitions.length}/1500</p>
                                 </div>

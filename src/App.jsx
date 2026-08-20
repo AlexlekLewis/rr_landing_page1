@@ -177,8 +177,10 @@ function App() {
         <Route path="/female-cricket-kickstart" element={<FemaleCricketIntroduction />} />
         <Route path="/female-cricket-kickstart/success" element={<FemaleCricketSuccess />} />
         <Route path="/female-empowerment" element={<FemaleEmpowerment />} />
-        {/* Coaching Opportunities — HIDDEN from nav, accessible via direct URL only */}
-        <Route path="/coaching-opportunities" element={<CoachingOpportunities />} />
+        {/* Careers — We're Hiring landing page (rebuilt from Coaching Opportunities, now covers
+            all roles: coaching, ops/admin, media & content across volunteer → full-time) */}
+        <Route path="/careers" element={<CoachingOpportunities />} />
+        <Route path="/coaching-opportunities" element={<Navigate to="/careers" replace />} />
         {/* Player Induction — generic, reusable form for ad-hoc program launches. Hidden from
             nav; share the link directly (optionally /induction?program=Name). Writes to program_inductions. */}
         <Route path="/induction" element={<InductionPage />} />

@@ -39,7 +39,7 @@ const VideoSection = () => {
                         transition={{ delay: 0.3 }}
                         className="text-base md:text-lg text-rr-charcoal font-medium leading-relaxed max-w-3xl mx-auto"
                     >
-                        A conversation between our Head Coach Alex Lewis and Director of Cricket Andy Crook on what coaching at RRA Melbourne really involves — the philosophy, the standards, and the opportunity.
+                        A conversation between our Head Coach Alex Lewis and Director of Cricket Andy Crook on what being part of RRA Melbourne really involves — the philosophy, the standards, and the opportunity.
                     </motion.p>
                 </div>
 

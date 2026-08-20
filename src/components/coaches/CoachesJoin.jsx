@@ -60,7 +60,7 @@ const CoachesJoin = () => {
 
                     <p className="text-white/60 text-sm font-medium">
                         A coach yourself?{' '}
-                        <Link to="/coaching-opportunities" className="text-white font-bold underline decoration-rr-pink decoration-2 underline-offset-4 hover:text-rr-pink transition-colors">
+                        <Link to="/careers" className="text-white font-bold underline decoration-rr-pink decoration-2 underline-offset-4 hover:text-rr-pink transition-colors">
                             Coach with the Academy
                         </Link>
                     </p>
