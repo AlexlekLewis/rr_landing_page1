@@ -58,7 +58,7 @@ const PricingSection = () => {
                             <p className="text-white/40 text-sm font-bold line-through mb-3">$330 after Early Bird ends</p>
 
                             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2 mb-6">
-                                <span className="text-white font-bold text-sm">$24.90 / hour across 12 hours</span>
+                                <span className="text-white font-bold text-sm">Less than <span className="text-yellow-300 font-black">$25 per hour</span> — 12 hours of elite coaching</span>
                             </div>
 
                             <button
