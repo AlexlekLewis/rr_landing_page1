@@ -7,7 +7,6 @@ import HallaBol from './HallaBol';
 import ClinicOverview from './ClinicOverview';
 import SessionWalkthrough from './SessionWalkthrough';
 import CoachesSection from './CoachesSection';
-import RoyalsPathway from './RoyalsPathway';
 import ActionImage from './ActionImage';
 import PricingSection from './PricingSection';
 import LocationsSection from './LocationsSection';
@@ -54,7 +53,6 @@ const SeptemberHoliday = () => {
                 <div id="coaches">
                     <CoachesSection />
                 </div>
-                <RoyalsPathway />
                 <div id="pricing">
                     <ActionImage />
                     <PricingSection />
