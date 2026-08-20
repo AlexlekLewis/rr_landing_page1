@@ -13,6 +13,7 @@ import HomeFAQ from './HomeFAQ';
 import HomeFinalCTA from './HomeFinalCTA';
 import HomeStickyCTA from './HomeStickyCTA';
 import RegisterDrawer from './RegisterDrawer';
+import PartnerStack from '../power-game/PartnerStack';
 import HomeTopBanner from './HomeTopBanner';
 import OpenDaysModal from './OpenDaysModal';
 import OpenDaysTicket from './OpenDaysTicket';
@@ -66,6 +67,7 @@ const HomePage = () => {
                 <div id="faq"><HomeFAQ onRegisterClick={openDrawer} /></div>
             </main>
 
+            <PartnerStack theme="light" />
             <Footer />
             <HomeStickyCTA onRegisterClick={openDrawer} />
             <RegisterDrawer isOpen={drawerOpen} onClose={closeDrawer} />

@@ -24,7 +24,7 @@ const PROGRAMS = [
     { label: 'Junior Royals', to: '/junior-royals' },
     { label: 'Holiday Program', to: '/junior-royals-holiday' },
     { label: 'Private Coaching', to: '/mickleham' },
-    { label: 'Elite Program', to: '/elite-royals' },
+    { label: 'Performance Squads', to: '/performance-squads' },
 ];
 
 const ACADEMY = [
