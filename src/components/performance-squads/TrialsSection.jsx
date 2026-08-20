@@ -17,8 +17,8 @@ const TrialsSection = ({ onChooseCentre }) => (
                     <motion.div key={c.slug} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i * 0.1}
                         className="bg-white/5 border border-white/10 hover:border-rr-pink/50 rounded-2xl p-7 flex flex-col transition-colors">
                         <div className="flex items-center justify-between mb-4">
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-rr-pink bg-rr-pink/10 rounded-full px-3 py-1.5">
-                                Now Trialling
+                            <span className={`text-[10px] font-black uppercase tracking-[0.2em] rounded-full px-3 py-1.5 ${c.trialSessions.length ? 'text-rr-pink bg-rr-pink/10' : 'text-white/50 bg-white/5'}`}>
+                                {c.trialSessions.length ? 'Now Trialling' : 'Trials Coming Soon'}
                             </span>
                             <Trophy className="w-5 h-5 text-white/30" />
                         </div>
@@ -38,18 +38,19 @@ const TrialsSection = ({ onChooseCentre }) => (
                             </div>
                             <div className="flex items-start gap-3">
                                 <CalendarDays className="w-4 h-4 text-rr-pink shrink-0 mt-0.5" />
-                                {c.trialDates.length ? (
+                                {c.trialSessions.length ? (
                                     <div className="space-y-1.5">
-                                        {c.trialDates.map((d) => (
-                                            <div key={d} className="text-white/75 text-sm font-medium">
-                                                {d.includes('—') ? (
-                                                    <>
-                                                        <span className="text-rr-light-pink font-bold">{d.split('—')[0].trim()}</span>
-                                                        {' — '}{d.split('—')[1].trim()}
-                                                    </>
-                                                ) : d}
+                                        {c.trialSessions.map((sess, n) => (
+                                            <div key={sess.id} className="text-white/75 text-sm font-medium">
+                                                <span className="text-rr-light-pink font-bold">Trial {n + 1}</span>
+                                                {' — '}{sess.label}
                                             </div>
                                         ))}
+                                        {c.maxTrialSessions < c.trialSessions.length && (
+                                            <div className="text-white/45 text-xs font-medium pt-0.5">
+                                                Attend up to {c.maxTrialSessions} of these {c.trialSessions.length} sessions.
+                                            </div>
+                                        )}
                                     </div>
                                 ) : (
                                     <span className="text-white/75 text-sm font-medium">Trials Coming Soon</span>
@@ -60,7 +61,7 @@ const TrialsSection = ({ onChooseCentre }) => (
                             onClick={() => onChooseCentre(c.slug)}
                             className="mt-auto inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-6 py-3.5 transition-colors"
                         >
-                            Register for Trial <ArrowRight className="w-4 h-4" />
+                            {c.trialSessions.length ? 'Register for Trial' : 'Register Your Interest'} <ArrowRight className="w-4 h-4" />
                         </button>
                     </motion.div>
                 ))}

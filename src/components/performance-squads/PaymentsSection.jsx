@@ -1,31 +1,46 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { CreditCard } from 'lucide-react';
+import { CreditCard, Check } from 'lucide-react';
 import { fadeUp, SectionHeading, Label, Chevron, selectClass } from './shared';
 import {
     ACTIVE_CENTRES,
     PAYMENT_OPTIONS,
     TRIAL_PRICE,
-    TRIAL_SESSION_CENTRES,
     FINANCIAL_CONDITION,
+    getTrialSessions,
+    getMaxTrialSessions,
     resolvePaymentLink,
 } from './data';
 
-const PaymentsSection = () => {
+// `registration` is the just-submitted form result: { centre, sessionIds }.
+// When present, the trial quantity is locked to what the player registered
+// for, so the form and the payment can't disagree.
+const PaymentsSection = ({ registration }) => {
     const [payCentre, setPayCentre] = useState(ACTIVE_CENTRES[0].slug);
     const [payType, setPayType] = useState('trial');
     const [sessions, setSessions] = useState(1);
 
-    // Session options only apply to trials, and only at centres that run
-    // multiple trial sessions (currently Cranbourne North).
-    const sessionOptions = TRIAL_SESSION_CENTRES[payCentre] || null;
-    const showSessions = payType === 'trial' && !!sessionOptions;
+    const lockedToRegistration =
+        !!registration?.sessionIds?.length && payType === 'trial' && payCentre === registration.centre;
 
-    // Reset the count whenever session choice stops being relevant, so a
-    // stale quantity can't leak into another centre or payment type.
+    const maxSessions = getMaxTrialSessions(payCentre);
+    const centreSessions = getTrialSessions(payCentre);
+    const showSessions = payType === 'trial' && maxSessions > 0;
+
+    // Follow the registration once it lands.
+    useEffect(() => {
+        if (registration?.centre) {
+            setPayCentre(registration.centre);
+            setPayType('trial');
+            setSessions(registration.sessionIds?.length || 1);
+        }
+    }, [registration]);
+
+    // Never let a quantity survive a change of centre or payment type.
     useEffect(() => {
         if (!showSessions) setSessions(1);
-    }, [showSessions, payCentre, payType]);
+        else setSessions((n) => Math.min(Math.max(n, 1), maxSessions));
+    }, [showSessions, maxSessions, payCentre, payType]);
 
     const payLink = resolvePaymentLink(payCentre, payType, sessions);
     const payOption = useMemo(() => PAYMENT_OPTIONS.find((o) => o.key === payType), [payType]);
@@ -38,6 +53,10 @@ const PaymentsSection = () => {
     const displayLabel = showSessions
         ? `${payOption.label} — ${sessions} session${sessions > 1 ? 's' : ''}`
         : payOption.label;
+
+    const registeredLabels = lockedToRegistration
+        ? centreSessions.filter((s) => registration.sessionIds.includes(s.id)).map((s) => s.label)
+        : [];
 
     const sc = (key) => selectClass({}, key);
 
@@ -76,11 +95,34 @@ const PaymentsSection = () => {
                         </div>
                     </div>
 
-                    {showSessions && (
+                    {/* Locked: quantity mirrors the registration exactly. */}
+                    {showSessions && lockedToRegistration && (
+                        <div className="mb-6 bg-rr-pink/10 border border-rr-pink/30 rounded-xl p-5">
+                            <div className="flex items-start gap-3">
+                                <Check className="w-5 h-5 text-rr-pink shrink-0 mt-0.5" />
+                                <div>
+                                    <p className="text-sm font-black uppercase tracking-wider mb-2">
+                                        Matched to your registration
+                                    </p>
+                                    <ul className="space-y-1 mb-2">
+                                        {registeredLabels.map((l) => (
+                                            <li key={l} className="text-white/75 text-sm font-medium">{l}</li>
+                                        ))}
+                                    </ul>
+                                    <p className="text-white/45 text-xs font-medium">
+                                        ${TRIAL_PRICE} per player, per session. To change this, resubmit the registration form above.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Unlocked: paying without registering in this visit. */}
+                    {showSessions && !lockedToRegistration && (
                         <div className="mb-6">
                             <Label required>How many trial sessions?</Label>
-                            <div className="grid grid-cols-3 gap-3">
-                                {sessionOptions.map((n) => (
+                            <div className={`grid gap-3 ${maxSessions === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
+                                {Array.from({ length: maxSessions }, (_, i) => i + 1).map((n) => (
                                     <button
                                         type="button"
                                         key={n}
@@ -98,11 +140,13 @@ const PaymentsSection = () => {
                                 ))}
                             </div>
                             <p className="text-white/45 text-xs font-medium mt-2.5">
-                                ${TRIAL_PRICE} per player, per session.
+                                ${TRIAL_PRICE} per player, per session
+                                {centreSessions.length > maxSessions
+                                    ? ` — up to ${maxSessions} of the ${centreSessions.length} sessions on offer.`
+                                    : '.'}
                             </p>
                         </div>
                     )}
-                    {!showSessions && <div className="mb-2" />}
 
                     <div className="bg-white/5 border border-white/10 rounded-xl p-5 mb-6">
                         <div className="flex items-center justify-between gap-4 mb-1.5">

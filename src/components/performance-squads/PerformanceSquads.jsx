@@ -45,6 +45,8 @@ const PerformanceSquads = () => {
 
     // Trial card → pre-selects that centre in the registration form.
     const [selectedCentre, setSelectedCentre] = useState('');
+    // Carries the submitted registration into Payments so the trial quantity matches.
+    const [registration, setRegistration] = useState(null);
 
     // ── Hidden page: noindex + title ──
     useEffect(() => {
@@ -85,10 +87,10 @@ const PerformanceSquads = () => {
                     <PricingSection />
                 </div>
                 <div id="registration-form" className="scroll-mt-28 lg:scroll-mt-32">
-                    <RegistrationForm selectedCentre={selectedCentre} />
+                    <RegistrationForm selectedCentre={selectedCentre} onRegistered={setRegistration} />
                 </div>
                 <div id="payments" className="scroll-mt-28 lg:scroll-mt-32">
-                    <PaymentsSection />
+                    <PaymentsSection registration={registration} />
                 </div>
                 <div id="faq" className="scroll-mt-28 lg:scroll-mt-32">
                     <FAQSection />

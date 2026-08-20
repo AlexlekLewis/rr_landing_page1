@@ -15,7 +15,11 @@ export const CENTRES = [
         suburb: 'Mickleham',
         coach: 'Alex Lewis',
         coachTitle: 'Head Coach',
-        trialDates: [], // empty → "Trials Coming Soon" (Mickleham not live for trials yet)
+        trialSessions: [
+            { id: 'nm-2026-09-06', label: 'Sunday 6 September · 2:00–4:00 PM' },
+            { id: 'nm-2026-09-10', label: 'Thursday 10 September · 7:00–9:00 PM' },
+        ],
+        maxTrialSessions: 2,
         active: true,
     },
     {
@@ -25,16 +29,18 @@ export const CENTRES = [
         suburb: 'Cranbourne North',
         coach: 'Alex Thornhill',
         coachTitle: 'Head Coach',
-        trialDates: [
-            'Trial 1 — Sunday 6 September · 7:00–8:30 PM',
-            'Trial 2 — Friday 11 September · 8:00–9:30 PM',
-            'Trial 3 — Sunday 13 September · 7:00–8:30 PM',
+        trialSessions: [
+            { id: 'se-2026-09-06', label: 'Sunday 6 September · 7:00–8:30 PM' },
+            { id: 'se-2026-09-11', label: 'Friday 11 September · 8:00–9:30 PM' },
+            { id: 'se-2026-09-13', label: 'Sunday 13 September · 7:00–8:30 PM' },
         ],
+        // Cranbourne North has fewer lanes — players attend at most 2 of the 3.
+        maxTrialSessions: 2,
         active: true,
     },
     // Future squads — displayed as "Coming 2027", not selectable.
-    { slug: 'west-melbourne', name: 'West Melbourne', venue: 'Venue to be announced', suburb: '', coach: null, trialDates: [], active: false },
-    { slug: 'east-melbourne', name: 'East Melbourne', venue: 'Venue to be announced', suburb: '', coach: null, trialDates: [], active: false },
+    { slug: 'west-melbourne', name: 'West Melbourne', venue: 'Venue to be announced', suburb: '', coach: null, trialSessions: [], maxTrialSessions: 0, active: false },
+    { slug: 'east-melbourne', name: 'East Melbourne', venue: 'Venue to be announced', suburb: '', coach: null, trialSessions: [], maxTrialSessions: 0, active: false },
 ];
 
 export const ACTIVE_CENTRES = CENTRES.filter((c) => c.active);
@@ -42,16 +48,16 @@ export const ACTIVE_CENTRES = CENTRES.filter((c) => c.active);
 // Stripe payment links — PASTE LIVE URLs when created in Stripe.
 // While null, the pay button shows "Payment link coming soon" and is disabled.
 export const PAYMENT_LINKS = {
+    // One link per centre/type. Trial links must have "Adjustable quantity"
+    // enabled in Stripe (min 1, max 2) — the page passes ?quantity=N so the
+    // checkout opens pre-set to the number of sessions the player chose.
     'north-melbourne': {
-        // Single link — North Melbourne trial dates aren't set yet.
         trial: null,    // e.g. 'https://buy.stripe.com/xxxx'
         games: null,
         annual: null,
     },
     'south-east-melbourne': {
-        // Cranbourne North runs three trial sessions, so players choose
-        // how many they're paying for. One Stripe link per quantity.
-        trial: { 1: null, 2: null, 3: null },
+        trial: null,
         games: null,
         annual: null,
     },
@@ -64,19 +70,20 @@ export const PAYMENT_OPTIONS = [
     { key: 'annual', label: 'Annual Fee', price: '$30 / week', desc: 'Ongoing squad fee at your home centre.' },
 ];
 
-// Trial pricing. Centres listed here let players pick how many trial
-// sessions they're paying for; centres not listed bill a single session.
+// Trial pricing.
 export const TRIAL_PRICE = 30;
-export const TRIAL_SESSION_CENTRES = {
-    'south-east-melbourne': [1, 2, 3],
-};
 
-// Resolves the right Stripe link for a centre/type, accounting for
-// quantity-based trial links. Returns null while links are unset.
+export const getCentre = (slug) => CENTRES.find((c) => c.slug === slug);
+export const getTrialSessions = (slug) => getCentre(slug)?.trialSessions || [];
+export const getMaxTrialSessions = (slug) => getCentre(slug)?.maxTrialSessions || 0;
+
+// Resolves the Stripe link for a centre/type. Trial links carry ?quantity=N
+// so checkout opens with the right number of sessions already selected.
 export const resolvePaymentLink = (centre, type, sessions = 1) => {
-    const entry = PAYMENT_LINKS[centre]?.[type];
-    if (entry && typeof entry === 'object') return entry[sessions] || null;
-    return entry || null;
+    const link = PAYMENT_LINKS[centre]?.[type];
+    if (!link) return null;
+    if (type !== 'trial' || sessions <= 1) return link;
+    return `${link}${link.includes('?') ? '&' : '?'}quantity=${sessions}`;
 };
 
 // Selection condition — shown beneath the fee cards and in the FAQ.
@@ -128,6 +135,10 @@ export const FAQS = [
     {
         q: 'What does it cost?',
         a: 'Three fees. A $30 trial fee per player per session, match fees which vary by format, and a $30 per week annual fee. All players must remain financial to be eligible for selection.',
+    },
+    {
+        q: 'When do Performance Squad games start?',
+        a: 'Performance Squad games commence in late September for certain age groups, with the remainder following through the season.',
     },
     {
         q: 'What is the Power League?',

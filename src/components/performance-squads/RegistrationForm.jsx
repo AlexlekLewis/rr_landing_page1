@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import {
     fadeUp, scrollTo, SectionHeading, Label, FieldError, Chevron,
     inputClass, selectClass,
 } from './shared';
-import { ACTIVE_CENTRES, PLAYING_ROLES } from './data';
+import { ACTIVE_CENTRES, PLAYING_ROLES, TRIAL_PRICE, getTrialSessions, getMaxTrialSessions } from './data';
 
-const RegistrationForm = ({ selectedCentre }) => {
+const RegistrationForm = ({ selectedCentre, onRegistered }) => {
     const [form, setForm] = useState({
         player_name: '',
         player_age: '',
@@ -20,6 +20,7 @@ const RegistrationForm = ({ selectedCentre }) => {
         entry_type: 'trial',
         invite_code: '',
         playing_role: '',
+        trial_session_dates: [],
     });
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
@@ -34,6 +35,25 @@ const RegistrationForm = ({ selectedCentre }) => {
 
     const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
+    const trialSessions = getTrialSessions(form.preferred_centre);
+    const maxSessions = getMaxTrialSessions(form.preferred_centre);
+    const showSessionPicker = form.entry_type === 'trial' && trialSessions.length > 0;
+
+    // Session ids belong to a centre, so clear them if the centre changes.
+    useEffect(() => {
+        setForm((f) => ({ ...f, trial_session_dates: [] }));
+    }, [form.preferred_centre, form.entry_type]);
+
+    const toggleSession = (id) =>
+        setForm((f) => {
+            const picked = f.trial_session_dates;
+            if (picked.includes(id)) {
+                return { ...f, trial_session_dates: picked.filter((x) => x !== id) };
+            }
+            if (picked.length >= maxSessions) return f; // cap enforced here
+            return { ...f, trial_session_dates: [...picked, id] };
+        });
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const next = {};
@@ -43,6 +63,9 @@ const RegistrationForm = ({ selectedCentre }) => {
         if (!form.phone.trim()) next.phone = 'Phone number is required';
         if (!form.preferred_centre) next.preferred_centre = 'Please choose a centre';
         if (!form.playing_role) next.playing_role = 'Please choose a playing role';
+        if (showSessionPicker && form.trial_session_dates.length === 0) {
+            next.trial_session_dates = 'Please choose at least one trial session';
+        }
         if (Object.keys(next).length) {
             setErrors(next);
             return;
@@ -67,12 +90,19 @@ const RegistrationForm = ({ selectedCentre }) => {
                     entry_type: form.entry_type,
                     invite_code: form.entry_type === 'invited' ? form.invite_code.trim() || null : null,
                     playing_role: form.playing_role,
+                    trial_sessions: showSessionPicker ? form.trial_session_dates.length : null,
+                    trial_session_dates: showSessionPicker ? form.trial_session_dates : null,
                     page_referrer: document.referrer || null,
                     ...utm,
                 },
             ]);
             if (error) throw error;
             setSubmitted(true);
+            // Hand the selection to Payments so the quantity can't drift.
+            onRegistered?.({
+                centre: form.preferred_centre,
+                sessionIds: showSessionPicker ? form.trial_session_dates : [],
+            });
         } catch (err) {
             console.error('Performance Squads registration error:', err);
             setErrors({ form: 'Something went wrong. Please try again or email info@rramelbourne.com' });
@@ -190,6 +220,52 @@ const RegistrationForm = ({ selectedCentre }) => {
                                 ))}
                             </div>
                         </div>
+                        {showSessionPicker && (
+                            <div className="mb-4">
+                                <Label required>
+                                    Which trial sessions will you attend?
+                                    <span className="normal-case font-medium text-white/40">
+                                        {' '}(choose up to {maxSessions})
+                                    </span>
+                                </Label>
+                                <div className="space-y-2.5">
+                                    {trialSessions.map((sess) => {
+                                        const picked = form.trial_session_dates.includes(sess.id);
+                                        const atCap = !picked && form.trial_session_dates.length >= maxSessions;
+                                        return (
+                                            <button
+                                                type="button"
+                                                key={sess.id}
+                                                onClick={() => toggleSession(sess.id)}
+                                                disabled={atCap}
+                                                aria-pressed={picked}
+                                                className={`w-full flex items-center gap-3 text-left rounded-xl px-4 py-3.5 border transition-colors ${picked
+                                                    ? 'bg-rr-pink/15 border-rr-pink text-white'
+                                                    : atCap
+                                                        ? 'bg-white/[0.03] border-white/10 text-white/30 cursor-not-allowed'
+                                                        : 'bg-white/5 border-white/15 text-white/70 hover:border-rr-pink/50'}`}
+                                            >
+                                                <span className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 ${picked ? 'bg-rr-pink border-rr-pink' : 'border-white/30'}`}>
+                                                    {picked && <Check className="w-3.5 h-3.5 text-white" />}
+                                                </span>
+                                                <span className="text-sm font-medium">{sess.label}</span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                                <FieldError msg={errors.trial_session_dates} />
+                                <p className="text-white/40 text-xs font-medium mt-2">
+                                    ${TRIAL_PRICE} per player, per session — you'll pay for{' '}
+                                    {form.trial_session_dates.length || 0} session
+                                    {form.trial_session_dates.length === 1 ? '' : 's'}
+                                    {form.trial_session_dates.length > 0 && (
+                                        <span className="text-rr-light-pink font-bold">
+                                            {' '}(${TRIAL_PRICE * form.trial_session_dates.length})
+                                        </span>
+                                    )}.
+                                </p>
+                            </div>
+                        )}
                         {form.entry_type === 'invited' && (
                             <div className="mb-4">
                                 <Label>Invite Reference <span className="normal-case font-medium text-white/40">(if provided)</span></Label>

@@ -31,6 +31,11 @@ const PowerLeagueSection = () => (
                     rounds, alongside fixtures against external opposition — so every squad member
                     competes in real, meaningful cricket throughout the season.
                 </p>
+                <p className="text-white/75 text-[15px] sm:text-base font-medium leading-relaxed mb-4">
+                    <span className="text-rr-light-pink font-bold">Performance Squad games commence in
+                    late September</span> for certain age groups, with the remainder following through
+                    the season.
+                </p>
                 <p className="text-white/45 text-xs font-medium italic">
                     Full Power League format, fixtures, and standings will be published here soon.
                 </p>
