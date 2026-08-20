@@ -61,8 +61,8 @@ export const PAYMENT_LINKS = {
     },
     'south-east-melbourne': {
         trial: {
-            1: null,    // $30  — 1 session
-            2: null,    // $60  — 2 sessions
+            1: 'https://buy.stripe.com/6oU4gz3bj0i1elK1Zp9Zm0x',    // $30  — 1 session
+            2: 'https://buy.stripe.com/9B6cN53bj8Ox6TifQf9Zm0y',    // $60  — 2 sessions
         },
         games: null,
         annual: null,
