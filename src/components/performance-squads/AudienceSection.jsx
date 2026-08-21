@@ -11,7 +11,7 @@ const AudienceSection = () => (
         <div className="max-w-5xl mx-auto">
             <SectionHeading
                 eyebrow="Who This Is For"
-                title="Built For T20 Cricketers"
+                title="Built For Emerging Cricketers"
                 sub="Performance Squads are for players serious about a short-format game — whatever the traditional pathway has decided so far."
             />
             <div className="grid sm:grid-cols-2 gap-5">
