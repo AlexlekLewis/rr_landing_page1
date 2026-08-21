@@ -8,7 +8,7 @@ import {
 } from './shared';
 import { ACTIVE_CENTRES, PLAYING_ROLES, TRIAL_PRICE, getTrialSessions, getMaxTrialSessions } from './data';
 
-const RegistrationForm = ({ selectedCentre, onRegistered }) => {
+const RegistrationForm = ({ selectedCentre, onRegistered, onRequestPayment }) => {
     const [form, setForm] = useState({
         player_name: '',
         player_age: '',
@@ -25,6 +25,7 @@ const RegistrationForm = ({ selectedCentre, onRegistered }) => {
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [submittedResult, setSubmittedResult] = useState(null);
 
     // Trial card "Register for Trial" pre-selects that centre.
     useEffect(() => {
@@ -97,12 +98,18 @@ const RegistrationForm = ({ selectedCentre, onRegistered }) => {
                 },
             ]);
             if (error) throw error;
-            setSubmitted(true);
-            // Hand the selection to Payments so the quantity can't drift.
-            onRegistered?.({
+            const result = {
                 centre: form.preferred_centre,
+                entryType: form.entry_type,
                 sessionIds: showSessionPicker ? form.trial_session_dates : [],
-            });
+            };
+            setSubmitted(true);
+            setSubmittedResult(result);
+            // Keep the standalone payment tool in sync...
+            onRegistered?.(result);
+            // ...and open the pay-now modal straight away, so registration and
+            // payment happen in one sitting rather than two separate steps.
+            onRequestPayment?.(result);
         } catch (err) {
             console.error('Performance Squads registration error:', err);
             setErrors({ form: 'Something went wrong. Please try again or email info@rramelbourne.com' });
@@ -118,9 +125,9 @@ const RegistrationForm = ({ selectedCentre, onRegistered }) => {
         <section className="py-20 px-5">
             <div className="max-w-2xl mx-auto">
                 <SectionHeading
-                    eyebrow="Step 1"
-                    title="Register Your Interest"
-                    sub="Trialling or invited — start here. We'll confirm your centre's trial details and next steps by email."
+                    eyebrow="Register & Pay"
+                    title="Secure Your Trial Spot"
+                    sub="Register your details and pay in one go. Trial spots aren't confirmed until payment is received."
                 />
                 {submitted ? (
                     <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}
@@ -131,16 +138,27 @@ const RegistrationForm = ({ selectedCentre, onRegistered }) => {
                             </svg>
                         </div>
                         <h3 className="text-2xl font-black uppercase mb-3">You're Registered</h3>
-                        <p className="text-white/70 text-[15px] font-medium leading-relaxed mb-6">
-                            Thanks — we've got your details. Our team will be in touch with your centre's
-                            trial information and next steps. If your trial fee is due, you can pay it now below.
-                        </p>
-                        <button
-                            onClick={() => scrollTo('payments')}
-                            className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
-                        >
-                            Go to Payments <ArrowRight className="w-4 h-4" />
-                        </button>
+                        {submittedResult?.sessionIds?.length ? (
+                            <>
+                                <p className="text-white/70 text-[15px] font-medium leading-relaxed mb-6">
+                                    Thanks — we've got your details. Your trial spot isn't confirmed until
+                                    the fee is paid, so finish up below if you haven't already.
+                                </p>
+                                {/* Safety net: the modal may have been dismissed. */}
+                                <button
+                                    onClick={() => onRequestPayment?.(submittedResult)}
+                                    className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
+                                >
+                                    Pay ${TRIAL_PRICE * submittedResult.sessionIds.length} Now
+                                    <ArrowRight className="w-4 h-4" />
+                                </button>
+                            </>
+                        ) : (
+                            <p className="text-white/70 text-[15px] font-medium leading-relaxed">
+                                Thanks — we've got your details. Our team will be in touch with your squad
+                                information and next steps.
+                            </p>
+                        )}
                     </motion.div>
                 ) : (
                     <form onSubmit={handleSubmit} noValidate className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-9">

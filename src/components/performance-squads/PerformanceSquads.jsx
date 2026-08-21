@@ -11,6 +11,7 @@ import RegistrationForm from './RegistrationForm';
 import PaymentsSection from './PaymentsSection';
 import FAQSection from './FAQSection';
 import StickyCTA from './StickyCTA';
+import PaymentModal from './PaymentModal';
 import PartnerStack from '../power-game/PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { scrollTo } from './shared';
@@ -34,7 +35,7 @@ const SECTIONS = [
     'coaches',
     'power-league',
     'pricing',
-    'registration-form',
+    'register-pay',
     'payments',
     'faq',
     'partners',
@@ -47,6 +48,7 @@ const PerformanceSquads = () => {
     const [selectedCentre, setSelectedCentre] = useState('');
     // Carries the submitted registration into Payments so the trial quantity matches.
     const [registration, setRegistration] = useState(null);
+    const [payModal, setPayModal] = useState(null);
 
     // ── Hidden page: noindex + title ──
     useEffect(() => {
@@ -61,7 +63,7 @@ const PerformanceSquads = () => {
 
     const handleChooseCentre = (slug) => {
         setSelectedCentre(slug);
-        scrollTo('registration-form');
+        scrollTo('register-pay');
     };
 
     return (
@@ -86,8 +88,12 @@ const PerformanceSquads = () => {
                 <div id="pricing" className="scroll-mt-28 lg:scroll-mt-32">
                     <PricingSection />
                 </div>
-                <div id="registration-form" className="scroll-mt-28 lg:scroll-mt-32">
-                    <RegistrationForm selectedCentre={selectedCentre} onRegistered={setRegistration} />
+                <div id="register-pay" className="scroll-mt-28 lg:scroll-mt-32">
+                    <RegistrationForm
+                        selectedCentre={selectedCentre}
+                        onRegistered={setRegistration}
+                        onRequestPayment={setPayModal}
+                    />
                 </div>
                 <div id="payments" className="scroll-mt-28 lg:scroll-mt-32">
                     <PaymentsSection registration={registration} />
@@ -102,6 +108,7 @@ const PerformanceSquads = () => {
             </main>
             <Footer />
             <StickyCTA />
+            <PaymentModal open={!!payModal} registration={payModal} onClose={() => setPayModal(null)} />
         </div>
     );
 };

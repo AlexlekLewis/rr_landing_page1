@@ -75,7 +75,7 @@ const PricingSection = () => (
                 </ul>
                 <div className="text-center">
                     <button
-                        onClick={() => scrollTo('registration-form')}
+                        onClick={() => scrollTo('register-pay')}
                         className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
                     >
                         Register Your Interest <ArrowRight className="w-4 h-4" />
