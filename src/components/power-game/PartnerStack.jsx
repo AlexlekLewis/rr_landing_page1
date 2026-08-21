@@ -6,6 +6,13 @@ import { motion } from 'framer-motion';
 // `logo` path on each partner. Until then, a clean placeholder is shown.
 const TIERS = [
     {
+        level: 'Major Sponsors',
+        size: 'large',
+        partners: [
+            { name: 'Whitewall', logo: '/assets/powergame/partners/whitewall.png', dark: true, big: true },
+        ],
+    },
+    {
         level: 'Venue Partners',
         size: 'medium',
         partners: [
