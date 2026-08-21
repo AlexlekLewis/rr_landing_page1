@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import HeroSection from './HeroSection';
+import AudienceSection from './AudienceSection';
+import OpportunitySection from './OpportunitySection';
 import PathwaySection from './PathwaySection';
 import TrialsSection from './TrialsSection';
 import CoachesSection from './CoachesSection';
@@ -30,6 +32,8 @@ import { scrollTo } from './shared';
 
 const SECTIONS = [
     'hero',
+    'who-its-for',
+    'opportunity',
     'pathway',
     'trials',
     'coaches',
@@ -72,6 +76,12 @@ const PerformanceSquads = () => {
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero">
                     <HeroSection />
+                </div>
+                <div id="who-its-for" className="scroll-mt-28 lg:scroll-mt-32">
+                    <AudienceSection />
+                </div>
+                <div id="opportunity" className="scroll-mt-28 lg:scroll-mt-32">
+                    <OpportunitySection />
                 </div>
                 <div id="pathway" className="scroll-mt-28 lg:scroll-mt-32">
                     <PathwaySection />

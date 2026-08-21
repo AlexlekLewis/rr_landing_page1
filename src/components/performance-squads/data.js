@@ -56,28 +56,34 @@ export const PAYMENT_LINKS = {
             1: 'https://buy.stripe.com/4gMcN56nvggZ2D233t9Zm0z',    // $30  — 1 session
             2: 'https://buy.stripe.com/8x2bJ17rz2q9elKeMb9Zm0A',    // $60  — 2 sessions
         },
-        games: null,
-        annual: null,
+        registration_upfront: null,
+        registration_weekly: null,
     },
     'south-east-melbourne': {
         trial: {
             1: 'https://buy.stripe.com/6oU4gz3bj0i1elK1Zp9Zm0x',    // $30  — 1 session
             2: 'https://buy.stripe.com/9B6cN53bj8Ox6TifQf9Zm0y',    // $60  — 2 sessions
         },
-        games: null,
-        annual: null,
+        registration_upfront: null,
+        registration_weekly: null,
     },
 };
 
-// Prices confirmed Aug 2026. Stripe links still to come.
+// Two stages: everyone pays a trial fee, and selected players then pay a
+// Registration Fee — either upfront at a discount, or weekly by subscription.
 export const PAYMENT_OPTIONS = [
     { key: 'trial', label: 'Trial Fee', price: '$30', desc: 'Per player, per session. Charged for each trial session you attend.' },
-    { key: 'games', label: 'Match Fee', price: 'Format dependent', desc: 'Match fees vary by format. Confirmed ahead of each fixture.' },
-    { key: 'annual', label: 'Annual Fee', price: '$30 / week', desc: 'Ongoing squad fee at your home centre.' },
+    { key: 'registration_upfront', label: 'Registration Fee — Upfront', price: 'TBC', desc: 'Paid once for the full season, at a discount on the weekly rate. Selected players only.' },
+    { key: 'registration_weekly', label: 'Registration Fee — Weekly', price: '$30 / week', desc: 'Ongoing weekly subscription for your squad place. Selected players only.' },
 ];
 
 // Trial pricing.
 export const TRIAL_PRICE = 30;
+
+// PLACEHOLDER — replace with the real upfront figure and its saving.
+export const REGISTRATION_WEEKLY_PRICE = 30;
+export const REGISTRATION_UPFRONT_PRICE = null;   // e.g. 1100
+export const REGISTRATION_UPFRONT_NOTE = 'Discounted rate — final figure confirming shortly.';
 
 export const getCentre = (slug) => CENTRES.find((c) => c.slug === slug);
 export const getTrialSessions = (slug) => getCentre(slug)?.trialSessions || [];
@@ -91,6 +97,70 @@ export const resolvePaymentLink = (centre, type, sessions = 1) => {
     if (typeof entry === 'object') return entry[sessions] || null;
     return entry;
 };
+
+// ── Who the squads are built for ──
+export const AUDIENCE = [
+    {
+        title: 'In the pathway, aiming at T20',
+        body: 'Players aged 10–19 currently in the traditional pathway who are looking to build a career in T20 cricket.',
+    },
+    {
+        title: 'Past 19, still chasing it',
+        body: 'Players over 19 who are still seeking outstanding opportunities in T20 cricket.',
+    },
+    {
+        title: 'Rebuilding a trajectory',
+        body: 'Players who have dropped out of the pathway through injury or other reasons, and are looking to reignite it.',
+    },
+    {
+        title: 'Built for the short format',
+        body: 'Players whose skillset is heavily suited to T20 cricket, whatever a selection panel has decided so far.',
+    },
+];
+
+// ── What a squad place opens up ──
+export const OPPORTUNITIES = [
+    'Exposure within the global T20 ecosystem',
+    'Opportunities for selection as a training partner at the Paarl Royals and Barbados Royals',
+    'Invitational training opportunities within the Rajasthan Royals system',
+    'Invitation to small group camps at the Rajasthan Royals High Performance Centre in Nagpur, home of the Royals and their coaching staff',
+    'Player data and vision analysed quarterly by Rajasthan Royals coaching staff',
+    'Selection opportunity to compete in international Rajasthan Royals Academy fixtures',
+];
+
+// ── Proof that the pathway is already moving players ──
+export const CASE_STUDIES = [
+    {
+        stat: '4',
+        statLabel: 'Players put forward',
+        title: 'Paarl Royals, SA20',
+        body: 'The Rajasthan Royals Academy selection team has put forward four players for consideration as training partners with the Paarl Royals in the SA20.',
+    },
+    {
+        stat: 'USA',
+        statLabel: 'Academies',
+        title: 'Barbados Royals',
+        body: 'Rajasthan Royals Academies based in the USA have sent Academy players as training partners of the Barbados Royals.',
+    },
+];
+
+// ── What the trial fee buys vs what a squad place buys ──
+export const TRIAL_INCLUDES = [
+    'Assessment by a Royals accredited Head Coach',
+    'Batting, bowling and fielding assessment across the session',
+    'Your session at your home centre',
+    'A selection outcome either way — you will be told where you stand',
+];
+
+export const SELECTED_INCLUDES = [
+    'A place in your centre\u2019s Performance Squad',
+    'Weekly training with your squad led by your Head Coach',
+    'Selection for Power League rounds, Sept 2026 – April 2027',
+    'Selection for fixtures against external opposition',
+    'Rajasthan Royals Academy First XI selection pathway',
+    'Ongoing performance feedback from your coaching staff',
+    'Royals Group global performance opportunities (High Performance Centre / Training Partners)',
+];
 
 // Selection condition — shown beneath the fee cards and in the FAQ.
 export const FINANCIAL_CONDITION =
@@ -119,28 +189,32 @@ export const SQUAD_COACHES = [
 // FAQ — DRAFT copy for Andy's review.
 export const FAQS = [
     {
-        q: 'What is a Performance Squad?',
-        a: 'A Performance Squad is the representative arm of the Academy — a group of like-skilled, like-motivated players based at one centre who train together and compete together. Each squad fields a First XI plus additional teams for Power League rounds and fixtures against external opposition.',
+        q: 'Who are the Performance Squads for?',
+        a: 'Players aged 10–19 in the current pathway who want to build a T20 career, players over 19 still chasing outstanding opportunities in T20, players rebuilding after injury or time away, and players whose skillset suits short-format cricket. Squads are built around playing standard rather than one age bracket.',
     },
     {
         q: 'How do I get into a squad?',
-        a: 'Two ways. You either trial at your nearest centre, or you are invited directly by our coaching staff. Both routes lead to the same standard — every player earns their place.',
+        a: 'You trial. Register, pay your trial fee, and take part at your nearest centre. Our coaches assess skill, athleticism and attitude, and successful players are offered a squad place once the trial period closes.',
     },
     {
         q: 'What happens at a trial?',
-        a: 'Our coaches assess skill, athleticism and attitude across batting, bowling and fielding. Successful players are offered a squad place shortly after the trial period closes. You will be told either way.',
-    },
-    {
-        q: 'What age groups are the squads for?',
-        a: 'Squads are built around playing standard rather than a single age bracket. Register your interest with the player’s age and we will confirm the right group for your centre.',
-    },
-    {
-        q: 'Do I need to be at a club to trial?',
-        a: 'No. Club cricketers and non-club players are both welcome to trial. If you are at a club, add it when you register — it helps our coaches with context.',
+        a: 'Our coaches assess you across batting, bowling and fielding. You will be told where you stand either way — a selection outcome is part of what your trial fee covers.',
     },
     {
         q: 'What does it cost?',
-        a: 'Three fees. A $30 trial fee per player per session, match fees which vary by format, and a $30 per week annual fee. All players must remain financial to be eligible for selection.',
+        a: 'Two stages. A $30 trial fee per player per session to be assessed. If you are selected, a Registration Fee for your squad place — payable upfront at a discount, or $30 per week by subscription. Nothing beyond the trial fee is owed unless you are offered a place.',
+    },
+    {
+        q: 'What do I get if I am selected?',
+        a: 'Weekly training with your squad under a Royals accredited Head Coach, selection for Power League rounds and external fixtures, the First XI pathway, ongoing performance feedback, and access to Royals Group global opportunities including High Performance Centre camps and training partner selection.',
+    },
+    {
+        q: 'Are the global opportunities real?',
+        a: 'Yes. The Rajasthan Royals Academy selection team has put forward four players for consideration as training partners with the Paarl Royals in the SA20, and Royals Academies in the USA have sent players as training partners of the Barbados Royals. Selection is competitive and never guaranteed, but the routes exist and are being used.',
+    },
+    {
+        q: 'Do I need to be at a club to trial?',
+        a: 'No. Club cricketers and non-club players are both welcome. If you are at a club, add it when you register — it gives our coaches useful context.',
     },
     {
         q: 'When do Performance Squad games start?',
@@ -148,7 +222,7 @@ export const FAQS = [
     },
     {
         q: 'What is the Power League?',
-        a: 'The Power League is the Academy’s own match series — the competitive stage where Performance Squad teams from each centre face off, running from September 2026 through April 2027. Full format, fixtures and standings will be published here.',
+        a: 'The Power League is the Academy\u2019s own match series — the competitive stage where Performance Squad teams from each centre face off, running from September 2026 through April 2027. Full format, fixtures and standings will be published here.',
     },
     {
         q: 'Which centres are running squads?',

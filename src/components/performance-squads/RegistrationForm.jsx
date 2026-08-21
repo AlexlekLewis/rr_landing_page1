@@ -18,7 +18,6 @@ const RegistrationForm = ({ selectedCentre, onRegistered, onRequestPayment }) =>
         club: '',
         preferred_centre: '',
         entry_type: 'trial',
-        invite_code: '',
         playing_role: '',
         trial_session_dates: [],
     });
@@ -38,12 +37,12 @@ const RegistrationForm = ({ selectedCentre, onRegistered, onRequestPayment }) =>
 
     const trialSessions = getTrialSessions(form.preferred_centre);
     const maxSessions = getMaxTrialSessions(form.preferred_centre);
-    const showSessionPicker = form.entry_type === 'trial' && trialSessions.length > 0;
+    const showSessionPicker = trialSessions.length > 0;
 
     // Session ids belong to a centre, so clear them if the centre changes.
     useEffect(() => {
         setForm((f) => ({ ...f, trial_session_dates: [] }));
-    }, [form.preferred_centre, form.entry_type]);
+    }, [form.preferred_centre]);
 
     const toggleSession = (id) =>
         setForm((f) => {
@@ -88,8 +87,7 @@ const RegistrationForm = ({ selectedCentre, onRegistered, onRequestPayment }) =>
                     phone: form.phone.trim(),
                     club: form.club.trim() || null,
                     preferred_centre: form.preferred_centre,
-                    entry_type: form.entry_type,
-                    invite_code: form.entry_type === 'invited' ? form.invite_code.trim() || null : null,
+                    entry_type: 'trial',
                     playing_role: form.playing_role,
                     trial_sessions: showSessionPicker ? form.trial_session_dates.length : null,
                     trial_session_dates: showSessionPicker ? form.trial_session_dates : null,
@@ -100,7 +98,7 @@ const RegistrationForm = ({ selectedCentre, onRegistered, onRequestPayment }) =>
             if (error) throw error;
             const result = {
                 centre: form.preferred_centre,
-                entryType: form.entry_type,
+                entryType: 'trial',
                 sessionIds: showSessionPicker ? form.trial_session_dates : [],
             };
             setSubmitted(true);
@@ -127,7 +125,7 @@ const RegistrationForm = ({ selectedCentre, onRegistered, onRequestPayment }) =>
                 <SectionHeading
                     eyebrow="Register & Pay"
                     title="Secure Your Trial Spot"
-                    sub="Register your details and pay in one go. Trial spots aren't confirmed until payment is received."
+                    sub="Register your details and pay your trial fee in one go. Trial spots aren't confirmed until payment is received."
                 />
                 {submitted ? (
                     <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}
@@ -220,24 +218,6 @@ const RegistrationForm = ({ selectedCentre, onRegistered, onRequestPayment }) =>
                                 <FieldError msg={errors.playing_role} />
                             </div>
                         </div>
-                        <div className="mb-4">
-                            <Label required>How are you joining?</Label>
-                            <div className="grid grid-cols-2 gap-3">
-                                {[
-                                    { value: 'trial', label: 'Trialling' },
-                                    { value: 'invited', label: 'Invited' },
-                                ].map((opt) => (
-                                    <button
-                                        type="button"
-                                        key={opt.value}
-                                        onClick={() => setForm((f) => ({ ...f, entry_type: opt.value }))}
-                                        className={`rounded-xl px-4 py-3.5 text-sm font-black uppercase tracking-wider border transition-colors ${form.entry_type === opt.value ? 'bg-rr-pink border-rr-pink text-white' : 'bg-white/5 border-white/15 text-white/60 hover:border-rr-pink/50'}`}
-                                    >
-                                        {opt.label}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
                         {showSessionPicker && (
                             <div className="mb-4">
                                 <Label required>
@@ -282,12 +262,6 @@ const RegistrationForm = ({ selectedCentre, onRegistered, onRequestPayment }) =>
                                         </span>
                                     )}.
                                 </p>
-                            </div>
-                        )}
-                        {form.entry_type === 'invited' && (
-                            <div className="mb-4">
-                                <Label>Invite Reference <span className="normal-case font-medium text-white/40">(if provided)</span></Label>
-                                <input type="text" value={form.invite_code} onChange={set('invite_code')} placeholder="e.g. coach name or invite code" className={ic('invite_code')} />
                             </div>
                         )}
                         {errors.form && (

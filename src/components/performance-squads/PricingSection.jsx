@@ -1,87 +1,134 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Check } from 'lucide-react';
+import { ArrowRight, Check, Repeat, Wallet } from 'lucide-react';
 import { fadeUp, scrollTo, SectionHeading } from './shared';
-import { PAYMENT_OPTIONS, FINANCIAL_CONDITION } from './data';
-
-// What every squad place includes — DRAFT copy for Andy's review.
-const INCLUDED = [
-    'A place in your centre’s Performance Squad',
-    'Weekly training with your squad led by your Head Coach',
-    'Selection for Power League rounds, Sept 2026 – April 2027',
-    'Selection for fixtures against external opposition',
-    'Rajasthan Royals Academy First XI selection pathway',
-    'Ongoing performance feedback from your coaching staff',
-    'Royals Group global performance opportunities (High Performance Centre/Training Partners)',
-];
+import {
+    TRIAL_PRICE,
+    REGISTRATION_WEEKLY_PRICE,
+    REGISTRATION_UPFRONT_PRICE,
+    REGISTRATION_UPFRONT_NOTE,
+    TRIAL_INCLUDES,
+    SELECTED_INCLUDES,
+    FINANCIAL_CONDITION,
+} from './data';
 
 const PricingSection = () => (
     <section className="py-20 px-5 bg-white/[0.02]">
         <div className="max-w-5xl mx-auto">
             <SectionHeading
                 eyebrow="Fees"
-                title="What It Costs"
-                sub="Performance Squads run on three fees — a trial fee, match fees, and an ongoing annual fee."
+                title="Two Stages, Two Fees"
+                sub="You pay a trial fee to be assessed. If you're selected, you then pay a Registration Fee to take up your squad place — upfront at a discount, or weekly."
             />
-            <div className="grid sm:grid-cols-3 gap-5 mb-8">
-                {PAYMENT_OPTIONS.map((o, i) => (
-                    <motion.div
-                        key={o.key}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
-                        variants={fadeUp}
-                        custom={i * 0.1}
-                        className="bg-white/5 border border-white/10 rounded-2xl p-7 text-center flex flex-col"
-                    >
-                        <h3 className="text-sm font-black uppercase tracking-wider text-white/70 mb-3">
-                            {o.label}
-                        </h3>
-                        <p className={`font-black text-rr-light-pink mb-4 ${o.price.startsWith('$') ? 'text-4xl' : 'text-2xl'}`}>
-                            {o.price}
-                        </p>
-                        <p className="text-white/60 text-sm font-medium leading-relaxed">{o.desc}</p>
-                    </motion.div>
-                ))}
-            </div>
 
-            <motion.p
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={fadeUp}
-                custom={0}
-                className="text-center text-white/70 text-sm sm:text-[15px] font-bold max-w-2xl mx-auto mb-12"
-            >
-                <span className="text-rr-light-pink">{FINANCIAL_CONDITION}</span>
-            </motion.p>
-
+            {/* Stage 1 — trial */}
             <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={fadeUp}
-                custom={0}
-                className="bg-gradient-to-br from-rr-navy to-rr-dark border border-white/10 rounded-2xl p-7 sm:p-10 max-w-3xl mx-auto"
+                initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}
+                className="bg-white/5 border border-white/10 rounded-2xl p-7 sm:p-9 mb-5"
             >
-                <h3 className="text-2xl font-black uppercase mb-6 text-center">What’s Included</h3>
-                <ul className="space-y-3 mb-8">
-                    {INCLUDED.map((item) => (
+                <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
+                    <div className="flex items-center gap-4">
+                        <span className="text-3xl font-black text-rr-pink/30 leading-none">01</span>
+                        <div>
+                            <h3 className="text-xl font-black uppercase leading-tight">Trial Fee</h3>
+                            <p className="text-white/50 text-xs font-bold uppercase tracking-wider mt-0.5">
+                                Everyone who trials
+                            </p>
+                        </div>
+                    </div>
+                    <div className="text-right">
+                        <span className="text-4xl font-black text-rr-light-pink leading-none">${TRIAL_PRICE}</span>
+                        <span className="block text-white/50 text-xs font-bold uppercase tracking-wider mt-1">
+                            Per player, per session
+                        </span>
+                    </div>
+                </div>
+                <ul className="space-y-2.5">
+                    {TRIAL_INCLUDES.map((item) => (
                         <li key={item} className="flex items-start gap-3">
                             <Check className="w-5 h-5 text-rr-pink shrink-0 mt-0.5" />
                             <span className="text-white/75 text-[15px] font-medium leading-relaxed">{item}</span>
                         </li>
                     ))}
                 </ul>
-                <div className="text-center">
-                    <button
-                        onClick={() => scrollTo('register-pay')}
-                        className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
-                    >
-                        Register Your Interest <ArrowRight className="w-4 h-4" />
-                    </button>
-                </div>
             </motion.div>
+
+            {/* Stage 2 — registration, only if selected */}
+            <motion.div
+                initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0.1}
+                className="bg-gradient-to-br from-rr-navy to-rr-dark border border-rr-pink/30 rounded-2xl p-7 sm:p-9 mb-6"
+            >
+                <div className="flex items-center gap-4 mb-2">
+                    <span className="text-3xl font-black text-rr-pink/40 leading-none">02</span>
+                    <div>
+                        <h3 className="text-xl font-black uppercase leading-tight">Registration Fee</h3>
+                        <p className="text-rr-light-pink text-xs font-bold uppercase tracking-wider mt-0.5">
+                            Only if you're selected
+                        </p>
+                    </div>
+                </div>
+                <p className="text-white/60 text-sm font-medium leading-relaxed mb-6">
+                    Nothing further to pay unless you're offered a squad place. Choose whichever
+                    option suits you.
+                </p>
+
+                <div className="grid sm:grid-cols-2 gap-4 mb-7">
+                    <div className="bg-white/5 border border-white/15 rounded-xl p-5">
+                        <div className="flex items-center gap-2.5 mb-3">
+                            <Wallet className="w-5 h-5 text-rr-pink" />
+                            <span className="text-sm font-black uppercase tracking-wider">Pay Upfront</span>
+                        </div>
+                        <p className="text-3xl font-black text-rr-light-pink leading-none mb-2">
+                            {REGISTRATION_UPFRONT_PRICE ? `$${REGISTRATION_UPFRONT_PRICE}` : 'TBC'}
+                        </p>
+                        <p className="text-white/55 text-xs font-medium leading-relaxed">
+                            One payment for the season, at a discount on the weekly rate.
+                            {REGISTRATION_UPFRONT_PRICE ? '' : ` ${REGISTRATION_UPFRONT_NOTE}`}
+                        </p>
+                    </div>
+                    <div className="bg-white/5 border border-white/15 rounded-xl p-5">
+                        <div className="flex items-center gap-2.5 mb-3">
+                            <Repeat className="w-5 h-5 text-rr-pink" />
+                            <span className="text-sm font-black uppercase tracking-wider">Pay Weekly</span>
+                        </div>
+                        <p className="text-3xl font-black text-rr-light-pink leading-none mb-2">
+                            ${REGISTRATION_WEEKLY_PRICE}
+                            <span className="text-base font-black text-white/50"> / week</span>
+                        </p>
+                        <p className="text-white/55 text-xs font-medium leading-relaxed">
+                            Ongoing subscription, charged weekly across the season.
+                        </p>
+                    </div>
+                </div>
+
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-rr-pink mb-4">
+                    What your squad place includes
+                </p>
+                <ul className="space-y-2.5">
+                    {SELECTED_INCLUDES.map((item) => (
+                        <li key={item} className="flex items-start gap-3">
+                            <Check className="w-5 h-5 text-rr-pink shrink-0 mt-0.5" />
+                            <span className="text-white/75 text-[15px] font-medium leading-relaxed">{item}</span>
+                        </li>
+                    ))}
+                </ul>
+            </motion.div>
+
+            <motion.p
+                initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}
+                className="text-center text-white/70 text-sm sm:text-[15px] font-bold max-w-2xl mx-auto mb-10"
+            >
+                <span className="text-rr-light-pink">{FINANCIAL_CONDITION}</span>
+            </motion.p>
+
+            <div className="text-center">
+                <button
+                    onClick={() => scrollTo('register-pay')}
+                    className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
+                >
+                    Register For A Trial <ArrowRight className="w-4 h-4" />
+                </button>
+            </div>
         </div>
     </section>
 );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ClipboardCheck, Mail, Shield } from 'lucide-react';
+import { ClipboardCheck, Shield, Trophy } from 'lucide-react';
 import { fadeUp, scrollTo, SectionHeading } from './shared';
 
 const PathwaySection = () => (
@@ -8,30 +8,40 @@ const PathwaySection = () => (
         <div className="max-w-5xl mx-auto">
             <SectionHeading
                 eyebrow="The Pathway"
-                title="Two Ways In. One Standard."
-                sub="Every Performance Squad player earns their place — through an open trial at their nearest centre, or by direct invitation from our coaches."
+                title="Trial. Get Selected. Compete."
+                sub="Every Performance Squad player earns their place at an open trial. No invitations, no shortcuts — you show us what you've got."
             />
-            <div className="grid sm:grid-cols-2 gap-5 mb-14">
-                <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}
-                    className="bg-white/5 border border-white/10 rounded-2xl p-7">
-                    <ClipboardCheck className="w-8 h-8 text-rr-pink mb-4" />
-                    <h3 className="text-xl font-black uppercase mb-2">Open Trial</h3>
-                    <p className="text-white/65 text-sm font-medium leading-relaxed">
-                        Register below, pay the trial fee, and show us what you've got at your
-                        centre's trial session. Our coaches assess skill, athleticism, and attitude —
-                        and successful players are offered a squad place.
-                    </p>
-                </motion.div>
-                <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0.1}
-                    className="bg-white/5 border border-white/10 rounded-2xl p-7">
-                    <Mail className="w-8 h-8 text-rr-pink mb-4" />
-                    <h3 className="text-xl font-black uppercase mb-2">By Invitation</h3>
-                    <p className="text-white/65 text-sm font-medium leading-relaxed">
-                        Standout players from our programs, clubs, and scouting network are invited
-                        directly into a squad. If you've been invited, select "Invited" when you
-                        register and include your invite reference if you were given one.
-                    </p>
-                </motion.div>
+            <div className="grid sm:grid-cols-3 gap-5 mb-14">
+                {[
+                    {
+                        n: '01',
+                        icon: ClipboardCheck,
+                        title: 'Trial',
+                        body: "Register, pay your trial fee, and take part at your centre. Our coaches assess skill, athleticism and attitude across the session.",
+                    },
+                    {
+                        n: '02',
+                        icon: Shield,
+                        title: 'Selection',
+                        body: 'Successful players are offered a squad place once the trial period closes. You will be told where you stand either way.',
+                    },
+                    {
+                        n: '03',
+                        icon: Trophy,
+                        title: 'Compete',
+                        body: 'Pay your Registration Fee, train weekly with your squad, and go into selection for Power League rounds and external fixtures.',
+                    },
+                ].map((step, i) => (
+                    <motion.div key={step.n} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i * 0.1}
+                        className="bg-white/5 border border-white/10 rounded-2xl p-7">
+                        <div className="flex items-center gap-3 mb-4">
+                            <span className="text-3xl font-black text-rr-pink/30 leading-none">{step.n}</span>
+                            <step.icon className="w-7 h-7 text-rr-pink" />
+                        </div>
+                        <h3 className="text-xl font-black uppercase mb-2">{step.title}</h3>
+                        <p className="text-white/65 text-sm font-medium leading-relaxed">{step.body}</p>
+                    </motion.div>
+                ))}
             </div>
 
             {/* Squad structure */}

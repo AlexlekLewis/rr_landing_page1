@@ -66,7 +66,7 @@ const PaymentsSection = ({ registration }) => {
                 <SectionHeading
                     eyebrow="Already Registered?"
                     title="Make A Payment"
-                    sub="Match fees, annual fees, or a trial fee you didn't pay at registration. Everything else is handled when you register above."
+                    sub="Selected players paying their Registration Fee, or a trial fee you didn't pay at registration."
                 />
                 <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}
                     className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-9">
