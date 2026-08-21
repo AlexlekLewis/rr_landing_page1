@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Globe, ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
+import { GlobalBallIcon } from './CricketIcons';
 import { fadeUp, SectionHeading } from './shared';
 import { OPPORTUNITIES, CASE_STUDIES } from './data';
 
@@ -26,7 +27,7 @@ const OpportunitySection = () => (
                 className="bg-gradient-to-br from-rr-navy to-rr-dark border border-white/10 rounded-2xl p-7 sm:p-10 mb-6"
             >
                 <div className="flex items-center gap-3 mb-6">
-                    <Globe className="w-7 h-7 text-rr-pink shrink-0" />
+                    <GlobalBallIcon className="w-7 h-7 text-rr-pink shrink-0" />
                     <h3 className="text-xl sm:text-2xl font-black uppercase leading-tight">
                         What A Squad Place Opens Up
                     </h3>

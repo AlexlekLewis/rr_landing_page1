@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Target } from 'lucide-react';
+import { BatBallIcon } from './CricketIcons';
 import { fadeUp, SectionHeading } from './shared';
 import { AUDIENCE } from './data';
 
@@ -25,7 +25,7 @@ const AudienceSection = () => (
                         custom={(i % 2) * 0.1}
                         className="bg-white/5 border border-white/10 hover:border-rr-pink/50 rounded-2xl p-7 transition-colors"
                     >
-                        <Target className="w-7 h-7 text-rr-pink mb-4" />
+                        <BatBallIcon className="w-7 h-7 text-rr-pink mb-4" />
                         <h3 className="text-lg font-black uppercase mb-2 leading-tight">{a.title}</h3>
                         <p className="text-white/65 text-sm font-medium leading-relaxed">{a.body}</p>
                     </motion.div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ClipboardCheck, Shield, Trophy } from 'lucide-react';
+import { StumpsIcon, SelectionIcon, BatIcon, BallIcon } from './CricketIcons';
 import { fadeUp, scrollTo, SectionHeading } from './shared';
 
 const PathwaySection = () => (
@@ -15,19 +15,19 @@ const PathwaySection = () => (
                 {[
                     {
                         n: '01',
-                        icon: ClipboardCheck,
+                        icon: StumpsIcon,
                         title: 'Trial',
                         body: "Register, pay your trial fee, and take part at your centre. Our coaches assess skill, athleticism and attitude across the session.",
                     },
                     {
                         n: '02',
-                        icon: Shield,
+                        icon: SelectionIcon,
                         title: 'Selection',
                         body: 'Successful players are offered a squad place once the trial period closes. You will be told where you stand either way.',
                     },
                     {
                         n: '03',
-                        icon: Trophy,
+                        icon: BatIcon,
                         title: 'Compete',
                         body: 'Pay your Registration Fee, train weekly with your squad, and go into selection for Power League rounds and external fixtures.',
                     },
@@ -48,7 +48,7 @@ const PathwaySection = () => (
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}
                 className="bg-gradient-to-br from-rr-navy to-rr-dark border border-white/10 rounded-2xl p-7 sm:p-10">
                 <div className="flex items-start gap-4">
-                    <Shield className="w-9 h-9 text-rr-pink shrink-0 mt-1" />
+                    <BallIcon className="w-9 h-9 text-rr-pink shrink-0 mt-1" />
                     <div>
                         <h3 className="text-2xl font-black uppercase mb-3">How Each Squad Is Built</h3>
                         <p className="text-white/70 text-[15px] font-medium leading-relaxed mb-3">
