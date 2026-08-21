@@ -10,7 +10,6 @@ import CoachesSection from './CoachesSection';
 import PowerLeagueSection from './PowerLeagueSection';
 import PricingSection from './PricingSection';
 import RegistrationForm from './RegistrationForm';
-import PaymentsSection from './PaymentsSection';
 import FAQSection from './FAQSection';
 import StickyCTA from './StickyCTA';
 import PaymentModal from './PaymentModal';
@@ -40,7 +39,6 @@ const SECTIONS = [
     'power-league',
     'pricing',
     'register-pay',
-    'payments',
     'faq',
     'partners',
 ];
@@ -51,7 +49,6 @@ const PerformanceSquads = () => {
     // Trial card → pre-selects that centre in the registration form.
     const [selectedCentre, setSelectedCentre] = useState('');
     // Carries the submitted registration into Payments so the trial quantity matches.
-    const [registration, setRegistration] = useState(null);
     const [payModal, setPayModal] = useState(null);
 
     // ── Hidden page: noindex + title ──
@@ -101,12 +98,8 @@ const PerformanceSquads = () => {
                 <div id="register-pay" className="scroll-mt-28 lg:scroll-mt-32">
                     <RegistrationForm
                         selectedCentre={selectedCentre}
-                        onRegistered={setRegistration}
                         onRequestPayment={setPayModal}
                     />
-                </div>
-                <div id="payments" className="scroll-mt-28 lg:scroll-mt-32">
-                    <PaymentsSection registration={registration} />
                 </div>
                 <div id="faq" className="scroll-mt-28 lg:scroll-mt-32">
                     <FAQSection />

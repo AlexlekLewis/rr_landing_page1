@@ -1,29 +1,53 @@
 import React, { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CreditCard, Check, X } from 'lucide-react';
-import { TRIAL_PRICE, getTrialSessions, resolvePaymentLink, ACTIVE_CENTRES } from './data';
+import {
+    TRIAL_PRICE,
+    REGISTRATION_WEEKLY_PRICE,
+    REGISTRATION_UPFRONT_PRICE,
+    getTrialSessions,
+    resolvePaymentLink,
+    getSignupType,
+    ACTIVE_CENTRES,
+} from './data';
 
-// Fires immediately after a successful registration so payment happens in the
-// same sitting. Previously registration and payment were separate sections and
-// players were dropping out between the two.
+// Single confirmation + payment step for the whole flow. Registration writes
+// to Supabase, then this opens immediately with the right payment for whatever
+// the player chose in the "What are you signing up for?" dropdown — trial
+// (per session), weekly registration, or upfront registration.
 const PaymentModal = ({ open, registration, onClose }) => {
     const closeRef = useRef(null);
     const panelRef = useRef(null);
 
     const centre = registration?.centre;
+    const signup = getSignupType(registration?.signupType) || getSignupType('trial');
     const sessionIds = registration?.sessionIds || [];
     const sessions = sessionIds.length;
-    const isTrial = registration?.entryType === 'trial' && sessions > 0;
 
     const centreName = ACTIVE_CENTRES.find((c) => c.slug === centre)?.name || '';
     const sessionLabels = getTrialSessions(centre)
         .filter((s) => sessionIds.includes(s.id))
         .map((s) => s.label);
 
-    const total = TRIAL_PRICE * sessions;
-    const payLink = isTrial ? resolvePaymentLink(centre, 'trial', sessions) : null;
+    // Work out what's being charged, and the link, per signup type.
+    const isTrial = signup.key === 'trial';
+    let amountLabel = '';
+    let lineItems = [];
+    if (isTrial) {
+        amountLabel = `$${TRIAL_PRICE * sessions}`;
+        lineItems = sessionLabels;
+    } else if (signup.key === 'registration_weekly') {
+        amountLabel = `$${REGISTRATION_WEEKLY_PRICE} / week`;
+        lineItems = ['Weekly squad registration', 'Charged by subscription across the season'];
+    } else if (signup.key === 'registration_upfront') {
+        amountLabel = REGISTRATION_UPFRONT_PRICE ? `$${REGISTRATION_UPFRONT_PRICE}` : 'Discounted rate';
+        lineItems = ['Full-season squad registration', 'One discounted upfront payment'];
+    }
 
-    // Lock background scroll, move focus in, and wire Esc to close.
+    const payLink = resolvePaymentLink(centre, signup.linkKey, sessions || 1);
+    const needsPayment = isTrial ? sessions > 0 : true;
+
+    // Lock scroll, trap focus, wire Esc.
     useEffect(() => {
         if (!open) return;
         const prevOverflow = document.body.style.overflow;
@@ -34,7 +58,6 @@ const PaymentModal = ({ open, registration, onClose }) => {
         const onKey = (e) => {
             if (e.key === 'Escape') { onClose?.(); return; }
             if (e.key !== 'Tab') return;
-            // Keep focus inside the dialog.
             const nodes = panelRef.current?.querySelectorAll(
                 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
             );
@@ -51,6 +74,10 @@ const PaymentModal = ({ open, registration, onClose }) => {
             lastFocused?.focus?.();
         };
     }, [open, onClose]);
+
+    const ctaText = signup.key === 'registration_weekly'
+        ? 'Start Weekly Payment'
+        : `Pay ${amountLabel} Now`;
 
     return (
         <AnimatePresence>
@@ -88,22 +115,23 @@ const PaymentModal = ({ open, registration, onClose }) => {
                         </div>
 
                         <h3 id="ps-pay-title" className="text-2xl sm:text-3xl font-black uppercase leading-tight mb-2">
-                            {isTrial ? 'Registration Received' : "You're Registered"}
+                            {needsPayment ? 'Registration Received' : "You're Registered"}
                         </h3>
 
-                        {isTrial ? (
+                        {needsPayment ? (
                             <>
                                 <p className="text-white/65 text-[15px] font-medium leading-relaxed mb-6">
-                                    Last step — secure your trial spot by paying now. Your place isn't
-                                    confirmed until payment is received.
+                                    {isTrial
+                                        ? "Last step — secure your trial spot by paying now. Your place isn't confirmed until payment is received."
+                                        : 'Last step — complete your Registration Fee below to confirm your squad place.'}
                                 </p>
 
                                 <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-6">
                                     <p className="text-[10px] font-black uppercase tracking-[0.2em] text-rr-pink mb-3">
-                                        {centreName}
+                                        {centreName} · {signup.short}
                                     </p>
                                     <ul className="space-y-2 mb-4">
-                                        {sessionLabels.map((l) => (
+                                        {lineItems.map((l) => (
                                             <li key={l} className="flex items-start gap-2.5">
                                                 <Check className="w-4 h-4 text-rr-pink shrink-0 mt-0.5" />
                                                 <span className="text-white/80 text-sm font-medium">{l}</span>
@@ -112,9 +140,11 @@ const PaymentModal = ({ open, registration, onClose }) => {
                                     </ul>
                                     <div className="flex items-center justify-between pt-3 border-t border-white/10">
                                         <span className="text-sm font-bold uppercase tracking-wider text-white/70">
-                                            {sessions} session{sessions > 1 ? 's' : ''} × ${TRIAL_PRICE}
+                                            {isTrial
+                                                ? `${sessions} session${sessions > 1 ? 's' : ''} × $${TRIAL_PRICE}`
+                                                : 'Total'}
                                         </span>
-                                        <span className="text-2xl font-black text-rr-light-pink">${total}</span>
+                                        <span className="text-2xl font-black text-rr-light-pink">{amountLabel}</span>
                                     </div>
                                 </div>
 
@@ -126,7 +156,7 @@ const PaymentModal = ({ open, registration, onClose }) => {
                                         onClick={onClose}
                                         className="w-full inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
                                     >
-                                        <CreditCard className="w-4 h-4" /> Pay ${total} Now
+                                        <CreditCard className="w-4 h-4" /> {ctaText}
                                     </a>
                                 ) : (
                                     <button
@@ -151,7 +181,7 @@ const PaymentModal = ({ open, registration, onClose }) => {
                             <>
                                 <p className="text-white/65 text-[15px] font-medium leading-relaxed mb-6">
                                     Thanks — we've got your details. Our team will be in touch with your
-                                    squad information and next steps. No payment is needed right now.
+                                    next steps.
                                 </p>
                                 <button
                                     onClick={onClose}

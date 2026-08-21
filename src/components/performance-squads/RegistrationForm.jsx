@@ -6,9 +6,13 @@ import {
     fadeUp, scrollTo, SectionHeading, Label, FieldError, Chevron,
     inputClass, selectClass,
 } from './shared';
-import { ACTIVE_CENTRES, PLAYING_ROLES, TRIAL_PRICE, getTrialSessions, getMaxTrialSessions } from './data';
+import {
+    ACTIVE_CENTRES, PLAYING_ROLES, TRIAL_PRICE,
+    getTrialSessions, getMaxTrialSessions,
+    SIGNUP_TYPES, getSignupType,
+} from './data';
 
-const RegistrationForm = ({ selectedCentre, onRegistered, onRequestPayment }) => {
+const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
     const [form, setForm] = useState({
         player_name: '',
         player_age: '',
@@ -17,7 +21,7 @@ const RegistrationForm = ({ selectedCentre, onRegistered, onRequestPayment }) =>
         phone: '',
         club: '',
         preferred_centre: '',
-        entry_type: 'trial',
+        signup_type: 'trial',   // what they're signing up for (dropdown)
         playing_role: '',
         trial_session_dates: [],
     });
@@ -35,14 +39,16 @@ const RegistrationForm = ({ selectedCentre, onRegistered, onRequestPayment }) =>
 
     const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
+    const signup = getSignupType(form.signup_type);
+    const isTrial = form.signup_type === 'trial';
     const trialSessions = getTrialSessions(form.preferred_centre);
     const maxSessions = getMaxTrialSessions(form.preferred_centre);
-    const showSessionPicker = trialSessions.length > 0;
+    const showSessionPicker = isTrial && trialSessions.length > 0;
 
-    // Session ids belong to a centre, so clear them if the centre changes.
+    // Session ids belong to a centre and only apply to trials.
     useEffect(() => {
         setForm((f) => ({ ...f, trial_session_dates: [] }));
-    }, [form.preferred_centre]);
+    }, [form.preferred_centre, form.signup_type]);
 
     const toggleSession = (id) =>
         setForm((f) => {
@@ -62,6 +68,7 @@ const RegistrationForm = ({ selectedCentre, onRegistered, onRequestPayment }) =>
         if (!form.email.trim() || !/^\S+@\S+\.\S+$/.test(form.email)) next.email = 'A valid email is required';
         if (!form.phone.trim()) next.phone = 'Phone number is required';
         if (!form.preferred_centre) next.preferred_centre = 'Please choose a centre';
+        if (!form.signup_type) next.signup_type = 'Please choose what you\'re signing up for';
         if (!form.playing_role) next.playing_role = 'Please choose a playing role';
         if (showSessionPicker && form.trial_session_dates.length === 0) {
             next.trial_session_dates = 'Please choose at least one trial session';
@@ -87,7 +94,7 @@ const RegistrationForm = ({ selectedCentre, onRegistered, onRequestPayment }) =>
                     phone: form.phone.trim(),
                     club: form.club.trim() || null,
                     preferred_centre: form.preferred_centre,
-                    entry_type: 'trial',
+                    entry_type: form.signup_type,
                     playing_role: form.playing_role,
                     trial_sessions: showSessionPicker ? form.trial_session_dates.length : null,
                     trial_session_dates: showSessionPicker ? form.trial_session_dates : null,
@@ -98,15 +105,13 @@ const RegistrationForm = ({ selectedCentre, onRegistered, onRequestPayment }) =>
             if (error) throw error;
             const result = {
                 centre: form.preferred_centre,
-                entryType: 'trial',
+                signupType: form.signup_type,
                 sessionIds: showSessionPicker ? form.trial_session_dates : [],
             };
             setSubmitted(true);
             setSubmittedResult(result);
-            // Keep the standalone payment tool in sync...
-            onRegistered?.(result);
-            // ...and open the pay-now modal straight away, so registration and
-            // payment happen in one sitting rather than two separate steps.
+            // Open the payment step immediately — registration and payment
+            // are one flow, not two separate sections.
             onRequestPayment?.(result);
         } catch (err) {
             console.error('Performance Squads registration error:', err);
@@ -124,8 +129,8 @@ const RegistrationForm = ({ selectedCentre, onRegistered, onRequestPayment }) =>
             <div className="max-w-2xl mx-auto">
                 <SectionHeading
                     eyebrow="Register & Pay"
-                    title="Secure Your Trial Spot"
-                    sub="Register your details and pay your trial fee in one go. Trial spots aren't confirmed until payment is received."
+                    title="Register & Secure Your Spot"
+                    sub="Choose what you're signing up for, enter your details, and pay — all in one step. Your spot isn't confirmed until payment is received."
                 />
                 {submitted ? (
                     <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}
@@ -135,28 +140,18 @@ const RegistrationForm = ({ selectedCentre, onRegistered, onRequestPayment }) =>
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                             </svg>
                         </div>
-                        <h3 className="text-2xl font-black uppercase mb-3">You're Registered</h3>
-                        {submittedResult?.sessionIds?.length ? (
-                            <>
-                                <p className="text-white/70 text-[15px] font-medium leading-relaxed mb-6">
-                                    Thanks — we've got your details. Your trial spot isn't confirmed until
-                                    the fee is paid, so finish up below if you haven't already.
-                                </p>
-                                {/* Safety net: the modal may have been dismissed. */}
-                                <button
-                                    onClick={() => onRequestPayment?.(submittedResult)}
-                                    className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
-                                >
-                                    Pay ${TRIAL_PRICE * submittedResult.sessionIds.length} Now
-                                    <ArrowRight className="w-4 h-4" />
-                                </button>
-                            </>
-                        ) : (
-                            <p className="text-white/70 text-[15px] font-medium leading-relaxed">
-                                Thanks — we've got your details. Our team will be in touch with your squad
-                                information and next steps.
-                            </p>
-                        )}
+                        <h3 className="text-2xl font-black uppercase mb-3">Registration Received</h3>
+                        <p className="text-white/70 text-[15px] font-medium leading-relaxed mb-6">
+                            Thanks — we've got your details. Your place isn't confirmed until payment
+                            is received, so finish up below if you haven't already.
+                        </p>
+                        {/* Safety net: reopens the payment step if the modal was dismissed. */}
+                        <button
+                            onClick={() => onRequestPayment?.(submittedResult)}
+                            className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
+                        >
+                            Complete Payment <ArrowRight className="w-4 h-4" />
+                        </button>
                     </motion.div>
                 ) : (
                     <form onSubmit={handleSubmit} noValidate className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-9">
@@ -217,6 +212,21 @@ const RegistrationForm = ({ selectedCentre, onRegistered, onRequestPayment }) =>
                                 </div>
                                 <FieldError msg={errors.playing_role} />
                             </div>
+                        </div>
+                        <div className="mb-4">
+                            <Label required>What are you signing up for?</Label>
+                            <div className="relative">
+                                <select value={form.signup_type} onChange={set('signup_type')} className={sc('signup_type')}>
+                                    {SIGNUP_TYPES.map((t) => (
+                                        <option key={t.key} value={t.key}>{t.label}</option>
+                                    ))}
+                                </select>
+                                <Chevron />
+                            </div>
+                            {signup?.note && (
+                                <p className="text-white/45 text-xs font-medium mt-2">{signup.note}</p>
+                            )}
+                            <FieldError msg={errors.signup_type} />
                         </div>
                         {showSessionPicker && (
                             <div className="mb-4">

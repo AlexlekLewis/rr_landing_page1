@@ -77,6 +77,40 @@ export const PAYMENT_OPTIONS = [
     { key: 'registration_weekly', label: 'Registration Fee — Weekly', price: '$30 / week', desc: 'Ongoing weekly subscription for your squad place. Selected players only.' },
 ];
 
+// What a player can sign up for, driving the form dropdown and the modal.
+// 'trial' needs session selection; the registration options are flat links.
+export const SIGNUP_TYPES = [
+    {
+        key: 'trial',
+        label: 'Trial — get assessed',
+        short: 'Trial',
+        linkKey: 'trial',
+        needsSessions: true,
+        selectedOnly: false,
+        note: 'Book your trial session and pay the $30 per-session fee.',
+    },
+    {
+        key: 'registration_weekly',
+        label: 'Registration Fee — Weekly ($30/week)',
+        short: 'Registration Fee (Weekly)',
+        linkKey: 'registration_weekly',
+        needsSessions: false,
+        selectedOnly: true,
+        note: 'For selected players. $30 per week by subscription.',
+    },
+    {
+        key: 'registration_upfront',
+        label: 'Registration Fee — Upfront (discounted)',
+        short: 'Registration Fee (Upfront)',
+        linkKey: 'registration_upfront',
+        needsSessions: false,
+        selectedOnly: true,
+        note: 'For selected players. One discounted payment for the season.',
+    },
+];
+
+export const getSignupType = (key) => SIGNUP_TYPES.find((t) => t.key === key);
+
 // Trial pricing.
 export const TRIAL_PRICE = 30;
 
