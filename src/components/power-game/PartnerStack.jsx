@@ -18,7 +18,7 @@ const TIERS = [
         level: 'Performance Partners',
         size: 'medium',
         partners: [
-            { name: 'Power Cricket', logo: '/assets/powergame/power-cricket-logo.png' },
+            { name: 'Power Cricket', logo: '/assets/powergame/power-cricket-logo.png', dark: true },
             { name: 'Full Track AI', logo: '/assets/powergame/partners/full-track-ai.png' },
             { name: 'str8bat', logo: '/assets/powergame/partners/str8bat.png' },
             { name: 'Shah NeuroVision', logo: '/assets/powergame/partners/shah-neurovision.webp', dark: true },
