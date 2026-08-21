@@ -111,41 +111,6 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
             ]);
             if (error) throw error;
 
-            // Mirror every registration — paid or not, all signup types — into
-            // the Google Sheet via Zapier. sendBeacon survives the page nav to
-            // Stripe and sidesteps CORS. centre_slug lets the Zap route each row
-            // to the right per-location tab.
-            // TODO: paste the Performance Squads Zapier catch-hook URL here.
-            const PS_SHEET_WEBHOOK = ''; // e.g. 'https://hooks.zapier.com/hooks/catch/XXXXXXX/xxxxxx/'
-            try {
-                if (PS_SHEET_WEBHOOK) {
-                    const centreName = ACTIVE_CENTRES.find((c) => c.slug === form.preferred_centre)?.name || form.preferred_centre;
-                    const sessionLabels = getTrialSessions(form.preferred_centre)
-                        .filter((s) => form.trial_session_dates.includes(s.id))
-                        .map((s) => s.label);
-                    const webhookData = new URLSearchParams({
-                        player_name: form.player_name.trim(),
-                        player_age: form.player_age.trim(),
-                        parent_name: form.parent_name.trim() || '',
-                        email: form.email.trim(),
-                        phone: form.phone.trim(),
-                        club: form.club.trim() || '',
-                        centre: centreName,
-                        centre_slug: form.preferred_centre,
-                        signing_up_for: getSignupType(form.signup_type)?.short || form.signup_type,
-                        playing_role: form.playing_role,
-                        trial_sessions: showSessionPicker ? String(form.trial_session_dates.length) : '',
-                        trial_session_dates: sessionLabels.join(' | '),
-                        submitted_at: new Date().toISOString(),
-                    });
-                    const blob = new Blob([webhookData.toString()], { type: 'application/x-www-form-urlencoded' });
-                    navigator.sendBeacon(PS_SHEET_WEBHOOK, blob);
-                }
-            } catch (beaconErr) {
-                // Never let a sheet-sync hiccup block the registration itself.
-                console.error('Performance Squads webhook error:', beaconErr);
-            }
-
             const result = {
                 centre: form.preferred_centre,
                 signupType: form.signup_type,
