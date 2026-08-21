@@ -18,12 +18,12 @@ const TIERS = [
         level: 'Performance Partners',
         size: 'medium',
         partners: [
-            { name: 'Power Cricket', logo: '/assets/powergame/power-cricket-logo.png', dark: true },
+            { name: 'Power Cricket', logo: '/assets/powergame/power-cricket-logo.png', dark: true, big: true },
             { name: 'Full Track AI', logo: '/assets/powergame/partners/full-track-ai.png' },
             { name: 'str8bat', logo: '/assets/powergame/partners/str8bat.png' },
             { name: 'Shah NeuroVision', logo: '/assets/powergame/partners/shah-neurovision.webp', dark: true },
             { name: 'Bowlstrong', logo: '/assets/powergame/partners/bowlstrong.png' },
-            { name: 'Nik Badkundri', logo: '/assets/powergame/partners/nik-badkundri.png', dark: true },
+            { name: 'Nik Badkundri', logo: '/assets/powergame/partners/nik-badkundri.png', dark: true, big: true },
             { name: 'Frog Box', logo: '/assets/powergame/partners/frog-box.png', dark: true },
         ],
     },
@@ -36,13 +36,13 @@ const sizeClasses = {
 
 const PartnerLogo = ({ partner, size }) => (
     <div
-        className={`w-full flex items-center justify-center rounded-2xl border ${sizeClasses[size]} py-4 transition-all duration-300 hover:border-rr-pink/40 hover:shadow-[0_8px_30px_rgba(225,31,143,0.10)] ${partner.dark ? 'bg-rr-dark border-white/10' : 'bg-white border-slate-200'}`}
+        className={`w-full flex items-center justify-center rounded-2xl border ${sizeClasses[size]} ${partner.big ? 'py-1.5' : 'py-4'} overflow-hidden transition-all duration-300 hover:border-rr-pink/40 hover:shadow-[0_8px_30px_rgba(225,31,143,0.10)] ${partner.dark ? 'bg-rr-dark border-white/10' : 'bg-white border-slate-200'}`}
     >
         {partner.logo ? (
             <img
                 src={partner.logo}
                 alt={partner.name}
-                className="max-h-full w-auto max-w-full object-contain"
+                className={`w-auto object-contain mx-auto ${partner.big ? 'max-h-[140%] max-w-[92%]' : 'max-h-full max-w-full'}`}
             />
         ) : (
             <div className="text-center">
