@@ -69,7 +69,6 @@ const PC_NAV = [
 //   Holiday early bird — 30 Aug 2026
 //   Masterclass        — 13 Sep 2026 (drop the row after the second session)
 const PROGRAMS_DROPDOWN = [
-const PROGRAMS_DROPDOWN = [
     { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', badge: 'Early Bird $299 — Ends 30 Aug', badgeColor: 'bg-rr-pink' },
     { label: 'Power Game Masterclass', route: '/power-game-masterclass', badge: '6 & 13 Sept · Book Now', badgeColor: 'bg-green-500' },
     { label: 'High Performance Camp · India', route: '/tours', badge: 'Applications Closed', badgeColor: 'bg-red-500' },
