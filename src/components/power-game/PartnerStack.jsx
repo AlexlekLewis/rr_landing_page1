@@ -49,7 +49,7 @@ const PartnerLogo = ({ partner, size }) => (
             <img
                 src={partner.logo}
                 alt={partner.name}
-                className={`w-auto object-contain mx-auto ${partner.big ? 'max-h-[140%] max-w-[92%]' : 'max-h-full max-w-full'}`}
+                className={`block mx-auto object-contain ${partner.big ? 'max-h-full max-w-[85%]' : 'max-h-full max-w-full'}`}
             />
         ) : (
             <div className="text-center">
