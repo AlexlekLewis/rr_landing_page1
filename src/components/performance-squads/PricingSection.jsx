@@ -1,10 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Check, Repeat, Wallet } from 'lucide-react';
+import { ArrowRight, Check, Wallet } from 'lucide-react';
 import { fadeUp, scrollTo, SectionHeading } from './shared';
 import {
     TRIAL_PRICE,
-    REGISTRATION_WEEKLY_PRICE,
     REGISTRATION_UPFRONT_PRICE,
     REGISTRATION_UPFRONT_NOTE,
     TRIAL_INCLUDES,
@@ -18,7 +17,7 @@ const PricingSection = () => (
             <SectionHeading
                 eyebrow="Fees"
                 title="Two Stages, Two Fees"
-                sub="You pay a trial fee to be assessed. If you're selected, you then pay a Registration Fee to take up your squad place — upfront at a discount, or weekly."
+                sub="You pay a trial fee to be assessed. If you're selected, you then pay a one-off Registration Fee to take up your squad place."
             />
 
             {/* Stage 1 — trial */}
@@ -68,35 +67,21 @@ const PricingSection = () => (
                     </div>
                 </div>
                 <p className="text-white/60 text-sm font-medium leading-relaxed mb-6">
-                    Nothing further to pay unless you're offered a squad place. Choose whichever
-                    option suits you.
+                    Nothing further to pay unless you're offered a squad place.
                 </p>
 
-                <div className="grid sm:grid-cols-2 gap-4 mb-7">
+                <div className="mb-7">
                     <div className="bg-white/5 border border-white/15 rounded-xl p-5">
                         <div className="flex items-center gap-2.5 mb-3">
                             <Wallet className="w-5 h-5 text-rr-pink" />
-                            <span className="text-sm font-black uppercase tracking-wider">Pay Upfront</span>
+                            <span className="text-sm font-black uppercase tracking-wider">One-Off Payment</span>
                         </div>
                         <p className="text-3xl font-black text-rr-light-pink leading-none mb-2">
                             {REGISTRATION_UPFRONT_PRICE ? `$${REGISTRATION_UPFRONT_PRICE}` : 'TBC'}
                         </p>
                         <p className="text-white/55 text-xs font-medium leading-relaxed">
-                            One payment for the season, at a discount on the weekly rate.
+                            One payment for the season, taken up if you're offered a squad place.
                             {REGISTRATION_UPFRONT_PRICE ? '' : ` ${REGISTRATION_UPFRONT_NOTE}`}
-                        </p>
-                    </div>
-                    <div className="bg-white/5 border border-white/15 rounded-xl p-5">
-                        <div className="flex items-center gap-2.5 mb-3">
-                            <Repeat className="w-5 h-5 text-rr-pink" />
-                            <span className="text-sm font-black uppercase tracking-wider">Pay Weekly</span>
-                        </div>
-                        <p className="text-3xl font-black text-rr-light-pink leading-none mb-2">
-                            ${REGISTRATION_WEEKLY_PRICE}
-                            <span className="text-base font-black text-white/50"> / week</span>
-                        </p>
-                        <p className="text-white/55 text-xs font-medium leading-relaxed">
-                            Ongoing subscription, charged weekly across the season.
                         </p>
                     </div>
                 </div>

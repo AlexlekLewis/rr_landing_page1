@@ -90,15 +90,6 @@ export const SIGNUP_TYPES = [
         note: 'Book your trial session and pay the $30 per-session fee.',
     },
     {
-        key: 'registration_weekly',
-        label: 'Registration Fee — Weekly ($30/week)',
-        short: 'Registration Fee (Weekly)',
-        linkKey: 'registration_weekly',
-        needsSessions: false,
-        selectedOnly: true,
-        note: 'For selected players. $30 per week by subscription.',
-    },
-    {
         key: 'registration_upfront',
         label: 'Registration Fee — Upfront (discounted)',
         short: 'Registration Fee (Upfront)',
@@ -236,7 +227,7 @@ export const FAQS = [
     },
     {
         q: 'What does it cost?',
-        a: 'Two stages. A $30 trial fee per player per session to be assessed. If you are selected, a Registration Fee for your squad place — payable upfront at a discount, or $30 per week by subscription. Nothing beyond the trial fee is owed unless you are offered a place.',
+        a: 'Two stages. A $30 trial fee per player per session to be assessed. If you are selected, a one-off Registration Fee for your squad place. Nothing beyond the trial fee is owed unless you are offered a place.',
     },
     {
         q: 'What do I get if I am selected?',
