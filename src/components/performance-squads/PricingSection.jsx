@@ -16,8 +16,8 @@ const PricingSection = () => (
         <div className="max-w-5xl mx-auto">
             <SectionHeading
                 eyebrow="Fees"
-                title="Two Stages, Two Fees"
-                sub="You pay a trial fee to be assessed. If you're selected, you then pay a one-off Registration Fee to take up your squad place."
+                title="Two Stages of the Process"
+                sub="You pay a trial fee to be assessed. If you're selected, you then pay a Registration Fee to take up your squad place."
             />
 
             {/* Stage 1 — trial */}
