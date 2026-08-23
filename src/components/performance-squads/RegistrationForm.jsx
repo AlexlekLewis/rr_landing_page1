@@ -9,7 +9,6 @@ import {
 import {
     ACTIVE_CENTRES, PLAYING_ROLES, TRIAL_PRICE,
     getTrialSessions, getMaxTrialSessions,
-    SIGNUP_TYPES, getSignupType,
 } from './data';
 
 const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
@@ -21,7 +20,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
         phone: '',
         club: '',
         preferred_centre: '',
-        signup_type: 'trial',   // what they're signing up for (dropdown)
+        signup_type: 'trial',   // form is trial-only; kept for the payment modal
         playing_role: '',
         trial_session_dates: [],
     });
@@ -39,8 +38,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
 
     const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
-    const signup = getSignupType(form.signup_type);
-    const isTrial = form.signup_type === 'trial';
+    const isTrial = true; // trial-only registration
     const trialSessions = getTrialSessions(form.preferred_centre);
     const maxSessions = getMaxTrialSessions(form.preferred_centre);
     const showSessionPicker = isTrial && trialSessions.length > 0;
@@ -48,7 +46,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
     // Session ids belong to a centre and only apply to trials.
     useEffect(() => {
         setForm((f) => ({ ...f, trial_session_dates: [] }));
-    }, [form.preferred_centre, form.signup_type]);
+    }, [form.preferred_centre]);
 
     const toggleSession = (id) =>
         setForm((f) => {
@@ -75,7 +73,6 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
         if (!form.email.trim() || !/^\S+@\S+\.\S+$/.test(form.email)) next.email = 'A valid email is required';
         if (!form.phone.trim()) next.phone = 'Phone number is required';
         if (!form.preferred_centre) next.preferred_centre = 'Please choose a centre';
-        if (!form.signup_type) next.signup_type = 'Please choose what you\'re signing up for';
         if (!form.playing_role) next.playing_role = 'Please choose a playing role';
         if (showSessionPicker && form.trial_session_dates.length === 0) {
             next.trial_session_dates = 'Please choose at least one trial session';
@@ -138,7 +135,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                 <SectionHeading
                     eyebrow="Register & Pay"
                     title="Register & Secure Your Spot"
-                    sub="Choose what you're signing up for, enter your details, and pay — all in one step. Your spot isn't confirmed until payment is received."
+                    sub="Enter your details, choose your trial session(s), and pay — all in one step. Your trial spot isn't confirmed until payment is received."
                 />
                 {submitted ? (
                     <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}
@@ -220,21 +217,6 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                                 </div>
                                 <FieldError msg={errors.playing_role} />
                             </div>
-                        </div>
-                        <div className="mb-4">
-                            <Label required>What are you signing up for?</Label>
-                            <div className="relative">
-                                <select value={form.signup_type} onChange={set('signup_type')} className={sc('signup_type')}>
-                                    {SIGNUP_TYPES.map((t) => (
-                                        <option key={t.key} value={t.key}>{t.label}</option>
-                                    ))}
-                                </select>
-                                <Chevron />
-                            </div>
-                            {signup?.note && (
-                                <p className="text-white/45 text-xs font-medium mt-2">{signup.note}</p>
-                            )}
-                            <FieldError msg={errors.signup_type} />
                         </div>
                         {showSessionPicker && (
                             <div className="mb-4">
