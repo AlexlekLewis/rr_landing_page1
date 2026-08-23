@@ -191,7 +191,16 @@ export const SELECTED_INCLUDES = [
 export const FINANCIAL_CONDITION =
     'All players must remain financial to be eligible for selection.';
 
-export const PLAYING_ROLES = ['Batter', 'Bowler', 'All-Rounder', 'Wicket-Keeper', 'Wicket-Keeper Batter'];
+export const PLAYING_ROLES = [
+    'Batter',
+    'Pace Bowler',
+    'Spin Bowler',
+    'Batting All-Rounder',
+    'Pace-Bowling All-Rounder',
+    'Spin-Bowling All-Rounder',
+    'Wicket-Keeper',
+    'Wicket-Keeper Batter',
+];
 
 // Head Coaches — one per live centre.
 export const SQUAD_COACHES = [
