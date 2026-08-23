@@ -42,6 +42,9 @@ const PricingSection = () => (
                         </span>
                     </div>
                 </div>
+                <p className="text-white/65 text-[15px] font-medium leading-relaxed mb-4">
+                    Register for 1 or 2 trial sessions — $30 for each session you attend.
+                </p>
                 <ul className="space-y-2.5">
                     {TRIAL_INCLUDES.map((item) => (
                         <li key={item} className="flex items-start gap-3">
