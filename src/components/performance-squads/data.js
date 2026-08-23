@@ -238,10 +238,6 @@ export const FAQS = [
         a: 'Yes. The Rajasthan Royals Academy selection team has put forward four players for consideration as training partners with the Paarl Royals in the SA20, and Royals Academies in the USA have sent players as training partners of the Barbados Royals. Selection is competitive and never guaranteed, but the routes exist and are being used.',
     },
     {
-        q: 'Do I need to be at a club to trial?',
-        a: 'No. Club cricketers and non-club players are both welcome. If you are at a club, add it when you register — it gives our coaches useful context.',
-    },
-    {
         q: 'When do Performance Squad games start?',
         a: 'Performance Squad games commence in late September for certain age groups, with the remainder following through the season.',
     },
