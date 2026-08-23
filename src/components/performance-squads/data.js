@@ -227,7 +227,7 @@ export const FAQS = [
     },
     {
         q: 'What does it cost?',
-        a: 'Two stages. A $30 trial fee per player per session to be assessed. If you are selected, a one-off Registration Fee for your squad place. Nothing beyond the trial fee is owed unless you are offered a place.',
+        a: 'Two stages. A $30 trial fee per player per session to be assessed. If you are selected, a Registration Fee for your squad place is required. Nothing beyond the trial fee is paid unless you are offered a place.',
     },
     {
         q: 'What do I get if I am selected?',
