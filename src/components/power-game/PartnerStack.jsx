@@ -25,12 +25,12 @@ const TIERS = [
         level: 'Performance Partners',
         size: 'medium',
         partners: [
-            { name: 'Power Cricket', logo: '/assets/powergame/power-cricket-logo.png', dark: true, big: true },
+            { name: 'Power Cricket', logo: '/assets/powergame/power-cricket-logo.png', dark: true, big: true, offset: { x: 10, y: 0 } },
             { name: 'Full Track AI', logo: '/assets/powergame/partners/full-track-ai.png' },
             { name: 'str8bat', logo: '/assets/powergame/partners/str8bat.png' },
             { name: 'Shah NeuroVision', logo: '/assets/powergame/partners/shah-neurovision.webp', dark: true },
             { name: 'Bowlstrong', logo: '/assets/powergame/partners/bowlstrong.png' },
-            { name: 'Nik Badkundri', logo: '/assets/powergame/partners/nik-badkundri.png', dark: true, big: true },
+            { name: 'Nik Badkundri', logo: '/assets/powergame/partners/nik-badkundri.png', dark: true, big: true, offset: { x: 0, y: -6 } },
             { name: 'Frog Box', logo: '/assets/powergame/partners/frog-box.png', dark: true },
         ],
     },
@@ -50,6 +50,7 @@ const PartnerLogo = ({ partner, size }) => (
                 src={partner.logo}
                 alt={partner.name}
                 className="max-h-full max-w-full w-auto object-contain"
+                style={partner.offset ? { transform: `translate(${partner.offset.x || 0}px, ${partner.offset.y || 0}px)` } : undefined}
             />
         ) : (
             <div className="text-center">
