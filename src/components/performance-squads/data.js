@@ -215,7 +215,7 @@ export const SQUAD_COACHES = [
 export const FAQS = [
     {
         q: 'Who are the Performance Squads for?',
-        a: 'Players aged 10–19 in the current pathway who want to build a T20 career, players over 19 still chasing outstanding opportunities in T20, players rebuilding after injury or time away, and players whose skillset suits short-format cricket. Squads are built around playing standard rather than one age bracket.',
+        a: 'Players aged 10 to U21 as of the 2026/27 cricket season, in the current pathway who want to build a T20 career, players still chasing outstanding opportunities in T20 cricket, players rebuilding after injury or time away, and players whose skillset suits short-format cricket. Squads are built around playing standard rather than one age bracket.',
     },
     {
         q: 'How do I get into a squad?',
