@@ -195,9 +195,10 @@ export const PLAYING_ROLES = [
     'Batter',
     'Pace Bowler',
     'Spin Bowler',
-    'Batting All-Rounder',
-    'Pace-Bowling All-Rounder',
-    'Spin-Bowling All-Rounder',
+    'Batting All-Rounder (Pace)',
+    'Batting All-Rounder (Spin)',
+    'Bowling All-Rounder (Pace)',
+    'Bowling All-Rounder (Spin)',
     'Wicket-Keeper',
     'Wicket-Keeper Batter',
 ];
