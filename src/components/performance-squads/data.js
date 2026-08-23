@@ -242,10 +242,6 @@ export const FAQS = [
         a: 'Performance Squad games commence in late September for certain age groups, with the remainder following through the season.',
     },
     {
-        q: 'What is the Power League?',
-        a: 'The Power League is the Academy\u2019s own match series — the competitive stage where Performance Squad teams from each centre face off, running from September 2026 through April 2027. Full format, fixtures and standings will be published here.',
-    },
-    {
         q: 'Which centres are running squads?',
         a: 'North Melbourne (Mickleham Indoor Sports Centre) and South-East Melbourne (Elite Cricket Centre, Cranbourne North) are live now. West and East Melbourne arrive in 2027.',
     },
