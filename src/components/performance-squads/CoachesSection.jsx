@@ -8,8 +8,8 @@ const CoachesSection = () => (
         <div className="max-w-5xl mx-auto">
             <SectionHeading
                 eyebrow="Your Coaches"
-                title="Led By The Royals Way"
-                sub="Each Performance Squad is led by a Royals accredited Head Coach who sets the standard, picks the teams, and drives the squad through the season."
+                title="Led By The Royals Ecosystem Coaches"
+                sub="Each Performance Squad is led by highly experienced CA and Royals accredited Head Coaches who set the standard, pick the teams, and drive the squad through the season."
             />
             <div className="grid sm:grid-cols-2 gap-5">
                 {SQUAD_COACHES.map((coach, i) => (
