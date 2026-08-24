@@ -7,7 +7,7 @@ const StickyCTA = () => {
     useEffect(() => {
         const handleScroll = () => {
             const hero = document.getElementById('hero');
-            const form = document.getElementById('registration-form');
+            const form = document.getElementById('register-pay');
             if (!hero || !form) return;
 
             const heroHeight = hero.offsetHeight;
@@ -25,7 +25,7 @@ const StickyCTA = () => {
     }, []);
 
     const scrollToForm = () => {
-        document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('register-pay')?.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (
@@ -43,7 +43,7 @@ const StickyCTA = () => {
                         className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.45)] flex items-center justify-center gap-3 text-sm"
                     >
                         <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                        Register — Performance Squads
+                        Register & Pay — Trial Spot
                     </button>
                 </motion.div>
             )}

@@ -64,9 +64,9 @@ const PaymentsSection = ({ registration }) => {
         <section className="py-20 px-5 bg-white/[0.02]">
             <div className="max-w-2xl mx-auto">
                 <SectionHeading
-                    eyebrow="Step 2"
-                    title="Payments"
-                    sub="Choose your centre and what you're paying for — trial fees, match fees, or your annual fee."
+                    eyebrow="Already Registered?"
+                    title="Make A Payment"
+                    sub="Selected players paying their Registration Fee, or a trial fee you didn't pay at registration."
                 />
                 <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}
                     className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-9">

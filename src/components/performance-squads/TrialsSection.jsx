@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, MapPin, Trophy, CalendarDays, Star } from 'lucide-react';
+import { ArrowRight, MapPin, CalendarDays, Star } from 'lucide-react';
+import { BatIcon } from './CricketIcons';
 import { fadeUp, SectionHeading } from './shared';
 import { CENTRES, ACTIVE_CENTRES } from './data';
 
@@ -9,7 +10,7 @@ const TrialsSection = ({ onChooseCentre }) => (
         <div className="max-w-5xl mx-auto">
             <SectionHeading
                 eyebrow="Our Centres"
-                title="Trial At Your Centre"
+                title="Choose Your Centre to Trial"
                 sub="Two Performance Squads are live now, with two more centres arriving in 2027."
             />
             <div className="grid sm:grid-cols-2 gap-5 mb-6">
@@ -20,7 +21,7 @@ const TrialsSection = ({ onChooseCentre }) => (
                             <span className={`text-[10px] font-black uppercase tracking-[0.2em] rounded-full px-3 py-1.5 ${c.trialSessions.length ? 'text-rr-pink bg-rr-pink/10' : 'text-white/50 bg-white/5'}`}>
                                 {c.trialSessions.length ? 'Now Trialling' : 'Trials Coming Soon'}
                             </span>
-                            <Trophy className="w-5 h-5 text-white/30" />
+                            <BatIcon className="w-5 h-5 text-white/30" />
                         </div>
                         <h3 className="text-2xl font-black uppercase mb-4">{c.name}</h3>
                         <div className="space-y-3 mb-6">

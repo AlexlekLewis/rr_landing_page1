@@ -112,7 +112,11 @@ const classifyByDescription = (description = '') => {
     d.includes('deposit + monthly')
   )
     return { program: 'elite', program_variant: null, program_label: description };
-  if (d.includes('holiday program') || d.includes('holiday camp') || d.includes('holiday clinic'))
+  // Any holiday-named product (…Holiday Program / Camp / Clinic / School Holidays)
+  // routes here so the payment back-fills onto the form-submitted registration row.
+  // Keep this broad — the client_reference_id UUID is what actually links the
+  // payment to exactly one row, so a false positive here just no-ops.
+  if (d.includes('holiday'))
     return { program: 'holiday', program_variant: null, program_label: description };
   if (d.includes('girls kickstart') || d.includes('female cricket') || d.includes('girls program'))
     return { program: 'female_kickstart', program_variant: null, program_label: description };
@@ -389,6 +393,7 @@ export default async function handler(req, res) {
       const HOLIDAY_TABLES = [
         'junior_royals_july_holidays_registrations',
         'holiday_clinic_registrations',
+        'junior_royals_sept_holidays_registrations',
       ];
       const isUuid = (v) => typeof v === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
       if (isUuid(refId)) {
@@ -403,9 +408,13 @@ export default async function handler(req, res) {
           receipt_url:              charge?.receipt_url || null,
         };
         for (const table of HOLIDAY_TABLES) {
+          // The Sept table also carries a boolean `paid` flag (July/clinic don't).
+          const tablePayload = table === 'junior_royals_sept_holidays_registrations'
+            ? { ...updatePayload, paid: true }
+            : updatePayload;
           const { data, error } = await supabase
             .from(table)
-            .update(updatePayload)
+            .update(tablePayload)
             .eq('id', refId)
             .select('id');
           if (error) {

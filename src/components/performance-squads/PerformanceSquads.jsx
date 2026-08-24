@@ -2,15 +2,17 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import HeroSection from './HeroSection';
+import AudienceSection from './AudienceSection';
+import OpportunitySection from './OpportunitySection';
 import PathwaySection from './PathwaySection';
 import TrialsSection from './TrialsSection';
 import CoachesSection from './CoachesSection';
 import PowerLeagueSection from './PowerLeagueSection';
 import PricingSection from './PricingSection';
 import RegistrationForm from './RegistrationForm';
-import PaymentsSection from './PaymentsSection';
 import FAQSection from './FAQSection';
 import StickyCTA from './StickyCTA';
+import PaymentModal from './PaymentModal';
 import PartnerStack from '../power-game/PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { scrollTo } from './shared';
@@ -29,13 +31,14 @@ import { scrollTo } from './shared';
 
 const SECTIONS = [
     'hero',
+    'who-its-for',
+    'opportunity',
     'pathway',
     'trials',
     'coaches',
     'power-league',
     'pricing',
-    'registration-form',
-    'payments',
+    'register-pay',
     'faq',
     'partners',
 ];
@@ -46,7 +49,7 @@ const PerformanceSquads = () => {
     // Trial card → pre-selects that centre in the registration form.
     const [selectedCentre, setSelectedCentre] = useState('');
     // Carries the submitted registration into Payments so the trial quantity matches.
-    const [registration, setRegistration] = useState(null);
+    const [payModal, setPayModal] = useState(null);
 
     // ── Hidden page: noindex + title ──
     useEffect(() => {
@@ -61,7 +64,7 @@ const PerformanceSquads = () => {
 
     const handleChooseCentre = (slug) => {
         setSelectedCentre(slug);
-        scrollTo('registration-form');
+        scrollTo('register-pay');
     };
 
     return (
@@ -70,6 +73,12 @@ const PerformanceSquads = () => {
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero">
                     <HeroSection />
+                </div>
+                <div id="who-its-for" className="scroll-mt-28 lg:scroll-mt-32">
+                    <AudienceSection />
+                </div>
+                <div id="opportunity" className="scroll-mt-28 lg:scroll-mt-32">
+                    <OpportunitySection />
                 </div>
                 <div id="pathway" className="scroll-mt-28 lg:scroll-mt-32">
                     <PathwaySection />
@@ -86,11 +95,11 @@ const PerformanceSquads = () => {
                 <div id="pricing" className="scroll-mt-28 lg:scroll-mt-32">
                     <PricingSection />
                 </div>
-                <div id="registration-form" className="scroll-mt-28 lg:scroll-mt-32">
-                    <RegistrationForm selectedCentre={selectedCentre} onRegistered={setRegistration} />
-                </div>
-                <div id="payments" className="scroll-mt-28 lg:scroll-mt-32">
-                    <PaymentsSection registration={registration} />
+                <div id="register-pay" className="scroll-mt-28 lg:scroll-mt-32">
+                    <RegistrationForm
+                        selectedCentre={selectedCentre}
+                        onRequestPayment={setPayModal}
+                    />
                 </div>
                 <div id="faq" className="scroll-mt-28 lg:scroll-mt-32">
                     <FAQSection />
@@ -102,6 +111,7 @@ const PerformanceSquads = () => {
             </main>
             <Footer />
             <StickyCTA />
+            <PaymentModal open={!!payModal} registration={payModal} onClose={() => setPayModal(null)} />
         </div>
     );
 };

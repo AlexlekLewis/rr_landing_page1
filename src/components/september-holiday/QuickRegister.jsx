@@ -29,26 +29,27 @@ const QuickRegister = () => {
             return;
         }
         setSaving(true);
+        // Client-generated id, saved via the SECURITY DEFINER RPC (no RLS read-back).
+        const regId = crypto.randomUUID();
         try {
-            const { data: inserted, error: insErr } = await supabase
-                .from('junior_royals_sept_holidays_registrations')
-                .insert([{
-                    parent_name: form.parent_name.trim(),
-                    parent_email: form.parent_email.trim().toLowerCase(),
-                    parent_phone: form.parent_phone.trim(),
-                    location: form.location || null,
-                    status: 'lead',
-                    ...getUTM(),
-                }])
-                .select('id')
-                .single();
+            const { error: insErr } = await supabase.rpc('save_sept_registration', { p: {
+                id: regId,
+                parent_name: form.parent_name.trim(),
+                parent_email: form.parent_email.trim().toLowerCase(),
+                parent_phone: form.parent_phone.trim(),
+                location: form.location || null,
+                status: 'lead',
+                ...getUTM(),
+            } });
             if (insErr) throw insErr;
-            // Hand details to the full form
-            sessionStorage.setItem('jr_sept_lead', JSON.stringify({ id: inserted.id, ...form }));
+            // Hand the row id + details to the full form so it continues this row.
+            sessionStorage.setItem('jr_sept_lead', JSON.stringify({ id: regId, ...form }));
             document.getElementById('secure-form')?.scrollIntoView({ behavior: 'smooth' });
         } catch (e) {
-            // Even on failure, still take them to the form
-            sessionStorage.setItem('jr_sept_lead', JSON.stringify({ id: null, ...form }));
+            // Even on failure, still take them to the form. We keep the id: the full
+            // form's RPC upserts, so it will insert against this id if the lead
+            // didn't persist, or update it if it did.
+            sessionStorage.setItem('jr_sept_lead', JSON.stringify({ id: regId, ...form }));
             document.getElementById('secure-form')?.scrollIntoView({ behavior: 'smooth' });
         } finally {
             setSaving(false);

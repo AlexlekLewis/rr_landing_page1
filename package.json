@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "build:pdf": "node generate_lp2_pdf.js",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:api": "vitest run --config vitest.api.config.mjs"
   },
   "dependencies": {
     "@posthog/react": "^1.8.2",
@@ -45,7 +46,7 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
     "jsdom": "^26.1.0",
-    "playwright": "^1.58.2",
+    "playwright": "^1.62.1",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18",
     "vite": "^7.2.4",

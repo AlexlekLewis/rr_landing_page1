@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 
@@ -51,8 +51,19 @@ const SeptRegistrationForm = () => {
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [showSizeChart, setShowSizeChart] = useState(false);
-    const [leadId, setLeadId] = useState(null);
-    const [partialSaved, setPartialSaved] = useState(false);
+
+    // Stable client-generated row id. Reuse the id from a hero QuickRegister lead
+    // if one is present, so we continue that row instead of creating a duplicate.
+    // All writes go through the save_sept_registration RPC (SECURITY DEFINER) —
+    // never a direct .insert().select(), whose RETURNING read-back anon RLS blocks.
+    const [regId] = useState(() => {
+        try {
+            const stored = sessionStorage.getItem('jr_sept_lead');
+            if (stored) { const l = JSON.parse(stored); if (l?.id) return l.id; }
+        } catch (e) { /* ignore */ }
+        return crypto.randomUUID();
+    });
+    const partialSavedRef = useRef(false);
 
     // Prefill from hero quick-register
     useEffect(() => {
@@ -67,15 +78,16 @@ const SeptRegistrationForm = () => {
                     parent_phone: lead.parent_phone || f.parent_phone,
                     location: lead.location || f.location,
                 }));
-                if (lead.id) setLeadId(lead.id);
+                if (lead.id) partialSavedRef.current = true; // row already exists
             }
         } catch (e) { /* ignore */ }
     }, []);
 
-    // Progressive capture — silently save a partial lead once contact details are valid
+    // Progressive capture — silently save a partial lead once contact details are
+    // valid. Writes through the RPC (no read-back) so anon RLS can't block it.
     useEffect(() => {
         const valid = form.parent_name.trim() && /\S+@\S+\.\S+/.test(form.parent_email) && form.parent_phone.trim();
-        if (!valid || partialSaved || leadId) return;
+        if (!valid || partialSavedRef.current || submitting || submitted) return;
         const t = setTimeout(async () => {
             try {
                 const newId = crypto.randomUUID();
@@ -94,7 +106,7 @@ const SeptRegistrationForm = () => {
             } catch (e) { /* silent */ }
         }, 1500);
         return () => clearTimeout(t);
-    }, [form.parent_name, form.parent_email, form.parent_phone, form.location, partialSaved, leadId]);
+    }, [form.parent_name, form.parent_email, form.parent_phone, form.location, submitting, submitted, regId]);
 
     // Capture UTM params from URL
     const getUTM = () => {
@@ -139,7 +151,6 @@ const SeptRegistrationForm = () => {
         if (Object.keys(e).length) { setErrors(e); return; }
         setSubmitting(true);
         try {
-            const utm = getUTM();
             const payload = {
                     parent_name:      form.parent_name.trim(),
                     parent_email:     form.parent_email.trim().toLowerCase(),
@@ -425,7 +436,7 @@ const SeptRegistrationForm = () => {
                     )}
                     <div className="bg-rr-pink/10 border border-rr-pink/30 rounded-xl px-5 py-4 mb-5 text-center">
                         <p className="text-rr-pink font-black text-sm uppercase tracking-wide">Early Bird Price — $299</p>
-                        <p className="text-rr-charcoal text-xs font-medium mt-1">Ends 11pm Sunday 30 August. Reverts to $330 after. Don't miss out — places are limited.</p>
+                        <p className="text-rr-charcoal text-xs font-medium mt-1">Ends 11pm Sunday 30 August — reverts to $330 after.</p>
                     </div>
                     <button
                         onClick={handleSubmit}

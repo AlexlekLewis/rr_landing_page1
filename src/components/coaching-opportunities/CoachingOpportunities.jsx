@@ -2,7 +2,9 @@ import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import HeroSection from './HeroSection';
+import RolesSection from './RolesSection';
 import AboutSection from './AboutSection';
+import HallaBolCTA from './HallaBolCTA';
 import StandardsSection from './StandardsSection';
 import VideoSection from './VideoSection';
 import HubSection from './HubSection';
@@ -14,6 +16,7 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 
 const SECTIONS = [
     'hero',
+    'roles',
     'about',
     'standards',
     'video',
@@ -21,11 +24,12 @@ const SECTIONS = [
     'development',
     'structure',
     'process',
+    'halla-bol',
     'application-form',
 ];
 
 const CoachingOpportunities = () => {
-    usePageAnalytics('/coaching-opportunities', { sections: SECTIONS });
+    usePageAnalytics('/careers', { sections: SECTIONS });
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -37,6 +41,9 @@ const CoachingOpportunities = () => {
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero">
                     <HeroSection />
+                </div>
+                <div id="roles">
+                    <RolesSection />
                 </div>
                 <div id="about">
                     <AboutSection />
@@ -58,6 +65,9 @@ const CoachingOpportunities = () => {
                 </div>
                 <div id="process">
                     <ProcessSection />
+                </div>
+                <div id="halla-bol">
+                    <HallaBolCTA />
                 </div>
                 <div id="application-form">
                     <ApplicationForm />

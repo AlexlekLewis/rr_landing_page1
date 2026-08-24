@@ -5,17 +5,17 @@ const STEPS = [
     {
         number: '01',
         title: 'Apply',
-        body: 'Submit your application below. Tell us about your playing, coaching, and what you want to achieve.',
+        body: 'Submit your application below. Tell us about your background, your skills, and what you want to achieve.',
     },
     {
         number: '02',
         title: 'Conversation',
-        body: 'Shortlisted applicants meet with our Head Coach and Director of Cricket to discuss fit and pathway.',
+        body: 'Shortlisted applicants meet with our leadership team to discuss fit, role, and pathway.',
     },
     {
         number: '03',
         title: 'Onboard & Deliver',
-        body: 'Compliance, induction, shadow sessions, and your first solo delivery — supported the whole way.',
+        body: 'Compliance, induction, and a supported start — shadow sessions for coaches, structured handover for every other role.',
     },
 ];
 

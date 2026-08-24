@@ -6,9 +6,29 @@ import {
     fadeUp, scrollTo, SectionHeading, Label, FieldError, Chevron,
     inputClass, selectClass,
 } from './shared';
-import { ACTIVE_CENTRES, PLAYING_ROLES, TRIAL_PRICE, getTrialSessions, getMaxTrialSessions } from './data';
+import {
+    ACTIVE_CENTRES, PLAYING_ROLES, TRIAL_PRICE,
+    getTrialSessions, getMaxTrialSessions,
+} from './data';
 
-const RegistrationForm = ({ selectedCentre, onRegistered }) => {
+const PSCheckbox = ({ checked, onToggle, error, children }) => (
+    <div className="mb-3.5">
+        <label className="flex items-start gap-3 cursor-pointer group">
+            <button
+                type="button"
+                onClick={onToggle}
+                aria-pressed={checked}
+                className={`mt-0.5 w-5 h-5 rounded-md shrink-0 border flex items-center justify-center transition-colors ${checked ? 'bg-rr-pink border-rr-pink' : 'border-white/30 bg-white/5 group-hover:border-rr-pink/60'}`}
+            >
+                {checked && <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
+            </button>
+            <span className="text-white/70 text-[13px] font-medium leading-relaxed">{children}</span>
+        </label>
+        {error && <p className="text-rr-pink text-xs font-medium mt-1 ml-8">{error}</p>}
+    </div>
+);
+
+const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
     const [form, setForm] = useState({
         player_name: '',
         player_age: '',
@@ -17,14 +37,18 @@ const RegistrationForm = ({ selectedCentre, onRegistered }) => {
         phone: '',
         club: '',
         preferred_centre: '',
-        entry_type: 'trial',
-        invite_code: '',
+        signup_type: 'trial',   // form is trial-only; kept for the payment modal
         playing_role: '',
         trial_session_dates: [],
+        accept_terms: false,
+        accept_player_code: false,
+        accept_parent_code: false,
+        accept_social_media: false,
     });
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [submittedResult, setSubmittedResult] = useState(null);
 
     // Trial card "Register for Trial" pre-selects that centre.
     useEffect(() => {
@@ -34,15 +58,17 @@ const RegistrationForm = ({ selectedCentre, onRegistered }) => {
     }, [selectedCentre]);
 
     const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+    const toggle = (key) => setForm((f) => ({ ...f, [key]: !f[key] }));
 
+    const isTrial = true; // trial-only registration
     const trialSessions = getTrialSessions(form.preferred_centre);
     const maxSessions = getMaxTrialSessions(form.preferred_centre);
-    const showSessionPicker = form.entry_type === 'trial' && trialSessions.length > 0;
+    const showSessionPicker = isTrial && trialSessions.length > 0;
 
-    // Session ids belong to a centre, so clear them if the centre changes.
+    // Session ids belong to a centre and only apply to trials.
     useEffect(() => {
         setForm((f) => ({ ...f, trial_session_dates: [] }));
-    }, [form.preferred_centre, form.entry_type]);
+    }, [form.preferred_centre]);
 
     const toggleSession = (id) =>
         setForm((f) => {
@@ -58,7 +84,14 @@ const RegistrationForm = ({ selectedCentre, onRegistered }) => {
         e.preventDefault();
         const next = {};
         if (!form.player_name.trim()) next.player_name = 'Player name is required';
-        if (!form.player_age.trim()) next.player_age = 'Player age is required';
+        if (!form.player_age.trim()) {
+            next.player_age = 'Player age is required';
+        } else {
+            const age = Number(form.player_age.trim());
+            if (!Number.isInteger(age) || age < 4 || age > 60) {
+                next.player_age = 'Please enter an age in years (e.g. 16)';
+            }
+        }
         if (!form.email.trim() || !/^\S+@\S+\.\S+$/.test(form.email)) next.email = 'A valid email is required';
         if (!form.phone.trim()) next.phone = 'Phone number is required';
         if (!form.preferred_centre) next.preferred_centre = 'Please choose a centre';
@@ -66,6 +99,10 @@ const RegistrationForm = ({ selectedCentre, onRegistered }) => {
         if (showSessionPicker && form.trial_session_dates.length === 0) {
             next.trial_session_dates = 'Please choose at least one trial session';
         }
+        if (!form.accept_terms) next.accept_terms = 'You must agree to the Terms & Conditions and Privacy Policy';
+        if (!form.accept_player_code) next.accept_player_code = 'You must agree to the Player Code of Conduct';
+        if (!form.accept_parent_code) next.accept_parent_code = 'You must agree to the Parent/Guardian Code of Conduct';
+        if (!form.accept_social_media) next.accept_social_media = 'Please confirm your social media consent';
         if (Object.keys(next).length) {
             setErrors(next);
             return;
@@ -87,22 +124,30 @@ const RegistrationForm = ({ selectedCentre, onRegistered }) => {
                     phone: form.phone.trim(),
                     club: form.club.trim() || null,
                     preferred_centre: form.preferred_centre,
-                    entry_type: form.entry_type,
-                    invite_code: form.entry_type === 'invited' ? form.invite_code.trim() || null : null,
+                    entry_type: form.signup_type,
                     playing_role: form.playing_role,
                     trial_sessions: showSessionPicker ? form.trial_session_dates.length : null,
                     trial_session_dates: showSessionPicker ? form.trial_session_dates : null,
+                    accept_terms: form.accept_terms,
+                    accept_player_code: form.accept_player_code,
+                    accept_parent_code: form.accept_parent_code,
+                    accept_social_media: form.accept_social_media,
                     page_referrer: document.referrer || null,
                     ...utm,
                 },
             ]);
             if (error) throw error;
-            setSubmitted(true);
-            // Hand the selection to Payments so the quantity can't drift.
-            onRegistered?.({
+
+            const result = {
                 centre: form.preferred_centre,
+                signupType: form.signup_type,
                 sessionIds: showSessionPicker ? form.trial_session_dates : [],
-            });
+            };
+            setSubmitted(true);
+            setSubmittedResult(result);
+            // Open the payment step immediately — registration and payment
+            // are one flow, not two separate sections.
+            onRequestPayment?.(result);
         } catch (err) {
             console.error('Performance Squads registration error:', err);
             setErrors({ form: 'Something went wrong. Please try again or email info@rramelbourne.com' });
@@ -118,9 +163,9 @@ const RegistrationForm = ({ selectedCentre, onRegistered }) => {
         <section className="py-20 px-5">
             <div className="max-w-2xl mx-auto">
                 <SectionHeading
-                    eyebrow="Step 1"
-                    title="Register Your Interest"
-                    sub="Trialling or invited — start here. We'll confirm your centre's trial details and next steps by email."
+                    eyebrow="Register & Pay"
+                    title="Register & Secure Your Spot"
+                    sub="Enter your details, choose your trial session(s), and pay — all in one step. Your trial spot isn't confirmed until payment is received."
                 />
                 {submitted ? (
                     <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}
@@ -130,16 +175,17 @@ const RegistrationForm = ({ selectedCentre, onRegistered }) => {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                             </svg>
                         </div>
-                        <h3 className="text-2xl font-black uppercase mb-3">You're Registered</h3>
+                        <h3 className="text-2xl font-black uppercase mb-3">Registration Received</h3>
                         <p className="text-white/70 text-[15px] font-medium leading-relaxed mb-6">
-                            Thanks — we've got your details. Our team will be in touch with your centre's
-                            trial information and next steps. If your trial fee is due, you can pay it now below.
+                            Thanks — we've got your details. Your place isn't confirmed until payment
+                            is received, so finish up below if you haven't already.
                         </p>
+                        {/* Safety net: reopens the payment step if the modal was dismissed. */}
                         <button
-                            onClick={() => scrollTo('payments')}
+                            onClick={() => onRequestPayment?.(submittedResult)}
                             className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
                         >
-                            Go to Payments <ArrowRight className="w-4 h-4" />
+                            Complete Payment <ArrowRight className="w-4 h-4" />
                         </button>
                     </motion.div>
                 ) : (
@@ -151,8 +197,8 @@ const RegistrationForm = ({ selectedCentre, onRegistered }) => {
                                 <FieldError msg={errors.player_name} />
                             </div>
                             <div>
-                                <Label required>Player Age</Label>
-                                <input type="text" inputMode="numeric" value={form.player_age} onChange={set('player_age')} placeholder="e.g. 16" className={ic('player_age')} />
+                                <Label required>Player Age <span className="normal-case font-medium text-white/40">(in years)</span></Label>
+                                <input type="text" inputMode="numeric" value={form.player_age} onChange={set('player_age')} placeholder="e.g. 16 years old" className={ic('player_age')} />
                                 <FieldError msg={errors.player_age} />
                             </div>
                         </div>
@@ -202,24 +248,6 @@ const RegistrationForm = ({ selectedCentre, onRegistered }) => {
                                 <FieldError msg={errors.playing_role} />
                             </div>
                         </div>
-                        <div className="mb-4">
-                            <Label required>How are you joining?</Label>
-                            <div className="grid grid-cols-2 gap-3">
-                                {[
-                                    { value: 'trial', label: 'Trialling' },
-                                    { value: 'invited', label: 'Invited' },
-                                ].map((opt) => (
-                                    <button
-                                        type="button"
-                                        key={opt.value}
-                                        onClick={() => setForm((f) => ({ ...f, entry_type: opt.value }))}
-                                        className={`rounded-xl px-4 py-3.5 text-sm font-black uppercase tracking-wider border transition-colors ${form.entry_type === opt.value ? 'bg-rr-pink border-rr-pink text-white' : 'bg-white/5 border-white/15 text-white/60 hover:border-rr-pink/50'}`}
-                                    >
-                                        {opt.label}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
                         {showSessionPicker && (
                             <div className="mb-4">
                                 <Label required>
@@ -266,12 +294,30 @@ const RegistrationForm = ({ selectedCentre, onRegistered }) => {
                                 </p>
                             </div>
                         )}
-                        {form.entry_type === 'invited' && (
-                            <div className="mb-4">
-                                <Label>Invite Reference <span className="normal-case font-medium text-white/40">(if provided)</span></Label>
-                                <input type="text" value={form.invite_code} onChange={set('invite_code')} placeholder="e.g. coach name or invite code" className={ic('invite_code')} />
-                            </div>
-                        )}
+
+                        {/* Governance — required for every registration, trials included */}
+                        <div className="mt-2 mb-6 pt-6 border-t border-white/10">
+                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-rr-pink mb-4">
+                                Agreements &amp; Consent
+                            </p>
+                            <PSCheckbox checked={form.accept_terms} onToggle={() => toggle('accept_terms')} error={errors.accept_terms}>
+                                I have read and agree to the{' '}
+                                <a href="/terms-conditions" target="_blank" rel="noreferrer" className="text-rr-light-pink underline hover:text-white">Terms &amp; Conditions</a>{' '}and{' '}
+                                <a href="/privacy-policy" target="_blank" rel="noreferrer" className="text-rr-light-pink underline hover:text-white">Privacy Policy</a>, and confirm the information provided is accurate.
+                            </PSCheckbox>
+                            <PSCheckbox checked={form.accept_player_code} onToggle={() => toggle('accept_player_code')} error={errors.accept_player_code}>
+                                I have read, understood, and agree to the{' '}
+                                <a href="/assets/RRA_Player_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-light-pink underline hover:text-white">Player Code of Conduct</a>.
+                            </PSCheckbox>
+                            <PSCheckbox checked={form.accept_parent_code} onToggle={() => toggle('accept_parent_code')} error={errors.accept_parent_code}>
+                                I have read, understood, and agree to the{' '}
+                                <a href="/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-light-pink underline hover:text-white">Parent/Guardian Code of Conduct</a>.
+                            </PSCheckbox>
+                            <PSCheckbox checked={form.accept_social_media} onToggle={() => toggle('accept_social_media')} error={errors.accept_social_media}>
+                                I am happy for photos and videos featuring the player to be used on Rajasthan Royals Academy Melbourne's social media and marketing channels.
+                            </PSCheckbox>
+                        </div>
+
                         {errors.form && (
                             <p className="text-rr-pink text-sm font-bold mb-4 text-center">{errors.form}</p>
                         )}

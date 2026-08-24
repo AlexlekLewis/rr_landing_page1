@@ -27,17 +27,19 @@ export const CENTRE = {
 };
 
 // What actually happens in the consultation — the value, in plain terms.
+// Plain-English, active voice — written to be read by a 10-year-old
+// or scanned in a few seconds. Keep sentences short and concrete.
 export const INCLUDES = [
-    'A full one-on-one assessment of where your game is right now',
-    'A development plan built around the player, not a template',
-    'The right coach assigned to you — matched to what you need',
-    'Your training nights locked in (Tuesdays or Fridays at Mickleham)',
+    'Alex looks at your game and tells you where you\u2019re at',
+    'You get a plan built for you, not a copy of someone else\u2019s',
+    'He picks the right coach for you',
+    'You book your night \u2014 Tuesday or Friday',
 ];
 
 export const STEPS = [
-    { n: '01', t: 'Register below', d: 'Two minutes. No payment, no obligation.' },
-    { n: '02', t: 'We call you', d: 'Our admin team contacts you in the coming days to organise a time.' },
-    { n: '03', t: 'Your session with Alex', d: '$50 while the launch special runs. Then you\'re away.' },
+    { n: '01', t: 'Fill in the form', d: 'Takes two minutes. You pay nothing now.' },
+    { n: '02', t: 'We call you', d: 'We\u2019ll ring in the next few days to pick a time.' },
+    { n: '03', t: 'You train with Alex', d: 'One hour, $50, at Mickleham.' },
 ];
 
 // Days remaining, floored at 0. Computed client-side against END_DATE.

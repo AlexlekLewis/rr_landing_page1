@@ -40,3 +40,10 @@ create policy "Allow anon insert performance squad leads"
     for insert
     to anon
     with check (true);
+
+-- Governance consents — required for every registration, trials included.
+alter table public.performance_squad_leads
+    add column if not exists accept_terms boolean not null default false,
+    add column if not exists accept_player_code boolean not null default false,
+    add column if not exists accept_parent_code boolean not null default false,
+    add column if not exists accept_social_media boolean not null default false;

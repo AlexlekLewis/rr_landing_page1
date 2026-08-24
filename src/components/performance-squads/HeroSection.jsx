@@ -39,8 +39,7 @@ const HeroSection = () => (
                 <p className="text-white/70 text-[15px] sm:text-lg font-medium leading-relaxed mb-10">
                     Our Performance Squads are the representative arm of the Rajasthan Royals Academy — squads of
                     like-skilled, like-motivated players who train together and compete together.
-                    Players either <span className="text-white font-bold">trial</span> for their place
-                    or are <span className="text-white font-bold">invited</span> by our coaching staff.
+                    Every player earns their place at an open <span className="text-white font-bold">trial</span>.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 sm:justify-start">
                     <button

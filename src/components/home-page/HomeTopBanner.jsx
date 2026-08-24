@@ -15,7 +15,7 @@ const HomeTopBanner = () => {
                     Now Taking Interest
                 </span>
                 <span className="font-bold uppercase tracking-wide text-xs sm:text-sm">
-                    <span className="text-rr-pink">School Holiday Camp</span> · Sept–Oct · Mickleham, Hallam &amp; Williamstown
+                    <span className="text-rr-pink">School Holiday Camp</span> · Sept–Oct · Mickleham &amp; Hallam
                 </span>
                 <Link
                     to="/junior-royals-holiday"

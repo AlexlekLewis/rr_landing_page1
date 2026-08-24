@@ -36,7 +36,7 @@ const HeroSection = () => {
                     className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6"
                 >
                     <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Join the Royals Way</span>
+                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">We're Hiring</span>
                 </motion.div>
 
                 {/* Headline */}
@@ -46,7 +46,7 @@ const HeroSection = () => {
                     transition={{ duration: 0.6, delay: 0.15 }}
                     className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none mb-6"
                 >
-                    COACH AT AUSTRALIA'S<br />
+                    JOIN AUSTRALIA'S<br />
                     <span className="text-rr-pink">MOST PROGRESSIVE</span><br />
                     CRICKET ACADEMY
                 </motion.h1>
@@ -64,10 +64,27 @@ const HeroSection = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.4 }}
-                    className="text-base md:text-xl text-white/85 font-medium leading-relaxed max-w-3xl mb-10"
+                    className="text-base md:text-xl text-white/85 font-medium leading-relaxed max-w-3xl mb-6"
                 >
-                    Rajasthan Royals Academy Melbourne is building a coaching team aligned to the standards of a global high-performance program. We're looking for coaches who lead with curiosity, deliver with rigour, and put the player first.
+                    Rajasthan Royals Academy Melbourne is building a team aligned to the standards of a global high-performance program — coaches, operations, media, and more. We're looking for people who lead with curiosity, deliver with rigour, and put the player first.
                 </motion.p>
+
+                {/* Engagement type chips */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.45 }}
+                    className="flex flex-wrap gap-2 md:gap-3 mb-10"
+                >
+                    {['Volunteer', 'Casual', 'Work Experience', 'Part-Time', 'Full-Time'].map((type) => (
+                        <span
+                            key={type}
+                            className="bg-white/5 border border-white/20 text-white/90 text-[11px] md:text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full backdrop-blur-sm"
+                        >
+                            {type}
+                        </span>
+                    ))}
+                </motion.div>
 
                 {/* CTAs */}
                 <motion.div
