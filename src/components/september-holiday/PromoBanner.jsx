@@ -10,7 +10,7 @@ const PromoBanner = () => {
             <span className="text-white/60 font-bold text-xs md:text-sm">·</span>
             <span className="text-white font-bold uppercase tracking-wide text-xs md:text-sm">Reverts to $330</span>
             <span className="text-white/60 font-bold text-xs md:text-sm">·</span>
-            <span className="text-white font-black uppercase tracking-widest text-xs md:text-sm">Places Limited — Don't Miss Out</span>
+            <span className="text-white font-black uppercase tracking-widest text-xs md:text-sm">12 Hours Across 3 Days</span>
         </span>
     );
 

@@ -423,7 +423,7 @@ const SeptRegistrationForm = () => {
                     )}
                     <div className="bg-rr-pink/10 border border-rr-pink/30 rounded-xl px-5 py-4 mb-5 text-center">
                         <p className="text-rr-pink font-black text-sm uppercase tracking-wide">Early Bird Price — $299</p>
-                        <p className="text-rr-charcoal text-xs font-medium mt-1">Ends 11pm Sunday 30 August. Reverts to $330 after. Don't miss out — places are limited.</p>
+                        <p className="text-rr-charcoal text-xs font-medium mt-1">Ends 11pm Sunday 30 August — reverts to $330 after.</p>
                     </div>
                     <button
                         onClick={handleSubmit}

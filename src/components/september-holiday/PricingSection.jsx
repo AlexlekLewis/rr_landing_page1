@@ -69,7 +69,7 @@ const PricingSection = () => {
                             </button>
 
                             <p className="text-white/40 text-xs mt-4 leading-relaxed">
-                                Early Bird price of $299 ends 11pm Sunday 30 August, then reverts to $330. Includes 12 hours of elite coaching across 3 days. Training shirt purchased separately at $29.95. Don't miss out — places are limited.
+                                Early Bird price of $299 ends 11pm Sunday 30 August, then reverts to $330. Includes 12 hours of elite coaching across 3 days. Training shirt purchased separately at $29.95.
                             </p>
                         </div>
                     </motion.div>
