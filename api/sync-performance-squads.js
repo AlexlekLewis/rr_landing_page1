@@ -56,17 +56,45 @@ import { getSheets, ensureTab, ensureHeader } from './_lib/pgpSheets.js';
 export const config = { api: { bodyParser: { sizeLimit: '256kb' } } };
 
 const SOURCE_TABLE = 'performance_squad_leads';
-const GUIDE_TAB = 'How this sheet works';
-const PAYMENTS_TAB = 'Payments (Stripe)';
+
+// Every tab this function writes carries the warning in its NAME, because the
+// tab strip is the one thing you cannot miss. Someone who spends an afternoon
+// typing notes into a synced column loses that afternoon on the next run, and a
+// warning buried in a guide tab does not stop that.
+const DNE = ' — DO NOT EDIT';
+
+const GUIDE_TAB = `How this sheet works${DNE}`;
+const PAYMENTS_TAB = `Payments (Stripe)${DNE}`;
 
 // One tab per live centre. Slug -> tab name, mirroring the centre slugs the
 // registration form writes into preferred_centre.
 const CENTRE_TABS = {
-  'north-melbourne': 'North Melbourne',
-  'south-east-melbourne': 'South-East Melbourne',
+  'north-melbourne': `North Melbourne${DNE}`,
+  'south-east-melbourne': `South-East Melbourne${DNE}`,
 };
 // A registration for a centre we have no tab for still has to land somewhere.
-const FALLBACK_TAB = 'Other / Unassigned';
+const FALLBACK_TAB = `Other / Unassigned${DNE}`;
+
+// Tabs created before the warning was added (24 Aug 2026). Renaming them keeps
+// the rows — and anyone's notes in the safe columns — exactly where they are,
+// instead of stranding them on an orphaned tab beside a new empty one.
+const LEGACY_TAB_NAMES = Object.fromEntries(
+  [GUIDE_TAB, PAYMENTS_TAB, FALLBACK_TAB, ...Object.values(CENTRE_TABS)]
+    .map((name) => [name, name.slice(0, -DNE.length)]),
+);
+
+// Column labels written once into the first column AFTER the sync's block, so
+// the boundary is visible in the sheet itself and not only in the guide.
+const SAFE_COL_LABEL = 'YOUR NOTES — SAFE TO EDIT, NEVER OVERWRITTEN →';
+
+// Readable centre names for CELL values. Deliberately separate from CENTRE_TABS:
+// a cell should read "South-East Melbourne", not carry the tab's DO NOT EDIT.
+const CENTRE_NAMES = {
+  'north-melbourne': 'North Melbourne',
+  'south-east-melbourne': 'South-East Melbourne',
+  'west-melbourne': 'West Melbourne',
+  'east-melbourne': 'East Melbourne',
+};
 
 // The form stores trial session IDs ('se-2026-09-06'), which mean nothing to a
 // coach reading the sheet. Source of truth for these labels is CENTRES[].
@@ -208,7 +236,7 @@ export const regRow = (r, pay) => {
     asText(r.phone),
     r.club || '',
     r.playing_role || '',
-    CENTRE_TABS[r.preferred_centre] || r.preferred_centre || '',
+    CENTRE_NAMES[r.preferred_centre] || r.preferred_centre || '',
     asText(sessions || ''),
     dates,
     sessions ? money(sessions * TRIAL_FEE_CENTS) : '',
@@ -257,7 +285,7 @@ export const payRow = (p) => ([
   p.payerEmail || '',
   money(p.amountCents),
   asText(p.sessions || ''),
-  CENTRE_TABS[p.centre] || p.centre || '',
+  CENTRE_NAMES[p.centre] || p.centre || '',
   p.matchedId || 'UNMATCHED — no registration with this email',
   p.matchedPlayer || '',
   p.status || '',
@@ -362,9 +390,98 @@ export function aggregatePaymentsByEmail(payments) {
 }
 
 // ------------------------------------------------------------
+// Making "do not edit" impossible to miss: the tab name says it, a Google
+// Sheets protected range warns on the way in, and the first safe column is
+// labelled so there is somewhere obvious to work instead.
+// ------------------------------------------------------------
+
+// 0-based column index -> A1 letter. 0 -> A, 26 -> AA, 29 -> AD.
+export const colLetter = (n) => {
+  let s = '', i = n;
+  do { s = String.fromCharCode(65 + (i % 26)) + s; i = Math.floor(i / 26) - 1; } while (i >= 0);
+  return s;
+};
+
+const sheetMeta = async (sheets, spreadsheetId) => {
+  const meta = await sheets.spreadsheets.get({
+    spreadsheetId,
+    fields: 'sheets(properties(sheetId,title),protectedRanges(description,protectedRangeId))',
+  });
+  return meta.data.sheets || [];
+};
+
+// Rename a pre-warning tab instead of leaving it orphaned next to a new one.
+async function renameLegacyTab(sheets, spreadsheetId, desired) {
+  const legacy = LEGACY_TAB_NAMES[desired];
+  if (!legacy) return false;
+  const all = await sheetMeta(sheets, spreadsheetId);
+  const titles = all.map((x) => x.properties?.title);
+  if (titles.includes(desired)) return false;         // already renamed
+  const hit = all.find((x) => x.properties?.title === legacy);
+  if (!hit) return false;                             // nothing to rename
+  await sheets.spreadsheets.batchUpdate({
+    spreadsheetId,
+    requestBody: {
+      requests: [{
+        updateSheetProperties: {
+          properties: { sheetId: hit.properties.sheetId, title: desired },
+          fields: 'title',
+        },
+      }],
+    },
+  });
+  return true;
+}
+
+// A warningOnly protected range: Sheets shows "you are editing a part of this
+// sheet that should not be changed" before the edit lands. Deliberately NOT a
+// hard lock — locking a range to the service account would stop a human fixing
+// something genuinely wrong, and would not stop the sync overwriting it anyway.
+// The point is to interrupt someone before they invest an afternoon in a column
+// that gets rewritten.
+const PROTECT_TAG = 'rra-sync';
+async function ensureProtectedRange(sheets, spreadsheetId, tabName, nCols, description) {
+  const all = await sheetMeta(sheets, spreadsheetId);
+  const hit = all.find((x) => x.properties?.title === tabName);
+  if (!hit) return false;
+  const already = (hit.protectedRanges || []).some((r) => (r.description || '').includes(PROTECT_TAG));
+  if (already) return false;
+  const range = { sheetId: hit.properties.sheetId, startRowIndex: 0, startColumnIndex: 0 };
+  if (nCols) range.endColumnIndex = nCols;
+  await sheets.spreadsheets.batchUpdate({
+    spreadsheetId,
+    requestBody: {
+      requests: [{
+        addProtectedRange: {
+          protectedRange: { range, description: `${description} [${PROTECT_TAG}]`, warningOnly: true },
+        },
+      }],
+    },
+  });
+  return true;
+}
+
+// Label the first column the sync never touches, so there is an obvious place to
+// work. Written ONCE and only into an empty cell — if someone has already put
+// their own heading there, it is left alone.
+async function ensureSafeColumnLabel(sheets, spreadsheetId, tabName, firstSafeIndex) {
+  const cell = `${colLetter(firstSafeIndex)}1`;
+  const cur = await sheets.spreadsheets.values.get({ spreadsheetId, range: `${tabName}!${cell}` });
+  if ((cur.data.values?.[0]?.[0] || '') !== '') return false;
+  await sheets.spreadsheets.values.update({
+    spreadsheetId,
+    range: `${tabName}!${cell}`,
+    valueInputOption: 'USER_ENTERED',
+    requestBody: { values: [[SAFE_COL_LABEL]] },
+  });
+  return true;
+}
+
+// ------------------------------------------------------------
 // Non-destructive reconcile of one tab.
 // ------------------------------------------------------------
 async function reconcileTab(sheets, spreadsheetId, tabName, headers, lastCol, rows) {
+  await renameLegacyTab(sheets, spreadsheetId, tabName);
   await ensureTab(sheets, spreadsheetId, tabName);
   await ensureHeader(sheets, spreadsheetId, tabName, headers);
   // ensureHeader only fills an EMPTY row 1, which is right for a relabelled
@@ -429,6 +546,13 @@ async function reconcileTab(sheets, spreadsheetId, tabName, headers, lastCol, ro
     });
   }
 
+  await ensureProtectedRange(
+    sheets, spreadsheetId, tabName, headers.length,
+    `Columns A-${lastCol} are filled in automatically every 4 hours. Anything you type here is `
+      + `replaced. Put your notes in column ${colLetter(headers.length)} onwards instead.`,
+  );
+  await ensureSafeColumnLabel(sheets, spreadsheetId, tabName, headers.length);
+
   return { tab: tabName, rows: rows.length, added: appends.length, updated: updates.length, unchanged };
 }
 
@@ -448,6 +572,14 @@ const GUIDE_LINES = [
   ['not need to add anyone by hand — a new registration appears on its own within 4'],
   ['hours, and so does a payment.'],
   [''],
+  ['WHY EVERY TAB SAYS "DO NOT EDIT"'],
+  [''],
+  ['Every tab in this workbook is filled in by the automation, so each one is named'],
+  ['"... — DO NOT EDIT". That warning is about the AUTOMATIC COLUMNS, not the whole'],
+  ['sheet — there is a safe place to work, and it is explained below. Google will also'],
+  ['warn you if you start typing into an automatic column; that warning is real, and'],
+  ['clicking through it means your typing is replaced within 4 hours.'],
+  [''],
   ['THE TABS'],
   [''],
   ['"North Melbourne" and "South-East Melbourne" — one row per player who registered'],
@@ -461,9 +593,13 @@ const GUIDE_LINES = [
   ['On the centre tabs, columns A to AC are filled in by the automatic update. If you'],
   ['change something there, your change is replaced next time that player’s details'],
   ['change. Column AD onwards is yours and is never touched — put notes, follow-up'],
-  ['status, selection decisions and anything else there.'],
+  ['status, selection decisions and anything else there. Column AD is labelled'],
+  ['"YOUR NOTES — SAFE TO EDIT" so you can find it.'],
   [''],
   ['On the Payments tab the same applies to columns A to J; K onwards is yours.'],
+  [''],
+  ['This tab is the one exception: it is rewritten in full every time, so do not keep'],
+  ['anything here at all.'],
   [''],
   ['You can sort, filter, colour and hide rows freely. Rows are matched by the ID in'],
   ['column A, not by position, so your notes stay attached to the right person.'],
@@ -491,6 +627,7 @@ const GUIDE_LINES = [
 ];
 
 async function ensureGuideTab(sheets, spreadsheetId) {
+  await renameLegacyTab(sheets, spreadsheetId, GUIDE_TAB);
   const created = await ensureTab(sheets, spreadsheetId, GUIDE_TAB);
   await sheets.spreadsheets.values.update({
     spreadsheetId,
@@ -498,6 +635,10 @@ async function ensureGuideTab(sheets, spreadsheetId) {
     valueInputOption: 'RAW',
     requestBody: { values: GUIDE_LINES },
   });
+  await ensureProtectedRange(
+    sheets, spreadsheetId, GUIDE_TAB, null,
+    'This whole tab is rewritten automatically every 4 hours. Anything you type here is replaced.',
+  );
   return created ? 'created' : 'refreshed';
 }
 

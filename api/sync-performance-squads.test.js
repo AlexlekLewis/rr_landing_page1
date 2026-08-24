@@ -9,6 +9,7 @@ import {
   regRow,
   payRow,
   paymentCheck,
+  colLetter,
   aggregatePaymentsByEmail,
 } from './sync-performance-squads.js';
 
@@ -83,6 +84,29 @@ describe('regRow', () => {
   it('distinguishes a false consent from an unanswered one', () => {
     expect(regRow(lead({ accept_social_media: false }), null)[col('Photo/Video Consent')]).toBe('No');
     expect(regRow(lead({ accept_social_media: null }), null)[col('Photo/Video Consent')]).toBe('');
+  });
+});
+
+describe('the DO NOT EDIT boundary', () => {
+  it('maps a column index to the right letter', () => {
+    // AD is where the safe columns start on a centre tab (29 sync columns).
+    expect(colLetter(0)).toBe('A');
+    expect(colLetter(25)).toBe('Z');
+    expect(colLetter(26)).toBe('AA');
+    expect(colLetter(28)).toBe('AC');
+    expect(colLetter(REG_HEADERS.length)).toBe('AD');
+  });
+
+  // The tab is named "South-East Melbourne — DO NOT EDIT", but the Centre CELL
+  // must read as a place, not carry the warning into the data.
+  it('keeps the tab warning out of the centre cell', () => {
+    expect(regRow(lead(), null)[col('Centre')]).toBe('South-East Melbourne');
+    expect(regRow(lead(), null)[col('Centre')]).not.toContain('DO NOT EDIT');
+  });
+
+  it('keeps it out of the payments tab centre cell too', () => {
+    const r = payRow({ sessionId: 'cs_1', paidAt: '2026-08-22T04:00:00Z', amountCents: 3000, centre: 'north-melbourne' });
+    expect(r[PAY_HEADERS.indexOf('Centre (from payment link)')]).toBe('North Melbourne');
   });
 });
 
