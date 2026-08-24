@@ -22,7 +22,7 @@
     },
     {
       "path": "/api/sync-performance-squads",
-      "schedule": "*/5 * * * *"
+      "schedule": "30 */4 * * *"
     }
   ],
   "headers": [
