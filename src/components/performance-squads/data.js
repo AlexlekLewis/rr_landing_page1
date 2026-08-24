@@ -159,7 +159,7 @@ export const CASE_STUDIES = [
         stat: '4',
         statLabel: 'Players put forward',
         title: 'Paarl Royals, SA20',
-        body: 'The Rajasthan Royals Academy selection team has put forward four players for consideration as training partners with the Paarl Royals in the SA20.',
+        body: 'Our Rajasthan Royals Academy selection team has put forward four players for consideration as training partners with the Paarl Royals in the SA20.',
     },
     {
         stat: 'USA',
