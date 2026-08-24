@@ -5,7 +5,6 @@ import { fadeUp, scrollTo, SectionHeading } from './shared';
 import {
     TRIAL_PRICE,
     REGISTRATION_UPFRONT_PRICE,
-    REGISTRATION_UPFRONT_NOTE,
     TRIAL_INCLUDES,
     SELECTED_INCLUDES,
     FINANCIAL_CONDITION,
@@ -77,14 +76,14 @@ const PricingSection = () => (
                     <div className="bg-white/5 border border-white/15 rounded-xl p-5">
                         <div className="flex items-center gap-2.5 mb-3">
                             <Wallet className="w-5 h-5 text-rr-pink" />
-                            <span className="text-sm font-black uppercase tracking-wider">One-Off Payment</span>
+                            <span className="text-sm font-black uppercase tracking-wider">Registration Fee</span>
                         </div>
                         <p className="text-3xl font-black text-rr-light-pink leading-none mb-2">
-                            {REGISTRATION_UPFRONT_PRICE ? `$${REGISTRATION_UPFRONT_PRICE}` : 'TBC'}
+                            {REGISTRATION_UPFRONT_PRICE ? `$${REGISTRATION_UPFRONT_PRICE}` : 'Fee TBC'}
                         </p>
                         <p className="text-white/55 text-xs font-medium leading-relaxed">
-                            One payment for the season, taken up if you're offered a squad place.
-                            {REGISTRATION_UPFRONT_PRICE ? '' : ` ${REGISTRATION_UPFRONT_NOTE}`}
+                            Upfront or monthly payment options. Discounted rates for additional
+                            Rajasthan Royals Academy programs. Final figure confirming shortly.
                         </p>
                     </div>
                 </div>

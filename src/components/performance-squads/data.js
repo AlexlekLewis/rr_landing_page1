@@ -172,19 +172,19 @@ export const CASE_STUDIES = [
 // ── What the trial fee buys vs what a squad place buys ──
 export const TRIAL_INCLUDES = [
     'Assessment by a Royals accredited Head Coach',
-    'Batting, bowling and fielding assessment across the session',
+    'Skill assessment across the sessions',
     'Your session at your home centre',
-    'A selection outcome either way — you will be told where you stand',
+    'A selection outcome by the end of the trial period',
 ];
 
 export const SELECTED_INCLUDES = [
-    'A place in your centre\u2019s Performance Squad',
-    'Weekly training with your squad led by your Head Coach',
-    'Selection for Power League rounds, Sept 2026 – April 2027',
-    'Selection for fixtures against external opposition',
-    'Rajasthan Royals Academy First XI selection pathway',
+    'A place in either the North Melbourne or Sth-East Melbourne Performance Squad',
+    'Weekly training opportunity with your squad led by your Head Coach',
+    'Selection for Power League fixtures staged at various times between Sept 2026 – April 2027',
+    'Selection for fixtures against external opposition in showcase games',
+    'Rajasthan Royals Academy First XI selection pathway, the peak of the Performance Squads',
     'Ongoing performance feedback from your coaching staff',
-    'Royals Group global performance opportunities (High Performance Centre / Training Partners)',
+    'Royals Group global performance opportunities (High Performance Centre / Franchise Training Partners)',
 ];
 
 // Selection condition — shown beneath the fee cards and in the FAQ.
