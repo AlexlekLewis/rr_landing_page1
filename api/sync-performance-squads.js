@@ -68,6 +68,20 @@ const CENTRE_TABS = {
 // A registration for a centre we have no tab for still has to land somewhere.
 const FALLBACK_TAB = 'Other / Unassigned';
 
+// The form stores trial session IDs ('se-2026-09-06'), which mean nothing to a
+// coach reading the sheet. Source of truth for these labels is CENTRES[].
+// trialSessions in src/components/performance-squads/data.js — keep in step when
+// a session is added, moved or cancelled. An unknown id falls back to the raw id
+// rather than being hidden, so a stale mapping is visible instead of silent.
+const TRIAL_SESSION_LABELS = {
+  'nm-2026-09-06': 'Sun 6 Sep, 2:00-4:00 PM (Mickleham)',
+  'nm-2026-09-10': 'Thu 10 Sep, 7:00-9:00 PM (Mickleham)',
+  'se-2026-09-06': 'Sun 6 Sep, 7:00-8:30 PM (Cranbourne Nth)',
+  'se-2026-09-11': 'Fri 11 Sep, 8:00-9:30 PM (Cranbourne Nth)',
+  'se-2026-09-13': 'Sun 13 Sep, 7:00-8:30 PM (Cranbourne Nth)',
+};
+const sessionLabel = (id) => TRIAL_SESSION_LABELS[id] || id;
+
 // Trial fee, in cents, per session. Source of truth is PAYMENT_OPTIONS in
 // src/components/performance-squads/data.js ("$30 per player, per session").
 const TRIAL_FEE_CENTS = 3000;
@@ -147,6 +161,7 @@ export const REG_HEADERS = [
   'Amount Paid (AUD)',
   'Paid At (Melbourne)',
   'Payment Matched By',
+  'Payment Check',
   'Accepted T&Cs',
   'Accepted Player Code',
   'Accepted Parent Code',
@@ -159,13 +174,30 @@ export const REG_HEADERS = [
   'UTM Term',
   'Referrer',
 ];
-// REG_HEADERS.length === 28 === column AB. Everything from AC rightwards is the
+// REG_HEADERS.length === 29 === column AC. Everything from AC rightwards is the
 // humans' and is never read, written or cleared by this sync.
-const REG_LAST_COL = 'AB';
+const REG_LAST_COL = 'AC';
+
+// Does what Stripe took line up with what the form said they owe? This exists
+// because email matching cannot see siblings: one parent paying for two children
+// from a single email address makes the first child look OVERPAID and the second
+// look UNPAID, and the obvious reaction — chase the second family for money —
+// would be wrong. Say so in the row rather than leaving someone to spot it.
+export const paymentCheck = (dueCents, pay) => {
+  if (!pay) return dueCents ? 'Not paid yet' : '';
+  const paid = pay.amountCents || 0;
+  if (!dueCents) return `Paid ${money(paid)} — form recorded no sessions, check what they booked`;
+  if (paid === dueCents) return 'OK';
+  if (paid > dueCents) {
+    return `Paid ${money(paid - dueCents)} more than due — likely covers a sibling `
+      + 'registered under a different email. Check before chasing anyone.';
+  }
+  return `Short ${money(dueCents - paid)} — paid ${money(paid)} of ${money(dueCents)}`;
+};
 
 export const regRow = (r, pay) => {
   const sessions = Number(r.trial_sessions) || 0;
-  const dates = Array.isArray(r.trial_session_dates) ? r.trial_session_dates.join(' · ') : '';
+  const dates = Array.isArray(r.trial_session_dates) ? r.trial_session_dates.map(sessionLabel).join(' · ') : '';
   return [
     r.id || '',
     asText(fmtMelb(r.created_at)),
@@ -184,6 +216,7 @@ export const regRow = (r, pay) => {
     pay ? money(pay.amountCents) : '',
     pay ? asText(fmtMelb(pay.paidAt)) : '',
     pay ? pay.method : '',
+    paymentCheck(sessions * TRIAL_FEE_CENTS, pay),
     yesNo(r.accept_terms),
     yesNo(r.accept_player_code),
     yesNo(r.accept_parent_code),
@@ -334,6 +367,22 @@ export function aggregatePaymentsByEmail(payments) {
 async function reconcileTab(sheets, spreadsheetId, tabName, headers, lastCol, rows) {
   await ensureTab(sheets, spreadsheetId, tabName);
   await ensureHeader(sheets, spreadsheetId, tabName, headers);
+  // ensureHeader only fills an EMPTY row 1, which is right for a relabelled
+  // column — someone's wording should survive. But if the stored header is
+  // SHORTER than the current contract, a column has been added since it was
+  // written, and every column to the right of the new one is now mislabelled.
+  // That is not a wording preference, it is a wrong sheet, so rewrite it.
+  const head = await sheets.spreadsheets.values.get({
+    spreadsheetId, range: `${tabName}!1:1`,
+  });
+  if ((head.data.values?.[0] || []).length < headers.length) {
+    await sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range: `${tabName}!A1`,
+      valueInputOption: 'USER_ENTERED',
+      requestBody: { values: [headers] },
+    });
+  }
 
   const existing = await sheets.spreadsheets.values.get({
     spreadsheetId,
@@ -384,8 +433,12 @@ async function reconcileTab(sheets, spreadsheetId, tabName, headers, lastCol, ro
 }
 
 // ------------------------------------------------------------
-// The plain-English guide tab. Written ONCE, on first run only, so any wording
-// a human changes to suit themselves survives every later sync.
+// The plain-English guide tab. Unlike the data tabs this one IS rewritten every
+// run, deliberately: it tells people which columns are safe to work in, and when
+// that boundary moves (it moved from AB to AC when the Payment Check column was
+// added) a guide frozen at first-write would quietly send someone to put their
+// notes in a column the sync overwrites. Generated documentation, not a
+// scratchpad — keep your own notes on the data tabs, not here.
 // ------------------------------------------------------------
 const GUIDE_LINES = [
   ['Performance Squads — Registrations & Payments — how this sheet works'],
@@ -405,9 +458,9 @@ const GUIDE_LINES = [
   [''],
   ['WHERE YOU CAN WORK SAFELY'],
   [''],
-  ['On the centre tabs, columns A to AB are filled in by the automatic update. If you'],
+  ['On the centre tabs, columns A to AC are filled in by the automatic update. If you'],
   ['change something there, your change is replaced next time that player’s details'],
-  ['change. Column AC onwards is yours and is never touched — put notes, follow-up'],
+  ['change. Column AD onwards is yours and is never touched — put notes, follow-up'],
   ['status, selection decisions and anything else there.'],
   [''],
   ['On the Payments tab the same applies to columns A to J; K onwards is yours.'],
@@ -439,14 +492,13 @@ const GUIDE_LINES = [
 
 async function ensureGuideTab(sheets, spreadsheetId) {
   const created = await ensureTab(sheets, spreadsheetId, GUIDE_TAB);
-  if (!created) return 'already present, left alone';
   await sheets.spreadsheets.values.update({
     spreadsheetId,
     range: `${GUIDE_TAB}!A1`,
     valueInputOption: 'RAW',
     requestBody: { values: GUIDE_LINES },
   });
-  return 'created';
+  return created ? 'created' : 'refreshed';
 }
 
 // ------------------------------------------------------------

@@ -8,6 +8,7 @@ import {
   PAY_HEADERS,
   regRow,
   payRow,
+  paymentCheck,
   aggregatePaymentsByEmail,
 } from './sync-performance-squads.js';
 
@@ -82,6 +83,47 @@ describe('regRow', () => {
   it('distinguishes a false consent from an unanswered one', () => {
     expect(regRow(lead({ accept_social_media: false }), null)[col('Photo/Video Consent')]).toBe('No');
     expect(regRow(lead({ accept_social_media: null }), null)[col('Photo/Video Consent')]).toBe('');
+  });
+});
+
+describe('paymentCheck — the sibling trap', () => {
+  it('is quiet when the amount paid matches the amount due', () => {
+    expect(paymentCheck(6000, { amountCents: 6000 })).toBe('OK');
+  });
+
+  it('says plainly that nobody has paid yet', () => {
+    expect(paymentCheck(3000, null)).toBe('Not paid yet');
+  });
+
+  // The real case from 22 Aug 2026: one parent paid 2 x $30 from a single email
+  // for two sons registered under different addresses. Without this warning the
+  // second son reads as unpaid and gets chased for money already paid.
+  it('warns that an overpayment probably covers a sibling', () => {
+    const msg = paymentCheck(3000, { amountCents: 6000 });
+    expect(msg).toContain('$30.00 more than due');
+    expect(msg).toContain('sibling');
+  });
+
+  it('quantifies a short payment rather than just flagging it', () => {
+    expect(paymentCheck(6000, { amountCents: 3000 })).toBe('Short $30.00 — paid $30.00 of $60.00');
+  });
+
+  it('flags a payment against a form that recorded no sessions', () => {
+    expect(paymentCheck(0, { amountCents: 3000 })).toContain('no sessions');
+  });
+});
+
+describe('trial session labels', () => {
+  it('turns session ids into something a coach can read', () => {
+    const r = regRow(lead({ trial_session_dates: ['se-2026-09-06', 'se-2026-09-13'] }), null);
+    expect(r[col('Trial Sessions Chosen')]).toBe(
+      'Sun 6 Sep, 7:00-8:30 PM (Cranbourne Nth) · Sun 13 Sep, 7:00-8:30 PM (Cranbourne Nth)',
+    );
+  });
+
+  it('shows an unknown id rather than hiding it, so a stale mapping is visible', () => {
+    const r = regRow(lead({ trial_session_dates: ['se-2027-01-01'] }), null);
+    expect(r[col('Trial Sessions Chosen')]).toBe('se-2027-01-01');
   });
 });
 
