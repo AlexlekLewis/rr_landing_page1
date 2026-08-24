@@ -78,19 +78,19 @@ const SeptRegistrationForm = () => {
         if (!valid || partialSaved || leadId) return;
         const t = setTimeout(async () => {
             try {
-                const { data: inserted } = await supabase
+                const newId = crypto.randomUUID();
+                const { error } = await supabase
                     .from('junior_royals_sept_holidays_registrations')
                     .insert([{
+                        id: newId,
                         parent_name: form.parent_name.trim(),
                         parent_email: form.parent_email.trim().toLowerCase(),
                         parent_phone: form.parent_phone.trim(),
                         location: form.location || null,
                         status: 'partial',
                         ...getUTM(),
-                    }])
-                    .select('id')
-                    .single();
-                if (inserted?.id) { setLeadId(inserted.id); setPartialSaved(true); }
+                    }]);
+                if (!error) { setLeadId(newId); setPartialSaved(true); }
             } catch (e) { /* silent */ }
         }, 1500);
         return () => clearTimeout(t);
@@ -159,27 +159,22 @@ const SeptRegistrationForm = () => {
                     on_waitlist:      false,
                     ...utm,
                 };
-            let inserted = null;
+            let registrationId = leadId;
             if (leadId) {
-                const { data, error } = await supabase
+                const { error } = await supabase
                     .from('junior_royals_sept_holidays_registrations')
                     .update({ ...payload, status: 'complete' })
-                    .eq('id', leadId)
-                    .select('id')
-                    .single();
+                    .eq('id', leadId);
                 if (error) throw error;
-                inserted = data;
             } else {
-                const { data, error } = await supabase
+                registrationId = crypto.randomUUID();
+                const { error } = await supabase
                     .from('junior_royals_sept_holidays_registrations')
-                    .insert([{ ...payload, status: 'complete' }])
-                    .select('id')
-                    .single();
+                    .insert([{ id: registrationId, ...payload, status: 'complete' }]);
                 if (error) throw error;
-                inserted = data;
             }
             const stripeUrl = new URL('https://buy.stripe.com/00w8wP8vD4yhb9y9rR9Zm0t');
-            if (inserted?.id) stripeUrl.searchParams.set('client_reference_id', inserted.id);
+            if (registrationId) stripeUrl.searchParams.set('client_reference_id', registrationId);
             stripeUrl.searchParams.set('prefilled_email', form.parent_email.trim().toLowerCase());
             window.location.href = stripeUrl.toString();
         } catch (err) {
