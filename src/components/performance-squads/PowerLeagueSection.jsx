@@ -6,15 +6,16 @@ import { fadeUp } from './shared';
 const PowerLeagueSection = () => (
     <section className="py-20 px-5">
         <div className="max-w-4xl mx-auto">
-            {/* Official Power League logo (same asset as the Power Cricket page) —
-                white/pink on transparent, designed for dark backgrounds. */}
+            {/* Power League wordmark, RRA-pink variant of the Power Cricket logo —
+                'LEAGUE' recoloured to rr-pink (#E11F8F) to match the page. The
+                original fuchsia asset stays for the Power Cricket brand. */}
             <div className="max-w-3xl mx-auto text-center mb-12">
                 <span className="inline-block text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] text-rr-pink mb-5">
                     Where Squads Compete
                 </span>
                 <h2 className="sr-only">The Power League</h2>
                 <img
-                    src="/assets/power-league-logo.png"
+                    src="/assets/power-league-logo-rra.png"
                     alt="The Power League"
                     className="h-24 sm:h-32 lg:h-36 w-auto mx-auto drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]"
                 />
