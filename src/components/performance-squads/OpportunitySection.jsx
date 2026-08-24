@@ -14,7 +14,7 @@ const OpportunitySection = () => (
             <SectionHeading
                 eyebrow="The Royals Pathway"
                 title="This Isn't Another T20 Comp"
-                sub="T20 has torn up the old route to the top. The Rajasthan Royals now run a global system — and a Performance Squad place puts you inside it."
+                sub="T20 has torn up the old route to professional cricket, and the exposure opportunities are now greater than ever. The Rajasthan Royals now run a global system — and a Performance Squad place puts you inside it."
             />
 
             {/* Opportunity list */}
