@@ -9,7 +9,7 @@ const PathwaySection = () => (
             <SectionHeading
                 eyebrow="The Pathway"
                 title="Trial. Get Selected. Compete."
-                sub="Every Performance Squad player earns their place at an open trial. No invitations, no shortcuts — you show us what you've got."
+                sub="Performance Squad players earn their place at open trials and through performances. Players who are part of our T20 Elite and Pre-Season Programs are also eligible for Performance Squad and match selections."
             />
             <div className="grid sm:grid-cols-3 gap-5 mb-14">
                 {[
