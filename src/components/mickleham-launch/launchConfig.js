@@ -19,6 +19,10 @@ export const OFFER = {
     wasPrice: '$160',
     label: '30-Day Launch Special',
     what: 'One-on-one consultation with Academy Head Coach Alex Lewis',
+    // The consultation is a ONE-OFF first session, not an ongoing rate.
+    // Alex 24 Aug: this has to be unmistakable so nobody reads $50 as
+    // the price of regular coaching.
+    oneOff: 'First session only \u2014 you do this once',
 };
 
 export const CENTRE = {
@@ -39,7 +43,7 @@ export const INCLUDES = [
 export const STEPS = [
     { n: '01', t: 'Fill in the form', d: 'Takes two minutes. You pay nothing now.' },
     { n: '02', t: 'We call you', d: 'We\u2019ll ring in the next few days to pick a time.' },
-    { n: '03', t: 'You train with Alex', d: 'One hour, $50, at Mickleham.' },
+    { n: '03', t: 'Your first session', d: 'One hour with Alex, $50. You only do this once.' },
 ];
 
 // Days remaining, floored at 0. Computed client-side against END_DATE.

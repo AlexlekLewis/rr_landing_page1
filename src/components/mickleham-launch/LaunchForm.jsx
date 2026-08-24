@@ -119,9 +119,9 @@ const LaunchForm = () => {
                         in the next few days to pick a time.
                     </p>
                     <p className="text-white/60 font-medium leading-relaxed">
-                        Your first hour with Alex is <b className="text-white">{OFFER.price}</b>{' '}
-                        (normally {OFFER.wasPrice}), at {CENTRE.name}. That’s where your coach, your
-                        night and your plan get sorted.
+                        Your first session with Alex is <b className="text-white">{OFFER.price}</b>{' '}
+                        (normally {OFFER.wasPrice}), at {CENTRE.name}. You only do this once — it’s
+                        where your coach, your night and your plan get sorted.
                     </p>
                 </div>
             </section>
@@ -198,8 +198,9 @@ const LaunchForm = () => {
                     </button>
 
                     <p className="text-center text-white/40 text-xs font-medium leading-relaxed">
-                        You pay nothing now. The {OFFER.price} price is for your first session
-                        (the consultation) at {CENTRE.name}, booked before {endDateLabel()}.
+                        You pay nothing now. The {OFFER.price} is for your first session only — the
+                        consultation — at {CENTRE.name}, booked before {endDateLabel()}. Regular
+                        coaching after that is priced separately, and Alex will talk you through it.
                     </p>
                 </form>
             </div>

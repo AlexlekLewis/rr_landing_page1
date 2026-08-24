@@ -70,10 +70,15 @@ const MicklehamLaunch = () => {
                                 <span className="text-3xl md:text-4xl font-bold text-white/40 line-through leading-none mb-1.5">{OFFER.wasPrice}</span>
                             </div>
 
+                            {/* One-off, stated at the price where people actually look */}
+                            <p className="text-sm md:text-base font-bold text-rr-pink uppercase tracking-widest mb-6">
+                                {OFFER.oneOff}
+                            </p>
+
                             <p className="text-base md:text-xl text-white/85 font-semibold leading-relaxed max-w-2xl mx-auto mb-10">
-                                One hour with Head Coach{' '}
-                                <span className="text-white">Alex Lewis</span>. He looks at your game,
-                                picks the right coach for you, and books your training night.
+                                This is your first session with Head Coach{' '}
+                                <span className="text-white">Alex Lewis</span>. You do it once. He looks
+                                at your game, picks the right coach for you, and books your training night.
                             </p>
 
                             <button
@@ -102,7 +107,8 @@ const MicklehamLaunch = () => {
                                 Your First Session
                             </h2>
                             <p className="text-lg text-rr-charcoal font-medium max-w-2xl mx-auto">
-                                One hour with Alex. Here’s what happens.
+                                Every player starts here. You do it once, then your regular
+                                coaching begins.
                             </p>
                         </div>
 
