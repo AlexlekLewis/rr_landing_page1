@@ -28,8 +28,10 @@ const PowerLeagueSection = () => (
                 </p>
                 <p className="text-white/75 text-[15px] sm:text-base font-medium leading-relaxed mb-4">
                     Each centre's First XI and additional squad teams (ages 10 to 20+) are selected
-                    for Power League rounds, alongside fixtures against external opposition — so every
-                    squad member competes in real, meaningful cricket throughout the season.
+                    for Power League fixtures, alongside fixtures against external opposition in
+                    showcase matches — with the Performance Squads program designed for every squad
+                    member to compete in real, meaningful cricket throughout the season at the rate of
+                    approximately 5-6 matches across the period.
                 </p>
                 <p className="text-white/75 text-[15px] sm:text-base font-medium leading-relaxed mb-4">
                     <span className="text-rr-light-pink font-bold">Performance Squad games commence in
@@ -37,7 +39,7 @@ const PowerLeagueSection = () => (
                     the season.
                 </p>
                 <p className="text-white/45 text-xs font-medium italic">
-                    Full Power League format, fixtures, and standings will be published here from time to time.
+                    Full Power League format, external showcase fixtures, and standings will be published here from time to time.
                 </p>
             </motion.div>
         </div>
