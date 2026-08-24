@@ -318,29 +318,56 @@ const sameRow = (a, b, n) => {
 // Map Payment Link URL -> plink id, once per cold start. Checkout Sessions
 // reference the id; the code and the sheet think in URLs.
 let _linkIds = null;
-async function resolvePaymentLinkIds(stripe) {
+export async function resolvePaymentLinkIds(stripe) {
   if (_linkIds) return _linkIds;
-  const wanted = new Map(); // plink id -> {centre, sessions}
+  const wanted = new Map();     // plink id -> {centre, sessions, url, active}
+  const seenUrls = new Set();
   let params = { limit: 100 };
   for (let page = 0; page < 10; page++) {
     const res = await stripe.paymentLinks.list(params);
     for (const link of res.data) {
       const meta = PS_PAYMENT_LINK_URLS[link.url];
-      if (meta) wanted.set(link.id, meta);
+      if (!meta) continue;
+      seenUrls.add(link.url);
+      wanted.set(link.id, { ...meta, url: link.url, active: link.active !== false });
     }
     if (!res.has_more) break;
     params = { ...params, starting_after: res.data[res.data.length - 1].id };
   }
-  _linkIds = wanted;
-  return wanted;
+  // A configured URL Stripe has never heard of takes money nowhere — the button
+  // on the page leads to a dead Stripe screen and the player quietly gives up.
+  // Silence is the dangerous outcome here, so name the misses.
+  const missing = Object.keys(PS_PAYMENT_LINK_URLS).filter((u) => !seenUrls.has(u));
+  const inactive = [...wanted.values()].filter((m) => !m.active).map((m) => m.url);
+  _linkIds = { ids: wanted, missing, inactive };
+  return _linkIds;
+}
+
+// One line per configured link, for the guide tab. Written in plain words so
+// whoever opens the sheet can act without reading any code.
+export function describeLinkHealth({ ids, inactive = [] }) {
+  // Derive each verdict from what Stripe actually returned, NOT from a
+  // separately-computed "missing" list. Absence of evidence is the whole signal
+  // here: a URL Stripe did not return is a URL that takes money nowhere, and
+  // defaulting an unrecognised link to "working" would hide exactly the fault
+  // this section exists to catch.
+  const byUrl = new Map([...ids.values()].map((m) => [m.url, m]));
+  return Object.entries(PS_PAYMENT_LINK_URLS).map(([url, meta]) => {
+    const centre = CENTRE_NAMES[meta.centre] || meta.centre;
+    const what = `${centre} — ${meta.sessions} session${meta.sessions > 1 ? 's' : ''} ($${meta.sessions * TRIAL_FEE_CENTS / 100})`;
+    if (!byUrl.has(url)) return `${what}: BROKEN — Stripe has no payment link at this address.`;
+    if (inactive.includes(url)) return `${what}: TURNED OFF in Stripe — it will not take a payment.`;
+    return `${what}: working.`;
+  });
 }
 
 // Walk Checkout Sessions and keep the paid ones that came from a PS trial link.
 // `sinceUnix` bounds the walk — the program launched Aug 2026, so there is no
 // reason to page back through years of unrelated sessions.
 export async function fetchPerformanceSquadPayments(stripe, sinceUnix) {
-  const linkIds = await resolvePaymentLinkIds(stripe);
-  if (linkIds.size === 0) return { payments: [], linksFound: 0 };
+  const health = await resolvePaymentLinkIds(stripe);
+  const linkIds = health.ids;
+  if (linkIds.size === 0) return { payments: [], health };
 
   const payments = [];
   let params = { limit: 100, created: { gte: sinceUnix } };
@@ -364,7 +391,7 @@ export async function fetchPerformanceSquadPayments(stripe, sinceUnix) {
     if (!res.has_more) break;
     params = { ...params, starting_after: res.data[res.data.length - 1].id };
   }
-  return { payments, linksFound: linkIds.size };
+  return { payments, health };
 }
 
 // email -> what that address has paid in total. A player who paid for two
@@ -564,7 +591,7 @@ async function reconcileTab(sheets, spreadsheetId, tabName, headers, lastCol, ro
 // notes in a column the sync overwrites. Generated documentation, not a
 // scratchpad — keep your own notes on the data tabs, not here.
 // ------------------------------------------------------------
-const GUIDE_LINES = [
+const guideLines = (linkLines = []) => [
   ['Performance Squads — Registrations & Payments — how this sheet works'],
   [''],
   ['This sheet fills itself in automatically. It refreshes every 4 hours from the'],
@@ -618,6 +645,15 @@ const GUIDE_LINES = [
   ['"Trial Fee Due" is simply $30 multiplied by the number of sessions the player'],
   ['booked on the form. "Amount Paid" is what Stripe actually took.'],
   [''],
+  ['ARE THE PAYMENT BUTTONS WORKING?'],
+  [''],
+  ['Checked automatically every time this sheet updates, straight from Stripe:'],
+  [''],
+  ...(linkLines.length ? linkLines.map((l) => [`  ${l}`]) : [['  (not checked yet)']]),
+  [''],
+  ['If any line above does not say "working", the Pay button for that centre and'],
+  ['session count is not taking money. Tell Alex — the fix is in Stripe, not here.'],
+  [''],
   ['IF A ROW LOOKS WRONG'],
   [''],
   ['The sheet mirrors what the person typed into the form. If a detail is wrong, it was'],
@@ -626,14 +662,14 @@ const GUIDE_LINES = [
   ['next update.'],
 ];
 
-async function ensureGuideTab(sheets, spreadsheetId) {
+async function ensureGuideTab(sheets, spreadsheetId, linkLines = []) {
   await renameLegacyTab(sheets, spreadsheetId, GUIDE_TAB);
   const created = await ensureTab(sheets, spreadsheetId, GUIDE_TAB);
   await sheets.spreadsheets.values.update({
     spreadsheetId,
     range: `${GUIDE_TAB}!A1`,
     valueInputOption: 'RAW',
-    requestBody: { values: GUIDE_LINES },
+    requestBody: { values: guideLines(linkLines) },
   });
   await ensureProtectedRange(
     sheets, spreadsheetId, GUIDE_TAB, null,
@@ -679,7 +715,13 @@ export async function reconcilePerformanceSquads(sheets, spreadsheetId, sb = nul
   // anyone who paid before finishing the form.
   const earliest = leads?.length ? new Date(leads[0].created_at).getTime() : Date.now();
   const sinceUnix = Math.floor((earliest - 30 * 24 * 3600 * 1000) / 1000);
-  const { payments, linksFound } = await fetchPerformanceSquadPayments(stripe, sinceUnix);
+  const { payments, health } = await fetchPerformanceSquadPayments(stripe, sinceUnix);
+  const linkLines = describeLinkHealth(health);
+  if (health.missing.length || health.inactive.length) {
+    console.warn('sync-performance-squads: payment link problem —', JSON.stringify({
+      missing: health.missing, inactive: health.inactive,
+    }));
+  }
 
   const paidByEmail = aggregatePaymentsByEmail(payments);
 
@@ -710,7 +752,7 @@ export async function reconcilePerformanceSquads(sheets, spreadsheetId, sb = nul
   });
   const payResult = await reconcileTab(sheets, spreadsheetId, PAYMENTS_TAB, PAY_HEADERS, PAY_LAST_COL, payRows);
 
-  const guide = await ensureGuideTab(sheets, spreadsheetId);
+  const guide = await ensureGuideTab(sheets, spreadsheetId, linkLines);
 
   await sb
     .from('holiday_program_sheets')
@@ -723,7 +765,7 @@ export async function reconcilePerformanceSquads(sheets, spreadsheetId, sb = nul
     payments: {
       ...payResult,
       stripePaymentsFound: payments.length,
-      paymentLinksResolved: linksFound,
+      paymentLinks: { working: health.ids.size, missing: health.missing, inactive: health.inactive },
       unmatched: payRows.filter((r) => String(r[7]).startsWith('UNMATCHED')).length,
     },
     guide,

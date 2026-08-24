@@ -10,6 +10,7 @@ import {
   payRow,
   paymentCheck,
   colLetter,
+  describeLinkHealth,
   aggregatePaymentsByEmail,
 } from './sync-performance-squads.js';
 
@@ -107,6 +108,42 @@ describe('the DO NOT EDIT boundary', () => {
   it('keeps it out of the payments tab centre cell too', () => {
     const r = payRow({ sessionId: 'cs_1', paidAt: '2026-08-22T04:00:00Z', amountCents: 3000, centre: 'north-melbourne' });
     expect(r[PAY_HEADERS.indexOf('Centre (from payment link)')]).toBe('North Melbourne');
+  });
+});
+
+describe('describeLinkHealth', () => {
+  const link = (url, centre, sessions, active = true) => [`plink_${url.slice(-4)}`, { url, centre, sessions, active }];
+  const NM1 = 'https://buy.stripe.com/4gMcN56nvggZ2D233t9Zm0z';
+  const SE2 = 'https://buy.stripe.com/9B6cN53bj8Ox6TifQf9Zm0y';
+
+  it('reports a link Stripe returned as working', () => {
+    const ids = new Map([link(SE2, 'south-east-melbourne', 2)]);
+    const lines = describeLinkHealth({ ids });
+    expect(lines.find((l) => l.startsWith('South-East Melbourne — 2 sessions'))).toContain('working');
+  });
+
+  // The bug this test exists for: an unrecognised link must never default to
+  // "working". Absence of evidence IS the fault signal.
+  it('calls a link Stripe never returned BROKEN, even with no missing list', () => {
+    const ids = new Map([link(SE2, 'south-east-melbourne', 2)]);
+    const lines = describeLinkHealth({ ids });
+    expect(lines.find((l) => l.startsWith('North Melbourne — 1 session'))).toContain('BROKEN');
+  });
+
+  it('distinguishes a switched-off link from a missing one', () => {
+    const ids = new Map([link(NM1, 'north-melbourne', 1, false)]);
+    const lines = describeLinkHealth({ ids, inactive: [NM1] });
+    expect(lines.find((l) => l.startsWith('North Melbourne — 1 session'))).toContain('TURNED OFF');
+  });
+
+  it('covers every configured link, so none can be silently skipped', () => {
+    expect(describeLinkHealth({ ids: new Map() })).toHaveLength(4);
+  });
+
+  it('states the price the link should charge', () => {
+    const lines = describeLinkHealth({ ids: new Map() });
+    expect(lines.some((l) => l.includes('($30)'))).toBe(true);
+    expect(lines.some((l) => l.includes('($60)'))).toBe(true);
   });
 });
 
