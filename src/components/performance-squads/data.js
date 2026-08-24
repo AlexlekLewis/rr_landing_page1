@@ -245,7 +245,7 @@ export const FAQS = [
     },
     {
         q: 'Are the global opportunities real?',
-        a: 'Yes. The Rajasthan Royals Academy selection team has put forward four players for consideration as training partners with the Paarl Royals in the SA20, and Royals Academies in the USA have sent players as training partners of the Barbados Royals. Selection is competitive and never guaranteed, but the routes exist and are being used.',
+        a: 'Yes. Our Rajasthan Royals Academy selection team has put forward four players for consideration as training partners with the Paarl Royals in the SA20, and Royals Academies in the USA have sent players as training partners of the Barbados Royals. Selection is competitive and never guaranteed, but the routes exist and are being used.',
     },
     {
         q: 'When do Performance Squad games start?',
