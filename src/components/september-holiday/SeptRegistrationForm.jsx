@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 
@@ -51,8 +51,19 @@ const SeptRegistrationForm = () => {
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [showSizeChart, setShowSizeChart] = useState(false);
-    const [leadId, setLeadId] = useState(null);
-    const [partialSaved, setPartialSaved] = useState(false);
+
+    // Stable client-generated row id. Reuse the id from a hero QuickRegister lead
+    // if one is present, so we continue that row instead of creating a duplicate.
+    // All writes go through the save_sept_registration RPC (SECURITY DEFINER) —
+    // never a direct .insert().select(), whose RETURNING read-back anon RLS blocks.
+    const [regId] = useState(() => {
+        try {
+            const stored = sessionStorage.getItem('jr_sept_lead');
+            if (stored) { const l = JSON.parse(stored); if (l?.id) return l.id; }
+        } catch (e) { /* ignore */ }
+        return crypto.randomUUID();
+    });
+    const partialSavedRef = useRef(false);
 
     // Prefill from hero quick-register
     useEffect(() => {
@@ -67,34 +78,30 @@ const SeptRegistrationForm = () => {
                     parent_phone: lead.parent_phone || f.parent_phone,
                     location: lead.location || f.location,
                 }));
-                if (lead.id) setLeadId(lead.id);
+                if (lead.id) partialSavedRef.current = true; // row already exists
             }
         } catch (e) { /* ignore */ }
     }, []);
 
-    // Progressive capture — silently save a partial lead once contact details are valid
+    // Progressive capture — silently save a partial lead once contact details are
+    // valid. Writes through the RPC (no read-back) so anon RLS can't block it.
     useEffect(() => {
         const valid = form.parent_name.trim() && /\S+@\S+\.\S+/.test(form.parent_email) && form.parent_phone.trim();
-        if (!valid || partialSaved || leadId) return;
+        if (!valid || partialSavedRef.current || submitting || submitted) return;
         const t = setTimeout(async () => {
-            try {
-                const { data: inserted } = await supabase
-                    .from('junior_royals_sept_holidays_registrations')
-                    .insert([{
-                        parent_name: form.parent_name.trim(),
-                        parent_email: form.parent_email.trim().toLowerCase(),
-                        parent_phone: form.parent_phone.trim(),
-                        location: form.location || null,
-                        status: 'partial',
-                        ...getUTM(),
-                    }])
-                    .select('id')
-                    .single();
-                if (inserted?.id) { setLeadId(inserted.id); setPartialSaved(true); }
-            } catch (e) { /* silent */ }
+            const { error } = await supabase.rpc('save_sept_registration', { p: {
+                id: regId,
+                parent_name: form.parent_name.trim(),
+                parent_email: form.parent_email.trim().toLowerCase(),
+                parent_phone: form.parent_phone.trim(),
+                location: form.location || null,
+                status: 'partial',
+                ...getUTM(),
+            } });
+            if (!error) partialSavedRef.current = true;
         }, 1500);
         return () => clearTimeout(t);
-    }, [form.parent_name, form.parent_email, form.parent_phone, form.location, partialSaved, leadId]);
+    }, [form.parent_name, form.parent_email, form.parent_phone, form.location, submitting, submitted, regId]);
 
     // Capture UTM params from URL
     const getUTM = () => {
@@ -139,47 +146,33 @@ const SeptRegistrationForm = () => {
         if (Object.keys(e).length) { setErrors(e); return; }
         setSubmitting(true);
         try {
-            const utm = getUTM();
             const payload = {
-                    parent_name:      form.parent_name.trim(),
-                    parent_email:     form.parent_email.trim().toLowerCase(),
-                    parent_phone:     form.parent_phone.trim(),
-                    player_name:      form.player_name.trim(),
-                    player_age:       parseInt(form.player_age),
-                    player_gender:    form.player_gender,
-                    primary_club:     form.primary_club.trim(),
-                    suburb:           form.suburb.trim(),
-                    location:         form.location,
-                    has_shirt:        false,
-                    shirt_size:       form.shirt_size,
-                    accept_terms:     form.accept_terms,
-                    accept_player_code: form.accept_player_code,
-                    accept_parent_code: form.accept_parent_code,
-                    accept_social_media: form.accept_social_media,
-                    on_waitlist:      false,
-                    ...utm,
-                };
-            let inserted = null;
-            if (leadId) {
-                const { data, error } = await supabase
-                    .from('junior_royals_sept_holidays_registrations')
-                    .update({ ...payload, status: 'complete' })
-                    .eq('id', leadId)
-                    .select('id')
-                    .single();
-                if (error) throw error;
-                inserted = data;
-            } else {
-                const { data, error } = await supabase
-                    .from('junior_royals_sept_holidays_registrations')
-                    .insert([{ ...payload, status: 'complete' }])
-                    .select('id')
-                    .single();
-                if (error) throw error;
-                inserted = data;
-            }
+                id:                  regId,
+                parent_name:         form.parent_name.trim(),
+                parent_email:        form.parent_email.trim().toLowerCase(),
+                parent_phone:        form.parent_phone.trim(),
+                player_name:         form.player_name.trim(),
+                player_age:          parseInt(form.player_age),
+                player_gender:       form.player_gender,
+                primary_club:        form.primary_club.trim(),
+                suburb:              form.suburb.trim(),
+                location:            form.location,
+                has_shirt:           false,
+                shirt_size:          form.shirt_size,
+                accept_terms:        form.accept_terms,
+                accept_player_code:  form.accept_player_code,
+                accept_parent_code:  form.accept_parent_code,
+                accept_social_media: form.accept_social_media,
+                on_waitlist:         false,
+                status:              'complete',
+                ...getUTM(),
+            };
+            // SECURITY DEFINER upsert-by-id — returns the row id, no RLS read-back.
+            const { data: savedId, error } = await supabase.rpc('save_sept_registration', { p: payload });
+            if (error) throw error;
+            const id = savedId || regId;
             const stripeUrl = new URL('https://buy.stripe.com/00w8wP8vD4yhb9y9rR9Zm0t');
-            if (inserted?.id) stripeUrl.searchParams.set('client_reference_id', inserted.id);
+            stripeUrl.searchParams.set('client_reference_id', id);
             stripeUrl.searchParams.set('prefilled_email', form.parent_email.trim().toLowerCase());
             window.location.href = stripeUrl.toString();
         } catch (err) {

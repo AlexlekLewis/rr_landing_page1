@@ -173,6 +173,28 @@ const findRowByRegistrationId = async (sheets, spreadsheetId, tabName, registrat
   return null;
 };
 
+// Ensure a location tab exists. If missing, create it and write the header row.
+// Lets a freshly-created (empty) workbook be wired up by just sharing it with the
+// service account — no need to hand-create tabs with exactly-matching names.
+const ensureTab = async (sheets, spreadsheetId, tabName) => {
+  const meta = await sheets.spreadsheets.get({
+    spreadsheetId,
+    fields: 'sheets.properties.title',
+  });
+  const exists = (meta.data.sheets || []).some(s => s.properties?.title === tabName);
+  if (exists) return;
+  await sheets.spreadsheets.batchUpdate({
+    spreadsheetId,
+    requestBody: { requests: [{ addSheet: { properties: { title: tabName } } }] },
+  });
+  await sheets.spreadsheets.values.update({
+    spreadsheetId,
+    range: `${tabName}!A1`,
+    valueInputOption: 'RAW',
+    requestBody: { values: [SHEET_HEADERS] },
+  });
+};
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -235,6 +257,7 @@ export default async function handler(req, res) {
   const row = buildRow(record);
 
   try {
+    await ensureTab(sheets, cfg.workbook_id, tabName);
     if (type === 'INSERT') {
       // Append. If a row with this id somehow already exists, prefer update
       // semantics so replays are idempotent.
