@@ -432,7 +432,7 @@ export const colLetter = (n) => {
 const sheetMeta = async (sheets, spreadsheetId) => {
   const meta = await sheets.spreadsheets.get({
     spreadsheetId,
-    fields: 'sheets(properties(sheetId,title),protectedRanges(description,protectedRangeId))',
+    fields: 'sheets(properties(sheetId,title,gridProperties(columnCount)),protectedRanges(description,protectedRangeId))',
   });
   return meta.data.sheets || [];
 };
@@ -488,10 +488,32 @@ async function ensureProtectedRange(sheets, spreadsheetId, tabName, nCols, descr
   return true;
 }
 
+// A new tab's grid is only as wide as what has been written to it — here exactly
+// 29 columns, one per header. Reading or writing AD1 (the 30th) then fails with
+// "exceeds grid limits" and, before this was handled, took the whole run down
+// with it. Widen the grid first.
+async function ensureColumnCount(sheets, spreadsheetId, tabName, minCols) {
+  const all = await sheetMeta(sheets, spreadsheetId);
+  const hit = all.find((x) => x.properties?.title === tabName);
+  if (!hit) return false;
+  const have = hit.properties?.gridProperties?.columnCount ?? 0;
+  if (have >= minCols) return false;
+  await sheets.spreadsheets.batchUpdate({
+    spreadsheetId,
+    requestBody: {
+      requests: [{
+        appendDimension: { sheetId: hit.properties.sheetId, dimension: 'COLUMNS', length: minCols - have },
+      }],
+    },
+  });
+  return true;
+}
+
 // Label the first column the sync never touches, so there is an obvious place to
 // work. Written ONCE and only into an empty cell — if someone has already put
 // their own heading there, it is left alone.
 async function ensureSafeColumnLabel(sheets, spreadsheetId, tabName, firstSafeIndex) {
+  await ensureColumnCount(sheets, spreadsheetId, tabName, firstSafeIndex + 1);
   const cell = `${colLetter(firstSafeIndex)}1`;
   const cur = await sheets.spreadsheets.values.get({ spreadsheetId, range: `${tabName}!${cell}` });
   if ((cur.data.values?.[0]?.[0] || '') !== '') return false;
@@ -573,12 +595,20 @@ async function reconcileTab(sheets, spreadsheetId, tabName, headers, lastCol, ro
     });
   }
 
-  await ensureProtectedRange(
-    sheets, spreadsheetId, tabName, headers.length,
-    `Columns A-${lastCol} are filled in automatically every 4 hours. Anything you type here is `
-      + `replaced. Put your notes in column ${colLetter(headers.length)} onwards instead.`,
-  );
-  await ensureSafeColumnLabel(sheets, spreadsheetId, tabName, headers.length);
+  // Signposting is decoration. The rows are the job, and they are already
+  // written by this point — so a failure here is logged and swallowed rather
+  // than allowed to abort the run and strand the payments tab and the guide,
+  // which is exactly what happened when AD1 hit the grid limit.
+  try {
+    await ensureProtectedRange(
+      sheets, spreadsheetId, tabName, headers.length,
+      `Columns A-${lastCol} are filled in automatically every 4 hours. Anything you type here is `
+        + `replaced. Put your notes in column ${colLetter(headers.length)} onwards instead.`,
+    );
+    await ensureSafeColumnLabel(sheets, spreadsheetId, tabName, headers.length);
+  } catch (err) {
+    console.warn(`sync-performance-squads: signposting on "${tabName}" failed (rows are still synced):`, err.message);
+  }
 
   return { tab: tabName, rows: rows.length, added: appends.length, updated: updates.length, unchanged };
 }
@@ -671,10 +701,14 @@ async function ensureGuideTab(sheets, spreadsheetId, linkLines = []) {
     valueInputOption: 'RAW',
     requestBody: { values: guideLines(linkLines) },
   });
-  await ensureProtectedRange(
-    sheets, spreadsheetId, GUIDE_TAB, null,
-    'This whole tab is rewritten automatically every 4 hours. Anything you type here is replaced.',
-  );
+  try {
+    await ensureProtectedRange(
+      sheets, spreadsheetId, GUIDE_TAB, null,
+      'This whole tab is rewritten automatically every 4 hours. Anything you type here is replaced.',
+    );
+  } catch (err) {
+    console.warn('sync-performance-squads: could not protect the guide tab:', err.message);
+  }
   return created ? 'created' : 'refreshed';
 }
 
