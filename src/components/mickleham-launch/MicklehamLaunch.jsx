@@ -71,9 +71,9 @@ const MicklehamLaunch = () => {
                             </div>
 
                             <p className="text-base md:text-xl text-white/85 font-semibold leading-relaxed max-w-2xl mx-auto mb-10">
-                                A one-on-one consultation with Academy Head Coach{' '}
-                                <span className="text-white">Alex Lewis</span> — your game assessed, your
-                                coach assigned, your plan set. For the next 30 days only.
+                                One hour with Head Coach{' '}
+                                <span className="text-white">Alex Lewis</span>. He looks at your game,
+                                picks the right coach for you, and books your training night.
                             </p>
 
                             <button
@@ -99,10 +99,10 @@ const MicklehamLaunch = () => {
                         <div className="text-center mb-12">
                             <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">What You Get</p>
                             <h2 className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-5">
-                                The Consultation
+                                Your First Session
                             </h2>
                             <p className="text-lg text-rr-charcoal font-medium max-w-2xl mx-auto">
-                                An hour with the Head Coach that sets up everything that follows.
+                                One hour with Alex. Here’s what happens.
                             </p>
                         </div>
 
@@ -131,7 +131,7 @@ const MicklehamLaunch = () => {
                                 onClick={scrollToForm}
                                 className="bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-10 py-4 rounded-full transition-all duration-300"
                             >
-                                Claim Your {OFFER.price} Consultation
+                                Claim Your {OFFER.price} Spot
                             </button>
                         </div>
                     </div>

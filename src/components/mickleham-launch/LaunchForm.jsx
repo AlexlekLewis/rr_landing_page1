@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
-import { CENTRE, OFFER } from './launchConfig';
+import { CENTRE, OFFER, endDateLabel } from './launchConfig';
 
 const DAYS = [
     { value: 'tuesday', label: 'Tuesday' },
@@ -50,7 +50,7 @@ const LaunchForm = () => {
         if (isMinor && !form.parent_name.trim()) return 'Please add a parent or guardian name for players under 18.';
         if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim())) return 'Please enter a valid email address.';
         if (form.phone.replace(/\D/g, '').length < 8) return 'Please enter a valid phone number.';
-        if (!form.preferred_day) return 'Please choose a day that suits — Tuesday, Friday, or either.';
+        if (!form.preferred_day) return 'Please pick a night — Tuesday, Friday, or either.';
         return '';
     };
 
@@ -114,14 +114,14 @@ const LaunchForm = () => {
                         You’re On The List
                     </h2>
                     <p className="text-white/80 font-medium leading-relaxed mb-4">
-                        Thanks {form.player_name.split(' ')[0]} — your spot in the launch special is
-                        locked in with <b className="text-white">Alex Lewis, Academy Head Coach</b>.
-                        Our administration team will contact you in the coming days to organise a time.
+                        Thanks {form.player_name.split(' ')[0]}. You’re in with{' '}
+                        <b className="text-white">Alex Lewis, Academy Head Coach</b>. We’ll call you
+                        in the next few days to pick a time.
                     </p>
                     <p className="text-white/60 font-medium leading-relaxed">
-                        That first session is your <b className="text-white">{OFFER.price} assessment</b>{' '}
-                        (normally {OFFER.wasPrice}) at {CENTRE.name} — where your coach, your nights and
-                        your plan all get sorted.
+                        Your first hour with Alex is <b className="text-white">{OFFER.price}</b>{' '}
+                        (normally {OFFER.wasPrice}), at {CENTRE.name}. That’s where your coach, your
+                        night and your plan get sorted.
                     </p>
                 </div>
             </section>
@@ -137,10 +137,10 @@ const LaunchForm = () => {
                 <div className="text-center mb-10">
                     <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Claim The Offer</p>
                     <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-none mb-4">
-                        Register Your Interest
+                        Book Your Spot
                     </h2>
                     <p className="text-white/70 font-medium">
-                        Two minutes. No payment now — our admin team will be in touch to book your time.
+                        Takes two minutes. You pay nothing now — we’ll call you to pick a time.
                     </p>
                 </div>
 
@@ -167,7 +167,7 @@ const LaunchForm = () => {
                         </Field>
                     </div>
 
-                    <Field label="Which Night Suits? — Tue or Fri">
+                    <Field label="Which night works? Tuesday or Friday">
                         <select className={selectCls} value={form.preferred_day} onChange={set('preferred_day')}>
                             <option value="" disabled>Select…</option>
                             {DAYS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
@@ -189,7 +189,7 @@ const LaunchForm = () => {
                         disabled={submitting}
                         className="w-full group bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-base px-8 py-5 rounded-full transition-all duration-300 hover:shadow-[0_0_32px_rgba(229,6,149,0.5)] flex items-center gap-3 justify-center"
                     >
-                        {submitting ? 'Sending…' : `Claim My ${OFFER.price} Consultation`}
+                        {submitting ? 'Sending…' : `Claim My ${OFFER.price} Spot`}
                         {!submitting && (
                             <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -198,8 +198,8 @@ const LaunchForm = () => {
                     </button>
 
                     <p className="text-center text-white/40 text-xs font-medium leading-relaxed">
-                        No payment now. Offer applies to your first consultation at {CENTRE.name},
-                        booked while the 30-day launch special runs.
+                        You pay nothing now. The {OFFER.price} price is for your first session
+                        (the consultation) at {CENTRE.name}, booked before {endDateLabel()}.
                     </p>
                 </form>
             </div>
