@@ -73,8 +73,8 @@ const Footer = () => {
                             />
                         </Link>
                         <p className="text-white/70 text-sm mt-4 max-w-xs leading-relaxed">
-                            Melbourne's Rajasthan Royals cricket academy — junior programs, elite squads,
-                            private coaching and holiday program.
+                            Melbourne's Rajasthan Royals Academy — junior programs, performance squads,
+                            private coaching, masterclasses and holiday program.
                         </p>
                         <div className="flex items-center gap-4 mt-5">
                             <a
