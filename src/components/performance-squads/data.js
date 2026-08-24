@@ -147,9 +147,9 @@ export const AUDIENCE = [
 export const OPPORTUNITIES = [
     'Exposure within the global T20 ecosystem',
     'Opportunities for selection as a training partner at the Paarl Royals and Barbados Royals',
-    'Invitational training opportunities within the Rajasthan Royals system',
+    'Invitational training opportunities within the Rajasthan Royals system and beyond',
     'Invitation to small group camps at the Rajasthan Royals High Performance Centre in Nagpur, home of the Royals and their coaching staff',
-    'Player data and vision analysed quarterly by Rajasthan Royals coaching staff',
+    'Player data and vision analysed throughout the year by Rajasthan Royals coaching staff',
     'Selection opportunity to compete in international Rajasthan Royals Academy fixtures',
 ];
 
