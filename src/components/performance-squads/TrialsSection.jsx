@@ -10,7 +10,7 @@ const TrialsSection = ({ onChooseCentre }) => (
         <div className="max-w-5xl mx-auto">
             <SectionHeading
                 eyebrow="Our Centres"
-                title="Trial At Your Centre"
+                title="Choose Your Centre to Trial"
                 sub="Two Performance Squads are live now, with two more centres arriving in 2027."
             />
             <div className="grid sm:grid-cols-2 gap-5 mb-6">
