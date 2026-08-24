@@ -1,224 +1,228 @@
 {
-    "functions": {
-        "api/fetch-playhq-stats.js": {
-            "maxDuration": 60,
-            "memory": 1024
-        },
-        "api/sync-pgp-leads.js": {
-            "maxDuration": 300
-        },
-        "api/sync-masterclass.js": {
-            "maxDuration": 60
-        }
+  "functions": {
+    "api/fetch-playhq-stats.js": {
+      "maxDuration": 60,
+      "memory": 1024
     },
-    "crons": [
+    "api/sync-pgp-leads.js": {
+      "maxDuration": 300
+    },
+    "api/sync-masterclass.js": {
+      "maxDuration": 60
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/sync-pgp-leads",
+      "schedule": "*/30 * * * *"
+    },
+    {
+      "path": "/api/sync-masterclass",
+      "schedule": "0 */4 * * *"
+    },
+    {
+      "path": "/api/sync-performance-squads",
+      "schedule": "30 */4 * * *"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*).mp4",
+      "headers": [
         {
-            "path": "/api/sync-pgp-leads",
-            "schedule": "*/30 * * * *"
+          "key": "Content-Type",
+          "value": "video/mp4"
         },
         {
-            "path": "/api/sync-masterclass",
-            "schedule": "0 */4 * * *"
+          "key": "Accept-Ranges",
+          "value": "bytes"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000"
         }
-    ],
-    "headers": [
+      ]
+    },
+    {
+      "source": "/power-preview-k7x2q9.html",
+      "headers": [
         {
-            "source": "/assets/(.*).mp4",
-            "headers": [
-                {
-                    "key": "Content-Type",
-                    "value": "video/mp4"
-                },
-                {
-                    "key": "Accept-Ranges",
-                    "value": "bytes"
-                },
-                {
-                    "key": "Cache-Control",
-                    "value": "public, max-age=31536000"
-                }
-            ]
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive, nosnippet"
         },
         {
-            "source": "/power-preview-k7x2q9.html",
-            "headers": [
-                {
-                    "key": "X-Robots-Tag",
-                    "value": "noindex, nofollow, noarchive, nosnippet"
-                },
-                {
-                    "key": "Cache-Control",
-                    "value": "no-store"
-                }
-            ]
+          "key": "Cache-Control",
+          "value": "no-store"
         }
-    ],
-    "redirects": [
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/holiday-programs",
+      "destination": "/junior-royals-holiday",
+      "permanent": true
+    },
+    {
+      "source": "/holiday-programs/:path*",
+      "destination": "/junior-royals-holiday/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/private-coaching",
+      "destination": "/mickleham",
+      "permanent": true
+    },
+    {
+      "source": "/india-tour-2026",
+      "destination": "/tours",
+      "permanent": true
+    },
+    {
+      "source": "/eliteprogram2026/playerDNAprofile",
+      "destination": "https://rramsdnaprofile.vercel.app",
+      "permanent": false
+    },
+    {
+      "source": "/eliteprogram2026/playerDNAprofile/:path*",
+      "destination": "https://rramsdnaprofile.vercel.app/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/power-preview-k7x2q9.html",
+      "has": [
         {
-            "source": "/holiday-programs",
-            "destination": "/junior-royals-holiday",
-            "permanent": true
-        },
-        {
-            "source": "/holiday-programs/:path*",
-            "destination": "/junior-royals-holiday/:path*",
-            "permanent": true
-        },
-        {
-            "source": "/private-coaching",
-            "destination": "/mickleham",
-            "permanent": true
-        },
-        {
-            "source": "/india-tour-2026",
-            "destination": "/tours",
-            "permanent": true
-        },
-        {
-            "source": "/eliteprogram2026/playerDNAprofile",
-            "destination": "https://rramsdnaprofile.vercel.app",
-            "permanent": false
-        },
-        {
-            "source": "/eliteprogram2026/playerDNAprofile/:path*",
-            "destination": "https://rramsdnaprofile.vercel.app/:path*",
-            "permanent": false
-        },
-        {
-            "source": "/power-preview-k7x2q9.html",
-            "has": [
-                {
-                    "type": "host",
-                    "value": "rramelbourne.com"
-                }
-            ],
-            "destination": "/",
-            "permanent": false
-        },
-        {
-            "source": "/power-preview-k7x2q9.html",
-            "has": [
-                {
-                    "type": "host",
-                    "value": "www.rramelbourne.com"
-                }
-            ],
-            "destination": "/",
-            "permanent": false
+          "type": "host",
+          "value": "rramelbourne.com"
         }
-    ],
-    "rewrites": [
+      ],
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/power-preview-k7x2q9.html",
+      "has": [
         {
-            "source": "/api/(.*)",
-            "destination": "/api/$1"
-        },
-        {
-            "source": "/RRACRMDashboard/(.*)",
-            "destination": "/RRACRMDashboard/$1"
-        },
-        {
-            "source": "/RRACRMDashboard",
-            "destination": "/RRACRMDashboard/index.html"
-        },
-        {
-            "source": "/eliteprogram2026",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/eliteprogram2026/success",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/master-page",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/eliteprogram/2026registration",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/eliteprogram/2026registrations",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/offer/assessment",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/invite",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/PGP2026/mickleham",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/PGP2026/mickleham/success",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/PGP2026/mickleham/junior/success",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/PGP2026/mickleham/entry",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/PGP2026/williamstown",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/PGP2026/williamstown/success",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/PGP2026/williamstown/junior/success",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/PGP2026/williamstown/entry",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/PGP2026/hallam",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/PGP2026/hallam/success",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/PGP2026/hallam/junior/success",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/PGP2026/hallam/entry",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/female-cricket-kickstart",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/female-cricket-kickstart/success",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/female-empowerment",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/india-tour-2026/deposit",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/india-tour-2026/deposit/success",
-            "destination": "/api/gone"
-        },
-        {
-            "source": "/(.*)",
-            "destination": "/index.html"
+          "type": "host",
+          "value": "www.rramelbourne.com"
         }
-    ]
+      ],
+      "destination": "/",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/RRACRMDashboard/(.*)",
+      "destination": "/RRACRMDashboard/$1"
+    },
+    {
+      "source": "/RRACRMDashboard",
+      "destination": "/RRACRMDashboard/index.html"
+    },
+    {
+      "source": "/eliteprogram2026",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/eliteprogram2026/success",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/master-page",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/eliteprogram/2026registration",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/eliteprogram/2026registrations",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/offer/assessment",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/invite",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/PGP2026/mickleham",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/PGP2026/mickleham/success",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/PGP2026/mickleham/junior/success",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/PGP2026/mickleham/entry",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/PGP2026/williamstown",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/PGP2026/williamstown/success",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/PGP2026/williamstown/junior/success",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/PGP2026/williamstown/entry",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/PGP2026/hallam",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/PGP2026/hallam/success",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/PGP2026/hallam/junior/success",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/PGP2026/hallam/entry",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/female-cricket-kickstart",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/female-cricket-kickstart/success",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/female-empowerment",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/india-tour-2026/deposit",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/india-tour-2026/deposit/success",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }

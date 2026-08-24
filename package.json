@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "build:pdf": "node generate_lp2_pdf.js",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:api": "vitest run --config vitest.api.config.mjs"
   },
   "dependencies": {
     "@posthog/react": "^1.8.2",
