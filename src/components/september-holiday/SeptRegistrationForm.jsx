@@ -89,21 +89,16 @@ const SeptRegistrationForm = () => {
         const valid = form.parent_name.trim() && /\S+@\S+\.\S+/.test(form.parent_email) && form.parent_phone.trim();
         if (!valid || partialSavedRef.current || submitting || submitted) return;
         const t = setTimeout(async () => {
-            try {
-                const newId = crypto.randomUUID();
-                const { error } = await supabase
-                    .from('junior_royals_sept_holidays_registrations')
-                    .insert([{
-                        id: newId,
-                        parent_name: form.parent_name.trim(),
-                        parent_email: form.parent_email.trim().toLowerCase(),
-                        parent_phone: form.parent_phone.trim(),
-                        location: form.location || null,
-                        status: 'partial',
-                        ...getUTM(),
-                    }]);
-                if (!error) { setLeadId(newId); setPartialSaved(true); }
-            } catch (e) { /* silent */ }
+            const { error } = await supabase.rpc('save_sept_registration', { p: {
+                id: regId,
+                parent_name: form.parent_name.trim(),
+                parent_email: form.parent_email.trim().toLowerCase(),
+                parent_phone: form.parent_phone.trim(),
+                location: form.location || null,
+                status: 'partial',
+                ...getUTM(),
+            } });
+            if (!error) partialSavedRef.current = true;
         }, 1500);
         return () => clearTimeout(t);
     }, [form.parent_name, form.parent_email, form.parent_phone, form.location, submitting, submitted, regId]);
@@ -152,40 +147,34 @@ const SeptRegistrationForm = () => {
         setSubmitting(true);
         try {
             const payload = {
-                    parent_name:      form.parent_name.trim(),
-                    parent_email:     form.parent_email.trim().toLowerCase(),
-                    parent_phone:     form.parent_phone.trim(),
-                    player_name:      form.player_name.trim(),
-                    player_age:       parseInt(form.player_age),
-                    player_gender:    form.player_gender,
-                    primary_club:     form.primary_club.trim(),
-                    suburb:           form.suburb.trim(),
-                    location:         form.location,
-                    has_shirt:        false,
-                    shirt_size:       form.shirt_size,
-                    accept_terms:     form.accept_terms,
-                    accept_player_code: form.accept_player_code,
-                    accept_parent_code: form.accept_parent_code,
-                    accept_social_media: form.accept_social_media,
-                    on_waitlist:      false,
-                    ...utm,
-                };
-            let registrationId = leadId;
-            if (leadId) {
-                const { error } = await supabase
-                    .from('junior_royals_sept_holidays_registrations')
-                    .update({ ...payload, status: 'complete' })
-                    .eq('id', leadId);
-                if (error) throw error;
-            } else {
-                registrationId = crypto.randomUUID();
-                const { error } = await supabase
-                    .from('junior_royals_sept_holidays_registrations')
-                    .insert([{ id: registrationId, ...payload, status: 'complete' }]);
-                if (error) throw error;
-            }
+                id:                  regId,
+                parent_name:         form.parent_name.trim(),
+                parent_email:        form.parent_email.trim().toLowerCase(),
+                parent_phone:        form.parent_phone.trim(),
+                player_name:         form.player_name.trim(),
+                player_age:          parseInt(form.player_age),
+                player_gender:       form.player_gender,
+                primary_club:        form.primary_club.trim(),
+                suburb:              form.suburb.trim(),
+                location:            form.location,
+                has_shirt:           false,
+                shirt_size:          form.shirt_size,
+                accept_terms:        form.accept_terms,
+                accept_player_code:  form.accept_player_code,
+                accept_parent_code:  form.accept_parent_code,
+                accept_social_media: form.accept_social_media,
+                on_waitlist:         false,
+                status:              'complete',
+                ...getUTM(),
+            };
+            // SECURITY DEFINER upsert-by-id: client-generated id, no RLS read-back,
+            // and it reliably upgrades the partial row (a bare anon UPDATE can't —
+            // with no anon SELECT policy it silently matches 0 rows and loses data).
+            const { data: savedId, error } = await supabase.rpc('save_sept_registration', { p: payload });
+            if (error) throw error;
+            const registrationId = savedId || regId;
             const stripeUrl = new URL('https://buy.stripe.com/00w8wP8vD4yhb9y9rR9Zm0t');
-            if (registrationId) stripeUrl.searchParams.set('client_reference_id', registrationId);
+            stripeUrl.searchParams.set('client_reference_id', registrationId);
             stripeUrl.searchParams.set('prefilled_email', form.parent_email.trim().toLowerCase());
             window.location.href = stripeUrl.toString();
         } catch (err) {
