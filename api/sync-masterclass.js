@@ -51,7 +51,7 @@
 //      MASTERCLASS_TAB (optional — defaults to "Registrations").
 // ============================================================
 import { createClient } from '@supabase/supabase-js';
-import { getSheets, ensureTab, ensureHeader } from './_lib/pgpSheets.js';
+import { getSheets, ensureTab } from './_lib/pgpSheets.js';
 
 export const config = { api: { bodyParser: { sizeLimit: '256kb' } } };
 
@@ -65,6 +65,10 @@ const getSupabase = () => {
 
 const TAB = process.env.MASTERCLASS_TAB || 'Registrations';
 const GUIDE_TAB = 'How this sheet works';
+// Bump when GUIDE_LINES changes. The guide is documentation, not the admin's
+// workspace, so a version bump rewrites it — otherwise a write-once guide goes
+// on telling her the wrong boundary column after the layout changes.
+const GUIDE_VERSION = 'v2';
 
 // Price the player is due to pay, from the shirt choice made on the form.
 // $240 covers both Sundays; the shirt is a $29.95 optional line item they untick
@@ -78,10 +82,13 @@ export const HEADERS = [
   'Registration ID',
   'Registered (Melbourne)',
   'Player Name',
-  'Age',
-  'Email',
-  'Phone',
+  'Player Age',
+  'Player Gender',
+  'Parent/Guardian Name',
+  'Parent Email',
+  'Parent Phone',
   'Club',
+  'Suburb',
   'Shirt Size',
   'Already Owns Shirt',
   'Buying a Shirt ($29.95)',
@@ -101,9 +108,16 @@ export const HEADERS = [
   'Referrer',
 ];
 
-// Last column the sync is allowed to touch. HEADERS.length === 24 === 'X'.
-// Everything from column Y rightwards belongs to whoever is working the sheet.
-const SYNC_LAST_COL = 'X';
+// Last column the sync is allowed to touch, DERIVED from HEADERS so the two can
+// never drift. Hardcoding this is how the sync silently starts writing over the
+// admin's notes after someone adds a column.
+const colLetter = (n) => {
+  let s = '';
+  while (n > 0) { const r = (n - 1) % 26; s = String.fromCharCode(65 + r) + s; n = Math.floor((n - 1) / 26); }
+  return s;
+};
+// Everything from the NEXT column rightwards belongs to whoever works the sheet.
+const SYNC_LAST_COL = colLetter(HEADERS.length);
 
 // Melbourne local time as "YYYY-MM-DD HH:MM", written as TEXT (see asText).
 //
@@ -139,20 +153,28 @@ const asText = (v) => (v !== null && v !== undefined && v !== '' ? `'${v}` : '')
 
 export const masterclassRow = (r) => {
   const dueCents = COURSE_CENTS + (r.purchase_shirt ? SHIRT_CENTS : 0);
+  // The form was changed on 25 Aug to collect PARENT contact details and to
+  // rename club -> primary_club. The old email/phone/club columns still exist on
+  // the table but nothing writes them any more, so they are not given their own
+  // sheet columns — three permanently blank columns in front of an admin is just
+  // confusing. They are kept as a fallback so any legacy row still renders.
   return [
     r.id || '',
-    asText(fmtMelb(r.created_at)),
+    fmtMelb(r.created_at),
     r.player_name || '',
     asText(r.player_age),
-    r.email || '',
-    asText(r.phone),
-    r.club || '',
+    r.player_gender || '',
+    r.parent_name || '',
+    r.parent_email || r.email || '',
+    asText(r.parent_phone || r.phone),
+    r.primary_club || r.club || '',
+    r.suburb || '',
     r.shirt_size || '',
     yesNo(r.has_shirt),
     yesNo(r.purchase_shirt),
     `$${(dueCents / 100).toFixed(2)}`,
     yesNo(r.paid),
-    asText(fmtMelb(r.paid_at)),
+    fmtMelb(r.paid_at),
     yesNo(r.accept_terms),
     yesNo(r.accept_player_code),
     yesNo(r.accept_parent_code),
@@ -204,31 +226,39 @@ const GUIDE_LINES = [
   [''],
   ['WHERE YOU CAN WORK SAFELY'],
   [''],
-  ['Columns A to X are filled in by the automatic update. If you change something in'],
-  ['those columns, your change will be replaced next time that person’s details change.'],
+  [`Columns A to ${SYNC_LAST_COL} are filled in by the automatic update. If you change`],
+  ['something in those columns, your change will be replaced next time that person’s'],
+  ['details change.'],
   [''],
-  ['Column Y onwards is yours. The automatic update never reads, writes, or clears'],
-  ['anything from column Y across. Put your notes, follow-up status, call logs and'],
+  [`Column ${colLetter(HEADERS.length + 1)} onwards is yours. The automatic update never reads, writes, or`],
+  ['clears anything from there across. Put your notes, follow-up status, call logs and'],
   ['anything else there and it will not be touched.'],
   [''],
   ['You can sort, filter, colour and hide rows freely. Rows are matched by the'],
   ['Registration ID in column A, not by their position, so your notes stay attached to'],
   ['the right player even after sorting.'],
   [''],
+  ['WHOSE CONTACT DETAILS ARE THESE?'],
+  [''],
+  ['The form asks for the PARENT/GUARDIAN’s name, email and phone — not the player’s.'],
+  ['So "Parent Email" and "Parent Phone" are the contacts to use. There is no separate'],
+  ['player email or phone.'],
+  [''],
   ['THE "PAID?" COLUMN IS NOT A PAYMENT RECORD'],
   [''],
-  ['Column L says "Paid?" but it will show "No" for everyone, including people who have'],
-  ['actually paid. Nothing connects Stripe back to this sheet yet. To check whether'],
-  ['someone has paid, look in Stripe.'],
+  ['The "Paid?" column will show "No" for everyone, including people who have actually'],
+  ['paid. Nothing connects Stripe back to this sheet yet. To check whether someone has'],
+  ['paid, look in Stripe.'],
   [''],
-  ['If you want to track payment yourself, do it in your own columns (Y onwards) — that'],
-  ['is the part of the sheet the automatic update leaves alone.'],
+  ['If you want to track payment yourself, do it in your own columns — that is the part'],
+  ['of the sheet the automatic update leaves alone.'],
   [''],
   ['WHAT THE PRICE COLUMN MEANS'],
   [''],
   ['"Total Due" is $240.00 if the player already owns the official training shirt, or'],
   ['$269.95 if they ticked that they need one ($240 course + $29.95 shirt). The $240'],
-  ['covers both Sundays, not one session.'],
+  ['covers both Sundays, not one session. "Shirt Size" is blank when they already own'],
+  ['one, because the form stops asking.'],
   [''],
   ['IF A ROW LOOKS WRONG'],
   [''],
@@ -236,18 +266,55 @@ const GUIDE_LINES = [
   ['is wrong, it was entered wrong — correct it in your own columns, or ask for it to be'],
   ['fixed at the source. Deleting a row here does not delete the registration; the row'],
   ['will come back on the next update.'],
+  [''],
+  [`(guide ${GUIDE_VERSION})`],
 ];
+
+// How many spare columns to guarantee to the right of the sync block. Without
+// this the grid ends exactly where the sync block ends and the admin has
+// literally nowhere to put a note — the "columns to the right are yours"
+// promise is only real if those columns exist.
+const ADMIN_SPARE_COLS = 12;
+
+// Widen the grid if the sync block fills it. Only ever ADDS columns; never
+// removes, never touches cell contents.
+async function ensureRoomForAdmin(sheets, spreadsheetId, tabName) {
+  const meta = await sheets.spreadsheets.get({
+    spreadsheetId, fields: 'sheets.properties(title,sheetId,gridProperties.columnCount)',
+  });
+  const sheet = (meta.data.sheets || []).find((x) => x.properties?.title === tabName);
+  if (!sheet) return { widened: false };
+  const have = sheet.properties.gridProperties?.columnCount ?? 0;
+  const want = HEADERS.length + ADMIN_SPARE_COLS;
+  if (have >= want) return { widened: false };
+  await sheets.spreadsheets.batchUpdate({
+    spreadsheetId,
+    requestBody: { requests: [{ appendDimension: {
+      sheetId: sheet.properties.sheetId, dimension: 'COLUMNS', length: want - have,
+    } }] },
+  });
+  return { widened: true, from: have, to: want };
+}
 
 async function ensureGuideTab(sheets, spreadsheetId) {
   const created = await ensureTab(sheets, spreadsheetId, GUIDE_TAB);
-  if (!created) return { guide: 'already present, left alone' };
+  if (!created) {
+    // Already there — only rewrite if it predates the current wording. Reading
+    // column A is enough; the version marker is the last line.
+    const cur = await sheets.spreadsheets.values.get({
+      spreadsheetId, range: `${GUIDE_TAB}!A1:A200`,
+    });
+    const text = (cur.data.values || []).flat().join('\n');
+    if (text.includes(`(guide ${GUIDE_VERSION})`)) return { guide: 'current, left alone' };
+    await sheets.spreadsheets.values.clear({ spreadsheetId, range: `${GUIDE_TAB}!A1:A200` });
+  }
   await sheets.spreadsheets.values.update({
     spreadsheetId,
     range: `${GUIDE_TAB}!A1`,
     valueInputOption: 'RAW',
     requestBody: { values: GUIDE_LINES },
   });
-  return { guide: 'created' };
+  return { guide: created ? 'created' : `rewritten to ${GUIDE_VERSION}` };
 }
 
 // ------------------------------------------------------------
@@ -266,7 +333,21 @@ export async function reconcileMasterclass(sheets, spreadsheetId, tabName = TAB,
   if (error) throw error;
 
   await ensureTab(sheets, spreadsheetId, tabName);
-  await ensureHeader(sheets, spreadsheetId, tabName, HEADERS);
+  const room = await ensureRoomForAdmin(sheets, spreadsheetId, tabName);
+  // Write the header row whenever it differs, not only when it is empty. The
+  // 25 Aug field change MOVED columns, so a stale header row would sit above
+  // data it no longer describes — worse than no header at all. Confined to the
+  // sync-owned block, so a header the admin added further right is untouched.
+  const hdr = await sheets.spreadsheets.values.get({
+    spreadsheetId, range: `${tabName}!A1:${SYNC_LAST_COL}1`,
+  });
+  const curHdr = (hdr.data.values || [])[0] || [];
+  if (JSON.stringify(padTo(curHdr, HEADERS.length)) !== JSON.stringify(HEADERS)) {
+    await sheets.spreadsheets.values.update({
+      spreadsheetId, range: `${tabName}!A1`, valueInputOption: 'USER_ENTERED',
+      requestBody: { values: [HEADERS] },
+    });
+  }
 
   // Read back ONLY the sync-owned block. Marielle's columns are never fetched,
   // so they can't be echoed back into a write by accident.
@@ -327,6 +408,8 @@ export async function reconcileMasterclass(sheets, spreadsheetId, tabName = TAB,
     updated: updates.length,
     unchanged,
     buyingShirts: (data || []).filter((r) => r.purchase_shirt).length,
+    adminSpace: `${colLetter(HEADERS.length + 1)} onwards`,
+    ...(room.widened ? { widenedGrid: `${room.from} -> ${room.to} cols` } : {}),
     ...guide,
   };
 }
