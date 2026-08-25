@@ -97,6 +97,9 @@ const MASTER_ITEMS = [
     { icon: SixIcon, label: 'Develop the ability to mis-hit sixes' },
 ];
 
+// Ages 14 to Open (adult). 14–29 explicit, then an Open/adult bucket.
+const AGE_OPTIONS = ['14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', 'Open (25+)'];
+
 const SHIRT_SIZE_ROWS = [...TOPS_SIZES.junior.slice(-2), ...TOPS_SIZES.senior];
 const SHIRT_SIZES = SHIRT_SIZE_ROWS.map((r) => r.label);
 
@@ -128,11 +131,14 @@ const DETAILS = [
 
 const PowerGameMasterclass = () => {
     const [form, setForm] = useState({
+        parent_name: '',
+        parent_email: '',
+        parent_phone: '',
         player_name: '',
-        email: '',
-        phone: '',
         player_age: '',
-        club: '',
+        player_gender: '',
+        primary_club: '',
+        suburb: '',
         shirt_size: '',
     });
     const [hasShirt, setHasShirt] = useState(true);
@@ -157,10 +163,12 @@ const PowerGameMasterclass = () => {
 
     const validate = () => {
         const next = {};
+        if (!form.parent_name.trim()) next.parent_name = 'Parent/guardian name is required';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.parent_email.trim())) next.parent_email = 'Valid email required';
+        if (!form.parent_phone.trim()) next.parent_phone = 'Phone number is required';
         if (!form.player_name.trim()) next.player_name = 'Player name is required';
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) next.email = 'Valid email required';
-        if (!form.phone.trim()) next.phone = 'Phone number is required';
-        if (!form.player_age.trim()) next.player_age = 'Player age is required';
+        if (!form.player_age) next.player_age = 'Player age is required';
+        if (!form.player_gender) next.player_gender = 'Please select cricket type';
         if (!hasShirt && !form.shirt_size) next.shirt_size = 'Training shirt size is required';
         if (!acceptTerms) next.acceptTerms = 'You must agree to the Terms & Conditions and Privacy Policy.';
         if (!acceptPlayerCode) next.acceptPlayerCode = 'You must agree to the Player Code of Conduct.';
@@ -184,11 +192,14 @@ const PowerGameMasterclass = () => {
 
             const { error } = await supabase.from('masterclass_registrations').insert([
                 {
+                    parent_name: form.parent_name.trim(),
+                    parent_email: form.parent_email.trim(),
+                    parent_phone: form.parent_phone.trim(),
                     player_name: form.player_name.trim(),
-                    email: form.email.trim(),
-                    phone: form.phone.trim(),
-                    player_age: form.player_age.trim(),
-                    club: form.club.trim() || null,
+                    player_age: form.player_age,
+                    player_gender: form.player_gender,
+                    primary_club: form.primary_club.trim() || null,
+                    suburb: form.suburb.trim() || null,
                     shirt_size: hasShirt ? null : form.shirt_size,
                     has_shirt: hasShirt,
                     purchase_shirt: !hasShirt,
@@ -479,6 +490,48 @@ const PowerGameMasterclass = () => {
                     </motion.div>
 
                     <div className="bg-white/5 border border-white/10 rounded-3xl p-6 sm:p-8 space-y-4">
+                        {/* ── Parent / Guardian Details ── */}
+                        <p className="text-xs font-black text-rr-pink uppercase tracking-widest">
+                            Parent / Guardian Details
+                        </p>
+                        <div>
+                            <input
+                                type="text"
+                                placeholder="Parent/guardian full name *"
+                                value={form.parent_name}
+                                onChange={setField('parent_name')}
+                                className={inputClass('parent_name')}
+                            />
+                            {errors.parent_name && <p className="text-rr-pink text-xs font-bold mt-1.5">{errors.parent_name}</p>}
+                        </div>
+                        <div>
+                            <input
+                                type="email"
+                                placeholder="Email *"
+                                value={form.parent_email}
+                                onChange={setField('parent_email')}
+                                className={inputClass('parent_email')}
+                            />
+                            {errors.parent_email && <p className="text-rr-pink text-xs font-bold mt-1.5">{errors.parent_email}</p>}
+                        </div>
+                        <div>
+                            <input
+                                type="tel"
+                                placeholder="Phone *"
+                                value={form.parent_phone}
+                                onChange={setField('parent_phone')}
+                                className={inputClass('parent_phone')}
+                            />
+                            {errors.parent_phone && <p className="text-rr-pink text-xs font-bold mt-1.5">{errors.parent_phone}</p>}
+                        </div>
+                        <p className="text-white/45 text-xs font-medium -mt-1">
+                            Players 18+ registering themselves can enter their own details above.
+                        </p>
+
+                        {/* ── Player Details ── */}
+                        <p className="text-xs font-black text-rr-pink uppercase tracking-widest pt-4 border-t border-white/10">
+                            Player Details
+                        </p>
                         <div>
                             <input
                                 type="text"
@@ -489,43 +542,47 @@ const PowerGameMasterclass = () => {
                             />
                             {errors.player_name && <p className="text-rr-pink text-xs font-bold mt-1.5">{errors.player_name}</p>}
                         </div>
-                        <div>
-                            <input
-                                type="email"
-                                placeholder="Email *"
-                                value={form.email}
-                                onChange={setField('email')}
-                                className={inputClass('email')}
-                            />
-                            {errors.email && <p className="text-rr-pink text-xs font-bold mt-1.5">{errors.email}</p>}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <select
+                                    value={form.player_age}
+                                    onChange={setField('player_age')}
+                                    className={`${inputClass('player_age')} appearance-none ${form.player_age ? '' : 'text-white/40'}`}
+                                >
+                                    <option value="" className="bg-rr-dark">Player age *</option>
+                                    {AGE_OPTIONS.map((age) => (
+                                        <option key={age} value={age} className="bg-rr-dark">{age === 'Open (25+)' ? age : `${age} years`}</option>
+                                    ))}
+                                </select>
+                                {errors.player_age && <p className="text-rr-pink text-xs font-bold mt-1.5">{errors.player_age}</p>}
+                            </div>
+                            <div>
+                                <select
+                                    value={form.player_gender}
+                                    onChange={setField('player_gender')}
+                                    className={`${inputClass('player_gender')} appearance-none ${form.player_gender ? '' : 'text-white/40'}`}
+                                >
+                                    <option value="" className="bg-rr-dark">Cricket type *</option>
+                                    <option value="male" className="bg-rr-dark">Male Cricket</option>
+                                    <option value="female" className="bg-rr-dark">Female Cricket</option>
+                                </select>
+                                {errors.player_gender && <p className="text-rr-pink text-xs font-bold mt-1.5">{errors.player_gender}</p>}
+                            </div>
                         </div>
-                        <div>
-                            <input
-                                type="tel"
-                                placeholder="Phone *"
-                                value={form.phone}
-                                onChange={setField('phone')}
-                                className={inputClass('phone')}
-                            />
-                            {errors.phone && <p className="text-rr-pink text-xs font-bold mt-1.5">{errors.phone}</p>}
-                        </div>
-                        <div>
+                        <div className="grid grid-cols-2 gap-4">
                             <input
                                 type="text"
-                                placeholder="Player age *"
-                                value={form.player_age}
-                                onChange={setField('player_age')}
-                                className={inputClass('player_age')}
+                                placeholder="Primary club (optional)"
+                                value={form.primary_club}
+                                onChange={setField('primary_club')}
+                                className={inputClass('primary_club')}
                             />
-                            {errors.player_age && <p className="text-rr-pink text-xs font-bold mt-1.5">{errors.player_age}</p>}
-                        </div>
-                        <div>
                             <input
                                 type="text"
-                                placeholder="Club (optional)"
-                                value={form.club}
-                                onChange={setField('club')}
-                                className={inputClass('club')}
+                                placeholder="Suburb (optional)"
+                                value={form.suburb}
+                                onChange={setField('suburb')}
+                                className={inputClass('suburb')}
                             />
                         </div>
 

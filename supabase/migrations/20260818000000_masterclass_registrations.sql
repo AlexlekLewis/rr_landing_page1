@@ -47,3 +47,12 @@ alter table public.masterclass_registrations
 alter table public.masterclass_registrations
     add column if not exists has_shirt boolean default false,
     add column if not exists purchase_shirt boolean default false;
+
+-- 21 Aug: standard parent/player detail fields (match Holiday Program / Junior Royals)
+alter table public.masterclass_registrations
+    add column if not exists parent_name text,
+    add column if not exists parent_email text,
+    add column if not exists parent_phone text,
+    add column if not exists player_gender text,
+    add column if not exists primary_club text,
+    add column if not exists suburb text;
