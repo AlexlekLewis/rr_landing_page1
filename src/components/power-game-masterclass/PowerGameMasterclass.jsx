@@ -161,7 +161,7 @@ const PowerGameMasterclass = () => {
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) next.email = 'Valid email required';
         if (!form.phone.trim()) next.phone = 'Phone number is required';
         if (!form.player_age.trim()) next.player_age = 'Player age is required';
-        if (!form.shirt_size) next.shirt_size = 'Training shirt size is required';
+        if (!hasShirt && !form.shirt_size) next.shirt_size = 'Training shirt size is required';
         if (!acceptTerms) next.acceptTerms = 'You must agree to the Terms & Conditions and Privacy Policy.';
         if (!acceptPlayerCode) next.acceptPlayerCode = 'You must agree to the Player Code of Conduct.';
         if (!acceptParentCode) next.acceptParentCode = 'You must agree to the Parent/Guardian Code of Conduct.';
@@ -189,7 +189,7 @@ const PowerGameMasterclass = () => {
                     phone: form.phone.trim(),
                     player_age: form.player_age.trim(),
                     club: form.club.trim() || null,
-                    shirt_size: form.shirt_size,
+                    shirt_size: hasShirt ? null : form.shirt_size,
                     has_shirt: hasShirt,
                     purchase_shirt: !hasShirt,
                     accept_terms: acceptTerms,
@@ -559,50 +559,55 @@ const PowerGameMasterclass = () => {
                                 </p>
                             )}
 
-                            <select
-                                value={form.shirt_size}
-                                onChange={setField('shirt_size')}
-                                className={`${inputClass('shirt_size')} appearance-none ${form.shirt_size ? '' : 'text-white/40'}`}
-                            >
-                                <option value="" className="bg-rr-dark">Select shirt size *</option>
-                                {SHIRT_SIZES.map((sz) => (
-                                    <option key={sz} value={sz} className="bg-rr-dark">{sz}</option>
-                                ))}
-                            </select>
-                            {errors.shirt_size && <p className="text-rr-pink text-xs font-bold mt-1.5">{errors.shirt_size}</p>}
+                            {/* Size only needed when purchasing a shirt */}
+                            {!hasShirt && (
+                                <>
+                                    <select
+                                        value={form.shirt_size}
+                                        onChange={setField('shirt_size')}
+                                        className={`${inputClass('shirt_size')} appearance-none ${form.shirt_size ? '' : 'text-white/40'}`}
+                                    >
+                                        <option value="" className="bg-rr-dark">Select shirt size *</option>
+                                        {SHIRT_SIZES.map((sz) => (
+                                            <option key={sz} value={sz} className="bg-rr-dark">{sz}</option>
+                                        ))}
+                                    </select>
+                                    {errors.shirt_size && <p className="text-rr-pink text-xs font-bold mt-1.5">{errors.shirt_size}</p>}
 
-                            {/* Size guide — ages 14+ */}
-                            <button
-                                type="button"
-                                onClick={() => setShowSizeGuide(!showSizeGuide)}
-                                className="mt-3 inline-flex items-center gap-1.5 text-rr-pink hover:text-rr-light-pink text-xs font-black uppercase tracking-widest transition-colors"
-                            >
-                                <Ruler className="w-3.5 h-3.5" strokeWidth={2.5} />
-                                {showSizeGuide ? 'Hide size guide' : 'View size guide (ages 14+)'}
-                                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showSizeGuide ? 'rotate-180' : ''}`} strokeWidth={2.5} />
-                            </button>
-                            {showSizeGuide && (
-                                <div className="mt-3 bg-white/5 border border-white/10 rounded-xl p-4 overflow-x-auto">
-                                    <p className="text-[11px] text-white/50 font-medium mb-3">{TOPS_MEASURE_TIP}</p>
-                                    <table className="w-full text-xs text-left">
-                                        <thead>
-                                            <tr className="border-b border-white/15">
-                                                <th className="font-black text-white uppercase tracking-wider py-2 pr-3">Size</th>
-                                                <th className="font-black text-white uppercase tracking-wider py-2 pr-3">Half Chest (in)</th>
-                                                <th className="font-black text-white uppercase tracking-wider py-2">Length (in)</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-white/10">
-                                            {SHIRT_SIZE_ROWS.map((row) => (
-                                                <tr key={row.label}>
-                                                    <td className="py-1.5 pr-3 font-bold text-white">{row.label}</td>
-                                                    <td className="py-1.5 pr-3 text-white/60">{row.halfChest}</td>
-                                                    <td className="py-1.5 text-white/60">{row.length}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    {/* Size guide — ages 14+ */}
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowSizeGuide(!showSizeGuide)}
+                                        className="mt-3 inline-flex items-center gap-1.5 text-rr-pink hover:text-rr-light-pink text-xs font-black uppercase tracking-widest transition-colors"
+                                    >
+                                        <Ruler className="w-3.5 h-3.5" strokeWidth={2.5} />
+                                        {showSizeGuide ? 'Hide size guide' : 'View size guide (ages 14+)'}
+                                        <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showSizeGuide ? 'rotate-180' : ''}`} strokeWidth={2.5} />
+                                    </button>
+                                    {showSizeGuide && (
+                                        <div className="mt-3 bg-white/5 border border-white/10 rounded-xl p-4 overflow-x-auto">
+                                            <p className="text-[11px] text-white/50 font-medium mb-3">{TOPS_MEASURE_TIP}</p>
+                                            <table className="w-full text-xs text-left">
+                                                <thead>
+                                                    <tr className="border-b border-white/15">
+                                                        <th className="font-black text-white uppercase tracking-wider py-2 pr-3">Size</th>
+                                                        <th className="font-black text-white uppercase tracking-wider py-2 pr-3">Half Chest (in)</th>
+                                                        <th className="font-black text-white uppercase tracking-wider py-2">Length (in)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="divide-y divide-white/10">
+                                                    {SHIRT_SIZE_ROWS.map((row) => (
+                                                        <tr key={row.label}>
+                                                            <td className="py-1.5 pr-3 font-bold text-white">{row.label}</td>
+                                                            <td className="py-1.5 pr-3 text-white/60">{row.halfChest}</td>
+                                                            <td className="py-1.5 text-white/60">{row.length}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    )}
+                                </>
                             )}
                         </div>
 
