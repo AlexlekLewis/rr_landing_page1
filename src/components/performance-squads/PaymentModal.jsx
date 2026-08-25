@@ -148,12 +148,20 @@ const PaymentModal = ({ open, registration, onClose }) => {
                                     </div>
                                 </div>
 
+                                {/* ── DO NOT PUT target="_blank" BACK ON THIS LINK ──
+                                    Most of this page's traffic arrives from Instagram, and the
+                                    Instagram in-app browser silently refuses to open a new tab:
+                                    the player taps Pay and nothing happens at all. Between 21-24
+                                    Aug 2026, every registration that came from Instagram (3 of 3)
+                                    paid nothing, while direct traffic paid 13 of 20.
+
+                                    It also used to close the modal on tap, so after the dead tap
+                                    the button itself vanished. Both are gone: this navigates in
+                                    the SAME tab and leaves the modal alone. Nothing is lost by
+                                    leaving the page — the registration row is already saved. ── */}
                                 {payLink ? (
                                     <a
                                         href={payLink}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        onClick={onClose}
                                         className="w-full inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
                                     >
                                         <CreditCard className="w-4 h-4" /> {ctaText}
@@ -174,7 +182,9 @@ const PaymentModal = ({ open, registration, onClose }) => {
                                     I'll pay later
                                 </button>
                                 <p className="text-white/35 text-xs font-medium text-center mt-2">
-                                    Payments are processed securely by Stripe.
+                                    Payments are processed securely by Stripe. If you close this,
+                                    use the <span className="text-white/60">Complete Payment</span> button
+                                    on the form to come back to it.
                                 </p>
                             </>
                         ) : (
