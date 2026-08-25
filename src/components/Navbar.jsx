@@ -106,7 +106,7 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
 
     // Junior Royals (isLittleCrickets): Term 3 is sold out — the CTA points at
     // the Term 4 entry form (Mondays & Wednesdays, no payment now).
-    const ctaLabel = isMasterclass ? 'BOOK YOUR PLACE' : isPerformanceSquads ? 'REGISTER INTEREST' : isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : isLittleCrickets ? 'TERM 4 — ENTER NOW' : isLP2 ? 'SECURE YOUR PLACE NOW' : 'REGISTER INTEREST';
+    const ctaLabel = isMasterclass ? 'BOOK YOUR PLACE' : isPerformanceSquads ? 'REGISTER INTEREST' : isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : isLittleCrickets ? 'TERM 4 — ENTER NOW' : isLP2 ? 'SECURE YOUR PLACE NOW' : isHoliday ? 'SECURE YOUR PLACE' : 'REGISTER INTEREST';
     const ctaTarget = isMasterclass ? 'register' : isPerformanceSquads ? 'register-pay' : isIndiaTour ? 'register' : isMickleham ? 'register' : isCoaches ? 'join' : isPrivateCoaching ? 'eoi-form' : isLP2 ? 'checkout' : isHoliday ? 'secure-form' : isLittleCrickets ? 'registration-form' : 'apply-form';
 
     const scrollToForm = () => {
