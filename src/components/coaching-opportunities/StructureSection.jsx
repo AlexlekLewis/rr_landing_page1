@@ -35,6 +35,10 @@ const Connector = ({ height = 'h-8' }) => (
 );
 
 const StructureSection = () => {
+    const scrollToForm = () => {
+        document.getElementById('application-form')?.scrollIntoView({ behavior: 'smooth' });
+    };
+
     return (
         <section className="relative py-24 md:py-32 bg-rr-dark overflow-hidden">
             {/* Ambient effects */}
@@ -59,7 +63,7 @@ const StructureSection = () => {
                         transition={{ delay: 0.1 }}
                         className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight leading-none mb-6"
                     >
-                        A Clear Path. <span className="text-rr-pink">A Real Career.</span>
+                        Career <span className="text-rr-pink">Progression.</span>
                     </motion.h2>
                     <motion.div
                         initial={{ opacity: 0, scaleX: 0 }}
@@ -91,10 +95,10 @@ const StructureSection = () => {
                     />
                     <Connector />
 
-                    {/* Centre Coordinators */}
+                    {/* Centre Head Coach */}
                     <RoleNode
-                        title="Centre Coordinators"
-                        subtitle="Operational leads at each delivery centre — scheduling, equipment, on-the-ground execution."
+                        title="Centre Head Coach"
+                        subtitle="Runs a centre and its region — the coaching standard on the floor, the schedule, the equipment, the coaches, and the region’s Power League team."
                         accent="blue"
                         size="md"
                         delay={0.1}
@@ -103,7 +107,7 @@ const StructureSection = () => {
 
                     {/* Stream split */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 max-w-4xl mx-auto pt-2">
-                        {/* Elite Stream */}
+                        {/* Performance Squad Stream */}
                         <div className="space-y-0">
                             <motion.div
                                 initial={{ opacity: 0, y: 16 }}
@@ -112,19 +116,19 @@ const StructureSection = () => {
                                 transition={{ delay: 0.2 }}
                                 className="text-center mb-3"
                             >
-                                <p className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.3em]">Elite Stream</p>
+                                <p className="text-[10px] font-bold text-rr-pink uppercase tracking-[0.3em]">Performance Squad Stream</p>
                             </motion.div>
                             <RoleNode
-                                title="Elite Squad Coach"
-                                subtitle="Lead coach for an Elite squad — session design, IDP delivery, performance reviews."
+                                title="Performance Squad Coach"
+                                subtitle="Lead coach for one Performance Squad — designs the sessions, writes each player’s development plan, and reviews it with them."
                                 accent="pink"
                                 size="sm"
                                 delay={0.3}
                             />
                             <Connector />
                             <RoleNode
-                                title="Elite Assistant Coach"
-                                subtitle="Supports squad delivery, runs stations, contributes to player feedback and tracking."
+                                title="Performance Squad Assistant Coach"
+                                subtitle="Works alongside the lead coach — runs stations in a session, and feeds into player feedback and tracking."
                                 accent="slate"
                                 size="sm"
                                 delay={0.4}
@@ -152,7 +156,7 @@ const StructureSection = () => {
                             <Connector />
                             <RoleNode
                                 title="Junior Royals Assistant Coach"
-                                subtitle="Co-delivers sessions; completes 10 paid assisted hours with a Lead before independent delivery."
+                                subtitle="Co-delivers sessions. Works 10 paid assisted hours with a Lead Coach ($25/hour on completion, T&Cs apply) before running a group solo."
                                 accent="slate"
                                 size="sm"
                                 delay={0.4}
@@ -168,6 +172,26 @@ const StructureSection = () => {
                         </div>
                     </div>
                 </div>
+
+
+                {/* Section CTA */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.3 }}
+                    className="mt-12 text-center"
+                >
+                    <button
+                        onClick={scrollToForm}
+                        className="group bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-10 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] inline-flex items-center gap-3"
+                    >
+                        Apply For One Of These
+                        <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </button>
+                </motion.div>
 
                 {/* Footnote */}
                 <motion.p

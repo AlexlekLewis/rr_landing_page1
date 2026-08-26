@@ -2,6 +2,17 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 
+// The roles we're hiring for, surfaced in the hero so a reader knows within two
+// seconds whether there's a job here for them. Each one jumps to its full card
+// in the Open Roles section below.
+const HERO_ROLES = [
+    { label: 'Cricket Coaches', anchor: 'role-cricket-coaches' },
+    { label: 'Junior / Assistant Coaches', anchor: 'role-junior-assistant-coaches' },
+    { label: 'Operations & Admin', anchor: 'role-operations-admin' },
+    { label: 'Media & Content', anchor: 'role-media-content' },
+    { label: "Don't See Your Role?", anchor: 'role-pitch-us' },
+];
+
 const HeroSection = () => {
     const scrollToForm = () => {
         document.getElementById('application-form')?.scrollIntoView({ behavior: 'smooth' });
@@ -9,6 +20,11 @@ const HeroSection = () => {
 
     const scrollToAbout = () => {
         document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    const scrollToRole = (anchor) => {
+        const target = document.getElementById(anchor) || document.getElementById('roles');
+        target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     };
 
     return (
@@ -46,9 +62,9 @@ const HeroSection = () => {
                     transition={{ duration: 0.6, delay: 0.15 }}
                     className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none mb-6"
                 >
-                    JOIN AUSTRALIA'S<br />
-                    <span className="text-rr-pink">MOST PROGRESSIVE</span><br />
-                    CRICKET ACADEMY
+                    CAREERS AT<br />
+                    <span className="text-rr-pink">RAJASTHAN ROYALS</span><br />
+                    ACADEMY MELBOURNE
                 </motion.h1>
 
                 {/* Divider */}
@@ -59,6 +75,33 @@ const HeroSection = () => {
                     className="w-16 h-px bg-gradient-to-r from-rr-pink to-rr-blue mb-6 origin-left"
                 />
 
+                {/* Role quick-links — the actual jobs, clickable, straight to the detail */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.45 }}
+                    className="mb-8"
+                >
+                    <p className="text-[11px] font-bold text-white/50 uppercase tracking-[0.3em] mb-3">
+                        Roles we're hiring — tap one to read it
+                    </p>
+                    <div className="flex flex-wrap gap-2 md:gap-3">
+                        {HERO_ROLES.map((role) => (
+                            <button
+                                key={role.anchor}
+                                type="button"
+                                onClick={() => scrollToRole(role.anchor)}
+                                className="group bg-white/5 hover:bg-rr-pink border border-white/20 hover:border-rr-pink text-white text-[11px] md:text-xs font-bold uppercase tracking-widest px-4 py-2.5 rounded-full backdrop-blur-sm transition-all duration-300 inline-flex items-center gap-2"
+                            >
+                                {role.label}
+                                <svg className="w-3 h-3 opacity-50 group-hover:opacity-100 group-hover:translate-y-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                </svg>
+                            </button>
+                        ))}
+                    </div>
+                </motion.div>
+
                 {/* Subhead */}
                 <motion.p
                     initial={{ opacity: 0, y: 20 }}
@@ -66,25 +109,8 @@ const HeroSection = () => {
                     transition={{ duration: 0.6, delay: 0.4 }}
                     className="text-base md:text-xl text-white/85 font-medium leading-relaxed max-w-3xl mb-6"
                 >
-                    Rajasthan Royals Academy Melbourne is building a team aligned to the standards of a global high-performance program — coaches, operations, media, and more. We're looking for people who lead with curiosity, deliver with rigour, and put the player first.
+                    We're recruiting across coaching, operations and media ahead of the October season, at our Melbourne centres.
                 </motion.p>
-
-                {/* Engagement type chips */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.45 }}
-                    className="flex flex-wrap gap-2 md:gap-3 mb-10"
-                >
-                    {['Volunteer', 'Casual', 'Work Experience', 'Part-Time', 'Full-Time'].map((type) => (
-                        <span
-                            key={type}
-                            className="bg-white/5 border border-white/20 text-white/90 text-[11px] md:text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full backdrop-blur-sm"
-                        >
-                            {type}
-                        </span>
-                    ))}
-                </motion.div>
 
                 {/* CTAs */}
                 <motion.div

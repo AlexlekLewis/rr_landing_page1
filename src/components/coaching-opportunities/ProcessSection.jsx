@@ -15,7 +15,7 @@ const STEPS = [
     {
         number: '03',
         title: 'Onboard & Deliver',
-        body: 'Compliance, induction, and a supported start — shadow sessions for coaches, structured handover for every other role.',
+        body: 'We sort your Working With Children Check and induction, then set you up. Coaches work 10 paid assisted hours alongside a Lead before running a group solo; every other role gets a supported handover.',
     },
 ];
 
@@ -44,7 +44,7 @@ const ProcessSection = () => {
                         transition={{ delay: 0.1 }}
                         className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-6"
                     >
-                        Three Steps to <span className="text-rr-pink">Joining the Royals.</span>
+                        Our <span className="text-rr-pink">Hiring Process.</span>
                     </motion.h2>
                     <motion.div
                         initial={{ opacity: 0, scaleX: 0 }}

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import HeroSection from './HeroSection';
+import WhereWhenSection from './WhereWhenSection';
 import RolesSection from './RolesSection';
 import AboutSection from './AboutSection';
 import HallaBolCTA from './HallaBolCTA';
@@ -16,6 +17,7 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 
 const SECTIONS = [
     'hero',
+    'where-when',
     'roles',
     'about',
     'standards',
@@ -41,6 +43,9 @@ const CoachingOpportunities = () => {
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero">
                     <HeroSection />
+                </div>
+                <div id="where-when">
+                    <WhereWhenSection />
                 </div>
                 <div id="roles">
                     <RolesSection />

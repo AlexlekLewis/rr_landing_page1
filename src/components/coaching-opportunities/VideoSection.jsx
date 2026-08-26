@@ -13,7 +13,7 @@ const VideoSection = () => {
                         viewport={{ once: true }}
                         className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-4"
                     >
-                        Hear From The Head Coach
+                        Leadership
                     </motion.p>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -22,8 +22,7 @@ const VideoSection = () => {
                         transition={{ delay: 0.1 }}
                         className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-6"
                     >
-                        The Royals Way —<br />
-                        <span className="text-rr-pink">In His Own Words.</span>
+                        Hear From Our <span className="text-rr-pink">Leadership.</span>
                     </motion.h2>
                     <motion.div
                         initial={{ opacity: 0, scaleX: 0 }}

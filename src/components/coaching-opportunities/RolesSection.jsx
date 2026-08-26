@@ -4,7 +4,8 @@ import { motion } from 'framer-motion';
 const ROLES = [
     {
         title: 'Cricket Coaches',
-        body: 'Lead squads in our Elite Program — session design, individual development plans, and performance reviews delivered to the Royals Way.',
+        anchor: 'role-cricket-coaches',
+        body: 'Lead a Performance Squad — our representative teams. You design the sessions, write each player a development plan, and sit down with them to review it.',
         engagement: ['Casual', 'Part-Time', 'Full-Time'],
         icon: (
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -14,7 +15,8 @@ const ROLES = [
     },
     {
         title: 'Junior / Assistant Coaches',
-        body: 'Start your coaching journey with Junior Royals — supported delivery, mentoring, and a defined pathway from cadet to lead coach.',
+        anchor: 'role-junior-assistant-coaches',
+        body: 'Start coaching with Junior Royals, our program for younger players. You are never thrown in alone — you get a mentor, and a set route from Cadet to Assistant to Lead Coach.',
         engagement: ['Volunteer', 'Work Experience', 'Casual', 'Part-Time'],
         icon: (
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -24,6 +26,7 @@ const ROLES = [
     },
     {
         title: 'Operations & Admin',
+        anchor: 'role-operations-admin',
         body: 'Keep the academy running — program coordination, scheduling, family communication, and on-the-ground centre operations.',
         engagement: ['Volunteer', 'Casual', 'Part-Time', 'Full-Time'],
         icon: (
@@ -34,6 +37,7 @@ const ROLES = [
     },
     {
         title: 'Media & Content',
+        anchor: 'role-media-content',
         body: 'Tell the Royals story — matchday photography, video, social content, and creative that connects our community to the global brand.',
         engagement: ['Work Experience', 'Volunteer', 'Casual', 'Part-Time'],
         icon: (
@@ -44,6 +48,7 @@ const ROLES = [
     },
     {
         title: "Don't See Your Role?",
+        anchor: 'role-pitch-us',
         body: "If you believe you can make our academy better, pitch us. Tell us what you'd bring in the application form and we'll take it seriously.",
         engagement: ['All Engagement Types'],
         highlight: true,
@@ -82,7 +87,7 @@ const RolesSection = () => {
                         transition={{ delay: 0.1 }}
                         className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-6"
                     >
-                        Where <span className="text-rr-pink">You Fit.</span>
+                        Current <span className="text-rr-pink">Openings.</span>
                     </motion.h2>
                     <motion.div
                         initial={{ opacity: 0, scaleX: 0 }}
@@ -108,6 +113,7 @@ const RolesSection = () => {
                         <motion.button
                             type="button"
                             key={role.title}
+                            id={role.anchor}
                             onClick={scrollToForm}
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -128,7 +134,7 @@ const RolesSection = () => {
                             <p className={`font-medium leading-relaxed text-sm md:text-base mb-5 ${role.highlight ? 'text-white/70' : 'text-rr-charcoal'}`}>
                                 {role.body}
                             </p>
-                            <div className="flex flex-wrap gap-2">
+                            <div className="flex flex-wrap gap-2 mb-5">
                                 {role.engagement.map((tag) => (
                                     <span
                                         key={tag}
@@ -142,9 +148,37 @@ const RolesSection = () => {
                                     </span>
                                 ))}
                             </div>
+                            <span className={`inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest ${role.highlight ? 'text-rr-pink' : 'text-rr-pink'}`}>
+                                Apply for this
+                                <svg className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </span>
                         </motion.button>
                     ))}
                 </div>
+
+                {/* Section CTA */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.2 }}
+                    className="mt-12 text-center"
+                >
+                    <button
+                        onClick={scrollToForm}
+                        className="group bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-10 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] inline-flex items-center gap-3"
+                    >
+                        One Form, Every Role
+                        <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </button>
+                    <p className="text-xs text-rr-charcoal/60 font-medium mt-4">
+                        One form covers every role. Five minutes if you skip the long-answer boxes — longer if you don’t, and for coaching roles those boxes are what we read first.
+                    </p>
+                </motion.div>
             </div>
         </section>
     );

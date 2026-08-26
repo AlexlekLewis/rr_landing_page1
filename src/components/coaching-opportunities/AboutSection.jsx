@@ -12,8 +12,8 @@ const BENEFITS = [
         ),
     },
     {
-        title: 'Royals Coaching Hub Access',
-        body: 'Complimentary access to courses built by IPL-experienced coaches, including Sid Lahiri, Shane Burger, and Michael Italiano.',
+        title: 'Royals Coaching Hub, Paid For',
+        body: 'The Hub is the Royals global coach-education platform. Its Pro Coaching Foundation course comes in two levels, Basic and Advanced. We pay for the level your role needs, so the course costs you nothing. Taught by IPL coaches including Sid Lahiri, Shane Burger and Michael Italiano.',
         icon: (
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
@@ -32,6 +32,10 @@ const BENEFITS = [
 ];
 
 const AboutSection = () => {
+    const scrollToForm = () => {
+        document.getElementById('application-form')?.scrollIntoView({ behavior: 'smooth' });
+    };
+
     return (
         <section className="relative py-24 md:py-32 bg-slate-50 overflow-hidden">
             {/* Subtle background accent */}
@@ -47,7 +51,7 @@ const AboutSection = () => {
                         transition={{ duration: 0.5 }}
                         className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-4"
                     >
-                        Why The Royals
+                        Working Here
                     </motion.p>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -56,8 +60,7 @@ const AboutSection = () => {
                         transition={{ duration: 0.5, delay: 0.1 }}
                         className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-6"
                     >
-                        More Than a Job.<br />
-                        <span className="text-rr-pink">A Royals Education.</span>
+                        Why <span className="text-rr-pink">Join Us.</span>
                     </motion.h2>
                     <motion.div
                         initial={{ opacity: 0, scaleX: 0 }}
@@ -73,7 +76,7 @@ const AboutSection = () => {
                         transition={{ duration: 0.5, delay: 0.3 }}
                         className="text-base md:text-lg text-rr-charcoal font-medium leading-relaxed"
                     >
-                        Working at RRA Melbourne means joining a program that's directly connected to one of cricket's most innovative global brands. Whether you're on the pitch, behind the camera, or running the show behind the scenes, our whole team delivers to a defined philosophy — <em className="text-rr-dark font-bold not-italic">the Royals Way</em> — built on technical sharpness, evidence-based practice, and player-first development. You'll be supported by structured onboarding, ongoing mentoring from our leadership team, and free access to the Royals Coaching Hub: the same education platform used across the global Royals network.
+                        Working at RRA Melbourne means joining a program that's directly connected to one of cricket's most innovative global brands. Whether you're on the pitch, behind the camera, or running the show behind the scenes, our whole team delivers to a defined philosophy — <em className="text-rr-dark font-bold not-italic">the Royals Way</em> — built on technical sharpness, evidence-based practice, and player-first development. You'll be supported by structured onboarding, ongoing mentoring from our leadership team, and a paid-for place on the Royals Coaching Hub — the same coach-education platform used across the global Royals network.
                     </motion.p>
                 </div>
 
@@ -96,6 +99,25 @@ const AboutSection = () => {
                         </motion.div>
                     ))}
                 </div>
+
+                {/* Section CTA */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.3 }}
+                    className="mt-12 text-center"
+                >
+                    <button
+                        onClick={scrollToForm}
+                        className="group bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-10 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] inline-flex items-center gap-3"
+                    >
+                        Start Your Application
+                        <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </button>
+                </motion.div>
             </div>
         </section>
     );

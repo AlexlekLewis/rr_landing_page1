@@ -46,8 +46,8 @@ const REFERRAL_OPTIONS = [
 ];
 
 const TIER_OPTIONS = [
-    { value: 'elite', label: 'Elite Program' },
-    { value: 'junior-royals', label: 'Junior Royals' },
+    { value: 'elite', label: 'Performance Squads — our representative teams' },
+    { value: 'junior-royals', label: 'Junior Royals — our program for younger players' },
     { value: 'either', label: 'Either — happy to be placed' },
 ];
 
@@ -170,6 +170,8 @@ const ApplicationForm = () => {
         if (!form.phone.trim()) newErrors.phone = 'Phone number is required.';
         if (!form.suburb.trim()) newErrors.suburb = 'Suburb is required.';
         if (!form.age || isNaN(Number(form.age))) newErrors.age = 'Age is required.';
+        // The input declares min=16; enforce it here too, or the constraint is decorative.
+        else if (Number(form.age) < 16) newErrors.age = 'You need to be 16 or older to apply. If you are younger and want work experience, email andy.crook@rramelbourne.com.';
         if (!form.employment_status) newErrors.employment_status = 'Please select your employment status.';
         if (!form.wwc_status) newErrors.wwc_status = 'Please select your WWC status.';
         if (!roleInterest.length) newErrors.roleInterest = 'Please select at least one area of interest.';
@@ -400,6 +402,7 @@ const ApplicationForm = () => {
                                         {WWC_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                                     </select>
                                     {errors.wwc_status && <p className="text-red-500 text-xs font-medium mt-1">{errors.wwc_status}</p>}
+                                    <p className={helperClass}>You don't need one to apply. You do need one before you work with players — we'll walk you through it.</p>
                                 </div>
                                 <div>
                                     <label className={labelClass}>How did you hear about this opportunity?</label>
@@ -546,7 +549,7 @@ const ApplicationForm = () => {
                                 </div>
                                 <div>
                                     <label className={labelClass}>Brief Coaching CV / Experience Summary</label>
-                                    <textarea name="coaching_cv" value={form.coaching_cv} onChange={handleChange} maxLength={1500} rows={5} className={inputClass('coaching_cv')} placeholder="Walk us through your coaching journey — programs, age groups, roles, achievements." />
+                                    <textarea name="coaching_cv" value={form.coaching_cv} onChange={handleChange} maxLength={1500} rows={5} className={inputClass('coaching_cv')} placeholder="Where have you coached? Programs, age groups, what you were responsible for, and a session you were proud of." />
                                     <p className={helperClass}>{form.coaching_cv.length}/1500</p>
                                 </div>
                                 </>)}

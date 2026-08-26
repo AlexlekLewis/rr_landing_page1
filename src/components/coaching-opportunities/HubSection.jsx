@@ -2,13 +2,17 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const HUB_FEATURES = [
-    'Pro Coaching Foundation — Basic and Advanced',
+    'The Pro Coaching Foundation course, at both levels — Basic and Advanced',
     'Modules across batting, fast bowling, spin bowling, fielding, and wicketkeeping',
     'Taught by IPL-experienced coaches: Sid Lahiri, Shane Burger, Michael Italiano, Dishant Yagnik, Richard Das Neves',
     'Step-by-step learning with practical drills and coaching insights',
 ];
 
 const HubSection = () => {
+    const scrollToForm = () => {
+        document.getElementById('application-form')?.scrollIntoView({ behavior: 'smooth' });
+    };
+
     return (
         <section className="relative py-24 md:py-32 bg-rr-dark overflow-hidden">
             {/* Ambient effects */}
@@ -21,6 +25,15 @@ const HubSection = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                     {/* Left: Copy */}
                     <div>
+                        {/* The Hub's own logo, so it's obvious this is a real, separate platform */}
+                        <motion.img
+                            src="/assets/royals-coaching-hub-logo.png"
+                            alt="Royals Coaching Hub"
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="w-52 md:w-64 h-auto mb-7"
+                        />
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -36,8 +49,7 @@ const HubSection = () => {
                             transition={{ delay: 0.1 }}
                             className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight leading-none mb-6"
                         >
-                            Your Development,<br />
-                            <span className="text-rr-pink">Built by the Royals.</span>
+                            Training and <span className="text-rr-pink">Development.</span>
                         </motion.h2>
                         <motion.div
                             initial={{ opacity: 0, scaleX: 0 }}
@@ -53,24 +65,37 @@ const HubSection = () => {
                             transition={{ delay: 0.3 }}
                             className="text-base md:text-lg text-white/75 font-medium leading-relaxed mb-8"
                         >
-                            Every RRA Melbourne coach receives complimentary access to the Royals Coaching Hub — the global Royals education platform. The expectation is simple: every coach completes every module. It's how we keep our delivery aligned, sharp, and at the standard our players deserve.
+                            The Royals Coaching Hub is the education platform the Royals run for coaches worldwide. Its Pro Coaching Foundation course comes in two levels — Basic and Advanced. Coach with us and we pay for the level your role needs. The expectation in return is simple: you complete every module. It's how we keep our coaching consistent from one centre to the next.
                         </motion.p>
 
-                        <motion.a
-                            href="https://www.royalscoachinghub.com/"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: 0.4 }}
-                            className="group inline-flex items-center gap-3 bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]"
+                            className="flex flex-col sm:flex-row gap-4"
                         >
-                            Explore the Hub
-                            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
-                        </motion.a>
+                            <button
+                                onClick={scrollToForm}
+                                className="group inline-flex items-center justify-center gap-3 bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]"
+                            >
+                                Apply Now
+                                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </button>
+                            <a
+                                href="https://www.royalscoachinghub.com/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group inline-flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/20 hover:border-white/40 text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300"
+                            >
+                                See the Hub
+                                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </a>
+                        </motion.div>
                     </div>
 
                     {/* Right: Feature card */}
