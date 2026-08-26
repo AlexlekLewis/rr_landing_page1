@@ -6,6 +6,7 @@ import HomeTrustBar from './HomeTrustBar';
 import HomeAbout from './HomeAbout';
 import HomeProgramCards from './HomeProgramCards';
 import HomeVideo from './HomeVideo';
+import HomeCareersBanner from './HomeCareersBanner';
 import HomeShopFeature from './HomeShopFeature';
 import HomeCinematicBreak from './HomeCinematicBreak';
 import HomeCoaches from './HomeCoaches';
@@ -61,6 +62,7 @@ const HomePage = () => {
                 <div id="hero"><HomeHero onRegisterClick={openDrawer} /></div>
                 <div id="about"><HomeAbout /></div>
                 <div id="video"><HomeVideo /></div>
+                <div id="careers-banner"><HomeCareersBanner /></div>
                 <div id="programs"><HomeProgramCards /></div>
                 <div id="shop"><HomeShopFeature /></div>
                 <div id="coaches"><HomeCoaches /></div>
