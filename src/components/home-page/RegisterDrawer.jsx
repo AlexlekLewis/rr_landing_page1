@@ -15,7 +15,6 @@ const GENDER_OPTIONS = ['Male Cricket', 'Female Cricket', 'No Preference'];
 const PROGRAMS = [
     { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', urgency: 'Early Bird $299 — ends 11pm Sun 30 Aug' },
     { label: 'Performance Squads', route: '/performance-squads', urgency: 'Trials 6, 11 & 13 September' },
-    { label: 'Power Game Masterclass', route: '/power-game-masterclass', urgency: 'Sun 6 & Sun 13 Sept, 5–7pm — ages 14 and up' },
     { label: 'Junior Royals', route: '/junior-royals', urgency: 'Term 4 entries open — Mondays & Wednesdays' },
 ];
 

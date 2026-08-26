@@ -29,14 +29,6 @@ export const ANNOUNCEMENTS = [
         highlight: true,
     },
     {
-        key: 'power-game-masterclass',
-        name: 'Power Game Masterclass',
-        tag: 'Two evening sessions on hitting the ball harder and further · Sun 6 & Sun 13 September',
-        detail: 'Ages 14 and up · 5–7pm · Cranbourne North · $240 for both evenings',
-        href: '/power-game-masterclass',
-        badge: 'Book now',
-    },
-    {
         key: 'junior-royals-t4',
         name: 'Junior Royals · Term 4',
         tag: 'Weekly coaching, Mondays or Wednesdays · October – December',
