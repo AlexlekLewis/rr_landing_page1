@@ -58,6 +58,7 @@ const PowerGameFullRide = React.lazy(() => import('./components/power-game/retur
 // Performance Squads — representative pathway (trial or invite; North Melbourne + South-East
 // Melbourne). HIDDEN page: noindex, not linked from nav/homepage/sitemap. Direct URL only.
 const PerformanceSquads = React.lazy(() => import('./components/performance-squads/PerformanceSquads'));
+const PerformanceSquadsSuccess = React.lazy(() => import('./components/performance-squads/PerformanceSquadsSuccess'));
 
 // Admin components
 import AdminLogin from './components/admin/AdminLogin';
@@ -217,6 +218,7 @@ function App() {
         {/* Performance Squads — trial/invite representative pathway. HIDDEN: noindex,
             not in nav or sitemap, direct URL only until Andy approves go-live. */}
         <Route path="/performance-squads" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquads /></React.Suspense>} />
+        <Route path="/performance-squads/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquadsSuccess /></React.Suspense>} />
 
         {/* Power Game Program — hidden from nav, accessible via direct URL only */}
         <Route path="/elite-royals" element={<PowerGame />} />
