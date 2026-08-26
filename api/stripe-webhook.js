@@ -96,6 +96,17 @@ const PROGRAM_PRICE_IDS = {
   'price_1T7OxzIo52UEA50y2f9UvDSr': { program: 'elite',            program_variant: 'deposit_3_monthly', program_label: 'Elite Program — $2,995 Payment Plan (Deposit + 3 Monthly)' },
 };
 
+// Static Payment Link id → program. The most reliable classifier for a fixed
+// Payment Link: `session.payment_link` is present on every session from that
+// link, independent of line-item descriptions. The holiday link bundles a
+// training shirt (price not in PROGRAM_PRICE_IDS) and the camp's description
+// wasn't matching, so holiday sessions fell through to "unknown_session_kind"
+// and were IGNORED — payment succeeded in Stripe but nothing recorded (the
+// July + Sept holiday payment gap). Add other static links here as needed.
+const PAYMENT_LINK_PROGRAMS = {
+  'plink_1U5Kd0Io52UEA50y3hqasgbv': { program: 'holiday', program_variant: null, program_label: 'Junior Royals Holiday Program — Sept/Oct 2026' },
+};
+
 const classifyByDescription = (description = '') => {
   const d = description.toLowerCase();
   if (!d) return null;
@@ -127,6 +138,11 @@ const classifyByDescription = (description = '') => {
 
 const classifyAsProgram = (session, lineItems) => {
   if (session?.metadata?.source === 'academy-shop') return null;
+  // Fixed Payment Link → program. Checked first: reliable even when line items
+  // don't classify by description (which is why holiday sessions were ignored).
+  if (session?.payment_link && PAYMENT_LINK_PROGRAMS[session.payment_link]) {
+    return PAYMENT_LINK_PROGRAMS[session.payment_link];
+  }
   if (lineItems.some(i => SHOP_PRICE_IDS.has(i.price_id))) return null;
   if (session?.metadata?.source === 'program' && session?.metadata?.program) {
     return {
