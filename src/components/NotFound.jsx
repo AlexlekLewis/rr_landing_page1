@@ -1,12 +1,21 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
 // Friendly 404 with the full site chrome + direct links to the main pages, so a user
 // (or crawler) that lands on a dead URL always has a clear way back into the site.
+//
+// It also RESCUES near-miss URLs. On 26 Aug 2026 players were landing on
+// /perfromace-squads (two letters transposed and an "n" dropped) and hitting this
+// page instead of the trial registration form. The misspelling was not in the site
+// anywhere — someone had typed the address by hand — and every one of those visits
+// was a player who wanted to register and gave up instead. A typo nobody can find
+// the source of should not cost a registration, so a close-enough URL now redirects
+// to the page it was obviously aiming at.
 const LINKS = [
     { label: 'Home', to: '/' },
+    { label: 'Performance Squads', to: '/performance-squads' },
     { label: 'Junior Royals', to: '/junior-royals' },
     { label: 'Holiday Camps', to: '/junior-royals-holiday' },
     { label: 'Private Coaching', to: '/mickleham' },
@@ -14,10 +23,84 @@ const LINKS = [
     { label: 'Our Coaches', to: '/coaches' },
 ];
 
+// Public routes a mistyped address could plausibly be aiming at. Keep in step with
+// App.jsx — a route missing here just means its typos are not rescued, never a break.
+export const KNOWN_ROUTES = [
+    '/performance-squads',
+    '/power-game-masterclass',
+    '/junior-royals',
+    '/junior-royals-holiday',
+    '/mickleham',
+    '/elite-royals',
+    '/coaches',
+    '/tours',
+    '/academy-shop',
+    '/coaching-opportunities',
+    '/reviews',
+    '/privacy-policy',
+    '/terms-conditions',
+];
+
+// Compare on letters and digits only, so hyphens, slashes, trailing slashes and
+// capitals can't count as differences.
+const slugOf = (path) => String(path || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+// Standard Levenshtein, two-row variant.
+export const editDistance = (a, b) => {
+    if (a === b) return 0;
+    if (!a.length) return b.length;
+    if (!b.length) return a.length;
+    let prev = Array.from({ length: b.length + 1 }, (_, i) => i);
+    for (let i = 1; i <= a.length; i++) {
+        const row = [i];
+        for (let j = 1; j <= b.length; j++) {
+            row[j] = Math.min(
+                prev[j] + 1,
+                row[j - 1] + 1,
+                prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1),
+            );
+        }
+        prev = row;
+    }
+    return prev[b.length];
+};
+
+// The route a mistyped path was aiming at, or null to show the 404.
+//
+// Two guards keep this from sending anyone somewhere they didn't ask for:
+//   • the typo must be within 3 edits of a real route, and
+//   • that route must be a STRICTLY better match than every other route,
+//     so an ambiguous address shows the 404 rather than a coin toss.
+// Very short paths are left alone entirely — at 5 characters or fewer, 3 edits is
+// most of the word and almost anything "matches" something.
+export const closestRoute = (pathname) => {
+    const want = slugOf(pathname);
+    if (want.length < 6) return null;
+    let best = null;
+    let bestDistance = Infinity;
+    let runnerUp = Infinity;
+    for (const route of KNOWN_ROUTES) {
+        const d = editDistance(want, slugOf(route));
+        if (d < bestDistance) {
+            runnerUp = bestDistance;
+            bestDistance = d;
+            best = route;
+        } else if (d < runnerUp) {
+            runnerUp = d;
+        }
+    }
+    return bestDistance <= 3 && bestDistance < runnerUp ? best : null;
+};
+
 const NotFound = () => {
+    const { pathname } = useLocation();
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
+
+    const rescue = closestRoute(pathname);
+    if (rescue) return <Navigate to={rescue} replace />;
 
     return (
         <div className="min-h-screen flex flex-col bg-white text-rr-dark">
