@@ -27,7 +27,6 @@ const LINKS = [
 // App.jsx — a route missing here just means its typos are not rescued, never a break.
 export const KNOWN_ROUTES = [
     '/performance-squads',
-    '/power-game-masterclass',
     '/junior-royals',
     '/junior-royals-holiday',
     '/mickleham',

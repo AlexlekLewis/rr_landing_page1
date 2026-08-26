@@ -57,6 +57,7 @@ export const PAGE_SEO = {
     title: 'Power Hitting Masterclass Melbourne | Rajasthan Royals',
     description:
       'A two-session power-hitting masterclass in Melbourne for cricketers aged 14 and up — mechanics, bat swing, video analysis and exit velocity testing.',
+    noindex: true,
   },
   '/coaches': {
     title: 'Our Cricket Coaches | Rajasthan Royals Academy',

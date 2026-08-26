@@ -46,6 +46,10 @@ export default function RouteSeo() {
         upsertMeta('name', 'description', description);
         upsertCanonical(canonical);
 
+        // Robots — pages flagged noindex are kept out of search results even if
+        // reached directly. Managed pages without the flag get an explicit index.
+        upsertMeta('name', 'robots', cfg.noindex ? 'noindex, nofollow' : 'index, follow');
+
         // Open Graph
         upsertMeta('property', 'og:title', title);
         upsertMeta('property', 'og:description', description);

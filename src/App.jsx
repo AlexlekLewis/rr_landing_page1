@@ -18,8 +18,6 @@ import FemaleCricketSuccess from './components/female-cricket-introduction/Femal
 import FemaleEmpowerment from './components/female-empowerment/FemaleEmpowerment';
 import CoachingOpportunities from './components/coaching-opportunities/CoachingOpportunities';
 import PowerGame from './components/power-game/PowerGame';
-import PowerGameMasterclass from './components/power-game-masterclass/PowerGameMasterclass';
-import MasterclassSuccess from './components/power-game-masterclass/MasterclassSuccess';
 import MicklehamOpenDay from './components/mickleham-open-day/MicklehamOpenDay';
 import OpenDay from './components/open-day/OpenDay';
 import OpenDaySuccess from './components/open-day/OpenDaySuccess';
@@ -210,10 +208,11 @@ function App() {
             Not in nav; writes to program_feedback via the service-role /api/program-feedback. */}
         <Route path="/elite-feedback" element={<ProgramFeedback />} />
 
-        {/* Power Game Masterclass (Sun 6 & 13 Sept, 5-7pm, Cranbourne North) — PUBLIC
-            since 20 Aug 2026: in the nav, the home What's On widget and the sitemap. */}
-        <Route path="/power-game-masterclass" element={<PowerGameMasterclass />} />
-        <Route path="/power-game-masterclass/success" element={<MasterclassSuccess />} />
+        {/* Power Game Masterclass — RETIRED 2026 (program removed from schedule).
+            Routes intentionally fall through to the 404 catch-all so the page is not
+            reachable or discoverable. Component + success page kept in the repo
+            (src/components/power-game-masterclass/) to revive if the program returns:
+            restore these two Route lines and set is_active/noindex accordingly. */}
 
         {/* Performance Squads — trial/invite representative pathway. HIDDEN: noindex,
             not in nav or sitemap, direct URL only until Andy approves go-live. */}
