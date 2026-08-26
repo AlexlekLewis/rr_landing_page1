@@ -1,7 +1,23 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
+// Hosted on the landing project's public `videos` bucket (same convention as the
+// home and Power Game videos). preload="none" means the 58MB file is only fetched
+// when a visitor actually clicks play — the poster image is all that loads up front.
+const VIDEO_URL = 'https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/videos/careers/careers-coaches-alex-lewis-v1.mp4';
+const POSTER = '/assets/coaches/alex-lewis.jpg';
+
 const VideoSection = () => {
+    const videoRef = useRef(null);
+    const [playing, setPlaying] = useState(false);
+
+    const startPlaying = () => {
+        const v = videoRef.current;
+        if (!v) return;
+        v.play();
+        setPlaying(true);
+    };
+
     return (
         <section className="relative py-24 md:py-32 bg-slate-50 overflow-hidden">
             <div className="relative max-w-5xl mx-auto px-6">
@@ -38,37 +54,46 @@ const VideoSection = () => {
                         transition={{ delay: 0.3 }}
                         className="text-base md:text-lg text-rr-charcoal font-medium leading-relaxed max-w-3xl mx-auto"
                     >
-                        A conversation between our Head Coach Alex Lewis and Director of Cricket Andy Crook on what being part of RRA Melbourne really involves — the philosophy, the standards, and the opportunity.
+                        Our Head Coach, Alex Lewis, on what coaching at RRA Melbourne actually involves — how we coach, the standard we hold coaches to, and what we look for in the people who join us.
                     </motion.p>
                 </div>
 
-                {/* Video placeholder — TODO: Replace with actual video embed */}
+                {/* Video player — poster loads immediately, the file only downloads on play */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.4, duration: 0.6 }}
-                    className="relative aspect-video w-full rounded-2xl overflow-hidden bg-rr-dark border border-slate-200 shadow-2xl group cursor-pointer"
+                    className="relative aspect-video w-full rounded-2xl overflow-hidden bg-rr-dark border border-slate-200 shadow-2xl"
                 >
-                    {/* Background image as placeholder */}
-                    <div
-                        className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-50 transition-opacity"
-                        style={{ backgroundImage: "url('/assets/coaches/alex-lewis.jpg')" }}
+                    <video
+                        ref={videoRef}
+                        className="absolute inset-0 w-full h-full object-cover"
+                        src={VIDEO_URL}
+                        poster={POSTER}
+                        preload="none"
+                        controls={playing}
+                        playsInline
+                        onPlay={() => setPlaying(true)}
                     />
 
-                    {/* Dark overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-rr-dark/80 via-rr-dark/60 to-rr-blue/40" />
-
-                    {/* Play button + label */}
-                    <div className="relative z-10 flex flex-col items-center justify-center h-full text-white">
-                        <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-rr-pink/90 group-hover:bg-rr-pink flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-2xl shadow-rr-pink/40">
-                            <svg className="w-8 h-8 md:w-10 md:h-10 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M8 5v14l11-7z" />
-                            </svg>
-                        </div>
-                        <p className="text-xs font-bold uppercase tracking-[0.3em] text-white/70">Video Coming Soon</p>
-                        <p className="text-sm md:text-base font-bold uppercase tracking-widest text-white mt-1">Interview · Alex Lewis × Andy Crook</p>
-                    </div>
+                    {/* Click-to-play overlay — hidden once the video starts */}
+                    {!playing && (
+                        <button
+                            type="button"
+                            onClick={startPlaying}
+                            aria-label="Play the video from Alex Lewis"
+                            className="absolute inset-0 z-10 flex flex-col items-center justify-center group cursor-pointer"
+                        >
+                            <div className="absolute inset-0 bg-gradient-to-br from-rr-dark/70 via-rr-dark/50 to-rr-blue/30 group-hover:from-rr-dark/60 transition-colors" />
+                            <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-full bg-rr-pink/90 group-hover:bg-rr-pink flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xl shadow-rr-pink/40">
+                                <svg className="w-8 h-8 md:w-10 md:h-10 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z" />
+                                </svg>
+                            </div>
+                            <p className="relative text-sm md:text-base font-bold uppercase tracking-widest text-white mt-4">Alex Lewis · Head Coach</p>
+                        </button>
+                    )}
 
                     {/* Subtle border accent */}
                     <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-2xl pointer-events-none" />
