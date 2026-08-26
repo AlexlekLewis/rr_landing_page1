@@ -16,29 +16,20 @@ const HomeCareersBanner = () => (
                     background: 'linear-gradient(90deg, #3B1670 0%, #7A1D8F 45%, #E11F8F 100%)',
                 }}
             >
-                {/* Decorative lion silhouette on the right */}
-                <img
-                    src="/assets/MELBOURNE_OFFICIAL.png"
-                    alt=""
-                    aria-hidden="true"
-                    className="absolute -right-16 -bottom-8 w-64 md:w-96 lg:w-[28rem] opacity-15 pointer-events-none select-none"
-                    style={{ filter: 'brightness(0) invert(1)' }}
-                />
-
-                <div className="relative grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 md:gap-10 items-center px-6 py-10 md:px-14 md:py-14">
-                    {/* Left — RRA logo (hidden on small mobile to keep the tile clean) */}
+                <div className="relative grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 md:gap-12 items-center px-6 py-10 md:px-14 md:py-14">
+                    {/* Left — RRA logo (enlarged for balance) */}
                     <div className="hidden sm:flex justify-center md:justify-start shrink-0">
                         <img
                             src="/assets/MELBOURNE_OFFICIAL.png"
                             alt="Rajasthan Royals Academy Melbourne"
-                            className="w-24 md:w-32 lg:w-36 h-auto"
+                            className="w-40 md:w-56 lg:w-64 h-auto"
                             style={{ filter: 'brightness(0) invert(1)' }}
                         />
                     </div>
 
                     {/* Right — Content */}
                     <div className="text-white">
-                        <p className="text-xs md:text-sm font-bold tracking-[0.25em] text-white/80 uppercase mb-3 md:mb-4">
+                        <p className="text-sm md:text-base lg:text-lg font-bold tracking-[0.28em] text-white/85 uppercase mb-3 md:mb-5">
                             We're Hiring
                         </p>
                         <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-tight leading-[0.95] mb-4 md:mb-6">
