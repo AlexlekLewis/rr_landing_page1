@@ -5,7 +5,8 @@ import { motion } from 'framer-motion';
 // home and Power Game videos). preload="none" means the 58MB file is only fetched
 // when a visitor actually clicks play — the poster image is all that loads up front.
 const VIDEO_URL = 'https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/videos/careers/careers-coaches-alex-lewis-v1.mp4';
-const POSTER = '/assets/coaches/alex-lewis.jpg';
+// The video's own branded title card, captured as a still — loads instantly with the page.
+const POSTER = '/assets/careers-video-poster.jpg';
 
 const VideoSection = () => {
     const videoRef = useRef(null);
@@ -54,7 +55,7 @@ const VideoSection = () => {
                         transition={{ delay: 0.3 }}
                         className="text-base md:text-lg text-rr-charcoal font-medium leading-relaxed max-w-3xl mx-auto"
                     >
-                        Our Head Coach, Alex Lewis, on what coaching at RRA Melbourne actually involves — how we coach, the standard we hold coaches to, and what we look for in the people who join us.
+                        Director of Cricket Andy Crook sits down with Head Coach Alex Lewis to talk through what coaching at RRA Melbourne actually involves — how we coach, the standard we hold coaches to, and who we're looking for.
                     </motion.p>
                 </div>
 
@@ -82,16 +83,16 @@ const VideoSection = () => {
                         <button
                             type="button"
                             onClick={startPlaying}
-                            aria-label="Play the video from Alex Lewis"
-                            className="absolute inset-0 z-10 flex flex-col items-center justify-center group cursor-pointer"
+                            aria-label="Play the video: Andy Crook interviews Alex Lewis"
+                            className="absolute inset-0 z-10 flex items-center justify-center group cursor-pointer"
                         >
-                            <div className="absolute inset-0 bg-gradient-to-br from-rr-dark/70 via-rr-dark/50 to-rr-blue/30 group-hover:from-rr-dark/60 transition-colors" />
-                            <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-full bg-rr-pink/90 group-hover:bg-rr-pink flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xl shadow-rr-pink/40">
+                            {/* Light scrim only — the branded title card poster should stay visible */}
+                            <div className="absolute inset-0 bg-rr-dark/20 group-hover:bg-rr-dark/10 transition-colors" />
+                            <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-full bg-rr-pink group-hover:bg-rr-light-pink flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xl shadow-rr-dark/50">
                                 <svg className="w-8 h-8 md:w-10 md:h-10 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M8 5v14l11-7z" />
                                 </svg>
                             </div>
-                            <p className="relative text-sm md:text-base font-bold uppercase tracking-widest text-white mt-4">Alex Lewis · Head Coach</p>
                         </button>
                     )}
 
