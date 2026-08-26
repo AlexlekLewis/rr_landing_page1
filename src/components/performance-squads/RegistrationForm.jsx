@@ -164,7 +164,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
             <div className="max-w-2xl mx-auto">
                 <SectionHeading
                     eyebrow="Register & Pay"
-                    title="Register & Secure Your Spot"
+                    title="Register & Secure Your Trial Spot"
                     sub="Enter your details, choose your trial session(s), and pay — all in one step. Your trial spot isn't confirmed until payment is received."
                 />
                 {submitted ? (
