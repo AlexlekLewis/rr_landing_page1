@@ -1,6 +1,6 @@
 // ============================================================
 // Vercel Serverless Function — mirror Performance Squads registrations AND
-// their Stripe trial payments into one Google Sheet. Runs 4-hourly on cron.
+// their Stripe trial payments into one Google Sheet. Runs hourly on cron.
 // GET (Vercel Cron) or POST (admin manual run).
 // ============================================================
 // Target workbook: "Performance Squads — Registrations & Payments", created by
@@ -471,8 +471,31 @@ async function ensureProtectedRange(sheets, spreadsheetId, tabName, nCols, descr
   const all = await sheetMeta(sheets, spreadsheetId);
   const hit = all.find((x) => x.properties?.title === tabName);
   if (!hit) return false;
-  const already = (hit.protectedRanges || []).some((r) => (r.description || '').includes(PROTECT_TAG));
-  if (already) return false;
+  const wanted = `${description} [${PROTECT_TAG}]`;
+  const existing = (hit.protectedRanges || []).find((r) => (r.description || '').includes(PROTECT_TAG));
+
+  // Already there and already says the right thing.
+  if (existing && existing.description === wanted) return false;
+
+  // Already there but the wording has moved on — the note tells people which
+  // columns are safe to work in, so a stale one is worse than none. Update it in
+  // place rather than skipping, which is what let "every 4 hours" survive the
+  // switch to hourly.
+  if (existing) {
+    await sheets.spreadsheets.batchUpdate({
+      spreadsheetId,
+      requestBody: {
+        requests: [{
+          updateProtectedRange: {
+            protectedRange: { protectedRangeId: existing.protectedRangeId, description: wanted },
+            fields: 'description',
+          },
+        }],
+      },
+    });
+    return true;
+  }
+
   const range = { sheetId: hit.properties.sheetId, startRowIndex: 0, startColumnIndex: 0 };
   if (nCols) range.endColumnIndex = nCols;
   await sheets.spreadsheets.batchUpdate({
@@ -480,7 +503,7 @@ async function ensureProtectedRange(sheets, spreadsheetId, tabName, nCols, descr
     requestBody: {
       requests: [{
         addProtectedRange: {
-          protectedRange: { range, description: `${description} [${PROTECT_TAG}]`, warningOnly: true },
+          protectedRange: { range, description: wanted, warningOnly: true },
         },
       }],
     },
@@ -602,8 +625,8 @@ async function reconcileTab(sheets, spreadsheetId, tabName, headers, lastCol, ro
   try {
     await ensureProtectedRange(
       sheets, spreadsheetId, tabName, headers.length,
-      `Columns A-${lastCol} are filled in automatically every 4 hours. Anything you type here is `
-        + `replaced. Put your notes in column ${colLetter(headers.length)} onwards instead.`,
+      `Columns A-${lastCol} are filled in automatically. Anything you type here is replaced `
+        + `on the next update. Put your notes in column ${colLetter(headers.length)} onwards instead.`,
     );
     await ensureSafeColumnLabel(sheets, spreadsheetId, tabName, headers.length);
   } catch (err) {
@@ -624,10 +647,10 @@ async function reconcileTab(sheets, spreadsheetId, tabName, headers, lastCol, ro
 const guideLines = (linkLines = []) => [
   ['Performance Squads — Registrations & Payments — how this sheet works'],
   [''],
-  ['This sheet fills itself in automatically. It refreshes every 4 hours from the'],
+  ['This sheet fills itself in automatically. It refreshes every hour from the'],
   ['registration form at rramelbourne.com/performance-squads and from Stripe. You do'],
-  ['not need to add anyone by hand — a new registration appears on its own within 4'],
-  ['hours, and so does a payment.'],
+  ['not need to add anyone by hand — a new registration appears on its own within'],
+  ['the hour, and so does a payment.'],
   [''],
   ['WHY EVERY TAB SAYS "DO NOT EDIT"'],
   [''],
@@ -635,7 +658,7 @@ const guideLines = (linkLines = []) => [
   ['"... — DO NOT EDIT". That warning is about the AUTOMATIC COLUMNS, not the whole'],
   ['sheet — there is a safe place to work, and it is explained below. Google will also'],
   ['warn you if you start typing into an automatic column; that warning is real, and'],
-  ['clicking through it means your typing is replaced within 4 hours.'],
+  ['clicking through it means your typing is replaced within the hour.'],
   [''],
   ['THE TABS'],
   [''],
@@ -704,7 +727,7 @@ async function ensureGuideTab(sheets, spreadsheetId, linkLines = []) {
   try {
     await ensureProtectedRange(
       sheets, spreadsheetId, GUIDE_TAB, null,
-      'This whole tab is rewritten automatically every 4 hours. Anything you type here is replaced.',
+      'This whole tab is rewritten automatically on every update. Anything you type here is replaced.',
     );
   } catch (err) {
     console.warn('sync-performance-squads: could not protect the guide tab:', err.message);
