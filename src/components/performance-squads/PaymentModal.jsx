@@ -175,16 +175,18 @@ const PaymentModal = ({ open, registration, onClose }) => {
                                     </button>
                                 )}
 
-                                <button
-                                    onClick={onClose}
-                                    className="w-full text-white/45 hover:text-white/70 text-xs font-bold uppercase tracking-wider mt-4 py-2 transition-colors"
-                                >
-                                    I'll pay later
-                                </button>
-                                <p className="text-white/35 text-xs font-medium text-center mt-2">
-                                    Payments are processed securely by Stripe. If you close this,
-                                    use the <span className="text-white/60">Complete Payment</span> button
-                                    on the form to come back to it.
+                                {/* The defer button that used to sit here is gone on purpose.
+                                    Of 19 payments, 18 landed within three minutes of registering.
+                                    The one person who came back later did it by REGISTERING AGAIN,
+                                    which is why a single player sits in the sheet three times.
+                                    Nothing is emailed on registration, so deferring led nowhere —
+                                    it was an exit dressed up as an option. The dialog can still be
+                                    dismissed with the X or by tapping outside; we just no longer
+                                    invite it. Restore this only once a confirmation email with the
+                                    pay link actually exists. */}
+                                <p className="text-white/35 text-xs font-medium text-center mt-4">
+                                    Payments are processed securely by Stripe. Your trial spot is not
+                                    held until payment is received.
                                 </p>
                             </>
                         ) : (
