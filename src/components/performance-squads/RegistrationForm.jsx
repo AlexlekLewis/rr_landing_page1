@@ -330,9 +330,6 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                         >
                             {submitting ? 'Submitting…' : 'Submit Registration'} {!submitting && <ArrowRight className="w-4 h-4" />}
                         </button>
-                        <p className="text-white/40 text-xs font-medium text-center mt-4">
-                            Your details are only used to manage your Performance Squad registration.
-                        </p>
                     </form>
                 )}
             </div>
