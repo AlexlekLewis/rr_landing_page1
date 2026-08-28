@@ -43,7 +43,7 @@ const PricingSection = () => {
                         <div className="absolute top-0 left-0 right-0 bg-rr-pink py-2 px-4">
                             <p className="text-white text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                                Early Bird — Ends 11pm Sunday 30 August
+                                Early Bird Extended — Ends 11pm Wednesday 2 September
                             </p>
                         </div>
 
@@ -69,7 +69,7 @@ const PricingSection = () => {
                             </button>
 
                             <p className="text-white/40 text-xs mt-4 leading-relaxed">
-                                Early Bird price of $299 ends 11pm Sunday 30 August, then reverts to $330. Includes 12 hours of elite coaching across 3 days. Training shirt purchased separately at $29.95.
+                                Early Bird price of $299 has been extended — it now ends 11pm Wednesday 2 September, then reverts to $330. Includes 12 hours of elite coaching across 3 days. Training shirt purchased separately at $29.95.
                             </p>
                         </div>
                     </motion.div>

@@ -70,7 +70,7 @@ const HeroSection = () => {
                     className="text-sm md:text-lg text-white/90 font-medium mb-8 max-w-xl"
                 >
                     The Junior Royals Holiday Program is back for the September / October school holidays, for boys
-                    and girls aged 7–15, at our centres across Melbourne. Secure your place below — Early Bird pricing ends 11pm Sunday 30 August.
+                    and girls aged 7–15, at our centres across Melbourne. Secure your place below — Early Bird pricing extended until 11pm Wednesday 2 September.
                 </motion.p>
 
                 {/* Location pills */}

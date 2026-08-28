@@ -6,7 +6,7 @@ const PromoBanner = () => {
         <span className="inline-flex items-center gap-3 px-8">
             <span className="text-white font-black uppercase tracking-widest text-xs md:text-sm">🏏 Early Bird — $299</span>
             <span className="text-white/60 font-bold text-xs md:text-sm">·</span>
-            <span className="text-white font-bold uppercase tracking-wide text-xs md:text-sm">Ends 11pm Sunday 30 August</span>
+            <span className="text-white font-bold uppercase tracking-wide text-xs md:text-sm">Extended to 11pm Wednesday 2 September</span>
             <span className="text-white/60 font-bold text-xs md:text-sm">·</span>
             <span className="text-white font-bold uppercase tracking-wide text-xs md:text-sm">Reverts to $330</span>
             <span className="text-white/60 font-bold text-xs md:text-sm">·</span>

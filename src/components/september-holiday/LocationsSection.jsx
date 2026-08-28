@@ -17,7 +17,7 @@ const locations = [
         time: '9:00 AM – 1:00 PM',
         onSale: true,
         coach: 'Alex Lewis',
-        urgency: 'Early Bird $299 — Ends 11pm Sun 30 Aug',
+        urgency: 'Early Bird $299 Extended — Ends Wed 2 Sept',
         urgencyColor: 'bg-rr-pink',
     },
     {
@@ -30,24 +30,8 @@ const locations = [
         time: '9:00 AM – 1:00 PM',
         onSale: true,
         coach: 'Alex Thornhill',
-        urgency: 'Early Bird $299 — Ends 11pm Sun 30 Aug',
+        urgency: 'Early Bird $299 Extended — Ends Wed 2 Sept',
         urgencyColor: 'bg-rr-pink',
-    },
-    {
-        name: 'Venue TBC',
-        suburb: 'Western Melbourne',
-        region: 'Western Melbourne',
-        venue: 'TBC',
-        tag: 'western-melbourne',
-        onSale: false,
-    },
-    {
-        name: 'Venue TBC',
-        suburb: 'Eastern Melbourne',
-        region: 'Eastern Melbourne',
-        venue: 'TBC',
-        tag: 'eastern-melbourne',
-        onSale: false,
     },
 ];
 

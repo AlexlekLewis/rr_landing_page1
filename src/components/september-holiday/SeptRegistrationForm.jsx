@@ -134,7 +134,7 @@ const SeptRegistrationForm = () => {
         if (!form.primary_club.trim()) e.primary_club = 'Required';
         if (!form.suburb.trim())       e.suburb       = 'Required';
         if (!form.location)            e.location     = 'Please select a location';
-        if (!form.shirt_size) e.shirt_size = 'Please select a shirt size';
+        if (!form.has_shirt && !form.shirt_size) e.shirt_size = 'Please select a shirt size';
         if (!form.accept_terms)        e.accept_terms = 'Required';
         if (!form.accept_player_code)  e.accept_player_code = 'Required';
         if (!form.accept_parent_code)  e.accept_parent_code = 'Required';
@@ -299,20 +299,24 @@ const SeptRegistrationForm = () => {
                             <option value="">Select a location</option>
                             <option value="mickleham">Mickleham Indoor Sports Centre | Sept 23, 24 &amp; 25</option>
                             <option value="cranbourne-north">Elite Cricket Centre — Cranbourne North | Sept 30, Oct 1 &amp; 2</option>
-                            <option value="western-melbourne" disabled>Western Melbourne (Coming Soon)</option>
-                            <option value="eastern-melbourne" disabled>Eastern Melbourne (Coming Soon)</option>
                         </select>
                         {errors.location && <p className="text-red-500 text-xs mt-1">{errors.location}</p>}
                     </div>
 
                     {/* ── SHIRT ── */}
-                    <p className="text-xs font-black text-rr-pink uppercase tracking-widest mb-3 pb-2 border-b border-slate-100">Training Shirt — $29.95 (Required)</p>
+                    <p className="text-xs font-black text-rr-pink uppercase tracking-widest mb-3 pb-2 border-b border-slate-100">Training Shirt — $29.95</p>
                     <div className="bg-amber-50 border border-amber-200 rounded-xl px-5 py-4 mb-6">
                         <p className="text-amber-800 text-sm font-bold mb-1">⚠️ Please take care when selecting your shirt size</p>
                         <p className="text-amber-700 text-xs font-medium leading-relaxed">Shirts are ordered specifically for each participant and cannot be exchanged after purchase. We strongly recommend using the Omtex size chart below to measure your child before selecting. Choosing the wrong size is a common mistake — please don't guess.</p>
                     </div>
                     <div className="mb-8">
                         {/* Size selector — only shown if they don't already have a shirt */}
+                        <label className="flex items-start gap-3 cursor-pointer mb-5">
+                            <input type="checkbox" name="has_shirt" checked={form.has_shirt} onChange={handleChange} className="mt-0.5 w-4 h-4 accent-rr-pink shrink-0" />
+                            <span className="text-sm font-medium text-rr-charcoal">My child already has a Rajasthan Royals Academy training shirt — I don't need to purchase one</span>
+                        </label>
+
+                        {!form.has_shirt && (
                         <div>
                                     <label className={labelClass}>Select Shirt Size</label>
                                     <select name="shirt_size" value={form.shirt_size} onChange={handleChange} className={inputClass(errors.shirt_size)}>
@@ -397,6 +401,7 @@ const SeptRegistrationForm = () => {
                                         )}
                                     </AnimatePresence>
                         </div>
+                        )}
                     </div>
 
                     {/* ── COMPLIANCE ── */}
