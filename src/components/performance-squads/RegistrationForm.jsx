@@ -283,13 +283,15 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                                 </div>
                                 <FieldError msg={errors.trial_session_dates} />
                                 <p className="text-white/40 text-xs font-medium mt-2">
-                                    ${TRIAL_PRICE} per player, per session — you'll pay for{' '}
-                                    {form.trial_session_dates.length || 0} session
-                                    {form.trial_session_dates.length === 1 ? '' : 's'}
+                                    ${TRIAL_PRICE} per player, per session
                                     {form.trial_session_dates.length > 0 && (
-                                        <span className="text-rr-light-pink font-bold">
-                                            {' '}(${TRIAL_PRICE * form.trial_session_dates.length})
-                                        </span>
+                                        <>
+                                            {' '}— you'll pay for {form.trial_session_dates.length} session
+                                            {form.trial_session_dates.length === 1 ? '' : 's'}
+                                            <span className="text-rr-light-pink font-bold">
+                                                {' '}(${TRIAL_PRICE * form.trial_session_dates.length})
+                                            </span>
+                                        </>
                                     )}.
                                 </p>
                             </div>
