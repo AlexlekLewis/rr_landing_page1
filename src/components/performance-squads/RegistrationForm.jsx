@@ -277,6 +277,11 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                                                     {picked && <Check className="w-3.5 h-3.5 text-white" />}
                                                 </span>
                                                 <span className="text-sm font-medium">{sess.label}</span>
+                                                {sess.badge && (
+                                                    <span className="ml-auto text-[10px] font-black uppercase tracking-wider text-amber-300 bg-amber-300/10 border border-amber-300/25 rounded-full px-2 py-0.5 shrink-0">
+                                                        {sess.badge}
+                                                    </span>
+                                                )}
                                             </button>
                                         );
                                     })}

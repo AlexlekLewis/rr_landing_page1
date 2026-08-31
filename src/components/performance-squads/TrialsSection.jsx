@@ -42,9 +42,16 @@ const TrialsSection = ({ onChooseCentre }) => (
                                 {c.trialSessions.length ? (
                                     <div className="space-y-1.5">
                                         {c.trialSessions.map((sess, n) => (
-                                            <div key={sess.id} className="text-white/75 text-sm font-medium">
-                                                <span className="text-rr-light-pink font-bold">Trial {n + 1}</span>
-                                                {' — '}{sess.label}
+                                            <div key={sess.id} className="text-white/75 text-sm font-medium flex items-center gap-2 flex-wrap">
+                                                <span>
+                                                    <span className="text-rr-light-pink font-bold">Trial {n + 1}</span>
+                                                    {' — '}{sess.label}
+                                                </span>
+                                                {sess.badge && (
+                                                    <span className="text-[10px] font-black uppercase tracking-wider text-amber-300 bg-amber-300/10 border border-amber-300/25 rounded-full px-2 py-0.5">
+                                                        {sess.badge}
+                                                    </span>
+                                                )}
                                             </div>
                                         ))}
                                         {c.maxTrialSessions < c.trialSessions.length && (

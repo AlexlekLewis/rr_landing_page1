@@ -16,7 +16,7 @@ export const CENTRES = [
         coach: 'Alex Lewis',
         coachTitle: 'Head Coach',
         trialSessions: [
-            { id: 'nm-2026-09-06', label: 'Sunday 6 September · 2:00–4:00 PM' },
+            { id: 'nm-2026-09-06', label: 'Sunday 6 September · 2:00–4:00 PM', badge: 'Nearly Full' },
             { id: 'nm-2026-09-10', label: 'Thursday 10 September · 7:00–9:00 PM' },
         ],
         maxTrialSessions: 2,
@@ -30,7 +30,7 @@ export const CENTRES = [
         coach: 'Alex Thornhill',
         coachTitle: 'Head Coach',
         trialSessions: [
-            { id: 'se-2026-09-06', label: 'Sunday 6 September · 7:00–8:30 PM' },
+            { id: 'se-2026-09-06', label: 'Sunday 6 September · 7:00–8:30 PM', badge: 'Nearly Full' },
             { id: 'se-2026-09-11', label: 'Friday 11 September · 8:00–9:30 PM' },
             { id: 'se-2026-09-13', label: 'Sunday 13 September · 7:00–8:30 PM' },
         ],
