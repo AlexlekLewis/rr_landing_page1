@@ -59,6 +59,19 @@ export const PAGE_SEO = {
       'A two-session power-hitting masterclass in Melbourne for cricketers aged 14 and up — mechanics, bat swing, video analysis and exit velocity testing.',
     noindex: true,
   },
+  // Private link, handed out by Alex to current Academy players who cannot make a
+  // trial date. Deliberately NOT in the sitemap and not linked from any page, and
+  // noindex so it stays out of search results if the address ever gets shared.
+  // It must not be discoverable: it is a no-fee route into the squads sitting
+  // beside a paid one, so anyone finding it organically would skip the trial fee.
+  // Deliberately NOT added to robots.txt — that file is public, so listing the
+  // path there would advertise the very URL we are trying to keep quiet.
+  '/performance-squads/interest': {
+    title: "Can't Make a Trial? | Performance Squads | Rajasthan Royals Academy",
+    description:
+      'For current Rajasthan Royals Academy players who cannot attend a September Performance Squads trial.',
+    noindex: true,
+  },
   '/coaches': {
     title: 'Our Cricket Coaches | Rajasthan Royals Academy',
     description:

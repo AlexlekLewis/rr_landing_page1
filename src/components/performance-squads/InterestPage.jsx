@@ -67,9 +67,10 @@ const InterestPage = () => {
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
 
+    // Title and the noindex flag come from <RouteSeo/> (see src/seo/pageSeo.js).
+    // Setting document.title here would overwrite it.
     useEffect(() => {
         window.scrollTo(0, 0);
-        document.title = "Can't Make a Trial? | Performance Squads | Rajasthan Royals Academy Melbourne";
     }, []);
 
     const set = (key) => (e) => {
