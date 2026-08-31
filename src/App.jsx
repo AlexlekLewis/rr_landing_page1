@@ -57,6 +57,9 @@ const PowerGameFullRide = React.lazy(() => import('./components/power-game/retur
 // Melbourne). HIDDEN page: noindex, not linked from nav/homepage/sitemap. Direct URL only.
 const PerformanceSquads = React.lazy(() => import('./components/performance-squads/PerformanceSquads'));
 const PerformanceSquadsSuccess = React.lazy(() => import('./components/performance-squads/PerformanceSquadsSuccess'));
+// "I can't make a trial" — current Academy players who want a squad place but
+// cannot attend any September trial. Same table, entry_type='unable-to-trial', no fee.
+const PerformanceSquadsInterest = React.lazy(() => import('./components/performance-squads/InterestPage'));
 
 // Admin components
 import AdminLogin from './components/admin/AdminLogin';
@@ -218,6 +221,7 @@ function App() {
             not in nav or sitemap, direct URL only until Andy approves go-live. */}
         <Route path="/performance-squads" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquads /></React.Suspense>} />
         <Route path="/performance-squads/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquadsSuccess /></React.Suspense>} />
+        <Route path="/performance-squads/interest" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquadsInterest /></React.Suspense>} />
 
         {/* Power Game Program — hidden from nav, accessible via direct URL only */}
         <Route path="/elite-royals" element={<PowerGame />} />

@@ -1,82 +1,8 @@
 {
-  "hash": "fedfd43b",
+  "hash": "78cc915a",
   "configHash": "bdb19b62",
-  "lockfileHash": "bfbe3bae",
-  "browserHash": "02e04c7d",
-  "optimized": {
-    "react": {
-      "src": "../../../../../../../../../Users/alexlewis/Documents/Claude/Projects/Player DNA CArd/rr_landing_page1/node_modules/react/index.js",
-      "file": "react.js",
-      "fileHash": "4cb23068",
-      "needsInterop": true
-    },
-    "react-dom/client": {
-      "src": "../../../../../../../../../Users/alexlewis/Documents/Claude/Projects/Player DNA CArd/rr_landing_page1/node_modules/react-dom/client.js",
-      "file": "react-dom_client.js",
-      "fileHash": "b47ad4cd",
-      "needsInterop": true
-    },
-    "react-router-dom": {
-      "src": "../../../../../../../../../Users/alexlewis/Documents/Claude/Projects/Player DNA CArd/rr_landing_page1/node_modules/react-router-dom/dist/index.mjs",
-      "file": "react-router-dom.js",
-      "fileHash": "6ba5ae8c",
-      "needsInterop": false
-    },
-    "posthog-js": {
-      "src": "../../../../../../../../../Users/alexlewis/Documents/Claude/Projects/Player DNA CArd/rr_landing_page1/node_modules/posthog-js/dist/module.js",
-      "file": "posthog-js.js",
-      "fileHash": "6a9d2b7e",
-      "needsInterop": false
-    },
-    "posthog-js/react": {
-      "src": "../../../../../../../../../Users/alexlewis/Documents/Claude/Projects/Player DNA CArd/rr_landing_page1/node_modules/posthog-js/react/dist/esm/index.js",
-      "file": "posthog-js_react.js",
-      "fileHash": "42bb2a26",
-      "needsInterop": false
-    },
-    "lucide-react": {
-      "src": "../../../../../../../../../Users/alexlewis/Documents/Claude/Projects/Player DNA CArd/rr_landing_page1/node_modules/lucide-react/dist/esm/lucide-react.js",
-      "file": "lucide-react.js",
-      "fileHash": "eb501ad3",
-      "needsInterop": false
-    },
-    "framer-motion": {
-      "src": "../../../../../../../../../Users/alexlewis/Documents/Claude/Projects/Player DNA CArd/rr_landing_page1/node_modules/framer-motion/dist/es/index.mjs",
-      "file": "framer-motion.js",
-      "fileHash": "8f7aef6c",
-      "needsInterop": false
-    },
-    "recharts": {
-      "src": "../../../../../../../../../Users/alexlewis/Documents/Claude/Projects/Player DNA CArd/rr_landing_page1/node_modules/recharts/es6/index.js",
-      "file": "recharts.js",
-      "fileHash": "37fbf668",
-      "needsInterop": false
-    },
-    "@supabase/supabase-js": {
-      "src": "../../../../../../../../../Users/alexlewis/Documents/Claude/Projects/Player DNA CArd/rr_landing_page1/node_modules/@supabase/supabase-js/dist/index.mjs",
-      "file": "@supabase_supabase-js.js",
-      "fileHash": "3c87556a",
-      "needsInterop": false
-    },
-    "react-leaflet": {
-      "src": "../../../../../../../../../Users/alexlewis/Documents/Claude/Projects/Player DNA CArd/rr_landing_page1/node_modules/react-leaflet/lib/index.js",
-      "file": "react-leaflet.js",
-      "fileHash": "0e55f433",
-      "needsInterop": false
-    }
-  },
-  "chunks": {
-    "chunk-TSH2WNNJ": {
-      "file": "chunk-TSH2WNNJ.js"
-    },
-    "chunk-SA5MBN7R": {
-      "file": "chunk-SA5MBN7R.js"
-    },
-    "chunk-ERKUMPI5": {
-      "file": "chunk-ERKUMPI5.js"
-    },
-    "chunk-PR4QN5HX": {
-      "file": "chunk-PR4QN5HX.js"
-    }
-  }
+  "lockfileHash": "e3b0c442",
+  "browserHash": "772387bc",
+  "optimized": {},
+  "chunks": {}
 }

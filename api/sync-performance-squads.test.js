@@ -90,12 +90,13 @@ describe('regRow', () => {
 
 describe('the DO NOT EDIT boundary', () => {
   it('maps a column index to the right letter', () => {
-    // AD is where the safe columns start on a centre tab (29 sync columns).
     expect(colLetter(0)).toBe('A');
     expect(colLetter(25)).toBe('Z');
     expect(colLetter(26)).toBe('AA');
-    expect(colLetter(28)).toBe('AC');
-    expect(colLetter(REG_HEADERS.length)).toBe('AD');
+    // The safe columns start immediately after the sync's block, wherever that
+    // ends. Pinned to REG_HEADERS so adding a column moves it here too, rather
+    // than silently pointing people at a column the sync overwrites.
+    expect(colLetter(REG_HEADERS.length)).toBe('AE');
   });
 
   // The tab is named "South-East Melbourne — DO NOT EDIT", but the Centre CELL
@@ -144,6 +145,45 @@ describe('describeLinkHealth', () => {
     const lines = describeLinkHealth({ ids: new Map() });
     expect(lines.some((l) => l.includes('($30)'))).toBe(true);
     expect(lines.some((l) => l.includes('($60)'))).toBe(true);
+  });
+});
+
+// Players who cannot attend a trial owe nothing. If they read as unpaid they end
+// up on a chase list and get rung for money they were never asked for.
+describe('registrations from someone who cannot attend a trial', () => {
+  const cantTrial = (over = {}) => lead({
+    entry_type: 'unable-to-trial', trial_sessions: null, trial_session_dates: null, ...over,
+  });
+
+  it('is labelled so you can tell them apart at a glance', () => {
+    expect(regRow(cantTrial(), null)[col('Registration Type')]).toBe("Can't attend a trial");
+    expect(regRow(lead(), null)[col('Registration Type')]).toBe('Trial');
+  });
+
+  it('owes no fee', () => {
+    expect(regRow(cantTrial(), null)[col('Trial Fee Due (AUD)')]).toBe('No fee');
+  });
+
+  it('is never shown as unpaid', () => {
+    const r = regRow(cantTrial(), null);
+    expect(r[col('Paid in Stripe?')]).toBe('n/a');
+    expect(r[col('Payment Check')]).not.toMatch(/not paid/i);
+    expect(r[col('Payment Check')]).toContain('Do not chase');
+  });
+
+  it('leaves the trial session columns empty rather than implying a booking', () => {
+    const r = regRow(cantTrial(), null);
+    expect(r[col('Trial Sessions Booked')]).toBe('');
+    expect(r[col('Trial Sessions Chosen')]).toBe('');
+  });
+
+  it('still records the centre they want to join', () => {
+    expect(regRow(cantTrial(), null)[col('Centre')]).toBe('South-East Melbourne');
+  });
+
+  it('treats a row with no entry_type as a trial, so existing rows are unaffected', () => {
+    const legacy = lead(); delete legacy.entry_type;
+    expect(regRow(legacy, null)[col('Registration Type')]).toBe('Trial');
   });
 });
 

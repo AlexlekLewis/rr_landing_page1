@@ -182,6 +182,7 @@ export const REG_HEADERS = [
   'Club',
   'Playing Role',
   'Centre',
+  'Registration Type',
   'Trial Sessions Booked',
   'Trial Sessions Chosen',
   'Trial Fee Due (AUD)',
@@ -202,9 +203,9 @@ export const REG_HEADERS = [
   'UTM Term',
   'Referrer',
 ];
-// REG_HEADERS.length === 29 === column AC. Everything from AC rightwards is the
+// REG_HEADERS.length === 30 === column AD. Everything from AC rightwards is the
 // humans' and is never read, written or cleared by this sync.
-const REG_LAST_COL = 'AC';
+const REG_LAST_COL = 'AD';
 
 // Does what Stripe took line up with what the form said they owe? This exists
 // because email matching cannot see siblings: one parent paying for two children
@@ -223,7 +224,14 @@ export const paymentCheck = (dueCents, pay) => {
   return `Short ${money(dueCents - paid)} — paid ${money(paid)} of ${money(dueCents)}`;
 };
 
+// entry_type 'trial' is someone attending a September trial and paying the fee.
+// 'unable-to-trial' is a current Academy player who cannot make any trial date and
+// registered via /performance-squads/interest. They owe NOTHING, so the fee and
+// payment columns must not treat them as a debtor.
+const isTrialEntry = (r) => (r.entry_type || 'trial') === 'trial';
+
 export const regRow = (r, pay) => {
+  const trialEntry = isTrialEntry(r);
   const sessions = Number(r.trial_sessions) || 0;
   const dates = Array.isArray(r.trial_session_dates) ? r.trial_session_dates.map(sessionLabel).join(' · ') : '';
   return [
@@ -237,14 +245,16 @@ export const regRow = (r, pay) => {
     r.club || '',
     r.playing_role || '',
     CENTRE_NAMES[r.preferred_centre] || r.preferred_centre || '',
-    asText(sessions || ''),
-    dates,
-    sessions ? money(sessions * TRIAL_FEE_CENTS) : '',
-    pay ? 'Yes' : 'No',
+    trialEntry ? 'Trial' : "Can't attend a trial",
+    trialEntry ? asText(sessions || '') : '',
+    trialEntry ? dates : '',
+    trialEntry ? (sessions ? money(sessions * TRIAL_FEE_CENTS) : '') : 'No fee',
+    trialEntry ? (pay ? 'Yes' : 'No') : 'n/a',
     pay ? money(pay.amountCents) : '',
     pay ? asText(fmtMelb(pay.paidAt)) : '',
     pay ? pay.method : '',
-    paymentCheck(sessions * TRIAL_FEE_CENTS, pay),
+    trialEntry ? paymentCheck(sessions * TRIAL_FEE_CENTS, pay)
+      : 'No trial fee — assessed from their Academy training. Do not chase.',
     yesNo(r.accept_terms),
     yesNo(r.accept_player_code),
     yesNo(r.accept_parent_code),
@@ -670,10 +680,10 @@ const guideLines = (linkLines = []) => [
   [''],
   ['WHERE YOU CAN WORK SAFELY'],
   [''],
-  ['On the centre tabs, columns A to AC are filled in by the automatic update. If you'],
+  ['On the centre tabs, columns A to AD are filled in by the automatic update. If you'],
   ['change something there, your change is replaced next time that player’s details'],
-  ['change. Column AD onwards is yours and is never touched — put notes, follow-up'],
-  ['status, selection decisions and anything else there. Column AD is labelled'],
+  ['change. Column AE onwards is yours and is never touched — put notes, follow-up'],
+  ['status, selection decisions and anything else there. Column AE is labelled'],
   ['"YOUR NOTES — SAFE TO EDIT" so you can find it.'],
   [''],
   ['On the Payments tab the same applies to columns A to J; K onwards is yours.'],
@@ -683,6 +693,16 @@ const guideLines = (linkLines = []) => [
   [''],
   ['You can sort, filter, colour and hide rows freely. Rows are matched by the ID in'],
   ['column A, not by position, so your notes stay attached to the right person.'],
+  [''],
+  ['THE "REGISTRATION TYPE" COLUMN'],
+  [''],
+  ['"Trial" means they are coming to a September trial and owe the trial fee.'],
+  [''],
+  ['"Can\'t attend a trial" means they are a current Academy player who registered at'],
+  ['rramelbourne.com/performance-squads/interest because none of the trial dates work'],
+  ['for them. They owe NOTHING. Their fee columns read "No fee" and "Do not chase" so'],
+  ['they never end up on a payment chase list. Their coach assesses them from their'],
+  ['normal training instead.'],
   [''],
   ['HOW "PAID" IS WORKED OUT'],
   [''],
