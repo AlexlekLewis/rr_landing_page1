@@ -66,6 +66,13 @@ const DNE = ' — DO NOT EDIT';
 const GUIDE_TAB = `How this sheet works${DNE}`;
 const PAYMENTS_TAB = `Payments (Stripe)${DNE}`;
 
+// Players who registered at /performance-squads/interest because they cannot make
+// any trial date. They get their OWN tab rather than sitting among the trial
+// players: the centre tabs are the lists a coach works off on a trial night, and
+// someone who is not turning up should not be on them. The Centre column on this
+// tab says which squad they are asking to join.
+const INTEREST_TAB = `Can't Attend a Trial${DNE}`;
+
 // One tab per live centre. Slug -> tab name, mirroring the centre slugs the
 // registration form writes into preferred_centre.
 const CENTRE_TABS = {
@@ -79,7 +86,7 @@ const FALLBACK_TAB = `Other / Unassigned${DNE}`;
 // the rows — and anyone's notes in the safe columns — exactly where they are,
 // instead of stranding them on an orphaned tab beside a new empty one.
 const LEGACY_TAB_NAMES = Object.fromEntries(
-  [GUIDE_TAB, PAYMENTS_TAB, FALLBACK_TAB, ...Object.values(CENTRE_TABS)]
+  [GUIDE_TAB, PAYMENTS_TAB, INTEREST_TAB, FALLBACK_TAB, ...Object.values(CENTRE_TABS)]
     .map((name) => [name, name.slice(0, -DNE.length)]),
 );
 
@@ -678,6 +685,12 @@ const guideLines = (linkLines = []) => [
   ['"Payments (Stripe)" — every Performance Squads trial payment Stripe has taken,'],
   ['including any we could not match to a registration.'],
   [''],
+  ['THE "CANNOT ATTEND A TRIAL" TAB — current Academy players who want a squad'],
+  ['place but they cannot make any of the trial dates. They registered at'],
+  ['squads/interest. They owe NOTHING and are NOT coming to a trial, so they are'],
+  ['kept off the centre tabs on purpose. The Centre column says which squad they'],
+  ['are asking to join. Their coach assesses them from their normal training.'],
+  [''],
   ['WHERE YOU CAN WORK SAFELY'],
   [''],
   ['On the centre tabs, columns A to AD are filled in by the automatic update. If you'],
@@ -809,10 +822,12 @@ export async function reconcilePerformanceSquads(sheets, spreadsheetId, sb = nul
     if (k && !regByEmail.has(k)) regByEmail.set(k, { id: r.id, player: r.player_name });
   }
 
-  // Group registrations into their centre tabs.
+  // Trial registrations go to their centre's tab. Anyone who cannot attend a trial
+  // goes to the one interest tab instead, so a coach working a centre tab on a
+  // trial night is only looking at people who are actually turning up.
   const byTab = new Map();
   for (const r of leads || []) {
-    const tab = CENTRE_TABS[r.preferred_centre] || FALLBACK_TAB;
+    const tab = !isTrialEntry(r) ? INTEREST_TAB : (CENTRE_TABS[r.preferred_centre] || FALLBACK_TAB);
     if (!byTab.has(tab)) byTab.set(tab, []);
     byTab.get(tab).push(regRow(r, paidByEmail.get(emailKey(r.email)) || null));
   }
