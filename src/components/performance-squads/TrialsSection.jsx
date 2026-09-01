@@ -42,9 +42,13 @@ const TrialsSection = ({ onChooseCentre }) => (
                                 {c.trialSessions.length ? (
                                     <div className="space-y-1.5">
                                         {c.trialSessions.map((sess, n) => (
-                                            <div key={sess.id} className="text-white/75 text-sm font-medium flex items-center gap-2 flex-wrap">
-                                                <span>
-                                                    <span className="text-rr-light-pink font-bold">Trial {n + 1}</span>
+                                            // A full session is struck through and dimmed, so the line reads as
+                                            // gone before the badge is even reached. On a narrow screen the badge
+                                            // wraps to its own line, and without the strike a player has already
+                                            // read the date as an available option by then.
+                                            <div key={sess.id} className={`text-sm font-medium flex items-center gap-2 flex-wrap ${sess.full ? 'text-white/35' : 'text-white/75'}`}>
+                                                <span className={sess.full ? 'line-through decoration-white/30' : undefined}>
+                                                    <span className={`font-bold ${sess.full ? 'text-rr-light-pink/50' : 'text-rr-light-pink'}`}>Trial {n + 1}</span>
                                                     {' — '}{sess.label}
                                                 </span>
                                                 {sess.badge && (
