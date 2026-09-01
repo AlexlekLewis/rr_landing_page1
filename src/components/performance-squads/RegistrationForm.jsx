@@ -76,6 +76,9 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
             if (picked.includes(id)) {
                 return { ...f, trial_session_dates: picked.filter((x) => x !== id) };
             }
+            // A full session is unselectable. The button is disabled too — this is
+            // the belt to that pair of braces.
+            if (trialSessions.find((x) => x.id === id)?.full) return f;
             if (picked.length >= maxSessions) return f; // cap enforced here
             return { ...f, trial_session_dates: [...picked, id] };
         });
@@ -96,6 +99,9 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
         if (!form.phone.trim()) next.phone = 'Phone number is required';
         if (!form.preferred_centre) next.preferred_centre = 'Please choose a centre';
         if (!form.playing_role) next.playing_role = 'Please choose a playing role';
+        if (showSessionPicker && form.trial_session_dates.some((id) => trialSessions.find((x) => x.id === id)?.full)) {
+            next.trial_session_dates = 'One of the sessions you picked is now full. Please choose another.';
+        }
         if (showSessionPicker && form.trial_session_dates.length === 0) {
             next.trial_session_dates = 'Please choose at least one trial session';
         }
@@ -259,26 +265,32 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                                 <div className="space-y-2.5">
                                     {trialSessions.map((sess) => {
                                         const picked = form.trial_session_dates.includes(sess.id);
+                                        const isFull = sess.full === true;
                                         const atCap = !picked && form.trial_session_dates.length >= maxSessions;
                                         return (
                                             <button
                                                 type="button"
                                                 key={sess.id}
                                                 onClick={() => toggleSession(sess.id)}
-                                                disabled={atCap}
+                                                disabled={isFull || atCap}
+                                                aria-disabled={isFull || atCap}
                                                 aria-pressed={picked}
-                                                className={`w-full flex items-center gap-3 text-left rounded-xl px-4 py-3.5 border transition-colors ${picked
-                                                    ? 'bg-rr-pink/15 border-rr-pink text-white'
-                                                    : atCap
-                                                        ? 'bg-white/[0.03] border-white/10 text-white/30 cursor-not-allowed'
-                                                        : 'bg-white/5 border-white/15 text-white/70 hover:border-rr-pink/50'}`}
+                                                className={`w-full flex items-center gap-3 text-left rounded-xl px-4 py-3.5 border transition-colors ${isFull
+                                                    ? 'bg-white/[0.02] border-white/10 text-white/25 cursor-not-allowed'
+                                                    : picked
+                                                        ? 'bg-rr-pink/15 border-rr-pink text-white'
+                                                        : atCap
+                                                            ? 'bg-white/[0.03] border-white/10 text-white/30 cursor-not-allowed'
+                                                            : 'bg-white/5 border-white/15 text-white/70 hover:border-rr-pink/50'}`}
                                             >
-                                                <span className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 ${picked ? 'bg-rr-pink border-rr-pink' : 'border-white/30'}`}>
+                                                <span className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 ${picked ? 'bg-rr-pink border-rr-pink' : 'border-white/30'} ${isFull ? 'opacity-40' : ''}`}>
                                                     {picked && <Check className="w-3.5 h-3.5 text-white" />}
                                                 </span>
-                                                <span className="text-sm font-medium">{sess.label}</span>
+                                                <span className={`text-sm font-medium ${isFull ? 'line-through decoration-white/25' : ''}`}>{sess.label}</span>
                                                 {sess.badge && (
-                                                    <span className="ml-auto text-[10px] font-black uppercase tracking-wider text-amber-300 bg-amber-300/10 border border-amber-300/25 rounded-full px-2 py-0.5 shrink-0">
+                                                    <span className={`ml-auto text-[10px] font-black uppercase tracking-wider rounded-full px-2 py-0.5 shrink-0 ${isFull
+                                                        ? 'text-red-300 bg-red-500/15 border border-red-400/40'
+                                                        : 'text-amber-300 bg-amber-300/10 border border-amber-300/25'}`}>
                                                         {sess.badge}
                                                     </span>
                                                 )}
@@ -286,6 +298,13 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                                         );
                                     })}
                                 </div>
+                                {trialSessions.some((x) => x.full) && (
+                                    <p className="text-white/55 text-xs font-medium mt-2.5 leading-relaxed">
+                                        <span className="text-red-300 font-bold">Trial Full</span> means that
+                                        session has reached capacity and can no longer be booked. The other
+                                        sessions at this centre are still open — choose one of those instead.
+                                    </p>
+                                )}
                                 <FieldError msg={errors.trial_session_dates} />
                                 <p className="text-white/40 text-xs font-medium mt-2">
                                     ${TRIAL_PRICE} per player, per session

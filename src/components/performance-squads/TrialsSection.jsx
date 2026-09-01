@@ -48,7 +48,7 @@ const TrialsSection = ({ onChooseCentre }) => (
                                                     {' — '}{sess.label}
                                                 </span>
                                                 {sess.badge && (
-                                                    <span className="text-[10px] font-black uppercase tracking-wider text-amber-300 bg-amber-300/10 border border-amber-300/25 rounded-full px-2 py-0.5">
+                                                    <span className={`text-[10px] font-black uppercase tracking-wider rounded-full px-2 py-0.5 ${sess.full ? 'text-red-300 bg-red-500/15 border border-red-400/40' : 'text-amber-300 bg-amber-300/10 border border-amber-300/25'}`}>
                                                         {sess.badge}
                                                     </span>
                                                 )}

@@ -30,7 +30,9 @@ export const CENTRES = [
         coach: 'Alex Thornhill',
         coachTitle: 'Head Coach',
         trialSessions: [
-            { id: 'se-2026-09-06', label: 'Sunday 6 September · 7:00–8:30 PM', badge: 'Nearly Full' },
+            // FULL as of 1 Sep 2026 — 37 players booked into a 90-minute session. `full`
+            // makes it unselectable on the form; the 37 already booked keep their place.
+            { id: 'se-2026-09-06', label: 'Sunday 6 September · 7:00–8:30 PM', badge: 'Trial Full', full: true },
             { id: 'se-2026-09-11', label: 'Friday 11 September · 8:00–9:30 PM' },
             { id: 'se-2026-09-13', label: 'Sunday 13 September · 7:00–8:30 PM' },
         ],
@@ -113,6 +115,11 @@ export const REGISTRATION_UPFRONT_NOTE = 'Discounted rate — final figure confi
 export const getCentre = (slug) => CENTRES.find((c) => c.slug === slug);
 export const getTrialSessions = (slug) => getCentre(slug)?.trialSessions || [];
 export const getMaxTrialSessions = (slug) => getCentre(slug)?.maxTrialSessions || 0;
+
+// A session marked full can no longer be chosen. Checked in the picker, in the
+// toggle handler and again on submit, so a stale id can never sneak through.
+export const isSessionFull = (slug, id) =>
+    (getTrialSessions(slug).find((x) => x.id === id) || {}).full === true;
 
 // Resolves the Stripe link for a centre/type. Trial links are keyed by the
 // number of sessions; everything else is a single link. Null until set.
