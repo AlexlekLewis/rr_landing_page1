@@ -30,13 +30,16 @@ export const CENTRES = [
         coach: 'Alex Thornhill',
         coachTitle: 'Head Coach',
         trialSessions: [
-            // FULL as of 1 Sep 2026 — 37 players booked into a 90-minute session. `full`
-            // makes it unselectable on the form; the 37 already booked keep their place.
+            // Both Sunday sessions are now FULL — 6 Sept closed 1 Sep 2026 (37 players
+            // booked into 90 minutes), 13 Sept closed 3 Sep 2026. `full` makes a session
+            // unselectable on the form; everyone already booked keeps their place.
             { id: 'se-2026-09-06', label: 'Sunday 6 September · 7:00–8:30 PM', badge: 'Trial Full', full: true },
             { id: 'se-2026-09-11', label: 'Friday 11 September · 8:00–9:30 PM' },
-            { id: 'se-2026-09-13', label: 'Sunday 13 September · 7:00–8:30 PM' },
+            { id: 'se-2026-09-13', label: 'Sunday 13 September · 7:00–8:30 PM', badge: 'Trial Full', full: true },
         ],
         // Cranbourne North has fewer lanes — players attend at most 2 of the 3.
+        // With both Sundays full, Friday 11 Sept is the only one still bookable; the
+        // UI caps the picker at what is actually open rather than at this number.
         maxTrialSessions: 2,
         active: true,
     },
@@ -120,6 +123,17 @@ export const getMaxTrialSessions = (slug) => getCentre(slug)?.maxTrialSessions |
 // toggle handler and again on submit, so a stale id can never sneak through.
 export const isSessionFull = (slug, id) =>
     (getTrialSessions(slug).find((x) => x.id === id) || {}).full === true;
+
+// The sessions a player can still book, and how many they can actually pick.
+// Once sessions fill, the centre's own cap stops being the real limit — a player
+// at a centre with one session left can only choose one, whatever maxTrialSessions
+// says. Every "choose up to N" line reads from here so the number on screen is
+// always a number the player can reach.
+export const getOpenTrialSessions = (slug) =>
+    getTrialSessions(slug).filter((x) => x.full !== true);
+
+export const getSelectableSessionCount = (slug) =>
+    Math.min(getMaxTrialSessions(slug), getOpenTrialSessions(slug).length);
 
 // Resolves the Stripe link for a centre/type. Trial links are keyed by the
 // number of sessions; everything else is a single link. Null until set.

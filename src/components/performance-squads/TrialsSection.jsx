@@ -58,11 +58,34 @@ const TrialsSection = ({ onChooseCentre }) => (
                                                 )}
                                             </div>
                                         ))}
-                                        {c.maxTrialSessions < c.trialSessions.length && (
-                                            <div className="text-white/45 text-xs font-medium pt-0.5">
-                                                Attend up to {c.maxTrialSessions} of these {c.trialSessions.length} sessions.
-                                            </div>
-                                        )}
+                                        {/* Counts what is still bookable, not what the venue could
+                                            hold. Once sessions fill, "attend up to 2 of these 3"
+                                            offers a choice the player cannot actually make. */}
+                                        {(() => {
+                                            const open = c.trialSessions.filter((x) => !x.full);
+                                            if (open.length === 0) {
+                                                return (
+                                                    <div className="text-white/45 text-xs font-medium pt-0.5">
+                                                        Every trial session at this centre is full.
+                                                    </div>
+                                                );
+                                            }
+                                            if (open.length === 1 && open.length < c.trialSessions.length) {
+                                                return (
+                                                    <div className="text-white/45 text-xs font-medium pt-0.5">
+                                                        Only {open[0].label} is still open to book.
+                                                    </div>
+                                                );
+                                            }
+                                            if (c.maxTrialSessions < open.length) {
+                                                return (
+                                                    <div className="text-white/45 text-xs font-medium pt-0.5">
+                                                        Attend up to {c.maxTrialSessions} of the {open.length} sessions still open.
+                                                    </div>
+                                                );
+                                            }
+                                            return null;
+                                        })()}
                                     </div>
                                 ) : (
                                     <span className="text-white/75 text-sm font-medium">Trials Coming Soon</span>

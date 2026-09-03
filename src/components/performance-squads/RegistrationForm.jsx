@@ -8,7 +8,8 @@ import {
 } from './shared';
 import {
     ACTIVE_CENTRES, PLAYING_ROLES, TRIAL_PRICE,
-    getTrialSessions, getMaxTrialSessions,
+    getTrialSessions, getMaxTrialSessions, getOpenTrialSessions,
+    getSelectableSessionCount,
 } from './data';
 
 const PSCheckbox = ({ checked, onToggle, error, children }) => (
@@ -64,6 +65,12 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
     const trialSessions = getTrialSessions(form.preferred_centre);
     const maxSessions = getMaxTrialSessions(form.preferred_centre);
     const showSessionPicker = isTrial && trialSessions.length > 0;
+
+    // What is left to book, and the most a player could pick even if they tried.
+    // At a centre with sessions full these differ from the centre's own cap, and
+    // the copy below must quote the reachable number, not the theoretical one.
+    const openSessions = getOpenTrialSessions(form.preferred_centre);
+    const selectableCount = getSelectableSessionCount(form.preferred_centre);
 
     // Session ids belong to a centre and only apply to trials.
     useEffect(() => {
@@ -259,7 +266,9 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                                 <Label required>
                                     Which trial sessions will you attend?
                                     <span className="normal-case font-medium text-white/40">
-                                        {' '}(choose up to {maxSessions})
+                                        {selectableCount === 1
+                                            ? " (one session is still open — choose it below)"
+                                            : ` (choose up to ${selectableCount})`}
                                     </span>
                                 </Label>
                                 <div className="space-y-2.5">
@@ -301,8 +310,12 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                                 {trialSessions.some((x) => x.full) && (
                                     <p className="text-white/55 text-xs font-medium mt-2.5 leading-relaxed">
                                         <span className="text-red-300 font-bold">Trial Full</span> means that
-                                        session has reached capacity and can no longer be booked. The other
-                                        sessions at this centre are still open — choose one of those instead.
+                                        session has reached capacity and can no longer be booked.
+                                        {openSessions.length === 0
+                                            ? ' Every trial session at this centre is now full. Choose the other centre, or register your interest and we will contact you about the next opportunity.'
+                                            : openSessions.length === 1
+                                                ? ` One session at this centre is still open — ${openSessions[0].label} — so book that one instead.`
+                                                : ' The other sessions at this centre are still open — choose one of those instead.'}
                                     </p>
                                 )}
                                 <FieldError msg={errors.trial_session_dates} />
