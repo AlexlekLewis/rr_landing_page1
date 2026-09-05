@@ -7,7 +7,7 @@ import {
     inputClass, selectClass,
 } from './shared';
 import {
-    ACTIVE_CENTRES, PLAYING_ROLES, TRIAL_PRICE,
+    ACTIVE_CENTRES, PLAYING_ROLES, TRIAL_PRICE, MIN_AGE, MAX_AGE,
     getTrialSessions, getMaxTrialSessions, getOpenTrialSessions,
     getSelectableSessionCount,
 } from './data';
@@ -100,6 +100,11 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
             const age = Number(form.player_age.trim());
             if (!Number.isInteger(age) || age < 4 || age > 60) {
                 next.player_age = 'Please enter an age in years (e.g. 16)';
+            } else if (age < MIN_AGE || age > MAX_AGE) {
+                // Typos are caught above, so a number landing here is a real age
+                // outside the squads' range — say so plainly rather than showing
+                // the generic "enter an age" message.
+                next.player_age = `Performance Squads are for players aged ${MIN_AGE} to ${MAX_AGE}.`;
             }
         }
         if (!form.email.trim() || !/^\S+@\S+\.\S+$/.test(form.email)) next.email = 'A valid email is required';
@@ -210,7 +215,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                                 <FieldError msg={errors.player_name} />
                             </div>
                             <div>
-                                <Label required>Player Age <span className="normal-case font-medium text-white/40">(in years)</span></Label>
+                                <Label required>Player Age <span className="normal-case font-medium text-white/40">(in years — {MIN_AGE} to {MAX_AGE})</span></Label>
                                 <input type="text" inputMode="numeric" value={form.player_age} onChange={set('player_age')} placeholder="e.g. 16 years old" className={ic('player_age')} />
                                 <FieldError msg={errors.player_age} />
                             </div>

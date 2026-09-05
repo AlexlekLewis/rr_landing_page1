@@ -7,7 +7,7 @@ import Footer from '../Footer';
 import PartnerStack from '../power-game/PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { fadeUp, SectionHeading, Label, FieldError, Chevron, inputClass, selectClass } from './shared';
-import { ACTIVE_CENTRES, PLAYING_ROLES } from './data';
+import { ACTIVE_CENTRES, PLAYING_ROLES, MIN_AGE, MAX_AGE } from './data';
 
 // ─────────────────────────────────────────────────────────────
 // PERFORMANCE SQUADS — "I can't make a trial" registration
@@ -89,6 +89,11 @@ const InterestPage = () => {
             const age = Number(form.player_age.trim());
             if (!Number.isInteger(age) || age < 4 || age > 60) {
                 next.player_age = 'Please enter an age in years (e.g. 16)';
+            } else if (age < MIN_AGE || age > MAX_AGE) {
+                // Typos are caught above, so a number landing here is a real age
+                // outside the squads' range — say so plainly rather than showing
+                // the generic "enter an age" message.
+                next.player_age = `Performance Squads are for players aged ${MIN_AGE} to ${MAX_AGE}.`;
             }
         }
         if (!form.email.trim() || !/^\S+@\S+\.\S+$/.test(form.email)) next.email = 'A valid email is required';
@@ -206,7 +211,7 @@ const InterestPage = () => {
                                         <FieldError msg={errors.player_name} />
                                     </div>
                                     <div>
-                                        <Label required>Player Age (in years)</Label>
+                                        <Label required>Player Age (in years — {MIN_AGE} to {MAX_AGE})</Label>
                                         <input className={ic('player_age')} value={form.player_age} onChange={set('player_age')} placeholder="e.g. 16 years old" />
                                         <FieldError msg={errors.player_age} />
                                     </div>

@@ -28,7 +28,7 @@ const PowerLeagueSection = () => (
                     from September 2026 through April 2027.
                 </p>
                 <p className="text-white/75 text-[15px] sm:text-base font-medium leading-relaxed mb-4">
-                    Each centre's First XI and additional squad teams (ages 10 to 20+) are selected
+                    Each centre's First XI and additional squad teams (ages 10 to 24) are selected
                     for Power League fixtures, alongside fixtures against external opposition in
                     showcase matches — with the Performance Squads program designed for every squad
                     member to compete in real, meaningful cricket throughout the season at the rate of

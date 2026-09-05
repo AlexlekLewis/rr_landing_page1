@@ -107,6 +107,14 @@ export const SIGNUP_TYPES = [
 
 export const getSignupType = (key) => SIGNUP_TYPES.find((t) => t.key === key);
 
+// Age eligibility, set Sept 2026: 10 to 24 inclusive.
+// The copy on the page AND both registration forms read from here, so the page
+// can never advertise one range while the form quietly accepts another. The
+// trial takes a $30 payment up front, so an ineligible player has to be stopped
+// at the form rather than refunded afterwards.
+export const MIN_AGE = 10;
+export const MAX_AGE = 24;
+
 // Trial pricing.
 export const TRIAL_PRICE = 30;
 
@@ -152,7 +160,7 @@ export const AUDIENCE = [
     },
     {
         title: 'Past 19, still chasing it',
-        body: 'Players over 19 who are still seeking outstanding opportunities in T20 cricket.',
+        body: 'Players aged 20 to 24 who are still seeking outstanding opportunities in T20 cricket.',
     },
     {
         title: 'Rebuilding a trajectory',
@@ -246,7 +254,7 @@ export const SQUAD_COACHES = [
 export const FAQS = [
     {
         q: 'Who are the Performance Squads for?',
-        a: 'Players aged 10 to U21 as of the 2026/27 cricket season, in the current pathway who want to build a T20 career, players still chasing outstanding opportunities in T20 cricket, players rebuilding after injury or time away, and players whose skillset suits short-format cricket. Squads are built around playing standard rather than one age bracket.',
+        a: 'Players aged 10 to 24 as of the 2026/27 cricket season, in the current pathway who want to build a T20 career, players still chasing outstanding opportunities in T20 cricket, players rebuilding after injury or time away, and players whose skillset suits short-format cricket. Squads are built around playing standard rather than one age bracket.',
     },
     {
         q: 'How do I get into a squad?',
