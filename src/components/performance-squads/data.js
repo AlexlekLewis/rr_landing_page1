@@ -159,11 +159,11 @@ export const resolvePaymentLink = (centre, type, sessions = 1) => {
 export const AUDIENCE = [
     {
         title: 'In the pathway, aiming at T20',
-        body: 'Players aged 10–19 currently in the traditional pathway who are looking to build a career in T20 cricket.',
+        body: 'Players in the junior age groups now, working towards a career in T20 cricket.',
     },
     {
-        title: 'Past 19, still chasing it',
-        body: 'Players aged 20 to 24 who are still seeking outstanding opportunities in T20 cricket.',
+        title: 'Past the age groups, still chasing it',
+        body: 'Players who have come through the junior age groups and are still seeking outstanding opportunities in T20 cricket.',
     },
     {
         title: 'Rebuilding a trajectory',
