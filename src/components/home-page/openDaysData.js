@@ -31,7 +31,7 @@ export const ANNOUNCEMENTS = [
     {
         key: 'performance-squads',
         name: 'Performance Squads',
-        tag: 'Trials Sun 6, Thu 10 & Fri 11 September · elite pathway for high-potential players',
+        tag: 'Trials Thu 10 & Fri 11 September · elite pathway for high-potential players',
         detail: 'Boys & girls · book a trial to be considered for a squad place',
         href: '/performance-squads',
         badge: 'Book a trial',

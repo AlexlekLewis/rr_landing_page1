@@ -71,7 +71,7 @@ const PC_NAV = [
 //   Masterclass        — 13 Sep 2026 (drop the row after the second session)
 const PROGRAMS_DROPDOWN = [
     { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', badge: 'Early Bird Extended — Ends 2 Sept', badgeColor: 'bg-rr-pink' },
-    { label: 'Performance Squads', route: '/performance-squads', badge: 'Trials 6, 10 & 11 Sept', badgeColor: 'bg-green-500' },
+    { label: 'Performance Squads', route: '/performance-squads', badge: 'Trials 10 & 11 Sept', badgeColor: 'bg-green-500' },
     { label: 'High Performance Camp · India', route: '/tours', badge: 'Applications Closed', badgeColor: 'bg-red-500' },
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 Entries Open', badgeColor: 'bg-green-500' },
     { label: 'Private Coaching', route: '/mickleham', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },

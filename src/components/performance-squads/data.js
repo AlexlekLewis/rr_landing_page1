@@ -16,7 +16,10 @@ export const CENTRES = [
         coach: 'Alex Lewis',
         coachTitle: 'Head Coach',
         trialSessions: [
-            { id: 'nm-2026-09-06', label: 'Sunday 6 September · 2:00–4:00 PM', badge: 'Nearly Full' },
+            // Applications closed 6 Sep 2026, the morning of the session. Thursday 10
+            // September is the only Mickleham trial still taking bookings; anyone
+            // already booked in for today keeps their place.
+            { id: 'nm-2026-09-06', label: 'Sunday 6 September · 2:00–4:00 PM', badge: 'Trial Full', full: true },
             { id: 'nm-2026-09-10', label: 'Thursday 10 September · 7:00–9:00 PM' },
         ],
         maxTrialSessions: 2,
