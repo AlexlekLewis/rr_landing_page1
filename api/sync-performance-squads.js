@@ -110,7 +110,7 @@ const CENTRE_NAMES = {
 // rather than being hidden, so a stale mapping is visible instead of silent.
 const TRIAL_SESSION_LABELS = {
   'nm-2026-09-06': 'Sun 6 Sep, 2:00-4:00 PM (Mickleham)',
-  'nm-2026-09-10': 'Thu 10 Sep, 7:00-9:00 PM (Mickleham)',
+  'nm-2026-09-10': 'Thu 10 Sep, 8:00-10:00 PM (Mickleham)',
   'se-2026-09-06': 'Sun 6 Sep, 7:00-8:30 PM (Cranbourne Nth)',
   'se-2026-09-11': 'Fri 11 Sep, 8:00-9:30 PM (Cranbourne Nth)',
   'se-2026-09-13': 'Sun 13 Sep, 7:00-8:30 PM (Cranbourne Nth)',
