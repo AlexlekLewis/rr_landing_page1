@@ -17,7 +17,7 @@ const locations = [
         time: '9:00 AM – 1:00 PM',
         onSale: true,
         coach: 'Alex Lewis',
-        urgency: 'Early Bird $299 Extended — Ends Wed 2 Sept',
+        urgency: 'Places Limited — Selling Fast',
         urgencyColor: 'bg-rr-pink',
     },
     {
@@ -30,7 +30,7 @@ const locations = [
         time: '9:00 AM – 1:00 PM',
         onSale: true,
         coach: 'Alex Thornhill',
-        urgency: 'Early Bird $299 Extended — Ends Wed 2 Sept',
+        urgency: 'Places Limited — Selling Fast',
         urgencyColor: 'bg-rr-pink',
     },
 ];

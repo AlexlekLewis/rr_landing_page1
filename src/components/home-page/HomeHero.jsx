@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 // with the site chrome on it.
 // Review date: the Masterclass badge expires 13 Sep 2026.
 const PROGRAMS = [
-    { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', badge: 'Early Bird $299 — Sept/Oct', badgeColor: 'bg-rr-pink' },
+    { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', badge: 'Sept/Oct — Now Open', badgeColor: 'bg-rr-pink' },
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Trials 10 & 11 Sept', badgeColor: 'bg-green-500' },
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 Entries Open', badgeColor: 'bg-green-500' },
 ];

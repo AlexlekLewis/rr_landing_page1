@@ -4,11 +4,11 @@ import React from 'react';
 const PromoBanner = () => {
     const item = (
         <span className="inline-flex items-center gap-3 px-8">
-            <span className="text-white font-black uppercase tracking-widest text-xs md:text-sm">🏏 Early Bird — $299</span>
+            <span className="text-white font-black uppercase tracking-widest text-xs md:text-sm">🏏 Junior Royals Holiday Program — $330</span>
             <span className="text-white/60 font-bold text-xs md:text-sm">·</span>
-            <span className="text-white font-bold uppercase tracking-wide text-xs md:text-sm">Extended to 11pm Wednesday 2 September</span>
+            <span className="text-white font-bold uppercase tracking-wide text-xs md:text-sm">September / October School Holidays</span>
             <span className="text-white/60 font-bold text-xs md:text-sm">·</span>
-            <span className="text-white font-bold uppercase tracking-wide text-xs md:text-sm">Reverts to $330</span>
+            <span className="text-white font-bold uppercase tracking-wide text-xs md:text-sm">Secure Your Place Now</span>
             <span className="text-white/60 font-bold text-xs md:text-sm">·</span>
             <span className="text-white font-black uppercase tracking-widest text-xs md:text-sm">12 Hours Across 3 Days</span>
         </span>

@@ -173,7 +173,7 @@ const SeptRegistrationForm = () => {
             const { data: savedId, error } = await supabase.rpc('save_sept_registration', { p: payload });
             if (error) throw error;
             const registrationId = savedId || regId;
-            const stripeUrl = new URL('https://buy.stripe.com/00w8wP8vD4yhb9y9rR9Zm0t');
+            const stripeUrl = new URL('https://buy.stripe.com/6oU8wPfY5ggZelK47x9Zm0E');
             stripeUrl.searchParams.set('client_reference_id', registrationId);
             stripeUrl.searchParams.set('prefilled_email', form.parent_email.trim().toLowerCase());
             window.location.href = stripeUrl.toString();
