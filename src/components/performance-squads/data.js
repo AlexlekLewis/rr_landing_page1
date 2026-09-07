@@ -37,7 +37,7 @@ export const CENTRES = [
             // booked into 90 minutes), 13 Sept closed 3 Sep 2026. `full` makes a session
             // unselectable on the form; everyone already booked keeps their place.
             { id: 'se-2026-09-06', label: 'Sunday 6 September · 7:00–8:30 PM', badge: 'Trial Full', full: true },
-            { id: 'se-2026-09-11', label: 'Friday 11 September · 8:00–9:30 PM' },
+            { id: 'se-2026-09-11', label: 'Friday 11 September · 8:00–9:30 PM', badge: 'Trial Full', full: true },
             { id: 'se-2026-09-13', label: 'Sunday 13 September · 7:00–8:30 PM', badge: 'Trial Full', full: true },
         ],
         // Cranbourne North has fewer lanes — players attend at most 2 of the 3.
