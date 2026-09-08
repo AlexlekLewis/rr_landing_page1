@@ -20,7 +20,7 @@ export const CENTRES = [
             // September is the only Mickleham trial still taking bookings; anyone
             // already booked in for today keeps their place.
             { id: 'nm-2026-09-06', label: 'Sunday 6 September · 2:00–4:00 PM', badge: 'Trial Full', full: true },
-            { id: 'nm-2026-09-10', label: 'Thursday 10 September · 8:00–10:00 PM' },
+            { id: 'nm-2026-09-10', label: 'Thursday 10 September · 8:00–10:00 PM', badge: 'Trial Full', full: true },
         ],
         maxTrialSessions: 2,
         active: true,
