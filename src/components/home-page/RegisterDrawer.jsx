@@ -14,7 +14,7 @@ const GENDER_OPTIONS = ['Male Cricket', 'Female Cricket', 'No Preference'];
 // Review date: the Masterclass line expires 13 Sep 2026.
 const PROGRAMS = [
     { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', urgency: 'Sept/Oct school holidays — places limited' },
-    { label: 'Performance Squads', route: '/performance-squads', urgency: 'Trials 10 & 11 September' },
+    { label: 'Performance Squads', route: '/performance-squads', urgency: 'Trials Full' },
     { label: 'Junior Royals', route: '/junior-royals', urgency: 'Term 4 entries open — Mondays & Wednesdays' },
 ];
 
