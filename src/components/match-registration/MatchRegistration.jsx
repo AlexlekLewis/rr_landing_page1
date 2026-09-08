@@ -77,7 +77,9 @@ const MatchRegistration = () => {
 
             <main className="flex-1 w-full overflow-hidden">
                 {/* ── HERO ── */}
-                <section className="relative px-5 pt-16 pb-14 sm:pt-24 sm:pb-20">
+                {/* Navbar is fixed and overlays the page — pt clears it so the
+                    Power League logo isn't clipped on mobile. */}
+                <section className="relative px-5 pt-28 pb-14 sm:pt-36 sm:pb-20">
                     <div className="absolute inset-0 pointer-events-none">
                         <div className="absolute top-[-15%] left-[-10%] w-[520px] h-[520px] rounded-full bg-rr-pink/10 blur-[130px]" />
                         <div className="absolute bottom-[-20%] right-[-10%] w-[520px] h-[520px] rounded-full bg-rr-pink/10 blur-[130px]" />
