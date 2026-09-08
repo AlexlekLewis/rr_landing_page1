@@ -60,6 +60,11 @@ const PerformanceSquadsSuccess = React.lazy(() => import('./components/performan
 // "I can't make a trial" — current Academy players who want a squad place but
 // cannot attend any September trial. Same table, entry_type='unable-to-trial', no fee.
 const PerformanceSquadsInterest = React.lazy(() => import('./components/performance-squads/InterestPage'));
+// Match Registration — reusable match-day registration + payment page. Match-specific
+// detail lives in src/components/match-registration/matchConfig.js, so the next block
+// of matches is a config swap, not a new page. HIDDEN: noindex, direct URL only.
+const MatchRegistration = React.lazy(() => import('./components/match-registration/MatchRegistration'));
+const MatchRegistrationSuccess = React.lazy(() => import('./components/match-registration/MatchRegistrationSuccess'));
 
 // Admin components
 import AdminLogin from './components/admin/AdminLogin';
@@ -222,6 +227,12 @@ function App() {
         <Route path="/performance-squads" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquads /></React.Suspense>} />
         <Route path="/performance-squads/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquadsSuccess /></React.Suspense>} />
         <Route path="/performance-squads/interest" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquadsInterest /></React.Suspense>} />
+
+        {/* Match Registration — reusable match-day registration + payment. HIDDEN:
+            noindex, not in nav or sitemap, direct URL only. Currently serving the
+            Power League Matches, Mon 28 & Tue 29 September. */}
+        <Route path="/match-registration" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><MatchRegistration /></React.Suspense>} />
+        <Route path="/match-registration/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><MatchRegistrationSuccess /></React.Suspense>} />
 
         {/* Power Game Program — hidden from nav, accessible via direct URL only */}
         <Route path="/elite-royals" element={<PowerGame />} />
