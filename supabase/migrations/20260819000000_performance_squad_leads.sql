@@ -47,3 +47,8 @@ alter table public.performance_squad_leads
     add column if not exists accept_player_code boolean not null default false,
     add column if not exists accept_parent_code boolean not null default false,
     add column if not exists accept_social_media boolean not null default false;
+
+-- Waitlist flag — set when a player joins the waitlist for a centre whose
+-- trial sessions are all full (no session/payment captured).
+alter table public.performance_squad_leads
+    add column if not exists on_waitlist boolean not null default false;

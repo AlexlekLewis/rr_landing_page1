@@ -9,7 +9,7 @@ import {
 import {
     ACTIVE_CENTRES, PLAYING_ROLES, TRIAL_PRICE, MIN_AGE, MAX_AGE,
     getTrialSessions, getMaxTrialSessions, getOpenTrialSessions,
-    getSelectableSessionCount,
+    getSelectableSessionCount, isCentreFull,
 } from './data';
 
 const PSCheckbox = ({ checked, onToggle, error, children }) => (
@@ -64,7 +64,10 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
     const isTrial = true; // trial-only registration
     const trialSessions = getTrialSessions(form.preferred_centre);
     const maxSessions = getMaxTrialSessions(form.preferred_centre);
-    const showSessionPicker = isTrial && trialSessions.length > 0;
+    // When a centre's trials are all full, the form becomes a waitlist sign-up:
+    // no session picker, no payment — just capture interest.
+    const isWaitlist = isCentreFull(form.preferred_centre);
+    const showSessionPicker = isTrial && trialSessions.length > 0 && !isWaitlist;
 
     // What is left to book, and the most a player could pick even if they tried.
     // At a centre with sessions full these differ from the centre's own cap, and
@@ -117,10 +120,12 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
         if (showSessionPicker && form.trial_session_dates.length === 0) {
             next.trial_session_dates = 'Please choose at least one trial session';
         }
-        if (!form.accept_terms) next.accept_terms = 'You must agree to the Terms & Conditions and Privacy Policy';
-        if (!form.accept_player_code) next.accept_player_code = 'You must agree to the Player Code of Conduct';
-        if (!form.accept_parent_code) next.accept_parent_code = 'You must agree to the Parent/Guardian Code of Conduct';
-        if (!form.accept_social_media) next.accept_social_media = 'Please confirm your social media consent';
+        if (!isWaitlist) {
+            if (!form.accept_terms) next.accept_terms = 'You must agree to the Terms & Conditions and Privacy Policy';
+            if (!form.accept_player_code) next.accept_player_code = 'You must agree to the Player Code of Conduct';
+            if (!form.accept_parent_code) next.accept_parent_code = 'You must agree to the Parent/Guardian Code of Conduct';
+            if (!form.accept_social_media) next.accept_social_media = 'Please confirm your social media consent';
+        }
         if (Object.keys(next).length) {
             setErrors(next);
             return;
@@ -142,7 +147,8 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                     phone: form.phone.trim(),
                     club: form.club.trim() || null,
                     preferred_centre: form.preferred_centre,
-                    entry_type: form.signup_type,
+                    entry_type: isWaitlist ? 'waitlist' : form.signup_type,
+                    on_waitlist: isWaitlist,
                     playing_role: form.playing_role,
                     trial_sessions: showSessionPicker ? form.trial_session_dates.length : null,
                     trial_session_dates: showSessionPicker ? form.trial_session_dates : null,
@@ -160,12 +166,13 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                 centre: form.preferred_centre,
                 signupType: form.signup_type,
                 sessionIds: showSessionPicker ? form.trial_session_dates : [],
+                waitlist: isWaitlist,
             };
             setSubmitted(true);
             setSubmittedResult(result);
-            // Open the payment step immediately — registration and payment
-            // are one flow, not two separate sections.
-            onRequestPayment?.(result);
+            // Waitlist sign-ups take no payment — just confirm. Otherwise open
+            // the payment step immediately (registration and payment are one flow).
+            if (!isWaitlist) onRequestPayment?.(result);
         } catch (err) {
             console.error('Performance Squads registration error:', err);
             setErrors({ form: 'Something went wrong. Please try again or email info@rramelbourne.com' });
@@ -181,9 +188,11 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
         <section className="py-20 px-5">
             <div className="max-w-2xl mx-auto">
                 <SectionHeading
-                    eyebrow="Register & Pay"
-                    title="Register & Secure Your Trial Spot"
-                    sub="Enter your details, choose your trial session(s), and pay — all in one step. Your trial spot isn't confirmed until payment is received."
+                    eyebrow={isWaitlist ? 'Waitlist' : 'Register & Pay'}
+                    title={isWaitlist ? 'Join the Waitlist' : 'Register & Secure Your Trial Spot'}
+                    sub={isWaitlist
+                        ? "This centre's trials are full. Enter your details to join the waitlist and we'll let you know as soon as a spot or new trial date opens — nothing to pay."
+                        : "Enter your details, choose your trial session(s), and pay — all in one step. Your trial spot isn't confirmed until payment is received."}
                 />
                 {submitted ? (
                     <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}
@@ -193,18 +202,30 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                             </svg>
                         </div>
-                        <h3 className="text-2xl font-black uppercase mb-3">Registration Received</h3>
-                        <p className="text-white/70 text-[15px] font-medium leading-relaxed mb-6">
-                            Thanks — we've got your details. Your place isn't confirmed until payment
-                            is received, so finish up below if you haven't already.
-                        </p>
-                        {/* Safety net: reopens the payment step if the modal was dismissed. */}
-                        <button
-                            onClick={() => onRequestPayment?.(submittedResult)}
-                            className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
-                        >
-                            Complete Payment <ArrowRight className="w-4 h-4" />
-                        </button>
+                        <h3 className="text-2xl font-black uppercase mb-3">
+                            {submittedResult?.waitlist ? "You're On The Waitlist" : 'Registration Received'}
+                        </h3>
+                        {submittedResult?.waitlist ? (
+                            <p className="text-white/70 text-[15px] font-medium leading-relaxed">
+                                Thanks — you're on the waitlist for this centre. We'll be in touch as
+                                soon as a spot opens up or new trial dates are released. Questions?
+                                Email info@rramelbourne.com
+                            </p>
+                        ) : (
+                            <>
+                                <p className="text-white/70 text-[15px] font-medium leading-relaxed mb-6">
+                                    Thanks — we've got your details. Your place isn't confirmed until payment
+                                    is received, so finish up below if you haven't already.
+                                </p>
+                                {/* Safety net: reopens the payment step if the modal was dismissed. */}
+                                <button
+                                    onClick={() => onRequestPayment?.(submittedResult)}
+                                    className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
+                                >
+                                    Complete Payment <ArrowRight className="w-4 h-4" />
+                                </button>
+                            </>
+                        )}
                     </motion.div>
                 ) : (
                     <form onSubmit={handleSubmit} noValidate className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-9">
@@ -339,7 +360,21 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                             </div>
                         )}
 
-                        {/* Governance — required for every registration, trials included */}
+                        {isWaitlist && (
+                            <div className="mb-6 bg-red-500/5 border border-red-400/30 rounded-xl px-4 py-4">
+                                <p className="text-sm font-black uppercase tracking-wide text-red-300 mb-1.5">
+                                    This centre&apos;s trials are full
+                                </p>
+                                <p className="text-white/70 text-sm font-medium leading-relaxed">
+                                    Every trial session at this centre is full. Join the waitlist and
+                                    we&apos;ll be in touch as soon as a spot opens up or new trial dates
+                                    are released. There&apos;s nothing to pay to join the waitlist.
+                                </p>
+                            </div>
+                        )}
+
+                        {/* Governance — required for trial registrations, not for waitlist sign-ups */}
+                        {!isWaitlist && (
                         <div className="mt-2 mb-6 pt-6 border-t border-white/10">
                             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-rr-pink mb-4">
                                 Agreements &amp; Consent
@@ -361,6 +396,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                                 I am happy for photos and videos featuring the player to be used on Rajasthan Royals Academy Melbourne's social media and marketing channels.
                             </PSCheckbox>
                         </div>
+                        )}
 
                         {errors.form && (
                             <p className="text-rr-pink text-sm font-bold mb-4 text-center">{errors.form}</p>
@@ -370,7 +406,10 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                             disabled={submitting}
                             className="w-full inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
                         >
-                            {submitting ? 'Submitting…' : 'Submit Registration'} {!submitting && <ArrowRight className="w-4 h-4" />}
+                            {submitting
+                                ? 'Submitting…'
+                                : isWaitlist ? 'Join the Waitlist' : 'Submit Registration'}
+                            {!submitting && <ArrowRight className="w-4 h-4" />}
                         </button>
                     </form>
                 )}

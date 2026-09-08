@@ -96,7 +96,12 @@ const TrialsSection = ({ onChooseCentre }) => (
                             onClick={() => onChooseCentre(c.slug)}
                             className="mt-auto inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-6 py-3.5 transition-colors"
                         >
-                            {c.trialSessions.length ? 'Register for Trial' : 'Register Your Interest'} <ArrowRight className="w-4 h-4" />
+                            {(() => {
+                                const hasSessions = c.trialSessions.length > 0;
+                                const allFull = hasSessions && c.trialSessions.every((s) => s.full);
+                                if (!hasSessions) return 'Register Your Interest';
+                                return allFull ? 'Join the Waitlist' : 'Register for Trial';
+                            })()} <ArrowRight className="w-4 h-4" />
                         </button>
                     </motion.div>
                 ))}

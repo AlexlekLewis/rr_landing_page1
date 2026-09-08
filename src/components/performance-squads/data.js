@@ -129,6 +129,12 @@ export const REGISTRATION_UPFRONT_NOTE = 'Discounted rate — final figure confi
 export const getCentre = (slug) => CENTRES.find((c) => c.slug === slug);
 export const getTrialSessions = (slug) => getCentre(slug)?.trialSessions || [];
 export const getMaxTrialSessions = (slug) => getCentre(slug)?.maxTrialSessions || 0;
+// A centre is "full" (waitlist-only) when it has trial sessions but every one
+// is closed. No sessions at all means "coming soon", not full.
+export const isCentreFull = (slug) => {
+    const sessions = getTrialSessions(slug);
+    return sessions.length > 0 && sessions.every((s) => s.full);
+};
 
 // A session marked full can no longer be chosen. Checked in the picker, in the
 // toggle handler and again on submit, so a stale id can never sneak through.
