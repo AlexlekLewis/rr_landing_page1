@@ -374,7 +374,7 @@ const MatchRegistrationForm = ({ onRequestPayment }) => {
                         <button
                             onClick={handleSubmit}
                             disabled={submitting}
-                            className="w-full mt-8 inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
+                            className="w-full mt-8 inline-flex items-center justify-center gap-2 whitespace-nowrap bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-wider text-[13px] sm:text-sm rounded-full px-5 sm:px-8 py-4 transition-colors"
                         >
                             {submitting ? 'Submitting…' : (
                                 <>Continue To Payment · ${ACTIVE_MATCH.price} <ArrowRight className="w-4 h-4" /></>
