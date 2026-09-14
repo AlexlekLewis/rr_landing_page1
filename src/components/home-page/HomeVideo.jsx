@@ -55,7 +55,7 @@ const HomeVideo = () => {
                         <div className="w-12 h-px bg-gradient-to-r from-rr-pink to-rr-blue mb-6" />
 
                         <p className="text-lg text-white/60 font-medium leading-relaxed mb-8">
-                            Hear from Sid Lahiri, Head of International Talent Development, and Performance Coach for the Rajasthan Royals Group.
+                            Hear from Sid Lahiri, Head of International Player Development, and Performance Coach for the Rajasthan Royals Group.
                         </p>
 
                         {/* Speaker credit */}
@@ -65,7 +65,7 @@ const HomeVideo = () => {
                             </div>
                             <div>
                                 <p className="text-white font-black uppercase tracking-wide text-sm">Siddhartha Lahiri</p>
-                                <p className="text-white/50 text-xs font-medium mt-0.5">Head of International Talent Development</p>
+                                <p className="text-white/50 text-xs font-medium mt-0.5">Head of International Player Development</p>
                                 <p className="text-rr-pink text-xs font-bold mt-0.5">Rajasthan Royals Group</p>
                             </div>
                         </div>
