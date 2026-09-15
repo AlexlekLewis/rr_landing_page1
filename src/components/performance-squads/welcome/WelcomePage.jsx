@@ -123,7 +123,7 @@ const FixtureList = ({ fixtures }) => (
                     {i + 1}
                 </span>
                 <div className="min-w-0">
-                    <p className="text-lg sm:text-xl font-black uppercase tracking-wide leading-snug">{m.date}</p>
+                    <p className="text-lg sm:text-xl font-black uppercase tracking-wide leading-snug">{m.date} <span className="text-white/45 font-bold">{m.year}</span></p>
                     <p className="text-white/85 text-base font-medium leading-relaxed mt-0.5">
                         {m.first ? 'Round 1 · Power League' : 'Power League match day'}
                     </p>
@@ -169,7 +169,7 @@ const WelcomePage = () => {
                     in Tailwind v4 (--image-* is not a theme namespace). */}
                 <section
                     id="hero"
-                    className="relative px-5 pt-28 pb-0 sm:pt-36 lg:pb-0 overflow-hidden"
+                    className="relative px-5 pt-24 pb-0 sm:pt-36 overflow-hidden"
                     style={{ backgroundImage: 'var(--image-gradient-rr)' }}
                 >
                     {/* Royals rampant lion, white stroke — one of the three approved lion
@@ -178,7 +178,7 @@ const WelcomePage = () => {
                         src="/assets/rr-rampant-lion-white.png"
                         alt=""
                         aria-hidden="true"
-                        className="pointer-events-none select-none absolute z-0 right-[-14%] sm:right-[-4%] lg:right-[8%] top-[46%] sm:top-1/2 -translate-y-1/2 h-[78%] sm:h-[88%] w-auto max-w-none opacity-[0.16] sm:opacity-20 lg:opacity-30"
+                        className="pointer-events-none select-none absolute z-0 left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 lg:right-[8%] bottom-[-6%] lg:bottom-auto lg:top-1/2 lg:-translate-y-1/2 h-[62%] sm:h-[70%] lg:h-[88%] w-auto max-w-none opacity-20 lg:opacity-30"
                     />
                     <div className="relative max-w-6xl mx-auto">
                         {isDraft && (
@@ -186,14 +186,14 @@ const WelcomePage = () => {
                                 DRAFT FOR REVIEW. Not ready to send to families. Still to confirm: {missing.join(', ')}.
                             </div>
                         )}
-                        <div className="grid lg:grid-cols-[1fr_380px] gap-8 lg:gap-6 items-end">
-                            <MotionDiv initial="hidden" animate="visible" variants={fadeUp} custom={0} className="pb-16 sm:pb-24 text-center lg:text-left">
+                        <div className="grid lg:grid-cols-[1fr_380px] gap-4 lg:gap-6 items-end">
+                            <MotionDiv initial="hidden" animate="visible" variants={fadeUp} custom={0} className="pb-6 sm:pb-10 lg:pb-24 text-center lg:text-left">
                                 <img
                                     src="/assets/MELBOURNE_OFFICIAL.png"
                                     alt="Rajasthan Royals Academy Melbourne"
                                     className="h-20 sm:h-24 w-auto mx-auto lg:mx-0 mb-8 brightness-0 invert"
                                 />
-                                <p className="text-sm font-black uppercase tracking-[0.2em] text-white mb-4">
+                                <p className="text-[11px] sm:text-sm font-black uppercase tracking-[0.16em] sm:tracking-[0.2em] text-white mb-4">
                                     Performance Squad · Season 2026/27
                                 </p>
                                 {/* Two elements on purpose: "Congratulations!" is one long word and
@@ -201,7 +201,7 @@ const WelcomePage = () => {
                                 <p className="text-[22px] sm:text-4xl font-black uppercase tracking-wide leading-tight mb-2">
                                     Congratulations!
                                 </p>
-                                <h1 className="text-[44px] sm:text-6xl lg:text-7xl font-black uppercase leading-[0.98] mb-6">
+                                <h1 className="text-[42px] sm:text-6xl lg:text-7xl font-black uppercase leading-[0.98] mb-6">
                                     You have<br className="hidden sm:block" /> been selected
                                 </h1>
                                 <p className="text-white text-base sm:text-lg font-medium leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-4">
@@ -236,7 +236,7 @@ const WelcomePage = () => {
                                 <img
                                     src={PLAYER_IMAGE}
                                     alt="A Rajasthan Royals player celebrating with a double fist pump"
-                                    className="w-[260px] sm:w-[320px] lg:w-[380px] h-auto drop-shadow-[0_24px_40px_rgba(0,0,0,0.45)] -mb-3"
+                                    className="w-[300px] sm:w-[340px] lg:w-[380px] h-auto drop-shadow-[0_24px_40px_rgba(0,0,0,0.45)] -mb-3"
                                 />
                             </MotionDiv>
                         </div>
@@ -361,16 +361,14 @@ const WelcomePage = () => {
                 <section id="fixtures" className="px-5 pb-14 sm:pb-20 scroll-mt-28 lg:scroll-mt-32">
                     <div className="max-w-3xl mx-auto">
                         <Card className="border-rr-pink/40">
-                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-7">
-                                <div>
-                                    <Eyebrow className="mb-2">Match days</Eyebrow>
-                                    <h2 className="text-2xl sm:text-3xl font-black uppercase leading-tight">Power League fixtures</h2>
-                                </div>
+                            <div className="mb-7">
+                                <Eyebrow className="mb-4">Match days</Eyebrow>
                                 <img
                                     src="/assets/power-league-logo-rra.png"
-                                    alt="The Power League"
-                                    className="h-12 sm:h-14 w-auto self-start sm:self-auto"
+                                    alt="Power League"
+                                    className="h-14 sm:h-16 w-auto mb-3"
                                 />
+                                <h2 className="text-2xl sm:text-3xl font-black uppercase leading-tight">Fixtures · Season 2026/27</h2>
                             </div>
                             <FixtureList fixtures={c.fixtures} />
                             <div className="mt-7 flex items-start gap-3 rounded-xl bg-rr-pink/15 border border-rr-pink/50 p-4 sm:p-5">
@@ -443,7 +441,7 @@ const WelcomePage = () => {
                                 className="w-40 h-40 sm:w-[200px] sm:h-[200px] rounded-2xl object-cover object-top mx-auto"
                             />
                             <div>
-                                <Eyebrow>2 x squad sessions with {SID.name}</Eyebrow>
+                                <Eyebrow>Squad sessions with {SID.name}</Eyebrow>
                                 <h2 className="text-2xl sm:text-3xl font-black uppercase leading-tight mb-4">
                                     We will invite players to meet Sid
                                 </h2>
