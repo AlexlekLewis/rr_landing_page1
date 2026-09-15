@@ -342,6 +342,54 @@ export default async function handler(req, res) {
   // NOT shop_orders_training — that one is for retail Academy Shop orders. The
   // pending row was written by api/performance-squad-kit-checkout; flip it to paid.
   // Claimed here so it never falls through to the shop/program routing below.
+  // ── Performance Squad — Joining Fee + weekly Squad Fee + kit, one checkout ──
+  // Created by api/performance-squad-checkout (subscription mode). Mark the
+  // player's confirmation paid and, if kit was in the basket, the kit order paid.
+  if (session.metadata?.source === 'performance-squad-join') {
+    const registrationId = session.metadata?.registration_id || session.client_reference_id;
+    const kitOrderId = session.metadata?.kit_order_id || null;
+    if (!registrationId) {
+      return res.status(200).json({ received: true, ignored: 'join_session_without_registration_id' });
+    }
+    try {
+      const supabase = getSupabase();
+      const now = new Date().toISOString();
+      const subscriptionId = typeof session.subscription === 'string' ? session.subscription : session.subscription?.id || null;
+      const customerId = typeof session.customer === 'string' ? session.customer : session.customer?.id || null;
+      const { error: regErr } = await supabase
+        .from('performance_squads_registrations')
+        .update({
+          status:                 'paid',
+          paid_at:                now,
+          amount_paid_cents:      session.amount_total ?? null,
+          stripe_session_id:      session.id,
+          stripe_customer_id:     customerId,
+          stripe_subscription_id: subscriptionId,
+          has_own_kit:            session.metadata?.has_own_kit === 'yes',
+        })
+        .eq('id', registrationId);
+      if (regErr) throw regErr;
+      if (kitOrderId) {
+        const { error: kitErr } = await supabase
+          .from('performance_squad_kit_orders')
+          .update({
+            status:            'paid',
+            paid_at:           now,
+            updated_at:        now,
+            stripe_session_id: session.id,
+            email:             customerEmail || undefined,
+            mobile:            customerPhone || undefined,
+          })
+          .eq('id', kitOrderId);
+        if (kitErr) throw kitErr;
+      }
+    } catch (e) {
+      console.error('performance-squad-join update failed:', e.message);
+      return res.status(500).json({ error: 'performance squad join update failed' });
+    }
+    return res.status(200).json({ received: true, kind: 'performance_squad_join' });
+  }
+
   if (session.metadata?.source === 'performance-squad-kit') {
     const kitOrderId = session.metadata?.kit_order_id || session.client_reference_id;
     if (!kitOrderId) {

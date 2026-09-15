@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { supabase } from '../../../lib/supabase';
-import { Label, FieldError, Chevron, inputClass, selectClass, PSCheckbox } from '../shared';
+import { Label, FieldError, Chevron, inputClass, selectClass, PSCheckbox, scrollTo } from '../shared';
 import { REGIONS } from './welcomeConfig';
-import { Pending, Eyebrow } from './welcomeShared';
+import { Eyebrow } from './welcomeShared';
 
 // The row id is made in the browser. The public can insert into this table but
 // can't read rows back, so the id can't come from the database. It is also
@@ -17,16 +17,6 @@ const newRowId = () => {
         const r = (Math.random() * 16) | 0;
         return (ch === 'x' ? r : (r & 0x3) | 0x8).toString(16);
     });
-};
-
-const paymentUrl = (link, rowId) => {
-    try {
-        const url = new URL(link);
-        url.searchParams.set('client_reference_id', rowId);
-        return url.toString();
-    } catch {
-        return link;
-    }
 };
 
 // The 4 agreements every program uses (same wording), then the training and match
@@ -159,31 +149,26 @@ const WelcomeConfirmForm = ({ config, isDraft, onSaved }) => {
                 )}
                 <div className="text-center">
                     <CheckCircle2 aria-hidden="true" className="w-14 h-14 text-rr-pink mx-auto mb-4" strokeWidth={1.75} />
-                    <h3 className="text-2xl sm:text-3xl font-black uppercase mb-3">Thank you</h3>
+                    <h3 className="text-2xl sm:text-3xl font-black uppercase mb-3">Details saved</h3>
                     <p className="text-white/85 text-base font-medium leading-relaxed">
-                        We have the player&apos;s details and your agreements. No payment has been taken yet.
+                        We have the player&apos;s details and your agreements. Nothing has been charged yet —
+                        you pay for everything together at the end.
                     </p>
                 </div>
                 <div className="mt-8 pt-6 border-t border-white/10 text-center">
                     <Eyebrow>Next</Eyebrow>
-                    <p className="text-xl font-black uppercase tracking-wide mb-2">Pay the Joining Fee</p>
+                    <p className="text-xl font-black uppercase tracking-wide mb-2">Step 2: your training kit</p>
                     <p className="text-white/85 text-base font-medium mb-6">
-                        This covers the {config.pricing.joiningFee.amount} Joining Fee plus your first{' '}
-                        {config.pricing.squadFee.amount} Squad Fee instalment. {config.pricing.joiningFee.note}{' '}
-                        Your place is confirmed once this payment is complete.
+                        Tell us if you already have what you need, or choose your kit. Then proceed to checkout
+                        for the Joining Fee, your weekly Squad Fee and any kit in one payment.
                     </p>
-                    {config.paymentLink ? (
-                        // Same tab on purpose: in-app browsers (Instagram especially) silently block new tabs.
-                        <a
-                            href={paymentUrl(config.paymentLink, saved.id)}
-                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 whitespace-nowrap bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-[13px] sm:text-sm rounded-full px-5 sm:px-8 py-4 transition-colors"
-                        >
-                            Pay Joining Fee <ArrowRight className="w-4 h-4" />
-                        </a>
-                    ) : (
-                        <p><Pending>Payment link to be confirmed</Pending></p>
-                    )}
-                    <p className="text-white/55 text-sm font-medium mt-4">Payments are processed by Stripe.</p>
+                    <button
+                        type="button"
+                        onClick={() => scrollTo('kit')}
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 whitespace-nowrap bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-[13px] sm:text-sm rounded-full px-5 sm:px-8 py-4 transition-colors"
+                    >
+                        Go to Step 2 <ArrowRight className="w-4 h-4" />
+                    </button>
                 </div>
             </div>
         );

@@ -88,7 +88,7 @@ const Step = ({ n, title, children, linkLabel, target }) => (
 const buildTimeline = (c) => {
     const { firstTraining, sidSessions } = c.season;
     return [
-        { year: firstTraining.year, when: `Within ${c.confirmWindow} of being notified`, what: 'Confirm your place: register below and complete the Joining Fee payment', highlight: true },
+        { year: firstTraining.year, when: `Within ${c.confirmWindow} of being notified`, what: 'Confirm your place: enter your details, sort your kit and check out', highlight: true },
         { year: firstTraining.year, when: firstTraining.date, what: 'First squad training at your home centre', detail: firstTraining.time, detailPending: 'Time to be confirmed' },
         { year: sidSessions.year, when: sidSessions.when, what: 'Squad sessions with Sid Lahiri', detail: 'We will invite players to meet Sid' },
     ];
@@ -229,8 +229,8 @@ const WelcomePage = () => {
                                     Confirm your place <ArrowRight className="w-4 h-4" />
                                 </button>
                                 <p className="mt-6 text-white text-base font-bold leading-relaxed max-w-xl mx-auto lg:mx-0">
-                                    Once you have been notified of your selection, you have {window72} to confirm your place
-                                    by registering below and completing the payment process. After that, your place may be
+                                    Once you have been notified of your selection, you have {window72} to confirm your place:
+                                    enter your details, sort your kit and check out below. After that, your place may be
                                     offered to another player.
                                 </p>
                             </MotionDiv>
@@ -257,16 +257,17 @@ const WelcomePage = () => {
                     <div className="max-w-5xl mx-auto">
                         <Heading eyebrow="What to do now" title="3 things to do" />
                         <ol className="grid gap-4 md:grid-cols-3">
-                            <Step n={1} title="Confirm your place" linkLabel="Go to step 1" target="confirm">
-                                Within {window72} of being notified. Go to Step 1, confirm your details and lock in your
-                                place by paying the Joining Fee and first {pricing.squadFee.amount} instalment.
+                            <Step n={1} title="Confirm your details" linkLabel="Go to step 1" target="confirm">
+                                Within {window72} of being notified. Tell us the region you were selected in, the
+                                player&apos;s details, and agree to the codes of conduct.
                             </Step>
-                            <Step n={2} title="Order your kit" linkLabel="See what you need" target="kit">
-                                Use the order form on this page. Every player needs a training shirt, a pair of
-                                training pants (recommended) and/or training shorts, and a cap. Collect it at squad training.
+                            <Step n={2} title="Your training kit" linkLabel="Go to step 2" target="kit">
+                                Every player needs a training shirt, training pants (recommended) and/or training
+                                shorts, and a cap. Tick that you have it, or choose what you need at participant prices.
                             </Step>
-                            <Step n={3} title="Set up the player portal">
-                                We will send you a login for our player portal. Setting it up takes about 10 minutes.
+                            <Step n={3} title="Proceed to checkout" linkLabel="Go to checkout" target="kit">
+                                One payment for the {pricing.joiningFee.amount} Joining Fee, your first{' '}
+                                {pricing.squadFee.amount} weekly Squad Fee and any kit. Then {pricing.squadFee.amount} a week.
                             </Step>
                         </ol>
                     </div>
@@ -472,8 +473,8 @@ const WelcomePage = () => {
                     <div className="max-w-2xl mx-auto">
                         <Heading
                             eyebrow="Step 1"
-                            title="Confirm your place"
-                            sub={<>You have {window72} from being notified to register here and complete the Joining Fee payment. Tell us the region you were selected in, fill in the player&apos;s details and agree to the 5 items below.</>}
+                            title="Confirm your details"
+                            sub={<>You have {window72} from being notified to confirm and pay. Tell us the region you were selected in, fill in the player&apos;s details and agree to the 5 items below. You pay at the end of Step 2.</>}
                         />
                         <WelcomeConfirmForm config={c} isDraft={isDraft} onSaved={savePlayer} />
                     </div>
@@ -485,8 +486,8 @@ const WelcomePage = () => {
                     <div className="max-w-2xl mx-auto">
                         <Heading
                             eyebrow="Step 2"
-                            title="Order your kit"
-                            sub="Squad players pay participant prices — not the Academy Shop price. Order here and collect your kit at squad training."
+                            title="Your kit and checkout"
+                            sub="Tick that you already have your kit, or choose what you need at participant prices. Then proceed to checkout — one payment covers the Joining Fee, your weekly Squad Fee and any kit."
                         />
                         <Card className="mb-6 border-rr-pink/40">
                             <IconTitle icon={ShoppingBag}>Every player needs</IconTitle>
@@ -496,12 +497,12 @@ const WelcomePage = () => {
                     </div>
                 </section>
 
-                {/* ── STEP 3: PORTAL ── */}
+                {/* ── AFTER PAYMENT: PORTAL ── */}
                 <section id="portal" className="px-5 pb-14 sm:pb-20 scroll-mt-28 lg:scroll-mt-32">
                     <div className="max-w-2xl mx-auto">
                         <Card className="text-center">
                             <KeyRound aria-hidden="true" className="w-8 h-8 text-rr-pink mx-auto mb-4" />
-                            <Eyebrow>Step 3</Eyebrow>
+                            <Eyebrow>After you&apos;ve paid</Eyebrow>
                             <h2 className="text-2xl sm:text-3xl font-black uppercase leading-tight mb-3">Your player portal</h2>
                             <p className="text-white/85 text-base font-medium leading-relaxed">
                                 We will send you a login for our player portal. Setting it up takes about 10 minutes.

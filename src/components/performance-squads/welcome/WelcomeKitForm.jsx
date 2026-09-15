@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { ArrowRight, Check, Loader2, UserRound } from 'lucide-react';
-import { Label, FieldError, Chevron, inputClass, selectClass, scrollTo } from '../shared';
+import { FieldError, Chevron, selectClass, scrollTo } from '../shared';
 import { Eyebrow } from './welcomeShared';
-import { REGIONS } from './welcomeConfig';
+import { REGIONS, WELCOME } from './welcomeConfig';
 import { TOPS_SIZES, SHORTS_SIZES, PANTS_SIZES, JACKET_SIZES } from '../../academy-shop/sizeData';
 import SizeGuide from '../../academy-shop/SizeGuide';
 
@@ -45,21 +45,17 @@ const BLANK = { region: '', first_name: '', last_name: '', parent_name: '', emai
 const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
     const [group, setGroup] = useState('senior');
     const [picks, setPicks] = useState({});           // key -> size ('' = not ordered)
-    const [manual, setManual] = useState(false);       // typing details without Step 1
-    const [typed, setTyped] = useState(BLANK);
-    const player = confirmed ? { ...BLANK, ...confirmed } : typed;
-    const setPlayer = setTyped;
+    const [ownKit, setOwnKit] = useState(false);       // "I already have the kit I need"
+    const player = { ...BLANK, ...(confirmed || {}) };
     const [errors, setErrors] = useState({});
     const [busy, setBusy] = useState(false);
     const [failed, setFailed] = useState('');
 
-    const chosen = useMemo(() => ITEMS.filter((i) => picks[i.key]), [picks]);
-    const subtotal = chosen.reduce((sum, i) => sum + i.priceCents, 0);
-
-    const setField = (k) => (e) => {
-        setPlayer((p) => ({ ...p, [k]: e.target.value }));
-        setErrors((x) => ({ ...x, [k]: undefined }));
-    };
+    const chosen = useMemo(() => (ownKit ? [] : ITEMS.filter((i) => picks[i.key])), [picks, ownKit]);
+    const kitTotal = chosen.reduce((sum, i) => sum + i.priceCents, 0);
+    const joiningCents = 14995;
+    const weeklyCents = 2995;
+    const dueToday = joiningCents + weeklyCents + kitTotal;
 
     const toggle = (item, size) => {
         setPicks((p) => {
@@ -73,13 +69,8 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
 
     const validate = () => {
         const next = {};
-        if (!confirmed && !manual) next.player = 'Please confirm your place in Step 1 first — your details carry over to this order.';
-        if (!player.region) next.region = 'Please choose your region';
-        if (!player.first_name.trim()) next.first_name = 'Please enter the player\u2019s first name';
-        if (!player.last_name.trim()) next.last_name = 'Please enter the player\u2019s last name';
-        if (!/^\S+@\S+\.\S+$/.test(player.email.trim())) next.email = 'Please enter a valid email';
-        if (!player.mobile.trim()) next.mobile = 'Please enter a mobile number';
-        if (chosen.length === 0) next.kit = 'Please choose at least one item';
+        if (!confirmed) next.player = 'Please confirm your details in Step 1 first — checkout is recorded against that confirmation.';
+        if (!ownKit && chosen.length === 0) next.kit = 'Choose your kit, or tick that you already have what you need';
         setErrors(next);
         return Object.keys(next).length === 0;
     };
@@ -90,10 +81,12 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
         setFailed('');
         try {
             const region = REGIONS.find((r) => r.slug === player.region);
-            const res = await fetch('/api/performance-squad-kit-checkout', {
+            const res = await fetch('/api/performance-squad-checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+                    registration_id: confirmed?.registration_id || null,
+                    has_own_kit: ownKit,
                     player: {
                         first_name: player.first_name.trim(),
                         last_name: player.last_name.trim(),
@@ -105,7 +98,6 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
                         registration_id: confirmed?.registration_id || null,
                     },
                     items: chosen.map((i) => ({ key: i.key, size: picks[i.key] })),
-                    fulfillment: 'pickup',
                     pickupVenue: region?.slug || '',
                 }),
             });
@@ -127,8 +119,26 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
 
     return (
         <div className="bg-white/5 border border-white/12 rounded-2xl p-6 sm:p-8">
-            <Eyebrow className="mb-4">Choose your kit</Eyebrow>
+            <Eyebrow className="mb-4">Your training kit</Eyebrow>
 
+            <label className={`flex items-start gap-3 cursor-pointer rounded-xl border p-4 mb-6 transition-colors ${ownKit ? 'border-rr-pink bg-rr-pink/10' : 'border-white/15 bg-white/5 hover:border-rr-pink/60'}`}>
+                <button
+                    type="button"
+                    role="checkbox"
+                    aria-checked={ownKit}
+                    onClick={() => { setOwnKit((v) => !v); setErrors((x) => ({ ...x, kit: undefined })); }}
+                    className={`mt-0.5 w-5 h-5 rounded-md shrink-0 border flex items-center justify-center transition-colors ${ownKit ? 'bg-rr-pink border-rr-pink' : 'border-white/30 bg-white/5'}`}
+                >
+                    {ownKit && <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
+                </button>
+                <span className="text-base font-medium text-white/85 leading-relaxed">
+                    <span className="font-black text-white">I already have the training kit I need</span>
+                    <br />A training shirt, training pants (recommended) and/or training shorts, and a cap.
+                </span>
+            </label>
+
+            <div className={ownKit ? 'opacity-40 pointer-events-none' : ''}>
+            <p className="text-white/70 text-sm font-medium mb-4">Otherwise, choose what you need at participant prices:</p>
             <div className="flex items-center gap-2 mb-6">
                 {['junior', 'senior'].map((g) => (
                     <button
@@ -195,10 +205,11 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
                     );
                 })}
             </ul>
+            </div>
             <FieldError msg={errors.kit} />
 
             {/* Minimum-kit checklist */}
-            {!complete && (
+            {!ownKit && !complete && (
                 <div className="mt-5 rounded-xl border border-white/15 bg-white/5 p-4 text-sm font-medium text-white/75 leading-relaxed">
                     Still to choose:{' '}
                     {[!hasShirt && 'a training shirt', !hasLegs && 'training pants (recommended) and/or shorts', !hasHat && 'a cap']
@@ -207,12 +218,14 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
                 </div>
             )}
 
-            <div className="mt-7 pt-6 border-t border-white/10">
-                <Eyebrow className="mb-3">Collection</Eyebrow>
-                <p className="text-white/85 text-base font-medium leading-relaxed">
-                    Kit is collected at squad training — nothing is posted. Bring your receipt to your first session.
-                </p>
-            </div>
+            {!ownKit && chosen.length > 0 && (
+                <div className="mt-7 pt-6 border-t border-white/10">
+                    <Eyebrow className="mb-3">Collection</Eyebrow>
+                    <p className="text-white/85 text-base font-medium leading-relaxed">
+                        Kit is collected at squad training — nothing is posted. Bring your receipt to your first session.
+                    </p>
+                </div>
+            )}
 
             <div className="mt-7 pt-6 border-t border-white/10">
                 <Eyebrow className="mb-4">Player details</Eyebrow>
@@ -229,79 +242,40 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
                             </p>
                         </div>
                     </div>
-                ) : !manual ? (
-                    <div className="rounded-xl bg-white/5 border border-white/12 p-4 text-base font-medium text-white/85 leading-relaxed">
-                        <p>Confirm your place in Step 1 first — the details you enter there carry over to this order, so you only type them once.</p>
-                        <div className="flex flex-wrap gap-x-5 gap-y-2 mt-3 text-sm">
-                            <button type="button" onClick={() => scrollTo('confirm')} className="text-rr-light-pink font-black uppercase tracking-wider hover:text-white">Go to Step 1</button>
-                            <button type="button" onClick={() => setManual(true)} className="text-white/60 underline hover:text-white">Already confirmed on another device? Enter details</button>
-                        </div>
-                        <FieldError msg={errors.player} />
-                    </div>
                 ) : (
-                    <>
-                        <div className="relative mb-4">
-                            <Label required>Region / location you were selected in</Label>
-                            <div className="relative">
-                                <select value={player.region} onChange={setField('region')} className={selectClass(errors, 'region')}>
-                                    <option value="" disabled>Choose your region</option>
-                                    {REGIONS.map((r) => (
-                                        <option key={r.slug} value={r.slug}>{r.name} — {r.venue}</option>
-                                    ))}
-                                </select>
-                                <Chevron />
-                            </div>
-                            <FieldError msg={errors.region} />
+                    <div className="rounded-xl bg-white/5 border border-white/12 p-4 text-base font-medium text-white/85 leading-relaxed">
+                        <p>Complete Step 1 first — the details you enter there carry over, so you only type them once, and your payment is recorded against that confirmation.</p>
+                        <div className="mt-3 text-sm">
+                            <button type="button" onClick={() => scrollTo('confirm')} className="text-rr-light-pink font-black uppercase tracking-wider hover:text-white">Go to Step 1</button>
                         </div>
-                        <div className="grid sm:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <Label required>Player first name</Label>
-                                <input value={player.first_name} onChange={setField('first_name')} className={inputClass(errors, 'first_name')} />
-                                <FieldError msg={errors.first_name} />
-                            </div>
-                            <div>
-                                <Label required>Player last name</Label>
-                                <input value={player.last_name} onChange={setField('last_name')} className={inputClass(errors, 'last_name')} />
-                                <FieldError msg={errors.last_name} />
-                            </div>
-                        </div>
-                        <div className="mb-4">
-                            <Label>Parent or guardian name <span className="text-white/45 font-medium normal-case">(if the player is under 18)</span></Label>
-                            <input value={player.parent_name} onChange={setField('parent_name')} className={inputClass(errors, 'parent_name')} />
-                        </div>
-                        <div className="grid sm:grid-cols-2 gap-4">
-                            <div>
-                                <Label required>Email</Label>
-                                <input type="email" value={player.email} onChange={setField('email')} placeholder="you@email.com" className={inputClass(errors, 'email')} />
-                                <FieldError msg={errors.email} />
-                            </div>
-                            <div>
-                                <Label required>Mobile</Label>
-                                <input type="tel" value={player.mobile} onChange={setField('mobile')} placeholder="04xx xxx xxx" className={inputClass(errors, 'mobile')} />
-                                <FieldError msg={errors.mobile} />
-                            </div>
-                        </div>
-                    </>
+                                <FieldError msg={errors.player} />
+                    </div>
                 )}
             </div>
 
             <div className="mt-7 pt-6 border-t border-white/10">
-                <div className="flex items-baseline justify-between mb-5">
-                    <p className="font-black uppercase tracking-wider text-sm text-white/70">Total</p>
-                    <p className="text-3xl font-black">{fmt(subtotal)}</p>
+                <Eyebrow className="mb-4">Due today</Eyebrow>
+                <ul className="space-y-2 text-base font-medium text-white/85 mb-4">
+                    <li className="flex justify-between gap-4"><span>Joining Fee <span className="text-white/50 text-sm">(one-off, non-refundable)</span></span><span className="font-black">{fmt(joiningCents)}</span></li>
+                    <li className="flex justify-between gap-4"><span>Squad Fee — first week</span><span className="font-black">{fmt(weeklyCents)}</span></li>
+                    {chosen.map((i) => (
+                        <li key={i.key} className="flex justify-between gap-4"><span>{i.label} <span className="text-white/50 text-sm">({picks[i.key]})</span></span><span className="font-black">{fmt(i.priceCents)}</span></li>
+                    ))}
+                </ul>
+                <div className="flex items-baseline justify-between border-t border-white/15 pt-4 mb-2">
+                    <p className="font-black uppercase tracking-wider text-sm text-white/70">Total due today</p>
+                    <p className="text-3xl font-black">{fmt(dueToday)}</p>
                 </div>
-                {chosen.length > 0 && (
-                    <p className="text-white/55 text-sm font-medium mb-5 leading-relaxed">
-                        {chosen.map((i) => `${i.label} (${picks[i.key]})`).join(', ')}
-                    </p>
-                )}
+                <p className="text-white/55 text-sm font-medium mb-6 leading-relaxed">
+                    Then {fmt(weeklyCents)} a week, charged weekly in advance. {WELCOME.pricing.cancel}
+                </p>
                 <button
                     type="button"
                     onClick={submit}
                     disabled={busy}
                     className="w-full inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
                 >
-                    {busy ? <><Loader2 className="w-4 h-4 animate-spin" /> Taking you to checkout</> : <>Order kit <ArrowRight className="w-4 h-4" /></>}
+                    {busy ? <><Loader2 className="w-4 h-4 animate-spin" /> Taking you to checkout</> : <>Proceed to checkout <ArrowRight className="w-4 h-4" /></>}
                 </button>
                 {failed && <p className="text-rr-light-pink text-sm font-bold mt-3 text-center">{failed}</p>}
                 <p className="text-white/45 text-sm font-medium mt-3 text-center">Payments are processed by Stripe.</p>

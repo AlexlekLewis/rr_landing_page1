@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { CheckCircle2, Mail, Shirt, MessageCircle } from 'lucide-react';
+import { CheckCircle2, Mail, MessageCircle } from 'lucide-react';
 import Navbar from '../../Navbar';
 import Footer from '../../Footer';
 import { WELCOME, HALLA_BOL } from './welcomeConfig';
@@ -16,7 +16,6 @@ import { Eyebrow } from './welcomeShared';
 
 const WelcomeSuccess = () => {
     const c = WELCOME;
-    const kitOrdered = new URLSearchParams(window.location.search).get('kit') === 'ordered';
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -57,12 +56,10 @@ const WelcomeSuccess = () => {
                             Performance Squad · Season 2026/27
                         </p>
                         <h1 className="text-[40px] sm:text-6xl font-black uppercase leading-[0.98] mb-6">
-                            {kitOrdered ? 'Kit ordered' : "You're in"}
+                            You&apos;re in
                         </h1>
                         <p className="text-white text-base sm:text-lg font-medium leading-relaxed">
-                            {kitOrdered
-                                ? 'Thanks — your kit order is confirmed. A receipt is on its way to your email.'
-                                : 'Your place in the Performance Squad is confirmed. A receipt is on its way to your email.'}
+                            Your place in the Performance Squad is confirmed. A receipt is on its way to your email.
                         </p>
                     </div>
                 </section>
@@ -84,25 +81,6 @@ const WelcomeSuccess = () => {
                             </ul>
                         </div>
 
-                        {!kitOrdered && (
-                            <div className="bg-white/5 border border-white/12 rounded-2xl p-6 sm:p-8">
-                                <div className="flex items-center gap-3 mb-4">
-                                    <Shirt aria-hidden="true" className="w-6 h-6 text-rr-pink shrink-0" strokeWidth={2} />
-                                    <h2 className="text-xl sm:text-2xl font-black uppercase tracking-wide">Your kit</h2>
-                                </div>
-                                <p className="text-white/85 text-base font-medium leading-relaxed mb-5">
-                                    Every player needs a training shirt, a pair of training pants (recommended)
-                                    and/or training shorts, and a cap. Order it at participant prices on the
-                                    welcome page and collect it at squad training sessions.
-                                </p>
-                                <a
-                                    href="/performance-squads/welcome#kit"
-                                    className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
-                                >
-                                    Order your kit
-                                </a>
-                            </div>
-                        )}
 
                         {/* Only players who confirm inside the window can be considered. */}
                         <div className="rounded-2xl border-2 border-rr-light-pink/60 bg-rr-pink/10 p-6 sm:p-8">
