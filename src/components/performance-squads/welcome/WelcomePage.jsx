@@ -386,7 +386,7 @@ const WelcomePage = () => {
                             </h2>
                             <Bullets items={[
                                 `${septemberGames.dates}: T20 matches at ${septemberGames.venue}.`,
-                                <>Players who confirm their place early <strong className="text-white font-black">may</strong> get an offer to play, at a special price.</>,
+                                <>Players who confirm their place within {window72} of being notified <strong className="text-white font-black">may</strong> be invited to play, at a special price.</>,
                                 'Only players with an offer can play. If you get an offer, we will send it to you separately.',
                                 <>Confirm your place within {window72} of being notified to be considered.</>,
                             ]} />

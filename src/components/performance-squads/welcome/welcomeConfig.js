@@ -21,7 +21,8 @@ export const WELCOME = {
     // Every selected player has this long from the moment they are notified to
     // confirm their place: register on this page, then complete the Joining Fee payment.
     confirmWindow: '72 hours',
-    paymentLink: null,      // Stripe Payment Link for the Joining Fee
+    // Stripe Payment Link — Joining Fee PLUS the first $29.95 Squad Fee instalment.
+    paymentLink: 'https://buy.stripe.com/8x23cvcLTc0J4LaeMb9Zm0L',
 
     // Kit is ordered on this page at PARTICIPANT prices (api/_lib/uniformPricing.js,
     // the same prices Power Game charges), NOT the Academy Shop's retail prices.
@@ -81,7 +82,7 @@ export const WELCOME = {
 
     // ── Training and events (NOT match days — those are the fixture list) ──
     season: {
-        firstTraining: { year: 2026, date: 'Monday 5 October', time: null },
+        firstTraining: { year: 2026, date: 'Monday 5 October', time: 'Evening — final time to be confirmed' },
         sidSessions: { year: 2026, when: 'Early October' },
     },
 
@@ -102,6 +103,12 @@ export const WELCOME = {
         dates: 'Monday 28 and Tuesday 29 September',
         venue: 'North Balwyn Cricket Club, Macleay Park',
     },
+
+    // Shown on the success page and in the confirm step.
+    afterConfirm: [
+        'We will be in touch with your squad, your training night and everything else you need before the season starts.',
+        'Training apparel will also be available at squad training sessions.',
+    ],
 
     letter: {
         from: 'Alex Lewis',
@@ -133,11 +140,11 @@ export const PLAYER_IMAGE = '/assets/performance-squads/selected-player-fist-pum
 // Royals war cry wordmark, white on transparent (from the RRA standee artwork).
 export const HALLA_BOL = '/assets/performance-squads/halla-bol-white.png';
 
-// Every detail the page still needs before it can go to families.
+// What would stop the page working for a real family. Anything else that is not
+// yet known (a venue, a time) simply shows as a "to be confirmed" chip.
+// While this returns anything, the confirm form walks through without saving.
 export const getMissingDetails = (c) => {
     const missing = [];
-    if (!c.season?.firstTraining?.time) missing.push('first training time');
-    if (!c.fixtures?.find((m) => m.first)?.venueAndTime) missing.push('first match venue and time');
     if (!c.paymentLink) missing.push('Joining Fee payment link');
     return missing;
 };

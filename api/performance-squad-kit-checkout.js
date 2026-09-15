@@ -119,7 +119,7 @@ export default async function handler(req, res) {
                 centre_slug: str(player.centre_slug, 60),
                 items_summary: uniform.summary.slice(0, 480),
             },
-            success_url: `${BASE_URL}/performance-squads/welcome?kit=ordered&session_id={CHECKOUT_SESSION_ID}`,
+            success_url: `${BASE_URL}/performance-squads/welcome/success?kit=ordered&session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${BASE_URL}/performance-squads/welcome?kit=cancelled#kit`,
         });
 

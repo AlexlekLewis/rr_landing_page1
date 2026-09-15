@@ -158,8 +158,9 @@ const WelcomeConfirmForm = ({ config, isDraft }) => {
                     <Eyebrow>Next</Eyebrow>
                     <p className="text-xl font-black uppercase tracking-wide mb-2">Pay the Joining Fee</p>
                     <p className="text-white/85 text-base font-medium mb-6">
-                        The Joining Fee is {config.pricing.joiningFee.amount}. {config.pricing.joiningFee.note}{' '}
-                        The {config.pricing.squadFee.amount} / {config.pricing.squadFee.per} Squad Fee starts once the season begins.
+                        This covers the {config.pricing.joiningFee.amount} Joining Fee plus your first{' '}
+                        {config.pricing.squadFee.amount} Squad Fee instalment. {config.pricing.joiningFee.note}{' '}
+                        Your place is confirmed once this payment is complete.
                     </p>
                     {config.paymentLink ? (
                         // Same tab on purpose: in-app browsers (Instagram especially) silently block new tabs.
