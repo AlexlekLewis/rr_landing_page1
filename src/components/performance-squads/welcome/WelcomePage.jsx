@@ -249,8 +249,8 @@ const WelcomePage = () => {
                         <Heading eyebrow="What to do now" title="3 things to do" />
                         <ol className="grid gap-4 md:grid-cols-3">
                             <Step n={1} title="Confirm your place" linkLabel="Go to step 1" target="confirm">
-                                Within {window72} of being notified. Tell us the region you were selected in, then pay the{' '}
-                                {pricing.joiningFee.amount} Joining Fee to lock in your place.
+                                Within {window72} of being notified. Go to Step 1, confirm your details and lock in your
+                                place by paying the Joining Fee and first {pricing.squadFee.amount} instalment.
                             </Step>
                             <Step n={2} title="Order your kit" linkLabel="See what you need" target="kit">
                                 Use the kit link on this page. It has the price for Performance Squad players.
