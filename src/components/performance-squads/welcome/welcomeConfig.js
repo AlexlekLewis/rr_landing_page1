@@ -23,10 +23,10 @@ export const WELCOME = {
     confirmWindow: '72 hours',
     paymentLink: null,      // Stripe Payment Link for the Joining Fee
 
-    // Kit is ordered on this page through the Academy Shop's order form, limited
-    // to training items. These are the product ids from academy-shop/shopConfig.js.
+    // Kit is ordered on this page at PARTICIPANT prices (api/_lib/uniformPricing.js,
+    // the same prices Power Game charges), NOT the Academy Shop's retail prices.
+    // Orders land in the performance_squad_kit_orders table.
     kit: {
-        productIds: ['training-shirt', 'training-pants', 'training-shorts', 'pink-cap'],
         // Every player must have, as a minimum:
         required: [
             'At least one training shirt',

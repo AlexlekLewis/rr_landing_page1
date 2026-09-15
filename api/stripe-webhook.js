@@ -336,6 +336,41 @@ export default async function handler(req, res) {
     }
   }
 
+  // ── Performance Squad kit ──────────────────────────────────────────────────
+  // Selected players order training kit from the welcome page at PARTICIPANT
+  // prices (api/_lib/uniformPricing.js). Those orders live in their own table,
+  // NOT shop_orders_training — that one is for retail Academy Shop orders. The
+  // pending row was written by api/performance-squad-kit-checkout; flip it to paid.
+  // Claimed here so it never falls through to the shop/program routing below.
+  if (session.metadata?.source === 'performance-squad-kit') {
+    const kitOrderId = session.metadata?.kit_order_id || session.client_reference_id;
+    if (!kitOrderId) {
+      return res.status(200).json({ received: true, ignored: 'kit_session_without_order_id' });
+    }
+    try {
+      const supabase = getSupabase();
+      await supabase
+        .from('performance_squad_kit_orders')
+        .update({
+          status:                'paid',
+          paid_at:               new Date().toISOString(),
+          updated_at:            new Date().toISOString(),
+          stripe_session_id:     session.id,
+          stripe_payment_intent: session.payment_intent?.id || null,
+          shipping_address:      shippingAddress || session.customer_details?.address || null,
+          shipping_cents:        session.shipping_cost?.amount_total ?? 0,
+          total_cents:           session.amount_total ?? null,
+          email:                 customerEmail || undefined,
+          mobile:                customerPhone || undefined,
+        })
+        .eq('id', kitOrderId);
+    } catch (e) {
+      console.error('performance_squad_kit_orders update failed:', e.message);
+      return res.status(500).json({ error: 'kit order update failed' });
+    }
+    return res.status(200).json({ received: true, kind: 'performance_squad_kit' });
+  }
+
   // Route between shop orders and program registrations. The two systems are
   // isolated — a session lands in exactly one of: shop_orders_*, program_registrations,
   // or is ignored entirely.

@@ -8,11 +8,7 @@ import { fadeUp, scrollTo } from '../shared';
 import { WELCOME, SID, PLAYER_IMAGE, HALLA_BOL, getMissingDetails } from './welcomeConfig';
 import { Pending, Eyebrow, Heading, Card, Bullets } from './welcomeShared';
 import WelcomeConfirmForm from './WelcomeConfirmForm';
-import { CartProvider } from '../../academy-shop/CartContext';
-import { PRODUCTS } from '../../academy-shop/shopConfig';
-import ProductGrid from '../../academy-shop/ProductGrid';
-import CartDrawer from '../../academy-shop/CartDrawer';
-import CartButton from '../../academy-shop/CartButton';
+import WelcomeKitForm from './WelcomeKitForm';
 
 const MotionDiv = motion.div;
 
@@ -473,27 +469,20 @@ const WelcomePage = () => {
 
                 {/* ── STEP 2: KIT ── The Academy Shop's order form (cart + Stripe checkout),
                     limited to training kit. Orders land in shop_orders_training like any shop order. */}
-                <CartProvider>
-                    <section id="kit" className="px-5 py-14 sm:py-20 scroll-mt-28 lg:scroll-mt-32">
-                        <div className="max-w-4xl mx-auto">
-                            <Heading
-                                eyebrow="Step 2"
-                                title="Order your kit"
-                                sub="Players train and play in Royals Academy kit. Pick your sizes below, add to cart and check out."
-                            />
-                            <Card className="mb-8 border-rr-pink/40">
-                                <IconTitle icon={ShoppingBag}>Every player needs</IconTitle>
-                                <Bullets items={c.kit.required} />
-                                <p className="text-white/60 text-sm font-medium mt-5">
-                                    Pick up free from the academy, or have it posted. Payments are processed by Stripe.
-                                </p>
-                            </Card>
-                            <ProductGrid embedded products={c.kit.productIds.map((id) => PRODUCTS.find((p) => p.id === id)).filter(Boolean)} />
-                        </div>
-                    </section>
-                    <CartDrawer />
-                    <CartButton />
-                </CartProvider>
+                <section id="kit" className="px-5 py-14 sm:py-20 scroll-mt-28 lg:scroll-mt-32">
+                    <div className="max-w-2xl mx-auto">
+                        <Heading
+                            eyebrow="Step 2"
+                            title="Order your kit"
+                            sub="Squad players pay participant prices — not the Academy Shop price. Please order here."
+                        />
+                        <Card className="mb-6 border-rr-pink/40">
+                            <IconTitle icon={ShoppingBag}>Every player needs</IconTitle>
+                            <Bullets items={c.kit.required} />
+                        </Card>
+                        <WelcomeKitForm />
+                    </div>
+                </section>
 
                 {/* ── STEP 3: PORTAL ── */}
                 <section id="portal" className="px-5 pb-14 sm:pb-20 scroll-mt-28 lg:scroll-mt-32">
