@@ -118,6 +118,8 @@ export const SID = {
 };
 
 export const PLAYER_IMAGE = '/assets/performance-squads/selected-player-fist-pump.png';
+// Royals war cry wordmark, white on transparent (from the RRA standee artwork).
+export const HALLA_BOL = '/assets/performance-squads/halla-bol-white.png';
 
 // Every detail the page still needs before it can go to families.
 export const getMissingDetails = (c) => {

@@ -5,7 +5,7 @@ import Navbar from '../../Navbar';
 import Footer from '../../Footer';
 import usePageAnalytics from '../../../hooks/usePageAnalytics';
 import { fadeUp, scrollTo } from '../shared';
-import { WELCOME, SID, PLAYER_IMAGE, getMissingDetails } from './welcomeConfig';
+import { WELCOME, SID, PLAYER_IMAGE, HALLA_BOL, getMissingDetails } from './welcomeConfig';
 import { Pending, Eyebrow, Heading, Card, Bullets } from './welcomeShared';
 import WelcomeConfirmForm from './WelcomeConfirmForm';
 
@@ -172,12 +172,13 @@ const WelcomePage = () => {
                     className="relative px-5 pt-28 pb-0 sm:pt-36 lg:pb-0 overflow-hidden"
                     style={{ backgroundImage: 'var(--image-gradient-rr)' }}
                 >
-                    {/* Watermark crest, echoing the membership overview artwork. */}
+                    {/* Royals rampant lion, white stroke — one of the three approved lion
+                        variants (opacity can vary). Sits behind the player artwork. */}
                     <img
-                        src="/assets/MELBOURNE_OFFICIAL.png"
+                        src="/assets/rr-rampant-lion-white.png"
                         alt=""
                         aria-hidden="true"
-                        className="pointer-events-none absolute right-[-120px] top-1/2 -translate-y-1/2 w-[520px] lg:w-[680px] opacity-[0.08] brightness-0 invert select-none"
+                        className="pointer-events-none select-none absolute z-0 right-[-14%] sm:right-[-4%] lg:right-[8%] top-[46%] sm:top-1/2 -translate-y-1/2 h-[78%] sm:h-[88%] w-auto max-w-none opacity-[0.16] sm:opacity-20 lg:opacity-30"
                     />
                     <div className="relative max-w-6xl mx-auto">
                         {isDraft && (
@@ -513,16 +514,32 @@ const WelcomePage = () => {
                     </div>
                 </section>
 
-                {/* ── CLOSE ── */}
-                <section className="px-5 pb-20 sm:pb-28 text-center">
-                    <p className="text-2xl sm:text-4xl font-black uppercase tracking-wide">
-                        See you on {season.firstTraining.date}!
-                    </p>
-                    <p className="mt-5 text-white/75 text-base font-medium">
-                        <Mail aria-hidden="true" className="inline w-4 h-4 mr-2 -mt-0.5" />
-                        Any questions? Email{' '}
-                        <a href={`mailto:${c.contactEmail}`} className="text-rr-light-pink underline hover:text-white">{c.contactEmail}</a>
-                    </p>
+                {/* ── CLOSE ── Royals sign-off: brand gradient, stroke lion, Halla Bol. */}
+                <section
+                    className="relative px-5 py-20 sm:py-28 text-center overflow-hidden"
+                    style={{ backgroundImage: 'var(--image-gradient-rr)' }}
+                >
+                    <img
+                        src="/assets/rr-rampant-lion-white.png"
+                        alt=""
+                        aria-hidden="true"
+                        className="pointer-events-none select-none absolute z-0 left-[-18%] sm:left-[-2%] lg:left-[6%] top-1/2 -translate-y-1/2 h-[120%] w-auto max-w-none opacity-20 lg:opacity-30"
+                    />
+                    <div className="relative z-10 max-w-3xl mx-auto">
+                        <img
+                            src={HALLA_BOL}
+                            alt="Halla Bol!"
+                            className="h-24 sm:h-32 w-auto mx-auto mb-8 drop-shadow-[0_6px_18px_rgba(0,0,0,0.35)]"
+                        />
+                        <p className="text-2xl sm:text-4xl font-black uppercase tracking-wide">
+                            See you on {season.firstTraining.date}!
+                        </p>
+                        <p className="mt-5 text-white/90 text-base font-medium">
+                            <Mail aria-hidden="true" className="inline w-4 h-4 mr-2 -mt-0.5" />
+                            Any questions? Email{' '}
+                            <a href={`mailto:${c.contactEmail}`} className="text-white underline hover:text-white/80">{c.contactEmail}</a>
+                        </p>
+                    </div>
                 </section>
             </main>
 
