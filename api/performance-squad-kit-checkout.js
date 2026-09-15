@@ -76,6 +76,8 @@ export default async function handler(req, res) {
                 mobile: str(player.mobile, 40),
                 centre_slug: str(player.centre_slug, 60),
                 venue_name: str(player.venue_name, 120),
+                // Links the order to the Step 1 confirmation (same player, one record set).
+                registration_id: /^[0-9a-f-]{36}$/i.test(player.registration_id || '') ? player.registration_id : null,
                 items: orderItems,
                 items_summary: uniform.summary,
                 subtotal_cents: uniform.totalCents,

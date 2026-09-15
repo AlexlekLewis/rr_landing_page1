@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Target, Trophy, Wallet, ShoppingBag, KeyRound, Mail, Sparkles, Users, ShieldCheck } from 'lucide-react';
 import Navbar from '../../Navbar';
@@ -20,6 +20,16 @@ const MotionDiv = motion.div;
 // region in the confirm form. Benefits, pricing and membership wording follow
 // the Performance Squads Membership Overview (see ./welcomeConfig.js).
 // ─────────────────────────────────────────────────────────────
+
+// Details from Step 1 are kept for Step 2 (kit) so nothing is typed twice, and
+// survive a reload or the round trip to Stripe.
+const PLAYER_KEY = 'psw_player';
+const loadPlayer = () => {
+    try { return JSON.parse(sessionStorage.getItem(PLAYER_KEY) || 'null'); } catch { return null; }
+};
+const storePlayer = (p) => {
+    try { p ? sessionStorage.setItem(PLAYER_KEY, JSON.stringify(p)) : sessionStorage.removeItem(PLAYER_KEY); } catch { /* private mode */ }
+};
 
 const SECTIONS = ['hero', 'steps', 'welcome', 'membership', 'pricing', 'season', 'fixtures', 'september-games', 'training', 'sid', 'confirm', 'kit', 'portal'];
 
@@ -157,6 +167,8 @@ const WelcomePage = () => {
 
     const missing = getMissingDetails(c);
     const isDraft = missing.length > 0;
+    const [player, setPlayer] = useState(loadPlayer);
+    const savePlayer = (p) => { storePlayer(p); setPlayer(p); };
     const { season, septemberGames, letter, pricing, benefits, squadDna, selection, memberPricing } = c;
     const window72 = <strong className="font-black">{c.confirmWindow}</strong>;
 
@@ -463,7 +475,7 @@ const WelcomePage = () => {
                             title="Confirm your place"
                             sub={<>You have {window72} from being notified to register here and complete the Joining Fee payment. Tell us the region you were selected in, fill in the player&apos;s details and agree to the 5 items below.</>}
                         />
-                        <WelcomeConfirmForm config={c} isDraft={isDraft} />
+                        <WelcomeConfirmForm config={c} isDraft={isDraft} onSaved={savePlayer} />
                     </div>
                 </section>
 
@@ -480,7 +492,7 @@ const WelcomePage = () => {
                             <IconTitle icon={ShoppingBag}>Every player needs</IconTitle>
                             <Bullets items={c.kit.required} />
                         </Card>
-                        <WelcomeKitForm />
+                        <WelcomeKitForm player={player} onChangePlayer={() => savePlayer(null)} />
                     </div>
                 </section>
 

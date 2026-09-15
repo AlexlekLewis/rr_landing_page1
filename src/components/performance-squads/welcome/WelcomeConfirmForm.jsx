@@ -41,7 +41,7 @@ const AGREEMENT_ERRORS = {
 
 const linkClass = 'text-rr-light-pink underline hover:text-white';
 
-const WelcomeConfirmForm = ({ config, isDraft }) => {
+const WelcomeConfirmForm = ({ config, isDraft, onSaved }) => {
     const [form, setForm] = useState({
         region: '',
         first_name: '',
@@ -131,6 +131,16 @@ const WelcomeConfirmForm = ({ config, isDraft }) => {
             ]);
             if (error) throw error;
             setSaved({ id, draft: false });
+            // Step 2 (kit) reuses these — the player never types their details twice.
+            onSaved?.({
+                registration_id: id,
+                first_name: first,
+                last_name: last,
+                parent_name: form.parent_name.trim(),
+                email: form.email.trim(),
+                mobile: form.phone.trim(),
+                region: region.slug,
+            });
         } catch (err) {
             console.error('Performance Squad confirmation error:', err);
             setErrors({ form: `Something went wrong. Please try again, or email ${config.contactEmail}` });

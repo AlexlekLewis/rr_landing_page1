@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { ArrowRight, Check, Loader2 } from 'lucide-react';
-import { Label, FieldError, Chevron, inputClass, selectClass } from '../shared';
+import { ArrowRight, Check, Loader2, UserRound } from 'lucide-react';
+import { Label, FieldError, Chevron, inputClass, selectClass, scrollTo } from '../shared';
 import { Eyebrow } from './welcomeShared';
 import { REGIONS } from './welcomeConfig';
 import { TOPS_SIZES, SHORTS_SIZES, PANTS_SIZES, JACKET_SIZES } from '../../academy-shop/sizeData';
@@ -37,10 +37,18 @@ const sizesFor = (item, group) => {
     return s?.[group] || s?.senior || [];
 };
 
-const WelcomeKitForm = () => {
+// player: the details saved in Step 1 (confirm form). When present they are shown
+// read-only and the order is linked to that registration, so the family never types
+// anything twice. Without them (confirmed on another device) the fields are offered.
+const BLANK = { region: '', first_name: '', last_name: '', parent_name: '', email: '', mobile: '' };
+
+const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
     const [group, setGroup] = useState('senior');
     const [picks, setPicks] = useState({});           // key -> size ('' = not ordered)
-    const [player, setPlayer] = useState({ region: '', first_name: '', last_name: '', parent_name: '', email: '', mobile: '' });
+    const [manual, setManual] = useState(false);       // typing details without Step 1
+    const [typed, setTyped] = useState(BLANK);
+    const player = confirmed ? { ...BLANK, ...confirmed } : typed;
+    const setPlayer = setTyped;
     const [errors, setErrors] = useState({});
     const [busy, setBusy] = useState(false);
     const [failed, setFailed] = useState('');
@@ -65,6 +73,7 @@ const WelcomeKitForm = () => {
 
     const validate = () => {
         const next = {};
+        if (!confirmed && !manual) next.player = 'Please confirm your place in Step 1 first — your details carry over to this order.';
         if (!player.region) next.region = 'Please choose your region';
         if (!player.first_name.trim()) next.first_name = 'Please enter the player\u2019s first name';
         if (!player.last_name.trim()) next.last_name = 'Please enter the player\u2019s last name';
@@ -93,6 +102,7 @@ const WelcomeKitForm = () => {
                         mobile: player.mobile.trim(),
                         centre_slug: region?.slug || '',
                         venue_name: region?.venue || '',
+                        registration_id: confirmed?.registration_id || null,
                     },
                     items: chosen.map((i) => ({ key: i.key, size: picks[i.key] })),
                     fulfillment: 'pickup',
@@ -206,47 +216,73 @@ const WelcomeKitForm = () => {
 
             <div className="mt-7 pt-6 border-t border-white/10">
                 <Eyebrow className="mb-4">Player details</Eyebrow>
-                <div className="relative mb-4">
-                    <Label required>Region / location you were selected in</Label>
-                    <div className="relative">
-                        <select value={player.region} onChange={setField('region')} className={selectClass(errors, 'region')}>
-                            <option value="" disabled>Choose your region</option>
-                            {REGIONS.map((r) => (
-                                <option key={r.slug} value={r.slug}>{r.name} — {r.venue}</option>
-                            ))}
-                        </select>
-                        <Chevron />
+                {confirmed ? (
+                    <div className="flex items-start gap-3 rounded-xl bg-white/5 border border-white/12 p-4">
+                        <UserRound aria-hidden="true" className="w-5 h-5 text-rr-pink shrink-0 mt-0.5" />
+                        <div className="min-w-0 text-base font-medium text-white/85 leading-relaxed">
+                            <p className="font-black text-white">{confirmed.first_name} {confirmed.last_name}</p>
+                            <p>{REGIONS.find((r) => r.slug === confirmed.region)?.name || confirmed.region}</p>
+                            <p className="text-white/60 text-sm break-words">{confirmed.email} · {confirmed.mobile}</p>
+                            <p className="text-white/55 text-sm mt-2">
+                                From Step 1 — this order will be recorded under this name.{' '}
+                                <button type="button" onClick={onChangePlayer} className="text-rr-light-pink underline hover:text-white">Not you?</button>
+                            </p>
+                        </div>
                     </div>
-                    <FieldError msg={errors.region} />
-                </div>
-                <div className="grid sm:grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <Label required>Player first name</Label>
-                        <input value={player.first_name} onChange={setField('first_name')} className={inputClass(errors, 'first_name')} />
-                        <FieldError msg={errors.first_name} />
+                ) : !manual ? (
+                    <div className="rounded-xl bg-white/5 border border-white/12 p-4 text-base font-medium text-white/85 leading-relaxed">
+                        <p>Confirm your place in Step 1 first — the details you enter there carry over to this order, so you only type them once.</p>
+                        <div className="flex flex-wrap gap-x-5 gap-y-2 mt-3 text-sm">
+                            <button type="button" onClick={() => scrollTo('confirm')} className="text-rr-light-pink font-black uppercase tracking-wider hover:text-white">Go to Step 1</button>
+                            <button type="button" onClick={() => setManual(true)} className="text-white/60 underline hover:text-white">Already confirmed on another device? Enter details</button>
+                        </div>
+                        <FieldError msg={errors.player} />
                     </div>
-                    <div>
-                        <Label required>Player last name</Label>
-                        <input value={player.last_name} onChange={setField('last_name')} className={inputClass(errors, 'last_name')} />
-                        <FieldError msg={errors.last_name} />
-                    </div>
-                </div>
-                <div className="mb-4">
-                    <Label>Parent or guardian name <span className="text-white/45 font-medium normal-case">(if the player is under 18)</span></Label>
-                    <input value={player.parent_name} onChange={setField('parent_name')} className={inputClass(errors, 'parent_name')} />
-                </div>
-                <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                        <Label required>Email</Label>
-                        <input type="email" value={player.email} onChange={setField('email')} placeholder="you@email.com" className={inputClass(errors, 'email')} />
-                        <FieldError msg={errors.email} />
-                    </div>
-                    <div>
-                        <Label required>Mobile</Label>
-                        <input type="tel" value={player.mobile} onChange={setField('mobile')} placeholder="04xx xxx xxx" className={inputClass(errors, 'mobile')} />
-                        <FieldError msg={errors.mobile} />
-                    </div>
-                </div>
+                ) : (
+                    <>
+                        <div className="relative mb-4">
+                            <Label required>Region / location you were selected in</Label>
+                            <div className="relative">
+                                <select value={player.region} onChange={setField('region')} className={selectClass(errors, 'region')}>
+                                    <option value="" disabled>Choose your region</option>
+                                    {REGIONS.map((r) => (
+                                        <option key={r.slug} value={r.slug}>{r.name} — {r.venue}</option>
+                                    ))}
+                                </select>
+                                <Chevron />
+                            </div>
+                            <FieldError msg={errors.region} />
+                        </div>
+                        <div className="grid sm:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <Label required>Player first name</Label>
+                                <input value={player.first_name} onChange={setField('first_name')} className={inputClass(errors, 'first_name')} />
+                                <FieldError msg={errors.first_name} />
+                            </div>
+                            <div>
+                                <Label required>Player last name</Label>
+                                <input value={player.last_name} onChange={setField('last_name')} className={inputClass(errors, 'last_name')} />
+                                <FieldError msg={errors.last_name} />
+                            </div>
+                        </div>
+                        <div className="mb-4">
+                            <Label>Parent or guardian name <span className="text-white/45 font-medium normal-case">(if the player is under 18)</span></Label>
+                            <input value={player.parent_name} onChange={setField('parent_name')} className={inputClass(errors, 'parent_name')} />
+                        </div>
+                        <div className="grid sm:grid-cols-2 gap-4">
+                            <div>
+                                <Label required>Email</Label>
+                                <input type="email" value={player.email} onChange={setField('email')} placeholder="you@email.com" className={inputClass(errors, 'email')} />
+                                <FieldError msg={errors.email} />
+                            </div>
+                            <div>
+                                <Label required>Mobile</Label>
+                                <input type="tel" value={player.mobile} onChange={setField('mobile')} placeholder="04xx xxx xxx" className={inputClass(errors, 'mobile')} />
+                                <FieldError msg={errors.mobile} />
+                            </div>
+                        </div>
+                    </>
+                )}
             </div>
 
             <div className="mt-7 pt-6 border-t border-white/10">
