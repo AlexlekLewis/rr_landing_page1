@@ -3,6 +3,7 @@ import { ArrowRight, Check, Loader2, UserRound } from 'lucide-react';
 import { FieldError, Chevron, selectClass, scrollTo } from '../shared';
 import { Eyebrow } from './welcomeShared';
 import { REGIONS, WELCOME } from './welcomeConfig';
+import usePrices, { fmt } from './usePrices';
 import { TOPS_SIZES, SHORTS_SIZES, PANTS_SIZES, JACKET_SIZES } from '../../academy-shop/sizeData';
 import SizeGuide from '../../academy-shop/SizeGuide';
 
@@ -19,15 +20,14 @@ import SizeGuide from '../../academy-shop/SizeGuide';
 // Kit is PICK UP ONLY — collected at squad training. Nothing is posted.
 // ─────────────────────────────────────────────────────────────
 
+// Prices come from usePrices() (server-owned); only labels/sizes live here.
 const ITEMS = [
-    { key: 'shirt', label: 'Training Shirt', priceCents: 2995, sizes: TOPS_SIZES, required: true, guide: 'training-shirt' },
-    { key: 'pants', label: 'Training Pants', priceCents: 3700, sizes: PANTS_SIZES, note: 'Recommended', guide: 'training-pants' },
-    { key: 'shorts', label: 'Training Shorts', priceCents: 3500, sizes: SHORTS_SIZES, note: 'Instead of, or as well as, pants', guide: 'training-shorts' },
-    { key: 'cap', label: 'Cap', priceCents: 2500, oneSize: true, required: true },
-    { key: 'jacket', label: 'Fleece Jacket', priceCents: 4900, sizes: JACKET_SIZES, note: 'Optional — runs small, consider one size up', guide: 'fleece-jacket' },
+    { key: 'shirt', label: 'Training Shirt', sizes: TOPS_SIZES, required: true, guide: 'training-shirt' },
+    { key: 'pants', label: 'Training Pants', sizes: PANTS_SIZES, note: 'Recommended', guide: 'training-pants' },
+    { key: 'shorts', label: 'Training Shorts', sizes: SHORTS_SIZES, note: 'Instead of, or as well as, pants', guide: 'training-shorts' },
+    { key: 'cap', label: 'Cap', oneSize: true, required: true },
+    { key: 'jacket', label: 'Fleece Jacket', sizes: JACKET_SIZES, note: 'Optional — runs small, consider one size up', guide: 'fleece-jacket' },
 ];
-
-const fmt = (cents) => `$${(cents / 100).toFixed(2)}`;
 
 // Sizes are split junior/senior in sizeData; 'senior' covers adult sizing.
 const sizesFor = (item, group) => {
@@ -47,14 +47,16 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
     const [picks, setPicks] = useState({});           // key -> size ('' = not ordered)
     const [ownKit, setOwnKit] = useState(false);       // "I already have the kit I need"
     const player = { ...BLANK, ...(confirmed || {}) };
+    const prices = usePrices();
+    const priceOf = (item) => prices.kit[item.key]?.cents ?? 0;
     const [errors, setErrors] = useState({});
     const [busy, setBusy] = useState(false);
     const [failed, setFailed] = useState('');
 
     const chosen = useMemo(() => (ownKit ? [] : ITEMS.filter((i) => picks[i.key])), [picks, ownKit]);
-    const kitTotal = chosen.reduce((sum, i) => sum + i.priceCents, 0);
-    const joiningCents = 14995;
-    const weeklyCents = 2995;
+    const kitTotal = chosen.reduce((sum, i) => sum + priceOf(i), 0);
+    const joiningCents = prices.joiningFeeCents;
+    const weeklyCents = prices.squadFeeCents;
     const dueToday = joiningCents + weeklyCents + kitTotal;
 
     const toggle = (item, size) => {
@@ -166,7 +168,7 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
                                     </p>
                                     {item.note && <p className="text-white/55 text-sm font-medium mt-0.5">{item.note}</p>}
                                 </div>
-                                <p className="font-black text-lg shrink-0">{fmt(item.priceCents)}</p>
+                                <p className="font-black text-lg shrink-0">{fmt(priceOf(item))}</p>
                             </div>
                             {unavailable ? (
                                 <p className="text-white/50 text-sm font-medium">Not available in junior sizes.</p>
@@ -259,7 +261,7 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
                     <li className="flex justify-between gap-4"><span>Joining Fee <span className="text-white/50 text-sm">(one-off, non-refundable)</span></span><span className="font-black">{fmt(joiningCents)}</span></li>
                     <li className="flex justify-between gap-4"><span>Squad Fee — first week</span><span className="font-black">{fmt(weeklyCents)}</span></li>
                     {chosen.map((i) => (
-                        <li key={i.key} className="flex justify-between gap-4"><span>{i.label} <span className="text-white/50 text-sm">({picks[i.key]})</span></span><span className="font-black">{fmt(i.priceCents)}</span></li>
+                        <li key={i.key} className="flex justify-between gap-4"><span>{i.label} <span className="text-white/50 text-sm">({picks[i.key]})</span></span><span className="font-black">{fmt(priceOf(i))}</span></li>
                     ))}
                 </ul>
                 <div className="flex items-baseline justify-between border-t border-white/15 pt-4 mb-2">

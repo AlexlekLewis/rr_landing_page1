@@ -38,10 +38,12 @@ export const WELCOME = {
 
     contactEmail: 'alex.lewis@rramelbourne.com',
 
-    // ── Pricing (Membership Overview — first intake) ──
+    // ── Pricing notes ── The AMOUNTS are not here: they come from Stripe via
+    // /api/performance-squad-prices (see usePrices.js), so the page always shows
+    // exactly what checkout charges. Only the wording lives in config.
     pricing: {
-        joiningFee: { amount: '$149.95', note: 'One-off, non-refundable. Locks in your place.' },
-        squadFee: { amount: '$29.95', per: 'wk', note: 'Charged weekly, in advance.' },
+        joiningFee: { note: 'One-off, non-refundable. Locks in your place.' },
+        squadFee: { per: 'wk', note: 'Charged weekly, in advance.' },
         matchFees: { amount: 'Per match', note: 'Set for each fixture. Covers standard match day costs.' },
         cancel: 'You can cancel at any time. You must be financial to receive member benefits. If payments stop without notice, there is a two-week grace period before your squad place is released.',
     },

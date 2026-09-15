@@ -9,6 +9,7 @@ import { WELCOME, SID, PLAYER_IMAGE, HALLA_BOL, getMissingDetails } from './welc
 import { Pending, Eyebrow, Heading, Card, Bullets } from './welcomeShared';
 import WelcomeConfirmForm from './WelcomeConfirmForm';
 import WelcomeKitForm from './WelcomeKitForm';
+import usePrices, { fmt } from './usePrices';
 
 const MotionDiv = motion.div;
 
@@ -168,6 +169,9 @@ const WelcomePage = () => {
     const missing = getMissingDetails(c);
     const isDraft = missing.length > 0;
     const [player, setPlayer] = useState(loadPlayer);
+    const prices = usePrices();
+    const joiningFee = fmt(prices.joiningFeeCents);
+    const squadFee = fmt(prices.squadFeeCents);
     const savePlayer = (p) => { storePlayer(p); setPlayer(p); };
     const { season, septemberGames, letter, pricing, benefits, squadDna, selection, memberPricing } = c;
     const window72 = <strong className="font-black">{c.confirmWindow}</strong>;
@@ -266,8 +270,8 @@ const WelcomePage = () => {
                                 shorts, and a cap. Tick that you have it, or choose what you need at participant prices.
                             </Step>
                             <Step n={3} title="Proceed to checkout" linkLabel="Go to checkout" target="kit">
-                                One payment for the {pricing.joiningFee.amount} Joining Fee, your first{' '}
-                                {pricing.squadFee.amount} weekly Squad Fee and any kit. Then {pricing.squadFee.amount} a week.
+                                One payment for the {joiningFee} Joining Fee, your first{' '}
+                                {squadFee} weekly Squad Fee and any kit. Then {squadFee} a week.
                             </Step>
                         </ol>
                     </div>
@@ -336,8 +340,8 @@ const WelcomePage = () => {
                     <div className="max-w-5xl mx-auto">
                         <Heading eyebrow="First intake pricing" title="Membership fees" />
                         <div className="grid gap-4 md:grid-cols-3">
-                            <PriceCard label="Joining fee" amount={pricing.joiningFee.amount} note={pricing.joiningFee.note} accent />
-                            <PriceCard label="Squad fee" amount={pricing.squadFee.amount} per={pricing.squadFee.per} note={pricing.squadFee.note} />
+                            <PriceCard label="Joining fee" amount={joiningFee} note={pricing.joiningFee.note} accent />
+                            <PriceCard label="Squad fee" amount={squadFee} per={pricing.squadFee.per} note={pricing.squadFee.note} />
                             <PriceCard label="Match fees" amount={pricing.matchFees.amount} note={pricing.matchFees.note} />
                         </div>
                         <div className="mt-4 rounded-2xl border-l-4 border-rr-pink bg-white/5 p-6 sm:p-8">

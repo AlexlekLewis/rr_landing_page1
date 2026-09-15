@@ -17,11 +17,11 @@
 // kit order paid on checkout.session.completed.
 //
 // Env: STRIPE_SECRET_KEY, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, VITE_APP_URL.
-// Optional overrides: PS_JOINING_FEE_PRICE_ID, PS_SQUAD_FEE_PRICE_ID.
 // ============================================================
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import { buildUniformLineItems, UNIFORM_CATALOG } from './_lib/uniformPricing.js';
+import { getProgramPrices } from './_lib/performanceSquadPrices.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const supabase = createClient(
@@ -30,9 +30,6 @@ const supabase = createClient(
 );
 const BASE_URL = process.env.VITE_APP_URL || 'https://rramelbourne.com';
 
-// Must match welcomeConfig.paymentLink.
-const PAYMENT_LINK_URL = 'https://buy.stripe.com/8x23cvcLTc0J4LaeMb9Zm0L';
-
 const PICKUP_VENUES = {
     'north-melbourne': 'Mickleham Indoor Sports Centre',
     'south-east-melbourne': 'Elite Cricket Centre, Cranbourne North',
@@ -40,31 +37,6 @@ const PICKUP_VENUES = {
 
 const str = (v, max = 200) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
 const isUuid = (v) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v || '');
-
-// ── Program prices: read off the Payment Link, cached per instance ──
-let programPrices = null;
-async function getProgramPrices() {
-    if (programPrices) return programPrices;
-    if (process.env.PS_JOINING_FEE_PRICE_ID && process.env.PS_SQUAD_FEE_PRICE_ID) {
-        programPrices = { joiningFee: process.env.PS_JOINING_FEE_PRICE_ID, squadFee: process.env.PS_SQUAD_FEE_PRICE_ID };
-        return programPrices;
-    }
-    let link = null;
-    for await (const pl of stripe.paymentLinks.list({ limit: 100 })) {
-        if (pl.url === PAYMENT_LINK_URL) { link = pl; break; }
-    }
-    if (!link) throw new Error('Joining Fee payment link not found in Stripe');
-    const items = await stripe.paymentLinks.listLineItems(link.id, { limit: 10, expand: ['data.price'] });
-    let joiningFee = null;
-    let squadFee = null;
-    for (const li of items.data) {
-        if (li.price?.recurring) squadFee = li.price.id;
-        else joiningFee = li.price.id;
-    }
-    if (!joiningFee || !squadFee) throw new Error('Payment link is missing the joining fee or the weekly squad fee');
-    programPrices = { joiningFee, squadFee };
-    return programPrices;
-}
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
@@ -130,11 +102,11 @@ export default async function handler(req, res) {
         }
 
         // ── Program prices ──
-        const prices = await getProgramPrices();
+        const prices = await getProgramPrices(stripe);
 
         const lineItems = [
-            { price: prices.squadFee, quantity: 1 },     // $29.95 / week, billed from today
-            { price: prices.joiningFee, quantity: 1 },   // one-off, first invoice only
+            { price: prices.squadFee.priceId, quantity: 1 },     // weekly, billed from today
+            { price: prices.joiningFee.priceId, quantity: 1 },   // one-off, first invoice only
             ...uniform.lineItems,                        // one-off kit, first invoice only
         ];
 
