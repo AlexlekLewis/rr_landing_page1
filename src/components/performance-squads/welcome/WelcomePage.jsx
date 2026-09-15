@@ -77,7 +77,7 @@ const Step = ({ n, title, children, linkLabel, target }) => (
 const buildTimeline = (c) => {
     const { firstTraining, sidSessions } = c.season;
     return [
-        { year: firstTraining.year, when: c.confirmBy, whenPending: 'Date to be confirmed', what: 'Last day to confirm your place', highlight: true },
+        { year: firstTraining.year, when: `Within ${c.confirmWindow} of being notified`, what: 'Confirm your place: register below and complete the Joining Fee payment', highlight: true },
         { year: firstTraining.year, when: firstTraining.date, what: 'First squad training at your home centre', detail: firstTraining.time, detailPending: 'Time to be confirmed' },
         { year: sidSessions.year, when: sidSessions.when, what: 'Squad sessions with Sid Lahiri', detail: 'We will invite players to meet Sid' },
     ];
@@ -157,7 +157,7 @@ const WelcomePage = () => {
     const missing = getMissingDetails(c);
     const isDraft = missing.length > 0;
     const { season, septemberGames, letter, pricing, benefits, squadDna, selection, memberPricing } = c;
-    const confirmBy = c.confirmBy || <Pending>date to be confirmed</Pending>;
+    const window72 = <strong className="font-black">{c.confirmWindow}</strong>;
 
     return (
         <div className="min-h-screen bg-rr-dark text-white font-sans flex flex-col selection:bg-rr-pink selection:text-white">
@@ -220,9 +220,9 @@ const WelcomePage = () => {
                                     Confirm your place <ArrowRight className="w-4 h-4" />
                                 </button>
                                 <p className="mt-6 text-white text-base font-bold leading-relaxed max-w-xl mx-auto lg:mx-0">
-                                    {c.confirmBy
-                                        ? <>Places go to the first players who confirm, so please confirm your place by {c.confirmBy}.</>
-                                        : <>Please confirm your place by {confirmBy}</>}
+                                    Once you have been notified of your selection, you have {window72} to confirm your place
+                                    by registering below and completing the payment process. After that, your place may be
+                                    offered to another player.
                                 </p>
                             </MotionDiv>
 
@@ -249,7 +249,7 @@ const WelcomePage = () => {
                         <Heading eyebrow="What to do now" title="3 things to do" />
                         <ol className="grid gap-4 md:grid-cols-3">
                             <Step n={1} title="Confirm your place" linkLabel="Go to step 1" target="confirm">
-                                Do it by {confirmBy}. Tell us the region you were selected in, then pay the{' '}
+                                Within {window72} of being notified. Tell us the region you were selected in, then pay the{' '}
                                 {pricing.joiningFee.amount} Joining Fee to lock in your place.
                             </Step>
                             <Step n={2} title="Order your kit" linkLabel="See what you need" target="kit">
@@ -390,7 +390,7 @@ const WelcomePage = () => {
                                 `${septemberGames.dates}: T20 matches at ${septemberGames.venue}.`,
                                 <>Players who confirm their place early <strong className="text-white font-black">may</strong> get an offer to play, at a special price.</>,
                                 'Only players with an offer can play. If you get an offer, we will send it to you separately.',
-                                <>Confirm your place by {confirmBy} to be considered.</>,
+                                <>Confirm your place within {window72} of being notified to be considered.</>,
                             ]} />
                         </div>
                     </section>
@@ -463,7 +463,7 @@ const WelcomePage = () => {
                         <Heading
                             eyebrow="Step 1"
                             title="Confirm your place"
-                            sub={<>Please do this by {confirmBy}. Tell us the region you were selected in, fill in the player&apos;s details and agree to the 5 items below.</>}
+                            sub={<>You have {window72} from being notified to register here and complete the Joining Fee payment. Tell us the region you were selected in, fill in the player&apos;s details and agree to the 5 items below.</>}
                         />
                         <WelcomeConfirmForm config={c} isDraft={isDraft} />
                     </div>

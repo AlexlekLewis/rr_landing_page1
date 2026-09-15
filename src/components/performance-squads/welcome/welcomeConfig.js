@@ -18,7 +18,9 @@
 
 export const WELCOME = {
     // ── Still to come ──
-    confirmBy: null,        // e.g. 'Friday 25 September'
+    // Every selected player has this long from the moment they are notified to
+    // confirm their place: register on this page, then complete the Joining Fee payment.
+    confirmWindow: '72 hours',
     paymentLink: null,      // Stripe Payment Link for the Joining Fee
     kitItems: [],           // e.g. ['RRA Melbourne Training Shirt', 'Academy Cap']
     // Stripe link for the uniform at the Performance Squad player price. Selected
@@ -124,7 +126,6 @@ export const HALLA_BOL = '/assets/performance-squads/halla-bol-white.png';
 // Every detail the page still needs before it can go to families.
 export const getMissingDetails = (c) => {
     const missing = [];
-    if (!c.confirmBy) missing.push('confirm-by date');
     if (!c.season?.firstTraining?.time) missing.push('first training time');
     if (!c.fixtures?.find((m) => m.first)?.venueAndTime) missing.push('first match venue and time');
     if (!c.paymentLink) missing.push('Joining Fee payment link');
