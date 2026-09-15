@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { ArrowRight, Check, Loader2, UserRound } from 'lucide-react';
+import { ArrowRight, Check, Loader2, UserRound, Minus, Plus, X } from 'lucide-react';
 import { FieldError, Chevron, selectClass, scrollTo } from '../shared';
 import { Eyebrow } from './welcomeShared';
 import { REGIONS, WELCOME } from './welcomeConfig';
@@ -44,7 +44,8 @@ const BLANK = { region: '', first_name: '', last_name: '', parent_name: '', emai
 
 const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
     const [group, setGroup] = useState('senior');
-    const [picks, setPicks] = useState({});           // key -> size ('' = not ordered)
+    // key -> [{ size, qty }]. One entry per size; qty for how many of that size.
+    const [picks, setPicks] = useState({});
     const [ownKit, setOwnKit] = useState(false);       // "I already have the kit I need"
     const player = { ...BLANK, ...(confirmed || {}) };
     const prices = usePrices();
@@ -53,20 +54,37 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
     const [busy, setBusy] = useState(false);
     const [failed, setFailed] = useState('');
 
-    const chosen = useMemo(() => (ownKit ? [] : ITEMS.filter((i) => picks[i.key])), [picks, ownKit]);
-    const kitTotal = chosen.reduce((sum, i) => sum + priceOf(i), 0);
+    // Flat list of what's in the basket: [{ item, size, qty }]
+    const chosen = useMemo(
+        () => (ownKit ? [] : ITEMS.flatMap((item) => (picks[item.key] || []).map((line) => ({ item, ...line })))),
+        [picks, ownKit],
+    );
+    const kitTotal = chosen.reduce((sum, l) => sum + priceOf(l.item) * l.qty, 0);
+    const has = (key) => (picks[key] || []).length > 0;
     const joiningCents = prices.joiningFeeCents;
     const weeklyCents = prices.squadFeeCents;
     const dueToday = joiningCents + weeklyCents + kitTotal;
 
-    const toggle = (item, size) => {
+    const MAX_QTY = 5;
+    const setLines = (key, lines) => {
         setPicks((p) => {
             const next = { ...p };
-            if (size) next[item.key] = size;
-            else delete next[item.key];
+            if (lines.length) next[key] = lines;
+            else delete next[key];
             return next;
         });
         setErrors((x) => ({ ...x, kit: undefined }));
+    };
+    const addLine = (item, size) => {
+        if (!size) return;
+        const lines = picks[item.key] || [];
+        const i = lines.findIndex((l) => l.size === size);
+        if (i >= 0) setLines(item.key, lines.map((l, n) => (n === i ? { ...l, qty: Math.min(MAX_QTY, l.qty + 1) } : l)));
+        else setLines(item.key, [...lines, { size, qty: 1 }]);
+    };
+    const setQty = (item, size, qty) => {
+        const lines = picks[item.key] || [];
+        setLines(item.key, qty <= 0 ? lines.filter((l) => l.size !== size) : lines.map((l) => (l.size === size ? { ...l, qty: Math.min(MAX_QTY, qty) } : l)));
     };
 
     const validate = () => {
@@ -99,7 +117,7 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
                         venue_name: region?.venue || '',
                         registration_id: confirmed?.registration_id || null,
                     },
-                    items: chosen.map((i) => ({ key: i.key, size: picks[i.key] })),
+                    items: chosen.map((l) => ({ key: l.item.key, size: l.size, quantity: l.qty })),
                     pickupVenue: region?.slug || '',
                 }),
             });
@@ -114,9 +132,9 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
     };
 
     // Minimum-kit reminder, so a player can see at a glance what is still missing.
-    const hasShirt = !!picks.shirt;
-    const hasLegs = !!picks.pants || !!picks.shorts;
-    const hasHat = !!picks.cap;
+    const hasShirt = has('shirt');
+    const hasLegs = has('pants') || has('shorts');
+    const hasHat = has('cap');
     const complete = hasShirt && hasLegs && hasHat;
 
     return (
@@ -170,26 +188,42 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
                                 </div>
                                 <p className="font-black text-lg shrink-0">{fmt(priceOf(item))}</p>
                             </div>
+                            {/* What's already in the basket for this item, with quantity */}
+                            {(picks[item.key] || []).map((line) => (
+                                <div key={line.size} className="flex items-center justify-between gap-3 rounded-xl bg-rr-pink/10 border border-rr-pink/40 px-4 py-2.5 mb-2">
+                                    <span className="text-sm font-black">
+                                        {item.oneSize ? 'One size' : `Size ${line.size}`}
+                                        <span className="text-white/60 font-medium"> · {fmt(priceOf(item) * line.qty)}</span>
+                                    </span>
+                                    <span className="inline-flex items-center gap-1">
+                                        <button type="button" aria-label={`One fewer ${item.label}${item.oneSize ? '' : ` size ${line.size}`}`} onClick={() => setQty(item, line.size, line.qty - 1)} className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"><Minus className="w-4 h-4" /></button>
+                                        <span className="w-6 text-center font-black tabular-nums">{line.qty}</span>
+                                        <button type="button" aria-label={`One more ${item.label}${item.oneSize ? '' : ` size ${line.size}`}`} disabled={line.qty >= MAX_QTY} onClick={() => setQty(item, line.size, line.qty + 1)} className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 disabled:opacity-40 flex items-center justify-center"><Plus className="w-4 h-4" /></button>
+                                        <button type="button" aria-label={`Remove ${item.label}${item.oneSize ? '' : ` size ${line.size}`}`} onClick={() => setQty(item, line.size, 0)} className="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white ml-1"><X className="w-4 h-4" /></button>
+                                    </span>
+                                </div>
+                            ))}
                             {unavailable ? (
                                 <p className="text-white/50 text-sm font-medium">Not available in junior sizes.</p>
                             ) : item.oneSize ? (
-                                <button
-                                    type="button"
-                                    onClick={() => toggle(item, picks[item.key] ? '' : 'One size')}
-                                    className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-black uppercase tracking-wider transition-colors ${picks[item.key] ? 'bg-rr-pink text-white' : 'bg-white/8 text-white/70 hover:text-white'}`}
-                                >
-                                    {picks[item.key] && <Check className="w-4 h-4" />}
-                                    {picks[item.key] ? 'Added — one size' : 'Add — one size'}
-                                </button>
+                                !has(item.key) && (
+                                    <button
+                                        type="button"
+                                        onClick={() => addLine(item, 'One size')}
+                                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-black uppercase tracking-wider transition-colors bg-white/8 text-white/70 hover:text-white"
+                                    >
+                                        <Plus className="w-4 h-4" /> Add — one size
+                                    </button>
+                                )
                             ) : (
                                 <div className="relative max-w-xs">
                                     <select
-                                        value={picks[item.key] || ''}
-                                        onChange={(e) => toggle(item, e.target.value)}
+                                        value=""
+                                        onChange={(e) => addLine(item, e.target.value)}
                                         className={selectClass({}, '')}
-                                        aria-label={`${item.label} size`}
+                                        aria-label={`Add ${item.label} — choose a size`}
                                     >
-                                        <option value="">Not ordering this</option>
+                                        <option value="">{has(item.key) ? 'Add another size…' : 'Choose a size to add'}</option>
                                         {sizes.map((s) => {
                                             const val = typeof s === 'string' ? s : s.size || s.label;
                                             return <option key={val} value={val}>{val}</option>;
@@ -260,8 +294,11 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
                 <ul className="space-y-2 text-base font-medium text-white/85 mb-4">
                     <li className="flex justify-between gap-4"><span>Joining Fee <span className="text-white/50 text-sm">(one-off, non-refundable)</span></span><span className="font-black">{fmt(joiningCents)}</span></li>
                     <li className="flex justify-between gap-4"><span>Squad Fee — first week</span><span className="font-black">{fmt(weeklyCents)}</span></li>
-                    {chosen.map((i) => (
-                        <li key={i.key} className="flex justify-between gap-4"><span>{i.label} <span className="text-white/50 text-sm">({picks[i.key]})</span></span><span className="font-black">{fmt(priceOf(i))}</span></li>
+                    {chosen.map((l) => (
+                        <li key={`${l.item.key}-${l.size}`} className="flex justify-between gap-4">
+                            <span>{l.qty > 1 ? `${l.qty} × ` : ''}{l.item.label} <span className="text-white/50 text-sm">({l.size})</span></span>
+                            <span className="font-black">{fmt(priceOf(l.item) * l.qty)}</span>
+                        </li>
                     ))}
                 </ul>
                 <div className="flex items-baseline justify-between border-t border-white/15 pt-4 mb-2">

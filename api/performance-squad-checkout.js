@@ -20,7 +20,7 @@
 // ============================================================
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
-import { buildUniformLineItems, UNIFORM_CATALOG } from './_lib/uniformPricing.js';
+import { UNIFORM_CATALOG } from './_lib/uniformPricing.js';
 import { getProgramPrices } from './_lib/performanceSquadPrices.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -36,6 +36,39 @@ const PICKUP_VENUES = {
 };
 
 const str = (v, max = 200) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
+const MAX_QTY = 5;
+
+// [{ key, size, quantity }] → Stripe one-time line items at PARTICIPANT prices.
+// Unlike uniformPricing.buildUniformLineItems (which Power Game relies on to
+// allow one of each), a family here can order several of an item — two shirts,
+// say — in one size or several. Unknown keys and sized items without a size are
+// dropped; quantity is clamped to 1–MAX_QTY.
+function buildKitLineItems(items) {
+    const lineItems = [];
+    const orderItems = [];
+    const summaryParts = [];
+    let totalCents = 0;
+    for (const it of Array.isArray(items) ? items : []) {
+        const key = it && typeof it.key === 'string' ? it.key : '';
+        const cat = UNIFORM_CATALOG[key];
+        if (!cat) continue;
+        const size = cat.oneSize ? 'One size' : str(it.size, 40);
+        if (!size) continue;
+        const quantity = Math.min(MAX_QTY, Math.max(1, parseInt(it.quantity, 10) || 1));
+        lineItems.push({
+            price_data: {
+                currency: 'aud',
+                product_data: { name: cat.label, description: `Size: ${size}` },
+                unit_amount: cat.priceCents,
+            },
+            quantity,
+        });
+        orderItems.push({ key, label: cat.label, size, quantity, price_cents: cat.priceCents });
+        summaryParts.push(`${quantity > 1 ? `${quantity} × ` : ''}${cat.label} (${size})`);
+        totalCents += cat.priceCents * quantity;
+    }
+    return { lineItems, orderItems, totalCents, summary: summaryParts.join(', ') };
+}
 const isUuid = (v) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v || '');
 
 export default async function handler(req, res) {
@@ -59,22 +92,14 @@ export default async function handler(req, res) {
 
         // ── Kit ──
         const ownKit = has_own_kit === true;
-        const uniform = ownKit ? { lineItems: [], totalCents: 0, summary: '' } : buildUniformLineItems(Array.isArray(items) ? items : []);
+        const uniform = ownKit ? { lineItems: [], orderItems: [], totalCents: 0, summary: '' } : buildKitLineItems(items);
         if (!ownKit && uniform.lineItems.length === 0) {
             return res.status(400).json({ error: 'Choose your training kit, or tick that you already have what you need' });
         }
 
         let kitOrderId = null;
         if (uniform.lineItems.length) {
-            const orderItems = items
-                .filter((i) => UNIFORM_CATALOG[i?.key])
-                .map((i) => ({
-                    key: i.key,
-                    label: UNIFORM_CATALOG[i.key].label,
-                    size: UNIFORM_CATALOG[i.key].oneSize ? 'One size' : str(i.size, 40),
-                    price_cents: UNIFORM_CATALOG[i.key].priceCents,
-                }))
-                .filter((i) => i.size);
+            const orderItems = uniform.orderItems;
             const venue = str(pickupVenue, 60) || str(player.centre_slug, 60);
             const { data: order, error } = await supabase
                 .from('performance_squad_kit_orders')
