@@ -30,9 +30,9 @@ export const WELCOME = {
     kit: {
         // Every player must have, as a minimum:
         required: [
-            'At least one training shirt',
-            'One pair of training pants (recommended) or training shorts',
-            'A training hat',
+            'A training shirt',
+            'A pair of training pants (recommended) and/or training shorts',
+            'A cap',
         ],
     },
 
@@ -107,7 +107,7 @@ export const WELCOME = {
     // Shown on the success page and in the confirm step.
     afterConfirm: [
         'We will be in touch with your squad, your training night and everything else you need before the season starts.',
-        'Training apparel will also be available at squad training sessions.',
+        'Training apparel is collected at squad training sessions — nothing is posted.',
     ],
 
     letter: {

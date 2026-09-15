@@ -4,6 +4,7 @@ import { Label, FieldError, Chevron, inputClass, selectClass } from '../shared';
 import { Eyebrow } from './welcomeShared';
 import { REGIONS } from './welcomeConfig';
 import { TOPS_SIZES, SHORTS_SIZES, PANTS_SIZES, JACKET_SIZES } from '../../academy-shop/sizeData';
+import SizeGuide from '../../academy-shop/SizeGuide';
 
 // ─────────────────────────────────────────────────────────────
 // Performance Squad kit order — PARTICIPANT prices.
@@ -13,16 +14,17 @@ import { TOPS_SIZES, SHORTS_SIZES, PANTS_SIZES, JACKET_SIZES } from '../../acade
 // amount. Same participant pricing Power Game uses — not the Academy Shop's
 // retail prices — and orders land in performance_squad_kit_orders.
 //
-// Minimum every player needs: a training shirt, pants (recommended) or shorts,
-// and a hat. The jacket is optional.
+// Minimum every player needs: a training shirt, training pants (recommended)
+// and/or training shorts, and a cap. The jacket is optional.
+// Kit is PICK UP ONLY — collected at squad training. Nothing is posted.
 // ─────────────────────────────────────────────────────────────
 
 const ITEMS = [
-    { key: 'shirt', label: 'Training Shirt', priceCents: 2995, sizes: TOPS_SIZES, required: true },
-    { key: 'pants', label: 'Training Pants', priceCents: 3700, sizes: PANTS_SIZES, note: 'Recommended' },
-    { key: 'shorts', label: 'Training Shorts', priceCents: 3500, sizes: SHORTS_SIZES },
+    { key: 'shirt', label: 'Training Shirt', priceCents: 2995, sizes: TOPS_SIZES, required: true, guide: 'training-shirt' },
+    { key: 'pants', label: 'Training Pants', priceCents: 3700, sizes: PANTS_SIZES, note: 'Recommended', guide: 'training-pants' },
+    { key: 'shorts', label: 'Training Shorts', priceCents: 3500, sizes: SHORTS_SIZES, note: 'Instead of, or as well as, pants', guide: 'training-shorts' },
     { key: 'cap', label: 'Cap', priceCents: 2500, oneSize: true, required: true },
-    { key: 'jacket', label: 'Fleece Jacket', priceCents: 4900, sizes: JACKET_SIZES, note: 'Optional — runs small, consider one size up' },
+    { key: 'jacket', label: 'Fleece Jacket', priceCents: 4900, sizes: JACKET_SIZES, note: 'Optional — runs small, consider one size up', guide: 'fleece-jacket' },
 ];
 
 const fmt = (cents) => `$${(cents / 100).toFixed(2)}`;
@@ -39,7 +41,6 @@ const WelcomeKitForm = () => {
     const [group, setGroup] = useState('senior');
     const [picks, setPicks] = useState({});           // key -> size ('' = not ordered)
     const [player, setPlayer] = useState({ region: '', first_name: '', last_name: '', parent_name: '', email: '', mobile: '' });
-    const [fulfillment, setFulfillment] = useState('pickup');
     const [errors, setErrors] = useState({});
     const [busy, setBusy] = useState(false);
     const [failed, setFailed] = useState('');
@@ -94,8 +95,8 @@ const WelcomeKitForm = () => {
                         venue_name: region?.venue || '',
                     },
                     items: chosen.map((i) => ({ key: i.key, size: picks[i.key] })),
-                    fulfillment,
-                    pickupVenue: fulfillment === 'pickup' ? region?.slug || '' : '',
+                    fulfillment: 'pickup',
+                    pickupVenue: region?.slug || '',
                 }),
             });
             const data = await res.json();
@@ -175,6 +176,11 @@ const WelcomeKitForm = () => {
                                     <Chevron />
                                 </div>
                             )}
+                            {item.guide && !unavailable && (
+                                <div className="mt-2 [&>div>button]:text-rr-light-pink [&>div>button:hover]:text-white">
+                                    <SizeGuide productId={item.guide} ageGroup={group} />
+                                </div>
+                            )}
                         </li>
                     );
                 })}
@@ -185,33 +191,17 @@ const WelcomeKitForm = () => {
             {!complete && (
                 <div className="mt-5 rounded-xl border border-white/15 bg-white/5 p-4 text-sm font-medium text-white/75 leading-relaxed">
                     Still to choose:{' '}
-                    {[!hasShirt && 'a training shirt', !hasLegs && 'training pants or shorts', !hasHat && 'a hat']
+                    {[!hasShirt && 'a training shirt', !hasLegs && 'training pants (recommended) and/or shorts', !hasHat && 'a cap']
                         .filter(Boolean)
                         .join(', ')}.
                 </div>
             )}
 
             <div className="mt-7 pt-6 border-t border-white/10">
-                <Eyebrow className="mb-4">How would you like it?</Eyebrow>
-                <div className="flex flex-wrap gap-2">
-                    {[
-                        { id: 'pickup', label: 'Pick up — free' },
-                        { id: 'standard', label: 'Post — standard' },
-                        { id: 'express', label: 'Post — express' },
-                    ].map((o) => (
-                        <button
-                            key={o.id}
-                            type="button"
-                            onClick={() => setFulfillment(o.id)}
-                            className={`px-5 py-2.5 rounded-full text-sm font-black uppercase tracking-wider transition-colors ${fulfillment === o.id ? 'bg-rr-pink text-white' : 'bg-white/8 text-white/70 hover:text-white'}`}
-                        >
-                            {o.label}
-                        </button>
-                    ))}
-                </div>
-                {fulfillment === 'pickup' && (
-                    <p className="text-white/55 text-sm font-medium mt-3">Pick up from your home centre at training.</p>
-                )}
+                <Eyebrow className="mb-3">Collection</Eyebrow>
+                <p className="text-white/85 text-base font-medium leading-relaxed">
+                    Kit is collected at squad training — nothing is posted. Bring your receipt to your first session.
+                </p>
             </div>
 
             <div className="mt-7 pt-6 border-t border-white/10">
@@ -267,7 +257,6 @@ const WelcomeKitForm = () => {
                 {chosen.length > 0 && (
                     <p className="text-white/55 text-sm font-medium mb-5 leading-relaxed">
                         {chosen.map((i) => `${i.label} (${picks[i.key]})`).join(', ')}
-                        {fulfillment !== 'pickup' && ' — postage added at checkout.'}
                     </p>
                 )}
                 <button

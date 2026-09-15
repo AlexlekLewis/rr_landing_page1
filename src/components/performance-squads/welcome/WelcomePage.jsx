@@ -250,8 +250,8 @@ const WelcomePage = () => {
                                 place by paying the Joining Fee and first {pricing.squadFee.amount} instalment.
                             </Step>
                             <Step n={2} title="Order your kit" linkLabel="See what you need" target="kit">
-                                Use the order form on this page. Every player needs at least one training shirt,
-                                one pair of training pants (recommended) or training shorts, and a training hat.
+                                Use the order form on this page. Every player needs a training shirt, a pair of
+                                training pants (recommended) and/or training shorts, and a cap. Collect it at squad training.
                             </Step>
                             <Step n={3} title="Set up the player portal">
                                 We will send you a login for our player portal. Setting it up takes about 10 minutes.
@@ -474,7 +474,7 @@ const WelcomePage = () => {
                         <Heading
                             eyebrow="Step 2"
                             title="Order your kit"
-                            sub="Squad players pay participant prices — not the Academy Shop price. Please order here."
+                            sub="Squad players pay participant prices — not the Academy Shop price. Order here and collect your kit at squad training."
                         />
                         <Card className="mb-6 border-rr-pink/40">
                             <IconTitle icon={ShoppingBag}>Every player needs</IconTitle>

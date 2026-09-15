@@ -91,10 +91,9 @@ const WelcomeSuccess = () => {
                                     <h2 className="text-xl sm:text-2xl font-black uppercase tracking-wide">Your kit</h2>
                                 </div>
                                 <p className="text-white/85 text-base font-medium leading-relaxed mb-5">
-                                    Every player needs at least one training shirt, one pair of training pants
-                                    (recommended) or training shorts, and a training hat. Order it at participant
-                                    prices on the welcome page — or pick it up at squad training sessions, where
-                                    training apparel will also be available.
+                                    Every player needs a training shirt, a pair of training pants (recommended)
+                                    and/or training shorts, and a cap. Order it at participant prices on the
+                                    welcome page and collect it at squad training sessions.
                                 </p>
                                 <a
                                     href="/performance-squads/welcome#kit"

@@ -26,12 +26,6 @@ const supabase = createClient(
 );
 const BASE_URL = process.env.VITE_APP_URL || 'https://rramelbourne.com';
 
-// Same Stripe shipping rates the Academy Shop uses.
-const SHIPPING_RATES = {
-    standard: 'shr_1TROdrIo52UEA50yMijZecJJ',
-    express: 'shr_1TROf8Io52UEA50yeADIIgxr',
-};
-
 // Keyed by region slug — the same slugs the welcome form's region dropdown uses.
 const PICKUP_VENUES = {
     'north-melbourne': 'Mickleham Indoor Sports Centre',
@@ -44,7 +38,7 @@ export default async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
     try {
-        const { player = {}, items, fulfillment, pickupVenue } = req.body || {};
+        const { player = {}, items, pickupVenue } = req.body || {};
 
         if (!Array.isArray(items) || items.length === 0) {
             return res.status(400).json({ error: 'No kit items selected' });
@@ -67,8 +61,9 @@ export default async function handler(req, res) {
             }))
             .filter((i) => i.size);
 
-        const method = ['pickup', 'standard', 'express'].includes(fulfillment) ? fulfillment : 'pickup';
-        const venue = method === 'pickup' ? str(pickupVenue, 60) : '';
+        // Pick up only — kit is collected at squad training, never posted.
+        const method = 'pickup';
+        const venue = str(pickupVenue, 60);
 
         // Pending row first, so the order exists even if payment is abandoned.
         const { data: order, error } = await supabase
@@ -94,15 +89,13 @@ export default async function handler(req, res) {
 
         if (error) throw new Error(`Could not save kit order: ${error.message}`);
 
-        const shippingOptions = method === 'pickup'
-            ? [{
-                shipping_rate_data: {
-                    type: 'fixed_amount',
-                    fixed_amount: { amount: 0, currency: 'aud' },
-                    display_name: `Pick up — ${PICKUP_VENUES[venue] || 'your home centre'}`,
-                },
-            }]
-            : [{ shipping_rate: SHIPPING_RATES[method] }];
+        const shippingOptions = [{
+            shipping_rate_data: {
+                type: 'fixed_amount',
+                fixed_amount: { amount: 0, currency: 'aud' },
+                display_name: `Collect at squad training — ${PICKUP_VENUES[venue] || 'your home centre'}`,
+            },
+        }];
 
         const session = await stripe.checkout.sessions.create({
             mode: 'payment',
@@ -110,8 +103,6 @@ export default async function handler(req, res) {
             customer_email: str(player.email, 160) || undefined,
             line_items: uniform.lineItems,
             shipping_options: shippingOptions,
-            // Only collect an address when we're actually posting the kit.
-            ...(method === 'pickup' ? {} : { shipping_address_collection: { allowed_countries: ['AU'] } }),
             client_reference_id: order.id,
             metadata: {
                 source: 'performance-squad-kit',
