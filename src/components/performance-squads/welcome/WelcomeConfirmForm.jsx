@@ -26,12 +26,14 @@ const paymentUrl = (link, rowId) => {
     }
 };
 
-// The same four agreements, and the same wording, as every other program.
+// The 4 agreements every program uses (same wording), then the training and match
+// risk acknowledgement, which is saved to accept_liability.
 const AGREEMENT_ERRORS = {
     accept_terms: 'You must agree to the Terms & Conditions and Privacy Policy',
     accept_player_code: 'You must agree to the Player Code of Conduct',
     accept_parent_code: 'You must agree to the Parent/Guardian Code of Conduct',
     accept_social_media: 'Please confirm your social media consent',
+    accept_liability: 'You must confirm that the player trains and plays matches at their own risk',
 };
 
 const linkClass = 'text-rr-light-pink underline hover:text-white';
@@ -47,6 +49,7 @@ const WelcomeConfirmForm = ({ centre, isDraft }) => {
         accept_player_code: false,
         accept_parent_code: false,
         accept_social_media: false,
+        accept_liability: false,
     });
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
@@ -113,6 +116,7 @@ const WelcomeConfirmForm = ({ centre, isDraft }) => {
                     accept_player_code: form.accept_player_code,
                     accept_parent_code: form.accept_parent_code,
                     accept_social_media: form.accept_social_media,
+                    accept_liability: form.accept_liability,
                     page_referrer: document.referrer || null,
                     utm_source: params.get('utm_source') || null,
                     utm_medium: params.get('utm_medium') || null,
@@ -207,8 +211,8 @@ const WelcomeConfirmForm = ({ centre, isDraft }) => {
             <div className="pt-7 border-t border-white/10">
                 <Eyebrow className="mb-2">Agreements</Eyebrow>
                 <p className="text-white/75 text-[15px] font-medium leading-relaxed mb-5">
-                    These are the same 4 agreements for every Royals Academy program. Please open and read
-                    each one before you tick the box.
+                    The first 4 are the same for every Royals Academy program. The last one is about training
+                    and playing matches. Please open and read each one before you tick the box.
                 </p>
                 <div id="psw-accept_terms">
                     <PSCheckbox checked={form.accept_terms} onToggle={() => toggle('accept_terms')} error={errors.accept_terms}>
@@ -232,6 +236,13 @@ const WelcomeConfirmForm = ({ centre, isDraft }) => {
                 <div id="psw-accept_social_media">
                     <PSCheckbox checked={form.accept_social_media} onToggle={() => toggle('accept_social_media')} error={errors.accept_social_media}>
                         I am happy for photos and videos featuring the player to be used on Rajasthan Royals Academy Melbourne&apos;s social media and marketing channels.
+                    </PSCheckbox>
+                </div>
+                <div id="psw-accept_liability">
+                    <PSCheckbox checked={form.accept_liability} onToggle={() => toggle('accept_liability')} error={errors.accept_liability}>
+                        I understand that training and playing matches can cause injury, and that the player trains and
+                        plays matches at their own risk, as set out in clause 7 of the{' '}
+                        <a href="/terms-conditions" target="_blank" rel="noreferrer" className={linkClass}>Terms &amp; Conditions</a>.
                     </PSCheckbox>
                 </div>
             </div>

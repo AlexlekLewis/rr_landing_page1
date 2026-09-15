@@ -79,7 +79,7 @@ const buildTimeline = (c) => {
     return [
         { year: firstTraining.year, when: c.confirmBy, whenPending: 'Date to be confirmed', what: 'Last day to confirm your place', highlight: true },
         { year: firstTraining.year, when: firstTraining.date, what: `First training at ${c.venue}`, detail: firstTraining.time, detailPending: 'Time to be confirmed' },
-        { year: sidSessions.year, when: sidSessions.when, what: 'Sessions with Sid Lahiri', detail: 'We will send you the dates' },
+        { year: sidSessions.year, when: sidSessions.when, what: 'Sessions with Sid Lahiri', detail: 'We will invite players to meet Sid' },
         ...matchDays.map((m) => (m.first
             ? { year: m.year, when: m.date, what: 'First match day', detail: m.venueAndTime, detailPending: 'Venue and time to be confirmed' }
             : { year: m.year, when: m.date, what: 'Match day', detail: m.note || null })),
@@ -217,7 +217,7 @@ const WelcomePage = () => {
                                 {c.registrationFee || <Pending>amount to be confirmed</Pending>}.
                             </Step>
                             <Step n={2} title="Order your kit" linkLabel="See what you need" target="kit">
-                                Order your kit from the Academy Shop.
+                                Use the kit link on this page. It has the price for Performance Squad players.
                             </Step>
                             <Step n={3} title="Set up the player portal">
                                 We will send you a login for our player portal. Setting it up takes about 10 minutes.
@@ -308,7 +308,7 @@ const WelcomePage = () => {
                     </div>
                 </section>
 
-                {/* ── SID LAHIRI ── Always "invited to sessions with Sid", never "meet Sid". */}
+                {/* ── SID LAHIRI ── Not every player is invited: "We will invite players to meet Sid", never "every player". */}
                 <section id="sid" className="px-5 py-14 sm:py-20 scroll-mt-28 lg:scroll-mt-32">
                     <div className="max-w-4xl mx-auto">
                         <Card className="grid gap-6 sm:gap-8 sm:grid-cols-[200px_1fr] items-center">
@@ -321,13 +321,13 @@ const WelcomePage = () => {
                             <div>
                                 <Eyebrow>Sessions with {SID.name}</Eyebrow>
                                 <h2 className="text-2xl sm:text-3xl font-black uppercase leading-tight mb-4">
-                                    Every player will be invited to sessions with Sid
+                                    We will invite players to meet Sid
                                 </h2>
                                 <div className="space-y-3 text-white/85 text-base font-medium leading-relaxed">
                                     <p>He is the Head of International Player Development at the Rajasthan Royals.</p>
                                     <p>He is also a performance coach for the Rajasthan Royals team in the IPL.</p>
                                     <p>He has worked with Yashasvi Jaiswal, Riyan Parag and Vaibhav Sooryavanshi.</p>
-                                    <p className="text-white/65">{season.sidSessions.when}: we will send you the dates.</p>
+                                    <p className="text-white/65">When: {season.sidSessions.when}.</p>
                                 </div>
                             </div>
                         </Card>
@@ -340,7 +340,7 @@ const WelcomePage = () => {
                         <Heading
                             eyebrow="Step 1"
                             title="Confirm your place"
-                            sub={<>Please do this by {confirmBy}. Fill in the player&apos;s details and agree to the 4 items below.</>}
+                            sub={<>Please do this by {confirmBy}. Fill in the player&apos;s details and agree to the 5 items below.</>}
                         />
                         <WelcomeConfirmForm centre={c} isDraft={isDraft} />
                     </div>
@@ -349,19 +349,28 @@ const WelcomePage = () => {
                 {/* ── STEP 2: KIT ── */}
                 <section id="kit" className="px-5 py-14 sm:py-20 scroll-mt-28 lg:scroll-mt-32">
                     <div className="max-w-2xl mx-auto">
-                        <Heading eyebrow="Step 2" title="Order your kit" sub="Order your kit from the Academy Shop." />
+                        <Heading
+                            eyebrow="Step 2"
+                            title="Order your kit"
+                            sub="Please use the kit link below, not the Academy Shop. This link has the price for Performance Squad players."
+                        />
                         <Card>
                             <IconTitle icon={ShoppingBag}>You need</IconTitle>
                             {c.kitItems.length
                                 ? <Bullets items={c.kitItems} />
                                 : <p><Pending>Kit list to be confirmed</Pending></p>}
-                            <a
-                                href="/academy-shop"
-                                className="mt-7 w-full sm:w-auto inline-flex items-center justify-center gap-2 whitespace-nowrap bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-[13px] sm:text-sm rounded-full px-5 sm:px-8 py-4 transition-colors"
-                            >
-                                Go to the Academy Shop <ArrowRight className="w-4 h-4" />
-                            </a>
-                            <p className="text-white/55 text-sm font-medium mt-3">rramelbourne.com/academy-shop</p>
+                            {c.kitOrderLink ? (
+                                // Same tab on purpose: in-app browsers (Instagram especially) silently block new tabs.
+                                <a
+                                    href={c.kitOrderLink}
+                                    className="mt-7 w-full sm:w-auto inline-flex items-center justify-center gap-2 whitespace-nowrap bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-[13px] sm:text-sm rounded-full px-5 sm:px-8 py-4 transition-colors"
+                                >
+                                    Order your kit <ArrowRight className="w-4 h-4" />
+                                </a>
+                            ) : (
+                                <p className="mt-7"><Pending>Kit order link to be confirmed</Pending></p>
+                            )}
+                            <p className="text-white/55 text-sm font-medium mt-3">Payments are processed by Stripe.</p>
                         </Card>
                     </div>
                 </section>

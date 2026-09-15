@@ -33,6 +33,9 @@ export const WELCOME_CENTRES = {
         registrationFee: null,   // e.g. '$450' — shown exactly as written
         paymentLink: null,       // Stripe Payment Link for the Registration Fee
         kitItems: [],            // e.g. ['RRA Melbourne Training Shirt', 'Academy Cap']
+        // Stripe link for the uniform at the Performance Squad player price. Selected
+        // players order here, NOT through the Academy Shop.
+        kitOrderLink: null,
 
         season: {
             firstTraining: { year: 2026, date: 'Monday 5 October', time: null },
@@ -80,6 +83,7 @@ export const WELCOME_CENTRES = {
         registrationFee: null,
         paymentLink: null,
         kitItems: [],
+        kitOrderLink: null,
         season: null,
         septemberGames: null,
         letter: null,
@@ -101,6 +105,7 @@ export const getMissingDetails = (c) => {
     if (!c.registrationFee) missing.push('Registration Fee amount');
     if (!c.paymentLink) missing.push('Registration Fee payment link');
     if (!c.kitItems?.length) missing.push('kit list');
+    if (!c.kitOrderLink) missing.push('kit order link');
     return missing;
 };
 

@@ -22,7 +22,7 @@ const TermsConditions = () => {
                         Back to Home
                     </Link>
                     <h1 className="text-4xl md:text-5xl font-black uppercase tracking-wide">Terms &amp; Conditions</h1>
-                    <p className="text-white/70 mt-4 text-sm">Last updated: July 2026</p>
+                    <p className="text-white/70 mt-4 text-sm">Last updated: September 2026</p>
                 </div>
             </div>
 
@@ -111,14 +111,16 @@ const TermsConditions = () => {
                     <section>
                         <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">7. Health, Safety &amp; Equipment (CA/CV Compliance)</h2>
                         <p className="text-rr-dark/80 leading-relaxed mb-4">
-                            The Rajasthan Royals Academy Melbourne takes player safety seriously and strictly adheres to the guidelines set out by Cricket Australia (CA) and Cricket Victoria (CV). By attending an assessment session or participating in the program, you agree to the following:
+                            The Rajasthan Royals Academy Melbourne takes player safety seriously and strictly adheres to the guidelines set out by Cricket Australia (CA) and Cricket Victoria (CV). By attending an assessment session, a training session or a match, or participating in the program, you agree to the following:
                         </p>
                         <ul className="list-disc pl-6 space-y-2 text-rr-dark/80">
-                            <li><strong>Helmets &amp; Protective Gear:</strong> It is mandatory for all players (regardless of age) to wear a British Standard (BS7928:2013) compliant helmet when batting, wicket-keeping standing up to the stumps, or fielding in close proximity to the batter.</li>
+                            <li><strong>Helmets &amp; Protective Gear:</strong> It is mandatory for all players (regardless of age) to wear a British Standard (BS7928:2013) compliant helmet when batting, wicket-keeping standing up to the stumps, or fielding in close proximity to the batter. This applies at training and in matches.</li>
                             <li><strong>StemGuards:</strong> In alignment with Cricket Australia safety recommendations, the use of neck protectors (StemGuards) is strongly recommended for all players, and is enforced as mandatory for specific high-performance scenarios as directed by the coaching staff.</li>
                             <li><strong>Equipment Standard:</strong> Participants must provide their own personal protective equipment (pads, gloves, protectors) and ensure it is in good, safe working condition. Coaches reserve the right to prevent a player from participating if their equipment is deemed unsafe.</li>
                             <li><strong>Medical Conditions:</strong> It is the responsibility of the player (or parent/guardian if under 18) to disclose any pre-existing medical conditions, allergies, or injuries prior to participating.</li>
-                            <li><strong>Risk Acknowledgement:</strong> Cricket is an active sport with inherent risks. By participating in any Academy assessment session, training, camp, clinic, or program, you acknowledge and accept all risks of physical injury, and agree that the Academy and its coaching staff are not liable for injuries sustained during standard training activities.</li>
+                            <li><strong>Risk Acknowledgement:</strong> Cricket is an active sport with inherent risks. By participating in any Academy assessment session, training session, match, camp, clinic, or program, you acknowledge and accept all risks of physical injury, and agree that the Academy and its coaching staff are not liable for injuries sustained during training or match activities, to the extent permitted by law.</li>
+                            <li><strong>Matches &amp; Match Play:</strong> Academy programs include matches, such as Power League matches, exhibition and showcase matches, and matches against other teams. Matches may be played at venues the Academy does not own or run, on turf or synthetic pitches, and against players the Academy does not coach. Match play has its own risks, including a hard cricket ball and contact with other players in the field. Players take part in matches at their own risk. They must follow the directions of coaches, umpires and venue staff, and wear the protective equipment set out in this clause. The player (or parent/guardian if under 18) must tell the coach about any injury or illness before a match. The Academy may stop a player from playing in a match if it believes it is not safe for them to play.</li>
+                            <li><strong>Your Rights Under the Australian Consumer Law:</strong> Nothing in this clause, or in clauses 9 and 10, excludes, restricts or modifies any right or remedy you have under the Australian Consumer Law that cannot lawfully be excluded, restricted or modified.</li>
                         </ul>
                     </section>
 
@@ -140,8 +142,8 @@ const TermsConditions = () => {
                             To the fullest extent permitted by law, the Rajasthan Royals Academy Melbourne, its directors,
                             officers, employees, and agents shall not be liable for any direct, indirect, incidental,
                             consequential, or special damages arising from your use of this website, participation
-                            in the application process, attendance at the assessment sessions, or involvement in the Academy program. Participation in
-                            any assessments or Academy activities is undertaken at the applicant's own risk.
+                            in the application process, attendance at assessment sessions, training sessions or matches, or involvement in the Academy program. Participation in
+                            any assessments, training, matches or other Academy activities is undertaken at the participant's own risk.
                         </p>
                     </section>
 
