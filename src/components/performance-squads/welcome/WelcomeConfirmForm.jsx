@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { supabase } from '../../../lib/supabase';
-import { Label, FieldError, inputClass, PSCheckbox } from '../shared';
+import { Label, FieldError, Chevron, inputClass, selectClass, PSCheckbox } from '../shared';
+import { REGIONS } from './welcomeConfig';
 import { Pending, Eyebrow } from './welcomeShared';
 
 // The row id is made in the browser. The public can insert into this table but
 // can't read rows back, so the id can't come from the database. It is also
 // handed to Stripe as client_reference_id, so the Registration Fee payment can
 // be matched to this exact confirmation instead of relying on the payer's email.
+// Every row also carries the region the player picked (centre_slug / venue_name),
+// so confirmations from different regions are told apart at a glance.
 const newRowId = () => {
     if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') return crypto.randomUUID();
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (ch) => {
@@ -38,8 +41,9 @@ const AGREEMENT_ERRORS = {
 
 const linkClass = 'text-rr-light-pink underline hover:text-white';
 
-const WelcomeConfirmForm = ({ centre, isDraft }) => {
+const WelcomeConfirmForm = ({ config, isDraft }) => {
     const [form, setForm] = useState({
+        region: '',
         first_name: '',
         last_name: '',
         parent_name: '',
@@ -60,6 +64,7 @@ const WelcomeConfirmForm = ({ centre, isDraft }) => {
 
     const validate = () => {
         const next = {};
+        if (!form.region) next.region = 'Please choose the region you were selected in';
         if (!form.first_name.trim()) next.first_name = "Please enter the player's first name";
         if (!form.last_name.trim()) next.last_name = "Please enter the player's last name";
         if (!form.email.trim()) next.email = 'Please enter an email address';
@@ -94,6 +99,7 @@ const WelcomeConfirmForm = ({ centre, isDraft }) => {
             const params = new URLSearchParams(window.location.search);
             const first = form.first_name.trim();
             const last = form.last_name.trim();
+            const region = REGIONS.find((r) => r.slug === form.region);
             // Plain insert, no .select(): asking for the row back needs read access
             // the public doesn't have, and would make the whole insert fail.
             const { error } = await supabase.from('performance_squads_registrations').insert([
@@ -110,8 +116,8 @@ const WelcomeConfirmForm = ({ centre, isDraft }) => {
                     parent_name: form.parent_name.trim() || null,
                     email: form.email.trim(),
                     phone: form.phone.trim(),
-                    centre_slug: centre.dbCentreSlug,
-                    venue_name: centre.venue,
+                    centre_slug: region.slug,
+                    venue_name: region.venue,
                     accept_terms: form.accept_terms,
                     accept_player_code: form.accept_player_code,
                     accept_parent_code: form.accept_parent_code,
@@ -127,7 +133,7 @@ const WelcomeConfirmForm = ({ centre, isDraft }) => {
             setSaved({ id, draft: false });
         } catch (err) {
             console.error('Performance Squad confirmation error:', err);
-            setErrors({ form: `Something went wrong. Please try again, or email ${centre.contactEmail}` });
+            setErrors({ form: `Something went wrong. Please try again, or email ${config.contactEmail}` });
         } finally {
             setSubmitting(false);
         }
@@ -150,17 +156,18 @@ const WelcomeConfirmForm = ({ centre, isDraft }) => {
                 </div>
                 <div className="mt-8 pt-6 border-t border-white/10 text-center">
                     <Eyebrow>Next</Eyebrow>
-                    <p className="text-xl font-black uppercase tracking-wide mb-2">Pay the Registration Fee</p>
+                    <p className="text-xl font-black uppercase tracking-wide mb-2">Pay the Joining Fee</p>
                     <p className="text-white/85 text-base font-medium mb-6">
-                        The Registration Fee is {centre.registrationFee || <Pending>amount to be confirmed</Pending>}.
+                        The Joining Fee is {config.pricing.joiningFee.amount}. {config.pricing.joiningFee.note}{' '}
+                        The {config.pricing.squadFee.amount} / {config.pricing.squadFee.per} Squad Fee starts once the season begins.
                     </p>
-                    {centre.paymentLink ? (
+                    {config.paymentLink ? (
                         // Same tab on purpose: in-app browsers (Instagram especially) silently block new tabs.
                         <a
-                            href={paymentUrl(centre.paymentLink, saved.id)}
+                            href={paymentUrl(config.paymentLink, saved.id)}
                             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 whitespace-nowrap bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-[13px] sm:text-sm rounded-full px-5 sm:px-8 py-4 transition-colors"
                         >
-                            Pay Registration Fee <ArrowRight className="w-4 h-4" />
+                            Pay Joining Fee <ArrowRight className="w-4 h-4" />
                         </a>
                     ) : (
                         <p><Pending>Payment link to be confirmed</Pending></p>
@@ -175,6 +182,21 @@ const WelcomeConfirmForm = ({ centre, isDraft }) => {
 
     return (
         <form onSubmit={handleSubmit} noValidate className="bg-white/5 border border-white/12 rounded-2xl p-6 sm:p-9">
+            <Eyebrow className="mb-5">Your region</Eyebrow>
+            <div className="relative mb-8" id="psw-region">
+                <Label required>Region / location you were selected in</Label>
+                <div className="relative">
+                    <select value={form.region} onChange={set('region')} className={selectClass(errors, 'region')}>
+                        <option value="" disabled>Choose your region</option>
+                        {REGIONS.map((r) => (
+                            <option key={r.slug} value={r.slug}>{r.name} — {r.venue}</option>
+                        ))}
+                    </select>
+                    <Chevron />
+                </div>
+                <FieldError msg={errors.region} />
+            </div>
+
             <Eyebrow className="mb-5">Player details</Eyebrow>
             <div className="grid sm:grid-cols-2 gap-4 mb-4">
                 <div id="psw-first_name">

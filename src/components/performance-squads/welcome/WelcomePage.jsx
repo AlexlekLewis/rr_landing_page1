@@ -1,27 +1,26 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Target, Trophy, Wallet, ShoppingBag, KeyRound, Mail } from 'lucide-react';
+import { ArrowRight, Target, Trophy, Wallet, ShoppingBag, KeyRound, Mail, Sparkles, Users, ShieldCheck } from 'lucide-react';
 import Navbar from '../../Navbar';
 import Footer from '../../Footer';
 import usePageAnalytics from '../../../hooks/usePageAnalytics';
 import { fadeUp, scrollTo } from '../shared';
-import { getWelcomeCentre, getMissingDetails, SID } from './welcomeConfig';
+import { WELCOME, SID, PLAYER_IMAGE, getMissingDetails } from './welcomeConfig';
 import { Pending, Eyebrow, Heading, Card, Bullets } from './welcomeShared';
 import WelcomeConfirmForm from './WelcomeConfirmForm';
 
 const MotionDiv = motion.div;
 
 // ─────────────────────────────────────────────────────────────
-// PERFORMANCE SQUAD WELCOME — /performance-squads/welcome[/:centre]
+// PERFORMANCE SQUAD WELCOME — /performance-squads/welcome
 // HIDDEN PAGE: not linked from nav/homepage/sitemap, noindex.
 //
-// Selected players arrive from the "Confirm your place" link in their welcome
-// email. The copy follows that approved email, so the page and the email say
-// the same things. Everything centre-specific lives in ./welcomeConfig.js.
+// ONE generic page for every selected player. The player tells us their
+// region in the confirm form. Benefits, pricing and membership wording follow
+// the Performance Squads Membership Overview (see ./welcomeConfig.js).
 // ─────────────────────────────────────────────────────────────
 
-const SECTIONS = ['hero', 'steps', 'welcome', 'season', 'september-games', 'training', 'sid', 'confirm', 'kit', 'portal'];
+const SECTIONS = ['hero', 'steps', 'welcome', 'membership', 'pricing', 'season', 'fixtures', 'september-games', 'training', 'sid', 'confirm', 'kit', 'portal'];
 
 const useNoIndex = (title) => {
     useEffect(() => {
@@ -74,15 +73,13 @@ const Step = ({ n, title, children, linkLabel, target }) => (
     </li>
 );
 
+// Training and events only. Match days live in the fixture list.
 const buildTimeline = (c) => {
-    const { firstTraining, sidSessions, matchDays } = c.season;
+    const { firstTraining, sidSessions } = c.season;
     return [
         { year: firstTraining.year, when: c.confirmBy, whenPending: 'Date to be confirmed', what: 'Last day to confirm your place', highlight: true },
-        { year: firstTraining.year, when: firstTraining.date, what: `First training at ${c.venue}`, detail: firstTraining.time, detailPending: 'Time to be confirmed' },
-        { year: sidSessions.year, when: sidSessions.when, what: 'Sessions with Sid Lahiri', detail: 'We will invite players to meet Sid' },
-        ...matchDays.map((m) => (m.first
-            ? { year: m.year, when: m.date, what: 'First match day', detail: m.venueAndTime, detailPending: 'Venue and time to be confirmed' }
-            : { year: m.year, when: m.date, what: 'Match day', detail: m.note || null })),
+        { year: firstTraining.year, when: firstTraining.date, what: 'First squad training at your home centre', detail: firstTraining.time, detailPending: 'Time to be confirmed' },
+        { year: sidSessions.year, when: sidSessions.when, what: 'Squad sessions with Sid Lahiri', detail: 'We will invite players to meet Sid' },
     ];
 };
 
@@ -118,36 +115,48 @@ const Timeline = ({ rows }) => {
     );
 };
 
-const NotReady = () => (
-    <div className="min-h-screen bg-rr-dark text-white font-sans flex flex-col">
-        <Navbar variant="performance-squads-welcome" />
-        <main className="flex-1 px-5 pt-36 pb-24">
-            <div className="max-w-xl mx-auto text-center">
-                <h1 className="text-3xl sm:text-4xl font-black uppercase mb-4">This page is not ready yet</h1>
-                <p className="text-white/75 text-base font-medium leading-relaxed">
-                    Please use the link in your welcome email. Any questions? Email{' '}
-                    <a href="mailto:info@rramelbourne.com" className="text-rr-light-pink underline hover:text-white">info@rramelbourne.com</a>
-                </p>
-            </div>
-        </main>
-        <Footer />
+const FixtureList = ({ fixtures }) => (
+    <ol className="divide-y divide-white/10">
+        {fixtures.map((m, i) => (
+            <li key={m.date} className="flex items-start gap-4 py-4 first:pt-0 last:pb-0">
+                <span aria-hidden="true" className="w-9 h-9 rounded-full bg-rr-pink/15 border border-rr-pink/50 text-rr-light-pink font-black text-sm flex items-center justify-center shrink-0 mt-0.5">
+                    {i + 1}
+                </span>
+                <div className="min-w-0">
+                    <p className="text-lg sm:text-xl font-black uppercase tracking-wide leading-snug">{m.date}</p>
+                    <p className="text-white/85 text-base font-medium leading-relaxed mt-0.5">
+                        {m.first ? 'Round 1 · Power League' : 'Power League match day'}
+                    </p>
+                    {m.first && (m.venueAndTime
+                        ? <p className="text-white/60 text-[15px] font-medium mt-0.5">{m.venueAndTime}</p>
+                        : <p className="mt-1.5"><Pending>Venue and time to be confirmed</Pending></p>)}
+                    {m.note && <p className="text-white/60 text-[15px] font-medium mt-0.5">{m.note}</p>}
+                </div>
+            </li>
+        ))}
+    </ol>
+);
+
+const PriceCard = ({ label, amount, per, note, accent }) => (
+    <div className={`rounded-2xl p-6 sm:p-7 border ${accent ? 'bg-rr-pink/10 border-rr-pink/50' : 'bg-white/5 border-white/12'}`}>
+        <p className="text-xs font-black uppercase tracking-[0.2em] text-rr-light-pink mb-3">{label}</p>
+        <p className="text-4xl sm:text-5xl font-black leading-none mb-3">
+            {amount}
+            {per && <span className="text-lg sm:text-xl font-bold text-white/60"> / {per}</span>}
+        </p>
+        <p className="text-white/75 text-[15px] font-medium leading-relaxed">{note}</p>
     </div>
 );
 
 const WelcomePage = () => {
-    const { centre: centreParam } = useParams();
-    const c = getWelcomeCentre(centreParam);
+    const c = WELCOME;
 
-    usePageAnalytics(`/performance-squads/welcome/${c ? c.slug : 'unknown'}`, { sections: SECTIONS });
-    useNoIndex(c
-        ? `Welcome to the Performance Squad program | ${c.centreName} | Rajasthan Royals Academy Melbourne`
-        : 'Rajasthan Royals Academy Melbourne');
-
-    if (!c) return <NotReady />;
+    usePageAnalytics('/performance-squads/welcome', { sections: SECTIONS });
+    useNoIndex('Welcome to the Performance Squad program | Rajasthan Royals Academy Melbourne');
 
     const missing = getMissingDetails(c);
     const isDraft = missing.length > 0;
-    const { season, septemberGames, letter } = c;
+    const { season, septemberGames, letter, pricing, benefits, squadDna, selection, memberPricing } = c;
     const confirmBy = c.confirmBy || <Pending>date to be confirmed</Pending>;
 
     return (
@@ -160,50 +169,76 @@ const WelcomePage = () => {
                     in Tailwind v4 (--image-* is not a theme namespace). */}
                 <section
                     id="hero"
-                    className="px-5 pt-28 pb-16 sm:pt-36 sm:pb-24"
+                    className="relative px-5 pt-28 pb-0 sm:pt-36 lg:pb-0 overflow-hidden"
                     style={{ backgroundImage: 'var(--image-gradient-rr)' }}
                 >
-                    <div className="max-w-3xl mx-auto text-center">
+                    {/* Watermark crest, echoing the membership overview artwork. */}
+                    <img
+                        src="/assets/MELBOURNE_OFFICIAL.png"
+                        alt=""
+                        aria-hidden="true"
+                        className="pointer-events-none absolute right-[-120px] top-1/2 -translate-y-1/2 w-[520px] lg:w-[680px] opacity-[0.08] brightness-0 invert select-none"
+                    />
+                    <div className="relative max-w-6xl mx-auto">
                         {isDraft && (
-                            <div role="note" className="mb-8 rounded-xl bg-amber-300 text-rr-dark px-4 py-3 text-left text-sm font-bold leading-relaxed">
+                            <div role="note" className="mb-8 rounded-xl bg-amber-300 text-rr-dark px-4 py-3 text-left text-sm font-bold leading-relaxed max-w-3xl">
                                 DRAFT FOR REVIEW. Not ready to send to families. Still to confirm: {missing.join(', ')}.
                             </div>
                         )}
-                        <MotionDiv initial="hidden" animate="visible" variants={fadeUp} custom={0}>
-                            <img
-                                src="/assets/MELBOURNE_OFFICIAL.png"
-                                alt="Rajasthan Royals Academy Melbourne"
-                                className="h-20 sm:h-28 w-auto mx-auto mb-8 brightness-0 invert"
-                            />
-                            <p className="text-sm font-black uppercase tracking-[0.2em] text-white mb-4">
-                                Performance Squad program · {c.centreName}
-                            </p>
-                            {/* Two elements on purpose: "Congratulations!" is one long word and
-                                runs off a phone screen at headline size. */}
-                            <p className="text-[22px] sm:text-4xl font-black uppercase tracking-wide leading-tight mb-2">
-                                Congratulations!
-                            </p>
-                            <h1 className="text-4xl sm:text-6xl font-black uppercase leading-[1.02] mb-6">
-                                You have been selected
-                            </h1>
-                            <p className="text-white text-base sm:text-lg font-medium leading-relaxed max-w-2xl mx-auto mb-8">
-                                You have been selected for the Rajasthan Royals Academy Performance Squad program
-                                at {c.centreName}. This is the first season of the program. We are very proud of it,
-                                and excited to start it with you.
-                            </p>
-                            <button
-                                type="button"
-                                onClick={() => scrollTo('confirm')}
-                                className="inline-flex items-center justify-center gap-2 bg-white hover:bg-white/90 text-rr-dark font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
+                        <div className="grid lg:grid-cols-[1fr_380px] gap-8 lg:gap-6 items-end">
+                            <MotionDiv initial="hidden" animate="visible" variants={fadeUp} custom={0} className="pb-16 sm:pb-24 text-center lg:text-left">
+                                <img
+                                    src="/assets/MELBOURNE_OFFICIAL.png"
+                                    alt="Rajasthan Royals Academy Melbourne"
+                                    className="h-20 sm:h-24 w-auto mx-auto lg:mx-0 mb-8 brightness-0 invert"
+                                />
+                                <p className="text-sm font-black uppercase tracking-[0.2em] text-white mb-4">
+                                    Performance Squad · Season 2026/27
+                                </p>
+                                {/* Two elements on purpose: "Congratulations!" is one long word and
+                                    runs off a phone screen at headline size. */}
+                                <p className="text-[22px] sm:text-4xl font-black uppercase tracking-wide leading-tight mb-2">
+                                    Congratulations!
+                                </p>
+                                <h1 className="text-[44px] sm:text-6xl lg:text-7xl font-black uppercase leading-[0.98] mb-6">
+                                    You have<br className="hidden sm:block" /> been selected
+                                </h1>
+                                <p className="text-white text-base sm:text-lg font-medium leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-4">
+                                    You are one of the players selected for the Rajasthan Royals Academy Melbourne
+                                    Performance Squad. This is the first season of the program. We are very proud of it,
+                                    and excited to start it with you.
+                                </p>
+                                <p className="text-white/85 text-base sm:text-lg font-black uppercase tracking-wide mb-8">
+                                    Train as a squad, play as a squad — the Royals way.
+                                </p>
+                                <button
+                                    type="button"
+                                    onClick={() => scrollTo('confirm')}
+                                    className="inline-flex items-center justify-center gap-2 bg-white hover:bg-white/90 text-rr-dark font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
+                                >
+                                    Confirm your place <ArrowRight className="w-4 h-4" />
+                                </button>
+                                <p className="mt-6 text-white text-base font-bold leading-relaxed max-w-xl mx-auto lg:mx-0">
+                                    {c.confirmBy
+                                        ? <>Places go to the first players who confirm, so please confirm your place by {c.confirmBy}.</>
+                                        : <>Please confirm your place by {confirmBy}</>}
+                                </p>
+                            </MotionDiv>
+
+                            {/* Selected-player artwork: sits on the hero floor, bleeds off the bottom edge. */}
+                            <MotionDiv
+                                initial={{ opacity: 0, y: 40 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.7, delay: 0.25, ease: 'easeOut' }}
+                                className="relative flex justify-center lg:justify-end"
                             >
-                                Confirm your place <ArrowRight className="w-4 h-4" />
-                            </button>
-                            <p className="mt-6 text-white text-base font-bold leading-relaxed max-w-xl mx-auto">
-                                {c.confirmBy
-                                    ? <>Places go to the first players who confirm, so please confirm your place by {c.confirmBy}.</>
-                                    : <>Please confirm your place by {confirmBy}</>}
-                            </p>
-                        </MotionDiv>
+                                <img
+                                    src={PLAYER_IMAGE}
+                                    alt="A Rajasthan Royals player celebrating with a double fist pump"
+                                    className="w-[260px] sm:w-[320px] lg:w-[380px] h-auto drop-shadow-[0_24px_40px_rgba(0,0,0,0.45)] -mb-3"
+                                />
+                            </MotionDiv>
+                        </div>
                     </div>
                 </section>
 
@@ -213,8 +248,8 @@ const WelcomePage = () => {
                         <Heading eyebrow="What to do now" title="3 things to do" />
                         <ol className="grid gap-4 md:grid-cols-3">
                             <Step n={1} title="Confirm your place" linkLabel="Go to step 1" target="confirm">
-                                Do it by {confirmBy}. The Registration Fee is{' '}
-                                {c.registrationFee || <Pending>amount to be confirmed</Pending>}.
+                                Do it by {confirmBy}. Tell us the region you were selected in, then pay the{' '}
+                                {pricing.joiningFee.amount} Joining Fee to lock in your place.
                             </Step>
                             <Step n={2} title="Order your kit" linkLabel="See what you need" target="kit">
                                 Use the kit link on this page. It has the price for Performance Squad players.
@@ -247,17 +282,105 @@ const WelcomePage = () => {
                     </section>
                 )}
 
-                {/* ── SEASON TIMELINE ── */}
+                {/* ── MEMBERSHIP BENEFITS ── Wording follows the Membership Overview 01–06. */}
+                <section id="membership" className="px-5 py-14 sm:py-20 scroll-mt-28 lg:scroll-mt-32">
+                    <div className="max-w-5xl mx-auto">
+                        <Heading
+                            eyebrow="Your membership"
+                            title="What your squad place includes"
+                            sub="Year round. Cancel anytime."
+                        />
+                        <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                            {benefits.map((b, i) => (
+                                <li key={b.title} className="bg-white/5 border border-white/12 rounded-2xl p-6">
+                                    <span className="block text-rr-light-pink font-black text-sm tracking-[0.2em] mb-3">
+                                        {String(i + 1).padStart(2, '0')}
+                                    </span>
+                                    <h3 className="text-lg font-black uppercase tracking-wide leading-snug mb-2">{b.title}</h3>
+                                    <p className="text-white/80 text-[15px] font-medium leading-relaxed">{b.body}</p>
+                                </li>
+                            ))}
+                        </ol>
+                        <div className="grid gap-4 md:grid-cols-2 mt-4">
+                            <Card>
+                                <IconTitle icon={Users}>Squad DNA</IconTitle>
+                                <p className="text-4xl sm:text-5xl font-black leading-none mb-3">
+                                    {squadDna.ages} <span className="text-base font-bold text-white/60 tracking-wider uppercase">years old</span>
+                                </p>
+                                <p className="text-white/80 text-[15px] font-medium leading-relaxed">{squadDna.body}</p>
+                                <p className="text-rr-light-pink font-black text-[15px] mt-2">{squadDna.highlight}</p>
+                            </Card>
+                            <Card>
+                                <IconTitle icon={ShieldCheck}>Selection eligibility</IconTitle>
+                                <p className="text-white/85 text-base font-medium leading-relaxed">{selection.body}</p>
+                                <p className="text-white/60 text-[15px] font-medium leading-relaxed mt-3">{selection.note}</p>
+                            </Card>
+                        </div>
+                    </div>
+                </section>
+
+                {/* ── PRICING ── First intake pricing from the Membership Overview. */}
+                <section id="pricing" className="px-5 py-14 sm:py-20 bg-white/[0.02] scroll-mt-28 lg:scroll-mt-32">
+                    <div className="max-w-5xl mx-auto">
+                        <Heading eyebrow="First intake pricing" title="Membership fees" />
+                        <div className="grid gap-4 md:grid-cols-3">
+                            <PriceCard label="Joining fee" amount={pricing.joiningFee.amount} note={pricing.joiningFee.note} accent />
+                            <PriceCard label="Squad fee" amount={pricing.squadFee.amount} per={pricing.squadFee.per} note={pricing.squadFee.note} />
+                            <PriceCard label="Match fees" amount={pricing.matchFees.amount} note={pricing.matchFees.note} />
+                        </div>
+                        <div className="mt-4 rounded-2xl border-l-4 border-rr-pink bg-white/5 p-6 sm:p-8">
+                            <p className="text-xl sm:text-2xl font-black leading-snug mb-2">{memberPricing.lead}</p>
+                            <p className="text-white/80 text-base font-medium leading-relaxed">{memberPricing.body}</p>
+                            <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 mt-6">
+                                {memberPricing.programs.map((p) => (
+                                    <li key={p.name} className="border-t border-white/15 pt-3">
+                                        <p className="font-black text-base leading-snug">{p.name}</p>
+                                        <p className="text-rr-light-pink text-sm font-bold mt-1">{p.when}</p>
+                                    </li>
+                                ))}
+                            </ul>
+                            <p className="text-white/60 text-sm font-medium leading-relaxed mt-6">
+                                {memberPricing.note} {pricing.cancel}
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                {/* ── SEASON TIMELINE ── Training and events only; matches are the fixture list. */}
                 <section id="season" className="px-5 py-14 sm:py-20 scroll-mt-28 lg:scroll-mt-32">
                     <div className="max-w-3xl mx-auto">
-                        <Heading eyebrow="Your season" title="Season timeline" sub="Every match day is a Sunday." />
+                        <Heading eyebrow="Your season" title="Training and key dates" />
                         <Card>
                             <Timeline rows={buildTimeline(c)} />
                         </Card>
                     </div>
                 </section>
 
-                {/* ── SEPTEMBER GAMES ── Deliberately outside the timeline: offer only. */}
+                {/* ── POWER LEAGUE FIXTURES ── */}
+                <section id="fixtures" className="px-5 pb-14 sm:pb-20 scroll-mt-28 lg:scroll-mt-32">
+                    <div className="max-w-3xl mx-auto">
+                        <Card className="border-rr-pink/40">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-7">
+                                <div>
+                                    <Eyebrow className="mb-2">Match days</Eyebrow>
+                                    <h2 className="text-2xl sm:text-3xl font-black uppercase leading-tight">Power League fixtures</h2>
+                                </div>
+                                <img
+                                    src="/assets/power-league-logo-rra.png"
+                                    alt="The Power League"
+                                    className="h-12 sm:h-14 w-auto self-start sm:self-auto"
+                                />
+                            </div>
+                            <FixtureList fixtures={c.fixtures} />
+                            <div className="mt-7 flex items-start gap-3 rounded-xl bg-rr-pink/15 border border-rr-pink/50 p-4 sm:p-5">
+                                <Sparkles aria-hidden="true" className="w-5 h-5 text-rr-light-pink shrink-0 mt-0.5" />
+                                <p className="text-white font-bold text-[15px] sm:text-base leading-relaxed">{c.moreFixtures}</p>
+                            </div>
+                        </Card>
+                    </div>
+                </section>
+
+                {/* ── SEPTEMBER GAMES ── Deliberately outside the fixture list: offer only. */}
                 {septemberGames && (
                     <section id="september-games" className="px-5 pb-14 sm:pb-20 scroll-mt-28 lg:scroll-mt-32">
                         <div className="max-w-3xl mx-auto rounded-2xl border-2 border-rr-light-pink/60 bg-rr-pink/10 p-6 sm:p-8">
@@ -291,18 +414,18 @@ const WelcomePage = () => {
                                 <IconTitle icon={Trophy}>Matches</IconTitle>
                                 <Bullets items={[
                                     'Our first match is early, so we can see how everyone is playing.',
-                                    'Power League matches can be T20, T10 or 100-ball. Each player plays about 5 or 6 matches across the season.',
-                                    'Players will also be invited to special exhibition and showcase matches against other teams.',
-                                    'We will tell you the team before each match.',
+                                    'Play 5–10 T20 match days across the season, circa. average 1 a month from September to April. Performance dependant.',
+                                    'Squad players are eligible for selection in Power League and External Showcase matches.',
+                                    'Selection is at the coaching staff\'s discretion. Not every player plays every game. We will tell you the team before each match.',
                                 ]} />
                             </Card>
                         </div>
                         <Card className="mt-5">
                             <IconTitle icon={Wallet}>Match fees</IconTitle>
                             <div className="space-y-3 text-white/85 text-base font-medium leading-relaxed">
-                                <p>You pay a match fee for each match you play. This is separate from the Registration Fee.</p>
+                                <p>You pay a match fee for each match you play. It is set for each fixture and covers standard match day costs. This is separate from the Joining Fee and the weekly Squad Fee.</p>
                                 <p>The fee depends on the pitch: turf (grass) or synthetic (fake grass).</p>
-                                <p className="text-white font-bold">Keep your match fees paid so you can be selected.</p>
+                                <p className="text-white font-bold">All players must remain financial to be eligible for selection.</p>
                             </div>
                         </Card>
                     </div>
@@ -319,7 +442,7 @@ const WelcomePage = () => {
                                 className="w-40 h-40 sm:w-[200px] sm:h-[200px] rounded-2xl object-cover object-top mx-auto"
                             />
                             <div>
-                                <Eyebrow>Sessions with {SID.name}</Eyebrow>
+                                <Eyebrow>2 x squad sessions with {SID.name}</Eyebrow>
                                 <h2 className="text-2xl sm:text-3xl font-black uppercase leading-tight mb-4">
                                     We will invite players to meet Sid
                                 </h2>
@@ -327,6 +450,7 @@ const WelcomePage = () => {
                                     <p>He is the Head of International Player Development at the Rajasthan Royals.</p>
                                     <p>He is also a performance coach for the Rajasthan Royals team in the IPL.</p>
                                     <p>He has worked with Yashasvi Jaiswal, Riyan Parag and Vaibhav Sooryavanshi.</p>
+                                    <p>Other Royals and guest coaches and players will join from time to time, online and in person.</p>
                                     <p className="text-white/65">When: {season.sidSessions.when}.</p>
                                 </div>
                             </div>
@@ -340,9 +464,9 @@ const WelcomePage = () => {
                         <Heading
                             eyebrow="Step 1"
                             title="Confirm your place"
-                            sub={<>Please do this by {confirmBy}. Fill in the player&apos;s details and agree to the 5 items below.</>}
+                            sub={<>Please do this by {confirmBy}. Tell us the region you were selected in, fill in the player&apos;s details and agree to the 5 items below.</>}
                         />
-                        <WelcomeConfirmForm centre={c} isDraft={isDraft} />
+                        <WelcomeConfirmForm config={c} isDraft={isDraft} />
                     </div>
                 </section>
 
