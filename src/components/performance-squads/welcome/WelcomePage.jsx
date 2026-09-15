@@ -433,12 +433,12 @@ const WelcomePage = () => {
                 {/* ── SID LAHIRI ── Not every player is invited: "We will invite players to meet Sid", never "every player". */}
                 <section id="sid" className="px-5 py-14 sm:py-20 scroll-mt-28 lg:scroll-mt-32">
                     <div className="max-w-4xl mx-auto">
-                        <Card className="grid gap-6 sm:gap-8 sm:grid-cols-[200px_1fr] items-center">
+                        <Card className="grid gap-6 sm:gap-8 sm:grid-cols-[260px_1fr] items-center">
                             <img
                                 src={SID.photo}
-                                alt={SID.name}
+                                alt={SID.photoAlt}
                                 loading="lazy"
-                                className="w-40 h-40 sm:w-[200px] sm:h-[200px] rounded-2xl object-cover object-top mx-auto"
+                                className="w-full sm:w-[260px] aspect-[4/5] sm:aspect-[2/3] rounded-2xl object-cover object-[30%_top]"
                             />
                             <div>
                                 <Eyebrow>Squad sessions with {SID.name}</Eyebrow>

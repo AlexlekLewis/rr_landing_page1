@@ -116,7 +116,9 @@ export const REGIONS = [
 
 export const SID = {
     name: 'Sid Lahiri',
-    photo: '/assets/coaches/siddhartha-lahiri.jpg',
+    // Sid working with Riyan Parag (general-use Royals image).
+    photo: '/assets/performance-squads/sid-lahiri-riyan-parag.jpg',
+    photoAlt: 'Sid Lahiri talking through a delivery with Riyan Parag at a Rajasthan Royals training session',
 };
 
 export const PLAYER_IMAGE = '/assets/performance-squads/selected-player-fist-pump.png';
