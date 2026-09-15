@@ -32,9 +32,10 @@ const SHIPPING_RATES = {
     express: 'shr_1TROf8Io52UEA50yeADIIgxr',
 };
 
+// Keyed by region slug — the same slugs the welcome form's region dropdown uses.
 const PICKUP_VENUES = {
-    mickleham: 'Mickleham Indoor Sports Centre',
-    'cranbourne-north': 'Elite Cricket Centre, Cranbourne North',
+    'north-melbourne': 'Mickleham Indoor Sports Centre',
+    'south-east-melbourne': 'Elite Cricket Centre, Cranbourne North',
 };
 
 const str = (v, max = 200) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
