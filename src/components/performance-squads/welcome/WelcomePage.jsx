@@ -497,7 +497,7 @@ const WelcomePage = () => {
                             <IconTitle icon={ShoppingBag}>Every player needs</IconTitle>
                             <Bullets items={c.kit.required} />
                         </Card>
-                        <WelcomeKitForm player={player} onChangePlayer={() => savePlayer(null)} />
+                        <WelcomeKitForm player={player} onChangePlayer={() => savePlayer(null)} onFound={savePlayer} />
                     </div>
                 </section>
 

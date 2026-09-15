@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { ArrowRight, Check, Loader2, UserRound, Minus, Plus, X } from 'lucide-react';
-import { FieldError, Chevron, selectClass, scrollTo } from '../shared';
+import { Label, FieldError, Chevron, inputClass, selectClass, scrollTo } from '../shared';
 import { Eyebrow } from './welcomeShared';
 import { REGIONS, WELCOME } from './welcomeConfig';
 import usePrices, { fmt } from './usePrices';
@@ -42,7 +42,20 @@ const sizesFor = (item, group) => {
 // anything twice. Without them (confirmed on another device) the fields are offered.
 const BLANK = { region: '', first_name: '', last_name: '', parent_name: '', email: '', mobile: '' };
 
-const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
+const WelcomeKitForm = ({ player: confirmed, onChangePlayer, onFound }) => {
+    // "Already confirmed?" lookup by the email + mobile used in Step 1
+    const [lookup, setLookup] = useState({ email: '', mobile: '' });
+    const [lookupBusy, setLookupBusy] = useState(false);
+    const [lookupErr, setLookupErr] = useState('');
+    const findMe = async () => {
+        setLookupErr(''); setLookupBusy(true);
+        try {
+            const r = await fetch('/api/performance-squad-lookup', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(lookup) });
+            const d = await r.json();
+            if (!r.ok) throw new Error(d.error || 'Not found');
+            onFound?.(d);
+        } catch (e) { setLookupErr(e.message); } finally { setLookupBusy(false); }
+    };
     const [group, setGroup] = useState('senior');
     // key -> [{ size, qty }]. One entry per size; qty for how many of that size.
     const [picks, setPicks] = useState({});
@@ -89,9 +102,10 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
 
     const validate = () => {
         const next = {};
-        if (!confirmed) next.player = 'Please confirm your details in Step 1 first — checkout is recorded against that confirmation.';
+        if (!confirmed) next.player = 'We need your Step 1 details before checkout. Complete Step 1, or find your confirmation above using the email and mobile you used.';
         if (!ownKit && chosen.length === 0) next.kit = 'Choose your kit, or tick that you already have what you need';
         setErrors(next);
+        if (next.player) document.getElementById('psw-kit-player')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return Object.keys(next).length === 0;
     };
 
@@ -279,12 +293,29 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
                         </div>
                     </div>
                 ) : (
-                    <div className="rounded-xl bg-white/5 border border-white/12 p-4 text-base font-medium text-white/85 leading-relaxed">
+                    <div id="psw-kit-player" className={`rounded-xl bg-white/5 border p-4 text-base font-medium text-white/85 leading-relaxed ${errors.player ? 'border-rr-pink' : 'border-white/12'}`}>
                         <p>Complete Step 1 first — the details you enter there carry over, so you only type them once, and your payment is recorded against that confirmation.</p>
                         <div className="mt-3 text-sm">
                             <button type="button" onClick={() => scrollTo('confirm')} className="text-rr-light-pink font-black uppercase tracking-wider hover:text-white">Go to Step 1</button>
                         </div>
-                                <FieldError msg={errors.player} />
+                        <div className="mt-5 pt-4 border-t border-white/10">
+                            <p className="font-black text-white mb-3">Already done Step 1? Find your confirmation</p>
+                            <div className="grid sm:grid-cols-2 gap-3">
+                                <div>
+                                    <Label required>Email used in Step 1</Label>
+                                    <input type="email" value={lookup.email} onChange={(e) => setLookup((l) => ({ ...l, email: e.target.value }))} placeholder="you@email.com" className={inputClass({}, '')} />
+                                </div>
+                                <div>
+                                    <Label required>Mobile used in Step 1</Label>
+                                    <input type="tel" value={lookup.mobile} onChange={(e) => setLookup((l) => ({ ...l, mobile: e.target.value }))} placeholder="04xx xxx xxx" className={inputClass({}, '')} />
+                                </div>
+                            </div>
+                            <button type="button" onClick={findMe} disabled={lookupBusy} className="mt-3 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-black uppercase tracking-wider bg-white/10 hover:bg-white/20 disabled:opacity-60 transition-colors">
+                                {lookupBusy ? <><Loader2 className="w-4 h-4 animate-spin" /> Finding</> : 'Find my confirmation'}
+                            </button>
+                            <FieldError msg={lookupErr} />
+                        </div>
+                        <FieldError msg={errors.player} />
                     </div>
                 )}
             </div>
@@ -316,7 +347,9 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer }) => {
                 >
                     {busy ? <><Loader2 className="w-4 h-4 animate-spin" /> Taking you to checkout</> : <>Proceed to checkout <ArrowRight className="w-4 h-4" /></>}
                 </button>
-                {failed && <p className="text-rr-light-pink text-sm font-bold mt-3 text-center">{failed}</p>}
+                {(failed || errors.player || errors.kit) && (
+                    <p role="alert" className="text-rr-light-pink text-sm font-bold mt-3 text-center leading-relaxed">{failed || errors.player || errors.kit}</p>
+                )}
                 <p className="text-white/45 text-sm font-medium mt-3 text-center">Payments are processed by Stripe.</p>
             </div>
         </div>
