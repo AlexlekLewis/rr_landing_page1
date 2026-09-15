@@ -107,6 +107,46 @@ const PAYMENT_LINK_PROGRAMS = {
   'plink_1U5Kd0Io52UEA50y3hqasgbv': { program: 'holiday', program_variant: null, program_label: 'Junior Royals Holiday Program — Sept/Oct 2026' },
 };
 
+const isUuid = (v) => typeof v === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
+
+// Registration tables a holiday Stripe payment can back-fill onto. A payment is
+// joined to exactly one row by client_reference_id (the row UUID the form sends
+// to Stripe Checkout). This same list also RECOVERS a holiday payment whose
+// Payment Link / product description didn't classify — see recoverHolidayByReference.
+const HOLIDAY_TABLES = [
+  'junior_royals_july_holidays_registrations',
+  'holiday_clinic_registrations',
+  'junior_royals_sept_holidays_registrations',
+];
+
+// Link-independent holiday classifier. Holiday Payment Links get re-created every
+// time the price changes (early-bird → full), so neither the plink id in
+// PAYMENT_LINK_PROGRAMS nor the product description can be relied on to classify
+// them — and an unclassified session was being dropped as "unknown_session_kind",
+// silently discarding the payment (the gap from 7 Sep 2026, ~15 paid families
+// never recorded). The one signal the form ALWAYS sets is client_reference_id =
+// the registration row UUID. If that UUID is the primary key of a real holiday
+// row, this IS a holiday payment, whatever link it arrived through. Returns a
+// holiday programClass (so the normal program_registrations + back-fill path
+// runs), or null when it's genuinely not a holiday session.
+const recoverHolidayByReference = async (supabase, session, lineItems = []) => {
+  const refId = session?.client_reference_id || null;
+  if (!isUuid(refId)) return null;
+  for (const table of HOLIDAY_TABLES) {
+    const { data, error } = await supabase.from(table).select('id').eq('id', refId).limit(1);
+    if (error) {
+      console.warn(`holiday-recovery lookup failed for ${table}:`, error.message);
+      continue;
+    }
+    if (data && data.length) {
+      const label = lineItems.find(i => i?.description)?.description || 'Junior Royals Holiday Program';
+      console.log(`unknown session recovered as holiday via client_reference_id (id=${refId}, table=${table}, session=${session.id})`);
+      return { program: 'holiday', program_variant: null, program_label: label };
+    }
+  }
+  return null;
+};
+
 const classifyByDescription = (description = '') => {
   const d = description.toLowerCase();
   if (!d) return null;
@@ -423,7 +463,15 @@ export default async function handler(req, res) {
   // isolated — a session lands in exactly one of: shop_orders_*, program_registrations,
   // or is ignored entirely.
   if (!isShopSession(session, lineItems)) {
-    const programClass = classifyAsProgram(session, lineItems);
+    let programClass = classifyAsProgram(session, lineItems);
+    // Link-independent holiday recovery. When classification fails, a session
+    // whose client_reference_id is the primary key of a real holiday
+    // registration row IS a holiday payment (whatever Payment Link or product
+    // name it came through) — recover it here rather than dropping it as
+    // "unknown_session_kind". See recoverHolidayByReference.
+    if (!programClass) {
+      programClass = await recoverHolidayByReference(getSupabase(), session, lineItems);
+    }
     if (!programClass) {
       return res.status(200).json({ received: true, ignored: 'unknown_session_kind' });
     }
@@ -489,12 +537,6 @@ export default async function handler(req, res) {
     // -----------------------------------------------------------
     if (programClass.program === 'holiday') {
       const refId = session.client_reference_id || null;
-      const HOLIDAY_TABLES = [
-        'junior_royals_july_holidays_registrations',
-        'holiday_clinic_registrations',
-        'junior_royals_sept_holidays_registrations',
-      ];
-      const isUuid = (v) => typeof v === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
       if (isUuid(refId)) {
         const updatePayload = {
           payment_status:           'completed',
