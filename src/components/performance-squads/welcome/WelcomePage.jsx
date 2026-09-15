@@ -186,11 +186,7 @@ const WelcomePage = () => {
                         className="pointer-events-none select-none absolute z-0 left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 lg:right-[8%] bottom-[-6%] lg:bottom-auto lg:top-1/2 lg:-translate-y-1/2 h-[62%] sm:h-[70%] lg:h-[88%] w-auto max-w-none opacity-20 lg:opacity-30"
                     />
                     <div className="relative max-w-6xl mx-auto">
-                        {isDraft && (
-                            <div role="note" className="mb-8 rounded-xl bg-amber-300 text-rr-dark px-4 py-3 text-left text-sm font-bold leading-relaxed max-w-3xl">
-                                DRAFT FOR REVIEW. Not ready to send to families. Still to confirm: {missing.join(', ')}.
-                            </div>
-                        )}
+
                         <div className="grid lg:grid-cols-[1fr_380px] gap-4 lg:gap-6 items-end">
                             <MotionDiv initial="hidden" animate="visible" variants={fadeUp} custom={0} className="pb-6 sm:pb-10 lg:pb-24 text-center lg:text-left">
                                 <img
