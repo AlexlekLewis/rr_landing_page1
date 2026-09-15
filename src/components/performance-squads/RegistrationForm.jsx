@@ -4,30 +4,13 @@ import { ArrowRight, Check } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import {
     fadeUp, scrollTo, SectionHeading, Label, FieldError, Chevron,
-    inputClass, selectClass,
+    inputClass, selectClass, PSCheckbox,
 } from './shared';
 import {
     ACTIVE_CENTRES, PLAYING_ROLES, TRIAL_PRICE, MIN_AGE, MAX_AGE,
     getTrialSessions, getMaxTrialSessions, getOpenTrialSessions,
     getSelectableSessionCount, isCentreFull,
 } from './data';
-
-const PSCheckbox = ({ checked, onToggle, error, children }) => (
-    <div className="mb-3.5">
-        <label className="flex items-start gap-3 cursor-pointer group">
-            <button
-                type="button"
-                onClick={onToggle}
-                aria-pressed={checked}
-                className={`mt-0.5 w-5 h-5 rounded-md shrink-0 border flex items-center justify-center transition-colors ${checked ? 'bg-rr-pink border-rr-pink' : 'border-white/30 bg-white/5 group-hover:border-rr-pink/60'}`}
-            >
-                {checked && <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
-            </button>
-            <span className="text-white/70 text-[13px] font-medium leading-relaxed">{children}</span>
-        </label>
-        {error && <p className="text-rr-pink text-xs font-medium mt-1 ml-8">{error}</p>}
-    </div>
-);
 
 const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
     const [form, setForm] = useState({

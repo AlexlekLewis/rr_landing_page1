@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronDown } from 'lucide-react';
+import { Check, ChevronDown } from 'lucide-react';
 
 export const fadeUp = {
     hidden: { opacity: 0, y: 24 },
@@ -43,3 +43,23 @@ export const inputClass = (errors, key) =>
 
 export const selectClass = (errors, key) =>
     `${inputClass(errors, key)} appearance-none pr-10 cursor-pointer [&>option]:text-rr-dark`;
+
+// Agreement checkbox shared by the Performance Squads forms (trial registration
+// and the selected-player welcome page), so every agreement looks and behaves
+// the same.
+export const PSCheckbox = ({ checked, onToggle, error, children }) => (
+    <div className="mb-3.5">
+        <label className="flex items-start gap-3 cursor-pointer group">
+            <button
+                type="button"
+                onClick={onToggle}
+                aria-pressed={checked}
+                className={`mt-0.5 w-5 h-5 rounded-md shrink-0 border flex items-center justify-center transition-colors ${checked ? 'bg-rr-pink border-rr-pink' : 'border-white/30 bg-white/5 group-hover:border-rr-pink/60'}`}
+            >
+                {checked && <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
+            </button>
+            <span className="text-white/70 text-[13px] font-medium leading-relaxed">{children}</span>
+        </label>
+        {error && <p className="text-rr-pink text-xs font-medium mt-1 ml-8">{error}</p>}
+    </div>
+);

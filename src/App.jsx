@@ -60,6 +60,10 @@ const PerformanceSquadsSuccess = React.lazy(() => import('./components/performan
 // "I can't make a trial" — current Academy players who want a squad place but
 // cannot attend any September trial. Same table, entry_type='unable-to-trial', no fee.
 const PerformanceSquadsInterest = React.lazy(() => import('./components/performance-squads/InterestPage'));
+// Performance Squad welcome — where selected players confirm their place, from the
+// link in their welcome email. HIDDEN: noindex, not in nav or sitemap. One page per
+// centre; details live in components/performance-squads/welcome/welcomeConfig.js.
+const PerformanceSquadsWelcome = React.lazy(() => import('./components/performance-squads/welcome/WelcomePage'));
 // Match Registration — reusable match-day registration + payment page. Match-specific
 // detail lives in src/components/match-registration/matchConfig.js, so the next block
 // of matches is a config swap, not a new page. HIDDEN: noindex, direct URL only.
@@ -227,6 +231,8 @@ function App() {
         <Route path="/performance-squads" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquads /></React.Suspense>} />
         <Route path="/performance-squads/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquadsSuccess /></React.Suspense>} />
         <Route path="/performance-squads/interest" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquadsInterest /></React.Suspense>} />
+        <Route path="/performance-squads/welcome" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquadsWelcome /></React.Suspense>} />
+        <Route path="/performance-squads/welcome/:centre" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquadsWelcome /></React.Suspense>} />
 
         {/* Match Registration — reusable match-day registration + payment. HIDDEN:
             noindex, not in nav or sitemap, direct URL only. Currently serving the
