@@ -8,6 +8,11 @@ import { fadeUp, scrollTo } from '../shared';
 import { WELCOME, SID, PLAYER_IMAGE, HALLA_BOL, getMissingDetails } from './welcomeConfig';
 import { Pending, Eyebrow, Heading, Card, Bullets } from './welcomeShared';
 import WelcomeConfirmForm from './WelcomeConfirmForm';
+import { CartProvider } from '../../academy-shop/CartContext';
+import { PRODUCTS } from '../../academy-shop/shopConfig';
+import ProductGrid from '../../academy-shop/ProductGrid';
+import CartDrawer from '../../academy-shop/CartDrawer';
+import CartButton from '../../academy-shop/CartButton';
 
 const MotionDiv = motion.div;
 
@@ -253,7 +258,8 @@ const WelcomePage = () => {
                                 place by paying the Joining Fee and first {pricing.squadFee.amount} instalment.
                             </Step>
                             <Step n={2} title="Order your kit" linkLabel="See what you need" target="kit">
-                                Use the kit link on this page. It has the price for Performance Squad players.
+                                Use the order form on this page. Every player needs at least one training shirt,
+                                one pair of training pants (recommended) or training shorts, and a training hat.
                             </Step>
                             <Step n={3} title="Set up the player portal">
                                 We will send you a login for our player portal. Setting it up takes about 10 minutes.
@@ -469,34 +475,29 @@ const WelcomePage = () => {
                     </div>
                 </section>
 
-                {/* ── STEP 2: KIT ── */}
-                <section id="kit" className="px-5 py-14 sm:py-20 scroll-mt-28 lg:scroll-mt-32">
-                    <div className="max-w-2xl mx-auto">
-                        <Heading
-                            eyebrow="Step 2"
-                            title="Order your kit"
-                            sub="Please use the kit link below, not the Academy Shop. This link has the price for Performance Squad players."
-                        />
-                        <Card>
-                            <IconTitle icon={ShoppingBag}>You need</IconTitle>
-                            {c.kitItems.length
-                                ? <Bullets items={c.kitItems} />
-                                : <p><Pending>Kit list to be confirmed</Pending></p>}
-                            {c.kitOrderLink ? (
-                                // Same tab on purpose: in-app browsers (Instagram especially) silently block new tabs.
-                                <a
-                                    href={c.kitOrderLink}
-                                    className="mt-7 w-full sm:w-auto inline-flex items-center justify-center gap-2 whitespace-nowrap bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-[13px] sm:text-sm rounded-full px-5 sm:px-8 py-4 transition-colors"
-                                >
-                                    Order your kit <ArrowRight className="w-4 h-4" />
-                                </a>
-                            ) : (
-                                <p className="mt-7"><Pending>Kit order link to be confirmed</Pending></p>
-                            )}
-                            <p className="text-white/55 text-sm font-medium mt-3">Payments are processed by Stripe.</p>
-                        </Card>
-                    </div>
-                </section>
+                {/* ── STEP 2: KIT ── The Academy Shop's order form (cart + Stripe checkout),
+                    limited to training kit. Orders land in shop_orders_training like any shop order. */}
+                <CartProvider>
+                    <section id="kit" className="px-5 py-14 sm:py-20 scroll-mt-28 lg:scroll-mt-32">
+                        <div className="max-w-4xl mx-auto">
+                            <Heading
+                                eyebrow="Step 2"
+                                title="Order your kit"
+                                sub="Players train and play in Royals Academy kit. Pick your sizes below, add to cart and check out."
+                            />
+                            <Card className="mb-8 border-rr-pink/40">
+                                <IconTitle icon={ShoppingBag}>Every player needs</IconTitle>
+                                <Bullets items={c.kit.required} />
+                                <p className="text-white/60 text-sm font-medium mt-5">
+                                    Pick up free from the academy, or have it posted. Payments are processed by Stripe.
+                                </p>
+                            </Card>
+                            <ProductGrid embedded products={c.kit.productIds.map((id) => PRODUCTS.find((p) => p.id === id)).filter(Boolean)} />
+                        </div>
+                    </section>
+                    <CartDrawer />
+                    <CartButton />
+                </CartProvider>
 
                 {/* ── STEP 3: PORTAL ── */}
                 <section id="portal" className="px-5 pb-14 sm:pb-20 scroll-mt-28 lg:scroll-mt-32">

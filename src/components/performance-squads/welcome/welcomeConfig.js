@@ -22,10 +22,18 @@ export const WELCOME = {
     // confirm their place: register on this page, then complete the Joining Fee payment.
     confirmWindow: '72 hours',
     paymentLink: null,      // Stripe Payment Link for the Joining Fee
-    kitItems: [],           // e.g. ['RRA Melbourne Training Shirt', 'Academy Cap']
-    // Stripe link for the uniform at the Performance Squad player price. Selected
-    // players order here, NOT through the Academy Shop.
-    kitOrderLink: null,
+
+    // Kit is ordered on this page through the Academy Shop's order form, limited
+    // to training items. These are the product ids from academy-shop/shopConfig.js.
+    kit: {
+        productIds: ['training-shirt', 'training-pants', 'training-shorts', 'pink-cap'],
+        // Every player must have, as a minimum:
+        required: [
+            'At least one training shirt',
+            'One pair of training pants (recommended) or training shorts',
+            'A training hat',
+        ],
+    },
 
     contactEmail: 'alex.lewis@rramelbourne.com',
 
@@ -131,7 +139,5 @@ export const getMissingDetails = (c) => {
     if (!c.season?.firstTraining?.time) missing.push('first training time');
     if (!c.fixtures?.find((m) => m.first)?.venueAndTime) missing.push('first match venue and time');
     if (!c.paymentLink) missing.push('Joining Fee payment link');
-    if (!c.kitItems?.length) missing.push('kit list');
-    if (!c.kitOrderLink) missing.push('kit order link');
     return missing;
 };

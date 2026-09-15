@@ -2,25 +2,12 @@ import React from 'react';
 import { PRODUCTS } from './shopConfig';
 import ProductCard from './ProductCard';
 
-const ProductGrid = () => {
-  return (
-    <section className="bg-slate-50 py-20">
-      <div className="max-w-6xl mx-auto px-6">
-        {/* Section header */}
-        <div className="mb-12">
-          <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">2025 / 2026 Season</p>
-          <h2 className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none">
-            Official Kit
-          </h2>
-          <div className="w-12 h-px mt-4" style={{ background: 'linear-gradient(90deg, #E11F8F, #1226AA)' }} />
-          <p className="text-rr-charcoal font-medium mt-4 max-w-xl">
-            Kit up in official Rajasthan Royals colours. Select your size, add to cart, and check out in minutes.
-          </p>
-        </div>
-
-        {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {PRODUCTS.map((product, index) => {
+// products: subset to show (defaults to the full shop). embedded: grid only, no
+// section chrome — used where another page hosts the kit order form.
+const ProductGrid = ({ products = PRODUCTS, embedded = false }) => {
+  const grid = (
+        <div className={`grid grid-cols-1 sm:grid-cols-2 ${embedded ? 'lg:grid-cols-2' : 'lg:grid-cols-4'} gap-6`}>
+          {products.map((product, index) => {
             // Hidden products show a contact placeholder card
             if (product.hidden) {
               return (
@@ -59,6 +46,25 @@ const ProductGrid = () => {
             return <ProductCard key={product.id} product={product} index={index} />;
           })}
         </div>
+  );
+  if (embedded) return grid;
+  return (
+    <section className="bg-slate-50 py-20">
+      <div className="max-w-6xl mx-auto px-6">
+        {/* Section header */}
+        <div className="mb-12">
+          <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">2025 / 2026 Season</p>
+          <h2 className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none">
+            Official Kit
+          </h2>
+          <div className="w-12 h-px mt-4" style={{ background: 'linear-gradient(90deg, #E11F8F, #1226AA)' }} />
+          <p className="text-rr-charcoal font-medium mt-4 max-w-xl">
+            Kit up in official Rajasthan Royals colours. Select your size, add to cart, and check out in minutes.
+          </p>
+        </div>
+
+        {/* Grid */}
+        {grid}
       </div>
     </section>
   );
