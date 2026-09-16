@@ -63,7 +63,7 @@ const InvitationHero = ({ applicantName }) => {
                 >
                     <h3 className="text-2xl font-black text-white uppercase tracking-wide mb-4">The Assessment Session</h3>
                     <p className="text-slate-300 mb-6 leading-relaxed">
-                        The session will be led by <strong className="text-white">Siddhartha Lahiri</strong>, the Rajasthan Royals Head of International Talent Development, as well as Assistant and Performance Coach for Rajasthan, Paarl and Barbados Royals.
+                        The session will be led by <strong className="text-white">Siddhartha Lahiri</strong>, the Rajasthan Royals Head of International Player Development, as well as Assistant and Performance Coach for Rajasthan, Paarl and Barbados Royals.
                     </p>
                     <p className="text-slate-300 leading-relaxed">
                         Alongside Siddhartha, our Melbourne coaching and leadership team will also be present and working through the final selection process with Siddhartha.
