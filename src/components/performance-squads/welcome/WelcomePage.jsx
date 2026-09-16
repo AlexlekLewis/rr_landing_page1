@@ -90,7 +90,7 @@ const buildTimeline = (c) => {
     const { firstTraining, sidSessions } = c.season;
     return [
         { year: firstTraining.year, when: `Within ${c.confirmWindow} of being notified`, what: 'Confirm your place: enter your details, sort your kit and check out', highlight: true },
-        { year: firstTraining.year, when: firstTraining.date, what: 'First squad training at your home centre', detail: firstTraining.time, detailPending: 'Time to be confirmed' },
+        { year: firstTraining.year, when: firstTraining.date, what: 'First squad training at your home centre', detail: firstTraining.time, detailNote: firstTraining.timeNote, detailPending: 'Time to be confirmed' },
         { year: sidSessions.year, when: sidSessions.when, what: 'Squad sessions with Sid Lahiri', detail: 'We will invite players to meet Sid' },
     ];
 };
@@ -118,6 +118,9 @@ const Timeline = ({ rows }) => {
                                 ) : r.detailPending ? (
                                     <p className="mt-1.5"><Pending>{r.detailPending}</Pending></p>
                                 ) : null}
+                                {r.detail && r.detailNote && (
+                                    <p className="text-white/60 text-[15px] font-medium leading-relaxed">{r.detailNote}</p>
+                                )}
                             </li>
                         ))}
                     </ol>

@@ -84,7 +84,15 @@ export const WELCOME = {
 
     // ── Training and events (NOT match days — those are the fixture list) ──
     season: {
-        firstTraining: { year: 2026, date: 'Monday 5 October', time: 'Evening — final time to be confirmed' },
+        // Same time at both centres (Alex, 16 Sep). The \u00a0 (non-breaking space)
+        // keeps "PM" on the same line as the time on a narrow phone. timeNote shows
+        // on its own line underneath.
+        firstTraining: {
+            year: 2026,
+            date: 'Monday 5 October',
+            time: 'Mickleham and Cranbourne North: 6:00–9:00\u00a0PM (subject to change)',
+            timeNote: 'We will let you know if it changes.',
+        },
         sidSessions: { year: 2026, when: 'Early October' },
     },
 
