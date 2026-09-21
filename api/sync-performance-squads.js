@@ -114,6 +114,8 @@ const TRIAL_SESSION_LABELS = {
   'se-2026-09-06': 'Sun 6 Sep, 7:00-8:30 PM (Cranbourne Nth)',
   'se-2026-09-11': 'Fri 11 Sep, 8:00-9:30 PM (Cranbourne Nth)',
   'se-2026-09-13': 'Sun 13 Sep, 7:00-8:30 PM (Cranbourne Nth)',
+  // Open age trial. The oa- prefix tells these apart from squad trials at a glance.
+  'oa-2026-10-04': 'Sun 4 Oct, 1:00-2:30 PM (Cranbourne Nth, open age)',
 };
 const sessionLabel = (id) => TRIAL_SESSION_LABELS[id] || id;
 

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
-import OpenAgeHero from './OpenAgeHero';
+// Alex's call: the standard Performance Squads hero, unchanged, with the
+// Sid section carrying the story directly underneath it.
+import HeroSection from '../performance-squads/HeroSection';
 import SidSection from './SidSection';
 import OpenAgePathway from './OpenAgePathway';
 import OpenAgeTrialsSection from './OpenAgeTrialsSection';
@@ -78,7 +80,7 @@ const OpenAgeTrial = () => {
             />
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero">
-                    <OpenAgeHero />
+                    <HeroSection />
                 </div>
                 <div id="sid" className="scroll-mt-28 lg:scroll-mt-32">
                     <SidSection />

@@ -58,43 +58,32 @@ export const CENTRE = {
 export const TRIAL_COACHES = SQUAD_COACHES.filter((c) => c.name === SE.coach);
 
 // ─────────────────────────────────────────────────────────────
-// ⚠️  TRIAL DATES AND TIMES — THE ONE BLOCKER. NOT YET SUPPLIED.
+// TRIAL DATES AND TIMES — confirmed by Alex, 21 September 2026.
 //
-// Alex has not given dates or times. Nothing here is invented, so the
-// array is EMPTY on purpose. While it is empty:
-//   • the hero button is disabled and reads "Trial dates to be confirmed"
-//   • the trials section says the dates are still to be confirmed
-//   • the booking form does not open and takes no payment
-//   • a "tell me when the dates are announced" form runs in its place
-// No date can be rendered as real, because there is no date to render.
+// One session only. Sunday 4 October 2026, 1:00 to 2:30 PM, at the
+// Elite Cricket Centre, Cranbourne North.
 //
-// TO GO LIVE: paste the real sessions below. Nothing else changes.
-//
-//   export const TRIAL_SESSIONS = [
-//       { id: 'oa-2026-10-07', label: 'Wednesday 7 October · 7:30–9:00 PM' },
-//       { id: 'oa-2026-10-14', label: 'Wednesday 14 October · 7:30–9:00 PM' },
-//   ];
-//
-// WHICH NIGHT: a midweek evening, Monday to Wednesday, is the recommendation.
-// The South-East squad's usual Sunday and Friday evening slots are the two
-// slots Victorian Premier Cricket occupies for exactly this age band, so a
-// trial on either self-selects for the players who are NOT getting picked
-// elsewhere. Before locking a date, check the 2026/27 Victorian Premier
-// Cricket fixture and the Premier Cricket Under 18 rounds on
-// vicpremiercricket.com.au, plus Dandenong and Casey-South Melbourne training
-// nights, since that is the Cranbourne North catchment.
-//
-// SHAPE: { id, label } is the minimum. `badge` and `full` are the same shape
-// the squads page uses — set `full: true` to CLOSE one night once it books
-// out. Never delete a session to close it: everyone already booked into it
-// would lose their date off their confirmation and off the coach's sheet.
-//
-// Use the `oa-` prefix so open age sessions are told apart from the
-// squad trial ids (`se-`) in the Google Sheet at a glance. Add the same
-// ids and labels to TRIAL_SESSION_LABELS in api/sync-performance-squads.js
-// and the sheet prints the date instead of the raw id.
+// 90 minutes is the same length as the September trials at this venue,
+// where 37 players were booked into one session and it had to be closed.
+// This page is PUBLIC and promoted, so it can draw more than that. Set
+// `full: true` to close bookings the moment the session is at capacity.
 // ─────────────────────────────────────────────────────────────
-export const TRIAL_SESSIONS = [];
+
+export const TRIAL_SESSIONS = [
+    { id: 'oa-2026-10-04', label: 'Sunday 4 October · 1:00–2:30 PM' },
+];
+
+// NOTE ON THE DAY, kept from the build's research: Sunday is one of the
+// slots Victorian Premier Cricket uses for this age band, so a Sunday
+// trial can clash with the players it is trying to reach. Alex chose
+// Sunday 4 October knowing the catchment. Worth checking the 2026/27
+// Premier Cricket fixture, and Dandenong and Casey-South Melbourne, if
+// turnout is thin.
+//
+// Never delete a session to close it, or everyone already booked loses
+// the date off their confirmation and off the coach's sheet. Set
+// `full: true` instead. Add the id and label to TRIAL_SESSION_LABELS in
+// api/sync-performance-squads.js so the sheet prints the date, not the id.
 
 // The single switch the whole page reads. False until real dates land.
 export const DATES_CONFIRMED = TRIAL_SESSIONS.length > 0;

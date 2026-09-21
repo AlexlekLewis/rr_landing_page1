@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { GlobalBallIcon } from '../performance-squads/CricketIcons';
-import { fadeUp, SectionHeading } from '../performance-squads/shared';
+import { fadeUp } from '../performance-squads/shared';
 import { SID, SID_SECTION } from './openAgeData';
 
 // Sits second on the page so nobody scrolls past it.
@@ -13,7 +13,11 @@ import { SID, SID_SECTION } from './openAgeData';
 const SidSection = () => (
     <section className="py-20 px-5 bg-white/[0.02]">
         <div className="max-w-5xl mx-auto">
-            <SectionHeading eyebrow={SID_SECTION.eyebrow} title={SID_SECTION.title} />
+            {/* A plain H1, as asked. The hero above carries the Royals badge,
+                so this heading is the first thing that says what the page is. */}
+            <h1 className="text-3xl sm:text-5xl font-black uppercase leading-[1.05] text-center mb-12">
+                {SID_SECTION.title}
+            </h1>
 
             <motion.div
                 initial="hidden"
