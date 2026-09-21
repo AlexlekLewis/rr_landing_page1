@@ -73,6 +73,7 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
         accept_parent_code: false,
         accept_safety_equipment: false,
         accept_social_media: false,
+        acknowledged_filmed_event: false,
         filming_consent: '',
         volunteer: false,
         volunteer_role: '',
@@ -104,6 +105,7 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
         if (!form.accept_parent_code) next.accept_parent_code = 'You must agree to the Parent/Guardian Code of Conduct';
         if (!form.accept_safety_equipment) next.accept_safety_equipment = 'You must confirm the helmet and stem guard requirement';
         if (!form.accept_social_media) next.accept_social_media = 'Please confirm your social media consent';
+        if (!form.acknowledged_filmed_event) next.acknowledged_filmed_event = 'Please confirm you have read this';
         if (!form.filming_consent) next.filming_consent = 'Please choose one of the two options above';
 
         if (form.volunteer && !form.volunteer_role) next.volunteer_role = 'Please choose where you can help';
@@ -141,6 +143,7 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
                     accept_parent_code: form.accept_parent_code,
                     accept_safety_equipment: form.accept_safety_equipment,
                     accept_social_media: form.accept_social_media,
+                    acknowledged_filmed_event: form.acknowledged_filmed_event,
                     filming_consent: form.filming_consent,
                     volunteer: form.volunteer,
                     volunteer_role: form.volunteer ? form.volunteer_role : null,
@@ -307,6 +310,21 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
                                 </MRCheckbox>
                             </div>
 
+                            {/* Notice, not permission. Every family is TOLD the ground is
+                                filmed. Whether the player appears is still their own choice,
+                                asked separately below, and either answer lets them play. */}
+                            <div id="mr-acknowledged_filmed_event">
+                                <MRCheckbox
+                                    checked={form.acknowledged_filmed_event}
+                                    onToggle={() => toggle('acknowledged_filmed_event')}
+                                    error={errors.acknowledged_filmed_event}
+                                >
+                                    I understand this is a <strong className="text-white/90">{match.streaming.partner} event</strong>. The
+                                    whole ground is filmed and streamed, so the Academy cannot promise that a
+                                    player will stay off camera.
+                                </MRCheckbox>
+                            </div>
+
                             <div id="mr-accept_social_media">
                                 <MRCheckbox
                                     checked={form.accept_social_media}
@@ -326,7 +344,8 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
                             </p>
                             <p className="text-white/55 text-[13px] font-medium leading-relaxed mb-4">
                                 {match.streaming.partner} will be producing and streaming the matches.
-                                Please choose one — both options are fine, we just need to know.
+                                Please choose one. Both answers let the player register and play, we
+                                just need to know.
                             </p>
                             <FilmingChoice
                                 partner={match.streaming.partner}
@@ -334,6 +353,11 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
                                 onChange={(v) => set('filming_consent', v)}
                                 error={errors.filming_consent}
                             />
+                            <p className="text-white/45 text-[12px] font-medium leading-relaxed mt-1">
+                                If you ask us to keep the player off the stream we pass that on to
+                                {' '}{match.streaming.partner}. If being filmed is not possible for your family,
+                                please email {match.contactEmail} before you pay.
+                            </p>
                         </div>
 
                         {/* ── Volunteers ── */}
