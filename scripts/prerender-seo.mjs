@@ -9,14 +9,14 @@
 // production: fetching rramelbourne.com/performance-squads as a Facebook
 // crawler returns the generic site title and zero og tags.
 //
-// That is fine for a page nobody shares. It is fatal for /open-age-trial,
+// That is fine for a page nobody shares. It is fatal for /performance-squads-open-trial,
 // whose entire distribution plan is a picture of Sid Lahiri previewing
 // correctly when the link is posted.
 //
 // WHAT THIS DOES. After `vite build`, for each route below it copies
 // dist/index.html to dist/<route>/index.html with the head tags written in.
 // Vercel serves a real file before it applies the SPA rewrite, so a crawler
-// hitting /open-age-trial gets HTML that already carries the tags, and a
+// hitting /performance-squads-open-trial gets HTML that already carries the tags, and a
 // browser gets the same file and boots the app exactly as before.
 //
 // SCOPED ON PURPOSE. Only the routes in ROUTES are prerendered, so this
@@ -36,7 +36,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist');
 
-const ROUTES = ['/open-age-trial'];
+const ROUTES = ['/performance-squads-open-trial'];
 
 const escapeAttr = (s) =>
     String(s)

@@ -85,13 +85,13 @@ export const PAGE_SEO = {
   // whole point is that it is found and shared. Copy is the source of truth in
   // src/components/open-age-trial/openAgeData.js (SEO) and mirrored here.
   // These tags reach a social crawler ONLY because scripts/prerender-seo.mjs
-  // bakes this route's head into dist/open-age-trial/index.html at build time.
+  // bakes this route's head into dist/performance-squads-open-trial/index.html at build time.
   // RouteSeo alone runs in JavaScript, which no crawler executes.
   // NOTE: the Sid photo is portrait (900x1349) and social cards are wide, so it
   // crops. Swap ogImage for a 1200x630 crop when one exists.
   // "is coming to", never "is at" — his attendance is scheduled, not certain,
   // and the page hedges it in four places. The card must not out-promise it.
-  '/open-age-trial': {
+  '/performance-squads-open-trial': {
     title: 'T20 Trial with the Royals Performance Coach | Melbourne',
     description:
       'Sid Lahiri, Performance Coach of the Rajasthan Royals, is coming to our open age T20 trial in Cranbourne North. Players 16 to 25. $30 a session.',

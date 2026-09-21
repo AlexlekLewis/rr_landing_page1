@@ -248,7 +248,7 @@ function App() {
         <Route path="/performance-squads/welcome" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquadsWelcome /></React.Suspense>} />
         <Route path="/performance-squads/welcome/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquadsWelcomeSuccess /></React.Suspense>} />
 
-        <Route path="/open-age-trial" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><OpenAgeTrial /></React.Suspense>} />
+        <Route path="/performance-squads-open-trial" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><OpenAgeTrial /></React.Suspense>} />
 
         {/* Match Registration — reusable match-day registration + payment. HIDDEN:
             noindex, not in nav or sitemap, direct URL only. Currently serving the

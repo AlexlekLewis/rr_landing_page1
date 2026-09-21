@@ -221,12 +221,12 @@
       "destination": "/api/gone"
     },
     {
-      "source": "/open-age-trial",
-      "destination": "/open-age-trial/index.html"
+      "source": "/performance-squads-open-trial",
+      "destination": "/performance-squads-open-trial/index.html"
     },
     {
-      "source": "/open-age-trial/",
-      "destination": "/open-age-trial/index.html"
+      "source": "/performance-squads-open-trial/",
+      "destination": "/performance-squads-open-trial/index.html"
     },
     {
       "source": "/(.*)",
