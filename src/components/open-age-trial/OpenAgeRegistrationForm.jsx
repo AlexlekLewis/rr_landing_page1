@@ -37,7 +37,7 @@ const PROGRAM_TYPE = 'performance-squads-open-age-2026';
 // ── Anti-bot. This page is indexed, in the sitemap and in the nav on every
 // page of the site, and the table's only row-level security policy lets the
 // browser's anon key insert freely. Nothing here calls a paid service, so the
-// risk is junk in the coach's sheet on a trial night rather than a bill.
+// risk is junk in the coach's sheet on a trial day rather than a bill.
 // A honeypot plus a simple per-browser throttle stops the cheap scripted kind.
 // A determined attacker needs a database-side WITH CHECK, which is a schema
 // change and therefore Alex's call.
@@ -309,7 +309,7 @@ const BookingForm = ({ onRequestPayment }) => {
     const ageNum = Number(form.player_age.trim());
     const isMinor = Number.isInteger(ageNum) && ageNum >= MIN_AGE && ageNum < PARENT_REQUIRED_UNDER;
 
-    // The real cap: a trial with one night still open lets a player pick one,
+    // The real cap: a trial with one session still open lets a player pick one,
     // whatever MAX_TRIAL_SESSIONS says.
     const cap = getSelectableSessionCount();
 
