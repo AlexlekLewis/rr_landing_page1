@@ -22,6 +22,7 @@ const EMPTY = {
     email: '',
     phone: '',
     notes: '',
+    intent: false,
 };
 
 const SCForm = () => {
@@ -43,6 +44,7 @@ const SCForm = () => {
         if (!form.email.trim() || !form.email.includes('@')) return 'Please give us an email address we can reply to.';
         if (!form.phone.trim()) return 'Please give us a phone number.';
         if (ageNum < 18 && !form.parent_name.trim()) return 'For players under 18, please give a parent or guardian’s name.';
+        if (!form.intent) return 'Please tick the box to say you would take a place if you are offered one.';
         return '';
     };
 
@@ -59,6 +61,10 @@ const SCForm = () => {
         const club = CLUBS.find((c) => c.key === form.club_choice);
         const name = form.player_name.trim();
         const utmParams = getUTMParams();
+        const notes = [
+            form.notes.trim(),
+            'Intends to accept an offer if selected: yes',
+        ].filter(Boolean).join('\n\n');
 
         const { error: insertError } = await supabase.from('applications').insert([
             {
@@ -75,7 +81,7 @@ const SCForm = () => {
                 program: club?.name || null,
                 program_type: 'Spin Club',
                 source: `spin-club-${club?.key || 'unknown'}`,
-                bio: form.notes.trim() || null,
+                bio: notes,
                 page_referrer: document.referrer || null,
                 ...utmParams,
             },
@@ -84,7 +90,7 @@ const SCForm = () => {
         setSubmitting(false);
 
         if (insertError) {
-            setError('Something went wrong sending your application. Please try again, or email info@rramelbourne.com and we will add you by hand.');
+            setError('Something went wrong sending your expression of interest. Please try again, or email info@rramelbourne.com and we will add you by hand.');
             return;
         }
         setSubmitted(true);
@@ -96,15 +102,19 @@ const SCForm = () => {
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-rr-pink to-transparent" />
                 <div className="max-w-2xl mx-auto px-6 text-center">
                     <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight mb-5">
-                        Application received
+                        We&rsquo;ve got it
                     </h2>
                     <p className="text-base text-white/75 font-medium leading-relaxed mb-4">
-                        Thanks. The Royal Spin Coach at the centre you picked reads every application, and
-                        we will email you either way once the group is picked.
+                        The Royal Spin Coach at the centre you picked reads every expression of
+                        interest. <strong className="text-white">First-round offers</strong> go out
+                        to the players they pick first. If any of those are turned down, we send{' '}
+                        <strong className="text-white">second-round offers</strong> to everyone else
+                        who applied — so you hear from us either way.
                     </p>
                     <p className="text-sm text-white/50 font-medium">
-                        Nothing has been paid and no place is held yet. If anything changes in the
-                        meantime, email <span className="text-rr-pink">info@rramelbourne.com</span>.
+                        Nothing has been paid and no place is held yet. Your place is confirmed when
+                        you accept an offer. Questions in the meantime:{' '}
+                        <span className="text-rr-pink">info@rramelbourne.com</span>.
                     </p>
                 </div>
             </section>
@@ -118,16 +128,27 @@ const SCForm = () => {
         <section className="bg-white py-20 md:py-28">
             <div className="max-w-3xl mx-auto px-6">
                 <p className="text-xs font-black text-rr-pink uppercase tracking-[0.3em] mb-4">
-                    Apply for a place
+                    Register your interest
                 </p>
                 <h2 className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-5">
                     Tell us about your bowling
                 </h2>
-                <p className="text-base text-rr-dark/70 font-medium leading-relaxed mb-10">
-                    Spin Club takes a set number of spinners at each centre, so every player applies
-                    and the Royal Spin Coach picks the group. It takes a minute. Sending this does not hold
-                    a place and takes no payment — we reply to everyone either way.
+                <p className="text-base text-rr-dark/70 font-medium leading-relaxed mb-4">
+                    Spin Club takes a set number of spinners at each centre, so every player
+                    registers their interest and the Royal Spin Coach picks the group.
                 </p>
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 mb-9">
+                    <p className="text-sm font-black text-rr-dark uppercase tracking-widest mb-2">
+                        How the offers work
+                    </p>
+                    <p className="text-[15px] text-rr-dark/70 font-medium leading-relaxed">
+                        This form is an expression of interest, not a booking. It holds no place and
+                        takes no payment. <strong className="text-rr-dark">First-round offers</strong>{' '}
+                        go to the players the coach picks first. If any are turned down,{' '}
+                        <strong className="text-rr-dark">second-round offers</strong> go to everyone
+                        else who applied. You have a place once you accept an offer and pay.
+                    </p>
+                </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -196,6 +217,22 @@ const SCForm = () => {
                         <textarea id="sc-notes" rows={3} className={ic} value={form.notes} onChange={set('notes')} placeholder="How long you have bowled spin, what you want to get better at, or a night you cannot make." />
                     </div>
 
+                    <label className="flex items-start gap-3 bg-slate-50 border border-slate-200 rounded-2xl p-5 cursor-pointer">
+                        <input
+                            type="checkbox"
+                            className="mt-1 w-5 h-5 accent-rr-pink shrink-0"
+                            checked={form.intent}
+                            onChange={(e) => setForm((f) => ({ ...f, intent: e.target.checked }))}
+                        />
+                        <span className="text-[15px] text-rr-dark font-semibold leading-relaxed">
+                            If I am offered a place, I intend to take it.
+                            <span className="block text-rr-dark/60 font-medium mt-1">
+                                We ask because places are limited, and a place held by someone who
+                                won&rsquo;t use it is a place another spinner missed out on.
+                            </span>
+                        </span>
+                    </label>
+
                     {error && (
                         <p className="text-sm font-bold text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
                             {error}
@@ -207,7 +244,7 @@ const SCForm = () => {
                         disabled={submitting}
                         className="w-full sm:w-auto bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 text-white font-bold uppercase tracking-widest px-10 py-4 rounded-full transition-all duration-300"
                     >
-                        {submitting ? 'Sending…' : 'Send my application'}
+                        {submitting ? 'Sending…' : 'Register my interest'}
                     </button>
                 </form>
             </div>

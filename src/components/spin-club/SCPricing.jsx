@@ -62,8 +62,9 @@ const SCPricing = () => (
             </div>
 
             <p className="text-[13px] text-rr-dark/50 font-medium mt-6 max-w-3xl">
-                Nothing is paid now. You are applying for a place, and we will send you the payment
-                details once the head coach has picked the group and you have told us you want it.
+                Nothing is paid now. You are registering interest, and offers go out in two rounds
+                once the Royal Spin Coach has picked the group. You have a place when you accept an
+                offer and pay.
             </p>
         </div>
     </section>
