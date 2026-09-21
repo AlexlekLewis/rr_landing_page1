@@ -36,6 +36,7 @@ import PrivateCoaching from './components/private-coaching/PrivateCoaching';
 import MicklehamLaunch from './components/mickleham-launch/MicklehamLaunch';
 import Reviews from './components/reviews/Reviews';
 import ProgramFeedback from './components/program-feedback/ProgramFeedback';
+import SpinClub from './components/spin-club/SpinClub';
 import PostHogPageviewTracker from './components/PostHogPageviewTracker';
 
 // DNA Profile — lazy-loaded so it never impacts landing page bundle size
@@ -221,6 +222,12 @@ function App() {
         {/* Elite Program feedback + win-back survey — private link shared with the 2026 cohort.
             Not in nav; writes to program_feedback via the service-role /api/program-feedback. */}
         <Route path="/elite-feedback" element={<ProgramFeedback />} />
+
+        {/* Spin Club — Wednesday-night spin program at Mickleham (North) and Cranbourne
+            North (South). Expression-of-interest page only: the form writes to
+            `applications` with program_type 'Spin Club' and takes no payment. Not in the
+            nav and noindex until Alex announces it. */}
+        <Route path="/spin-club" element={<SpinClub />} />
 
         {/* Power Game Masterclass — RETIRED 2026 (program removed from schedule).
             Routes intentionally fall through to the 404 catch-all so the page is not

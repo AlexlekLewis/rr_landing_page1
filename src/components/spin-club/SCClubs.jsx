@@ -1,0 +1,65 @@
+import React from 'react';
+import { CLUBS, PROGRAM } from './scOptions';
+
+const SCClubs = () => (
+    <section className="bg-slate-50 py-20 md:py-28">
+        <div className="max-w-6xl mx-auto px-6">
+            <p className="text-xs font-black text-rr-pink uppercase tracking-[0.3em] mb-4">
+                Two clubs, two Royal Spin Coaches
+            </p>
+            <h2 className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-6">
+                Pick the one closest to you
+            </h2>
+            <p className="text-base md:text-lg text-rr-dark/70 font-medium leading-relaxed max-w-3xl mb-12">
+                Both clubs run on the same night at the same time, and both are open to spinners
+                aged {PROGRAM.ages}. The Royal Spin Coach named below runs that centre&rsquo;s night
+                and picks its group.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {CLUBS.map((club) => (
+                    <div
+                        key={club.key}
+                        className="bg-white rounded-3xl border border-slate-200 overflow-hidden flex flex-col"
+                    >
+                        <div className="bg-rr-dark px-8 py-6">
+                            <h3 className="text-2xl font-black text-white uppercase tracking-tight leading-none">
+                                {club.name}
+                            </h3>
+                            <p className="text-sm text-white/60 font-medium mt-2">
+                                {club.venue}, {club.suburb} &middot; {club.region}
+                            </p>
+                        </div>
+
+                        <div className="px-8 py-7 flex-1">
+                            <p className="text-xs font-black text-rr-pink uppercase tracking-widest mb-2">
+                                {club.coach.role}
+                            </p>
+                            <p className="text-xl font-black text-rr-dark uppercase tracking-tight mb-1">
+                                {club.coach.name}
+                            </p>
+                            <p className="text-sm font-bold text-rr-dark/60 mb-4">{club.coach.spin}</p>
+                            <p className="text-[15px] text-rr-dark/70 font-medium leading-relaxed">
+                                {club.coach.line}
+                            </p>
+                        </div>
+
+                        <div className="px-8 py-5 border-t border-slate-200 bg-slate-50">
+                            <p className="text-[13px] text-rr-dark/60 font-medium">
+                                {PROGRAM.day}s, {PROGRAM.time}
+                            </p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            <p className="text-[13px] text-rr-dark/50 font-medium mt-6 max-w-3xl">
+                Both coaches play and train through the season, so on the few nights either of them
+                is away with their own cricket, another Academy spin coach runs the session. We tell
+                you in advance when that happens.
+            </p>
+        </div>
+    </section>
+);
+
+export default SCClubs;
