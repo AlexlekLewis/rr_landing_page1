@@ -52,8 +52,8 @@ const SCHero = () => (
                 </p>
 
                 <p className="text-base md:text-lg text-white font-semibold leading-relaxed max-w-2xl mb-10">
-                    You apply, and the Royal Spin Coach picks the group. Tell us about your bowling below
-                    and we will come back to you either way.
+                    Register your interest, and the Royal Spin Coach picks the group. Offers go out
+                    in two rounds, so you hear from us either way.
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-4 max-w-3xl mb-10">

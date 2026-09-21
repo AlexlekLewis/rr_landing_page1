@@ -1,7 +1,7 @@
 // Every fact about Spin Club lives here, so the page and the form can never
 // disagree with each other. Change a price or a time once, here.
 //
-// STILL TO CONFIRM (Alex, 20 Sep 2026): the start date, and how many places
+// STILL TO CONFIRM (Alex, 21 Sep 2026): the start date, and how many places
 // there are at each centre. Both are deliberately absent from the page rather
 // than guessed — see START_DATE below.
 
@@ -12,7 +12,7 @@ export const PROGRAM = {
     time: '7:00–8:30pm',
     sessionLength: '1.5 hours',
     ages: '10 to 25',
-    weeks: 6,
+    weeks: 8,
 };
 
 // Left null on purpose. When Alex confirms the first Wednesday, put it here as
@@ -48,31 +48,32 @@ export const CLUBS = [
     },
 ];
 
-// Priced as a 6-week block (Alex, 21 Sep 2026). $450 is the full price; Performance
-// Squad members take 20% off, which is $360. The per-night figures are the block
-// divided by 6, and the per-hour figures are that divided by the 1.5-hour session.
+// Priced by the hour (Alex, 21 Sep 2026): $30 an hour for Performance Squad
+// members, $50 for everyone else, $60 for a one-off night. The session is
+// 1.5 hours, so the per-night price is the hourly rate x 1.5, and the block
+// price is that x 8 weeks.
 export const PRICES = [
     {
         key: 'squad',
         label: 'Performance Squad members',
-        perSession: '$60',
-        perHour: '$40 an hour',
-        block: '$360 for the 6 weeks',
-        who: 'You are in a Royals Academy Performance Squad this season, which takes 20% off.',
+        perSession: '$45',
+        perHour: '$30 an hour',
+        block: '$360 for the 8 weeks',
+        who: 'You are in a Royals Academy Performance Squad this season.',
     },
     {
         key: 'open',
         label: 'Everyone else',
         perSession: '$75',
         perHour: '$50 an hour',
-        block: '$450 for the 6 weeks',
-        who: 'Any spinner aged 10 to 25 who is selected.',
+        block: '$600 for the 8 weeks',
+        who: 'Any spinner aged 10 to 25 who is offered a place.',
     },
     {
         key: 'single',
         label: 'A single night',
-        perSession: '$82.50',
-        perHour: '$55 an hour',
+        perSession: '$90',
+        perHour: '$60 an hour',
         block: 'Pay for one Wednesday at a time',
         who: 'Come for one session when there is a spare place that week.',
     },
