@@ -72,5 +72,41 @@ export const ACTIVE_MATCH = {
     contactEmail: 'info@rramelbourne.com',
 };
 
+// ─────────────────────────────────────────────────────────────
+// PERFORMANCE SQUAD PRICE — /match-registration-special
+//
+// The SAME page as /match-registration. Everything below is copied
+// from ACTIVE_MATCH and only four things differ:
+//   1. the price          $99 instead of $196
+//   2. the Stripe link    the special-price link, so only squad
+//                         families can reach that price
+//   3. the slug           squad sign-ups stay separate from the
+//                         full-price ones in `match_registrations`
+//   4. squadNote          says on the page why they get this price
+//
+// Reached only by the invite text. Not linked anywhere on the site.
+// ─────────────────────────────────────────────────────────────
+
+export const SQUAD_MATCH = {
+    ...ACTIVE_MATCH,
+
+    slug: 'power-league-sept-2026-squad',
+    eyebrow: 'Performance Squad',
+
+    price: 99,
+    priceLabel: '$99 for both days',
+    priceNote: 'Covers both days. This is the Performance Squad price.',
+
+    // The SPECIAL PRICE Stripe link. Squad families only.
+    paymentLink: 'https://buy.stripe.com/28E9ATfY5c0J7Xm9rR9Zm0K',
+
+    squadNote:
+        'You are getting this price because you are a Performance Squad player. '
+        + 'The normal Power League price is $196. Your price is $99 for both days.',
+
+    deadlineLabel: 'Tuesday 22 September',
+    deadlineNote: 'We pick the teams after that. Places are limited.',
+};
+
 export const MIN_AGE = 6;
 export const MAX_AGE = 21;
