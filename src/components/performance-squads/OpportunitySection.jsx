@@ -8,7 +8,12 @@ import { OPPORTUNITIES, CASE_STUDIES } from './data';
 // The differentiator no club or association can match. Sits high on the page,
 // with proof underneath — the Royals Group placements are the whole argument
 // that this isn't just another T20 competition.
-const OpportunitySection = () => (
+//
+// `lead` is an optional sentence rendered directly above the list. The open age
+// trial page uses it to say, where the reader actually meets the claim, that
+// these are squad opportunities and not trial outcomes. /performance-squads
+// passes nothing and renders exactly what it always has.
+const OpportunitySection = ({ lead = null }) => (
     <section className="py-20 px-5 bg-white/[0.02]">
         <div className="max-w-5xl mx-auto">
             <SectionHeading
@@ -16,6 +21,19 @@ const OpportunitySection = () => (
                 title="This Isn't Another T20 Comp"
                 sub="T20 has torn up the old route to professional cricket, and the exposure opportunities are now greater than ever. The Rajasthan Royals now run a global system — and a Performance Squad place puts you inside it."
             />
+
+            {lead && (
+                <motion.p
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={fadeUp}
+                    custom={0}
+                    className="text-white/70 text-[15px] sm:text-base font-medium leading-relaxed max-w-3xl mx-auto text-center mb-8 -mt-2"
+                >
+                    {lead}
+                </motion.p>
+            )}
 
             {/* Opportunity list */}
             <motion.div

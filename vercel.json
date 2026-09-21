@@ -221,6 +221,14 @@
       "destination": "/api/gone"
     },
     {
+      "source": "/open-age-trial",
+      "destination": "/open-age-trial/index.html"
+    },
+    {
+      "source": "/open-age-trial/",
+      "destination": "/open-age-trial/index.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

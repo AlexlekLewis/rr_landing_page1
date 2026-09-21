@@ -69,15 +69,26 @@ const PC_NAV = [
 // BADGE REVIEW DATES — a badge here is wrong on every page once it expires:
 //   Holiday early bird — 30 Aug 2026
 //   Masterclass        — 13 Sep 2026 (drop the row after the second session)
+//   Open Age T20 Trial — 'Dates Coming' must be replaced the day the dates go
+//                        into openAgeData.TRIAL_SESSIONS, and the row moved up
+//                        into the joinable block above. Review 15 Oct 2026; if
+//                        there are still no dates by then, pull the row.
 const PROGRAMS_DROPDOWN = [
     { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', badge: 'Now Open — Places Limited', badgeColor: 'bg-rr-pink' },
-    { label: 'Performance Squads', route: '/performance-squads', badge: 'Trials Full', badgeColor: 'bg-slate-500' },
-    { label: 'High Performance Camp · India', route: '/tours', badge: 'Applications Closed', badgeColor: 'bg-red-500' },
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 Entries Open', badgeColor: 'bg-green-500' },
     { label: 'Private Coaching', route: '/mickleham', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },
+    // Not joinable today — booking opens when the dates land, so it sits below
+    // the three a visitor can act on now, per the ordering rule above.
+    { label: 'Open Age T20 Trial · 16-25', route: '/open-age-trial', badge: 'Dates Coming', badgeColor: 'bg-amber-500' },
+    { label: 'Performance Squads', route: '/performance-squads', badge: 'Trials Full', badgeColor: 'bg-slate-500' },
+    { label: 'High Performance Camp · India', route: '/tours', badge: 'Applications Closed', badgeColor: 'bg-red-500' },
 ];
 
-const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
+// ctaLabelOverride / ctaTargetOverride let a page whose call to action changes
+// with its own state (the open age trial: "book" once dates exist, "get the
+// dates" before that) set the bar's button without this file importing that
+// page's config. Every existing caller passes neither and is unaffected.
+const Navbar = ({ variant = 'lp1', onRegisterClick, ctaLabelOverride, ctaTargetOverride }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [programsOpen, setProgramsOpen] = useState(false);
     const [mobileProgramsOpen, setMobileProgramsOpen] = useState(false);
@@ -99,18 +110,22 @@ const Navbar = ({ variant = 'lp1', onRegisterClick }) => {
     // takes a selected player to the confirmation form, not the trial registration.
     const isPSWelcome = variant === 'performance-squads-welcome';
     const isMasterclass = variant === 'masterclass';
+    // Open age T20 trial. Same chrome as Performance Squads, but its own CTA:
+    // the squads variant's REGISTER INTEREST points at a booking panel this
+    // page does not have while its dates are pending.
+    const isOpenAgeTrial = variant === 'open-age-trial';
 
-    const navLinks = (isLP3 || isHoliday || isShop || isPerformanceSquads || isPSWelcome || isMasterclass || isPowerGame) ? [] : isIndiaTour ? IT_NAV : isPrivateCoaching ? PC_NAV : isCoaches ? COACHES_NAV : isMickleham ? MICKLEHAM_NAV : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
+    const navLinks = (isLP3 || isHoliday || isShop || isPerformanceSquads || isPSWelcome || isMasterclass || isPowerGame || isOpenAgeTrial) ? [] : isIndiaTour ? IT_NAV : isPrivateCoaching ? PC_NAV : isCoaches ? COACHES_NAV : isMickleham ? MICKLEHAM_NAV : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
     // Standalone pages (Mickleham, Coaches, Private Coaching, India Tour) get the full site nav: Home + the Programs dropdown of live pages.
-    const showProgramsDropdown = isHome || isMickleham || isCoaches || isPrivateCoaching || isIndiaTour || isPerformanceSquads || isPSWelcome || isMasterclass;
-    const showHomeLink = isMickleham || isCoaches || isPrivateCoaching || isIndiaTour || isPerformanceSquads || isPSWelcome || isMasterclass;
+    const showProgramsDropdown = isHome || isMickleham || isCoaches || isPrivateCoaching || isIndiaTour || isPerformanceSquads || isPSWelcome || isMasterclass || isOpenAgeTrial;
+    const showHomeLink = isMickleham || isCoaches || isPrivateCoaching || isIndiaTour || isPerformanceSquads || isPSWelcome || isMasterclass || isOpenAgeTrial;
     const showCTA = !isShop && !isPowerGame;
     const showHamburger = !isShop;
 
     // Junior Royals (isLittleCrickets): Term 3 is sold out — the CTA points at
     // the Term 4 entry form (Mondays & Wednesdays, no payment now).
-    const ctaLabel = isPSWelcome ? 'CONFIRM YOUR PLACE' : isMasterclass ? 'BOOK YOUR PLACE' : isPerformanceSquads ? 'REGISTER INTEREST' : isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : isLittleCrickets ? 'TERM 4 — ENTER NOW' : isLP2 ? 'SECURE YOUR PLACE NOW' : isHoliday ? 'SECURE YOUR PLACE' : 'REGISTER INTEREST';
-    const ctaTarget = isPSWelcome ? 'confirm' : isMasterclass ? 'register' : isPerformanceSquads ? 'register-pay' : isIndiaTour ? 'register' : isMickleham ? 'register' : isCoaches ? 'join' : isPrivateCoaching ? 'eoi-form' : isLP2 ? 'checkout' : isHoliday ? 'secure-form' : isLittleCrickets ? 'registration-form' : 'apply-form';
+    const ctaLabel = ctaLabelOverride || (isPSWelcome ? 'CONFIRM YOUR PLACE' : isMasterclass ? 'BOOK YOUR PLACE' : isPerformanceSquads ? 'REGISTER INTEREST' : isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : isLittleCrickets ? 'TERM 4 — ENTER NOW' : isLP2 ? 'SECURE YOUR PLACE NOW' : isHoliday ? 'SECURE YOUR PLACE' : 'REGISTER INTEREST');
+    const ctaTarget = ctaTargetOverride || (isPSWelcome ? 'confirm' : isMasterclass ? 'register' : isPerformanceSquads ? 'register-pay' : isIndiaTour ? 'register' : isMickleham ? 'register' : isCoaches ? 'join' : isPrivateCoaching ? 'eoi-form' : isLP2 ? 'checkout' : isHoliday ? 'secure-form' : isLittleCrickets ? 'registration-form' : 'apply-form');
 
     const scrollToForm = () => {
         if (isHome && onRegisterClick) {

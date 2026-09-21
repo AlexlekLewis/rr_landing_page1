@@ -24,10 +24,16 @@ const PaymentModal = ({ open, registration, onClose }) => {
     const sessionIds = registration?.sessionIds || [];
     const sessions = sessionIds.length;
 
-    const centreName = ACTIVE_CENTRES.find((c) => c.slug === centre)?.name || '';
-    const sessionLabels = getTrialSessions(centre)
-        .filter((s) => sessionIds.includes(s.id))
-        .map((s) => s.label);
+    // A caller whose sessions do not live in data.js CENTRES (the open age trial
+    // keeps its own dates) can pass the labels and centre name straight through.
+    // Both fall back to the data.js lookup, so /performance-squads is unchanged.
+    const centreName = registration?.centreName
+        || ACTIVE_CENTRES.find((c) => c.slug === centre)?.name
+        || '';
+    const sessionLabels = registration?.sessionLabels
+        || getTrialSessions(centre)
+            .filter((s) => sessionIds.includes(s.id))
+            .map((s) => s.label);
 
     // Work out what's being charged, and the link, per signup type.
     const isTrial = signup.key === 'trial';
@@ -184,6 +190,19 @@ const PaymentModal = ({ open, registration, onClose }) => {
                                     dismissed with the X or by tapping outside; we just no longer
                                     invite it. Restore this only once a confirmation email with the
                                     pay link actually exists. */}
+                                {/* The Stripe link opens with no email prefilled, and the
+                                    coach's sheet matches money to a registration on the
+                                    PAYER's email alone. A player who registers with one
+                                    address while a parent pays with another lands in the
+                                    Payments tab unmatched. Shown only where the caller asks
+                                    for it, so the live squads flow is unchanged; that form
+                                    has the same gap and the same sentence would fix it. */}
+                                {registration?.payerEmailHint && (
+                                    <p className="text-amber-300/80 text-xs font-medium text-center mt-4 leading-relaxed">
+                                        Please pay with the same email address you just registered with,
+                                        so we can match your payment to your booking.
+                                    </p>
+                                )}
                                 <p className="text-white/35 text-xs font-medium text-center mt-4">
                                     Payments are processed securely by Stripe. Your trial spot is not
                                     held until payment is received.

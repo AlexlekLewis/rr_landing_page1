@@ -12,6 +12,7 @@ import {
   colLetter,
   describeLinkHealth,
   aggregatePaymentsByEmail,
+  allocatePaymentsToRegistrations,
 } from './sync-performance-squads.js';
 
 const lead = (over = {}) => ({
@@ -259,6 +260,71 @@ describe('aggregatePaymentsByEmail', () => {
   it('ignores a payment with no email rather than grouping them together', () => {
     const m = aggregatePaymentsByEmail([pay({ payerEmail: '' }), pay({ payerEmail: null })]);
     expect(m.size).toBe(0);
+  });
+});
+
+// The open age trial reuses the South-East Stripe links for a second intake,
+// so the same email now legitimately appears on two registrations months apart.
+// Matching money to an email for all time would tell the coach a player had
+// paid for a trial he had not paid for.
+describe('allocatePaymentsToRegistrations — a second intake on the same links', () => {
+  const sept = lead({ id: 'reg-sept', created_at: '2026-09-01T00:00:00Z', program_type: 'performance-squads-2026' });
+  const oct = lead({ id: 'reg-oct', created_at: '2026-10-01T00:00:00Z', program_type: 'performance-squads-open-age-2026' });
+  const pay = (over = {}) => ({
+    sessionId: 'cs_1', paidAt: '2026-09-02T00:00:00Z',
+    payerEmail: 'parent@example.com', amountCents: 3000, ...over,
+  });
+
+  it('does not let September money pay for an October trial', () => {
+    const { byRegId } = allocatePaymentsToRegistrations([sept, oct], [pay()]);
+    expect(byRegId.get('reg-sept').amountCents).toBe(3000);
+    expect(byRegId.get('reg-oct')).toBeUndefined();
+  });
+
+  it('settles each intake with the money taken for it', () => {
+    const { byRegId } = allocatePaymentsToRegistrations([sept, oct], [
+      pay({ sessionId: 'cs_sept', paidAt: '2026-09-02T00:00:00Z' }),
+      pay({ sessionId: 'cs_oct', paidAt: '2026-10-02T00:00:00Z' }),
+    ]);
+    expect(byRegId.get('reg-sept').amountCents).toBe(3000);
+    expect(byRegId.get('reg-oct').amountCents).toBe(3000);
+  });
+
+  it('still sums two payments made against the same registration', () => {
+    const { byRegId } = allocatePaymentsToRegistrations([sept], [
+      pay({ sessionId: 'cs_1' }),
+      pay({ sessionId: 'cs_2' }),
+    ]);
+    expect(byRegId.get('reg-sept').amountCents).toBe(6000);
+    expect(byRegId.get('reg-sept').method).toBe('email match (2 payments)');
+  });
+
+  it('gives a payment made before any registration to the first one, as it always did', () => {
+    const { byRegId } = allocatePaymentsToRegistrations([sept, oct], [
+      pay({ paidAt: '2026-08-30T00:00:00Z' }),
+    ]);
+    expect(byRegId.get('reg-sept').amountCents).toBe(3000);
+  });
+
+  it('names the registration each payment actually settled, with its program', () => {
+    const { regIdByPayment } = allocatePaymentsToRegistrations([sept, oct], [
+      pay({ sessionId: 'cs_oct', paidAt: '2026-10-02T00:00:00Z' }),
+    ]);
+    expect(regIdByPayment.get('cs_oct')).toMatchObject({
+      id: 'reg-oct', program: 'performance-squads-open-age-2026',
+    });
+  });
+
+  it('matches regardless of case or whitespace, like the rest of the sync', () => {
+    const { byRegId } = allocatePaymentsToRegistrations([sept], [
+      pay({ payerEmail: '  PARENT@Example.com ' }),
+    ]);
+    expect(byRegId.get('reg-sept').amountCents).toBe(3000);
+  });
+
+  it('drops a payment with no email rather than guessing an owner', () => {
+    const { byRegId } = allocatePaymentsToRegistrations([sept], [pay({ payerEmail: '' })]);
+    expect(byRegId.size).toBe(0);
   });
 });
 

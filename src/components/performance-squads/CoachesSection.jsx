@@ -3,16 +3,19 @@ import { motion } from 'framer-motion';
 import { fadeUp, SectionHeading } from './shared';
 import { SQUAD_COACHES } from './data';
 
-const CoachesSection = () => (
+// Content-driven so a page recruiting into ONE squad can show only that squad's
+// head coach. Defaults are the full Performance Squads pair and heading.
+const CoachesSection = ({
+    coaches = SQUAD_COACHES,
+    eyebrow = 'Your Coaches',
+    title = 'Led By The Royals Ecosystem Coaches',
+    sub = 'Each Performance Squad is led by highly experienced CA and Royals accredited Head Coaches who set the standard, pick the teams, and drive the squad through the season.',
+}) => (
     <section className="py-20 px-5">
         <div className="max-w-5xl mx-auto">
-            <SectionHeading
-                eyebrow="Your Coaches"
-                title="Led By The Royals Ecosystem Coaches"
-                sub="Each Performance Squad is led by highly experienced CA and Royals accredited Head Coaches who set the standard, pick the teams, and drive the squad through the season."
-            />
-            <div className="grid sm:grid-cols-2 gap-5">
-                {SQUAD_COACHES.map((coach, i) => (
+            <SectionHeading eyebrow={eyebrow} title={title} sub={sub} />
+            <div className={`grid gap-5 ${coaches.length > 1 ? 'sm:grid-cols-2' : 'max-w-md mx-auto'}`}>
+                {coaches.map((coach, i) => (
                     <motion.div
                         key={coach.name}
                         initial="hidden"

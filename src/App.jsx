@@ -66,6 +66,11 @@ const PerformanceSquadsInterest = React.lazy(() => import('./components/performa
 // page for every region; details live in components/performance-squads/welcome/welcomeConfig.js.
 const PerformanceSquadsWelcome = React.lazy(() => import('./components/performance-squads/welcome/WelcomePage'));
 const PerformanceSquadsWelcomeSuccess = React.lazy(() => import('./components/performance-squads/welcome/WelcomeSuccess'));
+
+// Open age T20 trial — an EXTRA INTAKE into the existing South-East Melbourne
+// Performance Squad at Cranbourne North, headlined by Sid Lahiri, Performance
+// Coach of the Rajasthan Royals. Public and indexed, unlike /performance-squads.
+const OpenAgeTrial = React.lazy(() => import('./components/open-age-trial/OpenAgeTrial'));
 // Match Registration — reusable match-day registration + payment page. Match-specific
 // detail lives in src/components/match-registration/matchConfig.js, so the next block
 // of matches is a config swap, not a new page. HIDDEN: noindex, direct URL only.
@@ -242,6 +247,8 @@ function App() {
         <Route path="/performance-squads/interest" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquadsInterest /></React.Suspense>} />
         <Route path="/performance-squads/welcome" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquadsWelcome /></React.Suspense>} />
         <Route path="/performance-squads/welcome/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquadsWelcomeSuccess /></React.Suspense>} />
+
+        <Route path="/open-age-trial" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><OpenAgeTrial /></React.Suspense>} />
 
         {/* Match Registration — reusable match-day registration + payment. HIDDEN:
             noindex, not in nav or sitemap, direct URL only. Currently serving the
