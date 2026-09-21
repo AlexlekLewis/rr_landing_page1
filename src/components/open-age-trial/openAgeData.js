@@ -113,7 +113,7 @@ export const MAX_TRIAL_SESSIONS = Math.min(REQUESTED_MAX_TRIAL_SESSIONS, MAX_PAY
 export const getOpenTrialSessions = () => TRIAL_SESSIONS.filter((s) => s.full !== true);
 export const isSessionFull = (id) =>
     (TRIAL_SESSIONS.find((s) => s.id === id) || {}).full === true;
-// A player at a trial with one night left can only pick one, whatever the cap
+// A player at a trial with one session left can only pick one, whatever the cap
 // says. Every "choose up to N" line reads from here.
 export const getSelectableSessionCount = () =>
     Math.min(MAX_TRIAL_SESSIONS, getOpenTrialSessions().length);
@@ -182,10 +182,10 @@ export const SID = {
 
     // Kills the most reasonable false read available to a disappointed player
     // or parent: that the man in the hero is the man who hands out the global
-    // placements listed further down the page. He is not, on this night.
+    // placements listed further down the page. He is not, on the day.
     separation:
         'Sid is at the trial to watch cricket. He is not selecting anyone for anything on the '
-        + 'night. Selection into the squad is Alex Thornhill’s call, and the global '
+        + 'day. Selection into the squad is Alex Thornhill’s call, and the global '
         + 'opportunities are a separate process that happens later and is competitive.',
 };
 
@@ -217,8 +217,8 @@ export const SID_SECTION = {
         'Sid Lahiri is the Performance Coach of the Rajasthan Royals. The Royals run a global '
         + 'system across the IPL, the SA20 and the CPL, and Sid is part of the coaching staff '
         + 'inside it.',
-        'He is coming to Cranbourne North for this trial. That is not a normal night of suburban '
-        + 'cricket, and it is the reason this page exists.',
+        'He is coming to Cranbourne North for this trial. That is not a normal session of '
+        + 'suburban cricket, and it is the reason this page exists.',
     ],
 };
 
