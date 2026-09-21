@@ -70,6 +70,7 @@ const PerformanceSquadsWelcomeSuccess = React.lazy(() => import('./components/pe
 // of matches is a config swap, not a new page. HIDDEN: noindex, direct URL only.
 const MatchRegistration = React.lazy(() => import('./components/match-registration/MatchRegistration'));
 const MatchRegistrationSuccess = React.lazy(() => import('./components/match-registration/MatchRegistrationSuccess'));
+import { SQUAD_MATCH } from './components/match-registration/matchConfig';
 
 // Admin components
 import AdminLogin from './components/admin/AdminLogin';
@@ -240,6 +241,11 @@ function App() {
             Power League Matches, Mon 28 & Tue 29 September. */}
         <Route path="/match-registration" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><MatchRegistration /></React.Suspense>} />
         <Route path="/match-registration/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><MatchRegistrationSuccess /></React.Suspense>} />
+        {/* Performance Squad price. Same page, same form, same consents.
+            Only the price, the Stripe link and the slug differ. Reached
+            only by the invite text, never linked from the site. */}
+        <Route path="/match-registration-special" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><MatchRegistration match={SQUAD_MATCH} /></React.Suspense>} />
+        <Route path="/match-registration-special/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><MatchRegistrationSuccess match={SQUAD_MATCH} /></React.Suspense>} />
 
         {/* Power Game Program — hidden from nav, accessible via direct URL only */}
         <Route path="/elite-royals" element={<PowerGame />} />

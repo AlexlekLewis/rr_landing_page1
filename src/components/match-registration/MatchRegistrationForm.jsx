@@ -30,9 +30,9 @@ const MRCheckbox = ({ checked, onToggle, error, children }) => (
 // a yes would both contradict that and stop anyone who declines from registering
 // at all. Both answers let the player through; the answer is stored either way so
 // there's a clean list of who to keep off camera.
-const FilmingChoice = ({ value, onChange, error }) => {
+const FilmingChoice = ({ value, onChange, error, partner }) => {
     const options = [
-        { key: 'consented', icon: Video, label: `I'm happy for the player to appear on the ${ACTIVE_MATCH.streaming.partner} stream` },
+        { key: 'consented', icon: Video, label: `I'm happy for the player to appear on the ${partner} stream` },
         { key: 'declined', icon: VideoOff, label: 'Please keep the player off the stream' },
     ];
     return (
@@ -61,7 +61,7 @@ const FilmingChoice = ({ value, onChange, error }) => {
     );
 };
 
-const MatchRegistrationForm = ({ onRequestPayment }) => {
+const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
     const [form, setForm] = useState({
         player_name: '',
         player_age: '',
@@ -129,8 +129,8 @@ const MatchRegistrationForm = ({ onRequestPayment }) => {
 
             const { error } = await supabase.from('match_registrations').insert([
                 {
-                    match_slug: ACTIVE_MATCH.slug,
-                    match_name: ACTIVE_MATCH.name,
+                    match_slug: match.slug,
+                    match_name: match.name,
                     player_name: form.player_name.trim(),
                     player_age: Number(form.player_age),
                     parent_name: form.parent_name.trim(),
@@ -144,7 +144,7 @@ const MatchRegistrationForm = ({ onRequestPayment }) => {
                     filming_consent: form.filming_consent,
                     volunteer: form.volunteer,
                     volunteer_role: form.volunteer ? form.volunteer_role : null,
-                    amount: ACTIVE_MATCH.price,
+                    amount: match.price,
                     page_referrer: document.referrer || null,
                     ...utm,
                 },
@@ -156,7 +156,7 @@ const MatchRegistrationForm = ({ onRequestPayment }) => {
             onRequestPayment?.({ playerName: form.player_name.trim() });
         } catch (err) {
             console.error('Match registration error:', err);
-            setErrors({ form: `Something went wrong. Please try again or email ${ACTIVE_MATCH.contactEmail}` });
+            setErrors({ form: `Something went wrong. Please try again or email ${match.contactEmail}` });
         } finally {
             setSubmitting(false);
         }
@@ -171,7 +171,7 @@ const MatchRegistrationForm = ({ onRequestPayment }) => {
                 <SectionHeading
                     eyebrow="Register & Pay"
                     title="Confirm Your Spot"
-                    sub={`Enter the player's details, confirm the checklist below, and pay — all in one step. Your spot isn't locked in until payment is received. Please pay by ${ACTIVE_MATCH.deadlineLabel}.`}
+                    sub={`Enter the player's details, confirm the checklist below, and pay — all in one step. Your spot isn't locked in until payment is received. Please pay by ${match.deadlineLabel}.`}
                 />
 
                 {submitted ? (
@@ -325,10 +325,11 @@ const MatchRegistrationForm = ({ onRequestPayment }) => {
                                 Live Streaming
                             </p>
                             <p className="text-white/55 text-[13px] font-medium leading-relaxed mb-4">
-                                {ACTIVE_MATCH.streaming.partner} will be producing and streaming the matches.
+                                {match.streaming.partner} will be producing and streaming the matches.
                                 Please choose one — both options are fine, we just need to know.
                             </p>
                             <FilmingChoice
+                                partner={match.streaming.partner}
                                 value={form.filming_consent}
                                 onChange={(v) => set('filming_consent', v)}
                                 error={errors.filming_consent}
@@ -341,7 +342,7 @@ const MatchRegistrationForm = ({ onRequestPayment }) => {
                                 Can You Help?
                             </p>
                             <p className="text-white/55 text-[13px] font-medium leading-relaxed mb-4">
-                                {ACTIVE_MATCH.volunteers.blurb}
+                                {match.volunteers.blurb}
                             </p>
                             <MRCheckbox checked={form.volunteer} onToggle={() => toggle('volunteer')}>
                                 Yes — I can help out across the two days.
@@ -356,7 +357,7 @@ const MatchRegistrationForm = ({ onRequestPayment }) => {
                                             onChange={(e) => set('volunteer_role', e.target.value)}
                                         >
                                             <option value="">Select an option</option>
-                                            {ACTIVE_MATCH.volunteers.roles.map((r) => (
+                                            {match.volunteers.roles.map((r) => (
                                                 <option key={r.value} value={r.value}>{r.label}</option>
                                             ))}
                                         </select>
@@ -377,7 +378,7 @@ const MatchRegistrationForm = ({ onRequestPayment }) => {
                             className="w-full mt-8 inline-flex items-center justify-center gap-2 whitespace-nowrap bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-wider text-[13px] sm:text-sm rounded-full px-5 sm:px-8 py-4 transition-colors"
                         >
                             {submitting ? 'Submitting…' : (
-                                <>Continue To Payment · ${ACTIVE_MATCH.price} <ArrowRight className="w-4 h-4" /></>
+                                <>Continue To Payment · ${match.price} <ArrowRight className="w-4 h-4" /></>
                             )}
                         </button>
 

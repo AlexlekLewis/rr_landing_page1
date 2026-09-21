@@ -5,7 +5,7 @@ import { ACTIVE_MATCH } from './matchConfig';
 
 // Confirmation + payment step. Registration is already written to Supabase by
 // the time this opens, so nothing is lost if the player leaves the page.
-const MatchPaymentModal = ({ open, registration, onClose }) => {
+const MatchPaymentModal = ({ open, registration, onClose, match = ACTIVE_MATCH }) => {
     const closeRef = useRef(null);
     const panelRef = useRef(null);
 
@@ -38,8 +38,8 @@ const MatchPaymentModal = ({ open, registration, onClose }) => {
     }, [open, onClose]);
 
     const lineItems = [
-        ACTIVE_MATCH.datesLabel,
-        ACTIVE_MATCH.venue.name,
+        match.datesLabel,
+        match.venue.name,
         '4 games per player across the two days',
     ];
 
@@ -89,7 +89,7 @@ const MatchPaymentModal = ({ open, registration, onClose }) => {
 
                         <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-6">
                             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-rr-pink mb-3">
-                                {ACTIVE_MATCH.name}
+                                {match.name}
                             </p>
                             <ul className="space-y-2 mb-4">
                                 {lineItems.map((l) => (
@@ -101,7 +101,7 @@ const MatchPaymentModal = ({ open, registration, onClose }) => {
                             </ul>
                             <div className="flex items-center justify-between pt-3 border-t border-white/10">
                                 <span className="text-sm font-bold uppercase tracking-wider text-white/70">Both days</span>
-                                <span className="text-2xl font-black text-rr-light-pink">${ACTIVE_MATCH.price}</span>
+                                <span className="text-2xl font-black text-rr-light-pink">${match.price}</span>
                             </div>
                         </div>
 
@@ -112,15 +112,15 @@ const MatchPaymentModal = ({ open, registration, onClose }) => {
                             SAME tab. Nothing is lost by leaving — the registration row
                             is already saved. ── */}
                         <a
-                            href={ACTIVE_MATCH.paymentLink}
+                            href={match.paymentLink}
                             className="w-full inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
                         >
-                            <CreditCard className="w-4 h-4" /> Pay ${ACTIVE_MATCH.price} Now
+                            <CreditCard className="w-4 h-4" /> Pay ${match.price} Now
                         </a>
 
                         <p className="text-white/35 text-xs font-medium text-center mt-4">
                             Payments are processed securely by Stripe. Please pay by{' '}
-                            {ACTIVE_MATCH.deadlineLabel}.
+                            {match.deadlineLabel}.
                         </p>
                     </motion.div>
                 </motion.div>

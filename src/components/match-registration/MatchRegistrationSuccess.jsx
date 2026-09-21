@@ -8,8 +8,8 @@ import { ACTIVE_MATCH } from './matchConfig';
 // Branded confirmation shown after payment. Reached via the Stripe Payment
 // Link's after_completion redirect:
 //   /match-registration/success
-const MatchRegistrationSuccess = () => {
-    const m = ACTIVE_MATCH;
+const MatchRegistrationSuccess = ({ match = ACTIVE_MATCH }) => {
+    const m = match;
 
     useEffect(() => {
         window.scrollTo(0, 0);

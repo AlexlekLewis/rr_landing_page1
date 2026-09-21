@@ -56,9 +56,9 @@ const ListCard = ({ icon: Icon, title, items, delay = 0 }) => (
     </motion.div>
 );
 
-const MatchRegistration = () => {
+const MatchRegistration = ({ match = ACTIVE_MATCH }) => {
     const [payModal, setPayModal] = useState(null);
-    const m = ACTIVE_MATCH;
+    const m = match;
 
     // ── Hidden page: noindex + title ──
     useEffect(() => {
@@ -110,6 +110,22 @@ const MatchRegistration = () => {
                         >
                             {m.datesLabel}
                         </motion.p>
+                        {/* Squad price banner. Only renders on the special-price
+                            page, so the full-price page is untouched. */}
+                        {m.squadNote && (
+                            <motion.div
+                                initial="hidden" animate="visible" variants={fadeUp} custom={0.18}
+                                className="mb-8 bg-rr-pink/15 border border-rr-pink/45 rounded-2xl px-5 py-4 max-w-xl mx-auto"
+                            >
+                                <p className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-rr-light-pink mb-2">
+                                    Performance Squad price
+                                </p>
+                                <p className="text-white/90 text-[15px] sm:text-base font-bold leading-relaxed">
+                                    {m.squadNote}
+                                </p>
+                            </motion.div>
+                        )}
+
                         <motion.p
                             initial="hidden" animate="visible" variants={fadeUp} custom={0.2}
                             className="text-white/65 text-[15px] sm:text-base font-medium leading-relaxed max-w-xl mx-auto mb-8"
@@ -223,12 +239,13 @@ const MatchRegistration = () => {
 
                 {/* ── REGISTER ── */}
                 <div id="register-pay" className="scroll-mt-28 lg:scroll-mt-32">
-                    <MatchRegistrationForm onRequestPayment={setPayModal} />
+                    <MatchRegistrationForm onRequestPayment={setPayModal} match={m} />
                 </div>
             </main>
 
             <Footer />
             <MatchPaymentModal
+                match={m}
                 open={!!payModal}
                 registration={payModal}
                 onClose={() => setPayModal(null)}
