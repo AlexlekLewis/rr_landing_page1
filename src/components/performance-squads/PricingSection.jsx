@@ -10,14 +10,30 @@ import {
     FINANCIAL_CONDITION,
 } from './data';
 
-const PricingSection = () => (
+// Content-driven so a page with no published post-selection fee can render
+// stage one alone. Every prop defaults to the Performance Squads copy, so an
+// unprop'd call renders exactly what /performance-squads has always rendered.
+const PricingSection = ({
+    eyebrow = 'Fees',
+    title = 'Two Stages of the Process',
+    sub = "You pay a trial fee to be assessed. If you're selected, you then pay a Registration Fee to take up your squad place.",
+    // When false, the Registration Fee card and the "what your squad place
+    // includes" list are not rendered. Pass `footnote` to say plainly that a
+    // further fee exists, so dropping the card never means going quiet on it.
+    showRegistrationStage = true,
+    footnote = null,
+    ctaLabel = 'Register For A Trial',
+    // The "register for 1 or 2 sessions" line used to be a hardcoded string, so
+    // a page whose cap or price differed would advertise one thing while its
+    // form accepted another. Both now come from the caller, defaulting to the
+    // Performance Squads values.
+    trialPrice = TRIAL_PRICE,
+    maxTrialSessions = 2,
+    trialIncludes = TRIAL_INCLUDES,
+}) => (
     <section className="py-20 px-5 bg-white/[0.02]">
         <div className="max-w-5xl mx-auto">
-            <SectionHeading
-                eyebrow="Fees"
-                title="Two Stages of the Process"
-                sub="You pay a trial fee to be assessed. If you're selected, you then pay a Registration Fee to take up your squad place."
-            />
+            <SectionHeading eyebrow={eyebrow} title={title} sub={sub} />
 
             {/* Stage 1 — trial */}
             <motion.div
@@ -26,7 +42,9 @@ const PricingSection = () => (
             >
                 <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
                     <div className="flex items-center gap-4">
-                        <span className="text-3xl font-black text-rr-pink/30 leading-none">01</span>
+                        {showRegistrationStage && (
+                            <span className="text-3xl font-black text-rr-pink/30 leading-none">01</span>
+                        )}
                         <div>
                             <h3 className="text-xl font-black uppercase leading-tight">Trial Fee</h3>
                             <p className="text-white/50 text-xs font-bold uppercase tracking-wider mt-0.5">
@@ -42,10 +60,13 @@ const PricingSection = () => (
                     </div>
                 </div>
                 <p className="text-white/65 text-[15px] font-medium leading-relaxed mb-4">
-                    Register for 1 or 2 trial sessions — $30 for each session you attend.
+                    {maxTrialSessions > 1
+                        ? `Register for 1 or ${maxTrialSessions} trial sessions`
+                        : 'Register for 1 trial session'}
+                    {' \u2014 '}${trialPrice} for each session you attend.
                 </p>
                 <ul className="space-y-2.5">
-                    {TRIAL_INCLUDES.map((item) => (
+                    {trialIncludes.map((item) => (
                         <li key={item} className="flex items-start gap-3">
                             <Check className="w-5 h-5 text-rr-pink shrink-0 mt-0.5" />
                             <span className="text-white/75 text-[15px] font-medium leading-relaxed">{item}</span>
@@ -55,6 +76,7 @@ const PricingSection = () => (
             </motion.div>
 
             {/* Stage 2 — registration, only if selected */}
+            {showRegistrationStage && (
             <motion.div
                 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0.1}
                 className="bg-gradient-to-br from-rr-navy to-rr-dark border border-rr-pink/30 rounded-2xl p-7 sm:p-9 mb-6"
@@ -100,6 +122,16 @@ const PricingSection = () => (
                     ))}
                 </ul>
             </motion.div>
+            )}
+
+            {footnote && (
+                <motion.p
+                    initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0.05}
+                    className="text-white/65 text-sm sm:text-[15px] font-medium leading-relaxed max-w-2xl mx-auto mb-6 text-center"
+                >
+                    {footnote}
+                </motion.p>
+            )}
 
             <motion.p
                 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}
@@ -113,7 +145,7 @@ const PricingSection = () => (
                     onClick={() => scrollTo('register-pay')}
                     className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
                 >
-                    Register For A Trial <ArrowRight className="w-4 h-4" />
+                    {ctaLabel} <ArrowRight className="w-4 h-4" />
                 </button>
             </div>
         </div>

@@ -6,16 +6,21 @@ import { AUDIENCE } from './data';
 
 // Sits directly under the hero so a player can self-identify before they
 // hit any logistics. Deliberately names the overlooked and the older player.
-const AudienceSection = () => (
+//
+// Content-driven so other pages can reuse the layout with their own cards.
+// Every prop defaults to the Performance Squads copy, so calling it with no
+// props renders exactly what /performance-squads has always rendered.
+const AudienceSection = ({
+    items = AUDIENCE,
+    eyebrow = 'Who This Is For',
+    title = 'Built For Emerging Cricketers',
+    sub = 'Performance Squads are for players serious about a short-format game \u2014 whatever the traditional pathway has decided so far.',
+}) => (
     <section className="py-20 px-5">
         <div className="max-w-5xl mx-auto">
-            <SectionHeading
-                eyebrow="Who This Is For"
-                title="Built For Emerging Cricketers"
-                sub="Performance Squads are for players serious about a short-format game — whatever the traditional pathway has decided so far."
-            />
+            <SectionHeading eyebrow={eyebrow} title={title} sub={sub} />
             <div className="grid sm:grid-cols-2 gap-5">
-                {AUDIENCE.map((a, i) => (
+                {items.map((a, i) => (
                     <motion.div
                         key={a.title}
                         initial="hidden"

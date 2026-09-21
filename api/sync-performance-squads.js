@@ -114,6 +114,8 @@ const TRIAL_SESSION_LABELS = {
   'se-2026-09-06': 'Sun 6 Sep, 7:00-8:30 PM (Cranbourne Nth)',
   'se-2026-09-11': 'Fri 11 Sep, 8:00-9:30 PM (Cranbourne Nth)',
   'se-2026-09-13': 'Sun 13 Sep, 7:00-8:30 PM (Cranbourne Nth)',
+  // Open age trial. The oa- prefix tells these apart from squad trials at a glance.
+  'oa-2026-10-04': 'Sun 4 Oct, 1:00-2:30 PM (Cranbourne Nth, open age)',
 };
 const sessionLabel = (id) => TRIAL_SESSION_LABELS[id] || id;
 
@@ -290,10 +292,15 @@ export const PAY_HEADERS = [
   'Centre (from payment link)',
   'Matched Registration',
   'Matched Player',
+  // The open age trial reuses the South-East Stripe links, so open age money and
+  // squad trial money are the SAME product inside Stripe and cannot be told
+  // apart on the payment side. The matched registration's program_type is the
+  // only thing that splits them, so it is carried across to this tab.
+  'Matched Program',
   'Stripe Status',
 ];
-// PAY_HEADERS.length === 10 === column J.
-const PAY_LAST_COL = 'J';
+// PAY_HEADERS.length === 11 === column K.
+const PAY_LAST_COL = 'K';
 
 export const payRow = (p) => ([
   p.sessionId,
@@ -305,6 +312,7 @@ export const payRow = (p) => ([
   CENTRE_NAMES[p.centre] || p.centre || '',
   p.matchedId || 'UNMATCHED — no registration with this email',
   p.matchedPlayer || '',
+  p.matchedProgram || '',
   p.status || '',
 ]);
 
@@ -415,6 +423,11 @@ export async function fetchPerformanceSquadPayments(stripe, sinceUnix) {
 // sessions in two separate transactions must read as the sum, not as whichever
 // one Stripe happened to return last. `paidAt` keeps the EARLIEST payment, so
 // the sheet shows when they first committed.
+//
+// NOT used by the sync any more — allocatePaymentsToRegistrations below settles
+// each payment against one registration instead, which is what a second intake
+// on the same Stripe links needs. Kept because it is the clearest statement of
+// how a single email's payments add up, and it is covered by tests.
 export function aggregatePaymentsByEmail(payments) {
   const byEmail = new Map();
   for (const p of payments) {
@@ -431,6 +444,74 @@ export function aggregatePaymentsByEmail(payments) {
     prev.method = `email match (${prev.count} payments)`;
   }
   return byEmail;
+}
+
+// A payment can land a little before the registration row it belongs to —
+// clock skew, or a player who opened the link then finished the form. Five
+// minutes is generous and far shorter than any gap between two intakes.
+const PAYMENT_GRACE_MS = 5 * 60 * 1000;
+
+// Give every payment to ONE registration, instead of giving every registration
+// the lifetime total for its email address.
+//
+// This matters the moment a second intake reuses the same Stripe links. Someone
+// who paid $30 for a September squad trial and later books one $30 open age
+// session would otherwise read as fully PAID on the coach's sheet without
+// paying anything for the second trial, and the September row would read as
+// overpaid. 92 distinct emails already carry 104 South-East rows, so this is
+// not hypothetical.
+//
+// A payment goes to the most recent registration made at or before it. A
+// payment that predates every registration for that email goes to the first
+// one, which is what the old behaviour did and what the Stripe lookback window
+// was built for. An email with exactly one registration is therefore unchanged.
+export function allocatePaymentsToRegistrations(leads, payments) {
+  const regsByEmail = new Map();
+  for (const r of leads || []) {
+    const k = emailKey(r.email);
+    if (!k) continue;
+    if (!regsByEmail.has(k)) regsByEmail.set(k, []);
+    regsByEmail.get(k).push(r);
+  }
+  for (const list of regsByEmail.values()) {
+    list.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+  }
+
+  const byRegId = new Map();      // registration id -> paid summary
+  const regIdByPayment = new Map(); // stripe session id -> { id, player, program }
+
+  for (const p of payments) {
+    const k = emailKey(p.payerEmail);
+    const regs = k ? regsByEmail.get(k) : null;
+    if (!regs || !regs.length) continue;
+
+    const paidAt = new Date(p.paidAt).getTime();
+    let target = regs[0];
+    for (const r of regs) {
+      if (new Date(r.created_at).getTime() <= paidAt + PAYMENT_GRACE_MS) target = r;
+      else break;
+    }
+
+    regIdByPayment.set(p.sessionId, {
+      id: target.id,
+      player: target.player_name,
+      program: target.program_type || '',
+    });
+
+    const prev = byRegId.get(target.id);
+    if (!prev) {
+      byRegId.set(target.id, {
+        amountCents: p.amountCents || 0, paidAt: p.paidAt, method: 'email match', count: 1,
+      });
+      continue;
+    }
+    prev.amountCents += p.amountCents || 0;
+    prev.count += 1;
+    if (new Date(p.paidAt) < new Date(prev.paidAt)) prev.paidAt = p.paidAt;
+    prev.method = `email match (${prev.count} payments)`;
+  }
+
+  return { byRegId, regIdByPayment };
 }
 
 // ------------------------------------------------------------
@@ -813,14 +894,10 @@ export async function reconcilePerformanceSquads(sheets, spreadsheetId, sb = nul
     }));
   }
 
-  const paidByEmail = aggregatePaymentsByEmail(payments);
-
-  // Registration email -> {id, player} so the Payments tab can name its match.
-  const regByEmail = new Map();
-  for (const r of leads || []) {
-    const k = emailKey(r.email);
-    if (k && !regByEmail.has(k)) regByEmail.set(k, { id: r.id, player: r.player_name });
-  }
+  // Each payment settles ONE registration. See allocatePaymentsToRegistrations
+  // for why an email-for-all-time total goes wrong as soon as a second intake
+  // reuses the same Stripe links.
+  const { byRegId: paidByReg, regIdByPayment } = allocatePaymentsToRegistrations(leads, payments);
 
   // Trial registrations go to their centre's tab. Anyone who cannot attend a trial
   // goes to the one interest tab instead, so a coach working a centre tab on a
@@ -829,7 +906,7 @@ export async function reconcilePerformanceSquads(sheets, spreadsheetId, sb = nul
   for (const r of leads || []) {
     const tab = !isTrialEntry(r) ? INTEREST_TAB : (CENTRE_TABS[r.preferred_centre] || FALLBACK_TAB);
     if (!byTab.has(tab)) byTab.set(tab, []);
-    byTab.get(tab).push(regRow(r, paidByEmail.get(emailKey(r.email)) || null));
+    byTab.get(tab).push(regRow(r, paidByReg.get(r.id) || null));
   }
 
   const tabResults = [];
@@ -839,8 +916,13 @@ export async function reconcilePerformanceSquads(sheets, spreadsheetId, sb = nul
 
   // Payments tab — including unmatched, which is the whole point of listing it.
   const payRows = payments.map((p) => {
-    const hit = regByEmail.get(emailKey(p.payerEmail));
-    return payRow({ ...p, matchedId: hit?.id || null, matchedPlayer: hit?.player || '' });
+    const hit = regIdByPayment.get(p.sessionId);
+    return payRow({
+      ...p,
+      matchedId: hit?.id || null,
+      matchedPlayer: hit?.player || '',
+      matchedProgram: hit?.program || '',
+    });
   });
   const payResult = await reconcileTab(sheets, spreadsheetId, PAYMENTS_TAB, PAY_HEADERS, PAY_LAST_COL, payRows);
 

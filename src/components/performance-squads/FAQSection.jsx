@@ -4,20 +4,23 @@ import { ChevronDown } from 'lucide-react';
 import { fadeUp, SectionHeading } from './shared';
 import { FAQS } from './data';
 
-const FAQSection = () => {
+// Content-driven. Defaults are the Performance Squads FAQ and heading, so an
+// unprop'd call renders exactly what /performance-squads has always rendered.
+const FAQSection = ({
+    items = FAQS,
+    eyebrow = 'Questions',
+    title = 'Frequently Asked',
+    sub = "Anything not covered here? Email info@rramelbourne.com and we'll come back to you.",
+}) => {
     // Accordions closed by default.
     const [open, setOpen] = useState(null);
 
     return (
         <section className="py-20 px-5">
             <div className="max-w-3xl mx-auto">
-                <SectionHeading
-                    eyebrow="Questions"
-                    title="Frequently Asked"
-                    sub="Anything not covered here? Email info@rramelbourne.com and we'll come back to you."
-                />
+                <SectionHeading eyebrow={eyebrow} title={title} sub={sub} />
                 <div className="space-y-3">
-                    {FAQS.map((item, i) => {
+                    {items.map((item, i) => {
                         const isOpen = open === i;
                         return (
                             <motion.div
