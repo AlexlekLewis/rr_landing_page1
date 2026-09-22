@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
     MapPin, Clock, Trophy, DollarSign, Shirt, Backpack,
-    Radio, HandHeart, AlertTriangle, ArrowRight,
+    Radio, HandHeart, AlertTriangle, ArrowRight, PhoneCall,
 } from 'lucide-react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
@@ -19,6 +19,9 @@ import MatchPaymentModal from './MatchPaymentModal';
 // Deliberately reusable: every match-specific detail (name, dates,
 // venue, price, Stripe link, kit list) lives in ./matchConfig.js.
 // The next match block is a config swap, not a new page.
+//
+// If the match has a `waitlist` config, the page is an EMERGENCY LIST:
+// same details and form, but nothing is sold on it.
 // ─────────────────────────────────────────────────────────────
 
 const DetailCard = ({ icon: Icon, label, children, delay = 0 }) => (
@@ -59,17 +62,18 @@ const ListCard = ({ icon: Icon, title, items, delay = 0 }) => (
 const MatchRegistration = ({ match = ACTIVE_MATCH }) => {
     const [payModal, setPayModal] = useState(null);
     const m = match;
+    const wl = m.waitlist;
 
     // ── Hidden page: noindex + title ──
     useEffect(() => {
         window.scrollTo(0, 0);
-        document.title = `${m.name} | Rajasthan Royals Academy Melbourne`;
+        document.title = `${m.name}${wl ? ' — Emergency List' : ''} | Rajasthan Royals Academy Melbourne`;
         const meta = document.createElement('meta');
         meta.name = 'robots';
         meta.content = 'noindex,nofollow';
         document.head.appendChild(meta);
         return () => { document.head.removeChild(meta); };
-    }, [m.name]);
+    }, [m.name, wl]);
 
     return (
         <div className="min-h-screen bg-rr-dark text-white font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
@@ -110,50 +114,105 @@ const MatchRegistration = ({ match = ACTIVE_MATCH }) => {
                         >
                             {m.datesLabel}
                         </motion.p>
-                        {/* Squad price banner. Only renders on the special-price
-                            page, so the full-price page is untouched. */}
-                        {m.squadNote && (
-                            <motion.div
-                                initial="hidden" animate="visible" variants={fadeUp} custom={0.18}
-                                className="mb-8 bg-rr-pink/15 border border-rr-pink/45 rounded-2xl px-5 py-4 max-w-xl mx-auto"
-                            >
-                                <p className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-rr-light-pink mb-2">
-                                    Performance Squad price
-                                </p>
-                                <p className="text-white/90 text-[15px] sm:text-base font-bold leading-relaxed">
-                                    {m.squadNote}
-                                </p>
-                            </motion.div>
+                        {wl ? (
+                            <>
+                                {/* Emergency list. Says plainly that registration has
+                                    closed, what an emergency is, that nothing is paid
+                                    and that no place is held. */}
+                                <motion.div
+                                    initial="hidden" animate="visible" variants={fadeUp} custom={0.18}
+                                    className="mb-8 bg-rr-pink/15 border border-rr-pink/45 rounded-2xl px-5 py-5 sm:px-7 max-w-xl mx-auto text-left"
+                                >
+                                    <p className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-rr-light-pink mb-2">
+                                        Emergency list
+                                    </p>
+                                    <p className="text-white/90 text-[15px] sm:text-base font-bold leading-relaxed mb-3">
+                                        Registrations for the {m.name} have closed, but you can still
+                                        register the player as an emergency.
+                                    </p>
+                                    <p className="text-white/70 text-[15px] font-medium leading-relaxed">
+                                        An emergency is a reserve player. If a player in one of the teams
+                                        drops out, we offer their place to an emergency. It costs nothing to
+                                        go on the list, and being on it does not give the player a place in
+                                        a team.
+                                    </p>
+                                    <p className="text-white/55 text-sm font-medium leading-relaxed mt-3 pt-3 border-t border-white/10">
+                                        Already registered and paid? The player's place is confirmed, so
+                                        there is nothing to do here.
+                                    </p>
+                                </motion.div>
+
+                                <motion.button
+                                    initial="hidden" animate="visible" variants={fadeUp} custom={0.25}
+                                    onClick={() => scrollTo('register-pay')}
+                                    className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-9 py-4 transition-colors"
+                                >
+                                    Register As An Emergency <ArrowRight className="w-4 h-4" />
+                                </motion.button>
+
+                                <motion.div
+                                    initial="hidden" animate="visible" variants={fadeUp} custom={0.3}
+                                    className="mt-8 inline-flex items-start gap-3 bg-rr-pink/12 border border-rr-pink/40 rounded-2xl px-5 py-4 text-left max-w-md mx-auto"
+                                >
+                                    <PhoneCall className="w-5 h-5 text-rr-light-pink shrink-0 mt-0.5" />
+                                    <p className="text-white/85 text-sm font-bold leading-relaxed">
+                                        If you register, please stand by.
+                                        <span className="block font-medium text-white/60 mt-1">
+                                            Drop-outs can happen right up to the day, so keep {m.datesLabel} free
+                                            if you can and have the player's kit ready. If a place opens, we
+                                            contact you on the mobile number and email you give us.
+                                        </span>
+                                    </p>
+                                </motion.div>
+                            </>
+                        ) : (
+                            <>
+                                {/* Squad price banner. Only renders on the special-price
+                                    page, so the full-price page is untouched. */}
+                                {m.squadNote && (
+                                    <motion.div
+                                        initial="hidden" animate="visible" variants={fadeUp} custom={0.18}
+                                        className="mb-8 bg-rr-pink/15 border border-rr-pink/45 rounded-2xl px-5 py-4 max-w-xl mx-auto"
+                                    >
+                                        <p className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-rr-light-pink mb-2">
+                                            Performance Squad price
+                                        </p>
+                                        <p className="text-white/90 text-[15px] sm:text-base font-bold leading-relaxed">
+                                            {m.squadNote}
+                                        </p>
+                                    </motion.div>
+                                )}
+
+                                <motion.p
+                                    initial="hidden" animate="visible" variants={fadeUp} custom={0.2}
+                                    className="text-white/65 text-[15px] sm:text-base font-medium leading-relaxed max-w-xl mx-auto mb-8"
+                                >
+                                    Everything you need is below. We need a yes and payment from you to lock
+                                    your spot in — places are naturally limited, so if you'd like to take
+                                    part, please don't delay.
+                                </motion.p>
+
+                                <motion.button
+                                    initial="hidden" animate="visible" variants={fadeUp} custom={0.25}
+                                    onClick={() => scrollTo('register-pay')}
+                                    className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-9 py-4 transition-colors"
+                                >
+                                    Register &amp; Pay · ${m.price} <ArrowRight className="w-4 h-4" />
+                                </motion.button>
+
+                                {/* Deadline */}
+                                <motion.div
+                                    initial="hidden" animate="visible" variants={fadeUp} custom={0.3}
+                                    className="mt-8 inline-flex items-start gap-3 bg-rr-pink/12 border border-rr-pink/40 rounded-2xl px-5 py-4 text-left max-w-md mx-auto"
+                                >
+                                    <AlertTriangle className="w-5 h-5 text-rr-light-pink shrink-0 mt-0.5" />
+                                    <p className="text-white/85 text-sm font-bold leading-relaxed">
+                                        To confirm your spot, please pay by {m.deadlineLabel}.
+                                        <span className="block font-medium text-white/60 mt-1">{m.deadlineNote}</span>
+                                    </p>
+                                </motion.div>
+                            </>
                         )}
-
-                        <motion.p
-                            initial="hidden" animate="visible" variants={fadeUp} custom={0.2}
-                            className="text-white/65 text-[15px] sm:text-base font-medium leading-relaxed max-w-xl mx-auto mb-8"
-                        >
-                            Everything you need is below. We need a yes and payment from you to lock
-                            your spot in — places are naturally limited, so if you'd like to take
-                            part, please don't delay.
-                        </motion.p>
-
-                        <motion.button
-                            initial="hidden" animate="visible" variants={fadeUp} custom={0.25}
-                            onClick={() => scrollTo('register-pay')}
-                            className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-9 py-4 transition-colors"
-                        >
-                            Register &amp; Pay · ${m.price} <ArrowRight className="w-4 h-4" />
-                        </motion.button>
-
-                        {/* Deadline */}
-                        <motion.div
-                            initial="hidden" animate="visible" variants={fadeUp} custom={0.3}
-                            className="mt-8 inline-flex items-start gap-3 bg-rr-pink/12 border border-rr-pink/40 rounded-2xl px-5 py-4 text-left max-w-md mx-auto"
-                        >
-                            <AlertTriangle className="w-5 h-5 text-rr-light-pink shrink-0 mt-0.5" />
-                            <p className="text-white/85 text-sm font-bold leading-relaxed">
-                                To confirm your spot, please pay by {m.deadlineLabel}.
-                                <span className="block font-medium text-white/60 mt-1">{m.deadlineNote}</span>
-                            </p>
-                        </motion.div>
                     </div>
                 </section>
 
@@ -174,10 +233,21 @@ const MatchRegistration = ({ match = ACTIVE_MATCH }) => {
                             <DetailCard icon={Clock} label="When" delay={0.05}>{m.times}</DetailCard>
                             <DetailCard icon={Trophy} label="Format" delay={0.1}>{m.format}</DetailCard>
                             <DetailCard icon={DollarSign} label="Cost" delay={0.15}>
-                                <span className="text-2xl font-black text-rr-light-pink block mb-1">
-                                    ${m.price}
-                                </span>
-                                {m.priceNote}
+                                {wl ? (
+                                    <>
+                                        <span className="text-2xl font-black text-rr-light-pink block mb-1">
+                                            Nothing to pay now
+                                        </span>
+                                        {wl.costNote}
+                                    </>
+                                ) : (
+                                    <>
+                                        <span className="text-2xl font-black text-rr-light-pink block mb-1">
+                                            ${m.price}
+                                        </span>
+                                        {m.priceNote}
+                                    </>
+                                )}
                             </DetailCard>
                         </div>
                     </div>
@@ -186,7 +256,11 @@ const MatchRegistration = ({ match = ACTIVE_MATCH }) => {
                 {/* ── KIT ── */}
                 <section className="px-5 py-14 sm:py-20">
                     <div className="max-w-4xl mx-auto">
-                        <SectionHeading eyebrow="On The Day" title="What To Wear &amp; Bring" />
+                        <SectionHeading
+                            eyebrow="On The Day"
+                            title="What To Wear &amp; Bring"
+                            sub={wl ? 'If the player is called in, they will need all of this on the day, so have it ready.' : undefined}
+                        />
                         <div className="grid md:grid-cols-2 gap-5">
                             <ListCard icon={Shirt} title="What To Wear" items={m.wear} delay={0} />
                             <ListCard icon={Backpack} title="What To Bring" items={m.bring} delay={0.08} />
@@ -239,17 +313,19 @@ const MatchRegistration = ({ match = ACTIVE_MATCH }) => {
 
                 {/* ── REGISTER ── */}
                 <div id="register-pay" className="scroll-mt-28 lg:scroll-mt-32">
-                    <MatchRegistrationForm onRequestPayment={setPayModal} match={m} />
+                    <MatchRegistrationForm onRequestPayment={wl ? undefined : setPayModal} match={m} />
                 </div>
             </main>
 
             <Footer />
-            <MatchPaymentModal
-                match={m}
-                open={!!payModal}
-                registration={payModal}
-                onClose={() => setPayModal(null)}
-            />
+            {!wl && (
+                <MatchPaymentModal
+                    match={m}
+                    open={!!payModal}
+                    registration={payModal}
+                    onClose={() => setPayModal(null)}
+                />
+            )}
         </div>
     );
 };

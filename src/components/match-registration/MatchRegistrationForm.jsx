@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Check, Video, VideoOff } from 'lucide-react';
+import { ArrowRight, Check, Video, VideoOff, Mail } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import {
     fadeUp, SectionHeading, Label, FieldError, Chevron,
@@ -81,6 +81,15 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const wl = match.waitlist;
+    const doneRef = useRef(null);
+
+    // On the emergency list no payment modal takes over the screen, and the
+    // long form collapses into a short confirmation — so bring that into view
+    // rather than leaving the parent looking at the footer.
+    useEffect(() => {
+        if (submitted && wl) doneRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, [submitted, wl]);
 
     const set = (key, value) => setForm((f) => ({ ...f, [key]: value }));
     const toggle = (key) => setForm((f) => ({ ...f, [key]: !f[key] }));
@@ -131,7 +140,9 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
 
             const { error } = await supabase.from('match_registrations').insert([
                 {
-                    match_slug: match.slug,
+                    // Emergencies get their own slug so they never mix with
+                    // the players who registered and paid.
+                    match_slug: wl ? wl.slug : match.slug,
                     match_name: match.name,
                     player_name: form.player_name.trim(),
                     player_age: Number(form.player_age),
@@ -147,7 +158,8 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
                     filming_consent: form.filming_consent,
                     volunteer: form.volunteer,
                     volunteer_role: form.volunteer ? form.volunteer_role : null,
-                    amount: match.price,
+                    // Nothing is owed to join the emergency list, so no amount.
+                    amount: wl ? null : match.price,
                     page_referrer: document.referrer || null,
                     ...utm,
                 },
@@ -156,7 +168,8 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
 
             setSubmitted(true);
             // Registration and payment are one flow — open payment immediately.
-            onRequestPayment?.({ playerName: form.player_name.trim() });
+            // Never on the emergency list: nothing is paid there.
+            if (!wl) onRequestPayment?.({ playerName: form.player_name.trim() });
         } catch (err) {
             console.error('Match registration error:', err);
             setErrors({ form: `Something went wrong. Please try again or email ${match.contactEmail}` });
@@ -167,17 +180,59 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
 
     const ic = (key) => inputClass(errors, key);
     const sc = (key) => selectClass(errors, key);
+    const firstName = form.player_name.trim().split(' ')[0];
 
     return (
         <section className="py-20 px-5">
             <div className="max-w-2xl mx-auto">
-                <SectionHeading
-                    eyebrow="Register & Pay"
-                    title="Confirm Your Spot"
-                    sub={`Enter the player's details, confirm the checklist below, and pay — all in one step. Your spot isn't locked in until payment is received. Please pay by ${match.deadlineLabel}.`}
-                />
+                {wl ? (
+                    <SectionHeading
+                        eyebrow="Emergency List"
+                        title="Register As An Emergency"
+                        sub={submitted ? undefined : "Fill in the player's details and the checklist below. There is nothing to pay. We ask for the same details and agreements as a full registration, so if we offer the player a place there is nothing more to fill in."}
+                    />
+                ) : (
+                    <SectionHeading
+                        eyebrow="Register & Pay"
+                        title="Confirm Your Spot"
+                        sub={`Enter the player's details, confirm the checklist below, and pay — all in one step. Your spot isn't locked in until payment is received. Please pay by ${match.deadlineLabel}.`}
+                    />
+                )}
 
-                {submitted ? (
+                {submitted && wl ? (
+                    <motion.div
+                        ref={doneRef}
+                        initial="hidden" animate="visible" variants={fadeUp} custom={0}
+                        className="bg-white/5 border border-rr-pink/40 rounded-2xl p-7 sm:p-10"
+                    >
+                        <div className="w-14 h-14 rounded-full bg-rr-pink flex items-center justify-center mx-auto mb-5">
+                            <Check className="w-7 h-7 text-white" strokeWidth={3} />
+                        </div>
+                        <h3 className="text-2xl font-black uppercase mb-3 text-center">You're On The Emergency List</h3>
+                        <p className="text-white/85 text-[15px] font-bold leading-relaxed mb-6 text-center">
+                            Thanks, we have {firstName}'s details. Please stand by.
+                        </p>
+                        <ul className="space-y-3.5">
+                            {[
+                                `No payment has been taken and no place is held for ${firstName}.`,
+                                `If a place opens for ${firstName}, we will contact you on ${form.phone.trim()} or at ${form.email.trim()}. Drop-outs can happen right up to the day, so keep ${match.datesLabel} free if you can and have the kit ready.`,
+                                wl.costNote,
+                            ].map((line) => (
+                                <li key={line} className="flex items-start gap-3">
+                                    <span className="mt-[9px] w-1.5 h-1.5 rounded-full bg-rr-pink shrink-0" />
+                                    <span className="text-white/70 text-[15px] font-medium leading-relaxed">{line}</span>
+                                </li>
+                            ))}
+                        </ul>
+                        <p className="text-white/50 text-sm font-medium leading-relaxed mt-6 pt-5 border-t border-white/10 text-center">
+                            There is nothing else to do for now. If the mobile number or email above is
+                            wrong, or you have a question, email{' '}
+                            <a href={`mailto:${match.contactEmail}`} className="inline-flex items-center gap-1 text-rr-light-pink underline hover:text-white">
+                                <Mail className="w-3.5 h-3.5" />{match.contactEmail}
+                            </a>.
+                        </p>
+                    </motion.div>
+                ) : submitted ? (
                     <motion.div
                         initial="hidden" animate="visible" variants={fadeUp} custom={0}
                         className="bg-white/5 border border-rr-pink/40 rounded-2xl p-10 text-center"
@@ -356,7 +411,8 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
                             <p className="text-white/45 text-[12px] font-medium leading-relaxed mt-1">
                                 If you ask us to keep the player off the stream we pass that on to
                                 {' '}{match.streaming.partner}. If being filmed is not possible for your family,
-                                please email {match.contactEmail} before you pay.
+                                please email {match.contactEmail}{' '}
+                                {wl ? 'so we know before we offer the player a place.' : 'before you pay.'}
                             </p>
                         </div>
 
@@ -401,14 +457,17 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
                             disabled={submitting}
                             className="w-full mt-8 inline-flex items-center justify-center gap-2 whitespace-nowrap bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-wider text-[13px] sm:text-sm rounded-full px-5 sm:px-8 py-4 transition-colors"
                         >
-                            {submitting ? 'Submitting…' : (
+                            {submitting ? 'Submitting…' : wl ? (
+                                <>Register As An Emergency <ArrowRight className="w-4 h-4" /></>
+                            ) : (
                                 <>Continue To Payment · ${match.price} <ArrowRight className="w-4 h-4" /></>
                             )}
                         </button>
 
                         <p className="text-white/35 text-xs font-medium text-center mt-4">
-                            Payments are processed securely by Stripe. Your spot is not held until
-                            payment is received.
+                            {wl
+                                ? 'There is nothing to pay to go on the emergency list. No place is held until we offer one and you accept it.'
+                                : 'Payments are processed securely by Stripe. Your spot is not held until payment is received.'}
                         </p>
                     </motion.div>
                 )}

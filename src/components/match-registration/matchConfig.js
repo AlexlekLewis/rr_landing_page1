@@ -10,6 +10,14 @@
 //
 // Registrations land in Supabase `match_registrations`, tagged with
 // match_slug so each block's players stay separate.
+//
+// EMERGENCY LIST. When a block is full, give the match a `waitlist`
+// object (see ACTIVE_MATCH below). The page then stops selling: no
+// price button, no Stripe link, no payment modal. The form still asks
+// for every detail and agreement, so an emergency who is called in can
+// play without filling anything in again, and the rows are written
+// under waitlist.slug so they never mix with the players who paid.
+// Delete `waitlist` to turn the page back into a paid registration.
 // ─────────────────────────────────────────────────────────────
 
 export const ACTIVE_MATCH = {
@@ -70,6 +78,16 @@ export const ACTIVE_MATCH = {
     },
 
     contactEmail: 'info@rramelbourne.com',
+
+    // Paid registration closed 22 Sep 2026. Everyone who signs up from
+    // here goes on the emergency list and pays nothing unless they are
+    // offered a place and take it.
+    waitlist: {
+        slug: 'power-league-sept-2026-waitlist',
+        costNote:
+            'If we offer the player a place and you accept it, we send you the payment '
+            + 'link then. The price is $196 for both days.',
+    },
 };
 
 // ─────────────────────────────────────────────────────────────
@@ -106,6 +124,16 @@ export const SQUAD_MATCH = {
 
     deadlineLabel: 'Tuesday 22 September',
     deadlineNote: 'We pick the teams after that. Places are limited.',
+
+    // Own slug, so squad emergencies stay separate from the full-price
+    // emergency list, and they keep the squad price if they are called in.
+    waitlist: {
+        slug: 'power-league-sept-2026-squad-waitlist',
+        costNote:
+            'If we offer the player a place and you accept it, we send you the payment '
+            + 'link then. As a Performance Squad player you pay $99 for both days, not '
+            + 'the normal $196.',
+    },
 };
 
 export const MIN_AGE = 6;
