@@ -94,7 +94,7 @@ export const PAGE_SEO = {
   // "is coming to", never "is at" — his attendance is scheduled, not certain,
   // and the page hedges it in four places. The card must not out-promise it.
   '/performance-squads-open-trial': {
-    title: 'T20 Trial with the Royals Performance Coach | Melbourne',
+    title: 'Open Age T20 Trials, Mickleham & Cranbourne North | Royals',
     description:
       'Open age T20 trials, players 16 to 25. Mickleham Mon 5 Oct, Cranbourne North Sun 4 Oct, where Royals Performance Coach Sid Lahiri is coming. $30 a session.',
     ogImage: '/assets/performance-squads/sid-lahiri-riyan-parag.jpg',

@@ -79,7 +79,7 @@ const PROGRAMS_DROPDOWN = [
     { label: 'Private Coaching', route: '/mickleham', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },
     // Not joinable today — booking opens when the dates land, so it sits below
     // the three a visitor can act on now, per the ordering rule above.
-    { label: 'Open Age T20 Trial · 16-25', route: '/performance-squads-open-trial', badge: '4 & 5 Oct', badgeColor: 'bg-rr-pink' },
+    { label: 'Open Age T20 Trials · 16-25', route: '/performance-squads-open-trial', badge: '4 & 5 Oct', badgeColor: 'bg-rr-pink' },
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Trials Full', badgeColor: 'bg-slate-500' },
     { label: 'High Performance Camp · India', route: '/tours', badge: 'Applications Closed', badgeColor: 'bg-red-500' },
 ];
