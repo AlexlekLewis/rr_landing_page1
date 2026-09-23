@@ -38,30 +38,48 @@ export {
 
 export const ROUTE = '/open-age-trial';
 
-// ── The centre. One only. The existing South-East squad's home. ──
-export const CENTRE_SLUG = 'south-east-melbourne';
+// ── The centres. Two, since 23 September 2026: Cranbourne North and Mickleham. ──
+// Each centre's venue, suburb and head coach are pulled from the live centre
+// list so this page can never disagree with /performance-squads.
+//
+// A player books at ONE of them. The two are about 70 km apart on opposite
+// sides of Melbourne, capacity is per centre, and each centre has its own
+// Stripe link — a booking split across both would charge the wrong one.
+export const CENTRE_SLUGS = ['south-east-melbourne', 'north-melbourne'];
 
-// Pulled from the live centre list so the venue, suburb and head coach can
-// never disagree with /performance-squads.
-const SE = CENTRES.find((c) => c.slug === CENTRE_SLUG);
-
-export const CENTRE = {
-    slug: CENTRE_SLUG,
-    name: SE.name,
-    venue: SE.venue,
-    suburb: SE.suburb,
-    coach: SE.coach,
-    coachTitle: SE.coachTitle,
+const toCentre = (slug) => {
+    const c = CENTRES.find((x) => x.slug === slug);
+    return {
+        slug,
+        name: c.name,
+        venue: c.venue,
+        suburb: c.suburb,
+        coach: c.coach,
+        coachTitle: c.coachTitle,
+    };
 };
 
-// Head coach card — Alex Thornhill only. This trial recruits into his squad.
-export const TRIAL_COACHES = SQUAD_COACHES.filter((c) => c.name === SE.coach);
+export const TRIAL_CENTRES = CENTRE_SLUGS.map(toCentre);
+export const getCentre = (slug) => TRIAL_CENTRES.find((c) => c.slug === slug);
+
+// SID IS AT CRANBOURNE NORTH ONLY. Alex has not said he is at Mickleham, so
+// nothing on this page may say or imply it. Every Sid line is rendered against
+// this slug, never against "the trial" as a whole.
+export const SID_CENTRE_SLUG = 'south-east-melbourne';
+
+// The Sid story and its FAQ answers speak for the Cranbourne North session.
+export const CENTRE = getCentre(SID_CENTRE_SLUG);
+
+// Head coach cards — one per centre this trial recruits into.
+export const TRIAL_COACHES = SQUAD_COACHES.filter(
+    (c) => TRIAL_CENTRES.some((tc) => tc.coach === c.name));
 
 // ─────────────────────────────────────────────────────────────
-// TRIAL DATES AND TIMES — confirmed by Alex, 21 September 2026.
+// TRIAL DATES AND TIMES — Cranbourne North confirmed by Alex 21 September
+// 2026, Mickleham added by Alex 23 September 2026.
 //
-// One session only. Sunday 4 October 2026, 1:00 to 2:30 PM, at the
-// Elite Cricket Centre, Cranbourne North.
+// Every session states the centre it belongs to. Nothing else works out a
+// session's centre, so a date can never end up filed under the wrong one.
 //
 // 90 minutes is the same length as the September trials at this venue,
 // where 37 players were booked into one session and it had to be closed.
@@ -70,8 +88,27 @@ export const TRIAL_COACHES = SQUAD_COACHES.filter((c) => c.name === SE.coach);
 // ─────────────────────────────────────────────────────────────
 
 export const TRIAL_SESSIONS = [
-    { id: 'oa-2026-10-04', label: 'Sunday 4 October · 1:00–2:30 PM' },
+    {
+        id: 'oa-2026-10-04',
+        centre: 'south-east-melbourne',
+        label: 'Sunday 4 October · 1:00–2:30 PM',
+    },
+    {
+        id: 'oa-2026-10-05',
+        centre: 'north-melbourne',
+        label: 'Monday 5 October · 5:30–7:00 PM',
+        // Alex, 23 September 2026: Mickleham players arrive 30 minutes early to
+        // be signed in. He has NOT said the same of Cranbourne North, so only a
+        // session carrying `arriveBy` shows an arrival line anywhere on the page.
+        arriveBy: '5:00 PM',
+    },
 ];
+
+// The sign-in line, from the session itself. Null for a session without a rule.
+export const arrivalLine = (sess) =>
+    (sess && sess.arriveBy
+        ? `Arrive by ${sess.arriveBy}, 30 minutes before the start, to be signed in.`
+        : null);
 
 // NOTE ON THE DAY, kept from the build's research: Sunday is one of the
 // slots Victorian Premier Cricket uses for this age band, so a Sunday
@@ -99,28 +136,38 @@ export const DATES_CONFIRMED = TRIAL_SESSIONS.length > 0;
 // Stripe links first.
 const REQUESTED_MAX_TRIAL_SESSIONS = 2;
 
-// The largest session count that actually has a Stripe link behind it.
-const PAYABLE_SESSION_COUNTS = Object.keys(PAYMENT_LINKS[CENTRE_SLUG]?.trial || {})
+// The largest session count that actually has a Stripe link behind it, worked
+// out per centre because the links are per centre.
+const payableSessionCounts = (slug) => Object.keys(PAYMENT_LINKS[slug]?.trial || {})
     .map(Number)
     .filter((n) => Number.isInteger(n) && n > 0);
-const MAX_PAYABLE_SESSIONS = PAYABLE_SESSION_COUNTS.length
-    ? Math.max(...PAYABLE_SESSION_COUNTS)
-    : 1;
 
-export const MAX_TRIAL_SESSIONS = Math.min(REQUESTED_MAX_TRIAL_SESSIONS, MAX_PAYABLE_SESSIONS);
+export const getMaxTrialSessions = (slug) => {
+    const payable = payableSessionCounts(slug);
+    return Math.min(REQUESTED_MAX_TRIAL_SESSIONS, payable.length ? Math.max(...payable) : 1);
+};
 
-// ── Session helpers. Same three checks the squads page uses. ──
-export const getOpenTrialSessions = () => TRIAL_SESSIONS.filter((s) => s.full !== true);
-export const isSessionFull = (id) =>
-    (TRIAL_SESSIONS.find((s) => s.id === id) || {}).full === true;
-// A player at a trial with one session left can only pick one, whatever the cap
-// says. Every "choose up to N" line reads from here.
-export const getSelectableSessionCount = () =>
-    Math.min(MAX_TRIAL_SESSIONS, getOpenTrialSessions().length);
+// The ceiling that holds at every centre on the page. Used where one number
+// has to stand for the whole page.
+export const MAX_TRIAL_SESSIONS = Math.min(...CENTRE_SLUGS.map(getMaxTrialSessions));
+
+// ── Session helpers. Same checks the squads page uses, now per centre. ──
+export const getSession = (id) => TRIAL_SESSIONS.find((s) => s.id === id);
+export const getSessionsForCentre = (slug) => TRIAL_SESSIONS.filter((s) => s.centre === slug);
+export const getSessionCentreSlug = (id) => getSession(id)?.centre || null;
+// No slug means "across the whole page"; a slug narrows it to that centre.
+export const getOpenTrialSessions = (slug) =>
+    TRIAL_SESSIONS.filter((s) => s.full !== true && (!slug || s.centre === slug));
+export const isSessionFull = (id) => (getSession(id) || {}).full === true;
+// A centre with one session left lets a player pick one, whatever the cap says.
+// Every "choose up to N" line reads from here.
+export const getSelectableSessionCount = (slug) =>
+    Math.min(getMaxTrialSessions(slug), getOpenTrialSessions(slug).length);
+export const isCentreFull = (slug) =>
+    getSessionsForCentre(slug).length > 0 && getOpenTrialSessions(slug).length === 0;
 export const ALL_SESSIONS_FULL = DATES_CONFIRMED && getOpenTrialSessions().length === 0;
 
-export const getSessionLabel = (id) =>
-    TRIAL_SESSIONS.find((s) => s.id === id)?.label || id;
+export const getSessionLabel = (id) => getSession(id)?.label || id;
 
 // ── Age gate. This page only. /performance-squads stays at 10 to 24. ──
 // One set of constants drives the copy AND the form, so the page can never
@@ -177,19 +224,24 @@ export const SID = {
     // renders under the hero, on the booking card and in the FAQ answer, and
     // it is the only promise about him the page is allowed to make.
     attendance:
-        'Sid is scheduled to attend this trial. If anything changes we will tell every booked '
-        + 'player before the session, and you can move to another session or take a full refund.',
+        'Sid is scheduled to attend the Cranbourne North session on Sunday 4 October. If anything '
+        + 'changes we will tell every booked player before the session, and you can move to '
+        + 'another session or take a full refund.',
 
     // Kills the most reasonable false read available to a disappointed player
     // or parent: that the man in the hero is the man who hands out the global
     // placements listed further down the page. He is not, on the day.
     separation:
         'Sid is at the trial to watch cricket. He is not selecting anyone for anything on the '
-        + 'day. Selection into the squad is Alex Thornhill’s call, and the global '
-        + 'opportunities are a separate process that happens later and is competitive.',
+        + 'day. Selection into a squad is the centre’s head coach’s call — Alex Thornhill at '
+        + 'Cranbourne North, Alex Lewis at Mickleham — and the global opportunities are a '
+        + 'separate process that happens later and is competitive.',
 };
 
 // ── Hero ──
+// NOT RENDERED. OpenAgeTrial.jsx uses the standard Performance Squads hero
+// (Alex's call), so this block and OpenAgeHero.jsx are unused. Editing it
+// changes nothing on the page.
 export const HERO = {
     kicker: `Cranbourne North · Open Age T20 Trial · ${MIN_AGE} to ${MAX_AGE}`,
     headline: 'The Rajasthan Royals Performance Coach Is Coming To Cranbourne North.',
@@ -284,7 +336,8 @@ export const PATHWAY_STEPS = [
     {
         n: '03',
         title: 'Compete',
-        body: 'Selected players join the South-East Melbourne Performance Squad and go into its fixtures.',
+        body: 'Selected players join the Performance Squad at the centre they trialled at, and go '
+            + 'into its fixtures.',
     },
 ];
 
@@ -299,8 +352,8 @@ export const OPPORTUNITY_LEAD =
 // ── Trials / booking section ──
 export const TRIALS_HEADING = {
     eyebrow: 'Dates & Booking',
-    title: 'One Centre. Cranbourne North.',
-    sub: `$${TRIAL_PRICE} per player, per session, paid when you book.`,
+    title: 'Two Centres. Two Dates.',
+    sub: `$${TRIAL_PRICE} per player, per session, paid when you book. Book at one centre.`,
 };
 
 // ── Fees. Stage one only. ──
@@ -358,9 +411,10 @@ export const FAQS = [
     {
         q: 'Is Sid Lahiri really going to be there?',
         a: 'That is the plan, and it is why we are running it. Sid Lahiri is the Performance Coach '
-            + 'of the Rajasthan Royals and he is scheduled to be at this trial at the Elite Cricket '
-            + 'Centre in Cranbourne North. If that changes we will tell you before you turn up, and '
-            + 'you can move to another session or take a full refund.',
+            + 'of the Rajasthan Royals and he is scheduled to be at the Cranbourne North session on '
+            + 'Sunday 4 October, at the Elite Cricket Centre. He is not scheduled at Mickleham. If '
+            + 'that changes we will tell you before you turn up, and you can move to another session '
+            + 'or take a full refund.',
     },
     {
         q: 'Is Sid picking the squad?',
@@ -368,15 +422,17 @@ export const FAQS = [
     },
     {
         q: 'When is the trial?',
-        a: 'Dates and times are being confirmed and will be published on this page as soon as they are '
-            + 'set. Nothing can be booked until then. Leave your details on this page and we will email '
-            + 'you the moment they are announced.',
+        a: 'Two sessions, one at each centre. Cranbourne North is Sunday 4 October, 1:00 to 2:30 PM, '
+            + 'at the Elite Cricket Centre. Mickleham is Monday 5 October, 5:30 to 7:00 PM, at the '
+            + 'Mickleham Indoor Sports Centre — arrive by 5:00 PM, 30 minutes before the start, to be '
+            + 'signed in. Book the one you can get to.',
     },
     {
         q: 'What am I trialling for?',
-        a: 'A place in the South-East Melbourne Performance Squad, based at the Elite Cricket Centre in '
-            + 'Cranbourne North under Head Coach Alex Thornhill. This is an extra intake into that squad, '
-            + 'not a new one.',
+        a: 'A place in the Performance Squad at the centre you trial at. Cranbourne North is the '
+            + 'South-East Melbourne squad at the Elite Cricket Centre under Head Coach Alex Thornhill. '
+            + 'Mickleham is the North Melbourne squad at the Mickleham Indoor Sports Centre under Head '
+            + 'Coach Alex Lewis. This is an extra intake into those squads, not a new one.',
     },
     {
         q: 'What does it cost?',
@@ -426,7 +482,8 @@ export const FAQ_HEADING = {
 export const SEO = {
     title: 'T20 Trial with the Royals Performance Coach | Melbourne',
     description:
-        'Sid Lahiri, Performance Coach of the Rajasthan Royals, is coming to our open age T20 trial '
-        + `in Cranbourne North. Players ${MIN_AGE} to ${MAX_AGE}. $${TRIAL_PRICE} a session.`,
+        `Open age T20 trials, players ${MIN_AGE} to ${MAX_AGE}. Mickleham Mon 5 Oct, Cranbourne `
+        + 'North Sun 4 Oct, where Royals Performance Coach Sid Lahiri is coming. '
+        + `$${TRIAL_PRICE} a session.`,
     ogImage: SID.photo,
 };

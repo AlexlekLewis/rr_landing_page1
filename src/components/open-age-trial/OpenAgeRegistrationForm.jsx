@@ -8,9 +8,11 @@ import {
     inputClass, selectClass, PSCheckbox,
 } from '../performance-squads/shared';
 import {
-    CENTRE, PLAYING_ROLES, TRIAL_PRICE, MIN_AGE, MAX_AGE, AGE_AS_AT,
+    TRIAL_CENTRES, getCentre, SID, SID_CENTRE_SLUG,
+    PLAYING_ROLES, TRIAL_PRICE, MIN_AGE, MAX_AGE, AGE_AS_AT,
     PARENT_REQUIRED_UNDER, TRIAL_SESSIONS, DATES_CONFIRMED, ALL_SESSIONS_FULL,
-    getSelectableSessionCount, getSessionLabel, isSessionFull, WAITLIST,
+    getSelectableSessionCount, getSessionLabel, getSessionCentreSlug,
+    getSessionsForCentre, arrivalLine, isSessionFull, WAITLIST,
 } from './openAgeData';
 
 // Open age trial registration.
@@ -23,7 +25,9 @@ import {
 //   • the parent code of conduct is only asked of under 18s, because an adult
 //     cannot honestly accept a document that is not theirs
 //   • photo and video consent is OPTIONAL, not a gate on registering
-//   • one centre, fixed — this trial only recruits into Cranbourne North
+//   • two centres since 23 Sep 2026, and a booking belongs to ONE of them:
+//     the centre comes from the session picked, and it decides both the row's
+//     preferred_centre and which Stripe link the payment step opens
 //   • while trial dates are unconfirmed it captures a waitlist instead of a
 //     booking, so a public promoted page is never a dead end
 //
@@ -132,7 +136,9 @@ const ageError = (raw) => {
 // trace and there is nobody to tell when the dates land.
 // ─────────────────────────────────────────────────────────────
 const WaitlistCapture = () => {
-    const [form, setForm] = useState({ player_name: '', player_age: '', email: '', company: '' });
+    // The centre is ASKED, not assumed. With two centres on the page, defaulting
+    // it would file half this list under the wrong coach's sheet.
+    const [form, setForm] = useState({ player_name: '', player_age: '', email: '', centre: '', company: '' });
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
     const [done, setDone] = useState(false);
@@ -147,6 +153,7 @@ const WaitlistCapture = () => {
         const ageMsg = ageError(form.player_age);
         if (ageMsg) next.player_age = ageMsg;
         if (!form.email.trim() || !/^\S+@\S+\.\S+$/.test(form.email)) next.email = 'A valid email is required';
+        if (!form.centre) next.centre = 'Please choose the centre you would trial at';
         if (Object.keys(next).length) {
             setErrors(next);
             return;
@@ -176,7 +183,7 @@ const WaitlistCapture = () => {
                     // number. An empty string keeps the row honest without
                     // inventing a contact we do not hold.
                     phone: '',
-                    preferred_centre: CENTRE.slug,
+                    preferred_centre: form.centre,
                     entry_type: 'waitlist',
                     on_waitlist: true,
                     program_type: PROGRAM_TYPE,
@@ -250,10 +257,23 @@ const WaitlistCapture = () => {
                                 <FieldError msg={errors.player_age} />
                             </div>
                         </div>
-                        <div className="mb-6">
+                        <div className="mb-4">
                             <Label required>Email</Label>
                             <input type="email" value={form.email} onChange={set('email')} placeholder="Where we send the dates" className={ic('email')} />
                             <FieldError msg={errors.email} />
+                        </div>
+                        <div className="mb-6 relative">
+                            <Label required>Which centre would you trial at?</Label>
+                            <div className="relative">
+                                <select value={form.centre} onChange={set('centre')} className={selectClass(errors, 'centre')}>
+                                    <option value="" disabled>Choose a centre</option>
+                                    {TRIAL_CENTRES.map((c) => (
+                                        <option key={c.slug} value={c.slug}>{c.name} — {c.venue}, {c.suburb}</option>
+                                    ))}
+                                </select>
+                                <Chevron />
+                            </div>
+                            <FieldError msg={errors.centre} />
                         </div>
                         {errors.form && (
                             <p className="text-rr-pink text-sm font-bold mb-4 text-center">{errors.form}</p>
@@ -309,9 +329,18 @@ const BookingForm = ({ onRequestPayment }) => {
     const ageNum = Number(form.player_age.trim());
     const isMinor = Number.isInteger(ageNum) && ageNum >= MIN_AGE && ageNum < PARENT_REQUIRED_UNDER;
 
-    // The real cap: a trial with one session still open lets a player pick one,
-    // whatever MAX_TRIAL_SESSIONS says.
-    const cap = getSelectableSessionCount();
+    // A booking belongs to ONE centre. The centres are about 70 km apart,
+    // capacity is per centre, and each has its own Stripe link — a booking
+    // split across both would be charged against the wrong one.
+    const selectedCentreSlug = form.trial_session_dates.length
+        ? getSessionCentreSlug(form.trial_session_dates[0])
+        : null;
+
+    // The real cap: a centre with one session still open lets a player pick one,
+    // whatever the per-centre maximum says.
+    const cap = selectedCentreSlug
+        ? getSelectableSessionCount(selectedCentreSlug)
+        : Math.max(...TRIAL_CENTRES.map((c) => getSelectableSessionCount(c.slug)));
 
     const toggleSession = (id) =>
         setForm((f) => {
@@ -322,7 +351,13 @@ const BookingForm = ({ onRequestPayment }) => {
             if (picked.includes(id)) {
                 return { ...f, trial_session_dates: picked.filter((x) => x !== id) };
             }
-            if (picked.length >= cap) return f;
+            // Choosing the other centre starts a fresh selection rather than
+            // silently mixing two centres into one booking and one payment.
+            const centreSlug = getSessionCentreSlug(id);
+            if (picked.some((x) => getSessionCentreSlug(x) !== centreSlug)) {
+                return { ...f, trial_session_dates: [id] };
+            }
+            if (picked.length >= getSelectableSessionCount(centreSlug)) return f;
             return { ...f, trial_session_dates: [...picked, id] };
         });
 
@@ -350,6 +385,10 @@ const BookingForm = ({ onRequestPayment }) => {
             next.trial_session_dates = 'Please choose at least one trial session';
         } else if (form.trial_session_dates.some(isSessionFull)) {
             next.trial_session_dates = 'One of the sessions you picked is now full. Please choose another.';
+        } else if (new Set(form.trial_session_dates.map(getSessionCentreSlug)).size > 1) {
+            // Belt to the picker's braces: one centre per booking, or the payment
+            // step would charge against a centre the player did not choose.
+            next.trial_session_dates = 'Please choose sessions at one centre only.';
         }
         if (!form.accept_terms) next.accept_terms = 'You must agree to the Terms & Conditions and Privacy Policy';
         if (!form.accept_player_code) next.accept_player_code = 'You must agree to the Player Code of Conduct';
@@ -394,7 +433,7 @@ const BookingForm = ({ onRequestPayment }) => {
                     email: form.email.trim(),
                     phone: form.phone.trim(),
                     club: form.club.trim() || null,
-                    preferred_centre: CENTRE.slug,
+                    preferred_centre: selectedCentreSlug,
                     entry_type: 'trial',
                     on_waitlist: false,
                     program_type: PROGRAM_TYPE,
@@ -413,11 +452,13 @@ const BookingForm = ({ onRequestPayment }) => {
             throttleRecord();
 
             const result = {
-                centre: CENTRE.slug,
-                centreName: CENTRE.name,
+                // Drives which centre's Stripe link the payment step opens.
+                centre: selectedCentreSlug,
+                centreName: getCentre(selectedCentreSlug)?.name,
                 signupType: 'trial',
                 sessionIds: form.trial_session_dates,
                 sessionLabels: form.trial_session_dates.map(getSessionLabel),
+                arrival: arrivalLine(TRIAL_SESSIONS.find((s) => s.id === form.trial_session_dates[0])),
                 payerEmailHint: true,
             };
             setSubmitted(true);
@@ -453,6 +494,11 @@ const BookingForm = ({ onRequestPayment }) => {
                             Thanks, we have your details. Your place is not confirmed until payment is
                             received, so finish up below if you have not already.
                         </p>
+                        {submittedResult?.arrival && (
+                            <p className="text-amber-300/90 text-sm font-bold leading-relaxed mb-6">
+                                {submittedResult.arrival}
+                            </p>
+                        )}
                         {submittedResult && (
                             <button
                                 onClick={() => onRequestPayment?.(submittedResult)}
@@ -534,45 +580,78 @@ const BookingForm = ({ onRequestPayment }) => {
 
                         <div className="mb-4">
                             <Label required>
-                                Which trial sessions will you attend?
+                                Which trial session will you attend?
                                 <span className="normal-case font-medium text-white/40">
-                                    {cap > 1 ? ` (choose up to ${cap})` : ''}
+                                    {cap > 1 ? ` (choose up to ${cap} at one centre)` : ' (one centre)'}
                                 </span>
                             </Label>
-                            <div className="space-y-2.5">
-                                {TRIAL_SESSIONS.map((sess) => {
-                                    const picked = form.trial_session_dates.includes(sess.id);
-                                    const full = sess.full === true;
-                                    const atCap = !picked && form.trial_session_dates.length >= cap;
-                                    const blocked = full || atCap;
+                            <div className="space-y-4">
+                                {TRIAL_CENTRES.map((centre) => {
+                                    const sessions = getSessionsForCentre(centre.slug);
+                                    if (!sessions.length) return null;
                                     return (
-                                        <button
-                                            type="button"
-                                            key={sess.id}
-                                            onClick={() => toggleSession(sess.id)}
-                                            disabled={blocked}
-                                            aria-disabled={blocked}
-                                            aria-pressed={picked}
-                                            className={`w-full flex items-center gap-3 text-left rounded-xl px-4 py-3.5 border transition-colors ${picked
-                                                ? 'bg-rr-pink/15 border-rr-pink text-white'
-                                                : blocked
-                                                    ? 'bg-white/[0.03] border-white/10 text-white/30 cursor-not-allowed'
-                                                    : 'bg-white/5 border-white/15 text-white/70 hover:border-rr-pink/50'}`}
-                                        >
-                                            <span className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 ${picked ? 'bg-rr-pink border-rr-pink' : 'border-white/30'}`}>
-                                                {picked && <Check className="w-3.5 h-3.5 text-white" />}
-                                            </span>
-                                            <span className={`text-sm font-medium ${full ? 'line-through' : ''}`}>{sess.label}</span>
-                                            {full && (
-                                                <span className="ml-auto text-[10px] font-black uppercase tracking-wider text-amber-300/70">
-                                                    {sess.badge || 'Full'}
-                                                </span>
-                                            )}
-                                        </button>
+                                        <div key={centre.slug}>
+                                            <p className="text-[11px] font-black uppercase tracking-[0.18em] text-white/45 mb-2">
+                                                {centre.name} · {centre.venue}, {centre.suburb}
+                                                {/* Sid is scheduled at one centre. The tag appears
+                                                    only there, so a player booking the other one
+                                                    cannot read it as applying to them. */}
+                                                {centre.slug === SID_CENTRE_SLUG && (
+                                                    <span className="text-rr-light-pink"> · {SID.name} scheduled</span>
+                                                )}
+                                            </p>
+                                            <div className="space-y-2.5">
+                                                {sessions.map((sess) => {
+                                                    const picked = form.trial_session_dates.includes(sess.id);
+                                                    const full = sess.full === true;
+                                                    // Choosing the other centre is allowed and starts a
+                                                    // fresh selection, so it is never "at cap".
+                                                    const sameCentre = !selectedCentreSlug || selectedCentreSlug === sess.centre;
+                                                    const atCap = !picked && sameCentre
+                                                        && form.trial_session_dates.length >= cap;
+                                                    const blocked = full || atCap;
+                                                    const arrive = arrivalLine(sess);
+                                                    return (
+                                                        <button
+                                                            type="button"
+                                                            key={sess.id}
+                                                            onClick={() => toggleSession(sess.id)}
+                                                            disabled={blocked}
+                                                            aria-disabled={blocked}
+                                                            aria-pressed={picked}
+                                                            className={`w-full flex items-center gap-3 text-left rounded-xl px-4 py-3.5 border transition-colors ${picked
+                                                                ? 'bg-rr-pink/15 border-rr-pink text-white'
+                                                                : blocked
+                                                                    ? 'bg-white/[0.03] border-white/10 text-white/30 cursor-not-allowed'
+                                                                    : 'bg-white/5 border-white/15 text-white/70 hover:border-rr-pink/50'}`}
+                                                        >
+                                                            <span className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 ${picked ? 'bg-rr-pink border-rr-pink' : 'border-white/30'}`}>
+                                                                {picked && <Check className="w-3.5 h-3.5 text-white" />}
+                                                            </span>
+                                                            <span className="min-w-0">
+                                                                <span className={`block text-sm font-medium ${full ? 'line-through' : ''}`}>{sess.label}</span>
+                                                                {arrive && !full && (
+                                                                    <span className="block text-amber-300/80 text-xs font-medium mt-0.5">{arrive}</span>
+                                                                )}
+                                                            </span>
+                                                            {full && (
+                                                                <span className="ml-auto text-[10px] font-black uppercase tracking-wider text-amber-300/70">
+                                                                    {sess.badge || 'Full'}
+                                                                </span>
+                                                            )}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
                                     );
                                 })}
                             </div>
                             <FieldError msg={errors.trial_session_dates} />
+                            <p className="text-white/40 text-xs font-medium mt-2">
+                                One centre per booking. Picking a session at the other centre replaces
+                                what you have chosen.
+                            </p>
                             <p className="text-white/40 text-xs font-medium mt-2">
                                 ${TRIAL_PRICE} per player, per session
                                 {form.trial_session_dates.length > 0 && (

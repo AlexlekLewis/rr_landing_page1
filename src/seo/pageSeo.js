@@ -80,7 +80,9 @@ export const PAGE_SEO = {
       'For current Rajasthan Royals Academy players who cannot attend a September Performance Squads trial.',
     noindex: true,
   },
-  // Open age T20 trial at Cranbourne North, headlined by Sid Lahiri, Performance
+  // Open age T20 trials at Cranbourne North and Mickleham, headlined by Sid Lahiri,
+  // who is scheduled at the CRANBOURNE NORTH session only — the card must not
+  // imply he is at both. Performance
   // Coach of the Rajasthan Royals. PUBLIC AND PROMOTED, so no noindex here: the
   // whole point is that it is found and shared. Copy is the source of truth in
   // src/components/open-age-trial/openAgeData.js (SEO) and mirrored here.
@@ -94,7 +96,7 @@ export const PAGE_SEO = {
   '/performance-squads-open-trial': {
     title: 'T20 Trial with the Royals Performance Coach | Melbourne',
     description:
-      'Sid Lahiri, Performance Coach of the Rajasthan Royals, is coming to our open age T20 trial in Cranbourne North. Players 16 to 25. $30 a session.',
+      'Open age T20 trials, players 16 to 25. Mickleham Mon 5 Oct, Cranbourne North Sun 4 Oct, where Royals Performance Coach Sid Lahiri is coming. $30 a session.',
     ogImage: '/assets/performance-squads/sid-lahiri-riyan-parag.jpg',
   },
   '/coaches': {

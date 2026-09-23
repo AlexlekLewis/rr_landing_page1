@@ -18,7 +18,8 @@ import PaymentModal from '../performance-squads/PaymentModal';
 import PartnerStack from '../power-game/PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import {
-    ROUTE, AUDIENCE, AUDIENCE_HEADING, TRIAL_COACHES, CENTRE, SID,
+    ROUTE, AUDIENCE, AUDIENCE_HEADING, TRIAL_COACHES, TRIAL_CENTRES,
+    getCentre, SID, SID_CENTRE_SLUG,
     PRICING_HEADING, PRICING_FOOTNOTE, FAQS, FAQ_HEADING, DATES_CONFIRMED,
     OPPORTUNITY_LEAD, TRIAL_PRICE, MAX_TRIAL_SESSIONS, TRIAL_INCLUDES_OPEN_AGE,
 } from './openAgeData';
@@ -31,8 +32,9 @@ import {
 // There is deliberately NO noindex meta here — unlike /performance-squads,
 // which hides itself. Do not copy that block in.
 //
-// Recruits an extra intake into the EXISTING South-East Melbourne Performance
-// Squad at Cranbourne North. Every new fact lives in ./openAgeData.js.
+// Recruits an extra intake into the EXISTING Performance Squads: South-East
+// Melbourne at Cranbourne North, and North Melbourne at Mickleham. A player
+// books at ONE centre. Every new fact lives in ./openAgeData.js.
 // Sections whose content is unchanged are the live Performance Squads
 // components, given their content as props.
 // ─────────────────────────────────────────────────────────────
@@ -102,8 +104,10 @@ const OpenAgeTrial = () => {
                     <CoachesSection
                         coaches={TRIAL_COACHES}
                         eyebrow="Your Coach"
-                        title="Your Squad Head Coach"
-                        sub={`Selected players train under ${CENTRE.coach} at the ${CENTRE.venue} in ${CENTRE.suburb}. ${SID.name} is scheduled to be at the trial itself.`}
+                        title="Your Squad Head Coaches"
+                        // Names both, because a player trials into the squad at the
+                        // centre they picked. Sid is named against HIS session only.
+                        sub={`Selected players train under the head coach at the centre they trial at — ${TRIAL_CENTRES.map((c) => `${c.coach} at the ${c.venue} in ${c.suburb}`).join(', and ')}. ${SID.name} is scheduled to be at the ${getCentre(SID_CENTRE_SLUG).suburb} session.`}
                     />
                 </div>
                 <div id="trials" className="scroll-mt-28 lg:scroll-mt-32">
