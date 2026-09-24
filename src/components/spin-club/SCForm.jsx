@@ -134,8 +134,9 @@ const SCForm = () => {
                     Tell us about your bowling
                 </h2>
                 <p className="text-base text-rr-dark/70 font-medium leading-relaxed mb-4">
-                    Spin Club takes a set number of spinners at each centre, so every player
-                    registers their interest and the Royal Spin Coach picks the group.
+                    <strong className="text-rr-dark">Spin Club is for spin bowlers aged {PROGRAM.ages},
+                    and places at each centre are limited.</strong> Every player registers their
+                    interest and the Royal Spin Coach picks the group.
                 </p>
                 <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 mb-9">
                     <p className="text-sm font-black text-rr-dark uppercase tracking-widest mb-2">

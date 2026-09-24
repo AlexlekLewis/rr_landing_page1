@@ -11,9 +11,10 @@ const SCClubs = () => (
                 Pick the one closest to you
             </h2>
             <p className="text-base md:text-lg text-rr-dark/70 font-medium leading-relaxed max-w-3xl mb-12">
-                Both clubs run on the same night at the same time, and both are open to spinners
-                aged {PROGRAM.ages}. The Royal Spin Coach named below runs that centre&rsquo;s night
-                and picks its group.
+                Both clubs run on the same night at the same time, and both are open to spin bowlers
+                aged {PROGRAM.ages} at any standard. <strong className="text-rr-dark">Each centre
+                takes a limited number of places.</strong> The Royal Spin Coach named below mentors that
+                centre&rsquo;s group and picks it.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
