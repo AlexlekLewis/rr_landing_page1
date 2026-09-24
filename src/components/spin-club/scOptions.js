@@ -30,8 +30,10 @@ export const CLUBS = [
         coach: {
             name: 'Callum Stow',
             role: 'Royal Spin Coach — Spin Club North',
+            // What he bowls himself. NOT what the centre takes — every type of
+            // spin is welcome at both centres. See EVERY_SPIN below.
             spin: 'Left-arm wrist spin',
-            line: 'Callum plays for the Melbourne Renegades in the Big Bash League, the San Francisco Unicorns in Major League Cricket, and Victoria.',
+            line: 'Callum came out of Geelong Cricket Club and through Cricket Victoria\u2019s rookie program. He took nine wickets in five games for Victoria at the 2024 Global Super League in Guyana, then took a wicket on debut in the Big Bash and two against the Brisbane Heat in his next match. The Melbourne Renegades have re-signed him every season since, and he spent 2025 with the San Francisco Unicorns in Major League Cricket.',
         },
     },
     {
@@ -44,7 +46,7 @@ export const CLUBS = [
             name: 'Harkirat Bajwa',
             role: 'Royal Spin Coach — Spin Club South',
             spin: 'Off spin',
-            line: 'Harkirat has played for the Australia Under-19s, and plays his club cricket at Fitzroy Doncaster.',
+            line: 'Harkirat moved to Melbourne from India when he was seven and was bowling in the back yard not long after. At 17 he was the youngest player in Australia\u2019s Under-19 World Cup squad, and the only bottom-age player picked. He is an attacking off spinner who lives on his variations, and he plays his club cricket at Fitzroy Doncaster.',
         },
     },
 ];
@@ -53,6 +55,13 @@ export const CLUBS = [
 // for the whole block first, then what that works out at per night.
 // Squad members are capped at $25 a night. Everyone else is $67.50 a night
 // ($45/hr) and a one-off night is $97.50 ($65/hr).
+// A Royal Spin Coach bowls one type of spin. The centre takes all of them.
+// This line exists because "Off spin" under a venue name reads as a restriction.
+export const EVERY_SPIN = {
+    short: 'Every type of spin, at both centres',
+    long: 'Both centres take every type of spin — off spin, leg spin, left-arm orthodox, left-arm wrist spin, and anyone still working out what it is they bowl. Your Royal Spin Coach bowls one of them. They coach all of them.',
+};
+
 export const PRICES = [
     {
         key: 'squad',
