@@ -128,7 +128,7 @@ const JRT3Locations = () => {
                     <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}
                         className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium">
                         {TERM3_SOLD_OUT
-                            ? <>The session times below are <span className="font-black text-rr-dark">Term 3's</span>, which is sold out and now underway. In <span className="font-black text-rr-dark">Term 4 (October – December 2026)</span>, every centre runs sessions on <span className="font-black text-rr-dark">Mondays and Wednesdays</span> — enter now and pick your day, and we'll confirm your exact session time by email.</>
+                            ? <>In <span className="font-black text-rr-dark">Term 4 (October – December 2026)</span>, every centre runs sessions on <span className="font-black text-rr-dark">Mondays and Wednesdays</span> — enter now and pick your day, and we'll confirm your exact session time by email.</>
                             : earlyBird
                             ? <>Early bird pricing at <span className="font-black text-rr-dark">$299</span> — increasing to <span className="font-black text-rr-dark">$330</span> once the early bird offer concludes at 11pm 15 July. Small group sessions, one hour per week for 8 consecutive weeks at your preferred time. Select a location to view age groups and times.</>
                             : <>Programs at <span className="font-black text-rr-dark">$330</span> — small group sessions, one hour per week for 8 consecutive weeks at your preferred time. Select a location to view age groups and times.</>
@@ -152,15 +152,11 @@ const JRT3Locations = () => {
 
                                 <div className="space-y-2 mb-4">
                                     <div className="flex items-center gap-3">
-                                        <Calendar className="w-4 h-4 text-rr-blue shrink-0" />
-                                        <span className="text-rr-charcoal font-semibold text-sm">{TERM3_SOLD_OUT ? `Term 3: ${loc.dates}` : loc.dates}</span>
+                                        <Calendar className={`w-4 h-4 shrink-0 ${TERM3_SOLD_OUT ? 'text-rr-pink' : 'text-rr-blue'}`} />
+                                        {TERM3_SOLD_OUT
+                                            ? <span className="text-rr-dark font-black text-sm">Term 4: Mondays &amp; Wednesdays · Oct – Dec</span>
+                                            : <span className="text-rr-charcoal font-semibold text-sm">{loc.dates}</span>}
                                     </div>
-                                    {TERM3_SOLD_OUT && (
-                                        <div className="flex items-center gap-3">
-                                            <Calendar className="w-4 h-4 text-rr-pink shrink-0" />
-                                            <span className="text-rr-dark font-black text-sm">Term 4: Mondays &amp; Wednesdays · Oct – Dec</span>
-                                        </div>
-                                    )}
                                     <div className="flex items-center gap-3">
                                         <MapPin className="w-4 h-4 text-rr-blue shrink-0" />
                                         <span className="text-rr-charcoal font-semibold text-sm">{loc.note}</span>
@@ -170,7 +166,7 @@ const JRT3Locations = () => {
                                 {TERM3_SOLD_OUT ? (
                                     <div className="bg-rr-pink/5 border border-rr-pink/25 rounded-xl px-4 py-2.5 mb-4 flex items-center gap-2">
                                         <span className="w-2 h-2 rounded-full bg-rr-pink shrink-0" />
-                                        <p className="text-rr-pink text-xs font-bold uppercase tracking-wide">Term 3 sold out — Term 4 entries open</p>
+                                        <p className="text-rr-pink text-xs font-bold uppercase tracking-wide">Term 4 entries now open</p>
                                     </div>
                                 ) : loc.confirmed ? (
                                     <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-2.5 mb-4 flex items-center gap-2">
@@ -183,12 +179,18 @@ const JRT3Locations = () => {
                                     </div>
                                 )}
 
-                                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">{TERM3_SOLD_OUT ? 'Term 3 Age Groups & Times (Sold Out)' : 'Age Groups & Times'}</p>
-                                <div className="space-y-2 mb-5">
-                                    {(VENUE_GROUPS[loc.tag] || []).map(group => (
-                                        <GroupAccordion key={group.name} group={group} />
-                                    ))}
-                                </div>
+                                {TERM3_SOLD_OUT ? (
+                                    <p className="text-sm text-rr-charcoal font-medium leading-relaxed mb-5">Ages 7–15 · Exact session times confirmed by email after you enter.</p>
+                                ) : (
+                                    <>
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Age Groups &amp; Times</p>
+                                        <div className="space-y-2 mb-5">
+                                            {(VENUE_GROUPS[loc.tag] || []).map(group => (
+                                                <GroupAccordion key={group.name} group={group} />
+                                            ))}
+                                        </div>
+                                    </>
+                                )}
 
                                 <div className="flex flex-col gap-3">
                                     <button onClick={scrollToForm}

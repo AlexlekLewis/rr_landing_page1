@@ -24,7 +24,7 @@ const JRT3Overview = () => (
         <div className="max-w-6xl mx-auto px-6">
             <div className="text-center mb-16">
                 <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                    className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Term 3 · 2026</motion.p>
+                    className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Term 4 · 2026</motion.p>
                 <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
                     className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight mb-6">About the Program</motion.h2>
                 <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}

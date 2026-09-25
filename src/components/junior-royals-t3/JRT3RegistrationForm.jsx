@@ -177,9 +177,6 @@ const Term4EntryPanel = () => {
                     <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-wide mb-6">
                         TERM 4 ENTRIES <span className="text-rr-pink">NOW OPEN</span>
                     </h2>
-                    <p className="text-white/80 font-medium leading-relaxed mb-4">
-                        Term 3 sold out at all three centres and is now underway. If you're already registered for Term 3, you don't need to do anything — your place is secure, and your session day and time are in your confirmation email.
-                    </p>
                     <p className="text-white/80 font-medium leading-relaxed">
                         Term 4 runs October – December 2026, and entries are now being accepted. In Term 4, every centre — Mickleham, Hallam and Williamstown — runs sessions on both <span className="font-black text-white">Mondays and Wednesdays</span>, so you choose the training day that suits your family.
                     </p>

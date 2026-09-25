@@ -50,7 +50,7 @@ const JRT3Hero = () => {
                 >
                     <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
                     <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">
-                        {TERM3_SOLD_OUT ? 'Term 3 Sold Out — Term 4 Entries Now Open' : countdown.expired ? 'Now Enrolling — Term 3, 2026' : 'Early Bird — $299 · Term 3, 2026'}
+                        {TERM3_SOLD_OUT ? 'Term 4, 2026 — Entries Now Open' : countdown.expired ? 'Now Enrolling — Term 3, 2026' : 'Early Bird — $299 · Term 3, 2026'}
                     </span>
                 </motion.div>
 
@@ -62,7 +62,7 @@ const JRT3Hero = () => {
                     className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-200 uppercase tracking-tighter leading-none mb-6"
                 >
                     JUNIOR ROYALS<br />
-                    <span className="text-rr-pink">TERM 3</span>
+                    <span className="text-rr-pink">{TERM3_SOLD_OUT ? 'TERM 4' : 'TERM 3'}</span>
                 </motion.h1>
 
                 <motion.p
@@ -71,7 +71,7 @@ const JRT3Hero = () => {
                     transition={{ delay: 0.3 }}
                     className="text-lg md:text-2xl text-white font-semibold mb-4"
                 >
-                    Term 3, 2026 · 8-Week Program
+                    {TERM3_SOLD_OUT ? 'Term 4, 2026 · October – December' : 'Term 3, 2026 · 8-Week Program'}
                 </motion.p>
 
                 <motion.p
@@ -80,7 +80,7 @@ const JRT3Hero = () => {
                     transition={{ delay: 0.4 }}
                     className="text-sm md:text-lg text-white/80 font-medium mb-8 max-w-xl"
                 >
-                    Small group coaching for players aged 7–15 — one hour each week at your preferred session time, in your selected age group, for 8 consecutive weeks. Build foundation skills, develop game sense and take your game to the next level — delivered by Royals and CA accredited coaches.
+                    Small group coaching for players aged 7–15 — one hour each week on your preferred training day, in your selected age group{TERM3_SOLD_OUT ? '' : ', for 8 consecutive weeks'}. Build foundation skills, develop game sense and take your game to the next level — delivered by Royals and CA accredited coaches.
                 </motion.p>
 
                 {/* Venue pills */}
