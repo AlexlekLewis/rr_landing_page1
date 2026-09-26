@@ -29,8 +29,8 @@ const OpenDaysModal = ({ open, onClose }) => {
                     Off for anyone who asks for reduced motion, same as the ticker. */}
                 <style>{`
                   @keyframes rrFeaturedGlow {
-                    0%, 100% { box-shadow: 0 0 0 0 rgba(225,31,143,0.0); }
-                    50%      { box-shadow: 0 0 24px 3px rgba(225,31,143,0.55); }
+                    0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0.0); }
+                    50%      { box-shadow: 0 0 26px 4px rgba(212,175,55,0.6); }
                   }
                   .rr-featured-glow { animation: rrFeaturedGlow 2.6s ease-in-out infinite; }
                   @media (prefers-reduced-motion: reduce) { .rr-featured-glow { animation: none !important; } }

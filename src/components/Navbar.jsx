@@ -80,9 +80,9 @@ const PROGRAMS_DROPDOWN = [
     { label: 'Spin Club · Spinners 10-25', route: '/spin-club', badge: 'Registering Interest', badgeColor: 'bg-green-500' },
     { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', badge: 'Now Open — Places Limited', badgeColor: 'bg-rr-pink' },
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 Entries Open', badgeColor: 'bg-green-500' },
+    { label: 'Performance Squads', route: '/performance-squads', badge: 'Register Your Interest', badgeColor: 'bg-green-500' },
     { label: 'Private Coaching', route: '/mickleham', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },
-    // Closed but real — they belong here rather than in the home-page modal.
-    { label: 'Performance Squads', route: '/performance-squads', badge: 'Trials Full', badgeColor: 'bg-slate-500' },
+    // Closed but real — it belongs here rather than in the home-page modal.
     { label: 'High Performance Camp · India', route: '/tours', badge: 'Applications Closed', badgeColor: 'bg-red-500' },
 ];
 

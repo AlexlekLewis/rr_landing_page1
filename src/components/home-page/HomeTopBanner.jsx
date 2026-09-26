@@ -17,19 +17,23 @@ import { Link } from 'react-router-dom';
 //   4. Sid is at the CRANBOURNE NORTH session. He is not scheduled at Mickleham,
 //      so no line here may read as him being at both.
 //
-// The glow pulses to catch the eye. It is switched off for anyone who asks for
+// The glow pulses to catch the eye, in the Royals' original gold (Alex asked
+// for it by name on 26 Sep 2026). NOTE: the brand spec in reference material
+// says "no gold anywhere" because gold belongs to another sub-brand — this
+// banner is Alex's deliberate exception, not a precedent for other pages.
+// The status light is green and flashes. Both stop for anyone who asks for
 // reduced motion, the same rule the What's On ticker follows.
 const HomeTopBanner = () => {
     return (
         <div className="pt-20 md:pt-28 bg-rr-dark">
             <style>{`
               @keyframes rrEventGlow {
-                0%, 100% { box-shadow: 0 0 0 0 rgba(225,31,143,0.0), inset 0 0 0 0 rgba(255,255,255,0.0); }
-                50%      { box-shadow: 0 0 30px 6px rgba(225,31,143,0.55), inset 0 0 26px 0 rgba(255,255,255,0.14); }
+                0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0.0), inset 0 0 0 0 rgba(255,255,255,0.0); }
+                50%      { box-shadow: 0 0 34px 7px rgba(212,175,55,0.62), inset 0 0 26px 0 rgba(255,255,255,0.12); }
               }
               @keyframes rrEventDot {
-                0%, 100% { opacity: 1; transform: scale(1); }
-                50%      { opacity: 0.35; transform: scale(0.75); }
+                0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 9px 2px rgba(34,197,94,0.95); }
+                50%      { opacity: 0.4; transform: scale(0.72); box-shadow: 0 0 0 0 rgba(34,197,94,0); }
               }
               .rr-event-glow { animation: rrEventGlow 2.6s ease-in-out infinite; }
               .rr-event-dot  { animation: rrEventDot 1.3s ease-in-out infinite; }
@@ -41,7 +45,7 @@ const HomeTopBanner = () => {
             <div className="rr-event-glow relative w-full bg-gradient-to-r from-rr-blue via-rr-blue to-rr-pink text-white px-3 sm:px-4 py-2.5 sm:py-3.5">
                 <div className="max-w-6xl mx-auto flex items-center justify-center gap-x-3 sm:gap-x-4 gap-y-1.5 flex-wrap text-center">
                     <span className="inline-flex items-center gap-1.5 font-black uppercase tracking-widest text-[10px] sm:text-xs bg-white/15 rounded-full px-2.5 py-0.5 sm:py-1">
-                        <span className="rr-event-dot w-1.5 h-1.5 rounded-full bg-white" />
+                        <span className="rr-event-dot w-2 h-2 rounded-full" style={{ backgroundColor: '#22c55e' }} />
                         Special Event
                     </span>
 

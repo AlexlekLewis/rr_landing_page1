@@ -10,13 +10,17 @@
 // visitor who lands on the home page, so a closed or full program must come out
 // the moment it closes. Power Game Pre-Season came out on 6 Aug 2026 and the
 // India High Performance Camp on 20 Aug 2026, both because enrolment had
-// closed. Performance Squads came out on 26 Sep 2026 because its trials are
-// full and the open age trial below is the way in now. The School Holiday Camp
-// came out on 26 Sep 2026 (Alex). Each still sits in the nav Programs dropdown
-// and the sitemap, which is where a closed-but-real program belongs.
+// closed. The School Holiday Camp came out on 26 Sep 2026 (Alex). A closed
+// program that is still real belongs in the nav Programs dropdown and the
+// sitemap rather than here.
+//
+// Performance Squads STAYS (Alex, 26 Sep 2026): its September trials are done,
+// but the next intake is real, so the row asks for interest instead of
+// announcing a closed door. Do not drop this page from the list.
 //
 // ORDER = nearest real deadline first. Review dates:
 //   Open Age T20 Trial — 6 Oct 2026, the day after the last session. REMOVE IT.
+//   Performance Squads — when the next intake has dates, put them in the tag
 //   Spin Club          — when Alex confirms the start date, put it in the tag
 //   Junior Royals T4   — end of Term 4
 //
@@ -40,6 +44,17 @@ export const ANNOUNCEMENTS = [
         href: '/performance-squads-open-trial',
         badge: 'Book now',
         highlight: true,
+    },
+    {
+        // The program the trial above feeds. It says "register your interest"
+        // rather than "trials full": the September trials are done, and a closed
+        // door on the home page loses a player who would have waited.
+        key: 'performance-squads',
+        name: 'Performance Squads',
+        tag: 'Our representative squads, players 10 to 24 · register your interest for the next intake',
+        detail: 'Mickleham & Cranbourne North · aged 16 to 25? Trial on 4 & 5 Oct',
+        href: '/performance-squads',
+        badge: 'Register interest',
     },
     {
         key: 'spin-club',

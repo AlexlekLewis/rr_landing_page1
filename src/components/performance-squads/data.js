@@ -19,8 +19,8 @@ export const CENTRES = [
             // Applications closed 6 Sep 2026, the morning of the session. Thursday 10
             // September is the only Mickleham trial still taking bookings; anyone
             // already booked in for today keeps their place.
-            { id: 'nm-2026-09-06', label: 'Sunday 6 September · 2:00–4:00 PM', badge: 'Trial Full', full: true },
-            { id: 'nm-2026-09-10', label: 'Thursday 10 September · 8:00–10:00 PM', badge: 'Trial Full', full: true },
+            { id: 'nm-2026-09-06', label: 'Sunday 6 September · 2:00–4:00 PM', badge: 'Completed', full: true },
+            { id: 'nm-2026-09-10', label: 'Thursday 10 September · 8:00–10:00 PM', badge: 'Completed', full: true },
         ],
         maxTrialSessions: 2,
         active: true,
@@ -36,9 +36,9 @@ export const CENTRES = [
             // Both Sunday sessions are now FULL — 6 Sept closed 1 Sep 2026 (37 players
             // booked into 90 minutes), 13 Sept closed 3 Sep 2026. `full` makes a session
             // unselectable on the form; everyone already booked keeps their place.
-            { id: 'se-2026-09-06', label: 'Sunday 6 September · 7:00–8:30 PM', badge: 'Trial Full', full: true },
-            { id: 'se-2026-09-11', label: 'Friday 11 September · 8:00–9:30 PM', badge: 'Trial Full', full: true },
-            { id: 'se-2026-09-13', label: 'Sunday 13 September · 7:00–8:30 PM', badge: 'Trial Full', full: true },
+            { id: 'se-2026-09-06', label: 'Sunday 6 September · 7:00–8:30 PM', badge: 'Completed', full: true },
+            { id: 'se-2026-09-11', label: 'Friday 11 September · 8:00–9:30 PM', badge: 'Completed', full: true },
+            { id: 'se-2026-09-13', label: 'Sunday 13 September · 7:00–8:30 PM', badge: 'Completed', full: true },
         ],
         // Cranbourne North has fewer lanes — players attend at most 2 of the 3.
         // With both Sundays full, Friday 11 Sept is the only one still bookable; the
