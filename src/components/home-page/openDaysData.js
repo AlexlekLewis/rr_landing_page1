@@ -27,12 +27,16 @@
 export const ANNOUNCEMENTS = [
     {
         key: 'open-age-trial',
-        name: 'Open Age T20 Trial',
-        // Sid is scheduled at the CRANBOURNE NORTH session only. Never write a
-        // line here that reads as him being at both — the Mickleham players see
-        // this too. Same rule as the trial page itself.
-        tag: 'Open age 16 to 25 · Sid Lahiri, Rajasthan Royals Performance Coach, at the Cranbourne North session',
-        detail: 'Cranbourne North Sun 4 Oct · Mickleham Mon 5 Oct · $30 a session',
+        // Named for what it IS: the way into the Performance Squads (Alex, 26 Sep).
+        name: 'Performance Squads · Open Age Trial',
+        // The tag carries the two facts that decide whether a reader is eligible:
+        // the age bracket, and that it runs at BOTH centres. The ticker shows
+        // this line and nothing else.
+        tag: 'Open age 16 to 25 · at both centres, Mickleham and Cranbourne North',
+        // The modal truncates `detail` on a narrow screen, so it stays short and
+        // the dates lead. Sid is named against his own session only — he is not
+        // scheduled at Mickleham.
+        detail: 'Mickleham Mon 5 Oct · Cranbourne North Sun 4 Oct (Sid Lahiri) · $30',
         href: '/performance-squads-open-trial',
         badge: 'Book now',
         highlight: true,

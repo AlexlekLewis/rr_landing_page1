@@ -25,6 +25,16 @@ const OpenDaysModal = ({ open, onClose }) => {
                 className="relative w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl border border-white/10 max-h-[92vh] overflow-y-auto"
                 style={{ background: 'linear-gradient(175deg,#00112f 0%,#0a1f5c 34%,#3a1566 66%,#8f1a6e 100%)' }}
             >
+                {/* The highlighted row is a dated special event, so it pulses.
+                    Off for anyone who asks for reduced motion, same as the ticker. */}
+                <style>{`
+                  @keyframes rrFeaturedGlow {
+                    0%, 100% { box-shadow: 0 0 0 0 rgba(225,31,143,0.0); }
+                    50%      { box-shadow: 0 0 24px 3px rgba(225,31,143,0.55); }
+                  }
+                  .rr-featured-glow { animation: rrFeaturedGlow 2.6s ease-in-out infinite; }
+                  @media (prefers-reduced-motion: reduce) { .rr-featured-glow { animation: none !important; } }
+                `}</style>
                 {/* glows */}
                 <div className="absolute -top-20 -right-16 w-64 h-64 bg-rr-pink/25 rounded-full blur-[90px] pointer-events-none" />
 
@@ -54,7 +64,7 @@ const OpenDaysModal = ({ open, onClose }) => {
                             key={d.key}
                             href={d.href}
                             className={`group block rounded-2xl px-5 py-4 transition-all duration-300 ${d.highlight
-                                ? 'bg-rr-pink/15 border border-rr-pink/50 hover:bg-rr-pink/25'
+                                ? 'rr-featured-glow bg-rr-pink/15 border border-rr-pink/50 hover:bg-rr-pink/25'
                                 : 'bg-white/5 border border-white/10 hover:bg-white/10'}`}
                         >
                             <div className="flex items-center justify-between gap-3">
@@ -66,7 +76,7 @@ const OpenDaysModal = ({ open, onClose }) => {
                                         )}
                                     </div>
                                     <p className="text-sm font-bold text-white/90">{d.tag}</p>
-                                    <p className="text-xs font-medium text-white/55 mt-0.5 truncate">{d.detail}</p>
+                                    <p className="text-xs font-medium text-white/55 mt-0.5 leading-snug">{d.detail}</p>
                                 </div>
                                 <span className="shrink-0 w-9 h-9 rounded-full bg-white/10 group-hover:bg-rr-pink flex items-center justify-center text-white transition-colors">
                                     <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>

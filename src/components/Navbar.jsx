@@ -76,7 +76,7 @@ const PC_NAV = [
 //                        confirmed; when Alex sets the first Wednesday, say it
 //                        in the badge.
 const PROGRAMS_DROPDOWN = [
-    { label: 'Open Age T20 Trials · 16-25', route: '/performance-squads-open-trial', badge: '4 & 5 Oct', badgeColor: 'bg-rr-pink' },
+    { label: 'Performance Squads Open Trial · 16-25', route: '/performance-squads-open-trial', badge: 'Both Centres · 4 & 5 Oct', badgeColor: 'bg-rr-pink' },
     { label: 'Spin Club · Spinners 10-25', route: '/spin-club', badge: 'Registering Interest', badgeColor: 'bg-green-500' },
     { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', badge: 'Now Open — Places Limited', badgeColor: 'bg-rr-pink' },
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 Entries Open', badgeColor: 'bg-green-500' },
