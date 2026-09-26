@@ -38,9 +38,9 @@ export const ANNOUNCEMENTS = [
         // this line and nothing else.
         tag: 'Open age 16 to 25 · at both centres, Mickleham and Cranbourne North',
         // The modal truncates `detail` on a narrow screen, so it stays short and
-        // the dates lead. Sid is named against his own session only — he is not
+        // the dates lead. Sid is at both sessions (Alex, 26 Sep 2026) — he is not
         // scheduled at Mickleham.
-        detail: 'Mickleham Mon 5 Oct · Cranbourne North Sun 4 Oct (Sid Lahiri) · $30',
+        detail: 'Sid Lahiri at both · Mickleham Mon 5 Oct · Cranbourne North Sun 4 Oct · $30',
         href: '/performance-squads-open-trial',
         badge: 'Book now',
         highlight: true,

@@ -2,8 +2,9 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 // Timings are shown as elapsed time from the start of the day, not as clock
-// times — the daily start time differs by centre (July 2026 ran 9:00am at two
-// centres and 1:30pm at the third) and is confirmed to each family by email.
+// times, because this block is reused across camps whose start times differ.
+// This camp is one centre, Cranbourne North, 9:00 AM to 1:00 PM each day — the
+// clock times are stated in the hero, the overview and the locations section.
 // The four blocks add up to the full four-hour day.
 const slots = [
     {
@@ -70,7 +71,7 @@ const SessionWalkthrough = () => {
                         transition={{ duration: 0.6, delay: 0.15 }}
                         className="text-lg text-white/80 max-w-2xl mx-auto font-medium"
                     >
-                        Four hours a day, three days running. Every minute structured, every player challenged. Your centre&rsquo;s start and finish times come in your confirmation email.
+                        Four hours a day, three days running. Every minute structured, every player challenged. The day runs 9:00 AM to 1:00 PM at Cranbourne North.
                     </motion.p>
                 </div>
 

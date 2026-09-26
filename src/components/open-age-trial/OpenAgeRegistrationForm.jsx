@@ -8,7 +8,7 @@ import {
     inputClass, selectClass, PSCheckbox,
 } from '../performance-squads/shared';
 import {
-    TRIAL_CENTRES, getCentre, SID, SID_CENTRE_SLUG,
+    TRIAL_CENTRES, getCentre, SID, sidIsAt,
     PLAYING_ROLES, TRIAL_PRICE, MIN_AGE, MAX_AGE, AGE_AS_AT,
     PARENT_REQUIRED_UNDER, TRIAL_SESSIONS, DATES_CONFIRMED, ALL_SESSIONS_FULL,
     getSelectableSessionCount, getSessionLabel, getSessionCentreSlug,
@@ -594,10 +594,10 @@ const BookingForm = ({ onRequestPayment }) => {
                                         <div key={centre.slug}>
                                             <p className="text-[11px] font-black uppercase tracking-[0.18em] text-white/45 mb-2">
                                                 {centre.name} · {centre.venue}, {centre.suburb}
-                                                {/* Sid is scheduled at one centre. The tag appears
-                                                    only there, so a player booking the other one
-                                                    cannot read it as applying to them. */}
-                                                {centre.slug === SID_CENTRE_SLUG && (
+                                                {/* Sid is scheduled at both centres, but the tag is
+                                                    still rendered per centre, so it can never say
+                                                    more than the data does. */}
+                                                {sidIsAt(centre.slug) && (
                                                     <span className="text-rr-light-pink"> · {SID.name} scheduled</span>
                                                 )}
                                             </p>

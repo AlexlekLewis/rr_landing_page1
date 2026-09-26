@@ -19,7 +19,7 @@ import PartnerStack from '../power-game/PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import {
     ROUTE, AUDIENCE, AUDIENCE_HEADING, TRIAL_COACHES, TRIAL_CENTRES,
-    getCentre, SID, SID_CENTRE_SLUG,
+    SID,
     PRICING_HEADING, PRICING_FOOTNOTE, FAQS, FAQ_HEADING, DATES_CONFIRMED,
     OPPORTUNITY_LEAD, TRIAL_PRICE, MAX_TRIAL_SESSIONS, TRIAL_INCLUDES_OPEN_AGE,
 } from './openAgeData';
@@ -106,8 +106,8 @@ const OpenAgeTrial = () => {
                         eyebrow="Your Coach"
                         title="Your Squad Head Coaches"
                         // Names both, because a player trials into the squad at the
-                        // centre they picked. Sid is named against HIS session only.
-                        sub={`Selected players train under the head coach at the centre they trial at — ${TRIAL_CENTRES.map((c) => `${c.coach} at the ${c.venue} in ${c.suburb}`).join(', and ')}. ${SID.name} is scheduled to be at the ${getCentre(SID_CENTRE_SLUG).suburb} session.`}
+                        // centre they picked, under that centre's head coach.
+                        sub={`Selected players train under the head coach at the centre they trial at — ${TRIAL_CENTRES.map((c) => `${c.coach} at the ${c.venue} in ${c.suburb}`).join(', and ')}. ${SID.name} is scheduled to be at both sessions.`}
                     />
                 </div>
                 <div id="trials" className="scroll-mt-28 lg:scroll-mt-32">

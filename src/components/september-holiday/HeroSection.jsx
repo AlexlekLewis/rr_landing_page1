@@ -60,7 +60,7 @@ const HeroSection = () => {
                     transition={{ duration: 0.6, delay: 0.3 }}
                     className="text-lg md:text-2xl text-white font-semibold mb-4"
                 >
-                    Three days. 12 hours of coaching. Centres across Melbourne.
+                    Three days. 12 hours of coaching. Cranbourne North.
                 </motion.p>
 
                 <motion.p
@@ -70,7 +70,8 @@ const HeroSection = () => {
                     className="text-sm md:text-lg text-white/90 font-medium mb-8 max-w-xl"
                 >
                     The Junior Royals Holiday Program is back for the September / October school holidays, for boys
-                    and girls aged 7–15, at our centres across Melbourne. Secure your place below — places are limited.
+                    and girls aged 7–15, at the Elite Cricket Centre in Cranbourne North — Wednesday 30 September,
+                    Thursday 1 October and Friday 2 October, 9:00 AM to 1:00 PM each day. Secure your place below.
                 </motion.p>
 
                 {/* Location pills */}
@@ -80,10 +81,8 @@ const HeroSection = () => {
                     transition={{ duration: 0.6, delay: 0.5 }}
                     className="flex flex-wrap gap-3 mb-10"
                 >
-                    <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2">
-                        <span className="text-rr-pink font-bold text-xs">📍</span>
-                        <span className="text-white text-xs font-semibold uppercase tracking-wide">Mickleham — North</span>
-                    </div>
+                    {/* One pill, one centre: Cranbourne North is the only camp
+                        running these holidays (Alex, 26 Sep 2026). */}
                     <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2">
                         <span className="text-rr-pink font-bold text-xs">📍</span>
                         <span className="text-white text-xs font-semibold uppercase tracking-wide">Cranbourne North — South-East</span>

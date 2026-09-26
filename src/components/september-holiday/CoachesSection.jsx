@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 const coaches = [
     {
         name: 'Alex Lewis',
-        role: 'Lead Coach — Mickleham',
+        role: 'Director of Cricket',
         bio: 'Rajasthan Royals Academy Melbourne Head Coach. Over 20 years coaching cricketers through representative pathways. A current premier-cricket senior assistant and bowling coach, Alex coaches the individual\u2019s game, not a template \u2014 building better cricketers, sharper athletes and tougher competitors.',
         img: '/assets/coaches/alex-lewis.jpg',
     },

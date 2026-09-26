@@ -11,10 +11,14 @@ const GENDER_OPTIONS = ['Male Cricket', 'Female Cricket', 'No Preference'];
 // Same rule as the home-page hero list: no urgency claim unless it is true today,
 // and nothing that lands on a page without the site's navigation. Elite Program
 // removed Aug 2026 — /elite-royals is the closed Power Game page and has no Navbar.
-// Review date: the Masterclass line expires 13 Sep 2026.
+// Kept in step with the Navbar dropdown, the home hero list and the What's On
+// modal — same five programs, same order (26 Sep 2026).
+// REVIEW 6 OCT 2026 — the trial and the holiday camp are both over by then.
 const PROGRAMS = [
-    { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', urgency: 'Sept/Oct school holidays — places limited' },
-    { label: 'Performance Squads', route: '/performance-squads', urgency: 'Trials Full' },
+    { label: 'Performance Squads Open Trial', route: '/performance-squads-open-trial', urgency: 'Ages 16 to 25 — Cranbourne North Sun 4 Oct, Mickleham Mon 5 Oct, $30 a session' },
+    { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', urgency: 'Cranbourne North only — 30 September, 1 and 2 October' },
+    { label: 'Spin Club', route: '/spin-club', urgency: 'Spin bowlers 10 to 25 — registering interest, nothing to pay now' },
+    { label: 'Performance Squads', route: '/performance-squads', urgency: 'Register your interest for the next intake' },
     { label: 'Junior Royals', route: '/junior-royals', urgency: 'Term 4 entries open — Mondays & Wednesdays' },
 ];
 
@@ -73,7 +77,7 @@ const PathBuy = ({ onBack }) => (
             <ChevronLeft className="w-3 h-3" /> Back
         </button>
         <h3 className="text-xl font-black text-rr-dark uppercase tracking-wide mb-2">Choose Your Program</h3>
-        <p className="text-sm text-rr-charcoal font-medium mb-6">Select a program below to go to the registration and payment page.</p>
+        <p className="text-sm text-rr-charcoal font-medium mb-6">Pick a program to go to its page — where you can book and pay, or register your interest if the next intake has not opened yet.</p>
         <div className="space-y-3">
             {PROGRAMS.map(p => p.route ? (
                 <Link
