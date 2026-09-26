@@ -51,7 +51,7 @@ export const ANNOUNCEMENTS = [
         // door on the home page loses a player who would have waited.
         key: 'performance-squads',
         name: 'Performance Squads',
-        tag: 'Our representative squads, players 10 to 24 · register your interest for the next intake',
+        tag: 'Our representative squads, players 10 to 25 · register your interest for the next intake',
         detail: 'Mickleham & Cranbourne North · aged 16 to 25? Trial on 4 & 5 Oct',
         href: '/performance-squads',
         badge: 'Register interest',

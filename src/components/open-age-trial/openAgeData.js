@@ -177,7 +177,7 @@ export const centreDayLine = (slug) => {
     return s ? `${c.suburb} on ${s.label.split('·')[0].trim()}` : c.suburb;
 };
 
-// ── Age gate. This page only. /performance-squads stays at 10 to 24. ──
+// ── Age gate. This page only. /performance-squads is 10 to 25. ──
 // One set of constants drives the copy AND the form, so the page can never
 // advertise one range while the form accepts another.
 //
@@ -186,11 +186,11 @@ export const centreDayLine = (slug) => {
 // and we have already taken his trial fee. The squads FAQ pins its range to
 // the season the same way, and it matches Cricket Victoria's own convention.
 //
-// FOR ALEX, ONE DECISION TO SETTLE ONCE: the repo currently holds three
-// different ranges. performance-squads/data.js says 10 to 24, the squad
-// welcome page's welcomeConfig.js says 10 to 25 and also says "Age is not a
-// limiting factor", and this page says 16 to 25. One number, one file,
-// everything else imports it.
+// SETTLED (Alex, 26 Sep 2026): the Performance Squads are 10 to 25, in
+// performance-squads/data.js, and the welcome page agrees. THIS page keeps
+// 16 to 25 on purpose — it is the open age end of that same range, not a
+// different programme. Change the squads' range in data.js and this page is
+// unaffected; change this one only if the open age bracket itself moves.
 export const MIN_AGE = 16;
 export const MAX_AGE = 25;
 export const AGE_AS_AT = '1 September 2026';

@@ -18,7 +18,8 @@ import {
 // Open age trial registration.
 //
 // Differences from the Performance Squads trial form, and why:
-//   • age gate is MIN_AGE to MAX_AGE from openAgeData (16 to 25), not 10 to 24,
+//   • age gate is MIN_AGE to MAX_AGE from openAgeData (16 to 25), not the
+//     squads' full 10 to 25,
 //     and it is pinned to a date so it means the same thing in December
 //   • under 18 the contact details collected are the PARENT OR GUARDIAN's, so
 //     there is an adult we can actually reach about a child's session

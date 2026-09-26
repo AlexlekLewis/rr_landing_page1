@@ -110,13 +110,18 @@ export const SIGNUP_TYPES = [
 
 export const getSignupType = (key) => SIGNUP_TYPES.find((t) => t.key === key);
 
-// Age eligibility, set Sept 2026: 10 to 24 inclusive.
+// Age eligibility, SETTLED BY ALEX 26 Sep 2026: 10 to 25 inclusive.
+// It was 10 to 24 until then, and the repo held three different ranges. This
+// pair is the source of truth for the squads: the copy and both registration
+// forms read from it, so the page can never advertise one range while the
+// form accepts another. /performance-squads-open-trial keeps its own 16 to 25,
+// because that trial is the open age end of this same range.
 // The copy on the page AND both registration forms read from here, so the page
 // can never advertise one range while the form quietly accepts another. The
 // trial takes a $30 payment up front, so an ineligible player has to be stopped
 // at the form rather than refunded afterwards.
 export const MIN_AGE = 10;
-export const MAX_AGE = 24;
+export const MAX_AGE = 25;
 
 // Trial pricing.
 export const TRIAL_PRICE = 30;
@@ -263,7 +268,7 @@ export const SQUAD_COACHES = [
 export const FAQS = [
     {
         q: 'Who are the Performance Squads for?',
-        a: 'Players aged 10 to 24 as of the 2026/27 cricket season, in the current pathway who want to build a T20 career, players still chasing outstanding opportunities in T20 cricket, players rebuilding after injury or time away, and players whose skillset suits short-format cricket. Squads are built around playing standard rather than one age bracket.',
+        a: 'Players aged 10 to 25 as of the 2026/27 cricket season, in the current pathway who want to build a T20 career, players still chasing outstanding opportunities in T20 cricket, players rebuilding after injury or time away, and players whose skillset suits short-format cricket. Squads are built around playing standard rather than one age bracket.',
     },
     {
         q: 'How do I get into a squad?',
