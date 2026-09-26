@@ -1,5 +1,5 @@
 import React from 'react';
-import { CLUBS, PROGRAM } from './scOptions';
+import { CLUBS, PROGRAM, EVERY_SPIN } from './scOptions';
 
 const SCClubs = () => (
     <section className="bg-slate-50 py-20 md:py-28">
@@ -10,11 +10,22 @@ const SCClubs = () => (
             <h2 className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-6">
                 Pick the one closest to you
             </h2>
-            <p className="text-base md:text-lg text-rr-dark/70 font-medium leading-relaxed max-w-3xl mb-12">
-                Both clubs run on the same night at the same time, and both are open to spinners
-                aged {PROGRAM.ages}. The Royal Spin Coach named below runs that centre&rsquo;s night
-                and picks its group.
+            <p className="text-base md:text-lg text-rr-dark/70 font-medium leading-relaxed max-w-3xl mb-6">
+                Both clubs run on the same night at the same time, and both are open to spin bowlers
+                aged {PROGRAM.ages} at any standard. <strong className="text-rr-dark">Each centre
+                takes a limited number of places.</strong> The Royal Spin Coach named below mentors that
+                centre&rsquo;s group and picks it.
             </p>
+
+            {/* Said plainly, because "Off spin" under a venue name reads as a restriction. */}
+            <div className="bg-white border-l-4 border-rr-pink rounded-r-2xl px-6 py-5 max-w-3xl mb-12">
+                <p className="text-sm font-black text-rr-dark uppercase tracking-wide mb-2">
+                    {EVERY_SPIN.short}
+                </p>
+                <p className="text-[15px] text-rr-dark/70 font-medium leading-relaxed">
+                    {EVERY_SPIN.long}
+                </p>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {CLUBS.map((club) => (
@@ -35,10 +46,12 @@ const SCClubs = () => (
                             <p className="text-xs font-black text-rr-pink uppercase tracking-widest mb-2">
                                 {club.coach.role}
                             </p>
-                            <p className="text-xl font-black text-rr-dark uppercase tracking-tight mb-1">
+                            <p className="text-2xl font-black text-rr-dark uppercase tracking-tight mb-3">
                                 {club.coach.name}
                             </p>
-                            <p className="text-sm font-bold text-rr-dark/60 mb-4">{club.coach.spin}</p>
+                            <p className="text-[13px] font-bold text-rr-dark/60 uppercase tracking-wide mb-4 pb-4 border-b border-slate-200">
+                                Bowls {club.coach.spin.toLowerCase()} &middot; coaches every kind
+                            </p>
                             <p className="text-[15px] text-rr-dark/70 font-medium leading-relaxed">
                                 {club.coach.line}
                             </p>

@@ -1,18 +1,18 @@
 import React from 'react';
 import { PROGRAM } from './scOptions';
 
-const BLOCKS = [
+const PILLARS = [
     {
-        title: 'Talk about your last game',
-        body: 'Every night starts with the overs you bowled on the weekend. What worked, what got hit, and what you would do differently. Everyone in the room has been there.',
+        title: 'Technical',
+        body: 'Your grip, your action, your release. The work that makes the ball spin hard and land where you meant it to.',
     },
     {
-        title: 'Learn what only spinners know',
-        body: 'Field settings, changing your pace, bowling to a left-hander, bowling on a day when it is not turning. The parts of the game a spinner usually has to work out alone.',
+        title: 'Mental',
+        body: 'What you do after you get hit. Spin is the one job in cricket where doing it right can still cost you runs, so we train how you handle that.',
     },
     {
-        title: 'Give it a rip',
-        body: 'A ball you toss up and spin is the right ball, even when it goes for six. We coach the next one, instead of teaching you to bowl flat and safe.',
+        title: 'Tactical',
+        body: 'Reading the batter, setting them up, picking the next ball, and knowing what your field is really for.',
     },
 ];
 
@@ -27,26 +27,58 @@ const SCWhatItIs = () => (
     <section className="bg-white py-20 md:py-28">
         <div className="max-w-6xl mx-auto px-6">
             <p className="text-xs font-black text-rr-pink uppercase tracking-[0.3em] mb-4">
-                What Spin Club is
+                Why Spin Club exists
             </p>
             <h2 className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-6">
-                Spinners, together,<br className="hidden md:block" /> every Wednesday
+                The hardest part of spin<br className="hidden md:block" /> is knowing if you bowled well
             </h2>
-            <p className="text-base md:text-lg text-rr-dark/70 font-medium leading-relaxed max-w-3xl mb-5">
-                Spin Club brings Melbourne&rsquo;s spinners together under Callum Stow and Harkirat
-                Bajwa, to train, to talk and to work things out with each other. It runs during the
-                season, so the night is about the cricket you are actually playing: the overs you
-                bowled on the weekend, what the batter did to you, what you would try next time, and
-                the tactics only another spinner really understands.
-            </p>
-            <p className="text-base md:text-lg text-rr-dark font-semibold leading-relaxed max-w-3xl mb-14">
-                It is as much a support network as it is a training night. It runs for{' '}
-                {PROGRAM.weeks} weeks across the school term, then keeps going through January,
-                February and March.
-            </p>
 
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 lg:gap-14 mb-16">
+                <div className="lg:col-span-3">
+                    <p className="text-base md:text-lg text-rr-dark/70 font-medium leading-relaxed mb-5">
+                        In season is the trickiest time to be a spinner. You can bowl beautifully and
+                        still go for runs. You can bowl average and take five. Most spinners are left
+                        to sort that out on their own, in the car on the way home.
+                    </p>
+                    <p className="text-base md:text-lg text-rr-dark/70 font-medium leading-relaxed mb-5">
+                        Spin Club exists to put those problems in one room. Spinners bring the night
+                        they had, and the group shares it, learns from it, works on it and solves it
+                        together. That is the whole idea: a community of spinners who explore the
+                        game with each other, rather than alone.
+                    </p>
+                    <p className="text-base md:text-lg text-rr-dark/70 font-medium leading-relaxed mb-5">
+                        It is deliberately player-led. The spinners set what the night is about and
+                        the coaches support it, with Callum Stow and Harkirat Bajwa mentoring the
+                        group rather than running drills at it.
+                    </p>
+                    <p className="text-base md:text-lg text-rr-dark font-semibold leading-relaxed">
+                        We want to change how spinners prepare for games, and how we develop them —
+                        with a real balance between the technical work, the mental side and the
+                        tactical understanding.
+                    </p>
+                </div>
+
+                <div className="lg:col-span-2">
+                    <div className="bg-slate-50 border-l-4 border-rr-pink rounded-r-2xl p-7 h-full flex flex-col justify-center">
+                        <p className="text-lg md:text-xl text-rr-dark font-bold leading-relaxed mb-5">
+                            &ldquo;Growing up, the thing I wanted most was a group of spinners to work
+                            with and explore the game with. That is what we are building here.&rdquo;
+                        </p>
+                        <p className="text-sm font-black text-rr-dark uppercase tracking-widest">
+                            Alex Lewis
+                        </p>
+                        <p className="text-sm text-rr-dark/60 font-medium">
+                            Director of Cricket, Rajasthan Royals Academy Melbourne
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <p className="text-xs font-black text-rr-pink uppercase tracking-[0.3em] mb-6">
+                What we work on
+            </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {BLOCKS.map((b, i) => (
+                {PILLARS.map((b, i) => (
                     <div key={b.title} className="border-t-2 border-rr-pink/30 pt-5">
                         <p className="text-5xl font-black text-rr-pink/20 leading-none mb-3">
                             {String(i + 1).padStart(2, '0')}
@@ -72,7 +104,8 @@ const SCWhatItIs = () => (
                     ))}
                 </div>
                 <p className="text-[13px] text-white/50 font-medium mt-6">
-                    {PROGRAM.time} on a {PROGRAM.day} night. {PROGRAM.sessionLength} on the floor.
+                    {PROGRAM.time} on a {PROGRAM.day} night. {PROGRAM.sessionLength} on the floor,
+                    for {PROGRAM.weeks} weeks, then straight on through January, February and March.
                 </p>
             </div>
         </div>
