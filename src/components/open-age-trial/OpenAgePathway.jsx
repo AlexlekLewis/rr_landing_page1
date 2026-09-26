@@ -6,7 +6,7 @@ import { PATHWAY_HEADING, PATHWAY_STEPS } from './openAgeData';
 
 // Three steps, written for this trial. The squads page's "How Each Squad Is
 // Built" block is deliberately not carried over — it is written around the
-// 10 to 24 junior squads.
+// 10 to 25 squads.
 const ICONS = [StumpsIcon, SelectionIcon, BatIcon];
 
 const OpenAgePathway = () => (

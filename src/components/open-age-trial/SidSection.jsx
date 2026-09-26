@@ -54,6 +54,13 @@ const SidSection = () => (
                         </p>
                     ))}
 
+                    {/* Two sessions, one of them his. Said here rather than three
+                        screens later at the booking card, so a Mickleham player is
+                        never reading this section about a session they can't book. */}
+                    <p className="text-white/75 text-[15px] sm:text-base font-medium leading-relaxed mt-3">
+                        {SID_SECTION.sessions}
+                    </p>
+
                     {/* Separation. Sid is in the hero and the global opportunities
                         list names Paarl and Barbados further down the page. Without
                         this line a reader can reasonably join those two things up.

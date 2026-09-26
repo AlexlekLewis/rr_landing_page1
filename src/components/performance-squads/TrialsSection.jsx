@@ -66,7 +66,8 @@ const TrialsSection = ({ onChooseCentre }) => (
                                             if (open.length === 0) {
                                                 return (
                                                     <div className="text-white/45 text-xs font-medium pt-0.5">
-                                                        Every trial session at this centre is full.
+                                                        Our September trials here are done. Register your interest and
+                                                        we will tell you when the next dates are set.
                                                     </div>
                                                 );
                                             }
@@ -100,7 +101,7 @@ const TrialsSection = ({ onChooseCentre }) => (
                                 const hasSessions = c.trialSessions.length > 0;
                                 const allFull = hasSessions && c.trialSessions.every((s) => s.full);
                                 if (!hasSessions) return 'Register Your Interest';
-                                return allFull ? 'Join the Waitlist' : 'Register for Trial';
+                                return allFull ? 'Register Your Interest' : 'Register for Trial';
                             })()} <ArrowRight className="w-4 h-4" />
                         </button>
                     </motion.div>

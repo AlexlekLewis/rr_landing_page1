@@ -171,10 +171,10 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
         <section className="py-20 px-5">
             <div className="max-w-2xl mx-auto">
                 <SectionHeading
-                    eyebrow={isWaitlist ? 'Waitlist' : 'Register & Pay'}
-                    title={isWaitlist ? 'Join the Waitlist' : 'Register & Secure Your Trial Spot'}
+                    eyebrow={isWaitlist ? 'Register Interest' : 'Register & Pay'}
+                    title={isWaitlist ? 'Register Your Interest' : 'Register & Secure Your Trial Spot'}
                     sub={isWaitlist
-                        ? "This centre's trials are full. Enter your details to join the waitlist and we'll let you know as soon as a spot or new trial date opens — nothing to pay."
+                        ? "Our September trials at this centre are done. Leave your details and we will tell you as soon as the next trial dates are set, or a place opens — nothing to pay."
                         : "Enter your details, choose your trial session(s), and pay — all in one step. Your trial spot isn't confirmed until payment is received."}
                 />
                 {submitted ? (
@@ -186,12 +186,12 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                             </svg>
                         </div>
                         <h3 className="text-2xl font-black uppercase mb-3">
-                            {submittedResult?.waitlist ? "You're On The Waitlist" : 'Registration Received'}
+                            {submittedResult?.waitlist ? "You're On The List" : 'Registration Received'}
                         </h3>
                         {submittedResult?.waitlist ? (
                             <p className="text-white/70 text-[15px] font-medium leading-relaxed">
-                                Thanks — you're on the waitlist for this centre. We'll be in touch as
-                                soon as a spot opens up or new trial dates are released. Questions?
+                                Thanks — we have your details. We'll be in touch as soon as the next
+                                trial dates are set, or a place opens up. Questions?
                                 Email info@rramelbourne.com
                             </p>
                         ) : (
@@ -344,14 +344,16 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                         )}
 
                         {isWaitlist && (
-                            <div className="mb-6 bg-red-500/5 border border-red-400/30 rounded-xl px-4 py-4">
-                                <p className="text-sm font-black uppercase tracking-wide text-red-300 mb-1.5">
-                                    This centre&apos;s trials are full
+                            <div className="mb-6 bg-rr-pink/8 border border-rr-pink/30 rounded-xl px-4 py-4">
+                                <p className="text-sm font-black uppercase tracking-wide text-rr-light-pink mb-1.5">
+                                    September trials here are done
                                 </p>
                                 <p className="text-white/70 text-sm font-medium leading-relaxed">
-                                    Every trial session at this centre is full. Join the waitlist and
-                                    we&apos;ll be in touch as soon as a spot opens up or new trial dates
-                                    are released. There&apos;s nothing to pay to join the waitlist.
+                                    Register your interest and we&apos;ll be in touch as soon as the next
+                                    trial dates are set, or a place opens up. There&apos;s nothing to pay.
+                                    Aged 16 to 25? There is an open age trial at both centres on 4 and 5
+                                    October — see{' '}
+                                    <a href="/performance-squads-open-trial" className="text-rr-light-pink underline hover:text-white">the open age trial</a>.
                                 </p>
                             </div>
                         )}
@@ -391,7 +393,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                         >
                             {submitting
                                 ? 'Submitting…'
-                                : isWaitlist ? 'Join the Waitlist' : 'Submit Registration'}
+                                : isWaitlist ? 'Register My Interest' : 'Submit Registration'}
                             {!submitting && <ArrowRight className="w-4 h-4" />}
                         </button>
                     </form>

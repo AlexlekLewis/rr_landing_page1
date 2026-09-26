@@ -31,13 +31,13 @@ const ELITE = {
 };
 
 export const PAGE_SEO = {
-  // Spin Club — not in the nav and not announced yet. noindex until go-live, so the
-  // link can be shared without the page turning up in search first.
+  // Spin Club — ANNOUNCED 26 Sep 2026 (Alex): it is in the nav, the home-page
+  // modal and the ticker, so the noindex came off and the route went into the
+  // sitemap. A page we promote to every visitor should not be hidden from search.
   '/spin-club': {
     title: 'Spin Bowling Coaching Melbourne | Royals Spin Club',
     description:
       'A Wednesday night club for spin bowlers aged 10 to 25, at Mickleham and Cranbourne North. Run by Rajasthan Royals Academy Melbourne. Apply for a place.',
-    noindex: true,
   },
   '/': {
     title: 'Rajasthan Royals Academy Melbourne | Cricket Coaching',
@@ -80,7 +80,9 @@ export const PAGE_SEO = {
       'For current Rajasthan Royals Academy players who cannot attend a September Performance Squads trial.',
     noindex: true,
   },
-  // Open age T20 trial at Cranbourne North, headlined by Sid Lahiri, Performance
+  // Open age T20 trials at Cranbourne North and Mickleham, headlined by Sid Lahiri,
+  // who is scheduled at the CRANBOURNE NORTH session only — the card must not
+  // imply he is at both. Performance
   // Coach of the Rajasthan Royals. PUBLIC AND PROMOTED, so no noindex here: the
   // whole point is that it is found and shared. Copy is the source of truth in
   // src/components/open-age-trial/openAgeData.js (SEO) and mirrored here.
@@ -92,9 +94,9 @@ export const PAGE_SEO = {
   // "is coming to", never "is at" — his attendance is scheduled, not certain,
   // and the page hedges it in four places. The card must not out-promise it.
   '/performance-squads-open-trial': {
-    title: 'T20 Trial with the Royals Performance Coach | Melbourne',
+    title: 'Open Age T20 Trials, Mickleham & Cranbourne North | Royals',
     description:
-      'Sid Lahiri, Performance Coach of the Rajasthan Royals, is coming to our open age T20 trial in Cranbourne North. Players 16 to 25. $30 a session.',
+      'Open age T20 trials, players 16 to 25. Mickleham Mon 5 Oct, Cranbourne North Sun 4 Oct, where Royals Performance Coach Sid Lahiri is coming. $30 a session.',
     ogImage: '/assets/performance-squads/sid-lahiri-riyan-parag.jpg',
   },
   '/coaches': {
