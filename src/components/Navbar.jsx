@@ -78,7 +78,7 @@ const PC_NAV = [
 const PROGRAMS_DROPDOWN = [
     { label: 'Performance Squads Open Trial · 16-25', route: '/performance-squads-open-trial', badge: 'Both Centres · 4 & 5 Oct', badgeColor: 'bg-rr-pink' },
     { label: 'Spin Club · Spinners 10-25', route: '/spin-club', badge: 'Registering Interest', badgeColor: 'bg-green-500' },
-    { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', badge: 'Now Open — Places Limited', badgeColor: 'bg-rr-pink' },
+    { label: 'Junior Royals Holiday Program · Cranbourne North', route: '/junior-royals-holiday', badge: '30 Sep – 2 Oct', badgeColor: 'bg-rr-pink' },
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 Entries Open', badgeColor: 'bg-green-500' },
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Register Your Interest', badgeColor: 'bg-green-500' },
     { label: 'Private Coaching', route: '/mickleham', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },

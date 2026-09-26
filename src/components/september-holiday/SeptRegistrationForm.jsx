@@ -297,7 +297,9 @@ const SeptRegistrationForm = () => {
                         <label className={labelClass}>Select Location</label>
                         <select name="location" value={form.location} onChange={handleChange} className={inputClass(errors.location)}>
                             <option value="">Select a location</option>
-                            <option value="mickleham">Mickleham Indoor Sports Centre | Sept 23, 24 &amp; 25</option>
+                            {/* CRANBOURNE NORTH ONLY these holidays (Alex, 26 Sep 2026).
+                                The Mickleham camp (23–25 Sep) was cancelled — leaving it
+                                selectable let a parent pay $330 for a camp not running. */}
                             <option value="cranbourne-north">Elite Cricket Centre — Cranbourne North | Sept 30, Oct 1 &amp; 2</option>
                         </select>
                         {errors.location && <p className="text-red-500 text-xs mt-1">{errors.location}</p>}

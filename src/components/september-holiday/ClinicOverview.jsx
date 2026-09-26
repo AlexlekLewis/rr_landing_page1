@@ -20,13 +20,13 @@ const features = [
 
     {
         icon: 'pin',
-        title: 'Centres Across Melbourne',
-        desc: 'Centres across Melbourne — north, south-east and west. Pick whichever you can get to.',
+        title: 'Cranbourne North',
+        desc: 'The Elite Cricket Centre in Cranbourne North — the Academy\u2019s south-east home, where our Performance Squad trains on Monday nights.',
     },
     {
         icon: 'clock',
         title: 'Three Days, 12 Hours',
-        desc: 'Four hours a day across three consecutive days. The exact days and start times are confirmed by email once we set them.',
+        desc: 'Four hours a day across three days: Wednesday 30 September, Thursday 1 October and Friday 2 October, 9:00 AM to 1:00 PM each day.',
     },
 ];
 

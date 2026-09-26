@@ -93,10 +93,11 @@ export const PAGE_SEO = {
   // crops. Swap ogImage for a 1200x630 crop when one exists.
   // "is coming to", never "is at" — his attendance is scheduled, not certain,
   // and the page hedges it in four places. The card must not out-promise it.
+  // Sid is coming to BOTH sessions (Alex, 26 September 2026).
   '/performance-squads-open-trial': {
     title: 'Open Age T20 Trials, Mickleham & Cranbourne North | Royals',
     description:
-      'Open age T20 trials, players 16 to 25. Mickleham Mon 5 Oct, Cranbourne North Sun 4 Oct, where Royals Performance Coach Sid Lahiri is coming. $30 a session.',
+      'Open age T20 trials, players 16 to 25. Mickleham Mon 5 Oct and Cranbourne North Sun 4 Oct, both with Royals Performance Coach Sid Lahiri coming. $30 a session.',
     ogImage: '/assets/performance-squads/sid-lahiri-riyan-parag.jpg',
   },
   '/coaches': {

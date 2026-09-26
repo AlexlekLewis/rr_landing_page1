@@ -14,8 +14,9 @@ import { Link } from 'react-router-dom';
 //   1. it is a trial for the PERFORMANCE SQUADS, not a stand-alone event
 //   2. it is for OPEN AGE players, 16 to 25
 //   3. it runs at BOTH CENTRES — Mickleham and Cranbourne North
-//   4. Sid is at the CRANBOURNE NORTH session. He is not scheduled at Mickleham,
-//      so no line here may read as him being at both.
+//   4. Sid is at BOTH sessions — Alex confirmed Mickleham on 26 Sep 2026.
+//      His attendance is "scheduled", never certain: the page it links to
+//      carries the hedge and the refund, so this line stays factual.
 //
 // The glow pulses to catch the eye, in the Royals' original gold (Alex asked
 // for it by name on 26 Sep 2026). NOTE: the brand spec in reference material
@@ -65,14 +66,14 @@ const HomeTopBanner = () => {
                     </Link>
                 </div>
 
-                {/* Both centres, each with its own date, then Sid against his own
-                    session. Second row so the first row stays readable on a phone. */}
+                {/* Both centres, each with its own date, then Sid — who is at both.
+                    Second row so the first row stays readable on a phone. */}
                 <div className="max-w-6xl mx-auto mt-1 flex items-center justify-center gap-x-2.5 gap-y-0.5 flex-wrap text-center leading-snug">
                     <span className="font-bold uppercase tracking-wide text-[10px] sm:text-xs">
                         Both centres — Mickleham Mon 5 Oct <span className="text-white/60">·</span> Cranbourne North Sun 4 Oct
                     </span>
                     <span className="font-medium text-[10px] sm:text-xs text-white/80">
-                        Sid Lahiri, Rajasthan Royals Performance Coach, at the Cranbourne North session
+                        Sid Lahiri, Rajasthan Royals Performance Coach, at both sessions
                     </span>
                 </div>
             </div>
