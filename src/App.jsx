@@ -230,8 +230,8 @@ function App() {
 
         {/* Spin Club — Wednesday-night spin program at Mickleham (North) and Cranbourne
             North (South). Expression-of-interest page only: the form writes to
-            `applications` with program_type 'Spin Club' and takes no payment. Not in the
-            nav and noindex until Alex announces it. */}
+            `applications` with program_type 'Spin Club' and takes no payment.
+            ANNOUNCED 26 Sep 2026: in the nav, the home-page modal and the sitemap. */}
         <Route path="/spin-club" element={<SpinClub />} />
 
         {/* Power Game Masterclass — RETIRED 2026 (program removed from schedule).

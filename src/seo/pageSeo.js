@@ -31,13 +31,13 @@ const ELITE = {
 };
 
 export const PAGE_SEO = {
-  // Spin Club — not in the nav and not announced yet. noindex until go-live, so the
-  // link can be shared without the page turning up in search first.
+  // Spin Club — ANNOUNCED 26 Sep 2026 (Alex): it is in the nav, the home-page
+  // modal and the ticker, so the noindex came off and the route went into the
+  // sitemap. A page we promote to every visitor should not be hidden from search.
   '/spin-club': {
     title: 'Spin Bowling Coaching Melbourne | Royals Spin Club',
     description:
       'A Wednesday night club for spin bowlers aged 10 to 25, at Mickleham and Cranbourne North. Run by Rajasthan Royals Academy Melbourne. Apply for a place.',
-    noindex: true,
   },
   '/': {
     title: 'Rajasthan Royals Academy Melbourne | Cricket Coaching',

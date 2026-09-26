@@ -69,17 +69,19 @@ const PC_NAV = [
 // BADGE REVIEW DATES — a badge here is wrong on every page once it expires:
 //   Holiday early bird — 30 Aug 2026
 //   Masterclass        — 13 Sep 2026 (drop the row after the second session)
-//   Open Age T20 Trial — 'Dates Coming' must be replaced the day the dates go
-//                        into openAgeData.TRIAL_SESSIONS, and the row moved up
-//                        into the joinable block above. Review 15 Oct 2026; if
-//                        there are still no dates by then, pull the row.
+//   Open Age T20 Trial — dates are live (4 & 5 Oct), so the row sits in the
+//                        joinable block. REVIEW 6 OCT 2026: pull it the day
+//                        after the last session.
+//   Spin Club          — announced 26 Sep 2026, interest only. No start date
+//                        confirmed; when Alex sets the first Wednesday, say it
+//                        in the badge.
 const PROGRAMS_DROPDOWN = [
+    { label: 'Open Age T20 Trials · 16-25', route: '/performance-squads-open-trial', badge: '4 & 5 Oct', badgeColor: 'bg-rr-pink' },
+    { label: 'Spin Club · Spinners 10-25', route: '/spin-club', badge: 'Registering Interest', badgeColor: 'bg-green-500' },
     { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', badge: 'Now Open — Places Limited', badgeColor: 'bg-rr-pink' },
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 Entries Open', badgeColor: 'bg-green-500' },
     { label: 'Private Coaching', route: '/mickleham', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },
-    // Not joinable today — booking opens when the dates land, so it sits below
-    // the three a visitor can act on now, per the ordering rule above.
-    { label: 'Open Age T20 Trials · 16-25', route: '/performance-squads-open-trial', badge: '4 & 5 Oct', badgeColor: 'bg-rr-pink' },
+    // Closed but real — they belong here rather than in the home-page modal.
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Trials Full', badgeColor: 'bg-slate-500' },
     { label: 'High Performance Camp · India', route: '/tours', badge: 'Applications Closed', badgeColor: 'bg-red-500' },
 ];
