@@ -189,13 +189,15 @@ export const MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encod
 // at this session as guest coach. No honours, former clubs, quotes, or claims
 // about players he has worked with.
 //
-// "Head of Global Academies" is in Alex's brief (22–24 September 2026) and
-// is already public on the home page and the tours page.
+// Title: "Rajasthan Royals Performance Coach", the same as the open age trial
+// page and the 28 Sep coach's email (Director ruling, 27 Sep 2026). The site
+// also uses "Head of Global Academies" and "Head of International Player
+// Development"; the bigger title is Alex's call, so it is not added here.
 export const SID_NAME = SID.name;
 export const SID_PHOTO = SID.photo;
 export const SID_PHOTO_ALT = SID.photoAlt;
 export const SID_PHOTO_CAPTION = SID.photoCaption;
-export const SID_TITLE_LINE = `${SID.employer} ${SID.title} and Head of Global Academies`;
+export const SID_TITLE_LINE = `${SID.employer} ${SID.title}`;
 export const SID_IN_MELBOURNE = '3 to 6 October';
 
 // THE HEDGE. Families book on the strength of one named person turning up,
@@ -300,7 +302,7 @@ export const ON_THE_DAY = [
     },
     { key: 'helmet', text: 'Bring a helmet with a stem guard. Nobody bats against a hard ball without one.' },
     // The junior pages' own kit line (Junior Royals, holiday and open day).
-    { key: 'water', text: 'Bring a drink bottle and water.' },
+    { key: 'water', text: 'Bring a water bottle.' },
 ];
 
 // ── The booking section, by state ──
