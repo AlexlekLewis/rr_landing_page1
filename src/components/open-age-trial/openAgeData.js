@@ -210,22 +210,28 @@ export const PARENT_REQUIRED_UNDER = 18;
 // former clubs, no years of service, no quotes, no claims about players he
 // has produced.
 //
-// FOR ALEX, ON THE RECORD AND FREE TO USE IF HE WANTS IT: the Royals have
-// publicly announced Sid in bigger roles than the one used here, including
-// Head of International Player Development for Royals Sports Group. Those are
-// stronger credentials than the one on this page. They are NOT added without
-// Alex's word, but he should know they exist.
+// HIS TITLE (Alex, 27 September 2026): both of his current Royals roles, in
+// the same words here, on the rest of the site and on the A4 trial posters —
+// "Head of International Player Development and Performance Coach, Rajasthan
+// Royals". Each role is stated on the Royals' own website:
+//   - Head of International Player Development: the Royals Sports Group
+//     appointment article, 4 February 2025 (rajasthanroyals.com/latest-news/
+//     siddhartha-lahiri-royals-head-of-international-player-development-appoint)
+//   - Performance Coach: the Rajasthan Royals IPL 2026 support staff page
+//     (rajasthanroyals.com/support-staff)
+// "Head of Global Academies" was an earlier title. Do not bring it back.
+// His full name, Siddhartha Lahiri, the first time a page names him; "Sid" after.
 // ─────────────────────────────────────────────────────────────
 export const SID = {
-    name: 'Sid Lahiri',
-    title: 'Performance Coach',
+    name: 'Siddhartha Lahiri',
+    title: 'Head of International Player Development and Performance Coach',
     employer: 'Rajasthan Royals',
-    titleLine: 'Performance Coach of the Rajasthan Royals',
+    titleLine: 'Head of International Player Development and Performance Coach, Rajasthan Royals',
     // Up-to-date photo in this season's Royals kit (Alex, 27 Sep 2026). Sid is
     // at the trial to watch cricket, so the page shows him watching a batter.
     photo: '/assets/performance-squads/sid-lahiri-watching-2026.jpg',
     photoAlt:
-        'Sid Lahiri, Rajasthan Royals Performance Coach, watching a batter at a Rajasthan Royals training session',
+        'Sid Lahiri, Rajasthan Royals Head of International Player Development and Performance Coach, watching a batter at a Rajasthan Royals training session',
     photoCaption: 'Sid Lahiri at a Rajasthan Royals training session.',
 
     // THE HEDGE. This page takes money up front on the strength of one named

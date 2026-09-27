@@ -48,9 +48,9 @@ export const PAGE_SEO = {
   // Mickleham coaches run the session, per the safeguarding review), and his
   // attendance is "scheduled", never certain: it is hedged everywhere on the page.
   '/sid-juniors': {
-    title: 'Junior Session with Sid Lahiri, Mickleham | Royals Academy',
+    title: 'Junior Session with Siddhartha Lahiri, Mickleham | Royals Academy',
     description:
-      'One hour of junior coaching at Mickleham on Monday 5 October, 4:30–5:30pm, with Rajasthan Royals Performance Coach Sid Lahiri scheduled as guest coach.',
+      'One hour of junior coaching at Mickleham on Monday 5 October, 4:30–5:30pm, with Siddhartha Lahiri, Head of International Player Development and Performance Coach at the Rajasthan Royals, scheduled as guest coach.',
     ogImage: '/assets/performance-squads/sid-lahiri-riyan-parag.jpg',
   },
   '/': {

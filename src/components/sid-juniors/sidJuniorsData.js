@@ -189,10 +189,11 @@ export const MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encod
 // at this session as guest coach. No honours, former clubs, quotes, or claims
 // about players he has worked with.
 //
-// Title: "Rajasthan Royals Performance Coach", the same as the open age trial
-// page and the 28 Sep coach's email (Director ruling, 27 Sep 2026). The site
-// also uses "Head of Global Academies" and "Head of International Player
-// Development"; the bigger title is Alex's call, so it is not added here.
+// Title (Alex, 27 Sep 2026): both of his roles, "Head of International Player
+// Development and Performance Coach, Rajasthan Royals", the same on every page
+// of the site and on the open age trial posters. It replaces that day's
+// Director ruling of "Rajasthan Royals Performance Coach" alone. SID_NAME and
+// SID_TITLE_LINE read the trial page's SID, so the two pages cannot drift.
 export const SID_NAME = SID.name;
 // Its own up-to-date photo (Alex, 27 Sep 2026): Sid coaching, which suits a
 // junior session where he is guest coach. The trial page shows him watching.
@@ -224,7 +225,10 @@ export const CTA = {
 export const HERO = {
     kicker: 'Rajasthan Royals Academy Melbourne',
     headlineTop: 'Junior Session',
-    headlineBottom: `With ${SID.name}`,
+    // "Sid" on purpose. His full name does not fit the hero column at desktop
+    // size and breaks the headline into four lines. The body line straight
+    // under it gives his full name and title.
+    headlineBottom: 'With Sid Lahiri',
     tagline: `${SESSION.dayLabel} · ${SESSION.timeLabel} · ${SESSION.suburb}`,
     body:
         `An hour on the lanes at the ${SESSION.venue} for players aged ${AGE_RANGE}. Our `
