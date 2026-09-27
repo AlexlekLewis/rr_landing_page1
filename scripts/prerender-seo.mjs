@@ -36,7 +36,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist');
 
-const ROUTES = ['/performance-squads-open-trial'];
+const ROUTES = ['/performance-squads-open-trial', '/sid-juniors'];
 
 const escapeAttr = (s) =>
     String(s)

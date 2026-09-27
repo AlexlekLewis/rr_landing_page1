@@ -39,6 +39,20 @@ export const PAGE_SEO = {
     description:
       'A Wednesday night club for spin bowlers aged 10 to 25, at Mickleham and Cranbourne North. Run by Rajasthan Royals Academy Melbourne. Apply for a place.',
   },
+  // Junior session with Sid Lahiri, Mon 5 Oct 2026 (src/components/sid-juniors).
+  // Linked from the all-families email, so the card matters when a parent
+  // forwards it: scripts/prerender-seo.mjs bakes these tags into
+  // dist/sid-juniors/index.html. CONFIRMED FACTS ONLY — the price and age
+  // range are still unconfirmed in sidJuniorsData.js, so they stay out of here
+  // where nobody would think to update them. Sid is the guest coach (our
+  // Mickleham coaches run the session, per the safeguarding review), and his
+  // attendance is "scheduled", never certain: it is hedged everywhere on the page.
+  '/sid-juniors': {
+    title: 'Junior Session with Sid Lahiri, Mickleham | Royals Academy',
+    description:
+      'One hour of junior coaching at Mickleham on Monday 5 October, 4:30–5:30pm, with Rajasthan Royals Performance Coach Sid Lahiri scheduled as guest coach.',
+    ogImage: '/assets/performance-squads/sid-lahiri-riyan-parag.jpg',
+  },
   '/': {
     title: 'Rajasthan Royals Academy Melbourne | Cricket Coaching',
     description:

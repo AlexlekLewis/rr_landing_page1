@@ -229,6 +229,14 @@
       "destination": "/performance-squads-open-trial/index.html"
     },
     {
+      "source": "/sid-juniors",
+      "destination": "/sid-juniors/index.html"
+    },
+    {
+      "source": "/sid-juniors/",
+      "destination": "/sid-juniors/index.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

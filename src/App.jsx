@@ -71,6 +71,12 @@ const PerformanceSquadsWelcomeSuccess = React.lazy(() => import('./components/pe
 // Performance Squad at Cranbourne North, headlined by Sid Lahiri, Performance
 // Coach of the Rajasthan Royals. Public and indexed, unlike /performance-squads.
 const OpenAgeTrial = React.lazy(() => import('./components/open-age-trial/OpenAgeTrial'));
+// Junior session with Sid Lahiri — Mon 5 Oct 2026, 4:30–5:30pm, Mickleham.
+// Every fact and unconfirmed default lives in components/sid-juniors/sidJuniorsData.js.
+// /success only exists for pay-to-book; until a payment link is set it
+// redirects back to the booking page.
+const SidJuniors = React.lazy(() => import('./components/sid-juniors/SidJuniors'));
+const SidJuniorsSuccess = React.lazy(() => import('./components/sid-juniors/SidJuniorsSuccess'));
 // Match Registration — reusable match-day registration + payment page. Match-specific
 // detail lives in src/components/match-registration/matchConfig.js, so the next block
 // of matches is a config swap, not a new page. HIDDEN: noindex, direct URL only.
@@ -249,6 +255,11 @@ function App() {
         <Route path="/performance-squads/welcome/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquadsWelcomeSuccess /></React.Suspense>} />
 
         <Route path="/performance-squads-open-trial" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><OpenAgeTrial /></React.Suspense>} />
+
+        {/* Junior session with Sid Lahiri at Mickleham, Mon 5 Oct. Public, linked
+            from the all-families email. */}
+        <Route path="/sid-juniors" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><SidJuniors /></React.Suspense>} />
+        <Route path="/sid-juniors/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><SidJuniorsSuccess /></React.Suspense>} />
 
         {/* Match Registration — reusable match-day registration + payment. HIDDEN:
             noindex, not in nav or sitemap, direct URL only. Currently serving the
