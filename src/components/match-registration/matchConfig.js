@@ -32,7 +32,9 @@ export const ACTIVE_MATCH = {
         mapsUrl: 'https://www.google.com/maps/search/?api=1&query=101+Belmore+Rd,+Balwyn+North+VIC+3104',
     },
 
-    times: 'First matches 8:30am, finishing around 6:00pm. More details provided closer to the time.',
+    // Alex, 27 Sep 2026: 9:30am to 4:00pm both days, so players can get to
+    // senior training afterwards (his 22 Sep call: finish by 4pm).
+    times: 'Matches run 9:30am to 4:00pm on both days.',
     format: 'T20 across two ovals — 4 games per player over the two days. Teams announced in the next week.',
 
     price: 196,

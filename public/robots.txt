@@ -1,5 +1,7 @@
 User-agent: *
 # Private pages — keep out of search engines.
 Disallow: /rramadmin_26
+# Images hosted for emails to families — not for search results.
+Disallow: /email/
 
 Sitemap: https://rramelbourne.com/sitemap.xml
