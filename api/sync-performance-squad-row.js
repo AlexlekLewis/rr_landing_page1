@@ -15,6 +15,7 @@
 //   SUPABASE_SERVICE_ROLE_KEY     — config lookup
 //   GOOGLE_SERVICE_ACCOUNT_JSON   — service account, Editor on the workbook
 //   SUPABASE_WEBHOOK_SECRET       — shared secret, matched against x-webhook-secret
+//                                   (unset → every request is refused)
 //   (optional) VITE_SUPABASE_URL  — defaults to the RRA project
 //
 // Supabase Database Webhook configuration:
@@ -26,6 +27,7 @@
 
 import { google } from 'googleapis';
 import { createClient } from '@supabase/supabase-js';
+import { checkWebhookSecret } from './_lib/webhookSecret.js';
 
 export const config = {
   api: { bodyParser: { sizeLimit: '256kb' } },
@@ -246,14 +248,8 @@ const resolveConfig = async (supabase, sheets, drive) => {
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const expected = process.env.SUPABASE_WEBHOOK_SECRET;
-  if (expected) {
-    const got = req.headers['x-webhook-secret'];
-    if (got !== expected) {
-      console.warn('sync-performance-squad-row: bad/missing webhook secret');
-      return res.status(401).json({ error: 'unauthorized' });
-    }
-  }
+  const denied = checkWebhookSecret(req, 'sync-performance-squad-row');
+  if (denied) return res.status(denied.status).json({ error: denied.error });
 
   const { type, table, record, old_record } = req.body || {};
   if (!type || !table) return res.status(400).json({ error: 'invalid payload' });
