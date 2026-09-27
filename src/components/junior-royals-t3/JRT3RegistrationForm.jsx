@@ -85,19 +85,21 @@ const TERM3_SOLD_OUT = true;
 // Term 4 entry panel. Entries land in jr_term4_waitlist (anon INSERT only —
 // parents can enter but nobody can read the list back without an admin login).
 //
-// TERM 4 IS MICKLEHAM ONLY. Alex, 27 Sep 2026: "Hallam and Williamstown do not
-// have programs in term 4". They were still selectable here until then, and 15
-// of the 26 entries taken so far picked one of them — those families have to be
-// told. Do not put a centre back on this list without a booking behind it.
+// TERM 4 RUNS AT TWO CENTRES. Alex, 27 Sep 2026: "Hallam and williamstown do
+// not have programs in term 4", and yes to Cranbourne North. Hallam and
+// Williamstown were still selectable here until then, and 15 of the 26 entries
+// taken so far picked one of them — those families have to be told. Do not put
+// a centre on this list without a booking behind it.
 const WAITLIST_CENTRES = [
-    { value: 'mickleham', label: 'Mickleham Indoor Sports Centre' },
+    { value: 'mickleham',       label: 'Mickleham Indoor Sports Centre' },
+    { value: 'cranbourne-north', label: 'Elite Cricket Centre — Cranbourne North' },
 ];
 
-// WEDNESDAY IS THE BOOKED NIGHT — the Mickleham Term 4 net booking order
-// (RRA-T4-2026-MIC) has Junior Royals on Wednesdays, 6:00pm and 7:00pm, for 11
-// weeks from 7 Oct. Mondays at Mickleham are the Performance Squad, so Monday
-// is offered here as a PREFERENCE we are measuring, never as a night that
-// exists — the label has to keep saying so.
+// WEDNESDAY IS THE BOOKED NIGHT AT BOTH CENTRES — the Term 4 net booking
+// orders (RRA-T4-2026-MIC, RRA-T4-2026-CRN) have Junior Royals on Wednesdays,
+// 6:00pm and 7:00pm, for 11 weeks from 7 Oct. Mondays are the Performance
+// Squad at both, so Monday is offered here as a PREFERENCE we are measuring,
+// never as a night that exists — the label has to keep saying so.
 const TERM4_DAYS = [
     { value: 'wednesday', label: 'Wednesdays — the Term 4 night' },
     { value: 'monday',    label: 'Mondays — only if we add a second night' },
@@ -186,7 +188,7 @@ const Term4EntryPanel = () => {
                         Term 3 sold out at all three centres and has now finished. If your player was in Term 3, nothing carries over automatically — enter below to hold a place in Term 4.
                     </p>
                     <p className="text-white/80 font-medium leading-relaxed">
-                        Term 4 runs at <span className="font-black text-white">Mickleham Indoor Sports Centre</span> on <span className="font-black text-white">Wednesday nights</span>, 7 October to 16 December — one hour a week, in two groups at 6:00pm and 7:00pm. There is no Term 4 program at Hallam or Williamstown this term. Entries are open now; no payment is taken today.
+                        Term 4 runs at <span className="font-black text-white">Mickleham</span> and the <span className="font-black text-white">Elite Cricket Centre in Cranbourne North</span> on <span className="font-black text-white">Wednesday nights</span>, 7 October to 16 December — one hour a week, in two groups at 6:00pm and 7:00pm. There is no Term 4 program at Hallam or Williamstown this term. Entries are open now; no payment is taken today.
                     </p>
                 </div>
 
@@ -243,7 +245,7 @@ const Term4EntryPanel = () => {
                                     </div>
                                 </div>
                                 <p className="text-slate-500 text-xs font-medium leading-relaxed -mt-1">
-                                    Term 4 at Mickleham runs on Wednesday nights. If Mondays would suit your family better, pick Mondays — we are counting who wants one before deciding whether to add a Monday night, and we'll confirm your exact session time by email either way.
+                                    Term 4 runs on Wednesday nights at both centres. If Mondays would suit your family better, pick Mondays — we are counting who wants one before deciding whether to add a Monday night, and we'll confirm your exact session time by email either way.
                                 </p>
                             </div>
                             {errors.form && <div className="bg-red-50 border border-red-200 rounded-xl p-4 mt-6"><p className="text-red-600 text-sm font-medium">{errors.form}</p></div>}

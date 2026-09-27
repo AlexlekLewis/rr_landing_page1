@@ -8,11 +8,13 @@ const price = () => isEarlyBird() ? '$299' : '$330';
 
 // Term 3 filled every place (30 Jul 2026). The session times listed below are
 // Term 3's — kept for current families — while the CTAs point at the Term 4
-// entry form. TERM 4 RUNS AT MICKLEHAM ONLY — Alex, 27 Sep 2026: "Hallam and
-// Williamstown do not have programs in term 4". The night comes from the
-// Mickleham Term 4 net booking order (RRA-T4-2026-MIC): Junior Royals on
-// WEDNESDAYS, 6:00pm and 7:00pm groups, 7 Oct – 16 Dec. A centre with no Term 4
-// carries `term4: null` and says so on its card rather than going quiet.
+// entry form. TERM 4 RUNS AT MICKLEHAM AND CRANBOURNE NORTH — Alex, 27 Sep
+// 2026: "Hallam and williamstown do not have programs in term 4", and yes to
+// Cranbourne North. The night comes from the two Term 4 net booking orders
+// (RRA-T4-2026-MIC and RRA-T4-2026-CRN): Junior Royals on WEDNESDAYS, 6:00pm
+// and 7:00pm groups, 7 Oct – 16 Dec at both. A centre with no Term 4 carries
+// `term4: null` and says so on its card rather than going quiet. The Term 4
+// centres are listed first, so the two live ones lead the grid.
 const TERM3_SOLD_OUT = true;
 
 const VENUE_GROUPS = {
@@ -91,6 +93,21 @@ const locations = [
     {
         area: 'South-Eastern Melbourne',
         name: 'Elite Cricket Centre',
+        suburb: 'Cranbourne North, VIC',
+        // No Term 3 ran here, so this card has no VENUE_GROUPS entry and shows
+        // no age-group accordion. NOT the same site as Hallam below.
+        dates: null,
+        term4: 'Wednesdays · 7 Oct – 16 Dec',
+        note: 'Indoor cricket facility',
+        confirmed: true,
+        image: '/assets/jr-bundoora.png',
+        gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 60%, #E11F8F 100%)',
+        mapsUrl: 'https://maps.google.com/?q=Elite+Cricket+Centre+Cranbourne+North+VIC',
+        tag: 'cranbourne-north',
+    },
+    {
+        area: 'South-Eastern Melbourne',
+        name: 'Elite Cricket Centre',
         suburb: 'Hallam, VIC',
         dates: '1 Aug – 19 Sep · Saturdays',
         term4: null,
@@ -135,7 +152,7 @@ const JRT3Locations = () => {
                     <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}
                         className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium">
                         {TERM3_SOLD_OUT
-                            ? <>The session times below are <span className="font-black text-rr-dark">Term 3's</span>, which is finished. <span className="font-black text-rr-dark">Term 4 (October – December 2026)</span> runs at <span className="font-black text-rr-dark">Mickleham</span> on <span className="font-black text-rr-dark">Wednesday nights, 7 October to 16 December</span>. There is no Term 4 program at Hallam or Williamstown. Enter below and we'll confirm your player's place, exact session time and payment by email.</>
+                            ? <>The session times below are <span className="font-black text-rr-dark">Term 3's</span>, which is finished. <span className="font-black text-rr-dark">Term 4 (October – December 2026)</span> runs at <span className="font-black text-rr-dark">Mickleham</span> and <span className="font-black text-rr-dark">Cranbourne North</span> on <span className="font-black text-rr-dark">Wednesday nights, 7 October to 16 December</span>. There is no Term 4 program at Hallam or Williamstown. Enter below and we'll confirm your player's place, exact session time and payment by email.</>
                             : earlyBird
                             ? <>Early bird pricing at <span className="font-black text-rr-dark">$299</span> — increasing to <span className="font-black text-rr-dark">$330</span> once the early bird offer concludes at 11pm 15 July. Small group sessions, one hour per week for 8 consecutive weeks at your preferred time. Select a location to view age groups and times.</>
                             : <>Programs at <span className="font-black text-rr-dark">$330</span> — small group sessions, one hour per week for 8 consecutive weeks at your preferred time. Select a location to view age groups and times.</>
@@ -143,7 +160,7 @@ const JRT3Locations = () => {
                     </motion.p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {locations.map((loc, i) => (
                         <motion.div key={loc.tag} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }} transition={{ duration: 0.6, delay: i * 0.1 }}
@@ -160,7 +177,11 @@ const JRT3Locations = () => {
                                 <div className="space-y-2 mb-4">
                                     <div className="flex items-center gap-3">
                                         <Calendar className="w-4 h-4 text-rr-blue shrink-0" />
-                                        <span className="text-rr-charcoal font-semibold text-sm">{TERM3_SOLD_OUT ? `Term 3: ${loc.dates}` : loc.dates}</span>
+                                        <span className="text-rr-charcoal font-semibold text-sm">
+                                            {loc.dates
+                                                ? (TERM3_SOLD_OUT ? `Term 3: ${loc.dates}` : loc.dates)
+                                                : 'New for Term 4'}
+                                        </span>
                                     </div>
                                     {TERM3_SOLD_OUT && (
                                         <div className="flex items-center gap-3">
@@ -194,12 +215,20 @@ const JRT3Locations = () => {
                                     </div>
                                 )}
 
-                                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">{TERM3_SOLD_OUT ? 'Term 3 Age Groups & Times (Sold Out)' : 'Age Groups & Times'}</p>
-                                <div className="space-y-2 mb-5">
-                                    {(VENUE_GROUPS[loc.tag] || []).map(group => (
-                                        <GroupAccordion key={group.name} group={group} />
-                                    ))}
-                                </div>
+                                {(VENUE_GROUPS[loc.tag] || []).length > 0 ? (
+                                    <>
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">{TERM3_SOLD_OUT ? 'Term 3 Age Groups & Times (Sold Out)' : 'Age Groups & Times'}</p>
+                                        <div className="space-y-2 mb-5">
+                                            {VENUE_GROUPS[loc.tag].map(group => (
+                                                <GroupAccordion key={group.name} group={group} />
+                                            ))}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <p className="text-sm text-rr-charcoal font-medium mb-5">
+                                        Two groups on the night, 6:00pm and 7:00pm. We confirm which one your player is in by email.
+                                    </p>
+                                )}
 
                                 <div className="flex flex-col gap-3">
                                     {TERM3_SOLD_OUT && !loc.term4 ? (

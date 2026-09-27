@@ -27,8 +27,9 @@ const useCountdown = (target) => {
 const Pad = ({ n }) => String(n).padStart(2, '0');
 
 // Term 3 filled every place across all three centres (30 Jul 2026) and has now
-// finished. TERM 4 IS MICKLEHAM ONLY (Alex, 27 Sep 2026), Wednesday nights, so
-// the venue pills name one centre — three pills read as three Term 4 venues.
+// finished. TERM 4 IS MICKLEHAM AND CRANBOURNE NORTH (Alex, 27 Sep 2026),
+// Wednesday nights. Hallam and Williamstown have no Term 4, so they are off the
+// venue pills — a pill here reads as a Term 4 venue.
 const TERM3_SOLD_OUT = true;
 
 const JRT3Hero = () => {
@@ -93,7 +94,8 @@ const JRT3Hero = () => {
                     className="flex flex-wrap gap-3 mb-6"
                 >
                     {[
-                        { label: 'Mickleham Indoor Sports Centre', icon: '📍' },
+                        { label: 'Mickleham', icon: '📍' },
+                        { label: 'Cranbourne North', icon: '📍' },
                         { label: 'Wednesday nights', icon: '📅' },
                         { label: 'Ages 7–15', icon: '👦' },
                     ].map((p, i) => (
@@ -105,7 +107,7 @@ const JRT3Hero = () => {
                     <div className="flex items-center gap-2 bg-rr-pink/20 border border-rr-pink/40 rounded-full px-4 py-2">
                         <span className="text-rr-pink font-bold text-xs">💰</span>
                         <span className="text-white text-xs font-semibold uppercase tracking-wide">
-                            {TERM3_SOLD_OUT ? 'Term 4 — Wednesdays at Mickleham' : countdown.expired ? 'Programs from $330' : 'Early Bird from $299'}
+                            {TERM3_SOLD_OUT ? 'Term 4 — Wednesday nights' : countdown.expired ? 'Programs from $330' : 'Early Bird from $299'}
                         </span>
                     </div>
                 </motion.div>
