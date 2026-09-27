@@ -22,10 +22,13 @@ const COACHES = [
         bio:
             'Sid leads the camp. He heads the Royals\' academies worldwide, coaches batting for ' +
             'Birmingham Phoenix, and oversees the Rajasthan Royals Academy Melbourne.',
-        quote:
-            'In March this year I witnessed first hand the quality in the Melbourne Rajasthan Royals ' +
-            'Academy. We are looking forward to welcoming players from Australia for the first time, and ' +
-            'giving them a deep dive into the Royals way of playing the game.',
+        // No quote while the page is time-neutral. Sid's 2026 quote is tied to its moment
+        // ("In March this year…", "welcoming players from Australia for the first time"),
+        // and a person's words can't be edited to fit. Ask Sid for a fresh line for the next
+        // tour, or restore it as it was:
+        //   'In March this year I witnessed first hand the quality in the Melbourne Rajasthan
+        //    Royals Academy. We are looking forward to welcoming players from Australia for the
+        //    first time, and giving them a deep dive into the Royals way of playing the game.'
     },
     {
         name: 'Romi Bhinder',

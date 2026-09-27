@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// India Tour 2026 — page copy, in two reading levels.
+// India Tour — page copy, in two reading levels. Time-neutral: no dates.
 //
 //   simple   : *** THE LIVE COPY — Alex picked this one, 5 Aug 2026. ***
 //              Written so a 10-year-old can read it and a busy parent can scan
@@ -37,25 +37,27 @@ export const FLIGHT_ESTIMATE_AUD = { min: 1500, max: 2000 };
 // confirmed. Flights are paid separately via the group booking link when that
 // is sorted. Do not reintroduce deposit language on this page.
 
-// Registrations close seven days after going live (Alex, 5 Aug 2026: "we're gonna
-// close it in seven days"). Melbourne time, end of day. CHANGE THIS ONE LINE to
-// move or extend the deadline — the hero clock, the form and the closed state all
-// read from it.
-// Master switch for the page. 'open' takes applications and runs the clock;
-// 'closed' shuts the form, drops the register CTAs and shows the closed notice.
-// Flip this ONE value to reopen — nothing else needs touching.
-export const TOUR_STATUS = 'closed';
+// Master switch for the page. 'open' takes expressions of interest; 'closed'
+// shuts the form, drops the register CTAs and shows the closed notice.
+//
+// Time-neutral since 27 Sep 2026 (Alex: "EOI with the same information but time
+// neutral"). The page takes interest for the NEXT tour, so it carries no dates
+// and no clock. The September 2026 camp's registrations closed on 12 Aug 2026.
+export const TOUR_STATUS = 'open';
 
-export const REGISTRATIONS_CLOSE_AT = '2026-08-12T23:59:00+10:00';
+// Optional deadline for a dated registration window; the hero clock reads it.
+// null = no deadline and no clock (a standing expression of interest). To run a
+// window again, set an absolute instant such as '2026-08-12T23:59:00+10:00'.
+export const REGISTRATIONS_CLOSE_AT = null;
 
-// The official camp document, served from /public. Size is stated on the page —
-// it is a 26 MB export, which is a lot on mobile data, so nobody should be
-// ambushed by it. (A lighter Canva export would fix that at source.)
-export const CAMP_PDF = {
-    href: '/rra-high-performance-camp-2026.pdf',
-    filename: 'RRA High Performance Camp 2026.pdf',
-    sizeLabel: '26 MB',
-};
+// The official camp document, served from /public. The one we have is the
+// September 2026 booklet (its PDF title says so), so the time-neutral page does
+// not offer it. The hero and itinerary show the download only when this is set.
+// When a dateless version exists, set it back to the same shape:
+//   { href: '/rra-high-performance-camp-2026.pdf',
+//     filename: 'RRA High Performance Camp 2026.pdf', sizeLabel: '26 MB' }
+// (26 MB is a lot on mobile data, so keep the size on the page.)
+export const CAMP_PDF = null;
 
 // Players the Rajasthan Royals High Performance Centre is documented as having
 // developed. Samson / Jaiswal / Jurel / Parag are sourced to Forbes India's
@@ -66,7 +68,7 @@ export const PRODUCED_HERE = [
     { name: 'Yashasvi Jaiswal', note: 'India Test opener' },
     { name: 'Dhruv Jurel', note: 'India wicketkeeper-batter' },
     { name: 'Riyan Parag', note: 'India international' },
-    { name: 'Vaibhav Sooryavanshi', note: 'trains at the centre today' },
+    { name: 'Vaibhav Sooryavanshi', note: 'trains at the centre' },
     { name: 'Luhan-dre Pretorius', note: 'Royals top order' },
 ];
 
@@ -78,17 +80,17 @@ export const fmtRangeAUD = (r) => `${fmtAUD(r.min)}–${fmtAUD(r.max)}`;
 
 const STANDARD = {
     hero: {
-        badge: 'The First Australian Squad · Limited Places',
+        badge: 'A Small Squad · Limited Places',
         h1: 'High Performance',
         h1Accent: 'Centre Camp',
         kicker: 'Rajasthan Royals Academy',
-        dateline: '19–26 September 2026 · Nagpur, India',
+        dateline: 'Nagpur, India · Next tour dates to be announced',
         lead:
             'Six days inside the Rajasthan Royals\' talent factory in Nagpur — the franchise\'s own High ' +
             'Performance Centre, and the place that built the games of Sanju Samson, Yashasvi Jaiswal, ' +
-            'Dhruv Jurel and Riyan Parag. It is where Vaibhav Sooryavanshi trains today, alongside the ' +
+            'Dhruv Jurel and Riyan Parag. It is where Vaibhav Sooryavanshi trains, alongside the ' +
             'coach who is his legal guardian. Every session is taken by the Royals\' own high performance ' +
-            'staff. No Australian squad has trained here before, and places are capped.',
+            'staff, and places are capped.',
         costLabel: 'What it costs — per player',
         flights:
             'We book the whole squad on the same flights and send you a group booking link to pay for ' +
@@ -111,12 +113,12 @@ const STANDARD = {
         },
         ctaAfterPricing: {
             heading: 'Ready to put your player forward?',
-            body: 'Register your interest and we will come back to you in writing with your price, your place, and the flight booking link.',
+            body: 'Register your interest and, once the next tour has dates, we will come back to you in writing with the dates, your price, your place, and the flight booking link.',
         },
         closedBadge: 'Applications Closed',
         closedHeading: 'Applications for this tour have closed',
         closedBody:
-            'The September High Performance Centre Camp is now closed to new applications, and our ' +
+            'This High Performance Centre Camp is now closed to new applications, and our ' +
             'coaches are confirming the touring squad. A new tour will be announced shortly.',
         closedNext: 'New tour announcement coming soon.',
         countdownClosed: 'Applications for this tour have closed.',
@@ -131,9 +133,9 @@ const STANDARD = {
         headingAccent: 'Talent Factory',
         lead:
             'Academies run tours. Almost none of them get inside the building an IPL franchise actually ' +
-            'uses. This September a Rajasthan Royals Academy Melbourne squad spends seven nights at the ' +
+            'uses. A Rajasthan Royals Academy Melbourne squad spends seven nights at the ' +
             'Royals\' High Performance Centre in Nagpur — six full coaching days, taken by the club\'s own ' +
-            'high performance staff. It is the first time an Australian group has been brought in.',
+            'high performance staff.',
         producedHereLabel: 'Built at this centre',
         points: [
             {
@@ -151,11 +153,10 @@ const STANDARD = {
                     'performance psychologist. These are the people who coach the club\'s own players.',
             },
             {
-                title: 'A first, and a small one',
+                title: 'A small group, on purpose',
                 body:
-                    'No Australian squad has done this before, and the group is deliberately small so ' +
-                    'every player gets seen. Anyone can register; our coaches confirm the squad. ' +
-                    'Registering early gives you the best chance.',
+                    'The group is deliberately small so every player gets seen. Anyone can register; ' +
+                    'our coaches confirm the squad. Registering early gives you the best chance.',
             },
         ],
     },
@@ -241,14 +242,14 @@ const STANDARD = {
             'Six full coaching days between arrival and departure. Mornings build the skill, afternoons ' +
             'apply it, and the evenings cover the things that keep a player on the field.',
         itineraryDays: [
-            { when: 'Sat 19 Sep', title: 'Arrival', body: 'You land in Nagpur, get picked up, and settle in at the centre. Welcome and orientation.' },
-            { when: 'Sun 20 Sep', title: 'Day 1 — Foundation', body: 'Morning: performance testing (speed, agility, coordination) and a skill assessment across batting, bowling and fielding. Afternoon: player evaluation and video analysis, one-on-one with a coach. Evening: physio-led injury management.' },
-            { when: 'Mon 21 Sep', title: 'Day 2 — Nets & Skill', body: 'Morning: technical batting and bowling drills, plus core fielding. Afternoon: extended net sessions against varied bowling. Evening: mental strength session one — focus, confidence and handling pressure.' },
-            { when: 'Tue 22 Sep', title: 'Day 3 — Centre Wicket', body: 'Morning: warm-up, skill reinforcement and match-situation fielding. Afternoon: structured centre-wicket practice in a game-like environment. Evening: nutrition and hydration.' },
-            { when: 'Wed 23 Sep', title: 'Day 4 — Centre Wicket', body: 'A second full day in the middle, building on day three under direct coach guidance.' },
-            { when: 'Thu 24 Sep', title: 'Day 5 — Match Day', body: 'Morning: a practice match on turf wickets. Afternoon: post-match feedback and skill work. Evening: mental strength session two — game pressure and decision-making.' },
-            { when: 'Fri 25 Sep', title: 'Day 6 — Closing & Evaluation', body: 'Morning: a light optional net session. Afternoon: group reflection and your individual development plan. Evening: closing huddle.' },
-            { when: 'Sat 26 Sep', title: 'Departure', body: 'Farewell and transfer back to Nagpur airport for the flight home.' },
+            { when: 'Arrival day', title: 'Arrival', body: 'You land in Nagpur, get picked up, and settle in at the centre. Welcome and orientation.' },
+            { when: 'Day 1', title: 'Foundation', body: 'Morning: performance testing (speed, agility, coordination) and a skill assessment across batting, bowling and fielding. Afternoon: player evaluation and video analysis, one-on-one with a coach. Evening: physio-led injury management.' },
+            { when: 'Day 2', title: 'Nets & Skill', body: 'Morning: technical batting and bowling drills, plus core fielding. Afternoon: extended net sessions against varied bowling. Evening: mental strength session one — focus, confidence and handling pressure.' },
+            { when: 'Day 3', title: 'Centre Wicket', body: 'Morning: warm-up, skill reinforcement and match-situation fielding. Afternoon: structured centre-wicket practice in a game-like environment. Evening: nutrition and hydration.' },
+            { when: 'Day 4', title: 'Centre Wicket', body: 'A second full day in the middle, building on day three under direct coach guidance.' },
+            { when: 'Day 5', title: 'Match Day', body: 'Morning: a practice match on turf wickets. Afternoon: post-match feedback and skill work. Evening: mental strength session two — game pressure and decision-making.' },
+            { when: 'Day 6', title: 'Closing & Evaluation', body: 'Morning: a light optional net session. Afternoon: group reflection and your individual development plan. Evening: closing huddle.' },
+            { when: 'Departure day', title: 'Departure', body: 'Farewell and transfer back to Nagpur airport for the flight home.' },
         ],
         includedHeading: 'What your fee covers',
         includedNote: 'Identical for both prices. Once you are in Nagpur, everything below is already paid for.',
@@ -257,8 +258,8 @@ const STANDARD = {
                 title: 'Seven nights inside the Royals HPC',
                 body:
                     'Shared air-conditioned rooms inside the Rajasthan Royals High Performance Centre in ' +
-                    'Nagpur. You fly in on Saturday 19 September, train across six full camp days from the ' +
-                    '20th to the 25th, and fly home on Saturday 26 September 2026.',
+                    'Nagpur. You fly in the day before camp starts, train across six full camp days, and ' +
+                    'fly home the day after the last one.',
             },
             {
                 title: 'All meals, every day',
@@ -321,7 +322,7 @@ const STANDARD = {
         howHeading: 'What happens next',
         steps: [
             'Register your interest using the form below. There is nothing to pay today — at this stage we are only collecting enquiries, and registering does not commit you to the tour.',
-            'We come back to you in writing to confirm which of the two prices applies to your player, and whether they have a place in the touring squad.',
+            'When the next tour has dates, we come back to you in writing with them, confirm which of the two prices applies to your player, and tell you whether they have a place in the touring squad.',
             'Once the place is confirmed, the program fee is paid in full, up front. That single payment covers everything at the high performance centre listed above.',
             'Flights are handled separately. As soon as the squad flights are locked in we send you the group booking link, and you pay for your own player\'s seat then.',
         ],
@@ -331,7 +332,7 @@ const STANDARD = {
         badge: 'Expression of Interest',
         heading: 'Register Your',
         headingAccent: 'Interest',
-        lead: "A few quick details and we'll be in touch with everything you need to know.",
+        lead: "A few quick details and we'll be in touch with everything you need to know once the next tour has dates.",
         tierHeading: 'Which Price Applies',
         tierLead:
             'Pick the one that describes your player. This is what sets your program fee — we will ' +
@@ -345,16 +346,16 @@ const STANDARD = {
 
 const SIMPLE = {
     hero: {
-        badge: 'The First Aussie Squad · Only A Few Spots',
+        badge: 'A Small Team · Only A Few Spots',
         h1: 'High Performance',
         h1Accent: 'Centre Camp',
         kicker: 'Rajasthan Royals Academy',
-        dateline: '19–26 September 2026 · Nagpur, India',
+        dateline: 'Nagpur, India · Next tour dates to be announced',
         lead:
             'Six days inside the Rajasthan Royals\' talent factory in Nagpur. This is the centre that ' +
             'built Sanju Samson, Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag — and where Vaibhav ' +
-            'Sooryavanshi trains today. The Royals\' own coaches take every session, not ours. No team ' +
-            'from Australia has ever trained here. Only a few spots, and our coaches pick the team.',
+            'Sooryavanshi trains. The Royals\' own coaches take every session, not ours. Only a few ' +
+            'spots, and our coaches pick the team.',
         costLabel: 'What it costs',
         flights: 'We book the whole team on the same plane. Then we send you a link to pay for your seat.',
         flightsLead: 'Flights cost extra.',
@@ -374,12 +375,12 @@ const SIMPLE = {
         },
         ctaAfterPricing: {
             heading: 'Want a spot?',
-            body: 'Put your name down and we will write back with your price, whether you have a spot, and the flight link.',
+            body: 'Put your name down. When the next trip has dates, we will write back with the dates, your price, whether you have a spot, and the flight link.',
         },
         closedBadge: 'Applications Closed',
         closedHeading: 'Sign-ups for this tour are closed',
         closedBody:
-            'You can no longer put your name down for the September camp. Our coaches are picking the ' +
+            'You can no longer put your name down for this camp. Our coaches are picking the ' +
             'team now. We will announce a new tour soon.',
         closedNext: 'New tour announcement coming soon.',
         countdownClosed: 'Sign-ups for this tour are closed.',
@@ -394,8 +395,8 @@ const SIMPLE = {
         lead:
             'Lots of academies run trips to India. Almost none of them get inside the building an IPL ' +
             'club really uses. You stay seven nights at the Rajasthan Royals\' own centre in Nagpur. Six ' +
-            'of those days are full training days, taken by the club\'s own coaches. No team from ' +
-            'Australia has ever been in. Put your name down below and we will tell you everything.',
+            'of those days are full training days, taken by the club\'s own coaches. Put your name ' +
+            'down below and we will tell you everything.',
         producedHereLabel: 'Built at this centre',
         points: [
             {
@@ -412,10 +413,10 @@ const SIMPLE = {
                     'for six days, with you.',
             },
             {
-                title: 'A first — and a small group',
+                title: 'A small group',
                 body:
-                    'No Australian team has ever done this. The group is kept small so every player gets ' +
-                    'seen. Anyone can sign up; our coaches pick the team. Sign up early.',
+                    'The group is kept small so every player gets seen. Anyone can sign up; our coaches ' +
+                    'pick the team. Sign up early.',
             },
         ],
     },
@@ -485,14 +486,14 @@ const SIMPLE = {
         itineraryHeadingAccent: 'Each Day',
         itineraryLead: 'Six full days of cricket between the day you land and the day you fly home.',
         itineraryDays: [
-            { when: 'Sat 19 Sep', title: 'You arrive', body: 'You land in Nagpur. We pick you up. You settle in and meet everyone.' },
-            { when: 'Sun 20 Sep', title: 'Day 1 — Testing', body: 'Morning: we test how fast and agile you are, and watch you bat, bowl and field. Afternoon: you watch video of yourself with a coach. Evening: a physio shows you how to avoid injuries.' },
-            { when: 'Mon 21 Sep', title: 'Day 2 — Nets', body: 'Morning: batting and bowling drills, plus catching and throwing. Afternoon: long net sessions against different bowlers. Evening: how to stay focused under pressure.' },
-            { when: 'Tue 22 Sep', title: 'Day 3 — Middle practice', body: 'Morning: warm-up and fielding in match situations. Afternoon: batting in the middle, like a real game. Evening: what to eat and drink.' },
-            { when: 'Wed 23 Sep', title: 'Day 4 — Middle practice', body: 'Another full day batting and bowling in the middle, with coaches watching every ball.' },
-            { when: 'Thu 24 Sep', title: 'Day 5 — Match day', body: 'Morning: you play a real match on grass. Afternoon: the coaches tell you what they saw. Evening: handling pressure in a game.' },
-            { when: 'Fri 25 Sep', title: 'Day 6 — Last day', body: 'Morning: an easy net if you want one. Afternoon: you get your own written plan. Evening: the closing huddle.' },
-            { when: 'Sat 26 Sep', title: 'You fly home', body: 'We take you back to Nagpur airport for your flight.' },
+            { when: 'Arrival day', title: 'You arrive', body: 'You land in Nagpur. We pick you up. You settle in and meet everyone.' },
+            { when: 'Day 1', title: 'Testing', body: 'Morning: we test how fast and agile you are, and watch you bat, bowl and field. Afternoon: you watch video of yourself with a coach. Evening: a physio shows you how to avoid injuries.' },
+            { when: 'Day 2', title: 'Nets', body: 'Morning: batting and bowling drills, plus catching and throwing. Afternoon: long net sessions against different bowlers. Evening: how to stay focused under pressure.' },
+            { when: 'Day 3', title: 'Middle practice', body: 'Morning: warm-up and fielding in match situations. Afternoon: batting in the middle, like a real game. Evening: what to eat and drink.' },
+            { when: 'Day 4', title: 'Middle practice', body: 'Another full day batting and bowling in the middle, with coaches watching every ball.' },
+            { when: 'Day 5', title: 'Match day', body: 'Morning: you play a real match on grass. Afternoon: the coaches tell you what they saw. Evening: handling pressure in a game.' },
+            { when: 'Day 6', title: 'Last day', body: 'Morning: an easy net if you want one. Afternoon: you get your own written plan. Evening: the closing huddle.' },
+            { when: 'Going home', title: 'You fly home', body: 'We take you back to Nagpur airport for your flight.' },
         ],
         includedHeading: 'What you get',
         includedNote: 'The same for both prices. Once you land, all of this is already paid for.',
@@ -500,9 +501,8 @@ const SIMPLE = {
             {
                 title: 'A bed for 7 nights',
                 body:
-                    'You share an air-conditioned room inside the Rajasthan Royals High Performance Centre. You fly in on Saturday 19 ' +
-                    'September, train for six days from the 20th to the 25th, and fly home on Saturday ' +
-                    '26 September.',
+                    'You share an air-conditioned room inside the Rajasthan Royals High Performance Centre. ' +
+                    'You fly in the day before camp, train for six days, then fly home.',
             },
             {
                 title: 'All your food',
@@ -555,7 +555,7 @@ const SIMPLE = {
         howHeading: 'What happens next',
         steps: [
             'Fill in the form below. You pay nothing today. Right now we are just taking names.',
-            'We write back and tell you your price, and if you have a spot.',
+            'When the next trip has dates, we write back. We tell you the dates, your price, and if you have a spot.',
             'When you get a spot, you pay the full price up front. That one payment covers everything at the camp.',
             'The flight is separate. When we have booked the team flights, we send you a link. You pay for your seat then.',
         ],
@@ -566,8 +566,8 @@ const SIMPLE = {
         heading: 'Put Your Name',
         headingAccent: 'Down',
         lead:
-            'Fill this in and we will get back to you with your price and everything else you need to ' +
-            'know. You are not paying or promising anything yet.',
+            'Fill this in. When the next trip has dates, we will get back to you with your price and ' +
+            'everything else you need to know. You are not paying or promising anything yet.',
         tierHeading: 'Which Price Is Yours',
         tierLead: 'Pick the one that is you. This sets your price. We will check it and confirm it.',
         tierFootnote: 'plus the flight, booked through our group link',
