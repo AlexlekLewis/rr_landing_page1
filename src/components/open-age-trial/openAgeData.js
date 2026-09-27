@@ -228,10 +228,12 @@ export const SID = {
     title: 'Head of International Player Development and Performance Coach',
     employer: 'Rajasthan Royals',
     titleLine: 'Head of International Player Development and Performance Coach, Rajasthan Royals',
-    photo: '/assets/performance-squads/sid-lahiri-riyan-parag.jpg',
+    // Up-to-date photo in this season's Royals kit (Alex, 27 Sep 2026). Sid is
+    // at the trial to watch cricket, so the page shows him watching a batter.
+    photo: '/assets/performance-squads/sid-lahiri-watching-2026.jpg',
     photoAlt:
-        'Sid Lahiri talking through a delivery with Riyan Parag at a Rajasthan Royals training session',
-    photoCaption: 'Sid Lahiri working with Riyan Parag at a Rajasthan Royals session.',
+        'Sid Lahiri, Rajasthan Royals Head of International Player Development and Performance Coach, watching a batter at a Rajasthan Royals training session',
+    photoCaption: 'Sid Lahiri at a Rajasthan Royals training session.',
 
     // THE HEDGE. This page takes money up front on the strength of one named
     // person turning up, and he flies in from overseas around an IPL and two
