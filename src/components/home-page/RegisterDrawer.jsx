@@ -19,7 +19,7 @@ const PROGRAMS = [
     { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', urgency: 'Cranbourne North only — 30 September, 1 and 2 October' },
     { label: 'Spin Club', route: '/spin-club', urgency: 'Spin bowlers 10 to 25 — registering interest, nothing to pay now' },
     { label: 'Performance Squads', route: '/performance-squads', urgency: 'Register your interest for the next intake' },
-    { label: 'Junior Royals', route: '/junior-royals', urgency: 'Term 4 entries open — Mondays & Wednesdays' },
+    { label: 'Junior Royals', route: '/junior-royals', urgency: 'Term 4 entries open — Wednesdays at Mickleham, 7 Oct – 16 Dec' },
 ];
 
 const InputField = ({ label, type = 'text', value, onChange, placeholder, required }) => (

@@ -75,27 +75,32 @@ const SUPABASE_TABLE = {
     williamstown: 'jr_term3_williamstown',
 };
 
-// Term 3 filled every place across all three centres (30 Jul 2026). While
-// true, the page shows the Term 4 entry panel (no-payment entries into
-// jr_term4_waitlist) instead of the paid Term 3 form. Flip to false (and
+// Term 3 filled every place across all three centres (30 Jul 2026) and has now
+// finished (it ran to 18–19 Sep). While true, the page shows the Term 4 entry
+// panel (no-payment entries into jr_term4_waitlist) instead of the paid form. Flip to false (and
 // update the Stripe links/pricing/session options) when Term 4 paid
 // registration opens.
 const TERM3_SOLD_OUT = true;
 
 // Term 4 entry panel. Entries land in jr_term4_waitlist (anon INSERT only —
 // parents can enter but nobody can read the list back without an admin login).
-// Term 4 runs Mondays AND Wednesdays at every centre — the family picks a day
-// now, and the team confirms exact session time + payment by email.
+//
+// TERM 4 IS MICKLEHAM ONLY. Alex, 27 Sep 2026: "Hallam and Williamstown do not
+// have programs in term 4". They were still selectable here until then, and 15
+// of the 26 entries taken so far picked one of them — those families have to be
+// told. Do not put a centre back on this list without a booking behind it.
 const WAITLIST_CENTRES = [
-    { value: 'mickleham',    label: 'Mickleham Indoor Sports Centre' },
-    { value: 'hallam',       label: 'Elite Cricket Centre — Hallam' },
-    { value: 'williamstown', label: 'The Netz — Williamstown' },
-    { value: 'any',          label: 'Any centre — happy to travel' },
+    { value: 'mickleham', label: 'Mickleham Indoor Sports Centre' },
 ];
 
+// WEDNESDAY IS THE BOOKED NIGHT — the Mickleham Term 4 net booking order
+// (RRA-T4-2026-MIC) has Junior Royals on Wednesdays, 6:00pm and 7:00pm, for 11
+// weeks from 7 Oct. Mondays at Mickleham are the Performance Squad, so Monday
+// is offered here as a PREFERENCE we are measuring, never as a night that
+// exists — the label has to keep saying so.
 const TERM4_DAYS = [
-    { value: 'monday',    label: 'Mondays' },
-    { value: 'wednesday', label: 'Wednesdays' },
+    { value: 'wednesday', label: 'Wednesdays — the Term 4 night' },
+    { value: 'monday',    label: 'Mondays — only if we add a second night' },
 ];
 
 const Term4EntryPanel = () => {
@@ -120,7 +125,7 @@ const Term4EntryPanel = () => {
         if (!form.player_name.trim()) e.player_name = 'Required.';
         if (!form.player_age) e.player_age = 'Required.';
         if (!form.preferred_centre) e.preferred_centre = 'Please pick a centre.';
-        if (!form.preferred_day) e.preferred_day = 'Please pick Mondays or Wednesdays.';
+        if (!form.preferred_day) e.preferred_day = 'Please pick a night.';
         setErrors(e);
         return Object.keys(e).length === 0;
     };
@@ -178,10 +183,10 @@ const Term4EntryPanel = () => {
                         TERM 4 ENTRIES <span className="text-rr-pink">NOW OPEN</span>
                     </h2>
                     <p className="text-white/80 font-medium leading-relaxed mb-4">
-                        Term 3 sold out at all three centres and is now underway. If you're already registered for Term 3, you don't need to do anything — your place is secure, and your session day and time are in your confirmation email.
+                        Term 3 sold out at all three centres and has now finished. If your player was in Term 3, nothing carries over automatically — enter below to hold a place in Term 4.
                     </p>
                     <p className="text-white/80 font-medium leading-relaxed">
-                        Term 4 runs October – December 2026, and entries are now being accepted. In Term 4, every centre — Mickleham, Hallam and Williamstown — runs sessions on both <span className="font-black text-white">Mondays and Wednesdays</span>, so you choose the training day that suits your family.
+                        Term 4 runs at <span className="font-black text-white">Mickleham Indoor Sports Centre</span> on <span className="font-black text-white">Wednesday nights</span>, 7 October to 16 December — one hour a week, in two groups at 6:00pm and 7:00pm. There is no Term 4 program at Hallam or Williamstown this term. Entries are open now; no payment is taken today.
                     </p>
                 </div>
 
@@ -202,7 +207,7 @@ const Term4EntryPanel = () => {
                         <form onSubmit={handleSubmit} noValidate>
                             <h3 className="text-base font-black text-rr-dark uppercase tracking-widest mb-2">Enter for Term 4</h3>
                             <p className="text-rr-charcoal text-sm font-medium leading-relaxed mb-6">
-                                Fill in the details below and pick your preferred centre and training day — Mondays or Wednesdays. No payment is taken now: our team will email you to confirm your player's place, exact session time and payment before the term starts.
+                                Fill in the details below and tell us which night suits you. No payment is taken now: our team will email you to confirm your player's place, exact session time and payment before the term starts.
                             </p>
                             <div className="space-y-5">
                                 <div><label className={lc}>Parent / Guardian Full Name *</label><input name="parent_name" value={form.parent_name} onChange={handleChange} className={ic('parent_name')} placeholder="e.g. Jane Smith" />{errors.parent_name && <p className="text-red-500 text-xs mt-1">{errors.parent_name}</p>}</div>
@@ -238,7 +243,7 @@ const Term4EntryPanel = () => {
                                     </div>
                                 </div>
                                 <p className="text-slate-500 text-xs font-medium leading-relaxed -mt-1">
-                                    Every centre runs Term 4 sessions on both Mondays and Wednesdays — pick whichever day works best. We'll confirm your exact session time by email.
+                                    Term 4 at Mickleham runs on Wednesday nights. If Mondays would suit your family better, pick Mondays — we are counting who wants one before deciding whether to add a Monday night, and we'll confirm your exact session time by email either way.
                                 </p>
                             </div>
                             {errors.form && <div className="bg-red-50 border border-red-200 rounded-xl p-4 mt-6"><p className="text-red-600 text-sm font-medium">{errors.form}</p></div>}

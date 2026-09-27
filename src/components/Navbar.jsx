@@ -125,7 +125,7 @@ const Navbar = ({ variant = 'lp1', onRegisterClick, ctaLabelOverride, ctaTargetO
     const showHamburger = !isShop;
 
     // Junior Royals (isLittleCrickets): Term 3 is sold out — the CTA points at
-    // the Term 4 entry form (Mondays & Wednesdays, no payment now).
+    // the Term 4 entry form (Wednesdays at Mickleham, no payment now).
     const ctaLabel = ctaLabelOverride || (isPSWelcome ? 'CONFIRM YOUR PLACE' : isMasterclass ? 'BOOK YOUR PLACE' : isPerformanceSquads ? 'REGISTER INTEREST' : isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : isLittleCrickets ? 'TERM 4 — ENTER NOW' : isLP2 ? 'SECURE YOUR PLACE NOW' : isHoliday ? 'SECURE YOUR PLACE' : 'REGISTER INTEREST');
     const ctaTarget = ctaTargetOverride || (isPSWelcome ? 'confirm' : isMasterclass ? 'register' : isPerformanceSquads ? 'register-pay' : isIndiaTour ? 'register' : isMickleham ? 'register' : isCoaches ? 'join' : isPrivateCoaching ? 'eoi-form' : isLP2 ? 'checkout' : isHoliday ? 'secure-form' : isLittleCrickets ? 'registration-form' : 'apply-form');
 

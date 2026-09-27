@@ -67,8 +67,8 @@ export const ANNOUNCEMENTS = [
     {
         key: 'junior-royals-t4',
         name: 'Junior Royals · Term 4',
-        tag: 'Boys & girls 5 to 17 · weekly coaching, Mondays or Wednesdays',
-        detail: 'October – December · Mickleham, Hallam & Williamstown',
+        tag: 'Boys & girls 5 to 17 · weekly coaching on Wednesday nights',
+        detail: 'Mickleham · Wednesdays 7 Oct – 16 Dec · entries open, nothing to pay now',
         href: '/junior-royals',
         badge: 'Entries open',
     },
