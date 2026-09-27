@@ -23,8 +23,9 @@ const scrollToPricing = () =>
 const FOCAL = '34% 42%';
 
 const HERO_IMG_ALT =
-    'Sid Lahiri, Head of Global Academies for the Rajasthan Royals, demonstrating a batting ' +
-    'drill to players at the High Performance Centre in Nagpur';
+    'Siddhartha Lahiri, Head of International Player Development and Performance Coach at the ' +
+    'Rajasthan Royals, demonstrating a batting drill to players at the High Performance Centre ' +
+    'in Nagpur';
 
 const ITHero = ({ copy }) => {
     const tiers = getTiers(copy);

@@ -73,7 +73,7 @@ const HomeTopBanner = () => {
                         Both centres — Mickleham Mon 5 Oct <span className="text-white/60">·</span> Cranbourne North Sun 4 Oct
                     </span>
                     <span className="font-medium text-[10px] sm:text-xs text-white/80">
-                        Sid Lahiri, Rajasthan Royals Performance Coach, at both sessions
+                        Siddhartha Lahiri, Rajasthan Royals Head of International Player Development and Performance Coach, at both sessions
                     </span>
                 </div>
             </div>

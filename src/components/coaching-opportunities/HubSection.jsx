@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 const HUB_FEATURES = [
     'The Pro Coaching Foundation course, at both levels — Basic and Advanced',
     'Modules across batting, fast bowling, spin bowling, fielding, and wicketkeeping',
-    'Taught by IPL-experienced coaches: Sid Lahiri, Shane Burger, Michael Italiano, Dishant Yagnik, Richard Das Neves',
+    'Taught by IPL-experienced coaches: Siddhartha Lahiri, Shane Burger, Michael Italiano, Dishant Yagnik, Richard Das Neves',
     'Step-by-step learning with practical drills and coaching insights',
 ];
 
