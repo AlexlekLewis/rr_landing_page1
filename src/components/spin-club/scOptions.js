@@ -1,9 +1,8 @@
 // Every fact about Spin Club lives here, so the page and the form can never
 // disagree with each other. Change a price or a time once, here.
 //
-// STILL TO CONFIRM (Alex, 24 Sep 2026): the start date, and how many places
-// there are at each centre. Both are deliberately absent from the page rather
-// than guessed — see START_DATE below.
+// STILL TO CONFIRM (Alex, 27 Sep 2026): how many places there are at each
+// centre. Deliberately absent from the page rather than guessed.
 
 export const PROGRAM = {
     academy: 'Rajasthan Royals Academy Melbourne',
@@ -16,9 +15,14 @@ export const PROGRAM = {
     totalHours: 12, // 8 nights x 1.5 hours
 };
 
-// Left null on purpose. When Alex confirms the first Wednesday, put it here as
-// e.g. 'Wednesday 7 October' and the hero and details sections will show it.
-export const START_DATE = null;
+// Confirmed by Alex, 27 Sep 2026. 7 October 2026 is a Wednesday; eight weekly
+// nights from there run to Wednesday 25 November.
+export const START_DATE = 'Wednesday 7 October';
+export const END_DATE = 'Wednesday 25 November';
+export const NIGHTS = [
+    '7 October', '14 October', '21 October', '28 October',
+    '4 November', '11 November', '18 November', '25 November',
+];
 
 export const CLUBS = [
     {

@@ -1,12 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { PROGRAM, START_DATE } from './scOptions';
+import { PROGRAM, START_DATE, END_DATE } from './scOptions';
 
 const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
 const FACTS = [
     { title: `Ages ${PROGRAM.ages}`, detail: 'Spin bowlers only, at every standard of cricket' },
-    { title: 'Wednesday nights', detail: `${PROGRAM.time}, every week of the ${PROGRAM.weeks}-week block` },
+    { title: `${PROGRAM.weeks} Wednesday nights`, detail: `${PROGRAM.time}, ${START_DATE.replace('Wednesday ', '')} through to ${END_DATE.replace('Wednesday ', '')}` },
     { title: 'Two centres', detail: 'Mickleham in the north, Cranbourne North in the south-east' },
 ];
 
