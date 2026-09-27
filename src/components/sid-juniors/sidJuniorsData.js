@@ -194,9 +194,11 @@ export const MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encod
 // also uses "Head of Global Academies" and "Head of International Player
 // Development"; the bigger title is Alex's call, so it is not added here.
 export const SID_NAME = SID.name;
-export const SID_PHOTO = SID.photo;
-export const SID_PHOTO_ALT = SID.photoAlt;
-export const SID_PHOTO_CAPTION = SID.photoCaption;
+// Its own up-to-date photo (Alex, 27 Sep 2026): Sid coaching, which suits a
+// junior session where he is guest coach. The trial page shows him watching.
+export const SID_PHOTO = '/assets/performance-squads/sid-lahiri-coaching-2026.jpg';
+export const SID_PHOTO_ALT = 'Sid Lahiri coaching at a Rajasthan Royals training session';
+export const SID_PHOTO_CAPTION = 'Sid Lahiri coaching at a Rajasthan Royals session.';
 export const SID_TITLE_LINE = `${SID.employer} ${SID.title}`;
 export const SID_IN_MELBOURNE = '3 to 6 October';
 
