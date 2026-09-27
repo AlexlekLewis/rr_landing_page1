@@ -2,10 +2,25 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
-import { getTiers, TIER_PRICES, TOUR_STATUS } from './itCopy';
+import { getTiers, TIER_PRICES, TOUR_STATUS, fmtAUD } from './itCopy';
 
-const SOURCE_TAG = 'india-tour-2026-eoi';
-const PROGRAM_LABEL = 'India Tour 2026';
+// Where an expression of interest goes: the shared applications table only, the
+// same home as every other website EOI (Spin Club, Private Coaching, …).
+//
+// NOT india_tour_2026_eoi. The portal's hourly sync-india-tour job mirrors every
+// row of that table into the finished India 2026 tour, and provision-tour-accounts
+// then creates a portal login for each one — so an enquiry about the NEXT tour
+// written there would be enrolled in a tour that has already run. The 2026 rows
+// stay where they are. Tour answers with no column in applications travel in
+// `bio`, one per line.
+const SOURCE_TAG = 'india-tour-eoi';
+const PROGRAM_LABEL = 'India Tour';
+
+// Plain labels for the admin view, whichever reading level the family saw.
+const TIER_LABEL = {
+    royals_program: 'Already in an RRA program',
+    external: 'New to the academy',
+};
 
 const getUTMParams = () => {
     const params = new URLSearchParams(window.location.search);
@@ -176,63 +191,41 @@ const ITForm = ({ copy, referralCode, referralName }) => {
 
         try {
             const utm = getUTMParams();
-            const payload = {
-                player_type: form.player_type || null,
-                program_fee_aud: TIER_PRICES[form.player_type] ?? null,
-                player_name: form.player_name.trim(),
-                player_dob: form.player_dob || null,
-                player_age: age,
-                current_club: form.current_club.trim(),
-                highest_level: form.highest_level.trim(),
-                primary_skill: form.primary_skill || null,
-                secondary_skill: form.secondary_skill || null,
-                player_email: form.player_email.trim() || null,
-                player_phone: form.player_phone.trim() || null,
-                guardian1_name: form.guardian1_name.trim() || null,
-                guardian1_relationship: form.guardian1_relationship || null,
-                guardian1_email: form.guardian1_email.trim() || null,
-                guardian1_phone: form.guardian1_phone.trim() || null,
-                guardian2_name: form.guardian2_name.trim() || null,
-                guardian2_relationship: form.guardian2_relationship || null,
-                guardian2_email: form.guardian2_email.trim() || null,
-                guardian2_phone: form.guardian2_phone.trim() || null,
-                is_over_18: isAdult,
-                consent_contact: consent,
-                referral_code: referralCode || null,
-                referral_name: referralName || null,
+            const nameParts = form.player_name.trim().split(' ');
+            const bio = [
+                form.player_type &&
+                    `Price tier: ${TIER_LABEL[form.player_type]} (${fmtAUD(TIER_PRICES[form.player_type])} at current prices)`,
+                form.secondary_skill && `Secondary skill: ${form.secondary_skill}`,
+                form.guardian1_relationship && `Parent/guardian 1: ${form.guardian1_relationship}`,
+                form.guardian2_relationship && `Parent/guardian 2: ${form.guardian2_relationship}`,
+                referralCode && `Referral: ${referralCode}${referralName ? ` (${referralName})` : ''}`,
+                'Agreed to be contacted about India tours: yes',
+            ].filter(Boolean).join('\n');
+
+            const { error: insertError } = await supabase.from('applications').insert([{
+                first_name: nameParts[0] || '',
+                last_name: nameParts.slice(1).join(' ') || '',
+                dob: form.player_dob || null,
+                age,
+                club: form.current_club.trim() || null,
+                experience_level: form.highest_level.trim() || null,
+                cricket_type: form.primary_skill || null,
+                email: (form.player_email || form.guardian1_email).trim() || null,
+                phone: (form.player_phone || form.guardian1_phone).trim() || null,
+                parent1_name: form.guardian1_name.trim() || null,
+                parent1_email: form.guardian1_email.trim() || null,
+                parent1_phone: form.guardian1_phone.trim() || null,
+                parent2_name: form.guardian2_name.trim() || null,
+                parent2_email: form.guardian2_email.trim() || null,
+                parent2_phone: form.guardian2_phone.trim() || null,
                 source: SOURCE_TAG,
+                program: PROGRAM_LABEL,
+                program_type: SOURCE_TAG,
+                bio,
                 page_referrer: document.referrer || null,
                 ...utm,
-            };
-
-            const { error: insertError } = await supabase.from('india_tour_2026_eoi').insert([payload]);
+            }]);
             if (insertError) throw insertError;
-
-            // Secondary, non-blocking insert into the shared applications table.
-            try {
-                const nameParts = form.player_name.trim().split(' ');
-                await supabase.from('applications').insert([{
-                    first_name: nameParts[0] || '',
-                    last_name: nameParts.slice(1).join(' ') || '',
-                    dob: form.player_dob || null,
-                    age,
-                    club: form.current_club.trim() || null,
-                    experience_level: form.highest_level.trim() || null,
-                    email: (form.player_email || form.guardian1_email).trim() || null,
-                    phone: (form.player_phone || form.guardian1_phone).trim() || null,
-                    parent1_name: form.guardian1_name.trim() || null,
-                    parent1_email: form.guardian1_email.trim() || null,
-                    parent1_phone: form.guardian1_phone.trim() || null,
-                    parent2_name: form.guardian2_name.trim() || null,
-                    parent2_email: form.guardian2_email.trim() || null,
-                    parent2_phone: form.guardian2_phone.trim() || null,
-                    source: SOURCE_TAG,
-                    program: PROGRAM_LABEL,
-                    program_type: SOURCE_TAG,
-                    page_referrer: document.referrer || null,
-                    ...utm,
-                }]);
-            } catch (_) { /* non-blocking */ }
 
             setSubmitted(true);
             window.scrollTo({ top: document.getElementById('register')?.offsetTop || 0, behavior: 'smooth' });
@@ -263,19 +256,19 @@ const ITForm = ({ copy, referralCode, referralName }) => {
                         <div className="w-16 h-1 rounded-full bg-rr-pink mx-auto mb-6" />
                         <p className="text-rr-charcoal font-medium leading-relaxed">
                             Thanks <strong>{form.player_name.split(' ')[0]}</strong> — your interest in the
-                            India Tour 2026 has been registered. Our team will be in touch with more
-                            information as the touring squad takes shape.
+                            India Tour has been registered. We will be in touch as soon as the next
+                            tour has dates.
                         </p>
                         {TIER_BY_KEY[form.player_type] && (
                             <p className="text-rr-charcoal font-medium leading-relaxed mt-4">
                                 You told us your player is an{' '}
-                                <strong>{TIER_BY_KEY[form.player_type].heading}</strong>, so the program fee
-                                we will quote is{' '}
+                                <strong>{TIER_BY_KEY[form.player_type].heading}</strong>, so at current
+                                prices the program fee would be{' '}
                                 <strong>
                                     ${TIER_BY_KEY[form.player_type].price.toLocaleString('en-AU')} including GST
                                 </strong>
-                                , plus flights. We will confirm that in writing — you have not been charged
-                                anything today.
+                                , plus flights. We will confirm the price for the next tour in writing — you
+                                have not been charged anything.
                             </p>
                         )}
                     </motion.div>
@@ -500,9 +493,9 @@ const ITForm = ({ copy, referralCode, referralName }) => {
                                     )}
                                 </span>
                                 <span className="text-rr-charcoal text-sm font-medium leading-relaxed">
-                                    I agree to be contacted by Rajasthan Royals Academy Melbourne about the India Tour 2026
+                                    I agree to be contacted by Rajasthan Royals Academy Melbourne about India tours
                                     and consent to my information being stored in line with the{' '}
-                                    <a href="/india-tour-privacy-notice.html" target="_blank" rel="noopener noreferrer" className="text-rr-pink hover:underline font-bold">privacy notice</a>.
+                                    <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-rr-pink hover:underline font-bold">privacy policy</a>.
                                 </span>
                             </label>
                             {errors.consent && <p className="text-red-500 text-xs font-medium mt-1 ml-8">{errors.consent}</p>}
