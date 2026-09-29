@@ -211,21 +211,29 @@ export const PARENT_REQUIRED_UNDER = 18;
 // former clubs, no years of service, no quotes, no claims about players he
 // has produced.
 //
-// FOR ALEX, ON THE RECORD AND FREE TO USE IF HE WANTS IT: the Royals have
-// publicly announced Sid in bigger roles than the one used here, including
-// Head of International Player Development for Royals Sports Group. Those are
-// stronger credentials than the one on this page. They are NOT added without
-// Alex's word, but he should know they exist.
+// HIS TITLE (Alex, 27 September 2026): both of his current Royals roles, in
+// the same words here, on the rest of the site and on the A4 trial posters —
+// "Head of International Player Development and Performance Coach, Rajasthan
+// Royals". Each role is stated on the Royals' own website:
+//   - Head of International Player Development: the Royals Sports Group
+//     appointment article, 4 February 2025 (rajasthanroyals.com/latest-news/
+//     siddhartha-lahiri-royals-head-of-international-player-development-appoint)
+//   - Performance Coach: the Rajasthan Royals IPL 2026 support staff page
+//     (rajasthanroyals.com/support-staff)
+// "Head of Global Academies" was an earlier title. Do not bring it back.
+// His full name, Siddhartha Lahiri, the first time a page names him; "Sid" after.
 // ─────────────────────────────────────────────────────────────
 export const SID = {
-    name: 'Sid Lahiri',
-    title: 'Performance Coach',
+    name: 'Siddhartha Lahiri',
+    title: 'Head of International Player Development and Performance Coach',
     employer: 'Rajasthan Royals',
-    titleLine: 'Performance Coach of the Rajasthan Royals',
-    photo: '/assets/performance-squads/sid-lahiri-riyan-parag.jpg',
+    titleLine: 'Head of International Player Development and Performance Coach, Rajasthan Royals',
+    // Up-to-date photo in this season's Royals kit (Alex, 27 Sep 2026). Sid is
+    // at the trial to watch cricket, so the page shows him watching a batter.
+    photo: '/assets/performance-squads/sid-lahiri-watching-2026.jpg',
     photoAlt:
-        'Sid Lahiri talking through a delivery with Riyan Parag at a Rajasthan Royals training session',
-    photoCaption: 'Sid Lahiri working with Riyan Parag at a Rajasthan Royals session.',
+        'Sid Lahiri, Rajasthan Royals Head of International Player Development and Performance Coach, watching a batter at a Rajasthan Royals training session',
+    photoCaption: 'Sid Lahiri at a Rajasthan Royals training session.',
 
     // THE HEDGE. This page takes money up front on the strength of one named
     // person turning up, and he flies in from overseas around an IPL and two
@@ -256,9 +264,10 @@ export const HERO = {
     headline: 'The Rajasthan Royals Performance Coach Is Coming To Both Centres.',
     tagline: 'Sid Lahiri is in the building.',
     body:
-        'Sid Lahiri is the Performance Coach of the Rajasthan Royals. He is scheduled to be on the '
-        + 'floor at both sessions — Cranbourne North on Sunday 4 October and Mickleham on Monday '
-        + '5 October — watching open age players train. Both are an extra intake '
+        'Siddhartha (Sid) Lahiri is Head of International Player Development and Performance '
+        + 'Coach at the Rajasthan Royals. He is scheduled to be on the floor at both sessions — '
+        + 'Cranbourne North on Sunday 4 October and Mickleham on Monday 5 October — watching '
+        + 'open age players train. Both are an extra intake '
         + `into the Performance Squad at that centre. $${TRIAL_PRICE} a session.`,
     primaryCta: 'Book your trial place',
     // Shown instead, and unclickable, until TRIAL_SESSIONS has real dates in it.
@@ -273,11 +282,13 @@ export const HERO = {
 // ── The Sid section. Sits second so nobody misses it. ──
 export const SID_SECTION = {
     eyebrow: 'Who Is Running It',
-    title: 'Sid Lahiri Is Coming To Both Centres',
+    // The page's H1 and the first time Sid is named, so it carries his full
+    // name, as the posters do. The first paragraph then introduces "Sid".
+    title: 'Siddhartha Lahiri Is Coming To Both Centres',
     paragraphs: [
-        'Sid Lahiri is the Performance Coach of the Rajasthan Royals. The Royals run a global '
-        + 'system across the IPL, the SA20 and the CPL, and Sid is part of the coaching staff '
-        + 'inside it.',
+        'Siddhartha (Sid) Lahiri is Head of International Player Development and Performance '
+        + 'Coach at the Rajasthan Royals. The Royals run a global system across the IPL, the SA20 '
+        + 'and the CPL, and Sid is part of the coaching staff inside it.',
         'He is coming to both of these sessions. That is not a normal session of '
         + 'suburban cricket, and it is the reason this page exists.',
     ],
@@ -428,8 +439,9 @@ export const FAQS = [
     },
     {
         q: 'Is Sid Lahiri really going to be there?',
-        a: 'That is the plan, and it is why we are running it. Sid Lahiri is the Performance Coach '
-            + 'of the Rajasthan Royals and he is scheduled to be at both sessions — Cranbourne North '
+        a: 'That is the plan, and it is why we are running it. Sid Lahiri is Head of International '
+            + 'Player Development and Performance Coach at the Rajasthan Royals, and he is scheduled '
+            + 'to be at both sessions — Cranbourne North '
             + 'on Sunday 4 October at the Elite Cricket Centre, and Mickleham on Monday 5 October at '
             + 'the Mickleham Indoor Sports Centre. If that changes we will tell you before you turn '
             + 'up, and you can take a full refund.',
@@ -501,9 +513,11 @@ export const SEO = {
     // Names both centres, because the page sells two sessions and Sid is at
     // both of them.
     title: 'Open Age T20 Trials, Mickleham & Cranbourne North | Royals',
+    // The facts a reader needs lead, so a search result that cuts the end off
+    // still says what, who for, where, when and how much.
     description:
         `Open age T20 trials, players ${MIN_AGE} to ${MAX_AGE}. Mickleham Mon 5 Oct and Cranbourne `
-        + 'North Sun 4 Oct, both with Royals Performance Coach Sid Lahiri. '
-        + `$${TRIAL_PRICE} a session.`,
+        + `North Sun 4 Oct, $${TRIAL_PRICE} a session. Siddhartha Lahiri, Head of International `
+        + 'Player Development and Performance Coach at the Rajasthan Royals, is coming to both.',
     ogImage: SID.photo,
 };
