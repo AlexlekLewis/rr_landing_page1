@@ -275,7 +275,7 @@ const ITForm = ({ copy, referralCode, referralName }) => {
                         <h2 className="text-3xl font-black text-rr-dark uppercase tracking-wide mb-4">You're On The List</h2>
                         <div className="w-16 h-1 rounded-full bg-rr-pink mx-auto mb-6" />
                         <p className="text-rr-charcoal font-medium leading-relaxed">
-                            Thanks <strong>{form.player_name.split(' ')[0]}</strong>. We have your interest in:
+                            Thanks <strong>{form.player_name.split(' ')[0]}</strong>. You have registered interest in:
                         </p>
                         <ul className="mt-3 space-y-1">
                             {selectedTours.map(t => (
@@ -284,7 +284,7 @@ const ITForm = ({ copy, referralCode, referralName }) => {
                         </ul>
                         <p className="text-rr-charcoal font-medium leading-relaxed mt-4">
                             When the dates are set, we will write to you with them, the exact price and what
-                            it includes. You have not paid anything, and no place is held yet.
+                            it includes. You have not paid anything, and no place is held.
                         </p>
                     </motion.div>
                 </div>
@@ -594,7 +594,7 @@ const ITForm = ({ copy, referralCode, referralName }) => {
                                 </>
                             ) : (
                                 <>
-                                    Submit Registration
+                                    {copy.hero.cta}
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                     </svg>

@@ -55,7 +55,7 @@ const fillRequiredDetails = () => {
   fireEvent.click(consentText.parentElement!.querySelector("span")!);
 };
 
-const submit = () => fireEvent.click(screen.getByRole("button", { name: /submit registration/i }));
+const submit = () => fireEvent.click(document.querySelector('[data-cta="submit-eoi"]')!);
 
 const tourBox = (id: string) => document.querySelector(`input[data-tour="${id}"]`) as HTMLInputElement;
 
@@ -68,6 +68,13 @@ beforeEach(() => {
 });
 
 describe("ITForm — which tour", () => {
+  it("labels the submit button with the page's call to action, not \"registration\"", () => {
+    render(<ITForm copy={COPY.simple} />);
+    const button = document.querySelector('[data-cta="submit-eoi"]') as HTMLButtonElement;
+    expect(button.textContent).toContain(COPY.simple.hero.cta);
+    expect(button.textContent).not.toMatch(/registration/i);
+  });
+
   it("offers exactly the two upcoming tours as checkboxes, none ticked", () => {
     render(<ITForm copy={COPY.simple} />);
     expect(TOURS.map((t) => t.id)).toEqual([DEC, APR]);
@@ -105,7 +112,8 @@ describe("ITForm — which tour", () => {
     expect(String(row.bio)).not.toMatch(/\$|price tier/i);
 
     // The thank-you names both tours and says nothing is paid or held.
-    expect(await screen.findByText(/You have not paid anything, and no place is held yet/)).toBeTruthy();
+    expect(await screen.findByText(/You have not paid anything, and no place is held\./)).toBeTruthy();
+    expect(screen.getByText(/You have registered interest in:/)).toBeTruthy();
     expect(screen.getByText("Late December 2026 to early January 2027")).toBeTruthy();
     expect(screen.getByText("April 2027")).toBeTruthy();
   });

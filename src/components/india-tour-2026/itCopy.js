@@ -111,8 +111,9 @@ const STANDARD = {
             `A tour of about ${TOUR_LENGTH_DAYS} days to the Rajasthan Royals' talent factory in Nagpur — ` +
             'the franchise\'s own High Performance Centre, and the place that built the games of Sanju ' +
             'Samson, Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag. It is where Vaibhav Sooryavanshi ' +
-            'trains, alongside the coach who is his legal guardian. Sessions are taken by the Royals\' ' +
-            'own high performance staff, and the squad is kept small.',
+            'trains, alongside the coach who is his legal guardian. Our first touring group trained there ' +
+            'with the Royals\' own high performance staff in September 2026, and our Melbourne coaches ' +
+            'pick each touring squad.',
         priceLabel: 'Estimated price',
         priceUnit: 'per player',
         priceNote:
@@ -129,7 +130,7 @@ const STANDARD = {
             'everyone who registered.',
         ctaAfterCoaches: {
             heading: 'Choose one tour or both',
-            body: 'Register your interest in the tour that suits you, or in both. It costs nothing, takes about two minutes, and commits you to nothing. The squad is small, and our coaches confirm it.',
+            body: 'Register your interest in the tour that suits you, or in both. It costs nothing, takes about two minutes and commits you to nothing. Our Melbourne coaches pick each touring squad from everyone who registers.',
         },
         ctaAfterPricing: {
             heading: 'Ready to put your player forward?',
@@ -154,8 +155,7 @@ const STANDARD = {
         lead:
             'Academies run tours. Almost none of them get inside the building an IPL franchise actually ' +
             'uses. Each Rajasthan Royals Academy Melbourne tour goes to the Royals\' High Performance ' +
-            `Centre in Nagpur for about ${TOUR_LENGTH_DAYS} days, coached by the club's own high ` +
-            'performance staff.',
+            `Centre in Nagpur for about ${TOUR_LENGTH_DAYS} days.`,
         producedHereLabel: 'Built at this centre',
         points: [
             {
@@ -166,17 +166,16 @@ const STANDARD = {
                     'rebuilt their games here before playing for India.',
             },
             {
-                title: 'The club\'s coaches, not ours',
+                title: 'The club\'s own coaches',
                 body:
                     'The Rajasthan Royals team manager. A former India international and Ranji ' +
                     'Trophy-winning captain. The centre\'s resident fast bowling coach. The Royals\' ' +
-                    'performance psychologist. These are the people who coach the club\'s own players.',
+                    'performance psychologist. These are the people who coach the club\'s own players, and ' +
+                    'they coached our first touring group in September 2026.',
             },
             {
-                title: 'A small group, on purpose',
-                body:
-                    'The group is deliberately small so every player gets seen. Anyone can register; ' +
-                    'our coaches confirm the squad. Registering early gives you the best chance.',
+                title: 'How the squad is picked',
+                body: 'Anyone can register. Our Melbourne coaches pick each touring squad.',
             },
         ],
     },
@@ -190,18 +189,18 @@ const STANDARD = {
             'The dates and the final price are not set yet for either tour. Before anyone commits, we ' +
             'confirm in writing the exact price and exactly what it includes.',
         includesEyebrow: 'What the price includes',
-        includesHeading: 'Confirmed with the price',
+        includesHeading: 'Not Confirmed Yet',
         includesBody:
             'When we confirm the price for a tour, we will set out in writing exactly what it covers, ' +
             'including whether flights are part of it, and anything you would need to pay for yourself. ' +
             'You will have all of it before you decide.',
 
         pillarsEyebrow: 'Beyond The Boundary',
-        pillarsHeading: 'The Pro-Athlete',
-        pillarsHeadingAccent: 'Support System',
+        pillarsHeading: 'What A Professional',
+        pillarsHeadingAccent: 'Set-Up Covers',
         pillarsLead:
-            'A professional set-up does not just coach your batting. Four things are worked on at the ' +
-            'centre, every day, alongside the cricket.',
+            'A professional set-up coaches more than batting. The plan for our first tour, in September ' +
+            '2026, covered these four alongside the cricket.',
         pillars: [
             { title: 'Physical', body: 'Strength and conditioning, injury management, and physio-led rehabilitation fundamentals.' },
             { title: 'Mental', body: 'Focus, resilience, and handling match-day pressure under competitive stress.' },
@@ -212,22 +211,22 @@ const STANDARD = {
         // The day-by-day below is the September 2026 camp's plan, shown as a guide to
         // what a tour at the centre involves. The new tours are longer, so it is
         // labelled as last time's plan, not as theirs.
-        itineraryEyebrow: 'From Our First Tour, September 2026',
-        itineraryHeading: 'What A Day',
-        itineraryHeadingAccent: 'Looks Like',
+        itineraryEyebrow: 'September 2026',
+        itineraryHeading: 'Our First Tour,',
+        itineraryHeadingAccent: 'Day By Day',
         itineraryLead:
             'This was the day-by-day plan for our first tour, in September 2026: six full coaching days ' +
-            'between arrival and departure. Mornings build the skill, afternoons apply it, and the ' +
-            'evenings cover the things that keep a player on the field. The new tours are longer, at about ' +
+            'between arrival and departure. Mornings built the skill, afternoons applied it, and evenings ' +
+            'covered the things that keep a player on the field. The new tours are longer, at about ' +
             `${TOUR_LENGTH_DAYS} days each, so their plans will be different.`,
         itineraryDays: [
-            { when: 'Arrival day', title: 'Arrival', body: 'You land in Nagpur, get picked up, and settle in at the centre. Welcome and orientation.' },
+            { when: 'Arrival day', title: 'Arrival', body: 'Land in Nagpur, get picked up, and settle in at the centre. Welcome and orientation.' },
             { when: 'Day 1', title: 'Foundation', body: 'Morning: performance testing (speed, agility, coordination) and a skill assessment across batting, bowling and fielding. Afternoon: player evaluation and video analysis, one-on-one with a coach. Evening: physio-led injury management.' },
             { when: 'Day 2', title: 'Nets & Skill', body: 'Morning: technical batting and bowling drills, plus core fielding. Afternoon: extended net sessions against varied bowling. Evening: mental strength session one — focus, confidence and handling pressure.' },
             { when: 'Day 3', title: 'Centre Wicket', body: 'Morning: warm-up, skill reinforcement and match-situation fielding. Afternoon: structured centre-wicket practice in a game-like environment. Evening: nutrition and hydration.' },
             { when: 'Day 4', title: 'Centre Wicket', body: 'A second full day in the middle, building on day three under direct coach guidance.' },
             { when: 'Day 5', title: 'Match Day', body: 'Morning: a practice match on turf wickets. Afternoon: post-match feedback and skill work. Evening: mental strength session two — game pressure and decision-making.' },
-            { when: 'Day 6', title: 'Closing & Evaluation', body: 'Morning: a light optional net session. Afternoon: group reflection and your individual development plan. Evening: closing huddle.' },
+            { when: 'Day 6', title: 'Closing & Evaluation', body: 'Morning: a light optional net session. Afternoon: group reflection and each player\'s individual development plan. Evening: closing huddle.' },
             { when: 'Departure day', title: 'Departure', body: 'Farewell and transfer back to Nagpur airport for the flight home.' },
         ],
         includedHeading: 'What your fee covers',
@@ -350,8 +349,8 @@ const SIMPLE = {
         lead:
             `A tour of about ${TOUR_LENGTH_DAYS} days to the Rajasthan Royals' talent factory in Nagpur. ` +
             'This is the centre that built Sanju Samson, Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag — ' +
-            'and where Vaibhav Sooryavanshi trains. The Royals\' own coaches take the sessions, not ours. ' +
-            'The team is kept small, and our coaches pick it.',
+            'and where Vaibhav Sooryavanshi trains. Royals coaches worked with our first touring group ' +
+            'there in September 2026. Our Melbourne coaches pick the team.',
         priceLabel: 'Estimated price',
         priceUnit: 'per player',
         priceNote:
@@ -372,7 +371,7 @@ const SIMPLE = {
         },
         ctaAfterPricing: {
             heading: 'Want a spot?',
-            body: 'Put your name down. When a tour has dates, we write back with the dates, the exact price, what it covers, and whether you have a spot.',
+            body: 'Put your name down. When a tour you picked has dates, we write back with the dates, the exact price, what it covers, and whether you have a spot.',
         },
         closedBadge: 'Applications Closed',
         closedHeading: 'Sign-ups for this tour are closed',
@@ -392,8 +391,7 @@ const SIMPLE = {
         lead:
             'Lots of academies run trips to India. Almost none of them get inside the building an IPL ' +
             'club really uses. Our tours go to the Rajasthan Royals\' own centre in Nagpur, for about ' +
-            `${TOUR_LENGTH_DAYS} days each, and the club's own coaches take the training. Put your name ` +
-            'down below and we will tell you everything.',
+            `${TOUR_LENGTH_DAYS} days each. Put your name down below and we will tell you everything.`,
         producedHereLabel: 'Built at this centre',
         points: [
             {
@@ -410,10 +408,8 @@ const SIMPLE = {
                     'coached our first touring group in September 2026.',
             },
             {
-                title: 'A small group',
-                body:
-                    'The group is kept small so every player gets seen. Anyone can sign up; our coaches ' +
-                    'pick the team. Sign up early.',
+                title: 'How the team is picked',
+                body: 'Anyone can put their name down. Our Melbourne coaches pick the team.',
             },
         ],
     },
@@ -427,40 +423,40 @@ const SIMPLE = {
             'price, and the dates are not set yet either. Before you say yes, we tell you the exact ' +
             'price and what it covers, in writing.',
         includesEyebrow: 'What the price covers',
-        includesHeading: 'We tell you with the price',
+        includesHeading: 'Not Set Yet',
         includesBody:
             'When we confirm the price for a tour, we tell you exactly what it covers. That includes ' +
             'whether the flights are part of it, and anything you would need to pay for yourself. You ' +
             'get all of it in writing before you decide.',
 
         pillarsEyebrow: 'More Than Cricket',
-        pillarsHeading: 'The Team',
-        pillarsHeadingAccent: 'Around You',
-        pillarsLead: 'A real pro set-up works on four things, not just your batting. The centre works on all four, every day.',
+        pillarsHeading: 'What A Pro Set-Up',
+        pillarsHeadingAccent: 'Works On',
+        pillarsLead: 'A pro set-up works on more than your batting. The plan for our first tour, in September 2026, covered these four things.',
         pillars: [
-            { title: 'Your body', body: 'Fitness training. A physio to keep you safe and fix niggles.' },
+            { title: 'Your body', body: 'Fitness training, and a physio to help prevent and fix niggles.' },
             { title: 'Your head', body: 'How to stay calm, focused and brave when the game gets tight.' },
             { title: 'Your food', body: 'What to eat and drink before you play, and after, so you recover.' },
-            { title: 'Your game plan', body: 'Video of you, an honest assessment, and a plan of what to fix.' },
+            { title: 'Your game plan', body: 'Video, an honest assessment, and a plan of what to fix.' },
         ],
 
         // September 2026's plan, shown as a guide (see the note in STANDARD).
-        itineraryEyebrow: 'From Our First Tour, September 2026',
-        itineraryHeading: 'What A Day',
-        itineraryHeadingAccent: 'Looks Like',
+        itineraryEyebrow: 'September 2026',
+        itineraryHeading: 'Our First Tour,',
+        itineraryHeadingAccent: 'Day By Day',
         itineraryLead:
             'This was the plan for our first tour, in September 2026: six days of cricket between the ' +
             'day the team landed and the day it flew home. The new tours are longer, about ' +
             `${TOUR_LENGTH_DAYS} days each, so their plans will be different.`,
         itineraryDays: [
-            { when: 'Arrival day', title: 'You arrive', body: 'You land in Nagpur. We pick you up. You settle in and meet everyone.' },
-            { when: 'Day 1', title: 'Testing', body: 'Morning: we test how fast and agile you are, and watch you bat, bowl and field. Afternoon: you watch video of yourself with a coach. Evening: a physio shows you how to avoid injuries.' },
+            { when: 'Arrival day', title: 'Arrive', body: 'Land in Nagpur, get picked up, settle in and meet everyone.' },
+            { when: 'Day 1', title: 'Testing', body: 'Morning: speed and agility tests, and the coaches watch everyone bat, bowl and field. Afternoon: video review with a coach. Evening: a physio session on how to avoid injuries.' },
             { when: 'Day 2', title: 'Nets', body: 'Morning: batting and bowling drills, plus catching and throwing. Afternoon: long net sessions against different bowlers. Evening: how to stay focused under pressure.' },
             { when: 'Day 3', title: 'Middle practice', body: 'Morning: warm-up and fielding in match situations. Afternoon: batting in the middle, like a real game. Evening: what to eat and drink.' },
             { when: 'Day 4', title: 'Middle practice', body: 'Another full day batting and bowling in the middle, with coaches watching every ball.' },
-            { when: 'Day 5', title: 'Match day', body: 'Morning: you play a real match on grass. Afternoon: the coaches tell you what they saw. Evening: handling pressure in a game.' },
-            { when: 'Day 6', title: 'Last day', body: 'Morning: an easy net if you want one. Afternoon: you get your own written plan. Evening: the closing huddle.' },
-            { when: 'Going home', title: 'You fly home', body: 'We take you back to Nagpur airport for your flight.' },
+            { when: 'Day 5', title: 'Match day', body: 'Morning: a real match on grass. Afternoon: the coaches say what they saw. Evening: handling pressure in a game.' },
+            { when: 'Day 6', title: 'Last day', body: 'Morning: an easy net for anyone who wants one. Afternoon: each player gets their own written plan. Evening: the closing huddle.' },
+            { when: 'Going home', title: 'Fly home', body: 'Back to Nagpur airport for the flight home.' },
         ],
         includedHeading: 'What you get',
         includedNote: 'The same for both prices. Once you land, all of this is already paid for.',
@@ -522,7 +518,7 @@ const SIMPLE = {
         howHeading: 'What happens next',
         steps: [
             'Fill in the form below. Tick the tour you want, or both. You pay nothing today. Right now we are just taking names.',
-            'When a tour has dates, we write to you. We tell you the dates, the exact price, what it covers, and if you have a spot.',
+            'When a tour you picked has dates, we write to you. We tell you the dates, the exact price, what it covers, and if you have a spot.',
             'Nothing is booked and nothing is paid until you have all of that in writing and say yes.',
         ],
     },
@@ -532,23 +528,23 @@ const SIMPLE = {
         heading: 'Put Your Name',
         headingAccent: 'Down',
         lead:
-            'Fill this in and tick the tour you want, or both. When a tour has dates, we will get back ' +
-            'to you with the price and everything else you need to know. You are not paying or ' +
+            'Fill this in and tick the tour you want, or both. When a tour you picked has dates, we will ' +
+            'get back to you with the price and everything else you need to know. You are not paying or ' +
             'promising anything yet.',
         toursHeading: 'Which Tour',
         toursLead: 'Tick one or both. The dates are not set yet. We will tell you when they are.',
         toursError: 'Please tick at least one tour.',
-        playerTypeHeading: 'Do You Train With Us Now?',
-        playerTypeLead: 'Pick the one that is you.',
-        playerTypeError: 'Please pick the one that is you.',
+        playerTypeHeading: 'Does The Player Train With Us Now?',
+        playerTypeLead: 'Pick the one that fits the player.',
+        playerTypeError: 'Please pick the one that fits the player.',
         playerTypes: {
             royals_program: {
                 heading: 'Already With Us',
-                who: 'You train with us now, in any of our programs.',
+                who: 'The player trains with us now, in any of our programs.',
             },
             external: {
                 heading: 'New To Us',
-                who: 'You do not train with us yet.',
+                who: 'The player does not train with us yet.',
             },
         },
     },

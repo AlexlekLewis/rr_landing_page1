@@ -75,7 +75,7 @@ describe.each(["simple", "standard"] as const)("%s copy", (level) => {
 
   it("uses none of the banned sales phrases", () => {
     expect(rendered).not.toMatch(
-      /\bup to\b|from just|as little as|limited time|limited places|only a few spots|\binvestment\b|act now|don't miss|cutting.edge|world.class|\bunlock\b|\bjourney\b/i,
+      /\bup to\b|from just|as little as|limited time|limited places|only a few spots|sign up early|registering early|\binvestment\b|act now|don't miss|cutting.edge|world.class|\bunlock\b|\bjourney\b/i,
     );
   });
 
