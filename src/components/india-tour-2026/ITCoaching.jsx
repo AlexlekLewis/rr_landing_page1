@@ -53,16 +53,6 @@ const COACHES = [
             'first-class career to the panel, with batting and leadership his focus.',
     },
     {
-        // Added 29 Sep 2026 (Alex): he coached our first touring group, in September
-        // 2026, alongside Faiz Fazal. There is no headshot on file yet, so the card
-        // shows his initials. Say nothing about him beyond what Alex has confirmed.
-        name: 'Siddharth Trivedi',
-        role: 'Former Rajasthan Royals Fast Bowler',
-        bio:
-            'He played for the Rajasthan Royals as a fast bowler, and coached our first touring group ' +
-            'at the centre in September 2026.',
-    },
-    {
         name: 'Somi Bhinder',
         role: 'Resident Fast Bowling Coach',
         image: '/assets/rra/somi-bhinder.jpg',
