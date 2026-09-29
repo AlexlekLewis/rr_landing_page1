@@ -10,23 +10,23 @@ import FAQSection from '../performance-squads/FAQSection';
 import StickyCTA from '../performance-squads/StickyCTA';
 import PartnerStack from '../power-game/PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
-import { ROUTE, CTA, BOOKING_STATE, FAQS, FAQ_HEADING } from './sidJuniorsData';
+import { ROUTE, CTA, PAGE_STATE, FAQS, FAQ_HEADING } from './sidJuniorsData';
 
 // ─────────────────────────────────────────────────────────────
-// JUNIOR SESSION WITH SID LAHIRI — /sid-juniors
+// JUNIOR SESSIONS WITH SIDDHARTHA LAHIRI — /sid-juniors
 //
-// One hour on the lanes at Mickleham, Monday 5 October 2026, 4:30–5:30pm.
-// Linked from the all-families email of 27–28 September 2026.
+// Two junior sessions, one at each centre: Cranbourne North on Sunday
+// 4 October 2026 (1:00–2:30pm) and Mickleham on Monday 5 October 2026
+// (4:30–5:30pm). Linked from the all-families email.
 //
 // Built to match /performance-squads-open-trial: the standard hero, the Sid
 // card under it, the same FAQ component, and the performance-partners stack
 // above the footer. Every fact, and every unconfirmed default, lives in
 // ./sidJuniorsData.js.
 //
-// SAFEGUARDING (review of 27 Sep 2026): bookings stay closed until two named
-// Academy coaches with verified Working with Children Checks are rostered and
-// the capacity fits them. Until then the page shows everything except the
-// form. The gate lives in sidJuniorsData.js.
+// Each session opens and closes on its own switches in sidJuniorsData.js. A
+// session that is not taking bookings is still shown, but cannot be chosen;
+// with no session open, the page shows everything except the form.
 // ─────────────────────────────────────────────────────────────
 
 const SECTIONS = ['hero', 'sid', 'session', 'supervision', 'register-pay', 'faq', 'partners'];
@@ -72,7 +72,7 @@ const SidJuniors = () => {
             </main>
             <Footer />
             {/* Phones only, and only while there is a form to scroll to. */}
-            {BOOKING_STATE === 'open' && <StickyCTA label={CTA} />}
+            {PAGE_STATE === 'open' && <StickyCTA label={CTA} />}
         </div>
     );
 };

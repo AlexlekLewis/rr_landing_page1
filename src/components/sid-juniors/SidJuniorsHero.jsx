@@ -46,9 +46,14 @@ const SidJuniorsHero = () => (
                 <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black uppercase leading-[0.95] mb-6">
                     {HERO.headlineTop}<br />{HERO.headlineBottom}
                 </h1>
-                <p className="text-lg sm:text-2xl font-bold text-rr-light-pink mb-4 max-w-2xl">
-                    {HERO.tagline}
-                </p>
+                {/* One line per session, so both dates are visible above the fold. */}
+                <div className="mb-5 max-w-2xl space-y-1">
+                    {HERO.taglines.map((t) => (
+                        <p key={t.key} className="text-lg sm:text-2xl font-bold text-rr-light-pink leading-snug">
+                            {t.lead} · <span className="whitespace-nowrap">{t.time}</span>
+                        </p>
+                    ))}
+                </div>
                 <p className="text-white/70 text-[15px] sm:text-lg font-medium leading-relaxed mb-10 max-w-2xl">
                     {HERO.body}
                 </p>

@@ -3,18 +3,11 @@
 -- apply_migration as "match_registrations_add_club_notes"; this file is the
 -- canonical record).
 -- ============================================================
--- /sid-juniors reuses the generic match_registrations table, tagged by
--- match_slug ('sid-juniors-2026-10-05-request' for booking requests,
--- 'sid-juniors-2026-10-05' once a payment link is set). It asks two optional
--- things no match page asks: the player's current club, and a note for the
--- coaches.
---
--- Both nullable with no default, so existing rows and the live Power League
--- insert (which sends neither column) are unaffected. Length caps follow the
--- repo's anon-insert convention (power_game_length_caps, jr_term4_waitlist).
---
--- RLS is unchanged: anon/authenticated may INSERT only. There is still no
--- SELECT, UPDATE or DELETE policy, so the browser can never read or edit a row.
+-- /sid-juniors reuses the shared match_registrations table, tagged by
+-- match_slug. It asks two optional things no match page asks: the player's
+-- current club and a note for the coaches. Both nullable with no default, so
+-- existing rows and the match pages' inserts (which send neither) are
+-- unaffected. Length caps follow the repo's convention for public forms.
 --
 -- ROLLBACK:
 --   ALTER TABLE public.match_registrations

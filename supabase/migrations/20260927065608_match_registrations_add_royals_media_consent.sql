@@ -3,21 +3,10 @@
 -- MCP apply_migration as "match_registrations_add_royals_media_consent"; this
 -- file is the canonical record).
 -- ============================================================
--- Safeguarding review (27 Sep 2026) for /sid-juniors: photo consent is two
--- separate, optional answers, both unticked by default, neither blocking a
--- booking.
---   accept_social_media  (existing)  "RRA Melbourne may use photos and video of
---                                     my player from this session on its
---                                     website, emails and social media."
---   accept_royals_media  (new)       "The Rajasthan Royals may also use them on
---                                     their own channels, which reach a
---                                     worldwide audience."
---
--- DEFAULT false: an unanswered consent is a no. Adding a column with a
--- constant default is a metadata-only change, and the live Power League
--- insert (which never asks it) keeps working and reads as no.
---
--- Also re-describes `notes`, which may now hold health information.
+-- /sid-juniors asks two separate, optional photo questions.
+-- accept_social_media (existing) holds the first; accept_royals_media (new)
+-- holds the second. DEFAULT false: an unanswered question is a no, and the
+-- match pages' inserts (which never ask it) keep working.
 --
 -- ROLLBACK:
 --   ALTER TABLE public.match_registrations DROP COLUMN IF EXISTS accept_royals_media;

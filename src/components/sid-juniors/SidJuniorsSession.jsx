@@ -1,74 +1,96 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { CalendarDays, MapPin, Users, Ticket, ArrowRight, Navigation } from 'lucide-react';
+import { CalendarDays, MapPin, Ticket, ArrowRight, Navigation, Clock } from 'lucide-react';
 import { fadeUp, SectionHeading } from '../performance-squads/shared';
 import {
-    SESSION, SESSION_SECTION, MAPS_URL, AGE_RANGE, PRICE_LABEL, OLDER_PLAYERS,
+    SESSION_VIEW, SESSION_SECTION, STATE_BADGE, OLDER_PLAYERS,
 } from './sidJuniorsData';
 
-// What, when, where, who and what it costs — the four things a parent needs
-// before they decide, each one a fact from sidJuniorsData.js.
-const Tile = ({ icon: Icon, label, children, delay }) => (
-    <motion.div
+// One card per session: when, where, what it costs, and whether it is taking
+// bookings. Every value comes from sidJuniorsData.js.
+const badgeClass = {
+    open: 'bg-rr-pink text-white',
+    closed: 'bg-white/10 text-white/70',
+    full: 'bg-amber-400/15 text-amber-200',
+};
+
+const Row = ({ icon: Icon, children }) => (
+    <div className="flex items-start gap-3">
+        <Icon className="w-4 h-4 text-rr-pink shrink-0 mt-1" />
+        <div className="text-white/70 text-[15px] font-medium leading-relaxed">{children}</div>
+    </div>
+);
+
+const SessionCard = ({ s, delay }) => (
+    <motion.article
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         variants={fadeUp}
         custom={delay}
-        className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-7"
+        className="bg-white/5 border border-white/10 rounded-3xl p-6 sm:p-8 flex flex-col"
+        aria-label={`${s.centreName} session`}
     >
-        <div className="flex items-center gap-2.5 mb-3">
-            <Icon className="w-5 h-5 text-rr-pink shrink-0" />
-            <p className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-rr-pink">{label}</p>
+        <div className="flex items-start justify-between gap-3 mb-5">
+            <div>
+                <p className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-rr-pink mb-2">{s.shortDay}</p>
+                <h3 className="text-2xl sm:text-3xl font-black uppercase leading-none">{s.centreName}</h3>
+            </div>
+            <span className={`shrink-0 text-[10px] font-black uppercase tracking-wider rounded-full px-3 py-1.5 ${badgeClass[s.state]}`}>
+                {STATE_BADGE[s.state]}
+            </span>
         </div>
-        {children}
-    </motion.div>
-);
 
-const Main = ({ children }) => (
-    <p className="text-lg sm:text-xl font-black uppercase leading-tight">{children}</p>
-);
+        <div className="space-y-3.5">
+            <Row icon={CalendarDays}>
+                <span className="text-white font-bold">{s.dateLabel}</span>
+            </Row>
+            <Row icon={Clock}>
+                {s.timeLabel}, {s.durationLabel}.
+            </Row>
+            <Row icon={MapPin}>
+                <span className="text-white font-bold">{s.venue}</span>, {s.address}.
+                {s.lanesNote && <> {s.lanesNote}</>}
+                <a
+                    href={s.mapsUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-1.5 text-rr-light-pink hover:text-white text-sm font-bold mt-2 underline underline-offset-4 w-fit"
+                >
+                    <Navigation className="w-3.5 h-3.5" /> Get directions
+                </a>
+            </Row>
+            <Row icon={Ticket}>
+                <span className="text-white font-bold">{s.priceLabel}</span>
+            </Row>
+        </div>
 
-const Detail = ({ children }) => (
-    <p className="text-white/65 text-[15px] font-medium leading-relaxed mt-1.5">{children}</p>
+        {/* The trial shares this centre and this time, so say so on the card
+            itself. The safeguarding detail is in the next section. */}
+        {s.alongsideTrial && (
+            <p className="text-white/55 text-[13px] font-medium leading-relaxed mt-5 pt-4 border-t border-white/10">
+                The open age trial runs in the same centre at the same time. Junior players have their
+                own lanes, their own coaches and a separate sign-in.
+            </p>
+        )}
+    </motion.article>
 );
 
 const SidJuniorsSession = () => (
     <section className="py-20 px-5">
-        <div className="max-w-4xl mx-auto">
-            <SectionHeading {...SESSION_SECTION} />
+        <div className="max-w-5xl mx-auto">
+            <SectionHeading eyebrow={SESSION_SECTION.eyebrow} title={SESSION_SECTION.title} sub={SESSION_SECTION.sub} />
 
-            <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
-                <Tile icon={CalendarDays} label="When" delay={0}>
-                    <Main>{SESSION.dateLabel}</Main>
-                    <Detail>{SESSION.timeLabel}, one hour.</Detail>
-                </Tile>
-
-                <Tile icon={MapPin} label="Where" delay={0.05}>
-                    <Main>{SESSION.venue}</Main>
-                    <Detail>{SESSION.address}. {SESSION.lanes}</Detail>
-                    <a
-                        href={MAPS_URL}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 text-rr-light-pink hover:text-white text-sm font-bold mt-3 underline underline-offset-4"
-                    >
-                        <Navigation className="w-3.5 h-3.5" /> Get directions
-                    </a>
-                </Tile>
-
-                <Tile icon={Users} label="Who" delay={0.1}>
-                    <Main>Players aged {AGE_RANGE}</Main>
-                    {/* Group size and supervision are in the next section. */}
-                    <Detail>Coaching, not a trial.</Detail>
-                </Tile>
-
-                <Tile icon={Ticket} label="Cost" delay={0.15}>
-                    <Main>{PRICE_LABEL}</Main>
-                    <Detail>{SESSION_SECTION.costNote}</Detail>
-                </Tile>
+            <div className="grid md:grid-cols-2 gap-5">
+                {SESSION_VIEW.map((s, i) => (
+                    <SessionCard key={s.key} s={s} delay={i * 0.06} />
+                ))}
             </div>
+
+            <p className="text-white/50 text-sm font-medium leading-relaxed text-center mt-6">
+                {SESSION_SECTION.costNote}
+            </p>
 
             {/* For families with an older player too. Links out and says no more:
                 who is at the trial is that page's to say, not this one's. */}
@@ -77,7 +99,7 @@ const SidJuniorsSession = () => (
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeUp}
-                custom={0.2}
+                custom={0.15}
                 className="mt-8 border-t border-white/10 pt-6 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6"
             >
                 <p className="text-white/55 text-sm font-medium leading-relaxed flex-1">{OLDER_PLAYERS.text}</p>

@@ -1,41 +1,39 @@
 import React, { useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
     CheckCircle2, CalendarDays, MapPin, Mail, ArrowRight, Navigation, LogIn, UserCheck, HardHat, GlassWater,
 } from 'lucide-react';
 import { fadeUp } from '../performance-squads/shared';
 import {
-    PAY_TO_BOOK, ROUTE, SESSION, MAPS_URL, SID_NAME, SID_CAVEAT, CONTACT_EMAIL, ON_THE_DAY,
+    ANY_PAY_TO_BOOK, SESSION_VIEW, getSession, ROUTE, SID_NAME, SID_CAVEAT, CONTACT_EMAIL, ON_THE_DAY,
 } from './sidJuniorsData';
 
-// /sid-juniors/success — where the Stripe Payment Link sends a parent after
-// paying (its after-payment redirect must point here; see sidJuniorsData.js).
+// /sid-juniors/success — where a session's Stripe Payment Link sends a parent
+// after paying. Each link's after-payment redirect adds ?session=<key>, so the
+// page can show that session; without it, it lists every session that takes
+// payment.
 //
-// While there is no payment link, nobody can have paid, so the page refuses
-// to say "payment received" and sends the visitor to the booking page.
-//
-// Like the match registration success page, it does not write to the
-// database: anon has no UPDATE on the table, on purpose. Payments are matched
-// to bookings in Stripe by the payer's email.
+// While no session has a payment link, nobody can have paid, so the page
+// refuses to say "payment received" and sends the visitor to the booking page.
+// It does not write to the database: payments are matched to bookings in
+// Stripe by the payer's email.
+const DAY_ICONS = { 'sign-in': LogIn, 'pick-up': UserCheck, helmet: HardHat, water: GlassWater };
+
 const Content = () => {
+    const [params] = useSearchParams();
+    const picked = getSession(params.get('session'));
+    const shown = picked && picked.payToBook ? [picked] : SESSION_VIEW.filter((s) => s.payToBook);
+
     useEffect(() => {
         window.scrollTo(0, 0);
-        document.title = `Payment Received | Junior Session with ${SID_NAME}`;
+        document.title = `Payment Received | Junior Sessions with ${SID_NAME}`;
         const meta = document.createElement('meta');
         meta.name = 'robots';
         meta.content = 'noindex,nofollow';
         document.head.appendChild(meta);
         return () => { document.head.removeChild(meta); };
     }, []);
-
-    const dayIcons = { 'sign-in': LogIn, 'pick-up': UserCheck, helmet: HardHat, water: GlassWater };
-    const details = [
-        { icon: CalendarDays, text: `${SESSION.dateLabel}, ${SESSION.timeLabel}` },
-        { icon: MapPin, text: `${SESSION.venue}, ${SESSION.address}` },
-        // Sign-in (once confirmed), pick-up, helmet and water: the same lines as the page.
-        ...ON_THE_DAY.map(({ key, text }) => ({ icon: dayIcons[key] || UserCheck, text })),
-    ];
 
     return (
         <div className="min-h-screen bg-rr-dark text-white font-sans flex flex-col items-center px-6 py-16 sm:py-20 relative overflow-hidden">
@@ -53,7 +51,7 @@ const Content = () => {
                         initial="hidden" animate="visible" variants={fadeUp} custom={0.05}
                         className="text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] text-rr-pink mb-4"
                     >
-                        Junior Session with {SID_NAME}
+                        Junior Sessions with {SID_NAME}
                     </motion.p>
                     <motion.h1
                         initial="hidden" animate="visible" variants={fadeUp} custom={0.1}
@@ -73,23 +71,40 @@ const Content = () => {
                     initial="hidden" animate="visible" variants={fadeUp} custom={0.2}
                     className="bg-white/5 border border-white/12 rounded-2xl p-6 sm:p-8 mt-10"
                 >
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-rr-pink mb-5">The Session</p>
-                    <ul className="space-y-4">
-                        {details.map(({ icon: Icon, text }) => (
-                            <li key={text} className="flex items-start gap-3">
-                                <Icon className="w-4 h-4 text-rr-pink shrink-0 mt-1" />
-                                <span className="text-white/75 text-[15px] font-medium leading-relaxed">{text}</span>
-                            </li>
-                        ))}
+                    {shown.map((s) => (
+                        <div key={s.key} className="mb-6 pb-6 border-b border-white/10 last:mb-0 last:pb-0 last:border-b-0">
+                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-rr-pink mb-4">{s.centreName}</p>
+                            <ul className="space-y-3">
+                                <li className="flex items-start gap-3">
+                                    <CalendarDays className="w-4 h-4 text-rr-pink shrink-0 mt-1" />
+                                    <span className="text-white/75 text-[15px] font-medium leading-relaxed">{s.dateLabel}, {s.timeLabel}</span>
+                                </li>
+                                <li className="flex items-start gap-3">
+                                    <MapPin className="w-4 h-4 text-rr-pink shrink-0 mt-1" />
+                                    <span className="text-white/75 text-[15px] font-medium leading-relaxed">{s.venue}, {s.address}</span>
+                                </li>
+                            </ul>
+                            <a
+                                href={s.mapsUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1.5 text-rr-light-pink hover:text-white text-sm font-bold mt-3 underline underline-offset-4"
+                            >
+                                <Navigation className="w-3.5 h-3.5" /> Get directions
+                            </a>
+                        </div>
+                    ))}
+                    <ul className="space-y-3 mt-6 pt-6 border-t border-white/10">
+                        {ON_THE_DAY.map(({ key, icon, text }) => {
+                            const Icon = DAY_ICONS[icon] || UserCheck;
+                            return (
+                                <li key={key} className="flex items-start gap-3">
+                                    <Icon className="w-4 h-4 text-rr-pink shrink-0 mt-1" />
+                                    <span className="text-white/75 text-[15px] font-medium leading-relaxed">{text}</span>
+                                </li>
+                            );
+                        })}
                     </ul>
-                    <a
-                        href={MAPS_URL}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 text-rr-light-pink hover:text-white text-sm font-bold mt-4 underline underline-offset-4"
-                    >
-                        <Navigation className="w-3.5 h-3.5" /> Get directions
-                    </a>
                     <p className="text-white/55 text-sm font-medium leading-relaxed mt-5 pt-5 border-t border-white/10">
                         {SID_CAVEAT}
                     </p>
@@ -130,6 +145,6 @@ const Content = () => {
     );
 };
 
-const SidJuniorsSuccess = () => (PAY_TO_BOOK ? <Content /> : <Navigate to={ROUTE} replace />);
+const SidJuniorsSuccess = () => (ANY_PAY_TO_BOOK ? <Content /> : <Navigate to={ROUTE} replace />);
 
 export default SidJuniorsSuccess;

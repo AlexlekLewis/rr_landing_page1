@@ -7,9 +7,9 @@ import {
 } from './sidJuniorsData';
 
 // Who looks after the players, and what a parent needs to know on the day.
-// Every line comes from the safeguarding review (27 September 2026) via
-// sidJuniorsData.js: the coach names and the number of places render from
-// config, and the sign-in line only appears once a time is confirmed.
+// Every line comes from sidJuniorsData.js: the number of places renders from
+// each session's config, and a sign-in line only appears once that session's
+// time is confirmed. Coach names are not published.
 const DAY_ICONS = {
     'sign-in': LogIn,
     'pick-up': UserCheck,
@@ -46,8 +46,8 @@ const SidJuniorsSupervision = () => (
                 >
                     <p className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-rr-pink mb-5">On The Day</p>
                     <ul className="space-y-5">
-                        {ON_THE_DAY.map(({ key, text }) => {
-                            const Icon = DAY_ICONS[key] || ShieldCheck;
+                        {ON_THE_DAY.map(({ key, icon, text }) => {
+                            const Icon = DAY_ICONS[icon] || ShieldCheck;
                             return (
                                 <li key={key} className="flex items-start gap-3.5">
                                     <Icon className="w-5 h-5 text-rr-pink shrink-0 mt-0.5" />

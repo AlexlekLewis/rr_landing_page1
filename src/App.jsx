@@ -71,7 +71,8 @@ const PerformanceSquadsWelcomeSuccess = React.lazy(() => import('./components/pe
 // Performance Squad at Cranbourne North, headlined by Sid Lahiri, Performance
 // Coach of the Rajasthan Royals. Public and indexed, unlike /performance-squads.
 const OpenAgeTrial = React.lazy(() => import('./components/open-age-trial/OpenAgeTrial'));
-// Junior session with Sid Lahiri — Mon 5 Oct 2026, 4:30–5:30pm, Mickleham.
+// Junior sessions with Siddhartha Lahiri — Cranbourne North Sun 4 Oct (1:00–2:30pm)
+// and Mickleham Mon 5 Oct (4:30–5:30pm), 2026.
 // Every fact and unconfirmed default lives in components/sid-juniors/sidJuniorsData.js.
 // /success only exists for pay-to-book; until a payment link is set it
 // redirects back to the booking page.
@@ -256,8 +257,8 @@ function App() {
 
         <Route path="/performance-squads-open-trial" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><OpenAgeTrial /></React.Suspense>} />
 
-        {/* Junior session with Sid Lahiri at Mickleham, Mon 5 Oct. Public, linked
-            from the all-families email. */}
+        {/* Junior sessions with Siddhartha Lahiri at Cranbourne North (Sun 4 Oct)
+            and Mickleham (Mon 5 Oct). Public, linked from the all-families email. */}
         <Route path="/sid-juniors" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><SidJuniors /></React.Suspense>} />
         <Route path="/sid-juniors/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><SidJuniorsSuccess /></React.Suspense>} />
 

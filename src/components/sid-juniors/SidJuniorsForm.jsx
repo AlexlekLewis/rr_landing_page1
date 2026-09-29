@@ -7,37 +7,30 @@ import {
     fadeUp, SectionHeading, FieldError, inputClass, PSCheckbox,
 } from '../performance-squads/shared';
 import {
-    DB, PAY_TO_BOOK, BOOKING_STATE, PAYMENT_LINK, PRICE, MIN_AGE, MAX_AGE, AGE_RANGE,
+    DB_TABLE, SESSION_VIEW, PAGE_STATE, STATE_BADGE, getSession, MIN_AGE, MAX_AGE, AGE_RANGE,
     FORM_COPY, FULL_COPY, CLOSED_COPY, NOTES_FIELD, PHOTO_CONSENT, SID_CAVEAT, CONTACT_EMAIL,
+    submitCopyFor,
 } from './sidJuniorsData';
 
-// Booking section for /sid-juniors. What it renders depends on
-// sidJuniorsData.BOOKING_STATE:
+// Booking section for /sid-juniors. What it renders depends on PAGE_STATE in
+// sidJuniorsData.js:
 //
-//   closed — the safeguarding gate is shut (coaches not confirmed, or the
-//            capacity does not add up). No form, just when places open.
-//   full   — closed by hand. No form.
-//   open   — the form, in one of two modes (UNCONFIRMED.paymentLink):
-//     BOOKING REQUEST (no link) — saves the details, takes no money, and says
-//     plainly that no payment has been taken and no place is held.
-//     PAY TO BOOK (link set) — saves the details first, then sends the parent
-//     to Stripe in the SAME tab. Same reason as every sibling payment step:
-//     the Instagram in-app browser silently refuses to open a new tab.
-//     Nothing is lost by leaving, because the row is already saved.
+//   open   — the form, while at least one session takes bookings. The parent
+//            must choose a session; a session that is closed or full is shown
+//            but cannot be chosen.
+//   closed — no session is taking bookings yet. No form, just when places open.
+//   full   — every session is full. No form.
 //
-// Writes ONLY to match_registrations. No dual insert into `applications`:
-// the closest siblings (open age trial, match registration) don't do one,
-// and every `applications` insert fires the Elite pipeline, a Google Sheet
-// push and a Zapier hook — places the health notes must never go.
+// Each session is either a BOOKING REQUEST (no payment link: the details are
+// saved, no money is taken, and the page says so) or PAY TO BOOK (details are
+// saved first, then the parent goes to Stripe in the SAME tab, because the
+// Instagram in-app browser silently refuses to open a new tab).
 //
-// The insert never chains .select(): anon may insert but not read, so asking
-// for the row back would fail AFTER the row was written, and the parent would
-// be told it failed when it had not.
+// One row per booking in match_registrations, tagged with the session's slug.
+// The insert never chains .select(): the row cannot be read back from the
+// browser, so asking for it would report a failure after the row was saved.
 
-// ── Anti-bot, as on the open age trial. The table's only policy lets the
-// browser's anon key insert freely, and nothing here calls a paid service,
-// so the risk is junk rows, not a bill. A honeypot plus a per-browser
-// throttle stops the cheap scripted kind.
+// ── Anti-bot, as on the open age trial: a honeypot plus a per-browser throttle.
 const THROTTLE_KEY = 'sid_juniors_last_submit';
 const THROTTLE_MS = 20 * 1000;
 const HOURLY_KEY = 'sid_juniors_submits_hour';
@@ -111,11 +104,11 @@ const ageError = (raw) => {
     if (!v) return "Please enter the player's age";
     const age = Number(v);
     if (!Number.isInteger(age)) return 'Please enter the age in whole years, for example 10';
-    if (age < MIN_AGE || age > MAX_AGE) return `This session is for players aged ${AGE_RANGE}.`;
+    if (age < MIN_AGE || age > MAX_AGE) return `These sessions are for players aged ${AGE_RANGE}.`;
     return null;
 };
 
-const EMPTY_PLAYER = { player_name: '', player_age: '', club: '', notes: '' };
+const EMPTY_PLAYER = { session: '', player_name: '', player_age: '', club: '', notes: '' };
 // Every agreement and both photo answers start unticked, and are asked again
 // for each player rather than carried over.
 const EMPTY_CONSENTS = {
@@ -147,7 +140,7 @@ const Notice = ({ eyebrow, title, children }) => (
     </section>
 );
 
-// ── The safeguarding gate is shut: no form, and no dead end either. ──
+// ── No session is taking bookings yet: no form, and no dead end either. ──
 const ClosedNotice = () => (
     <Notice eyebrow={CLOSED_COPY.eyebrow} title={CLOSED_COPY.title}>
         <CalendarClock className="w-8 h-8 text-rr-pink mx-auto mb-4" />
@@ -158,7 +151,7 @@ const ClosedNotice = () => (
     </Notice>
 );
 
-// ── Closed by hand once the session is at capacity. ──
+// ── Every session is full. ──
 const FullNotice = () => (
     <Notice eyebrow={FULL_COPY.eyebrow} title={FULL_COPY.title}>
         <p className="text-white/75 text-[15px] font-medium leading-relaxed mb-5">{FULL_COPY.body}</p>
@@ -169,11 +162,58 @@ const FullNotice = () => (
     </Notice>
 );
 
+// ── The session choice. Required; only sessions taking bookings can be chosen. ──
+const SessionChoice = ({ value, onChoose, error }) => (
+    <div id="sj-session" className="mb-8">
+        <p id="sj-session-label" className="block text-white/70 text-xs font-bold uppercase tracking-wider mb-2 text-left">
+            Which session? <span className="text-rr-pink">*</span>
+        </p>
+        <div role="radiogroup" aria-labelledby="sj-session-label" className="grid sm:grid-cols-2 gap-3">
+            {SESSION_VIEW.map((s) => {
+                const selectable = s.state === 'open';
+                const picked = value === s.key;
+                return (
+                    <button
+                        key={s.key}
+                        type="button"
+                        role="radio"
+                        aria-checked={picked}
+                        aria-disabled={!selectable}
+                        disabled={!selectable}
+                        onClick={() => selectable && onChoose(s.key)}
+                        className={`w-full flex items-start gap-3 text-left rounded-xl border px-4 py-3.5 transition-colors ${picked
+                            ? 'bg-rr-pink/15 border-rr-pink'
+                            : selectable
+                                ? `bg-white/5 ${error ? 'border-rr-pink' : 'border-white/15'} hover:border-rr-pink/60`
+                                : 'bg-white/[0.03] border-white/10 cursor-not-allowed opacity-60'}`}
+                    >
+                        <span className={`mt-1 w-4 h-4 rounded-full border-2 shrink-0 flex items-center justify-center ${picked ? 'border-rr-pink' : 'border-white/35'}`}>
+                            {picked && <span className="w-2 h-2 rounded-full bg-rr-pink" />}
+                        </span>
+                        <span className="min-w-0">
+                            <span className="block text-white font-black uppercase text-sm tracking-wide">{s.centreName}</span>
+                            <span className="block text-white/75 text-sm font-medium">{s.dayLabel}</span>
+                            <span className="block text-white/75 text-sm font-medium whitespace-nowrap">{s.timeLabel}</span>
+                            <span className="block text-white/45 text-xs font-medium mt-0.5">{s.venue}</span>
+                            {!selectable && (
+                                <span className="inline-block mt-1.5 text-[10px] font-black uppercase tracking-wider text-amber-200/80">
+                                    {STATE_BADGE[s.state]}
+                                </span>
+                            )}
+                        </span>
+                    </button>
+                );
+            })}
+        </div>
+        <FieldError msg={error} />
+    </div>
+);
+
 const BookingForm = () => {
     const [form, setForm] = useState(EMPTY);
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
-    const [done, setDone] = useState(null); // { firstName, email } once saved
+    const [done, setDone] = useState(null); // { firstName, email, sessionKey } once saved
     const doneRef = useRef(null);
 
     // The long form collapses into a short card, so bring the card into view
@@ -185,9 +225,13 @@ const BookingForm = () => {
     const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
     const toggle = (key) => setForm((f) => ({ ...f, [key]: !f[key] }));
     const ic = (key) => inputClass(errors, key);
+    const chosen = getSession(form.session);
+    const submitCopy = submitCopyFor(chosen);
 
     const validate = () => {
         const next = {};
+        if (!chosen) next.session = 'Please choose a session';
+        else if (chosen.state !== 'open') next.session = 'That session is not taking bookings. Please choose another.';
         if (!form.player_name.trim()) next.player_name = "Please enter the player's name";
         const ageMsg = ageError(form.player_age);
         if (ageMsg) next.player_age = ageMsg;
@@ -216,10 +260,11 @@ const BookingForm = () => {
 
         const firstName = form.player_name.trim().split(/\s+/)[0];
         const email = form.email.trim().toLowerCase();
+        const s = chosen;
 
         // A filled honeypot means a script. Same success card, nothing written.
         if (isHoneypotTripped(form.company)) {
-            setDone({ firstName, email });
+            setDone({ firstName, email, sessionKey: s.key });
             return;
         }
         const held = throttleCheck();
@@ -231,20 +276,19 @@ const BookingForm = () => {
         setErrors({});
         setSubmitting(true);
         try {
-            const { error } = await supabase.from(DB.table).insert([
+            const { error } = await supabase.from(DB_TABLE).insert([
                 {
-                    match_slug: PAY_TO_BOOK ? DB.slug : DB.requestSlug,
-                    match_name: DB.name,
+                    // The slug records WHICH session this booking is for.
+                    match_slug: s.payToBook ? s.dbSlug : s.requestSlug,
+                    match_name: s.dbName,
                     player_name: form.player_name.trim(),
                     player_age: Number(form.player_age.trim()),
-                    // Every player here is 8 to 14, so the contact of record is
+                    // Every player here is 8 to 16, so the contact of record is
                     // always the parent or guardian's.
                     parent_name: form.parent_name.trim(),
                     email,
                     phone: form.phone.trim(),
                     club: form.club.trim() || null,
-                    // May hold health information. It goes to this table and
-                    // nowhere else: no webhook, no sheet, no `applications` row.
                     notes: form.notes.trim() || null,
                     accept_terms: form.accept_terms,
                     accept_player_code: form.accept_player_code,
@@ -253,14 +297,14 @@ const BookingForm = () => {
                     accept_royals_media: form.accept_royals_media,
                     // Nothing is owed until a place is confirmed, so a booking
                     // request carries no amount.
-                    amount: PAY_TO_BOOK ? PRICE : null,
+                    amount: s.payToBook ? s.price : null,
                     page_referrer: document.referrer || null,
                     ...collectUtm(),
                 },
             ]);
             if (error) throw error;
             throttleRecord();
-            setDone({ firstName, email });
+            setDone({ firstName, email, sessionKey: s.key });
         } catch (err) {
             console.error('Sid juniors booking error:', err);
             setErrors({
@@ -272,13 +316,17 @@ const BookingForm = () => {
     };
 
     // Another player in the same family: keep the parent's details, clear the
-    // player's, and ask for the agreements again rather than pre-ticking them.
+    // player's (session included), and ask for the agreements again rather
+    // than pre-ticking them.
     const addAnother = () => {
         setForm((f) => ({ ...f, ...EMPTY_PLAYER, ...EMPTY_CONSENTS, company: '' }));
         setErrors({});
         setDone(null);
-        setTimeout(() => document.getElementById('sj-in-player_name')?.focus(), 50);
+        setTimeout(() => document.getElementById('sj-session-label')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
     };
+
+    const doneSession = done ? getSession(done.sessionKey) : null;
+    const sessionLine = doneSession ? `${doneSession.centreName} on ${doneSession.dayLabel}, ${doneSession.timeLabel}` : '';
 
     return (
         <section className="py-20 px-5">
@@ -289,7 +337,7 @@ const BookingForm = () => {
                     sub={done ? undefined : FORM_COPY.sub}
                 />
 
-                {done && PAY_TO_BOOK && (
+                {done && doneSession?.payToBook && (
                     <motion.div
                         ref={doneRef}
                         initial="hidden" animate="visible" variants={fadeUp} custom={0}
@@ -300,15 +348,15 @@ const BookingForm = () => {
                         </div>
                         <h3 className="text-2xl font-black uppercase mb-3">Details Received</h3>
                         <p className="text-white/75 text-[15px] font-medium leading-relaxed mb-6">
-                            One more step: pay ${PRICE} to book {done.firstName}&apos;s place. The place is
-                            not booked until the payment goes through.
+                            One more step: pay ${doneSession.price} to book {done.firstName}&apos;s place at {sessionLine}.
+                            The place is not booked until the payment goes through.
                         </p>
                         {/* DO NOT add target="_blank". Same tab, on purpose (see top). */}
                         <a
-                            href={PAYMENT_LINK}
+                            href={doneSession.paymentLink}
                             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
                         >
-                            <CreditCard className="w-4 h-4" /> Pay ${PRICE} Now
+                            <CreditCard className="w-4 h-4" /> Pay ${doneSession.price} Now
                         </a>
                         <p className="text-white/50 text-sm font-medium leading-relaxed mt-5">
                             At checkout, use <span className="text-white/80">{done.email}</span> so we can
@@ -317,7 +365,7 @@ const BookingForm = () => {
                     </motion.div>
                 )}
 
-                {done && !PAY_TO_BOOK && (
+                {done && !doneSession?.payToBook && (
                     <motion.div
                         ref={doneRef}
                         initial="hidden" animate="visible" variants={fadeUp} custom={0}
@@ -328,7 +376,7 @@ const BookingForm = () => {
                         </div>
                         <h3 className="text-2xl font-black uppercase mb-3 text-center">Booking Request Received</h3>
                         <p className="text-white/85 text-[15px] font-bold leading-relaxed mb-6 text-center">
-                            Thanks, we have {done.firstName}&apos;s details.
+                            Thanks, we have {done.firstName}&apos;s details for {sessionLine}.
                         </p>
                         <ul className="space-y-3.5">
                             {[
@@ -370,6 +418,15 @@ const BookingForm = () => {
                     >
                         <Honeypot value={form.company} onChange={set('company')} />
 
+                        <SessionChoice
+                            value={form.session}
+                            onChoose={(key) => {
+                                setForm((f) => ({ ...f, session: key }));
+                                if (errors.session) setErrors((er) => ({ ...er, session: undefined }));
+                            }}
+                            error={errors.session}
+                        />
+
                         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-rr-pink mb-5">Player</p>
                         <div className="grid sm:grid-cols-2 gap-4 mb-4">
                             <div id="sj-player_name">
@@ -383,7 +440,7 @@ const BookingForm = () => {
                                 <FieldLabel htmlFor="sj-in-player_age" required hint={`(${AGE_RANGE})`}>Player Age</FieldLabel>
                                 <input id="sj-in-player_age" type="text" inputMode="numeric" maxLength={2}
                                     value={form.player_age} onChange={set('player_age')}
-                                    placeholder="e.g. 10" className={ic('player_age')} />
+                                    placeholder="e.g. 12" className={ic('player_age')} />
                                 <FieldError msg={errors.player_age} />
                             </div>
                         </div>
@@ -405,7 +462,7 @@ const BookingForm = () => {
 
                         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-rr-pink mb-2">Parent or Guardian</p>
                         <p className="text-white/50 text-[13px] font-medium leading-relaxed mb-5">
-                            Every player at this session is under 18, so these are the details we use to
+                            Every player at these sessions is under 18, so these are the details we use to
                             confirm the place and to tell you about any change to the session. At pick-up we
                             release the player only to the person named here.
                         </p>
@@ -486,11 +543,11 @@ const BookingForm = () => {
                             disabled={submitting}
                             className="w-full mt-7 inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-wider text-[13px] sm:text-sm rounded-full px-5 sm:px-8 py-4 transition-colors"
                         >
-                            {submitting ? 'Sending…' : FORM_COPY.submit}
+                            {submitting ? 'Sending…' : submitCopy.submit}
                             {!submitting && <ArrowRight className="w-4 h-4" />}
                         </button>
                         <p className="text-white/40 text-xs font-medium text-center mt-4 leading-relaxed">
-                            {FORM_COPY.footnote}
+                            {submitCopy.footnote}
                         </p>
                     </motion.form>
                 )}
@@ -501,8 +558,8 @@ const BookingForm = () => {
 
 // The one thing #register-pay renders.
 const SidJuniorsForm = () => {
-    if (BOOKING_STATE === 'closed') return <ClosedNotice />;
-    if (BOOKING_STATE === 'full') return <FullNotice />;
+    if (PAGE_STATE === 'closed') return <ClosedNotice />;
+    if (PAGE_STATE === 'full') return <FullNotice />;
     return <BookingForm />;
 };
 
