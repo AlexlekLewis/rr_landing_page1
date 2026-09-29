@@ -13,9 +13,10 @@ import ITReadingToggle from './ITReadingToggle';
 import { getCopy, useReadingMode } from './itCopy';
 
 const META_DESCRIPTION =
-    'High Performance Centre Camp — a Rajasthan Royals Academy Melbourne squad trains at the Royals ' +
-    'High Performance Centre in Nagpur, India. Six full days of coaching. $2,100 for current academy ' +
-    'players, $2,700 for players new to us, plus flights. Register your interest in the next tour.';
+    'High Performance Centre Camp — two Rajasthan Royals Academy Melbourne tours to the Royals High ' +
+    'Performance Centre in Nagpur, India: late December 2026 to early January 2027, and April 2027. ' +
+    'About 10 days each, estimated at $7,000 to $8,000 per player. Register your interest in one tour ' +
+    'or both.';
 
 // Any ?ref= code is still captured for attribution, but it no longer gates the
 // page — this is a public program page now.

@@ -26,8 +26,8 @@ const COACHES = [
         role: 'Head of International Player Development and Performance Coach, Rajasthan Royals',
         image: '/assets/rra/sid-lahiri-profile.png',
         bio:
-            'Sid leads the camp. He heads the Royals\' academies worldwide, coaches batting for ' +
-            'Birmingham Phoenix, and oversees the Rajasthan Royals Academy Melbourne.',
+            'Sid coached our first touring group in Nagpur in September 2026. He also coaches batting ' +
+            'for Birmingham Phoenix and oversees the Rajasthan Royals Academy Melbourne.',
         // No quote while the page is time-neutral. Sid's 2026 quote is tied to its moment
         // ("In March this year…", "welcoming players from Australia for the first time"),
         // and a person's words can't be edited to fit. Ask Sid for a fresh line for the next
@@ -42,8 +42,7 @@ const COACHES = [
         image: '/assets/rra/romi-bhinder.png',
         bio:
             'Romi lives at the High Performance Centre and trains the Royals players there all year ' +
-            'round. He is the legal guardian of Vaibhav Sooryavanshi. Six days working with a coach at ' +
-            'the cutting edge of the game is the rarest part of this camp.',
+            'round. He is the legal guardian of Vaibhav Sooryavanshi.',
     },
     {
         name: 'Faiz Fazal',
@@ -54,12 +53,22 @@ const COACHES = [
             'first-class career to the panel, with batting and leadership his focus.',
     },
     {
+        // Added 29 Sep 2026 (Alex): he coached our first touring group, in September
+        // 2026, alongside Faiz Fazal. There is no headshot on file yet, so the card
+        // shows his initials. Say nothing about him beyond what Alex has confirmed.
+        name: 'Siddharth Trivedi',
+        role: 'Former Rajasthan Royals Fast Bowler',
+        bio:
+            'He played for the Rajasthan Royals as a fast bowler, and coached our first touring group ' +
+            'at the centre in September 2026.',
+    },
+    {
         name: 'Somi Bhinder',
         role: 'Resident Fast Bowling Coach',
         image: '/assets/rra/somi-bhinder.jpg',
         bio:
-            'A former fast bowler and coach, Somi is the centre\'s resident fast bowling coach — there ' +
-            'every day, not flown in for the week.',
+            'A former fast bowler and coach, Somi is the centre\'s resident fast bowling coach. He is ' +
+            'there every day, not flown in for a visit.',
     },
     {
         name: 'Dr Neeta Adhau',
@@ -84,7 +93,7 @@ const ITCoaching = ({ copy }) => (
                     viewport={{ once: true }}
                     className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3"
                 >
-                    The Royals’ Own High Performance Staff
+                    In Nagpur, September 2026
                 </motion.p>
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
@@ -93,7 +102,7 @@ const ITCoaching = ({ copy }) => (
                     transition={{ delay: 0.05 }}
                     className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none"
                 >
-                    Coached By The <span className="text-rr-pink">Club Itself</span>
+                    Who Coached <span className="text-rr-pink">Our First Tour</span>
                 </motion.h2>
                 <div className="w-12 h-px bg-gradient-to-r from-rr-pink to-rr-blue mx-auto my-5" />
                 <motion.p
@@ -103,9 +112,9 @@ const ITCoaching = ({ copy }) => (
                     transition={{ delay: 0.1 }}
                     className="text-base md:text-lg text-rr-charcoal font-medium leading-relaxed"
                 >
-                    These are not academy staff, and they are not guests brought in for the week. This is
-                    the Rajasthan Royals&rsquo; own high performance team — the people who prepare an IPL
-                    squad, and who are at the Nagpur centre year round. For six days they coach your player.
+                    These coaches worked with our first touring group at the Royals&rsquo; High Performance
+                    Centre in Nagpur, in September 2026. Some of them work at the centre all year, coaching
+                    the Royals&rsquo; own players. Who coaches each new tour is not set yet.
                 </motion.p>
             </div>
 

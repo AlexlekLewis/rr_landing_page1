@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import heroImg from '../../assets/india-tour-2026/hero-coaching.jpg';
-import { getTiers, fmtAUD, FLIGHT_ESTIMATE_AUD, CAMP_PDF, TOUR_STATUS, REGISTRATIONS_CLOSE_AT } from './itCopy';
+import { TOURS, PRICE_ESTIMATE_AUD, fmtRangeAUD, CAMP_PDF, TOUR_STATUS, REGISTRATIONS_CLOSE_AT } from './itCopy';
 import ITCountdown from './ITCountdown';
 
 const scrollToRegister = () =>
@@ -28,48 +28,38 @@ const HERO_IMG_ALT =
     'in Nagpur';
 
 const ITHero = ({ copy }) => {
-    const tiers = getTiers(copy);
     const c = copy.hero;
     const closed = TOUR_STATUS === 'closed';
     // The clock slot shows a countdown, or the closed notice. With no deadline
     // and the page open (a standing EOI) there is nothing to show, so no gap either.
     const showClock = closed || Boolean(REGISTRATIONS_CLOSE_AT);
 
+    // The estimate, up front. It always travels with "estimate" and "per player",
+    // and with the promise that the exact price and inclusions come in writing
+    // before anyone commits: a bare "$7,000–$8,000" would read as a quote.
     const priceBand = (
         <>
             <p className="text-[11px] font-bold text-rr-pink uppercase tracking-[0.25em]">
-                {c.costLabel}
+                {c.priceLabel}
             </p>
 
-            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
-                {tiers.map((t, i) => (
-                    <div key={t.key} className={i > 0 ? 'sm:pl-6 sm:border-l sm:border-white/20' : undefined}>
-                        <p className="flex items-baseline gap-2">
-                            <span className="text-3xl md:text-4xl font-black text-white leading-none">
-                                {fmtAUD(t.price)}
-                            </span>
-                            <span className="text-[11px] font-bold text-white/70 uppercase tracking-widest">
-                                incl GST
-                            </span>
-                        </p>
-                        <p className="text-sm text-white/75 font-medium leading-snug mt-2">{t.heroWho}</p>
-                    </div>
-                ))}
-            </div>
-
-            <p className="text-sm text-white/70 font-medium leading-relaxed mt-5">
-                <strong className="text-white">{c.flightsLead}</strong> {c.flights}
-                {FLIGHT_ESTIMATE_AUD && c.flightsEstimate && (
-                    <> <span className="text-white">{c.flightsEstimate(FLIGHT_ESTIMATE_AUD)}</span></>
-                )}
+            <p className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <span className="text-3xl md:text-4xl font-black text-white leading-none">
+                    {fmtRangeAUD(PRICE_ESTIMATE_AUD)}
+                </span>
+                <span className="text-[11px] font-bold text-white/70 uppercase tracking-widest">
+                    {c.priceUnit}
+                </span>
             </p>
+
+            <p className="text-sm text-white/75 font-medium leading-relaxed mt-3">{c.priceNote}</p>
 
             <button
                 onClick={scrollToPricing}
                 data-cta="hero-see-pricing"
                 className="mt-3 -ml-1 px-1 py-3 text-sm font-bold text-rr-pink hover:text-white uppercase tracking-widest inline-flex items-center gap-2 transition-colors"
             >
-                {c.seeIncluded}
+                {c.seePrice}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                 </svg>
@@ -119,6 +109,30 @@ const ITHero = ({ copy }) => {
                 </span>
             </motion.div>
 
+            {/* The two tours, named by their windows (exact dates are not set). Same
+                flex order as the dateline, so it always sits straight under it. */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: 'easeOut', delay: 0.18 }}
+                className="order-3 mt-5 max-w-xl"
+            >
+                <p className="text-[11px] font-bold text-rr-pink uppercase tracking-[0.25em]">
+                    {c.toursLabel}
+                </p>
+                <ul className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {TOURS.map((t) => (
+                        <li key={t.id} className="rounded-xl border border-white/20 bg-white/5 px-4 py-3">
+                            <span className="block text-base font-black text-white leading-snug">{t.window}</span>
+                            <span className="block text-[11px] font-bold text-white/60 uppercase tracking-widest mt-1">
+                                {c.tourLength}
+                            </span>
+                        </li>
+                    ))}
+                </ul>
+                <p className="text-sm text-white/70 font-medium leading-relaxed mt-3">{c.toursNote}</p>
+            </motion.div>
+
             {showClock && (
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -139,8 +153,7 @@ const ITHero = ({ copy }) => {
                 {c.lead}
             </motion.p>
 
-            {/* Costs, up front. Each number carries its tier and the flights caveat —
-                a bare "$2,100" here would mean nothing to someone reading cold. */}
+            {/* The estimated price, up front, always labelled as an estimate. */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

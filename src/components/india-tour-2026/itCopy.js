@@ -1,5 +1,6 @@
 // ---------------------------------------------------------------------------
-// India Tour — page copy, in two reading levels. Time-neutral: no dates.
+// India Tour — page copy, in two reading levels. Two upcoming tours, named by
+// their windows only: exact dates are not set (Alex, 29 Sep 2026).
 //
 //   simple   : *** THE LIVE COPY — Alex picked this one, 5 Aug 2026. ***
 //              Written so a 10-year-old can read it and a busy parent can scan
@@ -13,36 +14,52 @@
 // voice; ?read=simple forces simple. When either parameter is present a small
 // toggle appears so the two can still be compared side by side.
 //
-// PRICES LIVE HERE ONCE. Both variants and the form read them, so a price can
-// never be updated in one place and stale in another.
+// THE TOURS AND THE PRICE LIVE HERE ONCE. The hero, the pricing section and the
+// form all read them, so nothing can be updated in one place and stale in another.
 // ---------------------------------------------------------------------------
 
 import { useEffect, useState } from 'react';
 
-export const TIER_KEYS = ['royals_program', 'external'];
+// The two upcoming tours to the Rajasthan Royals High Performance Centre in
+// Nagpur (Alex, 29 Sep 2026). Exact dates are NOT set, so each tour is named by
+// its window and never by a date. `id` is what the form stores in
+// applications.tour_interest: keep the ids stable once families have registered
+// against them, because staff filter on them.
+export const TOURS = [
+    { id: '2026-12-late-dec-jan', window: 'Late December 2026 to early January 2027' },
+    { id: '2027-04-april', window: 'April 2027' },
+];
 
-export const TIER_PRICES = {
-    royals_program: 2100,
-    external: 2700,
-};
+// Each tour is about 10 days long (Alex, 29 Sep 2026). The page always says "about".
+export const TOUR_LENGTH_DAYS = 10;
 
-// Rough return airfare per player, as a RANGE (Alex, 5 Aug 2026: "between
-// fifteen hundred and two thousand"). Set to null to go back to the page saying
-// it will be confirmed later. It is always presented as an estimate, never as a
-// quote — the real figure lands with the group booking link.
-export const FLIGHT_ESTIMATE_AUD = { min: 1500, max: 2000 };
+// Estimated price per player, per tour (Alex, 29 Sep 2026). It is an ESTIMATE and
+// the page always says so: the exact price, and what it includes, are confirmed in
+// writing before anyone commits. Don't say what it covers (flights, accommodation,
+// meals…) until Alex has confirmed it.
+export const PRICE_ESTIMATE_AUD = { min: 7000, max: 8000 };
 
-// NOTE: there is deliberately no deposit here. Players pay their high
-// performance costs ($2,100 / $2,700) IN FULL UP FRONT once a place is
-// confirmed. Flights are paid separately via the group booking link when that
-// is sorted. Do not reintroduce deposit language on this page.
+// What the price covers is not confirmed yet, so the pricing section shows a
+// "confirmed with the price" note instead of an inclusions list. The `included`
+// and `notIncluded` lists below describe the SEPTEMBER 2026 camp (seven nights,
+// six coaching days) and are kept only as the record. When Alex confirms what the
+// new tours include, rewrite those lists for the new tours FIRST, then set this true.
+export const INCLUSIONS_CONFIRMED = false;
+
+// History: the September 2026 camp (19–26 Sep, now run) cost $2,100 for academy
+// players and $2,700 for players new to us, both incl GST, plus flights booked
+// through a group link. Those prices must not be shown for the new tours.
+
+// "Does your player already train with us?" The form still asks, as a plain
+// question with no price attached, and the answer is stored as a label.
+export const PLAYER_TYPE_KEYS = ['royals_program', 'external'];
 
 // Master switch for the page. 'open' takes expressions of interest; 'closed'
 // shuts the form, drops the register CTAs and shows the closed notice.
 //
-// Time-neutral since 27 Sep 2026 (Alex: "EOI with the same information but time
-// neutral"). The page takes interest for the NEXT tour, so it carries no dates
-// and no clock. The September 2026 camp's registrations closed on 12 Aug 2026.
+// From 27 Sep 2026 the page took interest with no dates at all. From 29 Sep 2026
+// it names the two upcoming tours by their windows (see TOURS). There is still no
+// deadline and no clock. The September 2026 camp's registrations closed on 12 Aug 2026.
 export const TOUR_STATUS = 'open';
 
 // Optional deadline for a dated registration window; the hero clock reads it.
@@ -73,32 +90,36 @@ export const PRODUCED_HERE = [
 ];
 
 export const fmtAUD = (n) => `$${Number(n).toLocaleString('en-AU')}`;
-// "$1,500–$2,000" — en dash, both sides signed so neither number reads as a total.
+// "$7,000–$8,000" — en dash, both sides signed so neither number reads as a total.
 export const fmtRangeAUD = (r) => `${fmtAUD(r.min)}–${fmtAUD(r.max)}`;
 
 // --- standard -------------------------------------------------------------
 
 const STANDARD = {
     hero: {
-        badge: 'A Small Squad · Limited Places',
+        badge: 'Expressions Of Interest Open',
         h1: 'High Performance',
         h1Accent: 'Centre Camp',
         kicker: 'Rajasthan Royals Academy',
-        dateline: 'Nagpur, India · Next tour dates to be announced',
+        dateline: 'Nagpur, India · Two\u00a0Tours',
+        toursLabel: 'The two tours',
+        tourLength: `About ${TOUR_LENGTH_DAYS} days`,
+        toursNote:
+            'Exact dates are not set yet. Register your interest now in one tour or both, and we will ' +
+            'write to you when they are.',
         lead:
-            'Six days inside the Rajasthan Royals\' talent factory in Nagpur — the franchise\'s own High ' +
-            'Performance Centre, and the place that built the games of Sanju Samson, Yashasvi Jaiswal, ' +
-            'Dhruv Jurel and Riyan Parag. It is where Vaibhav Sooryavanshi trains, alongside the ' +
-            'coach who is his legal guardian. Every session is taken by the Royals\' own high performance ' +
-            'staff, and places are capped.',
-        costLabel: 'What it costs — per player',
-        flights:
-            'We book the whole squad on the same flights and send you a group booking link to pay for ' +
-            'your own player\'s seat.',
-        flightsLead: 'Flights are not included in either price.',
-        // Rendered only when FLIGHT_ESTIMATE_AUD is set.
-        flightsEstimate: (r) => `Allow roughly ${fmtRangeAUD(r)} per player on top for the return airfare.`,
-        seeIncluded: "See exactly what's included",
+            `A tour of about ${TOUR_LENGTH_DAYS} days to the Rajasthan Royals' talent factory in Nagpur — ` +
+            'the franchise\'s own High Performance Centre, and the place that built the games of Sanju ' +
+            'Samson, Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag. It is where Vaibhav Sooryavanshi ' +
+            'trains, alongside the coach who is his legal guardian. Our first touring group trained there ' +
+            'with the Royals\' own high performance staff in September 2026, and our Melbourne coaches ' +
+            'pick each touring squad.',
+        priceLabel: 'Estimated price',
+        priceUnit: 'per player',
+        priceNote:
+            `For each tour of about ${TOUR_LENGTH_DAYS} days. This is an estimate, not a final price: ` +
+            'before anyone commits, we confirm in writing the exact price and exactly what it includes.',
+        seePrice: 'How the price works',
         downloadLabel: 'Download the camp document',
         downloadSub: (size) => `PDF, ${size} — the full programme, coaches and itinerary`,
         cta: 'Register Your Interest',
@@ -108,12 +129,12 @@ const STANDARD = {
             'Once the clock runs out we close the list and our coaches pick the touring squad from ' +
             'everyone who registered.',
         ctaAfterCoaches: {
-            heading: 'Six days with these coaches',
-            body: 'Places are limited and the squad is confirmed by our coaches. Registering costs nothing and takes about two minutes.',
+            heading: 'Choose one tour or both',
+            body: 'Register your interest in the tour that suits you, or in both. It costs nothing, takes about two minutes and commits you to nothing. Our Melbourne coaches pick each touring squad from everyone who registers.',
         },
         ctaAfterPricing: {
             heading: 'Ready to put your player forward?',
-            body: 'Register your interest and, once the next tour has dates, we will come back to you in writing with the dates, your price, your place, and the flight booking link.',
+            body: 'Register your interest and, when a tour you picked has dates, we will write to you with the dates, the exact price, what it includes, and whether your player has a place.',
         },
         closedBadge: 'Applications Closed',
         closedHeading: 'Applications for this tour have closed',
@@ -133,9 +154,8 @@ const STANDARD = {
         headingAccent: 'Talent Factory',
         lead:
             'Academies run tours. Almost none of them get inside the building an IPL franchise actually ' +
-            'uses. A Rajasthan Royals Academy Melbourne squad spends seven nights at the ' +
-            'Royals\' High Performance Centre in Nagpur — six full coaching days, taken by the club\'s own ' +
-            'high performance staff.',
+            'uses. Each Rajasthan Royals Academy Melbourne tour goes to the Royals\' High Performance ' +
+            `Centre in Nagpur for about ${TOUR_LENGTH_DAYS} days.`,
         producedHereLabel: 'Built at this centre',
         points: [
             {
@@ -146,88 +166,41 @@ const STANDARD = {
                     'rebuilt their games here before playing for India.',
             },
             {
-                title: 'The club\'s coaches, not ours',
+                title: 'The club\'s own coaches',
                 body:
                     'The Rajasthan Royals team manager. A former India international and Ranji ' +
                     'Trophy-winning captain. The centre\'s resident fast bowling coach. The Royals\' ' +
-                    'performance psychologist. These are the people who coach the club\'s own players.',
+                    'performance psychologist. These are the people who coach the club\'s own players, and ' +
+                    'they coached our first touring group in September 2026.',
             },
             {
-                title: 'A small group, on purpose',
-                body:
-                    'The group is deliberately small so every player gets seen. Anyone can register; ' +
-                    'our coaches confirm the squad. Registering early gives you the best chance.',
+                title: 'How the squad is picked',
+                body: 'Anyone can register. Our Melbourne coaches pick each touring squad.',
             },
         ],
     },
 
     pricing: {
         eyebrow: 'What It Costs',
-        heading: 'Two Prices —',
-        headingAccent: "Here's Yours",
+        heading: `About ${fmtRangeAUD(PRICE_ESTIMATE_AUD)}`,
+        headingAccent: 'Per Player',
         intro:
-            'There are two prices for this tour, and which one applies to you depends on one thing ' +
-            'only: whether your player already trains in a Rajasthan Royals Academy Melbourne program. ' +
-            'Players already with us pay the lower of the two, because they pay into the academy across ' +
-            'the year.',
-        introEmphasis: 'Both groups do exactly the same camp',
-        introTail:
-            '— same accommodation, same IPL coaching staff, same sessions, same analysis. Nobody gets a ' +
-            'lesser version. What you are buying is not a camp fee; it is six days of access to a place ' +
-            'and a group of coaches that are otherwise closed.',
-        notSure:
-            'Not sure which one you are? Tell us in the form below and we will confirm your price in ' +
-            'writing before you pay anything.',
-        tiers: {
-            royals_program: {
-                eyebrow: 'For players already with us',
-                heading: 'RRA Program Player',
-                heroWho: 'If your player already trains in one of our programs',
-                who:
-                    'Your player is currently training in a Rajasthan Royals Academy Melbourne program — ' +
-                    'Junior Royals, the Academy Elite Program, or Power Pre-Season.',
-            },
-            external: {
-                eyebrow: 'For players joining us for the tour',
-                heading: 'New To The Academy',
-                heroWho: 'If your player is new to the academy',
-                who:
-                    'Your player does not currently train in one of our programs. They join the touring ' +
-                    'squad for the camp and train alongside our program players.',
-            },
-        },
-        priceNote:
-            'That is the total program fee — there is no tax or booking fee added on top. It is paid in ' +
-            'full, up front, once your player\'s place is confirmed. Flights are separate and are ' +
-            'explained below.',
-        perPlayer: 'per player, including GST',
-        thisIsYou: 'This is you if…',
-
-        flightsEyebrow: 'On Top Of The Program Fee',
-        flightsHeading: 'Flights To India',
-        flightsBody1:
-            'We want the whole squad on the same flights, arriving and leaving together, so we book the ' +
-            'group ourselves and then send you a group booking link. You use that link to pay for your ' +
-            'own player\'s seat directly — the money does not come to us, and you are not left hunting ' +
-            'for flights on your own.',
-        flightsBody2Unknown:
-            'We will confirm the exact return airfare, per player, at the same time as we send the group ' +
-            'booking link — so you will have the real number in front of you before you commit to it.',
-        flightsBody2Known: (r) =>
-            `As a guide, budget ${fmtRangeAUD(r)} per player for the return airfare between Melbourne ` +
-            'and Nagpur. That is an estimate, not a quote — airfares move, and we confirm the exact ' +
-            'figure when the group booking link goes out.',
-        flightsBody3:
-            'So your total outlay for the tour is the program fee above plus the airfare, and then the ' +
-            'few personal items listed under "what it does not cover". There is nothing else coming from us.',
-
+            `That is our estimate for each tour of about ${TOUR_LENGTH_DAYS} days, not a final price. ` +
+            'The dates and the final price are not set yet for either tour. Before anyone commits, we ' +
+            'confirm in writing the exact price and exactly what it includes.',
+        includesEyebrow: 'What the price includes',
+        includesHeading: 'Not Confirmed Yet',
+        includesBody:
+            'When we confirm the price for a tour, we will set out in writing exactly what it covers, ' +
+            'including whether flights are part of it, and anything you would need to pay for yourself. ' +
+            'You will have all of it before you decide.',
 
         pillarsEyebrow: 'Beyond The Boundary',
-        pillarsHeading: 'The Pro-Athlete',
-        pillarsHeadingAccent: 'Support System',
+        pillarsHeading: 'What A Professional',
+        pillarsHeadingAccent: 'Set-Up Covers',
         pillarsLead:
-            'A professional set-up does not just coach your batting. Four things are worked on at the ' +
-            'centre, every day, alongside the cricket.',
+            'A professional set-up coaches more than batting. The plan for our first tour, in September ' +
+            '2026, covered these four alongside the cricket.',
         pillars: [
             { title: 'Physical', body: 'Strength and conditioning, injury management, and physio-led rehabilitation fundamentals.' },
             { title: 'Mental', body: 'Focus, resilience, and handling match-day pressure under competitive stress.' },
@@ -235,20 +208,25 @@ const STANDARD = {
             { title: 'Tactical', body: 'Video analysis, player evaluation and individual tactical feedback.' },
         ],
 
-        itineraryEyebrow: 'Day By Day',
-        itineraryHeading: 'What The Week',
-        itineraryHeadingAccent: 'Actually Looks Like',
+        // The day-by-day below is the September 2026 camp's plan, shown as a guide to
+        // what a tour at the centre involves. The new tours are longer, so it is
+        // labelled as last time's plan, not as theirs.
+        itineraryEyebrow: 'September 2026',
+        itineraryHeading: 'Our First Tour,',
+        itineraryHeadingAccent: 'Day By Day',
         itineraryLead:
-            'Six full coaching days between arrival and departure. Mornings build the skill, afternoons ' +
-            'apply it, and the evenings cover the things that keep a player on the field.',
+            'This was the day-by-day plan for our first tour, in September 2026: six full coaching days ' +
+            'between arrival and departure. Mornings built the skill, afternoons applied it, and evenings ' +
+            'covered the things that keep a player on the field. The new tours are longer, at about ' +
+            `${TOUR_LENGTH_DAYS} days each, so their plans will be different.`,
         itineraryDays: [
-            { when: 'Arrival day', title: 'Arrival', body: 'You land in Nagpur, get picked up, and settle in at the centre. Welcome and orientation.' },
+            { when: 'Arrival day', title: 'Arrival', body: 'Land in Nagpur, get picked up, and settle in at the centre. Welcome and orientation.' },
             { when: 'Day 1', title: 'Foundation', body: 'Morning: performance testing (speed, agility, coordination) and a skill assessment across batting, bowling and fielding. Afternoon: player evaluation and video analysis, one-on-one with a coach. Evening: physio-led injury management.' },
             { when: 'Day 2', title: 'Nets & Skill', body: 'Morning: technical batting and bowling drills, plus core fielding. Afternoon: extended net sessions against varied bowling. Evening: mental strength session one — focus, confidence and handling pressure.' },
             { when: 'Day 3', title: 'Centre Wicket', body: 'Morning: warm-up, skill reinforcement and match-situation fielding. Afternoon: structured centre-wicket practice in a game-like environment. Evening: nutrition and hydration.' },
             { when: 'Day 4', title: 'Centre Wicket', body: 'A second full day in the middle, building on day three under direct coach guidance.' },
             { when: 'Day 5', title: 'Match Day', body: 'Morning: a practice match on turf wickets. Afternoon: post-match feedback and skill work. Evening: mental strength session two — game pressure and decision-making.' },
-            { when: 'Day 6', title: 'Closing & Evaluation', body: 'Morning: a light optional net session. Afternoon: group reflection and your individual development plan. Evening: closing huddle.' },
+            { when: 'Day 6', title: 'Closing & Evaluation', body: 'Morning: a light optional net session. Afternoon: group reflection and each player\'s individual development plan. Evening: closing huddle.' },
             { when: 'Departure day', title: 'Departure', body: 'Farewell and transfer back to Nagpur airport for the flight home.' },
         ],
         includedHeading: 'What your fee covers',
@@ -322,10 +300,9 @@ const STANDARD = {
 
         howHeading: 'What happens next',
         steps: [
-            'Register your interest using the form below. There is nothing to pay today — at this stage we are only collecting enquiries, and registering does not commit you to the tour.',
-            'When the next tour has dates, we come back to you in writing with them, confirm which of the two prices applies to your player, and tell you whether they have a place in the touring squad.',
-            'Once the place is confirmed, the program fee is paid in full, up front. That single payment covers everything at the high performance centre listed above.',
-            'Flights are handled separately. As soon as the squad flights are locked in we send you the group booking link, and you pay for your own player\'s seat then.',
+            'Register your interest using the form below, and tick the tour you want, or both. There is nothing to pay today: at this stage we are only collecting enquiries, and registering does not commit you to anything.',
+            'When a tour you picked has dates, we write to you with them, along with the exact price, exactly what it includes, and whether your player has a place in the touring squad.',
+            'Nothing is booked and nothing is paid until you have all of that in writing and tell us you want the place.',
         ],
     },
 
@@ -333,12 +310,25 @@ const STANDARD = {
         badge: 'Expression of Interest',
         heading: 'Register Your',
         headingAccent: 'Interest',
-        lead: "A few quick details and we'll be in touch with everything you need to know once the next tour has dates.",
-        tierHeading: 'Which Price Applies',
-        tierLead:
-            'Pick the one that describes your player. This is what sets your program fee — we will ' +
-            'confirm it in writing before you pay anything.',
-        tierFootnote: 'plus flights, booked through our group link',
+        lead:
+            'Tick the tour you want, or both, and add a few quick details. When a tour you picked has ' +
+            'dates, we will write to you with everything you need to know.',
+        toursHeading: 'Which Tour',
+        toursLead: 'Tick one tour or both. Exact dates are not set yet; we will write to you when they are.',
+        toursError: 'Please tick at least one tour.',
+        playerTypeHeading: 'Does Your Player Train With Us Now?',
+        playerTypeLead: 'Pick the one that describes your player.',
+        playerTypeError: 'Please tell us which one describes your player.',
+        playerTypes: {
+            royals_program: {
+                heading: 'Already Training With Us',
+                who: 'Your player trains in a Rajasthan Royals Academy Melbourne program now.',
+            },
+            external: {
+                heading: 'New To The Academy',
+                who: 'Your player does not train in one of our programs at the moment.',
+            },
+        },
     },
 };
 
@@ -347,21 +337,27 @@ const STANDARD = {
 
 const SIMPLE = {
     hero: {
-        badge: 'A Small Team · Only A Few Spots',
+        badge: 'Now Taking Names',
         h1: 'High Performance',
         h1Accent: 'Centre Camp',
         kicker: 'Rajasthan Royals Academy',
-        dateline: 'Nagpur, India · Next tour dates to be announced',
+        dateline: 'Nagpur, India · Two\u00a0Tours',
+        toursLabel: 'The two tours',
+        tourLength: `About ${TOUR_LENGTH_DAYS} days`,
+        toursNote:
+            'The exact dates are not set yet. Put your name down now for one tour or both, and we will ' +
+            'tell you when the dates are set.',
         lead:
-            'Six days inside the Rajasthan Royals\' talent factory in Nagpur. This is the centre that ' +
-            'built Sanju Samson, Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag — and where Vaibhav ' +
-            'Sooryavanshi trains. The Royals\' own coaches take every session, not ours. Only a few ' +
-            'spots, and our coaches pick the team.',
-        costLabel: 'What it costs',
-        flights: 'We book the whole team on the same plane. Then we send you a link to pay for your seat.',
-        flightsLead: 'Flights cost extra.',
-        flightsEstimate: (r) => `Plan for about ${fmtRangeAUD(r)} more for the return flight.`,
-        seeIncluded: 'See what you get',
+            `A tour of about ${TOUR_LENGTH_DAYS} days to the Rajasthan Royals' talent factory in Nagpur. ` +
+            'This is the centre that built Sanju Samson, Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag — ' +
+            'and where Vaibhav Sooryavanshi trains. Royals coaches worked with our first touring group ' +
+            'there in September 2026. Our Melbourne coaches pick the team.',
+        priceLabel: 'Estimated price',
+        priceUnit: 'per player',
+        priceNote:
+            `For each tour of about ${TOUR_LENGTH_DAYS} days. It is an estimate, not the final price. ` +
+            'Before you say yes, we tell you the exact price and what it covers, in writing.',
+        seePrice: 'More about the price',
         downloadLabel: 'Download the camp booklet',
         downloadSub: (size) => `PDF, ${size} — everything about the camp in one file`,
         cta: 'Put My Name Down',
@@ -371,12 +367,12 @@ const SIMPLE = {
             'When the clock hits zero we shut the list. Then our coaches pick the team from everyone ' +
             'who signed up.',
         ctaAfterCoaches: {
-            heading: 'Six days with these coaches',
-            body: 'There are only a few spots and the coaches pick the team. Signing up is free and takes about two minutes.',
+            heading: 'One tour or both',
+            body: 'Put your name down for the tour you want, or both. It is free and takes about two minutes. You are not paying or promising anything yet.',
         },
         ctaAfterPricing: {
             heading: 'Want a spot?',
-            body: 'Put your name down. When the next trip has dates, we will write back with the dates, your price, whether you have a spot, and the flight link.',
+            body: 'Put your name down. When a tour you picked has dates, we write back with the dates, the exact price, what it covers, and whether you have a spot.',
         },
         closedBadge: 'Applications Closed',
         closedHeading: 'Sign-ups for this tour are closed',
@@ -395,9 +391,8 @@ const SIMPLE = {
         headingAccent: 'Talent Factory',
         lead:
             'Lots of academies run trips to India. Almost none of them get inside the building an IPL ' +
-            'club really uses. You stay seven nights at the Rajasthan Royals\' own centre in Nagpur. Six ' +
-            'of those days are full training days, taken by the club\'s own coaches. Put your name ' +
-            'down below and we will tell you everything.',
+            'club really uses. Our tours go to the Rajasthan Royals\' own centre in Nagpur, for about ' +
+            `${TOUR_LENGTH_DAYS} days each. Put your name down below and we will tell you everything.`,
         producedHereLabel: 'Built at this centre',
         points: [
             {
@@ -410,91 +405,59 @@ const SIMPLE = {
                 title: 'The club\'s own coaches',
                 body:
                     'The Rajasthan Royals team manager. A man who played for India and captained a ' +
-                    'title-winning side. These are the coaches who work with the club\'s players — and ' +
-                    'for six days, with you.',
+                    'title-winning side. These are the coaches who work with the club\'s players. They ' +
+                    'coached our first touring group in September 2026.',
             },
             {
-                title: 'A small group',
-                body:
-                    'The group is kept small so every player gets seen. Anyone can sign up; our coaches ' +
-                    'pick the team. Sign up early.',
+                title: 'How the team is picked',
+                body: 'Anyone can put their name down. Our Melbourne coaches pick the team.',
             },
         ],
     },
 
     pricing: {
         eyebrow: 'What It Costs',
-        heading: 'Two Prices.',
-        headingAccent: "Here's Yours.",
+        heading: `About ${fmtRangeAUD(PRICE_ESTIMATE_AUD)}`,
+        headingAccent: 'Per Player',
         intro:
-            'There are two prices. Which one you pay depends on one thing: do you already train with us? ' +
-            'If you do, you pay less, because you already pay for our programs during the year.',
-        introEmphasis: 'Both groups get the same camp',
-        introTail:
-            '— same rooms, same coaches, same training. Nobody misses out. And what you are paying for is ' +
-            'not really a camp. It is six days somewhere almost nobody gets to go.',
-        notSure: 'Not sure which one you are? Just tell us in the form. We will check it for you.',
-        tiers: {
-            royals_program: {
-                eyebrow: 'You already train with us',
-                heading: 'Already With Us',
-                heroWho: 'If you already train with us',
-                who: 'You are in one of our programs now: Junior Royals, Elite, or Power Pre-Season.',
-            },
-            external: {
-                eyebrow: 'You are new to us',
-                heading: 'New To Us',
-                heroWho: 'If you are new to us',
-                who: 'You do not train with us yet. You join the team for this trip and train with our players.',
-            },
-        },
-        priceNote:
-            'This is the whole price. Nothing is added on top. You pay it all at once, up front, when ' +
-            'you get a spot. The flight costs extra — see below.',
-        perPlayer: 'per player, GST included',
-        thisIsYou: 'This is you if…',
-
-        flightsEyebrow: 'Extra Cost',
-        flightsHeading: 'Getting There',
-        flightsBody1:
-            'We want the whole team on the same plane, there and back. So we book the group. Then we send ' +
-            'you a link. You use the link to pay for your own seat. That money goes to the airline, not ' +
-            'to us. You do not have to find flights yourself.',
-        flightsBody2Unknown:
-            'We will tell you the exact price of the flight when we send you the link. You will see the ' +
-            'real number before you say yes.',
-        flightsBody2Known: (r) =>
-            `Plan for about ${fmtRangeAUD(r)} for the return flight. That is a guess, not a final price ` +
-            '— flights go up and down. We will tell you the real price when we send you the link.',
-        flightsBody3:
-            'So you pay two things: the price above, and the flight. Plus a few small things on the list ' +
-            'below. That is all.',
-
+            `That is our estimate for each tour of about ${TOUR_LENGTH_DAYS} days. It is not the final ` +
+            'price, and the dates are not set yet either. Before you say yes, we tell you the exact ' +
+            'price and what it covers, in writing.',
+        includesEyebrow: 'What the price covers',
+        includesHeading: 'Not Set Yet',
+        includesBody:
+            'When we confirm the price for a tour, we tell you exactly what it covers. That includes ' +
+            'whether the flights are part of it, and anything you would need to pay for yourself. You ' +
+            'get all of it in writing before you decide.',
 
         pillarsEyebrow: 'More Than Cricket',
-        pillarsHeading: 'The Team',
-        pillarsHeadingAccent: 'Around You',
-        pillarsLead: 'A real pro set-up works on four things, not just your batting. You get all four.',
+        pillarsHeading: 'What A Pro Set-Up',
+        pillarsHeadingAccent: 'Works On',
+        pillarsLead: 'A pro set-up works on more than your batting. The plan for our first tour, in September 2026, covered these four things.',
         pillars: [
-            { title: 'Your body', body: 'Fitness training. A physio to keep you safe and fix niggles.' },
+            { title: 'Your body', body: 'Fitness training, and a physio to help prevent and fix niggles.' },
             { title: 'Your head', body: 'How to stay calm, focused and brave when the game gets tight.' },
             { title: 'Your food', body: 'What to eat and drink before you play, and after, so you recover.' },
-            { title: 'Your game plan', body: 'Video of you, an honest assessment, and a plan of what to fix.' },
+            { title: 'Your game plan', body: 'Video, an honest assessment, and a plan of what to fix.' },
         ],
 
-        itineraryEyebrow: 'Day By Day',
-        itineraryHeading: 'What You Do',
-        itineraryHeadingAccent: 'Each Day',
-        itineraryLead: 'Six full days of cricket between the day you land and the day you fly home.',
+        // September 2026's plan, shown as a guide (see the note in STANDARD).
+        itineraryEyebrow: 'September 2026',
+        itineraryHeading: 'Our First Tour,',
+        itineraryHeadingAccent: 'Day By Day',
+        itineraryLead:
+            'This was the plan for our first tour, in September 2026: six days of cricket between the ' +
+            'day the team landed and the day it flew home. The new tours are longer, about ' +
+            `${TOUR_LENGTH_DAYS} days each, so their plans will be different.`,
         itineraryDays: [
-            { when: 'Arrival day', title: 'You arrive', body: 'You land in Nagpur. We pick you up. You settle in and meet everyone.' },
-            { when: 'Day 1', title: 'Testing', body: 'Morning: we test how fast and agile you are, and watch you bat, bowl and field. Afternoon: you watch video of yourself with a coach. Evening: a physio shows you how to avoid injuries.' },
+            { when: 'Arrival day', title: 'Arrive', body: 'Land in Nagpur, get picked up, settle in and meet everyone.' },
+            { when: 'Day 1', title: 'Testing', body: 'Morning: speed and agility tests, and the coaches watch everyone bat, bowl and field. Afternoon: video review with a coach. Evening: a physio session on how to avoid injuries.' },
             { when: 'Day 2', title: 'Nets', body: 'Morning: batting and bowling drills, plus catching and throwing. Afternoon: long net sessions against different bowlers. Evening: how to stay focused under pressure.' },
             { when: 'Day 3', title: 'Middle practice', body: 'Morning: warm-up and fielding in match situations. Afternoon: batting in the middle, like a real game. Evening: what to eat and drink.' },
             { when: 'Day 4', title: 'Middle practice', body: 'Another full day batting and bowling in the middle, with coaches watching every ball.' },
-            { when: 'Day 5', title: 'Match day', body: 'Morning: you play a real match on grass. Afternoon: the coaches tell you what they saw. Evening: handling pressure in a game.' },
-            { when: 'Day 6', title: 'Last day', body: 'Morning: an easy net if you want one. Afternoon: you get your own written plan. Evening: the closing huddle.' },
-            { when: 'Going home', title: 'You fly home', body: 'We take you back to Nagpur airport for your flight.' },
+            { when: 'Day 5', title: 'Match day', body: 'Morning: a real match on grass. Afternoon: the coaches say what they saw. Evening: handling pressure in a game.' },
+            { when: 'Day 6', title: 'Last day', body: 'Morning: an easy net for anyone who wants one. Afternoon: each player gets their own written plan. Evening: the closing huddle.' },
+            { when: 'Going home', title: 'Fly home', body: 'Back to Nagpur airport for the flight home.' },
         ],
         includedHeading: 'What you get',
         includedNote: 'The same for both prices. Once you land, all of this is already paid for.',
@@ -557,10 +520,9 @@ const SIMPLE = {
 
         howHeading: 'What happens next',
         steps: [
-            'Fill in the form below. You pay nothing today. Right now we are just taking names.',
-            'When the next trip has dates, we write back. We tell you the dates, your price, and if you have a spot.',
-            'When you get a spot, you pay the full price up front. That one payment covers everything at the camp.',
-            'The flight is separate. When we have booked the team flights, we send you a link. You pay for your seat then.',
+            'Fill in the form below. Tick the tour you want, or both. You pay nothing today. Right now we are just taking names.',
+            'When a tour you picked has dates, we write to you. We tell you the dates, the exact price, what it covers, and if you have a spot.',
+            'Nothing is booked and nothing is paid until you have all of that in writing and say yes.',
         ],
     },
 
@@ -569,11 +531,25 @@ const SIMPLE = {
         heading: 'Put Your Name',
         headingAccent: 'Down',
         lead:
-            'Fill this in. When the next trip has dates, we will get back to you with your price and ' +
-            'everything else you need to know. You are not paying or promising anything yet.',
-        tierHeading: 'Which Price Is Yours',
-        tierLead: 'Pick the one that is you. This sets your price. We will check it and confirm it.',
-        tierFootnote: 'plus the flight, booked through our group link',
+            'Fill this in and tick the tour you want, or both. When a tour you picked has dates, we will ' +
+            'get back to you with the price and everything else you need to know. You are not paying or ' +
+            'promising anything yet.',
+        toursHeading: 'Which Tour',
+        toursLead: 'Tick one or both. The dates are not set yet. We will tell you when they are.',
+        toursError: 'Please tick at least one tour.',
+        playerTypeHeading: 'Does The Player Train With Us Now?',
+        playerTypeLead: 'Pick the one that fits the player.',
+        playerTypeError: 'Please pick the one that fits the player.',
+        playerTypes: {
+            royals_program: {
+                heading: 'Already With Us',
+                who: 'The player trains with us now, in any of our programs.',
+            },
+            external: {
+                heading: 'New To Us',
+                who: 'The player does not train with us yet.',
+            },
+        },
     },
 };
 
@@ -615,6 +591,6 @@ export const useReadingMode = () => {
     return { simple: mode !== 'standard', showToggle: mode !== null, setMode: apply };
 };
 
-/** Tier list for rendering, merging the shared prices with the chosen variant. */
-export const getTiers = (copy) =>
-    TIER_KEYS.map((key) => ({ key, price: TIER_PRICES[key], ...copy.pricing.tiers[key] }));
+/** "Does your player train with us now?" options, in the chosen reading level. */
+export const getPlayerTypes = (copy) =>
+    PLAYER_TYPE_KEYS.map((key) => ({ key, ...copy.form.playerTypes[key] }));
