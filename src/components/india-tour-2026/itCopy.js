@@ -254,7 +254,8 @@ const STANDARD = {
             {
                 title: 'The resident Royals coaching team',
                 body:
-                    'Sid Lahiri, Head of Global Academies and a Royals performance coach, leads the camp. ' +
+                    'Sid Lahiri, Head of International Player Development and Performance Coach at the ' +
+                    'Rajasthan Royals, leads the camp. ' +
                     'Batting and leadership with Romi Bhinder — the Rajasthan Royals team manager, who ' +
                     'lives at the centre and trains the Royals players there all year round — and with ' +
                     'Faiz Fazal, a former India international and Ranji Trophy-winning captain. Fast ' +
@@ -478,7 +479,9 @@ const SIMPLE = {
             {
                 title: 'Top coaches',
                 body:
-                    'Sid Lahiri runs the Royals academies around the world. He leads the camp. Romi ' +
+                    'Sid Lahiri is Head of International Player Development and Performance Coach at ' +
+                    'the Rajasthan Royals. He runs the Royals academies around the world and leads the ' +
+                    'camp. Romi ' +
                     'Bhinder is the Rajasthan Royals team manager — he lives at the centre and coaches ' +
                     'their players all year. Faiz Fazal played for India and captained a title-winning ' +
                     'team. Somi Bhinder coaches fast bowling. Dr Neeta Adhau helps you with the mental side.',

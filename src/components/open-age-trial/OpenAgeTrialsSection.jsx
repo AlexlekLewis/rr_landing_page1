@@ -4,7 +4,7 @@ import { ArrowRight, MapPin, Star, CalendarDays, CalendarClock, Clock } from 'lu
 import { BatIcon } from '../performance-squads/CricketIcons';
 import { fadeUp, scrollTo, SectionHeading } from '../performance-squads/shared';
 import {
-    TRIAL_CENTRES, TRIALS_HEADING, DATES_CONFIRMED, SID, SID_CENTRE_SLUG,
+    TRIAL_CENTRES, TRIALS_HEADING, DATES_CONFIRMED, SID, sidIsAt,
     TRIAL_PRICE, ALL_SESSIONS_FULL, getSessionsForCentre, getOpenTrialSessions,
     getSelectableSessionCount, isCentreFull, arrivalLine,
 } from './openAgeData';
@@ -12,15 +12,15 @@ import {
 // One card per centre. Everything a card says comes from openAgeData: its
 // sessions, whether they are full, and whether Sid is scheduled there.
 //
-// SID APPEARS ON ONE CARD ONLY. He is scheduled at Cranbourne North, so the
-// Mickleham card carries no Sid line and no attendance hedge. A player booking
-// Mickleham must never read this page and expect him.
+// SID IS ON BOTH CARDS, because he is scheduled at both sessions (Alex, 26
+// September 2026). It is still read per centre through sidIsAt, so a card only
+// ever claims him where the data says he is.
 const CentreCard = ({ centre, delay }) => {
     const sessions = getSessionsForCentre(centre.slug);
     const full = isCentreFull(centre.slug);
     const open = getOpenTrialSessions(centre.slug);
     const selectable = getSelectableSessionCount(centre.slug);
-    const hasSid = centre.slug === SID_CENTRE_SLUG;
+    const hasSid = sidIsAt(centre.slug);
 
     return (
         <motion.div

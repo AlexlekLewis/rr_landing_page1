@@ -3,23 +3,11 @@ import { motion } from 'framer-motion';
 import { MapPin, Calendar, Clock, Users } from 'lucide-react';
 import DualCTA from './DualCTA';
 
-// The three centres the Academy currently runs. Exact program dates and daily times
-// are deliberately NOT stated — they are set once we see where the interest is,
-// and every family on the interest list is emailed them first.
+// CRANBOURNE NORTH ONLY these school holidays (Alex, 26 September 2026).
+// The Mickleham camp set for 23–25 September was cancelled, so it is removed
+// rather than left on sale — the home page's program card says the same. If a second centre is added, put it back in this array —
+// the section counts the array, it does not hard-code "three centres".
 const locations = [
-    {
-        name: 'Mickleham Indoor Sports Centre',
-        suburb: 'Mickleham, VIC',
-        region: 'Northern Melbourne',
-        venue: 'Mickleham Indoor Sports Centre',
-        tag: 'mickleham',
-        dates: 'September 23, 24 & 25',
-        time: '9:00 AM – 1:00 PM',
-        onSale: true,
-        coach: 'Alex Lewis',
-        urgency: 'Places Limited — Selling Fast',
-        urgencyColor: 'bg-rr-pink',
-    },
     {
         name: 'Elite Cricket Centre',
         suburb: 'Cranbourne North, VIC',
@@ -30,7 +18,9 @@ const locations = [
         time: '9:00 AM – 1:00 PM',
         onSale: true,
         coach: 'Alex Thornhill',
-        urgency: 'Places Limited — Selling Fast',
+        // A date a parent can check, not "selling fast" — the calendar does the
+        // work here. Three days, starting Wednesday 30 September.
+        urgency: 'Starts Wednesday 30 September',
         urgencyColor: 'bg-rr-pink',
     },
 ];
@@ -47,7 +37,7 @@ const LocationsSection = () => {
                     className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-5 py-2 mb-6"
                 >
                     <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                    <span className="text-xs font-black text-rr-pink uppercase tracking-widest">Three Centres Across Melbourne</span>
+                    <span className="text-xs font-black text-rr-pink uppercase tracking-widest">One Centre These Holidays</span>
                 </motion.div>
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
@@ -56,7 +46,7 @@ const LocationsSection = () => {
                     transition={{ delay: 0.1 }}
                     className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-wide mb-6"
                 >
-                    PICK YOUR <span className="text-rr-pink">CENTRE</span>
+                    WHERE IT <span className="text-rr-pink">RUNS</span>
                 </motion.h2>
                 <motion.p
                     initial={{ opacity: 0, y: 20 }}
@@ -65,12 +55,19 @@ const LocationsSection = () => {
                     transition={{ delay: 0.2 }}
                     className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium"
                 >
-                    The program runs at our centres across Melbourne. Tell us which one you would come to — the centre
-                    with the most interest gets scheduled first, and we email you the dates before anyone else.
+                    These school holidays the program runs at one centre only — the Elite Cricket Centre in
+                    Cranbourne North, over three days: Wednesday 30 September, Thursday 1 October and Friday
+                    2 October, 9:00 AM to 1:00 PM each day. The Mickleham camp that was set for 23, 24 and 25 September was cancelled. If you are in
+                    the north, our weekly Junior Royals program at Mickleham starts back on Wednesday 7 October.
                 </motion.p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* With one centre the card is centred instead of being stranded in
+                column one of a three-column grid. Add a centre to `locations`
+                and the grid widens itself back out. */}
+            <div className={`grid gap-6 ${locations.length === 1
+                ? 'grid-cols-1 max-w-md mx-auto'
+                : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'}`}>
                 {locations.map((loc, i) => (
                     <motion.div
                         key={loc.tag}

@@ -12,12 +12,18 @@ import ITCtaBand from './ITCtaBand';
 // added. Headshots for Faiz, Somi and Dr Adhau were lifted out of the camp
 // document itself (cropped from the coaching-panel page), so all five now have a
 // face. The monogram fallback stays for any future coach added without a photo.
+//
+// SID'S TITLE IS THE EXCEPTION (Alex, 27 September 2026). It reads the same on
+// every page of the site and on the trial posters: "Head of International Player
+// Development and Performance Coach, Rajasthan Royals" — both roles, as the
+// Royals' own website states them. The camp document's "Head of Global Academies"
+// was an earlier title.
 // ---------------------------------------------------------------------------
 
 const COACHES = [
     {
-        name: 'Sid Lahiri',
-        role: 'Head of Global Academies · Royals Performance Coach',
+        name: 'Siddhartha Lahiri',
+        role: 'Head of International Player Development and Performance Coach, Rajasthan Royals',
         image: '/assets/rra/sid-lahiri-profile.png',
         bio:
             'Sid coached our first touring group in Nagpur in September 2026. He also coaches batting ' +
