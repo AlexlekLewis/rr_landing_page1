@@ -1,7 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, MapPin, Star, CalendarDays, CalendarClock, Clock } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { BatIcon } from '../performance-squads/CricketIcons';
+import { TRIAL_PAGE, SID_JUNIORS_ROUTE } from '../sid-juniors/sidJuniorsPromo';
 import { fadeUp, scrollTo, SectionHeading } from '../performance-squads/shared';
 import {
     TRIAL_CENTRES, TRIALS_HEADING, DATES_CONFIRMED, SID, sidIsAt,
@@ -91,6 +93,18 @@ const CentreCard = ({ centre, delay }) => {
                         <span className="text-white/75 text-sm font-medium">{arrivalLine(s)}</span>
                     </div>
                 ))}
+                {/* Juniors 8 to 16 have their own session at this centre. */}
+                {TRIAL_PAGE.cardNote[centre.slug] && (
+                    <div className="flex items-start gap-3">
+                        <Star className="w-4 h-4 text-rr-light-pink shrink-0 mt-0.5" />
+                        <span className="text-white/75 text-sm font-medium">
+                            {TRIAL_PAGE.cardNote[centre.slug]}{' '}
+                            <Link to={SID_JUNIORS_ROUTE} className="text-rr-light-pink font-bold underline underline-offset-2 hover:text-white">
+                                {TRIAL_PAGE.linkLabel}
+                            </Link>
+                        </span>
+                    </div>
+                )}
             </div>
 
             {full ? (

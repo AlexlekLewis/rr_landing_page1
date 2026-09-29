@@ -20,6 +20,7 @@
 //
 // ORDER = nearest real deadline first. Review dates:
 //   Open Age T20 Trial — 6 Oct 2026, the day after the last session. REMOVE IT.
+//   Junior sessions    — 6 Oct 2026, the same day, for the same reason. REMOVE IT.
 //   Performance Squads — when the next intake has dates, put them in the tag
 //   Spin Club          — when Alex confirms the start date, put it in the tag
 //   Junior Royals T4   — end of Term 4
@@ -28,6 +29,8 @@
 // fires on arrival at the destination. Every line has to make sense to someone
 // who has never heard of us — say what the thing is, who it's for, and what
 // the next step is.
+import { ANNOUNCEMENT as SID_JUNIORS_ANNOUNCEMENT } from '../sid-juniors/sidJuniorsPromo';
+
 export const ANNOUNCEMENTS = [
     {
         key: 'open-age-trial',
@@ -45,6 +48,9 @@ export const ANNOUNCEMENTS = [
         badge: 'Book now',
         highlight: true,
     },
+    // Juniors aged 8 to 16: their own sessions with Sid at both centres, on the
+    // same two days as the trial above (Alex, 29 Sep 2026).
+    SID_JUNIORS_ANNOUNCEMENT,
     {
         // The program the trial above feeds. It says "register your interest"
         // rather than "trials full": the September trials are done, and a closed

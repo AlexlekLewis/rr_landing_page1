@@ -10,6 +10,8 @@ import { Pending, Eyebrow, Heading, Card, Bullets } from './welcomeShared';
 import WelcomeConfirmForm from './WelcomeConfirmForm';
 import WelcomeKitForm from './WelcomeKitForm';
 import usePrices, { fmt } from './usePrices';
+import { Link } from 'react-router-dom';
+import { WELCOME_LINE, SID_JUNIORS_ROUTE } from '../../sid-juniors/sidJuniorsPromo';
 
 const MotionDiv = motion.div;
 
@@ -469,6 +471,14 @@ const WelcomePage = () => {
                                     <p>He has worked with Yashasvi Jaiswal, Riyan Parag and Vaibhav Sooryavanshi.</p>
                                     <p>Other Royals and guest coaches and players will join from time to time, online and in person.</p>
                                     <p className="text-white/65">When: {season.sidSessions.when}.</p>
+                                    {/* A different thing from the squad sessions above: open to any
+                                        player aged 8 to 16, booked on its own page. */}
+                                    <p className="text-white/65 text-sm pt-3 border-t border-white/10">
+                                        {WELCOME_LINE}{' '}
+                                        <Link to={SID_JUNIORS_ROUTE} className="text-rr-light-pink font-bold underline underline-offset-2 hover:text-white">
+                                            See the junior sessions
+                                        </Link>
+                                    </p>
                                 </div>
                             </div>
                         </Card>

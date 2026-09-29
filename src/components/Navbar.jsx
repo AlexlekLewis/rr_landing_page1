@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from './Button';
+import { PROGRAM_ROW, SID_JUNIORS_ROUTE } from './sid-juniors/sidJuniorsPromo';
 
 const LP1_NAV = [
     { label: 'PROGRAM OVERVIEW', id: 'program-overview' },
@@ -72,11 +73,14 @@ const PC_NAV = [
 //   Open Age T20 Trial — dates are live (4 & 5 Oct), so the row sits in the
 //                        joinable block. REVIEW 6 OCT 2026: pull it the day
 //                        after the last session.
+//   Junior sessions    — the juniors' half of the same visit (Alex, 29 Sep
+//                        2026). REVIEW 6 OCT 2026: pull it with the trial.
 //   Spin Club          — announced 26 Sep 2026, interest only. No start date
 //                        confirmed; when Alex sets the first Wednesday, say it
 //                        in the badge.
 const PROGRAMS_DROPDOWN = [
     { label: 'Performance Squads Open Trial · 16-25', route: '/performance-squads-open-trial', badge: 'Both Centres · 4 & 5 Oct', badgeColor: 'bg-rr-pink' },
+    { label: PROGRAM_ROW.navLabel, route: SID_JUNIORS_ROUTE, badge: PROGRAM_ROW.navBadge, badgeColor: 'bg-rr-pink' },
     { label: 'Spin Club · Spinners 10-25', route: '/spin-club', badge: 'Registering Interest', badgeColor: 'bg-green-500' },
     { label: 'Junior Royals Holiday Program · Cranbourne North', route: '/junior-royals-holiday', badge: '30 Sep – 2 Oct', badgeColor: 'bg-rr-pink' },
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 Entries Open', badgeColor: 'bg-green-500' },

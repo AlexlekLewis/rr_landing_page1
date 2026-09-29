@@ -17,6 +17,7 @@ import StickyCTA from '../performance-squads/StickyCTA';
 import PaymentModal from '../performance-squads/PaymentModal';
 import PartnerStack from '../power-game/PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
+import { TRIAL_PAGE } from '../sid-juniors/sidJuniorsPromo';
 import {
     ROUTE, AUDIENCE, AUDIENCE_HEADING, TRIAL_COACHES, TRIAL_CENTRES,
     SID,
@@ -131,7 +132,7 @@ const OpenAgeTrial = () => {
                     <OpenAgeRegistrationForm onRequestPayment={setPayModal} />
                 </div>
                 <div id="faq" className="scroll-mt-28 lg:scroll-mt-32">
-                    <FAQSection items={FAQS} {...FAQ_HEADING} />
+                    <FAQSection items={[...FAQS, TRIAL_PAGE.faq]} {...FAQ_HEADING} />
                 </div>
                 <div id="partners" className="scroll-mt-28 lg:scroll-mt-32">
                     <PartnerStack theme="dark" />

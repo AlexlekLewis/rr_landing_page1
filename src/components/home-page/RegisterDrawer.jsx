@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ArrowRight, ChevronLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+import { PROGRAM_ROW, SID_JUNIORS_ROUTE } from '../sid-juniors/sidJuniorsPromo';
 
 const AGE_GROUPS = ['U10', 'U12', 'U14', 'U16', 'U18', 'Adult'];
 const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Advanced', 'Elite'];
@@ -12,10 +13,12 @@ const GENDER_OPTIONS = ['Male Cricket', 'Female Cricket', 'No Preference'];
 // and nothing that lands on a page without the site's navigation. Elite Program
 // removed Aug 2026 — /elite-royals is the closed Power Game page and has no Navbar.
 // Kept in step with the Navbar dropdown, the home hero list and the What's On
-// modal — same five programs, same order (26 Sep 2026).
-// REVIEW 6 OCT 2026 — the trial and the holiday camp are both over by then.
+// modal — same programs, same order (26 Sep 2026).
+// REVIEW 6 OCT 2026 — the trial, the junior sessions with Sid and the holiday
+// camp are all over by then.
 const PROGRAMS = [
     { label: 'Performance Squads Open Trial', route: '/performance-squads-open-trial', urgency: 'Ages 16 to 25 — Cranbourne North Sun 4 Oct, Mickleham Mon 5 Oct, $30 a session' },
+    { label: PROGRAM_ROW.heroLabel, route: SID_JUNIORS_ROUTE, urgency: PROGRAM_ROW.drawerUrgency },
     { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', urgency: 'Cranbourne North only — 30 September, 1 and 2 October' },
     { label: 'Spin Club', route: '/spin-club', urgency: 'Spin bowlers 10 to 25 — registering interest, nothing to pay now' },
     { label: 'Performance Squads', route: '/performance-squads', urgency: 'Register your interest for the next intake' },
