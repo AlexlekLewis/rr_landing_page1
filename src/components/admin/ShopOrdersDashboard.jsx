@@ -31,6 +31,9 @@ const formatDateTime = (iso) => {
 };
 
 const VENUE_LABELS = {
+    cranbourne_north: 'Elite Cricket Centre — Cranbourne North',
+    mickleham: 'Mickleham Indoor Sports Centre — Mickleham',
+    // Former pickup points — older orders still carry these ids.
     bundoora: 'Cutting Edge Cricket — Bundoora',
     hallam: 'Cricket Connect — Hallam',
 };

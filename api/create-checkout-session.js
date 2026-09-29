@@ -55,11 +55,14 @@ export default async function handler(req, res) {
     const { pickupVenue, mtoSurcharge, mtoQty } = req.body;
     let shippingOptions;
     if (fulfillment === 'pickup') {
-      const venueLabel = pickupVenue === 'bundoora'
-        ? 'Pickup — Cutting Edge Cricket, Unit 7/19 Enterprise Dr, Bundoora 3083'
-        : pickupVenue === 'hallam'
-          ? 'Pickup — Cricket Connect, 22 Technology CCT, Hallam 3803'
-          : 'Academy Pickup';
+      const PICKUP_LABELS = {
+        cranbourne_north: 'Pickup — Elite Cricket Centre, 30 Medley Dr, Cranbourne North 3977',
+        mickleham: 'Pickup — Mickleham Indoor Sports Centre, 3 Eclipse Dr, Mickleham 3064',
+        // Former pickup points, kept for a cart page opened before this change.
+        bundoora: 'Pickup — Cutting Edge Cricket, Unit 7/19 Enterprise Dr, Bundoora 3083',
+        hallam: 'Pickup — Cricket Connect, 22 Technology CCT, Hallam 3803',
+      };
+      const venueLabel = PICKUP_LABELS[pickupVenue] || 'Academy Pickup';
       shippingOptions = [{
         shipping_rate_data: {
           type: 'fixed_amount',

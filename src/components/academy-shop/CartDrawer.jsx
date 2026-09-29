@@ -5,21 +5,25 @@ import { useCart } from './CartContext';
 import { supabase } from '../../lib/supabase';
 
 const FULFILLMENT_OPTIONS = [
-  { id: 'pickup',   label: 'Academy Pickup (Free)', icon: MapPin, price: 0, description: 'Cutting Edge Cricket — Bundoora or Cricket Connect — Hallam' },
+  { id: 'pickup',   label: 'Academy Pickup (Free)', icon: MapPin, price: 0, description: 'Elite Cricket Centre — Cranbourne North or Mickleham Indoor Sports Centre' },
   { id: 'standard', label: 'Standard Shipping', icon: Truck,   price: 1200, description: 'Delivered to your address (5–7 business days)' },
   { id: 'express',  label: 'Express Shipping',  icon: Truck,   price: 2000, description: 'Delivered to your address (1–3 business days)' },
 ];
 
+// Pickup points offered at checkout. Cutting Edge Cricket (Bundoora) has closed and
+// Cricket Connect (Hallam) is no longer used. Older orders still carry the ids
+// 'bundoora' and 'hallam', so the success page, the order email, the checkout
+// label and the admin dashboard keep labels for them.
 const PICKUP_VENUES = [
   {
-    id: 'bundoora',
-    name: 'Cutting Edge Cricket — Bundoora',
-    address: 'Unit 7, Factory 19, Enterprise Drive, Bundoora VIC 3083',
+    id: 'cranbourne_north',
+    name: 'Elite Cricket Centre — Cranbourne North',
+    address: '30 Medley Drive, Cranbourne North VIC 3977',
   },
   {
-    id: 'hallam',
-    name: 'Cricket Connect — Hallam',
-    address: '22 Technology CCT, Hallam VIC 3803',
+    id: 'mickleham',
+    name: 'Mickleham Indoor Sports Centre — Mickleham',
+    address: '3 Eclipse Drive, Mickleham VIC 3064',
   },
 ];
 

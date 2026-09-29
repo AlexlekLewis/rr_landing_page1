@@ -51,11 +51,14 @@ const ShopSuccess = () => {
   const isPickup = fulfillment === 'pickup';
   const isExpress = fulfillment === 'express';
 
-  const venueDetails = pickupVenue === 'bundoora'
-    ? { name: 'Cutting Edge Cricket — Bundoora', address: 'Unit 7, Factory 19, Enterprise Drive, Bundoora VIC 3083' }
-    : pickupVenue === 'hallam'
-      ? { name: 'Cricket Connect — Hallam', address: '22 Technology CCT, Hallam VIC 3803' }
-      : null;
+  const VENUE_DETAILS = {
+    cranbourne_north: { name: 'Elite Cricket Centre — Cranbourne North', address: '30 Medley Drive, Cranbourne North VIC 3977' },
+    mickleham: { name: 'Mickleham Indoor Sports Centre — Mickleham', address: '3 Eclipse Drive, Mickleham VIC 3064' },
+    // Former pickup points, kept for a cart opened before the change.
+    bundoora: { name: 'Cutting Edge Cricket — Bundoora', address: 'Unit 7, Factory 19, Enterprise Drive, Bundoora VIC 3083' },
+    hallam: { name: 'Cricket Connect — Hallam', address: '22 Technology CCT, Hallam VIC 3803' },
+  };
+  const venueDetails = VENUE_DETAILS[pickupVenue] || null;
 
   return (
     <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white">
