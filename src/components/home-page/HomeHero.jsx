@@ -8,11 +8,19 @@ import { Link } from 'react-router-dom';
 // pointed at /elite-royals, which renders the closed Power Game sales page with
 // no Navbar — a dead end. Put Elite back when there is an open intake AND a page
 // with the site chrome on it.
-// Review date: the Masterclass badge expires 13 Sep 2026.
+// SAME FIVE PROGRAMS, SAME ORDER, as the Navbar dropdown and the What's On
+// modal (26 Sep 2026). A program that is open has to be findable in all of
+// them, and no list may carry a status the others contradict: this one still
+// said "Trials Full" for the Performance Squads after that page changed to
+// registering interest, and it did not carry the open age trial at all.
+// Pink dot = you can book or pay now. Green dot = open, nothing to pay yet.
+// REVIEW 6 OCT 2026 — the trial and the holiday camp are both over by then.
 const PROGRAMS = [
-    { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', badge: 'Sept/Oct — Now Open', badgeColor: 'bg-rr-pink' },
-    { label: 'Performance Squads', route: '/performance-squads', badge: 'Trials Full', badgeColor: 'bg-slate-500' },
-    { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 Entries Open', badgeColor: 'bg-green-500' },
+    { label: 'Performance Squads Open Trial', route: '/performance-squads-open-trial', badge: 'Ages 16 to 25 · both centres · 4 & 5 Oct', badgeColor: 'bg-rr-pink' },
+    { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', badge: 'Cranbourne North · 30 Sep – 2 Oct', badgeColor: 'bg-rr-pink' },
+    { label: 'Spin Club', route: '/spin-club', badge: 'Spin bowlers 10 to 25 · registering interest', badgeColor: 'bg-green-500' },
+    { label: 'Performance Squads', route: '/performance-squads', badge: 'Register your interest · next intake', badgeColor: 'bg-green-500' },
+    { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 entries open', badgeColor: 'bg-green-500' },
 ];
 
 const HomeHero = ({ onRegisterClick }) => {
@@ -75,7 +83,7 @@ const HomeHero = ({ onRegisterClick }) => {
                                     <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                                         <span className={`w-2 h-2 rounded-full ${p.badgeColor} shrink-0`} />
                                         <div className="min-w-0">
-                                            <p className="text-white font-bold text-xs sm:text-sm uppercase tracking-wide leading-tight truncate">{p.label}</p>
+                                            <p className="text-white font-bold text-xs sm:text-sm uppercase tracking-wide leading-tight">{p.label}</p>
                                             <p className="text-white/50 text-xs font-medium">{p.badge}</p>
                                         </div>
                                     </div>
@@ -86,7 +94,7 @@ const HomeHero = ({ onRegisterClick }) => {
                                     <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                                         <span className={`w-2 h-2 rounded-full ${p.badgeColor} shrink-0 animate-pulse`} />
                                         <div className="min-w-0">
-                                            <p className="text-white font-bold text-xs sm:text-sm uppercase tracking-wide leading-tight truncate">{p.label}</p>
+                                            <p className="text-white font-bold text-xs sm:text-sm uppercase tracking-wide leading-tight">{p.label}</p>
                                             <p className="text-white/50 text-xs font-medium">{p.badge}</p>
                                         </div>
                                     </div>

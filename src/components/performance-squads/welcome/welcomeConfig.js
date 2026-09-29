@@ -50,7 +50,7 @@ export const WELCOME = {
 
     // ── Membership benefits (Membership Overview, 01–06) ──
     benefits: [
-        { title: 'Weekly squad training', body: 'Weekly squad training opportunity with the Head Coach and a dedicated squad coach. Training is likely to be Monday nights.' },
+        { title: 'Weekly squad training', body: 'Weekly squad training with the Head Coach and a dedicated squad coach. Monday nights, every week from 5 October to 14 December — the courts are booked at both centres.' },
         { title: '5–10 T20 match days', body: 'Circa. average 1 a month from September to April (Season). Performance dependant.' },
         { title: '2 x squad sessions with Siddhartha Lahiri', body: 'Other Royals and guest coaches and players will join from time to time (online and in person).' },
         { title: 'Royals High Performance Centre camps', body: 'Invitation to attend multiple Rajasthan Royals operated camps at the Royals High Performance Centre in Nagpur.' },
@@ -84,14 +84,18 @@ export const WELCOME = {
 
     // ── Training and events (NOT match days — those are the fixture list) ──
     season: {
-        // Same time at both centres (Alex, 16 Sep). The \u00a0 (non-breaking space)
-        // keeps "PM" on the same line as the time on a narrow phone. timeNote shows
-        // on its own line underneath.
+        // NOT the same time at both centres. Straight off the Term 4 net booking
+        // orders issued to the venues on 23 Sep 2026 (RRA-T4-2026-MIC and
+        // RRA-T4-2026-CRN): Mickleham squad training is 7:00–8:30 PM, because the
+        // open age trial has the floor there 5:30–7:00 PM on opening night.
+        // Cranbourne North takes the whole centre 6:00–9:00 PM.
+        // The \u00a0 (non-breaking space) keeps "PM" on the same line as the time
+        // on a narrow phone. timeNote shows on its own line underneath.
         firstTraining: {
             year: 2026,
             date: 'Monday 5 October',
-            time: 'Mickleham and Cranbourne North: 6:00–9:00\u00a0PM (subject to change)',
-            timeNote: 'We will let you know if it changes.',
+            time: 'Mickleham 7:00–8:30\u00a0PM · Cranbourne North 6:00–9:00\u00a0PM',
+            timeNote: 'Then every Monday to 14 December. Times are subject to change and we will let you know if they do.',
         },
         sidSessions: { year: 2026, when: 'Early October' },
     },

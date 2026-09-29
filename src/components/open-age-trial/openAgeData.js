@@ -62,13 +62,13 @@ const toCentre = (slug) => {
 export const TRIAL_CENTRES = CENTRE_SLUGS.map(toCentre);
 export const getCentre = (slug) => TRIAL_CENTRES.find((c) => c.slug === slug);
 
-// SID IS AT CRANBOURNE NORTH ONLY. Alex has not said he is at Mickleham, so
-// nothing on this page may say or imply it. Every Sid line is rendered against
-// this slug, never against "the trial" as a whole.
-export const SID_CENTRE_SLUG = 'south-east-melbourne';
-
-// The Sid story and its FAQ answers speak for the Cranbourne North session.
-export const CENTRE = getCentre(SID_CENTRE_SLUG);
+// SID IS AT BOTH SESSIONS. Alex confirmed on 26 September 2026 that Sid is
+// coming to Mickleham on the Monday night as well as Cranbourne North on the
+// Sunday. Every Sid line still renders through this list rather than being
+// hard-coded, so if one centre ever drops off him, this is the only place to
+// change and no page can be left claiming him at a session he is not at.
+export const SID_CENTRE_SLUGS = [...CENTRE_SLUGS];
+export const sidIsAt = (slug) => SID_CENTRE_SLUGS.includes(slug);
 
 // Head coach cards — one per centre this trial recruits into.
 export const TRIAL_COACHES = SQUAD_COACHES.filter(
@@ -92,14 +92,15 @@ export const TRIAL_SESSIONS = [
         id: 'oa-2026-10-04',
         centre: 'south-east-melbourne',
         label: 'Sunday 4 October · 1:00–2:30 PM',
+        arriveBy: '12:30 PM',
     },
     {
         id: 'oa-2026-10-05',
         centre: 'north-melbourne',
         label: 'Monday 5 October · 5:30–7:00 PM',
-        // Alex, 23 September 2026: Mickleham players arrive 30 minutes early to
-        // be signed in. He has NOT said the same of Cranbourne North, so only a
-        // session carrying `arriveBy` shows an arrival line anywhere on the page.
+        // Alex, 26 September 2026: players at BOTH centres arrive 30 minutes
+        // early to be signed in. Still read off the session rather than
+        // assumed, so a session without the rule never shows the line.
         arriveBy: '5:00 PM',
     },
 ];
@@ -232,15 +233,15 @@ export const SID = {
     // renders under the hero, on the booking card and in the FAQ answer, and
     // it is the only promise about him the page is allowed to make.
     attendance:
-        'Sid is scheduled to attend the Cranbourne North session on Sunday 4 October. If anything '
-        + 'changes we will tell every booked player before the session, and you can move to '
-        + 'another session or take a full refund.',
+        'Sid is scheduled to attend both sessions — Cranbourne North on Sunday 4 October and '
+        + 'Mickleham on Monday 5 October. If anything changes we will tell every booked player '
+        + 'before the session, and you can take a full refund.',
 
     // Kills the most reasonable false read available to a disappointed player
     // or parent: that the man in the hero is the man who hands out the global
     // placements listed further down the page. He is not, on the day.
     separation:
-        'Sid is at the Cranbourne North session to watch cricket. He is not selecting anyone on the '
+        'Sid is at both sessions to watch cricket. He is not selecting anyone on the '
         + 'day. Selection into a squad is the centre’s head coach’s call — Alex Thornhill at '
         + 'Cranbourne North, Alex Lewis at Mickleham — and the global opportunities are a '
         + 'separate process that happens later and is competitive.',
@@ -252,12 +253,12 @@ export const SID = {
 // changes nothing on the page.
 export const HERO = {
     kicker: `Open Age T20 Trials · ${MIN_AGE} to ${MAX_AGE} · Mickleham & Cranbourne North`,
-    headline: 'The Rajasthan Royals Performance Coach Is Coming To Cranbourne North.',
+    headline: 'The Rajasthan Royals Performance Coach Is Coming To Both Centres.',
     tagline: 'Sid Lahiri is in the building.',
     body:
-        'Sid Lahiri is the Performance Coach of the Rajasthan Royals. He is scheduled to be at '
-        + 'the Cranbourne North session, on the floor at the Elite Cricket Centre, watching open '
-        + 'age players train. There is a second session at Mickleham. Both are an extra intake '
+        'Sid Lahiri is the Performance Coach of the Rajasthan Royals. He is scheduled to be on the '
+        + 'floor at both sessions — Cranbourne North on Sunday 4 October and Mickleham on Monday '
+        + '5 October — watching open age players train. Both are an extra intake '
         + `into the Performance Squad at that centre. $${TRIAL_PRICE} a session.`,
     primaryCta: 'Book your trial place',
     // Shown instead, and unclickable, until TRIAL_SESSIONS has real dates in it.
@@ -272,20 +273,20 @@ export const HERO = {
 // ── The Sid section. Sits second so nobody misses it. ──
 export const SID_SECTION = {
     eyebrow: 'Who Is Running It',
-    title: 'Sid Lahiri Is Coming To Cranbourne North',
+    title: 'Sid Lahiri Is Coming To Both Centres',
     paragraphs: [
         'Sid Lahiri is the Performance Coach of the Rajasthan Royals. The Royals run a global '
         + 'system across the IPL, the SA20 and the CPL, and Sid is part of the coaching staff '
         + 'inside it.',
-        'He is coming to Cranbourne North for that session. That is not a normal session of '
+        'He is coming to both of these sessions. That is not a normal session of '
         + 'suburban cricket, and it is the reason this page exists.',
     ],
-    // Which session is which, said HERE, in the Sid section — so a Mickleham
-    // player does not read three screens assuming he is at theirs.
+    // Both sessions named HERE, in the Sid section, so nobody has to work out
+    // which night is theirs or whether Sid is at it.
     sessions:
-        `There are two sessions: ${centreDayLine('south-east-melbourne')}, where Sid is scheduled, `
-        + `and ${centreDayLine('north-melbourne')} with our own coaches. Both are the same trial, `
-        + 'for the same standard, into the squad at that centre. Book whichever one you can get to.',
+        `There are two sessions and Sid is scheduled at both: ${centreDayLine('south-east-melbourne')} `
+        + `and ${centreDayLine('north-melbourne')}. Same trial, same standard, into the squad at that `
+        + 'centre with that centre’s head coach. Book whichever one you can get to.',
 };
 
 // ── Who it is for. Four cards, open age. ──
@@ -331,10 +332,9 @@ export const PATHWAY_STEPS = [
     {
         n: '01',
         title: 'Trial',
-        // Sid's attendance is stated of the CRANBOURNE NORTH session only, never
-        // of "the trial", because there are two and he is scheduled at one.
-        // AWAITING ALEX: if he is also coming to Mickleham, say so here and in
-        // SID_CENTRE_SLUG — nothing else needs to change.
+        // Sid is scheduled at both sessions (Alex, 26 September 2026), so this
+        // step can speak of "the trial" again. If that ever narrows to one
+        // centre, SID_CENTRE_SLUGS is the only place to change.
         body: `Book a session, pay $${TRIAL_PRICE}, and train in front of our coaches.`,
     },
     {
@@ -429,10 +429,10 @@ export const FAQS = [
     {
         q: 'Is Sid Lahiri really going to be there?',
         a: 'That is the plan, and it is why we are running it. Sid Lahiri is the Performance Coach '
-            + 'of the Rajasthan Royals and he is scheduled to be at the Cranbourne North session on '
-            + 'Sunday 4 October, at the Elite Cricket Centre. He is not scheduled at Mickleham. If '
-            + 'that changes we will tell you before you turn up, and you can move to another session '
-            + 'or take a full refund.',
+            + 'of the Rajasthan Royals and he is scheduled to be at both sessions — Cranbourne North '
+            + 'on Sunday 4 October at the Elite Cricket Centre, and Mickleham on Monday 5 October at '
+            + 'the Mickleham Indoor Sports Centre. If that changes we will tell you before you turn '
+            + 'up, and you can take a full refund.',
     },
     {
         q: 'Is Sid picking the squad?',
@@ -498,12 +498,12 @@ export const FAQ_HEADING = {
 //     (about 1200 x 630), so it will crop badly. A wide crop is on Alex's list;
 //     swap SEO.ogImage and pageSeo.js to it when it exists.
 export const SEO = {
-    // Names both centres, because the page now sells two sessions. Sid stays in
-    // the description, where it can say WHICH session he is at.
+    // Names both centres, because the page sells two sessions and Sid is at
+    // both of them.
     title: 'Open Age T20 Trials, Mickleham & Cranbourne North | Royals',
     description:
-        `Open age T20 trials, players ${MIN_AGE} to ${MAX_AGE}. Mickleham Mon 5 Oct, Cranbourne `
-        + 'North Sun 4 Oct, where Royals Performance Coach Sid Lahiri is coming. '
+        `Open age T20 trials, players ${MIN_AGE} to ${MAX_AGE}. Mickleham Mon 5 Oct and Cranbourne `
+        + 'North Sun 4 Oct, both with Royals Performance Coach Sid Lahiri. '
         + `$${TRIAL_PRICE} a session.`,
     ogImage: SID.photo,
 };
