@@ -19,6 +19,10 @@
 // parents can watch, or a Q&A segment. None of those is confirmed.
 //
 // Anything still unconfirmed is marked `// UNCONFIRMED — Alex to confirm`.
+//
+// The mentions of these sessions on other pages (home banner, What's On,
+// Programs menu, open age trial page) read sidJuniorsPromo.js in this folder.
+// If a date, time, age or price changes here, change it there too.
 // ─────────────────────────────────────────────────────────────
 
 import { getCentre } from '../performance-squads/data';
