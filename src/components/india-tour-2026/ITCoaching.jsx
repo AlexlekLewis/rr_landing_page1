@@ -12,20 +12,29 @@ import ITCtaBand from './ITCtaBand';
 // added. Headshots for Faiz, Somi and Dr Adhau were lifted out of the camp
 // document itself (cropped from the coaching-panel page), so all five now have a
 // face. The monogram fallback stays for any future coach added without a photo.
+//
+// SID'S TITLE IS THE EXCEPTION (Alex, 27 September 2026). It reads the same on
+// every page of the site and on the trial posters: "Head of International Player
+// Development and Performance Coach, Rajasthan Royals" — both roles, as the
+// Royals' own website states them. The camp document's "Head of Global Academies"
+// was an earlier title.
 // ---------------------------------------------------------------------------
 
 const COACHES = [
     {
-        name: 'Sid Lahiri',
-        role: 'Head of Global Academies · Royals Performance Coach',
+        name: 'Siddhartha Lahiri',
+        role: 'Head of International Player Development and Performance Coach, Rajasthan Royals',
         image: '/assets/rra/sid-lahiri-profile.png',
         bio:
             'Sid leads the camp. He heads the Royals\' academies worldwide, coaches batting for ' +
             'Birmingham Phoenix, and oversees the Rajasthan Royals Academy Melbourne.',
-        quote:
-            'In March this year I witnessed first hand the quality in the Melbourne Rajasthan Royals ' +
-            'Academy. We are looking forward to welcoming players from Australia for the first time, and ' +
-            'giving them a deep dive into the Royals way of playing the game.',
+        // No quote while the page is time-neutral. Sid's 2026 quote is tied to its moment
+        // ("In March this year…", "welcoming players from Australia for the first time"),
+        // and a person's words can't be edited to fit. Ask Sid for a fresh line for the next
+        // tour, or restore it as it was:
+        //   'In March this year I witnessed first hand the quality in the Melbourne Rajasthan
+        //    Royals Academy. We are looking forward to welcoming players from Australia for the
+        //    first time, and giving them a deep dive into the Royals way of playing the game.'
     },
     {
         name: 'Romi Bhinder',

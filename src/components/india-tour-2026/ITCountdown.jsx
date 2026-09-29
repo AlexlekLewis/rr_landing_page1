@@ -8,13 +8,17 @@ import { REGISTRATIONS_CLOSE_AT, TOUR_STATUS } from './itCopy';
 // The deadline is an absolute instant with a +10:00 offset, so the same moment is
 // shown wherever the viewer is — a family in Perth or Dubai sees the real time
 // remaining, not a figure skewed by their own clock.
+//
+// No deadline (REGISTRATIONS_CLOSE_AT = null) means a standing expression of
+// interest: there is no clock, so this renders nothing unless the tour is closed.
 
 const useTimeLeft = (deadlineIso) => {
-    const deadline = new Date(deadlineIso).getTime();
-    const compute = () => Math.max(0, deadline - Date.now());
+    const deadline = deadlineIso ? new Date(deadlineIso).getTime() : null;
+    const compute = () => (deadline === null ? null : Math.max(0, deadline - Date.now()));
     const [ms, setMs] = useState(compute);
 
     useEffect(() => {
+        if (deadline === null) return undefined;
         // Re-sync on mount and then tick. Also recompute when the tab regains
         // focus, since background tabs throttle timers and can drift.
         setMs(compute());
@@ -28,6 +32,8 @@ const useTimeLeft = (deadlineIso) => {
             document.removeEventListener('visibilitychange', onFocus);
         };
     }, [deadlineIso]);
+
+    if (ms === null) return { none: true };
 
     const total = Math.floor(ms / 1000);
     return {
@@ -53,6 +59,8 @@ const ITCountdown = ({ copy }) => {
             </div>
         );
     }
+
+    if (t.none) return null;
 
     const cells = [
         { v: t.days, label: c.countdownUnits.days, padded: false },

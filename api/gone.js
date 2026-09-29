@@ -1,9 +1,11 @@
 // Returns HTTP 410 Gone for retired pages so search engines drop them from the
 // index and they can no longer be visited. Wired up via rewrites in vercel.json.
 //
-// Currently retiring: the 2026 Elite Program intake pages (main + legacy LP1/LP2)
-// and the July 2026 open training day pages (/PGP2026/{mickleham,williamstown,hallam}
-// + their success/junior/entry sub-pages). 410 (not 404) is a deliberate, stronger
+// Currently retiring: the 2026 Elite Program intake pages (main + legacy LP1/LP2),
+// the July 2026 open training day pages (/PGP2026/{mickleham,williamstown,hallam}
+// + their success/junior/entry sub-pages), the India Tour deposit pages, and the
+// open India Tour intake form (/india-tour-intake.html — it collected passport and
+// medical details with no login; its API is retired too). 410 (not 404) is a deliberate, stronger
 // "this is permanently gone" signal to Google. Kept program-agnostic so it can serve
 // any retired page.
 export default function handler(req, res) {

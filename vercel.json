@@ -221,6 +221,14 @@
       "destination": "/api/gone"
     },
     {
+      "source": "/india-tour-intake.html",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/india-tour-intake",
+      "destination": "/api/gone"
+    },
+    {
       "source": "/performance-squads-open-trial",
       "destination": "/performance-squads-open-trial/index.html"
     },

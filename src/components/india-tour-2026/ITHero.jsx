@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import heroImg from '../../assets/india-tour-2026/hero-coaching.jpg';
-import { getTiers, fmtAUD, FLIGHT_ESTIMATE_AUD, CAMP_PDF, TOUR_STATUS } from './itCopy';
+import { getTiers, fmtAUD, FLIGHT_ESTIMATE_AUD, CAMP_PDF, TOUR_STATUS, REGISTRATIONS_CLOSE_AT } from './itCopy';
 import ITCountdown from './ITCountdown';
 
 const scrollToRegister = () =>
@@ -23,13 +23,17 @@ const scrollToPricing = () =>
 const FOCAL = '34% 42%';
 
 const HERO_IMG_ALT =
-    'Sid Lahiri, Head of Global Academies for the Rajasthan Royals, demonstrating a batting ' +
-    'drill to players at the High Performance Centre in Nagpur';
+    'Siddhartha Lahiri, Head of International Player Development and Performance Coach at the ' +
+    'Rajasthan Royals, demonstrating a batting drill to players at the High Performance Centre ' +
+    'in Nagpur';
 
 const ITHero = ({ copy }) => {
     const tiers = getTiers(copy);
     const c = copy.hero;
     const closed = TOUR_STATUS === 'closed';
+    // The clock slot shows a countdown, or the closed notice. With no deadline
+    // and the page open (a standing EOI) there is nothing to show, so no gap either.
+    const showClock = closed || Boolean(REGISTRATIONS_CLOSE_AT);
 
     const priceBand = (
         <>
@@ -115,14 +119,16 @@ const ITHero = ({ copy }) => {
                 </span>
             </motion.div>
 
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
-                className="order-4 mt-6"
-            >
-                <ITCountdown copy={copy} />
-            </motion.div>
+            {showClock && (
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
+                    className="order-4 mt-6"
+                >
+                    <ITCountdown copy={copy} />
+                </motion.div>
+            )}
 
             <motion.p
                 initial={{ opacity: 0, y: 20 }}
@@ -163,8 +169,9 @@ const ITHero = ({ copy }) => {
                     </button>}
 
                     {/* The official camp document. Size is stated up front — it is a big
-                        file and a parent on mobile data deserves the warning. */}
-                    <a
+                        file and a parent on mobile data deserves the warning. Hidden while
+                        CAMP_PDF is null (the only booklet we have is the dated one). */}
+                    {CAMP_PDF && <a
                         href={CAMP_PDF.href}
                         download={CAMP_PDF.filename}
                         data-cta="hero-download-pdf"
@@ -181,7 +188,7 @@ const ITHero = ({ copy }) => {
                                 {c.downloadSub(CAMP_PDF.sizeLabel)}
                             </span>
                         </span>
-                    </a>
+                    </a>}
                 </div>
             </motion.div>
         </div>

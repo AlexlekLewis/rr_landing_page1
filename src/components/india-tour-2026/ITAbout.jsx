@@ -100,8 +100,8 @@ const ITAbout = ({ copy }) => {
                         <div className="absolute inset-0 bg-gradient-to-t from-rr-navy/40 to-transparent" />
                     </div>
                     <div className="absolute -bottom-5 -left-5 hidden md:block bg-rr-pink text-white rounded-2xl px-6 py-4 shadow-xl">
-                        <p className="text-3xl font-black leading-none">SEP</p>
-                        <p className="text-xs font-bold uppercase tracking-widest mt-1">2026</p>
+                        <p className="text-3xl font-black leading-none">6 DAYS</p>
+                        <p className="text-xs font-bold uppercase tracking-widest mt-1">At the Royals HPC</p>
                     </div>
                 </motion.div>
             </div>

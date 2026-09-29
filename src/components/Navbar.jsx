@@ -78,12 +78,12 @@ const PC_NAV = [
 const PROGRAMS_DROPDOWN = [
     { label: 'Performance Squads Open Trial · 16-25', route: '/performance-squads-open-trial', badge: 'Both Centres · 4 & 5 Oct', badgeColor: 'bg-rr-pink' },
     { label: 'Spin Club · Spinners 10-25', route: '/spin-club', badge: 'Registering Interest', badgeColor: 'bg-green-500' },
-    { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', badge: 'Now Open — Places Limited', badgeColor: 'bg-rr-pink' },
+    { label: 'Junior Royals Holiday Program · Cranbourne North', route: '/junior-royals-holiday', badge: '30 Sep – 2 Oct', badgeColor: 'bg-rr-pink' },
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 Entries Open', badgeColor: 'bg-green-500' },
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Register Your Interest', badgeColor: 'bg-green-500' },
     { label: 'Private Coaching', route: '/mickleham', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },
     // Closed but real — it belongs here rather than in the home-page modal.
-    { label: 'High Performance Camp · India', route: '/tours', badge: 'Applications Closed', badgeColor: 'bg-red-500' },
+    { label: 'High Performance Camp · India', route: '/tours', badge: 'Register Your Interest', badgeColor: 'bg-green-500' },
 ];
 
 // ctaLabelOverride / ctaTargetOverride let a page whose call to action changes
@@ -125,7 +125,7 @@ const Navbar = ({ variant = 'lp1', onRegisterClick, ctaLabelOverride, ctaTargetO
     const showHamburger = !isShop;
 
     // Junior Royals (isLittleCrickets): Term 3 is sold out — the CTA points at
-    // the Term 4 entry form (Mondays & Wednesdays, no payment now).
+    // the Term 4 entry form (Wednesdays at Mickleham, no payment now).
     const ctaLabel = ctaLabelOverride || (isPSWelcome ? 'CONFIRM YOUR PLACE' : isMasterclass ? 'BOOK YOUR PLACE' : isPerformanceSquads ? 'REGISTER INTEREST' : isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : isLittleCrickets ? 'TERM 4 — ENTER NOW' : isLP2 ? 'SECURE YOUR PLACE NOW' : isHoliday ? 'SECURE YOUR PLACE' : 'REGISTER INTEREST');
     const ctaTarget = ctaTargetOverride || (isPSWelcome ? 'confirm' : isMasterclass ? 'register' : isPerformanceSquads ? 'register-pay' : isIndiaTour ? 'register' : isMickleham ? 'register' : isCoaches ? 'join' : isPrivateCoaching ? 'eoi-form' : isLP2 ? 'checkout' : isHoliday ? 'secure-form' : isLittleCrickets ? 'registration-form' : 'apply-form');
 
