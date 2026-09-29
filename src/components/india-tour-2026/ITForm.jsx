@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
-import { getTiers, TIER_PRICES, TOUR_STATUS, fmtAUD } from './itCopy';
+import { getPlayerTypes, TOURS, TOUR_STATUS } from './itCopy';
 
 // Where an expression of interest goes: the shared applications table only, the
 // same home as every other website EOI (Spin Club, Private Coaching, …).
@@ -13,11 +13,15 @@ import { getTiers, TIER_PRICES, TOUR_STATUS, fmtAUD } from './itCopy';
 // written there would be enrolled in a tour that has already run. The 2026 rows
 // stay where they are. Tour answers with no column in applications travel in
 // `bio`, one per line.
+//
+// Which tour(s) the family wants goes in BOTH places: the tour ids in
+// `tour_interest` (a text[] column, for filtering), and a readable "Tours:" line
+// at the top of `bio`, so anyone reading the enquiry sees it without the ids.
 const SOURCE_TAG = 'india-tour-eoi';
 const PROGRAM_LABEL = 'India Tour';
 
 // Plain labels for the admin view, whichever reading level the family saw.
-const TIER_LABEL = {
+const PLAYER_TYPE_LABEL = {
     royals_program: 'Already in an RRA program',
     external: 'New to the academy',
 };
@@ -123,9 +127,9 @@ const ITForm = ({ copy, referralCode, referralName }) => {
         );
     }
 
-    const TIERS = getTiers(copy);
-    const TIER_BY_KEY = TIERS.reduce((acc, t) => ({ ...acc, [t.key]: t }), {});
+    const PLAYER_TYPES = getPlayerTypes(copy);
     const [form, setForm] = useState({
+        tours: [], // TOURS ids the family ticked: one or both, at least one required
         player_type: '',
         player_name: '',
         player_dob: '',
@@ -154,9 +158,24 @@ const ITForm = ({ copy, referralCode, referralName }) => {
         if (errors[name]) setErrors(prev => ({ ...prev, [name]: undefined }));
     };
 
+    // Tick or untick one tour. The stored list always follows TOURS order, so
+    // "both" is recorded the same way whichever box was ticked first.
+    const toggleTour = (id) => {
+        setForm(prev => {
+            const picked = new Set(prev.tours);
+            if (picked.has(id)) picked.delete(id);
+            else picked.add(id);
+            return { ...prev, tours: TOURS.map(t => t.id).filter(t => picked.has(t)) };
+        });
+        if (errors.tours) setErrors(prev => ({ ...prev, tours: undefined }));
+    };
+
+    const selectedTours = TOURS.filter(t => form.tours.includes(t.id));
+
     const validate = () => {
         const next = {};
-        if (!form.player_type) next.player_type = 'Please tell us which one describes your player.';
+        if (selectedTours.length === 0) next.tours = fc.toursError;
+        if (!form.player_type) next.player_type = fc.playerTypeError;
         if (!form.player_name.trim()) next.player_name = "Player's full name is required.";
         if (!form.player_dob || age === null) next.player_dob = 'Please enter a valid date of birth.';
         if (!form.current_club.trim()) next.current_club = 'Current club is required.';
@@ -193,8 +212,8 @@ const ITForm = ({ copy, referralCode, referralName }) => {
             const utm = getUTMParams();
             const nameParts = form.player_name.trim().split(' ');
             const bio = [
-                form.player_type &&
-                    `Price tier: ${TIER_LABEL[form.player_type]} (${fmtAUD(TIER_PRICES[form.player_type])} at current prices)`,
+                `Tours: ${selectedTours.map(t => t.window).join('; ')}`,
+                form.player_type && `Player type: ${PLAYER_TYPE_LABEL[form.player_type]}`,
                 form.secondary_skill && `Secondary skill: ${form.secondary_skill}`,
                 form.guardian1_relationship && `Parent/guardian 1: ${form.guardian1_relationship}`,
                 form.guardian2_relationship && `Parent/guardian 2: ${form.guardian2_relationship}`,
@@ -221,6 +240,7 @@ const ITForm = ({ copy, referralCode, referralName }) => {
                 source: SOURCE_TAG,
                 program: PROGRAM_LABEL,
                 program_type: SOURCE_TAG,
+                tour_interest: selectedTours.map(t => t.id),
                 bio,
                 page_referrer: document.referrer || null,
                 ...utm,
@@ -255,22 +275,17 @@ const ITForm = ({ copy, referralCode, referralName }) => {
                         <h2 className="text-3xl font-black text-rr-dark uppercase tracking-wide mb-4">You're On The List</h2>
                         <div className="w-16 h-1 rounded-full bg-rr-pink mx-auto mb-6" />
                         <p className="text-rr-charcoal font-medium leading-relaxed">
-                            Thanks <strong>{form.player_name.split(' ')[0]}</strong> — your interest in the
-                            India Tour has been registered. We will be in touch as soon as the next
-                            tour has dates.
+                            Thanks <strong>{form.player_name.split(' ')[0]}</strong>. We have your interest in:
                         </p>
-                        {TIER_BY_KEY[form.player_type] && (
-                            <p className="text-rr-charcoal font-medium leading-relaxed mt-4">
-                                You told us your player is an{' '}
-                                <strong>{TIER_BY_KEY[form.player_type].heading}</strong>, so at current
-                                prices the program fee would be{' '}
-                                <strong>
-                                    ${TIER_BY_KEY[form.player_type].price.toLocaleString('en-AU')} including GST
-                                </strong>
-                                , plus flights. We will confirm the price for the next tour in writing — you
-                                have not been charged anything.
-                            </p>
-                        )}
+                        <ul className="mt-3 space-y-1">
+                            {selectedTours.map(t => (
+                                <li key={t.id} className="text-rr-dark font-black">{t.window}</li>
+                            ))}
+                        </ul>
+                        <p className="text-rr-charcoal font-medium leading-relaxed mt-4">
+                            When the dates are set, we will write to you with them, the exact price and what
+                            it includes. You have not paid anything, and no place is held yet.
+                        </p>
                     </motion.div>
                 </div>
             </section>
@@ -318,14 +333,79 @@ const ITForm = ({ copy, referralCode, referralName }) => {
                     className="bg-white rounded-2xl p-8 md:p-10"
                 >
                     <form onSubmit={handleSubmit} noValidate>
-                        {/* Which price applies — drives the fee we quote back. */}
-                        <div className="mb-8" data-error={!!errors.player_type}>
-                            <h3 className={sectionHeading}>{fc.tierHeading}</h3>
-                            <p className="text-sm text-rr-charcoal font-medium leading-relaxed -mt-2 mb-5">
-{fc.tierLead}
+                        {/* Which tour — one or both, at least one. Real checkboxes (visually
+                            hidden, still focusable) so keyboards and screen readers work. */}
+                        <div
+                            role="group"
+                            aria-labelledby="tours-heading"
+                            aria-describedby="tours-lead"
+                            className="mb-8"
+                            data-error={!!errors.tours}
+                        >
+                            <h3 id="tours-heading" className={sectionHeading}>{fc.toursHeading}</h3>
+                            <p id="tours-lead" className="text-sm text-rr-charcoal font-medium leading-relaxed -mt-2 mb-5">
+                                {fc.toursLead}
                             </p>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {TIERS.map((t) => {
+                                {TOURS.map((t) => {
+                                    const checked = form.tours.includes(t.id);
+                                    return (
+                                        <label
+                                            key={t.id}
+                                            className={`relative block cursor-pointer rounded-xl border-2 p-5 transition-all focus-within:ring-2 focus-within:ring-rr-pink/40 ${
+                                                checked
+                                                    ? 'border-rr-pink bg-rr-pink/5'
+                                                    : errors.tours
+                                                        ? 'border-red-300 bg-slate-50 hover:border-rr-pink/60'
+                                                        : 'border-slate-200 bg-slate-50 hover:border-rr-pink/60'
+                                            }`}
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                name="tour_interest"
+                                                value={t.id}
+                                                checked={checked}
+                                                onChange={() => toggleTour(t.id)}
+                                                className="sr-only"
+                                                data-tour={t.id}
+                                            />
+                                            <span className="flex items-start gap-3">
+                                                <span
+                                                    aria-hidden="true"
+                                                    className={`mt-0.5 w-5 h-5 rounded shrink-0 border-2 flex items-center justify-center transition-all ${
+                                                        checked ? 'bg-rr-pink border-rr-pink' : 'border-slate-300 bg-white'
+                                                    }`}
+                                                >
+                                                    {checked && (
+                                                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                                        </svg>
+                                                    )}
+                                                </span>
+                                                <span>
+                                                    <span className="block text-sm font-black text-rr-dark uppercase tracking-wide leading-snug">
+                                                        {t.window}
+                                                    </span>
+                                                    <span className="block text-xs text-rr-charcoal/70 font-medium mt-1">
+                                                        {copy.hero.tourLength}
+                                                    </span>
+                                                </span>
+                                            </span>
+                                        </label>
+                                    );
+                                })}
+                            </div>
+                            {errors.tours && <p role="alert" className="text-red-500 text-xs font-medium mt-2">{errors.tours}</p>}
+                        </div>
+
+                        {/* Does the player already train with us — a plain question now, no price. */}
+                        <div className="mb-8" data-error={!!errors.player_type}>
+                            <h3 className={sectionHeading}>{fc.playerTypeHeading}</h3>
+                            <p className="text-sm text-rr-charcoal font-medium leading-relaxed -mt-2 mb-5">
+{fc.playerTypeLead}
+                            </p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {PLAYER_TYPES.map((t) => {
                                     const selected = form.player_type === t.key;
                                     return (
                                         <button
@@ -355,15 +435,6 @@ const ITForm = ({ copy, referralCode, referralName }) => {
                                                 <span className="text-sm font-black text-rr-dark uppercase tracking-wide">
                                                     {t.heading}
                                                 </span>
-                                            </span>
-                                            <span className="block text-2xl font-black text-rr-dark mt-3">
-                                                ${t.price.toLocaleString('en-AU')}
-                                                <span className="text-xs font-bold text-rr-charcoal/70 uppercase tracking-wide ml-2">
-                                                    incl GST
-                                                </span>
-                                            </span>
-                                            <span className="block text-xs text-rr-charcoal/70 font-medium mt-1">
-{fc.tierFootnote}
                                             </span>
                                             <span className="block text-sm text-rr-charcoal font-medium leading-relaxed mt-3">
                                                 {t.who}

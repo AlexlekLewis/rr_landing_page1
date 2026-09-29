@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import coachingImg from '../../assets/india-tour-2026/coaching-mentoring.jpg';
-import { PRODUCED_HERE } from './itCopy';
+import { PRODUCED_HERE, TOURS, TOUR_LENGTH_DAYS } from './itCopy';
 
 const ITAbout = ({ copy }) => {
   const c = copy.about;
@@ -100,8 +100,8 @@ const ITAbout = ({ copy }) => {
                         <div className="absolute inset-0 bg-gradient-to-t from-rr-navy/40 to-transparent" />
                     </div>
                     <div className="absolute -bottom-5 -left-5 hidden md:block bg-rr-pink text-white rounded-2xl px-6 py-4 shadow-xl">
-                        <p className="text-3xl font-black leading-none">6 DAYS</p>
-                        <p className="text-xs font-bold uppercase tracking-widest mt-1">At the Royals HPC</p>
+                        <p className="text-3xl font-black leading-none">{TOURS.length} TOURS</p>
+                        <p className="text-xs font-bold uppercase tracking-widest mt-1">About {TOUR_LENGTH_DAYS} days each</p>
                     </div>
                 </motion.div>
             </div>

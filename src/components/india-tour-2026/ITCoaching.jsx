@@ -20,8 +20,9 @@ const COACHES = [
         role: 'Head of Global Academies · Royals Performance Coach',
         image: '/assets/rra/sid-lahiri-profile.png',
         bio:
-            'Sid leads the camp. He heads the Royals\' academies worldwide, coaches batting for ' +
-            'Birmingham Phoenix, and oversees the Rajasthan Royals Academy Melbourne.',
+            'Sid was with our first touring group in Nagpur in September 2026. He heads the Royals\' ' +
+            'academies worldwide, coaches batting for Birmingham Phoenix, and oversees the Rajasthan ' +
+            'Royals Academy Melbourne.',
         // No quote while the page is time-neutral. Sid's 2026 quote is tied to its moment
         // ("In March this year…", "welcoming players from Australia for the first time"),
         // and a person's words can't be edited to fit. Ask Sid for a fresh line for the next
@@ -36,8 +37,7 @@ const COACHES = [
         image: '/assets/rra/romi-bhinder.png',
         bio:
             'Romi lives at the High Performance Centre and trains the Royals players there all year ' +
-            'round. He is the legal guardian of Vaibhav Sooryavanshi. Six days working with a coach at ' +
-            'the cutting edge of the game is the rarest part of this camp.',
+            'round. He is the legal guardian of Vaibhav Sooryavanshi.',
     },
     {
         name: 'Faiz Fazal',
@@ -46,6 +46,16 @@ const COACHES = [
         bio:
             'A former India international and a Ranji Trophy-winning captain. He brings a long ' +
             'first-class career to the panel, with batting and leadership his focus.',
+    },
+    {
+        // Added 29 Sep 2026 (Alex): he coached our first touring group, in September
+        // 2026, alongside Faiz Fazal. There is no headshot on file yet, so the card
+        // shows his initials. Say nothing about him beyond what Alex has confirmed.
+        name: 'Siddharth Trivedi',
+        role: 'Former Rajasthan Royals Fast Bowler',
+        bio:
+            'Siddharth played for the Rajasthan Royals as a fast bowler. He coached our first touring ' +
+            'group at the centre in September 2026.',
     },
     {
         name: 'Somi Bhinder',
@@ -97,9 +107,10 @@ const ITCoaching = ({ copy }) => (
                     transition={{ delay: 0.1 }}
                     className="text-base md:text-lg text-rr-charcoal font-medium leading-relaxed"
                 >
-                    These are not academy staff, and they are not guests brought in for the week. This is
-                    the Rajasthan Royals&rsquo; own high performance team — the people who prepare an IPL
-                    squad, and who are at the Nagpur centre year round. For six days they coach your player.
+                    These are not academy staff. This is the Rajasthan Royals&rsquo; own high performance
+                    team — the people who prepare an IPL squad, and who coach at the Nagpur centre. They
+                    coached our first touring group there in September 2026. Which of them coach each new
+                    tour is not set yet.
                 </motion.p>
             </div>
 
