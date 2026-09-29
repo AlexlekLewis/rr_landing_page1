@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { BANNER, SID_JUNIORS_ROUTE } from '../sid-juniors/sidJuniorsPromo';
 
 // The full-width banner directly under the nav on the home page — the single
 // loudest slot on the site. It promotes ONE thing at a time, and that thing has
@@ -17,6 +18,9 @@ import { Link } from 'react-router-dom';
 //   4. Sid is at BOTH sessions — Alex confirmed Mickleham on 26 Sep 2026.
 //      His attendance is "scheduled", never certain: the page it links to
 //      carries the hedge and the refund, so this line stays factual.
+//   5. juniors aged 8 to 16 have their own sessions with Sid at both centres
+//      (Alex, 29 Sep 2026). A third row links to /sid-juniors; its words come
+//      from sid-juniors/sidJuniorsPromo.js.
 //
 // The glow pulses to catch the eye, in the Royals' original gold (Alex asked
 // for it by name on 26 Sep 2026). NOTE: the brand spec in reference material
@@ -75,6 +79,21 @@ const HomeTopBanner = () => {
                     <span className="font-medium text-[10px] sm:text-xs text-white/80">
                         Siddhartha Lahiri, Rajasthan Royals Head of International Player Development and Performance Coach, at both sessions
                     </span>
+                </div>
+
+                {/* Juniors, 8 to 16: their own sessions with Sid at both centres.
+                    Under the row that gives his full name, so "Sid" reads right. */}
+                <div className="max-w-6xl mx-auto mt-1.5 text-center leading-snug">
+                    {/* Inline, not flex, so on a phone it wraps as one sentence
+                        with the arrow at the end of the last line. */}
+                    <Link
+                        to={SID_JUNIORS_ROUTE}
+                        className="group text-[10px] sm:text-xs font-medium text-white underline decoration-white/40 underline-offset-2 hover:decoration-white"
+                    >
+                        <span className="font-black uppercase tracking-wide">{BANNER.lead}:</span>{' '}
+                        {BANNER.text}
+                        <ArrowRight className="inline-block w-3 h-3 sm:w-3.5 sm:h-3.5 ml-1 align-[-2px] transition-transform group-hover:translate-x-0.5" />
+                    </Link>
                 </div>
             </div>
         </div>

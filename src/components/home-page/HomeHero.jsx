@@ -2,21 +2,24 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { PROGRAM_ROW, SID_JUNIORS_ROUTE } from '../sid-juniors/sidJuniorsPromo';
 
 // Only list programs a visitor can act on today, and only ones whose page sits
 // inside the site's navigation. "Elite Program" was dropped in Aug 2026: it
 // pointed at /elite-royals, which renders the closed Power Game sales page with
 // no Navbar — a dead end. Put Elite back when there is an open intake AND a page
 // with the site chrome on it.
-// SAME FIVE PROGRAMS, SAME ORDER, as the Navbar dropdown and the What's On
+// SAME PROGRAMS, SAME ORDER, as the Navbar dropdown and the What's On
 // modal (26 Sep 2026). A program that is open has to be findable in all of
 // them, and no list may carry a status the others contradict: this one still
 // said "Trials Full" for the Performance Squads after that page changed to
 // registering interest, and it did not carry the open age trial at all.
 // Pink dot = you can book or pay now. Green dot = open, nothing to pay yet.
-// REVIEW 6 OCT 2026 — the trial and the holiday camp are both over by then.
+// REVIEW 6 OCT 2026 — the trial, the junior sessions with Sid and the holiday
+// camp are all over by then.
 const PROGRAMS = [
     { label: 'Performance Squads Open Trial', route: '/performance-squads-open-trial', badge: 'Ages 16 to 25 · both centres · 4 & 5 Oct', badgeColor: 'bg-rr-pink' },
+    { label: PROGRAM_ROW.heroLabel, route: SID_JUNIORS_ROUTE, badge: PROGRAM_ROW.heroBadge, badgeColor: 'bg-rr-pink' },
     { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', badge: 'Cranbourne North · 30 Sep – 2 Oct', badgeColor: 'bg-rr-pink' },
     { label: 'Spin Club', route: '/spin-club', badge: 'Spin bowlers 10 to 25 · registering interest', badgeColor: 'bg-green-500' },
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Register your interest · next intake', badgeColor: 'bg-green-500' },

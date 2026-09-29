@@ -2,7 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { GlobalBallIcon } from '../performance-squads/CricketIcons';
 import { fadeUp } from '../performance-squads/shared';
+import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import { SID, SID_SECTION } from './openAgeData';
+import { TRIAL_PAGE, SID_JUNIORS_ROUTE } from '../sid-juniors/sidJuniorsPromo';
 
 // Sits second on the page so nobody scrolls past it.
 //
@@ -59,6 +62,15 @@ const SidSection = () => (
                         never reading this section about a session they can't book. */}
                     <p className="text-white/75 text-[15px] sm:text-base font-medium leading-relaxed mt-3">
                         {SID_SECTION.sessions}
+                    </p>
+
+                    {/* Younger players have their own sessions with Sid on the same
+                        two days. Linked, never folded into this trial. */}
+                    <p className="text-white/75 text-[15px] sm:text-base font-medium leading-relaxed mt-3">
+                        {TRIAL_PAGE.sidSection}{' '}
+                        <Link to={SID_JUNIORS_ROUTE} className="inline-flex items-center gap-1 text-rr-light-pink font-bold underline underline-offset-4 hover:text-white">
+                            {TRIAL_PAGE.linkLabel} <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
                     </p>
 
                     {/* Separation. Sid is in the hero and the global opportunities
