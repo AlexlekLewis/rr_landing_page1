@@ -433,16 +433,18 @@ describe('junior royals term 4', () => {
   // "Hallam" is the Cranbourne North centre under its old name (Alex, 30 Sep
   // 2026). Reading it as a closed centre would tell 12 families there is no
   // program when there is one — the single most damaging thing this tab could do.
-  it('treats "hallam" as Cranbourne North, which IS running', () => {
+  it('says a hallam family still has a program, but at a different venue', () => {
     const status = jrTerm4CentreStatus('hallam');
     expect(status).toMatch(/^Yes/);
-    expect(status).toContain('Wednesdays');
+    expect(status).toContain('DIFFERENT VENUE');
+    expect(status).toContain('Cranbourne North');
+    expect(status).toContain('before 7 October');
   });
 
-  it('shows a hallam row under the real centre, and says why the name differs', () => {
+  it('shows a hallam row under the venue they must actually attend', () => {
     const cell = jrTerm4Row(jrT4({ preferred_centre: 'hallam' }))[JR_TERM4_HEADERS.indexOf('Centre They Chose')];
     expect(cell).toContain('Cranbourne North');
-    expect(cell).toContain('old name');
+    expect(cell).toContain('entered when it ran at Hallam');
   });
 
   it('says NO only for Williamstown, and says the family has not been told', () => {
@@ -508,10 +510,10 @@ describe('guide tab covers term 4', () => {
     expect(text).toContain('READ THE "RUNNING IN TERM 4?" COLUMN BEFORE YOU RING ANYONE');
   });
 
-  it('tells the reader that a "Hallam" row is not a problem', () => {
+  it('tells the reader a "Hallam" row needs the venue explained, not a place found', () => {
     const text = guideLines([], {}).map((r) => r[0]).join('\n');
-    expect(text).toContain('"HALLAM" ON A ROW MEANS CRANBOURNE NORTH');
-    expect(text).toContain('Nothing is wrong with those entries');
+    expect(text).toContain('A "HALLAM" ROW STILL HAS A PROGRAM — AT A NEW VENUE');
+    expect(text).toContain('told where to turn up before 7 October');
   });
 
   it('warns against offering another centre unprompted', () => {
