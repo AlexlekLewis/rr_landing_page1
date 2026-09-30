@@ -111,6 +111,25 @@ const SPIN_CLUB_PROGRAM = 'Spin Club';
 const SID_SLUG_PREFIX = 'sid-juniors';
 // src/components/india-tour-2026/ITForm.jsx → SOURCE_TAG
 const TOUR_SOURCE = 'india-tour-eoi';
+// src/components/junior-royals-t3/JRT3RegistrationForm.jsx writes every Term 4
+// entry to its own table, so there is nothing to filter on.
+const JR_TERM4_TABLE = 'jr_term4_waitlist';
+
+// Tour Interest shows entries from 1 SEPTEMBER 2026 ONWARDS (Alex, 30 Sep 2026).
+// Anything older is a lead from a campaign that has been and gone, and it made
+// the tab read as a big list when the live funnel is small.
+//
+// In practice this cutoff removes the whole `india_tour_2026_eoi` source: that
+// referral-gated form closed on 10 Aug 2026 and every one of its 22 entries
+// predates the cutoff. The rows are NOT deleted — they are still in the table,
+// they are just not on this tab. If the cutoff is ever moved back they reappear
+// on the next run with no other change.
+//
+// Melbourne local midnight, not UTC: "from September" means the 1st here, not
+// mid-afternoon on the 31st.
+const TOUR_SINCE = '2026-08-31T14:00:00.000Z'; // 2026-09-01 00:00 Australia/Melbourne
+export const isTourEntryInWindow = (createdAt) =>
+  Boolean(createdAt) && new Date(createdAt) >= new Date(TOUR_SINCE);
 
 // ------------------------------------------------------------
 // Stripe. A program only reconciles against Stripe if it has links here.
@@ -134,6 +153,7 @@ export const PROGRAM_PAYMENT_LINKS = {
   'spin-club': {},
   'sid-juniors': {},
   'tour-interest': {},
+  'jr-term4': {},
 };
 
 // $30 per player, per session. Source of truth is PAYMENT_OPTIONS in
@@ -147,6 +167,7 @@ const NO_PAYMENT_LINE = {
   'spin-club': 'Nothing to pay — this is a registration of interest only',
   'sid-juniors': 'Booking request — no payment has been taken and no place is held',
   'tour-interest': 'Nothing to pay — this is an expression of interest only',
+  'jr-term4': 'Nothing to pay — an entry only. No place is held until we confirm one.',
 };
 
 // Readable centre names for CELL values. Deliberately separate from anything
@@ -374,6 +395,7 @@ export const PROGRAM_LABELS = {
   'spin-club': 'Spin Club',
   'sid-juniors': 'Juniors with Sid',
   'tour-interest': 'Tour Interest',
+  'jr-term4': 'Junior Royals Term 4',
 };
 const tabName = (key) => `${PROGRAM_LABELS[key]}${DNE}`;
 
@@ -578,6 +600,94 @@ export const tourRowFromEoi = (r) => ([
   NO_PAYMENT_LINE['tour-interest'],
 ]);
 
+// ── Junior Royals Term 4 ────────────────────────────────────
+// Entries from /junior-royals. Nothing is paid and no place is held — the page
+// says so, and so does this tab.
+//
+// THE POINT OF THE "RUNNING IN TERM 4?" COLUMN.
+// Until 27 Sep 2026 the form still offered Hallam and Williamstown. Alex
+// confirmed that day that neither has a Term 4 program, and the form now offers
+// Mickleham and Cranbourne North only — but the entries taken before that are
+// still in the table, and 16 of the 29 on the list picked a centre that will
+// not run. Listing them without saying so puts a coach on the phone to a family
+// about a session that does not exist. So every row states it in words.
+//
+// Deliberately NOT done here: proposing the other centre. Mickleham and
+// Cranbourne North are about 70km apart, and a same-centre offer is the
+// standing rule — who gets called, and what they are offered, is Alex's call
+// and not a column in a spreadsheet.
+export const JR_TERM4_HEADERS = [
+  'Entry ID',
+  'Registered (Melbourne)',
+  'Player Name',
+  'Age',
+  'Parent / Guardian',
+  'Parent Email',
+  'Parent Phone',
+  'Centre They Chose',
+  'Running in Term 4?',
+  'Night They Chose',
+  'Payment',
+];
+
+// Centres that actually run Junior Royals in Term 4. Source of truth is
+// WAITLIST_CENTRES in src/components/junior-royals-t3/JRT3RegistrationForm.jsx.
+// If a centre is added or dropped there, change it here in the same commit.
+const JR_TERM4_CENTRES = {
+  'mickleham': 'Mickleham Indoor Sports Centre',
+  'cranbourne-north': 'Elite Cricket Centre, Cranbourne North',
+  // "hallam" IS the Cranbourne North centre under its old name (Alex, 30 Sep
+  // 2026). The south-east centre was called Hallam when these 12 families
+  // entered, so they are IN the centre that runs Term 4, not stranded by it.
+  // Treating 'hallam' as closed would have put a coach on the phone telling 12
+  // families there is no program when there is one.
+  'hallam': 'Elite Cricket Centre, Cranbourne North',
+};
+// Centres the form used to offer that genuinely have no Term 4 program. Named
+// rather than lumped into an "unknown" bucket, so a stale value and a genuinely
+// unrecognised one do not read the same.
+const JR_TERM4_CLOSED_CENTRES = {
+  williamstown: 'Williamstown',
+};
+
+export const jrTerm4CentreStatus = (centre) => {
+  if (JR_TERM4_CENTRES[centre]) {
+    return 'Yes — Wednesdays 6:00pm or 7:00pm, 7 October to 16 December';
+  }
+  if (JR_TERM4_CLOSED_CENTRES[centre]) {
+    return `NO — there is no Term 4 program at ${JR_TERM4_CLOSED_CENTRES[centre]}. `
+      + 'They entered before the centres were confirmed and have not been told yet.';
+  }
+  return `Centre "${centre || '(blank)'}" is not one we recognise — check this row by hand`;
+};
+
+// Wednesday is the booked night at both centres (net bookings RRA-T4-2026-MIC
+// and RRA-T4-2026-CRN). Monday is Performance Squad, and is offered on the form
+// only to measure demand for a second night.
+const JR_TERM4_NIGHTS = {
+  wednesday: 'Wednesday — the Term 4 night',
+  monday: 'Monday — only runs if we add a second night',
+};
+
+export const jrTerm4Row = (r) => ([
+  r.id || '',
+  asText(fmtMelb(r.created_at)),
+  r.player_name || '',
+  asText(r.player_age ?? ''),
+  r.parent_name || '',
+  r.parent_email || '',
+  asText(r.parent_phone || ''),
+  r.preferred_centre === 'hallam'
+    ? `${JR_TERM4_CENTRES.hallam} (they picked it as "Hallam", the centre's old name)`
+    : JR_TERM4_CENTRES[r.preferred_centre]
+      || JR_TERM4_CLOSED_CENTRES[r.preferred_centre]
+      || r.preferred_centre || '',
+  jrTerm4CentreStatus(r.preferred_centre),
+  JR_TERM4_NIGHTS[r.preferred_day]
+    || (r.preferred_day ? r.preferred_day : 'Not asked — they entered before the form asked about nights'),
+  NO_PAYMENT_LINE['jr-term4'],
+]);
+
 // ── Payments (Stripe) ───────────────────────────────────────
 // Every payment on a configured link, INCLUDING the ones we could not attach to
 // a sign-up. An unmatched payment is never dropped — it is listed so a human can
@@ -627,11 +737,11 @@ export const guideLines = (linkLines = [], counts = {}) => {
     ['forms on rramelbourne.com and from Stripe. You do not need to add anyone by hand —'],
     ['a new sign-up appears on its own within half an hour, and so does a payment.'],
     [''],
-    ['THE FOUR TABS — one per program on the "Register" panel on the home page'],
+    ['THE PROGRAM TABS — one per program on the "Register" panel on the home page'],
     [''],
     [`"${PROGRAM_LABELS['open-trial']}" — the open age T20 trial for players 16 to 25 at`],
     ['  rramelbourne.com/performance-squads-open-trial. $30 per player, per session,'],
-    ['  paid through Stripe when they book. This is the only one of the four that'],
+    ['  paid through Stripe when they book. This is the only program on this sheet that'],
     [`  takes money online. Currently ${counts.openTrial ?? 0} sign-ups.`],
     [''],
     [`"${PROGRAM_LABELS['spin-club']}" — spin bowlers 10 to 25 registering interest in the`],
@@ -644,11 +754,38 @@ export const guideLines = (linkLines = [], counts = {}) => {
     ['  has to come back to each family and confirm. If a Stripe payment link is added'],
     [`  to the page later, payments start appearing here on their own. Currently ${counts.sidJuniors ?? 0}.`],
     [''],
+    [`"${PROGRAM_LABELS['jr-term4']}" — families who have entered for Term 4 at`],
+    ['  rramelbourne.com/junior-royals. Nothing is paid and NO PLACE IS HELD: an entry'],
+    [`  means they have put their hand up, not that they are in. Currently ${counts.jrTerm4 ?? 0} entries.`],
+    [''],
+    ['  READ THE "RUNNING IN TERM 4?" COLUMN BEFORE YOU RING ANYONE.'],
+    ['  Term 4 runs at Mickleham and the Elite Cricket Centre in Cranbourne North, on'],
+    ['  Wednesday nights, 7 October to 16 December, one hour a week in two groups at'],
+    ['  6:00pm and 7:00pm.'],
+    [''],
+    ['  "HALLAM" ON A ROW MEANS CRANBOURNE NORTH. It is the same south-east centre'],
+    ['  under its old name, so those families are in a centre that IS running. Their'],
+    ['  row says so. Nothing is wrong with those entries.'],
+    [''],
+    [`  Williamstown is the real gap: ${counts.jrTerm4Closed ?? 0} entries on this tab picked it, and there`],
+    ['  is no Term 4 program there. Those families have not been told. Do not promise'],
+    ['  them a place, and do not offer them another centre off your own bat —'],
+    ['  Williamstown to either Term 4 centre is a long way across Melbourne. Ask Alex'],
+    ['  what those families should be told.'],
+    [''],
+    ['  The "Night They Chose" column works the same way. Wednesday is the night that is'],
+    ['  actually booked. Monday was offered to measure whether a second night is worth'],
+    ['  adding — picking it does not mean a Monday session exists.'],
+    [''],
     [`"${PROGRAM_LABELS['tour-interest']}" — players who want to go on an India tour, from`],
     ['  rramelbourne.com/tours. An expression of interest, not a booking: nothing has'],
-    ['  been paid and no place is held. This tab also carries the people who filled in'],
-    ['  the older India Tour 2026 EOI form before it closed on 10 August 2026 — the'],
-    [`  "Registered Via" column says which form each person came through. Currently ${counts.tour ?? 0}.`],
+    ['  been paid and no place is held.'],
+    [''],
+    [`  THIS TAB STARTS AT 1 SEPTEMBER 2026. Currently ${counts.tour ?? 0} entries. A further`],
+    [`  ${counts.tourBeforeCutoff ?? 0} people registered interest before that date and are NOT shown here —`],
+    ['  almost all of them through the older India Tour 2026 EOI form, which closed on'],
+    ['  10 August 2026. Nothing has been deleted: those entries are still in the'],
+    ['  database and can be put back on this tab whenever you want them.'],
     [''],
     [`"${PAYMENTS_TAB.replace(DNE, '')}" — every payment Stripe has taken on these programs,`],
     ['  including any we could NOT match to a sign-up.'],
@@ -671,6 +808,7 @@ export const guideLines = (linkLines = [], counts = {}) => {
     [`  ${PROGRAM_LABELS['open-trial']}: column ${safeCol(OPEN_TRIAL_HEADERS)} onwards`],
     [`  ${PROGRAM_LABELS['spin-club']}: column ${safeCol(SPIN_CLUB_HEADERS)} onwards`],
     [`  ${PROGRAM_LABELS['sid-juniors']}: column ${safeCol(SID_HEADERS)} onwards`],
+    [`  ${PROGRAM_LABELS['jr-term4']}: column ${safeCol(JR_TERM4_HEADERS)} onwards`],
     [`  ${PROGRAM_LABELS['tour-interest']}: column ${safeCol(TOUR_HEADERS)} onwards`],
     [`  Payments (Stripe): column ${safeCol(PAY_HEADERS)} onwards`],
     [''],
@@ -682,7 +820,9 @@ export const guideLines = (linkLines = [], counts = {}) => {
     [''],
     ['HOW "PAID" IS WORKED OUT'],
     [''],
-    ['Only the Open Trial charges anything online. The fee is $30 per player, per'],
+    ['Only the Open Trial charges anything online. Spin Club, Junior Royals Term 4 and'],
+    ['Tour Interest take no money at all, and the junior sessions with Sid are booking'],
+    ['requests. The Open Trial fee is $30 per player, per'],
     ['session, taken through a Stripe payment link. Stripe does not tell our website'],
     ['when someone pays, so this sheet asks Stripe directly and matches a payment to a'],
     ['player BY EMAIL ADDRESS.'],
@@ -767,7 +907,7 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
   // would quietly stop putting people on a coach's tab with nothing to show it
   // had happened. ROW_CAP is well above any of these (240 in
   // performance_squad_leads at 30 Sep 2026) and hitting it is logged loudly.
-  const [squadLeads, spinClub, sidBookings, tourApps, tourEois] = await Promise.all([
+  const [squadLeads, spinClub, sidBookings, tourApps, tourEois, jrTerm4] = await Promise.all([
     // ALL performance_squad_leads, not just the open-trial ones: payments are
     // allocated across the whole table so this workbook and the Performance
     // Squads workbook can never disagree about who has paid. Filtered down to
@@ -777,6 +917,7 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
     sb.from('match_registrations').select('*').like('match_slug', `${SID_SLUG_PREFIX}%`).order('created_at', { ascending: true }).limit(ROW_CAP),
     sb.from('applications').select('*').eq('source', TOUR_SOURCE).order('created_at', { ascending: true }).limit(ROW_CAP),
     sb.from('india_tour_2026_eoi').select('*').order('created_at', { ascending: true }).limit(ROW_CAP),
+    sb.from(JR_TERM4_TABLE).select('*').order('created_at', { ascending: true }).limit(ROW_CAP),
   ]);
   const sources = {
     performance_squad_leads: squadLeads,
@@ -784,6 +925,7 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
     'match_registrations (Sid)': sidBookings,
     'applications (Tour)': tourApps,
     india_tour_2026_eoi: tourEois,
+    jr_term4_waitlist: jrTerm4,
   };
   for (const [name, r] of Object.entries(sources)) {
     if (r.error) throw r.error;
@@ -839,11 +981,16 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
       rows: (sidBookings.data || []).map((r) => sidRow(r, paidById.get(r.id) || null)),
     },
     {
+      key: 'jr-term4',
+      headers: JR_TERM4_HEADERS,
+      rows: (jrTerm4.data || []).map(jrTerm4Row),
+    },
+    {
       key: 'tour-interest',
       headers: TOUR_HEADERS,
       rows: [
-        ...(tourApps.data || []).map(tourRowFromApplication),
-        ...(tourEois.data || []).map(tourRowFromEoi),
+        ...(tourApps.data || []).filter((r) => isTourEntryInWindow(r.created_at)).map(tourRowFromApplication),
+        ...(tourEois.data || []).filter((r) => isTourEntryInWindow(r.created_at)).map(tourRowFromEoi),
       ],
     },
   ];
@@ -873,7 +1020,13 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
     openTrial: openTrialLeads.length,
     spinClub: (spinClub.data || []).length,
     sidJuniors: (sidBookings.data || []).length,
-    tour: (tourApps.data || []).length + (tourEois.data || []).length,
+    tour: [...(tourApps.data || []), ...(tourEois.data || [])]
+      .filter((r) => isTourEntryInWindow(r.created_at)).length,
+    tourBeforeCutoff: [...(tourApps.data || []), ...(tourEois.data || [])]
+      .filter((r) => !isTourEntryInWindow(r.created_at)).length,
+    jrTerm4: (jrTerm4.data || []).length,
+    jrTerm4Closed: (jrTerm4.data || [])
+      .filter((r) => !JR_TERM4_CENTRES[r.preferred_centre]).length,
   });
 
   await sb

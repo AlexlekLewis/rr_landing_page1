@@ -20,6 +20,10 @@ import {
   tourRowFromEoi,
   payRow,
   paymentCheck,
+  JR_TERM4_HEADERS,
+  jrTerm4Row,
+  jrTerm4CentreStatus,
+  isTourEntryInWindow,
   allocatePayments,
   describeLinkHealth,
   guideLines,
@@ -80,6 +84,19 @@ const sidBooking = (over = {}) => ({
   ...over,
 });
 
+const jrT4 = (over = {}) => ({
+  id: 'jr-1',
+  created_at: '2026-09-28T02:00:00.000Z',
+  player_name: 'Junior Player',
+  player_age: 9,
+  parent_name: 'A Parent',
+  parent_email: 'parent@example.com',
+  parent_phone: '0400111222',
+  preferred_centre: 'mickleham',
+  preferred_day: 'wednesday',
+  ...over,
+});
+
 const payment = (over = {}) => ({
   sessionId: 'cs_test_1',
   paidAt: '2026-09-29T03:00:00.000Z',
@@ -127,6 +144,7 @@ describe('row width matches its header block', () => {
     ['sid juniors', sidRow(sidBooking(), null), SID_HEADERS],
     ['tour (page)', tourRowFromApplication({ id: 't1' }), TOUR_HEADERS],
     ['tour (old EOI)', tourRowFromEoi({ id: 't2' }), TOUR_HEADERS],
+    ['jr term 4', jrTerm4Row(jrT4()), JR_TERM4_HEADERS],
     ['payments', payRow(payment()), PAY_HEADERS],
   ])('%s', (_name, row, headers) => {
     expect(row).toHaveLength(headers.length);
@@ -381,15 +399,156 @@ describe('guide tab', () => {
   });
 
   it('reports the live counts rather than a fixed number', () => {
-    const text = guideLines([], { openTrial: 17, spinClub: 4, sidJuniors: 9, tour: 24 }).map((r) => r[0]).join('\n');
+    const text = guideLines([], {
+      openTrial: 17, spinClub: 4, sidJuniors: 9, tour: 2, tourBeforeCutoff: 22, jrTerm4: 29,
+    }).map((r) => r[0]).join('\n');
     expect(text).toContain('Currently 17 sign-ups');
     expect(text).toContain('Currently 4 sign-ups');
     expect(text).toContain('Currently 9.');
-    expect(text).toContain('Currently 24.');
+    expect(text).toContain('Currently 2 entries');
+    expect(text).toContain('Currently 29 entries');
   });
 
   it('says plainly that a Sid booking holds no place', () => {
     const text = guideLines([], {}).map((r) => r[0]).join('\n');
     expect(text).toContain('no money has been taken and no place is held');
+  });
+});
+
+// ------------------------------------------------------------
+// Junior Royals Term 4. The danger here is not a missing row — it is a row that
+// reads as normal when the centre that family chose has no Term 4 program at
+// all. 16 of the 29 entries are in exactly that position.
+// ------------------------------------------------------------
+describe('junior royals term 4', () => {
+  it('confirms the night and dates for a centre that IS running', () => {
+    for (const centre of ['mickleham', 'cranbourne-north']) {
+      const status = jrTerm4CentreStatus(centre);
+      expect(status).toMatch(/^Yes/);
+      expect(status).toContain('Wednesdays');
+      expect(status).toContain('7 October to 16 December');
+    }
+  });
+
+  // "Hallam" is the Cranbourne North centre under its old name (Alex, 30 Sep
+  // 2026). Reading it as a closed centre would tell 12 families there is no
+  // program when there is one — the single most damaging thing this tab could do.
+  it('treats "hallam" as Cranbourne North, which IS running', () => {
+    const status = jrTerm4CentreStatus('hallam');
+    expect(status).toMatch(/^Yes/);
+    expect(status).toContain('Wednesdays');
+  });
+
+  it('shows a hallam row under the real centre, and says why the name differs', () => {
+    const cell = jrTerm4Row(jrT4({ preferred_centre: 'hallam' }))[JR_TERM4_HEADERS.indexOf('Centre They Chose')];
+    expect(cell).toContain('Cranbourne North');
+    expect(cell).toContain('old name');
+  });
+
+  it('says NO only for Williamstown, and says the family has not been told', () => {
+    const status = jrTerm4CentreStatus('williamstown');
+    expect(status).toMatch(/^NO/);
+    expect(status).toContain('Williamstown');
+    expect(status).toContain('have not been told');
+  });
+
+  it('never proposes another centre — that is Alex\'s call, not a column', () => {
+    const status = jrTerm4CentreStatus('williamstown');
+    expect(status).not.toMatch(/mickleham|cranbourne/i);
+  });
+
+  it('flags an unrecognised centre instead of passing it off as fine', () => {
+    const status = jrTerm4CentreStatus('bundoora');
+    expect(status).toContain('not one we recognise');
+    expect(status).not.toMatch(/^Yes/);
+  });
+
+  it('a blank centre does not read as a working one', () => {
+    expect(jrTerm4CentreStatus('')).toContain('(blank)');
+    expect(jrTerm4CentreStatus(undefined)).not.toMatch(/^Yes/);
+  });
+
+  it('spells out what picking Monday actually means', () => {
+    const row = jrTerm4Row(jrT4({ preferred_day: 'monday' }));
+    expect(row[JR_TERM4_HEADERS.indexOf('Night They Chose')])
+      .toBe('Monday — only runs if we add a second night');
+  });
+
+  it('explains a blank night rather than leaving the cell empty', () => {
+    const row = jrTerm4Row(jrT4({ preferred_day: null }));
+    expect(row[JR_TERM4_HEADERS.indexOf('Night They Chose')])
+      .toContain('entered before the form asked');
+  });
+
+  it('never implies a place is held', () => {
+    const row = jrTerm4Row(jrT4());
+    expect(row[JR_TERM4_HEADERS.indexOf('Payment')])
+      .toBe('Nothing to pay — an entry only. No place is held until we confirm one.');
+  });
+
+  it('names the venue rather than the slug, for closed centres too', () => {
+    expect(jrTerm4Row(jrT4())[JR_TERM4_HEADERS.indexOf('Centre They Chose')])
+      .toBe('Mickleham Indoor Sports Centre');
+    expect(jrTerm4Row(jrT4({ preferred_centre: 'cranbourne-north' }))[JR_TERM4_HEADERS.indexOf('Centre They Chose')])
+      .toBe('Elite Cricket Centre, Cranbourne North');
+    expect(jrTerm4Row(jrT4({ preferred_centre: 'williamstown' }))[JR_TERM4_HEADERS.indexOf('Centre They Chose')])
+      .toBe('Williamstown');
+  });
+
+  it('keeps the leading zero on the parent phone', () => {
+    expect(jrTerm4Row(jrT4())[JR_TERM4_HEADERS.indexOf('Parent Phone')]).toBe("'0400111222");
+  });
+});
+
+describe('guide tab covers term 4', () => {
+  it('states the count of families whose centre is not running', () => {
+    const text = guideLines([], { jrTerm4: 29, jrTerm4Closed: 4 }).map((r) => r[0]).join('\n');
+    expect(text).toContain('Currently 29 entries');
+    expect(text).toContain('4 entries on this tab picked it');
+    expect(text).toContain('READ THE "RUNNING IN TERM 4?" COLUMN BEFORE YOU RING ANYONE');
+  });
+
+  it('tells the reader that a "Hallam" row is not a problem', () => {
+    const text = guideLines([], {}).map((r) => r[0]).join('\n');
+    expect(text).toContain('"HALLAM" ON A ROW MEANS CRANBOURNE NORTH');
+    expect(text).toContain('Nothing is wrong with those entries');
+  });
+
+  it('warns against offering another centre unprompted', () => {
+    const text = guideLines([], {}).map((r) => r[0]).join('\n');
+    expect(text).toContain('do not offer them another centre');
+    expect(text).toContain('NO PLACE IS HELD');
+  });
+});
+
+// ------------------------------------------------------------
+// Tour Interest is capped to entries from 1 September 2026 (Alex, 30 Sep 2026).
+// The cutoff is Melbourne midnight, not UTC — getting that wrong would silently
+// include or drop anything registered on 31 August evening.
+// ------------------------------------------------------------
+describe('tour cutoff', () => {
+  it('keeps entries from 1 September Melbourne time onward', () => {
+    expect(isTourEntryInWindow('2026-09-30T02:36:17.193Z')).toBe(true);   // 30 Sep, live funnel
+    expect(isTourEntryInWindow('2026-08-31T14:00:00.000Z')).toBe(true);   // 1 Sep 00:00 Melbourne
+  });
+
+  it('drops everything before it, including the closed EOI form', () => {
+    expect(isTourEntryInWindow('2026-08-31T13:59:59.000Z')).toBe(false);  // 31 Aug 23:59 Melbourne
+    expect(isTourEntryInWindow('2026-08-10T05:58:57.916Z')).toBe(false);  // last EOI row
+    expect(isTourEntryInWindow('2026-06-03T23:48:44.937Z')).toBe(false);  // first EOI row
+  });
+
+  it('does not treat a missing date as in-window', () => {
+    expect(isTourEntryInWindow(null)).toBe(false);
+    expect(isTourEntryInWindow(undefined)).toBe(false);
+    expect(isTourEntryInWindow('')).toBe(false);
+  });
+
+  it('the guide says how many are hidden, and that nothing was deleted', () => {
+    const text = guideLines([], { tour: 2, tourBeforeCutoff: 22 }).map((r) => r[0]).join('\n');
+    expect(text).toContain('THIS TAB STARTS AT 1 SEPTEMBER 2026');
+    expect(text).toContain('Currently 2 entries');
+    expect(text).toContain('22 people registered interest before that date');
+    expect(text).toContain('Nothing has been deleted');
   });
 });
