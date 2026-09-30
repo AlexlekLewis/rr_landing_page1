@@ -85,8 +85,14 @@ const TERM3_SOLD_OUT = true;
 // Term 4 entry panel. Entries land in jr_term4_waitlist (anon INSERT only —
 // parents can enter but nobody can read the list back without an admin login).
 //
-// TERM 4 RUNS AT TWO CENTRES. Alex, 27 Sep 2026: "Hallam and williamstown do
-// not have programs in term 4", and yes to Cranbourne North. Hallam and
+// TERM 4 RUNS AT TWO CENTRES: Mickleham, and the Elite Cricket Centre at
+// 30 Medley Dr, Cranbourne North.
+//
+// THE SOUTH-EAST PROGRAM MOVED — it did not close. Alex, 30 Sep 2026:
+// "cranbourne north is the centre". The earlier note here read "Hallam and
+// williamstown do not have programs in term 4", which was true of the Hallam
+// VENUE but told the page to say the south-east program had gone. It had not;
+// it relocated. 12 families had already entered choosing Hallam. Williamstown
 // Williamstown were still selectable here until then, and 15 of the 26 entries
 // taken so far picked one of them — those families have to be told. Do not put
 // a centre on this list without a booking behind it.
@@ -188,7 +194,7 @@ const Term4EntryPanel = () => {
                         Term 3 sold out at all three centres and has now finished. If your player was in Term 3, nothing carries over automatically — enter below to hold a place in Term 4.
                     </p>
                     <p className="text-white/80 font-medium leading-relaxed">
-                        Term 4 runs at <span className="font-black text-white">Mickleham</span> and the <span className="font-black text-white">Elite Cricket Centre in Cranbourne North</span> on <span className="font-black text-white">Wednesday nights</span>, 7 October to 16 December — one hour a week, in two groups at 6:00pm and 7:00pm. There is no Term 4 program at Hallam or Williamstown this term. Entries are open now; no payment is taken today.
+                        Term 4 runs at <span className="font-black text-white">Mickleham</span> and the <span className="font-black text-white">Elite Cricket Centre in Cranbourne North</span> on <span className="font-black text-white">Wednesday nights</span>, 7 October to 16 December — one hour a week, in two groups at 6:00pm and 7:00pm. Our south-east program has moved: it used to run at Hallam, and from Term 4 it runs at the Elite Cricket Centre, 30 Medley Dr, Cranbourne North. If you came to us at Hallam, that is your centre. There is no Term 4 program at Williamstown this term. Entries are open now; no payment is taken today.
                     </p>
                 </div>
 
