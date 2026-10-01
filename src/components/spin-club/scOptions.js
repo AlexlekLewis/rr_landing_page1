@@ -55,40 +55,48 @@ export const CLUBS = [
     },
 ];
 
-// Prices (Alex, 24 Sep 2026). Written the way a family reads them: the price
-// for the whole block first, then what that works out at per night.
-// Squad members are capped at $25 a night. Everyone else is $67.50 a night
-// ($45/hr) and a one-off night is $97.50 ($65/hr).
 // A Royal Spin Coach bowls one type of spin. The centre takes all of them.
 // This line exists because "Off spin" under a venue name reads as a restriction.
 export const EVERY_SPIN = {
     short: 'Every type of spin, at both centres',
-    long: 'Both centres take every type of spin — off spin, leg spin, left-arm orthodox, left-arm wrist spin, and anyone still working out what it is they bowl. Your Royal Spin Coach bowls one of them. They coach all of them.',
+    long: 'Both centres take every type of spin \u2014 off spin, leg spin, left-arm orthodox, left-arm wrist spin, and anyone still working out what it is they bowl. Your Royal Spin Coach bowls one of them. They coach all of them.',
 };
+
+// Prices. The figures Alex works to are GST-exclusive ($200 / $540 / $97.50);
+// GST is on top (Alex, 1 Oct 2026). Australian Consumer Law requires a
+// consumer-facing page to show the total payable, so the big number here is the
+// GST-INCLUSIVE one and the ex-GST figure sits underneath it.
+//   squad  $200 + GST = $220.00  ->  $27.50 a night
+//   open   $540 + GST = $594.00  ->  $74.25 a night
+//   single  $97.50 + GST = $107.25
+export const GST_NOTE = 'Every price on this page includes GST.';
 
 export const PRICES = [
     {
         key: 'squad',
         question: 'In a Performance Squad?',
-        headline: '$200',
+        headline: '$220',
         unit: 'for all 8 Wednesday nights',
-        perNight: 'That works out at $25 a night.',
+        exGst: '$200 plus GST',
+        perNight: 'That works out at $27.50 a night.',
         who: 'You already train with us this season, so you pay the lower price.',
         feature: true,
     },
     {
         key: 'open',
         question: 'Not in a squad?',
-        headline: '$540',
+        headline: '$594',
         unit: 'for all 8 Wednesday nights',
-        perNight: 'That works out at $67.50 a night.',
+        exGst: '$540 plus GST',
+        perNight: 'That works out at $74.25 a night.',
         who: 'Open to any spinner aged 10 to 25 who is offered a place.',
     },
     {
         key: 'single',
         question: 'Just want to try one night?',
-        headline: '$97.50',
+        headline: '$107.25',
         unit: 'for a single Wednesday',
+        exGst: '$97.50 plus GST',
         perNight: 'You pay for that night only.',
         who: 'Come once, when there is a spare place that week.',
     },
