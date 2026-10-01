@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { CalendarDays, MapPin, Ticket, ArrowRight, Navigation, Clock } from 'lucide-react';
+import { CalendarDays, MapPin, Ticket, ArrowRight, Navigation, Clock, LogIn } from 'lucide-react';
 import { fadeUp, SectionHeading } from '../performance-squads/shared';
 import {
     SESSION_VIEW, SESSION_SECTION, STATE_BADGE, OLDER_PLAYERS,
@@ -49,6 +49,9 @@ const SessionCard = ({ s, delay }) => (
             <Row icon={Clock}>
                 {s.timeLabel}, {s.durationLabel}.
             </Row>
+            <Row icon={LogIn}>
+                {s.arriveLine}
+            </Row>
             <Row icon={MapPin}>
                 <span className="text-white font-bold">{s.venue}</span>, {s.address}.
                 {s.lanesNote && <> {s.lanesNote}</>}
@@ -67,7 +70,7 @@ const SessionCard = ({ s, delay }) => (
         </div>
 
         {/* The trial shares this centre and this time, so say so on the card
-            itself. The safeguarding detail is in the next section. */}
+            itself. */}
         {s.alongsideTrial && (
             <p className="text-white/55 text-[13px] font-medium leading-relaxed mt-5 pt-4 border-t border-white/10">
                 The open age trial runs in the same centre at the same time. Junior players have their

@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { fadeUp, scrollTo } from '../performance-squads/shared';
-import { HERO, CTA, SID_CAVEAT } from './sidJuniorsData';
+import { HERO, CTA } from './sidJuniorsData';
 
 // THE STANDARD HERO. Same background, lion mark, pill, type scale and buttons
 // as ../performance-squads/HeroSection.jsx, which /performance-squads-open-trial
@@ -73,9 +73,6 @@ const SidJuniorsHero = () => (
                         {HERO.secondaryCta}
                     </button>
                 </div>
-                <p className="text-white/50 text-xs sm:text-[13px] font-medium leading-relaxed mt-6 max-w-xl">
-                    {SID_CAVEAT}
-                </p>
             </motion.div>
         </div>
     </section>

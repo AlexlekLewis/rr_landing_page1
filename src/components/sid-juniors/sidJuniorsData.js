@@ -15,8 +15,10 @@
 // What each session is, stated no more strongly than this: time on the lanes
 // with our coaches, and Sid as guest coach.
 //
-// Do not add an arrival time, a kit list beyond what is below, a promise that
-// parents can watch, or a Q&A segment. None of those is confirmed.
+// Arrival: 30 minutes before the session starts (Alex, 2 Oct 2026). Sid is
+// in Melbourne on 4 and 5 October (Alex, 2 Oct 2026). Do not add a kit list,
+// a promise that parents can watch, or a Q&A segment. None of those is
+// confirmed.
 //
 // Anything still unconfirmed is marked `// UNCONFIRMED — Alex to confirm`.
 //
@@ -62,7 +64,7 @@ const NORTH = getCentre('north-melbourne'); // Mickleham Indoor Sports Centre, M
 //   capacity      places, within the house ratio above
 //   full          close this session by hand the moment it is full
 //   price         $ per player
-//   signInTime    shown once set, e.g. '12:45pm'. Never invent one.
+//   signInTime    when to arrive: 30 minutes before the start (Alex, 2 Oct 2026)
 //   paymentLink   null → booking request: no money is taken online and we
 //                 email to confirm the place and how to pay. A Stripe Payment
 //                 Link here → pay to book for this session. Before pasting
@@ -100,7 +102,7 @@ export const SESSIONS = [
         coachCount: 2, // Alex, 29 Sep 2026: two WWC-verified Academy coaches will be rostered per session; names are not published
         capacity: 12, // house ratio for 2 coaches
         full: false,
-        signInTime: null, // UNCONFIRMED — Alex to confirm
+        signInTime: '12:30pm', // 30 minutes before the 1:00pm start (Alex, 2 Oct 2026)
         paymentLink: null, // UNCONFIRMED — Alex to confirm
     },
     {
@@ -127,15 +129,10 @@ export const SESSIONS = [
         coachCount: 2, // Alex, 29 Sep 2026: two WWC-verified Academy coaches will be rostered per session; names are not published
         capacity: 12, // house ratio for 2 coaches
         full: false,
-        signInTime: null, // UNCONFIRMED — Alex to confirm
+        signInTime: '4:00pm', // 30 minutes before the 4:30pm start (Alex, 2 Oct 2026)
         paymentLink: null, // UNCONFIRMED — Alex to confirm
     },
 ];
-
-// Who a parent contacts about a player's safety. An email address renders
-// as a link; anything else (a name and number) renders as plain text.
-export const CONCERNS_CONTACT = 'info@rramelbourne.com'; // UNCONFIRMED — Alex to name a person
-export const CONCERNS_IS_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(CONCERNS_CONTACT.trim());
 
 export const ROUTE = '/sid-juniors';
 export const SUCCESS_ROUTE = '/sid-juniors/success';
@@ -187,6 +184,9 @@ export const SESSION_VIEW = SESSIONS.map((s) => ({
     requestSlug: `${s.dbSlug}-request`,
     priceLabel: `$${s.price} per player`,
     mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${s.venue}, ${s.address}`)}`,
+    arriveLine: s.signInTime
+        ? `Please arrive by ${s.signInTime}, 30 minutes before the session starts.`
+        : 'Please arrive 30 minutes before the session starts.',
 }));
 
 export const getSession = (key) => SESSION_VIEW.find((s) => s.key === key) || null;
@@ -211,7 +211,7 @@ const listJoin = (items) => (items.length <= 1
 
 // ── Sid ──
 // EVIDENCE BASE, and the whole of it: his name and title, his employer, the
-// photo, that he is in Melbourne 3–6 October, and that he is scheduled at
+// photo, that he is in Melbourne on 4 and 5 October, and that he is scheduled at
 // both sessions as guest coach. No honours, former clubs, quotes, or claims
 // about players he has worked with.
 //
@@ -224,13 +224,7 @@ export const SID_TITLE_LINE = SID.titleLine; // Head of International Player Dev
 export const SID_PHOTO = '/assets/performance-squads/sid-lahiri-coaching-2026.jpg';
 export const SID_PHOTO_ALT = 'Sid Lahiri coaching at a Rajasthan Royals training session';
 export const SID_PHOTO_CAPTION = 'Sid Lahiri coaching at a Rajasthan Royals session.';
-export const SID_IN_MELBOURNE = '3 to 6 October';
-
-// THE HEDGE. His attendance is never stated as a certainty. The refund
-// promise appears only once a session takes payment.
-export const SID_CAVEAT = ANY_PAY_TO_BOOK
-    ? "If Sid can't be there, we'll tell you before the day, and anyone who has paid can cancel for a full refund."
-    : "If Sid can't be there, we'll tell you before the day.";
+export const SID_IN_MELBOURNE = 'Sunday 4 and Monday 5 October'; // Alex, 2 Oct 2026
 
 // ── Call to action, by page state ──
 // "Book a place" matches the all-families email's button ("BOOK A JUNIOR
@@ -264,7 +258,7 @@ export const SID_SECTION = {
     title: 'Sid Lahiri Is Coming To Both Centres',
     paragraphs: [
         `${SID_NAME}, known as Sid, is ${SID.title} at the ${SID.employer}.`,
-        `He is in Melbourne from ${SID_IN_MELBOURNE}, and he is scheduled to join both junior `
+        `He is in Melbourne on ${SID_IN_MELBOURNE}, and he is scheduled to join both junior `
         + `sessions as guest coach: ${listJoin(SESSION_VIEW.map((s) => `${s.centreName} on ${s.dayLabel}`))}.`,
     ],
 };
@@ -302,45 +296,6 @@ export const OLDER_PLAYERS = {
     linkLabel: 'See the open age trial',
     href: '/performance-squads-open-trial',
 };
-
-// ── Who's looking after your player ──
-const capacities = [...new Set(SESSION_VIEW.map((s) => s.capacity).filter(Number.isInteger))];
-const TRIAL_SESSION = SESSION_VIEW.find((s) => s.alongsideTrial);
-
-export const SUPERVISION = {
-    eyebrow: 'Safe And Supervised',
-    title: "Who's Looking After Your Player",
-    points: [
-        `Our Royals Academy Melbourne coaches run each session, with ${SID_NAME} as guest coach.`,
-        'At least two Academy coaches with verified Working with Children Checks are on the lanes '
-        + 'for the whole session, and no adult is ever alone with a player.',
-        capacities.length === 1
-            ? `At most ${capacities[0]} players per session, four to a lane, grouped by age.`
-            : `At most ${listJoin(SESSION_VIEW.map((s) => `${s.capacity} players at ${s.centreName}`))}, four to a lane, grouped by age.`,
-        ...(TRIAL_SESSION ? [
-            `At ${TRIAL_SESSION.centreName}, the open age trial for players aged 16 to 25 runs at the same `
-            + 'time, in the same centre. Our junior players are on their own lanes, grouped by age, with '
-            + 'their own coaches, and they sign in at a separate point from the trial.',
-        ] : []),
-    ],
-};
-
-export const ON_THE_DAY = [
-    // Only once a sign-in time is confirmed for that session.
-    ...SESSION_VIEW
-        .filter((s) => s.signInTime)
-        .map((s) => ({ key: `sign-in-${s.key}`, icon: 'sign-in', text: `${s.centreName}: sign your player in from ${s.signInTime}.` })),
-    {
-        key: 'pick-up',
-        icon: 'pick-up',
-        text:
-            `Collect your player from the lanes when their session ends: `
-            + `${listJoin(SESSION_VIEW.map((s) => `${s.endTime} at ${s.centreName}`))}. We only release `
-            + 'players to the parent or guardian named on the booking.',
-    },
-    { key: 'helmet', icon: 'helmet', text: 'Bring a helmet with a stem guard. Nobody bats against a hard ball without one.' },
-    { key: 'water', icon: 'water', text: 'Bring a water bottle.' },
-];
 
 // ── The booking section, by page state ──
 export const CLOSED_COPY = {
@@ -404,8 +359,8 @@ export const FAQS = [
     {
         q: 'Is Sid really going to be there?',
         a:
-            `That is the plan. ${SID_NAME}, ${SID.title} at the ${SID.employer}, is in Melbourne from `
-            + `${SID_IN_MELBOURNE} and is scheduled to join both junior sessions as guest coach. ${SID_CAVEAT}`,
+            `That is the plan. ${SID_NAME}, ${SID.title} at the ${SID.employer}, is in Melbourne on `
+            + `${SID_IN_MELBOURNE} and is scheduled to join both junior sessions as guest coach.`,
     },
     {
         q: 'Is this a trial?',

@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import { Navigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-    CheckCircle2, CalendarDays, MapPin, Mail, ArrowRight, Navigation, LogIn, UserCheck, HardHat, GlassWater,
+    CheckCircle2, CalendarDays, MapPin, Mail, ArrowRight, Navigation, LogIn,
 } from 'lucide-react';
 import { fadeUp } from '../performance-squads/shared';
 import {
-    ANY_PAY_TO_BOOK, SESSION_VIEW, getSession, ROUTE, SID_NAME, SID_CAVEAT, CONTACT_EMAIL, ON_THE_DAY,
+    ANY_PAY_TO_BOOK, SESSION_VIEW, getSession, ROUTE, SID_NAME, CONTACT_EMAIL,
 } from './sidJuniorsData';
 
 // /sid-juniors/success — where a session's Stripe Payment Link sends a parent
@@ -18,7 +18,6 @@ import {
 // refuses to say "payment received" and sends the visitor to the booking page.
 // It does not write to the database: payments are matched to bookings in
 // Stripe by the payer's email.
-const DAY_ICONS = { 'sign-in': LogIn, 'pick-up': UserCheck, helmet: HardHat, water: GlassWater };
 
 const Content = () => {
     const [params] = useSearchParams();
@@ -83,6 +82,10 @@ const Content = () => {
                                     <MapPin className="w-4 h-4 text-rr-pink shrink-0 mt-1" />
                                     <span className="text-white/75 text-[15px] font-medium leading-relaxed">{s.venue}, {s.address}</span>
                                 </li>
+                                <li className="flex items-start gap-3">
+                                    <LogIn className="w-4 h-4 text-rr-pink shrink-0 mt-1" />
+                                    <span className="text-white/75 text-[15px] font-medium leading-relaxed">{s.arriveLine}</span>
+                                </li>
                             </ul>
                             <a
                                 href={s.mapsUrl}
@@ -94,20 +97,6 @@ const Content = () => {
                             </a>
                         </div>
                     ))}
-                    <ul className="space-y-3 mt-6 pt-6 border-t border-white/10">
-                        {ON_THE_DAY.map(({ key, icon, text }) => {
-                            const Icon = DAY_ICONS[icon] || UserCheck;
-                            return (
-                                <li key={key} className="flex items-start gap-3">
-                                    <Icon className="w-4 h-4 text-rr-pink shrink-0 mt-1" />
-                                    <span className="text-white/75 text-[15px] font-medium leading-relaxed">{text}</span>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                    <p className="text-white/55 text-sm font-medium leading-relaxed mt-5 pt-5 border-t border-white/10">
-                        {SID_CAVEAT}
-                    </p>
                 </motion.div>
 
                 <motion.div

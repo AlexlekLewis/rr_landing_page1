@@ -4,7 +4,7 @@ import { GlobalBallIcon } from '../performance-squads/CricketIcons';
 import { fadeUp } from '../performance-squads/shared';
 import {
     SID_NAME, SID_TITLE_LINE, SID_PHOTO, SID_PHOTO_ALT, SID_PHOTO_CAPTION,
-    SID_SECTION, SID_CAVEAT,
+    SID_SECTION,
 } from './sidJuniorsData';
 
 // Sits second on the page, straight under the hero, in the same card layout
@@ -53,11 +53,6 @@ const SidJuniorsSid = () => (
                         </p>
                     ))}
 
-                    {/* The caveat, in the same words as the hero, the form's
-                        confirmation and the FAQ. */}
-                    <p className="text-white/70 text-[15px] sm:text-base font-medium leading-relaxed mt-5 pt-5 border-t border-white/10">
-                        {SID_CAVEAT}
-                    </p>
 
                     <p className="text-white/35 text-xs font-medium leading-relaxed mt-5 pt-4 border-t border-white/10">
                         {SID_PHOTO_CAPTION}

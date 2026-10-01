@@ -8,7 +8,7 @@ import {
 } from '../performance-squads/shared';
 import {
     DB_TABLE, SESSION_VIEW, PAGE_STATE, STATE_BADGE, getSession, MIN_AGE, MAX_AGE, AGE_RANGE,
-    FORM_COPY, FULL_COPY, CLOSED_COPY, NOTES_FIELD, PHOTO_CONSENT, SID_CAVEAT, CONTACT_EMAIL,
+    FORM_COPY, FULL_COPY, CLOSED_COPY, NOTES_FIELD, PHOTO_CONSENT, CONTACT_EMAIL,
     submitCopyFor,
 } from './sidJuniorsData';
 
@@ -382,7 +382,6 @@ const BookingForm = () => {
                             {[
                                 `No payment has been taken, and no place is held for ${done.firstName} yet.`,
                                 `We will email you at ${done.email} to confirm the place and tell you how to pay.`,
-                                SID_CAVEAT,
                             ].map((line) => (
                                 <li key={line} className="flex items-start gap-3">
                                     <span className="mt-[9px] w-1.5 h-1.5 rounded-full bg-rr-pink shrink-0" />
