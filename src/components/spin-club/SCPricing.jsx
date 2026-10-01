@@ -1,5 +1,5 @@
 import React from 'react';
-import { PRICES, INCLUDED, HOW_PAYING_WORKS, PROGRAM } from './scOptions';
+import { PRICES, INCLUDED, HOW_PAYING_WORKS, PROGRAM, GST_NOTE } from './scOptions';
 
 const SCPricing = () => (
     <section className="bg-white py-20 md:py-28">
@@ -14,6 +14,11 @@ const SCPricing = () => (
                 You pay for the whole block of {PROGRAM.weeks} Wednesday nights. Players already in
                 a Royals Academy Performance Squad pay less. If you would rather try one night
                 first, you can do that instead.
+            </p>
+            {/* ACL: a consumer page must show the total payable, so the big number
+                on each card is GST-inclusive and this says so once, up front. */}
+            <p className="text-sm font-black text-rr-dark uppercase tracking-wide mb-12 -mt-8">
+                {GST_NOTE}
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -32,8 +37,11 @@ const SCPricing = () => (
                         <p className="text-5xl font-black tracking-tight leading-none mb-2">
                             {p.headline}
                         </p>
-                        <p className={`text-[15px] font-bold mb-4 ${p.feature ? 'text-white' : 'text-rr-dark'}`}>
+                        <p className={`text-[15px] font-bold mb-1.5 ${p.feature ? 'text-white' : 'text-rr-dark'}`}>
                             {p.unit}
+                        </p>
+                        <p className={`text-[13px] font-semibold mb-4 ${p.feature ? 'text-white/55' : 'text-rr-dark/50'}`}>
+                            {p.exGst} &middot; GST included above
                         </p>
                         <p className={`text-[15px] font-semibold mb-4 ${p.feature ? 'text-white/85' : 'text-rr-dark/70'}`}>
                             {p.perNight}

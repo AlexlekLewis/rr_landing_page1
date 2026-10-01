@@ -84,14 +84,14 @@ const SCHero = () => (
                         What it costs
                     </p>
                     <p className="text-white text-base md:text-lg font-bold leading-relaxed mb-2">
-                        <span className="text-2xl md:text-3xl font-black">$200</span> for all 8 nights
+                        <span className="text-2xl md:text-3xl font-black">$220</span> for all 8 nights
                         if you are in a Royals Academy Performance Squad.
-                        <span className="text-white/60"> That is $25 a night.</span>
+                        <span className="text-white/60"> That is $27.50 a night, GST included.</span>
                     </p>
                     <p className="text-white text-base md:text-lg font-bold leading-relaxed mb-3">
-                        <span className="text-2xl md:text-3xl font-black">$540</span> for all 8 nights
+                        <span className="text-2xl md:text-3xl font-black">$594</span> for all 8 nights
                         if you are not.
-                        <span className="text-white/60"> That is $67.50 a night.</span>
+                        <span className="text-white/60"> That is $74.25 a night, GST included.</span>
                     </p>
                     <button
                         onClick={() => scrollTo('pricing')}
