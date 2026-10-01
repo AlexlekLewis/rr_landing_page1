@@ -2,15 +2,20 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
     CheckCircle2, MapPin, Clock, Shirt, Backpack,
-    Trophy, Globe2, Plane, GraduationCap, Mail, ArrowRight,
+    Trophy, Globe2, Plane, GraduationCap, Mail, ArrowRight, CalendarDays, LogIn,
 } from 'lucide-react';
 import { ACTIVE_CENTRES } from './data';
+import { TRIAL_SESSIONS, arrivalLine } from '../open-age-trial/openAgeData';
 
 // Branded confirmation shown after a trial payment. Reached via each Stripe
 // trial link's after_completion redirect, e.g.
 //   /performance-squads/success?centre=north-melbourne
 // Each link is centre-specific, so the centre comes straight off the URL — no
 // Stripe session lookup needed. Falls back to a generic message if absent.
+//
+// The same trial links now sell the open age trial (openAgeData TRIAL_SESSIONS),
+// so the page shows that centre's trial date, time and sign-in time straight
+// from that file. With no centre on the URL it lists every trial session.
 const PerformanceSquadsSuccess = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -19,6 +24,8 @@ const PerformanceSquadsSuccess = () => {
 
     const centreSlug = new URLSearchParams(window.location.search).get('centre');
     const centre = ACTIVE_CENTRES.find((c) => c.slug === centreSlug) || null;
+    const sessions = TRIAL_SESSIONS.filter((t) => !centre || t.centre === centre.slug);
+    const centreOf = (slug) => ACTIVE_CENTRES.find((c) => c.slug === slug);
 
     const fadeUp = {
         hidden: { opacity: 0, y: 22 },
@@ -31,7 +38,9 @@ const PerformanceSquadsSuccess = () => {
     const onTheDay = [
         { icon: Backpack, text: 'Bring your playing equipment.' },
         { icon: Shirt, text: 'Wear your Rajasthan Royals Academy — or your own club — playing or training apparel.' },
-        { icon: Clock, text: 'Arrive a minimum of 20 minutes before the Trial commences.' },
+        sessions.length
+            ? { icon: Clock, text: 'Arrive 30 minutes before your session starts, so you can be signed in before it begins.' }
+            : { icon: Clock, text: 'Arrive 30 minutes before the trial starts to be signed in.' },
     ];
 
     const opportunities = [
@@ -58,7 +67,7 @@ const PerformanceSquadsSuccess = () => {
                         initial="hidden" animate="visible" variants={fadeUp} custom={0.05}
                         className="text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] text-rr-pink mb-4"
                     >
-                        Performance Squads Trial
+                        {sessions.length ? 'Open Age Trial · Performance Squads' : 'Performance Squads Trial'}
                     </motion.p>
                     <motion.h1
                         initial="hidden" animate="visible" variants={fadeUp} custom={0.1}
@@ -70,14 +79,45 @@ const PerformanceSquadsSuccess = () => {
                         initial="hidden" animate="visible" variants={fadeUp} custom={0.18}
                         className="text-white/80 text-[15px] sm:text-lg font-medium leading-relaxed mb-8"
                     >
-                        Thank you — we&apos;ve received your registration and payment for your trial.
-                        A receipt is on its way to your inbox from Stripe, and our team will be in
-                        touch with your session details.
+                        Thank you. We&apos;ve received your registration and your trial payment, so your
+                        place at the trial is booked. Stripe is emailing you a receipt.
+                        {sessions.length ? ' Your session is below.' : ' Our team will email you your session details.'}
                     </motion.p>
                 </div>
 
-                {/* Centre */}
-                {centre && (
+                {/* Your session(s) */}
+                {sessions.length > 0 ? (
+                    <motion.div
+                        initial="hidden" animate="visible" variants={fadeUp} custom={0.24}
+                        className="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6 mb-5"
+                    >
+                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/45 mb-4">
+                            {sessions.length === 1 ? 'Your Trial Session' : 'Trial Sessions'}
+                        </p>
+                        {sessions.map((t) => {
+                            const c = centreOf(t.centre);
+                            const arrive = arrivalLine(t);
+                            return (
+                                <ul key={t.id} className="space-y-2.5 mb-5 pb-5 border-b border-white/10 last:mb-0 last:pb-0 last:border-b-0">
+                                    <li className="flex items-start gap-3">
+                                        <MapPin className="w-[18px] h-[18px] text-rr-pink flex-shrink-0 mt-0.5" strokeWidth={2.25} />
+                                        <span className="text-sm sm:text-base font-bold">{c ? `${c.venue}, ${c.suburb}` : t.centre}</span>
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                        <CalendarDays className="w-[18px] h-[18px] text-rr-pink flex-shrink-0 mt-0.5" strokeWidth={2.25} />
+                                        <span className="text-white/80 text-sm font-medium">{t.label}</span>
+                                    </li>
+                                    {arrive && (
+                                        <li className="flex items-start gap-3">
+                                            <LogIn className="w-[18px] h-[18px] text-rr-pink flex-shrink-0 mt-0.5" strokeWidth={2.25} />
+                                            <span className="text-white/80 text-sm font-medium">{arrive}</span>
+                                        </li>
+                                    )}
+                                </ul>
+                            );
+                        })}
+                    </motion.div>
+                ) : centre && (
                     <motion.div
                         initial="hidden" animate="visible" variants={fadeUp} custom={0.24}
                         className="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6 mb-5"

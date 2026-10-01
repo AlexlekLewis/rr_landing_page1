@@ -22,6 +22,7 @@ import { sendOrderConfirmation } from './_lib/orderEmail.js';
 import { unpackApplication, buildPaidRow } from './_lib/pgpCheckout.js';
 import { sendPgpConfirmation } from './_lib/pgpEmail.js';
 import { isJrT3Session, classifyJrT3, completeJrT3Registration } from './_lib/jrTerm3.js';
+import { getProduct as getCatalogProduct, PAYABLE_TABLES } from './_lib/checkoutCatalog.js';
 
 // Stripe signature verification requires the *raw* request body. Vercel's
 // default body parser returns a parsed object, which would always fail
@@ -299,6 +300,34 @@ export default async function handler(req, res) {
 
   const charge = session.payment_intent?.latest_charge;
   const card = charge?.payment_method_details?.card;
+
+  // ── Catalogue products (api/program-checkout) ──────────────────────────────
+  // One-off bookings sold from api/_lib/checkoutCatalog.js. The booking row
+  // already exists; mark it paid and move it to the product's paid slug.
+  if (session.metadata?.source === 'program-checkout') {
+    const product = getCatalogProduct(session.metadata.product);
+    const registrationId = session.client_reference_id || session.metadata.registration_id;
+    if (!product || !PAYABLE_TABLES.has(product.table) || !isUuid(registrationId)) {
+      console.error('program-checkout session not recognised:', session.id, session.metadata);
+      return res.status(200).json({ received: true, ignored: 'program_checkout_unrecognised' });
+    }
+    try {
+      const { error } = await getSupabase()
+        .from(product.table)
+        .update({
+          paid: true,
+          paid_at: new Date().toISOString(),
+          amount: (session.amount_total ?? product.amountCents) / 100,
+          [product.slugColumn]: product.paidSlug,
+        })
+        .eq('id', registrationId);
+      if (error) throw error;
+    } catch (e) {
+      console.error('program-checkout update failed:', e.message);
+      return res.status(500).json({ error: 'program checkout update failed' });
+    }
+    return res.status(200).json({ received: true, kind: 'program_checkout', product: session.metadata.product });
+  }
 
   // ── Power Game (create-on-payment) ─────────────────────────────────────────
   // No power_game_applications row is written until payment is confirmed. The

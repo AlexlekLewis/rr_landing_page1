@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/prerender-seo.mjs",
+    "build": "npm run test:payments && vite build && node scripts/prerender-seo.mjs",
+    "test:payments": "vitest run src/config/payments.guard.test.ts",
     "lint": "eslint .",
     "preview": "vite preview",
     "build:pdf": "node generate_lp2_pdf.js",

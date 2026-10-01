@@ -270,6 +270,15 @@ describe('sid juniors rows', () => {
     expect(row[SID_HEADERS.indexOf('Payment')]).toBe('Paid');
     expect(row[SID_HEADERS.indexOf('Amount Paid (AUD)')]).toBe('$30.00');
   });
+
+  it('shows a payment the webhook stamped on the row (program checkout)', () => {
+    const row = sidRow(
+      sidBooking({ match_slug: 'sid-juniors-2026-10-05-mickleham', amount: 30, paid: true, paid_at: '2026-10-02T03:00:00.000Z' }),
+      null,
+    );
+    expect(row[SID_HEADERS.indexOf('Payment')]).toBe('Paid');
+    expect(row[SID_HEADERS.indexOf('Amount Paid (AUD)')]).toBe('$30.00');
+  });
 });
 
 // ------------------------------------------------------------
