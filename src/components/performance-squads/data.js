@@ -126,6 +126,72 @@ export const MAX_AGE = 25;
 // Trial pricing.
 export const TRIAL_PRICE = 30;
 
+// ── Membership — Alex, 2 October 2026. ──
+// The ONE place this page's membership numbers live. They match the welcome
+// page (/performance-squads/welcome) and the Stripe checkout: a one-off $149
+// joining fee, then $29.95 a week. Alex's framing for every line of copy: the
+// membership is a YEARLY fee, broken down for the family's convenience into a
+// weekly payment, and it can be cancelled any time — but cancelling means the
+// $149 joining fee is paid again to come back.
+export const MEMBERSHIP = {
+    joiningFee: 149,       // one-off, non-refundable, paid again to rejoin after cancelling
+    weeklyFee: 29.95,      // charged weekly, in advance
+    weeksPerYear: 52,
+    graceWeeks: 2,         // if payments stop without notice, before the place is released
+};
+// "two-week" — the grace period in words, as the welcome page says it.
+const NUMBER_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six'];
+export const GRACE_PERIOD = `${NUMBER_WORDS[MEMBERSHIP.graceWeeks] || MEMBERSHIP.graceWeeks}-week`;
+
+// $1,557.40 — worked out, never typed, so it can never disagree with the weekly fee.
+export const MEMBERSHIP_YEARLY = Math.round(MEMBERSHIP.weeklyFee * MEMBERSHIP.weeksPerYear * 100) / 100;
+
+// "$149", "$29.95", "$1,557.40" — whole dollars stay whole, anything else shows cents.
+export const money = (n) => `$${n.toLocaleString('en-AU', {
+    minimumFractionDigits: Number.isInteger(n) ? 0 : 2,
+    maximumFractionDigits: 2,
+})}`;
+
+// What a squad place gives a member. Same six points as the welcome page, in
+// the same order, so the promise a family reads before trialling is the promise
+// they read when they join.
+export const MEMBER_INCLUDES = [
+    {
+        title: 'Weekly squad training',
+        body: 'Train every week at your centre with your Head Coach and a dedicated squad coach, on Monday nights.',
+    },
+    {
+        title: '5 to 10 T20 match days',
+        body: 'About one a month from September to April, in the Power League and showcase matches. Selection is based on performance.',
+    },
+    {
+        title: 'Two squad sessions with Sid Lahiri',
+        body: "Siddhartha Lahiri, the Rajasthan Royals' Head of International Player Development. Other Royals and guest coaches join from time to time, online and in person.",
+    },
+    {
+        title: 'High Performance Centre camps',
+        body: 'Invitations to Royals-run camps at the Rajasthan Royals High Performance Centre in Nagpur.',
+    },
+    {
+        title: 'Train with Royals franchise teams',
+        body: 'Select players get the chance to train with Royals franchise teams.',
+    },
+    {
+        title: 'Global inter-academy matches',
+        body: 'The chance to play in Global Royals Inter-Academy matches and tournaments.',
+    },
+];
+
+// Member pricing — the programs a financial member pays less for.
+export const MEMBER_PRICING_ON = [
+    '12-week T20 Program',
+    'Pre-Season Program',
+    'Masterclasses',
+    'Spin Club',
+    'High Performance Centre tours',
+    'Royals apparel and partner offers',
+];
+
 // PLACEHOLDER — replace with the real upfront figure and its saving.
 export const REGISTRATION_WEEKLY_PRICE = 30;
 export const REGISTRATION_UPFRONT_PRICE = null;   // e.g. 1100
@@ -264,35 +330,45 @@ export const SQUAD_COACHES = [
     },
 ];
 
-// FAQ — DRAFT copy for Andy's review.
+// FAQ — this page only (the open age trial and Sid Juniors pages pass their own).
+// Every number here comes from the constants above, so the answers can never
+// quote a different fee from the membership section.
 export const FAQS = [
     {
         q: 'Who are the Performance Squads for?',
-        a: 'Players aged 10 to 25 as of the 2026/27 cricket season, in the current pathway who want to build a T20 career, players still chasing outstanding opportunities in T20 cricket, players rebuilding after injury or time away, and players whose skillset suits short-format cricket. Squads are built around playing standard rather than one age bracket.',
+        a: `Players aged ${MIN_AGE} to ${MAX_AGE} who want to build a T20 career: players in the current pathway, players still chasing outstanding opportunities in T20 cricket, players rebuilding after injury or time away, and players whose skillset suits short-format cricket. Squads are built around playing standard rather than one age bracket.`,
     },
     {
         q: 'How do I get into a squad?',
-        a: 'You trial. Register, pay your trial fee, and take part at your nearest centre. Our coaches assess skill, athleticism and attitude, and successful players are offered a squad place once the trial period closes.',
+        a: 'Through a trial. Players in our T20 Elite and Pre-Season Programs are also eligible for selection. Trial dates are listed under Trial Dates on this page as soon as they are set. If there is no trial open for your age, register your interest and we will let you know as soon as the next one opens.',
+    },
+    {
+        q: 'When is the next trial?',
+        a: 'Check Trial Dates on this page. We post new dates there as soon as they are set. If none are listed for you yet, the dates are still to be confirmed. Register your interest and we will tell you first.',
     },
     {
         q: 'What happens at a trial?',
-        a: 'Our coaches assess you across batting, bowling and fielding. You will be told where you stand either way — a selection outcome is part of what your trial fee covers.',
+        a: 'Our coaches assess you across batting, bowling and fielding. You will be told where you stand either way. A selection outcome is part of what your trial fee covers.',
     },
     {
         q: 'What does it cost?',
-        a: 'Two stages. A $30 trial fee per player per session to be assessed. If you are selected, a Registration Fee for your squad place is required. Nothing beyond the trial fee is paid unless you are offered a place.',
+        a: `A ${money(TRIAL_PRICE)} trial fee per session to be assessed. If you are offered a place, you pay a one-off ${money(MEMBERSHIP.joiningFee)} joining fee, then your membership: a yearly fee of ${money(MEMBERSHIP_YEARLY)}, broken down for your convenience into ${money(MEMBERSHIP.weeklyFee)} a week. Match fees are separate and set for each match.`,
     },
     {
-        q: 'What do I get if I am selected?',
-        a: 'Weekly training with your squad under a Royals accredited Head Coach, selection for Power League rounds and external fixtures, the First XI pathway, ongoing performance feedback, and access to Royals Group global opportunities including High Performance Centre camps and training partner selection.',
+        q: 'Can I cancel my membership?',
+        a: `Yes, any time. But if you cancel and later want to come back, you will need to pay the ${money(MEMBERSHIP.joiningFee)} joining fee again. If payments stop without notice, there is a ${GRACE_PERIOD} grace period before your squad place is released.`,
+    },
+    {
+        q: 'What do I get as a member?',
+        a: 'Weekly training with your Head Coach and a squad coach, 5 to 10 T20 match days across the season, two squad sessions with Sid Lahiri, invitations to High Performance Centre camps, and the chance to train with Royals franchise teams and play Global Royals Inter-Academy matches. Members also get member pricing on our other programs.',
     },
     {
         q: 'Are the global opportunities real?',
         a: 'Yes. Our Rajasthan Royals Academy selection team has put forward four players for consideration as training partners with the Paarl Royals in the SA20, and Royals Academies in the USA have sent players as training partners of the Barbados Royals. Selection is competitive and never guaranteed, but the routes exist and are being used.',
     },
     {
-        q: 'When do Performance Squad games start?',
-        a: 'Performance Squad games commence in late September for certain age groups, with the remainder following through the season.',
+        q: 'When are matches played?',
+        a: 'From September to April. Squad players get 5 to 10 T20 match days across the season, about one a month, in the Power League and showcase matches. Selection is at the coaching staff’s discretion, and not every player plays every game.',
     },
     {
         q: 'Which centres are running squads?',

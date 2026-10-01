@@ -2,7 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { fadeUp } from './shared';
 
-// Reserved explanation section — placeholder copy, refine with Andy.
+// Where the squads play. Evergreen: no season-specific dates, so the page stays
+// true from one season to the next. Match count matches the membership section.
 const PowerLeagueSection = () => (
     <section className="py-20 px-5">
         <div className="max-w-4xl mx-auto">
@@ -24,20 +25,19 @@ const PowerLeagueSection = () => (
                 className="bg-gradient-to-br from-rr-navy to-rr-dark border border-white/10 rounded-2xl p-7 sm:p-10">
                 <p className="text-white/75 text-[15px] sm:text-base font-medium leading-relaxed mb-4">
                     The Power League is where the Academy Performance Squads compete head-to-head
-                    against each other in T20, T10 and 100-ball matches, played at various times
-                    from September 2026 through April 2027.
+                    against each other in T20, T10 and 100-ball matches, played from September to
+                    April each season.
                 </p>
                 <p className="text-white/75 text-[15px] sm:text-base font-medium leading-relaxed mb-4">
                     Each centre's First XI and additional squad teams (ages 10 to 25) are selected
                     for Power League fixtures, alongside fixtures against external opposition in
-                    showcase matches — with the Performance Squads program designed for every squad
-                    member to compete in real, meaningful cricket throughout the season at the rate of
-                    approximately 5-6 matches across the period.
+                    showcase matches. The program is designed for every squad member to play real,
+                    meaningful cricket through the season: 5 to 10 T20 match days, about one a month.
                 </p>
                 <p className="text-white/75 text-[15px] sm:text-base font-medium leading-relaxed mb-4">
-                    <span className="text-rr-light-pink font-bold">Performance Squad games commence in
-                    late September</span> for certain age groups, with the remainder following through
-                    the season.
+                    <span className="text-rr-light-pink font-bold">Selection is at the coaching staff’s
+                    discretion</span>, and not every player plays every game. We tell you the team before
+                    each match.
                 </p>
                 <p className="text-white/45 text-xs font-medium italic">
                     Full Power League format, external showcase fixtures, and standings will be published here from time to time.
