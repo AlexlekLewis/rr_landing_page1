@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Check, CreditCard, Mail, UserPlus, Camera, CalendarClock } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { HONEYPOT_FIELD, isHoneypotTripped } from '../../lib/security/bot.js';
+import { newBookingId, startCheckout } from '../../lib/startCheckout';
 import {
     fadeUp, SectionHeading, FieldError, inputClass, PSCheckbox,
 } from '../performance-squads/shared';
@@ -21,10 +22,13 @@ import {
 //   closed — no session is taking bookings yet. No form, just when places open.
 //   full   — every session is full. No form.
 //
-// Each session is either a BOOKING REQUEST (no payment link: the details are
+// Each session is either a BOOKING REQUEST (no checkout: the details are
 // saved, no money is taken, and the page says so) or PAY TO BOOK (details are
-// saved first, then the parent goes to Stripe in the SAME tab, because the
-// Instagram in-app browser silently refuses to open a new tab).
+// saved first, then the parent goes straight to Stripe Checkout in the SAME
+// tab, because the Instagram in-app browser silently refuses to open a new
+// tab). Checkout is created by /api/program-checkout from the session's
+// checkoutProduct; if that call fails, the saved booking shows a Pay button
+// that retries it.
 //
 // One row per booking in match_registrations, tagged with the session's slug.
 // The insert never chains .select(): the row cannot be read back from the
@@ -213,7 +217,20 @@ const BookingForm = () => {
     const [form, setForm] = useState(EMPTY);
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
-    const [done, setDone] = useState(null); // { firstName, email, sessionKey } once saved
+    const [done, setDone] = useState(null); // { firstName, email, sessionKey, bookingId } once saved
+    const [payError, setPayError] = useState(null);
+    const [paying, setPaying] = useState(false);
+
+    const retryPayment = async () => {
+        setPayError(null);
+        setPaying(true);
+        try {
+            await startCheckout({ bookingId: done.bookingId, product: getSession(done.sessionKey).checkoutProduct });
+        } catch (payErr) {
+            setPayError(`${payErr.message} The booking is saved. Try again, or email ${CONTACT_EMAIL}.`);
+            setPaying(false);
+        }
+    };
     const doneRef = useRef(null);
 
     // The long form collapses into a short card, so bring the card into view
@@ -275,9 +292,12 @@ const BookingForm = () => {
 
         setErrors({});
         setSubmitting(true);
+        // Made here so the row can be paid for: the browser cannot read it back.
+        const bookingId = newBookingId();
         try {
             const { error } = await supabase.from(DB_TABLE).insert([
                 {
+                    id: bookingId,
                     // The slug records WHICH session this booking is for.
                     match_slug: s.payToBook ? s.dbSlug : s.requestSlug,
                     match_name: s.dbName,
@@ -304,7 +324,15 @@ const BookingForm = () => {
             ]);
             if (error) throw error;
             throttleRecord();
-            setDone({ firstName, email, sessionKey: s.key });
+            setDone({ firstName, email, sessionKey: s.key, bookingId });
+            if (s.checkoutProduct) {
+                try {
+                    await startCheckout({ bookingId, product: s.checkoutProduct });
+                } catch (payErr) {
+                    console.error('Sid juniors checkout error:', payErr);
+                    setPayError(`${payErr.message} The booking is saved: press Pay to try again.`);
+                }
+            }
         } catch (err) {
             console.error('Sid juniors booking error:', err);
             setErrors({
@@ -322,6 +350,8 @@ const BookingForm = () => {
         setForm((f) => ({ ...f, ...EMPTY_PLAYER, ...EMPTY_CONSENTS, company: '' }));
         setErrors({});
         setDone(null);
+        setPayError(null);
+        setPaying(false);
         setTimeout(() => document.getElementById('sj-session-label')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
     };
 
@@ -351,16 +381,31 @@ const BookingForm = () => {
                             One more step: pay ${doneSession.price} to book {done.firstName}&apos;s place at {sessionLine}.
                             The place is not booked until the payment goes through.
                         </p>
-                        {/* DO NOT add target="_blank". Same tab, on purpose (see top). */}
-                        <a
-                            href={doneSession.paymentLink}
-                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
-                        >
-                            <CreditCard className="w-4 h-4" /> Pay ${doneSession.price} Now
-                        </a>
+                        {doneSession.checkoutProduct ? (
+                            <button
+                                type="button"
+                                onClick={retryPayment}
+                                disabled={paying || (submitting && !payError)}
+                                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
+                            >
+                                <CreditCard className="w-4 h-4" />
+                                {paying || (submitting && !payError) ? 'Opening secure payment…' : `Pay $${doneSession.price} Now`}
+                            </button>
+                        ) : (
+                            // DO NOT add target="_blank". Same tab, on purpose (see top).
+                            <a
+                                href={doneSession.paymentLink}
+                                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
+                            >
+                                <CreditCard className="w-4 h-4" /> Pay ${doneSession.price} Now
+                            </a>
+                        )}
+                        {payError && (
+                            <p role="alert" className="text-amber-200 text-sm font-medium leading-relaxed mt-4">{payError}</p>
+                        )}
                         <p className="text-white/50 text-sm font-medium leading-relaxed mt-5">
-                            At checkout, use <span className="text-white/80">{done.email}</span> so we can
-                            match the payment to this booking. Payments are processed securely by Stripe.
+                            Payments are processed securely by Stripe. Your receipt goes to{' '}
+                            <span className="text-white/80">{done.email}</span>.
                         </p>
                     </motion.div>
                 )}

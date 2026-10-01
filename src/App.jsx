@@ -78,6 +78,7 @@ const OpenAgeTrial = React.lazy(() => import('./components/open-age-trial/OpenAg
 // redirects back to the booking page.
 const SidJuniors = React.lazy(() => import('./components/sid-juniors/SidJuniors'));
 const SidJuniorsSuccess = React.lazy(() => import('./components/sid-juniors/SidJuniorsSuccess'));
+const SidJuniorsPay = React.lazy(() => import('./components/sid-juniors/SidJuniorsPay'));
 // Match Registration — reusable match-day registration + payment page. Match-specific
 // detail lives in src/components/match-registration/matchConfig.js, so the next block
 // of matches is a config swap, not a new page. HIDDEN: noindex, direct URL only.
@@ -261,6 +262,7 @@ function App() {
             and Mickleham (Mon 5 Oct). Public, linked from the all-families email. */}
         <Route path="/sid-juniors" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><SidJuniors /></React.Suspense>} />
         <Route path="/sid-juniors/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><SidJuniorsSuccess /></React.Suspense>} />
+        <Route path="/sid-juniors/pay" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><SidJuniorsPay /></React.Suspense>} />
 
         {/* Match Registration — reusable match-day registration + payment. HIDDEN:
             noindex, not in nav or sitemap, direct URL only. Currently serving the

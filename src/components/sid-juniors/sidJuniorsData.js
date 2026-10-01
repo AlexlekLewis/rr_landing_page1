@@ -63,14 +63,13 @@ const NORTH = getCentre('north-melbourne'); // Mickleham Indoor Sports Centre, M
 //   full          close this session by hand the moment it is full
 //   price         $ per player
 //   signInTime    shown once set, e.g. '12:45pm'. Never invent one.
-//   paymentLink   null → booking request: no money is taken online and we
-//                 email to confirm the place and how to pay. A Stripe Payment
-//                 Link here → pay to book for this session. Before pasting
-//                 one in, set its after-payment redirect to
-//                 https://rramelbourne.com/sid-juniors/success?session=<key>
-//                 and keep "Junior Royals", "Royals Academy", "Holiday" and
-//                 "Elite" out of the Stripe product name (the Stripe webhook
-//                 files unrecognised payments by those words).
+//   checkoutProduct  the product key in api/_lib/checkoutCatalog.js. Set →
+//                 pay to book: the details are saved, then the parent goes
+//                 straight to Stripe Checkout, built on the server with the
+//                 success page (/sid-juniors/success) already wired. Null →
+//                 booking request (no money taken online). The payments guard
+//                 fails the build if a session with a price has neither.
+//   paymentLink   legacy: a Stripe Payment Link instead of checkoutProduct.
 //
 // A session only takes bookings when bookingsOpen is true, coachCount is at
 // least 2 and capacity fits the ratio. Anything short of that shows the
@@ -101,7 +100,9 @@ export const SESSIONS = [
         capacity: 12, // house ratio for 2 coaches
         full: false,
         signInTime: null, // UNCONFIRMED — Alex to confirm
-        paymentLink: null, // UNCONFIRMED — Alex to confirm
+        // Alex, 2 Oct 2026: every paid page must take payment.
+        checkoutProduct: 'sid-juniors-cranbourne-north',
+        paymentLink: null,
     },
     {
         key: 'mickleham',
@@ -128,7 +129,8 @@ export const SESSIONS = [
         capacity: 12, // house ratio for 2 coaches
         full: false,
         signInTime: null, // UNCONFIRMED — Alex to confirm
-        paymentLink: null, // UNCONFIRMED — Alex to confirm
+        checkoutProduct: 'sid-juniors-mickleham', // Alex, 2 Oct 2026
+        paymentLink: null,
     },
 ];
 
@@ -139,6 +141,7 @@ export const CONCERNS_IS_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(CONCERNS_CONT
 
 export const ROUTE = '/sid-juniors';
 export const SUCCESS_ROUTE = '/sid-juniors/success';
+export const PAY_ROUTE = '/sid-juniors/pay'; // ?booking=<row id>: pay for an existing booking
 export const CONTACT_EMAIL = 'info@rramelbourne.com'; // same inbox the match and Spin Club pages use
 
 // Bookings are written to the shared, slug-keyed `match_registrations` table
@@ -183,7 +186,7 @@ SESSIONS.forEach((s) => {
 export const SESSION_VIEW = SESSIONS.map((s) => ({
     ...s,
     state: stateOf(s),
-    payToBook: Boolean(s.paymentLink),
+    payToBook: Boolean(s.checkoutProduct || s.paymentLink),
     requestSlug: `${s.dbSlug}-request`,
     priceLabel: `$${s.price} per player`,
     mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${s.venue}, ${s.address}`)}`,
@@ -193,6 +196,7 @@ export const getSession = (key) => SESSION_VIEW.find((s) => s.key === key) || nu
 export const OPEN_SESSIONS = SESSION_VIEW.filter((s) => s.state === 'open');
 export const ANY_PAY_TO_BOOK = SESSION_VIEW.some((s) => s.payToBook);
 const ALL_REQUEST_MODE = !ANY_PAY_TO_BOOK;
+const ALL_PAY_TO_BOOK = SESSION_VIEW.every((s) => s.payToBook);
 
 // 'open' while any session takes bookings; otherwise 'closed' if a session is
 // still waiting on its switches, and 'full' only when every session is full.
@@ -280,7 +284,9 @@ export const SESSION_SECTION = {
         + 'so book the one you can get to.',
     costNote: ALL_REQUEST_MODE
         ? 'Nothing is paid on this page. We email you to confirm the place and how to pay.'
-        : 'See the booking form for how each session is paid.',
+        : ALL_PAY_TO_BOOK
+            ? 'Paid by card when you book. The place is yours once the payment goes through.'
+            : 'See the booking form for how each session is paid.',
 };
 
 export const STATE_BADGE = {
@@ -363,14 +369,17 @@ export const FORM_COPY = {
     sub: ALL_REQUEST_MODE
         ? "Choose a session and send us the player's details. No payment is taken now and no place "
           + 'is held yet. We will email you to confirm the place and how to pay.'
-        : "Choose a session and enter the player's details. How that session is paid is shown "
-          + 'under the button.',
+        : ALL_PAY_TO_BOOK
+            ? "Choose a session and enter the player's details, then pay by card on the next screen. "
+              + 'The place is booked once the payment goes through.'
+            : "Choose a session and enter the player's details. How that session is paid is shown "
+              + 'under the button.',
 };
 
 // Per chosen session: what the button says and what it promises.
-export const submitCopyFor = (s) => (s && s.payToBook
+export const submitCopyFor = (s) => ((s ? s.payToBook : ALL_PAY_TO_BOOK)
     ? {
-        submit: `Continue To Payment · $${s.price}`,
+        submit: `Continue To Payment · $${(s || SESSION_VIEW[0]).price}`,
         footnote: 'Payments are processed securely by Stripe. The place is not booked until the payment goes through.',
     }
     : {
@@ -416,7 +425,9 @@ export const FAQS = [
         a: ALL_REQUEST_MODE
             ? `${PRICE_SUMMARY}. Nothing is paid on this page. Book a place and we will email you to `
               + 'confirm it and explain how to pay. No place is held until we do.'
-            : `${PRICE_SUMMARY}. The booking form shows how each session is paid.`,
+            : ALL_PAY_TO_BOOK
+                ? `${PRICE_SUMMARY}, paid by card when you book. ${SID_CAVEAT}`
+                : `${PRICE_SUMMARY}. The booking form shows how each session is paid.`,
     },
     {
         q: 'Who is it for, and when is it?',

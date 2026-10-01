@@ -139,9 +139,8 @@ export const isTourEntryInWindow = (createdAt) =>
 // Payment Link ID (plink_...), not the short URL, so at runtime we list Payment
 // Links once and map url -> id.
 //
-// Juniors with Sid: both sessions have paymentLink: null (UNCONFIRMED, Alex to
-// confirm). Add the two URLs here when they exist and the Sid tab starts
-// showing payments — nothing else needs changing.
+// Juniors with Sid: paid through /api/program-checkout (no Payment Link), so
+// payments are read off the row (paid / paid_at / amount) in sidRow.
 // ------------------------------------------------------------
 export const PROGRAM_PAYMENT_LINKS = {
   'open-trial': {
@@ -510,9 +509,15 @@ export const sidCentre = (slug) => {
   return '';
 };
 
-export const sidRow = (r, pay) => {
+export const sidRow = (r, linkPay) => {
   // A '-request' slug is a booking request: details saved, no money taken, no
-  // place held. Anything else came through a Stripe payment link.
+  // place held. Since 2 Oct 2026 both sessions take payment through
+  // /api/program-checkout, and api/stripe-webhook stamps the row itself
+  // (paid, paid_at, amount) and moves it to the paid slug, so the row is the
+  // record of payment. A Payment Link match (linkPay) still wins if present.
+  const pay = linkPay || (r.paid === true
+    ? { amountCents: Math.round(Number(r.amount || 0) * 100), paidAt: r.paid_at }
+    : null);
   const isRequest = String(r.match_slug || '').endsWith('-request');
   const paidLine = pay
     ? 'Paid'
