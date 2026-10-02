@@ -15,8 +15,10 @@
 // What each session is, stated no more strongly than this: time on the lanes
 // with our coaches, and Sid as guest coach.
 //
-// Do not add an arrival time, a kit list beyond what is below, a promise that
-// parents can watch, or a Q&A segment. None of those is confirmed.
+// Arrival: 30 minutes before the session starts (Alex, 2 Oct 2026). Sid is
+// in Melbourne on 4 and 5 October (Alex, 2 Oct 2026). Do not add a kit list,
+// a promise that parents can watch, or a Q&A segment. None of those is
+// confirmed.
 //
 // Anything still unconfirmed is marked `// UNCONFIRMED — Alex to confirm`.
 //
@@ -62,7 +64,7 @@ const NORTH = getCentre('north-melbourne'); // Mickleham Indoor Sports Centre, M
 //   capacity      places, within the house ratio above
 //   full          close this session by hand the moment it is full
 //   price         $ per player
-//   signInTime    shown once set, e.g. '12:45pm'. Never invent one.
+//   signInTime    when to arrive: 30 minutes before the start (Alex, 2 Oct 2026)
 //   paymentLink   null → booking request: no money is taken online and we
 //                 email to confirm the place and how to pay. A Stripe Payment
 //                 Link here → pay to book for this session. Before pasting
@@ -100,7 +102,7 @@ export const SESSIONS = [
         coachCount: 2, // Alex, 29 Sep 2026: two WWC-verified Academy coaches will be rostered per session; names are not published
         capacity: 12, // house ratio for 2 coaches
         full: false,
-        signInTime: null, // UNCONFIRMED — Alex to confirm
+        signInTime: '12:30pm', // 30 minutes before the 1:00pm start (Alex, 2 Oct 2026)
         paymentLink: null, // UNCONFIRMED — Alex to confirm
     },
     {
@@ -127,15 +129,10 @@ export const SESSIONS = [
         coachCount: 2, // Alex, 29 Sep 2026: two WWC-verified Academy coaches will be rostered per session; names are not published
         capacity: 12, // house ratio for 2 coaches
         full: false,
-        signInTime: null, // UNCONFIRMED — Alex to confirm
+        signInTime: '4:00pm', // 30 minutes before the 4:30pm start (Alex, 2 Oct 2026)
         paymentLink: null, // UNCONFIRMED — Alex to confirm
     },
 ];
-
-// Who a parent contacts about a player's safety. An email address renders
-// as a link; anything else (a name and number) renders as plain text.
-export const CONCERNS_CONTACT = 'info@rramelbourne.com'; // UNCONFIRMED — Alex to name a person
-export const CONCERNS_IS_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(CONCERNS_CONTACT.trim());
 
 export const ROUTE = '/sid-juniors';
 export const SUCCESS_ROUTE = '/sid-juniors/success';
@@ -187,6 +184,9 @@ export const SESSION_VIEW = SESSIONS.map((s) => ({
     requestSlug: `${s.dbSlug}-request`,
     priceLabel: `$${s.price} per player`,
     mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${s.venue}, ${s.address}`)}`,
+    arriveLine: s.signInTime
+        ? `Please arrive by ${s.signInTime}, 30 minutes before the session starts.`
+        : 'Please arrive 30 minutes before the session starts.',
 }));
 
 export const getSession = (key) => SESSION_VIEW.find((s) => s.key === key) || null;
@@ -210,13 +210,28 @@ const listJoin = (items) => (items.length <= 1
     : `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`);
 
 // ── Sid ──
-// EVIDENCE BASE, and the whole of it: his name and title, his employer, the
-// photo, that he is in Melbourne 3–6 October, and that he is scheduled at
-// both sessions as guest coach. No honours, former clubs, quotes, or claims
-// about players he has worked with.
-//
-// Name and title read the trial page's SID, so the pages cannot drift: full
-// name the first time the page names him, "Sid" after.
+// EVIDENCE BASE (rebuilt 2 Oct 2026, at Alex's request for a fuller record).
+// Every line below has a public source. Add nothing that is not on this list.
+//   1. Head of International Player Development, Royals Sports Group; works
+//      year-round with the academies in Jaipur, Surrey, Pune and New Jersey.
+//      rajasthanroyals.com, appointment article, 4 Feb 2025.
+//   2. Performance Coach, Rajasthan Royals (IPL), listed with Kumar Sangakkara
+//      and Shane Bond. rajasthanroyals.com/support-staff (IPL 2026).
+//   3. Assistant coach, Birmingham Phoenix (The Hundred), 2026: Edgbaston's
+//      coaching-staff announcement. Assistant coach, Paarl Royals (SA20): the
+//      approved 28 Sep coach's email and Andy Crook (27 Sep 2026).
+//   4. Founded the Star Cricket Academy in Surrey in 2005; it is now the
+//      Rajasthan Royals Academy Surrey. starcricketacademy.co.uk; National
+//      Herald, 17 Mar 2026.
+//   5. Shoaib Bashir: "I have been training with Sid (Siddhartha Lahiri) and
+//      the Rajasthan Royals academy since I was 11". Ollie Pope is named as
+//      one of the England players who came through the Royals academies.
+//      rajasthanroyals.com, 12 Dec 2023.
+//   6. Oversees the Melbourne academy; was with our India tour group in
+//      Nagpur in September. The approved 28 Sep coach's email.
+// NOT claimed, on purpose: that he developed Jaiswal, Parag, Jurel or
+// Sooryavanshi (sources credit the Nagpur centre, not him), the Barbados
+// Royals role (not in the current title Alex set), or any number of years.
 export const SID_NAME = SID.name; // Siddhartha Lahiri
 export const SID_TITLE_LINE = SID.titleLine; // Head of International Player Development and Performance Coach, Rajasthan Royals
 // Its own up-to-date photo (Alex, 27 Sep 2026): Sid coaching, which suits a
@@ -224,13 +239,7 @@ export const SID_TITLE_LINE = SID.titleLine; // Head of International Player Dev
 export const SID_PHOTO = '/assets/performance-squads/sid-lahiri-coaching-2026.jpg';
 export const SID_PHOTO_ALT = 'Sid Lahiri coaching at a Rajasthan Royals training session';
 export const SID_PHOTO_CAPTION = 'Sid Lahiri coaching at a Rajasthan Royals session.';
-export const SID_IN_MELBOURNE = '3 to 6 October';
-
-// THE HEDGE. His attendance is never stated as a certainty. The refund
-// promise appears only once a session takes payment.
-export const SID_CAVEAT = ANY_PAY_TO_BOOK
-    ? "If Sid can't be there, we'll tell you before the day, and anyone who has paid can cancel for a full refund."
-    : "If Sid can't be there, we'll tell you before the day.";
+export const SID_IN_MELBOURNE = 'Sunday 4 and Monday 5 October'; // Alex, 2 Oct 2026
 
 // ── Call to action, by page state ──
 // "Book a place" matches the all-families email's button ("BOOK A JUNIOR
@@ -261,13 +270,69 @@ export const HERO = {
 
 // ── The Sid section ──
 export const SID_SECTION = {
-    title: 'Sid Lahiri Is Coming To Both Centres',
-    paragraphs: [
-        `${SID_NAME}, known as Sid, is ${SID.title} at the ${SID.employer}.`,
-        `He is in Melbourne from ${SID_IN_MELBOURNE}, and he is scheduled to join both junior `
-        + `sessions as guest coach: ${listJoin(SESSION_VIEW.map((s) => `${s.centreName} on ${s.dayLabel}`))}.`,
+    title: 'Who Is Sid Lahiri?',
+    intro:
+        `${SID_NAME}, known as Sid, runs player development across the Royals' teams and academies `
+        + 'around the world, and coaches in three professional franchise leagues: the IPL, the SA20 and The Hundred.',
+    // Current roles. Sources 1–3 above.
+    roles: [
+        { team: 'Rajasthan Royals', league: 'Indian Premier League', role: 'Performance Coach' },
+        { team: 'Royals Sports Group', league: 'Owns the Rajasthan, Paarl and Barbados Royals', role: 'Head of International Player Development' },
+        { team: 'Paarl Royals', league: 'SA20, South Africa', role: 'Assistant Coach' },
+        { team: 'Birmingham Phoenix', league: 'The Hundred, England', role: 'Assistant Coach' },
     ],
+    // Players, in two groups so the link to Sid is never overstated.
+    // England: source 5 above. Bashir's link is in his own words; Pope's is
+    // the academy's, so it says "came through", not "coached by".
+    // IPL: Sooryavanshi and Jurel are in the Rajasthan Royals' 2026 IPL squad
+    // (Wikipedia, 2026 Rajasthan Royals season), where Sid is Performance
+    // Coach (source 2). Say exactly that. No source says Sid developed either
+    // of them, so never write "coached by" or "discovered".
+    playersTitle: 'Players he has worked with',
+    playerGroups: [
+        {
+            label: 'In the Rajasthan Royals IPL squad, where Sid is Performance Coach',
+            players: [
+                {
+                    name: 'Vaibhav Sooryavanshi',
+                    now: 'India batter',
+                    link: 'Signed by the Royals at 13, the youngest player ever to sign an IPL contract. Played his first match for India in July 2026.',
+                },
+                {
+                    name: 'Dhruv Jurel',
+                    now: 'India Test wicketkeeper',
+                    link: 'Wicketkeeper-batter for the Rajasthan Royals in the IPL.',
+                },
+            ],
+        },
+        {
+            label: 'From his academy in Surrey, England',
+            players: [
+                {
+                    name: 'Shoaib Bashir',
+                    now: 'England Test spinner',
+                    link: 'Trained with Sid at the Royals academy in Surrey from the age of 11.',
+                },
+                {
+                    name: 'Ollie Pope',
+                    now: 'England Test batter',
+                    link: 'Came through the Royals academy system in England.',
+                },
+            ],
+        },
+    ],
+    // Academies. Sources 1, 4 and 6 above.
+    academiesTitle: 'The academies he runs',
+    academies: [
+        'Founded the Star Cricket Academy in Surrey in 2005. It is now the Rajasthan Royals Academy Surrey.',
+        'Works year-round with the Royals academies in Jaipur, Pune, Surrey and New Jersey, and oversees ours in Melbourne.',
+        'In September he coached our India tour group at the Royals High Performance Centre in Nagpur.',
+    ],
+    visit:
+        `He is in Melbourne on ${SID_IN_MELBOURNE}, and he is scheduled to join both junior `
+        + `sessions as guest coach: ${listJoin(SESSION_VIEW.map((s) => `${s.centreName} on ${s.dayLabel}`))}.`,
 };
+
 
 // ── The session details ──
 export const NOT_A_TRIAL = 'This is a coaching session, not a trial. Nobody is assessed, ranked or selected.';
@@ -302,45 +367,6 @@ export const OLDER_PLAYERS = {
     linkLabel: 'See the open age trial',
     href: '/performance-squads-open-trial',
 };
-
-// ── Who's looking after your player ──
-const capacities = [...new Set(SESSION_VIEW.map((s) => s.capacity).filter(Number.isInteger))];
-const TRIAL_SESSION = SESSION_VIEW.find((s) => s.alongsideTrial);
-
-export const SUPERVISION = {
-    eyebrow: 'Safe And Supervised',
-    title: "Who's Looking After Your Player",
-    points: [
-        `Our Royals Academy Melbourne coaches run each session, with ${SID_NAME} as guest coach.`,
-        'At least two Academy coaches with verified Working with Children Checks are on the lanes '
-        + 'for the whole session, and no adult is ever alone with a player.',
-        capacities.length === 1
-            ? `At most ${capacities[0]} players per session, four to a lane, grouped by age.`
-            : `At most ${listJoin(SESSION_VIEW.map((s) => `${s.capacity} players at ${s.centreName}`))}, four to a lane, grouped by age.`,
-        ...(TRIAL_SESSION ? [
-            `At ${TRIAL_SESSION.centreName}, the open age trial for players aged 16 to 25 runs at the same `
-            + 'time, in the same centre. Our junior players are on their own lanes, grouped by age, with '
-            + 'their own coaches, and they sign in at a separate point from the trial.',
-        ] : []),
-    ],
-};
-
-export const ON_THE_DAY = [
-    // Only once a sign-in time is confirmed for that session.
-    ...SESSION_VIEW
-        .filter((s) => s.signInTime)
-        .map((s) => ({ key: `sign-in-${s.key}`, icon: 'sign-in', text: `${s.centreName}: sign your player in from ${s.signInTime}.` })),
-    {
-        key: 'pick-up',
-        icon: 'pick-up',
-        text:
-            `Collect your player from the lanes when their session ends: `
-            + `${listJoin(SESSION_VIEW.map((s) => `${s.endTime} at ${s.centreName}`))}. We only release `
-            + 'players to the parent or guardian named on the booking.',
-    },
-    { key: 'helmet', icon: 'helmet', text: 'Bring a helmet with a stem guard. Nobody bats against a hard ball without one.' },
-    { key: 'water', icon: 'water', text: 'Bring a water bottle.' },
-];
 
 // ── The booking section, by page state ──
 export const CLOSED_COPY = {
@@ -404,8 +430,8 @@ export const FAQS = [
     {
         q: 'Is Sid really going to be there?',
         a:
-            `That is the plan. ${SID_NAME}, ${SID.title} at the ${SID.employer}, is in Melbourne from `
-            + `${SID_IN_MELBOURNE} and is scheduled to join both junior sessions as guest coach. ${SID_CAVEAT}`,
+            `That is the plan. ${SID_NAME}, ${SID.title} at the ${SID.employer}, is in Melbourne on `
+            + `${SID_IN_MELBOURNE} and is scheduled to join both junior sessions as guest coach.`,
     },
     {
         q: 'Is this a trial?',

@@ -4,7 +4,6 @@ import Footer from '../Footer';
 import SidJuniorsHero from './SidJuniorsHero';
 import SidJuniorsSid from './SidJuniorsSid';
 import SidJuniorsSession from './SidJuniorsSession';
-import SidJuniorsSupervision from './SidJuniorsSupervision';
 import SidJuniorsForm from './SidJuniorsForm';
 import FAQSection from '../performance-squads/FAQSection';
 import StickyCTA from '../performance-squads/StickyCTA';
@@ -29,7 +28,7 @@ import { ROUTE, CTA, PAGE_STATE, FAQS, FAQ_HEADING } from './sidJuniorsData';
 // with no session open, the page shows everything except the form.
 // ─────────────────────────────────────────────────────────────
 
-const SECTIONS = ['hero', 'sid', 'session', 'supervision', 'register-pay', 'faq', 'partners'];
+const SECTIONS = ['hero', 'sid', 'session', 'register-pay', 'faq', 'partners'];
 
 const SidJuniors = () => {
     usePageAnalytics(ROUTE, { sections: SECTIONS });
@@ -56,9 +55,6 @@ const SidJuniors = () => {
                 </div>
                 <div id="session" className="scroll-mt-28 lg:scroll-mt-32">
                     <SidJuniorsSession />
-                </div>
-                <div id="supervision" className="scroll-mt-28 lg:scroll-mt-32">
-                    <SidJuniorsSupervision />
                 </div>
                 <div id="register-pay" className="scroll-mt-28 lg:scroll-mt-32">
                     <SidJuniorsForm />
