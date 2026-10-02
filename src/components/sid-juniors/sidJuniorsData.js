@@ -281,19 +281,44 @@ export const SID_SECTION = {
         { team: 'Paarl Royals', league: 'SA20, South Africa', role: 'Assistant Coach' },
         { team: 'Birmingham Phoenix', league: 'The Hundred, England', role: 'Assistant Coach' },
     ],
-    // Players. Source 5 above. Bashir's link is in his own words; Pope's is
+    // Players, in two groups so the link to Sid is never overstated.
+    // England: source 5 above. Bashir's link is in his own words; Pope's is
     // the academy's, so it says "came through", not "coached by".
-    playersTitle: 'Players from his academy',
-    players: [
+    // IPL: Sooryavanshi and Jurel are in the Rajasthan Royals' 2026 IPL squad
+    // (Wikipedia, 2026 Rajasthan Royals season), where Sid is Performance
+    // Coach (source 2). Say exactly that. No source says Sid developed either
+    // of them, so never write "coached by" or "discovered".
+    playersTitle: 'Players he has worked with',
+    playerGroups: [
         {
-            name: 'Shoaib Bashir',
-            now: 'England Test spinner',
-            link: 'Trained with Sid at the Royals academy in Surrey from the age of 11.',
+            label: 'In the Rajasthan Royals IPL squad, where Sid is Performance Coach',
+            players: [
+                {
+                    name: 'Vaibhav Sooryavanshi',
+                    now: 'India batter',
+                    link: 'Signed by the Royals at 13, the youngest player ever to sign an IPL contract. Played his first match for India in July 2026.',
+                },
+                {
+                    name: 'Dhruv Jurel',
+                    now: 'India Test wicketkeeper',
+                    link: 'Wicketkeeper-batter for the Rajasthan Royals in the IPL.',
+                },
+            ],
         },
         {
-            name: 'Ollie Pope',
-            now: 'England Test batter',
-            link: 'Came through the Royals academy system in England.',
+            label: 'From his academy in Surrey, England',
+            players: [
+                {
+                    name: 'Shoaib Bashir',
+                    now: 'England Test spinner',
+                    link: 'Trained with Sid at the Royals academy in Surrey from the age of 11.',
+                },
+                {
+                    name: 'Ollie Pope',
+                    now: 'England Test batter',
+                    link: 'Came through the Royals academy system in England.',
+                },
+            ],
         },
     ],
     // Academies. Sources 1, 4 and 6 above.

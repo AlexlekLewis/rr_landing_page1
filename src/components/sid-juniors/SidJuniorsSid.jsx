@@ -77,17 +77,24 @@ const SidJuniorsSid = () => (
                 <div className="grid md:grid-cols-2 border-t border-white/10">
                     <div className="p-7 sm:p-10 md:border-r border-white/10">
                         <ListHeading icon={Trophy}>{SID_SECTION.playersTitle}</ListHeading>
-                        <ul className="space-y-4">
-                            {SID_SECTION.players.map((pl) => (
-                                <li key={pl.name}>
-                                    <p className="text-white font-black text-base leading-tight">
-                                        {pl.name}
-                                        <span className="text-rr-light-pink font-bold text-sm"> · {pl.now}</span>
-                                    </p>
-                                    <p className="text-white/65 text-[14px] font-medium leading-relaxed mt-1">{pl.link}</p>
-                                </li>
+                        <div className="space-y-6">
+                            {SID_SECTION.playerGroups.map((g) => (
+                                <div key={g.label}>
+                                    <p className="text-white/45 text-[11px] font-black uppercase tracking-wider mb-3">{g.label}</p>
+                                    <ul className="space-y-3">
+                                        {g.players.map((pl) => (
+                                            <li key={pl.name}>
+                                                <p className="text-white font-black text-base leading-tight">
+                                                    {pl.name}
+                                                    <span className="text-rr-light-pink font-bold text-sm"> · {pl.now}</span>
+                                                </p>
+                                                <p className="text-white/65 text-[14px] font-medium leading-relaxed mt-1">{pl.link}</p>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
                             ))}
-                        </ul>
+                        </div>
                     </div>
                     <div className="p-7 sm:p-10 border-t md:border-t-0 border-white/10">
                         <ListHeading icon={Building2}>{SID_SECTION.academiesTitle}</ListHeading>
