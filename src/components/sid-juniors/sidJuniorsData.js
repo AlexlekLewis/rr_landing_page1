@@ -210,13 +210,28 @@ const listJoin = (items) => (items.length <= 1
     : `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`);
 
 // ── Sid ──
-// EVIDENCE BASE, and the whole of it: his name and title, his employer, the
-// photo, that he is in Melbourne on 4 and 5 October, and that he is scheduled at
-// both sessions as guest coach. No honours, former clubs, quotes, or claims
-// about players he has worked with.
-//
-// Name and title read the trial page's SID, so the pages cannot drift: full
-// name the first time the page names him, "Sid" after.
+// EVIDENCE BASE (rebuilt 2 Oct 2026, at Alex's request for a fuller record).
+// Every line below has a public source. Add nothing that is not on this list.
+//   1. Head of International Player Development, Royals Sports Group; works
+//      year-round with the academies in Jaipur, Surrey, Pune and New Jersey.
+//      rajasthanroyals.com, appointment article, 4 Feb 2025.
+//   2. Performance Coach, Rajasthan Royals (IPL), listed with Kumar Sangakkara
+//      and Shane Bond. rajasthanroyals.com/support-staff (IPL 2026).
+//   3. Assistant coach, Birmingham Phoenix (The Hundred), 2026: Edgbaston's
+//      coaching-staff announcement. Assistant coach, Paarl Royals (SA20): the
+//      approved 28 Sep coach's email and Andy Crook (27 Sep 2026).
+//   4. Founded the Star Cricket Academy in Surrey in 2005; it is now the
+//      Rajasthan Royals Academy Surrey. starcricketacademy.co.uk; National
+//      Herald, 17 Mar 2026.
+//   5. Shoaib Bashir: "I have been training with Sid (Siddhartha Lahiri) and
+//      the Rajasthan Royals academy since I was 11". Ollie Pope is named as
+//      one of the England players who came through the Royals academies.
+//      rajasthanroyals.com, 12 Dec 2023.
+//   6. Oversees the Melbourne academy; was with our India tour group in
+//      Nagpur in September. The approved 28 Sep coach's email.
+// NOT claimed, on purpose: that he developed Jaiswal, Parag, Jurel or
+// Sooryavanshi (sources credit the Nagpur centre, not him), the Barbados
+// Royals role (not in the current title Alex set), or any number of years.
 export const SID_NAME = SID.name; // Siddhartha Lahiri
 export const SID_TITLE_LINE = SID.titleLine; // Head of International Player Development and Performance Coach, Rajasthan Royals
 // Its own up-to-date photo (Alex, 27 Sep 2026): Sid coaching, which suits a
@@ -255,13 +270,44 @@ export const HERO = {
 
 // ── The Sid section ──
 export const SID_SECTION = {
-    title: 'Sid Lahiri Is Coming To Both Centres',
-    paragraphs: [
-        `${SID_NAME}, known as Sid, is ${SID.title} at the ${SID.employer}.`,
+    title: 'Who Is Sid Lahiri?',
+    intro:
+        `${SID_NAME}, known as Sid, runs player development across the Royals' teams and academies `
+        + 'around the world, and coaches in three professional franchise leagues: the IPL, the SA20 and The Hundred.',
+    // Current roles. Sources 1–3 above.
+    roles: [
+        { team: 'Rajasthan Royals', league: 'Indian Premier League', role: 'Performance Coach' },
+        { team: 'Royals Sports Group', league: 'Owns the Rajasthan, Paarl and Barbados Royals', role: 'Head of International Player Development' },
+        { team: 'Paarl Royals', league: 'SA20, South Africa', role: 'Assistant Coach' },
+        { team: 'Birmingham Phoenix', league: 'The Hundred, England', role: 'Assistant Coach' },
+    ],
+    // Players. Source 5 above. Bashir's link is in his own words; Pope's is
+    // the academy's, so it says "came through", not "coached by".
+    playersTitle: 'Players from his academy',
+    players: [
+        {
+            name: 'Shoaib Bashir',
+            now: 'England Test spinner',
+            link: 'Trained with Sid at the Royals academy in Surrey from the age of 11.',
+        },
+        {
+            name: 'Ollie Pope',
+            now: 'England Test batter',
+            link: 'Came through the Royals academy system in England.',
+        },
+    ],
+    // Academies. Sources 1, 4 and 6 above.
+    academiesTitle: 'The academies he runs',
+    academies: [
+        'Founded the Star Cricket Academy in Surrey in 2005. It is now the Rajasthan Royals Academy Surrey.',
+        'Works year-round with the Royals academies in Jaipur, Pune, Surrey and New Jersey, and oversees ours in Melbourne.',
+        'In September he coached our India tour group at the Royals High Performance Centre in Nagpur.',
+    ],
+    visit:
         `He is in Melbourne on ${SID_IN_MELBOURNE}, and he is scheduled to join both junior `
         + `sessions as guest coach: ${listJoin(SESSION_VIEW.map((s) => `${s.centreName} on ${s.dayLabel}`))}.`,
-    ],
 };
+
 
 // ── The session details ──
 export const NOT_A_TRIAL = 'This is a coaching session, not a trial. Nobody is assessed, ranked or selected.';
