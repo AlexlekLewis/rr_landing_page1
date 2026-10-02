@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import {
   computeDna,
   getAge,
@@ -34,6 +34,7 @@ function baseInput(overrides: Partial<ComputeDnaInput> = {}): ComputeDnaInput {
     stats: [],
     competitionTiers: TIERS,
     currentSeasonStartYear: 2025,
+    asAt: NOW,
     ...overrides,
   };
 }
@@ -51,6 +52,24 @@ describe("getAge", () => {
   it("returns null for junk", () => {
     expect(getAge("not-a-date", NOW)).toBeNull();
     expect(getAge(null, NOW)).toBeNull();
+  });
+});
+
+describe("computeDna — asAt (the date age is worked out at)", () => {
+  it("works age out at asAt, not today", () => {
+    // Born 1 Sep 2009: 16 on 31 Aug 2026, 17 from 1 Sep 2026.
+    const ageAt = (asAt: Date) => computeDna(baseInput({ profile: { dob: "2009-09-01" }, asAt })).breakdown.age;
+    expect(ageAt(new Date(2026, 7, 31))).toBe(16);
+    expect(ageAt(new Date(2026, 8, 1))).toBe(17);
+  });
+
+  it("uses today when asAt is omitted (the live funnel never passes it)", () => {
+    vi.setSystemTime(new Date(2030, 0, 2));
+    try {
+      expect(computeDna({ ...baseInput(), asAt: undefined }).breakdown.age).toBe(22); // born 1 Jan 2008
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
 
@@ -432,7 +451,7 @@ describe("computeDna — review flags", () => {
   // age_outlier is measured against the OLDEST level played (max expected age), not the
   // highest-CTI level. A player with an age-appropriate senior level is not an outlier even
   // when a younger-age honour ties it on CTI and is considered first.
-  const dobForAge = (age: number) => `${new Date().getFullYear() - age}-06-01`;
+  const dobForAge = (age: number) => `${NOW.getFullYear() - age}-01-01`; // exactly `age` at NOW
   it("does NOT flag age_outlier when an age-appropriate senior level ties the junior honour on CTI", () => {
     const tiers: CompetitionTierInput[] = [
       { code: "JR-U18", ctiValue: 0.75, expectedMidpointAge: 16.5 }, // junior rep — young

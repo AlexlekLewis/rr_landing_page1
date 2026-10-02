@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeAll, afterAll, vi } from "vitest";
 // @ts-expect-error — plain JS module (shares logic with the funnel + API layer).
 import { buildApplicationRow } from "./submit.js";
 
@@ -12,6 +12,16 @@ const adult = {
 const minor = { ...adult, player_name: "Jo Young", player_dob: "2013-01-01", parent_name: "Pat Young", contact_email: "pat@e.com", contact_phone: "0411111111" };
 const placement = { stream: "performance", placedBand: "14-16", requiresReview: false, reviewReasons: [] };
 const squad = { day: "Saturday", startTime: "2:00pm", endTime: "4:00pm" };
+
+// buildApplicationRow works age out from today's date to decide who is a minor. Freeze the
+// test clock so the "minor" fixture (born 1 Jan 2013) stays 13, instead of turning 18 on
+// 1 Jan 2031 and quietly becoming an adult.
+beforeAll(() => {
+  vi.setSystemTime(new Date(2026, 6, 1)); // 1 Jul 2026
+});
+afterAll(() => {
+  vi.useRealTimers();
+});
 
 describe("buildApplicationRow", () => {
   it("splits a multi-word name into first/last", () => {

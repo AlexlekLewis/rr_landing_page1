@@ -8,6 +8,11 @@ import { computeDna, type Format } from "./engine";
 import { COMPETITION_TIERS, LADDER_BY_CODE, LADDER } from "./ladder";
 import { placeFromDna, streamForTier } from "./guardrail";
 
+// The ages in the test names ("17yo", "14yo"…) are true as at this date. The engine works
+// age out at it instead of today; otherwise every player here has a birthday on 1 Jan 2027
+// and the 14yo play-up case is no longer a 14yo.
+const NOW = new Date(2026, 6, 1); // 1 Jul 2026
+
 interface F {
   dob: string;
   code: string;
@@ -45,6 +50,7 @@ function run(f: F) {
     ],
     competitionTiers: COMPETITION_TIERS,
     currentSeasonStartYear: 2025,
+    asAt: NOW,
   });
   return { dna, placement: placeFromDna(dna) };
 }

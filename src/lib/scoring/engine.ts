@@ -134,6 +134,11 @@ export interface ComputeDnaInput {
    * the last 3 seasons count toward eligibility. Omit to treat all rows as in-window.
    */
   currentSeasonStartYear?: number;
+  /**
+   * Date to work the player's age out at. Omit to use today (what the live funnel does).
+   * Tests pin it so fixtures with literal birth dates don't get older with the calendar.
+   */
+  asAt?: Date;
   engineVersion?: string;
 }
 
@@ -661,7 +666,7 @@ export function computeDna(input: ComputeDnaInput): DnaResult {
   const tiers = new Map<string, CompetitionTierInput>();
   for (const t of competitionTiers) tiers.set(t.code, t);
 
-  const age = getAge(profile.dob);
+  const age = getAge(profile.dob, input.asAt); // undefined → getAge's default (today)
   const ageBand = getAgeBand(age);
 
   // ---- Overall-highest level across ALL known codes (history + stats) → fallback CTI + tier context ----
