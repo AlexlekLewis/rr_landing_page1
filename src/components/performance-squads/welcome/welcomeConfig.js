@@ -16,6 +16,8 @@
 // null and the banner goes away.
 // ─────────────────────────────────────────────────────────────
 
+import { MEMBER_PRICING_RULE, TERMS_MEMBERSHIP_CLAUSE } from '../data';
+
 export const WELCOME = {
     // ── Still to come ──
     // Every selected player has this long from the moment they are notified to
@@ -79,7 +81,9 @@ export const WELCOME = {
             { name: 'High Performance Centre Tour', when: 'September' },
             { name: 'Royals apparel and Partner Offers', when: 'Year round' },
         ],
-        note: 'Full pricing on request.',
+        // The two-tier rule (programs while active; tours after six months) is
+        // Alex's, 2 October 2026, on top of the v8 overview. Terms clause 13.
+        note: `Full pricing on request. ${MEMBER_PRICING_RULE} See ${TERMS_MEMBERSHIP_CLAUSE} of our Terms & Conditions.`,
     },
 
     // ── Training and events (NOT match days — those are the fixture list) ──

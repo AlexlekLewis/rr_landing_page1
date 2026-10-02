@@ -143,6 +143,16 @@ export const MEMBERSHIP = {
 const NUMBER_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six'];
 export const GRACE_PERIOD = `${NUMBER_WORDS[MEMBERSHIP.graceWeeks] || MEMBERSHIP.graceWeeks}-week`;
 
+// Member pricing has two tiers (Alex, 2 October 2026). Programs such as Spin
+// Club get the member price while the membership is active. TOURS need a
+// minimum period of continuous membership first. Terms & Conditions clause 13
+// (/terms-conditions) is the binding version; every page quotes this line.
+export const TOUR_MEMBER_MONTHS = 6;
+export const TOUR_MEMBER_MONTHS_WORD = NUMBER_WORDS[TOUR_MEMBER_MONTHS] || String(TOUR_MEMBER_MONTHS);
+export const MEMBER_PRICING_RULE = `Member pricing applies while your membership is active. For tours, including High Performance Centre tours, it starts once you have been a member for ${TOUR_MEMBER_MONTHS_WORD} months in a row.`;
+export const TERMS_ROUTE = '/terms-conditions';
+export const TERMS_MEMBERSHIP_CLAUSE = 'clause 13';
+
 // $1,557.40 — worked out, never typed, so it can never disagree with the weekly fee.
 export const MEMBERSHIP_YEARLY = Math.round(MEMBERSHIP.weeklyFee * MEMBERSHIP.weeksPerYear * 100) / 100;
 
@@ -357,6 +367,10 @@ export const FAQS = [
     {
         q: 'Can I cancel my membership?',
         a: `Yes, any time. But if you cancel and later want to come back, you will need to pay the ${money(MEMBERSHIP.joiningFee)} joining fee again. If payments stop without notice, there is a ${GRACE_PERIOD} grace period before your squad place is released.`,
+    },
+    {
+        q: 'When do I get member pricing?',
+        a: `While your membership is active, you get member pricing on our programs, such as Spin Club, masterclasses, the 12-week T20 Program and the Pre-Season Program. For tours, including High Performance Centre tours, member pricing starts once you have been a member for ${TOUR_MEMBER_MONTHS_WORD} months in a row. If you cancel and rejoin, the ${TOUR_MEMBER_MONTHS_WORD} months start again. The full rules are in ${TERMS_MEMBERSHIP_CLAUSE} of our Terms & Conditions.`,
     },
     {
         q: 'What do I get as a member?',

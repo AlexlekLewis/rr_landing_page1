@@ -10,7 +10,7 @@ import {
     timeOf,
 } from './trialCalendar';
 import { TRIAL_SESSIONS as OPEN_AGE_SESSIONS } from '../open-age-trial/openAgeData';
-import { MEMBERSHIP, MEMBERSHIP_YEARLY, money, FAQS } from './data';
+import { MEMBERSHIP, MEMBERSHIP_YEARLY, money, FAQS, MEMBER_PRICING_RULE, TOUR_MEMBER_MONTHS } from './data';
 
 const at = (iso: string) => new Date(iso);
 
@@ -73,5 +73,20 @@ describe('membership numbers', () => {
         expect(cost).toContain('$29.95 a week');
         const cancel = FAQS.find((f) => f.q === 'Can I cancel my membership?')!.a;
         expect(cancel).toContain('$149 joining fee again');
+    });
+});
+
+describe('member pricing rule', () => {
+    it('gives tours a six-month minimum and programs the price while active', () => {
+        expect(TOUR_MEMBER_MONTHS).toBe(6);
+        expect(MEMBER_PRICING_RULE).toContain('while your membership is active');
+        expect(MEMBER_PRICING_RULE).toContain('six months in a row');
+    });
+
+    it('says the same in the FAQ, including that rejoining restarts the clock', () => {
+        const faq = FAQS.find((f) => f.q === 'When do I get member pricing?')!.a;
+        expect(faq).toContain('six months in a row');
+        expect(faq).toContain('the six months start again');
+        expect(faq).toContain('clause 13');
     });
 });
