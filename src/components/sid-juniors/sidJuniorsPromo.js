@@ -19,7 +19,7 @@
 
 export const SID_JUNIORS_ROUTE = '/sid-juniors';
 export const SID_JUNIORS_AGES = '8 to 16';
-export const SID_JUNIORS_PRICE = 30;
+export const SID_JUNIORS_PRICE = 33; // incl. GST (Alex, 2 Oct 2026)
 
 // The two sessions (Alex, 29 Sep 2026). `trialCentre` is the open age trial's
 // centre slug, so the trial page can put the right note on the right card.

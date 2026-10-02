@@ -353,7 +353,8 @@ const BookingForm = () => {
                         </p>
                         {/* DO NOT add target="_blank". Same tab, on purpose (see top). */}
                         <a
-                            href={doneSession.paymentLink}
+                            // The parent's email goes into Stripe, so the payment matches the booking.
+                            href={`${doneSession.paymentLink}?prefilled_email=${encodeURIComponent(done.email)}`}
                             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
                         >
                             <CreditCard className="w-4 h-4" /> Pay ${doneSession.price} Now

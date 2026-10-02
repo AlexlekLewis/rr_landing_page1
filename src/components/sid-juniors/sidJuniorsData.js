@@ -97,13 +97,13 @@ export const SESSIONS = [
         dbSlug: 'sid-juniors-2026-10-04-cranbourne-north',
         dbName: 'Junior session with Siddhartha Lahiri, Sun 4 Oct 2026, Cranbourne North',
 
-        price: 30, // CONFIRMED (Alex, 29 Sep 2026)
+        price: 33, // $30 + GST = $33, what Stripe charges (Alex, 2 Oct 2026). Show the GST-inclusive total.
         bookingsOpen: true, // Alex, 29 Sep 2026
         coachCount: 2, // Alex, 29 Sep 2026: two WWC-verified Academy coaches will be rostered per session; names are not published
         capacity: 12, // house ratio for 2 coaches
         full: false,
         signInTime: '12:30pm', // 30 minutes before the 1:00pm start (Alex, 2 Oct 2026)
-        paymentLink: null, // UNCONFIRMED — Alex to confirm
+        paymentLink: 'https://buy.stripe.com/8x200jfY59SB7XmbzZ9Zm0S', // one link for both sessions (Alex, 2 Oct 2026); the booking row records the session
     },
     {
         key: 'mickleham',
@@ -124,13 +124,13 @@ export const SESSIONS = [
         dbSlug: 'sid-juniors-2026-10-05-mickleham',
         dbName: 'Junior session with Siddhartha Lahiri, Mon 5 Oct 2026, Mickleham',
 
-        price: 30, // CONFIRMED (Alex, 29 Sep 2026)
+        price: 33, // $30 + GST = $33, what Stripe charges (Alex, 2 Oct 2026). Show the GST-inclusive total.
         bookingsOpen: true, // Alex, 29 Sep 2026
         coachCount: 2, // Alex, 29 Sep 2026: two WWC-verified Academy coaches will be rostered per session; names are not published
         capacity: 12, // house ratio for 2 coaches
         full: false,
         signInTime: '4:00pm', // 30 minutes before the 4:30pm start (Alex, 2 Oct 2026)
-        paymentLink: null, // UNCONFIRMED — Alex to confirm
+        paymentLink: 'https://buy.stripe.com/8x200jfY59SB7XmbzZ9Zm0S', // one link for both sessions (Alex, 2 Oct 2026); the booking row records the session
     },
 ];
 
@@ -182,7 +182,7 @@ export const SESSION_VIEW = SESSIONS.map((s) => ({
     state: stateOf(s),
     payToBook: Boolean(s.paymentLink),
     requestSlug: `${s.dbSlug}-request`,
-    priceLabel: `$${s.price} per player`,
+    priceLabel: `$${s.price} per player, including GST`,
     mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${s.venue}, ${s.address}`)}`,
     arriveLine: s.signInTime
         ? `Please arrive by ${s.signInTime}, 30 minutes before the session starts.`
@@ -202,7 +202,7 @@ export const PAGE_STATE = OPEN_SESSIONS.length
 
 const samePrice = SESSION_VIEW.every((s) => s.price === SESSION_VIEW[0].price);
 export const PRICE_SUMMARY = samePrice
-    ? `$${SESSION_VIEW[0].price} per player, per session`
+    ? `$${SESSION_VIEW[0].price} per player, per session, including GST`
     : SESSION_VIEW.map((s) => `$${s.price} at ${s.centreName}`).join(', ');
 
 const listJoin = (items) => (items.length <= 1
@@ -343,7 +343,7 @@ export const SESSION_SECTION = {
         + 'so book the one you can get to.',
     costNote: ALL_REQUEST_MODE
         ? 'Nothing is paid on this page. We email you to confirm the place and how to pay.'
-        : 'See the booking form for how each session is paid.',
+        : 'You pay by card when you book. The place is booked once the payment goes through.',
 };
 
 export const STATE_BADGE = {
@@ -387,8 +387,8 @@ export const FORM_COPY = {
     sub: ALL_REQUEST_MODE
         ? "Choose a session and send us the player's details. No payment is taken now and no place "
           + 'is held yet. We will email you to confirm the place and how to pay.'
-        : "Choose a session and enter the player's details. How that session is paid is shown "
-          + 'under the button.',
+        : "Choose a session and enter the player's details. On the next step you pay by card, "
+          + 'and the place is booked once the payment goes through.',
 };
 
 // Per chosen session: what the button says and what it promises.
@@ -436,7 +436,7 @@ export const FAQS = [
         a: ALL_REQUEST_MODE
             ? `${PRICE_SUMMARY}. Nothing is paid on this page. Book a place and we will email you to `
               + 'confirm it and explain how to pay. No place is held until we do.'
-            : `${PRICE_SUMMARY}. The booking form shows how each session is paid.`,
+            : `${PRICE_SUMMARY}. You pay by card when you book, and the place is booked once the payment goes through.`,
     },
     {
         q: 'Who is it for, and when is it?',
