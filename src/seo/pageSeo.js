@@ -49,7 +49,7 @@ export const PAGE_SEO = {
   '/sid-juniors': {
     title: 'Junior Sessions with Siddhartha Lahiri | Royals Academy',
     description:
-      'Junior coaching for players aged 8 to 16 at Cranbourne North (Sun 4 Oct, 1:00–2:30pm) and Mickleham (Mon 5 Oct, 4:30–5:30pm), $33 a session including GST. Siddhartha Lahiri, Head of International Player Development and Performance Coach at the Rajasthan Royals, is scheduled as guest coach at both.',
+      'Junior coaching for players aged 8 to 16 at Cranbourne North (Sun 4 Oct, 1:00–2:30pm) and Mickleham (Mon 5 Oct, 4:30–5:30pm), $30 a session. Siddhartha Lahiri, Head of International Player Development and Performance Coach at the Rajasthan Royals, is scheduled as guest coach at both.',
     ogImage: '/assets/performance-squads/sid-lahiri-coaching-2026.jpg',
   },
   '/': {

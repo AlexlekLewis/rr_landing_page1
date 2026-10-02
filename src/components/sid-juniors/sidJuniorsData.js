@@ -97,13 +97,13 @@ export const SESSIONS = [
         dbSlug: 'sid-juniors-2026-10-04-cranbourne-north',
         dbName: 'Junior session with Siddhartha Lahiri, Sun 4 Oct 2026, Cranbourne North',
 
-        price: 33, // $30 + GST = $33, what Stripe charges (Alex, 2 Oct 2026). Show the GST-inclusive total.
+        price: 30, // what the Stripe link charges (new link, Alex 2 Oct 2026)
         bookingsOpen: true, // Alex, 29 Sep 2026
         coachCount: 2, // Alex, 29 Sep 2026: two WWC-verified Academy coaches will be rostered per session; names are not published
         capacity: 12, // house ratio for 2 coaches
         full: false,
         signInTime: '12:30pm', // 30 minutes before the 1:00pm start (Alex, 2 Oct 2026)
-        paymentLink: 'https://buy.stripe.com/8x200jfY59SB7XmbzZ9Zm0S', // one link for both sessions (Alex, 2 Oct 2026); the booking row records the session
+        paymentLink: 'https://buy.stripe.com/dRm3cvbHPfcV91q5bB9Zm0T', // one link for both sessions (Alex, 2 Oct 2026); the booking row records the session
     },
     {
         key: 'mickleham',
@@ -124,13 +124,13 @@ export const SESSIONS = [
         dbSlug: 'sid-juniors-2026-10-05-mickleham',
         dbName: 'Junior session with Siddhartha Lahiri, Mon 5 Oct 2026, Mickleham',
 
-        price: 33, // $30 + GST = $33, what Stripe charges (Alex, 2 Oct 2026). Show the GST-inclusive total.
+        price: 30, // what the Stripe link charges (new link, Alex 2 Oct 2026)
         bookingsOpen: true, // Alex, 29 Sep 2026
         coachCount: 2, // Alex, 29 Sep 2026: two WWC-verified Academy coaches will be rostered per session; names are not published
         capacity: 12, // house ratio for 2 coaches
         full: false,
         signInTime: '4:00pm', // 30 minutes before the 4:30pm start (Alex, 2 Oct 2026)
-        paymentLink: 'https://buy.stripe.com/8x200jfY59SB7XmbzZ9Zm0S', // one link for both sessions (Alex, 2 Oct 2026); the booking row records the session
+        paymentLink: 'https://buy.stripe.com/dRm3cvbHPfcV91q5bB9Zm0T', // one link for both sessions (Alex, 2 Oct 2026); the booking row records the session
     },
 ];
 
@@ -182,7 +182,7 @@ export const SESSION_VIEW = SESSIONS.map((s) => ({
     state: stateOf(s),
     payToBook: Boolean(s.paymentLink),
     requestSlug: `${s.dbSlug}-request`,
-    priceLabel: `$${s.price} per player, including GST`,
+    priceLabel: `$${s.price} per player`,
     mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${s.venue}, ${s.address}`)}`,
     arriveLine: s.signInTime
         ? `Please arrive by ${s.signInTime}, 30 minutes before the session starts.`
@@ -202,7 +202,7 @@ export const PAGE_STATE = OPEN_SESSIONS.length
 
 const samePrice = SESSION_VIEW.every((s) => s.price === SESSION_VIEW[0].price);
 export const PRICE_SUMMARY = samePrice
-    ? `$${SESSION_VIEW[0].price} per player, per session, including GST`
+    ? `$${SESSION_VIEW[0].price} per player, per session`
     : SESSION_VIEW.map((s) => `$${s.price} at ${s.centreName}`).join(', ');
 
 const listJoin = (items) => (items.length <= 1
