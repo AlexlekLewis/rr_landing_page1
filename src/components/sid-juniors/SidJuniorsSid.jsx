@@ -73,7 +73,7 @@ const SidJuniorsSid = () => (
                     </div>
                 </div>
 
-                {/* Track record: players and academies */}
+                {/* The Royals system: its players and its network */}
                 <div className="grid md:grid-cols-2 border-t border-white/10">
                     <div className="p-7 sm:p-10 md:border-r border-white/10">
                         <ListHeading icon={Trophy}>{SID_SECTION.playersTitle}</ListHeading>

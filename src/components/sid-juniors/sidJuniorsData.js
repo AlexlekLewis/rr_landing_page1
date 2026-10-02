@@ -229,9 +229,9 @@ const listJoin = (items) => (items.length <= 1
 //      rajasthanroyals.com, 12 Dec 2023.
 //   6. Oversees the Melbourne academy; was with our India tour group in
 //      Nagpur in September. The approved 28 Sep coach's email.
-// NOT claimed, on purpose: that he developed Jaiswal, Parag, Jurel or
-// Sooryavanshi (sources credit the Nagpur centre, not him), the Barbados
-// Royals role (not in the current title Alex set), or any number of years.
+// NOT claimed, on purpose (Alex, 2 Oct 2026): anything about Sid personally
+// coaching a player (Bashir, the India tour group, his own Surrey academy),
+// his non-Royals role (Birmingham Phoenix), or any number of years.
 export const SID_NAME = SID.name; // Siddhartha Lahiri
 export const SID_TITLE_LINE = SID.titleLine; // Head of International Player Development and Performance Coach, Rajasthan Royals
 // Its own up-to-date photo (Alex, 27 Sep 2026): Sid coaching, which suits a
@@ -270,63 +270,49 @@ export const HERO = {
 
 // ── The Sid section ──
 export const SID_SECTION = {
+    // RULE (Alex, 2 Oct 2026): nothing about Sid personally coaching individual
+    // players. Keep it to the Royals and his role in the Royals' global
+    // organisation. Players are named as products of the Royals system, never
+    // as players Sid coached.
     title: 'Who Is Sid Lahiri?',
     intro:
-        `${SID_NAME}, known as Sid, runs player development across the Royals' teams and academies `
-        + 'around the world, and coaches in three professional franchise leagues: the IPL, the SA20 and The Hundred.',
-    // Current roles. Sources 1–3 above.
+        `${SID_NAME}, known as Sid, leads player development across the Royals' global organisation: `
+        + 'the Rajasthan Royals in the IPL, the Paarl Royals in the SA20, the Barbados Royals in the CPL, '
+        + 'and the Royals academies around the world.',
+    // His Royals roles. Sources 1–2 above, and the approved 28 Sep email.
     roles: [
-        { team: 'Rajasthan Royals', league: 'Indian Premier League', role: 'Performance Coach' },
         { team: 'Royals Sports Group', league: 'Owns the Rajasthan, Paarl and Barbados Royals', role: 'Head of International Player Development' },
+        { team: 'Rajasthan Royals', league: 'Indian Premier League', role: 'Performance Coach' },
         { team: 'Paarl Royals', league: 'SA20, South Africa', role: 'Assistant Coach' },
-        { team: 'Birmingham Phoenix', league: 'The Hundred, England', role: 'Assistant Coach' },
+        { team: 'Royals Academies', league: 'Jaipur, Pune, Surrey, New Jersey and Melbourne', role: 'Runs the academy network' },
     ],
-    // Players, in two groups so the link to Sid is never overstated.
-    // England: source 5 above. Bashir's link is in his own words; Pope's is
-    // the academy's, so it says "came through", not "coached by".
-    // IPL: Sooryavanshi and Jurel are in the Rajasthan Royals' 2026 IPL squad
-    // (Wikipedia, 2026 Rajasthan Royals season), where Sid is Performance
-    // Coach (source 2). Say exactly that. No source says Sid developed either
-    // of them, so never write "coached by" or "discovered".
-    playersTitle: 'Players he has worked with',
+    // Players from the Royals system. Nagpur: National Herald, 17 Mar 2026
+    // ("famous for honing the skills of" Jaiswal, Parag, Jurel, Sooryavanshi)
+    // and the approved 28 Sep email. England: rajasthanroyals.com, 12 Dec 2023.
+    playersTitle: 'Players from the Royals system',
     playerGroups: [
         {
-            label: 'In the Rajasthan Royals IPL squad, where Sid is Performance Coach',
+            label: "Trained at the Royals' High Performance Centre in Nagpur",
             players: [
-                {
-                    name: 'Vaibhav Sooryavanshi',
-                    now: 'India batter',
-                    link: 'Signed by the Royals at 13, the youngest player ever to sign an IPL contract. Played his first match for India in July 2026.',
-                },
-                {
-                    name: 'Dhruv Jurel',
-                    now: 'India Test wicketkeeper',
-                    link: 'Wicketkeeper-batter for the Rajasthan Royals in the IPL.',
-                },
+                { name: 'Yashasvi Jaiswal', now: 'India Test batter', link: 'Opening batter for the Rajasthan Royals.' },
+                { name: 'Riyan Parag', now: 'Rajasthan Royals captain', link: 'Captained the Rajasthan Royals in the 2026 IPL.' },
+                { name: 'Dhruv Jurel', now: 'India Test wicketkeeper', link: 'Wicketkeeper-batter for the Rajasthan Royals.' },
+                { name: 'Vaibhav Sooryavanshi', now: 'India batter', link: 'Signed by the Royals at 13, the youngest player ever to sign an IPL contract.' },
             ],
         },
         {
-            label: 'From his academy in Surrey, England',
+            label: 'Came through the Royals academies in England',
             players: [
-                {
-                    name: 'Shoaib Bashir',
-                    now: 'England Test spinner',
-                    link: 'Trained with Sid at the Royals academy in Surrey from the age of 11.',
-                },
-                {
-                    name: 'Ollie Pope',
-                    now: 'England Test batter',
-                    link: 'Came through the Royals academy system in England.',
-                },
+                { name: 'Shoaib Bashir', now: 'England Test spinner', link: 'Trained at the Rajasthan Royals Academy in Surrey from the age of 11.' },
+                { name: 'Ollie Pope', now: 'England Test batter', link: 'Came through the Royals academy system in England.' },
             ],
         },
     ],
-    // Academies. Sources 1, 4 and 6 above.
-    academiesTitle: 'The academies he runs',
+    academiesTitle: "The Royals' global network",
     academies: [
-        'Founded the Star Cricket Academy in Surrey in 2005. It is now the Rajasthan Royals Academy Surrey.',
-        'Works year-round with the Royals academies in Jaipur, Pune, Surrey and New Jersey, and oversees ours in Melbourne.',
-        'In September he coached our India tour group at the Royals High Performance Centre in Nagpur.',
+        'The Royals Sports Group owns the Rajasthan Royals (IPL), the Paarl Royals (SA20) and the Barbados Royals (CPL).',
+        'Royals academies run year-round in Jaipur, Pune, Surrey and New Jersey. Ours in Melbourne is part of the same network, and Sid oversees it.',
+        "In September our India tour group trained at the Royals' High Performance Centre in Nagpur.",
     ],
     visit:
         `He is in Melbourne on ${SID_IN_MELBOURNE}, and he is scheduled to join both junior `
