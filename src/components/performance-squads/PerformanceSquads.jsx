@@ -33,8 +33,8 @@ import { getUpcomingTrials, getBookableOpenAgeTrials, joinDays, dayOf } from './
 //   • fees         → MEMBERSHIP and TRIAL_PRICE in ./data.js;
 //   • FAQ answers  → FAQS in ./data.js (they read the same fee constants).
 //
-// Still noindex, as it was while hidden. It is linked from the navbar now, so
-// whether search engines should list it is Alex's call.
+// PUBLIC AND INDEXED since 2 October 2026 (Alex): in the sitemap, prerendered
+// for social previews, and its search tags live in src/seo/pageSeo.js.
 // ─────────────────────────────────────────────────────────────
 
 // Section ids are kept from the old page ('trials' = Trial Dates, 'pricing' =
@@ -75,15 +75,11 @@ const PerformanceSquads = () => {
     // Carries the submitted registration into Payments so the trial quantity matches.
     const [payModal, setPayModal] = useState(null);
 
-    // ── Hidden page: noindex + title ──
+    // Search title, description and robots come from src/seo/pageSeo.js via
+    // <RouteSeo/>, like every other public page. This page is indexed (Alex,
+    // 2 October 2026: permanent and public).
     useEffect(() => {
         window.scrollTo(0, 0);
-        document.title = 'Performance Squads | Rajasthan Royals Academy Melbourne';
-        const meta = document.createElement('meta');
-        meta.name = 'robots';
-        meta.content = 'noindex,nofollow';
-        document.head.appendChild(meta);
-        return () => { document.head.removeChild(meta); };
     }, []);
 
     const handleChooseCentre = (slug) => {

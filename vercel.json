@@ -236,6 +236,14 @@
       "destination": "/api/gone"
     },
     {
+      "source": "/performance-squads",
+      "destination": "/performance-squads/index.html"
+    },
+    {
+      "source": "/performance-squads/",
+      "destination": "/performance-squads/index.html"
+    },
+    {
       "source": "/performance-squads-open-trial",
       "destination": "/performance-squads-open-trial/index.html"
     },
