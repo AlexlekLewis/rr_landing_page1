@@ -63,6 +63,7 @@ const Content = () => {
                         className="text-white/70 text-[15px] sm:text-base font-medium leading-relaxed"
                     >
                         Thanks. The payment went through, so the place is booked.
+                        {shown.length > 1 && ' It is at the session you chose on the form. Both sessions are below so you can check the time and where to go.'}
                     </motion.p>
                 </div>
 
