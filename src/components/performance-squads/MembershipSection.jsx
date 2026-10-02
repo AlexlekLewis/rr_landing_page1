@@ -7,6 +7,9 @@ import {
     MEMBERSHIP,
     MEMBERSHIP_YEARLY,
     MEMBER_PRICING_ON,
+    MEMBER_PRICING_RULE,
+    TERMS_ROUTE,
+    TERMS_MEMBERSHIP_CLAUSE,
     GRACE_PERIOD,
     money,
 } from './data';
@@ -120,13 +123,20 @@ const MembershipSection = () => (
                 <p className="text-white/65 text-sm font-medium leading-relaxed mb-4">
                     Financial members pay member prices on our other programs, including:
                 </p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 mb-5">
                     {MEMBER_PRICING_ON.map((p) => (
                         <span key={p} className="text-xs sm:text-sm font-bold text-white bg-rr-pink/15 border border-rr-pink/30 rounded-full px-3.5 py-1.5">
                             {p}
                         </span>
                     ))}
                 </div>
+                {/* Two tiers: programs while active, tours after the minimum period. */}
+                <p className="text-white/80 text-sm font-medium leading-relaxed">
+                    {MEMBER_PRICING_RULE}{' '}
+                    <a href={TERMS_ROUTE} className="text-rr-light-pink underline underline-offset-2 hover:text-white">
+                        See {TERMS_MEMBERSHIP_CLAUSE} of our Terms &amp; Conditions.
+                    </a>
+                </p>
             </motion.div>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">

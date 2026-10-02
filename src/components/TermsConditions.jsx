@@ -22,7 +22,7 @@ const TermsConditions = () => {
                         Back to Home
                     </Link>
                     <h1 className="text-4xl md:text-5xl font-black uppercase tracking-wide">Terms &amp; Conditions</h1>
-                    <p className="text-white/70 mt-4 text-sm">Last updated: September 2026</p>
+                    <p className="text-white/70 mt-4 text-sm">Last updated: October 2026</p>
                 </div>
             </div>
 
@@ -387,7 +387,70 @@ const TermsConditions = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">13. Referral Program</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">13. Performance Squad Membership &amp; Member Pricing</h2>
+                        <p className="text-rr-dark/80 leading-relaxed mb-4">
+                            This clause applies to players who accept a place in a Performance Squad.
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">13.1  Membership fees</h3>
+                        <p className="text-rr-dark/80 leading-relaxed">
+                            A Performance Squad place is held through a membership. Membership has a one-off
+                            joining fee, payable when a place is accepted, and a yearly membership fee which, for
+                            your convenience, is paid in weekly instalments charged in advance. The current fees
+                            are published on the Performance Squads page.
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">13.2  Cancelling and rejoining</h3>
+                        <p className="text-rr-dark/80 leading-relaxed">
+                            You may cancel your membership at any time. If you cancel and later rejoin, the
+                            joining fee is payable again. If payments stop without notice, there is a two-week
+                            grace period before the squad place is released.
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">13.3  Financial membership</h3>
+                        <p className="text-rr-dark/80 leading-relaxed">
+                            A membership is financial while it is active and every payment is up to date. Member
+                            benefits, including member pricing and eligibility for selection, are available only
+                            to financial members.
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">13.4  Member pricing on programs</h3>
+                        <p className="text-rr-dark/80 leading-relaxed">
+                            While your membership is financial, you receive member pricing on Academy programs
+                            such as Spin Club, the 12-week T20 Program, the Pre-Season Program and masterclasses,
+                            and on Royals apparel and partner offers. Member pricing applies to bookings made and
+                            paid for while your membership is financial.
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">13.5  Member pricing on tours — minimum membership period</h3>
+                        <p className="text-rr-dark/80 leading-relaxed">
+                            Member pricing on tours, including Rajasthan Royals High Performance Centre tours, is
+                            available only to members who will have held a continuous, financial membership for at
+                            least six months by the date the tour starts. Members who will not have reached six
+                            months by that date pay the standard tour price. If a membership is cancelled, or the
+                            squad place is released under clause 13.2, before the tour starts, the member is no
+                            longer eligible for member pricing on that tour and the difference between the member
+                            price and the standard tour price becomes payable.
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">13.6  Continuous membership</h3>
+                        <p className="text-rr-dark/80 leading-relaxed">
+                            Your membership period is counted from the date of your first membership payment and
+                            is continuous while your weekly payments continue without a break. If a membership is
+                            cancelled, or the squad place is released under clause 13.2, the membership period
+                            starts again from the date you rejoin.
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">13.7  The Academy's discretion</h3>
+                        <p className="text-rr-dark/80 leading-relaxed">
+                            The Academy reserves the right to determine, at its discretion, whether a player is
+                            eligible for member pricing on a tour, including deciding a player's eligibility before
+                            the six-month membership period has been reached.
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">14. Referral Program</h2>
                         <p className="text-rr-dark/80 leading-relaxed mb-4">
                             From time to time the Academy may operate a referral program under which an existing
                             participant (the referring member) may receive a benefit when a person they refer applies,
@@ -405,7 +468,7 @@ const TermsConditions = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">14. Governing Law</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">15. Governing Law</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             These Terms shall be governed by and construed in accordance with the laws of the
                             State of Victoria, Australia. Any disputes arising in connection with these Terms
@@ -414,7 +477,7 @@ const TermsConditions = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">15. Amendments</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">16. Amendments</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             We reserve the right to amend these Terms at any time. Updated Terms will be posted
                             on this page with a revised date. Continued use of the website or participation in
@@ -423,7 +486,7 @@ const TermsConditions = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">16. Contact Us</h2>
+                        <h2 className="text-2xl font-bold uppercase tracking-wide text-rr-navy mb-4">17. Contact Us</h2>
                         <p className="text-rr-dark/80 leading-relaxed">
                             If you have any questions regarding these Terms, please contact us at:
                         </p>
