@@ -232,6 +232,8 @@ const listJoin = (items) => (items.length <= 1
 // NOT claimed, on purpose (Alex, 2 Oct 2026): anything about Sid personally
 // coaching a player (Bashir, the India tour group, his own Surrey academy),
 // his non-Royals role (Birmingham Phoenix), or any number of years.
+// Barbados: the CPL team is the Barbados TRIDENTS from 2026 (renamed May 2026),
+// so never write "Barbados Royals". Paarl Royals role = Batting Coach (ESPNcricinfo).
 export const SID_NAME = SID.name; // Siddhartha Lahiri
 export const SID_TITLE_LINE = SID.titleLine; // Head of International Player Development and Performance Coach, Rajasthan Royals
 // Its own up-to-date photo (Alex, 27 Sep 2026): Sid coaching, which suits a
@@ -277,13 +279,13 @@ export const SID_SECTION = {
     title: 'Who Is Sid Lahiri?',
     intro:
         `${SID_NAME}, known as Sid, leads player development across the Royals' global organisation: `
-        + 'the Rajasthan Royals in the IPL, the Paarl Royals in the SA20, the Barbados Royals in the CPL, '
-        + 'and the Royals academies around the world.',
+        + 'the Rajasthan Royals in the IPL, the Paarl Royals in the SA20, and the Royals academies around '
+        + 'the world.',
     // His Royals roles. Sources 1–2 above, and the approved 28 Sep email.
     roles: [
-        { team: 'Royals Sports Group', league: 'Owns the Rajasthan, Paarl and Barbados Royals', role: 'Head of International Player Development' },
+        { team: 'Royals Sports Group', league: 'Owns the Rajasthan Royals and the Paarl Royals', role: 'Head of International Player Development' },
         { team: 'Rajasthan Royals', league: 'Indian Premier League', role: 'Performance Coach' },
-        { team: 'Paarl Royals', league: 'SA20, South Africa', role: 'Assistant Coach' },
+        { team: 'Paarl Royals', league: 'SA20, South Africa', role: 'Batting Coach' },
         { team: 'Royals Academies', league: 'Jaipur, Pune, Surrey, New Jersey and Melbourne', role: 'Runs the academy network' },
     ],
     // Players from the Royals system. Nagpur: National Herald, 17 Mar 2026
@@ -310,7 +312,7 @@ export const SID_SECTION = {
     ],
     academiesTitle: "The Royals' global network",
     academies: [
-        'The Royals Sports Group owns the Rajasthan Royals (IPL), the Paarl Royals (SA20) and the Barbados Royals (CPL).',
+        'The Royals Sports Group owns the Rajasthan Royals in the IPL and the Paarl Royals in the SA20.',
         'Royals academies run year-round in Jaipur, Pune, Surrey and New Jersey. Ours in Melbourne is part of the same network, and Sid oversees it.',
         "In September our India tour group trained at the Royals' High Performance Centre in Nagpur.",
     ],
