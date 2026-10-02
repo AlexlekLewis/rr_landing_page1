@@ -13,28 +13,32 @@ New inquiries appear automatically (within ~1 minute), all on a single tab named
 power_game_inquiries (Supabase)
         │  RLS: only authenticated can read directly
         ▼
-export_power_game_inquiries(p_token)   ← SECURITY DEFINER, token-gated RPC
+export_power_game_inquiries(p_token)   ← SECURITY DEFINER, service_role only
         ▲
-        │  HTTPS POST { p_token } with the public anon key, every 1 min
+        │  HTTPS POST with the service_role key (Script Properties), every 1 min
 Apps Script syncPowerGameInquiries()   ← bound to the sheet
         ▼
 "Power Game Inquiries 2026" tab        ← appends new rows, deduped by id
 ```
 
-The sheet never holds a powerful database key. The only secret is a narrow read
-token (`SYNC_TOKEN`) that unlocks just this one read function. Each run reconciles
-the whole table, so it is self-healing — no rows are missed even if the script is
-paused.
+The service_role key lives only in the script's Script Properties, never in
+`Code.gs` — this repo is public. The export function refuses every caller except
+the service_role key; `p_token` is still accepted but ignored once
+`supabase/migrations/20260927120000_sheet_sync_secrets_to_vault.sql` is applied.
+Each run reconciles the whole table, so it is self-healing — no rows are missed
+even if the script is paused.
 
 ## One-time setup
 
 1. Open the sheet → **Extensions → Apps Script**.
 2. Replace the default `Code.gs` with [`Code.gs`](./Code.gs) in this folder. Save.
-3. Run `syncPowerGameInquiries` once → approve the Google authorization prompt.
-4. Run `installTrigger` once → schedules the sync every minute.
+3. **Project Settings → Script properties** → add `SUPABASE_URL` and
+   `SUPABASE_SERVICE_KEY` (optional: `SHEET_ID`) — see the SETUP comment in `Code.gs`.
+4. Run `syncPowerGameInquiries` once → approve the Google authorization prompt.
+5. Run `installTrigger` once → schedules the sync every minute.
 
-Done. To rotate the token later, change it in both `Code.gs` (`SYNC_TOKEN`) and the
-`export_power_game_inquiries` migration, then re-apply the migration.
+Done. Never paste a key or token into `Code.gs` or a migration — this repo is
+public. If the service_role key is rotated, update the Script Property.
 
 ## Columns
 
