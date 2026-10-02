@@ -335,13 +335,11 @@ export const SID_SECTION = {
 
 
 // ── The session details ──
-export const NOT_A_TRIAL = 'This is a coaching session, not a trial. Nobody is assessed, ranked or selected.';
-
 export const SESSION_SECTION = {
     eyebrow: 'The Sessions',
     title: 'One Session At Each Centre',
     sub:
-        `Coaching for players aged ${AGE_RANGE}. ${NOT_A_TRIAL} Each session is booked separately, `
+        `Coaching for players aged ${AGE_RANGE}. Each session is booked separately, `
         + 'so book the one you can get to.',
     costNote: ALL_REQUEST_MODE
         ? 'Nothing is paid on this page. We email you to confirm the place and how to pay.'
@@ -432,10 +430,6 @@ export const FAQS = [
         a:
             `That is the plan. ${SID_NAME}, ${SID.title} at the ${SID.employer}, is in Melbourne on `
             + `${SID_IN_MELBOURNE} and is scheduled to join both junior sessions as guest coach.`,
-    },
-    {
-        q: 'Is this a trial?',
-        a: `No. ${NOT_A_TRIAL}`,
     },
     {
         q: 'What does it cost, and when do I pay?',
