@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const StickyCTA = ({ label = 'Register & Pay \u2014 Trial Spot' }) => {
+// `targetId` defaults to the registration form, as it always has; a page can
+// point the button somewhere else (it still hides once the form has scrolled past).
+const StickyCTA = ({ label = 'Register & Pay \u2014 Trial Spot', targetId = 'register-pay' }) => {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
@@ -25,7 +27,7 @@ const StickyCTA = ({ label = 'Register & Pay \u2014 Trial Spot' }) => {
     }, []);
 
     const scrollToForm = () => {
-        document.getElementById('register-pay')?.scrollIntoView({ behavior: 'smooth' });
+        document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (

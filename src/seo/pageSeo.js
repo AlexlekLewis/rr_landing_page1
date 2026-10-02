@@ -83,6 +83,16 @@ export const PAGE_SEO = {
   // Private link, handed out by Alex to current Academy players who cannot make a
   // trial date. Deliberately NOT in the sitemap and not linked from any page, and
   // noindex so it stays out of search results if the address ever gets shared.
+  // The Performance Squads' permanent landing page (Alex, 2 October 2026):
+  // trial dates, the program and membership. Public and indexed. Kept generic
+  // on purpose — no dates — because the trial dates on the page change.
+  // scripts/prerender-seo.mjs bakes these tags into dist/performance-squads/index.html.
+  '/performance-squads': {
+    title: 'Cricket Performance Squads Melbourne | Rajasthan Royals',
+    description:
+      'Rajasthan Royals Academy Performance Squads for players 10 to 25 in North and South-East Melbourne. Weekly training, T20 matches, trial dates, membership.',
+    ogImage: '/assets/performance-squads/selected-player-fist-pump.png',
+  },
   // It must not be discoverable: it is a no-fee route into the squads sitting
   // beside a paid one, so anyone finding it organically would skip the trial fee.
   // Deliberately NOT added to robots.txt — that file is public, so listing the

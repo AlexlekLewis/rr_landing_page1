@@ -11,6 +11,10 @@ import {
     getTrialSessions, getMaxTrialSessions, getOpenTrialSessions,
     getSelectableSessionCount, isCentreFull,
 } from './data';
+import {
+    isSquadTrialBookable, getBookableOpenAgeTrials, joinDays,
+    OPEN_AGE_TRIAL_ROUTE,
+} from './trialCalendar';
 
 const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
     const [form, setForm] = useState({
@@ -47,9 +51,15 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
     const isTrial = true; // trial-only registration
     const trialSessions = getTrialSessions(form.preferred_centre);
     const maxSessions = getMaxTrialSessions(form.preferred_centre);
-    // When a centre's trials are all full, the form becomes a waitlist sign-up:
-    // no session picker, no payment — just capture interest.
-    const isWaitlist = isCentreFull(form.preferred_centre);
+    // This page is permanent. Unless a squad trial can be booked right now, the
+    // form is a register-your-interest sign-up: no session picker, no payment.
+    // With bookings open, a centre whose sessions are all full falls back to the
+    // same interest sign-up.
+    const bookingOpen = isSquadTrialBookable();
+    const isWaitlist = !bookingOpen || isCentreFull(form.preferred_centre)
+        || (Boolean(form.preferred_centre) && getOpenTrialSessions(form.preferred_centre).length === 0);
+    // The Open Age Trial, while it is on, for anyone aged 16 to 25 who lands here.
+    const openAge = getBookableOpenAgeTrials();
     const showSessionPicker = isTrial && trialSessions.length > 0 && !isWaitlist;
 
     // What is left to book, and the most a player could pick even if they tried.
@@ -174,7 +184,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                     eyebrow={isWaitlist ? 'Register Interest' : 'Register & Pay'}
                     title={isWaitlist ? 'Register Your Interest' : 'Register & Secure Your Trial Spot'}
                     sub={isWaitlist
-                        ? "Our September trials at this centre are done. Leave your details and we will tell you as soon as the next trial dates are set, or a place opens — nothing to pay."
+                        ? 'Leave your details and we will let you know as soon as the next trial dates are set. There is nothing to pay.'
                         : "Enter your details, choose your trial session(s), and pay — all in one step. Your trial spot isn't confirmed until payment is received."}
                 />
                 {submitted ? (
@@ -190,9 +200,8 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                         </h3>
                         {submittedResult?.waitlist ? (
                             <p className="text-white/70 text-[15px] font-medium leading-relaxed">
-                                Thanks — we have your details. We'll be in touch as soon as the next
-                                trial dates are set, or a place opens up. Questions?
-                                Email info@rramelbourne.com
+                                Thanks, we have your details. We will let you know as soon as the
+                                next trial opens. Questions? Email info@rramelbourne.com
                             </p>
                         ) : (
                             <>
@@ -346,14 +355,19 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                         {isWaitlist && (
                             <div className="mb-6 bg-rr-pink/8 border border-rr-pink/30 rounded-xl px-4 py-4">
                                 <p className="text-sm font-black uppercase tracking-wide text-rr-light-pink mb-1.5">
-                                    September trials here are done
+                                    Next trials: dates to be confirmed
                                 </p>
                                 <p className="text-white/70 text-sm font-medium leading-relaxed">
-                                    Register your interest and we&apos;ll be in touch as soon as the next
-                                    trial dates are set, or a place opens up. There&apos;s nothing to pay.
-                                    Aged 16 to 25? There is an open age trial at both centres on 4 and 5
-                                    October — see{' '}
-                                    <a href="/performance-squads-open-trial" className="text-rr-light-pink underline hover:text-white">the open age trial</a>.
+                                    Register your interest and we will let you know as soon as the next
+                                    trial opens. There is nothing to pay.
+                                    {openAge.length > 0 && (
+                                        <>
+                                            {' '}Aged 16 to 25? The Open Age Trial is open now, on {joinDays(openAge)}.{' '}
+                                            <a href={OPEN_AGE_TRIAL_ROUTE} className="text-rr-light-pink underline hover:text-white">
+                                                Book the Open Age Trial
+                                            </a>.
+                                        </>
+                                    )}
                                 </p>
                             </div>
                         )}

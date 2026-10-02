@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { StumpsIcon, SelectionIcon, BatIcon, BallIcon } from './CricketIcons';
 import { fadeUp, scrollTo, SectionHeading } from './shared';
+import { TRIAL_PRICE, MEMBERSHIP, money } from './data';
 
 const PathwaySection = () => (
     <section className="py-20 px-5">
@@ -9,7 +10,7 @@ const PathwaySection = () => (
             <SectionHeading
                 eyebrow="The Pathway"
                 title="Trial. Get Selected. Compete."
-                sub="Performance Squad players earn their place at open trials and through performances. Players who are part of our T20 Elite and Pre-Season Programs are also eligible for Performance Squad and match selections."
+                sub="Performance Squad players earn their place at a trial and through their performances. Players in our T20 Elite and Pre-Season Programs are also eligible for squad and match selection."
             />
             <div className="grid sm:grid-cols-3 gap-5 mb-14">
                 {[
@@ -17,19 +18,19 @@ const PathwaySection = () => (
                         n: '01',
                         icon: StumpsIcon,
                         title: 'Trial',
-                        body: "Register, pay your trial fee, and take part at your centre. Our coaches assess skill, athleticism and attitude across the session.",
+                        body: `Book a trial when dates are set, pay the ${money(TRIAL_PRICE)} trial fee, and take part at your centre. Our coaches assess skill, athleticism and attitude.`,
                     },
                     {
                         n: '02',
                         icon: SelectionIcon,
                         title: 'Selection',
-                        body: 'Successful players are offered a squad place once the trial period closes. You will be told where you stand either way.',
+                        body: 'Successful players are offered a squad place after the trial. You will be told where you stand either way.',
                     },
                     {
                         n: '03',
                         icon: BatIcon,
                         title: 'Compete',
-                        body: 'Pay your Registration Fee, train weekly with your squad, and go into selection for Power League rounds and external fixtures.',
+                        body: `Accept your place with the ${money(MEMBERSHIP.joiningFee)} joining fee, then your membership at ${money(MEMBERSHIP.weeklyFee)} a week. Train weekly with your squad and go into selection for Power League rounds and showcase matches.`,
                     },
                 ].map((step, i) => (
                     <motion.div key={step.n} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i * 0.1}
@@ -63,8 +64,8 @@ const PathwaySection = () => (
                         </p>
                         <p className="text-white/70 text-[15px] font-medium leading-relaxed">
                             That means every player in the squad gets meaningful game time at their
-                            level — approximately 5-6 across the cricket season, with a clear pathway to
-                            push for First XI selection and selection in Royals Group opportunities.
+                            level: 5 to 10 T20 match days across the season, about one a month, with a clear
+                            pathway to push for First XI selection and selection in Royals Group opportunities.
                         </p>
                     </div>
                 </div>
