@@ -425,9 +425,12 @@ const TermsConditions = () => {
                         <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">13.5  Member pricing on tours — minimum membership period</h3>
                         <p className="text-rr-dark/80 leading-relaxed">
                             Member pricing on tours, including Rajasthan Royals High Performance Centre tours, is
-                            available only to members who have held a continuous, financial membership for at least
-                            six months at the time the tour is booked. Members who have not yet reached six months
-                            pay the standard tour price.
+                            available only to members who will have held a continuous, financial membership for at
+                            least six months by the date the tour starts. Members who will not have reached six
+                            months by that date pay the standard tour price. If a membership is cancelled, or the
+                            squad place is released under clause 13.2, before the tour starts, the member is no
+                            longer eligible for member pricing on that tour and the difference between the member
+                            price and the standard tour price becomes payable.
                         </p>
 
                         <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">13.6  Continuous membership</h3>
@@ -436,6 +439,13 @@ const TermsConditions = () => {
                             is continuous while your weekly payments continue without a break. If a membership is
                             cancelled, or the squad place is released under clause 13.2, the membership period
                             starts again from the date you rejoin.
+                        </p>
+
+                        <h3 className="font-bold uppercase tracking-wide text-rr-navy text-sm mt-6 mb-2">13.7  The Academy's discretion</h3>
+                        <p className="text-rr-dark/80 leading-relaxed">
+                            The Academy reserves the right to determine, at its discretion, whether a player is
+                            eligible for member pricing on a tour, including deciding a player's eligibility before
+                            the six-month membership period has been reached.
                         </p>
                     </section>
 

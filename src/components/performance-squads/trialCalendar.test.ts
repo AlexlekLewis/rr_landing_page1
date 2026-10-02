@@ -80,12 +80,13 @@ describe('member pricing rule', () => {
     it('gives tours a six-month minimum and programs the price while active', () => {
         expect(TOUR_MEMBER_MONTHS).toBe(6);
         expect(MEMBER_PRICING_RULE).toContain('while your membership is active');
-        expect(MEMBER_PRICING_RULE).toContain('six months in a row');
+        expect(MEMBER_PRICING_RULE).toContain('six months in a row by the date the tour starts');
     });
 
     it('says the same in the FAQ, including that rejoining restarts the clock', () => {
         const faq = FAQS.find((f) => f.q === 'When do I get member pricing?')!.a;
-        expect(faq).toContain('six months in a row');
+        expect(faq).toContain('six months in a row by the date the tour starts');
+        expect(faq).toContain('the member discount becomes payable');
         expect(faq).toContain('the six months start again');
         expect(faq).toContain('clause 13');
     });

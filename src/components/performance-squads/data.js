@@ -149,7 +149,8 @@ export const GRACE_PERIOD = `${NUMBER_WORDS[MEMBERSHIP.graceWeeks] || MEMBERSHIP
 // (/terms-conditions) is the binding version; every page quotes this line.
 export const TOUR_MEMBER_MONTHS = 6;
 export const TOUR_MEMBER_MONTHS_WORD = NUMBER_WORDS[TOUR_MEMBER_MONTHS] || String(TOUR_MEMBER_MONTHS);
-export const MEMBER_PRICING_RULE = `Member pricing applies while your membership is active. For tours, including High Performance Centre tours, it starts once you have been a member for ${TOUR_MEMBER_MONTHS_WORD} months in a row.`;
+// Counted to the date the TOUR STARTS (Alex, 2 October 2026), not the booking date.
+export const MEMBER_PRICING_RULE = `Member pricing applies while your membership is active. For tours, including High Performance Centre tours, you need to have been a member for ${TOUR_MEMBER_MONTHS_WORD} months in a row by the date the tour starts.`;
 export const TERMS_ROUTE = '/terms-conditions';
 export const TERMS_MEMBERSHIP_CLAUSE = 'clause 13';
 
@@ -370,7 +371,7 @@ export const FAQS = [
     },
     {
         q: 'When do I get member pricing?',
-        a: `While your membership is active, you get member pricing on our programs, such as Spin Club, masterclasses, the 12-week T20 Program and the Pre-Season Program. For tours, including High Performance Centre tours, member pricing starts once you have been a member for ${TOUR_MEMBER_MONTHS_WORD} months in a row. If you cancel and rejoin, the ${TOUR_MEMBER_MONTHS_WORD} months start again. The full rules are in ${TERMS_MEMBERSHIP_CLAUSE} of our Terms & Conditions.`,
+        a: `While your membership is active, you get member pricing on our programs, such as Spin Club, masterclasses, the 12-week T20 Program and the Pre-Season Program. For tours, including High Performance Centre tours, you get member pricing if you will have been a member for ${TOUR_MEMBER_MONTHS_WORD} months in a row by the date the tour starts. If you cancel before the tour starts, the member discount becomes payable, and if you cancel and rejoin, the ${TOUR_MEMBER_MONTHS_WORD} months start again. The full rules are in ${TERMS_MEMBERSHIP_CLAUSE} of our Terms & Conditions.`,
     },
     {
         q: 'What do I get as a member?',
