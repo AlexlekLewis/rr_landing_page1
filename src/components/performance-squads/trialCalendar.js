@@ -31,7 +31,7 @@ export const OPEN_AGE_TRIAL_ROUTE = '/performance-squads-open-trial';
 
 // Read as "for players aged 16 to 25 (as at 1 September 2026)".
 export const OPEN_AGE_AGE_LINE = `aged ${OPEN_AGE_MIN} to ${OPEN_AGE_MAX} (as at ${OPEN_AGE_AS_AT})`;
-export const SQUAD_AGE_LINE = `aged ${MIN_AGE} to ${MAX_AGE}`;
+export const SQUAD_AGE_LINE = `aged ${MIN_AGE}–${MAX_AGE}`;
 
 // When each open age session finishes, Melbourne time. Daylight saving starts
 // on Sunday 4 October 2026, so both are AEDT (+11:00).

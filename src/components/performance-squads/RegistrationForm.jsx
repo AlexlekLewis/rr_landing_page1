@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Check } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { HONEYPOT_FIELD, isHoneypotTripped } from '../../lib/security/bot.js';
 import {
     fadeUp, scrollTo, SectionHeading, Label, FieldError, Chevron,
     inputClass, selectClass, PSCheckbox,
@@ -15,6 +16,24 @@ import {
     isSquadTrialBookable, getBookableOpenAgeTrials, joinDays,
     OPEN_AGE_TRIAL_ROUTE,
 } from './trialCalendar';
+
+// ── Anti-bot, the same approach as the open age trial form
+// (open-age-trial/OpenAgeRegistrationForm.jsx): a honeypot plus a per-browser
+// throttle. Turnstile (security/BotGuard.jsx) is NOT wired: its token can only
+// be enforced server-side, and this form inserts straight into Supabase from
+// the browser. Wire it the day this submission goes through an API route.
+const THROTTLE_KEY = 'ps_interest_last_submit';
+const THROTTLE_MS = 20 * 1000;
+const throttled = () => {
+    try {
+        return Date.now() - Number(window.localStorage.getItem(THROTTLE_KEY) || 0) < THROTTLE_MS;
+    } catch {
+        return false; // storage blocked — never block a real player on it
+    }
+};
+const recordSubmit = () => {
+    try { window.localStorage.setItem(THROTTLE_KEY, String(Date.now())); } catch { /* storage blocked */ }
+};
 
 const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
     const [form, setForm] = useState({
@@ -32,6 +51,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
         accept_player_code: false,
         accept_parent_code: false,
         accept_social_media: false,
+        company: '',            // honeypot — humans never see or fill it
     });
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
@@ -100,13 +120,14 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                 // Typos are caught above, so a number landing here is a real age
                 // outside the squads' range — say so plainly rather than showing
                 // the generic "enter an age" message.
-                next.player_age = `Performance Squads are for players aged ${MIN_AGE} to ${MAX_AGE}.`;
+                next.player_age = `Performance Squads are for players aged ${MIN_AGE}–${MAX_AGE}.`;
             }
         }
         if (!form.email.trim() || !/^\S+@\S+\.\S+$/.test(form.email)) next.email = 'A valid email is required';
+        // Phone stays in interest mode: performance_squad_leads.phone is NOT NULL.
         if (!form.phone.trim()) next.phone = 'Phone number is required';
         if (!form.preferred_centre) next.preferred_centre = 'Please choose a centre';
-        if (!form.playing_role) next.playing_role = 'Please choose a playing role';
+        if (!isWaitlist && !form.playing_role) next.playing_role = 'Please choose a playing role';
         if (showSessionPicker && form.trial_session_dates.some((id) => trialSessions.find((x) => x.id === id)?.full)) {
             next.trial_session_dates = 'One of the sessions you picked is now full. Please choose another.';
         }
@@ -124,6 +145,17 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
             return;
         }
         setErrors({});
+        // Honeypot filled means a script, not a player: show the same success
+        // state and write nothing.
+        if (isHoneypotTripped(form.company)) {
+            setSubmitted(true);
+            setSubmittedResult({ centre: form.preferred_centre, signupType: form.signup_type, sessionIds: [], waitlist: true });
+            return;
+        }
+        if (isWaitlist && throttled()) {
+            setErrors({ form: 'That went through a moment ago. Give it a few seconds before trying again.' });
+            return;
+        }
         setSubmitting(true);
         try {
             const params = new URLSearchParams(window.location.search);
@@ -135,14 +167,14 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                 {
                     player_name: form.player_name.trim(),
                     player_age: form.player_age.trim(),
-                    parent_name: form.parent_name.trim() || null,
+                    parent_name: isWaitlist ? null : (form.parent_name.trim() || null),
                     email: form.email.trim(),
                     phone: form.phone.trim(),
-                    club: form.club.trim() || null,
+                    club: isWaitlist ? null : (form.club.trim() || null),
                     preferred_centre: form.preferred_centre,
                     entry_type: isWaitlist ? 'waitlist' : form.signup_type,
                     on_waitlist: isWaitlist,
-                    playing_role: form.playing_role,
+                    playing_role: isWaitlist ? null : form.playing_role,
                     trial_sessions: showSessionPicker ? form.trial_session_dates.length : null,
                     trial_session_dates: showSessionPicker ? form.trial_session_dates : null,
                     accept_terms: form.accept_terms,
@@ -154,6 +186,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                 },
             ]);
             if (error) throw error;
+            if (isWaitlist) recordSubmit();
 
             const result = {
                 centre: form.preferred_centre,
@@ -184,7 +217,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                     eyebrow={isWaitlist ? 'Register Interest' : 'Register & Pay'}
                     title={isWaitlist ? 'Register Your Interest' : 'Register & Secure Your Trial Spot'}
                     sub={isWaitlist
-                        ? 'Leave your details and we will let you know as soon as the next trial dates are set. There is nothing to pay.'
+                        ? "Leave your details and we'll email you the next trial dates as soon as they're set. No payment now. No place held."
                         : "Enter your details, choose your trial session(s), and pay — all in one step. Your trial spot isn't confirmed until payment is received."}
                 />
                 {submitted ? (
@@ -200,8 +233,9 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                         </h3>
                         {submittedResult?.waitlist ? (
                             <p className="text-white/70 text-[15px] font-medium leading-relaxed">
-                                Thanks, we have your details. We will let you know as soon as the
-                                next trial opens. Questions? Email info@rramelbourne.com
+                                No payment has been taken and no place is held. We&apos;ll email you the
+                                next trial dates as soon as they&apos;re set. Questions:{' '}
+                                <a href="mailto:info@rramelbourne.com" className="text-rr-light-pink underline hover:text-white">info@rramelbourne.com</a>
                             </p>
                         ) : (
                             <>
@@ -220,7 +254,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                         )}
                     </motion.div>
                 ) : (
-                    <form onSubmit={handleSubmit} noValidate className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-9">
+                    <form onSubmit={handleSubmit} noValidate className="relative bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-9">
                         <div className="grid sm:grid-cols-2 gap-4 mb-4">
                             <div>
                                 <Label required>Player Name</Label>
@@ -228,18 +262,26 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                                 <FieldError msg={errors.player_name} />
                             </div>
                             <div>
-                                <Label required>Player Age <span className="normal-case font-medium text-white/40">(in years — {MIN_AGE} to {MAX_AGE})</span></Label>
+                                <Label required>Player Age <span className="normal-case font-medium text-white/40">(in years, {MIN_AGE}–{MAX_AGE})</span></Label>
                                 <input type="text" inputMode="numeric" value={form.player_age} onChange={set('player_age')} placeholder="e.g. 16 years old" className={ic('player_age')} />
                                 <FieldError msg={errors.player_age} />
                             </div>
                         </div>
+                        {/* Interest mode asks only what we need to tell them the dates
+                            (3 Oct 2026): name, age, email, phone (NOT NULL in the
+                            table), centre. Parent name, club and role are asked at booking. */}
+                        {!isWaitlist && (
                         <div className="mb-4">
                             <Label>Parent / Guardian Name <span className="normal-case font-medium text-white/40">(if player is under 18)</span></Label>
                             <input type="text" value={form.parent_name} onChange={set('parent_name')} placeholder="Parent or guardian full name" className={ic('parent_name')} />
                         </div>
+                        )}
                         <div className="grid sm:grid-cols-2 gap-4 mb-4">
                             <div>
-                                <Label required>Email</Label>
+                                <Label required>
+                                    {isWaitlist ? 'Parent / Guardian Email' : 'Email'}
+                                    {isWaitlist && <span className="normal-case font-medium text-white/40"> (player&apos;s own if 18+)</span>}
+                                </Label>
                                 <input type="email" value={form.email} onChange={set('email')} placeholder="you@email.com" className={ic('email')} />
                                 <FieldError msg={errors.email} />
                             </div>
@@ -249,24 +291,27 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                                 <FieldError msg={errors.phone} />
                             </div>
                         </div>
+                        {!isWaitlist && (
                         <div className="mb-4">
                             <Label>Current Club <span className="normal-case font-medium text-white/40">(optional)</span></Label>
                             <input type="text" value={form.club} onChange={set('club')} placeholder="Club / association" className={ic('club')} />
                         </div>
-                        <div className="grid sm:grid-cols-2 gap-4 mb-4">
+                        )}
+                        <div className={`grid gap-4 mb-4 ${isWaitlist ? '' : 'sm:grid-cols-2'}`}>
                             <div className="relative">
                                 <Label required>Preferred Centre</Label>
                                 <div className="relative">
                                     <select value={form.preferred_centre} onChange={set('preferred_centre')} className={sc('preferred_centre')}>
                                         <option value="" disabled>Choose a centre</option>
                                         {ACTIVE_CENTRES.map((c) => (
-                                            <option key={c.slug} value={c.slug}>{c.name} — {c.venue}</option>
+                                            <option key={c.slug} value={c.slug}>{c.venue}, {c.suburb} ({c.name})</option>
                                         ))}
                                     </select>
                                     <Chevron />
                                 </div>
                                 <FieldError msg={errors.preferred_centre} />
                             </div>
+                            {!isWaitlist && (
                             <div className="relative">
                                 <Label required>Playing Role</Label>
                                 <div className="relative">
@@ -278,7 +323,13 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                                 </div>
                                 <FieldError msg={errors.playing_role} />
                             </div>
+                            )}
                         </div>
+                        {isWaitlist && (
+                            <p className="text-white/50 text-xs font-medium -mt-2 mb-4">
+                                The two centres are about 70 km apart. Choose the one you can get to every week.
+                            </p>
+                        )}
                         {showSessionPicker && (
                             <div className="mb-4">
                                 <Label required>
@@ -338,7 +389,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                                 )}
                                 <FieldError msg={errors.trial_session_dates} />
                                 <p className="text-white/40 text-xs font-medium mt-2">
-                                    ${TRIAL_PRICE} per player, per session
+                                    ${TRIAL_PRICE} incl. GST per player, per session
                                     {form.trial_session_dates.length > 0 && (
                                         <>
                                             {' '}— you'll pay for {form.trial_session_dates.length} session
@@ -358,8 +409,8 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                                     Next trials: dates to be confirmed
                                 </p>
                                 <p className="text-white/70 text-sm font-medium leading-relaxed">
-                                    Register your interest and we will let you know as soon as the next
-                                    trial opens. There is nothing to pay.
+                                    No payment now. No place held. We&apos;ll email you the next trial
+                                    dates as soon as they&apos;re set.
                                     {openAge.length > 0 && (
                                         <>
                                             {' '}Aged 16 to 25? The Open Age Trial is open now, on {joinDays(openAge)}.{' '}
@@ -397,6 +448,16 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                         </div>
                         )}
 
+                        <input
+                            type="text"
+                            name={HONEYPOT_FIELD}
+                            tabIndex={-1}
+                            autoComplete="off"
+                            aria-hidden="true"
+                            className="absolute left-[-9999px] top-0 w-px h-px opacity-0"
+                            value={form.company}
+                            onChange={set('company')}
+                        />
                         {errors.form && (
                             <p className="text-rr-pink text-sm font-bold mb-4 text-center">{errors.form}</p>
                         )}
@@ -407,7 +468,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                         >
                             {submitting
                                 ? 'Submitting…'
-                                : isWaitlist ? 'Register My Interest' : 'Submit Registration'}
+                                : isWaitlist ? 'Register Your Interest' : 'Submit Registration'}
                             {!submitting && <ArrowRight className="w-4 h-4" />}
                         </button>
                     </form>

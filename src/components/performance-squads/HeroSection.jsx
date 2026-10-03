@@ -12,9 +12,13 @@ const HeroSection = ({
     announcement = null,        // { label, text, target } — a strip above the title
     primary = { label: 'Register for a Trial', target: 'trials' },
     secondary = { label: 'How it works', target: 'pathway' },
+    eyebrow = 'Rajasthan Royals Academy Melbourne',
+    priceLine = null,           // a facts line under the body (prices), when given
+    buttonNote = null,          // a small line under the buttons, when given
 }) => (
     <section className="relative min-h-[92svh] w-full overflow-hidden flex items-center">
-        <div className="absolute inset-0 bg-gradient-rr opacity-25" />
+        {/* bg-gradient-rr is a dead class; the gradient is a CSS variable. */}
+        <div className="absolute inset-0 opacity-25" style={{ backgroundImage: 'var(--image-gradient-rr)' }} />
         <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/60 to-rr-dark/90" />
 
         {/* Royals rampant lion — right-hand background mark. Decorative only.
@@ -51,7 +55,7 @@ const HeroSection = ({
                     </button>
                 )}
                 <span className="inline-block text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-white bg-rr-pink rounded-full px-5 py-2 mb-6">
-                    Rajasthan Royals Academy Melbourne
+                    {eyebrow}
                 </span>
                 <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black uppercase leading-[0.95] mb-6">
                     Performance<br />Squads
@@ -59,7 +63,7 @@ const HeroSection = ({
                 <p className="text-lg sm:text-2xl font-bold text-rr-light-pink mb-4">
                     {tagline}
                 </p>
-                <p className="text-white/70 text-[15px] sm:text-lg font-medium leading-relaxed mb-10">
+                <p className={`text-white/70 text-[15px] sm:text-lg font-medium leading-relaxed ${priceLine ? 'mb-5' : 'mb-10'}`}>
                     {body || (
                         <>
                             Our Performance Squads are the representative arm of the Rajasthan Royals Academy — squads of
@@ -68,6 +72,11 @@ const HeroSection = ({
                         </>
                     )}
                 </p>
+                {priceLine && (
+                    <p className="text-white text-[15px] sm:text-lg font-bold leading-relaxed mb-10">
+                        {priceLine}
+                    </p>
+                )}
                 <div className="flex flex-col sm:flex-row gap-3 sm:justify-start">
                     <button
                         onClick={() => scrollTo(primary.target)}
@@ -82,6 +91,11 @@ const HeroSection = ({
                         {secondary.label}
                     </button>
                 </div>
+                {buttonNote && (
+                    <p className="text-white/60 text-sm font-medium leading-relaxed mt-4">
+                        {buttonNote}
+                    </p>
+                )}
             </motion.div>
         </div>
     </section>

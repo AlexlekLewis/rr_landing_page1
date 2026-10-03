@@ -18,7 +18,7 @@ const PathwaySection = () => (
                         n: '01',
                         icon: StumpsIcon,
                         title: 'Trial',
-                        body: `Book a trial when dates are set, pay the ${money(TRIAL_PRICE)} trial fee, and take part at your centre. Our coaches assess skill, athleticism and attitude.`,
+                        body: `Book a trial when dates are set, pay the ${money(TRIAL_PRICE)} trial fee (incl. GST), and take part at your centre. Our coaches assess skill, athleticism and attitude.`,
                     },
                     {
                         n: '02',
@@ -30,7 +30,7 @@ const PathwaySection = () => (
                         n: '03',
                         icon: BatIcon,
                         title: 'Compete',
-                        body: `Accept your place with the ${money(MEMBERSHIP.joiningFee)} joining fee, then your membership at ${money(MEMBERSHIP.weeklyFee)} a week. Train weekly with your squad and go into selection for Power League rounds and showcase matches.`,
+                        body: `Accept your place with the ${money(MEMBERSHIP.joiningFee)} joining fee, then your membership at ${money(MEMBERSHIP.weeklyFee)} a week (all incl. GST). Train weekly with your squad and go into selection for Power League rounds and showcase matches.`,
                     },
                 ].map((step, i) => (
                     <motion.div key={step.n} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i * 0.1}
@@ -58,7 +58,7 @@ const PathwaySection = () => (
                             the squad's premier representative team. Alongside the First XI, additional
                             teams at various age groups and skill levels are assembled from the squad for fixtures in the{' '}
                             <button onClick={() => scrollTo('power-league')} className="text-rr-light-pink font-bold underline underline-offset-2 hover:text-rr-pink transition-colors">
-                                RRA Power League
+                                Power League
                             </button>{' '}
                             and matches against external opposition in showcase fixtures.
                         </p>
