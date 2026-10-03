@@ -78,10 +78,14 @@ const PC_NAV = [
 //   Spin Club          — announced 26 Sep 2026, interest only. No start date
 //                        confirmed; when Alex sets the first Wednesday, say it
 //                        in the badge.
+//   Batting Club and   — added 3 Oct 2026, interest only, Mickleham, no start
+//   Keeping Club         date. Same rule as Spin Club when a date is set.
 const PROGRAMS_DROPDOWN = [
     { label: 'Performance Squads Open Trial · 16-25', route: '/performance-squads-open-trial', badge: 'Both Centres · 4 & 5 Oct', badgeColor: 'bg-rr-pink' },
     { label: PROGRAM_ROW.navLabel, route: SID_JUNIORS_ROUTE, badge: PROGRAM_ROW.navBadge, badgeColor: 'bg-rr-pink' },
     { label: 'Spin Club · Spinners 10-25', route: '/spin-club', badge: 'Registering Interest', badgeColor: 'bg-green-500' },
+    { label: 'Batting Club · Batters 10-25', route: '/batting-club', badge: 'Registering Interest', badgeColor: 'bg-green-500' },
+    { label: 'Keeping Club · Keepers 10-25', route: '/keeping-club', badge: 'Registering Interest', badgeColor: 'bg-green-500' },
     { label: 'Junior Royals Holiday Program · Cranbourne North', route: '/junior-royals-holiday', badge: '30 Sep – 2 Oct', badgeColor: 'bg-rr-pink' },
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 Entries Open', badgeColor: 'bg-green-500' },
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Register Your Interest', badgeColor: 'bg-green-500' },
