@@ -39,6 +39,20 @@ export const PAGE_SEO = {
     description:
       'A Wednesday night club for spin bowlers aged 10 to 25, at Mickleham and Cranbourne North. Run by Rajasthan Royals Academy Melbourne. Apply for a place.',
   },
+  // Batting Club and Keeping Club — Wednesday nights at Mickleham, either side of
+  // Spin Club North (added 3 Oct 2026). Interest only; no start date yet.
+  '/batting-club': {
+    title: 'Batting Coaching Melbourne | Royals Batting Club',
+    description:
+      'A Wednesday night club for batters aged 10 to 25 at Mickleham, mentored by First XI Premier cricketers Ikroop Dhanoa and Rittin Raman. Run by Rajasthan Royals Academy Melbourne. Register your interest.',
+    ogImage: '/assets/coaches/ikroop-dhanoa.jpg',
+  },
+  '/keeping-club': {
+    title: 'Wicketkeeping Coaching Melbourne | Royals Keeping Club',
+    description:
+      'A Wednesday night club for wicketkeepers aged 10 to 25 at Mickleham, mentored by Rittin Raman, alongside Spin Club. Run by Rajasthan Royals Academy Melbourne. Register your interest.',
+    ogImage: '/assets/coaches/rittin-raman.jpg',
+  },
   // Junior sessions with Siddhartha Lahiri: Cranbourne North Sun 4 Oct and
   // Mickleham Mon 5 Oct 2026 (src/components/sid-juniors). Linked from the
   // all-families email, so the card matters when a parent forwards it:
