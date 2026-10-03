@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { JR_T4 } from './jrTerm4Data';
 
-const EARLY_BIRD_END = new Date('2026-07-15T13:00:00Z');
-
-// Term 3 is sold out (30 Jul 2026); the floating nudge now points at the
-// Term 4 entry form instead of the paid Term 3 registration. Flip back when
-// Term 4 paid registration opens.
-const TERM3_SOLD_OUT = true;
-
+// Floating nudge to the Term 4 entry form. The Term 3 early-bird / paid
+// labels were removed on 3 Oct 2026. REVIEW 16 Dec 2026 (last Term 4 session).
 const JRT3StickyCTA = () => {
     const [visible, setVisible] = useState(false);
     const [pastForm, setPastForm] = useState(false);
-    const earlyBird = new Date() < EARLY_BIRD_END;
 
     useEffect(() => {
         const handleScroll = () => {
@@ -33,7 +28,7 @@ const JRT3StickyCTA = () => {
                     <div className="max-w-lg mx-auto">
                         <button onClick={() => document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' })}
                             className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] flex items-center justify-center gap-3 text-sm">
-                            {TERM3_SOLD_OUT ? 'Term 4 Entries Open — Enter Now' : earlyBird ? 'Secure Early Bird Spot — $299' : 'Register Now — Term 3, 2026'}
+                            {JR_T4.stickyLabel}
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                             </svg>

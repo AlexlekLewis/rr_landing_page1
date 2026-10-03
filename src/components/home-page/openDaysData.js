@@ -23,7 +23,7 @@
 //   Junior sessions    — 6 Oct 2026, the same day, for the same reason. REMOVE IT.
 //   Performance Squads — when the next intake has dates, put them in the tag
 //   Spin Club          — when Alex confirms the start date, put it in the tag
-//   Junior Royals T4   — end of Term 4
+//   Junior Royals T4   — 16 Dec 2026, the last Term 4 session
 //
 // Each item links via a full-page <a href> so the global Meta Pixel PageView
 // fires on arrival at the destination. Every line has to make sense to someone
@@ -73,8 +73,9 @@ export const ANNOUNCEMENTS = [
     {
         key: 'junior-royals-t4',
         name: 'Junior Royals · Term 4',
-        tag: 'Boys & girls 5 to 17 · weekly coaching on Wednesday nights',
-        detail: 'Mickleham & Cranbourne North · Wednesdays 7 Oct – 16 Dec · nothing to pay now',
+        // REVIEW 16 Dec 2026 — last Term 4 session. Facts: junior-royals-t3/jrTerm4Data.js.
+        tag: 'Ages 7–15 · weekly coaching, Wednesdays 6:00pm – 8:00pm at Mickleham and Cranbourne North',
+        detail: 'Wednesdays 7 Oct – 16 Dec · register your interest, nothing to pay now',
         href: '/junior-royals',
         badge: 'Entries open',
     },

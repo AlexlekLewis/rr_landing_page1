@@ -7,14 +7,14 @@ const coaches = [
         role: 'Director of Cricket · Academy Head Coach',
         location: 'All Centres',
         bio: 'For over 22 years, hundreds of young cricketers have had their careers heavily and positively influenced by his coaching, tactical and player management skills.',
-        fullBio: 'For over 22 years, hundreds of young cricketers have had their careers heavily and positively influenced by his coaching, tactical and player management skills. Alex coaches the individual’s game, not a template — building better cricketers, sharper athletes and tougher competitors. Current premier cricket senior assistant coach, bowling coach and Academy director.',
+        fullBio: 'For over 22 years, hundreds of young cricketers have had their careers heavily and positively influenced by his coaching, tactical and player management skills. Current premier cricket senior assistant coach, bowling coach and Academy director.',
         img: '/assets/coaches/alex-lewis.jpg',
         imgPosition: 'object-center',
     },
     {
         name: 'Alex Thornhill',
-        role: 'Head Coach — Hallam · Regional Manager, South East',
-        location: 'South-Eastern Melbourne',
+        role: 'Junior Royals Coach',
+        location: 'Melbourne',
         bio: 'A high quality coach and a key part of the Rajasthan Royals Academy Elite Program, Alex oversees the curriculum and content development for the Junior Royals program.',
         fullBio: 'A high quality coach and a key part of the Rajasthan Royals Academy Elite Program, Alex oversees the curriculum and content development for the Junior Royals program, assisted by experienced lead coaches who deliver the program in each location. A batting specialist with coaching experience across two continents — UK county cricket and the Australian premier system. Alex currently coaches within the Fitzroy Doncaster Academy and leads the cricket program at Xavier College.',
         img: '/assets/coaches/alex-thornhill.jpg',
@@ -22,8 +22,8 @@ const coaches = [
     },
     {
         name: 'Andrew Walton',
-        role: 'Head Coach — Williamstown · Regional Manager, East & West',
-        location: 'East & West Melbourne',
+        role: 'Junior Royals Coach',
+        location: 'Melbourne',
         bio: 'A Cricket Australia Level 3 High Performance accredited coach with over a decade of Premier Cricket Head Coach experience.',
         fullBio: 'A Cricket Australia Level 3 High Performance accredited coach with over a decade of Premier Cricket Head Coach experience. Andrew has developed players through to Sheffield Shield, BBL and international honours, working with the likes of Glenn Maxwell, Chris Rogers and Sam Harper, and has completed 15 visits to India as a specialist coach at high-performance academies in Bangalore, Mysore and Mumbai. Currently Director of Coaching at Scotch College, Andrew brings a rare blend of technical excellence and data-driven performance thinking to the Rajasthan Royals Academy.',
         img: '/assets/coaches/andrew-walton.jpg',
@@ -114,7 +114,7 @@ const JRT3Coaches = () => (
                 </motion.h2>
                 <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}
                     className="text-lg text-white/70 max-w-2xl mx-auto font-medium">
-                    Each Junior Royals venue and program content is led by a dedicated Head Coach — certified, experienced, and committed to the Royals Way. They lead a team of dedicated coaches there to support your cricket growth. Tap a Head Coach to read more.
+                    Each Junior Royals venue and program content is led by a dedicated Head Coach — certified, experienced, and committed to the Royals Way. They lead a team of dedicated coaches there to support your cricket growth. Tap a coach to read more.
                 </motion.p>
             </div>
 
