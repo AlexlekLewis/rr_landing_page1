@@ -18,7 +18,7 @@ const ProgramSection = () => (
             <SectionHeading
                 eyebrow="The Program"
                 title="What A Squad Place Gives You"
-                sub={`Two squads of players aged ${MIN_AGE} to ${MAX_AGE}, one in North Melbourne and one in South-East Melbourne. Squads train every week and play matches from September to April. Here is what every member gets.`}
+                sub={`Two squads of players aged ${MIN_AGE}–${MAX_AGE}, one in North Melbourne and one in South-East Melbourne. Squads train every week and play matches from September to April. Here is what every member gets.`}
             />
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {MEMBER_INCLUDES.map((item, i) => (

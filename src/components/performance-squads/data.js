@@ -371,7 +371,7 @@ export const SQUAD_COACHES = [
 export const FAQS = [
     {
         q: 'Who are the Performance Squads for?',
-        a: `Players aged ${MIN_AGE} to ${MAX_AGE} who want to build a T20 career: players in the current pathway, players still chasing outstanding opportunities in T20 cricket, players rebuilding after injury or time away, and players whose skillset suits short-format cricket. Squads are built around playing standard rather than one age bracket.`,
+        a: `Players aged ${MIN_AGE}–${MAX_AGE} who want to build a T20 career: players in the current pathway, players still chasing outstanding opportunities in T20 cricket, players rebuilding after injury or time away, and players whose skillset suits short-format cricket. Squads are built around playing standard rather than one age bracket.`,
     },
     {
         q: 'How do I get into a squad?',

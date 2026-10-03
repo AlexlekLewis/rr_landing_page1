@@ -120,7 +120,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                 // Typos are caught above, so a number landing here is a real age
                 // outside the squads' range — say so plainly rather than showing
                 // the generic "enter an age" message.
-                next.player_age = `Performance Squads are for players aged ${MIN_AGE} to ${MAX_AGE}.`;
+                next.player_age = `Performance Squads are for players aged ${MIN_AGE}–${MAX_AGE}.`;
             }
         }
         if (!form.email.trim() || !/^\S+@\S+\.\S+$/.test(form.email)) next.email = 'A valid email is required';
@@ -262,7 +262,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                                 <FieldError msg={errors.player_name} />
                             </div>
                             <div>
-                                <Label required>Player Age <span className="normal-case font-medium text-white/40">(in years — {MIN_AGE} to {MAX_AGE})</span></Label>
+                                <Label required>Player Age <span className="normal-case font-medium text-white/40">(in years, {MIN_AGE}–{MAX_AGE})</span></Label>
                                 <input type="text" inputMode="numeric" value={form.player_age} onChange={set('player_age')} placeholder="e.g. 16 years old" className={ic('player_age')} />
                                 <FieldError msg={errors.player_age} />
                             </div>

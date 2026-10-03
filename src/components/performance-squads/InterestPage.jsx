@@ -93,7 +93,7 @@ const InterestPage = () => {
                 // Typos are caught above, so a number landing here is a real age
                 // outside the squads' range — say so plainly rather than showing
                 // the generic "enter an age" message.
-                next.player_age = `Performance Squads are for players aged ${MIN_AGE} to ${MAX_AGE}.`;
+                next.player_age = `Performance Squads are for players aged ${MIN_AGE}–${MAX_AGE}.`;
             }
         }
         if (!form.email.trim() || !/^\S+@\S+\.\S+$/.test(form.email)) next.email = 'A valid email is required';
@@ -211,7 +211,7 @@ const InterestPage = () => {
                                         <FieldError msg={errors.player_name} />
                                     </div>
                                     <div>
-                                        <Label required>Player Age (in years — {MIN_AGE} to {MAX_AGE})</Label>
+                                        <Label required>Player Age (in years, {MIN_AGE}–{MAX_AGE})</Label>
                                         <input className={ic('player_age')} value={form.player_age} onChange={set('player_age')} placeholder="e.g. 16 years old" />
                                         <FieldError msg={errors.player_age} />
                                     </div>
