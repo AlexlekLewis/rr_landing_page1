@@ -24,12 +24,12 @@ const JRT3Overview = () => (
         <div className="max-w-6xl mx-auto px-6">
             <div className="text-center mb-16">
                 <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                    className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Term 3 · 2026</motion.p>
+                    className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Term 4 · 2026</motion.p>
                 <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
                     className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight mb-6">About the Program</motion.h2>
                 <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
                     className="text-lg text-rr-charcoal font-medium max-w-3xl mx-auto leading-relaxed">
-                    The Junior Royals is a small group, term-based coaching program for players aged 7–15. Participants build foundation through to more advanced cricket skills and prepare to play cricket in a team and higher levels — delivered by ICC, Royals and CA accredited coaches. Delivered across all terms, Junior Royals program content also supports participant preparation for the Rajasthan Royals Academy T20 Elite programs.
+                    Junior Royals is our weekly coaching program for players aged 7 to 15. Players are grouped by age and coached in small groups by our coaches, so every player gets time with the bat and ball each week. Term 4 runs right through the start of the junior club season, so the skills your player works on here on a Wednesday are the ones they take into their Saturday games.
                 </motion.p>
             </div>
 

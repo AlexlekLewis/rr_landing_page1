@@ -260,6 +260,14 @@
       "destination": "/sid-juniors/index.html"
     },
     {
+      "source": "/junior-royals",
+      "destination": "/junior-royals/index.html"
+    },
+    {
+      "source": "/junior-royals/",
+      "destination": "/junior-royals/index.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
