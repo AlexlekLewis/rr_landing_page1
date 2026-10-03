@@ -7,6 +7,8 @@
 //   • Stripe payment links              → PAYMENT_LINKS
 // ─────────────────────────────────────────────────────────────
 
+import { SID } from '../open-age-trial/sid';
+
 export const CENTRES = [
     {
         slug: 'north-melbourne',
@@ -155,6 +157,14 @@ export const TERMS_ROUTE = '/terms-conditions';
 export const TERMS_MEMBERSHIP_CLAUSE = 'clause 13';
 
 // $1,557.40 — worked out, never typed, so it can never disagree with the weekly fee.
+// Joining fee terms (3 Oct 2026) — used here, on the welcome page and in its
+// checkout summary. A change-of-mind policy must carry the Australian Consumer
+// Law carve-out; "Non-refundable." on its own is misleading.
+export const JOINING_FEE_TERMS = "Paid once, when you accept your squad place. Non-refundable if you change your mind. This doesn't affect your rights under the Australian Consumer Law: if we cancel the program or can't deliver it, you get a refund.";
+
+// $178.95 — the joining fee plus the first week, worked out from the two fees.
+export const FIRST_PAYMENT = Math.round((MEMBERSHIP.joiningFee + MEMBERSHIP.weeklyFee) * 100) / 100;
+
 export const MEMBERSHIP_YEARLY = Math.round(MEMBERSHIP.weeklyFee * MEMBERSHIP.weeksPerYear * 100) / 100;
 
 // "$149", "$29.95", "$1,557.40" — whole dollars stay whole, anything else shows cents.
@@ -175,18 +185,22 @@ export const MEMBER_INCLUDES = [
         title: '5 to 10 T20 match days',
         body: 'About one a month from September to April, in the Power League and showcase matches. Selection is based on performance.',
     },
+    // REVIEW 6 Oct 2026 — remove this card after Sid's visit
+    // Wording: guests/sid-lahiri.md §3 (approved first mention). Name and title
+    // come from SID, never retyped. No personal-coaching claims; "we will invite
+    // squad players", never "every player".
     {
-        title: 'Two squad sessions with Sid Lahiri',
-        body: "Siddhartha Lahiri, the Rajasthan Royals' Head of International Player Development. Other Royals and guest coaches join from time to time, online and in person.",
+        title: 'Sid Lahiri in Melbourne, 4 and 5 October',
+        body: `${SID.name} (Sid) is ${SID.title} at the ${SID.employer}. The Royals run a global cricket organisation, with the Rajasthan Royals in India's IPL, the Paarl Royals in South Africa's SA20, and a network of Rajasthan Royals academies around the world, including ours in Melbourne. Sid's role is to develop players across that network: he works with the Royals academies year-round and coaches within the Royals' overseas franchises, including as batting coach at the Paarl Royals. We will invite squad players to meet Sid during his visit. His visit is scheduled; if it changes, we'll tell squad players straight away.`,
     },
     {
         title: 'High Performance Centre camps',
         body: 'Invitations to Royals-run camps at the Rajasthan Royals High Performance Centre in Nagpur.',
     },
-    {
-        title: 'Train with Royals franchise teams',
-        body: 'Select players get the chance to train with Royals franchise teams.',
-    },
+    // "Train with Royals franchise teams" removed from the public page (3 Oct
+    // 2026). Andy's rule, 27 Sep 2026: training-partner / franchise
+    // opportunities go in the database email and paid ads only, never the
+    // main feed or a public page.
     {
         title: 'Global inter-academy matches',
         body: 'The chance to play in Global Royals Inter-Academy matches and tournaments.',
@@ -264,16 +278,26 @@ export const AUDIENCE = [
 ];
 
 // ── What a squad place opens up ──
+// The Paarl Royals / Barbados Royals training-partner line is NOT in this list
+// any more (3 Oct 2026). Andy's rule, 27 Sep 2026: training-partner and
+// franchise opportunities are for the database email and paid ads only, not a
+// public page. It is kept below, unrendered, for that non-public use.
 export const OPPORTUNITIES = [
     'Exposure within the global T20 ecosystem',
-    'Opportunities for selection as a training partner at the Paarl Royals and Barbados Royals',
     'Invitational training opportunities within the Rajasthan Royals system and beyond',
     'Invitation to small group camps at the Rajasthan Royals High Performance Centre in Nagpur, home of the Royals and their coaching staff',
     'Player data and vision analysed throughout the year by Rajasthan Royals coaching staff',
     'Selection opportunity to compete in international Rajasthan Royals Academy fixtures',
 ];
 
+// Database email / paid ads only (Andy, 27 Sep 2026). Not rendered on any page.
+export const TRAINING_PARTNER_OPPORTUNITY_NOT_PUBLIC =
+    'Opportunities for selection as a training partner at the Paarl Royals and Barbados Royals';
+
 // ── Proof that the pathway is already moving players ──
+// NOT RENDERED on any public page since 3 Oct 2026 (OpportunitySection no
+// longer shows it). Andy's rule, 27 Sep 2026: training-partner / franchise
+// claims go in the database email and paid ads only. Kept for those uses.
 export const CASE_STUDIES = [
     {
         stat: '4',
@@ -363,7 +387,7 @@ export const FAQS = [
     },
     {
         q: 'What does it cost?',
-        a: `A ${money(TRIAL_PRICE)} trial fee per session to be assessed. If you are offered a place, you pay a one-off ${money(MEMBERSHIP.joiningFee)} joining fee, then your membership: a yearly fee of ${money(MEMBERSHIP_YEARLY)}, broken down for your convenience into ${money(MEMBERSHIP.weeklyFee)} a week. Match fees are separate and set for each match.`,
+        a: `All prices include GST. A ${money(TRIAL_PRICE)} trial fee per session to be assessed. If you are offered a place, you pay a one-off ${money(MEMBERSHIP.joiningFee)} joining fee, then your membership: a yearly fee of ${money(MEMBERSHIP_YEARLY)}, broken down for your convenience into ${money(MEMBERSHIP.weeklyFee)} a week. Your first payment is ${money(FIRST_PAYMENT)} (the joining fee plus your first week). Match fees are separate and are confirmed before each match you're picked for.`,
     },
     {
         q: 'Can I cancel my membership?',
@@ -375,18 +399,18 @@ export const FAQS = [
     },
     {
         q: 'What do I get as a member?',
-        a: 'Weekly training with your Head Coach and a squad coach, 5 to 10 T20 match days across the season, two squad sessions with Sid Lahiri, invitations to High Performance Centre camps, and the chance to train with Royals franchise teams and play Global Royals Inter-Academy matches. Members also get member pricing on our other programs.',
+        // REVIEW 6 Oct 2026 — drop the Sid sentence after his visit.
+        a: `Weekly training with your Head Coach and a squad coach, 5 to 10 T20 match days across the season, invitations to High Performance Centre camps, and the chance to play Global Royals Inter-Academy matches. Members also get member pricing on our other programs. ${SID.name}, ${SID.titleLine}, is in Melbourne on 4 and 5 October, and we will invite squad players to meet him during his visit. His visit is scheduled; if it changes, we'll tell squad players straight away.`,
     },
-    {
-        q: 'Are the global opportunities real?',
-        a: 'Yes. Our Rajasthan Royals Academy selection team has put forward four players for consideration as training partners with the Paarl Royals in the SA20, and Royals Academies in the USA have sent players as training partners of the Barbados Royals. Selection is competitive and never guaranteed, but the routes exist and are being used.',
-    },
+    // "Are the global opportunities real?" removed 3 Oct 2026: its answer is the
+    // training-partner claim, which Andy's 27 Sep rule keeps to the database
+    // email and paid ads.
     {
         q: 'When are matches played?',
         a: 'From September to April. Squad players get 5 to 10 T20 match days across the season, about one a month, in the Power League and showcase matches. Selection is at the coaching staff’s discretion, and not every player plays every game.',
     },
     {
         q: 'Which centres are running squads?',
-        a: 'North Melbourne (Mickleham Indoor Sports Centre) and South-East Melbourne (Elite Cricket Centre, Cranbourne North) are live now. West and East Melbourne arrive in 2027.',
+        a: 'North Melbourne (Mickleham Indoor Sports Centre) and South-East Melbourne (Elite Cricket Centre, Cranbourne North) are live now. The two centres are about 70 km apart, so choose the one you can get to every week.',
     },
 ];

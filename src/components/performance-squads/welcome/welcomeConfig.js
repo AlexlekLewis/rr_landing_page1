@@ -16,7 +16,8 @@
 // null and the banner goes away.
 // ─────────────────────────────────────────────────────────────
 
-import { MEMBER_PRICING_RULE, TERMS_MEMBERSHIP_CLAUSE } from '../data';
+import { MEMBER_PRICING_RULE, TERMS_MEMBERSHIP_CLAUSE, JOINING_FEE_TERMS } from '../data';
+import { SID } from '../../open-age-trial/sid';
 
 export const WELCOME = {
     // ── Still to come ──
@@ -44,7 +45,8 @@ export const WELCOME = {
     // /api/performance-squad-prices (see usePrices.js), so the page always shows
     // exactly what checkout charges. Only the wording lives in config.
     pricing: {
-        joiningFee: { note: 'One-off, non-refundable. Locks in your place.' },
+        // ACL carve-out wording (3 Oct 2026) — same line as /performance-squads.
+        joiningFee: { note: JOINING_FEE_TERMS },
         squadFee: { per: 'wk', note: 'Charged weekly, in advance.' },
         matchFees: { amount: 'Per match', note: 'Set for each fixture. Covers standard match day costs.' },
         cancel: 'You can cancel at any time. You must be financial to receive member benefits. If payments stop without notice, there is a two-week grace period before your squad place is released.',
@@ -54,7 +56,8 @@ export const WELCOME = {
     benefits: [
         { title: 'Weekly squad training', body: 'Weekly squad training with the Head Coach and a dedicated squad coach. Monday nights, every week from 5 October to 14 December — the courts are booked at both centres.' },
         { title: '5–10 T20 match days', body: 'Circa. average 1 a month from September to April (Season). Performance dependant.' },
-        { title: '2 x squad sessions with Siddhartha Lahiri', body: 'Other Royals and guest coaches and players will join from time to time (online and in person).' },
+        // REVIEW 6 Oct 2026 — remove this item after Sid's visit.
+        { title: `${SID.name} in Melbourne, 4 and 5 October`, body: `${SID.titleLine}. We will invite squad players to meet Sid during his visit. His visit is scheduled; if it changes, we'll tell squad players straight away. Other Royals and guest coaches and players will join from time to time (online and in person).` },
         { title: 'Royals High Performance Centre camps', body: 'Invitation to attend multiple Rajasthan Royals operated camps at the Royals High Performance Centre in Nagpur.' },
         { title: 'Train with Royals Franchise teams', body: 'Select players receive the opportunity to train with Royals Franchise teams.' },
         { title: 'Global Royals Inter-Academy matches', body: 'Opportunity to play in Global Royals Inter-Academy matches and tournaments.' },
@@ -147,12 +150,9 @@ export const REGIONS = [
     { slug: 'south-east-melbourne', name: 'South-East Melbourne', venue: 'Elite Cricket Centre, Cranbourne North' },
 ];
 
-export const SID = {
-    name: 'Sid Lahiri',
-    // Sid working with Riyan Parag (general-use Royals image).
-    photo: '/assets/performance-squads/sid-lahiri-riyan-parag.jpg',
-    photoAlt: 'Sid Lahiri talking through a delivery with Riyan Parag at a Rajasthan Royals training session',
-};
+// The duplicate welcome-page SID object was removed 3 Oct 2026. The page now
+// uses the one SID (open-age-trial/sid.js, re-exported by openAgeData.js):
+// one name, one title, and a photo that is not about a player he coached.
 
 export const PLAYER_IMAGE = '/assets/performance-squads/selected-player-fist-pump.png';
 // Royals war cry wordmark, white on transparent (from the RRA standee artwork).
