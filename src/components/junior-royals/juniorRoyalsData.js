@@ -5,9 +5,15 @@
 // year-round MEMBERSHIP on the same model as Performance Squads:
 //   • $149 joining fee, paid once (and paid again to rejoin after cancelling)
 //   • $30 a week, charged EVERY week of the year, school holidays included
-//   • training on Wednesday nights in school terms only
+//   • training on Wednesday nights in school terms only; new time slots on other
+//     days open as groups fill
+//   • ages 7–12; older players are pointed to Performance Squads
+//   • groups by age first, then coaches may move a player to suit ability and
+//     enjoyment; no more than six players per lane
+//   • DEVELOPMENT MATCHES (Sunday mornings, separate match fee) — the headline:
+//     train, play, then back to training on what the match showed, the same
+//     cycle as Performance Squads
 //   • Mickleham and Cranbourne North; first session Wednesday 28 October
-//   • Sunday-morning Junior Royals match days with a separate match fee
 //   • join any time, cancel any time
 // Language rule (Alex, 5 Oct 2026): a 10-year-old must be able to understand
 // that this is a YEARLY membership fee paid as a weekly plan, and that is why
@@ -19,6 +25,7 @@
 // ─────────────────────────────────────────────────────────────
 
 import { DIRECTOR, REGIONAL_COACHES } from '../coaches/coachData';
+import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squads/data';
 
 export const MOCKUP = true;
 
@@ -29,6 +36,17 @@ export const money = (n) => `$${n.toLocaleString('en-AU', {
     minimumFractionDigits: Number.isInteger(n) ? 0 : 2,
     maximumFractionDigits: 2,
 })}`;
+
+// ── Who ──
+export const AGES = { min: 7, max: 12 };           // Alex, 5 Oct 2026
+export const AGES_TEXT = `${AGES.min}–${AGES.max}`;
+export const PS_ROUTE = '/performance-squads';
+export const PS_AGES_TEXT = `${PS_MIN_AGE} to ${PS_MAX_AGE}`; // imported, never retyped
+export const OLDER_LINE = {
+    lead: `Aged ${AGES.max + 1} or older?`,
+    body: `Our Performance Squads are for players aged ${PS_AGES_TEXT}.`,
+    link: 'See Performance Squads',
+};
 
 // ── Membership fees — all GST-inclusive (consumer-law.md §1) ──
 export const FEES = {
@@ -53,13 +71,16 @@ export const CALENDAR = [
 ];
 export const SESSIONS_PER_YEAR = 40; // 2027: 8 + 11 + 10 + 11
 
-export const GROUPS = [
-    { time: '6:00pm – 7:00pm', who: tbc('Younger players', 'Which ages train at 6:00pm?') },
-    { time: '7:00pm – 8:00pm', who: tbc('Older players', 'Which ages train at 7:00pm?') },
-];
+// Price per hour of coaching, honestly: 52 weekly payments ÷ about 40 sessions.
+// ($30 is the WEEKLY payment, not the per-hour price — payments continue in the
+// holidays, so a parent who works it out gets $39. Say it before they do.)
+export const PER_HOUR = Math.round(YEARLY / SESSIONS_PER_YEAR);  // 39
 
-export const AGES = tbc('7–15', 'Still ages 7–15? (carried over from the Term 3 page)');
-export const PLAYERS_PER_COACH = tbc('[X] players per coach', 'How many players per coach?');
+export const GROUPS = [
+    { time: '6:00pm – 7:00pm', who: tbc('Younger players', 'Which ages start at 6:00pm?') },
+    { time: '7:00pm – 8:00pm', who: tbc('Older players', 'Which ages start at 7:00pm?') },
+];
+export const LANE_MAX = 6;                          // Alex, 5 Oct 2026: maximum six per lane
 export const JOINING_OPENS = tbc('Monday 19 October', 'What date does joining (payment) open?');
 
 // ── Where ── (addresses as already published on the site)
@@ -83,21 +104,25 @@ export const CENTRES = [
         coach: { ...REGIONAL_COACHES[0], jrRole: tbc('Head Coach, Cranbourne North', 'Is Alex Thornhill Head Coach at Cranbourne North?') },
     },
 ];
-export const CENTRES_APART = 'The two centres are about 70 km apart, so choose the one you can get to every Wednesday.';
+export const CENTRES_APART = 'The two centres are about 70 km apart, so choose the one you can get to every week.';
+export const WHERE_TITLE = 'Two centres, every Wednesday';
 export const NOT_RUNNING = 'There is no Junior Royals at Hallam or Williamstown.';
+export const NEW_SLOTS = "We're starting with Wednesday nights. As groups fill, we'll open new time slots on other days.";
 
 // ── Copy ──
 
 export const HERO = {
     eyebrow: 'Rajasthan Royals Academy · Melbourne',
     title: 'Junior Royals',
-    why: 'Players improve when they train every week with the same coach, all year round.',
+    why: 'Players improve when they train every week with the same coach, then put it into practice in a match.',
+    lead: "Junior Royals now includes development matches. Players use what they've learned at training in a real game, with our Royals coaches guiding them, then take what the match showed them back to training.",
     facts: [
-        { k: 'Who', v: ['Players aged ', AGES] },
-        { k: 'When', v: ['Wednesday nights, one hour, at 6:00pm or 7:00pm, in school terms'] },
+        { k: 'Who', v: [`Players aged ${AGES_TEXT}`], older: true },
+        { k: 'Training', v: ['Wednesday nights, one hour, at 6:00pm or 7:00pm, in school terms'] },
+        { k: 'Matches', v: ['Development matches on Sunday mornings, with our coaches'] },
         { k: 'Where', v: ['Mickleham and Cranbourne North'] },
         { k: 'Starts', v: [FIRST_SESSION.long] },
-        { k: 'Cost', v: [`${money(FEES.joining)} to join, then ${money(FEES.weekly)} a week (incl. GST)`] },
+        { k: 'Cost', v: [`${money(FEES.joining)} to join, then ${money(FEES.weekly)} a week (incl. GST). Each match has its own match fee.`] },
     ],
     noPayment: 'No payment now. No place is held yet.',
 };
@@ -108,8 +133,29 @@ export const CTA = {
     sticky: `${money(FEES.weekly)} a week incl. GST · starts ${FIRST_SESSION.short}`,
 };
 
+// Section 2 — straight after the hero (Alex: "put that up near the top").
+export const LOOP = {
+    eyebrow: 'Development matches',
+    title: 'Training and matches, working together',
+    body: [
+        "Our development matches are designed to help players learn how the game is played. Players use the skills they're working on at training in a real game, where mistakes are part of learning, with our Royals coaches guiding them through it.",
+        "Then they go back to training and work on what the match showed them. It's the same cycle our Performance Squads follow, and it's how players keep getting better.",
+    ],
+    steps: [
+        { n: '1', title: 'Train', body: 'One hour every Wednesday with your group, working on the skills for your age.' },
+        { n: '2', title: 'Play', body: 'A development match on a Sunday morning. Players use those skills in a game, with our coaches guiding them.' },
+        { n: '3', title: 'Work on it', body: 'Back at training, coaches work with each player on what the match showed.' },
+    ],
+    details: [
+        ['Matches are changed to suit each age group, so younger players play a modified game.'],
+        ['First match day: ', tbc('date to be confirmed', 'First Sunday match date? How often?')],
+        ['Where: ', tbc('venue to be confirmed', 'Match-day venue?')],
+        ['Match fee: ', tbc('to be confirmed', 'How much is the match fee?'), ', paid for each match. It is not part of the weekly membership.'],
+    ],
+};
+
 export const WHY = {
-    eyebrow: 'Why Junior Royals',
+    eyebrow: 'Why all year',
     title: 'Every week, all year',
     body: [
         'Young cricketers get better by training every week with a coach who knows their game. When coaching stops at the end of each term, players lose that rhythm and spend the first few weeks of the next one getting it back.',
@@ -120,17 +166,15 @@ export const WHY = {
 export const HOW = {
     eyebrow: 'How it runs',
     title: 'One hour, every Wednesday',
-    intro: [
-        'Every Wednesday in school terms, your player trains for one hour with their group at the centre you choose. There are two groups each night, and we tell you which one your player is in.',
-    ],
+    intro: 'Every Wednesday in school terms, your player trains for one hour with their group at the centre you choose.',
+    grouping: 'Players are put into groups by age first. Our coaches may then move a player into a different group if it suits their ability and experience better, so every player is challenged and enjoys it.',
+    lanes: `No more than ${LANE_MAX} players in each net lane.`,
     // From Andy's Term 3 age-group copy, reworded for the year-round program.
     ageBands: [
         { ages: '7–9', points: ['Building the basic skills of batting, bowling and fielding', 'Games that teach how cricket is played', 'Getting ready to play junior club cricket'] },
         { ages: '10–12', points: ['Skill-focused sessions, including the bowling machine', 'Extra training for players already playing club cricket'] },
-        { ages: '13–15', points: ['Harder, skill-focused sessions, including the bowling machine', 'Extra training for players playing competitive cricket'] },
     ],
     details: [
-        ['Group size: ', PLAYERS_PER_COACH],
         ['Every coach holds a current Working With Children Check. ', tbc('Confirm', 'Confirm every Junior Royals coach has a current WWCC')],
         ['Parents can follow attendance and coach feedback in the Rajasthan Royals Academy app. ', tbc('Confirm', 'Is the Academy app being used for Junior Royals?')],
     ],
@@ -152,31 +196,31 @@ export const MEMBERSHIP = {
     gst: GST_NOTE,
     includesTitle: 'What a member gets',
     includes: [
-        { title: `About ${SESSIONS_PER_YEAR} sessions a year`, body: 'One hour every Wednesday in school terms, at your centre, in your player\'s group.' },
-        { title: 'A place that\'s kept all year', body: 'Your player keeps their place in their group over the school holidays, as long as the membership is paid.' },
+        { title: `About ${SESSIONS_PER_YEAR} sessions a year`, body: "One hour every Wednesday in school terms, at your centre, in your player's group." },
+        { title: 'Development matches', body: 'Sunday-morning matches with our coaches. Each match has its own match fee.' },
+        { title: "A place that's kept all year", body: 'Your player keeps their place in their group over the school holidays, as long as the membership is paid.' },
         { title: 'Member prices on masterclasses', body: 'Lower prices on our special masterclasses.' },
         { title: 'Special-guest events', body: ['Access to all our future special-guest events, when Royals coaches and guests visit Melbourne. ', tbc('Free, or member price?', 'Are special-guest events free for members, or at a member price?')] },
-        { title: 'Sunday match days', body: 'Members can enter our Junior Royals match days. Each match has its own match fee.' },
     ],
 };
 
-export const MATCHES = {
-    eyebrow: 'Match days',
-    title: 'Sunday morning games',
-    body: [
-        'On Sunday mornings we will run Junior Royals match days, where our players play games against each other. Some are modified matches, with the rules changed to suit the age group.',
-        'Match days are not part of the weekly membership. Each match has its own match fee, and we tell you what it is before you enter.',
+// Per-hour price, then how it compares. Comparison rows are filled from published
+// Melbourne prices (research 5 Oct 2026) — every row needs a source URL and the
+// date checked, and the section a REVIEW date (consumer-law.md §4: comparisons
+// must be accurate and current).
+export const PRICE_CONTEXT = {
+    title: 'What it costs per hour',
+    lines: [
+        `The weekly payment is ${money(FEES.weekly)}. Because payments carry on through the school holidays, a full year is ${money(YEARLY)} for about ${SESSIONS_PER_YEAR} one-hour sessions.`,
+        `That works out at about ${money(PER_HOUR)} for each hour of coaching, with no more than ${LANE_MAX} players in a lane. In your first year, the ${money(FEES.joining)} joining fee is on top.`,
     ],
-    details: [
-        ['First match day: ', tbc('date to be confirmed', 'First Sunday match date?')],
-        ['Where: ', tbc('venue to be confirmed', 'Match-day venue?')],
-        ['Match fee: ', tbc('to be confirmed', 'How much is the match fee?')],
+    compareTitle: 'How that compares',
+    compare: [
+        { what: `Junior Royals membership`, perHour: `about ${money(PER_HOUR)}`, note: `${money(YEARLY)} a year ÷ about ${SESSIONS_PER_YEAR} sessions`, ours: true },
+        { what: tbc('Small-group junior coaching, other Melbourne academies', 'Research in progress: published prices, with sources'), perHour: tbc('$__ – $__'), note: '' },
+        { what: tbc('Private 1-on-1 junior coaching, Melbourne', 'Research in progress'), perHour: tbc('$__ – $__'), note: '' },
+        { what: tbc('Junior cricket holiday camps, Melbourne', 'Research in progress'), perHour: tbc('$__ – $__'), note: '' },
     ],
-};
-
-export const WHERE = {
-    eyebrow: 'Where',
-    title: 'Two centres, every Wednesday',
 };
 
 export const FORM = {
@@ -198,7 +242,11 @@ export const FAQS = [
     },
     {
         q: 'How much does a full year cost?',
-        a: `${money(FEES.joining)} to join, once. Then ${money(FEES.weekly)} a week, which is ${money(YEARLY)} over a full year. That covers about ${SESSIONS_PER_YEAR} Wednesday sessions plus the member benefits. Sunday match days have their own match fee. ${GST_NOTE}`,
+        a: `${money(FEES.joining)} to join, once. Then ${money(FEES.weekly)} a week, which is ${money(YEARLY)} over a full year. That covers about ${SESSIONS_PER_YEAR} Wednesday sessions, about ${money(PER_HOUR)} an hour, plus the member benefits. Development matches have their own match fee. ${GST_NOTE}`,
+    },
+    {
+        q: 'Are the development matches included?',
+        a: 'Members can play them, but each match has its own match fee, paid for that match. We tell you the fee before you enter.',
     },
     {
         q: 'How do I stop the membership?',
@@ -209,8 +257,17 @@ export const FAQS = [
         a: [tbc('Make-up policy to be confirmed', 'Can a missed session be made up? How?')],
     },
     {
+        q: 'My player is 13 or older. Can they join?',
+        a: `Junior Royals is for players aged ${AGES_TEXT}. Older players can join our Performance Squads, which are for players aged ${PS_AGES_TEXT}.`,
+        link: { to: PS_ROUTE, label: 'See Performance Squads' },
+    },
+    {
         q: 'Does my player need to be playing club cricket?',
         a: 'No. Players are grouped by age, and our youngest players start with the basic skills and get ready to play junior club cricket.',
+    },
+    {
+        q: 'Will there be other days and times?',
+        a: NEW_SLOTS,
     },
     {
         q: 'Can my player train at both centres?',
@@ -232,9 +289,9 @@ export const FAQS = [
 
 // Every open question on the mock-up, in one list for the review banner.
 export const OPEN_QUESTIONS = [
-    'Ages: still 7–15?',
     'Which ages train at 6:00pm and which at 7:00pm?',
-    'Players per coach, and places per group',
+    'Development matches: first date, how often, venue, match fee',
+    'Price comparison: other Melbourne programs per hour (research in progress)',
     'Date joining (payment) opens',
     'Head Coach at Cranbourne North',
     'First payment = $149 + first week ($179)?',
@@ -243,6 +300,5 @@ export const OPEN_QUESTIONS = [
     'Make-up policy for missed sessions',
     'Uniform',
     'Special-guest events: free or member price?',
-    'Sunday match days: first date, venue, match fee',
     'Working With Children Checks; Academy app for Junior Royals',
 ];
