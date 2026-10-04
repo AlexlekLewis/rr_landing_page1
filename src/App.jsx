@@ -10,6 +10,14 @@ import StripeSuccess from './components/landing-page-3/StripeSuccess';
 import LittleCrickets from './components/little-crickets/LittleCrickets';
 import JRSuccess from './components/little-crickets/JRSuccess';
 import JuniorRoyalsT3 from './components/junior-royals-t3/JuniorRoyalsT3';
+import JuniorRoyals from './components/junior-royals/JuniorRoyals';
+import { MOCKUP as JR_MOCKUP } from './components/junior-royals/juniorRoyalsData';
+
+// Safety: while the new year-round Junior Royals page is still a MOCK-UP it only
+// renders on previews and localhost. On rramelbourne.com the live Term 4 page
+// (junior-royals-t3) stays up, so an early merge can never publish a page with
+// unconfirmed facts and a form that saves nothing.
+const IS_PROD_HOST = typeof window !== 'undefined' && /(^|\.)rramelbourne\.com$/.test(window.location.hostname);
 import JRT3Success from './components/junior-royals-t3/JRT3Success';
 import SeptemberHoliday from './components/september-holiday/SeptemberHoliday';
 import HolidayProgramSuccess from './components/holiday-programs/HolidayProgramSuccess';
@@ -195,8 +203,9 @@ function App() {
         {/* Junior Royals Term 2 — archived */}
         <Route path="/junior-royals-term2" element={<LittleCrickets />} />
         <Route path="/junior-royals-term2/success" element={<JRSuccess />} />
-        {/* Junior Royals Term 3 — active */}
-        <Route path="/junior-royals" element={<JuniorRoyalsT3 />} />
+        {/* Junior Royals — live Term 4 page (junior-royals-t3) on rramelbourne.com until the year-round
+            membership page (junior-royals/JuniorRoyals) leaves mock-up (MOCKUP=false in juniorRoyalsData.js). */}
+        <Route path="/junior-royals" element={JR_MOCKUP && IS_PROD_HOST ? <JuniorRoyalsT3 /> : <JuniorRoyals />} />
         <Route path="/junior-royals/success" element={<JRT3Success />} />
         <Route path="/junior-royals-holiday/success" element={<HolidayProgramSuccess />} />
         {/* Female Cricket Introduction — DRAFT: not in nav, Vercel only until go-live instruction */}

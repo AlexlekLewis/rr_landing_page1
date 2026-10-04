@@ -23,6 +23,15 @@ const LC_NAV = [
     { label: 'LOCATIONS', id: 'locations' },
 ];
 
+// Junior Royals year-round membership (/junior-royals, Alex 5 Oct 2026) — ids set in
+// junior-royals/JuniorRoyals.jsx. LC_NAV above stays for the old Term 2 page.
+const JRM_NAV = [
+    { label: 'HOW IT RUNS', id: 'how' },
+    { label: 'MEMBERSHIP', id: 'membership' },
+    { label: 'MATCH DAYS', id: 'matches' },
+    { label: 'CENTRES', id: 'where' },
+];
+
 // India Tour 2026 — on-page section anchors (ids set in IndiaTour2026.jsx)
 const IT_NAV = [
     { label: 'THE CAMP', id: 'about' },
@@ -109,6 +118,7 @@ const Navbar = ({ variant = 'lp1', onRegisterClick, ctaLabelOverride, ctaTargetO
     const isHoliday = variant === 'holiday';
     const isHome = variant === 'home';
     const isLittleCrickets = variant === 'junior-royals';
+    const isJRMembership = variant === 'junior-royals-membership';
     const isShop = variant === 'shop';
     const isPowerGame = variant === 'power-game';
     const isMickleham = variant === 'mickleham';
@@ -125,7 +135,7 @@ const Navbar = ({ variant = 'lp1', onRegisterClick, ctaLabelOverride, ctaTargetO
     // page does not have while its dates are pending.
     const isOpenAgeTrial = variant === 'open-age-trial';
 
-    const navLinks = (isLP3 || isHoliday || isShop || isPerformanceSquads || isPSWelcome || isMasterclass || isPowerGame || isOpenAgeTrial) ? [] : isIndiaTour ? IT_NAV : isPrivateCoaching ? PC_NAV : isCoaches ? COACHES_NAV : isMickleham ? MICKLEHAM_NAV : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
+    const navLinks = (isLP3 || isHoliday || isShop || isPerformanceSquads || isPSWelcome || isMasterclass || isPowerGame || isOpenAgeTrial) ? [] : isIndiaTour ? IT_NAV : isPrivateCoaching ? PC_NAV : isCoaches ? COACHES_NAV : isJRMembership ? JRM_NAV : isMickleham ? MICKLEHAM_NAV : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
     // Standalone pages (Mickleham, Coaches, Private Coaching, India Tour) get the full site nav: Home + the Programs dropdown of live pages.
     const showProgramsDropdown = isHome || isMickleham || isCoaches || isPrivateCoaching || isIndiaTour || isPerformanceSquads || isPSWelcome || isMasterclass || isOpenAgeTrial;
     const showHomeLink = isMickleham || isCoaches || isPrivateCoaching || isIndiaTour || isPerformanceSquads || isPSWelcome || isMasterclass || isOpenAgeTrial;
@@ -135,8 +145,8 @@ const Navbar = ({ variant = 'lp1', onRegisterClick, ctaLabelOverride, ctaTargetO
     // Junior Royals (isLittleCrickets): the CTA points at the Term 4 entry form
     // (Wednesdays at Mickleham and Cranbourne North, no payment now). One label
     // on the whole page: "Register Your Interest" (Alex, 3 Oct 2026).
-    const ctaLabel = ctaLabelOverride || (isPSWelcome ? 'CONFIRM YOUR PLACE' : isMasterclass ? 'BOOK YOUR PLACE' : isPerformanceSquads ? 'REGISTER INTEREST' : isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : isLittleCrickets ? 'REGISTER YOUR INTEREST' : isLP2 ? 'SECURE YOUR PLACE NOW' : isHoliday ? 'SECURE YOUR PLACE' : 'REGISTER INTEREST');
-    const ctaTarget = ctaTargetOverride || (isPSWelcome ? 'confirm' : isMasterclass ? 'register' : isPerformanceSquads ? 'register-pay' : isIndiaTour ? 'register' : isMickleham ? 'register' : isCoaches ? 'join' : isPrivateCoaching ? 'eoi-form' : isLP2 ? 'checkout' : isHoliday ? 'secure-form' : isLittleCrickets ? 'registration-form' : 'apply-form');
+    const ctaLabel = ctaLabelOverride || (isPSWelcome ? 'CONFIRM YOUR PLACE' : isMasterclass ? 'BOOK YOUR PLACE' : isPerformanceSquads ? 'REGISTER INTEREST' : isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : isJRMembership ? 'REGISTER INTEREST' : isLittleCrickets ? 'REGISTER YOUR INTEREST' : isLP2 ? 'SECURE YOUR PLACE NOW' : isHoliday ? 'SECURE YOUR PLACE' : 'REGISTER INTEREST');
+    const ctaTarget = ctaTargetOverride || (isPSWelcome ? 'confirm' : isMasterclass ? 'register' : isPerformanceSquads ? 'register-pay' : isIndiaTour ? 'register' : isMickleham ? 'register' : isCoaches ? 'join' : isPrivateCoaching ? 'eoi-form' : isLP2 ? 'checkout' : isHoliday ? 'secure-form' : isJRMembership ? 'register' : isLittleCrickets ? 'registration-form' : 'apply-form');
 
     const scrollToForm = () => {
         if (isHome && onRegisterClick) {
