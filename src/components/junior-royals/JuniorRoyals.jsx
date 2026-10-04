@@ -306,7 +306,7 @@ const Faq = () => {
                     })}
                 </div>
                 <p className="mt-8 text-rr-charcoal font-medium">
-                    Anything else? Email <a href={`mailto:${FORM.contact}`} className="text-rr-pink font-bold hover:underline">{FORM.contact}</a>.
+                    All prices include GST. Anything else? Email <a href={`mailto:${FORM.contact}`} className="text-rr-pink font-bold hover:underline">{FORM.contact}</a>.
                 </p>
             </div>
         </section>

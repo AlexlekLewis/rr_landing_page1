@@ -105,7 +105,7 @@ export const HERO = {
 export const CTA = {
     primary: 'Register Your Interest',
     secondary: 'How the membership works',
-    sticky: `${money(FEES.weekly)} a week · starts ${FIRST_SESSION.short}`,
+    sticky: `${money(FEES.weekly)} a week incl. GST · starts ${FIRST_SESSION.short}`,
 };
 
 export const WHY = {
@@ -194,7 +194,7 @@ export const FORM = {
 export const FAQS = [
     {
         q: 'Why do we pay in the school holidays when there is no training?',
-        a: `Because it is a yearly membership. The yearly fee is ${money(YEARLY)}, and we split it into ${money(FEES.weekly)} a week so you don't pay it all at once. Paying through the holidays keeps your player's place in their group and keeps your member prices.`,
+        a: `Because it is a yearly membership. The yearly fee is ${money(YEARLY)} incl. GST, and we split it into ${money(FEES.weekly)} a week so you don't pay it all at once. Paying through the holidays keeps your player's place in their group and keeps your member prices.`,
     },
     {
         q: 'How much does a full year cost?',
