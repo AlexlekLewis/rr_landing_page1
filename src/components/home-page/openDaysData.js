@@ -39,13 +39,14 @@ export const ANNOUNCEMENTS = [
         // The tag carries the two facts that decide whether a reader is eligible:
         // the age bracket, and that it runs at BOTH centres. The ticker shows
         // this line and nothing else.
-        tag: 'Open age 16 to 25 · at both centres, Mickleham and Cranbourne North',
+        // Cranbourne North closed as full on 4 Oct 2026 (Alex): Mickleham leads.
+        tag: 'Open age 16 to 25 · Mickleham Mon 5 Oct, bookings open · Cranbourne North Sun 4 Oct is full',
         // Kept short: it is the small line under the tag in the modal. Sid is at
         // both sessions (Alex, 26 Sep 2026). His full name, as on the posters,
         // because the modal can be the first place a visitor meets him.
-        detail: 'Siddhartha Lahiri at both · Mickleham Mon 5 Oct · Cranbourne North Sun 4 Oct · $30',
+        detail: 'Siddhartha Lahiri at both · Mickleham Mon 5 Oct, 5:30–7:00 PM, $30 · Cranbourne North session full',
         href: '/performance-squads-open-trial',
-        badge: 'Book now',
+        badge: 'Book Mickleham',
         highlight: true,
     },
     // Juniors aged 8 to 16: their own sessions with Sid at both centres, on the
@@ -58,7 +59,7 @@ export const ANNOUNCEMENTS = [
         key: 'performance-squads',
         name: 'Performance Squads',
         tag: 'Our representative squads, players 10 to 25 · register your interest for the next intake',
-        detail: 'Mickleham & Cranbourne North · aged 16 to 25? Trial on 4 & 5 Oct',
+        detail: 'Mickleham & Cranbourne North · aged 16 to 25? Open trial at Mickleham, Mon 5 Oct',
         href: '/performance-squads',
         badge: 'Register interest',
     },

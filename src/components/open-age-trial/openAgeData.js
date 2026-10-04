@@ -45,7 +45,10 @@ export const ROUTE = '/open-age-trial';
 // A player books at ONE of them. The two are about 70 km apart on opposite
 // sides of Melbourne, capacity is per centre, and each centre has its own
 // Stripe link — a booking split across both would charge the wrong one.
-export const CENTRE_SLUGS = ['south-east-melbourne', 'north-melbourne'];
+//
+// MICKLEHAM LEADS (Alex, 4 Oct 2026): the Cranbourne North session is full, so
+// Mickleham is listed first on the cards, the booking form and the coach line.
+export const CENTRE_SLUGS = ['north-melbourne', 'south-east-melbourne'];
 
 const toCentre = (slug) => {
     const c = CENTRES.find((x) => x.slug === slug);
@@ -93,6 +96,10 @@ export const TRIAL_SESSIONS = [
         centre: 'south-east-melbourne',
         label: 'Sunday 4 October · 1:00–2:30 PM',
         arriveBy: '12:30 PM',
+        // Closed as full by Alex on 4 October 2026, the morning of the session.
+        // Kept, not deleted: everyone booked keeps the date on their confirmation.
+        full: true,
+        badge: 'Session Full',
     },
     {
         id: 'oa-2026-10-05',
@@ -167,6 +174,11 @@ export const getSelectableSessionCount = (slug) =>
 export const isCentreFull = (slug) =>
     getSessionsForCentre(slug).length > 0 && getOpenTrialSessions(slug).length === 0;
 export const ALL_SESSIONS_FULL = DATES_CONFIRMED && getOpenTrialSessions().length === 0;
+// The centres still taking bookings, and the one centre when only one is left.
+// Calls to action name that centre ("Book Mickleham") so nobody heads for the
+// full one.
+export const OPEN_CENTRES = TRIAL_CENTRES.filter((c) => !isCentreFull(c.slug));
+export const ONLY_OPEN_CENTRE = OPEN_CENTRES.length === 1 ? OPEN_CENTRES[0] : null;
 
 export const getSessionLabel = (id) => getSession(id)?.label || id;
 
@@ -295,9 +307,10 @@ export const SID_SECTION = {
     // Both sessions named HERE, in the Sid section, so nobody has to work out
     // which night is theirs or whether Sid is at it.
     sessions:
-        `There are two sessions and Sid is scheduled at both: ${centreDayLine('south-east-melbourne')} `
-        + `and ${centreDayLine('north-melbourne')}. Same trial, same standard, into the squad at that `
-        + 'centre with that centre’s head coach. Book whichever one you can get to.',
+        `There are two sessions and Sid is scheduled at both: ${centreDayLine('north-melbourne')} `
+        + `and ${centreDayLine('south-east-melbourne')}. Same trial, same standard, into the squad at that `
+        + 'centre with that centre’s head coach. The Cranbourne North session is full, so Mickleham '
+        + 'is the one still taking bookings.',
 };
 
 // ── Who it is for. Four cards, open age. ──
@@ -377,10 +390,13 @@ export const OPPORTUNITY_LEAD =
     + 'none of it is guaranteed.';
 
 // ── Trials / booking section ──
+// Cranbourne North closed as full on 4 Oct 2026 (Alex), so the heading sends
+// players to Mickleham and says plainly why.
 export const TRIALS_HEADING = {
     eyebrow: 'Dates & Booking',
-    title: 'Two Centres. Two Dates.',
-    sub: `$${TRIAL_PRICE} per player, per session, paid when you book. Book at one centre.`,
+    title: 'Book Mickleham, Monday 5 October',
+    sub: `The Cranbourne North session on Sunday 4 October is full. Mickleham is still taking `
+        + `bookings: Monday 5 October, 5:30 to 7:00 PM. $${TRIAL_PRICE} per player, paid when you book.`,
 };
 
 // ── Fees. Stage one only. ──
@@ -441,10 +457,9 @@ export const FAQS = [
         q: 'Is Sid Lahiri really going to be there?',
         a: 'That is the plan, and it is why we are running it. Sid Lahiri is Head of International '
             + 'Player Development and Performance Coach at the Rajasthan Royals, and he is scheduled '
-            + 'to be at both sessions — Cranbourne North '
-            + 'on Sunday 4 October at the Elite Cricket Centre, and Mickleham on Monday 5 October at '
-            + 'the Mickleham Indoor Sports Centre. If that changes we will tell you before you turn '
-            + 'up, and you can take a full refund.',
+            + 'to be at both sessions — Mickleham on Monday 5 October at the Mickleham Indoor Sports '
+            + 'Centre, and Cranbourne North on Sunday 4 October at the Elite Cricket Centre. If that '
+            + 'changes we will tell you before you turn up, and you can take a full refund.',
     },
     {
         q: 'Is Sid picking the squad?',
@@ -452,17 +467,17 @@ export const FAQS = [
     },
     {
         q: 'When are the trials?',
-        a: 'Two sessions, one at each centre. Cranbourne North is Sunday 4 October, 1:00 to 2:30 PM, '
-            + 'at the Elite Cricket Centre. Mickleham is Monday 5 October, 5:30 to 7:00 PM, at the '
+        a: 'Two sessions, one at each centre. Mickleham is Monday 5 October, 5:30 to 7:00 PM, at the '
             + 'Mickleham Indoor Sports Centre — arrive by 5:00 PM, 30 minutes before the start, to be '
-            + 'signed in. Book the one you can get to.',
+            + 'signed in. Mickleham is still taking bookings. Cranbourne North is Sunday 4 October, '
+            + '1:00 to 2:30 PM, at the Elite Cricket Centre, and that session is full.',
     },
     {
         q: 'What am I trialling for?',
-        a: 'A place in the Performance Squad at the centre you trial at. Cranbourne North is the '
-            + 'South-East Melbourne squad at the Elite Cricket Centre under Head Coach Alex Thornhill. '
-            + 'Mickleham is the North Melbourne squad at the Mickleham Indoor Sports Centre under Head '
-            + 'Coach Alex Lewis. This is an extra intake into those squads, not a new one.',
+        a: 'A place in the Performance Squad at the centre you trial at. Mickleham is the North '
+            + 'Melbourne squad at the Mickleham Indoor Sports Centre under Head Coach Alex Lewis. '
+            + 'Cranbourne North is the South-East Melbourne squad at the Elite Cricket Centre under '
+            + 'Head Coach Alex Thornhill. This is an extra intake into those squads, not a new one.',
     },
     {
         q: 'What does it cost?',
@@ -516,8 +531,8 @@ export const SEO = {
     // The facts a reader needs lead, so a search result that cuts the end off
     // still says what, who for, where, when and how much.
     description:
-        `Open age T20 trials, players ${MIN_AGE} to ${MAX_AGE}. Mickleham Mon 5 Oct and Cranbourne `
-        + `North Sun 4 Oct, $${TRIAL_PRICE} a session. Siddhartha Lahiri, Head of International `
-        + 'Player Development and Performance Coach at the Rajasthan Royals, is coming to both.',
+        `Open age T20 trials, players ${MIN_AGE} to ${MAX_AGE}. Mickleham Mon 5 Oct, 5:30 PM, `
+        + `$${TRIAL_PRICE} a session (Cranbourne North Sun 4 Oct is full). Siddhartha Lahiri, Head of `
+        + 'International Player Development and Performance Coach at the Rajasthan Royals, is coming to both.',
     ogImage: SID.photo,
 };
