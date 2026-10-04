@@ -93,9 +93,12 @@ const locations = [
     {
         area: 'South-Eastern Melbourne',
         name: 'Elite Cricket Centre',
-        suburb: 'Cranbourne North, VIC',
+        suburb: '30 Medley Dr, Cranbourne North, VIC 3977',
         // No Term 3 ran here, so this card has no VENUE_GROUPS entry and shows
-        // no age-group accordion. NOT the same site as Hallam below.
+        // no age-group accordion. A DIFFERENT SITE from Hallam below — but the
+        // same south-east program, which moved here for Term 4. Families who
+        // came to Hallam need this address, so it is on the card, not just the
+        // suburb.
         dates: null,
         term4: 'Wednesdays · 7 Oct – 16 Dec',
         note: 'Indoor cricket facility',
@@ -110,7 +113,11 @@ const locations = [
         name: 'Elite Cricket Centre',
         suburb: 'Hallam, VIC',
         dates: '1 Aug – 19 Sep · Saturdays',
+        // The program did not stop — it moved to Cranbourne North. Saying only
+        // "no Term 4 program at this centre" reads as "you have lost your
+        // program" to the 12 families who entered choosing Hallam.
         term4: null,
+        movedTo: 'Moved to Cranbourne North for Term 4',
         note: 'Indoor cricket facility',
         confirmed: true,
         image: '/assets/jr-hallam.png',
@@ -152,7 +159,7 @@ const JRT3Locations = () => {
                     <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}
                         className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium">
                         {TERM3_SOLD_OUT
-                            ? <>The session times below are <span className="font-black text-rr-dark">Term 3's</span>, which is finished. <span className="font-black text-rr-dark">Term 4 (October – December 2026)</span> runs at <span className="font-black text-rr-dark">Mickleham</span> and <span className="font-black text-rr-dark">Cranbourne North</span> on <span className="font-black text-rr-dark">Wednesday nights, 7 October to 16 December</span>. There is no Term 4 program at Hallam or Williamstown. Enter below and we'll confirm your player's place, exact session time and payment by email.</>
+                            ? <>The session times below are <span className="font-black text-rr-dark">Term 3's</span>, which is finished. <span className="font-black text-rr-dark">Term 4 (October – December 2026)</span> runs at <span className="font-black text-rr-dark">Mickleham</span> and <span className="font-black text-rr-dark">Cranbourne North</span> on <span className="font-black text-rr-dark">Wednesday nights, 7 October to 16 December</span>. Our south-east program has moved from Hallam to the Elite Cricket Centre, 30 Medley Dr, Cranbourne North — if you came to us at Hallam, that is your centre. There is no Term 4 program at Williamstown. Enter below and we'll confirm your player's place, exact session time and payment by email.</>
                             : earlyBird
                             ? <>Early bird pricing at <span className="font-black text-rr-dark">$299</span> — increasing to <span className="font-black text-rr-dark">$330</span> once the early bird offer concludes at 11pm 15 July. Small group sessions, one hour per week for 8 consecutive weeks at your preferred time. Select a location to view age groups and times.</>
                             : <>Programs at <span className="font-black text-rr-dark">$330</span> — small group sessions, one hour per week for 8 consecutive weeks at your preferred time. Select a location to view age groups and times.</>
@@ -187,7 +194,7 @@ const JRT3Locations = () => {
                                         <div className="flex items-center gap-3">
                                             <Calendar className={`w-4 h-4 shrink-0 ${loc.term4 ? 'text-rr-pink' : 'text-slate-300'}`} />
                                             <span className={`font-black text-sm ${loc.term4 ? 'text-rr-dark' : 'text-slate-400'}`}>
-                                                {loc.term4 ? `Term 4: ${loc.term4}` : 'No Term 4 program at this centre'}
+                                                {loc.term4 ? `Term 4: ${loc.term4}` : (loc.movedTo || 'No Term 4 program at this centre')}
                                             </span>
                                         </div>
                                     )}
@@ -201,7 +208,7 @@ const JRT3Locations = () => {
                                     <div className={`rounded-xl px-4 py-2.5 mb-4 flex items-center gap-2 ${loc.term4 ? 'bg-rr-pink/5 border border-rr-pink/25' : 'bg-slate-50 border border-slate-200'}`}>
                                         <span className={`w-2 h-2 rounded-full shrink-0 ${loc.term4 ? 'bg-rr-pink' : 'bg-slate-300'}`} />
                                         <p className={`text-xs font-bold uppercase tracking-wide ${loc.term4 ? 'text-rr-pink' : 'text-slate-400'}`}>
-                                            {loc.term4 ? 'Term 4 entries open' : 'Term 3 only — nothing running here in Term 4'}
+                                            {loc.term4 ? 'Term 4 entries open' : (loc.movedTo ? 'Term 4 runs at Cranbourne North instead' : 'Term 3 only — nothing running here in Term 4')}
                                         </p>
                                     </div>
                                 ) : loc.confirmed ? (
