@@ -7,8 +7,8 @@ import { TRIAL_PAGE, SID_JUNIORS_ROUTE } from '../sid-juniors/sidJuniorsPromo';
 import { fadeUp, scrollTo, SectionHeading } from '../performance-squads/shared';
 import {
     TRIAL_CENTRES, TRIALS_HEADING, DATES_CONFIRMED, SID, sidIsAt,
-    TRIAL_PRICE, ALL_SESSIONS_FULL, getSessionsForCentre, getOpenTrialSessions,
-    getSelectableSessionCount, isCentreFull, arrivalLine,
+    TRIAL_PRICE, getSessionsForCentre, getOpenTrialSessions,
+    getSelectableSessionCount, isCentreFull, arrivalLine, OPEN_CENTRES, ONLY_OPEN_CENTRE,
 } from './openAgeData';
 
 // One card per centre. Everything a card says comes from openAgeData: its
@@ -23,6 +23,10 @@ const CentreCard = ({ centre, delay }) => {
     const open = getOpenTrialSessions(centre.slug);
     const selectable = getSelectableSessionCount(centre.slug);
     const hasSid = sidIsAt(centre.slug);
+    // When this is the only centre still taking bookings, its card stands out
+    // and the full one steps back, so the eye lands on the one you can book.
+    const lead = ONLY_OPEN_CENTRE?.slug === centre.slug;
+    const one = sessions.length === 1;
 
     return (
         <motion.div
@@ -31,11 +35,13 @@ const CentreCard = ({ centre, delay }) => {
             viewport={{ once: true }}
             variants={fadeUp}
             custom={delay}
-            className="bg-white/5 border border-white/10 rounded-2xl p-7 sm:p-8 flex flex-col"
+            className={`rounded-2xl p-7 sm:p-8 flex flex-col border ${lead
+                ? 'bg-rr-pink/[0.07] border-rr-pink'
+                : full ? 'bg-white/[0.03] border-white/10' : 'bg-white/5 border-white/10'}`}
         >
             <div className="flex items-center justify-between mb-4">
                 <span className={`text-[10px] font-black uppercase tracking-[0.2em] rounded-full px-3 py-1.5 ${full ? 'text-amber-300 bg-amber-300/10 border border-amber-300/25' : 'text-rr-pink bg-rr-pink/10'}`}>
-                    {full ? 'Trials Full' : 'Now Trialling'}
+                    {full ? (one ? 'Session Full' : 'Trials Full') : lead ? 'Bookings Open' : 'Now Trialling'}
                 </span>
                 <BatIcon className="w-5 h-5 text-white/30" />
             </div>
@@ -114,7 +120,7 @@ const CentreCard = ({ centre, delay }) => {
                     aria-disabled="true"
                     className="mt-auto inline-flex items-center justify-center gap-2 bg-white/10 text-white/45 font-black uppercase tracking-wider text-sm rounded-full px-6 py-3.5 cursor-not-allowed"
                 >
-                    Every session is full
+                    {one ? 'This session is full' : 'Every session is full'}
                 </button>
             ) : (
                 <button
@@ -179,7 +185,7 @@ const OpenAgeTrialsSection = () => (
                             <CentreCard key={centre.slug} centre={centre} delay={i * 0.08} />
                         ))}
                     </div>
-                    {!ALL_SESSIONS_FULL && (
+                    {OPEN_CENTRES.length > 1 && (
                         <p className="text-white/45 text-xs font-medium text-center mt-5">
                             Book at one centre. The two are about 70 km apart, and each one has its
                             own squad and head coach.

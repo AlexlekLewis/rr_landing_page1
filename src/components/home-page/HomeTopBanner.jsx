@@ -65,16 +65,22 @@ const HomeTopBanner = () => {
                         to="/performance-squads-open-trial"
                         className="group inline-flex items-center gap-2 bg-white text-rr-pink hover:bg-rr-dark hover:text-white font-black uppercase tracking-widest text-[13px] sm:text-base px-5 sm:px-6 py-2 sm:py-2.5 rounded-full shadow-md transition-all duration-300 hover:shadow-[0_0_22px_rgba(255,255,255,0.35)]"
                     >
-                        Book Your Place
+                        Book Mickleham
                         <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-0.5" />
                     </Link>
                 </div>
 
-                {/* Both centres, each with its own date, then Sid — who is at both.
-                    Second row so the first row stays readable on a phone. */}
+                {/* Mickleham leads: Cranbourne North closed as full on 4 Oct 2026
+                    (Alex), so Mickleham is the one session still taking bookings.
+                    Then Sid — who is at both. Second row so the first row stays
+                    readable on a phone. */}
                 <div className="max-w-6xl mx-auto mt-1 flex items-center justify-center gap-x-2.5 gap-y-0.5 flex-wrap text-center leading-snug">
-                    <span className="font-bold uppercase tracking-wide text-[10px] sm:text-xs">
-                        Both centres — Mickleham Mon 5 Oct <span className="text-white/60">·</span> Cranbourne North Sun 4 Oct
+                    <span className="font-black uppercase tracking-wide text-[11px] sm:text-sm">
+                        Mickleham — Mon 5 Oct, 5:30 PM — bookings open
+                    </span>
+                    <span className="font-bold uppercase tracking-wide text-[10px] sm:text-xs text-white/60">
+                        <span className="line-through">Cranbourne North Sun 4 Oct</span>{' '}
+                        <span className="text-amber-300 no-underline">Session Full</span>
                     </span>
                     <span className="font-medium text-[10px] sm:text-xs text-white/80">
                         Siddhartha Lahiri, Rajasthan Royals Head of International Player Development and Performance Coach, at both sessions

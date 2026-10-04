@@ -120,7 +120,7 @@ export const PAGE_SEO = {
   '/performance-squads-open-trial': {
     title: 'Open Age T20 Trials, Mickleham & Cranbourne North | Royals',
     description:
-      'Open age T20 trials, players 16 to 25. Mickleham Mon 5 Oct and Cranbourne North Sun 4 Oct, $30 a session. Siddhartha Lahiri, Head of International Player Development and Performance Coach at the Rajasthan Royals, is coming to both.',
+      'Open age T20 trials, players 16 to 25. Mickleham Mon 5 Oct, 5:30 PM, $30 a session (Cranbourne North Sun 4 Oct is full). Siddhartha Lahiri, Head of International Player Development and Performance Coach at the Rajasthan Royals, is coming to both.',
     ogImage: '/assets/performance-squads/sid-lahiri-riyan-parag.jpg',
   },
   '/coaches': {

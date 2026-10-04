@@ -12,7 +12,7 @@ import {
     PLAYING_ROLES, TRIAL_PRICE, MIN_AGE, MAX_AGE, AGE_AS_AT,
     PARENT_REQUIRED_UNDER, TRIAL_SESSIONS, DATES_CONFIRMED, ALL_SESSIONS_FULL,
     getSelectableSessionCount, getSessionLabel, getSessionCentreSlug,
-    getSessionsForCentre, arrivalLine, isSessionFull, WAITLIST,
+    getSessionsForCentre, arrivalLine, isSessionFull, WAITLIST, OPEN_CENTRES,
 } from './openAgeData';
 
 // Open age trial registration.
@@ -649,10 +649,13 @@ const BookingForm = ({ onRequestPayment }) => {
                                 })}
                             </div>
                             <FieldError msg={errors.trial_session_dates} />
-                            <p className="text-white/40 text-xs font-medium mt-2">
-                                One centre per booking. Picking a session at the other centre replaces
-                                what you have chosen.
-                            </p>
+                            {/* Only worth saying while both centres can be booked. */}
+                            {OPEN_CENTRES.length > 1 && (
+                                <p className="text-white/40 text-xs font-medium mt-2">
+                                    One centre per booking. Picking a session at the other centre replaces
+                                    what you have chosen.
+                                </p>
+                            )}
                             <p className="text-white/40 text-xs font-medium mt-2">
                                 ${TRIAL_PRICE} per player, per session
                                 {form.trial_session_dates.length > 0 && (

@@ -23,7 +23,11 @@ import {
     SID,
     PRICING_HEADING, PRICING_FOOTNOTE, FAQS, FAQ_HEADING, DATES_CONFIRMED,
     OPPORTUNITY_LEAD, TRIAL_PRICE, MAX_TRIAL_SESSIONS, TRIAL_INCLUDES_OPEN_AGE,
+    ONLY_OPEN_CENTRE,
 } from './openAgeData';
+
+// With one centre left, every booking button names it ("Book Mickleham").
+const BOOK_LABEL = ONLY_OPEN_CENTRE ? `Book ${ONLY_OPEN_CENTRE.suburb}` : 'Book Your Trial Place';
 
 // ─────────────────────────────────────────────────────────────
 // OPEN AGE T20 TRIAL — /open-age-trial
@@ -78,7 +82,7 @@ const OpenAgeTrial = () => {
                 actually do today. */}
             <Navbar
                 variant="open-age-trial"
-                ctaLabelOverride={DATES_CONFIRMED ? 'BOOK YOUR TRIAL' : 'GET THE DATES'}
+                ctaLabelOverride={DATES_CONFIRMED ? BOOK_LABEL.toUpperCase() : 'GET THE DATES'}
                 ctaTargetOverride="register-pay"
             />
             <main className="flex-1 w-full overflow-hidden">
@@ -125,7 +129,7 @@ const OpenAgeTrial = () => {
                         maxTrialSessions={MAX_TRIAL_SESSIONS}
                         trialIncludes={TRIAL_INCLUDES_OPEN_AGE}
                         footnote={PRICING_FOOTNOTE}
-                        ctaLabel={DATES_CONFIRMED ? 'Book Your Trial Place' : 'Tell Me When The Dates Land'}
+                        ctaLabel={DATES_CONFIRMED ? BOOK_LABEL : 'Tell Me When The Dates Land'}
                     />
                 </div>
                 <div id="register-pay" className="scroll-mt-28 lg:scroll-mt-32">
@@ -142,7 +146,7 @@ const OpenAgeTrial = () => {
             {/* Before the dates land the sticky bar still has somewhere useful to
                 go: the "tell me when the dates are announced" panel. A page this
                 is being promoted on cannot afford a scroll that captures nothing. */}
-            <StickyCTA label={DATES_CONFIRMED ? 'Book Your Trial Place' : 'Get The Dates First'} />
+            <StickyCTA label={DATES_CONFIRMED ? BOOK_LABEL : 'Get The Dates First'} />
             <PaymentModal open={!!payModal} registration={payModal} onClose={() => setPayModal(null)} />
         </div>
     );
