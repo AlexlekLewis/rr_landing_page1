@@ -57,10 +57,13 @@ export const PAGE_SEO = {
     description:
       "Melbourne's Rajasthan Royals cricket academy — junior programs, elite squads, private coaching and holiday camps across Mickleham, Hallam & Williamstown.",
   },
+  // HIDDEN while Junior Royals is rebuilt as a year-round membership (Alex, 5 Oct 2026).
+  // The route shows a holding notice with no form. Remove noindex when the rebuilt page ships.
   '/junior-royals': {
     title: 'Junior Cricket Coaching Melbourne | Rajasthan Royals',
     description:
-      'Junior cricket coaching in Melbourne that builds real skills and confidence — structured, fun and professional. Train with Rajasthan Royals Academy.',
+      'Junior Royals cricket coaching at Rajasthan Royals Academy Melbourne is changing. New program details coming soon.',
+    noindex: true,
   },
   '/elite-royals': { ...ELITE },
   '/PGP2026': { ...ELITE, canonical: '/elite-royals' },

@@ -8,11 +8,6 @@ const PROGRAMS = [
         detail: 'Power Pre-Season · Ages 12–26',
         route: '/PGP2026',
     },
-    {
-        label: 'Junior Royals',
-        detail: 'Term Program · Ages 5–12',
-        route: '/junior-royals',
-    },
 ];
 
 const CoachesJoin = () => {

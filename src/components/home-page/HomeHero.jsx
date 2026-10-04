@@ -23,7 +23,6 @@ const PROGRAMS = [
     { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', badge: 'Cranbourne North · 30 Sep – 2 Oct', badgeColor: 'bg-rr-pink' },
     { label: 'Spin Club', route: '/spin-club', badge: 'Spin bowlers 10 to 25 · registering interest', badgeColor: 'bg-green-500' },
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Register your interest · next intake', badgeColor: 'bg-green-500' },
-    { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 entries open', badgeColor: 'bg-green-500' },
 ];
 
 const HomeHero = ({ onRegisterClick }) => {

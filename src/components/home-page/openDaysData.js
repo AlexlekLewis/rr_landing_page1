@@ -71,12 +71,4 @@ export const ANNOUNCEMENTS = [
         href: '/spin-club',
         badge: 'Registering interest',
     },
-    {
-        key: 'junior-royals-t4',
-        name: 'Junior Royals · Term 4',
-        tag: 'Boys & girls 5 to 17 · weekly coaching on Wednesday nights',
-        detail: 'Mickleham & Cranbourne North · Wednesdays 7 Oct – 16 Dec · nothing to pay now',
-        href: '/junior-royals',
-        badge: 'Entries open',
-    },
 ];

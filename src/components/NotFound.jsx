@@ -16,7 +16,6 @@ import Footer from './Footer';
 const LINKS = [
     { label: 'Home', to: '/' },
     { label: 'Performance Squads', to: '/performance-squads' },
-    { label: 'Junior Royals', to: '/junior-royals' },
     { label: 'Holiday Camps', to: '/junior-royals-holiday' },
     { label: 'Private Coaching', to: '/mickleham' },
     { label: 'Elite Program', to: '/elite-royals' },

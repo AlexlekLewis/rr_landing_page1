@@ -83,7 +83,6 @@ const PROGRAMS_DROPDOWN = [
     { label: PROGRAM_ROW.navLabel, route: SID_JUNIORS_ROUTE, badge: PROGRAM_ROW.navBadge, badgeColor: 'bg-rr-pink' },
     { label: 'Spin Club · Spinners 10-25', route: '/spin-club', badge: 'Registering Interest', badgeColor: 'bg-green-500' },
     { label: 'Junior Royals Holiday Program · Cranbourne North', route: '/junior-royals-holiday', badge: '30 Sep – 2 Oct', badgeColor: 'bg-rr-pink' },
-    { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 Entries Open', badgeColor: 'bg-green-500' },
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Register Your Interest', badgeColor: 'bg-green-500' },
     { label: 'Private Coaching', route: '/mickleham', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },
     // Closed but real — it belongs here rather than in the home-page modal.

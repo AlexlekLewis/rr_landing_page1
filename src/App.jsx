@@ -9,7 +9,9 @@ import OfferResponsePage from './components/offer-response/OfferResponsePage';
 import StripeSuccess from './components/landing-page-3/StripeSuccess';
 import LittleCrickets from './components/little-crickets/LittleCrickets';
 import JRSuccess from './components/little-crickets/JRSuccess';
-import JuniorRoyalsT3 from './components/junior-royals-t3/JuniorRoyalsT3';
+// Old Term 3/Term 4 page (junior-royals-t3/JuniorRoyalsT3) is OFF while Junior Royals is rebuilt as a
+// year-round membership (Alex, 5 Oct 2026). Its files stay; only the route moved to the holding notice.
+import JuniorRoyalsHolding from './components/junior-royals/JuniorRoyalsHolding';
 import JRT3Success from './components/junior-royals-t3/JRT3Success';
 import SeptemberHoliday from './components/september-holiday/SeptemberHoliday';
 import HolidayProgramSuccess from './components/holiday-programs/HolidayProgramSuccess';
@@ -195,8 +197,8 @@ function App() {
         {/* Junior Royals Term 2 — archived */}
         <Route path="/junior-royals-term2" element={<LittleCrickets />} />
         <Route path="/junior-royals-term2/success" element={<JRSuccess />} />
-        {/* Junior Royals Term 3 — active */}
-        <Route path="/junior-royals" element={<JuniorRoyalsT3 />} />
+        {/* Junior Royals — HOLDING NOTICE, no form, noindex, on no promo surface, while the page is rebuilt (Alex, 5 Oct 2026). */}
+        <Route path="/junior-royals" element={<JuniorRoyalsHolding />} />
         <Route path="/junior-royals/success" element={<JRT3Success />} />
         <Route path="/junior-royals-holiday/success" element={<HolidayProgramSuccess />} />
         {/* Female Cricket Introduction — DRAFT: not in nav, Vercel only until go-live instruction */}
