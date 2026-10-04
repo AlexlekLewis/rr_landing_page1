@@ -26,9 +26,9 @@ const LC_NAV = [
 // Junior Royals year-round membership (/junior-royals, Alex 5 Oct 2026) — ids set in
 // junior-royals/JuniorRoyals.jsx. LC_NAV above stays for the old Term 2 page.
 const JRM_NAV = [
+    { label: 'MATCHES', id: 'matches' },
     { label: 'HOW IT RUNS', id: 'how' },
     { label: 'MEMBERSHIP', id: 'membership' },
-    { label: 'MATCH DAYS', id: 'matches' },
     { label: 'CENTRES', id: 'where' },
 ];
 

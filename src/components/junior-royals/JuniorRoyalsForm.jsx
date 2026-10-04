@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { ArrowRight, Check } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { HONEYPOT_FIELD, isHoneypotTripped } from '../../lib/security/bot.js';
-import { MOCKUP, CENTRES, FORM, FIRST_SESSION, CTA } from './juniorRoyalsData';
+import { Link } from 'react-router-dom';
+import { MOCKUP, CENTRES, FORM, FIRST_SESSION, CTA, AGES, AGES_TEXT, OLDER_LINE, PS_ROUTE } from './juniorRoyalsData';
 
 // ─────────────────────────────────────────────────────────────
 // Junior Royals — Register Your Interest form.
@@ -53,6 +54,18 @@ const Label = ({ children, htmlFor }) => (
     </label>
 );
 
+// Age in whole years on the later of today and the first session — the age the
+// player will be when they start. Junior Royals is 7–12 (Alex, 5 Oct 2026).
+export const ageAtStart = (dob, today = new Date()) => {
+    const start = new Date(Math.max(today.getTime(), new Date(`${FIRST_SESSION.iso}T00:00:00`).getTime()));
+    const d = new Date(`${dob}T00:00:00`);
+    if (Number.isNaN(d.getTime())) return null;
+    let age = start.getFullYear() - d.getFullYear();
+    const m = start.getMonth() - d.getMonth();
+    if (m < 0 || (m === 0 && start.getDate() < d.getDate())) age -= 1;
+    return age;
+};
+
 const EMPTY = { parent_name: '', email: '', phone: '', player_name: '', player_dob: '', centre: '' };
 
 const JuniorRoyalsForm = () => {
@@ -75,6 +88,12 @@ const JuniorRoyalsForm = () => {
         if (form.phone.replace(/\D/g, '').length < 8) e.phone = 'Please enter a phone number.';
         if (!form.player_name.trim()) e.player_name = "Please enter your player's name.";
         if (!form.player_dob) e.player_dob = "Please enter your player's date of birth.";
+        else {
+            const age = ageAtStart(form.player_dob);
+            if (age === null) e.player_dob = "Please enter your player's date of birth.";
+            else if (age > AGES.max) e.player_dob = 'older';
+            else if (age < AGES.min) e.player_dob = `Junior Royals is for players aged ${AGES_TEXT}.`;
+        }
         if (!CENTRES.some((c) => c.value === form.centre)) e.centre = 'Please choose a centre.';
         setErrors(e);
         return Object.keys(e).length === 0;
@@ -157,7 +176,12 @@ const JuniorRoyalsForm = () => {
                 <div>
                     <Label htmlFor="player_dob">Player's date of birth</Label>
                     <input id="player_dob" name="player_dob" type="date" value={form.player_dob} onChange={set} className={inputClass(errors.player_dob)} />
-                    {errors.player_dob && <p className="text-rr-pink text-xs font-bold mt-1">{errors.player_dob}</p>}
+                    {errors.player_dob === 'older' ? (
+                        <p className="text-rr-pink text-xs font-bold mt-1">
+                            Junior Royals is for players aged {AGES_TEXT}. {OLDER_LINE.body}{' '}
+                            <Link to={PS_ROUTE} className="underline underline-offset-2">{OLDER_LINE.link}</Link>
+                        </p>
+                    ) : errors.player_dob && <p className="text-rr-pink text-xs font-bold mt-1">{errors.player_dob}</p>}
                 </div>
                 <fieldset className="sm:col-span-2">
                     <legend className="block text-xs font-black uppercase tracking-widest text-rr-dark mb-2">

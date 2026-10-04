@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Check, ChevronDown, MapPin } from 'lucide-react';
 import Navbar from '../Navbar';
@@ -7,18 +8,21 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 import JuniorRoyalsForm from './JuniorRoyalsForm';
 import { Rich, SectionHead, scrollToId } from './JuniorRoyalsShared';
 import {
-    MOCKUP, OPEN_QUESTIONS, HERO, CTA, WHY, HOW, GROUPS, CENTRES, MEMBERSHIP, FEES, YEARLY,
-    CALENDAR, MATCHES, WHERE, CENTRES_APART, NOT_RUNNING, FIRST_SESSION, FORM, FAQS, money,
+    MOCKUP, OPEN_QUESTIONS, HERO, CTA, LOOP, WHY, HOW, GROUPS, CENTRES, MEMBERSHIP, FEES, YEARLY,
+    CALENDAR, PRICE_CONTEXT, WHERE_TITLE, CENTRES_APART, NOT_RUNNING, NEW_SLOTS, FIRST_SESSION,
+    FORM, FAQS, OLDER_LINE, PS_ROUTE, money,
 } from './juniorRoyalsData';
 
 // ─────────────────────────────────────────────────────────────
 // JUNIOR ROYALS — /junior-royals. Year-round membership (Alex, 5 Oct 2026).
-// Built with the rr-page-generator skill: Why → How → What, every fact and line
-// of copy in ./juniorRoyalsData.js. Interest only for now: no payment, no place
-// held. Section ids match JRM_NAV in Navbar.jsx.
+// Built with the rr-page-generator skill: every fact and line of copy lives in
+// ./juniorRoyalsData.js. Order: hero → development matches (Alex: "near the
+// top") → why all year → how it runs → membership + price per hour → where →
+// form → FAQ. Interest only for now: no payment, no place held. Section ids
+// match JRM_NAV in Navbar.jsx.
 // ─────────────────────────────────────────────────────────────
 
-const SECTIONS = ['hero', 'why', 'how', 'membership', 'matches', 'where', 'register', 'faq'];
+const SECTIONS = ['hero', 'matches', 'why', 'how', 'membership', 'where', 'register', 'faq'];
 
 const fade = {
     initial: { opacity: 0, y: 20 },
@@ -39,6 +43,16 @@ const Tick = ({ children, dark }) => (
         <Check className="w-5 h-5 text-rr-pink shrink-0 mt-0.5" strokeWidth={3} />
         <span className={`text-[15px] sm:text-base font-medium leading-relaxed ${dark ? 'text-white/80' : 'text-rr-charcoal'}`}>{children}</span>
     </li>
+);
+
+// "Aged 13 or older? … See Performance Squads →"
+const OlderLink = ({ dark }) => (
+    <span className={dark ? 'text-white/75' : 'text-rr-charcoal'}>
+        {OLDER_LINE.lead} {OLDER_LINE.body}{' '}
+        <Link to={PS_ROUTE} className={`font-bold underline underline-offset-2 ${dark ? 'text-rr-light-pink hover:text-white' : 'text-rr-pink'}`}>
+            {OLDER_LINE.link}
+        </Link>
+    </span>
 );
 
 // ── Review banner (mock-up only) ──
@@ -71,16 +85,20 @@ const Hero = () => (
         <img src="/assets/little-crickets-hero.jpeg" alt="A Junior Royals coach talking to a group of young players in the nets"
             className="absolute inset-0 w-full h-full object-cover object-[70%_center]" />
         <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/85 to-rr-dark/40 md:bg-gradient-to-r md:from-rr-dark md:via-rr-dark/90 md:to-rr-dark/10" />
-        <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-6 pt-16 pb-16 md:pt-24 md:pb-24">
+        <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-6 pt-14 pb-16 md:pt-20 md:pb-24">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="max-w-xl">
                 <p className="text-xs font-black text-rr-pink uppercase tracking-[0.3em] mb-4">{HERO.eyebrow}</p>
                 <h1 className="text-5xl sm:text-6xl md:text-7xl font-black uppercase tracking-tighter leading-none text-white mb-5">{HERO.title}</h1>
-                <p className="text-lg sm:text-xl font-bold text-rr-light-pink leading-snug mb-8">{HERO.why}</p>
+                <p className="text-lg sm:text-xl font-bold text-rr-light-pink leading-snug mb-4">{HERO.why}</p>
+                <p className="text-white/80 text-[15px] sm:text-base font-medium leading-relaxed mb-7">{HERO.lead}</p>
                 <dl className="space-y-2.5 mb-8">
                     {HERO.facts.map((f) => (
                         <div key={f.k} className="flex gap-4">
-                            <dt className="w-16 shrink-0 text-xs font-black uppercase tracking-widest text-rr-pink pt-1">{f.k}</dt>
-                            <dd className="text-white text-[15px] sm:text-base font-semibold leading-snug"><Rich v={f.v} /></dd>
+                            <dt className="w-20 shrink-0 text-xs font-black uppercase tracking-widest text-rr-pink pt-1">{f.k}</dt>
+                            <dd className="text-white text-[15px] sm:text-base font-semibold leading-snug">
+                                <Rich v={f.v} />
+                                {f.older && <span className="block text-sm font-medium mt-1"><OlderLink dark /></span>}
+                            </dd>
                         </div>
                     ))}
                 </dl>
@@ -97,9 +115,38 @@ const Hero = () => (
     </section>
 );
 
-// ── 2. Why ──
-const Why = () => (
+// ── 2. Development matches — training and matches as one cycle ──
+const Loop = () => (
     <section className="bg-white py-16 md:py-24">
+        <div className="max-w-5xl mx-auto px-5 sm:px-6">
+            <SectionHead eyebrow={LOOP.eyebrow} title={LOOP.title} />
+            <div className="max-w-3xl">
+                {LOOP.body.map((p) => <p key={p} className="text-lg text-rr-charcoal font-medium leading-relaxed mb-5">{p}</p>)}
+            </div>
+            <ol className="grid md:grid-cols-3 gap-8 my-10">
+                {LOOP.steps.map((s, i) => (
+                    <motion.li {...fade} transition={{ duration: 0.5, delay: i * 0.1 }} key={s.n} className="border-t-2 border-rr-pink pt-4">
+                        <p className="flex items-baseline gap-3 mb-2">
+                            <span className="text-3xl font-black text-rr-pink leading-none">{s.n}</span>
+                            <span className="text-xl font-black uppercase text-rr-dark">{s.title}</span>
+                        </p>
+                        <p className="text-rr-charcoal font-medium leading-relaxed">{s.body}</p>
+                        {i < LOOP.steps.length - 1 ? null : (
+                            <p className="mt-2 text-sm font-bold text-rr-pink">Then back to step 1.</p>
+                        )}
+                    </motion.li>
+                ))}
+            </ol>
+            <ul className="space-y-3 max-w-3xl">
+                {LOOP.details.map((d, i) => <Tick key={i}><Rich v={d} /></Tick>)}
+            </ul>
+        </div>
+    </section>
+);
+
+// ── 3. Why all year ──
+const Why = () => (
+    <section className="bg-slate-50 py-16 md:py-24">
         <motion.div {...fade} className="max-w-3xl mx-auto px-5 sm:px-6">
             <SectionHead eyebrow={WHY.eyebrow} title={WHY.title} />
             {WHY.body.map((p) => <p key={p} className="text-lg text-rr-charcoal font-medium leading-relaxed mb-5">{p}</p>)}
@@ -107,15 +154,15 @@ const Why = () => (
     </section>
 );
 
-// ── 3. How ──
+// ── 4. How it runs ──
 const How = () => (
     <section className="bg-rr-dark py-16 md:py-24 relative">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-rr-pink to-transparent" />
         <div className="max-w-6xl mx-auto px-5 sm:px-6">
             <SectionHead eyebrow={HOW.eyebrow} title={HOW.title} dark />
-            {HOW.intro.map((p) => <p key={p} className="max-w-3xl text-lg text-white/80 font-medium leading-relaxed mb-10">{p}</p>)}
+            <p className="max-w-3xl text-lg text-white/80 font-medium leading-relaxed mb-10">{HOW.intro}</p>
 
-            <div className="grid sm:grid-cols-2 gap-8 mb-14 max-w-3xl">
+            <div className="grid sm:grid-cols-2 gap-8 mb-8 max-w-3xl">
                 {GROUPS.map((g) => (
                     <motion.div {...fade} key={g.time} className="border-t-2 border-rr-pink pt-4">
                         <p className="text-2xl font-black text-white">{g.time}</p>
@@ -123,9 +170,14 @@ const How = () => (
                     </motion.div>
                 ))}
             </div>
+            <ul className="space-y-3 max-w-3xl mb-14">
+                <Tick dark>{HOW.grouping}</Tick>
+                <Tick dark>{HOW.lanes}</Tick>
+                <Tick dark>{NEW_SLOTS}</Tick>
+            </ul>
 
             <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-rr-pink mb-6">What your player works on</h3>
-            <div className="grid md:grid-cols-3 gap-8 mb-14">
+            <div className="grid md:grid-cols-2 gap-8 mb-6 max-w-4xl">
                 {HOW.ageBands.map((b, i) => (
                     <motion.div {...fade} transition={{ duration: 0.5, delay: i * 0.1 }} key={b.ages}>
                         <p className="text-xl font-black text-white uppercase mb-3">Ages {b.ages}</p>
@@ -133,6 +185,7 @@ const How = () => (
                     </motion.div>
                 ))}
             </div>
+            <p className="text-[15px] font-medium mb-14"><OlderLink dark /></p>
 
             <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-rr-pink mb-6">Your Head Coach</h3>
             <div className="grid md:grid-cols-2 gap-8 mb-12">
@@ -155,9 +208,9 @@ const How = () => (
     </section>
 );
 
-// ── 4. Membership — the money, in words a 10-year-old can follow ──
+// ── 5. Membership — the money, in words a 10-year-old can follow ──
 const Membership = () => (
-    <section className="bg-slate-50 py-16 md:py-24">
+    <section className="bg-white py-16 md:py-24">
         <div className="max-w-5xl mx-auto px-5 sm:px-6">
             <SectionHead eyebrow={MEMBERSHIP.eyebrow} title={MEMBERSHIP.title} />
             <p className="text-xl text-rr-dark font-bold leading-relaxed max-w-3xl mb-10">{MEMBERSHIP.lead}</p>
@@ -187,6 +240,32 @@ const Membership = () => (
             </ol>
             <p className="text-rr-charcoal font-medium leading-relaxed max-w-3xl mb-2"><Rich v={MEMBERSHIP.firstPayment} /></p>
             <p className="text-rr-charcoal font-bold mb-14">{MEMBERSHIP.gst}</p>
+
+            {/* Price per hour, honestly, then the comparison. */}
+            <div className="border-l-4 border-rr-pink pl-6 mb-14 max-w-4xl">
+                <h3 className="text-2xl font-black uppercase text-rr-dark mb-4">{PRICE_CONTEXT.title}</h3>
+                {PRICE_CONTEXT.lines.map((l) => <p key={l} className="text-rr-charcoal text-lg font-medium leading-relaxed mb-3">{l}</p>)}
+                <h4 className="text-sm font-bold uppercase tracking-[0.2em] text-rr-pink mt-8 mb-4">{PRICE_CONTEXT.compareTitle}</h4>
+                <table className="w-full text-left">
+                    <thead>
+                        <tr className="border-b-2 border-rr-dark">
+                            <th className="py-2 pr-3 text-xs font-black uppercase tracking-wider text-rr-dark">Program</th>
+                            <th className="py-2 text-xs font-black uppercase tracking-wider text-rr-dark text-right whitespace-nowrap">Per hour</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {PRICE_CONTEXT.compare.map((r, i) => (
+                            <tr key={i} className="border-b border-slate-200 align-top">
+                                <td className="py-3 pr-3">
+                                    <span className={`block font-bold ${r.ours ? 'text-rr-pink' : 'text-rr-dark'}`}><Rich v={r.what} /></span>
+                                    {r.note && <span className="block text-sm text-rr-charcoal font-medium">{r.note}</span>}
+                                </td>
+                                <td className="py-3 text-right font-black text-rr-dark whitespace-nowrap"><Rich v={r.perHour} /></td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
             <div className="grid md:grid-cols-2 gap-12">
                 <div>
@@ -228,25 +307,11 @@ const Membership = () => (
     </section>
 );
 
-// ── 5. Sunday match days ──
-const Matches = () => (
-    <section className="bg-rr-dark py-16 md:py-24 relative">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-rr-pink to-transparent" />
-        <motion.div {...fade} className="max-w-3xl mx-auto px-5 sm:px-6">
-            <SectionHead eyebrow={MATCHES.eyebrow} title={MATCHES.title} dark />
-            {MATCHES.body.map((p) => <p key={p} className="text-lg text-white/80 font-medium leading-relaxed mb-5">{p}</p>)}
-            <ul className="space-y-3 mt-6">
-                {MATCHES.details.map((d, i) => <Tick key={i} dark><Rich v={d} /></Tick>)}
-            </ul>
-        </motion.div>
-    </section>
-);
-
 // ── 6. Where ──
 const Where = () => (
-    <section className="bg-white py-16 md:py-24">
+    <section className="bg-slate-50 py-16 md:py-24">
         <div className="max-w-5xl mx-auto px-5 sm:px-6">
-            <SectionHead eyebrow={WHERE.eyebrow} title={WHERE.title} />
+            <SectionHead eyebrow="Where" title={WHERE_TITLE} />
             <div className="grid md:grid-cols-2 gap-10 mb-8">
                 {CENTRES.map((c) => (
                     <motion.div {...fade} key={c.value} className="border-l-4 border-rr-pink pl-5">
@@ -297,7 +362,10 @@ const Faq = () => {
                                 <AnimatePresence initial={false}>
                                     {isOpen && (
                                         <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-                                            <p className="pb-5 text-rr-charcoal font-medium leading-relaxed"><Rich v={f.a} /></p>
+                                            <p className="pb-5 text-rr-charcoal font-medium leading-relaxed">
+                                                <Rich v={f.a} />
+                                                {f.link && <>{' '}<Link to={f.link.to} className="text-rr-pink font-bold underline underline-offset-2">{f.link.label}</Link></>}
+                                            </p>
                                         </motion.div>
                                     )}
                                 </AnimatePresence>
@@ -337,6 +405,8 @@ const StickyBar = () => {
     );
 };
 
+const SCROLL_PAD = 'scroll-mt-[84px] md:scroll-mt-[112px]';
+
 const JuniorRoyals = () => {
     usePageAnalytics('/junior-royals', { sections: SECTIONS });
     useEffect(() => { window.scrollTo(0, 0); }, []);
@@ -345,14 +415,14 @@ const JuniorRoyals = () => {
             <Navbar variant="junior-royals-membership" />
             <main className="flex-1 w-full overflow-hidden pt-[84px] md:pt-[112px]">
                 <MockupBanner />
-                <div id="hero" className="scroll-mt-[84px] md:scroll-mt-[112px]"><Hero /></div>
-                <div id="why" className="scroll-mt-[84px] md:scroll-mt-[112px]"><Why /></div>
-                <div id="how" className="scroll-mt-[84px] md:scroll-mt-[112px]"><How /></div>
-                <div id="membership" className="scroll-mt-[84px] md:scroll-mt-[112px]"><Membership /></div>
-                <div id="matches" className="scroll-mt-[84px] md:scroll-mt-[112px]"><Matches /></div>
-                <div id="where" className="scroll-mt-[84px] md:scroll-mt-[112px]"><Where /></div>
-                <div id="register" className="scroll-mt-[84px] md:scroll-mt-[112px]"><Register /></div>
-                <div id="faq" className="scroll-mt-[84px] md:scroll-mt-[112px]"><Faq /></div>
+                <div id="hero" className={SCROLL_PAD}><Hero /></div>
+                <div id="matches" className={SCROLL_PAD}><Loop /></div>
+                <div id="why" className={SCROLL_PAD}><Why /></div>
+                <div id="how" className={SCROLL_PAD}><How /></div>
+                <div id="membership" className={SCROLL_PAD}><Membership /></div>
+                <div id="where" className={SCROLL_PAD}><Where /></div>
+                <div id="register" className={SCROLL_PAD}><Register /></div>
+                <div id="faq" className={SCROLL_PAD}><Faq /></div>
             </main>
             <Footer />
             <StickyBar />
