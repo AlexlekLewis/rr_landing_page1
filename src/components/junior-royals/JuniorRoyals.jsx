@@ -8,8 +8,8 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 import JuniorRoyalsForm from './JuniorRoyalsForm';
 import { Rich, SectionHead, scrollToId } from './JuniorRoyalsShared';
 import {
-    MOCKUP, OPEN_QUESTIONS, HERO, CTA, LOOP, WHY, HOW, GROUPS, CENTRES, MEMBERSHIP, FEES, YEARLY,
-    CALENDAR, PRICE_CONTEXT, WHERE_TITLE, CENTRES_APART, NOT_RUNNING, NEW_SLOTS, FIRST_SESSION,
+    MOCKUP, OPEN_QUESTIONS, HERO, CTA, LOOP, WHY, HOW, GROUPS, CENTRES, PRICES, PRICE_CONTEXT,
+    CALENDAR, termPrice, WHERE_TITLE, CENTRES_APART, NOT_RUNNING, NEW_SLOTS, FIRST_SESSION,
     FORM, FAQS, OLDER_LINE, PS_ROUTE, money,
 } from './juniorRoyalsData';
 
@@ -102,6 +102,7 @@ const Hero = () => (
                         </div>
                     ))}
                 </dl>
+                <p className="-mt-4 mb-8 text-sm font-medium text-white/70">{HERO.priceNote}</p>
                 <div className="flex flex-col sm:flex-row gap-3">
                     <PrimaryButton />
                     <button onClick={() => scrollToId('membership')}
@@ -208,44 +209,82 @@ const How = () => (
     </section>
 );
 
-// ── 5. Membership — the money, in words a 10-year-old can follow ──
-const Membership = () => (
+// ── 5. Prices — two ways to pay; the membership in words a 10-year-old can follow ──
+const Prices = () => (
     <section className="bg-white py-16 md:py-24">
         <div className="max-w-5xl mx-auto px-5 sm:px-6">
-            <SectionHead eyebrow={MEMBERSHIP.eyebrow} title={MEMBERSHIP.title} />
-            <p className="text-xl text-rr-dark font-bold leading-relaxed max-w-3xl mb-10">{MEMBERSHIP.lead}</p>
+            <SectionHead eyebrow={PRICES.eyebrow} title={PRICES.title} />
+            <p className="text-xl text-rr-dark font-bold leading-relaxed max-w-3xl mb-10">{PRICES.lead}</p>
 
-            {/* The three numbers, side by side. No boxes: lines only. */}
-            <div className="grid grid-cols-3 border-y border-slate-300 divide-x divide-slate-300 mb-10">
-                {[
-                    { n: money(FEES.joining), l: 'to join, once' },
-                    { n: money(FEES.weekly), l: 'a week, all year' },
-                    { n: money(YEARLY), l: 'a year in total' },
-                ].map((x) => (
-                    <div key={x.l} className="py-6 px-2 text-center">
-                        <p className="text-3xl sm:text-5xl font-black text-rr-dark">{x.n}</p>
-                        <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-rr-charcoal mt-2">{x.l}</p>
-                    </div>
-                ))}
+            <div className="grid md:grid-cols-2 gap-12 mb-10">
+                {/* Membership */}
+                <div className="border-t-4 border-rr-pink pt-5">
+                    <p className="text-sm font-black uppercase tracking-[0.2em] text-rr-pink mb-2">{PRICES.member.name}</p>
+                    <p className="mb-6">
+                        <span className="text-5xl font-black text-rr-dark">{PRICES.member.headline}</span>
+                        <span className="text-lg font-bold text-rr-charcoal ml-2">{PRICES.member.unit}</span>
+                    </p>
+                    <ol className="space-y-4 mb-5">
+                        {PRICES.member.simple.map((line, i) => (
+                            <li key={line} className="flex gap-3">
+                                <span className="text-xl font-black text-rr-pink leading-tight w-6 shrink-0">{i + 1}</span>
+                                <span className="text-base text-rr-dark font-semibold leading-relaxed">{line}</span>
+                            </li>
+                        ))}
+                    </ol>
+                    <p className="text-rr-charcoal text-sm font-medium leading-relaxed mb-5"><Rich v={PRICES.member.firstPayment} /></p>
+                    <p className="text-xs font-black uppercase tracking-widest text-rr-dark mb-3">Members also get</p>
+                    <ul className="space-y-2.5">{PRICES.member.gets.map((g, i) => <Tick key={i}><Rich v={g} /></Tick>)}</ul>
+                </div>
+
+                {/* By the term */}
+                <div className="border-t-4 border-rr-dark pt-5">
+                    <p className="text-sm font-black uppercase tracking-[0.2em] text-rr-dark mb-2">{PRICES.term.name}</p>
+                    <p className="mb-6">
+                        <span className="text-5xl font-black text-rr-dark">{PRICES.term.headline}</span>
+                        <span className="text-lg font-bold text-rr-charcoal ml-2">{PRICES.term.unit}</span>
+                    </p>
+                    <ul className="space-y-3">{PRICES.term.lines.map((l, i) => <Tick key={i}><Rich v={l} /></Tick>)}</ul>
+                </div>
             </div>
 
-            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-rr-pink mb-5">The simple version</h3>
-            <ol className="space-y-5 mb-8 max-w-3xl">
-                {MEMBERSHIP.simple.map((line, i) => (
-                    <li key={line} className="flex gap-4">
-                        <span className="text-2xl font-black text-rr-pink leading-none w-8 shrink-0">{i + 1}</span>
-                        <span className="text-lg text-rr-dark font-semibold leading-relaxed">{line}</span>
-                    </li>
-                ))}
-            </ol>
-            <p className="text-rr-charcoal font-medium leading-relaxed max-w-3xl mb-2"><Rich v={MEMBERSHIP.firstPayment} /></p>
-            <p className="text-rr-charcoal font-bold mb-14">{MEMBERSHIP.gst}</p>
+            <p className="text-lg text-rr-dark font-bold leading-relaxed max-w-3xl mb-2">{PRICES.yearCompare}</p>
+            <p className="text-rr-charcoal font-medium mb-14">{PRICES.notes.join(' ')}</p>
 
-            {/* Price per hour, honestly, then the comparison. */}
-            <div className="border-l-4 border-rr-pink pl-6 mb-14 max-w-4xl">
-                <h3 className="text-2xl font-black uppercase text-rr-dark mb-4">{PRICE_CONTEXT.title}</h3>
-                {PRICE_CONTEXT.lines.map((l) => <p key={l} className="text-rr-charcoal text-lg font-medium leading-relaxed mb-3">{l}</p>)}
-                <h4 className="text-sm font-bold uppercase tracking-[0.2em] text-rr-pink mt-8 mb-4">{PRICE_CONTEXT.compareTitle}</h4>
+            {/* When we train, and what each term costs */}
+            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-rr-pink mb-5">When we train, and the term prices</h3>
+            <table className="w-full text-left mb-3">
+                <thead>
+                    <tr className="border-b-2 border-rr-dark">
+                        <th className="py-2 pr-3 text-xs font-black uppercase tracking-wider text-rr-dark">Term</th>
+                        <th className="py-2 pr-3 text-xs font-black uppercase tracking-wider text-rr-dark hidden sm:table-cell">Wednesdays</th>
+                        <th className="py-2 pr-3 text-xs font-black uppercase tracking-wider text-rr-dark text-right">Sessions</th>
+                        <th className="py-2 text-xs font-black uppercase tracking-wider text-rr-dark text-right whitespace-nowrap">By the term</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {CALENDAR.map((c) => (
+                        <tr key={c.label} className="border-b border-slate-200 align-top">
+                            <td className={`py-3 pr-3 font-black ${c.holiday ? 'text-rr-charcoal' : 'text-rr-dark'}`}>
+                                {c.label}
+                                <span className="block sm:hidden text-xs font-medium text-rr-charcoal">{c.dates}</span>
+                            </td>
+                            <td className="py-3 pr-3 text-rr-charcoal font-medium text-sm hidden sm:table-cell">{c.dates}</td>
+                            <td className="py-3 pr-3 text-right font-bold text-sm text-rr-dark">{c.holiday ? '–' : c.sessions}</td>
+                            <td className="py-3 text-right font-black text-sm text-rr-dark whitespace-nowrap">
+                                {c.holiday ? <span className="text-rr-pink font-bold">Members' weekly payment continues</span> : money(termPrice(c.sessions))}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <p className="text-sm text-rr-charcoal font-medium mb-14">
+                Training follows the Victorian school terms. There is no training in the school holidays.
+            </p>
+
+            {/* Per hour, and how that compares */}
+            <div className="border-l-4 border-rr-pink pl-6 max-w-4xl">
+                <h3 className="text-2xl font-black uppercase text-rr-dark mb-5">{PRICE_CONTEXT.title}</h3>
                 <table className="w-full text-left">
                     <thead>
                         <tr className="border-b-2 border-rr-dark">
@@ -265,43 +304,8 @@ const Membership = () => (
                         ))}
                     </tbody>
                 </table>
-                <p className="text-sm text-rr-charcoal font-medium mt-3">{PRICE_CONTEXT.sourceNote}</p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-12">
-                <div>
-                    <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-rr-pink mb-5">{MEMBERSHIP.includesTitle}</h3>
-                    <ul className="space-y-4">
-                        {MEMBERSHIP.includes.map((it) => (
-                            <li key={it.title} className="flex items-start gap-3">
-                                <Check className="w-5 h-5 text-rr-pink shrink-0 mt-0.5" strokeWidth={3} />
-                                <span>
-                                    <span className="block font-black text-rr-dark">{it.title}</span>
-                                    <span className="block text-rr-charcoal font-medium leading-relaxed"><Rich v={it.body} /></span>
-                                </span>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <div>
-                    <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-rr-pink mb-5">When we train</h3>
-                    <table className="w-full text-left">
-                        <tbody>
-                            {CALENDAR.map((c) => (
-                                <tr key={c.label} className="border-b border-slate-200">
-                                    <td className={`py-3 pr-3 font-black ${c.holiday ? 'text-rr-charcoal' : 'text-rr-dark'}`}>{c.label}</td>
-                                    <td className="py-3 pr-3 text-rr-charcoal font-medium text-sm">{c.dates}</td>
-                                    <td className="py-3 text-right font-bold text-sm text-rr-dark whitespace-nowrap">
-                                        {c.holiday ? <span className="text-rr-pink">Payments continue</span> : `${c.sessions} sessions`}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    <p className="text-sm text-rr-charcoal font-medium mt-3">
-                        Training follows the Victorian school terms. There is no training in the school holidays, and the weekly payment continues.
-                    </p>
-                </div>
+                <p className="text-sm text-rr-dark font-bold mt-3">{PRICE_CONTEXT.lanes}</p>
+                <p className="text-sm text-rr-charcoal font-medium mt-1">{PRICE_CONTEXT.sourceNote}</p>
             </div>
             <div className="mt-12"><PrimaryButton /></div>
         </div>
@@ -397,9 +401,9 @@ const StickyBar = () => {
     }, []);
     if (!show) return null;
     return (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-rr-dark border-t border-white/15 px-4 py-3 flex items-center justify-between gap-3">
-            <span className="text-white text-sm font-bold leading-tight">{CTA.sticky}</span>
-            <button onClick={() => scrollToId('register')} className="bg-rr-pink text-white font-black uppercase tracking-wider text-xs rounded-full px-5 py-3 whitespace-nowrap">
+        <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-rr-dark border-t border-white/15 px-4 pt-2.5 pb-3 flex flex-col gap-2">
+            <span className="text-white text-xs font-bold leading-tight text-center">{CTA.sticky}</span>
+            <button onClick={() => scrollToId('register')} className="w-full bg-rr-pink text-white font-black uppercase tracking-wider text-xs rounded-full px-5 py-3">
                 {CTA.primary}
             </button>
         </div>
@@ -420,7 +424,7 @@ const JuniorRoyals = () => {
                 <div id="matches" className={SCROLL_PAD}><Loop /></div>
                 <div id="why" className={SCROLL_PAD}><Why /></div>
                 <div id="how" className={SCROLL_PAD}><How /></div>
-                <div id="membership" className={SCROLL_PAD}><Membership /></div>
+                <div id="membership" className={SCROLL_PAD}><Prices /></div>
                 <div id="where" className={SCROLL_PAD}><Where /></div>
                 <div id="register" className={SCROLL_PAD}><Register /></div>
                 <div id="faq" className={SCROLL_PAD}><Faq /></div>
