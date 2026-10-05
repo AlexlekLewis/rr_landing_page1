@@ -168,17 +168,7 @@ const AcceptanceForm = () => {
             // Save the pre-generated ID to local storage for the success page
             localStorage.setItem('pending_registration_id', generatedId);
 
-            // Fire Zapier webhook
-            const webhookUrl = import.meta.env.VITE_LP3_WEBHOOK_URL;
-            if (webhookUrl) {
-                const formData = new URLSearchParams();
-                Object.entries(payload).forEach(([key, value]) => {
-                    if (value !== null && value !== undefined) {
-                        formData.append(key, typeof value === 'object' ? JSON.stringify(value) : String(value));
-                    }
-                });
-                fetch(webhookUrl, { method: 'POST', body: formData }).catch(err => console.warn('Webhook warning:', err));
-            }
+            // Zapier webhook removed — LandingPage3 is not routed; record is stored in Supabase above.
 
             // Redirect to Stripe Payment Link
             window.location.href = PAYMENT_LINK;

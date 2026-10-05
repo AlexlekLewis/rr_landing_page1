@@ -1,3 +1,6 @@
+-- 2026-09-27: the shared token that used to be written below was removed from this file
+-- (it had been committed to a public repo). The function no longer uses a shared token:
+-- see 20260927120000_sheet_sync_secrets_to_vault.sql.
 -- Token-gated export of power_game_inquiries for the Google Sheets sync.
 -- SECURITY DEFINER so it can read past RLS, but only when the caller passes the
 -- correct shared secret. The anon key alone CANNOT read the table directly
@@ -9,7 +12,7 @@ SECURITY DEFINER
 SET search_path = public
 AS $$
 BEGIN
-    IF p_token IS NULL OR p_token <> 'pg26_41d3a9013d39da58e110f69b5c0882e0cc5f729c151c7039' THEN
+    IF p_token IS NULL OR p_token <> '<redacted>' THEN
         RAISE EXCEPTION 'unauthorized';
     END IF;
     RETURN QUERY
