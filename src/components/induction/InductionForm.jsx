@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
+import { trackLead } from '../../lib/metaPixel';
+import { fillAttribution } from '../../lib/attribution';
 import DateOfBirthInput from '../DateOfBirthInput';
 
 // Cricket skill options. Stored as plain text in the DB, so this list can be
@@ -108,7 +110,7 @@ const InductionForm = ({ program = '' }) => {
 
         try {
             const utm = getUTMParams();
-            const payload = {
+            const payload = fillAttribution({
                 program: program || null,
                 player_name: form.player_name.trim(),
                 parent_name: form.parent_name.trim() || null,
@@ -127,7 +129,7 @@ const InductionForm = ({ program = '' }) => {
                 source: 'induction',
                 page_referrer: document.referrer || null,
                 ...utm,
-            };
+            });
 
             const { error: insertError } = await supabase
                 .from('program_inductions')
@@ -135,6 +137,8 @@ const InductionForm = ({ program = '' }) => {
 
             if (insertError) throw insertError;
 
+            // Program name comes from the Academy's own ?program= link, never the player.
+            trackLead({ program: program ? `Induction: ${String(program).slice(0, 60)}` : 'Induction' });
             setSubmitted(true);
             window.scrollTo({ top: document.getElementById('registration-form')?.offsetTop - 80 || 0, behavior: 'smooth' });
         } catch (err) {

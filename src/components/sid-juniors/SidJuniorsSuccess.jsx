@@ -5,6 +5,7 @@ import {
     CheckCircle2, CalendarDays, MapPin, Mail, ArrowRight, Navigation, LogIn,
 } from 'lucide-react';
 import { fadeUp } from '../performance-squads/shared';
+import { trackPurchaseOnReturn } from '../../lib/purchaseOnReturn';
 import {
     ANY_PAY_TO_BOOK, SESSION_VIEW, getSession, ROUTE, SID_NAME, CONTACT_EMAIL,
 } from './sidJuniorsData';
@@ -27,6 +28,8 @@ const Content = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
         document.title = `Payment Received | Junior Sessions with ${SID_NAME}`;
+        // Meta Purchase only when Stripe sent the family here (?session_id=…).
+        trackPurchaseOnReturn({ program: 'Sid junior session', fallbackValue: (picked || shown[0])?.price });
         const meta = document.createElement('meta');
         meta.name = 'robots';
         meta.content = 'noindex,nofollow';

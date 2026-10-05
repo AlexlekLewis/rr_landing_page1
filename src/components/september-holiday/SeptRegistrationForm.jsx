@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
+import { trackLead, trackCheckout } from '../../lib/metaPixel';
+import { fillAttribution } from '../../lib/attribution';
 
 // ── Omtex shirt sizing data ──────────────────────────────────
 const SHIRT_SIZES_JUNIOR = [
@@ -146,7 +148,7 @@ const SeptRegistrationForm = () => {
         if (Object.keys(e).length) { setErrors(e); return; }
         setSubmitting(true);
         try {
-            const payload = {
+            const payload = fillAttribution({
                 id:                  regId,
                 parent_name:         form.parent_name.trim(),
                 parent_email:        form.parent_email.trim().toLowerCase(),
@@ -166,7 +168,7 @@ const SeptRegistrationForm = () => {
                 on_waitlist:         false,
                 status:              'complete',
                 ...getUTM(),
-            };
+            });
             // SECURITY DEFINER upsert-by-id: client-generated id, no RLS read-back,
             // and it reliably upgrades the partial row (a bare anon UPDATE can't —
             // with no anon SELECT policy it silently matches 0 rows and loses data).
@@ -176,6 +178,8 @@ const SeptRegistrationForm = () => {
             const stripeUrl = new URL('https://buy.stripe.com/6oU8wPfY5ggZelK47x9Zm0E');
             stripeUrl.searchParams.set('client_reference_id', registrationId);
             stripeUrl.searchParams.set('prefilled_email', form.parent_email.trim().toLowerCase());
+            trackLead({ program: 'Junior Royals Holiday Program', centre: form.location });
+            trackCheckout({ program: 'Junior Royals Holiday Program', value: 330 });
             window.location.href = stripeUrl.toString();
         } catch (err) {
             setErrors({ form: `Something went wrong. Please try again or email info@rramelbourne.com` });
@@ -436,6 +440,7 @@ const SeptRegistrationForm = () => {
                     </div>
                     <button
                         onClick={handleSubmit}
+                        data-cta="Continue to payment (holiday form)" data-cta-target="stripe"
                         disabled={submitting}
                         className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 text-white font-black uppercase tracking-widest py-5 rounded-full transition-all duration-300 hover:shadow-[0_0_32px_rgba(229,6,149,0.5)] text-sm"
                     >

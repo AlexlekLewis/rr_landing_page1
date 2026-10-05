@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ArrowRight, ChevronLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+import { trackLead } from '../../lib/metaPixel';
+import { fillAttribution } from '../../lib/attribution';
 import { PROGRAM_ROW, SID_JUNIORS_ROUTE } from '../sid-juniors/sidJuniorsPromo';
 
 const AGE_GROUPS = ['U10', 'U12', 'U14', 'U16', 'U18', 'Adult'];
@@ -129,14 +131,15 @@ const PathUpcoming = ({ onBack, onSuccess }) => {
         setError('');
         try {
             const params = new URLSearchParams(window.location.search);
-            const { error: err } = await supabase.from('upcoming_program_interest').insert([{
+            const { error: err } = await supabase.from('upcoming_program_interest').insert([fillAttribution({
                 ...form,
                 utm_source: params.get('utm_source') || null,
                 utm_medium: params.get('utm_medium') || null,
                 utm_campaign: params.get('utm_campaign') || null,
                 page_referrer: document.referrer || null,
-            }]);
+            })]);
             if (err) throw err;
+            trackLead({ program: 'Upcoming programs interest' });
             onSuccess('We\'ll be in touch as soon as new programs are announced. Our team will match you to the right opportunity.');
         } catch {
             setError('Something went wrong. Please try again or email us directly.');
@@ -201,14 +204,15 @@ const PathMoreInfo = ({ onBack, onSuccess }) => {
         setError('');
         try {
             const params = new URLSearchParams(window.location.search);
-            const { error: err } = await supabase.from('general_enquiries').insert([{
+            const { error: err } = await supabase.from('general_enquiries').insert([fillAttribution({
                 ...form,
                 utm_source: params.get('utm_source') || null,
                 utm_medium: params.get('utm_medium') || null,
                 utm_campaign: params.get('utm_campaign') || null,
                 page_referrer: document.referrer || null,
-            }]);
+            })]);
             if (err) throw err;
+            trackLead({ program: 'General enquiry' });
             onSuccess('Thanks for reaching out. One of our team will be in touch within 48 hours to help find the right program for you.');
         } catch {
             setError('Something went wrong. Please try again or email us directly.');

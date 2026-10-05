@@ -5,6 +5,7 @@ import {
     Trophy, Globe2, Plane, GraduationCap, Mail, ArrowRight,
 } from 'lucide-react';
 import { ACTIVE_CENTRES } from './data';
+import { trackPurchaseOnReturn } from '../../lib/purchaseOnReturn';
 
 // Branded confirmation shown after a trial payment. Reached via each Stripe
 // trial link's after_completion redirect, e.g.
@@ -15,6 +16,8 @@ const PerformanceSquadsSuccess = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
         document.title = 'Registration Received | Rajasthan Royals Academy Performance Squads';
+        // Meta Purchase only when Stripe sent the player here (?session_id=…).
+        trackPurchaseOnReturn({ program: 'Performance Squads trial', fallbackValue: 30 });
     }, []);
 
     const centreSlug = new URLSearchParams(window.location.search).get('centre');

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CheckCircle2, Mail, Calendar, MapPin, ArrowRight, Shirt, Loader2 } from 'lucide-react';
 import { fmtAud } from './kit';
+import { trackPurchase } from '../../../lib/metaPixel';
 
 // Stripe redirect lands here after a Power Game payment. We do NOT trust the
 // redirect alone: /api/power-game-verify-session re-checks the session against
@@ -29,23 +30,22 @@ export default function PowerGameSuccess() {
       if (stash) setOrder(JSON.parse(stash));
     } catch (_) { /* no-op */ }
 
+    // Meta Purchase via the shared helper: once per Stripe session (eventID =
+    // session id), and only when the pixel is actually loaded, so the audit
+    // stamp below stays truthful. A plain visit with no session_id fires nothing.
     const firePurchase = (amountCents) => {
       try {
-        if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
-          window.fbq('track', 'Purchase', {
-            content_name: 'Power Game Program',
-            content_category: 'power-game-application',
-            value: amountCents ? amountCents / 100 : 989,
-            currency: 'AUD',
-          });
-          return true;
-        }
-      } catch (_) { /* never let analytics break the page */ }
-      return false;
+        if (typeof window === 'undefined' || typeof window.fbq !== 'function') return false;
+        return trackPurchase({
+          program: 'Power Game Program',
+          value: amountCents ? amountCents / 100 : 989,
+          sessionId: sid,
+        });
+      } catch (_) { return false; }
     };
 
     (async () => {
-      if (!sid) { setVerify({ state: 'unknown' }); firePurchase(null); return; }
+      if (!sid) { setVerify({ state: 'unknown' }); return; }
       try {
         const r = await fetch('/api/power-game-verify-session', {
           method: 'POST',

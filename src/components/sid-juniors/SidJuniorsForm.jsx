@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Check, CreditCard, Mail, UserPlus, Camera, CalendarClock } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { trackLead, trackCheckout } from '../../lib/metaPixel';
+import { fillAttribution, LEAD_ATTR_COLUMNS } from '../../lib/attribution';
 import { HONEYPOT_FIELD, isHoneypotTripped } from '../../lib/security/bot.js';
 import {
     fadeUp, SectionHeading, FieldError, inputClass, PSCheckbox,
@@ -277,7 +279,7 @@ const BookingForm = () => {
         setSubmitting(true);
         try {
             const { error } = await supabase.from(DB_TABLE).insert([
-                {
+                fillAttribution({
                     // The slug records WHICH session this booking is for.
                     match_slug: s.payToBook ? s.dbSlug : s.requestSlug,
                     match_name: s.dbName,
@@ -300,10 +302,11 @@ const BookingForm = () => {
                     amount: s.payToBook ? s.price : null,
                     page_referrer: document.referrer || null,
                     ...collectUtm(),
-                },
+                }, LEAD_ATTR_COLUMNS),
             ]);
             if (error) throw error;
             throttleRecord();
+            trackLead({ program: 'Sid junior session', centre: s.key, value: s.payToBook ? s.price : undefined });
             setDone({ firstName, email, sessionKey: s.key });
         } catch (err) {
             console.error('Sid juniors booking error:', err);
@@ -355,6 +358,9 @@ const BookingForm = () => {
                         <a
                             // The parent's email goes into Stripe, so the payment matches the booking.
                             href={`${doneSession.paymentLink}?prefilled_email=${encodeURIComponent(done.email)}`}
+                            onClick={() => trackCheckout({ program: 'Sid junior session', value: doneSession.price })}
+                            data-cta="Pay now (Sid juniors)"
+                            data-cta-target="stripe"
                             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
                         >
                             <CreditCard className="w-4 h-4" /> Pay ${doneSession.price} Now
@@ -540,6 +546,7 @@ const BookingForm = () => {
                         )}
                         <button
                             type="submit"
+                            data-cta="Submit Sid booking" data-cta-target="submit"
                             disabled={submitting}
                             className="w-full mt-7 inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-wider text-[13px] sm:text-sm rounded-full px-5 sm:px-8 py-4 transition-colors"
                         >

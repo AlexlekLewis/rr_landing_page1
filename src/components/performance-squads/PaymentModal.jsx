@@ -10,6 +10,7 @@ import {
     getSignupType,
     ACTIVE_CENTRES,
 } from './data';
+import { trackCheckout } from '../../lib/metaPixel';
 
 // Single confirmation + payment step for the whole flow. Registration writes
 // to Supabase, then this opens immediately with the right payment for whatever
@@ -51,6 +52,15 @@ const PaymentModal = ({ open, registration, onClose }) => {
     }
 
     const payLink = resolvePaymentLink(centre, signup.linkKey, sessions || 1);
+    // Meta InitiateCheckout when the player taps Pay (GST-inclusive AUD). The
+    // open age trial passes its own programName; nothing personal is sent.
+    const checkoutValue = isTrial ? TRIAL_PRICE * (sessions || 1)
+        : signup.key === 'registration_weekly' ? REGISTRATION_WEEKLY_PRICE
+        : (REGISTRATION_UPFRONT_PRICE || undefined);
+    const onPayClick = () => trackCheckout({
+        program: registration?.programName || (isTrial ? 'Performance Squads trial' : 'Performance Squads registration'),
+        value: checkoutValue,
+    });
     const needsPayment = isTrial ? sessions > 0 : true;
 
     // Lock scroll, trap focus, wire Esc.
@@ -168,6 +178,8 @@ const PaymentModal = ({ open, registration, onClose }) => {
                                 {payLink ? (
                                     <a
                                         href={payLink}
+                                        onClick={onPayClick}
+                                        data-cta="Pay (payment modal)"
                                         className="w-full inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
                                     >
                                         <CreditCard className="w-4 h-4" /> {ctaText}

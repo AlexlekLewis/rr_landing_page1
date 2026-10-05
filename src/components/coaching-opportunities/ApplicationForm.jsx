@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
+import { trackLead } from '../../lib/metaPixel';
+import { fillAttribution } from '../../lib/attribution';
 
 const SOURCE_TAG = 'careers';
 
@@ -204,7 +206,7 @@ const ApplicationForm = () => {
         try {
             const utmParams = getUTMParams();
 
-            const payload = {
+            const payload = fillAttribution({
                 full_name: form.full_name.trim(),
                 email: form.email.trim(),
                 phone: form.phone.trim(),
@@ -233,7 +235,7 @@ const ApplicationForm = () => {
                 source: SOURCE_TAG,
                 page_referrer: document.referrer || null,
                 ...utmParams,
-            };
+            });
 
             const { error: insertError } = await supabase
                 .from('coaching_opportunities_applications')
@@ -244,7 +246,7 @@ const ApplicationForm = () => {
             // Secondary insert into applications table (non-blocking)
             try {
                 const nameParts = form.full_name.trim().split(' ');
-                await supabase.from('applications').insert([{
+                await supabase.from('applications').insert([fillAttribution({
                     first_name: nameParts[0] || '',
                     last_name: nameParts.slice(1).join(' ') || '',
                     email: form.email.trim(),
@@ -255,9 +257,10 @@ const ApplicationForm = () => {
                     suburb: form.suburb.trim(),
                     page_referrer: document.referrer || null,
                     ...utmParams,
-                }]);
+                })]);
             } catch (_) { /* non-blocking */ }
 
+            trackLead({ program: 'Careers application' });
             setSubmitted(true);
         } catch (err) {
             console.error('Submission error:', err);

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Check } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { trackLead } from '../../lib/metaPixel';
+import { fillAttribution, LEAD_ATTR_COLUMNS } from '../../lib/attribution';
 import {
     fadeUp, scrollTo, SectionHeading, Label, FieldError, Chevron,
     inputClass, selectClass, PSCheckbox,
@@ -132,7 +134,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                 if (params.get(k)) utm[k] = params.get(k);
             });
             const { error } = await supabase.from('performance_squad_leads').insert([
-                {
+                fillAttribution({
                     player_name: form.player_name.trim(),
                     player_age: form.player_age.trim(),
                     parent_name: form.parent_name.trim() || null,
@@ -151,7 +153,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                     accept_social_media: form.accept_social_media,
                     page_referrer: document.referrer || null,
                     ...utm,
-                },
+                }, LEAD_ATTR_COLUMNS),
             ]);
             if (error) throw error;
 
@@ -163,6 +165,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
             };
             setSubmitted(true);
             setSubmittedResult(result);
+            trackLead({ program: isWaitlist ? 'Performance Squads interest' : 'Performance Squads trial', centre: form.preferred_centre });
             // Waitlist sign-ups take no payment — just confirm. Otherwise open
             // the payment step immediately (registration and payment are one flow).
             if (!isWaitlist) onRequestPayment?.(result);

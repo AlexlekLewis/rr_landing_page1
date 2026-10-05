@@ -5,6 +5,11 @@ import posthog from 'posthog-js'
 import { PostHogProvider } from 'posthog-js/react'
 import './index.css'
 import App from './App.jsx'
+import { captureAttribution } from './lib/attribution'
+
+// First-touch attribution: remember where this session arrived from (UTMs,
+// click ids, landing page, referrer) before any in-app navigation drops them.
+captureAttribution()
 
 // Initialize PostHog
 const posthogKey = import.meta.env.VITE_PUBLIC_POSTHOG_KEY

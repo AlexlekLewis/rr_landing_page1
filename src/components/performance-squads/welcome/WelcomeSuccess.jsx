@@ -4,6 +4,7 @@ import Navbar from '../../Navbar';
 import Footer from '../../Footer';
 import { WELCOME, HALLA_BOL } from './welcomeConfig';
 import { Eyebrow } from './welcomeShared';
+import { trackPurchaseOnReturn } from '../../../lib/purchaseOnReturn';
 
 // ─────────────────────────────────────────────────────────────
 // Where a player lands after paying the Joining Fee, and after a kit order.
@@ -20,6 +21,9 @@ const WelcomeSuccess = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
         document.title = 'You are in | Rajasthan Royals Academy Melbourne';
+        // Meta Purchase only when Stripe sent the player here (?session_id=…).
+        // The amount comes from Stripe (joining fee + first week + any kit).
+        trackPurchaseOnReturn({ program: 'Performance Squads membership' });
         let meta = document.head.querySelector('meta[name="robots"]');
         const created = !meta;
         const previous = meta ? meta.getAttribute('content') : null;

@@ -38,6 +38,7 @@ import Reviews from './components/reviews/Reviews';
 import ProgramFeedback from './components/program-feedback/ProgramFeedback';
 import SpinClub from './components/spin-club/SpinClub';
 import PostHogPageviewTracker from './components/PostHogPageviewTracker';
+import MetaPixelPageviewTracker from './components/MetaPixelPageviewTracker';
 
 // DNA Profile — lazy-loaded so it never impacts landing page bundle size
 const DNAProfileRoot = React.lazy(() => import('./DNAProfileApp/App.jsx'));
@@ -165,6 +166,7 @@ function App() {
   return (
     <div className="font-sans antialiased text-rr-dark bg-white selection:bg-rr-pink selection:text-white">
       <PostHogPageviewTracker />
+      <MetaPixelPageviewTracker />
       <RouteSeo />
       <ChunkReloadBoundary>
       <Routes>

@@ -6,6 +6,7 @@ import { REGIONS, WELCOME } from './welcomeConfig';
 import usePrices, { fmt } from './usePrices';
 import { TOPS_SIZES, SHORTS_SIZES, PANTS_SIZES, JACKET_SIZES } from '../../academy-shop/sizeData';
 import SizeGuide from '../../academy-shop/SizeGuide';
+import { trackCheckout } from '../../../lib/metaPixel';
 
 // ─────────────────────────────────────────────────────────────
 // Performance Squad kit order — PARTICIPANT prices.
@@ -137,6 +138,7 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer, onFound }) => {
             });
             const data = await res.json();
             if (!res.ok || !data.url) throw new Error(data.error || 'Checkout could not be started');
+            trackCheckout({ program: 'Performance Squads membership', value: dueToday / 100 });
             // Same tab on purpose: in-app browsers silently block new tabs.
             window.location.href = data.url;
         } catch (e) {

@@ -55,6 +55,7 @@ const PricingSection = () => {
 
                             <button
                                 onClick={scrollToForm}
+                                data-cta="Secure your place (pricing)" data-cta-target="#registration-form"
                                 className="w-full bg-white text-rr-pink font-black uppercase tracking-widest py-4 rounded-full text-sm hover:bg-white/90 transition-all duration-300"
                             >
                                 Secure Your Place Now

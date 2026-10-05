@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { supabase } from '../../lib/supabase';
+import { trackLead } from '../../lib/metaPixel';
+import { fillAttribution } from '../../lib/attribution';
 import { CLUBS, PROGRAM, SPIN_TYPES, SQUAD_STATUS } from './scOptions';
 
 const getUTMParams = () => {
@@ -67,7 +69,7 @@ const SCForm = () => {
         ].filter(Boolean).join('\n\n');
 
         const { error: insertError } = await supabase.from('applications').insert([
-            {
+            fillAttribution({
                 first_name: name.split(' ')[0],
                 last_name: name.split(' ').slice(1).join(' ') || null,
                 age: ageNum,
@@ -84,7 +86,7 @@ const SCForm = () => {
                 bio: notes,
                 page_referrer: document.referrer || null,
                 ...utmParams,
-            },
+            }),
         ]);
 
         setSubmitting(false);
@@ -93,6 +95,7 @@ const SCForm = () => {
             setError('Something went wrong sending your expression of interest. Please try again, or email info@rramelbourne.com and we will add you by hand.');
             return;
         }
+        trackLead({ program: 'Spin Club', centre: club?.key });
         setSubmitted(true);
     };
 
@@ -242,6 +245,7 @@ const SCForm = () => {
 
                     <button
                         type="submit"
+                        data-cta="Submit Spin Club interest" data-cta-target="submit"
                         disabled={submitting}
                         className="w-full sm:w-auto bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 text-white font-bold uppercase tracking-widest px-10 py-4 rounded-full transition-all duration-300"
                     >

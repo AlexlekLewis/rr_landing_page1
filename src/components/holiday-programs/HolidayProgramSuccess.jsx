@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { trackPurchase } from '../../lib/metaPixel';
 
 const HolidayProgramSuccess = () => {
     const navigate = useNavigate();
@@ -9,47 +10,35 @@ const HolidayProgramSuccess = () => {
         window.scrollTo(0, 0);
     }, []);
 
-    // Fire the Meta Purchase conversion. Stripe's Payment Link redirects here after
-    // payment; we verify the checkout session server-side before firing (never fire
-    // when Stripe says unpaid), use the real charged amount, and guard against a
-    // double-fire on reload. The base Pixel (fbq init + PageView) lives in index.html.
+    // Fire the Meta Purchase conversion. Stripe's Payment Link redirects here with
+    // ?session_id=…; we verify the checkout session server-side before firing
+    // (never fire when Stripe says unpaid) and use the real charged amount.
+    // A plain visit with no session_id fires nothing. trackPurchase de-dupes per
+    // session id, so a reload doesn't count twice.
     useEffect(() => {
-        const firePurchase = (valueAud) => {
-            try {
-                if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
-                    window.fbq('track', 'Purchase', {
-                        content_name: 'Junior Royals Holiday Program',
-                        content_category: 'holiday-program',
-                        value: (typeof valueAud === 'number' && valueAud > 0) ? valueAud : 299,
-                        currency: 'AUD',
-                    });
-                }
-            } catch (e) { /* never let analytics break the page */ }
-        };
-
         let sid = '';
         try { sid = new URLSearchParams(window.location.search).get('session_id') || ''; } catch (e) { /* no-op */ }
+        if (!sid) return; // not reached from a completed payment
 
-        // De-dupe: fire at most once per checkout session (or once per visit if no id).
-        const guardKey = `jr_holiday_purchase_fired:${sid || 'nosession'}`;
-        try { if (sessionStorage.getItem(guardKey)) return; } catch (e) { /* no-op */ }
-        const markFired = () => { try { sessionStorage.setItem(guardKey, '1'); } catch (e) { /* no-op */ } };
+        const firePurchase = (valueAud) => trackPurchase({
+            program: 'Junior Royals Holiday Program',
+            value: (typeof valueAud === 'number' && valueAud > 0) ? valueAud : 330,
+            sessionId: sid,
+        });
 
         (async () => {
-            if (!sid) { firePurchase(); markFired(); return; } // no session to verify — fire once
             try {
                 const r = await fetch(`/api/get-stripe-payment?session_id=${encodeURIComponent(sid)}`);
                 const data = r.ok ? await r.json() : null;
                 if (data && data.payment_status === 'paid') {
                     firePurchase(typeof data.amount_total === 'number' ? data.amount_total / 100 : undefined);
-                    markFired();
                 } else if (data && data.payment_status && data.payment_status !== 'paid') {
                     // Stripe says not paid yet (async/processing) — do NOT fire a Purchase.
                 } else {
-                    firePurchase(); markFired(); // verification unreachable — don't lose the conversion
+                    firePurchase(); // verification unreachable — don't lose the conversion
                 }
             } catch (e) {
-                firePurchase(); markFired();
+                firePurchase();
             }
         })();
     }, []);

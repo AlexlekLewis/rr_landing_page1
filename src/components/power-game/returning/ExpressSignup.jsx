@@ -29,6 +29,7 @@ import { buildApplicationRow } from '../apply/submit';
 import UniformSizeGuideModal from '../UniformSizeGuideModal';
 import SessionChangeNotice from '../../SessionChangeNotice';
 import { fmtAud } from '../apply/kit';
+import { trackCheckout } from '../../../lib/metaPixel';
 import { squadsForPlacement, CENTRE_BY_SLUG, ACTIVE_CENTRES } from '../../../lib/booking/squads';
 import { PG_BANDS, homeBandIdx, eligibleBands as eligibleBandsFor } from '../../../lib/scoring/guardrail';
 import { TOPS_SIZES, SHORTS_SIZES, PANTS_SIZES, JACKET_SIZES } from '../../academy-shop/sizeData';
@@ -339,7 +340,11 @@ export default function ExpressSignup({ config }) {
           }),
         });
         const data = await r.json().catch(() => null);
-        if (data?.url) { window.location.href = data.url; return; }
+        if (data?.url) {
+          trackCheckout({ program: 'Power Game Program', value: BLOCK_FEE_CENTS / 100 });
+          window.location.href = data.url;
+          return;
+        }
         setErrors([data?.error || 'Could not start checkout — please try again.']);
         return;
       }

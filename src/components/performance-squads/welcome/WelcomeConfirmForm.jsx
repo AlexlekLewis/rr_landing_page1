@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { supabase } from '../../../lib/supabase';
+import { trackLead } from '../../../lib/metaPixel';
+import { fillAttribution } from '../../../lib/attribution';
 import { Label, FieldError, Chevron, inputClass, selectClass, PSCheckbox, scrollTo } from '../shared';
 import { REGIONS } from './welcomeConfig';
 import { Eyebrow } from './welcomeShared';
@@ -93,7 +95,7 @@ const WelcomeConfirmForm = ({ config, isDraft, onSaved }) => {
             // Plain insert, no .select(): asking for the row back needs read access
             // the public doesn't have, and would make the whole insert fail.
             const { error } = await supabase.from('performance_squads_registrations').insert([
-                {
+                fillAttribution({
                     id,
                     // Marks a selected player's confirmation, so it can never be mistaken
                     // for a trial sign-up. squad_name stays empty on purpose.
@@ -117,10 +119,11 @@ const WelcomeConfirmForm = ({ config, isDraft, onSaved }) => {
                     utm_source: params.get('utm_source') || null,
                     utm_medium: params.get('utm_medium') || null,
                     utm_campaign: params.get('utm_campaign') || null,
-                },
+                }),
             ]);
             if (error) throw error;
             setSaved({ id, draft: false });
+            trackLead({ program: 'Performance Squads place confirmed', centre: region.slug });
             // Step 2 (kit) reuses these — the player never types their details twice.
             onSaved?.({
                 registration_id: id,

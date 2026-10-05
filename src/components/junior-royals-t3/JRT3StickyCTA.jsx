@@ -26,7 +26,7 @@ const JRT3StickyCTA = () => {
                 <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 100, opacity: 0 }}
                     transition={{ duration: 0.3 }} className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-4 pt-3 bg-gradient-to-t from-rr-dark/95 to-transparent">
                     <div className="max-w-lg mx-auto">
-                        <button onClick={() => document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' })}
+                        <button onClick={() => document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' })} data-cta="Register interest (sticky bar)" data-cta-target="#registration-form"
                             className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] flex items-center justify-center gap-3 text-sm">
                             {JR_T4.stickyLabel}
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

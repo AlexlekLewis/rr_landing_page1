@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
+import { trackLead } from '../../lib/metaPixel';
+import { fillAttribution } from '../../lib/attribution';
 
 const LEVEL_OPTIONS = [
     'Junior / local club',
@@ -118,7 +120,7 @@ const CoachesDayForm = () => {
         try {
             const utm = getUTMParams();
             const coachingRoles = [coachLevel, form.club_teams.trim()].filter(Boolean).join(' | ');
-            const payload = {
+            const payload = fillAttribution({
                 coach_name: form.coach_name.trim(),
                 email: form.email.trim(),
                 phone: form.phone.trim() || null,
@@ -131,7 +133,7 @@ const CoachesDayForm = () => {
                 source: 'coaches-day-site',
                 page_referrer: document.referrer || null,
                 ...utm,
-            };
+            });
 
             const { error: insertError } = await supabase
                 .from('coaches_day_registrations')
@@ -139,6 +141,7 @@ const CoachesDayForm = () => {
 
             if (insertError) throw insertError;
 
+            trackLead({ program: 'Coaches Day' });
             setSubmitted(true);
             window.scrollTo({ top: (document.getElementById('registration-form')?.offsetTop || 80) - 80, behavior: 'smooth' });
         } catch (err) {

@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { fadeUp, scrollTo, SectionHeading } from '../performance-squads/shared';
 import { ACTIVE_MATCH } from './matchConfig';
 import MatchRegistrationForm from './MatchRegistrationForm';
@@ -63,6 +64,8 @@ const MatchRegistration = ({ match = ACTIVE_MATCH }) => {
     const [payModal, setPayModal] = useState(null);
     const m = match;
     const wl = m.waitlist;
+    // Page views + cta_click (buttons carrying data-cta) into page_analytics.
+    usePageAnalytics(typeof window !== 'undefined' ? window.location.pathname : '/match-registration');
 
     // ── Hidden page: noindex + title ──
     useEffect(() => {
@@ -145,6 +148,8 @@ const MatchRegistration = ({ match = ACTIVE_MATCH }) => {
                                 <motion.button
                                     initial="hidden" animate="visible" variants={fadeUp} custom={0.25}
                                     onClick={() => scrollTo('register-pay')}
+                                    data-cta="Register as an emergency (hero)"
+                                    data-cta-target="#register-pay"
                                     className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-9 py-4 transition-colors"
                                 >
                                     Register As An Emergency <ArrowRight className="w-4 h-4" />
@@ -195,6 +200,8 @@ const MatchRegistration = ({ match = ACTIVE_MATCH }) => {
                                 <motion.button
                                     initial="hidden" animate="visible" variants={fadeUp} custom={0.25}
                                     onClick={() => scrollTo('register-pay')}
+                                    data-cta="Register and pay (hero)"
+                                    data-cta-target="#register-pay"
                                     className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-9 py-4 transition-colors"
                                 >
                                     Register &amp; Pay · ${m.price} <ArrowRight className="w-4 h-4" />

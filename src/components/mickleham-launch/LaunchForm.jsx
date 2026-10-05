@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
+import { trackLead } from '../../lib/metaPixel';
+import { fillAttribution } from '../../lib/attribution';
 import { CENTRE, OFFER, endDateLabel } from './launchConfig';
 
 const DAYS = [
@@ -62,7 +64,7 @@ const LaunchForm = () => {
         setSubmitting(true);
 
         const utm = getUTMParams();
-        const row = {
+        const row = fillAttribution({
             centre: 'mickleham',
             player_name: form.player_name.trim(),
             age: ageNum,
@@ -74,7 +76,7 @@ const LaunchForm = () => {
             source: 'mickleham-launch',
             page_referrer: document.referrer || null,
             ...utm,
-        };
+        });
 
         const { error: insertError } = await supabase.from('private_coaching_eoi').insert([row]);
         if (insertError) {
@@ -84,7 +86,7 @@ const LaunchForm = () => {
         }
 
         try {
-            await supabase.from('applications').insert([{
+            await supabase.from('applications').insert([fillAttribution({
                 first_name: form.player_name.trim().split(' ')[0],
                 last_name: form.player_name.trim().split(' ').slice(1).join(' '),
                 email: form.email.trim().toLowerCase(),
@@ -93,9 +95,10 @@ const LaunchForm = () => {
                 program_type: 'Private Coaching — Mickleham Launch Special',
                 page_referrer: document.referrer || null,
                 ...utm,
-            }]);
+            })]);
         } catch (_) { /* non-blocking */ }
 
+        trackLead({ program: 'Mickleham Launch Special consultation', centre: 'mickleham' });
         setSubmitting(false);
         setSubmitted(true);
     };

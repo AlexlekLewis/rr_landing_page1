@@ -12,6 +12,7 @@ import { fmtAud } from './kit';
 import DnaRevealCard from './DnaRevealCard';
 import CentreAvailabilityGrid from '../CentreAvailabilityGrid';
 import { submitApplication, buildApplicationRow } from './submit';
+import { trackCheckout } from '../../../lib/metaPixel';
 import UniformSizeGuideModal from '../UniformSizeGuideModal';
 import { TOPS_SIZES, SHORTS_SIZES, PANTS_SIZES, JACKET_SIZES, KIDS_AGE_CHART } from '../../academy-shop/sizeData';
 
@@ -278,7 +279,11 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
           }),
         });
         const data = await r.json();
-        if (data?.url) { window.location.href = data.url; return; }
+        if (data?.url) {
+          trackCheckout({ program: 'Power Game Program', value: BLOCK_FEE });
+          window.location.href = data.url;
+          return;
+        }
         setErrors([data?.error || 'Could not start checkout — please try again.']);
         return;
       }
