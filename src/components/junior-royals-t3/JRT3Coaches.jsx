@@ -20,15 +20,6 @@ const coaches = [
         img: '/assets/coaches/alex-thornhill.jpg',
         imgPosition: 'object-center',
     },
-    {
-        name: 'Andrew Walton',
-        role: 'Junior Royals Coach',
-        location: 'Melbourne',
-        bio: 'A Cricket Australia Level 3 High Performance accredited coach with over a decade of Premier Cricket Head Coach experience.',
-        fullBio: 'A Cricket Australia Level 3 High Performance accredited coach with over a decade of Premier Cricket Head Coach experience. Andrew has developed players through to Sheffield Shield, BBL and international honours, working with the likes of Glenn Maxwell, Chris Rogers and Sam Harper, and has completed 15 visits to India as a specialist coach at high-performance academies in Bangalore, Mysore and Mumbai. Currently Director of Coaching at Scotch College, Andrew brings a rare blend of technical excellence and data-driven performance thinking to the Rajasthan Royals Academy.',
-        img: '/assets/coaches/andrew-walton.jpg',
-        imgPosition: 'object-center',
-    },
 ];
 
 const CoachCard = ({ coach, i }) => {
@@ -118,7 +109,7 @@ const JRT3Coaches = () => (
                 </motion.p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 max-w-3xl mx-auto">
                 {coaches.map((coach, i) => (
                     <CoachCard key={coach.name} coach={coach} i={i} />
                 ))}

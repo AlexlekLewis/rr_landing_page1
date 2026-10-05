@@ -5,6 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import { supabase } from '../../lib/supabase';
+import { pickupVenueDetails } from './pickupVenues';
 
 const ShopSuccess = () => {
   const [updated, setUpdated] = useState(false);
@@ -51,11 +52,7 @@ const ShopSuccess = () => {
   const isPickup = fulfillment === 'pickup';
   const isExpress = fulfillment === 'express';
 
-  const venueDetails = pickupVenue === 'bundoora'
-    ? { name: 'Cutting Edge Cricket — Bundoora', address: 'Unit 7, Factory 19, Enterprise Drive, Bundoora VIC 3083' }
-    : pickupVenue === 'hallam'
-      ? { name: 'Cricket Connect — Hallam', address: '22 Technology CCT, Hallam VIC 3803' }
-      : null;
+  const venueDetails = pickupVenueDetails(pickupVenue);
 
   return (
     <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white">

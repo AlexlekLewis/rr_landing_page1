@@ -32,8 +32,8 @@ const CoachesHero = () => {
                     </h1>
                     <p className="text-base md:text-lg text-white/80 font-medium leading-relaxed max-w-2xl mb-10">
                         An academy is only as good as the people on the floor of the nets. Meet the
-                        coaching group that leads every session across Mickleham, Hallam and
-                        Williamstown — and the standards they hold every player to.
+                        coaching group that leads every session at Mickleham and Cranbourne North —
+                        and the standards they hold every player to.
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4">

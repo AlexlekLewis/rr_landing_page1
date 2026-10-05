@@ -84,8 +84,9 @@ const PROGRAMS_DROPDOWN = [
     { label: 'Performance Squads Open Trial · 16-25', route: '/performance-squads-open-trial', badge: 'Mickleham 5 Oct · Cranbourne Full', badgeColor: 'bg-rr-pink' },
     { label: PROGRAM_ROW.navLabel, route: SID_JUNIORS_ROUTE, badge: PROGRAM_ROW.navBadge, badgeColor: 'bg-rr-pink' },
     { label: 'Spin Club · Spinners 10-25', route: '/spin-club', badge: 'Registering Interest', badgeColor: 'bg-green-500' },
-    { label: 'Junior Royals Holiday Program · Cranbourne North', route: '/junior-royals-holiday', badge: '30 Sep – 2 Oct', badgeColor: 'bg-rr-pink' },
     // REVIEW 16 Dec 2026 — last Term 4 session; the badge is wrong after that.
+    // Holiday camp (/junior-royals-holiday) taken off every promo surface 5 Oct 2026
+    // (Alex): that camp finished 2 Oct. The page stays at its address for old links.
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Wednesdays from 28 Oct', badgeColor: 'bg-green-500' },
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Register Your Interest', badgeColor: 'bg-green-500' },
     { label: 'Private Coaching', route: '/mickleham', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },

@@ -3,25 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ShoppingBag, Plus, Minus, Trash2, Truck, MapPin } from 'lucide-react';
 import { useCart } from './CartContext';
 import { supabase } from '../../lib/supabase';
+import { PICKUP_VENUES, PICKUP_SUMMARY } from './pickupVenues';
 
 const FULFILLMENT_OPTIONS = [
-  { id: 'pickup',   label: 'Academy Pickup (Free)', icon: MapPin, price: 0, description: 'Cutting Edge Cricket — Bundoora or Cricket Connect — Hallam' },
+  { id: 'pickup',   label: 'Academy Pickup (Free)', icon: MapPin, price: 0, description: PICKUP_SUMMARY },
   { id: 'standard', label: 'Standard Shipping', icon: Truck,   price: 1200, description: 'Delivered to your address (5–7 business days)' },
   { id: 'express',  label: 'Express Shipping',  icon: Truck,   price: 2000, description: 'Delivered to your address (1–3 business days)' },
 ];
 
-const PICKUP_VENUES = [
-  {
-    id: 'bundoora',
-    name: 'Cutting Edge Cricket — Bundoora',
-    address: 'Unit 7, Factory 19, Enterprise Drive, Bundoora VIC 3083',
-  },
-  {
-    id: 'hallam',
-    name: 'Cricket Connect — Hallam',
-    address: '22 Technology CCT, Hallam VIC 3803',
-  },
-];
 
 const CartDrawer = () => {
   const { items, isOpen, setIsOpen, removeItem, updateQuantity, totalItems, totalPrice, clearCart } = useCart();

@@ -8,6 +8,7 @@
 // ============================================================
 
 import Stripe from 'stripe';
+import { pickupLabel } from './_lib/pickupVenues.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -55,11 +56,7 @@ export default async function handler(req, res) {
     const { pickupVenue, mtoSurcharge, mtoQty } = req.body;
     let shippingOptions;
     if (fulfillment === 'pickup') {
-      const venueLabel = pickupVenue === 'bundoora'
-        ? 'Pickup — Cutting Edge Cricket, Unit 7/19 Enterprise Dr, Bundoora 3083'
-        : pickupVenue === 'hallam'
-          ? 'Pickup — Cricket Connect, 22 Technology CCT, Hallam 3803'
-          : 'Academy Pickup';
+      const venueLabel = pickupLabel(pickupVenue);
       shippingOptions = [{
         shipping_rate_data: {
           type: 'fixed_amount',

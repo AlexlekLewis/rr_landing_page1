@@ -11,6 +11,8 @@
 //   RESEND_BCC        = info@rramelbourne.com   (optional, BCC ops inbox)
 // ============================================================
 
+import { pickupVenue as lookupPickupVenue } from './pickupVenues.js';
+
 const FROM_DEFAULT = 'Royals Melbourne Academy <onboarding@resend.dev>';
 
 const formatAUD = (cents) =>
@@ -40,11 +42,7 @@ const renderItemsHtml = (items = []) => items
 
 const renderFulfillmentHtml = ({ fulfillmentMethod, pickupVenue, shippingAddress }) => {
   if (fulfillmentMethod === 'pickup') {
-    const venue = pickupVenue === 'bundoora'
-      ? { name: 'Cutting Edge Cricket — Bundoora', address: 'Unit 7, Factory 19, Enterprise Drive, Bundoora VIC 3083' }
-      : pickupVenue === 'hallam'
-        ? { name: 'Cricket Connect — Hallam', address: '22 Technology CCT, Hallam VIC 3803' }
-        : null;
+    const venue = lookupPickupVenue(pickupVenue);
     return `
       <p style="margin:0 0 8px;color:#0a0a14;font-weight:700">Academy Pickup</p>
       ${venue ? `
