@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { supabase } from '../../lib/supabase';
+import { trackLead } from '../../lib/metaPixel';
+import { fillAttribution } from '../../lib/attribution';
 import { Link } from 'react-router-dom';
 import { JR_T4 } from './jrTerm4Data';
 import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squads/data';
@@ -74,7 +76,7 @@ const JRT3RegistrationForm = () => {
         setSubmitting(true);
         try {
             const utm = getUTMParams();
-            const row = {
+            const row = fillAttribution({
                 parent_name: form.parent_name.trim(),
                 parent_email: form.parent_email.trim(),
                 parent_phone: form.parent_phone.trim() || null,
@@ -85,7 +87,7 @@ const JRT3RegistrationForm = () => {
                 source: ENTRY_SOURCE,
                 page_referrer: document.referrer || null,
                 ...utm,
-            };
+            });
             let { error } = await supabase.from('jr_term4_waitlist').insert([row]);
             if (error && error.code === '23514') {
                 // The database refused a value. Save the entry anyway, with the real
@@ -96,14 +98,7 @@ const JRT3RegistrationForm = () => {
                 }]));
             }
             if (error) throw error;
-            try {
-                if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
-                    window.fbq('track', 'Lead', {
-                        content_name: 'Junior Royals Term 4 Entry',
-                        content_category: `junior-royals-term4-${form.preferred_centre}`,
-                    });
-                }
-            } catch (_) { /* never let analytics block the submit */ }
+            trackLead({ program: 'Junior Royals Term 4 Entry', centre: form.preferred_centre });
             setDone(true);
         } catch (err) {
             console.error(err);
@@ -177,7 +172,7 @@ const JRT3RegistrationForm = () => {
                                 </div>
                             </div>
                             {errors.form && <div className="bg-red-50 border border-red-200 rounded-xl p-4 mt-6"><p className="text-red-600 text-sm font-medium">{errors.form}</p></div>}
-                            <button type="submit" disabled={submitting}
+                            <button type="submit" disabled={submitting} data-cta="Submit Term 4 entry" data-cta-target="submit"
                                 className="mt-8 w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]">
                                 {submitting ? 'Sending…' : JR_T4.ctaLabel}
                             </button>

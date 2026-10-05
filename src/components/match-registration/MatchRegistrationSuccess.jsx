@@ -4,6 +4,7 @@ import {
     CheckCircle2, MapPin, Clock, Shirt, AlertTriangle, Mail, ArrowRight,
 } from 'lucide-react';
 import { ACTIVE_MATCH } from './matchConfig';
+import { trackPurchaseOnReturn } from '../../lib/purchaseOnReturn';
 
 // Branded confirmation shown after payment. Reached via the Stripe Payment
 // Link's after_completion redirect:
@@ -14,6 +15,8 @@ const MatchRegistrationSuccess = ({ match = ACTIVE_MATCH }) => {
     useEffect(() => {
         window.scrollTo(0, 0);
         document.title = `Spot Confirmed | ${m.name}`;
+        // Meta Purchase only when Stripe sent the family here (?session_id=…).
+        trackPurchaseOnReturn({ program: m.name, fallbackValue: m.price });
         const meta = document.createElement('meta');
         meta.name = 'robots';
         meta.content = 'noindex,nofollow';

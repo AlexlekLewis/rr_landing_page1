@@ -6,6 +6,7 @@ import Navbar from '../Navbar';
 import Footer from '../Footer';
 import { supabase } from '../../lib/supabase';
 import { pickupVenueDetails } from './pickupVenues';
+import { trackPurchaseOnReturn } from '../../lib/purchaseOnReturn';
 
 const ShopSuccess = () => {
   const [updated, setUpdated] = useState(false);
@@ -16,6 +17,9 @@ const ShopSuccess = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    // Meta Purchase only when Stripe sent the buyer here (?session_id=…);
+    // the amount comes from Stripe.
+    trackPurchaseOnReturn({ program: 'Academy Shop' });
     // Clear localStorage fallbacks
     localStorage.removeItem('shop_fulfillment');
     localStorage.removeItem('shop_pickup_venue');

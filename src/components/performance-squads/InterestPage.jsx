@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Check, ArrowRight } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { trackLead } from '../../lib/metaPixel';
+import { fillAttribution, LEAD_ATTR_COLUMNS } from '../../lib/attribution';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import PartnerStack from '../power-game/PartnerStack';
@@ -116,7 +118,7 @@ const InterestPage = () => {
                 if (params.get(k)) utm[k] = params.get(k);
             });
             const { error } = await supabase.from('performance_squad_leads').insert([
-                {
+                fillAttribution({
                     player_name: form.player_name.trim(),
                     player_age: form.player_age.trim(),
                     parent_name: form.parent_name.trim() || null,
@@ -134,10 +136,11 @@ const InterestPage = () => {
                     accept_social_media: form.accept_social_media,
                     page_referrer: document.referrer || null,
                     ...utm,
-                },
+                }, LEAD_ATTR_COLUMNS),
             ]);
             if (error) throw error;
             setSubmitted(true);
+            trackLead({ program: 'Performance Squads interest (unable to trial)', centre: form.preferred_centre });
             window.scrollTo({ top: 0, behavior: 'smooth' });
         } catch (err) {
             console.error('Performance Squads interest registration error:', err);

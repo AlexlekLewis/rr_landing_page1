@@ -42,6 +42,7 @@ const StickyCTA = ({ label = 'Register & Pay \u2014 Trial Spot', targetId = 'reg
                 >
                     <button
                         onClick={scrollToForm}
+                        data-cta="Register (sticky bar)" data-cta-target="#register-pay"
                         className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.45)] flex items-center justify-center gap-3 text-sm"
                     >
                         <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />

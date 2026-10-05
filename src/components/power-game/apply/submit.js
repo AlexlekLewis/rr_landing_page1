@@ -13,6 +13,7 @@
 // "pgp2026" at production go-live.
 // ============================================================
 import { calcAge, isMinor, REFERRAL_CODE } from "./flow";
+import { trackLead } from "../../../lib/metaPixel";
 // NOTE: the supabase client is imported lazily inside submitApplication() so that
 // buildApplicationRow (pure) stays importable in tests without instantiating a
 // client (createClient throws when env vars are absent).
@@ -129,15 +130,8 @@ export async function submitApplication(form, placement, squad, opts = {}) {
   const { error } = await supabase.from("power_game_applications").insert([payload]);
   if (error) throw error;
 
-  // Meta Pixel — fire a Lead conversion on successful application submit.
-  try {
-    if (typeof window !== "undefined" && typeof window.fbq === "function") {
-      window.fbq("track", "Lead", {
-        content_name: "Power Game Program",
-        content_category: "power-game-application",
-      });
-    }
-  } catch (_) { /* never let analytics block the submit */ }
+  // Meta Pixel — Lead on successful application submit (program + centre only).
+  trackLead({ program: "Power Game Program", centre: row.venue || undefined });
 
   return { id, row };
 }

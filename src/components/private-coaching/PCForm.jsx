@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
+import { trackLead } from '../../lib/metaPixel';
+import { fillAttribution } from '../../lib/attribution';
 import { CENTRE, DAY_AVAILABILITY } from './pcOptions';
 
 const getUTMParams = () => {
@@ -69,7 +71,7 @@ const PCForm = () => {
         setSubmitting(true);
 
         const utmParams = getUTMParams();
-        const row = {
+        const row = fillAttribution({
             centre: CENTRE.slug,
             player_name: form.player_name.trim(),
             age: ageNum,
@@ -81,7 +83,7 @@ const PCForm = () => {
             notes: form.notes.trim() || null,
             page_referrer: document.referrer || null,
             ...utmParams,
-        };
+        });
 
         const { error: insertError } = await supabase.from('private_coaching_eoi').insert([row]);
 
@@ -93,7 +95,7 @@ const PCForm = () => {
 
         // Secondary CRM insert — never blocks the flow.
         try {
-            await supabase.from('applications').insert([{
+            await supabase.from('applications').insert([fillAttribution({
                 first_name: form.player_name.trim().split(' ')[0],
                 last_name: form.player_name.trim().split(' ').slice(1).join(' '),
                 email: form.email.trim().toLowerCase(),
@@ -102,9 +104,10 @@ const PCForm = () => {
                 program_type: 'Private Coaching — Mickleham',
                 ...utmParams,
                 page_referrer: document.referrer || null,
-            }]);
+            })]);
         } catch (_) { /* non-blocking */ }
 
+        trackLead({ program: 'Private Coaching', centre: CENTRE.slug });
         setSubmitting(false);
         setSubmitted(true);
     };
@@ -206,6 +209,7 @@ const PCForm = () => {
 
                     <button
                         type="submit"
+                        data-cta="Submit private coaching enquiry" data-cta-target="submit"
                         disabled={submitting}
                         className="w-full group bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] flex items-center gap-3 justify-center"
                     >

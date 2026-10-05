@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Check, Video, VideoOff, Mail } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { trackLead } from '../../lib/metaPixel';
+import { fillAttribution, LEAD_ATTR_COLUMNS } from '../../lib/attribution';
 import {
     fadeUp, SectionHeading, Label, FieldError, Chevron,
     inputClass, selectClass,
@@ -139,7 +141,7 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
             });
 
             const { error } = await supabase.from('match_registrations').insert([
-                {
+                fillAttribution({
                     // Emergencies get their own slug so they never mix with
                     // the players who registered and paid.
                     match_slug: wl ? wl.slug : match.slug,
@@ -162,11 +164,12 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
                     amount: wl ? null : match.price,
                     page_referrer: document.referrer || null,
                     ...utm,
-                },
+                }, LEAD_ATTR_COLUMNS),
             ]);
             if (error) throw error;
 
             setSubmitted(true);
+            trackLead({ program: wl ? `${match.name} (emergency list)` : match.name, value: wl ? undefined : match.price });
             // Registration and payment are one flow — open payment immediately.
             // Never on the emergency list: nothing is paid there.
             if (!wl) onRequestPayment?.({ playerName: form.player_name.trim() });
@@ -247,6 +250,7 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
                         </p>
                         <button
                             onClick={() => onRequestPayment?.({ playerName: form.player_name.trim() })}
+                            data-cta="Pay now (after registering)" data-cta-target="payment-modal"
                             className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
                         >
                             Complete Payment <ArrowRight className="w-4 h-4" />
@@ -454,6 +458,7 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
 
                         <button
                             onClick={handleSubmit}
+                            data-cta="Submit match registration" data-cta-target="submit"
                             disabled={submitting}
                             className="w-full mt-8 inline-flex items-center justify-center gap-2 whitespace-nowrap bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-wider text-[13px] sm:text-sm rounded-full px-5 sm:px-8 py-4 transition-colors"
                         >

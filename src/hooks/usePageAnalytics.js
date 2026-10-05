@@ -98,6 +98,12 @@ const usePageAnalytics = (pagePath, options = {}) => {
             referrer: document.referrer,
             url: window.location.href,
             timestamp: new Date().toISOString(),
+            // Browser language(s) — the audience is multilingual; this tells us
+            // which languages families actually read the site in.
+            ...(typeof navigator !== 'undefined' ? {
+                language: navigator.language || null,
+                languages: (navigator.languages || []).slice(0, 5),
+            } : {}),
         });
 
         // ─── 2. Scroll Depth Tracking ───────────────────────────
@@ -151,8 +157,21 @@ const usePageAnalytics = (pagePath, options = {}) => {
         const handleCtaClick = (e) => {
             const target = e.target.closest('[data-cta]');
             if (target) {
+                const label = target.dataset.cta || target.textContent?.trim().substring(0, 60);
+                // Where the button goes: an explicit data-cta-target, else a
+                // link's path (same-site) or host (external, e.g. Stripe). Never
+                // the query string, which can carry personal details.
+                let dest = target.dataset.ctaTarget || null;
+                if (!dest && target.getAttribute('href')) {
+                    try {
+                        const u = new URL(target.getAttribute('href'), window.location.origin);
+                        dest = u.origin === window.location.origin ? `${u.pathname}${u.hash}` : u.host;
+                    } catch { /* ignore */ }
+                }
                 enqueue('cta_click', {
-                    cta: target.dataset.cta || target.textContent?.trim().substring(0, 60),
+                    cta: label,
+                    label,
+                    target: dest,
                     section: target.closest('[id]')?.id || 'unknown',
                 });
             }

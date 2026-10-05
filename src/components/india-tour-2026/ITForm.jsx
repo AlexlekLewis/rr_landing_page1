@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
+import { trackLead } from '../../lib/metaPixel';
+import { fillAttribution } from '../../lib/attribution';
 import DateOfBirthInput from '../DateOfBirthInput';
 import { getPlayerTypes, TOURS, TOUR_STATUS } from './itCopy';
 
@@ -221,7 +223,7 @@ const ITForm = ({ copy, referralCode, referralName }) => {
                 'Agreed to be contacted about India tours: yes',
             ].filter(Boolean).join('\n');
 
-            const { error: insertError } = await supabase.from('applications').insert([{
+            const { error: insertError } = await supabase.from('applications').insert([fillAttribution({
                 first_name: nameParts[0] || '',
                 last_name: nameParts.slice(1).join(' ') || '',
                 dob: form.player_dob || null,
@@ -244,9 +246,10 @@ const ITForm = ({ copy, referralCode, referralName }) => {
                 bio,
                 page_referrer: document.referrer || null,
                 ...utm,
-            }]);
+            })]);
             if (insertError) throw insertError;
 
+            trackLead({ program: 'Tours expression of interest' });
             setSubmitted(true);
             window.scrollTo({ top: document.getElementById('register')?.offsetTop || 0, behavior: 'smooth' });
         } catch (err) {

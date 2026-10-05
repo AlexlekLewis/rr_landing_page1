@@ -61,6 +61,7 @@ const SidJuniorsHero = () => (
                     <button
                         type="button"
                         onClick={() => scrollTo('register-pay')}
+                        data-cta="Book a place (hero)" data-cta-target="#register-pay"
                         className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
                     >
                         {CTA} <ArrowRight className="w-4 h-4" />

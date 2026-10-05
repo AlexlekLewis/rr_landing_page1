@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Check, CalendarClock } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { trackLead } from '../../lib/metaPixel';
+import { fillAttribution, LEAD_ATTR_COLUMNS } from '../../lib/attribution';
 import { HONEYPOT_FIELD, isHoneypotTripped } from '../../lib/security/bot.js';
 import {
     fadeUp, SectionHeading, Label, FieldError, Chevron,
@@ -176,7 +178,7 @@ const WaitlistCapture = () => {
         setSubmitting(true);
         try {
             const { error } = await supabase.from('performance_squad_leads').insert([
-                {
+                fillAttribution({
                     player_name: form.player_name.trim(),
                     player_age: form.player_age.trim(),
                     email: form.email.trim(),
@@ -198,10 +200,11 @@ const WaitlistCapture = () => {
                     accept_social_media: false,
                     page_referrer: document.referrer || null,
                     ...collectUtm(),
-                },
+                }, LEAD_ATTR_COLUMNS),
             ]);
             if (error) throw error;
             throttleRecord();
+            trackLead({ program: 'Open Age T20 Trial (waitlist)', centre: form.centre });
             setDone(true);
         } catch (err) {
             console.error('Open age trial waitlist error:', err);
@@ -421,7 +424,7 @@ const BookingForm = ({ onRequestPayment }) => {
         setSubmitting(true);
         try {
             const { error } = await supabase.from('performance_squad_leads').insert([
-                {
+                fillAttribution({
                     player_name: form.player_name.trim(),
                     player_age: form.player_age.trim(),
                     parent_name: form.parent_name.trim() || null,
@@ -447,7 +450,7 @@ const BookingForm = ({ onRequestPayment }) => {
                     accept_social_media: form.accept_social_media,
                     page_referrer: document.referrer || null,
                     ...collectUtm(),
-                },
+                }, LEAD_ATTR_COLUMNS),
             ]);
             if (error) throw error;
             throttleRecord();
@@ -461,9 +464,11 @@ const BookingForm = ({ onRequestPayment }) => {
                 sessionLabels: form.trial_session_dates.map(getSessionLabel),
                 arrival: arrivalLine(TRIAL_SESSIONS.find((s) => s.id === form.trial_session_dates[0])),
                 payerEmailHint: true,
+                programName: 'Open Age T20 Trial',
             };
             setSubmitted(true);
             setSubmittedResult(result);
+            trackLead({ program: 'Open Age T20 Trial', centre: selectedCentreSlug });
             onRequestPayment?.(result);
         } catch (err) {
             console.error('Open age trial registration error:', err);
@@ -503,6 +508,7 @@ const BookingForm = ({ onRequestPayment }) => {
                         {submittedResult && (
                             <button
                                 onClick={() => onRequestPayment?.(submittedResult)}
+                                data-cta="Pay trial fee (after registering)" data-cta-target="payment-modal"
                                 className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
                             >
                                 Complete Payment <ArrowRight className="w-4 h-4" />

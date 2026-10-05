@@ -104,6 +104,7 @@ const SCHero = () => (
                 <div className="flex flex-col sm:flex-row gap-4">
                     <button
                         onClick={() => scrollTo('apply')}
+                        data-cta="Express interest (hero)" data-cta-target="#apply"
                         className="group bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 flex items-center justify-center gap-3"
                     >
                         Register your interest

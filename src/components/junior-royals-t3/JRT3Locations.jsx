@@ -61,7 +61,7 @@ const JRT3Locations = () => {
                                 </div>
 
                                 <div className="flex flex-col gap-3">
-                                    <button onClick={scrollToForm}
+                                    <button onClick={scrollToForm} data-cta="Register interest (centre card)" data-cta-target="#registration-form"
                                         className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest py-3 rounded-full transition-all duration-300 hover:shadow-[0_0_20px_rgba(229,6,149,0.4)] text-sm">
                                         {JR_T4.ctaLabel}
                                     </button>

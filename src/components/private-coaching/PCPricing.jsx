@@ -153,6 +153,7 @@ const PCPricing = () => {
                     </p>
                     <button
                         onClick={() => scrollTo('eoi-form')}
+                        data-cta="Enquire (pricing)" data-cta-target="#eoi-form"
                         className="group bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] inline-flex items-center gap-3"
                     >
                         Register Your Interest

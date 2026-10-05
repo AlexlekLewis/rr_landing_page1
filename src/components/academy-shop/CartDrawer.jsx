@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ShoppingBag, Plus, Minus, Trash2, Truck, MapPin } from 'lucide-react';
 import { useCart } from './CartContext';
 import { supabase } from '../../lib/supabase';
+import { trackCheckout } from '../../lib/metaPixel';
 import { PICKUP_VENUES, PICKUP_SUMMARY } from './pickupVenues';
 
 const FULFILLMENT_OPTIONS = [
@@ -117,6 +118,7 @@ const CartDrawer = () => {
       const { url, error: stripeError } = await response.json();
       if (stripeError) throw new Error(stripeError);
       if (url) {
+        trackCheckout({ program: 'Academy Shop', value: grandTotal > 0 ? grandTotal / 100 : undefined });
         window.location.href = url;
       } else {
         throw new Error('No checkout URL returned from Stripe');

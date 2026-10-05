@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CreditCard, Check, X } from 'lucide-react';
 import { ACTIVE_MATCH } from './matchConfig';
+import { trackCheckout } from '../../lib/metaPixel';
 
 // Confirmation + payment step. Registration is already written to Supabase by
 // the time this opens, so nothing is lost if the player leaves the page.
@@ -113,6 +114,8 @@ const MatchPaymentModal = ({ open, registration, onClose, match = ACTIVE_MATCH }
                             is already saved. ── */}
                         <a
                             href={match.paymentLink}
+                            onClick={() => trackCheckout({ program: match.name, value: match.price })}
+                            data-cta="Pay now (payment modal)"
                             className="w-full inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
                         >
                             <CreditCard className="w-4 h-4" /> Pay ${match.price} Now
