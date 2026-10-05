@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { INCLUSIONS_CONFIRMED } from './itCopy';
+import { INCLUSIONS_CONFIRMED, MEMBER_PROGRAMS, TERMS_ROUTE } from './itCopy';
 import ITCtaBand from './ITCtaBand';
 
 // ---------------------------------------------------------------------------
@@ -17,7 +17,64 @@ import ITCtaBand from './ITCtaBand';
 //
 // All wording lives in itCopy.js in two reading levels; the tours and the price
 // live there once and are shared with the hero and the form.
+//
+// MEMBER PRICING (Alex, 5 Oct 2026): who gets it on the December tour, and why
+// December is an exception to clause 13.5 of the Terms. No member figure is
+// shown because none is set. See the MEMBER_PROGRAMS note in itCopy.js.
 // ---------------------------------------------------------------------------
+
+const MemberPricing = ({ m }) => (
+    <motion.div
+        id="member-pricing"
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="mt-12 bg-white rounded-2xl border-2 border-rr-pink p-8 md:p-10 scroll-mt-28"
+    >
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div>
+                <p className="text-[11px] font-bold text-rr-pink uppercase tracking-[0.2em]">{m.eyebrow}</p>
+                <h3 className="text-3xl md:text-4xl font-black text-rr-dark uppercase tracking-tight leading-none mt-2">
+                    {m.heading} <span className="text-rr-pink">{m.headingAccent}</span>
+                </h3>
+                <p className="text-base text-rr-charcoal font-medium leading-relaxed mt-4">{m.lead}</p>
+
+                <p className="text-xs font-black text-rr-dark uppercase tracking-widest mt-6">{m.programsLabel}</p>
+                <ul className="mt-3 space-y-2">
+                    {MEMBER_PROGRAMS.map((p) => (
+                        <li key={p} className="flex items-center gap-3">
+                            <span className="w-6 h-6 rounded-full bg-rr-pink flex items-center justify-center shrink-0">
+                                <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </span>
+                            <span className="text-base font-black text-rr-dark">{p}</span>
+                        </li>
+                    ))}
+                </ul>
+
+                <p className="text-sm text-rr-charcoal font-medium leading-relaxed mt-6">{m.priceNote}</p>
+            </div>
+
+            <div className="lg:border-l lg:border-slate-200 lg:pl-10">
+                <h4 className="text-sm font-black text-rr-dark uppercase tracking-widest">{m.whyHeading}</h4>
+                <p className="text-sm text-rr-charcoal font-medium leading-relaxed mt-3">{m.whyBody}</p>
+                <p className="text-sm text-rr-charcoal font-medium leading-relaxed mt-3">{m.aprilNote}</p>
+                <a
+                    href={TERMS_ROUTE}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block text-sm font-bold text-rr-pink hover:text-rr-dark underline underline-offset-2 mt-3"
+                >
+                    {m.termsLabel}
+                </a>
+                <p className="text-sm text-rr-dark font-bold leading-relaxed mt-6 pt-6 border-t border-slate-200">
+                    {m.formHint}
+                </p>
+            </div>
+        </div>
+    </motion.div>
+);
 
 const ITPricing = ({ copy }) => {
     const c = copy.pricing;
@@ -56,7 +113,9 @@ const ITPricing = ({ copy }) => {
                     </motion.p>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-12">
+                <MemberPricing m={c.member} />
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
                     {/* What the price includes: not confirmed yet, so say so */}
                     <motion.div
                         initial={{ opacity: 0, y: 24 }}

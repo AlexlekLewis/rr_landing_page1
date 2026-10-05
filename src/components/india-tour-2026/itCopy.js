@@ -19,6 +19,11 @@
 // ---------------------------------------------------------------------------
 
 import { useEffect, useState } from 'react';
+import {
+    TOUR_MEMBER_MONTHS_WORD,
+    TERMS_ROUTE,
+    TERMS_MEMBERSHIP_CLAUSE,
+} from '../performance-squads/data';
 
 // The two upcoming tours to the Rajasthan Royals High Performance Centre in
 // Nagpur (Alex, 29 Sep 2026). Exact dates are NOT set, so each tour is named by
@@ -29,6 +34,44 @@ export const TOURS = [
     { id: '2026-12-late-dec-jan', window: 'Late December 2026 to early January 2027' },
     { id: '2027-04-april', window: 'April 2027' },
 ];
+
+// The tour the page promotes first (Alex, 5 Oct 2026).
+export const DECEMBER_TOUR_ID = '2026-12-late-dec-jan';
+
+// ROUND 1 for the December tour (Alex, 5 Oct 2026: "30th of October round 1,
+// expressions of interest will end"). One instant drives the hero clock, the
+// tour cards and the form. +11:00 because Melbourne is on daylight time (AEDT)
+// from 4 Oct 2026, so the clock is right wherever the viewer is.
+//
+// When it passes, the clock swaps to a "Round 1 has closed" notice. The form
+// stays open for both tours: Alex called this Round 1, not the end of interest.
+// REVIEW 31 Oct 2026: ask Alex whether a Round 2 opens, then update the copy.
+export const ROUND_1 = {
+    tourId: DECEMBER_TOUR_ID,
+    closesAt: '2026-10-30T23:59:00+11:00',
+    closesLabel: 'Friday 30 October 2026',
+    closesShort: 'Fri 30 Oct',
+    closesTime: '11:59pm Melbourne time',
+};
+
+// MEMBER PRICING FOR THE DECEMBER TOUR (Alex, 5 Oct 2026). A player who has been
+// in any of these three programs gets member pricing on the December tour.
+//
+// This is an EXCEPTION, not a change to the Terms. Clause 13.5 says tour member
+// pricing needs six months of unbroken Performance Squad membership by the day
+// the tour starts. Squads started on 5 Oct 2026, so nobody can reach six months
+// by late December. Alex chose to keep 13.5 as written and use clause 13.7 (the
+// Academy decides eligibility) for the December tour. The April 2027 tour
+// follows 13.5 as written.
+//
+// No member price figure yet (Alex, 5 Oct 2026). The page says who qualifies and
+// that both prices come in writing. It never says how much less members pay.
+export const MEMBER_PROGRAMS = ['12-week T20 Program', 'Power Game Pre-Season', 'Performance Squads'];
+export { TERMS_ROUTE, TERMS_MEMBERSHIP_CLAUSE };
+
+// "12-week T20 Program, Power Game Pre-Season or Performance Squads"
+export const memberProgramsOr = () =>
+    `${MEMBER_PROGRAMS.slice(0, -1).join(', ')} or ${MEMBER_PROGRAMS[MEMBER_PROGRAMS.length - 1]}`;
 
 // Each tour is about 10 days long (Alex, 29 Sep 2026). The page always says "about".
 export const TOUR_LENGTH_DAYS = 10;
@@ -50,9 +93,16 @@ export const INCLUSIONS_CONFIRMED = false;
 // players and $2,700 for players new to us, both incl GST, plus flights booked
 // through a group link. Those prices must not be shown for the new tours.
 
-// "Does your player already train with us?" The form still asks, as a plain
-// question with no price attached, and the answer is stored as a label.
-export const PLAYER_TYPE_KEYS = ['royals_program', 'external'];
+// "Which of our programs has the player been in?" (from 5 Oct 2026). The form
+// asks so staff can check member pricing for the December tour. Tick any of the
+// three member programs, and/or another program, or "new to the Academy" on its
+// own. The answer is stored in `bio`, with the older "Player type" label
+// (already in a program / new) worked out from it so existing filters still work.
+export const PROGRAM_OPTIONS = [
+    ...MEMBER_PROGRAMS.map((label) => ({ key: label, label, member: true })),
+    { key: 'other', label: 'Another of our programs, such as Junior Royals', member: false },
+];
+export const NEW_TO_ACADEMY_KEY = 'new';
 
 // Master switch for the page. 'open' takes expressions of interest; 'closed'
 // shuts the form, drops the register CTAs and shows the closed notice.
@@ -62,10 +112,6 @@ export const PLAYER_TYPE_KEYS = ['royals_program', 'external'];
 // deadline and no clock. The September 2026 camp's registrations closed on 12 Aug 2026.
 export const TOUR_STATUS = 'open';
 
-// Optional deadline for a dated registration window; the hero clock reads it.
-// null = no deadline and no clock (a standing expression of interest). To run a
-// window again, set an absolute instant such as '2026-08-12T23:59:00+10:00'.
-export const REGISTRATIONS_CLOSE_AT = null;
 
 // The official camp document, served from /public. The one we have is the
 // September 2026 booklet (its PDF title says so), so the time-neutral page does
@@ -97,10 +143,10 @@ export const fmtRangeAUD = (r) => `${fmtAUD(r.min)}–${fmtAUD(r.max)}`;
 
 const STANDARD = {
     hero: {
-        badge: 'Expressions Of Interest Open',
+        badge: 'December Tour · Round 1 Open',
         h1: 'High Performance',
         h1Accent: 'Centre Camp',
-        kicker: 'Rajasthan Royals Academy',
+        kicker: 'Rajasthan Royals Academy · Melbourne',
         dateline: 'Nagpur, India · Two\u00a0Tours',
         toursLabel: 'The two tours',
         tourLength: `About ${TOUR_LENGTH_DAYS} days`,
@@ -123,11 +169,17 @@ const STANDARD = {
         downloadLabel: 'Download the camp document',
         downloadSub: (size) => `PDF, ${size} — the full programme, coaches and itinerary`,
         cta: 'Register Your Interest',
-        countdownLabel: 'Registrations close in',
+        round1Tag: `Round 1 closes ${ROUND_1.closesShort}`,
+        memberTag: 'Member pricing',
+        memberLine:
+            `Member pricing on the December tour for players who have been in our ${memberProgramsOr()}.`,
+        memberLink: 'Who qualifies',
+        countdownLabel: 'December tour · Round 1 closes in',
         countdownUnits: { days: 'Days', hours: 'Hrs', minutes: 'Mins', seconds: 'Secs' },
         countdownNote:
-            'Once the clock runs out we close the list and our coaches pick the touring squad from ' +
-            'everyone who registered.',
+            `Round 1 for the December tour closes on ${ROUND_1.closesLabel} at ${ROUND_1.closesTime}. ` +
+            'When it closes, our coaches start picking the December touring squad from everyone in ' +
+            'Round 1. The April 2027 tour stays open.',
         ctaAfterCoaches: {
             heading: 'Choose one tour or both',
             body: 'Register your interest in the tour that suits you, or in both. It costs nothing, takes about two minutes and commits you to nothing. Our Melbourne coaches pick each touring squad from everyone who registers.',
@@ -142,10 +194,10 @@ const STANDARD = {
             'This High Performance Centre Camp is now closed to new applications, and our ' +
             'coaches are confirming the touring squad. A new tour will be announced shortly.',
         closedNext: 'New tour announcement coming soon.',
-        countdownClosed: 'Applications for this tour have closed.',
+        countdownClosed: 'Round 1 for the December tour has closed.',
         countdownClosedNote:
-            'If you still want to be considered, email info@rramelbourne.com and we will tell you ' +
-            'whether any places are left.',
+            'You can still register your interest in the December tour, and we will tell you if a ' +
+            'second round opens. Registrations for the April 2027 tour remain open.',
     },
 
     about: {
@@ -188,6 +240,34 @@ const STANDARD = {
             `That is our estimate for each tour of about ${TOUR_LENGTH_DAYS} days, not a final price. ` +
             'The dates and the final price are not set yet for either tour. Before anyone commits, we ' +
             'confirm in writing the exact price and exactly what it includes.',
+        member: {
+            eyebrow: 'December Tour',
+            heading: 'Member',
+            headingAccent: 'Pricing',
+            lead:
+                `Players who have been in our ${memberProgramsOr()} get member pricing on the December ` +
+                'tour. The member price is lower than the standard price.',
+            programsLabel: 'Member pricing applies if your player has been in',
+            priceNote:
+                'The member price is not set yet. When the December dates are confirmed, we write to you ' +
+                'with the member price, the standard price and what each includes, before you commit to ' +
+                'anything.',
+            whyHeading: 'Why December is an exception',
+            whyBody:
+                'Under our Terms & Conditions, member pricing on a tour normally needs ' +
+                `${TOUR_MEMBER_MONTHS_WORD} months of unbroken Performance Squad membership by the day the ` +
+                'tour starts. The squads began in October 2026, so no player can reach ' +
+                `${TOUR_MEMBER_MONTHS_WORD} months by late December. For the December tour, the Academy is ` +
+                'giving member pricing to every player who has been in one of the three programs above.',
+            aprilNote:
+                `The April 2027 tour follows the usual rule: ${TOUR_MEMBER_MONTHS_WORD} months of unbroken ` +
+                'Performance Squad membership by the day it starts.',
+            termsLabel: `Read the full rules in ${TERMS_MEMBERSHIP_CLAUSE} of our Terms & Conditions`,
+            formHint:
+                'The form below asks which of our programs your player has been in, so we can confirm ' +
+                'the member price.',
+        },
+
         includesEyebrow: 'What the price includes',
         includesHeading: 'Not Confirmed Yet',
         includesBody:
@@ -316,19 +396,14 @@ const STANDARD = {
         toursHeading: 'Which Tour',
         toursLead: 'Tick one tour or both. Exact dates are not set yet; we will write to you when they are.',
         toursError: 'Please tick at least one tour.',
-        playerTypeHeading: 'Does Your Player Train With Us Now?',
-        playerTypeLead: 'Pick the one that describes your player.',
-        playerTypeError: 'Please tell us which one describes your player.',
-        playerTypes: {
-            royals_program: {
-                heading: 'Already Training With Us',
-                who: 'Your player trains in a Rajasthan Royals Academy Melbourne program now.',
-            },
-            external: {
-                heading: 'New To The Academy',
-                who: 'Your player does not train in one of our programs at the moment.',
-            },
-        },
+        round1Note: `Round 1 closes ${ROUND_1.closesLabel}`,
+        programsHeading: 'Which Of Our Programs Has Your Player Been In?',
+        programsLead:
+            `Tick every one that applies. Players who have been in our ${memberProgramsOr()} get member ` +
+            'pricing on the December tour.',
+        programsMemberTag: 'Member pricing',
+        programsNewLabel: 'None yet: new to the Academy',
+        programsError: 'Please tick the programs your player has been in, or "new to the Academy".',
     },
 };
 
@@ -337,10 +412,10 @@ const STANDARD = {
 
 const SIMPLE = {
     hero: {
-        badge: 'Now Taking Names',
+        badge: 'December Tour · Round 1 Open',
         h1: 'High Performance',
         h1Accent: 'Centre Camp',
-        kicker: 'Rajasthan Royals Academy',
+        kicker: 'Rajasthan Royals Academy · Melbourne',
         dateline: 'Nagpur, India · Two\u00a0Tours',
         toursLabel: 'The two tours',
         tourLength: `About ${TOUR_LENGTH_DAYS} days`,
@@ -361,11 +436,17 @@ const SIMPLE = {
         downloadLabel: 'Download the camp booklet',
         downloadSub: (size) => `PDF, ${size} — everything about the camp in one file`,
         cta: 'Put My Name Down',
-        countdownLabel: 'Sign-ups close in',
+        round1Tag: `Round 1 closes ${ROUND_1.closesShort}`,
+        memberTag: 'Member price',
+        memberLine:
+            `Been in our ${memberProgramsOr()}? You get the member price on the December tour.`,
+        memberLink: 'Who gets it',
+        countdownLabel: 'December tour · Round 1 closes in',
         countdownUnits: { days: 'Days', hours: 'Hrs', minutes: 'Mins', seconds: 'Secs' },
         countdownNote:
-            'When the clock hits zero we shut the list. Then our coaches pick the team from everyone ' +
-            'who signed up.',
+            `Round 1 for the December tour closes on ${ROUND_1.closesLabel} at ${ROUND_1.closesTime}. ` +
+            'Then our coaches start picking the December team from everyone in Round 1. The April 2027 ' +
+            'tour stays open.',
         ctaAfterCoaches: {
             heading: 'One tour or both',
             body: 'Put your name down for the tour you want, or both. It is free and takes about two minutes. You are not paying or promising anything yet.',
@@ -380,9 +461,10 @@ const SIMPLE = {
             'You can no longer put your name down for this camp. Our coaches are picking the ' +
             'team now. We will announce a new tour soon.',
         closedNext: 'New tour announcement coming soon.',
-        countdownClosed: 'Sign-ups for this tour are closed.',
+        countdownClosed: 'Round 1 for the December tour has closed.',
         countdownClosedNote:
-            'You can still email info@rramelbourne.com to ask if there are any spots left.',
+            'You can still put your name down for the December tour. We will tell you if a second ' +
+            'round opens. Sign-ups for the April 2027 tour are still open.',
     },
 
     about: {
@@ -423,6 +505,31 @@ const SIMPLE = {
             `That is our estimate for each tour of about ${TOUR_LENGTH_DAYS} days. It is not the final ` +
             'price, and the dates are not set yet either. Before you say yes, we tell you the exact ' +
             'price and what it covers, in writing.',
+        member: {
+            eyebrow: 'December Tour',
+            heading: 'Member',
+            headingAccent: 'Price',
+            lead:
+                'Has your player been in one of these three programs? Then they get the member price ' +
+                'for the December tour. The member price is lower than the standard price.',
+            programsLabel: 'The three programs',
+            priceNote:
+                'We have not set the member price yet. When the December dates are set, we tell you the ' +
+                'member price and the standard price, in writing, before you say yes.',
+            whyHeading: 'Why December is different',
+            whyBody:
+                'Normally, to get the member price on a tour, a player needs to be in a Performance Squad ' +
+                `for ${TOUR_MEMBER_MONTHS_WORD} months in a row by the day the tour starts. The squads only ` +
+                `started in October 2026, so nobody can have ${TOUR_MEMBER_MONTHS_WORD} months by December. ` +
+                'So for the December tour, every player who has been in one of the three programs gets ' +
+                'the member price.',
+            aprilNote:
+                `The April 2027 tour uses the normal rule: ${TOUR_MEMBER_MONTHS_WORD} months in a row in a ` +
+                'Performance Squad by the day the tour starts.',
+            termsLabel: `The full rules are in ${TERMS_MEMBERSHIP_CLAUSE} of our Terms & Conditions`,
+            formHint: 'In the form below, tick the programs your player has been in. That is how we check.',
+        },
+
         includesEyebrow: 'What the price covers',
         includesHeading: 'Not Set Yet',
         includesBody:
@@ -480,8 +587,8 @@ const SIMPLE = {
                 title: 'Top coaches',
                 body:
                     'Sid Lahiri is Head of International Player Development and Performance Coach at ' +
-                    'the Rajasthan Royals. He runs the Royals academies around the world and leads the ' +
-                    'camp. Romi ' +
+                    'the Rajasthan Royals. He works with the Royals academies around the world and led ' +
+                    'the camp. Romi ' +
                     'Bhinder is the Rajasthan Royals team manager — he lives at the centre and coaches ' +
                     'their players all year. Faiz Fazal played for India and captained a title-winning ' +
                     'team. Somi Bhinder coaches fast bowling. Dr Neeta Adhau helps you with the mental side.',
@@ -537,19 +644,12 @@ const SIMPLE = {
         toursHeading: 'Which Tour',
         toursLead: 'Tick one or both. The dates are not set yet. We will tell you when they are.',
         toursError: 'Please tick at least one tour.',
-        playerTypeHeading: 'Does The Player Train With Us Now?',
-        playerTypeLead: 'Pick the one that fits the player.',
-        playerTypeError: 'Please pick the one that fits the player.',
-        playerTypes: {
-            royals_program: {
-                heading: 'Already With Us',
-                who: 'The player trains with us now, in any of our programs.',
-            },
-            external: {
-                heading: 'New To Us',
-                who: 'The player does not train with us yet.',
-            },
-        },
+        round1Note: `Round 1 closes ${ROUND_1.closesLabel}`,
+        programsHeading: 'Which Of Our Programs Has The Player Been In?',
+        programsLead: 'Tick all that fit. The first three get the member price on the December tour.',
+        programsMemberTag: 'Member price',
+        programsNewLabel: 'None. The player is new to us.',
+        programsError: 'Please tick at least one box.',
     },
 };
 
@@ -590,7 +690,3 @@ export const useReadingMode = () => {
     // Simple is the default: only an explicit ?read=standard opts into the club voice.
     return { simple: mode !== 'standard', showToggle: mode !== null, setMode: apply };
 };
-
-/** "Does your player train with us now?" options, in the chosen reading level. */
-export const getPlayerTypes = (copy) =>
-    PLAYER_TYPE_KEYS.map((key) => ({ key, ...copy.form.playerTypes[key] }));
