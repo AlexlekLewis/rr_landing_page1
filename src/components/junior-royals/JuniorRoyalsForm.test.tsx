@@ -1,6 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { ageAtStart } from './JuniorRoyalsForm';
-import { AGES, CENTRES, FEES, YEARLY, PER_HOUR, SESSIONS_PER_YEAR, CALENDAR } from './juniorRoyalsData';
+import {
+    AGES, CENTRES, CALENDAR, SESSIONS_PER_YEAR, MEMBER, MEMBER_WEEKLY, MEMBER_YEARLY, MEMBER_FIRST_YEAR,
+    FIRST_PAYMENT, termPrice, TERM_YEAR, PAY_CHOICES,
+} from './juniorRoyalsData';
 
 // Junior Royals is ages 7–12 (Alex, 5 Oct 2026). Age is taken on the later of
 // today and the first session (Wed 28 Oct 2026) — the age the player starts at.
@@ -34,9 +37,19 @@ describe('Junior Royals age check', () => {
     });
 });
 
-describe('Junior Royals facts agree with each other', () => {
-    it('the yearly fee is 52 weekly payments', () => {
-        expect(YEARLY).toBe(FEES.weekly * 52);
+describe('Junior Royals prices agree with each other', () => {
+    it('membership: $25 an hour over 40 sessions, paid as 52 weekly payments', () => {
+        expect(MEMBER.perHour).toBe(25);
+        expect(MEMBER_WEEKLY).toBe(19.23);
+        expect(MEMBER_YEARLY).toBe(999.96);
+        expect(Math.round(MEMBER_YEARLY / SESSIONS_PER_YEAR)).toBe(MEMBER.perHour);
+        expect(MEMBER_FIRST_YEAR).toBe(1148.96);
+        expect(FIRST_PAYMENT).toBe(168.23);
+    });
+
+    it('by the term: $35 a session, so a 10-week term is $350', () => {
+        expect(termPrice(10)).toBe(350);
+        expect(TERM_YEAR).toBe(1400);
     });
 
     it('sessions per year matches the 2027 school-term calendar', () => {
@@ -44,12 +57,17 @@ describe('Junior Royals facts agree with each other', () => {
         expect(y2027).toBe(SESSIONS_PER_YEAR);
     });
 
-    it('the per-hour figure is the yearly fee over the sessions, rounded', () => {
-        expect(PER_HOUR).toBe(Math.round(YEARLY / SESSIONS_PER_YEAR));
+    it('a member pays less than term-by-term for a full year, even in the first year', () => {
+        expect(MEMBER_FIRST_YEAR).toBeLessThan(TERM_YEAR);
     });
+});
 
-    it('offers exactly the two Term 4 centres, with the values the database must accept', () => {
-        // If these change, the hourly watchdog test-inserts and the table must change too.
+describe('Junior Royals form values the database must accept', () => {
+    // If these change, the hourly watchdog test-inserts and the table must change too.
+    it('centres', () => {
         expect(CENTRES.map((c) => c.value)).toEqual(['mickleham', 'cranbourne-north']);
+    });
+    it('payment choices', () => {
+        expect(PAY_CHOICES.map((c) => c.value)).toEqual(['membership', 'term', 'not-sure']);
     });
 });

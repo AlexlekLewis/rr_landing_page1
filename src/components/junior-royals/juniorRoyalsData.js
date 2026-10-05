@@ -1,10 +1,14 @@
 // ─────────────────────────────────────────────────────────────
 // JUNIOR ROYALS — every fact and every line of copy on /junior-royals.
 //
-// Alex, 5 Oct 2026: Junior Royals stops being a term program. It becomes a
-// year-round MEMBERSHIP on the same model as Performance Squads:
-//   • $149 joining fee, paid once (and paid again to rejoin after cancelling)
-//   • $30 a week, charged EVERY week of the year, school holidays included
+// Alex, 5 Oct 2026: Junior Royals stops being a term-only program. TWO WAYS TO PAY:
+//   1. MEMBERSHIP — $25 an hour. A yearly fee ($25 × about 40 sessions = $1,000)
+//      paid as 52 weekly payments ($19.23), every week of the year, school
+//      holidays included, plus a $149 joining fee once (paid again to rejoin
+//      after cancelling). Join any time, cancel any time.
+//   2. BY THE TERM — $35 a session ("$350 for the term" on a 10-week term); each
+//      term is priced by the number of Wednesdays it actually has.
+// Also (Alex, 5 Oct 2026):
 //   • training on Wednesday nights in school terms only; new time slots on other
 //     days open as groups fill
 //   • ages 7–12; older players are pointed to Performance Squads
@@ -14,9 +18,8 @@
 //     train, play, then back to training on what the match showed, the same
 //     cycle as Performance Squads
 //   • Mickleham and Cranbourne North; first session Wednesday 28 October
-//   • join any time, cancel any time
 // Language rule (Alex, 5 Oct 2026): a 10-year-old must be able to understand
-// that this is a YEARLY membership fee paid as a weekly plan, and that is why
+// that the membership is a YEARLY fee paid as a weekly plan, and that is why
 // payments run all year — to hold the place and keep member prices.
 //
 // MOCK-UP: while MOCKUP is true the page shows a review banner, highlights every
@@ -48,16 +51,6 @@ export const OLDER_LINE = {
     link: 'See Performance Squads',
 };
 
-// ── Membership fees — all GST-inclusive (consumer-law.md §1) ──
-export const FEES = {
-    joining: 149,     // once; paid again to rejoin after cancelling
-    weekly: 30,       // every week of the year, school holidays included
-    weeksPerYear: 52,
-};
-export const YEARLY = FEES.weekly * FEES.weeksPerYear;          // 1560 — worked out, never typed
-export const FIRST_PAYMENT = FEES.joining + FEES.weekly;        // 179 — joining fee + first week (PS model)
-export const GST_NOTE = 'All prices include GST.';
-
 // ── When ──
 export const FIRST_SESSION = { long: 'Wednesday 28 October', short: 'Wed 28 Oct', iso: '2026-10-28' };
 // Wednesdays inside the Victorian school terms (vic.gov.au term dates, checked 5 Oct 2026).
@@ -71,10 +64,26 @@ export const CALENDAR = [
 ];
 export const SESSIONS_PER_YEAR = 40; // 2027: 8 + 11 + 10 + 11
 
-// Price per hour of coaching, honestly: 52 weekly payments ÷ about 40 sessions.
-// ($30 is the WEEKLY payment, not the per-hour price — payments continue in the
-// holidays, so a parent who works it out gets $39. Say it before they do.)
-export const PER_HOUR = Math.round(YEARLY / SESSIONS_PER_YEAR);  // 39
+// ── Prices — all GST-inclusive (consumer-law.md §1). Worked out, never typed. ──
+// Membership: $25 an hour × 40 sessions = $1,000 a year, paid weekly over 52 weeks.
+export const MEMBER = {
+    joining: 149,          // once; paid again to rejoin after cancelling
+    perHour: 25,           // Alex, 5 Oct 2026
+    weeksPerYear: 52,
+};
+export const MEMBER_WEEKLY = Math.round((MEMBER.perHour * SESSIONS_PER_YEAR / MEMBER.weeksPerYear) * 100) / 100; // 19.23
+export const MEMBER_YEARLY = Math.round(MEMBER_WEEKLY * MEMBER.weeksPerYear * 100) / 100;                          // 999.96
+export const MEMBER_FIRST_YEAR = Math.round((MEMBER_YEARLY + MEMBER.joining) * 100) / 100;                         // 1148.96
+export const FIRST_PAYMENT = Math.round((MEMBER.joining + MEMBER_WEEKLY) * 100) / 100;                             // 168.23 — joining fee + first week (PS model)
+
+// By the term: $35 a session; a term costs its number of sessions × $35.
+export const TERM_SESSION = 35;                     // Alex, 5 Oct 2026: "$350 for the term" (10 weeks)
+export const TERM_EXAMPLE_SESSIONS = 10;
+export const termPrice = (sessions) => sessions * TERM_SESSION;
+export const TERM_YEAR = termPrice(SESSIONS_PER_YEAR); // 1400 — all four 2027 terms, paid term by term
+
+export const GST_NOTE = 'All prices include GST.';
+export const MATCH_FEE_NOTE = 'Development matches have their own match fee.';
 
 export const GROUPS = [
     { time: '6:00pm – 7:00pm', who: tbc('Younger players', 'Which ages start at 6:00pm?') },
@@ -104,10 +113,18 @@ export const CENTRES = [
         coach: { ...REGIONAL_COACHES[0], jrRole: tbc('Head Coach, Cranbourne North', 'Is Alex Thornhill Head Coach at Cranbourne North?') },
     },
 ];
-export const CENTRES_APART = 'The two centres are about 70 km apart, so choose the one you can get to every week.';
 export const WHERE_TITLE = 'Two centres, every Wednesday';
+export const CENTRES_APART = 'The two centres are about 70 km apart, so choose the one you can get to every week.';
 export const NOT_RUNNING = 'There is no Junior Royals at Hallam or Williamstown.';
 export const NEW_SLOTS = "We're starting with Wednesday nights. As groups fill, we'll open new time slots on other days.";
+
+// How a family wants to pay — asked on the interest form so we know the split.
+// Values are what the database stores (no list-of-values rule on that column).
+export const PAY_CHOICES = [
+    { value: 'membership', label: `Membership · ${money(MEMBER.perHour)} an hour` },
+    { value: 'term', label: `By the term · ${money(TERM_SESSION)} a session` },
+    { value: 'not-sure', label: 'Not sure yet' },
+];
 
 // ── Copy ──
 
@@ -122,15 +139,17 @@ export const HERO = {
         { k: 'Matches', v: ['Development matches on Sunday mornings, with our coaches'] },
         { k: 'Where', v: ['Mickleham and Cranbourne North'] },
         { k: 'Starts', v: [FIRST_SESSION.long] },
-        { k: 'Cost', v: [`${money(FEES.joining)} to join, then ${money(FEES.weekly)} a week (incl. GST). Each match has its own match fee.`] },
+        { k: 'Members', v: [`${money(MEMBER.perHour)} an hour: ${money(MEMBER.joining)} to join, then ${money(MEMBER_WEEKLY)} a week, all year`] },
+        { k: 'Or', v: [`${money(TERM_SESSION)} a session, paid by the term (${money(termPrice(TERM_EXAMPLE_SESSIONS))} for a ${TERM_EXAMPLE_SESSIONS}-week term)`] },
     ],
+    priceNote: `All prices include GST. ${MATCH_FEE_NOTE}`,
     noPayment: 'No payment now. No place is held yet.',
 };
 
 export const CTA = {
     primary: 'Register Your Interest',
-    secondary: 'How the membership works',
-    sticky: `${money(FEES.weekly)} a week incl. GST · starts ${FIRST_SESSION.short}`,
+    secondary: 'Prices and membership',
+    sticky: `Members ${money(MEMBER.perHour)} an hour incl. GST · starts ${FIRST_SESSION.short}`,
 };
 
 // Section 2 — straight after the hero (Alex: "put that up near the top").
@@ -150,7 +169,7 @@ export const LOOP = {
         ['Matches are changed to suit each age group, so younger players play a modified game.'],
         ['First match day: ', tbc('date to be confirmed', 'First Sunday match date? How often?')],
         ['Where: ', tbc('venue to be confirmed', 'Match-day venue?')],
-        ['Match fee: ', tbc('to be confirmed', 'How much is the match fee?'), ', paid for each match. It is not part of the weekly membership.'],
+        ['Match fee: ', tbc('to be confirmed', 'How much is the match fee? Same for members and term players?'), ', paid for each match. It is not part of the membership or the term price.'],
     ],
 };
 
@@ -180,32 +199,46 @@ export const HOW = {
     ],
 };
 
-// The membership in words a 10-year-old can follow. One idea per line.
-export const MEMBERSHIP = {
-    eyebrow: 'The membership',
-    title: 'How the membership works',
-    lead: 'Junior Royals is a membership. You join once, and your player trains with us every Wednesday of the school year.',
-    simple: [
-        `Joining costs ${money(FEES.joining)}, once.`,
-        `Then it costs ${money(FEES.weekly)} a week, every week of the year.`,
-        `That adds up to ${money(YEARLY)} a year. We split it into weekly payments so you don't have to pay it all at once.`,
-        "You keep paying in the school holidays, even though there's no training. That keeps your player's place, and your member prices, while we're on a break.",
-        `You can stop any time. If you stop and want to come back later, you pay the ${money(FEES.joining)} joining fee again.`,
-    ],
-    firstPayment: ['When you join, your first payment is ', money(FIRST_PAYMENT), `: the ${money(FEES.joining)} joining fee plus your first week. `, tbc('Confirm', 'Same as Performance Squads: joining fee + first week charged together?')],
-    gst: GST_NOTE,
-    includesTitle: 'What a member gets',
-    includes: [
-        { title: `About ${SESSIONS_PER_YEAR} sessions a year`, body: "One hour every Wednesday in school terms, at your centre, in your player's group." },
-        { title: 'Development matches', body: 'Sunday-morning matches with our coaches. Each match has its own match fee.' },
-        { title: "A place that's kept all year", body: 'Your player keeps their place in their group over the school holidays, as long as the membership is paid.' },
-        { title: 'Member prices on masterclasses', body: 'Lower prices on our special masterclasses.' },
-        { title: 'Special-guest events', body: ['Access to all our future special-guest events, when Royals coaches and guests visit Melbourne. ', tbc('Free, or member price?', 'Are special-guest events free for members, or at a member price?')] },
-    ],
+// ── Prices section: two ways to pay ──
+export const PRICES = {
+    eyebrow: 'Prices',
+    title: 'Two ways to pay',
+    lead: 'You can become a member, or pay one term at a time. Both get the same Wednesday coaching.',
+    member: {
+        name: 'Membership',
+        headline: money(MEMBER.perHour),
+        unit: 'an hour',
+        // The membership in words a 10-year-old can follow. One idea per line.
+        simple: [
+            `Joining costs ${money(MEMBER.joining)}, once.`,
+            `The membership is a yearly fee of ${money(MEMBER_YEARLY)}. That's about ${SESSIONS_PER_YEAR} sessions at ${money(MEMBER.perHour)} each.`,
+            `We split the yearly fee into weekly payments of ${money(MEMBER_WEEKLY)}, so you pay a little every week instead of all at once.`,
+            "Because it's a yearly fee, the weekly payment carries on in the school holidays, when there's no training. That keeps your player's place and your member prices.",
+            `You can stop any time. If you stop and want to come back later, you pay the ${money(MEMBER.joining)} joining fee again.`,
+        ],
+        firstPayment: ['Your first payment is ', money(FIRST_PAYMENT), `: the ${money(MEMBER.joining)} joining fee plus your first week. `, tbc('Confirm', 'Same as Performance Squads: joining fee + first week charged together?')],
+        gets: [
+            "Your player's place is kept all year, through the school holidays",
+            'Member prices on our special masterclasses',
+            ['Access to all our future special-guest events, when Royals coaches and guests visit Melbourne ', tbc('(free, or member price?)', 'Are special-guest events free for members, or at a member price?')],
+        ],
+    },
+    term: {
+        name: 'By the term',
+        headline: money(TERM_SESSION),
+        unit: 'a session',
+        lines: [
+            `You pay for one term at a time, before it starts. Each term costs ${money(TERM_SESSION)} for every Wednesday session in it, so a ${TERM_EXAMPLE_SESSIONS}-week term is ${money(termPrice(TERM_EXAMPLE_SESSIONS))}.`,
+            'No joining fee, and nothing to pay in the school holidays.',
+            ['Your place is for that term only. To keep going, you book the next term. ', tbc('Confirm', 'Term players: is a place for next term NOT held?')],
+        ],
+    },
+    yearCompare: `If your player trains all year, a membership costs ${money(MEMBER_FIRST_YEAR)} in the first year (including the joining fee) and ${money(MEMBER_YEARLY)} after that. Paying term by term for the same ${SESSIONS_PER_YEAR} sessions costs ${money(TERM_YEAR)}.`,
+    notes: [GST_NOTE, MATCH_FEE_NOTE],
 };
 
-// Per-hour price, then how it compares (Alex, 5 Oct 2026: show members how our
-// price compares per hour with other programs in the same space).
+// Per-hour comparison (Alex, 5 Oct 2026: show members how our price compares per
+// hour with other programs in the same space).
 //
 // SOURCES — published prices on each provider's own website, checked 5 Oct 2026.
 // Providers are NOT named on the page; the figures are ranges by kind of program.
@@ -222,22 +255,17 @@ export const MEMBERSHIP = {
 //   Left OUT on purpose (not the same product): holiday camps ($11.67–$30.80/h, long
 //     days that include breaks) and Woolworths Cricket Blast (about $10/h, a volunteer-run
 //     beginner program for ages 5–7).
-//   Our own: Junior Royals Term 3, 2026 — $330 for 8 × 1-hour sessions = $41.25/h.
 // REVIEW 5 Jan 2027 — re-check every price above; a stale comparison is misleading
 // conduct under the ACL (consumer-law.md §4).
 export const PRICE_CONTEXT = {
-    title: 'What it costs per hour',
-    lines: [
-        `The weekly payment is ${money(FEES.weekly)}. Because payments carry on through the school holidays, a full year is ${money(YEARLY)} for about ${SESSIONS_PER_YEAR} one-hour sessions.`,
-        `That works out at about ${money(PER_HOUR)} for each hour of coaching, with no more than ${LANE_MAX} players in a lane. In your first year, the ${money(FEES.joining)} joining fee is on top.`,
-    ],
-    compareTitle: 'How that compares',
+    title: 'How our prices compare, per hour',
     compare: [
-        { what: 'Junior Royals membership', perHour: `about ${money(PER_HOUR)}`, note: `${money(YEARLY)} a year ÷ about ${SESSIONS_PER_YEAR} sessions · up to ${LANE_MAX} players a lane · incl. GST`, ours: true },
+        { what: 'Junior Royals membership', perHour: money(MEMBER.perHour), note: `${money(MEMBER_YEARLY)} a year ÷ ${SESSIONS_PER_YEAR} sessions · joining fee extra · incl. GST`, ours: true },
+        { what: 'Junior Royals, paid by the term', perHour: money(TERM_SESSION), note: 'No joining fee · incl. GST', ours: true },
         { what: 'Weekly small-group coaching at other Melbourne cricket academies', perHour: '$35 – $50', note: 'Published prices from 3 academies, groups of 3 to 10 players' },
-        { what: 'Junior Royals as a term program (Term 3, 2026)', perHour: '$41.25', note: '$330 for 8 one-hour sessions' },
         { what: 'Private one-on-one junior coaching in Melbourne', perHour: '$80 – $140', note: 'Published prices from 4 academies, one player with one coach' },
     ],
+    lanes: `Every Junior Royals session has no more than ${LANE_MAX} players in a lane.`,
     sourceNote: "Other academies' prices are as published on their own websites on 5 October 2026. They don't say whether GST is included.",
 };
 
@@ -255,24 +283,28 @@ export const FORM = {
 
 export const FAQS = [
     {
-        q: 'Why do we pay in the school holidays when there is no training?',
-        a: `Because it is a yearly membership. The yearly fee is ${money(YEARLY)} incl. GST, and we split it into ${money(FEES.weekly)} a week so you don't pay it all at once. Paying through the holidays keeps your player's place in their group and keeps your member prices.`,
+        q: "What's the difference between membership and paying by the term?",
+        a: `Both get the same Wednesday coaching. Members pay ${money(MEMBER.perHour)} an hour: a ${money(MEMBER.joining)} joining fee, then ${money(MEMBER_WEEKLY)} a week all year, and their place is kept through the holidays. Paying by the term costs ${money(TERM_SESSION)} a session, with no joining fee and nothing in the holidays, but you book one term at a time. ${GST_NOTE}`,
+    },
+    {
+        q: 'Why do members pay in the school holidays when there is no training?',
+        a: `Because the membership is a yearly fee: ${money(MEMBER_YEARLY)} incl. GST, which is about ${SESSIONS_PER_YEAR} sessions at ${money(MEMBER.perHour)} each. We split it into ${money(MEMBER_WEEKLY)} a week so you don't pay it all at once. Paying through the holidays keeps your player's place in their group and keeps your member prices.`,
     },
     {
         q: 'How much does a full year cost?',
-        a: `${money(FEES.joining)} to join, once. Then ${money(FEES.weekly)} a week, which is ${money(YEARLY)} over a full year. That covers about ${SESSIONS_PER_YEAR} Wednesday sessions, about ${money(PER_HOUR)} an hour, plus the member benefits. Development matches have their own match fee. ${GST_NOTE}`,
+        a: PRICES.yearCompare + ` ${MATCH_FEE_NOTE} ${GST_NOTE}`,
     },
     {
         q: 'Are the development matches included?',
-        a: 'Members can play them, but each match has its own match fee, paid for that match. We tell you the fee before you enter.',
+        a: 'No. Each match has its own match fee, paid for that match. We tell you the fee before you enter.',
     },
     {
         q: 'How do I stop the membership?',
-        a: [`Email us at info@rramelbourne.com any time. `, tbc('Notice needed and when the last payment is taken', 'How much notice to cancel? Does it stop the next weekly charge?'), ` If you come back later, you pay the ${money(FEES.joining)} joining fee again. If payments stop without notice, we hold your player's place for two weeks before offering it to another player. `, tbc('Confirm', 'Two-week grace period copied from Performance Squads')],
+        a: [`Email us at info@rramelbourne.com any time. `, tbc('Notice needed and when the last payment is taken', 'How much notice to cancel? Does it stop the next weekly charge?'), ` If you come back later, you pay the ${money(MEMBER.joining)} joining fee again. If payments stop without notice, we hold your player's place for two weeks before offering it to another player. `, tbc('Confirm', 'Two-week grace period copied from Performance Squads')],
     },
     {
         q: 'What if my player misses a Wednesday?',
-        a: [tbc('Make-up policy to be confirmed', 'Can a missed session be made up? How?')],
+        a: [tbc('Make-up policy to be confirmed', 'Can a missed session be made up? How? Same for members and term players?')],
     },
     {
         q: 'My player is 13 or older. Can they join?',
@@ -297,7 +329,7 @@ export const FAQS = [
     },
     {
         q: 'My player was entered for Term 4. Do I need to do anything?',
-        a: "You don't need to. We have your details and will email you about the membership. You're welcome to register here as well.",
+        a: "You don't need to. We have your details and will email you about the new program. You're welcome to register here as well.",
     },
     {
         q: 'Does my player need a uniform?',
@@ -307,14 +339,16 @@ export const FAQS = [
 
 // Every open question on the mock-up, in one list for the review banner.
 export const OPEN_QUESTIONS = [
+    `Member weekly payment ${money(MEMBER_WEEKLY)} (= ${money(MEMBER_YEARLY)} a year, $25 an hour). OK, or round it?`,
+    'By the term: each term priced at $35 × its sessions (8 sessions = $280, 11 = $385)? Paid up front?',
+    'Term players: is their place for next term NOT held?',
     'Which ages train at 6:00pm and which at 7:00pm?',
     'Development matches: first date, how often, venue, match fee',
     'Approve the price comparison (sources are listed in the page code)',
     'Date joining (payment) opens',
     'Head Coach at Cranbourne North',
-    'First payment = $149 + first week ($179)?',
-    'Notice needed to cancel',
-    'Two-week grace period (copied from Performance Squads)',
+    `First member payment = $149 + first week (${money(FIRST_PAYMENT)})?`,
+    'Notice needed to cancel; two-week grace period (copied from Performance Squads)',
     'Make-up policy for missed sessions',
     'Uniform',
     'Special-guest events: free or member price?',

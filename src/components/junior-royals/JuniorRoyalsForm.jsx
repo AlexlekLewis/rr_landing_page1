@@ -3,7 +3,7 @@ import { ArrowRight, Check } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { HONEYPOT_FIELD, isHoneypotTripped } from '../../lib/security/bot.js';
 import { Link } from 'react-router-dom';
-import { MOCKUP, CENTRES, FORM, FIRST_SESSION, CTA, AGES, AGES_TEXT, OLDER_LINE, PS_ROUTE } from './juniorRoyalsData';
+import { MOCKUP, CENTRES, FORM, FIRST_SESSION, CTA, AGES, AGES_TEXT, OLDER_LINE, PS_ROUTE, PAY_CHOICES } from './juniorRoyalsData';
 
 // ─────────────────────────────────────────────────────────────
 // Junior Royals — Register Your Interest form.
@@ -66,7 +66,7 @@ export const ageAtStart = (dob, today = new Date()) => {
     return age;
 };
 
-const EMPTY = { parent_name: '', email: '', phone: '', player_name: '', player_dob: '', centre: '' };
+const EMPTY = { parent_name: '', email: '', phone: '', player_name: '', player_dob: '', centre: '', payment_choice: '' };
 
 const JuniorRoyalsForm = () => {
     const [form, setForm] = useState(EMPTY);
@@ -95,6 +95,7 @@ const JuniorRoyalsForm = () => {
             else if (age < AGES.min) e.player_dob = `Junior Royals is for players aged ${AGES_TEXT}.`;
         }
         if (!CENTRES.some((c) => c.value === form.centre)) e.centre = 'Please choose a centre.';
+        if (!PAY_CHOICES.some((c) => c.value === form.payment_choice)) e.payment_choice = 'Please choose one.';
         setErrors(e);
         return Object.keys(e).length === 0;
     };
@@ -114,6 +115,7 @@ const JuniorRoyalsForm = () => {
                     player_name: form.player_name.trim(),
                     player_dob: form.player_dob,
                     centre: form.centre,
+                    payment_choice: form.payment_choice,
                     page_referrer: document.referrer || null,
                     ...collectUtm(),
                 }]);
@@ -202,6 +204,23 @@ const JuniorRoyalsForm = () => {
                         })}
                     </div>
                     {errors.centre && <p className="text-rr-pink text-xs font-bold mt-1">{errors.centre}</p>}
+                </fieldset>
+                <fieldset className="sm:col-span-2">
+                    <legend className="block text-xs font-black uppercase tracking-widest text-rr-dark mb-2">
+                        How would you like to pay? <span className="text-rr-pink">*</span>
+                    </legend>
+                    <div className="grid sm:grid-cols-3 gap-3">
+                        {PAY_CHOICES.map((c) => {
+                            const on = form.payment_choice === c.value;
+                            return (
+                                <label key={c.value} className={`flex items-center gap-3 cursor-pointer rounded-xl border-2 px-4 py-3 transition-colors ${on ? 'border-rr-pink' : errors.payment_choice ? 'border-rr-pink/50' : 'border-slate-300 hover:border-rr-pink/60'}`}>
+                                    <input type="radio" name="payment_choice" value={c.value} checked={on} onChange={set} className="accent-rr-pink" />
+                                    <span className="text-sm font-bold text-rr-dark">{c.label}</span>
+                                </label>
+                            );
+                        })}
+                    </div>
+                    {errors.payment_choice && <p className="text-rr-pink text-xs font-bold mt-1">{errors.payment_choice}</p>}
                 </fieldset>
             </div>
 

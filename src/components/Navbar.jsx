@@ -28,7 +28,7 @@ const LC_NAV = [
 const JRM_NAV = [
     { label: 'MATCHES', id: 'matches' },
     { label: 'HOW IT RUNS', id: 'how' },
-    { label: 'MEMBERSHIP', id: 'membership' },
+    { label: 'PRICES', id: 'membership' },
     { label: 'CENTRES', id: 'where' },
 ];
 
