@@ -37,7 +37,7 @@ export const CLUBS = [
             // What he bowls himself. NOT what the centre takes — every type of
             // spin is welcome at both centres. See EVERY_SPIN below.
             spin: 'Left-arm wrist spin',
-            line: 'Callum came out of Geelong Cricket Club and through Cricket Victoria\u2019s rookie program. He took nine wickets in five games for Victoria at the 2024 Global Super League in Guyana, then took a wicket on debut in the Big Bash and two against the Brisbane Heat in his next match. The Melbourne Renegades have re-signed him every season since, and he spent 2025 with the San Francisco Unicorns in Major League Cricket.',
+            line: 'Callum started at Geelong Cricket Club and Victoria picked him up. He took nine wickets in five games for Victoria at the 2024 Global Super League in Guyana, then took a wicket on debut in the Big Bash and two against the Brisbane Heat in his next match. The Melbourne Renegades have re-signed him every season since, and he spent 2025 with the San Francisco Unicorns in Major League Cricket.',
         },
     },
     {
