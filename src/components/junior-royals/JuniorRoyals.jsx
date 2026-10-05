@@ -9,7 +9,7 @@ import JuniorRoyalsForm from './JuniorRoyalsForm';
 import { Rich, SectionHead, scrollToId } from './JuniorRoyalsShared';
 import {
     MOCKUP, OPEN_QUESTIONS, HERO, CTA, LOOP, WHY, HOW, GROUPS, CENTRES, PRICES, PRICE_CONTEXT,
-    CALENDAR, termPrice, WHERE_TITLE, CENTRES_APART, NOT_RUNNING, NEW_SLOTS, FIRST_SESSION,
+    CALENDAR, termPrice, WHERE_TITLE, CENTRES_APART, NEW_SLOTS, FIRST_SESSION,
     FORM, FAQS, OLDER_LINE, PS_ROUTE, money,
 } from './juniorRoyalsData';
 
@@ -331,7 +331,7 @@ const Where = () => (
                     </motion.div>
                 ))}
             </div>
-            <p className="text-rr-charcoal font-medium">{CENTRES_APART} {NOT_RUNNING}</p>
+            <p className="text-rr-charcoal font-medium">{CENTRES_APART}</p>
         </div>
     </section>
 );

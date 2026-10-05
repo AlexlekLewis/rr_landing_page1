@@ -115,7 +115,8 @@ export const CENTRES = [
 ];
 export const WHERE_TITLE = 'Two centres, every Wednesday';
 export const CENTRES_APART = 'The two centres are about 70 km apart, so choose the one you can get to every week.';
-export const NOT_RUNNING = 'There is no Junior Royals at Hallam or Williamstown.';
+// Two centres only (Alex, 5 Oct 2026): Hallam and Williamstown are no longer part of
+// the Academy for now, so the page never names them.
 export const NEW_SLOTS = "We're starting with Wednesday nights. As groups fill, we'll open new time slots on other days.";
 
 // How a family wants to pay — asked on the interest form so we know the split.
@@ -322,10 +323,6 @@ export const FAQS = [
     {
         q: 'Can my player train at both centres?',
         a: `${CENTRES_APART} Your player belongs to one centre.`,
-    },
-    {
-        q: 'Is there Junior Royals at Hallam or Williamstown?',
-        a: 'No. Junior Royals runs at Mickleham and Cranbourne North.',
     },
     {
         q: 'My player was entered for Term 4. Do I need to do anything?',
