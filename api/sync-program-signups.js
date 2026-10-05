@@ -639,7 +639,7 @@ const JR_TERM4_CENTRES = {
   // The south-east program MOVED from Hallam to Cranbourne North (Alex, 30 Sep
   // 2026: "cranbourne north is the centre"). These families are NOT stranded —
   // their program runs — but they entered when it was at Hallam and have to be
-  // told the venue has changed before 7 October. Treating 'hallam' as closed
+  // told the venue has changed before 28 October. Treating 'hallam' as closed
   // would have told 12 families there is no program when there is one; treating
   // it as a plain rename would have let them turn up at the wrong address.
   'hallam': 'Elite Cricket Centre, Cranbourne North',
@@ -653,13 +653,13 @@ const JR_TERM4_CLOSED_CENTRES = {
 
 export const jrTerm4CentreStatus = (centre) => {
   if (centre === 'hallam') {
-    return 'Yes — Wednesdays 6:00pm or 7:00pm, 7 October to 16 December, but AT A '
+    return 'Yes — Wednesdays 6:00pm or 7:00pm, 28 October to 16 December, but AT A '
       + 'DIFFERENT VENUE. They entered when the south-east program ran at Hallam; it '
       + 'now runs at the Elite Cricket Centre, Cranbourne North. Tell them where to go '
-      + 'before 7 October.';
+      + 'before 28 October.';
   }
   if (JR_TERM4_CENTRES[centre]) {
-    return 'Yes — Wednesdays 6:00pm or 7:00pm, 7 October to 16 December';
+    return 'Yes — Wednesdays 6:00pm or 7:00pm, 28 October to 16 December';
   }
   if (JR_TERM4_CLOSED_CENTRES[centre]) {
     return `NO — there is no Term 4 program at ${JR_TERM4_CLOSED_CENTRES[centre]}. `
@@ -676,6 +676,18 @@ const JR_TERM4_NIGHTS = {
   monday: 'Monday — only runs if we add a second night',
 };
 
+// The Term 4 form's fallback (5 Oct 2026): when the database CHECK refused a
+// centre value, the entry was saved as preferred_centre 'any' with the real
+// centre in source ("junior-royals-term4-entry|centre=cranbourne-north").
+// Read the real centre back so the row shows where the family actually chose.
+export const jrTerm4Centre = (r) => {
+  if (r.preferred_centre === 'any') {
+    const m = /\|centre=([a-z-]+)/.exec(r.source || '');
+    if (m) return m[1];
+  }
+  return r.preferred_centre;
+};
+
 export const jrTerm4Row = (r) => ([
   r.id || '',
   asText(fmtMelb(r.created_at)),
@@ -684,12 +696,12 @@ export const jrTerm4Row = (r) => ([
   r.parent_name || '',
   r.parent_email || '',
   asText(r.parent_phone || ''),
-  r.preferred_centre === 'hallam'
+  jrTerm4Centre(r) === 'hallam'
     ? `${JR_TERM4_CENTRES.hallam} (they entered when it ran at Hallam)`
-    : JR_TERM4_CENTRES[r.preferred_centre]
-      || JR_TERM4_CLOSED_CENTRES[r.preferred_centre]
-      || r.preferred_centre || '',
-  jrTerm4CentreStatus(r.preferred_centre),
+    : JR_TERM4_CENTRES[jrTerm4Centre(r)]
+      || JR_TERM4_CLOSED_CENTRES[jrTerm4Centre(r)]
+      || jrTerm4Centre(r) || '',
+  jrTerm4CentreStatus(jrTerm4Centre(r)),
   JR_TERM4_NIGHTS[r.preferred_day]
     || (r.preferred_day ? r.preferred_day : 'Not asked — they entered before the form asked about nights'),
   NO_PAYMENT_LINE['jr-term4'],
@@ -767,13 +779,13 @@ export const guideLines = (linkLines = [], counts = {}) => {
     [''],
     ['  READ THE "RUNNING IN TERM 4?" COLUMN BEFORE YOU RING ANYONE.'],
     ['  Term 4 runs at Mickleham and the Elite Cricket Centre in Cranbourne North, on'],
-    ['  Wednesday nights, 7 October to 16 December, one hour a week in two groups at'],
+    ['  Wednesday nights, 28 October to 16 December, one hour a week in two groups at'],
     ['  6:00pm and 7:00pm.'],
     [''],
     ['  A "HALLAM" ROW STILL HAS A PROGRAM — AT A NEW VENUE. The south-east program'],
     ['  has moved from Hallam to the Elite Cricket Centre in Cranbourne North. Those'],
     ['  families are not stranded, but they entered expecting Hallam and need to be'],
-    ['  told where to turn up before 7 October. Their row says so.'],
+    ['  told where to turn up before 28 October. Their row says so.'],
     [''],
     [`  Williamstown is the real gap: ${counts.jrTerm4Closed ?? 0} entries on this tab picked it, and there`],
     ['  is no Term 4 program there. Those families have not been told. Do not promise'],

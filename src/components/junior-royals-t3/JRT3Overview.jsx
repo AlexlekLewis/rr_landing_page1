@@ -1,5 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { JR_T4 } from './jrTerm4Data';
+import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squads/data';
 
 const groups = [
     {
@@ -12,11 +15,6 @@ const groups = [
         color: 'from-rr-pink to-rr-blue',
         points: ['Skill-focused sessions', 'Use of bowling machine', 'Secondary training for those already playing cricket'],
     },
-    {
-        ages: '13–15 years',
-        color: 'from-rr-blue to-rr-pink',
-        points: ['High-intensity, skill-focused sessions', 'Use of bowling machine', 'Ideal secondary training for competitive players'],
-    },
 ];
 
 const JRT3Overview = () => (
@@ -24,19 +22,19 @@ const JRT3Overview = () => (
         <div className="max-w-6xl mx-auto px-6">
             <div className="text-center mb-16">
                 <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                    className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Term 3 · 2026</motion.p>
+                    className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Term 4 · 2026</motion.p>
                 <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
                     className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight mb-6">About the Program</motion.h2>
                 <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
                     className="text-lg text-rr-charcoal font-medium max-w-3xl mx-auto leading-relaxed">
-                    The Junior Royals is a small group, term-based coaching program for players aged 7–15. Participants build foundation through to more advanced cricket skills and prepare to play cricket in a team and higher levels — delivered by ICC, Royals and CA accredited coaches. Delivered across all terms, Junior Royals program content also supports participant preparation for the Rajasthan Royals Academy T20 Elite programs.
+                    Junior Royals is our weekly coaching program for players aged {JR_T4.ageMin} to {JR_T4.ageMax}. Players are grouped by age and coached in small groups by our coaches, so every player gets time with the bat and ball each week. Term 4 runs right through the start of the junior club season, so the skills your player works on here on a Wednesday are the ones they take into their Saturday games.
                 </motion.p>
             </div>
 
             <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
                 className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-6 text-center">Age Groups</motion.p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
                 {groups.map((group, i) => (
                     <motion.div key={group.ages} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }} transition={{ delay: i * 0.08 }}
@@ -76,6 +74,10 @@ const JRT3Overview = () => (
                     <div className="absolute bottom-4 left-4"><span className="text-xs font-bold text-white/80 uppercase tracking-widest">Skills &amp; Drills</span></div>
                 </motion.div>
             </div>
+            <p className="text-center text-rr-charcoal font-medium mt-8">
+                {JR_T4.olderLead} Our Performance Squads are for players aged {PS_MIN_AGE} to {PS_MAX_AGE}.{' '}
+                <Link to={JR_T4.olderRoute} className="text-rr-pink font-bold underline underline-offset-2">{JR_T4.olderLinkLabel}</Link>
+            </p>
         </div>
     </section>
 );

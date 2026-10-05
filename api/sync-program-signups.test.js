@@ -426,7 +426,7 @@ describe('junior royals term 4', () => {
       const status = jrTerm4CentreStatus(centre);
       expect(status).toMatch(/^Yes/);
       expect(status).toContain('Wednesdays');
-      expect(status).toContain('7 October to 16 December');
+      expect(status).toContain('28 October to 16 December');
     }
   });
 
@@ -438,7 +438,14 @@ describe('junior royals term 4', () => {
     expect(status).toMatch(/^Yes/);
     expect(status).toContain('DIFFERENT VENUE');
     expect(status).toContain('Cranbourne North');
-    expect(status).toContain('before 7 October');
+    expect(status).toContain('before 28 October');
+  });
+
+  // The form's save-anyway fallback (5 Oct 2026): 'any' + the real centre in source.
+  it('reads a fallback-saved Cranbourne North entry back as Cranbourne North', () => {
+    const r = jrT4({ preferred_centre: 'any', source: 'junior-royals-term4-entry|centre=cranbourne-north' });
+    expect(jrTerm4Row(r)[JR_TERM4_HEADERS.indexOf('Centre They Chose')]).toBe('Elite Cricket Centre, Cranbourne North');
+    expect(jrTerm4CentreStatus('cranbourne-north')).toMatch(/^Yes/);
   });
 
   it('shows a hallam row under the venue they must actually attend', () => {
@@ -513,7 +520,7 @@ describe('guide tab covers term 4', () => {
   it('tells the reader a "Hallam" row needs the venue explained, not a place found', () => {
     const text = guideLines([], {}).map((r) => r[0]).join('\n');
     expect(text).toContain('A "HALLAM" ROW STILL HAS A PROGRAM — AT A NEW VENUE');
-    expect(text).toContain('told where to turn up before 7 October');
+    expect(text).toContain('told where to turn up before 28 October');
   });
 
   it('warns against offering another centre unprompted', () => {

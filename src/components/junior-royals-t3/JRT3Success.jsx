@@ -1,21 +1,33 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../../lib/supabase';
+import { JR_T4_CONFIRMATION } from './JRT3RegistrationForm';
+import { JR_T4 } from './jrTerm4Data';
 
-const TABLE_MAP = { mickleham: 'jr_term3_mickleham', hallam: 'jr_term3_hallam', williamstown: 'jr_term3_williamstown' };
-
+// /junior-royals/success — Term 4 entry received. NOTHING is written from the
+// browser here any more: the old Term 3 version marked a jr_term3_* row
+// "completed" from localStorage, which anyone could trigger without paying
+// (removed 3 Oct 2026). No payment is taken for Term 4 entries and no place
+// is held. noindex: a confirmation page has no business in search results.
 const JRT3Success = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        const recordId = localStorage.getItem('jr_record_id');
-        const location = localStorage.getItem('jr_location_t3');
-        if (recordId && location && TABLE_MAP[location]) {
-            supabase.from(TABLE_MAP[location]).update({ payment_status: 'completed' }).eq('id', recordId)
-                .then(() => { localStorage.removeItem('jr_record_id'); localStorage.removeItem('jr_location_t3'); });
+        document.title = 'Term 4 Entry Received | Junior Royals | Rajasthan Royals Academy Melbourne';
+        let meta = document.head.querySelector('meta[name="robots"]');
+        const previous = meta ? meta.getAttribute('content') : null;
+        const created = !meta;
+        if (!meta) {
+            meta = document.createElement('meta');
+            meta.setAttribute('name', 'robots');
+            document.head.appendChild(meta);
         }
+        meta.setAttribute('content', 'noindex, nofollow');
+        return () => {
+            if (created) meta.remove();
+            else if (previous != null) meta.setAttribute('content', previous);
+        };
     }, []);
 
     const fadeUp = {
@@ -63,10 +75,10 @@ const JRT3Success = () => {
 
                 {/* Headline */}
                 <motion.div initial="hidden" animate="visible" custom={0.25} variants={fadeUp} className="mb-4">
-                    <p className="text-rr-pink font-bold uppercase tracking-widest text-sm md:text-base mb-3">Enrolment Confirmed</p>
+                    <p className="text-rr-pink font-bold uppercase tracking-widest text-sm md:text-base mb-3">Junior Royals — {JR_T4.term}</p>
                     <h1 className="text-5xl sm:text-6xl md:text-7xl font-black uppercase tracking-tight leading-none">
-                        YOU'RE{' '}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">IN.</span>
+                        ENTRY{' '}
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-rr-pink to-rr-blue">RECEIVED.</span>
                     </h1>
                 </motion.div>
 
@@ -75,12 +87,12 @@ const JRT3Success = () => {
 
                 {/* Welcome message */}
                 <motion.p initial="hidden" animate="visible" custom={0.4} variants={fadeUp} className="text-xl md:text-2xl font-semibold text-white/90 leading-relaxed mb-6">
-                    Welcome to the Junior Royals — Term 3, 2026.
+                    Thanks for registering your interest in Junior Royals, Term 4.
                 </motion.p>
 
                 {/* Body copy */}
                 <motion.p initial="hidden" animate="visible" custom={0.5} variants={fadeUp} className="text-base md:text-lg text-white/70 leading-relaxed mb-6 max-w-lg mx-auto font-medium">
-                    You are now enrolled in the program and our team are looking forward to working with you as you continue your cricketing journey — the Royals Way.
+                    {JR_T4_CONFIRMATION}
                 </motion.p>
 
                 {/* What to bring */}
@@ -95,8 +107,6 @@ const JRT3Success = () => {
                             <p className="text-sm font-bold text-white/90 mb-2">What to Bring</p>
                             <ul className="text-sm text-white/60 leading-relaxed space-y-1">
                                 <li>• A drink bottle and water</li>
-                                <li>• A Rajasthan Royals training shirt is required at every session</li>
-                                <li>• If you ordered a shirt, it will be available to collect prior to your first session</li>
                                 <li>• Please arrive <span className="text-white font-bold">10 minutes early</span> for your first session</li>
                             </ul>
                         </div>
@@ -112,18 +122,18 @@ const JRT3Success = () => {
                             </svg>
                         </div>
                         <div>
-                            <p className="text-sm font-bold text-white/90 mb-2">Place Confirmation</p>
+                            <p className="text-sm font-bold text-white/90 mb-2">What Happens Next</p>
                             <p className="text-sm text-white/70 leading-relaxed mb-2">
-                                This payment confirms your place in the Junior Royals program. A member of our team will be in touch within <span className="font-bold text-white">24–72 hours</span> to confirm your place and session details.
+                                We'll email you the Term 4 price and how to book before the first session on <span className="font-bold text-white">{JR_T4.firstSessionLong}</span>. Your player's place is only held once you've booked.
                             </p>
                             <p className="text-sm text-white/60 leading-relaxed mb-2">
                                 Please check your email inbox, including your <span className="font-bold text-white/80">junk, spam and promotions folders</span>, as our confirmation may be filtered.
                             </p>
                             <p className="text-sm text-white/60 leading-relaxed mb-2">
-                                You will also receive a follow-up email in the days prior to your first session with everything you need to know before the program begins.
+                                Once you've booked, you'll get a follow-up email before the first session with everything you need to know.
                             </p>
                             <p className="text-xs text-white/40 leading-relaxed">
-                                Office hours: Monday – Friday, 8:30am – 5:30pm. Confirmation will be sent on the first business day following your enrolment.
+                                Office hours: Monday – Friday, 8:30am – 5:30pm. We reply on business days.
                             </p>
                         </div>
                     </div>

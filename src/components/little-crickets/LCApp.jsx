@@ -19,7 +19,7 @@ const LCApp = () => (
                 </motion.h2>
                 <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
                     className="text-lg text-white/70 font-medium max-w-2xl mx-auto leading-relaxed">
-                    Our first AI-enabled platform — helping parents stay connected with their child's academy journey. Track attendance, receive coach feedback and monitor progress over time.
+                    The Academy app shows you your player's attendance and their coach's notes after each session.
                 </motion.p>
             </div>
 
@@ -43,10 +43,9 @@ const LCApp = () => (
                 {/* Features + download */}
                 <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} className="space-y-4">
                     {[
-                        { icon: '📋', title: 'Attendance Tracking', desc: 'Monitor your child\'s session attendance in real time.' },
+                        { icon: '📋', title: 'Attendance Tracking', desc: 'See which sessions your player has attended.' },
                         { icon: '💬', title: 'Coach Feedback', desc: 'Receive direct feedback from coaches after every session.' },
-                        { icon: '📈', title: 'Progress Insights', desc: 'A clear picture of your child\'s development over time.' },
-                        { icon: '🤖', title: 'AI-Enabled', desc: 'Australia\'s first AI-powered academy management platform.' },
+                        { icon: '📈', title: 'Progress Insights', desc: 'A record of your player\'s progress over the term.' },
                     ].map((f, i) => (
                         <motion.div key={i} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 * i }}
                             className="flex items-start gap-4 bg-white/5 border border-white/10 rounded-xl px-5 py-4">
