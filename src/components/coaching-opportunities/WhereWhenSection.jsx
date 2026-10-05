@@ -18,7 +18,7 @@ const FACTS = [
     },
     {
         label: 'Where you would work',
-        heading: 'Mickleham and Hallam / Cranbourne',
+        heading: 'Mickleham and Cranbourne North',
         body: 'These are our two active centres — one in Melbourne’s north, one in the south-east. Sessions run at the centre you are placed at, not across all of them.',
         icon: (
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

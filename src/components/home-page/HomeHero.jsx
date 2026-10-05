@@ -20,7 +20,6 @@ import { PROGRAM_ROW, SID_JUNIORS_ROUTE } from '../sid-juniors/sidJuniorsPromo';
 const PROGRAMS = [
     { label: 'Performance Squads Open Trial', route: '/performance-squads-open-trial', badge: 'Ages 16 to 25 · Mickleham Mon 5 Oct · Cranbourne North full', badgeColor: 'bg-rr-pink' },
     { label: PROGRAM_ROW.heroLabel, route: SID_JUNIORS_ROUTE, badge: PROGRAM_ROW.heroBadge, badgeColor: 'bg-rr-pink' },
-    { label: 'Junior Royals Holiday Program', route: '/junior-royals-holiday', badge: 'Cranbourne North · 30 Sep – 2 Oct', badgeColor: 'bg-rr-pink' },
     { label: 'Spin Club', route: '/spin-club', badge: 'Spin bowlers 10 to 25 · registering interest', badgeColor: 'bg-green-500' },
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Register your interest · next intake', badgeColor: 'bg-green-500' },
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 entries open', badgeColor: 'bg-green-500' },

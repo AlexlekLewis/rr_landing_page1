@@ -22,7 +22,6 @@ const FacebookIcon = () => (
 // because /elite-royals renders without a Navbar and dead-ends the visitor.
 const PROGRAMS = [
     { label: 'Junior Royals', to: '/junior-royals' },
-    { label: 'Holiday Program', to: '/junior-royals-holiday' },
     { label: 'Private Coaching', to: '/mickleham' },
     { label: 'Performance Squads', to: '/performance-squads' },
 ];

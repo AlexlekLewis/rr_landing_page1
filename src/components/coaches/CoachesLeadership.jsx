@@ -83,7 +83,7 @@ const CoachesLeadership = () => {
                 </motion.div>
 
                 {/* Tier 2 — Regional Head Coaches */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className={`grid grid-cols-1 gap-8 ${REGIONAL_COACHES.length > 1 ? 'md:grid-cols-2' : 'max-w-2xl mx-auto'}`}>
                     {REGIONAL_COACHES.map((coach, i) => (
                         <motion.div
                             key={coach.slug}
