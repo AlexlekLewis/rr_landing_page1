@@ -26,17 +26,22 @@ const LCApp = () => (
             {/* Video + content */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-16">
 
-                {/* YouTube embed */}
+                {/* App introduction video (76 s). SELF-HOSTED on purpose: the YouTube copy
+                    (youtu.be/s8gXspAQ9jw, embedded 24 Jun 2026) was deleted or made private and
+                    the page showed "Video unavailable" (found 5 Oct 2026). Our own file can't
+                    disappear from under the page. */}
                 <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
-                    <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_40px_rgba(225,31,143,0.15)]" style={{ paddingBottom: '56.25%', height: 0 }}>
-                        <iframe
-                            className="absolute top-0 left-0 w-full h-full rounded-2xl"
-                            src="https://www.youtube.com/embed/s8gXspAQ9jw"
-                            title="RRA Academy App Introduction"
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                        />
+                    <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-black aspect-video">
+                        <video
+                            className="absolute inset-0 w-full h-full object-contain"
+                            src="/assets/jr-app-intro.mp4"
+                            controls
+                            playsInline
+                            preload="metadata"
+                            aria-label="Introduction to the Rajasthan Royals Academy app"
+                        >
+                            Your browser can't play this video.
+                        </video>
                     </div>
                 </motion.div>
 
