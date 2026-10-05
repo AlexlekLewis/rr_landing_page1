@@ -76,7 +76,7 @@ const PC_NAV = [
 //   Junior sessions    — the juniors' half of the same visit (Alex, 29 Sep
 //                        2026). REVIEW 6 OCT 2026: pull it with the trial.
 //   Junior Royals      — Term 4, Wednesdays at Mickleham and Cranbourne North,
-//                        7 Oct – 16 Dec. REVIEW 16 DEC 2026.
+//                        28 Oct – 16 Dec (Alex, 5 Oct 2026). REVIEW 16 DEC 2026.
 //   Spin Club          — announced 26 Sep 2026, interest only. No start date
 //                        confirmed; when Alex sets the first Wednesday, say it
 //                        in the badge.
@@ -86,7 +86,7 @@ const PROGRAMS_DROPDOWN = [
     { label: 'Spin Club · Spinners 10-25', route: '/spin-club', badge: 'Registering Interest', badgeColor: 'bg-green-500' },
     { label: 'Junior Royals Holiday Program · Cranbourne North', route: '/junior-royals-holiday', badge: '30 Sep – 2 Oct', badgeColor: 'bg-rr-pink' },
     // REVIEW 16 Dec 2026 — last Term 4 session; the badge is wrong after that.
-    { label: 'Junior Royals', route: '/junior-royals', badge: 'Wednesdays from 7 Oct', badgeColor: 'bg-green-500' },
+    { label: 'Junior Royals', route: '/junior-royals', badge: 'Wednesdays from 28 Oct', badgeColor: 'bg-green-500' },
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Register Your Interest', badgeColor: 'bg-green-500' },
     { label: 'Private Coaching', route: '/mickleham', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },
     // Closed but real — it belongs here rather than in the home-page modal.

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { supabase } from '../../lib/supabase';
+import { Link } from 'react-router-dom';
 import { JR_T4 } from './jrTerm4Data';
+import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squads/data';
 
 // Junior Royals — Term 4 entry form. Entries land in jr_term4_waitlist
 // (anon INSERT only — parents can enter but nobody can read the list back
@@ -18,13 +20,24 @@ import { JR_T4 } from './jrTerm4Data';
 // WEDNESDAY IS THE ONLY NIGHT (Alex, 3 Oct 2026). The form no longer asks
 // which night; every entry is sent with preferred_day 'wednesday' so the
 // Junior Royals sheet sync (api/sync-program-signups.js) labels it correctly.
+//
+// NEVER LOSE AN ENTRY (5 Oct 2026). From 27 Sep to 5 Oct every Cranbourne North
+// entry was rejected: the jr_term4_waitlist CHECK constraint on preferred_centre
+// only allows mickleham | hallam | williamstown | any, and nobody was told. Until
+// the constraint is widened (the SQL is with Alex), a rejected centre value
+// (Postgres 23514) is retried ONCE as preferred_centre 'any' with the real
+// centre carried in `source` ("junior-royals-term4-entry|centre=cranbourne-north").
+// The sheet sync reads it back from there. Once the constraint allows the value,
+// the first insert simply succeeds and the retry never runs.
+export const ENTRY_SOURCE = 'junior-royals-term4-entry';
+export const fallbackSource = (centre) => `${ENTRY_SOURCE}|centre=${centre}`;
 
 const getUTMParams = () => {
     const p = new URLSearchParams(window.location.search);
     return { utm_source: p.get('utm_source') || null, utm_medium: p.get('utm_medium') || null, utm_campaign: p.get('utm_campaign') || null };
 };
 
-const AGE_OPTIONS = Array.from({ length: JR_T4.ageMax - JR_T4.ageMin + 1 }, (_, i) => i + JR_T4.ageMin); // 7–15
+const AGE_OPTIONS = Array.from({ length: JR_T4.ageMax - JR_T4.ageMin + 1 }, (_, i) => i + JR_T4.ageMin); // 7–12
 
 export const JR_T4_CONFIRMATION =
     `We've got your Term 4 entry. No payment has been taken and no place is held yet. We'll email you the price and how to book before the first session on ${JR_T4.firstSessionLong}.`;
@@ -61,7 +74,7 @@ const JRT3RegistrationForm = () => {
         setSubmitting(true);
         try {
             const utm = getUTMParams();
-            const { error } = await supabase.from('jr_term4_waitlist').insert([{
+            const row = {
                 parent_name: form.parent_name.trim(),
                 parent_email: form.parent_email.trim(),
                 parent_phone: form.parent_phone.trim() || null,
@@ -69,10 +82,19 @@ const JRT3RegistrationForm = () => {
                 player_age: parseInt(form.player_age, 10),
                 preferred_centre: form.preferred_centre,
                 preferred_day: 'wednesday',
-                source: 'junior-royals-term4-entry',
+                source: ENTRY_SOURCE,
                 page_referrer: document.referrer || null,
                 ...utm,
-            }]);
+            };
+            let { error } = await supabase.from('jr_term4_waitlist').insert([row]);
+            if (error && error.code === '23514') {
+                // The database refused a value. Save the entry anyway, with the real
+                // centre in `source`, rather than turn a family away.
+                console.warn('jr_term4_waitlist rejected a value; saving with the fallback', error.message);
+                ({ error } = await supabase.from('jr_term4_waitlist').insert([{
+                    ...row, preferred_centre: 'any', source: fallbackSource(form.preferred_centre),
+                }]));
+            }
             if (error) throw error;
             try {
                 if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
@@ -138,6 +160,10 @@ const JRT3RegistrationForm = () => {
                                             <option value="">Select age</option>
                                             {AGE_OPTIONS.map(a => <option key={a} value={a}>{a} years old</option>)}
                                         </select>{errors.player_age && <p className="text-red-500 text-xs mt-1">{errors.player_age}</p>}
+                                        <p className="text-slate-500 text-xs font-medium leading-relaxed mt-2">
+                                            {JR_T4.olderLead} Our Performance Squads are for players aged {PS_MIN_AGE} to {PS_MAX_AGE}.{' '}
+                                            <Link to={JR_T4.olderRoute} className="text-rr-pink font-bold underline">{JR_T4.olderLinkLabel}</Link>
+                                        </p>
                                     </div>
                                 </div>
                                 <div>
