@@ -27,7 +27,12 @@ const TIERS: CompetitionTierInput[] = [
   { code: "RY-2S", ctiValue: 0.35, expectedMidpointAge: 21 }, // Country lower synthetic — BELOW rep floor
 ];
 
-// Each player: a human label + the engine input. DOBs chosen so ages are stable around mid-2026.
+// Each player: a human label + the engine input. The DOBs are literal, so ages are worked
+// out as at NOW (mid-2026), the date the ages in the labels are true on. Reading today's
+// date instead quietly re-scores players as they have birthdays (Jayden turned 15 on
+// 1 Sep 2026 and dropped from 103.2 to 98.6).
+const NOW = new Date(2026, 6, 1); // 1 Jul 2026
+
 interface Case {
   id: string;
   name: string;
@@ -41,6 +46,7 @@ const base = (over: Partial<ComputeDnaInput>): ComputeDnaInput => ({
   stats: [],
   competitionTiers: TIERS,
   currentSeasonStartYear: 2025,
+  asAt: NOW,
   ...over,
 });
 
