@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Check } from 'lucide-react';
-import { supabase } from '../../lib/supabase';
 import { trackLead } from '../../lib/metaPixel';
 import { fillAttribution, LEAD_ATTR_COLUMNS } from '../../lib/attribution';
+import { ArrowRight, Check } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
 import {
     fadeUp, scrollTo, SectionHeading, Label, FieldError, Chevron,
     inputClass, selectClass, PSCheckbox,
