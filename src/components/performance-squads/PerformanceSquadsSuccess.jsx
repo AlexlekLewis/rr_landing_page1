@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
     CheckCircle2, MapPin, Clock, Shirt, Backpack,
-    Trophy, Globe2, Plane, GraduationCap, Mail, ArrowRight,
+    Globe2, Plane, GraduationCap, Mail, ArrowRight,
 } from 'lucide-react';
 import { ACTIVE_CENTRES } from './data';
 
@@ -35,7 +35,8 @@ const PerformanceSquadsSuccess = () => {
     ];
 
     const opportunities = [
-        { icon: Trophy, text: 'Training-partner selection for the SA20 (Paarl Royals) and CPL (Barbados Royals)' },
+        // Paarl Royals / Barbados Royals training-partner line removed 3 Oct 2026.
+        // Andy's rule, 27 Sep 2026: database email and paid ads only.
         { icon: Globe2, text: 'Exclusive training camps at the Royals High Performance Centre' },
         { icon: Plane, text: 'Royals Academy Australia representative tours' },
         { icon: GraduationCap, text: 'Exclusive training opportunities with Rajasthan Royals coaches — and more' },
@@ -128,9 +129,6 @@ const PerformanceSquadsSuccess = () => {
                             </li>
                         ))}
                     </ul>
-                    <p className="text-white/55 text-xs font-semibold uppercase tracking-wider">
-                        The final program price will be confirmed soon.
-                    </p>
                 </motion.div>
 
                 {/* CTA + contact */}

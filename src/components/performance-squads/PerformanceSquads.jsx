@@ -17,7 +17,7 @@ import PaymentModal from './PaymentModal';
 import PartnerStack from '../power-game/PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { scrollTo } from './shared';
-import { MIN_AGE, MAX_AGE } from './data';
+import { MIN_AGE, MAX_AGE, TRIAL_PRICE, MEMBERSHIP, getCentre, money } from './data';
 import { getUpcomingTrials, getBookableOpenAgeTrials, joinDays, dayOf } from './trialCalendar';
 
 // ─────────────────────────────────────────────────────────────
@@ -67,6 +67,14 @@ const heroAnnouncement = () => {
     return { label: 'Next trials', text: 'Dates to be confirmed. Register your interest to hear first.', target: 'register-pay' };
 };
 
+// Hero facts — every venue, age and price read from ./data.js (3 Oct 2026).
+const NORTH = getCentre('north-melbourne');
+const SOUTH_EAST = getCentre('south-east-melbourne');
+const HERO_BODY = `Our representative squads for players aged ${MIN_AGE}–${MAX_AGE}, at ${NORTH.venue} (${NORTH.name}) and the ${SOUTH_EAST.venue}, ${SOUTH_EAST.suburb} (${SOUTH_EAST.name}). The two centres are about 70 km apart, so choose the one you can get to every week. The 2026/27 squads start training on Monday 5 October; dates for the next trial are not set yet.`;
+const HERO_PRICE_LINE = `Trial ${money(TRIAL_PRICE)} incl. GST. If you're offered a place: ${money(MEMBERSHIP.joiningFee)} joining fee, then ${money(MEMBERSHIP.weeklyFee)} a week (all incl. GST).`;
+const HERO_BUTTON_NOTE = "No payment now. No place held. We'll email you the next trial dates as soon as they're set.";
+const PRIMARY_LABEL = 'Register Your Interest';
+
 const PerformanceSquads = () => {
     usePageAnalytics('/performance-squads', { sections: SECTIONS });
 
@@ -94,9 +102,12 @@ const PerformanceSquads = () => {
                 <div id="hero">
                     <HeroSection
                         announcement={heroAnnouncement()}
-                        body={`Our Performance Squads are the representative arm of the Rajasthan Royals Academy: squads of like-skilled players aged ${MIN_AGE} to ${MAX_AGE} who train together every week and play matches together from September to April. Every player earns their place at a trial.`}
-                        primary={{ label: 'See Trial Dates', target: 'trials' }}
-                        secondary={{ label: 'How Membership Works', target: 'pricing' }}
+                        eyebrow="Rajasthan Royals Academy · Melbourne"
+                        body={HERO_BODY}
+                        priceLine={HERO_PRICE_LINE}
+                        buttonNote={HERO_BUTTON_NOTE}
+                        primary={{ label: PRIMARY_LABEL, target: 'register-pay' }}
+                        secondary={{ label: 'How it works', target: 'pathway' }}
                     />
                 </div>
                 <div id="trials" className="scroll-mt-28 lg:scroll-mt-32">
@@ -138,7 +149,7 @@ const PerformanceSquads = () => {
                 </div>
             </main>
             <Footer />
-            <StickyCTA label="See Trial Dates" targetId="trials" />
+            <StickyCTA label={PRIMARY_LABEL} targetId="register-pay" />
             <PaymentModal open={!!payModal} registration={payModal} onClose={() => setPayModal(null)} />
         </div>
     );

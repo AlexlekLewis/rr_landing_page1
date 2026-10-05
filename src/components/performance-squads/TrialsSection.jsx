@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, MapPin, CalendarDays, Star, Bell } from 'lucide-react';
 import { BatIcon } from './CricketIcons';
 import { fadeUp, scrollTo, SectionHeading } from './shared';
-import { CENTRES, ACTIVE_CENTRES, TRIAL_PRICE, getCentre, money } from './data';
+import { ACTIVE_CENTRES, TRIAL_PRICE, getCentre, money } from './data';
 import {
     getUpcomingTrials,
     getBookableOpenAgeTrials,
@@ -50,7 +50,7 @@ const TrialsSection = ({ onChooseCentre, now = new Date() }) => {
                         <h3 className="text-2xl sm:text-3xl font-black uppercase mb-3">Open Age Trial</h3>
                         <p className="text-white/80 text-[15px] sm:text-base font-medium leading-relaxed mb-5">
                             The trial running right now is the Open Age Trial, for players {OPEN_AGE_AGE_LINE}.
-                            It costs {money(TRIAL_PRICE)} per player and is booked on its own page.
+                            It costs {money(TRIAL_PRICE)} incl. GST per player and is booked on its own page.
                         </p>
                         <div className="space-y-2.5 mb-6">
                             {openAge.map((t) => {
@@ -97,7 +97,6 @@ const TrialsSection = ({ onChooseCentre, now = new Date() }) => {
                     {ACTIVE_CENTRES.map((c, i) => {
                         const trials = upcoming.filter((t) => t.centre === c.slug);
                         const openAgeHere = trials.some((t) => t.kind === 'open-age' && !t.full);
-                        const squadHere = trials.some((t) => t.kind === 'squad' && !t.full);
                         return (
                             <motion.div key={c.slug} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i * 0.1}
                                 className="bg-white/5 border border-white/10 hover:border-rr-pink/50 rounded-2xl p-7 flex flex-col transition-colors">
@@ -157,16 +156,14 @@ const TrialsSection = ({ onChooseCentre, now = new Date() }) => {
                                             Book the Open Age Trial <ArrowRight className="w-4 h-4" />
                                         </a>
                                     )}
-                                    {squadHere && (
-                                        <button onClick={() => onChooseCentre(c.slug)} className={primaryBtn}>
-                                            Register for Trial <ArrowRight className="w-4 h-4" />
-                                        </button>
-                                    )}
+                                    {/* One label for the page's primary action (3 Oct 2026). When a
+                                        squad trial is bookable, the same button pre-selects this centre
+                                        and the form below switches to booking. */}
                                     <button
                                         onClick={() => onChooseCentre(c.slug)}
-                                        className={openAgeHere || squadHere ? secondaryBtn : primaryBtn}
+                                        className={openAgeHere ? secondaryBtn : primaryBtn}
                                     >
-                                        Register Your Interest {!(openAgeHere || squadHere) && <ArrowRight className="w-4 h-4" />}
+                                        Register Your Interest {!openAgeHere && <ArrowRight className="w-4 h-4" />}
                                     </button>
                                 </div>
                             </motion.div>
@@ -174,18 +171,6 @@ const TrialsSection = ({ onChooseCentre, now = new Date() }) => {
                     })}
                 </div>
 
-                {/* Future centres */}
-                <div className="grid sm:grid-cols-2 gap-5">
-                    {CENTRES.filter((c) => !c.active).map((c) => (
-                        <div key={c.slug} className="bg-white/[0.03] border border-dashed border-white/15 rounded-2xl p-7 opacity-60">
-                            <span className="inline-block text-[10px] font-black uppercase tracking-[0.2em] text-white/50 bg-white/5 rounded-full px-3 py-1.5 mb-4">
-                                Coming 2027
-                            </span>
-                            <h3 className="text-2xl font-black uppercase mb-2 text-white/70">{c.name}</h3>
-                            <p className="text-white/40 text-sm font-medium">{c.venue}</p>
-                        </div>
-                    ))}
-                </div>
             </div>
         </section>
     );

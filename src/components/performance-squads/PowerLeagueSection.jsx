@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { fadeUp } from './shared';
+import { MIN_AGE, MAX_AGE } from './data';
 
 // Where the squads play. Evergreen: no season-specific dates, so the page stays
 // true from one season to the next. Match count matches the membership section.
@@ -29,7 +30,7 @@ const PowerLeagueSection = () => (
                     April each season.
                 </p>
                 <p className="text-white/75 text-[15px] sm:text-base font-medium leading-relaxed mb-4">
-                    Each centre's First XI and additional squad teams (ages 10 to 25) are selected
+                    Each centre's First XI and additional squad teams (ages {MIN_AGE}–{MAX_AGE}) are selected
                     for Power League fixtures, alongside fixtures against external opposition in
                     showcase matches. The program is designed for every squad member to play real,
                     meaningful cricket through the season: 5 to 10 T20 match days, about one a month.

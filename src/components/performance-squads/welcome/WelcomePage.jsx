@@ -5,7 +5,8 @@ import Navbar from '../../Navbar';
 import Footer from '../../Footer';
 import usePageAnalytics from '../../../hooks/usePageAnalytics';
 import { fadeUp, scrollTo } from '../shared';
-import { WELCOME, SID, PLAYER_IMAGE, HALLA_BOL, getMissingDetails } from './welcomeConfig';
+import { WELCOME, PLAYER_IMAGE, HALLA_BOL, getMissingDetails } from './welcomeConfig';
+import { SID } from '../../open-age-trial/sid';
 import { Pending, Eyebrow, Heading, Card, Bullets } from './welcomeShared';
 import WelcomeConfirmForm from './WelcomeConfirmForm';
 import WelcomeKitForm from './WelcomeKitForm';
@@ -461,14 +462,14 @@ const WelcomePage = () => {
                                 className="w-full sm:w-[260px] aspect-[4/5] sm:aspect-[2/3] rounded-2xl object-cover object-[30%_top]"
                             />
                             <div>
-                                <Eyebrow>Squad sessions with {SID.name}</Eyebrow>
+                                {/* REVIEW 6 Oct 2026 — remove this section after Sid's visit. */}
+                                <Eyebrow>{SID.name} in Melbourne</Eyebrow>
                                 <h2 className="text-2xl sm:text-3xl font-black uppercase leading-tight mb-4">
                                     We will invite players to meet Sid
                                 </h2>
                                 <div className="space-y-3 text-white/85 text-base font-medium leading-relaxed">
-                                    <p>He is the Head of International Player Development at the Rajasthan Royals.</p>
-                                    <p>He is also a performance coach for the Rajasthan Royals team in the IPL.</p>
-                                    <p>He has worked with Yashasvi Jaiswal, Riyan Parag and Vaibhav Sooryavanshi.</p>
+                                    <p>{SID.name} (Sid) is {SID.title} at the {SID.employer}.</p>
+                                    <p>His visit is scheduled; if it changes, we&apos;ll tell squad players straight away.</p>
                                     <p>Other Royals and guest coaches and players will join from time to time, online and in person.</p>
                                     <p className="text-white/65">When: {season.sidSessions.when}.</p>
                                     {/* A different thing from the squad sessions above: open to any

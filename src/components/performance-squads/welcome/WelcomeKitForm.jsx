@@ -323,7 +323,7 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer, onFound }) => {
             <div className="mt-7 pt-6 border-t border-white/10">
                 <Eyebrow className="mb-4">Due today</Eyebrow>
                 <ul className="space-y-2 text-base font-medium text-white/85 mb-4">
-                    <li className="flex justify-between gap-4"><span>Joining Fee <span className="text-white/50 text-sm">(one-off, non-refundable)</span></span><span className="font-black">{fmt(joiningCents)}</span></li>
+                    <li className="flex justify-between gap-4"><span>Joining Fee <span className="text-white/50 text-sm">(one-off)</span></span><span className="font-black">{fmt(joiningCents)}</span></li>
                     <li className="flex justify-between gap-4"><span>Squad Fee — first week</span><span className="font-black">{fmt(weeklyCents)}</span></li>
                     {chosen.map((l) => (
                         <li key={`${l.item.key}-${l.size}`} className="flex justify-between gap-4">
@@ -337,6 +337,7 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer, onFound }) => {
                     <p className="text-3xl font-black">{fmt(dueToday)}</p>
                 </div>
                 <p className="text-white/55 text-sm font-medium mb-6 leading-relaxed">
+                    Joining Fee: {WELCOME.pricing.joiningFee.note}{' '}
                     Then {fmt(weeklyCents)} a week, charged weekly in advance. {WELCOME.pricing.cancel}
                 </p>
                 <button

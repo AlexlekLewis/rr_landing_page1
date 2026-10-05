@@ -11,6 +11,8 @@ import {
     TERMS_ROUTE,
     TERMS_MEMBERSHIP_CLAUSE,
     GRACE_PERIOD,
+    FIRST_PAYMENT,
+    JOINING_FEE_TERMS,
     money,
 } from './data';
 
@@ -29,21 +31,21 @@ const FEES = [
         n: '01',
         label: 'Trial fee',
         price: money(TRIAL_PRICE),
-        unit: 'per session',
+        unit: 'incl. GST, per session',
         body: 'To be assessed at a trial. Nothing more to pay unless you are offered a squad place.',
     },
     {
         n: '02',
         label: 'Joining fee',
         price: money(MEMBERSHIP.joiningFee),
-        unit: 'one-off',
-        body: 'Paid once, when you accept your squad place. Non-refundable.',
+        unit: 'incl. GST, one-off',
+        body: JOINING_FEE_TERMS,
     },
     {
         n: '03',
         label: 'Membership',
         price: money(MEMBERSHIP.weeklyFee),
-        unit: 'a week',
+        unit: 'incl. GST, a week',
         body: `Your ${money(MEMBERSHIP_YEARLY)} yearly membership, charged weekly in advance. Cancel any time.`,
     },
 ];
@@ -53,9 +55,23 @@ const MembershipSection = () => (
         <div className="max-w-5xl mx-auto">
             <SectionHeading
                 eyebrow="Membership"
-                title="How Membership Works"
-                sub="Performance Squads run on a yearly membership. You pay it weekly, and you can cancel any time."
+                title="What It Costs"
+                sub="Performance Squads run on a yearly membership. You pay it weekly, and you can cancel any time. All prices include GST."
             />
+
+            {/* The two numbers a family needs first, in plain words. */}
+            <motion.ul initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}
+                className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 space-y-3 mb-6">
+                <li className="text-white/85 text-[15px] sm:text-base font-medium leading-relaxed">
+                    <span className="text-white font-black">Trial:</span> {money(TRIAL_PRICE)} incl. GST a session.
+                    Nothing more to pay unless you&apos;re offered a squad place.
+                </li>
+                <li className="text-white/85 text-[15px] sm:text-base font-medium leading-relaxed">
+                    <span className="text-white font-black">If you accept a place:</span> {money(MEMBERSHIP.joiningFee)} joining
+                    fee, then {money(MEMBERSHIP.weeklyFee)} a week. Your first payment is {money(FIRST_PAYMENT)} incl. GST
+                    (the joining fee plus your first week).
+                </li>
+            </motion.ul>
 
             {/* The statement Alex wants read before anything else on fees. */}
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}
@@ -65,7 +81,7 @@ const MembershipSection = () => (
                 </h3>
                 <p className="text-white/85 text-base sm:text-lg font-medium leading-relaxed mb-6">
                     Your Performance Squad membership is a yearly fee of{' '}
-                    <span className="text-white font-black">{money(MEMBERSHIP_YEARLY)}</span>. For your convenience,
+                    <span className="text-white font-black">{money(MEMBERSHIP_YEARLY)} incl. GST</span>. For your convenience,
                     it is broken down into weekly payments of{' '}
                     <span className="text-white font-black">{money(MEMBERSHIP.weeklyFee)}</span>.
                 </p>
@@ -105,7 +121,8 @@ const MembershipSection = () => (
             <motion.ul initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}
                 className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 space-y-3 mb-6">
                 {[
-                    'Match fees are separate. They are set for each match, depending on whether it is played on turf or synthetic.',
+                    // Amounts not set yet — no hidden compulsory figure implied (3 Oct 2026).
+                    "Match fees are separate and are confirmed before each match you're picked for.",
                     `If payments stop without notice, there is a ${GRACE_PERIOD} grace period before your squad place is released.`,
                     'You must stay financial to receive member benefits and to be selected for matches.',
                 ].map((line) => (
@@ -140,13 +157,9 @@ const MembershipSection = () => (
             </motion.div>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <button onClick={() => scrollTo('trials')}
-                    className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors">
-                    See Trial Dates <ArrowRight className="w-4 h-4" />
-                </button>
                 <button onClick={() => scrollTo('register-pay')}
-                    className="inline-flex items-center justify-center gap-2 border-2 border-white/25 hover:border-rr-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors">
-                    Register Your Interest
+                    className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors">
+                    Register Your Interest <ArrowRight className="w-4 h-4" />
                 </button>
             </div>
         </div>

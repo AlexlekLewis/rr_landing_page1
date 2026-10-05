@@ -73,6 +73,18 @@ const PAYMENTS_TAB = `Payments (Stripe)${DNE}`;
 // tab says which squad they are asking to join.
 const INTEREST_TAB = `Can't Attend a Trial${DNE}`;
 
+// People who registered interest on /performance-squads while no trial was
+// open (entry_type 'waitlist'). Until 3 Oct 2026 they landed on the
+// "Can't Attend a Trial" tab with that tab's "No trial fee — assessed from
+// their Academy training. Do not chase." note, which is wrong for them: they
+// are not Academy players being assessed in training, they are waiting for
+// the next trial. Their own tab, with their own note.
+// Rows already written to the old tab are left where they are (this sync
+// never clears or deletes); they simply stop being updated there.
+export const NEXT_INTAKE_TAB = `Register Interest — Next Intake${DNE}`;
+export const NEXT_INTAKE_NOTE =
+  'Registered interest for the next trial. No payment taken, no place held. Follow up when trial dates are set.';
+
 // One tab per live centre. Slug -> tab name, mirroring the centre slugs the
 // registration form writes into preferred_centre.
 const CENTRE_TABS = {
@@ -86,7 +98,7 @@ const FALLBACK_TAB = `Other / Unassigned${DNE}`;
 // the rows — and anyone's notes in the safe columns — exactly where they are,
 // instead of stranding them on an orphaned tab beside a new empty one.
 const LEGACY_TAB_NAMES = Object.fromEntries(
-  [GUIDE_TAB, PAYMENTS_TAB, INTEREST_TAB, FALLBACK_TAB, ...Object.values(CENTRE_TABS)]
+  [GUIDE_TAB, PAYMENTS_TAB, INTEREST_TAB, NEXT_INTAKE_TAB, FALLBACK_TAB, ...Object.values(CENTRE_TABS)]
     .map((name) => [name, name.slice(0, -DNE.length)]),
 );
 
@@ -239,9 +251,18 @@ export const paymentCheck = (dueCents, pay) => {
 // registered via /performance-squads/interest. They owe NOTHING, so the fee and
 // payment columns must not treat them as a debtor.
 const isTrialEntry = (r) => (r.entry_type || 'trial') === 'trial';
+const isNextIntakeEntry = (r) => r.entry_type === 'waitlist';
+
+// Which tab a registration belongs on.
+export const tabFor = (r) => {
+  if (isNextIntakeEntry(r)) return NEXT_INTAKE_TAB;
+  if (!isTrialEntry(r)) return INTEREST_TAB;
+  return CENTRE_TABS[r.preferred_centre] || FALLBACK_TAB;
+};
 
 export const regRow = (r, pay) => {
   const trialEntry = isTrialEntry(r);
+  const nextIntake = isNextIntakeEntry(r);
   const sessions = Number(r.trial_sessions) || 0;
   const dates = Array.isArray(r.trial_session_dates) ? r.trial_session_dates.map(sessionLabel).join(' · ') : '';
   return [
@@ -255,7 +276,7 @@ export const regRow = (r, pay) => {
     r.club || '',
     r.playing_role || '',
     CENTRE_NAMES[r.preferred_centre] || r.preferred_centre || '',
-    trialEntry ? 'Trial' : "Can't attend a trial",
+    trialEntry ? 'Trial' : nextIntake ? 'Registered interest — next intake' : "Can't attend a trial",
     trialEntry ? asText(sessions || '') : '',
     trialEntry ? dates : '',
     trialEntry ? (sessions ? money(sessions * TRIAL_FEE_CENTS) : '') : 'No fee',
@@ -264,7 +285,8 @@ export const regRow = (r, pay) => {
     pay ? asText(fmtMelb(pay.paidAt)) : '',
     pay ? pay.method : '',
     trialEntry ? paymentCheck(sessions * TRIAL_FEE_CENTS, pay)
-      : 'No trial fee — assessed from their Academy training. Do not chase.',
+      : nextIntake ? NEXT_INTAKE_NOTE
+        : 'No trial fee — assessed from their Academy training. Do not chase.',
     yesNo(r.accept_terms),
     yesNo(r.accept_player_code),
     yesNo(r.accept_parent_code),
@@ -773,6 +795,12 @@ const guideLines = (linkLines = []) => [
   ['kept off the centre tabs on purpose. The Centre column says which squad they'],
   ['are asking to join. Their coach assesses them from their normal training.'],
   [''],
+  ['THE "REGISTER INTEREST — NEXT INTAKE" TAB — people who registered interest on'],
+  ['rramelbourne.com/performance-squads while no trial was open. No payment has been'],
+  ['taken and no place is held. Follow them up when the next trial dates are set.'],
+  ['(Before 3 October 2026 these sign-ups were put on the "Cannot attend a trial" tab;'],
+  ['those older rows stay there and are no longer updated.)'],
+  [''],
   ['WHERE YOU CAN WORK SAFELY'],
   [''],
   ['On the centre tabs, columns A to AD are filled in by the automatic update. If you'],
@@ -905,7 +933,7 @@ export async function reconcilePerformanceSquads(sheets, spreadsheetId, sb = nul
   // trial night is only looking at people who are actually turning up.
   const byTab = new Map();
   for (const r of leads || []) {
-    const tab = !isTrialEntry(r) ? INTEREST_TAB : (CENTRE_TABS[r.preferred_centre] || FALLBACK_TAB);
+    const tab = tabFor(r);
     if (!byTab.has(tab)) byTab.set(tab, []);
     byTab.get(tab).push(regRow(r, paidByReg.get(r.id) || null));
   }

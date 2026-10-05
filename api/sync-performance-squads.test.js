@@ -13,6 +13,9 @@ import {
   describeLinkHealth,
   aggregatePaymentsByEmail,
   allocatePaymentsToRegistrations,
+  tabFor,
+  NEXT_INTAKE_TAB,
+  NEXT_INTAKE_NOTE,
 } from './sync-performance-squads.js';
 
 const lead = (over = {}) => ({
@@ -185,6 +188,50 @@ describe('registrations from someone who cannot attend a trial', () => {
   it('treats a row with no entry_type as a trial, so existing rows are unaffected', () => {
     const legacy = lead(); delete legacy.entry_type;
     expect(regRow(legacy, null)[col('Registration Type')]).toBe('Trial');
+  });
+});
+
+// Interest registered on /performance-squads while no trial is open
+// (entry_type 'waitlist'). These used to land on the "Can't Attend a Trial" tab
+// with an "assessed from their Academy training" note that was not true of them.
+describe('interest registered for the next intake', () => {
+  const interest = (over = {}) => lead({
+    entry_type: 'waitlist', on_waitlist: true, trial_sessions: null, trial_session_dates: null,
+    phone: '0412345678', club: null, playing_role: null, parent_name: null, ...over,
+  });
+
+  it('goes to its own tab, named with the DO NOT EDIT warning', () => {
+    expect(tabFor(interest())).toBe(NEXT_INTAKE_TAB);
+    expect(NEXT_INTAKE_TAB).toBe('Register Interest — Next Intake — DO NOT EDIT');
+  });
+
+  it('leaves trial and cannot-attend rows on their existing tabs', () => {
+    expect(tabFor(lead())).toBe('South-East Melbourne — DO NOT EDIT');
+    expect(tabFor(lead({ preferred_centre: 'north-melbourne' }))).toBe('North Melbourne — DO NOT EDIT');
+    expect(tabFor(lead({ entry_type: 'unable-to-trial' }))).toBe("Can't Attend a Trial — DO NOT EDIT");
+    expect(tabFor(lead({ preferred_centre: 'west-melbourne' }))).toBe('Other / Unassigned — DO NOT EDIT');
+  });
+
+  it('says plainly that nothing was paid and no place is held', () => {
+    const r = regRow(interest(), null);
+    expect(r[col('Registration Type')]).toBe('Registered interest — next intake');
+    expect(r[col('Payment Check')]).toBe(NEXT_INTAKE_NOTE);
+    expect(NEXT_INTAKE_NOTE).toMatch(/No payment taken, no place held/);
+    expect(r[col('Payment Check')]).not.toMatch(/Academy training|Do not chase/);
+  });
+
+  it('is never shown as owing a trial fee', () => {
+    const r = regRow(interest(), null);
+    expect(r[col('Trial Fee Due (AUD)')]).toBe('No fee');
+    expect(r[col('Paid in Stripe?')]).toBe('n/a');
+  });
+
+  it('copes with the fields the shorter interest form leaves out', () => {
+    const r = regRow(interest(), null);
+    expect(r).toHaveLength(REG_HEADERS.length);
+    expect(r[col('Club')]).toBe('');
+    expect(r[col('Playing Role')]).toBe('');
+    expect(r[col('Parent / Guardian')]).toBe('');
   });
 });
 

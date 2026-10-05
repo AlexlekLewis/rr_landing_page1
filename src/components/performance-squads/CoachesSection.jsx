@@ -8,8 +8,8 @@ import { SQUAD_COACHES } from './data';
 const CoachesSection = ({
     coaches = SQUAD_COACHES,
     eyebrow = 'Your Coaches',
-    title = 'Led By The Royals Ecosystem Coaches',
-    sub = 'Each Performance Squad is led by highly experienced CA and Royals accredited Head Coaches who set the standard, pick the teams, and drive the squad through the season.',
+    title = 'Led By Our Head Coaches',
+    sub = 'Each Performance Squad is led by highly experienced Cricket Australia and Royals accredited Head Coaches who set the standard, pick the teams, and drive the squad through the season.',
 }) => (
     <section className="py-20 px-5">
         <div className="max-w-5xl mx-auto">

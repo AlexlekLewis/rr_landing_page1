@@ -55,7 +55,7 @@ const PowerGameConfirm = React.lazy(() => import('./components/power-game/return
 const PowerGameScholarship = React.lazy(() => import('./components/power-game/returning/ScholarshipSignup'));
 const PowerGameFullRide = React.lazy(() => import('./components/power-game/returning/FullRideSignup'));
 // Performance Squads — representative pathway (trial or invite; North Melbourne + South-East
-// Melbourne). HIDDEN page: noindex, not linked from nav/homepage/sitemap. Direct URL only.
+// Melbourne). PUBLIC and indexed since 2 Oct 2026 (Alex): in the sitemap; SEO in src/seo/pageSeo.js.
 const PerformanceSquads = React.lazy(() => import('./components/performance-squads/PerformanceSquads'));
 const PerformanceSquadsSuccess = React.lazy(() => import('./components/performance-squads/PerformanceSquadsSuccess'));
 // "I can't make a trial" — current Academy players who want a squad place but
@@ -69,7 +69,7 @@ const PerformanceSquadsWelcomeSuccess = React.lazy(() => import('./components/pe
 
 // Open age T20 trial — an EXTRA INTAKE into the existing South-East Melbourne
 // Performance Squad at Cranbourne North, headlined by Sid Lahiri, Performance
-// Coach of the Rajasthan Royals. Public and indexed, unlike /performance-squads.
+// Coach of the Rajasthan Royals. Public and indexed, like /performance-squads.
 const OpenAgeTrial = React.lazy(() => import('./components/open-age-trial/OpenAgeTrial'));
 // Junior sessions with Siddhartha Lahiri — Cranbourne North Sun 4 Oct (1:00–2:30pm)
 // and Mickleham Mon 5 Oct (4:30–5:30pm), 2026.
@@ -247,8 +247,8 @@ function App() {
             (src/components/power-game-masterclass/) to revive if the program returns:
             restore these two Route lines and set is_active/noindex accordingly. */}
 
-        {/* Performance Squads — trial/invite representative pathway. HIDDEN: noindex,
-            not in nav or sitemap, direct URL only until Andy approves go-live. */}
+        {/* Performance Squads — representative pathway. PUBLIC and indexed since
+            2 Oct 2026 (Alex). The /success page below is reached from Stripe only. */}
         <Route path="/performance-squads" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquads /></React.Suspense>} />
         <Route path="/performance-squads/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquadsSuccess /></React.Suspense>} />
         <Route path="/performance-squads/interest" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PerformanceSquadsInterest /></React.Suspense>} />

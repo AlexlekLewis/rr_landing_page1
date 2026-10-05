@@ -3,11 +3,10 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { GlobalBallIcon } from './CricketIcons';
 import { fadeUp, SectionHeading } from './shared';
-import { OPPORTUNITIES, CASE_STUDIES } from './data';
+import { OPPORTUNITIES } from './data';
 
 // The differentiator no club or association can match. Sits high on the page,
-// with proof underneath — the Royals Group placements are the whole argument
-// that this isn't just another T20 competition.
+// Training-partner proof cards removed 3 Oct 2026 (see note in the JSX).
 //
 // `lead` is an optional sentence rendered directly above the list. The open age
 // trial page uses it to say, where the reader actually meets the claim, that
@@ -60,34 +59,12 @@ const OpportunitySection = ({ lead = null }) => (
                 </ul>
             </motion.div>
 
-            {/* Proof */}
-            <div className="grid sm:grid-cols-2 gap-5 mb-6">
-                {CASE_STUDIES.map((c, i) => (
-                    <motion.div
-                        key={c.title}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
-                        variants={fadeUp}
-                        custom={i * 0.1}
-                        className="bg-white/5 border border-white/10 rounded-2xl p-7 flex flex-col"
-                    >
-                        <span className="inline-block text-[10px] font-black uppercase tracking-[0.2em] text-rr-pink bg-rr-pink/10 rounded-full px-3 py-1.5 self-start mb-5">
-                            Already Happening
-                        </span>
-                        <div className="flex items-baseline gap-3 mb-3">
-                            <span className="text-4xl sm:text-5xl font-black text-rr-light-pink leading-none">
-                                {c.stat}
-                            </span>
-                            <span className="text-[11px] font-black uppercase tracking-wider text-white/50">
-                                {c.statLabel}
-                            </span>
-                        </div>
-                        <h4 className="text-lg font-black uppercase mb-2">{c.title}</h4>
-                        <p className="text-white/65 text-sm font-medium leading-relaxed">{c.body}</p>
-                    </motion.div>
-                ))}
-            </div>
+            {/* The two "Already Happening" proof cards (Paarl Royals / Barbados
+                Royals training partners) are no longer rendered, here or on
+                /performance-squads-open-trial which shares this section.
+                Andy's rule, 27 Sep 2026: training-partner and franchise claims
+                go in the database email and paid ads only. CASE_STUDIES stays
+                in ./data.js for those non-public uses. */}
 
             <motion.p
                 initial="hidden"
