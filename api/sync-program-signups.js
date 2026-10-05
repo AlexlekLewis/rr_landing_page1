@@ -554,7 +554,28 @@ export const TOUR_HEADERS = [
   'Tours They Want',
   'Registered Via',
   'Payment',
+  // Added 5 Oct 2026 (Alex): member pricing on the December tour. APPENDED, so
+  // every column before them keeps its letter.
+  'Programs They Have Been In',
+  'December Member Pricing',
 ];
+
+// The /tours form writes these answers as lines in `bio` (ITForm.jsx →
+// programLines). Entries made before 5 Oct 2026 were never asked.
+const bioLine = (bio, label) => {
+  const m = String(bio || '').match(new RegExp(`^${label}: (.*)$`, 'm'));
+  return m ? m[1].trim() : null;
+};
+const NOT_ASKED = 'Not asked — entered before 5 Oct 2026';
+const DECEMBER_TOUR_ID = '2026-12-late-dec-jan';
+export const tourProgramsCell = (r) => bioLine(r.bio, 'Programs') ?? NOT_ASKED;
+export const tourMemberPricingCell = (r) => {
+  const wantsDecember = Array.isArray(r.tour_interest) && r.tour_interest.includes(DECEMBER_TOUR_ID);
+  if (!wantsDecember) return '';
+  const line = bioLine(r.bio, 'December tour member pricing');
+  if (line === null) return NOT_ASKED;
+  return line.startsWith('yes') ? 'Yes — self-declared, check before quoting' : 'No';
+};
 
 // The live /tours page writes an applications row.
 export const tourRowFromApplication = (r) => ([
@@ -575,6 +596,8 @@ export const tourRowFromApplication = (r) => ([
     .map((id) => TOUR_WINDOWS[id] || id).join(', '),
   'Tour page (rramelbourne.com/tours)',
   NO_PAYMENT_LINE['tour-interest'],
+  tourProgramsCell(r),
+  tourMemberPricingCell(r),
 ]);
 
 // The 2026 referral-gated EOI form. It stopped taking entries on 10 Aug 2026,
@@ -598,6 +621,8 @@ export const tourRowFromEoi = (r) => ([
   '',
   'India Tour 2026 EOI form (closed 10 Aug 2026)',
   NO_PAYMENT_LINE['tour-interest'],
+  NOT_ASKED,
+  '',
 ]);
 
 // ── Junior Royals Term 4 ────────────────────────────────────
@@ -788,6 +813,12 @@ export const guideLines = (linkLines = [], counts = {}) => {
     [`"${PROGRAM_LABELS['tour-interest']}" — players who want to go on an India tour, from`],
     ['  rramelbourne.com/tours. An expression of interest, not a booking: nothing has'],
     ['  been paid and no place is held.'],
+    [''],
+    ['  "Programs They Have Been In" and "December Member Pricing" (from 5 Oct 2026):'],
+    ['  players who have been in the 12-week T20 Program, Power Game Pre-Season or'],
+    ['  Performance Squads get member pricing on the December tour. The family ticks'],
+    ['  the programs on the form, so a "Yes" is SELF-DECLARED: check it against our'],
+    ['  records before quoting the member price.'],
     [''],
     [`  THIS TAB STARTS AT 1 SEPTEMBER 2026. Currently ${counts.tour ?? 0} entries. A further`],
     [`  ${counts.tourBeforeCutoff ?? 0} people registered interest before that date and are NOT shown here —`],
