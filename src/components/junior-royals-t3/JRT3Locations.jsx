@@ -76,7 +76,7 @@ const JRT3Locations = () => {
                 </div>
 
                 <p className="text-center text-sm text-rr-charcoal font-medium mt-10 max-w-2xl mx-auto">
-                    {JR_T4.notRunning} {JR_T4.movedFromHallam}
+                    {JR_T4.twoCentres} {JR_T4.centresApart}
                 </p>
             </div>
         </section>

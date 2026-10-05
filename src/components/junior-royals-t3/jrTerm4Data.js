@@ -34,10 +34,9 @@ export const JR_T4 = {
     stickyLabel: 'Register Your Interest · Term 4 from Wed 28 Oct',
     noPaymentLine: "No payment now. No place is held yet. We'll email you the price and how to book.",
     centresApart: 'The two centres are about 70 km apart, so pick the one you can get to every week.',
-    notRunning: "Term 4 isn't running at Hallam or Williamstown.",
-    // South-east program moved from Hallam to Cranbourne North (Alex, 30 Sep
-    // 2026: "cranbourne north is the centre"). Folded in from PR #102.
-    movedFromHallam: 'Our south-east program has moved from Hallam to the Elite Cricket Centre in Cranbourne North.',
+    // TWO CENTRES ONLY (Alex, 5 Oct 2026): "Hallam and Williamstown no longer exist
+    // as part of the organisation for the moment." Don't name them on the page.
+    twoCentres: 'Junior Royals runs at two centres: Mickleham Indoor Sports Centre in North Melbourne, and the Elite Cricket Centre in Cranbourne North, South-East Melbourne.',
     // Players older than 12 go to Performance Squads (Alex, 5 Oct 2026).
     olderLead: 'Aged 13 or older?',
     olderLinkLabel: 'See Performance Squads',
