@@ -204,10 +204,27 @@ export const MEMBERSHIP = {
     ],
 };
 
-// Per-hour price, then how it compares. Comparison rows are filled from published
-// Melbourne prices (research 5 Oct 2026) — every row needs a source URL and the
-// date checked, and the section a REVIEW date (consumer-law.md §4: comparisons
-// must be accurate and current).
+// Per-hour price, then how it compares (Alex, 5 Oct 2026: show members how our
+// price compares per hour with other programs in the same space).
+//
+// SOURCES — published prices on each provider's own website, checked 5 Oct 2026.
+// Providers are NOT named on the page; the figures are ranges by kind of program.
+// None of these pages says whether GST is included; ours is incl. GST.
+//   Weekly small-group coaching (groups of 3–10):
+//     Ravenhall Indoor Cricket Centre, Youth Development Group, 6 × 60 min $240 ($40/h),
+//       12 × 60 min $420 ($35/h) — ravenhallindoorcricketcentre.com.au
+//     Elite Cricket Academy, Junior Group Sessions, 6 h/month $235 ($39.17/h),
+//       12 h/month $435 ($36.25/h) — elitecricketacademy.com.au/junior-group-sessions
+//     Cricket HQ, weekly U12 group, $50 per 60 min — cricket-hq.com.au/coaching/u12-and-u14-to-open-group-training-sessions/
+//     Cricket HQ, Autumn GAP U12, 7 × 90 min $385 ($36.67/h) — cricket-hq.com.au/coaching/the-victorian-junior-cricket-academy-autumn-gap-programme/
+//   Private 1-on-1 (single hour or smallest pack): Cricket HQ $140/h; Shaun Brown's
+//     Cricket Coaching $110/h; P2G Cricket Academy $99/h; Ravenhall $80–$110/h by coach level.
+//   Left OUT on purpose (not the same product): holiday camps ($11.67–$30.80/h, long
+//     days that include breaks) and Woolworths Cricket Blast (about $10/h, a volunteer-run
+//     beginner program for ages 5–7).
+//   Our own: Junior Royals Term 3, 2026 — $330 for 8 × 1-hour sessions = $41.25/h.
+// REVIEW 5 Jan 2027 — re-check every price above; a stale comparison is misleading
+// conduct under the ACL (consumer-law.md §4).
 export const PRICE_CONTEXT = {
     title: 'What it costs per hour',
     lines: [
@@ -216,11 +233,12 @@ export const PRICE_CONTEXT = {
     ],
     compareTitle: 'How that compares',
     compare: [
-        { what: `Junior Royals membership`, perHour: `about ${money(PER_HOUR)}`, note: `${money(YEARLY)} a year ÷ about ${SESSIONS_PER_YEAR} sessions`, ours: true },
-        { what: tbc('Small-group junior coaching, other Melbourne academies', 'Research in progress: published prices, with sources'), perHour: tbc('$__ – $__'), note: '' },
-        { what: tbc('Private 1-on-1 junior coaching, Melbourne', 'Research in progress'), perHour: tbc('$__ – $__'), note: '' },
-        { what: tbc('Junior cricket holiday camps, Melbourne', 'Research in progress'), perHour: tbc('$__ – $__'), note: '' },
+        { what: 'Junior Royals membership', perHour: `about ${money(PER_HOUR)}`, note: `${money(YEARLY)} a year ÷ about ${SESSIONS_PER_YEAR} sessions · up to ${LANE_MAX} players a lane · incl. GST`, ours: true },
+        { what: 'Weekly small-group coaching at other Melbourne cricket academies', perHour: '$35 – $50', note: 'Published prices from 3 academies, groups of 3 to 10 players' },
+        { what: 'Junior Royals as a term program (Term 3, 2026)', perHour: '$41.25', note: '$330 for 8 one-hour sessions' },
+        { what: 'Private one-on-one junior coaching in Melbourne', perHour: '$80 – $140', note: 'Published prices from 4 academies, one player with one coach' },
     ],
+    sourceNote: "Other academies' prices are as published on their own websites on 5 October 2026. They don't say whether GST is included.",
 };
 
 export const FORM = {
@@ -291,7 +309,7 @@ export const FAQS = [
 export const OPEN_QUESTIONS = [
     'Which ages train at 6:00pm and which at 7:00pm?',
     'Development matches: first date, how often, venue, match fee',
-    'Price comparison: other Melbourne programs per hour (research in progress)',
+    'Approve the price comparison (sources are listed in the page code)',
     'Date joining (payment) opens',
     'Head Coach at Cranbourne North',
     'First payment = $149 + first week ($179)?',

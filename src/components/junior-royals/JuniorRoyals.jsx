@@ -265,6 +265,7 @@ const Membership = () => (
                         ))}
                     </tbody>
                 </table>
+                <p className="text-sm text-rr-charcoal font-medium mt-3">{PRICE_CONTEXT.sourceNote}</p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-12">
