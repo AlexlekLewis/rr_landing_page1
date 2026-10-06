@@ -8,7 +8,7 @@ export const PROGRAM = {
     academy: 'Rajasthan Royals Academy Melbourne',
     name: 'Spin Club',
     day: 'Wednesday',
-    time: '7:00–8:30pm',
+    time: '6:00–7:30pm',
     sessionLength: '1.5 hours',
     ages: '10 to 25',
     weeks: 8,
