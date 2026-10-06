@@ -324,7 +324,7 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer, onFound }) => {
                 <Eyebrow className="mb-4">Due today</Eyebrow>
                 <ul className="space-y-2 text-base font-medium text-white/85 mb-4">
                     <li className="flex justify-between gap-4"><span>Joining Fee <span className="text-white/50 text-sm">(one-off, non-refundable)</span></span><span className="font-black">{fmt(joiningCents)}</span></li>
-                    <li className="flex justify-between gap-4"><span>Squad Fee — first week</span><span className="font-black">{fmt(weeklyCents)}</span></li>
+                    <li className="flex justify-between gap-4"><span>Membership — first week</span><span className="font-black">{fmt(weeklyCents)}</span></li>
                     {chosen.map((l) => (
                         <li key={`${l.item.key}-${l.size}`} className="flex justify-between gap-4">
                             <span>{l.qty > 1 ? `${l.qty} × ` : ''}{l.item.label} <span className="text-white/50 text-sm">({l.size})</span></span>

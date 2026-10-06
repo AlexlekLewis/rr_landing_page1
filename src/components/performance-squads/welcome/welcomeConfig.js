@@ -16,7 +16,7 @@
 // null and the banner goes away.
 // ─────────────────────────────────────────────────────────────
 
-import { MEMBER_PRICING_RULE, TERMS_MEMBERSHIP_CLAUSE } from '../data';
+import { MEMBER_PRICING_RULE, TERMS_MEMBERSHIP_CLAUSE, MEMBERSHIP } from '../data';
 
 export const WELCOME = {
     // ── Still to come ──
@@ -43,18 +43,27 @@ export const WELCOME = {
     // ── Pricing notes ── The AMOUNTS are not here: they come from Stripe via
     // /api/performance-squad-prices (see usePrices.js), so the page always shows
     // exactly what checkout charges. Only the wording lives in config.
+    // Wording = Alex's 2 October 2026 framing, the same as the MembershipSection on
+    // /performance-squads: a YEARLY membership, broken down for the family's
+    // convenience into a weekly payment. Cancel any time, but rejoining means
+    // paying the Joining Fee again.
     pricing: {
-        joiningFee: { note: 'One-off, non-refundable. Locks in your place.' },
-        squadFee: { per: 'wk', note: 'Charged weekly, in advance.' },
-        matchFees: { amount: 'Per match', note: 'Set for each fixture. Covers standard match day costs.' },
-        cancel: 'You can cancel at any time. You must be financial to receive member benefits. If payments stop without notice, there is a two-week grace period before your squad place is released.',
+        weeksPerYear: MEMBERSHIP.weeksPerYear,
+        joiningFee: { unit: 'one-off', note: 'Paid once, when you accept your squad place. Non-refundable.' },
+        membership: { unit: 'a week' },
+        matchFees: { amount: 'Per match', note: 'Set for each match, depending on whether it is played on turf or synthetic.' },
+        conditions: [
+            'Match fees are separate. They are set for each match, depending on whether it is played on turf or synthetic.',
+            'If payments stop without notice, there is a two-week grace period before your squad place is released.',
+            'You must stay financial to receive member benefits and to be selected for matches.',
+        ],
     },
 
     // ── Membership benefits (Membership Overview, 01–06) ──
     benefits: [
         { title: 'Weekly squad training', body: 'Weekly squad training with the Head Coach and a dedicated squad coach. Monday nights, every week from 5 October to 14 December — the courts are booked at both centres.' },
         { title: '5–10 T20 match days', body: 'Circa. average 1 a month from September to April (Season). Performance dependant.' },
-        { title: '2 x squad sessions with Siddhartha Lahiri', body: 'Other Royals and guest coaches and players will join from time to time (online and in person).' },
+        { title: 'Royals and guest coaches', body: 'Other Royals and guest coaches and players will join from time to time (online and in person).' },
         { title: 'Royals High Performance Centre camps', body: 'Invitation to attend multiple Rajasthan Royals operated camps at the Royals High Performance Centre in Nagpur.' },
         { title: 'Train with Royals Franchise teams', body: 'Select players receive the opportunity to train with Royals Franchise teams.' },
         { title: 'Global Royals Inter-Academy matches', body: 'Opportunity to play in Global Royals Inter-Academy matches and tournaments.' },
@@ -95,32 +104,34 @@ export const WELCOME = {
         // Cranbourne North takes the whole centre 6:00–9:00 PM.
         // The \u00a0 (non-breaking space) keeps "PM" on the same line as the time
         // on a narrow phone. timeNote shows on its own line underneath.
+        // Squad training began Monday 5 October 2026, so the row reads "every
+        // Monday" rather than a first date that has already been played.
         firstTraining: {
             year: 2026,
-            date: 'Monday 5 October',
+            date: 'Every Monday night',
             time: 'Mickleham 7:00–8:30\u00a0PM · Cranbourne North 6:00–9:00\u00a0PM',
-            timeNote: 'Then every Monday to 14 December. Times are subject to change and we will let you know if they do.',
+            timeNote: 'Every Monday to 14 December. Times are subject to change and we will let you know if they do.',
         },
-        sidSessions: { year: 2026, when: 'Early October' },
     },
 
-    // ── Power League fixture list ──
+    // ── Power League fixture list ── Alex, 3 October 2026: five match days, two
+    // games each. Rules behind them: no Premier finals, a 24 Dec – 5 Jan blackout,
+    // and nothing in the first three weeks of January (carnival season). The
+    // last two are a two-day carnival in the final week of the school holidays;
+    // Australia Day (Tue 26 Jan) falls between them. The juniors-only game at
+    // Lower Plenty on Sun 11 Oct is not one of the five and is not listed here.
     fixtures: [
-        { year: 2026, date: 'Sunday 11 October', first: true, venueAndTime: null },
+        { year: 2026, date: 'Sunday 25 October', first: true, venueAndTime: null },
         { year: 2026, date: 'Sunday 15 November' },
-        // Standing rule: 24 January is always shown as the Australia Day long weekend.
-        { year: 2027, date: 'Sunday 24 January', note: 'Australia Day long weekend' },
-        { year: 2027, date: 'Sunday 7 March' },
-        { year: 2027, date: 'Sunday 4 April' },
+        { year: 2026, date: 'Sunday 13 December' },
+        { year: 2027, date: 'Monday 25 January', note: 'Two-day carnival, day 1 · school holidays' },
+        { year: 2027, date: 'Wednesday 27 January', note: 'Two-day carnival, day 2 · last day of the school holidays' },
     ],
     moreFixtures: 'More Power League and Showcase Match dates will be added. We will let you know as they are confirmed.',
 
-    // Kept OUT of the fixture list on purpose: only players who get an
-    // offer can play, and the offer is sent separately.
-    septemberGames: {
-        dates: 'Monday 28 and Tuesday 29 September',
-        venue: 'North Balwyn Cricket Club, Macleay Park',
-    },
+    // The offer-only September games (28 and 29 September 2026, North Balwyn)
+    // have been played. null switches the section off.
+    septemberGames: null,
 
     // Shown on the success page and in the confirm step.
     afterConfirm: [
@@ -146,13 +157,6 @@ export const REGIONS = [
     { slug: 'north-melbourne', name: 'North Melbourne', venue: 'Mickleham Indoor Sports Centre' },
     { slug: 'south-east-melbourne', name: 'South-East Melbourne', venue: 'Elite Cricket Centre, Cranbourne North' },
 ];
-
-export const SID = {
-    name: 'Sid Lahiri',
-    // Sid working with Riyan Parag (general-use Royals image).
-    photo: '/assets/performance-squads/sid-lahiri-riyan-parag.jpg',
-    photoAlt: 'Sid Lahiri talking through a delivery with Riyan Parag at a Rajasthan Royals training session',
-};
 
 export const PLAYER_IMAGE = '/assets/performance-squads/selected-player-fist-pump.png';
 // Royals war cry wordmark, white on transparent (from the RRA standee artwork).

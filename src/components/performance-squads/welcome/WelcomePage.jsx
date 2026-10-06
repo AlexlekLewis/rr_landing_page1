@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Target, Trophy, Wallet, ShoppingBag, KeyRound, Mail, Sparkles, Users, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Target, Trophy, Wallet, ShoppingBag, KeyRound, Mail, Sparkles, Users, ShieldCheck, Check, AlertCircle } from 'lucide-react';
 import Navbar from '../../Navbar';
 import Footer from '../../Footer';
 import usePageAnalytics from '../../../hooks/usePageAnalytics';
 import { fadeUp, scrollTo } from '../shared';
-import { WELCOME, SID, PLAYER_IMAGE, HALLA_BOL, getMissingDetails } from './welcomeConfig';
+import { WELCOME, PLAYER_IMAGE, HALLA_BOL, getMissingDetails } from './welcomeConfig';
 import { Pending, Eyebrow, Heading, Card, Bullets } from './welcomeShared';
 import WelcomeConfirmForm from './WelcomeConfirmForm';
 import WelcomeKitForm from './WelcomeKitForm';
-import usePrices, { fmt } from './usePrices';
-import { Link } from 'react-router-dom';
-import { WELCOME_LINE, SID_JUNIORS_ROUTE } from '../../sid-juniors/sidJuniorsPromo';
+import usePrices, { money } from './usePrices';
 
 const MotionDiv = motion.div;
 
@@ -34,7 +32,7 @@ const storePlayer = (p) => {
     try { p ? sessionStorage.setItem(PLAYER_KEY, JSON.stringify(p)) : sessionStorage.removeItem(PLAYER_KEY); } catch { /* private mode */ }
 };
 
-const SECTIONS = ['hero', 'steps', 'welcome', 'membership', 'pricing', 'season', 'fixtures', 'september-games', 'training', 'sid', 'confirm', 'kit', 'portal'];
+const SECTIONS = ['hero', 'steps', 'welcome', 'membership', 'pricing', 'season', 'fixtures', 'training', 'confirm', 'kit', 'portal'];
 
 const useNoIndex = (title) => {
     useEffect(() => {
@@ -89,11 +87,10 @@ const Step = ({ n, title, children, linkLabel, target }) => (
 
 // Training and events only. Match days live in the fixture list.
 const buildTimeline = (c) => {
-    const { firstTraining, sidSessions } = c.season;
+    const { firstTraining } = c.season;
     return [
         { year: firstTraining.year, when: `Within ${c.confirmWindow} of being notified`, what: 'Confirm your place: enter your details, sort your kit and check out', highlight: true },
-        { year: firstTraining.year, when: firstTraining.date, what: 'First squad training at your home centre', detail: firstTraining.time, detailNote: firstTraining.timeNote, detailPending: 'Time to be confirmed' },
-        { year: sidSessions.year, when: sidSessions.when, what: 'Squad sessions with Sid Lahiri', detail: 'We will invite players to meet Sid' },
+        { year: firstTraining.year, when: firstTraining.date, what: 'Squad training at your home centre', detail: firstTraining.time, detailNote: firstTraining.timeNote, detailPending: 'Time to be confirmed' },
     ];
 };
 
@@ -154,12 +151,12 @@ const FixtureList = ({ fixtures }) => (
     </ol>
 );
 
-const PriceCard = ({ label, amount, per, note, accent }) => (
+const PriceCard = ({ label, amount, unit, note, accent }) => (
     <div className={`rounded-2xl p-6 sm:p-7 border ${accent ? 'bg-rr-pink/10 border-rr-pink/50' : 'bg-white/5 border-white/12'}`}>
         <p className="text-xs font-black uppercase tracking-[0.2em] text-rr-light-pink mb-3">{label}</p>
         <p className="text-4xl sm:text-5xl font-black leading-none mb-3">
             {amount}
-            {per && <span className="text-lg sm:text-xl font-bold text-white/60"> / {per}</span>}
+            {unit && <span className="text-lg sm:text-xl font-bold text-white/60"> {unit}</span>}
         </p>
         <p className="text-white/75 text-[15px] font-medium leading-relaxed">{note}</p>
     </div>
@@ -175,10 +172,12 @@ const WelcomePage = () => {
     const isDraft = missing.length > 0;
     const [player, setPlayer] = useState(loadPlayer);
     const prices = usePrices();
-    const joiningFee = fmt(prices.joiningFeeCents);
-    const squadFee = fmt(prices.squadFeeCents);
+    const joiningFee = money(prices.joiningFeeCents);
+    const squadFee = money(prices.squadFeeCents);
+    // Worked out from the weekly price checkout charges, never typed, so the two can't disagree.
+    const yearlyFee = money(prices.squadFeeCents * c.pricing.weeksPerYear);
     const savePlayer = (p) => { storePlayer(p); setPlayer(p); };
-    const { season, septemberGames, letter, pricing, benefits, squadDna, selection, memberPricing } = c;
+    const { septemberGames, letter, pricing, benefits, squadDna, selection, memberPricing } = c;
     const window72 = <strong className="font-black">{c.confirmWindow}</strong>;
 
     return (
@@ -275,8 +274,8 @@ const WelcomePage = () => {
                                 shorts, and a cap. Tick that you have it, or choose what you need at participant prices.
                             </Step>
                             <Step n={3} title="Proceed to checkout" linkLabel="Go to checkout" target="kit">
-                                One payment for the {joiningFee} Joining Fee, your first{' '}
-                                {squadFee} weekly Squad Fee and any kit. Then {squadFee} a week.
+                                One payment for the {joiningFee} Joining Fee, your first {squadFee} weekly
+                                membership payment and any kit. Then {squadFee} a week.
                             </Step>
                         </ol>
                     </div>
@@ -309,7 +308,7 @@ const WelcomePage = () => {
                         <Heading
                             eyebrow="Your membership"
                             title="What your squad place includes"
-                            sub="Year round. Cancel anytime."
+                            sub="A yearly membership, paid weekly. Cancel any time."
                         />
                         <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             {benefits.map((b, i) => (
@@ -340,15 +339,51 @@ const WelcomePage = () => {
                     </div>
                 </section>
 
-                {/* ── PRICING ── First intake pricing from the Membership Overview. */}
+                {/* ── PRICING ── Alex, 2 October 2026, the same framing as /performance-squads:
+                    a yearly membership broken down into weekly payments; cancel any time, but
+                    rejoining means paying the Joining Fee again. */}
                 <section id="pricing" className="px-5 py-14 sm:py-20 bg-white/[0.02] scroll-mt-28 lg:scroll-mt-32">
                     <div className="max-w-5xl mx-auto">
-                        <Heading eyebrow="First intake pricing" title="Membership fees" />
+                        <Heading
+                            eyebrow="Membership"
+                            title="How membership works"
+                            sub="Performance Squads run on a yearly membership. You pay it weekly, and you can cancel any time."
+                        />
+                        <div className="rounded-2xl border border-rr-pink/50 bg-gradient-to-br from-rr-pink/25 via-rr-navy to-rr-dark p-6 sm:p-10 mb-4">
+                            <h3 className="text-2xl sm:text-3xl font-black uppercase leading-tight mb-4">
+                                A yearly membership, paid weekly
+                            </h3>
+                            <p className="text-white/85 text-base sm:text-lg font-medium leading-relaxed mb-6">
+                                Your Performance Squad membership is a yearly fee of{' '}
+                                <span className="text-white font-black">{yearlyFee}</span>. For your convenience, it is
+                                broken down into weekly payments of <span className="text-white font-black">{squadFee}</span>.
+                            </p>
+                            <div className="grid sm:grid-cols-2 gap-3">
+                                <div className="flex items-start gap-3 bg-white/10 rounded-xl px-4 py-3.5">
+                                    <Check aria-hidden="true" className="w-5 h-5 text-rr-light-pink shrink-0 mt-0.5" strokeWidth={3} />
+                                    <p className="text-white text-[15px] font-bold leading-snug">You can cancel any time.</p>
+                                </div>
+                                <div className="flex items-start gap-3 bg-white/10 rounded-xl px-4 py-3.5">
+                                    <AlertCircle aria-hidden="true" className="w-5 h-5 text-rr-light-pink shrink-0 mt-0.5" />
+                                    <p className="text-white text-[15px] font-bold leading-snug">
+                                        If you cancel and later rejoin, you pay the {joiningFee} Joining Fee again.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                         <div className="grid gap-4 md:grid-cols-3">
-                            <PriceCard label="Joining fee" amount={joiningFee} note={pricing.joiningFee.note} accent />
-                            <PriceCard label="Squad fee" amount={squadFee} per={pricing.squadFee.per} note={pricing.squadFee.note} />
+                            <PriceCard label="Joining fee" amount={joiningFee} unit={pricing.joiningFee.unit} note={pricing.joiningFee.note} accent />
+                            <PriceCard label="Membership" amount={squadFee} unit={pricing.membership.unit} note={`Your ${yearlyFee} yearly membership, charged weekly in advance. Cancel any time.`} />
                             <PriceCard label="Match fees" amount={pricing.matchFees.amount} note={pricing.matchFees.note} />
                         </div>
+                        <ul className="mt-4 rounded-2xl bg-white/5 border border-white/12 p-6 sm:p-8 space-y-3">
+                            {pricing.conditions.map((line) => (
+                                <li key={line} className="flex items-start gap-3">
+                                    <Check aria-hidden="true" className="w-4 h-4 text-rr-pink shrink-0 mt-1" strokeWidth={3} />
+                                    <span className="text-white/80 text-[15px] font-medium leading-relaxed">{line}</span>
+                                </li>
+                            ))}
+                        </ul>
                         <div className="mt-4 rounded-2xl border-l-4 border-rr-pink bg-white/5 p-6 sm:p-8">
                             <p className="text-xl sm:text-2xl font-black leading-snug mb-2">{memberPricing.lead}</p>
                             <p className="text-white/80 text-base font-medium leading-relaxed">{memberPricing.body}</p>
@@ -361,7 +396,7 @@ const WelcomePage = () => {
                                 ))}
                             </ul>
                             <p className="text-white/60 text-sm font-medium leading-relaxed mt-6">
-                                {memberPricing.note} {pricing.cancel}
+                                {memberPricing.note}
                             </p>
                         </div>
                     </div>
@@ -442,44 +477,9 @@ const WelcomePage = () => {
                         <Card className="mt-5">
                             <IconTitle icon={Wallet}>Match fees</IconTitle>
                             <div className="space-y-3 text-white/85 text-base font-medium leading-relaxed">
-                                <p>You pay a match fee for each match you play. It is set for each fixture and covers standard match day costs. This is separate from the Joining Fee and the weekly Squad Fee.</p>
+                                <p>You pay a match fee for each match you play. It is set for each fixture and covers standard match day costs. This is separate from the Joining Fee and your weekly membership.</p>
                                 <p>The fee depends on the pitch: turf (grass) or synthetic (fake grass).</p>
                                 <p className="text-white font-bold">All players must remain financial to be eligible for selection.</p>
-                            </div>
-                        </Card>
-                    </div>
-                </section>
-
-                {/* ── SID LAHIRI ── Not every player is invited: "We will invite players to meet Sid", never "every player". */}
-                <section id="sid" className="px-5 py-14 sm:py-20 scroll-mt-28 lg:scroll-mt-32">
-                    <div className="max-w-4xl mx-auto">
-                        <Card className="grid gap-6 sm:gap-8 sm:grid-cols-[260px_1fr] items-center">
-                            <img
-                                src={SID.photo}
-                                alt={SID.photoAlt}
-                                loading="lazy"
-                                className="w-full sm:w-[260px] aspect-[4/5] sm:aspect-[2/3] rounded-2xl object-cover object-[30%_top]"
-                            />
-                            <div>
-                                <Eyebrow>Squad sessions with {SID.name}</Eyebrow>
-                                <h2 className="text-2xl sm:text-3xl font-black uppercase leading-tight mb-4">
-                                    We will invite players to meet Sid
-                                </h2>
-                                <div className="space-y-3 text-white/85 text-base font-medium leading-relaxed">
-                                    <p>He is the Head of International Player Development at the Rajasthan Royals.</p>
-                                    <p>He is also a performance coach for the Rajasthan Royals team in the IPL.</p>
-                                    <p>He has worked with Yashasvi Jaiswal, Riyan Parag and Vaibhav Sooryavanshi.</p>
-                                    <p>Other Royals and guest coaches and players will join from time to time, online and in person.</p>
-                                    <p className="text-white/65">When: {season.sidSessions.when}.</p>
-                                    {/* A different thing from the squad sessions above: open to any
-                                        player aged 8 to 16, booked on its own page. */}
-                                    <p className="text-white/65 text-sm pt-3 border-t border-white/10">
-                                        {WELCOME_LINE}{' '}
-                                        <Link to={SID_JUNIORS_ROUTE} className="text-rr-light-pink font-bold underline underline-offset-2 hover:text-white">
-                                            See the junior sessions
-                                        </Link>
-                                    </p>
-                                </div>
                             </div>
                         </Card>
                     </div>
@@ -504,7 +504,7 @@ const WelcomePage = () => {
                         <Heading
                             eyebrow="Step 2"
                             title="Your kit and checkout"
-                            sub="Tick that you already have your kit, or choose what you need at participant prices. Then proceed to checkout — one payment covers the Joining Fee, your weekly Squad Fee and any kit."
+                            sub="Tick that you already have your kit, or choose what you need at participant prices. Then proceed to checkout — one payment covers the Joining Fee, your first weekly membership payment and any kit."
                         />
                         <Card className="mb-6 border-rr-pink/40">
                             <IconTitle icon={ShoppingBag}>Every player needs</IconTitle>
@@ -546,7 +546,7 @@ const WelcomePage = () => {
                             className="h-24 sm:h-32 w-auto mx-auto mb-8 drop-shadow-[0_6px_18px_rgba(0,0,0,0.35)]"
                         />
                         <p className="text-2xl sm:text-4xl font-black uppercase tracking-wide">
-                            See you on {season.firstTraining.date}!
+                            See you at squad training!
                         </p>
                         <p className="mt-5 text-white/90 text-base font-medium">
                             <Mail aria-hidden="true" className="inline w-4 h-4 mr-2 -mt-0.5" />

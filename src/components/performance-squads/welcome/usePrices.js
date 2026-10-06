@@ -19,6 +19,13 @@ export const FALLBACK = {
 
 export const fmt = (cents) => `$${(cents / 100).toFixed(2)}`;
 
+// Display amounts the way /performance-squads writes them: whole dollars stay
+// whole ("$149"), anything else shows cents, with thousands separators ("$1,557.40").
+export const money = (cents) => `$${(cents / 100).toLocaleString('en-AU', {
+    minimumFractionDigits: cents % 100 === 0 ? 0 : 2,
+    maximumFractionDigits: 2,
+})}`;
+
 let cached = null;
 
 export default function usePrices() {

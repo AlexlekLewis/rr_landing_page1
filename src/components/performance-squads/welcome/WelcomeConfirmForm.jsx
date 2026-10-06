@@ -160,7 +160,7 @@ const WelcomeConfirmForm = ({ config, isDraft, onSaved }) => {
                     <p className="text-xl font-black uppercase tracking-wide mb-2">Step 2: your training kit</p>
                     <p className="text-white/85 text-base font-medium mb-6">
                         Tell us if you already have what you need, or choose your kit. Then proceed to checkout
-                        for the Joining Fee, your weekly Squad Fee and any kit in one payment.
+                        for the Joining Fee, your first weekly membership payment and any kit in one payment.
                     </p>
                     <button
                         type="button"
