@@ -52,8 +52,8 @@ export const WELCOME = {
         joiningFee: { unit: 'one-off', note: 'Paid once, when you accept your squad place. Non-refundable.' },
         membership: { unit: 'a week' },
         matchFees: { amount: 'Per match', note: 'Set for each match, depending on whether it is played on turf or synthetic.' },
+        // The match-fee line lives on its own card above, so it isn't repeated here.
         conditions: [
-            'Match fees are separate. They are set for each match, depending on whether it is played on turf or synthetic.',
             'If payments stop without notice, there is a two-week grace period before your squad place is released.',
             'You must stay financial to receive member benefits and to be selected for matches.',
         ],
