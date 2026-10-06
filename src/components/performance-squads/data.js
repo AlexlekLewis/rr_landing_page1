@@ -176,8 +176,8 @@ export const MEMBER_INCLUDES = [
         body: 'About one a month from September to April, in the Power League and showcase matches. Selection is based on performance.',
     },
     {
-        title: 'Two squad sessions with Sid Lahiri',
-        body: "Siddhartha Lahiri, the Rajasthan Royals' Head of International Player Development. Other Royals and guest coaches join from time to time, online and in person.",
+        title: 'Royals and guest coaches',
+        body: 'Other Royals and guest coaches and players join from time to time, online and in person.',
     },
     {
         title: 'High Performance Centre camps',
@@ -375,7 +375,7 @@ export const FAQS = [
     },
     {
         q: 'What do I get as a member?',
-        a: 'Weekly training with your Head Coach and a squad coach, 5 to 10 T20 match days across the season, two squad sessions with Sid Lahiri, invitations to High Performance Centre camps, and the chance to train with Royals franchise teams and play Global Royals Inter-Academy matches. Members also get member pricing on our other programs.',
+        a: 'Weekly training with your Head Coach and a squad coach, 5 to 10 T20 match days across the season, Royals and guest coaches from time to time, invitations to High Performance Centre camps, and the chance to train with Royals franchise teams and play Global Royals Inter-Academy matches. Members also get member pricing on our other programs.',
     },
     {
         q: 'Are the global opportunities real?',
