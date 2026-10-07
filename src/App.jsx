@@ -11,6 +11,7 @@ import LittleCrickets from './components/little-crickets/LittleCrickets';
 import JRSuccess from './components/little-crickets/JRSuccess';
 import JuniorRoyalsT3 from './components/junior-royals-t3/JuniorRoyalsT3';
 import JuniorRoyals from './components/junior-royals/JuniorRoyals';
+import JuniorRoyalsV2 from './components/junior-royals/v2/JuniorRoyalsV2';
 import { MOCKUP as JR_MOCKUP } from './components/junior-royals/juniorRoyalsData';
 
 // Safety: while the new year-round Junior Royals page is still a MOCK-UP it only
@@ -205,7 +206,9 @@ function App() {
         <Route path="/junior-royals-term2/success" element={<JRSuccess />} />
         {/* Junior Royals — live Term 4 page (junior-royals-t3) on rramelbourne.com until the year-round
             membership page (junior-royals/JuniorRoyals) leaves mock-up (MOCKUP=false in juniorRoyalsData.js). */}
-        <Route path="/junior-royals" element={JR_MOCKUP && IS_PROD_HOST ? <JuniorRoyalsT3 /> : <JuniorRoyals />} />
+        <Route path="/junior-royals" element={JR_MOCKUP && IS_PROD_HOST ? <JuniorRoyalsT3 /> : <JuniorRoyalsV2 />} />
+        {/* Mock-up version 1 (5 Oct 2026), kept on previews only for comparison with version 2. */}
+        <Route path="/junior-royals/v1" element={IS_PROD_HOST ? <Navigate to="/junior-royals" replace /> : <JuniorRoyals />} />
         <Route path="/junior-royals/success" element={<JRT3Success />} />
         <Route path="/junior-royals-holiday/success" element={<HolidayProgramSuccess />} />
         {/* Female Cricket Introduction — DRAFT: not in nav, Vercel only until go-live instruction */}

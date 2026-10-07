@@ -20,6 +20,16 @@ function upsertMeta(attr, key, content) {
     el.setAttribute('content', content);
 }
 
+// Structured data (schema.org JSON-LD). One managed <script> per route; removed when
+// the next route has none, so a page never carries another page's data.
+const JSONLD_ID = 'route-jsonld';
+function setJsonLd(data) {
+    const existing = document.getElementById(JSONLD_ID);
+    if (!data) { if (existing) existing.remove(); return; }
+    const el = existing || Object.assign(document.createElement('script'), { id: JSONLD_ID, type: 'application/ld+json' });
+    el.textContent = JSON.stringify(data);
+    if (!existing) document.head.appendChild(el);
+}
 function upsertCanonical(href) {
     let el = document.head.querySelector('link[rel="canonical"]');
     if (!el) {
@@ -35,7 +45,7 @@ export default function RouteSeo() {
 
     useEffect(() => {
         const cfg = PAGE_SEO[pathname];
-        if (!cfg) return; // not a managed page — leave the head as-is
+        if (!cfg) { setJsonLd(null); return; } // not a managed page — leave the head as-is
 
         const title = cfg.title || DEFAULT_SEO.title;
         const description = cfg.description || DEFAULT_SEO.description;
@@ -64,6 +74,7 @@ export default function RouteSeo() {
         upsertMeta('name', 'twitter:title', title);
         upsertMeta('name', 'twitter:description', description);
         upsertMeta('name', 'twitter:image', ogImage);
+        setJsonLd(cfg.jsonLd || null);
     }, [pathname]);
 
     return null;

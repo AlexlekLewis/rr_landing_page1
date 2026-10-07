@@ -1,3 +1,5 @@
+import { JR_V2_SEO, JR_V2_JSONLD } from '../components/junior-royals/v2/jrV2Seo.js';
+
 // Central SEO config for all public pages, consumed by <RouteSeo/> (react-helmet-async).
 // One entry per public route. Titles target the non-branded category terms we currently
 // rank for NOTHING on (per the GSC baseline: 100% branded traffic today).
@@ -59,10 +61,13 @@ export const PAGE_SEO = {
   },
   // REVIEW 16 Dec 2026 — Term 4 facts in the description. Prerendered by
   // scripts/prerender-seo.mjs so shared links get a preview card.
+  // Junior Royals mock-up version 2 (branch feat/junior-royals-membership). This entry goes
+  // live only when version 2 does. Structured data: v2/jrV2Seo.js (no offers until joining opens).
   '/junior-royals': {
-    title: 'Junior Cricket Coaching Melbourne | Rajasthan Royals',
-    description:
-      'Junior Royals Term 4: weekly cricket coaching for ages 7–12, Wednesdays 6–8pm, 28 Oct – 16 Dec, at Mickleham and Cranbourne North, Melbourne. Register your interest.',
+    title: JR_V2_SEO.title,
+    description: JR_V2_SEO.description,
+    ogImage: JR_V2_SEO.ogImage,
+    jsonLd: JR_V2_JSONLD,
   },
   '/elite-royals': { ...ELITE },
   '/PGP2026': { ...ELITE, canonical: '/elite-royals' },

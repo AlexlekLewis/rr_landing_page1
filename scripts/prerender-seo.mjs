@@ -73,11 +73,18 @@ const headFor = (route, cfg, site, fallback) => {
         .map(([attr, key, value]) => `  <meta ${attr}="${key}" content="${escapeAttr(value)}" />`)
         .join('\n');
 
+    // Structured data, if the route has any (pageSeo.js `jsonLd`). '<' is escaped so a
+    // value can never close the script tag early.
+    const jsonLd = cfg.jsonLd
+        ? `  <script type="application/ld+json" id="route-jsonld">${JSON.stringify(cfg.jsonLd).replace(/</g, '\\u003c')}</script>`
+        : null;
+
     return [
         `  <title>${escapeText(title)}</title>`,
         `  <link rel="canonical" href="${escapeAttr(canonical)}" />`,
         meta,
-    ].join('\n');
+        jsonLd,
+    ].filter(Boolean).join('\n');
 };
 
 async function main() {
