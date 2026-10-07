@@ -43,7 +43,7 @@ export const NEARBY = {
 export const HERO = {
     eyebrow: 'Rajasthan Royals Academy · Melbourne',
     title: 'Junior Royals',
-    titleSub: 'Cricket coaching for ages 7 to 12',
+    titleSub: 'Cricket coaching for ages 7–12',
     why: tbc('Players get better when they practise one skill for a few weeks, then use it in a real game.', 'The one-line Why for the hero — OK?'),
     facts: [
         { icon: 'users', k: 'Ages', v: `Ages ${AGES_TEXT}`, older: true },
@@ -119,7 +119,7 @@ export const SKILL = {
     eyebrow: 'Three weeks on each skill',
     title: 'How a skill sticks',
     intro: 'Your player learns one batting skill and one bowling skill at a time. Each pair of skills is called a block, and a block lasts 3 Wednesdays.',
-    cuesTitle: 'Every skill has one cue: two or three words your coach says to help you remember it. The same words from age 7 to 12.',
+    cuesTitle: 'Every skill has one cue: two or three words your coach says to help you remember it. The same words for every player aged 7–12.',
     shortTermNote: 'In an 8-week term, like Term 4, the second and third skills get 2 weeks: learn it, then use it.',
 };
 
@@ -206,7 +206,7 @@ export const COACHES = {
         `${SID.name}, ${SID.titleLine}. `,
         tbc('Confirm wording', 'Can the page name the Royals Coaching Hub and Sid this way?'),
     ],
-    notMeet: 'Players don’t train with Sid or with IPL staff. Our coaches in Melbourne run every session.',
+    notMeet: 'Weekly sessions are run by our coaches in Melbourne, not by Sid or by Rajasthan Royals players or staff from India.',
     pillarsTitle: 'The Royals Way, in every session',
 };
 
@@ -270,7 +270,7 @@ export const FAQS = [
     },
     {
         q: 'Is it safe?',
-        a: ['Groups are small: 4 or 6 players in a lane. For players aged 7 to 10, the coach feeds every ball in batting. Players aged 7 and 8 bowl at targets, never at a batter. ', tbc('Supervision and Working With Children Checks: to be confirmed before enrolment opens.', 'Two checked adults per session, WWCC verified, sign-in and sign-out (blueprint step 6).')],
+        a: ['Groups are small: 4 or 6 players in a lane. For players aged 7–10, the coach feeds every ball in batting. Players aged 7 and 8 bowl at targets, never at a batter. ', tbc('Supervision and Working With Children Checks: to be confirmed before enrolment opens.', 'Two checked adults per session, WWCC verified, sign-in and sign-out (blueprint step 6).')],
     },
     {
         q: 'How do payments work?',
@@ -293,8 +293,8 @@ export const FAQS = [
         a: 'No. Each match has its own fee, paid for that match. We tell you the fee before you enter.',
     },
     {
-        q: 'Will my player meet Sid or IPL players?',
-        a: `No. Our Royals Academy coaches in Melbourne run every session. What comes from ${SID.name} is the coaching course our coaches teach from.`,
+        q: 'Will my player meet Sid or Rajasthan Royals players?',
+        a: `Not at weekly sessions. Our Royals Academy coaches in Melbourne run every Junior Royals session. What comes from ${SID.name} is the coaching course our coaches teach from.`,
     },
     {
         q: 'Does Junior Royals lead to Performance Squads?',
