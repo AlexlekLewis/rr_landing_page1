@@ -10,7 +10,7 @@ import { MOCKUP, CENTRES, CALENDAR } from '../juniorRoyalsData';
 import { PILLARS } from './jrV2Facts';
 import {
     HERO, CTA, LOOP, WORRIES, HOUR, SKILL, TERM, PATH, PRICES, COMPARE, COACHES, WHERE, FORM, FAQS,
-    OPEN_QUESTIONS_V2, REGION_LABEL, NEARBY, termTotal,
+    OPEN_QUESTIONS_V2, REGION_LABEL, NEARBY, PHOTOS, termTotal,
 } from './jrV2Content';
 import { LoopVisual, HourNumbers, HourRibbon, LaneDots, SkillSteps, Cues, TermRows, Scoreboards, YearStrip } from './JRV2Visuals';
 import { StageJourney, BadgeBlock } from './JRV2Pathway';
@@ -56,8 +56,21 @@ const Tick = ({ children, dark }) => (
     </li>
 );
 
-const Section = ({ id, tone = 'white', children }) => (
+// A photo that melts into the section colour: soft fades top and bottom, and a light
+// fade at the sides. No frame, no shadow, no overlay box (design-system.md). Sits at the
+// top of its section, so it also softens the step from the section before.
+const FADE_Y = 'linear-gradient(to bottom, transparent 0%, #000 30%, #000 70%, transparent 100%)';
+const FADE_X = 'linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%)';
+const PhotoFade = ({ src, alt, position = 'center' }) => (
+    <div className="relative -mt-14 md:-mt-20 mb-4 md:mb-6 h-60 sm:h-72 md:h-[26rem] max-w-[1280px] mx-auto overflow-hidden">
+        <img src={src} alt={alt} loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover"
+            style={{ objectPosition: position, WebkitMaskImage: `${FADE_Y}, ${FADE_X}`, maskImage: `${FADE_Y}, ${FADE_X}`, WebkitMaskComposite: 'source-in', maskComposite: 'intersect' }} />
+    </div>
+);
+
+const Section = ({ id, tone = 'white', photo, children }) => (
     <section id={id} className={`${SCROLL_PAD} ${tone === 'dark' ? 'bg-rr-dark' : tone === 'slate' ? 'bg-slate-50' : 'bg-white'} py-14 md:py-20`}>
+        {photo && <PhotoFade {...photo} />}
         <div className="max-w-5xl mx-auto px-5 sm:px-6">{children}</div>
     </section>
 );
@@ -116,6 +129,7 @@ const Hero = () => (
                         <div key={o.key}>
                             <p className="text-white font-black text-[15px] leading-tight">{o.name}</p>
                             <p className="text-white/85 text-sm font-semibold">{o.what}</p>
+                            <p className="text-white text-sm font-bold">{o.upside}</p>
                             <p className="mt-1 whitespace-nowrap"><span className="text-white text-3xl font-black">{o.price}</span> <span className="text-white/85 text-sm font-bold">{o.per}</span></p>
                             <p className="text-white/80 text-xs font-semibold">{o.term4}</p>
                         </div>
@@ -147,7 +161,7 @@ const Matches = () => (
 
 // ── 3. Common worries ──
 const Worries = () => (
-    <Section id="why" tone="slate">
+    <Section id="why" tone="slate" photo={PHOTOS.why}>
         <Head eyebrow={WORRIES.eyebrow} title={WORRIES.title} />
         <ul className="grid sm:grid-cols-2 gap-x-10 gap-y-6">
             {WORRIES.items.map((w) => (
@@ -163,7 +177,7 @@ const Worries = () => (
 
 // ── 4. One night ──
 const Hour = () => (
-    <Section id="how">
+    <Section id="how" photo={PHOTOS.how}>
         <Head eyebrow={HOUR.eyebrow} title={HOUR.title} />
         <p className="text-lg text-rr-dark font-semibold mb-6">{HOUR.intro}</p>
         <HourNumbers items={HOUR.bigNumbers} />
@@ -185,7 +199,7 @@ const Hour = () => (
 
 // ── 5. How a skill sticks ──
 const Skill = () => (
-    <Section id="skills" tone="slate">
+    <Section id="skills" tone="slate" photo={PHOTOS.skills}>
         <Head eyebrow={SKILL.eyebrow} title={SKILL.title} />
         <p className="text-lg text-rr-dark font-semibold mb-8 max-w-3xl">{SKILL.intro}</p>
         <SkillSteps />
@@ -233,11 +247,13 @@ const Prices = () => (
                 <div key={o.key} className={`border-t-4 ${o.key === '4s' ? 'border-rr-pink' : 'border-rr-dark'} pt-5`}>
                     <p className="text-2xl font-black text-rr-dark leading-tight">{o.name}</p>
                     <p className="text-lg font-bold text-rr-dark">{o.what}</p>
-                    <p className="mt-4"><span className="text-5xl font-black text-rr-dark">{o.price}</span> <span className="text-lg font-bold text-rr-charcoal">a session</span></p>
+                    <ul className="mt-4 space-y-2">
+                        {o.upside.map((u) => <Tick key={u}><span className="font-semibold text-rr-dark">{u}</span></Tick>)}
+                    </ul>
+                    <p className="mt-5"><span className="text-5xl font-black text-rr-dark">{o.price}</span> <span className="text-lg font-bold text-rr-charcoal">a session</span></p>
                     <p className="text-[15px] font-bold text-rr-dark mt-1">{o.term4}</p>
                     <ul className="mt-4 space-y-2">
                         {o.ahead.map((a) => <Tick key={a.label}><span className="font-bold text-rr-dark">{a.label}:</span> {a.price}</Tick>)}
-                        <Tick>{o.coachTime}</Tick>
                         <Tick>{o.max}</Tick>
                     </ul>
                 </div>
@@ -306,7 +322,7 @@ const Prices = () => (
                             <span className={`font-bold ${r.ours ? 'text-rr-dark' : 'text-rr-charcoal'}`}>{r.what}</span>
                             <span className="font-black text-rr-dark whitespace-nowrap">{r.price} <span className="text-xs font-bold text-rr-charcoal">an hour</span></span>
                         </p>
-                        <p className="text-sm font-medium text-rr-charcoal">{r.players} {r.players === '1' ? 'player' : 'players'} per coach · about {r.time} of the coach’s hour each</p>
+                        <p className="text-sm font-medium text-rr-charcoal">Group size: {r.players}</p>
                     </li>
                 ))}
             </ul>
@@ -322,7 +338,6 @@ const Prices = () => (
                             <tr key={r.what} className="border-b border-slate-200">
                                 <td className={`py-2.5 pr-3 font-bold ${r.ours ? 'text-rr-dark' : 'text-rr-charcoal'}`}>{r.what}</td>
                                 <td className="py-2.5 pr-3 text-right font-bold text-rr-dark">{r.players}</td>
-                                <td className="py-2.5 pr-3 text-right font-bold text-rr-dark whitespace-nowrap">{r.time}</td>
                                 <td className="py-2.5 text-right font-black text-rr-dark whitespace-nowrap">{r.price}</td>
                             </tr>
                         ))}
@@ -367,7 +382,7 @@ const Coaches = () => (
 
 // ── 10. Where ──
 const Where = () => (
-    <Section id="where">
+    <Section id="where" photo={PHOTOS.where}>
         <Head eyebrow={WHERE.eyebrow} title={WHERE.title} />
         <div className="grid md:grid-cols-2 gap-10 mb-8">
             {CENTRES.map((c) => (
@@ -375,7 +390,7 @@ const Where = () => (
                     <p className="text-xs font-black uppercase tracking-[0.2em] text-rr-dark mb-1">{REGION_LABEL[c.value]}</p>
                     <h3 className="text-2xl font-black text-rr-dark uppercase leading-tight">{c.venue}, {c.suburb}</h3>
                     <p className="text-rr-charcoal font-medium mt-2">{c.address}</p>
-                    <p className="text-rr-charcoal font-medium">Wednesdays from Wed 28 Oct · 6:00pm and 7:00pm groups</p>
+                    <p className="text-rr-charcoal font-medium">{WHERE.times}</p>
                     <p className="text-sm text-rr-charcoal font-medium mt-2">{NEARBY[c.value]}</p>
                     <a href={c.mapsUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 mt-3 min-h-[44px] text-rr-dark font-bold text-sm underline underline-offset-4 decoration-rr-pink">
                         <MapPin className="w-4 h-4 text-rr-pink" /> Get directions

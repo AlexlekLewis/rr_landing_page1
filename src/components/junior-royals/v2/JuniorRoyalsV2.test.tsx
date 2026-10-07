@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { OPTIONS, DISCOUNTS, NOTICE_WEEKS, TERM_8, PHASES, SESSION, CURRICULUM, BADGES, wednesdays2027 } from './jrV2Facts';
 import * as CONTENT from './jrV2Content';
-import { priceAhead, termTotal, coachMinutes } from './jrV2Content';
+import { priceAhead, termTotal, SHORT_TERM_NOTE, GROUP_UPSIDE } from './jrV2Content';
 import { FORM_VALUES } from './JRV2Form';
 import { JR_V2_SEO, JR_V2_JSONLD, JR_SEO_VENUES } from './jrV2Seo';
 import { CENTRES } from '../juniorRoyalsData';
@@ -30,9 +30,9 @@ describe('the two options', () => {
         expect(termTotal('6s', 8)).toBe(280);
     });
 
-    it('coach time per player: 15 min (4s), 10 min (6s)', () => {
-        expect(coachMinutes(4)).toBe(15);
-        expect(coachMinutes(6)).toBe(10);
+    it('each option leads with what the group size gives a player, never a coach-time ratio', () => {
+        expect(Object.keys(GROUP_UPSIDE)).toEqual(['4s', '6s']);
+        expect(JSON.stringify(CONTENT)).not.toMatch(/coach.s hour|minutes of coach|1 coach for every/i);
     });
 
     it('2 weeks notice before the next term', () => {
@@ -78,7 +78,9 @@ describe('the pathway pop-ups and skill badges (Alex, 8 Oct: show the full curri
             expect(c, p.key).toBeTruthy();
             ['batting', 'bowling', 'fielding', 'byTheEnd'].forEach((k) => expect(c[k].length, `${p.key}.${k}`).toBeGreaterThan(0));
         });
-        expect(PHASES.map((p) => CURRICULUM[p.key].level)).toEqual([1, 2, 3]);
+        // Stage certificates (Alex, 8 Oct): "completed", never "passed"
+        PHASES.forEach((p) => expect(CURRICULUM[p.key].certificate).toMatch(new RegExp(`completed (${p.name}|Junior Royals)`)));
+        expect(JSON.stringify(CURRICULUM)).not.toMatch(/passed|failed/i);
     });
 
     it('28 badges a year: one batting + one bowling per block (12 blocks) + 4 fielding', () => {
@@ -91,6 +93,19 @@ describe('the pathway pop-ups and skill badges (Alex, 8 Oct: show the full curri
         const text = JSON.stringify(CONTENT.WORRIES) + JSON.stringify(CONTENT.FAQS);
         expect(text).toMatch(/At Wednesday training, players aged 7 and 8/);
         expect(text).not.toMatch(/Soft balls\. The coach feeds every ball/);
+    });
+});
+
+describe('continuity: one word for one thing (Alex, 8 Oct)', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { SHORT_TERM_NOTE: _note, ...copy } = CONTENT;
+    const text = JSON.stringify(copy) + JSON.stringify({ PHASES, CURRICULUM, BADGES });
+    it('blocks are 3 weeks everywhere; the 8-week-term note is worded once', () => {
+        expect(text).not.toMatch(/2 or 3 weeks|two or three weeks|usually lasts/i);
+        expect(text.split(SHORT_TERM_NOTE).length - 1).toBe(1);
+    });
+    it('no leftover "Junior Level" certificates, "join the list", or "night" for a session', () => {
+        expect(text).not.toMatch(/Junior Level|Join the list|first night|last night|two nights/i);
     });
 });
 

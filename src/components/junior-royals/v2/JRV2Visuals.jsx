@@ -91,7 +91,7 @@ export const LaneDots = ({ players, label }) => (
         </svg>
         <figcaption className="text-center mt-2">
             <span className="block text-sm font-black text-rr-dark">{label}</span>
-            <span className="block text-sm font-medium text-rr-charcoal">{players} players, 1 coach</span>
+            <span className="block text-sm font-medium text-rr-charcoal">{players} players and their coach</span>
         </figcaption>
     </figure>
 );

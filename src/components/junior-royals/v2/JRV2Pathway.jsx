@@ -64,7 +64,7 @@ const StageCard = ({ p, i, onOpen }) => {
                         <li key={k} className={`border-l-4 ${TOPIC_BAR[k]} pl-2.5 text-[15px] font-semibold text-rr-dark leading-snug`}>{t}</li>
                     ))}
                 </ul>
-                <p className="mt-3 text-sm font-semibold text-rr-charcoal"><Rich v={PATH.level(c.level)} /></p>
+                <p className="mt-3 inline-flex items-center gap-1.5 text-sm font-bold text-rr-dark"><Award className="w-4 h-4 text-rr-pink" aria-hidden="true" />{PATH.certificate(p.name)}</p>
                 <span className="mt-4 inline-flex items-center gap-1.5 min-h-[44px] font-black text-rr-dark underline underline-offset-4 decoration-2 decoration-rr-pink">
                     {PATH.open(p.name)} ({PATH.topics(topicCount(c))})
                     <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
@@ -189,7 +189,15 @@ const StageModal = ({ index, onClose, onNav }) => {
                         {p.key === 'discover'
                             ? <ul className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-6 mt-3">{BADGES.discover.slice(0, 4).map((b) => <BadgeMedal key={b.name} b={b} />)}</ul>
                             : <p className="text-[15px] font-medium text-rr-charcoal"><Rich v={PATH.modal.badgesNotWritten} /></p>}
-                        <p className="mt-4 text-sm font-semibold text-rr-dark"><Rich v={PATH.level(c.level)} /> <Rich v={BADGE_COPY.starts} /></p>
+                        <p className="mt-4 text-sm font-semibold text-rr-dark"><Rich v={BADGE_COPY.starts} /></p>
+                    </section>
+
+                    <section className="flex items-start gap-3">
+                        <Award className="w-8 h-8 text-rr-pink shrink-0" aria-hidden="true" />
+                        <div>
+                            <H>{PATH.certificate(p.name)}</H>
+                            <p className="text-[16px] font-bold text-rr-dark leading-snug">“{c.certificate}”</p>
+                        </div>
                     </section>
 
                     <p className="text-[15px] font-bold text-rr-dark">{c.next}</p>
@@ -269,5 +277,18 @@ export const BadgeBlock = () => (
                 </li>
             ))}
         </ul>
+
+        <h4 className="mt-12 text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark">{BADGE_COPY.certificateTitle}</h4>
+        <p className="mt-2 text-[16px] font-medium text-rr-dark max-w-3xl">{BADGE_COPY.certificate}</p>
+        <ol className="mt-5 grid md:grid-cols-3 gap-4">
+            {PHASES.map((p, i) => (
+                <li key={p.key} className={`rounded-2xl border-2 ${STAGE[i].border} bg-white px-5 py-4`}>
+                    <p className="flex items-center gap-2 text-sm font-black uppercase tracking-wider text-rr-dark">
+                        <Award className="w-5 h-5 text-rr-pink" aria-hidden="true" /> {p.name} · ages {p.ages}
+                    </p>
+                    <p className="mt-2 text-[15px] font-semibold text-rr-dark leading-snug">“{CURRICULUM[p.key].certificate}”</p>
+                </li>
+            ))}
+        </ol>
     </div>
 );

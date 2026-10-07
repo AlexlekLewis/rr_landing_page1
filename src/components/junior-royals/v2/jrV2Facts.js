@@ -92,7 +92,7 @@ export const CURRICULUM = {
             'Call YES, NO or WAIT, loud and early',
         ],
         next: 'Next, at 9: the full range of front-foot shots, and a run-up.',
-        level: 1,
+        certificate: 'Congratulations, you’ve completed Discover. Next stop: Develop.',
     },
     develop: {
         means: 'The best age for learning skills. The full range of front-foot shots, back-foot defence, first spin and leaving the ball. A run-up, the jump, and bowling a good length. Simple choices, made after the ball is bowled.',
@@ -124,7 +124,7 @@ export const CURRICULUM = {
             'Take a high catch side-on',
         ],
         next: 'Next, at 11: back-foot shots, playing spin, and bowling to a plan.',
-        level: 2,
+        certificate: 'Congratulations, you’ve completed Develop. Next stop: Elevate.',
     },
     elevate: {
         means: 'The skills under pressure. The cut and the pull, using your feet and the crease against spin, range hitting and the sweep. Bowling with pace, the slower ball, bowling to a plan and a field. Chasing and defending a score.',
@@ -153,7 +153,7 @@ export const CURRICULUM = {
             'Bowl to a plan and a field, with a stock ball and a slower ball',
         ],
         next: 'Next, at 13: Performance Squads, by trial. Not every player gets a place.',
-        level: 3,
+        certificate: 'Congratulations, you’ve completed Elevate and Junior Royals. Next stop: Performance Squads trials.',
     },
 };
 
@@ -218,7 +218,8 @@ export const PILLARS = [
 // ── Skill badges: PROPOSED, pilot Term 1 2027 (blueprint Part IV, p35–37) ──
 // Each 3-week block carries one batting and one bowling badge; fielding adds four a
 // year → 12 + 12 + 4 = 28 a year. Year 2 of a stage adds a harder second stripe.
-// A stage's badges complete a Junior Level certificate (Discover = Level 1, …).
+// Certificates are per STAGE (Alex, 8 Oct 2026): "Congratulations, you've completed
+// Discover…" — everyone moves up with their age group; never "passed" or "failed".
 // Rules: 4 good balls in 6, on two nights; "not yet", never "failed"; no
 // leaderboards; nothing for size, pace or attendance; awarded on the night only.
 // Only Discover Year 1 badges are written (p36–37); Develop and Elevate are not.
