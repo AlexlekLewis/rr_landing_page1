@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { OPTIONS, DISCOUNTS, NOTICE_WEEKS, TERM_8, PHASES, SESSION, wednesdays2027 } from './jrV2Facts';
+import { OPTIONS, DISCOUNTS, NOTICE_WEEKS, TERM_8, PHASES, SESSION, CURRICULUM, BADGES, wednesdays2027 } from './jrV2Facts';
 import * as CONTENT from './jrV2Content';
 import { priceAhead, termTotal, coachMinutes } from './jrV2Content';
 import { FORM_VALUES } from './JRV2Form';
@@ -68,6 +68,29 @@ describe('the program facts', () => {
         const w = wednesdays2027();
         expect(w).toHaveLength(52);
         expect(w.filter((x) => x.term).length).toBe(40);
+    });
+});
+
+describe('the pathway pop-ups and skill badges (Alex, 8 Oct: show the full curriculum)', () => {
+    it('every stage has topics for batting, bowling and fielding, and things to work towards', () => {
+        PHASES.forEach((p) => {
+            const c = CURRICULUM[p.key];
+            expect(c, p.key).toBeTruthy();
+            ['batting', 'bowling', 'fielding', 'byTheEnd'].forEach((k) => expect(c[k].length, `${p.key}.${k}`).toBeGreaterThan(0));
+        });
+        expect(PHASES.map((p) => CURRICULUM[p.key].level)).toEqual([1, 2, 3]);
+    });
+
+    it('28 badges a year: one batting + one bowling per block (12 blocks) + 4 fielding', () => {
+        expect(BADGES.perYear).toEqual({ batting: 12, bowling: 12, fielding: 4 });
+        expect(BADGES.check).toEqual({ good: 4, of: 6, nights: 2 });
+        expect(BADGES.status).toBe('proposed');
+    });
+
+    it('safety promises are scoped to Wednesday training (matches are real games)', () => {
+        const text = JSON.stringify(CONTENT.WORRIES) + JSON.stringify(CONTENT.FAQS);
+        expect(text).toMatch(/At Wednesday training, players aged 7 and 8/);
+        expect(text).not.toMatch(/Soft balls\. The coach feeds every ball/);
     });
 });
 

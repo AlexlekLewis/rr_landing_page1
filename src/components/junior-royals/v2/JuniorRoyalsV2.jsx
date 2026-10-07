@@ -12,7 +12,8 @@ import {
     HERO, CTA, LOOP, WORRIES, HOUR, SKILL, TERM, PATH, PRICES, COMPARE, COACHES, WHERE, FORM, FAQS,
     OPEN_QUESTIONS_V2, REGION_LABEL, NEARBY, termTotal,
 } from './jrV2Content';
-import { LoopVisual, HourNumbers, HourRibbon, LaneDots, SkillSteps, Cues, TermRows, Scoreboards, StageLadder, YearStrip } from './JRV2Visuals';
+import { LoopVisual, HourNumbers, HourRibbon, LaneDots, SkillSteps, Cues, TermRows, Scoreboards, YearStrip } from './JRV2Visuals';
+import { StageJourney, BadgeBlock } from './JRV2Pathway';
 import JRV2Form from './JRV2Form';
 import { money } from '../juniorRoyalsData';
 
@@ -68,14 +69,14 @@ const MockupBanner = () => {
     return (
         <div className="bg-yellow-300 text-rr-dark">
             <div className="max-w-6xl mx-auto px-5 sm:px-6 py-3">
-                <button type="button" onClick={() => setOpen((o) => !o)} className="w-full flex items-center justify-between gap-3 text-left min-h-[44px]">
+                <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className="w-full flex items-center justify-between gap-3 text-left min-h-[44px]">
                     <span className="text-sm font-bold">
                         <span className="font-black uppercase tracking-wider">Mock-up version 2, for review. Not live.</span>{' '}
-                        Yellow = still to decide ({OPEN_QUESTIONS_V2.length} items). The form saves nothing.{' '}
-                        <Link to="/junior-royals/v1" className="underline">See version 1</Link>
+                        Yellow = still to decide ({OPEN_QUESTIONS_V2.length} items). The form saves nothing.
                     </span>
                     <ChevronDown className={`w-5 h-5 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`} />
                 </button>
+                <Link to="/junior-royals/v1" data-review-only className="inline-block text-sm font-bold underline py-1">See version 1</Link>
                 {open && <ol className="mt-2 mb-1 list-decimal pl-5 space-y-1 text-sm font-medium">{OPEN_QUESTIONS_V2.map((q) => <li key={q}>{q}</li>)}</ol>}
             </div>
         </div>
@@ -203,7 +204,7 @@ const Term = () => (
             <div className="space-y-5">
                 <Scoreboards first={TERM.scoreFirst} last={TERM.scoreLast} note={TERM.scoreNote} />
                 <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed border-l-4 border-rr-pink pl-4">{TERM.benchmark}</p>
-                <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed border-l-4 border-rr-pink pl-4">{TERM.festival} <Rich v={TERM.familiesWatch} /></p>
+                <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed border-l-4 border-rr-pink pl-4">{TERM.festival} <Rich v={TERM.familiesWatch} /> {TERM.photos}</p>
             </div>
         </div>
         <div className="mt-10"><PrimaryButton /></div>
@@ -214,12 +215,10 @@ const Term = () => (
 const Path = () => (
     <Section id="path" tone="slate">
         <Head eyebrow={PATH.eyebrow} title={PATH.title} />
-        <p className="text-[15px] text-rr-dark font-semibold mb-6">{PATH.gloss} <Rich v={PATH.ageCutoff} /></p>
-        <StageLadder goalLead={PATH.goalLead} />
-        <p className="text-[15px] text-rr-charcoal font-medium mt-6">
-            <span className="font-bold text-rr-dark">{PATH.older.lead}</span> {PATH.older.body}{' '}
-            <Link to={PATH.older.link.to} className="text-rr-dark font-bold underline underline-offset-2 decoration-rr-pink">{PATH.older.link.label}</Link>
-        </p>
+        <p className="text-lg text-rr-dark font-semibold max-w-3xl">{PATH.intro}</p>
+        <p className="text-[15px] text-rr-charcoal font-medium mt-3 mb-8 max-w-3xl">{PATH.gloss} <Rich v={PATH.ageCutoff} /> <Rich v={PATH.beginners} /></p>
+        <StageJourney />
+        <BadgeBlock />
     </Section>
 );
 
@@ -244,7 +243,11 @@ const Prices = () => (
                 </div>
             ))}
         </div>
-        <p className="text-rr-dark font-bold mb-12">{PRICES.gst} {PRICES.matchFee}</p>
+        <p className="text-rr-dark font-bold">{PRICES.gst} {PRICES.matchFee}</p>
+        <ul className="mt-4 mb-12 space-y-2 max-w-3xl">
+            <Tick><Rich v={PRICES.cover} /></Tick>
+            <Tick><Rich v={PRICES.fourAvailability} /></Tick>
+        </ul>
 
         <div className="grid md:grid-cols-2 gap-12 mb-12">
             <div>
@@ -275,13 +278,13 @@ const Prices = () => (
                 <table className="w-full text-left">
                     <thead>
                         <tr className="border-b-2 border-rr-dark text-xs font-black uppercase tracking-wider text-rr-dark">
-                            <th className="py-2 pr-2">Term</th><th className="py-2 pr-2 text-right">Sessions</th><th className="py-2 pr-2 text-right normal-case">4s</th><th className="py-2 text-right normal-case">6s</th>
+                            <th className="py-2 pr-2">Term</th><th className="py-2 pr-2 text-right">Sessions</th><th className="py-2 pr-2 text-right normal-case">4 in a lane</th><th className="py-2 text-right normal-case">6 in a lane</th>
                         </tr>
                     </thead>
                     <tbody>
                         {CALENDAR.filter((c) => !c.holiday).map((c) => (
                             <tr key={c.label} className="border-b border-slate-200 align-top">
-                                <td className="py-2.5 pr-2"><span className="block font-black text-rr-dark">{c.label}</span><span className="block text-xs text-rr-charcoal font-medium">{c.dates}</span></td>
+                                <td className="py-2.5 pr-2"><span className="block font-black text-rr-dark">{c.label === 'Rest of 2026' ? 'Term 4, 2026' : c.label}</span><span className="block text-xs text-rr-charcoal font-medium">{c.dates}</span></td>
                                 <td className="py-2.5 pr-2 text-right font-bold text-rr-dark">{c.sessions}</td>
                                 <td className="py-2.5 pr-2 text-right font-black text-rr-dark whitespace-nowrap">{money(termTotal('4s', c.sessions))}</td>
                                 <td className="py-2.5 text-right font-black text-rr-dark whitespace-nowrap">{money(termTotal('6s', c.sessions))}</td>
@@ -303,7 +306,7 @@ const Prices = () => (
                             <span className={`font-bold ${r.ours ? 'text-rr-dark' : 'text-rr-charcoal'}`}>{r.what}</span>
                             <span className="font-black text-rr-dark whitespace-nowrap">{r.price} <span className="text-xs font-bold text-rr-charcoal">an hour</span></span>
                         </p>
-                        <p className="text-sm font-medium text-rr-charcoal">{r.players} {r.players === '1' ? 'player' : 'players'} per coach · {r.time} of coach time each</p>
+                        <p className="text-sm font-medium text-rr-charcoal">{r.players} {r.players === '1' ? 'player' : 'players'} per coach · about {r.time} of the coach’s hour each</p>
                     </li>
                 ))}
             </ul>

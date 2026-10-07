@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Check, RotateCcw, Flag, ArrowDown } from 'lucide-react';
-import { SESSION, BLOCK, CUES, TERM_8, PHASES, AFTER, wednesdays2027 } from './jrV2Facts';
+import { SESSION, BLOCK, CUES, TERM_8, wednesdays2027 } from './jrV2Facts';
 
 // ─────────────────────────────────────────────────────────────
 // Visual explainers for /junior-royals version 2 (experience-design brief, 7 Oct 2026).
@@ -155,68 +155,18 @@ export const Scoreboards = ({ first, last, note }) => (
     </figure>
 );
 
-// 5 ── Where it leads: three stages, then the trial.
-export const StageLadder = ({ goalLead }) => {
-    const [openKey, setOpenKey] = useState(null);
-    return (
-        <ol>
-            {PHASES.map((p, i) => {
-                const open = openKey === p.key;
-                return (
-                    <li key={p.key} className="grid grid-cols-[4.5rem_1fr] gap-4">
-                        <div className="flex flex-col items-center">
-                            <span className={`w-16 h-16 rounded-full flex items-center justify-center text-white font-black text-lg ${i === 0 ? 'bg-rr-pink' : i === 1 ? 'bg-rr-blue' : 'bg-rr-dark'}`}>{p.ages}</span>
-                            <span className="w-0.5 flex-1 bg-slate-300 my-1" aria-hidden="true" />
-                        </div>
-                        <div className="pb-8">
-                            <p className="text-xs font-black uppercase tracking-widest text-rr-charcoal">Ages {p.ages}</p>
-                            <p className="text-2xl font-black uppercase text-rr-dark leading-tight">{p.name}</p>
-                            <p className="font-bold text-rr-dark">{p.aim}</p>
-                            <p className="text-sm font-black text-rr-dark mt-3">{goalLead}</p>
-                            <ul className="mt-1.5 space-y-1.5">
-                                {p.canDo.map((c) => (
-                                    <li key={c} className="flex items-start gap-2 text-[15px] text-rr-charcoal font-medium leading-snug">
-                                        <Check className="w-4 h-4 text-rr-pink shrink-0 mt-0.5" strokeWidth={3} aria-hidden="true" />{c}
-                                    </li>
-                                ))}
-                            </ul>
-                            <button type="button" aria-expanded={open} onClick={() => setOpenKey(open ? null : p.key)}
-                                className="mt-1 min-h-[44px] text-sm font-bold text-rr-dark underline underline-offset-4 decoration-dotted decoration-rr-pink">
-                                {open ? 'Hide' : 'What does it feel like?'}
-                            </button>
-                            {open && <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed border-l-4 border-rr-pink pl-3">{p.feel}</p>}
-                        </div>
-                    </li>
-                );
-            })}
-            {AFTER.map((a) => (
-                <li key={a.name} className="grid grid-cols-[4.5rem_1fr] gap-4">
-                    <div className="flex flex-col items-center">
-                        <span className="w-16 h-16 rounded-full border-4 border-dashed border-rr-dark flex items-center justify-center text-rr-dark font-black text-sm uppercase">{a.ages}</span>
-                    </div>
-                    <div className="pb-2">
-                        <p className="text-xs font-black uppercase tracking-widest text-rr-charcoal">After Junior Royals</p>
-                        <p className="text-xl font-black uppercase text-rr-dark leading-tight">{a.name}</p>
-                        <p className="text-[15px] text-rr-charcoal font-medium mt-1">{a.note}</p>
-                    </div>
-                </li>
-            ))}
-        </ol>
-    );
-};
-
 // 6 ── A year: one square per Wednesday. Filled = a training week you pay for.
 export const YearStrip = () => {
     const weeks = wednesdays2027();
     return (
-        <figure aria-label="2027: 40 training weeks and 12 school-holiday weeks">
+        <figure aria-label="2027: 40 Wednesday sessions and 12 school-holiday weeks">
             <div className="grid grid-cols-[repeat(13,minmax(0,1fr))] sm:grid-cols-[repeat(26,minmax(0,1fr))] gap-1 max-w-xl" aria-hidden="true">
                 {weeks.map((w) => (
                     <div key={w.iso} className={`aspect-square rounded-[3px] ${w.term ? 'bg-rr-dark' : 'border-[1.5px] border-slate-500'}`} />
                 ))}
             </div>
             <div className="flex flex-wrap gap-x-5 gap-y-1 mt-3 text-sm font-bold text-rr-dark">
-                <span className="inline-flex items-center gap-2"><span className="w-3 h-3 rounded-sm bg-rr-dark" />Training week (you pay)</span>
+                <span className="inline-flex items-center gap-2"><span className="w-3 h-3 rounded-sm bg-rr-dark" />Wednesday with a session (you pay)</span>
                 <span className="inline-flex items-center gap-2"><span className="w-3 h-3 rounded-sm border-[1.5px] border-slate-500" />School holidays (nothing to pay)</span>
             </div>
             <figcaption className="text-xs text-rr-charcoal font-medium mt-2">2027, one square for each Wednesday, January to December.</figcaption>

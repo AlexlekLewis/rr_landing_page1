@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Check } from 'lucide-react';
 import { supabase } from '../../../lib/supabase';
 import { HONEYPOT_FIELD, isHoneypotTripped } from '../../../lib/security/bot.js';
-import { MOCKUP, CENTRES, FIRST_SESSION, AGES, AGES_TEXT, PS_ROUTE } from '../juniorRoyalsData';
+import { MOCKUP, CENTRES, AGES, AGES_TEXT, PS_ROUTE } from '../juniorRoyalsData';
 import { ageAtStart } from '../JuniorRoyalsForm';
+import { Rich } from '../JuniorRoyalsShared';
 import { FORM, CTA, REGION_LABEL } from './jrV2Content';
 
 // ─────────────────────────────────────────────────────────────
@@ -42,9 +43,9 @@ const collectUtm = () => {
 const inputClass = (err) =>
     `w-full bg-white border ${err ? 'border-rr-pink' : 'border-slate-300'} rounded-xl px-4 py-3.5 text-rr-dark text-[16px] focus:outline-none focus:border-rr-pink transition-colors`;
 
-const Label = ({ children, htmlFor, why }) => (
+const Label = ({ children, htmlFor, why, optional }) => (
     <label htmlFor={htmlFor} className="block mb-2">
-        <span className="text-xs font-black uppercase tracking-widest text-rr-dark">{children} <span className="text-rr-pink">*</span></span>
+        <span className="text-xs font-black uppercase tracking-widest text-rr-dark">{children} {optional ? <span className="normal-case tracking-normal font-semibold text-rr-charcoal">(optional)</span> : <span className="text-rr-pink">*</span>}</span>
         {why && <span className="block text-sm font-medium text-rr-charcoal normal-case tracking-normal mt-0.5">{why}</span>}
     </label>
 );
@@ -92,8 +93,8 @@ const JRV2Form = () => {
         const e = {};
         if (!form.parent_name.trim()) e.parent_name = 'Please enter your name.';
         if (!/\S+@\S+\.\S+/.test(form.email)) e.email = 'Please enter a valid email.';
-        if (form.phone.replace(/\D/g, '').length < 8) e.phone = 'Please enter a phone number.';
-        if (!form.player_name.trim()) e.player_name = "Please enter your player's name.";
+        if (form.phone && form.phone.replace(/\D/g, '').length < 8) e.phone = 'Please check the number, or leave it blank.';
+        if (!form.player_name.trim()) e.player_name = "Please enter your player's first name.";
         if (!form.player_dob) e.player_dob = "Please enter your player's date of birth.";
         else {
             const age = ageAtStart(form.player_dob);
@@ -119,7 +120,7 @@ const JRV2Form = () => {
                     id: crypto.randomUUID(),
                     parent_name: form.parent_name.trim(),
                     email: form.email.trim(),
-                    phone: form.phone.trim(),
+                    phone: form.phone.trim() || null,
                     player_name: form.player_name.trim(),
                     player_dob: form.player_dob,
                     centre: form.centre,
@@ -169,13 +170,13 @@ const JRV2Form = () => {
                     <Err msg={errors.email} />
                 </div>
                 <div>
-                    <Label htmlFor="phone">Mobile</Label>
+                    <Label htmlFor="phone" optional>Mobile</Label>
                     <input id="phone" name="phone" type="tel" autoComplete="tel" value={form.phone} onChange={set} className={inputClass(errors.phone)} />
                     <Err msg={errors.phone} />
                 </div>
                 <div>
-                    <Label htmlFor="player_name">Player's full name</Label>
-                    <input id="player_name" name="player_name" value={form.player_name} onChange={set} className={inputClass(errors.player_name)} />
+                    <Label htmlFor="player_name">Player's first name</Label>
+                    <input id="player_name" name="player_name" autoComplete="off" value={form.player_name} onChange={set} className={inputClass(errors.player_name)} />
                     <Err msg={errors.player_name} />
                 </div>
                 <div>
@@ -204,7 +205,11 @@ const JRV2Form = () => {
             </button>
             <p className="mt-3 flex items-center justify-center gap-2 text-sm font-medium text-rr-charcoal">
                 <Check className="w-4 h-4 text-rr-pink" strokeWidth={3} />
-                No payment now. First session {FIRST_SESSION.long}.
+                No payment now. No place is held yet.
+            </p>
+            <p className="mt-4 text-xs font-medium text-rr-charcoal leading-relaxed">
+                <Rich v={FORM.privacy} />{' '}
+                <Link to="/privacy-policy" className="underline underline-offset-2">Privacy Policy</Link>
             </p>
         </form>
     );

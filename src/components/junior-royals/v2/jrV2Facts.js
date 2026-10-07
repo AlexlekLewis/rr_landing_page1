@@ -26,7 +26,7 @@ export const PHASES = [
         max: 8,
         aim: 'Learn the game',
         // "How it feels" (blueprint p7), in plain words.
-        feel: 'Soft balls, tees and lots of hitting. The coach feeds every ball, and players bowl at targets, never at a batter.',
+        feel: 'Soft balls, batting tees (a stand that holds the ball) and lots of hitting. At Wednesday training the coach throws every ball, and players bowl at targets, never at a batter. Fun comes first.',
         canDo: [
             'Hit the ball along the ground and stay balanced',
             'Bowl at the stumps with a straight arm',
@@ -39,7 +39,7 @@ export const PHASES = [
         min: 9,
         max: 10,
         aim: 'Learn to play',
-        feel: 'Soft or incrediball. The coach feeds every ball, and players start making choices after the ball is bowled.',
+        feel: 'A soft ball, or an Incrediball (a softer rubber cricket ball). At Wednesday training the coach throws every ball, and players start making choices after the ball is bowled. The score rewards a good choice, not only a good hit.',
         canDo: [
             'Choose to hit or block off the front foot',
             'Run in and bowl the same way, ball after ball',
@@ -52,13 +52,110 @@ export const PHASES = [
         min: 11,
         max: 12,
         aim: 'Learn to compete',
-        feel: 'Match-like situations with a scoreboard. This is the step before a Performance Squads trial.',
+        feel: 'Tennis balls or soft balls, and games with a scoreboard, like a real match. Players start to plan: where to hit, and how to bowl to a field.',
         canDo: [
             'Chase a score with a plan, and finish it',
             'Bowl to a plan, with a slower ball to trick the batter',
         ],
     },
 ];
+
+// ── The curriculum per stage (blueprint p7–9 "What the player learns", the skill
+// ladder p14–15, and "By the end of …, a player can"). Plain words for parents;
+// the coach-facing names and Sid's clip numbers stay in the blueprint. Shown in the
+// stage pop-up on the page (Alex, 8 Oct: "people are going to really struggle with
+// understanding that there's a full curriculum").
+export const CURRICULUM = {
+    discover: {
+        means: 'Learning to love the game and building the base: holding the bat and ball, the stance, a straight swing, a straight bowling arm, catching and throwing. Lots of hitting and lots of games.',
+        batting: [
+            'Grip, stance and lifting the bat',
+            'Step and hit: heel to toe',
+            'Swing straight through a gate',
+            'First block, to save your stumps',
+            'First rock back, to hit a high ball',
+            'Run and call: YES, NO or WAIT',
+        ],
+        bowling: [
+            'Hold the ball in your fingers',
+            'A straight arm, from standing',
+            'Walk in and bowl at the keeper’s gloves',
+            'Aim low, at the base of the stumps',
+            'Jog in and still bowl straight',
+        ],
+        fielding: ['Ready position', 'Catch a soft ball', 'Pick up and throw at the stumps'],
+        byTheEnd: [
+            'Take their grip and stance, and lift the bat, without help',
+            'Hit a tee or dropped ball along the ground through a gate, and keep their balance',
+            'Bowl at the stumps from a short run with a straight arm',
+            'Catch a soft ball with soft hands',
+            'Call YES, NO or WAIT, loud and early',
+        ],
+        next: 'Next, at 9: the full range of front-foot shots, and a run-up.',
+        level: 1,
+    },
+    develop: {
+        means: 'The best age for learning skills. The full range of front-foot shots, back-foot defence, first spin and leaving the ball. A run-up, the jump, and bowling a good length. Simple choices, made after the ball is bowled.',
+        batting: [
+            'Forward defence',
+            'On drive and cover drive',
+            'Flick off the pads',
+            'Back-foot defence and back-foot punch',
+            'Block and drive against spin',
+            'Leave it or play it',
+            'Pick the length: forward or back',
+        ],
+        bowling: [
+            'Base, landing and back leg through',
+            'Feel the release',
+            'The jump',
+            'A run-up to the keeper’s gloves',
+            'A straight seam',
+            'Bowl to left- and right-handed batters',
+            'Land it in a length box',
+            'Simple plans: bowl at the stumps, or outside off',
+        ],
+        fielding: ['High catch, side-on', 'Walk in low', 'Keeping: catch and move sideways'],
+        byTheEnd: [
+            'Drive or block off the front foot, by choice',
+            'Go back and across to a short ball',
+            'Bowl from a run-up with an action that repeats',
+            'Land it in a length box to right- and left-handed batters',
+            'Take a high catch side-on',
+        ],
+        next: 'Next, at 11: back-foot shots, playing spin, and bowling to a plan.',
+        level: 2,
+    },
+    elevate: {
+        means: 'The skills under pressure. The cut and the pull, using your feet and the crease against spin, range hitting and the sweep. Bowling with pace, the slower ball, bowling to a plan and a field. Chasing and defending a score.',
+        batting: [
+            'Glance, cut and pull',
+            'Choose punch or cut from the line',
+            'Drive the turning ball',
+            'Use the depth of the crease against spin',
+            'Range hitting',
+            'The sweep',
+            'Rotate the strike and chase with a plan',
+        ],
+        bowling: [
+            'The same run-up, every ball',
+            'Length on demand',
+            'Pace from a rhythmic run-up; more spin for spinners',
+            'The slower ball',
+            'Bowl to a field',
+            'Set up a batter',
+        ],
+        fielding: ['Run-outs and relay throws', 'Keeping: stumpings'],
+        byTheEnd: [
+            'Pick the punch, cut or pull from the length and line',
+            'Play spin forward or back',
+            'Chase a target with a plan, and finish strong',
+            'Bowl to a plan and a field, with a stock ball and a slower ball',
+        ],
+        next: 'Next, at 13: Performance Squads, by trial. Not every player gets a place.',
+        level: 3,
+    },
+};
 
 // After Junior Royals (blueprint p10). Performance Squads is BY TRIAL — never promised.
 export const AFTER = [
@@ -118,11 +215,29 @@ export const PILLARS = [
     { name: 'Respect', note: 'Shake hands, accept the umpire’s call, win and lose well.' },
 ];
 
-// ── Skill badges: PROPOSED, pilot Term 1 2027 (blueprint Part IV) ──
+// ── Skill badges: PROPOSED, pilot Term 1 2027 (blueprint Part IV, p35–37) ──
+// Each 3-week block carries one batting and one bowling badge; fielding adds four a
+// year → 12 + 12 + 4 = 28 a year. Year 2 of a stage adds a harder second stripe.
+// A stage's badges complete a Junior Level certificate (Discover = Level 1, …).
+// Rules: 4 good balls in 6, on two nights; "not yet", never "failed"; no
+// leaderboards; nothing for size, pace or attendance; awarded on the night only.
+// Only Discover Year 1 badges are written (p36–37); Develop and Elevate are not.
 export const BADGES = {
     status: 'proposed',
     pilot: 'Term 1, 2027',
-    examples: ['Two Vs', 'Straight to the Target', 'Safe Hands', 'Call It'],
+    perYear: { batting: 12, bowling: 12, fielding: 4 },
+    check: { good: 4, of: 6, nights: 2 },
+    // Discover Year 1 (blueprint p36–37): name + the player's "I can…"
+    discover: [
+        { name: 'Two Vs', kind: 'bat', can: 'find my grip myself and hit it straight' },
+        { name: 'Heel to Toe', kind: 'bat', can: 'hit along the ground and stay balanced' },
+        { name: 'Guard the Stumps', kind: 'bat', can: 'block it and save my stumps' },
+        { name: 'Call It', kind: 'bat', can: 'call YES, NO or WAIT, loud and early' },
+        { name: 'Straight to the Target', kind: 'bowl', can: 'hold it in my fingers and bowl straight' },
+        { name: 'Base of the Stump', kind: 'bowl', can: 'aim low and hit the stumps' },
+        { name: 'Two the Same', kind: 'bowl', can: 'bowl two the same, in a row' },
+        { name: 'Safe Hands', kind: 'field', can: 'catch a soft ball with either hand' },
+    ],
 };
 
 // ── Rehearsal nights before the first session (blueprint p32) ──
