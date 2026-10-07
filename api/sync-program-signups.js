@@ -13,7 +13,9 @@
 // to the SA, and writes start failing 403. Every sync target must be created by
 // a human and shared to the SA.
 //
-// ── THE FOUR PROGRAMS, AND WHERE THEIR ENTRIES LIVE ──────────
+// ── THE PROGRAMS, AND WHERE THEIR ENTRIES LIVE ───────────────
+//   Junior Royals Interest  /junior-royals (new page, from Oct 2026)
+//                    junior_royals_interest — tab appears once the table exists
 //   Open Trial       /performance-squads-open-trial
 //                    performance_squad_leads, program_type = OPEN_TRIAL_PROGRAM
 //   Spin Club        /spin-club
@@ -114,6 +116,12 @@ const TOUR_SOURCE = 'india-tour-eoi';
 // src/components/junior-royals-t3/JRT3RegistrationForm.jsx writes every Term 4
 // entry to its own table, so there is nothing to filter on.
 const JR_TERM4_TABLE = 'jr_term4_waitlist';
+// src/components/junior-royals/v2/JRV2Form.jsx → TABLE. The new Junior Royals
+// register-your-interest list (Groups of 4 / Groups of 6). Created by
+// supabase/migrations/20261009000000_junior_royals_interest.sql — which is NOT
+// applied until Alex approves the new page. Until then the read below finds no
+// table and the tab is simply left empty: it must never stop the other tabs.
+const JR_INTEREST_TABLE = 'junior_royals_interest';
 
 // Tour Interest shows entries from 1 SEPTEMBER 2026 ONWARDS (Alex, 30 Sep 2026).
 // Anything older is a lead from a campaign that has been and gone, and it made
@@ -154,6 +162,7 @@ export const PROGRAM_PAYMENT_LINKS = {
   'sid-juniors': {},
   'tour-interest': {},
   'jr-term4': {},
+  'jr-interest': {},
 };
 
 // $30 per player, per session. Source of truth is PAYMENT_OPTIONS in
@@ -168,6 +177,7 @@ const NO_PAYMENT_LINE = {
   'sid-juniors': 'Booking request — no payment has been taken and no place is held',
   'tour-interest': 'Nothing to pay — this is an expression of interest only',
   'jr-term4': 'Nothing to pay — an entry only. No place is held until we confirm one.',
+  'jr-interest': 'Nothing to pay — interest only. No payment has been taken and no place is held.',
 };
 
 // Readable centre names for CELL values. Deliberately separate from anything
@@ -396,6 +406,7 @@ export const PROGRAM_LABELS = {
   'sid-juniors': 'Juniors with Sid',
   'tour-interest': 'Tour Interest',
   'jr-term4': 'Junior Royals Term 4',
+  'jr-interest': 'Junior Royals Interest',
 };
 const tabName = (key) => `${PROGRAM_LABELS[key]}${DNE}`;
 
@@ -707,6 +718,87 @@ export const jrTerm4Row = (r) => ([
   NO_PAYMENT_LINE['jr-term4'],
 ]);
 
+// ── Junior Royals Interest ──────────────────────────────────
+// The new Junior Royals page (Groups of 4 / Groups of 6). Each code is written
+// out in words. Source of truth for every value: FORM in
+// src/components/junior-royals/v2/jrV2Content.js (FORM_VALUES in JRV2Form.jsx);
+// the test file checks that every value the form can send has a label here.
+export const JR_INTEREST_HEADERS = [
+  'Entry ID',
+  'Registered (Melbourne)',
+  'Player First Name',
+  'Player Date of Birth',
+  'Stage in 2027',
+  'Parent / Guardian',
+  'Parent Email',
+  'Parent Phone',
+  'Centre',
+  'Group Size',
+  'Time',
+  'How They Would Likely Pay',
+  'Payment',
+];
+export const JR_INTEREST_LABELS = {
+  centre: {
+    mickleham: 'Mickleham Indoor Sports Centre',
+    'cranbourne-north': 'Elite Cricket Centre, Cranbourne North',
+  },
+  group_option: { '4s': 'Groups of 4', '6s': 'Groups of 6', either: 'Either — not sure yet' },
+  preferred_time: { '6pm': '6:00pm', '7pm': '7:00pm', either: 'Either' },
+  payment_plan: {
+    term: 'The term, up front',
+    weekly: 'Weekly, during the term',
+    '2-terms': '2 terms ahead (10% off)',
+    year: '4 terms (a year) ahead (15% off)',
+    'not-sure': 'Not sure yet',
+  },
+};
+const jrLabel = (field, v) => JR_INTEREST_LABELS[field][v]
+  || (v ? `${v} (not a value the form sends — check this row)` : '');
+
+// Stage by age on 1 January 2027 (proposed cut-off; not yet confirmed).
+// Discover 7–8, Develop 9–10, Elevate 11–12. Pure date arithmetic on the
+// 'YYYY-MM-DD' string, so no time zone can shift a birthday.
+export const jrStage2027 = (dob) => {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(dob || '');
+  if (!m) return 'No date of birth — check';
+  const age = 2027 - Number(m[1]) - 1; // nobody has had their 2027 birthday on 1 January…
+  const onNewYear = m[2] === '01' && m[3] === '01' ? age + 1 : age; // …except 1 January babies
+  if (onNewYear >= 7 && onNewYear <= 8) return `Discover (${onNewYear} on 1 Jan 2027)`;
+  if (onNewYear >= 9 && onNewYear <= 10) return `Develop (${onNewYear} on 1 Jan 2027)`;
+  if (onNewYear >= 11 && onNewYear <= 12) return `Elevate (${onNewYear} on 1 Jan 2027)`;
+  return `${onNewYear} on 1 Jan 2027 — outside 7 to 12, check`;
+};
+
+export const jrInterestRow = (r) => ([
+  r.id || '',
+  asText(fmtMelb(r.created_at)),
+  r.player_name || '',
+  asText(r.player_dob || ''),
+  jrStage2027(r.player_dob),
+  r.parent_name || '',
+  r.email || '',
+  asText(r.phone || ''),
+  jrLabel('centre', r.centre),
+  jrLabel('group_option', r.group_option),
+  jrLabel('preferred_time', r.preferred_time),
+  jrLabel('payment_plan', r.payment_plan),
+  NO_PAYMENT_LINE['jr-interest'],
+]);
+
+// A table that does not exist yet reads as empty instead of failing the whole
+// sync (PostgREST: 42P01 "relation does not exist" / PGRST205 "could not find
+// the table"). Any OTHER error still fails loudly, as before.
+export const emptyIfMissing = (r, name) => {
+  const e = r && r.error;
+  if (e && (e.code === '42P01' || e.code === 'PGRST205'
+    || /does not exist|could not find the table/i.test(e.message || ''))) {
+    console.warn(`sync-program-signups: ${name} does not exist yet — its tab is skipped.`);
+    return { data: [], error: null, missing: true };
+  }
+  return r;
+};
+
 // ── Payments (Stripe) ───────────────────────────────────────
 // Every payment on a configured link, INCLUDING the ones we could not attach to
 // a sign-up. An unmatched payment is never dropped — it is listed so a human can
@@ -797,6 +889,15 @@ export const guideLines = (linkLines = [], counts = {}) => {
     ['  actually booked. Monday was offered to measure whether a second night is worth'],
     ['  adding — picking it does not mean a Monday session exists.'],
     [''],
+    ...(counts.jrInterest == null ? [] : [
+      [`"${PROGRAM_LABELS['jr-interest']}" — families who registered interest in the new Junior Royals`],
+      ['  (ages 7 to 12, Groups of 4 or Groups of 6, from Wednesday 28 October) at'],
+      ['  rramelbourne.com/junior-royals. Nothing is paid and NO PLACE IS HELD. Their answers'],
+      ['  are for planning: how many lanes of each size, at which centre and time, and how'],
+      ['  families would like to pay. The "Stage in 2027" column assumes the player\'s age'],
+      [`  on 1 January sets their stage — not yet confirmed. Currently ${counts.jrInterest} entries.`],
+      [''],
+    ]),
     [`"${PROGRAM_LABELS['tour-interest']}" — players who want to go on an India tour, from`],
     ['  rramelbourne.com/tours. An expression of interest, not a booking: nothing has'],
     ['  been paid and no place is held.'],
@@ -829,6 +930,7 @@ export const guideLines = (linkLines = [], counts = {}) => {
     [`  ${PROGRAM_LABELS['spin-club']}: column ${safeCol(SPIN_CLUB_HEADERS)} onwards`],
     [`  ${PROGRAM_LABELS['sid-juniors']}: column ${safeCol(SID_HEADERS)} onwards`],
     [`  ${PROGRAM_LABELS['jr-term4']}: column ${safeCol(JR_TERM4_HEADERS)} onwards`],
+    [`  ${PROGRAM_LABELS['jr-interest']}: column ${safeCol(JR_INTEREST_HEADERS)} onwards`],
     [`  ${PROGRAM_LABELS['tour-interest']}: column ${safeCol(TOUR_HEADERS)} onwards`],
     [`  Payments (Stripe): column ${safeCol(PAY_HEADERS)} onwards`],
     [''],
@@ -927,7 +1029,7 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
   // would quietly stop putting people on a coach's tab with nothing to show it
   // had happened. ROW_CAP is well above any of these (240 in
   // performance_squad_leads at 30 Sep 2026) and hitting it is logged loudly.
-  const [squadLeads, spinClub, sidBookings, tourApps, tourEois, jrTerm4] = await Promise.all([
+  const [squadLeads, spinClub, sidBookings, tourApps, tourEois, jrTerm4, jrInterest] = await Promise.all([
     // ALL performance_squad_leads, not just the open-trial ones: payments are
     // allocated across the whole table so this workbook and the Performance
     // Squads workbook can never disagree about who has paid. Filtered down to
@@ -938,6 +1040,8 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
     sb.from('applications').select('*').eq('source', TOUR_SOURCE).order('created_at', { ascending: true }).limit(ROW_CAP),
     sb.from('india_tour_2026_eoi').select('*').order('created_at', { ascending: true }).limit(ROW_CAP),
     sb.from(JR_TERM4_TABLE).select('*').order('created_at', { ascending: true }).limit(ROW_CAP),
+    sb.from(JR_INTEREST_TABLE).select('*').order('created_at', { ascending: true }).limit(ROW_CAP)
+      .then((r) => emptyIfMissing(r, JR_INTEREST_TABLE)),
   ]);
   const sources = {
     performance_squad_leads: squadLeads,
@@ -946,6 +1050,7 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
     'applications (Tour)': tourApps,
     india_tour_2026_eoi: tourEois,
     jr_term4_waitlist: jrTerm4,
+    junior_royals_interest: jrInterest,
   };
   for (const [name, r] of Object.entries(sources)) {
     if (r.error) throw r.error;
@@ -1005,6 +1110,12 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
       headers: JR_TERM4_HEADERS,
       rows: (jrTerm4.data || []).map(jrTerm4Row),
     },
+    // Only once the table exists: no empty tab appears before the page is live.
+    ...(jrInterest.missing ? [] : [{
+      key: 'jr-interest',
+      headers: JR_INTEREST_HEADERS,
+      rows: (jrInterest.data || []).map(jrInterestRow),
+    }]),
     {
       key: 'tour-interest',
       headers: TOUR_HEADERS,
@@ -1045,6 +1156,7 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
     tourBeforeCutoff: [...(tourApps.data || []), ...(tourEois.data || [])]
       .filter((r) => !isTourEntryInWindow(r.created_at)).length,
     jrTerm4: (jrTerm4.data || []).length,
+    jrInterest: jrInterest.missing ? null : (jrInterest.data || []).length,
     jrTerm4Closed: (jrTerm4.data || [])
       .filter((r) => !JR_TERM4_CENTRES[r.preferred_centre]).length,
   });

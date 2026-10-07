@@ -23,12 +23,18 @@ import {
   JR_TERM4_HEADERS,
   jrTerm4Row,
   jrTerm4CentreStatus,
+  JR_INTEREST_HEADERS,
+  JR_INTEREST_LABELS,
+  jrInterestRow,
+  jrStage2027,
+  emptyIfMissing,
   isTourEntryInWindow,
   allocatePayments,
   describeLinkHealth,
   guideLines,
 } from './sync-program-signups.js';
 import { sameRow, colLetter } from './_lib/sheetReconcile.js';
+import { FORM_VALUES as JR_FORM_VALUES } from '../src/components/junior-royals/v2/JRV2Form.jsx';
 
 // ------------------------------------------------------------
 // Fixtures, shaped like the real rows these tables hold.
@@ -559,5 +565,60 @@ describe('tour cutoff', () => {
     expect(text).toContain('Currently 2 entries');
     expect(text).toContain('22 people registered interest before that date');
     expect(text).toContain('Nothing has been deleted');
+  });
+});
+
+// ------------------------------------------------------------
+// Junior Royals Interest (new page, Groups of 4 / Groups of 6). The table is not
+// created until the page goes live, so the sync must skip it quietly until then;
+// and every value the form can send must read as words, never as a raw code.
+// ------------------------------------------------------------
+describe('Junior Royals Interest tab', () => {
+  const row = (over = {}) => ({
+    id: 'jri-1', created_at: '2026-10-20T08:00:00.000Z', parent_name: 'Sample Parent',
+    email: 'parent@example.com', phone: null, player_name: 'Sam', player_dob: '2017-05-10',
+    centre: 'cranbourne-north', group_option: '4s', preferred_time: '6pm', payment_plan: 'year', ...over,
+  });
+
+  it('has a label for every value the form can send', () => {
+    for (const [field, values] of Object.entries(JR_FORM_VALUES)) {
+      for (const v of values) expect(JR_INTEREST_LABELS[field][v], `${field}=${v}`).toBeTruthy();
+    }
+  });
+
+  it('writes codes out in words, and says no place is held', () => {
+    const r = jrInterestRow(row());
+    expect(r).toHaveLength(JR_INTEREST_HEADERS.length);
+    const at = (h) => r[JR_INTEREST_HEADERS.indexOf(h)];
+    expect(at('Centre')).toBe('Elite Cricket Centre, Cranbourne North');
+    expect(at('Group Size')).toBe('Groups of 4');
+    expect(at('How They Would Likely Pay')).toBe('4 terms (a year) ahead (15% off)');
+    expect(at('Payment')).toMatch(/no place is held/);
+    expect(jrInterestRow(row({ centre: 'somewhere-else' }))[JR_INTEREST_HEADERS.indexOf('Centre')]).toMatch(/check this row/);
+  });
+
+  it('works out the 2027 stage from the date of birth (age on 1 January)', () => {
+    expect(jrStage2027('2019-05-10')).toMatch(/^Discover \(7/);
+    expect(jrStage2027('2020-01-01')).toMatch(/^Discover \(7/);   // turns 7 on 1 Jan 2027
+    expect(jrStage2027('2020-01-02')).toMatch(/outside 7 to 12/); // still 6
+    expect(jrStage2027('2016-06-01')).toMatch(/^Develop \(10/);
+    expect(jrStage2027('2014-12-31')).toMatch(/^Elevate \(12/);
+    expect(jrStage2027('')).toMatch(/No date of birth/);
+  });
+
+  it('skips the table quietly while it does not exist, but still fails on any other error', () => {
+    expect(emptyIfMissing({ data: null, error: { code: 'PGRST205', message: 'Could not find the table' } }, 't'))
+      .toEqual({ data: [], error: null, missing: true });
+    expect(emptyIfMissing({ data: null, error: { code: '42P01', message: 'relation does not exist' } }, 't').missing).toBe(true);
+    const denied = { data: null, error: { code: '42501', message: 'permission denied' } };
+    expect(emptyIfMissing(denied, 't')).toBe(denied);
+  });
+
+  it('only describes the tab in the guide once the table exists', () => {
+    const before = guideLines([], {}).map((r) => r[0]).join('\n');
+    expect(before).not.toContain('registered interest in the new Junior Royals');
+    const after = guideLines([], { jrInterest: 3 }).map((r) => r[0]).join('\n');
+    expect(after).toContain('Currently 3 entries.');
+    expect(after).toContain(`${PROGRAM_LABELS['jr-interest']}: column ${colLetter(JR_INTEREST_HEADERS.length)} onwards`);
   });
 });
