@@ -263,13 +263,15 @@ export const wednesdays2027 = () => {
     return out;
 };
 
-// ── The two options (Alex, 8 Oct 2026) ──
+// ── The two options (Alex, 8 Oct 2026): renamed "Groups of 4" / "Groups of 6" and
+// priced $49.95 / $34.95 a session incl. GST (was "Junior Royals 4s/6s" at $50 / $35).
+// Keys '4s'/'6s' are internal (form values, database) and never shown.
 // Same program, same coaches, same session plan. The only difference is how many
 // players share the lane. Each lane also keeps ONE spot for a player making up a
 // missed session, so a lane never goes over `max`. Prices incl. GST, per session.
 export const OPTIONS = [
-    { key: '4s', name: 'Junior Royals 4s', perLane: 4, max: 5, price: 50 },
-    { key: '6s', name: 'Junior Royals 6s', perLane: 6, max: 7, price: 35 },
+    { key: '4s', name: 'Groups of 4', perLane: 4, max: 5, price: 49.95 },
+    { key: '6s', name: 'Groups of 6', perLane: 6, max: 7, price: 34.95 },
 ];
 // Paying ahead (Alex, 7 Oct 2026). Applies to both options.
 export const DISCOUNTS = { twoTerms: 0.10, year: 0.15 };

@@ -12,8 +12,8 @@
 // term up front or weekly during it; 10% off paying 2 terms ahead, 15% off the
 // year; 2 weeks' notice before the next term. Nothing is charged in the holidays.
 //
-// The names "4s" and "6s" ALWAYS appear with their meaning ("4 players in a lane"):
-// on their own, "4s" can read as an age group.
+// The two options are "Groups of 4" and "Groups of 6" (Alex, 8 Oct 2026), $49.95 and
+// $34.95 a session. Never "4s"/"6s" on the page, never "premium"/"economy".
 //
 // Facts come from ./jrV2Facts.js and ../juniorRoyalsData.js — never retyped.
 // Anything not yet decided is tbc() and shows in yellow on the mock-up.
@@ -25,10 +25,12 @@ import { OPTIONS, DISCOUNTS, NOTICE_WEEKS, BADGES } from './jrV2Facts';
 
 const r2 = (n) => Math.round(n * 100) / 100;
 export const opt = (key) => OPTIONS.find((o) => o.key === key);
-export const priceAhead = (price, d) => r2(price * (1 - d));
+// Discounted prices are rounded DOWN to the nearest 5 cents ($34.95 → $31.45 and $29.70), so
+// every total is price × sessions and the saving is never less than the 10% or 15% we advertise.
+export const priceAhead = (price, d) => Math.floor(price * (1 - d) * 20 + 1e-9) / 20;
 export const TERM4_SESSIONS = CALENDAR[0].sessions;                       // 8
 export const termTotal = (key, sessions) => r2(opt(key).price * sessions);
-export const yearTotal = (key, d = 0) => r2(opt(key).price * (1 - d) * SESSIONS_PER_YEAR);
+export const yearTotal = (key, d = 0) => r2(priceAhead(opt(key).price, d) * SESSIONS_PER_YEAR);   // per-session price × sessions, always
 
 // One wording for the 8-week-term exception, used everywhere it appears (Alex, 8 Oct:
 // "there's got to be continuity"). The rule is the 3-week block; this is the only exception.
@@ -85,7 +87,6 @@ export const HERO = {
     options: OPTIONS.map((o) => ({
         key: o.key,
         name: o.name,
-        what: `${o.perLane} players in a net lane`,
         upside: { '4s': 'More turns', '6s': 'More teammates' }[o.key],   // short form of GROUP_UPSIDE for the hero
         price: money(o.price),
         per: 'a session',
@@ -93,7 +94,7 @@ export const HERO = {
     })),
     priceNote: `${GST_NOTE} Nothing to pay in the school holidays. Development matches cost extra.`,
     noPayment: 'No payment now. No place is held yet.',
-    returning: "Already sent us your details on our Term 4 form? We have them, and we'll email you when enrolment opens. You'll choose Junior Royals 4s or 6s then.",
+    returning: "Already sent us your details on our Term 4 form? We have them, and we'll email you when enrolment opens. You'll choose Groups of 4 or Groups of 6 then.",
 };
 
 export const CTA = {
@@ -145,7 +146,7 @@ export const HOUR = {
     ],
     guide: 'Plus a 5-minute warm-up game and a 5-minute drink break: 60 minutes in all. The order is the same every week; the minutes are a guide.',
     lane: 'A lane is one practice net: a long pitch with netting all round. Your group has its own lane and a Royals Academy coach.',
-    perLane: `Junior Royals 4s have 4 players in a lane. Junior Royals 6s have 6.`,
+    perLane: 'Groups of 4 have 4 players in a lane. Groups of 6 have 6.',
 };
 
 // ── 5. How a skill sticks ──
@@ -232,7 +233,6 @@ export const PRICES = {
     options: OPTIONS.map((o) => ({
         key: o.key,
         name: o.name,
-        what: `${o.perLane} players in a lane`,
         max: `Never more than ${o.max} in a lane: ${o.perLane} players, plus 1 player some weeks who is making up a missed session`,
         upside: GROUP_UPSIDE[o.key],
         price: money(o.price),
@@ -243,6 +243,14 @@ export const PRICES = {
             { label: 'For example, all of 2027 paid ahead', price: `${SESSIONS_PER_YEAR} sessions = ${money(yearTotal(o.key, DISCOUNTS.year))}` },
         ],
     })),
+    // The step up, in facts: price difference and the extra turns (6 → 4 players = 1.5× the turns).
+    stepUp: (() => {
+        const lo = opt('6s').price, hi = opt('4s').price;
+        const pct = Math.round(((hi - lo) / lo) * 100);
+        const turns = Math.round((opt('6s').perLane / opt('4s').perLane - 1) * 100);
+        void pct; // 43%: for the business case (model, "Profit by price" §5), not the page
+        return `Step up to Groups of 4: ${turns}% more turns to bat and bowl, for ${money(r2(hi - lo))} more a session.`;
+    })(),
     howTitle: 'How enrolment works',
     how: [
         ['Enrol before the term starts. New players start at the beginning of a term, not partway through, so groups stay together. ', tbc('Enrolments close the Friday before term.', 'Enrolment closing day? Proposed: the Friday before term.')],
@@ -253,7 +261,7 @@ export const PRICES = {
         ['Nothing to pay in the school holidays.'],
     ],
     cover: tbc('Each lane always has its own coach. If a coach is away and we can’t replace them, we cancel that group’s session and credit it. We don’t merge lanes.', 'Approve the cover rule (cancel + credit, never merge lanes)?'),
-    fourAvailability: tbc('A Junior Royals 4s lane runs at a centre and time once at least 3 families choose it. If it doesn’t run, we’ll offer you a place in Junior Royals 6s.', 'Minimum families to open a 4s lane (3?), and what happens if it doesn’t run?'),
+    fourAvailability: tbc('A Groups of 4 lane runs at a centre and time once at least 3 families choose it. If it doesn’t run, we’ll offer you a place in Groups of 6.', 'Minimum families to open a Groups of 4 lane (3?), and what happens if it doesn’t run?'),
     makeup: ['Each lane keeps one spot for a player making up a missed session. ', tbc('Your player can make up a missed session in another group at the same stage and the same centre, when that group has a spot. Make-ups aren’t available in the first or last session of term.', 'Make-up rules: same stage + same centre only, none on Benchmark/festival nights (safeguarding). How many a term? How booked?')],
     leaving: tbc('Paid ahead and need to stop? The terms you used are charged at the full price, and the rest is refunded.', 'Proposed rule so the discount can’t be gamed — approve? Lawyer to check the Terms.'),
     currentTerm: tbc('If you stop partway through a term, that term isn’t refunded, unless we cancel sessions. This doesn’t affect your rights under the Australian Consumer Law.', 'Lawyer to check before payment opens.'),
@@ -270,8 +278,8 @@ export const COMPARE = {
     title: 'How we compare, per hour',
     head: ['Program', 'Group size', 'Price per hour'],
     rows: [
-        { what: 'Junior Royals 4s', players: '4 players', price: money(opt('4s').price), ours: true },
-        { what: 'Junior Royals 6s', players: '6 players', price: money(opt('6s').price), ours: true },
+        { what: 'Groups of 4', players: '4 players', price: money(opt('4s').price), ours: true },
+        { what: 'Groups of 6', players: '6 players', price: money(opt('6s').price), ours: true },
         { what: 'Group coaching at other Melbourne academies', players: '3 to 10 players', price: '$35 – $50' },
         { what: 'One-on-one coaching', players: '1 player', price: '$80 – $140' },
     ],
@@ -314,8 +322,8 @@ export const FORM = {
         pay: 'You can change your mind later. It helps us plan.',
     },
     optionChoices: [
-        { value: '4s', label: 'Junior Royals 4s', sub: `4 in a lane · ${money(opt('4s').price)} a session` },
-        { value: '6s', label: 'Junior Royals 6s', sub: `6 in a lane · ${money(opt('6s').price)} a session` },
+        { value: '4s', label: 'Groups of 4', sub: `${money(opt('4s').price)} a session · more turns` },
+        { value: '6s', label: 'Groups of 6', sub: `${money(opt('6s').price)} a session · more teammates` },
         { value: 'either', label: 'Either', sub: 'Not sure yet' },
     ],
     timeChoices: [
@@ -341,8 +349,8 @@ export const FORM = {
 // ── 12. FAQ ──
 export const FAQS = [
     {
-        q: 'What is the difference between Junior Royals 4s and 6s?',
-        a: `The group size. Junior Royals 4s (4 players in a lane, ${money(opt('4s').price)} a session): more turns, so your player is back up to bat or bowl sooner, and more of the coach’s attention on every ball. Junior Royals 6s (6 players in a lane, ${money(opt('6s').price)} a session): more players to play with, so more partner challenges and a scored game with two teams of 3. Both have the same coaching team, the same session plan and the same skills. ${GST_NOTE} Development matches cost extra.`,
+        q: 'What is the difference between Groups of 4 and Groups of 6?',
+        a: `The group size. Groups of 4 (${money(opt('4s').price)} a session): more turns, so your player is back up to bat or bowl sooner, and more of the coach’s attention on every ball. Groups of 6 (${money(opt('6s').price)} a session): more players to play with, so more partner challenges and a scored game with two teams of 3. Both have the same coaching team, the same session plan and the same skills. ${GST_NOTE} Development matches cost extra.`,
     },
     {
         q: 'My player has never played. Can they enrol?',
@@ -416,7 +424,7 @@ export const OPEN_QUESTIONS_V2 = [
     'Head Coach at Cranbourne North; uniform',
     'Blueprint decision 1: does 28 Oct start at the basics for every stage?',
     'Balls faced and bowled by each player in a session (for the queue answer)',
-    'Junior Royals 4s: minimum families to open a lane, and what happens if it doesn’t run',
+    'Groups of 4: minimum families to open a lane, and what happens if it doesn’t run',
     'Late notice to stop: is the next term charged?',
     'Skill badges from Term 1, 2027 (blueprint Part IV): go ahead?',
     'Older beginners (11–12): how they start',

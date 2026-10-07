@@ -128,7 +128,6 @@ const Hero = () => (
                     {HERO.options.map((o) => (
                         <div key={o.key}>
                             <p className="text-white font-black text-[15px] leading-tight">{o.name}</p>
-                            <p className="text-white/85 text-sm font-semibold">{o.what}</p>
                             <p className="text-white text-sm font-bold">{o.upside}</p>
                             <p className="mt-1 whitespace-nowrap"><span className="text-white text-3xl font-black">{o.price}</span> <span className="text-white/85 text-sm font-bold">{o.per}</span></p>
                             <p className="text-white/80 text-xs font-semibold">{o.term4}</p>
@@ -188,8 +187,8 @@ const Hour = () => (
             </div>
             <div>
                 <div className="flex justify-center gap-8">
-                    <LaneDots players={4} label="Junior Royals 4s" />
-                    <LaneDots players={6} label="Junior Royals 6s" />
+                    <LaneDots players={4} label="Groups of 4" />
+                    <LaneDots players={6} label="Groups of 6" />
                 </div>
                 <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed mt-4 max-w-xs">{HOUR.lane}</p>
             </div>
@@ -246,7 +245,6 @@ const Prices = () => (
             {PRICES.options.map((o) => (
                 <div key={o.key} className={`border-t-4 ${o.key === '4s' ? 'border-rr-pink' : 'border-rr-dark'} pt-5`}>
                     <p className="text-2xl font-black text-rr-dark leading-tight">{o.name}</p>
-                    <p className="text-lg font-bold text-rr-dark">{o.what}</p>
                     <ul className="mt-4 space-y-2">
                         {o.upside.map((u) => <Tick key={u}><span className="font-semibold text-rr-dark">{u}</span></Tick>)}
                     </ul>
@@ -259,6 +257,7 @@ const Prices = () => (
                 </div>
             ))}
         </div>
+        <p className="text-lg text-rr-dark font-bold border-l-4 border-rr-pink pl-4 mb-6 max-w-3xl">{PRICES.stepUp}</p>
         <p className="text-rr-dark font-bold">{PRICES.gst} {PRICES.matchFee}</p>
         <ul className="mt-4 mb-12 space-y-2 max-w-3xl">
             <Tick><Rich v={PRICES.cover} /></Tick>

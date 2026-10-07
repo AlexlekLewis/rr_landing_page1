@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { OPTIONS, DISCOUNTS, NOTICE_WEEKS, TERM_8, PHASES, SESSION, CURRICULUM, BADGES, wednesdays2027 } from './jrV2Facts';
 import * as CONTENT from './jrV2Content';
-import { priceAhead, termTotal, SHORT_TERM_NOTE, GROUP_UPSIDE } from './jrV2Content';
+import { priceAhead, termTotal, yearTotal, SHORT_TERM_NOTE, GROUP_UPSIDE } from './jrV2Content';
 import { FORM_VALUES } from './JRV2Form';
 import { JR_V2_SEO, JR_V2_JSONLD, JR_SEO_VENUES } from './jrV2Seo';
 import { CENTRES } from '../juniorRoyalsData';
@@ -9,25 +9,30 @@ import { CENTRES } from '../juniorRoyalsData';
 // Junior Royals mock-up v2 (Alex, 7–8 Oct 2026): two options, rolling term enrolment,
 // discounts for paying ahead. These tests keep every number on the page in step.
 describe('the two options', () => {
-    it('4s: 4 per lane, never more than 5, $50; 6s: 6 per lane, never more than 7, $35', () => {
+    it('Groups of 4: never more than 5, $49.95; Groups of 6: never more than 7, $34.95 (Alex, 8 Oct)', () => {
         expect(OPTIONS).toEqual([
-            { key: '4s', name: 'Junior Royals 4s', perLane: 4, max: 5, price: 50 },
-            { key: '6s', name: 'Junior Royals 6s', perLane: 6, max: 7, price: 35 },
+            { key: '4s', name: 'Groups of 4', perLane: 4, max: 5, price: 49.95 },
+            { key: '6s', name: 'Groups of 6', perLane: 6, max: 7, price: 34.95 },
         ]);
         OPTIONS.forEach((o) => expect(o.max).toBe(o.perLane + 1)); // one make-up spot
     });
 
     it('paying ahead: 10% off 2 terms, 15% off the year', () => {
         expect(DISCOUNTS).toEqual({ twoTerms: 0.10, year: 0.15 });
-        expect(priceAhead(50, DISCOUNTS.twoTerms)).toBe(45);
-        expect(priceAhead(50, DISCOUNTS.year)).toBe(42.5);
-        expect(priceAhead(35, DISCOUNTS.twoTerms)).toBe(31.5);
-        expect(priceAhead(35, DISCOUNTS.year)).toBe(29.75);
+        // rounded DOWN to 5c, so the saving is never less than advertised
+        expect(priceAhead(49.95, DISCOUNTS.twoTerms)).toBe(44.95);
+        expect(priceAhead(49.95, DISCOUNTS.year)).toBe(42.45);
+        expect(priceAhead(34.95, DISCOUNTS.twoTerms)).toBe(31.45);
+        expect(priceAhead(34.95, DISCOUNTS.year)).toBe(29.7);
+        expect(priceAhead(50, DISCOUNTS.twoTerms)).toBe(45);   // exact values stay exact
     });
 
-    it('Term 4 2026 (8 sessions): $400 for 4s, $280 for 6s', () => {
-        expect(termTotal('4s', 8)).toBe(400);
-        expect(termTotal('6s', 8)).toBe(280);
+    it('Term 4 2026 (8 sessions): $399.60 for Groups of 4, $279.60 for Groups of 6', () => {
+        expect(termTotal('4s', 8)).toBe(399.6);
+        expect(termTotal('6s', 8)).toBe(279.6);
+        // a year ahead = the rounded per-session price × 40, never a different rounding
+        expect(yearTotal('4s', DISCOUNTS.year)).toBe(1698);
+        expect(yearTotal('6s', DISCOUNTS.year)).toBe(1188);
     });
 
     it('each option leads with what the group size gives a player, never a coach-time ratio', () => {
@@ -148,6 +153,7 @@ describe('copy rules (CLAUDE.md §2, language.md)', () => {
     const text = JSON.stringify(CONTENT);
     it('no banned sales words, no "economy"/"premium" tiers, no retired centres', () => {
         expect(text).not.toMatch(/\b(investment|essential|premium|economy|world-class|unlock|journey|tailored|bespoke|limited time|act now|from just)\b/i);
+        expect(text).not.toMatch(/Junior Royals [46]s|(?<!["\w])[46]s\b(?!")/); // renamed: Groups of 4 / Groups of 6 (keys "4s"/"6s" are internal)
         expect(text).not.toMatch(/Hallam|Williamstown/i);
         expect(text).not.toMatch(/North Melbourne/); // an inner suburb; Mickleham is "Melbourne's north"
     });
