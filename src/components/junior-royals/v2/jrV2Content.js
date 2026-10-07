@@ -68,7 +68,7 @@ export const PHOTOS = {
     skills: { src: '/assets/junior-royals-card.jpg', alt: 'A Royals Academy coach shows a junior batter a skill in the nets', position: 'center 35%' },
     // Not used: holiday-program-group.jpg shows faces AND readable first-name stickers,
     // and isn't on the live site yet. Only with written consent and the names blurred.
-    where: { src: '/assets/cec-lanes.jpg', alt: 'Indoor practice lanes, each with its own net and stumps', position: 'center 60%' },
+    where: { src: '/assets/jr-lanes-1600.jpg', alt: 'Indoor practice lanes, each with its own net and stumps', position: 'center 60%' },
 };
 
 // ── 1. Hero (first screen on a phone) ──
