@@ -45,12 +45,24 @@ const SCClubs = () => (
                         </div>
 
                         <div className="px-8 py-7 flex-1">
-                            <p className="text-xs font-black text-rr-pink uppercase tracking-widest mb-2">
-                                {club.coach.role}
-                            </p>
-                            <p className="text-2xl font-black text-rr-dark uppercase tracking-tight mb-3">
-                                {club.coach.name}
-                            </p>
+                            <div className="flex items-center gap-4 mb-4">
+                                <img
+                                    src={club.coach.photo}
+                                    alt={`${club.coach.name}, ${club.coach.role}`}
+                                    width="88"
+                                    height="88"
+                                    loading="lazy"
+                                    className="w-[88px] h-[88px] rounded-full object-cover ring-4 ring-rr-pink/25 shrink-0 bg-slate-100"
+                                />
+                                <div className="min-w-0">
+                                    <p className="text-xs font-black text-rr-pink uppercase tracking-widest mb-1.5">
+                                        {club.coach.role}
+                                    </p>
+                                    <p className="text-2xl font-black text-rr-dark uppercase tracking-tight leading-none">
+                                        {club.coach.name}
+                                    </p>
+                                </div>
+                            </div>
                             <p className="text-[13px] font-bold text-rr-dark/60 uppercase tracking-wide mb-4">
                                 Bowls {club.coach.spin.toLowerCase()} &middot; coaches every kind
                             </p>

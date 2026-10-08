@@ -36,7 +36,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist');
 
-const ROUTES = ['/performance-squads', '/performance-squads-open-trial', '/sid-juniors', '/junior-royals'];
+const ROUTES = ['/performance-squads', '/performance-squads-open-trial', '/sid-juniors', '/junior-royals', '/spin-club'];
 
 const escapeAttr = (s) =>
     String(s)
@@ -73,11 +73,19 @@ const headFor = (route, cfg, site, fallback) => {
         .map(([attr, key, value]) => `  <meta ${attr}="${key}" content="${escapeAttr(value)}" />`)
         .join('\n');
 
+    // Structured data goes in the static HTML on purpose. Google renders JS and
+    // would find a client-injected block, but most answer-engine crawlers do not,
+    // and being citable by them is the point.
+    const jsonLd = cfg.jsonLd
+        ? `  <script type="application/ld+json">${JSON.stringify(cfg.jsonLd).replace(/</g, '\\u003c')}</script>`
+        : '';
+
     return [
         `  <title>${escapeText(title)}</title>`,
         `  <link rel="canonical" href="${escapeAttr(canonical)}" />`,
         meta,
-    ].join('\n');
+        jsonLd,
+    ].filter(Boolean).join('\n');
 };
 
 async function main() {
