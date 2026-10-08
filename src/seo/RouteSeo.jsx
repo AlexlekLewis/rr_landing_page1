@@ -20,6 +20,25 @@ function upsertMeta(attr, key, content) {
     el.setAttribute('content', content);
 }
 
+// Structured data is baked into the static HTML by scripts/prerender-seo.mjs for
+// the prerendered routes. This keeps it correct on client-side navigations too,
+// and is the only source for a managed route that is not prerendered.
+function upsertJsonLd(data) {
+    const ID = 'route-seo-jsonld';
+    let el = document.getElementById(ID);
+    if (!data) {
+        if (el) el.remove();
+        return;
+    }
+    if (!el) {
+        el = document.createElement('script');
+        el.type = 'application/ld+json';
+        el.id = ID;
+        document.head.appendChild(el);
+    }
+    el.textContent = JSON.stringify(data);
+}
+
 function upsertCanonical(href) {
     let el = document.head.querySelector('link[rel="canonical"]');
     if (!el) {
@@ -64,6 +83,8 @@ export default function RouteSeo() {
         upsertMeta('name', 'twitter:title', title);
         upsertMeta('name', 'twitter:description', description);
         upsertMeta('name', 'twitter:image', ogImage);
+
+        upsertJsonLd(cfg.jsonLd);
     }, [pathname]);
 
     return null;

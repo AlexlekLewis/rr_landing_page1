@@ -38,6 +38,95 @@ export const PAGE_SEO = {
     title: 'Spin Bowling Coaching Melbourne | Royals Spin Club',
     description:
       'A Wednesday night club for spin bowlers aged 10 to 25, at Mickleham and Cranbourne North. Run by Rajasthan Royals Academy Melbourne. Sign up one night at a time.',
+    // A shared link is how most people meet this page — off a poster QR, or
+    // forwarded in WhatsApp. The logo told them nothing, so this card carries
+    // the headline, the price and both coaches.
+    ogImage: '/assets/spin-club-og.png',
+    // First structured data on the site. Every value here is also on the page;
+    // if one changes in scOptions.js, change it here too.
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@type': 'Course',
+      name: 'Rajasthan Royals Spin Club',
+      description:
+        'A Wednesday night coaching program for spin bowlers aged 10 to 25, working on the technical, tactical and mental sides of spin bowling — including building plans for a batter, executing them, and setting fields for T20, one-day and two-day cricket.',
+      provider: {
+        '@type': 'SportsOrganization',
+        name: 'Rajasthan Royals Academy Melbourne',
+        url: 'https://rramelbourne.com',
+      },
+      url: 'https://rramelbourne.com/spin-club',
+      inLanguage: 'en-AU',
+      audience: {
+        '@type': 'Audience',
+        audienceType: 'Spin bowlers aged 10 to 25',
+        suggestedMinAge: 10,
+        suggestedMaxAge: 25,
+      },
+      offers: {
+        '@type': 'Offer',
+        price: '60.00',
+        priceCurrency: 'AUD',
+        category: 'Per session',
+        description: 'One 1.5-hour Wednesday session, GST included.',
+        url: 'https://rramelbourne.com/spin-club',
+        availability: 'https://schema.org/InStock',
+      },
+      hasCourseInstance: [
+        {
+          '@type': 'CourseInstance',
+          name: 'Spin Club North — Mickleham',
+          courseMode: 'onsite',
+          courseWorkload: 'PT1H30M',
+          courseSchedule: {
+            '@type': 'Schedule',
+            repeatFrequency: 'P1W',
+            byDay: 'https://schema.org/Wednesday',
+            startDate: '2026-10-07',
+            endDate: '2026-11-25',
+            startTime: '18:00',
+            endTime: '19:30',
+            scheduleTimezone: 'Australia/Melbourne',
+          },
+          location: {
+            '@type': 'Place',
+            name: 'Mickleham Indoor Sports Centre',
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: 'Mickleham',
+              addressRegion: 'VIC',
+              addressCountry: 'AU',
+            },
+          },
+        },
+        {
+          '@type': 'CourseInstance',
+          name: 'Spin Club South — Cranbourne North',
+          courseMode: 'onsite',
+          courseWorkload: 'PT1H30M',
+          courseSchedule: {
+            '@type': 'Schedule',
+            repeatFrequency: 'P1W',
+            byDay: 'https://schema.org/Wednesday',
+            startDate: '2026-10-07',
+            endDate: '2026-11-25',
+            startTime: '18:00',
+            endTime: '19:30',
+            scheduleTimezone: 'Australia/Melbourne',
+          },
+          location: {
+            '@type': 'Place',
+            name: 'Elite Cricket Centre',
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: 'Cranbourne North',
+              addressRegion: 'VIC',
+              addressCountry: 'AU',
+            },
+          },
+        },
+      ],
+    },
   },
   // Junior sessions with Siddhartha Lahiri: Cranbourne North Sun 4 Oct and
   // Mickleham Mon 5 Oct 2026 (src/components/sid-juniors). Linked from the
