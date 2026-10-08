@@ -37,6 +37,7 @@ export const CLUBS = [
             // What he bowls himself. NOT what the centre takes — every type of
             // spin is welcome at both centres. See EVERY_SPIN below.
             spin: 'Left-arm wrist spin',
+            creds: ['Melbourne Renegades, Big Bash', 'Victoria', 'San Francisco Unicorns, MLC'],
             line: 'Callum started at Geelong Cricket Club and Victoria picked him up. He took nine wickets in five games for Victoria at the 2024 Global Super League in Guyana, then took a wicket on debut in the Big Bash and two against the Brisbane Heat in his next match. The Melbourne Renegades have re-signed him every season since, and he spent 2025 with the San Francisco Unicorns in Major League Cricket.',
         },
     },
@@ -50,8 +51,42 @@ export const CLUBS = [
             name: 'Harkirat Bajwa',
             role: 'Royal Spin Coach — Spin Club South',
             spin: 'Off spin',
+            creds: ['Australia Under-19 World Cup squad', 'Youngest player picked', 'Fitzroy Doncaster'],
             line: 'Harkirat moved to Melbourne from India when he was seven and was bowling in the back yard not long after. At 17 he was the youngest player in Australia\u2019s Under-19 World Cup squad, and the only bottom-age player picked. He is an attacking off spinner who lives on his variations, and he plays his club cricket at Fitzroy Doncaster.',
         },
+    },
+];
+
+// Alex created Spin Club and oversees both centres. Title per Alex, 9 Oct 2026.
+export const FOUNDER = {
+    name: 'Alex Lewis',
+    role: 'Academy Head Coach',
+    second: 'specialist spin bowling coach',
+    line: 'Spin Club was built by Alex Lewis, Academy Head Coach and a specialist spin bowling coach, and he oversees both centres.',
+};
+
+// The three things every night works on. The sub-points are the ones Alex says
+// most clubs never get to, and where a spinner improves fastest.
+export const PILLARS = [
+    {
+        title: 'Technical',
+        body: 'Your grip, your action, your release. The work that makes the ball spin hard and land where you meant it to.',
+        points: ['A repeatable action under fatigue', 'A stock ball you trust', 'Variations that actually do something'],
+    },
+    {
+        title: 'Tactical',
+        body: 'Most spinners are never taught this part. It is where you can get better fastest.',
+        points: [
+            'Building a plan for a batter before you bowl',
+            'Executing it when the game is moving',
+            'Setting a field, and knowing why each one is there',
+            'How the field changes between T20, one-day and two-day cricket',
+        ],
+    },
+    {
+        title: 'Mental',
+        body: 'What you do after you get hit. Spin is the one job in cricket where doing it right can still cost you runs.',
+        points: ['Staying in the over after a boundary', 'Judging a spell on more than the figures', 'Asking for the ball when it is hard'],
     },
 ];
 
