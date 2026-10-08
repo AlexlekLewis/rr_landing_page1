@@ -142,6 +142,13 @@ export const PRICES = [
     },
 ];
 
+
+// Verified against the live checkout on 9 Oct 2026: the product reads
+// "Spin Club Session Price" and charges A$60.00, which matches PRICES above.
+// Re-check this if the price on the page ever changes — a page and a checkout
+// that disagree is the one thing we must never ship.
+export const STRIPE_LINK = 'https://buy.stripe.com/cNi8wPh29ggZgtScE39Zm0V';
+
 export const SQUAD_NOTE = {
     members: 'Already in a Royals Academy Performance Squad? Do not pay here \u2014 speak to your head coach directly and they will sort your rate out with you.',
     joiners: 'Not in a squad, and want to be?',
@@ -156,9 +163,9 @@ export const INCLUDED = [
 ];
 
 export const HOW_PAYING_WORKS = [
-    ['Sign up for a night', 'Pick your centre and the Wednesday you want. It takes a minute.'],
-    ['We confirm the lane', 'We check there is a place that night and write back the same week.'],
-    ['You pay for that night', 'We send the payment link once your place is confirmed.'],
+    ['Tell us who you are', 'Pick your centre and the Wednesday you want. It takes a minute.'],
+    ['Pay for that night', 'The payment button comes up as soon as you have signed up.'],
+    ['Turn up and bowl', 'We will have a lane and a coach ready for you.'],
 ];
 
 export const SPIN_TYPES = [

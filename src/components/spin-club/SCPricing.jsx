@@ -104,8 +104,8 @@ const SCPricing = () => (
                     How signing up works
                 </h3>
                 <p className="text-[15px] text-rr-dark/70 font-medium mb-7 max-w-2xl">
-                    Nothing is charged on this page. You pick a night, we confirm there is a place,
-                    and the payment link comes after that.
+                    Sign up, pay for the night, turn up. There is nothing to commit to beyond the
+                    Wednesday you picked.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                     {HOW_PAYING_WORKS.map(([title, detail], i) => (

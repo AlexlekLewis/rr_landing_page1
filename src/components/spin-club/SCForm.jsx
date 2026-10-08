@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { CLUBS, PROGRAM, SPIN_TYPES, SQUAD_STATUS, SQUAD_NOTE, PRICES, upcomingNights } from './scOptions';
+import { CLUBS, PROGRAM, SPIN_TYPES, SQUAD_STATUS, SQUAD_NOTE, PRICES, STRIPE_LINK, upcomingNights } from './scOptions';
 
 const getUTMParams = () => {
     const p = new URLSearchParams(window.location.search);
@@ -110,15 +110,29 @@ const SCForm = () => {
                     <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight mb-5">
                         We&rsquo;ve got it
                     </h2>
-                    <p className="text-base text-white/75 font-medium leading-relaxed mb-4">
-                        You are down for the night you picked. We check there is a lane free that
-                        Wednesday and write back to you{' '}
-                        <strong className="text-white">the same week</strong>, with the payment link
-                        for that night.
+                    <p className="text-base text-white/75 font-medium leading-relaxed mb-8">
+                        You are down for{' '}
+                        <strong className="text-white">Wednesday {form.night}</strong> at{' '}
+                        <strong className="text-white">{CLUBS.find((c) => c.key === form.club_choice)?.name}</strong>.
+                        One thing left — pay for the night and your place is locked in.
                     </p>
+
+                    {/* Straight to Stripe. The link is the $60 Spin Club Session Price. */}
+                    <a
+                        href={STRIPE_LINK}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-3 bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-10 py-5 rounded-full transition-colors duration-300 mb-5"
+                    >
+                        Pay {PRICES[0].headline} for this night
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </a>
+
                     <p className="text-sm text-white/50 font-medium">
-                        Nothing has been charged yet. Your place is confirmed once you pay for the
-                        night. Questions in the meantime:{' '}
+                        Coming more than once? Pay the same amount again for each night. If a night
+                        turns out to be full we will call you and refund it. Questions:{' '}
                         <span className="text-rr-pink">info@rramelbourne.com</span>.
                     </p>
                 </div>
@@ -161,9 +175,10 @@ const SCForm = () => {
                         What happens next
                     </p>
                     <p className="text-[15px] text-rr-dark/70 font-medium leading-relaxed">
-                        No payment is taken on this page. We check there is a lane free on the night
-                        you picked, then send you the payment link for that night. Your place is
-                        confirmed once you have paid. Lanes are limited, so earlier is safer.
+                        Sign up below and the payment button comes up straight away &mdash;{' '}
+                        <strong className="text-rr-dark">{PRICES[0].headline} for that night</strong>.
+                        Your place is confirmed once you have paid. Lanes are limited, so earlier is
+                        safer.
                     </p>
                 </div>
 
