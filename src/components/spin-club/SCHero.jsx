@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { PROGRAM, START_DATE, END_DATE, FOUNDER } from './scOptions';
+import { PROGRAM, START_DATE, END_DATE, FOUNDER, HEADLINE } from './scOptions';
 
 const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
@@ -35,9 +35,17 @@ const SCHero = () => (
                     Rajasthan Royals Academy Melbourne &middot; Spin Club
                 </p>
 
-                {/* The line every spinner recognises, doing the selling. */}
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-[0.92] mb-6 max-w-4xl">
-                    You can bowl well<br />and go for runs.
+                {/* Name first, then the promise, then the tagline it signs off with. */}
+                <h1 className="font-black text-white uppercase tracking-tighter mb-6 max-w-4xl">
+                    <span className="block text-5xl md:text-7xl lg:text-8xl leading-[0.88]">
+                        {HEADLINE.name}
+                    </span>
+                    <span className="block text-2xl md:text-4xl lg:text-5xl leading-[1.04] mt-3 text-white/90">
+                        {HEADLINE.promise}
+                    </span>
+                    <span className="block text-3xl md:text-5xl lg:text-6xl leading-[1.0] mt-2 text-rr-pink">
+                        and {HEADLINE.rip}
+                    </span>
                 </h1>
 
                 <p className="text-lg md:text-2xl text-white font-bold leading-snug max-w-2xl mb-6">

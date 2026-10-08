@@ -80,6 +80,13 @@ export const CLUBS = [
     },
 ];
 
+// The headline, set by Alex 9 Oct 2026. "Give it a rip" is the standing tagline.
+export const HEADLINE = {
+    name: 'Spin Club',
+    promise: 'Discover, Develop, Elevate',
+    rip: 'Give it a rip!',
+};
+
 // Alex created Spin Club and oversees both centres. Title per Alex, 9 Oct 2026.
 export const FOUNDER = {
     name: 'Alex Lewis',
