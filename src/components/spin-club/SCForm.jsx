@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { CLUBS, PROGRAM, SPIN_TYPES, SQUAD_STATUS } from './scOptions';
+import { CLUBS, PROGRAM, SPIN_TYPES, SQUAD_STATUS, SQUAD_NOTE, PRICES, upcomingNights } from './scOptions';
 
 const getUTMParams = () => {
     const p = new URLSearchParams(window.location.search);
@@ -15,6 +15,7 @@ const EMPTY = {
     player_name: '',
     age: '',
     club_choice: '',
+    night: '',
     spin_type: '',
     squad_status: '',
     current_club: '',
@@ -40,11 +41,12 @@ const SCForm = () => {
         if (!form.age || Number.isNaN(ageNum)) return 'Please tell us the player’s age.';
         if (ageNum < 10 || ageNum > 25) return 'Spin Club is for players aged 10 to 25.';
         if (!form.club_choice) return 'Please pick Spin Club North or Spin Club South.';
+        if (!form.night) return 'Please pick the Wednesday you want to come to.';
         if (!form.spin_type) return 'Please tell us what you bowl.';
         if (!form.email.trim() || !form.email.includes('@')) return 'Please give us an email address we can reply to.';
         if (!form.phone.trim()) return 'Please give us a phone number.';
         if (ageNum < 18 && !form.parent_name.trim()) return 'For players under 18, please give a parent or guardian’s name.';
-        if (!form.intent) return 'Please tick the box to say you would take a place if you are offered one.';
+        if (!form.intent) return 'Please tick the box to say you will come on the night you picked.';
         return '';
     };
 
@@ -62,8 +64,9 @@ const SCForm = () => {
         const name = form.player_name.trim();
         const utmParams = getUTMParams();
         const notes = [
+            `Night requested: Wednesday ${form.night}`,
             form.notes.trim(),
-            'Intends to accept an offer if selected: yes',
+            'Will come on the night picked: yes',
         ].filter(Boolean).join('\n\n');
 
         const { error: insertError } = await supabase.from('applications').insert([
@@ -80,6 +83,9 @@ const SCForm = () => {
                 location: club?.key || null,
                 program: club?.name || null,
                 program_type: 'Spin Club',
+                // One night at a time is the only thing sold now, so the night
+                // they picked IS the purchase. `applications` has no date column.
+                payment_option_selected: `One night \u2014 Wednesday ${form.night} (${PRICES[0].headline} inc GST)`,
                 source: `spin-club-${club?.key || 'unknown'}`,
                 bio: notes,
                 page_referrer: document.referrer || null,
@@ -90,7 +96,7 @@ const SCForm = () => {
         setSubmitting(false);
 
         if (insertError) {
-            setError('Something went wrong sending your expression of interest. Please try again, or email info@rramelbourne.com and we will add you by hand.');
+            setError('Something went wrong sending your sign-up. Please try again, or email info@rramelbourne.com and we will add you by hand.');
             return;
         }
         setSubmitted(true);
@@ -105,15 +111,14 @@ const SCForm = () => {
                         We&rsquo;ve got it
                     </h2>
                     <p className="text-base text-white/75 font-medium leading-relaxed mb-4">
-                        The Royal Spin Coach at the centre you picked reads every expression of
-                        interest. <strong className="text-white">First-round offers</strong> go out
-                        to the players they pick first. If any of those are turned down, we send{' '}
-                        <strong className="text-white">second-round offers</strong> to everyone else
-                        who applied — so you hear from us either way.
+                        You are down for the night you picked. We check there is a lane free that
+                        Wednesday and write back to you{' '}
+                        <strong className="text-white">the same week</strong>, with the payment link
+                        for that night.
                     </p>
                     <p className="text-sm text-white/50 font-medium">
-                        Nothing has been paid and no place is held yet. Your place is confirmed when
-                        you accept an offer. Questions in the meantime:{' '}
+                        Nothing has been charged yet. Your place is confirmed once you pay for the
+                        night. Questions in the meantime:{' '}
                         <span className="text-rr-pink">info@rramelbourne.com</span>.
                     </p>
                 </div>
@@ -128,26 +133,37 @@ const SCForm = () => {
         <section className="bg-white py-20 md:py-28">
             <div className="max-w-3xl mx-auto px-6">
                 <p className="text-xs font-black text-rr-pink uppercase tracking-[0.3em] mb-4">
-                    Register your interest
+                    Sign up
                 </p>
                 <h2 className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-5">
-                    Tell us about your bowling
+                    Pick a night and sign up
                 </h2>
                 <p className="text-base text-rr-dark/70 font-medium leading-relaxed mb-4">
-                    <strong className="text-rr-dark">Spin Club is for spin bowlers aged {PROGRAM.ages},
-                    and places at each centre are limited.</strong> Every player registers their
-                    interest and the Royal Spin Coach picks the group.
+                    <strong className="text-rr-dark">Spin Club is for spin bowlers aged {PROGRAM.ages}.</strong>{' '}
+                    Pick the centre and the Wednesday you want. It is{' '}
+                    <strong className="text-rr-dark">{PRICES[0].headline} a night</strong>, and you
+                    only pay for the nights you come to.
                 </p>
+                {/* The asterisk again, right where a squad member is about to pay full price. */}
+                <div className="bg-rr-pink/5 border-2 border-rr-pink/35 rounded-2xl p-5 mb-5">
+                    <p className="text-sm font-black text-rr-pink uppercase tracking-widest mb-2">
+                        * In a Performance Squad?
+                    </p>
+                    <p className="text-[15px] text-rr-dark/80 font-semibold leading-relaxed mb-3">
+                        {SQUAD_NOTE.members}
+                    </p>
+                    <a href={SQUAD_NOTE.href} className="inline-block text-rr-blue hover:text-rr-pink font-black uppercase tracking-widest text-xs transition-colors duration-300">
+                        {SQUAD_NOTE.joiners} {SQUAD_NOTE.linkLabel} &rarr;
+                    </a>
+                </div>
                 <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 mb-9">
                     <p className="text-sm font-black text-rr-dark uppercase tracking-widest mb-2">
-                        How the offers work
+                        What happens next
                     </p>
                     <p className="text-[15px] text-rr-dark/70 font-medium leading-relaxed">
-                        This form is an expression of interest, not a booking. It holds no place and
-                        takes no payment. <strong className="text-rr-dark">First-round offers</strong>{' '}
-                        go to the players the coach picks first. If any are turned down,{' '}
-                        <strong className="text-rr-dark">second-round offers</strong> go to everyone
-                        else who applied. You have a place once you accept an offer and pay.
+                        No payment is taken on this page. We check there is a lane free on the night
+                        you picked, then send you the payment link for that night. Your place is
+                        confirmed once you have paid. Lanes are limited, so earlier is safer.
                     </p>
                 </div>
 
@@ -173,6 +189,20 @@ const SCForm = () => {
                                 </option>
                             ))}
                         </select>
+                    </div>
+
+                    <div>
+                        <label className={lc} htmlFor="sc-night">Which Wednesday?</label>
+                        <select id="sc-night" className={ic} value={form.night} onChange={set('night')}>
+                            <option value="">Choose a night</option>
+                            {upcomingNights().map((n) => (
+                                <option key={n.iso} value={n.label}>{n.label}</option>
+                            ))}
+                        </select>
+                        <p className="text-[13px] text-rr-dark/50 font-medium mt-2">
+                            Want more than one night? Say which in the notes below and we will put
+                            them all on the one payment link.
+                        </p>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -215,7 +245,7 @@ const SCForm = () => {
 
                     <div>
                         <label className={lc} htmlFor="sc-notes">Anything the coach should know? <span className="text-rr-dark/40 font-bold normal-case tracking-normal">(optional)</span></label>
-                        <textarea id="sc-notes" rows={3} className={ic} value={form.notes} onChange={set('notes')} placeholder="How long you have bowled spin, what you want to get better at, or a night you cannot make." />
+                        <textarea id="sc-notes" rows={3} className={ic} value={form.notes} onChange={set('notes')} placeholder="How long you have bowled spin, what you want to get better at, or any other nights you want to come to." />
                     </div>
 
                     <label className="flex items-start gap-3 bg-slate-50 border border-slate-200 rounded-2xl p-5 cursor-pointer">
@@ -226,10 +256,10 @@ const SCForm = () => {
                             onChange={(e) => setForm((f) => ({ ...f, intent: e.target.checked }))}
                         />
                         <span className="text-[15px] text-rr-dark font-semibold leading-relaxed">
-                            If I am offered a place, I intend to take it.
+                            I will be there on the night I picked.
                             <span className="block text-rr-dark/60 font-medium mt-1">
-                                We ask because places are limited, and a place held by someone who
-                                won&rsquo;t use it is a place another spinner missed out on.
+                                We ask because lanes are limited, and a lane held by someone who
+                                won&rsquo;t use it is a lane another spinner missed out on.
                             </span>
                         </span>
                     </label>
@@ -245,7 +275,7 @@ const SCForm = () => {
                         disabled={submitting}
                         className="w-full sm:w-auto bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 text-white font-bold uppercase tracking-widest px-10 py-4 rounded-full transition-all duration-300"
                     >
-                        {submitting ? 'Sending…' : 'Register my interest'}
+                        {submitting ? 'Sending…' : 'Sign me up for this night'}
                     </button>
                 </form>
             </div>

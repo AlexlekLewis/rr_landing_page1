@@ -24,6 +24,27 @@ export const NIGHTS = [
     '4 November', '11 November', '18 November', '25 November',
 ];
 
+// Same eight nights with their dates attached, so the sign-up form can drop the
+// ones that have already been played rather than offering a night in the past.
+export const NIGHT_DATES = [
+    { label: '7 October', iso: '2026-10-07' },
+    { label: '14 October', iso: '2026-10-14' },
+    { label: '21 October', iso: '2026-10-21' },
+    { label: '28 October', iso: '2026-10-28' },
+    { label: '4 November', iso: '2026-11-04' },
+    { label: '11 November', iso: '2026-11-11' },
+    { label: '18 November', iso: '2026-11-18' },
+    { label: '25 November', iso: '2026-11-25' },
+];
+
+export const upcomingNights = (now = new Date()) => {
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    return NIGHT_DATES.filter((n) => {
+        const [y, m, d] = n.iso.split('-').map(Number);
+        return new Date(y, m - 1, d) >= today;
+    });
+};
+
 export const CLUBS = [
     {
         key: 'north',
@@ -97,45 +118,38 @@ export const EVERY_SPIN = {
     long: 'Both centres take every type of spin \u2014 off spin, leg spin, left-arm orthodox, left-arm wrist spin, and anyone still working out what it is they bowl. Your Royal Spin Coach bowls one of them. They coach all of them.',
 };
 
-// Prices. The figures Alex works to are GST-exclusive ($200 / $540 / $97.50);
-// GST is on top (Alex, 1 Oct 2026). Australian Consumer Law requires a
-// consumer-facing page to show the total payable, so the big number here is the
-// GST-INCLUSIVE one and the ex-GST figure sits underneath it.
-//   squad  $200 + GST = $220.00  ->  $27.50 a night
-//   open   $540 + GST = $594.00  ->  $74.25 a night
+// Prices. Alex works to GST-exclusive figures and GST goes on top (Alex, 1 Oct
+// 2026). Australian Consumer Law requires a consumer-facing page to show the
+// total payable, so the big number is the GST-INCLUSIVE one and the ex-GST
+// figure sits underneath it.
+//
+// 9 Oct 2026: the 8-night block prices are WITHDRAWN. Spin Club now sells one
+// night at a time only. Performance Squad members do not buy from this page at
+// all — their rate is arranged through their head coach.
 //   single  $97.50 + GST = $107.25
 export const GST_NOTE = 'Every price on this page includes GST.';
 
 export const PRICES = [
     {
-        key: 'squad',
-        question: 'In a Performance Squad?',
-        headline: '$220',
-        unit: 'for all 8 Wednesday nights',
-        exGst: '$200 plus GST',
-        perNight: 'That works out at $27.50 a night.',
-        who: 'You already train with us this season, so you pay the lower price.',
+        key: 'single',
+        question: 'One Wednesday night',
+        headline: '$107.25',
+        unit: 'per night',
+        exGst: '$97.50 plus GST',
+        perNight: 'You pay for the nights you come to, and nothing else.',
+        who: 'Open to any spin bowler aged 10 to 25. Come to one night or come to all of them.',
         feature: true,
     },
-    {
-        key: 'open',
-        question: 'Not in a squad?',
-        headline: '$594',
-        unit: 'for all 8 Wednesday nights',
-        exGst: '$540 plus GST',
-        perNight: 'That works out at $74.25 a night.',
-        who: 'Open to any spinner aged 10 to 25 who is offered a place.',
-    },
-    {
-        key: 'single',
-        question: 'Just want to try one night?',
-        headline: '$107.25',
-        unit: 'for a single Wednesday',
-        exGst: '$97.50 plus GST',
-        perNight: 'You pay for that night only.',
-        who: 'Come once, when there is a spare place that week.',
-    },
 ];
+
+// The asterisk under the price. Squad members are handled off-page; everyone
+// else who wants that rate is pointed at the squad itself.
+export const SQUAD_NOTE = {
+    members: 'Already in a Royals Academy Performance Squad? Do not pay here \u2014 speak to your head coach directly and they will sort your rate out with you.',
+    joiners: 'Not in a squad, and want to be?',
+    linkLabel: 'See the Performance Squads',
+    href: '/performance-squads',
+};
 
 export const INCLUDED = [
     ['12 hours of coaching', '8 nights, an hour and a half each.'],
@@ -144,10 +158,9 @@ export const INCLUDED = [
 ];
 
 export const HOW_PAYING_WORKS = [
-    ['Register your interest', 'It costs nothing and holds no place.'],
-    ['We pick the group', 'Your Royal Spin Coach chooses. Offers go out in two rounds.'],
-    ['You say yes', 'Only then do we send you the payment details.'],
-    ['You pay', 'For the 8 nights, or for a single night if that is what you picked.'],
+    ['Sign up for a night', 'Pick your centre and the Wednesday you want. It takes a minute.'],
+    ['We confirm the lane', 'We check there is a place that night and write back the same week.'],
+    ['You pay for that night', 'We send the payment link once your place is confirmed.'],
 ];
 
 export const SPIN_TYPES = [
