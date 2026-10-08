@@ -118,32 +118,30 @@ export const EVERY_SPIN = {
     long: 'Both centres take every type of spin \u2014 off spin, leg spin, left-arm orthodox, left-arm wrist spin, and anyone still working out what it is they bowl. Your Royal Spin Coach bowls one of them. They coach all of them.',
 };
 
-// Prices. Alex works to GST-exclusive figures and GST goes on top (Alex, 1 Oct
-// 2026). Australian Consumer Law requires a consumer-facing page to show the
-// total payable, so the big number is the GST-INCLUSIVE one and the ex-GST
-// figure sits underneath it.
+// Prices. 9 Oct 2026: the 8-night block prices are WITHDRAWN. Spin Club sells
+// one 1.5-hour Wednesday session at a time.
 //
-// 9 Oct 2026: the 8-night block prices are WITHDRAWN. Spin Club now sells one
-// night at a time only. Performance Squad members do not buy from this page at
-// all — their rate is arranged through their head coach.
-//   single  $97.50 + GST = $107.25
+// Alex, 9 Oct 2026: "$60 including GST for 1.5 hours." So unlike every earlier
+// Spin Club price, this one is GST-INCLUSIVE as stated — $60 is the total
+// payable, and the ex-GST figure is $60 / 1.1 = $54.55.
+//
+// Performance Squad members do not buy from this page at all; their rate is
+// arranged through their head coach.
 export const GST_NOTE = 'Every price on this page includes GST.';
 
 export const PRICES = [
     {
         key: 'single',
         question: 'One Wednesday night',
-        headline: '$107.25',
-        unit: 'per night',
-        exGst: '$97.50 plus GST',
+        headline: '$60',
+        unit: 'for the 1.5-hour session',
+        exGst: '$54.55 plus GST',
         perNight: 'You pay for the nights you come to, and nothing else.',
         who: 'Open to any spin bowler aged 10 to 25. Come to one night or come to all of them.',
         feature: true,
     },
 ];
 
-// The asterisk under the price. Squad members are handled off-page; everyone
-// else who wants that rate is pointed at the squad itself.
 export const SQUAD_NOTE = {
     members: 'Already in a Royals Academy Performance Squad? Do not pay here \u2014 speak to your head coach directly and they will sort your rate out with you.',
     joiners: 'Not in a squad, and want to be?',
