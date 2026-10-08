@@ -1,20 +1,6 @@
 import React from 'react';
-import { PROGRAM } from './scOptions';
+import { PROGRAM, PILLARS, FOUNDER } from './scOptions';
 
-const PILLARS = [
-    {
-        title: 'Technical',
-        body: 'Your grip, your action, your release. The work that makes the ball spin hard and land where you meant it to.',
-    },
-    {
-        title: 'Mental',
-        body: 'What you do after you get hit. Spin is the one job in cricket where doing it right can still cost you runs, so we train how you handle that.',
-    },
-    {
-        title: 'Tactical',
-        body: 'Reading the batter, setting them up, picking the next ball, and knowing what your field is really for.',
-    },
-];
 
 const NIGHT = [
     ['Talk', 'What happened in your last game, and what you are working on.'],
@@ -67,15 +53,28 @@ const SCWhatItIs = () => (
                         <p className="text-sm font-black text-rr-dark uppercase tracking-widest">
                             Alex Lewis
                         </p>
+                        <p className="text-[13px] text-rr-pink font-black uppercase tracking-wide mb-0.5">
+                            Built Spin Club &middot; oversees both centres
+                        </p>
                         <p className="text-sm text-rr-dark/60 font-medium">
-                            Director of Cricket, Rajasthan Royals Academy Melbourne
+                            Academy Head Coach and specialist spin bowling coach
                         </p>
                     </div>
                 </div>
             </div>
 
-            <p className="text-xs font-black text-rr-pink uppercase tracking-[0.3em] mb-6">
+            <p className="text-xs font-black text-rr-pink uppercase tracking-[0.3em] mb-4">
                 What we work on
+            </p>
+            <h3 className="text-2xl md:text-4xl font-black text-rr-dark uppercase tracking-tight leading-none mb-4">
+                Technical, tactical and mental
+            </h3>
+            <p className="text-base md:text-lg text-rr-dark/70 font-medium leading-relaxed max-w-3xl mb-10">
+                Most clubs get a spinner bowling. Very few teach the rest of it &mdash; how to build
+                a plan for a batter, how to hold it together when the game moves, and how to set a
+                field and know what every fielder is there for.{' '}
+                <strong className="text-rr-dark">That is where a spinner improves fastest</strong>,
+                and it is the part Spin Club is built around.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {PILLARS.map((b, i) => (
@@ -86,7 +85,15 @@ const SCWhatItIs = () => (
                         <h3 className="text-lg font-black text-rr-dark uppercase tracking-wide mb-3">
                             {b.title}
                         </h3>
-                        <p className="text-[15px] text-rr-dark/70 font-medium leading-relaxed">{b.body}</p>
+                        <p className="text-[15px] text-rr-dark/70 font-medium leading-relaxed mb-4">{b.body}</p>
+                        <ul className="space-y-2">
+                            {b.points.map((pt) => (
+                                <li key={pt} className="flex gap-2.5 items-start">
+                                    <span className="block w-1.5 h-1.5 rounded-full bg-rr-pink mt-[7px] shrink-0" />
+                                    <span className="text-[14px] text-rr-dark/75 font-semibold leading-snug">{pt}</span>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 ))}
             </div>
