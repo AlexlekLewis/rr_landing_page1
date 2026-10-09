@@ -34,10 +34,10 @@ const JRM_NAV = [
 
 // Junior Royals mock-up version 2 — ids set in junior-royals/v2/JuniorRoyalsV2.jsx.
 const JRV2_NAV = [
-    { label: 'MATCHES', id: 'matches' },
-    { label: 'HOW IT WORKS', id: 'how' },
-    { label: 'PRICES', id: 'prices' },
-    { label: 'CENTRES', id: 'where' },
+    { label: 'PROGRESS', id: 'progress' },
+    { label: 'HOW THEY LEARN', id: 'learn' },
+    { label: 'COACHES', id: 'coaches' },
+    { label: 'PRICE', id: 'prices' },
 ];
 
 // India Tour 2026 — on-page section anchors (ids set in IndiaTour2026.jsx)

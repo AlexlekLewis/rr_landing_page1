@@ -3,21 +3,22 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Check } from 'lucide-react';
 import { supabase } from '../../../lib/supabase';
 import { HONEYPOT_FIELD, isHoneypotTripped } from '../../../lib/security/bot.js';
-import { MOCKUP, CENTRES, AGES, AGES_TEXT, PS_ROUTE } from '../juniorRoyalsData';
+import { MOCKUP, AGES, AGES_TEXT, PS_ROUTE } from '../juniorRoyalsData';
 import { ageAtStart } from '../JuniorRoyalsForm';
 import { Rich } from '../JuniorRoyalsShared';
-import { FORM, CTA, REGION_LABEL } from './jrV2Content';
+import { FORM, CTA, REGION_LABEL, V2_CENTRES, DAYS, MIN_DAYS } from './jrV2Content';
 
 // ─────────────────────────────────────────────────────────────
 // Junior Royals v2 — Register Your Interest.
 //
 // Alex, 8 Oct 2026: expressions of interest first, "so we can understand what our
 // bookings are and our lane hires". So beyond the contact details the form asks
-// three quick taps: which group size (4s / 6s / either), which time, and how the
-// family would likely pay. Each says why it is asked (copy-esl.md §1.7).
+// the centre, 2 or more weekdays the player could train, and a time. Each says
+// why it is asked (copy-esl.md §1.7).
 //
 // Writes to public.junior_royals_interest (not created yet; one row = a family who
-// wants a Junior Royals place; NO payment taken, NO place held). While MOCKUP is
+// wants a Junior Royals place; NO payment taken, NO place held). Asks centre
+// (incl. Ravenhall, coming soon), 2+ weekdays and a time (Alex, 9 Oct 2026). While MOCKUP is
 // true it validates and shows the success state but saves nothing.
 //
 // Choice columns get NO list-of-values CHECK in the database (the 27 Sep – 5 Oct
@@ -26,13 +27,12 @@ import { FORM, CTA, REGION_LABEL } from './jrV2Content';
 // ─────────────────────────────────────────────────────────────
 
 const TABLE = 'junior_royals_interest';
-const EMPTY = { parent_name: '', email: '', phone: '', player_name: '', player_dob: '', centre: '', group_option: '', preferred_time: '', payment_plan: '' };
+const EMPTY = { parent_name: '', email: '', phone: '', player_name: '', player_dob: '', centre: '', preferred_days: [], preferred_time: '' };
 
 export const FORM_VALUES = {
-    centre: CENTRES.map((c) => c.value),
-    group_option: FORM.optionChoices.map((c) => c.value),
+    centre: V2_CENTRES.map((c) => c.value),
+    preferred_days: DAYS.map((d) => d.value),
     preferred_time: FORM.timeChoices.map((c) => c.value),
-    payment_plan: FORM.payChoices.map((c) => c.value),
 };
 
 const collectUtm = () => {
@@ -89,6 +89,12 @@ const JRV2Form = () => {
         if (errors[name]) setErrors((x) => ({ ...x, [name]: undefined }));
     };
 
+    const toggleDay = (e) => {
+        const { value, checked } = e.target;
+        setForm((f) => ({ ...f, preferred_days: checked ? [...f.preferred_days, value] : f.preferred_days.filter((d) => d !== value) }));
+        if (errors.preferred_days) setErrors((x) => ({ ...x, preferred_days: undefined }));
+    };
+
     const validate = () => {
         const e = {};
         if (!form.parent_name.trim()) e.parent_name = 'Please enter your name.';
@@ -102,9 +108,10 @@ const JRV2Form = () => {
             else if (age > AGES.max) e.player_dob = 'older';
             else if (age < AGES.min) e.player_dob = `Junior Royals is for players aged ${AGES_TEXT}.`;
         }
-        for (const k of ['centre', 'group_option', 'preferred_time', 'payment_plan']) {
+        for (const k of ['centre', 'preferred_time']) {
             if (!FORM_VALUES[k].includes(form[k])) e[k] = 'Please choose one.';
         }
+        if (form.preferred_days.filter((d) => FORM_VALUES.preferred_days.includes(d)).length < MIN_DAYS) e.preferred_days = FORM.daysError;
         setErrors(e);
         return Object.keys(e).length === 0;
     };
@@ -124,9 +131,8 @@ const JRV2Form = () => {
                     player_name: form.player_name.trim(),
                     player_dob: form.player_dob,
                     centre: form.centre,
-                    group_option: form.group_option,
+                    preferred_days: DAYS.map((d) => d.value).filter((d) => form.preferred_days.includes(d)),
                     preferred_time: form.preferred_time,
-                    payment_plan: form.payment_plan,
                     page_referrer: document.referrer || null,
                     ...collectUtm(),
                 }]);
@@ -190,11 +196,27 @@ const JRV2Form = () => {
                     ) : <Err msg={errors.player_dob} />}
                 </div>
 
-                <Choices name="centre" legend="Centre" value={form.centre} onChange={set} error={errors.centre} cols="sm:grid-cols-2"
-                    items={CENTRES.map((c) => ({ value: c.value, label: `${c.venue}, ${c.suburb}`, sub: `${REGION_LABEL[c.value]} · Wednesdays` }))} />
-                <Choices name="group_option" legend="Group size" why={FORM.why.option} value={form.group_option} onChange={set} error={errors.group_option} items={FORM.optionChoices} />
+                <Choices name="centre" legend="Centre" value={form.centre} onChange={set} error={errors.centre}
+                    items={V2_CENTRES.map((c) => ({ value: c.value, label: c.venueText ? c.venueText : `${c.venue}, ${c.suburb}`, sub: c.comingSoon ? `${REGION_LABEL[c.value]} · coming soon` : REGION_LABEL[c.value] }))} />
+                <fieldset className="sm:col-span-2">
+                    <legend className="block mb-2">
+                        <span className="text-xs font-black uppercase tracking-widest text-rr-dark">Days your player could train <span className="text-rr-pink">*</span></span>
+                        <span className="block text-sm font-medium text-rr-charcoal mt-0.5">{FORM.why.days}</span>
+                    </legend>
+                    <div className="grid gap-2 grid-cols-2 sm:grid-cols-5">
+                        {DAYS.map((d) => {
+                            const on = form.preferred_days.includes(d.value);
+                            return (
+                                <label key={d.value} className={`flex items-center gap-3 cursor-pointer rounded-xl border-2 px-4 py-3 min-h-[48px] transition-colors ${on ? 'border-rr-pink' : errors.preferred_days ? 'border-rr-pink/50' : 'border-slate-300 hover:border-rr-pink/60'}`}>
+                                    <input type="checkbox" name="preferred_days" value={d.value} checked={on} onChange={toggleDay} className="accent-rr-pink" />
+                                    <span className="font-bold text-rr-dark text-[15px]">{d.label}</span>
+                                </label>
+                            );
+                        })}
+                    </div>
+                    <Err msg={errors.preferred_days} />
+                </fieldset>
                 <Choices name="preferred_time" legend="Time" why={FORM.why.time} value={form.preferred_time} onChange={set} error={errors.preferred_time} items={FORM.timeChoices} />
-                <Choices name="payment_plan" legend="How would you likely pay?" why={FORM.why.pay} value={form.payment_plan} onChange={set} error={errors.payment_plan} cols="sm:grid-cols-2" items={FORM.payChoices} />
             </div>
 
             {errors.form && <p className="mt-5 text-sm font-bold text-rr-pink">{errors.form}</p>}

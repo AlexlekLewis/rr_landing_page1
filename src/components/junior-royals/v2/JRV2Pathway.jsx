@@ -1,20 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Award, Check, ChevronsDown, Crosshair, Footprints, Hand, Megaphone, Repeat, Shield, Target, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Award, BadgeCheck, Check, ChevronsDown, ClipboardList, Crosshair, Footprints, Hand, Megaphone, Repeat, Shield, Target, Trophy, X } from 'lucide-react';
 import { Rich } from '../JuniorRoyalsShared';
 import { PHASES, CURRICULUM, BADGES, AFTER } from './jrV2Facts';
-import { PATH, BADGE_COPY } from './jrV2Content';
+import { PATH, PROGRESS } from './jrV2Content';
 
 // ─────────────────────────────────────────────────────────────
-// The Junior Royals pathway, ages 7 to 12 (Alex, 8 Oct 2026): show that there is
-// a full curriculum behind the program, stage by stage, with skill badges.
+// Stage cards + pop-ups, and the Royals Way Progress Tracking and Development
+// System block (Alex, 9 Oct 2026). No ages on stages (Alex, 9 Oct).
 //
-// - An age ruler (7 … 12, then 13+ by trial) so a 10-year-old can find themselves.
-// - One card per stage. Tapping a card opens a pop-up with everything the stage
-//   covers. Pop-ups open on tap or click, never on hover alone: 80% of visitors
-//   are on phones, which have no hover (copy-esl.md §2).
-// - Badge medals: icon + name + the player's own "I can …".
+// Pop-ups open on tap or click, never on hover alone: 80% of visitors are on
+// phones, which have no hover (copy-esl.md §2).
 // Colours follow the stage: Discover pink, Develop blue, Elevate dark. White text
 // sits on colour only at 20px+ bold (pink is 4.4:1 against white).
 // ─────────────────────────────────────────────────────────────
@@ -28,22 +25,17 @@ const TOPIC_KEYS = ['batting', 'bowling', 'fielding'];
 const TOPIC_BAR = { batting: 'border-rr-pink', bowling: 'border-rr-blue', fielding: 'border-rr-dark' };
 const topicCount = (c) => TOPIC_KEYS.reduce((n, k) => n + c[k].length, 0);
 
-// ── Age ruler ──
-const AgeRuler = () => (
-    <div className="grid grid-cols-[2fr_2fr_2fr_1.2fr] gap-1.5 mb-8" aria-hidden="true">
+// ── Stage strip: Discover → Develop → Elevate → Performance Squads ──
+const StageStrip = () => (
+    <ol className="flex flex-wrap items-center gap-x-2 gap-y-2 mb-6" aria-label="The three stages, then Performance Squads">
         {PHASES.map((p, i) => (
-            <div key={p.key}>
-                <div className="flex justify-between px-1 text-sm font-black text-rr-dark"><span>{p.min}</span><span>{p.max}</span></div>
-                <div className={`h-3 rounded-full ${STAGE[i].bg}`} />
-                <p className="mt-1.5 text-center text-xs sm:text-sm font-black uppercase tracking-wide text-rr-dark">{p.name}</p>
-            </div>
+            <li key={p.key} className="flex items-center gap-2">
+                <span className={`${STAGE[i].bg} text-white font-black uppercase text-sm tracking-wider rounded-full px-4 py-1.5`}>{p.name}</span>
+                <ArrowRight className="w-4 h-4 text-rr-charcoal" aria-hidden="true" />
+            </li>
         ))}
-        <div>
-            <div className="text-center text-sm font-black text-rr-dark">13+</div>
-            <div className="h-3 rounded-full border-2 border-dashed border-rr-dark" />
-            <p className="mt-1.5 text-center text-xs sm:text-sm font-black uppercase tracking-wide text-rr-dark">Trial</p>
-        </div>
-    </div>
+        <li><span className="border-2 border-dashed border-rr-dark text-rr-dark font-black uppercase text-sm tracking-wider rounded-full px-4 py-1">Performance Squads, by trial</span></li>
+    </ol>
 );
 
 // ── One stage card (a button: the whole card opens the pop-up) ──
@@ -58,7 +50,7 @@ const StageCard = ({ p, i, onOpen }) => {
                 <p className="text-white text-xl font-bold mt-1.5">{p.aim}</p>
             </div>
             <div className="px-5 py-4">
-                <p className="text-xs font-black uppercase tracking-widest text-rr-charcoal">{PATH.stageLabel(i)} · Ages {p.ages}</p>
+                <p className="text-xs font-black uppercase tracking-widest text-rr-charcoal">{PATH.stageLabel(i)}</p>
                 <ul className="mt-3 space-y-1.5">
                     {sample.map(({ k, t }) => (
                         <li key={k} className={`border-l-4 ${TOPIC_BAR[k]} pl-2.5 text-[15px] font-semibold text-rr-dark leading-snug`}>{t}</li>
@@ -81,15 +73,15 @@ const BADGE_ICON = {
 };
 const RING = { bat: 'border-rr-pink text-rr-pink', bowl: 'border-rr-blue text-rr-blue', field: 'border-rr-dark text-rr-dark' };
 
-const BadgeMedal = ({ b }) => {
+const BadgeMedal = ({ b, dark }) => {
     const Icon = BADGE_ICON[b.name] || Award;
     return (
         <li className="flex flex-col items-center text-center">
             <span className={`w-16 h-16 rounded-full border-4 bg-white flex items-center justify-center ${RING[b.kind]}`}>
                 <Icon className="w-7 h-7" strokeWidth={2.5} aria-hidden="true" />
             </span>
-            <span className="mt-2 text-sm font-black text-rr-dark leading-tight">{b.name}</span>
-            <span className="mt-0.5 text-xs font-medium text-rr-charcoal leading-snug">“{BADGE_COPY.iCan} {b.can}”</span>
+            <span className={`mt-2 text-sm font-black leading-tight ${dark ? 'text-white' : 'text-rr-dark'}`}>{b.name}</span>
+            <span className={`mt-0.5 text-xs font-medium leading-snug ${dark ? 'text-white/80' : 'text-rr-charcoal'}`}>“{PROGRESS.iCan} {b.can}”</span>
         </li>
     );
 };
@@ -138,7 +130,7 @@ const StageModal = ({ index, onClose, onNav }) => {
                 <div className={`${STAGE[index].bg} px-5 sm:px-8 pt-5 pb-6`}>
                     <div className="flex items-start justify-between gap-4">
                         <div>
-                            <p className="text-white text-xl font-bold">Ages {p.ages}</p>
+                            <p className="text-white text-xl font-bold">{PATH.stageLabel(index)}</p>
                             <h2 id="jr-stage-title" className="text-white text-4xl sm:text-5xl font-black uppercase leading-none mt-1">{p.name}</h2>
                             <p className="text-white text-xl font-bold mt-2">{p.aim}</p>
                         </div>
@@ -189,7 +181,7 @@ const StageModal = ({ index, onClose, onNav }) => {
                         {p.key === 'discover'
                             ? <ul className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-6 mt-3">{BADGES.discover.slice(0, 4).map((b) => <BadgeMedal key={b.name} b={b} />)}</ul>
                             : <p className="text-[15px] font-medium text-rr-charcoal"><Rich v={PATH.modal.badgesNotWritten} /></p>}
-                        <p className="mt-4 text-sm font-semibold text-rr-dark"><Rich v={BADGE_COPY.starts} /></p>
+                        <p className="mt-4 text-sm font-semibold text-rr-dark"><Rich v={PROGRESS.starts} /></p>
                     </section>
 
                     <section className="flex items-start gap-3">
@@ -222,13 +214,12 @@ const StageModal = ({ index, onClose, onNav }) => {
     );
 };
 
-// ── The pathway: ruler + three stage cards + what comes after ──
+// ── What your player learns: stage strip + three stage cards + what comes after ──
 export const StageJourney = () => {
     const [open, setOpen] = useState(null);
     return (
         <>
-            <AgeRuler />
-            <p className="text-sm font-bold text-rr-charcoal mb-3">{PATH.tapHint}</p>
+            <StageStrip />
             <div className="grid md:grid-cols-3 gap-4">
                 {PHASES.map((p, i) => <StageCard key={p.key} p={p} i={i} onOpen={setOpen} />)}
             </div>
@@ -249,46 +240,46 @@ export const StageJourney = () => {
     );
 };
 
-// ── Skill badges ──
-export const BadgeBlock = () => (
-    <div className="mt-14 border-t-2 border-rr-dark pt-10">
-        <p className="text-xs font-black uppercase tracking-[0.25em] text-rr-dark mb-2">{BADGE_COPY.eyebrow}</p>
-        <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-tight leading-none text-rr-dark">{BADGE_COPY.title}</h3>
-        <p className="mt-3 text-[15px] font-semibold text-rr-dark"><Rich v={BADGE_COPY.starts} /></p>
-        <p className="mt-2 text-[16px] font-medium text-rr-dark leading-relaxed max-w-3xl">{BADGE_COPY.what}</p>
-        <ol className="mt-6 grid sm:grid-cols-3 gap-6">
-            {BADGE_COPY.steps.map((s) => (
-                <li key={s.n} className="border-t-4 border-rr-pink pt-3">
-                    <span className="text-3xl font-black text-rr-pink leading-none">{s.n}</span>
-                    <p className="mt-1 font-black text-rr-dark">{s.title}</p>
-                    <p className="text-[15px] font-medium text-rr-charcoal leading-snug mt-0.5">{s.body}</p>
-                </li>
-            ))}
-        </ol>
-        <p className="mt-10 text-sm font-black uppercase tracking-wider text-rr-dark">{BADGE_COPY.sampleTitle}</p>
-        <ul className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-7">
-            {BADGES.discover.map((b) => <BadgeMedal key={b.name} b={b} />)}
-        </ul>
-        <p className="mt-8 text-[15px] font-medium text-rr-dark leading-relaxed max-w-3xl">{BADGE_COPY.perYear}</p>
-        <ul className="mt-4 space-y-2 max-w-3xl">
-            {BADGE_COPY.rules.map((r) => (
-                <li key={r} className="flex items-start gap-2.5 text-[15px] text-rr-charcoal font-medium leading-snug">
-                    <Check className="w-5 h-5 text-rr-pink shrink-0" strokeWidth={3} aria-hidden="true" />{r}
-                </li>
-            ))}
-        </ul>
+// ── The Royals Way Progress Tracking and Development System (on dark) ──
+const PART_ICON = { badge: BadgeCheck, score: Target, card: ClipboardList, cert: Trophy };
 
-        <h4 className="mt-12 text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark">{BADGE_COPY.certificateTitle}</h4>
-        <p className="mt-2 text-[16px] font-medium text-rr-dark max-w-3xl">{BADGE_COPY.certificate}</p>
-        <ol className="mt-5 grid md:grid-cols-3 gap-4">
-            {PHASES.map((p, i) => (
-                <li key={p.key} className={`rounded-2xl border-2 ${STAGE[i].border} bg-white px-5 py-4`}>
-                    <p className="flex items-center gap-2 text-sm font-black uppercase tracking-wider text-rr-dark">
-                        <Award className="w-5 h-5 text-rr-pink" aria-hidden="true" /> {p.name} · ages {p.ages}
-                    </p>
-                    <p className="mt-2 text-[15px] font-semibold text-rr-dark leading-snug">“{CURRICULUM[p.key].certificate}”</p>
+export const ProgressParts = () => (
+    <ol className="grid sm:grid-cols-2 gap-4">
+        {PROGRESS.parts.map((p, i) => {
+            const Icon = PART_ICON[p.icon];
+            return (
+                <li key={p.title} className="rounded-2xl border-2 border-white/15 p-5">
+                    <div className="flex items-center gap-3">
+                        <span className="w-11 h-11 rounded-full bg-rr-pink flex items-center justify-center shrink-0">
+                            <Icon className="w-6 h-6 text-white" aria-hidden="true" />
+                        </span>
+                        <p className="text-white text-xl font-black leading-tight"><span className="text-rr-light-pink mr-1.5">{i + 1}.</span>{p.title}</p>
+                    </div>
+                    <p className="text-white/85 text-[15px] font-medium leading-relaxed mt-3">{p.body}</p>
                 </li>
-            ))}
-        </ol>
-    </div>
+            );
+        })}
+    </ol>
+);
+
+export const BadgeWall = () => (
+    <>
+        <p className="text-white text-sm font-black uppercase tracking-wider">{PROGRESS.sampleTitle}</p>
+        <ul className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-7">
+            {BADGES.discover.map((b) => <BadgeMedal key={b.name} b={b} dark />)}
+        </ul>
+    </>
+);
+
+export const Certificates = () => (
+    <ol className="grid md:grid-cols-3 gap-4">
+        {PHASES.map((p, i) => (
+            <li key={p.key} className={`rounded-2xl bg-white px-5 py-4 border-t-8 ${['border-t-rr-pink', 'border-t-rr-blue', 'border-t-rr-dark'][i]}`}>
+                <p className="flex items-center gap-2 text-sm font-black uppercase tracking-wider text-rr-dark">
+                    <Award className="w-5 h-5 text-rr-pink" aria-hidden="true" /> {p.name} certificate
+                </p>
+                <p className="mt-2 text-[15px] font-semibold text-rr-dark leading-snug">“{CURRICULUM[p.key].certificate}”</p>
+            </li>
+        ))}
+    </ol>
 );

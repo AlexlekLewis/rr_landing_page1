@@ -1,5 +1,5 @@
 -- ============================================================
--- Junior Royals — Register Your Interest (Groups of 4 / Groups of 6)
+-- Junior Royals — Register Your Interest ($49.95 a week; Ravenhall coming soon)
 -- NOT APPLIED YET. Apply to rraa-landing (pudldzgmluwoocwxtzhw) only when Alex
 -- approves the new Junior Royals page taking real entries (MOCKUP = false).
 -- ============================================================
@@ -29,9 +29,8 @@ create table if not exists public.junior_royals_interest (
   player_name text not null check (char_length(player_name) between 1 and 200),
   player_dob date not null,
   centre text not null check (char_length(centre) <= 50),
-  group_option text not null check (char_length(group_option) <= 20),
+  preferred_days text[] not null check (cardinality(preferred_days) between 2 and 5),
   preferred_time text not null check (char_length(preferred_time) <= 20),
-  payment_plan text not null check (char_length(payment_plan) <= 20),
   source text not null default 'junior-royals-v2' check (char_length(source) <= 100),
   page_referrer text check (char_length(page_referrer) <= 500),
   utm_source text check (char_length(utm_source) <= 200),
@@ -40,14 +39,13 @@ create table if not exists public.junior_royals_interest (
 );
 
 comment on table public.junior_royals_interest is
-  'Junior Royals register-your-interest list (ages 7–12, Groups of 4 / Groups of 6, from Wed 28 Oct 2026). One row = one family who wants a place. NO payment taken, NO place held. Written by the /junior-royals form; read only by the service role (sheet sync).';
+  'Junior Royals register-your-interest list (ages 7–12, $49.95 a week, from Wed 28 Oct 2026). One row = one family who wants a place. NO payment taken, NO place held. Written by the /junior-royals form; read only by the service role (sheet sync).';
 comment on column public.junior_royals_interest.player_name is 'Player FIRST name only (data minimisation; surname is collected at enrolment).';
-comment on column public.junior_royals_interest.player_dob is 'Used to place the player in a stage (Discover 7–8, Develop 9–10, Elevate 11–12). The form refuses ages outside 7–12.';
+comment on column public.junior_royals_interest.player_dob is 'Checks the player is 7–12 (the form refuses other ages) and helps plan groups.';
 comment on column public.junior_royals_interest.phone is 'Optional on the form.';
-comment on column public.junior_royals_interest.centre is 'mickleham | cranbourne-north';
-comment on column public.junior_royals_interest.group_option is '4s = Groups of 4 | 6s = Groups of 6 | either';
+comment on column public.junior_royals_interest.centre is 'mickleham | cranbourne-north | ravenhall (coming soon: interest only)';
+comment on column public.junior_royals_interest.preferred_days is 'Weekdays the player could train, at least 2 of: mon | tue | wed | thu | fri. We tell each family their day.';
 comment on column public.junior_royals_interest.preferred_time is '6pm | 7pm | either';
-comment on column public.junior_royals_interest.payment_plan is 'term | weekly | 2-terms | year | not-sure  (how they would LIKELY pay; not binding)';
 
 alter table public.junior_royals_interest enable row level security;
 
@@ -59,9 +57,9 @@ revoke select, update, delete on public.junior_royals_interest from anon, authen
 -- ── After applying ─────────────────────────────────────────────
 -- 1. Watchdog (~/.claude/scheduled-tasks/rra-form-watchdog/SKILL.md, Check C):
 --    add JR-3, a rolled-back test insert for EVERY value the form can send —
---    centre (mickleham, cranbourne-north) × group_option (4s, 6s, either) ×
---    preferred_time (6pm, 7pm, either) × payment_plan (term, weekly, 2-terms,
---    year, not-sure) — so a refused value is caught within the hour.
+--    centre (mickleham, cranbourne-north, ravenhall) × preferred_time (6pm, 7pm,
+--    either), with preferred_days of 2 and of 5 days (mon..fri) — so a refused
+--    value is caught within the hour.
 -- 2. Set MOCKUP = false in src/components/junior-royals/juniorRoyalsData.js and
 --    resolve or remove every yellow tbc() item first.
 -- 3. Check the "Junior Royals Interest" tab appears in "RRA — Program Sign-Ups"

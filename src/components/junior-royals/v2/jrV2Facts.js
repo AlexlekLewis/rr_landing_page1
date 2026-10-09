@@ -16,14 +16,11 @@
 // file is also read by Node for the prerendered structured data.
 // ─────────────────────────────────────────────────────────────
 
-// ── The three phases (set by age, two years each) ──
+// ── The three stages (Alex, 9 Oct 2026: no age definitions on the page) ──
 export const PHASES = [
     {
         key: 'discover',
         name: 'Discover',
-        ages: '7–8',
-        min: 7,
-        max: 8,
         aim: 'Learn the game',
         // "How it feels" (blueprint p7), in plain words.
         feel: 'Soft balls, batting tees (a stand that holds the ball) and lots of hitting. At Wednesday training the coach throws every ball, and players bowl at targets, never at a batter. Fun comes first.',
@@ -35,9 +32,6 @@ export const PHASES = [
     {
         key: 'develop',
         name: 'Develop',
-        ages: '9–10',
-        min: 9,
-        max: 10,
         aim: 'Learn to play',
         feel: 'A soft ball, or an Incrediball (a softer rubber cricket ball). At Wednesday training the coach throws every ball, and players start making choices after the ball is bowled. The score rewards a good choice, not only a good hit.',
         canDo: [
@@ -48,9 +42,6 @@ export const PHASES = [
     {
         key: 'elevate',
         name: 'Elevate',
-        ages: '11–12',
-        min: 11,
-        max: 12,
         aim: 'Learn to compete',
         feel: 'Tennis balls or soft balls, and games with a scoreboard, like a real match. Players start to plan: where to hit, and how to bowl to a field.',
         canDo: [
@@ -91,7 +82,7 @@ export const CURRICULUM = {
             'Catch a soft ball with soft hands',
             'Call YES, NO or WAIT, loud and early',
         ],
-        next: 'Next, at 9: the full range of front-foot shots, and a run-up.',
+        next: 'Next stage, Develop: the full range of front-foot shots, and a run-up.',
         certificate: 'Congratulations, you’ve completed Discover. Next stop: Develop.',
     },
     develop: {
@@ -123,7 +114,7 @@ export const CURRICULUM = {
             'Land it in a length box to right- and left-handed batters',
             'Take a high catch side-on',
         ],
-        next: 'Next, at 11: back-foot shots, playing spin, and bowling to a plan.',
+        next: 'Next stage, Elevate: back-foot shots, playing spin, and bowling to a plan.',
         certificate: 'Congratulations, you’ve completed Develop. Next stop: Elevate.',
     },
     elevate: {
@@ -152,7 +143,7 @@ export const CURRICULUM = {
             'Chase a target with a plan, and finish strong',
             'Bowl to a plan and a field, with a stock ball and a slower ball',
         ],
-        next: 'Next, at 13: Performance Squads, by trial. Not every player gets a place.',
+        next: 'Next: Performance Squads, by trial. Not every player gets a place.',
         certificate: 'Congratulations, you’ve completed Elevate and Junior Royals. Next stop: Performance Squads trials.',
     },
 };
@@ -162,13 +153,6 @@ export const AFTER = [
     { name: 'Performance Squads', ages: 'Trial', aim: 'Compete', note: 'Players try out. Not every player gets a place.' },
 ];
 
-// What a player can do at 12 (blueprint p10).
-export const AT_TWELVE = [
-    'Bats from a sound base, forward and back, with a plan against spin',
-    'Bowls a repeatable action to a plan, with a stock ball and a change of pace',
-    'Catches and fields with confidence, runs hard and calls early',
-    'Reads a chase or a defence, and is ready to trial for Performance Squads or lead their club side',
-];
 
 // ── One session: the same 60 minutes every week, at every level (blueprint p16) ──
 export const SESSION = [
@@ -195,17 +179,6 @@ export const CUES = [
     { cue: 'Straight to the target', means: 'Your bowling hand finishes pointing at the stumps.' },
 ];
 
-// ── One term (blueprint p17). Term 4 2026 has 8 Wednesdays (28 Oct – 16 Dec). ──
-export const TERM_8 = [
-    { date: 'Wed 28 Oct', label: 'Benchmark Game', note: 'Block 1: learn it', flag: true },
-    { date: 'Wed 4 Nov', label: 'Block 1', note: 'own it' },
-    { date: 'Wed 11 Nov', label: 'Block 1', note: 'use it' },
-    { date: 'Wed 18 Nov', label: 'Block 2', note: 'learn it' },
-    { date: 'Wed 25 Nov', label: 'Block 2', note: 'use it' },
-    { date: 'Wed 2 Dec', label: 'Block 3', note: 'learn it' },
-    { date: 'Wed 9 Dec', label: 'Block 3', note: 'use it' },
-    { date: 'Wed 16 Dec', label: 'Festival night', note: 'The Benchmark Game again', flag: true },
-];
 
 // ── The Royals Way (blueprint p10–11) ──
 export const PILLARS = [
@@ -263,16 +236,14 @@ export const wednesdays2027 = () => {
     return out;
 };
 
-// ── The two options (Alex, 8 Oct 2026): renamed "Groups of 4" / "Groups of 6" and
-// priced $49.95 / $34.95 a session incl. GST (was "Junior Royals 4s/6s" at $50 / $35).
-// Keys '4s'/'6s' are internal (form values, database) and never shown.
-// Same program, same coaches, same session plan. The only difference is how many
-// players share the lane. Each lane also keeps ONE spot for a player making up a
-// missed session, so a lane never goes over `max`. Prices incl. GST, per session.
-export const OPTIONS = [
-    { key: '4s', name: 'Groups of 4', perLane: 4, max: 5, price: 49.95 },
-    { key: '6s', name: 'Groups of 6', perLane: 6, max: 7, price: 34.95 },
-];
-// Paying ahead (Alex, 7 Oct 2026). Applies to both options.
-export const DISCOUNTS = { twoTerms: 0.10, year: 0.15 };
+// ── Price (Alex, 9 Oct 2026): ONE price, $49.95 a week incl. GST, paid weekly in
+// term as a term-based subscription. No group-size options, no bulk/prepay
+// discounts. The player is enrolled for the whole term; the place rolls on each
+// term until the family cancels. Lane size stays at the 5 Oct cap: 6 players
+// (+1 some weeks making up a missed session).
+export const PRICE = { perWeek: 49.95, perLane: LANE_MAX, max: LANE_MAX + 1 };
+// Training shirt (Alex, 9 Oct 2026): compulsory, at the member price (shop price
+// $62.95, src/components/academy-shop/shopConfig.js). Relaunch offer: free for
+// the first 20 players to enrol, subject to shirt stock.
+export const SHIRT = { memberPrice: 29.95, shopPrice: 62.95, freeForFirst: 20 };
 export const NOTICE_WEEKS = 2;            // notice before the next term (Alex, 8 Oct 2026)

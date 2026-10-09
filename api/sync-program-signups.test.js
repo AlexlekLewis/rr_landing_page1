@@ -26,7 +26,7 @@ import {
   JR_INTEREST_HEADERS,
   JR_INTEREST_LABELS,
   jrInterestRow,
-  jrStage2027,
+  jrAge2027,
   emptyIfMissing,
   isTourEntryInWindow,
   allocatePayments,
@@ -577,7 +577,7 @@ describe('Junior Royals Interest tab', () => {
   const row = (over = {}) => ({
     id: 'jri-1', created_at: '2026-10-20T08:00:00.000Z', parent_name: 'Sample Parent',
     email: 'parent@example.com', phone: null, player_name: 'Sam', player_dob: '2017-05-10',
-    centre: 'cranbourne-north', group_option: '4s', preferred_time: '6pm', payment_plan: 'year', ...over,
+    centre: 'cranbourne-north', preferred_days: ['mon', 'wed'], preferred_time: '6pm', ...over,
   });
 
   it('has a label for every value the form can send', () => {
@@ -591,19 +591,18 @@ describe('Junior Royals Interest tab', () => {
     expect(r).toHaveLength(JR_INTEREST_HEADERS.length);
     const at = (h) => r[JR_INTEREST_HEADERS.indexOf(h)];
     expect(at('Centre')).toBe('Elite Cricket Centre, Cranbourne North');
-    expect(at('Group Size')).toBe('Groups of 4');
-    expect(at('How They Would Likely Pay')).toBe('4 terms (a year) ahead (15% off)');
+    expect(at('Days They Could Do')).toBe('Mon, Wed');
+    expect(jrInterestRow(row({ centre: 'ravenhall' }))[JR_INTEREST_HEADERS.indexOf('Centre')]).toMatch(/COMING SOON/);
     expect(at('Payment')).toMatch(/no place is held/);
     expect(jrInterestRow(row({ centre: 'somewhere-else' }))[JR_INTEREST_HEADERS.indexOf('Centre')]).toMatch(/check this row/);
   });
 
-  it('works out the 2027 stage from the date of birth (age on 1 January)', () => {
-    expect(jrStage2027('2019-05-10')).toMatch(/^Discover \(7/);
-    expect(jrStage2027('2020-01-01')).toMatch(/^Discover \(7/);   // turns 7 on 1 Jan 2027
-    expect(jrStage2027('2020-01-02')).toMatch(/outside 7 to 12/); // still 6
-    expect(jrStage2027('2016-06-01')).toMatch(/^Develop \(10/);
-    expect(jrStage2027('2014-12-31')).toMatch(/^Elevate \(12/);
-    expect(jrStage2027('')).toMatch(/No date of birth/);
+  it('works out the age on 1 January 2027 from the date of birth', () => {
+    expect(jrAge2027('2019-05-10')).toBe('7');
+    expect(jrAge2027('2020-01-01')).toBe('7');                    // turns 7 on 1 Jan 2027
+    expect(jrAge2027('2020-01-02')).toMatch(/outside 7 to 12/);   // still 6
+    expect(jrAge2027('2014-12-31')).toBe('12');
+    expect(jrAge2027('')).toMatch(/No date of birth/);
   });
 
   it('skips the table quietly while it does not exist, but still fails on any other error', () => {

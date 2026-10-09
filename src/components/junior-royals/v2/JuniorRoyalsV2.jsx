@@ -1,38 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, Check, ChevronDown, Clock, MapPin, Users } from 'lucide-react';
+import { ArrowRight, Cake, Check, ChevronDown, Clock, MapPin, Shirt, Users } from 'lucide-react';
 import Navbar from '../../Navbar';
 import Footer from '../../Footer';
 import usePageAnalytics from '../../../hooks/usePageAnalytics';
 import { Rich } from '../JuniorRoyalsShared';
-import { MOCKUP, CENTRES, CALENDAR } from '../juniorRoyalsData';
-import { PILLARS } from './jrV2Facts';
+import { MOCKUP, money } from '../juniorRoyalsData';
+import { PILLARS, PRICE } from './jrV2Facts';
 import {
-    HERO, CTA, LOOP, WORRIES, HOUR, SKILL, TERM, PATH, PRICES, COMPARE, COACHES, WHERE, FORM, FAQS,
-    OPEN_QUESTIONS_V2, REGION_LABEL, NEARBY, PHOTOS, termTotal,
+    HERO, CTA, PROGRESS, LEARN, PATH, PRICES, COMPARE, COACHES, FORM, FAQS, OPEN_QUESTIONS_V2,
+    REGION_LABEL, NEARBY, PHOTOS, V2_CENTRES, TERMS, termTotal,
 } from './jrV2Content';
-import { LoopVisual, HourNumbers, HourRibbon, LaneDots, SkillSteps, Cues, TermRows, Scoreboards, YearStrip } from './JRV2Visuals';
-import { StageJourney, BadgeBlock } from './JRV2Pathway';
+import { HourNumbers, HourRibbon, LaneDots, SkillSteps, Cues, YearStrip } from './JRV2Visuals';
+import { StageJourney, ProgressParts, BadgeWall, Certificates } from './JRV2Pathway';
 import JRV2Form from './JRV2Form';
-import { money } from '../juniorRoyalsData';
 
 // ─────────────────────────────────────────────────────────────
 // JUNIOR ROYALS — MOCK-UP VERSION 2 (/junior-royals on previews; version 1 is
-// /junior-royals/v1). Built 7–8 Oct 2026 with the rr-page-generator skill.
-//
-// Order (design brief): each section past the hero is seen by about half as many
-// people as the one before (on today's page: 84% hero, 24% form, 14% centres),
-// so this order is also the priority order. Sections 4–7 zoom out one step at a
-// time: one hour → three weeks → one term → six years.
+// /junior-royals/v1). Restructured 9 Oct 2026 to Alex's order:
+//   1 Hero · 2 The Royals Way Progress Tracking and Development System ·
+//   3 How your player learns (4 parts) · 4 Coaches at each centre · Price ·
+//   5 Form · FAQ.
+// More calls to action (Alex): one after every section, plus the sticky bar.
+// Photos: Andy's, shown like the rest of the site (rounded tiles, no fades).
 // No entrance animation on the hero (it's the LCP element; SEO brief).
 // Section ids match JRV2_NAV in Navbar.jsx.
 // ─────────────────────────────────────────────────────────────
 
-const SECTIONS = ['hero', 'matches', 'why', 'how', 'skills', 'term', 'path', 'prices', 'coaches', 'where', 'register', 'faq'];
+const SECTIONS = ['hero', 'progress', 'learn', 'coaches', 'prices', 'register', 'faq'];
 const SCROLL_PAD = 'scroll-mt-[84px] md:scroll-mt-[112px]';
 const go = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-const ICON = { users: Users, clock: Clock, pin: MapPin };
+const ICON = { users: Cake, clock: Clock, pin: MapPin, group: Users };
 
 const Head = ({ eyebrow, title, dark }) => (
     <div className="mb-8">
@@ -49,6 +48,14 @@ const PrimaryButton = ({ className = '' }) => (
     </button>
 );
 
+// A call to action after every section (Alex, 9 Oct: more CTA buttons).
+const CtaRow = ({ dark, className = 'mt-12' }) => (
+    <div className={`${className} flex flex-col sm:flex-row sm:items-center gap-3`}>
+        <PrimaryButton className="w-full sm:w-auto" />
+        <p className={`text-sm font-semibold ${dark ? 'text-white/85' : 'text-rr-charcoal'}`}>{CTA.under}</p>
+    </div>
+);
+
 const Tick = ({ children, dark }) => (
     <li className="flex items-start gap-3">
         <Check className="w-5 h-5 text-rr-pink shrink-0 mt-0.5" strokeWidth={3} aria-hidden="true" />
@@ -56,21 +63,18 @@ const Tick = ({ children, dark }) => (
     </li>
 );
 
-// A photo that melts into the section colour: soft fades top and bottom, and a light
-// fade at the sides. No frame, no shadow, no overlay box (design-system.md). Sits at the
-// top of its section, so it also softens the step from the section before.
-const FADE_Y = 'linear-gradient(to bottom, transparent 0%, #000 30%, #000 70%, transparent 100%)';
-const FADE_X = 'linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%)';
-const PhotoFade = ({ src, alt, position = 'center' }) => (
-    <div className="relative -mt-14 md:-mt-20 mb-4 md:mb-6 h-60 sm:h-72 md:h-[26rem] max-w-[1280px] mx-auto overflow-hidden">
-        <img src={src} alt={alt} loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover"
-            style={{ objectPosition: position, WebkitMaskImage: `${FADE_Y}, ${FADE_X}`, maskImage: `${FADE_Y}, ${FADE_X}`, WebkitMaskComposite: 'source-in', maskComposite: 'intersect' }} />
-    </div>
+// Photos the way the rest of the site shows them (JRT3Overview, LCOverview):
+// a rounded tile, the image filling it, a dark gradient at the foot and a short label.
+const PhotoTile = ({ src, alt, label, className = 'aspect-[4/5]' }) => (
+    <figure className={`relative overflow-hidden rounded-2xl ${className}`}>
+        <img src={src} alt={alt} loading="lazy" decoding="async" className="w-full h-full object-cover object-center" />
+        <div className="absolute inset-0 bg-gradient-to-t from-rr-dark/60 to-transparent" aria-hidden="true" />
+        {label && <figcaption className="absolute bottom-4 left-4 text-xs font-bold text-white/90 uppercase tracking-widest">{label}</figcaption>}
+    </figure>
 );
 
-const Section = ({ id, tone = 'white', photo, children }) => (
+const Section = ({ id, tone = 'white', children }) => (
     <section id={id} className={`${SCROLL_PAD} ${tone === 'dark' ? 'bg-rr-dark' : tone === 'slate' ? 'bg-slate-50' : 'bg-white'} py-14 md:py-20`}>
-        {photo && <PhotoFade {...photo} />}
         <div className="max-w-5xl mx-auto px-5 sm:px-6">{children}</div>
     </section>
 );
@@ -124,20 +128,14 @@ const Hero = () => (
                         );
                     })}
                 </ul>
-                <div className="mt-5 grid grid-cols-2 gap-3 border-t border-white/20 pt-4">
-                    {HERO.options.map((o) => (
-                        <div key={o.key}>
-                            <p className="text-white font-black text-[15px] leading-tight">{o.name}</p>
-                            <p className="text-white text-sm font-bold">{o.upside}</p>
-                            <p className="mt-1 whitespace-nowrap"><span className="text-white text-3xl font-black">{o.price}</span> <span className="text-white/85 text-sm font-bold">{o.per}</span></p>
-                            <p className="text-white/80 text-xs font-semibold">{o.term4}</p>
-                        </div>
-                    ))}
+                <div className="mt-5 border-t border-white/20 pt-4">
+                    <p className="whitespace-nowrap"><span className="text-white text-4xl font-black">{HERO.price}</span> <span className="text-white/90 text-base font-bold">{HERO.per}</span></p>
+                    <p className="text-white/85 text-sm font-semibold mt-1">{HERO.priceNote}</p>
+                    <p className="text-white text-sm font-semibold mt-2 flex items-start gap-2"><Shirt className="w-4 h-4 text-rr-light-pink shrink-0 mt-0.5" aria-hidden="true" />{HERO.shirt}</p>
                 </div>
-                <p className="text-white/80 text-xs font-semibold mt-3">{HERO.priceNote}</p>
                 <div className="mt-6 flex flex-col sm:flex-row gap-3">
                     <PrimaryButton className="w-full sm:w-auto" />
-                    <button type="button" onClick={() => go('prices')} className="inline-flex items-center justify-center border-2 border-white/40 hover:border-white text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 min-h-[52px]">
+                    <button type="button" onClick={() => go('progress')} className="inline-flex items-center justify-center border-2 border-white/40 hover:border-white text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 min-h-[52px]">
                         {CTA.secondary}
                     </button>
                 </div>
@@ -148,123 +146,181 @@ const Hero = () => (
     </section>
 );
 
-// ── 2. Train, play, train again ──
-const Matches = () => (
-    <Section id="matches">
-        <Head eyebrow={LOOP.eyebrow} title={LOOP.title} />
-        <LoopVisual steps={LOOP.steps} />
-        <p className="mt-6 text-[15px] text-rr-charcoal font-medium leading-relaxed border-l-4 border-rr-pink pl-4 max-w-3xl">{LOOP.gloss}</p>
-        <p className="mt-4 text-[15px] text-rr-dark font-semibold leading-relaxed max-w-3xl"><Rich v={LOOP.notSet} /></p>
-    </Section>
-);
-
-// ── 3. Common worries ──
-const Worries = () => (
-    <Section id="why" tone="slate" photo={PHOTOS.why}>
-        <Head eyebrow={WORRIES.eyebrow} title={WORRIES.title} />
-        <ul className="grid sm:grid-cols-2 gap-x-10 gap-y-6">
-            {WORRIES.items.map((w) => (
-                <li key={w.worry} className="border-t border-slate-300 pt-4">
-                    <p className="text-lg font-black text-rr-dark">“{w.worry}”</p>
-                    <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed mt-1"><Rich v={w.answer} /></p>
-                </li>
-            ))}
-        </ul>
-        <div className="mt-10"><PrimaryButton /></div>
-    </Section>
-);
-
-// ── 4. One night ──
-const Hour = () => (
-    <Section id="how" photo={PHOTOS.how}>
-        <Head eyebrow={HOUR.eyebrow} title={HOUR.title} />
-        <p className="text-lg text-rr-dark font-semibold mb-6">{HOUR.intro}</p>
-        <HourNumbers items={HOUR.bigNumbers} />
-        <div className="grid md:grid-cols-[1fr_auto] gap-10 mt-8">
-            <div>
-                <HourRibbon />
-                <p className="text-sm text-rr-charcoal font-medium mt-2">{HOUR.guide}</p>
-            </div>
-            <div>
-                <div className="flex justify-center gap-8">
-                    <LaneDots players={4} label="Groups of 4" />
-                    <LaneDots players={6} label="Groups of 6" />
+// ── 2. The Royals Way Progress Tracking and Development System ──
+const Progress = () => (
+    <section id="progress" className={`${SCROLL_PAD} py-14 md:py-20`} style={{ backgroundImage: 'var(--image-gradient-rr)' }}>
+        <div className="max-w-5xl mx-auto px-5 sm:px-6">
+            <p className="text-xs font-black uppercase tracking-[0.25em] mb-2 text-white">{PROGRESS.eyebrow}</p>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight leading-[1.05] text-white max-w-4xl">{PROGRESS.title}</h2>
+            <div className="w-12 h-1 bg-white mt-4 mb-6" />
+            <div className="grid md:grid-cols-[1fr_18rem] gap-8 items-start">
+                <div>
+                    <p className="text-lg sm:text-xl text-white font-semibold leading-relaxed">{PROGRESS.lead}</p>
+                    <p className="mt-3 text-[15px] font-semibold text-white"><Rich v={PROGRESS.starts} /></p>
+                    <div className="mt-8"><ProgressParts /></div>
                 </div>
-                <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed mt-4 max-w-xs">{HOUR.lane}</p>
+                <PhotoTile {...PHOTOS.progress} className="aspect-[4/5] hidden md:block" />
             </div>
-        </div>
-    </Section>
-);
 
-// ── 5. How a skill sticks ──
-const Skill = () => (
-    <Section id="skills" tone="slate" photo={PHOTOS.skills}>
-        <Head eyebrow={SKILL.eyebrow} title={SKILL.title} />
-        <p className="text-lg text-rr-dark font-semibold mb-8 max-w-3xl">{SKILL.intro}</p>
-        <SkillSteps />
-        <p className="text-[15px] text-rr-dark font-semibold leading-relaxed mt-10 mb-5 max-w-3xl">{SKILL.cuesTitle}</p>
-        <Cues />
-        <p className="text-sm text-rr-charcoal font-medium mt-6">{SKILL.shortTermNote}</p>
-    </Section>
-);
-
-// ── 6. One term ──
-const Term = () => (
-    <Section id="term">
-        <Head eyebrow={TERM.eyebrow} title={TERM.title} />
-        <div className="grid md:grid-cols-2 gap-10">
-            <TermRows />
-            <div className="space-y-5">
-                <Scoreboards first={TERM.scoreFirst} last={TERM.scoreLast} note={TERM.scoreNote} />
-                <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed border-l-4 border-rr-pink pl-4">{TERM.benchmark}</p>
-                <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed border-l-4 border-rr-pink pl-4">{TERM.festival} <Rich v={TERM.familiesWatch} /> {TERM.photos}</p>
+            <div className="mt-12 rounded-2xl bg-rr-dark p-6 sm:p-8">
+                <BadgeWall />
+                <p className="mt-8 text-white/90 text-[15px] font-medium leading-relaxed max-w-3xl">{PROGRESS.perYear}</p>
+                <ul className="mt-4 space-y-2 max-w-3xl">
+                    {PROGRESS.rules.map((r) => <Tick key={r} dark>{r}</Tick>)}
+                </ul>
             </div>
+
+            <h3 className="mt-12 mb-5 text-xl sm:text-2xl font-black uppercase tracking-tight text-white">{PROGRESS.certTitle}</h3>
+            <Certificates />
+            <CtaRow dark />
         </div>
-        <div className="mt-10"><PrimaryButton /></div>
+    </section>
+);
+
+// ── 3. How your player learns: four parts in one section ──
+const Part = ({ id, n, title, children }) => (
+    <div id={id} className={`${SCROLL_PAD} pt-12 first:pt-0`}>
+        <h3 className="flex items-baseline gap-3 text-2xl sm:text-3xl font-black uppercase tracking-tight text-rr-dark">
+            <span className="text-rr-pink">{n}</span>{title}
+        </h3>
+        <div className="w-10 h-1 bg-rr-pink mt-3 mb-6" />
+        {children}
+    </div>
+);
+
+const Learn = () => {
+    const [how, night, blocks, what] = LEARN.parts;
+    return (
+        <Section id="learn">
+            <Head eyebrow={LEARN.eyebrow} title={LEARN.title} />
+            <nav aria-label="In this section" className="flex flex-wrap gap-2 mb-10">
+                {LEARN.parts.map((p) => (
+                    <a key={p.id} href={`#${p.id}`} onClick={(e) => { e.preventDefault(); go(p.id); }}
+                        className="inline-flex items-center gap-2 min-h-[44px] rounded-full border-2 border-slate-200 hover:border-rr-pink px-4 text-sm font-bold text-rr-dark">
+                        <span className="text-rr-pink font-black">{p.n}</span>{p.title}
+                    </a>
+                ))}
+            </nav>
+
+            <div className="divide-y divide-slate-200 [&>*]:pb-12">
+                <Part {...how}>
+                    <div className="grid md:grid-cols-[1fr_16rem] gap-8 items-start">
+                        <div>
+                            <ul className="space-y-3">{LEARN.how.points.map((p) => <Tick key={p}><span className="text-rr-dark font-semibold">{p}</span></Tick>)}</ul>
+                            <h4 className="text-lg font-black uppercase text-rr-dark mt-8 mb-4">{LEARN.how.pillarsTitle}</h4>
+                            <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-4">
+                                {PILLARS.map((p) => (
+                                    <li key={p.name} className="border-l-4 border-rr-pink pl-4">
+                                        <p className="font-black text-rr-dark">{p.name}</p>
+                                        <p className="text-[15px] text-rr-charcoal font-medium">{p.note}</p>
+                                    </li>
+                                ))}
+                            </ul>
+                            <p className="mt-8 text-[15px] text-rr-dark font-semibold leading-relaxed border-l-4 border-rr-blue pl-4"><Rich v={LEARN.how.matches} /></p>
+                        </div>
+                        <PhotoTile {...PHOTOS.how} />
+                    </div>
+                </Part>
+
+                <Part {...night}>
+                    <p className="text-lg text-rr-dark font-semibold mb-6">{LEARN.night.intro}</p>
+                    <HourNumbers items={LEARN.night.bigNumbers} />
+                    <div className="grid md:grid-cols-[1fr_auto_14rem] gap-8 mt-8 items-start">
+                        <div>
+                            <HourRibbon />
+                            <p className="text-sm text-rr-charcoal font-medium mt-2">{LEARN.night.guide}</p>
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <LaneDots players={PRICE.perLane} label="Your player’s lane" />
+                            <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed mt-4 max-w-[14rem]">{LEARN.night.lane}</p>
+                        </div>
+                        <PhotoTile {...PHOTOS.night} />
+                    </div>
+                </Part>
+
+                <Part {...blocks}>
+                    <p className="text-lg text-rr-dark font-semibold mb-8 max-w-3xl">{LEARN.blocks.intro}</p>
+                    <SkillSteps />
+                    <div className="grid grid-cols-2 gap-4 mt-8 max-w-xl">
+                        {PHOTOS.blocks.map((p) => <PhotoTile key={p.src} {...p} />)}
+                    </div>
+                    <p className="text-[15px] text-rr-dark font-semibold leading-relaxed mt-10 mb-5 max-w-3xl">{LEARN.blocks.cuesTitle}</p>
+                    <Cues />
+                </Part>
+
+                <Part {...what}>
+                    <p className="text-lg text-rr-dark font-semibold max-w-3xl">{LEARN.what.intro}</p>
+                    <p className="text-[15px] text-rr-charcoal font-medium mt-2 mb-6 max-w-3xl"><Rich v={LEARN.what.placement} /></p>
+                    <StageJourney />
+                </Part>
+            </div>
+            <CtaRow className="mt-4" />
+        </Section>
+    );
+};
+
+// ── 4. Coaches at each centre ──
+const Coaches = () => (
+    <Section id="coaches" tone="slate">
+        <Head eyebrow={COACHES.eyebrow} title={COACHES.title} />
+        <p className="text-lg text-rr-dark font-semibold mb-8 max-w-3xl">{COACHES.intro}</p>
+        <div className="grid md:grid-cols-3 gap-5">
+            {V2_CENTRES.map((c) => (
+                <article key={c.value} className={`rounded-2xl bg-white border-2 ${c.comingSoon ? 'border-dashed border-slate-300' : 'border-slate-200'} p-5 flex flex-col`}>
+                    <p className="text-xs font-black uppercase tracking-[0.2em] text-rr-dark">{REGION_LABEL[c.value]}</p>
+                    {c.comingSoon && <p className="mt-2 inline-block self-start bg-rr-pink text-white text-xs font-black uppercase tracking-wider rounded-full px-3 py-1">{COACHES.comingSoon}</p>}
+                    <h3 className="text-xl font-black text-rr-dark uppercase leading-tight mt-2"><Rich v={c.venue} />{c.comingSoon ? '' : `, ${c.suburb}`}</h3>
+                    <p className="text-sm text-rr-charcoal font-medium mt-1">{c.address}</p>
+                    {!c.comingSoon && <p className="text-sm text-rr-charcoal font-medium">{COACHES.times}</p>}
+                    <a href={c.mapsUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 mt-2 min-h-[44px] text-rr-dark font-bold text-sm underline underline-offset-4 decoration-rr-pink">
+                        <MapPin className="w-4 h-4 text-rr-pink" aria-hidden="true" /> Get directions
+                    </a>
+                    {c.comingSoon ? (
+                        <p className="text-[15px] text-rr-dark font-semibold leading-relaxed mt-3">{COACHES.comingSoonNote}</p>
+                    ) : (
+                        <div className="mt-4 border-t border-slate-200 pt-4">
+                            <div className="flex gap-4 items-start">
+                                <img src={c.coach.img} alt={c.coach.name} loading="lazy" decoding="async" className="w-16 h-16 rounded-full object-cover shrink-0" />
+                                <div>
+                                    <p className="text-lg font-black text-rr-dark leading-tight">{c.coach.name}</p>
+                                    <p className="text-rr-dark text-xs font-bold uppercase tracking-widest mt-1"><Rich v={c.coach.jrRole} /></p>
+                                </div>
+                            </div>
+                            <p className="text-sm text-rr-charcoal font-medium leading-relaxed mt-3">{c.coach.credentials.join(' · ')}</p>
+                            <p className="text-sm font-semibold mt-3"><Rich v={COACHES.more} /></p>
+                        </div>
+                    )}
+                    <p className="text-xs text-rr-charcoal font-medium mt-auto pt-4">{NEARBY[c.value]}</p>
+                </article>
+            ))}
+        </div>
+        <div className="grid md:grid-cols-[1fr_14rem] gap-8 mt-10 items-start">
+            <div>
+                <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed"><Rich v={COACHES.course} /></p>
+                <p className="text-[15px] text-rr-dark font-semibold leading-relaxed mt-3">{COACHES.notMeet}</p>
+                <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed mt-3">{COACHES.apart}</p>
+            </div>
+            <PhotoTile {...PHOTOS.coaches} className="aspect-[4/5] hidden md:block" />
+        </div>
+        <CtaRow />
     </Section>
 );
 
-// ── 7. Where it leads ──
-const Path = () => (
-    <Section id="path" tone="slate">
-        <Head eyebrow={PATH.eyebrow} title={PATH.title} />
-        <p className="text-lg text-rr-dark font-semibold max-w-3xl">{PATH.intro}</p>
-        <p className="text-[15px] text-rr-charcoal font-medium mt-3 mb-8 max-w-3xl">{PATH.gloss} <Rich v={PATH.ageCutoff} /> <Rich v={PATH.beginners} /></p>
-        <StageJourney />
-        <BadgeBlock />
-    </Section>
-);
-
-// ── 8. Prices ──
+// ── Price ──
 const Prices = () => (
     <Section id="prices">
         <Head eyebrow={PRICES.eyebrow} title={PRICES.title} />
-        <p className="text-lg text-rr-dark font-semibold mb-8 max-w-3xl">{PRICES.lead}</p>
-
-        <div className="grid sm:grid-cols-2 gap-8 mb-10">
-            {PRICES.options.map((o) => (
-                <div key={o.key} className={`border-t-4 ${o.key === '4s' ? 'border-rr-pink' : 'border-rr-dark'} pt-5`}>
-                    <p className="text-2xl font-black text-rr-dark leading-tight">{o.name}</p>
-                    <ul className="mt-4 space-y-2">
-                        {o.upside.map((u) => <Tick key={u}><span className="font-semibold text-rr-dark">{u}</span></Tick>)}
-                    </ul>
-                    <p className="mt-5"><span className="text-5xl font-black text-rr-dark">{o.price}</span> <span className="text-lg font-bold text-rr-charcoal">a session</span></p>
-                    <p className="text-[15px] font-bold text-rr-dark mt-1">{o.term4}</p>
-                    <ul className="mt-4 space-y-2">
-                        {o.ahead.map((a) => <Tick key={a.label}><span className="font-bold text-rr-dark">{a.label}:</span> {a.price}</Tick>)}
-                        <Tick>{o.max}</Tick>
-                    </ul>
+        <div className="grid md:grid-cols-2 gap-10">
+            <div className="border-t-4 border-rr-pink pt-5">
+                <p><span className="text-6xl font-black text-rr-dark">{PRICES.price}</span> <span className="text-xl font-bold text-rr-charcoal">{PRICES.per}</span></p>
+                <p className="text-[15px] font-bold text-rr-dark mt-1">{PRICES.perNote}</p>
+                <ul className="mt-5 space-y-2">{PRICES.includes.map((t) => <Tick key={t}><span className="font-semibold text-rr-dark">{t}</span></Tick>)}</ul>
+                <div className="mt-6 rounded-2xl border-2 border-slate-200 p-5">
+                    <p className="flex items-center gap-2 text-sm font-black uppercase tracking-wider text-rr-dark"><Shirt className="w-5 h-5 text-rr-pink" aria-hidden="true" />{PRICES.shirtTitle}</p>
+                    <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed mt-2">{PRICES.shirt}</p>
+                    <p className="text-[15px] text-rr-dark font-bold leading-relaxed mt-2"><Rich v={PRICES.shirtOffer} /></p>
                 </div>
-            ))}
-        </div>
-        <p className="text-lg text-rr-dark font-bold border-l-4 border-rr-pink pl-4 mb-6 max-w-3xl">{PRICES.stepUp}</p>
-        <p className="text-rr-dark font-bold">{PRICES.gst} {PRICES.matchFee}</p>
-        <ul className="mt-4 mb-12 space-y-2 max-w-3xl">
-            <Tick><Rich v={PRICES.cover} /></Tick>
-            <Tick><Rich v={PRICES.fourAvailability} /></Tick>
-        </ul>
-
-        <div className="grid md:grid-cols-2 gap-12 mb-12">
+            </div>
             <div>
                 <h3 className="text-xl font-black uppercase text-rr-dark mb-4">{PRICES.howTitle}</h3>
                 <ol className="space-y-3">
@@ -277,10 +333,12 @@ const Prices = () => (
                 </ol>
                 <ul className="mt-6 space-y-3">
                     <Tick><Rich v={PRICES.makeup} /></Tick>
-                    <Tick><Rich v={PRICES.leaving} /></Tick>
-                    <Tick><Rich v={PRICES.currentTerm} /></Tick>
+                    <Tick><Rich v={PRICES.cover} /></Tick>
                 </ul>
             </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-10 mt-12">
             <div>
                 <h3 className="text-xl font-black uppercase text-rr-dark mb-1">{PRICES.yearTitle}</h3>
                 <p className="text-[15px] font-bold text-rr-dark mb-4">{PRICES.yearNote}</p>
@@ -290,118 +348,46 @@ const Prices = () => (
                         <h3 className="text-lg font-black uppercase text-rr-dark">{PRICES.calendarTitle}</h3>
                         <ChevronDown className="w-5 h-5 shrink-0 text-rr-charcoal transition-transform group-open:rotate-180" />
                     </summary>
-                <table className="w-full text-left">
-                    <thead>
-                        <tr className="border-b-2 border-rr-dark text-xs font-black uppercase tracking-wider text-rr-dark">
-                            <th className="py-2 pr-2">Term</th><th className="py-2 pr-2 text-right">Sessions</th><th className="py-2 pr-2 text-right normal-case">4 in a lane</th><th className="py-2 text-right normal-case">6 in a lane</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {CALENDAR.filter((c) => !c.holiday).map((c) => (
-                            <tr key={c.label} className="border-b border-slate-200 align-top">
-                                <td className="py-2.5 pr-2"><span className="block font-black text-rr-dark">{c.label === 'Rest of 2026' ? 'Term 4, 2026' : c.label}</span><span className="block text-xs text-rr-charcoal font-medium">{c.dates}</span></td>
-                                <td className="py-2.5 pr-2 text-right font-bold text-rr-dark">{c.sessions}</td>
-                                <td className="py-2.5 pr-2 text-right font-black text-rr-dark whitespace-nowrap">{money(termTotal('4s', c.sessions))}</td>
-                                <td className="py-2.5 text-right font-black text-rr-dark whitespace-nowrap">{money(termTotal('6s', c.sessions))}</td>
+                    <table className="w-full text-left">
+                        <thead>
+                            <tr className="border-b-2 border-rr-dark text-xs font-black uppercase tracking-wider text-rr-dark">
+                                <th className="py-2 pr-2">Term</th><th className="py-2 pr-2 text-right">Weeks</th><th className="py-2 text-right">Total</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-                <p className="text-xs text-rr-charcoal font-medium mt-2 pb-4">Paid by the term, before discounts. {PRICES.gst}</p>
+                        </thead>
+                        <tbody>
+                            {TERMS.map((c) => (
+                                <tr key={c.label} className="border-b border-slate-200 align-top">
+                                    <td className="py-2.5 pr-2"><span className="block font-black text-rr-dark">{c.label}</span><span className="block text-xs text-rr-charcoal font-medium">{c.dates}</span></td>
+                                    <td className="py-2.5 pr-2 text-right font-bold text-rr-dark">{c.sessions}</td>
+                                    <td className="py-2.5 text-right font-black text-rr-dark whitespace-nowrap">{money(termTotal(c.sessions))}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <p className="text-xs text-rr-charcoal font-medium mt-2 pb-4">{PRICES.calendarNote}</p>
                 </details>
             </div>
-        </div>
-
-        <div className="border-l-4 border-rr-pink pl-5 max-w-4xl">
-            <h3 className="text-xl font-black uppercase text-rr-dark mb-4">{COMPARE.title}</h3>
-            <ul className="sm:hidden border-t-2 border-rr-dark">
-                {COMPARE.rows.map((r) => (
-                    <li key={r.what} className="border-b border-slate-200 py-3">
-                        <p className="flex justify-between gap-3">
-                            <span className={`font-bold ${r.ours ? 'text-rr-dark' : 'text-rr-charcoal'}`}>{r.what}</span>
-                            <span className="font-black text-rr-dark whitespace-nowrap">{r.price} <span className="text-xs font-bold text-rr-charcoal">an hour</span></span>
-                        </p>
-                        <p className="text-sm font-medium text-rr-charcoal">Group size: {r.players}</p>
-                    </li>
-                ))}
-            </ul>
-            <div className="hidden sm:block">
-                <table className="w-full text-left">
-                    <thead>
-                        <tr className="border-b-2 border-rr-dark text-xs font-black uppercase tracking-wider text-rr-dark">
-                            {COMPARE.head.map((h, i) => <th key={h} className={`py-2 pr-3 ${i ? 'text-right' : ''}`}>{h}</th>)}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {COMPARE.rows.map((r) => (
-                            <tr key={r.what} className="border-b border-slate-200">
-                                <td className={`py-2.5 pr-3 font-bold ${r.ours ? 'text-rr-dark' : 'text-rr-charcoal'}`}>{r.what}</td>
-                                <td className="py-2.5 pr-3 text-right font-bold text-rr-dark">{r.players}</td>
-                                <td className="py-2.5 text-right font-black text-rr-dark whitespace-nowrap">{r.price}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            <div className="border-l-4 border-rr-pink pl-5">
+                <h3 className="text-xl font-black uppercase text-rr-dark mb-4">{COMPARE.title}</h3>
+                <ul className="border-t-2 border-rr-dark">
+                    {COMPARE.rows.map((r) => (
+                        <li key={r.what} className="border-b border-slate-200 py-3">
+                            <p className="flex justify-between gap-3">
+                                <span className={`font-bold ${r.ours ? 'text-rr-dark' : 'text-rr-charcoal'}`}>{r.what}</span>
+                                <span className="font-black text-rr-dark whitespace-nowrap">{r.price} <span className="text-xs font-bold text-rr-charcoal">an hour</span></span>
+                            </p>
+                            <p className="text-sm font-medium text-rr-charcoal">Group size: {r.players}</p>
+                        </li>
+                    ))}
+                </ul>
+                <p className="text-xs text-rr-charcoal font-medium mt-2">{COMPARE.source} <Rich v={COMPARE.toConfirm} /></p>
             </div>
-            <p className="text-xs text-rr-charcoal font-medium mt-2">{COMPARE.source} <Rich v={COMPARE.toConfirm} /></p>
         </div>
-        <div className="mt-10"><PrimaryButton /></div>
+        <CtaRow />
     </Section>
 );
 
-// ── 9. Coaches ──
-const Coaches = () => (
-    <Section id="coaches" tone="slate">
-        <Head eyebrow={COACHES.eyebrow} title={COACHES.title} />
-        <div className="grid md:grid-cols-2 gap-8 mb-8">
-            {CENTRES.map(({ coach, suburb }) => (
-                <div key={suburb} className="flex gap-5 items-start">
-                    <img src={coach.img} alt={coach.name} loading="lazy" decoding="async" className="w-24 h-24 rounded-full object-cover shrink-0 border-2 border-white" />
-                    <div>
-                        <p className="text-xl font-black text-rr-dark">{coach.name}</p>
-                        <p className="text-rr-dark text-xs font-bold uppercase tracking-widest mt-1 mb-2"><Rich v={coach.jrRole} /></p>
-                        <p className="text-rr-charcoal text-sm font-medium leading-relaxed">{coach.credentials.join(' · ')}</p>
-                    </div>
-                </div>
-            ))}
-        </div>
-        <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed max-w-3xl"><Rich v={COACHES.course} /></p>
-        <p className="text-[15px] text-rr-dark font-semibold leading-relaxed max-w-3xl mt-3">{COACHES.notMeet}</p>
-        <h3 className="text-xl font-black uppercase text-rr-dark mt-10 mb-4">{COACHES.pillarsTitle}</h3>
-        <ul className="grid sm:grid-cols-2 gap-x-10 gap-y-4">
-            {PILLARS.map((p) => (
-                <li key={p.name} className="border-l-4 border-rr-pink pl-4">
-                    <p className="font-black text-rr-dark">{p.name}</p>
-                    <p className="text-[15px] text-rr-charcoal font-medium">{p.note}</p>
-                </li>
-            ))}
-        </ul>
-    </Section>
-);
-
-// ── 10. Where ──
-const Where = () => (
-    <Section id="where" photo={PHOTOS.where}>
-        <Head eyebrow={WHERE.eyebrow} title={WHERE.title} />
-        <div className="grid md:grid-cols-2 gap-10 mb-8">
-            {CENTRES.map((c) => (
-                <div key={c.value} className="border-l-4 border-rr-pink pl-5">
-                    <p className="text-xs font-black uppercase tracking-[0.2em] text-rr-dark mb-1">{REGION_LABEL[c.value]}</p>
-                    <h3 className="text-2xl font-black text-rr-dark uppercase leading-tight">{c.venue}, {c.suburb}</h3>
-                    <p className="text-rr-charcoal font-medium mt-2">{c.address}</p>
-                    <p className="text-rr-charcoal font-medium">{WHERE.times}</p>
-                    <p className="text-sm text-rr-charcoal font-medium mt-2">{NEARBY[c.value]}</p>
-                    <a href={c.mapsUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 mt-3 min-h-[44px] text-rr-dark font-bold text-sm underline underline-offset-4 decoration-rr-pink">
-                        <MapPin className="w-4 h-4 text-rr-pink" /> Get directions
-                    </a>
-                </div>
-            ))}
-        </div>
-        <p className="text-rr-charcoal font-medium">{WHERE.apart} {WHERE.newSlots}</p>
-    </Section>
-);
-
-// ── 11. Register ──
+// ── 5. Register ──
 const Register = () => (
     <section id="register" className={`${SCROLL_PAD} bg-rr-dark py-14 md:py-20`}>
         <div className="max-w-2xl mx-auto px-5 sm:px-6">
@@ -412,7 +398,7 @@ const Register = () => (
     </section>
 );
 
-// ── 12. FAQ (native details/summary: works without JS, keyboard and screen readers) ──
+// ── FAQ (native details/summary: works without JS, keyboard and screen readers) ──
 const Faq = () => (
     <Section id="faq">
         <Head eyebrow="Questions" title="Questions parents ask" />
@@ -433,6 +419,7 @@ const Faq = () => (
         <p className="mt-8 text-rr-charcoal font-medium">
             Anything else? Email <a href={`mailto:${FORM.contact}`} className="text-rr-dark font-bold underline decoration-rr-pink">{FORM.contact}</a>.
         </p>
+        <CtaRow />
     </Section>
 );
 
@@ -471,15 +458,10 @@ const JuniorRoyalsV2 = () => {
             <main className="flex-1 w-full overflow-hidden pt-[84px] md:pt-[112px]">
                 <MockupBanner />
                 <Hero />
-                <Matches />
-                <Worries />
-                <Hour />
-                <Skill />
-                <Term />
-                <Path />
-                <Prices />
+                <Progress />
+                <Learn />
                 <Coaches />
-                <Where />
+                <Prices />
                 <Register />
                 <Faq />
             </main>

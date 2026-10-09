@@ -117,7 +117,7 @@ const TOUR_SOURCE = 'india-tour-eoi';
 // entry to its own table, so there is nothing to filter on.
 const JR_TERM4_TABLE = 'jr_term4_waitlist';
 // src/components/junior-royals/v2/JRV2Form.jsx → TABLE. The new Junior Royals
-// register-your-interest list (Groups of 4 / Groups of 6). Created by
+// register-your-interest list. Created by
 // supabase/migrations/20261009000000_junior_royals_interest.sql — which is NOT
 // applied until Alex approves the new page. Until then the read below finds no
 // table and the tab is simply left empty: it must never stop the other tabs.
@@ -719,7 +719,7 @@ export const jrTerm4Row = (r) => ([
 ]);
 
 // ── Junior Royals Interest ──────────────────────────────────
-// The new Junior Royals page (Groups of 4 / Groups of 6). Each code is written
+// The new Junior Royals page ($49.95 a week). Each code is written
 // out in words. Source of truth for every value: FORM in
 // src/components/junior-royals/v2/jrV2Content.js (FORM_VALUES in JRV2Form.jsx);
 // the test file checks that every value the form can send has a label here.
@@ -728,46 +728,35 @@ export const JR_INTEREST_HEADERS = [
   'Registered (Melbourne)',
   'Player First Name',
   'Player Date of Birth',
-  'Stage in 2027',
+  'Age on 1 Jan 2027',
   'Parent / Guardian',
   'Parent Email',
   'Parent Phone',
   'Centre',
-  'Group Size',
+  'Days They Could Do',
   'Time',
-  'How They Would Likely Pay',
   'Payment',
 ];
 export const JR_INTEREST_LABELS = {
   centre: {
     mickleham: 'Mickleham Indoor Sports Centre',
     'cranbourne-north': 'Elite Cricket Centre, Cranbourne North',
+    ravenhall: 'Ravenhall — COMING SOON (interest only, no sessions yet)',
   },
-  group_option: { '4s': 'Groups of 4', '6s': 'Groups of 6', either: 'Either — not sure yet' },
+  preferred_days: { mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu', fri: 'Fri' },
   preferred_time: { '6pm': '6:00pm', '7pm': '7:00pm', either: 'Either' },
-  payment_plan: {
-    term: 'The term, up front',
-    weekly: 'Weekly, during the term',
-    '2-terms': '2 terms ahead (10% off)',
-    year: '4 terms (a year) ahead (15% off)',
-    'not-sure': 'Not sure yet',
-  },
 };
 const jrLabel = (field, v) => JR_INTEREST_LABELS[field][v]
   || (v ? `${v} (not a value the form sends — check this row)` : '');
 
-// Stage by age on 1 January 2027 (proposed cut-off; not yet confirmed).
-// Discover 7–8, Develop 9–10, Elevate 11–12. Pure date arithmetic on the
-// 'YYYY-MM-DD' string, so no time zone can shift a birthday.
-export const jrStage2027 = (dob) => {
+// Age on 1 January 2027, to help put groups together (stages have no ages on the
+// page any more — Alex, 9 Oct 2026). Pure date arithmetic on the 'YYYY-MM-DD'
+// string, so no time zone can shift a birthday.
+export const jrAge2027 = (dob) => {
   const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(dob || '');
   if (!m) return 'No date of birth — check';
-  const age = 2027 - Number(m[1]) - 1; // nobody has had their 2027 birthday on 1 January…
-  const onNewYear = m[2] === '01' && m[3] === '01' ? age + 1 : age; // …except 1 January babies
-  if (onNewYear >= 7 && onNewYear <= 8) return `Discover (${onNewYear} on 1 Jan 2027)`;
-  if (onNewYear >= 9 && onNewYear <= 10) return `Develop (${onNewYear} on 1 Jan 2027)`;
-  if (onNewYear >= 11 && onNewYear <= 12) return `Elevate (${onNewYear} on 1 Jan 2027)`;
-  return `${onNewYear} on 1 Jan 2027 — outside 7 to 12, check`;
+  const age = 2027 - Number(m[1]) - (m[2] === '01' && m[3] === '01' ? 0 : 1);
+  return age >= 7 && age <= 12 ? String(age) : `${age} — outside 7 to 12, check`;
 };
 
 export const jrInterestRow = (r) => ([
@@ -775,14 +764,13 @@ export const jrInterestRow = (r) => ([
   asText(fmtMelb(r.created_at)),
   r.player_name || '',
   asText(r.player_dob || ''),
-  jrStage2027(r.player_dob),
+  asText(jrAge2027(r.player_dob)),
   r.parent_name || '',
   r.email || '',
   asText(r.phone || ''),
   jrLabel('centre', r.centre),
-  jrLabel('group_option', r.group_option),
+  (Array.isArray(r.preferred_days) ? r.preferred_days : []).map((d) => jrLabel('preferred_days', d)).join(', '),
   jrLabel('preferred_time', r.preferred_time),
-  jrLabel('payment_plan', r.payment_plan),
   NO_PAYMENT_LINE['jr-interest'],
 ]);
 
@@ -891,11 +879,11 @@ export const guideLines = (linkLines = [], counts = {}) => {
     [''],
     ...(counts.jrInterest == null ? [] : [
       [`"${PROGRAM_LABELS['jr-interest']}" — families who registered interest in the new Junior Royals`],
-      ['  (ages 7 to 12, Groups of 4 or Groups of 6, from Wednesday 28 October) at'],
+      ['  (ages 7 to 12, $49.95 a week, from Wednesday 28 October) at'],
       ['  rramelbourne.com/junior-royals. Nothing is paid and NO PLACE IS HELD. Their answers'],
-      ['  are for planning: how many lanes of each size, at which centre and time, and how'],
-      ['  families would like to pay. The "Stage in 2027" column assumes the player\'s age'],
-      [`  on 1 January sets their stage — not yet confirmed. Currently ${counts.jrInterest} entries.`],
+      ['  are for planning: which centre (Ravenhall is coming soon — interest only), which'],
+      ['  weekdays they could do (at least 2; each family is told their day) and which time.'],
+      [`  "Age on 1 Jan 2027" helps put groups together. Currently ${counts.jrInterest} entries.`],
       [''],
     ]),
     [`"${PROGRAM_LABELS['tour-interest']}" — players who want to go on an India tour, from`],

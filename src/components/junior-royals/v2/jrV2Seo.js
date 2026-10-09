@@ -7,8 +7,8 @@
 // dist/junior-royals/index.html (Facebook, WhatsApp and AI crawlers don't run JS).
 //
 // What is deliberately NOT here (SEO brief §4):
-// - No `offers` while the page only takes interest. Add the two Offers (4s $50,
-//   6s $35 per session, valueAddedTaxIncluded) when joining opens and the prices
+// - No `offers` while the page only takes interest. Add the Offer ($49.95 a
+//   week, valueAddedTaxIncluded) when joining opens and the prices
 //   are bookable — and only once GST registration is confirmed.
 // - No FAQPage: several answers are still "to be confirmed", and Google stopped
 //   showing FAQ rich results in 2026.
@@ -30,8 +30,8 @@ export const JR_SEO_VENUES = [
 export const JR_V2_SEO = {
     title: 'Junior Cricket Coaching Melbourne, 7–12 | Rajasthan Royals',
     // Dated description: switch to the undated one after the first session (REVIEW 28 Oct 2026).
-    description: 'Rajasthan Royals Academy Melbourne: cricket coaching for ages 7–12, Wednesdays from 28 Oct at Mickleham or Cranbourne North. Groups of 4 or 6 players.',
-    descriptionUndated: 'Weekly cricket coaching for ages 7–12 at Mickleham or Cranbourne North, Melbourne. One hour on Wednesdays, in groups of 4 or 6 players per lane.',
+    description: 'Rajasthan Royals Academy Melbourne: cricket coaching for ages 7–12 from 28 Oct at Mickleham or Cranbourne North. Small groups, skill badges, $49.95 a week.',
+    descriptionUndated: 'Weekly cricket coaching for ages 7–12 at Mickleham or Cranbourne North, Melbourne. One hour a week in small groups, with skill badges each term.',
     ogImage: '/assets/little-crickets-nets.jpeg',
 };
 
@@ -43,7 +43,7 @@ const venueNode = (v) => ({
     address: { '@type': 'PostalAddress', streetAddress: v.street, addressLocality: v.locality, addressRegion: 'VIC', postalCode: v.postcode, addressCountry: 'AU' },
 });
 
-const phaseText = PHASES.map((p) => `${p.name} (ages ${p.min}-${p.max})`).join(', ');
+const phaseText = PHASES.map((p) => p.name).join(', ');
 
 export const JR_V2_JSONLD = {
     '@context': 'https://schema.org',
@@ -75,7 +75,7 @@ export const JR_V2_JSONLD = {
             '@id': `${URL}#course`,
             name: 'Junior Royals',
             url: URL,
-            description: `Weekly one-hour cricket coaching for players aged 7 to 12, on Wednesday nights in school terms, in groups of 4 or 6 players per indoor net lane. Every player bats and bowls every session. Skills are taught in 3-week blocks (Learn it, Own it, Use it), with a Benchmark Game on the first and last night of each term. Players are grouped by age: ${phaseText}. Development matches are planned, for a separate match fee.`,
+            description: `Weekly one-hour cricket coaching for players aged 7 to 12 on weekday evenings in school terms, in small groups of up to 6 players per indoor net lane, each with its own coach. Every player bats and bowls every session. Skills are taught in 3-week blocks (Learn it, Own it, Use it), tracked with skill badges, a Benchmark Game each term and a progress card. Three stages: ${phaseText}.`,
             provider: { '@id': `${SITE}/#organization` },
             inLanguage: 'en-AU',
             typicalAgeRange: '7-12',
@@ -88,9 +88,8 @@ export const JR_V2_JSONLD = {
                 location: { '@id': `${SITE}/#venue-${v.id}` },
                 courseSchedule: {
                     '@type': 'Schedule',
-                    description: 'Two one-hour groups each Wednesday in school term: 6:00pm to 7:00pm and 7:00pm to 8:00pm. Each player joins one group.',
+                    description: 'One-hour sessions on weekday evenings in school term, at 6:00pm or 7:00pm. Each player joins one group, on one day a week.',
                     repeatFrequency: 'P1W',
-                    byDay: 'https://schema.org/Wednesday',
                     startDate: '2026-10-28',
                     startTime: '18:00:00',
                     endTime: '20:00:00',
