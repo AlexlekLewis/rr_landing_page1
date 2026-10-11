@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, Cake, Check, ChevronDown, Clock, MapPin, Shirt, Users } from 'lucide-react';
+import { ArrowRight, BadgeCheck, Cake, CalendarCheck, Check, ChevronDown, ClipboardList, Clock, GraduationCap, Layers, ListChecks, MapPin, Repeat, Shirt, Smile, Target, Trophy, Users } from 'lucide-react';
 import Navbar from '../../Navbar';
 import Footer from '../../Footer';
 import usePageAnalytics from '../../../hooks/usePageAnalytics';
@@ -9,11 +9,12 @@ import { Rich } from '../JuniorRoyalsShared';
 import { MOCKUP, money } from '../juniorRoyalsData';
 import { PILLARS, PRICE } from './jrV2Facts';
 import {
-    HERO, CTA, PROGRESS, LEARN, PATH, PRICES, COMPARE, COACHES, FORM, FAQS, OPEN_QUESTIONS_V2,
+    HERO, CTA, VALUE, PROGRESS, LEARN, PATH, PRICES, COMPARE, COACHES, FORM, FAQS, OPEN_QUESTIONS_V2,
     REGION_LABEL, NEARBY, PHOTOS, V2_CENTRES, TERMS, termTotal,
 } from './jrV2Content';
 import { HourNumbers, HourRibbon, LaneDots, SkillSteps, Cues, YearStrip } from './JRV2Visuals';
 import { StageJourney, ProgressParts, BadgeWall, Certificates } from './JRV2Pathway';
+import { ActionCards } from './JRV2ActionCards';
 import JRV2Form from './JRV2Form';
 
 // ─────────────────────────────────────────────────────────────
@@ -28,7 +29,7 @@ import JRV2Form from './JRV2Form';
 // Section ids match JRV2_NAV in Navbar.jsx.
 // ─────────────────────────────────────────────────────────────
 
-const SECTIONS = ['hero', 'progress', 'learn', 'coaches', 'prices', 'register', 'faq'];
+const SECTIONS = ['hero', 'progress', 'value', 'learn', 'coaches', 'prices', 'register', 'faq'];
 const SCROLL_PAD = 'scroll-mt-[84px] md:scroll-mt-[112px]';
 const go = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 const ICON = { users: Cake, clock: Clock, pin: MapPin, group: Users };
@@ -146,6 +147,43 @@ const Hero = () => (
     </section>
 );
 
+// ── The value, for the player and for the parent (Alex, 11 Oct 2026) ──
+const VALUE_ICON = { bat: Repeat, one: Target, game: Trophy, badge: BadgeCheck, joy: Smile, card: ClipboardList, list: ListChecks, group: Users, same: GraduationCap, place: CalendarCheck };
+
+const ValueColumn = ({ col, accent }) => (
+    <div className={`border-t-4 ${accent} pt-5`}>
+        <h3 className="text-2xl font-black uppercase text-rr-dark">{col.title}</h3>
+        <ul className="mt-5 space-y-5">
+            {col.points.map((pt) => {
+                const Icon = VALUE_ICON[pt.icon];
+                return (
+                    <li key={pt.head} className="flex gap-4">
+                        <span className="w-11 h-11 rounded-full flex items-center justify-center shrink-0" style={{ backgroundImage: 'var(--image-gradient-rr)' }}>
+                            <Icon className="w-5 h-5 text-white" aria-hidden="true" />
+                        </span>
+                        <div>
+                            <p className="text-lg font-black text-rr-dark leading-tight">{pt.head}</p>
+                            <p className="text-[15px] text-rr-charcoal font-medium leading-snug mt-0.5">{pt.body}</p>
+                            <p className="text-xs font-black uppercase tracking-widest text-rr-blue mt-1">{pt.from}</p>
+                        </div>
+                    </li>
+                );
+            })}
+        </ul>
+    </div>
+);
+
+const Value = () => (
+    <Section id="value">
+        <Head eyebrow={VALUE.eyebrow} title={VALUE.title} />
+        <div className="grid md:grid-cols-2 gap-10">
+            <ValueColumn col={VALUE.player} accent="border-rr-pink" />
+            <ValueColumn col={VALUE.parent} accent="border-rr-blue" />
+        </div>
+        <CtaRow />
+    </Section>
+);
+
 // ── 2. The Royals Way Progress Tracking and Development System ──
 const Progress = () => (
     <section id="progress" className={`${SCROLL_PAD} py-14 md:py-20`} style={{ backgroundImage: 'var(--image-gradient-rr)' }}>
@@ -163,6 +201,7 @@ const Progress = () => (
             </div>
 
             <div className="mt-12 rounded-2xl bg-rr-dark p-6 sm:p-8">
+                <p className="text-white text-sm font-black uppercase tracking-wider mb-5">{PROGRESS.sampleTitle}</p>
                 <BadgeWall />
                 <p className="mt-8 text-white/90 text-[15px] font-medium leading-relaxed max-w-3xl">{PROGRESS.perYear}</p>
                 <ul className="mt-4 space-y-2 max-w-3xl">
@@ -177,87 +216,78 @@ const Progress = () => (
     </section>
 );
 
-// ── 3. How your player learns: four parts in one section ──
-const Part = ({ id, n, title, children }) => (
-    <div id={id} className={`${SCROLL_PAD} pt-12 first:pt-0`}>
-        <h3 className="flex items-baseline gap-3 text-2xl sm:text-3xl font-black uppercase tracking-tight text-rr-dark">
-            <span className="text-rr-pink">{n}</span>{title}
-        </h3>
-        <div className="w-10 h-1 bg-rr-pink mt-3 mb-6" />
-        {children}
+// ── 3. How your player learns: four action cards (Alex, 11 Oct 2026) ──
+// A short summary on each card; the detail opens on hover or click (computer) or
+// on tap (phone). The visuals live inside: the hour, the 3-week block, the stages.
+const LEARN_ICON = { 'learn-how': GraduationCap, 'learn-night': Clock, 'learn-blocks': Layers, 'learn-what': ListChecks };
+
+const HowDetail = () => (
+    <div className="grid md:grid-cols-[1fr_15rem] gap-8 items-start">
+        <div>
+            <ul className="space-y-3">{LEARN.how.points.map((p) => <Tick key={p}><span className="text-rr-dark font-semibold">{p}</span></Tick>)}</ul>
+            <h4 className="text-lg font-black uppercase text-rr-dark mt-8 mb-4">{LEARN.how.pillarsTitle}</h4>
+            <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-4">
+                {PILLARS.map((p) => (
+                    <li key={p.name} className="border-l-4 border-rr-pink pl-4">
+                        <p className="font-black text-rr-dark">{p.name}</p>
+                        <p className="text-[15px] text-rr-charcoal font-medium">{p.note}</p>
+                    </li>
+                ))}
+            </ul>
+            <p className="mt-8 text-[15px] text-rr-dark font-semibold leading-relaxed border-l-4 border-rr-blue pl-4"><Rich v={LEARN.how.matches} /></p>
+        </div>
+        <PhotoTile {...PHOTOS.how} />
     </div>
 );
 
-const Learn = () => {
-    const [how, night, blocks, what] = LEARN.parts;
-    return (
-        <Section id="learn">
-            <Head eyebrow={LEARN.eyebrow} title={LEARN.title} />
-            <nav aria-label="In this section" className="flex flex-wrap gap-2 mb-10">
-                {LEARN.parts.map((p) => (
-                    <a key={p.id} href={`#${p.id}`} onClick={(e) => { e.preventDefault(); go(p.id); }}
-                        className="inline-flex items-center gap-2 min-h-[44px] rounded-full border-2 border-slate-200 hover:border-rr-pink px-4 text-sm font-bold text-rr-dark">
-                        <span className="text-rr-pink font-black">{p.n}</span>{p.title}
-                    </a>
-                ))}
-            </nav>
-
-            <div className="divide-y divide-slate-200 [&>*]:pb-12">
-                <Part {...how}>
-                    <div className="grid md:grid-cols-[1fr_16rem] gap-8 items-start">
-                        <div>
-                            <ul className="space-y-3">{LEARN.how.points.map((p) => <Tick key={p}><span className="text-rr-dark font-semibold">{p}</span></Tick>)}</ul>
-                            <h4 className="text-lg font-black uppercase text-rr-dark mt-8 mb-4">{LEARN.how.pillarsTitle}</h4>
-                            <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-4">
-                                {PILLARS.map((p) => (
-                                    <li key={p.name} className="border-l-4 border-rr-pink pl-4">
-                                        <p className="font-black text-rr-dark">{p.name}</p>
-                                        <p className="text-[15px] text-rr-charcoal font-medium">{p.note}</p>
-                                    </li>
-                                ))}
-                            </ul>
-                            <p className="mt-8 text-[15px] text-rr-dark font-semibold leading-relaxed border-l-4 border-rr-blue pl-4"><Rich v={LEARN.how.matches} /></p>
-                        </div>
-                        <PhotoTile {...PHOTOS.how} />
-                    </div>
-                </Part>
-
-                <Part {...night}>
-                    <p className="text-lg text-rr-dark font-semibold mb-6">{LEARN.night.intro}</p>
-                    <HourNumbers items={LEARN.night.bigNumbers} />
-                    <div className="grid md:grid-cols-[1fr_auto_14rem] gap-8 mt-8 items-start">
-                        <div>
-                            <HourRibbon />
-                            <p className="text-sm text-rr-charcoal font-medium mt-2">{LEARN.night.guide}</p>
-                        </div>
-                        <div className="flex flex-col items-center">
-                            <LaneDots players={PRICE.perLane} label="Your player’s lane" />
-                            <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed mt-4 max-w-[14rem]">{LEARN.night.lane}</p>
-                        </div>
-                        <PhotoTile {...PHOTOS.night} />
-                    </div>
-                </Part>
-
-                <Part {...blocks}>
-                    <p className="text-lg text-rr-dark font-semibold mb-8 max-w-3xl">{LEARN.blocks.intro}</p>
-                    <SkillSteps />
-                    <div className="grid grid-cols-2 gap-4 mt-8 max-w-xl">
-                        {PHOTOS.blocks.map((p) => <PhotoTile key={p.src} {...p} />)}
-                    </div>
-                    <p className="text-[15px] text-rr-dark font-semibold leading-relaxed mt-10 mb-5 max-w-3xl">{LEARN.blocks.cuesTitle}</p>
-                    <Cues />
-                </Part>
-
-                <Part {...what}>
-                    <p className="text-lg text-rr-dark font-semibold max-w-3xl">{LEARN.what.intro}</p>
-                    <p className="text-[15px] text-rr-charcoal font-medium mt-2 mb-6 max-w-3xl"><Rich v={LEARN.what.placement} /></p>
-                    <StageJourney />
-                </Part>
+const NightDetail = () => (
+    <>
+        <p className="text-lg text-rr-dark font-semibold mb-6">{LEARN.night.intro}</p>
+        <HourNumbers items={LEARN.night.bigNumbers} />
+        <div className="grid md:grid-cols-[1fr_auto_13rem] gap-8 mt-8 items-start">
+            <div>
+                <HourRibbon />
+                <p className="text-sm text-rr-charcoal font-medium mt-2">{LEARN.night.guide}</p>
             </div>
-            <CtaRow className="mt-4" />
-        </Section>
-    );
-};
+            <div className="flex flex-col items-center">
+                <LaneDots players={PRICE.perLane} label="Your player’s lane" />
+                <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed mt-4 max-w-[14rem]">{LEARN.night.lane}</p>
+            </div>
+            <PhotoTile {...PHOTOS.night} />
+        </div>
+    </>
+);
+
+const BlocksDetail = () => (
+    <>
+        <p className="text-lg text-rr-dark font-semibold mb-8 max-w-3xl">{LEARN.blocks.intro}</p>
+        <SkillSteps />
+        <p className="text-[15px] text-rr-dark font-semibold leading-relaxed mt-10 mb-5 max-w-3xl">{LEARN.blocks.cuesTitle}</p>
+        <Cues />
+        <div className="grid grid-cols-2 gap-4 mt-8 max-w-md">
+            {PHOTOS.blocks.map((p) => <PhotoTile key={p.src} {...p} />)}
+        </div>
+    </>
+);
+
+const WhatDetail = () => (
+    <>
+        <p className="text-lg text-rr-dark font-semibold max-w-3xl">{LEARN.what.intro}</p>
+        <p className="text-[15px] text-rr-charcoal font-medium mt-2 mb-6 max-w-3xl"><Rich v={LEARN.what.placement} /></p>
+        <StageJourney />
+    </>
+);
+
+const LEARN_DETAIL = { 'learn-how': <HowDetail />, 'learn-night': <NightDetail />, 'learn-blocks': <BlocksDetail />, 'learn-what': <WhatDetail /> };
+
+const Learn = () => (
+    <Section id="learn">
+        <Head eyebrow={LEARN.eyebrow} title={LEARN.title} />
+        <p className="text-lg text-rr-dark font-semibold max-w-3xl mb-8">{LEARN.lead}</p>
+        <ActionCards items={LEARN.parts.map((p) => ({ ...p, Icon: LEARN_ICON[p.id], content: LEARN_DETAIL[p.id] }))} />
+        <CtaRow />
+    </Section>
+);
 
 // ── 4. Coaches at each centre ──
 const Coaches = () => (
@@ -459,6 +489,7 @@ const JuniorRoyalsV2 = () => {
                 <MockupBanner />
                 <Hero />
                 <Progress />
+                <Value />
                 <Learn />
                 <Coaches />
                 <Prices />

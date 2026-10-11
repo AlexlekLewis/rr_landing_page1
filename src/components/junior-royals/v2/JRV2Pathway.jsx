@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Award, BadgeCheck, Check, ChevronsDown, ClipboardList, Crosshair, Footprints, Hand, Megaphone, Repeat, Shield, Target, Trophy, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Award, BadgeCheck, Check, ClipboardList, Target, Trophy, X } from 'lucide-react';
 import { Rich } from '../JuniorRoyalsShared';
 import { PHASES, CURRICULUM, BADGES, AFTER } from './jrV2Facts';
 import { PATH, PROGRESS } from './jrV2Content';
+import { Badge, KIND_LABEL } from './JRV2Badges';
 
 // ─────────────────────────────────────────────────────────────
 // Stage cards + pop-ups, and the Royals Way Progress Tracking and Development
@@ -66,25 +67,14 @@ const StageCard = ({ p, i, onOpen }) => {
     );
 };
 
-// ── Badge medal ──
-const BADGE_ICON = {
-    'Two Vs': ChevronsDown, 'Heel to Toe': Footprints, 'Guard the Stumps': Shield, 'Call It': Megaphone,
-    'Straight to the Target': Target, 'Base of the Stump': Crosshair, 'Two the Same': Repeat, 'Safe Hands': Hand,
-};
-const RING = { bat: 'border-rr-pink text-rr-pink', bowl: 'border-rr-blue text-rr-blue', field: 'border-rr-dark text-rr-dark' };
-
-const BadgeMedal = ({ b, dark }) => {
-    const Icon = BADGE_ICON[b.name] || Award;
-    return (
-        <li className="flex flex-col items-center text-center">
-            <span className={`w-16 h-16 rounded-full border-4 bg-white flex items-center justify-center ${RING[b.kind]}`}>
-                <Icon className="w-7 h-7" strokeWidth={2.5} aria-hidden="true" />
-            </span>
-            <span className={`mt-2 text-sm font-black leading-tight ${dark ? 'text-white' : 'text-rr-dark'}`}>{b.name}</span>
-            <span className={`mt-0.5 text-xs font-medium leading-snug ${dark ? 'text-white/80' : 'text-rr-charcoal'}`}>“{PROGRESS.iCan} {b.can}”</span>
-        </li>
-    );
-};
+// ── Badge with its name and the player's "I can …" (used in the stage pop-up) ──
+const BadgeMedal = ({ b, dark }) => (
+    <li className="flex flex-col items-center text-center">
+        <Badge name={b.name} kind={b.kind} className="w-20 h-20" />
+        <span className={`mt-2 text-sm font-black leading-tight ${dark ? 'text-white' : 'text-rr-dark'}`}>{b.name}</span>
+        <span className={`mt-0.5 text-xs font-medium leading-snug ${dark ? 'text-white/80' : 'text-rr-charcoal'}`}>“{PROGRESS.iCan} {b.can}”</span>
+    </li>
+);
 
 // ── The stage pop-up ──
 const H = ({ children }) => <h3 className="text-xs font-black uppercase tracking-widest text-rr-dark mb-2">{children}</h3>;
@@ -123,7 +113,7 @@ const StageModal = ({ index, onClose, onNav }) => {
     const prev = PHASES[index - 1];
     const next = PHASES[index + 1];
     return createPortal(
-        <div className="fixed inset-0 z-[60] flex items-end md:items-center justify-center">
+        <div data-jr-stage-modal className="fixed inset-0 z-[60] flex items-end md:items-center justify-center">
             <div className="absolute inset-0 bg-rr-dark/80" onClick={onClose} aria-hidden="true" />
             <div ref={panelRef} role="dialog" aria-modal="true" aria-labelledby="jr-stage-title"
                 className="relative w-full md:max-w-3xl h-[100dvh] md:h-auto md:max-h-[90vh] overflow-y-auto bg-white md:rounded-2xl">
@@ -262,14 +252,46 @@ export const ProgressParts = () => (
     </ol>
 );
 
-export const BadgeWall = () => (
-    <>
-        <p className="text-white text-sm font-black uppercase tracking-wider">{PROGRESS.sampleTitle}</p>
-        <ul className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-7">
-            {BADGES.discover.map((b) => <BadgeMedal key={b.name} b={b} dark />)}
-        </ul>
-    </>
-);
+// All 28 Discover badges. Point at one (computer) or tap it (phone) to read its "I can …".
+const KINDS = ['bat', 'bowl', 'field'];
+export const BadgeWall = () => {
+    const [sel, setSel] = useState(BADGES.discover[0]);
+    return (
+        <div className="grid md:grid-cols-[1fr_17rem] gap-8 items-start">
+            <div className="order-2 md:order-1 space-y-6">
+                <p className="md:hidden text-white/80 text-xs font-bold -mb-2">{PROGRESS.badgeHint}</p>
+                {KINDS.map((k) => (
+                    <div key={k}>
+                        <p className="text-white text-xs font-black uppercase tracking-[0.2em] mb-3">{KIND_LABEL[k]}</p>
+                        <ul className="grid grid-cols-4 sm:grid-cols-6 gap-2.5">
+                            {BADGES.discover.filter((b) => b.kind === k).map((b) => {
+                                const on = sel.name === b.name;
+                                return (
+                                    <li key={b.name}>
+                                        <button type="button" onMouseEnter={() => setSel(b)} onFocus={() => setSel(b)} onClick={() => setSel(b)}
+                                            aria-pressed={on} aria-label={`${b.name}: I can ${b.can}`}
+                                            className={`block w-full rounded-xl p-1 transition-transform hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white ${on ? 'scale-110 bg-white/10' : ''}`}>
+                                            <Badge name={b.name} kind={b.kind} className="w-full h-auto" />
+                                        </button>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </div>
+                ))}
+            </div>
+            <div className="order-1 md:order-2 sticky top-[92px] md:top-32 z-10 bg-rr-dark rounded-2xl border-2 border-white/20 p-4 md:p-5 flex md:block items-center gap-4 md:text-center" aria-live="polite">
+                <Badge name={sel.name} kind={sel.kind} className="w-20 h-20 md:w-32 md:h-32 shrink-0 md:mx-auto" />
+                <div>
+                    <p className="md:mt-3 text-white text-xs font-black uppercase tracking-[0.2em]">{KIND_LABEL[sel.kind]} badge</p>
+                    <p className="mt-0.5 md:mt-1 text-white text-xl md:text-2xl font-black leading-tight">{sel.name}</p>
+                    <p className="mt-1 md:mt-2 text-white/90 text-sm md:text-[15px] font-semibold leading-snug">“{PROGRESS.iCan} {sel.can}”</p>
+                    <p className="hidden md:block mt-4 text-white/70 text-xs font-bold">{PROGRESS.badgeHint}</p>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 export const Certificates = () => (
     <ol className="grid md:grid-cols-3 gap-4">

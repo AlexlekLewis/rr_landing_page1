@@ -3,6 +3,7 @@ import { PRICE, SHIRT, NOTICE_WEEKS, PHASES, SESSION, CURRICULUM, BADGES, wednes
 import * as CONTENT from './jrV2Content';
 import { termTotal, yearTotal, TERMS, V2_CENTRES, DAYS, MIN_DAYS } from './jrV2Content';
 import { FORM_VALUES } from './JRV2Form';
+import { hasArt } from './JRV2Badges';
 import { JR_V2_SEO, JR_V2_JSONLD, JR_SEO_VENUES } from './jrV2Seo';
 import { CENTRES } from '../juniorRoyalsData';
 
@@ -74,6 +75,26 @@ describe('progress system and stages', () => {
     it('28 badges a year: one batting + one bowling per block (12 blocks) + 4 fielding', () => {
         expect(BADGES.perYear).toEqual({ batting: 12, bowling: 12, fielding: 4 });
         expect(BADGES.check).toEqual({ good: 4, of: 6, nights: 2 });
+    });
+
+    it('every Discover badge has its own artwork: 12 batting, 12 bowling, 4 fielding (Alex, 11 Oct)', () => {
+        const d = BADGES.discover;
+        expect(d).toHaveLength(28);
+        expect(new Set(d.map((b) => b.name)).size).toBe(28);
+        (['bat', 'bowl', 'field'] as const).forEach((k, i) => expect(d.filter((b) => b.kind === k)).toHaveLength([12, 12, 4][i]));
+        d.forEach((b) => expect(hasArt(b.name), `no artwork for "${b.name}"`).toBe(true));
+    });
+
+    it('the four action cards each have a short summary (the detail opens on hover or tap)', () => {
+        expect(CONTENT.LEARN.parts).toHaveLength(4);
+        CONTENT.LEARN.parts.forEach((p) => { expect(p.summary.length).toBeGreaterThan(20); expect(p.summary.length).toBeLessThan(90); });
+    });
+
+    it('the value is spelled out for the player and for the parent, each tied to the Royals Way or our method', () => {
+        [CONTENT.VALUE.player, CONTENT.VALUE.parent].forEach((col) => {
+            expect(col.points.length).toBeGreaterThanOrEqual(4);
+            col.points.forEach((pt) => expect(pt.from).toBeTruthy());
+        });
     });
 
     it('the system has its name, and the page makes no unprovable superlatives (CLAUDE.md §2)', () => {

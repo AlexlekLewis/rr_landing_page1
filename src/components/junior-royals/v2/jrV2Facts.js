@@ -201,16 +201,38 @@ export const BADGES = {
     pilot: 'Term 1, 2027',
     perYear: { batting: 12, bowling: 12, fielding: 4 },
     check: { good: 4, of: 6, nights: 2 },
-    // Discover Year 1 (blueprint p36–37): name + the player's "I can…"
+    // Discover Year 1, ALL 28 badges in block order (blueprint p36–37): name + the
+    // player's "I can…". Each has its own artwork in JRV2Badges.jsx (Alex, 11 Oct
+    // 2026: "unique context-aware badges for every badge").
     discover: [
         { name: 'Two Vs', kind: 'bat', can: 'find my grip myself and hit it straight' },
         { name: 'Heel to Toe', kind: 'bat', can: 'hit along the ground and stay balanced' },
+        { name: 'Through the Gate', kind: 'bat', can: 'swing straight through the gate' },
+        { name: 'Bounce and Hit', kind: 'bat', can: 'hit the bouncing ball cleanly' },
         { name: 'Guard the Stumps', kind: 'bat', can: 'block it and save my stumps' },
+        { name: 'Hit or Block', kind: 'bat', can: 'hit the full one, block the straight one' },
+        { name: 'Rock Back', kind: 'bat', can: 'rock back and hit the high ball' },
+        { name: 'Line Up, Hit', kind: 'bat', can: 'hit it to the side it’s bowled' },
+        { name: 'Rock or Step', kind: 'bat', can: 'step or rock back to suit the ball' },
         { name: 'Call It', kind: 'bat', can: 'call YES, NO or WAIT, loud and early' },
+        { name: 'Gap and Go', kind: 'bat', can: 'hit a gap and make my run' },
+        { name: 'Chase Together', kind: 'bat', can: 'chase a score with my partner' },
         { name: 'Straight to the Target', kind: 'bowl', can: 'hold it in my fingers and bowl straight' },
+        { name: 'Keeper’s Gloves', kind: 'bowl', can: 'walk in and bowl at the keeper’s gloves' },
         { name: 'Base of the Stump', kind: 'bowl', can: 'aim low and hit the stumps' },
         { name: 'Two the Same', kind: 'bowl', can: 'bowl two the same, in a row' },
+        { name: 'Length Ladder', kind: 'bowl', can: 'hit the stumps from near, middle and far' },
+        { name: 'Jog and Bowl', kind: 'bowl', can: 'jog in and still bowl straight' },
+        { name: 'Seam Up', kind: 'bowl', can: 'bowl it straight with the seam up' },
+        { name: 'One Stump', kind: 'bowl', can: 'hit one stump wherever it’s put' },
+        { name: 'Beat the Bat', kind: 'bowl', can: 'beat the bat and hit the stumps' },
+        { name: 'Tidy Over', kind: 'bowl', can: 'bowl an over of six straight' },
+        { name: 'Partner’s Pick', kind: 'bowl', can: 'hit the target my partner picks' },
+        { name: 'Last Over', kind: 'bowl', can: 'hit the stumps when it counts' },
         { name: 'Safe Hands', kind: 'field', can: 'catch a soft ball with either hand' },
+        { name: 'Stump Hitter', kind: 'field', can: 'pick it up and hit the stumps' },
+        { name: 'Back Me Up', kind: 'field', can: 'back up every throw' },
+        { name: 'Run-out Ready', kind: 'field', can: 'throw at the stumps for a run-out' },
     ],
 };
 

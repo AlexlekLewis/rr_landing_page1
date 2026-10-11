@@ -19,9 +19,11 @@
 
 import { SID } from '../../open-age-trial/openAgeData';
 import { tbc, money, AGES_TEXT, FIRST_SESSION, CALENDAR, SESSIONS_PER_YEAR, GST_NOTE, JOINING_OPENS, CENTRES, PS_ROUTE } from '../juniorRoyalsData';
-import { PRICE, SHIRT, NOTICE_WEEKS, BADGES } from './jrV2Facts';
+import { PRICE, SHIRT, NOTICE_WEEKS, BADGES, CURRICULUM } from './jrV2Facts';
 
 const r2 = (n) => Math.round(n * 100) / 100;
+// Every batting, bowling and fielding topic across the three stages (47).
+export const TOPIC_TOTAL = Object.values(CURRICULUM).reduce((n, c) => n + c.batting.length + c.bowling.length + c.fielding.length, 0);
 export const WEEKLY = money(PRICE.perWeek);                                   // "$49.95"
 export const termTotal = (sessions) => r2(PRICE.perWeek * sessions);
 export const yearTotal = () => r2(PRICE.perWeek * SESSIONS_PER_YEAR);
@@ -88,6 +90,35 @@ export const HERO = {
     returning: "Already sent us your details on our Term 4 form? We have them, and we'll email you when enrolment opens.",
 };
 
+// ── The value, in plain words (Alex, 11 Oct 2026: "clearly communicate what the
+// value is … for the player and the parent", with the Royals Way and our method
+// folded in). Each line is something that happens every week or every term, and
+// names the Royals Way principle or the part of our method behind it.
+export const VALUE = {
+    eyebrow: 'Play the Royals Way',
+    title: 'What your player gets, and what you get',
+    player: {
+        title: 'For your player',
+        points: [
+            { icon: 'bat', head: 'Bats and bowls every session', body: 'Every player, every week. Nobody waits a week for their turn.', from: 'Learn by doing' },
+            { icon: 'one', head: 'One skill at a time', body: 'Three weeks on each skill: learn it, own it, use it.', from: 'Our method' },
+            { icon: 'game', head: 'A game with a score, every session', body: 'A brave try counts, not only the result.', from: 'Play bold' },
+            { icon: 'badge', head: 'Badges for what they can do', body: 'Each badge is an “I can …” they have shown their coach.', from: 'Progress you can see' },
+            { icon: 'joy', head: 'Fun comes first', body: 'Games, questions and lots of hitting, especially for players who are new.', from: 'Joy and curiosity' },
+        ],
+    },
+    parent: {
+        title: 'For you',
+        points: [
+            { icon: 'card', head: 'You can see their progress', body: 'Skill badges, a scored game each term, and a progress card that comes home.', from: 'Progress you can see' },
+            { icon: 'list', head: 'You know what is being taught', body: `All ${TOPIC_TOTAL} topics in the three stages are on this page.`, from: 'Our method' },
+            { icon: 'group', head: 'A small group with its own coach', body: `Up to ${PRICE.perLane} players in a lane, so your player is coached, not queued.`, from: 'Our method' },
+            { icon: 'same', head: 'Every coach teaches the same way', body: 'The same skills, the same cue words, the same session plan at every centre.', from: 'The Royals Way' },
+            { icon: 'place', head: 'Your player keeps their place', body: 'The same day and time each week, and their place carries on term after term.', from: 'Respect' },
+        ],
+    },
+};
+
 export const CTA = {
     primary: 'Register Your Interest',
     secondary: 'See how progress is tracked',
@@ -114,7 +145,8 @@ export const PROGRESS = {
         '“Not yet”, never “failed”. A badge stays open until it’s earned, and stays earned once it is.',
         'No leaderboards. Badges are for skills only: never for size, speed or turning up.',
     ],
-    sampleTitle: 'Some of the first badges, in Discover',
+    sampleTitle: `The ${BADGES.discover.length} badges in Discover`,
+    badgeHint: 'Point at a badge, or tap it, to see what it means.',
     iCan: 'I can',
     certTitle: 'A certificate for every stage',
 };
@@ -123,11 +155,12 @@ export const PROGRESS = {
 export const LEARN = {
     eyebrow: 'How your player learns',
     title: 'What your player will learn and experience',
+    lead: 'Four things every parent asks. Open each one to see it.',
     parts: [
-        { id: 'learn-how', n: '1', title: 'How they learn' },
-        { id: 'learn-night', n: '2', title: 'What a night looks like' },
-        { id: 'learn-blocks', n: '3', title: 'Developing in 3-week skill blocks' },
-        { id: 'learn-what', n: '4', title: 'What your player learns' },
+        { id: 'learn-how', n: '1', title: 'How they learn', summary: 'Small groups, one skill at a time, and a game with a score every session.' },
+        { id: 'learn-night', n: '2', title: 'What a night looks like', summary: 'One hour: 20 minutes of batting, 20 of bowling, then a scored game.' },
+        { id: 'learn-blocks', n: '3', title: '3-week skill blocks', summary: 'Three weeks on every skill: learn it, own it, use it.' },
+        { id: 'learn-what', n: '4', title: 'What your player learns', summary: `Three stages and ${TOPIC_TOTAL} topics, from holding the bat to bowling to a plan.` },
     ],
     how: {
         points: [
