@@ -143,14 +143,15 @@ export const CURRICULUM = {
             'Chase a target with a plan, and finish strong',
             'Bowl to a plan and a field, with a stock ball and a slower ball',
         ],
-        next: 'Next: Performance Squads, by trial. Not every player gets a place.',
-        certificate: 'Congratulations, you’ve completed Elevate and Junior Royals. Next stop: Performance Squads trials.',
+        next: 'Alongside Junior Royals: Performance Squads, by invitation only, for players from age 10.',
+        certificate: 'Congratulations, you’ve completed Elevate, and all three stages of Junior Royals.',
     },
 };
 
-// After Junior Royals (blueprint p10). Performance Squads is BY TRIAL — never promised.
+// Alongside Junior Royals (blueprint as updated 9 Oct 2026): Performance Squads is BY
+// INVITATION ONLY, with players eligible from age 10. Never promised.
 export const AFTER = [
-    { name: 'Performance Squads', ages: 'Trial', aim: 'Compete', note: 'Players try out. Not every player gets a place.' },
+    { name: 'Performance Squads', ages: 'From 10', aim: 'Compete', note: 'Runs alongside Junior Royals. By invitation only, for players from age 10.' },
 ];
 
 
@@ -180,12 +181,17 @@ export const CUES = [
 ];
 
 
-// ── The Royals Way (blueprint p10–11) ──
+// ── The Royals Way pillars that shape a Junior Royals session ──
+// Names are the Academy's LOCKED wording, quoted exactly (Royals Way – Head Coach
+// Reference, Part 1; The Royals Way Coaching Bible, Part II; source check 11 Oct
+// 2026). These are four of the Academy's seven pillars. They are the Melbourne
+// Academy's own framework: the page says "built on The Royals Way" and never
+// presents them as the franchise's official pillars.
 export const PILLARS = [
-    { name: 'Joy and curiosity', note: 'Fun comes first, especially for the youngest players.' },
-    { name: 'Learn by doing', note: 'Try, make a mistake, learn from it, try again.' },
-    { name: 'Play bold', note: 'We reward the brave attempt, not only the result.' },
-    { name: 'Respect', note: 'Shake hands, accept the umpire’s call, win and lose well.' },
+    { name: 'Learn by Doing', note: 'Try it, make a mistake, learn from it, try again.' },
+    { name: 'Play Bold', note: 'A brave, smart try is celebrated, even when it doesn’t come off.' },
+    { name: 'Joy, Curiosity & Lifelong Learning', note: 'The game stays fun, and questions are welcome.' },
+    { name: 'Fairness, Respect & Inclusion', note: 'Every player gets the same number of turns, and the same respect.' },
 ];
 
 // ── Skill badges: PROPOSED, pilot Term 1 2027 (blueprint Part IV, p35–37) ──

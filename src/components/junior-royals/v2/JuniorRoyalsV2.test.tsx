@@ -45,7 +45,8 @@ describe('the program facts', () => {
             expect(p).not.toHaveProperty('ages');
             expect(p).not.toHaveProperty('min');
         });
-        expect(JSON.stringify(CURRICULUM)).not.toMatch(/\bat (9|11|13)\b|ages? \d/i);
+        // "from age 10" is the Performance Squads invitation age (blueprint, 9 Oct), not a stage age.
+        expect(JSON.stringify(CURRICULUM)).not.toMatch(/\bat (9|11|13)\b|ages? (7|8|9|11|12)\b|\d–\d/i);
     });
 
     it('the session is 60 minutes, 20 batting, 20 bowling', () => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, BadgeCheck, Cake, CalendarCheck, Check, ChevronDown, ClipboardList, Clock, GraduationCap, Layers, ListChecks, MapPin, Repeat, Shirt, Smile, Target, Trophy, Users } from 'lucide-react';
+import { ArrowRight, BadgeCheck, Cake, CalendarCheck, Check, ChevronDown, ClipboardList, Clock, GraduationCap, Layers, ListChecks, MapPin, MessageCircle, Repeat, ShieldCheck, Shirt, Smile, Target, Trophy, Users } from 'lucide-react';
 import Navbar from '../../Navbar';
 import Footer from '../../Footer';
 import usePageAnalytics from '../../../hooks/usePageAnalytics';
@@ -148,7 +148,7 @@ const Hero = () => (
 );
 
 // ── The value, for the player and for the parent (Alex, 11 Oct 2026) ──
-const VALUE_ICON = { bat: Repeat, one: Target, game: Trophy, badge: BadgeCheck, joy: Smile, card: ClipboardList, list: ListChecks, group: Users, same: GraduationCap, place: CalendarCheck };
+const VALUE_ICON = { bat: Repeat, one: Target, cue: MessageCircle, game: Trophy, badge: BadgeCheck, joy: Smile, card: ClipboardList, plan: ListChecks, safe: ShieldCheck, group: Users, same: GraduationCap, place: CalendarCheck };
 
 const ValueColumn = ({ col, accent }) => (
     <div className={`border-t-4 ${accent} pt-5`}>
@@ -163,7 +163,7 @@ const ValueColumn = ({ col, accent }) => (
                         </span>
                         <div>
                             <p className="text-lg font-black text-rr-dark leading-tight">{pt.head}</p>
-                            <p className="text-[15px] text-rr-charcoal font-medium leading-snug mt-0.5">{pt.body}</p>
+                            <p className="text-[15px] text-rr-charcoal font-medium leading-snug mt-0.5"><Rich v={pt.body} /></p>
                             <p className="text-xs font-black uppercase tracking-widest text-rr-blue mt-1">{pt.from}</p>
                         </div>
                     </li>
@@ -176,6 +176,8 @@ const ValueColumn = ({ col, accent }) => (
 const Value = () => (
     <Section id="value">
         <Head eyebrow={VALUE.eyebrow} title={VALUE.title} />
+        <p className="text-lg sm:text-xl text-rr-dark font-semibold max-w-3xl"><Rich v={VALUE.lead} /></p>
+        <p className="text-[15px] text-rr-charcoal font-medium mt-2 mb-8 max-w-3xl">{VALUE.builtOn}</p>
         <div className="grid md:grid-cols-2 gap-10">
             <ValueColumn col={VALUE.player} accent="border-rr-pink" />
             <ValueColumn col={VALUE.parent} accent="border-rr-blue" />
@@ -225,7 +227,8 @@ const HowDetail = () => (
     <div className="grid md:grid-cols-[1fr_15rem] gap-8 items-start">
         <div>
             <ul className="space-y-3">{LEARN.how.points.map((p) => <Tick key={p}><span className="text-rr-dark font-semibold">{p}</span></Tick>)}</ul>
-            <h4 className="text-lg font-black uppercase text-rr-dark mt-8 mb-4">{LEARN.how.pillarsTitle}</h4>
+            <h4 className="text-lg font-black uppercase text-rr-dark mt-8">{LEARN.how.pillarsTitle}</h4>
+            <p className="text-[15px] text-rr-charcoal font-medium mb-4">{LEARN.how.pillarsLead}</p>
             <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-4">
                 {PILLARS.map((p) => (
                     <li key={p.name} className="border-l-4 border-rr-pink pl-4">

@@ -35,7 +35,7 @@ const StageStrip = () => (
                 <ArrowRight className="w-4 h-4 text-rr-charcoal" aria-hidden="true" />
             </li>
         ))}
-        <li><span className="border-2 border-dashed border-rr-dark text-rr-dark font-black uppercase text-sm tracking-wider rounded-full px-4 py-1">Performance Squads, by trial</span></li>
+        <li><span className="border-2 border-dashed border-rr-dark text-rr-dark font-black uppercase text-sm tracking-wider rounded-full px-4 py-1">Performance Squads, by invitation</span></li>
     </ol>
 );
 
@@ -215,7 +215,7 @@ export const StageJourney = () => {
             </div>
             {AFTER.map((a) => (
                 <div key={a.name} className="mt-4 rounded-2xl border-2 border-dashed border-rr-dark px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
-                    <p className="text-xl font-black uppercase text-rr-dark">13+ · {a.name}</p>
+                    <p className="text-xl font-black uppercase text-rr-dark">{a.ages} · {a.name}</p>
                     <p className="text-[15px] font-medium text-rr-charcoal">
                         {a.note}{' '}
                         <Link to={PATH.older.link.to} className="text-rr-dark font-bold underline underline-offset-2 decoration-rr-pink">{PATH.older.link.label}</Link>

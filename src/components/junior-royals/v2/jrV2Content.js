@@ -97,24 +97,28 @@ export const HERO = {
 export const VALUE = {
     eyebrow: 'Play the Royals Way',
     title: 'What your player gets, and what you get',
+    lead: tbc('Junior Royals is where players aged 7 to 12 fall in love with cricket and get better at it, one skill at a time.', 'The one-sentence “why” for Junior Royals: none is decided yet. OK to use this?'),
+    builtOn: 'Built on The Royals Way and our own coaching method. Under each line is the pillar or part of the method it comes from.',
     player: {
         title: 'For your player',
         points: [
-            { icon: 'bat', head: 'Bats and bowls every session', body: 'Every player, every week. Nobody waits a week for their turn.', from: 'Learn by doing' },
-            { icon: 'one', head: 'One skill at a time', body: 'Three weeks on each skill: learn it, own it, use it.', from: 'Our method' },
-            { icon: 'game', head: 'A game with a score, every session', body: 'A brave try counts, not only the result.', from: 'Play bold' },
-            { icon: 'badge', head: 'Badges for what they can do', body: 'Each badge is an “I can …” they have shown their coach.', from: 'Progress you can see' },
-            { icon: 'joy', head: 'Fun comes first', body: 'Games, questions and lots of hitting, especially for players who are new.', from: 'Joy and curiosity' },
+            { icon: 'bat', head: 'They bat and bowl every week', body: 'Every player gets the same number of turns. Nobody waits for their go.', from: 'Fairness, Respect & Inclusion' },
+            { icon: 'one', head: 'One skill at a time', body: 'One batting skill and one bowling skill for three weeks, so they really get it.', from: 'Learn it, Own it, Use it' },
+            { icon: 'cue', head: 'A few words to remember', body: 'Every skill has a cue, like “Heel to toe”, that they can say to themselves.', from: 'One cue for every skill' },
+            { icon: 'game', head: 'A game with a score, every session', body: 'The hour always ends with a game, so skills get used, not just practised.', from: 'Joy, Curiosity & Lifelong Learning' },
+            { icon: 'joy', head: 'Brave tries count', body: 'Have a go. If it doesn’t work, the coach asks what happened, and they go again.', from: 'Play Bold · Learn by Doing' },
+            { icon: 'badge', head: 'Beat your own score', body: 'Players try to beat their own score. There is no leaderboard.', from: 'The Benchmark Game' },
         ],
     },
     parent: {
         title: 'For you',
         points: [
-            { icon: 'card', head: 'You can see their progress', body: 'Skill badges, a scored game each term, and a progress card that comes home.', from: 'Progress you can see' },
-            { icon: 'list', head: 'You know what is being taught', body: `All ${TOPIC_TOTAL} topics in the three stages are on this page.`, from: 'Our method' },
-            { icon: 'group', head: 'A small group with its own coach', body: `Up to ${PRICE.perLane} players in a lane, so your player is coached, not queued.`, from: 'Our method' },
-            { icon: 'same', head: 'Every coach teaches the same way', body: 'The same skills, the same cue words, the same session plan at every centre.', from: 'The Royals Way' },
-            { icon: 'place', head: 'Your player keeps their place', body: 'The same day and time each week, and their place carries on term after term.', from: 'Respect' },
+            { icon: 'group', head: 'A small group with its own coach', body: `No more than ${PRICE.perLane} players in a lane.`, from: 'Our method' },
+            { icon: 'plan', head: 'The same plan every week', body: 'Sixty minutes: batting, bowling, then a scored game. You always know what they did.', from: 'Our method' },
+            { icon: 'safe', head: 'Safety rules for each stage', body: 'In Discover, players bowl at targets, never at a batter, and the coach throws every ball.', from: 'Safety & Progressive Loading' },
+            { icon: 'card', head: 'Progress you can see', body: ['A score from the same game in the first and last session of term, and each skill named in “I can …” words on a progress card. ', tbc('From Term 1, 2027.', 'Skill badges and progress cards: start date to confirm (blueprint Part IV is a proposal).')], from: 'The Royals Way Progress Tracking and Development System' },
+            { icon: 'same', head: 'Every coach works from the same written plan', body: 'A goal, the coaching points, the questions to ask and the drills, for every session.', from: 'Our method' },
+            { icon: 'place', head: 'Your player keeps their place', body: 'The same day and time each week, and their place carries on term after term.', from: 'How enrolment works' },
         ],
     },
 };
@@ -169,7 +173,8 @@ export const LEARN = {
             'Every skill has a cue: two or three words your coach says, so your player remembers what to do.',
             'Every player bats and bowls every week, and every session ends with a game with a score.',
         ],
-        pillarsTitle: 'The Royals Way, in every session',
+        pillarsTitle: 'Built on The Royals Way',
+        pillarsLead: 'Four of its pillars shape every Junior Royals session:',
         matches: [
             'Matches: some Junior Royals players may be invited to play Power League matches, which are part of our Performance Squads program. ',
             tbc('Which players, from what age, and the match fee: to be confirmed.', 'Power League for Junior Royals: who is invited, from what age (Power League is 10–25), and the match fee?'),
@@ -212,7 +217,7 @@ export const PATH = {
         badgesNotWritten: tbc('This stage’s badges are being written by our coaching group.', 'Develop and Elevate badges are not written yet (blueprint Part IV covers Discover Year 1 only).'),
         close: 'Close',
     },
-    older: { lead: 'Aged 13 or older?', body: 'Players can trial for our Performance Squads.', link: { to: PS_ROUTE, label: 'See Performance Squads' } },
+    older: { lead: 'Aged 13 or older?', body: 'See our Performance Squads.', link: { to: PS_ROUTE, label: 'See Performance Squads' } },
 };
 
 // ── 4. Coaches at each centre ──
@@ -379,7 +384,7 @@ export const FAQS = [
     },
     {
         q: 'Does Junior Royals lead to Performance Squads?',
-        a: 'When Junior Royals ends at 12, players can trial for our Performance Squads. A squad place is decided at the trial, and not every player gets one.',
+        a: 'Performance Squads runs alongside Junior Royals. It is by invitation only, and players are eligible from age 10. An invitation is never promised.',
         link: { to: PS_ROUTE, label: 'See Performance Squads' },
     },
     {
@@ -412,7 +417,9 @@ export const OPEN_QUESTIONS_V2 = [
     'Cover rule: cancel + credit, never merge lanes',
     'Head Coach at Cranbourne North',
     'Blueprint decision 1: does 28 Oct start at the basics for every stage?',
-    'Performance Squads’ own page takes ages 10–25; this page points 13+ there. Align? What happens after a “no” at the trial?',
+    'Performance Squads: “by invitation only, from age 10” (blueprint, 9 Oct) — confirm this is how the page should say it',
+    'The one-sentence “why” for Junior Royals (draft in the value section)',
+    '“Built on The Royals Way”: the pillars are the Academy’s framework; confirm we may not call them the franchise’s official pillars',
     'SAFEGUARDING: WWC register + WWC Connect for every coach, 2 checked adults, sign-in/out, policy page, named lead (veto until true)',
     'Helmets to lend at each centre (count them)',
     'Photos of players: written parent consent for web, social previews and paid ads',
