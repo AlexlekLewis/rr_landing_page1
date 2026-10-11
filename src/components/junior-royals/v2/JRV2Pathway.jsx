@@ -70,7 +70,7 @@ const StageCard = ({ p, i, onOpen }) => {
 // ── Badge with its name and the player's "I can …" (used in the stage pop-up) ──
 const BadgeMedal = ({ b, dark }) => (
     <li className="flex flex-col items-center text-center">
-        <Badge name={b.name} kind={b.kind} className="w-20 h-20" />
+        <Badge name={b.name} kind={b.kind} className="w-24 h-24" />
         <span className={`mt-2 text-sm font-black leading-tight ${dark ? 'text-white' : 'text-rr-dark'}`}>{b.name}</span>
         <span className={`mt-0.5 text-xs font-medium leading-snug ${dark ? 'text-white/80' : 'text-rr-charcoal'}`}>“{PROGRESS.iCan} {b.can}”</span>
     </li>
@@ -259,11 +259,11 @@ export const BadgeWall = () => {
     return (
         <div className="grid md:grid-cols-[1fr_17rem] gap-8 items-start">
             <div className="order-2 md:order-1 space-y-6">
-                <p className="md:hidden text-white/80 text-xs font-bold -mb-2">{PROGRESS.badgeHint}</p>
+                <p className="md:hidden text-white/80 text-xs font-bold mb-4">{PROGRESS.badgeHint}</p>
                 {KINDS.map((k) => (
                     <div key={k}>
                         <p className="text-white text-xs font-black uppercase tracking-[0.2em] mb-3">{KIND_LABEL[k]}</p>
-                        <ul className="grid grid-cols-4 sm:grid-cols-6 gap-2.5">
+                        <ul className="grid grid-cols-3 sm:grid-cols-6 gap-2.5">
                             {BADGES.discover.filter((b) => b.kind === k).map((b) => {
                                 const on = sel.name === b.name;
                                 return (
@@ -281,7 +281,7 @@ export const BadgeWall = () => {
                 ))}
             </div>
             <div className="order-1 md:order-2 sticky top-[92px] md:top-32 z-10 bg-rr-dark rounded-2xl border-2 border-white/20 p-4 md:p-5 flex md:block items-center gap-4 md:text-center" aria-live="polite">
-                <Badge name={sel.name} kind={sel.kind} className="w-20 h-20 md:w-32 md:h-32 shrink-0 md:mx-auto" />
+                <Badge name={sel.name} kind={sel.kind} ribbon className="w-28 h-28 md:w-48 md:h-48 shrink-0 md:mx-auto" />
                 <div>
                     <p className="md:mt-3 text-white text-xs font-black uppercase tracking-[0.2em]">{KIND_LABEL[sel.kind]} badge</p>
                     <p className="mt-0.5 md:mt-1 text-white text-xl md:text-2xl font-black leading-tight">{sel.name}</p>

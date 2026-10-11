@@ -3,7 +3,9 @@ import { PRICE, SHIRT, NOTICE_WEEKS, PHASES, SESSION, CURRICULUM, BADGES, wednes
 import * as CONTENT from './jrV2Content';
 import { termTotal, yearTotal, TERMS, V2_CENTRES, DAYS, MIN_DAYS } from './jrV2Content';
 import { FORM_VALUES } from './JRV2Form';
-import { hasArt } from './JRV2Badges';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { Badge, hasArt } from './JRV2Badges';
 import { JR_V2_SEO, JR_V2_JSONLD, JR_SEO_VENUES } from './jrV2Seo';
 import { CENTRES } from '../juniorRoyalsData';
 
@@ -84,6 +86,21 @@ describe('progress system and stages', () => {
         expect(new Set(d.map((b) => b.name)).size).toBe(28);
         (['bat', 'bowl', 'field'] as const).forEach((k, i) => expect(d.filter((b) => b.kind === k)).toHaveLength([12, 12, 4][i]));
         d.forEach((b) => expect(hasArt(b.name), `no artwork for "${b.name}"`).toBe(true));
+    });
+
+    // Alex, 12 Oct: a 10-year-old must be able to tell which skill a badge is for.
+    // The pictures were checked blind (no names) before this; these guards keep
+    // every badge drawing, keep its name on the ribbon, and stop two badges
+    // ending up as the same picture.
+    it('every badge draws its own picture and carries its name on the ribbon', () => {
+        const art = (svg: string) => svg.replace(/id="[^"]*"|url\(#[^)]*\)|aria-label="[^"]*"/g, '');
+        const plain = BADGES.discover.map((b) => renderToStaticMarkup(createElement(Badge, { name: b.name, kind: b.kind })));
+        plain.forEach((svg, i) => expect(svg.length, `"${BADGES.discover[i].name}" drew almost nothing`).toBeGreaterThan(900));
+        expect(new Set(plain.map(art)).size).toBe(28);
+        BADGES.discover.forEach((b) => {
+            const svg = renderToStaticMarkup(createElement(Badge, { name: b.name, kind: b.kind, ribbon: true }));
+            expect(svg).toContain(b.name.toUpperCase().replace(/&/g, '&amp;'));
+        });
     });
 
     it('the four action cards each have a short summary (the detail opens on hover or tap)', () => {
