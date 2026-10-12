@@ -334,21 +334,49 @@ export const PRICES = {
     shirtTitle: 'The training shirt',
     shirt: `The Junior Royals training shirt is part of the kit, and players wear it at every session. It costs ${money(SHIRT.memberPrice)} at the member price (${money(SHIRT.shopPrice)} in our shop), paid once.`,
     shirtOffer: `Relaunch offer: the first ${SHIRT.freeForFirst} players to enrol get their shirt free, if we have their size.`,
-    howTitle: 'How enrolment works',
-    how: [
-        ['Enrol before the term starts. New players start at the beginning of a term, so groups stay together. ', tbc('Enrolments close the Friday before term.', 'Enrolment closing day? Proposed: the Friday before term.')],
-        [`${SUBSCRIPTION_LINE} ${FIRST_PAYMENT_LINE}`],
-        [`${AUTO_RENEW_LINE} Your player keeps their place in their group, and you don’t need to enrol again.`],
-        ['Nothing to pay in the school holidays.'],
-        [STOP_LINE],
-        ['Stopping in the middle of a term: a cancellation fee of ', CANCEL_FEE, ' applies, because nobody new can join that group until the next term. This doesn’t affect your rights under the Australian Consumer Law.'],
+    // Alex, 12 Oct 2026: "The how enrolment works needs to be replaced by graphics.
+    // And if it's a terms and conditions type thing then we need to point them to a
+    // pop-up of the terms and conditions, particularly like cancellation fees …
+    // we don't want all of that bulk text making the site look messy."
+    // So: five steps drawn as a flow, one line on stopping, and a button that opens
+    // the terms pop-up (TERMS_POPUP below), which carries the detail.
+    flowTitle: 'How enrolment works',
+    flow: [
+        { icon: 'enrol', head: 'Enrol once', body: 'Before the term starts.' },
+        { icon: 'first', head: 'First payment', body: `${WEEKLY}, on the day of your player’s first session.` },
+        { icon: 'weekly', head: 'Then weekly', body: `${WEEKLY} a week until the term ends.` },
+        { icon: 'holiday', head: 'School holidays', body: 'Nothing to pay.' },
+        { icon: 'renew', head: 'Next term', body: 'Re-enrolment is automatic.' },
     ],
+    flowRepeat: 'Steps 2 to 5 repeat every term, until you tell us to stop.',
+    stopShort: `To stop, email us at least ${NOTICE_WEEKS} weeks before the next term starts. Stopping in the middle of a term has a cancellation fee.`,
+    termsButton: 'Read the terms',
     makeup: ['Missed a session? Each group keeps one spot for a player who missed a session. ', tbc('Your player can do it with another group at the same phase and the same centre, when that group has a spot. This isn’t available in the first or last session of term.', 'Make-up rules: same phase + same centre only, none on Benchmark/festival nights (safeguarding). How many a term? How booked?')],
     cover: tbc('Each group always has its own coach. If a coach is away and we can’t replace them, we cancel that group’s session and credit you for it. We don’t join two groups together.', 'Approve the cover rule (cancel + credit, never merge lanes)?'),
     yearTitle: `2027: ${SESSIONS_PER_YEAR} weeks of sessions and ${52 - SESSIONS_PER_YEAR} school-holiday weeks`,
     yearNote: 'You only pay for weeks with a session.',
     calendarTitle: 'Every term and what it costs',
     calendarNote: `${WEEKLY} a week, paid weekly in term. ${GST_NOTE}`,
+};
+
+// ── The terms pop-up. These are the main terms in plain words, taken from the
+// rules already on the page; the full Terms and Conditions are not written yet
+// (docs/junior-royals-terms-checklist.md) and a lawyer reads them before
+// enrolment opens.
+export const TERMS_POPUP = {
+    title: 'Junior Royals: the main terms',
+    intro: tbc('These are the main terms. You will be asked to read and accept the full Terms and Conditions when you enrol.', 'The full Terms and Conditions are not written yet. They must exist, lawyer-checked, before enrolment opens.'),
+    items: [
+        { head: 'Enrolling', body: [`${SUBSCRIPTION_LINE} Enrol before the term starts. New players start at the beginning of a term, so groups stay together. `, tbc('Enrolments close the Friday before term.', 'Enrolment closing day? Proposed: the Friday before term.')] },
+        { head: 'Payments', body: `${FIRST_PAYMENT_LINE} Nothing to pay in the school holidays. ${GST_NOTE}` },
+        { head: 'Automatic re-enrolment', body: `${AUTO_RENEW_LINE} Your player keeps their place in their group, and you don’t need to enrol again.` },
+        { head: 'Stopping', body: STOP_LINE },
+        { head: 'Cancellation fee', body: ['Stopping in the middle of a term: a cancellation fee of ', CANCEL_FEE, ' applies, because nobody new can join that group until the next term. This doesn’t affect your rights under the Australian Consumer Law.'] },
+        { head: 'Missed sessions', body: PRICES.makeup.slice(1) },
+        { head: 'If your coach is away', body: PRICES.cover },
+        { head: 'Training shirt', body: `Players wear the Junior Royals training shirt at every session. It costs ${money(SHIRT.memberPrice)}, paid once.` },
+    ],
+    close: 'Close',
 };
 
 // Per-hour comparison. Market figures: published prices checked 5 Oct 2026 (sources in

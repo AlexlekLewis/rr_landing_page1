@@ -171,17 +171,33 @@ describe('the interest form', () => {
 
     // Alex, 12 Oct: "Make sure it's clear … that re-enrolments are automatic. First
     // payment comes out the day of the first session of the term."
-    it('says re-enrolment is automatic and when the first payment is taken, in the steps and the FAQ', () => {
+    it('says re-enrolment is automatic and when the first payment is taken, in the terms pop-up and the FAQ', () => {
         expect(CONTENT.AUTO_RENEW_LINE).toMatch(/^Re-enrolment is automatic\./);
         expect(CONTENT.FIRST_PAYMENT_LINE).toContain('on the day of your player’s first session of each term');
-        const steps = JSON.stringify(CONTENT.PRICES.how);
+        const terms = JSON.stringify(CONTENT.TERMS_POPUP);
         const faqs = JSON.stringify(CONTENT.FAQS);
         [CONTENT.AUTO_RENEW_LINE, CONTENT.FIRST_PAYMENT_LINE, CONTENT.STOP_LINE].forEach((line) => {
-            expect(steps).toContain(line);
+            expect(terms).toContain(line);
             expect(faqs).toContain(line);
         });
         expect(CONTENT.FAQS.map((f) => f.q)).toContain('Do we need to enrol again each term?');
         expect(JSON.stringify(CONTENT)).not.toMatch(/week 1 of each term/i);
+    });
+
+    // Alex, 12 Oct: "how enrolment works needs to be replaced by graphics", with the
+    // terms-and-conditions detail (cancellation fee and so on) in a pop-up.
+    it('enrolment is a five-step graphic; the detail is in the terms pop-up', () => {
+        const flow = CONTENT.PRICES.flow;
+        expect(flow.map((st) => st.head)).toEqual(['Enrol once', 'First payment', 'Then weekly', 'School holidays', 'Next term']);
+        flow.forEach((st) => expect(st.body.split(/\s+/).length).toBeLessThanOrEqual(10));      // a caption, not a paragraph
+        expect(flow[4].body).toBe('Re-enrolment is automatic.');
+        expect((CONTENT.PRICES as Record<string, unknown>).how).toBeUndefined();
+        // the one line that stays on the page says how to stop and that a fee exists
+        expect(CONTENT.PRICES.stopShort).toMatch(/at least 2 weeks before the next term/);
+        expect(CONTENT.PRICES.stopShort).toMatch(/cancellation fee/);
+        const heads = CONTENT.TERMS_POPUP.items.map((it) => it.head);
+        expect(heads).toEqual(expect.arrayContaining(['Automatic re-enrolment', 'Stopping', 'Cancellation fee', 'Missed sessions', 'If your coach is away']));
+        expect(JSON.stringify(CONTENT.TERMS_POPUP)).toContain('Australian Consumer Law');
     });
 
     // Alex, 12 Oct: clearer badges, the learning process around them, why we track,

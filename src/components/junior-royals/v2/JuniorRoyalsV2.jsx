@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, Award, BadgeCheck, Cake, CalendarCheck, Check, ChevronDown, ClipboardList, Clock, GraduationCap, Layers, ListChecks, MapPin, MessageCircle, Repeat, ShieldCheck, Shirt, Smile, Target, Trophy, Users } from 'lucide-react';
+import { ArrowRight, Award, BadgeCheck, Cake, CalendarCheck, Check, ChevronDown, ClipboardCheck, ClipboardList, Clock, FileText, GraduationCap, Layers, ListChecks, MapPin, MessageCircle, RefreshCw, Repeat, ShieldCheck, Shirt, Smile, Sun, Target, Trophy, Users, X } from 'lucide-react';
 import Navbar from '../../Navbar';
 import Footer from '../../Footer';
 import usePageAnalytics from '../../../hooks/usePageAnalytics';
@@ -9,7 +10,7 @@ import { Rich } from '../JuniorRoyalsShared';
 import { MOCKUP, money } from '../juniorRoyalsData';
 import { PILLARS, PRICE, PHASES, CURRICULUM } from './jrV2Facts';
 import {
-    HERO, CTA, VALUE, PROGRESS, LEARN, PATH, PRICES, COMPARE, COACHES, FORM, FAQS,
+    HERO, CTA, VALUE, PROGRESS, LEARN, PATH, PRICES, TERMS_POPUP, COMPARE, COACHES, FORM, FAQS,
     REGION_LABEL, NEARBY, PHOTOS, V2_CENTRES, TERMS, termTotal,
 } from './jrV2Content';
 import { HourNumbers, HourRibbon, LaneDots, SkillSteps, Cues, YearStrip } from './JRV2Visuals';
@@ -394,6 +395,101 @@ const Coaches = () => (
     </Section>
 );
 
+// ── How enrolment works, as a graphic (Alex, 12 Oct 2026: "replaced by graphics …
+// we don't want all of that bulk text making the site look messy"). Five steps
+// in a row on a computer, down the page on a phone. The detail is in the terms
+// pop-up, opened by the button underneath.
+const FLOW_ICON = { enrol: ClipboardCheck, first: CalendarCheck, weekly: Repeat, holiday: Sun, renew: RefreshCw };
+
+const TermsModal = ({ onClose }) => {
+    const panelRef = useRef(null);
+    const closeRef = useRef(null);
+    const onCloseRef = useRef(onClose);
+    useEffect(() => { onCloseRef.current = onClose; });
+    // Open: lock page scroll, focus Close, Esc closes, Tab stays inside. Close: give focus back.
+    useEffect(() => {
+        const opener = document.activeElement;
+        const overflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        closeRef.current?.focus();
+        const onKey = (e) => {
+            if (e.key === 'Escape') { onCloseRef.current(); return; }
+            if (e.key !== 'Tab' || !panelRef.current) return;
+            const f = [...panelRef.current.querySelectorAll('button, a[href]')].filter((el) => !el.disabled);
+            if (!f.length) return;
+            if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+            else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+        };
+        document.addEventListener('keydown', onKey);
+        return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = overflow; opener?.focus?.(); };
+    }, []);
+    return createPortal(
+        <div data-jr-terms-modal className="fixed inset-0 z-[60] flex items-end md:items-center justify-center">
+            <div className="absolute inset-0 bg-rr-dark/80" onClick={onClose} aria-hidden="true" />
+            <div ref={panelRef} role="dialog" aria-modal="true" aria-labelledby="jr-terms-title"
+                className="relative w-full md:max-w-2xl h-[100dvh] md:h-auto md:max-h-[90vh] overflow-y-auto bg-white md:rounded-2xl">
+                <div className="sticky top-0 bg-white border-b border-slate-200 px-5 sm:px-8 py-4 flex items-start justify-between gap-4">
+                    <h2 id="jr-terms-title" className="text-xl sm:text-2xl font-black uppercase text-rr-dark leading-tight">{TERMS_POPUP.title}</h2>
+                    <button ref={closeRef} type="button" onClick={onClose} aria-label={TERMS_POPUP.close}
+                        className="shrink-0 w-11 h-11 rounded-full bg-rr-dark text-white flex items-center justify-center">
+                        <X className="w-5 h-5" strokeWidth={3} />
+                    </button>
+                </div>
+                <div className="px-5 sm:px-8 py-6">
+                    <p className="text-[15px] font-semibold text-rr-dark leading-relaxed"><Rich v={TERMS_POPUP.intro} /></p>
+                    <dl className="mt-5 divide-y divide-slate-200 border-y border-slate-200">
+                        {TERMS_POPUP.items.map((it) => (
+                            <div key={it.head} className="py-4">
+                                <dt className="text-sm font-black uppercase tracking-[0.12em] text-rr-pink">{it.head}</dt>
+                                <dd className="mt-1.5 text-[15px] sm:text-base font-medium text-rr-dark leading-relaxed"><Rich v={it.body} /></dd>
+                            </div>
+                        ))}
+                    </dl>
+                    <button type="button" onClick={onClose} className="mt-6 inline-flex items-center justify-center min-h-[48px] px-7 rounded-full border-2 border-rr-dark text-rr-dark font-black uppercase tracking-wider text-sm">{TERMS_POPUP.close}</button>
+                </div>
+            </div>
+        </div>,
+        document.body,
+    );
+};
+
+const EnrolFlow = () => {
+    const [terms, setTerms] = useState(false);
+    return (
+        <div className="mt-12 border-t border-slate-200 pt-10">
+            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark mb-8">{PRICES.flowTitle}</h3>
+            <ol className="relative grid gap-y-6 md:grid-cols-5 md:gap-x-3">
+                <li aria-hidden="true" className="hidden md:block absolute top-8 left-[10%] right-[10%] h-0.5 bg-rr-pink" />
+                <li aria-hidden="true" className="md:hidden absolute left-8 top-8 bottom-8 w-0.5 -translate-x-1/2 bg-rr-pink" />
+                {PRICES.flow.map((st, i) => {
+                    const Icon = FLOW_ICON[st.icon];
+                    return (
+                        <li key={st.head} className="relative flex md:flex-col items-center md:text-center gap-4 md:gap-0">
+                            <span className="relative w-16 h-16 rounded-full bg-rr-pink flex items-center justify-center shrink-0 ring-8 ring-white">
+                                <Icon className="w-7 h-7 text-white" aria-hidden="true" />
+                                <span className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-rr-dark text-white text-xs font-black flex items-center justify-center">{i + 1}</span>
+                            </span>
+                            <span className="md:mt-4">
+                                <span className="block text-rr-dark text-lg font-black uppercase leading-tight">{st.head}</span>
+                                <span className="block text-rr-charcoal text-[15px] font-medium leading-snug mt-1">{st.body}</span>
+                            </span>
+                        </li>
+                    );
+                })}
+            </ol>
+            <p className="mt-8 flex items-center gap-2 text-rr-dark text-[15px] sm:text-base font-bold"><RefreshCw className="w-5 h-5 text-rr-pink shrink-0" aria-hidden="true" />{PRICES.flowRepeat}</p>
+            <div className="mt-5 flex flex-col sm:flex-row sm:items-center gap-4">
+                <p className="text-rr-charcoal text-[15px] sm:text-base font-medium leading-relaxed max-w-xl">{PRICES.stopShort}</p>
+                <button type="button" data-jr-terms-open onClick={() => setTerms(true)} aria-haspopup="dialog"
+                    className="shrink-0 inline-flex items-center justify-center gap-2 min-h-[48px] px-6 rounded-full border-2 border-rr-dark text-rr-dark hover:bg-rr-dark hover:text-white font-black uppercase tracking-wider text-sm transition-colors">
+                    <FileText className="w-4 h-4" aria-hidden="true" />{PRICES.termsButton}
+                </button>
+            </div>
+            {terms && <TermsModal onClose={() => setTerms(false)} />}
+        </div>
+    );
+};
+
 // ── Price ──
 const Prices = () => (
     <Section id="prices">
@@ -403,28 +499,15 @@ const Prices = () => (
                 <p><span className="text-6xl font-black text-rr-dark">{PRICES.price}</span> <span className="text-xl font-bold text-rr-charcoal">{PRICES.per}</span></p>
                 <p className="text-[15px] font-bold text-rr-dark mt-1">{PRICES.perNote}</p>
                 <ul className="mt-5 space-y-2">{PRICES.includes.map((t, i) => <Tick key={i}><span className="font-semibold text-rr-dark"><Rich v={t} /></span></Tick>)}</ul>
-                <div className="mt-6 rounded-2xl border-2 border-slate-200 p-5">
-                    <p className="flex items-center gap-2 text-sm font-black uppercase tracking-wider text-rr-dark"><Shirt className="w-5 h-5 text-rr-pink" aria-hidden="true" />{PRICES.shirtTitle}</p>
-                    <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed mt-2">{PRICES.shirt}</p>
-                    <p className="text-[15px] text-rr-dark font-bold leading-relaxed mt-2"><Rich v={PRICES.shirtOffer} /></p>
-                </div>
             </div>
-            <div>
-                <h3 className="text-xl font-black uppercase text-rr-dark mb-4">{PRICES.howTitle}</h3>
-                <ol className="space-y-3">
-                    {PRICES.how.map((h, i) => (
-                        <li key={i} className="flex gap-3">
-                            <span className="text-xl font-black text-rr-pink leading-tight w-6 shrink-0">{i + 1}</span>
-                            <span className="text-[15px] text-rr-dark font-medium leading-relaxed"><Rich v={h} /></span>
-                        </li>
-                    ))}
-                </ol>
-                <ul className="mt-6 space-y-3">
-                    <Tick><Rich v={PRICES.makeup} /></Tick>
-                    <Tick><Rich v={PRICES.cover} /></Tick>
-                </ul>
+            <div className="rounded-2xl border-2 border-slate-200 p-5 self-start">
+                <p className="flex items-center gap-2 text-sm font-black uppercase tracking-wider text-rr-dark"><Shirt className="w-5 h-5 text-rr-pink" aria-hidden="true" />{PRICES.shirtTitle}</p>
+                <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed mt-2">{PRICES.shirt}</p>
+                <p className="text-[15px] text-rr-dark font-bold leading-relaxed mt-2"><Rich v={PRICES.shirtOffer} /></p>
             </div>
         </div>
+
+        <EnrolFlow />
 
         <div className="grid md:grid-cols-2 gap-10 mt-12">
             <div>
