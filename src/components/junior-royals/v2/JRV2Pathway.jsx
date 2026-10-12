@@ -171,7 +171,6 @@ const StageModal = ({ index, onClose, onNav }) => {
                         {p.key === 'discover'
                             ? <ul className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-6 mt-3">{BADGES.discover.slice(0, 4).map((b) => <BadgeMedal key={b.name} b={b} />)}</ul>
                             : <p className="text-[15px] font-medium text-rr-charcoal"><Rich v={PATH.modal.badgesNotWritten} /></p>}
-                        <p className="mt-4 text-sm font-semibold text-rr-dark"><Rich v={PROGRESS.starts} /></p>
                     </section>
 
                     <section className="flex items-start gap-3">

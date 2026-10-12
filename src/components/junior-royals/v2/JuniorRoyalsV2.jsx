@@ -10,13 +10,14 @@ import { Rich } from '../JuniorRoyalsShared';
 import { MOCKUP, money } from '../juniorRoyalsData';
 import { PILLARS, PRICE, PHASES, CURRICULUM } from './jrV2Facts';
 import {
-    HERO, CTA, VALUE, PROGRESS, LEARN, PATH, PRICES, TERMS_POPUP, COMPARE, COACHES, FORM, FAQS,
+    HERO, CTA, VALUE, PROGRESS, LEARN, PATH, PRICES, TERMS_POPUP, COMPARE, COACHES, FORM, FAQS, TRY,
     REGION_LABEL, NEARBY, PHOTOS, V2_CENTRES, TERMS, termTotal,
 } from './jrV2Content';
-import { HourNumbers, HourRibbon, LaneDots, SkillSteps, Cues, YearStrip } from './JRV2Visuals';
+import { HourNumbers, HourRibbon, LaneDots, SkillSteps, Cues } from './JRV2Visuals';
 import { StageJourney, BadgeWall } from './JRV2Pathway';
 import { ActionCards } from './JRV2ActionCards';
 import JRV2Form from './JRV2Form';
+import JRV2ComeAndTry, { TRY_OPEN_EVENT } from './JRV2ComeAndTry';
 
 // ─────────────────────────────────────────────────────────────
 // JUNIOR ROYALS — MOCK-UP VERSION 2 (/junior-royals on previews; version 1 is
@@ -202,7 +203,6 @@ const Progress = () => (
             <div>
                 <p className="text-lg sm:text-xl text-rr-dark font-semibold leading-relaxed">{PROGRESS.lead}</p>
                 <p className="mt-4 text-lg sm:text-xl text-rr-dark font-semibold leading-relaxed border-l-4 border-rr-pink pl-4">{PROGRESS.feel}</p>
-                <p className="mt-4 text-[15px] font-semibold text-rr-charcoal"><Rich v={PROGRESS.starts} /></p>
                 {/* The learning process around a badge: three weeks, the coach's check, the badge. */}
                 <h3 className="mt-10 mb-5 text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark">{PROGRESS.stepsTitle}</h3>
                 <ol className="space-y-5">
@@ -267,7 +267,6 @@ const Progress = () => (
                 <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark">{PROGRESS.portalTitle}</h3>
                 <p className="mt-2 text-[17px] font-bold text-rr-dark leading-snug">{PROGRESS.portal.lead}</p>
                 <ul className="mt-4 space-y-2.5">{PROGRESS.portal.points.map((pt) => <Tick key={pt}><span className="text-rr-dark font-semibold">{pt}</span></Tick>)}</ul>
-                <p className="mt-4 text-sm font-semibold text-rr-charcoal"><Rich v={PROGRESS.starts} /></p>
             </div>
         </div>
 
@@ -511,14 +510,8 @@ const Prices = () => (
 
         <div className="grid md:grid-cols-2 gap-10 mt-12">
             <div>
-                <h3 className="text-xl font-black uppercase text-rr-dark mb-1">{PRICES.yearTitle}</h3>
-                <p className="text-[15px] font-bold text-rr-dark mb-4">{PRICES.yearNote}</p>
-                <YearStrip />
-                <details className="group mt-8 border-y border-slate-200">
-                    <summary className="list-none cursor-pointer py-4 min-h-[44px] flex justify-between items-center gap-4">
-                        <h3 className="text-lg font-black uppercase text-rr-dark">{PRICES.calendarTitle}</h3>
-                        <ChevronDown className="w-5 h-5 shrink-0 text-rr-charcoal transition-transform group-open:rotate-180" />
-                    </summary>
+                <h3 className="text-xl font-black uppercase text-rr-dark mb-4">{PRICES.calendarTitle}</h3>
+                <div className="border-t border-slate-200">
                     <table className="w-full text-left">
                         <thead>
                             <tr className="border-b-2 border-rr-dark text-xs font-black uppercase tracking-wider text-rr-dark">
@@ -535,8 +528,8 @@ const Prices = () => (
                             ))}
                         </tbody>
                     </table>
-                    <p className="text-xs text-rr-charcoal font-medium mt-2 pb-4">{PRICES.calendarNote}</p>
-                </details>
+                    <p className="text-xs text-rr-charcoal font-medium mt-2">{PRICES.calendarNote}</p>
+                </div>
             </div>
             <div className="border-l-4 border-rr-pink pl-5">
                 <h3 className="text-xl font-black uppercase text-rr-dark mb-4">{COMPARE.title}</h3>
@@ -573,6 +566,14 @@ const Register = () => (
             </ol>
             <p className="mb-6 text-sm font-medium text-white/80">{FORM.returning}</p>
             <JRV2Form />
+            {/* A family who closed the come and try pop-up can open it again here. */}
+            <div className="mt-8 border-t border-white/20 pt-6 flex flex-col sm:flex-row sm:items-center gap-3">
+                <p className="text-white text-[17px] font-bold">{TRY.again.lead}</p>
+                <button type="button" data-jr-try-open onClick={() => window.dispatchEvent(new Event(TRY_OPEN_EVENT))} aria-haspopup="dialog"
+                    className="inline-flex items-center justify-center min-h-[48px] px-6 rounded-full border-2 border-white text-white hover:bg-white hover:text-rr-dark font-black uppercase tracking-wider text-sm transition-colors">
+                    {TRY.again.button}
+                </button>
+            </div>
         </div>
     </section>
 );
@@ -647,6 +648,7 @@ const JuniorRoyalsV2 = () => {
             </main>
             <Footer />
             <StickyBar />
+            <JRV2ComeAndTry />
         </div>
     );
 };

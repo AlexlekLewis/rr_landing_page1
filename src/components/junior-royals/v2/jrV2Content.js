@@ -18,7 +18,7 @@
 // ─────────────────────────────────────────────────────────────
 
 import { tbc, money, AGES_TEXT, FIRST_SESSION, CALENDAR, SESSIONS_PER_YEAR, GST_NOTE, JOINING_OPENS, CENTRES, PS_ROUTE } from '../juniorRoyalsData';
-import { PRICE, SHIRT, NOTICE_WEEKS, BADGES, CURRICULUM, TIMES, BLOCK } from './jrV2Facts';
+import { PRICE, SHIRT, NOTICE_WEEKS, BADGES, CURRICULUM, TIMES, BLOCK, COME_AND_TRY } from './jrV2Facts';
 
 const r2 = (n) => Math.round(n * 100) / 100;
 // Every batting, bowling and fielding topic across the three phases (47).
@@ -109,7 +109,6 @@ export const HERO = {
 // The portal's public name and the start-date note, used by the value and progress sections.
 export const PHASE_BADGES = BADGES.perPhase.batting + BADGES.perPhase.bowling + BADGES.perPhase.fielding;   // 28
 export const PORTAL_NAME = 'Player Performance Portal';   // the name the Power Game pages already use
-const WHEN = tbc('From Term 1, 2027.', 'Skill badges and portal access for Junior Royals: start date to confirm (blueprint Part IV is a proposal; is the Junior Royals part of the portal built?).');
 
 // ── The value, in plain words (Alex, 11 Oct 2026: "clearly communicate what the
 // value is … for the player and the parent", with the Royals Way folded in).
@@ -153,7 +152,7 @@ export const VALUE = {
             { icon: 'group', head: 'A small group with its own coach', body: `No more than ${PRICE.perLane} players in a lane.` },
             { icon: 'plan', head: 'The same plan every week', body: 'Sixty minutes: batting, bowling, then a scored game.' },
             { icon: 'safe', head: 'Safety rules for each phase', body: 'In Discover, players bowl at targets, never at a batter, and the coach feeds every ball to the batter.' },
-            { icon: 'card', head: 'Progress you can see', body: [`Every badge your player earns is recorded in the ${PORTAL_NAME}, in “I can …” words. `, WHEN] },
+            { icon: 'card', head: 'Progress you can see', body: `Every badge your player earns is recorded in the ${PORTAL_NAME}, in “I can …” words.` },
             { icon: 'same', head: 'Every coach works from the same written plan', body: 'A goal, the coaching points, the questions to ask and the drills, for every session.' },
             { icon: 'place', head: 'Your player keeps their place', body: 'The same day and time each week, and their place continues every term until you stop it.' },
         ],
@@ -189,7 +188,9 @@ export const PROGRESS = {
     // accomplishment and a player's ability to feel self-confident as they develop
     // and grow their game." His words, kept close.
     feel: 'Every badge gives your player a sense of accomplishment, and helps them feel self-confident as they develop and grow their game.',
-    starts: tbc('Skill badges and portal access start in Term 1, 2027.', 'Start date for badges and portal access: Term 1, 2027 is the blueprint’s proposal. Confirm, or start in Term 4, 2026.'),
+    // No start date on the page: players get their badges and portal access straight
+    // away (Alex, 12 Oct 2026: "I don't know why it says from Term 1 2027. Let's get
+    // rid of that … they get access straight away"; "we don't need to tell them that").
     // The learning process around a badge: the 3-week block (jrV2Facts BLOCK), the
     // coach's check (BADGES.check) and the badge arriving in the portal.
     stepsTitle: 'How your player earns a badge',
@@ -328,7 +329,7 @@ export const PRICES = {
     includes: [
         'One hour of coaching every week in school terms',
         `A small group: up to ${PRICE.perLane} players in a lane, with their own coach`,
-        [`Digital skill badges and access to the ${PORTAL_NAME} `, tbc('(from Term 1, 2027)', 'Skill badges and portal access: start date to confirm.')],
+        `Digital skill badges and access to the ${PORTAL_NAME}`,
         'A digital certificate at the end of every phase',
     ],
     shirtTitle: 'The training shirt',
@@ -353,8 +354,6 @@ export const PRICES = {
     termsButton: 'Read the terms',
     makeup: ['Missed a session? Each group keeps one spot for a player who missed a session. ', tbc('Your player can do it with another group at the same phase and the same centre, when that group has a spot. This isn’t available in the first or last session of term.', 'Make-up rules: same phase + same centre only, none on Benchmark/festival nights (safeguarding). How many a term? How booked?')],
     cover: tbc('Each group always has its own coach. If a coach is away and we can’t replace them, we cancel that group’s session and credit you for it. We don’t join two groups together.', 'Approve the cover rule (cancel + credit, never merge lanes)?'),
-    yearTitle: `2027: ${SESSIONS_PER_YEAR} weeks of sessions and ${52 - SESSIONS_PER_YEAR} school-holiday weeks`,
-    yearNote: 'You only pay for weeks with a session.',
     calendarTitle: 'Every term and what it costs',
     calendarNote: `${WEEKLY} a week, paid weekly in term. ${GST_NOTE}`,
 };
@@ -431,19 +430,52 @@ export const FORM = {
     privacy: ['We use these details only to plan Junior Royals groups and to contact you about Junior Royals. We don’t share them outside the Academy, except with the services that store them for us. ', tbc('If your player doesn’t enrol, we delete them by 30 June 2027.', 'Retention date for interest-only records?'), ' To see or delete your details, email info@rramelbourne.com.'],
 };
 
+// ── The free come and try day pop-up (Alex, 12 Oct 2026): "We want a pop-up to come
+// up on the page to say register for free come and try day for the new program."
+// It asks the parent's name, the player's name and age, a day, an email and a
+// mobile. Mickleham only for now. The time is worked out from the age and the day.
+const TRY_CENTRE = CENTRES.find((c) => c.value === COME_AND_TRY.centre);
+export const TRY = {
+    eyebrow: 'New program',
+    title: 'Free come and try day',
+    lead: 'Register for a free come and try day for the new Junior Royals program.',
+    where: `At Mickleham only, for now: ${TRY_CENTRE.venue}, ${TRY_CENTRE.address}.`,
+    // "Monday: 5:00pm for players aged 7 to 9, 6:00pm for players aged 10 to 12."
+    dayLines: COME_AND_TRY.days.map((d) => `${d.label}: ${d.times.map((t) => `${t.time} for players aged ${t.min} to ${t.max}`).join(', ')}.`),
+    labels: { parent: 'Parent or guardian name', player: 'Player’s first name', age: 'Player’s age', day: 'Choose a day', email: 'Email', mobile: 'Mobile' },
+    agePlaceholder: 'Choose an age',
+    ageWhy: 'The time depends on your player’s age.',
+    yourSession: (day, time) => `Your player’s session: ${day} at ${time}.`,
+    button: 'Register for free',
+    under: 'Free. Nothing to pay.',
+    done: {
+        title: 'You’re registered',
+        body: (day, time) => `We’ve got your details for the free come and try day at Mickleham: ${day} at ${time}. We’ll contact you to confirm.`,
+    },
+    mockupNote: 'Mock-up: this form is not connected yet. Nothing you type is saved.',
+    close: 'Close',
+    // Shown on the page too, so a family who closed the pop-up can open it again.
+    again: { lead: 'Want to try a session first?', button: 'Free come and try day' },
+    faq: {
+        q: 'Can we try a session before we enrol?',
+        a: `Yes. There is a free come and try day for the new program, at Mickleham only for now. ${COME_AND_TRY.days.map((d) => `${d.label}: ${d.times.map((t) => `${t.time} for players aged ${t.min} to ${t.max}`).join(', ')}.`).join(' ')} Register with the “Free come and try day” button on this page.`,
+    },
+};
+
 // ── 7. FAQ ──
 export const FAQS = [
+    { q: TRY.faq.q, a: TRY.faq.a },
     {
         q: 'What will my player learn?',
         a: 'Batting, bowling and fielding, one skill at a time. Junior Royals has three phases (Discover, Develop and Elevate), and each has its own list of topics. Tap a phase in “What your player learns” to see every topic.',
     },
     {
         q: 'How will I know my player is improving?',
-        a: [`Your player earns a digital skill badge each time they show a skill without help: ${BADGES.check.good} good balls out of ${BADGES.check.of}, in ${BADGES.check.nights} different sessions. At the end of every phase they receive a digital certificate. Both are kept in the ${PORTAL_NAME}. `, PROGRESS.starts],
+        a: `Your player earns a digital skill badge each time they show a skill without help: ${BADGES.check.good} good balls out of ${BADGES.check.of}, in ${BADGES.check.nights} different sessions. At the end of every phase they receive a digital certificate. Both are kept in the ${PORTAL_NAME}.`,
     },
     {
         q: `What is the ${PORTAL_NAME}?`,
-        a: [`${PROGRESS.portal.lead} ${PROGRESS.portal.points.join(' ')} `, PROGRESS.starts],
+        a: `${PROGRESS.portal.lead} ${PROGRESS.portal.points.join(' ')}`,
     },
     {
         q: 'Which day and time will my player train?',
@@ -515,7 +547,7 @@ export const FAQS = [
 // Every open decision, for the review banner. Each also shows in yellow where it's used.
 export const OPEN_QUESTIONS_V2 = [
     'The one-line Why in the hero',
-    'Progress system: skill badges + Player Performance Portal access from Term 1, 2027 — go ahead? Benchmark Game and printed progress card are off the page (Alex, 12 Oct): keep either?',
+    'Badges and portal access start straight away (Alex, 12 Oct): the Junior Royals part of the portal must be ready for the first session. Benchmark Game and printed progress card are off the page: keep either?',
     'Cancellation fee for stopping mid-term (proposed 2 weeks’ fees) — lawyer to check; add to the T&Cs',
     'Free-shirt offer: who keeps the “shirts left” count current?',
     'Junior Royals coaches at each centre (names and roles)',

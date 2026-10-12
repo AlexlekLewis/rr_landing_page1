@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { PRICE, SHIRT, NOTICE_WEEKS, PHASES, SESSION, CURRICULUM, BADGES, wednesdays2027, timeForAge } from './jrV2Facts';
+import { PRICE, SHIRT, NOTICE_WEEKS, PHASES, SESSION, CURRICULUM, BADGES, wednesdays2027, timeForAge, COME_AND_TRY, tryTime } from './jrV2Facts';
+import { TRY_VALUES } from './JRV2ComeAndTry';
 import * as CONTENT from './jrV2Content';
 import { termTotal, yearTotal, TERMS, V2_CENTRES, DAYS, MIN_DAYS } from './jrV2Content';
 import { FORM_VALUES } from './JRV2Form';
@@ -250,6 +251,44 @@ describe('the interest form', () => {
             return o.tbc ? String(o.text) : Object.values(o).map(shown).join(' ');
         };
         expect(shown({ ...CONTENT, OPEN_QUESTIONS_V2: undefined }) + shown(PHASES) + shown(CURRICULUM)).not.toMatch(/\bstages?\b/i);
+    });
+
+    // Alex, 12 Oct: a pop-up to "register for free come and try day for the new
+    // program": parent name, player name, player age, a day, email and mobile;
+    // Mickleham only for now; Monday 5pm and 6pm, Wednesday 6pm and 7pm, the
+    // younger players first.
+    it('free come and try day: Mickleham only, two days, time set by age', () => {
+        expect(COME_AND_TRY.centre).toBe('mickleham');
+        expect(COME_AND_TRY.days.map((d) => d.label)).toEqual(['Monday', 'Wednesday']);
+        expect([7, 9, 10, 12].map((a) => tryTime('mon', a)?.time)).toEqual(['5:00pm', '5:00pm', '6:00pm', '6:00pm']);
+        expect([7, 9, 10, 12].map((a) => tryTime('wed', a)?.time)).toEqual(['6:00pm', '6:00pm', '7:00pm', '7:00pm']);
+        expect(tryTime('mon', 6)).toBeNull();
+        expect(tryTime('mon', 13)).toBeNull();
+        expect(TRY_VALUES).toEqual({ centre: ['mickleham'], day: ['mon', 'wed'], session_time: ['5pm', '6pm', '7pm'], player_age: [7, 8, 9, 10, 11, 12] });
+        expect(CONTENT.TRY.title).toBe('Free come and try day');
+        expect(CONTENT.TRY.where).toContain('Mickleham only, for now');
+        expect(CONTENT.TRY.dayLines).toEqual([
+            'Monday: 5:00pm for players aged 7 to 9, 6:00pm for players aged 10 to 12.',
+            'Wednesday: 6:00pm for players aged 7 to 9, 7:00pm for players aged 10 to 12.',
+        ]);
+        expect(Object.keys(CONTENT.TRY.labels)).toEqual(['parent', 'player', 'age', 'day', 'email', 'mobile']);
+    });
+
+    // Alex, 12 Oct: no "from Term 1, 2027" on badges or portal access (players get
+    // access straight away), and no year-of-weeks graphic in the price section.
+    it('no start date on badges or the portal, and no year graphic', () => {
+        const shown = (v: unknown): string => {
+            if (v == null || typeof v === 'function') return '';
+            if (typeof v !== 'object') return String(v);
+            if (Array.isArray(v)) return v.map(shown).join(' ');
+            const o = v as Record<string, unknown>;
+            return o.tbc ? String(o.text) : Object.values(o).map(shown).join(' ');
+        };
+        const copy = shown({ ...CONTENT, OPEN_QUESTIONS_V2: undefined, TERMS: undefined });
+        expect(copy).not.toMatch(/from Term 1, 2027|start in Term 1, 2027/i);
+        expect(copy).not.toMatch(/school-holiday weeks/i);
+        expect((CONTENT.PRICES as Record<string, unknown>).yearTitle).toBeUndefined();
+        expect(CONTENT.PRICES.calendarTitle).toBe('Every term and what it costs');
     });
 
     // Alex, 12 Oct: the hero was too crowded. It goes straight to who it is for,

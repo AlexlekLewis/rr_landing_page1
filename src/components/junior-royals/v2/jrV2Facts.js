@@ -176,6 +176,24 @@ export const TIMES = [
 ];
 export const timeForAge = (age) => TIMES.find((t) => age >= t.min && age <= t.max) || null;
 
+// ── Free come and try day (Alex, 12 Oct 2026): "register for free come and try
+// day for the new program", Mickleham only for now. A family chooses one of two
+// days; the time is set by the player's age, younger players first.
+//   Monday:    5:00pm (aged 7 to 9), 6:00pm (aged 10 to 12)
+//   Wednesday: 6:00pm (aged 7 to 9), 7:00pm (aged 10 to 12)
+// ⚠️ To confirm with Alex: he said "choose a Monday or a Tuesday" and then gave the
+// second day's times as "on Wednesday". Wednesday is used here. No dates given yet.
+export const COME_AND_TRY = {
+    centre: 'mickleham',
+    ages: { min: 7, max: 12 },
+    days: [
+        { value: 'mon', label: 'Monday', times: [{ value: '5pm', time: '5:00pm', min: 7, max: 9 }, { value: '6pm', time: '6:00pm', min: 10, max: 12 }] },
+        { value: 'wed', label: 'Wednesday', times: [{ value: '6pm', time: '6:00pm', min: 7, max: 9 }, { value: '7pm', time: '7:00pm', min: 10, max: 12 }] },
+    ],
+};
+export const tryTime = (dayValue, age) =>
+    COME_AND_TRY.days.find((d) => d.value === dayValue)?.times.find((t) => age >= t.min && age <= t.max) ?? null;
+
 // ── One skill, three weeks (blueprint p17) ──
 export const BLOCK = [
     { week: 1, name: 'Learn it', does: 'Your coach shows you, step by step. You copy it.' },

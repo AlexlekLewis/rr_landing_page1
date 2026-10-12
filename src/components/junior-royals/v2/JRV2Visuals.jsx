@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowDown } from 'lucide-react';
-import { SESSION, BLOCK, CUES, wednesdays2027 } from './jrV2Facts';
+import { SESSION, BLOCK, CUES } from './jrV2Facts';
 
 // ─────────────────────────────────────────────────────────────
 // Visual explainers for /junior-royals version 2 (experience-design brief, 7 Oct 2026).
@@ -98,22 +98,3 @@ export const Cues = () => (
         ))}
     </ul>
 );
-
-// 6 ── A year: one square per Wednesday. Filled = a training week you pay for.
-export const YearStrip = () => {
-    const weeks = wednesdays2027();
-    return (
-        <figure aria-label="2027: 40 weeks of sessions and 12 school-holiday weeks">
-            <div className="grid grid-cols-[repeat(13,minmax(0,1fr))] sm:grid-cols-[repeat(26,minmax(0,1fr))] gap-1 max-w-xl" aria-hidden="true">
-                {weeks.map((w) => (
-                    <div key={w.iso} className={`aspect-square rounded-[3px] ${w.term ? 'bg-rr-dark' : 'border-[1.5px] border-slate-500'}`} />
-                ))}
-            </div>
-            <div className="flex flex-wrap gap-x-5 gap-y-1 mt-3 text-sm font-bold text-rr-dark">
-                <span className="inline-flex items-center gap-2"><span className="w-3 h-3 rounded-sm bg-rr-dark" />A week with a session (you pay)</span>
-                <span className="inline-flex items-center gap-2"><span className="w-3 h-3 rounded-sm border-[1.5px] border-slate-500" />School holidays (nothing to pay)</span>
-            </div>
-            <figcaption className="text-xs text-rr-charcoal font-medium mt-2">2027, one square for each week, January to December.</figcaption>
-        </figure>
-    );
-};
