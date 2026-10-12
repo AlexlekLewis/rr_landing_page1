@@ -167,6 +167,15 @@ export const SESSION = [
 ];
 export const LANE_MAX = 6;
 
+// ── Session times are set by age (Alex, 12 Oct 2026): 6:00pm is for players aged
+// 7 to 9, 7:00pm is for players aged 10 to 12. The form works the time out from
+// the date of birth (age on the day of the player's first session).
+export const TIMES = [
+    { value: '6pm', time: '6:00pm', min: 7, max: 9 },
+    { value: '7pm', time: '7:00pm', min: 10, max: 12 },
+];
+export const timeForAge = (age) => TIMES.find((t) => age >= t.min && age <= t.max) || null;
+
 // ── One skill, three weeks (blueprint p17) ──
 export const BLOCK = [
     { week: 1, name: 'Learn it', does: 'Your coach shows you, step by step. You copy it.' },

@@ -107,8 +107,7 @@ const Hero = () => (
                     <span className="block text-4xl sm:text-6xl md:text-7xl">{HERO.title}</span>
                     <span className="block text-base sm:text-xl normal-case tracking-normal font-bold text-white/90 mt-2">{HERO.titleSub}</span>
                 </h1>
-                <p className="text-[17px] sm:text-xl font-semibold text-white leading-snug mt-4"><Rich v={HERO.why} /></p>
-                <ul className="mt-5 space-y-2.5">
+                <ul className="mt-6 space-y-3.5">
                     {HERO.facts.map((f) => {
                         const Icon = ICON[f.icon];
                         return (
@@ -116,7 +115,7 @@ const Hero = () => (
                                 <Icon className="w-5 h-5 text-rr-light-pink shrink-0 mt-0.5" aria-label={f.k} />
                                 <span>
                                     {f.v}
-                                    {f.older && <> · <Link to={PATH.older.link.to} className="text-rr-light-pink underline underline-offset-2 font-bold">13 or older? See Performance Squads</Link></>}
+                                    {f.lines && f.lines.map((ln) => <span key={ln} className="block font-black text-white mt-1">{ln}</span>)}
                                 </span>
                             </li>
                         );
@@ -127,14 +126,8 @@ const Hero = () => (
                     <p className="text-white/85 text-sm font-semibold mt-1">{HERO.priceNote}</p>
                     <p className="text-white text-sm font-semibold mt-2 flex items-start gap-2"><Shirt className="w-4 h-4 text-rr-light-pink shrink-0 mt-0.5" aria-hidden="true" />{HERO.shirt}</p>
                 </div>
-                <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                    <PrimaryButton className="w-full sm:w-auto" />
-                    <button type="button" onClick={() => go('progress')} className="inline-flex items-center justify-center border-2 border-white/40 hover:border-white text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 min-h-[52px]">
-                        {CTA.secondary}
-                    </button>
-                </div>
+                <div className="mt-6"><PrimaryButton className="w-full sm:w-auto" /></div>
                 <p className="mt-3 text-sm font-semibold text-white">{HERO.noPayment}</p>
-                <p className="mt-1 text-sm font-medium text-white/80">{HERO.returning}</p>
             </div>
         </div>
     </section>
@@ -435,6 +428,7 @@ const Register = () => (
                     </li>
                 ))}
             </ol>
+            <p className="mb-6 text-sm font-medium text-white/80">{FORM.returning}</p>
             <JRV2Form />
         </div>
     </section>

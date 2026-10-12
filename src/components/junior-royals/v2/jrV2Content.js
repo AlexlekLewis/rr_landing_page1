@@ -18,7 +18,7 @@
 // ─────────────────────────────────────────────────────────────
 
 import { tbc, money, AGES_TEXT, FIRST_SESSION, CALENDAR, SESSIONS_PER_YEAR, GST_NOTE, JOINING_OPENS, CENTRES, PS_ROUTE } from '../juniorRoyalsData';
-import { PRICE, SHIRT, NOTICE_WEEKS, BADGES, CURRICULUM } from './jrV2Facts';
+import { PRICE, SHIRT, NOTICE_WEEKS, BADGES, CURRICULUM, TIMES } from './jrV2Facts';
 
 const r2 = (n) => Math.round(n * 100) / 100;
 // Every batting, bowling and fielding topic across the three stages (47).
@@ -69,25 +69,29 @@ export const PHOTOS = {
     coaches: { src: '/assets/jr-photo-feed.jpg', alt: 'A Royals Academy coach feeds balls to a young batter', label: 'Our coaches' },
 };
 
+// Session time by age, in one line each ("6:00pm: players aged 7 to 9").
+export const TIME_LINES = TIMES.map((t) => `${t.time}: players aged ${t.min} to ${t.max}`);
+export const TIMES_SENTENCE = `Players aged ${TIMES[0].min} to ${TIMES[0].max} train at ${TIMES[0].time}, and players aged ${TIMES[1].min} to ${TIMES[1].max} train at ${TIMES[1].time}.`;
+
 // ── 1. Hero (first screen on a phone) ──
+// Alex, 12 Oct 2026: "The hero section is too crowded … go straight into who's it
+// for, what time is it, where are the locations, group sizing", and say plainly
+// that 6:00pm is for ages 7 to 9 and 7:00pm for ages 10 to 12. So: no "why" line,
+// no second button, no side links. Who it is for is the line under the title.
 export const HERO = {
     eyebrow: 'Rajasthan Royals Academy · Melbourne',
     title: 'Junior Royals',
-    titleSub: `Cricket coaching for ages ${AGES_TEXT}`,
-    // Blueprint Part I §1, word for word ("the same words we will use with families").
-    why: tbc('We teach it the Royals Way: through games, with one clear skill to learn, one coaching point to hold on to, and a score to beat.', 'Hero line: taken word for word from the blueprint (Part I §1). OK to use it here?'),
+    titleSub: 'Cricket coaching for players aged 7 to 12',
     facts: [
-        { icon: 'users', k: 'Ages', v: `Ages ${AGES_TEXT}`, older: true },
-        { icon: 'clock', k: 'When', v: `One hour a week on a weekday evening in school terms, at 6:00pm or 7:00pm. First sessions ${FIRST_SESSION.long}.` },
+        { icon: 'clock', k: 'When', v: `One hour a week, on a weekday evening in school terms. First sessions ${FIRST_SESSION.long}.`, lines: TIME_LINES },
         { icon: 'pin', k: 'Where', v: CENTRE_NAMES },
-        { icon: 'group', k: 'Groups', v: `Small groups: up to ${PRICE.perLane} players and their own coach in each lane (a lane is one practice net)` },
+        { icon: 'group', k: 'Groups', v: `Up to ${PRICE.perLane} players in each group, with their own coach` },
     ],
     price: WEEKLY,
     per: 'a week',
-    priceNote: `${GST_NOTE} You enrol for a whole term and pay weekly. Nothing to pay in the school holidays.`,
-    shirt: `Plus the Junior Royals training shirt, ${money(SHIRT.memberPrice)} once (compulsory). Free for the first ${SHIRT.freeForFirst} players to enrol.`,
+    priceNote: `${GST_NOTE} You enrol for a whole term and pay weekly.`,
+    shirt: `Plus the training shirt, ${money(SHIRT.memberPrice)} once (compulsory). Free for the first ${SHIRT.freeForFirst} players to enrol.`,
     noPayment: 'No payment now. No place is held yet.',
-    returning: "Already sent us your details on our Term 4 form? We have them, and we'll email you when enrolment opens.",
 };
 
 // ── The value, in plain words (Alex, 11 Oct 2026: "clearly communicate what the
@@ -239,7 +243,7 @@ export const COACHES = {
     eyebrow: 'Coaches and centres',
     title: 'Your coaches at each centre',
     intro: 'Every lane has its own Royals Academy coach. These are the coaches at each centre.',
-    times: '6:00pm and 7:00pm sessions on weekday evenings',
+    times: `Weekday evenings. ${TIME_LINES.join('. ')}.`,
     comingSoon: 'Coming soon',
     comingSoonNote: 'Junior Royals is coming to Melbourne’s west. Register your interest and choose Ravenhall, and we’ll tell you first when it opens.',
     apart: 'The centres are far apart, so choose the one you can get to every week.',
@@ -314,21 +318,18 @@ export const FORM = {
     // (cold-read audit, 12 Oct 2026): set them side by side above the form.
     steps: [
         { n: '1', when: 'Today', does: 'Register your interest. No payment now, and no place is held yet.' },
-        { n: '2', when: 'Then', does: 'We email you the day your player’s group trains.' },
+        { n: '2', when: 'Then', does: 'We email you the day your player’s group trains. The time is set by age.' },
         { n: '3', when: ['From ', JOINING_OPENS], does: 'Enrolment opens. You confirm your player’s place and arrange payment. Everyone on this list gets the enrolment link before we announce it anywhere else.' },
     ],
+    returning: "Already sent us your details on our Term 4 form? We have them, and we'll email you when enrolment opens.",
     mockupNote: 'Mock-up: this form is not connected yet. Nothing you type is saved.',
+    timeByAge: `The session time is set by age. ${TIMES_SENTENCE}`,
+    yourTime: (time) => `Your player trains at ${time}.`,
     why: {
-        dob: 'So we know your player is 7 to 12.',
+        dob: 'So we know your player’s age group and session time.',
         days: `Tick every weekday your player could train. Please choose at least ${MIN_DAYS}. We'll tell you which day your player's group is on before enrolment opens.`,
-        time: 'So we can plan the 6:00pm and 7:00pm sessions.',
     },
     daysError: `Please choose at least ${MIN_DAYS} days.`,
-    timeChoices: [
-        { value: '6pm', label: '6:00pm' },
-        { value: '7pm', label: '7:00pm' },
-        { value: 'either', label: 'Either' },
-    ],
     done: {
         title: "You're on the list",
         body: "We've got your details. No payment has been taken and no place is held yet. We'll email you your player's day and the enrolment link before enrolment opens.",
@@ -348,8 +349,8 @@ export const FAQS = [
         a: ['Your player earns a skill badge each time their coach sees them do a skill on their own in a scored turn. You get a progress card at the end of every term, and a certificate at the end of every stage. ', PROGRESS.starts],
     },
     {
-        q: 'Which day will my player train?',
-        a: `On the form, tick every weekday your player could train (at least ${MIN_DAYS}). We put groups together from those answers, and email you your player's day before enrolment opens. Your player then trains on that day every week of term.`,
+        q: 'Which day and time will my player train?',
+        a: `The time is set by age. ${TIMES_SENTENCE} For the day: on the form, tick every weekday your player could train (at least ${MIN_DAYS}). We put groups together from those answers, and email you your player's day before enrolment opens. Your player then trains on that day every week of term.`,
     },
     {
         q: 'My player has never played. Can they enrol?',

@@ -7,18 +7,21 @@ import { MOCKUP, AGES, AGES_TEXT, PS_ROUTE } from '../juniorRoyalsData';
 import { ageAtStart } from '../JuniorRoyalsForm';
 import { Rich } from '../JuniorRoyalsShared';
 import { FORM, CTA, REGION_LABEL, V2_CENTRES, DAYS, MIN_DAYS } from './jrV2Content';
+import { TIMES, timeForAge } from './jrV2Facts';
 
 // ─────────────────────────────────────────────────────────────
 // Junior Royals v2 — Register Your Interest.
 //
 // Alex, 8 Oct 2026: expressions of interest first, "so we can understand what our
 // bookings are and our lane hires". So beyond the contact details the form asks
-// the centre, 2 or more weekdays the player could train, and a time. Each says
-// why it is asked (copy-esl.md §1.7).
+// the centre and 2 or more weekdays the player could train. Each says why it is
+// asked (copy-esl.md §1.7). The time is NOT asked: it is set by age (Alex, 12 Oct
+// 2026: 6:00pm for ages 7 to 9, 7:00pm for ages 10 to 12), worked out from the
+// date of birth and saved as preferred_time.
 //
 // Writes to public.junior_royals_interest (not created yet; one row = a family who
 // wants a Junior Royals place; NO payment taken, NO place held). Asks centre
-// (incl. Ravenhall, coming soon), 2+ weekdays and a time (Alex, 9 Oct 2026). While MOCKUP is
+// (incl. Ravenhall, coming soon) and 2+ weekdays (Alex, 9 Oct 2026). While MOCKUP is
 // true it validates and shows the success state but saves nothing.
 //
 // Choice columns get NO list-of-values CHECK in the database (the 27 Sep – 5 Oct
@@ -27,12 +30,12 @@ import { FORM, CTA, REGION_LABEL, V2_CENTRES, DAYS, MIN_DAYS } from './jrV2Conte
 // ─────────────────────────────────────────────────────────────
 
 const TABLE = 'junior_royals_interest';
-const EMPTY = { parent_name: '', email: '', phone: '', player_name: '', player_dob: '', centre: '', preferred_days: [], preferred_time: '' };
+const EMPTY = { parent_name: '', email: '', phone: '', player_name: '', player_dob: '', centre: '', preferred_days: [] };
 
 export const FORM_VALUES = {
     centre: V2_CENTRES.map((c) => c.value),
     preferred_days: DAYS.map((d) => d.value),
-    preferred_time: FORM.timeChoices.map((c) => c.value),
+    preferred_time: TIMES.map((t) => t.value),   // set from the player's age, never typed
 };
 
 const collectUtm = () => {
@@ -89,6 +92,9 @@ const JRV2Form = () => {
         if (errors[name]) setErrors((x) => ({ ...x, [name]: undefined }));
     };
 
+    // The session time for this player's age, once a date of birth is entered.
+    const slot = form.player_dob ? timeForAge(ageAtStart(form.player_dob)) : null;
+
     const toggleDay = (e) => {
         const { value, checked } = e.target;
         setForm((f) => ({ ...f, preferred_days: checked ? [...f.preferred_days, value] : f.preferred_days.filter((d) => d !== value) }));
@@ -108,9 +114,7 @@ const JRV2Form = () => {
             else if (age > AGES.max) e.player_dob = 'older';
             else if (age < AGES.min) e.player_dob = `Junior Royals is for players aged ${AGES_TEXT}.`;
         }
-        for (const k of ['centre', 'preferred_time']) {
-            if (!FORM_VALUES[k].includes(form[k])) e[k] = 'Please choose one.';
-        }
+        if (!FORM_VALUES.centre.includes(form.centre)) e.centre = 'Please choose one.';
         if (form.preferred_days.filter((d) => FORM_VALUES.preferred_days.includes(d)).length < MIN_DAYS) e.preferred_days = FORM.daysError;
         setErrors(e);
         return Object.keys(e).length === 0;
@@ -132,7 +136,7 @@ const JRV2Form = () => {
                     player_dob: form.player_dob,
                     centre: form.centre,
                     preferred_days: DAYS.map((d) => d.value).filter((d) => form.preferred_days.includes(d)),
-                    preferred_time: form.preferred_time,
+                    preferred_time: timeForAge(ageAtStart(form.player_dob))?.value ?? null,
                     page_referrer: document.referrer || null,
                     ...collectUtm(),
                 }]);
@@ -193,6 +197,9 @@ const JRV2Form = () => {
                             <Link to={PS_ROUTE} className="underline underline-offset-2">See Performance Squads</Link>
                         </p>
                     ) : <Err msg={errors.player_dob} />}
+                    <p className="text-sm font-medium text-rr-charcoal mt-2" aria-live="polite">
+                        {slot ? <span className="font-black text-rr-dark">{FORM.yourTime(slot.time)} </span> : null}{FORM.timeByAge}
+                    </p>
                 </div>
 
                 <Choices name="centre" legend="Centre" value={form.centre} onChange={set} error={errors.centre}
@@ -215,7 +222,6 @@ const JRV2Form = () => {
                     </div>
                     <Err msg={errors.preferred_days} />
                 </fieldset>
-                <Choices name="preferred_time" legend="Time" why={FORM.why.time} value={form.preferred_time} onChange={set} error={errors.preferred_time} items={FORM.timeChoices} />
             </div>
 
             {errors.form && <p className="mt-5 text-sm font-bold text-rr-pink">{errors.form}</p>}

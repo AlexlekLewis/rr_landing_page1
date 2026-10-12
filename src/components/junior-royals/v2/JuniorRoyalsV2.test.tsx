@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { PRICE, SHIRT, NOTICE_WEEKS, PHASES, SESSION, CURRICULUM, BADGES, wednesdays2027 } from './jrV2Facts';
+import { PRICE, SHIRT, NOTICE_WEEKS, PHASES, SESSION, CURRICULUM, BADGES, wednesdays2027, timeForAge } from './jrV2Facts';
 import * as CONTENT from './jrV2Content';
 import { termTotal, yearTotal, TERMS, V2_CENTRES, DAYS, MIN_DAYS } from './jrV2Content';
 import { FORM_VALUES } from './JRV2Form';
@@ -120,7 +120,6 @@ describe('progress system and stages', () => {
     // the verified Sid profile; these guards stop a drafted line creeping back in.
     it('says who the Royals are, what the Royals Way is and where it leads, in the blueprint’s own words', () => {
         const text = (v: unknown): string => (Array.isArray(v) ? v.map(text).join('') : typeof v === 'object' && v ? (v as { text: string }).text : String(v));
-        expect(text(CONTENT.HERO.why)).toBe('We teach it the Royals Way: through games, with one clear skill to learn, one coaching point to hold on to, and a score to beat.');
         expect(text(CONTENT.VALUE.lead)).toMatch(/^Junior Royals is cricket coaching the Royals Way for players aged 7 to 12\./);
         const royals = CONTENT.VALUE.royals.items.map((it) => text(it.a)).join(' ');
         expect(CONTENT.VALUE.royals.items).toHaveLength(4);
@@ -144,8 +143,31 @@ describe('the interest form', () => {
         expect(FORM_VALUES).toEqual({
             centre: ['mickleham', 'cranbourne-north', 'ravenhall'],
             preferred_days: ['mon', 'tue', 'wed', 'thu', 'fri'],
-            preferred_time: ['6pm', '7pm', 'either'],
+            preferred_time: ['6pm', '7pm'],
         });
+    });
+
+    // Alex, 12 Oct: "6 p.m. is any player between the ages of seven and nine … and
+    // 7pm are players between the ages of 10 and 12." The time is never asked.
+    it('session time is set by age: 6:00pm for 7 to 9, 7:00pm for 10 to 12', () => {
+        expect([7, 8, 9].map((a) => timeForAge(a)?.time)).toEqual(['6:00pm', '6:00pm', '6:00pm']);
+        expect([10, 11, 12].map((a) => timeForAge(a)?.time)).toEqual(['7:00pm', '7:00pm', '7:00pm']);
+        expect(timeForAge(6)).toBeNull();
+        expect(timeForAge(13)).toBeNull();
+        expect(CONTENT.TIME_LINES).toEqual(['6:00pm: players aged 7 to 9', '7:00pm: players aged 10 to 12']);
+        expect(JSON.stringify(CONTENT.HERO)).toContain('6:00pm: players aged 7 to 9');
+        expect(JSON.stringify(CONTENT.FORM)).not.toMatch(/timeChoices|Either/);
+    });
+
+    // Alex, 12 Oct: the hero was too crowded. It goes straight to who it is for,
+    // when, where and group size: no "why" line, no second button, no side links.
+    it('the hero is lean: who, when (with the two times), where, groups, price', () => {
+        const hero = CONTENT.HERO as Record<string, unknown>;
+        expect(hero.why).toBeUndefined();
+        expect(hero.returning).toBeUndefined();
+        expect(CONTENT.HERO.titleSub).toBe('Cricket coaching for players aged 7 to 12');
+        expect(CONTENT.HERO.facts.map((f) => f.k)).toEqual(['When', 'Where', 'Groups']);
+        expect(JSON.stringify(hero).split(/\s+/).length).toBeLessThan(95);
     });
 
     it('asks for at least 2 weekdays, Monday to Friday', () => {
