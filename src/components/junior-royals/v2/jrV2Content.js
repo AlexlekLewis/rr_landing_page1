@@ -73,6 +73,13 @@ export const PHOTOS = {
 // every term, on a subscription". A family enrols ONCE; it is never "enrol for a
 // term". "Weekly" is in the line because the price is a weekly price.
 export const SUBSCRIPTION_LINE = 'Enrol once, pay weekly every term, on a subscription.';
+// Alex, 12 Oct 2026: "Make sure it's clear in the terms and conditions or even in
+// the FAQ section that re-enrolments are automatic. First payment comes out the
+// day of the first session of the term." The same two sentences are used in the
+// enrolment steps and the FAQ, and the Terms checklist (docs/) says the same.
+export const FIRST_PAYMENT_LINE = `The first payment of ${WEEKLY} is taken on the day of your player’s first session of each term. After that, one payment is taken each week until that term ends.`;
+export const AUTO_RENEW_LINE = 'Re-enrolment is automatic. Your player’s place continues into the next term, and payments start again on the day of the first session of that term, unless you tell us to stop.';
+export const STOP_LINE = `To stop, email info@rramelbourne.com at least ${NOTICE_WEEKS} weeks before the next term starts. There’s no fee for that.`;
 
 // Session time by age, in one line each ("6:00pm: players aged 7 to 9").
 export const TIME_LINES = TIMES.map((t) => `${t.time}: players aged ${t.min} to ${t.max}`);
@@ -277,10 +284,10 @@ export const PRICES = {
     howTitle: 'How enrolment works',
     how: [
         ['Enrol before the term starts. New players start at the beginning of a term, so groups stay together. ', tbc('Enrolments close the Friday before term.', 'Enrolment closing day? Proposed: the Friday before term.')],
-        [`${SUBSCRIPTION_LINE} Your first weekly payment of ${WEEKLY} is taken in week 1 of each term, then once a week until that term ends.`],
-        ['Your player’s place continues into the next term automatically. They keep their place in their group, and you don’t need to enrol again.'],
+        [`${SUBSCRIPTION_LINE} ${FIRST_PAYMENT_LINE}`],
+        [`${AUTO_RENEW_LINE} Your player keeps their place in their group, and you don’t need to enrol again.`],
         ['Nothing to pay in the school holidays.'],
-        [`To stop, email info@rramelbourne.com at least ${NOTICE_WEEKS} weeks before the next term starts. There’s no fee for that.`],
+        [STOP_LINE],
         ['Stopping in the middle of a term: a cancellation fee of ', CANCEL_FEE, ' applies, because nobody new can join that group until the next term. This doesn’t affect your rights under the Australian Consumer Law.'],
     ],
     makeup: ['Missed a session? Each group keeps one spot for a player who missed a session. ', tbc('Your player can do it with another group at the same stage and the same centre, when that group has a spot. This isn’t available in the first or last session of term.', 'Make-up rules: same stage + same centre only, none on Benchmark/festival nights (safeguarding). How many a term? How booked?')],
@@ -375,7 +382,11 @@ export const FAQS = [
     },
     {
         q: 'How do payments work?',
-        a: `${WEEKLY} a week. ${SUBSCRIPTION_LINE} The first payment is taken in week 1 of each term, then once a week until that term ends. Your player’s place continues into the next term automatically. Nothing is charged in the school holidays. ${GST_NOTE}`,
+        a: `${WEEKLY} a week. ${SUBSCRIPTION_LINE} ${FIRST_PAYMENT_LINE} Nothing is charged in the school holidays. ${GST_NOTE}`,
+    },
+    {
+        q: 'Do we need to enrol again each term?',
+        a: `No. ${AUTO_RENEW_LINE} ${STOP_LINE}`,
     },
     {
         q: 'Do we have to buy the training shirt?',

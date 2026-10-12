@@ -169,6 +169,21 @@ describe('the interest form', () => {
         expect(all).not.toMatch(/enrol for (a|the) (whole )?term|term-by-term/i);
     });
 
+    // Alex, 12 Oct: "Make sure it's clear … that re-enrolments are automatic. First
+    // payment comes out the day of the first session of the term."
+    it('says re-enrolment is automatic and when the first payment is taken, in the steps and the FAQ', () => {
+        expect(CONTENT.AUTO_RENEW_LINE).toMatch(/^Re-enrolment is automatic\./);
+        expect(CONTENT.FIRST_PAYMENT_LINE).toContain('on the day of your player’s first session of each term');
+        const steps = JSON.stringify(CONTENT.PRICES.how);
+        const faqs = JSON.stringify(CONTENT.FAQS);
+        [CONTENT.AUTO_RENEW_LINE, CONTENT.FIRST_PAYMENT_LINE, CONTENT.STOP_LINE].forEach((line) => {
+            expect(steps).toContain(line);
+            expect(faqs).toContain(line);
+        });
+        expect(CONTENT.FAQS.map((f) => f.q)).toContain('Do we need to enrol again each term?');
+        expect(JSON.stringify(CONTENT)).not.toMatch(/week 1 of each term/i);
+    });
+
     // Alex, 12 Oct: the hero was too crowded. It goes straight to who it is for,
     // when, where and group size: no "why" line, no second button, no side links.
     it('the hero is lean: who, when (with the two times), where, groups, price', () => {

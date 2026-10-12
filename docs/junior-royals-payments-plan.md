@@ -1,8 +1,9 @@
 # Junior Royals: how payments would work (plan only, 8 Oct 2026)
 
 > **Updated 9 Oct 2026: the model is simpler.** Alex set ONE price, **$49.95 a week incl. GST**,
-> paid **weekly in term** as a term-by-term subscription. The first payment is taken in week 1
-> of each term, then weekly until the term ends, and the place re-enrols automatically.
+> paid **weekly in term** on a subscription: enrol once, pay weekly every term. The first
+> payment is taken **on the day of the player's first session of each term** (Alex, 12 Oct),
+> then weekly until the term ends, and re-enrolment is automatic.
 > There is **no bulk or prepay option**, so the 2-terms and 4-terms rows below no longer apply,
 > and neither do decisions 1 and 4. Added: a compulsory $29.95 shirt (free for the first 20)
 > and a mid-term **cancellation fee** (amount to set; see `junior-royals-terms-checklist.md`).
