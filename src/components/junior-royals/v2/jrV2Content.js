@@ -184,6 +184,10 @@ export const PROGRESS = {
     eyebrow: 'Progress you can see',
     title: 'The Royals Way Progress Tracking and Development System',
     lead: `Your player earns a digital skill badge for every skill they learn, and a digital certificate for every stage they complete. Both are kept in the ${PORTAL_NAME}, which keeps a record of your player’s time with the Royals.`,
+    // Alex, 12 Oct 2026: "put some language in the badges about a sense of
+    // accomplishment and a player's ability to feel self-confident as they develop
+    // and grow their game." His words, kept close.
+    feel: 'Every badge gives your player a sense of accomplishment, and helps them feel self-confident as they develop and grow their game.',
     starts: tbc('Skill badges and portal access start in Term 1, 2027.', 'Start date for badges and portal access: Term 1, 2027 is the blueprint’s proposal. Confirm, or start in Term 4, 2026.'),
     // The learning process around a badge: the 3-week block (jrV2Facts BLOCK), the
     // coach's check (BADGES.check) and the badge arriving in the portal.
@@ -195,13 +199,14 @@ export const PROGRESS = {
         { name: 'The coach checks it', when: 'The check', does: `Your player shows the skill without help: ${BADGES.check.good} good balls out of ${BADGES.check.of}, in ${BADGES.check.nights} different sessions.` },
         { name: 'The badge is earned', when: 'The badge', does: `The digital badge appears in your player’s ${PORTAL_NAME}.` },
     ],
-    // Why track. Lines 1, 2 and 4 are the blueprint's (Part IV: "Over a year the
+    // Why track. The first line is Alex's (12 Oct). Of the rest, lines 1, 2 and 4 are the blueprint's (Part IV: "Over a year the
     // badges show exactly what each player can do, built from the same coaching
     // points we teach"; "One good night is performance, not learning"; "A climb,
     // not a rank. No leaderboards; nothing for size, pace or attendance"). Line 3
     // is from its portal view ("earned badges and Working on it"). Line 5 is Alex's.
     whyTitle: 'Why we track every player’s development',
     why: [
+        { head: 'A sense of accomplishment', body: 'Each badge is something your player has earned, so they feel self-confident as they develop and grow their game.' },
         { head: 'You see exactly what your player can do', body: 'Over a year, the badges show exactly what each player can do. They are built from the same coaching points we teach.' },
         { head: 'A badge means the skill is learned', body: `One good session is not enough. Your player shows the skill in ${BADGES.check.nights} different sessions before the badge is earned.` },
         { head: 'Everyone knows what comes next', body: 'Your player and their coach always know which skills are earned and which they are working on.' },

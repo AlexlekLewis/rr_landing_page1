@@ -200,7 +200,8 @@ const Progress = () => (
         <div className="grid md:grid-cols-[1fr_18rem] gap-10 items-start">
             <div>
                 <p className="text-lg sm:text-xl text-rr-dark font-semibold leading-relaxed">{PROGRESS.lead}</p>
-                <p className="mt-3 text-[15px] font-semibold text-rr-charcoal"><Rich v={PROGRESS.starts} /></p>
+                <p className="mt-4 text-lg sm:text-xl text-rr-dark font-semibold leading-relaxed border-l-4 border-rr-pink pl-4">{PROGRESS.feel}</p>
+                <p className="mt-4 text-[15px] font-semibold text-rr-charcoal"><Rich v={PROGRESS.starts} /></p>
                 {/* The learning process around a badge: three weeks, the coach's check, the badge. */}
                 <h3 className="mt-10 mb-5 text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark">{PROGRESS.stepsTitle}</h3>
                 <ol className="space-y-5">

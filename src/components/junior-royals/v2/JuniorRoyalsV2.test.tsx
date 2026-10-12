@@ -192,6 +192,10 @@ describe('the interest form', () => {
         const P = CONTENT.PROGRESS;
         expect(P.steps.map((st) => st.name)).toEqual(['Learn it', 'Own it', 'Use it', 'The coach checks it', 'The badge is earned']);
         expect(P.why.length).toBeGreaterThanOrEqual(4);
+        // Alex, 12 Oct: the badges carry "a sense of accomplishment" and "feel self-confident as they develop and grow their game".
+        expect(P.feel).toMatch(/sense of accomplishment/);
+        expect(P.feel).toMatch(/feel self-confident as they develop and grow their game/);
+        expect(P.why[0].head).toBe('A sense of accomplishment');
         expect(CONTENT.PORTAL_NAME).toBe('Player Performance Portal');
         const portal = [P.portal.lead, ...P.portal.points].join(' ');
         expect(portal).toContain('gets access to the Player Performance Portal');
