@@ -207,12 +207,22 @@ describe('the interest form', () => {
     // the Royals"). He did not recognise the Benchmark Game, so it is off the page.
     it('progress section: five steps to a badge, why we track, and the portal; no Benchmark Game', () => {
         const P = CONTENT.PROGRESS;
-        expect(P.steps.map((st) => st.name)).toEqual(['Learn it', 'Own it', 'Use it', 'The coach checks it', 'The badge is earned']);
+        // Alex: "they train on a skill and once they … demonstrate that they can do that
+        // skill, they get a badge and then they move on to the next one. Or they might
+        // revisit it later."
+        expect(P.steps.map((st) => st.head)).toEqual(['Train on one skill', 'Show the skill', 'Earn the badge', 'Move to the next skill']);
+        expect(P.steps[0].body).toBe('For 3 weeks: learn it, own it, use it.');
+        expect(P.steps[1].body).toContain('4 good balls out of 6, in 2 different sessions');
+        expect(P.steps[3].body).toMatch(/come back to a skill later/);
+        expect(P.lead).toMatch(/trains on one skill at a time/);
+        expect(P.lead).toMatch(/earn its badge and move on to the next skill/);
+        // The parent's question: "am I going to get what I ask for?"
+        expect(P.whyTitle).toBe('How you know your player is getting what you pay for');
         expect(P.why.length).toBeGreaterThanOrEqual(4);
         // Alex, 12 Oct: the badges carry "a sense of accomplishment" and "feel self-confident as they develop and grow their game".
-        expect(P.feel).toMatch(/sense of accomplishment/);
-        expect(P.feel).toMatch(/feel self-confident as they develop and grow their game/);
-        expect(P.why[0].head).toBe('A sense of accomplishment');
+        const feel = P.why.map((w) => w.body).join(' ');
+        expect(feel).toMatch(/sense of accomplishment/);
+        expect(feel).toMatch(/feel self-confident as they develop and grow their game/);
         expect(CONTENT.PORTAL_NAME).toBe('Player Performance Portal');
         const portal = [P.portal.lead, ...P.portal.points].join(' ');
         expect(portal).toContain('gets access to the Player Performance Portal');
@@ -239,7 +249,8 @@ describe('the interest form', () => {
         expect(BADGES.perPhase).toEqual({ batting: 12, bowling: 12, fielding: 4 });
         expect(CONTENT.PHASE_BADGES).toBe(28);
         expect(BADGES.discover).toHaveLength(CONTENT.PHASE_BADGES);
-        expect(CONTENT.PROGRESS.phasesTitle).toBe('Three phases, 28 badges in each');
+        expect(CONTENT.PROGRESS.phasesTitle).toBe('How the program is put together');
+        expect(CONTENT.PROGRESS.phasesSub).toBe('Three phases, 28 badges in each');
         expect(CONTENT.PROGRESS.phasesLead).toContain('Every phase has 28 skill badges: 12 for batting, 12 for bowling and 4 for fielding.');
         expect(CONTENT.PROGRESS.phasesLead).toContain('84 badges across the three phases');
         expect(CONTENT.PATH.phaseLabel(0)).toBe('Phase 1 of 3');

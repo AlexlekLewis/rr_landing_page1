@@ -180,40 +180,52 @@ export const CTA = {
 // The Benchmark Game and the printed progress card are OFF the page: Alex did not
 // recognise the Benchmark Game ("I feel like you made that up"). Both come from
 // the Program Blueprint (Proposal v1), not from a decision; see the decisions note.
+// 12 Oct 2026, later (Alex): "The real feature of this program is the Royals Way
+// progress tracking and development system. I don't think we're doing a very good
+// job at explaining what badges are, how they relate to a player's growth and how
+// the program's actually put together … It's not telling me that they train on a
+// skill and once they … demonstrate that they can do that skill, they get a badge
+// and then they move on to the next one. Or they might revisit it later … we have
+// to explain to a new audience what our development process looks like and how we
+// track it and why is it important … questions parents ask themselves when they
+// want to spend money on a program of this quality: am I going to get what I ask
+// for? Is my player going to get what is being delivered?"
+// So the section now runs in that order: what it is → how it works (train, show,
+// badge, next skill) → how a parent knows they are getting what they pay for →
+// how the program is put together (skills, badges, phases) → the badges.
 export const PROGRESS = {
     eyebrow: 'Progress you can see',
     title: 'The Royals Way Progress Tracking and Development System',
-    lead: `Your player earns a digital skill badge for every skill they learn, and a digital certificate for every phase they complete. Both are kept in the ${PORTAL_NAME}, which keeps a record of your player’s time with the Royals.`,
-    // Alex, 12 Oct 2026: "put some language in the badges about a sense of
-    // accomplishment and a player's ability to feel self-confident as they develop
-    // and grow their game." His words, kept close.
-    feel: 'Every badge gives your player a sense of accomplishment, and helps them feel self-confident as they develop and grow their game.',
+    // What it is, in his words: train on a skill, show it, earn the badge, move on.
+    lead: 'This is how Junior Royals works. Your player trains on one skill at a time. When they show they can do that skill, they earn its badge and move on to the next skill. Every badge is recorded, so you can see exactly what your player has learned.',
     // No start date on the page: players get their badges and portal access straight
-    // away (Alex, 12 Oct 2026: "I don't know why it says from Term 1 2027. Let's get
-    // rid of that … they get access straight away"; "we don't need to tell them that").
-    // The learning process around a badge: the 3-week block (jrV2Facts BLOCK), the
-    // coach's check (BADGES.check) and the badge arriving in the portal.
-    stepsTitle: 'How your player earns a badge',
+    // away (Alex, 12 Oct 2026: "they get access straight away"; "we don't need to
+    // tell them that").
+    // How it works: the development process as four steps, drawn as a flow.
+    stepsTitle: 'How it works: one skill, one badge',
     steps: [
-        { name: BLOCK[0].name, when: `Week ${BLOCK[0].week}`, does: 'Your coach shows the skill, step by step. Your player copies it.' },
-        { name: BLOCK[1].name, when: `Week ${BLOCK[1].week}`, does: 'Your player does it without help, again and again.' },
-        { name: BLOCK[2].name, when: `Week ${BLOCK[2].week}`, does: 'Mixed-up balls, like a real game. Your player chooses what to do.' },
-        { name: 'The coach checks it', when: 'The check', does: `Your player shows the skill without help: ${BADGES.check.good} good balls out of ${BADGES.check.of}, in ${BADGES.check.nights} different sessions.` },
-        { name: 'The badge is earned', when: 'The badge', does: `The digital badge appears in your player’s ${PORTAL_NAME}.` },
+        { icon: 'train', head: 'Train on one skill', body: `For 3 weeks: ${BLOCK.map((b) => b.name.toLowerCase()).join(', ')}.` },
+        { icon: 'show', head: 'Show the skill', body: `Without help: ${BADGES.check.good} good balls out of ${BADGES.check.of}, in ${BADGES.check.nights} different sessions. Their coach checks it.` },
+        { icon: 'badge', head: 'Earn the badge', body: `A digital badge for that skill, kept in the ${PORTAL_NAME}.` },
+        { icon: 'next', head: 'Move to the next skill', body: 'Your player may come back to a skill later.' },
     ],
-    // Why track. The first line is Alex's (12 Oct). Of the rest, lines 1, 2 and 4 are the blueprint's (Part IV: "Over a year the
-    // badges show exactly what each player can do, built from the same coaching
-    // points we teach"; "One good night is performance, not learning"; "A climb,
-    // not a rank. No leaderboards; nothing for size, pace or attendance"). Line 3
-    // is from its portal view ("earned badges and Working on it"). Line 5 is Alex's.
-    whyTitle: 'Why we track every player’s development',
+    rules: [
+        '“Not yet”, never “failed”. A player can keep trying for a badge until they earn it. Once it is earned, they keep it.',
+    ],
+    // Why it matters: the question a parent asks before paying. The points are the
+    // blueprint's (Part IV: "Over a year the badges show exactly what each player
+    // can do, built from the same coaching points we teach"; "One good night is
+    // performance, not learning"; "A climb, not a rank. No leaderboards; nothing
+    // for size, pace or attendance") and Alex's (the record; accomplishment and
+    // self-confidence).
+    whyTitle: 'How you know your player is getting what you pay for',
+    whyLead: 'When you pay for coaching, you want to know your player is getting what was promised. This is how you can check.',
     why: [
-        { head: 'A sense of accomplishment', body: 'Each badge is something your player has earned, so they feel self-confident as they develop and grow their game.' },
-        { head: 'You see exactly what your player can do', body: 'Over a year, the badges show exactly what each player can do. They are built from the same coaching points we teach.' },
-        { head: 'A badge means the skill is learned', body: `One good session is not enough. Your player shows the skill in ${BADGES.check.nights} different sessions before the badge is earned.` },
-        { head: 'Everyone knows what comes next', body: 'Your player and their coach always know which skills are earned and which they are working on.' },
+        { head: 'Every skill we teach has a badge', body: 'The badges are built from the same coaching points we teach. Over a year, they show exactly what your player can do.' },
+        { head: 'A badge has to be earned', body: `Your player shows the skill without help, in ${BADGES.check.nights} different sessions. One good session is not enough.` },
+        { head: 'It is all recorded', body: `Every badge and every certificate is kept in the ${PORTAL_NAME}, with a record of your player’s time with the Royals.` },
+        { head: 'Your player feels it too', body: 'Every badge gives your player a sense of accomplishment, and helps them feel self-confident as they develop and grow their game.' },
         { head: 'A climb, not a rank', body: 'Players are not ranked against each other. Badges are for skills only: never for size, speed or attendance.' },
-        { head: 'One record, from the first session on', body: `The ${PORTAL_NAME} keeps every badge and every certificate your player earns, for all their time with the Royals.` },
     ],
     portalTitle: `The ${PORTAL_NAME}`,
     portal: {
@@ -224,19 +236,17 @@ export const PROGRESS = {
             'It keeps a record of your player’s time with the Royals: every badge and every certificate.',
         ],
     },
-    // Alex, 12 Oct 2026: "make it clear that every phase has an X number of badges
-    // and we need to be clear on the three phases." 28 a phase: 12 batting, 12
-    // bowling, 4 fielding (BADGES.perPhase), so 84 across the three phases.
-    phasesTitle: `Three phases, ${PHASE_BADGES} badges in each`,
-    phasesLead: `Junior Royals has three phases: Discover, Develop and Elevate. Every phase has ${PHASE_BADGES} skill badges: ${BADGES.perPhase.batting} for batting, ${BADGES.perPhase.bowling} for bowling and ${BADGES.perPhase.fielding} for fielding. That is ${PHASE_BADGES * 3} badges across the three phases. When your player completes a phase, they receive its digital certificate and move on to the next phase.`,
+    // How the program is put together: skills → badges → phases (Alex, 12 Oct 2026:
+    // "every phase has an X number of badges … be clear on the three phases").
+    // 28 a phase: 12 batting, 12 bowling, 4 fielding (BADGES.perPhase), 84 in all.
+    phasesTitle: 'How the program is put together',
+    phasesSub: `Three phases, ${PHASE_BADGES} badges in each`,
+    phasesLead: `One skill, one badge. Every phase has ${PHASE_BADGES} skill badges: ${BADGES.perPhase.batting} for batting, ${BADGES.perPhase.bowling} for bowling and ${BADGES.perPhase.fielding} for fielding. Junior Royals has three phases: Discover, Develop and Elevate. That is ${PHASE_BADGES * 3} badges across the three phases. When your player completes a phase, they receive its digital certificate and move on to the next phase.`,
     phaseBadges: `${PHASE_BADGES} skill badges`,
     phaseSplit: `${BADGES.perPhase.batting} batting · ${BADGES.perPhase.bowling} bowling · ${BADGES.perPhase.fielding} fielding`,
     phaseCert: (name) => `Then the ${name} digital certificate`,
     othersNote: tbc(`Develop and Elevate have ${PHASE_BADGES} badges each. Those badges are being written by our coaching group.`, 'Develop and Elevate badge lists are not written yet (blueprint Part IV covers Discover only).'),
     cadence: 'Every 3 weeks there is one new batting badge and one new bowling badge.',
-    rules: [
-        '“Not yet”, never “failed”. A player can keep trying for a badge until they earn it. Once it is earned, they keep it.',
-    ],
     sampleTitle: `The ${BADGES.discover.length} badges in Discover, the first phase`,
     badgeHint: 'Tap or click a badge to see what it means.',
     iCan: 'I can',
