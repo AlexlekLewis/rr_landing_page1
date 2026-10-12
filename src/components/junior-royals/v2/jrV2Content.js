@@ -69,6 +69,11 @@ export const PHOTOS = {
     coaches: { src: '/assets/jr-photo-feed.jpg', alt: 'A Royals Academy coach feeds balls to a young batter', label: 'Our coaches' },
 };
 
+// How enrolment and payment work, in Alex's words (12 Oct 2026): "enrol once, pay
+// every term, on a subscription". A family enrols ONCE; it is never "enrol for a
+// term". "Weekly" is in the line because the price is a weekly price.
+export const SUBSCRIPTION_LINE = 'Enrol once, pay weekly every term, on a subscription.';
+
 // Session time by age, in one line each ("6:00pm: players aged 7 to 9").
 export const TIME_LINES = TIMES.map((t) => `${t.time}: players aged ${t.min} to ${t.max}`);
 export const TIMES_SENTENCE = `Players aged ${TIMES[0].min} to ${TIMES[0].max} train at ${TIMES[0].time}, and players aged ${TIMES[1].min} to ${TIMES[1].max} train at ${TIMES[1].time}.`;
@@ -89,7 +94,7 @@ export const HERO = {
     ],
     price: WEEKLY,
     per: 'a week',
-    priceNote: `${GST_NOTE} You enrol for a whole term and pay weekly.`,
+    priceNote: `${GST_NOTE} ${SUBSCRIPTION_LINE}`,
     shirt: `Plus the training shirt, ${money(SHIRT.memberPrice)} once (compulsory). Free for the first ${SHIRT.freeForFirst} players to enrol.`,
     noPayment: 'No payment now. No place is held yet.',
 };
@@ -272,7 +277,7 @@ export const PRICES = {
     howTitle: 'How enrolment works',
     how: [
         ['Enrol before the term starts. New players start at the beginning of a term, so groups stay together. ', tbc('Enrolments close the Friday before term.', 'Enrolment closing day? Proposed: the Friday before term.')],
-        [`You enrol for a whole term. Your first weekly payment of ${WEEKLY} is taken in week 1 of each term, then once a week until that term ends.`],
+        [`${SUBSCRIPTION_LINE} Your first weekly payment of ${WEEKLY} is taken in week 1 of each term, then once a week until that term ends.`],
         ['Your player’s place continues into the next term automatically. They keep their place in their group, and you don’t need to enrol again.'],
         ['Nothing to pay in the school holidays.'],
         [`To stop, email info@rramelbourne.com at least ${NOTICE_WEEKS} weeks before the next term starts. There’s no fee for that.`],
@@ -370,7 +375,7 @@ export const FAQS = [
     },
     {
         q: 'How do payments work?',
-        a: `${WEEKLY} a week, paid weekly in term. You enrol for a whole term: the first payment is taken in week 1, then once a week until that term ends. Your player’s place continues into the next term automatically. Nothing is charged in the school holidays. ${GST_NOTE}`,
+        a: `${WEEKLY} a week. ${SUBSCRIPTION_LINE} The first payment is taken in week 1 of each term, then once a week until that term ends. Your player’s place continues into the next term automatically. Nothing is charged in the school holidays. ${GST_NOTE}`,
     },
     {
         q: 'Do we have to buy the training shirt?',

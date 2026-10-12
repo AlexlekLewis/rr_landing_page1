@@ -159,6 +159,16 @@ describe('the interest form', () => {
         expect(JSON.stringify(CONTENT.FORM)).not.toMatch(/timeChoices|Either/);
     });
 
+    // Alex, 12 Oct: "The language should actually be enrol once, pay every term, on a
+    // subscription." A family enrols once; the page never says "enrol for a term".
+    it('says enrol once, pay every term, on a subscription, in the same words everywhere', () => {
+        const line = CONTENT.SUBSCRIPTION_LINE;
+        expect(line).toMatch(/^Enrol once, pay .*every term, on a subscription\.$/);
+        const all = JSON.stringify(CONTENT);
+        expect(all.split(line).length - 1).toBeGreaterThanOrEqual(4);   // the constant, hero, price steps, FAQ
+        expect(all).not.toMatch(/enrol for (a|the) (whole )?term|term-by-term/i);
+    });
+
     // Alex, 12 Oct: the hero was too crowded. It goes straight to who it is for,
     // when, where and group size: no "why" line, no second button, no side links.
     it('the hero is lean: who, when (with the two times), where, groups, price', () => {
