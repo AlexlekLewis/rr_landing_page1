@@ -190,21 +190,22 @@ const Modal = ({ onClose }) => {
 
                                 <fieldset className="sm:col-span-2">
                                     <legend className="block mb-1.5 text-xs font-black uppercase tracking-widest text-rr-dark">{TRY.labels.day} <span className="text-rr-pink">*</span></legend>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    <div className="grid grid-cols-2 gap-2">
                                         {COME_AND_TRY.days.map((d) => {
                                             const on = form.day === d.value;
                                             return (
-                                                <label key={d.value} className={`flex items-start gap-3 cursor-pointer rounded-xl border-2 px-4 py-3 min-h-[48px] transition-colors ${on ? 'border-rr-pink' : errors.day ? 'border-rr-pink/50' : 'border-slate-300 hover:border-rr-pink/60'}`}>
-                                                    <input type="radio" name="day" value={d.value} checked={on} onChange={set} className="mt-1 accent-rr-pink" />
-                                                    <span>
-                                                        <span className="block font-black text-rr-dark text-[15px]">{d.label}</span>
-                                                        {d.times.map((t) => <span key={t.value} className="block text-sm font-medium text-rr-charcoal leading-snug">{t.time}: aged {t.min} to {t.max}</span>)}
-                                                    </span>
+                                                <label key={d.value} className={`flex items-center gap-3 cursor-pointer rounded-xl border-2 px-4 py-3 min-h-[48px] transition-colors ${on ? 'border-rr-pink' : errors.day ? 'border-rr-pink/50' : 'border-slate-300 hover:border-rr-pink/60'}`}>
+                                                    <input type="radio" name="day" value={d.value} checked={on} onChange={set} className="accent-rr-pink" />
+                                                    <span className="font-black text-rr-dark text-[15px]">{d.label}</span>
                                                 </label>
                                             );
                                         })}
                                     </div>
                                     {errors.day ? <p className="text-rr-pink text-sm font-bold mt-1">{errors.day}</p> : null}
+                                    {/* Both days' times are always shown; the player's own session appears once age and day are chosen. */}
+                                    <ul className="mt-2 space-y-0.5">
+                                        {TRY.dayLines.map((ln) => <li key={ln} className="text-sm font-medium text-rr-charcoal leading-snug">{ln}</li>)}
+                                    </ul>
                                     <p className="mt-2 text-sm font-medium text-rr-charcoal" aria-live="polite">
                                         {slot ? <span className="font-black text-rr-dark">{TRY.yourSession(day.label, slot.time)}</span> : TRY.ageWhy}
                                     </p>
