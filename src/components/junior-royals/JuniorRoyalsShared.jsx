@@ -1,14 +1,10 @@
 import React from 'react';
-import { MOCKUP } from './juniorRoyalsData';
 
-// A value Alex hasn't confirmed. Highlighted on the mock-up; the hover/long-press
-// title says what needs deciding. Plain text once MOCKUP is false.
-export const Tbc = ({ text, why }) =>
-    MOCKUP ? (
-        <mark title={why} className="bg-yellow-300 text-rr-dark font-bold px-1 rounded-sm">{text}</mark>
-    ) : (
-        <>{text}</>
-    );
+// A value Alex hasn't confirmed. It renders as plain text: the page is always
+// shown clean, and open decisions go to Alex in a separate note, not on the page
+// (Alex, 12 Oct 2026). The `why` on each tbc() in the data files is the source
+// for that note.
+export const Tbc = ({ text }) => <>{text}</>;
 
 // Renders copy from the data file: a string, a tbc() value, or an array of both.
 export const Rich = ({ v }) => {

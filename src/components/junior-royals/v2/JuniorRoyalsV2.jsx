@@ -9,7 +9,7 @@ import { Rich } from '../JuniorRoyalsShared';
 import { MOCKUP, money } from '../juniorRoyalsData';
 import { PILLARS, PRICE } from './jrV2Facts';
 import {
-    HERO, CTA, VALUE, PROGRESS, LEARN, PATH, PRICES, COMPARE, COACHES, FORM, FAQS, OPEN_QUESTIONS_V2,
+    HERO, CTA, VALUE, PROGRESS, LEARN, PATH, PRICES, COMPARE, COACHES, FORM, FAQS,
     REGION_LABEL, NEARBY, PHOTOS, V2_CENTRES, TERMS, termTotal,
 } from './jrV2Content';
 import { HourNumbers, HourRibbon, LaneDots, SkillSteps, Cues, YearStrip } from './JRV2Visuals';
@@ -80,22 +80,15 @@ const Section = ({ id, tone = 'white', children }) => (
     </section>
 );
 
-// ── Review banner (mock-up only) ──
+// ── Review strip (mock-up only): a safety label, nothing to decide on it.
+// Open decisions are sent to Alex as a separate note (Alex, 12 Oct 2026). ──
 const MockupBanner = () => {
-    const [open, setOpen] = useState(false);
     if (!MOCKUP) return null;
     return (
         <div className="bg-yellow-300 text-rr-dark">
-            <div className="max-w-6xl mx-auto px-5 sm:px-6 py-3">
-                <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className="w-full flex items-center justify-between gap-3 text-left min-h-[44px]">
-                    <span className="text-sm font-bold">
-                        <span className="font-black uppercase tracking-wider">Mock-up version 2, for review. Not live.</span>{' '}
-                        Yellow = still to decide ({OPEN_QUESTIONS_V2.length} items). The form saves nothing.
-                    </span>
-                    <ChevronDown className={`w-5 h-5 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`} />
-                </button>
-                <Link to="/junior-royals/v1" data-review-only className="inline-block text-sm font-bold underline py-1">See version 1</Link>
-                {open && <ol className="mt-2 mb-1 list-decimal pl-5 space-y-1 text-sm font-medium">{OPEN_QUESTIONS_V2.map((q) => <li key={q}>{q}</li>)}</ol>}
+            <div className="max-w-6xl mx-auto px-5 sm:px-6 py-2.5 flex flex-wrap items-center gap-x-4 gap-y-1">
+                <p className="text-sm font-bold"><span className="font-black uppercase tracking-wider">Mock-up for review. Not live.</span> The form saves nothing.</p>
+                <Link to="/junior-royals/v1" data-review-only className="text-sm font-bold underline py-1">See version 1</Link>
             </div>
         </div>
     );
@@ -164,7 +157,6 @@ const ValueColumn = ({ col, accent }) => (
                         <div>
                             <p className="text-lg font-black text-rr-dark leading-tight">{pt.head}</p>
                             <p className="text-[15px] text-rr-charcoal font-medium leading-snug mt-0.5"><Rich v={pt.body} /></p>
-                            <p className="text-xs font-black uppercase tracking-widest text-rr-blue mt-1">{pt.from}</p>
                         </div>
                     </li>
                 );
@@ -176,8 +168,18 @@ const ValueColumn = ({ col, accent }) => (
 const Value = () => (
     <Section id="value">
         <Head eyebrow={VALUE.eyebrow} title={VALUE.title} />
-        <p className="text-lg sm:text-xl text-rr-dark font-semibold max-w-3xl"><Rich v={VALUE.lead} /></p>
-        <p className="text-[15px] text-rr-charcoal font-medium mt-2 mb-8 max-w-3xl">{VALUE.builtOn}</p>
+        <p className="text-lg sm:text-xl text-rr-dark font-semibold max-w-3xl leading-relaxed"><Rich v={VALUE.lead} /></p>
+        <div className="mt-8 mb-10 rounded-2xl p-5 sm:p-7" style={{ backgroundImage: 'var(--image-gradient-rr)' }}>
+            <h3 className="text-xl sm:text-2xl font-black uppercase text-white">{VALUE.royals.title}</h3>
+            <dl className="mt-4 grid md:grid-cols-2 gap-x-10 gap-y-5">
+                {VALUE.royals.items.map((it) => (
+                    <div key={it.q}>
+                        <dt className="text-white text-[15px] font-black uppercase tracking-wider">{it.q}</dt>
+                        <dd className="text-white text-[16px] font-medium leading-relaxed mt-1"><Rich v={it.a} /></dd>
+                    </div>
+                ))}
+            </dl>
+        </div>
         <div className="grid md:grid-cols-2 gap-10">
             <ValueColumn col={VALUE.player} accent="border-rr-pink" />
             <ValueColumn col={VALUE.parent} accent="border-rr-blue" />
@@ -203,6 +205,7 @@ const Progress = () => (
             </div>
 
             <div className="mt-12 rounded-2xl bg-rr-dark p-6 sm:p-8">
+                <p className="text-white text-[15px] font-semibold mb-2">{PROGRESS.stagesIntro}</p>
                 <p className="text-white text-sm font-black uppercase tracking-wider mb-5">{PROGRESS.sampleTitle}</p>
                 <BadgeWall />
                 <p className="mt-8 text-white/90 text-[15px] font-medium leading-relaxed max-w-3xl">{PROGRESS.perYear}</p>
@@ -320,7 +323,6 @@ const Coaches = () => (
                                 </div>
                             </div>
                             <p className="text-sm text-rr-charcoal font-medium leading-relaxed mt-3">{c.coach.credentials.join(' · ')}</p>
-                            <p className="text-sm font-semibold mt-3"><Rich v={COACHES.more} /></p>
                         </div>
                     )}
                     <p className="text-xs text-rr-charcoal font-medium mt-auto pt-4">{NEARBY[c.value]}</p>
@@ -347,7 +349,7 @@ const Prices = () => (
             <div className="border-t-4 border-rr-pink pt-5">
                 <p><span className="text-6xl font-black text-rr-dark">{PRICES.price}</span> <span className="text-xl font-bold text-rr-charcoal">{PRICES.per}</span></p>
                 <p className="text-[15px] font-bold text-rr-dark mt-1">{PRICES.perNote}</p>
-                <ul className="mt-5 space-y-2">{PRICES.includes.map((t) => <Tick key={t}><span className="font-semibold text-rr-dark">{t}</span></Tick>)}</ul>
+                <ul className="mt-5 space-y-2">{PRICES.includes.map((t, i) => <Tick key={i}><span className="font-semibold text-rr-dark"><Rich v={t} /></span></Tick>)}</ul>
                 <div className="mt-6 rounded-2xl border-2 border-slate-200 p-5">
                     <p className="flex items-center gap-2 text-sm font-black uppercase tracking-wider text-rr-dark"><Shirt className="w-5 h-5 text-rr-pink" aria-hidden="true" />{PRICES.shirtTitle}</p>
                     <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed mt-2">{PRICES.shirt}</p>
@@ -413,7 +415,7 @@ const Prices = () => (
                         </li>
                     ))}
                 </ul>
-                <p className="text-xs text-rr-charcoal font-medium mt-2">{COMPARE.source} <Rich v={COMPARE.toConfirm} /></p>
+                <p className="text-xs text-rr-charcoal font-medium mt-2">{COMPARE.source}</p>
             </div>
         </div>
         <CtaRow />
@@ -425,7 +427,14 @@ const Register = () => (
     <section id="register" className={`${SCROLL_PAD} bg-rr-dark py-14 md:py-20`}>
         <div className="max-w-2xl mx-auto px-5 sm:px-6">
             <Head eyebrow={FORM.eyebrow} title={FORM.title} dark />
-            <p className="text-lg text-white/85 font-medium leading-relaxed mb-8"><Rich v={FORM.intro} /></p>
+            <ol className="mb-8 space-y-4">
+                {FORM.steps.map((st) => (
+                    <li key={st.n} className="flex gap-4">
+                        <span className="w-9 h-9 rounded-full bg-rr-pink text-white font-black flex items-center justify-center shrink-0" aria-hidden="true">{st.n}</span>
+                        <p className="text-[17px] text-white font-medium leading-relaxed"><span className="font-black"><Rich v={st.when} />.</span> {st.does}</p>
+                    </li>
+                ))}
+            </ol>
             <JRV2Form />
         </div>
     </section>

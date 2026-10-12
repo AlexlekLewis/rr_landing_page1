@@ -17,7 +17,6 @@
 // Anything not yet decided is tbc() and shows in yellow on the mock-up.
 // ─────────────────────────────────────────────────────────────
 
-import { SID } from '../../open-age-trial/openAgeData';
 import { tbc, money, AGES_TEXT, FIRST_SESSION, CALENDAR, SESSIONS_PER_YEAR, GST_NOTE, JOINING_OPENS, CENTRES, PS_ROUTE } from '../juniorRoyalsData';
 import { PRICE, SHIRT, NOTICE_WEEKS, BADGES, CURRICULUM } from './jrV2Facts';
 
@@ -75,50 +74,67 @@ export const HERO = {
     eyebrow: 'Rajasthan Royals Academy · Melbourne',
     title: 'Junior Royals',
     titleSub: `Cricket coaching for ages ${AGES_TEXT}`,
-    why: tbc('Your player learns one skill at a time, and you can see every skill they’ve mastered.', 'The one-line Why for the hero — OK?'),
+    // Blueprint Part I §1, word for word ("the same words we will use with families").
+    why: tbc('We teach it the Royals Way: through games, with one clear skill to learn, one coaching point to hold on to, and a score to beat.', 'Hero line: taken word for word from the blueprint (Part I §1). OK to use it here?'),
     facts: [
         { icon: 'users', k: 'Ages', v: `Ages ${AGES_TEXT}`, older: true },
         { icon: 'clock', k: 'When', v: `One hour a week on a weekday evening in school terms, at 6:00pm or 7:00pm. First sessions ${FIRST_SESSION.long}.` },
         { icon: 'pin', k: 'Where', v: CENTRE_NAMES },
-        { icon: 'group', k: 'Groups', v: `Small groups: up to ${PRICE.perLane} players in a lane, with their own coach` },
+        { icon: 'group', k: 'Groups', v: `Small groups: up to ${PRICE.perLane} players and their own coach in each lane (a lane is one practice net)` },
     ],
     price: WEEKLY,
     per: 'a week',
-    priceNote: `${GST_NOTE} Paid weekly in term. Nothing to pay in the school holidays.`,
+    priceNote: `${GST_NOTE} You enrol for a whole term and pay weekly. Nothing to pay in the school holidays.`,
     shirt: `Plus the Junior Royals training shirt, ${money(SHIRT.memberPrice)} once (compulsory). Free for the first ${SHIRT.freeForFirst} players to enrol.`,
     noPayment: 'No payment now. No place is held yet.',
     returning: "Already sent us your details on our Term 4 form? We have them, and we'll email you when enrolment opens.",
 };
 
 // ── The value, in plain words (Alex, 11 Oct 2026: "clearly communicate what the
-// value is … for the player and the parent", with the Royals Way and our method
-// folded in). Each line is something that happens every week or every term, and
-// names the Royals Way principle or the part of our method behind it.
+// value is … for the player and the parent", with the Royals Way folded in).
+// 12 Oct audit (Alex: "don't make up your own language if you haven't got it"):
+// the lead and the Royals Way block are now quoted from documents that already
+// exist; the source of each line is noted beside it. Nothing here says why the
+// Royals system is better than another academy: nothing is written on that yet.
 export const VALUE = {
     eyebrow: 'Play the Royals Way',
     title: 'What your player gets, and what you get',
-    lead: tbc('Junior Royals is where players aged 7 to 12 fall in love with cricket and get better at it, one skill at a time.', 'The one-sentence “why” for Junior Royals: none is decided yet. OK to use this?'),
-    builtOn: 'Built on The Royals Way and our own coaching method. Under each line is the pillar or part of the method it comes from.',
+    // Blueprint Part I, "In one paragraph, for families", word for word.
+    lead: tbc('Junior Royals is cricket coaching the Royals Way for players aged 7 to 12. Every week of the school term, your player bats and bowls with a Royals Academy coach in a small group. Every skill gets three weeks: we learn it, we own it, then we use it in a game. On the first night of term we play a game and keep the score; on the last night we play it again, so you can see how far your player has come.',
+        'Blueprint "In one paragraph, for families" (its decision 10 asks you to approve it). Note: Term 4, 2026 is a shorter term, and the blueprint gives two of its three skills 2 weeks, not 3.'),
+    royals: {
+        title: 'The Royals and the Royals Way',
+        items: [
+            // Sid profile §3 (verified 2 Oct 2026), word for word.
+            { q: 'Who are the Royals?', a: 'The Royals run a global cricket organisation, with the Rajasthan Royals in India’s IPL, the Paarl Royals in South Africa’s SA20, and a network of Rajasthan Royals academies around the world, including ours in Melbourne.' },
+            // Blueprint Part I §1, word for word.
+            { q: 'What is the Royals Way?', a: 'We teach the whole game: batting, bowling, fielding and how to play. We teach it the Royals Way: through games, with one clear skill to learn, one coaching point to hold on to, and a score to beat.' },
+            // Blueprint Part I §1, word for word; "(the Royals’ coaching videos)" explains the Hub and is to confirm.
+            { q: 'Where do the skills come from?', a: ['The skills follow the path the Royals’ own coaches teach on the Royals Coaching Hub ', tbc('(the Royals’ coaching videos)', 'Is "the Royals’ coaching videos" a fair plain description of the Royals Coaching Hub?'), ', from the very first grip to the shots and plans of a player ready to compete.'] },
+            // Blueprint Part I §3 and §2, word for word.
+            { q: 'Where does it lead?', a: 'Junior Royals is the first six years of the Royals Player Pathway: one arc from a seven-year-old’s first session to Performance Squads and beyond. Performance Squads runs alongside: it is by invitation only, and players are eligible from age 10. An invitation is never promised.' },
+        ],
+    },
     player: {
         title: 'For your player',
         points: [
-            { icon: 'bat', head: 'They bat and bowl every week', body: 'Every player gets the same number of turns. Nobody waits for their go.', from: 'Fairness, Respect & Inclusion' },
-            { icon: 'one', head: 'One skill at a time', body: 'One batting skill and one bowling skill for three weeks, so they really get it.', from: 'Learn it, Own it, Use it' },
-            { icon: 'cue', head: 'A few words to remember', body: 'Every skill has a cue, like “Heel to toe”, that they can say to themselves.', from: 'One cue for every skill' },
-            { icon: 'game', head: 'A game with a score, every session', body: 'The hour always ends with a game, so skills get used, not just practised.', from: 'Joy, Curiosity & Lifelong Learning' },
-            { icon: 'joy', head: 'Brave tries count', body: 'Have a go. If it doesn’t work, the coach asks what happened, and they go again.', from: 'Play Bold · Learn by Doing' },
-            { icon: 'badge', head: 'Beat your own score', body: 'Players try to beat their own score. There is no leaderboard.', from: 'The Benchmark Game' },
+            { icon: 'bat', head: 'They bat and bowl every week', body: 'Every player gets the same number of turns.' },
+            { icon: 'one', head: 'One skill at a time', body: 'One batting skill and one bowling skill for 3 weeks, so there is time to learn them properly.' },
+            { icon: 'cue', head: 'A few words to remember', body: 'Every skill has a cue: 2 or 3 words, like “Heel to toe”, that help them remember it.' },
+            { icon: 'game', head: 'A game with a score, every session', body: 'The hour always ends with a game, so skills get used, not just practised.' },
+            { icon: 'joy', head: 'Brave tries count', body: 'Players are asked to try. If it doesn’t work, the coach asks what happened, and they try again.' },
+            { icon: 'badge', head: 'Beat your own score', body: 'Players try to beat their own score. Players are not ranked against each other.' },
         ],
     },
     parent: {
         title: 'For you',
         points: [
-            { icon: 'group', head: 'A small group with its own coach', body: `No more than ${PRICE.perLane} players in a lane.`, from: 'Our method' },
-            { icon: 'plan', head: 'The same plan every week', body: 'Sixty minutes: batting, bowling, then a scored game. You always know what they did.', from: 'Our method' },
-            { icon: 'safe', head: 'Safety rules for each stage', body: 'In Discover, players bowl at targets, never at a batter, and the coach throws every ball.', from: 'Safety & Progressive Loading' },
-            { icon: 'card', head: 'Progress you can see', body: ['A score from the same game in the first and last session of term, and each skill named in “I can …” words on a progress card. ', tbc('From Term 1, 2027.', 'Skill badges and progress cards: start date to confirm (blueprint Part IV is a proposal).')], from: 'The Royals Way Progress Tracking and Development System' },
-            { icon: 'same', head: 'Every coach works from the same written plan', body: 'A goal, the coaching points, the questions to ask and the drills, for every session.', from: 'Our method' },
-            { icon: 'place', head: 'Your player keeps their place', body: 'The same day and time each week, and their place carries on term after term.', from: 'How enrolment works' },
+            { icon: 'group', head: 'A small group with its own coach', body: `No more than ${PRICE.perLane} players in a lane.` },
+            { icon: 'plan', head: 'The same plan every week', body: 'Sixty minutes: batting, bowling, then a scored game.' },
+            { icon: 'safe', head: 'Safety rules for each stage', body: 'In Discover, players bowl at targets, never at a batter, and the coach feeds every ball to the batter.' },
+            { icon: 'card', head: 'Progress you can see', body: ['A progress card every term. It shows your player’s score from the first and last session, and each skill they can do, in “I can …” words. ', tbc('From Term 1, 2027.', 'Skill badges and progress cards: start date to confirm (blueprint Part IV is a proposal).')] },
+            { icon: 'same', head: 'Every coach works from the same written plan', body: 'A goal, the coaching points, the questions to ask and the drills, for every session.' },
+            { icon: 'place', head: 'Your player keeps their place', body: 'The same day and time each week, and their place continues every term until you stop it.' },
         ],
     },
 };
@@ -136,21 +152,22 @@ export const CTA = {
 export const PROGRESS = {
     eyebrow: 'Progress you can see',
     title: 'The Royals Way Progress Tracking and Development System',
-    lead: 'Every skill your player learns is checked by their coach in a real turn with a score, recorded as a skill badge, and shown on a progress card that comes home at the end of every term.',
-    starts: tbc('Skill badges and progress cards start in Term 1, 2027.', 'Blueprint Part IV is a proposal: go ahead from Term 1, 2027? The coaching group settles the standard first.'),
+    lead: 'Your player’s coach checks every skill in a turn that is scored. Each skill your player can do earns a skill badge. You get a progress card at the end of every term.',
+    starts: tbc('The Benchmark Game starts in Term 4, 2026. Skill badges and progress cards start in Term 1, 2027.', 'Blueprint Part IV is a proposal: go ahead from Term 1, 2027? The coaching group settles the standard first.'),
     parts: [
-        { icon: 'badge', title: 'Skill badges', body: `When your player can do a skill on their own in a scored turn (${BADGES.check.good} good balls out of ${BADGES.check.of}, in ${BADGES.check.nights} different sessions), they earn its badge.` },
-        { icon: 'score', title: 'The Benchmark Game', body: 'The same short game is scored in the first and last session of every term. Your player tries to beat their own score. Scores go on their own card, never on a board.' },
+        { icon: 'badge', title: 'Skill badges', body: `Your player earns a badge when they can do the skill without help: ${BADGES.check.good} good balls out of ${BADGES.check.of}, in ${BADGES.check.nights} different sessions.` },
+        { icon: 'score', title: 'The Benchmark Game', body: 'A short game with a score, played in the first and last session of every term. Your player tries to beat their own score. The score goes on your player’s own card. It is not put on a board for others to see.' },
         { icon: 'card', title: 'A progress card every term', body: 'You see which badges your player has earned, and which skills they are working on next.' },
         { icon: 'cert', title: 'A certificate for every stage', body: 'At the end of each stage your player gets a certificate, and moves on to the next stage.' },
     ],
-    perYear: `Each year there are ${BADGES.perYear.batting} batting badges, ${BADGES.perYear.bowling} bowling badges and ${BADGES.perYear.fielding} fielding badges to earn: one batting and one bowling badge for every 3-week skill block.`,
+    perYear: `There are ${BADGES.perYear.batting + BADGES.perYear.bowling + BADGES.perYear.fielding} badges to earn each year: ${BADGES.perYear.batting} for batting, ${BADGES.perYear.bowling} for bowling and ${BADGES.perYear.fielding} for fielding. Every 3 weeks there is one new batting badge and one new bowling badge.`,
     rules: [
-        '“Not yet”, never “failed”. A badge stays open until it’s earned, and stays earned once it is.',
-        'No leaderboards. Badges are for skills only: never for size, speed or turning up.',
+        '“Not yet”, never “failed”. A player can keep trying for a badge until they earn it. Once it is earned, they keep it.',
+        'No ranking of players. Badges are for skills only: never for size, speed or attendance.',
     ],
+    stagesIntro: 'Junior Royals has three stages: Discover, Develop and Elevate. Discover is the first.',
     sampleTitle: `The ${BADGES.discover.length} badges in Discover`,
-    badgeHint: 'Point at a badge, or tap it, to see what it means.',
+    badgeHint: 'Tap or click a badge to see what it means.',
     iCan: 'I can',
     certTitle: 'A certificate for every stage',
 };
@@ -170,15 +187,12 @@ export const LEARN = {
         points: [
             `Small groups: up to ${PRICE.perLane} players in a lane, and every lane has its own Royals Academy coach.`,
             'One batting skill and one bowling skill at a time, so your player isn’t trying to learn everything at once.',
-            'Every skill has a cue: two or three words your coach says, so your player remembers what to do.',
+            'Every skill has a cue: 2 or 3 words your coach says, so your player remembers what to do.',
             'Every player bats and bowls every week, and every session ends with a game with a score.',
         ],
         pillarsTitle: 'Built on The Royals Way',
-        pillarsLead: 'Four of its pillars shape every Junior Royals session:',
-        matches: [
-            'Matches: some Junior Royals players may be invited to play Power League matches, which are part of our Performance Squads program. ',
-            tbc('Which players, from what age, and the match fee: to be confirmed.', 'Power League for Junior Royals: who is invited, from what age (Power League is 10–25), and the match fee?'),
-        ],
+        pillarsLead: 'Four of the Royals Way pillars shape every Junior Royals session:',
+        matches: 'Matches: some Junior Royals players may be invited to play Power League matches (matches between our Performance Squads).',
     },
     night: {
         intro: 'One hour, once a week. Every session follows the same plan, so your player always knows what’s next.',
@@ -191,8 +205,8 @@ export const LEARN = {
         lane: `A lane is one practice net: a long pitch with netting all round. Your player’s group has its own lane and its own coach, with up to ${PRICE.perLane} players.`,
     },
     blocks: {
-        intro: 'Each skill gets 3 weeks, so it has time to stick: learn it, own it, use it. There are 3 skill blocks in every term, and each one builds on the last.',
-        cuesTitle: 'Every skill has one cue: two or three words your coach says to help your player remember it.',
+        intro: 'Each skill gets 3 weeks, so there is time to learn it properly: learn it, own it, use it. Each skill block builds on the one before.',
+        cuesTitle: 'Every skill has one cue: 2 or 3 words your coach says to help your player remember it.',
     },
     what: {
         intro: 'Junior Royals has three stages: Discover, Develop and Elevate. Each stage has its own list of batting, bowling and fielding topics. Tap a stage to see everything it covers.',
@@ -225,17 +239,14 @@ export const COACHES = {
     eyebrow: 'Coaches and centres',
     title: 'Your coaches at each centre',
     intro: 'Every lane has its own Royals Academy coach. These are the coaches at each centre.',
-    more: tbc('More coaches to be added.', 'Alex to send the Junior Royals coaches at each centre (name and role).'),
     times: '6:00pm and 7:00pm sessions on weekday evenings',
     comingSoon: 'Coming soon',
-    comingSoonNote: 'Junior Royals is coming to Melbourne’s west. Register your interest and choose Ravenhall, and you’ll hear first when it opens.',
-    apart: 'The centres are a long way apart, so choose the one you can get to every week.',
-    course: [
-        'What our coaches teach follows the Rajasthan Royals’ coaching course, presented by ',
-        `${SID.name}, ${SID.titleLine}. `,
-        tbc('Confirm wording', 'Can the page name the Royals Coaching Hub and Sid this way?'),
-    ],
-    notMeet: 'Weekly sessions are run by our coaches in Melbourne, not by Sid or by Rajasthan Royals players or staff from India.',
+    comingSoonNote: 'Junior Royals is coming to Melbourne’s west. Register your interest and choose Ravenhall, and we’ll tell you first when it opens.',
+    apart: 'The centres are far apart, so choose the one you can get to every week.',
+    // Blueprint Part I §1, word for word (the earlier "presented by Sid" line was
+    // unapproved, and other coaches present parts of the Hub).
+    course: 'The skills our coaches teach follow the path the Royals’ own coaches teach on the Royals Coaching Hub.',
+    notMeet: 'Weekly sessions are run by our coaches in Melbourne, not by Rajasthan Royals players or staff from India.',
 };
 
 // ── 5. Price (Alex, 9 Oct 2026) ──
@@ -248,26 +259,23 @@ export const PRICES = {
     includes: [
         'One hour of coaching every week in school terms',
         `A small group: up to ${PRICE.perLane} players in a lane, with their own coach`,
-        'Skill badges, the Benchmark Game and a progress card every term',
+        ['Skill badges, the Benchmark Game and a progress card every term ', tbc('(from Term 1, 2027)', 'Skill badges and progress cards: start date to confirm.')],
         'A certificate at the end of every stage',
     ],
     shirtTitle: 'The training shirt',
     shirt: `The Junior Royals training shirt is part of the kit, and players wear it at every session. It costs ${money(SHIRT.memberPrice)} at the member price (${money(SHIRT.shopPrice)} in our shop), paid once.`,
-    shirtOffer: [
-        `Relaunch offer: the first ${SHIRT.freeForFirst} players to enrol get their shirt free, subject to stock in their size. `,
-        tbc('We’ll show how many free shirts are left.', 'Who keeps the free-shirt count current? A count that goes stale is misleading (CLAUDE.md §2.2).'),
-    ],
+    shirtOffer: `Relaunch offer: the first ${SHIRT.freeForFirst} players to enrol get their shirt free, if we have their size.`,
     howTitle: 'How enrolment works',
     how: [
         ['Enrol before the term starts. New players start at the beginning of a term, so groups stay together. ', tbc('Enrolments close the Friday before term.', 'Enrolment closing day? Proposed: the Friday before term.')],
-        [`It’s a term-by-term subscription. Your first weekly payment of ${WEEKLY} is taken in week 1 of each term, then once a week until that term ends.`],
-        ['Your player’s place carries on to the next term automatically, so they keep their place in their group without enrolling again.'],
+        [`You enrol for a whole term. Your first weekly payment of ${WEEKLY} is taken in week 1 of each term, then once a week until that term ends.`],
+        ['Your player’s place continues into the next term automatically. They keep their place in their group, and you don’t need to enrol again.'],
         ['Nothing to pay in the school holidays.'],
         [`To stop, email info@rramelbourne.com at least ${NOTICE_WEEKS} weeks before the next term starts. There’s no fee for that.`],
-        ['Stopping partway through a term: a cancellation fee of ', CANCEL_FEE, ' applies, because nobody new can join that group until the next term. This doesn’t affect your rights under the Australian Consumer Law.'],
+        ['Stopping in the middle of a term: a cancellation fee of ', CANCEL_FEE, ' applies, because nobody new can join that group until the next term. This doesn’t affect your rights under the Australian Consumer Law.'],
     ],
-    makeup: ['Missed a session? Each lane keeps one spot for a player making up a missed session. ', tbc('Your player can make up a missed session in another group at the same stage and the same centre, when that group has a spot. Make-ups aren’t available in the first or last session of term.', 'Make-up rules: same stage + same centre only, none on Benchmark/festival nights (safeguarding). How many a term? How booked?')],
-    cover: tbc('Each lane always has its own coach. If a coach is away and we can’t replace them, we cancel that group’s session and credit it. We don’t merge lanes.', 'Approve the cover rule (cancel + credit, never merge lanes)?'),
+    makeup: ['Missed a session? Each group keeps one spot for a player who missed a session. ', tbc('Your player can do it with another group at the same stage and the same centre, when that group has a spot. This isn’t available in the first or last session of term.', 'Make-up rules: same stage + same centre only, none on Benchmark/festival nights (safeguarding). How many a term? How booked?')],
+    cover: tbc('Each group always has its own coach. If a coach is away and we can’t replace them, we cancel that group’s session and credit you for it. We don’t join two groups together.', 'Approve the cover rule (cancel + credit, never merge lanes)?'),
     yearTitle: `2027: ${SESSIONS_PER_YEAR} weeks of sessions and ${52 - SESSIONS_PER_YEAR} school-holiday weeks`,
     yearNote: 'You only pay for weeks with a session.',
     calendarTitle: 'Every term and what it costs',
@@ -285,7 +293,6 @@ export const COMPARE = {
         { what: 'One-on-one coaching', players: '1 player', price: '$80 – $140' },
     ],
     source: "Other academies' prices and group sizes are as published on their own websites on 5 October 2026. They don't say whether GST is included.",
-    toConfirm: tbc('Comparison to be approved before publishing.', 'Approve the comparison table? (Re-check every price by 5 Jan 2027.)'),
 };
 
 // ── 6. Register your interest ──
@@ -303,7 +310,13 @@ export const MIN_DAYS = 2;
 export const FORM = {
     eyebrow: 'Register your interest',
     title: 'Hear first when enrolment opens',
-    intro: ['No payment now, and no place is held yet. Enrolment (choosing a place and paying) opens on ', JOINING_OPENS, '. Everyone on this list gets the enrolment link before we announce it anywhere else.'],
+    // Registering interest, hearing your day and enrolling are three different steps
+    // (cold-read audit, 12 Oct 2026): set them side by side above the form.
+    steps: [
+        { n: '1', when: 'Today', does: 'Register your interest. No payment now, and no place is held yet.' },
+        { n: '2', when: 'Then', does: 'We email you the day your player’s group trains.' },
+        { n: '3', when: ['From ', JOINING_OPENS], does: 'Enrolment opens. You confirm your player’s place and arrange payment. Everyone on this list gets the enrolment link before we announce it anywhere else.' },
+    ],
     mockupNote: 'Mock-up: this form is not connected yet. Nothing you type is saved.',
     why: {
         dob: 'So we know your player is 7 to 12.',
@@ -340,35 +353,35 @@ export const FAQS = [
     },
     {
         q: 'My player has never played. Can they enrol?',
-        a: ['Yes. Every stage starts with the basics: grip, stance and a straight bowling arm. Players new to cricket use soft balls and batting tees. ', tbc('Confirm', 'Blueprint decision 1 (14 Oct): does 28 Oct start at the basics for every stage?')],
+        a: ['Yes. Every stage starts with the basics: grip, stance and a straight bowling arm. Players new to cricket use soft balls and batting tees.'],
     },
     {
         q: 'My player already plays club cricket. Is it too easy?',
-        a: ['No. Every drill has a harder version for players who are ready, and in Elevate players work on the cut, the pull, spin, and bowling to a plan. ', LEARN.what.placement],
+        a: ['No. Every drill has a harder version for players who are ready. In Elevate, players work on the cut, the pull, spin, and bowling to a plan. ', LEARN.what.placement],
     },
     {
         q: 'Is it safe?',
-        a: ['Groups are small, with up to 6 players in a lane and their own coach. At training, in Discover and Develop the coach throws every ball the batter faces, and in Discover players bowl at targets, never at a batter. Elevate uses tennis balls or soft balls. Power League matches are real games, so players bowl to each other there. ', tbc('Players wear a helmet when batting or keeping wicket in Develop, Elevate and every match. Bring your own if you have one; we lend helmets at every centre.', 'Helmets: count the lending helmets at each centre before this line goes live.'), ' ', tbc('Before enrolment opens, we’ll publish here how we check every coach and how players are signed in and out.', 'SAFEGUARDING VETO until true: every coach on the WWC register + connected in WWC Connect (law from 19 Oct 2026), 2 checked adults (18+) every session, sign-in/out, Child Safety Policy page, named Safeguarding Lead with phone.')],
+        a: ['Groups are small, with up to 6 players in a lane and their own coach. At training, in Discover and Develop the coach feeds every ball to the batter. In Discover, players bowl at targets, never at a batter. Elevate uses tennis balls or soft balls. Power League matches are real games, so players bowl to each other there. ', tbc('Players wear a helmet when batting or keeping wicket in Develop, Elevate and every match. Bring your own if you have one; we lend helmets at every centre.', 'Helmets: count the lending helmets at each centre before this line goes live.'), ' ', tbc('Before enrolment opens, we’ll publish here how we check every coach and how players are signed in and out.', 'SAFEGUARDING VETO until true: every coach on the WWC register + connected in WWC Connect (law from 19 Oct 2026), 2 checked adults (18+) every session, sign-in/out, Child Safety Policy page, named Safeguarding Lead with phone.')],
     },
     {
         q: 'How do drop-off and pick-up work?',
-        a: [tbc('Please bring your player into the centre and sign them in with their coach, and sign them out at the end. We only hand players over to you or an adult you name on the enrolment form. If your player is new to cricket, please stay in the centre during the session, so you’re close by if they need the toilet or a hand.', 'Sign-in/out system + authorised collectors on the enrolment form (safeguarding). Coaches never take a player to the toilet alone.')],
+        a: [tbc('Please bring your player into the centre and sign them in with their coach, and sign them out at the end. We only hand players over to you or an adult you name on the enrolment form. If your player is new to cricket, please stay in the centre during the session. Then you are near if they need the toilet or need help.', 'Sign-in/out system + authorised collectors on the enrolment form (safeguarding). Coaches never take a player to the toilet alone.')],
     },
     {
         q: 'How do payments work?',
-        a: `${WEEKLY} a week, paid weekly in term. It’s a term-by-term subscription: the first payment is taken in week 1 of each term, then once a week until that term ends. Your player’s place carries on to the next term automatically. Nothing is charged in the school holidays. ${GST_NOTE}`,
+        a: `${WEEKLY} a week, paid weekly in term. You enrol for a whole term: the first payment is taken in week 1, then once a week until that term ends. Your player’s place continues into the next term automatically. Nothing is charged in the school holidays. ${GST_NOTE}`,
     },
     {
         q: 'Do we have to buy the training shirt?',
-        a: `Yes. Players wear the Junior Royals training shirt at every session. It’s ${money(SHIRT.memberPrice)} at the member price, paid once, and the first ${SHIRT.freeForFirst} players to enrol get it free (subject to stock in their size).`,
+        a: `Yes. Players wear the Junior Royals training shirt at every session. It’s ${money(SHIRT.memberPrice)} at the member price, paid once, and the first ${SHIRT.freeForFirst} players to enrol get it free, if we have their size.`,
     },
     {
         q: 'Can we stop?',
-        a: [`Yes. Email info@rramelbourne.com at least ${NOTICE_WEEKS} weeks before the next term starts, and your player’s place ends when the current term ends, with no fee. If you stop partway through a term, a cancellation fee of `, CANCEL_FEE, ' applies.'],
+        a: [`Yes. Email info@rramelbourne.com at least ${NOTICE_WEEKS} weeks before the next term starts. Your player’s place then ends when the current term ends, with no fee. If you stop in the middle of a term, a cancellation fee of `, CANCEL_FEE, ' applies.'],
     },
     {
         q: 'Can my player start partway through a term?',
-        a: 'No. New players start at the beginning of a term, so groups stay together. If you register now, you hear first when enrolment opens.',
+        a: 'No. New players start at the beginning of a term, so groups stay together. If you register now, we tell you first when enrolment opens.',
     },
     {
         q: 'What if my player misses a session?',
@@ -380,7 +393,7 @@ export const FAQS = [
     },
     {
         q: 'Will my player meet Sid or Rajasthan Royals players?',
-        a: `Not at weekly sessions. Our Royals Academy coaches in Melbourne run every Junior Royals session. What comes from ${SID.name} is the coaching course our coaches teach from.`,
+        a: 'Not at weekly sessions. Our Royals Academy coaches in Melbourne run every Junior Royals session. The skills they teach follow the path the Royals’ own coaches teach on the Royals Coaching Hub.',
     },
     {
         q: 'Does Junior Royals lead to Performance Squads?',
@@ -389,11 +402,11 @@ export const FAQS = [
     },
     {
         q: 'When does Ravenhall open?',
-        a: ['Junior Royals is coming to Ravenhall, in Melbourne’s west. ', tbc('Opening date to be announced.', 'Ravenhall: opening term, days and coaches?'), ' Register your interest and choose Ravenhall, and you’ll hear first.'],
+        a: ['Junior Royals is coming to Ravenhall, in Melbourne’s west. ', tbc('Opening date to be announced.', 'Ravenhall: opening term, days and coaches?'), ' Register your interest and choose Ravenhall, and we’ll tell you first.'],
     },
     {
         q: 'Can we use more than one centre?',
-        a: 'No. Your player trains at one centre. The centres are a long way apart, so choose the one you can get to every week.',
+        a: 'No. Your player trains at one centre. The centres are far apart, so choose the one you can get to every week.',
     },
 ];
 

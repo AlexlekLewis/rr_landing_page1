@@ -23,7 +23,7 @@ export const PHASES = [
         name: 'Discover',
         aim: 'Learn the game',
         // "How it feels" (blueprint p7), in plain words.
-        feel: 'Soft balls, batting tees (a stand that holds the ball) and lots of hitting. At Wednesday training the coach throws every ball, and players bowl at targets, never at a batter. Fun comes first.',
+        feel: 'Soft balls, batting tees (a stand that holds the ball) and lots of hitting. At training the coach feeds every ball to the batter, and players bowl at targets, never at a batter. Fun comes first.',
         canDo: [
             'Hit the ball along the ground and stay balanced',
             'Bowl at the stumps with a straight arm',
@@ -33,7 +33,7 @@ export const PHASES = [
         key: 'develop',
         name: 'Develop',
         aim: 'Learn to play',
-        feel: 'A soft ball, or an Incrediball (a softer rubber cricket ball). At Wednesday training the coach throws every ball, and players start making choices after the ball is bowled. The score rewards a good choice, not only a good hit.',
+        feel: 'A soft ball, or an Incrediball (a softer rubber cricket ball). At training the coach feeds every ball to the batter, and players start making choices after the ball is bowled. The score rewards a good choice, not only a good hit.',
         canDo: [
             'Choose to hit or block off the front foot',
             'Run in and bowl the same way, ball after ball',
@@ -189,9 +189,9 @@ export const CUES = [
 // presents them as the franchise's official pillars.
 export const PILLARS = [
     { name: 'Learn by Doing', note: 'Try it, make a mistake, learn from it, try again.' },
-    { name: 'Play Bold', note: 'A brave, smart try is celebrated, even when it doesn’t come off.' },
-    { name: 'Joy, Curiosity & Lifelong Learning', note: 'The game stays fun, and questions are welcome.' },
-    { name: 'Fairness, Respect & Inclusion', note: 'Every player gets the same number of turns, and the same respect.' },
+    { name: 'Play Bold', note: 'A brave, smart try is celebrated, even when it fails.' },
+    { name: 'Joy, Curiosity & Lifelong Learning', note: 'The game stays fun, and minds stay open.' },
+    { name: 'Fairness, Respect & Inclusion', note: 'Every player gets equal turns to bat and bowl.' },
 ];
 
 // ── Skill badges: PROPOSED, pilot Term 1 2027 (blueprint Part IV, p35–37) ──

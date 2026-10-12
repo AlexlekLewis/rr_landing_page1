@@ -108,11 +108,29 @@ describe('progress system and stages', () => {
         CONTENT.LEARN.parts.forEach((p) => { expect(p.summary.length).toBeGreaterThan(20); expect(p.summary.length).toBeLessThan(90); });
     });
 
-    it('the value is spelled out for the player and for the parent, each tied to the Royals Way or our method', () => {
+    it('the value is spelled out for the player and for the parent', () => {
         [CONTENT.VALUE.player, CONTENT.VALUE.parent].forEach((col) => {
             expect(col.points.length).toBeGreaterThanOrEqual(4);
-            col.points.forEach((pt) => expect(pt.from).toBeTruthy());
+            col.points.forEach((pt) => { expect(pt.head).toBeTruthy(); expect(pt.body).toBeTruthy(); });
         });
+    });
+
+    // Alex, 12 Oct: "don't make up your own language if you haven't got it."
+    // The Why and the Royals Way lines are quoted from the blueprint (Part I) and
+    // the verified Sid profile; these guards stop a drafted line creeping back in.
+    it('says who the Royals are, what the Royals Way is and where it leads, in the blueprint’s own words', () => {
+        const text = (v: unknown): string => (Array.isArray(v) ? v.map(text).join('') : typeof v === 'object' && v ? (v as { text: string }).text : String(v));
+        expect(text(CONTENT.HERO.why)).toBe('We teach it the Royals Way: through games, with one clear skill to learn, one coaching point to hold on to, and a score to beat.');
+        expect(text(CONTENT.VALUE.lead)).toMatch(/^Junior Royals is cricket coaching the Royals Way for players aged 7 to 12\./);
+        const royals = CONTENT.VALUE.royals.items.map((it) => text(it.a)).join(' ');
+        expect(CONTENT.VALUE.royals.items).toHaveLength(4);
+        expect(royals).toContain('Rajasthan Royals in India’s IPL');
+        expect(royals).toContain('through games, with one clear skill to learn');
+        expect(royals).toContain('first six years of the Royals Player Pathway');
+        expect(royals).toContain('by invitation only');
+        const all = JSON.stringify(CONTENT);
+        expect(all).not.toMatch(/our own coaching method|presented by|mastered/i);
+        expect(all).not.toMatch(/Confirm wording|to be confirmed|to be approved|to be added/i);
     });
 
     it('the system has its name, and the page makes no unprovable superlatives (CLAUDE.md §2)', () => {

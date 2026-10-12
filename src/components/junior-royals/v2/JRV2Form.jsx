@@ -162,7 +162,6 @@ const JRV2Form = () => {
         <form onSubmit={submit} noValidate className="relative bg-white rounded-2xl p-5 sm:p-8">
             <input type="text" name={HONEYPOT_FIELD} tabIndex={-1} autoComplete="off" aria-hidden="true"
                 className="absolute left-[-9999px] top-0 w-px h-px opacity-0" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
-            {MOCKUP && <p className="mb-5 text-sm font-bold text-rr-dark bg-yellow-300 rounded-lg px-3 py-2">{FORM.mockupNote}</p>}
 
             <div className="grid sm:grid-cols-2 gap-5">
                 <div className="sm:col-span-2">
