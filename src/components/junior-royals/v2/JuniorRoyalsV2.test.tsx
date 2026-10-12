@@ -212,11 +212,19 @@ describe('the interest form', () => {
         // skill, they get a badge and then they move on to the next one. Or they might
         // revisit it later."
         expect(P.steps.map((st) => st.head)).toEqual(['Train on one skill', 'Show the skill', 'Earn the badge', 'Move to the next skill']);
-        expect(P.steps[0].body).toBe('For 3 weeks: learn it, own it, use it.');
+        expect(P.steps[0].body).toBe('With their coach, for 3 weeks: learn it, own it, use it.');
         expect(P.steps[1].body).toContain('4 good balls out of 6, in 2 different sessions');
         expect(P.steps[3].body).toMatch(/come back to a skill later/);
-        expect(P.lead).toMatch(/trains on one skill at a time/);
+        expect(P.lead).toMatch(/trains on one skill at a time, with their coach/);
         expect(P.lead).toMatch(/earn its badge and move on to the next skill/);
+        // Alex: "I don't want all the responsibility on the player. The responsibility is
+        // a collective one": coach, player and parent each have a part.
+        expect(P.lead).toMatch(/the coach, your player and you can all see/);
+        expect(P.together.map((t) => t.head)).toEqual(['The coach', 'Your player', 'You']);
+        expect(P.togetherLead).toMatch(/shared between three people: their coach, your player and you/);
+        expect(P.togetherNote).toMatch(/keep all three focused on the next skill/);
+        expect(P.togetherNote).toMatch(/long-term growth/);
+        expect(P.steps[3].body).toMatch(/Their coach sets the next skill/);
         // The parent's question: "am I going to get what I ask for?"
         expect(P.whyTitle).toBe('How you know your player is getting what you pay for');
         expect(P.why.length).toBeGreaterThanOrEqual(4);

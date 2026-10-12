@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, Award, BadgeCheck, Cake, CalendarCheck, Check, ChevronDown, ClipboardCheck, ClipboardList, Clock, Eye, FileText, GraduationCap, Layers, ListChecks, MapPin, MessageCircle, RefreshCw, Repeat, ShieldCheck, Shirt, Smile, Sprout, Sun, Target, TrendingUp, Trophy, Users, X } from 'lucide-react';
+import { ArrowRight, Award, BadgeCheck, Cake, CalendarCheck, Check, ChevronDown, ClipboardCheck, ClipboardList, Clock, Eye, FileText, GraduationCap, HeartHandshake, Layers, ListChecks, MapPin, MessageCircle, RefreshCw, Repeat, ShieldCheck, Shirt, Smile, Sprout, Sun, Target, TrendingUp, Trophy, Users, X } from 'lucide-react';
 import Navbar from '../../Navbar';
 import Footer from '../../Footer';
 import usePageAnalytics from '../../../hooks/usePageAnalytics';
@@ -202,6 +202,7 @@ const Value = () => (
 const STEP_ICON = { train: Repeat, show: ClipboardCheck, next: ArrowRight };
 const WHY_ICON = { badge: BadgeCheck, earned: ClipboardCheck, record: ClipboardList, feel: Smile, climb: TrendingUp, pace: Sprout };
 const PORTAL_ICON = { badge: BadgeCheck, eye: Eye, record: ClipboardList };
+const TOGETHER_ICON = { coach: GraduationCap, player: Smile, parent: HeartHandshake };
 // Scroll to "How your player learns" and open its fourth card, where the phases and their example badges are.
 const openPhases = () => { go('learn'); window.setTimeout(() => document.getElementById('learn-what')?.click(), 500); };
 
@@ -241,6 +242,27 @@ const Progress = () => (
             <ul className="mt-10 space-y-2 max-w-3xl">
                 {PROGRESS.rules.map((r) => <Tick key={r}><span className="text-rr-dark font-semibold">{r}</span></Tick>)}
             </ul>
+        </div>
+
+        {/* Shared work: the coach, the player and the parent each have a part (Alex, 12 Oct). */}
+        <div className="mt-16">
+            <h3 className="text-2xl sm:text-4xl font-black uppercase tracking-tight leading-none text-rr-dark">{PROGRESS.togetherTitle}</h3>
+            <p className="mt-4 text-[17px] sm:text-lg font-semibold text-rr-dark leading-relaxed max-w-2xl">{PROGRESS.togetherLead}</p>
+            <ol className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+                {PROGRESS.together.map((t) => {
+                    const Icon = TOGETHER_ICON[t.icon];
+                    return (
+                        <li key={t.head} className="rounded-2xl border-2 border-slate-200 p-5 flex md:flex-col items-start md:items-center md:text-center gap-4">
+                            <span className="w-16 h-16 rounded-full bg-rr-pink flex items-center justify-center shrink-0"><Icon className="w-8 h-8 text-white" aria-hidden="true" /></span>
+                            <div>
+                                <p className="text-rr-dark text-xl font-black uppercase leading-tight">{t.head}</p>
+                                <p className="text-rr-charcoal text-base font-medium leading-snug mt-1.5">{t.body}</p>
+                            </div>
+                        </li>
+                    );
+                })}
+            </ol>
+            <p className="mt-6 border-l-4 border-rr-pink pl-4 text-[17px] sm:text-lg font-semibold text-rr-dark leading-relaxed max-w-3xl">{PROGRESS.togetherNote}</p>
         </div>
 
         {/* Why it matters: the question a parent asks before paying, as six quick tiles. */}

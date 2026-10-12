@@ -197,7 +197,7 @@ export const PROGRESS = {
     eyebrow: 'Progress you can see',
     title: 'The Royals Way Progress Tracking and Development System',
     // What it is, in his words: train on a skill, show it, earn the badge, move on.
-    lead: 'This is how Junior Royals works. Your player trains on one skill at a time. When they show they can do that skill, they earn its badge and move on to the next skill. Every badge is recorded, so you can see exactly what your player has learned.',
+    lead: 'This is how Junior Royals works. Your player trains on one skill at a time, with their coach. When they can do that skill, they earn its badge and move on to the next skill. Every badge is recorded, so the coach, your player and you can all see what has been learned and what comes next.',
     // No start date on the page: players get their badges and portal access straight
     // away (Alex, 12 Oct 2026: "they get access straight away"; "we don't need to
     // tell them that").
@@ -206,10 +206,10 @@ export const PROGRESS = {
     stepsTitle: 'One skill, one badge',
     stepsBadge: 'Heel to Toe',   // a real Discover badge shown at step 3, so the reader sees what a badge is
     steps: [
-        { icon: 'train', head: 'Train on one skill', body: `For 3 weeks: ${BLOCK.map((b) => b.name.toLowerCase()).join(', ')}.` },
+        { icon: 'train', head: 'Train on one skill', body: `With their coach, for 3 weeks: ${BLOCK.map((b) => b.name.toLowerCase()).join(', ')}.` },
         { icon: 'show', head: 'Show the skill', body: `Without help: ${BADGES.check.good} good balls out of ${BADGES.check.of}, in ${BADGES.check.nights} different sessions. Their coach checks it.` },
         { icon: 'badge', head: 'Earn the badge', body: `A digital badge for that skill, kept in the ${PORTAL_NAME}.` },
-        { icon: 'next', head: 'Move to the next skill', body: 'Your player may come back to a skill later.' },
+        { icon: 'next', head: 'Move to the next skill', body: 'Their coach sets the next skill. Your player may come back to a skill later.' },
     ],
     rules: [
         '“Not yet”, never “failed”. A player can keep trying for a badge until they earn it. Once it is earned, they keep it.',
@@ -220,6 +220,20 @@ export const PROGRESS = {
     // performance, not learning"; "A climb, not a rank. No leaderboards; nothing
     // for size, pace or attendance") and Alex's (the record; accomplishment and
     // self-confidence).
+    // Shared work (Alex, 12 Oct, late): "between the coach and the player and the parent
+    // all investing in the progress and development of the player, and the badges help
+    // keep the player's development focused … the long-term growth of a player matters
+    // a whole lot more. I don't want all … the responsibility on the player. The
+    // responsibility is a collective one." Each of the three has a part; none of this
+    // is put on the player alone.
+    togetherTitle: 'Everyone has a part',
+    togetherLead: 'Your player’s progress is shared between three people: their coach, your player and you.',
+    together: [
+        { icon: 'coach', head: 'The coach', body: 'Teaches each skill, checks it, and plans what comes next.' },
+        { icon: 'player', head: 'Your player', body: 'Tries each skill, and keeps trying until they can do it.' },
+        { icon: 'parent', head: 'You', body: 'Follow their progress and encourage them.' },
+    ],
+    togetherNote: 'The badges keep all three focused on the next skill. What matters most is your player’s long-term growth.',
     // Alex, 12 Oct (later): "That's a really good section. Let's just change the UI on
     // it. Because remember it both has to be player friendly, quick to consume, and
     // easy to understand." So: tiles with an icon, a few words and one short line.
