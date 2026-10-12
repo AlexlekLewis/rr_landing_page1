@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Award, BadgeCheck, Check, ClipboardList, Target, Trophy, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Award, Check, X } from 'lucide-react';
 import { Rich } from '../JuniorRoyalsShared';
 import { PHASES, CURRICULUM, BADGES, AFTER } from './jrV2Facts';
 import { PATH, PROGRESS } from './jrV2Content';
@@ -229,28 +229,6 @@ export const StageJourney = () => {
         </>
     );
 };
-
-// ── The Royals Way Progress Tracking and Development System (on dark) ──
-const PART_ICON = { badge: BadgeCheck, score: Target, card: ClipboardList, cert: Trophy };
-
-export const ProgressParts = () => (
-    <ol className="grid sm:grid-cols-2 gap-4">
-        {PROGRESS.parts.map((p, i) => {
-            const Icon = PART_ICON[p.icon];
-            return (
-                <li key={p.title} className="rounded-2xl border-2 border-white/15 p-5">
-                    <div className="flex items-center gap-3">
-                        <span className="w-11 h-11 rounded-full bg-rr-pink flex items-center justify-center shrink-0">
-                            <Icon className="w-6 h-6 text-white" aria-hidden="true" />
-                        </span>
-                        <p className="text-white text-xl font-black leading-tight"><span className="text-rr-light-pink mr-1.5">{i + 1}.</span>{p.title}</p>
-                    </div>
-                    <p className="text-white/85 text-[15px] font-medium leading-relaxed mt-3">{p.body}</p>
-                </li>
-            );
-        })}
-    </ol>
-);
 
 // All 28 Discover badges. Point at one (computer) or tap it (phone) to read its "I can …".
 const KINDS = ['bat', 'bowl', 'field'];

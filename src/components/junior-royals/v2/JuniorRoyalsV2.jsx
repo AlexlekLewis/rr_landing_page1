@@ -13,7 +13,7 @@ import {
     REGION_LABEL, NEARBY, PHOTOS, V2_CENTRES, TERMS, termTotal,
 } from './jrV2Content';
 import { HourNumbers, HourRibbon, LaneDots, SkillSteps, Cues, YearStrip } from './JRV2Visuals';
-import { StageJourney, ProgressParts, BadgeWall, Certificates } from './JRV2Pathway';
+import { StageJourney, BadgeWall, Certificates } from './JRV2Pathway';
 import { ActionCards } from './JRV2ActionCards';
 import JRV2Form from './JRV2Form';
 
@@ -200,7 +200,19 @@ const Progress = () => (
                 <div>
                     <p className="text-lg sm:text-xl text-white font-semibold leading-relaxed">{PROGRESS.lead}</p>
                     <p className="mt-3 text-[15px] font-semibold text-white"><Rich v={PROGRESS.starts} /></p>
-                    <div className="mt-8"><ProgressParts /></div>
+                    {/* The learning process around a badge: three weeks, the coach's check, the badge. */}
+                    <h3 className="mt-9 mb-4 text-xl sm:text-2xl font-black uppercase tracking-tight text-white">{PROGRESS.stepsTitle}</h3>
+                    <ol className="space-y-3">
+                        {PROGRESS.steps.map((st, i) => (
+                            <li key={st.name} className="flex gap-4 rounded-2xl border-2 border-white/20 p-4">
+                                <span className="w-10 h-10 rounded-full bg-rr-pink text-white text-lg font-black flex items-center justify-center shrink-0" aria-hidden="true">{i + 1}</span>
+                                <div>
+                                    <p className="text-white text-lg font-black leading-tight">{st.name}<span className="ml-2 align-middle text-white/80 text-xs font-black uppercase tracking-widest">{st.when}</span></p>
+                                    <p className="text-white text-[15px] font-medium leading-snug mt-1">{st.does}</p>
+                                </div>
+                            </li>
+                        ))}
+                    </ol>
                 </div>
                 <PhotoTile {...PHOTOS.progress} className="aspect-[4/5] hidden md:block" />
             </div>
@@ -213,6 +225,27 @@ const Progress = () => (
                 <ul className="mt-4 space-y-2 max-w-3xl">
                     {PROGRESS.rules.map((r) => <Tick key={r} dark>{r}</Tick>)}
                 </ul>
+            </div>
+
+            {/* Why we track, and where the record lives (Alex, 12 Oct 2026). */}
+            <div className="mt-12 grid md:grid-cols-2 gap-8 items-start">
+                <div>
+                    <h3 className="mb-5 text-xl sm:text-2xl font-black uppercase tracking-tight text-white">{PROGRESS.whyTitle}</h3>
+                    <ul className="space-y-4">
+                        {PROGRESS.why.map((w) => (
+                            <li key={w.head} className="border-l-4 border-white pl-4">
+                                <p className="text-white text-lg font-black leading-tight">{w.head}</p>
+                                <p className="text-white text-[15px] font-medium leading-snug mt-1">{w.body}</p>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <div className="rounded-2xl bg-white p-6 sm:p-7 border-t-8 border-t-rr-pink">
+                    <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark">{PROGRESS.portalTitle}</h3>
+                    <p className="mt-2 text-[17px] font-bold text-rr-dark leading-snug">{PROGRESS.portal.lead}</p>
+                    <ul className="mt-4 space-y-2.5">{PROGRESS.portal.points.map((pt) => <Tick key={pt}><span className="text-rr-dark font-semibold">{pt}</span></Tick>)}</ul>
+                    <p className="mt-4 text-sm font-semibold text-rr-charcoal"><Rich v={PROGRESS.starts} /></p>
+                </div>
             </div>
 
             <h3 className="mt-12 mb-5 text-xl sm:text-2xl font-black uppercase tracking-tight text-white">{PROGRESS.certTitle}</h3>

@@ -184,6 +184,33 @@ describe('the interest form', () => {
         expect(JSON.stringify(CONTENT)).not.toMatch(/week 1 of each term/i);
     });
 
+    // Alex, 12 Oct: clearer badges, the learning process around them, why we track,
+    // and the Player Performance Portal ("where they'll receive their digital
+    // badges and digital certificates … also keeps record of their journey with
+    // the Royals"). He did not recognise the Benchmark Game, so it is off the page.
+    it('progress section: five steps to a badge, why we track, and the portal; no Benchmark Game', () => {
+        const P = CONTENT.PROGRESS;
+        expect(P.steps.map((st) => st.name)).toEqual(['Learn it', 'Own it', 'Use it', 'The coach checks it', 'The badge is earned']);
+        expect(P.why.length).toBeGreaterThanOrEqual(4);
+        expect(CONTENT.PORTAL_NAME).toBe('Player Performance Portal');
+        const portal = [P.portal.lead, ...P.portal.points].join(' ');
+        expect(portal).toContain('gets access to the Player Performance Portal');
+        expect(portal).toContain('digital badges');
+        expect(portal).toContain('digital certificate');
+        expect(portal).toContain('record of your player’s time with the Royals');
+        // What a visitor can read: a tbc() value shows its text, never its review note.
+        const shown = (v: unknown): string => {
+            if (v == null || typeof v === 'function') return '';
+            if (typeof v !== 'object') return String(v);
+            if (Array.isArray(v)) return v.map(shown).join(' ');
+            const o = v as Record<string, unknown>;
+            return o.tbc ? String(o.text) : Object.values(o).map(shown).join(' ');
+        };
+        const pageCopy = shown({ ...CONTENT, OPEN_QUESTIONS_V2: undefined });
+        expect(pageCopy).not.toMatch(/Benchmark|progress card/i);
+        expect(JSON.stringify(JR_V2_JSONLD)).not.toMatch(/Benchmark|progress card/i);
+    });
+
     // Alex, 12 Oct: the hero was too crowded. It goes straight to who it is for,
     // when, where and group size: no "why" line, no second button, no side links.
     it('the hero is lean: who, when (with the two times), where, groups, price', () => {

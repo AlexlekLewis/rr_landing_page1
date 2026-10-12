@@ -18,7 +18,7 @@
 // ─────────────────────────────────────────────────────────────
 
 import { tbc, money, AGES_TEXT, FIRST_SESSION, CALENDAR, SESSIONS_PER_YEAR, GST_NOTE, JOINING_OPENS, CENTRES, PS_ROUTE } from '../juniorRoyalsData';
-import { PRICE, SHIRT, NOTICE_WEEKS, BADGES, CURRICULUM, TIMES } from './jrV2Facts';
+import { PRICE, SHIRT, NOTICE_WEEKS, BADGES, CURRICULUM, TIMES, BLOCK } from './jrV2Facts';
 
 const r2 = (n) => Math.round(n * 100) / 100;
 // Every batting, bowling and fielding topic across the three stages (47).
@@ -106,6 +106,10 @@ export const HERO = {
     noPayment: 'No payment now. No place is held yet.',
 };
 
+// The portal's public name and the start-date note, used by the value and progress sections.
+export const PORTAL_NAME = 'Player Performance Portal';   // the name the Power Game pages already use
+const WHEN = tbc('From Term 1, 2027.', 'Skill badges and portal access for Junior Royals: start date to confirm (blueprint Part IV is a proposal; is the Junior Royals part of the portal built?).');
+
 // ── The value, in plain words (Alex, 11 Oct 2026: "clearly communicate what the
 // value is … for the player and the parent", with the Royals Way folded in).
 // 12 Oct audit (Alex: "don't make up your own language if you haven't got it"):
@@ -116,8 +120,8 @@ export const VALUE = {
     eyebrow: 'Play the Royals Way',
     title: 'What your player gets, and what you get',
     // Blueprint Part I, "In one paragraph, for families", word for word.
-    lead: tbc('Junior Royals is cricket coaching the Royals Way for players aged 7 to 12. Every week of the school term, your player bats and bowls with a Royals Academy coach in a small group. Every skill gets three weeks: we learn it, we own it, then we use it in a game. On the first night of term we play a game and keep the score; on the last night we play it again, so you can see how far your player has come.',
-        'Blueprint "In one paragraph, for families" (its decision 10 asks you to approve it). Note: Term 4, 2026 is a shorter term, and the blueprint gives two of its three skills 2 weeks, not 3.'),
+    lead: tbc('Junior Royals is cricket coaching the Royals Way for players aged 7 to 12. Every week of the school term, your player bats and bowls with a Royals Academy coach in a small group. Every skill gets three weeks: we learn it, we own it, then we use it in a game.',
+        'Blueprint "In one paragraph, for families" (its decision 10 asks you to approve it), minus its last sentence about the first-night and last-night game (the Benchmark Game). Note: Term 4, 2026 is a shorter term, and the blueprint gives two of its three skills 2 weeks, not 3.'),
     royals: {
         title: 'The Royals and the Royals Way',
         items: [
@@ -139,7 +143,7 @@ export const VALUE = {
             { icon: 'cue', head: 'A few words to remember', body: 'Every skill has a cue: 2 or 3 words, like “Heel to toe”, that help them remember it.' },
             { icon: 'game', head: 'A game with a score, every session', body: 'The hour always ends with a game, so skills get used, not just practised.' },
             { icon: 'joy', head: 'Brave tries count', body: 'Players are asked to try. If it doesn’t work, the coach asks what happened, and they try again.' },
-            { icon: 'badge', head: 'Beat your own score', body: 'Players try to beat their own score. Players are not ranked against each other.' },
+            { icon: 'badge', head: 'A badge for every skill', body: `Each skill they learn earns a digital badge, kept in their ${PORTAL_NAME}.` },
         ],
     },
     parent: {
@@ -148,7 +152,7 @@ export const VALUE = {
             { icon: 'group', head: 'A small group with its own coach', body: `No more than ${PRICE.perLane} players in a lane.` },
             { icon: 'plan', head: 'The same plan every week', body: 'Sixty minutes: batting, bowling, then a scored game.' },
             { icon: 'safe', head: 'Safety rules for each stage', body: 'In Discover, players bowl at targets, never at a batter, and the coach feeds every ball to the batter.' },
-            { icon: 'card', head: 'Progress you can see', body: ['A progress card every term. It shows your player’s score from the first and last session, and each skill they can do, in “I can …” words. ', tbc('From Term 1, 2027.', 'Skill badges and progress cards: start date to confirm (blueprint Part IV is a proposal).')] },
+            { icon: 'card', head: 'Progress you can see', body: [`Every badge your player earns is recorded in the ${PORTAL_NAME}, in “I can …” words. `, WHEN] },
             { icon: 'same', head: 'Every coach works from the same written plan', body: 'A goal, the coaching points, the questions to ask and the drills, for every session.' },
             { icon: 'place', head: 'Your player keeps their place', body: 'The same day and time each week, and their place continues every term until you stop it.' },
         ],
@@ -163,29 +167,65 @@ export const CTA = {
 };
 
 // ── 2. The Royals Way Progress Tracking and Development System (Alex, 9 Oct:
-// the first section after the hero). Blueprint Part IV: a proposal, pilot
-// Term 1 2027 — so the start date stays yellow until Alex confirms it.
+// the first section after the hero).
+// Rebuilt 12 Oct 2026 (Alex): "We need to be clearer about the badges and the
+// learning process around the badges and the reasons why it's important to be
+// able to track a player's development over time. We need to talk about access
+// to the player performance portal for Junior Royals. This is the environment
+// where they'll receive their digital badges and digital certificates when
+// they've completed each phase or skill. Also keeps record of their journey with
+// the Royals."
+// ("Journey" is on the banned list in CLAUDE.md §2.1, so the page says "a record
+// of your player's time with the Royals: every badge and every certificate".)
+// The Benchmark Game and the printed progress card are OFF the page: Alex did not
+// recognise the Benchmark Game ("I feel like you made that up"). Both come from
+// the Program Blueprint (Proposal v1), not from a decision; see the decisions note.
 export const PROGRESS = {
     eyebrow: 'Progress you can see',
     title: 'The Royals Way Progress Tracking and Development System',
-    lead: 'Your player’s coach checks every skill in a turn that is scored. Each skill your player can do earns a skill badge. You get a progress card at the end of every term.',
-    starts: tbc('The Benchmark Game starts in Term 4, 2026. Skill badges and progress cards start in Term 1, 2027.', 'Blueprint Part IV is a proposal: go ahead from Term 1, 2027? The coaching group settles the standard first.'),
-    parts: [
-        { icon: 'badge', title: 'Skill badges', body: `Your player earns a badge when they can do the skill without help: ${BADGES.check.good} good balls out of ${BADGES.check.of}, in ${BADGES.check.nights} different sessions.` },
-        { icon: 'score', title: 'The Benchmark Game', body: 'A short game with a score, played in the first and last session of every term. Your player tries to beat their own score. The score goes on your player’s own card. It is not put on a board for others to see.' },
-        { icon: 'card', title: 'A progress card every term', body: 'You see which badges your player has earned, and which skills they are working on next.' },
-        { icon: 'cert', title: 'A certificate for every stage', body: 'At the end of each stage your player gets a certificate, and moves on to the next stage.' },
+    lead: `Your player earns a digital skill badge for every skill they learn, and a digital certificate for every stage they complete. Both are kept in the ${PORTAL_NAME}, which keeps a record of your player’s time with the Royals.`,
+    starts: tbc('Skill badges and portal access start in Term 1, 2027.', 'Start date for badges and portal access: Term 1, 2027 is the blueprint’s proposal. Confirm, or start in Term 4, 2026.'),
+    // The learning process around a badge: the 3-week block (jrV2Facts BLOCK), the
+    // coach's check (BADGES.check) and the badge arriving in the portal.
+    stepsTitle: 'How your player earns a badge',
+    steps: [
+        { name: BLOCK[0].name, when: `Week ${BLOCK[0].week}`, does: 'Your coach shows the skill, step by step. Your player copies it.' },
+        { name: BLOCK[1].name, when: `Week ${BLOCK[1].week}`, does: 'Your player does it without help, again and again.' },
+        { name: BLOCK[2].name, when: `Week ${BLOCK[2].week}`, does: 'Mixed-up balls, like a real game. Your player chooses what to do.' },
+        { name: 'The coach checks it', when: 'The check', does: `Your player shows the skill without help: ${BADGES.check.good} good balls out of ${BADGES.check.of}, in ${BADGES.check.nights} different sessions.` },
+        { name: 'The badge is earned', when: 'The badge', does: `The digital badge appears in your player’s ${PORTAL_NAME}.` },
     ],
+    // Why track. Lines 1, 2 and 4 are the blueprint's (Part IV: "Over a year the
+    // badges show exactly what each player can do, built from the same coaching
+    // points we teach"; "One good night is performance, not learning"; "A climb,
+    // not a rank. No leaderboards; nothing for size, pace or attendance"). Line 3
+    // is from its portal view ("earned badges and Working on it"). Line 5 is Alex's.
+    whyTitle: 'Why we track every player’s development',
+    why: [
+        { head: 'You see exactly what your player can do', body: 'Over a year, the badges show exactly what each player can do. They are built from the same coaching points we teach.' },
+        { head: 'A badge means the skill is learned', body: `One good session is not enough. Your player shows the skill in ${BADGES.check.nights} different sessions before the badge is earned.` },
+        { head: 'Everyone knows what comes next', body: 'Your player and their coach always know which skills are earned and which they are working on.' },
+        { head: 'A climb, not a rank', body: 'Players are not ranked against each other. Badges are for skills only: never for size, speed or attendance.' },
+        { head: 'One record, from the first session on', body: `The ${PORTAL_NAME} keeps every badge and every certificate your player earns, for all their time with the Royals.` },
+    ],
+    portalTitle: `The ${PORTAL_NAME}`,
+    portal: {
+        lead: `Every Junior Royals player gets access to the ${PORTAL_NAME}.`,
+        points: [
+            'It is where your player receives their digital badges, each time they earn one.',
+            'It is where your player receives a digital certificate when they complete a stage.',
+            'It keeps a record of your player’s time with the Royals: every badge and every certificate.',
+        ],
+    },
     perYear: `There are ${BADGES.perYear.batting + BADGES.perYear.bowling + BADGES.perYear.fielding} badges to earn each year: ${BADGES.perYear.batting} for batting, ${BADGES.perYear.bowling} for bowling and ${BADGES.perYear.fielding} for fielding. Every 3 weeks there is one new batting badge and one new bowling badge.`,
     rules: [
         '“Not yet”, never “failed”. A player can keep trying for a badge until they earn it. Once it is earned, they keep it.',
-        'No ranking of players. Badges are for skills only: never for size, speed or attendance.',
     ],
     stagesIntro: 'Junior Royals has three stages: Discover, Develop and Elevate. Discover is the first.',
     sampleTitle: `The ${BADGES.discover.length} badges in Discover`,
     badgeHint: 'Tap or click a badge to see what it means.',
     iCan: 'I can',
-    certTitle: 'A certificate for every stage',
+    certTitle: 'A digital certificate for every stage',
 };
 
 // ── 3. How your player learns (one section, four parts) ──
@@ -275,8 +315,8 @@ export const PRICES = {
     includes: [
         'One hour of coaching every week in school terms',
         `A small group: up to ${PRICE.perLane} players in a lane, with their own coach`,
-        ['Skill badges, the Benchmark Game and a progress card every term ', tbc('(from Term 1, 2027)', 'Skill badges and progress cards: start date to confirm.')],
-        'A certificate at the end of every stage',
+        [`Digital skill badges and access to the ${PORTAL_NAME} `, tbc('(from Term 1, 2027)', 'Skill badges and portal access: start date to confirm.')],
+        'A digital certificate at the end of every stage',
     ],
     shirtTitle: 'The training shirt',
     shirt: `The Junior Royals training shirt is part of the kit, and players wear it at every session. It costs ${money(SHIRT.memberPrice)} at the member price (${money(SHIRT.shopPrice)} in our shop), paid once.`,
@@ -358,7 +398,11 @@ export const FAQS = [
     },
     {
         q: 'How will I know my player is improving?',
-        a: ['Your player earns a skill badge each time their coach sees them do a skill on their own in a scored turn. You get a progress card at the end of every term, and a certificate at the end of every stage. ', PROGRESS.starts],
+        a: [`Your player earns a digital skill badge each time they show a skill without help: ${BADGES.check.good} good balls out of ${BADGES.check.of}, in ${BADGES.check.nights} different sessions. At the end of every stage they receive a digital certificate. Both are kept in the ${PORTAL_NAME}. `, PROGRESS.starts],
+    },
+    {
+        q: `What is the ${PORTAL_NAME}?`,
+        a: [`${PROGRESS.portal.lead} ${PROGRESS.portal.points.join(' ')} `, PROGRESS.starts],
     },
     {
         q: 'Which day and time will my player train?',
@@ -430,7 +474,7 @@ export const FAQS = [
 // Every open decision, for the review banner. Each also shows in yellow where it's used.
 export const OPEN_QUESTIONS_V2 = [
     'The one-line Why in the hero',
-    'Progress system: skill badges + progress cards from Term 1, 2027 (blueprint Part IV) — go ahead?',
+    'Progress system: skill badges + Player Performance Portal access from Term 1, 2027 — go ahead? Benchmark Game and printed progress card are off the page (Alex, 12 Oct): keep either?',
     'Cancellation fee for stopping mid-term (proposed 2 weeks’ fees) — lawyer to check; add to the T&Cs',
     'Free-shirt offer: who keeps the “shirts left” count current?',
     'Junior Royals coaches at each centre (names and roles)',
