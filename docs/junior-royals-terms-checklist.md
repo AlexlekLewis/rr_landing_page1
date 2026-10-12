@@ -18,7 +18,7 @@ opens** (auto-renewal, cancellation fee and refunds are consumer-law areas).
 | 7 | **No new players mid-term.** Enrolment closes (proposed) the Friday before term. | Closing day to confirm |
 | 8 | **Training shirt:** compulsory, $29.95 member price (shop $62.95), paid once. | Decided (Alex, 9 Oct) |
 | 9 | **Relaunch offer:** free shirt for the first 20 players to enrol, subject to stock in their size. We need to say who counts, when the offer ends, and what happens if a size is out of stock. | Decided; wording + counter owner to confirm |
-| 10 | **Make-ups:** one spot per lane; same stage and same centre; not in the first or last session of term. | Proposed (safeguarding); Alex to approve |
+| 10 | **Make-ups:** one spot per lane; same phase and same centre; not in the first or last session of term. | Proposed (safeguarding); Alex to approve |
 | 11 | **Coach cover:** each lane always has its own coach. If no cover is found, the session is cancelled and credited; lanes are never merged. | Proposed; Alex to approve |
 | 12 | **Sessions we cancel:** credit or refund. ACL rights are not limited. | Standard; lawyer wording |
 | 13 | **Day and time:** families choose 2 or more weekdays; we tell them their player's day. The time is set by age: 6:00pm for players aged 7 to 9, 7:00pm for players aged 10 to 12 (age on the day of the player's first session). Say what happens if no chosen day can be offered, and when a player who turns 10 moves to 7:00pm. | Day: decided (Alex, 9 Oct). Time by age: decided (Alex, 12 Oct). Fallback and birthday wording needed |

@@ -215,6 +215,27 @@ describe('the interest form', () => {
         expect(JSON.stringify(JR_V2_JSONLD)).not.toMatch(/Benchmark|progress card/i);
     });
 
+    // Alex, 12 Oct: "make it clear that every phase has an X number of badges and
+    // we need to be clear on the three phases." His word is "phase", not "stage".
+    it('three phases, 28 badges in each, 84 in all; the page says "phase", never "stage"', () => {
+        expect(PHASES.map((p) => p.name)).toEqual(['Discover', 'Develop', 'Elevate']);
+        expect(BADGES.perPhase).toEqual({ batting: 12, bowling: 12, fielding: 4 });
+        expect(CONTENT.PHASE_BADGES).toBe(28);
+        expect(BADGES.discover).toHaveLength(CONTENT.PHASE_BADGES);
+        expect(CONTENT.PROGRESS.phasesTitle).toBe('Three phases, 28 badges in each');
+        expect(CONTENT.PROGRESS.phasesLead).toContain('Every phase has 28 skill badges: 12 for batting, 12 for bowling and 4 for fielding.');
+        expect(CONTENT.PROGRESS.phasesLead).toContain('84 badges across the three phases');
+        expect(CONTENT.PATH.phaseLabel(0)).toBe('Phase 1 of 3');
+        const shown = (v: unknown): string => {
+            if (v == null || typeof v === 'function') return '';
+            if (typeof v !== 'object') return String(v);
+            if (Array.isArray(v)) return v.map(shown).join(' ');
+            const o = v as Record<string, unknown>;
+            return o.tbc ? String(o.text) : Object.values(o).map(shown).join(' ');
+        };
+        expect(shown({ ...CONTENT, OPEN_QUESTIONS_V2: undefined }) + shown(PHASES) + shown(CURRICULUM)).not.toMatch(/\bstages?\b/i);
+    });
+
     // Alex, 12 Oct: the hero was too crowded. It goes straight to who it is for,
     // when, where and group size: no "why" line, no second button, no side links.
     it('the hero is lean: who, when (with the two times), where, groups, price', () => {

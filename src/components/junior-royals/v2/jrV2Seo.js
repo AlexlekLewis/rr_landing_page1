@@ -75,7 +75,7 @@ export const JR_V2_JSONLD = {
             '@id': `${URL}#course`,
             name: 'Junior Royals',
             url: URL,
-            description: `Weekly one-hour cricket coaching for players aged 7 to 12 on weekday evenings in school terms, in small groups of up to 6 players per indoor net lane, each with its own coach. Every player bats and bowls every session. Skills are taught in 3-week blocks (Learn it, Own it, Use it), tracked with digital skill badges and a digital certificate for every stage, kept in the Player Performance Portal. Three stages: ${phaseText}.`,
+            description: `Weekly one-hour cricket coaching for players aged 7 to 12 on weekday evenings in school terms, in small groups of up to 6 players per indoor net lane, each with its own coach. Every player bats and bowls every session. Skills are taught in 3-week blocks (Learn it, Own it, Use it), tracked with digital skill badges and a digital certificate for every stage, kept in the Player Performance Portal. Three phases: ${phaseText}.`,
             provider: { '@id': `${SITE}/#organization` },
             inLanguage: 'en-AU',
             typicalAgeRange: '7-12',

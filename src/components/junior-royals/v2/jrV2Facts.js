@@ -82,7 +82,7 @@ export const CURRICULUM = {
             'Catch a soft ball with soft hands',
             'Call YES, NO or WAIT, loud and early',
         ],
-        next: 'Next stage, Develop: the full range of front-foot shots, and a run-up.',
+        next: 'Next phase, Develop: the full range of front-foot shots, and a run-up.',
         certificate: 'Congratulations, you’ve completed Discover. Next stop: Develop.',
     },
     develop: {
@@ -114,7 +114,7 @@ export const CURRICULUM = {
             'Land it in a length box to right- and left-handed batters',
             'Take a high catch side-on',
         ],
-        next: 'Next stage, Elevate: back-foot shots, playing spin, and bowling to a plan.',
+        next: 'Next phase, Elevate: back-foot shots, playing spin, and bowling to a plan.',
         certificate: 'Congratulations, you’ve completed Develop. Next stop: Elevate.',
     },
     elevate: {
@@ -144,7 +144,7 @@ export const CURRICULUM = {
             'Bowl to a plan and a field, with a stock ball and a slower ball',
         ],
         next: 'Alongside Junior Royals: Performance Squads, by invitation only, for players from age 10.',
-        certificate: 'Congratulations, you’ve completed Elevate, and all three stages of Junior Royals.',
+        certificate: 'Congratulations, you’ve completed Elevate, and all three phases of Junior Royals.',
     },
 };
 
@@ -215,6 +215,10 @@ export const BADGES = {
     status: 'proposed',
     pilot: 'Term 1, 2027',
     perYear: { batting: 12, bowling: 12, fielding: 4 },
+    // Every phase has the same 28 (Alex, 12 Oct 2026: "every phase has an X number
+    // of badges"). The blueprint awards 28 a year and gives Year 2 of a phase a
+    // harder second stripe on the same badges, so a phase has 28 badges.
+    perPhase: { batting: 12, bowling: 12, fielding: 4 },
     check: { good: 4, of: 6, nights: 2 },
     // Discover Year 1, ALL 28 badges in block order (blueprint p36–37): name + the
     // player's "I can…". Each has its own artwork in JRV2Badges.jsx (Alex, 11 Oct

@@ -28,7 +28,7 @@ const topicCount = (c) => TOPIC_KEYS.reduce((n, k) => n + c[k].length, 0);
 
 // ── Stage strip: Discover → Develop → Elevate → Performance Squads ──
 const StageStrip = () => (
-    <ol className="flex flex-wrap items-center gap-x-2 gap-y-2 mb-6" aria-label="The three stages, then Performance Squads">
+    <ol className="flex flex-wrap items-center gap-x-2 gap-y-2 mb-6" aria-label="The three phases, then Performance Squads">
         {PHASES.map((p, i) => (
             <li key={p.key} className="flex items-center gap-2">
                 <span className={`${STAGE[i].bg} text-white font-black uppercase text-sm tracking-wider rounded-full px-4 py-1.5`}>{p.name}</span>
@@ -51,7 +51,7 @@ const StageCard = ({ p, i, onOpen }) => {
                 <p className="text-white text-xl font-bold mt-1.5">{p.aim}</p>
             </div>
             <div className="px-5 py-4">
-                <p className="text-xs font-black uppercase tracking-widest text-rr-charcoal">{PATH.stageLabel(i)}</p>
+                <p className="text-xs font-black uppercase tracking-widest text-rr-charcoal">{PATH.phaseLabel(i)}</p>
                 <ul className="mt-3 space-y-1.5">
                     {sample.map(({ k, t }) => (
                         <li key={k} className={`border-l-4 ${TOPIC_BAR[k]} pl-2.5 text-[15px] font-semibold text-rr-dark leading-snug`}>{t}</li>
@@ -120,7 +120,7 @@ const StageModal = ({ index, onClose, onNav }) => {
                 <div className={`${STAGE[index].bg} px-5 sm:px-8 pt-5 pb-6`}>
                     <div className="flex items-start justify-between gap-4">
                         <div>
-                            <p className="text-white text-xl font-bold">{PATH.stageLabel(index)}</p>
+                            <p className="text-white text-xl font-bold">{PATH.phaseLabel(index)}</p>
                             <h2 id="jr-stage-title" className="text-white text-4xl sm:text-5xl font-black uppercase leading-none mt-1">{p.name}</h2>
                             <p className="text-white text-xl font-bold mt-2">{p.aim}</p>
                         </div>
@@ -270,16 +270,3 @@ export const BadgeWall = () => {
         </div>
     );
 };
-
-export const Certificates = () => (
-    <ol className="grid md:grid-cols-3 gap-4">
-        {PHASES.map((p) => (
-            <li key={p.key} className="rounded-2xl bg-slate-50 px-5 py-4 border-t-8 border-rr-pink">
-                <p className="flex items-center gap-2 text-sm font-black uppercase tracking-wider text-rr-dark">
-                    <Award className="w-5 h-5 text-rr-pink" aria-hidden="true" /> {p.name} certificate
-                </p>
-                <p className="mt-2 text-[15px] font-semibold text-rr-dark leading-snug">“{CURRICULUM[p.key].certificate}”</p>
-            </li>
-        ))}
-    </ol>
-);

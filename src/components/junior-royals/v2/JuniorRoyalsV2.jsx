@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, BadgeCheck, Cake, CalendarCheck, Check, ChevronDown, ClipboardList, Clock, GraduationCap, Layers, ListChecks, MapPin, MessageCircle, Repeat, ShieldCheck, Shirt, Smile, Target, Trophy, Users } from 'lucide-react';
+import { ArrowRight, Award, BadgeCheck, Cake, CalendarCheck, Check, ChevronDown, ClipboardList, Clock, GraduationCap, Layers, ListChecks, MapPin, MessageCircle, Repeat, ShieldCheck, Shirt, Smile, Target, Trophy, Users } from 'lucide-react';
 import Navbar from '../../Navbar';
 import Footer from '../../Footer';
 import usePageAnalytics from '../../../hooks/usePageAnalytics';
 import { Rich } from '../JuniorRoyalsShared';
 import { MOCKUP, money } from '../juniorRoyalsData';
-import { PILLARS, PRICE } from './jrV2Facts';
+import { PILLARS, PRICE, PHASES, CURRICULUM } from './jrV2Facts';
 import {
     HERO, CTA, VALUE, PROGRESS, LEARN, PATH, PRICES, COMPARE, COACHES, FORM, FAQS,
     REGION_LABEL, NEARBY, PHOTOS, V2_CENTRES, TERMS, termTotal,
 } from './jrV2Content';
 import { HourNumbers, HourRibbon, LaneDots, SkillSteps, Cues, YearStrip } from './JRV2Visuals';
-import { StageJourney, BadgeWall, Certificates } from './JRV2Pathway';
+import { StageJourney, BadgeWall } from './JRV2Pathway';
 import { ActionCards } from './JRV2ActionCards';
 import JRV2Form from './JRV2Form';
 
@@ -219,11 +219,31 @@ const Progress = () => (
             <PhotoTile {...PHOTOS.progress} className="aspect-[4/5] hidden md:block" />
         </div>
 
+        {/* The three phases, and how many badges each one has (Alex, 12 Oct 2026). */}
         <div className="mt-14 border-t border-slate-200 pt-10">
-            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark">{PROGRESS.sampleTitle}</h3>
-            <p className="mt-2 mb-6 text-[15px] sm:text-base font-medium text-rr-charcoal">{PROGRESS.stagesIntro}</p>
+            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark">{PROGRESS.phasesTitle}</h3>
+            <p className="mt-3 text-[15px] sm:text-base font-medium text-rr-charcoal leading-relaxed max-w-3xl">{PROGRESS.phasesLead}</p>
+            <ol className="mt-7 grid md:grid-cols-3 gap-5">
+                {PHASES.map((ph, n) => (
+                    <li key={ph.key} className="rounded-2xl bg-slate-50 border-t-8 border-rr-pink px-5 py-5 flex flex-col">
+                        <p className="text-xs font-black uppercase tracking-widest text-rr-pink">{PATH.phaseLabel(n)}</p>
+                        <p className="mt-1 text-2xl font-black uppercase text-rr-dark leading-none">{ph.name}</p>
+                        <p className="mt-1.5 text-[15px] font-bold text-rr-dark">{ph.aim}</p>
+                        <p className="mt-5 text-3xl font-black text-rr-dark leading-none">{PROGRESS.phaseBadges}</p>
+                        <p className="mt-1.5 text-sm font-semibold text-rr-charcoal">{PROGRESS.phaseSplit}</p>
+                        <p className="mt-5 pt-4 border-t border-slate-200 text-sm font-bold text-rr-dark flex items-start gap-2">
+                            <Award className="w-5 h-5 text-rr-pink shrink-0" aria-hidden="true" />
+                            <span>{PROGRESS.phaseCert(ph.name)}<span className="block font-medium text-rr-charcoal mt-1">“{CURRICULUM[ph.key].certificate}”</span></span>
+                        </p>
+                    </li>
+                ))}
+            </ol>
+        </div>
+
+        <div className="mt-14 border-t border-slate-200 pt-10">
+            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark mb-6">{PROGRESS.sampleTitle}</h3>
             <BadgeWall />
-            <p className="mt-8 text-rr-charcoal text-[15px] sm:text-base font-medium leading-relaxed max-w-3xl">{PROGRESS.perYear}</p>
+            <p className="mt-8 text-rr-charcoal text-[15px] sm:text-base font-medium leading-relaxed max-w-3xl"><Rich v={PROGRESS.othersNote} /> {PROGRESS.cadence}</p>
             <ul className="mt-4 space-y-2 max-w-3xl">
                 {PROGRESS.rules.map((r) => <Tick key={r}>{r}</Tick>)}
             </ul>
@@ -250,8 +270,6 @@ const Progress = () => (
             </div>
         </div>
 
-        <h3 className="mt-14 mb-5 text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark">{PROGRESS.certTitle}</h3>
-        <Certificates />
         <CtaRow />
     </Section>
 );

@@ -9,7 +9,7 @@
 // experience. Plain English (copy-esl.md), facts not adjectives (CLAUDE.md §2):
 // the page never calls the program "unique" or "second to none"; it shows what
 // happens instead, so a parent can check every line.
-// No stage ages on the page (Alex, 9 Oct). No "8 weeks" note. One price.
+// No phase ages on the page (Alex, 9 Oct). No "8 weeks" note. One price.
 // A third centre, Ravenhall (Melbourne's west), is "coming soon" (Alex, 9 Oct).
 // The form asks for 2 or more weekdays; we tell each family their day.
 //
@@ -21,7 +21,7 @@ import { tbc, money, AGES_TEXT, FIRST_SESSION, CALENDAR, SESSIONS_PER_YEAR, GST_
 import { PRICE, SHIRT, NOTICE_WEEKS, BADGES, CURRICULUM, TIMES, BLOCK } from './jrV2Facts';
 
 const r2 = (n) => Math.round(n * 100) / 100;
-// Every batting, bowling and fielding topic across the three stages (47).
+// Every batting, bowling and fielding topic across the three phases (47).
 export const TOPIC_TOTAL = Object.values(CURRICULUM).reduce((n, c) => n + c.batting.length + c.bowling.length + c.fielding.length, 0);
 export const WEEKLY = money(PRICE.perWeek);                                   // "$49.95"
 export const termTotal = (sessions) => r2(PRICE.perWeek * sessions);
@@ -107,6 +107,7 @@ export const HERO = {
 };
 
 // The portal's public name and the start-date note, used by the value and progress sections.
+export const PHASE_BADGES = BADGES.perPhase.batting + BADGES.perPhase.bowling + BADGES.perPhase.fielding;   // 28
 export const PORTAL_NAME = 'Player Performance Portal';   // the name the Power Game pages already use
 const WHEN = tbc('From Term 1, 2027.', 'Skill badges and portal access for Junior Royals: start date to confirm (blueprint Part IV is a proposal; is the Junior Royals part of the portal built?).');
 
@@ -151,7 +152,7 @@ export const VALUE = {
         points: [
             { icon: 'group', head: 'A small group with its own coach', body: `No more than ${PRICE.perLane} players in a lane.` },
             { icon: 'plan', head: 'The same plan every week', body: 'Sixty minutes: batting, bowling, then a scored game.' },
-            { icon: 'safe', head: 'Safety rules for each stage', body: 'In Discover, players bowl at targets, never at a batter, and the coach feeds every ball to the batter.' },
+            { icon: 'safe', head: 'Safety rules for each phase', body: 'In Discover, players bowl at targets, never at a batter, and the coach feeds every ball to the batter.' },
             { icon: 'card', head: 'Progress you can see', body: [`Every badge your player earns is recorded in the ${PORTAL_NAME}, in “I can …” words. `, WHEN] },
             { icon: 'same', head: 'Every coach works from the same written plan', body: 'A goal, the coaching points, the questions to ask and the drills, for every session.' },
             { icon: 'place', head: 'Your player keeps their place', body: 'The same day and time each week, and their place continues every term until you stop it.' },
@@ -183,7 +184,7 @@ export const CTA = {
 export const PROGRESS = {
     eyebrow: 'Progress you can see',
     title: 'The Royals Way Progress Tracking and Development System',
-    lead: `Your player earns a digital skill badge for every skill they learn, and a digital certificate for every stage they complete. Both are kept in the ${PORTAL_NAME}, which keeps a record of your player’s time with the Royals.`,
+    lead: `Your player earns a digital skill badge for every skill they learn, and a digital certificate for every phase they complete. Both are kept in the ${PORTAL_NAME}, which keeps a record of your player’s time with the Royals.`,
     // Alex, 12 Oct 2026: "put some language in the badges about a sense of
     // accomplishment and a player's ability to feel self-confident as they develop
     // and grow their game." His words, kept close.
@@ -218,19 +219,26 @@ export const PROGRESS = {
         lead: `Every Junior Royals player gets access to the ${PORTAL_NAME}.`,
         points: [
             'It is where your player receives their digital badges, each time they earn one.',
-            'It is where your player receives a digital certificate when they complete a stage.',
+            'It is where your player receives a digital certificate when they complete a phase.',
             'It keeps a record of your player’s time with the Royals: every badge and every certificate.',
         ],
     },
-    perYear: `There are ${BADGES.perYear.batting + BADGES.perYear.bowling + BADGES.perYear.fielding} badges to earn each year: ${BADGES.perYear.batting} for batting, ${BADGES.perYear.bowling} for bowling and ${BADGES.perYear.fielding} for fielding. Every 3 weeks there is one new batting badge and one new bowling badge.`,
+    // Alex, 12 Oct 2026: "make it clear that every phase has an X number of badges
+    // and we need to be clear on the three phases." 28 a phase: 12 batting, 12
+    // bowling, 4 fielding (BADGES.perPhase), so 84 across the three phases.
+    phasesTitle: `Three phases, ${PHASE_BADGES} badges in each`,
+    phasesLead: `Junior Royals has three phases: Discover, Develop and Elevate. Every phase has ${PHASE_BADGES} skill badges: ${BADGES.perPhase.batting} for batting, ${BADGES.perPhase.bowling} for bowling and ${BADGES.perPhase.fielding} for fielding. That is ${PHASE_BADGES * 3} badges across the three phases. When your player completes a phase, they receive its digital certificate and move on to the next phase.`,
+    phaseBadges: `${PHASE_BADGES} skill badges`,
+    phaseSplit: `${BADGES.perPhase.batting} batting · ${BADGES.perPhase.bowling} bowling · ${BADGES.perPhase.fielding} fielding`,
+    phaseCert: (name) => `Then the ${name} digital certificate`,
+    othersNote: tbc(`Develop and Elevate have ${PHASE_BADGES} badges each. Those badges are being written by our coaching group.`, 'Develop and Elevate badge lists are not written yet (blueprint Part IV covers Discover only).'),
+    cadence: 'Every 3 weeks there is one new batting badge and one new bowling badge.',
     rules: [
         '“Not yet”, never “failed”. A player can keep trying for a badge until they earn it. Once it is earned, they keep it.',
     ],
-    stagesIntro: 'Junior Royals has three stages: Discover, Develop and Elevate. Discover is the first.',
-    sampleTitle: `The ${BADGES.discover.length} badges in Discover`,
+    sampleTitle: `The ${BADGES.discover.length} badges in Discover, the first phase`,
     badgeHint: 'Tap or click a badge to see what it means.',
     iCan: 'I can',
-    certTitle: 'A digital certificate for every stage',
 };
 
 // ── 3. How your player learns (one section, four parts) ──
@@ -242,7 +250,7 @@ export const LEARN = {
         { id: 'learn-how', n: '1', title: 'How they learn', summary: 'Small groups, one skill at a time, and a game with a score every session.' },
         { id: 'learn-night', n: '2', title: 'What a night looks like', summary: 'One hour: 20 minutes of batting, 20 of bowling, then a scored game.' },
         { id: 'learn-blocks', n: '3', title: '3-week skill blocks', summary: 'Three weeks on every skill: learn it, own it, use it.' },
-        { id: 'learn-what', n: '4', title: 'What your player learns', summary: `Three stages and ${TOPIC_TOTAL} topics, from holding the bat to bowling to a plan.` },
+        { id: 'learn-what', n: '4', title: 'What your player learns', summary: `Three phases and ${TOPIC_TOTAL} topics, from holding the bat to bowling to a plan.` },
     ],
     how: {
         points: [
@@ -270,14 +278,14 @@ export const LEARN = {
         cuesTitle: 'Every skill has one cue: 2 or 3 words your coach says to help your player remember it.',
     },
     what: {
-        intro: 'Junior Royals has three stages: Discover, Develop and Elevate. Each stage has its own list of batting, bowling and fielding topics. Tap a stage to see everything it covers.',
-        placement: tbc('Your coach places your player in the stage that suits them.', 'How are players placed in a stage now the stage ages are off the page: by age (as in the blueprint) or by the coach?'),
+        intro: 'Junior Royals has three phases: Discover, Develop and Elevate. Each phase has its own list of batting, bowling and fielding topics. Tap a phase to see everything it covers.',
+        placement: tbc('Your coach places your player in the phase that suits them.', 'How are players placed in a phase now the phase ages are off the page: by age (as in the blueprint) or by the coach?'),
     },
 };
 
-// The stage cards and pop-ups (JRV2Pathway.jsx).
+// The phase cards and pop-ups (JRV2Pathway.jsx).
 export const PATH = {
-    stageLabel: (i) => `Stage ${i + 1} of 3`,
+    phaseLabel: (i) => `Phase ${i + 1} of 3`,
     topics: (n) => `${n} topics`,
     open: (name) => `See everything in ${name}`,
     certificate: (name) => `Ends with the ${name} certificate`,
@@ -288,8 +296,8 @@ export const PATH = {
         fielding: 'Fielding',
         byTheEnd: (name) => `What we work towards in ${name}:`,
         feel: 'What it feels like',
-        badges: 'Skill badges in this stage',
-        badgesNotWritten: tbc('This stage’s badges are being written by our coaching group.', 'Develop and Elevate badges are not written yet (blueprint Part IV covers Discover Year 1 only).'),
+        badges: 'Skill badges in this phase',
+        badgesNotWritten: tbc('This phase’s badges are being written by our coaching group.', 'Develop and Elevate badges are not written yet (blueprint Part IV covers Discover Year 1 only).'),
         close: 'Close',
     },
     older: { lead: 'Aged 13 or older?', body: 'See our Performance Squads.', link: { to: PS_ROUTE, label: 'See Performance Squads' } },
@@ -321,7 +329,7 @@ export const PRICES = {
         'One hour of coaching every week in school terms',
         `A small group: up to ${PRICE.perLane} players in a lane, with their own coach`,
         [`Digital skill badges and access to the ${PORTAL_NAME} `, tbc('(from Term 1, 2027)', 'Skill badges and portal access: start date to confirm.')],
-        'A digital certificate at the end of every stage',
+        'A digital certificate at the end of every phase',
     ],
     shirtTitle: 'The training shirt',
     shirt: `The Junior Royals training shirt is part of the kit, and players wear it at every session. It costs ${money(SHIRT.memberPrice)} at the member price (${money(SHIRT.shopPrice)} in our shop), paid once.`,
@@ -335,7 +343,7 @@ export const PRICES = {
         [STOP_LINE],
         ['Stopping in the middle of a term: a cancellation fee of ', CANCEL_FEE, ' applies, because nobody new can join that group until the next term. This doesn’t affect your rights under the Australian Consumer Law.'],
     ],
-    makeup: ['Missed a session? Each group keeps one spot for a player who missed a session. ', tbc('Your player can do it with another group at the same stage and the same centre, when that group has a spot. This isn’t available in the first or last session of term.', 'Make-up rules: same stage + same centre only, none on Benchmark/festival nights (safeguarding). How many a term? How booked?')],
+    makeup: ['Missed a session? Each group keeps one spot for a player who missed a session. ', tbc('Your player can do it with another group at the same phase and the same centre, when that group has a spot. This isn’t available in the first or last session of term.', 'Make-up rules: same phase + same centre only, none on Benchmark/festival nights (safeguarding). How many a term? How booked?')],
     cover: tbc('Each group always has its own coach. If a coach is away and we can’t replace them, we cancel that group’s session and credit you for it. We don’t join two groups together.', 'Approve the cover rule (cancel + credit, never merge lanes)?'),
     yearTitle: `2027: ${SESSIONS_PER_YEAR} weeks of sessions and ${52 - SESSIONS_PER_YEAR} school-holiday weeks`,
     yearNote: 'You only pay for weeks with a session.',
@@ -399,11 +407,11 @@ export const FORM = {
 export const FAQS = [
     {
         q: 'What will my player learn?',
-        a: 'Batting, bowling and fielding, one skill at a time. Junior Royals has three stages (Discover, Develop and Elevate), and each has its own list of topics. Tap a stage in “What your player learns” to see every topic.',
+        a: 'Batting, bowling and fielding, one skill at a time. Junior Royals has three phases (Discover, Develop and Elevate), and each has its own list of topics. Tap a phase in “What your player learns” to see every topic.',
     },
     {
         q: 'How will I know my player is improving?',
-        a: [`Your player earns a digital skill badge each time they show a skill without help: ${BADGES.check.good} good balls out of ${BADGES.check.of}, in ${BADGES.check.nights} different sessions. At the end of every stage they receive a digital certificate. Both are kept in the ${PORTAL_NAME}. `, PROGRESS.starts],
+        a: [`Your player earns a digital skill badge each time they show a skill without help: ${BADGES.check.good} good balls out of ${BADGES.check.of}, in ${BADGES.check.nights} different sessions. At the end of every phase they receive a digital certificate. Both are kept in the ${PORTAL_NAME}. `, PROGRESS.starts],
     },
     {
         q: `What is the ${PORTAL_NAME}?`,
@@ -415,7 +423,7 @@ export const FAQS = [
     },
     {
         q: 'My player has never played. Can they enrol?',
-        a: ['Yes. Every stage starts with the basics: grip, stance and a straight bowling arm. Players new to cricket use soft balls and batting tees.'],
+        a: ['Yes. Every phase starts with the basics: grip, stance and a straight bowling arm. Players new to cricket use soft balls and batting tees.'],
     },
     {
         q: 'My player already plays club cricket. Is it too easy?',
@@ -485,9 +493,9 @@ export const OPEN_QUESTIONS_V2 = [
     'Junior Royals coaches at each centre (names and roles)',
     'Ravenhall: exact venue name, opening term, days and coaches',
     'Day allocation: when do families hear their day, and is Wednesday 28 Oct still the first session at both centres?',
-    'Stage placement now the ages are off the page: by age or by the coach?',
+    'Phase placement now the ages are off the page: by age or by the coach?',
     'Power League matches for Junior Royals: who, from what age, match fee',
-    'Which stages train at 6:00pm and which at 7:00pm?',
+    'Which phases train at 6:00pm and which at 7:00pm?',
     'Enrolment closing day (proposed: the Friday before term)',
     'Make-up policy: how many, how booked',
     'Enrolment-opens date',
@@ -495,7 +503,7 @@ export const OPEN_QUESTIONS_V2 = [
     'The per-hour comparison table',
     'Cover rule: cancel + credit, never merge lanes',
     'Head Coach at Cranbourne North',
-    'Blueprint decision 1: does 28 Oct start at the basics for every stage?',
+    'Blueprint decision 1: does 28 Oct start at the basics for every phase?',
     'Performance Squads: “by invitation only, from age 10” (blueprint, 9 Oct) — confirm this is how the page should say it',
     'The one-sentence “why” for Junior Royals (draft in the value section)',
     '“Built on The Royals Way”: the pillars are the Academy’s framework; confirm we may not call them the franchise’s official pillars',
