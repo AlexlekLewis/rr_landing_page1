@@ -202,7 +202,9 @@ export const PROGRESS = {
     // away (Alex, 12 Oct 2026: "they get access straight away"; "we don't need to
     // tell them that").
     // How it works: the development process as four steps, drawn as a flow.
-    stepsTitle: 'How it works: one skill, one badge',
+    stepsEyebrow: 'How it works',
+    stepsTitle: 'One skill, one badge',
+    stepsBadge: 'Heel to Toe',   // a real Discover badge shown at step 3, so the reader sees what a badge is
     steps: [
         { icon: 'train', head: 'Train on one skill', body: `For 3 weeks: ${BLOCK.map((b) => b.name.toLowerCase()).join(', ')}.` },
         { icon: 'show', head: 'Show the skill', body: `Without help: ${BADGES.check.good} good balls out of ${BADGES.check.of}, in ${BADGES.check.nights} different sessions. Their coach checks it.` },
@@ -218,37 +220,44 @@ export const PROGRESS = {
     // performance, not learning"; "A climb, not a rank. No leaderboards; nothing
     // for size, pace or attendance") and Alex's (the record; accomplishment and
     // self-confidence).
+    // Alex, 12 Oct (later): "That's a really good section. Let's just change the UI on
+    // it. Because remember it both has to be player friendly, quick to consume, and
+    // easy to understand." So: tiles with an icon, a few words and one short line.
+    // The last tile is his "healthy language": "it's the player's journey and
+    // everyone's journey of development is different … allowing players to grow and
+    // explore the game at their own rate" ("journey" is on the banned list in
+    // CLAUDE.md §2.1, so the tile says it without that word).
     whyTitle: 'How you know your player is getting what you pay for',
     whyLead: 'When you pay for coaching, you want to know your player is getting what was promised. This is how you can check.',
     why: [
-        { head: 'Every skill we teach has a badge', body: 'The badges are built from the same coaching points we teach. Over a year, they show exactly what your player can do.' },
-        { head: 'A badge has to be earned', body: `Your player shows the skill without help, in ${BADGES.check.nights} different sessions. One good session is not enough.` },
-        { head: 'It is all recorded', body: `Every badge and every certificate is kept in the ${PORTAL_NAME}, with a record of your player’s time with the Royals.` },
-        { head: 'Your player feels it too', body: 'Every badge gives your player a sense of accomplishment, and helps them feel self-confident as they develop and grow their game.' },
-        { head: 'A climb, not a rank', body: 'Players are not ranked against each other. Badges are for skills only: never for size, speed or attendance.' },
+        { icon: 'badge', head: 'Every skill has a badge', body: 'So you can see exactly what your player can do.' },
+        { icon: 'earned', head: 'Badges are earned', body: `Shown without help, in ${BADGES.check.nights} different sessions.` },
+        { icon: 'record', head: 'It is all recorded', body: `Every badge and certificate, in the ${PORTAL_NAME}.` },
+        { icon: 'feel', head: 'Your player feels it', body: 'A sense of accomplishment, and self-confidence as they develop and grow their game.' },
+        { icon: 'climb', head: 'A climb, not a rank', body: 'Players are never ranked against each other.' },
+        { icon: 'pace', head: 'At their own rate', body: 'Every player develops differently. Players grow and explore the game at their own rate.' },
     ],
+    // The portal's role for Junior Royals (Alex, 12 Oct, later): "making it really
+    // clear that parents can track progress and be a part of the journey with their
+    // child", and that development is the player's own, at their own rate.
     portalTitle: `The ${PORTAL_NAME}`,
     portal: {
-        lead: `Every Junior Royals player gets access to the ${PORTAL_NAME}.`,
+        lead: `Every Junior Royals player gets access to the ${PORTAL_NAME}. Parents can follow every step there.`,
         points: [
-            'It is where your player receives their digital badges, each time they earn one.',
-            'It is where your player receives a digital certificate when they complete a phase.',
-            'It keeps a record of your player’s time with the Royals: every badge and every certificate.',
+            { icon: 'badge', text: 'Your player receives their digital badges and certificates there.' },
+            { icon: 'eye', text: 'You can track your player’s progress, and be part of it with them.' },
+            { icon: 'record', text: 'It keeps a record of your player’s time with the Royals.' },
         ],
+        own: 'This is your player’s own development. Every player develops differently, so players grow and explore the game at their own rate.',
     },
-    // How the program is put together: skills → badges → phases (Alex, 12 Oct 2026:
-    // "every phase has an X number of badges … be clear on the three phases").
-    // 28 a phase: 12 batting, 12 bowling, 4 fielding (BADGES.perPhase), 84 in all.
-    phasesTitle: 'How the program is put together',
-    phasesSub: `Three phases, ${PHASE_BADGES} badges in each`,
-    phasesLead: `One skill, one badge. Every phase has ${PHASE_BADGES} skill badges: ${BADGES.perPhase.batting} for batting, ${BADGES.perPhase.bowling} for bowling and ${BADGES.perPhase.fielding} for fielding. Junior Royals has three phases: Discover, Develop and Elevate. That is ${PHASE_BADGES * 3} badges across the three phases. When your player completes a phase, they receive its digital certificate and move on to the next phase.`,
-    phaseBadges: `${PHASE_BADGES} skill badges`,
-    phaseSplit: `${BADGES.perPhase.batting} batting · ${BADGES.perPhase.bowling} bowling · ${BADGES.perPhase.fielding} fielding`,
-    phaseCert: (name) => `Then the ${name} digital certificate`,
-    othersNote: tbc(`Develop and Elevate have ${PHASE_BADGES} badges each. Those badges are being written by our coaching group.`, 'Develop and Elevate badge lists are not written yet (blueprint Part IV covers Discover only).'),
-    cadence: 'Every 3 weeks there is one new batting badge and one new bowling badge.',
-    sampleTitle: `The ${BADGES.discover.length} badges in Discover, the first phase`,
-    badgeHint: 'Tap or click a badge to see what it means.',
+    // The phases, in one line (Alex, 12 Oct, later: "we don't really need to show the
+    // three phases and that they've got 28 skill badges … really all we're saying is
+    // that there are three core phases and there are 28 badges per phase"). The phase
+    // cards and the wall of 28 badges are gone from this section; example badges for
+    // each phase now sit where the phases are explained ("What your player learns").
+    phasesLine: [`Three core phases: Discover, Develop and Elevate. `, `${PHASE_BADGES} badges in every phase.`],
+    phasesNote: 'When your player completes a phase, they receive its digital certificate and move on to the next phase.',
+    phasesButton: 'See the three phases and example badges',
     iCan: 'I can',
 };
 
@@ -307,9 +316,20 @@ export const PATH = {
         fielding: 'Fielding',
         byTheEnd: (name) => `What we work towards in ${name}:`,
         feel: 'What it feels like',
-        badges: 'Skill badges in this phase',
-        badgesNotWritten: tbc('This phase’s badges are being written by our coaching group.', 'Develop and Elevate badges are not written yet (blueprint Part IV covers Discover Year 1 only).'),
+        badges: 'Example badges in this phase',
         close: 'Close',
+    },
+    // Example badges on each phase card: hover or tap one to see what it takes to earn it.
+    badges: {
+        title: 'Example badges',
+        count: `${PHASE_BADGES} badges in this phase`,
+        hint: 'Point at a badge, or tap it, to see what it takes.',
+        earn: 'To earn it',
+        point: 'Coaching point',
+        cue: 'Cue',
+        standard: `Every badge: ${BADGES.check.good} good balls out of ${BADGES.check.of}, in ${BADGES.check.nights} different sessions.`,
+        moreToCome: tbc('The full list of badges for this phase is being written by our coaching group.', 'Develop and Elevate badge lists are not written yet; only the two example badges per phase exist (blueprint Part IV §5).'),
+        discoverAll: `Two of the ${PHASE_BADGES} Discover badges.`,
     },
     older: { lead: 'Aged 13 or older?', body: 'See our Performance Squads.', link: { to: PS_ROUTE, label: 'See Performance Squads' } },
 };
@@ -485,7 +505,7 @@ export const FAQS = [
     },
     {
         q: `What is the ${PORTAL_NAME}?`,
-        a: `${PROGRESS.portal.lead} ${PROGRESS.portal.points.join(' ')}`,
+        a: `${PROGRESS.portal.lead} ${PROGRESS.portal.points.map((pt) => pt.text).join(' ')} ${PROGRESS.portal.own}`,
     },
     {
         q: 'Which day and time will my player train?',

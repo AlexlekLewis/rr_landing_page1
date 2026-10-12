@@ -2,19 +2,20 @@ import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, Award, BadgeCheck, Cake, CalendarCheck, Check, ChevronDown, ClipboardCheck, ClipboardList, Clock, FileText, GraduationCap, Layers, ListChecks, MapPin, MessageCircle, RefreshCw, Repeat, ShieldCheck, Shirt, Smile, Sun, Target, Trophy, Users, X } from 'lucide-react';
+import { ArrowRight, Award, BadgeCheck, Cake, CalendarCheck, Check, ChevronDown, ClipboardCheck, ClipboardList, Clock, Eye, FileText, GraduationCap, Layers, ListChecks, MapPin, MessageCircle, RefreshCw, Repeat, ShieldCheck, Shirt, Smile, Sprout, Sun, Target, TrendingUp, Trophy, Users, X } from 'lucide-react';
 import Navbar from '../../Navbar';
 import Footer from '../../Footer';
 import usePageAnalytics from '../../../hooks/usePageAnalytics';
 import { Rich } from '../JuniorRoyalsShared';
 import { MOCKUP, money } from '../juniorRoyalsData';
-import { PILLARS, PRICE, PHASES, CURRICULUM } from './jrV2Facts';
+import { PILLARS, PRICE } from './jrV2Facts';
 import {
     HERO, CTA, VALUE, PROGRESS, LEARN, PATH, PRICES, TERMS_POPUP, COMPARE, COACHES, FORM, FAQS, TRY,
     REGION_LABEL, NEARBY, PHOTOS, V2_CENTRES, TERMS, termTotal,
 } from './jrV2Content';
 import { HourNumbers, HourRibbon, LaneDots, SkillSteps, Cues } from './JRV2Visuals';
-import { StageJourney, BadgeWall } from './JRV2Pathway';
+import { StageJourney } from './JRV2Pathway';
+import { Badge } from './JRV2Badges';
 import { ActionCards } from './JRV2ActionCards';
 import JRV2Form from './JRV2Form';
 import JRV2ComeAndTry, { TRY_OPEN_EVENT } from './JRV2ComeAndTry';
@@ -192,13 +193,17 @@ const Value = () => (
 );
 
 // ── 2. The Royals Way Progress Tracking and Development System ──
-// "The real feature of this program" (Alex, 12 Oct 2026). The section explains,
-// to someone seeing it for the first time, in this order: what it is → how it
-// works (train on a skill, show it, earn the badge, move on) → how a parent knows
-// they are getting what they pay for → how the program is put together → the
-// badges themselves. Light, open and airy: white background, dark text, pink
-// accents; no gradient or dark panels (Alex, 12 Oct).
-const STEP_ICON = { train: Repeat, show: ClipboardCheck, badge: Award, next: ArrowRight };
+// "The real feature of this program" (Alex, 12 Oct 2026). In order: what it is →
+// how it works (the centrepiece: train on a skill, show it, earn the badge, move on)
+// → how a parent knows they are getting what they pay for (quick tiles) → the
+// Player Performance Portal (parents track progress; every player at their own
+// rate) → the phases in one line, with a button to the example badges. Light, open
+// and airy; pink accents; no gradient or dark panels.
+const STEP_ICON = { train: Repeat, show: ClipboardCheck, next: ArrowRight };
+const WHY_ICON = { badge: BadgeCheck, earned: ClipboardCheck, record: ClipboardList, feel: Smile, climb: TrendingUp, pace: Sprout };
+const PORTAL_ICON = { badge: BadgeCheck, eye: Eye, record: ClipboardList };
+// Scroll to "How your player learns" and open its fourth card, where the phases and their example badges are.
+const openPhases = () => { go('learn'); window.setTimeout(() => document.getElementById('learn-what')?.click(), 500); };
 
 const Progress = () => (
     <Section id="progress">
@@ -208,80 +213,86 @@ const Progress = () => (
             <PhotoTile {...PHOTOS.progress} className="aspect-[4/3] hidden md:block" />
         </div>
 
-        {/* How it works: the development process as a four-step flow. */}
-        <div className="mt-12 border-t border-slate-200 pt-10">
-            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark mb-8">{PROGRESS.stepsTitle}</h3>
-            <ol className="relative grid gap-y-6 md:grid-cols-4 md:gap-x-4">
-                <li aria-hidden="true" className="hidden md:block absolute top-8 left-[12.5%] right-[12.5%] h-0.5 bg-rr-pink" />
-                <li aria-hidden="true" className="md:hidden absolute left-8 top-8 bottom-8 w-0.5 -translate-x-1/2 bg-rr-pink" />
+        {/* How it works: the centrepiece of the section. Big steps, a real badge at step 3. */}
+        <div className="mt-10 rounded-3xl bg-slate-50 border-t-8 border-rr-pink px-5 py-8 sm:px-10 sm:py-12">
+            <p className="text-xs font-black uppercase tracking-[0.25em] text-rr-pink">{PROGRESS.stepsEyebrow}</p>
+            <h3 className="mt-2 text-3xl sm:text-5xl font-black uppercase tracking-tight leading-none text-rr-dark">{PROGRESS.stepsTitle}</h3>
+            <ol className="relative mt-10 grid gap-y-8 md:grid-cols-4 md:gap-x-5">
+                <li aria-hidden="true" className="hidden md:block absolute top-12 left-[12.5%] right-[12.5%] h-1 rounded-full bg-rr-pink" />
+                <li aria-hidden="true" className="md:hidden absolute left-12 top-12 bottom-12 w-1 -translate-x-1/2 rounded-full bg-rr-pink" />
                 {PROGRESS.steps.map((st, i) => {
                     const Icon = STEP_ICON[st.icon];
                     return (
-                        <li key={st.head} className="relative flex md:flex-col items-center md:text-center gap-4 md:gap-0">
-                            <span className="relative w-16 h-16 rounded-full bg-rr-pink flex items-center justify-center shrink-0 ring-8 ring-white">
-                                <Icon className="w-7 h-7 text-white" aria-hidden="true" />
-                                <span className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-rr-dark text-white text-xs font-black flex items-center justify-center">{i + 1}</span>
+                        <li key={st.head} className="relative flex md:flex-col items-center md:text-center gap-5 md:gap-0">
+                            <span className="relative w-24 h-24 shrink-0 flex items-center justify-center">
+                                {Icon
+                                    ? <span className="w-24 h-24 rounded-full bg-rr-pink ring-8 ring-slate-50 flex items-center justify-center"><Icon className="w-10 h-10 text-white" strokeWidth={2.4} aria-hidden="true" /></span>
+                                    : <span className="w-24 h-24 rounded-full bg-slate-50 ring-8 ring-slate-50 flex items-center justify-center"><Badge name={PROGRESS.stepsBadge} kind="bat" className="w-24 h-24" /></span>}
+                                <span className="absolute -top-1 -right-1 w-8 h-8 rounded-full bg-rr-dark text-white text-sm font-black flex items-center justify-center">{i + 1}</span>
                             </span>
-                            <span className="md:mt-4">
-                                <span className="block text-rr-dark text-lg font-black uppercase leading-tight">{st.head}</span>
-                                <span className="block text-rr-charcoal text-[15px] sm:text-base font-medium leading-snug mt-1">{st.body}</span>
+                            <span className="md:mt-5">
+                                <span className="block text-rr-dark text-xl sm:text-2xl font-black uppercase leading-none">{st.head}</span>
+                                <span className="block text-rr-charcoal text-base font-medium leading-snug mt-2">{st.body}</span>
                             </span>
                         </li>
                     );
                 })}
             </ol>
-            <ul className="mt-8 space-y-2 max-w-3xl">
-                {PROGRESS.rules.map((r) => <Tick key={r}>{r}</Tick>)}
+            <ul className="mt-10 space-y-2 max-w-3xl">
+                {PROGRESS.rules.map((r) => <Tick key={r}><span className="text-rr-dark font-semibold">{r}</span></Tick>)}
             </ul>
         </div>
 
-        {/* Why it matters: the question a parent asks before paying; and where the record lives. */}
-        <div className="mt-14 border-t border-slate-200 pt-10 grid md:grid-cols-2 gap-10 items-start">
-            <div>
-                <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark">{PROGRESS.whyTitle}</h3>
-                <p className="mt-3 mb-6 text-[17px] font-semibold text-rr-dark leading-relaxed">{PROGRESS.whyLead}</p>
-                <ul className="space-y-5">
-                    {PROGRESS.why.map((w) => (
-                        <li key={w.head} className="border-l-4 border-rr-pink pl-4">
-                            <p className="text-rr-dark text-lg font-black leading-tight">{w.head}</p>
-                            <p className="text-rr-charcoal text-[15px] sm:text-base font-medium leading-relaxed mt-1">{w.body}</p>
+        {/* Why it matters: the question a parent asks before paying, as six quick tiles. */}
+        <div className="mt-16">
+            <h3 className="text-2xl sm:text-4xl font-black uppercase tracking-tight leading-none text-rr-dark max-w-3xl">{PROGRESS.whyTitle}</h3>
+            <p className="mt-4 text-[17px] sm:text-lg font-semibold text-rr-dark leading-relaxed max-w-2xl">{PROGRESS.whyLead}</p>
+            <ul className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {PROGRESS.why.map((w) => {
+                    const Icon = WHY_ICON[w.icon];
+                    return (
+                        <li key={w.head} className="rounded-2xl border-2 border-slate-200 p-5 flex items-start gap-4">
+                            <span className="w-14 h-14 rounded-full bg-rr-pink flex items-center justify-center shrink-0"><Icon className="w-7 h-7 text-white" aria-hidden="true" /></span>
+                            <div>
+                                <p className="text-rr-dark text-lg font-black uppercase leading-tight">{w.head}</p>
+                                <p className="text-rr-charcoal text-[15px] sm:text-base font-medium leading-snug mt-1.5">{w.body}</p>
+                            </div>
                         </li>
-                    ))}
-                </ul>
-            </div>
-            <div className="rounded-2xl bg-slate-50 p-6 sm:p-8 border-t-8 border-rr-pink">
-                <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark">{PROGRESS.portalTitle}</h3>
-                <p className="mt-2 text-[17px] font-bold text-rr-dark leading-snug">{PROGRESS.portal.lead}</p>
-                <ul className="mt-4 space-y-2.5">{PROGRESS.portal.points.map((pt) => <Tick key={pt}><span className="text-rr-dark font-semibold">{pt}</span></Tick>)}</ul>
-            </div>
+                    );
+                })}
+            </ul>
         </div>
 
-        {/* How the program is put together: skills → badges → phases. */}
-        <div className="mt-14 border-t border-slate-200 pt-10">
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-rr-pink mb-2">{PROGRESS.phasesSub}</p>
-            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark">{PROGRESS.phasesTitle}</h3>
-            <p className="mt-3 text-[15px] sm:text-base font-medium text-rr-charcoal leading-relaxed max-w-3xl">{PROGRESS.phasesLead}</p>
-            <ol className="mt-7 grid md:grid-cols-3 gap-5">
-                {PHASES.map((ph, n) => (
-                    <li key={ph.key} className="rounded-2xl bg-slate-50 border-t-8 border-rr-pink px-5 py-5 flex flex-col">
-                        <p className="text-xs font-black uppercase tracking-widest text-rr-pink">{PATH.phaseLabel(n)}</p>
-                        <p className="mt-1 text-2xl font-black uppercase text-rr-dark leading-none">{ph.name}</p>
-                        <p className="mt-1.5 text-[15px] font-bold text-rr-dark">{ph.aim}</p>
-                        <p className="mt-5 text-3xl font-black text-rr-dark leading-none">{PROGRESS.phaseBadges}</p>
-                        <p className="mt-1.5 text-sm font-semibold text-rr-charcoal">{PROGRESS.phaseSplit}</p>
-                        <p className="mt-5 pt-4 border-t border-slate-200 text-sm font-bold text-rr-dark flex items-start gap-2">
-                            <Award className="w-5 h-5 text-rr-pink shrink-0" aria-hidden="true" />
-                            <span>{PROGRESS.phaseCert(ph.name)}<span className="block font-medium text-rr-charcoal mt-1">“{CURRICULUM[ph.key].certificate}”</span></span>
-                        </p>
-                    </li>
-                ))}
-            </ol>
+        {/* The portal's role for Junior Royals: parents track progress; each player at their own rate. */}
+        <div className="mt-6 rounded-3xl bg-slate-50 border-t-8 border-rr-pink px-5 py-8 sm:px-10 sm:py-10 grid md:grid-cols-2 gap-8 md:gap-12 items-start">
+            <div>
+                <h3 className="text-2xl sm:text-4xl font-black uppercase tracking-tight leading-none text-rr-dark">{PROGRESS.portalTitle}</h3>
+                <p className="mt-4 text-[17px] sm:text-lg font-bold text-rr-dark leading-snug">{PROGRESS.portal.lead}</p>
+                <p className="mt-5 border-l-4 border-rr-pink pl-4 text-[17px] font-semibold text-rr-dark leading-relaxed">{PROGRESS.portal.own}</p>
+            </div>
+            <ul className="space-y-5">
+                {PROGRESS.portal.points.map((pt) => {
+                    const Icon = PORTAL_ICON[pt.icon];
+                    return (
+                        <li key={pt.text} className="flex items-center gap-4">
+                            <span className="w-14 h-14 rounded-full bg-rr-pink flex items-center justify-center shrink-0"><Icon className="w-7 h-7 text-white" aria-hidden="true" /></span>
+                            <span className="text-rr-dark text-[17px] font-semibold leading-snug">{pt.text}</span>
+                        </li>
+                    );
+                })}
+            </ul>
         </div>
 
-        <div className="mt-14 border-t border-slate-200 pt-10">
-            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark mb-6">{PROGRESS.sampleTitle}</h3>
-            <BadgeWall />
-            <p className="mt-8 text-rr-charcoal text-[15px] sm:text-base font-medium leading-relaxed max-w-3xl"><Rich v={PROGRESS.othersNote} /> {PROGRESS.cadence}</p>
+        {/* The phases, in one line; the detail and the example badges are in "What your player learns". */}
+        <div className="mt-14 border-t border-slate-200 pt-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div>
+                <p className="text-2xl sm:text-3xl font-black text-rr-dark leading-tight">{PROGRESS.phasesLine[0]}<span className="text-rr-pink">{PROGRESS.phasesLine[1]}</span></p>
+                <p className="mt-2 text-[15px] sm:text-base font-medium text-rr-charcoal leading-relaxed max-w-2xl">{PROGRESS.phasesNote}</p>
+            </div>
+            <button type="button" onClick={openPhases}
+                className="shrink-0 inline-flex items-center justify-center gap-2 min-h-[48px] px-6 rounded-full border-2 border-rr-dark text-rr-dark hover:bg-rr-dark hover:text-white font-black uppercase tracking-wider text-sm transition-colors">
+                {PROGRESS.phasesButton}<ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </button>
         </div>
 
         <CtaRow />

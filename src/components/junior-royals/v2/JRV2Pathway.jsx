@@ -3,9 +3,10 @@ import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Award, Check, X } from 'lucide-react';
 import { Rich } from '../JuniorRoyalsShared';
-import { PHASES, CURRICULUM, BADGES, AFTER } from './jrV2Facts';
+import { PHASES, CURRICULUM, AFTER, SAMPLE_BADGES } from './jrV2Facts';
 import { PATH, PROGRESS } from './jrV2Content';
-import { Badge, KIND_LABEL } from './JRV2Badges';
+import { KIND_LABEL } from './JRV2Badges';
+import { PhaseBadge } from './JRV2SampleBadges';
 
 // ─────────────────────────────────────────────────────────────
 // Stage cards + pop-ups, and the Royals Way Progress Tracking and Development
@@ -39,42 +40,70 @@ const StageStrip = () => (
     </ol>
 );
 
-// ── One stage card (a button: the whole card opens the pop-up) ──
+// ── Example badges for one phase (Alex, 12 Oct 2026: "have the badges describe that
+// phase … hover over the badge and it pops up some of the coaching points and the core
+// lesson learned in that badge for it to be a pass"). Point at a badge (computer) or
+// tap it (phone) and the box underneath shows what it takes to earn it. One badge is
+// always open, so nothing depends on hover.
+export const PhaseBadges = ({ phaseKey }) => {
+    const list = SAMPLE_BADGES[phaseKey];
+    const [sel, setSel] = useState(0);
+    const b = list[sel];
+    return (
+        <div data-jr-phase-badges>
+            <ul className="flex gap-3">
+                {list.map((x, n) => {
+                    const on = n === sel;
+                    return (
+                        <li key={x.name}>
+                            <button type="button" data-badge onMouseEnter={() => setSel(n)} onFocus={() => setSel(n)} onClick={() => setSel(n)}
+                                aria-pressed={on} aria-label={`${x.name}: ${PROGRESS.iCan} ${x.can}`}
+                                className={`block rounded-xl p-1.5 transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-rr-pink ${on ? 'bg-slate-100 scale-105' : ''}`}>
+                                <PhaseBadge name={x.name} kind={x.kind} className="w-20 h-20 block" />
+                            </button>
+                        </li>
+                    );
+                })}
+            </ul>
+            <div data-badge-detail className="mt-3 rounded-xl border-2 border-slate-200 p-4" aria-live="polite">
+                <p className="text-xs font-black uppercase tracking-[0.15em] text-rr-pink">{KIND_LABEL[b.kind]} badge</p>
+                <p className="mt-0.5 text-lg font-black text-rr-dark leading-tight">{b.name}</p>
+                <p className="mt-1 text-[15px] font-semibold text-rr-dark leading-snug">“{PROGRESS.iCan} {b.can}”</p>
+                <dl className="mt-3 space-y-2 text-sm">
+                    <div><dt className="font-black text-rr-dark">{PATH.badges.earn}</dt><dd className="font-medium text-rr-charcoal leading-snug">{b.earn}</dd></div>
+                    {b.point && <div><dt className="font-black text-rr-dark">{PATH.badges.point}</dt><dd className="font-medium text-rr-charcoal leading-snug">{b.point}</dd></div>}
+                    {b.cue && <div><dt className="font-black text-rr-dark">{PATH.badges.cue}</dt><dd className="font-medium text-rr-charcoal leading-snug">“{b.cue}”</dd></div>}
+                </dl>
+            </div>
+        </div>
+    );
+};
+
+// ── One phase card: its name and aim, its example badges, and a button to the full topic list ──
 const StageCard = ({ p, i, onOpen }) => {
     const c = CURRICULUM[p.key];
-    const sample = TOPIC_KEYS.map((k) => ({ k, t: c[k][0] }));
     return (
-        <button type="button" onClick={() => onOpen(i)} aria-haspopup="dialog"
-            className={`group w-full text-left rounded-2xl overflow-hidden bg-white border-2 border-slate-200 hover:${STAGE[i].border} focus-visible:outline focus-visible:outline-4 focus-visible:outline-rr-pink transition-colors`}>
+        <div className="rounded-2xl overflow-hidden bg-white border-2 border-slate-200 flex flex-col">
             <div className={`${STAGE[i].bg} px-5 pt-4 pb-5`}>
                 <p className="text-white text-3xl font-black uppercase leading-none">{p.name}</p>
                 <p className="text-white text-xl font-bold mt-1.5">{p.aim}</p>
             </div>
-            <div className="px-5 py-4">
-                <p className="text-xs font-black uppercase tracking-widest text-rr-charcoal">{PATH.phaseLabel(i)}</p>
-                <ul className="mt-3 space-y-1.5">
-                    {sample.map(({ k, t }) => (
-                        <li key={k} className={`border-l-4 ${TOPIC_BAR[k]} pl-2.5 text-[15px] font-semibold text-rr-dark leading-snug`}>{t}</li>
-                    ))}
-                </ul>
+            <div className="px-5 py-4 flex flex-col grow">
+                <p className="text-xs font-black uppercase tracking-widest text-rr-charcoal">{PATH.phaseLabel(i)} · {PATH.badges.count}</p>
+                <p className="mt-4 text-xs font-black uppercase tracking-widest text-rr-dark">{PATH.badges.title}</p>
+                <p className="mb-2 text-xs font-medium text-rr-charcoal">{PATH.badges.hint}</p>
+                <PhaseBadges phaseKey={p.key} />
+                <p className="mt-3 text-sm font-medium text-rr-charcoal leading-snug">{p.key === 'discover' ? PATH.badges.discoverAll : <Rich v={PATH.badges.moreToCome} />}</p>
                 <p className="mt-3 inline-flex items-center gap-1.5 text-sm font-bold text-rr-dark"><Award className="w-4 h-4 text-rr-pink" aria-hidden="true" />{PATH.certificate(p.name)}</p>
-                <span className="mt-4 inline-flex items-center gap-1.5 min-h-[44px] font-black text-rr-dark underline underline-offset-4 decoration-2 decoration-rr-pink">
+                <button type="button" onClick={() => onOpen(i)} aria-haspopup="dialog"
+                    className="group mt-auto pt-3 inline-flex items-center gap-1.5 min-h-[44px] text-left font-black text-rr-dark underline underline-offset-4 decoration-2 decoration-rr-pink focus-visible:outline focus-visible:outline-2 focus-visible:outline-rr-pink">
                     {PATH.open(p.name)} ({PATH.topics(topicCount(c))})
                     <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-                </span>
+                </button>
             </div>
-        </button>
+        </div>
     );
 };
-
-// ── Badge with its name and the player's "I can …" (used in the stage pop-up) ──
-const BadgeMedal = ({ b, dark }) => (
-    <li className="flex flex-col items-center text-center">
-        <Badge name={b.name} kind={b.kind} className="w-24 h-24" />
-        <span className={`mt-2 text-sm font-black leading-tight ${dark ? 'text-white' : 'text-rr-dark'}`}>{b.name}</span>
-        <span className={`mt-0.5 text-xs font-medium leading-snug ${dark ? 'text-white/80' : 'text-rr-charcoal'}`}>“{PROGRESS.iCan} {b.can}”</span>
-    </li>
-);
 
 // ── The stage pop-up ──
 const H = ({ children }) => <h3 className="text-xs font-black uppercase tracking-widest text-rr-dark mb-2">{children}</h3>;
@@ -168,9 +197,8 @@ const StageModal = ({ index, onClose, onNav }) => {
 
                     <section>
                         <H>{PATH.modal.badges}</H>
-                        {p.key === 'discover'
-                            ? <ul className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-6 mt-3">{BADGES.discover.slice(0, 4).map((b) => <BadgeMedal key={b.name} b={b} />)}</ul>
-                            : <p className="text-[15px] font-medium text-rr-charcoal"><Rich v={PATH.modal.badgesNotWritten} /></p>}
+                        <div className="mt-3 max-w-sm"><PhaseBadges phaseKey={p.key} /></div>
+                        <p className="mt-3 text-sm font-medium text-rr-charcoal">{p.key === 'discover' ? PATH.badges.discoverAll : <Rich v={PATH.badges.moreToCome} />} {PATH.badges.standard}</p>
                     </section>
 
                     <section className="flex items-start gap-3">
@@ -226,46 +254,5 @@ export const StageJourney = () => {
                     onNav={(d) => setOpen((x) => Math.min(PHASES.length - 1, Math.max(0, x + d)))} />
             )}
         </>
-    );
-};
-
-// All 28 Discover badges. Point at one (computer) or tap it (phone) to read its "I can …".
-const KINDS = ['bat', 'bowl', 'field'];
-export const BadgeWall = () => {
-    const [sel, setSel] = useState(BADGES.discover[0]);
-    return (
-        <div className="grid md:grid-cols-[1fr_17rem] gap-8 items-start">
-            <div className="order-2 md:order-1 space-y-6">
-                <p className="md:hidden text-rr-charcoal text-xs font-bold mb-4">{PROGRESS.badgeHint}</p>
-                {KINDS.map((k) => (
-                    <div key={k}>
-                        <p className="text-rr-dark text-xs font-black uppercase tracking-[0.2em] mb-3">{KIND_LABEL[k]}</p>
-                        <ul className="grid grid-cols-3 sm:grid-cols-6 gap-2.5">
-                            {BADGES.discover.filter((b) => b.kind === k).map((b) => {
-                                const on = sel.name === b.name;
-                                return (
-                                    <li key={b.name}>
-                                        <button type="button" onMouseEnter={() => setSel(b)} onFocus={() => setSel(b)} onClick={() => setSel(b)}
-                                            aria-pressed={on} aria-label={`${b.name}: I can ${b.can}`}
-                                            className={`block w-full rounded-xl p-1 transition-transform hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-rr-pink ${on ? 'scale-110 bg-slate-100' : ''}`}>
-                                            <Badge name={b.name} kind={b.kind} className="w-full h-auto" />
-                                        </button>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    </div>
-                ))}
-            </div>
-            <div className="order-1 md:order-2 sticky top-[92px] md:top-32 z-10 bg-white rounded-2xl border-2 border-slate-200 p-4 md:p-5 flex md:block items-center gap-4 md:text-center" aria-live="polite">
-                <Badge name={sel.name} kind={sel.kind} ribbon className="w-28 h-28 md:w-48 md:h-48 shrink-0 md:mx-auto" />
-                <div>
-                    <p className="md:mt-3 text-rr-pink text-xs font-black uppercase tracking-[0.2em]">{KIND_LABEL[sel.kind]} badge</p>
-                    <p className="mt-0.5 md:mt-1 text-rr-dark text-xl md:text-2xl font-black leading-tight">{sel.name}</p>
-                    <p className="mt-1 md:mt-2 text-rr-charcoal text-sm md:text-[15px] font-semibold leading-snug">“{PROGRESS.iCan} {sel.can}”</p>
-                    <p className="hidden md:block mt-4 text-rr-charcoal text-xs font-bold">{PROGRESS.badgeHint}</p>
-                </div>
-            </div>
-        </div>
     );
 };

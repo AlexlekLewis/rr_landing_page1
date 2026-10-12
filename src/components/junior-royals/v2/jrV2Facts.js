@@ -176,6 +176,32 @@ export const TIMES = [
 ];
 export const timeForAge = (age) => TIMES.find((t) => age >= t.min && age <= t.max) || null;
 
+// ── Example badges for each phase (Alex, 12 Oct 2026): "have the badges describe that
+// phase … hover over the badge and it pops up some of the coaching points and the core
+// lesson learned in that badge for it to be a pass … put the Develop and Elevate sample
+// badges in there as well."
+// These are the blueprint's own two "climbs" (Part IV §4 and §5): the same skill, one
+// step harder in each phase, so nothing here is invented.
+//   can   = the badge's "I can …" line, word for word.
+//   earn  = the blueprint's "Coach sees" for that badge, in plain words.
+//   point = the coaching point for a clip the blueprint lists for it (Appendix A).
+//   cue   = that clip's cue.
+// Develop and Elevate have only these examples so far: their full lists are not written.
+export const SAMPLE_BADGES = {
+    discover: [
+        { name: 'Rock or Step', kind: 'bat', can: 'step or rock back to suit the ball', earn: 'A full ball or a high ball, in random order. Your player makes the right move with their feet.', point: 'Defend first. Then mix full balls and short balls.', cue: 'Full forward, short back' },
+        { name: 'Length Ladder', kind: 'bowl', can: 'hit the stumps from near, middle and far', earn: 'Two balls from each of three marks. Your player hits the stumps, or the gate beside them, from every mark.', point: 'Give young bowlers one clear target: the base of off stump.', cue: 'Base of the stump' },
+    ],
+    develop: [
+        { name: 'Forward or Back', kind: 'bat', can: 'go forward to the full one, back to the short one', earn: 'Balls of different lengths, in random order. Your player goes forward or back to suit each one.', point: 'Back and across to a rising ball, with the weight on the balls of the feet.', cue: 'Back and across' },
+        { name: 'Length Box', kind: 'bowl', can: 'land it in the box off my run-up', earn: 'Off a run-up, your player lands the ball in the length box the coach calls.', point: 'Add the run-up without losing the action.', cue: 'Keeper’s gloves' },
+    ],
+    elevate: [
+        { name: 'Pick the Length', kind: 'bat', can: 'pick the length and the shot', earn: 'Your player picks the length, chooses the shot and hits it into the gap.', point: 'Really move the feet back and across. Let the line choose punch or cut.', cue: 'Full forward, short back' },
+        { name: 'Length on Demand', kind: 'bowl', can: 'bowl the length the coach calls', earn: 'From a full run-up, your player bowls the length the coach calls.' },
+    ],
+};
+
 // ── Free come and try day (Alex, 12 Oct 2026): "register for free come and try
 // day for the new program", Mickleham only for now. A family chooses one of two
 // days; the time is set by the player's age, younger players first.

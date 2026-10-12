@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { PRICE, SHIRT, NOTICE_WEEKS, PHASES, SESSION, CURRICULUM, BADGES, wednesdays2027, timeForAge, COME_AND_TRY, tryTime } from './jrV2Facts';
+import { PRICE, SHIRT, NOTICE_WEEKS, PHASES, SESSION, CURRICULUM, BADGES, wednesdays2027, timeForAge, COME_AND_TRY, tryTime, SAMPLE_BADGES } from './jrV2Facts';
 import { TRY_VALUES } from './JRV2ComeAndTry';
+import { PhaseBadge, hasSampleArt } from './JRV2SampleBadges';
 import * as CONTENT from './jrV2Content';
 import { termTotal, yearTotal, TERMS, V2_CENTRES, DAYS, MIN_DAYS } from './jrV2Content';
 import { FORM_VALUES } from './JRV2Form';
@@ -222,12 +223,17 @@ describe('the interest form', () => {
         // Alex, 12 Oct: the badges carry "a sense of accomplishment" and "feel self-confident as they develop and grow their game".
         const feel = P.why.map((w) => w.body).join(' ');
         expect(feel).toMatch(/sense of accomplishment/);
-        expect(feel).toMatch(/feel self-confident as they develop and grow their game/);
+        expect(feel).toMatch(/self-confidence as they develop and grow their game/);
+        // …and the healthy language: every player at their own rate.
+        expect(feel).toMatch(/Every player develops differently\. Players grow and explore the game at their own rate\./);
         expect(CONTENT.PORTAL_NAME).toBe('Player Performance Portal');
-        const portal = [P.portal.lead, ...P.portal.points].join(' ');
+        const portal = [P.portal.lead, ...P.portal.points.map((pt) => pt.text), P.portal.own].join(' ');
         expect(portal).toContain('gets access to the Player Performance Portal');
         expect(portal).toContain('digital badges');
-        expect(portal).toContain('digital certificate');
+        expect(portal).toContain('certificates');
+        // parents can track progress, and it is the player's own development
+        expect(portal).toContain('You can track your player’s progress');
+        expect(portal).toContain('grow and explore the game at their own rate');
         expect(portal).toContain('record of your player’s time with the Royals');
         // What a visitor can read: a tbc() value shows its text, never its review note.
         const shown = (v: unknown): string => {
@@ -249,10 +255,8 @@ describe('the interest form', () => {
         expect(BADGES.perPhase).toEqual({ batting: 12, bowling: 12, fielding: 4 });
         expect(CONTENT.PHASE_BADGES).toBe(28);
         expect(BADGES.discover).toHaveLength(CONTENT.PHASE_BADGES);
-        expect(CONTENT.PROGRESS.phasesTitle).toBe('How the program is put together');
-        expect(CONTENT.PROGRESS.phasesSub).toBe('Three phases, 28 badges in each');
-        expect(CONTENT.PROGRESS.phasesLead).toContain('Every phase has 28 skill badges: 12 for batting, 12 for bowling and 4 for fielding.');
-        expect(CONTENT.PROGRESS.phasesLead).toContain('84 badges across the three phases');
+        // "really all we're saying is that there are three core phases and there are 28 badges per phase"
+        expect(CONTENT.PROGRESS.phasesLine.join('')).toBe('Three core phases: Discover, Develop and Elevate. 28 badges in every phase.');
         expect(CONTENT.PATH.phaseLabel(0)).toBe('Phase 1 of 3');
         const shown = (v: unknown): string => {
             if (v == null || typeof v === 'function') return '';
@@ -300,6 +304,27 @@ describe('the interest form', () => {
         expect(copy).not.toMatch(/school-holiday weeks/i);
         expect((CONTENT.PRICES as Record<string, unknown>).yearTitle).toBeUndefined();
         expect(CONTENT.PRICES.calendarTitle).toBe('Every term and what it costs');
+    });
+
+    // Alex, 12 Oct: example badges describe each phase, where the phases are explained;
+    // Develop and Elevate have examples too. All six come from the blueprint's two
+    // "climbs" (Part IV §4 and §5); each has a picture, an "I can" and what it takes to earn it.
+    it('every phase has example badges with a picture, an "I can" line and how to earn it', () => {
+        expect(Object.keys(SAMPLE_BADGES)).toEqual(['discover', 'develop', 'elevate']);
+        expect(SAMPLE_BADGES.discover.map((b) => b.name)).toEqual(['Rock or Step', 'Length Ladder']);
+        expect(SAMPLE_BADGES.develop.map((b) => b.name)).toEqual(['Forward or Back', 'Length Box']);
+        expect(SAMPLE_BADGES.elevate.map((b) => b.name)).toEqual(['Pick the Length', 'Length on Demand']);
+        Object.values(SAMPLE_BADGES).flat().forEach((b) => {
+            expect(hasSampleArt(b.name), `no picture for "${b.name}"`).toBe(true);
+            expect(b.can.length).toBeGreaterThan(10);
+            expect(b.earn.length).toBeGreaterThan(20);
+        });
+        // the Discover examples are real Discover badges, with the same "I can" line
+        SAMPLE_BADGES.discover.forEach((b) => expect(BADGES.discover.find((d) => d.name === b.name)?.can).toBe(b.can));
+        // a Develop or Elevate example draws a frame plus its own picture
+        const html = renderToStaticMarkup(createElement(PhaseBadge, { name: 'Length Box', kind: 'bowl', ribbon: true }));
+        expect(html).toContain('LENGTH BOX');
+        expect((html.match(/<svg/g) || []).length).toBe(2);
     });
 
     // Alex, 12 Oct: the hero was too crowded. It goes straight to who it is for,
