@@ -97,11 +97,19 @@ const MockupBanner = () => {
 // ── 1. Hero ──
 const Hero = () => (
     <section id="hero" className={`${SCROLL_PAD} relative overflow-hidden bg-rr-dark`}>
+        {/* The photo (Alex, 12 Oct 2026: "the player's behind the blend … push the image
+            to the right into the four-fifths of the page"). From tablet width up the
+            photo is pinned so the batter, who stands 59% across the picture, sits
+            four-fifths of the way across the hero, clear of the text and of the dark
+            blend. On phones the text takes the full width, so the photo stays a dim
+            backdrop. */}
         <img src="/assets/little-crickets-nets.jpeg" alt="A young batter playing a drive in the indoor nets, in front of a Rajasthan Royals Academy Melbourne banner"
-            fetchPriority="high" className="absolute inset-0 w-full h-full object-cover object-[75%_center]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/90 to-rr-dark/40 md:bg-gradient-to-r md:from-rr-dark md:via-rr-dark/95 md:to-rr-dark/20" />
+            fetchPriority="high"
+            className="absolute inset-0 w-full h-full object-cover object-[75%_center] md:inset-auto md:top-0 md:left-[80%] md:h-full md:w-auto md:min-w-[55%] md:max-w-none md:-translate-x-[59%] md:object-[59%_center]" />
+        {/* The blend: solid behind the text, clear by the time it reaches the batter. */}
+        <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/90 to-rr-dark/40 md:bg-[linear-gradient(90deg,#111921_0%,#111921_46%,rgba(17,25,33,0.72)_60%,rgba(17,25,33,0.14)_78%,rgba(17,25,33,0.1)_100%)]" />
         <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-6 pt-10 pb-12 md:pt-16 md:pb-20">
-            <div className="max-w-xl">
+            <div className="max-w-md lg:max-w-xl">
                 <p className="text-[11px] font-black text-white uppercase tracking-[0.25em] mb-3">{HERO.eyebrow}</p>
                 <h1 className="text-white uppercase font-black leading-none tracking-tight">
                     <span className="block text-4xl sm:text-6xl md:text-7xl">{HERO.title}</span>
