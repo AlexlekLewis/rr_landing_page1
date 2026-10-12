@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, Award, BadgeCheck, Cake, CalendarCheck, Check, ChevronDown, ClipboardCheck, ClipboardList, Clock, Eye, FileText, GraduationCap, HeartHandshake, Layers, ListChecks, MapPin, MessageCircle, RefreshCw, Repeat, ShieldCheck, Shirt, Smile, Sprout, Sun, Target, TrendingUp, Trophy, Users, X } from 'lucide-react';
+import { ArrowRight, Award, BadgeCheck, Cake, CalendarCheck, Check, ChevronDown, ClipboardCheck, ClipboardList, Clock, Eye, FileText, GraduationCap, HeartHandshake, Layers, ListChecks, MapPin, MessageCircle, RefreshCw, Repeat, ShieldCheck, Shirt, Smile, Sprout, Sun, Target, TrendingUp, Trophy, User, Users, X } from 'lucide-react';
 import Navbar from '../../Navbar';
 import Footer from '../../Footer';
 import usePageAnalytics from '../../../hooks/usePageAnalytics';
@@ -536,6 +536,90 @@ const EnrolFlow = () => {
     );
 };
 
+// ── How we compare (Alex, 12 Oct 2026: "give visual precedence on how we compare
+// versus other academies"). Junior Royals comes first, large and pink; the others
+// are smaller and grey. Each small figure is one player in a group: for a range
+// ("3 to 10") the smallest group is drawn solid and the rest faint. ──
+const Figures = ({ solid, faint, ours }) => (
+    <span className="flex flex-wrap gap-1" aria-hidden="true">
+        {Array.from({ length: solid + faint }, (_, i) => (
+            <User key={i} strokeWidth={ours ? 2.6 : 2.2}
+                className={ours ? 'w-7 h-7 sm:w-8 sm:h-8 text-rr-pink' : `w-5 h-5 ${i < solid ? 'text-slate-500' : 'text-slate-300'}`} />
+        ))}
+    </span>
+);
+
+const Compare = () => {
+    const ours = COMPARE.rows.find((r) => r.ours);
+    const others = COMPARE.rows.filter((r) => !r.ours);
+    return (
+        <div data-jr-compare className="mt-12 border-t border-slate-200 pt-10">
+            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark mb-6">{COMPARE.title}</h3>
+            <div className="grid md:grid-cols-2 gap-4 md:gap-6">
+                <div data-jr-compare-ours className="rounded-2xl border-2 border-rr-pink overflow-hidden flex flex-col">
+                    <p className="bg-rr-pink text-white px-5 sm:px-6 py-3 flex items-center gap-2 text-base font-black uppercase tracking-[0.12em]">
+                        <BadgeCheck className="w-5 h-5 shrink-0" aria-hidden="true" />{ours.what}
+                    </p>
+                    <div className="p-5 sm:p-6 flex-1 flex flex-col justify-center">
+                        <Figures {...ours.figures} ours />
+                        <p className="mt-3 text-xl sm:text-2xl font-black text-rr-dark leading-tight">{ours.group}</p>
+                        <p className="mt-5">
+                            <span className="text-4xl sm:text-5xl font-black text-rr-dark">{ours.price}</span>{' '}
+                            <span className="text-lg font-bold text-rr-charcoal">{COMPARE.per}</span>{' '}
+                            <span className="text-sm font-bold text-rr-charcoal whitespace-nowrap">{ours.gst}</span>
+                        </p>
+                    </div>
+                </div>
+                <ul className="grid gap-4">
+                    {others.map((r) => (
+                        <li key={r.what} data-jr-compare-other className="rounded-2xl bg-slate-50 border border-slate-200 p-5">
+                            <p className="text-sm font-bold uppercase tracking-wider text-slate-600">{r.what}</p>
+                            <div className="mt-3"><Figures {...r.figures} /></div>
+                            <p className="mt-2 text-[15px] font-semibold text-slate-600">{r.group}</p>
+                            <p className="mt-2 text-slate-600"><span className="text-2xl font-bold">{r.price}</span> <span className="text-sm font-semibold">{COMPARE.per}</span></p>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+            <p className="text-xs text-rr-charcoal font-medium mt-3">{COMPARE.source}</p>
+        </div>
+    );
+};
+
+// ── Every term and what it costs: a drop-down, closed until it is tapped
+// (Alex, 12 Oct 2026). Native details/summary, like the FAQ. ──
+const TermCosts = () => (
+    <details data-jr-term-costs className="group mt-10 max-w-3xl rounded-2xl border-2 border-slate-200 open:border-rr-dark">
+        <summary className="list-none [&::-webkit-details-marker]:hidden cursor-pointer px-5 py-4 min-h-[60px] flex items-center justify-between gap-4">
+            <h3 className="flex items-center gap-3 text-lg sm:text-xl font-black uppercase text-rr-dark leading-tight">
+                <CalendarCheck className="w-5 h-5 text-rr-pink shrink-0" aria-hidden="true" />{PRICES.calendarTitle}
+            </h3>
+            <span className="shrink-0 w-9 h-9 rounded-full bg-rr-dark text-white flex items-center justify-center">
+                <ChevronDown className="w-5 h-5 transition-transform group-open:rotate-180" strokeWidth={3} aria-hidden="true" />
+            </span>
+        </summary>
+        <div className="px-5 pb-5">
+            <table className="w-full text-left">
+                <thead>
+                    <tr className="border-b-2 border-rr-dark text-xs font-black uppercase tracking-wider text-rr-dark">
+                        <th className="py-2 pr-2">Term</th><th className="py-2 pr-2 text-right">Weeks</th><th className="py-2 text-right">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {TERMS.map((c) => (
+                        <tr key={c.label} className="border-b border-slate-200 align-top">
+                            <td className="py-2.5 pr-2"><span className="block font-black text-rr-dark">{c.label}</span><span className="block text-xs text-rr-charcoal font-medium">{c.dates}</span></td>
+                            <td className="py-2.5 pr-2 text-right font-bold text-rr-dark">{c.sessions}</td>
+                            <td className="py-2.5 text-right font-black text-rr-dark whitespace-nowrap">{money(termTotal(c.sessions))}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <p className="text-xs text-rr-charcoal font-medium mt-2">{PRICES.calendarNote}</p>
+        </div>
+    </details>
+);
+
 // ── Price ──
 const Prices = () => (
     <Section id="prices">
@@ -553,47 +637,9 @@ const Prices = () => (
             </div>
         </div>
 
+        <Compare />
         <EnrolFlow />
-
-        <div className="grid md:grid-cols-2 gap-10 mt-12">
-            <div>
-                <h3 className="text-xl font-black uppercase text-rr-dark mb-4">{PRICES.calendarTitle}</h3>
-                <div className="border-t border-slate-200">
-                    <table className="w-full text-left">
-                        <thead>
-                            <tr className="border-b-2 border-rr-dark text-xs font-black uppercase tracking-wider text-rr-dark">
-                                <th className="py-2 pr-2">Term</th><th className="py-2 pr-2 text-right">Weeks</th><th className="py-2 text-right">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {TERMS.map((c) => (
-                                <tr key={c.label} className="border-b border-slate-200 align-top">
-                                    <td className="py-2.5 pr-2"><span className="block font-black text-rr-dark">{c.label}</span><span className="block text-xs text-rr-charcoal font-medium">{c.dates}</span></td>
-                                    <td className="py-2.5 pr-2 text-right font-bold text-rr-dark">{c.sessions}</td>
-                                    <td className="py-2.5 text-right font-black text-rr-dark whitespace-nowrap">{money(termTotal(c.sessions))}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    <p className="text-xs text-rr-charcoal font-medium mt-2">{PRICES.calendarNote}</p>
-                </div>
-            </div>
-            <div className="border-l-4 border-rr-pink pl-5">
-                <h3 className="text-xl font-black uppercase text-rr-dark mb-4">{COMPARE.title}</h3>
-                <ul className="border-t-2 border-rr-dark">
-                    {COMPARE.rows.map((r) => (
-                        <li key={r.what} className="border-b border-slate-200 py-3">
-                            <p className="flex justify-between gap-3">
-                                <span className={`font-bold ${r.ours ? 'text-rr-dark' : 'text-rr-charcoal'}`}>{r.what}</span>
-                                <span className="font-black text-rr-dark whitespace-nowrap">{r.price} <span className="text-xs font-bold text-rr-charcoal">an hour</span></span>
-                            </p>
-                            <p className="text-sm font-medium text-rr-charcoal">Group size: {r.players}</p>
-                        </li>
-                    ))}
-                </ul>
-                <p className="text-xs text-rr-charcoal font-medium mt-2">{COMPARE.source}</p>
-            </div>
-        </div>
+        <TermCosts />
         <CtaRow />
     </Section>
 );

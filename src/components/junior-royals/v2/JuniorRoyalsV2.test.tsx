@@ -131,7 +131,10 @@ describe('progress system and stages', () => {
         expect(royals).toContain('by invitation only');
         const all = JSON.stringify(CONTENT);
         expect(all).not.toMatch(/our own coaching method|presented by|mastered/i);
-        expect(all).not.toMatch(/Confirm wording|to be confirmed|to be approved|to be added/i);
+        // One exception, asked for by Alex (12 Oct): the come and try day's date is
+        // shown as to be confirmed, in the pop-up and in its FAQ answer.
+        const rest = JSON.stringify({ ...CONTENT, TRY: undefined, FAQS: CONTENT.FAQS.filter((f) => f.q !== CONTENT.TRY.faq.q) });
+        expect(rest).not.toMatch(/Confirm wording|to be confirmed|to be approved|to be added/i);
     });
 
     it('the system has its name, and the page makes no unprovable superlatives (CLAUDE.md §2)', () => {
@@ -278,8 +281,9 @@ describe('the interest form', () => {
 
     // Alex, 12 Oct: a pop-up to "register for free come and try day for the new
     // program": parent name, player name, player age, a day, email and mobile;
-    // Mickleham only for now; Monday 5pm and 6pm, Wednesday 6pm and 7pm, the
-    // younger players first.
+    // Mickleham only; Monday 5pm and 6pm, Wednesday 6pm and 7pm, the younger
+    // players first. Later the same day: no "for now", a highlighted "Other centres
+    // launching soon", and the date shown as to be confirmed.
     it('free come and try day: Mickleham only, two days, time set by age', () => {
         expect(COME_AND_TRY.centre).toBe('mickleham');
         expect(COME_AND_TRY.days.map((d) => d.label)).toEqual(['Monday', 'Wednesday']);
@@ -289,7 +293,13 @@ describe('the interest form', () => {
         expect(tryTime('mon', 13)).toBeNull();
         expect(TRY_VALUES).toEqual({ centre: ['mickleham'], day: ['mon', 'wed'], session_time: ['5pm', '6pm', '7pm'], player_age: [7, 8, 9, 10, 11, 12] });
         expect(CONTENT.TRY.title).toBe('Free come and try day');
-        expect(CONTENT.TRY.where).toContain('Mickleham only, for now');
+        expect(CONTENT.TRY.where).toContain('At Mickleham only:');
+        expect(JSON.stringify(CONTENT.TRY) + CONTENT.TRY.faq.a).not.toMatch(/for now/i);
+        expect(CONTENT.TRY.otherCentres).toBe('Other centres launching soon');
+        expect(CONTENT.TRY.date).toBe('Date to be confirmed');
+        expect(CONTENT.TRY.yourSession('Monday', '5:00pm')).toBe('Your player’s session: Monday at 5:00pm. Date to be confirmed.');
+        expect(CONTENT.TRY.done.body('Monday', '5:00pm')).toContain('The date is to be confirmed.');
+        expect(CONTENT.TRY.faq.a).toContain('The date is to be confirmed.');
         expect(CONTENT.TRY.dayLines).toEqual([
             'Monday: 5:00pm for players aged 7 to 9, 6:00pm for players aged 10 to 12.',
             'Wednesday: 6:00pm for players aged 7 to 9, 7:00pm for players aged 10 to 12.',
@@ -312,6 +322,19 @@ describe('the interest form', () => {
         expect(copy).not.toMatch(/school-holiday weeks/i);
         expect((CONTENT.PRICES as Record<string, unknown>).yearTitle).toBeUndefined();
         expect(CONTENT.PRICES.calendarTitle).toBe('Every term and what it costs');
+    });
+
+    // Alex, 12 Oct: "give visual precedence on how we compare versus other academies":
+    // Junior Royals is the one highlighted row; the others carry only published facts.
+    it('comparison: one highlighted row (ours), and only published facts for the others', () => {
+        const { rows, source } = CONTENT.COMPARE;
+        expect(rows.filter((r) => r.ours).map((r) => r.what)).toEqual(['Junior Royals']);
+        expect(rows[0]).toMatchObject({ price: '$49.95', gst: 'incl. GST', group: 'Up to 6 players in a group, with their own coach', figures: { solid: 6, faint: 0 } });
+        expect(rows[1]).toMatchObject({ price: '$35 – $50', group: '3 to 10 players in a group', figures: { solid: 3, faint: 7 } });
+        expect(rows[2]).toMatchObject({ price: '$80 – $140', group: '1 player with 1 coach', figures: { solid: 1, faint: 0 } });
+        expect(source).toMatch(/published on their own websites on 5 October 2026/);
+        // Nothing is claimed about what other academies do or don't include.
+        expect(JSON.stringify(rows.slice(1))).not.toMatch(/badge|portal|certificate|no |not /i);
     });
 
     // Alex, 12 Oct: example badges describe each phase, where the phases are explained;

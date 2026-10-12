@@ -424,15 +424,22 @@ export const TERMS_POPUP = {
 
 // Per-hour comparison. Market figures: published prices checked 5 Oct 2026 (sources in
 // ../juniorRoyalsData.js, PRICE_CONTEXT; REVIEW 5 Jan 2027).
+// Alex, 12 Oct 2026: "give visual precedence on how we compare versus other
+// academies … our academy needs to be highlighted as a positive and the others
+// … subtly … as negative." The emphasis is in the design: Junior Royals comes
+// first, large and pink; the others are smaller and grey. `figures` draws one
+// person for each player in a group (solid = the smallest group, faint = up to
+// the largest). Every figure is a published fact. We have not checked what other
+// academies include, so nothing is claimed about that.
 export const COMPARE = {
     title: 'How we compare, per hour',
-    head: ['Program', 'Group size', 'Price per hour'],
+    per: 'an hour',
     rows: [
-        { what: 'Junior Royals', players: `Up to ${PRICE.perLane} players`, price: WEEKLY, ours: true },
-        { what: 'Group coaching at other Melbourne academies', players: '3 to 10 players', price: '$35 – $50' },
-        { what: 'One-on-one coaching', players: '1 player', price: '$80 – $140' },
+        { what: 'Junior Royals', group: `Up to ${PRICE.perLane} players in a group, with their own coach`, price: WEEKLY, gst: 'incl. GST', figures: { solid: PRICE.perLane, faint: 0 }, ours: true },
+        { what: 'Group coaching at other Melbourne academies', group: '3 to 10 players in a group', price: '$35 – $50', figures: { solid: 3, faint: 7 } },
+        { what: 'One-on-one coaching', group: '1 player with 1 coach', price: '$80 – $140', figures: { solid: 1, faint: 0 } },
     ],
-    source: "Other academies' prices and group sizes are as published on their own websites on 5 October 2026. They don't say whether GST is included.",
+    source: "Other academies' prices and group sizes are as published on their own websites on 5 October 2026: 3 academies for group coaching and 4 for one-on-one coaching. They don't say whether GST is included.",
 };
 
 // ── 6. Register your interest ──
@@ -477,24 +484,28 @@ export const FORM = {
 // ── The free come and try day pop-up (Alex, 12 Oct 2026): "We want a pop-up to come
 // up on the page to say register for free come and try day for the new program."
 // It asks the parent's name, the player's name and age, a day, an email and a
-// mobile. Mickleham only for now. The time is worked out from the age and the day.
+// mobile. Mickleham only. The time is worked out from the age and the day.
+// Alex, 12 Oct (later): drop "for now"; highlight "Other centres launching soon";
+// and show that the date is to be confirmed.
 const TRY_CENTRE = CENTRES.find((c) => c.value === COME_AND_TRY.centre);
 export const TRY = {
     eyebrow: 'New program',
     title: 'Free come and try day',
     lead: 'Register for a free come and try day for the new Junior Royals program.',
-    where: `At Mickleham only, for now: ${TRY_CENTRE.venue}, ${TRY_CENTRE.address}.`,
+    where: `At Mickleham only: ${TRY_CENTRE.venue}, ${TRY_CENTRE.address}.`,
+    otherCentres: 'Other centres launching soon',
+    date: 'Date to be confirmed',
     // "Monday: 5:00pm for players aged 7 to 9, 6:00pm for players aged 10 to 12."
     dayLines: COME_AND_TRY.days.map((d) => `${d.label}: ${d.times.map((t) => `${t.time} for players aged ${t.min} to ${t.max}`).join(', ')}.`),
     labels: { parent: 'Parent or guardian name', player: 'Player’s first name', age: 'Player’s age', day: 'Choose a day', email: 'Email', mobile: 'Mobile' },
     agePlaceholder: 'Choose an age',
     ageWhy: 'The time depends on your player’s age.',
-    yourSession: (day, time) => `Your player’s session: ${day} at ${time}.`,
+    yourSession: (day, time) => `Your player’s session: ${day} at ${time}. Date to be confirmed.`,
     button: 'Register for free',
     under: 'Free. Nothing to pay.',
     done: {
         title: 'You’re registered',
-        body: (day, time) => `We’ve got your details for the free come and try day at Mickleham: ${day} at ${time}. We’ll contact you to confirm.`,
+        body: (day, time) => `We’ve got your details for the free come and try day at Mickleham: ${day} at ${time}. The date is to be confirmed. We’ll contact you with the date.`,
     },
     mockupNote: 'Mock-up: this form is not connected yet. Nothing you type is saved.',
     close: 'Close',
@@ -502,7 +513,7 @@ export const TRY = {
     again: { lead: 'Want to try a session first?', button: 'Free come and try day' },
     faq: {
         q: 'Can we try a session before we enrol?',
-        a: `Yes. There is a free come and try day for the new program, at Mickleham only for now. ${COME_AND_TRY.days.map((d) => `${d.label}: ${d.times.map((t) => `${t.time} for players aged ${t.min} to ${t.max}`).join(', ')}.`).join(' ')} Register with the “Free come and try day” button on this page.`,
+        a: `Yes. There is a free come and try day for the new program, at Mickleham only. Other centres are launching soon. The date is to be confirmed. ${COME_AND_TRY.days.map((d) => `${d.label}: ${d.times.map((t) => `${t.time} for players aged ${t.min} to ${t.max}`).join(', ')}.`).join(' ')} Register with the “Free come and try day” button on this page.`,
     },
 };
 

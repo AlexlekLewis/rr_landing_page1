@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Check, MapPin, X } from 'lucide-react';
+import { ArrowRight, CalendarDays, Check, MapPin, X } from 'lucide-react';
 import { supabase } from '../../../lib/supabase';
 import { HONEYPOT_FIELD, isHoneypotTripped } from '../../../lib/security/bot.js';
 import { MOCKUP } from '../juniorRoyalsData';
@@ -14,6 +14,8 @@ import { COME_AND_TRY, tryTime } from './jrV2Facts';
 // "We want a pop-up to come up on the page to say register for free come and try
 // day for the new program. And that gets the parent name, player name, player
 // age, choose a [day], offer this only at Mickleham for now, and email and mobile."
+// Later the same day: no "for now"; a highlighted "Other centres launching soon";
+// and the date shown as to be confirmed.
 //
 // - It opens by itself a few seconds after the page loads, once per visit, and
 //   never on top of another pop-up or while someone is typing in the form.
@@ -169,6 +171,8 @@ const Modal = ({ onClose }) => {
                         <>
                             <p className="mt-3 text-[17px] font-semibold text-rr-dark leading-snug">{TRY.lead}</p>
                             <p className="mt-2 flex items-start gap-2 text-[15px] font-medium text-rr-charcoal leading-snug"><MapPin className="w-4 h-4 text-rr-pink shrink-0 mt-0.5" aria-hidden="true" />{TRY.where}</p>
+                            <p className="mt-2 pl-6"><span data-jr-try-other className="inline-block rounded-md bg-rr-pink text-white text-xs font-black uppercase tracking-wider px-3 py-1.5">{TRY.otherCentres}</span></p>
+                            <p data-jr-try-date className="mt-3 flex items-start gap-2 text-[15px] font-black text-rr-dark leading-snug"><CalendarDays className="w-4 h-4 text-rr-pink shrink-0 mt-0.5" aria-hidden="true" />{TRY.date}</p>
 
                             <form onSubmit={submit} noValidate className="mt-5 grid sm:grid-cols-2 gap-4">
                                 <input type="text" name={HONEYPOT_FIELD} tabIndex={-1} autoComplete="off" aria-hidden="true"

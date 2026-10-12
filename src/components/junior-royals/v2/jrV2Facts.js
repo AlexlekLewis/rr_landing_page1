@@ -203,12 +203,13 @@ export const SAMPLE_BADGES = {
 };
 
 // ── Free come and try day (Alex, 12 Oct 2026): "register for free come and try
-// day for the new program", Mickleham only for now. A family chooses one of two
+// day for the new program", Mickleham only. A family chooses one of two
 // days; the time is set by the player's age, younger players first.
 //   Monday:    5:00pm (aged 7 to 9), 6:00pm (aged 10 to 12)
 //   Wednesday: 6:00pm (aged 7 to 9), 7:00pm (aged 10 to 12)
 // ⚠️ To confirm with Alex: he said "choose a Monday or a Tuesday" and then gave the
-// second day's times as "on Wednesday". Wednesday is used here. No dates given yet.
+// second day's times as "on Wednesday". Wednesday is used here. The date is to be
+// confirmed, and the pop-up says so.
 export const COME_AND_TRY = {
     centre: 'mickleham',
     ages: { min: 7, max: 12 },
