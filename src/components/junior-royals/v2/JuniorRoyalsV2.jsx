@@ -167,16 +167,16 @@ const ValueColumn = ({ col, accent }) => (
 );
 
 const Value = () => (
-    <Section id="value">
+    <Section id="value" tone="slate">
         <Head eyebrow={VALUE.eyebrow} title={VALUE.title} />
         <p className="text-lg sm:text-xl text-rr-dark font-semibold max-w-3xl leading-relaxed"><Rich v={VALUE.lead} /></p>
-        <div className="mt-8 mb-10 rounded-2xl p-5 sm:p-7" style={{ backgroundImage: 'var(--image-gradient-rr)' }}>
-            <h3 className="text-xl sm:text-2xl font-black uppercase text-white">{VALUE.royals.title}</h3>
-            <dl className="mt-4 grid md:grid-cols-2 gap-x-10 gap-y-5">
+        <div className="mt-10 mb-12 border-t-4 border-rr-pink pt-6">
+            <h3 className="text-xl sm:text-2xl font-black uppercase text-rr-dark">{VALUE.royals.title}</h3>
+            <dl className="mt-5 grid md:grid-cols-2 gap-x-10 gap-y-6">
                 {VALUE.royals.items.map((it) => (
                     <div key={it.q}>
-                        <dt className="text-white text-[15px] font-black uppercase tracking-wider">{it.q}</dt>
-                        <dd className="text-white text-[16px] font-medium leading-relaxed mt-1"><Rich v={it.a} /></dd>
+                        <dt className="text-rr-pink text-sm font-black uppercase tracking-[0.15em]">{it.q}</dt>
+                        <dd className="text-rr-dark text-[16px] font-medium leading-relaxed mt-1.5"><Rich v={it.a} /></dd>
                     </div>
                 ))}
             </dl>
@@ -190,69 +190,69 @@ const Value = () => (
 );
 
 // ── 2. The Royals Way Progress Tracking and Development System ──
+// Light, open and airy, like every other section (Alex, 12 Oct 2026: the blue
+// gradient background "wasn't in the original work … we had it in a light mode
+// … that blue should be reserved for buttons and things like that"). White
+// background, dark text, pink accents; no gradient or dark panels here.
 const Progress = () => (
-    <section id="progress" className={`${SCROLL_PAD} py-14 md:py-20`} style={{ backgroundImage: 'var(--image-gradient-rr)' }}>
-        <div className="max-w-5xl mx-auto px-5 sm:px-6">
-            <p className="text-xs font-black uppercase tracking-[0.25em] mb-2 text-white">{PROGRESS.eyebrow}</p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight leading-[1.05] text-white max-w-4xl">{PROGRESS.title}</h2>
-            <div className="w-12 h-1 bg-white mt-4 mb-6" />
-            <div className="grid md:grid-cols-[1fr_18rem] gap-8 items-start">
-                <div>
-                    <p className="text-lg sm:text-xl text-white font-semibold leading-relaxed">{PROGRESS.lead}</p>
-                    <p className="mt-3 text-[15px] font-semibold text-white"><Rich v={PROGRESS.starts} /></p>
-                    {/* The learning process around a badge: three weeks, the coach's check, the badge. */}
-                    <h3 className="mt-9 mb-4 text-xl sm:text-2xl font-black uppercase tracking-tight text-white">{PROGRESS.stepsTitle}</h3>
-                    <ol className="space-y-3">
-                        {PROGRESS.steps.map((st, i) => (
-                            <li key={st.name} className="flex gap-4 rounded-2xl border-2 border-white/20 p-4">
-                                <span className="w-10 h-10 rounded-full bg-rr-pink text-white text-lg font-black flex items-center justify-center shrink-0" aria-hidden="true">{i + 1}</span>
-                                <div>
-                                    <p className="text-white text-lg font-black leading-tight">{st.name}<span className="ml-2 align-middle text-white/80 text-xs font-black uppercase tracking-widest">{st.when}</span></p>
-                                    <p className="text-white text-[15px] font-medium leading-snug mt-1">{st.does}</p>
-                                </div>
-                            </li>
-                        ))}
-                    </ol>
-                </div>
-                <PhotoTile {...PHOTOS.progress} className="aspect-[4/5] hidden md:block" />
+    <Section id="progress">
+        <Head eyebrow={PROGRESS.eyebrow} title={PROGRESS.title} />
+        <div className="grid md:grid-cols-[1fr_18rem] gap-10 items-start">
+            <div>
+                <p className="text-lg sm:text-xl text-rr-dark font-semibold leading-relaxed">{PROGRESS.lead}</p>
+                <p className="mt-3 text-[15px] font-semibold text-rr-charcoal"><Rich v={PROGRESS.starts} /></p>
+                {/* The learning process around a badge: three weeks, the coach's check, the badge. */}
+                <h3 className="mt-10 mb-5 text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark">{PROGRESS.stepsTitle}</h3>
+                <ol className="space-y-5">
+                    {PROGRESS.steps.map((st, i) => (
+                        <li key={st.name} className="flex gap-4">
+                            <span className="w-10 h-10 rounded-full bg-rr-pink text-white text-lg font-black flex items-center justify-center shrink-0" aria-hidden="true">{i + 1}</span>
+                            <div>
+                                <p className="text-rr-dark text-lg font-black leading-tight">{st.name}<span className="ml-2 align-middle text-rr-pink text-xs font-black uppercase tracking-widest">{st.when}</span></p>
+                                <p className="text-rr-charcoal text-[15px] sm:text-base font-medium leading-relaxed mt-1">{st.does}</p>
+                            </div>
+                        </li>
+                    ))}
+                </ol>
             </div>
+            <PhotoTile {...PHOTOS.progress} className="aspect-[4/5] hidden md:block" />
+        </div>
 
-            <div className="mt-12 rounded-2xl bg-rr-dark p-6 sm:p-8">
-                <p className="text-white text-[15px] font-semibold mb-2">{PROGRESS.stagesIntro}</p>
-                <p className="text-white text-sm font-black uppercase tracking-wider mb-5">{PROGRESS.sampleTitle}</p>
-                <BadgeWall />
-                <p className="mt-8 text-white/90 text-[15px] font-medium leading-relaxed max-w-3xl">{PROGRESS.perYear}</p>
-                <ul className="mt-4 space-y-2 max-w-3xl">
-                    {PROGRESS.rules.map((r) => <Tick key={r} dark>{r}</Tick>)}
+        <div className="mt-14 border-t border-slate-200 pt-10">
+            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark">{PROGRESS.sampleTitle}</h3>
+            <p className="mt-2 mb-6 text-[15px] sm:text-base font-medium text-rr-charcoal">{PROGRESS.stagesIntro}</p>
+            <BadgeWall />
+            <p className="mt-8 text-rr-charcoal text-[15px] sm:text-base font-medium leading-relaxed max-w-3xl">{PROGRESS.perYear}</p>
+            <ul className="mt-4 space-y-2 max-w-3xl">
+                {PROGRESS.rules.map((r) => <Tick key={r}>{r}</Tick>)}
+            </ul>
+        </div>
+
+        {/* Why we track, and where the record lives (Alex, 12 Oct 2026). */}
+        <div className="mt-14 border-t border-slate-200 pt-10 grid md:grid-cols-2 gap-10 items-start">
+            <div>
+                <h3 className="mb-6 text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark">{PROGRESS.whyTitle}</h3>
+                <ul className="space-y-5">
+                    {PROGRESS.why.map((w) => (
+                        <li key={w.head} className="border-l-4 border-rr-pink pl-4">
+                            <p className="text-rr-dark text-lg font-black leading-tight">{w.head}</p>
+                            <p className="text-rr-charcoal text-[15px] sm:text-base font-medium leading-relaxed mt-1">{w.body}</p>
+                        </li>
+                    ))}
                 </ul>
             </div>
-
-            {/* Why we track, and where the record lives (Alex, 12 Oct 2026). */}
-            <div className="mt-12 grid md:grid-cols-2 gap-8 items-start">
-                <div>
-                    <h3 className="mb-5 text-xl sm:text-2xl font-black uppercase tracking-tight text-white">{PROGRESS.whyTitle}</h3>
-                    <ul className="space-y-4">
-                        {PROGRESS.why.map((w) => (
-                            <li key={w.head} className="border-l-4 border-white pl-4">
-                                <p className="text-white text-lg font-black leading-tight">{w.head}</p>
-                                <p className="text-white text-[15px] font-medium leading-snug mt-1">{w.body}</p>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <div className="rounded-2xl bg-white p-6 sm:p-7 border-t-8 border-t-rr-pink">
-                    <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark">{PROGRESS.portalTitle}</h3>
-                    <p className="mt-2 text-[17px] font-bold text-rr-dark leading-snug">{PROGRESS.portal.lead}</p>
-                    <ul className="mt-4 space-y-2.5">{PROGRESS.portal.points.map((pt) => <Tick key={pt}><span className="text-rr-dark font-semibold">{pt}</span></Tick>)}</ul>
-                    <p className="mt-4 text-sm font-semibold text-rr-charcoal"><Rich v={PROGRESS.starts} /></p>
-                </div>
+            <div className="rounded-2xl bg-slate-50 p-6 sm:p-8 border-t-8 border-rr-pink">
+                <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark">{PROGRESS.portalTitle}</h3>
+                <p className="mt-2 text-[17px] font-bold text-rr-dark leading-snug">{PROGRESS.portal.lead}</p>
+                <ul className="mt-4 space-y-2.5">{PROGRESS.portal.points.map((pt) => <Tick key={pt}><span className="text-rr-dark font-semibold">{pt}</span></Tick>)}</ul>
+                <p className="mt-4 text-sm font-semibold text-rr-charcoal"><Rich v={PROGRESS.starts} /></p>
             </div>
-
-            <h3 className="mt-12 mb-5 text-xl sm:text-2xl font-black uppercase tracking-tight text-white">{PROGRESS.certTitle}</h3>
-            <Certificates />
-            <CtaRow dark />
         </div>
-    </section>
+
+        <h3 className="mt-14 mb-5 text-xl sm:text-2xl font-black uppercase tracking-tight text-rr-dark">{PROGRESS.certTitle}</h3>
+        <Certificates />
+        <CtaRow />
+    </Section>
 );
 
 // ── 3. How your player learns: four action cards (Alex, 11 Oct 2026) ──

@@ -237,10 +237,10 @@ export const BadgeWall = () => {
     return (
         <div className="grid md:grid-cols-[1fr_17rem] gap-8 items-start">
             <div className="order-2 md:order-1 space-y-6">
-                <p className="md:hidden text-white/80 text-xs font-bold mb-4">{PROGRESS.badgeHint}</p>
+                <p className="md:hidden text-rr-charcoal text-xs font-bold mb-4">{PROGRESS.badgeHint}</p>
                 {KINDS.map((k) => (
                     <div key={k}>
-                        <p className="text-white text-xs font-black uppercase tracking-[0.2em] mb-3">{KIND_LABEL[k]}</p>
+                        <p className="text-rr-dark text-xs font-black uppercase tracking-[0.2em] mb-3">{KIND_LABEL[k]}</p>
                         <ul className="grid grid-cols-3 sm:grid-cols-6 gap-2.5">
                             {BADGES.discover.filter((b) => b.kind === k).map((b) => {
                                 const on = sel.name === b.name;
@@ -248,7 +248,7 @@ export const BadgeWall = () => {
                                     <li key={b.name}>
                                         <button type="button" onMouseEnter={() => setSel(b)} onFocus={() => setSel(b)} onClick={() => setSel(b)}
                                             aria-pressed={on} aria-label={`${b.name}: I can ${b.can}`}
-                                            className={`block w-full rounded-xl p-1 transition-transform hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white ${on ? 'scale-110 bg-white/10' : ''}`}>
+                                            className={`block w-full rounded-xl p-1 transition-transform hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-rr-pink ${on ? 'scale-110 bg-slate-100' : ''}`}>
                                             <Badge name={b.name} kind={b.kind} className="w-full h-auto" />
                                         </button>
                                     </li>
@@ -258,13 +258,13 @@ export const BadgeWall = () => {
                     </div>
                 ))}
             </div>
-            <div className="order-1 md:order-2 sticky top-[92px] md:top-32 z-10 bg-rr-dark rounded-2xl border-2 border-white/20 p-4 md:p-5 flex md:block items-center gap-4 md:text-center" aria-live="polite">
+            <div className="order-1 md:order-2 sticky top-[92px] md:top-32 z-10 bg-white rounded-2xl border-2 border-slate-200 p-4 md:p-5 flex md:block items-center gap-4 md:text-center" aria-live="polite">
                 <Badge name={sel.name} kind={sel.kind} ribbon className="w-28 h-28 md:w-48 md:h-48 shrink-0 md:mx-auto" />
                 <div>
-                    <p className="md:mt-3 text-white text-xs font-black uppercase tracking-[0.2em]">{KIND_LABEL[sel.kind]} badge</p>
-                    <p className="mt-0.5 md:mt-1 text-white text-xl md:text-2xl font-black leading-tight">{sel.name}</p>
-                    <p className="mt-1 md:mt-2 text-white/90 text-sm md:text-[15px] font-semibold leading-snug">“{PROGRESS.iCan} {sel.can}”</p>
-                    <p className="hidden md:block mt-4 text-white/70 text-xs font-bold">{PROGRESS.badgeHint}</p>
+                    <p className="md:mt-3 text-rr-pink text-xs font-black uppercase tracking-[0.2em]">{KIND_LABEL[sel.kind]} badge</p>
+                    <p className="mt-0.5 md:mt-1 text-rr-dark text-xl md:text-2xl font-black leading-tight">{sel.name}</p>
+                    <p className="mt-1 md:mt-2 text-rr-charcoal text-sm md:text-[15px] font-semibold leading-snug">“{PROGRESS.iCan} {sel.can}”</p>
+                    <p className="hidden md:block mt-4 text-rr-charcoal text-xs font-bold">{PROGRESS.badgeHint}</p>
                 </div>
             </div>
         </div>
@@ -273,8 +273,8 @@ export const BadgeWall = () => {
 
 export const Certificates = () => (
     <ol className="grid md:grid-cols-3 gap-4">
-        {PHASES.map((p, i) => (
-            <li key={p.key} className={`rounded-2xl bg-white px-5 py-4 border-t-8 ${['border-t-rr-pink', 'border-t-rr-blue', 'border-t-rr-dark'][i]}`}>
+        {PHASES.map((p) => (
+            <li key={p.key} className="rounded-2xl bg-slate-50 px-5 py-4 border-t-8 border-rr-pink">
                 <p className="flex items-center gap-2 text-sm font-black uppercase tracking-wider text-rr-dark">
                     <Award className="w-5 h-5 text-rr-pink" aria-hidden="true" /> {p.name} certificate
                 </p>
