@@ -20,16 +20,25 @@ function upsertMeta(attr, key, content) {
     el.setAttribute('content', content);
 }
 
-// Structured data (schema.org JSON-LD). One managed <script> per route; removed when
-// the next route has none, so a page never carries another page's data.
-const JSONLD_ID = 'route-jsonld';
-function setJsonLd(data) {
-    const existing = document.getElementById(JSONLD_ID);
-    if (!data) { if (existing) existing.remove(); return; }
-    const el = existing || Object.assign(document.createElement('script'), { id: JSONLD_ID, type: 'application/ld+json' });
+// Structured data is baked into the static HTML by scripts/prerender-seo.mjs for
+// the prerendered routes. This keeps it correct on client-side navigations too,
+// and is the only source for a managed route that is not prerendered.
+function upsertJsonLd(data) {
+    const ID = 'route-seo-jsonld';
+    let el = document.getElementById(ID);
+    if (!data) {
+        if (el) el.remove();
+        return;
+    }
+    if (!el) {
+        el = document.createElement('script');
+        el.type = 'application/ld+json';
+        el.id = ID;
+        document.head.appendChild(el);
+    }
     el.textContent = JSON.stringify(data);
-    if (!existing) document.head.appendChild(el);
 }
+
 function upsertCanonical(href) {
     let el = document.head.querySelector('link[rel="canonical"]');
     if (!el) {
@@ -45,7 +54,7 @@ export default function RouteSeo() {
 
     useEffect(() => {
         const cfg = PAGE_SEO[pathname];
-        if (!cfg) { setJsonLd(null); return; } // not a managed page — leave the head as-is
+        if (!cfg) { upsertJsonLd(null); return; } // not a managed page: leave the head as-is, but drop the last page's structured data
 
         const title = cfg.title || DEFAULT_SEO.title;
         const description = cfg.description || DEFAULT_SEO.description;
@@ -74,7 +83,8 @@ export default function RouteSeo() {
         upsertMeta('name', 'twitter:title', title);
         upsertMeta('name', 'twitter:description', description);
         upsertMeta('name', 'twitter:image', ogImage);
-        setJsonLd(cfg.jsonLd || null);
+
+        upsertJsonLd(cfg.jsonLd);
     }, [pathname]);
 
     return null;
