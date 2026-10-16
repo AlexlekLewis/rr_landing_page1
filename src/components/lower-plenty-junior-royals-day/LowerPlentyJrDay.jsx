@@ -13,8 +13,9 @@ import { ROUTE, CTA, FORM_ANCHOR } from './lpJrDayData';
 // JUNIOR ROYALS CARNIVAL AT LOWER PLENTY — /lower-plenty-junior-royals-day
 //
 // A free morning for players aged 7 to 12: Sunday 25 October 2026,
-// 9:00am – 11:00am, Lower Plenty Cricket Club (South Oval, Montmorency Park,
-// Montmorency). 60 places; registrations close Friday 23 October, 9:00pm.
+// 9:00am – 11:00am, Lower Plenty Cricket Club (Lower Plenty Oval South,
+// Montmorency Park, Montmorency). FREE EVENT, said big (Alex, 16 Oct 2026).
+// 60 places; registrations close Friday 23 October, 9:00pm.
 // PUBLIC: in the Programs menu, What's On, the home list and the register
 // drawer (lpJrDayPromo.js). Every fact lives in lpJrDayData.js.
 //

@@ -328,7 +328,7 @@ const RegistrationForm = ({ places }) => {
                     <p className="text-white/55 text-[13px] font-medium leading-relaxed mb-5">
                         {returning
                             ? 'Your details from the last player are filled in. Check them, then add the next player above.'
-                            : 'Every player is under 18, so we use these details to tell you about any change to the morning. At pick-up we hand the player back to the person named here.'}
+                            : 'Every player is under 18, so we use these details to tell you about any change to the morning.'}
                     </p>
                     <div id="lp-parent_name" className="mb-4">
                         <FieldLabel htmlFor="lp-in-parent" required>Parent / Guardian name</FieldLabel>

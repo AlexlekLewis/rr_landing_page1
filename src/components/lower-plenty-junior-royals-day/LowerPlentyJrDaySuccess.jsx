@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { CheckCircle2, CalendarDays, MapPin, Navigation, UserPlus, ArrowRight } from 'lucide-react';
+import { CheckCircle2, CalendarDays, MapPin, UserPlus, ArrowRight } from 'lucide-react';
+import LPMap from './LPMap';
 import { fadeUp } from '../performance-squads/shared';
 import {
-    ROUTE, FORM_ANCHOR, SUCCESS, VENUE, ADDRESS_LINE, MAPS_URL, DATE_FULL, TIME, STORE, CONTACT_EMAIL, LOGOS, CLUB,
+    ROUTE, FORM_ANCHOR, SUCCESS, VENUE, ADDRESS_LINE, DATE_FULL, TIME, STORE, CONTACT_EMAIL, LOGOS, CLUB,
 } from './lpJrDayData';
 
 // /lower-plenty-junior-royals-day/success — where the form lands after a
@@ -56,14 +57,7 @@ const LowerPlentyJrDaySuccess = () => {
                             </span>
                         </li>
                     </ul>
-                    <a
-                        href={MAPS_URL}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-2 text-rr-blue hover:text-rr-pink text-sm font-black uppercase tracking-wider mt-4 ml-8 underline underline-offset-4"
-                    >
-                        <Navigation className="w-4 h-4" /> Get directions
-                    </a>
+                    <div className="mt-6"><LPMap compact /></div>
 
                     <h2 className="text-lg font-black uppercase mt-10 mb-4">Before Sunday</h2>
                     <ul className="space-y-3">

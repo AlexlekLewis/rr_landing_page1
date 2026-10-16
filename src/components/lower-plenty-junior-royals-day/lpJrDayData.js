@@ -12,16 +12,22 @@
 //   • 60 places. Registrations close Friday 23 October, 9:00pm.
 //   • Public page, at this address.
 //
-// The ground (16 Oct 2026, from the club's own website and the Diamond Valley
-// Cricket Association venue list): the club plays at the South Oval,
-// Montmorency Park, Park Lane, off Para Road, Montmorency VIC 3094. The map
-// pin is the South Oval as mapped on OpenStreetMap.
+// The ground. Its name is "Lower Plenty Oval South", in Montmorency Park
+// (Alex, 16 Oct 2026). Address from the club's website and the Diamond Valley
+// Cricket Association venue list: Park Lane, off Para Road, Montmorency VIC
+// 3094. The DVCA lists it as the club's main ground. The map pin is that oval
+// as mapped on OpenStreetMap ("South Oval"). Montmorency Park has two ovals,
+// so the page shows a map with the pin (Alex, 16 Oct 2026).
+//
+// Also confirmed by Alex, 16 Oct 2026: say FREE EVENT, big and bold; finish and
+// pick-up on the main oval; players bring their bat, gloves and all their
+// playing equipment if they have it.
 //
 // WORKING ASSUMPTIONS — written as plain fact on the page so it reads as
 // final, and listed for Alex in "Lower Plenty Junior Royals Day - Decisions
 // (16 Oct 2026).md". Change them here if he says otherwise:
-//   ARRIVE_BY, BRING, EQUIPMENT_LINE, PARENTS_STAY, WEATHER_LINE, the
-//   MORNING steps.
+//   ARRIVE_BY, the water/hat/runners part of BRING, PARENTS_STAY,
+//   WEATHER_LINE, the middle MORNING step.
 //
 // The 60-place cap and the 9:00pm close are enforced by the DATABASE
 // (lower_plenty_jr_day_limits() in the migration). CAPACITY and CLOSES_AT
@@ -59,12 +65,15 @@ export const CAPACITY = 60;
 export const CLOSES = 'Friday 23 October, 9:00pm';
 export const CLOSES_AT_ISO = '2026-10-23T21:00:00+11:00'; // must match the database
 export const PRICE_LINE = 'Free';
+export const FREE_LABEL = 'Free event'; // Alex, 16 Oct 2026: big, bold, impossible to miss
 
 // ── The ground ──
 export const CLUB = 'Lower Plenty Cricket Club';
 export const VENUE = {
     club: CLUB,
-    ground: 'South Oval, Montmorency Park',
+    oval: 'Lower Plenty Oval South',
+    park: 'Montmorency Park',
+    ground: 'Lower Plenty Oval South, Montmorency Park',
     street: 'Park Lane, off Para Road',
     suburb: 'Montmorency',
     state: 'VIC',
@@ -73,9 +82,10 @@ export const VENUE = {
     lat: -37.71735,
     lng: 145.11311,
 };
-export const VENUE_ONE_LINE = `${VENUE.club}, ${VENUE.ground}, ${VENUE.suburb}`;
 export const ADDRESS_LINE = `${VENUE.street}, ${VENUE.suburb} ${VENUE.state} ${VENUE.postcode}`;
 export const MAPS_URL = `https://www.google.com/maps/dir/?api=1&destination=${VENUE.lat},${VENUE.lng}`;
+// Satellite view with a pin on the oval, so the two ovals in the park can't be mixed up.
+export const MAP_EMBED = `https://maps.google.com/maps?q=${VENUE.lat},${VENUE.lng}&t=k&z=17&output=embed`;
 
 export const LOGOS = {
     academy: '/assets/Logo_White_Transparent.png',
@@ -94,12 +104,12 @@ export const HERO = {
         `A free morning of cricket for ${CLUB} juniors, and juniors from all around Melbourne, `
         + 'with the coaches from Rajasthan Royals Academy Melbourne.',
     // One line under the date, so cost and age are on the first phone screen.
-    keyLine: `Free · Players aged ${AGES_SPOKEN}`,
+    keyLine: `Players aged ${AGES_SPOKEN} · Nothing to pay`,
     facts: [
         { label: 'When', value: `${DAY}, ${TIME}` },
-        { label: 'Where', value: `${CLUB}, ${VENUE.ground}, ${VENUE.suburb}` },
+        { label: 'Where', value: `${VENUE.oval}, ${VENUE.park}, ${VENUE.suburb}` },
         { label: 'Who', value: `Players aged ${AGES_SPOKEN}, from any club or none` },
-        { label: 'Cost', value: `Free. ${CAPACITY} places.` },
+        { label: 'Cost', value: 'Free event — nothing to pay' },
     ],
     closes: `Registrations close ${CLOSES}, or sooner if all ${CAPACITY} places are taken.`,
     secondaryCta: 'What happens on the day',
@@ -115,7 +125,7 @@ export const MORNING = {
         {
             time: ARRIVE_BY,
             title: 'Arrive and sign in',
-            text: `Come to the ${VENUE.ground}. We sign your player in and you are ready to go.`,
+            text: `Come to ${VENUE.oval} in ${VENUE.park}. We sign your player in and you are ready to go.`,
         },
         {
             time: TIME,
@@ -125,13 +135,18 @@ export const MORNING = {
         {
             time: '11:00am',
             title: 'Finish and pick-up',
-            text: 'We hand each player back to the parent or guardian named on the form.',
+            text: `Pick up your player from the main oval, ${VENUE.oval}.`,
         },
     ],
 };
 
-export const BRING = ['A water bottle', 'A hat and sunscreen', 'Runners (sports shoes)'];
-export const EQUIPMENT_LINE = 'Bats, balls and all equipment are provided. Players can bring their own bat if they have one.';
+// Kit: Alex, 16 Oct 2026. Water, hat/sunscreen and runners are working assumptions.
+export const BRING = [
+    'Their bat, gloves and all their playing equipment, if they have it',
+    'A water bottle',
+    'A hat and sunscreen',
+    'Runners (sports shoes)',
+];
 export const PARENTS_STAY = 'A parent or guardian stays at the ground for the two hours.';
 export const WEATHER_LINE =
     'If the weather means we cannot play, we will email and text the parent or guardian by 7:30am on Sunday.';
@@ -153,22 +168,25 @@ export const WHERE = {
     eyebrow: 'Where',
     title: CLUB,
     lines: [
-        `${VENUE.ground}`,
+        `${VENUE.oval}, ${VENUE.park}`,
         ADDRESS_LINE,
     ],
-    note: `${CLUB} plays at the South Oval in Montmorency Park, in ${VENUE.region}. Turn into Park Lane from Para Road.`,
+    note:
+        `${VENUE.park} in ${VENUE.region} has two ovals. We are on ${VENUE.oval}, ${CLUB}'s `
+        + 'ground at the Park Lane end of the park: the pin on the map. Turn into Park Lane from Para Road.',
+    mapTitle: `Map: ${VENUE.oval}, ${VENUE.park}, ${VENUE.suburb}`,
     directions: 'Get directions',
 };
 
 // ── The form ──
 export const FORM_COPY = {
-    eyebrow: 'Free Registration',
+    eyebrow: 'Free Event · Free Registration',
     title: CTA,
     sub:
-        `It is free, and registering books your player's place. There are ${CAPACITY} places. `
+        `It is a free event, and registering books your player's place. There are ${CAPACITY} places. `
         + 'Registering brothers or sisters? Add one player at a time — your details stay filled in.',
     submit: 'Register My Player',
-    footnote: 'Free. Nothing to pay, now or on the day.',
+    footnote: 'Free event. Nothing to pay, now or on the day.',
 };
 
 export const CLUB_OPTIONS = [
@@ -216,11 +234,17 @@ export const DB_REFUSALS = {
 export const FAQS = [
     {
         q: 'Does it cost anything?',
-        a: 'No. The morning is free. There is nothing to pay, now or on the day.',
+        a: 'No. It is a free event. There is nothing to pay, now or on the day.',
     },
     {
         q: 'Does my player need to play at Lower Plenty?',
         a: `No. Players aged ${AGES_SPOKEN} from any club, or not at a club yet, are welcome.`,
+    },
+    {
+        q: 'What should my player bring?',
+        a:
+            'Their bat, gloves and all their playing equipment, if they have it. Also a water bottle, '
+            + 'a hat, sunscreen and runners (sports shoes).',
     },
     {
         q: 'Do parents stay?',
@@ -253,10 +277,11 @@ export const SUCCESS = {
     eyebrow: `${EVENT_NAME} · ${CLUB}`,
     title: "You're Registered",
     // {name} is the player's first name, read from this browser's session only.
-    lead: (name) => `${name ? `${name}'s` : 'Your player\'s'} place is booked for ${DAY}, ${TIME}. It is free — there is nothing to pay.`,
+    lead: (name) => `${name ? `${name}'s` : 'Your player\'s'} place is booked for ${DAY}, ${TIME}. It is a free event — there is nothing to pay.`,
     next: [
-        `Arrive by ${ARRIVE_BY} at the ${VENUE.ground}, ${VENUE.suburb}.`,
-        `Bring ${BRING.slice(0, -1).map((b) => b.toLowerCase()).join(', ')} and ${BRING[BRING.length - 1].toLowerCase()}.`,
+        `Arrive by ${ARRIVE_BY} at ${VENUE.oval}, ${VENUE.park}, ${VENUE.suburb}. Use the map below.`,
+        'Bring their bat, gloves and all their playing equipment, if they have it, plus a water bottle, a hat, sunscreen and runners.',
+        `Pick-up is at 11:00am on the main oval, ${VENUE.oval}.`,
         WEATHER_LINE,
     ],
     another: 'Register another player',

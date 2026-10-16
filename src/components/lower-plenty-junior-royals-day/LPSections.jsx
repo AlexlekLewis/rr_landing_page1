@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, Clock, MapPin, Navigation, Droplets, Sun, Footprints, Users, CloudRain } from 'lucide-react';
+import { ChevronDown, Clock, MapPin, Droplets, Sun, Footprints, Users, CloudRain, Backpack } from 'lucide-react';
 import { fadeUp } from '../performance-squads/shared';
+import LPMap from './LPMap';
 import {
-    MORNING, BRING, EQUIPMENT_LINE, PARENTS_STAY, WEATHER_LINE, WHO_RUNS_IT, WHERE, MAPS_URL,
+    MORNING, BRING, PARENTS_STAY, WEATHER_LINE, WHO_RUNS_IT, WHERE,
     FAQS, FAQ_HEADING,
 } from './lpJrDayData';
 
@@ -25,7 +26,7 @@ const Section = ({ tone = 'white', children }) => (
     </section>
 );
 
-const BRING_ICONS = [Droplets, Sun, Footprints];
+const BRING_ICONS = [Backpack, Droplets, Sun, Footprints];
 
 // ── The morning, step by step, then what to bring ──
 export const LPMorning = () => (
@@ -54,13 +55,12 @@ export const LPMorning = () => (
                     {BRING.map((b, i) => {
                         const Icon = BRING_ICONS[i] || Droplets;
                         return (
-                            <li key={b} className="flex items-center gap-3 text-rr-charcoal text-[15px] font-semibold">
+                            <li key={b} className={`flex items-start gap-3 text-[15px] leading-snug ${i === 0 ? 'text-rr-dark font-bold' : 'text-rr-charcoal font-semibold'}`}>
                                 <Icon className="w-5 h-5 text-rr-pink shrink-0" /> {b}
                             </li>
                         );
                     })}
                 </ul>
-                <p className="text-rr-charcoal text-[15px] font-medium leading-relaxed mt-4">{EQUIPMENT_LINE}</p>
             </div>
             <div>
                 <h3 className="text-lg font-black uppercase text-rr-dark mb-4">Parents and weather</h3>
@@ -75,33 +75,26 @@ export const LPMorning = () => (
     </Section>
 );
 
-// ── Where, and who runs it ──
+// ── Where (with the map: the park has two ovals), then who runs it ──
 export const LPWhere = () => (
     <Section tone="slate">
-        <div className="grid md:grid-cols-2 gap-12 md:gap-16">
+        <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-start">
             <div>
                 <Head eyebrow={WHERE.eyebrow} title={WHERE.title} />
                 <p className="flex items-start gap-3 text-rr-dark text-lg font-bold leading-snug -mt-4 mb-4">
                     <MapPin className="w-5 h-5 text-rr-pink shrink-0 mt-1" />
                     <span>{WHERE.lines.map((l) => <span key={l} className="block">{l}</span>)}</span>
                 </p>
-                <p className="text-rr-charcoal text-[15px] font-medium leading-relaxed mb-6">{WHERE.note}</p>
-                <a
-                    href={MAPS_URL}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 bg-rr-blue hover:bg-rr-medium-blue text-white font-black uppercase tracking-wider text-sm rounded-full px-6 py-3.5 transition-colors"
-                >
-                    <Navigation className="w-4 h-4" /> {WHERE.directions}
-                </a>
+                <p className="text-rr-charcoal text-[15px] font-medium leading-relaxed">{WHERE.note}</p>
             </div>
-            <div>
-                <Head eyebrow={WHO_RUNS_IT.eyebrow} title={WHO_RUNS_IT.title} />
-                <div className="space-y-4 -mt-4">
-                    {WHO_RUNS_IT.lines.map((l) => (
-                        <p key={l} className="text-rr-charcoal text-[15px] sm:text-base font-medium leading-relaxed">{l}</p>
-                    ))}
-                </div>
+            <LPMap />
+        </div>
+        <div className="border-t border-slate-200 mt-14 pt-12 max-w-3xl">
+            <Head eyebrow={WHO_RUNS_IT.eyebrow} title={WHO_RUNS_IT.title} />
+            <div className="space-y-4 -mt-4">
+                {WHO_RUNS_IT.lines.map((l) => (
+                    <p key={l} className="text-rr-charcoal text-[15px] sm:text-base font-medium leading-relaxed">{l}</p>
+                ))}
             </div>
         </div>
     </Section>

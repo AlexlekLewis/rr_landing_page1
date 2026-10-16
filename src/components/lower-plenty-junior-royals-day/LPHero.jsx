@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { fadeUp, scrollTo } from '../performance-squads/shared';
-import { HERO, CTA, EVENT_NAME, DAY, SHORT_DAY, TIME, LOGOS, HERO_PHOTO, CLUB, FORM_ANCHOR } from './lpJrDayData';
+import { HERO, CTA, EVENT_NAME, DAY, SHORT_DAY, TIME, LOGOS, HERO_PHOTO, CLUB, FORM_ANCHOR, FREE_LABEL } from './lpJrDayData';
 import { placesLine } from './usePlaces';
 
 // Dark photo hero, the one dark surface above the form (Alex, 12 Oct 2026:
@@ -40,6 +40,11 @@ const LPHero = ({ places }) => {
                         </div>
                     </div>
 
+                    {/* FREE EVENT, big and bold (Alex, 16 Oct 2026). A solid block on
+                        purpose: the one thing on the page that must not be missed. */}
+                    <p className="inline-block bg-rr-pink text-white font-black uppercase text-[1.9rem] sm:text-5xl leading-none tracking-wide px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg mb-4 sm:mb-5">
+                        {FREE_LABEL}
+                    </p>
                     <h1 className="text-[2.2rem] leading-[0.95] sm:text-6xl lg:text-7xl font-black uppercase tracking-tight mb-3 sm:mb-5">
                         {EVENT_NAME}
                     </h1>
