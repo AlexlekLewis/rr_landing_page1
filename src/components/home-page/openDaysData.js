@@ -18,9 +18,10 @@
 // but the next intake is real, so the row asks for interest instead of
 // announcing a closed door. Do not drop this page from the list.
 //
+// The Open Age T20 Trial and the junior sessions with Sid finished on 4–5 Oct
+// 2026 and came out on 16 Oct 2026 (ten days late — check the review dates).
+//
 // ORDER = nearest real deadline first. Review dates:
-//   Open Age T20 Trial — 6 Oct 2026, the day after the last session. REMOVE IT.
-//   Junior sessions    — 6 Oct 2026, the same day, for the same reason. REMOVE IT.
 //   Performance Squads — when the next intake has dates, put them in the tag
 //   Spin Club          — when Alex confirms the start date, put it in the tag
 //   Junior Royals T4   — 16 Dec 2026, the last Term 4 session
@@ -29,37 +30,16 @@
 // fires on arrival at the destination. Every line has to make sense to someone
 // who has never heard of us — say what the thing is, who it's for, and what
 // the next step is.
-import { ANNOUNCEMENT as SID_JUNIORS_ANNOUNCEMENT } from '../sid-juniors/sidJuniorsPromo';
-
 export const ANNOUNCEMENTS = [
     {
-        key: 'open-age-trial',
-        // Named for what it IS: the way into the Performance Squads (Alex, 26 Sep).
-        name: 'Performance Squads · Open Age Trial',
-        // The tag carries the two facts that decide whether a reader is eligible:
-        // the age bracket, and that it runs at BOTH centres. The ticker shows
-        // this line and nothing else.
-        // Cranbourne North closed as full on 4 Oct 2026 (Alex): Mickleham leads.
-        tag: 'Open age 16 to 25 · Mickleham Mon 5 Oct, bookings open · Cranbourne North Sun 4 Oct is full',
-        // Kept short: it is the small line under the tag in the modal. Sid is at
-        // both sessions (Alex, 26 Sep 2026). His full name, as on the posters,
-        // because the modal can be the first place a visitor meets him.
-        detail: 'Siddhartha Lahiri at both · Mickleham Mon 5 Oct, 5:30–7:00 PM, $30 · Cranbourne North session full',
-        href: '/performance-squads-open-trial',
-        badge: 'Book Mickleham',
-        highlight: true,
-    },
-    // Juniors aged 8 to 16: their own sessions with Sid at both centres, on the
-    // same two days as the trial above (Alex, 29 Sep 2026).
-    SID_JUNIORS_ANNOUNCEMENT,
-    {
-        // The program the trial above feeds. It says "register your interest"
-        // rather than "trials full": the September trials are done, and a closed
-        // door on the home page loses a player who would have waited.
+        // It says "register your interest" rather than "trials full": the
+        // September trials and the open age trial are done, and a closed door on
+        // the home page loses a player who would have waited.
         key: 'performance-squads',
         name: 'Performance Squads',
         tag: 'Our representative squads, players 10 to 25 · register your interest for the next intake',
-        detail: 'Mickleham & Cranbourne North · aged 16 to 25? Open trial at Mickleham, Mon 5 Oct',
+        // The promise the Performance Squads page itself makes (TrialsSection).
+        detail: 'Mickleham & Cranbourne North · we let you know as soon as the next trial dates are set',
         href: '/performance-squads',
         badge: 'Register interest',
     },
