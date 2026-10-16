@@ -11,25 +11,25 @@
 // junior-royals-day out of public/sitemap.xml.
 // ─────────────────────────────────────────────────────────────
 
-import { ROUTE, AGES, AGES_SPOKEN, SHORT_DAY, CLUB, EVENT_NAME, TIME, CLOSES } from './lpJrDayData';
+import { ROUTE, AGES, AGES_SPOKEN, SHORT_DAY, CLUB, EVENT_NAME, TIME, CLOSES, PRICE } from './lpJrDayData';
 
 export const LP_JR_DAY_ROUTE = ROUTE;
 
 export const PROGRAM_ROW = {
     navLabel: `${EVENT_NAME} · ${AGES}`,
-    navBadge: `Free Event · ${SHORT_DAY}`,
+    navBadge: `$${PRICE} · ${SHORT_DAY}`,
     heroLabel: `${EVENT_NAME} at Lower Plenty`,
-    heroBadge: `FREE EVENT · ages ${AGES_SPOKEN} · ${SHORT_DAY}, 9–11am`,
-    drawerUrgency: `FREE EVENT for ages ${AGES_SPOKEN} — ${CLUB}, ${SHORT_DAY}, 9–11am. Registrations close ${CLOSES}`,
+    heroBadge: `Ages ${AGES_SPOKEN} · ${SHORT_DAY}, 9–11am · $${PRICE}`,
+    drawerUrgency: `Ages ${AGES_SPOKEN} — ${CLUB}, ${SHORT_DAY}, 9–11am, $${PRICE} incl. GST. Registrations close ${CLOSES}`,
 };
 
 // The ticker shows only `name` and `tag`, so the tag says who, where, when, cost.
 export const ANNOUNCEMENT = {
     key: 'lower-plenty-junior-royals-day',
-    name: `FREE EVENT: ${EVENT_NAME} at ${CLUB}`,
-    tag: `Free event · ages ${AGES_SPOKEN} · ${SHORT_DAY}, ${TIME}`,
-    detail: `Lower Plenty Oval South, Montmorency Park · 60 places · registrations close ${CLOSES}`,
+    name: `${EVENT_NAME} at ${CLUB}`,
+    tag: `Ages ${AGES_SPOKEN} · ${SHORT_DAY}, ${TIME} · $${PRICE}`,
+    detail: `Lower Plenty Oval South, Montmorency Park · $${PRICE} incl. GST · 60 places · registrations close ${CLOSES}`,
     href: ROUTE,
-    badge: 'Free · Register',
+    badge: 'Secure your place',
     highlight: true,
 };

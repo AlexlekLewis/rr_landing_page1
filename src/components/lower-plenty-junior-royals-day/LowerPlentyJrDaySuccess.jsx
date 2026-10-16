@@ -1,29 +1,50 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate, Link } from 'react-router-dom';
+import { Navigate, Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CheckCircle2, CalendarDays, MapPin, UserPlus, ArrowRight } from 'lucide-react';
 import LPMap from './LPMap';
 import { fadeUp } from '../performance-squads/shared';
 import {
     ROUTE, FORM_ANCHOR, SUCCESS, VENUE, ADDRESS_LINE, DATE_FULL, TIME, STORE, CONTACT_EMAIL, LOGOS, CLUB,
+    PRICE, PROGRAM_NAME,
 } from './lpJrDayData';
 
-// /lower-plenty-junior-royals-day/success — where the form lands after a
-// registration is saved. It writes nothing. It only says "you're registered"
-// to a browser that has just registered (session storage set by the form);
-// anyone else is sent to the page, so it can't confirm a place that doesn't
-// exist. The player's first name comes from session storage, never the URL.
+// /lower-plenty-junior-royals-day/success — where Stripe sends a parent after
+// paying the $10 (the Payment Link's after-payment redirect adds
+// ?session_id={CHECKOUT_SESSION_ID}). It writes nothing: the webhook marks the
+// registration paid. Without a Stripe session id it refuses to say "payment
+// received" and sends the visitor to the page. The player's first name comes
+// from this browser's session storage, never the URL.
 
 const readDone = () => {
-    try { return window.sessionStorage.getItem(STORE.done); } catch { return null; }
+    try { return window.sessionStorage.getItem(STORE.done) || ''; } catch { return ''; }
 };
 
 const LowerPlentyJrDaySuccess = () => {
+    const [params] = useSearchParams();
+    const sessionId = params.get('session_id') || '';
+    const paid = sessionId.startsWith('cs_');
     const [name] = useState(readDone);
 
     useEffect(() => {
+        if (!paid) return;
+        // This payment is done: stop offering "Pay $10 now" for it.
+        try { window.sessionStorage.removeItem(STORE.pending); } catch { /* ignore */ }
+        // Meta Pixel Purchase, once per Stripe session. No personal data.
+        const key = `px_purchase_${sessionId}`;
+        try {
+            if (!window.sessionStorage.getItem(key)) {
+                window.sessionStorage.setItem(key, '1');
+                if (typeof window.fbq === 'function') {
+                    window.fbq('track', 'Purchase', { content_name: PROGRAM_NAME, value: PRICE, currency: 'AUD' }, { eventID: sessionId });
+                }
+            }
+        } catch { /* never block the page on tracking */ }
+    }, [paid, sessionId]);
+
+    useEffect(() => {
         window.scrollTo(0, 0);
-        document.title = "You're Registered | Junior Royals Carnival, Lower Plenty";
+        document.title = "Payment Received | Junior Royals Carnival, Lower Plenty";
         const meta = document.createElement('meta');
         meta.name = 'robots';
         meta.content = 'noindex,nofollow';
@@ -31,7 +52,7 @@ const LowerPlentyJrDaySuccess = () => {
         return () => { document.head.removeChild(meta); };
     }, []);
 
-    if (name === null) return <Navigate to={ROUTE} replace />;
+    if (!paid) return <Navigate to={ROUTE} replace />;
 
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans px-5 py-14 sm:py-20">

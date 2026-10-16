@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Camera, Mail } from 'lucide-react';
+import { ArrowRight, Camera, Mail, CreditCard, UserPlus } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { HONEYPOT_FIELD, isHoneypotTripped } from '../../lib/security/bot.js';
 import { fadeUp, SectionHeading, FieldError, inputClass, PSCheckbox } from '../performance-squads/shared';
 import {
     DB_TABLE, SUCCESS_ROUTE, MIN_AGE, MAX_AGE, AGES_SPOKEN, PROGRAM_NAME, CLUB, CONTACT_EMAIL,
     FORM_COPY, CLUB_OPTIONS, NOTES_FIELD, PHOTO_CONSENT, MARKETING_OPT_IN, STATE_COPY, DB_REFUSALS, STORE,
+    PRICE, REFUND_LINE, payUrlFor,
 } from './lpJrDayData';
 import { placesLine } from './usePlaces';
 
-// Registration for the free Junior Royals Carnival at Lower Plenty.
+// Registration for the Junior Royals Carnival at Lower Plenty: $10 per player.
 //
 // One row per player in lower_plenty_junior_royals_day_registrations. The id
 // is made here and the insert never chains .select(): the public role cannot
 // read the table back, so asking for the row would report a failure after it
 // was saved.
+//
+// Payment: once the row is saved, the parent goes to the Stripe Payment Link
+// in the SAME tab (the Instagram in-app browser silently refuses new tabs),
+// with the row id as client_reference_id and the email prefilled. The webhook
+// marks the row paid; Stripe sends the parent to /success. A family who comes
+// back without paying sees a "Pay $10 now" card instead of the form.
 //
 // The database refuses an insert once 60 places are taken (EVENT_FULL) or
 // after Friday 23 October, 9:00pm Melbourne (REGISTRATIONS_CLOSED). The form
@@ -24,7 +31,7 @@ import { placesLine } from './usePlaces';
 //
 // A brother or sister: after saving, the parent's details are kept in this
 // browser's session storage (never in the address bar), so the next player
-// only needs the player fields.
+// only needs the player fields. Each player pays separately.
 
 const THROTTLE_KEY = 'lpjrday_last_submit';
 const THROTTLE_MS = 15 * 1000;
@@ -127,10 +134,21 @@ const RegistrationForm = ({ places }) => {
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
     const [returning, setReturning] = useState(false);
+    // A registration saved in this browser that hasn't come back from Stripe paid.
+    const [pending, setPending] = useState(null);
 
     useEffect(() => {
-        try { setReturning(Boolean(window.sessionStorage.getItem(STORE.parent))); } catch { /* ignore */ }
+        try {
+            setReturning(Boolean(window.sessionStorage.getItem(STORE.parent)));
+            const p = JSON.parse(window.sessionStorage.getItem(STORE.pending) || 'null');
+            if (p && p.id) setPending(p);
+        } catch { /* ignore */ }
     }, []);
+
+    const registerDifferentPlayer = () => {
+        try { window.sessionStorage.removeItem(STORE.pending); } catch { /* ignore */ }
+        setPending(null);
+    };
 
     const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
     const toggle = (key) => setForm((f) => ({ ...f, [key]: !f[key] }));
@@ -154,17 +172,19 @@ const RegistrationForm = ({ places }) => {
         return next;
     };
 
-    const finish = (firstName) => {
+    const goToPayment = (bookingId, firstName, email) => {
         try {
             window.sessionStorage.setItem(STORE.done, firstName);
+            window.sessionStorage.setItem(STORE.pending, JSON.stringify({ id: bookingId, firstName, email }));
             window.sessionStorage.setItem(STORE.parent, JSON.stringify({
                 parent_name: form.parent_name.trim(),
                 email: form.email.trim(),
                 phone: form.phone.trim(),
                 suburb: form.suburb.trim(),
             }));
-        } catch { /* storage blocked — the success page still works without the name */ }
-        navigate(SUCCESS_ROUTE);
+        } catch { /* storage blocked — payment still works, the reminder card won't show */ }
+        // DO NOT open a new tab: same tab on purpose (see top).
+        window.location.assign(payUrlFor({ bookingId, email }));
     };
 
     const handleSubmit = async (e) => {
@@ -176,10 +196,11 @@ const RegistrationForm = ({ places }) => {
             return;
         }
         const firstName = form.player_first_name.trim();
+        const email = form.email.trim().toLowerCase();
 
-        // A filled honeypot means a script: same outcome on screen, nothing written.
+        // A filled honeypot means a script: nothing written, and it never reaches Stripe.
         if (isHoneypotTripped(form.company)) {
-            finish(firstName);
+            navigate(SUCCESS_ROUTE);
             return;
         }
         const held = throttleCheck();
@@ -190,9 +211,10 @@ const RegistrationForm = ({ places }) => {
 
         setErrors({});
         setSubmitting(true);
+        const bookingId = newId();
         try {
             const { error } = await supabase.from(DB_TABLE).insert([{
-                id: newId(),
+                id: bookingId,
                 player_first_name: firstName,
                 player_last_name: form.player_last_name.trim(),
                 player_age: Number(form.player_age.trim()),
@@ -201,7 +223,7 @@ const RegistrationForm = ({ places }) => {
                     : form.club_status === 'lower-plenty' ? CLUB : null,
                 notes: form.notes.trim() || null,
                 parent_name: form.parent_name.trim(),
-                email: form.email.trim().toLowerCase(),
+                email,
                 phone: form.phone.trim(),
                 suburb: form.suburb.trim() || null,
                 accept_terms: form.accept_terms,
@@ -215,14 +237,16 @@ const RegistrationForm = ({ places }) => {
             }]);
             if (error) throw error;
             throttleRecord();
-            // Meta Pixel: a registration was saved. Program and place only — never
-            // a name, email, phone or age.
+            // Meta Pixel: a registration was saved and is going to Stripe. Program,
+            // place and price only — never a name, email, phone or age.
             try {
                 if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
-                    window.fbq('track', 'Lead', { content_name: PROGRAM_NAME, content_category: 'Lower Plenty' });
+                    window.fbq('track', 'Lead', { content_name: PROGRAM_NAME, content_category: 'Lower Plenty', value: PRICE, currency: 'AUD' });
+                    window.fbq('track', 'InitiateCheckout', { content_name: PROGRAM_NAME, value: PRICE, currency: 'AUD' });
                 }
             } catch { /* never block the family on tracking */ }
-            finish(firstName);
+            goToPayment(bookingId, firstName, email);
+            return; // stay "saving" while the browser leaves for Stripe
         } catch (err) {
             console.error('Lower Plenty registration error:', err);
             const msg = String(err?.message || '');
@@ -232,10 +256,44 @@ const RegistrationForm = ({ places }) => {
                     ? DB_REFUSALS[refusal]
                     : `Something went wrong and nothing was saved. Please try again, or email ${CONTACT_EMAIL} and we will add the player by hand.`,
             });
-        } finally {
             setSubmitting(false);
         }
     };
+
+    // Came back from Stripe without paying (or opened the page again before
+    // paying): offer the payment for the saved registration instead of a fresh
+    // form, so the family doesn't register the same player twice.
+    if (pending) {
+        return (
+            <section className="bg-rr-dark text-white py-16 sm:py-24 px-5">
+                <div className="max-w-2xl mx-auto">
+                    <SectionHeading eyebrow={FORM_COPY.eyebrow} title="Finish Paying" />
+                    <div className="border border-rr-pink/50 rounded-2xl p-6 sm:p-9 text-center">
+                        <p className="text-white text-base sm:text-lg font-bold leading-relaxed mb-2">
+                            {pending.firstName ? `${pending.firstName}'s` : 'Your'} registration is saved, but the ${PRICE} payment hasn&apos;t gone through yet.
+                        </p>
+                        <p className="text-white/65 text-[15px] font-medium leading-relaxed mb-6">
+                            The place is booked once you pay. Already paid? Check your email for the Stripe receipt — you don&apos;t need to pay again.
+                        </p>
+                        <a
+                            href={payUrlFor({ bookingId: pending.id, email: pending.email })}
+                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
+                        >
+                            <CreditCard className="w-4 h-4" /> Pay ${PRICE} now
+                        </a>
+                        <p className="text-white/45 text-xs font-medium leading-relaxed mt-4">{REFUND_LINE}</p>
+                        <button
+                            type="button"
+                            onClick={registerDifferentPlayer}
+                            className="mt-7 inline-flex items-center justify-center gap-2 border-2 border-white/25 hover:border-rr-pink text-white font-black uppercase tracking-wider text-xs sm:text-sm rounded-full px-6 py-3 transition-colors"
+                        >
+                            <UserPlus className="w-4 h-4" /> Register a different player
+                        </button>
+                    </div>
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section className="bg-rr-dark text-white py-16 sm:py-24 px-5">
@@ -414,6 +472,7 @@ const RegistrationForm = ({ places }) => {
                         {!submitting && <ArrowRight className="w-4 h-4" />}
                     </button>
                     <p className="text-white/50 text-xs font-medium text-center mt-4">{FORM_COPY.footnote}</p>
+                    <p className="text-white/45 text-xs font-medium text-center mt-2 leading-relaxed">{REFUND_LINE}</p>
                 </motion.form>
             </div>
         </section>

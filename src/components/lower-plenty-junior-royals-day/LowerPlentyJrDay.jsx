@@ -7,15 +7,16 @@ import LPHero from './LPHero';
 import { LPMorning, LPWhere, LPFaq } from './LPSections';
 import LPForm from './LPForm';
 import usePlaces from './usePlaces';
-import { ROUTE, CTA, FORM_ANCHOR } from './lpJrDayData';
+import { ROUTE, CTA, CTA_WITH_PRICE, FORM_ANCHOR } from './lpJrDayData';
 
 // ─────────────────────────────────────────────────────────────
 // JUNIOR ROYALS CARNIVAL AT LOWER PLENTY — /lower-plenty-junior-royals-day
 //
-// A free morning for players aged 7 to 12: Sunday 25 October 2026,
+// A morning for players aged 7 to 12: Sunday 25 October 2026,
 // 9:00am – 11:00am, Lower Plenty Cricket Club (Lower Plenty Oval South,
-// Montmorency Park, Montmorency). FREE EVENT, said big (Alex, 16 Oct 2026).
-// 60 places; registrations close Friday 23 October, 9:00pm.
+// Montmorency Park, Montmorency). $10 per player incl. GST via a Stripe
+// Payment Link (Alex, 16 Oct 2026). 60 places; registrations close Friday
+// 23 October, 9:00pm.
 // PUBLIC: in the Programs menu, What's On, the home list and the register
 // drawer (lpJrDayPromo.js). Every fact lives in lpJrDayData.js.
 //
@@ -29,7 +30,6 @@ import { ROUTE, CTA, FORM_ANCHOR } from './lpJrDayData';
 //
 // The form section's id is "register-pay" because the shared phone sticky bar
 // (performance-squads/StickyCTA.jsx) hides itself once that element is passed.
-// Nothing on this page takes payment.
 // ─────────────────────────────────────────────────────────────
 
 const SECTIONS = ['hero', 'morning', 'where', FORM_ANCHOR, 'faq'];
@@ -64,7 +64,7 @@ const LowerPlentyJrDay = () => {
                 <div id="faq" className={ANCHOR}><LPFaq /></div>
             </main>
             <Footer />
-            {open && <StickyCTA label={`${CTA} · Free`} targetId={FORM_ANCHOR} />}
+            {open && <StickyCTA label={CTA_WITH_PRICE} targetId={FORM_ANCHOR} />}
         </div>
     );
 };

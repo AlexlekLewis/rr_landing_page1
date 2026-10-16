@@ -159,7 +159,12 @@ export const PROGRAM_PAYMENT_LINKS = {
   'sid-juniors': {},
   'tour-interest': {},
   'jr-term4': {},
-  'lp-jr-day': {},
+  // $10 entry fee, "Junior Royals Carnival Day Entry Fee" (plink_1UR3QNIo52UEA50yq6GKVkSy,
+  // Alex 16 Oct 2026). Source of truth: PAYMENT_LINK in
+  // src/components/lower-plenty-junior-royals-day/lpJrDayData.js.
+  'lp-jr-day': {
+    'https://buy.stripe.com/5kQdR99zHd4N0uUdI79Zm0W': { label: 'Entry fee', sessions: 1, feeCents: 1000 },
+  },
 };
 
 // $30 per player, per session. Source of truth is PAYMENT_OPTIONS in
@@ -174,7 +179,6 @@ const NO_PAYMENT_LINE = {
   'sid-juniors': 'Booking request — no payment has been taken and no place is held',
   'tour-interest': 'Nothing to pay — this is an expression of interest only',
   'jr-term4': 'Nothing to pay — an entry only. No place is held until we confirm one.',
-  'lp-jr-day': "Free — nothing to pay. This row IS the player's place (60 places in total).",
 };
 
 // Readable centre names for CELL values. Deliberately separate from anything
@@ -277,8 +281,10 @@ export function describeLinkHealth({ ids, inactive = [] }) {
   const byUrl = new Map([...ids.values()].map((m) => [m.url, m]));
   return [...configured.entries()].map(([url, meta]) => {
     const centre = CENTRE_NAMES[meta.centre] || meta.centre || meta.program;
-    const what = `${PROGRAM_LABELS[meta.program] || meta.program} — ${centre}, `
-      + `${meta.sessions} session${meta.sessions > 1 ? 's' : ''} ($${meta.sessions * TRIAL_FEE_CENTS / 100})`;
+    const what = meta.label
+      ? `${PROGRAM_LABELS[meta.program] || meta.program} — ${meta.label} ($${(meta.feeCents || 0) / 100})`
+      : `${PROGRAM_LABELS[meta.program] || meta.program} — ${centre}, `
+        + `${meta.sessions} session${meta.sessions > 1 ? 's' : ''} ($${meta.sessions * TRIAL_FEE_CENTS / 100})`;
     if (!byUrl.has(url)) return `${what}: BROKEN — Stripe has no payment link at this address.`;
     if (inactive.includes(url)) return `${what}: TURNED OFF in Stripe — it will not take a payment.`;
     return `${what}: working.`;
@@ -306,6 +312,7 @@ export async function fetchPayments(stripe, sinceUnix) {
         payerName: s.customer_details?.name || '',
         payerEmail: s.customer_details?.email || '',
         amountCents: s.amount_total ?? null,
+        clientReferenceId: s.client_reference_id || null,
         program: meta.program,
         centre: meta.centre,
         sessions: meta.sessions,
@@ -375,6 +382,36 @@ export function allocatePayments(records, payments) {
     if (new Date(p.paidAt) < new Date(prev.paidAt)) prev.paidAt = p.paidAt;
   }
 
+  return { byRecordId, recordByPayment };
+}
+
+// Lower Plenty carnival: the form sends the row id to Stripe as
+// client_reference_id, so a payment carrying one goes to exactly that row.
+// Payments without one (a link opened by hand) fall back to email matching.
+export function allocateLpJrDay(records, payments) {
+  const rows = (records || []).map((r) => ({
+    ...r, player_name: [r.player_first_name, r.player_last_name].filter(Boolean).join(' '),
+    program_type: 'Lower Plenty Junior Royals Day',
+  }));
+  const ids = new Set(rows.map((r) => r.id));
+  const byRecordId = new Map();
+  const recordByPayment = new Map();
+  const rest = [];
+  for (const p of payments || []) {
+    if (p.clientReferenceId && ids.has(p.clientReferenceId)) {
+      const r = rows.find((x) => x.id === p.clientReferenceId);
+      const prev = byRecordId.get(r.id);
+      byRecordId.set(r.id, prev
+        ? { ...prev, amountCents: prev.amountCents + (p.amountCents || 0), count: prev.count + 1 }
+        : { amountCents: p.amountCents || 0, paidAt: p.paidAt, count: 1 });
+      recordByPayment.set(p.sessionId, { id: r.id, player: r.player_name, program: r.program_type });
+    } else {
+      rest.push(p);
+    }
+  }
+  const byEmail = allocatePayments(rows.filter((r) => !byRecordId.has(r.id)), rest);
+  for (const [k, v] of byEmail.byRecordId) byRecordId.set(k, v);
+  for (const [k, v] of byEmail.recordByPayment) recordByPayment.set(k, v);
   return { byRecordId, recordByPayment };
 }
 
@@ -716,11 +753,14 @@ export const jrTerm4Row = (r) => ([
 ]);
 
 // ── Lower Plenty Junior Royals Day ──────────────────────────
-// The free Junior Royals Carnival at Lower Plenty Cricket Club, Sunday
-// 25 October 2026, 9:00–11:00am, players 7 to 12. Free, so a row is a place.
-// The database caps it at 60 and stops taking rows at 9pm Friday 23 October.
-// A family that cancels: set cancelled_at on their row in the database — the
-// row stays on this tab and says CANCELLED, and the place frees up.
+// The Junior Royals Carnival at Lower Plenty Cricket Club, Sunday 25 October
+// 2026, 9:00–11:00am, players 7 to 12, $10 per player (Alex, 16 Oct 2026).
+// A row is a registration; the place is booked once the $10 is paid. Paid comes
+// from the row itself (the webhook sets it via client_reference_id) or, as a
+// fallback, from Stripe matched by the row id, then by email.
+// The database caps it at 60 rows (paid or not) and stops taking rows at 9pm
+// Friday 23 October. A family that cancels, or never pays: set cancelled_at on
+// their row — it stays on this tab marked CANCELLED and the place frees up.
 export const LP_JR_DAY_HEADERS = [
   'Registration ID',
   'Registered (Melbourne)',
@@ -736,8 +776,10 @@ export const LP_JR_DAY_HEADERS = [
   'Photos OK (Academy)?',
   'Photos OK (Royals)?',
   'Wants Junior Royals News?',
+  'Paid $10?',
+  'Amount Paid (AUD)',
+  'Paid At (Melbourne)',
   'Place',
-  'Payment',
 ];
 
 const LP_JR_DAY_CLUB = {
@@ -752,10 +794,21 @@ export const lpJrDayClub = (r) => {
 
 const yesNo = (v) => (v ? 'Yes' : 'No');
 
-export const lpJrDayRow = (r) => ([
-  r.id || '',
-  asText(fmtMelb(r.created_at)),
-  r.player_first_name || '',
+export const LP_JR_DAY_FEE_CENTS = 1000;
+
+// Paid summary for one row: the webhook's columns first, Stripe matching second.
+export const lpJrDayPaid = (r, pay) => {
+  if (r.paid) return { amountCents: r.amount_paid_cents ?? LP_JR_DAY_FEE_CENTS, paidAt: r.paid_at };
+  if (pay) return { amountCents: pay.amountCents || 0, paidAt: pay.paidAt };
+  return null;
+};
+
+export const lpJrDayRow = (r, pay = null) => {
+  const paid = lpJrDayPaid(r, pay);
+  return [
+    r.id || '',
+    asText(fmtMelb(r.created_at)),
+    r.player_first_name || '',
   r.player_last_name || '',
   asText(r.player_age ?? ''),
   lpJrDayClub(r),
@@ -767,11 +820,16 @@ export const lpJrDayRow = (r) => ([
   yesNo(r.photo_consent_academy),
   yesNo(r.photo_consent_royals),
   yesNo(r.marketing_opt_in),
+  paid ? 'Yes' : 'NOT PAID',
+  paid ? asText(money(paid.amountCents)) : '',
+  paid && paid.paidAt ? asText(fmtMelb(paid.paidAt)) : '',
   r.cancelled_at
     ? `CANCELLED ${fmtMelb(r.cancelled_at)} — place given back`
-    : 'Booked',
-  NO_PAYMENT_LINE['lp-jr-day'],
-]);
+    : paid
+      ? 'Booked (paid)'
+      : 'Registered, NOT paid — holding one of the 60 places. Chase, or cancel to free it.',
+  ];
+};
 
 // ── Payments (Stripe) ───────────────────────────────────────
 // Every payment on a configured link, INCLUDING the ones we could not attach to
@@ -863,14 +921,16 @@ export const guideLines = (linkLines = [], counts = {}) => {
     ['  actually booked. Monday was offered to measure whether a second night is worth'],
     ['  adding — picking it does not mean a Monday session exists.'],
     [''],
-    [`"${PROGRAM_LABELS['lp-jr-day']}" — the free Junior Royals Carnival at Lower Plenty`],
-    ['  Cricket Club, Sunday 25 October 2026, 9:00 to 11:00am, players aged 7 to 12, from'],
-    ['  rramelbourne.com/lower-plenty-junior-royals-day. It is FREE, so every row here is a'],
-    ['  player with a place. 60 places; the form stops itself when they are gone and at 9pm'],
-    [`  on Friday 23 October. Currently ${counts.lpJrDay ?? 0} registered (cancelled ones not counted).`],
-    ['  A family cancelling: mark their row cancelled in the database (cancelled_at) so the'],
-    ['  place frees up — deleting the row here does nothing. Read the Notes column before'],
-    ['  the day: it holds medical details.'],
+    [`"${PROGRAM_LABELS['lp-jr-day']}" — the Junior Royals Carnival at Lower Plenty Cricket`],
+    ['  Club, Sunday 25 October 2026, 9:00 to 11:00am, players aged 7 to 12, from'],
+    ['  rramelbourne.com/lower-plenty-junior-royals-day. $10 per player (incl. GST), paid by'],
+    ['  card through Stripe straight after the form. A player\'s place is booked once the'],
+    ['  "Paid $10?" column says Yes. 60 places; the form stops itself when 60 people have'],
+    [`  registered and at 9pm on Friday 23 October. Currently ${counts.lpJrDay ?? 0} registered`],
+    [`  (cancelled ones not counted), ${counts.lpJrDayPaid ?? 0} of them paid.`],
+    ['  An unpaid row still holds one of the 60 places. Chase the family, or cancel the row'],
+    ['  in the database (cancelled_at) so the place frees up — deleting it here does nothing.'],
+    ['  Read the Notes column before the day: it holds medical details.'],
     [''],
     [`"${PROGRAM_LABELS['tour-interest']}" — players who want to go on an India tour, from`],
     ['  rramelbourne.com/tours. An expression of interest, not a booking: nothing has'],
@@ -916,9 +976,10 @@ export const guideLines = (linkLines = [], counts = {}) => {
     [''],
     ['HOW "PAID" IS WORKED OUT'],
     [''],
-    ['Only the Open Trial charges anything online. Spin Club, Junior Royals Term 4, the'],
-    ['Lower Plenty Junior Royals Day and Tour Interest take no money at all, and the'],
-    ['junior sessions with Sid are booking requests. The Open Trial fee is $30 per player, per'],
+    ['The Open Trial and the Lower Plenty Junior Royals Day charge online; Spin Club,'],
+    ['Junior Royals Term 4 and Tour Interest take no money at all, and the junior sessions'],
+    ['with Sid are booking requests. The Lower Plenty $10 is matched to the exact'],
+    ['registration it was paid for. The Open Trial fee is $30 per player, per'],
     ['session, taken through a Stripe payment link. Stripe does not tell our website'],
     ['when someone pays, so this sheet asks Stripe directly and matches a payment to a'],
     ['player BY EMAIL ADDRESS.'],
@@ -1042,7 +1103,7 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
 
   // ── Stripe, from a month before the earliest record on a paying program.
   // Comfortably covers anyone who paid before finishing the form.
-  const payingRecords = [...(squadLeads.data || []), ...(sidBookings.data || [])];
+  const payingRecords = [...(squadLeads.data || []), ...(sidBookings.data || []), ...(lpJrDay.data || [])];
   const earliest = payingRecords.length
     ? Math.min(...payingRecords.map((r) => new Date(r.created_at).getTime()))
     : Date.now();
@@ -1060,9 +1121,10 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
   const byProgram = (key) => payments.filter((p) => p.program === key);
   const openTrialAlloc = allocatePayments(squadLeads.data, byProgram('open-trial'));
   const sidAlloc = allocatePayments(sidBookings.data, byProgram('sid-juniors'));
+  const lpAlloc = allocateLpJrDay(lpJrDay.data, byProgram('lp-jr-day'));
 
-  const paidById = new Map([...openTrialAlloc.byRecordId, ...sidAlloc.byRecordId]);
-  const matchByPayment = new Map([...openTrialAlloc.recordByPayment, ...sidAlloc.recordByPayment]);
+  const paidById = new Map([...openTrialAlloc.byRecordId, ...sidAlloc.byRecordId, ...lpAlloc.byRecordId]);
+  const matchByPayment = new Map([...openTrialAlloc.recordByPayment, ...sidAlloc.recordByPayment, ...lpAlloc.recordByPayment]);
 
   // ── Build each tab.
   const openTrialLeads = (squadLeads.data || []).filter((r) => r.program_type === OPEN_TRIAL_PROGRAM);
@@ -1091,7 +1153,7 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
     ...(lpJrDay.missing ? [] : [{
       key: 'lp-jr-day',
       headers: LP_JR_DAY_HEADERS,
-      rows: (lpJrDay.data || []).map(lpJrDayRow),
+      rows: (lpJrDay.data || []).map((r) => lpJrDayRow(r, paidById.get(r.id) || null)),
     }]),
     {
       key: 'tour-interest',
@@ -1134,6 +1196,7 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
       .filter((r) => !isTourEntryInWindow(r.created_at)).length,
     jrTerm4: (jrTerm4.data || []).length,
     lpJrDay: (lpJrDay.data || []).filter((r) => !r.cancelled_at).length,
+    lpJrDayPaid: (lpJrDay.data || []).filter((r) => !r.cancelled_at && lpJrDayPaid(r, paidById.get(r.id) || null)).length,
     jrTerm4Closed: (jrTerm4.data || [])
       .filter((r) => !JR_TERM4_CENTRES[r.preferred_centre]).length,
   });

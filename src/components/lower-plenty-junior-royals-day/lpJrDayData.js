@@ -5,7 +5,9 @@
 // success page and the promo rows (lpJrDayPromo.js) comes from here.
 //
 // CONFIRMED by Alex, 16 Oct 2026:
-//   • Free. Sunday 25 October 2026, 9:00am – 11:00am.
+//   • Sunday 25 October 2026, 9:00am – 11:00am.
+//   • $10 per player (Alex, 16 Oct 2026; was free until then). Paid through the
+//     Stripe Payment Link "Junior Royals Carnival Day Entry Fee" (PAYMENT_LINK).
 //   • Lower Plenty Cricket Club, on Para Road. Players aged 7 to 12.
 //   • For Lower Plenty juniors and juniors from all around Melbourne to spend
 //     time with the Rajasthan Royals Academy Melbourne coaches.
@@ -19,15 +21,16 @@
 // as mapped on OpenStreetMap ("South Oval"). Montmorency Park has two ovals,
 // so the page shows a map with the pin (Alex, 16 Oct 2026).
 //
-// Also confirmed by Alex, 16 Oct 2026: say FREE EVENT, big and bold; finish and
-// pick-up on the main oval; players bring their bat, gloves and all their
-// playing equipment if they have it.
+// Also confirmed by Alex, 16 Oct 2026: finish and pick-up on the main oval;
+// players bring their bat, gloves and all their playing equipment if they have
+// it. (He had asked for FREE EVENT big and bold; that came out when the $10
+// fee was set the same day — a paid event can't be called free.)
 //
 // WORKING ASSUMPTIONS — written as plain fact on the page so it reads as
 // final, and listed for Alex in "Lower Plenty Junior Royals Day - Decisions
 // (16 Oct 2026).md". Change them here if he says otherwise:
 //   ARRIVE_BY, the water/hat/runners part of BRING, PARENTS_STAY,
-//   WEATHER_LINE, the middle MORNING step.
+//   WEATHER_LINE, REFUND_LINE, the middle MORNING step.
 //
 // The 60-place cap and the 9:00pm close are enforced by the DATABASE
 // (lower_plenty_jr_day_limits() in the migration). CAPACITY and CLOSES_AT
@@ -39,7 +42,8 @@
 
 export const ROUTE = '/lower-plenty-junior-royals-day';
 export const SUCCESS_ROUTE = '/lower-plenty-junior-royals-day/success';
-export const FORM_ANCHOR = 'register-pay'; // the id the shared sticky bar watches; no payment here
+export const PAY_ROUTE = '/lower-plenty-junior-royals-day/pay';
+export const FORM_ANCHOR = 'register-pay'; // the id the shared sticky bar watches
 export const CONTACT_EMAIL = 'info@rramelbourne.com';
 
 export const DB_TABLE = 'lower_plenty_junior_royals_day_registrations';
@@ -64,8 +68,31 @@ export const END_ISO = '2026-10-25T11:00:00+11:00';
 export const CAPACITY = 60;
 export const CLOSES = 'Friday 23 October, 9:00pm';
 export const CLOSES_AT_ISO = '2026-10-23T21:00:00+11:00'; // must match the database
-export const PRICE_LINE = 'Free';
-export const FREE_LABEL = 'Free event'; // Alex, 16 Oct 2026: big, bold, impossible to miss
+// ── Price and payment (Alex, 16 Oct 2026) ──
+// $10 per player, GST included (Stripe price is tax-inclusive, automatic tax
+// off, so the family pays exactly $10). One payment per player.
+export const PRICE = 10;
+export const PRICE_LABEL = '$10 incl. GST';
+export const PRICE_LINE = `$${PRICE} per player, incl. GST`;
+// Stripe Payment Link "Junior Royals Carnival Day Entry Fee", created 16 Oct 2026
+// (plink_1UR3QNIo52UEA50yq6GKVkSy). After payment Stripe redirects to
+// /lower-plenty-junior-royals-day/success?session_id={CHECKOUT_SESSION_ID}.
+// The webhook maps this link to the carnival and marks the row paid using the
+// client_reference_id the form adds (api/stripe-webhook.js).
+export const PAYMENT_LINK = 'https://buy.stripe.com/5kQdR99zHd4N0uUdI79Zm0W';
+export const payUrlFor = ({ bookingId, email } = {}) => {
+    const q = new URLSearchParams();
+    if (bookingId) q.set('client_reference_id', bookingId);
+    if (email) q.set('prefilled_email', email);
+    const qs = q.toString();
+    return qs ? `${PAYMENT_LINK}?${qs}` : PAYMENT_LINK;
+};
+// ACL: change-of-mind refunds can be refused, but never the consumer guarantees;
+// if we cancel, the family gets their money back. ASSUMPTION — Alex to confirm.
+export const REFUND_LINE =
+    `If we cancel the morning (for example because of the weather), we refund the $${PRICE}. `
+    + 'If you change your mind, the fee is not refundable. This does not affect your rights '
+    + 'under the Australian Consumer Law.';
 
 // ── The ground ──
 export const CLUB = 'Lower Plenty Cricket Club';
@@ -94,22 +121,25 @@ export const LOGOS = {
 export const HERO_PHOTO = '/assets/little-crickets-hero.jpeg';
 
 // ── What's on the page ──
-export const CTA = 'Register Your Player';
+// Paid and the place is booked once payment goes through → "Secure Your Place",
+// price beside it (language.md §5).
+export const CTA = 'Secure Your Place';
+export const CTA_WITH_PRICE = `Secure Your Place · $${PRICE}`;
 
 export const HERO = {
     kicker: 'Rajasthan Royals Academy · Melbourne',
     withClub: `At ${CLUB}`,
     // Alex's own purpose for the morning (16 Oct 2026), in plain words.
     why:
-        `A free morning of cricket for ${CLUB} juniors, and juniors from all around Melbourne, `
+        `A morning of cricket for ${CLUB} juniors, and juniors from all around Melbourne, `
         + 'with the coaches from Rajasthan Royals Academy Melbourne.',
     // One line under the date, so cost and age are on the first phone screen.
-    keyLine: `Players aged ${AGES_SPOKEN} · Nothing to pay`,
+    keyLine: `Players aged ${AGES_SPOKEN} · $${PRICE} incl. GST`,
     facts: [
         { label: 'When', value: `${DAY}, ${TIME}` },
         { label: 'Where', value: `${VENUE.oval}, ${VENUE.park}, ${VENUE.suburb}` },
         { label: 'Who', value: `Players aged ${AGES_SPOKEN}, from any club or none` },
-        { label: 'Cost', value: 'Free event — nothing to pay' },
+        { label: 'Cost', value: `$${PRICE} per player, incl. GST — paid when you register` },
     ],
     closes: `Registrations close ${CLOSES}, or sooner if all ${CAPACITY} places are taken.`,
     secondaryCta: 'What happens on the day',
@@ -149,7 +179,7 @@ export const BRING = [
 ];
 export const PARENTS_STAY = 'A parent or guardian stays at the ground for the two hours.';
 export const WEATHER_LINE =
-    'If the weather means we cannot play, we will email and text the parent or guardian by 7:30am on Sunday.';
+    `If the weather means we cannot play, we will email and text the parent or guardian by 7:30am on Sunday, and refund the $${PRICE}.`;
 
 // The Royals, for a first-time reader. Facts from the verified network list in
 // sid-juniors/sidJuniorsData.js (rajasthanroyals.com, 2025–26).
@@ -180,13 +210,14 @@ export const WHERE = {
 
 // ── The form ──
 export const FORM_COPY = {
-    eyebrow: 'Free Event · Free Registration',
+    eyebrow: `Registration · $${PRICE} per player`,
     title: CTA,
     sub:
-        `It is a free event, and registering books your player's place. There are ${CAPACITY} places. `
+        `Enter your player's details, then pay $${PRICE} (incl. GST) by card on the next step. `
+        + `Your player's place is booked once the payment goes through. There are ${CAPACITY} places. `
         + 'Registering brothers or sisters? Add one player at a time — your details stay filled in.',
-    submit: 'Register My Player',
-    footnote: 'Free event. Nothing to pay, now or on the day.',
+    submit: `Continue to payment · $${PRICE}`,
+    footnote: `Payments are processed securely by Stripe. The place is booked once the $${PRICE} payment goes through.`,
 };
 
 export const CLUB_OPTIONS = [
@@ -233,8 +264,10 @@ export const DB_REFUSALS = {
 // ── FAQ ──
 export const FAQS = [
     {
-        q: 'Does it cost anything?',
-        a: 'No. It is a free event. There is nothing to pay, now or on the day.',
+        q: 'How much is it, and when do I pay?',
+        a:
+            `$${PRICE} per player, including GST. You pay by card straight after you fill in the form, `
+            + "and your player's place is booked once the payment goes through.",
     },
     {
         q: 'Does my player need to play at Lower Plenty?',
@@ -262,7 +295,13 @@ export const FAQS = [
     },
     {
         q: 'What if we can no longer come?',
-        a: `Please email ${CONTACT_EMAIL}, so we can give the place to another player.`,
+        a: `Please email ${CONTACT_EMAIL}, so we can give the place to another player. ${REFUND_LINE}`,
+    },
+    {
+        q: 'I registered but didn\'t finish paying. What now?',
+        a:
+            'Your place is not booked until the payment goes through. Come back to this page on the same '
+            + `phone or computer and tap "Pay $${PRICE} now", or email ${CONTACT_EMAIL} and we will send you the payment link.`,
     },
 ];
 
@@ -275,9 +314,9 @@ export const FAQ_HEADING = {
 // ── Success page ──
 export const SUCCESS = {
     eyebrow: `${EVENT_NAME} · ${CLUB}`,
-    title: "You're Registered",
+    title: 'Payment Received',
     // {name} is the player's first name, read from this browser's session only.
-    lead: (name) => `${name ? `${name}'s` : 'Your player\'s'} place is booked for ${DAY}, ${TIME}. It is a free event — there is nothing to pay.`,
+    lead: (name) => `Thanks — the $${PRICE} payment went through, so ${name ? `${name}'s` : 'your player\'s'} place is booked for ${DAY}, ${TIME}. Stripe emails you a receipt.`,
     next: [
         `Arrive by ${ARRIVE_BY} at ${VENUE.oval}, ${VENUE.park}, ${VENUE.suburb}. Use the map below.`,
         'Bring their bat, gloves and all their playing equipment, if they have it, plus a water bottle, a hat, sunscreen and runners.',
@@ -289,6 +328,18 @@ export const SUCCESS = {
 
 // Session storage keys (this browser only — nothing personal goes in a URL).
 export const STORE = {
-    done: 'lpjrday_registered', // player's first name, set after a successful save
+    done: 'lpjrday_registered', // player's first name, set when the row is saved
     parent: 'lpjrday_parent', // parent details, so "register another player" is quick
+    pending: 'lpjrday_pending', // { id, firstName, email } saved but not yet paid
+};
+
+// ── Pay page (/pay?booking=<id>) — for a family who registered but didn't finish paying.
+export const PAY_PAGE = {
+    eyebrow: `${EVENT_NAME} · ${CLUB}`,
+    title: 'Finish Paying',
+    body:
+        `Your registration is saved. Pay $${PRICE} (incl. GST) to book the place for ${DAY}, ${TIME}, `
+        + `at ${VENUE.oval}, ${VENUE.park}.`,
+    button: `Pay $${PRICE} now`,
+    footnote: 'Payments are processed securely by Stripe.',
 };

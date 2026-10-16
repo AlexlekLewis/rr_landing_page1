@@ -26,6 +26,7 @@ import {
   LP_JR_DAY_HEADERS,
   lpJrDayRow,
   lpJrDayClub,
+  allocateLpJrDay,
   isTourEntryInWindow,
   allocatePayments,
   describeLinkHealth,
@@ -387,7 +388,8 @@ describe('payments tab', () => {
 // nowhere, and the player quietly gives up. Silence is the dangerous outcome.
 // ------------------------------------------------------------
 describe('describeLinkHealth', () => {
-  const urls = Object.keys(PROGRAM_PAYMENT_LINKS['open-trial']);
+  // Every configured link, across every program that takes money.
+  const urls = Object.values(PROGRAM_PAYMENT_LINKS).flatMap((links) => Object.keys(links));
   const live = (list) => ({
     ids: new Map(list.map((u, i) => [`plink_${i}`, { url: u, program: 'open-trial', centre: 'south-east-melbourne', sessions: 1 }])),
     inactive: [],
@@ -594,9 +596,38 @@ describe('tour cutoff', () => {
 describe('lower plenty junior royals day', () => {
   const col = (row, name) => row[LP_JR_DAY_HEADERS.indexOf(name)];
 
-  it('says plainly that it is free and the row is the place', () => {
-    expect(col(lpJrDayRow(lpReg()), 'Payment')).toMatch(/^Free/);
-    expect(col(lpJrDayRow(lpReg()), 'Place')).toBe('Booked');
+  it('has its one $10 Stripe link configured', () => {
+    expect(Object.keys(PROGRAM_PAYMENT_LINKS['lp-jr-day'])).toEqual(['https://buy.stripe.com/5kQdR99zHd4N0uUdI79Zm0W']);
+  });
+
+  it('an unpaid row says so, and that it still holds a place', () => {
+    const row = lpJrDayRow(lpReg());
+    expect(col(row, 'Paid $10?')).toBe('NOT PAID');
+    expect(col(row, 'Place')).toMatch(/NOT paid/);
+  });
+
+  it('a row the webhook marked paid reads as booked', () => {
+    const row = lpJrDayRow(lpReg({ paid: true, amount_paid_cents: 1000, paid_at: '2026-10-17T01:00:00.000Z' }));
+    expect(col(row, 'Paid $10?')).toBe('Yes');
+    expect(col(row, 'Place')).toBe('Booked (paid)');
+    expect(String(col(row, 'Amount Paid (AUD)'))).toContain('10');
+  });
+
+  it('matches a Stripe payment to the exact row by client_reference_id, not email', () => {
+    const a = lpReg({ id: 'a', email: 'same@example.com', created_at: '2026-10-17T00:00:00.000Z' });
+    const b = lpReg({ id: 'b', email: 'same@example.com', created_at: '2026-10-17T00:05:00.000Z' });
+    const pay = payment({ sessionId: 'cs_1', payerEmail: 'same@example.com', amountCents: 1000, paidAt: '2026-10-17T00:10:00.000Z', program: 'lp-jr-day', clientReferenceId: 'a' });
+    const { byRecordId } = allocateLpJrDay([a, b], [pay]);
+    expect(byRecordId.has('a')).toBe(true);
+    expect(byRecordId.has('b')).toBe(false);
+  });
+
+  it('falls back to email when a payment has no reference', () => {
+    const a = lpReg({ id: 'a', email: 'Parent@Example.com' });
+    const pay = payment({ sessionId: 'cs_2', payerEmail: 'parent@example.com', amountCents: 1000, paidAt: '2026-10-18T00:00:00.000Z', program: 'lp-jr-day', clientReferenceId: null });
+    const { byRecordId } = allocateLpJrDay([a], [pay]);
+    expect(byRecordId.get('a').amountCents).toBe(1000);
+    expect(col(lpJrDayRow(a, byRecordId.get('a')), 'Paid $10?')).toBe('Yes');
   });
 
   it('keeps the leading zero on the phone number', () => {

@@ -79,12 +79,13 @@ const OpenAgeTrial = React.lazy(() => import('./components/open-age-trial/OpenAg
 // redirects back to the booking page.
 const SidJuniors = React.lazy(() => import('./components/sid-juniors/SidJuniors'));
 const SidJuniorsSuccess = React.lazy(() => import('./components/sid-juniors/SidJuniorsSuccess'));
-// Junior Royals Carnival at Lower Plenty — free, Sun 25 Oct 2026, 9–11am, ages 7–12.
+// Junior Royals Carnival at Lower Plenty — $10 (Stripe Payment Link), Sun 25 Oct 2026, 9–11am, ages 7–12.
 // PUBLIC (menu, What's On, home list, drawer via lpJrDayPromo.js). Facts:
 // components/lower-plenty-junior-royals-day/lpJrDayData.js. Form → lower_plenty_junior_royals_day_registrations
 // (60-place cap and Fri 23 Oct 9pm close enforced in the database).
 const LowerPlentyJrDay = React.lazy(() => import('./components/lower-plenty-junior-royals-day/LowerPlentyJrDay'));
 const LowerPlentyJrDaySuccess = React.lazy(() => import('./components/lower-plenty-junior-royals-day/LowerPlentyJrDaySuccess'));
+const LowerPlentyJrDayPay = React.lazy(() => import('./components/lower-plenty-junior-royals-day/LowerPlentyJrDayPay'));
 // Match Registration — reusable match-day registration + payment page. Match-specific
 // detail lives in src/components/match-registration/matchConfig.js, so the next block
 // of matches is a config swap, not a new page. HIDDEN: noindex, direct URL only.
@@ -270,10 +271,11 @@ function App() {
         <Route path="/sid-juniors" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><SidJuniors /></React.Suspense>} />
         <Route path="/sid-juniors/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><SidJuniorsSuccess /></React.Suspense>} />
 
-        {/* Junior Royals Carnival at Lower Plenty Cricket Club, Sun 25 Oct 2026 — free, ages 7–12.
+        {/* Junior Royals Carnival at Lower Plenty Cricket Club, Sun 25 Oct 2026 — $10, ages 7–12.
             Public. REVIEW 26 OCT 2026: take it off the promo surfaces, then close or retire. */}
         <Route path="/lower-plenty-junior-royals-day" element={<React.Suspense fallback={<div className="min-h-screen bg-white" />}><LowerPlentyJrDay /></React.Suspense>} />
         <Route path="/lower-plenty-junior-royals-day/success" element={<React.Suspense fallback={<div className="min-h-screen bg-white" />}><LowerPlentyJrDaySuccess /></React.Suspense>} />
+        <Route path="/lower-plenty-junior-royals-day/pay" element={<React.Suspense fallback={<div className="min-h-screen bg-white" />}><LowerPlentyJrDayPay /></React.Suspense>} />
 
         {/* Match Registration — reusable match-day registration + payment. HIDDEN:
             noindex, not in nav or sitemap, direct URL only. Currently serving the
