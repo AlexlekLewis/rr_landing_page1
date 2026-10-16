@@ -3,6 +3,10 @@ import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { BANNER, SID_JUNIORS_ROUTE } from '../sid-juniors/sidJuniorsPromo';
 
+// NOT RENDERED since 16 Oct 2026: the open age trial and the junior sessions
+// it promoted finished on 4–5 Oct. Every line below is about those events.
+// Rewrite all of it before putting <HomeTopBanner /> back in HomePage.jsx.
+//
 // The full-width banner directly under the nav on the home page — the single
 // loudest slot on the site. It promotes ONE thing at a time, and that thing has
 // to be currently open. Was the School Holiday Camp until 26 Sep 2026, when the

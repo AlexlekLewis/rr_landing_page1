@@ -15,7 +15,6 @@ import HomeFinalCTA from './HomeFinalCTA';
 import HomeStickyCTA from './HomeStickyCTA';
 import RegisterDrawer from './RegisterDrawer';
 import PartnerStack from '../power-game/PartnerStack';
-import HomeTopBanner from './HomeTopBanner';
 import OpenDaysModal from './OpenDaysModal';
 import OpenDaysTicket from './OpenDaysTicket';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
@@ -54,7 +53,10 @@ const HomePage = () => {
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
             <Navbar variant="home" onRegisterClick={openDrawer} />
-            <HomeTopBanner />
+            {/* Clears the fixed nav, so the ticker below is not hidden under it.
+                HomeTopBanner used to do this; it came off 16 Oct 2026 when the
+                open age trial it promoted had finished. */}
+            <div className="pt-20 md:pt-28 bg-rr-dark" />
             {/* "What's On" ticker — sits under the nav once the modal is closed */}
             <OpenDaysTicket show={openDaysTicket && !openDaysModal} onOpen={reopenOpenDays} onDismiss={dismissTicket} />
 

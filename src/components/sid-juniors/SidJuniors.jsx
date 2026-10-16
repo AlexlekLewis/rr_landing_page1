@@ -8,8 +8,11 @@ import SidJuniorsForm from './SidJuniorsForm';
 import FAQSection from '../performance-squads/FAQSection';
 import StickyCTA from '../performance-squads/StickyCTA';
 import PartnerStack from '../power-game/PartnerStack';
+import FinishedEventPage from '../FinishedEventPage';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
-import { ROUTE, CTA, PAGE_STATE, FAQS, FAQ_HEADING } from './sidJuniorsData';
+import {
+    ROUTE, CTA, PAGE_STATE, FAQS, FAQ_HEADING, FINISHED, CONTACT_EMAIL, SESSION_VIEW,
+} from './sidJuniorsData';
 
 // ─────────────────────────────────────────────────────────────
 // JUNIOR SESSIONS WITH SIDDHARTHA LAHIRI — /sid-juniors
@@ -73,4 +76,21 @@ const SidJuniors = () => {
     );
 };
 
-export default SidJuniors;
+// Once every session's date has passed (PAGE_STATE 'finished'), the address
+// stays live for old emails and links but shows only that the sessions are
+// over and what to do instead. No booking, no payment.
+const SidJuniorsFinished = () => (
+    <FinishedEventPage
+        route={ROUTE}
+        navVariant="performance-squads"
+        copy={FINISHED}
+        email={CONTACT_EMAIL}
+        sessions={SESSION_VIEW.map((s) => ({
+            key: s.key, place: s.centreName, when: `${s.dateLabel}, ${s.timeLabel}`, venue: s.venue,
+        }))}
+    />
+);
+
+const SidJuniorsPage = () => (PAGE_STATE === 'finished' ? <SidJuniorsFinished /> : <SidJuniors />);
+
+export default SidJuniorsPage;
