@@ -37,6 +37,7 @@ import MicklehamLaunch from './components/mickleham-launch/MicklehamLaunch';
 import Reviews from './components/reviews/Reviews';
 import ProgramFeedback from './components/program-feedback/ProgramFeedback';
 import SpinClub from './components/spin-club/SpinClub';
+import PowerLeague from './components/power-league/PowerLeague';
 import PostHogPageviewTracker from './components/PostHogPageviewTracker';
 
 // DNA Profile — lazy-loaded so it never impacts landing page bundle size
@@ -240,6 +241,7 @@ function App() {
             `applications` with program_type 'Spin Club' and takes no payment.
             ANNOUNCED 26 Sep 2026: in the nav, the home-page modal and the sitemap. */}
         <Route path="/spin-club" element={<SpinClub />} />
+        <Route path="/power-league" element={<PowerLeague />} />
 
         {/* Power Game Masterclass — RETIRED 2026 (program removed from schedule).
             Routes intentionally fall through to the 404 catch-all so the page is not
