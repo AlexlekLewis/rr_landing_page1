@@ -49,8 +49,12 @@ const LPHero = ({ places }) => {
                         {' · '}<span className="whitespace-nowrap">{TIME}</span>
                     </p>
                     <p className="text-base sm:text-xl font-black text-white mt-1 mb-3 sm:mb-5">{HERO.keyLine}</p>
-                    <p className="text-white/85 text-[15px] sm:text-lg font-medium leading-relaxed mb-6 max-w-2xl">
+                    <p className="text-white/85 text-[15px] sm:text-lg font-medium leading-relaxed max-w-2xl">
                         {HERO.why}
+                    </p>
+                    {/* What follows the carnival (Alex, 16 Oct 2026). */}
+                    <p className="text-white text-[15px] sm:text-lg font-bold leading-relaxed mt-2 mb-6 max-w-2xl">
+                        {HERO.then}
                     </p>
 
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">

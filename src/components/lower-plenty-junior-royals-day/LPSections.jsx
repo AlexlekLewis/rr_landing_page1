@@ -32,7 +32,7 @@ const BRING_ICONS = [Backpack, Droplets, Sun, Footprints];
 export const LPMorning = () => (
     <Section>
         <Head eyebrow={MORNING.eyebrow} title={MORNING.title} sub={MORNING.sub} />
-        <ol className="grid md:grid-cols-3 gap-8 md:gap-10 mb-14">
+        <ol className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 mb-14">
             {MORNING.steps.map((s, i) => (
                 <motion.li
                     key={s.title}

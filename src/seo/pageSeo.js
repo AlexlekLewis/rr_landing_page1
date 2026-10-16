@@ -48,7 +48,7 @@ export const PAGE_SEO = {
   '/lower-plenty-junior-royals-day': {
     title: 'Junior Cricket Carnival, Lower Plenty Melbourne | Royals',
     description:
-      'Junior Royals Carnival for players aged 7 to 12: Sunday 25 October, 9–11am, Lower Plenty Oval South, Montmorency Park, Melbourne. Rajasthan Royals Academy coaches. $10 incl. GST, 60 places.',
+      'Junior Royals Carnival for players aged 7 to 12: Sunday 25 October, 9–11am, Lower Plenty Oval South, Montmorency Park, Melbourne. Rajasthan Royals Academy coaches, then Power League matches. $10 incl. GST.',
     ogImage: '/assets/lower-plenty/lower-plenty-jr-day-og.png',
   },
   '/spin-club': {

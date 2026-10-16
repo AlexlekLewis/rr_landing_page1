@@ -28,7 +28,7 @@ export const ANNOUNCEMENT = {
     key: 'lower-plenty-junior-royals-day',
     name: `${EVENT_NAME} at ${CLUB}`,
     tag: `Ages ${AGES_SPOKEN} · ${SHORT_DAY}, ${TIME} · $${PRICE}`,
-    detail: `Lower Plenty Oval South, Montmorency Park · $${PRICE} incl. GST · 60 places · registrations close ${CLOSES}`,
+    detail: `Lower Plenty Oval South, Montmorency Park · $${PRICE} incl. GST · then stay for the Power League matches · registrations close ${CLOSES}`,
     href: ROUTE,
     badge: 'Secure your place',
     highlight: true,

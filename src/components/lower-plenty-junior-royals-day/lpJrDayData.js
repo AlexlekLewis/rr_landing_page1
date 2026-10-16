@@ -26,6 +26,15 @@
 // it. (He had asked for FREE EVENT big and bold; that came out when the $10
 // fee was set the same day — a paid event can't be called free.)
 //
+// Power League (Alex, 16 Oct 2026): the carnival is followed by Power League
+// matches on Lower Plenty's ground AND Montmorency's ground; "stay and watch our
+// Power League players play off against each other" is his line. Montmorency
+// Cricket Club's ground is also Montmorency Park, Para Road (DVCA venue list),
+// so the two grounds are the park's two ovals. Its oval's own name is not
+// confirmed, so the page calls it "Montmorency Cricket Club's ground". No start
+// time is given: the page says "after the carnival". The match day itself is
+// /power-league (power-league/plOptions.js).
+//
 // WORKING ASSUMPTIONS — written as plain fact on the page so it reads as
 // final, and listed for Alex in "Lower Plenty Junior Royals Day - Decisions
 // (16 Oct 2026).md". Change them here if he says otherwise:
@@ -120,6 +129,21 @@ export const LOGOS = {
 };
 export const HERO_PHOTO = '/assets/little-crickets-hero.jpeg';
 
+// ── Power League matches after the carnival (Alex, 16 Oct 2026) ──
+export const POWER_LEAGUE = {
+    when: 'After the carnival',
+    title: 'Stay for the Power League',
+    // Alex's words.
+    line: 'Stay and watch our Power League players play off against each other.',
+    explain:
+        'The Power League is T20 cricket between our Performance Squads, the Academy\'s '
+        + 'representative squads for players aged 10 to 25.',
+    grounds:
+        `The matches are on ${VENUE.oval} and on Montmorency Cricket Club's ground, the other `
+        + `oval in ${VENUE.park}, a short walk away.`,
+    short: "on Lower Plenty's and Montmorency's grounds",
+};
+
 // ── What's on the page ──
 // Paid and the place is booked once payment goes through → "Secure Your Place",
 // price beside it (language.md §5).
@@ -135,11 +159,14 @@ export const HERO = {
         + 'with the coaches from Rajasthan Royals Academy Melbourne.',
     // One line under the date, so cost and age are on the first phone screen.
     keyLine: `Players aged ${AGES_SPOKEN} · $${PRICE} incl. GST`,
+    // Shown under the why line, so the first screen says what follows.
+    then: `Then stay and watch our Power League players play off against each other, ${POWER_LEAGUE.short}.`,
     facts: [
         { label: 'When', value: `${DAY}, ${TIME}` },
         { label: 'Where', value: `${VENUE.oval}, ${VENUE.park}, ${VENUE.suburb}` },
         { label: 'Who', value: `Players aged ${AGES_SPOKEN}, from any club or none` },
         { label: 'Cost', value: `$${PRICE} per player, incl. GST — paid when you register` },
+        { label: 'After', value: `Power League T20 matches ${POWER_LEAGUE.short} — stay and watch` },
     ],
     closes: `Registrations close ${CLOSES}, or sooner if all ${CAPACITY} places are taken.`,
     secondaryCta: 'What happens on the day',
@@ -166,6 +193,11 @@ export const MORNING = {
             time: '11:00am',
             title: 'Finish and pick-up',
             text: `Pick up your player from the main oval, ${VENUE.oval}.`,
+        },
+        {
+            time: POWER_LEAGUE.when,
+            title: POWER_LEAGUE.title,
+            text: `${POWER_LEAGUE.line} ${POWER_LEAGUE.grounds}`,
         },
     ],
 };
@@ -202,8 +234,9 @@ export const WHERE = {
         ADDRESS_LINE,
     ],
     note:
-        `${VENUE.park} in ${VENUE.region} has two ovals. We are on ${VENUE.oval}, ${CLUB}'s `
-        + 'ground at the Park Lane end of the park: the pin on the map. Turn into Park Lane from Para Road.',
+        `${VENUE.park} in ${VENUE.region} has two ovals. The carnival is on ${VENUE.oval}, ${CLUB}'s `
+        + 'ground at the Park Lane end of the park: the pin on the map. Turn into Park Lane from Para Road. '
+        + "The Power League matches afterwards are on both ovals: this one and Montmorency Cricket Club's ground.",
     mapTitle: `Map: ${VENUE.oval}, ${VENUE.park}, ${VENUE.suburb}`,
     directions: 'Get directions',
 };
@@ -270,6 +303,10 @@ export const FAQS = [
             + "and your player's place is booked once the payment goes through.",
     },
     {
+        q: 'Can we stay after the carnival?',
+        a: `Yes. ${POWER_LEAGUE.line} ${POWER_LEAGUE.explain} ${POWER_LEAGUE.grounds}`,
+    },
+    {
         q: 'Does my player need to play at Lower Plenty?',
         a: `No. Players aged ${AGES_SPOKEN} from any club, or not at a club yet, are welcome.`,
     },
@@ -321,6 +358,7 @@ export const SUCCESS = {
         `Arrive by ${ARRIVE_BY} at ${VENUE.oval}, ${VENUE.park}, ${VENUE.suburb}. Use the map below.`,
         'Bring their bat, gloves and all their playing equipment, if they have it, plus a water bottle, a hat, sunscreen and runners.',
         `Pick-up is at 11:00am on the main oval, ${VENUE.oval}.`,
+        `Then stay and watch our Power League players play off against each other, ${POWER_LEAGUE.short}.`,
         WEATHER_LINE,
     ],
     another: 'Register another player',
