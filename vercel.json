@@ -260,6 +260,14 @@
       "destination": "/sid-juniors/index.html"
     },
     {
+      "source": "/lower-plenty-junior-royals-day",
+      "destination": "/lower-plenty-junior-royals-day/index.html"
+    },
+    {
+      "source": "/lower-plenty-junior-royals-day/",
+      "destination": "/lower-plenty-junior-royals-day/index.html"
+    },
+    {
       "source": "/junior-royals",
       "destination": "/junior-royals/index.html"
     },

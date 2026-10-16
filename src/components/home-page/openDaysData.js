@@ -30,8 +30,12 @@
 // who has never heard of us — say what the thing is, who it's for, and what
 // the next step is.
 import { ANNOUNCEMENT as SID_JUNIORS_ANNOUNCEMENT } from '../sid-juniors/sidJuniorsPromo';
+import { ANNOUNCEMENT as LP_JR_DAY_ANNOUNCEMENT } from '../lower-plenty-junior-royals-day/lpJrDayPromo';
 
 export const ANNOUNCEMENTS = [
+    // Free Junior Royals Carnival at Lower Plenty, Sun 25 Oct 2026 (Alex, 16 Oct
+    // 2026). Nearest real deadline (Fri 23 Oct, 9pm). REVIEW 26 OCT 2026: remove.
+    LP_JR_DAY_ANNOUNCEMENT,
     {
         key: 'open-age-trial',
         // Named for what it IS: the way into the Performance Squads (Alex, 26 Sep).
