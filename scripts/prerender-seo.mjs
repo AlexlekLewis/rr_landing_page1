@@ -75,9 +75,10 @@ const headFor = (route, cfg, site, fallback) => {
 
     // Structured data goes in the static HTML on purpose. Google renders JS and
     // would find a client-injected block, but most answer-engine crawlers do not,
-    // and being citable by them is the point.
+    // and being citable by them is the point. The id matches the one RouteSeo.jsx
+    // updates, so after the app loads the page still has one block, not two.
     const jsonLd = cfg.jsonLd
-        ? `  <script type="application/ld+json">${JSON.stringify(cfg.jsonLd).replace(/</g, '\\u003c')}</script>`
+        ? `  <script type="application/ld+json" id="route-seo-jsonld">${JSON.stringify(cfg.jsonLd).replace(/</g, '\\u003c')}</script>`
         : '';
 
     return [

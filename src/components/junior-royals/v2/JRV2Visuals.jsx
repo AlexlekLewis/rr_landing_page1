@@ -1,0 +1,100 @@
+import React from 'react';
+import { ArrowDown } from 'lucide-react';
+import { SESSION, BLOCK, CUES } from './jrV2Facts';
+
+// ─────────────────────────────────────────────────────────────
+// Visual explainers for /junior-royals version 2 (experience-design brief, 7 Oct 2026).
+// Each should make sense in about 5 seconds on a phone (402px median width).
+// - Colour key, the same everywhere: pink = batting, blue = bowling, dark = games.
+//   Colour is never the only signal: every segment also has a word.
+// - Pink is only used for big numbers, headings (19px+ bold), lines and shapes —
+//   small pink text fails contrast. Blue sits on white only (it vanishes on dark).
+// - Lines, numbers and ticks; no boxes, drop-shadows or pills.
+// - Live text and inline SVG, never images, so phone translation and screen
+//   readers work.
+// ─────────────────────────────────────────────────────────────
+
+export const KIND = {
+    bat: { bg: 'bg-rr-pink', border: 'border-rr-pink', label: 'Batting' },
+    bowl: { bg: 'bg-rr-blue', border: 'border-rr-blue', label: 'Bowling' },
+    game: { bg: 'bg-rr-dark', border: 'border-rr-dark', label: 'Games' },
+    break: { bg: 'bg-slate-400', border: 'border-slate-400', label: 'Break' },
+};
+
+// 2a ── One night: the three numbers that matter.
+export const HourNumbers = ({ items }) => (
+    <dl className="grid grid-cols-3 border-y border-slate-300 divide-x divide-slate-300">
+        {items.map((x) => (
+            <div key={x.label} className="py-5 px-2 text-center">
+                <dt className="sr-only">{x.label}</dt>
+                <dd>
+                    <span className="block text-4xl sm:text-5xl font-black text-rr-dark leading-none">{x.n}<span className="text-lg ml-0.5">{x.unit}</span></span>
+                    <span className={`block mx-auto mt-2 w-10 h-1 ${KIND[x.kind].bg}`} aria-hidden="true" />
+                    <span className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-rr-charcoal mt-2">{x.label}</span>
+                </dd>
+            </div>
+        ))}
+    </dl>
+);
+
+// 2b ── One night: the hour to scale (a vertical ribbon on phones).
+export const HourRibbon = () => (
+    <figure aria-label="The 60-minute plan for every session">
+        <ol className="space-y-0">
+            {SESSION.map((s) => (
+                <li key={s.from} className="grid grid-cols-[3.25rem_8px_1fr] gap-3">
+                    <span className="text-sm font-black text-rr-dark tabular-nums pt-0.5">{s.from}–{s.to}</span>
+                    <span className={`${KIND[s.kind].bg} rounded-sm`} style={{ minHeight: `${(s.to - s.from) * 7}px` }} aria-hidden="true" />
+                    <span className="pb-3 text-[15px] leading-snug">
+                        <span className="font-bold text-rr-dark">{s.name}.</span>{' '}
+                        <span className="text-rr-charcoal font-medium">{s.note}</span>
+                    </span>
+                </li>
+            ))}
+        </ol>
+    </figure>
+);
+
+// 2c ── A lane from above: the net, the stumps, the coach and the players.
+export const LaneDots = ({ players, label }) => (
+    <figure className="flex flex-col items-center">
+        <svg viewBox="0 0 120 220" className="w-24 h-44" role="img" aria-label={`${label}: one lane with ${players} players and a coach`}>
+            <rect x="6" y="6" width="108" height="208" rx="6" fill="none" stroke="#64748B" strokeWidth="2" strokeDasharray="4 4" />
+            {[52, 60, 68].map((x) => <line key={x} x1={x} y1="16" x2={x} y2="30" stroke="#111921" strokeWidth="3" />)}
+            <circle cx="60" cy="70" r="9" fill="none" stroke="#E11F8F" strokeWidth="4" />
+            {Array.from({ length: players }).map((_, i) => {
+                const cols = 2, row = Math.floor(i / cols), col = i % cols;
+                return <circle key={i} cx={42 + col * 36} cy={115 + row * 30} r="9" fill="#111921" />;
+            })}
+        </svg>
+        <figcaption className="text-center mt-2">
+            <span className="block text-sm font-black text-rr-dark">{label}</span>
+            <span className="block text-sm font-medium text-rr-charcoal">{players} players and their coach</span>
+        </figcaption>
+    </figure>
+);
+
+// 3 ── How a skill sticks: Learn it → Own it → Use it.
+export const SkillSteps = () => (
+    <ol className="grid sm:grid-cols-3 gap-6">
+        {BLOCK.map((b, i) => (
+            <li key={b.week} className="border-t-4 border-rr-pink pt-4">
+                <p className="text-xs font-black uppercase tracking-widest text-rr-charcoal">Week {b.week}</p>
+                <p className="text-2xl font-black uppercase text-rr-dark mt-1">{b.name}</p>
+                <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed mt-2">{b.does}</p>
+                {i < BLOCK.length - 1 && <ArrowDown className="sm:hidden mt-3 w-5 h-5 text-rr-pink" aria-hidden="true" />}
+            </li>
+        ))}
+    </ol>
+);
+
+export const Cues = () => (
+    <ul className="grid sm:grid-cols-3 gap-5">
+        {CUES.map((c) => (
+            <li key={c.cue} className="border-l-4 border-rr-pink pl-4">
+                <p className="text-2xl font-black text-rr-dark leading-tight">“{c.cue}”</p>
+                <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed mt-1">{c.means}</p>
+            </li>
+        ))}
+    </ul>
+);

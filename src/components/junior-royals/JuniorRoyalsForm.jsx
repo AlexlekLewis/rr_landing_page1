@@ -1,0 +1,241 @@
+import React, { useState } from 'react';
+import { ArrowRight, Check } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
+import { HONEYPOT_FIELD, isHoneypotTripped } from '../../lib/security/bot.js';
+import { Link } from 'react-router-dom';
+import { MOCKUP, CENTRES, FORM, FIRST_SESSION, CTA, AGES, AGES_TEXT, OLDER_LINE, PS_ROUTE, PAY_CHOICES } from './juniorRoyalsData';
+
+// ─────────────────────────────────────────────────────────────
+// Junior Royals — Register Your Interest form.
+//
+// Writes to public.junior_royals_interest (one row = a family who wants a Junior
+// Royals membership; NO payment taken, NO place held). The table does not exist
+// yet: while MOCKUP is true the form validates and shows the success state but
+// saves nothing.
+//
+// LESSON (27 Sep – 5 Oct 2026): the old Term 4 form sent a centre value the
+// database did not allow and every Cranbourne North entry was lost. So:
+//   • the table has NO list-of-values rules on choice columns (length caps only);
+//   • every value this form can send is test-inserted (and rolled back) before
+//     ship and by the hourly rra-form-watchdog;
+//   • the centre values come from CENTRES in juniorRoyalsData.js — the one list.
+// ─────────────────────────────────────────────────────────────
+
+const TABLE = 'junior_royals_interest';
+
+const Honeypot = ({ value, onChange }) => (
+    <input
+        type="text"
+        name={HONEYPOT_FIELD}
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="absolute left-[-9999px] top-0 w-px h-px opacity-0"
+        value={value}
+        onChange={onChange}
+    />
+);
+
+const collectUtm = () => {
+    const p = new URLSearchParams(window.location.search);
+    return {
+        utm_source: p.get('utm_source') || null,
+        utm_medium: p.get('utm_medium') || null,
+        utm_campaign: p.get('utm_campaign') || null,
+    };
+};
+
+const inputClass = (err) =>
+    `w-full bg-white border ${err ? 'border-rr-pink' : 'border-slate-300'} rounded-xl px-4 py-3.5 text-rr-dark text-[15px] focus:outline-none focus:border-rr-pink transition-colors`;
+
+const Label = ({ children, htmlFor }) => (
+    <label htmlFor={htmlFor} className="block text-xs font-black uppercase tracking-widest text-rr-dark mb-2">
+        {children} <span className="text-rr-pink">*</span>
+    </label>
+);
+
+// Age in whole years on the later of today and the first session — the age the
+// player will be when they start. Junior Royals is 7–12 (Alex, 5 Oct 2026).
+export const ageAtStart = (dob, today = new Date()) => {
+    const start = new Date(Math.max(today.getTime(), new Date(`${FIRST_SESSION.iso}T00:00:00`).getTime()));
+    const d = new Date(`${dob}T00:00:00`);
+    if (Number.isNaN(d.getTime())) return null;
+    let age = start.getFullYear() - d.getFullYear();
+    const m = start.getMonth() - d.getMonth();
+    if (m < 0 || (m === 0 && start.getDate() < d.getDate())) age -= 1;
+    return age;
+};
+
+const EMPTY = { parent_name: '', email: '', phone: '', player_name: '', player_dob: '', centre: '', payment_choice: '' };
+
+const JuniorRoyalsForm = () => {
+    const [form, setForm] = useState(EMPTY);
+    const [errors, setErrors] = useState({});
+    const [honeypot, setHoneypot] = useState('');
+    const [submitting, setSubmitting] = useState(false);
+    const [done, setDone] = useState(false);
+
+    const set = (e) => {
+        const { name, value } = e.target;
+        setForm((f) => ({ ...f, [name]: value }));
+        if (errors[name]) setErrors((x) => ({ ...x, [name]: undefined }));
+    };
+
+    const validate = () => {
+        const e = {};
+        if (!form.parent_name.trim()) e.parent_name = 'Please enter your name.';
+        if (!/\S+@\S+\.\S+/.test(form.email)) e.email = 'Please enter a valid email.';
+        if (form.phone.replace(/\D/g, '').length < 8) e.phone = 'Please enter a phone number.';
+        if (!form.player_name.trim()) e.player_name = "Please enter your player's name.";
+        if (!form.player_dob) e.player_dob = "Please enter your player's date of birth.";
+        else {
+            const age = ageAtStart(form.player_dob);
+            if (age === null) e.player_dob = "Please enter your player's date of birth.";
+            else if (age > AGES.max) e.player_dob = 'older';
+            else if (age < AGES.min) e.player_dob = `Junior Royals is for players aged ${AGES_TEXT}.`;
+        }
+        if (!CENTRES.some((c) => c.value === form.centre)) e.centre = 'Please choose a centre.';
+        if (!PAY_CHOICES.some((c) => c.value === form.payment_choice)) e.payment_choice = 'Please choose one.';
+        setErrors(e);
+        return Object.keys(e).length === 0;
+    };
+
+    const submit = async (ev) => {
+        ev.preventDefault();
+        if (!validate()) return;
+        if (isHoneypotTripped(honeypot)) { setDone(true); return; }
+        setSubmitting(true);
+        try {
+            if (!MOCKUP) {
+                const { error } = await supabase.from(TABLE).insert([{
+                    id: crypto.randomUUID(),
+                    parent_name: form.parent_name.trim(),
+                    email: form.email.trim(),
+                    phone: form.phone.trim(),
+                    player_name: form.player_name.trim(),
+                    player_dob: form.player_dob,
+                    centre: form.centre,
+                    payment_choice: form.payment_choice,
+                    page_referrer: document.referrer || null,
+                    ...collectUtm(),
+                }]);
+                if (error) throw error;
+                try {
+                    window.fbq?.('track', 'Lead', { content_name: 'Junior Royals Membership', content_category: form.centre });
+                } catch { /* analytics never blocks a sign-up */ }
+            }
+            setDone(true);
+        } catch (err) {
+            console.error(err);
+            setErrors({ form: `Something went wrong and your details were not saved. Please try again, or email ${FORM.contact} and we'll add you.` });
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    if (done) {
+        const centre = CENTRES.find((c) => c.value === form.centre);
+        return (
+            <div className="border-l-4 border-rr-pink pl-6 py-2">
+                <h3 className="text-2xl font-black uppercase text-white mb-3">{FORM.done.title}</h3>
+                <p className="text-white/80 font-medium leading-relaxed mb-3">{FORM.done.body}</p>
+                {centre && (
+                    <p className="text-white/80 font-medium leading-relaxed">
+                        Centre: <span className="text-white font-bold">{centre.venue}, {centre.suburb}</span>
+                    </p>
+                )}
+                {MOCKUP && <p className="mt-4 text-sm font-bold text-yellow-300">{FORM.mockupNote}</p>}
+            </div>
+        );
+    }
+
+    return (
+        <form onSubmit={submit} noValidate className="relative bg-white rounded-2xl p-6 sm:p-8">
+            <Honeypot value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
+            {MOCKUP && <p className="mb-5 text-sm font-bold text-rr-dark bg-yellow-300 rounded-lg px-3 py-2">{FORM.mockupNote}</p>}
+
+            <div className="grid sm:grid-cols-2 gap-5">
+                <div className="sm:col-span-2">
+                    <Label htmlFor="parent_name">Parent / guardian name</Label>
+                    <input id="parent_name" name="parent_name" autoComplete="name" value={form.parent_name} onChange={set} className={inputClass(errors.parent_name)} />
+                    {errors.parent_name && <p className="text-rr-pink text-xs font-bold mt-1">{errors.parent_name}</p>}
+                </div>
+                <div>
+                    <Label htmlFor="email">Email</Label>
+                    <input id="email" name="email" type="email" autoComplete="email" value={form.email} onChange={set} className={inputClass(errors.email)} />
+                    {errors.email && <p className="text-rr-pink text-xs font-bold mt-1">{errors.email}</p>}
+                </div>
+                <div>
+                    <Label htmlFor="phone">Mobile</Label>
+                    <input id="phone" name="phone" type="tel" autoComplete="tel" value={form.phone} onChange={set} className={inputClass(errors.phone)} />
+                    {errors.phone && <p className="text-rr-pink text-xs font-bold mt-1">{errors.phone}</p>}
+                </div>
+                <div>
+                    <Label htmlFor="player_name">Player's full name</Label>
+                    <input id="player_name" name="player_name" value={form.player_name} onChange={set} className={inputClass(errors.player_name)} />
+                    {errors.player_name && <p className="text-rr-pink text-xs font-bold mt-1">{errors.player_name}</p>}
+                </div>
+                <div>
+                    <Label htmlFor="player_dob">Player's date of birth</Label>
+                    <input id="player_dob" name="player_dob" type="date" value={form.player_dob} onChange={set} className={inputClass(errors.player_dob)} />
+                    {errors.player_dob === 'older' ? (
+                        <p className="text-rr-pink text-xs font-bold mt-1">
+                            Junior Royals is for players aged {AGES_TEXT}. {OLDER_LINE.body}{' '}
+                            <Link to={PS_ROUTE} className="underline underline-offset-2">{OLDER_LINE.link}</Link>
+                        </p>
+                    ) : errors.player_dob && <p className="text-rr-pink text-xs font-bold mt-1">{errors.player_dob}</p>}
+                </div>
+                <fieldset className="sm:col-span-2">
+                    <legend className="block text-xs font-black uppercase tracking-widest text-rr-dark mb-2">
+                        Centre <span className="text-rr-pink">*</span>
+                    </legend>
+                    <div className="grid sm:grid-cols-2 gap-3">
+                        {CENTRES.map((c) => {
+                            const on = form.centre === c.value;
+                            return (
+                                <label key={c.value} className={`flex items-start gap-3 cursor-pointer rounded-xl border-2 px-4 py-3.5 transition-colors ${on ? 'border-rr-pink' : errors.centre ? 'border-rr-pink/50' : 'border-slate-300 hover:border-rr-pink/60'}`}>
+                                    <input type="radio" name="centre" value={c.value} checked={on} onChange={set} className="mt-1 accent-rr-pink" />
+                                    <span>
+                                        <span className="block font-bold text-rr-dark">{c.venue}, {c.suburb}</span>
+                                        <span className="block text-sm text-rr-charcoal">{c.region} · Wednesdays</span>
+                                    </span>
+                                </label>
+                            );
+                        })}
+                    </div>
+                    {errors.centre && <p className="text-rr-pink text-xs font-bold mt-1">{errors.centre}</p>}
+                </fieldset>
+                <fieldset className="sm:col-span-2">
+                    <legend className="block text-xs font-black uppercase tracking-widest text-rr-dark mb-2">
+                        How would you like to pay? <span className="text-rr-pink">*</span>
+                    </legend>
+                    <div className="grid sm:grid-cols-3 gap-3">
+                        {PAY_CHOICES.map((c) => {
+                            const on = form.payment_choice === c.value;
+                            return (
+                                <label key={c.value} className={`flex items-center gap-3 cursor-pointer rounded-xl border-2 px-4 py-3 transition-colors ${on ? 'border-rr-pink' : errors.payment_choice ? 'border-rr-pink/50' : 'border-slate-300 hover:border-rr-pink/60'}`}>
+                                    <input type="radio" name="payment_choice" value={c.value} checked={on} onChange={set} className="accent-rr-pink" />
+                                    <span className="text-sm font-bold text-rr-dark">{c.label}</span>
+                                </label>
+                            );
+                        })}
+                    </div>
+                    {errors.payment_choice && <p className="text-rr-pink text-xs font-bold mt-1">{errors.payment_choice}</p>}
+                </fieldset>
+            </div>
+
+            {errors.form && <p className="mt-5 text-sm font-bold text-rr-pink">{errors.form}</p>}
+
+            <button type="submit" disabled={submitting}
+                className="mt-6 w-full inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors">
+                {submitting ? 'Sending…' : CTA.primary} {!submitting && <ArrowRight className="w-4 h-4" />}
+            </button>
+            <p className="mt-3 flex items-center justify-center gap-2 text-sm font-medium text-rr-charcoal">
+                <Check className="w-4 h-4 text-rr-pink" strokeWidth={3} />
+                No payment now. First session {FIRST_SESSION.long}.
+            </p>
+        </form>
+    );
+};
+
+export default JuniorRoyalsForm;

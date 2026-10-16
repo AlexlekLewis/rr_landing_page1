@@ -1,0 +1,49 @@
+/* Junior Royals v2 — the shimmer that marks the four action cards as things to open
+   (Alex, 11 Oct 2026). A light sweep across each card, staggered card to card, and a
+   pulsing dot beside the hint. Motion is switched off for people who ask for less. */
+
+@keyframes jr-shimmer {
+  0% { transform: translateX(-140%) skewX(-18deg); }
+  45%, 100% { transform: translateX(320%) skewX(-18deg); }
+}
+
+@keyframes jr-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.9); opacity: 0.25; }
+}
+
+@keyframes jr-pop {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.jr-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.jr-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 40%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+  animation: jr-shimmer 3.4s ease-in-out infinite;
+  animation-delay: var(--jr-delay, 0s);
+  pointer-events: none;
+}
+
+.jr-pulse {
+  animation: jr-pulse 1.6s ease-in-out infinite;
+}
+
+.jr-pop {
+  animation: jr-pop 0.18s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jr-shimmer::after { display: none; }
+  .jr-pulse, .jr-pop { animation: none; }
+}

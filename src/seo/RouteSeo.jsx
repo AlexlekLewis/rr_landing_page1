@@ -54,7 +54,7 @@ export default function RouteSeo() {
 
     useEffect(() => {
         const cfg = PAGE_SEO[pathname];
-        if (!cfg) return; // not a managed page — leave the head as-is
+        if (!cfg) { upsertJsonLd(null); return; } // not a managed page: leave the head as-is, but drop the last page's structured data
 
         const title = cfg.title || DEFAULT_SEO.title;
         const description = cfg.description || DEFAULT_SEO.description;
