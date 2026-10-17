@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { fadeUp, scrollTo } from '../performance-squads/shared';
-import { HERO, CTA, EVENT_NAME, TAGLINE, DAY, SHORT_DAY, TIME, LOGOS, HERO_PHOTO, CLUB, FORM_ANCHOR, PRICE } from './lpJrDayData';
+import { HERO, CTA, EVENT_NAME, DAY, SHORT_DAY, TIME, LOGOS, HERO_PHOTO, CLUB, FORM_ANCHOR, PRICE } from './lpJrDayData';
 import { placesLine } from './usePlaces';
 
 // Dark photo hero, the one dark surface above the form (Alex, 12 Oct 2026:
@@ -43,9 +43,6 @@ const LPHero = ({ places }) => {
                     <h1 className="text-[2.2rem] leading-[0.95] sm:text-6xl lg:text-7xl font-black uppercase tracking-tight mb-3 sm:mb-5">
                         {EVENT_NAME}
                     </h1>
-                    <p className="text-xl sm:text-3xl font-black uppercase text-white leading-tight -mt-1 sm:-mt-2 mb-3 sm:mb-4">
-                        {TAGLINE}
-                    </p>
                     <p className="text-lg sm:text-3xl font-black text-rr-light-pink leading-snug">
                         <span className="sm:hidden">{SHORT_DAY}</span>
                         <span className="hidden sm:inline">{DAY}</span>

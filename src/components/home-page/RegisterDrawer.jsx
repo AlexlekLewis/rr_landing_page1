@@ -17,7 +17,7 @@ const GENDER_OPTIONS = ['Male Cricket', 'Female Cricket', 'No Preference'];
 // modal — same programs, same order (26 Sep 2026).
 // REVIEW 6 OCT 2026 — the trial, the junior sessions with Sid and the holiday
 // camp are all over by then.
-// REVIEW 26 OCT 2026 — the Lower Plenty carnival row (first) comes out.
+// REVIEW 26 OCT 2026 — the Lower Plenty row (first) comes out.
 const PROGRAMS = [
     { label: LP_JR_DAY_ROW.heroLabel, route: LP_JR_DAY_ROUTE, urgency: LP_JR_DAY_ROW.drawerUrgency },
     { label: 'Performance Squads Open Trial', route: '/performance-squads-open-trial', urgency: 'Ages 16 to 25 — Mickleham Mon 5 Oct, $30 a session. Cranbourne North (Sun 4 Oct) is full' },

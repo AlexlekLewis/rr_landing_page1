@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────
-// JUNIOR ROYALS CARNIVAL AT LOWER PLENTY — /lower-plenty-junior-royals-day
+// JUNIOR ROYALS ARE COMING TO LOWER PLENTY — /lower-plenty-junior-royals-day
 //
 // THE ONE CONFIG FILE. Every fact and every line of copy on the page, the
 // success page and the promo rows (lpJrDayPromo.js) comes from here.
@@ -26,13 +26,13 @@
 // it. (He had asked for FREE EVENT big and bold; that came out when the $10
 // fee was set the same day — a paid event can't be called free.)
 //
-// Power League (Alex, 16 Oct 2026): the carnival is followed by Power League
+// Power League (Alex, 16 Oct 2026): the morning is followed by Power League
 // matches on Lower Plenty's ground AND Montmorency's ground; "stay and watch our
 // Power League players play off against each other" is his line. Montmorency
 // Cricket Club's ground is also Montmorency Park, Para Road (DVCA venue list),
 // so the two grounds are the park's two ovals. Its oval's own name is not
 // confirmed, so the page calls it "Montmorency Cricket Club's ground". No start
-// time is given: the page says "after the carnival". The match day itself is
+// time is given: the page says "afterwards". The match day itself is
 // /power-league (power-league/plOptions.js).
 //
 // WORKING ASSUMPTIONS — written as plain fact on the page so it reads as
@@ -59,12 +59,12 @@ export const DB_TABLE = 'lower_plenty_junior_royals_day_registrations';
 export const PLACES_RPC = 'lower_plenty_jr_day_places';
 
 // ── The event ──
-// Name and main heading: "Junior Royals Carnival" (Alex, 18 Oct 2026, back from a
-// day as "Junior Royals Are Coming to Lower Plenty"), with that phrase kept as the
-// line under the heading (TAGLINE). Posters print the full page address.
-export const EVENT_NAME = 'Junior Royals Carnival';
-export const TAGLINE = 'Junior Royals are coming to Lower Plenty';
-export const PROGRAM_NAME = 'Junior Royals Carnival at Lower Plenty'; // Meta Pixel content_name
+// Name and main heading (Alex, 18 Oct 2026): "Junior Royals are coming to Lower Plenty".
+// "Junior Royals Carnival" is no longer used anywhere — page, promos, posters. Two
+// leftovers only: the Stripe product is still called "Junior Royals Carnival Day Entry
+// Fee", and the old short address /carnival still redirects here.
+export const EVENT_NAME = 'Junior Royals Are Coming to Lower Plenty';
+export const PROGRAM_NAME = EVENT_NAME; // Meta Pixel content_name
 export const MIN_AGE = 7;
 export const MAX_AGE = 12;
 export const AGES = `${MIN_AGE}–${MAX_AGE}`;
@@ -90,7 +90,7 @@ export const PRICE_LINE = `$${PRICE} per player, incl. GST`;
 // Stripe Payment Link "Junior Royals Carnival Day Entry Fee", created 16 Oct 2026
 // (plink_1UR3QNIo52UEA50yq6GKVkSy). After payment Stripe redirects to
 // /lower-plenty-junior-royals-day/success?session_id={CHECKOUT_SESSION_ID}.
-// The webhook maps this link to the carnival and marks the row paid using the
+// The webhook maps this link to this event and marks the row paid using the
 // client_reference_id the form adds (api/stripe-webhook.js).
 export const PAYMENT_LINK = 'https://buy.stripe.com/5kQdR99zHd4N0uUdI79Zm0W';
 export const payUrlFor = ({ bookingId, email } = {}) => {
@@ -133,7 +133,7 @@ export const LOGOS = {
 };
 export const HERO_PHOTO = '/assets/little-crickets-hero.jpeg';
 
-// ── Power League matches after the carnival (Alex, 16 Oct 2026) ──
+// ── Power League matches after the morning (Alex, 16 Oct 2026) ──
 export const POWER_LEAGUE = {
     when: 'Afterwards',
     title: 'Stay for the Power League',

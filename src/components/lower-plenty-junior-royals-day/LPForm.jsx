@@ -12,7 +12,7 @@ import {
 } from './lpJrDayData';
 import { placesLine } from './usePlaces';
 
-// Registration for the Junior Royals Carnival at Lower Plenty: $10 per player.
+// Registration for "Junior Royals are coming to Lower Plenty": $10 per player.
 //
 // One row per player in lower_plenty_junior_royals_day_registrations. The id
 // is made here and the insert never chains .select(): the public role cannot

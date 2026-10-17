@@ -78,7 +78,7 @@ const PC_NAV = [
 //                        2026). REVIEW 6 OCT 2026: pull it with the trial.
 //   Junior Royals      — Term 4, Wednesdays at Mickleham and Cranbourne North,
 //                        28 Oct – 16 Dec (Alex, 5 Oct 2026). REVIEW 16 DEC 2026.
-//   Junior Royals Carnival at Lower Plenty — $10, Sun 25 Oct 2026, ages 7–12
+//   Junior Royals are coming to Lower Plenty — $10, Sun 25 Oct 2026, ages 7–12
 //                        (Alex, 16 Oct 2026). REVIEW 26 OCT 2026: pull the row.
 //   Spin Club          — announced 26 Sep 2026, interest only. No start date
 //                        confirmed; when Alex sets the first Wednesday, say it

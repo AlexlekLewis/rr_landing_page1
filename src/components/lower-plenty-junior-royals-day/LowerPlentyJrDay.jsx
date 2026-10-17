@@ -10,7 +10,7 @@ import usePlaces from './usePlaces';
 import { ROUTE, CTA, CTA_WITH_PRICE, FORM_ANCHOR } from './lpJrDayData';
 
 // ─────────────────────────────────────────────────────────────
-// JUNIOR ROYALS CARNIVAL AT LOWER PLENTY — /lower-plenty-junior-royals-day
+// JUNIOR ROYALS ARE COMING TO LOWER PLENTY — /lower-plenty-junior-royals-day
 //
 // A morning for players aged 7 to 12: Sunday 25 October 2026,
 // 9:00am – 11:00am, Lower Plenty Cricket Club (Lower Plenty Oval South,

@@ -385,7 +385,7 @@ export function allocatePayments(records, payments) {
   return { byRecordId, recordByPayment };
 }
 
-// Lower Plenty carnival: the form sends the row id to Stripe as
+// Lower Plenty morning: the form sends the row id to Stripe as
 // client_reference_id, so a payment carrying one goes to exactly that row.
 // Payments without one (a link opened by hand) fall back to email matching.
 export function allocateLpJrDay(records, payments) {
@@ -753,7 +753,7 @@ export const jrTerm4Row = (r) => ([
 ]);
 
 // ── Lower Plenty Junior Royals Day ──────────────────────────
-// The Junior Royals Carnival at Lower Plenty Cricket Club, Sunday 25 October
+// "Junior Royals are coming to Lower Plenty" — Lower Plenty Cricket Club, Sunday 25 October
 // 2026, 9:00–11:00am, players 7 to 12, $10 per player (Alex, 16 Oct 2026).
 // A row is a registration; the place is booked once the $10 is paid. Paid comes
 // from the row itself (the webhook sets it via client_reference_id) or, as a
@@ -921,7 +921,7 @@ export const guideLines = (linkLines = [], counts = {}) => {
     ['  actually booked. Monday was offered to measure whether a second night is worth'],
     ['  adding — picking it does not mean a Monday session exists.'],
     [''],
-    [`"${PROGRAM_LABELS['lp-jr-day']}" — the Junior Royals Carnival at Lower Plenty Cricket`],
+    [`"${PROGRAM_LABELS['lp-jr-day']}" — Junior Royals are coming to Lower Plenty: a morning at Lower Plenty Cricket`],
     ['  Club, Sunday 25 October 2026, 9:00 to 11:00am, players aged 7 to 12, from'],
     ['  rramelbourne.com/lower-plenty-junior-royals-day. $10 per player (incl. GST), paid by'],
     ['  card through Stripe straight after the form. A player\'s place is booked once the'],

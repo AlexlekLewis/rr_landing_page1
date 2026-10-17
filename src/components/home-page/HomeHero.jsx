@@ -18,7 +18,7 @@ import { PROGRAM_ROW as LP_JR_DAY_ROW, LP_JR_DAY_ROUTE } from '../lower-plenty-j
 // Pink dot = you can book or pay now. Green dot = open, nothing to pay yet.
 // REVIEW 6 OCT 2026 — the trial, the junior sessions with Sid and the holiday
 // camp are all over by then.
-// REVIEW 26 OCT 2026 — the Lower Plenty carnival row (first) comes out.
+// REVIEW 26 OCT 2026 — the Lower Plenty row (first) comes out.
 const PROGRAMS = [
     { label: LP_JR_DAY_ROW.heroLabel, route: LP_JR_DAY_ROUTE, badge: LP_JR_DAY_ROW.heroBadge, badgeColor: 'bg-rr-pink' },
     { label: 'Performance Squads Open Trial', route: '/performance-squads-open-trial', badge: 'Ages 16 to 25 · Mickleham Mon 5 Oct · Cranbourne North full', badgeColor: 'bg-rr-pink' },

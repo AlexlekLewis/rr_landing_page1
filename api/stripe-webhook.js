@@ -105,15 +105,15 @@ const PROGRAM_PRICE_IDS = {
 // July + Sept holiday payment gap). Add other static links here as needed.
 const PAYMENT_LINK_PROGRAMS = {
   'plink_1U5Kd0Io52UEA50y3hqasgbv': { program: 'holiday', program_variant: null, program_label: 'Junior Royals Holiday Program — Sept/Oct 2026' },
-  // $10 entry fee for the Junior Royals Carnival at Lower Plenty, Sun 25 Oct 2026
+  // $10 entry fee for "Junior Royals are coming to Lower Plenty", Sun 25 Oct 2026
   // (Alex, 16 Oct 2026). Mapped by link on purpose: its product name, "Junior
   // Royals Carnival Day Entry Fee", would otherwise classify as a Junior Royals
   // term payment by description. Paid rows back-fill onto
   // lower_plenty_junior_royals_day_registrations (see LOWER_PLENTY_JR_DAY_TABLE).
-  'plink_1UR3QNIo52UEA50yq6GKVkSy': { program: 'lower_plenty_jr_day', program_variant: null, program_label: 'Junior Royals Carnival Day Entry Fee — Lower Plenty, Sun 25 Oct 2026' },
+  'plink_1UR3QNIo52UEA50yq6GKVkSy': { program: 'lower_plenty_jr_day', program_variant: null, program_label: 'Junior Royals are coming to Lower Plenty — $10 entry fee, Sun 25 Oct 2026' },
 };
 
-// Registration table for the Lower Plenty carnival. The form sends the row id as
+// Registration table for the Lower Plenty morning. The form sends the row id as
 // client_reference_id; the webhook marks that row paid.
 const LOWER_PLENTY_JR_DAY_TABLE = 'lower_plenty_junior_royals_day_registrations';
 
@@ -536,7 +536,7 @@ export default async function handler(req, res) {
       }
     }
 
-    // Lower Plenty carnival ($10 entry fee): mark the registration row paid.
+    // Lower Plenty morning ($10 entry fee): mark the registration row paid.
     // Non-blocking, like the Term 3 completion above: the payment is already
     // recorded in program_registrations, and the sheet sync also matches it by
     // email, so a failure here must never make Stripe retry the whole event.
