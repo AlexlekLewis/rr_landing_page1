@@ -23,6 +23,10 @@ import {
   JR_TERM4_HEADERS,
   jrTerm4Row,
   jrTerm4CentreStatus,
+  LP_JR_DAY_HEADERS,
+  lpJrDayRow,
+  lpJrDayClub,
+  allocateLpJrDay,
   isTourEntryInWindow,
   allocatePayments,
   describeLinkHealth,
@@ -97,6 +101,26 @@ const jrT4 = (over = {}) => ({
   ...over,
 });
 
+const lpReg = (over = {}) => ({
+  id: 'lp-1',
+  created_at: '2026-10-17T00:30:00.000Z',
+  player_first_name: 'Junior',
+  player_last_name: 'Player',
+  player_age: 9,
+  club_status: 'lower-plenty',
+  club_name: 'Lower Plenty Cricket Club',
+  notes: 'Asthma — carries a puffer',
+  parent_name: 'A Parent',
+  email: 'parent@example.com',
+  phone: '0400111222',
+  suburb: 'Montmorency',
+  photo_consent_academy: true,
+  photo_consent_royals: false,
+  marketing_opt_in: true,
+  cancelled_at: null,
+  ...over,
+});
+
 const payment = (over = {}) => ({
   sessionId: 'cs_test_1',
   paidAt: '2026-09-29T03:00:00.000Z',
@@ -145,6 +169,7 @@ describe('row width matches its header block', () => {
     ['tour (page)', tourRowFromApplication({ id: 't1' }), TOUR_HEADERS],
     ['tour (old EOI)', tourRowFromEoi({ id: 't2' }), TOUR_HEADERS],
     ['jr term 4', jrTerm4Row(jrT4()), JR_TERM4_HEADERS],
+    ['lower plenty jr day', lpJrDayRow(lpReg()), LP_JR_DAY_HEADERS],
     ['payments', payRow(payment()), PAY_HEADERS],
   ])('%s', (_name, row, headers) => {
     expect(row).toHaveLength(headers.length);
@@ -363,7 +388,8 @@ describe('payments tab', () => {
 // nowhere, and the player quietly gives up. Silence is the dangerous outcome.
 // ------------------------------------------------------------
 describe('describeLinkHealth', () => {
-  const urls = Object.keys(PROGRAM_PAYMENT_LINKS['open-trial']);
+  // Every configured link, across every program that takes money.
+  const urls = Object.values(PROGRAM_PAYMENT_LINKS).flatMap((links) => Object.keys(links));
   const live = (list) => ({
     ids: new Map(list.map((u, i) => [`plink_${i}`, { url: u, program: 'open-trial', centre: 'south-east-melbourne', sessions: 1 }])),
     inactive: [],
@@ -559,5 +585,77 @@ describe('tour cutoff', () => {
     expect(text).toContain('Currently 2 entries');
     expect(text).toContain('22 people registered interest before that date');
     expect(text).toContain('Nothing has been deleted');
+  });
+});
+
+// ------------------------------------------------------------
+// Lower Plenty Junior Royals Day. Free, so a row is a place: the tab must say
+// so, keep the phone's leading zero, and show a cancelled row as cancelled
+// rather than dropping it.
+// ------------------------------------------------------------
+describe('lower plenty junior royals day', () => {
+  const col = (row, name) => row[LP_JR_DAY_HEADERS.indexOf(name)];
+
+  it('has its one $10 Stripe link configured', () => {
+    expect(Object.keys(PROGRAM_PAYMENT_LINKS['lp-jr-day'])).toEqual(['https://buy.stripe.com/5kQdR99zHd4N0uUdI79Zm0W']);
+  });
+
+  it('an unpaid row says so, and that it still holds a place', () => {
+    const row = lpJrDayRow(lpReg());
+    expect(col(row, 'Paid $10?')).toBe('NOT PAID');
+    expect(col(row, 'Place')).toMatch(/NOT paid/);
+  });
+
+  it('a row the webhook marked paid reads as booked', () => {
+    const row = lpJrDayRow(lpReg({ paid: true, amount_paid_cents: 1000, paid_at: '2026-10-17T01:00:00.000Z' }));
+    expect(col(row, 'Paid $10?')).toBe('Yes');
+    expect(col(row, 'Place')).toBe('Booked (paid)');
+    expect(String(col(row, 'Amount Paid (AUD)'))).toContain('10');
+  });
+
+  it('matches a Stripe payment to the exact row by client_reference_id, not email', () => {
+    const a = lpReg({ id: 'a', email: 'same@example.com', created_at: '2026-10-17T00:00:00.000Z' });
+    const b = lpReg({ id: 'b', email: 'same@example.com', created_at: '2026-10-17T00:05:00.000Z' });
+    const pay = payment({ sessionId: 'cs_1', payerEmail: 'same@example.com', amountCents: 1000, paidAt: '2026-10-17T00:10:00.000Z', program: 'lp-jr-day', clientReferenceId: 'a' });
+    const { byRecordId } = allocateLpJrDay([a, b], [pay]);
+    expect(byRecordId.has('a')).toBe(true);
+    expect(byRecordId.has('b')).toBe(false);
+  });
+
+  it('falls back to email when a payment has no reference', () => {
+    const a = lpReg({ id: 'a', email: 'Parent@Example.com' });
+    const pay = payment({ sessionId: 'cs_2', payerEmail: 'parent@example.com', amountCents: 1000, paidAt: '2026-10-18T00:00:00.000Z', program: 'lp-jr-day', clientReferenceId: null });
+    const { byRecordId } = allocateLpJrDay([a], [pay]);
+    expect(byRecordId.get('a').amountCents).toBe(1000);
+    expect(col(lpJrDayRow(a, byRecordId.get('a')), 'Paid $10?')).toBe('Yes');
+  });
+
+  it('keeps the leading zero on the phone number', () => {
+    expect(String(col(lpJrDayRow(lpReg()), 'Phone'))).toContain('0400111222');
+  });
+
+  it('shows a cancelled registration instead of dropping it', () => {
+    const row = lpJrDayRow(lpReg({ cancelled_at: '2026-10-20T01:00:00.000Z' }));
+    expect(col(row, 'Place')).toMatch(/^CANCELLED/);
+  });
+
+  it('names the club in words', () => {
+    expect(lpJrDayClub(lpReg())).toBe('Lower Plenty Cricket Club');
+    expect(lpJrDayClub(lpReg({ club_status: 'other-club', club_name: 'Eltham CC' }))).toBe('Another club: Eltham CC');
+    expect(lpJrDayClub(lpReg({ club_status: 'other-club', club_name: null }))).toBe('Another club (name not given)');
+    expect(lpJrDayClub(lpReg({ club_status: 'no-club' }))).toBe('Not at a club yet');
+  });
+
+  it('turns consents into Yes / No', () => {
+    const row = lpJrDayRow(lpReg());
+    expect(col(row, 'Photos OK (Academy)?')).toBe('Yes');
+    expect(col(row, 'Photos OK (Royals)?')).toBe('No');
+    expect(col(row, 'Wants Junior Royals News?')).toBe('Yes');
+  });
+
+  it('is on the guide tab with its safe column and live count', () => {
+    const text = guideLines([], { lpJrDay: 12 }).map((r) => r[0]).join('\n');
+    expect(text).toContain(`${PROGRAM_LABELS['lp-jr-day']}: column ${colLetter(LP_JR_DAY_HEADERS.length)} onwards`);
+    expect(text).toContain('Currently 12 registered');
   });
 });

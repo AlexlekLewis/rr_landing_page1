@@ -4,6 +4,7 @@ import { Menu, X, ChevronDown } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from './Button';
 import { PROGRAM_ROW, SID_JUNIORS_ROUTE } from './sid-juniors/sidJuniorsPromo';
+import { PROGRAM_ROW as LP_JR_DAY_ROW, LP_JR_DAY_ROUTE } from './lower-plenty-junior-royals-day/lpJrDayPromo';
 
 const LP1_NAV = [
     { label: 'PROGRAM OVERVIEW', id: 'program-overview' },
@@ -77,10 +78,13 @@ const PC_NAV = [
 //                        2026). REVIEW 6 OCT 2026: pull it with the trial.
 //   Junior Royals      — Term 4, Wednesdays at Mickleham and Cranbourne North,
 //                        28 Oct – 16 Dec (Alex, 5 Oct 2026). REVIEW 16 DEC 2026.
+//   Junior Royals Carnival at Lower Plenty — $10, Sun 25 Oct 2026, ages 7–12
+//                        (Alex, 16 Oct 2026). REVIEW 26 OCT 2026: pull the row.
 //   Spin Club          — announced 26 Sep 2026, interest only. No start date
 //                        confirmed; when Alex sets the first Wednesday, say it
 //                        in the badge.
 const PROGRAMS_DROPDOWN = [
+    { label: LP_JR_DAY_ROW.navLabel, route: LP_JR_DAY_ROUTE, badge: LP_JR_DAY_ROW.navBadge, badgeColor: 'bg-rr-pink' },
     { label: 'Performance Squads Open Trial · 16-25', route: '/performance-squads-open-trial', badge: 'Mickleham 5 Oct · Cranbourne Full', badgeColor: 'bg-rr-pink' },
     { label: PROGRAM_ROW.navLabel, route: SID_JUNIORS_ROUTE, badge: PROGRAM_ROW.navBadge, badgeColor: 'bg-rr-pink' },
     { label: 'Spin Club · Spinners 10-25', route: '/spin-club', badge: 'Registering Interest', badgeColor: 'bg-green-500' },
