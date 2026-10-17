@@ -276,6 +276,10 @@ function App() {
         <Route path="/lower-plenty-junior-royals-day" element={<React.Suspense fallback={<div className="min-h-screen bg-white" />}><LowerPlentyJrDay /></React.Suspense>} />
         <Route path="/lower-plenty-junior-royals-day/success" element={<React.Suspense fallback={<div className="min-h-screen bg-white" />}><LowerPlentyJrDaySuccess /></React.Suspense>} />
         <Route path="/lower-plenty-junior-royals-day/pay" element={<React.Suspense fallback={<div className="min-h-screen bg-white" />}><LowerPlentyJrDayPay /></React.Suspense>} />
+        {/* Short address printed on the posters (Alex, 17 Oct 2026). vercel.json
+            redirects it on the server (temporary, so it can point at a future
+            carnival); this route covers local dev and in-app navigation. */}
+        <Route path="/carnival" element={<Navigate to="/lower-plenty-junior-royals-day" replace />} />
 
         {/* Match Registration — reusable match-day registration + payment. HIDDEN:
             noindex, not in nav or sitemap, direct URL only. Currently serving the
