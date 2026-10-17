@@ -44,7 +44,7 @@ const LowerPlentyJrDaySuccess = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        document.title = "Payment Received | Junior Royals Are Coming to Lower Plenty";
+        document.title = "Payment Received | Junior Royals Carnival, Lower Plenty";
         const meta = document.createElement('meta');
         meta.name = 'robots';
         meta.content = 'noindex,nofollow';

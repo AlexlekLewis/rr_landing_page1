@@ -41,15 +41,15 @@ export const PAGE_SEO = {
     description:
       'Nominate a player for a Rajasthan Royals Academy Power League T20 match day on Sunday 25 October, Lower Plenty and Montmorency. Ages 10 to 25, $35 a game. Nominations close Tuesday 20 October.',
   },
-  // "Junior Royals Are Coming to Lower Plenty" (renamed 18 Oct; was the Junior Royals
-  // Carnival), Sun 25 Oct 2026 (Alex, 16 Oct 2026).
+  // Junior Royals Carnival at Lower Plenty ("Junior Royals are coming to Lower Plenty"),
+  // Sun 25 Oct 2026 (Alex, 16 and 18 Oct 2026).
   // Shared off the flyer QR and in WhatsApp, so it is prerendered with its own
   // card. Facts mirror components/lower-plenty-junior-royals-day/lpJrDayData.js.
   // REVIEW 26 OCT 2026 — the morning is over.
   '/lower-plenty-junior-royals-day': {
-    title: 'Junior Royals Are Coming to Lower Plenty | Melbourne',
+    title: 'Junior Royals Carnival | Lower Plenty, Melbourne',
     description:
-      'A morning of cricket for players aged 7 to 12: Sunday 25 October, 9–11am, Lower Plenty Oval South, Montmorency Park, Melbourne. Rajasthan Royals Academy coaches, then Power League matches. $10 incl. GST.',
+      'Junior Royals are coming to Lower Plenty: a morning of cricket for players aged 7 to 12, Sunday 25 October, 9–11am, Lower Plenty Oval South, Montmorency Park, Melbourne. Rajasthan Royals Academy coaches, then Power League matches. $10 incl. GST.',
     ogImage: '/assets/lower-plenty/lower-plenty-jr-day-og.png',
   },
   '/spin-club': {

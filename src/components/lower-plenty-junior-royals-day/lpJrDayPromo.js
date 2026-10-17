@@ -18,7 +18,7 @@ export const LP_JR_DAY_ROUTE = ROUTE;
 export const PROGRAM_ROW = {
     navLabel: `${EVENT_NAME} · ${AGES}`,
     navBadge: `$${PRICE} · ${SHORT_DAY}`,
-    heroLabel: EVENT_NAME,
+    heroLabel: `${EVENT_NAME} at Lower Plenty`,
     heroBadge: `Ages ${AGES_SPOKEN} · ${SHORT_DAY}, 9–11am · $${PRICE}`,
     drawerUrgency: `Ages ${AGES_SPOKEN} — ${CLUB}, ${SHORT_DAY}, 9–11am, $${PRICE} incl. GST. Registrations close ${CLOSES}`,
 };
@@ -26,7 +26,7 @@ export const PROGRAM_ROW = {
 // The ticker shows only `name` and `tag`, so the tag says who, where, when, cost.
 export const ANNOUNCEMENT = {
     key: 'lower-plenty-junior-royals-day',
-    name: EVENT_NAME,
+    name: `${EVENT_NAME} at ${CLUB}`,
     tag: `Ages ${AGES_SPOKEN} · ${SHORT_DAY}, ${TIME} · $${PRICE}`,
     detail: `Lower Plenty Oval South, Montmorency Park · $${PRICE} incl. GST · then stay for the Power League matches · registrations close ${CLOSES}`,
     href: ROUTE,

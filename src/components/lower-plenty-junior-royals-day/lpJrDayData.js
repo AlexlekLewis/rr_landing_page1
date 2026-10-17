@@ -59,10 +59,12 @@ export const DB_TABLE = 'lower_plenty_junior_royals_day_registrations';
 export const PLACES_RPC = 'lower_plenty_jr_day_places';
 
 // ── The event ──
-// Renamed by Alex, 18 Oct 2026 (was "Junior Royals Carnival"). The Stripe product is
-// still called "Junior Royals Carnival Day Entry Fee"; the short address stays /carnival.
-export const EVENT_NAME = 'Junior Royals Are Coming to Lower Plenty';
-export const PROGRAM_NAME = EVENT_NAME; // Meta Pixel content_name
+// Name and main heading: "Junior Royals Carnival" (Alex, 18 Oct 2026, back from a
+// day as "Junior Royals Are Coming to Lower Plenty"), with that phrase kept as the
+// line under the heading (TAGLINE). Posters print the full page address.
+export const EVENT_NAME = 'Junior Royals Carnival';
+export const TAGLINE = 'Junior Royals are coming to Lower Plenty';
+export const PROGRAM_NAME = 'Junior Royals Carnival at Lower Plenty'; // Meta Pixel content_name
 export const MIN_AGE = 7;
 export const MAX_AGE = 12;
 export const AGES = `${MIN_AGE}–${MAX_AGE}`;

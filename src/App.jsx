@@ -271,7 +271,7 @@ function App() {
         <Route path="/sid-juniors" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><SidJuniors /></React.Suspense>} />
         <Route path="/sid-juniors/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><SidJuniorsSuccess /></React.Suspense>} />
 
-        {/* Junior Royals Are Coming to Lower Plenty (Lower Plenty Cricket Club), Sun 25 Oct 2026 — $10, ages 7–12.
+        {/* Junior Royals Carnival at Lower Plenty Cricket Club, Sun 25 Oct 2026 — $10, ages 7–12.
             Public. REVIEW 26 OCT 2026: take it off the promo surfaces, then close or retire. */}
         <Route path="/lower-plenty-junior-royals-day" element={<React.Suspense fallback={<div className="min-h-screen bg-white" />}><LowerPlentyJrDay /></React.Suspense>} />
         <Route path="/lower-plenty-junior-royals-day/success" element={<React.Suspense fallback={<div className="min-h-screen bg-white" />}><LowerPlentyJrDaySuccess /></React.Suspense>} />
