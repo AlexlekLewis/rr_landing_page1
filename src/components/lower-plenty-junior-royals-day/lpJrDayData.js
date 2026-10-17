@@ -59,8 +59,10 @@ export const DB_TABLE = 'lower_plenty_junior_royals_day_registrations';
 export const PLACES_RPC = 'lower_plenty_jr_day_places';
 
 // ── The event ──
-export const EVENT_NAME = 'Junior Royals Carnival';
-export const PROGRAM_NAME = 'Junior Royals Carnival at Lower Plenty'; // Meta Pixel content_name
+// Renamed by Alex, 18 Oct 2026 (was "Junior Royals Carnival"). The Stripe product is
+// still called "Junior Royals Carnival Day Entry Fee"; the short address stays /carnival.
+export const EVENT_NAME = 'Junior Royals Are Coming to Lower Plenty';
+export const PROGRAM_NAME = EVENT_NAME; // Meta Pixel content_name
 export const MIN_AGE = 7;
 export const MAX_AGE = 12;
 export const AGES = `${MIN_AGE}–${MAX_AGE}`;
@@ -131,7 +133,7 @@ export const HERO_PHOTO = '/assets/little-crickets-hero.jpeg';
 
 // ── Power League matches after the carnival (Alex, 16 Oct 2026) ──
 export const POWER_LEAGUE = {
-    when: 'After the carnival',
+    when: 'Afterwards',
     title: 'Stay for the Power League',
     // Alex's words.
     line: 'Stay and watch our Power League players play off against each other.',
@@ -176,7 +178,7 @@ export const MORNING = {
     eyebrow: 'The Morning',
     title: 'Two Hours With Our Coaches',
     sub:
-        `${EVENT_NAME} is a morning of cricket for players aged ${AGES_SPOKEN}, run by the coaches `
+        `A morning of cricket for players aged ${AGES_SPOKEN}, run by the coaches `
         + 'from Rajasthan Royals Academy Melbourne.',
     steps: [
         {
@@ -234,7 +236,7 @@ export const WHERE = {
         ADDRESS_LINE,
     ],
     note:
-        `${VENUE.park} in ${VENUE.region} has two ovals. The carnival is on ${VENUE.oval}, ${CLUB}'s `
+        `${VENUE.park} in ${VENUE.region} has two ovals. The morning is on ${VENUE.oval}, ${CLUB}'s `
         + 'ground at the Park Lane end of the park: the pin on the map. Turn into Park Lane from Para Road. '
         + "The Power League matches afterwards are on both ovals: this one and Montmorency Cricket Club's ground.",
     mapTitle: `Map: ${VENUE.oval}, ${VENUE.park}, ${VENUE.suburb}`,
@@ -303,7 +305,7 @@ export const FAQS = [
             + "and your player's place is booked once the payment goes through.",
     },
     {
-        q: 'Can we stay after the carnival?',
+        q: 'Can we stay afterwards?',
         a: `Yes. ${POWER_LEAGUE.line} ${POWER_LEAGUE.explain} ${POWER_LEAGUE.grounds}`,
     },
     {
@@ -350,7 +352,7 @@ export const FAQ_HEADING = {
 
 // ── Success page ──
 export const SUCCESS = {
-    eyebrow: `${EVENT_NAME} · ${CLUB}`,
+    eyebrow: EVENT_NAME,
     title: 'Payment Received',
     // {name} is the player's first name, read from this browser's session only.
     lead: (name) => `Thanks — the $${PRICE} payment went through, so ${name ? `${name}'s` : 'your player\'s'} place is booked for ${DAY}, ${TIME}. Stripe emails you a receipt.`,
@@ -373,7 +375,7 @@ export const STORE = {
 
 // ── Pay page (/pay?booking=<id>) — for a family who registered but didn't finish paying.
 export const PAY_PAGE = {
-    eyebrow: `${EVENT_NAME} · ${CLUB}`,
+    eyebrow: EVENT_NAME,
     title: 'Finish Paying',
     body:
         `Your registration is saved. Pay $${PRICE} (incl. GST) to book the place for ${DAY}, ${TIME}, `

@@ -15,7 +15,7 @@ const LowerPlentyJrDayPay = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        document.title = 'Finish Paying | Junior Royals Carnival, Lower Plenty';
+        document.title = 'Finish Paying | Junior Royals Are Coming to Lower Plenty';
         const meta = document.createElement('meta');
         meta.name = 'robots';
         meta.content = 'noindex,nofollow';

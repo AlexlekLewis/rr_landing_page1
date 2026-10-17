@@ -52,7 +52,7 @@ const LPHero = ({ places }) => {
                     <p className="text-white/85 text-[15px] sm:text-lg font-medium leading-relaxed max-w-2xl">
                         {HERO.why}
                     </p>
-                    {/* What follows the carnival (Alex, 16 Oct 2026). */}
+                    {/* What follows the morning (Alex, 16 Oct 2026). */}
                     <p className="text-white text-[15px] sm:text-lg font-bold leading-relaxed mt-2 mb-6 max-w-2xl">
                         {HERO.then}
                     </p>

@@ -33,7 +33,7 @@ import { ANNOUNCEMENT as SID_JUNIORS_ANNOUNCEMENT } from '../sid-juniors/sidJuni
 import { ANNOUNCEMENT as LP_JR_DAY_ANNOUNCEMENT } from '../lower-plenty-junior-royals-day/lpJrDayPromo';
 
 export const ANNOUNCEMENTS = [
-    // $10 Junior Royals Carnival at Lower Plenty, Sun 25 Oct 2026 (Alex, 16 Oct
+    // Junior Royals Are Coming to Lower Plenty ($10), Sun 25 Oct 2026 (Alex, 16 Oct
     // 2026). Nearest real deadline (Fri 23 Oct, 9pm). REVIEW 26 OCT 2026: remove.
     LP_JR_DAY_ANNOUNCEMENT,
     {
