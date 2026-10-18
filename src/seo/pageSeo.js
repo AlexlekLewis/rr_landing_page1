@@ -39,7 +39,7 @@ export const PAGE_SEO = {
   '/power-league': {
     title: 'Power League T20 Match Day | Rajasthan Royals Academy',
     description:
-      'Nominate a player for a Rajasthan Royals Academy Power League T20 match day on Sunday 25 October, Lower Plenty and Montmorency. Ages 10 to 25, $35 a game. Nominations close Tuesday 20 October.',
+      'Nominate a player for a Rajasthan Royals Academy Power League T20 game in Melbourne on Sunday 25 October, 12pm or 3pm start, Montmorency Park. Ages 10 to 25, any club. $35 incl. GST, only if picked. Nominations close Tuesday 20 October, 9pm.',
   },
   '/spin-club': {
     title: 'Spin Bowling Coaching Melbourne | Royals Spin Club',

@@ -22,6 +22,8 @@ import {
   paymentCheck,
   JR_TERM4_HEADERS,
   jrTerm4Row,
+  POWER_LEAGUE_HEADERS,
+  powerLeagueRow,
   jrTerm4CentreStatus,
   isTourEntryInWindow,
   allocatePayments,
@@ -33,6 +35,26 @@ import { sameRow, colLetter } from './_lib/sheetReconcile.js';
 // ------------------------------------------------------------
 // Fixtures, shaped like the real rows these tables hold.
 // ------------------------------------------------------------
+// Shaped like a row src/components/power-league/PLForm.jsx writes.
+const plNom = (over = {}) => ({
+  id: 'pl-1',
+  created_at: '2026-10-19T09:30:00.000Z',
+  first_name: 'Sample',
+  last_name: 'Player',
+  dob: '2012-03-04',
+  age: 14,
+  email: 'parent@example.com',
+  phone: '0412345678',
+  club: 'Sample CC',
+  experience_level: 'Junior club cricket (Under 10 to Under 18)',
+  history: 'Under 14 Division 1',
+  cricket_type: 'Spin bowler',
+  parent1_name: 'Sample Parent',
+  accept_social_media: false,
+  bio: 'Nominated for Power League, Sunday 25 October\n\nPlays: Spin bowler\n\nMedical or injuries: Asthma\n\nAlso wants to hear about Performance Squad trials: yes\n\nNotes: Bowls leg spin',
+  ...over,
+});
+
 const trialLead = (over = {}) => ({
   id: 'oa-1',
   created_at: '2026-09-29T02:25:48.705Z',
@@ -145,6 +167,7 @@ describe('row width matches its header block', () => {
     ['tour (page)', tourRowFromApplication({ id: 't1' }), TOUR_HEADERS],
     ['tour (old EOI)', tourRowFromEoi({ id: 't2' }), TOUR_HEADERS],
     ['jr term 4', jrTerm4Row(jrT4()), JR_TERM4_HEADERS],
+    ['power league', powerLeagueRow(plNom()), POWER_LEAGUE_HEADERS],
     ['payments', payRow(payment()), PAY_HEADERS],
   ])('%s', (_name, row, headers) => {
     expect(row).toHaveLength(headers.length);
@@ -559,5 +582,25 @@ describe('tour cutoff', () => {
     expect(text).toContain('Currently 2 entries');
     expect(text).toContain('22 people registered interest before that date');
     expect(text).toContain('Nothing has been deleted');
+  });
+});
+
+describe('power league rows', () => {
+  const col = (name) => POWER_LEAGUE_HEADERS.indexOf(name);
+  it('pulls medical, squad interest and notes out of the form lines', () => {
+    const row = powerLeagueRow(plNom());
+    expect(row[col('Medical or Injuries')]).toBe('Asthma');
+    expect(row[col('Wants Squad Trial News')]).toBe('Yes');
+    expect(row[col('What They Told Us')]).toBe('Bowls leg spin');
+    expect(row[col('Highest Weekend Level')]).toContain('Junior club');
+  });
+  it('leaves the optional columns blank when the form left them out', () => {
+    const row = powerLeagueRow(plNom({ bio: 'Nominated for Power League, Sunday 25 October\n\nPlays: Batter' }));
+    expect(row[col('Medical or Injuries')]).toBe('');
+    expect(row[col('Wants Squad Trial News')]).toBe('');
+    expect(row[col('What They Told Us')]).toBe('');
+  });
+  it('never reads as paid', () => {
+    expect(powerLeagueRow(plNom())[col('Payment')]).toMatch(/^Nomination only/);
   });
 });
