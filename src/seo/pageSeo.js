@@ -39,7 +39,7 @@ export const PAGE_SEO = {
   '/power-league': {
     title: 'Play in the Power League | Rajasthan Royals Academy Melbourne',
     description:
-      'Nominate a player for a Rajasthan Royals Academy Power League T20 game in Melbourne on Sunday 25 October, 12pm or 3pm start, Montmorency Park. Ages 10 to 25, any club. $35 incl. GST, only if picked. Nominations close Tuesday 20 October, 9pm.',
+      'Nominate a player for a Rajasthan Royals Academy Power League T20 game in Melbourne on Sunday 25 October, 12pm to 7pm (games start 12pm or 3pm), Montmorency Park. Ages 10 to 25, any club. $35 incl. GST, only if picked. Nominations close Tuesday 20 October, 9pm.',
   },
   '/spin-club': {
     title: 'Spin Bowling Coaching Melbourne | Royals Spin Club',

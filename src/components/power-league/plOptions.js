@@ -7,7 +7,7 @@
 // Alex, 19 Oct 2026: an open invite for players 10 to 25, a 24-hour window to
 // nominate, picked players told within the next 24 hours, one game on the
 // Sunday fixtured for a 12pm or 3pm start depending on the fixture and the side,
-// $35 per player for the game. The form asks for the weekend club, the highest
+// $35 per player for the game. Alex, later 19 Oct: the day runs 12pm to 7pm. The form asks for the weekend club, the highest
 // level played on a weekend, name, date of birth and the usual consents.
 //
 // DATED CONTENT — REVIEW 26 Oct 2026: retire or repoint the page after the match.
@@ -15,8 +15,9 @@
 
 export const MATCH = {
     date: 'Sunday 25 October',
-    time: '12pm or 3pm start',
-    timeDetail: 'Games are fixtured for a 12pm or a 3pm start. Which one depends on the fixture and the side the player is picked for, and we tell you when we tell you they are picked.',
+    time: '12pm to 7pm',
+    starts: 'Games start at 12pm or 3pm',
+    timeDetail: 'The match day runs from 12pm to 7pm. Each player plays one game, starting at 12pm or 3pm depending on the fixture and the side they are picked for. We tell you the start time when we tell you they are picked.',
     venues: ['Lower Plenty Cricket Club', 'Montmorency Cricket Club'],
     where: 'Montmorency Park, Montmorency',
     whereDetail: 'Lower Plenty and Montmorency cricket clubs’ grounds, both in Montmorency Park, north-east Melbourne',
@@ -55,7 +56,7 @@ export const STEPS = [
     [`Pay ${MATCH.fee} for the game`,
      'Our message includes a link to pay. Paying confirms the player in the side. Nothing is paid before then.'],
     [`Play on ${MATCH.date}`,
-     'One T20 game at Montmorency Park, starting at 12pm or 3pm. We send what to bring and what to wear with the pick.'],
+     'The day runs 12pm to 7pm at Montmorency Park. Each player plays one T20 game, starting at 12pm or 3pm. We send what to bring and what to wear with the pick.'],
 ];
 
 // From the Performance Squads briefing, 28 Sep 2026 (the first three), and

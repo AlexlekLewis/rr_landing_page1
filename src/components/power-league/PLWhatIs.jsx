@@ -27,7 +27,7 @@ const PLWhatIs = () => (
                 <h3 className="text-xs font-black text-rr-pink uppercase tracking-[0.3em] mb-5">Match day details</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
                     {[
-                        ['When', MATCH.date, MATCH.timeDetail],
+                        ['When', `${MATCH.date}, ${MATCH.time}`, MATCH.timeDetail],
                         ['Where', MATCH.where, MATCH.whereDetail],
                         ['Cost', `${MATCH.fee}`, 'Per player, for the one game. Paid only if the player is picked.'],
                         ['Ages', MATCH.ages, 'Age on match day. Players from any club, in or out of the Academy.'],

@@ -43,7 +43,8 @@ const PLHero = () => {
 
                 <p className="text-lg md:text-2xl text-white font-bold leading-snug max-w-2xl mb-4">
                     An open invitation to play one T20 game in the Rajasthan Royals Academy Power League,
-                    at Montmorency Park, Melbourne. Ages 10 to 25, from any club.
+                    at Montmorency Park, Melbourne. Ages 10 to 25, from any club. Games start at 12pm
+                    or 3pm, depending on the side the player is picked for.
                 </p>
                 <p className="text-base md:text-lg text-white/75 font-medium leading-relaxed max-w-2xl mb-8">
                     Nominate by <strong className="text-white">{MATCH.closes}</strong>. Picked players
@@ -71,7 +72,7 @@ const PLHero = () => {
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-5 max-w-3xl">
                     {[
-                        ['When', `${MATCH.date}. ${MATCH.time}.`],
+                        ['When', `${MATCH.date}, ${MATCH.time}. ${MATCH.starts}.`],
                         ['Where', `${MATCH.where} (Lower Plenty and Montmorency grounds)`],
                         ['Cost', `${MATCH.fee} for the game, only if picked`],
                         ['Ages', `${MATCH.ages}, from any club`],
