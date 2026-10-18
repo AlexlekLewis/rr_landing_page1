@@ -16,6 +16,7 @@ import FAQSection from '../performance-squads/FAQSection';
 import StickyCTA from '../performance-squads/StickyCTA';
 import PaymentModal from '../performance-squads/PaymentModal';
 import PartnerStack from '../power-game/PartnerStack';
+import FinishedEventPage from '../FinishedEventPage';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { TRIAL_PAGE } from '../sid-juniors/sidJuniorsPromo';
 import {
@@ -23,7 +24,7 @@ import {
     SID,
     PRICING_HEADING, PRICING_FOOTNOTE, FAQS, FAQ_HEADING, DATES_CONFIRMED,
     OPPORTUNITY_LEAD, TRIAL_PRICE, MAX_TRIAL_SESSIONS, TRIAL_INCLUDES_OPEN_AGE,
-    ONLY_OPEN_CENTRE,
+    ONLY_OPEN_CENTRE, TRIALS_FINISHED, FINISHED, CONTACT_EMAIL, TRIAL_SESSIONS, getCentre,
 } from './openAgeData';
 
 // With one centre left, every booking button names it ("Book Mickleham").
@@ -152,4 +153,23 @@ const OpenAgeTrial = () => {
     );
 };
 
-export default OpenAgeTrial;
+// Once every session has been played (openAgeData TRIAL_SESSIONS `finished`),
+// the address stays live for the printed posters but shows only that the
+// trials are over and what to do instead. No booking, no payment.
+const OpenAgeTrialFinished = () => (
+    <FinishedEventPage
+        route={ROUTE}
+        navVariant="open-age-trial"
+        copy={FINISHED}
+        email={CONTACT_EMAIL}
+        sessions={TRIAL_SESSIONS.map((s) => {
+            const c = getCentre(s.centre);
+            const [day, time] = s.label.split('·').map((x) => x.trim());
+            return { key: s.id, place: c.suburb, when: `${day} 2026, ${time}`, venue: c.venue };
+        })}
+    />
+);
+
+const OpenAgeTrialPage = () => (TRIALS_FINISHED ? <OpenAgeTrialFinished /> : <OpenAgeTrial />);
+
+export default OpenAgeTrialPage;

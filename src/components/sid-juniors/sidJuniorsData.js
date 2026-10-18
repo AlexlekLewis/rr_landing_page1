@@ -63,6 +63,11 @@ const NORTH = getCentre('north-melbourne'); // Mickleham Indoor Sports Centre, M
 //                 does not count. Names are not published.
 //   capacity      places, within the house ratio above
 //   full          close this session by hand the moment it is full
+//   finished      the date has passed. Never bookable, whatever the other
+//                 switches say. With every session finished the page shows
+//                 the shared FinishedEventPage instead of the sales page.
+//                 Kept in the list, never deleted: the booking rows and the
+//                 success page still read the session.
 //   price         $ per player
 //   signInTime    when to arrive: 30 minutes before the start (Alex, 2 Oct 2026)
 //   paymentLink   null → booking request: no money is taken online and we
@@ -104,6 +109,7 @@ export const SESSIONS = [
         full: false,
         signInTime: '12:30pm', // 30 minutes before the 1:00pm start (Alex, 2 Oct 2026)
         paymentLink: 'https://buy.stripe.com/dRm3cvbHPfcV91q5bB9Zm0T', // one link for both sessions (Alex, 2 Oct 2026); the booking row records the session
+        finished: true, // date has passed (closed 16 Oct 2026)
     },
     {
         key: 'mickleham',
@@ -131,6 +137,7 @@ export const SESSIONS = [
         full: false,
         signInTime: '4:00pm', // 30 minutes before the 4:30pm start (Alex, 2 Oct 2026)
         paymentLink: 'https://buy.stripe.com/dRm3cvbHPfcV91q5bB9Zm0T', // one link for both sessions (Alex, 2 Oct 2026); the booking row records the session
+        finished: true, // date has passed (closed 16 Oct 2026)
     },
 ];
 
@@ -165,6 +172,7 @@ const gateProblems = (s) => {
 };
 
 const stateOf = (s) => {
+    if (s.finished === true) return 'finished';
     if (s.bookingsOpen !== true || gateProblems(s).length) return 'closed';
     if (s.full === true) return 'full';
     return 'open';
@@ -172,7 +180,7 @@ const stateOf = (s) => {
 
 SESSIONS.forEach((s) => {
     const problems = gateProblems(s);
-    if (s.bookingsOpen === true && problems.length) {
+    if (s.bookingsOpen === true && s.finished !== true && problems.length) {
         console.warn(`[sid-juniors] ${s.centreName}: bookingsOpen is true, but bookings stay CLOSED: ${problems.join('; ')}.`);
     }
 });
@@ -194,11 +202,14 @@ export const OPEN_SESSIONS = SESSION_VIEW.filter((s) => s.state === 'open');
 export const ANY_PAY_TO_BOOK = SESSION_VIEW.some((s) => s.payToBook);
 const ALL_REQUEST_MODE = !ANY_PAY_TO_BOOK;
 
-// 'open' while any session takes bookings; otherwise 'closed' if a session is
-// still waiting on its switches, and 'full' only when every session is full.
-export const PAGE_STATE = OPEN_SESSIONS.length
-    ? 'open'
-    : SESSION_VIEW.some((s) => s.state === 'closed') ? 'closed' : 'full';
+// 'finished' once every session's date has passed; otherwise 'open' while any
+// session takes bookings, 'closed' if a session is still waiting on its
+// switches, and 'full' only when every session is full.
+export const PAGE_STATE = SESSION_VIEW.every((s) => s.state === 'finished')
+    ? 'finished'
+    : OPEN_SESSIONS.length
+        ? 'open'
+        : SESSION_VIEW.some((s) => s.state === 'closed') ? 'closed' : 'full';
 
 const samePrice = SESSION_VIEW.every((s) => s.price === SESSION_VIEW[0].price);
 export const PRICE_SUMMARY = samePrice
@@ -251,6 +262,7 @@ export const CTA = {
     open: 'Book a place',
     closed: 'Places open soon',
     full: 'Sessions are full',
+    finished: 'Sessions finished',
 }[PAGE_STATE];
 
 // ── Hero ──
@@ -338,6 +350,7 @@ export const STATE_BADGE = {
     open: 'Taking bookings',
     closed: 'Places open soon',
     full: 'Full',
+    finished: 'Finished',
 };
 
 // Older players in the same family. The open age trial runs at the same time
@@ -440,3 +453,38 @@ export const FAQ_HEADING = {
     title: 'Frequently Asked',
     sub: `Anything not covered here? Email ${CONTACT_EMAIL} and we will come back to you.`,
 };
+
+// ── FINISHED (16 Oct 2026). What /sid-juniors shows once every session is ──
+// `finished`, laid out by the shared FinishedEventPage. It only says the
+// dates have passed, never who was there on the day, so Sid stays
+// "scheduled" as everywhere else.
+export const FINISHED = {
+    kicker: 'Rajasthan Royals Academy · Melbourne',
+    title: 'The Junior Sessions With Sid Lahiri Have Finished',
+    intro:
+        `These were two coaching sessions for players aged ${AGE_RANGE}, one at each of our centres, `
+        + `with ${SID_NAME}, ${SID_TITLE_LINE}, scheduled as guest coach. Both dates have passed, so `
+        + 'bookings are closed and nothing can be paid on this page.',
+    sessionsTitle: 'The two sessions',
+    badge: STATE_BADGE.finished,
+    nextTitle: 'What to do now',
+    next: [
+        {
+            title: 'Looking for junior coaching now?',
+            body: 'Our current programs are on the home page, with who each one is for and when it runs.',
+            cta: { label: 'See what’s on now', to: '/' },
+        },
+        {
+            title: 'Booked a place?',
+            body: `Questions about a booking or a payment? Email ${CONTACT_EMAIL}.`,
+        },
+    ],
+    navCta: 'NEXT STEPS',
+};
+
+// The success page, once the sessions have finished. Someone can only land
+// there by paying through the Stripe link, which should be switched off.
+export const SUCCESS_FINISHED_LINE =
+    `Thanks. The payment went through. The junior sessions with Sid were on ${SID_IN_MELBOURNE}. `
+    + `If you paid after those dates, the session had already happened: email ${CONTACT_EMAIL} and `
+    + 'we will refund you.';

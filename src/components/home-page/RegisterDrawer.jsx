@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ArrowRight, ChevronLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
-import { PROGRAM_ROW, SID_JUNIORS_ROUTE } from '../sid-juniors/sidJuniorsPromo';
+import { PROGRAM_ROW as LP_JR_DAY_ROW, LP_JR_DAY_ROUTE, lpJrDayOpen } from '../lower-plenty-junior-royals-day/lpJrDayPromo';
 
 const AGE_GROUPS = ['U10', 'U12', 'U14', 'U16', 'U18', 'Adult'];
 const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Advanced', 'Elite'];
@@ -14,12 +14,13 @@ const GENDER_OPTIONS = ['Male Cricket', 'Female Cricket', 'No Preference'];
 // removed Aug 2026 — /elite-royals is the closed Power Game page and has no Navbar.
 // Kept in step with the Navbar dropdown, the home hero list and the What's On
 // modal — same programs, same order (26 Sep 2026).
-// REVIEW 6 OCT 2026 — the trial, the junior sessions with Sid and the holiday
-// camp are all over by then.
+// The open age trial and the junior sessions with Sid came off 16 Oct 2026
+// (both finished 4–5 Oct).
+// The Lower Plenty row (first) shows only until registrations close, Fri 23 Oct
+// 9:00pm (lpJrDayOpen). REVIEW 26 OCT 2026 — delete it and its import.
 const PROGRAMS = [
-    { label: 'Performance Squads Open Trial', route: '/performance-squads-open-trial', urgency: 'Ages 16 to 25 — Mickleham Mon 5 Oct, $30 a session. Cranbourne North (Sun 4 Oct) is full' },
-    { label: PROGRAM_ROW.heroLabel, route: SID_JUNIORS_ROUTE, urgency: PROGRAM_ROW.drawerUrgency },
-    { label: 'Spin Club', route: '/spin-club', urgency: 'Spin bowlers 10 to 25 — registering interest, nothing to pay now' },
+    ...(lpJrDayOpen() ? [{ label: LP_JR_DAY_ROW.heroLabel, route: LP_JR_DAY_ROUTE, urgency: LP_JR_DAY_ROW.drawerUrgency }] : []),
+    { label: 'Spin Club', route: '/spin-club', urgency: 'Spin bowlers 10 to 25 — Wednesday nights until 25 Nov at Mickleham and Cranbourne North, $60 a night incl. GST' },
     { label: 'Performance Squads', route: '/performance-squads', urgency: 'Register your interest for the next intake' },
     { label: 'Junior Royals', route: '/junior-royals', urgency: 'Term 4 entries open — Wednesday nights at Mickleham and Cranbourne North' },
 ];

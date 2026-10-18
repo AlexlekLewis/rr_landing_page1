@@ -100,6 +100,7 @@ export const TRIAL_SESSIONS = [
         // Kept, not deleted: everyone booked keeps the date on their confirmation.
         full: true,
         badge: 'Session Full',
+        finished: true, // date has passed (closed 16 Oct 2026)
     },
     {
         id: 'oa-2026-10-05',
@@ -109,8 +110,15 @@ export const TRIAL_SESSIONS = [
         // early to be signed in. Still read off the session rather than
         // assumed, so a session without the rule never shows the line.
         arriveBy: '5:00 PM',
+        // The date has passed. Found still taking bookings on 16 Oct 2026:
+        // eight bookings came in after the 7:00 PM finish on 5 October.
+        finished: true,
     },
 ];
+
+// `finished: true` = the session has been played. It can never be booked, and
+// once every session is finished the page shows OpenAgeFinished instead of the
+// sales page. Kept in the list, never deleted, for the same reason as `full`.
 
 // The sign-in line, from the session itself. Null for a session without a rule.
 export const arrivalLine = (sess) =>
@@ -165,7 +173,7 @@ export const getSessionsForCentre = (slug) => TRIAL_SESSIONS.filter((s) => s.cen
 export const getSessionCentreSlug = (id) => getSession(id)?.centre || null;
 // No slug means "across the whole page"; a slug narrows it to that centre.
 export const getOpenTrialSessions = (slug) =>
-    TRIAL_SESSIONS.filter((s) => s.full !== true && (!slug || s.centre === slug));
+    TRIAL_SESSIONS.filter((s) => s.full !== true && s.finished !== true && (!slug || s.centre === slug));
 export const isSessionFull = (id) => (getSession(id) || {}).full === true;
 // A centre with one session left lets a player pick one, whatever the cap says.
 // Every "choose up to N" line reads from here.
@@ -174,6 +182,7 @@ export const getSelectableSessionCount = (slug) =>
 export const isCentreFull = (slug) =>
     getSessionsForCentre(slug).length > 0 && getOpenTrialSessions(slug).length === 0;
 export const ALL_SESSIONS_FULL = DATES_CONFIRMED && getOpenTrialSessions().length === 0;
+export const TRIALS_FINISHED = DATES_CONFIRMED && TRIAL_SESSIONS.every((s) => s.finished === true);
 // The centres still taking bookings, and the one centre when only one is left.
 // Calls to action name that centre ("Book Mickleham") so nobody heads for the
 // full one.
@@ -513,6 +522,51 @@ export const FAQ_HEADING = {
     sub: 'Anything not covered here? Get in touch through the contact details on our website and we will come back to you.',
 };
 
+// ── FINISHED (16 Oct 2026). What the page shows once every session in ──
+// TRIAL_SESSIONS is `finished`, rendered by OpenAgeFinished.jsx. The printed
+// posters still send people here, so it says plainly that the trials are over
+// and what to do instead. It only says the dates have passed, never who was
+// there on the day.
+export const CONTACT_EMAIL = 'info@rramelbourne.com'; // same inbox as /sid-juniors
+const MICKLEHAM_SESSION = getSession('oa-2026-10-05');
+
+export const FINISHED = {
+    kicker: 'Rajasthan Royals Academy · Melbourne',
+    title: 'The Open Age T20 Trials Have Finished',
+    intro:
+        `These were trials for players aged ${MIN_AGE} to ${MAX_AGE}, as a way into our Performance `
+        + 'Squads at Mickleham and Cranbourne North. Both trial dates have passed, so bookings are '
+        + 'closed and nothing can be paid on this page.',
+    sessionsTitle: 'The two trials',
+    badge: 'Finished',
+    nextTitle: 'What to do now',
+    next: [
+        {
+            title: 'Missed the trials?',
+            body:
+                'The trials were an extra intake into the Performance Squads. Register your interest on '
+                + 'the Performance Squads page and we will let you know as soon as the next trial dates '
+                + 'are set. There is nothing to pay.',
+            cta: { label: 'Register your interest', to: '/performance-squads' },
+        },
+        {
+            title: 'You trialled?',
+            body:
+                'Your selection outcome comes from the head coach at the centre you trialled at: '
+                + `${TRIAL_CENTRES.map((c) => `${c.coach} at ${c.suburb}`).join(', ')}. `
+                + `Not heard yet? Email ${CONTACT_EMAIL}.`,
+        },
+        {
+            title: `Booked after ${MICKLEHAM_SESSION.label.split('·')[0].trim()}?`,
+            body:
+                `The last trial was at Mickleham on ${MICKLEHAM_SESSION.label.split('·')[0].trim()}, so a `
+                + 'booking made after that was for a trial that had already happened. Email '
+                + `${CONTACT_EMAIL} and we will refund any payment.`,
+        },
+    ],
+    navCta: 'NEXT INTAKE',
+};
+
 // ── Social preview. Consumed by src/seo/pageSeo.js. ──
 // PUBLIC AND INDEXED on purpose. No noindex anywhere on this page.
 //
@@ -530,9 +584,10 @@ export const SEO = {
     title: 'Open Age T20 Trials, Mickleham & Cranbourne North | Royals',
     // The facts a reader needs lead, so a search result that cuts the end off
     // still says what, who for, where, when and how much.
+    // Finished (16 Oct 2026): the card says so, in case an old link is shared.
     description:
-        `Open age T20 trials, players ${MIN_AGE} to ${MAX_AGE}. Mickleham Mon 5 Oct, 5:30 PM, `
-        + `$${TRIAL_PRICE} a session (Cranbourne North Sun 4 Oct is full). Siddhartha Lahiri, Head of `
-        + 'International Player Development and Performance Coach at the Rajasthan Royals, is coming to both.',
+        `Open age T20 trials for players ${MIN_AGE} to ${MAX_AGE} at Mickleham and Cranbourne North, `
+        + 'Melbourne, on 4 and 5 October 2026. Both dates have passed and bookings are closed. '
+        + 'Register interest in the next Performance Squads intake.',
     ogImage: SID.photo,
 };

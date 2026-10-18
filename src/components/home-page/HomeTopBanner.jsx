@@ -1,40 +1,43 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { BANNER, SID_JUNIORS_ROUTE } from '../sid-juniors/sidJuniorsPromo';
+import { BANNER, LP_JR_DAY_ROUTE, lpJrDayOpen } from '../lower-plenty-junior-royals-day/lpJrDayPromo';
+import usePlaces, { placesLine } from '../lower-plenty-junior-royals-day/usePlaces';
 
 // The full-width banner directly under the nav on the home page — the single
 // loudest slot on the site. It promotes ONE thing at a time, and that thing has
-// to be currently open. Was the School Holiday Camp until 26 Sep 2026, when the
-// open age trial took the slot as a dated special event (Alex).
-// If what it points at closes, change it or delete it the same day.
-// REVIEW 6 OCT 2026 — the day after the last session. It must not outlive it.
+// to be currently open. History: the School Holiday Camp until 26 Sep 2026, then
+// the open age trial and Sid's junior sessions (finished 4–5 Oct, banner off
+// 16 Oct). Since 19 Oct 2026 (Alex): Junior Royals are coming to Lower Plenty,
+// as the home page's special event.
 //
-// WHAT THIS BANNER HAS TO SAY, because for many visitors it is the only line
-// they read (Alex, 26 Sep 2026):
-//   1. it is a trial for the PERFORMANCE SQUADS, not a stand-alone event
-//   2. it is for OPEN AGE players, 16 to 25
-//   3. it runs at BOTH CENTRES — Mickleham and Cranbourne North
-//   4. Sid is at BOTH sessions — Alex confirmed Mickleham on 26 Sep 2026.
-//      His attendance is "scheduled", never certain: the page it links to
-//      carries the hedge and the refund, so this line stays factual.
-//   5. juniors aged 8 to 16 have their own sessions with Sid at both centres
-//      (Alex, 29 Sep 2026). A third row links to /sid-juniors; its words come
-//      from sid-juniors/sidJuniorsPromo.js.
+// It switches itself off when registrations close (Fri 23 Oct 2026, 9:00pm —
+// lpJrDayOpen), leaving only the spacer that keeps the What's On ticker clear
+// of the fixed nav. REVIEW 26 OCT 2026: point it at the next event, or leave
+// the spacer and delete the rest.
 //
-// The glow pulses to catch the eye, in the Royals' original gold (Alex asked
-// for it by name on 26 Sep 2026). NOTE: the brand spec in reference material
-// says "no gold anywhere" because gold belongs to another sub-brand — this
-// banner is Alex's deliberate exception, not a precedent for other pages.
-// The status light is green and flashes. Both stop for anyone who asks for
-// reduced motion, the same rule the What's On ticker follows.
-const HomeTopBanner = () => {
+// For many visitors this is the only line they read, so it says what it is,
+// who it's for, when and where, what it costs and when registrations close.
+// The places count comes from the database (counts only), so it is never stale.
+//
+// The glow is the brand pink (the gold on the trial banner was Alex's one-off
+// exception). Both animations stop for anyone who asks for reduced motion.
+
+const Spacer = () => <div className="pt-20 md:pt-28 bg-rr-dark" />;
+
+const LowerPlentyBanner = () => {
+    const places = usePlaces();
+    // "60 places" until someone books, then "54 of 60 places left".
+    const placesText = places.left == null ? null
+        : places.state === 'open' && places.left >= places.capacity ? `${places.capacity} places`
+        : placesLine(places);
+
     return (
         <div className="pt-20 md:pt-28 bg-rr-dark">
             <style>{`
               @keyframes rrEventGlow {
-                0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0.0), inset 0 0 0 0 rgba(255,255,255,0.0); }
-                50%      { box-shadow: 0 0 34px 7px rgba(212,175,55,0.62), inset 0 0 26px 0 rgba(255,255,255,0.12); }
+                0%, 100% { box-shadow: 0 0 0 0 rgba(225,31,143,0.0), inset 0 0 0 0 rgba(255,255,255,0.0); }
+                50%      { box-shadow: 0 0 34px 7px rgba(225,31,143,0.55), inset 0 0 26px 0 rgba(255,255,255,0.12); }
               }
               @keyframes rrEventDot {
                 0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 9px 2px rgba(34,197,94,0.95); }
@@ -56,54 +59,31 @@ const HomeTopBanner = () => {
 
                     {/* What it is, and who it is for. */}
                     <span className="font-black uppercase tracking-wide text-[13px] sm:text-base leading-tight">
-                        Performance Squads <span className="text-white/70">·</span>{' '}
-                        <span className="text-rr-pink">Open Age Trial</span>{' '}
-                        <span className="text-white/70">·</span> Ages 16 to 25
+                        {BANNER.title} <span className="text-white/70">·</span> {BANNER.ages}
                     </span>
 
                     <Link
-                        to="/performance-squads-open-trial"
+                        to={LP_JR_DAY_ROUTE}
                         className="group inline-flex items-center gap-2 bg-white text-rr-pink hover:bg-rr-dark hover:text-white font-black uppercase tracking-widest text-[13px] sm:text-base px-5 sm:px-6 py-2 sm:py-2.5 rounded-full shadow-md transition-all duration-300 hover:shadow-[0_0_22px_rgba(255,255,255,0.35)]"
                     >
-                        Book Mickleham
+                        {BANNER.cta}
                         <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-0.5" />
                     </Link>
                 </div>
 
-                {/* Mickleham leads: Cranbourne North closed as full on 4 Oct 2026
-                    (Alex), so Mickleham is the one session still taking bookings.
-                    Then Sid — who is at both. Second row so the first row stays
-                    readable on a phone. */}
-                <div className="max-w-6xl mx-auto mt-1 flex items-center justify-center gap-x-2.5 gap-y-0.5 flex-wrap text-center leading-snug">
-                    <span className="font-black uppercase tracking-wide text-[11px] sm:text-sm">
-                        Mickleham — Mon 5 Oct, 5:30 PM — bookings open
-                    </span>
-                    <span className="font-bold uppercase tracking-wide text-[10px] sm:text-xs text-white/60">
-                        <span className="line-through">Cranbourne North Sun 4 Oct</span>{' '}
-                        <span className="text-amber-300 no-underline">Session Full</span>
-                    </span>
-                    <span className="font-medium text-[10px] sm:text-xs text-white/80">
-                        Siddhartha Lahiri, Rajasthan Royals Head of International Player Development and Performance Coach, at both sessions
-                    </span>
-                </div>
-
-                {/* Juniors, 8 to 16: their own sessions with Sid at both centres.
-                    Under the row that gives his full name, so "Sid" reads right. */}
-                <div className="max-w-6xl mx-auto mt-1.5 text-center leading-snug">
-                    {/* Inline, not flex, so on a phone it wraps as one sentence
-                        with the arrow at the end of the last line. */}
-                    <Link
-                        to={SID_JUNIORS_ROUTE}
-                        className="group text-[10px] sm:text-xs font-medium text-white underline decoration-white/40 underline-offset-2 hover:decoration-white"
-                    >
-                        <span className="font-black uppercase tracking-wide">{BANNER.lead}:</span>{' '}
-                        {BANNER.text}
-                        <ArrowRight className="inline-block w-3 h-3 sm:w-3.5 sm:h-3.5 ml-1 align-[-2px] transition-transform group-hover:translate-x-0.5" />
-                    </Link>
+                {/* When, where, cost — then the deadline and the real places count. */}
+                <div className="max-w-6xl mx-auto mt-1 text-center leading-snug">
+                    <p className="font-medium text-[11px] sm:text-sm text-white/90">{BANNER.what}</p>
+                    <p className="font-black uppercase tracking-wide text-[10px] sm:text-xs mt-0.5">
+                        {BANNER.closes}
+                        {placesText && <span className="text-white/80"> · {placesText}</span>}
+                    </p>
                 </div>
             </div>
         </div>
     );
 };
+
+const HomeTopBanner = () => (lpJrDayOpen() ? <LowerPlentyBanner /> : <Spacer />);
 
 export default HomeTopBanner;

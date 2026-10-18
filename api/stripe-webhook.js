@@ -105,7 +105,17 @@ const PROGRAM_PRICE_IDS = {
 // July + Sept holiday payment gap). Add other static links here as needed.
 const PAYMENT_LINK_PROGRAMS = {
   'plink_1U5Kd0Io52UEA50y3hqasgbv': { program: 'holiday', program_variant: null, program_label: 'Junior Royals Holiday Program — Sept/Oct 2026' },
+  // $10 entry fee for "Junior Royals are coming to Lower Plenty", Sun 25 Oct 2026
+  // (Alex, 16 Oct 2026). Mapped by link on purpose: its product name, "Junior
+  // Royals Carnival Day Entry Fee", would otherwise classify as a Junior Royals
+  // term payment by description. Paid rows back-fill onto
+  // lower_plenty_junior_royals_day_registrations (see LOWER_PLENTY_JR_DAY_TABLE).
+  'plink_1UR3QNIo52UEA50yq6GKVkSy': { program: 'lower_plenty_jr_day', program_variant: null, program_label: 'Junior Royals are coming to Lower Plenty — $10 entry fee, Sun 25 Oct 2026' },
 };
+
+// Registration table for the Lower Plenty morning. The form sends the row id as
+// client_reference_id; the webhook marks that row paid.
+const LOWER_PLENTY_JR_DAY_TABLE = 'lower_plenty_junior_royals_day_registrations';
 
 const isUuid = (v) => typeof v === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
 
@@ -523,6 +533,36 @@ export default async function handler(req, res) {
         console.log(`jr_term3 completion via ${jr.method}${jr.table ? ` → ${jr.table}/${jr.id}` : ''} (session=${session.id})`);
       } catch (e) {
         console.warn('jr_term3 completion failed (non-blocking):', e.message);
+      }
+    }
+
+    // Lower Plenty morning ($10 entry fee): mark the registration row paid.
+    // Non-blocking, like the Term 3 completion above: the payment is already
+    // recorded in program_registrations, and the sheet sync also matches it by
+    // email, so a failure here must never make Stripe retry the whole event.
+    if (programClass.program === 'lower_plenty_jr_day') {
+      const refId = session.client_reference_id || null;
+      if (isUuid(refId)) {
+        try {
+          const { data, error } = await supabase
+            .from(LOWER_PLENTY_JR_DAY_TABLE)
+            .update({
+              paid:              true,
+              paid_at:           charge?.created ? new Date(charge.created * 1000).toISOString() : new Date().toISOString(),
+              amount_paid_cents: session.amount_total ?? null,
+              stripe_session_id: session.id,
+              receipt_url:       charge?.receipt_url || null,
+            })
+            .eq('id', refId)
+            .select('id');
+          if (error) console.warn('lower plenty back-fill failed (non-blocking):', error.message);
+          else if (!data?.length) console.warn('lower plenty back-fill: no row for client_reference_id', { refId, session_id: session.id });
+          else console.log(`lower plenty payment back-filled (id=${refId}, session=${session.id})`);
+        } catch (e) {
+          console.warn('lower plenty back-fill threw (non-blocking):', e.message);
+        }
+      } else {
+        console.warn('lower plenty session missing client_reference_id — matched by email in the sheet instead', { session_id: session.id });
       }
     }
 
