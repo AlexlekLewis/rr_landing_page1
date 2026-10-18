@@ -111,6 +111,8 @@ const OPEN_TRIAL_PROGRAM = 'performance-squads-open-age-2026';
 const SPIN_CLUB_PROGRAM = 'Spin Club';
 // src/components/sid-juniors/sidJuniorsData.js → dbSlug / requestSlug
 const SID_SLUG_PREFIX = 'sid-juniors';
+// src/components/power-league/PLForm.jsx → PROGRAM_TYPE
+const POWER_LEAGUE_PROGRAM = 'Power League';
 // src/components/india-tour-2026/ITForm.jsx → SOURCE_TAG
 const TOUR_SOURCE = 'india-tour-eoi';
 // src/components/junior-royals-t3/JRT3RegistrationForm.jsx writes every Term 4
@@ -165,6 +167,7 @@ export const PROGRAM_PAYMENT_LINKS = {
   'lp-jr-day': {
     'https://buy.stripe.com/5kQdR99zHd4N0uUdI79Zm0W': { label: 'Entry fee', sessions: 1, feeCents: 1000 },
   },
+  'power-league': {},
 };
 
 // $30 per player, per session. Source of truth is PAYMENT_OPTIONS in
@@ -179,6 +182,7 @@ const NO_PAYMENT_LINE = {
   'sid-juniors': 'Booking request — no payment has been taken and no place is held',
   'tour-interest': 'Nothing to pay — this is an expression of interest only',
   'jr-term4': 'Nothing to pay — an entry only. No place is held until we confirm one.',
+  'power-league': 'Nomination only — nothing paid. Picked players pay $35 incl. GST through the link we send them.',
 };
 
 // Readable centre names for CELL values. Deliberately separate from anything
@@ -441,6 +445,7 @@ export const PROGRAM_LABELS = {
   'tour-interest': 'Tour Interest',
   'jr-term4': 'Junior Royals Term 4',
   'lp-jr-day': 'Lower Plenty Junior Royals Day',
+  'power-league': 'Power League',
 };
 const tabName = (key) => `${PROGRAM_LABELS[key]}${DNE}`;
 
@@ -526,6 +531,54 @@ export const spinClubRow = (r) => ([
   SPIN_CLUB_CENTRES[r.location] || r.program || r.location || '',
   (r.bio || '').replace(ACCEPT_LINE, '').trim(),
   NO_PAYMENT_LINE['spin-club'],
+]);
+
+// ── Power League (Sunday 25 October 2026) ───────────────────
+export const POWER_LEAGUE_HEADERS = [
+  'Nomination ID',
+  'Nominated (Melbourne)',
+  'Player Name',
+  'Date of Birth',
+  'Age on Match Day',
+  'Club',
+  'Highest Weekend Level',
+  'Grade / Team',
+  'Role',
+  'Parent / Guardian',
+  'Email',
+  'Phone',
+  'Medical or Injuries',
+  'Photo/Video Consent',
+  'Wants Squad Trial News',
+  'What They Told Us',
+  'Payment',
+];
+
+// The form writes labelled lines into `bio`. Pull the two a coach acts on into
+// their own columns and keep only the person's own words for the notes column.
+const bioLine = (bio, label) => {
+  const hit = (bio || '').split(/\n+/).find((l) => l.startsWith(`${label}: `));
+  return hit ? hit.slice(label.length + 2).trim() : '';
+};
+
+export const powerLeagueRow = (r) => ([
+  r.id || '',
+  asText(fmtMelb(r.created_at)),
+  [r.first_name, r.last_name].filter(Boolean).join(' '),
+  asText(r.dob || ''),
+  asText(r.age ?? ''),
+  r.club || '',
+  r.experience_level || '',
+  r.history || '',
+  r.cricket_type || '',
+  r.parent1_name || '',
+  r.email || '',
+  asText(r.phone || ''),
+  bioLine(r.bio, 'Medical or injuries'),
+  r.accept_social_media ? 'Yes' : 'No',
+  bioLine(r.bio, 'Also wants to hear about Performance Squad trials') ? 'Yes' : '',
+  bioLine(r.bio, 'Notes'),
+  NO_PAYMENT_LINE['power-league'],
 ]);
 
 // ── Juniors with Sid ────────────────────────────────────────
@@ -931,6 +984,12 @@ export const guideLines = (linkLines = [], counts = {}) => {
     ['  An unpaid row still holds one of the 60 places. Chase the family, or cancel the row'],
     ['  in the database (cancelled_at) so the place frees up — deleting it here does nothing.'],
     ['  Read the Notes column before the day: it holds medical details.'],
+    [`"${PROGRAM_LABELS['power-league']}" — players 10 to 25 nominated for the Power League T20 game on`],
+    ['  Sunday 25 October, 12pm to 7pm, at Montmorency Park (rramelbourne.com/power-league). Games start'],
+    ['  at 12pm or 3pm. Nominations close Tuesday 20 October, 9pm; picked players are told by'],
+    ['  Wednesday 21 October, 9pm. A NOMINATION'],
+    ['  IS NOT A PLACE: nothing is paid until a picked player pays the $35 incl. GST link we send.'],
+    [`  Sort by "Highest Weekend Level" and age to pick the sides. Currently ${counts.powerLeague ?? 0} nominations.`],
     [''],
     [`"${PROGRAM_LABELS['tour-interest']}" — players who want to go on an India tour, from`],
     ['  rramelbourne.com/tours. An expression of interest, not a booking: nothing has'],
@@ -965,6 +1024,7 @@ export const guideLines = (linkLines = [], counts = {}) => {
     [`  ${PROGRAM_LABELS['sid-juniors']}: column ${safeCol(SID_HEADERS)} onwards`],
     [`  ${PROGRAM_LABELS['jr-term4']}: column ${safeCol(JR_TERM4_HEADERS)} onwards`],
     [`  ${PROGRAM_LABELS['lp-jr-day']}: column ${safeCol(LP_JR_DAY_HEADERS)} onwards`],
+    [`  ${PROGRAM_LABELS['power-league']}: column ${safeCol(POWER_LEAGUE_HEADERS)} onwards`],
     [`  ${PROGRAM_LABELS['tour-interest']}: column ${safeCol(TOUR_HEADERS)} onwards`],
     [`  Payments (Stripe): column ${safeCol(PAY_HEADERS)} onwards`],
     [''],
@@ -1064,7 +1124,7 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
   // would quietly stop putting people on a coach's tab with nothing to show it
   // had happened. ROW_CAP is well above any of these (240 in
   // performance_squad_leads at 30 Sep 2026) and hitting it is logged loudly.
-  const [squadLeads, spinClub, sidBookings, tourApps, tourEois, jrTerm4, lpJrDayRaw] = await Promise.all([
+  const [squadLeads, spinClub, sidBookings, tourApps, tourEois, jrTerm4, lpJrDayRaw, powerLeague] = await Promise.all([
     // ALL performance_squad_leads, not just the open-trial ones: payments are
     // allocated across the whole table so this workbook and the Performance
     // Squads workbook can never disagree about who has paid. Filtered down to
@@ -1076,6 +1136,7 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
     sb.from('india_tour_2026_eoi').select('*').order('created_at', { ascending: true }).limit(ROW_CAP),
     sb.from(JR_TERM4_TABLE).select('*').order('created_at', { ascending: true }).limit(ROW_CAP),
     sb.from(LP_JR_DAY_TABLE).select('*').order('created_at', { ascending: true }).limit(ROW_CAP),
+    sb.from('applications').select('*').eq('program_type', POWER_LEAGUE_PROGRAM).eq('is_test', false).order('created_at', { ascending: true }).limit(ROW_CAP),
   ]);
   // The newest source: if its table is ever missing (a fresh database, a
   // rename), the other tabs must still sync. Every other error still throws.
@@ -1090,6 +1151,7 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
     india_tour_2026_eoi: tourEois,
     jr_term4_waitlist: jrTerm4,
     [LP_JR_DAY_TABLE]: lpJrDay,
+    'applications (Power League)': powerLeague,
   };
   for (const [name, r] of Object.entries(sources)) {
     if (r.error) throw r.error;
@@ -1156,6 +1218,11 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
       rows: (lpJrDay.data || []).map((r) => lpJrDayRow(r, paidById.get(r.id) || null)),
     }]),
     {
+      key: 'power-league',
+      headers: POWER_LEAGUE_HEADERS,
+      rows: (powerLeague.data || []).map(powerLeagueRow),
+    },
+    {
       key: 'tour-interest',
       headers: TOUR_HEADERS,
       rows: [
@@ -1197,6 +1264,7 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
     jrTerm4: (jrTerm4.data || []).length,
     lpJrDay: (lpJrDay.data || []).filter((r) => !r.cancelled_at).length,
     lpJrDayPaid: (lpJrDay.data || []).filter((r) => !r.cancelled_at && lpJrDayPaid(r, paidById.get(r.id) || null)).length,
+    powerLeague: (powerLeague.data || []).length,
     jrTerm4Closed: (jrTerm4.data || [])
       .filter((r) => !JR_TERM4_CENTRES[r.preferred_centre]).length,
   });

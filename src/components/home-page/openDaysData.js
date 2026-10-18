@@ -22,6 +22,7 @@
 // 2026 and came out on 16 Oct 2026 (ten days late — check the review dates).
 //
 // ORDER = nearest real deadline first. Review dates:
+//   Power League       — 26 Oct 2026, the day after the game (drops out at 9pm Tue 20 Oct)
 //   Performance Squads — when the next intake has dates, put them in the tag
 //   Spin Club          — 26 Nov 2026, the day after the last night
 //   Junior Royals T4   — 16 Dec 2026, the last Term 4 session
@@ -31,8 +32,14 @@
 // who has never heard of us — say what the thing is, who it's for, and what
 // the next step is.
 import { ANNOUNCEMENT as LP_JR_DAY_ANNOUNCEMENT, lpJrDayOpen } from '../lower-plenty-junior-royals-day/lpJrDayPromo';
+import { ANNOUNCEMENT as POWER_LEAGUE_ANNOUNCEMENT, powerLeagueOpen } from '../power-league/plPromo';
 
 export const ANNOUNCEMENTS = [
+    // Power League open invitation, Sun 25 Oct 2026 (Alex, 19 Oct 2026: "make sure
+    // it's on the main modal"). Nearest real deadline (Tue 20 Oct, 9pm) and it drops
+    // out by itself at that moment (powerLeagueOpen). REVIEW 26 OCT 2026: remove it
+    // and its import.
+    ...(powerLeagueOpen() ? [POWER_LEAGUE_ANNOUNCEMENT] : []),
     // Junior Royals Are Coming to Lower Plenty ($10), Sun 25 Oct 2026 (Alex, 16 Oct
     // 2026). Nearest real deadline (Fri 23 Oct, 9pm), and it drops out by itself
     // at that moment (lpJrDayOpen). REVIEW 26 OCT 2026: remove it and its import.
