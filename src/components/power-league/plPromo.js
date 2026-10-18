@@ -19,11 +19,13 @@ import { MATCH, nominationsClosed } from './plOptions';
 export const powerLeagueOpen = (now = Date.now()) => !nominationsClosed(now);
 
 // The ticker shows only `name` and `tag`, so the tag says who, what, when.
+// Alex, 19 Oct 2026: the hook has to say plainly that they PLAY A MATCH in the
+// Power League, WITH our Performance Squad players.
 export const ANNOUNCEMENT = {
     key: 'power-league',
-    name: 'Power League · Open Invitation',
-    tag: `Ages 10–25, any club · one T20 game with our Performance Squad players · Sun 25 Oct, 12–7pm`,
-    detail: `Montmorency Park · games start 12pm or 3pm · ${MATCH.fee}, only if picked · nominate by ${MATCH.closes}`,
+    name: 'Play in our Power League',
+    tag: `Join our Performance Squad players for a T20 match · ages 10–25, any club · Sun 25 Oct`,
+    detail: `Open invitation · Montmorency Park, 12–7pm, games start 12pm or 3pm · ${MATCH.fee}, only if picked · nominate by ${MATCH.closes}`,
     href: '/power-league',
     badge: 'Nominate',
     highlight: true,
