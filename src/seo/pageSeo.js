@@ -41,6 +41,17 @@ export const PAGE_SEO = {
     description:
       'Nominate a player for a Rajasthan Royals Academy Power League T20 game in Melbourne on Sunday 25 October, 12pm to 7pm (games start 12pm or 3pm), Montmorency Park. Ages 10 to 25, any club. $35 incl. GST, only if picked. Nominations close Tuesday 20 October, 9pm.',
   },
+  // "Junior Royals are coming to Lower Plenty" (the event's name since 18 Oct 2026),
+  // Sun 25 Oct 2026 (Alex, 16 Oct 2026).
+  // Shared off the flyer QR and in WhatsApp, so it is prerendered with its own
+  // card. Facts mirror components/lower-plenty-junior-royals-day/lpJrDayData.js.
+  // REVIEW 26 OCT 2026 — the morning is over.
+  '/lower-plenty-junior-royals-day': {
+    title: 'Junior Royals Are Coming to Lower Plenty | Melbourne',
+    description:
+      'A morning of cricket for players aged 7 to 12: Sunday 25 October, 9–11am, Lower Plenty Oval South, Montmorency Park, Melbourne. Rajasthan Royals Academy coaches, then Power League matches. $10 incl. GST.',
+    ogImage: '/assets/lower-plenty/lower-plenty-jr-day-og.png',
+  },
   '/spin-club': {
     title: 'Spin Bowling Coaching Melbourne | Royals Spin Club',
     description:
@@ -142,10 +153,12 @@ export const PAGE_SEO = {
   // Ages, dates and price are confirmed. Sid is the guest coach, and his
   // attendance is "scheduled", never certain, as everywhere on the page. The
   // first sentence carries the facts, so a truncated snippet still has them.
+  // FINISHED 16 Oct 2026: both dates have passed, so the card says so if an
+  // old link is forwarded. The page itself is noindex and out of the sitemap.
   '/sid-juniors': {
     title: 'Junior Sessions with Siddhartha Lahiri | Royals Academy',
     description:
-      'Junior coaching for players aged 8 to 16 at Cranbourne North (Sun 4 Oct, 1:00–2:30pm) and Mickleham (Mon 5 Oct, 4:30–5:30pm), $30 a session. Siddhartha Lahiri, Head of International Player Development and Performance Coach at the Rajasthan Royals, is scheduled as guest coach at both.',
+      'Junior coaching sessions for players aged 8 to 16 at Cranbourne North and Mickleham, Melbourne, on 4 and 5 October 2026. Both dates have passed and bookings are closed.',
     ogImage: '/assets/performance-squads/sid-lahiri-coaching-2026.jpg',
   },
   '/': {
@@ -215,10 +228,11 @@ export const PAGE_SEO = {
   // "is coming to", never "is at" — his attendance is scheduled, not certain,
   // and the page hedges it in four places. The card must not out-promise it.
   // Sid is coming to BOTH sessions (Alex, 26 September 2026).
+  // FINISHED 16 Oct 2026 — mirrors openAgeData SEO. Noindex, out of the sitemap.
   '/performance-squads-open-trial': {
     title: 'Open Age T20 Trials, Mickleham & Cranbourne North | Royals',
     description:
-      'Open age T20 trials, players 16 to 25. Mickleham Mon 5 Oct, 5:30 PM, $30 a session (Cranbourne North Sun 4 Oct is full). Siddhartha Lahiri, Head of International Player Development and Performance Coach at the Rajasthan Royals, is coming to both.',
+      'Open age T20 trials for players 16 to 25 at Mickleham and Cranbourne North, Melbourne, on 4 and 5 October 2026. Both dates have passed and bookings are closed. Register interest in the next Performance Squads intake.',
     ogImage: '/assets/performance-squads/sid-lahiri-riyan-parag.jpg',
   },
   '/coaches': {

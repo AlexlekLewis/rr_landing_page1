@@ -66,6 +66,11 @@
   ],
   "redirects": [
     {
+      "source": "/carnival",
+      "destination": "/lower-plenty-junior-royals-day",
+      "permanent": false
+    },
+    {
       "source": "/holiday-programs",
       "destination": "/junior-royals-holiday",
       "permanent": true
@@ -258,6 +263,14 @@
     {
       "source": "/sid-juniors/",
       "destination": "/sid-juniors/index.html"
+    },
+    {
+      "source": "/lower-plenty-junior-royals-day",
+      "destination": "/lower-plenty-junior-royals-day/index.html"
+    },
+    {
+      "source": "/lower-plenty-junior-royals-day/",
+      "destination": "/lower-plenty-junior-royals-day/index.html"
     },
     {
       "source": "/junior-royals",

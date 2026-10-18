@@ -7,6 +7,7 @@ import {
 import { fadeUp } from '../performance-squads/shared';
 import {
     ANY_PAY_TO_BOOK, SESSION_VIEW, getSession, ROUTE, SID_NAME, CONTACT_EMAIL,
+    PAGE_STATE, SUCCESS_FINISHED_LINE,
 } from './sidJuniorsData';
 
 // /sid-juniors/success — where a session's Stripe Payment Link sends a parent
@@ -18,8 +19,13 @@ import {
 // refuses to say "payment received" and sends the visitor to the booking page.
 // It does not write to the database: payments are matched to bookings in
 // Stripe by the payer's email.
+//
+// Once the sessions have finished (PAGE_STATE 'finished') it still confirms
+// the payment, but drops the session details and "book another player", and
+// says how to get a refund for a session that had already happened.
 
 const Content = () => {
+    const finished = PAGE_STATE === 'finished';
     const [params] = useSearchParams();
     const picked = getSession(params.get('session'));
     const shown = picked && picked.payToBook ? [picked] : SESSION_VIEW.filter((s) => s.payToBook);
@@ -62,11 +68,16 @@ const Content = () => {
                         initial="hidden" animate="visible" variants={fadeUp} custom={0.15}
                         className="text-white/70 text-[15px] sm:text-base font-medium leading-relaxed"
                     >
-                        Thanks. The payment went through, so the place is booked.
-                        {shown.length > 1 && ' It is at the session you chose on the form. Both sessions are below so you can check the time and where to go.'}
+                        {finished ? SUCCESS_FINISHED_LINE : (
+                            <>
+                                Thanks. The payment went through, so the place is booked.
+                                {shown.length > 1 && ' It is at the session you chose on the form. Both sessions are below so you can check the time and where to go.'}
+                            </>
+                        )}
                     </motion.p>
                 </div>
 
+                {!finished && (
                 <motion.div
                     initial="hidden" animate="visible" variants={fadeUp} custom={0.2}
                     className="bg-white/5 border border-white/12 rounded-2xl p-6 sm:p-8 mt-10"
@@ -99,21 +110,24 @@ const Content = () => {
                         </div>
                     ))}
                 </motion.div>
+                )}
 
                 <motion.div
                     initial="hidden" animate="visible" variants={fadeUp} custom={0.25}
                     className="text-center mt-10"
                 >
                     <p className="text-white/50 text-sm font-medium mb-5">
-                        Booking another player, or have a question?
+                        {finished ? 'Have a question?' : 'Booking another player, or have a question?'}
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                        {!finished && (
                         <a
                             href={ROUTE}
                             className="inline-flex items-center justify-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
                         >
                             Book another player <ArrowRight className="w-4 h-4" />
                         </a>
+                        )}
                         <a
                             href={`mailto:${CONTACT_EMAIL}`}
                             className="inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/15 text-white font-black uppercase tracking-wider text-sm rounded-full px-8 py-4 transition-colors"
