@@ -23,17 +23,27 @@ const PLHero = () => {
                     {closed ? 'Nominations have closed' : `Nominations close ${MATCH.closes}`}
                 </span>
 
-                <h1 className="font-black text-white uppercase tracking-tighter mb-6 max-w-4xl">
-                    <span className="block text-5xl md:text-7xl lg:text-8xl leading-[0.88]">Power League</span>
-                    <span className="block text-2xl md:text-4xl lg:text-5xl leading-[1.05] mt-3 text-rr-pink">
-                        Put your hand up for a game
-                    </span>
+                {/* Same lock-up as /match-registration and the squads welcome page: the
+                    Power League wordmark, then the headline, then the date in pink. The
+                    headline matches the poster ("Power League / Open Invitation"), so a
+                    player who scans the QR lands on the words they just read. */}
+                <img
+                    src="/assets/power-league-logo-rra.png"
+                    alt=""
+                    className="h-14 md:h-28 lg:h-32 w-auto mb-4"
+                />
+                {/* Headline: Alex, 19 Oct 2026 ("your chance to play as a Royal"). The next
+                    line names the ACADEMY's Power League, so it can't be read as the IPL side. */}
+                <h1 className="font-black text-white uppercase tracking-tighter mb-4 max-w-4xl text-4xl md:text-6xl lg:text-7xl leading-[0.92]">
+                    <span className="sr-only">Power League: </span>Your chance to play as a Royal
                 </h1>
+                <p className="text-xl md:text-3xl font-black text-rr-pink uppercase tracking-tight leading-tight mb-6">
+                    {MATCH.date} · {MATCH.time}
+                </p>
 
                 <p className="text-lg md:text-2xl text-white font-bold leading-snug max-w-2xl mb-4">
-                    A Rajasthan Royals Academy T20 match day at Montmorency Park, Melbourne, on{' '}
-                    <strong className="text-rr-pink">{MATCH.date}</strong>, open to players aged 10 to 25
-                    from any club.
+                    An open invitation to play one T20 game in the Rajasthan Royals Academy Power League,
+                    at Montmorency Park, Melbourne. Ages 10 to 25, from any club.
                 </p>
                 <p className="text-base md:text-lg text-white/75 font-medium leading-relaxed max-w-2xl mb-8">
                     Nominate by <strong className="text-white">{MATCH.closes}</strong>. Picked players

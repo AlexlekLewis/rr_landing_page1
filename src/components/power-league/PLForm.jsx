@@ -219,9 +219,9 @@ const PLForm = () => {
     return (
         <section className="bg-white py-20 md:py-28">
             <div className="max-w-3xl mx-auto px-6">
-                <p className="text-xs font-black text-rr-pink uppercase tracking-[0.3em] mb-4">Nominate</p>
+                <p className="text-xs font-black text-rr-pink uppercase tracking-[0.3em] mb-4">Closes {MATCH.closes}</p>
                 <h2 className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-5">
-                    Put a player forward
+                    Nominate a player
                 </h2>
                 <p className="text-base text-rr-dark/70 font-medium leading-relaxed mb-4">
                     Players can nominate themselves, or a coach or parent can do it for them. You do

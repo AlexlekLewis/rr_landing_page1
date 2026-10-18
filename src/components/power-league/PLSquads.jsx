@@ -9,7 +9,7 @@ const PLSquads = () => (
                 Where this leads
             </p>
             <h2 className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-6">
-                Performance Squads
+                Performance Squads:<br className="hidden md:block" /> a season of training and matches
             </h2>
             <p className="text-base md:text-lg text-rr-dark/70 font-medium leading-relaxed max-w-3xl mb-12">
                 The representative arm of the Rajasthan Royals Academy &mdash; squads of like-skilled
@@ -33,7 +33,7 @@ const PLSquads = () => (
             <div className="bg-rr-dark rounded-3xl p-8 md:p-12 text-white mb-16">
                 <p className="text-xs font-black text-rr-pink uppercase tracking-[0.3em] mb-4">The Royals pathway</p>
                 <h3 className="text-2xl md:text-4xl font-black uppercase tracking-tight leading-tight mb-5">
-                    This isn&rsquo;t another T20 comp
+                    A squad place puts you inside the Royals system
                 </h3>
                 <p className="text-[15px] md:text-base text-white/80 font-medium leading-relaxed max-w-3xl mb-7">
                     T20 has torn up the old route to professional cricket, and the Royals run a global

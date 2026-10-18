@@ -37,7 +37,7 @@ export const PAGE_SEO = {
   // Power League nomination day, Sun 25 Oct 2026. Nominations close Tue 20 Oct —
   // this page is time-boxed, so take it down or repoint it after that.
   '/power-league': {
-    title: 'Power League T20 Match Day | Rajasthan Royals Academy',
+    title: 'Play in the Power League | Rajasthan Royals Academy Melbourne',
     description:
       'Nominate a player for a Rajasthan Royals Academy Power League T20 game in Melbourne on Sunday 25 October, 12pm or 3pm start, Montmorency Park. Ages 10 to 25, any club. $35 incl. GST, only if picked. Nominations close Tuesday 20 October, 9pm.',
   },

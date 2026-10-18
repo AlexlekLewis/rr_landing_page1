@@ -4,14 +4,14 @@ import { WHAT_IS, MATCH, STEPS } from './plOptions';
 const PLWhatIs = () => (
     <section className="bg-white py-20 md:py-28">
         <div className="max-w-6xl mx-auto px-6">
-            <p className="text-xs font-black text-rr-pink uppercase tracking-[0.3em] mb-4">The match day</p>
+            <p className="text-xs font-black text-rr-pink uppercase tracking-[0.3em] mb-4">Where squads compete</p>
             <h2 className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-6">
-                What Power League<br className="hidden md:block" /> actually is
+                Our T20 match program,<br className="hidden md:block" /> open to any club
             </h2>
             <p className="text-base md:text-lg text-rr-dark/70 font-medium leading-relaxed max-w-3xl mb-12">
-                It is the match program that sits underneath our Performance Squads. For this one we
-                are opening places to players from any club, so you do not need to be in the Academy
-                to put your hand up.
+                The Power League is where the Academy&rsquo;s Performance Squads play each other in T20
+                matches, from September to April. For this game we are opening places to players from
+                any club, so you do not need to be in the Academy to put your hand up.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-14">
@@ -24,7 +24,7 @@ const PLWhatIs = () => (
             </div>
 
             <div className="bg-rr-dark rounded-3xl p-8 md:p-10 text-white">
-                <p className="text-xs font-black text-rr-pink uppercase tracking-[0.3em] mb-5">How it runs</p>
+                <h3 className="text-xs font-black text-rr-pink uppercase tracking-[0.3em] mb-5">Match day details</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
                     {[
                         ['When', MATCH.date, MATCH.timeDetail],
@@ -40,7 +40,7 @@ const PLWhatIs = () => (
                     ))}
                 </div>
                 <div className="mt-8 pt-7 border-t border-white/15">
-                    <p className="text-[11px] font-black text-white/50 uppercase tracking-[0.2em] mb-5">What happens after you nominate</p>
+                    <h3 className="text-[11px] font-black text-white/50 uppercase tracking-[0.2em] mb-5">What happens after you nominate</h3>
                     <ol className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
                         {STEPS.map(([title, body], i) => (
                             <li key={title} className="flex gap-4">
