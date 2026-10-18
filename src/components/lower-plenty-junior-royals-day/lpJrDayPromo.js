@@ -33,10 +33,12 @@ export const PROGRAM_ROW = {
 };
 
 // The ticker shows only `name` and `tag`, so the tag says who, where, when, cost.
+// "Everyone welcome" leads (Alex, 19 Oct 2026): any player 7 to 12, from any
+// club or none, not just Lower Plenty juniors.
 export const ANNOUNCEMENT = {
     key: 'lower-plenty-junior-royals-day',
     name: EVENT_NAME,
-    tag: `Ages ${AGES_SPOKEN} · ${SHORT_DAY}, ${TIME} · $${PRICE}`,
+    tag: `Everyone welcome · ages ${AGES_SPOKEN}, any club or none · ${SHORT_DAY}, ${TIME} · $${PRICE}`,
     detail: `Lower Plenty Oval South, Montmorency Park · $${PRICE} incl. GST · then stay for the Power League matches · registrations close ${CLOSES}`,
     href: ROUTE,
     badge: 'Secure your place',
