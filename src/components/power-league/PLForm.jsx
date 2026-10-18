@@ -16,7 +16,8 @@ import { MATCH, ROLES, LEVELS, STEPS, nominationsClosed, ageOnMatchDay } from '.
 //   • club and highest weekend level are required — the coaches pick sides on them
 //   • under 18 the contact details are the PARENT OR GUARDIAN's, and only they
 //     can accept the parent code of conduct
-//   • photo and video consent is optional, never a gate
+//   • it is a FILMED EVENT (Alex, 19 Oct 2026), so consent to filming is
+//     required to take part: footage can be shared beyond our control
 //   • the form closes itself at MATCH.closesAt
 const PROGRAM_TYPE = 'Power League';
 const SOURCE = 'power-league-nomination';
@@ -101,6 +102,7 @@ const PLForm = () => {
         if (!form.accept_terms) return 'Please agree to the Terms & Conditions and Privacy Policy.';
         if (!form.accept_player_code) return 'Please agree to the Player Code of Conduct.';
         if (isMinor && !form.accept_parent_code) return 'The parent or guardian needs to agree to the Parent/Guardian Code of Conduct.';
+        if (!form.accept_social_media) return 'This is a filmed event, so we need consent to film the player before they can play.';
         return '';
     };
 
@@ -334,7 +336,7 @@ const PLForm = () => {
                     <Tick checked={form.squad_interest} onChange={tick('squad_interest')}>
                         Tell me when Performance Squad trials are announced. <span className="text-rr-dark/50 font-medium">(Optional)</span>
                         <span className="block text-rr-dark/60 font-medium mt-1">
-                            Dates are not set yet. Nothing to pay, and you can say no later.
+                            Dates are not set yet. Nothing to pay.
                         </span>
                     </Tick>
 
@@ -357,9 +359,8 @@ const PLForm = () => {
                         </Tick>
                     )}
                     <Tick checked={form.accept_social_media} onChange={tick('accept_social_media')}>
-                        <span className="text-rr-dark/50 font-medium">(Optional)</span> Photos and videos of the player
-                        from the game can be used on Rajasthan Royals Academy Melbourne’s social media and marketing.
-                        <span className="block text-rr-dark/60 font-medium mt-1">You can nominate either way.</span>
+                        <strong>This is a filmed event.</strong> I agree to the player being filmed and photographed,
+                        knowing footage may be shared online and the Academy can’t control where it ends up.
                     </Tick>
 
                     {error && (

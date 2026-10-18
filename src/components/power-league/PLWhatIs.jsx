@@ -6,12 +6,12 @@ const PLWhatIs = () => (
         <div className="max-w-6xl mx-auto px-6">
             <p className="text-xs font-black text-rr-pink uppercase tracking-[0.3em] mb-4">Where squads compete</p>
             <h2 className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-6">
-                Our T20 match program,<br className="hidden md:block" /> open to any club
+                Play alongside our<br className="hidden md:block" /> Performance Squad players
             </h2>
             <p className="text-base md:text-lg text-rr-dark/70 font-medium leading-relaxed max-w-3xl mb-12">
-                The Power League is where the Academy&rsquo;s Performance Squads play each other in T20
-                matches, from September to April. For this game we are opening places to players from
-                any club, so you do not need to be in the Academy to put your hand up.
+                The Power League is where the Academy&rsquo;s Performance Squads, the players selected into
+                our squads, play their T20 matches from September to April. For this game we are inviting
+                players from any club to join them. You do not need to be in the Academy to put your hand up.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-14">

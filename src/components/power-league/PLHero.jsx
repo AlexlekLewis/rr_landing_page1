@@ -42,9 +42,12 @@ const PLHero = () => {
                 </p>
 
                 <p className="text-lg md:text-2xl text-white font-bold leading-snug max-w-2xl mb-4">
-                    An open invitation to play one T20 game in the Rajasthan Royals Academy Power League,
-                    at Montmorency Park, Melbourne. Ages 10 to 25, from any club. Games start at 12pm
-                    or 3pm, depending on the side the player is picked for.
+                    Play one T20 game alongside our <span className="text-rr-pink">Performance Squad</span> players,
+                    the Academy’s selected squads, in the Rajasthan Royals Academy Power League.
+                </p>
+                <p className="text-base md:text-lg text-white/85 font-semibold leading-relaxed max-w-2xl mb-4">
+                    An open invitation for players aged 10 to 25 from any club. Montmorency Park, Melbourne.
+                    Games start at 12pm or 3pm, depending on the side the player is picked for.
                 </p>
                 <p className="text-base md:text-lg text-white/75 font-medium leading-relaxed max-w-2xl mb-8">
                     Nominate by <strong className="text-white">{MATCH.closes}</strong>. Picked players

@@ -7,7 +7,8 @@
 // Alex, 19 Oct 2026: an open invite for players 10 to 25, a 24-hour window to
 // nominate, picked players told within the next 24 hours, one game on the
 // Sunday fixtured for a 12pm or 3pm start depending on the fixture and the side,
-// $35 per player for the game. Alex, later 19 Oct: the day runs 12pm to 7pm. The form asks for the weekend club, the highest
+// $35 per player for the game. Alex, later 19 Oct: the day runs 12pm to 7pm; make
+// it clear they play WITH our Performance Squad players; it is a filmed event. The form asks for the weekend club, the highest
 // level played on a weekend, name, date of birth and the usual consents.
 //
 // DATED CONTENT — REVIEW 26 Oct 2026: retire or repoint the page after the match.
@@ -56,7 +57,7 @@ export const STEPS = [
     [`Pay ${MATCH.fee} for the game`,
      'Our message includes a link to pay. Paying confirms the player in the side. Nothing is paid before then.'],
     [`Play on ${MATCH.date}`,
-     'The day runs 12pm to 7pm at Montmorency Park. Each player plays one T20 game, starting at 12pm or 3pm. We send what to bring and what to wear with the pick.'],
+     'The day runs 12pm to 7pm at Montmorency Park. Each player plays one T20 game with our Performance Squad players, starting at 12pm or 3pm. The game is filmed. We send what to bring and what to wear with the pick.'],
 ];
 
 // From the Performance Squads briefing, 28 Sep 2026 (the first three), and
@@ -69,7 +70,7 @@ export const WHAT_IS = [
     ['Selection is developmental',
      'You might be given a dominant role or a supporting one. You might bat at four or five instead of opening, to get time against spin. The role is chosen for what it will teach you.'],
     ['How the sides for this game are picked',
-     'Our coaches place nominated players by age, role and the level they play on a weekend, so the players in each game are at a similar level. That is why the form asks for the club and the highest level played.'],
+     'Our coaches place nominated players into sides with our Performance Squad players, by age, role and the level they play on a weekend, so the players in each game are at a similar level. That is why the form asks for the club and the highest level played.'],
 ];
 
 // The value offering, from rramelbourne.com/performance-squads.
