@@ -16,6 +16,9 @@ const PLHero = () => {
 
         <div className="relative w-full max-w-6xl mx-auto px-6 pb-20 pt-36 md:pb-24">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: 'easeOut' }}>
+                <p className="text-white/80 text-xs md:text-sm font-black uppercase tracking-[0.25em] mb-4">
+                    Rajasthan Royals Academy · Melbourne
+                </p>
                 <span className="inline-block bg-rr-pink text-white text-xs md:text-sm font-black uppercase tracking-[0.25em] rounded-full px-5 py-2 mb-6">
                     {closed ? 'Nominations have closed' : `Nominations close ${MATCH.closes}`}
                 </span>
