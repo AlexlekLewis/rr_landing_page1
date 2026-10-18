@@ -54,6 +54,9 @@ const HomePage = () => {
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
             <Navbar variant="home" onRegisterClick={openDrawer} />
+            {/* The Special Event banner. It also clears the fixed nav, so the
+                ticker below is not hidden under it — when no event is running it
+                renders only that spacer. */}
             <HomeTopBanner />
             {/* "What's On" ticker — sits under the nav once the modal is closed */}
             <OpenDaysTicket show={openDaysTicket && !openDaysModal} onOpen={reopenOpenDays} onDismiss={dismissTicket} />

@@ -15,6 +15,9 @@
 // already given his full name above them.
 //
 // REVIEW 6 OCT 2026: both sessions are over. Remove every mention that day.
+// DONE 16 Oct 2026: off the Programs menu, What's On, home hero list,
+// register drawer and home banner. TRIAL_PAGE is only read by the open age
+// trial's sales page, which no longer renders (that trial has finished too).
 // ─────────────────────────────────────────────────────────────
 
 export const SID_JUNIORS_ROUTE = '/sid-juniors';

@@ -2,8 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { PROGRAM_ROW, SID_JUNIORS_ROUTE } from '../sid-juniors/sidJuniorsPromo';
-import { PROGRAM_ROW as LP_JR_DAY_ROW, LP_JR_DAY_ROUTE } from '../lower-plenty-junior-royals-day/lpJrDayPromo';
+import { PROGRAM_ROW as LP_JR_DAY_ROW, LP_JR_DAY_ROUTE, lpJrDayOpen } from '../lower-plenty-junior-royals-day/lpJrDayPromo';
 
 // Only list programs a visitor can act on today, and only ones whose page sits
 // inside the site's navigation. "Elite Program" was dropped in Aug 2026: it
@@ -16,14 +15,13 @@ import { PROGRAM_ROW as LP_JR_DAY_ROW, LP_JR_DAY_ROUTE } from '../lower-plenty-j
 // said "Trials Full" for the Performance Squads after that page changed to
 // registering interest, and it did not carry the open age trial at all.
 // Pink dot = you can book or pay now. Green dot = open, nothing to pay yet.
-// REVIEW 6 OCT 2026 — the trial, the junior sessions with Sid and the holiday
-// camp are all over by then.
-// REVIEW 26 OCT 2026 — the Lower Plenty row (first) comes out.
+// The open age trial and the junior sessions with Sid came off 16 Oct 2026
+// (both finished 4–5 Oct).
+// The Lower Plenty row (first) shows only until registrations close, Fri 23 Oct
+// 9:00pm (lpJrDayOpen). REVIEW 26 OCT 2026 — delete it and its import.
 const PROGRAMS = [
-    { label: LP_JR_DAY_ROW.heroLabel, route: LP_JR_DAY_ROUTE, badge: LP_JR_DAY_ROW.heroBadge, badgeColor: 'bg-rr-pink' },
-    { label: 'Performance Squads Open Trial', route: '/performance-squads-open-trial', badge: 'Ages 16 to 25 · Mickleham Mon 5 Oct · Cranbourne North full', badgeColor: 'bg-rr-pink' },
-    { label: PROGRAM_ROW.heroLabel, route: SID_JUNIORS_ROUTE, badge: PROGRAM_ROW.heroBadge, badgeColor: 'bg-rr-pink' },
-    { label: 'Spin Club', route: '/spin-club', badge: 'Spin bowlers 10 to 25 · registering interest', badgeColor: 'bg-green-500' },
+    ...(lpJrDayOpen() ? [{ label: LP_JR_DAY_ROW.heroLabel, route: LP_JR_DAY_ROUTE, badge: LP_JR_DAY_ROW.heroBadge, badgeColor: 'bg-rr-pink' }] : []),
+    { label: 'Spin Club', route: '/spin-club', badge: 'Spin bowlers 10 to 25 · Wednesdays, $60 a night', badgeColor: 'bg-rr-pink' },
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Register your interest · next intake', badgeColor: 'bg-green-500' },
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 entries open', badgeColor: 'bg-green-500' },
 ];

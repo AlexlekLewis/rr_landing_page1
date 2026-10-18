@@ -3,8 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from './Button';
-import { PROGRAM_ROW, SID_JUNIORS_ROUTE } from './sid-juniors/sidJuniorsPromo';
-import { PROGRAM_ROW as LP_JR_DAY_ROW, LP_JR_DAY_ROUTE } from './lower-plenty-junior-royals-day/lpJrDayPromo';
+import { PROGRAM_ROW as LP_JR_DAY_ROW, LP_JR_DAY_ROUTE, lpJrDayOpen } from './lower-plenty-junior-royals-day/lpJrDayPromo';
 
 const LP1_NAV = [
     { label: 'PROGRAM OVERVIEW', id: 'program-overview' },
@@ -71,23 +70,20 @@ const PC_NAV = [
 // BADGE REVIEW DATES — a badge here is wrong on every page once it expires:
 //   Holiday early bird — 30 Aug 2026
 //   Masterclass        — 13 Sep 2026 (drop the row after the second session)
-//   Open Age T20 Trial — dates are live (4 & 5 Oct), so the row sits in the
-//                        joinable block. REVIEW 6 OCT 2026: pull it the day
-//                        after the last session.
-//   Junior sessions    — the juniors' half of the same visit (Alex, 29 Sep
-//                        2026). REVIEW 6 OCT 2026: pull it with the trial.
+//   Open Age T20 Trial + Junior sessions with Sid — both finished 4–5 Oct;
+//                        rows taken off 16 Oct 2026. Pages stay up, closed.
 //   Junior Royals      — Term 4, Wednesdays at Mickleham and Cranbourne North,
 //                        28 Oct – 16 Dec (Alex, 5 Oct 2026). REVIEW 16 DEC 2026.
 //   Junior Royals are coming to Lower Plenty — $10, Sun 25 Oct 2026, ages 7–12
-//                        (Alex, 16 Oct 2026). REVIEW 26 OCT 2026: pull the row.
-//   Spin Club          — announced 26 Sep 2026, interest only. No start date
-//                        confirmed; when Alex sets the first Wednesday, say it
-//                        in the badge.
+//                        (Alex, 16 Oct 2026). The row hides itself when
+//                        registrations close, Fri 23 Oct 9:00pm (lpJrDayOpen).
+//                        REVIEW 26 OCT 2026: pull the row and its import.
+//   Spin Club          — Wednesdays 7 Oct – 25 Nov 2026, sold one night at a
+//                        time, $60 incl. GST (Alex, 9 Oct 2026; spin-club/
+//                        scOptions.js). REVIEW 26 NOV 2026: pull the badge.
 const PROGRAMS_DROPDOWN = [
-    { label: LP_JR_DAY_ROW.navLabel, route: LP_JR_DAY_ROUTE, badge: LP_JR_DAY_ROW.navBadge, badgeColor: 'bg-rr-pink' },
-    { label: 'Performance Squads Open Trial · 16-25', route: '/performance-squads-open-trial', badge: 'Mickleham 5 Oct · Cranbourne Full', badgeColor: 'bg-rr-pink' },
-    { label: PROGRAM_ROW.navLabel, route: SID_JUNIORS_ROUTE, badge: PROGRAM_ROW.navBadge, badgeColor: 'bg-rr-pink' },
-    { label: 'Spin Club · Spinners 10-25', route: '/spin-club', badge: 'Registering Interest', badgeColor: 'bg-green-500' },
+    ...(lpJrDayOpen() ? [{ label: LP_JR_DAY_ROW.navLabel, route: LP_JR_DAY_ROUTE, badge: LP_JR_DAY_ROW.navBadge, badgeColor: 'bg-rr-pink' }] : []),
+    { label: 'Spin Club · Spinners 10-25', route: '/spin-club', badge: 'Wednesdays · $60 a night', badgeColor: 'bg-rr-pink' },
     // REVIEW 16 Dec 2026 — last Term 4 session; the badge is wrong after that.
     // Holiday camp (/junior-royals-holiday) taken off every promo surface 5 Oct 2026
     // (Alex): that camp finished 2 Oct. The page stays at its address for old links.

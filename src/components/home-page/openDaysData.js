@@ -18,62 +18,46 @@
 // but the next intake is real, so the row asks for interest instead of
 // announcing a closed door. Do not drop this page from the list.
 //
+// The Open Age T20 Trial and the junior sessions with Sid finished on 4–5 Oct
+// 2026 and came out on 16 Oct 2026 (ten days late — check the review dates).
+//
 // ORDER = nearest real deadline first. Review dates:
-//   Open Age T20 Trial — 6 Oct 2026, the day after the last session. REMOVE IT.
-//   Junior sessions    — 6 Oct 2026, the same day, for the same reason. REMOVE IT.
 //   Performance Squads — when the next intake has dates, put them in the tag
-//   Spin Club          — when Alex confirms the start date, put it in the tag
+//   Spin Club          — 26 Nov 2026, the day after the last night
 //   Junior Royals T4   — 16 Dec 2026, the last Term 4 session
 //
 // Each item links via a full-page <a href> so the global Meta Pixel PageView
 // fires on arrival at the destination. Every line has to make sense to someone
 // who has never heard of us — say what the thing is, who it's for, and what
 // the next step is.
-import { ANNOUNCEMENT as SID_JUNIORS_ANNOUNCEMENT } from '../sid-juniors/sidJuniorsPromo';
-import { ANNOUNCEMENT as LP_JR_DAY_ANNOUNCEMENT } from '../lower-plenty-junior-royals-day/lpJrDayPromo';
+import { ANNOUNCEMENT as LP_JR_DAY_ANNOUNCEMENT, lpJrDayOpen } from '../lower-plenty-junior-royals-day/lpJrDayPromo';
 
 export const ANNOUNCEMENTS = [
     // Junior Royals Are Coming to Lower Plenty ($10), Sun 25 Oct 2026 (Alex, 16 Oct
-    // 2026). Nearest real deadline (Fri 23 Oct, 9pm). REVIEW 26 OCT 2026: remove.
-    LP_JR_DAY_ANNOUNCEMENT,
+    // 2026). Nearest real deadline (Fri 23 Oct, 9pm), and it drops out by itself
+    // at that moment (lpJrDayOpen). REVIEW 26 OCT 2026: remove it and its import.
+    ...(lpJrDayOpen() ? [LP_JR_DAY_ANNOUNCEMENT] : []),
     {
-        key: 'open-age-trial',
-        // Named for what it IS: the way into the Performance Squads (Alex, 26 Sep).
-        name: 'Performance Squads · Open Age Trial',
-        // The tag carries the two facts that decide whether a reader is eligible:
-        // the age bracket, and that it runs at BOTH centres. The ticker shows
-        // this line and nothing else.
-        // Cranbourne North closed as full on 4 Oct 2026 (Alex): Mickleham leads.
-        tag: 'Open age 16 to 25 · Mickleham Mon 5 Oct, bookings open · Cranbourne North Sun 4 Oct is full',
-        // Kept short: it is the small line under the tag in the modal. Sid is at
-        // both sessions (Alex, 26 Sep 2026). His full name, as on the posters,
-        // because the modal can be the first place a visitor meets him.
-        detail: 'Siddhartha Lahiri at both · Mickleham Mon 5 Oct, 5:30–7:00 PM, $30 · Cranbourne North session full',
-        href: '/performance-squads-open-trial',
-        badge: 'Book Mickleham',
-        highlight: true,
-    },
-    // Juniors aged 8 to 16: their own sessions with Sid at both centres, on the
-    // same two days as the trial above (Alex, 29 Sep 2026).
-    SID_JUNIORS_ANNOUNCEMENT,
-    {
-        // The program the trial above feeds. It says "register your interest"
-        // rather than "trials full": the September trials are done, and a closed
-        // door on the home page loses a player who would have waited.
+        // It says "register your interest" rather than "trials full": the
+        // September trials and the open age trial are done, and a closed door on
+        // the home page loses a player who would have waited.
         key: 'performance-squads',
         name: 'Performance Squads',
         tag: 'Our representative squads, players 10 to 25 · register your interest for the next intake',
-        detail: 'Mickleham & Cranbourne North · aged 16 to 25? Open trial at Mickleham, Mon 5 Oct',
+        // The promise the Performance Squads page itself makes (TrialsSection).
+        detail: 'Mickleham & Cranbourne North · we let you know as soon as the next trial dates are set',
         href: '/performance-squads',
         badge: 'Register interest',
     },
     {
         key: 'spin-club',
         name: 'Spin Club',
-        tag: 'Spin bowlers 10 to 25 · Wednesday nights, an 8-week block',
-        detail: 'Mickleham & Cranbourne North · Register your interest, nothing to pay now',
+        // Sold one night at a time since 9 Oct 2026 (spin-club/scOptions.js).
+        // REVIEW 26 NOV 2026 — the last night is Wed 25 Nov.
+        tag: 'Spin bowlers 10 to 25 · Wednesday nights, 6:00–7:30pm, until 25 Nov · $60 a night',
+        detail: 'Mickleham & Cranbourne North · book one night at a time, $60 incl. GST',
         href: '/spin-club',
-        badge: 'Registering interest',
+        badge: 'Book a night',
     },
     {
         key: 'junior-royals-t4',

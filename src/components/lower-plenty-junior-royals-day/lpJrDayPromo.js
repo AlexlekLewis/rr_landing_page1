@@ -6,14 +6,23 @@
 // register drawer (RegisterDrawer.jsx). One set of words, so they can't
 // disagree. Facts come from lpJrDayData.js.
 //
+// Also read by the home page's Special Event banner (home-page/HomeTopBanner.jsx).
+//
+// Every one of those surfaces checks lpJrDayOpen() and drops the event by itself
+// once registrations close (Fri 23 Oct 2026, 9:00pm), so nothing keeps selling a
+// morning nobody can book (19 Oct 2026).
+//
 // REVIEW 26 OCT 2026: the morning was Sunday 25 October. Remove every import
-// of this file that day (the four files above), and take /lower-plenty-
+// of this file that day (the five files above), and take /lower-plenty-
 // junior-royals-day out of public/sitemap.xml.
 // ─────────────────────────────────────────────────────────────
 
-import { ROUTE, AGES, AGES_SPOKEN, SHORT_DAY, CLUB, EVENT_NAME, TIME, CLOSES, PRICE } from './lpJrDayData';
+import { ROUTE, AGES, AGES_SPOKEN, SHORT_DAY, CLUB, EVENT_NAME, TIME, CLOSES, CLOSES_AT_ISO, PRICE, VENUE, CTA_WITH_PRICE } from './lpJrDayData';
 
 export const LP_JR_DAY_ROUTE = ROUTE;
+
+// True until registrations close. Promo surfaces show the event only while this is true.
+export const lpJrDayOpen = (now = Date.now()) => now < new Date(CLOSES_AT_ISO).getTime();
 
 export const PROGRAM_ROW = {
     navLabel: `${EVENT_NAME} · ${AGES}`,
@@ -32,4 +41,13 @@ export const ANNOUNCEMENT = {
     href: ROUTE,
     badge: 'Secure your place',
     highlight: true,
+};
+
+// The home page's full-width Special Event banner (HomeTopBanner.jsx).
+export const BANNER = {
+    title: EVENT_NAME,
+    ages: `Ages ${AGES_SPOKEN}`,
+    cta: CTA_WITH_PRICE,
+    what: `A morning of cricket with our Academy coaches · ${SHORT_DAY}, ${TIME} · ${VENUE.oval}, ${VENUE.park}, ${VENUE.suburb} · $${PRICE} incl. GST`,
+    closes: `Registrations close ${CLOSES}`,
 };
