@@ -233,6 +233,72 @@ export const ALEX_PHILOSOPHY = {
     body: 'A coach is there to encourage and support growth — to develop the athlete as a person, and to build an environment where players are challenged and still feel safe enough to explore their game. Good coaching is a balance of the technical, the mental and the physical, and every player prepares differently. What I am really doing is creating an environment where players can coach themselves, driven by their own desire to compete.',
 };
 
+// The coaches Alex places players with after the assessment (PCCoaches).
+// Same rules as ALEX_RECORD: plain-English gloss on every club and body, and
+// nothing on the page that the record does not support.
+// `image` null = initials placeholder until a Royals-kit headshot exists
+// (marketing photos are Royals kit only). Drop it at /assets/coaches/<slug>.jpg.
+//
+// Mihiraj Jayasekara — joined Oct 2026 for private 1:1 and groups up to 4
+// (Alex, 19 Oct). Source: his resume (19 Oct 2026), cross-checked against
+// PlayHQ and the Sri Lankan press. Only what the record supports is on the
+// page; the full check lives in the Director of Cricket project folder
+// (04_Coaching Group), not in this public repo. Accreditation is held back
+// until Alex has seen the certificates.
+export const MICKLEHAM_COACHES = [
+    {
+        slug: 'mihiraj-jayasekara',
+        name: 'Mihiraj Jayasekara',
+        role: 'Batting Coach — Mickleham',
+        image: null,
+        chips: ['Batting specialist', 'One-on-one', 'Small groups of up to four'],
+        intro: [
+            'Mihiraj has coached cricket for more than 25 years, in Sri Lanka, England, the UAE, India and now Melbourne. He is a batting coach first. He coached batting to the First XIs of two of Colombo’s leading cricket schools, then ran academies in the UAE and India.',
+            'In Sri Lanka he worked with many first-class cricketers, among them Roshen Silva, who went on to bat for Sri Lanka in Test cricket.',
+            'At Mickleham he coaches one-on-one and small groups of up to four players.',
+        ],
+        quote: 'I have a very encouraging, firm and positive style of leadership, which helps get the best out of my players.',
+        record: [
+            {
+                heading: 'In Melbourne',
+                items: [
+                    {
+                        title: 'Batting coach, Third XI captain and curator — Strathmore Cricket Club',
+                        detail: 'In his first season at Strathmore (2026–27) he coaches batting for the club’s senior and developing players, captains the Third XI, and is the club’s curator, preparing its turf pitches.',
+                    },
+                    {
+                        title: 'Coach and player — Knox, Plenty Valley and Greenvale',
+                        detail: 'Before Strathmore he coached and played at Knox (2023–24), Plenty Valley (2024–25) and Greenvale (2025–26), where he also captained the Third XI.',
+                    },
+                ],
+            },
+            {
+                heading: 'Before Melbourne',
+                items: [
+                    {
+                        title: 'Head coach, Desert Cubs Cricket Academy — UAE',
+                        detail: 'Head coach from 2021 to 2023, running the academy’s coaching staff and its batting programs. He had earlier spent two years there (2015–17) as centre-in-charge and batting coach.',
+                    },
+                    {
+                        title: 'Head coach, Sheen Sports Academy — Bangalore, India',
+                        detail: 'Moved to Bangalore in 2018 to run the academy, and stayed until 2021, coaching developing and elite players and working with first-class cricketers on their batting.',
+                    },
+                    {
+                        title: 'First XI batting coach at two Colombo cricket schools',
+                        detail: 'Assistant coach and batting coach of the First XI at St. Joseph’s College, Colombo (2003–09) and at S. Thomas’ College, Mount Lavinia (2013–15). In Sri Lanka, school cricket is the main pathway into the national team.',
+                    },
+                    {
+                        title: 'Junior head coach, De Mazenod College — Kandana, Sri Lanka',
+                        detail: 'Where his coaching began: from 1999 to 2003 he ran the school’s junior cricket, teaching batting fundamentals and match awareness.',
+                    },
+                ],
+            },
+        ],
+        // Held back until Alex has seen the certificates.
+        accreditation: null,
+    },
+];
+
 // Venue credentials for the hero — every claim here is drawn from our own
 // bookings at the centre, not marketing copy.
 export const VENUE_FACTS = [
