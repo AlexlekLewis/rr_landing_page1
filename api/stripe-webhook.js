@@ -186,6 +186,23 @@ const classifyByDescription = (description = '') => {
   return null;
 };
 
+// Junior Royals Term 4 (paid from 19 Oct 2026): Alex's two Payment Links, whose
+// products are "Rajasthan Royals Academy Term 4 Junior Royals - One-Off Payment"
+// ($349) and "… - Weekly Payment" ($44.95 a week). The page sends the
+// jr_term4_waitlist row id as client_reference_id; the back-fill below marks it paid.
+export const JR_TERM4_TABLE = 'jr_term4_waitlist';
+export const classifyJrT4 = (lineItems) => {
+  const desc = (lineItems || [])
+    .map((i) => String(i.description || i.name || ''))
+    .find((d) => /term 4/i.test(d) && /junior royals/i.test(d));
+  if (!desc) return null;
+  return {
+    program: 'junior_royals',
+    program_variant: /weekly/i.test(desc) ? 'term_4_weekly' : 'term_4_upfront',
+    program_label: desc,
+  };
+};
+
 const classifyAsProgram = (session, lineItems) => {
   if (session?.metadata?.source === 'academy-shop') return null;
   // Fixed Payment Link → program. Checked first: reliable even when line items
@@ -201,6 +218,9 @@ const classifyAsProgram = (session, lineItems) => {
       program_label: session.metadata.program_label || null,
     };
   }
+  // Junior Royals Term 4 — before Term 3, so the shared words can't misfile it.
+  const jrT4 = classifyJrT4(lineItems);
+  if (jrT4) return jrT4;
   // Junior Royals Term 3 — must run BEFORE the price allowlist: the T3 Payment
   // Links reuse the Term 2 Hallam price ID, so the allowlist would file these
   // sessions as term_2_hallam (which is what happened 16–21 Jul 2026).
@@ -563,6 +583,34 @@ export default async function handler(req, res) {
         }
       } else {
         console.warn('lower plenty session missing client_reference_id — matched by email in the sheet instead', { session_id: session.id });
+      }
+    }
+
+    // Junior Royals Term 4: mark the booking row paid (non-blocking, like the
+    // Lower Plenty back-fill above). For the weekly plan this is the first
+    // payment; later weekly invoices are not checkout sessions and live in Stripe.
+    if (programClass.program === 'junior_royals' && String(programClass.program_variant || '').startsWith('term_4')) {
+      const refId = session.client_reference_id || null;
+      if (isUuid(refId)) {
+        try {
+          const { data, error } = await supabase
+            .from(JR_TERM4_TABLE)
+            .update({
+              paid:              true,
+              paid_at:           charge?.created ? new Date(charge.created * 1000).toISOString() : new Date().toISOString(),
+              amount_paid_cents: session.amount_total ?? null,
+              stripe_session_id: session.id,
+            })
+            .eq('id', refId)
+            .select('id');
+          if (error) console.warn('jr term 4 back-fill failed (non-blocking):', error.message);
+          else if (!data?.length) console.warn('jr term 4 back-fill: no row for client_reference_id', { refId, session_id: session.id });
+          else console.log(`jr term 4 payment back-filled (id=${refId}, ${programClass.program_variant}, session=${session.id})`);
+        } catch (e) {
+          console.warn('jr term 4 back-fill threw (non-blocking):', e.message);
+        }
+      } else {
+        console.warn('jr term 4 session missing client_reference_id — paid straight from the link, match by email', { session_id: session.id });
       }
     }
 

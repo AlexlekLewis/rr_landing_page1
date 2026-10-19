@@ -749,15 +749,23 @@ const JR_TERM4_CLOSED_CENTRES = {
   williamstown: 'Williamstown',
 };
 
+// Wednesday times per centre (Alex, 19 Oct 2026: Cranbourne North runs
+// 5:00pm – 7:00pm). Source of truth: centres[].times in jrTerm4Data.js.
+const JR_TERM4_TIMES = {
+  'mickleham': '6:00pm or 7:00pm',
+  'cranbourne-north': '5:00pm or 6:00pm',
+  'hallam': '5:00pm or 6:00pm',
+};
+
 export const jrTerm4CentreStatus = (centre) => {
   if (centre === 'hallam') {
-    return 'Yes — Wednesdays 6:00pm or 7:00pm, 28 October to 16 December, but AT A '
+    return `Yes — Wednesdays ${JR_TERM4_TIMES.hallam}, 28 October to 16 December, but AT A `
       + 'DIFFERENT VENUE. They entered when the south-east program ran at Hallam; it '
       + 'now runs at the Elite Cricket Centre, Cranbourne North. Tell them where to go '
       + 'before 28 October.';
   }
   if (JR_TERM4_CENTRES[centre]) {
-    return 'Yes — Wednesdays 6:00pm or 7:00pm, 28 October to 16 December';
+    return `Yes — Wednesdays ${JR_TERM4_TIMES[centre]}, 28 October to 16 December`;
   }
   if (JR_TERM4_CLOSED_CENTRES[centre]) {
     return `NO — there is no Term 4 program at ${JR_TERM4_CLOSED_CENTRES[centre]}. `
@@ -772,6 +780,21 @@ export const jrTerm4CentreStatus = (centre) => {
 const JR_TERM4_NIGHTS = {
   wednesday: 'Wednesday — the Term 4 night',
   monday: 'Monday — only runs if we add a second night',
+};
+// From 19 Oct 2026 the form takes Monday ENQUIRIES for Mickleham, 5:00pm – 7:00pm.
+const JR_TERM4_MONDAY_ENQUIRY = 'Monday 5:00pm – 7:00pm at Mickleham — an enquiry, nothing booked';
+
+// What the family did about payment (19 Oct 2026). Bookings carry the option in
+// source ("junior-royals-term4-booking|pay=upfront"); the webhook fills paid,
+// paid_at and amount_paid_cents. The amount is the first checkout, shirt included.
+const centsToDollars = (c) => `$${(Number(c || 0) / 100).toFixed(2)}`;
+export const jrTerm4Payment = (r) => {
+  const opt = /\|pay=(upfront|weekly)/.exec(r.source || '')?.[1];
+  const how = opt === 'weekly' ? 'weekly plan, first payment' : opt === 'upfront' ? 'upfront, all 8 weeks' : 'paid';
+  if (r.paid) return `PAID ${centsToDollars(r.amount_paid_cents)} (${how}) on ${fmtMelb(r.paid_at)}`;
+  if (opt) return `NOT PAID — went to Stripe (${opt}) but no payment has come through. Place not booked.`;
+  if (String(r.source || '').startsWith('junior-royals-term4-monday-enquiry')) return 'Nothing to pay — a Monday enquiry';
+  return NO_PAYMENT_LINE['jr-term4'];
 };
 
 // The Term 4 form's fallback (5 Oct 2026): when the database CHECK refused a
@@ -800,9 +823,11 @@ export const jrTerm4Row = (r) => ([
       || JR_TERM4_CLOSED_CENTRES[jrTerm4Centre(r)]
       || jrTerm4Centre(r) || '',
   jrTerm4CentreStatus(jrTerm4Centre(r)),
-  JR_TERM4_NIGHTS[r.preferred_day]
-    || (r.preferred_day ? r.preferred_day : 'Not asked — they entered before the form asked about nights'),
-  NO_PAYMENT_LINE['jr-term4'],
+  (r.preferred_day === 'monday' && String(r.source || '').startsWith('junior-royals-term4-monday-enquiry'))
+    ? JR_TERM4_MONDAY_ENQUIRY
+    : JR_TERM4_NIGHTS[r.preferred_day]
+      || (r.preferred_day ? r.preferred_day : 'Not asked — they entered before the form asked about nights'),
+  jrTerm4Payment(r),
 ]);
 
 // ── Lower Plenty Junior Royals Day ──────────────────────────

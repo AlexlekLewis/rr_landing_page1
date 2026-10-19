@@ -544,6 +544,31 @@ describe('junior royals term 4', () => {
       .toBe('Nothing to pay — an entry only. No place is held until we confirm one.');
   });
 
+  // 19 Oct 2026: Term 4 takes payment; Cranbourne North runs 5:00pm – 7:00pm.
+  it('gives each centre its own Wednesday times', () => {
+    expect(jrTerm4CentreStatus('mickleham')).toContain('6:00pm or 7:00pm');
+    expect(jrTerm4CentreStatus('cranbourne-north')).toContain('5:00pm or 6:00pm');
+  });
+
+  it('shows a paid booking as PAID with the amount and the plan', () => {
+    const row = jrTerm4Row(jrT4({ source: 'junior-royals-term4-booking|pay=upfront', paid: true, amount_paid_cents: 37895, paid_at: '2026-10-19T03:00:00.000Z' }));
+    const cell = row[JR_TERM4_HEADERS.indexOf('Payment')];
+    expect(cell).toMatch(/^PAID \$378\.95 \(upfront, all 8 weeks\)/);
+  });
+
+  it('never lets a booking that went to Stripe unpaid read as booked', () => {
+    const cell = jrTerm4Row(jrT4({ source: 'junior-royals-term4-booking|pay=weekly|centre=cranbourne-north', preferred_centre: 'any' }))[JR_TERM4_HEADERS.indexOf('Payment')];
+    expect(cell).toMatch(/^NOT PAID/);
+    expect(cell).toContain('weekly');
+    expect(cell).toContain('Place not booked');
+  });
+
+  it('labels a Monday enquiry as an enquiry, with nothing to pay', () => {
+    const row = jrTerm4Row(jrT4({ preferred_day: 'monday', source: 'junior-royals-term4-monday-enquiry' }));
+    expect(row[JR_TERM4_HEADERS.indexOf('Night They Chose')]).toContain('an enquiry');
+    expect(row[JR_TERM4_HEADERS.indexOf('Payment')]).toBe('Nothing to pay — a Monday enquiry');
+  });
+
   it('names the venue rather than the slug, for closed centres too', () => {
     expect(jrTerm4Row(jrT4())[JR_TERM4_HEADERS.indexOf('Centre They Chose')])
       .toBe('Mickleham Indoor Sports Centre');

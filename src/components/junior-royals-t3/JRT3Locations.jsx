@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import { MapPin, Calendar, Clock } from 'lucide-react';
 import { JR_T4 } from './jrTerm4Data';
 
-// Term 4 centres only. The Term 3 cards, session accordions and prices were
+// Term 4 centres only, each with its own Wednesday times (Cranbourne North
+// 5:00pm – 7:00pm from 19 Oct 2026). The Term 3 cards, session accordions and prices were
 // removed on 3 Oct 2026 (Term 3 finished 18–19 Sep). Hallam and Williamstown
 // have no Term 4, so they get one plain line instead of a card — a card reads
 // as a Term 4 venue. Centres and dates come from jrTerm4Data.js.
@@ -44,7 +45,7 @@ const JRT3Locations = () => {
                                 <div className="space-y-2 mb-5">
                                     <div className="flex items-center gap-3">
                                         <Calendar className="w-4 h-4 text-rr-pink shrink-0" />
-                                        <span className="text-rr-dark font-black text-sm">{JR_T4.night} {JR_T4.times}</span>
+                                        <span className="text-rr-dark font-black text-sm">{JR_T4.night} {loc.times}</span>
                                     </div>
                                     <div className="flex items-center gap-3">
                                         <Calendar className="w-4 h-4 text-rr-blue shrink-0" />
@@ -52,7 +53,7 @@ const JRT3Locations = () => {
                                     </div>
                                     <div className="flex items-start gap-3">
                                         <Clock className="w-4 h-4 text-rr-blue shrink-0 mt-0.5" />
-                                        <span className="text-rr-charcoal font-semibold text-sm">Two one-hour groups on the night, 6:00pm and 7:00pm. We confirm which one your player is in by email.</span>
+                                        <span className="text-rr-charcoal font-semibold text-sm">{loc.groups}</span>
                                     </div>
                                     <div className="flex items-center gap-3">
                                         <MapPin className="w-4 h-4 text-rr-blue shrink-0" />
@@ -77,6 +78,10 @@ const JRT3Locations = () => {
 
                 <p className="text-center text-sm text-rr-charcoal font-medium mt-10 max-w-2xl mx-auto">
                     {JR_T4.twoCentres} {JR_T4.centresApart}
+                </p>
+                <p className="text-center text-sm text-rr-dark font-semibold mt-4 max-w-2xl mx-auto">
+                    {JR_T4.monday.lead}{' '}
+                    <button type="button" onClick={scrollToForm} className="text-rr-pink font-bold underline underline-offset-2">Enquire about Mondays</button>
                 </p>
             </div>
         </section>

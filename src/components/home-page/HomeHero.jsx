@@ -23,7 +23,7 @@ const PROGRAMS = [
     ...(lpJrDayOpen() ? [{ label: LP_JR_DAY_ROW.heroLabel, route: LP_JR_DAY_ROUTE, badge: LP_JR_DAY_ROW.heroBadge, badgeColor: 'bg-rr-pink' }] : []),
     { label: 'Spin Club', route: '/spin-club', badge: 'Spin bowlers 10 to 25 · Wednesdays, $60 a night', badgeColor: 'bg-rr-pink' },
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Register your interest · next intake', badgeColor: 'bg-green-500' },
-    { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 entries open', badgeColor: 'bg-green-500' },
+    { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 bookings open · Wednesdays from 28 Oct', badgeColor: 'bg-green-500' },
 ];
 
 const HomeHero = ({ onRegisterClick }) => {
