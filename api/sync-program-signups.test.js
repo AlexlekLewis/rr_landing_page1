@@ -455,7 +455,7 @@ describe('guide tab', () => {
     expect(text).toContain('Currently 4 sign-ups');
     expect(text).toContain('Currently 9.');
     expect(text).toContain('Currently 2 entries');
-    expect(text).toContain('Currently 29 entries');
+    expect(text).toContain('Currently 29 rows');
   });
 
   it('says plainly that a Sid booking holds no place', () => {
@@ -544,9 +544,9 @@ describe('junior royals term 4', () => {
       .toBe('Nothing to pay — an entry only. No place is held until we confirm one.');
   });
 
-  // 19 Oct 2026: Term 4 takes payment; Cranbourne North runs 5:00pm – 7:00pm.
+  // 19 Oct 2026: Term 4 takes payment; both centres run 5:00pm – 7:00pm.
   it('gives each centre its own Wednesday times', () => {
-    expect(jrTerm4CentreStatus('mickleham')).toContain('6:00pm or 7:00pm');
+    expect(jrTerm4CentreStatus('mickleham')).toContain('5:00pm or 6:00pm');
     expect(jrTerm4CentreStatus('cranbourne-north')).toContain('5:00pm or 6:00pm');
   });
 
@@ -586,7 +586,7 @@ describe('junior royals term 4', () => {
 describe('guide tab covers term 4', () => {
   it('states the count of families whose centre is not running', () => {
     const text = guideLines([], { jrTerm4: 29, jrTerm4Closed: 4 }).map((r) => r[0]).join('\n');
-    expect(text).toContain('Currently 29 entries');
+    expect(text).toContain('Currently 29 rows');
     expect(text).toContain('4 entries on this tab picked it');
     expect(text).toContain('READ THE "RUNNING IN TERM 4?" COLUMN BEFORE YOU RING ANYONE');
   });
@@ -600,7 +600,8 @@ describe('guide tab covers term 4', () => {
   it('warns against offering another centre unprompted', () => {
     const text = guideLines([], {}).map((r) => r[0]).join('\n');
     expect(text).toContain('do not offer them another centre');
-    expect(text).toContain('NO PLACE IS HELD');
+    // 19 Oct 2026: bookings are paid; only a PAID row has a place.
+    expect(text).toContain('Only PAID rows have a place');
   });
 });
 

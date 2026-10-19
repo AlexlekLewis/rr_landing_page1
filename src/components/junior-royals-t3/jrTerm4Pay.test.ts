@@ -21,9 +21,10 @@ describe('Junior Royals Term 4 payments', () => {
         expect(WEEKLY_OPENS.toISOString()).toBe('2026-10-26T13:00:00.000Z');
     });
 
-    it('Cranbourne North is 5:00pm – 7:00pm and Mickleham 6:00pm – 8:00pm', () => {
+    it('both centres run Wednesdays 5:00pm – 7:00pm', () => {
         const t = Object.fromEntries(JR_T4.centres.map((c) => [c.value, c.times]));
-        expect(t).toEqual({ mickleham: '6:00pm – 8:00pm', 'cranbourne-north': '5:00pm – 7:00pm' });
+        expect(t).toEqual({ mickleham: '5:00pm – 7:00pm', 'cranbourne-north': '5:00pm – 7:00pm' });
+        expect(JR_T4.factLine).toContain('5:00pm – 7:00pm');
         expect(JR_T4.monday.lead).toContain('Mickleham only');
     });
 

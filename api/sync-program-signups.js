@@ -749,10 +749,10 @@ const JR_TERM4_CLOSED_CENTRES = {
   williamstown: 'Williamstown',
 };
 
-// Wednesday times per centre (Alex, 19 Oct 2026: Cranbourne North runs
-// 5:00pm – 7:00pm). Source of truth: centres[].times in jrTerm4Data.js.
+// Wednesday times per centre (Alex, 19 Oct 2026: both centres 5:00pm – 7:00pm).
+// Source of truth: centres[].times in jrTerm4Data.js.
 const JR_TERM4_TIMES = {
-  'mickleham': '6:00pm or 7:00pm',
+  'mickleham': '5:00pm or 6:00pm',
   'cranbourne-north': '5:00pm or 6:00pm',
   'hallam': '5:00pm or 6:00pm',
 };
@@ -975,14 +975,15 @@ export const guideLines = (linkLines = [], counts = {}) => {
     ['  has to come back to each family and confirm. If a Stripe payment link is added'],
     [`  to the page later, payments start appearing here on their own. Currently ${counts.sidJuniors ?? 0}.`],
     [''],
-    [`"${PROGRAM_LABELS['jr-term4']}" — families who have entered for Term 4 at`],
-    ['  rramelbourne.com/junior-royals. Nothing is paid and NO PLACE IS HELD: an entry'],
-    [`  means they have put their hand up, not that they are in. Currently ${counts.jrTerm4 ?? 0} entries.`],
+    [`"${PROGRAM_LABELS['jr-term4']}" — families who have entered or booked for Term 4 at`],
+    ['  rramelbourne.com/junior-royals. From 19 Oct 2026 a Wednesday booking is paid through'],
+    ['  Stripe: the PAYMENT column says PAID or NOT PAID. Only PAID rows have a place.'],
+    [`  Older entries and Monday enquiries paid nothing and hold no place. Currently ${counts.jrTerm4 ?? 0} rows.`],
     [''],
     ['  READ THE "RUNNING IN TERM 4?" COLUMN BEFORE YOU RING ANYONE.'],
     ['  Term 4 runs at Mickleham and the Elite Cricket Centre in Cranbourne North, on'],
     ['  Wednesday nights, 28 October to 16 December, one hour a week in two groups at'],
-    ['  6:00pm and 7:00pm.'],
+    ['  5:00pm and 6:00pm. Mondays 5:00pm – 7:00pm at Mickleham are enquiries only.'],
     [''],
     ['  A "HALLAM" ROW STILL HAS A PROGRAM — AT A NEW VENUE. The south-east program'],
     ['  has moved from Hallam to the Elite Cricket Centre in Cranbourne North. Those'],

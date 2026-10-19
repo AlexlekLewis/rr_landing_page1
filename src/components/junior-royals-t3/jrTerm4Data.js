@@ -2,7 +2,7 @@
 //
 // Source: Alex, 3 Oct 2026 (approved review), and the two Term 4 net booking
 // orders (RRA-T4-2026-MIC, RRA-T4-2026-CRN): Junior Royals on WEDNESDAYS,
-// 6:00pm and 7:00pm groups, at both centres.
+// 6:00pm and 7:00pm groups, at both centres (now 5:00pm and 6:00pm, see below).
 //
 // UPDATED Alex, 5 Oct 2026: Term 4 STARTS WEDNESDAY 28 OCTOBER (nothing runs
 // before it) — 8 Wednesdays, 28 Oct – 16 Dec — and Junior Royals is now ages
@@ -27,8 +27,9 @@
 // - It opens on Tuesday 27 October (Alex: "27th"). Before then a weekly plan
 //   started now would charge 9 times for 8 sessions.
 //
-// Wednesday only, at both centres. Cranbourne North runs 5:00pm – 7:00pm
-// ("age groups balanced accordingly"), Mickleham 6:00pm – 8:00pm. Mondays
+// Wednesday only, at both centres, 5:00pm – 7:00pm at both (Cranbourne North:
+// "age groups balanced accordingly"; Alex, 19 Oct 2026: "i want mickleham
+// wednesdays to show 5-7pm"). Mondays
 // 5:00pm – 7:00pm at Mickleham ONLY are an enquiry (no payment); not offered at
 // Cranbourne North.
 
@@ -73,7 +74,7 @@ export const JR_T4 = {
     ages: '7–12',
     ageMin: 7,
     ageMax: 12,
-    factLine: 'Ages 7–12 · Wednesdays · 8 weeks · Mickleham 6:00pm – 8:00pm · Cranbourne North 5:00pm – 7:00pm',
+    factLine: 'Ages 7–12 · Wednesdays 5:00pm – 7:00pm (5:00pm or 6:00pm group) · 8 weeks',
     priceLine: `${money(PRICE.upfront)} for all 8 weeks incl. GST, or ${money(PRICE.weekly)} a week incl. GST.`,
     priceLineUpfrontOnly: `${money(PRICE.upfront)} for all 8 weeks incl. GST.`,
     shirtLine: `Plus the Junior Royals training shirt, ${money(PRICE.shirt)} incl. GST, bought once at checkout. Players wear it at every session; if your player already has one, set the shirt to 0 at checkout.`,
@@ -107,8 +108,9 @@ export const JR_T4 = {
             mapsUrl: 'https://maps.google.com/?q=Mickleham+Indoor+Sports+Centre+VIC',
             image: '/assets/jr-bundoora.png',
             gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
-            times: '6:00pm – 8:00pm',
-            groups: 'Two one-hour groups on the night, 6:00pm and 7:00pm, by age. We confirm your player\'s group by email.',
+            // Alex, 19 Oct 2026: "i want mickleham wednesdays to show 5-7pm".
+            times: '5:00pm – 7:00pm',
+            groups: 'Two one-hour groups on the night, 5:00pm and 6:00pm, by age. We confirm your player\'s group by email.',
         },
         {
             value: 'cranbourne-north',
