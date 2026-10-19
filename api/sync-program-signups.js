@@ -1,7 +1,7 @@
 // ============================================================
 // Vercel Serverless Function — mirror the sign-ups for the four programs on the
 // home-page Register modal into ONE Google Sheet, one simple tab each, every
-// 30 minutes on cron. GET (Vercel Cron) or POST (admin manual run).
+// 10 minutes on cron (Alex, 19 Oct 2026; was 30). GET (Vercel Cron) or POST (admin manual run).
 // ============================================================
 // Target workbook: "RRA — Program Sign-Ups", created by Alex in his own Drive
 // and shared to the sync service account as Editor. The id lives in
@@ -929,9 +929,9 @@ export const guideLines = (linkLines = [], counts = {}) => {
   return [
     ['RRA — Program Sign-Ups — how this sheet works'],
     [''],
-    ['This sheet fills itself in automatically, every 30 minutes, from the registration'],
+    ['This sheet fills itself in automatically, every 10 minutes, from the registration'],
     ['forms on rramelbourne.com and from Stripe. You do not need to add anyone by hand —'],
-    ['a new sign-up appears on its own within half an hour, and so does a payment.'],
+    ['a new sign-up appears on its own within 10 minutes, and so does a payment.'],
     [''],
     ['THE PROGRAM TABS — one per program on the "Register" panel on the home page'],
     [''],
@@ -1010,7 +1010,7 @@ export const guideLines = (linkLines = [], counts = {}) => {
     ['"... — DO NOT EDIT". That warning is about the AUTOMATIC COLUMNS, not the whole'],
     ['sheet — there is a safe place to work, and it is right below. Google will also'],
     ['warn you if you start typing into an automatic column; that warning is real, and'],
-    ['clicking through it means your typing is replaced within half an hour.'],
+    ['clicking through it means your typing is replaced within 10 minutes.'],
     [''],
     ['WHERE YOU CAN WORK SAFELY'],
     [''],
