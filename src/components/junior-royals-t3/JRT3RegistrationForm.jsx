@@ -18,7 +18,8 @@ import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squ
 // payment, no place held (Alex, 19 Oct 2026).
 //
 // TWO CENTRES: Mickleham Indoor Sports Centre and the Elite Cricket Centre,
-// Cranbourne North. Do not add a centre without a booking behind it.
+// Cranbourne North, both Wednesdays 5:00pm – 7:00pm (Alex, 19 Oct 2026). If the
+// two centres' times differ again, the intro below must name each one. Do not add a centre without a booking behind it.
 //
 // NEVER LOSE AN ENTRY (5 Oct 2026). The jr_term4_waitlist CHECK on
 // preferred_centre still only allows mickleham | hallam | williamstown | any.
@@ -164,7 +165,7 @@ const JRT3RegistrationForm = () => {
                         SECURE YOUR <span className="text-rr-pink">PLACE</span>
                     </h2>
                     <p className="text-white/80 font-medium leading-relaxed mb-4">
-                        Term 4 runs on <span className="font-black text-white">Wednesday nights, {JR_T4.datesLong}</span>: at the <span className="font-black text-white">{mickleham.venue}, {mickleham.suburb}, {mickleham.times}</span>, and the <span className="font-black text-white">{cranbourne.venue}, {cranbourne.suburb}, {cranbourne.times}</span>. Each player trains for one hour a week with players their own age. If your player did Junior Royals last term, nothing carries over automatically, so please book below.
+                        Term 4 runs on <span className="font-black text-white">Wednesday nights, {mickleham.times}, {JR_T4.datesLong}</span>, at the <span className="font-black text-white">{mickleham.venue}, {mickleham.suburb}</span> and the <span className="font-black text-white">{cranbourne.venue}, {cranbourne.suburb}</span>. Each player trains for one hour a week with players their own age. If your player did Junior Royals last term, nothing carries over automatically, so please book below.
                     </p>
                     <p className="text-white font-black leading-relaxed">{weekly ? JR_T4.priceLine : JR_T4.priceLineUpfrontOnly}</p>
                     <p className="text-white/70 text-sm font-medium leading-relaxed mt-2">{JR_T4.shirtLine}</p>
