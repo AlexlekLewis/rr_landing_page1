@@ -25,9 +25,12 @@ const COACHES = [
         name: 'Siddhartha Lahiri',
         role: 'Head of International Player Development and Performance Coach, Rajasthan Royals',
         image: '/assets/rra/sid-lahiri-profile.png',
+        // Royals roles only (Alex, 2 Oct 2026): no Birmingham Phoenix, no "oversees"
+        // claims. Wording from rr-page-generator/references/guests/sid-lahiri.md.
         bio:
-            'Sid coached our first touring group in Nagpur in September 2026. He also coaches batting ' +
-            'for Birmingham Phoenix and oversees the Rajasthan Royals Academy Melbourne.',
+            'Sid led our first touring group in Nagpur in September 2026. His Royals role is to develop ' +
+            'players across the Royals\' global academy network, which includes ours in Melbourne, and ' +
+            'he is batting coach at the Paarl Royals, the Royals\' team in South Africa\'s SA20 league.',
         // No quote while the page is time-neutral. Sid's 2026 quote is tied to its moment
         // ("In March this year…", "welcoming players from Australia for the first time"),
         // and a person's words can't be edited to fit. Ask Sid for a fresh line for the next

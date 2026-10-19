@@ -15,7 +15,10 @@ import {
   PRICE_ESTIMATE_AUD,
   INCLUSIONS_CONFIRMED,
   fmtRangeAUD,
-  getPlayerTypes,
+  ROUND_1,
+  DECEMBER_TOUR_ID,
+  MEMBER_PROGRAMS,
+  PROGRAM_OPTIONS,
 } from "./itCopy";
 
 /** Every string in a copy variant (functions are called with a sample range). */
@@ -43,6 +46,26 @@ describe("the tours and the estimate", () => {
 
   it("keeps the September inclusions hidden until the new tours' inclusions are confirmed", () => {
     expect(INCLUSIONS_CONFIRMED).toBe(false);
+  });
+});
+
+describe("December tour: Round 1 and member pricing (Alex, 5 Oct 2026)", () => {
+  it("Round 1 belongs to the December tour and closes 11:59pm Friday 30 October 2026, Melbourne time", () => {
+    expect(ROUND_1.tourId).toBe(DECEMBER_TOUR_ID);
+    expect(TOURS[0].id).toBe(DECEMBER_TOUR_ID);
+    expect(ROUND_1.closesAt).toBe("2026-10-30T23:59:00+11:00");
+    const melb = new Intl.DateTimeFormat("en-AU", {
+      timeZone: "Australia/Melbourne", weekday: "long", day: "numeric", month: "long", year: "numeric",
+      hour: "numeric", minute: "2-digit",
+    }).format(new Date(ROUND_1.closesAt));
+    expect(melb).toMatch(/Friday,? 30 October 2026/);
+    expect(melb).toMatch(/11:59/);
+    expect(ROUND_1.closesLabel).toBe("Friday 30 October 2026");
+  });
+
+  it("member pricing names exactly the three programs, and each is a form option", () => {
+    expect(MEMBER_PROGRAMS).toEqual(["12-week T20 Program", "Power Game Pre-Season", "Performance Squads"]);
+    expect(PROGRAM_OPTIONS.filter((o) => o.member).map((o) => o.label)).toEqual(MEMBER_PROGRAMS);
   });
 });
 
@@ -83,13 +106,24 @@ describe.each(["simple", "standard"] as const)("%s copy", (level) => {
     expect(rendered).not.toMatch(/\bchild(ren)?\b/i);
   });
 
-  it("asks whether the player trains with us, with no price attached", () => {
-    const types = getPlayerTypes(copy);
-    expect(types.map((t) => t.key)).toEqual(["royals_program", "external"]);
-    for (const t of types) {
-      expect(t.heading).toBeTruthy();
-      expect(t.who).toBeTruthy();
-      expect(`${t.heading} ${t.who}`).not.toMatch(/\$/);
-    }
+  it("member pricing: no figure, says it is lower, explains the December exception and April's rule", () => {
+    const m = copy.pricing.member;
+    const all = allStrings(m).join("\n");
+    expect(all).not.toMatch(/\$/); // no member price is set (Alex, 5 Oct 2026)
+    expect(m.lead).toMatch(/lower than the standard price/);
+    for (const p of MEMBER_PROGRAMS) expect(all + copy.hero.memberLine).toContain(p);
+    expect(m.whyBody).toMatch(/six months/);
+    expect(m.aprilNote).toMatch(/April 2027/);
+    expect(m.termsLabel).toMatch(/clause 13/);
+  });
+
+  it("the hero says Melbourne", () => {
+    expect(copy.hero.kicker).toMatch(/Melbourne/);
+  });
+
+  it("Round 1 copy names the date and time, and says the April tour stays open", () => {
+    expect(copy.hero.countdownNote).toContain("Friday 30 October 2026 at 11:59pm Melbourne time");
+    expect(copy.hero.countdownNote).toMatch(/April 2027 tour stays open/);
+    expect(copy.hero.countdownClosedNote).toMatch(/April 2027/);
   });
 });

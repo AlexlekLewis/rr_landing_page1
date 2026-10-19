@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { REGISTRATIONS_CLOSE_AT, TOUR_STATUS } from './itCopy';
+import { ROUND_1, TOUR_STATUS } from './itCopy';
 
-// Seven-day clock on the India Tour registrations. Reads the single deadline in
-// itCopy.js, ticks every second, and swaps to a plain "closed" message once it
-// passes rather than sitting on 00:00:00 or counting into negatives.
+// The December tour's Round 1 clock. Reads the single deadline in itCopy.js
+// (ROUND_1.closesAt), ticks every second, and swaps to a plain "Round 1 has
+// closed" notice once it passes rather than sitting on 00:00:00 or counting into
+// negatives. The form stays open after that: only Round 1 ends.
 //
-// The deadline is an absolute instant with a +10:00 offset, so the same moment is
-// shown wherever the viewer is — a family in Perth or Dubai sees the real time
-// remaining, not a figure skewed by their own clock.
+// The deadline is an absolute instant with a +11:00 offset (Melbourne daylight
+// time), so the same moment is shown wherever the viewer is — a family in Perth
+// or Dubai sees the real time remaining, not a figure skewed by their own clock.
 //
-// No deadline (REGISTRATIONS_CLOSE_AT = null) means a standing expression of
-// interest: there is no clock, so this renders nothing unless the tour is closed.
+// No deadline (closesAt = null) means a standing expression of interest: there
+// is no clock, so this renders nothing unless the tour is closed.
 
 const useTimeLeft = (deadlineIso) => {
     const deadline = deadlineIso ? new Date(deadlineIso).getTime() : null;
@@ -49,7 +50,7 @@ const pad = (n) => String(n).padStart(2, '0');
 
 const ITCountdown = ({ copy }) => {
     const c = copy.hero;
-    const t = useTimeLeft(REGISTRATIONS_CLOSE_AT);
+    const t = useTimeLeft(ROUND_1.closesAt);
 
     if (TOUR_STATUS === 'closed' || t.expired) {
         return (

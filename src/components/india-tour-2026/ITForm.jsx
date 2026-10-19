@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
-import { getPlayerTypes, TOURS, TOUR_STATUS } from './itCopy';
+import { TOURS, TOUR_STATUS, ROUND_1, PROGRAM_OPTIONS, NEW_TO_ACADEMY_KEY } from './itCopy';
 
 // Where an expression of interest goes: the shared applications table only, the
 // same home as every other website EOI (Spin Club, Private Coaching, …).
@@ -20,10 +20,28 @@ import { getPlayerTypes, TOURS, TOUR_STATUS } from './itCopy';
 const SOURCE_TAG = 'india-tour-eoi';
 const PROGRAM_LABEL = 'India Tour';
 
-// Plain labels for the admin view, whichever reading level the family saw.
+// Plain labels for the admin view, whichever reading level the family saw. The
+// "Player type" line predates the programs question and staff still filter on
+// it, so it is worked out from the programs ticked.
 const PLAYER_TYPE_LABEL = {
     royals_program: 'Already in an RRA program',
     external: 'New to the academy',
+};
+
+// Programs ticked → the lines staff read in `bio`. Member pricing on the December
+// tour is self-declared here, so it is marked for checking before anyone is quoted.
+export const programLines = (programs, toursPicked) => {
+    const isNew = programs.includes(NEW_TO_ACADEMY_KEY);
+    const ticked = PROGRAM_OPTIONS.filter((o) => programs.includes(o.key));
+    const lines = [
+        `Programs: ${isNew || ticked.length === 0 ? 'none (new to the academy)' : ticked.map((o) => o.label).join('; ')}`,
+        `Player type: ${PLAYER_TYPE_LABEL[ticked.length > 0 ? 'royals_program' : 'external']}`,
+    ];
+    if (toursPicked.includes(ROUND_1.tourId)) {
+        const member = ticked.some((o) => o.member);
+        lines.push(`December tour member pricing: ${member ? 'yes, self-declared (check before quoting)' : 'no'}`);
+    }
+    return lines;
 };
 
 const getUTMParams = () => {
@@ -127,10 +145,11 @@ const ITForm = ({ copy, referralCode, referralName }) => {
         );
     }
 
-    const PLAYER_TYPES = getPlayerTypes(copy);
+    // Round 1 for the December tour: its deadline shows on that tour's box until it passes.
+    const round1Open = Boolean(ROUND_1.closesAt) && Date.now() < new Date(ROUND_1.closesAt).getTime();
     const [form, setForm] = useState({
         tours: [], // TOURS ids the family ticked: one or both, at least one required
-        player_type: '',
+        programs: [], // PROGRAM_OPTIONS keys ticked, or just NEW_TO_ACADEMY_KEY: at least one required
         player_name: '',
         player_dob: '',
         current_club: '',
@@ -172,10 +191,26 @@ const ITForm = ({ copy, referralCode, referralName }) => {
 
     const selectedTours = TOURS.filter(t => form.tours.includes(t.id));
 
+    // "New to the Academy" and the program boxes rule each other out: ticking one
+    // clears the other kind, so an entry can never say both.
+    const toggleProgram = (key) => {
+        setForm(prev => {
+            const picked = new Set(prev.programs);
+            if (picked.has(key)) picked.delete(key);
+            else if (key === NEW_TO_ACADEMY_KEY) return { ...prev, programs: [NEW_TO_ACADEMY_KEY] };
+            else {
+                picked.delete(NEW_TO_ACADEMY_KEY);
+                picked.add(key);
+            }
+            return { ...prev, programs: PROGRAM_OPTIONS.map(o => o.key).filter(k => picked.has(k)).concat(picked.has(NEW_TO_ACADEMY_KEY) ? [NEW_TO_ACADEMY_KEY] : []) };
+        });
+        if (errors.programs) setErrors(prev => ({ ...prev, programs: undefined }));
+    };
+
     const validate = () => {
         const next = {};
         if (selectedTours.length === 0) next.tours = fc.toursError;
-        if (!form.player_type) next.player_type = fc.playerTypeError;
+        if (form.programs.length === 0) next.programs = fc.programsError;
         if (!form.player_name.trim()) next.player_name = "Player's full name is required.";
         if (!form.player_dob || age === null) next.player_dob = 'Please enter a valid date of birth.';
         if (!form.current_club.trim()) next.current_club = 'Current club is required.';
@@ -213,7 +248,7 @@ const ITForm = ({ copy, referralCode, referralName }) => {
             const nameParts = form.player_name.trim().split(' ');
             const bio = [
                 `Tours: ${selectedTours.map(t => t.window).join('; ')}`,
-                form.player_type && `Player type: ${PLAYER_TYPE_LABEL[form.player_type]}`,
+                ...programLines(form.programs, form.tours),
                 form.secondary_skill && `Secondary skill: ${form.secondary_skill}`,
                 form.guardian1_relationship && `Parent/guardian 1: ${form.guardian1_relationship}`,
                 form.guardian2_relationship && `Parent/guardian 2: ${form.guardian2_relationship}`,
@@ -246,6 +281,16 @@ const ITForm = ({ copy, referralCode, referralName }) => {
                 ...utm,
             }]);
             if (insertError) throw insertError;
+
+            // Meta Pixel Lead: which tours only, never anything about the player.
+            try {
+                if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+                    window.fbq('track', 'Lead', {
+                        content_name: 'High Performance Centre Tour — Interest',
+                        content_category: selectedTours.map(t => t.id).join(','),
+                    });
+                }
+            } catch (_) { /* never let analytics block the submit */ }
 
             setSubmitted(true);
             window.scrollTo({ top: document.getElementById('register')?.offsetTop || 0, behavior: 'smooth' });
@@ -389,6 +434,11 @@ const ITForm = ({ copy, referralCode, referralName }) => {
                                                     <span className="block text-xs text-rr-charcoal/70 font-medium mt-1">
                                                         {copy.hero.tourLength}
                                                     </span>
+                                                    {t.id === ROUND_1.tourId && round1Open && (
+                                                        <span className="block text-xs text-rr-pink font-black uppercase tracking-wide mt-1">
+                                                            {fc.round1Note}
+                                                        </span>
+                                                    )}
                                                 </span>
                                             </span>
                                         </label>
@@ -398,52 +448,70 @@ const ITForm = ({ copy, referralCode, referralName }) => {
                             {errors.tours && <p role="alert" className="text-red-500 text-xs font-medium mt-2">{errors.tours}</p>}
                         </div>
 
-                        {/* Does the player already train with us — a plain question now, no price. */}
-                        <div className="mb-8" data-error={!!errors.player_type}>
-                            <h3 className={sectionHeading}>{fc.playerTypeHeading}</h3>
-                            <p className="text-sm text-rr-charcoal font-medium leading-relaxed -mt-2 mb-5">
-{fc.playerTypeLead}
+                        {/* Which of our programs the player has been in. Ticking one of the
+                            three member programs is what makes them eligible for member
+                            pricing on the December tour (self-declared; staff check it). */}
+                        <div
+                            role="group"
+                            aria-labelledby="programs-heading"
+                            aria-describedby="programs-lead"
+                            className="mb-8"
+                            data-error={!!errors.programs}
+                        >
+                            <h3 id="programs-heading" className={sectionHeading}>{fc.programsHeading}</h3>
+                            <p id="programs-lead" className="text-sm text-rr-charcoal font-medium leading-relaxed -mt-2 mb-5">
+                                {fc.programsLead}
                             </p>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {PLAYER_TYPES.map((t) => {
-                                    const selected = form.player_type === t.key;
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {[...PROGRAM_OPTIONS, { key: NEW_TO_ACADEMY_KEY, label: fc.programsNewLabel, member: false }].map((o) => {
+                                    const checked = form.programs.includes(o.key);
                                     return (
-                                        <button
-                                            type="button"
-                                            key={t.key}
-                                            onClick={() => {
-                                                setForm(prev => ({ ...prev, player_type: t.key }));
-                                                if (errors.player_type) setErrors(prev => ({ ...prev, player_type: undefined }));
-                                            }}
-                                            aria-pressed={selected}
-                                            className={`text-left rounded-xl border-2 p-5 transition-all ${
-                                                selected
+                                        <label
+                                            key={o.key}
+                                            className={`relative block cursor-pointer rounded-xl border-2 px-4 py-3.5 transition-all focus-within:ring-2 focus-within:ring-rr-pink/40 ${
+                                                checked
                                                     ? 'border-rr-pink bg-rr-pink/5'
-                                                    : errors.player_type
+                                                    : errors.programs
                                                         ? 'border-red-300 bg-slate-50 hover:border-rr-pink/60'
                                                         : 'border-slate-200 bg-slate-50 hover:border-rr-pink/60'
                                             }`}
                                         >
-                                            <span className="flex items-center gap-3">
+                                            <input
+                                                type="checkbox"
+                                                name="programs"
+                                                value={o.key}
+                                                checked={checked}
+                                                onChange={() => toggleProgram(o.key)}
+                                                className="sr-only"
+                                                data-program={o.key}
+                                            />
+                                            <span className="flex items-start gap-3">
                                                 <span
-                                                    className={`w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center ${
-                                                        selected ? 'border-rr-pink' : 'border-slate-300'
+                                                    aria-hidden="true"
+                                                    className={`mt-0.5 w-5 h-5 rounded shrink-0 border-2 flex items-center justify-center transition-all ${
+                                                        checked ? 'bg-rr-pink border-rr-pink' : 'border-slate-300 bg-white'
                                                     }`}
                                                 >
-                                                    {selected && <span className="w-2.5 h-2.5 rounded-full bg-rr-pink" />}
+                                                    {checked && (
+                                                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                                        </svg>
+                                                    )}
                                                 </span>
-                                                <span className="text-sm font-black text-rr-dark uppercase tracking-wide">
-                                                    {t.heading}
+                                                <span>
+                                                    <span className="block text-sm font-black text-rr-dark leading-snug">{o.label}</span>
+                                                    {o.member && (
+                                                        <span className="block text-[11px] text-rr-pink font-black uppercase tracking-widest mt-1">
+                                                            {fc.programsMemberTag}
+                                                        </span>
+                                                    )}
                                                 </span>
                                             </span>
-                                            <span className="block text-sm text-rr-charcoal font-medium leading-relaxed mt-3">
-                                                {t.who}
-                                            </span>
-                                        </button>
+                                        </label>
                                     );
                                 })}
                             </div>
-                            {errors.player_type && <p className="text-red-500 text-xs font-medium mt-2">{errors.player_type}</p>}
+                            {errors.programs && <p role="alert" className="text-red-500 text-xs font-medium mt-2">{errors.programs}</p>}
                         </div>
 
                         {/* Player details */}

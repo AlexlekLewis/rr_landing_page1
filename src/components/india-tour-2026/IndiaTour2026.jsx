@@ -15,8 +15,9 @@ import { getCopy, useReadingMode } from './itCopy';
 const META_DESCRIPTION =
     'High Performance Centre Camp — two Rajasthan Royals Academy Melbourne tours to the Royals High ' +
     'Performance Centre in Nagpur, India: late December 2026 to early January 2027, and April 2027. ' +
-    'About 10 days each, estimated at $7,000 to $8,000 per player. Register your interest in one tour ' +
-    'or both.';
+    'About 10 days each, estimated at $7,000 to $8,000 per player. Round 1 for the December tour ' +
+    'closes Friday 30 October 2026, with member pricing for 12-week T20 Program, Power Game ' +
+    'Pre-Season and Performance Squads players. Register your interest in one tour or both.';
 
 // Any ?ref= code is still captured for attribution, but it no longer gates the
 // page — this is a public program page now.
