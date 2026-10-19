@@ -15,7 +15,7 @@ import {
 } from './jrV2Content';
 import { HourNumbers, HourRibbon, LaneDots, SkillSteps, Cues } from './JRV2Visuals';
 import { StageJourney } from './JRV2Pathway';
-import { Badge } from './JRV2Badges';
+import { PhaseBadge } from './JRV2SampleBadges';
 import { ActionCards } from './JRV2ActionCards';
 import JRV2Form from './JRV2Form';
 import JRV2ComeAndTry, { TRY_OPEN_EVENT } from './JRV2ComeAndTry';
@@ -228,7 +228,7 @@ const Progress = () => (
                             <span className="relative w-24 h-24 shrink-0 flex items-center justify-center">
                                 {Icon
                                     ? <span className="w-24 h-24 rounded-full bg-rr-pink ring-8 ring-slate-50 flex items-center justify-center"><Icon className="w-10 h-10 text-white" strokeWidth={2.4} aria-hidden="true" /></span>
-                                    : <span className="w-24 h-24 rounded-full bg-slate-50 ring-8 ring-slate-50 flex items-center justify-center"><Badge name={PROGRESS.stepsBadge} kind="bat" className="w-24 h-24" /></span>}
+                                    : <span className="w-24 h-24 rounded-full bg-slate-50 ring-8 ring-slate-50 flex items-center justify-center"><PhaseBadge name={PROGRESS.stepsBadge} kind="bat" className="w-24 h-24" /></span>}
                                 <span className="absolute -top-1 -right-1 w-8 h-8 rounded-full bg-rr-dark text-white text-sm font-black flex items-center justify-center">{i + 1}</span>
                             </span>
                             <span className="md:mt-5">

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Badge, hasArt } from './JRV2Badges';
+import { approvedBadge } from './jrV2BadgeArt';
 
 // ─────────────────────────────────────────────────────────────
 // Example badges for Develop and Elevate (Alex, 12 Oct 2026: "make sure you put
@@ -11,6 +12,10 @@ import { Badge, hasArt } from './JRV2Badges';
 // <Badge> for a name it has no picture for, and this file lays its own picture on
 // top. When the Develop and Elevate sets are written properly, these four move
 // into JRV2Badges.jsx and this file goes.
+//
+// A Discover badge shows Alex's approved artwork (13 Oct 2026, jrV2BadgeArt.js)
+// instead of a drawing. The four Develop and Elevate pictures below are still the
+// older drawn style; they need artwork in the approved style.
 //
 // Same drawing rules as the Discover set: a player doing the skill, white
 // pictogram on the Royals gradient, pink only on the ball's seam; viewBox
@@ -139,6 +144,9 @@ const ART = {
 // A badge for any phase: Discover badges come straight from JRV2Badges.jsx; a
 // Develop or Elevate example is that file's frame with this file's picture on top.
 export const PhaseBadge = ({ name, kind, ribbon = false, className = 'w-20 h-20' }) => {
+    // The approved artwork carries its own name ribbon, so `ribbon` doesn't apply to it.
+    const src = approvedBadge(name);
+    if (src) return <img src={src} alt="" className={`${className} object-contain`} loading="lazy" decoding="async" />;
     const Art = ART[name];
     if (hasArt(name) || !Art) return <Badge name={name} kind={kind} ribbon={ribbon} className={className} />;
     return (
@@ -151,4 +159,4 @@ export const PhaseBadge = ({ name, kind, ribbon = false, className = 'w-20 h-20'
     );
 };
 
-export const hasSampleArt = (name) => hasArt(name) || Boolean(ART[name]);
+export const hasSampleArt = (name) => Boolean(approvedBadge(name)) || hasArt(name) || Boolean(ART[name]);

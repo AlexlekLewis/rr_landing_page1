@@ -2,6 +2,9 @@ import { describe, it, expect } from 'vitest';
 import { PRICE, SHIRT, NOTICE_WEEKS, PHASES, SESSION, CURRICULUM, BADGES, wednesdays2027, timeForAge, COME_AND_TRY, tryTime, SAMPLE_BADGES } from './jrV2Facts';
 import { TRY_VALUES } from './JRV2ComeAndTry';
 import { PhaseBadge, hasSampleArt } from './JRV2SampleBadges';
+import { APPROVED_BADGES, approvedBadge } from './jrV2BadgeArt';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import * as CONTENT from './jrV2Content';
 import { termTotal, yearTotal, TERMS, V2_CENTRES, DAYS, MIN_DAYS } from './jrV2Content';
 import { FORM_VALUES } from './JRV2Form';
@@ -420,4 +423,24 @@ describe('copy rules (CLAUDE.md §2, language.md)', () => {
         // "the same coaching team" is fine; "the same coach(es)" is a promise we can't keep.
         expect(text).not.toMatch(/guarantee(d)? (a )?(place|selection)|same coach(es)?\b|app notes/i);
     });
+
+// Alex, 19 Oct 2026: "was the site updated with the new badges?" The approved Discover
+// set (13 Oct) replaces the drawn pictures everywhere a Discover badge shows.
+describe('approved Discover badges (Alex, 13 Oct)', () => {
+    it('every one of the 28 has its own image file', () => {
+        expect(Object.keys(APPROVED_BADGES)).toHaveLength(28);
+        Object.entries(APPROVED_BADGES).forEach(([name, url]) => {
+            expect(existsSync(join(process.cwd(), 'public', url)), `no file for "${name}" at ${url}`).toBe(true);
+        });
+    });
+
+    it('a Discover badge on the page shows the approved artwork, not a drawing', () => {
+        ['Heel to Toe', 'Rock or Step', 'Length Ladder'].forEach((name) => {
+            const html = renderToStaticMarkup(createElement(PhaseBadge, { name, kind: 'bat', className: 'w-20 h-20' }));
+            expect(html).toContain(`src="${approvedBadge(name)}"`);
+            expect(html).not.toContain('<svg');
+        });
+        expect(approvedBadge(CONTENT.PROGRESS.stepsBadge)).toBeTruthy();
+    });
+});
 });

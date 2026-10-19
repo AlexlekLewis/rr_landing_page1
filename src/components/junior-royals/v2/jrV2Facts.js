@@ -266,8 +266,8 @@ export const BADGES = {
     perPhase: { batting: 12, bowling: 12, fielding: 4 },
     check: { good: 4, of: 6, nights: 2 },
     // Discover Year 1, ALL 28 badges in block order (blueprint p36–37): name + the
-    // player's "I can…". Each has its own artwork in JRV2Badges.jsx (Alex, 11 Oct
-    // 2026: "unique context-aware badges for every badge").
+    // player's "I can…". Each has its own artwork: Alex's approved set (13 Oct 2026),
+    // one file per badge, mapped in jrV2BadgeArt.js.
     discover: [
         { name: 'Two Vs', kind: 'bat', can: 'find my grip myself and hit it straight' },
         { name: 'Heel to Toe', kind: 'bat', can: 'hit along the ground and stay balanced' },
