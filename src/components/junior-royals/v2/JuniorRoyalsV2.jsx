@@ -10,7 +10,7 @@ import { Rich } from '../JuniorRoyalsShared';
 import { MOCKUP, money } from '../juniorRoyalsData';
 import { PILLARS, PRICE } from './jrV2Facts';
 import {
-    HERO, CTA, VALUE, PROGRESS, LEARN, PATH, PRICES, TERMS_POPUP, COMPARE, COACHES, FORM, FAQS, TRY,
+    HERO, CTA, VALUE, PROGRESS, LEARN, PATH, PRICES, PAY_NOW, TERMS_POPUP, COMPARE, COACHES, FORM, FAQS, TRY,
     REGION_LABEL, NEARBY, PHOTOS, V2_CENTRES, TERMS, termTotal,
 } from './jrV2Content';
 import { HourNumbers, HourRibbon, LaneDots, SkillSteps, Cues } from './JRV2Visuals';
@@ -620,6 +620,28 @@ const TermCosts = () => (
     </details>
 );
 
+// ── Pay now: the two Stripe links ──
+const PayNow = () => (
+    <div data-jr-pay className="mt-10 rounded-2xl bg-rr-dark p-6 sm:p-8">
+        <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white">{PAY_NOW.title}</h3>
+        <p className="text-white/80 text-[15px] font-medium leading-relaxed mt-2 max-w-2xl">{PAY_NOW.lead}</p>
+        <div className="grid sm:grid-cols-2 gap-4 mt-6">
+            {PAY_NOW.options.map((o) => (
+                <div key={o.key} className="rounded-xl bg-white p-5 flex flex-col">
+                    <p className="text-sm font-black uppercase tracking-wider text-rr-pink">{o.head}</p>
+                    <p className="mt-1"><span className="text-4xl font-black text-rr-dark">{o.price}</span> <span className="text-lg font-bold text-rr-charcoal">{o.per}</span></p>
+                    <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed mt-2 flex-1">{o.body}</p>
+                    <a href={o.url} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center justify-center gap-2 min-h-[48px] px-6 rounded-full bg-rr-pink text-white font-black uppercase tracking-wider text-sm hover:opacity-90">
+                        {o.button}<ArrowRight className="w-4 h-4" aria-hidden="true" />
+                    </a>
+                </div>
+            ))}
+        </div>
+        <p className="text-white text-sm font-semibold mt-5 flex items-start gap-2"><Shirt className="w-4 h-4 text-rr-light-pink shrink-0 mt-0.5" aria-hidden="true" />{PAY_NOW.shirt}</p>
+        <p className="text-white/70 text-xs font-medium mt-2">{PAY_NOW.secure}</p>
+    </div>
+);
+
 // ── Price ──
 const Prices = () => (
     <Section id="prices">
@@ -633,10 +655,10 @@ const Prices = () => (
             <div className="rounded-2xl border-2 border-slate-200 p-5 self-start">
                 <p className="flex items-center gap-2 text-sm font-black uppercase tracking-wider text-rr-dark"><Shirt className="w-5 h-5 text-rr-pink" aria-hidden="true" />{PRICES.shirtTitle}</p>
                 <p className="text-[15px] text-rr-charcoal font-medium leading-relaxed mt-2">{PRICES.shirt}</p>
-                <p className="text-[15px] text-rr-dark font-bold leading-relaxed mt-2"><Rich v={PRICES.shirtOffer} /></p>
             </div>
         </div>
 
+        <PayNow />
         <Compare />
         <EnrolFlow />
         <TermCosts />

@@ -14,20 +14,20 @@ import { Badge, hasArt } from './JRV2Badges';
 import { JR_V2_SEO, JR_V2_JSONLD, JR_SEO_VENUES } from './jrV2Seo';
 import { CENTRES } from '../juniorRoyalsData';
 
-// Junior Royals mock-up v2, restructured 9 Oct 2026 (Alex): one price, $49.95 a
-// week paid weekly in term; compulsory shirt at $29.95 (free for the first 20);
+// Junior Royals mock-up v2, restructured 9 Oct 2026 (Alex): one price, $44.95 a
+// week paid weekly in term (Stripe price, 19 Oct); compulsory shirt at $29.95;
 // no bulk discounts; no stage ages; Ravenhall coming soon; 2+ weekday choices.
 describe('price (Alex, 9 Oct)', () => {
-    it('one price: $49.95 a week, up to 6 per lane (+1 make-up), shirt $29.95', () => {
-        expect(PRICE).toEqual({ perWeek: 49.95, perLane: 6, max: 7 });
-        expect(SHIRT).toEqual({ memberPrice: 29.95, shopPrice: 62.95, freeForFirst: 20 });
+    it('one price: $44.95 a week, up to 6 per lane (+1 make-up), shirt $29.95', () => {
+        expect(PRICE).toEqual({ perWeek: 44.95, perLane: 6, max: 7 });
+        expect(SHIRT).toEqual({ memberPrice: 29.95, shopPrice: 62.95 });
         expect(NOTICE_WEEKS).toBe(2);
     });
 
     it('term and year totals are the weekly price × weeks', () => {
-        expect(termTotal(10)).toBe(499.5);
-        expect(termTotal(11)).toBe(549.45);
-        expect(yearTotal()).toBe(1998);
+        expect(termTotal(10)).toBe(449.5);
+        expect(termTotal(11)).toBe(494.45);
+        expect(yearTotal()).toBe(1798);
         expect(TERMS.every((t) => t.sessions > 0)).toBe(true);
         expect(TERMS[0].label).toBe('Term 4, 2026');
     });
@@ -41,6 +41,19 @@ describe('price (Alex, 9 Oct)', () => {
         expect(CONTENT.HERO.shirt).toMatch(/\$29\.95/);
         expect(CONTENT.HERO.shirt).toMatch(/compulsory/);
         expect(CONTENT.PRICES.shirt).toMatch(/\$29\.95/);
+        expect(CONTENT.PAY_NOW.shirt).toMatch(/\$29\.95/);
+    });
+
+    it('no free-shirt offer anywhere in the copy (Andy, 19 Oct)', () => {
+        expect(JSON.stringify(CONTENT)).not.toMatch(/free[^.]{0,60}shirt|shirt[^.]{0,60}free/i);
+    });
+
+    it('pay now: the two Stripe links, weekly and the whole term', () => {
+        const [weekly, upfront] = CONTENT.PAY_NOW.options;
+        expect(weekly.url).toBe('https://buy.stripe.com/7sYeVd9zH3udgtSavV9Zm0X');
+        expect(weekly.price).toBe('$44.95');
+        expect(upfront.url).toBe('https://buy.stripe.com/14A14n4fn3ud0uU7jJ9Zm0Y');
+        expect(upfront.price).toBe('$349');
     });
 });
 
@@ -332,7 +345,7 @@ describe('the interest form', () => {
     it('comparison: one highlighted row (ours), and only published facts for the others', () => {
         const { rows, source } = CONTENT.COMPARE;
         expect(rows.filter((r) => r.ours).map((r) => r.what)).toEqual(['Junior Royals']);
-        expect(rows[0]).toMatchObject({ price: '$49.95', gst: 'incl. GST', group: 'Up to 6 players in a group, with their own coach', figures: { solid: 6, faint: 0 } });
+        expect(rows[0]).toMatchObject({ price: '$44.95', gst: 'incl. GST', group: 'Up to 6 players in a group, with their own coach', figures: { solid: 6, faint: 0 } });
         expect(rows[1]).toMatchObject({ price: '$35 – $50', group: '3 to 10 players in a group', figures: { solid: 3, faint: 7 } });
         expect(rows[2]).toMatchObject({ price: '$80 – $140', group: '1 player with 1 coach', figures: { solid: 1, faint: 0 } });
         expect(source).toMatch(/published on their own websites on 5 October 2026/);

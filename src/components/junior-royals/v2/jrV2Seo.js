@@ -7,7 +7,7 @@
 // dist/junior-royals/index.html (Facebook, WhatsApp and AI crawlers don't run JS).
 //
 // What is deliberately NOT here (SEO brief §4):
-// - No `offers` while the page only takes interest. Add the Offer ($49.95 a
+// - No `offers` while the page only takes interest. Add the Offer ($44.95 a
 //   week, valueAddedTaxIncluded) when joining opens and the prices
 //   are bookable — and only once GST registration is confirmed.
 // - No FAQPage: several answers are still "to be confirmed", and Google stopped
@@ -30,7 +30,7 @@ export const JR_SEO_VENUES = [
 export const JR_V2_SEO = {
     title: 'Junior Cricket Coaching Melbourne, 7–12 | Rajasthan Royals',
     // Dated description: switch to the undated one after the first session (REVIEW 28 Oct 2026).
-    description: 'Rajasthan Royals Academy Melbourne: cricket coaching for ages 7–12 from 28 Oct at Mickleham or Cranbourne North. Small groups, skill badges, $49.95 a week.',
+    description: 'Rajasthan Royals Academy Melbourne: cricket coaching for ages 7–12 from 28 Oct at Mickleham or Cranbourne North. Small groups, skill badges, $44.95 a week.',
     descriptionUndated: 'Weekly cricket coaching for ages 7–12 at Mickleham or Cranbourne North, Melbourne. One hour a week in small groups, with skill badges each term.',
     ogImage: '/assets/little-crickets-nets.jpeg',
 };

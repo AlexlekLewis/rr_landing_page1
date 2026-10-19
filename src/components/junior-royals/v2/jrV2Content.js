@@ -18,12 +18,12 @@
 // ─────────────────────────────────────────────────────────────
 
 import { tbc, money, AGES_TEXT, FIRST_SESSION, CALENDAR, SESSIONS_PER_YEAR, GST_NOTE, JOINING_OPENS, CENTRES, PS_ROUTE } from '../juniorRoyalsData';
-import { PRICE, SHIRT, NOTICE_WEEKS, BADGES, CURRICULUM, TIMES, BLOCK, COME_AND_TRY } from './jrV2Facts';
+import { PRICE, SHIRT, PAY, NOTICE_WEEKS, BADGES, CURRICULUM, TIMES, BLOCK, COME_AND_TRY } from './jrV2Facts';
 
 const r2 = (n) => Math.round(n * 100) / 100;
 // Every batting, bowling and fielding topic across the three phases (47).
 export const TOPIC_TOTAL = Object.values(CURRICULUM).reduce((n, c) => n + c.batting.length + c.bowling.length + c.fielding.length, 0);
-export const WEEKLY = money(PRICE.perWeek);                                   // "$49.95"
+export const WEEKLY = money(PRICE.perWeek);                                   // "$44.95"
 export const termTotal = (sessions) => r2(PRICE.perWeek * sessions);
 export const yearTotal = () => r2(PRICE.perWeek * SESSIONS_PER_YEAR);
 export const TERMS = CALENDAR.filter((c) => !c.holiday)
@@ -102,7 +102,7 @@ export const HERO = {
     price: WEEKLY,
     per: 'a week',
     priceNote: `${GST_NOTE} ${SUBSCRIPTION_LINE}`,
-    shirt: `Plus the training shirt, ${money(SHIRT.memberPrice)} once (compulsory). Free for the first ${SHIRT.freeForFirst} players to enrol.`,
+    shirt: `Plus the training shirt, ${money(SHIRT.memberPrice)} once (compulsory).`,
     noPayment: 'No payment now. No place is held yet.',
 };
 
@@ -378,7 +378,6 @@ export const PRICES = {
     ],
     shirtTitle: 'The training shirt',
     shirt: `The Junior Royals training shirt is part of the kit, and players wear it at every session. It costs ${money(SHIRT.memberPrice)} at the member price (${money(SHIRT.shopPrice)} in our shop), paid once.`,
-    shirtOffer: `Relaunch offer: the first ${SHIRT.freeForFirst} players to enrol get their shirt free, if we have their size.`,
     // Alex, 12 Oct 2026: "The how enrolment works needs to be replaced by graphics.
     // And if it's a terms and conditions type thing then we need to point them to a
     // pop-up of the terms and conditions, particularly like cancellation fees …
@@ -400,6 +399,19 @@ export const PRICES = {
     cover: tbc('Each group always has its own coach. If a coach is away and we can’t replace them, we cancel that group’s session and credit you for it. We don’t join two groups together.', 'Approve the cover rule (cancel + credit, never merge lanes)?'),
     calendarTitle: 'Every term and what it costs',
     calendarNote: `${WEEKLY} a week, paid weekly in term. ${GST_NOTE}`,
+};
+
+// ── Pay now: the two Stripe links (Andy, 19 Oct 2026) ──
+const T4_SESSIONS = TERMS[0].sessions;
+export const PAY_NOW = {
+    title: `Pay for ${PAY.term}`,
+    lead: `First sessions ${FIRST_SESSION.long}. Choose how you’d like to pay. You pick your centre on the payment page.`,
+    options: [
+        { key: 'weekly', head: 'Pay weekly', price: WEEKLY, per: 'a week', body: `${WEEKLY} each week of the term.`, url: PAY.weeklyUrl, button: 'Pay weekly' },
+        { key: 'upfront', head: 'Pay for the term', price: money(PAY.upfront), per: 'once', body: `One payment for the whole term. You save ${money(termTotal(T4_SESSIONS) - PAY.upfront)}.`, url: PAY.upfrontUrl, button: 'Pay for the term' },
+    ],
+    shirt: `Both include the training shirt, ${money(SHIRT.memberPrice)} once. ${GST_NOTE}`,
+    secure: 'Payments are taken securely by Stripe.',
 };
 
 // ── The terms pop-up. These are the main terms in plain words, taken from the
@@ -562,7 +574,7 @@ export const FAQS = [
     },
     {
         q: 'Do we have to buy the training shirt?',
-        a: `Yes. Players wear the Junior Royals training shirt at every session. It’s ${money(SHIRT.memberPrice)} at the member price, paid once, and the first ${SHIRT.freeForFirst} players to enrol get it free, if we have their size.`,
+        a: `Yes. Players wear the Junior Royals training shirt at every session. It’s ${money(SHIRT.memberPrice)} at the member price, paid once.`,
     },
     {
         q: 'Can we stop?',
@@ -604,7 +616,6 @@ export const OPEN_QUESTIONS_V2 = [
     'The one-line Why in the hero',
     'Badges and portal access start straight away (Alex, 12 Oct): the Junior Royals part of the portal must be ready for the first session. Benchmark Game and printed progress card are off the page: keep either?',
     'Cancellation fee for stopping mid-term (proposed 2 weeks’ fees) — lawyer to check; add to the T&Cs',
-    'Free-shirt offer: who keeps the “shirts left” count current?',
     'Junior Royals coaches at each centre (names and roles)',
     'Ravenhall: exact venue name, opening term, days and coaches',
     'Day allocation: when do families hear their day, and is Wednesday 28 Oct still the first session at both centres?',
