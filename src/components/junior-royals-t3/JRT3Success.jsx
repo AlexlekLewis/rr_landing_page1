@@ -80,11 +80,11 @@ const JRT3Success = () => {
                     <p className="text-sm font-bold text-white/90 mb-2">When and where</p>
                     {centre ? (
                         <p className="text-sm text-white/75 leading-relaxed">
-                            <span className="font-bold text-white">{centre.venue}, {centre.address}.</span> Wednesdays {centre.times}, {JR_T4.datesLong} ({JR_T4.weeks} weeks). First session: <span className="font-bold text-white">{JR_T4.firstSessionLong}</span>. {centre.groups}
+                            <span className="font-bold text-white">{centre.venue}, {centre.address}.</span> {centre.night} {centre.times}, {centre.datesLong} ({JR_T4.weeks} weeks). First session: <span className="font-bold text-white">{centre.firstSessionLong}</span>. {centre.groups}
                         </p>
                     ) : (
                         <p className="text-sm text-white/75 leading-relaxed">
-                            Wednesdays, {JR_T4.datesLong} ({JR_T4.weeks} weeks), at the centre you chose: Mickleham {JR_T4.centres[0].times}, Cranbourne North {JR_T4.centres[1].times}. First session: <span className="font-bold text-white">{JR_T4.firstSessionLong}</span>. We confirm your player&apos;s one-hour group by email.
+                            {JR_T4.weeks} weeks at the centre you chose, 5:00pm – 7:00pm: Mickleham on {JR_T4.centres[0].night} ({JR_T4.centres[0].datesShort}), Cranbourne North on {JR_T4.centres[1].night} ({JR_T4.centres[1].datesShort}). We confirm your player&apos;s one-hour group by email.
                         </p>
                     )}
                     {booking?.option === 'weekly' && (

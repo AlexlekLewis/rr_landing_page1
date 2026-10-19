@@ -470,13 +470,16 @@ describe('guide tab', () => {
 // all. 16 of the 29 entries are in exactly that position.
 // ------------------------------------------------------------
 describe('junior royals term 4', () => {
+  // 19 Oct 2026: Mickleham moved to Mondays; Cranbourne North stays on Wednesdays.
   it('confirms the night and dates for a centre that IS running', () => {
-    for (const centre of ['mickleham', 'cranbourne-north']) {
-      const status = jrTerm4CentreStatus(centre);
-      expect(status).toMatch(/^Yes/);
-      expect(status).toContain('Wednesdays');
-      expect(status).toContain('28 October to 16 December');
-    }
+    expect(jrTerm4CentreStatus('mickleham')).toBe('Yes — Mondays 5:00pm or 6:00pm, 26 October to 14 December');
+    expect(jrTerm4CentreStatus('cranbourne-north')).toBe('Yes — Wednesdays 5:00pm or 6:00pm, 28 October to 16 December');
+  });
+
+  it('flags a Mickleham family who entered for a Wednesday: the night has changed', () => {
+    const status = jrTerm4Row(jrT4({ preferred_centre: 'mickleham', preferred_day: 'wednesday' }))[JR_TERM4_HEADERS.indexOf('Running in Term 4?')];
+    expect(status).toMatch(/^Yes — but MICKLEHAM IS NOW ON MONDAYS/);
+    expect(status).toContain('tell them the night has changed');
   });
 
   // "Hallam" is the Cranbourne North centre under its old name (Alex, 30 Sep
@@ -526,10 +529,11 @@ describe('junior royals term 4', () => {
     expect(jrTerm4CentreStatus(undefined)).not.toMatch(/^Yes/);
   });
 
-  it('spells out what picking Monday actually means', () => {
-    const row = jrTerm4Row(jrT4({ preferred_day: 'monday' }));
-    expect(row[JR_TERM4_HEADERS.indexOf('Night They Chose')])
-      .toBe('Monday — only runs if we add a second night');
+  it('names whose night each day is', () => {
+    expect(jrTerm4Row(jrT4({ preferred_day: 'monday' }))[JR_TERM4_HEADERS.indexOf('Night They Chose')])
+      .toBe("Monday (Mickleham's night from 26 October)");
+    expect(jrTerm4Row(jrT4({ preferred_centre: 'cranbourne-north' }))[JR_TERM4_HEADERS.indexOf('Night They Chose')])
+      .toBe("Wednesday (Cranbourne North's night)");
   });
 
   it('explains a blank night rather than leaving the cell empty', () => {
@@ -544,12 +548,6 @@ describe('junior royals term 4', () => {
       .toBe('Nothing to pay — an entry only. No place is held until we confirm one.');
   });
 
-  // 19 Oct 2026: Term 4 takes payment; both centres run 5:00pm – 7:00pm.
-  it('gives each centre its own Wednesday times', () => {
-    expect(jrTerm4CentreStatus('mickleham')).toContain('5:00pm or 6:00pm');
-    expect(jrTerm4CentreStatus('cranbourne-north')).toContain('5:00pm or 6:00pm');
-  });
-
   it('shows a paid booking as PAID with the amount and the plan', () => {
     const row = jrTerm4Row(jrT4({ source: 'junior-royals-term4-booking|pay=upfront', paid: true, amount_paid_cents: 37895, paid_at: '2026-10-19T03:00:00.000Z' }));
     const cell = row[JR_TERM4_HEADERS.indexOf('Payment')];
@@ -561,12 +559,6 @@ describe('junior royals term 4', () => {
     expect(cell).toMatch(/^NOT PAID/);
     expect(cell).toContain('weekly');
     expect(cell).toContain('Place not booked');
-  });
-
-  it('labels a Monday enquiry as an enquiry, with nothing to pay', () => {
-    const row = jrTerm4Row(jrT4({ preferred_day: 'monday', source: 'junior-royals-term4-monday-enquiry' }));
-    expect(row[JR_TERM4_HEADERS.indexOf('Night They Chose')]).toContain('an enquiry');
-    expect(row[JR_TERM4_HEADERS.indexOf('Payment')]).toBe('Nothing to pay — a Monday enquiry');
   });
 
   it('names the venue rather than the slug, for closed centres too', () => {

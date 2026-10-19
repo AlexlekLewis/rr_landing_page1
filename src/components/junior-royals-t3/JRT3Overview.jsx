@@ -27,7 +27,7 @@ const JRT3Overview = () => (
                     className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight mb-6">About the Program</motion.h2>
                 <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
                     className="text-lg text-rr-charcoal font-medium max-w-3xl mx-auto leading-relaxed">
-                    Junior Royals is our weekly coaching program for players aged {JR_T4.ageMin} to {JR_T4.ageMax}. Players are grouped by age and coached in small groups by our coaches, so every player gets time with the bat and ball each week. Term 4 runs right through the start of the junior club season, so the skills your player works on here on a Wednesday are the ones they take into their Saturday games.
+                    Junior Royals is our weekly coaching program for players aged {JR_T4.ageMin} to {JR_T4.ageMax}. Players are grouped by age and coached in small groups by our coaches, so every player gets time with the bat and ball each week. Term 4 runs right through the start of the junior club season, so the skills your player works on here each week are the ones they take into their Saturday games.
                 </motion.p>
             </div>
 

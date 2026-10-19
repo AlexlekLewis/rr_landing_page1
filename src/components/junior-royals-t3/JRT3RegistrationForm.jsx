@@ -7,19 +7,17 @@ import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squ
 
 // Junior Royals — Term 4 booking form (paid from 19 Oct 2026).
 //
-// WEDNESDAY (book and pay): the entry is saved to jr_term4_waitlist FIRST, with
+// BOOK AND PAY: the entry is saved to jr_term4_waitlist FIRST, with
 // an id made here (anon can insert but not read back), then the family goes to
 // the Stripe Payment Link they chose with that id as client_reference_id and
 // their email prefilled. api/stripe-webhook.js marks the row paid. Neither
 // Stripe checkout asks for the player, so this form is where we learn who is
 // coming. The database only accepts UNPAID rows from the browser.
 //
-// MONDAY (Mickleham only): an enquiry. Saved with preferred_day 'monday', no
-// payment, no place held (Alex, 19 Oct 2026).
-//
-// TWO CENTRES: Mickleham Indoor Sports Centre and the Elite Cricket Centre,
-// Cranbourne North, both Wednesdays 5:00pm – 7:00pm (Alex, 19 Oct 2026). If the
-// two centres' times differ again, the intro below must name each one. Do not add a centre without a booking behind it.
+// TWO CENTRES, EACH ITS OWN NIGHT (Alex, 19 Oct 2026): Mickleham Indoor Sports
+// Centre on MONDAYS (26 Oct – 14 Dec) and the Elite Cricket Centre, Cranbourne
+// North on WEDNESDAYS (28 Oct – 16 Dec), both 5:00pm – 7:00pm. The night is set by
+// the centre, so the form doesn't ask it; preferred_day is saved from the centre. Do not add a centre without a booking behind it.
 //
 // NEVER LOSE AN ENTRY (5 Oct 2026). The jr_term4_waitlist CHECK on
 // preferred_centre still only allows mickleham | hallam | williamstown | any.
@@ -28,7 +26,6 @@ import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squ
 // it back from there. When the constraint is widened the first insert succeeds.
 export const ENTRY_SOURCE = 'junior-royals-term4-entry';            // entries before payments opened
 export const BOOKING_SOURCE = 'junior-royals-term4-booking';         // + "|pay=upfront" / "|pay=weekly"
-export const MONDAY_SOURCE = 'junior-royals-term4-monday-enquiry';
 export const fallbackSource = (source, centre) => `${source}|centre=${centre}`;
 export const PENDING_KEY = 'jr_t4_pending_booking';
 
@@ -60,10 +57,8 @@ const readPending = () => {
 
 const JRT3RegistrationForm = () => {
     const weekly = weeklyOpen();
-    const [night, setNight] = useState('wednesday');
     const [pay, setPay] = useState('upfront');
     const [submitting, setSubmitting] = useState(false);
-    const [mondayDone, setMondayDone] = useState(false);
     const [pending, setPending] = useState(readPending);
     const [errors, setErrors] = useState({});
     const [honeypot, setHoneypot] = useState('');
@@ -71,7 +66,6 @@ const JRT3RegistrationForm = () => {
         parent_name: '', parent_email: '', parent_phone: '',
         player_name: '', player_age: '', preferred_centre: '',
     });
-    const isMonday = night === 'monday';
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -85,7 +79,7 @@ const JRT3RegistrationForm = () => {
         if (!form.parent_email.trim() || !/\S+@\S+\.\S+/.test(form.parent_email)) e.parent_email = 'Valid email required.';
         if (!form.player_name.trim()) e.player_name = 'Required.';
         if (!form.player_age) e.player_age = 'Required.';
-        if (!isMonday && !form.preferred_centre) e.preferred_centre = 'Please pick a centre.';
+        if (!form.preferred_centre) e.preferred_centre = 'Please pick a centre.';
         setErrors(e);
         return Object.keys(e).length === 0;
     };
@@ -94,12 +88,13 @@ const JRT3RegistrationForm = () => {
         ev.preventDefault();
         if (!validate()) return;
         // A filled honeypot means a script: nothing is written and it never reaches Stripe.
-        if (isHoneypotTripped(honeypot)) { if (isMonday) setMondayDone(true); return; }
+        if (isHoneypotTripped(honeypot)) return;
         setSubmitting(true);
         const id = newId();
         const option = weekly ? pay : 'upfront';
-        const centre = isMonday ? 'mickleham' : form.preferred_centre;
-        const source = isMonday ? MONDAY_SOURCE : `${BOOKING_SOURCE}|pay=${option}`;
+        const centre = form.preferred_centre;
+        const centreDay = JR_T4.centres.find((c) => c.value === centre)?.day || null;
+        const source = `${BOOKING_SOURCE}|pay=${option}`;
         const email = form.parent_email.trim();
         try {
             const row = {
@@ -110,7 +105,7 @@ const JRT3RegistrationForm = () => {
                 player_name: form.player_name.trim(),
                 player_age: parseInt(form.player_age, 10),
                 preferred_centre: centre,
-                preferred_day: isMonday ? 'monday' : 'wednesday',
+                preferred_day: centreDay,
                 source,
                 page_referrer: document.referrer ? document.referrer.slice(0, 500) : null,
                 ...getUTMParams(),
@@ -129,17 +124,11 @@ const JRT3RegistrationForm = () => {
             // Meta Pixel: program, centre and price only — never a name, email, phone or age.
             try {
                 if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
-                    if (isMonday) {
-                        window.fbq('track', 'Lead', { content_name: 'Junior Royals Monday Enquiry', content_category: 'junior-royals-term4-mickleham' });
-                    } else {
-                        const value = PAY_OPTIONS[option].value;
-                        window.fbq('track', 'Lead', { content_name: 'Junior Royals Term 4', content_category: `junior-royals-term4-${centre}`, value, currency: 'AUD' });
-                        window.fbq('track', 'InitiateCheckout', { content_name: `Junior Royals Term 4 (${option})`, value, currency: 'AUD' });
-                    }
+                    const value = PAY_OPTIONS[option].value;
+                    window.fbq('track', 'Lead', { content_name: 'Junior Royals Term 4', content_category: `junior-royals-term4-${centre}`, value, currency: 'AUD' });
+                    window.fbq('track', 'InitiateCheckout', { content_name: `Junior Royals Term 4 (${option})`, value, currency: 'AUD' });
                 }
             } catch { /* never let analytics block the family */ }
-
-            if (isMonday) { setMondayDone(true); setSubmitting(false); return; }
 
             try { window.sessionStorage.setItem(PENDING_KEY, JSON.stringify({ id, option, email, player: row.player_name, centre })); } catch { /* storage blocked: payment still works */ }
             // Same tab on purpose: Stripe sends them back to /junior-royals/success.
@@ -165,13 +154,13 @@ const JRT3RegistrationForm = () => {
                         SECURE YOUR <span className="text-rr-pink">PLACE</span>
                     </h2>
                     <p className="text-white/80 font-medium leading-relaxed mb-4">
-                        Term 4 runs on <span className="font-black text-white">Wednesday nights, {mickleham.times}, {JR_T4.datesLong}</span>, at the <span className="font-black text-white">{mickleham.venue}, {mickleham.suburb}</span> and the <span className="font-black text-white">{cranbourne.venue}, {cranbourne.suburb}</span>. Each player trains for one hour a week with players their own age. If your player did Junior Royals last term, nothing carries over automatically, so please book below.
+                        Term 4 runs on <span className="font-black text-white">{mickleham.night} at the {mickleham.venue}, {mickleham.suburb} ({mickleham.datesShort})</span> and <span className="font-black text-white">{cranbourne.night} at the {cranbourne.venue}, {cranbourne.suburb} ({cranbourne.datesShort})</span>, {mickleham.times} at both. Each player trains for one hour a week with players their own age. If your player did Junior Royals last term, nothing carries over automatically, so please book below.
                     </p>
                     <p className="text-white font-black leading-relaxed">{weekly ? JR_T4.priceLine : JR_T4.priceLineUpfrontOnly}</p>
                     <p className="text-white/70 text-sm font-medium leading-relaxed mt-2">{JR_T4.shirtLine}</p>
                 </div>
 
-                {pending && !isMonday && (
+                {pending && (
                     <div className="bg-white/10 border border-white/20 rounded-2xl p-5 mb-6 text-white" data-jr-t4-pending>
                         <p className="font-black">{pending.player ? `${pending.player}'s booking isn't paid yet.` : "Your booking isn't paid yet."}</p>
                         <p className="text-white/75 text-sm mt-1">The place is booked once you pay. Already paid? Check your email for the Stripe receipt; you don&apos;t need to pay again.</p>
@@ -185,36 +174,10 @@ const JRT3RegistrationForm = () => {
                 )}
 
                 <div className="bg-white rounded-2xl p-8 md:p-10">
-                    {mondayDone ? (
-                        <div className="text-center py-6" role="status">
-                            <div className="w-16 h-16 rounded-full bg-rr-pink/10 border-2 border-rr-pink flex items-center justify-center mx-auto mb-5">
-                                <svg className="w-8 h-8 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </div>
-                            <h3 className="text-2xl font-black text-rr-dark uppercase tracking-wide mb-3">Your Monday enquiry is in</h3>
-                            <p className="text-rr-charcoal text-sm font-medium leading-relaxed max-w-md mx-auto">{JR_T4.monday.done}</p>
-                        </div>
-                    ) : (
+                    {(
                         <form onSubmit={handleSubmit} noValidate>
                             <input type="text" name={HONEYPOT_FIELD} tabIndex={-1} autoComplete="off" aria-hidden="true"
                                 className="absolute left-[-9999px] top-0 w-px h-px opacity-0" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
-                            <fieldset className="mb-6">
-                                <legend className={lc}>Which night? *</legend>
-                                <div className="flex flex-col sm:flex-row gap-3">
-                                    <label className={choice(!isMonday)}>
-                                        <input type="radio" name="night" value="wednesday" checked={!isMonday} onChange={() => setNight('wednesday')} className="sr-only" />
-                                        <span className="block font-black text-rr-dark text-sm">Wednesdays · book now</span>
-                                        <span className="block text-xs text-rr-charcoal font-medium mt-0.5">Both centres, {JR_T4.datesShort}</span>
-                                    </label>
-                                    <label className={choice(isMonday)}>
-                                        <input type="radio" name="night" value="monday" checked={isMonday} onChange={() => setNight('monday')} className="sr-only" />
-                                        <span className="block font-black text-rr-dark text-sm">{JR_T4.monday.title} · enquire</span>
-                                        <span className="block text-xs text-rr-charcoal font-medium mt-0.5">{JR_T4.monday.times}, no payment now</span>
-                                    </label>
-                                </div>
-                            </fieldset>
-
                             <div className="space-y-5">
                                 <div><label className={lc}>Parent / Guardian Full Name *</label><input name="parent_name" value={form.parent_name} onChange={handleChange} className={ic('parent_name')} placeholder="e.g. Jane Smith" autoComplete="name" />{errors.parent_name && <p className="text-red-500 text-xs mt-1">{errors.parent_name}</p>}</div>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -235,17 +198,12 @@ const JRT3RegistrationForm = () => {
                                     </div>
                                 </div>
 
-                                {isMonday ? (
-                                    <p className="text-rr-charcoal text-sm font-medium leading-relaxed bg-slate-50 rounded-xl px-4 py-3">
-                                        <span className="font-black text-rr-dark">{mickleham.venue}, {mickleham.suburb}.</span> Mondays {JR_T4.monday.times}. {JR_T4.monday.formNote}
-                                    </p>
-                                ) : (
                                     <>
                                         <div>
                                             <label className={lc}>Centre *</label>
                                             <select name="preferred_centre" value={form.preferred_centre} onChange={handleChange} className={ic('preferred_centre')}>
                                                 <option value="">Select a centre</option>
-                                                {JR_T4.centres.map(c => <option key={c.value} value={c.value}>{c.venue}, {c.suburb} · Wednesdays {c.times}</option>)}
+                                                {JR_T4.centres.map(c => <option key={c.value} value={c.value}>{c.venue}, {c.suburb} · {c.night} {c.times}</option>)}
                                             </select>
                                             {errors.preferred_centre && <p className="text-red-500 text-xs mt-1">{errors.preferred_centre}</p>}
                                             <p className="text-slate-500 text-xs font-medium leading-relaxed mt-2">{JR_T4.centresApart} Stripe asks you to confirm the same centre at checkout.</p>
@@ -271,15 +229,14 @@ const JRT3RegistrationForm = () => {
                                             </div>
                                         </fieldset>
                                     </>
-                                )}
                             </div>
                             {errors.form && <div className="bg-red-50 border border-red-200 rounded-xl p-4 mt-6"><p className="text-red-600 text-sm font-medium">{errors.form}</p></div>}
                             <button type="submit" disabled={submitting}
                                 className="mt-8 w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]">
-                                {submitting ? (isMonday ? 'Sending…' : 'Going to payment…') : (isMonday ? JR_T4.monday.button : JR_T4.ctaLabel)}
+                                {submitting ? 'Going to payment…' : JR_T4.ctaLabel}
                             </button>
                             <p className="text-slate-500 text-xs text-center mt-4">
-                                {isMonday ? JR_T4.monday.formNote : `Next: Stripe's secure checkout. ${JR_T4.placeLine}`}
+                                {`Next: Stripe's secure checkout. ${JR_T4.placeLine}`}
                             </p>
                         </form>
                     )}

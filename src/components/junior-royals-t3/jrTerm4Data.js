@@ -25,13 +25,15 @@
 // - Alex, 19 Oct 2026: "the stripe link for weekly payments is wrong". It must
 //   not go on the page until he confirms or replaces it.
 // - It opens on Tuesday 27 October (Alex: "27th"). Before then a weekly plan
-//   started now would charge 9 times for 8 sessions.
+//   started now would charge 9 times for 8 sessions. NOTE: that date was set
+//   when both centres ran Wednesdays. Mickleham now starts Monday 26 Oct, so
+//   re-check the opening date per centre when the corrected link arrives.
 //
-// Wednesday only, at both centres, 5:00pm – 7:00pm at both (Cranbourne North:
-// "age groups balanced accordingly"; Alex, 19 Oct 2026: "i want mickleham
-// wednesdays to show 5-7pm"). Mondays
-// 5:00pm – 7:00pm at Mickleham ONLY are an enquiry (no payment); not offered at
-// Cranbourne North.
+// NIGHTS (Alex, 19 Oct 2026, final): MICKLEHAM MOVES TO MONDAYS ("I want to
+// move Mickleham TO mondays 5-7pm"), 8 Mondays 26 Oct – 14 Dec. CRANBOURNE NORTH
+// stays on Wednesdays, 8 Wednesdays 28 Oct – 16 Dec. Both 5:00pm – 7:00pm in two
+// one-hour groups by age ("age groups balanced accordingly"). There is no
+// Wednesday at Mickleham and no Monday at Cranbourne North.
 
 export const UPFRONT_LINK = 'https://buy.stripe.com/14A14n4fn3ud0uU7jJ9Zm0Y';
 export const WEEKLY_LINK = 'https://buy.stripe.com/7sYeVd9zH3udgtSavV9Zm0X';
@@ -67,19 +69,18 @@ export const PAY_OPTIONS = {
 export const JR_T4 = {
     term: 'Term 4, 2026',
     weeks: 8,
-    datesLong: '28 October – 16 December',
-    datesShort: '28 Oct – 16 Dec',
-    firstSessionLong: 'Wednesday 28 October',
-    night: 'Wednesdays',
+    // The whole term, both centres: first Mickleham Monday to last Cranbourne Wednesday.
+    datesLong: '26 October – 16 December',
+    datesShort: '26 Oct – 16 Dec',
     ages: '7–12',
     ageMin: 7,
     ageMax: 12,
-    factLine: 'Ages 7–12 · Wednesdays 5:00pm – 7:00pm (5:00pm or 6:00pm group) · 8 weeks',
+    factLine: 'Ages 7–12 · 5:00pm – 7:00pm (5:00pm or 6:00pm group) · 8 weeks · Mondays at Mickleham, Wednesdays at Cranbourne North',
     priceLine: `${money(PRICE.upfront)} for all 8 weeks incl. GST, or ${money(PRICE.weekly)} a week incl. GST.`,
     priceLineUpfrontOnly: `${money(PRICE.upfront)} for all 8 weeks incl. GST.`,
     shirtLine: `Plus the Junior Royals training shirt, ${money(PRICE.shirt)} incl. GST, bought once at checkout. Players wear it at every session; if your player already has one, set the shirt to 0 at checkout.`,
     ctaLabel: 'Secure Your Place',
-    stickyLabel: 'Secure Your Place · Term 4 from Wed 28 Oct',
+    stickyLabel: 'Secure Your Place · Term 4 from Mon 26 Oct',
     placeLine: 'Your place is booked once you have paid.',
     centresApart: 'The two centres are about 70 km apart, so pick the one you can get to every week.',
     // TWO CENTRES ONLY (Alex, 5 Oct 2026): "Hallam and Williamstown no longer exist
@@ -89,15 +90,6 @@ export const JR_T4 = {
     olderLead: 'Aged 13 or older?',
     olderLinkLabel: 'See Performance Squads',
     olderRoute: '/performance-squads',
-    // Mondays at Mickleham: an enquiry only (Alex, 19 Oct 2026).
-    monday: {
-        title: 'Mondays at Mickleham',
-        times: '5:00pm – 7:00pm',
-        lead: 'Want Monday nights instead? We take enquiries for Mondays, 5:00pm – 7:00pm, at Mickleham only.',
-        formNote: 'No payment now and no place is held. We will contact you about Monday places at Mickleham.',
-        done: "We've got your enquiry about Mondays at Mickleham. No payment has been taken and no place is held. We'll contact you about Monday places.",
-        button: 'Enquire About Mondays',
-    },
     centres: [
         {
             value: 'mickleham',
@@ -105,10 +97,15 @@ export const JR_T4 = {
             venue: 'Mickleham Indoor Sports Centre',
             suburb: 'Mickleham',
             address: 'Mickleham, VIC',
+            day: 'monday',
+            night: 'Mondays',
+            datesLong: '26 October – 14 December',
+            datesShort: '26 Oct – 14 Dec',
+            firstSessionLong: 'Monday 26 October',
             mapsUrl: 'https://maps.google.com/?q=Mickleham+Indoor+Sports+Centre+VIC',
             image: '/assets/jr-bundoora.png',
             gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
-            // Alex, 19 Oct 2026: "i want mickleham wednesdays to show 5-7pm".
+            // Alex, 19 Oct 2026: Mickleham moves to Mondays, 5:00pm – 7:00pm.
             times: '5:00pm – 7:00pm',
             groups: 'Two one-hour groups on the night, 5:00pm and 6:00pm, by age. We confirm your player\'s group by email.',
         },
@@ -119,6 +116,11 @@ export const JR_T4 = {
             suburb: 'Cranbourne North',
             // Street address from PR #102.
             address: '30 Medley Dr, Cranbourne North, VIC 3977',
+            day: 'wednesday',
+            night: 'Wednesdays',
+            datesLong: '28 October – 16 December',
+            datesShort: '28 Oct – 16 Dec',
+            firstSessionLong: 'Wednesday 28 October',
             mapsUrl: 'https://maps.google.com/?q=Elite+Cricket+Centre+30+Medley+Dr+Cranbourne+North+VIC',
             image: '/assets/jr-bundoora.png', // unchanged from the live card
             gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 60%, #E11F8F 100%)',

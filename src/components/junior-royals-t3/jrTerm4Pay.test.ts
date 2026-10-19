@@ -21,11 +21,15 @@ describe('Junior Royals Term 4 payments', () => {
         expect(WEEKLY_OPENS.toISOString()).toBe('2026-10-26T13:00:00.000Z');
     });
 
-    it('both centres run Wednesdays 5:00pm – 7:00pm', () => {
-        const t = Object.fromEntries(JR_T4.centres.map((c) => [c.value, c.times]));
-        expect(t).toEqual({ mickleham: '5:00pm – 7:00pm', 'cranbourne-north': '5:00pm – 7:00pm' });
-        expect(JR_T4.factLine).toContain('5:00pm – 7:00pm');
-        expect(JR_T4.monday.lead).toContain('Mickleham only');
+    // Alex, 19 Oct 2026: "I want to move Mickleham TO mondays 5-7pm" (26 Oct – 14 Dec).
+    it('Mickleham runs Mondays and Cranbourne North Wednesdays, both 5:00pm – 7:00pm', () => {
+        const t = Object.fromEntries(JR_T4.centres.map((c) => [c.value, [c.day, c.times, c.datesShort, c.firstSessionLong]]));
+        expect(t).toEqual({
+            mickleham: ['monday', '5:00pm – 7:00pm', '26 Oct – 14 Dec', 'Monday 26 October'],
+            'cranbourne-north': ['wednesday', '5:00pm – 7:00pm', '28 Oct – 16 Dec', 'Wednesday 28 October'],
+        });
+        expect(JR_T4.factLine).toContain('Mondays at Mickleham, Wednesdays at Cranbourne North');
+        expect('monday' in JR_T4).toBe(false); // no Monday enquiry any more
     });
 
     it('the webhook files both products as Junior Royals Term 4, by plan', () => {
