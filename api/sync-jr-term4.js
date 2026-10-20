@@ -3,7 +3,8 @@
 // ============================================================
 // Alex, 20 Oct 2026: "lets just create a new stand alone Junior Royals T4 2026 sign up
 // sheet with tabs for each centre". Rows come from jr_term4_waitlist (every Term 4
-// entry, booking and standby request from /junior-royals), every 10 minutes.
+// entry, booking and standby request from /junior-royals), once an hour at 5 past
+// (Alex, 20 Oct 2026: "run every hour").
 //
 // Tabs (names end "— DO NOT EDIT"; notes go in the column to the right of the data):
 //   Mickleham — Mondays           Mickleham entries, plus Williamstown entries
@@ -144,7 +145,7 @@ export const summaryLines = (rows, now = new Date()) => {
   const col = (f) => ['mickleham', 'cranbourne-north'].map((c) => f(at(c)));
   return [
     ['Junior Royals Term 4, 2026: sign-ups by centre'],
-    [`Updated ${fmtMelb(now.toISOString())} (Melbourne). This tab is rewritten every 10 minutes.`],
+    [`Updated ${fmtMelb(now.toISOString())} (Melbourne). This sheet updates once an hour, at 5 past the hour.`],
     [''],
     ['', 'Mickleham (Mondays, from 26 Oct)', 'Cranbourne North (Wednesdays, from 28 Oct)'],
     ['PAID: 5:00pm – 6:00pm group (ages 7–9)', ...col((rs) => paid(rs, '5:00pm'))],
@@ -178,7 +179,7 @@ async function writeSummary(sheets, spreadsheetId, rows) {
   });
   try {
     await ensureProtectedRange(sheets, spreadsheetId, SUMMARY_TAB, null,
-      'This whole tab is rewritten automatically every 10 minutes. Anything you type here is replaced.');
+      'This whole tab is rewritten automatically every hour. Anything you type here is replaced.');
   } catch (err) {
     console.warn('sync-jr-term4: could not protect the summary tab:', err.message);
   }
