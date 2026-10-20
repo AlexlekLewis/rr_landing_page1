@@ -38,5 +38,6 @@ describe('Junior Royals Term 4 payments', () => {
         expect(classifyJrT4([{ description: 'Rajasthan Royals Academy Term 4 Junior Royals - Weekly Payment' }]))
             .toMatchObject({ program_variant: 'term_4_weekly' });
         expect(classifyJrT4([{ description: '2026 Junior Royals Program - Term 3: Hallam' }])).toBeNull();
+        expect(PAY_OPTIONS.upfront.detail).toContain('Afterpay');
     });
 });

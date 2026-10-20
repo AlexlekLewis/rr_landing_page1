@@ -13,10 +13,13 @@
 // Junior Royals program"). Two Stripe Payment Links, both in live mode, both
 // with the training shirt as an adjustable line (a family that already has a
 // shirt sets it to 0) and a "Confirm your location" field:
-//   UPFRONT  $349 for all 8 weeks ("Save $10 and pay upfront"), card or Zip.
+//   UPFRONT  $349 for all 8 weeks ("Save $10 and pay upfront"), plink_1US8PnIo52UEA50y1mEdWz1P;
+//            card, Apple Pay, Afterpay, Klarna or Zip (dashboard, 20 Oct 2026).
 //   WEEKLY   $44.95 a week, a subscription: first payment the day they book,
 //            then every 7 days, "cancelled following the final session of
-//            Term 4". Card or Klarna.
+//            Term 4". plink_1US8NNIo52UEA50y5UuUuuyo; card, Apple Pay or Klarna.
+// Both links' confirmation page is Stripe's DEFAULT (20 Oct 2026), so families
+// are not sent back to /junior-royals/success until that is changed in Stripe.
 // Neither checkout asks for the player, so the page saves the entry first
 // (jr_term4_waitlist) and sends the row id to Stripe as client_reference_id;
 // api/stripe-webhook.js marks the row paid.
@@ -51,7 +54,7 @@ export const PAY_OPTIONS = {
         title: 'Pay upfront',
         amount: money(PRICE.upfront),
         per: 'for all 8 weeks',
-        detail: `One payment by card or Zip, ${money(Math.round((WEEKLY_MAX - PRICE.upfront) * 100) / 100)} less than paying weekly.`,
+        detail: `One payment at checkout (card, Apple Pay, Afterpay, Klarna or Zip), ${money(Math.round((WEEKLY_MAX - PRICE.upfront) * 100) / 100)} less than paying weekly.`,
         link: UPFRONT_LINK,
         value: PRICE.upfront,
     },
@@ -60,7 +63,7 @@ export const PAY_OPTIONS = {
         title: 'Pay weekly',
         amount: money(PRICE.weekly),
         per: 'a week',
-        detail: `By card or Klarna. The first payment is taken when you book, then one every 7 days, and they stop after the last session on 16 December: at most 8 payments, ${money(WEEKLY_MAX)} in total.`,
+        detail: `By card, Apple Pay or Klarna. The first payment is taken when you book, then one every 7 days, and they stop after the last session on 16 December: at most 8 payments, ${money(WEEKLY_MAX)} in total.`,
         link: WEEKLY_LINK,
         value: PRICE.weekly,
     },

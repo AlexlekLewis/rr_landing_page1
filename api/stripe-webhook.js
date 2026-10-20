@@ -110,6 +110,10 @@ const PAYMENT_LINK_PROGRAMS = {
   // Royals Carnival Day Entry Fee", would otherwise classify as a Junior Royals
   // term payment by description. Paid rows back-fill onto
   // lower_plenty_junior_royals_day_registrations (see LOWER_PLENTY_JR_DAY_TABLE).
+  // Junior Royals Term 4 (Alex's links, 19 Oct 2026). Mapped by link as well as by
+  // product name (classifyJrT4), so a renamed product can't misfile a payment.
+  'plink_1US8PnIo52UEA50y1mEdWz1P': { program: 'junior_royals', program_variant: 'term_4_upfront', program_label: 'Junior Royals Term 4 — upfront ($349, 8 weeks)' },
+  'plink_1US8NNIo52UEA50y5UuUuuyo': { program: 'junior_royals', program_variant: 'term_4_weekly', program_label: 'Junior Royals Term 4 — weekly ($44.95 a week)' },
   'plink_1UR3QNIo52UEA50yq6GKVkSy': { program: 'lower_plenty_jr_day', program_variant: null, program_label: 'Junior Royals are coming to Lower Plenty — $10 entry fee, Sun 25 Oct 2026' },
 };
 
