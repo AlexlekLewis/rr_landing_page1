@@ -1,21 +1,27 @@
+import APPROVED_KEYS from './approvedBadgeKeys.json';
 import { BADGES } from './jrV2Facts';
 
 // ─────────────────────────────────────────────────────────────
-// Alex's approved Discover badges (13 Oct 2026). He supplied them as one sheet,
-// "Junior Royals Discover — 28 approved badges" (Master Landing Page/Junior Royals
-// Badges/approved/), so each badge was cut from it into its own file with a
-// see-through background: public/assets/junior-royals/badges/discover/<name>.png.
-// They replace the code-drawn pictures in JRV2Badges.jsx wherever a Discover badge
-// appears. Each file is about 170 px wide (the sheet's own size), so keep them at
-// 96 px or smaller on the page until Alex sends the original artwork.
+// Alex's approved Junior Royals badges, all three phases (artwork approved 15 Oct
+// 2026), each carrying the official Rajasthan Royals Academy Melbourne logo
+// (approved 20 Oct 2026). Vector files, copied byte for byte from the approved
+// package "Junior-Royals-All-Three-Phases-with-logo" (Master Landing Page/Junior
+// Royals Badges/) — the same files the portal serves:
+//   public/assets/junior-royals/badges/<key>-ribbon.svg   with the name ribbon
+//   public/assets/junior-royals/badges/<key>.svg          without it
+// approvedBadgeKeys.json lists the 71 keys. Wherever the page shows a badge that is
+// on that list, it shows this artwork instead of a drawing from JRV2Badges.jsx.
 // ─────────────────────────────────────────────────────────────
 
-const DIR = '/assets/junior-royals/badges/discover/';
+const DIR = '/assets/junior-royals/badges/';
+const KEYS = new Set(APPROVED_KEYS);
 
 // "Keeper’s Gloves" → "keepers-gloves", "Line Up, Hit" → "line-up-hit"
 export const badgeSlug = (name) =>
     name.toLowerCase().replace(/’/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
-export const APPROVED_BADGES = Object.fromEntries(BADGES.discover.map((b) => [b.name, `${DIR}${badgeSlug(b.name)}.png`]));
+// The approved artwork for a badge, by name (with its ribbon), or null.
+export const approvedBadge = (name) => (KEYS.has(badgeSlug(name)) ? `${DIR}${badgeSlug(name)}-ribbon.svg` : null);
 
-export const approvedBadge = (name) => APPROVED_BADGES[name] || null;
+// The 28 Discover badges, name → file.
+export const APPROVED_BADGES = Object.fromEntries(BADGES.discover.map((b) => [b.name, approvedBadge(b.name)]));

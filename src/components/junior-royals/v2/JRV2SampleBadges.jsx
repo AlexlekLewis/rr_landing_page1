@@ -13,9 +13,9 @@ import { approvedBadge } from './jrV2BadgeArt';
 // top. When the Develop and Elevate sets are written properly, these four move
 // into JRV2Badges.jsx and this file goes.
 //
-// A Discover badge shows Alex's approved artwork (13 Oct 2026, jrV2BadgeArt.js)
-// instead of a drawing. The four Develop and Elevate pictures below are still the
-// older drawn style; they need artwork in the approved style.
+// Every badge Alex has approved (all three phases, with the Melbourne logo, 20 Oct
+// 2026, jrV2BadgeArt.js) shows that artwork instead of a drawing, so the Develop
+// and Elevate examples below are only drawn if a badge has no approved artwork.
 //
 // Same drawing rules as the Discover set: a player doing the skill, white
 // pictogram on the Royals gradient, pink only on the ball's seam; viewBox

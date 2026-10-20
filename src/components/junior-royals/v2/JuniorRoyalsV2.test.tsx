@@ -3,7 +3,7 @@ import { PRICE, SHIRT, NOTICE_WEEKS, PHASES, SESSION, CURRICULUM, BADGES, wednes
 import { TRY_VALUES } from './JRV2ComeAndTry';
 import { PhaseBadge, hasSampleArt } from './JRV2SampleBadges';
 import { APPROVED_BADGES, approvedBadge } from './jrV2BadgeArt';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import * as CONTENT from './jrV2Content';
 import { termTotal, yearTotal, TERMS, V2_CENTRES, DAYS, MIN_DAYS } from './jrV2Content';
@@ -355,10 +355,10 @@ describe('the interest form', () => {
         });
         // the Discover examples are real Discover badges, with the same "I can" line
         SAMPLE_BADGES.discover.forEach((b) => expect(BADGES.discover.find((d) => d.name === b.name)?.can).toBe(b.can));
-        // a Develop or Elevate example draws a frame plus its own picture
+        // a Develop or Elevate example now shows Alex's approved artwork (20 Oct 2026), not a drawing
         const html = renderToStaticMarkup(createElement(PhaseBadge, { name: 'Length Box', kind: 'bowl', ribbon: true }));
-        expect(html).toContain('LENGTH BOX');
-        expect((html.match(/<svg/g) || []).length).toBe(2);
+        expect(html).toContain('src="/assets/junior-royals/badges/length-box-ribbon.svg"');
+        expect(html).not.toContain('<svg');
     });
 
     // Alex, 12 Oct: the hero was too crowded. It goes straight to who it is for,
@@ -424,19 +424,32 @@ describe('copy rules (CLAUDE.md §2, language.md)', () => {
         expect(text).not.toMatch(/guarantee(d)? (a )?(place|selection)|same coach(es)?\b|app notes/i);
     });
 
-// Alex, 19 Oct 2026: "was the site updated with the new badges?" The approved Discover
-// set (13 Oct) replaces the drawn pictures everywhere a Discover badge shows.
-describe('approved Discover badges (Alex, 13 Oct)', () => {
-    it('every one of the 28 has its own image file', () => {
+// Alex, 19 Oct 2026: "was the site updated with the new badges?" The approved set
+// replaces the drawn pictures everywhere a badge shows. 20 Oct 2026: all three phases,
+// each badge carrying the official Melbourne logo.
+describe('approved badges with the Melbourne logo (Alex, 20 Oct)', () => {
+    it('every one of the 28 Discover badges has its own image file', () => {
         expect(Object.keys(APPROVED_BADGES)).toHaveLength(28);
         Object.entries(APPROVED_BADGES).forEach(([name, url]) => {
-            expect(existsSync(join(process.cwd(), 'public', url)), `no file for "${name}" at ${url}`).toBe(true);
+            expect(url, `no approved art for "${name}"`).toBeTruthy();
+            expect(existsSync(join(process.cwd(), 'public', url as string)), `no file for "${name}" at ${url}`).toBe(true);
         });
     });
 
-    it('a Discover badge on the page shows the approved artwork, not a drawing', () => {
-        ['Heel to Toe', 'Rock or Step', 'Length Ladder'].forEach((name) => {
+    it('every approved badge file carries the Melbourne logo, in both forms', () => {
+        const keys: string[] = JSON.parse(readFileSync(join(process.cwd(), 'src/components/junior-royals/v2/approvedBadgeKeys.json'), 'utf8'));
+        expect(keys).toHaveLength(71);
+        keys.forEach((k) => ['', '-ribbon'].forEach((form) => {
+            const f = join(process.cwd(), 'public/assets/junior-royals/badges', `${k}${form}.svg`);
+            expect(existsSync(f), `missing ${k}${form}.svg`).toBe(true);
+            expect(readFileSync(f, 'utf8'), `${k}${form}.svg has no logo`).toContain('rra-melbourne-logo');
+        }));
+    });
+
+    it('a badge on the page shows the approved artwork, not a drawing, in every phase', () => {
+        ['Heel to Toe', 'Rock or Step', 'Length Ladder', ...Object.values(SAMPLE_BADGES).flat().map((b: { name: string }) => b.name)].forEach((name) => {
             const html = renderToStaticMarkup(createElement(PhaseBadge, { name, kind: 'bat', className: 'w-20 h-20' }));
+            expect(approvedBadge(name), `no approved art for "${name}"`).toBeTruthy();
             expect(html).toContain(`src="${approvedBadge(name)}"`);
             expect(html).not.toContain('<svg');
         });
