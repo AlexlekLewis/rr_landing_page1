@@ -24,7 +24,8 @@
 // (jr_term4_waitlist) and sends the row id to Stripe as client_reference_id;
 // api/stripe-webhook.js marks the row paid.
 //
-// WEEKLY IS OFF until two things are true (WEEKLY_CONFIRMED and the date):
+// WEEKLY: Alex confirmed both links on 20 Oct 2026 ("these links are fine … make
+// sure the copy reflects the 2 payment options"). It still opens on 27 Oct:
 // - Alex, 19 Oct 2026: "the stripe link for weekly payments is wrong". It must
 //   not go on the page until he confirms or replaces it.
 // - It opens on Tuesday 27 October (Alex: "27th"). Before then a weekly plan
@@ -35,12 +36,12 @@
 // NIGHTS (Alex, 19 Oct 2026, final): MICKLEHAM MOVES TO MONDAYS ("I want to
 // move Mickleham TO mondays 5-7pm"), 8 Mondays 26 Oct – 14 Dec. CRANBOURNE NORTH
 // stays on Wednesdays, 8 Wednesdays 28 Oct – 16 Dec. Both 5:00pm – 7:00pm in two
-// one-hour groups by age ("age groups balanced accordingly"). There is no
+// one-hour groups by age (split fixed 20 Oct 2026: see GROUPS below). There is no
 // Wednesday at Mickleham and no Monday at Cranbourne North.
 
 export const UPFRONT_LINK = 'https://buy.stripe.com/14A14n4fn3ud0uU7jJ9Zm0Y';
 export const WEEKLY_LINK = 'https://buy.stripe.com/7sYeVd9zH3udgtSavV9Zm0X';
-export const WEEKLY_CONFIRMED = false;                       // Alex: the weekly link is wrong
+export const WEEKLY_CONFIRMED = true;                        // Alex, 20 Oct 2026: "these links are fine"
 export const WEEKLY_OPENS = new Date('2026-10-27T00:00:00+11:00'); // Tue 27 Oct, Melbourne
 export const weeklyOpen = (now = new Date()) => WEEKLY_CONFIRMED && now >= WEEKLY_OPENS;
 
@@ -63,11 +64,27 @@ export const PAY_OPTIONS = {
         title: 'Pay weekly',
         amount: money(PRICE.weekly),
         per: 'a week',
-        detail: `By card, Apple Pay or Klarna. The first payment is taken when you book, then one every 7 days, and they stop after the last session on 16 December: at most 8 payments, ${money(WEEKLY_MAX)} in total.`,
+        detail: `A weekly direct debit, by card, Apple Pay or Klarna. The first payment is taken when you book, then one each week. The direct debit is cancelled at the end of term (8 weeks is ${money(WEEKLY_MAX)}).`,
         link: WEEKLY_LINK,
         value: PRICE.weekly,
     },
 };
+
+// GROUPS BY AGE (Alex, 20 Oct 2026: "we also need to be clearer about the 5pm group and
+// 6pm group, so parents know which group and time they are signing up for or
+// requesting"; he chose 5pm = ages 7–9, 6pm = ages 10–12). Same split at both centres,
+// and on any night a family asks for. The form shows the group before they pay or
+// request, saves it in `source` ("|group=5pm"), and the sheet shows it. If this split
+// changes, change GROUP_RULE in api/sync-program-signups.js in the same commit.
+export const GROUPS = [
+    { key: '5pm', time: '5:00pm – 6:00pm', ages: '7–9', min: 7, max: 9 },
+    { key: '6pm', time: '6:00pm – 7:00pm', ages: '10–12', min: 10, max: 12 },
+];
+export const groupFor = (age) => {
+    const a = parseInt(age, 10);
+    return GROUPS.find((g) => a >= g.min && a <= g.max) || null;
+};
+const GROUPS_LINE = `Two one-hour groups by age: ages ${GROUPS[0].ages} train ${GROUPS[0].time}, and ages ${GROUPS[1].ages} train ${GROUPS[1].time}.`;
 
 export const JR_T4 = {
     term: 'Term 4, 2026',
@@ -78,13 +95,43 @@ export const JR_T4 = {
     ages: '7–12',
     ageMin: 7,
     ageMax: 12,
-    factLine: 'Ages 7–12 · 5:00pm – 7:00pm (5:00pm or 6:00pm group) · 8 weeks · Mondays at Mickleham, Wednesdays at Cranbourne North',
-    priceLine: `${money(PRICE.upfront)} for all 8 weeks incl. GST, or ${money(PRICE.weekly)} a week incl. GST.`,
-    priceLineUpfrontOnly: `${money(PRICE.upfront)} for all 8 weeks incl. GST.`,
+    factLine: 'Ages 7–9: 5:00pm – 6:00pm · Ages 10–12: 6:00pm – 7:00pm · 8 weeks · Mondays at Mickleham, Wednesdays at Cranbourne North',
+    groupsLine: GROUPS_LINE,
+    // Two ways to pay, always both on the page (Alex, 20 Oct 2026). Weekly opens 27 Oct.
+    priceLine: `Two ways to pay: ${money(PRICE.upfront)} upfront for all 8 weeks, or ${money(PRICE.weekly)} a week. Prices incl. GST.`,
+    priceLineBeforeWeekly: `Two ways to pay: ${money(PRICE.upfront)} upfront for all 8 weeks, or ${money(PRICE.weekly)} a week from Tuesday 27 October. Prices incl. GST.`,
     shirtLine: `Plus the Junior Royals training shirt, ${money(PRICE.shirt)} incl. GST, bought once at checkout. Players wear it at every session; if your player already has one, set the shirt to 0 at checkout.`,
     ctaLabel: 'Secure Your Place',
     stickyLabel: 'Secure Your Place · Term 4 from Mon 26 Oct',
     placeLine: 'Your place is booked once you have paid.',
+    // AUTOMATIC RE-ENROLMENT, OPT-OUT (Alex, 20 Oct 2026): "it's an automatic enrolment
+    // into the next term (opt out system) … we will be in touch to confirm. Direct debits
+    // will be cancelled at the end of the term and restart at the beginning." The 2 weeks'
+    // notice is Alex's (8 Oct 2026, NOTICE_WEEKS in the version 2 mock-up).
+    renewTitle: 'Next term',
+    renewLines: [
+        'Enrolment is automatic: your player\'s place carries on into the next term unless you opt out.',
+        'We\'ll be in touch before the next term starts to confirm your player\'s place.',
+        'Weekly direct debits are cancelled at the end of each term and start again at the beginning of the next term.',
+        'To opt out, email info@rramelbourne.com at least 2 weeks before the next term starts.',
+    ],
+    // A DIFFERENT NIGHT (Alex, 20 Oct 2026): "people can select different days but need to
+    // know Wednesday (Cranbourne Nth) and Monday (Mickleham) are only on offer currently and
+    // if another night is requested we don't take payment, we just send them to a
+    // confirmation page and to standby." We fill the nights on offer first.
+    request: {
+        offeredLead: 'Book and pay now.',
+        title: 'A different night',
+        lead: 'Request only: nothing to pay, and you go on standby.',
+        why: (c) => `Junior Royals at ${c.suburb} runs on ${c.night}, ${c.times}, for now, and we're filling those sessions first.`,
+        dayLabel: 'Which night would suit you?',
+        button: 'Request This Night',
+        note: 'No payment is taken and no place is held. You go on standby for that night.',
+        doneTitle: "You're on standby",
+        done: (player, day, c, g) => `We've got ${player}'s request for ${day} nights${g ? `, ${g.time} (the ages ${g.ages} group),` : ''} at the ${c.venue}, ${c.suburb}. No payment has been taken and no place is held. Junior Royals runs on ${c.night} there for now; if we open ${day} nights, we'll contact you first.`,
+    },
+    days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
+    renewShort: 'Enrolment carries on into the next term automatically unless you opt out; we\'ll be in touch to confirm.',
     centresApart: 'The two centres are about 70 km apart, so pick the one you can get to every week.',
     // TWO CENTRES ONLY (Alex, 5 Oct 2026): "Hallam and Williamstown no longer exist
     // as part of the organisation for the moment." Don't name them on the page.
@@ -110,7 +157,7 @@ export const JR_T4 = {
             gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
             // Alex, 19 Oct 2026: Mickleham moves to Mondays, 5:00pm – 7:00pm.
             times: '5:00pm – 7:00pm',
-            groups: 'Two one-hour groups on the night, 5:00pm and 6:00pm, by age. We confirm your player\'s group by email.',
+            groups: GROUPS_LINE,
         },
         {
             value: 'cranbourne-north',
@@ -129,7 +176,7 @@ export const JR_T4 = {
             gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 60%, #E11F8F 100%)',
             // Alex, 19 Oct 2026: "Cranbourne offering 5pm-7pm age groups balanced accordingly".
             times: '5:00pm – 7:00pm',
-            groups: 'Two one-hour groups on the night, 5:00pm and 6:00pm, by age. We confirm your player\'s group by email.',
+            groups: GROUPS_LINE,
         },
     ],
 };

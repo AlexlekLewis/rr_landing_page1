@@ -1,17 +1,19 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { JR_T4 } from './jrTerm4Data';
+import { JR_T4, GROUPS } from './jrTerm4Data';
 import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squads/data';
 
 const groups = [
     {
         ages: '7–9 years',
+        time: GROUPS[0].time,
         color: 'from-rr-blue to-rr-pink',
         points: ['Build on foundation cricket skills', 'Incorporate game sense activities', 'Prepare players to start playing junior cricket'],
     },
     {
         ages: '10–12 years',
+        time: GROUPS[1].time,
         color: 'from-rr-pink to-rr-blue',
         points: ['Skill-focused sessions', 'Use of bowling machine', 'Secondary training for those already playing cricket'],
     },
@@ -41,7 +43,8 @@ const JRT3Overview = () => (
                         className="bg-rr-dark rounded-2xl overflow-hidden">
                         <div className={`h-2 bg-gradient-to-r ${group.color}`} />
                         <div className="p-6">
-                            <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-5">{group.ages}</h3>
+                            <h3 className="text-2xl font-black text-white uppercase tracking-tight">{group.ages}</h3>
+                            <p className="text-rr-pink font-black text-sm uppercase tracking-widest mt-1 mb-5">{group.time}</p>
                             <ul className="space-y-2">
                                 {group.points.map((point, j) => (
                                     <li key={j} className="flex items-start gap-3">

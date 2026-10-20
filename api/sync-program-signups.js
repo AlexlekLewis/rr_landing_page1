@@ -725,6 +725,7 @@ export const JR_TERM4_HEADERS = [
   'Centre They Chose',
   'Running in Term 4?',
   'Night They Chose',
+  'Group and Time',
   'Payment',
 ];
 
@@ -749,13 +750,35 @@ const JR_TERM4_CLOSED_CENTRES = {
   williamstown: 'Williamstown',
 };
 
-// Night, times and dates per centre (Alex, 19 Oct 2026): Mickleham MONDAYS
-// 26 Oct – 14 Dec, Cranbourne North WEDNESDAYS 28 Oct – 16 Dec, both 5:00pm and
-// 6:00pm groups. Source of truth: centres[] in jrTerm4Data.js.
+// Night and dates per centre (Alex, 19 Oct 2026): Mickleham MONDAYS 26 Oct – 14 Dec,
+// Cranbourne North WEDNESDAYS 28 Oct – 16 Dec. The hour is in "Group and Time".
+// Source of truth: centres[] in jrTerm4Data.js.
 const JR_TERM4_WHEN = {
-  'mickleham': 'Mondays 5:00pm or 6:00pm, 26 October to 14 December',
-  'cranbourne-north': 'Wednesdays 5:00pm or 6:00pm, 28 October to 16 December',
-  'hallam': 'Wednesdays 5:00pm or 6:00pm, 28 October to 16 December',
+  'mickleham': 'Mondays, 26 October to 14 December',
+  'cranbourne-north': 'Wednesdays, 28 October to 16 December',
+  'hallam': 'Wednesdays, 28 October to 16 December',
+};
+
+// GROUP AND TIME (Alex, 20 Oct 2026): 5pm = ages 7–9, 6pm = ages 10–12, at both
+// centres and on any night asked for. Mirrors GROUPS in jrTerm4Data.js; change both
+// together. The form saves the group it showed in source ("|group=5pm"); older
+// rows fall back to the age.
+const JR_TERM4_GROUPS = {
+  '5pm': { time: '5:00pm – 6:00pm', ages: '7–9', min: 7, max: 9 },
+  '6pm': { time: '6:00pm – 7:00pm', ages: '10–12', min: 10, max: 12 },
+};
+export const jrTerm4Group = (r) => {
+  const key = /\|group=(5pm|6pm)/.exec(r.source || '')?.[1]
+    || Object.keys(JR_TERM4_GROUPS).find((k) => {
+      const g = JR_TERM4_GROUPS[k];
+      return Number(r.player_age) >= g.min && Number(r.player_age) <= g.max;
+    });
+  if (key) {
+    const g = JR_TERM4_GROUPS[key];
+    return `${g.time} (ages ${g.ages})${jrTerm4RequestDay(r) ? ', on the night they asked for' : ''}`;
+  }
+  if (r.player_age == null || r.player_age === '') return 'No age given — check with the family';
+  return `NO GROUP — age ${r.player_age} is outside 7 to 12. Check with Alex before booking`;
 };
 
 export const jrTerm4CentreStatus = (centre, day = null) => {
@@ -779,9 +802,8 @@ export const jrTerm4CentreStatus = (centre, day = null) => {
   return `Centre "${centre || '(blank)'}" is not one we recognise — check this row by hand`;
 };
 
-// Wednesday is the booked night at both centres (net bookings RRA-T4-2026-MIC
-// and RRA-T4-2026-CRN). Monday is Performance Squad, and is offered on the form
-// only to measure demand for a second night.
+// The night saved with a booking: Monday at Mickleham, Wednesday at Cranbourne North
+// (19 Oct 2026). Older entries were made when the form asked which night they wanted.
 const JR_TERM4_NIGHTS = {
   wednesday: 'Wednesday (Cranbourne North\'s night)',
   monday: 'Monday (Mickleham\'s night from 26 October)',
@@ -791,7 +813,16 @@ const JR_TERM4_NIGHTS = {
 // source ("junior-royals-term4-booking|pay=upfront"); the webhook fills paid,
 // paid_at and amount_paid_cents. The amount is the first checkout, shirt included.
 const centsToDollars = (c) => `$${(Number(c || 0) / 100).toFixed(2)}`;
+// A different night (20 Oct 2026): "junior-royals-term4-night-request|day=tuesday".
+// Standby only: nothing paid, no place held, the night they asked for isn't running.
+const jrTerm4RequestDay = (r) => {
+  const m = /^junior-royals-term4-night-request\|day=([a-z]+)/.exec(r.source || '');
+  return m ? m[1].charAt(0).toUpperCase() + m[1].slice(1) : null;
+};
+const JR_TERM4_RUNS = { 'mickleham': 'Mondays', 'cranbourne-north': 'Wednesdays', 'hallam': 'Wednesdays' };
+
 export const jrTerm4Payment = (r) => {
+  if (jrTerm4RequestDay(r)) return 'Nothing to pay — standby request for another night';
   const opt = /\|pay=(upfront|weekly)/.exec(r.source || '')?.[1];
   const how = opt === 'weekly' ? 'weekly plan, first payment' : opt === 'upfront' ? 'upfront, all 8 weeks' : 'paid';
   if (r.paid) return `PAID ${centsToDollars(r.amount_paid_cents)} (${how}) on ${fmtMelb(r.paid_at)}`;
@@ -824,9 +855,14 @@ export const jrTerm4Row = (r) => ([
     : JR_TERM4_CENTRES[jrTerm4Centre(r)]
       || JR_TERM4_CLOSED_CENTRES[jrTerm4Centre(r)]
       || jrTerm4Centre(r) || '',
-  jrTerm4CentreStatus(jrTerm4Centre(r), r.preferred_day),
-  JR_TERM4_NIGHTS[r.preferred_day]
-    || (r.preferred_day ? r.preferred_day : 'Not asked — they entered before the form asked about nights'),
+  jrTerm4RequestDay(r)
+    ? `STANDBY — asked for ${jrTerm4RequestDay(r)} nights; this centre runs ${JR_TERM4_RUNS[jrTerm4Centre(r)] || 'another night'} only`
+    : jrTerm4CentreStatus(jrTerm4Centre(r), r.preferred_day),
+  jrTerm4RequestDay(r)
+    ? `Asked for ${jrTerm4RequestDay(r)} instead (standby)`
+    : JR_TERM4_NIGHTS[r.preferred_day]
+      || (r.preferred_day ? r.preferred_day : 'Not asked — they entered before the form asked about nights'),
+  jrTerm4Group(r),
   jrTerm4Payment(r),
 ]);
 
@@ -983,7 +1019,9 @@ export const guideLines = (linkLines = [], counts = {}) => {
     ['  READ THE "RUNNING IN TERM 4?" COLUMN BEFORE YOU RING ANYONE.'],
     ['  Term 4 runs at Mickleham on MONDAYS (26 October to 14 December) and at the Elite'],
     ['  Cricket Centre in Cranbourne North on WEDNESDAYS (28 October to 16 December),'],
-    ['  one hour a week in two groups at 5:00pm and 6:00pm.'],
+    ['  one hour a week. The group is set by age: ages 7 to 9 train 5:00pm to 6:00pm,'],
+    ['  ages 10 to 12 train 6:00pm to 7:00pm. The "Group and Time" column shows each'],
+    ['  player\'s group, as the family saw it on the form before paying or asking.'],
     [''],
     ['  A "HALLAM" ROW STILL HAS A PROGRAM — AT A NEW VENUE. The south-east program'],
     ['  has moved from Hallam to the Elite Cricket Centre in Cranbourne North. Those'],
@@ -996,9 +1034,11 @@ export const guideLines = (linkLines = [], counts = {}) => {
     ['  Williamstown to either Term 4 centre is a long way across Melbourne. Ask Alex'],
     ['  what those families should be told.'],
     [''],
-    ['  The "Night They Chose" column works the same way. Wednesday is the night that is'],
-    ['  actually booked. Monday was offered to measure whether a second night is worth'],
-    ['  adding — picking it does not mean a Monday session exists.'],
+    ['  A DIFFERENT NIGHT (STANDBY). A family who can\'t make their centre\'s night can ask'],
+    ['  for another one on the form. Those rows say "STANDBY" in "Running in Term 4?" and'],
+    ['  "Asked for <day> instead" in "Night They Chose". Nothing is paid and no place is'],
+    ['  held: the night they asked for is not running. Filter "Running in Term 4?" for'],
+    ['  STANDBY to count how many families want each night, and in which group.'],
     [''],
     [`"${PROGRAM_LABELS['lp-jr-day']}" — Junior Royals are coming to Lower Plenty: a morning at Lower Plenty Cricket`],
     ['  Club, Sunday 25 October 2026, 9:00 to 11:00am, players aged 7 to 12, from'],
