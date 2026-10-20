@@ -50,7 +50,7 @@ export const REGIONAL_COACHES = [
             'Batting specialist with coaching experience across two continents — the UK county system and the Australian premier pathway.',
         credentials: ['England County System', 'Xavier College Cricket Lead', 'Fitzroy Doncaster Academy'],
         bio: [
-            'A high-quality coach and a key part of the Academy’s Elite Program, Alex is a batting specialist with coaching experience across two continents — UK county cricket and the Australian premier system. He also oversees curriculum and content development for the Junior Royals program.',
+            'A high-quality coach and a key part of the Academy’s Elite Program, Alex is a batting specialist with coaching experience across two continents — UK county cricket and the Australian premier system.',
             'Alex leads the Cranbourne North centre as Head Coach and manages the Academy’s South-East Melbourne region. Beyond the Academy he coaches within the Fitzroy Doncaster Academy and leads the cricket program at Xavier College.',
         ],
     },
