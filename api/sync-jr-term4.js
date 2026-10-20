@@ -31,6 +31,12 @@ const DNE = ' — DO NOT EDIT';
 const SAFE_COL_LABEL = 'YOUR NOTES — SAFE TO EDIT, NEVER OVERWRITTEN →';
 const ROW_CAP = 5000;
 
+// NOTHING OLDER THAN 13 OCTOBER (Alex, 20 Oct 2026: "i dont want any entries in the google
+// sheet prior to the last 7 days"). A fixed start date, not a rolling window: a rolling
+// 7 days would drop paid bookings off the sheet a week after they were made.
+export const SINCE = new Date('2026-10-13T00:00:00+11:00');   // Tue 13 Oct, Melbourne
+export const sinceStart = (rows) => rows.filter((r) => new Date(r.created_at) >= SINCE);
+
 // Where each entry's centre goes. Source of truth for the running centres:
 // centres[] in src/components/junior-royals-t3/jrTerm4Data.js.
 export const CENTRE_TABS = {
@@ -146,6 +152,7 @@ export const summaryLines = (rows, now = new Date()) => {
   return [
     ['Junior Royals Term 4, 2026: sign-ups by centre'],
     [`Updated ${fmtMelb(now.toISOString())} (Melbourne). This sheet updates once an hour, at 5 past the hour.`],
+    ['Only sign-ups made on or after Tuesday 13 October 2026 are in this sheet.'],
     [''],
     ['', 'Mickleham (Mondays, from 26 Oct)', 'Cranbourne North (Wednesdays, from 28 Oct)'],
     ['PAID: 5:00pm – 6:00pm group (ages 7–9)', ...col((rs) => paid(rs, '5:00pm'))],
@@ -174,6 +181,9 @@ export const summaryLines = (rows, now = new Date()) => {
 async function writeSummary(sheets, spreadsheetId, rows) {
   await ensureTab(sheets, spreadsheetId, SUMMARY_TAB);
   const lines = summaryLines(rows);
+  // The Summary tab is entirely the sync's (no notes column), so clear it first: an update
+  // alone leaves cells from a longer or wider earlier version behind.
+  await sheets.spreadsheets.values.clear({ spreadsheetId, range: `${SUMMARY_TAB}!A1:Z200` });
   await sheets.spreadsheets.values.update({
     spreadsheetId, range: `${SUMMARY_TAB}!A1`, valueInputOption: 'RAW', requestBody: { values: lines },
   });
@@ -185,7 +195,8 @@ async function writeSummary(sheets, spreadsheetId, rows) {
   }
 }
 
-export async function syncJrTerm4(sheets, spreadsheetId, rows) {
+export async function syncJrTerm4(sheets, spreadsheetId, allRows) {
+  const rows = sinceStart(allRows);
   const tabs = buildTabs(rows);
   const results = [];
   for (const c of ['mickleham', 'cranbourne-north']) {
@@ -237,7 +248,7 @@ export default async function handler(req, res) {
   try {
     const result = await syncJrTerm4(getSheets(), cfg.workbook_id, rows || []);
     await sb.from('holiday_program_sheets').update({ last_synced_at: new Date().toISOString() }).eq('source_table', SOURCE_KEY);
-    return res.status(200).json({ ok: true, rows: (rows || []).length, tabs: result });
+    return res.status(200).json({ ok: true, rows: sinceStart(rows || []).length, tabs: result });
   } catch (err) {
     console.error('sync-jr-term4: failed:', err);
     return res.status(500).json({ ok: false, error: err.message });

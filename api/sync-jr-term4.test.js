@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildTabs, jrT4Status, jrT4Note, duplicateOf, summaryLines, tabFor, JR_T4_HEADERS } from './sync-jr-term4.js';
+import { buildTabs, jrT4Status, jrT4Note, duplicateOf, summaryLines, tabFor, JR_T4_HEADERS, sinceStart, SINCE } from './sync-jr-term4.js';
 
 const row = (over = {}) => ({
   id: 'id-' + Math.random().toString(36).slice(2, 8),
@@ -68,5 +68,16 @@ describe('Junior Royals Term 4 standalone sheet', () => {
     expect(get('   of which paid upfront')).toEqual([1, 0]);
     expect(get('   of which paying weekly')).toEqual([1, 0]);
     expect(get('STANDBY')).toEqual(['0', 'Tuesday 1']);
+  });
+
+  // Alex, 20 Oct 2026: nothing older than the last 7 days, so sign-ups from 13 Oct onwards.
+  it('leaves out sign-ups made before Tuesday 13 October 2026 (Melbourne)', () => {
+    expect(SINCE.toISOString()).toBe('2026-10-12T13:00:00.000Z');
+    const kept = sinceStart([
+      row({ id: 'old', created_at: '2026-10-12T12:59:59Z' }),        // 12 Oct, 11:59pm Melbourne
+      row({ id: 'new', created_at: '2026-10-12T13:00:00Z' }),        // 13 Oct, midnight Melbourne
+      row({ id: 'later', created_at: '2026-11-30T00:00:00Z', paid: true }),
+    ]).map((r) => r.id);
+    expect(kept).toEqual(['new', 'later']);
   });
 });
