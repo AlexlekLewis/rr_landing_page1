@@ -36,7 +36,7 @@
 // NIGHTS (Alex, 19 Oct 2026, final): MICKLEHAM MOVES TO MONDAYS ("I want to
 // move Mickleham TO mondays 5-7pm"), 8 Mondays 26 Oct – 14 Dec. CRANBOURNE NORTH
 // stays on Wednesdays, 8 Wednesdays 28 Oct – 16 Dec. Both 5:00pm – 7:00pm in two
-// one-hour groups by age ("age groups balanced accordingly"). There is no
+// one-hour groups by age (split fixed 20 Oct 2026: see GROUPS below). There is no
 // Wednesday at Mickleham and no Monday at Cranbourne North.
 
 export const UPFRONT_LINK = 'https://buy.stripe.com/14A14n4fn3ud0uU7jJ9Zm0Y';
@@ -70,6 +70,22 @@ export const PAY_OPTIONS = {
     },
 };
 
+// GROUPS BY AGE (Alex, 20 Oct 2026: "we also need to be clearer about the 5pm group and
+// 6pm group, so parents know which group and time they are signing up for or
+// requesting"; he chose 5pm = ages 7–9, 6pm = ages 10–12). Same split at both centres,
+// and on any night a family asks for. The form shows the group before they pay or
+// request, saves it in `source` ("|group=5pm"), and the sheet shows it. If this split
+// changes, change GROUP_RULE in api/sync-program-signups.js in the same commit.
+export const GROUPS = [
+    { key: '5pm', time: '5:00pm – 6:00pm', ages: '7–9', min: 7, max: 9 },
+    { key: '6pm', time: '6:00pm – 7:00pm', ages: '10–12', min: 10, max: 12 },
+];
+export const groupFor = (age) => {
+    const a = parseInt(age, 10);
+    return GROUPS.find((g) => a >= g.min && a <= g.max) || null;
+};
+const GROUPS_LINE = `Two one-hour groups by age: ages ${GROUPS[0].ages} train ${GROUPS[0].time}, and ages ${GROUPS[1].ages} train ${GROUPS[1].time}.`;
+
 export const JR_T4 = {
     term: 'Term 4, 2026',
     weeks: 8,
@@ -79,7 +95,8 @@ export const JR_T4 = {
     ages: '7–12',
     ageMin: 7,
     ageMax: 12,
-    factLine: 'Ages 7–12 · 5:00pm – 7:00pm (5:00pm or 6:00pm group) · 8 weeks · Mondays at Mickleham, Wednesdays at Cranbourne North',
+    factLine: 'Ages 7–9: 5:00pm – 6:00pm · Ages 10–12: 6:00pm – 7:00pm · 8 weeks · Mondays at Mickleham, Wednesdays at Cranbourne North',
+    groupsLine: GROUPS_LINE,
     // Two ways to pay, always both on the page (Alex, 20 Oct 2026). Weekly opens 27 Oct.
     priceLine: `Two ways to pay: ${money(PRICE.upfront)} upfront for all 8 weeks, or ${money(PRICE.weekly)} a week. Prices incl. GST.`,
     priceLineBeforeWeekly: `Two ways to pay: ${money(PRICE.upfront)} upfront for all 8 weeks, or ${money(PRICE.weekly)} a week from Tuesday 27 October. Prices incl. GST.`,
@@ -111,7 +128,7 @@ export const JR_T4 = {
         button: 'Request This Night',
         note: 'No payment is taken and no place is held. You go on standby for that night.',
         doneTitle: "You're on standby",
-        done: (player, day, c) => `We've got ${player}'s request for ${day} nights at the ${c.venue}, ${c.suburb}. No payment has been taken and no place is held. Junior Royals runs on ${c.night} there for now; if we open ${day} nights, we'll contact you first.`,
+        done: (player, day, c, g) => `We've got ${player}'s request for ${day} nights${g ? `, ${g.time} (the ages ${g.ages} group),` : ''} at the ${c.venue}, ${c.suburb}. No payment has been taken and no place is held. Junior Royals runs on ${c.night} there for now; if we open ${day} nights, we'll contact you first.`,
     },
     days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
     renewShort: 'Enrolment carries on into the next term automatically unless you opt out; we\'ll be in touch to confirm.',
@@ -140,7 +157,7 @@ export const JR_T4 = {
             gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
             // Alex, 19 Oct 2026: Mickleham moves to Mondays, 5:00pm – 7:00pm.
             times: '5:00pm – 7:00pm',
-            groups: 'Two one-hour groups on the night, 5:00pm and 6:00pm, by age. We confirm your player\'s group by email.',
+            groups: GROUPS_LINE,
         },
         {
             value: 'cranbourne-north',
@@ -159,7 +176,7 @@ export const JR_T4 = {
             gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 60%, #E11F8F 100%)',
             // Alex, 19 Oct 2026: "Cranbourne offering 5pm-7pm age groups balanced accordingly".
             times: '5:00pm – 7:00pm',
-            groups: 'Two one-hour groups on the night, 5:00pm and 6:00pm, by age. We confirm your player\'s group by email.',
+            groups: GROUPS_LINE,
         },
     ],
 };

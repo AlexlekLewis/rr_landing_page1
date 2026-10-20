@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { PENDING_KEY } from './JRT3RegistrationForm';
-import { JR_T4, PAY_OPTIONS } from './jrTerm4Data';
+import { JR_T4, PAY_OPTIONS, GROUPS } from './jrTerm4Data';
 
 // /junior-royals/success — where Stripe sends a family after paying for Term 4
 // (each Payment Link's after-payment redirect must be
@@ -22,6 +22,8 @@ const JRT3Success = () => {
     const paid = sessionId.startsWith('cs_');
     const [booking] = useState(readPending);
     const centre = JR_T4.centres.find((c) => c.value === booking?.centre) || null;
+    // The group the form showed before payment (5pm = ages 7–9, 6pm = ages 10–12).
+    const group = GROUPS.find((g) => g.key === booking?.group) || null;
 
     useEffect(() => {
         if (!paid) return;
@@ -80,11 +82,13 @@ const JRT3Success = () => {
                     <p className="text-sm font-bold text-white/90 mb-2">When and where</p>
                     {centre ? (
                         <p className="text-sm text-white/75 leading-relaxed">
-                            <span className="font-bold text-white">{centre.venue}, {centre.address}.</span> {centre.night} {centre.times}, {centre.datesLong} ({JR_T4.weeks} weeks). First session: <span className="font-bold text-white">{centre.firstSessionLong}</span>. {centre.groups}
+                            <span className="font-bold text-white">{centre.venue}, {centre.address}.</span> {group
+                                ? <>{centre.night}, <span className="font-bold text-white">{group.time}</span> (the ages {group.ages} group), {centre.datesLong} ({JR_T4.weeks} weeks).</>
+                                : <>{centre.night} {centre.times}, {centre.datesLong} ({JR_T4.weeks} weeks).</>} First session: <span className="font-bold text-white">{centre.firstSessionLong}</span>.{group ? '' : ` ${centre.groups}`}
                         </p>
                     ) : (
                         <p className="text-sm text-white/75 leading-relaxed">
-                            {JR_T4.weeks} weeks at the centre you chose, 5:00pm – 7:00pm: Mickleham on {JR_T4.centres[0].night} ({JR_T4.centres[0].datesShort}), Cranbourne North on {JR_T4.centres[1].night} ({JR_T4.centres[1].datesShort}). We confirm your player&apos;s one-hour group by email.
+                            {JR_T4.weeks} weeks at the centre you chose, 5:00pm – 7:00pm: Mickleham on {JR_T4.centres[0].night} ({JR_T4.centres[0].datesShort}), Cranbourne North on {JR_T4.centres[1].night} ({JR_T4.centres[1].datesShort}). {JR_T4.groupsLine}
                         </p>
                     )}
                     {booking?.option === 'weekly' && (

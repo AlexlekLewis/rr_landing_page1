@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Link } from 'react-router-dom';
 import { HONEYPOT_FIELD, isHoneypotTripped } from '../../lib/security/bot.js';
-import { JR_T4, PAY_OPTIONS, WEEKLY_CONFIRMED, WEEKLY_OPENS, weeklyOpen } from './jrTerm4Data';
+import { JR_T4, PAY_OPTIONS, WEEKLY_CONFIRMED, WEEKLY_OPENS, weeklyOpen, groupFor } from './jrTerm4Data';
 import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squads/data';
 
 // Junior Royals — Term 4 booking form (paid from 19 Oct 2026).
@@ -17,6 +17,11 @@ import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squ
 // A DIFFERENT NIGHT (Alex, 20 Oct 2026): a family can ask for another night instead.
 // That is a standby request: saved, no payment, inline confirmation (REQUEST_SOURCE).
 //
+// GROUP AND TIME (Alex, 20 Oct 2026): the player's age sets the group (GROUPS in
+// jrTerm4Data.js: 7–9 at 5:00pm, 10–12 at 6:00pm). The form shows it under the age,
+// on the night card and in the summary above the button, and saves it in `source`
+// ("|group=5pm") so the sheet shows the time the family saw.
+//
 // TWO CENTRES, EACH ITS OWN NIGHT (Alex, 19 Oct 2026): Mickleham Indoor Sports
 // Centre on MONDAYS (26 Oct – 14 Dec) and the Elite Cricket Centre, Cranbourne
 // North on WEDNESDAYS (28 Oct – 16 Dec), both 5:00pm – 7:00pm. The night is set by
@@ -28,10 +33,14 @@ import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squ
 // centre carried in `source` ("…|centre=cranbourne-north"); the sheet sync reads
 // it back from there. When the constraint is widened the first insert succeeds.
 export const ENTRY_SOURCE = 'junior-royals-term4-entry';            // entries before payments opened
-export const BOOKING_SOURCE = 'junior-royals-term4-booking';         // + "|pay=upfront" / "|pay=weekly"
-export const REQUEST_SOURCE = 'junior-royals-term4-night-request';   // + "|day=tuesday": a different night, standby, no payment
+export const BOOKING_SOURCE = 'junior-royals-term4-booking';         // + "|pay=upfront" / "|pay=weekly", then "|group=5pm"
+export const REQUEST_SOURCE = 'junior-royals-term4-night-request';   // + "|day=tuesday|group=5pm": a different night, standby, no payment
 export const fallbackSource = (source, centre) => `${source}|centre=${centre}`;
 export const PENDING_KEY = 'jr_t4_pending_booking';
+// The full source tag for an entry. Exported for the tests.
+export const entrySource = ({ request, altDay, option, group }) =>
+    (request ? `${REQUEST_SOURCE}|day=${altDay}` : `${BOOKING_SOURCE}|pay=${option}`) + (group ? `|group=${group.key}` : '');
+const dayName = (d) => (d ? d.charAt(0).toUpperCase() + d.slice(1) : '');
 
 const getUTMParams = () => {
     const p = new URLSearchParams(window.location.search);
@@ -103,9 +112,10 @@ const JRT3RegistrationForm = () => {
         const centre = form.preferred_centre;
         const centreInfo = JR_T4.centres.find((c) => c.value === centre) || null;
         const request = nightChoice === 'other';
+        const group = groupFor(form.player_age);
         // A different night is a standby request: no payment, and the night they asked for
         // rides in `source` (the preferred_day CHECK only knows monday | wednesday).
-        const source = request ? `${REQUEST_SOURCE}|day=${altDay}` : `${BOOKING_SOURCE}|pay=${option}`;
+        const source = entrySource({ request, altDay, option, group });
         const centreDay = request ? null : centreInfo?.day || null;
         const email = form.parent_email.trim();
         try {
@@ -135,8 +145,7 @@ const JRT3RegistrationForm = () => {
 
             if (request) {
                 try { if (typeof window.fbq === 'function') window.fbq('track', 'Lead', { content_name: 'Junior Royals Term 4 night request', content_category: `junior-royals-term4-${centre}` }); } catch { /* never block */ }
-                const dayName = altDay.charAt(0).toUpperCase() + altDay.slice(1);
-                setStandby({ player: row.player_name, day: dayName, centre: centreInfo });
+                setStandby({ player: row.player_name, day: dayName(altDay), centre: centreInfo, group });
                 setSubmitting(false);
                 document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' });
                 return;
@@ -151,7 +160,7 @@ const JRT3RegistrationForm = () => {
                 }
             } catch { /* never let analytics block the family */ }
 
-            try { window.sessionStorage.setItem(PENDING_KEY, JSON.stringify({ id, option, email, player: row.player_name, centre })); } catch { /* storage blocked: payment still works */ }
+            try { window.sessionStorage.setItem(PENDING_KEY, JSON.stringify({ id, option, email, player: row.player_name, centre, group: group?.key || null })); } catch { /* storage blocked: payment still works */ }
             // Same tab on purpose: Stripe sends them back to /junior-royals/success.
             window.location.assign(payUrl(option, id, email));
         } catch (err) {
@@ -164,6 +173,8 @@ const JRT3RegistrationForm = () => {
     const ic = (field) => `w-full bg-slate-50 border ${errors[field] ? 'border-red-400' : 'border-slate-200'} rounded-xl px-4 py-3 text-rr-dark font-medium focus:outline-none focus:border-rr-pink transition-colors duration-200 text-sm`;
     const lc = 'block text-xs font-black text-rr-dark uppercase tracking-widest mb-2';
     const [mickleham, cranbourne] = JR_T4.centres;
+    const group = groupFor(form.player_age);
+    const pickedCentre = JR_T4.centres.find((x) => x.value === form.preferred_centre) || null;
     const choice = (on) => `flex-1 text-left rounded-xl border-2 px-4 py-3 transition-colors ${on ? 'border-rr-pink bg-rr-pink/5' : 'border-slate-200 hover:border-rr-pink/50'}`;
 
     return (
@@ -174,8 +185,8 @@ const JRT3RegistrationForm = () => {
                     <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-wide mb-6">
                         SECURE YOUR <span className="text-rr-pink">PLACE</span>
                     </h2>
-                    <p className="text-white/80 font-medium leading-relaxed mb-4">
-                        Term 4 runs on <span className="font-black text-white">{mickleham.night} at the {mickleham.venue}, {mickleham.suburb} ({mickleham.datesShort})</span> and <span className="font-black text-white">{cranbourne.night} at the {cranbourne.venue}, {cranbourne.suburb} ({cranbourne.datesShort})</span>, {mickleham.times} at both. Each player trains for one hour a week with players their own age. If your player did Junior Royals last term, nothing carries over automatically, so please book below.
+                    <p className="text-white/80 font-medium leading-relaxed mb-4" data-jr-t4-intro>
+                        Term 4 runs on <span className="font-black text-white">{mickleham.night} at the {mickleham.venue}, {mickleham.suburb} ({mickleham.datesShort})</span> and <span className="font-black text-white">{cranbourne.night} at the {cranbourne.venue}, {cranbourne.suburb} ({cranbourne.datesShort})</span>, {mickleham.times} at both. {JR_T4.groupsLine} If your player did Junior Royals last term, nothing carries over automatically, so please book below.
                     </p>
                     <p className="text-white font-black leading-relaxed">{weekly ? JR_T4.priceLine : JR_T4.priceLineBeforeWeekly}</p>
                     <p className="text-white/70 text-sm font-medium leading-relaxed mt-2">{JR_T4.shirtLine}</p>
@@ -203,7 +214,7 @@ const JRT3RegistrationForm = () => {
                                 </svg>
                             </div>
                             <h3 className="text-2xl font-black text-rr-dark uppercase tracking-wide mb-3">{JR_T4.request.doneTitle}</h3>
-                            <p className="text-rr-charcoal text-sm font-medium leading-relaxed max-w-md mx-auto">{JR_T4.request.done(standby.player, standby.day, standby.centre)}</p>
+                            <p className="text-rr-charcoal text-sm font-medium leading-relaxed max-w-md mx-auto">{JR_T4.request.done(standby.player, standby.day, standby.centre, standby.group)}</p>
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit} noValidate>
@@ -222,6 +233,11 @@ const JRT3RegistrationForm = () => {
                                             <option value="">Select age</option>
                                             {AGE_OPTIONS.map(a => <option key={a} value={a}>{a} years old</option>)}
                                         </select>{errors.player_age && <p className="text-red-500 text-xs mt-1">{errors.player_age}</p>}
+                                        {group && (
+                                            <p className="text-rr-dark text-xs font-bold leading-relaxed mt-2" data-jr-t4-group>
+                                                Group: {group.time} (ages {group.ages})
+                                            </p>
+                                        )}
                                         <p className="text-slate-500 text-xs font-medium leading-relaxed mt-2">
                                             {JR_T4.olderLead} Our Performance Squads are for players aged {PS_MIN_AGE} to {PS_MAX_AGE}.{' '}
                                             <Link to={JR_T4.olderRoute} className="text-rr-pink font-bold underline">{JR_T4.olderLinkLabel}</Link>
@@ -248,8 +264,8 @@ const JRT3RegistrationForm = () => {
                                                     <div className="flex flex-col sm:flex-row gap-3">
                                                         <label className={`${choice(nightChoice === 'offered')} cursor-pointer`}>
                                                             <input type="radio" name="night" value="offered" checked={nightChoice === 'offered'} onChange={() => setNightChoice('offered')} className="sr-only" />
-                                                            <span className="block font-black text-rr-dark text-sm">{c.night} {c.times}</span>
-                                                            <span className="block text-xs text-rr-charcoal font-medium mt-1 leading-relaxed">{JR_T4.request.offeredLead} From {c.firstSessionLong}.</span>
+                                                            <span className="block font-black text-rr-dark text-sm">{c.night}, {group ? group.time : c.times}</span>
+                                                            <span className="block text-xs text-rr-charcoal font-medium mt-1 leading-relaxed">{group ? `The ages ${group.ages} group. ` : ''}{JR_T4.request.offeredLead} From {c.firstSessionLong}.</span>
                                                         </label>
                                                         <label className={`${choice(nightChoice === 'other')} cursor-pointer`}>
                                                             <input type="radio" name="night" value="other" checked={nightChoice === 'other'} onChange={() => setNightChoice('other')} className="sr-only" />
@@ -263,7 +279,7 @@ const JRT3RegistrationForm = () => {
                                                             <label className={lc} htmlFor="alt_day">{JR_T4.request.dayLabel} *</label>
                                                             <select id="alt_day" value={altDay} onChange={(e) => { setAltDay(e.target.value); if (errors.alt_day) setErrors((p) => ({ ...p, alt_day: undefined })); }} className={ic('alt_day')}>
                                                                 <option value="">Select a night</option>
-                                                                {JR_T4.days.filter((d) => d !== c.day).map((d) => <option key={d} value={d}>{d.charAt(0).toUpperCase() + d.slice(1)}</option>)}
+                                                                {JR_T4.days.filter((d) => d !== c.day).map((d) => <option key={d} value={d}>{dayName(d)}{group ? `, ${group.time}` : ''}</option>)}
                                                             </select>
                                                             {errors.alt_day && <p className="text-red-500 text-xs mt-1">{errors.alt_day}</p>}
                                                         </div>
@@ -295,6 +311,21 @@ const JRT3RegistrationForm = () => {
                                         )}
                                     </>
                             </div>
+                            {pickedCentre && group && (nightChoice !== 'other' || altDay) && (
+                                <div className="mt-6 rounded-xl border-2 border-rr-pink bg-rr-pink/5 px-4 py-4" data-jr-t4-summary>
+                                    <p className="text-xs font-black text-rr-pink uppercase tracking-widest mb-1">
+                                        {nightChoice === 'other' ? "You're requesting (standby)" : "You're booking"}
+                                    </p>
+                                    <p className="text-rr-dark text-sm font-bold leading-relaxed">
+                                        {form.player_name.trim() || 'Your player'}: {nightChoice === 'other' ? `${dayName(altDay)}s` : pickedCentre.night}, {group.time} (the ages {group.ages} group), at the {pickedCentre.venue}, {pickedCentre.suburb}.
+                                    </p>
+                                    <p className="text-rr-charcoal text-sm font-medium leading-relaxed mt-1">
+                                        {nightChoice === 'other'
+                                            ? `${dayName(altDay)} nights aren't running yet. Nothing to pay and no place held; we'll contact you first if they open.`
+                                            : `${JR_T4.weeks} weeks, from ${pickedCentre.firstSessionLong}.`}
+                                    </p>
+                                </div>
+                            )}
                             <div className="mt-6 rounded-xl bg-slate-50 px-4 py-4" data-jr-t4-renewal>
                                 <p className="text-xs font-black text-rr-dark uppercase tracking-widest mb-2">{JR_T4.renewTitle}</p>
                                 <ul className="space-y-1.5 text-rr-charcoal text-sm font-medium leading-relaxed list-disc pl-5">

@@ -472,8 +472,8 @@ describe('guide tab', () => {
 describe('junior royals term 4', () => {
   // 19 Oct 2026: Mickleham moved to Mondays; Cranbourne North stays on Wednesdays.
   it('confirms the night and dates for a centre that IS running', () => {
-    expect(jrTerm4CentreStatus('mickleham')).toBe('Yes — Mondays 5:00pm or 6:00pm, 26 October to 14 December');
-    expect(jrTerm4CentreStatus('cranbourne-north')).toBe('Yes — Wednesdays 5:00pm or 6:00pm, 28 October to 16 December');
+    expect(jrTerm4CentreStatus('mickleham')).toBe('Yes — Mondays, 26 October to 14 December');
+    expect(jrTerm4CentreStatus('cranbourne-north')).toBe('Yes — Wednesdays, 28 October to 16 December');
   });
 
   it('flags a Mickleham family who entered for a Wednesday: the night has changed', () => {
@@ -567,6 +567,25 @@ describe('junior royals term 4', () => {
     expect(row[JR_TERM4_HEADERS.indexOf('Running in Term 4?')]).toBe('STANDBY — asked for Tuesday nights; this centre runs Mondays only');
     expect(row[JR_TERM4_HEADERS.indexOf('Night They Chose')]).toBe('Asked for Tuesday instead (standby)');
     expect(row[JR_TERM4_HEADERS.indexOf('Payment')]).toBe('Nothing to pay — standby request for another night');
+  });
+
+  // 20 Oct 2026 (Alex): 5pm = ages 7–9, 6pm = ages 10–12, so the sheet shows each group.
+  it('shows the group and time the family saw, falling back to the age', () => {
+    const col = JR_TERM4_HEADERS.indexOf('Group and Time');
+    expect(col).toBe(JR_TERM4_HEADERS.indexOf('Night They Chose') + 1);
+    expect(jrTerm4Row(jrT4({ player_age: 8, source: 'junior-royals-term4-booking|pay=upfront|group=5pm' }))[col])
+      .toBe('5:00pm – 6:00pm (ages 7–9)');
+    expect(jrTerm4Row(jrT4({ player_age: 11, source: 'junior-royals-term4-booking|pay=weekly|group=6pm|centre=cranbourne-north', preferred_centre: 'any' }))[col])
+      .toBe('6:00pm – 7:00pm (ages 10–12)');
+    // Older rows have no group tag: work it out from the age.
+    expect(jrTerm4Row(jrT4({ player_age: 9, source: 'junior-royals-term4-entry' }))[col]).toBe('5:00pm – 6:00pm (ages 7–9)');
+    expect(jrTerm4Row(jrT4({ player_age: 10, source: 'junior-royals-term4-entry' }))[col]).toBe('6:00pm – 7:00pm (ages 10–12)');
+    expect(jrTerm4Row(jrT4({ player_age: 16, source: 'junior-royals-term4-entry' }))[col]).toMatch(/^NO GROUP — age 16 is outside 7 to 12/);
+    // A standby request keeps the group on the night they asked for.
+    const req = jrTerm4Row(jrT4({ player_age: 7, preferred_day: null, source: 'junior-royals-term4-night-request|day=thursday|group=5pm' }));
+    expect(req[col]).toBe('5:00pm – 6:00pm (ages 7–9), on the night they asked for');
+    expect(req[JR_TERM4_HEADERS.indexOf('Night They Chose')]).toBe('Asked for Thursday instead (standby)');
+    expect(req[JR_TERM4_HEADERS.indexOf('Payment')]).toBe('Nothing to pay — standby request for another night');
   });
 
   it('names the venue rather than the slug, for closed centres too', () => {

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { JR_T4, PAY_OPTIONS, PRICE, UPFRONT_LINK, WEEKLY_OPENS, weeklyOpen, WEEKLY_CONFIRMED } from './jrTerm4Data';
+import { JR_T4, PAY_OPTIONS, PRICE, UPFRONT_LINK, WEEKLY_OPENS, weeklyOpen, WEEKLY_CONFIRMED, GROUPS, groupFor } from './jrTerm4Data';
 import { classifyJrT4 } from '../../../api/stripe-webhook.js';
 
 // Alex, 19 Oct 2026: the official Term 4 payment options.
@@ -61,5 +61,24 @@ describe('Junior Royals Term 4 payments', () => {
             .toMatchObject({ program_variant: 'term_4_weekly' });
         expect(classifyJrT4([{ description: '2026 Junior Royals Program - Term 3: Hallam' }])).toBeNull();
         expect(PAY_OPTIONS.upfront.detail).toContain('Afterpay');
+    });
+
+    // Alex, 20 Oct 2026: "be clearer about the 5pm group and 6pm group"; 5pm = 7–9, 6pm = 10–12.
+    it('puts ages 7–9 in the 5pm group and 10–12 in the 6pm group', () => {
+        expect(GROUPS.map((g) => [g.key, g.time, g.ages])).toEqual([
+            ['5pm', '5:00pm – 6:00pm', '7–9'],
+            ['6pm', '6:00pm – 7:00pm', '10–12'],
+        ]);
+        expect([7, 8, 9].map((a) => groupFor(a)?.key)).toEqual(['5pm', '5pm', '5pm']);
+        expect([10, 11, 12, '12'].map((a) => groupFor(a)?.key)).toEqual(['6pm', '6pm', '6pm', '6pm']);
+        expect(groupFor(6)).toBeNull();
+        expect(groupFor(13)).toBeNull();
+        expect(groupFor('')).toBeNull();
+        // Every age the form offers has a group.
+        for (let a = JR_T4.ageMin; a <= JR_T4.ageMax; a += 1) expect(groupFor(a)).not.toBeNull();
+        expect(JR_T4.groupsLine).toBe('Two one-hour groups by age: ages 7–9 train 5:00pm – 6:00pm, and ages 10–12 train 6:00pm – 7:00pm.');
+        expect(JR_T4.centres.every((c) => c.groups === JR_T4.groupsLine)).toBe(true);
+        expect(JR_T4.request.done('Liam', 'Tuesday', JR_T4.centres[0], GROUPS[0]))
+            .toContain("Liam's request for Tuesday nights, 5:00pm – 6:00pm (the ages 7–9 group), at the Mickleham Indoor Sports Centre");
     });
 });
