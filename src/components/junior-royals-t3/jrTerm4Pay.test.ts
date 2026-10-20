@@ -34,6 +34,15 @@ describe('Junior Royals Term 4 payments', () => {
         expect(PAY_OPTIONS.weekly.detail).toContain('direct debit');
     });
 
+    // Alex, 20 Oct 2026: another night can be requested — standby, no payment.
+    it('a different night is a standby request with no payment', () => {
+        const mick = JR_T4.centres.find((c) => c.value === 'mickleham');
+        expect(JR_T4.request.why(mick)).toBe("Junior Royals at Mickleham runs on Mondays, 5:00pm – 7:00pm, for now, and we're filling those sessions first.");
+        expect(JR_T4.request.note).toContain('No payment is taken');
+        expect(JR_T4.request.done('Sam', 'Tuesday', mick)).toContain("we'll contact you first");
+        expect(JR_T4.days).toEqual(['monday', 'tuesday', 'wednesday', 'thursday', 'friday']);
+    });
+
     // Alex, 19 Oct 2026: "I want to move Mickleham TO mondays 5-7pm" (26 Oct – 14 Dec).
     it('Mickleham runs Mondays and Cranbourne North Wednesdays, both 5:00pm – 7:00pm', () => {
         const t = Object.fromEntries(JR_T4.centres.map((c) => [c.value, [c.day, c.times, c.datesShort, c.firstSessionLong]]));

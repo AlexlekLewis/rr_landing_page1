@@ -14,6 +14,9 @@ import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squ
 // Stripe checkout asks for the player, so this form is where we learn who is
 // coming. The database only accepts UNPAID rows from the browser.
 //
+// A DIFFERENT NIGHT (Alex, 20 Oct 2026): a family can ask for another night instead.
+// That is a standby request: saved, no payment, inline confirmation (REQUEST_SOURCE).
+//
 // TWO CENTRES, EACH ITS OWN NIGHT (Alex, 19 Oct 2026): Mickleham Indoor Sports
 // Centre on MONDAYS (26 Oct – 14 Dec) and the Elite Cricket Centre, Cranbourne
 // North on WEDNESDAYS (28 Oct – 16 Dec), both 5:00pm – 7:00pm. The night is set by
@@ -26,6 +29,7 @@ import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squ
 // it back from there. When the constraint is widened the first insert succeeds.
 export const ENTRY_SOURCE = 'junior-royals-term4-entry';            // entries before payments opened
 export const BOOKING_SOURCE = 'junior-royals-term4-booking';         // + "|pay=upfront" / "|pay=weekly"
+export const REQUEST_SOURCE = 'junior-royals-term4-night-request';   // + "|day=tuesday": a different night, standby, no payment
 export const fallbackSource = (source, centre) => `${source}|centre=${centre}`;
 export const PENDING_KEY = 'jr_t4_pending_booking';
 
@@ -58,6 +62,9 @@ const readPending = () => {
 const JRT3RegistrationForm = () => {
     const weekly = weeklyOpen();
     const [pay, setPay] = useState('upfront');
+    const [nightChoice, setNightChoice] = useState('offered');   // 'offered' | 'other'
+    const [altDay, setAltDay] = useState('');
+    const [standby, setStandby] = useState(null);
     const [submitting, setSubmitting] = useState(false);
     const [pending, setPending] = useState(readPending);
     const [errors, setErrors] = useState({});
@@ -80,6 +87,7 @@ const JRT3RegistrationForm = () => {
         if (!form.player_name.trim()) e.player_name = 'Required.';
         if (!form.player_age) e.player_age = 'Required.';
         if (!form.preferred_centre) e.preferred_centre = 'Please pick a centre.';
+        if (nightChoice === 'other' && !altDay) e.alt_day = 'Please pick the night you would like.';
         setErrors(e);
         return Object.keys(e).length === 0;
     };
@@ -93,8 +101,12 @@ const JRT3RegistrationForm = () => {
         const id = newId();
         const option = weekly ? pay : 'upfront';
         const centre = form.preferred_centre;
-        const centreDay = JR_T4.centres.find((c) => c.value === centre)?.day || null;
-        const source = `${BOOKING_SOURCE}|pay=${option}`;
+        const centreInfo = JR_T4.centres.find((c) => c.value === centre) || null;
+        const request = nightChoice === 'other';
+        // A different night is a standby request: no payment, and the night they asked for
+        // rides in `source` (the preferred_day CHECK only knows monday | wednesday).
+        const source = request ? `${REQUEST_SOURCE}|day=${altDay}` : `${BOOKING_SOURCE}|pay=${option}`;
+        const centreDay = request ? null : centreInfo?.day || null;
         const email = form.parent_email.trim();
         try {
             const row = {
@@ -120,6 +132,15 @@ const JRT3RegistrationForm = () => {
                 }]));
             }
             if (error) throw error;
+
+            if (request) {
+                try { if (typeof window.fbq === 'function') window.fbq('track', 'Lead', { content_name: 'Junior Royals Term 4 night request', content_category: `junior-royals-term4-${centre}` }); } catch { /* never block */ }
+                const dayName = altDay.charAt(0).toUpperCase() + altDay.slice(1);
+                setStandby({ player: row.player_name, day: dayName, centre: centreInfo });
+                setSubmitting(false);
+                document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
 
             // Meta Pixel: program, centre and price only — never a name, email, phone or age.
             try {
@@ -174,7 +195,17 @@ const JRT3RegistrationForm = () => {
                 )}
 
                 <div className="bg-white rounded-2xl p-8 md:p-10">
-                    {(
+                    {standby ? (
+                        <div className="text-center py-6" role="status" data-jr-t4-standby>
+                            <div className="w-16 h-16 rounded-full bg-rr-pink/10 border-2 border-rr-pink flex items-center justify-center mx-auto mb-5">
+                                <svg className="w-8 h-8 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <h3 className="text-2xl font-black text-rr-dark uppercase tracking-wide mb-3">{JR_T4.request.doneTitle}</h3>
+                            <p className="text-rr-charcoal text-sm font-medium leading-relaxed max-w-md mx-auto">{JR_T4.request.done(standby.player, standby.day, standby.centre)}</p>
+                        </div>
+                    ) : (
                         <form onSubmit={handleSubmit} noValidate>
                             <input type="text" name={HONEYPOT_FIELD} tabIndex={-1} autoComplete="off" aria-hidden="true"
                                 className="absolute left-[-9999px] top-0 w-px h-px opacity-0" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
@@ -208,6 +239,39 @@ const JRT3RegistrationForm = () => {
                                             {errors.preferred_centre && <p className="text-red-500 text-xs mt-1">{errors.preferred_centre}</p>}
                                             <p className="text-slate-500 text-xs font-medium leading-relaxed mt-2">{JR_T4.centresApart} Stripe asks you to confirm the same centre at checkout.</p>
                                         </div>
+                                        {(() => {
+                                            const c = JR_T4.centres.find((x) => x.value === form.preferred_centre);
+                                            if (!c) return null;
+                                            return (
+                                                <fieldset data-jr-t4-night>
+                                                    <legend className={lc}>Which night? *</legend>
+                                                    <div className="flex flex-col sm:flex-row gap-3">
+                                                        <label className={`${choice(nightChoice === 'offered')} cursor-pointer`}>
+                                                            <input type="radio" name="night" value="offered" checked={nightChoice === 'offered'} onChange={() => setNightChoice('offered')} className="sr-only" />
+                                                            <span className="block font-black text-rr-dark text-sm">{c.night} {c.times}</span>
+                                                            <span className="block text-xs text-rr-charcoal font-medium mt-1 leading-relaxed">{JR_T4.request.offeredLead} From {c.firstSessionLong}.</span>
+                                                        </label>
+                                                        <label className={`${choice(nightChoice === 'other')} cursor-pointer`}>
+                                                            <input type="radio" name="night" value="other" checked={nightChoice === 'other'} onChange={() => setNightChoice('other')} className="sr-only" />
+                                                            <span className="block font-black text-rr-dark text-sm">{JR_T4.request.title}</span>
+                                                            <span className="block text-xs text-rr-charcoal font-medium mt-1 leading-relaxed">{JR_T4.request.lead}</span>
+                                                        </label>
+                                                    </div>
+                                                    {nightChoice === 'other' && (
+                                                        <div className="mt-3">
+                                                            <p className="text-rr-charcoal text-sm font-medium leading-relaxed mb-3">{JR_T4.request.why(c)}</p>
+                                                            <label className={lc} htmlFor="alt_day">{JR_T4.request.dayLabel} *</label>
+                                                            <select id="alt_day" value={altDay} onChange={(e) => { setAltDay(e.target.value); if (errors.alt_day) setErrors((p) => ({ ...p, alt_day: undefined })); }} className={ic('alt_day')}>
+                                                                <option value="">Select a night</option>
+                                                                {JR_T4.days.filter((d) => d !== c.day).map((d) => <option key={d} value={d}>{d.charAt(0).toUpperCase() + d.slice(1)}</option>)}
+                                                            </select>
+                                                            {errors.alt_day && <p className="text-red-500 text-xs mt-1">{errors.alt_day}</p>}
+                                                        </div>
+                                                    )}
+                                                </fieldset>
+                                            );
+                                        })()}
+                                        {nightChoice !== 'other' && (
                                         <fieldset>
                                             <legend className={lc}>How would you like to pay? *</legend>
                                             <div className="flex flex-col sm:flex-row gap-3">
@@ -228,6 +292,7 @@ const JRT3RegistrationForm = () => {
                                                 })}
                                             </div>
                                         </fieldset>
+                                        )}
                                     </>
                             </div>
                             <div className="mt-6 rounded-xl bg-slate-50 px-4 py-4" data-jr-t4-renewal>
@@ -239,10 +304,12 @@ const JRT3RegistrationForm = () => {
                             {errors.form && <div className="bg-red-50 border border-red-200 rounded-xl p-4 mt-6"><p className="text-red-600 text-sm font-medium">{errors.form}</p></div>}
                             <button type="submit" disabled={submitting}
                                 className="mt-8 w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]">
-                                {submitting ? 'Going to payment…' : JR_T4.ctaLabel}
+                                {nightChoice === 'other'
+                                    ? (submitting ? 'Sending…' : JR_T4.request.button)
+                                    : (submitting ? 'Going to payment…' : JR_T4.ctaLabel)}
                             </button>
                             <p className="text-slate-500 text-xs text-center mt-4">
-                                {`Next: Stripe's secure checkout. ${JR_T4.placeLine}`}
+                                {nightChoice === 'other' ? JR_T4.request.note : `Next: Stripe's secure checkout. ${JR_T4.placeLine}`}
                             </p>
                         </form>
                     )}

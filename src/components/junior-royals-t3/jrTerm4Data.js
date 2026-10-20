@@ -98,6 +98,22 @@ export const JR_T4 = {
         'Weekly direct debits are cancelled at the end of each term and start again at the beginning of the next term.',
         'To opt out, email info@rramelbourne.com at least 2 weeks before the next term starts.',
     ],
+    // A DIFFERENT NIGHT (Alex, 20 Oct 2026): "people can select different days but need to
+    // know Wednesday (Cranbourne Nth) and Monday (Mickleham) are only on offer currently and
+    // if another night is requested we don't take payment, we just send them to a
+    // confirmation page and to standby." We fill the nights on offer first.
+    request: {
+        offeredLead: 'Book and pay now.',
+        title: 'A different night',
+        lead: 'Request only: nothing to pay, and you go on standby.',
+        why: (c) => `Junior Royals at ${c.suburb} runs on ${c.night}, ${c.times}, for now, and we're filling those sessions first.`,
+        dayLabel: 'Which night would suit you?',
+        button: 'Request This Night',
+        note: 'No payment is taken and no place is held. You go on standby for that night.',
+        doneTitle: "You're on standby",
+        done: (player, day, c) => `We've got ${player}'s request for ${day} nights at the ${c.venue}, ${c.suburb}. No payment has been taken and no place is held. Junior Royals runs on ${c.night} there for now; if we open ${day} nights, we'll contact you first.`,
+    },
+    days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
     renewShort: 'Enrolment carries on into the next term automatically unless you opt out; we\'ll be in touch to confirm.',
     centresApart: 'The two centres are about 70 km apart, so pick the one you can get to every week.',
     // TWO CENTRES ONLY (Alex, 5 Oct 2026): "Hallam and Williamstown no longer exist

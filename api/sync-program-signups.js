@@ -791,7 +791,16 @@ const JR_TERM4_NIGHTS = {
 // source ("junior-royals-term4-booking|pay=upfront"); the webhook fills paid,
 // paid_at and amount_paid_cents. The amount is the first checkout, shirt included.
 const centsToDollars = (c) => `$${(Number(c || 0) / 100).toFixed(2)}`;
+// A different night (20 Oct 2026): "junior-royals-term4-night-request|day=tuesday".
+// Standby only: nothing paid, no place held, the night they asked for isn't running.
+const jrTerm4RequestDay = (r) => {
+  const m = /^junior-royals-term4-night-request\|day=([a-z]+)/.exec(r.source || '');
+  return m ? m[1].charAt(0).toUpperCase() + m[1].slice(1) : null;
+};
+const JR_TERM4_RUNS = { 'mickleham': 'Mondays', 'cranbourne-north': 'Wednesdays', 'hallam': 'Wednesdays' };
+
 export const jrTerm4Payment = (r) => {
+  if (jrTerm4RequestDay(r)) return 'Nothing to pay — standby request for another night';
   const opt = /\|pay=(upfront|weekly)/.exec(r.source || '')?.[1];
   const how = opt === 'weekly' ? 'weekly plan, first payment' : opt === 'upfront' ? 'upfront, all 8 weeks' : 'paid';
   if (r.paid) return `PAID ${centsToDollars(r.amount_paid_cents)} (${how}) on ${fmtMelb(r.paid_at)}`;
@@ -824,9 +833,13 @@ export const jrTerm4Row = (r) => ([
     : JR_TERM4_CENTRES[jrTerm4Centre(r)]
       || JR_TERM4_CLOSED_CENTRES[jrTerm4Centre(r)]
       || jrTerm4Centre(r) || '',
-  jrTerm4CentreStatus(jrTerm4Centre(r), r.preferred_day),
-  JR_TERM4_NIGHTS[r.preferred_day]
-    || (r.preferred_day ? r.preferred_day : 'Not asked — they entered before the form asked about nights'),
+  jrTerm4RequestDay(r)
+    ? `STANDBY — asked for ${jrTerm4RequestDay(r)} nights; this centre runs ${JR_TERM4_RUNS[jrTerm4Centre(r)] || 'another night'} only`
+    : jrTerm4CentreStatus(jrTerm4Centre(r), r.preferred_day),
+  jrTerm4RequestDay(r)
+    ? `Asked for ${jrTerm4RequestDay(r)} instead (standby)`
+    : JR_TERM4_NIGHTS[r.preferred_day]
+      || (r.preferred_day ? r.preferred_day : 'Not asked — they entered before the form asked about nights'),
   jrTerm4Payment(r),
 ]);
 

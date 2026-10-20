@@ -561,6 +561,14 @@ describe('junior royals term 4', () => {
     expect(cell).toContain('Place not booked');
   });
 
+  // 20 Oct 2026: a family can ask for a different night — standby, nothing paid.
+  it('shows a different-night request as standby, not a booking', () => {
+    const row = jrTerm4Row(jrT4({ preferred_centre: 'mickleham', preferred_day: null, source: 'junior-royals-term4-night-request|day=tuesday' }));
+    expect(row[JR_TERM4_HEADERS.indexOf('Running in Term 4?')]).toBe('STANDBY — asked for Tuesday nights; this centre runs Mondays only');
+    expect(row[JR_TERM4_HEADERS.indexOf('Night They Chose')]).toBe('Asked for Tuesday instead (standby)');
+    expect(row[JR_TERM4_HEADERS.indexOf('Payment')]).toBe('Nothing to pay — standby request for another night');
+  });
+
   it('names the venue rather than the slug, for closed centres too', () => {
     expect(jrTerm4Row(jrT4())[JR_TERM4_HEADERS.indexOf('Centre They Chose')])
       .toBe('Mickleham Indoor Sports Centre');
