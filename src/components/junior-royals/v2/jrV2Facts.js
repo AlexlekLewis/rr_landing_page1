@@ -329,12 +329,13 @@ export const wednesdays2027 = () => {
 // term until the family cancels. Lane size stays at the 5 Oct cap: 6 players
 // (+1 some weeks making up a missed session).
 export const PRICE = { perWeek: 44.95, perLane: LANE_MAX, max: LANE_MAX + 1 };
-// Training shirt (Alex, 9 Oct 2026): compulsory, at the member price (shop price
+// Training shirt (Andy, 20 Oct 2026): NOT included in the price; families buy one
+// only if their player doesn't already have one. At the member price (shop price
 // $62.95, src/components/academy-shop/shopConfig.js). No free-shirt offer
 // (Andy, 19 Oct 2026: no reference to free shirts anywhere on the page).
 export const SHIRT = { memberPrice: 29.95, shopPrice: 62.95 };
-// Stripe payment links for Term 4, 2026 (Andy, 19 Oct 2026). Both add the
-// training shirt at $29.95 and ask the family to pick their centre.
+// Stripe payment links for Term 4, 2026 (Andy, 19 Oct 2026). Both pre-add one
+// training shirt at $29.95 (the family can change it to 0) and ask the family to pick their centre.
 // weekly: $44.95 a week subscription. term: $349 one-off for the whole term.
 export const PAY = {
     term: 'Term 4, 2026',

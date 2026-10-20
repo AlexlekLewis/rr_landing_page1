@@ -102,7 +102,7 @@ export const HERO = {
     price: WEEKLY,
     per: 'a week',
     priceNote: `${GST_NOTE} ${SUBSCRIPTION_LINE}`,
-    shirt: `Plus the training shirt, ${money(SHIRT.memberPrice)} once (compulsory).`,
+    shirt: `Training shirt not included: ${money(SHIRT.memberPrice)} once, only if your player doesn’t have one.`,
     noPayment: 'No payment now. No place is held yet.',
 };
 
@@ -377,7 +377,7 @@ export const PRICES = {
         'A digital certificate at the end of every phase',
     ],
     shirtTitle: 'The training shirt',
-    shirt: `The Junior Royals training shirt is part of the kit, and players wear it at every session. It costs ${money(SHIRT.memberPrice)} at the member price (${money(SHIRT.shopPrice)} in our shop), paid once.`,
+    shirt: `Players wear the Junior Royals training shirt at sessions. It isn’t included in the price. If your player doesn’t have one, it costs ${money(SHIRT.memberPrice)} at the member price (${money(SHIRT.shopPrice)} in our shop), paid once.`,
     // Alex, 12 Oct 2026: "The how enrolment works needs to be replaced by graphics.
     // And if it's a terms and conditions type thing then we need to point them to a
     // pop-up of the terms and conditions, particularly like cancellation fees …
@@ -410,7 +410,7 @@ export const PAY_NOW = {
         { key: 'weekly', head: 'Pay weekly', price: WEEKLY, per: 'a week', body: `${WEEKLY} each week of the term.`, url: PAY.weeklyUrl, button: 'Pay weekly' },
         { key: 'upfront', head: 'Pay for the term', price: money(PAY.upfront), per: 'once', body: `One payment for the whole term. You save ${money(termTotal(T4_SESSIONS) - PAY.upfront)}.`, url: PAY.upfrontUrl, button: 'Pay for the term' },
     ],
-    shirt: `Both include the training shirt, ${money(SHIRT.memberPrice)} once. ${GST_NOTE}`,
+    shirt: `The training shirt isn’t included in the price. It’s ${money(SHIRT.memberPrice)} once, and the payment page adds one for you. If your player already has a shirt, change the number of shirts to 0. ${GST_NOTE}`,
     secure: 'Payments are taken securely by Stripe.',
 };
 
@@ -429,7 +429,7 @@ export const TERMS_POPUP = {
         { head: 'Cancellation fee', body: ['Stopping in the middle of a term: a cancellation fee of ', CANCEL_FEE, ' applies, because nobody new can join that group until the next term. This doesn’t affect your rights under the Australian Consumer Law.'] },
         { head: 'Missed sessions', body: PRICES.makeup.slice(1) },
         { head: 'If your coach is away', body: PRICES.cover },
-        { head: 'Training shirt', body: `Players wear the Junior Royals training shirt at every session. It costs ${money(SHIRT.memberPrice)}, paid once.` },
+        { head: 'Training shirt', body: `Players wear the Junior Royals training shirt at sessions. It isn’t included in the weekly price. If your player doesn’t have one, it costs ${money(SHIRT.memberPrice)}, paid once.` },
     ],
     close: 'Close',
 };
@@ -574,7 +574,7 @@ export const FAQS = [
     },
     {
         q: 'Do we have to buy the training shirt?',
-        a: `Yes. Players wear the Junior Royals training shirt at every session. It’s ${money(SHIRT.memberPrice)} at the member price, paid once.`,
+        a: `Only if your player doesn’t have one yet. Players wear the Junior Royals training shirt at sessions. It isn’t included in the weekly price. It’s ${money(SHIRT.memberPrice)} at the member price, paid once.`,
     },
     {
         q: 'Can we stop?',

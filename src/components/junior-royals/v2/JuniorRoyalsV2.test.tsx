@@ -15,7 +15,7 @@ import { JR_V2_SEO, JR_V2_JSONLD, JR_SEO_VENUES } from './jrV2Seo';
 import { CENTRES } from '../juniorRoyalsData';
 
 // Junior Royals mock-up v2, restructured 9 Oct 2026 (Alex): one price, $44.95 a
-// week paid weekly in term (Stripe price, 19 Oct); compulsory shirt at $29.95;
+// week paid weekly in term (Stripe price, 19 Oct); shirt $29.95, extra and only if needed (Andy, 20 Oct);
 // no bulk discounts; no stage ages; Ravenhall coming soon; 2+ weekday choices.
 describe('price (Alex, 9 Oct)', () => {
     it('one price: $44.95 a week, up to 6 per lane (+1 make-up), shirt $29.95', () => {
@@ -37,9 +37,10 @@ describe('price (Alex, 9 Oct)', () => {
         expect(text).not.toMatch(/(pay|paid|paying)( the year| \d terms?)? ahead|save 10%|save 15%|Groups of [46]|Junior Royals [46]s/i);
     });
 
-    it('the compulsory shirt sits next to every headline price (no drip pricing)', () => {
+    it('the shirt (extra, not included) sits next to every headline price (no drip pricing)', () => {
         expect(CONTENT.HERO.shirt).toMatch(/\$29\.95/);
-        expect(CONTENT.HERO.shirt).toMatch(/compulsory/);
+        expect(CONTENT.HERO.shirt).toMatch(/not included/);
+        expect(JSON.stringify(CONTENT)).not.toMatch(/compulsory|include the training shirt/i);
         expect(CONTENT.PRICES.shirt).toMatch(/\$29\.95/);
         expect(CONTENT.PAY_NOW.shirt).toMatch(/\$29\.95/);
     });
