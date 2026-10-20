@@ -126,6 +126,25 @@ async function ensureColumnCount(sheets, spreadsheetId, tabName, minCols) {
   return true;
 }
 
+// Insert blank columns at a 0-based index, pushing everything from there rightwards.
+async function insertColumns(sheets, spreadsheetId, tabName, at, count) {
+  const all = await sheetMeta(sheets, spreadsheetId);
+  const hit = all.find((x) => x.properties?.title === tabName);
+  if (!hit || count <= 0) return false;
+  await sheets.spreadsheets.batchUpdate({
+    spreadsheetId,
+    requestBody: {
+      requests: [{
+        insertDimension: {
+          range: { sheetId: hit.properties.sheetId, dimension: 'COLUMNS', startIndex: at, endIndex: at + count },
+          inheritFromBefore: true,
+        },
+      }],
+    },
+  });
+  return true;
+}
+
 // A warningOnly protected range: Sheets shows "you are editing a part of this
 // sheet that should not be changed" before the edit lands. Deliberately NOT a
 // hard lock — locking a range to the service account would stop a human fixing
@@ -142,16 +161,20 @@ export async function ensureProtectedRange(sheets, spreadsheetId, tabName, nCols
 
   if (existing && existing.description === wanted) return false;
 
+  const range = { sheetId: hit.properties.sheetId, startRowIndex: 0, startColumnIndex: 0 };
+  if (nCols) range.endColumnIndex = nCols;
+
   // Already there but the wording has moved on. The note tells people which
-  // columns are safe to work in, so a stale one is worse than none.
+  // columns are safe to work in, so a stale one is worse than none. The wording
+  // changes when a column is added, so the warned-about range moves with it.
   if (existing) {
     await sheets.spreadsheets.batchUpdate({
       spreadsheetId,
       requestBody: {
         requests: [{
           updateProtectedRange: {
-            protectedRange: { protectedRangeId: existing.protectedRangeId, description: wanted },
-            fields: 'description',
+            protectedRange: { protectedRangeId: existing.protectedRangeId, description: wanted, range },
+            fields: 'description,range',
           },
         }],
       },
@@ -159,8 +182,6 @@ export async function ensureProtectedRange(sheets, spreadsheetId, tabName, nCols
     return true;
   }
 
-  const range = { sheetId: hit.properties.sheetId, startRowIndex: 0, startColumnIndex: 0 };
-  if (nCols) range.endColumnIndex = nCols;
   await sheets.spreadsheets.batchUpdate({
     spreadsheetId,
     requestBody: {
@@ -203,8 +224,26 @@ export async function reconcileTab(sheets, spreadsheetId, tabName, headers, rows
   // column has been added since it was written and every column to the right of
   // the new one is now mislabelled. That is not a wording preference, it is a
   // wrong sheet, so rewrite it.
+  //
+  // THE NOTES COLUMN WHEN A COLUMN IS ADDED (20 Oct 2026). Length alone misses
+  // the commonest case: the notes label sits right after the old block, so adding
+  // ONE column leaves row 1 exactly as long as the new contract. The Junior
+  // Royals Term 4 tab hit this: its header never moved, and the rows, now one
+  // column wider, were written over the old notes column. So:
+  //   - notes label INSIDE the new block, nothing after it yet → columns were
+  //     added since it was placed. Insert blank columns there FIRST, so the notes
+  //     column and everything people typed in it moves right, out of the way.
+  //   - notes label inside the block AND at the right place → an earlier run
+  //     already widened the rows (the 20 Oct damage); only the header is stale.
+  // Either way, rewrite the header.
   const head = await sheets.spreadsheets.values.get({ spreadsheetId, range: `${tabName}!1:1` });
-  if ((head.data.values?.[0] || []).length < headers.length) {
+  const stored = head.data.values?.[0] || [];
+  const labelAt = safeColLabel ? stored.indexOf(safeColLabel) : -1;
+  const labelInside = labelAt >= 0 && labelAt < headers.length;
+  if (labelInside && stored[headers.length] !== safeColLabel) {
+    await insertColumns(sheets, spreadsheetId, tabName, labelAt, headers.length - labelAt);
+  }
+  if (stored.length < headers.length || labelInside) {
     await sheets.spreadsheets.values.update({
       spreadsheetId,
       range: `${tabName}!A1`,
