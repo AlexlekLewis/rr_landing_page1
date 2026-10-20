@@ -1,11 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
-import { JR_T4 } from './jrTerm4Data';
+import { JR_T4, weeklyOpen } from './jrTerm4Data';
 
 // Junior Royals — Term 4, 2026. Every fact here comes from jrTerm4Data.js.
-// No Term 4 price is set yet (Alex, 3 Oct 2026), so the page takes entries
-// only: no price, no payment, and it says so beside the button.
+// Paid from 19 Oct 2026: the price sits beside the button, with the shirt.
 const JRT3Hero = () => {
     const scrollToForm = () =>
         document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' });
@@ -41,7 +40,7 @@ const JRT3Hero = () => {
                     transition={{ delay: 0.3 }}
                     className="text-lg md:text-2xl text-white font-semibold mb-4"
                 >
-                    {JR_T4.weeks} Wednesday nights, {JR_T4.datesLong}
+                    {JR_T4.weeks} weeks · Mondays at Mickleham from 26 October · Wednesdays at Cranbourne North from 28 October
                 </motion.p>
 
                 <motion.p
@@ -50,7 +49,7 @@ const JRT3Hero = () => {
                     transition={{ delay: 0.4 }}
                     className="text-sm md:text-lg text-white/80 font-medium mb-4 max-w-xl"
                 >
-                    One hour of cricket coaching every Wednesday night, in a small group of players your own age, so your player is ready for their club season.
+                    One hour of cricket coaching each week, in a small group of players your own age, so your player is ready for their club season.
                 </motion.p>
 
                 <motion.p
@@ -91,7 +90,8 @@ const JRT3Hero = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
                     </button>
-                    <p className="text-white/70 text-sm font-medium mt-4 max-w-xl">{JR_T4.noPaymentLine}</p>
+                    <p className="text-white text-sm md:text-base font-black mt-4 max-w-xl">{weeklyOpen() ? JR_T4.priceLine : JR_T4.priceLineUpfrontOnly}</p>
+                    <p className="text-white/70 text-sm font-medium mt-1 max-w-xl">{JR_T4.shirtLine}</p>
                 </motion.div>
             </div>
 

@@ -455,7 +455,7 @@ describe('guide tab', () => {
     expect(text).toContain('Currently 4 sign-ups');
     expect(text).toContain('Currently 9.');
     expect(text).toContain('Currently 2 entries');
-    expect(text).toContain('Currently 29 entries');
+    expect(text).toContain('Currently 29 rows');
   });
 
   it('says plainly that a Sid booking holds no place', () => {
@@ -470,13 +470,16 @@ describe('guide tab', () => {
 // all. 16 of the 29 entries are in exactly that position.
 // ------------------------------------------------------------
 describe('junior royals term 4', () => {
+  // 19 Oct 2026: Mickleham moved to Mondays; Cranbourne North stays on Wednesdays.
   it('confirms the night and dates for a centre that IS running', () => {
-    for (const centre of ['mickleham', 'cranbourne-north']) {
-      const status = jrTerm4CentreStatus(centre);
-      expect(status).toMatch(/^Yes/);
-      expect(status).toContain('Wednesdays');
-      expect(status).toContain('28 October to 16 December');
-    }
+    expect(jrTerm4CentreStatus('mickleham')).toBe('Yes — Mondays 5:00pm or 6:00pm, 26 October to 14 December');
+    expect(jrTerm4CentreStatus('cranbourne-north')).toBe('Yes — Wednesdays 5:00pm or 6:00pm, 28 October to 16 December');
+  });
+
+  it('flags a Mickleham family who entered for a Wednesday: the night has changed', () => {
+    const status = jrTerm4Row(jrT4({ preferred_centre: 'mickleham', preferred_day: 'wednesday' }))[JR_TERM4_HEADERS.indexOf('Running in Term 4?')];
+    expect(status).toMatch(/^Yes — but MICKLEHAM IS NOW ON MONDAYS/);
+    expect(status).toContain('tell them the night has changed');
   });
 
   // "Hallam" is the Cranbourne North centre under its old name (Alex, 30 Sep
@@ -526,10 +529,11 @@ describe('junior royals term 4', () => {
     expect(jrTerm4CentreStatus(undefined)).not.toMatch(/^Yes/);
   });
 
-  it('spells out what picking Monday actually means', () => {
-    const row = jrTerm4Row(jrT4({ preferred_day: 'monday' }));
-    expect(row[JR_TERM4_HEADERS.indexOf('Night They Chose')])
-      .toBe('Monday — only runs if we add a second night');
+  it('names whose night each day is', () => {
+    expect(jrTerm4Row(jrT4({ preferred_day: 'monday' }))[JR_TERM4_HEADERS.indexOf('Night They Chose')])
+      .toBe("Monday (Mickleham's night from 26 October)");
+    expect(jrTerm4Row(jrT4({ preferred_centre: 'cranbourne-north' }))[JR_TERM4_HEADERS.indexOf('Night They Chose')])
+      .toBe("Wednesday (Cranbourne North's night)");
   });
 
   it('explains a blank night rather than leaving the cell empty', () => {
@@ -542,6 +546,19 @@ describe('junior royals term 4', () => {
     const row = jrTerm4Row(jrT4());
     expect(row[JR_TERM4_HEADERS.indexOf('Payment')])
       .toBe('Nothing to pay — an entry only. No place is held until we confirm one.');
+  });
+
+  it('shows a paid booking as PAID with the amount and the plan', () => {
+    const row = jrTerm4Row(jrT4({ source: 'junior-royals-term4-booking|pay=upfront', paid: true, amount_paid_cents: 37895, paid_at: '2026-10-19T03:00:00.000Z' }));
+    const cell = row[JR_TERM4_HEADERS.indexOf('Payment')];
+    expect(cell).toMatch(/^PAID \$378\.95 \(upfront, all 8 weeks\)/);
+  });
+
+  it('never lets a booking that went to Stripe unpaid read as booked', () => {
+    const cell = jrTerm4Row(jrT4({ source: 'junior-royals-term4-booking|pay=weekly|centre=cranbourne-north', preferred_centre: 'any' }))[JR_TERM4_HEADERS.indexOf('Payment')];
+    expect(cell).toMatch(/^NOT PAID/);
+    expect(cell).toContain('weekly');
+    expect(cell).toContain('Place not booked');
   });
 
   it('names the venue rather than the slug, for closed centres too', () => {
@@ -561,7 +578,7 @@ describe('junior royals term 4', () => {
 describe('guide tab covers term 4', () => {
   it('states the count of families whose centre is not running', () => {
     const text = guideLines([], { jrTerm4: 29, jrTerm4Closed: 4 }).map((r) => r[0]).join('\n');
-    expect(text).toContain('Currently 29 entries');
+    expect(text).toContain('Currently 29 rows');
     expect(text).toContain('4 entries on this tab picked it');
     expect(text).toContain('READ THE "RUNNING IN TERM 4?" COLUMN BEFORE YOU RING ANYONE');
   });
@@ -575,7 +592,8 @@ describe('guide tab covers term 4', () => {
   it('warns against offering another centre unprompted', () => {
     const text = guideLines([], {}).map((r) => r[0]).join('\n');
     expect(text).toContain('do not offer them another centre');
-    expect(text).toContain('NO PLACE IS HELD');
+    // 19 Oct 2026: bookings are paid; only a PAID row has a place.
+    expect(text).toContain('Only PAID rows have a place');
   });
 });
 

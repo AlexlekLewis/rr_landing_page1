@@ -171,7 +171,7 @@ export const PAGE_SEO = {
   '/junior-royals': {
     title: 'Junior Cricket Coaching Melbourne | Rajasthan Royals',
     description:
-      'Junior Royals Term 4: weekly cricket coaching for ages 7–12, Wednesdays 6–8pm, 28 Oct – 16 Dec, at Mickleham and Cranbourne North, Melbourne. Register your interest.',
+      'Junior Royals Term 4: weekly cricket coaching for ages 7–12, 5–7pm: Mondays at Mickleham from 26 Oct, Wednesdays at Cranbourne North from 28 Oct, Melbourne. $349 for 8 weeks.',
   },
   '/elite-royals': { ...ELITE },
   '/PGP2026': { ...ELITE, canonical: '/elite-royals' },

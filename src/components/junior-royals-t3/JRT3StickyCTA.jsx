@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { JR_T4 } from './jrTerm4Data';
 
-// Floating nudge to the Term 4 entry form. The Term 3 early-bird / paid
-// labels were removed on 3 Oct 2026. REVIEW 16 Dec 2026 (last Term 4 session).
+// Floating nudge to the Term 4 booking form (paid from 19 Oct 2026).
+// REVIEW 16 Dec 2026 (last Term 4 session).
 const JRT3StickyCTA = () => {
     const [visible, setVisible] = useState(false);
     const [pastForm, setPastForm] = useState(false);

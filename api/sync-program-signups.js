@@ -749,15 +749,28 @@ const JR_TERM4_CLOSED_CENTRES = {
   williamstown: 'Williamstown',
 };
 
-export const jrTerm4CentreStatus = (centre) => {
+// Night, times and dates per centre (Alex, 19 Oct 2026): Mickleham MONDAYS
+// 26 Oct – 14 Dec, Cranbourne North WEDNESDAYS 28 Oct – 16 Dec, both 5:00pm and
+// 6:00pm groups. Source of truth: centres[] in jrTerm4Data.js.
+const JR_TERM4_WHEN = {
+  'mickleham': 'Mondays 5:00pm or 6:00pm, 26 October to 14 December',
+  'cranbourne-north': 'Wednesdays 5:00pm or 6:00pm, 28 October to 16 December',
+  'hallam': 'Wednesdays 5:00pm or 6:00pm, 28 October to 16 December',
+};
+
+export const jrTerm4CentreStatus = (centre, day = null) => {
   if (centre === 'hallam') {
-    return 'Yes — Wednesdays 6:00pm or 7:00pm, 28 October to 16 December, but AT A '
+    return `Yes — ${JR_TERM4_WHEN.hallam}, but AT A `
       + 'DIFFERENT VENUE. They entered when the south-east program ran at Hallam; it '
       + 'now runs at the Elite Cricket Centre, Cranbourne North. Tell them where to go '
       + 'before 28 October.';
   }
+  if (centre === 'mickleham' && day === 'wednesday') {
+    return `Yes — but MICKLEHAM IS NOW ON MONDAYS (${JR_TERM4_WHEN.mickleham}). `
+      + 'They entered for a Wednesday: tell them the night has changed.';
+  }
   if (JR_TERM4_CENTRES[centre]) {
-    return 'Yes — Wednesdays 6:00pm or 7:00pm, 28 October to 16 December';
+    return `Yes — ${JR_TERM4_WHEN[centre]}`;
   }
   if (JR_TERM4_CLOSED_CENTRES[centre]) {
     return `NO — there is no Term 4 program at ${JR_TERM4_CLOSED_CENTRES[centre]}. `
@@ -770,8 +783,20 @@ export const jrTerm4CentreStatus = (centre) => {
 // and RRA-T4-2026-CRN). Monday is Performance Squad, and is offered on the form
 // only to measure demand for a second night.
 const JR_TERM4_NIGHTS = {
-  wednesday: 'Wednesday — the Term 4 night',
-  monday: 'Monday — only runs if we add a second night',
+  wednesday: 'Wednesday (Cranbourne North\'s night)',
+  monday: 'Monday (Mickleham\'s night from 26 October)',
+};
+
+// What the family did about payment (19 Oct 2026). Bookings carry the option in
+// source ("junior-royals-term4-booking|pay=upfront"); the webhook fills paid,
+// paid_at and amount_paid_cents. The amount is the first checkout, shirt included.
+const centsToDollars = (c) => `$${(Number(c || 0) / 100).toFixed(2)}`;
+export const jrTerm4Payment = (r) => {
+  const opt = /\|pay=(upfront|weekly)/.exec(r.source || '')?.[1];
+  const how = opt === 'weekly' ? 'weekly plan, first payment' : opt === 'upfront' ? 'upfront, all 8 weeks' : 'paid';
+  if (r.paid) return `PAID ${centsToDollars(r.amount_paid_cents)} (${how}) on ${fmtMelb(r.paid_at)}`;
+  if (opt) return `NOT PAID — went to Stripe (${opt}) but no payment has come through. Place not booked.`;
+  return NO_PAYMENT_LINE['jr-term4'];
 };
 
 // The Term 4 form's fallback (5 Oct 2026): when the database CHECK refused a
@@ -799,10 +824,10 @@ export const jrTerm4Row = (r) => ([
     : JR_TERM4_CENTRES[jrTerm4Centre(r)]
       || JR_TERM4_CLOSED_CENTRES[jrTerm4Centre(r)]
       || jrTerm4Centre(r) || '',
-  jrTerm4CentreStatus(jrTerm4Centre(r)),
+  jrTerm4CentreStatus(jrTerm4Centre(r), r.preferred_day),
   JR_TERM4_NIGHTS[r.preferred_day]
     || (r.preferred_day ? r.preferred_day : 'Not asked — they entered before the form asked about nights'),
-  NO_PAYMENT_LINE['jr-term4'],
+  jrTerm4Payment(r),
 ]);
 
 // ── Lower Plenty Junior Royals Day ──────────────────────────
@@ -950,14 +975,15 @@ export const guideLines = (linkLines = [], counts = {}) => {
     ['  has to come back to each family and confirm. If a Stripe payment link is added'],
     [`  to the page later, payments start appearing here on their own. Currently ${counts.sidJuniors ?? 0}.`],
     [''],
-    [`"${PROGRAM_LABELS['jr-term4']}" — families who have entered for Term 4 at`],
-    ['  rramelbourne.com/junior-royals. Nothing is paid and NO PLACE IS HELD: an entry'],
-    [`  means they have put their hand up, not that they are in. Currently ${counts.jrTerm4 ?? 0} entries.`],
+    [`"${PROGRAM_LABELS['jr-term4']}" — families who have entered or booked for Term 4 at`],
+    ['  rramelbourne.com/junior-royals. From 19 Oct 2026 a Wednesday booking is paid through'],
+    ['  Stripe: the PAYMENT column says PAID or NOT PAID. Only PAID rows have a place.'],
+    [`  Older entries paid nothing and hold no place. Currently ${counts.jrTerm4 ?? 0} rows.`],
     [''],
     ['  READ THE "RUNNING IN TERM 4?" COLUMN BEFORE YOU RING ANYONE.'],
-    ['  Term 4 runs at Mickleham and the Elite Cricket Centre in Cranbourne North, on'],
-    ['  Wednesday nights, 28 October to 16 December, one hour a week in two groups at'],
-    ['  6:00pm and 7:00pm.'],
+    ['  Term 4 runs at Mickleham on MONDAYS (26 October to 14 December) and at the Elite'],
+    ['  Cricket Centre in Cranbourne North on WEDNESDAYS (28 October to 16 December),'],
+    ['  one hour a week in two groups at 5:00pm and 6:00pm.'],
     [''],
     ['  A "HALLAM" ROW STILL HAS A PROGRAM — AT A NEW VENUE. The south-east program'],
     ['  has moved from Hallam to the Elite Cricket Centre in Cranbourne North. Those'],

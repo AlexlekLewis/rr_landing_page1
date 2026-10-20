@@ -72,8 +72,8 @@ const PC_NAV = [
 //   Masterclass        — 13 Sep 2026 (drop the row after the second session)
 //   Open Age T20 Trial + Junior sessions with Sid — both finished 4–5 Oct;
 //                        rows taken off 16 Oct 2026. Pages stay up, closed.
-//   Junior Royals      — Term 4, Wednesdays at Mickleham and Cranbourne North,
-//                        28 Oct – 16 Dec (Alex, 5 Oct 2026). REVIEW 16 DEC 2026.
+//   Junior Royals      — Term 4: Mondays at Mickleham (26 Oct – 14 Dec), Wednesdays
+//                        at Cranbourne North (28 Oct – 16 Dec), 5–7pm (Alex, 19 Oct 2026). REVIEW 16 DEC 2026.
 //   Junior Royals are coming to Lower Plenty — $10, Sun 25 Oct 2026, ages 7–12
 //                        (Alex, 16 Oct 2026). The row hides itself when
 //                        registrations close, Fri 23 Oct 9:00pm (lpJrDayOpen).
@@ -87,7 +87,7 @@ const PROGRAMS_DROPDOWN = [
     // REVIEW 16 Dec 2026 — last Term 4 session; the badge is wrong after that.
     // Holiday camp (/junior-royals-holiday) taken off every promo surface 5 Oct 2026
     // (Alex): that camp finished 2 Oct. The page stays at its address for old links.
-    { label: 'Junior Royals', route: '/junior-royals', badge: 'Wednesdays from 28 Oct', badgeColor: 'bg-green-500' },
+    { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 from 26 Oct', badgeColor: 'bg-green-500' },
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Register Your Interest', badgeColor: 'bg-green-500' },
     { label: 'Private Coaching', route: '/mickleham', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },
     // Closed but real — it belongs here rather than in the home-page modal.
@@ -132,10 +132,10 @@ const Navbar = ({ variant = 'lp1', onRegisterClick, ctaLabelOverride, ctaTargetO
     const showCTA = !isShop && !isPowerGame;
     const showHamburger = !isShop;
 
-    // Junior Royals (isLittleCrickets): the CTA points at the Term 4 entry form
-    // (Wednesdays at Mickleham and Cranbourne North, no payment now). One label
-    // on the whole page: "Register Your Interest" (Alex, 3 Oct 2026).
-    const ctaLabel = ctaLabelOverride || (isPSWelcome ? 'CONFIRM YOUR PLACE' : isMasterclass ? 'BOOK YOUR PLACE' : isPerformanceSquads ? 'REGISTER INTEREST' : isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : isLittleCrickets ? 'REGISTER YOUR INTEREST' : isLP2 ? 'SECURE YOUR PLACE NOW' : isHoliday ? 'SECURE YOUR PLACE' : 'REGISTER INTEREST');
+    // Junior Royals (isLittleCrickets): the CTA points at the Term 4 booking form
+    // (Mondays at Mickleham, Wednesdays at Cranbourne North, paid from 19 Oct 2026). One
+    // label on the whole page: "Secure Your Place".
+    const ctaLabel = ctaLabelOverride || (isPSWelcome ? 'CONFIRM YOUR PLACE' : isMasterclass ? 'BOOK YOUR PLACE' : isPerformanceSquads ? 'REGISTER INTEREST' : isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : isLittleCrickets ? 'SECURE YOUR PLACE' : isLP2 ? 'SECURE YOUR PLACE NOW' : isHoliday ? 'SECURE YOUR PLACE' : 'REGISTER INTEREST');
     const ctaTarget = ctaTargetOverride || (isPSWelcome ? 'confirm' : isMasterclass ? 'register' : isPerformanceSquads ? 'register-pay' : isIndiaTour ? 'register' : isMickleham ? 'register' : isCoaches ? 'join' : isPrivateCoaching ? 'eoi-form' : isLP2 ? 'checkout' : isHoliday ? 'secure-form' : isLittleCrickets ? 'registration-form' : 'apply-form');
 
     const scrollToForm = () => {

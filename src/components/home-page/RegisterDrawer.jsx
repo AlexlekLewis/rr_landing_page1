@@ -22,7 +22,7 @@ const PROGRAMS = [
     ...(lpJrDayOpen() ? [{ label: LP_JR_DAY_ROW.heroLabel, route: LP_JR_DAY_ROUTE, urgency: LP_JR_DAY_ROW.drawerUrgency }] : []),
     { label: 'Spin Club', route: '/spin-club', urgency: 'Spin bowlers 10 to 25 — Wednesday nights until 25 Nov at Mickleham and Cranbourne North, $60 a night incl. GST' },
     { label: 'Performance Squads', route: '/performance-squads', urgency: 'Register your interest for the next intake' },
-    { label: 'Junior Royals', route: '/junior-royals', urgency: 'Term 4 entries open — Wednesday nights at Mickleham and Cranbourne North' },
+    { label: 'Junior Royals', route: '/junior-royals', urgency: 'Term 4 bookings open — Mondays at Mickleham, Wednesdays at Cranbourne North, 5–7pm, $349 for 8 weeks incl. GST' },
 ];
 
 const InputField = ({ label, type = 'text', value, onChange, placeholder, required }) => (

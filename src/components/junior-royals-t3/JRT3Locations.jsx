@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import { MapPin, Calendar, Clock } from 'lucide-react';
 import { JR_T4 } from './jrTerm4Data';
 
-// Term 4 centres only. The Term 3 cards, session accordions and prices were
+// Term 4 centres only, each with its own night and dates (19 Oct 2026: Mickleham
+// Mondays, Cranbourne North Wednesdays, both 5:00pm – 7:00pm). The Term 3 cards, session accordions and prices were
 // removed on 3 Oct 2026 (Term 3 finished 18–19 Sep). Hallam and Williamstown
 // have no Term 4, so they get one plain line instead of a card — a card reads
 // as a Term 4 venue. Centres and dates come from jrTerm4Data.js.
@@ -23,7 +24,7 @@ const JRT3Locations = () => {
                     </motion.h2>
                     <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}
                         className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium">
-                        Term 4 runs at two centres, on <span className="font-black text-rr-dark">Wednesday nights from {JR_T4.datesLong}</span>. {JR_T4.centresApart}
+                        Term 4 runs at two centres, each on its own night: <span className="font-black text-rr-dark">Mondays at Mickleham and Wednesdays at Cranbourne North</span>, 5:00pm – 7:00pm. {JR_T4.centresApart}
                     </motion.p>
                 </div>
 
@@ -44,15 +45,15 @@ const JRT3Locations = () => {
                                 <div className="space-y-2 mb-5">
                                     <div className="flex items-center gap-3">
                                         <Calendar className="w-4 h-4 text-rr-pink shrink-0" />
-                                        <span className="text-rr-dark font-black text-sm">{JR_T4.night} {JR_T4.times}</span>
+                                        <span className="text-rr-dark font-black text-sm">{loc.night} {loc.times}</span>
                                     </div>
                                     <div className="flex items-center gap-3">
                                         <Calendar className="w-4 h-4 text-rr-blue shrink-0" />
-                                        <span className="text-rr-charcoal font-semibold text-sm">{JR_T4.datesShort} · {JR_T4.weeks} weeks</span>
+                                        <span className="text-rr-charcoal font-semibold text-sm">{loc.datesShort} · {JR_T4.weeks} weeks</span>
                                     </div>
                                     <div className="flex items-start gap-3">
                                         <Clock className="w-4 h-4 text-rr-blue shrink-0 mt-0.5" />
-                                        <span className="text-rr-charcoal font-semibold text-sm">Two one-hour groups on the night, 6:00pm and 7:00pm. We confirm which one your player is in by email.</span>
+                                        <span className="text-rr-charcoal font-semibold text-sm">{loc.groups}</span>
                                     </div>
                                     <div className="flex items-center gap-3">
                                         <MapPin className="w-4 h-4 text-rr-blue shrink-0" />
