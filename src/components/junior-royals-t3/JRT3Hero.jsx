@@ -90,8 +90,9 @@ const JRT3Hero = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
                     </button>
-                    <p className="text-white text-sm md:text-base font-black mt-4 max-w-xl">{weeklyOpen() ? JR_T4.priceLine : JR_T4.priceLineUpfrontOnly}</p>
+                    <p className="text-white text-sm md:text-base font-black mt-4 max-w-xl">{weeklyOpen() ? JR_T4.priceLine : JR_T4.priceLineBeforeWeekly}</p>
                     <p className="text-white/70 text-sm font-medium mt-1 max-w-xl">{JR_T4.shirtLine}</p>
+                    <p className="text-white/70 text-sm font-medium mt-1 max-w-xl">{JR_T4.renewShort}</p>
                 </motion.div>
             </div>
 

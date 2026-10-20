@@ -92,6 +92,13 @@ const JRT3Success = () => {
                     )}
                 </motion.div>
 
+                <motion.div initial="hidden" animate="visible" custom={0.4} variants={fadeUp} className={card}>
+                    <p className="text-sm font-bold text-white/90 mb-2">{JR_T4.renewTitle}</p>
+                    <ul className="text-sm text-white/75 leading-relaxed space-y-1">
+                        {JR_T4.renewLines.map((l) => <li key={l}>• {l}</li>)}
+                    </ul>
+                </motion.div>
+
                 <motion.div initial="hidden" animate="visible" custom={0.45} variants={fadeUp} className={card}>
                     <p className="text-sm font-bold text-white/90 mb-2">What to bring</p>
                     <ul className="text-sm text-white/70 leading-relaxed space-y-1">

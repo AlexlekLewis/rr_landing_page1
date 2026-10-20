@@ -24,7 +24,8 @@
 // (jr_term4_waitlist) and sends the row id to Stripe as client_reference_id;
 // api/stripe-webhook.js marks the row paid.
 //
-// WEEKLY IS OFF until two things are true (WEEKLY_CONFIRMED and the date):
+// WEEKLY: Alex confirmed both links on 20 Oct 2026 ("these links are fine … make
+// sure the copy reflects the 2 payment options"). It still opens on 27 Oct:
 // - Alex, 19 Oct 2026: "the stripe link for weekly payments is wrong". It must
 //   not go on the page until he confirms or replaces it.
 // - It opens on Tuesday 27 October (Alex: "27th"). Before then a weekly plan
@@ -40,7 +41,7 @@
 
 export const UPFRONT_LINK = 'https://buy.stripe.com/14A14n4fn3ud0uU7jJ9Zm0Y';
 export const WEEKLY_LINK = 'https://buy.stripe.com/7sYeVd9zH3udgtSavV9Zm0X';
-export const WEEKLY_CONFIRMED = false;                       // Alex: the weekly link is wrong
+export const WEEKLY_CONFIRMED = true;                        // Alex, 20 Oct 2026: "these links are fine"
 export const WEEKLY_OPENS = new Date('2026-10-27T00:00:00+11:00'); // Tue 27 Oct, Melbourne
 export const weeklyOpen = (now = new Date()) => WEEKLY_CONFIRMED && now >= WEEKLY_OPENS;
 
@@ -63,7 +64,7 @@ export const PAY_OPTIONS = {
         title: 'Pay weekly',
         amount: money(PRICE.weekly),
         per: 'a week',
-        detail: `By card, Apple Pay or Klarna. The first payment is taken when you book, then one every 7 days, and they stop after the last session on 16 December: at most 8 payments, ${money(WEEKLY_MAX)} in total.`,
+        detail: `A weekly direct debit, by card, Apple Pay or Klarna. The first payment is taken when you book, then one each week. The direct debit is cancelled at the end of term (8 weeks is ${money(WEEKLY_MAX)}).`,
         link: WEEKLY_LINK,
         value: PRICE.weekly,
     },
@@ -79,12 +80,25 @@ export const JR_T4 = {
     ageMin: 7,
     ageMax: 12,
     factLine: 'Ages 7–12 · 5:00pm – 7:00pm (5:00pm or 6:00pm group) · 8 weeks · Mondays at Mickleham, Wednesdays at Cranbourne North',
-    priceLine: `${money(PRICE.upfront)} for all 8 weeks incl. GST, or ${money(PRICE.weekly)} a week incl. GST.`,
-    priceLineUpfrontOnly: `${money(PRICE.upfront)} for all 8 weeks incl. GST.`,
+    // Two ways to pay, always both on the page (Alex, 20 Oct 2026). Weekly opens 27 Oct.
+    priceLine: `Two ways to pay: ${money(PRICE.upfront)} upfront for all 8 weeks, or ${money(PRICE.weekly)} a week. Prices incl. GST.`,
+    priceLineBeforeWeekly: `Two ways to pay: ${money(PRICE.upfront)} upfront for all 8 weeks, or ${money(PRICE.weekly)} a week from Tuesday 27 October. Prices incl. GST.`,
     shirtLine: `Plus the Junior Royals training shirt, ${money(PRICE.shirt)} incl. GST, bought once at checkout. Players wear it at every session; if your player already has one, set the shirt to 0 at checkout.`,
     ctaLabel: 'Secure Your Place',
     stickyLabel: 'Secure Your Place · Term 4 from Mon 26 Oct',
     placeLine: 'Your place is booked once you have paid.',
+    // AUTOMATIC RE-ENROLMENT, OPT-OUT (Alex, 20 Oct 2026): "it's an automatic enrolment
+    // into the next term (opt out system) … we will be in touch to confirm. Direct debits
+    // will be cancelled at the end of the term and restart at the beginning." The 2 weeks'
+    // notice is Alex's (8 Oct 2026, NOTICE_WEEKS in the version 2 mock-up).
+    renewTitle: 'Next term',
+    renewLines: [
+        'Enrolment is automatic: your player\'s place carries on into the next term unless you opt out.',
+        'We\'ll be in touch before the next term starts to confirm your player\'s place.',
+        'Weekly direct debits are cancelled at the end of each term and start again at the beginning of the next term.',
+        'To opt out, email info@rramelbourne.com at least 2 weeks before the next term starts.',
+    ],
+    renewShort: 'Enrolment carries on into the next term automatically unless you opt out; we\'ll be in touch to confirm.',
     centresApart: 'The two centres are about 70 km apart, so pick the one you can get to every week.',
     // TWO CENTRES ONLY (Alex, 5 Oct 2026): "Hallam and Williamstown no longer exist
     // as part of the organisation for the moment." Don't name them on the page.

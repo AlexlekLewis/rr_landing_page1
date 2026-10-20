@@ -71,7 +71,7 @@ export const ANNOUNCEMENTS = [
         name: 'Junior Royals · Term 4',
         // REVIEW 16 Dec 2026 — last Term 4 session. Facts: junior-royals-t3/jrTerm4Data.js.
         tag: 'Ages 7–12 · weekly coaching, 5:00pm – 7:00pm: Mondays at Mickleham, Wednesdays at Cranbourne North',
-        detail: 'From Mon 26 Oct (Mickleham) and Wed 28 Oct (Cranbourne North) · $349 for 8 weeks incl. GST',
+        detail: 'From Mon 26 Oct (Mickleham) and Wed 28 Oct (Cranbourne North) · $349 for 8 weeks or $44.95 a week, incl. GST',
         href: '/junior-royals',
         badge: 'Book now',
     },

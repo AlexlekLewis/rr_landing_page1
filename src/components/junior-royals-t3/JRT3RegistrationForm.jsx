@@ -156,7 +156,7 @@ const JRT3RegistrationForm = () => {
                     <p className="text-white/80 font-medium leading-relaxed mb-4">
                         Term 4 runs on <span className="font-black text-white">{mickleham.night} at the {mickleham.venue}, {mickleham.suburb} ({mickleham.datesShort})</span> and <span className="font-black text-white">{cranbourne.night} at the {cranbourne.venue}, {cranbourne.suburb} ({cranbourne.datesShort})</span>, {mickleham.times} at both. Each player trains for one hour a week with players their own age. If your player did Junior Royals last term, nothing carries over automatically, so please book below.
                     </p>
-                    <p className="text-white font-black leading-relaxed">{weekly ? JR_T4.priceLine : JR_T4.priceLineUpfrontOnly}</p>
+                    <p className="text-white font-black leading-relaxed">{weekly ? JR_T4.priceLine : JR_T4.priceLineBeforeWeekly}</p>
                     <p className="text-white/70 text-sm font-medium leading-relaxed mt-2">{JR_T4.shirtLine}</p>
                 </div>
 
@@ -221,7 +221,7 @@ const JRT3RegistrationForm = () => {
                                                             <input type="radio" name="pay" value={k} checked={on && available} disabled={!available} onChange={() => setPay(k)} className="sr-only" />
                                                             <span className="block font-black text-rr-dark text-sm">{o.title}: {o.amount} <span className="font-semibold text-rr-charcoal">{o.per} incl. GST</span></span>
                                                             <span className="block text-xs text-rr-charcoal font-medium mt-1 leading-relaxed">
-                                                                {available ? o.detail : `Weekly payments open on Tuesday ${WEEKLY_OPENS.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', timeZone: 'Australia/Melbourne' })}.`}
+                                                                {available ? o.detail : `Opens Tuesday ${WEEKLY_OPENS.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', timeZone: 'Australia/Melbourne' })}. ${o.detail}`}
                                                             </span>
                                                         </label>
                                                     );
@@ -229,6 +229,12 @@ const JRT3RegistrationForm = () => {
                                             </div>
                                         </fieldset>
                                     </>
+                            </div>
+                            <div className="mt-6 rounded-xl bg-slate-50 px-4 py-4" data-jr-t4-renewal>
+                                <p className="text-xs font-black text-rr-dark uppercase tracking-widest mb-2">{JR_T4.renewTitle}</p>
+                                <ul className="space-y-1.5 text-rr-charcoal text-sm font-medium leading-relaxed list-disc pl-5">
+                                    {JR_T4.renewLines.map((l) => <li key={l}>{l}</li>)}
+                                </ul>
                             </div>
                             {errors.form && <div className="bg-red-50 border border-red-200 rounded-xl p-4 mt-6"><p className="text-red-600 text-sm font-medium">{errors.form}</p></div>}
                             <button type="submit" disabled={submitting}
