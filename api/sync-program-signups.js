@@ -815,7 +815,7 @@ const JR_TERM4_NIGHTS = {
 const centsToDollars = (c) => `$${(Number(c || 0) / 100).toFixed(2)}`;
 // A different night (20 Oct 2026): "junior-royals-term4-night-request|day=tuesday".
 // Standby only: nothing paid, no place held, the night they asked for isn't running.
-const jrTerm4RequestDay = (r) => {
+export const jrTerm4RequestDay = (r) => {
   const m = /^junior-royals-term4-night-request\|day=([a-z]+)/.exec(r.source || '');
   return m ? m[1].charAt(0).toUpperCase() + m[1].slice(1) : null;
 };
