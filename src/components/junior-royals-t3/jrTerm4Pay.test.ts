@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { JR_T4, PAY_OPTIONS, PRICE, UPFRONT_LINK, WEEKLY_OPENS, weeklyOpen, WEEKLY_CONFIRMED, GROUPS, groupFor } from './jrTerm4Data';
+import { JR_T4, PAY_OPTIONS, PRICE, UPFRONT_LINK, WEEKLY_OPENS, weeklyOpen, WEEKLY_CONFIRMED, GROUPS, groupFor, ROYALS_WAY } from './jrTerm4Data';
+import { existsSync } from 'node:fs';
 import { classifyJrT4 } from '../../../api/stripe-webhook.js';
 
 // Alex, 19 Oct 2026: the official Term 4 payment options.
@@ -80,5 +81,15 @@ describe('Junior Royals Term 4 payments', () => {
         expect(JR_T4.centres.every((c) => c.groups === JR_T4.groupsLine)).toBe(true);
         expect(JR_T4.request.done('Liam', 'Tuesday', JR_T4.centres[0], GROUPS[0]))
             .toContain("Liam's request for Tuesday nights, 5:00pm – 6:00pm (the ages 7–9 group), at the Mickleham Indoor Sports Centre");
+    });
+
+    // Alex, 21 Oct 2026: the live page shows the Royals Way and badges, in the email's words.
+    it('describes the Royals Way the way the Term 4 email does, with real badge artwork', () => {
+        expect(ROYALS_WAY.lead).toBe('Junior Royals now runs on the Royals Way Progress Tracking and Development System. Every player has clear goals that build their cricket from the foundations up, through three phases: Discover, Develop and Elevate.');
+        expect(ROYALS_WAY.steps.map((s) => s.body).join(' ')).toContain('they earn its badge and move on to the next one');
+        expect(ROYALS_WAY.phases.map((p) => p.phase)).toEqual(['Discover', 'Develop', 'Elevate']);
+        for (const p of ROYALS_WAY.phases) expect(existsSync(`public${p.img}`)).toBe(true);
+        expect(ROYALS_WAY.note).toContain('never ranked');
+        expect(JSON.stringify(ROYALS_WAY)).not.toMatch(/portal|guarantee/i);
     });
 });

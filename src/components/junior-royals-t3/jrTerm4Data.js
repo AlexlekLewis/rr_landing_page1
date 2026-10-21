@@ -86,6 +86,32 @@ export const groupFor = (age) => {
 };
 const GROUPS_LINE = `Two one-hour groups by age: ages ${GROUPS[0].ages} train ${GROUPS[0].time}, and ages ${GROUPS[1].ages} train ${GROUPS[1].time}.`;
 
+// THE ROYALS WAY, NEW THIS TERM (Alex, 20–21 Oct 2026). The same words as the Term 4
+// first-chance email, so the page says what the email promises. Alex confirmed badges
+// start this term (20 Oct), overriding the blueprint's "pilot Term 1 2027". Wording from
+// the version 2 page (jrV2Content.js: PROGRESS.lead, the Royals Way answer, "A climb, not a
+// rank", "At their own rate"); the three badges are Alex's approved artwork (one batting
+// badge per phase, jrV2Facts.js SAMPLE_BADGES). No portal login is promised: Term 4
+// bookings don't reach the Player Performance Portal.
+export const ROYALS_WAY = {
+    about: 'Cricket coaching the Royals Way for players aged 7 to 12. Each week your player trains for one hour in a small group of players their own age. We teach the whole game: batting, bowling, fielding and how to play, through games, with one clear skill to learn, one coaching point to hold on to, and a score to beat.',
+    eyebrow: 'New this term',
+    title: 'Play the Royals Way',
+    lead: 'Junior Royals now runs on the Royals Way Progress Tracking and Development System. Every player has clear goals that build their cricket from the foundations up, through three phases: Discover, Develop and Elevate.',
+    steps: [
+        { head: 'One skill at a time', body: 'Your player trains on one skill at a time, with their coach.' },
+        { head: 'Earn the badge', body: 'When they can do that skill, they earn its badge and move on to the next one.' },
+        { head: 'Every badge is recorded', body: 'You, your player and their coach can see what has been learned and what comes next.' },
+    ],
+    phasesTitle: 'From the foundations up: one batting badge from each phase',
+    phases: [
+        { phase: 'Discover', badge: 'Rock or Step', can: 'I can step or rock back to suit the ball.', img: '/assets/junior-royals/badges/rock-or-step-ribbon.svg' },
+        { phase: 'Develop', badge: 'Forward or Back', can: 'I can go forward to the full one, back to the short one.', img: '/assets/junior-royals/badges/forward-or-back-ribbon.svg' },
+        { phase: 'Elevate', badge: 'Pick the Length', can: 'I can pick the length and the shot.', img: '/assets/junior-royals/badges/pick-the-length-ribbon.svg' },
+    ],
+    note: 'Players are never ranked against each other. Every player develops at their own rate.',
+};
+
 export const JR_T4 = {
     term: 'Term 4, 2026',
     weeks: 8,
