@@ -2,21 +2,29 @@ import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import StickyCTA from '../performance-squads/StickyCTA';
+import FinishedEventPage from '../FinishedEventPage';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import LPHero from './LPHero';
 import { LPMorning, LPWhere, LPFaq } from './LPSections';
 import LPForm from './LPForm';
 import usePlaces from './usePlaces';
-import { ROUTE, CTA, CTA_WITH_PRICE, FORM_ANCHOR } from './lpJrDayData';
+import {
+    ROUTE, CTA, CTA_WITH_PRICE, FORM_ANCHOR, CONTACT_EMAIL, CANCELLED, CANCELLED_COPY, CANCELLED_SESSIONS,
+} from './lpJrDayData';
 
 // ─────────────────────────────────────────────────────────────
 // JUNIOR ROYALS ARE COMING TO LOWER PLENTY — /lower-plenty-junior-royals-day
 //
+// CANCELLED 23 Oct 2026 (Alex): heavy rain is forecast, so the morning is
+// called off. While CANCELLED is true (lpJrDayData.js) the address shows the
+// shared FinishedEventPage with the cancellation notice: no form, no payment,
+// noindex. The live page below is kept intact, so nothing is lost.
+//
 // A morning for players aged 7 to 12: Sunday 25 October 2026,
 // 9:00am – 11:00am, Lower Plenty Cricket Club (Lower Plenty Oval South,
 // Montmorency Park, Montmorency). $10 per player incl. GST via a Stripe
-// Payment Link (Alex, 16 Oct 2026). 60 places; registrations close Friday
-// 23 October, 9:00pm.
+// Payment Link (Alex, 16 Oct 2026). 60 places; registrations were due to close
+// Friday 23 October, 9:00pm.
 // PUBLIC: in the Programs menu, What's On, the home list and the register
 // drawer (lpJrDayPromo.js). Every fact lives in lpJrDayData.js.
 //
@@ -25,8 +33,8 @@ import { ROUTE, CTA, CTA_WITH_PRICE, FORM_ANCHOR } from './lpJrDayData';
 // the form (Alex, 12 Oct 2026).
 //
 // The form writes to lower_plenty_junior_royals_day_registrations. The
-// database caps it at 60 and closes it at 9:00pm Friday; the page reads the
-// live count from lower_plenty_jr_day_places().
+// database caps it at 60 and closes it at the time in lower_plenty_jr_day_limits();
+// the page reads the live count from lower_plenty_jr_day_places().
 //
 // The form section's id is "register-pay" because the shared phone sticky bar
 // (performance-squads/StickyCTA.jsx) hides itself once that element is passed.
@@ -35,7 +43,7 @@ import { ROUTE, CTA, CTA_WITH_PRICE, FORM_ANCHOR } from './lpJrDayData';
 const SECTIONS = ['hero', 'morning', 'where', FORM_ANCHOR, 'faq'];
 const ANCHOR = 'scroll-mt-24 sm:scroll-mt-32';
 
-const LowerPlentyJrDay = () => {
+const LowerPlentyJrDayLive = () => {
     usePageAnalytics(ROUTE, { sections: SECTIONS });
     const places = usePlaces();
     const open = places.state === 'open';
@@ -68,5 +76,19 @@ const LowerPlentyJrDay = () => {
         </div>
     );
 };
+
+// What the address shows while the morning is cancelled: it says so plainly,
+// takes no registration and no payment, and says what to do now.
+const LowerPlentyJrDayCancelled = () => (
+    <FinishedEventPage
+        route={ROUTE}
+        navVariant="open-age-trial"
+        copy={CANCELLED_COPY}
+        email={CONTACT_EMAIL}
+        sessions={CANCELLED_SESSIONS}
+    />
+);
+
+const LowerPlentyJrDay = () => (CANCELLED ? <LowerPlentyJrDayCancelled /> : <LowerPlentyJrDayLive />);
 
 export default LowerPlentyJrDay;

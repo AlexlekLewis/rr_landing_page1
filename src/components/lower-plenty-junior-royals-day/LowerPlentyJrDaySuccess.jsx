@@ -6,7 +6,7 @@ import LPMap from './LPMap';
 import { fadeUp } from '../performance-squads/shared';
 import {
     ROUTE, FORM_ANCHOR, SUCCESS, VENUE, ADDRESS_LINE, DATE_FULL, TIME, STORE, CONTACT_EMAIL, LOGOS, CLUB,
-    PRICE, PROGRAM_NAME,
+    PRICE, PROGRAM_NAME, CANCELLED,
 } from './lpJrDayData';
 
 // /lower-plenty-junior-royals-day/success — where Stripe sends a parent after
@@ -27,7 +27,8 @@ const LowerPlentyJrDaySuccess = () => {
     const [name] = useState(readDone);
 
     useEffect(() => {
-        if (!paid) return;
+        // Cancelled 23 Oct 2026: a payment that is being refunded is not a Purchase.
+        if (!paid || CANCELLED) return;
         // This payment is done: stop offering "Pay $10 now" for it.
         try { window.sessionStorage.removeItem(STORE.pending); } catch { /* ignore */ }
         // Meta Pixel Purchase, once per Stripe session. No personal data.
@@ -52,7 +53,9 @@ const LowerPlentyJrDaySuccess = () => {
         return () => { document.head.removeChild(meta); };
     }, []);
 
-    if (!paid) return <Navigate to={ROUTE} replace />;
+    // Cancelled 23 Oct 2026: never say "place booked". Anyone who lands here reads the
+    // cancelled notice instead, which says paid players are refunded.
+    if (!paid || CANCELLED) return <Navigate to={ROUTE} replace />;
 
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans px-5 py-14 sm:py-20">

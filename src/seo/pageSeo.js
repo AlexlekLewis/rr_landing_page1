@@ -43,14 +43,16 @@ export const PAGE_SEO = {
   },
   // "Junior Royals are coming to Lower Plenty" (the event's name since 18 Oct 2026),
   // Sun 25 Oct 2026 (Alex, 16 Oct 2026).
-  // Shared off the flyer QR and in WhatsApp, so it is prerendered with its own
-  // card. Facts mirror components/lower-plenty-junior-royals-day/lpJrDayData.js.
-  // REVIEW 26 OCT 2026 — the morning is over.
+  // CANCELLED 23 Oct 2026 (Alex): the weather forecast. The page now says so, takes no
+  // registration and is noindex. It stays prerendered because the flyer QR and old
+  // WhatsApp links still point here, and a shared link should say "cancelled", not
+  // "register". Facts mirror components/lower-plenty-junior-royals-day/lpJrDayData.js.
+  // REVIEW 26 OCT 2026: retire this page, or keep the cancelled notice up.
   '/lower-plenty-junior-royals-day': {
-    title: 'Junior Royals Are Coming to Lower Plenty | Melbourne',
+    title: 'Lower Plenty Junior Royals Morning: Cancelled | Melbourne',
     description:
-      'A morning of cricket for players aged 7 to 12: Sunday 25 October, 9–11am, Lower Plenty Oval South, Montmorency Park, Melbourne. Rajasthan Royals Academy coaches, then Power League matches. $10 incl. GST.',
-    ogImage: '/assets/lower-plenty/lower-plenty-jr-day-og.png',
+      'The Junior Royals morning at Lower Plenty on Sunday 25 October is cancelled because of the weather forecast. If you paid, you are being refunded.',
+    noindex: true,
   },
   '/spin-club': {
     title: 'Spin Bowling Coaching Melbourne | Royals Spin Club',
