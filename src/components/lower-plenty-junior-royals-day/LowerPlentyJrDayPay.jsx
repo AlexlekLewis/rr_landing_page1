@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Navigate, Link, useSearchParams } from 'react-router-dom';
 import { CreditCard, CalendarDays, MapPin, ArrowRight } from 'lucide-react';
-import { ROUTE, PAY_PAGE, REFUND_LINE, CONTACT_EMAIL, DATE_FULL, TIME, VENUE, ADDRESS_LINE, payUrlFor } from './lpJrDayData';
+import { ROUTE, PAY_PAGE, REFUND_LINE, CONTACT_EMAIL, DATE_FULL, TIME, VENUE, ADDRESS_LINE, payUrlFor, CANCELLED } from './lpJrDayData';
 
 // /lower-plenty-junior-royals-day/pay?booking=<registration id>
 // The link to email a family who registered but didn't finish paying. The id
@@ -23,7 +23,8 @@ const LowerPlentyJrDayPay = () => {
         return () => { document.head.removeChild(meta); };
     }, []);
 
-    if (!UUID.test(booking)) return <Navigate to={ROUTE} replace />;
+    // Cancelled 23 Oct 2026: no "finish paying" link may reach Stripe. The page says it is cancelled.
+    if (CANCELLED || !UUID.test(booking)) return <Navigate to={ROUTE} replace />;
 
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans px-5 py-14 sm:py-20">

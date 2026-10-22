@@ -9,20 +9,22 @@
 // Also read by the home page's Special Event banner (home-page/HomeTopBanner.jsx).
 //
 // Every one of those surfaces checks lpJrDayOpen() and drops the event by itself
-// once registrations close (Fri 23 Oct 2026, 9:00pm), so nothing keeps selling a
-// morning nobody can book (19 Oct 2026).
+// once registrations close, so nothing keeps selling a morning nobody can book
+// (19 Oct 2026). The morning was CANCELLED on 23 Oct 2026 and registrations closed
+// at 8:30am that day, so every surface has already dropped it.
 //
-// REVIEW 26 OCT 2026: the morning was Sunday 25 October. Remove every import
-// of this file that day (the five files above), and take /lower-plenty-
-// junior-royals-day out of public/sitemap.xml.
+// REVIEW 26 OCT 2026: the morning would have been Sunday 25 October. Remove every
+// import of this file that day (the five files above). The page is already out of
+// public/sitemap.xml.
 // ─────────────────────────────────────────────────────────────
 
-import { ROUTE, AGES, AGES_SPOKEN, SHORT_DAY, CLUB, EVENT_NAME, TIME, CLOSES, CLOSES_AT_ISO, PRICE, VENUE, CTA_WITH_PRICE } from './lpJrDayData';
+import { ROUTE, AGES, AGES_SPOKEN, SHORT_DAY, CLUB, EVENT_NAME, TIME, CLOSES, CLOSES_AT_ISO, PRICE, VENUE, CTA_WITH_PRICE, CANCELLED } from './lpJrDayData';
 
 export const LP_JR_DAY_ROUTE = ROUTE;
 
-// True until registrations close. Promo surfaces show the event only while this is true.
-export const lpJrDayOpen = (now = Date.now()) => now < new Date(CLOSES_AT_ISO).getTime();
+// True until registrations close, and never once the morning is cancelled. Promo
+// surfaces show the event only while this is true.
+export const lpJrDayOpen = (now = Date.now()) => !CANCELLED && now < new Date(CLOSES_AT_ISO).getTime();
 
 export const PROGRAM_ROW = {
     navLabel: `${EVENT_NAME} · ${AGES}`,

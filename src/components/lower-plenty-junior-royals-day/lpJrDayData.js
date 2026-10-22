@@ -45,8 +45,15 @@
 // (lower_plenty_jr_day_limits() in the migration). CAPACITY and CLOSES_AT
 // here only drive what the page says. Change both places together.
 //
-// REVIEW 26 OCT 2026: the morning is over. Take it off every promo surface
-// (lpJrDayPromo.js lists them) and close or retire the page.
+// CANCELLED 23 Oct 2026 (Alex): heavy rain is forecast, so the morning is called off.
+// The page shows CANCELLED_COPY (bottom of this file) on the shared FinishedEventPage:
+// no form, no payment, noindex. Registrations were closed early, in the database and in
+// CLOSES_AT_ISO, and every promo surface dropped the event. To bring the morning back,
+// set CANCELLED to false AND move the close time forward in lower_plenty_jr_day_limits()
+// (the database refuses sign-ups until then).
+//
+// REVIEW 26 OCT 2026: the morning would have been Sunday 25 October. Retire the page,
+// or keep the cancelled notice up for families who still follow old links.
 // ─────────────────────────────────────────────────────────────
 
 export const ROUTE = '/lower-plenty-junior-royals-day';
@@ -79,8 +86,10 @@ export const START_ISO = '2026-10-25T09:00:00+11:00';
 export const END_ISO = '2026-10-25T11:00:00+11:00';
 
 export const CAPACITY = 60;
-export const CLOSES = 'Friday 23 October, 9:00pm';
-export const CLOSES_AT_ISO = '2026-10-23T21:00:00+11:00'; // must match the database
+export const CLOSES = 'Friday 23 October, 9:00pm'; // the deadline first published
+// Moved from 9:00pm to 8:30am on Fri 23 Oct 2026 when the morning was cancelled. The
+// database close time moved to the same moment (migration 20261023083000).
+export const CLOSES_AT_ISO = '2026-10-23T08:30:00+11:00'; // must match the database
 // ── Price and payment (Alex, 16 Oct 2026) ──
 // $10 per player, GST included (Stripe price is tax-inclusive, automatic tax
 // off, so the family pays exactly $10). One payment per player.
@@ -384,4 +393,50 @@ export const PAY_PAGE = {
         + `at ${VENUE.oval}, ${VENUE.park}.`,
     button: `Pay $${PRICE} now`,
     footnote: 'Payments are processed securely by Stripe.',
+};
+
+// ── CANCELLED (Alex, 23 Oct 2026) ──
+// Heavy rain is forecast for the weekend, so the morning is called off. While this
+// is true, LowerPlentyJrDay.jsx shows CANCELLED_COPY on the shared FinishedEventPage
+// (no form, no payment), /pay and /success send people there, and the page is noindex.
+// Registrations were closed in the database at 8:30am on Fri 23 Oct (see CLOSES_AT_ISO).
+// Paid players are refunded in full, in Stripe, by staff (REFUND_LINE promises it).
+// The Stripe Payment Link is deactivated separately, in Stripe.
+export const CANCELLED = true;
+
+// The morning that was planned, listed on the cancelled page in the shared layout.
+export const CANCELLED_SESSIONS = [
+    {
+        key: 'morning',
+        place: EVENT_NAME,
+        when: `${DATE_FULL}, ${TIME}`,
+        venue: `${VENUE.oval}, ${VENUE.park}, ${VENUE.suburb}`,
+    },
+];
+
+export const CANCELLED_COPY = {
+    kicker: 'Rajasthan Royals Academy · Melbourne',
+    title: 'The Lower Plenty Morning Is Cancelled',
+    intro:
+        `We have cancelled the Junior Royals morning at ${CLUB} on ${DAY}. Heavy rain is forecast, and `
+        + 'we do not think the ground will be fit to play on. Please do not come to the ground on Sunday '
+        + 'morning. Registrations are closed and nothing can be paid on this page.',
+    sessionsTitle: 'The morning that was planned',
+    badge: 'Cancelled',
+    nextTitle: 'What happens now',
+    next: [
+        {
+            title: 'If you have paid',
+            body:
+                `We are refunding your $${PRICE} in full. It goes back to the card you paid with, and it can `
+                + 'take a few days to show on your statement. You do not need to do anything. '
+                + `Questions? Email ${CONTACT_EMAIL}.`,
+        },
+        {
+            title: 'Looking for junior coaching now?',
+            body: 'Our current programs are on the home page, with who each one is for and when it runs.',
+            cta: { label: 'See what’s on now', to: '/' },
+        },
+    ],
+    navCta: 'WHAT HAPPENS NOW',
 };
