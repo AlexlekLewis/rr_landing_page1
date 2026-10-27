@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { pixelTrack } from '../../lib/metaPixel';
 
 const HolidayProgramSuccess = () => {
     const navigate = useNavigate();
@@ -12,12 +13,12 @@ const HolidayProgramSuccess = () => {
     // Fire the Meta Purchase conversion. Stripe's Payment Link redirects here after
     // payment; we verify the checkout session server-side before firing (never fire
     // when Stripe says unpaid), use the real charged amount, and guard against a
-    // double-fire on reload. The base Pixel (fbq init + PageView) lives in index.html.
+    // double-fire on reload. The Pixel is loaded by src/lib/metaPixel.js (and is off on this route).
     useEffect(() => {
         const firePurchase = (valueAud) => {
             try {
-                if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
-                    window.fbq('track', 'Purchase', {
+                {
+                    pixelTrack('Purchase', {
                         content_name: 'Junior Royals Holiday Program',
                         content_category: 'holiday-program',
                         value: (typeof valueAud === 'number' && valueAud > 0) ? valueAud : 299,
