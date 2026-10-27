@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { CheckCircle2, CalendarDays, MapPin, UserPlus, ArrowRight } from 'lucide-react';
 import LPMap from './LPMap';
 import { fadeUp } from '../performance-squads/shared';
+import { pixelTrack } from '../../lib/metaPixel';
 import {
     ROUTE, FORM_ANCHOR, SUCCESS, VENUE, ADDRESS_LINE, DATE_FULL, TIME, STORE, CONTACT_EMAIL, LOGOS, CLUB,
     PRICE, PROGRAM_NAME, CANCELLED,
@@ -36,8 +37,8 @@ const LowerPlentyJrDaySuccess = () => {
         try {
             if (!window.sessionStorage.getItem(key)) {
                 window.sessionStorage.setItem(key, '1');
-                if (typeof window.fbq === 'function') {
-                    window.fbq('track', 'Purchase', { content_name: PROGRAM_NAME, value: PRICE, currency: 'AUD' }, { eventID: sessionId });
+                {
+                    pixelTrack('Purchase', { content_name: PROGRAM_NAME, value: PRICE, currency: 'AUD' }, { eventID: sessionId });
                 }
             }
         } catch { /* never block the page on tracking */ }
