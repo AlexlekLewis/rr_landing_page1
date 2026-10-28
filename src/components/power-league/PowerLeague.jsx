@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import PartnerStack from '../power-game/PartnerStack';
 import PLHero from './PLHero';
 import PLWhatIs from './PLWhatIs';
 import PLSquads from './PLSquads';
@@ -23,6 +24,7 @@ const PowerLeague = () => {
                 <div id="squads" className={ANCHOR}><PLSquads /></div>
                 <div id="nominate" className={ANCHOR}><PLForm /></div>
             </main>
+            <PartnerStack />
             <Footer />
         </div>
     );

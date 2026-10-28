@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import PartnerStack from '../power-game/PartnerStack';
 import InductionHero from './InductionHero';
 import InductionForm from './InductionForm';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
@@ -30,6 +31,7 @@ const InductionPage = () => {
                 </div>
                 <InductionForm program={program} />
             </main>
+            <PartnerStack />
             <Footer />
         </div>
     );

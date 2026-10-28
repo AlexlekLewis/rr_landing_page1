@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import PartnerStack from '../power-game/PartnerStack';
 import JRT3Hero from './JRT3Hero';
 import JRT3Overview from './JRT3Overview';
 import JRT4RoyalsWay from './JRT4RoyalsWay';
@@ -28,6 +29,7 @@ const JuniorRoyalsT3 = () => {
                 <div id="locations"><JRT3Locations /></div>
                 <div id="registration-form"><JRT3RegistrationForm /></div>
             </main>
+            <PartnerStack />
             <Footer />
             <JRT3StickyCTA />
         </div>

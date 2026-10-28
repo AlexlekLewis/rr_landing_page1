@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import PartnerStack from '../power-game/PartnerStack';
 import LaunchForm from './LaunchForm';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { OFFER, CENTRE, INCLUDES, STEPS, daysLeft, endDateLabel } from './launchConfig';
@@ -175,6 +176,7 @@ const MicklehamLaunch = () => {
                 <LaunchForm />
             </main>
 
+            <PartnerStack />
             <Footer />
         </div>
     );

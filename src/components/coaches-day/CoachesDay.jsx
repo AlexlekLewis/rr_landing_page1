@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import PartnerStack from '../power-game/PartnerStack';
 import CoachesDayHero from './CoachesDayHero';
 import CoachesDayDetails from './CoachesDayDetails';
 import CoachesDayForm from './CoachesDayForm';
@@ -25,6 +26,7 @@ const CoachesDay = () => {
                 <CoachesDayDetails />
                 <CoachesDayForm />
             </main>
+            <PartnerStack />
             <Footer />
         </div>
     );

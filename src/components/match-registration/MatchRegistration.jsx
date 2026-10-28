@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import PartnerStack from '../power-game/PartnerStack';
 import { fadeUp, scrollTo, SectionHeading } from '../performance-squads/shared';
 import { ACTIVE_MATCH } from './matchConfig';
 import MatchRegistrationForm from './MatchRegistrationForm';
@@ -317,6 +318,7 @@ const MatchRegistration = ({ match = ACTIVE_MATCH }) => {
                 </div>
             </main>
 
+            <PartnerStack theme="dark" />
             <Footer />
             {!wl && (
                 <MatchPaymentModal

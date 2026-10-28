@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import PartnerStack from './power-game/PartnerStack';
 import usePageAnalytics from '../hooks/usePageAnalytics';
 
 // ─────────────────────────────────────────────────────────────
@@ -98,6 +99,7 @@ const FinishedEventPage = ({ route, navVariant, copy, sessions, email }) => {
                     </p>
                 </section>
             </main>
+            <PartnerStack />
             <Footer />
         </div>
     );

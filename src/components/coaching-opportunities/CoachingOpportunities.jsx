@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import PartnerStack from '../power-game/PartnerStack';
 import HeroSection from './HeroSection';
 import WhereWhenSection from './WhereWhenSection';
 import RolesSection from './RolesSection';
@@ -78,6 +79,7 @@ const CoachingOpportunities = () => {
                     <ApplicationForm />
                 </div>
             </main>
+            <PartnerStack />
             <Footer />
         </div>
     );
