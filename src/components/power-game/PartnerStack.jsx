@@ -30,7 +30,6 @@ const TIERS = [
             { name: 'str8bat', logo: '/assets/powergame/partners/str8bat.png' },
             { name: 'Shah NeuroVision', logo: '/assets/powergame/partners/shah-neurovision.webp', dark: true },
             { name: 'Bowlstrong', logo: '/assets/powergame/partners/bowlstrong.png' },
-            { name: 'Nik Badkundri', logo: '/assets/powergame/partners/nik-badkundri.png', dark: true, big: true, offset: { x: 0, y: -6 } },
             { name: 'Frog Box', logo: '/assets/powergame/partners/frog-box.png', dark: true },
         ],
     },
