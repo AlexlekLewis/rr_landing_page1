@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import PartnerStack from '../power-game/PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import OpenDayHero from './OpenDayHero';
 import OpenDayForm from './OpenDayForm';
@@ -34,6 +35,7 @@ const OpenDay = ({ config }) => {
                 <JuniorRegisterForm cfg={config.junior} />
                 <OpenDayForm config={config} />
             </main>
+            <PartnerStack />
             <Footer />
         </div>
     );

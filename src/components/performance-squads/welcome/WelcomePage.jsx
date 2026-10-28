@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Target, Trophy, Wallet, ShoppingBag, KeyRound, Mail, Sparkles, Users, ShieldCheck, Check, AlertCircle } from 'lucide-react';
 import Navbar from '../../Navbar';
 import Footer from '../../Footer';
+import PartnerStack from '../../power-game/PartnerStack';
 import usePageAnalytics from '../../../hooks/usePageAnalytics';
 import { fadeUp, scrollTo } from '../shared';
 import { WELCOME, PLAYER_IMAGE, HALLA_BOL, getMissingDetails } from './welcomeConfig';
@@ -557,6 +558,7 @@ const WelcomePage = () => {
                 </section>
             </main>
 
+            <PartnerStack theme="dark" />
             <Footer />
         </div>
     );
