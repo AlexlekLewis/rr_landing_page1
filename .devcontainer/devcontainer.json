@@ -1,0 +1,48 @@
+{
+  // One-click dev environment for VS Code (Dev Containers extension) and GitHub Codespaces.
+  // Open the repo in Codespaces, or in VS Code run "Dev Containers: Reopen in Container".
+  "name": "RR Landing Page",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "forwardPorts": [5173, 4173, 3000],
+  "portsAttributes": {
+    "5173": { "label": "Vite dev server", "onAutoForward": "openPreview" },
+    "4173": { "label": "Vite preview (production build)" },
+    "3000": { "label": "vercel dev (site + /api functions)" }
+  },
+  "postCreateCommand": "npm ci && npm install -g vercel",
+  "postAttachCommand": "echo 'Run: npm run dev   ->  site opens on port 5173'",
+  "hostRequirements": { "memory": "4gb" },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "vitest.explorer",
+        "eamodio.gitlens",
+        "github.vscode-pull-request-github",
+        "ms-azuretools.vscode-docker"
+      ],
+      "settings": {
+        "files.eol": "\n",
+        "editor.tabSize": 2,
+        "editor.formatOnSave": false,
+        "eslint.useFlatConfig": true,
+        "files.watcherExclude": {
+          "**/node_modules/**": true,
+          "**/Media/**": true,
+          "**/*.zip": true,
+          "**/*.pdf": true
+        },
+        "search.exclude": {
+          "**/node_modules": true,
+          "**/dist": true,
+          "**/Media": true
+        }
+      }
+    }
+  }
+}

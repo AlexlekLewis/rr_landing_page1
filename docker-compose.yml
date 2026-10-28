@@ -1,0 +1,25 @@
+# docker compose up          -> dev server with live reload on http://localhost:5173
+# docker compose --profile preview up preview
+#                            -> production build served on http://localhost:4173
+services:
+  web:
+    build: .
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      # Keep the container's Linux node_modules separate from the host's.
+      - node_modules:/app/node_modules
+    environment:
+      # File-change events don't always cross the Docker boundary (Windows/WSL); poll instead.
+      CHOKIDAR_USEPOLLING: "true"
+
+  preview:
+    build: .
+    profiles: ["preview"]
+    ports:
+      - "4173:4173"
+    command: sh -c "npm run build && npm run preview -- --host 0.0.0.0"
+
+volumes:
+  node_modules:

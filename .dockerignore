@@ -1,0 +1,20 @@
+# Keep the Docker build context small: the repo holds large brand PDFs, zips and videos
+# that the site build never reads.
+.git
+node_modules
+dist
+.vite
+.DS_Store
+*.zip
+*.pdf
+*.docx
+*.xlsx
+*.mov
+*.mp4
+Media
+Branding Guidlines
+remotion-assets
+repo_clone
+Landing Page 2
+Upates for V2
+Landing page Ui Inspiration.png

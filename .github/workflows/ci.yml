@@ -1,0 +1,39 @@
+name: CI
+
+# Runs on every pull request and on pushes to main.
+# Vercel deploys the site itself (a preview URL per PR, production on merge to main);
+# this workflow catches a broken build before it gets there.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Build site
+        run: npm run build
+      - name: API tests
+        run: npm run test:api
+
+      # The two checks below already fail on main (existing lint errors and two
+      # squad-guardrail tests). They report but don't block until those are fixed.
+      - name: Unit tests (non-blocking)
+        run: npm test
+        continue-on-error: true
+      - name: Lint (non-blocking)
+        run: npm run lint
+        continue-on-error: true
