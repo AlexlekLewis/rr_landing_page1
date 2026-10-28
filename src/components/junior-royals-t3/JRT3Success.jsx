@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { PENDING_KEY } from './JRT3RegistrationForm';
 import { JR_T4, PAY_OPTIONS, GROUPS } from './jrTerm4Data';
+import { useJrContent } from './jrContent';
 
 // /junior-royals/success — where Stripe sends a family after paying for Term 4
 // (each Payment Link's after-payment redirect must be
@@ -17,6 +18,7 @@ const readPending = () => {
 
 const JRT3Success = () => {
     const navigate = useNavigate();
+    useJrContent();
     const [params] = useSearchParams();
     const sessionId = params.get('session_id') || '';
     const paid = sessionId.startsWith('cs_');

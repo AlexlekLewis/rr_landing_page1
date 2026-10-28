@@ -114,6 +114,20 @@ export const ROYALS_WAY = {
 
 export const JR_T4 = {
     term: 'Term 4, 2026',
+    // Page wording that used to sit in the JSX, here so the admin Junior Royals Editor
+    // (admin/JuniorRoyalsEditor.jsx, jrContent.js) can change it.
+    heroEyebrow: 'Rajasthan Royals Academy · Melbourne',
+    heroTitle: 'JUNIOR ROYALS',
+    heroTitleAccent: 'TERM 4, 2026',
+    heroSub: '8 weeks · Mondays at Mickleham from 26 October · Wednesdays at Cranbourne North from 28 October',
+    heroLead: 'One hour of cricket coaching each week, in a small group of players your own age, so your player is ready for their club season.',
+    overviewEyebrow: 'Term 4 · 2026',
+    overviewTitle: 'About the Program',
+    overviewTail: 'Term 4 runs right through the start of the junior club season, so the skills your player works on here each week are the ones they take into their Saturday games.',
+    groupPoints: {
+        '5pm': ['Build on foundation cricket skills', 'Incorporate game sense activities', 'Prepare players to start playing junior cricket'],
+        '6pm': ['Skill-focused sessions', 'Use of bowling machine', 'Secondary training for those already playing cricket'],
+    },
     weeks: 8,
     // The whole term, both centres: first Mickleham Monday to last Cranbourne Wednesday.
     datesLong: '26 October – 16 December',

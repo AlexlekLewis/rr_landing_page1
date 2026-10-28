@@ -9,13 +9,13 @@ const groups = [
         ages: '7–9 years',
         time: GROUPS[0].time,
         color: 'from-rr-blue to-rr-pink',
-        points: ['Build on foundation cricket skills', 'Incorporate game sense activities', 'Prepare players to start playing junior cricket'],
+        key: GROUPS[0].key,
     },
     {
         ages: '10–12 years',
         time: GROUPS[1].time,
         color: 'from-rr-pink to-rr-blue',
-        points: ['Skill-focused sessions', 'Use of bowling machine', 'Secondary training for those already playing cricket'],
+        key: GROUPS[1].key,
     },
 ];
 
@@ -24,12 +24,12 @@ const JRT3Overview = () => (
         <div className="max-w-6xl mx-auto px-6">
             <div className="text-center mb-16">
                 <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                    className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Term 4 · 2026</motion.p>
+                    className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">{JR_T4.overviewEyebrow}</motion.p>
                 <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
-                    className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight mb-6">About the Program</motion.h2>
+                    className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight mb-6">{JR_T4.overviewTitle}</motion.h2>
                 <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
                     className="text-lg text-rr-charcoal font-medium max-w-3xl mx-auto leading-relaxed">
-                    {ROYALS_WAY.about} Term 4 runs right through the start of the junior club season, so the skills your player works on here each week are the ones they take into their Saturday games.
+                    {ROYALS_WAY.about} {JR_T4.overviewTail}
                 </motion.p>
             </div>
 
@@ -46,7 +46,7 @@ const JRT3Overview = () => (
                             <h3 className="text-2xl font-black text-white uppercase tracking-tight">{group.ages}</h3>
                             <p className="text-rr-pink font-black text-sm uppercase tracking-widest mt-1 mb-5">{group.time}</p>
                             <ul className="space-y-2">
-                                {group.points.map((point, j) => (
+                                {JR_T4.groupPoints[group.key].map((point, j) => (
                                     <li key={j} className="flex items-start gap-3">
                                         <span className="mt-0.5 w-4 h-4 rounded-full bg-gradient-to-br from-rr-pink to-rr-blue flex items-center justify-center shrink-0">
                                             <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

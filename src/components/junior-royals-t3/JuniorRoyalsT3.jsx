@@ -10,11 +10,13 @@ import JRT3Locations from './JRT3Locations';
 import JRT3RegistrationForm from './JRT3RegistrationForm';
 import JRT3StickyCTA from './JRT3StickyCTA';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
+import { useJrContent } from './jrContent';
 
 const SECTIONS = ['hero', 'program-overview', 'royals-way', 'coaches', 'app', 'locations', 'registration-form'];
 
 const JuniorRoyalsT3 = () => {
     usePageAnalytics('/junior-royals', { sections: SECTIONS });
+    useJrContent(); // wording edited in the admin Junior Royals Editor
     useEffect(() => { window.scrollTo(0, 0); }, []);
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
