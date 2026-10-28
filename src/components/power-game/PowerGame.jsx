@@ -512,8 +512,7 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
     </div>
     <div class="narrow">
       <div style="text-align:center; font-size:10.5px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:var(--slate); margin-bottom:12px;">Venue Partners</div>
-      <div class="grid g3" style="margin-bottom:22px;">
-        <div class="card" style="height:88px; display:flex; align-items:center; justify-content:center; padding:14px;"><img src="/assets/powergame/partners/the-netz.svg" alt="The Netz" style="max-height:48px; max-width:88%; object-fit:contain;"></div>
+      <div class="grid g2" style="margin-bottom:22px;">
         <div class="card" style="height:88px; display:flex; align-items:center; justify-content:center; padding:14px;"><img src="/assets/powergame/partners/elite-cricket-centre.webp" alt="Elite Cricket Centre" style="max-height:56px; max-width:88%; object-fit:contain;"></div>
         <div class="card" style="height:88px; display:flex; align-items:center; justify-content:center; padding:14px;"><img src="/assets/powergame/partners/mickleham-isc.png" alt="Mickleham Indoor Sports Centre" style="max-height:56px; max-width:88%; object-fit:contain;"></div>
       </div>
