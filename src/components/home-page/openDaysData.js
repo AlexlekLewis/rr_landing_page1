@@ -34,7 +34,21 @@
 import { ANNOUNCEMENT as LP_JR_DAY_ANNOUNCEMENT, lpJrDayOpen } from '../lower-plenty-junior-royals-day/lpJrDayPromo';
 import { ANNOUNCEMENT as POWER_LEAGUE_ANNOUNCEMENT, powerLeagueOpen } from '../power-league/plPromo';
 
+// Power League matches, Sun 15 Nov 2026 (Andy, 28 Oct 2026: "add event as Power
+// League matches that are now on November 15" — a test). TICKER ONLY: no
+// nomination form and no page for this date yet (/power-league still describes
+// 25 Oct), so it carries no link and the What's On pop-up skips it
+// (tickerOnly). It drops out by itself after the day. REVIEW 16 NOV 2026: remove it.
+const POWER_LEAGUE_NOV_ENDS = Date.parse('2026-11-16T00:00:00+11:00');
+const POWER_LEAGUE_NOV = {
+    key: 'power-league-15-nov',
+    name: 'Power League',
+    tag: 'Performance Squad T20 matches · Sun 15 Nov',
+    tickerOnly: true,
+};
+
 export const ANNOUNCEMENTS = [
+    ...(Date.now() < POWER_LEAGUE_NOV_ENDS ? [POWER_LEAGUE_NOV] : []),
     // Power League open invitation, Sun 25 Oct 2026 (Alex, 19 Oct 2026: "make sure
     // it's on the main modal"). Nearest real deadline (Tue 20 Oct, 9pm) and it drops
     // out by itself at that moment (powerLeagueOpen). REVIEW 26 OCT 2026: remove it
