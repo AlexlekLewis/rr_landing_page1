@@ -47,7 +47,7 @@ const PLHero = () => {
                 </p>
                 <p className="text-base md:text-lg text-white/85 font-semibold leading-relaxed max-w-2xl mb-4">
                     An open invitation for players aged 10 to 25 from any club. Montmorency Park, Melbourne.
-                    Games start at 12pm or 3pm, depending on the side the player is picked for.
+                    Games are in the afternoon, from 1pm. The start time depends on the side the player is picked for.
                 </p>
                 <p className="text-base md:text-lg text-white/75 font-medium leading-relaxed max-w-2xl mb-8">
                     Nominate by <strong className="text-white">{MATCH.closes}</strong>. Picked players

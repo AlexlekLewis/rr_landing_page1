@@ -32,6 +32,12 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
+  <!-- Junior Royals are coming to Lower Plenty, now Sun 15 Nov 2026 (new date after the 25 Oct washout). REVIEW 16 NOV 2026: remove. -->
+  <url>
+    <loc>https://rramelbourne.com/lower-plenty-junior-royals-day</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://rramelbourne.com/mickleham</loc>
     <changefreq>monthly</changefreq>
