@@ -8,6 +8,8 @@
 // Canonical URLs only: use /mickleham (not the /private-coaching 308) and /elite-royals
 // as the primary for the shared Elite/PowerGame page (/PGP2026 canonicalises to it).
 
+import { COACH_PROFILES } from '../components/coach-profile/coachProfiles.js';
+
 export const SITE = {
   name: 'Rajasthan Royals Academy Melbourne',
   baseUrl: 'https://rramelbourne.com',
@@ -268,3 +270,15 @@ export const PAGE_SEO = {
       'The terms and conditions for using the Rajasthan Royals Academy Melbourne website and programs.',
   },
 };
+
+// Per-coach pages (/coaches/<slug>). Titles and descriptions live with each
+// coach's content in coachProfiles.js. The pages themselves stay hidden until
+// VITE_COACH_PAGES=on, so these entries only take effect once they're switched on.
+for (const p of Object.values(COACH_PROFILES)) {
+  PAGE_SEO[`/coaches/${p.slug}`] = {
+    title: p.seo.title,
+    description: p.seo.description,
+    ...(p.photo ? { ogImage: p.photo } : {}),
+  };
+}
+
