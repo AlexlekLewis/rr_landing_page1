@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import RouteSeo from './seo/RouteSeo';
 import NotFound from './components/NotFound';
 import PrivacyPolicy from './components/PrivacyPolicy';
@@ -39,9 +39,12 @@ import ProgramFeedback from './components/program-feedback/ProgramFeedback';
 import SpinClub from './components/spin-club/SpinClub';
 import PowerLeague from './components/power-league/PowerLeague';
 import PostHogPageviewTracker from './components/PostHogPageviewTracker';
+import PrivateBookingEntry from './components/booking/PrivateBookingEntry';
+import { isBookingFlowPath } from './components/booking/booking-privacy';
 
 // DNA Profile — lazy-loaded so it never impacts landing page bundle size
 const DNAProfileRoot = React.lazy(() => import('./DNAProfileApp/App.jsx'));
+const BookPrivateCoaching = React.lazy(() => import('./components/booking/BookPage.jsx'));
 
 // Power Game apply funnel — lazy-loaded (qualify → place → pay registration)
 const PowerGameApply = React.lazy(() => import('./components/power-game/apply/ApplyFlow'));
@@ -145,7 +148,7 @@ class ChunkReloadBoundary extends React.Component {
           sessionStorage.setItem('chunk_reloaded', '1');
           window.location.reload();
         }
-      } catch (_) { /* sessionStorage blocked — fall through to the fallback UI */ }
+      } catch { /* sessionStorage blocked — fall through to the fallback UI */ }
     }
   }
   render() {
@@ -156,7 +159,7 @@ class ChunkReloadBoundary extends React.Component {
             <p style={{ fontWeight: 800, fontSize: 18, marginBottom: 4 }}>Sorry — something went wrong loading the page.</p>
             <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, marginBottom: 16 }}>A quick refresh usually fixes it.</p>
             <button
-              onClick={() => { try { sessionStorage.removeItem('chunk_reloaded'); } catch (_) { /* ignore */ } window.location.reload(); }}
+              onClick={() => { try { sessionStorage.removeItem('chunk_reloaded'); } catch { /* ignore */ } window.location.reload(); }}
               style={{ background: '#E50695', color: '#fff', border: 'none', borderRadius: 9999, padding: '12px 28px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer' }}
             >
               Reload
@@ -170,6 +173,7 @@ class ChunkReloadBoundary extends React.Component {
 }
 
 function App() {
+  const { pathname } = useLocation();
   return (
     <div className="font-sans antialiased text-rr-dark bg-white selection:bg-rr-pink selection:text-white">
       <PostHogPageviewTracker />
@@ -221,19 +225,20 @@ function App() {
 
         {/* The Coaches — leadership tiers, coaching mission + full bios. Info page, no form. */}
         <Route path="/coaches" element={<CoachesPage />} />
-        {/* Private Coaching at Mickleham. EOI form → Head Coach assigns a coach.
-            Writes to private_coaching_eoi (anon insert only). Canonical URL is
+        <Route path="/book" element={<PrivateBookingEntry><React.Suspense fallback={<div className="min-h-screen bg-white p-8" role="status">Loading private coaching…</div>}><BookPrivateCoaching /></React.Suspense></PrivateBookingEntry>} />
+        {/* Private Coaching at Mickleham. Enquiries go directly to the portal's
+            public-enquiry endpoint. Canonical URL is
             /mickleham (per Alex); /private-coaching 308s in vercel.json, with a
             client redirect here for any in-app navigations. */}
-        <Route path="/mickleham" element={<PrivateCoaching />} />
-        <Route path="/Mickleham" element={<PrivateCoaching />} />
+        <Route path="/mickleham" element={<PrivateBookingEntry><PrivateCoaching /></PrivateBookingEntry>} />
+        <Route path="/Mickleham" element={<PrivateBookingEntry><PrivateCoaching /></PrivateBookingEntry>} />
         <Route path="/private-coaching" element={<Navigate to="/mickleham" replace />} />
         {/* Mickleham 30-Day Launch Special — campaign page for the front-desk flyer
             QR code + Instagram link. /Mickleham_Launch is the published short link;
             /launch kept as a fallback so nothing already shared breaks. */}
-        <Route path="/mickleham-launch" element={<MicklehamLaunch />} />
-        <Route path="/Mickleham_Launch" element={<MicklehamLaunch />} />
-        <Route path="/launch" element={<MicklehamLaunch />} />
+        <Route path="/mickleham-launch" element={<PrivateBookingEntry><MicklehamLaunch /></PrivateBookingEntry>} />
+        <Route path="/Mickleham_Launch" element={<PrivateBookingEntry><MicklehamLaunch /></PrivateBookingEntry>} />
+        <Route path="/launch" element={<PrivateBookingEntry><MicklehamLaunch /></PrivateBookingEntry>} />
         {/* An Afternoon for Coaches — free coaches afternoon, junior & senior (Sun 26 Jul 2026).
             Standalone registration, writes to coaches_day_registrations. Share the link directly. */}
         <Route path="/coaches-day" element={<CoachesDay />} />
@@ -377,7 +382,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       </ChunkReloadBoundary>
-      <TextUsButton />
+      {!isBookingFlowPath(pathname) ? <TextUsButton /> : null}
     </div>
   );
 }

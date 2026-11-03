@@ -6,16 +6,12 @@ import PCAlex from './PCAlex';
 import PCHowItWorks from './PCHowItWorks';
 import PCPricing from './PCPricing';
 import PCForm from './PCForm';
-import usePageAnalytics from '../../hooks/usePageAnalytics';
-
-const SECTIONS = ['hero', 'meet', 'how-it-works', 'pricing', 'eoi-form'];
 
 // Anchored sections sit under a fixed navbar — offset them so a jumped-to
 // heading lands below the bar instead of behind it.
 const ANCHOR = 'scroll-mt-28 md:scroll-mt-32';
 
 const PrivateCoaching = () => {
-    usePageAnalytics('/mickleham', { sections: SECTIONS });
 
     useEffect(() => {
         window.scrollTo(0, 0);

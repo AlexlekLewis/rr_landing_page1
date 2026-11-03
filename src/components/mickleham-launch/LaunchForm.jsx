@@ -1,103 +1,57 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { supabase } from '../../lib/supabase';
+import React, { useEffect, useRef, useState } from 'react';
+import { motion as Motion } from 'framer-motion';
 import { CENTRE, OFFER, endDateLabel } from './launchConfig';
+import { createPublicClient, publicError } from '../booking/public-client';
+import { clearDraft, enquiryDraftKey, readAttempt, readDraft, writeAttempt, writeDraft } from '../booking/private-draft';
+import { emptyDraft } from '../booking/booking-model';
+import Turnstile from '../booking/Turnstile';
 
 const DAYS = [
     { value: 'tuesday', label: 'Tuesday' },
     { value: 'friday', label: 'Friday' },
     { value: 'either', label: 'Either — I’m flexible' },
 ];
-
-const getUTMParams = () => {
-    const p = new URLSearchParams(window.location.search);
-    return {
-        utm_source: p.get('utm_source') || null,
-        utm_medium: p.get('utm_medium') || null,
-        utm_campaign: p.get('utm_campaign') || null,
-    };
-};
-
-const inputCls =
-    'w-full bg-white/5 border border-white/15 rounded-xl px-4 py-3.5 text-base text-white placeholder-white/25 focus:outline-none focus:border-rr-pink/60 focus:bg-white/8 transition-colors';
+const inputCls = 'w-full bg-white/5 border border-white/15 rounded-xl px-4 py-3.5 text-base text-white placeholder-white/25 focus:outline-none focus:border-rr-pink/60 focus:bg-white/8 transition-colors';
 const selectCls = `${inputCls} appearance-none [&>option]:text-rr-dark`;
 const labelCls = 'block text-xs font-bold text-white/70 uppercase tracking-widest mb-2';
-
-const Field = ({ label, required = true, children }) => (
-    <div>
-        <label className={labelCls}>
-            {label} {required && <span className="text-rr-pink">*</span>}
-        </label>
-        {children}
-    </div>
-);
-
+const Field = ({ label, required = true, children }) => <label className={labelCls}>{label} {required && <span className="text-rr-pink">*</span>}<span className="mt-2 block normal-case">{children}</span></label>;
 const EMPTY = { player_name: '', age: '', parent_name: '', email: '', phone: '', preferred_day: '' };
 
 const LaunchForm = () => {
-    const [form, setForm] = useState(EMPTY);
-    const [submitting, setSubmitting] = useState(false);
-    const [submitted, setSubmitted] = useState(false);
-    const [error, setError] = useState('');
-
-    const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
-    const ageNum = parseInt(form.age, 10);
-    const isMinor = !Number.isNaN(ageNum) && ageNum < 18;
-
+    const [sourcePage] = useState(() => ['/mickleham-launch', '/Mickleham_Launch', '/launch'].includes(globalThis.location?.pathname) ? globalThis.location.pathname : '/mickleham-launch');
+    const key = enquiryDraftKey(sourcePage), scope = `enquiry:${sourcePage}`;
+    const [form, setForm] = useState(() => { const saved = readDraft(undefined, Date.now(), key); return saved ? { ...EMPTY, player_name: saved.players[0].name, age: saved.players[0].age, parent_name: saved.parent.name, email: saved.parent.email, phone: saved.parent.mobile, preferred_day: DAYS.some(d => saved.note === 'Launch preferred day: ' + d.value) ? saved.note.replace('Launch preferred day: ', '') : '' } : EMPTY; });
+    const [submitting, setSubmitting] = useState(false), [submitted, setSubmitted] = useState(false), [error, setError] = useState('');
+    const [receipt, setReceipt] = useState(null), [token, setToken] = useState(''), [reset, setReset] = useState(0);
+    const [initialAttempt] = useState(() => readAttempt(scope));
+    const attempt = useRef(initialAttempt), active = useRef(true);
+    useEffect(() => { active.current = true; return () => { active.current = false; }; }, []);
+    useEffect(() => { if (!submitted) writeDraft({ ...emptyDraft(), players: [{ name: form.player_name, age: form.age }], parent: { name: form.parent_name, email: form.email, mobile: form.phone }, note: 'Launch preferred day: ' + form.preferred_day }, undefined, Date.now(), key); }, [form, key, submitted]);
+    const set = k => e => setForm(f => ({ ...f, [k]: e.target.value }));
+    const ageNum = Number(form.age), isMinor = form.age !== '' && ageNum < 18;
     const validate = () => {
-        if (!form.player_name.trim()) return 'Please enter the player’s name.';
-        if (Number.isNaN(ageNum) || ageNum < 4 || ageNum > 99) return 'Please enter a valid age.';
+        if (!form.player_name.trim() || form.player_name.length > 120) return 'Please enter the player’s name.';
+        if (!/^\d{1,3}$/.test(form.age) || ageNum > 120) return 'Please enter a valid age.';
         if (isMinor && !form.parent_name.trim()) return 'Please add a parent or guardian name for players under 18.';
         if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim())) return 'Please enter a valid email address.';
-        if (form.phone.replace(/\D/g, '').length < 8) return 'Please enter a valid phone number.';
-        if (!form.preferred_day) return 'Please pick a night — Tuesday, Friday, or either.';
+        if (!/^[+\d ()-]{7,30}$/.test(form.phone) || form.phone.replace(/\D/g, '').length < 7) return 'Please enter a valid phone number.';
+        if (!DAYS.some(d => d.value === form.preferred_day)) return 'Please pick a night — Tuesday, Friday, or either.';
         return '';
     };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const problem = validate();
-        if (problem) { setError(problem); return; }
-        setError('');
-        setSubmitting(true);
-
-        const utm = getUTMParams();
-        const row = {
-            centre: 'mickleham',
-            player_name: form.player_name.trim(),
-            age: ageNum,
-            parent_name: form.parent_name.trim() || null,
-            email: form.email.trim().toLowerCase(),
-            phone: form.phone.trim(),
-            preferred_day: form.preferred_day,
-            notes: `[30-DAY LAUNCH SPECIAL — ${OFFER.price} consultation]`,
-            source: 'mickleham-launch',
-            page_referrer: document.referrer || null,
-            ...utm,
-        };
-
-        const { error: insertError } = await supabase.from('private_coaching_eoi').insert([row]);
-        if (insertError) {
-            setSubmitting(false);
-            setError('Something went wrong sending that through. Please try again, or text us using the button in the corner.');
-            return;
-        }
-
+    const handleSubmit = async e => {
+        e.preventDefault(); if (submitting) return;
+        const problem = validate(); if (problem) { setError(problem); return; }
+        if (new FormData(e.currentTarget).get('company_website')) { setError('Check the form and try again.'); return; }
+        if (!token) { setError('Complete the security check before sending.'); return; }
+        const intent = { centre: 'mickleham', player_name: form.player_name.trim(), player_age: ageNum, parent_name: form.parent_name.trim() || null, email: form.email.trim().toLowerCase(), mobile: form.phone.trim(), note: `[30-DAY LAUNCH SPECIAL — ${OFFER.price} consultation enquiry] Preferred night: ${DAYS.find(d => d.value === form.preferred_day).label}.`, source_page: sourcePage };
+        const payload = JSON.stringify(intent);
+        if (attempt.current?.payload !== payload) attempt.current = { nonce: crypto.randomUUID(), payload };
+        writeAttempt(scope, attempt.current); setError(''); setSubmitting(true);
         try {
-            await supabase.from('applications').insert([{
-                first_name: form.player_name.trim().split(' ')[0],
-                last_name: form.player_name.trim().split(' ').slice(1).join(' '),
-                email: form.email.trim().toLowerCase(),
-                phone: form.phone.trim(),
-                source: 'mickleham-launch',
-                program_type: 'Private Coaching — Mickleham Launch Special',
-                page_referrer: document.referrer || null,
-                ...utm,
-            }]);
-        } catch (_) { /* non-blocking */ }
-
-        setSubmitting(false);
-        setSubmitted(true);
+            const saved = await createPublicClient().enquiry(intent, token, attempt.current.nonce);
+            if (active.current) { setReceipt(saved); clearDraft(undefined, key); writeAttempt(scope, null); setSubmitted(true); }
+        } catch (problem) { if (active.current) { setError(publicError(problem)); setToken(''); setReset(n => n + 1); } }
+        finally { if (active.current) setSubmitting(false); }
     };
 
     if (submitted) {
@@ -114,14 +68,12 @@ const LaunchForm = () => {
                         You’re On The List
                     </h2>
                     <p className="text-white/80 font-medium leading-relaxed mb-4">
-                        Thanks {form.player_name.split(' ')[0]}. You’re in with{' '}
-                        <b className="text-white">Alex Lewis, Academy Head Coach</b>. We’ll call you
-                        in the next few days to pick a time.
+                        Thanks {form.player_name.split(' ')[0]}. Your enquiry is with the Academy.
+                        We’ll call you <b className="text-white">{receipt.call_by_plain}</b>.
                     </p>
                     <p className="text-white/60 font-medium leading-relaxed">
-                        Your first session with Alex is <b className="text-white">{OFFER.price}</b>{' '}
-                        (normally {OFFER.wasPrice}), at {CENTRE.name}. You only do this once — it’s
-                        where your coach, your night and your plan get sorted.
+                        You’re asking about the <b className="text-white">{OFFER.price}</b> consultation offer
+                        at {CENTRE.name}. This is an enquiry, not a booking. No payment has been taken.
                     </p>
                 </div>
             </section>
@@ -144,7 +96,7 @@ const LaunchForm = () => {
                     </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+                <form onSubmit={handleSubmit} className="space-y-5 ph-no-capture" noValidate>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <Field label="Player’s Name">
                             <input className={inputCls} value={form.player_name} onChange={set('player_name')} placeholder="e.g. Arjun Sharma" autoComplete="name" />
@@ -174,19 +126,21 @@ const LaunchForm = () => {
                         </select>
                     </Field>
 
+                    <label className="booking-trap" aria-hidden="true">Company website<input name="company_website" tabIndex={-1} autoComplete="off" /></label>
+                    <Turnstile onToken={setToken} reset={reset} />
                     {error && (
-                        <motion.p
+                        <Motion.p
                             initial={{ opacity: 0, y: -6 }}
                             animate={{ opacity: 1, y: 0 }}
                             className="text-sm font-bold text-rr-pink bg-rr-pink/10 border border-rr-pink/30 rounded-xl px-4 py-3"
                         >
                             {error}
-                        </motion.p>
+                        </Motion.p>
                     )}
 
                     <button
                         type="submit"
-                        disabled={submitting}
+                        disabled={submitting || !token}
                         className="w-full group bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-base px-8 py-5 rounded-full transition-all duration-300 hover:shadow-[0_0_32px_rgba(229,6,149,0.5)] flex items-center gap-3 justify-center"
                     >
                         {submitting ? 'Sending…' : `Claim My ${OFFER.price} Spot`}

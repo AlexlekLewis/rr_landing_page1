@@ -31,6 +31,11 @@ const ELITE = {
 };
 
 export const PAGE_SEO = {
+  '/book': {
+    title: 'Request Private Cricket Coaching | RRA Melbourne',
+    description: 'Find a coach and request private or small-group cricket coaching at Mickleham or Cranbourne North. The Academy confirms with the venue before you are booked.',
+    noindex: true,
+  },
   // Spin Club — ANNOUNCED 26 Sep 2026 (Alex): it is in the nav, the home-page
   // modal and the ticker, so the noindex came off and the route went into the
   // sitemap. A page we promote to every visitor should not be hidden from search.

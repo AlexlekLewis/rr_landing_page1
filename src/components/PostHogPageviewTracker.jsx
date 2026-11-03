@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { usePostHog } from 'posthog-js/react'
+import { isPrivateBookingPath } from './booking/booking-privacy'
 
 /**
  * Tracks SPA route changes in PostHog.
@@ -12,7 +13,7 @@ export default function PostHogPageviewTracker() {
   const posthog = usePostHog()
 
   useEffect(() => {
-    if (posthog) {
+    if (posthog && !isPrivateBookingPath(location.pathname)) {
       posthog.capture('$pageview', {
         $current_url: window.location.href,
       })

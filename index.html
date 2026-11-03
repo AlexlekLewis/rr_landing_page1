@@ -13,6 +13,9 @@
 
   <!-- Meta Pixel Code -->
   <script>
+    var privateBookingPath = window.location.pathname;
+    try { privateBookingPath = decodeURIComponent(privateBookingPath); } catch (_) {}
+    if (!/^\/(?:book|booking|mickleham|mickleham-launch|mickleham_launch|launch|private-coaching)(?:\/|$)/i.test(privateBookingPath)) {
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -23,6 +26,12 @@
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '3125499870991789');
     fbq('track', 'PageView');
+    } else {
+      var privateReferrerPolicy = document.createElement('meta');
+      privateReferrerPolicy.name = 'referrer';
+      privateReferrerPolicy.content = 'no-referrer';
+      document.head.appendChild(privateReferrerPolicy);
+    }
   </script>
   <!-- End Meta Pixel Code -->
 </head>

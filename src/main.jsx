@@ -5,18 +5,20 @@ import posthog from 'posthog-js'
 import { PostHogProvider } from 'posthog-js/react'
 import './index.css'
 import App from './App.jsx'
+import { isPrivateBookingPath, privateBookingAnalytics } from './components/booking/booking-privacy'
 
 // Initialize PostHog
 const posthogKey = import.meta.env.VITE_PUBLIC_POSTHOG_KEY
 const posthogHost = import.meta.env.VITE_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com'
 
-if (posthogKey) {
+if (posthogKey && !isPrivateBookingPath(window.location.pathname)) {
   posthog.init(posthogKey, {
     api_host: posthogHost,
     person_profiles: 'anonymous',
     capture_pageview: false,
     capture_pageleave: true,
     autocapture: true,
+    before_send: privateBookingAnalytics,
   })
 }
 
