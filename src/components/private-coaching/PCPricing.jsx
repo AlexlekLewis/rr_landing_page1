@@ -4,11 +4,10 @@ import { PRICING, BOOKING_RULES, LAUNCH_OFFER } from './pcOptions';
 
 const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
-// Laid out in even rows so no row is left with an orphan card: the assessment
-// runs full width because everyone starts there, then three per-session rates,
-// then the two weekly packages. Grouping also matches how a parent decides.
+// Laid out in even rows so no row is left with an orphan card: three per-session
+// rates, then the two weekly packages. Grouping also matches how a parent decides.
+// (The Head Coach assessment card was removed 3 Nov 2026.)
 const byKey = (k) => PRICING.find((p) => p.key === k);
-const FEATURED = byKey('consult');
 const PER_SESSION = ['academy', 'leadership', 'group'].map(byKey).filter(Boolean);
 const PACKAGES = ['term', 'season'].map(byKey).filter(Boolean);
 
@@ -73,21 +72,13 @@ const PCPricing = () => {
                     </h2>
                     <p className="text-rr-charcoal font-medium leading-relaxed">
                         All prices include GST and cover the coach and the lane — there is nothing to
-                        pay at the centre on the night. Every player starts with the assessment session
-                        at the top of this list; everything below it is what you can book afterwards,
-                        once Alex has assigned your coach.
+                        pay at the centre on the night. Everything below is what you can book once
+                        Alex has assigned your coach.
                     </p>
                 </motion.div>
 
-                {FEATURED && (
-                    <div className="mb-12">
-                        <RowLabel>Start here — every player</RowLabel>
-                        <Card p={FEATURED} featured />
-                    </div>
-                )}
-
                 <div className="mb-12">
-                    <RowLabel>Then, per session</RowLabel>
+                    <RowLabel>Per session</RowLabel>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                         {PER_SESSION.map((p, i) => (
                             <Card key={p.key} p={p} delay={i * 0.05} />
@@ -104,7 +95,7 @@ const PCPricing = () => {
                     </div>
                 </div>
 
-                {/* Launch offer on groups — separate from the $50 assessment offer. */}
+                {/* Launch offer on groups. */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -149,7 +140,7 @@ const PCPricing = () => {
                 >
                     <p className="text-rr-charcoal font-medium mb-6 max-w-2xl mx-auto">
                         Nothing is paid online. Register your interest, our administration team will
-                        organise your time, and you decide on your block after the assessment session.
+                        organise your time, and you choose your block once your coach is assigned.
                     </p>
                     <button
                         onClick={() => scrollTo('eoi-form')}

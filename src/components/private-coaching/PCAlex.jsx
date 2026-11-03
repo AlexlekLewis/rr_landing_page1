@@ -4,8 +4,8 @@ import { CENTRE, ALEX_RECORD, ALEX_ACCREDITATION, ALEX_PHILOSOPHY } from './pcOp
 
 const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
-// The step-by-step lives in PCHowItWorks — this section is who Alex is and what
-// the assessment costs, then it hands off to that section.
+// The step-by-step lives in PCHowItWorks — this section is who Alex is, then it
+// hands off to that section. (The Head Coach assessment was removed 3 Nov 2026.)
 
 const PCAlex = () => {
     return (
@@ -45,14 +45,14 @@ const PCAlex = () => {
                             Director of Cricket · Academy Head Coach — Mickleham
                         </p>
                         <p className="text-rr-charcoal font-medium leading-relaxed mb-4">
-                            Every private coaching journey at Mickleham starts with Alex. Register your
-                            interest below and our <b className="text-rr-dark">administration team will be in
-                            touch in the coming days</b> to organise a time for your first session with him.
+                            Alex matches every player who registers for private coaching at Mickleham
+                            with their coach. Register your interest below and our <b className="text-rr-dark">administration
+                            team will be in touch in the coming days</b> to organise your first session.
                         </p>
                         <p className="text-rr-charcoal font-medium leading-relaxed mb-4">
-                            That session is where everything gets decided — which coach suits your
-                            game, which nights work for your family, and what the journey looks like
-                            from there.
+                            When they call, they will ask about the player’s game, what they want to
+                            work on and which night suits your family — that is what Alex uses to
+                            choose the right coach.
                         </p>
                         <p className="text-rr-charcoal font-medium leading-relaxed mb-8">
                             Alex has spent more than twenty years coaching juniors through Melbourne’s
@@ -61,23 +61,6 @@ const PCAlex = () => {
                             Victoria, and built and ran his own junior academy for over a decade. His
                             full record is below.
                         </p>
-
-                        {/* The one number on the page */}
-                        <div className="p-[2px] rounded-2xl bg-gradient-to-br from-rr-pink via-rr-pink/80 to-rr-blue mb-8">
-                            <div className="bg-rr-dark rounded-[14px] px-6 py-5 flex flex-col sm:flex-row sm:items-center gap-5">
-                                <div className="shrink-0">
-                                    <span className="inline-block bg-rr-pink text-white text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full mb-2">Launch Offer</span>
-                                    <div className="flex items-end gap-2.5">
-                                        <p className="text-4xl font-black text-white tracking-tight leading-none">$50</p>
-                                        <p className="text-xl font-bold text-white/40 line-through leading-none mb-0.5">$160</p>
-                                    </div>
-                                </div>
-                                <p className="text-white/85 text-sm font-semibold leading-relaxed">
-                                    Your first session, one-on-one with the Head Coach — the player
-                                    assessed, their coach assigned, their nights locked in.
-                                </p>
-                            </div>
-                        </div>
 
                         <div className="flex flex-col sm:flex-row gap-4">
                             <button

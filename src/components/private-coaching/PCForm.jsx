@@ -120,7 +120,7 @@ const PCForm = () => {
                         </svg>
                     </span>
                     <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-none mb-6">
-                        You're In
+                        Interest Registered
                     </h2>
                     <p className="text-white/80 font-medium leading-relaxed mb-4">
                         Thanks {form.player_name.split(' ')[0]} — your inquiry has gone through to{' '}
@@ -128,9 +128,9 @@ const PCForm = () => {
                         team will contact you in the coming days to organise a time.
                     </p>
                     <p className="text-white/60 font-medium leading-relaxed">
-                        That first session is your <b className="text-white">$50 assessment</b>{' '}
-                        (normally $160) — an hour one-on-one with the Head Coach, where your coach,
-                        your nights and your plan all get locked in.
+                        When they call, they will ask about the player and which night suits you,
+                        and Alex will match the player with their coach. No payment has been taken
+                        and no session is booked yet.
                     </p>
                 </div>
             </section>
@@ -150,8 +150,7 @@ const PCForm = () => {
                     </h2>
                     <p className="text-white/70 font-medium max-w-xl mx-auto">
                         Two minutes, no payment. Our administration team will contact you in the
-                        coming days to organise a time for your $50 assessment session with Head
-                        Coach Alex Lewis.
+                        coming days to organise your first session.
                     </p>
                 </div>
 
@@ -218,8 +217,8 @@ const PCForm = () => {
                     </button>
 
                     <p className="text-center text-white/40 text-xs font-medium leading-relaxed">
-                        No payment now. The first step is a $50 assessment session (normally $160)
-                        with the Head Coach at {CENTRE.name} — everything else gets decided there.
+                        No payment now. Our administration team will call you, Alex will match the
+                        player with their coach at {CENTRE.name}, and you choose your block from there.
                     </p>
                 </form>
             </div>

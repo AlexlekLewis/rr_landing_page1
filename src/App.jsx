@@ -33,7 +33,6 @@ import InductionPage from './components/induction/InductionPage';
 import CoachesDay from './components/coaches-day/CoachesDay';
 import CoachesPage from './components/coaches/CoachesPage';
 import PrivateCoaching from './components/private-coaching/PrivateCoaching';
-import MicklehamLaunch from './components/mickleham-launch/MicklehamLaunch';
 import Reviews from './components/reviews/Reviews';
 import ProgramFeedback from './components/program-feedback/ProgramFeedback';
 import SpinClub from './components/spin-club/SpinClub';
@@ -228,12 +227,12 @@ function App() {
         <Route path="/mickleham" element={<PrivateCoaching />} />
         <Route path="/Mickleham" element={<PrivateCoaching />} />
         <Route path="/private-coaching" element={<Navigate to="/mickleham" replace />} />
-        {/* Mickleham 30-Day Launch Special — campaign page for the front-desk flyer
-            QR code + Instagram link. /Mickleham_Launch is the published short link;
-            /launch kept as a fallback so nothing already shared breaks. */}
-        <Route path="/mickleham-launch" element={<MicklehamLaunch />} />
-        <Route path="/Mickleham_Launch" element={<MicklehamLaunch />} />
-        <Route path="/launch" element={<MicklehamLaunch />} />
+        {/* The Mickleham 30-Day Launch Special ($50 Head Coach consultation) was
+            removed 3 Nov 2026 with the Head Coach assessment. Its links (flyer QR,
+            Instagram) now send people to /mickleham so nothing already shared breaks. */}
+        <Route path="/mickleham-launch" element={<Navigate to="/mickleham" replace />} />
+        <Route path="/Mickleham_Launch" element={<Navigate to="/mickleham" replace />} />
+        <Route path="/launch" element={<Navigate to="/mickleham" replace />} />
         {/* An Afternoon for Coaches — free coaches afternoon, junior & senior (Sun 26 Jul 2026).
             Standalone registration, writes to coaches_day_registrations. Share the link directly. */}
         <Route path="/coaches-day" element={<CoachesDay />} />
