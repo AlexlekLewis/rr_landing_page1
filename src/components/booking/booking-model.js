@@ -27,10 +27,14 @@ export function parseCatalog(raw) {
   if (raw.durations_minutes.some(d => ![60, 90, 120].includes(d)) || !raw.durations_minutes.length || raw.group_sizes.some(g => ![2, 3, 4].includes(g)) || !raw.group_sizes.length || raw.focus.some(f => !Object.hasOwn(FOCUS_LABELS, f)) || !raw.focus.length || !integer(raw.max_weeks, 1, 104) || !integer(raw.block_discount.min_sessions, 1, 104) || !integer(raw.block_discount.percent, 0, 100) || !integer(raw.cancellation.free_hours, 0, 8760) || !integer(raw.cancellation.late_fee_cents)) fail();
   return { centres, coaches, durations_minutes: raw.durations_minutes, group_sizes: raw.group_sizes, focus: raw.focus, max_weeks: raw.max_weeks, block_discount: { min_sessions: raw.block_discount.min_sessions, percent: raw.block_discount.percent }, cancellation: { free_hours: raw.cancellation.free_hours, late_fee_cents: raw.cancellation.late_fee_cents }, prices: { one_on_one_hour_cents: integer(raw.prices.one_on_one_hour_cents, 1) ? raw.prices.one_on_one_hour_cents : null, group_player_hour_cents: Object.fromEntries(raw.group_sizes.map(g => [g, integer(raw.prices.group_player_hour_cents[g], 1) ? raw.prices.group_player_hour_cents[g] : null])) } };
 }
-export function parsePrice(p) {
+export function parsePrice(p,{funded=false}={}) {
   const keys = ['per_session_cents', 'sessions', 'first_session_hold_cents', 'rest_cents', 'total_cents'];
-  if (!object(p) || keys.some(key => !integer(p[key])) || p.sessions < 1 || p.sessions > 104 || typeof p.discount_applied !== 'boolean' || p.first_session_hold_cents + p.rest_cents !== p.total_cents || p.per_session_cents * p.sessions !== p.total_cents) fail();
-  return Object.fromEntries([...keys, 'discount_applied'].map(key => [key, p[key]]));
+  if (!object(p) || keys.some(key => !integer(p[key])) || p.sessions < 1 || p.sessions > 104 || typeof p.discount_applied !== 'boolean') fail();
+  const credit=funded&&p.credit_reserved_cents!==undefined?p.credit_reserved_cents:0,mode=funded&&p.funding_mode!==undefined?p.funding_mode:'card';
+  if(!integer(credit)||!['card','setup','covered','recorded'].includes(mode)||(!funded&&(p.credit_reserved_cents!==undefined||p.funding_mode!==undefined))||
+     p.first_session_hold_cents+p.rest_cents+credit!==p.total_cents||p.per_session_cents*p.sessions!==p.total_cents||
+     (mode==='card'&&p.first_session_hold_cents===0)||(mode==='setup'&&(p.first_session_hold_cents!==0||p.rest_cents===0||credit<p.per_session_cents))||(mode==='covered'&&(p.first_session_hold_cents!==0||p.rest_cents!==0||credit!==p.total_cents))||(credit>0&&!p.funding_mode))fail();
+  return {...Object.fromEntries([...keys, 'discount_applied'].map(key => [key, p[key]])),...(p.credit_reserved_cents===undefined?{}:{credit_reserved_cents:credit}),...(p.funding_mode===undefined?{}:{funding_mode:mode})};
 }
 export function parseSlots(raw, centre) {
   if (!object(raw) || raw.centre !== centre || !Array.isArray(raw.by_coach) || !object(raw.window) || !instant(raw.window.earliest) || !instant(raw.window.before) || !integer(raw.window.max_weeks, 1, 104)) fail();

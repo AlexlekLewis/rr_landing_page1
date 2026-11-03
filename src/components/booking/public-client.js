@@ -76,7 +76,10 @@ export function parseRequest(data, { tokenRequired = false, local = false } = {}
     if (!d || typeof d !== 'object' || !validDate(d.date) || !Number.isFinite(Date.parse(d.starts_at)) || !Number.isFinite(Date.parse(d.ends_at))) throw new PublicBookingError();
     return { date: d.date, starts_at: d.starts_at, ends_at: d.ends_at };
   });
-  const out = { request_id: r.request_id, state: r.state, server_now: r.server_now, expires_at: typeof r.expires_at === 'string' && Number.isFinite(Date.parse(r.expires_at)) ? r.expires_at : null, expires_in_seconds: r.expires_in_seconds, dates, price: parsePrice(r.price), checkout_state: r.checkout_state };
+  const out = { request_id: r.request_id, state: r.state, server_now: r.server_now, expires_at: typeof r.expires_at === 'string' && Number.isFinite(Date.parse(r.expires_at)) ? r.expires_at : null, expires_in_seconds: r.expires_in_seconds, dates, price: parsePrice(r.price,{funded:true}), checkout_state: r.checkout_state };
+  if(dates.length===0||out.price.sessions!==dates.length)throw new PublicBookingError();
+  if(r.funding_mode!==undefined){if(!['card','setup','covered','recorded'].includes(r.funding_mode)||(out.price.funding_mode!==undefined&&out.price.funding_mode!==r.funding_mode)||(['setup','covered'].includes(r.funding_mode)&&out.price.funding_mode!==r.funding_mode))throw new PublicBookingError();out.funding_mode=r.funding_mode;}
+  if((out.funding_mode??out.price.funding_mode)==='covered'&&r.state==='checkout')throw new PublicBookingError();
   if (tokenRequired) out.request_token = r.request_token;
   if (r.checkout_url) { const url = checkoutUrl(r.checkout_url, local); if (!url) throw new PublicBookingError(); if (r.state === 'checkout' && r.expires_in_seconds > 0) out.checkout_url = url; }
   if (typeof r.call_by_plain === 'string' && r.call_by_plain.length <= 150) out.call_by_plain = r.call_by_plain;
