@@ -252,11 +252,11 @@ export const COACH_PROFILES = {
         slug: 'mihiraj-jayasekara',
         name: 'Mihiraj Jayasekara',
         first: 'Mihiraj',
-        // Royals-top headshot sent 29 Oct 2026 on WhatsApp; not saved here yet.
-        // Drop it at /assets/coaches/mihiraj-jayasekara.jpg and set the path.
-        photo: null,
+        // Royals-kit headshot he sent on 29 Oct 2026, cut out and placed on the
+        // Halla Bol media wall to match the other coaches (3 Nov 2026).
+        photo: '/assets/coaches/mihiraj-jayasekara.jpg',
         initials: 'MJ',
-        photoPosition: '50% 20%',
+        photoPosition: '50% 22%',
         homeCentre: 'mickleham',
         roleStrengths: 'Batting, one-on-one and in small groups',
         intro: 'Mihiraj coaches young cricketers to enjoy the game and get better at it. He has coached cricket for more than 25 years, in Sri Lanka, the UAE, India and now Melbourne, and is a batting coach first. He coached batting to the First XIs of two of Colombo’s leading cricket schools, then ran academies in the UAE and India.',
