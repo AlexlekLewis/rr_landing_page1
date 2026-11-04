@@ -3,7 +3,7 @@ import { dayLabel, money, timeLabel } from './booking-model';
 export function Quote({ slot, group = false }) {
   if (!slot) return null;
   const p = slot.price;
-  return <div className="booking-summary"><p className="booking-kicker">{p.sessions} actual session{p.sessions === 1 ? '' : 's'}{group ? ' · whole group' : ''}</p><p className="booking-price">{money(p.total_cents)} <span className="booking-help">incl. GST</span></p><p>{money(p.per_session_cents)} per session{p.discount_applied ? ' · block discount included' : ''}.</p><p className="booking-help">The quote is for the dates listed below. It is checked again before your card hold.</p></div>;
+  return <div className="booking-summary"><p className="booking-kicker">{p.sessions} actual session{p.sessions === 1 ? '' : 's'}{group ? ' · whole group' : ''}</p><p className="booking-price">{money(p.total_cents)} <span className="booking-help">incl. GST</span></p><p>{money(p.per_session_cents)} per session{p.discount_applied ? ' · block discount included' : ''}.</p><p className="booking-help">The quote is for the dates listed below. It is checked again before you submit your request.</p></div>;
 }
 export default function SeriesDates({ slot, draft, onSkip, onAlternative, onAdd }) {
   if (!slot) return null;
