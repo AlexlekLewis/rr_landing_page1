@@ -10,8 +10,8 @@
 // running. Run: npx vitest run src/lib/scoring/squad-guardrail.test.ts
 // ============================================================
 
-import { describe, it, expect } from "vitest";
-import { computeDna, type CompetitionTierInput, type Format } from "./engine";
+import { afterAll, beforeAll, describe, it, expect, vi } from "vitest";
+import { computeDna, getAge, type CompetitionTierInput, type Format } from "./engine";
 
 const TIERS: CompetitionTierInput[] = [
   { code: "P1M", ctiValue: 1.0, expectedMidpointAge: 24 },
@@ -104,7 +104,27 @@ const CASES: { id: string; who: string; form: MiniForm }[] = [
 ];
 
 describe("BLIND — competitive + age-appropriate squad placement", () => {
-  const R = new Map(CASES.map((c) => [c.id, run(c.form)]));
+  let R: Map<string, ReturnType<typeof run>>;
+  beforeAll(() => {
+    // This study describes the 2025/26 cohort. Keep its real DOB-derived ages
+    // reproducible rather than allowing the same players to age into new bands.
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2026-06-15T12:00:00+10:00'));
+    R = new Map(CASES.map((c) => [c.id, run(c.form)]));
+  });
+  afterAll(() => vi.useRealTimers());
+
+  it('uses the stated ages through the real scoring calculation', () => {
+    for (const [id, age] of [['A', 16], ['B', 14], ['C', 18], ['D', 17], ['E', 20], ['F', 24], ['G', 22], ['H', 21], ['I', 21], ['J', 15]] as const) {
+      expect(R.get(id)!.dna.breakdown.age, id).toBe(age);
+    }
+  });
+  it('moves the two young fixtures across their actual birthday boundaries', () => {
+    for (const [dob, age] of [['2009-09-01', 16], ['2011-09-01', 14]] as const) {
+      expect(getAge(dob, new Date('2026-08-31T12:00:00+10:00'))).toBe(age);
+      expect(getAge(dob, new Date('2026-09-01T12:00:00+10:00'))).toBe(age + 1);
+    }
+  });
 
   it("prints the placement table", () => {
     const L: Record<number, string> = { 5: "Elite", 4: "Performance", 3: "Development", 2: "Foundation", 1: "Entry" };

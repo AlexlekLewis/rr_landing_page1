@@ -33,7 +33,7 @@ it('keeps a stale deep-link notice after jumping to the server window and loadin
   history.replaceState(null, '', '/book?centre=mickleham&coach=test-coach&start=2026-11-01T16%3A00&duration=60&focus=batting');
   api.slots.mockImplementation(async query => ({ ...parseSlots(slots(), 'mickleham'), by_coach: query.to < '2026-11-11' ? [] : parseSlots(slots(), 'mickleham').by_coach }));
   render(<BookPage />);
-  await screen.findByRole('button', { name: /5:00/ });
+  await screen.findByRole('button', { name: 'Wednesday 11 November 2026, 5pm Melbourne time, 1 coach free' });
   expect(screen.getByRole('alert').textContent).toContain('That preview time is no longer available');
   expect(api.slots.mock.calls.some(([query]) => query.from === '2026-11-11')).toBe(true);
   expect(api.slots.mock.calls.every(([query]) => query.centre === 'mickleham')).toBe(true);

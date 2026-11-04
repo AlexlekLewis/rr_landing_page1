@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { catalog, id, slot, slots, starts } from './fixtures.test-helper';
-import { deepLink, emptyDraft, localStart, parseCatalog, parseSlots, recoveredIntent, requestIntent } from './booking-model';
+import { dayLabel, deepLink, emptyDraft, localStart, parseCatalog, parseSlots, recoveredIntent, requestIntent, slotAccessibleLabel, timeLabel } from './booking-model';
 describe('public booking model', () => {
   it('keeps only declared public facts, including nested price and series fields', () => {
     const raw = slots(); Object.assign(raw.by_coach[0].slots[0], { net: { lane: 7 }, family_email: 'test-private@example.test' }); Object.assign(raw.by_coach[0], { pay_rate: 99 });
@@ -25,6 +25,24 @@ describe('public booking model', () => {
     expect(deepLink('?centre=cranbourne-north&coach=test-coach', parseCatalog(catalog()))).not.toHaveProperty('profile_id');
   });
   it('keeps Melbourne wall time across actual offsets without converting a hint into authority', () => { expect(localStart(starts)).toBe('2026-11-11T17:00'); expect(localStart('2027-04-05T17:00:00+10:00')).toBe('2027-04-05T17:00'); });
+  it('uses the Melbourne day and time across UTC midnight and the end of daylight saving', () => {
+    expect(slotAccessibleLabel('2026-11-10T13:30:00Z', 3)).toBe('Wednesday 11 November 2026, 12:30am Melbourne time, 3 coaches free');
+    expect(slotAccessibleLabel('2027-04-04T14:30:00Z', 1)).toBe('Monday 5 April 2027, 12:30am Melbourne time, 1 coach free');
+    expect(dayLabel(starts)).toBe('Wed 11 Nov'); expect(timeLabel(starts)).toBe('5pm');
+  });
+  it('keeps the server policy deadline separate from provider facts and submitted intent', () => {
+    const raw = slots(); Object.assign(raw.by_coach[0].slots[0].decision_quote, { provider_capture_before: '2099-01-01T00:00:00Z', family: 'private' });
+    const parsed = parseSlots(raw, 'mickleham').by_coach[0].slots[0];
+    expect(parsed.decision_quote).toEqual({ kind: 'policy_quote', quoted_at: '2026-11-09T09:00:00+11:00', confirm_by: '2026-11-10T09:00:00+11:00' });
+    expect(requestIntent(draft(), parsed)).not.toHaveProperty('decision_quote');
+  });
+  it('refuses malformed or contradictory policy deadlines without deriving one in the browser', () => {
+    for (const change of [{ kind: 'provider_authorization' }, { quoted_at: 'bad' }, { confirm_by: 'bad' }, { confirm_by: '2026-11-08T09:00:00+11:00' }, { confirm_by: '2026-11-12T09:00:00+11:00' }]) {
+      const raw = slots(); Object.assign(raw.by_coach[0].slots[0].decision_quote, change); expect(() => parseSlots(raw, 'mickleham')).toThrow();
+    }
+    const raw = slots(); Object.assign(raw.by_coach[0].slots[0], { decision_quote: null });
+    expect(parseSlots(raw, 'mickleham').by_coach[0].slots[0].decision_quote).toBeNull();
+  });
   const draft = () => ({ ...emptyDraft(), centre: 'mickleham', kind: 'one_on_one', focus: 'batting', duration_minutes: 60, profile_id: id(3), starts_at: starts, players: [{ name: 'Test खिलाड़ी', age: '10' }], parent: { name: 'Test Parent', email: 'test-parent@example.test', mobile: '+61 400 000 001' }, consent_save_card: true });
   it('requires parent details for minors and an actual ready slot with card permission', () => {
     const s = { ...slot(), profile_id: id(3) }; expect(requestIntent(draft(), s)?.players[0].name).toBe('Test खिलाड़ी'); expect(requestIntent({ ...draft(), parent: { ...draft().parent, name: '' } }, s)).toBeNull(); expect(requestIntent({ ...draft(), consent_save_card: false }, s)).toBeNull(); expect(requestIntent(draft(), { ...s, series_check: { ...s.series_check, ready: false } })).toBeNull();

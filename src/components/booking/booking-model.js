@@ -14,8 +14,18 @@ export function localStart(iso) {
   return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}`;
 }
 export const localDate = iso => localStart(iso).slice(0, 10);
-export const dayLabel = iso => new Intl.DateTimeFormat('en-AU', { timeZone: TIME_ZONE, weekday: 'short', day: 'numeric', month: 'short' }).format(new Date(iso.length === 10 ? iso + 'T12:00:00+11:00' : iso));
-export const timeLabel = iso => new Intl.DateTimeFormat('en-AU', { timeZone: TIME_ZONE, hour: 'numeric', minute: '2-digit' }).format(new Date(iso));
+function dateParts(iso, full = false) {
+  return Object.fromEntries(new Intl.DateTimeFormat('en-AU', { timeZone: TIME_ZONE, weekday: full ? 'long' : 'short', day: 'numeric', month: full ? 'long' : 'short', ...(full ? { year: 'numeric' } : {}) }).formatToParts(new Date(iso.length === 10 ? iso + 'T12:00:00+11:00' : iso)).map(part => [part.type, part.value]));
+}
+export const dayLabel = iso => { const p = dateParts(iso); return `${p.weekday} ${p.day} ${p.month}`; };
+export const timeLabel = iso => {
+  const p = Object.fromEntries(new Intl.DateTimeFormat('en-AU', { timeZone: TIME_ZONE, hour: 'numeric', minute: '2-digit', hour12: true }).formatToParts(new Date(iso)).map(part => [part.type, part.value]));
+  return `${p.hour}${p.minute === '00' ? '' : ':' + p.minute}${p.dayPeriod.toLowerCase()}`;
+};
+export function slotAccessibleLabel(iso, coachCount) {
+  const p = dateParts(iso, true);
+  return `${p.weekday} ${p.day} ${p.month} ${p.year}, ${timeLabel(iso)} Melbourne time, ${coachCount} coach${coachCount === 1 ? '' : 'es'} free`;
+}
 export const money = cents => integer(cents) ? new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', maximumFractionDigits: cents % 100 ? 2 : 0 }).format(cents / 100) : 'Price unavailable';
 export const lengthLabel = minutes => ({ 60: '1 hour', 90: '1½ hours', 120: '2 hours' })[minutes] ?? `${minutes} minutes`;
 export const addDays = (date, count) => new Date(Date.parse(date + 'T12:00:00Z') + count * 86400000).toISOString().slice(0, 10);
@@ -49,7 +59,13 @@ export function parseSlots(raw, centre) {
       const blocked = s.blocked.map(b => { if (!validDate(b.date) || !text(b.kind, 80) || !text(b.reason_plain, 500) || typeof b.auto_skipped !== 'boolean') fail(); return { date: b.date, kind: b.kind, reason_plain: b.reason_plain, auto_skipped: b.auto_skipped, alternative: alt(b.alternative) }; });
       if (s.skipped_dates.some(d => !validDate(d))) fail();
       const price = parsePrice(slot.price); if (price.sessions !== s.actual_sessions) fail();
-      return { profile_id: c.profile_id, starts_at: slot.starts_at, ends_at: slot.ends_at, price, series_check: { ready: s.ready, requested_weeks: s.requested_weeks, actual_sessions: s.actual_sessions, dates, flagged, blocked, skipped_dates: s.skipped_dates, add_week: alt(s.add_week) } };
+      let decision_quote = null;
+      if (slot.decision_quote != null) {
+        const q = slot.decision_quote;
+        if (!object(q) || q.kind !== 'policy_quote' || !instant(q.quoted_at) || !instant(q.confirm_by) || !s.ready || Date.parse(q.confirm_by) < Date.parse(q.quoted_at) || dates.some(date => Date.parse(q.confirm_by) > Date.parse(date.starts_at))) fail();
+        decision_quote = { kind: q.kind, quoted_at: q.quoted_at, confirm_by: q.confirm_by };
+      }
+      return { profile_id: c.profile_id, starts_at: slot.starts_at, ends_at: slot.ends_at, price, decision_quote, series_check: { ready: s.ready, requested_weeks: s.requested_weeks, actual_sessions: s.actual_sessions, dates, flagged, blocked, skipped_dates: s.skipped_dates, add_week: alt(s.add_week) } };
     });
     return { profile_id: c.profile_id, display_name: c.display_name, home_centre: c.home_centre, coaches_what: c.coaches_what.filter(f => Object.hasOwn(FOCUS_LABELS, f)), slots };
   });
