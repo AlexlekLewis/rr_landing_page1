@@ -22,9 +22,9 @@ export function requestCheckpoint(value, storage, now = Date.now()) {
   try {
     const store = storage ?? globalThis.sessionStorage, key = KEY + '.request';
     if (value === null) { store.removeItem(key); return null; }
-    if (value !== undefined) { if (!uuid(value.request_id) || typeof value.request_token !== 'string' || !/^[A-Za-z\d._~-]{16,1024}$/.test(value.request_token)) return null; store.setItem(key, JSON.stringify({ request_id: value.request_id, request_token: value.request_token, saved_at: now })); return value; }
+    if (value !== undefined) { if (!uuid(value.request_id) || typeof value.request_token !== 'string' || !/^[A-Za-z\d._~-]{16,1024}$/.test(value.request_token)) return null; const checkpoint = { request_id: value.request_id, request_token: value.request_token, ...(value.mode === 'credit' ? { mode: 'credit' } : {}) }; store.setItem(key, JSON.stringify({ ...checkpoint, saved_at: now })); return checkpoint; }
     const encoded = store.getItem(key); if (encoded?.length > 16384) { store.removeItem(key); return null; } const saved = JSON.parse(encoded);
     if (!saved || !Number.isFinite(saved.saved_at) || !uuid(saved.request_id) || typeof saved.request_token !== 'string' || !/^[A-Za-z\d._~-]{16,1024}$/.test(saved.request_token) || saved.saved_at > now || now - saved.saved_at > DRAFT_LIFETIME) { store.removeItem(key); return null; }
-    return { request_id: saved.request_id, request_token: saved.request_token };
+    return { request_id: saved.request_id, request_token: saved.request_token, ...(saved.mode === 'credit' ? { mode: 'credit' } : {}) };
   } catch { return null; }
 }

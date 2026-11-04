@@ -4,16 +4,21 @@ import { isBookingFlowPath } from './booking-privacy';
 import { familyCapabilityMemory } from './family-capability';
 import { createFamilyClient } from './family-client';
 import { FamilyContext } from './family-context';
+import { createCreditClient } from './credit-client';
+import { createFamilyOperationGate } from './family-operation-gate';
 
 export default function FamilyCapabilityProvider({ children }) {
   const { pathname } = useLocation();
   const hasCapability = useSyncExternalStore(familyCapabilityMemory.subscribe, familyCapabilityMemory.has, () => false);
-  const [client] = useState(() => createFamilyClient());
-  const clear = useCallback(() => { client.clear(); familyCapabilityMemory.clear(); }, [client]);
+  const [{ client, creditClient, gate }] = useState(() => {
+    const gate = createFamilyOperationGate();
+    return { gate, client: createFamilyClient(import.meta.env, globalThis.fetch, familyCapabilityMemory, gate), creditClient: createCreditClient(import.meta.env, globalThis.fetch, familyCapabilityMemory, gate) };
+  });
+  const clear = useCallback(() => { client.clear(); creditClient.clear(); gate.clear(); familyCapabilityMemory.clear(); }, [client, creditClient, gate]);
   // No effect cleanup clears the capability: StrictMode rehearses cleanups on
   // mount. Leaving the private flow or the document explicitly clears memory.
   useLayoutEffect(() => { if (!isBookingFlowPath(pathname)) clear(); }, [pathname, clear]);
   useEffect(() => { window.addEventListener('pagehide', clear); return () => window.removeEventListener('pagehide', clear); }, [clear]);
-  const value = useMemo(() => ({ hasCapability, client, clear }), [hasCapability, client, clear]);
+  const value = useMemo(() => ({ hasCapability, client, creditClient, gate, creditEnabled: import.meta.env.VITE_PRIVATE_BOOKING_CREDIT_ENABLED === 'true', clear }), [hasCapability, client, creditClient, gate, clear]);
   return <FamilyContext.Provider value={value}>{children}</FamilyContext.Provider>;
 }

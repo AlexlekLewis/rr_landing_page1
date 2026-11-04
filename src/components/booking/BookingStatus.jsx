@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useSyncExternalStore } from 'react';
 import { createPublicClient, publicError } from './public-client';
 import { dayLabel, money } from './booking-model';
+import { creditError } from './credit-client';
 function addCalendar(request) {
   const stamp = iso => new Date(iso).toISOString().replace(/[-:]|\.\d{3}/g, '');
   const status = request.state === 'confirmed' ? 'CONFIRMED' : 'TENTATIVE';
@@ -8,24 +9,27 @@ function addCalendar(request) {
   const blob = new Blob([['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//RRA Melbourne//Private Coaching//EN', ...events, 'END:VCALENDAR', ''].join('\r\n')], { type: 'text/calendar;charset=utf-8' });
   const url = URL.createObjectURL(blob), link = document.createElement('a'); link.href = url; link.download = 'private-coaching.ics'; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
-export default function BookingStatus({ initial, checkpoint, onNew, onUpdate }) {
+const idleSnapshot = Object.freeze({ paused: false }), readIdle = () => idleSnapshot, subscribeIdle = () => () => {};
+export default function BookingStatus({ initial, checkpoint, onNew, onUpdate, operationGate, creditMode = false }) {
+  const operation = useSyncExternalStore(operationGate?.subscribe ?? subscribeIdle, operationGate?.getSnapshot ?? readIdle, readIdle);
   const [state, setState] = useState(() => ({ request: initial, error: '', received: performance.now() })), [reload, setReload] = useState(0), [elapsed, setElapsed] = useState(0);
   useEffect(() => {
     let active = true, timer; const controller = new AbortController(), client = createPublicClient();
     async function check() {
       try {
+        operationGate?.assertReadable();
         const request = await client.status(checkpoint.request_token, controller.signal);
         if (!active) return; if (request.request_id !== checkpoint.request_id) throw new Error('unavailable');
         setState({ request, error: '', received: performance.now() }); onUpdate?.(request);
         if (['checkout', 'requested', 'venue_told'].includes(request.state)) timer = setTimeout(check, request.state === 'checkout' ? 5000 : 30000);
-      } catch (error) { if (active && error.name !== 'AbortError') setState(s => ({ ...s, error: publicError(error) })); }
+      } catch (error) { if (error.code === 'rate_limited') operationGate?.pause(); if (active && error.name !== 'AbortError') setState(s => ({ ...s, error: operationGate || creditMode ? creditError(error) : publicError(error) })); }
     }
     if (checkpoint) void check();
     return () => { active = false; clearTimeout(timer); controller.abort(); };
-  }, [checkpoint, reload, onUpdate]);
+  }, [checkpoint, reload, onUpdate, operationGate, creditMode]);
   useEffect(() => { const timer = setInterval(() => setElapsed(Math.floor((performance.now() - state.received) / 1000)), 1000); return () => clearInterval(timer); }, [state.received]);
   const request = state.request;
-  if (!request) return <div className="booking-stack"><h1>Checking your request</h1><p>We’re checking the result with the Academy. A Checkout return page doesn’t confirm a booking.</p>{state.error ? <p className="booking-error" role="alert">{state.error}</p> : <p role="status">Checking…</p>}<button type="button" className="booking-secondary" onClick={() => setReload(n => n + 1)}>Check again</button></div>;
+  if (!request) return <div className="booking-stack"><h1>Checking your request</h1><p>We’re checking the result with the Academy. A Checkout return page doesn’t confirm a booking.</p>{state.error ? <p className="booking-error" role="alert">{state.error}</p> : <p role="status">Checking…</p>}<button type="button" className="booking-secondary" disabled={operation.paused} onClick={() => setReload(n => n + 1)}>Check again</button></div>;
   if (request.state === 'needs_review') return <div role="status"><h1>We’ll check the details with you</h1><p>We’ll be in touch {request.call_by_plain}. No card hold has been requested and no session is confirmed.</p></div>;
   const funding=request.funding_mode??request.price.funding_mode??'card',setup=funding==='setup',recorded=funding==='recorded',credit=request.price.credit_reserved_cents??0;
   const seconds = Math.max(0, request.expires_in_seconds - elapsed), minutes = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
@@ -40,6 +44,6 @@ export default function BookingStatus({ initial, checkpoint, onNew, onUpdate }) 
     {request.dates.length ? <div><h2>Your dates</h2><ul className="booking-date-list">{request.dates.map(d => <li key={d.date}>{dayLabel(d.date)}</li>)}</ul></div> : null}
     {['requested', 'venue_told', 'confirmed'].includes(request.state) && request.dates.some(d => d.starts_at && d.ends_at) ? <button type="button" className="booking-secondary" onClick={() => addCalendar(request)}>Add {request.state === 'confirmed' ? 'sessions' : 'tentative requests'} to my calendar</button> : null}
     {state.error ? <p className="booking-error" role="alert">{state.error}</p> : null}
-    <button type="button" className="booking-link" onClick={() => setReload(n => n + 1)}>Check the latest status</button>
+    <button type="button" className="booking-link" disabled={operation.paused} onClick={() => setReload(n => n + 1)}>Check the latest status</button>
   </div>;
 }

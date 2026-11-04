@@ -18,6 +18,14 @@ it('keeps an exact nonce separately and strips malformed checkpoint timestamps',
   const store = storage(); writeAttempt('request', { nonce: id(1), payload: '{"test":true}' }, store, 1000); expect(readAttempt('request', store, 1001).nonce).toBe(id(1)); writeAttempt('request', null, store); expect(readAttempt('request', store, 1001)).toBeNull();
   requestCheckpoint({ request_id: id(1), request_token: 'test_scoped_request_token_123456' }, store, 1000); expect(requestCheckpoint(undefined, store, 1001).request_id).toBe(id(1)); expect(requestCheckpoint(undefined, store, 1000 + DRAFT_LIFETIME + 1)).toBeNull();
 });
+it('persists only validated credit request status and its non-secret mode, never a credit intent', () => {
+  const store = storage(), checkpoint = { request_id: id(2), request_token: 'unit_scoped_credit_status_123456789', mode: 'credit' };
+  requestCheckpoint({ ...checkpoint, family_token: 'unit-family-secret', review: 'unit-review-secret', nonce: id(3), fields: { players: [{ name: 'Private player' }] } }, store, 1000);
+  expect(requestCheckpoint(undefined, store, 1001)).toEqual(checkpoint);
+  expect(JSON.parse([...store.values.values()][0])).toEqual({ ...checkpoint, saved_at: 1000 });
+  requestCheckpoint({ request_id: id(4), request_token: 'unit_scoped_card_status_123456789' }, store, 1002);
+  expect(requestCheckpoint(undefined, store, 1003)).toEqual({ request_id: id(4), request_token: 'unit_scoped_card_status_123456789' });
+});
 it.each(['/book', '/book/', '/BOOK', '/booking/private-token', '/%62ook', '/booking%2Fprivate-token', '/mickleham', '/Mickleham/', '/mickleham-launch', '/Mickleham_Launch', '/launch', '/private-coaching'])('excludes private direct/SPA paths from analytics %s', path => { expect(isPrivateBookingPath(path)).toBe(true); expect(privateBookingAnalytics({ properties: { email: 'test@example.test' } }, path)).toBeNull(); });
 it('drops private referrer/URL events without changing other programme analytics', () => { expect(privateBookingAnalytics({ properties: { $referrer: 'https://rramelbourne.com/booking/secret' } }, '/junior-royals')).toBeNull(); const event = { properties: { $current_url: 'https://rramelbourne.com/junior-royals' } }; expect(privateBookingAnalytics(event, '/junior-royals')).toBe(event); });
 

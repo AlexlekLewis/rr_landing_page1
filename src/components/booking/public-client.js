@@ -28,6 +28,10 @@ export function createPublicClient(env = import.meta.env, request = globalThis.f
       if (config.key) Object.assign(headers, { apikey: config.key, Authorization: `Bearer ${config.key}` });
       if (nonce) { if (!uuid(nonce)) throw new PublicBookingError('invalid_request'); headers['Idempotency-Key'] = nonce; }
       const res = await request(`${config.base}/${path}`, { method: body ? 'POST' : 'GET', headers, ...(body ? { body: JSON.stringify(body) } : {}), signal: controller.signal, cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer' });
+      if (res.status === 429) {
+        try { await res.body?.cancel(); } catch { /* The refusal still stops this operation. */ }
+        throw new PublicBookingError('rate_limited', 429, Math.max(0, Number(res.headers.get('Retry-After')) || 0));
+      }
       const raw = await res.text(); if (raw.length > 4194304) throw new PublicBookingError();
       let data; try { data = JSON.parse(raw); } catch { throw new PublicBookingError(); }
       if (!res.ok) {

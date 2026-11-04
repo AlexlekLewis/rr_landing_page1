@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { Link } from 'react-router-dom';
 import { dayLabel, money, timeLabel } from './booking-model';
 import { familyError } from './family-client';
@@ -29,7 +29,8 @@ function CancellationTerms({ preview, working, onClose, onConfirm }) {
 }
 
 export default function FamilyManagePage() {
-  const { hasCapability, client, clear } = useFamilyService();
+  const { hasCapability, client, clear, creditEnabled = false } = useFamilyService();
+  const operation = useSyncExternalStore(client.subscribe, client.getSnapshot, client.getSnapshot);
   const [view, setView] = useState({ data: null, loading: true, stale: false, error: '' });
   const [reload, setReload] = useState(0), [preview, setPreview] = useState(null), [checking, setChecking] = useState('');
   const [working, setWorking] = useState(false), [actionError, setActionError] = useState(''), [receipt, setReceipt] = useState(null), [choices, setChoices] = useState({});
@@ -86,7 +87,7 @@ export default function FamilyManagePage() {
       if (error.code === 'family_unavailable') setView(previous => ({ ...previous, data: null }));
     } finally { busy.current = false; if (alive.current) setWorking(false); }
   }
-  const operation = client.state(), disabled = working || operation.paused || Boolean(operation.pending);
+  const disabled = working || operation.paused || Boolean(operation.pending);
   const data = view.data;
   return <div className="private-booking ph-no-capture">
     <header className="booking-top"><strong>Rajasthan Royals Academy · Melbourne</strong><Link to="/" onClick={clear}>Close private page</Link></header>
@@ -96,12 +97,13 @@ export default function FamilyManagePage() {
         {view.loading ? <p role="status">Checking your sessions and credit…</p> : null}
         {view.error ? <p role="alert" className="booking-error">{view.error}</p> : null}
         {actionError ? <p role="alert" className="booking-error">{actionError}</p> : null}
-        {operation.pending && operation.pending.phase !== 'sending' ? <div className="booking-notice"><h2>Check your submitted choice</h2><p>We haven’t confirmed whether it was saved. Check the same submission before making another choice.</p><button type="button" className="booking-primary" disabled={working || operation.paused} onClick={() => save(() => client.retry())}>Check submitted result</button></div> : null}
+        {operation.paused ? <p className="booking-error" role="alert">{familyError({ code: 'rate_limited' })}</p> : null}
+        {operation.pending && operation.pending.phase !== 'sending' ? <div className="booking-notice"><h2>Check your submitted choice</h2><p>We haven’t confirmed whether it was saved. Check the same submission before making another choice.</p>{['credit_request', 'card_request'].includes(operation.pending.kind) ? <Link className="booking-secondary" to={operation.pending.kind === 'credit_request' ? '/book/credit' : '/book'}>Check submitted booking request</Link> : <button type="button" className="booking-primary" disabled={working || operation.paused} onClick={() => save(() => client.retry())}>Check submitted result</button>}</div> : null}
         {receipt ? <div className="booking-notice" role="status"><h2>{receipt.booking_id ? 'Session cancelled' : 'Your choice is saved'}</h2><p>{receipt.choice === 'refund' ? 'Your refund has been requested. The Academy will confirm when it is completed.' : receipt.choice === 'move' ? 'A new time has been requested. The Academy will arrange the replacement session.' : `${money(receipt.credit_cents)} in player credit has been recorded.`}</p>{receipt.fee_cents > 0 ? <p>Cancellation fee: {money(receipt.fee_cents)}.</p> : null}{receipt.fee_owing_cents > 0 ? <p>Fee still owing: {money(receipt.fee_owing_cents)}. Contact the Academy to arrange payment.</p> : null}</div> : null}
         {data ? <>
           <section className="booking-stack" aria-label="Player credit"><h2>Player credit</h2>
             {view.stale || operation.pending ? <p>Check your updated balance before using credit.</p> : data.players.length ? <ul className="booking-date-list">{data.players.map(player => <li key={player.id}><strong>{player.name}</strong><p>Available: {money(player.available_credit_cents)}</p><p>Reserved for requests: {money(player.reserved_credit_cents)}</p></li>)}</ul> : <p>No player credit records are linked here yet.</p>}
-            <button type="button" className="booking-secondary" disabled>Book with my credit</button><p className="booking-help">Contact the Academy to use your credit when booking.</p>
+            {creditEnabled && !disabled && !view.stale ? <Link className="booking-primary" to="/book/credit">Book with my credit</Link> : <><button type="button" className="booking-secondary" disabled>Book with my credit</button><p className="booking-help">{creditEnabled ? 'Check any submitted choice and refresh your balance before booking with credit.' : 'Contact the Academy to use your credit when booking.'}</p></>}
           </section>
           <section className="booking-stack" aria-label="Your sessions"><h2>Your sessions</h2>
             {data.items.length ? <ul className="booking-date-list">{data.items.map(item => <li key={item.booking_id}>
@@ -112,7 +114,7 @@ export default function FamilyManagePage() {
             </li>)}</ul> : <p>No private sessions are linked here yet.</p>}
           </section>
           <p className="booking-help">Times are Melbourne time. Last checked {dateTime(data.as_of)}.</p>
-          <Link className="booking-secondary" to="/book">Request another session by card</Link>
+          {disabled ? <button className="booking-secondary" type="button" disabled>Request another session by card</button> : <Link className="booking-secondary" to="/book">Request another session by card</Link>}
         </> : !view.loading && !view.error ? <p>Open the link in your email or contact the Academy to check this booking.</p> : null}
         <button type="button" className="booking-secondary" disabled={view.loading || working || operation.paused} onClick={() => { setView(previous => ({ ...previous, loading: true, error: '' })); setReload(value => value + 1); }}>Check latest sessions and credit</button>
       </>}

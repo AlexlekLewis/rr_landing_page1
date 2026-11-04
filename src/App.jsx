@@ -226,7 +226,8 @@ function App() {
 
         {/* The Coaches — leadership tiers, coaching mission + full bios. Info page, no form. */}
         <Route path="/coaches" element={<CoachesPage />} />
-        <Route path="/book" element={<PrivateBookingEntry><React.Suspense fallback={<div className="min-h-screen bg-white p-8" role="status">Loading private coaching…</div>}><BookPrivateCoaching /></React.Suspense></PrivateBookingEntry>} />
+        <Route path="/book" element={<PrivateBookingEntry><React.Suspense fallback={<div className="min-h-screen bg-white p-8" role="status">Loading private coaching…</div>}><BookPrivateCoaching key="card" /></React.Suspense></PrivateBookingEntry>} />
+        <Route path="/book/credit" element={<PrivateBookingEntry><React.Suspense fallback={<div className="min-h-screen bg-white p-8" role="status">Loading private coaching…</div>}><BookPrivateCoaching key="credit" credit /></React.Suspense></PrivateBookingEntry>} />
         <Route path="/booking" element={<PrivateBookingEntry><React.Suspense fallback={<div className="min-h-screen bg-white p-8" role="status">Opening private coaching…</div>}><ManagePrivateCoaching /></React.Suspense></PrivateBookingEntry>} />
         <Route path="/booking/*" element={<Navigate to="/booking" replace />} />
         <Route path="/manage/*" element={<Navigate to="/booking" replace />} />

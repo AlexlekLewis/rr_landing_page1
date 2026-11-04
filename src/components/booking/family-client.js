@@ -1,6 +1,7 @@
 import { publicConfig } from './public-client';
 import { uuid, validDate } from './booking-model';
 import { familyCapabilityMemory } from './family-capability';
+import { createFamilyOperationGate } from './family-operation-gate';
 
 export class FamilyBookingError extends Error {
   constructor(code = 'unavailable', status = 0, retryAfter = 0) {
@@ -65,23 +66,22 @@ function parseReceipt(data, operation) {
 }
 
 /** Family secrets enter POST bodies only. Financial attempts live only in this closure. */
-export function createFamilyClient(env = import.meta.env, request = globalThis.fetch, memory = familyCapabilityMemory) {
-  let paused = false, pending = null, generation = 0;
+export function createFamilyClient(env = import.meta.env, request = globalThis.fetch, memory = familyCapabilityMemory, gate = createFamilyOperationGate()) {
   const controllers = new Set();
   async function call(endpoint, body, nonce, signal) {
-    if (paused) throw new FamilyBookingError('rate_limited', 429);
+    gate.assertReadable();
     const capability = memory.read();
     if (typeof capability !== 'string' || !/^[0-9a-f]{64}$/.test(capability)) throw new FamilyBookingError('family_unavailable', 404);
     const controller = new AbortController(), abort = () => controller.abort();
     if (signal?.aborted) abort(); else signal?.addEventListener('abort', abort, { once: true });
-    controllers.add(controller); const timer = setTimeout(abort, 18000);
+    controllers.add(controller); const unregister = gate.registerAbort(abort), timer = setTimeout(abort, 18000);
     try {
       const config = publicConfig(env), headers = { 'Content-Type': 'application/json' };
       if (config.key) Object.assign(headers, { apikey: config.key, Authorization: `Bearer ${config.key}` });
       if (nonce) headers['Idempotency-Key'] = nonce;
       const response = await request(`${config.base}/${endpoint}`, { method: 'POST', headers, body: JSON.stringify({ ...body, family_token: capability }), signal: controller.signal, credentials: 'omit', cache: 'no-store', referrerPolicy: 'no-referrer' });
       if (response.status === 429) {
-        paused = true; try { await response.body?.cancel(); } catch { /* Refusal still stops the client. */ }
+        gate.pause(); try { await response.body?.cancel(); } catch { /* Refusal still stops the client. */ }
         throw new FamilyBookingError('rate_limited', 429, Math.max(0, Number(response.headers.get('Retry-After')) || 0));
       }
       const raw = await response.text(); if (raw.length > 1048576) fail();
@@ -95,36 +95,10 @@ export function createFamilyClient(env = import.meta.env, request = globalThis.f
     } catch (error) {
       if (error instanceof FamilyBookingError) throw error;
       throw new FamilyBookingError();
-    } finally { clearTimeout(timer); signal?.removeEventListener('abort', abort); controllers.delete(controller); }
-  }
-  async function dispatch(operation, signal) {
-    if (operation.promise) return operation.promise;
-    operation.phase = 'sending'; const sequence = generation;
-    operation.promise = (async () => {
-      try {
-        const result = parseReceipt(await call(operation.kind === 'cancel' ? 'public-private-cancel' : 'public-private-cancel-choice', operation.body, operation.nonce, signal), operation);
-        if (generation === sequence && pending === operation) pending = null;
-        return result;
-      } catch (error) {
-        if (generation === sequence && pending === operation) {
-          // The canonical nonce lookup precedes the state/fee checks. This
-          // explicit refusal proves a fresh preview is needed, not a new retry.
-          if (error.code === 'review_required' && error.status === 409) pending = null;
-          else if (!operation.retried && [400, 404].includes(error.status)) pending = null;
-          else operation.phase = error.code === 'rate_limited' ? 'paused' : 'unknown';
-        }
-        throw error;
-      } finally { operation.promise = null; }
-    })();
-    return operation.promise;
+    } finally { clearTimeout(timer); unregister(); signal?.removeEventListener('abort', abort); controllers.delete(controller); }
   }
   function perform(kind, body, signal) {
-    if (paused) return Promise.reject(new FamilyBookingError('rate_limited', 429));
-    const key = JSON.stringify([kind, body]);
-    if (pending && pending.key !== key) return Promise.reject(new FamilyBookingError('outcome_unknown'));
-    if (!pending) pending = { kind, body: Object.freeze({ ...body }), key, nonce: crypto.randomUUID(), phase: 'sending', promise: null, retried: false };
-    else if (!pending.promise) pending.retried = true;
-    return dispatch(pending, signal);
+    return gate.perform(kind, body, async ({ body: intent, nonce, transport }) => parseReceipt(await call(kind === 'cancel' ? 'public-private-cancel' : 'public-private-cancel-choice', intent, nonce, transport), { kind, body: intent, nonce }), signal);
   }
   return {
     async read(signal) { return parseFamily(await call('public-private-manage', {}, null, signal)); },
@@ -136,11 +110,12 @@ export function createFamilyClient(env = import.meta.env, request = globalThis.f
     },
     choose({ event_id, choice }, signal) { return perform('choice', { event_id: id(event_id), choice: outcome(choice) }, signal); },
     retry(signal) {
-      if (!pending) return Promise.reject(new FamilyBookingError('invalid_request', 400));
-      if (!pending.promise) pending.retried = true;
-      return dispatch(pending, signal);
+      if (!['cancel', 'choice'].includes(gate.getSnapshot().pending?.kind)) return Promise.reject(new FamilyBookingError('invalid_request', 400));
+      return gate.retry(signal);
     },
-    state() { return { paused, pending: pending ? { kind: pending.kind, target: pending.body.booking_id ?? pending.body.event_id, phase: pending.phase, ...(pending.kind === 'choice' ? { choice: pending.body.choice } : {}) } : null }; },
-    clear() { generation++; pending = null; for (const controller of controllers) controller.abort(); controllers.clear(); },
+    state: gate.getSnapshot,
+    getSnapshot: gate.getSnapshot,
+    subscribe: gate.subscribe,
+    clear() { gate.clear(); for (const controller of controllers) controller.abort(); controllers.clear(); },
   };
 }

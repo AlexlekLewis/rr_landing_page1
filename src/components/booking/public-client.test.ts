@@ -28,6 +28,10 @@ it('does not accept a return URL as evidence of received, confirmed or paid', ()
 it('rate limiting surfaces a pause without an automatic retry or raw SQL error text', async () => {
   const fetch = vi.fn().mockResolvedValue(response({ code: 'rate_limited', message: 'sensitive diagnostic' }, 429)); let error; try { await createPublicClient(env, fetch).catalog(); } catch (e) { error = e; } expect(fetch).toHaveBeenCalledTimes(1); expect(publicError(error)).toContain('wait'); expect(publicError(error)).not.toContain('diagnostic');
 });
+it('preserves a non-JSON429 refusal for the shared family visit gate before parsing its body', async () => {
+  const fetch = vi.fn().mockResolvedValue(new Response('private refusal detail', { status: 429, headers: { 'Retry-After': '45' } }));
+  await expect(createPublicClient(env, fetch).reserve({}, 'unit-challenge', id(5))).rejects.toMatchObject({ code: 'rate_limited', status: 429, retryAfter: 45 }); expect(fetch).toHaveBeenCalledTimes(1);
+});
 it('slot-conflict suggestions drop foreign-centre and internal fields', async () => {
   const fetch = vi.fn().mockResolvedValue(response({ ok: false, error: { code: 'slot_taken', nearest: [{ centre: 'cranbourne-north', profile_id: id(3), starts_at: '2026-11-12T17:00:00+11:00', ends_at: '2026-11-12T18:00:00+11:00' }, { centre: 'mickleham', profile_id: id(3), starts_at: '2026-11-13T17:00:00+11:00', ends_at: '2026-11-13T18:00:00+11:00', net: 7 }] } }, 409));
   let error; try { await createPublicClient(env, fetch).reserve({ centre: 'mickleham' }, 'unit-token', id(4)); } catch (e) { error = e; } expect(error.nearest).toHaveLength(1); expect(error.nearest[0].centre).toBe('mickleham'); expect(error.nearest[0]).not.toHaveProperty('net');
