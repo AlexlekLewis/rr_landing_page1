@@ -1,3 +1,4 @@
+import './components/booking/family-capability'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
@@ -6,6 +7,7 @@ import { PostHogProvider } from 'posthog-js/react'
 import './index.css'
 import App from './App.jsx'
 import { isPrivateBookingPath, privateBookingAnalytics } from './components/booking/booking-privacy'
+import FamilyCapabilityProvider from './components/booking/FamilyCapabilityProvider'
 
 // Initialize PostHog
 const posthogKey = import.meta.env.VITE_PUBLIC_POSTHOG_KEY
@@ -26,7 +28,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <PostHogProvider client={posthog}>
       <BrowserRouter>
-        <App />
+        <FamilyCapabilityProvider><App /></FamilyCapabilityProvider>
       </BrowserRouter>
     </PostHogProvider>
   </StrictMode>,

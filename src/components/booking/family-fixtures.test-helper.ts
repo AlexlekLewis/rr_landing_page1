@@ -1,0 +1,8 @@
+import { id } from './fixtures.test-helper';
+
+export const family = () => ({ as_of: '2026-11-17T17:00:00+11:00', players: [{ id: id(501), name: 'Test Player', available_credit_cents: 1000, reserved_credit_cents: 2000 }], items: [{ booking_id: id(601), request_id: id(701), starts_at: '2026-11-17T18:00:00+11:00', ends_at: '2026-11-17T19:00:00+11:00', coach: 'Test Coach', centre: 'Test Mickleham', state: 'confirmed', state_plain: 'Booked', can_cancel_free_until: '2026-11-16T18:00:00+11:00', late_fee_cents: 3500, cancellation_fee_cents: null as number | null, pending_choice_event: null as string | null }] });
+export const preview = () => ({ booking_id: id(601), request_id: id(701), state: 'confirmed', cancel_free_until: '2026-11-16T18:00:00+11:00', fee_cents: 3500, prepaid_cents: 13000, credit_cents: 9500, fee_owing_cents: 0, session_value_cents: 13000, server_now: '2026-11-17T17:00:00+11:00' });
+export const cancelReceipt = (nonce: string) => ({ saved: true, request: nonce, request_id: id(701), booking_id: id(601), event_id: id(801), cause: 'family', choice: 'credit', fee_cents: 3500, credit_cents: 9500, fee_owing_cents: 0, revision: 5 });
+export const choiceReceipt = (nonce: string, choice: string) => ({ saved: true, request: nonce, request_id: id(701), event_id: id(801), choice, credit_cents: choice === 'credit' || choice === 'move' ? 13000 : 0 });
+export const familyEnv = { VITE_APP_ENV: 'local', VITE_PRIVATE_BOOKING_URL: 'http://127.0.0.1:54321/functions/v1', VITE_PRIVATE_BOOKING_KEY: 'unit-public-anon' };
+export const jsonResponse = (value: unknown, status = 200) => new Response(JSON.stringify(value), { status, headers: { 'Content-Type': 'application/json', 'Retry-After': '52' } });

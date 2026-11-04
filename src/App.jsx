@@ -45,6 +45,7 @@ import { isBookingFlowPath } from './components/booking/booking-privacy';
 // DNA Profile — lazy-loaded so it never impacts landing page bundle size
 const DNAProfileRoot = React.lazy(() => import('./DNAProfileApp/App.jsx'));
 const BookPrivateCoaching = React.lazy(() => import('./components/booking/BookPage.jsx'));
+const ManagePrivateCoaching = React.lazy(() => import('./components/booking/FamilyManagePage.jsx'));
 
 // Power Game apply funnel — lazy-loaded (qualify → place → pay registration)
 const PowerGameApply = React.lazy(() => import('./components/power-game/apply/ApplyFlow'));
@@ -226,6 +227,9 @@ function App() {
         {/* The Coaches — leadership tiers, coaching mission + full bios. Info page, no form. */}
         <Route path="/coaches" element={<CoachesPage />} />
         <Route path="/book" element={<PrivateBookingEntry><React.Suspense fallback={<div className="min-h-screen bg-white p-8" role="status">Loading private coaching…</div>}><BookPrivateCoaching /></React.Suspense></PrivateBookingEntry>} />
+        <Route path="/booking" element={<PrivateBookingEntry><React.Suspense fallback={<div className="min-h-screen bg-white p-8" role="status">Opening private coaching…</div>}><ManagePrivateCoaching /></React.Suspense></PrivateBookingEntry>} />
+        <Route path="/booking/*" element={<Navigate to="/booking" replace />} />
+        <Route path="/manage/*" element={<Navigate to="/booking" replace />} />
         {/* Private Coaching at Mickleham. Enquiries go directly to the portal's
             public-enquiry endpoint. Canonical URL is
             /mickleham (per Alex); /private-coaching 308s in vercel.json, with a

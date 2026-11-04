@@ -3,6 +3,30 @@
 
 <head>
   <meta charset="UTF-8" />
+  <script id="private-family-bootstrap">
+    // Capture a family capability before assets or analytics load. It is never
+    // written to the DOM, browser storage, router state or an HTTP URL.
+    (function () {
+      var path = window.location.pathname;
+      try { path = decodeURIComponent(path); } catch (_) {}
+      if (!/^\/(?:booking|manage)(?:\/|$)/i.test(path)) return;
+      var token = null;
+      if (/^\/booking\/?$/i.test(path) && !window.location.search && /^#token=[0-9a-f]{64}$/.test(window.location.hash)) {
+        token = window.location.hash.slice(7);
+      }
+      var policy = document.createElement('meta');
+      policy.name = 'referrer'; policy.content = 'no-referrer'; document.head.appendChild(policy);
+      var robots = document.createElement('meta');
+      robots.name = 'robots'; robots.content = 'noindex, nofollow, noarchive'; document.head.appendChild(robots);
+      try { window.history.replaceState(null, '', '/booking'); }
+      catch (_) { token = null; window.location.replace('/booking'); }
+      var handoff = Symbol.for('rra.private.family.bootstrap.v1');
+      Object.defineProperty(window, handoff, { configurable: true, value: function () {
+        var value = token; token = null; delete window[handoff]; return value;
+      } });
+      window.addEventListener('pagehide', function () { token = null; }, { once: true });
+    }());
+  </script>
   <link rel="icon" type="image/png" href="/assets/MELBOURNE.ai.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,7 +39,7 @@
   <script>
     var privateBookingPath = window.location.pathname;
     try { privateBookingPath = decodeURIComponent(privateBookingPath); } catch (_) {}
-    if (!/^\/(?:book|booking|mickleham|mickleham-launch|mickleham_launch|launch|private-coaching)(?:\/|$)/i.test(privateBookingPath)) {
+    if (!/^\/(?:book|booking|manage|mickleham|mickleham-launch|mickleham_launch|launch|private-coaching)(?:\/|$)/i.test(privateBookingPath)) {
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
