@@ -8,16 +8,21 @@ const source = /<script id="private-family-bootstrap">([\s\S]*?)<\/script>/.exec
 const marker = 'a'.repeat(64);
 function bootstrap(path: string, refuseHistory = false) {
   const url = new URL(path, 'https://unit.example.test'), metas: { name?: string; content?: string }[] = [], states: unknown[] = [], redirects: string[] = [];
-  const location = { pathname: url.pathname, search: url.search, hash: url.hash, replace: (next: string) => redirects.push(next) };
+  const handlers = new Map<string, (() => void)[]>(); let reloads = 0;
+  const location = { pathname: url.pathname, search: url.search, hash: url.hash, replace: (next: string) => redirects.push(next), reload: () => { reloads++; } };
   const window = { location, history: { replaceState: (state: unknown, _title: string, next: string) => {
     if (refuseHistory) throw Error('unit history unavailable');
     states.push(state); const clean = new URL(next, url); Object.assign(location, { pathname: clean.pathname, search: clean.search, hash: clean.hash });
-  } }, addEventListener: () => {} };
+  } }, addEventListener: (event: string, listener: () => void) => { handlers.set(event, [...(handlers.get(event) ?? []), listener]); } };
   Object.defineProperty(window, 'sessionStorage', { get: () => { throw Error('No browser storage'); } });
   Object.defineProperty(window, 'localStorage', { get: () => { throw Error('No browser storage'); } });
   expect(typeof source).toBe('string');
   vm.runInNewContext(source!, { window, document: { createElement: () => ({}), head: { appendChild: (meta: object) => metas.push(meta) } }, Symbol });
-  return { window, location, states, metas, redirects, memory: createFamilyCapabilityMemory(window) };
+  const navigateHash = (next: string) => {
+    const changed = new URL(next, url); Object.assign(location, { pathname: changed.pathname, search: changed.search, hash: changed.hash });
+    for (const listener of handlers.get('hashchange') ?? []) listener();
+  };
+  return { window, location, states, metas, redirects, navigateHash, reloads: () => reloads, memory: createFamilyCapabilityMemory(window) };
 }
 it('captures the canonical fragment once and clears the address before external assets', () => {
   const result = bootstrap('/booking#token=' + marker);
@@ -43,6 +48,26 @@ it.each([
 it('does not retain access if URL cleanup fails', () => {
   const result = bootstrap('/booking#token=' + marker, true);
   expect(result.memory.has()).toBe(false); expect(result.redirects).toEqual(['/booking']);
+});
+it('starts a fresh document for a capability hash added to an already-open clean family page', () => {
+  const current = bootstrap('/booking'); expect(current.memory.has()).toBe(false);
+  current.navigateHash('/booking#token=' + marker);
+  expect(current.reloads()).toBe(1);
+  // The next document runs the early bootstrap before assets or application code.
+  const next = bootstrap(current.location.pathname + current.location.search + current.location.hash);
+  expect(next.memory.read() === marker).toBe(true);
+  expect(next.location.hash).toBe(''); expect(next.reloads()).toBe(0);
+  expect(JSON.stringify([...current.metas, ...next.metas]).includes(marker)).toBe(false);
+});
+it.each(['/booking#token=invalid', '/booking#other', '/booking#', '/manage#token=' + marker, '/manage/legacy#token=' + marker])('reloads and fails closed for a new malformed or legacy family hash: %s', path => {
+  const current = bootstrap('/booking'); current.navigateHash(path);
+  expect(current.reloads()).toBe(1);
+  const next = bootstrap(current.location.pathname + current.location.search + current.location.hash);
+  expect(next.memory.has()).toBe(false); expect(next.location.hash).toBe('');
+});
+it('checks the current route on hash navigation without reloading ordinary page anchors', () => {
+  const current = bootstrap('/coaches'); current.navigateHash('/coaches#coach'); expect(current.reloads()).toBe(0);
+  current.navigateHash('/booking#token=' + marker); expect(current.reloads()).toBe(1);
 });
 it('clears the memory capability and notifies without passing its value', () => {
   const result = bootstrap('/booking#token=' + marker); let calls = 0;

@@ -7,10 +7,21 @@
     // Capture a family capability before assets or analytics load. It is never
     // written to the DOM, browser storage, router state or an HTTP URL.
     (function () {
+      var token = null;
+      // A fragment link to an already-open page does not rerun this bootstrap.
+      // Restart the document so pagehide clears old access and the new fragment
+      // is consumed here before assets load, including malformed family links.
+      window.addEventListener('hashchange', function () {
+        var currentPath = window.location.pathname;
+        try { currentPath = decodeURIComponent(currentPath); } catch (_) {}
+        if (/^\/(?:booking|manage)(?:\/|$)/i.test(currentPath)) {
+          token = null;
+          window.location.reload();
+        }
+      });
       var path = window.location.pathname;
       try { path = decodeURIComponent(path); } catch (_) {}
       if (!/^\/(?:booking|manage)(?:\/|$)/i.test(path)) return;
-      var token = null;
       if (/^\/booking\/?$/i.test(path) && !window.location.search && /^#token=[0-9a-f]{64}$/.test(window.location.hash)) {
         token = window.location.hash.slice(7);
       }
