@@ -8,7 +8,8 @@
 // "By Program" rollup tab and the "About" metadata tab.
 //
 // Auth: requires x-webhook-secret header matching SUPABASE_WEBHOOK_SECRET
-// (re-using the same env var that protects /api/sync-holiday-row).
+// (re-using the same env var that protects /api/sync-holiday-row). If the env
+// var is unset, every request is refused.
 //
 // Trigger: manually via curl, or cron via Supabase pg_cron, or admin button.
 //
@@ -20,6 +21,7 @@
 
 import { google } from 'googleapis';
 import { createClient } from '@supabase/supabase-js';
+import { checkWebhookSecret } from './_lib/webhookSecret.js';
 
 const SPREADSHEET_ID = '1zCi9GF-jO77ZI-hP6smxVgbOk_ogOg0iV_lH4CCcsGc';
 const TZ = 'Australia/Melbourne';
@@ -111,13 +113,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const expected = process.env.SUPABASE_WEBHOOK_SECRET;
-  if (expected) {
-    const got = req.headers['x-webhook-secret'];
-    if (got !== expected) {
-      return res.status(401).json({ error: 'unauthorized' });
-    }
-  }
+  const denied = checkWebhookSecret(req, 'refresh-unified-people');
+  if (denied) return res.status(denied.status).json({ error: denied.error });
 
   let sheets, supabase;
   try {
