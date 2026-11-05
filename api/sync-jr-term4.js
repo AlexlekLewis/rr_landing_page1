@@ -73,18 +73,23 @@ const kind = (r) => {
 };
 const ageOk = (r) => Number(r.player_age) >= 7 && Number(r.player_age) <= 12;
 
-// The same player entered more than once (same first name, same parent email). The
-// entry kept is the paid one, else a booking or request, else the latest; the rest
-// are marked so nobody rings a family twice. Siblings share an email, so the first
-// name is part of the key and an email alone never merges two children.
+// The same player entered more than once: same first name, same parent email AND the same
+// age (21 Oct 2026 live test: "TEST Player" 8 and "TEST Request" 11 from one email were
+// wrongly merged on first name alone). The entry kept is the most real one: paid, then a
+// booking, then a standby request, then an early interest entry; newest breaks a tie. So an
+// unpaid booking is never hidden behind a later request. Siblings share an email, so the
+// first name and age are part of the key and an email alone never merges two children.
+const KIND_RANK = { booking: 2, request: 1, interest: 0 };
 export const duplicateOf = (rows) => {
-  const key = (r) => `${String(r.player_name || '').trim().toLowerCase().split(/\s+/)[0]}|${String(r.parent_email || '').trim().toLowerCase()}`;
-  const rank = (r) => [r.paid ? 2 : kind(r) === 'interest' ? 0 : 1, String(r.created_at || '')];
+  const key = (r) => [
+    String(r.player_name || '').trim().toLowerCase().split(/\s+/)[0],
+    String(r.parent_email || '').trim().toLowerCase(),
+    String(r.player_age ?? ''),
+  ].join('|');
+  const rank = (r) => [r.paid ? 3 : KIND_RANK[kind(r)], String(r.created_at || '')];
+  const better = (a, b) => rank(a)[0] > rank(b)[0] || (rank(a)[0] === rank(b)[0] && rank(a)[1] > rank(b)[1]);
   const best = new Map();
-  for (const r of rows) {
-    const k = key(r); const b = best.get(k);
-    if (!b || rank(r)[0] > rank(b)[0] || (rank(r)[0] === rank(b)[0] && rank(r)[1] > rank(b)[1])) best.set(k, r);
-  }
+  for (const r of rows) { const k = key(r); const b = best.get(k); if (!b || better(r, b)) best.set(k, r); }
   const out = new Map();
   for (const r of rows) { const b = best.get(key(r)); if (b && b.id !== r.id) out.set(r.id, b); }
   return out;
