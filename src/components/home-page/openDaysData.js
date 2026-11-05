@@ -35,10 +35,11 @@ import { ANNOUNCEMENT as LP_JR_DAY_ANNOUNCEMENT, lpJrDayOpen } from '../lower-pl
 import { ANNOUNCEMENT as POWER_LEAGUE_ANNOUNCEMENT, powerLeagueOpen } from '../power-league/plPromo';
 
 // Power League matches, Sun 15 Nov 2026 (Andy, 28 Oct 2026: "add event as Power
-// League matches that are now on November 15" — a test). TICKER ONLY: no
-// nomination form and no page for this date yet (/power-league still describes
-// 25 Oct), so it carries no link and the What's On pop-up skips it
-// (tickerOnly). It drops out by itself after the day. REVIEW 16 NOV 2026: remove it.
+// League matches that are now on November 15"). TICKER ONLY, no link. Since 30 Oct
+// /power-league describes 15 Nov and takes nominations, so the linked open
+// invitation below runs until nominations close (Tue 10 Nov, 9pm) and this line
+// takes over after that: the ticker never carries two Power League rows. It drops
+// out by itself after the day. REVIEW 16 NOV 2026: remove it.
 const POWER_LEAGUE_NOV_ENDS = Date.parse('2026-11-16T00:00:00+11:00');
 const POWER_LEAGUE_NOV = {
     key: 'power-league-15-nov',
@@ -48,15 +49,16 @@ const POWER_LEAGUE_NOV = {
 };
 
 export const ANNOUNCEMENTS = [
-    ...(Date.now() < POWER_LEAGUE_NOV_ENDS ? [POWER_LEAGUE_NOV] : []),
-    // Power League open invitation, Sun 25 Oct 2026 (Alex, 19 Oct 2026: "make sure
-    // it's on the main modal"). Nearest real deadline (Tue 20 Oct, 9pm) and it drops
-    // out by itself at that moment (powerLeagueOpen). REVIEW 26 OCT 2026: remove it
-    // and its import.
+    ...(!powerLeagueOpen() && Date.now() < POWER_LEAGUE_NOV_ENDS ? [POWER_LEAGUE_NOV] : []),
+    // Power League open invitation, now Sun 15 Nov 2026 (first set for 25 Oct, rained
+    // out; Alex, 19 Oct 2026: "make sure it's on the main modal"). Nearest real
+    // deadline (Tue 10 Nov, 9pm) and it drops out by itself at that moment
+    // (powerLeagueOpen). REVIEW 16 NOV 2026: remove it and its import.
     ...(powerLeagueOpen() ? [POWER_LEAGUE_ANNOUNCEMENT] : []),
-    // Junior Royals Are Coming to Lower Plenty ($10), Sun 25 Oct 2026 (Alex, 16 Oct
-    // 2026). Nearest real deadline (Fri 23 Oct, 9pm), and it drops out by itself
-    // at that moment (lpJrDayOpen). REVIEW 26 OCT 2026: remove it and its import.
+    // Junior Royals Are Coming to Lower Plenty ($10), now Sun 15 Nov 2026 (first set
+    // for 25 Oct, rained out). Nearest real deadline (Fri 13 Nov, 9pm), and it drops
+    // out by itself at that moment (lpJrDayOpen). REVIEW 16 NOV 2026: remove it and
+    // its import.
     ...(lpJrDayOpen() ? [LP_JR_DAY_ANNOUNCEMENT] : []),
     {
         // It says "register your interest" rather than "trials full": the
