@@ -1,5 +1,6 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
+import { getFirstTouch, mergeCampaignTags, stripClickIds } from '../lib/campaignTags';
 
 /**
  * Comprehensive page analytics tracker.
@@ -22,6 +23,18 @@ const getSessionId = () => {
     }
     return sid;
 };
+
+// The campaign tags (utm_*, has_fbclid, has_gclid, landing_path) of the page this browser
+// session LANDED on, added to every event so a scroll or an exit carries the same tags
+// as the page view. sessionStorage can be blocked, so it is passed in guarded.
+const getStorage = () => {
+    try { return window.sessionStorage; } catch { return null; }
+};
+const campaignTags = () => getFirstTouch({
+    search: window.location.search,
+    pathname: window.location.pathname,
+    storage: getStorage(),
+});
 
 const getDeviceType = (w) => {
     if (w < 768) return 'mobile';
@@ -59,8 +72,8 @@ const usePageAnalytics = (pagePath, options = {}) => {
             session_id: sessionId.current,
             page_path: pagePath,
             event_type: eventType,
-            event_data: eventData,
-            referrer: document.referrer || null,
+            event_data: mergeCampaignTags(eventData, campaignTags()),
+            referrer: stripClickIds(document.referrer) || null,
             user_agent: navigator.userAgent,
             screen_width: window.innerWidth,
             screen_height: window.innerHeight,
@@ -95,8 +108,8 @@ const usePageAnalytics = (pagePath, options = {}) => {
 
         // ─── 1. Page View ───────────────────────────────────────
         enqueue('page_view', {
-            referrer: document.referrer,
-            url: window.location.href,
+            referrer: stripClickIds(document.referrer),
+            url: stripClickIds(window.location.href),
             timestamp: new Date().toISOString(),
         });
 
@@ -178,8 +191,11 @@ const usePageAnalytics = (pagePath, options = {}) => {
                 session_id: sessionId.current,
                 page_path: pagePath,
                 event_type: 'exit',
-                event_data: { total_seconds: totalSeconds, max_scroll: Math.max(...firedScrollDepths.current, 0) },
-                referrer: document.referrer || null,
+                event_data: mergeCampaignTags(
+                    { total_seconds: totalSeconds, max_scroll: Math.max(...firedScrollDepths.current, 0) },
+                    campaignTags(),
+                ),
+                referrer: stripClickIds(document.referrer) || null,
                 user_agent: navigator.userAgent,
                 screen_width: window.innerWidth,
                 screen_height: window.innerHeight,

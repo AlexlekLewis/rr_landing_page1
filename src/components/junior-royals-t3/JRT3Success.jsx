@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { PENDING_KEY } from './JRT3RegistrationForm';
 import { JR_T4, PAY_OPTIONS, GROUPS } from './jrTerm4Data';
+import { pixelTrack } from '../../lib/metaPixel';
 
 // /junior-royals/success — where Stripe sends a family after paying for Term 4
 // (each Payment Link's after-payment redirect must be
@@ -34,9 +35,9 @@ const JRT3Success = () => {
         try {
             if (!window.sessionStorage.getItem(key)) {
                 window.sessionStorage.setItem(key, '1');
-                if (typeof window.fbq === 'function') {
+                {
                     const option = PAY_OPTIONS[booking?.option] ? booking.option : 'upfront';
-                    window.fbq('track', 'Purchase', { content_name: `Junior Royals Term 4 (${option})`, value: PAY_OPTIONS[option].value, currency: 'AUD' }, { eventID: sessionId });
+                    pixelTrack('Purchase', { content_name: `Junior Royals Term 4 (${option})`, value: PAY_OPTIONS[option].value, currency: 'AUD' }, { eventID: sessionId });
                 }
             }
         } catch { /* never block the page on tracking */ }

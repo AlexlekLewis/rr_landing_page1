@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '../../lib/supabase';
+import { pixelTrack } from '../../lib/metaPixel';
 
 // Expression-of-interest form for the September/October school holiday program at
 // Centres across Melbourne. NO payment is taken here — the program dates,
@@ -79,8 +80,8 @@ const HolidayInterestForm = () => {
             }]);
             if (error) throw error;
             try {
-                if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
-                    window.fbq('track', 'Lead', {
+                {
+                    pixelTrack('Lead', {
                         content_name: 'Junior Royals Holiday Program — Interest',
                         content_category: `holiday-camp-${form.preferred_centre}`,
                     });
