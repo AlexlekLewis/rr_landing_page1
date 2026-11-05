@@ -4,7 +4,7 @@ import { CENTRE } from './pcOptions';
 
 const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
-// Four steps, written so a parent who has never spoken to us knows exactly what
+// Three steps, written so a parent who has never spoken to us knows exactly what
 // happens next and what it costs at each stage.
 const STEPS = [
     {
@@ -15,17 +15,12 @@ const STEPS = [
     {
         n: '02',
         title: 'Our admin team books your time',
-        body: 'Someone from the Academy’s administration team contacts you within a few days to organise a time for your first session. They will confirm the night, the start time and what to bring — you do not need to chase anyone.',
+        body: 'Someone from the Academy’s administration team contacts you within a few days. They will ask about the player and which night suits you, then confirm the night, the start time and what to bring — you do not need to chase anyone.',
     },
     {
         n: '03',
-        title: 'The assessment session — $50',
-        body: 'Every player starts with a one-hour session with Alex at Mickleham. He watches them bat or bowl, works out what will actually move their game forward, and writes it down as a plan you keep. Right now that session is $50 instead of the usual $160.',
-    },
-    {
-        n: '04',
         title: 'Alex assigns your coach, then your block starts',
-        body: 'Off the back of that session Alex matches the player to the coach who best suits how they play and what they need next — you do not pick a name off a list, and you are not simply given whoever is free. From there you book a block of sessions (three at the least) on your night.',
+        body: 'Alex matches the player to the coach who best suits how they play and what they need next — you do not pick a name off a list, and you are not simply given whoever is free. From there you book a block of sessions (three at the least) on your night.',
     },
 ];
 
@@ -42,7 +37,7 @@ const PCHowItWorks = () => {
                 >
                     <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">How It Works</p>
                     <h2 className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-5">
-                        Four steps, start to first session
+                        Three steps, start to first session
                     </h2>
                     <p className="text-rr-charcoal font-medium leading-relaxed">
                         Private coaching at {CENTRE.name} runs on Tuesday and Friday evenings. Here is
@@ -51,7 +46,7 @@ const PCHowItWorks = () => {
                     </p>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 mb-14">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-10 mb-14">
                     {STEPS.map((s, i) => (
                         <motion.div
                             key={s.n}
@@ -86,8 +81,8 @@ const PCHowItWorks = () => {
                         Every player is placed by the Head Coach
                     </h3>
                     <p className="text-rr-charcoal font-medium leading-relaxed mb-4">
-                        Alex Lewis assesses every single player who comes through private coaching at
-                        Mickleham, and he decides which coach they train with. A young batter who needs
+                        Alex Lewis decides which coach every player in private coaching at Mickleham
+                        trains with. A young batter who needs
                         to learn to score square of the wicket does not need the same coach as a
                         seventeen-year-old quick chasing another yard of pace.
                     </p>

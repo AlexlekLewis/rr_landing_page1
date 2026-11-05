@@ -2,7 +2,7 @@
 // pcOptions.js — Private Coaching product + EOI form options (Mickleham).
 //
 // Pricing HELD by Alex 22 Jul 2026 (customer-facing, inc GST):
-// $160 first consultation (session 1 for everyone) · 1-on-1 $130/hr
+// 1-on-1 $130/hr (the $160 Head Coach assessment was REMOVED 3 Nov 2026, Alex)
 // PROFESSIONAL coach · $160/hr Leadership (6+ blocks only) ·
 // groups $70pp (2) / $60pp (3) / $50pp (4) —
 // groups deliberately undercut solo to push players toward them.
@@ -91,20 +91,11 @@ export const qualifiesForPathway = (sessionsRequested, packageType = 'none') =>
 // they cannot buy a single hour.
 export const PRICING = [
     {
-        key: 'consult',
-        label: 'Assessment session with the Head Coach',
-        price: '$50',
-        wasPrice: '$160',
-        unit: 'one hour · every player starts here',
-        detail: 'One hour, one-on-one with Academy Head Coach Alex Lewis. He assesses the player, writes the development plan you keep, and decides which coach they go on to train with. The launch price is $50 until 28 August 2026; after that it returns to its standard price of $160.',
-        minimum: 'Everyone does this first. You cannot skip it, and you can stop after it if you choose.',
-    },
-    {
         key: 'academy',
         label: 'One-on-one with a professional coach',
         price: '$130',
         unit: 'per hour · one player, one coach, one lane',
-        detail: 'Your player and their assigned coach in a dedicated lane for a full hour, working through the plan set at the assessment.',
+        detail: 'Your player and their assigned coach in a dedicated lane for a full hour, working through the plan your coach sets with you.',
         minimum: 'Smallest booking is a 3-session starter block — $390. Most families then continue on 6 or more.',
     },
     {
@@ -148,7 +139,7 @@ export const PRICING = [
 export const BOOKING_RULES = [
     {
         title: 'We do not sell single sessions',
-        body: 'After your assessment, the smallest booking is a block of 3 sessions. Cricket skills do not change in one hour — a block is what makes the coaching worth paying for.',
+        body: 'The smallest booking is a block of 3 sessions. Cricket skills do not change in one hour — a block is what makes the coaching worth paying for.',
     },
     {
         title: 'Tuesday or Friday evenings',
