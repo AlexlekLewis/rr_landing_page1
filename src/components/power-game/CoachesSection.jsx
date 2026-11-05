@@ -71,9 +71,9 @@ const performance = [
         bio: "A First XI batter for Essendon in Victorian Premier Cricket and a full Victorian pathway player up to the Under-19s. Ikroop's game is powerful, adaptive and built for 360° T20 — and he brings that modern attacking method and sharp tactical thinking to every player he coaches.",
     },
     {
-        name: "Rittin Raman",
+        name: "Ritin Raman",
         role: "Performance Coach — Wicketkeeping",
-        bio: "An emerging pathway talent and state-level representative, Rittin is a wicketkeeper-batter playing First XI cricket for Melbourne Cricket Club. Still climbing the pathway himself, he coaches with high energy, technical precision and a genuine drive to help players unlock their potential.",
+        bio: "An emerging pathway talent and state-level representative, Ritin is a wicketkeeper-batter playing First XI cricket for Melbourne Cricket Club. Still climbing the pathway himself, he coaches with high energy, technical precision and a genuine drive to help players unlock their potential.",
     },
     {
         name: "Zac Parr",
