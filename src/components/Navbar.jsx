@@ -52,6 +52,13 @@ const COACHES_NAV = [
     { label: 'THE COACHES', id: 'bios' },
 ];
 
+// A single coach's page (/coaches/:slug) — on-page anchors + back to all coaches
+const COACH_PROFILE_NAV = [
+    { label: 'WHAT THEY COACH', id: 'strengths' },
+    { label: 'PRICES', id: 'prices' },
+    { label: 'ALL COACHES', route: '/coaches' },
+];
+
 // Private Coaching page — on-page section anchors
 const PC_NAV = [
     { label: 'HOW IT WORKS', id: 'how-it-works' },
@@ -114,6 +121,7 @@ const Navbar = ({ variant = 'lp1', onRegisterClick, ctaLabelOverride, ctaTargetO
     const isMickleham = variant === 'mickleham';
     const isCoaches = variant === 'coaches';
     const isPrivateCoaching = variant === 'private-coaching';
+    const isCoachProfile = variant === 'coach-profile';
     const isIndiaTour = variant === 'india-tour';
     const isPerformanceSquads = variant === 'performance-squads';
     // Selected-player welcome page: same chrome as Performance Squads, but the CTA
@@ -125,10 +133,10 @@ const Navbar = ({ variant = 'lp1', onRegisterClick, ctaLabelOverride, ctaTargetO
     // page does not have while its dates are pending.
     const isOpenAgeTrial = variant === 'open-age-trial';
 
-    const navLinks = (isLP3 || isHoliday || isShop || isPerformanceSquads || isPSWelcome || isMasterclass || isPowerGame || isOpenAgeTrial) ? [] : isIndiaTour ? IT_NAV : isPrivateCoaching ? PC_NAV : isCoaches ? COACHES_NAV : isMickleham ? MICKLEHAM_NAV : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
+    const navLinks = (isLP3 || isHoliday || isShop || isPerformanceSquads || isPSWelcome || isMasterclass || isPowerGame || isOpenAgeTrial) ? [] : isIndiaTour ? IT_NAV : isPrivateCoaching ? PC_NAV : isCoachProfile ? COACH_PROFILE_NAV : isCoaches ? COACHES_NAV : isMickleham ? MICKLEHAM_NAV : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
     // Standalone pages (Mickleham, Coaches, Private Coaching, India Tour) get the full site nav: Home + the Programs dropdown of live pages.
-    const showProgramsDropdown = isHome || isMickleham || isCoaches || isPrivateCoaching || isIndiaTour || isPerformanceSquads || isPSWelcome || isMasterclass || isOpenAgeTrial;
-    const showHomeLink = isMickleham || isCoaches || isPrivateCoaching || isIndiaTour || isPerformanceSquads || isPSWelcome || isMasterclass || isOpenAgeTrial;
+    const showProgramsDropdown = isHome || isMickleham || isCoaches || isCoachProfile || isPrivateCoaching || isIndiaTour || isPerformanceSquads || isPSWelcome || isMasterclass || isOpenAgeTrial;
+    const showHomeLink = isMickleham || isCoaches || isCoachProfile || isPrivateCoaching || isIndiaTour || isPerformanceSquads || isPSWelcome || isMasterclass || isOpenAgeTrial;
     const showCTA = !isShop && !isPowerGame;
     const showHamburger = !isShop;
 

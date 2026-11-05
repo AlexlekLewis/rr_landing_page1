@@ -32,6 +32,7 @@ import HomePage from './components/home-page/HomePage';
 import InductionPage from './components/induction/InductionPage';
 import CoachesDay from './components/coaches-day/CoachesDay';
 import CoachesPage from './components/coaches/CoachesPage';
+import { COACH_PAGES_ENABLED } from './components/coach-profile/coachPagesConfig';
 import PrivateCoaching from './components/private-coaching/PrivateCoaching';
 import MicklehamLaunch from './components/mickleham-launch/MicklehamLaunch';
 import Reviews from './components/reviews/Reviews';
@@ -57,6 +58,8 @@ const PowerGameScholarship = React.lazy(() => import('./components/power-game/re
 const PowerGameFullRide = React.lazy(() => import('./components/power-game/returning/FullRideSignup'));
 // Performance Squads — representative pathway (trial or invite; North Melbourne + South-East
 // Melbourne). HIDDEN page: noindex, not linked from nav/homepage/sitemap. Direct URL only.
+// Per-coach pages: hidden until the private-coaching booking system is live.
+const CoachProfilePage = React.lazy(() => import('./components/coach-profile/CoachProfilePage'));
 const PerformanceSquads = React.lazy(() => import('./components/performance-squads/PerformanceSquads'));
 const PerformanceSquadsSuccess = React.lazy(() => import('./components/performance-squads/PerformanceSquadsSuccess'));
 // "I can't make a trial" — current Academy players who want a squad place but
@@ -221,6 +224,12 @@ function App() {
 
         {/* The Coaches — leadership tiers, coaching mission + full bios. Info page, no form. */}
         <Route path="/coaches" element={<CoachesPage />} />
+        <Route
+          path="/coaches/:slug"
+          element={COACH_PAGES_ENABLED
+            ? <React.Suspense fallback={<div className="min-h-screen bg-white" />}><CoachProfilePage /></React.Suspense>
+            : <Navigate to="/coaches" replace />}
+        />
         {/* Private Coaching at Mickleham. EOI form → Head Coach assigns a coach.
             Writes to private_coaching_eoi (anon insert only). Canonical URL is
             /mickleham (per Alex); /private-coaching 308s in vercel.json, with a
