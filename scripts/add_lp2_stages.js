@@ -1,9 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
+import process from 'node:process';
 
-const supabase = createClient(
-    'https://pudldzgmluwoocwxtzhw.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB1ZGxkemdtbHV3b29jd3h0emh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0MTA0OTQsImV4cCI6MjA4NDk4NjQ5NH0.X-pDkxLGDGIpno_HVmPTURXf4IZ2jucZURXjj3si0gg'
-);
+// Run with: node --env-file=.env scripts/add_lp2_stages.js   (see .env.example)
+const { VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY } = process.env;
+if (!VITE_SUPABASE_URL || !VITE_SUPABASE_ANON_KEY) {
+    console.error('Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY (see .env.example).');
+    process.exit(1);
+}
+const supabase = createClient(VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY);
 
 const newStages = [
     { name: 'Assessment Invited', slug: 'assessment_invited', sort_order: 5, color: '#8B5CF6', is_default: false },
