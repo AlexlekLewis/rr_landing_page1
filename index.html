@@ -11,24 +11,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rajasthan Royals Academy Melbourne</title>
 
-  <!-- Meta Pixel Code -->
+  <!-- Meta Pixel Code. Never loaded on pages for programs aimed at children under 13 (Meta's terms). -->
+  <!-- pixelBlocked is the one rule: src/components/PixelRouteGuard.jsx uses it for in-app moves. -->
   <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '3125499870991789');
-    fbq('track', 'PageView');
+    (function (w, d) {
+      // Any address containing "junior" is blocked, so new junior pages are covered without a change here:
+      // /junior-royals (Term 4, 7-12), /junior-royals-term2 (7-15), /junior-royals-holiday (7-15),
+      // /lower-plenty-junior-royals-day (7-12), /sid-juniors (8-16), and the pages under them.
+      // Also blocked, with the pages under them:
+      var PIXEL_BLOCKED = [
+        '/holiday-programs', // old address, redirects to the Junior Royals holiday camps
+        '/carnival',         // old address, redirects to the Lower Plenty Junior Royals Day
+        '/rramadmin_26'      // staff screens
+      ];
+      function pixelBlocked(path) {
+        var p = String(path || '/').toLowerCase().split(/[?#]/)[0].replace(/\/+$/, '') || '/';
+        if (p.indexOf('junior') !== -1) return true;
+        for (var i = 0; i < PIXEL_BLOCKED.length; i++) {
+          if (p === PIXEL_BLOCKED[i] || p.indexOf(PIXEL_BLOCKED[i] + '/') === 0) return true;
+        }
+        return false;
+      }
+      w.rraPixelBlocked = pixelBlocked;
+      if (pixelBlocked(w.location.pathname)) return; // child page: no Meta script, no fbq, no events
+
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(w, d,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      w.fbq.disablePushState = true;         // PixelRouteGuard sends PageView for in-app moves
+      w.fbq.allowDuplicatePageViews = true;
+      w.fbq('init', '3125499870991789');
+      w.fbq('track', 'PageView');
+      w.rraPixelOn = true;                   // set only when the Pixel loaded in this page
+    })(window, document);
   </script>
   <!-- End Meta Pixel Code -->
 </head>
 
 <body>
-  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=3125499870991789&ev=PageView&noscript=1" /></noscript>
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
 </body>
