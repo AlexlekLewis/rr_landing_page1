@@ -1,0 +1,13 @@
+export const id=(n:number)=>`00000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
+export const secret='pci1.'+'a'.repeat(64),review='ci1.'+'b'.repeat(64)+'.1794182400000000';
+export const env={VITE_APP_ENV:'local',VITE_PRIVATE_BOOKING_URL:'http://127.0.0.1:54321/functions/v1'};
+export const fields=(accept=false)=>({parent:{name:'Family Contact',email:'family@example.test',phone:'0400000000'},note:'My own note',confirm_players:accept,consent_save_card:accept});
+export const header=()=>({schema_version:1,invitation_id:id(1),proposal_version:1,expires_at:'2026-11-10T09:00:00+11:00',expires_in_seconds:86400});
+export const preview=()=>({...header(),state:'ready',centre:{slug:'mickleham',name:'Synthetic centre'},coach:{display_name:'Synthetic coach'},booking:{starts_at:'2026-12-08T16:00:00+11:00',duration_minutes:60,weeks:1,skip_dates:[],kind:'one_on_one',group_size:null,focus:'batting',machine:'either',goals:[]},participants:[{first_name:'Test',surname_initial:'P',age:14}],recipient_masked:'f***@example.test'});
+export const dates=()=>[{date:'2026-12-08',starts_at:'2026-12-08T16:00:00+11:00',ends_at:'2026-12-08T17:00:00+11:00'}];
+export const price=()=>({per_session_cents:14000,sessions:1,discount_applied:false,first_session_hold_cents:14000,rest_cents:0,total_cents:14000});
+export const quote=()=>({...header(),state:'quoted',as_of:'2026-11-09T09:00:00+11:00',price:price(),series_check:{ready:true,requested_weeks:1,ok_dates:['2026-12-08'],dates:dates(),flagged:[],blocked:[],skipped_dates:[],add_week:null,actual_sessions:1},decision_quote:{kind:'policy_quote',quoted_at:'2026-11-09T09:00:00+11:00',confirm_by:'2026-11-10T09:00:00+11:00'},funding:{funding_mode:'card',first_due_cents:14000,rest_due_cents:0,credit_applied_cents:0},review,consent_version:'private_save_card_v1',participant_confirmation_required:true,card_consent_required:true});
+export const unavailable=(nonce=id(2))=>({schema_version:1,receipt_kind:'original_invitation_submission',invitation_id:id(1),proposal_version:1,request:nonce,payload_verified:true,at:'2026-11-09T09:01:00+11:00',outcome:'unavailable',saved:false,canonical_submission:false,request_id:null,result:{state:'unavailable',code:'slot_taken'}});
+export const missing=()=>({schema_version:1,receipt_state:'not_found'});
+export const found=(receipt:unknown)=>({schema_version:1,receipt_state:'found',receipt});
+export const json=(packet:unknown,status=200)=>new Response(JSON.stringify(packet),{status,headers:{'Content-Type':'application/json'}});

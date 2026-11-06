@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import React, { StrictMode, useEffect } from 'react';
+import React, { StrictMode, useEffect,useContext } from 'react';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { Link, MemoryRouter, useLocation } from 'react-router-dom';
@@ -12,7 +12,7 @@ vi.mock('./family-capability', () => ({ familyCapabilityMemory: test.memory }));
 vi.mock('./family-client', () => ({ createFamilyClient: (...args: unknown[]) => { test.familyGates.push(args[3]); return test.client; } }));
 vi.mock('./credit-client', () => ({ createCreditClient: (...args: unknown[]) => { test.creditGates.push(args[3]); return test.creditClient; } }));
 import FamilyCapabilityProvider from './FamilyCapabilityProvider';
-import { useFamilyService } from './family-context';
+import { useFamilyService,FamilyContext } from './family-context';
 
 const states: unknown[] = [];
 function Probe() {
@@ -42,4 +42,9 @@ it('clears memory when the document is left or put into the back-forward cache',
   fireEvent(window, new Event('pagehide')); expect(screen.getByText('Private access cleared')).toBeTruthy();
   expect(test.client.clear).toHaveBeenCalled();
   expect(test.creditClient.clear).toHaveBeenCalled();
+});
+it('invitation entry clears retained915 authority and provides no management or credit context',()=>{
+ function IsolationProbe(){const service=useContext(FamilyContext);return <><p>{service?'Family provider present':'No family provider'}</p><Link to="/book/invitation">Invitation</Link></>;}
+ render(<MemoryRouter initialEntries={['/booking']}><FamilyCapabilityProvider><IsolationProbe/></FamilyCapabilityProvider></MemoryRouter>);
+ expect(screen.getByText('Family provider present')).toBeTruthy();fireEvent.click(screen.getByRole('link',{name:'Invitation'}));expect(screen.getByText('No family provider')).toBeTruthy();expect(test.memory.has()).toBe(false);expect(test.client.clear).toHaveBeenCalled();expect(test.creditClient.clear).toHaveBeenCalled();
 });

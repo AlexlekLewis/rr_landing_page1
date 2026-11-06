@@ -17,8 +17,8 @@ export default function FamilyCapabilityProvider({ children }) {
   const clear = useCallback(() => { client.clear(); creditClient.clear(); gate.clear(); familyCapabilityMemory.clear(); }, [client, creditClient, gate]);
   // No effect cleanup clears the capability: StrictMode rehearses cleanups on
   // mount. Leaving the private flow or the document explicitly clears memory.
-  useLayoutEffect(() => { if (!isBookingFlowPath(pathname)) clear(); }, [pathname, clear]);
+  useLayoutEffect(() => { if (!isBookingFlowPath(pathname) || /^\/book\/invitation(?:\/|$)/i.test(pathname)) clear(); }, [pathname, clear]);
   useEffect(() => { window.addEventListener('pagehide', clear); return () => window.removeEventListener('pagehide', clear); }, [clear]);
   const value = useMemo(() => ({ hasCapability, client, creditClient, gate, creditEnabled: import.meta.env.VITE_PRIVATE_BOOKING_CREDIT_ENABLED === 'true', clear }), [hasCapability, client, creditClient, gate, clear]);
-  return <FamilyContext.Provider value={value}>{children}</FamilyContext.Provider>;
+  return /^\/book\/invitation(?:\/|$)/i.test(pathname)?children:<FamilyContext.Provider value={value}>{children}</FamilyContext.Provider>;
 }

@@ -46,6 +46,7 @@ import { isBookingFlowPath } from './components/booking/booking-privacy';
 const DNAProfileRoot = React.lazy(() => import('./DNAProfileApp/App.jsx'));
 const BookPrivateCoaching = React.lazy(() => import('./components/booking/BookPage.jsx'));
 const ManagePrivateCoaching = React.lazy(() => import('./components/booking/FamilyManagePage.jsx'));
+const CardInvitation = React.lazy(() => import('./components/booking/invitation/InvitationPage.jsx'));
 
 // Power Game apply funnel — lazy-loaded (qualify → place → pay registration)
 const PowerGameApply = React.lazy(() => import('./components/power-game/apply/ApplyFlow'));
@@ -141,6 +142,7 @@ class ChunkReloadBoundary extends React.Component {
     return { failed: true };
   }
   componentDidCatch(error) {
+    if (this.props.noReload) return;
     const msg = String((error && (error.message || error.toString())) || '');
     const isChunkError = /dynamically imported module|Importing a module script failed|ChunkLoadError|Loading (chunk|CSS chunk)|error loading dynamically|Failed to fetch/i.test(msg);
     if (isChunkError) {
@@ -158,13 +160,14 @@ class ChunkReloadBoundary extends React.Component {
         <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#111921', color: '#fff', fontFamily: 'sans-serif', textAlign: 'center', padding: 24 }}>
           <div>
             <p style={{ fontWeight: 800, fontSize: 18, marginBottom: 4 }}>Sorry — something went wrong loading the page.</p>
-            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, marginBottom: 16 }}>A quick refresh usually fixes it.</p>
-            <button
+            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, marginBottom: 16 }}>{this.props.noReload?'Keep this invitation tab open if a submitted result is uncertain. Reloading loses the original recovery details. Contact the Academy for help.':'A quick refresh usually fixes it.'}</p>
+            {this.props.noReload?<button type="button" onClick={()=>this.setState({failed:false})} style={{minHeight:44,padding:'12px 20px',borderRadius:12,border:'1px solid white'}}>Reopen invitation view without reloading</button>:null}
+            {!this.props.noReload?<button
               onClick={() => { try { sessionStorage.removeItem('chunk_reloaded'); } catch { /* ignore */ } window.location.reload(); }}
               style={{ background: '#E50695', color: '#fff', border: 'none', borderRadius: 9999, padding: '12px 28px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer' }}
             >
               Reload
-            </button>
+            </button>:null}
           </div>
         </div>
       );
@@ -175,11 +178,12 @@ class ChunkReloadBoundary extends React.Component {
 
 function App() {
   const { pathname } = useLocation();
+  const invitationPath = /^\/book\/invitation(?:\/|$)/i.test(pathname);
   return (
     <div className="font-sans antialiased text-rr-dark bg-white selection:bg-rr-pink selection:text-white">
       <PostHogPageviewTracker />
       <RouteSeo />
-      <ChunkReloadBoundary>
+      <ChunkReloadBoundary key={invitationPath?'invitation':'ordinary'} noReload={invitationPath}>
       <Routes>
         {/* DNA Profile App — lazy-loaded portal at /eliteprogram/playerDNAprofile */}
         <Route path="/eliteprogram2026/playerDNAprofile/*" element={
@@ -227,6 +231,8 @@ function App() {
         {/* The Coaches — leadership tiers, coaching mission + full bios. Info page, no form. */}
         <Route path="/coaches" element={<CoachesPage />} />
         <Route path="/book" element={<PrivateBookingEntry><React.Suspense fallback={<div className="min-h-screen bg-white p-8" role="status">Loading private coaching…</div>}><BookPrivateCoaching key="card" /></React.Suspense></PrivateBookingEntry>} />
+        <Route path="/book/invitation" element={<PrivateBookingEntry><React.Suspense fallback={<div className="min-h-screen bg-white p-8" role="status">Opening card invitation…</div>}><CardInvitation /></React.Suspense></PrivateBookingEntry>} />
+        <Route path="/book/invitation/*" element={<Navigate to="/book/invitation" replace />} />
         <Route path="/book/credit" element={<PrivateBookingEntry><React.Suspense fallback={<div className="min-h-screen bg-white p-8" role="status">Loading private coaching…</div>}><BookPrivateCoaching key="credit" credit /></React.Suspense></PrivateBookingEntry>} />
         <Route path="/booking" element={<PrivateBookingEntry><React.Suspense fallback={<div className="min-h-screen bg-white p-8" role="status">Opening private coaching…</div>}><ManagePrivateCoaching /></React.Suspense></PrivateBookingEntry>} />
         <Route path="/booking/*" element={<Navigate to="/booking" replace />} />
