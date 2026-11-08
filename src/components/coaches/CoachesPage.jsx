@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import PartnerStack from '../power-game/PartnerStack';
 import CoachesHero from './CoachesHero';
 import CoachesLeadership from './CoachesLeadership';
 import CoachesMission from './CoachesMission';
@@ -38,6 +39,7 @@ const CoachesPage = () => {
                     <CoachesJoin />
                 </div>
             </main>
+            <PartnerStack />
             <Footer />
         </div>
     );

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import PartnerStack from '../power-game/PartnerStack';
 import StickyCTA from '../performance-squads/StickyCTA';
 import FinishedEventPage from '../FinishedEventPage';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
@@ -71,6 +72,7 @@ const LowerPlentyJrDayLive = () => {
                 <div id={FORM_ANCHOR} className={ANCHOR}><LPForm places={places} /></div>
                 <div id="faq" className={ANCHOR}><LPFaq /></div>
             </main>
+            <PartnerStack />
             <Footer />
             {open && <StickyCTA label={CTA_WITH_PRICE} targetId={FORM_ANCHOR} />}
         </div>

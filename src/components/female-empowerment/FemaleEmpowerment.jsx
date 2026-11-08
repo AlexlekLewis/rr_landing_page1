@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import PartnerStack from '../power-game/PartnerStack';
 import HeroSection from './HeroSection';
 import ProgramOverview from './ProgramOverview';
 import ProgramStructure from './ProgramStructure';
@@ -64,6 +65,7 @@ const FemaleEmpowerment = () => {
                     <FAQSection />
                 </div>
             </main>
+            <PartnerStack />
             <Footer />
             <StickyCTA />
         </div>

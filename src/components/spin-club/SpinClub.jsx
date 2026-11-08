@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import PartnerStack from '../power-game/PartnerStack';
 import SCHero from './SCHero';
 import SCWhatItIs from './SCWhatItIs';
 import SCClubs from './SCClubs';
@@ -42,6 +43,7 @@ const SpinClub = () => {
                     <SCForm />
                 </div>
             </main>
+            <PartnerStack />
             <Footer />
         </div>
     );

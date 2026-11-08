@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import PartnerStack from '../power-game/PartnerStack';
 import ShopHero from './ShopHero';
 import ProductGrid from './ProductGrid';
 import CartDrawer from './CartDrawer';
@@ -19,6 +20,7 @@ const AcademyShopInner = () => {
         <ProductGrid />
       </main>
 
+      <PartnerStack />
       <Footer />
 
       {/* Cart UI — lives outside main so it overlays everything */}

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import PartnerStack from '../power-game/PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import OpenDayHero from '../open-day/OpenDayHero';
 import SessionsSplit from '../open-day/SessionsSplit';
@@ -57,6 +58,7 @@ const MicklehamOpenDay = () => {
                 <JuniorRegisterForm cfg={MICKLEHAM.junior} />
                 <MicklehamForm />
             </main>
+            <PartnerStack />
             <Footer />
         </div>
     );

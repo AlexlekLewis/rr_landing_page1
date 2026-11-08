@@ -122,6 +122,11 @@ it can be read as one piece. If tone matters, show Alex the plain draft first.
 - Files, route and data file: `site-structure.md` §2. Design: `design-system.md` (reuse
   Navbar/Footer/Button; no drop-shadows or translucent boxes; `bg-gradient-rr` class is dead —
   use `style={{ backgroundImage: 'var(--image-gradient-rr)' }}`).
+- **Partner Stack on every public page** (Andy, 28 Oct 2026): render
+  `<PartnerStack />` (`src/components/power-game/PartnerStack.jsx`) directly above
+  `<Footer />` — `theme="dark"` on a dark page. Never copy the logos into a page:
+  the shared component is the one list, so adding or removing a partner updates
+  every page. Not on success/pay screens, checkout wizards, admin, legal or 404.
 - Backend — all five, same PR (`backend.md`): **table** (named + commented + migration file),
   **payment** if priced (always active, automatic success page — §2b), **success page** (+ pay page),
   **every new Stripe Payment Link gets its success-page routing** (Stripe redirect + route +
@@ -209,6 +214,8 @@ The build isn't done until all of these are true, checked on rramelbourne.com it
    6b. **Plain English & disclosure** — sentence length, idioms, unexplained terms, hover-only
       content, essentials hidden behind a tap (`copy-esl.md`).
    7. **Hierarchy, Why → How → What & CTAs** — first-screen facts (`conversion.md` §2), body order, one H1, one primary label, ≤1 secondary, labels true to what the button does.
+   7b. **Partner Stack** — the shared `<PartnerStack />` sits above the footer (public
+      pages only); no hand-copied partner logos that can drift from it.
    8. **Backend** — table name and comment readable cold; sheet tab exists and refreshes;
       hidden pages not linked anywhere.
 4. Report as a short list, most severe first. Each finding: `file:line`, what's wrong, who
