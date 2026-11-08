@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import PartnerStack from '../power-game/PartnerStack';
 import LCHero from './LCHero';
 import LCOverview from './LCOverview';
 import LCCoaches from './LCCoaches';
@@ -49,6 +50,7 @@ const LittleCrickets = () => {
                     <LCRegistrationForm />
                 </div>
             </main>
+            <PartnerStack />
             <Footer />
             <LCStickyCTA />
         </div>

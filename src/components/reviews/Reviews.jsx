@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Star, CheckCircle2, ExternalLink, Loader2 } from 'lucide-react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import PartnerStack from '../power-game/PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -338,6 +339,7 @@ const Reviews = () => {
         </section>
       </main>
 
+      <PartnerStack />
       <Footer />
     </div>
   );

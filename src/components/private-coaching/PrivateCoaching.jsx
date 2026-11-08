@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import PartnerStack from '../power-game/PartnerStack';
 import PCHero from './PCHero';
 import PCAlex from './PCAlex';
 import PCHowItWorks from './PCHowItWorks';
@@ -42,6 +43,7 @@ const PrivateCoaching = () => {
                     <PCForm />
                 </div>
             </main>
+            <PartnerStack />
             <Footer />
         </div>
     );

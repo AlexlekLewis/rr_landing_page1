@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import PartnerStack from '../power-game/PartnerStack';
 import ITHero from './ITHero';
 import ITAbout from './ITAbout';
 import ITCoaching from './ITCoaching';
@@ -66,6 +67,7 @@ const IndiaTour2026 = () => {
                 <div id="pricing"><ITPricing copy={copy} /></div>
                 <div id="register"><ITForm copy={copy} referralCode={referralCode} /></div>
             </main>
+            <PartnerStack />
             <Footer />
             {showToggle && <ITReadingToggle simple={simple} onChange={setMode} />}
         </div>

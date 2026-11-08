@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import PartnerStack from '../power-game/PartnerStack';
 import PromoBanner from './PromoBanner';
 import HeroSection from './HeroSection';
 import HallaBol from './HallaBol';
@@ -67,6 +68,7 @@ const SeptemberHoliday = () => {
                 <GotAQuestion />
             </main>
                         <StickyCTA />
+                <PartnerStack />
                 <Footer />
         </div>
     );
