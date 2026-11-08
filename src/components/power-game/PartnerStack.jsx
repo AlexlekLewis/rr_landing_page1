@@ -16,7 +16,6 @@ const TIERS = [
         level: 'Venue Partners',
         size: 'medium',
         partners: [
-            { name: 'The Netz', logo: '/assets/powergame/partners/the-netz.svg' },
             { name: 'Elite Cricket Centre', logo: '/assets/powergame/partners/elite-cricket-centre.webp' },
             { name: 'Mickleham Indoor Sports Centre', logo: '/assets/powergame/partners/mickleham-isc.png' },
         ],
@@ -30,7 +29,6 @@ const TIERS = [
             { name: 'str8bat', logo: '/assets/powergame/partners/str8bat.png' },
             { name: 'Shah NeuroVision', logo: '/assets/powergame/partners/shah-neurovision.webp', dark: true },
             { name: 'Bowlstrong', logo: '/assets/powergame/partners/bowlstrong.png' },
-            { name: 'Nik Badkundri', logo: '/assets/powergame/partners/nik-badkundri.png', dark: true, big: true, offset: { x: 0, y: -6 } },
             { name: 'Frog Box', logo: '/assets/powergame/partners/frog-box.png', dark: true },
         ],
     },

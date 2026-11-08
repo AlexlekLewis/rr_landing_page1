@@ -59,7 +59,7 @@ const OpenDaysModal = ({ open, onClose }) => {
 
                 {/* programme rows */}
                 <div className="px-4 sm:px-6 pb-4 space-y-3">
-                    {ANNOUNCEMENTS.map((d) => (
+                    {ANNOUNCEMENTS.filter((d) => !d.tickerOnly).map((d) => (
                         <a
                             key={d.key}
                             href={d.href}
