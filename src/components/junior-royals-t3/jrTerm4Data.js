@@ -126,6 +126,37 @@ export const lastSessionLine = (c) => `The last session before the Christmas bre
 export const bookingOpen = (centre, now = new Date()) => Boolean(nextSession(centre, now));
 export const breakLine = (c) => `${c.night} at ${c.suburb} are on the Christmas break, so we're not taking bookings or payments for now. Email info@rramelbourne.com and we'll tell you when sessions restart.`;
 
+// PHOTOS from real Junior Royals sessions (Andy, 8 Nov 2026: "show what Junior Royals is
+// all about visually"). Files in public/assets/junior-royals/gallery/, each as a 900px
+// .webp and a 480px "-sm" copy for phones. ECC signage = Elite Cricket Centre, Cranbourne
+// North; the "M" logo = Mickleham Indoor Sports Centre.
+const photo = (name, alt, caption) => ({
+    src: `/assets/junior-royals/gallery/${name}.webp`,
+    srcSm: `/assets/junior-royals/gallery/${name}-sm.webp`,
+    alt,
+    caption,
+});
+export const JR_PHOTOS = {
+    hero: photo('squad-talk', 'A Junior Royals coach talking to a squad of young players sitting in front of a Rajasthan Royals Academy Melbourne banner', 'Squad talk'),
+    heroFeature: photo('coach-demo-bat', 'A Junior Royals coach showing a group of young players how to hold the bat', 'One coaching point to hold on to'),
+    heroInset: photo('ecc-bowling-pair', 'Two young players practising their bowling action in the nets while a coach watches', 'Bowling, one skill at a time'),
+    gallery: [
+        photo('coach-demo-bat', 'A Junior Royals coach showing a group of young players how to hold the bat', 'One coaching point to hold on to'),
+        photo('hands-on-batting', 'A coach guiding a young batter into position while another player plays a forward defence', 'Hands-on coaching'),
+        photo('bowling-line-drill', 'A line of young players kneeling to practise their bowling arm with a coach watching', 'Bowling drills, together'),
+        photo('squad-talk', 'A Junior Royals coach talking to a squad of young players sitting in front of a Rajasthan Royals Academy Melbourne banner', 'Learning as a squad'),
+        photo('batting-with-coach', 'A young batter playing a pull shot as a coach feeds the ball', 'Batting with a coach'),
+        photo('ecc-bowling-pair', 'Two young players practising their bowling action in the nets while a coach watches', 'Bowling, one skill at a time'),
+        photo('girl-batting', 'A young girl in a helmet and pads playing a shot in the nets', 'Batting in the nets'),
+        photo('bowler-running-in', 'A young bowler running in to bowl in the nets while teammates wait their turn', 'In the nets'),
+        photo('coach-watching-nets', 'A coach watching a young bowler in the nets with a batter waiting', 'Coaches in the nets'),
+    ],
+    centres: {
+        mickleham: photo('hands-on-batting', 'Junior Royals batting practice at the Mickleham Indoor Sports Centre', 'Mickleham'),
+        'cranbourne-north': photo('ecc-bowling-pair', 'Junior Royals bowling practice at the Elite Cricket Centre, Cranbourne North', 'Cranbourne North'),
+    },
+};
+
 export const JR_T4 = {
     // Page wording that used to sit in the JSX, here so the admin Junior Royals Editor
     // (admin/JuniorRoyalsEditor.jsx, jrContent.js) can change it.
