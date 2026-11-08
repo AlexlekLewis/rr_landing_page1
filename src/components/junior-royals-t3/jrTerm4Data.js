@@ -1,4 +1,7 @@
-// Junior Royals — Term 4, 2026: every fact on /junior-royals lives here.
+// Junior Royals: every fact on /junior-royals lives here.
+// 8 Nov 2026 (Andy): no longer sold as Term 4. Join any week, weekly subscription only,
+// and each centre shows its last session before the Christmas break. The notes below
+// are the history behind the nights, groups and Stripe links.
 //
 // Source: Alex, 3 Oct 2026 (approved review), and the two Term 4 net booking
 // orders (RRA-T4-2026-MIC, RRA-T4-2026-CRN): Junior Royals on WEDNESDAYS,
@@ -39,32 +42,23 @@
 // one-hour groups by age (split fixed 20 Oct 2026: see GROUPS below). There is no
 // Wednesday at Mickleham and no Monday at Cranbourne North.
 
+// JOIN ANY WEEK, WEEKLY ONLY (8 Nov 2026): the page is no longer sold as an 8-week
+// term. Families can join at any time, and the only way to pay is the weekly
+// subscription. The upfront link is no longer offered on the page; it stays here
+// because api/stripe-webhook.js still files earlier upfront payments.
 export const UPFRONT_LINK = 'https://buy.stripe.com/14A14n4fn3ud0uU7jJ9Zm0Y';
 export const WEEKLY_LINK = 'https://buy.stripe.com/7sYeVd9zH3udgtSavV9Zm0X';
-export const WEEKLY_CONFIRMED = true;                        // Alex, 20 Oct 2026: "these links are fine"
-export const WEEKLY_OPENS = new Date('2026-10-27T00:00:00+11:00'); // Tue 27 Oct, Melbourne
-export const weeklyOpen = (now = new Date()) => WEEKLY_CONFIRMED && now >= WEEKLY_OPENS;
 
 const money = (n) => `$${Number.isInteger(n) ? n : n.toFixed(2)}`;
-export const PRICE = { upfront: 349, weekly: 44.95, shirt: 29.95 };
-const WEEKLY_MAX = Math.round(PRICE.weekly * 8 * 100) / 100;          // 359.60
+export const PRICE = { weekly: 44.95, shirt: 29.95 };
 
 export const PAY_OPTIONS = {
-    upfront: {
-        key: 'upfront',
-        title: 'Pay upfront',
-        amount: money(PRICE.upfront),
-        per: 'for all 8 weeks',
-        detail: `One payment at checkout (card, Apple Pay, Afterpay, Klarna or Zip), ${money(Math.round((WEEKLY_MAX - PRICE.upfront) * 100) / 100)} less than paying weekly.`,
-        link: UPFRONT_LINK,
-        value: PRICE.upfront,
-    },
     weekly: {
         key: 'weekly',
         title: 'Pay weekly',
         amount: money(PRICE.weekly),
         per: 'a week',
-        detail: `A weekly direct debit, by card, Apple Pay or Klarna. The first payment is taken when you book, then one each week. The direct debit is cancelled at the end of term (8 weeks is ${money(WEEKLY_MAX)}).`,
+        detail: 'A weekly direct debit, by card, Apple Pay or Klarna. The first payment is taken when you book, then one each week, up to the last session before the Christmas break.',
         link: WEEKLY_LINK,
         value: PRICE.weekly,
     },
@@ -95,7 +89,7 @@ const GROUPS_LINE = `Two one-hour groups by age: ages ${GROUPS[0].ages} train ${
 // bookings don't reach the Player Performance Portal.
 export const ROYALS_WAY = {
     about: 'Cricket coaching the Royals Way for players aged 7 to 12. Each week your player trains for one hour in a small group of players their own age. We teach the whole game: batting, bowling, fielding and how to play, through games, with one clear skill to learn, one coaching point to hold on to, and a score to beat.',
-    eyebrow: 'New this term',
+    eyebrow: 'How it works',
     title: 'Play the Royals Way',
     lead: 'Junior Royals now runs on the Royals Way Progress Tracking and Development System. Every player has clear goals that build their cricket from the foundations up, through three phases: Discover, Develop and Elevate.',
     steps: [
@@ -112,48 +106,61 @@ export const ROYALS_WAY = {
     note: 'Players are never ranked against each other. Every player develops at their own rate.',
 };
 
+// SESSIONS AT EACH CENTRE: weekly from the first night to the last one before the
+// Christmas break. Each centre has its own last night. Sessions start at 5:00pm.
+const sessionAt = (date) => new Date(`${date}T17:00:00+11:00`);
+// The next session a family joining now would come to, or null after the last one.
+export const nextSession = (centre, now = new Date()) => {
+    const last = sessionAt(centre.lastDate);
+    for (let d = sessionAt(centre.firstDate); d <= last; d = new Date(d.getTime() + 7 * 86400000)) {
+        if (d > now) return d;
+    }
+    return null;
+};
+export const sessionLong = (d) => d.toLocaleDateString('en-AU', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Australia/Melbourne' });
+export const lastSessionLine = (c) => `The last session before the Christmas break is ${c.lastSessionLong}.`;
+
 export const JR_T4 = {
-    term: 'Term 4, 2026',
     // Page wording that used to sit in the JSX, here so the admin Junior Royals Editor
     // (admin/JuniorRoyalsEditor.jsx, jrContent.js) can change it.
     heroEyebrow: 'Rajasthan Royals Academy · Melbourne',
     heroTitle: 'JUNIOR ROYALS',
-    heroTitleAccent: 'TERM 4, 2026',
-    heroSub: '8 weeks · Mondays at Mickleham from 26 October · Wednesdays at Cranbourne North from 28 October',
-    heroLead: 'One hour of cricket coaching each week, in a small group of players your own age, so your player is ready for their club season.',
-    overviewEyebrow: 'Term 4 · 2026',
-    overviewTitle: 'About the Program',
-    overviewTail: 'Term 4 runs right through the start of the junior club season, so the skills your player works on here each week are the ones they take into their Saturday games.',
-    groupPoints: {
-        '5pm': ['Build on foundation cricket skills', 'Incorporate game sense activities', 'Prepare players to start playing junior cricket'],
-        '6pm': ['Skill-focused sessions', 'Use of bowling machine', 'Secondary training for those already playing cricket'],
-    },
-    weeks: 8,
-    // The whole term, both centres: first Mickleham Monday to last Cranbourne Wednesday.
-    datesLong: '26 October – 16 December',
-    datesShort: '26 Oct – 16 Dec',
+    heroTitleAccent: 'CRICKET FOR AGES 7–12',
+    heroSub: 'Weekly coaching · Join any week · Pay weekly',
+    heroLead: 'One hour of cricket coaching each week, in a small group of players their own age, with Rajasthan Royals Academy coaches.',
+    // THE BENEFITS, short and plain (8 Nov 2026: "be clear about the benefits").
+    benefitsEyebrow: 'Why Junior Royals',
+    benefitsTitle: 'What your player gets',
+    benefits: [
+        { head: 'Coaching every week', body: 'One hour each week with Rajasthan Royals Academy coaches.' },
+        { head: 'A small group their own age', body: 'Ages 7–9 train at 5:00pm and ages 10–12 at 6:00pm, so every player is with players at their level.' },
+        { head: 'The whole game', body: 'Batting, bowling, fielding and how to play, taught through games.' },
+        { head: 'Progress you can see', body: 'One skill at a time. When your player can do it, they earn its badge and move on to the next.' },
+        { head: 'Ready for club cricket', body: 'The skills they learn each week are the ones they take into their Saturday games.' },
+        { head: 'Join any week', body: 'No need to wait for a new term. Book now and your player starts at the next session.' },
+    ],
     ages: '7–12',
     ageMin: 7,
     ageMax: 12,
-    factLine: 'Ages 7–9: 5:00pm – 6:00pm · Ages 10–12: 6:00pm – 7:00pm · 8 weeks · Mondays at Mickleham, Wednesdays at Cranbourne North',
+    factLine: 'Ages 7–9: 5:00pm – 6:00pm · Ages 10–12: 6:00pm – 7:00pm · Mondays at Mickleham, Wednesdays at Cranbourne North',
     groupsLine: GROUPS_LINE,
-    // Two ways to pay, always both on the page (Alex, 20 Oct 2026). Weekly opens 27 Oct.
-    priceLine: `Two ways to pay: ${money(PRICE.upfront)} upfront for all 8 weeks, or ${money(PRICE.weekly)} a week. Prices incl. GST.`,
-    priceLineBeforeWeekly: `Two ways to pay: ${money(PRICE.upfront)} upfront for all 8 weeks, or ${money(PRICE.weekly)} a week from Tuesday 27 October. Prices incl. GST.`,
+    priceLine: `${money(PRICE.weekly)} a week, incl. GST. Join any week and pay week by week: no upfront term fee.`,
     shirtLine: `Plus the Junior Royals training shirt, ${money(PRICE.shirt)} incl. GST, bought once at checkout. Players wear it at every session; if your player already has one, set the shirt to 0 at checkout.`,
+    joinLine: 'Join any week: your player starts at the next session after you book.',
     ctaLabel: 'Secure Your Place',
-    stickyLabel: 'Secure Your Place · Term 4 from Mon 26 Oct',
+    stickyLabel: 'Secure Your Place · $44.95 a week incl. GST',
     placeLine: 'Your place is booked once you have paid.',
     // AUTOMATIC RE-ENROLMENT, OPT-OUT (Alex, 20 Oct 2026): "it's an automatic enrolment
     // into the next term (opt out system) … we will be in touch to confirm. Direct debits
     // will be cancelled at the end of the term and restart at the beginning." The 2 weeks'
     // notice is Alex's (8 Oct 2026, NOTICE_WEEKS in the version 2 mock-up).
-    renewTitle: 'Next term',
+    // Same opt-out rules, without the word "term" (8 Nov 2026: join any week).
+    renewTitle: 'After the Christmas break',
     renewLines: [
-        'Enrolment is automatic: your player\'s place carries on into the next term unless you opt out.',
-        'We\'ll be in touch before the next term starts to confirm your player\'s place.',
-        'Weekly direct debits are cancelled at the end of each term and start again at the beginning of the next term.',
-        'To opt out, email info@rramelbourne.com at least 2 weeks before the next term starts.',
+        'Enrolment is automatic: your player\'s place carries on after the Christmas break unless you opt out.',
+        'We\'ll be in touch before sessions restart to confirm your player\'s place.',
+        'The weekly direct debit stops after your centre\'s last session before the break and starts again when sessions restart.',
+        'To opt out, email info@rramelbourne.com at least 2 weeks before sessions restart.',
     ],
     // A DIFFERENT NIGHT (Alex, 20 Oct 2026): "people can select different days but need to
     // know Wednesday (Cranbourne Nth) and Monday (Mickleham) are only on offer currently and
@@ -171,7 +178,7 @@ export const JR_T4 = {
         done: (player, day, c, g) => `We've got ${player}'s request for ${day} nights${g ? `, ${g.time} (the ages ${g.ages} group),` : ''} at the ${c.venue}, ${c.suburb}. No payment has been taken and no place is held. Junior Royals runs on ${c.night} there for now; if we open ${day} nights, we'll contact you first.`,
     },
     days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
-    renewShort: 'Enrolment carries on into the next term automatically unless you opt out; we\'ll be in touch to confirm.',
+    renewShort: 'Your place carries on after the Christmas break unless you opt out; we\'ll be in touch to confirm.',
     centresApart: 'The two centres are about 70 km apart, so pick the one you can get to every week.',
     // TWO CENTRES ONLY (Alex, 5 Oct 2026): "Hallam and Williamstown no longer exist
     // as part of the organisation for the moment." Don't name them on the page.
@@ -189,9 +196,9 @@ export const JR_T4 = {
             address: 'Mickleham, VIC',
             day: 'monday',
             night: 'Mondays',
-            datesLong: '26 October – 14 December',
-            datesShort: '26 Oct – 14 Dec',
-            firstSessionLong: 'Monday 26 October',
+            firstDate: '2026-10-26',
+            lastDate: '2026-12-14',
+            lastSessionLong: 'Monday 14 December',
             mapsUrl: 'https://maps.google.com/?q=Mickleham+Indoor+Sports+Centre+VIC',
             image: '/assets/jr-bundoora.png',
             gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 40%, #E11F8F 100%)',
@@ -208,9 +215,9 @@ export const JR_T4 = {
             address: '30 Medley Dr, Cranbourne North, VIC 3977',
             day: 'wednesday',
             night: 'Wednesdays',
-            datesLong: '28 October – 16 December',
-            datesShort: '28 Oct – 16 Dec',
-            firstSessionLong: 'Wednesday 28 October',
+            firstDate: '2026-10-28',
+            lastDate: '2026-12-16',
+            lastSessionLong: 'Wednesday 16 December',
             mapsUrl: 'https://maps.google.com/?q=Elite+Cricket+Centre+30+Medley+Dr+Cranbourne+North+VIC',
             image: '/assets/jr-bundoora.png', // unchanged from the live card
             gradient: 'linear-gradient(135deg, #001D48 0%, #1226AA 60%, #E11F8F 100%)',

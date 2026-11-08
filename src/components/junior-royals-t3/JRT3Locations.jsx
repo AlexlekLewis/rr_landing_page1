@@ -24,7 +24,7 @@ const JRT3Locations = () => {
                     </motion.h2>
                     <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}
                         className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium">
-                        Term 4 runs at two centres, each on its own night: <span className="font-black text-rr-dark">Mondays at Mickleham and Wednesdays at Cranbourne North</span>, 5:00pm – 7:00pm. {JR_T4.centresApart}
+                        Two centres, each on its own night: <span className="font-black text-rr-dark">Mondays at Mickleham and Wednesdays at Cranbourne North</span>, 5:00pm – 7:00pm. {JR_T4.joinLine}
                     </motion.p>
                 </div>
 
@@ -49,7 +49,7 @@ const JRT3Locations = () => {
                                     </div>
                                     <div className="flex items-center gap-3">
                                         <Calendar className="w-4 h-4 text-rr-blue shrink-0" />
-                                        <span className="text-rr-charcoal font-semibold text-sm">{loc.datesShort} · {JR_T4.weeks} weeks</span>
+                                        <span className="text-rr-charcoal font-semibold text-sm">Last session before the Christmas break: <span className="font-black text-rr-dark">{loc.lastSessionLong}</span></span>
                                     </div>
                                     <div className="flex items-start gap-3">
                                         <Clock className="w-4 h-4 text-rr-blue shrink-0 mt-0.5" />

@@ -1,27 +1,35 @@
 import { describe, it, expect } from 'vitest';
-import { JR_T4, PAY_OPTIONS, PRICE, UPFRONT_LINK, WEEKLY_OPENS, weeklyOpen, WEEKLY_CONFIRMED, GROUPS, groupFor, ROYALS_WAY } from './jrTerm4Data';
+import { JR_T4, PAY_OPTIONS, PRICE, WEEKLY_LINK, GROUPS, groupFor, ROYALS_WAY, nextSession, sessionLong, lastSessionLine } from './jrTerm4Data';
 import { existsSync } from 'node:fs';
 import { classifyJrT4 } from '../../../api/stripe-webhook.js';
 
 // Alex, 19 Oct 2026: the official Term 4 payment options.
 describe('Junior Royals Term 4 payments', () => {
-    it('uses the official prices: $349 upfront, $44.95 a week, $29.95 shirt', () => {
-        expect(PRICE).toEqual({ upfront: 349, weekly: 44.95, shirt: 29.95 });
-        expect(PAY_OPTIONS.upfront.link).toBe(UPFRONT_LINK);
-        expect(PAY_OPTIONS.upfront.detail).toContain('$10.60 less than paying weekly');
-        expect(PAY_OPTIONS.weekly.detail).toContain('8 weeks is $359.60');
-        expect(JR_T4.priceLine).toContain('incl. GST');
+    // Andy, 8 Nov 2026: join any week, the weekly subscription is the only way to pay.
+    it('offers only the weekly subscription: $44.95 a week, $29.95 shirt, incl. GST', () => {
+        expect(PRICE).toEqual({ weekly: 44.95, shirt: 29.95 });
+        expect(Object.keys(PAY_OPTIONS)).toEqual(['weekly']);
+        expect(PAY_OPTIONS.weekly.link).toBe(WEEKLY_LINK);
+        expect(PAY_OPTIONS.weekly.detail).toContain('last session before the Christmas break');
+        expect(JR_T4.priceLine).toBe('$44.95 a week, incl. GST. Join any week and pay week by week: no upfront term fee.');
         expect(JR_T4.shirtLine).toContain('$29.95 incl. GST');
+        expect(JSON.stringify({ JR_T4, PAY_OPTIONS })).not.toMatch(/\$349|8 weeks|Term 4/);
     });
 
-    // Alex, 20 Oct 2026: "these links are fine … make sure the copy reflects the 2 payment
-    // options". Weekly is confirmed and opens on Tue 27 Oct (his "27th").
-    it('shows both ways to pay; weekly opens on 27 Oct', () => {
-        expect(WEEKLY_CONFIRMED).toBe(true);
-        expect(weeklyOpen(new Date('2026-10-26T23:59:00+11:00'))).toBe(false);
-        expect(weeklyOpen(new Date('2026-10-27T00:00:00+11:00'))).toBe(true);
-        expect(JR_T4.priceLine).toContain('$349 upfront for all 8 weeks, or $44.95 a week');
-        expect(JR_T4.priceLineBeforeWeekly).toContain('from Tuesday 27 October');
+    it('joins at the next session; each centre has its own last session before Christmas', () => {
+        const [mick, crn] = JR_T4.centres;
+        expect(lastSessionLine(mick)).toBe('The last session before the Christmas break is Monday 14 December.');
+        expect(lastSessionLine(crn)).toBe('The last session before the Christmas break is Wednesday 16 December.');
+        // Sunday 8 Nov: next Mickleham Monday is the 9th, next Cranbourne Wednesday the 11th.
+        const sun = new Date('2026-11-08T12:00:00+11:00');
+        expect(sessionLong(nextSession(mick, sun))).toBe('Monday 9 November');
+        expect(sessionLong(nextSession(crn, sun))).toBe('Wednesday 11 November');
+        // Booking on a session night before 5pm still joins that night.
+        expect(sessionLong(nextSession(mick, new Date('2026-11-09T16:00:00+11:00')))).toBe('Monday 9 November');
+        expect(sessionLong(nextSession(mick, new Date('2026-11-09T18:00:00+11:00')))).toBe('Monday 16 November');
+        expect(nextSession(mick, new Date('2026-12-14T18:00:00+11:00'))).toBeNull();
+        expect(sessionLong(nextSession(crn, new Date('2026-12-14T18:00:00+11:00')))).toBe('Wednesday 16 December');
+        expect(JR_T4.benefits.map((b) => b.head)).toContain('Join any week');
     });
 
     // "automatic enrolment into the next term (opt out) … we will be in touch to confirm.
@@ -30,8 +38,8 @@ describe('Junior Royals Term 4 payments', () => {
         const all = JR_T4.renewLines.join(' ');
         expect(all).toContain('unless you opt out');
         expect(all).toContain('be in touch');
-        expect(all).toContain('cancelled at the end of each term and start again');
-        expect(all).toContain('at least 2 weeks before the next term');
+        expect(all).toContain('stops after your centre\'s last session before the break and starts again');
+        expect(all).toContain('at least 2 weeks before sessions restart');
         expect(PAY_OPTIONS.weekly.detail).toContain('direct debit');
     });
 
@@ -46,11 +54,15 @@ describe('Junior Royals Term 4 payments', () => {
 
     // Alex, 19 Oct 2026: "I want to move Mickleham TO mondays 5-7pm" (26 Oct – 14 Dec).
     it('Mickleham runs Mondays and Cranbourne North Wednesdays, both 5:00pm – 7:00pm', () => {
-        const t = Object.fromEntries(JR_T4.centres.map((c) => [c.value, [c.day, c.times, c.datesShort, c.firstSessionLong]]));
+        const t = Object.fromEntries(JR_T4.centres.map((c) => [c.value, [c.day, c.times, c.firstDate, c.lastDate]]));
         expect(t).toEqual({
-            mickleham: ['monday', '5:00pm – 7:00pm', '26 Oct – 14 Dec', 'Monday 26 October'],
-            'cranbourne-north': ['wednesday', '5:00pm – 7:00pm', '28 Oct – 16 Dec', 'Wednesday 28 October'],
+            mickleham: ['monday', '5:00pm – 7:00pm', '2026-10-26', '2026-12-14'],
+            'cranbourne-north': ['wednesday', '5:00pm – 7:00pm', '2026-10-28', '2026-12-16'],
         });
+        // Every session date really falls on that centre's night.
+        for (const c of JR_T4.centres) {
+            for (const d of [c.firstDate, c.lastDate]) expect(sessionLong(new Date(`${d}T17:00:00+11:00`)).toLowerCase()).toContain(c.day);
+        }
         expect(JR_T4.factLine).toContain('Mondays at Mickleham, Wednesdays at Cranbourne North');
         expect('monday' in JR_T4).toBe(false); // no Monday enquiry any more
     });
@@ -61,7 +73,6 @@ describe('Junior Royals Term 4 payments', () => {
         expect(classifyJrT4([{ description: 'Rajasthan Royals Academy Term 4 Junior Royals - Weekly Payment' }]))
             .toMatchObject({ program_variant: 'term_4_weekly' });
         expect(classifyJrT4([{ description: '2026 Junior Royals Program - Term 3: Hallam' }])).toBeNull();
-        expect(PAY_OPTIONS.upfront.detail).toContain('Afterpay');
     });
 
     // Alex, 20 Oct 2026: "be clearer about the 5pm group and 6pm group"; 5pm = 7–9, 6pm = 10–12.

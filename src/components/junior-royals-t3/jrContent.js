@@ -29,7 +29,7 @@ export const SECTIONS = [
             { path: 'jr.heroSub', label: 'Subtitle', type: 'text' },
             { path: 'jr.heroLead', label: 'Intro paragraph', type: 'textarea' },
             { path: 'jr.factLine', label: 'Times and nights line', type: 'textarea' },
-            { path: 'jr.renewShort', label: 'Re-enrolment line under the price', type: 'textarea' },
+            { path: 'jr.joinLine', label: 'Join any week line', type: 'text' },
         ],
     },
     {
@@ -41,14 +41,14 @@ export const SECTIONS = [
         ],
     },
     {
-        title: 'About the Program',
+        title: 'What your player gets (benefits)',
         fields: [
-            { path: 'jr.overviewEyebrow', label: 'Small line above the heading', type: 'text' },
-            { path: 'jr.overviewTitle', label: 'Heading', type: 'text' },
-            { path: 'rw.about', label: 'About paragraph (first part)', type: 'textarea' },
-            { path: 'jr.overviewTail', label: 'About paragraph (second part)', type: 'textarea' },
-            { path: 'jr.groupPoints.5pm', label: 'Ages 7–9 group: points', type: 'list' },
-            { path: 'jr.groupPoints.6pm', label: 'Ages 10–12 group: points', type: 'list' },
+            { path: 'jr.benefitsEyebrow', label: 'Small line above the heading', type: 'text' },
+            { path: 'jr.benefitsTitle', label: 'Heading', type: 'text' },
+            ...JR_T4.benefits.flatMap((_, i) => [
+                { path: `jr.benefits.${i}.head`, label: `Benefit ${i + 1}: heading`, type: 'text' },
+                { path: `jr.benefits.${i}.body`, label: `Benefit ${i + 1}: text`, type: 'textarea' },
+            ]),
             { path: 'jr.olderLead', label: 'Older players line', type: 'text' },
             { path: 'jr.olderLinkLabel', label: 'Older players link', type: 'text' },
         ],

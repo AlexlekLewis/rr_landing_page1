@@ -87,18 +87,19 @@ const PROGRAMS_DROPDOWN = [
     // REVIEW 16 Dec 2026 — last Term 4 session; the badge is wrong after that.
     // Holiday camp (/junior-royals-holiday) taken off every promo surface 5 Oct 2026
     // (Alex): that camp finished 2 Oct. The page stays at its address for old links.
-    { label: 'Junior Royals', route: '/junior-royals', badge: 'Term 4 from 26 Oct', badgeColor: 'bg-green-500' },
+    { label: 'Junior Royals', route: '/junior-royals', badge: 'Join any week', badgeColor: 'bg-green-500' },
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Register Your Interest', badgeColor: 'bg-green-500' },
     { label: 'Private Coaching', route: '/mickleham', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },
     // Closed but real — it belongs here rather than in the home-page modal.
     { label: 'High Performance Camp · India', route: '/tours', badge: 'Register Your Interest', badgeColor: 'bg-green-500' },
 ];
 
+// navLinksOverride replaces the variant's section links (e.g. /junior-royals).
 // ctaLabelOverride / ctaTargetOverride let a page whose call to action changes
 // with its own state (the open age trial: "book" once dates exist, "get the
 // dates" before that) set the bar's button without this file importing that
 // page's config. Every existing caller passes neither and is unaffected.
-const Navbar = ({ variant = 'lp1', onRegisterClick, ctaLabelOverride, ctaTargetOverride }) => {
+const Navbar = ({ variant = 'lp1', onRegisterClick, ctaLabelOverride, ctaTargetOverride, navLinksOverride }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [programsOpen, setProgramsOpen] = useState(false);
     const [mobileProgramsOpen, setMobileProgramsOpen] = useState(false);
@@ -125,7 +126,7 @@ const Navbar = ({ variant = 'lp1', onRegisterClick, ctaLabelOverride, ctaTargetO
     // page does not have while its dates are pending.
     const isOpenAgeTrial = variant === 'open-age-trial';
 
-    const navLinks = (isLP3 || isHoliday || isShop || isPerformanceSquads || isPSWelcome || isMasterclass || isPowerGame || isOpenAgeTrial) ? [] : isIndiaTour ? IT_NAV : isPrivateCoaching ? PC_NAV : isCoaches ? COACHES_NAV : isMickleham ? MICKLEHAM_NAV : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV);
+    const navLinks = navLinksOverride || ((isLP3 || isHoliday || isShop || isPerformanceSquads || isPSWelcome || isMasterclass || isPowerGame || isOpenAgeTrial) ? [] : isIndiaTour ? IT_NAV : isPrivateCoaching ? PC_NAV : isCoaches ? COACHES_NAV : isMickleham ? MICKLEHAM_NAV : isHome ? HOME_NAV : isLittleCrickets ? LC_NAV : (isLP2 ? LP2_NAV : LP1_NAV));
     // Standalone pages (Mickleham, Coaches, Private Coaching, India Tour) get the full site nav: Home + the Programs dropdown of live pages.
     const showProgramsDropdown = isHome || isMickleham || isCoaches || isPrivateCoaching || isIndiaTour || isPerformanceSquads || isPSWelcome || isMasterclass || isOpenAgeTrial;
     const showHomeLink = isMickleham || isCoaches || isPrivateCoaching || isIndiaTour || isPerformanceSquads || isPSWelcome || isMasterclass || isOpenAgeTrial;
