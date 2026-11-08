@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { HONEYPOT_FIELD, isHoneypotTripped } from '../../lib/security/bot.js';
 import { JR_T4, PAY_OPTIONS, WEEKLY_CONFIRMED, WEEKLY_OPENS, weeklyOpen, groupFor } from './jrTerm4Data';
 import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squads/data';
+import { pixelTrack } from '../../lib/metaPixel';
 
 // Junior Royals — Term 4 booking form (paid from 19 Oct 2026).
 //
@@ -144,7 +145,7 @@ const JRT3RegistrationForm = () => {
             if (error) throw error;
 
             if (request) {
-                try { if (typeof window.fbq === 'function') window.fbq('track', 'Lead', { content_name: 'Junior Royals Term 4 night request', content_category: `junior-royals-term4-${centre}` }); } catch { /* never block */ }
+                pixelTrack('Lead', { content_name: 'Junior Royals Term 4 night request', content_category: `junior-royals-term4-${centre}` });
                 setStandby({ player: row.player_name, day: dayName(altDay), centre: centreInfo, group });
                 setSubmitting(false);
                 document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' });
@@ -153,10 +154,10 @@ const JRT3RegistrationForm = () => {
 
             // Meta Pixel: program, centre and price only — never a name, email, phone or age.
             try {
-                if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+                {
                     const value = PAY_OPTIONS[option].value;
-                    window.fbq('track', 'Lead', { content_name: 'Junior Royals Term 4', content_category: `junior-royals-term4-${centre}`, value, currency: 'AUD' });
-                    window.fbq('track', 'InitiateCheckout', { content_name: `Junior Royals Term 4 (${option})`, value, currency: 'AUD' });
+                    pixelTrack('Lead', { content_name: 'Junior Royals Term 4', content_category: `junior-royals-term4-${centre}`, value, currency: 'AUD' });
+                    pixelTrack('InitiateCheckout', { content_name: `Junior Royals Term 4 (${option})`, value, currency: 'AUD' });
                 }
             } catch { /* never let analytics block the family */ }
 

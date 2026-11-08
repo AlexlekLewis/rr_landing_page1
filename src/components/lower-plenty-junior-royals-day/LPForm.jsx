@@ -11,6 +11,7 @@ import {
     PRICE, REFUND_LINE, payUrlFor,
 } from './lpJrDayData';
 import { placesLine } from './usePlaces';
+import { pixelTrack } from '../../lib/metaPixel';
 
 // Registration for "Junior Royals are coming to Lower Plenty": $10 per player.
 //
@@ -240,9 +241,9 @@ const RegistrationForm = ({ places }) => {
             // Meta Pixel: a registration was saved and is going to Stripe. Program,
             // place and price only — never a name, email, phone or age.
             try {
-                if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
-                    window.fbq('track', 'Lead', { content_name: PROGRAM_NAME, content_category: 'Lower Plenty', value: PRICE, currency: 'AUD' });
-                    window.fbq('track', 'InitiateCheckout', { content_name: PROGRAM_NAME, value: PRICE, currency: 'AUD' });
+                {
+                    pixelTrack('Lead', { content_name: PROGRAM_NAME, content_category: 'Lower Plenty', value: PRICE, currency: 'AUD' });
+                    pixelTrack('InitiateCheckout', { content_name: PROGRAM_NAME, value: PRICE, currency: 'AUD' });
                 }
             } catch { /* never block the family on tracking */ }
             goToPayment(bookingId, firstName, email);
