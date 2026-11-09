@@ -1,6 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import heroImg from '../../assets/india-tour-2026/hero-coaching.jpg';
+import heroTeamTalk from '../../assets/india-tour-2026/hero-team-talk.webp';
+import heroTeamTalkSm from '../../assets/india-tour-2026/hero-team-talk-sm.webp';
+import heroCafe from '../../assets/india-tour-2026/hero-royals-cafe.webp';
 import { TOURS, PRICE_ESTIMATE_AUD, fmtRangeAUD, CAMP_PDF, TOUR_STATUS, REGISTRATIONS_CLOSE_AT } from './itCopy';
 import ITCountdown from './ITCountdown';
 
@@ -10,22 +12,12 @@ const scrollToRegister = () =>
 const scrollToPricing = () =>
     document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
 
-// The source is a 1280x720 video frame, so how much we stretch it decides how
-// soft it looks. On phones we DON'T use it as a full-bleed background behind
-// ~1200px of copy (that meant blowing 720px up to ~3600 device px, hence the
-// blur). Instead the mobile hero is a contained 4:3 block sitting below the
-// fixed navbar, so the source is barely scaled at all.
-//
-// object-position keeps the demonstrating coach in the pink Royals top — the
-// subject of the shot, about a third of the way across — in frame once the
-// image is cropped. The 4:3 box IS narrower than the 16:9 source, so this
-// crops the sides and shows the full height of the photo: heads included.
-const FOCAL = '34% 42%';
-
-const HERO_IMG_ALT =
-    'Siddhartha Lahiri, Head of International Player Development and Performance Coach at the ' +
-    'Rajasthan Royals, demonstrating a batting drill to players at the High Performance Centre ' +
-    'in Nagpur';
+const HERO_FEATURE_ALT =
+    'Royals coaches talking to Rajasthan Royals Academy Melbourne players on the main ground at the ' +
+    'High Performance Centre in Nagpur, September 2026';
+const HERO_INSET_ALT =
+    'Our touring group at lunch in the Royals Cafe at the High Performance Centre, under a wall of ' +
+    'Royals legends';
 
 const ITHero = ({ copy }) => {
     const c = copy.hero;
@@ -207,39 +199,50 @@ const ITHero = ({ copy }) => {
         </div>
     );
 
-    // One DOM tree for both layouts — the image wrapper is in normal flow on
-    // phones (contained 16:10 block above the copy) and becomes an absolute
-    // full-bleed background from md up. Rendering the copy twice would put two
-    // <h1>India Tour 2026</h1> in the document, which hurts SEO and screen
-    // readers even when one copy is display:none.
+    // Hero layout follows the Junior Royals hero (Nov 2026): a real photo from our
+    // September 2026 tour behind the words (stronger on phones, faint on desktop),
+    // and on desktop two framed photos beside them telling the story: the team
+    // talk on the ground with the Royals coaches, and lunch in the Royals Cafe.
     return (
-        <section className="relative bg-rr-navy overflow-hidden md:flex md:items-center md:min-h-[88vh]">
-            {/* The site navbar is position:fixed and 80px tall. This block starts at
-                top:0, so the nav was covering the top 80px of a ~258px image — which is
-                exactly where the players' heads are, leaving only legs visible. Push the
-                image down clear of the nav on phones (mt-20 = the nav's 80px) and give it
-                a little more height so the full bodies have room. Desktop is unaffected:
-                there the image is a full-bleed background and the nav only overlaps sky. */}
-            <div className="relative w-full mt-20 aspect-[4/3] overflow-hidden md:mt-0 md:absolute md:inset-0 md:w-auto md:h-full md:aspect-auto">
-                <img
-                    src={heroImg}
-                    alt={HERO_IMG_ALT}
-                    width={1280}
-                    height={720}
-                    fetchPriority="high"
-                    decoding="async"
-                    className="absolute inset-0 w-full h-full object-cover"
-                    style={{ objectPosition: FOCAL }}
-                />
-                {/* Phones: short fade where the image meets the copy. */}
-                <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-rr-navy to-transparent md:hidden" />
-                {/* md+: darken the left so the copy stays legible over the photo. */}
-                <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-rr-navy via-rr-navy/88 to-transparent" />
+        <section className="relative min-h-screen flex items-center overflow-hidden bg-rr-dark">
+            <img
+                src={heroTeamTalk}
+                srcSet={`${heroTeamTalkSm} 800w, ${heroTeamTalk} 1600w`}
+                sizes="100vw"
+                alt=""
+                aria-hidden="true"
+                fetchPriority="high"
+                className="absolute inset-0 w-full h-full object-cover object-[center_45%] opacity-50 lg:opacity-15"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-rr-dark/90 via-rr-dark/75 to-rr-dark/95 lg:bg-gradient-to-br lg:from-rr-dark lg:via-rr-dark/85 lg:to-rr-navy/70" />
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-rr-pink/8 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-rr-blue/8 rounded-full blur-[120px] pointer-events-none" />
+
+            <div className="relative z-20 container mx-auto px-6 pt-28 md:pt-32 pb-20 max-w-6xl lg:grid lg:grid-cols-[1.25fr_1fr] lg:gap-12 lg:items-center">
+                {content}
+
+                {/* Desktop: two framed photos from the September 2026 tour. */}
+                <motion.div
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.4, duration: 0.7 }}
+                    className="hidden lg:block relative h-[560px]"
+                >
+                    <img
+                        src={heroTeamTalk}
+                        alt={HERO_FEATURE_ALT}
+                        className="absolute right-0 top-0 w-[86%] h-[400px] object-cover object-[35%_50%] rounded-3xl border-4 border-white/10"
+                    />
+                    <img
+                        src={heroCafe}
+                        alt={HERO_INSET_ALT}
+                        className="absolute left-0 bottom-0 w-[62%] h-[250px] object-cover object-[60%_50%] rounded-3xl border-4 border-rr-dark"
+                    />
+                    <span className="absolute right-4 bottom-20 bg-rr-pink text-white text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full">
+                        {c.photoTag}
+                    </span>
+                </motion.div>
             </div>
-
-            <div className="hidden md:block absolute -top-24 -left-24 w-96 h-96 bg-rr-pink/20 rounded-full blur-[120px] pointer-events-none" />
-
-            <div className="relative px-6 pt-6 pb-14 md:container md:mx-auto md:pt-40 md:pb-24">{content}</div>
         </section>
     );
 };
