@@ -13,21 +13,29 @@
 //     Captions never name a person unless we are sure who it is.
 //   They appear in a swipeable carousel, so there is no limit on how many you add.
 //
-// ADDING A VIDEO TO THE TOP VIDEO SECTION
-//   1. Put the file in /public/tours/ (e.g. public/tours/nagpur-day-1.mp4).
-//      MP4 (H.264), 1080p or smaller, ideally under ~30 MB.
+// ADDING A VIDEO TO THE VIDEO CAROUSEL
+//   1. Upload it (Supabase storage like the home page video, or /public/tours/).
+//      Portrait 9:16 suits the player best. MP4 (H.264), ideally under ~30 MB.
 //   2. Optionally add a poster image (the still shown before play) next to it.
-//   3. Add an entry to VIDEOS. The first is shown large. A YouTube or Vimeo
-//      link works too: use `embed` instead of `src`.
+//   3. Add an entry to VIDEOS. They show in a swipeable carousel, in list order.
+//      A YouTube or Vimeo link works too: use `embed` instead of `src`.
 //
 //   { src: '/tours/nagpur-day-1.mp4', poster: '/tours/nagpur-day-1.jpg',
 //     title: 'Day one in Nagpur', caption: 'Warm-up on the main ground.' }
 //   { embed: 'https://www.youtube.com/embed/VIDEO_ID', title: 'Tour highlights' }
 //
-// While VIDEOS is empty the video section shows a "coming soon" frame.
+// With VIDEOS empty the video section is hidden.
 // ---------------------------------------------------------------------------
 
-export const VIDEOS = [];
+// The home page intro video (Sid Lahiri) is the first one until tour videos arrive.
+export const VIDEOS = [
+    {
+        src: 'https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/RRAM%20MAIN/General%20Coaching%20Edit%20RR%20Sid%20V2.mov',
+        poster: '/assets/intro-video-poster.jpg',
+        title: 'Meet Siddhartha Lahiri',
+        caption: 'Head of International Player Development and Performance Coach, Rajasthan Royals.',
+    },
+];
 
 const DEFAULT_ALT =
     'Rajasthan Royals Academy Melbourne players at the Rajasthan Royals High Performance Centre in ' +
@@ -76,5 +84,3 @@ export const SEPT_2026_MEDIA = Object.keys(files)
         };
     });
 
-// Shown behind the "coming soon" frame while VIDEOS is empty.
-export const VIDEO_PLACEHOLDER_IMAGE = SEPT_2026_MEDIA[0]?.src;

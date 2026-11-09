@@ -46,6 +46,10 @@ describe("the tours and the estimate", () => {
 describe.each(["simple", "standard"] as const)("%s copy", (level) => {
   const copy = COPY[level];
 
+  it("never mentions Sanju Samson, who no longer plays for the Royals", () => {
+    for (const str of allStrings(copy)) expect(str).not.toMatch(/samson/i);
+  });
+
   it("never mentions the dropped late December / early January tour, or a choice of tours", () => {
     for (const str of allStrings(copy)) {
       expect(str).not.toMatch(/december|january|one tour or both|two tours/i);

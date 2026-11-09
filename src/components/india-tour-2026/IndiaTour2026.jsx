@@ -28,7 +28,7 @@ const getRefFromUrl = () => {
 
 const IndiaTour2026 = () => {
     usePageAnalytics('/tours', {
-        sections: ['hero', 'videos', 'benefits', 'september-2026', 'coaching', 'aspiration', 'pricing', 'register'],
+        sections: ['hero', 'september-2026', 'videos', 'benefits', 'coaching', 'aspiration', 'pricing', 'register'],
     });
 
     const { simple, showToggle, setMode } = useReadingMode();
@@ -60,9 +60,9 @@ const IndiaTour2026 = () => {
             <Navbar variant="india-tour" />
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero"><ITHero copy={copy} /></div>
+                <div id="september-2026"><ITSeptember2026 copy={copy} /></div>
                 <div id="videos"><ITVideos copy={copy} /></div>
                 <div id="benefits"><ITBenefits copy={copy} /></div>
-                <div id="september-2026"><ITSeptember2026 copy={copy} /></div>
                 <div id="coaching"><ITCoaching copy={copy} /></div>
                 <div id="aspiration"><ITAspiration copy={copy} /></div>
                 <div id="pricing"><ITPricing copy={copy} /></div>
