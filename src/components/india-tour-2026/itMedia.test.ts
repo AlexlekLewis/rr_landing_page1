@@ -1,7 +1,7 @@
 // itMedia.test.ts — the September 2026 gallery is read from a folder, so adding
 // a photo needs no code. Guard the order and that every item is usable.
 import { describe, it, expect } from "vitest";
-import { SEPT_2026_MEDIA, GALLERY_INITIAL_COUNT, VIDEOS } from "./itMedia";
+import { SEPT_2026_MEDIA, VIDEOS } from "./itMedia";
 
 describe("September 2026 gallery", () => {
   it("loads every photo in the folder, in filename order, warm-up first", () => {
@@ -17,8 +17,7 @@ describe("September 2026 gallery", () => {
     }
   });
 
-  it("shows a first batch, with the feature grid full", () => {
-    expect(GALLERY_INITIAL_COUNT).toBeGreaterThanOrEqual(5);
+  it("keeps the video list as an array", () => {
     expect(Array.isArray(VIDEOS)).toBe(true);
   });
 });

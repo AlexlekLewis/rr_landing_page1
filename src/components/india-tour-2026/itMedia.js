@@ -7,12 +7,11 @@
 //     long side) so the page stays fast on phones.
 //   - mp4 or webm clips work too; they show with a play button.
 //   - Files show in filename order, so number them: 06-..., 07-...
-//     The first file is the big one in the gallery.
+//     The first file is the first slide in the carousel.
 //   - Optional: add a caption and description in CAPTIONS below, keyed by the
 //     filename. Without one, a general description is used and no caption shown.
 //     Captions never name a person unless we are sure who it is.
-//   The page shows the first GALLERY_INITIAL_COUNT items, then a
-//   "Show all photos" button, so there is no limit on how many you add.
+//   They appear in a swipeable carousel, so there is no limit on how many you add.
 //
 // ADDING A VIDEO TO THE TOP VIDEO SECTION
 //   1. Put the file in /public/tours/ (e.g. public/tours/nagpur-day-1.mp4).
@@ -29,9 +28,6 @@
 // ---------------------------------------------------------------------------
 
 export const VIDEOS = [];
-
-// How many gallery items show before "Show all photos".
-export const GALLERY_INITIAL_COUNT = 9;
 
 const DEFAULT_ALT =
     'Rajasthan Royals Academy Melbourne players at the Rajasthan Royals High Performance Centre in ' +

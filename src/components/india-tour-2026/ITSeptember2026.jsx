@@ -2,11 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ITSectionHeader from './ITSectionHeader';
 import ITRegisterButton from './ITRegisterButton';
-import { SEPT_2026_MEDIA, GALLERY_INITIAL_COUNT } from './itMedia';
+import { SEPT_2026_MEDIA } from './itMedia';
 import { CAMP_PDF } from './itCopy';
 
 // Our first tour, September 2026, told mostly in pictures: a few numbers, a photo
-// and video gallery (tap to enlarge), and the day-by-day plan behind a toggle so
+// and video carousel (swipe or arrows, tap to enlarge), and the day-by-day plan behind a toggle so
 // it is there for parents who want it without making the page a wall of text.
 // Add photos or videos in itMedia.js.
 
@@ -48,7 +48,8 @@ const ITSeptember2026 = ({ copy }) => {
     const days = copy.pricing.itineraryDays;
     const [open, setOpen] = useState(null);
     const [showDays, setShowDays] = useState(false);
-    const [showAll, setShowAll] = useState(false);
+    const [slide, setSlide] = useState(0);
+    const trackRef = useRef(null);
     const touchX = useRef(null);
     const total = SEPT_2026_MEDIA.length;
     const step = (d) => setOpen((i) => (i + d + total) % total);
@@ -64,15 +65,22 @@ const ITSeptember2026 = ({ copy }) => {
         return () => window.removeEventListener('keydown', onKey);
     }, [open, total]);
 
-    // The first five fill the feature grid (one large, four small). Anything
-    // after that goes in a plain grid underneath, so more photos can be added
-    // in itMedia.js without breaking the layout.
-    const [lead, ...others] = SEPT_2026_MEDIA;
-    const featured = others.slice(0, 4);
-    const allExtra = others.slice(4);
-    // Show the first GALLERY_INITIAL_COUNT items, the rest behind "Show all".
-    const extra = showAll ? allExtra : allExtra.slice(0, Math.max(0, GALLERY_INITIAL_COUNT - 5));
-    const hidden = allExtra.length - extra.length;
+    // Carousel: which slide is at the left edge, and move one slide at a time.
+    const slideWidth = () => {
+        const first = trackRef.current?.querySelector('[data-slide]');
+        if (!first) return 0;
+        const gap = parseFloat(getComputedStyle(trackRef.current).columnGap) || 0;
+        return first.getBoundingClientRect().width + gap;
+    };
+    const onTrackScroll = () => {
+        const w = slideWidth();
+        if (w) setSlide(Math.min(total - 1, Math.round(trackRef.current.scrollLeft / w)));
+    };
+    const slideBy = (d) => {
+        const w = slideWidth();
+        if (w) trackRef.current.scrollBy({ left: d * w, behavior: 'smooth' });
+    };
+
     const current = open === null ? null : SEPT_2026_MEDIA[open];
 
     return (
@@ -93,32 +101,60 @@ const ITSeptember2026 = ({ copy }) => {
                     ))}
                 </dl>
 
-                {/* Gallery: the first item large, the rest around it */}
-                {lead && (
-                    <div className="mt-8 grid grid-cols-2 md:grid-cols-4 md:grid-rows-2 gap-3 md:gap-4 md:h-[640px]">
-                        <Thumb m={lead} onOpen={() => setOpen(0)} className="col-span-2 md:row-span-2 aspect-[3/4] md:aspect-auto" />
-                        {featured.map((m, i) => (
-                            <Thumb key={i} m={m} onOpen={() => setOpen(i + 1)} className="aspect-[3/4] md:aspect-auto" />
-                        ))}
-                    </div>
-                )}
-                {extra.length > 0 && (
-                    <div className="mt-3 md:mt-4 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-                        {extra.map((m, i) => (
-                            <Thumb key={i} m={m} onOpen={() => setOpen(i + 5)} className="aspect-[3/4]" />
-                        ))}
-                    </div>
-                )}
-                {hidden > 0 && (
-                    <div className="mt-6 text-center">
-                        <button
-                            type="button"
-                            onClick={() => setShowAll(true)}
-                            data-cta="september-show-all"
-                            className="inline-flex items-center gap-2 text-sm font-black text-white bg-rr-navy hover:bg-rr-blue uppercase tracking-widest rounded-full px-7 py-3.5 transition-colors"
+                {/* Carousel: swipe on phones, arrows on desktop, tap a photo to enlarge.
+                    Takes any number of photos (they come from the folder in itMedia.js). */}
+                {total > 0 && (
+                    <div className="mt-8" role="region" aria-roledescription="carousel" aria-label={c.carouselLabel}>
+                        <div
+                            ref={trackRef}
+                            onScroll={onTrackScroll}
+                            className="flex gap-3 md:gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth -mx-6 px-6 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
                         >
-                            {c.showAll(total)}
-                        </button>
+                            {SEPT_2026_MEDIA.map((m, i) => (
+                                <div
+                                    key={i}
+                                    data-slide
+                                    role="group"
+                                    aria-roledescription="slide"
+                                    aria-label={`${i + 1} / ${total}`}
+                                    className="snap-start shrink-0 w-[82%] sm:w-[48%] lg:w-[calc((100%-2rem)/3)] aspect-[3/4]"
+                                >
+                                    <Thumb m={m} onOpen={() => setOpen(i)} />
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="mt-5 flex items-center gap-4">
+                            <button
+                                type="button"
+                                onClick={() => slideBy(-1)}
+                                disabled={slide === 0}
+                                aria-label={c.prevLabel}
+                                data-cta="september-carousel-prev"
+                                className="w-12 h-12 shrink-0 rounded-full border-2 border-rr-dark/15 hover:border-rr-pink text-rr-dark flex items-center justify-center transition-colors disabled:opacity-30 disabled:hover:border-rr-dark/15"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" /></svg>
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => slideBy(1)}
+                                disabled={slide >= total - 1}
+                                aria-label={c.nextLabel}
+                                data-cta="september-carousel-next"
+                                className="w-12 h-12 shrink-0 rounded-full bg-rr-pink hover:bg-rr-light-pink text-white flex items-center justify-center transition-colors disabled:opacity-30"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg>
+                            </button>
+                            <div className="flex-1 h-1 rounded-full bg-slate-200 overflow-hidden" aria-hidden="true">
+                                <div
+                                    className="h-full bg-rr-pink rounded-full transition-all duration-300"
+                                    style={{ width: `${((slide + 1) / total) * 100}%` }}
+                                />
+                            </div>
+                            <span className="text-xs font-black text-rr-dark uppercase tracking-widest tabular-nums" aria-live="polite">
+                                {slide + 1} / {total}
+                            </span>
+                        </div>
                     </div>
                 )}
 

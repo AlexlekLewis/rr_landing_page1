@@ -181,7 +181,7 @@ const SEPTEMBER_COPY = {
     closeLabel: 'Close',
     prevLabel: 'Previous photo',
     nextLabel: 'Next photo',
-    showAll: (n) => `Show all ${n} photos`,
+    carouselLabel: 'Photos from our September 2026 tour',
 };
 
 // --- standard -------------------------------------------------------------
