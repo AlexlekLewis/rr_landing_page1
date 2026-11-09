@@ -128,8 +128,11 @@ const ITForm = ({ copy, referralCode, referralName }) => {
     }
 
     const PLAYER_TYPES = getPlayerTypes(copy);
+    // With only one tour on offer there is nothing to choose: it is pre-selected and
+    // shown as a fixed card instead of a checkbox.
+    const singleTour = TOURS.length === 1;
     const [form, setForm] = useState({
-        tours: [], // TOURS ids the family ticked: one or both, at least one required
+        tours: singleTour ? [TOURS[0].id] : [], // TOURS ids the family ticked; at least one required
         player_type: '',
         player_name: '',
         player_dob: '',
@@ -159,7 +162,7 @@ const ITForm = ({ copy, referralCode, referralName }) => {
     };
 
     // Tick or untick one tour. The stored list always follows TOURS order, so
-    // "both" is recorded the same way whichever box was ticked first.
+    // several tours are recorded the same way whichever box was ticked first.
     const toggleTour = (id) => {
         setForm(prev => {
             const picked = new Set(prev.tours);
@@ -333,8 +336,8 @@ const ITForm = ({ copy, referralCode, referralName }) => {
                     className="bg-white rounded-2xl p-8 md:p-10"
                 >
                     <form onSubmit={handleSubmit} noValidate>
-                        {/* Which tour — one or both, at least one. Real checkboxes (visually
-                            hidden, still focusable) so keyboards and screen readers work. */}
+                        {/* Which tour. With several tours: real checkboxes (visually hidden, still
+                            focusable), at least one required. With one tour: a fixed card. */}
                         <div
                             role="group"
                             aria-labelledby="tours-heading"
@@ -346,6 +349,16 @@ const ITForm = ({ copy, referralCode, referralName }) => {
                             <p id="tours-lead" className="text-sm text-rr-charcoal font-medium leading-relaxed -mt-2 mb-5">
                                 {fc.toursLead}
                             </p>
+                            {singleTour ? (
+                                <div className="rounded-xl border-2 border-rr-pink bg-rr-pink/5 p-5" data-tour={TOURS[0].id}>
+                                    <span className="block text-sm font-black text-rr-dark uppercase tracking-wide leading-snug">
+                                        {TOURS[0].window}
+                                    </span>
+                                    <span className="block text-xs text-rr-charcoal/70 font-medium mt-1">
+                                        {copy.hero.tourLength}
+                                    </span>
+                                </div>
+                            ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {TOURS.map((t) => {
                                     const checked = form.tours.includes(t.id);
@@ -395,6 +408,7 @@ const ITForm = ({ copy, referralCode, referralName }) => {
                                     );
                                 })}
                             </div>
+                            )}
                             {errors.tours && <p role="alert" className="text-red-500 text-xs font-medium mt-2">{errors.tours}</p>}
                         </div>
 

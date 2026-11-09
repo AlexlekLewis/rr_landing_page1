@@ -28,11 +28,8 @@ const allStrings = (node: unknown, out: string[] = []): string[] => {
 };
 
 describe("the tours and the estimate", () => {
-  it("names the two tours by window, with stable ids", () => {
-    expect(TOURS).toEqual([
-      { id: "2026-12-late-dec-jan", window: "Late December 2026 to early January 2027" },
-      { id: "2027-04-april", window: "April 2027" },
-    ]);
+  it("names the one upcoming tour by window, with a stable id", () => {
+    expect(TOURS).toEqual([{ id: "2027-04-april", window: "April 2027" }]);
     expect(TOUR_LENGTH_DAYS).toBe(10);
   });
 
@@ -48,6 +45,12 @@ describe("the tours and the estimate", () => {
 
 describe.each(["simple", "standard"] as const)("%s copy", (level) => {
   const copy = COPY[level];
+
+  it("never mentions the dropped late December / early January tour, or a choice of tours", () => {
+    for (const str of allStrings(copy)) {
+      expect(str).not.toMatch(/december|january|one tour or both|two tours/i);
+    }
+  });
   // What the page renders while INCLUSIONS_CONFIRMED is false: everything except
   // the September inclusions lists, which are kept only as the record.
   const { included, includedHeading, includedNote, notIncluded, notIncludedHeading, notIncludedNote, ...pricing } =

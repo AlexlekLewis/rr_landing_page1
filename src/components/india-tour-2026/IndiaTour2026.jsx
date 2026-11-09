@@ -4,20 +4,20 @@ import Navbar from '../Navbar';
 import Footer from '../Footer';
 import PartnerStack from '../power-game/PartnerStack';
 import ITHero from './ITHero';
-import ITAbout from './ITAbout';
+import ITVideos from './ITVideos';
+import ITBenefits from './ITBenefits';
+import ITSeptember2026 from './ITSeptember2026';
 import ITCoaching from './ITCoaching';
 import ITAspiration from './ITAspiration';
-import ITItinerary from './ITItinerary';
 import ITPricing from './ITPricing';
 import ITForm from './ITForm';
 import ITReadingToggle from './ITReadingToggle';
 import { getCopy, useReadingMode } from './itCopy';
 
 const META_DESCRIPTION =
-    'High Performance Centre Camp — two Rajasthan Royals Academy Melbourne tours to the Royals High ' +
-    'Performance Centre in Nagpur, India: late December 2026 to early January 2027, and April 2027. ' +
-    'About 10 days each, estimated at $7,000 to $8,000 per player. Register your interest in one tour ' +
-    'or both.';
+    'High Performance Centre Camp — a Rajasthan Royals Academy Melbourne tour to the Royals High ' +
+    'Performance Centre in Nagpur, India, in April 2027. About 10 days, estimated at $7,000 to ' +
+    '$8,000 per player. Register your interest.';
 
 // Any ?ref= code is still captured for attribution, but it no longer gates the
 // page — this is a public program page now.
@@ -28,7 +28,7 @@ const getRefFromUrl = () => {
 
 const IndiaTour2026 = () => {
     usePageAnalytics('/tours', {
-        sections: ['hero', 'about', 'coaching', 'itinerary', 'aspiration', 'pricing', 'register'],
+        sections: ['hero', 'videos', 'benefits', 'september-2026', 'coaching', 'aspiration', 'pricing', 'register'],
     });
 
     const { simple, showToggle, setMode } = useReadingMode();
@@ -60,10 +60,11 @@ const IndiaTour2026 = () => {
             <Navbar variant="india-tour" />
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero"><ITHero copy={copy} /></div>
-                <div id="about"><ITAbout copy={copy} /></div>
+                <div id="videos"><ITVideos copy={copy} /></div>
+                <div id="benefits"><ITBenefits copy={copy} /></div>
+                <div id="september-2026"><ITSeptember2026 copy={copy} /></div>
                 <div id="coaching"><ITCoaching copy={copy} /></div>
-                <div id="itinerary"><ITItinerary copy={copy} /></div>
-                <div id="aspiration"><ITAspiration /></div>
+                <div id="aspiration"><ITAspiration copy={copy} /></div>
                 <div id="pricing"><ITPricing copy={copy} /></div>
                 <div id="register"><ITForm copy={copy} referralCode={referralCode} /></div>
             </main>
