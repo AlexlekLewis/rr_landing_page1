@@ -63,6 +63,14 @@ const CAPTIONS = {
         alt: 'Rajasthan Royals Academy Melbourne players resting in the players’ lounge at the centre between sessions',
         caption: 'Between sessions in the players’ lounge, the same room the Royals players use.',
     },
+    '06-coach-and-batter-in-nets.webp': {
+        alt: 'A Royals coach talking a padded-up batter through the next drill in the nets',
+        caption: 'Talking it through with a Royals coach before batting.',
+    },
+    '07-bowler-in-nets.webp': {
+        alt: 'A Rajasthan Royals Academy Melbourne player bowling in the nets at the centre',
+        caption: 'Bowling in the nets at the centre.',
+    },
 };
 
 // Every file in the folder, picked up at build time.
