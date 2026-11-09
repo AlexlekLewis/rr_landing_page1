@@ -58,7 +58,7 @@ export const PAY_OPTIONS = {
         title: 'Pay weekly',
         amount: money(PRICE.weekly),
         per: 'a week',
-        detail: 'A weekly direct debit, by card, Apple Pay or Klarna. The first payment is taken when you book, then one each week, up to the last session before the Christmas break.',
+        detail: 'A weekly direct debit, by card, Apple Pay or Klarna. The first payment is taken when you book, then one each week while sessions are running. Over the holiday breaks, payments are paused and you keep your spot.',
         link: WEEKLY_LINK,
         value: PRICE.weekly,
     },
@@ -192,12 +192,15 @@ export const JR_T4 = {
     // will be cancelled at the end of the term and restart at the beginning." The 2 weeks'
     // notice is Alex's (8 Oct 2026, NOTICE_WEEKS in the version 2 mock-up).
     // Same opt-out rules, without the word "term" (8 Nov 2026: join any week).
-    renewTitle: 'After the Christmas break',
+    // HOLIDAY BREAKS (Alex, 9 Nov 2026): "payments are paused but you keep your spot."
+    // The admin team pauses each weekly subscription in Stripe (Pause payment collection,
+    // Void invoices, resume date = first session back), so no one is charged for weeks off.
+    renewTitle: 'Holiday breaks: payments pause, you keep your spot',
     renewLines: [
-        'Enrolment is automatic: your player\'s place carries on after the Christmas break unless you opt out.',
-        'We\'ll be in touch before sessions restart to confirm your player\'s place.',
-        'The weekly direct debit stops after your centre\'s last session before the break and starts again when sessions restart.',
-        'To opt out, email info@rramelbourne.com at least 2 weeks before sessions restart.',
+        'Over the holiday breaks, including Christmas, your weekly payments are paused but you keep your spot. You aren\'t charged for the weeks with no sessions.',
+        'Payments stop after your centre\'s last session before a break and start again when sessions restart.',
+        'We\'ll be in touch before sessions restart to confirm your player\'s spot.',
+        'Not coming back after a break? Email info@rramelbourne.com at least 2 weeks before sessions restart and we\'ll cancel your payments.',
     ],
     // A DIFFERENT NIGHT (Alex, 20 Oct 2026): "people can select different days but need to
     // know Wednesday (Cranbourne Nth) and Monday (Mickleham) are only on offer currently and
@@ -215,7 +218,7 @@ export const JR_T4 = {
         done: (player, day, c, g) => `We've got ${player}'s request for ${day} nights${g ? `, ${g.time} (the ages ${g.ages} group),` : ''} at the ${c.venue}, ${c.suburb}. No payment has been taken and no place is held. Junior Royals runs on ${c.night} there for now; if we open ${day} nights, we'll contact you first.`,
     },
     days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
-    renewShort: 'Your place carries on after the Christmas break unless you opt out; we\'ll be in touch to confirm.',
+    renewShort: 'Over the holiday breaks your payments are paused and you keep your spot; we\'ll be in touch before sessions restart.',
     centresApart: 'The two centres are about 70 km apart, so pick the one you can get to every week.',
     // TWO CENTRES ONLY (Alex, 5 Oct 2026): "Hallam and Williamstown no longer exist
     // as part of the organisation for the moment." Don't name them on the page.

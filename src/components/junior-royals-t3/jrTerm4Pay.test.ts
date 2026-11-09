@@ -10,7 +10,7 @@ describe('Junior Royals Term 4 payments', () => {
         expect(PRICE).toEqual({ weekly: 44.95, shirt: 29.95 });
         expect(Object.keys(PAY_OPTIONS)).toEqual(['weekly']);
         expect(PAY_OPTIONS.weekly.link).toBe(WEEKLY_LINK);
-        expect(PAY_OPTIONS.weekly.detail).toContain('last session before the Christmas break');
+        expect(PAY_OPTIONS.weekly.detail).toContain('one each week while sessions are running');
         expect(JR_T4.priceLine).toBe('$44.95 a week, incl. GST. Join any week and pay week by week: no upfront term fee.');
         expect(JR_T4.shirtLine).toContain('$29.95 incl. GST');
         expect(JSON.stringify({ JR_T4, PAY_OPTIONS })).not.toMatch(/\$349|8 weeks|Term 4/);
@@ -45,13 +45,16 @@ describe('Junior Royals Term 4 payments', () => {
 
     // "automatic enrolment into the next term (opt out) … we will be in touch to confirm.
     // Direct debits will be cancelled at the end of the term and restart at the beginning."
-    it('says enrolment carries on (opt-out), we confirm, and direct debits stop and restart', () => {
+    // Alex, 9 Nov 2026: "payments are paused but you keep your spot."
+    it('over the holiday breaks payments pause and the player keeps their spot; opt out by email', () => {
         const all = JR_T4.renewLines.join(' ');
-        expect(all).toContain('unless you opt out');
+        expect(JR_T4.renewTitle).toBe('Holiday breaks: payments pause, you keep your spot');
+        expect(all).toContain('your weekly payments are paused but you keep your spot');
+        expect(all).toContain('aren\'t charged for the weeks with no sessions');
         expect(all).toContain('be in touch');
-        expect(all).toContain('stops after your centre\'s last session before the break and starts again');
         expect(all).toContain('at least 2 weeks before sessions restart');
         expect(PAY_OPTIONS.weekly.detail).toContain('direct debit');
+        expect(PAY_OPTIONS.weekly.detail).toContain('payments are paused and you keep your spot');
     });
 
     // Alex, 20 Oct 2026: another night can be requested — standby, no payment.
