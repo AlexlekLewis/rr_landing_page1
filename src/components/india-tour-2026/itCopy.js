@@ -79,11 +79,11 @@ export const REGISTRATIONS_CLOSE_AT = null;
 export const CAMP_PDF = null;
 
 // Players the Rajasthan Royals High Performance Centre is documented as having
-// developed. Samson / Jaiswal / Jurel / Parag are sourced to Forbes India's
+// developed. Jaiswal / Jurel / Parag are sourced to Forbes India's
 // reporting on the centre; Sooryavanshi and Pretorius come from the camp document.
 // Do NOT add a name here without a source — this is public, about real people.
+// Sanju Samson was removed (Nov 2026): he no longer plays for the Royals.
 export const PRODUCED_HERE = [
-    { name: 'Sanju Samson', note: 'India international · Royals captain' },
     { name: 'Yashasvi Jaiswal', note: 'India Test opener' },
     { name: 'Dhruv Jurel', note: 'India wicketkeeper-batter' },
     { name: 'Riyan Parag', note: 'India international' },
@@ -102,9 +102,10 @@ const VIDEOS_COPY = {
     eyebrow: 'Watch',
     heading: 'Inside The',
     headingAccent: 'Royals HPC',
-    lead: 'See what a day at the Rajasthan Royals High Performance Centre looks like.',
-    comingSoonTitle: 'Videos from Nagpur are coming soon',
-    comingSoonBody: 'We are putting together video from our September 2026 tour. Check back soon.',
+    lead: 'Hear from the coaches and see what training with the Royals looks like.',
+    carouselLabel: 'Videos',
+    prevLabel: 'Previous video',
+    nextLabel: 'Next video',
 };
 
 const BENEFITS_COPY = {
@@ -204,8 +205,8 @@ const STANDARD = {
             'they are.',
         lead:
             `A tour of about ${TOUR_LENGTH_DAYS} days to the Rajasthan Royals' talent factory in Nagpur — ` +
-            'the franchise\'s own High Performance Centre, and the place that built the games of Sanju ' +
-            'Samson, Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag. It is where Vaibhav Sooryavanshi ' +
+            'the franchise\'s own High Performance Centre, and the place that built the games of ' +
+            'Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag. It is where Vaibhav Sooryavanshi ' +
             'trains, alongside the coach who is his legal guardian. Our first touring group trained there ' +
             'with the Royals\' own high performance staff in September 2026, and our Melbourne coaches ' +
             'pick the touring squad.',
@@ -257,7 +258,7 @@ const STANDARD = {
                 title: 'A factory with a record',
                 body:
                     'This is the Royals\' own centre, used by their contracted players — not a facility ' +
-                    'booked for the week. Sanju Samson, Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag all ' +
+                    'booked for the week. Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag all ' +
                     'rebuilt their games here before playing for India.',
             },
             {
@@ -448,7 +449,7 @@ const SIMPLE = {
             'dates are set.',
         lead:
             `A tour of about ${TOUR_LENGTH_DAYS} days to the Rajasthan Royals' talent factory in Nagpur. ` +
-            'This is the centre that built Sanju Samson, Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag — ' +
+            'This is the centre that built Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag — ' +
             'and where Vaibhav Sooryavanshi trains. Royals coaches worked with our first touring group ' +
             'there in September 2026. Our Melbourne coaches pick the team.',
         priceLabel: 'Estimated price',
@@ -497,7 +498,7 @@ const SIMPLE = {
             {
                 title: 'This place makes India players',
                 body:
-                    'Sanju Samson, Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag all trained here before ' +
+                    'Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag all trained here before ' +
                     'they played for India. It is the Royals\' own centre, not a ground we hired.',
             },
             {

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ITSectionHeader from './ITSectionHeader';
 import ITRegisterButton from './ITRegisterButton';
+import { useCarousel, CarouselTrack, CarouselControls } from './ITCarousel';
 import { SEPT_2026_MEDIA } from './itMedia';
 import { CAMP_PDF } from './itCopy';
 
@@ -48,8 +49,6 @@ const ITSeptember2026 = ({ copy }) => {
     const days = copy.pricing.itineraryDays;
     const [open, setOpen] = useState(null);
     const [showDays, setShowDays] = useState(false);
-    const [slide, setSlide] = useState(0);
-    const trackRef = useRef(null);
     const touchX = useRef(null);
     const total = SEPT_2026_MEDIA.length;
     const step = (d) => setOpen((i) => (i + d + total) % total);
@@ -65,21 +64,7 @@ const ITSeptember2026 = ({ copy }) => {
         return () => window.removeEventListener('keydown', onKey);
     }, [open, total]);
 
-    // Carousel: which slide is at the left edge, and move one slide at a time.
-    const slideWidth = () => {
-        const first = trackRef.current?.querySelector('[data-slide]');
-        if (!first) return 0;
-        const gap = parseFloat(getComputedStyle(trackRef.current).columnGap) || 0;
-        return first.getBoundingClientRect().width + gap;
-    };
-    const onTrackScroll = () => {
-        const w = slideWidth();
-        if (w) setSlide(Math.min(total - 1, Math.round(trackRef.current.scrollLeft / w)));
-    };
-    const slideBy = (d) => {
-        const w = slideWidth();
-        if (w) trackRef.current.scrollBy({ left: d * w, behavior: 'smooth' });
-    };
+    const carousel = useCarousel(total);
 
     const current = open === null ? null : SEPT_2026_MEDIA[open];
 
@@ -104,12 +89,8 @@ const ITSeptember2026 = ({ copy }) => {
                 {/* Carousel: swipe on phones, arrows on desktop, tap a photo to enlarge.
                     Takes any number of photos (they come from the folder in itMedia.js). */}
                 {total > 0 && (
-                    <div className="mt-8" role="region" aria-roledescription="carousel" aria-label={c.carouselLabel}>
-                        <div
-                            ref={trackRef}
-                            onScroll={onTrackScroll}
-                            className="flex gap-3 md:gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth -mx-6 px-6 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-                        >
+                    <div className="mt-8">
+                        <CarouselTrack carousel={carousel} label={c.carouselLabel}>
                             {SEPT_2026_MEDIA.map((m, i) => (
                                 <div
                                     key={i}
@@ -122,39 +103,8 @@ const ITSeptember2026 = ({ copy }) => {
                                     <Thumb m={m} onOpen={() => setOpen(i)} />
                                 </div>
                             ))}
-                        </div>
-
-                        <div className="mt-5 flex items-center gap-4">
-                            <button
-                                type="button"
-                                onClick={() => slideBy(-1)}
-                                disabled={slide === 0}
-                                aria-label={c.prevLabel}
-                                data-cta="september-carousel-prev"
-                                className="w-12 h-12 shrink-0 rounded-full border-2 border-rr-dark/15 hover:border-rr-pink text-rr-dark flex items-center justify-center transition-colors disabled:opacity-30 disabled:hover:border-rr-dark/15"
-                            >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" /></svg>
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => slideBy(1)}
-                                disabled={slide >= total - 1}
-                                aria-label={c.nextLabel}
-                                data-cta="september-carousel-next"
-                                className="w-12 h-12 shrink-0 rounded-full bg-rr-pink hover:bg-rr-light-pink text-white flex items-center justify-center transition-colors disabled:opacity-30"
-                            >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg>
-                            </button>
-                            <div className="flex-1 h-1 rounded-full bg-slate-200 overflow-hidden" aria-hidden="true">
-                                <div
-                                    className="h-full bg-rr-pink rounded-full transition-all duration-300"
-                                    style={{ width: `${((slide + 1) / total) * 100}%` }}
-                                />
-                            </div>
-                            <span className="text-xs font-black text-rr-dark uppercase tracking-widest tabular-nums" aria-live="polite">
-                                {slide + 1} / {total}
-                            </span>
-                        </div>
+                        </CarouselTrack>
+                        <CarouselControls carousel={carousel} total={total} prevLabel={c.prevLabel} nextLabel={c.nextLabel} idPrefix="september-carousel" />
                     </div>
                 )}
 

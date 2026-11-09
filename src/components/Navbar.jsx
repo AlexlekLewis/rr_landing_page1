@@ -25,9 +25,9 @@ const LC_NAV = [
 
 // India Tour 2026 — on-page section anchors (ids set in IndiaTour2026.jsx)
 const IT_NAV = [
+    { label: 'SEPT 2026', id: 'september-2026' },
     { label: 'VIDEOS', id: 'videos' },
     { label: 'WHY GO', id: 'benefits' },
-    { label: 'SEPT 2026', id: 'september-2026' },
     { label: 'COACHES', id: 'coaching' },
     { label: 'COSTS', id: 'pricing' },
 ];
