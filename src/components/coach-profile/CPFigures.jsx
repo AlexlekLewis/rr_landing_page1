@@ -125,7 +125,31 @@ function Group() {
     );
 }
 
-const FIGURES = { wagon: Wagon, overs: Overs, field: Fielders, keeping: Keeping, order: Order, worm: Worm, group: Group };
+function Spin() {
+    // Looking down the pitch from behind the bowler: the leg break turns away
+    // from a right-handed batter, the wrong'un turns back in.
+    return (
+        <svg viewBox="0 0 220 130" className="h-[132px] w-auto max-w-full" aria-hidden="true">
+            <text x="10" y="16" fontSize="10" fill="#323E48" letterSpacing="1" style={LABEL}>TWO BALLS, SAME ACTION</text>
+            <polygon points="88,118 132,118 120,30 100,30" fill={PITCH} />
+            <g fill={DARK}><rect x="104" y="24" width="2.5" height="10" /><rect x="108.75" y="24" width="2.5" height="10" /><rect x="113.5" y="24" width="2.5" height="10" /></g>
+            <circle cx="110" cy="116" r="4" fill={DARK} />
+            <path d="M110 116 Q108 80 106 58 Q104 46 92 34" fill="none" stroke={PINK} strokeWidth="3" strokeLinecap="round" />
+            <path d="M110 116 Q112 80 114 58 Q116 46 128 34" fill="none" stroke={BLUE} strokeWidth="3" strokeLinecap="round" strokeDasharray="6 4" />
+            <circle cx="105.5" cy="56" r="3.5" fill={PINK} />
+            <circle cx="114.5" cy="56" r="3.5" fill={BLUE} />
+            <g fontSize="9" letterSpacing=".5" style={LABEL}>
+                <text x="12" y="44" fill={PINK}>LEG BREAK</text>
+                <text x="12" y="56" fill="#5B6773">TURNS AWAY</text>
+                <text x="146" y="44" fill={BLUE}>WRONG’UN</text>
+                <text x="146" y="56" fill="#5B6773">TURNS IN</text>
+                <text x="12" y="112" fill="#5B6773">BOWLER</text>
+            </g>
+        </svg>
+    );
+}
+
+const FIGURES = { spin: Spin, wagon: Wagon, overs: Overs, field: Fielders, keeping: Keeping, order: Order, worm: Worm, group: Group };
 
 export default function StrengthFigure({ kind }) {
     const Fig = FIGURES[kind] || Fielders;
