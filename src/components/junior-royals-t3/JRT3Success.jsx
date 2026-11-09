@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { PENDING_KEY } from './JRT3RegistrationForm';
-import { JR_T4, PAY_OPTIONS, GROUPS } from './jrTerm4Data';
+import { JR_T4, PAY_OPTIONS, GROUPS, nextSession, sessionLong, lastSessionLine } from './jrTerm4Data';
+import { useJrContent } from './jrContent';
 
 // /junior-royals/success — where Stripe sends a family after paying for Term 4
 // (each Payment Link's after-payment redirect must be
@@ -17,6 +18,7 @@ const readPending = () => {
 
 const JRT3Success = () => {
     const navigate = useNavigate();
+    useJrContent();
     const [params] = useSearchParams();
     const sessionId = params.get('session_id') || '';
     const paid = sessionId.startsWith('cs_');
@@ -24,6 +26,8 @@ const JRT3Success = () => {
     const centre = JR_T4.centres.find((c) => c.value === booking?.centre) || null;
     // The group the form showed before payment (5pm = ages 7–9, 6pm = ages 10–12).
     const group = GROUPS.find((g) => g.key === booking?.group) || null;
+    // The next session from now: they paid just now, so this is the first one they come to.
+    const [first] = useState(() => (centre ? nextSession(centre) : null));
 
     useEffect(() => {
         if (!paid) return;
@@ -35,7 +39,7 @@ const JRT3Success = () => {
             if (!window.sessionStorage.getItem(key)) {
                 window.sessionStorage.setItem(key, '1');
                 if (typeof window.fbq === 'function') {
-                    const option = PAY_OPTIONS[booking?.option] ? booking.option : 'upfront';
+                    const option = 'weekly'; // the only way to pay since 8 Nov 2026
                     window.fbq('track', 'Purchase', { content_name: `Junior Royals Term 4 (${option})`, value: PAY_OPTIONS[option].value, currency: 'AUD' }, { eventID: sessionId });
                 }
             }
@@ -44,7 +48,7 @@ const JRT3Success = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        document.title = 'Payment Received | Junior Royals Term 4 | Rajasthan Royals Academy Melbourne';
+        document.title = 'Payment Received | Junior Royals | Rajasthan Royals Academy Melbourne';
         const meta = document.createElement('meta');
         meta.name = 'robots';
         meta.content = 'noindex,nofollow';
@@ -68,14 +72,14 @@ const JRT3Success = () => {
                 </motion.div>
 
                 <motion.div initial="hidden" animate="visible" custom={0.15} variants={fadeUp} className="mb-4">
-                    <p className="text-rr-pink font-bold uppercase tracking-widest text-sm md:text-base mb-3">Junior Royals — {JR_T4.term}</p>
+                    <p className="text-rr-pink font-bold uppercase tracking-widest text-sm md:text-base mb-3">Junior Royals · Melbourne</p>
                     <h1 className="text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-none">
                         Payment received. <span className="text-rr-pink">You&apos;re in.</span>
                     </h1>
                 </motion.div>
 
                 <motion.p initial="hidden" animate="visible" custom={0.25} variants={fadeUp} className="text-lg md:text-xl font-semibold text-white/90 leading-relaxed my-8">
-                    {booking?.player ? `${booking.player}'s place` : 'Your player\'s place'} in Junior Royals, {JR_T4.term}, is booked. Stripe has emailed you a receipt.
+                    {booking?.player ? `${booking.player}'s place` : 'Your player\'s place'} in Junior Royals is booked. Stripe has emailed you a receipt.
                 </motion.p>
 
                 <motion.div initial="hidden" animate="visible" custom={0.35} variants={fadeUp} className={card}>
@@ -83,17 +87,15 @@ const JRT3Success = () => {
                     {centre ? (
                         <p className="text-sm text-white/75 leading-relaxed">
                             <span className="font-bold text-white">{centre.venue}, {centre.address}.</span> {group
-                                ? <>{centre.night}, <span className="font-bold text-white">{group.time}</span> (the ages {group.ages} group), {centre.datesLong} ({JR_T4.weeks} weeks).</>
-                                : <>{centre.night} {centre.times}, {centre.datesLong} ({JR_T4.weeks} weeks).</>} First session: <span className="font-bold text-white">{centre.firstSessionLong}</span>.{group ? '' : ` ${centre.groups}`}
+                                ? <>{centre.night}, <span className="font-bold text-white">{group.time}</span> (the ages {group.ages} group).</>
+                                : <>{centre.night} {centre.times}.</>}{first ? <> First session: <span className="font-bold text-white">{sessionLong(first)}</span>.</> : " We'll be in touch to confirm the first session after the Christmas break."} {lastSessionLine(centre)}{group ? '' : ` ${centre.groups}`}
                         </p>
                     ) : (
                         <p className="text-sm text-white/75 leading-relaxed">
-                            {JR_T4.weeks} weeks at the centre you chose, 5:00pm – 7:00pm: Mickleham on {JR_T4.centres[0].night} ({JR_T4.centres[0].datesShort}), Cranbourne North on {JR_T4.centres[1].night} ({JR_T4.centres[1].datesShort}). {JR_T4.groupsLine}
+                            Every week at the centre you chose, 5:00pm – 7:00pm: Mickleham on {JR_T4.centres[0].night} (last session before the Christmas break {JR_T4.centres[0].lastSessionLong}), Cranbourne North on {JR_T4.centres[1].night} (last session {JR_T4.centres[1].lastSessionLong}). {JR_T4.groupsLine}
                         </p>
                     )}
-                    {booking?.option === 'weekly' && (
-                        <p className="text-sm text-white/75 leading-relaxed mt-2">{PAY_OPTIONS.weekly.detail}</p>
-                    )}
+                    <p className="text-sm text-white/75 leading-relaxed mt-2">{PAY_OPTIONS.weekly.detail}</p>
                 </motion.div>
 
                 <motion.div initial="hidden" animate="visible" custom={0.4} variants={fadeUp} className={card}>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Calendar, Clock } from 'lucide-react';
-import { JR_T4 } from './jrTerm4Data';
+import { JR_T4, JR_PHOTOS } from './jrTerm4Data';
 
 // Term 4 centres only, each with its own night and dates (19 Oct 2026: Mickleham
 // Mondays, Cranbourne North Wednesdays, both 5:00pm – 7:00pm). The Term 3 cards, session accordions and prices were
@@ -24,7 +24,7 @@ const JRT3Locations = () => {
                     </motion.h2>
                     <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}
                         className="text-lg text-rr-charcoal max-w-2xl mx-auto font-medium">
-                        Term 4 runs at two centres, each on its own night: <span className="font-black text-rr-dark">Mondays at Mickleham and Wednesdays at Cranbourne North</span>, 5:00pm – 7:00pm. {JR_T4.centresApart}
+                        Two centres, each on its own night: <span className="font-black text-rr-dark">Mondays at Mickleham and Wednesdays at Cranbourne North</span>, 5:00pm – 7:00pm. {JR_T4.joinLine}
                     </motion.p>
                 </div>
 
@@ -34,8 +34,9 @@ const JRT3Locations = () => {
                             viewport={{ once: true }} transition={{ duration: 0.6, delay: i * 0.1 }}
                             className="bg-white rounded-2xl overflow-hidden border border-slate-100">
                             <div className="h-4" style={{ background: loc.gradient }} />
-                            <div className="h-40 overflow-hidden">
-                                <img src={loc.image} alt={`${loc.venue}, ${loc.suburb}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                            <div className="h-56 overflow-hidden">
+                                <img src={JR_PHOTOS.centres[loc.value]?.src || loc.image} alt={JR_PHOTOS.centres[loc.value]?.alt || `${loc.venue}, ${loc.suburb}`} loading="lazy"
+                                    className="w-full h-full object-cover object-[center_35%] hover:scale-105 transition-transform duration-500" />
                             </div>
                             <div className="p-6">
                                 <p className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-1">{loc.region}</p>
@@ -49,7 +50,7 @@ const JRT3Locations = () => {
                                     </div>
                                     <div className="flex items-center gap-3">
                                         <Calendar className="w-4 h-4 text-rr-blue shrink-0" />
-                                        <span className="text-rr-charcoal font-semibold text-sm">{loc.datesShort} · {JR_T4.weeks} weeks</span>
+                                        <span className="text-rr-charcoal font-semibold text-sm">Last session before the Christmas break: <span className="font-black text-rr-dark">{loc.lastSessionLong}</span></span>
                                     </div>
                                     <div className="flex items-start gap-3">
                                         <Clock className="w-4 h-4 text-rr-blue shrink-0 mt-0.5" />

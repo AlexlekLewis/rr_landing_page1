@@ -1,27 +1,31 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
-import { JR_T4, weeklyOpen } from './jrTerm4Data';
+import { JR_T4, JR_PHOTOS } from './jrTerm4Data';
 
-// Junior Royals — Term 4, 2026. Every fact here comes from jrTerm4Data.js.
-// Paid from 19 Oct 2026: the price sits beside the button, with the shirt.
+// Junior Royals. Every fact here comes from jrTerm4Data.js.
+// Join any week, weekly price only (8 Nov 2026): the price sits beside the button, with the shirt.
 const JRT3Hero = () => {
     const scrollToForm = () =>
         document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' });
 
     return (
         <section className="relative min-h-screen flex items-center overflow-hidden bg-rr-dark">
-            <div className="absolute inset-0 bg-gradient-to-br from-rr-dark via-rr-dark/95 to-rr-navy/60" />
+            {/* A real session behind the words (8 Nov 2026), darkened so the text stays readable. */}
+            <img src={JR_PHOTOS.hero.src} srcSet={`${JR_PHOTOS.hero.srcSm} 480w, ${JR_PHOTOS.hero.src} 900w`} sizes="100vw"
+                alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover object-[center_40%] opacity-50 lg:opacity-15" />
+            <div className="absolute inset-0 bg-gradient-to-b from-rr-dark/90 via-rr-dark/75 to-rr-dark/95 lg:bg-gradient-to-br lg:from-rr-dark lg:via-rr-dark/85 lg:to-rr-navy/70" />
             <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-rr-pink/8 rounded-full blur-[120px] pointer-events-none" />
             <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-rr-blue/8 rounded-full blur-[120px] pointer-events-none" />
 
-            <div className="relative z-20 container mx-auto px-6 pt-32 pb-24 max-w-4xl">
+            <div className="relative z-20 container mx-auto px-6 pt-32 pb-24 max-w-6xl lg:grid lg:grid-cols-[1.25fr_1fr] lg:gap-12 lg:items-center">
+                <div>
                 <motion.p
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-6"
                 >
-                    Rajasthan Royals Academy · Melbourne
+                    {JR_T4.heroEyebrow}
                 </motion.p>
 
                 <motion.h1
@@ -30,8 +34,8 @@ const JRT3Hero = () => {
                     transition={{ delay: 0.15 }}
                     className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-200 uppercase tracking-tighter leading-none mb-6"
                 >
-                    JUNIOR ROYALS<span className="sr-only"> — </span><br />
-                    <span className="text-rr-pink">TERM 4, 2026</span>
+                    {JR_T4.heroTitle}<span className="sr-only"> — </span><br />
+                    <span className="text-rr-pink">{JR_T4.heroTitleAccent}</span>
                 </motion.h1>
 
                 <motion.p
@@ -40,7 +44,7 @@ const JRT3Hero = () => {
                     transition={{ delay: 0.3 }}
                     className="text-lg md:text-2xl text-white font-semibold mb-4"
                 >
-                    {JR_T4.weeks} weeks · Mondays at Mickleham from 26 October · Wednesdays at Cranbourne North from 28 October
+                    {JR_T4.heroSub}
                 </motion.p>
 
                 <motion.p
@@ -49,7 +53,7 @@ const JRT3Hero = () => {
                     transition={{ delay: 0.4 }}
                     className="text-sm md:text-lg text-white/80 font-medium mb-4 max-w-xl"
                 >
-                    One hour of cricket coaching each week, in a small group of players your own age, so your player is ready for their club season.
+                    {JR_T4.heroLead}
                 </motion.p>
 
                 <motion.p
@@ -90,9 +94,20 @@ const JRT3Hero = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
                     </button>
-                    <p className="text-white text-sm md:text-base font-black mt-4 max-w-xl">{weeklyOpen() ? JR_T4.priceLine : JR_T4.priceLineBeforeWeekly}</p>
+                    <p className="text-white text-sm md:text-base font-black mt-4 max-w-xl">{JR_T4.priceLine}</p>
+                    <p className="text-white/70 text-sm font-medium mt-1 max-w-xl">{JR_T4.joinLine}</p>
                     <p className="text-white/70 text-sm font-medium mt-1 max-w-xl">{JR_T4.shirtLine}</p>
-                    <p className="text-white/70 text-sm font-medium mt-1 max-w-xl">{JR_T4.renewShort}</p>
+                </motion.div>
+                </div>
+
+                {/* Desktop: two framed photos from real sessions. */}
+                <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4, duration: 0.7 }}
+                    className="hidden lg:block relative h-[560px]">
+                    <img src={JR_PHOTOS.heroFeature.src} alt={JR_PHOTOS.heroFeature.alt}
+                        className="absolute right-0 top-0 w-[78%] h-[480px] object-cover rounded-3xl border-4 border-white/10" />
+                    <img src={JR_PHOTOS.heroInset.src} alt={JR_PHOTOS.heroInset.alt}
+                        className="absolute left-0 bottom-0 w-[48%] h-[300px] object-cover rounded-3xl border-4 border-rr-dark" />
+                    <span className="absolute right-4 bottom-24 bg-rr-pink text-white text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full">Ages 7–12 · Melbourne</span>
                 </motion.div>
             </div>
 

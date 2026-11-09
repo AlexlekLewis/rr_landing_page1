@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Link } from 'react-router-dom';
 import { HONEYPOT_FIELD, isHoneypotTripped } from '../../lib/security/bot.js';
-import { JR_T4, PAY_OPTIONS, WEEKLY_CONFIRMED, WEEKLY_OPENS, weeklyOpen, groupFor } from './jrTerm4Data';
+import { JR_T4, PAY_OPTIONS, groupFor, nextSession, sessionLong, lastSessionLine, bookingOpen, breakLine } from './jrTerm4Data';
 import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squads/data';
 
-// Junior Royals — Term 4 booking form (paid from 19 Oct 2026).
+// Junior Royals booking form (paid from 19 Oct 2026). JOIN ANY WEEK, WEEKLY ONLY
+// (8 Nov 2026): one way to pay, the weekly subscription; the player starts at the
+// centre's next session, and the summary shows that centre's last session before Christmas.
 //
 // BOOK AND PAY: the entry is saved to jr_term4_waitlist FIRST, with
 // an id made here (anon can insert but not read back), then the family goes to
@@ -33,7 +35,7 @@ import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squ
 // centre carried in `source` ("…|centre=cranbourne-north"); the sheet sync reads
 // it back from there. When the constraint is widened the first insert succeeds.
 export const ENTRY_SOURCE = 'junior-royals-term4-entry';            // entries before payments opened
-export const BOOKING_SOURCE = 'junior-royals-term4-booking';         // + "|pay=upfront" / "|pay=weekly", then "|group=5pm"
+export const BOOKING_SOURCE = 'junior-royals-term4-booking';         // + "|pay=weekly" ("|pay=upfront" before 8 Nov 2026), then "|group=5pm"
 export const REQUEST_SOURCE = 'junior-royals-term4-night-request';   // + "|day=tuesday|group=5pm": a different night, standby, no payment
 export const fallbackSource = (source, centre) => `${source}|centre=${centre}`;
 export const PENDING_KEY = 'jr_t4_pending_booking';
@@ -64,13 +66,17 @@ export const payUrl = (option, id, email) => {
 
 const AGE_OPTIONS = Array.from({ length: JR_T4.ageMax - JR_T4.ageMin + 1 }, (_, i) => i + JR_T4.ageMin); // 7–12
 
+// When a family booking now would start, at that centre.
+const startLine = (c) => {
+    const d = nextSession(c);
+    return d ? `Starts ${sessionLong(d)}.` : "We'll be in touch to confirm the first session after the Christmas break.";
+};
+
 const readPending = () => {
     try { return JSON.parse(window.sessionStorage.getItem(PENDING_KEY) || 'null'); } catch { return null; }
 };
 
 const JRT3RegistrationForm = () => {
-    const weekly = weeklyOpen();
-    const [pay, setPay] = useState('upfront');
     const [nightChoice, setNightChoice] = useState('offered');   // 'offered' | 'other'
     const [altDay, setAltDay] = useState('');
     const [standby, setStandby] = useState(null);
@@ -108,10 +114,12 @@ const JRT3RegistrationForm = () => {
         if (isHoneypotTripped(honeypot)) return;
         setSubmitting(true);
         const id = newId();
-        const option = weekly ? pay : 'upfront';
+        const option = 'weekly';
         const centre = form.preferred_centre;
         const centreInfo = JR_T4.centres.find((c) => c.value === centre) || null;
         const request = nightChoice === 'other';
+        // No sessions left before the break at this centre: nothing is saved and nobody is sent to Stripe.
+        if (!request && centreInfo && !bookingOpen(centreInfo)) { setSubmitting(false); return; }
         const group = groupFor(form.player_age);
         // A different night is a standby request: no payment, and the night they asked for
         // rides in `source` (the preferred_day CHECK only knows monday | wednesday).
@@ -175,20 +183,21 @@ const JRT3RegistrationForm = () => {
     const [mickleham, cranbourne] = JR_T4.centres;
     const group = groupFor(form.player_age);
     const pickedCentre = JR_T4.centres.find((x) => x.value === form.preferred_centre) || null;
+    const onBreak = Boolean(pickedCentre) && nightChoice !== 'other' && !bookingOpen(pickedCentre);
     const choice = (on) => `flex-1 text-left rounded-xl border-2 px-4 py-3 transition-colors ${on ? 'border-rr-pink bg-rr-pink/5' : 'border-slate-200 hover:border-rr-pink/50'}`;
 
     return (
         <section id="registration-form" className="py-24 bg-rr-dark">
             <div className="max-w-2xl mx-auto px-6">
                 <div className="text-center mb-10">
-                    <p className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-6">Junior Royals — {JR_T4.term}</p>
+                    <p className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-6">Junior Royals · Melbourne</p>
                     <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-wide mb-6">
                         SECURE YOUR <span className="text-rr-pink">PLACE</span>
                     </h2>
                     <p className="text-white/80 font-medium leading-relaxed mb-4" data-jr-t4-intro>
-                        Term 4 runs on <span className="font-black text-white">{mickleham.night} at the {mickleham.venue}, {mickleham.suburb} ({mickleham.datesShort})</span> and <span className="font-black text-white">{cranbourne.night} at the {cranbourne.venue}, {cranbourne.suburb} ({cranbourne.datesShort})</span>, {mickleham.times} at both. {JR_T4.groupsLine} If your player did Junior Royals last term, nothing carries over automatically, so please book below.
+                        <span className="font-black text-white">{mickleham.night} at the {mickleham.venue}, {mickleham.suburb}</span> and <span className="font-black text-white">{cranbourne.night} at the {cranbourne.venue}, {cranbourne.suburb}</span>, {mickleham.times} at both. {JR_T4.groupsLine} {JR_T4.joinLine}
                     </p>
-                    <p className="text-white font-black leading-relaxed">{weekly ? JR_T4.priceLine : JR_T4.priceLineBeforeWeekly}</p>
+                    <p className="text-white font-black leading-relaxed">{JR_T4.priceLine}</p>
                     <p className="text-white/70 text-sm font-medium leading-relaxed mt-2">{JR_T4.shirtLine}</p>
                 </div>
 
@@ -197,7 +206,7 @@ const JRT3RegistrationForm = () => {
                         <p className="font-black">{pending.player ? `${pending.player}'s booking isn't paid yet.` : "Your booking isn't paid yet."}</p>
                         <p className="text-white/75 text-sm mt-1">The place is booked once you pay. Already paid? Check your email for the Stripe receipt; you don&apos;t need to pay again.</p>
                         <div className="mt-3 flex flex-wrap gap-3">
-                            <a href={payUrl(pending.option in PAY_OPTIONS ? pending.option : 'upfront', pending.id, pending.email)}
+                            <a href={payUrl('weekly', pending.id, pending.email)}
                                 className="inline-flex items-center bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-xs px-5 py-3 rounded-full">Pay now</a>
                             <button type="button" onClick={() => { try { window.sessionStorage.removeItem(PENDING_KEY); } catch { /* ignore */ } setPending(null); }}
                                 className="text-white/80 underline text-sm font-semibold">Start a new booking</button>
@@ -265,7 +274,7 @@ const JRT3RegistrationForm = () => {
                                                         <label className={`${choice(nightChoice === 'offered')} cursor-pointer`}>
                                                             <input type="radio" name="night" value="offered" checked={nightChoice === 'offered'} onChange={() => setNightChoice('offered')} className="sr-only" />
                                                             <span className="block font-black text-rr-dark text-sm">{c.night}, {group ? group.time : c.times}</span>
-                                                            <span className="block text-xs text-rr-charcoal font-medium mt-1 leading-relaxed">{group ? `The ages ${group.ages} group. ` : ''}{JR_T4.request.offeredLead} From {c.firstSessionLong}.</span>
+                                                            <span className="block text-xs text-rr-charcoal font-medium mt-1 leading-relaxed">{group ? `The ages ${group.ages} group. ` : ''}{JR_T4.request.offeredLead} {startLine(c)}</span>
                                                         </label>
                                                         <label className={`${choice(nightChoice === 'other')} cursor-pointer`}>
                                                             <input type="radio" name="night" value="other" checked={nightChoice === 'other'} onChange={() => setNightChoice('other')} className="sr-only" />
@@ -288,26 +297,11 @@ const JRT3RegistrationForm = () => {
                                             );
                                         })()}
                                         {nightChoice !== 'other' && (
-                                        <fieldset>
-                                            <legend className={lc}>How would you like to pay? *</legend>
-                                            <div className="flex flex-col sm:flex-row gap-3">
-                                                {['upfront', 'weekly'].map((k) => {
-                                                    const o = PAY_OPTIONS[k];
-                                                    const available = k === 'upfront' || weekly;
-                                                    if (k === 'weekly' && !WEEKLY_CONFIRMED) return null;
-                                                    const on = (weekly ? pay : 'upfront') === k;
-                                                    return (
-                                                        <label key={k} data-pay-option={k} className={`${choice(on && available)} ${available ? 'cursor-pointer' : 'opacity-60 cursor-not-allowed'}`}>
-                                                            <input type="radio" name="pay" value={k} checked={on && available} disabled={!available} onChange={() => setPay(k)} className="sr-only" />
-                                                            <span className="block font-black text-rr-dark text-sm">{o.title}: {o.amount} <span className="font-semibold text-rr-charcoal">{o.per} incl. GST</span></span>
-                                                            <span className="block text-xs text-rr-charcoal font-medium mt-1 leading-relaxed">
-                                                                {available ? o.detail : `Opens Tuesday ${WEEKLY_OPENS.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', timeZone: 'Australia/Melbourne' })}. ${o.detail}`}
-                                                            </span>
-                                                        </label>
-                                                    );
-                                                })}
-                                            </div>
-                                        </fieldset>
+                                        <div className="rounded-xl border-2 border-rr-pink bg-rr-pink/5 px-4 py-3" data-pay-option="weekly">
+                                            <p className={lc}>How you pay</p>
+                                            <span className="block font-black text-rr-dark text-sm">{PAY_OPTIONS.weekly.title}: {PAY_OPTIONS.weekly.amount} <span className="font-semibold text-rr-charcoal">{PAY_OPTIONS.weekly.per} incl. GST</span></span>
+                                            <span className="block text-xs text-rr-charcoal font-medium mt-1 leading-relaxed">{PAY_OPTIONS.weekly.detail}</span>
+                                        </div>
                                         )}
                                     </>
                             </div>
@@ -322,7 +316,7 @@ const JRT3RegistrationForm = () => {
                                     <p className="text-rr-charcoal text-sm font-medium leading-relaxed mt-1">
                                         {nightChoice === 'other'
                                             ? `${dayName(altDay)} nights aren't running yet. Nothing to pay and no place held; we'll contact you first if they open.`
-                                            : `${JR_T4.weeks} weeks, from ${pickedCentre.firstSessionLong}.`}
+                                            : `${startLine(pickedCentre)} ${lastSessionLine(pickedCentre)}`}
                                     </p>
                                 </div>
                             )}
@@ -333,14 +327,15 @@ const JRT3RegistrationForm = () => {
                                 </ul>
                             </div>
                             {errors.form && <div className="bg-red-50 border border-red-200 rounded-xl p-4 mt-6"><p className="text-red-600 text-sm font-medium">{errors.form}</p></div>}
-                            <button type="submit" disabled={submitting}
+                            {onBreak && <div className="rounded-xl border-2 border-rr-pink bg-rr-pink/5 p-4 mt-6" data-jr-on-break><p className="text-rr-dark text-sm font-bold leading-relaxed">{breakLine(pickedCentre)}</p></div>}
+                            <button type="submit" disabled={submitting || onBreak}
                                 className="mt-8 w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]">
                                 {nightChoice === 'other'
                                     ? (submitting ? 'Sending…' : JR_T4.request.button)
                                     : (submitting ? 'Going to payment…' : JR_T4.ctaLabel)}
                             </button>
                             <p className="text-slate-500 text-xs text-center mt-4">
-                                {nightChoice === 'other' ? JR_T4.request.note : `Next: Stripe's secure checkout. ${JR_T4.placeLine}`}
+                                {nightChoice === 'other' ? JR_T4.request.note : (onBreak ? 'No payment is taken while sessions are on the break.' : `Next: Stripe's secure checkout. ${JR_T4.placeLine}`)}
                             </p>
                         </form>
                     )}

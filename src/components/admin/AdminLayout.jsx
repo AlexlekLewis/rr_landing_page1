@@ -5,7 +5,7 @@ import {
     LayoutDashboard, Kanban, Users, BarChart3, FileText,
     Settings, LogOut, ChevronLeft, ChevronRight, Menu, X,
     Send, CheckCircle2, Eye, ClipboardList, UserCheck, Shield, ChevronDown,
-    UserCircle, ShoppingBag, Trophy, GraduationCap, Crown, Sun, Sparkles,
+    UserCircle, ShoppingBag, Trophy, GraduationCap, PenLine, Crown, Sun, Sparkles,
     MessageCircle, Plane, Zap, Star
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
@@ -77,6 +77,7 @@ const NAV_GROUPS = [
         items: [
             { label: 'Offer Manager', path: '/rramadmin_26/tokens', icon: Send },
             { label: 'Site Pages', path: '/rramadmin_26/pages', icon: FileText },
+            { label: 'Junior Royals Editor', path: '/rramadmin_26/junior-royals-editor', icon: PenLine },
             { label: 'Settings', path: '/rramadmin_26/settings', icon: Settings },
         ],
     },
