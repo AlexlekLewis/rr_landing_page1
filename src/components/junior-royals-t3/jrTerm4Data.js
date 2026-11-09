@@ -119,6 +119,12 @@ export const nextSession = (centre, now = new Date()) => {
 };
 export const sessionLong = (d) => d.toLocaleDateString('en-AU', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Australia/Melbourne' });
 export const lastSessionLine = (c) => `The last session before the Christmas break is ${c.lastSessionLong}.`;
+// BOOKING CLOSES AFTER EACH CENTRE'S LAST SESSION (9 Nov 2026). The weekly direct debit
+// starts the day a family pays, so after the last session before the break the form must
+// not send anyone to Stripe: they would pay each week with no sessions running. It opens
+// again once the restart dates are added here (firstDate / lastDate per centre).
+export const bookingOpen = (centre, now = new Date()) => Boolean(nextSession(centre, now));
+export const breakLine = (c) => `${c.night} at ${c.suburb} are on the Christmas break, so we're not taking bookings or payments for now. Email info@rramelbourne.com and we'll tell you when sessions restart.`;
 
 export const JR_T4 = {
     // Page wording that used to sit in the JSX, here so the admin Junior Royals Editor

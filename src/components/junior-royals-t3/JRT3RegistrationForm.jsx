@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Link } from 'react-router-dom';
 import { HONEYPOT_FIELD, isHoneypotTripped } from '../../lib/security/bot.js';
-import { JR_T4, PAY_OPTIONS, groupFor, nextSession, sessionLong, lastSessionLine } from './jrTerm4Data';
+import { JR_T4, PAY_OPTIONS, groupFor, nextSession, sessionLong, lastSessionLine, bookingOpen, breakLine } from './jrTerm4Data';
 import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squads/data';
 
 // Junior Royals booking form (paid from 19 Oct 2026). JOIN ANY WEEK, WEEKLY ONLY
@@ -118,6 +118,8 @@ const JRT3RegistrationForm = () => {
         const centre = form.preferred_centre;
         const centreInfo = JR_T4.centres.find((c) => c.value === centre) || null;
         const request = nightChoice === 'other';
+        // No sessions left before the break at this centre: nothing is saved and nobody is sent to Stripe.
+        if (!request && centreInfo && !bookingOpen(centreInfo)) { setSubmitting(false); return; }
         const group = groupFor(form.player_age);
         // A different night is a standby request: no payment, and the night they asked for
         // rides in `source` (the preferred_day CHECK only knows monday | wednesday).
@@ -181,6 +183,7 @@ const JRT3RegistrationForm = () => {
     const [mickleham, cranbourne] = JR_T4.centres;
     const group = groupFor(form.player_age);
     const pickedCentre = JR_T4.centres.find((x) => x.value === form.preferred_centre) || null;
+    const onBreak = Boolean(pickedCentre) && nightChoice !== 'other' && !bookingOpen(pickedCentre);
     const choice = (on) => `flex-1 text-left rounded-xl border-2 px-4 py-3 transition-colors ${on ? 'border-rr-pink bg-rr-pink/5' : 'border-slate-200 hover:border-rr-pink/50'}`;
 
     return (
@@ -324,14 +327,15 @@ const JRT3RegistrationForm = () => {
                                 </ul>
                             </div>
                             {errors.form && <div className="bg-red-50 border border-red-200 rounded-xl p-4 mt-6"><p className="text-red-600 text-sm font-medium">{errors.form}</p></div>}
-                            <button type="submit" disabled={submitting}
+                            {onBreak && <div className="rounded-xl border-2 border-rr-pink bg-rr-pink/5 p-4 mt-6" data-jr-on-break><p className="text-rr-dark text-sm font-bold leading-relaxed">{breakLine(pickedCentre)}</p></div>}
+                            <button type="submit" disabled={submitting || onBreak}
                                 className="mt-8 w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)]">
                                 {nightChoice === 'other'
                                     ? (submitting ? 'Sending…' : JR_T4.request.button)
                                     : (submitting ? 'Going to payment…' : JR_T4.ctaLabel)}
                             </button>
                             <p className="text-slate-500 text-xs text-center mt-4">
-                                {nightChoice === 'other' ? JR_T4.request.note : `Next: Stripe's secure checkout. ${JR_T4.placeLine}`}
+                                {nightChoice === 'other' ? JR_T4.request.note : (onBreak ? 'No payment is taken while sessions are on the break.' : `Next: Stripe's secure checkout. ${JR_T4.placeLine}`)}
                             </p>
                         </form>
                     )}

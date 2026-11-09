@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { JR_T4, PAY_OPTIONS, PRICE, WEEKLY_LINK, GROUPS, groupFor, ROYALS_WAY, nextSession, sessionLong, lastSessionLine } from './jrTerm4Data';
+import { JR_T4, PAY_OPTIONS, PRICE, WEEKLY_LINK, GROUPS, groupFor, ROYALS_WAY, nextSession, sessionLong, lastSessionLine, bookingOpen, breakLine } from './jrTerm4Data';
 import { existsSync } from 'node:fs';
 import { classifyJrT4 } from '../../../api/stripe-webhook.js';
 
@@ -30,6 +30,17 @@ describe('Junior Royals Term 4 payments', () => {
         expect(nextSession(mick, new Date('2026-12-14T18:00:00+11:00'))).toBeNull();
         expect(sessionLong(nextSession(crn, new Date('2026-12-14T18:00:00+11:00')))).toBe('Wednesday 16 December');
         expect(JR_T4.benefits.map((b) => b.head)).toContain('Join any week');
+    });
+
+    // 9 Nov 2026: the weekly direct debit starts the day a family pays, so the form must not
+    // send anyone to Stripe once their centre has no session left before the break.
+    it('stops taking bookings at each centre after its last session before the break', () => {
+        const [mick, crn] = JR_T4.centres;
+        expect(bookingOpen(mick, new Date('2026-12-14T16:59:00+11:00'))).toBe(true);
+        expect(bookingOpen(mick, new Date('2026-12-14T17:01:00+11:00'))).toBe(false);
+        expect(bookingOpen(crn, new Date('2026-12-14T17:01:00+11:00'))).toBe(true);
+        expect(bookingOpen(crn, new Date('2026-12-16T17:01:00+11:00'))).toBe(false);
+        expect(breakLine(mick)).toBe("Mondays at Mickleham are on the Christmas break, so we're not taking bookings or payments for now. Email info@rramelbourne.com and we'll tell you when sessions restart.");
     });
 
     // "automatic enrolment into the next term (opt out) … we will be in touch to confirm.
