@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BotGuard from '../security/BotGuard';
+
+const TURNSTILE_ON = Boolean(import.meta.env.VITE_TURNSTILE_SITE_KEY);
 import { CENTRES } from './coachProfiles';
 import { SectionHead } from './CPShared';
 import {
-    bookingMode, buildBookUrl, formatDay, formatLength, formatTime,
-    getCoachSlots, melbourneDate, sendEnquiry,
+    bookingMode, buildBookUrl, formatDay, formatLength, formatTime, getCoachSlots, melbourneDate, sendEnquiry, enquiryProblem,
 } from './bookingClient';
 import { trackCoachEnquiry } from './coachPixel';
 
@@ -83,7 +84,7 @@ export default function CPBook({ profile, catalog, catalogLoading, catalogCoach,
             ? `${profile.first}’s free times at ${centreInfo.short} over the next week. Tap a time to request it. You’re not charged until we confirm it with the centre.`
             : catalogLoading
                 ? `Loading ${profile.first}’s free times…`
-                : `${profile.first} isn’t taking new private bookings right now. Leave your details and we’ll call you about times with ${profile.first} or another Academy coach.`;
+                : `${profile.first} has no free times showing right now. Leave your details and we’ll call you about times with ${profile.first} or another Academy coach.`;
 
     return (
         <section className="py-16 md:py-24 bg-rr-dark text-slate-300">
@@ -210,21 +211,25 @@ function AskUs({ profile, centre, catalogCoach, sourcePage }) {
     const [token, setToken] = useState(null);
     const [honeypot, setHoneypot] = useState('');
     const [state, setState] = useState({ sending: false, error: '', done: '' });
+    // One key per submission, kept across retries, so it can't create two enquiries.
+    const [submissionKey] = useState(() => (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : String(Date.now())));
     const set = (k) => (e) => setF((p) => ({ ...p, [k]: e.target.value }));
 
     const submit = async (e) => {
         e.preventDefault();
-        if (!f.playerName.trim() || !f.playerAge || !f.parentName.trim() || !f.mobile.trim()) {
-            setState({ sending: false, error: 'Please fill in the player’s name and age, and a parent or guardian’s name and mobile.', done: '' });
+        const problem = enquiryProblem(f);
+        if (problem) {
+            setState({ sending: false, error: problem, done: '' });
             return;
         }
-        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email.trim())) {
-            setState({ sending: false, error: 'Please enter a valid email address.', done: '' });
+        // The portal requires a Turnstile token once the site key is set.
+        if (TURNSTILE_ON && !token) {
+            setState({ sending: false, error: 'Please complete the quick check above the Send button.', done: '' });
             return;
         }
         setState({ sending: true, error: '', done: '' });
         try {
-            const r = await sendEnquiry({ ...f, centre, coach: catalogCoach, sourcePage, turnstileToken: token, honeypot });
+            const r = await sendEnquiry({ ...f, centre, coach: catalogCoach, sourcePage, turnstileToken: token, honeypot, idempotencyKey: submissionKey });
             setState({ sending: false, error: '', done: `Thanks. We’ll call you ${r.callByPlain}.` });
             trackCoachEnquiry(profile, centre);
         } catch {

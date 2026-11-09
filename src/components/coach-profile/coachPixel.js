@@ -9,10 +9,12 @@
 // PRIVACY: the coach's name and the centre only. Never a player's or parent's
 // name, age, email, phone or note.
 //
-// What the coach page fires, and what /book fires (Build Plan §10.1, Addendum §7):
-//   coach page   ViewContent on load · Lead when an "Ask us" enquiry is sent
-//   /book        InitiateCheckout before Stripe · Lead on "request received" ·
-//                Purchase when the booking is confirmed and charged (server side)
+// What the coach page fires: ViewContent on load, Lead when an "Ask us" enquiry is sent.
+//
+// /book, /booking and the request-received / confirmed states belong to Codex's
+// booking build. As read on 9 Nov 2026 that branch switches the Pixel OFF on those
+// paths (index.html guard). Alex's rule (9 Nov) is the opposite: the Pixel fires on
+// every success page. Required change for Codex: Coach Pages Addendum §7 and §11.
 const fbq = (...args) => {
     try {
         if (typeof window !== 'undefined' && typeof window.fbq === 'function') window.fbq(...args);

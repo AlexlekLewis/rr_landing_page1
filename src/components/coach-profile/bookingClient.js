@@ -219,9 +219,9 @@ export function mockSlots({ slug, minutes = 60, days = 7, now = new Date() }) {
 
 // ---------- network ----------
 
-async function call(path, { method = 'GET', body, env = ENV } = {}) {
+async function call(path, { method = 'GET', body, headers: extra = {}, env = ENV } = {}) {
     const base = env.VITE_PRIVATE_BOOKING_URL.replace(/\/$/, '');
-    const headers = { 'content-type': 'application/json' };
+    const headers = { 'content-type': 'application/json', ...extra };
     if (env.VITE_PRIVATE_BOOKING_KEY) {
         headers.apikey = env.VITE_PRIVATE_BOOKING_KEY;
         headers.authorization = `Bearer ${env.VITE_PRIVATE_BOOKING_KEY}`;
@@ -230,8 +230,10 @@ async function call(path, { method = 'GET', body, env = ENV } = {}) {
     let data = null;
     try { data = await res.json(); } catch { /* empty body */ }
     if (!res.ok) {
-        const err = new Error((data && (data.message || data.code)) || `HTTP ${res.status}`);
-        err.code = data && data.code;
+        // Two error shapes on the portal side: {code} (enquiry) and {ok:false, error:{code, message}} (request).
+        const e = (data && data.error) || data || {};
+        const err = new Error(e.message || e.code || `HTTP ${res.status}`);
+        err.code = e.code;
         throw err;
     }
     return data;
@@ -273,21 +275,40 @@ export async function getCoachSlots({ coach, centre, kind = 'one_on_one', groupS
     return (mine?.slots || []).map((s) => ({ startsAt: s.starts_at, endsAt: s.ends_at }));
 }
 
-/** "Ask us": goes straight to the admin Enquiries inbox (Build Plan §10.2). */
-export async function sendEnquiry({ centre, coach, playerName, playerAge, parentName, mobile, email, note, sourcePage, turnstileToken, honeypot }) {
+/** The portal's own checks on an enquiry (private-public.ts), so the form can say what's wrong. */
+export function enquiryProblem({ playerName, playerAge, parentName, mobile, email }) {
+    if (!String(playerName || '').trim()) return 'Please enter the player’s name.';
+    const age = String(playerAge || '').trim();
+    if (!/^\d{1,3}$/.test(age) || Number(age) > 120) return 'Please enter the player’s age as a number, for example 11.';
+    if (Number(age) < 18 && !String(parentName || '').trim()) return 'Please enter a parent or guardian’s name.';
+    const m = String(mobile || '').trim();
+    if (!/^[+\d ()-]+$/.test(m) || m.replace(/\D/g, '').length < 8 || m.length > 30) return 'Please enter a mobile number using digits only, for example 0412 345 678.';
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(email || '').trim())) return 'Please enter a valid email address.';
+    return '';
+}
+
+const newKey = () => (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`);
+
+/**
+ * "Ask us": goes straight to the admin Enquiries inbox (Build Plan §10.2).
+ * `idempotencyKey` stays the same across retries of one submission, so a
+ * double tap or a retry can't create two enquiries.
+ */
+export async function sendEnquiry({ centre, coach, playerName, playerAge, parentName, mobile, email, note, sourcePage, turnstileToken, honeypot, idempotencyKey = newKey() }) {
     const mode = bookingMode();
     if (mode === 'off') throw new Error('Enquiries are not open yet.');
     if (mode === 'mock') { await wait(300); return { callByPlain: 'within 24 hours' }; }
     const data = await call('public-enquiry', {
         method: 'POST',
+        headers: { 'idempotency-key': idempotencyKey },
         body: {
             centre,
             coach_profile_id: coach?.profileId,
-            player_name: playerName,
-            player_age: playerAge ? Number(playerAge) : null,
-            parent_name: parentName,
-            mobile,
-            email,
+            player_name: String(playerName).trim(),
+            player_age: Number(String(playerAge).trim()),
+            parent_name: String(parentName || '').trim() || undefined,
+            mobile: String(mobile).trim(),
+            email: String(email).trim(),
             note: note || undefined,
             source_page: sourcePage,
             turnstile_token: turnstileToken || undefined,

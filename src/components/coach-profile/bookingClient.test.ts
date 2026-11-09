@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   bookingMode, buildBookUrl, coachOffers, formatDay, formatLength, formatLengths, formatMoney, formatTime,
-  melbourneLocal, mockSlots, normaliseCatalog, sessionPriceCents,
+  melbourneLocal, mockSlots, normaliseCatalog, sessionPriceCents, enquiryProblem,
 } from "./bookingClient.js";
 
 describe("bookingMode", () => {
@@ -147,5 +147,22 @@ describe("mockSlots", () => {
         expect(["Sat", "Sun"]).not.toContain(formatDay(s.startsAt).slice(0, 3));
       }
     }
+  });
+});
+
+describe("enquiryProblem (matches the portal's public-enquiry checks)", () => {
+  const ok = { playerName: "Sam", playerAge: "11", parentName: "Jo", mobile: "0412 345 678", email: "jo@example.com" };
+  it("accepts a normal enquiry", () => {
+    expect(enquiryProblem(ok)).toBe("");
+    expect(enquiryProblem({ ...ok, mobile: "+61 (412) 345-678" })).toBe("");
+    expect(enquiryProblem({ ...ok, playerAge: "19", parentName: "" })).toBe("");
+  });
+  it("rejects what the portal would reject", () => {
+    expect(enquiryProblem({ ...ok, playerAge: "12 yrs" })).toMatch(/age/);
+    expect(enquiryProblem({ ...ok, playerAge: "" })).toMatch(/age/);
+    expect(enquiryProblem({ ...ok, parentName: " " })).toMatch(/parent/);
+    expect(enquiryProblem({ ...ok, mobile: "0412-ABC" })).toMatch(/mobile/);
+    expect(enquiryProblem({ ...ok, email: "jo@" })).toMatch(/email/);
+    expect(enquiryProblem({ ...ok, playerName: "" })).toMatch(/name/);
   });
 });
