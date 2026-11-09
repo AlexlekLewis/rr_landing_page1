@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import heroImg from '../../assets/india-tour-2026/hero-coaching.jpg';
-import { TOURS, PRICE_ESTIMATE_AUD, fmtRangeAUD, CAMP_PDF, TOUR_STATUS, REGISTRATIONS_CLOSE_AT } from './itCopy';
+import { TOURS, PRICE_ESTIMATE_AUD, fmtRangeAUD, CAMP_PDF, TOUR_STATUS, ROUND_1 } from './itCopy';
 import ITCountdown from './ITCountdown';
 
 const scrollToRegister = () =>
@@ -9,6 +9,9 @@ const scrollToRegister = () =>
 
 const scrollToPricing = () =>
     document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+
+const scrollToMemberPricing = () =>
+    document.getElementById('member-pricing')?.scrollIntoView({ behavior: 'smooth' });
 
 // The source is a 1280x720 video frame, so how much we stretch it decides how
 // soft it looks. On phones we DON'T use it as a full-bleed background behind
@@ -32,7 +35,10 @@ const ITHero = ({ copy }) => {
     const closed = TOUR_STATUS === 'closed';
     // The clock slot shows a countdown, or the closed notice. With no deadline
     // and the page open (a standing EOI) there is nothing to show, so no gap either.
-    const showClock = closed || Boolean(REGISTRATIONS_CLOSE_AT);
+    const showClock = closed || Boolean(ROUND_1.closesAt);
+    // The "Round 1 closes" tag on the December card disappears once it has passed,
+    // so the card never shows a deadline that is already gone.
+    const round1Open = Boolean(ROUND_1.closesAt) && Date.now() < new Date(ROUND_1.closesAt).getTime();
 
     // The estimate, up front. It always travels with "estimate" and "per player",
     // and with the promise that the exact price and inclusions come in writing
@@ -53,6 +59,20 @@ const ITHero = ({ copy }) => {
             </p>
 
             <p className="text-sm text-white/75 font-medium leading-relaxed mt-3">{c.priceNote}</p>
+
+            {/* Who gets member pricing on the December tour. The detail, and why
+                December is an exception to the Terms, is in the pricing section. */}
+            <p className="text-sm text-white font-bold leading-relaxed mt-3">
+                {c.memberLine}{' '}
+                <button
+                    type="button"
+                    onClick={scrollToMemberPricing}
+                    data-cta="hero-member-pricing"
+                    className="text-rr-pink hover:text-white underline underline-offset-2 font-bold"
+                >
+                    {c.memberLink}
+                </button>
+            </p>
 
             <button
                 onClick={scrollToPricing}
@@ -121,14 +141,34 @@ const ITHero = ({ copy }) => {
                     {c.toursLabel}
                 </p>
                 <ul className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {TOURS.map((t) => (
-                        <li key={t.id} className="rounded-xl border border-white/20 bg-white/5 px-4 py-3">
-                            <span className="block text-base font-black text-white leading-snug">{t.window}</span>
-                            <span className="block text-[11px] font-bold text-white/60 uppercase tracking-widest mt-1">
-                                {c.tourLength}
-                            </span>
-                        </li>
-                    ))}
+                    {TOURS.map((t) => {
+                        // The December tour is the one being promoted: pink edge, its
+                        // Round 1 deadline, and the member-pricing tag.
+                        const promoted = t.id === ROUND_1.tourId;
+                        return (
+                            <li
+                                key={t.id}
+                                className={`rounded-xl border px-4 py-3 ${promoted ? 'border-rr-pink border-2' : 'border-white/20'}`}
+                            >
+                                <span className="block text-base font-black text-white leading-snug">{t.window}</span>
+                                <span className="block text-[11px] font-bold text-white/60 uppercase tracking-widest mt-1">
+                                    {c.tourLength}
+                                </span>
+                                {promoted && (
+                                    <span className="flex flex-wrap gap-x-3 gap-y-1 mt-2">
+                                        {round1Open && (
+                                            <span className="text-[11px] font-black text-rr-pink uppercase tracking-widest">
+                                                {c.round1Tag}
+                                            </span>
+                                        )}
+                                        <span className="text-[11px] font-black text-white uppercase tracking-widest">
+                                            {c.memberTag}
+                                        </span>
+                                    </span>
+                                )}
+                            </li>
+                        );
+                    })}
                 </ul>
                 <p className="text-sm text-white/70 font-medium leading-relaxed mt-3">{c.toursNote}</p>
             </motion.div>

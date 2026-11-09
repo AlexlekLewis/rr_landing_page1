@@ -5,6 +5,10 @@
 // Families pick ONE or BOTH of the two upcoming tours, and at least one is
 // required. The choice must reach the database in two forms: the tour ids in
 // `tour_interest` (for filtering) and a readable "Tours:" line in `bio`.
+//
+// From 5 Oct 2026 the form also asks which of our programs the player has been
+// in. Ticking one of the three member programs is what marks a December entry
+// for member pricing (self-declared; staff check it before quoting).
 // Supabase is mocked, so nothing here touches a real database.
 // ============================================================
 import React from "react";
@@ -42,7 +46,7 @@ const DEC = "2026-12-late-dec-jan";
 const APR = "2027-04-april";
 
 const fillRequiredDetails = () => {
-  fireEvent.click(screen.getByRole("button", { name: /new to us/i }));
+  fireEvent.click(programBox("new"));
   fireEvent.change(document.querySelector('input[name="player_name"]')!, { target: { value: "Test Player" } });
   fireEvent.change(screen.getByLabelText("Date of birth"), { target: { value: "1995-01-01" } }); // over 18
   fireEvent.change(document.querySelector('input[name="current_club"]')!, { target: { value: "Test CC" } });
@@ -58,6 +62,11 @@ const fillRequiredDetails = () => {
 const submit = () => fireEvent.click(document.querySelector('[data-cta="submit-eoi"]')!);
 
 const tourBox = (id: string) => document.querySelector(`input[data-tour="${id}"]`) as HTMLInputElement;
+const programBox = (key: string) => document.querySelector(`input[data-program="${key}"]`) as HTMLInputElement;
+const lastBio = () => {
+  const [[rows]] = insert.mock.calls as unknown as [[Array<Record<string, unknown>>]];
+  return String(rows[0].bio);
+};
 
 beforeEach(() => {
   cleanup();
@@ -125,8 +134,8 @@ describe("ITForm — which tour", () => {
     fireEvent.click(tourBox(DEC)); // untick December again
     expect(tourBox(DEC).checked).toBe(false);
     expect(tourBox(APR).checked).toBe(true);
-    fireEvent.click(screen.getByRole("button", { name: /new to the academy/i }));
-    // fillRequiredDetails clicks "New To Us" (simple copy); do the standard-copy fields by hand.
+    fireEvent.click(programBox("new"));
+    // Standard copy: fill the fields by hand rather than through the simple-copy helper.
     fireEvent.change(document.querySelector('input[name="player_name"]')!, { target: { value: "Test Player" } });
     fireEvent.change(screen.getByLabelText("Date of birth"), { target: { value: "1995-01-01" } });
     fireEvent.change(document.querySelector('input[name="current_club"]')!, { target: { value: "Test CC" } });
@@ -142,5 +151,86 @@ describe("ITForm — which tour", () => {
     const [[rows]] = insert.mock.calls as unknown as [[Array<Record<string, unknown>>]];
     expect(rows[0].tour_interest).toEqual([APR]);
     expect(String(rows[0].bio).split("\n")[0]).toBe("Tours: April 2027");
+  });
+});
+
+describe("ITForm — which of our programs (member pricing on the December tour)", () => {
+  it("offers the three member programs, another program, and new to the Academy", () => {
+    render(<ITForm copy={COPY.simple} />);
+    for (const key of ["12-week T20 Program", "Power Game Pre-Season", "Performance Squads", "other", "new"]) {
+      expect(programBox(key)).toBeTruthy();
+    }
+  });
+
+  it("will not submit until a programs box is ticked", async () => {
+    render(<ITForm copy={COPY.simple} />);
+    fireEvent.click(tourBox(DEC));
+    fillRequiredDetails();
+    fireEvent.click(programBox("new")); // untick it again
+    submit();
+    expect(await screen.findByText(COPY.simple.form.programsError)).toBeTruthy();
+    expect(insert).not.toHaveBeenCalled();
+  });
+
+  it("'new to the Academy' and the program boxes clear each other", () => {
+    render(<ITForm copy={COPY.simple} />);
+    fireEvent.click(programBox("Performance Squads"));
+    fireEvent.click(programBox("new"));
+    expect(programBox("Performance Squads").checked).toBe(false);
+    expect(programBox("new").checked).toBe(true);
+    fireEvent.click(programBox("12-week T20 Program"));
+    expect(programBox("new").checked).toBe(false);
+  });
+
+  it("marks a December entry from a member program for member pricing, to be checked", async () => {
+    render(<ITForm copy={COPY.simple} />);
+    fireEvent.click(tourBox(DEC));
+    fillRequiredDetails();
+    fireEvent.click(programBox("Power Game Pre-Season"));
+    fireEvent.click(programBox("Performance Squads"));
+    submit();
+    await waitFor(() => expect(insert).toHaveBeenCalledTimes(1));
+    const bio = lastBio();
+    expect(bio).toContain("Programs: Power Game Pre-Season; Performance Squads");
+    expect(bio).toContain("Player type: Already in an RRA program");
+    expect(bio).toContain("December tour member pricing: yes, self-declared (check before quoting)");
+  });
+
+  it("another program alone is 'already with us' but not December member pricing", async () => {
+    render(<ITForm copy={COPY.simple} />);
+    fireEvent.click(tourBox(DEC));
+    fillRequiredDetails();
+    fireEvent.click(programBox("other"));
+    submit();
+    await waitFor(() => expect(insert).toHaveBeenCalledTimes(1));
+    const bio = lastBio();
+    expect(bio).toContain("Programs: Another of our programs, such as Junior Royals");
+    expect(bio).toContain("Player type: Already in an RRA program");
+    expect(bio).toContain("December tour member pricing: no");
+  });
+
+  it("says nothing about December member pricing on an April-only entry", async () => {
+    render(<ITForm copy={COPY.simple} />);
+    fireEvent.click(tourBox(APR));
+    fillRequiredDetails();
+    submit();
+    await waitFor(() => expect(insert).toHaveBeenCalledTimes(1));
+    const bio = lastBio();
+    expect(bio).toContain("Programs: none (new to the academy)");
+    expect(bio).not.toMatch(/December tour member pricing/);
+  });
+});
+
+describe("ITForm — Round 1 line on the December box", () => {
+  it("shows while Round 1 is open, and is gone once it has closed", () => {
+    const now = vi.spyOn(Date, "now");
+    now.mockReturnValue(new Date("2026-10-30T23:58:00+11:00").getTime());
+    render(<ITForm copy={COPY.simple} />);
+    expect(screen.getByText(COPY.simple.form.round1Note)).toBeTruthy();
+    cleanup();
+    now.mockReturnValue(new Date("2026-10-31T00:00:00+11:00").getTime());
+    render(<ITForm copy={COPY.simple} />);
+    expect(screen.queryByText(COPY.simple.form.round1Note)).toBeNull();
+    now.mockRestore();
   });
 });
