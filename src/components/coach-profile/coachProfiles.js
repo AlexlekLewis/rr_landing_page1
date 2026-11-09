@@ -9,9 +9,27 @@
 // coach can be booked at, and whether they're bookable at all come from the
 // booking system at run time (bookingClient.js). Never put a price here.
 //
+// Page order (Alex, 9 Nov 2026): sell the coach as a person and a coach first,
+// then the offering, which is the same for every coach: one-on-one, or a small
+// group of 2 to 4 players.
+//
+// Fields per coach:
+//   heroLine   one sentence under the name in the hero (the coach's main credential)
+//   intro      one paragraph. "About <first>" shows it when there's no `about` yet
+//   about      OPTIONAL. Fills "About <first>", directly under the hero:
+//                about: {
+//                  player: ['paragraph', …],  // their cricket: role, skills, how they play and think about the game
+//                  coach:  ['paragraph', …],  // how they coach, who they work with
+//                  facts:  [{ label: 'Plays', value: 'First XI, Essendon (Victorian Premier Cricket)' }, …], // 3–5, shown beside the text
+//                }
+//              Any of the three can be left out. Plain text only (no HTML).
+//   strengths  "Where <first> is strongest": 2 to 4 cards that describe the coach's skill set
+//   record     "<first>'s cricket": playing and Academy record, shown at the end of About
+//
 // Each strength carries a `focus` from the booking catalog (batting, pace, spin,
-// keeping, allround). It decides the net the session needs (Build Plan §5.2),
-// so it's what we pass to /book when the family picks that strength.
+// keeping, allround). The FIRST strength's focus goes to /book as `focus`,
+// which decides the net the session needs (Build Plan §5.2). Order the
+// strengths with the coach's main one first.
 //
 // DRAFT TEXT: strengths and intros are drafted from each coach's published bio.
 // Each coach confirms their own page before it goes live (Build Plan §17.3).
@@ -70,6 +88,8 @@ export const COACH_PROFILES = {
         photoPosition: '50% 22%',
         homeCentre: 'mickleham',
         roleStrengths: 'Batting and T20 cricket',
+        heroLine: `Ikroop is a First XI batter at Essendon, in ${PREMIER_GLOSS}.`,
+        // about: { player: […], coach: […], facts: […] }: being written with Alex (9 Nov 2026).
         intro: `Ikroop coaches young cricketers to enjoy the game and get better at it. He bats in the First XI at Essendon in ${PREMIER_GLOSS}, and came through Victoria’s junior pathway to Under-19, so he knows what each next step takes.`,
         card: { strengths: 'Batting · T20 cricket', cred: 'First XI batter at Essendon in Victorian Premier Cricket.' },
         strengths: [
@@ -87,7 +107,7 @@ export const COACH_PROFILES = {
                 title: 'T20 cricket',
                 focus: 'batting',
                 figure: 'overs',
-                description: 'Knowing what to do in each part of a T20 game: the six powerplay overs, the middle overs and the last five. Ikroop plays T20 at Premier level and coaches players to read the field, pick their moment and keep the scoreboard moving.',
+                description: 'Knowing what to do in each part of a T20 (20-over) game: the six powerplay overs, the middle overs and the last five. Ikroop plays T20 at Premier level and coaches players to read the field, pick their moment and keep the scoreboard moving.',
                 goodFor: 'Players aged 12 and over who play T20 matches.',
                 inSession: ['A plan for the powerplay, middle and death overs', 'Reading the field before each ball', 'Rotating the strike when the boundaries dry up'],
             },
@@ -96,8 +116,8 @@ export const COACH_PROFILES = {
                 title: 'All-round development',
                 focus: 'allround',
                 figure: 'field',
-                description: 'For younger players, and anyone not sure yet what to work on. Ikroop coaches Junior Royals, the Academy’s program for players aged 7 to 12, and works across batting, bowling and fielding to find what will help the player most.',
-                goodFor: 'Players aged 7 to 12, and players in their first few seasons.',
+                description: 'For younger players, and anyone not sure yet what to work on. Ikroop coaches Junior Royals, the Academy’s program for players aged 7–12, and works across batting, bowling and fielding to find what will help the player most.',
+                goodFor: 'Players aged 7–12, and players in their first few seasons.',
                 inSession: ['Batting, bowling and fielding, in games and challenges', 'Plenty of turns and very little waiting', 'Skills the player can take to club training'],
             },
         ],
@@ -112,8 +132,8 @@ export const COACH_PROFILES = {
             {
                 heading: 'At the Academy',
                 items: [
-                    { title: 'Junior Royals coach, Mickleham', detail: 'The Academy’s weekly program for players aged 7 to 12.' },
-                    { title: 'Power Game Pre-Season, 360° batting coach', detail: 'The Academy’s pre-season program for players aged 12 to 26.' },
+                    { title: 'Junior Royals coach, Mickleham', detail: 'The Academy’s weekly program for players aged 7–12.' },
+                    { title: 'Power Game Pre-Season, 360° batting coach', detail: 'The Academy’s pre-season program for players aged 12–26.' },
                     { title: 'Performance Squad coach, Mickleham', detail: 'The Academy’s T20 squad, which trains each week and plays matches.' },
                 ],
             },
@@ -132,6 +152,7 @@ export const COACH_PROFILES = {
         photoPosition: '50% 25%',
         homeCentre: 'cranbourne-north',
         roleStrengths: 'Batting',
+        heroLine: 'Alex runs the Academy’s Cranbourne North centre. A batting specialist, he has coached in the English county system and at Fitzroy Doncaster, a club in Victorian Premier Cricket (the top grade of club cricket in Victoria).',
         intro: 'Alex coaches young cricketers to enjoy the game and get better at it. He runs the Academy’s Cranbourne North centre and manages South-East Melbourne. A batting specialist, he has coached in the English county system and at Fitzroy Doncaster in Victorian Premier Cricket, and leads the cricket program at Xavier College.',
         card: { strengths: 'Batting', cred: 'Cranbourne North · South-East Manager. Has coached in the English county system.' },
         strengths: [
@@ -195,6 +216,7 @@ export const COACH_PROFILES = {
         photoPosition: '50% 22%',
         homeCentre: 'mickleham',
         roleStrengths: 'Wicketkeeping and top-order batting',
+        heroLine: `Ritin is a top-order batter and wicketkeeper in the First XI at Melbourne Cricket Club, in ${PREMIER_GLOSS}.`,
         intro: `Ritin coaches young cricketers to enjoy the game and get better at it. He is a top-order batter and wicketkeeper in the First XI at Melbourne Cricket Club, in ${PREMIER_GLOSS}, and has represented Victoria in the junior pathway.`,
         card: { strengths: 'Wicketkeeping · top-order batting', cred: 'Top-order batter and wicketkeeper in the First XI at Melbourne Cricket Club.' },
         strengths: [
@@ -221,8 +243,8 @@ export const COACH_PROFILES = {
                 title: 'All-round development',
                 focus: 'allround',
                 figure: 'field',
-                description: 'Ritin coaches Junior Royals, the Academy’s program for players aged 7 to 12. For younger players he works across batting, keeping and fielding to build the basics and keep the game fun.',
-                goodFor: 'Players aged 7 to 12, and players in their first few seasons.',
+                description: 'Ritin coaches Junior Royals, the Academy’s program for players aged 7–12. For younger players he works across batting, keeping and fielding to build the basics and keep the game fun.',
+                goodFor: 'Players aged 7–12, and players in their first few seasons.',
                 inSession: ['Batting, keeping and fielding, in games and challenges', 'Plenty of turns and very little waiting', 'Skills the player can take to club training'],
             },
         ],
@@ -237,8 +259,8 @@ export const COACH_PROFILES = {
             {
                 heading: 'At the Academy',
                 items: [
-                    { title: 'Junior Royals coach, Mickleham', detail: 'The Academy’s weekly program for players aged 7 to 12.' },
-                    { title: 'Power Game Pre-Season, wicketkeeping coach', detail: 'The Academy’s pre-season program for players aged 12 to 26.' },
+                    { title: 'Junior Royals coach, Mickleham', detail: 'The Academy’s weekly program for players aged 7–12.' },
+                    { title: 'Power Game Pre-Season, wicketkeeping coach', detail: 'The Academy’s pre-season program for players aged 12–26.' },
                 ],
             },
         ],
@@ -259,6 +281,7 @@ export const COACH_PROFILES = {
         photoPosition: '50% 22%',
         homeCentre: 'mickleham',
         roleStrengths: 'Batting, one-on-one and in small groups',
+        heroLine: 'Mihiraj has coached batting for more than 25 years, in Sri Lanka, the UAE, India and now Melbourne.',
         intro: 'Mihiraj coaches young cricketers to enjoy the game and get better at it. He has coached cricket for more than 25 years, in Sri Lanka, the UAE, India and now Melbourne, and is a batting coach first. He coached batting to the First XIs of two of Colombo’s leading cricket schools, then ran academies in the UAE and India.',
         quote: 'I have a very encouraging, firm and positive style of leadership, which helps get the best out of my players.',
         card: { strengths: 'Batting · small groups', cred: 'More than 25 years coaching batting in Sri Lanka, the UAE, India and Melbourne.' },

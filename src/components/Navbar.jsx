@@ -54,6 +54,7 @@ const COACHES_NAV = [
 
 // A single coach's page (/coaches/:slug) — on-page anchors + back to all coaches
 const COACH_PROFILE_NAV = [
+    { label: 'ABOUT', id: 'about' },
     { label: 'WHAT THEY COACH', id: 'strengths' },
     { label: 'PRICES', id: 'prices' },
     { label: 'ALL COACHES', route: '/coaches' },

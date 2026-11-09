@@ -73,6 +73,15 @@ export function formatLength(minutes) {
     return `${minutes / 60} hours`;
 }
 
+/** [60, 90, 120] → "1, 1½ or 2 hours" */
+export function formatLengths(durations) {
+    const list = (durations || []).filter((m) => m > 0);
+    if (!list.length) return '';
+    if (list.length === 1) return formatLength(list[0]);
+    const num = (m) => (m % 60 === 30 ? `${Math.floor(m / 60)}½` : String(m / 60));
+    return `${list.slice(0, -1).map(num).join(', ')} or ${num(list[list.length - 1])} hours`;
+}
+
 /** Price of one session, in cents, for one player (Build Plan §9.1). */
 export function sessionPriceCents(prices, { kind, groupSize, minutes }) {
     if (!prices) return null;
@@ -102,6 +111,19 @@ export function buildBookUrl({ centre, coach, startsAt, minutes, focus, goals = 
 
 // ---------- catalog ----------
 
+/**
+ * What a coach offers: one-on-one, small groups, or both (Alex, 9 Nov 2026:
+ * every coach is tagged with what they do). Comes from the catalog coach's
+ * optional `offers: { one_on_one, group }`, which mirrors the "offers 1-on-1 /
+ * offers groups" flags on coach hours (Build Plan §7.1). A missing flag means
+ * yes, so a catalog without `offers` shows both. With no catalog coach at all
+ * (bookings off, or the coach isn't bookable) both options are still described.
+ */
+export function coachOffers(coach) {
+    const o = coach?.offers;
+    return { one_on_one: o?.one_on_one !== false, group: o?.group !== false };
+}
+
 /** Turn the §13 catalog into the shape the pages use. */
 export function normaliseCatalog(raw) {
     if (!raw) return null;
@@ -124,6 +146,7 @@ export function normaliseCatalog(raw) {
             slug: c.slug,
             homeCentre: c.home_centre,
             centres: c.centres || [],
+            offers: coachOffers(c),
         })),
     };
 }
@@ -142,11 +165,13 @@ const MOCK_CATALOG = {
     block_discount: { min_sessions: 6, percent: 10 },
     prices: { one_on_one_hour_cents: 13000, group_player_hour_cents: { 2: 7000, 3: 6000, 4: 5000 } },
     cancellation: { free_hours: 24, late_fee_cents: 3500 },
+    // `offers` is optional (missing = both). Example data only: real values come
+    // from each coach's hours in the booking system.
     coaches: [
-        { profile_id: 'mock-ikroop', slug: 'ikroop-dhanoa', home_centre: 'mickleham', centres: ['mickleham'] },
-        { profile_id: 'mock-thornhill', slug: 'alex-thornhill', home_centre: 'cranbourne-north', centres: ['cranbourne-north'] },
-        { profile_id: 'mock-ritin', slug: 'ritin-raman', home_centre: 'mickleham', centres: ['mickleham'] },
-        { profile_id: 'mock-mihiraj', slug: 'mihiraj-jayasekara', home_centre: 'mickleham', centres: ['mickleham'] },
+        { profile_id: 'mock-ikroop', slug: 'ikroop-dhanoa', home_centre: 'mickleham', centres: ['mickleham'], offers: { one_on_one: true, group: true } },
+        { profile_id: 'mock-thornhill', slug: 'alex-thornhill', home_centre: 'cranbourne-north', centres: ['cranbourne-north'], offers: { one_on_one: true, group: true } },
+        { profile_id: 'mock-ritin', slug: 'ritin-raman', home_centre: 'mickleham', centres: ['mickleham'], offers: { one_on_one: true, group: true } },
+        { profile_id: 'mock-mihiraj', slug: 'mihiraj-jayasekara', home_centre: 'mickleham', centres: ['mickleham'], offers: { one_on_one: true, group: true } },
     ],
 };
 
