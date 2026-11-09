@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ITSectionHeader from './ITSectionHeader';
 import ITRegisterButton from './ITRegisterButton';
-import { SEPT_2026_MEDIA } from './itMedia';
+import { SEPT_2026_MEDIA, GALLERY_INITIAL_COUNT } from './itMedia';
 import { CAMP_PDF } from './itCopy';
 
 // Our first tour, September 2026, told mostly in pictures: a few numbers, a photo
@@ -48,24 +48,31 @@ const ITSeptember2026 = ({ copy }) => {
     const days = copy.pricing.itineraryDays;
     const [open, setOpen] = useState(null);
     const [showDays, setShowDays] = useState(false);
+    const [showAll, setShowAll] = useState(false);
+    const touchX = useRef(null);
+    const total = SEPT_2026_MEDIA.length;
+    const step = (d) => setOpen((i) => (i + d + total) % total);
 
     useEffect(() => {
         if (open === null) return undefined;
         const onKey = (e) => {
             if (e.key === 'Escape') setOpen(null);
-            if (e.key === 'ArrowRight') setOpen((i) => (i + 1) % SEPT_2026_MEDIA.length);
-            if (e.key === 'ArrowLeft') setOpen((i) => (i - 1 + SEPT_2026_MEDIA.length) % SEPT_2026_MEDIA.length);
+            if (e.key === 'ArrowRight') setOpen((i) => (i + 1) % total);
+            if (e.key === 'ArrowLeft') setOpen((i) => (i - 1 + total) % total);
         };
         window.addEventListener('keydown', onKey);
         return () => window.removeEventListener('keydown', onKey);
-    }, [open]);
+    }, [open, total]);
 
     // The first five fill the feature grid (one large, four small). Anything
     // after that goes in a plain grid underneath, so more photos can be added
     // in itMedia.js without breaking the layout.
     const [lead, ...others] = SEPT_2026_MEDIA;
     const featured = others.slice(0, 4);
-    const extra = others.slice(4);
+    const allExtra = others.slice(4);
+    // Show the first GALLERY_INITIAL_COUNT items, the rest behind "Show all".
+    const extra = showAll ? allExtra : allExtra.slice(0, Math.max(0, GALLERY_INITIAL_COUNT - 5));
+    const hidden = allExtra.length - extra.length;
     const current = open === null ? null : SEPT_2026_MEDIA[open];
 
     return (
@@ -100,6 +107,18 @@ const ITSeptember2026 = ({ copy }) => {
                         {extra.map((m, i) => (
                             <Thumb key={i} m={m} onOpen={() => setOpen(i + 5)} className="aspect-[3/4]" />
                         ))}
+                    </div>
+                )}
+                {hidden > 0 && (
+                    <div className="mt-6 text-center">
+                        <button
+                            type="button"
+                            onClick={() => setShowAll(true)}
+                            data-cta="september-show-all"
+                            className="inline-flex items-center gap-2 text-sm font-black text-white bg-rr-navy hover:bg-rr-blue uppercase tracking-widest rounded-full px-7 py-3.5 transition-colors"
+                        >
+                            {c.showAll(total)}
+                        </button>
                     </div>
                 )}
 
@@ -170,15 +189,45 @@ const ITSeptember2026 = ({ copy }) => {
                         aria-modal="true"
                         aria-label={current.caption || current.alt}
                         onClick={() => setOpen(null)}
+                        onTouchStart={(e) => { touchX.current = e.touches[0].clientX; }}
+                        onTouchEnd={(e) => {
+                            if (touchX.current === null) return;
+                            const dx = e.changedTouches[0].clientX - touchX.current;
+                            touchX.current = null;
+                            if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1);
+                        }}
                     >
                         <figure className="max-w-4xl w-full" onClick={(e) => e.stopPropagation()}>
                             {current.type === 'video' ? (
-                                <video src={current.src} poster={current.poster} controls autoPlay playsInline className="w-full max-h-[80vh] rounded-xl bg-black" />
+                                <video key={open} src={current.src} poster={current.poster} controls autoPlay playsInline className="w-full max-h-[80vh] rounded-xl bg-black" />
                             ) : (
                                 <img src={current.src} alt={current.alt} className="w-full max-h-[80vh] object-contain rounded-xl" />
                             )}
-                            {current.caption && <figcaption className="mt-3 text-center text-sm text-white/80 font-medium">{current.caption}</figcaption>}
+                            <figcaption className="mt-3 text-center text-sm text-white/80 font-medium">
+                                {current.caption && <span className="block">{current.caption}</span>}
+                                {total > 1 && <span className="block mt-1 text-xs text-white/50 font-bold tracking-widest">{open + 1} / {total}</span>}
+                            </figcaption>
                         </figure>
+                        {total > 1 && (
+                            <>
+                                <button
+                                    type="button"
+                                    onClick={(e) => { e.stopPropagation(); step(-1); }}
+                                    className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center"
+                                    aria-label={c.prevLabel}
+                                >
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" /></svg>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={(e) => { e.stopPropagation(); step(1); }}
+                                    className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center"
+                                    aria-label={c.nextLabel}
+                                >
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg>
+                                </button>
+                            </>
+                        )}
                         <button
                             type="button"
                             onClick={() => setOpen(null)}

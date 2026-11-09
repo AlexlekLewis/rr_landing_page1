@@ -179,6 +179,9 @@ const SEPTEMBER_COPY = {
         'The September 2026 plan. The April 2027 tour is longer, at about ' +
         `${TOUR_LENGTH_DAYS} days, so its plan will be different.`,
     closeLabel: 'Close',
+    prevLabel: 'Previous photo',
+    nextLabel: 'Next photo',
+    showAll: (n) => `Show all ${n} photos`,
 };
 
 // --- standard -------------------------------------------------------------

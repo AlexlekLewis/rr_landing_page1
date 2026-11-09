@@ -64,12 +64,12 @@ const ITVideos = ({ copy }) => {
                         </>
                     ) : (
                         <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl" data-video-placeholder>
-                            <img
+                            {VIDEO_PLACEHOLDER_IMAGE && <img
                                 src={VIDEO_PLACEHOLDER_IMAGE}
                                 alt=""
                                 className="absolute inset-0 w-full h-full object-cover object-[50%_45%]"
                                 loading="lazy"
-                            />
+                            />}
                             <div className="absolute inset-0 bg-rr-navy/70" />
                             <div className="relative h-full flex flex-col items-center justify-center text-center px-6">
                                 <span className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-rr-pink/90 flex items-center justify-center shadow-xl">
