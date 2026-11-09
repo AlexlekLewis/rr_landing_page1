@@ -109,7 +109,7 @@ const ITHero = ({ copy }) => {
                 </span>
             </motion.div>
 
-            {/* The two tours, named by their windows (exact dates are not set). Same
+            {/* The upcoming tour(s), named by window (exact dates are not set). Same
                 flex order as the dateline, so it always sits straight under it. */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -120,7 +120,7 @@ const ITHero = ({ copy }) => {
                 <p className="text-[11px] font-bold text-rr-pink uppercase tracking-[0.25em]">
                     {c.toursLabel}
                 </p>
-                <ul className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <ul className={`mt-3 grid grid-cols-1 gap-3 ${TOURS.length > 1 ? 'sm:grid-cols-2' : 'sm:max-w-xs'}`}>
                     {TOURS.map((t) => (
                         <li key={t.id} className="rounded-xl border border-white/20 bg-white/5 px-4 py-3">
                             <span className="block text-base font-black text-white leading-snug">{t.window}</span>

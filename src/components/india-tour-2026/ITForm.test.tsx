@@ -2,8 +2,8 @@
 // ============================================================
 // ITForm.test.tsx — the /tours expression-of-interest form.
 //
-// Families pick ONE or BOTH of the two upcoming tours, and at least one is
-// required. The choice must reach the database in two forms: the tour ids in
+// There is one upcoming tour (April 2027), pre-selected. It must reach the
+// database in two forms: the tour id in
 // `tour_interest` (for filtering) and a readable "Tours:" line in `bio`.
 // Supabase is mocked, so nothing here touches a real database.
 // ============================================================
@@ -38,7 +38,6 @@ vi.mock("../DateOfBirthInput", async () => {
 import ITForm from "./ITForm";
 import { COPY, TOURS } from "./itCopy";
 
-const DEC = "2026-12-late-dec-jan";
 const APR = "2027-04-april";
 
 const fillRequiredDetails = () => {
@@ -57,8 +56,6 @@ const fillRequiredDetails = () => {
 
 const submit = () => fireEvent.click(document.querySelector('[data-cta="submit-eoi"]')!);
 
-const tourBox = (id: string) => document.querySelector(`input[data-tour="${id}"]`) as HTMLInputElement;
-
 beforeEach(() => {
   cleanup();
   insert.mockClear();
@@ -75,27 +72,16 @@ describe("ITForm — which tour", () => {
     expect(button.textContent).not.toMatch(/registration/i);
   });
 
-  it("offers exactly the two upcoming tours as checkboxes, none ticked", () => {
+  it("pre-selects the one upcoming tour: no checkbox, no December tour", () => {
     render(<ITForm copy={COPY.simple} />);
-    expect(TOURS.map((t) => t.id)).toEqual([DEC, APR]);
-    for (const t of TOURS) {
-      const box = screen.getByRole("checkbox", { name: new RegExp(t.window) });
-      expect((box as HTMLInputElement).checked).toBe(false);
-    }
+    expect(TOURS.map((t) => t.id)).toEqual([APR]);
+    expect(screen.queryByRole("checkbox")).toBeNull();
+    expect(screen.getByText("April 2027")).toBeTruthy();
+    expect(screen.queryByText(/December/)).toBeNull();
   });
 
-  it("will not submit until at least one tour is ticked", async () => {
+  it("records the April tour: id in tour_interest, and a readable line at the top of bio", async () => {
     render(<ITForm copy={COPY.simple} />);
-    fillRequiredDetails();
-    submit();
-    expect(await screen.findByText(COPY.simple.form.toursError)).toBeTruthy();
-    expect(insert).not.toHaveBeenCalled();
-  });
-
-  it("records BOTH tours: ids in tour_interest, and a readable line at the top of bio", async () => {
-    render(<ITForm copy={COPY.simple} />);
-    fireEvent.click(tourBox(DEC));
-    fireEvent.click(tourBox(APR));
     fillRequiredDetails();
     submit();
 
@@ -103,44 +89,15 @@ describe("ITForm — which tour", () => {
     expect(from).toHaveBeenCalledWith("applications");
     const [[rows]] = insert.mock.calls as unknown as [[Array<Record<string, unknown>>]];
     const row = rows[0];
-    expect(row.tour_interest).toEqual([DEC, APR]);
+    expect(row.tour_interest).toEqual([APR]);
     expect(row.source).toBe("india-tour-eoi");
-    expect(String(row.bio).split("\n")[0]).toBe(
-      "Tours: Late December 2026 to early January 2027; April 2027",
-    );
+    expect(String(row.bio).split("\n")[0]).toBe("Tours: April 2027");
     expect(String(row.bio)).toContain("Player type: New to the academy");
     expect(String(row.bio)).not.toMatch(/\$|price tier/i);
 
-    // The thank-you names both tours and says nothing is paid or held.
+    // The thank-you names the tour and says nothing is paid or held.
     expect(await screen.findByText(/You have not paid anything, and no place is held\./)).toBeTruthy();
     expect(screen.getByText(/You have registered interest in:/)).toBeTruthy();
-    expect(screen.getByText("Late December 2026 to early January 2027")).toBeTruthy();
     expect(screen.getByText("April 2027")).toBeTruthy();
-  });
-
-  it("records one tour, and keeps tour order whichever box was ticked first", async () => {
-    render(<ITForm copy={COPY.standard} />);
-    fireEvent.click(tourBox(APR));
-    fireEvent.click(tourBox(DEC));
-    fireEvent.click(tourBox(DEC)); // untick December again
-    expect(tourBox(DEC).checked).toBe(false);
-    expect(tourBox(APR).checked).toBe(true);
-    fireEvent.click(screen.getByRole("button", { name: /new to the academy/i }));
-    // fillRequiredDetails clicks "New To Us" (simple copy); do the standard-copy fields by hand.
-    fireEvent.change(document.querySelector('input[name="player_name"]')!, { target: { value: "Test Player" } });
-    fireEvent.change(screen.getByLabelText("Date of birth"), { target: { value: "1995-01-01" } });
-    fireEvent.change(document.querySelector('input[name="current_club"]')!, { target: { value: "Test CC" } });
-    fireEvent.change(document.querySelector('input[name="highest_level"]')!, { target: { value: "Sub-district" } });
-    fireEvent.change(document.querySelector('select[name="primary_skill"]')!, { target: { value: "Batsman" } });
-    fireEvent.change(document.querySelector('input[name="player_email"]')!, { target: { value: "player@example.com" } });
-    fireEvent.change(document.querySelector('input[name="player_phone"]')!, { target: { value: "0491 570 156" } });
-    const consentText = screen.getByText(/I agree to be contacted by Rajasthan Royals Academy Melbourne/);
-    fireEvent.click(consentText.parentElement!.querySelector("span")!);
-    submit();
-
-    await waitFor(() => expect(insert).toHaveBeenCalledTimes(1));
-    const [[rows]] = insert.mock.calls as unknown as [[Array<Record<string, unknown>>]];
-    expect(rows[0].tour_interest).toEqual([APR]);
-    expect(String(rows[0].bio).split("\n")[0]).toBe("Tours: April 2027");
   });
 });

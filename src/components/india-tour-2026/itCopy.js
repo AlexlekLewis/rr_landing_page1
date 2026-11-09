@@ -1,6 +1,7 @@
 // ---------------------------------------------------------------------------
-// India Tour — page copy, in two reading levels. Two upcoming tours, named by
-// their windows only: exact dates are not set (Alex, 29 Sep 2026).
+// India Tour — page copy, in two reading levels. One upcoming tour, named by
+// its window only: exact dates are not set (Alex, 29 Sep 2026). The late
+// December 2026 – early January 2027 tour was dropped from the page (Nov 2026).
 //
 //   simple   : *** THE LIVE COPY — Alex picked this one, 5 Aug 2026. ***
 //              Written so a 10-year-old can read it and a busy parent can scan
@@ -20,20 +21,21 @@
 
 import { useEffect, useState } from 'react';
 
-// The two upcoming tours to the Rajasthan Royals High Performance Centre in
-// Nagpur (Alex, 29 Sep 2026). Exact dates are NOT set, so each tour is named by
-// its window and never by a date. `id` is what the form stores in
+// The upcoming tour to the Rajasthan Royals High Performance Centre in Nagpur.
+// Exact dates are NOT set, so the tour is named by its window and never by a date.
+// The late December 2026 – early January 2027 tour ('2026-12-late-dec-jan') was
+// removed from the page in November 2026; its id stays in api/sync-program-signups.js
+// so families who already registered against it still read correctly. `id` is what the form stores in
 // applications.tour_interest: keep the ids stable once families have registered
 // against them, because staff filter on them.
 export const TOURS = [
-    { id: '2026-12-late-dec-jan', window: 'Late December 2026 to early January 2027' },
     { id: '2027-04-april', window: 'April 2027' },
 ];
 
-// Each tour is about 10 days long (Alex, 29 Sep 2026). The page always says "about".
+// The tour is about 10 days long (Alex, 29 Sep 2026). The page always says "about".
 export const TOUR_LENGTH_DAYS = 10;
 
-// Estimated price per player, per tour (Alex, 29 Sep 2026). It is an ESTIMATE and
+// Estimated price per player (Alex, 29 Sep 2026). It is an ESTIMATE and
 // the page always says so: the exact price, and what it includes, are confirmed in
 // writing before anyone commits. Don't say what it covers (flights, accommodation,
 // meals…) until Alex has confirmed it.
@@ -58,7 +60,7 @@ export const PLAYER_TYPE_KEYS = ['royals_program', 'external'];
 // shuts the form, drops the register CTAs and shows the closed notice.
 //
 // From 27 Sep 2026 the page took interest with no dates at all. From 29 Sep 2026
-// it names the two upcoming tours by their windows (see TOURS). There is still no
+// it names the upcoming tour(s) by window (see TOURS). There is still no
 // deadline and no clock. The September 2026 camp's registrations closed on 12 Aug 2026.
 export const TOUR_STATUS = 'open';
 
@@ -101,23 +103,23 @@ const STANDARD = {
         h1: 'High Performance',
         h1Accent: 'Centre Camp',
         kicker: 'Rajasthan Royals Academy',
-        dateline: 'Nagpur, India · Two\u00a0Tours',
-        toursLabel: 'The two tours',
+        dateline: 'Nagpur, India · April\u00a02027',
+        toursLabel: 'The tour',
         tourLength: `About ${TOUR_LENGTH_DAYS} days`,
         toursNote:
-            'Exact dates are not set yet. Register your interest now in one tour or both, and we will ' +
-            'write to you when they are.',
+            'Exact dates are not set yet. Register your interest now and we will write to you when ' +
+            'they are.',
         lead:
             `A tour of about ${TOUR_LENGTH_DAYS} days to the Rajasthan Royals' talent factory in Nagpur — ` +
             'the franchise\'s own High Performance Centre, and the place that built the games of Sanju ' +
             'Samson, Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag. It is where Vaibhav Sooryavanshi ' +
             'trains, alongside the coach who is his legal guardian. Our first touring group trained there ' +
             'with the Royals\' own high performance staff in September 2026, and our Melbourne coaches ' +
-            'pick each touring squad.',
+            'pick the touring squad.',
         priceLabel: 'Estimated price',
         priceUnit: 'per player',
         priceNote:
-            `For each tour of about ${TOUR_LENGTH_DAYS} days. This is an estimate, not a final price: ` +
+            `For the tour of about ${TOUR_LENGTH_DAYS} days. This is an estimate, not a final price: ` +
             'before anyone commits, we confirm in writing the exact price and exactly what it includes.',
         seePrice: 'How the price works',
         downloadLabel: 'Download the camp document',
@@ -129,12 +131,12 @@ const STANDARD = {
             'Once the clock runs out we close the list and our coaches pick the touring squad from ' +
             'everyone who registered.',
         ctaAfterCoaches: {
-            heading: 'Choose one tour or both',
-            body: 'Register your interest in the tour that suits you, or in both. It costs nothing, takes about two minutes and commits you to nothing. Our Melbourne coaches pick each touring squad from everyone who registers.',
+            heading: 'Register for April 2027',
+            body: 'Register your interest in the April 2027 tour. It costs nothing, takes about two minutes and commits you to nothing. Our Melbourne coaches pick the touring squad from everyone who registers.',
         },
         ctaAfterPricing: {
             heading: 'Ready to put your player forward?',
-            body: 'Register your interest and, when a tour you picked has dates, we will write to you with the dates, the exact price, what it includes, and whether your player has a place.',
+            body: 'Register your interest and, when the tour has dates, we will write to you with the dates, the exact price, what it includes, and whether your player has a place.',
         },
         closedBadge: 'Applications Closed',
         closedHeading: 'Applications for this tour have closed',
@@ -175,7 +177,7 @@ const STANDARD = {
             },
             {
                 title: 'How the squad is picked',
-                body: 'Anyone can register. Our Melbourne coaches pick each touring squad.',
+                body: 'Anyone can register. Our Melbourne coaches pick the touring squad.',
             },
         ],
     },
@@ -185,7 +187,7 @@ const STANDARD = {
         heading: `About ${fmtRangeAUD(PRICE_ESTIMATE_AUD)}`,
         headingAccent: 'Per Player',
         intro:
-            `That is our estimate for each tour of about ${TOUR_LENGTH_DAYS} days, not a final price. ` +
+            `That is our estimate for the tour of about ${TOUR_LENGTH_DAYS} days, not a final price. ` +
             'The dates and the final price are not set yet for either tour. Before anyone commits, we ' +
             'confirm in writing the exact price and exactly what it includes.',
         includesEyebrow: 'What the price includes',
@@ -300,8 +302,8 @@ const STANDARD = {
 
         howHeading: 'What happens next',
         steps: [
-            'Register your interest using the form below, and tick the tour you want, or both. There is nothing to pay today: at this stage we are only collecting enquiries, and registering does not commit you to anything.',
-            'When a tour you picked has dates, we write to you with them, along with the exact price, exactly what it includes, and whether your player has a place in the touring squad.',
+            'Register your interest using the form below. There is nothing to pay today: at this stage we are only collecting enquiries, and registering does not commit you to anything.',
+            'When the tour has dates, we write to you with them, along with the exact price, exactly what it includes, and whether your player has a place in the touring squad.',
             'Nothing is booked and nothing is paid until you have all of that in writing and tell us you want the place.',
         ],
     },
@@ -311,10 +313,10 @@ const STANDARD = {
         heading: 'Register Your',
         headingAccent: 'Interest',
         lead:
-            'Tick the tour you want, or both, and add a few quick details. When a tour you picked has ' +
-            'dates, we will write to you with everything you need to know.',
-        toursHeading: 'Which Tour',
-        toursLead: 'Tick one tour or both. Exact dates are not set yet; we will write to you when they are.',
+            'Add a few quick details. When the tour has dates, we will write to you with everything ' +
+            'you need to know.',
+        toursHeading: 'The Tour',
+        toursLead: 'Exact dates are not set yet; we will write to you when they are.',
         toursError: 'Please tick at least one tour.',
         playerTypeHeading: 'Does Your Player Train With Us Now?',
         playerTypeLead: 'Pick the one that describes your player.',
@@ -341,12 +343,12 @@ const SIMPLE = {
         h1: 'High Performance',
         h1Accent: 'Centre Camp',
         kicker: 'Rajasthan Royals Academy',
-        dateline: 'Nagpur, India · Two\u00a0Tours',
-        toursLabel: 'The two tours',
+        dateline: 'Nagpur, India · April\u00a02027',
+        toursLabel: 'The tour',
         tourLength: `About ${TOUR_LENGTH_DAYS} days`,
         toursNote:
-            'The exact dates are not set yet. Put your name down now for one tour or both, and we will ' +
-            'tell you when the dates are set.',
+            'The exact dates are not set yet. Put your name down now and we will tell you when the ' +
+            'dates are set.',
         lead:
             `A tour of about ${TOUR_LENGTH_DAYS} days to the Rajasthan Royals' talent factory in Nagpur. ` +
             'This is the centre that built Sanju Samson, Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag — ' +
@@ -355,7 +357,7 @@ const SIMPLE = {
         priceLabel: 'Estimated price',
         priceUnit: 'per player',
         priceNote:
-            `For each tour of about ${TOUR_LENGTH_DAYS} days. It is an estimate, not the final price. ` +
+            `For the tour of about ${TOUR_LENGTH_DAYS} days. It is an estimate, not the final price. ` +
             'Before you say yes, we tell you the exact price and what it covers, in writing.',
         seePrice: 'More about the price',
         downloadLabel: 'Download the camp booklet',
@@ -367,12 +369,12 @@ const SIMPLE = {
             'When the clock hits zero we shut the list. Then our coaches pick the team from everyone ' +
             'who signed up.',
         ctaAfterCoaches: {
-            heading: 'One tour or both',
-            body: 'Put your name down for the tour you want, or both. It is free and takes about two minutes. You are not paying or promising anything yet.',
+            heading: 'April 2027',
+            body: 'Put your name down for the April 2027 tour. It is free and takes about two minutes. You are not paying or promising anything yet.',
         },
         ctaAfterPricing: {
             heading: 'Want a spot?',
-            body: 'Put your name down. When a tour you picked has dates, we write back with the dates, the exact price, what it covers, and whether you have a spot.',
+            body: 'Put your name down. When the tour has dates, we write back with the dates, the exact price, what it covers, and whether you have a spot.',
         },
         closedBadge: 'Applications Closed',
         closedHeading: 'Sign-ups for this tour are closed',
@@ -420,7 +422,7 @@ const SIMPLE = {
         heading: `About ${fmtRangeAUD(PRICE_ESTIMATE_AUD)}`,
         headingAccent: 'Per Player',
         intro:
-            `That is our estimate for each tour of about ${TOUR_LENGTH_DAYS} days. It is not the final ` +
+            `That is our estimate for the tour of about ${TOUR_LENGTH_DAYS} days. It is not the final ` +
             'price, and the dates are not set yet either. Before you say yes, we tell you the exact ' +
             'price and what it covers, in writing.',
         includesEyebrow: 'What the price covers',
@@ -520,8 +522,8 @@ const SIMPLE = {
 
         howHeading: 'What happens next',
         steps: [
-            'Fill in the form below. Tick the tour you want, or both. You pay nothing today. Right now we are just taking names.',
-            'When a tour you picked has dates, we write to you. We tell you the dates, the exact price, what it covers, and if you have a spot.',
+            'Fill in the form below. You pay nothing today. Right now we are just taking names.',
+            'When the tour has dates, we write to you. We tell you the dates, the exact price, what it covers, and if you have a spot.',
             'Nothing is booked and nothing is paid until you have all of that in writing and say yes.',
         ],
     },
@@ -531,11 +533,11 @@ const SIMPLE = {
         heading: 'Put Your Name',
         headingAccent: 'Down',
         lead:
-            'Fill this in and tick the tour you want, or both. When a tour you picked has dates, we will ' +
+            'Fill this in. When the tour has dates, we will ' +
             'get back to you with the price and everything else you need to know. You are not paying or ' +
             'promising anything yet.',
-        toursHeading: 'Which Tour',
-        toursLead: 'Tick one or both. The dates are not set yet. We will tell you when they are.',
+        toursHeading: 'The Tour',
+        toursLead: 'The dates are not set yet. We will tell you when they are.',
         toursError: 'Please tick at least one tour.',
         playerTypeHeading: 'Does The Player Train With Us Now?',
         playerTypeLead: 'Pick the one that fits the player.',
