@@ -116,7 +116,7 @@ export const COACH_PROFILES = {
                 title: 'All-round development',
                 focus: 'allround',
                 figure: 'field',
-                description: 'For younger players, and anyone not sure yet what to work on. Ikroop coaches Junior Royals, the Academy’s program for players aged 7–12, and works across batting, bowling and fielding to find what will help the player most.',
+                description: 'For younger players, and anyone not sure yet what to work on. Ikroop coaches Junior Royals, the Academy’s program for players aged 7–12. He works across batting, bowling and fielding to find what will help the player most.',
                 goodFor: 'Players aged 7–12, and players in their first few seasons.',
                 inSession: ['Batting, bowling and fielding, in games and challenges', 'Plenty of turns and very little waiting', 'Skills the player can take to club training'],
             },
@@ -152,8 +152,8 @@ export const COACH_PROFILES = {
         photoPosition: '50% 25%',
         homeCentre: 'cranbourne-north',
         roleStrengths: 'Batting',
-        heroLine: 'Alex runs the Academy’s Cranbourne North centre. A batting specialist, he has coached in the English county system and at Fitzroy Doncaster, a club in Victorian Premier Cricket (the top grade of club cricket in Victoria).',
-        intro: 'Alex coaches young cricketers to enjoy the game and get better at it. He runs the Academy’s Cranbourne North centre and manages South-East Melbourne. A batting specialist, he has coached in the English county system and at Fitzroy Doncaster in Victorian Premier Cricket, and leads the cricket program at Xavier College.',
+        heroLine: 'Alex runs the Academy’s Cranbourne North centre. He is a batting specialist who has coached in the English county system.',
+        intro: 'Alex coaches young cricketers to enjoy the game and get better at it. He runs the Academy’s Cranbourne North centre and manages South-East Melbourne. A batting specialist, he has coached in the English county system and at Fitzroy Doncaster in Victorian Premier Cricket. He also leads the cricket program at Xavier College.',
         card: { strengths: 'Batting', cred: 'Cranbourne North · South-East Manager. Has coached in the English county system.' },
         strengths: [
             {
@@ -326,7 +326,7 @@ export const COACH_PROFILES = {
                 heading: 'Before Melbourne',
                 items: [
                     { title: 'Head coach, Desert Cubs Cricket Academy, UAE', detail: 'Head coach from 2021 to 2023, running the academy’s coaching staff and its batting programs, after two earlier years there (2015–17) as centre-in-charge and batting coach.' },
-                    { title: 'Head coach, Sheen Sports Academy, Bangalore, India', detail: 'Ran the academy from 2018 to 2021, coaching developing and elite players and working with first-class cricketers on their batting.' },
+                    { title: 'Head coach, Sheen Sports Academy, Bangalore, India', detail: 'Ran the academy from 2018 to 2021, coaching developing players and working with first-class cricketers on their batting.' },
                     { title: 'First XI batting coach at two Colombo cricket schools', detail: 'At St. Joseph’s College, Colombo (2003–09) and S. Thomas’ College, Mount Lavinia (2013–15). In Sri Lanka, school cricket is the main pathway into the national team.' },
                 ],
             },

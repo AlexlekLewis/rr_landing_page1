@@ -460,7 +460,7 @@ function StickyBar({ profile }) {
                         <span className="text-xs text-slate-300 truncate block">Development coach · {centre.short}</span>
                     </div>
                 </div>
-                <a href="#book" data-cta="sticky-book" className="shrink-0 bg-rr-pink hover:bg-rr-light-pink rounded-full px-5 py-3 text-xs font-black uppercase tracking-widest transition-colors">Book</a>
+                <a href="#book" data-cta="sticky-book" className="shrink-0 bg-rr-pink hover:bg-rr-light-pink rounded-full px-5 py-3 text-xs font-black uppercase tracking-widest transition-colors">Book {profile.first}</a>
             </div>
         </div>
     );
