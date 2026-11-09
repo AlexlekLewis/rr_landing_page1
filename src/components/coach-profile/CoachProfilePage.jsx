@@ -14,10 +14,15 @@ import { trackCoachPageView } from './coachPixel';
 // /coaches/:slug — one page per coach. Hidden until VITE_COACH_PAGES=on (App.jsx).
 //
 // Order (Alex, 9 Nov 2026): sell the coach as a person and as a coach, then the
-// offering, which is the same for every coach (one-on-one, or a small group of
-// 2 to 4 players), then the booking panel. The booking system takes over from
-// there: the family picks a time the coach works and the Academy confirms it with
-// the centre. Every price sits in "What it costs", after the booking panel.
+// offering, which is the same for every coach (one-on-one, or a small private
+// group of 2 to 4 players), then the booking panel. The booking system takes over
+// from there: the family picks a time the coach works and the Academy confirms it
+// with the centre.
+//
+// Prices (Alex, 9 Nov: "optimise from the data"): on /mickleham 79% of visitors
+// see the hero and only 7% reach the pricing section, so each option's price sits
+// on its button in the hero, again on the offering cards and in the sticky bar.
+// The full table stays in "What it costs".
 //
 //   hero → about (+ record) → areas → strengths → offer → book → how → prices → coaches
 const SECTIONS = ['hero', 'about', 'record', 'areas', 'strengths', 'offer', 'book', 'how', 'prices', 'coaches'];
@@ -100,7 +105,7 @@ function CoachProfilePage({ profile }) {
                 <div id="coaches" className="scroll-mt-20"><OtherCoaches profile={profile} /></div>
             </main>
             <Footer />
-            <StickyBar profile={profile} />
+            <StickyBar profile={profile} catalog={catalog} offers={offers} />
         </div>
     );
 }
@@ -110,18 +115,36 @@ const groupRange = (catalog) => {
     return `${Math.min(...sizes)} to ${Math.max(...sizes)}`;
 };
 
+// Each option's price, from the catalog: "$130" one-on-one, "$50–$70" per
+// player in a group, and the per-size detail for the offering card.
+const offerPrices = (catalog) => {
+    const p = catalog?.prices;
+    if (!p) return {};
+    const groups = Object.entries(p.groupCents || {}).filter(([, c]) => c).sort((a, b) => Number(a[0]) - Number(b[0]));
+    const cents = groups.map(([, c]) => c);
+    return {
+        oneOnOne: p.hourCents ? formatMoney(p.hourCents) : null,
+        group: cents.length ? (Math.min(...cents) === Math.max(...cents) ? formatMoney(cents[0]) : `${formatMoney(Math.min(...cents))}–${formatMoney(Math.max(...cents))}`) : null,
+        groupDetail: groups.length ? groups.map(([n, c]) => `${formatMoney(c)} each for ${n}`).join(', ') + ', per player per hour' : null,
+    };
+};
+
+const offerBtnBase = 'w-full min-h-[64px] text-left sm:text-center rounded-2xl px-5 py-3.5 text-[13px] sm:text-sm font-black uppercase tracking-wide leading-tight transition-colors';
+const offerBtnPrimary = `${offerBtnBase} bg-rr-pink hover:bg-rr-light-pink text-white`;
+const offerBtnSecondary = `${offerBtnBase} bg-white border-2 border-rr-pink text-rr-pink hover:bg-rr-pink hover:text-white`;
+const offerPriceLine = 'block mt-1 text-[13px] font-bold normal-case tracking-normal opacity-90';
+
 const directionsUrl = (centre) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${centre.name}, ${centre.address}`)}`;
 
 function Hero({ profile, catalog, offers, onChoose }) {
     const centre = CENTRES[profile.homeCentre];
     const range = groupRange(catalog);
-    const what = offers.one_on_one && offers.group
-        ? `One-on-one, or a small group of ${range} players`
-        : offers.group ? `Small groups of ${range} players` : 'One-on-one sessions';
+    const price = offerPrices(catalog);
+    const bd = catalog?.blockDiscount;
     return (
-        <section className="py-6 md:py-16 bg-white">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 grid gap-5 sm:gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14 lg:items-center">
-                <Photo profile={profile} className="rounded-2xl aspect-[2/1] sm:aspect-[3/2] lg:aspect-[4/5] lg:order-2" />
+        <section className="pt-3 pb-6 md:py-16 bg-white">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 grid gap-4 sm:gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14 lg:items-center">
+                <Photo profile={profile} className="rounded-2xl aspect-[5/2] sm:aspect-[3/2] lg:aspect-[4/5] lg:order-2" />
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="grid gap-3 sm:gap-4 min-w-0">
                     <p className="text-xs font-extrabold uppercase tracking-[0.1em] text-rr-pink">Rajasthan Royals Academy Melbourne · {centre.short}</p>
                     <h1 className="text-[clamp(2.5rem,9vw,4.75rem)] font-black uppercase tracking-wide leading-[1.02] text-rr-dark">{profile.name}</h1>
@@ -129,24 +152,26 @@ function Hero({ profile, catalog, offers, onChoose }) {
                         Development coach · <span className="text-rr-pink">{profile.roleStrengths}</span>
                     </p>
                     <p className="text-base sm:text-lg font-medium text-rr-charcoal max-w-[38em]">{profile.heroLine || profile.intro}</p>
-                    <div className="grid gap-3 sm:flex sm:flex-wrap">
+                    <div className={`grid gap-3 ${offers.one_on_one && offers.group ? 'sm:grid-cols-2' : 'sm:max-w-sm'}`}>
                         {offers.one_on_one && (
-                            <button type="button" data-cta="hero-one-on-one" onClick={() => onChoose('one_on_one')} className={btnPrimary}>
-                                Book a one-on-one with {profile.first}
+                            <button type="button" data-cta="hero-one-on-one" onClick={() => onChoose('one_on_one')} className={offerBtnPrimary}>
+                                <span className="block">Book a one-on-one with {profile.first}</span>
+                                {price.oneOnOne && <span className={offerPriceLine}>{price.oneOnOne} an hour, incl. GST</span>}
                             </button>
                         )}
                         {offers.group && (
-                            <button type="button" data-cta="hero-small-group" onClick={() => onChoose('group')} className={offers.one_on_one ? btnSecondary : btnPrimary}>
-                                Book a small group with {profile.first}
+                            <button type="button" data-cta="hero-small-group" onClick={() => onChoose('group')} className={offers.one_on_one ? offerBtnSecondary : offerBtnPrimary}>
+                                <span className="block">Book a small private group with {profile.first}</span>
+                                {price.group && <span className={offerPriceLine}>{range} players · {price.group} each an hour, incl. GST</span>}
                             </button>
                         )}
                     </div>
                     <ul className="grid gap-2.5 border-t border-slate-200 pt-4 font-medium text-rr-charcoal">
                         {[
-                            what,
+                            bd && `Book ${bd.minSessions} or more sessions together and every session is ${bd.percent}% off`,
                             `Your first session is a consultation with ${profile.first} to set the player’s plan`,
                             `Sessions of ${formatLengths(catalog?.durations || [60, 90, 120])} in an indoor net`,
-                        ].map((t) => <TickItem key={t}>{t}</TickItem>)}
+                        ].filter(Boolean).map((t) => <TickItem key={t}>{t}</TickItem>)}
                         <TickItem>
                             Home centre: {centre.name}, {centre.address}.{' '}
                             <a href={directionsUrl(centre)} target="_blank" rel="noopener noreferrer" className="font-bold text-rr-blue underline underline-offset-2">Get directions</a>
@@ -272,10 +297,12 @@ function Areas({ profile }) {
 function Offering({ profile, catalog, offers, centres, onChoose }) {
     const where = centres.map((c) => CENTRES[c]?.name).filter(Boolean).join(' or ') || CENTRES[profile.homeCentre].name;
     const range = groupRange(catalog);
+    const price = offerPrices(catalog);
     const options = [
         offers.one_on_one && {
             key: 'one_on_one',
             title: 'One-on-one',
+            price: price.oneOnOne && `${price.oneOnOne} an hour, incl. GST`,
             body: [
                 `The player has ${profile.first} to themselves for the whole session.`,
                 'It suits a player who wants to work on one part of their game in detail.',
@@ -284,15 +311,16 @@ function Offering({ profile, catalog, offers, centres, onChoose }) {
         },
         offers.group && {
             key: 'group',
-            title: `Small group (${range} players)`,
+            title: `Small private group (${range} players)`,
+            price: price.groupDetail && `${price.groupDetail}, incl. GST`,
             body: [
-                `${range} players train together with ${profile.first}, taking turns on the same skill. Each player pays less than for a one-on-one.`,
-                'It suits friends or teammates who want to train together. You make up the group yourselves: the person booking adds the other players’ names.',
+                `A private session for ${range} players you bring together, such as friends, siblings or teammates. They train with ${profile.first} on the same skill, taking turns, and each player pays less than for a one-on-one.`,
+                'The person booking adds the other players’ names.',
             ],
-            button: `Book a small group with ${profile.first}`,
+            button: `Book a small private group with ${profile.first}`,
         },
     ].filter(Boolean);
-    const second = options.length > 1 ? 'One-on-one or a small group' : options[0]?.key === 'group' ? `In a small group of ${range} players` : 'One-on-one';
+    const second = options.length > 1 ? 'One-on-one or a small private group' : options[0]?.key === 'group' ? `In a small private group of ${range} players` : 'One-on-one';
     return (
         <section className="py-16 md:py-24 bg-white">
             <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -306,6 +334,7 @@ function Offering({ profile, catalog, offers, centres, onChoose }) {
                         <div key={o.key} className="grid gap-4 content-start border-t-2 border-rr-pink pt-6 min-w-0">
                             {/* With one option, the section heading already names it. */}
                             {options.length > 1 && <h3 className="text-2xl font-black uppercase tracking-wide text-rr-dark">{o.title}</h3>}
+                            {o.price && <p className="text-lg font-black text-rr-dark tabular-nums">{o.price}</p>}
                             {o.body.map((t) => <p key={t} className="font-medium text-rr-charcoal">{t}</p>)}
                             <button type="button" data-cta={`offer-${o.key}`} onClick={() => onChoose(o.key)} className={`${i === 0 ? btnPrimary : btnSecondary} mt-1 sm:justify-self-start`}>
                                 {o.button}
@@ -380,7 +409,7 @@ function Prices({ profile, catalog, catalogLoading, offers }) {
                             )}
                             {offers.group && groups.length > 0 && (
                                 <table className="w-full border-collapse">
-                                    <caption className="text-left pb-2 font-black uppercase tracking-wide text-rr-dark">Small group with {profile.first}</caption>
+                                    <caption className="text-left pb-2 font-black uppercase tracking-wide text-rr-dark">Small private group with {profile.first}</caption>
                                     <tbody>
                                         {groups.map(([n, cents]) => row(`Group of ${n} players`, <>{formatMoney(cents)} incl. GST<small className="block text-xs font-semibold text-slate-500">per player, per hour</small></>))}
                                     </tbody>
@@ -448,8 +477,12 @@ function OtherCoaches({ profile }) {
     );
 }
 
-function StickyBar({ profile }) {
+function StickyBar({ profile, catalog, offers }) {
     const centre = CENTRES[profile.homeCentre];
+    const price = offerPrices(catalog);
+    const sub = offers.one_on_one && price.oneOnOne
+        ? `One-on-one ${price.oneOnOne} an hour, incl. GST`
+        : offers.group && price.group ? `Small private group ${price.group} each an hour` : `Development coach · ${centre.short}`;
     return (
         <div className="fixed inset-x-0 bottom-0 z-40 bg-rr-dark text-white px-4 pt-2.5" style={{ paddingBottom: 'calc(10px + env(safe-area-inset-bottom, 0px))' }}>
             <div className="max-w-6xl mx-auto flex items-center justify-between gap-3">
@@ -457,7 +490,7 @@ function StickyBar({ profile }) {
                     <Photo profile={profile} small className="w-[42px] h-[42px] rounded-full shrink-0" />
                     <div className="min-w-0 leading-tight">
                         <b className="block font-black uppercase tracking-wide text-sm truncate">{profile.name}</b>
-                        <span className="text-xs text-slate-300 truncate block">Development coach · {centre.short}</span>
+                        <span className="text-xs text-slate-300 truncate block">{sub}</span>
                     </div>
                 </div>
                 <a href="#book" data-cta="sticky-book" className="shrink-0 bg-rr-pink hover:bg-rr-light-pink rounded-full px-5 py-3 text-xs font-black uppercase tracking-widest transition-colors">Book {profile.first}</a>

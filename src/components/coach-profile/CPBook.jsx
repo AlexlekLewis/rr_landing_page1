@@ -119,7 +119,7 @@ export default function CPBook({ profile, catalog, catalogLoading, catalogCoach,
                                     </button>
                                 ))}
                             </div>
-                            {offers.group && <p className="text-sm">For a group, you bring the players. The person booking adds the other players’ names on the next screen.</p>}
+                            {offers.group && <p className="text-sm">A small private group is players you bring together. The person booking adds the other players’ names on the next screen.</p>}
                         </div>
 
                         <div className="grid gap-2.5">

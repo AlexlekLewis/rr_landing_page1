@@ -14,7 +14,7 @@ const CoachesPrivate = () => (
                     Private coaching <span className="block text-rr-pink">with our coaches</span>
                 </h2>
                 <p className="text-lg font-medium text-rr-charcoal">
-                    Book one-on-one or small-group sessions at Mickleham or Cranbourne North. Every Academy coach is a development coach first. Pick the one whose strengths fit what the player wants to work on.
+                    Book one-on-one or small private group sessions at Mickleham or Cranbourne North. Every Academy coach is a development coach first. Pick the one whose strengths fit what the player wants to work on.
                 </p>
             </motion.div>
             <div className="grid grid-cols-2 gap-5 lg:grid-cols-4 lg:gap-7">

@@ -90,7 +90,7 @@ export const COACH_PROFILES = {
         roleStrengths: 'Leg spin, batting and T20 cricket',
         // Text from Alex's answers (9 Nov 2026) and Ikroop's PlayCricket record.
         // Source notes: Master Landing Page/Coach Profiles/Ikroop Dhanoa - profile draft (9 Nov 2026).md
-        heroLine: 'Ikroop is a leg-spinning all-rounder in Essendon’s First XI who played Under-19 cricket for Victoria.',
+        heroLine: 'Leg-spinning all-rounder in Essendon’s First XI, captain of our Northern First XI and our Junior Royals development specialist.',
         intro: 'Ikroop coaches every level, from beginners aged 7 to players in the pathway, and specialises in spin bowling, batting and T20 cricket.',
         about: {
             player: [
@@ -101,6 +101,7 @@ export const COACH_PROFILES = {
             ],
             coach: [
                 'Ikroop is friendly and easy to talk to. He enjoys helping young players improve, and he makes sure they feel comfortable in his sessions. He coaches every level, from beginners aged 7 to players in the pathway at Under-18 and beyond. His specialties are batting and spin bowling, and he has a real passion for T20 cricket and power hitting.',
+                'Inside the Royals he does four jobs. He captains the Academy’s Northern First XI, our First XI team in Melbourne’s north. He coaches in the Performance Squad, the Academy’s T20 squad program, and in the Academy’s Elite program. And he is the development specialist for Junior Royals, the Academy’s program for players aged 7–12.',
                 'Outside the Academy he gives back to junior cricket. He is one of the coaches of Essendon’s Under-16 Dowling Shield squad, the Premier Cricket clubs’ junior pathway competition, and has helped with Plenty Valley’s JG Craig Shield program, an Under-15 competition. Having played Under-19 cricket for Victoria himself, he can tell a player and their family what each step of the pathway involves.',
                 'He holds a Level 1 coaching accreditation, he is a Royals Level 1 coach (the Academy’s own coaching accreditation), and he has a Working With Children Check.',
             ],
@@ -108,6 +109,7 @@ export const COACH_PROFILES = {
                 { label: 'Plays', value: 'First XI, Essendon (Victorian Premier Cricket)' },
                 { label: 'Bowls', value: 'Leg spin, with every variation' },
                 { label: 'Represented', value: 'Victoria, Under-15 and Under-19' },
+                { label: 'At the Academy', value: 'Captain, Northern First XI · Junior Royals development specialist' },
                 { label: 'Coaches', value: 'Beginners aged 7 to Under-18 and beyond' },
                 { label: 'Accredited', value: 'Level 1 coach · Royals Level 1 · Working With Children Check' },
             ],
@@ -167,14 +169,16 @@ export const COACH_PROFILES = {
                 items: [
                     { title: 'Coach, Essendon Under-16 Dowling Shield squad', detail: 'The Premier Cricket clubs’ Under-16 pathway competition.' },
                     { title: 'Plenty Valley JG Craig Shield program', detail: 'The Under-15 competition for sub-district clubs.' },
-                    { title: 'Junior Royals, Power Game Pre-Season and Performance Squad', detail: 'At the Academy’s Mickleham centre.' },
+                    { title: 'Captain, Academy Northern First XI', detail: 'The Academy’s First XI team in Melbourne’s north.' },
+                    { title: 'Junior Royals development specialist', detail: 'The Academy’s program for players aged 7–12, at Mickleham.' },
+                    { title: 'Coach, Performance Squad and Elite program', detail: 'The Academy’s T20 squad program, and its program for its most advanced players.' },
                     { title: 'Accreditation', detail: 'Level 1 coach, Royals Level 1 coach, and a Working With Children Check.' },
                 ],
             },
         ],
         seo: {
             title: 'Ikroop Dhanoa · Cricket Coach, Mickleham, Melbourne',
-            description: 'Private and small-group cricket coaching with Ikroop Dhanoa, a leg-spinning all-rounder in Essendon’s First XI, at the Royals Academy in Mickleham, Melbourne.',
+            description: 'One-on-one and small private group coaching with Ikroop Dhanoa, a leg-spinning all-rounder in Essendon’s First XI, at the Royals Academy, Mickleham, Melbourne.',
         },
     },
 
@@ -237,7 +241,7 @@ export const COACH_PROFILES = {
         ],
         seo: {
             title: 'Alex Thornhill · Cricket Coach, Cranbourne North, Melbourne',
-            description: 'Private and small-group batting coaching with Alex Thornhill at the Rajasthan Royals Academy in Cranbourne North, South-East Melbourne.',
+            description: 'One-on-one and small private group batting coaching with Alex Thornhill at the Rajasthan Royals Academy in Cranbourne North, South-East Melbourne.',
         },
     },
 
@@ -300,7 +304,7 @@ export const COACH_PROFILES = {
         ],
         seo: {
             title: 'Ritin Raman · Wicketkeeping Coach, Mickleham, Melbourne',
-            description: 'Private and small-group wicketkeeping and batting coaching with Ritin Raman, a Melbourne Cricket Club First XI keeper, at the Royals Academy, Mickleham.',
+            description: 'One-on-one and small private group keeping and batting coaching with Ritin Raman, Melbourne Cricket Club First XI keeper, at the Royals Academy, Mickleham.',
         },
     },
 
@@ -314,11 +318,11 @@ export const COACH_PROFILES = {
         initials: 'MJ',
         photoPosition: '50% 22%',
         homeCentre: 'mickleham',
-        roleStrengths: 'Batting, one-on-one and in small groups',
+        roleStrengths: 'Batting, one-on-one and in small private groups',
         heroLine: 'Mihiraj has coached batting for more than 25 years, in Sri Lanka, the UAE, India and now Melbourne.',
         intro: 'Mihiraj coaches young cricketers to enjoy the game and get better at it. He has coached cricket for more than 25 years, in Sri Lanka, the UAE, India and now Melbourne, and is a batting coach first. He coached batting to the First XIs of two of Colombo’s leading cricket schools, then ran academies in the UAE and India.',
         quote: 'I have a very encouraging, firm and positive style of leadership, which helps get the best out of my players.',
-        card: { strengths: 'Batting · small groups', cred: 'More than 25 years coaching batting in Sri Lanka, the UAE, India and Melbourne.' },
+        card: { strengths: 'Batting · small private groups', cred: 'More than 25 years coaching batting in Sri Lanka, the UAE, India and Melbourne.' },
         strengths: [
             {
                 key: 'batting-technique',
@@ -331,7 +335,7 @@ export const COACH_PROFILES = {
             },
             {
                 key: 'small-group-batting',
-                title: 'Small-group batting',
+                title: 'Small private group batting',
                 focus: 'batting',
                 figure: 'group',
                 description: 'Batting in a group of 2 to 4 players, so each player gets plenty of balls and learns from watching the others. It costs less per player than one-on-one.',
@@ -367,7 +371,7 @@ export const COACH_PROFILES = {
         ],
         seo: {
             title: 'Mihiraj Jayasekara · Batting Coach, Mickleham, Melbourne',
-            description: 'Private and small-group batting coaching with Mihiraj Jayasekara, a batting coach of 25 years, at the Rajasthan Royals Academy in Mickleham, Melbourne.',
+            description: 'One-on-one and small private group batting coaching with Mihiraj Jayasekara, a batting coach for 25 years, at the Royals Academy in Mickleham, Melbourne.',
         },
     },
 };
