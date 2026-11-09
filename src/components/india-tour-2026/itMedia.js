@@ -79,6 +79,18 @@ const CAPTIONS = {
         alt: 'A Rajasthan Royals Academy Melbourne player in his stance during a batting drill in the nets',
         caption: 'Putting it into practice in a batting drill.',
     },
+    '10-bowling-coach-with-bowler.webp': {
+        alt: 'A Royals coach watching closely as a young Rajasthan Royals Academy Melbourne bowler walks back to his mark in the nets',
+        caption: 'Every ball watched: one-on-one with a Royals bowling coach.',
+    },
+    '11-coach-group-batting-drill.webp': {
+        alt: 'A Royals coach explaining a batting drill to three Rajasthan Royals Academy Melbourne players holding training bats in the nets',
+        caption: 'Small groups, so every player gets the coach\u2019s attention.',
+    },
+    '12-coach-explains-grip.webp': {
+        alt: 'A Royals coach explaining the grip to a young Rajasthan Royals Academy Melbourne batter in the nets',
+        caption: 'Getting the basics right: a Royals coach on the grip.',
+    },
 };
 
 // Every file in the folder, picked up at build time.
