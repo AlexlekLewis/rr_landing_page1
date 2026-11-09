@@ -91,6 +91,14 @@ const CAPTIONS = {
         alt: 'A Royals coach explaining the grip to a young Rajasthan Royals Academy Melbourne batter in the nets',
         caption: 'Getting the basics right: a Royals coach on the grip.',
     },
+    '13-warm-up-in-front-of-hpc.webp': {
+        alt: 'Rajasthan Royals Academy Melbourne players warming up in a line on the main ground in front of the Rajasthan Royals High Performance Centre building',
+        caption: 'Warming up in front of the Rajasthan Royals High Performance Centre.',
+    },
+    '14-centre-wicket-practice.webp': {
+        alt: 'A Rajasthan Royals Academy Melbourne batter on strike during centre-wicket practice on a turf pitch at the centre',
+        caption: 'Centre-wicket practice on turf, in a game-like setting.',
+    },
 };
 
 // Every file in the folder, picked up at build time.
