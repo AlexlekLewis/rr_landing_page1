@@ -85,8 +85,8 @@ export const SECTIONS = [
             { path: 'jr.request.button', label: 'Different night: button', type: 'text' },
             { path: 'jr.request.note', label: 'Different night: line under the button', type: 'textarea' },
             { path: 'jr.request.doneTitle', label: 'Different night: heading once sent', type: 'text' },
-            { path: 'jr.renewTitle', label: 'Next term: heading', type: 'text' },
-            { path: 'jr.renewLines', label: 'Next term: points', type: 'list' },
+            { path: 'jr.renewTitle', label: 'Holiday breaks: heading', type: 'text' },
+            { path: 'jr.renewLines', label: 'Holiday breaks: points', type: 'list' },
         ],
     },
 ];
