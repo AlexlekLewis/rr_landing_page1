@@ -1,31 +1,36 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BotGuard from '../security/BotGuard';
+
+const TURNSTILE_ON = Boolean(import.meta.env.VITE_TURNSTILE_SITE_KEY);
 import { CENTRES } from './coachProfiles';
 import { SectionHead } from './CPShared';
 import {
-    bookingMode, buildBookUrl, formatDay, formatLength, formatMoney, formatTime,
-    getCoachSlots, melbourneDate, sendEnquiry, sessionPriceCents,
+    bookingMode, buildBookUrl, formatDay, formatLength, formatTime, getCoachSlots, melbourneDate, sendEnquiry, enquiryProblem,
 } from './bookingClient';
+import { trackCoachEnquiry } from './coachPixel';
 
 // The booking panel: the coach's next free times, read live from the booking
 // system. Tapping a time and Continue opens /book with everything filled in.
 // Nothing here saves a booking. "Ask us" sends an enquiry to the admin inbox.
+//
+// One player or a group is chosen by the page (the hero and "How to train with"
+// buttons set it), so `kind` and `groupSize` come in as props. Prices aren't shown
+// here: they're in "What it costs" further down, and /book shows the price of
+// the family's choice before anything is requested (Alex, 9 Nov 2026).
 
 const chip = (on) =>
     `min-h-[46px] rounded-[10px] border-[1.5px] px-3.5 font-bold text-[15px] transition-colors ${on ? 'bg-rr-pink border-rr-pink text-white' : 'border-[#4A5764] text-white hover:border-rr-pink'}`;
 const label = 'text-[13px] font-extrabold uppercase tracking-[0.08em] text-white';
 const input = 'w-full rounded-[10px] border-[1.5px] border-[#3A4652] bg-white px-3.5 py-3 text-base font-semibold text-rr-dark';
 
-export default function CPBook({ profile, catalog, catalogLoading, catalogCoach, picks, sourcePage }) {
+export default function CPBook({ profile, catalog, catalogLoading, catalogCoach, offers, kind, groupSize, onChoose, sourcePage }) {
     const navigate = useNavigate();
     const mode = bookingMode();
     const centres = catalogCoach?.centres?.length ? catalogCoach.centres : [];
-    const bookable = Boolean(catalogCoach) && centres.length > 0;
+    const bookable = Boolean(catalogCoach) && centres.length > 0 && (offers.one_on_one || offers.group);
 
     const [centre, setCentre] = useState(null);
-    const [kind, setKind] = useState('one_on_one');
-    const [groupSize, setGroupSize] = useState(2);
     const [minutes, setMinutes] = useState(60);
     const [slots, setSlots] = useState(null);
     const [slotsError, setSlotsError] = useState('');
@@ -35,9 +40,8 @@ export default function CPBook({ profile, catalog, catalogLoading, catalogCoach,
 
     const activeCentre = centre || (centres.includes(catalogCoach?.homeCentre) ? catalogCoach.homeCentre : centres[0]) || profile.homeCentre;
     const centreInfo = CENTRES[activeCentre] || CENTRES[profile.homeCentre];
-    const pickedStrengths = profile.strengths.filter((s) => picks.includes(s.key));
-    const focus = (pickedStrengths[0] || profile.strengths[0]).focus;
-    const goals = pickedStrengths.map((s) => s.key);
+    // The coach's main strength decides the net the session needs (Build Plan §5.2).
+    const focus = profile.strengths[0].focus;
 
     useEffect(() => {
         if (!bookable) return undefined;
@@ -62,29 +66,25 @@ export default function CPBook({ profile, catalog, catalogLoading, catalogCoach,
         return [...byDay.entries()];
     }, [slots]);
 
-    const price = (m) => sessionPriceCents(catalog?.prices, { kind, groupSize, minutes: m });
-    const bookUrl = (startsAt) => buildBookUrl({ centre: activeCentre, coach: profile.slug, startsAt, minutes, focus, goals, kind, groupSize });
+    // No `goals`: the strength cards only describe now (Alex, 9 Nov 2026).
+    const bookUrl = (startsAt) => buildBookUrl({ centre: activeCentre, coach: profile.slug, startsAt, minutes, focus, kind, groupSize });
+    const moreUrl = bookUrl(undefined);
 
-    const moreUrl = buildBookUrl({ centre: activeCentre, coach: profile.slug, minutes, focus, goals, kind, groupSize });
-    const onMore = (e) => {
-        e.preventDefault();
-        if (mode === 'live') navigate(moreUrl);
-        else setMockUrl(moreUrl);
-    };
-
-    const onContinue = () => {
-        const url = bookUrl(picked.startsAt);
+    const go = (url) => {
         if (mode === 'live') navigate(url);
         else setMockUrl(url);
     };
+    const onMore = (e) => { e.preventDefault(); go(moreUrl); };
+    const onContinue = () => go(bookUrl(picked.startsAt));
 
+    const who = kind === 'group' ? `a group of ${groupSize}` : 'one player';
     const intro = mode === 'off'
         ? `Private coaching bookings with ${profile.first} open soon.`
         : bookable
             ? `${profile.first}’s free times at ${centreInfo.short} over the next week. Tap a time to request it. You’re not charged until we confirm it with the centre.`
             : catalogLoading
                 ? `Loading ${profile.first}’s free times…`
-                : `${profile.first} isn’t taking new private bookings right now. Leave your details and we’ll call you about times with ${profile.first} or another Academy coach.`;
+                : `${profile.first} has no free times showing right now. Leave your details and we’ll call you about times with ${profile.first} or another Academy coach.`;
 
     return (
         <section className="py-16 md:py-24 bg-rr-dark text-slate-300">
@@ -109,13 +109,18 @@ export default function CPBook({ profile, catalog, catalogLoading, catalogCoach,
                         <div className="grid gap-2.5">
                             <p className={label} id="cp-kind">Who’s training</p>
                             <div className="flex flex-wrap gap-2" role="radiogroup" aria-labelledby="cp-kind">
-                                <button type="button" role="radio" aria-checked={kind === 'one_on_one'} className={chip(kind === 'one_on_one')} onClick={() => setKind('one_on_one')}>One player</button>
-                                {(catalog?.groupSizes || [2, 3, 4]).map((n) => (
-                                    <button key={n} type="button" role="radio" aria-checked={kind === 'group' && groupSize === n} className={chip(kind === 'group' && groupSize === n)} onClick={() => { setKind('group'); setGroupSize(n); }}>
+                                {offers.one_on_one && (
+                                    <button type="button" role="radio" aria-checked={kind === 'one_on_one'} className={chip(kind === 'one_on_one')} onClick={() => onChoose('one_on_one')}>
+                                        One player
+                                    </button>
+                                )}
+                                {offers.group && (catalog?.groupSizes || [2, 3, 4]).map((n) => (
+                                    <button key={n} type="button" role="radio" aria-checked={kind === 'group' && groupSize === n} className={chip(kind === 'group' && groupSize === n)} onClick={() => onChoose('group', n)}>
                                         Group of {n}
                                     </button>
                                 ))}
                             </div>
+                            {offers.group && <p className="text-sm">A small private group is players you bring together. The person booking adds the other players’ names on the next screen.</p>}
                         </div>
 
                         <div className="grid gap-2.5">
@@ -123,10 +128,14 @@ export default function CPBook({ profile, catalog, catalogLoading, catalogCoach,
                             <div className="flex flex-wrap gap-2" role="radiogroup" aria-labelledby="cp-length">
                                 {(catalog?.durations || [60, 90, 120]).map((m) => (
                                     <button key={m} type="button" role="radio" aria-checked={minutes === m} className={chip(minutes === m)} onClick={() => setMinutes(m)}>
-                                        {formatLength(m)}{price(m) != null && ` · ${formatMoney(price(m))}${kind === 'group' ? ' each' : ''}`}
+                                        {formatLength(m)}
                                     </button>
                                 ))}
                             </div>
+                            <p className="text-sm">
+                                The next screen shows the price of your choice before you send anything.{' '}
+                                <a href="#prices" className="font-bold text-white underline underline-offset-4">See all prices</a>
+                            </p>
                         </div>
 
                         <div className="grid gap-3">
@@ -150,7 +159,7 @@ export default function CPBook({ profile, catalog, catalogLoading, catalogCoach,
                                     </div>
                                 </div>
                             ))}
-                            <a href={moreUrl} onClick={onMore} className="text-white font-bold text-sm underline underline-offset-4 w-fit">
+                            <a href={moreUrl} onClick={onMore} data-cta="see-more-weeks" className="text-white font-bold text-sm underline underline-offset-4 w-fit">
                                 See more weeks →
                             </a>
                         </div>
@@ -158,11 +167,10 @@ export default function CPBook({ profile, catalog, catalogLoading, catalogCoach,
                         {picked && (
                             <div className="grid gap-3 border-t-2 border-rr-pink pt-5" aria-live="polite">
                                 <p className="text-white font-extrabold text-lg">
-                                    {formatDay(picked.startsAt)}, {formatTime(picked.startsAt)} – {formatTime(picked.endsAt)} at {centreInfo.short} with {profile.first}
-                                    {price(minutes) != null && ` · ${formatMoney(price(minutes))}${kind === 'group' ? ' per player' : ''} incl. GST`}
+                                    {formatDay(picked.startsAt)}, {formatTime(picked.startsAt)} – {formatTime(picked.endsAt)} at {centreInfo.short} with {profile.first}, for {who}
                                 </p>
-                                <p>{pickedStrengths.length ? `Goals for ${profile.first}: ${pickedStrengths.map((s) => s.title).join(', ')}` : 'No goals picked yet. You can add them on the next screen.'}</p>
-                                <button type="button" onClick={onContinue}
+                                <p>On the next screen you choose how many weeks and add the player’s details. You can also add a note for {profile.first} about what the player wants to work on.</p>
+                                <button type="button" onClick={onContinue} data-cta="continue-to-book"
                                     className="w-full sm:w-auto min-h-[54px] rounded-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-8 transition-colors">
                                     Continue: weeks and player details
                                 </button>
@@ -171,7 +179,7 @@ export default function CPBook({ profile, catalog, catalogLoading, catalogCoach,
                         )}
 
                         {mockUrl && (
-                            <p className="text-[13px] text-white bg-[#1E2A35] rounded-lg px-3.5 py-3 break-all">
+                            <p className="text-[13px] text-white bg-[#1E2A35] rounded-lg px-3.5 py-3 break-all" data-testid="mock-book-url">
                                 Mock data: on the live site this opens <code className="text-pink-200">{mockUrl}</code>
                             </p>
                         )}
@@ -183,7 +191,7 @@ export default function CPBook({ profile, catalog, catalogLoading, catalogCoach,
                         {bookable && !askOpen && (
                             <p className="text-[15px]">
                                 Rather talk to someone first?{' '}
-                                <button type="button" onClick={() => setAskOpen(true)} className="font-extrabold text-white underline underline-offset-4">
+                                <button type="button" onClick={() => setAskOpen(true)} data-cta="ask-us-open" className="font-extrabold text-white underline underline-offset-4">
                                     Ask us and we’ll call you within 24 hours
                                 </button>
                             </p>
@@ -203,23 +211,27 @@ function AskUs({ profile, centre, catalogCoach, sourcePage }) {
     const [token, setToken] = useState(null);
     const [honeypot, setHoneypot] = useState('');
     const [state, setState] = useState({ sending: false, error: '', done: '' });
+    // One key per submission, kept across retries, so it can't create two enquiries.
+    const [submissionKey] = useState(() => (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : String(Date.now())));
     const set = (k) => (e) => setF((p) => ({ ...p, [k]: e.target.value }));
 
     const submit = async (e) => {
         e.preventDefault();
-        if (!f.playerName.trim() || !f.playerAge || !f.parentName.trim() || !f.mobile.trim()) {
-            setState({ sending: false, error: 'Please fill in the player’s name and age, and a parent or guardian’s name and mobile.', done: '' });
+        const problem = enquiryProblem(f);
+        if (problem) {
+            setState({ sending: false, error: problem, done: '' });
             return;
         }
-        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email.trim())) {
-            setState({ sending: false, error: 'Please enter a valid email address.', done: '' });
+        // The portal requires a Turnstile token once the site key is set.
+        if (TURNSTILE_ON && !token) {
+            setState({ sending: false, error: 'Please complete the quick check above the Send button.', done: '' });
             return;
         }
         setState({ sending: true, error: '', done: '' });
         try {
-            const r = await sendEnquiry({ ...f, centre, coach: catalogCoach, sourcePage, turnstileToken: token, honeypot });
+            const r = await sendEnquiry({ ...f, centre, coach: catalogCoach, sourcePage, turnstileToken: token, honeypot, idempotencyKey: submissionKey });
             setState({ sending: false, error: '', done: `Thanks. We’ll call you ${r.callByPlain}.` });
-            try { if (typeof window.fbq === 'function') window.fbq('track', 'Lead', { content_name: `Private coaching enquiry: ${profile.name}`, content_category: 'private-coaching' }); } catch { /* never block */ }
+            trackCoachEnquiry(profile, centre);
         } catch {
             setState({ sending: false, error: 'That didn’t send. Please try again, or email info@rramelbourne.com.', done: '' });
         }
@@ -240,7 +252,7 @@ function AskUs({ profile, centre, catalogCoach, sourcePage }) {
             </div>
             <BotGuard onToken={setToken} onHoneypot={setHoneypot} />
             {state.error && <p className="text-white font-bold">{state.error}</p>}
-            <button type="submit" disabled={state.sending}
+            <button type="submit" disabled={state.sending} data-cta="ask-us-send"
                 className="w-full sm:w-auto min-h-[54px] rounded-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 text-white font-black uppercase tracking-widest px-8 transition-colors">
                 {state.sending ? 'Sending…' : 'Send'}
             </button>

@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
-  bookingMode, buildBookUrl, formatDay, formatLength, formatMoney, formatTime,
-  melbourneLocal, mockSlots, normaliseCatalog, sessionPriceCents,
+  bookingMode, buildBookUrl, coachOffers, formatDay, formatLength, formatLengths, formatMoney, formatTime,
+  melbourneLocal, mockSlots, normaliseCatalog, sessionPriceCents, enquiryProblem,
 } from "./bookingClient.js";
 
 describe("bookingMode", () => {
@@ -42,6 +42,12 @@ describe("money and length", () => {
     expect(formatLength(90)).toBe("1½ hours");
     expect(formatLength(120)).toBe("2 hours");
   });
+  it("lists the catalog's lengths in one phrase", () => {
+    expect(formatLengths([60, 90, 120])).toBe("1, 1½ or 2 hours");
+    expect(formatLengths([60, 120])).toBe("1 or 2 hours");
+    expect(formatLengths([90])).toBe("1½ hours");
+    expect(formatLengths([])).toBe("");
+  });
 });
 
 describe("buildBookUrl", () => {
@@ -51,6 +57,23 @@ describe("buildBookUrl", () => {
       minutes: 60, focus: "batting", goals: ["batting", "t20-cricket"], kind: "one_on_one",
     });
     expect(url).toBe("/book?centre=mickleham&coach=ikroop-dhanoa&start=2026-11-10T17%3A00&duration=60&focus=batting&goals=batting%2Ct20-cricket");
+  });
+  it("a coach page link (no goals picked) carries focus and kind but no goals", () => {
+    const one = new URLSearchParams(buildBookUrl({
+      centre: "mickleham", coach: "mihiraj-jayasekara", startsAt: "2026-11-11T07:30:00Z",
+      minutes: 90, focus: "batting", kind: "one_on_one", groupSize: 2,
+    }).split("?")[1]);
+    expect(one.get("focus")).toBe("batting");
+    expect(one.get("duration")).toBe("90");
+    expect(one.has("kind")).toBe(false);
+    expect(one.has("group_size")).toBe(false);
+    expect(one.has("goals")).toBe(false);
+    const group = new URLSearchParams(buildBookUrl({
+      centre: "mickleham", coach: "mihiraj-jayasekara", minutes: 60, focus: "batting", kind: "group", groupSize: 2,
+    }).split("?")[1]);
+    expect(group.get("kind")).toBe("group");
+    expect(group.get("group_size")).toBe("2");
+    expect(group.has("goals")).toBe(false);
   });
   it("adds group details and caps goals at four", () => {
     const url = buildBookUrl({ centre: "cranbourne-north", coach: "alex-thornhill", kind: "group", groupSize: 3, goals: ["a", "b", "c", "d", "e"] });
@@ -73,8 +96,39 @@ describe("normaliseCatalog", () => {
     expect(c.prices.hourCents).toBe(13000);
     expect(c.blockDiscount).toEqual({ minSessions: 6, percent: 10 });
     expect(c.cancellation).toEqual({ freeHours: 24, lateFeeCents: 3500 });
-    expect(c.coaches[0]).toEqual({ profileId: "p1", slug: "ritin-raman", homeCentre: "mickleham", centres: ["mickleham"] });
+    expect(c.coaches[0]).toEqual({
+      profileId: "p1", slug: "ritin-raman", homeCentre: "mickleham", centres: ["mickleham"],
+      offers: { one_on_one: true, group: true },
+    });
     expect(c.durations).toEqual([60, 90, 120]);
+  });
+
+  it("reads what each coach offers, and treats a missing flag as yes", () => {
+    const c = normaliseCatalog({
+      coaches: [
+        { profile_id: "a", slug: "one-on-one-only", offers: { one_on_one: true, group: false } },
+        { profile_id: "b", slug: "groups-only", offers: { one_on_one: false, group: true } },
+        { profile_id: "c", slug: "half-tagged", offers: { group: false } },
+        { profile_id: "d", slug: "untagged" },
+      ],
+    });
+    expect(c.coaches.map((x) => x.offers)).toEqual([
+      { one_on_one: true, group: false },
+      { one_on_one: false, group: true },
+      { one_on_one: true, group: false },
+      { one_on_one: true, group: true },
+    ]);
+  });
+});
+
+describe("coachOffers", () => {
+  it("shows both options when there's no catalog coach (bookings off, or coach not bookable)", () => {
+    expect(coachOffers(null)).toEqual({ one_on_one: true, group: true });
+    expect(coachOffers(undefined)).toEqual({ one_on_one: true, group: true });
+  });
+  it("only an explicit false switches an option off", () => {
+    expect(coachOffers({ offers: { one_on_one: true, group: false } })).toEqual({ one_on_one: true, group: false });
+    expect(coachOffers({ offers: { one_on_one: null, group: 0 } })).toEqual({ one_on_one: true, group: true });
   });
 });
 
@@ -93,5 +147,22 @@ describe("mockSlots", () => {
         expect(["Sat", "Sun"]).not.toContain(formatDay(s.startsAt).slice(0, 3));
       }
     }
+  });
+});
+
+describe("enquiryProblem (matches the portal's public-enquiry checks)", () => {
+  const ok = { playerName: "Sam", playerAge: "11", parentName: "Jo", mobile: "0412 345 678", email: "jo@example.com" };
+  it("accepts a normal enquiry", () => {
+    expect(enquiryProblem(ok)).toBe("");
+    expect(enquiryProblem({ ...ok, mobile: "+61 (412) 345-678" })).toBe("");
+    expect(enquiryProblem({ ...ok, playerAge: "19", parentName: "" })).toBe("");
+  });
+  it("rejects what the portal would reject", () => {
+    expect(enquiryProblem({ ...ok, playerAge: "12 yrs" })).toMatch(/age/);
+    expect(enquiryProblem({ ...ok, playerAge: "" })).toMatch(/age/);
+    expect(enquiryProblem({ ...ok, parentName: " " })).toMatch(/parent/);
+    expect(enquiryProblem({ ...ok, mobile: "0412-ABC" })).toMatch(/mobile/);
+    expect(enquiryProblem({ ...ok, email: "jo@" })).toMatch(/email/);
+    expect(enquiryProblem({ ...ok, playerName: "" })).toMatch(/name/);
   });
 });

@@ -32,11 +32,18 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { loadEnv } from 'vite';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist');
 
 const ROUTES = ['/performance-squads', '/performance-squads-open-trial', '/sid-juniors', '/junior-royals', '/spin-club', '/power-league', '/lower-plenty-junior-royals-day'];
+
+// Coach pages (/coaches/<slug>) stay hidden until VITE_COACH_PAGES=on (App.jsx),
+// so they're prerendered only in a build where they're switched on. A hidden
+// page never ships as a real file. Read the same way Vite reads it (.env files
+// plus the build environment), so the app and this script always agree.
+const COACH_PAGES_ON = loadEnv('production', ROOT, 'VITE_').VITE_COACH_PAGES === 'on';
 
 const escapeAttr = (s) =>
     String(s)
@@ -99,7 +106,8 @@ async function main() {
         process.exit(1);
     }
 
-    for (const route of ROUTES) {
+    const coachRoutes = COACH_PAGES_ON ? Object.keys(PAGE_SEO).filter((r) => r.startsWith('/coaches/')) : [];
+    for (const route of [...ROUTES, ...coachRoutes]) {
         const cfg = PAGE_SEO[route];
         if (!cfg) {
             // Loud, not silent. A route here with no config would ship a page
