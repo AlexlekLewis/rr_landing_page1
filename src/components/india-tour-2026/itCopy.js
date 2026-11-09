@@ -95,9 +95,99 @@ export const fmtAUD = (n) => `$${Number(n).toLocaleString('en-AU')}`;
 // "$7,000–$8,000" — en dash, both sides signed so neither number reads as a total.
 export const fmtRangeAUD = (r) => `${fmtAUD(r.min)}–${fmtAUD(r.max)}`;
 
+// --- the new sections (Nov 2026) --------------------------------------------
+// Written once in plain English and used by both reading levels.
+
+const VIDEOS_COPY = {
+    eyebrow: 'Watch',
+    heading: 'Inside The',
+    headingAccent: 'Royals HPC',
+    lead: 'See what a day at the Rajasthan Royals High Performance Centre looks like.',
+    comingSoonTitle: 'Videos from Nagpur are coming soon',
+    comingSoonBody: 'We are putting together video from our September 2026 tour. Check back soon.',
+};
+
+const BENEFITS_COPY = {
+    eyebrow: 'Why Go',
+    heading: 'What Your Player',
+    headingAccent: 'Gets',
+    lead:
+        'Lots of academies run tours. Almost none get inside the building an IPL team actually ' +
+        'trains in. This is what the tour gives your player.',
+    items: [
+        {
+            title: 'Train where India stars were built',
+            body:
+                'The Royals’ own High Performance Centre in Nagpur. Not a ground hired for the week, ' +
+                'but the place the Royals use all year to develop their players.',
+        },
+        {
+            title: 'Coached by the Royals’ own staff',
+            body:
+                'The people who coach the Royals’ contracted players run the sessions: batting, fast ' +
+                'bowling, fielding and mental performance.',
+        },
+        {
+            title: 'Come home with a personal plan',
+            body:
+                'Every player is filmed and assessed, then sits down one-on-one with a coach. They leave ' +
+                'with a written plan that says exactly what to work on next.',
+        },
+        {
+            title: 'Learn how professionals prepare',
+            body:
+                'Strength and conditioning, physio, recovery, nutrition and mental skills. The things that ' +
+                'keep a player on the field, taught the way the pros do it.',
+        },
+        {
+            title: 'Test your game in Indian conditions',
+            body:
+                'Turf nets, centre-wicket sessions and a match on turf wickets, against the pace and spin ' +
+                'that India is famous for.',
+        },
+        {
+            title: 'Grow as a person',
+            body:
+                'About ten days away with team-mates, living like a professional cricketer. Players come ' +
+                'back more independent, more confident and hungrier to improve.',
+        },
+    ],
+    note:
+        'Based on our September 2026 tour. The exact April 2027 programme is confirmed in writing ' +
+        'with the price, before anyone commits.',
+    producedHereEyebrow: 'They Trained Here',
+    producedHereHeading: 'Built At This Centre',
+    producedHereLead: 'Players the Royals have developed at the High Performance Centre.',
+};
+
+const SEPTEMBER_COPY = {
+    eyebrow: 'September 2026',
+    heading: 'Our First Tour,',
+    headingAccent: 'In Pictures',
+    lead:
+        'In September 2026 our first touring group spent a week at the Royals High Performance ' +
+        'Centre. This is what it looked like.',
+    stats: [
+        { value: '7', label: 'nights at the centre' },
+        { value: '6', label: 'full coaching days' },
+        { value: '1', label: 'match on turf' },
+        { value: '1:1', label: 'video review for every player' },
+    ],
+    dayByDayShow: 'See the day-by-day plan',
+    dayByDayHide: 'Hide the day-by-day plan',
+    dayByDayLead:
+        'The September 2026 plan. The April 2027 tour is longer, at about ' +
+        `${TOUR_LENGTH_DAYS} days, so its plan will be different.`,
+    closeLabel: 'Close',
+};
+
 // --- standard -------------------------------------------------------------
 
 const STANDARD = {
+    videos: VIDEOS_COPY,
+    benefits: BENEFITS_COPY,
+    september: SEPTEMBER_COPY,
+
     hero: {
         badge: 'Expressions Of Interest Open',
         h1: 'High Performance',
@@ -124,7 +214,7 @@ const STANDARD = {
         seePrice: 'How the price works',
         downloadLabel: 'Download the camp document',
         downloadSub: (size) => `PDF, ${size} — the full programme, coaches and itinerary`,
-        cta: 'Register Your Interest',
+        cta: 'Register Now',
         countdownLabel: 'Registrations close in',
         countdownUnits: { days: 'Days', hours: 'Hrs', minutes: 'Mins', seconds: 'Secs' },
         countdownNote:
@@ -188,7 +278,7 @@ const STANDARD = {
         headingAccent: 'Per Player',
         intro:
             `That is our estimate for the tour of about ${TOUR_LENGTH_DAYS} days, not a final price. ` +
-            'The dates and the final price are not set yet for either tour. Before anyone commits, we ' +
+            'The dates and the final price are not set yet. Before anyone commits, we ' +
             'confirm in writing the exact price and exactly what it includes.',
         includesEyebrow: 'What the price includes',
         includesHeading: 'Not Confirmed Yet',
@@ -338,6 +428,10 @@ const STANDARD = {
 // Grade 4–5 reading level. Short lines. The value still lands.
 
 const SIMPLE = {
+    videos: VIDEOS_COPY,
+    benefits: BENEFITS_COPY,
+    september: SEPTEMBER_COPY,
+
     hero: {
         badge: 'Now Taking Names',
         h1: 'High Performance',
@@ -362,7 +456,7 @@ const SIMPLE = {
         seePrice: 'More about the price',
         downloadLabel: 'Download the camp booklet',
         downloadSub: (size) => `PDF, ${size} — everything about the camp in one file`,
-        cta: 'Put My Name Down',
+        cta: 'Register Now',
         countdownLabel: 'Sign-ups close in',
         countdownUnits: { days: 'Days', hours: 'Hrs', minutes: 'Mins', seconds: 'Secs' },
         countdownNote:

@@ -1,11 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import ITRegisterButton from './ITRegisterButton';
 import aspirationImg from '../../assets/india-tour-2026/aspiration-centurion.jpg';
 
-const scrollToRegister = () =>
-    document.getElementById('register')?.scrollIntoView({ behavior: 'smooth' });
-
-const ITAspiration = () => (
+const ITAspiration = ({ copy }) => (
     <section className="relative overflow-hidden bg-rr-navy">
         <img
             src={aspirationImg}
@@ -45,20 +43,9 @@ const ITAspiration = () => (
                     cricket. A tour of India is a rare chance to test your game in its heartland —
                     and to be seen.
                 </motion.p>
-                <motion.button
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.15 }}
-                    onClick={scrollToRegister}
-                    data-cta="aspiration-register"
-                    className="group mt-9 bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 md:px-10 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] inline-flex items-center gap-3"
-                >
-                    Register Your Interest
-                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </motion.button>
+                <div className="mt-9">
+                    <ITRegisterButton label={copy.hero.cta} id="aspiration-register" />
+                </div>
             </div>
         </div>
     </section>

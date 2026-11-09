@@ -4,10 +4,11 @@ import Navbar from '../Navbar';
 import Footer from '../Footer';
 import PartnerStack from '../power-game/PartnerStack';
 import ITHero from './ITHero';
-import ITAbout from './ITAbout';
+import ITVideos from './ITVideos';
+import ITBenefits from './ITBenefits';
+import ITSeptember2026 from './ITSeptember2026';
 import ITCoaching from './ITCoaching';
 import ITAspiration from './ITAspiration';
-import ITItinerary from './ITItinerary';
 import ITPricing from './ITPricing';
 import ITForm from './ITForm';
 import ITReadingToggle from './ITReadingToggle';
@@ -27,7 +28,7 @@ const getRefFromUrl = () => {
 
 const IndiaTour2026 = () => {
     usePageAnalytics('/tours', {
-        sections: ['hero', 'about', 'coaching', 'itinerary', 'aspiration', 'pricing', 'register'],
+        sections: ['hero', 'videos', 'benefits', 'september-2026', 'coaching', 'aspiration', 'pricing', 'register'],
     });
 
     const { simple, showToggle, setMode } = useReadingMode();
@@ -59,10 +60,11 @@ const IndiaTour2026 = () => {
             <Navbar variant="india-tour" />
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero"><ITHero copy={copy} /></div>
-                <div id="about"><ITAbout copy={copy} /></div>
+                <div id="videos"><ITVideos copy={copy} /></div>
+                <div id="benefits"><ITBenefits copy={copy} /></div>
+                <div id="september-2026"><ITSeptember2026 copy={copy} /></div>
                 <div id="coaching"><ITCoaching copy={copy} /></div>
-                <div id="itinerary"><ITItinerary copy={copy} /></div>
-                <div id="aspiration"><ITAspiration /></div>
+                <div id="aspiration"><ITAspiration copy={copy} /></div>
                 <div id="pricing"><ITPricing copy={copy} /></div>
                 <div id="register"><ITForm copy={copy} referralCode={referralCode} /></div>
             </main>
