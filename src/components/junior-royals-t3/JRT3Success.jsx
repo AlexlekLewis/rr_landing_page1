@@ -109,7 +109,7 @@ const JRT3Success = () => {
                     <p className="text-sm font-bold text-white/90 mb-2">What to bring</p>
                     <ul className="text-sm text-white/70 leading-relaxed space-y-1">
                         <li>• A drink bottle with water</li>
-                        <li>• The Junior Royals training shirt (players wear it at every session)</li>
+                        <li>• The Junior Royals training shirt (players wear it at every session){booking?.shirtSize ? <>: <span className="text-white font-bold">size {booking.shirtSize}, ordered with this booking</span></> : ''}</li>
                         <li>• Please arrive <span className="text-white font-bold">10 minutes early</span> for the first session</li>
                     </ul>
                     <p className="text-xs text-white/50 leading-relaxed mt-3">Check your junk, spam and promotions folders for our emails.</p>

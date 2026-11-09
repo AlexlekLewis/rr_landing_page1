@@ -43,6 +43,11 @@ scratch folder (`W=<scratchpad>/handoff-<slug>`), never inside the repo.
 - On the branch with the change, `git fetch origin main` and confirm the page builds (`npx vite build`).
 - Note the branch, the latest commit, and the pull request (if any). Commits that aren't pushed
   yet are fine; step 6 handles them.
+- **Paid program page? The mandatory training shirt must be there** (`CLAUDE.md`, Andy 9 Nov
+  2026). Check the form has `<TrainingShirtStep>`, blocks without an answer, and that the
+  checkout charges the shirt for "No" without letting it be removed. If it's missing, stop and
+  build it first: a paid page without it is not ready to hand off. Say in the brief's
+  `checks` that it was tested, and show the step in a section screenshot.
 
 ### 2. Screenshots, before and after
 

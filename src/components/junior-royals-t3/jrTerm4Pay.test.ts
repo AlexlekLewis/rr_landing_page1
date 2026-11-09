@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { JR_T4, PAY_OPTIONS, PRICE, WEEKLY_LINK, GROUPS, groupFor, ROYALS_WAY, nextSession, sessionLong, lastSessionLine, bookingOpen, breakLine } from './jrTerm4Data';
+import { JR_T4, PAY_OPTIONS, PRICE, WEEKLY_LINK, WEEKLY_NO_SHIRT_LINK, GROUPS, groupFor, ROYALS_WAY, nextSession, sessionLong, lastSessionLine, bookingOpen, breakLine } from './jrTerm4Data';
+import { payUrl, entrySource } from './JRT3RegistrationForm';
+import { jrTerm4Payment } from '../../../api/sync-program-signups.js';
 import { existsSync } from 'node:fs';
 import { classifyJrT4 } from '../../../api/stripe-webhook.js';
 
@@ -116,5 +118,23 @@ describe('Junior Royals Term 4 payments', () => {
         for (const p of ROYALS_WAY.phases) expect(existsSync(`public${p.img}`)).toBe(true);
         expect(ROYALS_WAY.note).toContain('never ranked');
         expect(JSON.stringify(ROYALS_WAY)).not.toMatch(/portal|guarantee/i);
+    });
+
+    // Andy, 9 Nov 2026: a family without a shirt must order one. "No" goes to the link with the
+    // shirt locked in; only "Yes, they have one" goes to the link without it.
+    it('sends each shirt answer to the right checkout and records it', () => {
+        expect(payUrl('weekly', 'abc', 'a@b.co')).toContain(WEEKLY_LINK);
+        expect(payUrl('weekly', 'abc', 'a@b.co', false)).toContain(WEEKLY_LINK);
+        expect(payUrl('weekly', 'abc', 'a@b.co', true)).toContain(WEEKLY_NO_SHIRT_LINK);
+        expect(payUrl('weekly', 'abc', 'a@b.co', true)).toContain('client_reference_id=abc');
+        expect(WEEKLY_NO_SHIRT_LINK).not.toBe(WEEKLY_LINK);
+        const g = GROUPS[0];
+        expect(entrySource({ option: 'weekly', group: g, shirt: { has: 'no', size: '26' } })).toBe('junior-royals-term4-booking|pay=weekly|group=5pm|shirt=order-26');
+        expect(entrySource({ option: 'weekly', group: g, shirt: { has: 'yes', size: '' } })).toBe('junior-royals-term4-booking|pay=weekly|group=5pm|shirt=has');
+        expect(entrySource({ request: true, altDay: 'tuesday', group: g, shirt: { has: 'no', size: '26' } })).toBe('junior-royals-term4-night-request|day=tuesday|group=5pm');
+        expect(jrTerm4Payment({ source: 'junior-royals-term4-booking|pay=weekly|group=5pm|shirt=order-26', paid: true, amount_paid_cents: 7490, paid_at: '2026-11-09T05:00:00Z' }))
+            .toMatch(/PAID \$74\.90 .*Shirt: ORDER size 26$/);
+        expect(JR_T4.shirtLine).not.toMatch(/set the shirt to 0/);
+        expect(JR_T4.olderLead).toBe('Aged 10 or over?');
     });
 });

@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { HONEYPOT_FIELD, isHoneypotTripped } from '../../lib/security/bot.js';
 import { JR_T4, PAY_OPTIONS, groupFor, nextSession, sessionLong, lastSessionLine, bookingOpen, breakLine } from './jrTerm4Data';
 import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squads/data';
+import TrainingShirtStep from '../shared/TrainingShirtStep';
+import { EMPTY_SHIRT, shirtError, shirtTag, needsShirt, TRAINING_SHIRT } from '../../lib/kit/trainingShirt';
 
 // Junior Royals booking form (paid from 19 Oct 2026). JOIN ANY WEEK, WEEKLY ONLY
 // (8 Nov 2026): one way to pay, the weekly subscription; the player starts at the
@@ -40,8 +42,11 @@ export const REQUEST_SOURCE = 'junior-royals-term4-night-request';   // + "|day=
 export const fallbackSource = (source, centre) => `${source}|centre=${centre}`;
 export const PENDING_KEY = 'jr_t4_pending_booking';
 // The full source tag for an entry. Exported for the tests.
-export const entrySource = ({ request, altDay, option, group }) =>
-    (request ? `${REQUEST_SOURCE}|day=${altDay}` : `${BOOKING_SOURCE}|pay=${option}`) + (group ? `|group=${group.key}` : '');
+// A booking also records the shirt answer ("|shirt=has" or "|shirt=order-28"): mandatory
+// on every paid program (src/lib/kit/trainingShirt.js). A standby request pays nothing, so none.
+export const entrySource = ({ request, altDay, option, group, shirt }) =>
+    (request ? `${REQUEST_SOURCE}|day=${altDay}` : `${BOOKING_SOURCE}|pay=${option}`) + (group ? `|group=${group.key}` : '')
+    + (!request && shirt ? shirtTag(shirt) : '');
 const dayName = (d) => (d ? d.charAt(0).toUpperCase() + d.slice(1) : '');
 
 const getUTMParams = () => {
@@ -56,9 +61,12 @@ const newId = () => (window.crypto?.randomUUID
         return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
     }));
 
-// The Stripe Payment Link for an option, carrying the entry id and the email.
-export const payUrl = (option, id, email) => {
-    const u = new URL(PAY_OPTIONS[option].link);
+// The Stripe Payment Link for an option, carrying the entry id and the email. A player who
+// already has a shirt goes to the link without it; everyone else to the one with the shirt
+// locked in (so a booking never reaches Stripe without a shirt unless the family said they have one).
+export const payUrl = (option, id, email, hasShirt = false) => {
+    const o = PAY_OPTIONS[option];
+    const u = new URL(hasShirt && o.linkNoShirt ? o.linkNoShirt : o.link);
     u.searchParams.set('client_reference_id', id);
     if (email) u.searchParams.set('prefilled_email', email);
     return u.toString();
@@ -84,6 +92,7 @@ const JRT3RegistrationForm = () => {
     const [pending, setPending] = useState(readPending);
     const [errors, setErrors] = useState({});
     const [honeypot, setHoneypot] = useState('');
+    const [shirt, setShirt] = useState(EMPTY_SHIRT);
     const [form, setForm] = useState({
         parent_name: '', parent_email: '', parent_phone: '',
         player_name: '', player_age: '', preferred_centre: '',
@@ -103,6 +112,7 @@ const JRT3RegistrationForm = () => {
         if (!form.player_age) e.player_age = 'Required.';
         if (!form.preferred_centre) e.preferred_centre = 'Please pick a centre.';
         if (nightChoice === 'other' && !altDay) e.alt_day = 'Please pick the night you would like.';
+        if (nightChoice !== 'other' && shirtError(shirt)) e.shirt = shirtError(shirt);
         setErrors(e);
         return Object.keys(e).length === 0;
     };
@@ -123,7 +133,7 @@ const JRT3RegistrationForm = () => {
         const group = groupFor(form.player_age);
         // A different night is a standby request: no payment, and the night they asked for
         // rides in `source` (the preferred_day CHECK only knows monday | wednesday).
-        const source = entrySource({ request, altDay, option, group });
+        const source = entrySource({ request, altDay, option, group, shirt });
         const centreDay = request ? null : centreInfo?.day || null;
         const email = form.parent_email.trim();
         try {
@@ -168,9 +178,10 @@ const JRT3RegistrationForm = () => {
                 }
             } catch { /* never let analytics block the family */ }
 
-            try { window.sessionStorage.setItem(PENDING_KEY, JSON.stringify({ id, option, email, player: row.player_name, centre, group: group?.key || null })); } catch { /* storage blocked: payment still works */ }
+            const hasShirt = !needsShirt(shirt);
+            try { window.sessionStorage.setItem(PENDING_KEY, JSON.stringify({ id, option, email, player: row.player_name, centre, group: group?.key || null, hasShirt, shirtSize: hasShirt ? null : shirt.size })); } catch { /* storage blocked: payment still works */ }
             // Same tab on purpose: Stripe sends them back to /junior-royals/success.
-            window.location.assign(payUrl(option, id, email));
+            window.location.assign(payUrl(option, id, email, hasShirt));
         } catch (err) {
             console.error(err);
             setErrors({ form: "Something went wrong and nothing was saved. Please try again, or email info@rramelbourne.com and we'll book your player by hand." });
@@ -206,7 +217,7 @@ const JRT3RegistrationForm = () => {
                         <p className="font-black">{pending.player ? `${pending.player}'s booking isn't paid yet.` : "Your booking isn't paid yet."}</p>
                         <p className="text-white/75 text-sm mt-1">The place is booked once you pay. Already paid? Check your email for the Stripe receipt; you don&apos;t need to pay again.</p>
                         <div className="mt-3 flex flex-wrap gap-3">
-                            <a href={payUrl('weekly', pending.id, pending.email)}
+                            <a href={payUrl('weekly', pending.id, pending.email, pending.hasShirt === true)}
                                 className="inline-flex items-center bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-xs px-5 py-3 rounded-full">Pay now</a>
                             <button type="button" onClick={() => { try { window.sessionStorage.removeItem(PENDING_KEY); } catch { /* ignore */ } setPending(null); }}
                                 className="text-white/80 underline text-sm font-semibold">Start a new booking</button>
@@ -297,6 +308,10 @@ const JRT3RegistrationForm = () => {
                                             );
                                         })()}
                                         {nightChoice !== 'other' && (
+                                        <TrainingShirtStep value={shirt} playerName={form.player_name} playerAge={form.player_age} error={errors.shirt}
+                                            onChange={(v) => { setShirt(v); if (errors.shirt) setErrors((p) => ({ ...p, shirt: undefined })); }} />
+                                        )}
+                                        {nightChoice !== 'other' && (
                                         <div className="rounded-xl border-2 border-rr-pink bg-rr-pink/5 px-4 py-3" data-pay-option="weekly">
                                             <p className={lc}>How you pay</p>
                                             <span className="block font-black text-rr-dark text-sm">{PAY_OPTIONS.weekly.title}: {PAY_OPTIONS.weekly.amount} <span className="font-semibold text-rr-charcoal">{PAY_OPTIONS.weekly.per} incl. GST</span></span>
@@ -318,6 +333,11 @@ const JRT3RegistrationForm = () => {
                                             ? `${dayName(altDay)} nights aren't running yet. Nothing to pay and no place held; we'll contact you first if they open.`
                                             : `${startLine(pickedCentre)} ${lastSessionLine(pickedCentre)}`}
                                     </p>
+                                    {nightChoice !== 'other' && needsShirt(shirt) && shirt.size && (
+                                        <p className="text-rr-dark text-sm font-bold leading-relaxed mt-1" data-jr-shirt-summary>
+                                            Plus the training shirt, size {shirt.size}: {TRAINING_SHIRT.priceLabel}, added to the first payment.
+                                        </p>
+                                    )}
                                 </div>
                             )}
                             <div className="mt-6 rounded-xl bg-slate-50 px-4 py-4" data-jr-t4-renewal>

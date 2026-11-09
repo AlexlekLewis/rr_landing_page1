@@ -821,12 +821,21 @@ export const jrTerm4RequestDay = (r) => {
 };
 const JR_TERM4_RUNS = { 'mickleham': 'Mondays', 'cranbourne-north': 'Wednesdays', 'hallam': 'Wednesdays' };
 
+// MANDATORY SHIRT (9 Nov 2026, src/lib/kit/trainingShirt.js): bookings record
+// "|shirt=has" or "|shirt=order-28". Shown after the payment so whoever hands out
+// shirts sees the size; bookings before 9 Nov carry no answer.
+export const jrTerm4Shirt = (r) => {
+  const m = /\|shirt=(has|order-([^|]+))/.exec(r.source || '');
+  if (!m) return '';
+  return m[1] === 'has' ? ' · Shirt: has their own' : ` · Shirt: ORDER size ${m[2]}`;
+};
+
 export const jrTerm4Payment = (r) => {
   if (jrTerm4RequestDay(r)) return 'Nothing to pay — standby request for another night';
   const opt = /\|pay=(upfront|weekly)/.exec(r.source || '')?.[1];
   const how = opt === 'weekly' ? 'weekly plan, first payment' : opt === 'upfront' ? 'upfront, all 8 weeks' : 'paid';
-  if (r.paid) return `PAID ${centsToDollars(r.amount_paid_cents)} (${how}) on ${fmtMelb(r.paid_at)}`;
-  if (opt) return `NOT PAID — went to Stripe (${opt}) but no payment has come through. Place not booked.`;
+  if (r.paid) return `PAID ${centsToDollars(r.amount_paid_cents)} (${how}) on ${fmtMelb(r.paid_at)}${jrTerm4Shirt(r)}`;
+  if (opt) return `NOT PAID — went to Stripe (${opt}) but no payment has come through. Place not booked.${jrTerm4Shirt(r)}`;
   return NO_PAYMENT_LINE['jr-term4'];
 };
 
