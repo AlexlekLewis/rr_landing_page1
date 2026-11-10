@@ -3,12 +3,11 @@ import { motion } from 'framer-motion';
 import ITSectionHeader from './ITSectionHeader';
 import ITRegisterButton from './ITRegisterButton';
 import { VideoCard } from './ITVideos';
-import { PRODUCED_HERE } from './itCopy';
 
 // "The Home Of The Rajasthan Royals": the HPC promo video beside the story of the
 // centre (Andy, 10 Nov 2026): the Royals' home base, where aspiring players trial
 // and Brijesh Sharma and Vaibhav Sooryavanshi were discovered, and where the next
-// generation (on this tour, the reader) trains. Then the players who trained here.
+// generation (on this tour, the reader) trains.
 const ITHomeOfRoyals = ({ copy }) => {
     const c = copy.home;
     const [activeId, setActiveId] = useState(null);
@@ -46,19 +45,6 @@ const ITHomeOfRoyals = ({ copy }) => {
                             ))}
                         </div>
                     </div>
-                </div>
-
-                {/* The players who trained here */}
-                <div className="mt-14">
-                    <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-4">{c.listHeading}</p>
-                    <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {PRODUCED_HERE.map((p) => (
-                            <li key={p.name} className="rounded-xl border border-white/15 bg-white/5 px-5 py-4">
-                                <span className="block text-base font-black text-white uppercase tracking-wide">{p.name}</span>
-                                <span className="block text-xs text-white/60 font-bold uppercase tracking-widest mt-1">{p.note}</span>
-                            </li>
-                        ))}
-                    </ul>
                 </div>
 
                 <div className="mt-10">
