@@ -148,16 +148,14 @@ export const JR_PHOTOS = {
     hero: photo('squad-talk', 'A Junior Royals coach talking to a squad of young players sitting in front of a Rajasthan Royals Academy Melbourne banner', 'Squad talk'),
     heroFeature: photo('coach-demo-bat', 'A Junior Royals coach showing a group of young players how to hold the bat', 'One coaching point to hold on to'),
     heroInset: photo('ecc-bowling-pair', 'Two young players practising their bowling action in the nets while a coach watches', 'Bowling, one skill at a time'),
+    // The photo strip under the hero (Andy, 10 Nov 2026: "a scrolling photo section below the
+    // hero section, as we have for the /tours page"), in the order Andy sent them.
     gallery: [
-        photo('coach-demo-bat', 'A Junior Royals coach showing a group of young players how to hold the bat', 'One coaching point to hold on to'),
-        photo('hands-on-batting', 'A coach guiding a young batter into position while another player plays a forward defence', 'Hands-on coaching'),
-        photo('bowling-line-drill', 'A line of young players kneeling to practise their bowling arm with a coach watching', 'Bowling drills, together'),
         photo('squad-talk', 'A Junior Royals coach talking to a squad of young players sitting in front of a Rajasthan Royals Academy Melbourne banner', 'Learning as a squad'),
-        photo('batting-with-coach', 'A young batter playing a pull shot as a coach feeds the ball', 'Batting with a coach'),
-        photo('ecc-bowling-pair', 'Two young players practising their bowling action in the nets while a coach watches', 'Bowling, one skill at a time'),
-        photo('girl-batting', 'A young girl in a helmet and pads playing a shot in the nets', 'Batting in the nets'),
-        photo('bowler-running-in', 'A young bowler running in to bowl in the nets while teammates wait their turn', 'In the nets'),
+        photo('bowler-running-in', 'A young bowler running in to bowl in the nets while teammates wait their turn', 'Bowling in the nets'),
         photo('coach-watching-nets', 'A coach watching a young bowler in the nets with a batter waiting', 'Coaches in the nets'),
+        photo('cones-batting-drill', 'Two young batters in helmets and pads practising a front-foot drill between coloured cones', 'Batting drills, one skill at a time'),
+        photo('girl-batting-pull', 'A young girl in a helmet and pads playing a pull shot in the nets as a coach feeds the ball', 'Batting in the nets'),
     ],
     centres: {
         mickleham: photo('hands-on-batting', 'Junior Royals batting practice at the Mickleham Indoor Sports Centre', 'Mickleham'),

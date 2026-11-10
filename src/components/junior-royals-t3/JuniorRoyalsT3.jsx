@@ -15,11 +15,11 @@ import { useJrContent } from './jrContent';
 
 // 8 Nov 2026 (Andy): benefits first, less on the page. About the Program and the app
 // section are gone; the benefits say it in six short cards.
-const SECTIONS = ['hero', 'benefits', 'photos', 'royals-way', 'locations', 'coaches', 'registration-form'];
+const SECTIONS = ['hero', 'photos', 'benefits', 'royals-way', 'locations', 'coaches', 'registration-form'];
 // The nav's section links (the variant's own links still serve the archived Term 2 page).
 const NAV = [
-    { label: 'BENEFITS', id: 'benefits' },
     { label: 'PHOTOS', id: 'photos' },
+    { label: 'BENEFITS', id: 'benefits' },
     { label: 'HOW IT WORKS', id: 'royals-way' },
     { label: 'LOCATIONS', id: 'locations' },
     { label: 'COACHES', id: 'coaches' },
@@ -34,8 +34,8 @@ const JuniorRoyalsT3 = () => {
             <Navbar variant="junior-royals" navLinksOverride={NAV} />
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero"><JRT3Hero /></div>
-                <div id="benefits"><JRBenefits /></div>
                 <div id="photos"><JRGallery /></div>
+                <div id="benefits"><JRBenefits /></div>
                 <div id="royals-way"><JRT4RoyalsWay /></div>
                 <div id="locations"><JRT3Locations /></div>
                 <div id="coaches"><JRT3Coaches /></div>
