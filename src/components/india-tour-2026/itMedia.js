@@ -57,6 +57,12 @@ export const VIDEOS = [
         title: 'From behind the stumps',
         caption: 'A net session, filmed from behind the stumps.',
     },
+    {
+        src: '/tours/sid-downswing.mp4',
+        poster: '/tours/sid-downswing.jpg',
+        title: 'The downswing',
+        caption: 'Sid talks the group through the downswing.',
+    },
 ];
 
 const DEFAULT_ALT =

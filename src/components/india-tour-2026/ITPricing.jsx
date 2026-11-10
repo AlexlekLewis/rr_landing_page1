@@ -7,7 +7,7 @@ import ITCtaBand from './ITCtaBand';
 // India Tour — what it costs.
 //
 // The two upcoming tours carry ONE estimated price (Alex, 29 Sep 2026): about
-// $7,000–$8,000 per player, per tour of about 10 days. It is an estimate, and
+// $6,000–$8,000 per player, per tour of about 10 days. It is an estimate, and
 // what it includes is not confirmed yet, so this section says exactly that and
 // promises the exact price and inclusions in writing before anyone commits.
 //
