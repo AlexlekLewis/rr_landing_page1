@@ -84,16 +84,16 @@ const CAPTIONS = {
         caption: 'Putting it into practice in a batting drill.',
     },
     '10-bowling-coach-with-bowler.webp': {
-        alt: 'A Royals coach watching closely as a young Rajasthan Royals Academy Melbourne bowler walks back to his mark in the nets',
-        caption: 'Every ball watched: one-on-one with a Royals bowling coach.',
+        alt: 'Siddharth Trivedi, legendary Rajasthan Royals bowler, watching closely as a young Rajasthan Royals Academy Melbourne bowler walks back to his mark in the nets',
+        caption: 'Every ball watched: one-on-one with Siddharth Trivedi, legendary Rajasthan Royals bowler.',
     },
     '11-coach-group-batting-drill.webp': {
         alt: 'A Royals coach explaining a batting drill to three Rajasthan Royals Academy Melbourne players holding training bats in the nets',
         caption: 'Small groups, so every player gets the coach\u2019s attention.',
     },
     '12-coach-explains-grip.webp': {
-        alt: 'A Royals coach explaining the grip to a young Rajasthan Royals Academy Melbourne batter in the nets',
-        caption: 'Getting the basics right: a Royals coach on the grip.',
+        alt: 'Faiz Fazal, Indian cricket legend and former Royals cricketer, explaining the grip to a young Rajasthan Royals Academy Melbourne batter in the nets',
+        caption: 'Getting the basics right: Faiz Fazal on the grip.',
     },
     '13-warm-up-in-front-of-hpc.webp': {
         alt: 'Rajasthan Royals Academy Melbourne players warming up in a line on the main ground in front of the Rajasthan Royals High Performance Centre building',
@@ -111,10 +111,10 @@ const CAPTIONS = {
         alt: 'A Royals coach standing beside a Rajasthan Royals Academy Melbourne player during a batting drill in the nets',
         caption: 'Side by side with a Royals coach in the nets.',
     },
-    // Coaches named here were identified by Andy (10 Nov 2026), including photos 04 and 06. Only name someone the
+    // Coaches named here were identified by Andy (10 Nov 2026), including photos 04, 06, 10 and 12. Only name someone the
     // Academy has identified; never guess from a face.
     '17-sid-trivedi-sets-up-drill.webp': {
-        alt: 'Royals coach Sid Trivedi pointing across the nets as he sets up a drill, under the Rajasthan Royals High Performance Centre banner',
+        alt: 'Siddharth (Sid) Trivedi, legendary Rajasthan Royals bowler, pointing across the nets as he sets up a drill, under the Rajasthan Royals High Performance Centre banner',
         caption: 'Sid Trivedi setting up the next drill.',
     },
     '18-faiz-fazal-with-batter.webp': {
