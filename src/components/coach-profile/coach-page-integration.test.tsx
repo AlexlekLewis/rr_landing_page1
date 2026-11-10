@@ -94,6 +94,113 @@ it('the actual coach selection reaches the current wizard weeks step after a fre
   expect(api.slots.mock.calls.every(([q]) => q.centre === 'mickleham')).toBe(true); expect(api.reserve).not.toHaveBeenCalled();
 });
 
+function enterContact(form: Pick<typeof screen, 'getByLabelText'> = screen) {
+  fireEvent.change(form.getByLabelText(/Parent or (person booking|guardian)/), { target: { value: 'Test Parent' } });
+  fireEvent.change(form.getByLabelText('Email'), { target: { value: 'test-parent@example.test' } });
+  fireEvent.change(form.getByLabelText('Mobile'), { target: { value: '0400000001' } });
+}
+
+async function sendEnquiryFromWizard() {
+  fireEvent.click(screen.getByRole('link', { name: 'Ask us instead' }));
+  const ask = within(screen.getByRole('region', { name: 'Ask us about private coaching' }));
+  fireEvent.change(ask.getByLabelText('Player’s name'), { target: { value: 'Test Player' } });
+  fireEvent.change(ask.getByLabelText('Player’s age'), { target: { value: '10' } });
+  enterContact(ask);
+  fireEvent.click(ask.getByRole('button', { name: 'Complete unit security check' }));
+  fireEvent.click(ask.getByRole('button', { name: 'Send my enquiry' }));
+  await ask.findByText(/your enquiry is with the Academy/);
+  fireEvent.click(ask.getByRole('button', { name: 'Back to my request' }));
+}
+
+it.each([2, 3, 4])('coach-page group of %i reaches card review with every participant', async size => {
+  const total = size * ({ 2: 7000, 3: 6000, 4: 5000 } as Record<number, number>)[size];
+  api.slots.mockImplementation(async query => {
+    const raw = slots();
+    if (query.kind === 'group') Object.assign(raw.by_coach[0]!.slots[0]!.price, { per_session_cents: total, first_session_hold_cents: total, total_cents: total });
+    return parseSlots(raw, 'mickleham');
+  });
+  draw(true);
+  fireEvent.click((await screen.findAllByRole('button', { name: 'Add to my booking' }))[0]!);
+  fireEvent.click(await screen.findByRole('radio', { name: `Group of ${size}` }));
+  fireEvent.click(await screen.findByRole('button', { name: '5:00pm' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Continue: weeks and player details' }));
+  fireEvent.click(await screen.findByRole('button', { name: 'Continue with 1 session' }));
+  const names = screen.getAllByLabelText('Player’s full name'), ages = screen.getAllByLabelText('Age');
+  expect(names).toHaveLength(size);
+  expect(ages).toHaveLength(size);
+  const players = names.map((name, i) => {
+    const player = { name: `Test Player ${i + 1}`, age: 10 + i };
+    fireEvent.change(name, { target: { value: player.name } });
+    fireEvent.change(ages[i]!, { target: { value: String(player.age) } });
+    return player;
+  });
+  enterContact();
+  fireEvent.click(screen.getByRole('button', { name: 'Check my request' }));
+  await screen.findByRole('heading', { name: 'Check and request' });
+  expect(screen.getByText(players.map(player => `${player.name} (${player.age})`).join(', '))).toBeTruthy();
+  expect(screen.getByText(new RegExp(`hold of \\$${total / 100}`))).toBeTruthy();
+  fireEvent.click(screen.getByRole('checkbox'));
+  fireEvent.click(screen.getByRole('button', { name: 'Complete unit security check' }));
+  api.reserve.mockRejectedValue(new Error('synthetic request receipt unavailable'));
+  fireEvent.click(screen.getByRole('button', { name: 'Request and continue to card hold' }));
+  await waitFor(() => expect(api.reserve).toHaveBeenCalledTimes(1));
+  expect(api.reserve.mock.calls[0]![0]).toMatchObject({ kind: 'group', group_size: size, players, profile_id: id(3), goals: ['leg-spin'], source_page: '/coaches/ikroop-dhanoa' });
+});
+
+it('choosing a different coach in the wizard clears the old goals and enquiry source', async () => {
+  const current = currentCatalog();
+  current.coaches.push({ ...current.coaches[0]!, profile_id: id(4), slug: 'alex-thornhill', display_name: 'Alex Thornhill' });
+  api.catalog.mockResolvedValue(current);
+  const raw = slots();
+  raw.by_coach.push({ ...raw.by_coach[0]!, profile_id: id(4), display_name: 'Alex Thornhill' });
+  api.slots.mockResolvedValue(parseSlots(raw, 'mickleham'));
+  draw(true);
+  fireEvent.click((await screen.findAllByRole('button', { name: 'Add to my booking' }))[0]!);
+  fireEvent.click(await screen.findByRole('button', { name: '5:00pm' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Continue: weeks and player details' }));
+  fireEvent.click(await screen.findByRole('button', { name: 'Continue with 1 session' }));
+  expect(screen.getByRole('button', { name: /Remove Leg spin goal/i })).toBeTruthy();
+  fireEvent.change(screen.getByLabelText('Player’s full name'), { target: { value: 'Test Player' } });
+  fireEvent.change(screen.getByLabelText('Age'), { target: { value: '10' } });
+  enterContact();
+  fireEvent.click(screen.getByRole('button', { name: '← Back' }));
+  fireEvent.click(screen.getByRole('button', { name: '← Back' }));
+  fireEvent.click(await screen.findByRole('button', { name: 'Choose a different coach' }));
+  fireEvent.click(screen.getByRole('button', { name: /Alex Thornhill.*Next free/ }));
+  fireEvent.click(screen.getByRole('button', { name: /5pm Melbourne time, 1 coach free/ }));
+  fireEvent.click(await screen.findByRole('button', { name: 'Continue with 1 session' }));
+  expect(screen.queryByRole('button', { name: /Remove Leg spin goal/i })).toBeNull();
+  expect((screen.getByLabelText('Player’s full name') as HTMLInputElement).value).toBe('Test Player');
+
+  await sendEnquiryFromWizard();
+  expect(api.enquiry.mock.calls[0]![0]).toMatchObject({ coach_profile_id: id(4), source_page: '/book' });
+
+  fireEvent.click(screen.getByRole('button', { name: 'Check my request' }));
+  await screen.findByRole('heading', { name: 'Check and request' });
+  fireEvent.click(screen.getByRole('checkbox'));
+  fireEvent.click(screen.getByRole('button', { name: 'Complete unit security check' }));
+  api.reserve.mockRejectedValue(new Error('synthetic request receipt unavailable'));
+  fireEvent.click(screen.getByRole('button', { name: 'Request and continue to card hold' }));
+  await waitFor(() => expect(api.reserve).toHaveBeenCalledTimes(1));
+  expect(api.reserve.mock.calls[0]![0]).toMatchObject({ profile_id: id(4), goals: [], source_page: '/book' });
+});
+
+it('changing the centre does not attribute the new enquiry to the original coach page', async () => {
+  draw(true);
+  fireEvent.click((await screen.findAllByRole('button', { name: 'Add to my booking' }))[0]!);
+  fireEvent.click(await screen.findByRole('button', { name: '5:00pm' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Continue: weeks and player details' }));
+  await screen.findByRole('button', { name: 'Continue with 1 session' });
+  for (const title of ['Find your time', 'How long would you like?', 'What do you want to work on?', 'Who’s the session for?', 'Where would you like to train?']) {
+    fireEvent.click(screen.getByRole('button', { name: '← Back' }));
+    await screen.findByRole('heading', { name: title });
+  }
+  fireEvent.click(screen.getByRole('button', { name: /Cranbourne North Test Cranbourne/ }));
+  await sendEnquiryFromWizard();
+  expect(api.enquiry.mock.calls[0]![0]).toMatchObject({ centre: 'cranbourne-north', source_page: '/book' });
+  expect(api.enquiry.mock.calls[0]![0]).not.toHaveProperty('coach_profile_id');
+});
+
 it('a taken coach-page preview is refused by the wizard and offers only the same-centre alternatives', async () => {
   const available = parseSlots(slots(), 'mickleham');
   api.slots.mockResolvedValueOnce(available).mockResolvedValueOnce({ ...available, by_coach: [] }).mockResolvedValue(available);

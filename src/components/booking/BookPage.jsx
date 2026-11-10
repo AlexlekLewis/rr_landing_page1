@@ -21,6 +21,8 @@ const titles = { where: 'Where would you like to train?', kind: 'Who’s the ses
 const back = d => ({ kind: 'where', group: 'kind', focus: d.kind === 'group' ? 'group' : 'kind', machine: 'focus', duration: d.focus === 'batting' ? 'machine' : 'focus', find: 'duration', weeks: 'find', players: 'weeks', review: 'players', recover: 'find' });
 const firstStep = d => !d.centre ? 'where' : !d.kind ? 'kind' : d.kind === 'group' && !d.group_size ? 'group' : !d.focus ? 'focus' : !d.duration_minutes ? 'duration' : 'find';
 const quoteKey = d => JSON.stringify([d.centre, d.profile_id, d.starts_at, d.kind, d.group_size, d.focus, d.machine, d.duration_minutes, d.weeks, d.skip_dates]);
+const playersForSize = (players, size) => Array.from({ length: size }, (_, index) => players[index] ?? { name: '', age: '' });
+const clearCoachContext = () => ({ goals: [], source_page: '/book' });
 const idleOperation = Object.freeze({ paused: false, pending: null });
 const idleSnapshot = () => idleOperation, idleSubscribe = () => () => {};
 function CreditStatusReturn({ gate }) {
@@ -54,10 +56,15 @@ function BookingForm({ credit, familyService }) {
       const hints = deepLink(globalThis.location.search, data), hasLink = ['centre', 'coach', 'start', 'duration', 'focus', 'kind', 'group_size', 'goals'].some(key => new URLSearchParams(globalThis.location.search).has(key));
       const next = { ...(hasLink ? emptyDraft() : saved ?? emptyDraft()), ...(hasLink ? hints : {}), consent_save_card: false };
       if (!data.centres.some(c => c.slug === next.centre)) next.centre = '';
-      if (!data.coaches.some(c => c.profile_id === next.profile_id && (!next.centre || c.centres.includes(next.centre)))) { next.profile_id = ''; next.starts_at = ''; }
+      const linkedCoach = data.coaches.find(c => c.profile_id === next.profile_id && (!next.centre || c.centres.includes(next.centre)));
+      if (!linkedCoach) Object.assign(next, clearCoachContext(), { profile_id: '', starts_at: '' });
+      else if (next.source_page !== '/book' && next.source_page !== `/coaches/${linkedCoach.slug}`) Object.assign(next, clearCoachContext());
       if (!data.durations_minutes.includes(next.duration_minutes)) next.duration_minutes = null;
       if (!data.focus.includes(next.focus)) next.focus = '';
       if (!data.group_sizes.includes(next.group_size)) next.group_size = null;
+      // A complete group link skips the size screen, so size its player fields here too.
+      if (next.kind === 'group' && next.group_size) next.players = playersForSize(next.players, next.group_size);
+      else if (next.kind === 'one_on_one') next.players = playersForSize(next.players, 1);
       next.weeks = Math.min(next.weeks, data.max_weeks);
       setDraft(next); setHint(hasLink ? hints.start_hint ?? '' : '');
       if (!initialCheckpoint && !(credit && gate?.getSnapshot().pending?.kind === 'credit_request')) setStep(firstStep(next));
@@ -68,12 +75,17 @@ function BookingForm({ credit, familyService }) {
   useEffect(() => { heading.current?.focus(); }, [step]);
   const closeAsk = useCallback(() => setAsk(false), []);
   const update = useCallback(fields => { setDraft(d => ({ ...d, ...fields })); setError(''); }, []);
-  const choose = (fields, next) => { update({ ...fields, starts_at: '', profile_id: fields.centre && fields.centre !== draft.centre ? '' : draft.profile_id, skip_dates: [], consent_save_card: false }); setQuote(null); setStep(next); };
+  const choose = (fields, next) => {
+    const centreChanged = fields.centre && fields.centre !== draft.centre;
+    update({ ...fields, ...(centreChanged ? { ...clearCoachContext(), profile_id: '' } : {}), starts_at: '', skip_dates: [], consent_save_card: false });
+    if (centreChanged) setHint('');
+    setQuote(null); setStep(next);
+  };
   const dropHint = useCallback(() => setHint(''), []);
   const selectSlot = useCallback(async (profile, startsAt) => {
     if (!catalog) return;
     setPending(true); setError(''); setNearest([]);
-    const next = { ...draft, profile_id: profile, starts_at: startsAt, skip_dates: [], consent_save_card: false };
+    const next = { ...draft, ...(profile !== draft.profile_id ? clearCoachContext() : {}), profile_id: profile, starts_at: startsAt, skip_dates: [], consent_save_card: false };
     try {
       const data = await publicReads.slots(searchIntent(next, localDate(startsAt), localDate(startsAt), { coach: profile }));
       if (!active.current) return;
@@ -185,8 +197,8 @@ function BookingForm({ credit, familyService }) {
       {!catalog ? <div className="booking-stack">{catalogError ? <><p className="booking-error" role="alert">{catalogError}</p><button type="button" className="booking-secondary" disabled={operation.paused} onClick={() => setReload(n => n + 1)}>Try the live service again</button></> : <p role="status">Loading live coaching options…</p>}</div> : <>
         {hasAttempt && step !== 'recover' ? <div className="booking-notice"><p>A previous attempt may have reached us. Recover it before starting another card hold.</p><button type="button" className="booking-link" onClick={() => setStep('recover')}>Recover my previous attempt</button></div> : null}
         {step === 'where' ? <div className="booking-grid">{catalog.centres.map(c => <button className="booking-choice" type="button" key={c.slug} onClick={() => choose({ centre: c.slug, kind: '' }, 'kind')}><strong>{c.suburb}</strong><small>{c.name}</small><small>{c.address ?? 'Address is being checked. Ask us if you need directions.'}</small></button>)}{!catalog.centres.length ? <p role="status">New private requests aren’t open at either centre right now. You can still ask us below.</p> : null}</div> : null}
-        {step === 'kind' ? <div className="booking-grid"><button type="button" className="booking-choice" onClick={() => choose({ kind: 'one_on_one', group_size: null, players: [draft.players[0]] }, 'focus')}><strong>One-on-one</strong><small>One player, one coach.</small></button><button type="button" className="booking-choice" onClick={() => choose({ kind: 'group', group_size: null }, 'group')}><strong>A small group</strong><small>Train together with one coach.</small></button></div> : null}
-        {step === 'group' ? <div className="booking-grid">{catalog.group_sizes.map(size => <button type="button" className="booking-choice" key={size} onClick={() => choose({ group_size: size, players: Array.from({ length: size }, (_, index) => draft.players[index] ?? { name: '', age: '' }) }, 'focus')}><strong>{size} players</strong><small>{catalog.prices.group_player_hour_cents[size] === null ? 'Price unavailable' : `${money(catalog.prices.group_player_hour_cents[size])} per player per hour, incl. GST`}</small></button>)}</div> : null}
+        {step === 'kind' ? <div className="booking-grid"><button type="button" className="booking-choice" onClick={() => choose({ kind: 'one_on_one', group_size: null, players: playersForSize(draft.players, 1) }, 'focus')}><strong>One-on-one</strong><small>One player, one coach.</small></button><button type="button" className="booking-choice" onClick={() => choose({ kind: 'group', group_size: null }, 'group')}><strong>A small group</strong><small>Train together with one coach.</small></button></div> : null}
+        {step === 'group' ? <div className="booking-grid">{catalog.group_sizes.map(size => <button type="button" className="booking-choice" key={size} onClick={() => choose({ group_size: size, players: playersForSize(draft.players, size) }, 'focus')}><strong>{size} players</strong><small>{catalog.prices.group_player_hour_cents[size] === null ? 'Price unavailable' : `${money(catalog.prices.group_player_hour_cents[size])} per player per hour, incl. GST`}</small></button>)}</div> : null}
         {step === 'focus' ? <div className="booking-grid">{catalog.focus.map(focus => <button type="button" className="booking-choice" key={focus} onClick={() => choose({ focus, machine: 'either' }, focus === 'batting' ? 'machine' : 'duration')}>{FOCUS_LABELS[focus]}</button>)}</div> : null}
         {step === 'machine' ? <div className="booking-grid">{[['yes', 'Yes, use a machine'], ['no', 'No machine'], ['either', 'Let the coach decide']].map(([machine, label]) => <button type="button" className="booking-choice" key={machine} onClick={() => choose({ machine }, 'duration')}>{label}</button>)}</div> : null}
         {step === 'duration' ? <div className="booking-grid">{catalog.durations_minutes.map(duration => { const rate = draft.kind === 'group' ? catalog.prices.group_player_hour_cents[draft.group_size] : catalog.prices.one_on_one_hour_cents; return <button type="button" className="booking-choice" disabled={rate === null} key={duration} onClick={() => choose({ duration_minutes: duration }, 'find')}><strong>{lengthLabel(duration)}</strong><small>{rate === null ? 'Price unavailable' : `${money(Math.round(rate * duration / 60))}${draft.kind === 'group' ? ' per player' : ''}, incl. GST before any block discount`}</small></button>; })}</div> : null}
