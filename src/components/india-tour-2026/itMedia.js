@@ -56,8 +56,8 @@ const CAPTIONS = {
         caption: 'One of our players in the nets.',
     },
     '03-coach-one-on-one.webp': {
-        alt: 'A Royals coach explaining a batting point to a player in the nets',
-        caption: 'One-on-one time with a Royals coach.',
+        alt: 'Faiz Fazal, Indian cricket legend and former Royals cricketer, working one-on-one with Khilesh Mamtani on a batting point in the nets',
+        caption: 'Faiz Fazal working one-on-one with Khilesh Mamtani.',
     },
     '04-coach-on-ground.webp': {
         alt: 'Somi Bhinder, resident fast bowling coach at the Rajasthan Royals High Performance Centre, giving instructions on the training ground',
@@ -111,7 +111,7 @@ const CAPTIONS = {
         alt: 'Rajasthan Royals Academy Melbourne player Joshua Richardson side by side with Faiz Fazal, Indian cricket legend and former Royals cricketer, during a batting drill in the nets',
         caption: 'Joshua Richardson side by side with Faiz Fazal in the nets.',
     },
-    // Coaches named here were identified by Andy (10 Nov 2026), including photos 04, 06, 10, 12 and 16. Only name someone the
+    // Coaches named here were identified by Andy (10 Nov 2026), including photos 03, 04, 06, 10, 12 and 16. Only name someone the
     // Academy has identified; never guess from a face.
     '17-sid-trivedi-sets-up-drill.webp': {
         alt: 'Siddharth (Sid) Trivedi, legendary Rajasthan Royals bowler, pointing across the nets as he sets up a drill, under the Rajasthan Royals High Performance Centre banner',
