@@ -120,7 +120,7 @@ const BENEFITS_COPY = {
         'prepares and thinks about the game. This is what you take home.',
     items: [
         {
-            title: 'Train like a professional',
+            title: 'Train like the Royals',
             body:
                 'Live and train at the Rajasthan Royals High Performance Centre, with the facilities, ' +
                 'routines and standards of a professional cricketer, every day.',

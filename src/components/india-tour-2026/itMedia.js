@@ -179,13 +179,18 @@ export const SEPT_2026_MEDIA = Object.keys(files)
 // ---------------------------------------------------------------------------
 // WHY GO PHOTOS: one photo per benefit card, from
 // src/assets/india-tour-2026/why-go/. Start each filename with the card number
-// (1-6, same order as the benefits in itCopy.js): e.g. "1-hpc-building.webp",
-// "4-recovery.webp". A card with no photo keeps its icon. Alt text below.
+// (1-6, same order as the benefits in itCopy.js). Prepare each one with
+//   python3 scripts/prepare-why-go-photo.py <card> <photo> <short-name>
+// which crops it to exactly 1200x900 (4:3), so every card is the same size
+// whatever photo is sent. A card with no photo keeps its icon. Alt text below.
 const whyGoFiles = import.meta.glob(
     '../../assets/india-tour-2026/why-go/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
     { eager: true, import: 'default' },
 );
-const WHY_GO_ALT = {};
+const WHY_GO_ALT = {
+    '1-team-talk.webp':
+        'Royals coaches talking Rajasthan Royals Academy Melbourne players through the session on the main ground at the Rajasthan Royals High Performance Centre',
+};
 export const WHY_GO_PHOTOS = Object.keys(whyGoFiles).reduce((acc, path) => {
     const name = path.split('/').pop();
     const n = parseInt(name, 10);
