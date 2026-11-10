@@ -173,7 +173,6 @@ const HOME_COPY = {
         'It is where the next generation of Royals aspirants will train and build their skillset. ' +
             'On this tour, that includes you.',
     ],
-    listHeading: 'Train Where They Trained',
     video: {
         src: '/tours/hpc-home-of-the-royals.mp4',
         poster: '/tours/hpc-home-of-the-royals.jpg',
