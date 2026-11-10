@@ -1,4 +1,4 @@
-import { publicConfig } from '../public-client';
+import { publicConfig, checkedPublicResult } from '../public-client';
 import { isRenewalOfferToken, isRenewalFamilyFields, isRenewalDeclineFields, isRenewalFamilyReview, decodeRenewalPreview, decodeRenewalQuote, decodeRenewalReceipt, decodeRenewalOriginalReceipt, decodeRenewalCurrent } from './renewal-model';
 export class RenewalError extends Error { constructor(code = 'unavailable') { super(code); this.code = code; } }
 export const renewalError = code => code === 'rate_limited' ? 'Too many checks have paused this visit. Keep the original command unchanged.' : code === 'invalid_fields' ? 'Check your contact details and the explicit confirmations.' : 'This renewal could not be verified. Keep any submitted original command and contact the Academy for help.';
@@ -20,7 +20,7 @@ export function createRenewalClient(env = import.meta.env, request = globalThis.
       const response = await request(`${config.base}/public-private-renewal-${kind}`, { method: 'POST', headers, body: JSON.stringify({ offer_token: token, ...body }), credentials: 'omit', cache: 'no-store', referrerPolicy: 'no-referrer', signal: controller.signal });
       if (response.status === 429) { halted = true; void response.body?.cancel().catch(() => {}); throw new RenewalError('rate_limited'); }
       const data = await packet(response, controller.signal), key = { preview: 'preview', quote: 'quote', accept: 'acceptance', decline: 'decline', receipt: 'receipt', current: 'current' }[kind];
-      if (!response.ok || data?.ok !== true || Object.keys(data).length !== 2 || !Object.hasOwn(data, key) || memory.read() !== token) throw new RenewalError(); return data[key];
+      if (!response.ok || data?.ok !== true || Object.keys(data).length !== 2 || !Object.hasOwn(data, key) || memory.read() !== token) throw new RenewalError(); return checkedPublicResult(data[key],config);
     } catch (error) { controller.abort(); throw error instanceof RenewalError ? error : new RenewalError(); } finally { clearTimeout(timer); }
   }
   const check = v => { if (!v) throw new RenewalError(); return v; };

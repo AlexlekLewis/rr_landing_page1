@@ -4,10 +4,13 @@ import { dayLabel, money, timeLabel } from './booking-model';
 import { familyError } from './family-client';
 import { useFamilyService } from './family-context';
 import './booking.css';
+const FamilyRecovery = React.lazy(() => import('./recovery/FamilyRecovery'));
 
 const dateTime = value => `${dayLabel(value)}, ${timeLabel(value)}`;
 const outcomeLabels = { credit: 'Credit for the player', refund: 'Refund to the original card', move: 'Arrange a new time' };
 const allowedOutcome = (item, choice) => choice === 'credit' || choice === 'move' || (choice === 'refund' && item.can_request_card_refund === true);
+const noSubscribe = () => () => {};
+const noRecovery = () => null;
 
 function CancellationTerms({ preview, working, onClose, onConfirm }) {
   const [accepted, setAccepted] = useState(false), heading = useRef(null);
@@ -30,8 +33,9 @@ function CancellationTerms({ preview, working, onClose, onConfirm }) {
 }
 
 export default function FamilyManagePage() {
-  const { hasCapability, client, clear, creditEnabled = false } = useFamilyService();
+  const { hasCapability, client, clear, creditEnabled = false, recovery, recoveryEnabled = false } = useFamilyService();
   const operation = useSyncExternalStore(client.subscribe, client.getSnapshot, client.getSnapshot);
+  const recoveryState = useSyncExternalStore(recovery?.subscribe ?? noSubscribe, recovery?.getSnapshot ?? noRecovery, noRecovery);
   const [view, setView] = useState({ data: null, loading: true, stale: false, error: '' });
   const [reload, setReload] = useState(0), [preview, setPreview] = useState(null), [checking, setChecking] = useState('');
   const [working, setWorking] = useState(false), [actionError, setActionError] = useState(''), [receipt, setReceipt] = useState(null), [choices, setChoices] = useState({});
@@ -47,7 +51,7 @@ export default function FamilyManagePage() {
   }, []);
   useEffect(() => {
     latestFamily.current = null;
-    if (!hasCapability) return;
+    if (!hasCapability || recovery?.locked()) return;
     let active = true; const controller = new AbortController();
     client.read(controller.signal).then(data => { if (active) {
       latestFamily.current = data;
@@ -58,7 +62,7 @@ export default function FamilyManagePage() {
     } })
       .catch(error => { if (active) setView(previous => ({ ...previous, ...(error.code === 'family_unavailable' ? { data: null } : {}), loading: false, stale: Boolean(previous.data), error: familyError(error) })); });
     return () => { active = false; latestFamily.current = null; controller.abort(); };
-  }, [hasCapability, client, reload]);
+  }, [hasCapability, client, reload, recovery]);
 
   async function checkCancellation(item) {
     if (busy.current || client.state().paused || client.state().pending) return;
@@ -101,18 +105,18 @@ export default function FamilyManagePage() {
       if (error.code === 'family_unavailable') setView(previous => ({ ...previous, data: null }));
     } finally { busy.current = false; if (alive.current) setWorking(false); }
   }
-  const disabled = working || operation.paused || Boolean(operation.pending);
+  const disabled = working || operation.paused || Boolean(operation.pending) || recoveryState?.busy;
   const data = view.data;
   return <div className="private-booking ph-no-capture">
-    <header className="booking-top"><strong>Rajasthan Royals Academy · Melbourne</strong><Link to="/" onClick={clear}>Close private page</Link></header>
-    <main className="booking-wrap"><section className="booking-card booking-stack">
+    <header className="booking-top"><strong>Rajasthan Royals Academy · Melbourne</strong><Link to="/" onClick={event => { if (clear() === false) event.preventDefault(); }}>Close private page</Link></header>
+    <main className="booking-wrap booking-stack"><section className="booking-card booking-stack">
       <h1>Your private coaching</h1>
       {!hasCapability ? <><h2>Secure link unavailable</h2><p>Open the private link in your email to see your sessions and player credit.</p></> : <>
         {view.loading ? <p role="status">Checking your sessions and credit…</p> : null}
         {view.error ? <p role="alert" className="booking-error">{view.error}</p> : null}
         {actionError ? <p role="alert" className="booking-error">{actionError}</p> : null}
         {operation.paused ? <p className="booking-error" role="alert">{familyError({ code: 'rate_limited' })}</p> : null}
-        {operation.pending && operation.pending.phase !== 'sending' ? <div className="booking-notice"><h2>Check your submitted choice</h2><p>We haven’t confirmed whether it was saved. Check the same submission before making another choice.</p>{['credit_request', 'card_request'].includes(operation.pending.kind) ? <Link className="booking-secondary" to={operation.pending.kind === 'credit_request' ? '/book/credit' : '/book'}>Check submitted booking request</Link> : <button type="button" className="booking-primary" disabled={working || operation.paused} onClick={() => save(() => client.retry())}>Check submitted result</button>}</div> : null}
+        {operation.pending && operation.pending.kind !== 'lapsed_request' && operation.pending.phase !== 'sending' ? <div className="booking-notice"><h2>Check your submitted choice</h2><p>We haven’t confirmed whether it was saved. Check the same submission before making another choice.</p>{['credit_request', 'card_request'].includes(operation.pending.kind) ? <Link className="booking-secondary" to={operation.pending.kind === 'credit_request' ? '/book/credit' : '/book'}>Check submitted booking request</Link> : <button type="button" className="booking-primary" disabled={working || operation.paused} onClick={() => save(() => client.retry())}>Check submitted result</button>}</div> : null}
         {receipt ? <div className="booking-notice" role="status"><h2>{receipt.booking_id ? 'Session cancelled' : 'Your choice is saved'}</h2><p>{receipt.choice === 'refund' ? 'Your refund has been requested. The Academy will confirm when it is completed.' : receipt.choice === 'move' ? 'A new time has been requested. The Academy will arrange the replacement session.' : `${money(receipt.credit_cents)} in player credit has been recorded.`}</p>{receipt.fee_cents > 0 ? <p>Cancellation fee: {money(receipt.fee_cents)}.</p> : null}{receipt.fee_owing_cents > 0 ? <p>Fee still owing: {money(receipt.fee_owing_cents)}. Contact the Academy to arrange payment.</p> : null}</div> : null}
         {data ? <>
           <section className="booking-stack" aria-label="Player credit"><h2>Player credit</h2>
@@ -128,11 +132,12 @@ export default function FamilyManagePage() {
             </li>)}</ul> : <p>No private sessions are linked here yet.</p>}
           </section>
           <p className="booking-help">Times are Melbourne time. Last checked {dateTime(data.as_of)}.</p>
+          {recoveryEnabled && recovery ? <section className="booking-stack" aria-label="Payment and expired request options"><h2>Payment and expired requests</h2><p>Check a remaining payment, or review a fresh request after an expired hold. Each option is checked against your secure link.</p>{[...new Map(data.items.filter(item => ['confirmed', 'expired'].includes(item.state)).map(item => [item.request_id, item])).values()].map(item => <div className="booking-stack" key={item.request_id}><p>{item.coach ?? 'Academy coach'} · {dateTime(item.starts_at)}</p><button className="booking-secondary" type="button" disabled={disabled || view.loading || view.stale} onClick={() => { void recovery.inspect(item.request_id, item.state === 'confirmed' ? 'remaining' : 'fresh').catch(() => {}); }}>{item.state === 'confirmed' ? 'Check remaining payment' : 'Review a fresh request after expiry'}</button></div>)}</section> : null}
           {disabled ? <button className="booking-secondary" type="button" disabled>Request another session by card</button> : <Link className="booking-secondary" to="/book">Request another session by card</Link>}
         </> : !view.loading && !view.error ? <p>Open the link in your email or contact the Academy to check this booking.</p> : null}
-        <button type="button" className="booking-secondary" disabled={view.loading || working || operation.paused} onClick={() => { latestFamily.current = null; setView(previous => ({ ...previous, loading: true, error: '' })); setReload(value => value + 1); }}>Check latest sessions and credit</button>
+        <button type="button" className="booking-secondary" disabled={view.loading || working || operation.paused || recoveryState?.busy || recovery?.locked()} onClick={() => { latestFamily.current = null; setView(previous => ({ ...previous, loading: true, error: '' })); setReload(value => value + 1); }}>Check latest sessions and credit</button>
       </>}
       <p><a className="booking-link" href="mailto:info@rramelbourne.com" referrerPolicy="no-referrer">Contact the Academy</a></p>
-    </section></main>
+    </section>{hasCapability && recovery && (recoveryEnabled || recovery.locked()) ? <React.Suspense fallback={<p role="status">Opening the secure recovery option…</p>}><FamilyRecovery /></React.Suspense> : null}</main>
   </div>;
 }

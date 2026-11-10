@@ -183,11 +183,12 @@ function App() {
   const { pathname } = useLocation();
   const invitationPath = /^\/book\/invitation(?:\/|$)/i.test(pathname);
   const renewalPath = /^\/book\/renewal(?:\/|$)/i.test(pathname);
+  const recoveryPath = import.meta.env.VITE_PRIVATE_BOOKING_PAYMENT_RECOVERY_ENABLED === 'true' && /^\/booking(?:\/|$)/i.test(pathname);
   return (
     <div className="font-sans antialiased text-rr-dark bg-white selection:bg-rr-pink selection:text-white">
       <PostHogPageviewTracker />
       <RouteSeo />
-      <ChunkReloadBoundary key={renewalPath?'renewal':invitationPath?'invitation':'ordinary'} noReload={invitationPath||renewalPath}>
+      <ChunkReloadBoundary key={renewalPath?'renewal':invitationPath?'invitation':recoveryPath?'recovery':'ordinary'} noReload={invitationPath||renewalPath||recoveryPath}>
       <Routes>
         {/* DNA Profile App — lazy-loaded portal at /eliteprogram/playerDNAprofile */}
         <Route path="/eliteprogram2026/playerDNAprofile/*" element={

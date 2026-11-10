@@ -1,3 +1,4 @@
+import { hostedBookingRuntime, hostedCheckoutResult } from './private-runtime';
 import { parseCatalog, parsePrice, parseSlots, uuid, validDate } from './booking-model';
 export class PublicBookingError extends Error {
   constructor(code = 'unavailable', status = 0, retryAfter = 0) { super(code); this.code = code; this.status = status; this.retryAfter = retryAfter; }
@@ -14,10 +15,12 @@ export function publicConfig(env = import.meta.env) {
   const raw = env.VITE_PRIVATE_BOOKING_URL;
   if (!raw || env.VITE_PRIVATE_BOOKING_MOCK === 'true') throw new PublicBookingError();
   let url; try { url = new URL(raw); } catch { throw new PublicBookingError(); }
+  let hosted; try { hosted = hostedBookingRuntime(env); } catch { throw new PublicBookingError(); }
   const local = ['local', 'test'].includes(env.VITE_APP_ENV);
-  if (url.username || url.password || url.search || url.hash || url.pathname.replace(/\/$/, '') !== '/functions/v1' || (local ? !['localhost', '127.0.0.1'].includes(url.hostname) || url.protocol !== 'http:' || url.port !== '54321' : url.protocol !== 'https:')) throw new PublicBookingError();
-  return { base: url.href.replace(/\/$/, ''), key: env.VITE_PRIVATE_BOOKING_KEY || '', local };
+  if (url.username || url.password || url.search || url.hash || url.pathname.replace(/\/$/, '') !== '/functions/v1' || (hosted ? raw !== `${hosted.backend}/functions/v1` : local ? !['localhost', '127.0.0.1'].includes(url.hostname) || url.protocol !== 'http:' || url.port !== '54321' : url.protocol !== 'https:')) throw new PublicBookingError();
+  return { base: url.href.replace(/\/$/, ''), key: env.VITE_PRIVATE_BOOKING_KEY || '', local, ...(hosted ? { hostedTest: true } : {}) };
 }
+export function checkedPublicResult(value, config) { return hostedCheckoutResult(value, config.hostedTest === true); }
 export function createPublicClient(env = import.meta.env, request = globalThis.fetch) {
   async function call(path, { body, nonce, signal } = {}) {
     const config = publicConfig(env), controller = new AbortController(), abort = () => controller.abort();
@@ -40,7 +43,7 @@ export function createPublicClient(env = import.meta.env, request = globalThis.f
         error.nearest = Array.isArray(suggestions) && body?.centre ? suggestions.filter(a => a && (!a.centre || a.centre === body.centre) && uuid(a.profile_id) && typeof a.starts_at === 'string' && Number.isFinite(Date.parse(a.starts_at)) && typeof a.ends_at === 'string' && Number.isFinite(Date.parse(a.ends_at))).slice(0, 8).map(a => ({ centre: body.centre, profile_id: a.profile_id, starts_at: a.starts_at, ends_at: a.ends_at })) : [];
         throw error;
       }
-      return data;
+      return checkedPublicResult(data, config);
     } catch (error) { if (error instanceof PublicBookingError) throw error; if (signal?.aborted) throw new DOMException('Aborted', 'AbortError'); throw new PublicBookingError(); }
     finally { clearTimeout(timer); signal?.removeEventListener('abort', abort); }
   }

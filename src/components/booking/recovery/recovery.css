@@ -1,0 +1,4 @@
+.booking-recovery .booking-fields select{width:100%;min-width:0;min-height:48px;border:1px solid #b9c5d7;background:#fff;border-radius:10px;padding:12px;color:#142b49;font:inherit;font-weight:500}
+.booking-recovery .booking-fields select:focus-visible{outline:2px solid #2356a2;outline-offset:2px}
+.booking-recovery dl{display:grid;gap:12px}.booking-recovery dd{margin:3px 0 0;font-weight:750}.booking-recovery dt{font-size:13px;color:#52627b}
+.booking-recovery .booking-fields,.booking-recovery label{min-width:0}.booking-recovery a{overflow-wrap:anywhere}

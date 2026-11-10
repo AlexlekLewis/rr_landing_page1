@@ -1,4 +1,4 @@
-import { publicConfig } from '../public-client';
+import { publicConfig, checkedPublicResult } from '../public-client';
 import { isCardInvitationToken,isCardInvitationFamilyFields,isCardInvitationReview,decodeCardInvitationPreview,decodeCardInvitationQuote,decodeCardInvitationOriginalReceipt,decodeCardInvitationAccept,decodeCardInvitationCurrent } from './invitation-model';
 export class InvitationError extends Error{constructor(code='unavailable'){super(code);this.code=code;}}
 const id=value=>typeof value==='string'&&/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/.test(value);
@@ -20,7 +20,7 @@ export function createInvitationClient(env=import.meta.env,request=globalThis.fe
   try{const headers={'Content-Type':'application/json'};if(config.key)Object.assign(headers,{apikey:config.key,Authorization:`Bearer ${config.key}`});if(nonce){if(!id(nonce))throw new InvitationError();headers['Idempotency-Key']=nonce;}
    const response=await request(`${config.base}/public-private-card-invitation-${kind}`,{method:'POST',headers,body:JSON.stringify({invitation_token:token,...body}),credentials:'omit',cache:'no-store',referrerPolicy:'no-referrer',signal:controller.signal});
    if(response.status===429){void response.body?.cancel().catch(()=>{});throw new InvitationError('rate_limited');}const packet=await boundedPacket(response,controller.signal);
-   const key={preview:'preview',quote:'quote',accept:'acceptance',receipt:'receipt',current:'current'}[kind];if(!response.ok||packet?.ok!==true||Object.keys(packet).length!==2||!Object.hasOwn(packet,key))throw new InvitationError();if(memory.read()!==token)throw new InvitationError();return packet[key];
+   const key={preview:'preview',quote:'quote',accept:'acceptance',receipt:'receipt',current:'current'}[kind];if(!response.ok||packet?.ok!==true||Object.keys(packet).length!==2||!Object.hasOwn(packet,key))throw new InvitationError();if(memory.read()!==token)throw new InvitationError();return checkedPublicResult(packet[key],config);
   }catch(error){controller.abort();throw error instanceof InvitationError?error:new InvitationError();}finally{clearTimeout(timer);}
  }
  const check=(value)=>{if(!value)throw new InvitationError();return value;};

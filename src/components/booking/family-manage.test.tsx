@@ -42,6 +42,8 @@ it('shows proved player balances and sessions while keeping credit booking gated
   expect(screen.getByText('Available: $10')).toBeTruthy(); expect(screen.getByText('Reserved for requests: $20')).toBeTruthy();
   expect((screen.getByRole('button', { name: 'Book with my credit' }) as HTMLButtonElement).disabled).toBe(true);
   expect(screen.getByRole('link', { name: 'Request another session by card' }).getAttribute('href')).toBe('/book');
+  expect(screen.queryByRole('button', { name: 'Check remaining payment' })).toBeNull();
+  expect(screen.queryByRole('heading', { name: 'Payment and expired requests' })).toBeNull();
   expect(document.body.innerHTML.includes(capability)).toBe(false); expect(sessionStorage.length + localStorage.length).toBe(0);
 });
 it('never reads family data without the memory capability', () => {

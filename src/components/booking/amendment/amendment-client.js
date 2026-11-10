@@ -1,4 +1,4 @@
-import {publicConfig} from '../public-client';
+import {publicConfig,checkedPublicResult} from '../public-client';
 import {isAmendmentFamilyFields,isAmendmentFamilyReview,decodeAmendmentPreview,decodeAmendmentQuote,decodeAmendmentSubmissionReceipt,decodeAmendmentOriginalReceipt,decodeAmendmentCurrent} from './amendment-model';
 export class AmendmentError extends Error{constructor(code='unavailable'){super(code);this.code=code;}}
 export const amendmentError=code=>code==='rate_limited'?'Too many checks have paused this visit. Keep your original attempt unchanged.':code==='invalid_fields'?'Check your contact details and explicit confirmations.':'The result could not be verified. Keep this tab open and contact the Academy if an original attempt is uncertain.';
@@ -19,7 +19,7 @@ export function createAmendmentClient(env=import.meta.env,request=globalThis.fet
    const response=await request(`${config.base}/public-private-amendment-${kind}`,{method:'POST',headers,body:JSON.stringify({family_token:capability.token,amendment_id:capability.amendmentId,...body}),credentials:'omit',cache:'no-store',referrerPolicy:'no-referrer',signal:controller.signal});
    if(response.status===429){halted=true;void response.body?.cancel().catch(()=>{});throw new AmendmentError('rate_limited');}
    const data=await packet(response,controller.signal),key=kind==='request'?'submission':kind;
-   if(!response.ok||data?.ok!==true||Object.keys(data).length!==2||!Object.hasOwn(data,key)||memory.read()!==capability)throw new AmendmentError();return data[key];
+   if(!response.ok||data?.ok!==true||Object.keys(data).length!==2||!Object.hasOwn(data,key)||memory.read()!==capability)throw new AmendmentError();return checkedPublicResult(data[key],config);
   }catch(error){controller.abort();throw error instanceof AmendmentError?error:new AmendmentError();}finally{clearTimeout(timer);}
  }
  const ref=a=>({amendmentId:a.amendment.amendment_id,nonce:a.nonce});

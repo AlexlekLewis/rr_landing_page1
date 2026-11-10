@@ -21,7 +21,7 @@ export function createFamilyOperationGate() {
   let paused = false, pending = null, generation = 0, snapshot = Object.freeze({ paused: false, pending: null });
   const listeners = new Set(), aborters = new Set();
   const emit = () => {
-    snapshot = Object.freeze({ paused, pending: pending ? Object.freeze({ kind: pending.kind, phase: pending.phase, target: pending.body.booking_id ?? pending.body.event_id ?? null }) : null });
+    snapshot = Object.freeze({ paused, pending: pending ? Object.freeze({ kind: pending.kind, phase: pending.phase, target: pending.body.booking_id ?? pending.body.event_id ?? pending.body.prior_request_id ?? null }) : null });
     for (const listener of listeners) listener();
   };
   async function dispatch(operation, transport) {
@@ -67,15 +67,27 @@ export function createFamilyOperationGate() {
       return dispatch(pending, transport);
     },
     retry(transport) {
-      if (!pending) return Promise.reject(new FamilyOperationError('invalid_request', 400));
+      if (!pending || pending.exclusive) return Promise.reject(new FamilyOperationError('invalid_request', 400));
       if (!pending.promise) pending.retried = true;
       return dispatch(pending, transport);
     },
     registerAbort(abort) { aborters.add(abort); return () => aborters.delete(abort); },
+    acquireExclusive(kind, target) {
+      if (paused) throw new FamilyOperationError('rate_limited', 429);
+      if (pending || kind !== 'lapsed_request') throw new FamilyOperationError('outcome_unknown');
+      const held = { kind, phase: 'sending', body: { prior_request_id: target }, exclusive: true };
+      pending = held; emit();
+      return Object.freeze({
+        setUnknown() { if (pending === held) { held.phase = paused ? 'paused' : 'unknown'; emit(); } },
+        release() { if (pending === held) { pending = null; emit(); } },
+      });
+    },
     clear() {
+      if (pending?.exclusive) return false;
       generation++; pending = null;
       for (const abort of aborters) abort(); aborters.clear(); emit();
       // A429 is permanent for this visit; clear never resets that latch.
+      return true;
     },
   };
 }
