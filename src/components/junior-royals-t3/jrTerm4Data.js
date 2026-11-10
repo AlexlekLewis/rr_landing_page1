@@ -217,8 +217,16 @@ export const JR_T4 = {
     heroTitle: 'JUNIOR ROYALS',
     heroTitleAccent: 'CRICKET FOR AGES 7–12',
     heroSub: 'Weekly coaching · Join any week · Pay weekly',
-    // Who the program is for, above heroLead (Andy, 10 Nov 2026, his wording).
-    heroFor: 'Perfect program for beginners, kids new to the game, those needing more work on the basics, friends wanting to train together, youngsters with ambition to train in our Performance Squads and players under 10 with skills wanting more training to drill their skills to a higher level.',
+    // Who the program is for, above heroLead (Andy, 10 Nov 2026: "people need to know who
+    // this is for"). His groups, as a ticked list so a parent can spot their child quickly.
+    heroForTitle: 'Junior Royals is perfect for:',
+    heroFor: [
+        'Beginners and kids new to the game',
+        'Players who need more work on the basics',
+        'Friends who want to train together',
+        'Skilled under-10s ready to take their game to the next level',
+        'Young players aiming for our Performance Squads',
+    ],
     heroLead: 'One hour of cricket coaching each week, in a small group of players their own age, with Rajasthan Royals Academy coaches.',
     // THE BENEFITS, short and plain (8 Nov 2026: "be clear about the benefits"), in a softer,
     // parent-facing voice (10 Nov 2026: "make this a bit more softer and customer focused").
