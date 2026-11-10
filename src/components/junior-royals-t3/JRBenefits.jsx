@@ -5,7 +5,7 @@ import { JR_T4, JR_PHOTOS } from './jrTerm4Data';
 import JRSectionCTA from './JRSectionCTA';
 import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squads/data';
 
-// What your player gets: the benefits in six short cards (Andy, 8 Nov 2026: "be clear
+// Made for your child: the benefits in six short cards (Andy, 8 Nov 2026: "be clear
 // about the benefits, there is too much stuff"). Replaces the old About the Program
 // section. Words live in JR_T4.benefits (editable in the admin Junior Royals Editor).
 const fade = (i = 0) => ({ initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { delay: i * 0.06 } });
