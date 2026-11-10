@@ -39,6 +39,12 @@ export const VIDEOS = [
         title: 'In the nets',
         caption: 'Batting in the nets.',
     },
+    {
+        src: '/tours/faiz-wet-ball-drill.mp4',
+        poster: '/tours/faiz-wet-ball-drill.jpg',
+        title: 'The wet-ball drill',
+        caption: 'Faiz Fazal explains the wet-ball drill, then the batters put it into practice.',
+    },
 ];
 
 const DEFAULT_ALT =

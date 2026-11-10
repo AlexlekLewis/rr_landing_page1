@@ -17,7 +17,7 @@ for in in "$@"; do
   mp4="$out_dir/$base.mp4"
   jpg="$out_dir/$base.jpg"
   ffmpeg -y -loglevel error -i "$in" \
-    -vf "scale='min(720,iw)':-2:force_original_aspect_ratio=decrease,fps=30" \
+    -vf "scale='trunc(min(720,iw)/2)*2':-2,fps=30" \
     -c:v libx264 -preset slow -crf 28 -profile:v high -pix_fmt yuv420p \
     -c:a aac -b:a 96k -ac 2 -movflags +faststart "$mp4"
   ffmpeg -y -loglevel error -ss 1 -i "$mp4" -frames:v 1 -q:v 4 "$jpg"
