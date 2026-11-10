@@ -132,10 +132,12 @@ const BENEFITS_COPY = {
                 'the same drills and feedback they do: batting, bowling, fielding and mental skills.',
         },
         {
-            title: 'Come home with a personal plan',
+            // Replaced 'Come home with a personal plan' (Andy, 10 Nov 2026).
+            title: 'Immerse yourself in the Royals environment',
             body:
-                'Every player is filmed and assessed, then sits down one-on-one with a coach. They leave ' +
-                'with a written plan that says exactly what to work on next.',
+                'Eat, rest and recover where the Royals do: the Royals Cafe, the players\u2019 lounge and ' +
+                'the grounds, surrounded by the club\u2019s history. For about ten days, the Royals ' +
+                'environment is your environment.',
         },
         {
             title: 'Learn how the Royals prepare for the IPL',

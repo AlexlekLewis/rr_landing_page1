@@ -190,6 +190,8 @@ const whyGoFiles = import.meta.glob(
 const WHY_GO_ALT = {
     '1-team-talk.webp':
         'Royals coaches talking Rajasthan Royals Academy Melbourne players through the session on the main ground at the Rajasthan Royals High Performance Centre',
+    '3-royals-cafe.webp':
+        'Rajasthan Royals Academy Melbourne players at lunch in the Royals Cafe at the Rajasthan Royals High Performance Centre, under a wall of Royals legends',
     '4-warm-up-session.webp':
         'Rajasthan Royals Academy Melbourne players lined up on the ground, watching a coach demonstrate a warm-up drill',
 };
