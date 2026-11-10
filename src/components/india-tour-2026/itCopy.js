@@ -195,7 +195,7 @@ const SEPTEMBER_COPY = {
         { value: '7', label: 'nights at the centre' },
         { value: '6', label: 'full coaching days' },
         { value: '1', label: 'match on turf' },
-        { value: '1:1', label: 'video review for every player' },
+        { value: '1', label: 'incredibly immersive Royals experience' },
     ],
     dayByDayShow: 'See the day-by-day plan',
     dayByDayHide: 'Hide the day-by-day plan',
