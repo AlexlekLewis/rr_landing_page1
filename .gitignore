@@ -56,6 +56,8 @@ Media/LP2/Kumar Interview V3.mov
 !public/assets/powergame/royals-academy-video.mp4
 # Exception: compressed web videos for the /tours page (scripts/compress-tour-videos.sh)
 !public/tours/*.mp4
+# Exception: compressed web videos for /junior-royals (720x1080 H.264, like /tours)
+!public/junior-royals/videos/*.mp4
 *.zip
 Master Landing Page/
 Media/
