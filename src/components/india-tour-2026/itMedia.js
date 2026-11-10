@@ -92,8 +92,8 @@ const CAPTIONS = {
         caption: 'Small groups, so every player gets the coach\u2019s attention.',
     },
     '12-coach-explains-grip.webp': {
-        alt: 'A Royals coach explaining the grip to a young Rajasthan Royals Academy Melbourne batter in the nets',
-        caption: 'Getting the basics right: a Royals coach on the grip.',
+        alt: 'Faiz Fazal, Indian cricket legend and former Royals cricketer, explaining the grip to a young Rajasthan Royals Academy Melbourne batter in the nets',
+        caption: 'Getting the basics right: Faiz Fazal on the grip.',
     },
     '13-warm-up-in-front-of-hpc.webp': {
         alt: 'Rajasthan Royals Academy Melbourne players warming up in a line on the main ground in front of the Rajasthan Royals High Performance Centre building',
@@ -111,7 +111,7 @@ const CAPTIONS = {
         alt: 'A Royals coach standing beside a Rajasthan Royals Academy Melbourne player during a batting drill in the nets',
         caption: 'Side by side with a Royals coach in the nets.',
     },
-    // Coaches named here were identified by Andy (10 Nov 2026), including photos 04, 06 and 10. Only name someone the
+    // Coaches named here were identified by Andy (10 Nov 2026), including photos 04, 06, 10 and 12. Only name someone the
     // Academy has identified; never guess from a face.
     '17-sid-trivedi-sets-up-drill.webp': {
         alt: 'Siddharth (Sid) Trivedi, legendary Rajasthan Royals bowler, pointing across the nets as he sets up a drill, under the Rajasthan Royals High Performance Centre banner',
