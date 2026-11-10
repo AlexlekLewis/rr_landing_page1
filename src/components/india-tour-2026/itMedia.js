@@ -46,10 +46,16 @@ export const VIDEOS = [
         caption: 'Faiz Fazal explains the wet-ball drill, then the batters put it into practice.',
     },
     {
-        src: '/tours/joshua-richardson-to-jake-fredericksen.mp4',
-        poster: '/tours/joshua-richardson-to-jake-fredericksen.jpg',
-        title: 'Joshua Richardson to Jake Fredericksen',
-        caption: 'Joshua Richardson bowls to Jake Fredericksen in the nets.',
+        src: '/tours/jake-fredericksen-to-joshua-richardson.mp4',
+        poster: '/tours/jake-fredericksen-to-joshua-richardson.jpg',
+        title: 'Jake Fredericksen to Joshua Richardson',
+        caption: 'Jake Fredericksen bowls to Joshua Richardson in the nets.',
+    },
+    {
+        src: '/tours/nets-1.mp4',
+        poster: '/tours/nets-1.jpg',
+        title: 'From behind the stumps',
+        caption: 'A net session, filmed from behind the stumps.',
     },
 ];
 
