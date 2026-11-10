@@ -180,6 +180,12 @@ export const JR_PHOTOS = {
         photo('bowling-line-drill', 'A line of young players kneeling to practise their bowling arm with a coach watching', 'Bowling drills, together'),
         photo('ecc-bowling-pair', 'Two young players practising their bowling action in the nets while a coach watches', 'Bowling, one skill at a time'),
         photo('coach-demo-bat', 'A Junior Royals coach showing a group of young players how to hold the bat', 'One coaching point to hold on to'),
+        // Added 10 Nov 2026. Two more Andy sent were already on the page (the lane 5 one-on-one is
+        // the "Andrew Walton one-on-one" video's poster; the kneeling bowling line is bowling-line-drill).
+        photo('batter-facing-bowler', 'A young batter in helmet and pads facing a bowler in the nets', 'Facing the bowler'),
+        photo('ready-to-bat', 'A young player in a Rajasthan Royals Academy shirt holding his bat, ready for his turn', 'Ready to bat'),
+        photo('waiting-turn-nets', 'Young players padded up and waiting their turn to bat in the nets', 'Waiting for their turn'),
+        photo('grip-practice', 'Young players practising how to grip the ball with soft coloured balls', 'Learning the grip'),
     ],
 };
 
