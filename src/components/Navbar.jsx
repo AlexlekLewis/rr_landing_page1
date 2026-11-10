@@ -25,9 +25,10 @@ const LC_NAV = [
 
 // India Tour 2026 — on-page section anchors (ids set in IndiaTour2026.jsx)
 const IT_NAV = [
-    { label: 'THE CAMP', id: 'about' },
+    { label: 'SEPT 2026', id: 'september-2026' },
+    { label: 'VIDEOS', id: 'videos' },
+    { label: 'WHY GO', id: 'benefits' },
     { label: 'COACHES', id: 'coaching' },
-    { label: 'ITINERARY', id: 'itinerary' },
     { label: 'COSTS', id: 'pricing' },
 ];
 
@@ -91,7 +92,7 @@ const PROGRAMS_DROPDOWN = [
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Register Your Interest', badgeColor: 'bg-green-500' },
     { label: 'Private Coaching', route: '/mickleham', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },
     // Closed but real — it belongs here rather than in the home-page modal.
-    { label: 'High Performance Camp · India', route: '/tours', badge: 'Register Your Interest', badgeColor: 'bg-green-500' },
+    { label: 'Rajasthan Royals High Performance Centre Camp · India', route: '/tours', badge: 'Coming Soon · Register Now', badgeColor: 'bg-green-500' },
 ];
 
 // navLinksOverride replaces the variant's section links (e.g. /junior-royals).
@@ -136,7 +137,7 @@ const Navbar = ({ variant = 'lp1', onRegisterClick, ctaLabelOverride, ctaTargetO
     // Junior Royals (isLittleCrickets): the CTA points at the Term 4 booking form
     // (Mondays at Mickleham, Wednesdays at Cranbourne North, paid from 19 Oct 2026). One
     // label on the whole page: "Secure Your Place".
-    const ctaLabel = ctaLabelOverride || (isPSWelcome ? 'CONFIRM YOUR PLACE' : isMasterclass ? 'BOOK YOUR PLACE' : isPerformanceSquads ? 'REGISTER INTEREST' : isHome ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : isLittleCrickets ? 'SECURE YOUR PLACE' : isLP2 ? 'SECURE YOUR PLACE NOW' : isHoliday ? 'SECURE YOUR PLACE' : 'REGISTER INTEREST');
+    const ctaLabel = ctaLabelOverride || (isPSWelcome ? 'CONFIRM YOUR PLACE' : isMasterclass ? 'BOOK YOUR PLACE' : isPerformanceSquads ? 'REGISTER INTEREST' : (isHome || isIndiaTour) ? 'REGISTER NOW' : isMickleham ? 'BOOK ELITE TRIAL' : isCoaches ? 'EXPLORE PROGRAMS' : isLittleCrickets ? 'SECURE YOUR PLACE' : isLP2 ? 'SECURE YOUR PLACE NOW' : isHoliday ? 'SECURE YOUR PLACE' : 'REGISTER INTEREST');
     const ctaTarget = ctaTargetOverride || (isPSWelcome ? 'confirm' : isMasterclass ? 'register' : isPerformanceSquads ? 'register-pay' : isIndiaTour ? 'register' : isMickleham ? 'register' : isCoaches ? 'join' : isPrivateCoaching ? 'eoi-form' : isLP2 ? 'checkout' : isHoliday ? 'secure-form' : isLittleCrickets ? 'registration-form' : 'apply-form');
 
     const scrollToForm = () => {
