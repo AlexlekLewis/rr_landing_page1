@@ -180,6 +180,12 @@ export const JR_PHOTOS = {
         photo('bowling-line-drill', 'A line of young players kneeling to practise their bowling arm with a coach watching', 'Bowling drills, together'),
         photo('ecc-bowling-pair', 'Two young players practising their bowling action in the nets while a coach watches', 'Bowling, one skill at a time'),
         photo('coach-demo-bat', 'A Junior Royals coach showing a group of young players how to hold the bat', 'One coaching point to hold on to'),
+        // Added 10 Nov 2026. Two more Andy sent were already on the page (the lane 5 one-on-one is
+        // the "Andrew Walton one-on-one" video's poster; the kneeling bowling line is bowling-line-drill).
+        photo('batter-facing-bowler', 'A young batter in helmet and pads facing a bowler in the nets', 'Facing the bowler'),
+        photo('ready-to-bat', 'A young player in a Rajasthan Royals Academy shirt holding his bat, ready for his turn', 'Ready to bat'),
+        photo('waiting-turn-nets', 'Young players padded up and waiting their turn to bat in the nets', 'Waiting for their turn'),
+        photo('grip-practice', 'Young players practising how to grip the ball with soft coloured balls', 'Learning the grip'),
     ],
 };
 
@@ -200,6 +206,8 @@ export const JR_VIDEOS = [
     video('session-montage', 'A Junior Royals session', 'Catching, fielding and batting, all in one session'),
     // Added 10 Nov 2026 (file "AW_coaching_youngster"). Coach: Andrew Walton (Andy, 10 Nov 2026).
     video('coaching-young-batter', 'Coaching a young batter', 'Andrew Walton one-on-one with a young batter in the nets'),
+    // Added 10 Nov 2026 (file "IMG_3550").
+    video('bowling-machine-drill', 'Bowling machine drill', 'Batting against the bowling machine while the group runs in from the cones'),
 ];
 
 export const JR_T4 = {
@@ -210,16 +218,17 @@ export const JR_T4 = {
     heroTitleAccent: 'CRICKET FOR AGES 7–12',
     heroSub: 'Weekly coaching · Join any week · Pay weekly',
     heroLead: 'One hour of cricket coaching each week, in a small group of players their own age, with Rajasthan Royals Academy coaches.',
-    // THE BENEFITS, short and plain (8 Nov 2026: "be clear about the benefits").
+    // THE BENEFITS, short and plain (8 Nov 2026: "be clear about the benefits"), in a softer,
+    // parent-facing voice (10 Nov 2026: "make this a bit more softer and customer focused").
     benefitsEyebrow: 'Why Junior Royals',
-    benefitsTitle: 'What your player gets',
+    benefitsTitle: 'Made for your child',
     benefits: [
-        { head: 'Coaching every week', body: 'One hour each week with Rajasthan Royals Academy coaches.' },
-        { head: 'A small group their own age', body: 'Ages 7–9 train at 5:00pm and ages 10–12 at 6:00pm, so every player is with players at their level.' },
-        { head: 'The whole game', body: 'Batting, bowling, fielding and how to play, taught through games.' },
-        { head: 'Progress you can see', body: 'One skill at a time. When your player can do it, they earn its badge and move on to the next.' },
-        { head: 'Ready for club cricket', body: 'The skills they learn each week are the ones they take into their Saturday games.' },
-        { head: 'Join any week', body: 'No need to wait for a new term. Book now and your player starts at the next session.' },
+        { head: 'Expert coaching, every week', body: 'Your child spends an hour each week with our Rajasthan Royals Academy coaches, learning in a friendly, encouraging group.' },
+        { head: 'With kids their own age', body: 'Ages 7–9 train at 5:00pm and ages 10–12 at 6:00pm, so your child learns alongside players at a similar stage.' },
+        { head: 'Learning through play', body: 'Batting, bowling and fielding are taught through games, so your child has fun while learning the whole game.' },
+        { head: 'Confidence that grows', body: 'Your child learns one skill at a time and earns a badge for each one, so you can both see how far they have come.' },
+        { head: 'Ready for Saturday cricket', body: 'What your child practises each week is what they use in their club games, so they head into Saturdays feeling ready.' },
+        { head: 'Join any week', body: 'No need to wait for a new term. Book today and your child joins at the next session.' },
     ],
     ages: '7–12',
     ageMin: 7,

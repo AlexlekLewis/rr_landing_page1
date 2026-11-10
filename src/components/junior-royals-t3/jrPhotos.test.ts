@@ -22,7 +22,7 @@ describe('Junior Royals photos', () => {
             expect(p.alt.length).toBeGreaterThan(20);
             expect(p.caption.length).toBeGreaterThan(3);
         }
-        expect(JR_PHOTOS.gallery).toHaveLength(8);
+        expect(JR_PHOTOS.gallery).toHaveLength(12);
         // One photo per benefit card, no more, no fewer.
         const { JR_T4 } = await import('./jrTerm4Data');
         expect(JR_PHOTOS.benefits).toHaveLength(JR_T4.benefits.length);

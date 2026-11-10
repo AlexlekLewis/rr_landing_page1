@@ -40,7 +40,7 @@ export const SECTIONS = [
         ],
     },
     {
-        title: 'What your player gets (benefits)',
+        title: 'Made for your child (benefits)',
         fields: [
             { path: 'jr.benefitsEyebrow', label: 'Small line above the heading', type: 'text' },
             { path: 'jr.benefitsTitle', label: 'Heading', type: 'text' },
