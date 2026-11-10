@@ -45,6 +45,12 @@ export const VIDEOS = [
         title: 'The wet-ball drill',
         caption: 'Faiz Fazal explains the wet-ball drill, then the batters put it into practice.',
     },
+    {
+        src: '/tours/joshua-richardson-to-jake-fredericksen.mp4',
+        poster: '/tours/joshua-richardson-to-jake-fredericksen.jpg',
+        title: 'Joshua Richardson to Jake Fredericksen',
+        caption: 'Joshua Richardson bowls to Jake Fredericksen in the nets.',
+    },
 ];
 
 const DEFAULT_ALT =
