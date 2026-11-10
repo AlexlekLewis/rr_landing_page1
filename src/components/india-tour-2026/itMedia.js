@@ -31,13 +31,43 @@
 // With VIDEOS empty the video section is hidden.
 // ---------------------------------------------------------------------------
 
-// The home page intro video (Sid Lahiri) is the first one until tour videos arrive.
+// Sid Lahiri's intro video was removed (Andy, 10 Nov 2026).
 export const VIDEOS = [
     {
-        src: 'https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/RRAM%20MAIN/General%20Coaching%20Edit%20RR%20Sid%20V2.mov',
-        poster: '/assets/intro-video-poster.jpg',
-        title: 'Meet Siddhartha Lahiri',
-        caption: 'Head of International Player Development and Performance Coach, Rajasthan Royals.',
+        src: '/tours/romi-kunwar-front-shoulder.mp4',
+        poster: '/tours/romi-kunwar-front-shoulder.jpg',
+        title: 'The front shoulder',
+        caption: 'Romi Bhinder and Kunwar working on his front shoulder.',
+    },
+    {
+        src: '/tours/kunwar.mp4',
+        poster: '/tours/kunwar.jpg',
+        title: 'In the nets',
+        caption: 'Kunwar batting in the nets.',
+    },
+    {
+        src: '/tours/faiz-wet-ball-drill.mp4',
+        poster: '/tours/faiz-wet-ball-drill.jpg',
+        title: 'The wet-ball drill',
+        caption: 'Faiz Fazal explains the wet-ball drill, then the batters put it into practice.',
+    },
+    {
+        src: '/tours/jake-fredericksen-to-joshua-richardson.mp4',
+        poster: '/tours/jake-fredericksen-to-joshua-richardson.jpg',
+        title: 'Jake Fredericksen to Joshua Richardson',
+        caption: 'Jake Fredericksen bowls to Joshua Richardson in the nets.',
+    },
+    {
+        src: '/tours/nets-1.mp4',
+        poster: '/tours/nets-1.jpg',
+        title: 'From behind the stumps',
+        caption: 'A net session, filmed from behind the stumps.',
+    },
+    {
+        src: '/tours/sid-downswing.mp4',
+        poster: '/tours/sid-downswing.jpg',
+        title: 'The downswing',
+        caption: 'Sid talks the group through the downswing.',
     },
 ];
 
@@ -49,27 +79,27 @@ const DEFAULT_ALT =
 const CAPTIONS = {
     '01-warmup-main-ground.webp': {
         alt: 'Rajasthan Royals Academy Melbourne players warming up on the main ground at the Rajasthan Royals High Performance Centre, beside a banner welcoming the academy',
-        caption: 'Warm-up on the main ground. The centre put up a banner to welcome us.',
+        caption: 'Warm-up on the main ground.',
     },
     '02-player-in-nets.webp': {
         alt: 'A Rajasthan Royals Academy Melbourne player waiting to bat in the nets at the centre',
         caption: 'One of our players in the nets.',
     },
     '03-coach-one-on-one.webp': {
-        alt: 'A Royals coach explaining a batting point to a player in the nets',
-        caption: 'One-on-one time with a Royals coach.',
+        alt: 'Faiz Fazal, Indian cricket legend and former Royals cricketer, working one-on-one with Khilesh Mamtani on a batting point in the nets',
+        caption: 'Faiz Fazal working one-on-one with Khilesh Mamtani.',
     },
     '04-coach-on-ground.webp': {
-        alt: 'A Royals coach giving instructions on the training ground',
-        caption: 'Royals coaches ran every session.',
+        alt: 'Somi Bhinder, resident coach at the Rajasthan Royals High Performance Centre, giving instructions on the training ground',
+        caption: 'Somi Bhinder, resident coach at the centre, running the session.',
     },
     '05-players-lounge.webp': {
         alt: 'Rajasthan Royals Academy Melbourne players resting in the players’ lounge at the centre between sessions',
         caption: 'Between sessions in the players’ lounge, the same room the Royals players use.',
     },
     '06-coach-and-batter-in-nets.webp': {
-        alt: 'A Royals coach talking a padded-up batter through the next drill in the nets',
-        caption: 'Talking it through with a Royals coach before batting.',
+        alt: 'Indian cricket legend and former Royals cricketer Faiz Fazal talking a padded-up batter through the next drill in the nets',
+        caption: 'Talking it through with Faiz Fazal, Indian cricket legend and former Royals cricketer.',
     },
     '07-bowler-in-nets.webp': {
         alt: 'A Rajasthan Royals Academy Melbourne player bowling in the nets at the centre',
@@ -84,16 +114,16 @@ const CAPTIONS = {
         caption: 'Putting it into practice in a batting drill.',
     },
     '10-bowling-coach-with-bowler.webp': {
-        alt: 'A Royals coach watching closely as a young Rajasthan Royals Academy Melbourne bowler walks back to his mark in the nets',
-        caption: 'Every ball watched: one-on-one with a Royals bowling coach.',
+        alt: 'Siddharth Trivedi, legendary Rajasthan Royals bowler, watching closely as a young Rajasthan Royals Academy Melbourne bowler walks back to his mark in the nets',
+        caption: 'Every ball watched: one-on-one with Siddharth Trivedi, legendary Rajasthan Royals bowler.',
     },
     '11-coach-group-batting-drill.webp': {
         alt: 'A Royals coach explaining a batting drill to three Rajasthan Royals Academy Melbourne players holding training bats in the nets',
         caption: 'Small groups, so every player gets the coach\u2019s attention.',
     },
     '12-coach-explains-grip.webp': {
-        alt: 'A Royals coach explaining the grip to a young Rajasthan Royals Academy Melbourne batter in the nets',
-        caption: 'Getting the basics right: a Royals coach on the grip.',
+        alt: 'Faiz Fazal, Indian cricket legend and former Royals cricketer, explaining the grip to a young Rajasthan Royals Academy Melbourne batter in the nets',
+        caption: 'Getting the basics right: Faiz Fazal on the grip.',
     },
     '13-warm-up-in-front-of-hpc.webp': {
         alt: 'Rajasthan Royals Academy Melbourne players warming up in a line on the main ground in front of the Rajasthan Royals High Performance Centre building',
@@ -108,18 +138,20 @@ const CAPTIONS = {
         caption: 'A Royals coach watching every movement in a footwork drill.',
     },
     '16-coach-and-batter-in-nets.webp': {
-        alt: 'A Royals coach standing beside a Rajasthan Royals Academy Melbourne player during a batting drill in the nets',
-        caption: 'Side by side with a Royals coach in the nets.',
+        alt: 'Rajasthan Royals Academy Melbourne player Joshua Richardson side by side with Faiz Fazal, Indian cricket legend and former Royals cricketer, during a batting drill in the nets',
+        caption: 'Joshua Richardson side by side with Faiz Fazal in the nets.',
     },
-    // Coaches below were named by Andy (10 Nov 2026). Only name someone the
+    // Coaches named here were identified by Andy (10 Nov 2026), including photos 03, 04, 06, 10, 12 and 16.
+    // Players: every player in the program ticks a box agreeing to be named, so a
+    // player Andy identifies can be named in a caption (Andy, 10 Nov 2026). Only name someone the
     // Academy has identified; never guess from a face.
     '17-sid-trivedi-sets-up-drill.webp': {
-        alt: 'Royals coach Sid Trivedi pointing across the nets as he sets up a drill, under the Rajasthan Royals High Performance Centre banner',
+        alt: 'Siddharth (Sid) Trivedi, legendary Rajasthan Royals bowler, pointing across the nets as he sets up a drill, under the Rajasthan Royals High Performance Centre banner',
         caption: 'Sid Trivedi setting up the next drill.',
     },
     '18-faiz-fazal-with-batter.webp': {
-        alt: 'Faiz Fazal, former India international, talking a padded-up batter through his plan on the ground',
-        caption: 'Faiz Fazal, former India international, talking a batter through his plan.',
+        alt: 'Faiz Fazal, Indian cricket legend and former Royals cricketer, talking a padded-up batter through his plan on the ground',
+        caption: 'Faiz Fazal talking a batter through his plan.',
     },
     '19-sid-lahiri-with-batter-in-nets.webp': {
         alt: 'Siddhartha Lahiri, Head of International Player Development at the Rajasthan Royals, with a padded-up batter in the nets',
@@ -149,4 +181,37 @@ export const SEPT_2026_MEDIA = Object.keys(files)
             caption: meta.caption || '',
         };
     });
+
+// ---------------------------------------------------------------------------
+// WHY GO PHOTOS: one photo per benefit card, from
+// src/assets/india-tour-2026/why-go/. Start each filename with the card number
+// (1-6, same order as the benefits in itCopy.js). Prepare each one with
+//   python3 scripts/prepare-why-go-photo.py <card> <photo> <short-name>
+// which crops it to exactly 1200x900 (4:3), so every card is the same size
+// whatever photo is sent. A card with no photo keeps its icon. Alt text below.
+const whyGoFiles = import.meta.glob(
+    '../../assets/india-tour-2026/why-go/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
+    { eager: true, import: 'default' },
+);
+const WHY_GO_ALT = {
+    '1-team-talk.webp':
+        'Royals coaches talking Rajasthan Royals Academy Melbourne players through the session on the main ground at the Rajasthan Royals High Performance Centre',
+    // Stand-in from the carousel (photo 08) until Andy sends a card 2 photo.
+    '2-coach-hands-on.webp':
+        'A Royals coach guiding a Rajasthan Royals Academy Melbourne player\u2019s hands on the bat during a batting drill in the nets',
+    '3-royals-cafe.webp':
+        'Rajasthan Royals Academy Melbourne players at lunch in the Royals Cafe at the Rajasthan Royals High Performance Centre, under a wall of Royals legends',
+    '4-recovery-session.webp':
+        'Rajasthan Royals Academy Melbourne players lying on mats on the ground during a recovery and mindfulness session at the Rajasthan Royals High Performance Centre',
+    '6-tiger-safari.webp':
+        'Rajasthan Royals Academy Melbourne players eating at a table beside a lake during a tiger safari outing',
+    '5-turf-nets.webp':
+        'A Rajasthan Royals Academy Melbourne batter facing up in the turf nets at the Rajasthan Royals High Performance Centre while coaches and team-mates look on',
+};
+export const WHY_GO_PHOTOS = Object.keys(whyGoFiles).reduce((acc, path) => {
+    const name = path.split('/').pop();
+    const n = parseInt(name, 10);
+    if (n >= 1 && n <= 6) acc[n - 1] = { src: whyGoFiles[path], alt: WHY_GO_ALT[name] || '' };
+    return acc;
+}, {});
 

@@ -54,11 +54,20 @@ const COACHES = [
     },
     {
         name: 'Somi Bhinder',
-        role: 'Resident Fast Bowling Coach',
+        role: 'Resident Coach',
         image: '/assets/rra/somi-bhinder.jpg',
         bio:
-            'A former fast bowler and coach, Somi is the centre\'s resident fast bowling coach. He is ' +
+            'A former fast bowler, Somi is a resident coach at the centre. He is ' +
             'there every day, not flown in for a visit.',
+    },
+    {
+        // Added at Andy's request (10 Nov 2026): bowling coach on the September 2026 tour.
+        name: 'Siddharth Trivedi',
+        role: 'Bowling Coach',
+        image: '/assets/rra/siddharth-trivedi.jpg',
+        bio:
+            'A legendary Rajasthan Royals bowler, Siddharth coached the bowlers on our first tour ' +
+            'in September 2026.',
     },
     {
         name: 'Dr Neeta Adhau',
@@ -92,7 +101,7 @@ const ITCoaching = ({ copy }) => (
                     transition={{ delay: 0.05 }}
                     className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none"
                 >
-                    Who Coached <span className="text-rr-pink">Our First Tour</span>
+                    Learn From <span className="text-rr-pink">Royals Coaches</span>
                 </motion.h2>
                 <div className="w-12 h-px bg-gradient-to-r from-rr-pink to-rr-blue mx-auto my-5" />
                 <motion.p
@@ -102,9 +111,10 @@ const ITCoaching = ({ copy }) => (
                     transition={{ delay: 0.1 }}
                     className="text-base md:text-lg text-rr-charcoal font-medium leading-relaxed"
                 >
-                    These coaches worked with our first touring group at the Rajasthan Royals High Performance
-                    Centre in Nagpur, in September 2026. Some of them work at the centre all year, coaching
-                    the Royals&rsquo; own players. Who coaches each new tour is not set yet.
+                    On our first tour in September 2026, these coaches ran the sessions at the Rajasthan
+                    Royals High Performance Centre. Several work there all year with the Royals&rsquo; own
+                    players, so you get the same coaching, drills and feedback they do. Who coaches the
+                    April 2027 tour is not set yet.
                 </motion.p>
             </div>
 

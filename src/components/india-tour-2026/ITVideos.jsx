@@ -10,11 +10,12 @@ import { VIDEOS } from './itMedia';
 // them in a swipeable carousel. Only one plays at a time. Videos are listed in
 // itMedia.js; with none listed the section is hidden.
 
-const VideoCard = ({ v, id, activeId, setActiveId }) => {
+export const VideoCard = ({ v, id, activeId, setActiveId }) => {
     const ref = useRef(null);
     const [playing, setPlaying] = useState(false);
     const [started, setStarted] = useState(false);
     const [muted, setMuted] = useState(false);
+    const [nativeControls, setNativeControls] = useState(false);
 
     // Another card started: pause this one.
     useEffect(() => {
@@ -29,7 +30,14 @@ const VideoCard = ({ v, id, activeId, setActiveId }) => {
             return;
         }
         setActiveId(id);
-        el.play().then(() => setStarted(true)).catch(() => {});
+        el.play().then(() => setStarted(true)).catch(() => {
+            // Safety net: if a phone refuses to start the video from our button,
+            // hand over to the browser's own player so the customer can still
+            // press play there, instead of nothing happening.
+            el.controls = true;
+            setStarted(true);
+            setNativeControls(true);
+        });
     };
     const toggleMute = () => {
         if (!ref.current) return;
@@ -54,7 +62,13 @@ const VideoCard = ({ v, id, activeId, setActiveId }) => {
                         <video
                             ref={ref}
                             className="absolute inset-0 w-full h-full object-cover"
-                            onPlay={() => setPlaying(true)}
+                            onPlay={() => {
+                                setPlaying(true);
+                                // One video at a time across the whole page, not just this carousel.
+                                document.querySelectorAll('video').forEach((other) => {
+                                    if (other !== ref.current && !other.paused) other.pause();
+                                });
+                            }}
                             onPause={() => setPlaying(false)}
                             onEnded={() => setPlaying(false)}
                             playsInline
@@ -67,7 +81,7 @@ const VideoCard = ({ v, id, activeId, setActiveId }) => {
 
                         {!started && <div className="absolute inset-0 bg-rr-dark/40 pointer-events-none" />}
 
-                        {!playing && (
+                        {!playing && !nativeControls && (
                             <button onClick={toggle} className="absolute inset-0 flex items-center justify-center group/play" aria-label={`Play: ${v.title || 'video'}`}>
                                 <span className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-rr-pink/90 flex items-center justify-center shadow-[0_0_50px_rgba(225,31,143,0.6)] group-hover/play:scale-110 group-hover/play:bg-rr-pink transition-all duration-300">
                                     <Play className="w-8 h-8 md:w-9 md:h-9 text-white ml-1" fill="white" />
@@ -75,14 +89,14 @@ const VideoCard = ({ v, id, activeId, setActiveId }) => {
                             </button>
                         )}
 
-                        <div className={`absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-rr-dark/90 to-transparent transition-opacity duration-300 flex items-center justify-between ${playing ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
+                        {!nativeControls && <div className={`absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-rr-dark/90 to-transparent transition-opacity duration-300 flex items-center justify-between ${playing ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
                             <button onClick={toggle} className="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center backdrop-blur-sm transition-colors" aria-label={playing ? 'Pause' : 'Play'}>
                                 {playing ? <Pause className="w-4 h-4 text-white" fill="white" /> : <Play className="w-4 h-4 text-white ml-0.5" fill="white" />}
                             </button>
                             <button onClick={toggleMute} className="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center backdrop-blur-sm transition-colors" aria-label={muted ? 'Unmute' : 'Mute'}>
                                 {muted ? <VolumeX className="w-4 h-4 text-white" /> : <Volume2 className="w-4 h-4 text-white" />}
                             </button>
-                        </div>
+                        </div>}
 
                         <div className="absolute top-4 left-4 pointer-events-none">
                             <div className="inline-flex items-center gap-2 bg-rr-dark/60 backdrop-blur-sm border border-white/10 rounded-full px-3 py-1.5">
