@@ -111,6 +111,24 @@ const CAPTIONS = {
         alt: 'A Royals coach standing beside a Rajasthan Royals Academy Melbourne player during a batting drill in the nets',
         caption: 'Side by side with a Royals coach in the nets.',
     },
+    // Coaches below were named by Andy (10 Nov 2026). Only name someone the
+    // Academy has identified; never guess from a face.
+    '17-sid-trivedi-sets-up-drill.webp': {
+        alt: 'Royals coach Sid Trivedi pointing across the nets as he sets up a drill, under the High Performance Centre banner',
+        caption: 'Sid Trivedi setting up the next drill.',
+    },
+    '18-faiz-fazal-with-batter.webp': {
+        alt: 'Faiz Fazal, former India international, talking a padded-up batter through his plan on the ground',
+        caption: 'Faiz Fazal, former India international, talking a batter through his plan.',
+    },
+    '19-sid-lahiri-with-batter-in-nets.webp': {
+        alt: 'Siddhartha Lahiri, Head of International Player Development at the Rajasthan Royals, with a padded-up batter in the nets',
+        caption: 'Sid Lahiri with a batter before his net session.',
+    },
+    '20-sid-lahiri-runs-net-session.webp': {
+        alt: 'Siddhartha Lahiri running a net session for Rajasthan Royals Academy Melbourne batters on a turf pitch',
+        caption: 'Sid Lahiri running a net session on turf.',
+    },
 };
 
 // Every file in the folder, picked up at build time.
