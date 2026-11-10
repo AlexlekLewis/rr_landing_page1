@@ -12,6 +12,10 @@
 //     filename. Without one, a general description is used and no caption shown.
 //     Captions never name a person unless we are sure who it is.
 //   They appear in a swipeable carousel, so there is no limit on how many you add.
+//   - Never add a repeat. Check new photos first:
+//       python3 scripts/check-photo-duplicates.py new1.jpg new2.jpg
+//     It compares what the pictures look like, so a resized or re-sent copy is
+//     still caught. Skip anything it marks DUPLICATE.
 //
 // ADDING A VIDEO TO THE VIDEO CAROUSEL
 //   1. Upload it (Supabase storage like the home page video, or /public/tours/).
@@ -98,6 +102,14 @@ const CAPTIONS = {
     '14-centre-wicket-practice.webp': {
         alt: 'A Rajasthan Royals Academy Melbourne batter on strike during centre-wicket practice on a turf pitch at the centre',
         caption: 'Centre-wicket practice on turf, in a game-like setting.',
+    },
+    '15-coach-watches-batting-drill.webp': {
+        alt: 'A Royals coach watching a Rajasthan Royals Academy Melbourne player work through a batting footwork drill in the nets',
+        caption: 'A Royals coach watching every movement in a footwork drill.',
+    },
+    '16-coach-and-batter-in-nets.webp': {
+        alt: 'A Royals coach standing beside a Rajasthan Royals Academy Melbourne player during a batting drill in the nets',
+        caption: 'Side by side with a Royals coach in the nets.',
     },
 };
 
