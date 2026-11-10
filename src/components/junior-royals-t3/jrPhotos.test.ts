@@ -31,3 +31,16 @@ describe('Junior Royals photos', () => {
         }
     });
 });
+
+describe('Junior Royals videos', () => {
+    it('every video and poster exists, no video twice, no player names', async () => {
+        const { JR_VIDEOS } = await import('./jrTerm4Data');
+        expect(JR_VIDEOS.length).toBeGreaterThan(0);
+        expect(new Set(JR_VIDEOS.map((v) => v.src)).size).toBe(JR_VIDEOS.length);
+        for (const v of JR_VIDEOS) {
+            expect(existsSync(`public${v.src}`), v.src).toBe(true);
+            expect(existsSync(`public${v.poster}`), v.poster).toBe(true);
+            expect(`${v.title} ${v.caption}`).not.toMatch(/Brodie|Netz/i);
+        }
+    });
+});

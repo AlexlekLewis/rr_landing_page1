@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import JRSectionCTA from './JRSectionCTA';
 
 const coaches = [
     {
@@ -114,6 +115,7 @@ const JRT3Coaches = () => (
                     <CoachCard key={coach.name} coach={coach} i={i} />
                 ))}
             </div>
+            <JRSectionCTA id="coaches" className="mt-14" />
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-rr-pink to-transparent" />
     </section>

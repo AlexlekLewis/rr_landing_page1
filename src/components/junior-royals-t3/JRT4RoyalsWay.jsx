@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ROYALS_WAY } from './jrTerm4Data';
+import JRSectionCTA from './JRSectionCTA';
 
 // "Play the Royals Way", new this term (Alex, 21 Oct 2026: "the site needs to be live with
 // the new version" → the Royals Way and badges on the live page, booking unchanged). Same
@@ -41,6 +42,7 @@ const JRT4RoyalsWay = () => (
             </div>
 
             <p className="text-center text-rr-charcoal font-semibold mt-12">{ROYALS_WAY.note}</p>
+            <JRSectionCTA id="how-it-works" className="mt-10" />
         </div>
     </section>
 );
