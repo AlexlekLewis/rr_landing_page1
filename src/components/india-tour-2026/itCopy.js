@@ -113,20 +113,20 @@ const BENEFITS_COPY = {
     heading: 'What Your Player',
     headingAccent: 'Gets',
     lead:
-        'Lots of academies run tours. Almost none get inside the building an IPL team actually ' +
-        'trains in. This is what the tour gives your player.',
+        'About ten days in a professional cricket environment changes how a player trains, ' +
+        'prepares and thinks about the game. This is what you take home.',
     items: [
         {
-            title: 'Train where India stars were built',
+            title: 'Train like a professional',
             body:
-                'The Rajasthan Royals High Performance Centre in Nagpur. Not a ground hired for the week, ' +
-                'but the place the Royals use all year to develop their players.',
+                'Live and train at the Rajasthan Royals High Performance Centre, with the facilities, ' +
+                'routines and standards of a professional cricketer, every day.',
         },
         {
-            title: 'Coached by the Royals’ own staff',
+            title: 'Learn from Royals coaches',
             body:
-                'The people who coach the Royals’ contracted players run the sessions: batting, fast ' +
-                'bowling, fielding and mental performance.',
+                'Your sessions are run by coaches who work with the Royals’ own players, so you get ' +
+                'the same drills and feedback they do: batting, bowling, fielding and mental skills.',
         },
         {
             title: 'Come home with a personal plan',
@@ -156,9 +156,9 @@ const BENEFITS_COPY = {
     note:
         'Based on our September 2026 tour. The exact April 2027 programme is confirmed in writing ' +
         'with the price, before anyone commits.',
-    producedHereEyebrow: 'They Trained Here',
-    producedHereHeading: 'Built At This Centre',
-    producedHereLead: 'Players the Royals have developed at the Rajasthan Royals High Performance Centre.',
+    producedHereEyebrow: 'Follow The Pathway',
+    producedHereHeading: 'Train Where They Trained',
+    producedHereLead: 'You train on the same grounds where these players developed their games.',
 };
 
 const SEPTEMBER_COPY = {
@@ -167,7 +167,7 @@ const SEPTEMBER_COPY = {
     headingAccent: 'In Pictures',
     lead:
         'In September 2026 our first touring group spent a week at the Rajasthan Royals High ' +
-        'Performance Centre. This is what it looked like.',
+        'Performance Centre. This is what your days could look like.',
     stats: [
         { value: '7', label: 'nights at the centre' },
         { value: '6', label: 'full coaching days' },
@@ -208,12 +208,11 @@ const STANDARD = {
             'Exact dates are not set yet. Register your interest now and we will write to you when ' +
             'they are.',
         lead:
-            `A tour of about ${TOUR_LENGTH_DAYS} days to the Rajasthan Royals' talent factory in Nagpur — ` +
-            'the Rajasthan Royals High Performance Centre, and the place that built the games of ' +
-            'Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag. It is where Vaibhav Sooryavanshi ' +
-            'trains, alongside the coach who is his legal guardian. Our first touring group trained there ' +
-            'with the Royals\' own high performance staff in September 2026, and our Melbourne coaches ' +
-            'pick the touring squad.',
+            'This is an incredible opportunity to build your skillset in the Rajasthan Royals ' +
+            'environment during the IPL season. ' +
+            `For about ${TOUR_LENGTH_DAYS} days you live and train at the Rajasthan Royals High ` +
+            'Performance Centre in Nagpur, coached by Royals staff, and come home a more complete ' +
+            'cricketer with a clear plan for what to work on next.',
         priceLabel: 'Estimated price',
         priceUnit: 'per player',
         priceNote:
@@ -226,11 +225,10 @@ const STANDARD = {
         countdownLabel: 'Registrations close in',
         countdownUnits: { days: 'Days', hours: 'Hrs', minutes: 'Mins', seconds: 'Secs' },
         countdownNote:
-            'Once the clock runs out we close the list and our coaches pick the touring squad from ' +
-            'everyone who registered.',
+            'Once the clock runs out we close the list and write to everyone who registered.',
         ctaAfterCoaches: {
             heading: 'Register for April 2027',
-            body: 'Register your interest in the April 2027 tour. It costs nothing, takes about two minutes and commits you to nothing. Our Melbourne coaches pick the touring squad from everyone who registers.',
+            body: 'Register your interest in the April 2027 tour. It costs nothing, takes about two minutes and commits you to nothing.',
         },
         ctaAfterPricing: {
             heading: 'Ready to put your player forward?',
@@ -246,38 +244,6 @@ const STANDARD = {
         countdownClosedNote:
             'If you still want to be considered, email info@rramelbourne.com and we will tell you ' +
             'whether any places are left.',
-    },
-
-    about: {
-        eyebrow: 'Why This Is Rare',
-        heading: 'The Royals\'',
-        headingAccent: 'Talent Factory',
-        lead:
-            'Academies run tours. Almost none of them get inside the building an IPL franchise actually ' +
-            'uses. Each Rajasthan Royals Academy Melbourne tour goes to the Rajasthan Royals High ' +
-            `Performance Centre in Nagpur for about ${TOUR_LENGTH_DAYS} days.`,
-        producedHereLabel: 'Built at this centre',
-        points: [
-            {
-                title: 'A factory with a record',
-                body:
-                    'This is the Royals\' own centre, used by their contracted players — not a facility ' +
-                    'booked for the week. Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag all ' +
-                    'rebuilt their games here before playing for India.',
-            },
-            {
-                title: 'The club\'s own coaches',
-                body:
-                    'The Rajasthan Royals team manager. A former India international and Ranji ' +
-                    'Trophy-winning captain. The centre\'s resident fast bowling coach. The Royals\' ' +
-                    'performance psychologist. These are the people who coach the club\'s own players, and ' +
-                    'they coached our first touring group in September 2026.',
-            },
-            {
-                title: 'How the squad is picked',
-                body: 'Anyone can register. Our Melbourne coaches pick the touring squad.',
-            },
-        ],
     },
 
     pricing: {
@@ -456,10 +422,11 @@ const SIMPLE = {
             'The exact dates are not set yet. Put your name down now and we will tell you when the ' +
             'dates are set.',
         lead:
-            `A tour of about ${TOUR_LENGTH_DAYS} days to the Rajasthan Royals' talent factory in Nagpur. ` +
-            'This is the centre that built Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag — ' +
-            'and where Vaibhav Sooryavanshi trains. Royals coaches worked with our first touring group ' +
-            'there in September 2026. Our Melbourne coaches pick the team.',
+            'This is an incredible opportunity to build your skillset in the Rajasthan Royals ' +
+            'environment during the IPL season. ' +
+            `For about ${TOUR_LENGTH_DAYS} days you live and train at the Rajasthan Royals High ` +
+            'Performance Centre in Nagpur, coached by Royals staff. You come home a better ' +
+            'cricketer, with a clear plan for what to work on next.',
         priceLabel: 'Estimated price',
         priceUnit: 'per player',
         priceNote:
@@ -472,8 +439,7 @@ const SIMPLE = {
         countdownLabel: 'Sign-ups close in',
         countdownUnits: { days: 'Days', hours: 'Hrs', minutes: 'Mins', seconds: 'Secs' },
         countdownNote:
-            'When the clock hits zero we shut the list. Then our coaches pick the team from everyone ' +
-            'who signed up.',
+            'When the clock hits zero we shut the list and write to everyone who signed up.',
         ctaAfterCoaches: {
             heading: 'April 2027',
             body: 'Put your name down for the April 2027 tour. It is free and takes about two minutes. You are not paying or promising anything yet.',
@@ -485,42 +451,11 @@ const SIMPLE = {
         closedBadge: 'Applications Closed',
         closedHeading: 'Sign-ups for this tour are closed',
         closedBody:
-            'You can no longer put your name down for this camp. Our coaches are picking the ' +
-            'team now. We will announce a new tour soon.',
+            'You can no longer put your name down for this camp. We will announce a new tour soon.',
         closedNext: 'New tour announcement coming soon.',
         countdownClosed: 'Sign-ups for this tour are closed.',
         countdownClosedNote:
             'You can still email info@rramelbourne.com to ask if there are any spots left.',
-    },
-
-    about: {
-        eyebrow: 'Why This Is Special',
-        heading: 'The Royals\'',
-        headingAccent: 'Talent Factory',
-        lead:
-            'Lots of academies run trips to India. Almost none of them get inside the building an IPL ' +
-            'club really uses. Our tours go to the Rajasthan Royals\' own centre in Nagpur, for about ' +
-            `${TOUR_LENGTH_DAYS} days each. Put your name down below and we will tell you everything.`,
-        producedHereLabel: 'Built at this centre',
-        points: [
-            {
-                title: 'This place makes India players',
-                body:
-                    'Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag all trained here before ' +
-                    'they played for India. It is the Royals\' own centre, not a ground we hired.',
-            },
-            {
-                title: 'The club\'s own coaches',
-                body:
-                    'The Rajasthan Royals team manager. A man who played for India and captained a ' +
-                    'title-winning side. These are the coaches who work with the club\'s players. They ' +
-                    'coached our first touring group in September 2026.',
-            },
-            {
-                title: 'How the team is picked',
-                body: 'Anyone can put their name down. Our Melbourne coaches pick the team.',
-            },
-        ],
     },
 
     pricing: {

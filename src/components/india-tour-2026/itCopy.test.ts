@@ -46,6 +46,14 @@ describe("the tours and the estimate", () => {
 describe.each(["simple", "standard"] as const)("%s copy", (level) => {
   const copy = COPY[level];
 
+  it("never says the coaches pick the team (Andy, 10 Nov 2026)", () => {
+    for (const str of allStrings(copy)) expect(str).not.toMatch(/coaches (pick|are picking)/i);
+  });
+
+  it("opens the hero with the player's opportunity, not the centre's record", () => {
+    expect(copy.hero.lead).toMatch(/^This is an incredible opportunity to build your skillset in the Rajasthan Royals environment during the IPL season\./);
+  });
+
   it("never mentions Sanju Samson, who no longer plays for the Royals", () => {
     for (const str of allStrings(copy)) expect(str).not.toMatch(/samson/i);
   });

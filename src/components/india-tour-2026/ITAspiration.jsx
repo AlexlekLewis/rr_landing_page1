@@ -40,8 +40,8 @@ const ITAspiration = ({ copy }) => (
                     className="text-base md:text-lg text-white/75 font-medium leading-relaxed mt-6"
                 >
                     The Royals develop players from the academy to the biggest stages in world
-                    cricket. A tour of India is a rare chance to test your game in its heartland —
-                    and to be seen.
+                    cricket. A tour of India is a rare chance to test your game in cricket&rsquo;s
+                    heartland and come home a better player.
                 </motion.p>
                 <div className="mt-9">
                     <ITRegisterButton label={copy.hero.cta} id="aspiration-register" />
