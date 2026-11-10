@@ -154,8 +154,9 @@ const BENEFITS_COPY = {
         {
             title: 'Grow as a person',
             body:
-                'About ten days away with team-mates, living like a professional cricketer. Players come ' +
-                'back more independent, more confident and hungrier to improve.',
+                'About ten days away with team-mates, living like a professional cricketer, with time to ' +
+                'see India too: on our September 2026 tour, members of the group went on a tiger safari. ' +
+                'Players come back more independent, more confident and hungrier to improve.',
         },
     ],
     note:

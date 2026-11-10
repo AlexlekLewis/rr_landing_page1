@@ -194,6 +194,8 @@ const WHY_GO_ALT = {
         'Rajasthan Royals Academy Melbourne players at lunch in the Royals Cafe at the Rajasthan Royals High Performance Centre, under a wall of Royals legends',
     '4-recovery-session.webp':
         'Rajasthan Royals Academy Melbourne players lying on mats on the ground during a recovery and mindfulness session at the Rajasthan Royals High Performance Centre',
+    '6-tiger-safari.webp':
+        'Rajasthan Royals Academy Melbourne players eating at a table beside a lake during a tiger safari outing',
     '5-warm-up-session.webp':
         'Rajasthan Royals Academy Melbourne players lined up on the ground, watching a coach demonstrate a warm-up drill',
 };
