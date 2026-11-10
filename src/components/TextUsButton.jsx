@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { isBookingFlowPath } from './booking/booking-privacy';
 
 const SMS_NUMBER = '0421261825';
 const MOBILE_MESSAGE = 'Hi - Let us know if you have a question!';
 const DESKTOP_MESSAGE = 'Hi, I have a question about RRA Melbourne programs';
 
 const TextUsButton = () => {
+    const { pathname } = useLocation();
     const [tooltip, setTooltip] = useState(false);
     const [cartOpen, setCartOpen] = useState(false);
 
@@ -24,7 +27,8 @@ const TextUsButton = () => {
         window.open(`sms:${SMS_NUMBER}${separator}body=${encodeURIComponent(message)}`, '_self');
     };
 
-    if (cartOpen) return null;
+    // Coach pages keep their inline enquiry form clear of floating controls.
+    if (cartOpen || /^\/coaches\/[^/]+\/?$/i.test(pathname) || isBookingFlowPath(pathname)) return null;
 
     return (
         <div className="fixed bottom-24 right-4 z-50 flex flex-col items-end gap-3">

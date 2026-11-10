@@ -29,6 +29,10 @@ const state = value => ['checkout', 'requested', 'venue_told', 'confirmed', 'dec
 const list = (value, max) => Array.isArray(value) && value.length <= max ? value : fail();
 const unique = (rows, key) => { if (new Set(rows.map(row => row[key])).size !== rows.length) fail(); return rows; };
 const outcome = value => ['credit', 'refund', 'move'].includes(value) ? value : fail();
+const cardRefundEligibility = value => {
+  if (!Object.hasOwn(value, 'can_request_card_refund')) return false;
+  return typeof value.can_request_card_refund === 'boolean' ? value.can_request_card_refund : fail();
+};
 
 export function parseFamily(data) {
   if (data?.ok !== true) fail();
@@ -40,7 +44,7 @@ export function parseFamily(data) {
   const items = unique(list(value.items, 400).map(item => {
     const b = object(item), starts_at = stamp(b.starts_at), ends_at = stamp(b.ends_at);
     if (Date.parse(ends_at) <= Date.parse(starts_at)) fail();
-    return { booking_id: id(b.booking_id), request_id: id(b.request_id), starts_at, ends_at, coach: b.coach === null ? null : text(b.coach, 120), centre: text(b.centre), state: state(b.state), state_plain: text(b.state_plain, 120), can_cancel_free_until: stamp(b.can_cancel_free_until), late_fee_cents: cents(b.late_fee_cents), cancellation_fee_cents: b.cancellation_fee_cents === null ? null : cents(b.cancellation_fee_cents), pending_choice_event: b.pending_choice_event === null ? null : id(b.pending_choice_event) };
+    return { booking_id: id(b.booking_id), request_id: id(b.request_id), starts_at, ends_at, coach: b.coach === null ? null : text(b.coach, 120), centre: text(b.centre), state: state(b.state), state_plain: text(b.state_plain, 120), can_cancel_free_until: stamp(b.can_cancel_free_until), late_fee_cents: cents(b.late_fee_cents), cancellation_fee_cents: b.cancellation_fee_cents === null ? null : cents(b.cancellation_fee_cents), pending_choice_event: b.pending_choice_event === null ? null : id(b.pending_choice_event), can_request_card_refund: cardRefundEligibility(b) };
   }), 'booking_id');
   return { as_of: stamp(value.as_of), players, items };
 }

@@ -97,7 +97,7 @@ it('requires another fee preview and explicit consent when the server refuses ch
   await screen.findByRole('heading', { name: 'Session cancelled' }); expect(nonces.length).toBe(2); expect(nonces[0]).not.toBe(nonces[1]);
 });
 it('shows refund and replacement choices as pending requests, not completed money or a replacement booking', async () => {
-  const test = harness(); test.server.items[0].state = 'cancelled'; test.server.items[0].state_plain = 'Cancelled'; test.server.items[0].pending_choice_event = id(801);
+  const test = harness(); test.server.items[0].state = 'cancelled'; test.server.items[0].state_plain = 'Cancelled'; test.server.items[0].pending_choice_event = id(801); test.server.items[0].can_request_card_refund = true;
   test.mount(); await ready(); expect((screen.getByRole('button', { name: 'Save my choice' }) as HTMLButtonElement).disabled).toBe(true);
   fireEvent.click(screen.getByRole('radio', { name: 'Refund to the original card' })); fireEvent.click(screen.getByRole('button', { name: 'Save my choice' }));
   await screen.findByText('Your refund has been requested. The Academy will confirm when it is completed.');
@@ -115,4 +115,64 @@ it('stops after429 without an automatic read loop or an enabled retry button', a
   test.mount(); await screen.findByText(/too many checks/);
   expect((screen.getByRole('button', { name: 'Check latest sessions and credit' }) as HTMLButtonElement).disabled).toBe(true);
   expect(test.send).toHaveBeenCalledTimes(1);
+});
+
+
+it.each(['false','missing'])('does not offer an original-card refund for %s eligibility while preserving credit and move',async mode=>{
+ const test=harness();Object.assign(test.server.items[0],{state:'cancelled',state_plain:'Cancelled',pending_choice_event:id(801)});
+ if(mode==='missing')Reflect.deleteProperty(test.server.items[0],'can_request_card_refund');
+ test.mount();await ready();expect(screen.queryByRole('radio',{name:'Refund to the original card'})).toBeNull();
+ expect(screen.getByRole('radio',{name:'Credit for the player'})).toBeTruthy();expect(screen.getByRole('radio',{name:'Arrange a new time'})).toBeTruthy();
+ expect(screen.getByText(/If you paid by bank transfer, contact the Academy about a refund/)).toBeTruthy();
+ expect(test.send.mock.calls.every(([url])=>url.endsWith('public-private-manage'))).toBe(true);
+});
+it('clears a selected refund after eligibility loss and does not restore or submit it after eligibility returns',async()=>{
+ const test=harness();Object.assign(test.server.items[0],{state:'cancelled',state_plain:'Cancelled',pending_choice_event:id(801),can_request_card_refund:true});
+ test.mount();await ready();fireEvent.click(screen.getByRole('radio',{name:'Refund to the original card'}));
+ expect((screen.getByRole('button',{name:'Save my choice'})as HTMLButtonElement).disabled).toBe(false);
+ test.server.items[0].can_request_card_refund=false;fireEvent.click(screen.getByRole('button',{name:'Check latest sessions and credit'}));
+ await waitFor(()=>expect(screen.queryByRole('radio',{name:'Refund to the original card'})).toBeNull());
+ const save=screen.getByRole('button',{name:'Save my choice'});expect((save as HTMLButtonElement).disabled).toBe(true);fireEvent.click(save);
+ test.server.items[0].can_request_card_refund=true;fireEvent.click(screen.getByRole('button',{name:'Check latest sessions and credit'}));
+ const refund=await screen.findByRole('radio',{name:'Refund to the original card'});expect((refund as HTMLInputElement).checked).toBe(false);
+ expect((screen.getByRole('button',{name:'Save my choice'})as HTMLButtonElement).disabled).toBe(true);
+ expect(test.send.mock.calls.filter(([url])=>url.endsWith('public-private-cancel-choice'))).toHaveLength(0);
+});
+it('blocks a retained selected-refund save while the fresh eligibility read is unresolved',async()=>{
+ let reads=0,resolveRead:(response:Response)=>void=()=>{};
+ const test=harness(async(url,_init,server)=>{
+  if(url.endsWith('public-private-manage')){if(++reads===1)return jsonResponse({ok:true,family:server});return new Promise<Response>(resolve=>{resolveRead=resolve;});}
+  throw Error('No financial call is allowed during an unresolved refresh');
+ });
+ Object.assign(test.server.items[0],{state:'cancelled',state_plain:'Cancelled',pending_choice_event:id(801),can_request_card_refund:true});
+ test.mount();await ready();fireEvent.click(screen.getByRole('radio',{name:'Refund to the original card'}));
+ fireEvent.click(screen.getByRole('button',{name:'Check latest sessions and credit'}));
+ const save=screen.getByRole('button',{name:'Save my choice'});expect((save as HTMLButtonElement).disabled).toBe(true);fireEvent.click(save);
+ expect(test.send.mock.calls.filter(([url])=>url.endsWith('public-private-cancel-choice'))).toHaveLength(0);
+ test.server.items[0].can_request_card_refund=false;resolveRead(jsonResponse({ok:true,family:test.server}));
+ await waitFor(()=>expect(screen.queryByRole('radio',{name:'Refund to the original card'})).toBeNull());
+});
+it('keeps an unknown original refund recoverable after a fresh read removes its event and eligibility',async()=>{
+ const attempts:{body:string;nonce:string}[]=[];
+ const test=harness(async(url,init,server)=>{
+  if(url.endsWith('public-private-manage'))return jsonResponse({ok:true,family:server});
+  if(url.endsWith('public-private-cancel-choice')){
+   const nonce=(init.headers as Record<string,string>)['Idempotency-Key'];attempts.push({body:init.body as string,nonce});
+   if(attempts.length===1){server.items[0].pending_choice_event=null;server.items[0].can_request_card_refund=false;throw Error('Unit lost original result after commit');}
+   return jsonResponse({ok:true,choice:choiceReceipt(nonce,'refund')});
+  }throw Error('Unexpected endpoint');
+ });
+ Object.assign(test.server.items[0],{state:'cancelled',state_plain:'Cancelled',pending_choice_event:id(801),can_request_card_refund:true});
+ test.mount();await ready();fireEvent.click(screen.getByRole('radio',{name:'Refund to the original card'}));fireEvent.click(screen.getByRole('button',{name:'Save my choice'}));
+ await screen.findByRole('heading',{name:'Check your submitted choice'});
+ const original=test.client.state().pending;expect(original).toMatchObject({kind:'choice',phase:'unknown',target:id(801)});
+ fireEvent.click(screen.getByRole('button',{name:'Check latest sessions and credit'}));
+ await waitFor(()=>expect(screen.queryByRole('button',{name:'Save my choice'})).toBeNull());
+ expect(attempts).toHaveLength(1);expect(test.client.state().pending).toEqual(original);
+ expect(screen.getByRole('button',{name:'Check submitted result'})).toBeTruthy();
+ await expect(test.client.choose({event_id:id(801),choice:'credit'})).rejects.toMatchObject({code:'outcome_unknown'});
+ fireEvent.click(screen.getByRole('button',{name:'Check submitted result'}));
+ await screen.findByText('Your refund has been requested. The Academy will confirm when it is completed.');
+ expect(attempts).toHaveLength(2);expect(attempts[1]).toEqual(attempts[0]);expect(test.client.state().pending).toBeNull();
+ expect(screen.queryByText('Your refund is complete')).toBeNull();expect(sessionStorage.length+localStorage.length).toBe(0);
 });

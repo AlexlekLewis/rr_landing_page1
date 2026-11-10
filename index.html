@@ -3,6 +3,26 @@
 
 <head>
   <meta charset="UTF-8" />
+  <script id="private-amendment-bootstrap">
+    // Own952 capture and redaction before assets or analytics.
+    (function () {
+      var secret = null, locked = false;
+      function path() { var value = window.location.pathname; try { value = decodeURIComponent(value); } catch (_) {} return value; }
+      function amendment() { return /^\/book\/amendment(?:\/|$)/i.test(path()); }
+      function clean() { try { window.history.replaceState(null, '', '/book/amendment'); return true; } catch (_) { secret = null; window.location.replace('/book/amendment'); return false; } }
+      window.addEventListener('hashchange', function () { if (!amendment()) return; if (locked) { clean(); return; } secret = null; window.location.reload(); });
+      window.addEventListener('popstate', function (event) { if (locked) { event.stopImmediatePropagation(); try { window.history.pushState(null, '', '/book/amendment'); } catch (_) {} } }, true);
+      if (!amendment()) return;
+      var match = /^#amendment=([a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12})&token=([a-f0-9]{64})$/.exec(window.location.hash);
+      if (/^\/book\/amendment\/?$/i.test(path()) && !window.location.search && match && match[0] === window.location.hash) secret = { amendmentId: match[1], token: match[2] };
+      var policy = document.createElement('meta'); policy.name = 'referrer'; policy.content = 'no-referrer'; document.head.appendChild(policy);
+      var robots = document.createElement('meta'); robots.name = 'robots'; robots.content = 'noindex, nofollow, noarchive'; document.head.appendChild(robots);
+      clean();
+      var handoff = Symbol.for('rra.private.amendment.bootstrap.v1');
+      Object.defineProperty(window, handoff, { configurable: true, value: function () { var value = secret; secret = null; delete window[handoff]; return { amendmentId: value && value.amendmentId, token: value && value.token, lock: function (v) { locked = v === true; } }; } });
+      window.addEventListener('pagehide', function () { secret = null; locked = false; }, { once: true });
+    }());
+  </script>
   <script id="private-renewal-bootstrap">
     // Own950 namespace. Capture and redact before any external asset or analytics.
     (function () {

@@ -32,6 +32,7 @@ import HomePage from './components/home-page/HomePage';
 import InductionPage from './components/induction/InductionPage';
 import CoachesDay from './components/coaches-day/CoachesDay';
 import CoachesPage from './components/coaches/CoachesPage';
+import CoachProfileRoute from './components/coach-profile/CoachProfileRoute';
 import PrivateCoaching from './components/private-coaching/PrivateCoaching';
 import MicklehamLaunch from './components/mickleham-launch/MicklehamLaunch';
 import Reviews from './components/reviews/Reviews';
@@ -48,6 +49,7 @@ const BookPrivateCoaching = React.lazy(() => import('./components/booking/BookPa
 const ManagePrivateCoaching = React.lazy(() => import('./components/booking/FamilyManagePage.jsx'));
 const CardInvitation = React.lazy(() => import('./components/booking/invitation/InvitationPage.jsx'));
 const RenewalOffer = React.lazy(() => import('./components/booking/renewal/RenewalPage.jsx'));
+const RequestedAmendment = React.lazy(() => import('./components/booking/amendment/AmendmentPage.jsx'));
 
 // Power Game apply funnel — lazy-loaded (qualify → place → pay registration)
 const PowerGameApply = React.lazy(() => import('./components/power-game/apply/ApplyFlow'));
@@ -232,11 +234,14 @@ function App() {
 
         {/* The Coaches — leadership tiers, coaching mission + full bios. Info page, no form. */}
         <Route path="/coaches" element={<CoachesPage />} />
+        <Route path="/coaches/:slug" element={<CoachProfileRoute />} />
         <Route path="/book" element={<PrivateBookingEntry><React.Suspense fallback={<div className="min-h-screen bg-white p-8" role="status">Loading private coaching…</div>}><BookPrivateCoaching key="card" /></React.Suspense></PrivateBookingEntry>} />
         <Route path="/book/invitation" element={<PrivateBookingEntry><React.Suspense fallback={<div className="min-h-screen bg-white p-8" role="status">Opening card invitation…</div>}><CardInvitation /></React.Suspense></PrivateBookingEntry>} />
         <Route path="/book/invitation/*" element={<Navigate to="/book/invitation" replace />} />
         <Route path="/book/renewal" element={<PrivateBookingEntry><React.Suspense fallback={<div className="min-h-screen bg-white p-8" role="status">Opening renewal offer…</div>}><RenewalOffer /></React.Suspense></PrivateBookingEntry>} />
+        <Route path="/book/amendment" element={<PrivateBookingEntry><React.Suspense fallback={<div className="min-h-screen bg-white p-8" role="status">Opening changed request…</div>}><RequestedAmendment /></React.Suspense></PrivateBookingEntry>} />
         <Route path="/book/renewal/*" element={<Navigate to="/book/renewal" replace />} />
+        <Route path="/book/amendment/*" element={<Navigate to="/book/amendment" replace />} />
         <Route path="/book/credit" element={<PrivateBookingEntry><React.Suspense fallback={<div className="min-h-screen bg-white p-8" role="status">Loading private coaching…</div>}><BookPrivateCoaching key="credit" credit /></React.Suspense></PrivateBookingEntry>} />
         <Route path="/booking" element={<PrivateBookingEntry><React.Suspense fallback={<div className="min-h-screen bg-white p-8" role="status">Opening private coaching…</div>}><ManagePrivateCoaching /></React.Suspense></PrivateBookingEntry>} />
         <Route path="/booking/*" element={<Navigate to="/booking" replace />} />

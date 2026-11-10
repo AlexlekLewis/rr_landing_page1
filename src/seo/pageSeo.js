@@ -8,6 +8,9 @@
 // Canonical URLs only: use /mickleham (not the /private-coaching 308) and /elite-royals
 // as the primary for the shared Elite/PowerGame page (/PGP2026 canonicalises to it).
 
+import { COACH_PROFILES } from '../components/coach-profile/coachProfiles.js';
+import { COACH_PAGES_ENABLED } from '../components/coach-profile/coachPagesConfig.js';
+
 export const SITE = {
   name: 'Rajasthan Royals Academy Melbourne',
   baseUrl: 'https://rramelbourne.com',
@@ -15,6 +18,7 @@ export const SITE = {
   defaultOgImage: '/assets/MELBOURNE_OFFICIAL.png',
   locale: 'en_AU',
 };
+
 
 // Fallback for any public route not explicitly listed below.
 export const DEFAULT_SEO = {
@@ -273,3 +277,13 @@ export const PAGE_SEO = {
       'The terms and conditions for using the Rajasthan Royals Academy Melbourne website and programs.',
   },
 };
+
+// The approved pages enter search metadata only with their explicit launch switch.
+if (COACH_PAGES_ENABLED) {
+  for (const profile of Object.values(COACH_PROFILES)) {
+    PAGE_SEO[`/coaches/${profile.slug}`] = {
+      title: profile.seo.title, description: profile.seo.description,
+      ...(profile.photo ? { ogImage: profile.photo } : {}),
+    };
+  }
+}

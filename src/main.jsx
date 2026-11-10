@@ -1,3 +1,4 @@
+import './components/booking/amendment/amendment-memory'
 import './components/booking/renewal/renewal-memory'
 import './components/booking/family-capability'
 import './components/booking/invitation/invitation-memory'
@@ -12,6 +13,7 @@ import { isPrivateBookingPath, privateBookingAnalytics } from './components/book
 import FamilyCapabilityProvider from './components/booking/FamilyCapabilityProvider'
 import InvitationPrivacyBoundary from './components/booking/invitation/InvitationPrivacyBoundary'
 import RenewalPrivacyBoundary from './components/booking/renewal/RenewalPrivacyBoundary'
+import AmendmentPrivacyBoundary from './components/booking/amendment/AmendmentPrivacyBoundary'
 
 // Initialize PostHog
 const posthogKey = import.meta.env.VITE_PUBLIC_POSTHOG_KEY
@@ -32,7 +34,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <PostHogProvider client={posthog}>
       <BrowserRouter>
-        <RenewalPrivacyBoundary><InvitationPrivacyBoundary><FamilyCapabilityProvider><App /></FamilyCapabilityProvider></InvitationPrivacyBoundary></RenewalPrivacyBoundary>
+        <AmendmentPrivacyBoundary><RenewalPrivacyBoundary><InvitationPrivacyBoundary><FamilyCapabilityProvider><App /></FamilyCapabilityProvider></InvitationPrivacyBoundary></RenewalPrivacyBoundary></AmendmentPrivacyBoundary>
       </BrowserRouter>
     </PostHogProvider>
   </StrictMode>,

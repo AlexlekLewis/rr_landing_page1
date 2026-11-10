@@ -41,6 +41,15 @@
   ],
   "headers": [
     {
+      "source": "/book/amendment/:path*",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store" },
+        { "key": "Referrer-Policy", "value": "no-referrer" },
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive, nosnippet" },
+        { "key": "Content-Security-Policy", "value": "img-src 'self' data:;" }
+      ]
+    },
+    {
       "source": "/book/invitation/:path*",
       "headers": [
         { "key": "Cache-Control", "value": "no-store" },

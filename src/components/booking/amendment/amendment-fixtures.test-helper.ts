@@ -1,0 +1,12 @@
+export const id=(n=1)=>`00000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
+const price=(v:number)=>({currency:'AUD',per_session_cents:v,sessions:1,discount_applied:false,first_session_hold_cents:v,rest_cents:0,total_cents:v});
+const terms=(m:number)=>({duration_minutes:m,price:price(m===60?13000:26000),dates:[{ordinal:1,starts_at:'2026-11-13T07:00:00Z',ends_at:m===60?'2026-11-13T08:00:00Z':'2026-11-13T09:00:00Z',venue:'Mickleham'}]});
+export const amendment=()=>({schema_version:1,amendment_id:id(),centre:{key:'mickleham',name:'Mickleham'},coach:{name:'Ava'},participants:[{ordinal:1,name:'Test Player',age_years:14}],old_terms:terms(60),new_terms:terms(120)});
+export const fields=(consent=false,confirmed=true)=>({parent:{name:'Test Family',email:'family@example.test',phone:'0400000000'},note:'',confirm_players:confirmed,consent_save_card:consent});
+export const preview=()=>({schema_version:1,state:'available',amendment:amendment(),fields:fields(false,false)});
+export const quote=()=>({schema_version:1,state:'ready',amendment:amendment(),fields:fields(),review:`lr1.${id(2)}`,expires_real_at:'2026-11-10T02:10:00Z'});
+export const receipt=()=>({schema_version:1,amendment_id:id(),nonce:id(3),outcome:'accepted',request_id:id(4)});
+export const missing=()=>({schema_version:1,receipt_state:'not_found'});
+export const found=()=>({schema_version:1,receipt_state:'found',receipt:receipt()});
+export const current=()=>({schema_version:1,view_kind:'amendment_successor_current',amendment_id:id(),request_id:id(4),revision:1,request_state:'checkout',payment_state:'checkout_pending',checkout_state:'ready',checkout_url:'https://checkout.stripe.com/c/pay/cs_test_fixture#opaqueFragment'});
+export const unavailable=()=>({schema_version:1,state:'unavailable',amendment_id:id(),code:'closed'});

@@ -99,7 +99,8 @@ async function main() {
         process.exit(1);
     }
 
-    for (const route of ROUTES) {
+    const coachRoutes = Object.keys(PAGE_SEO).filter(route => /^\/coaches\/[a-z0-9-]+$/.test(route));
+    for (const route of [...ROUTES, ...coachRoutes]) {
         const cfg = PAGE_SEO[route];
         if (!cfg) {
             // Loud, not silent. A route here with no config would ship a page
@@ -117,6 +118,14 @@ async function main() {
         await mkdir(dir, { recursive: true });
         await writeFile(join(dir, 'index.html'), html, 'utf8');
         console.log(`prerender-seo: wrote dist${route}/index.html`);
+    }
+    if (coachRoutes.length) {
+        const sitemapPath = join(DIST, 'sitemap.xml');
+        const sitemap = await readFile(sitemapPath, 'utf8');
+        const missing = coachRoutes.filter(route => !sitemap.includes(`<loc>${SITE.baseUrl}${route}</loc>`));
+        const entries = missing.map(route => `  <url><loc>${SITE.baseUrl}${route}</loc></url>`).join('\n');
+        if (!sitemap.includes('</urlset>')) throw new Error('Coach sitemap requires the existing urlset');
+        await writeFile(sitemapPath, sitemap.replace('</urlset>', entries + '\n</urlset>'), 'utf8');
     }
 }
 

@@ -1,5 +1,6 @@
 import { expect, it, vi } from 'vitest';
 import { createFamilyClient, familyError, parseFamily } from './family-client';
+import { parseFamily as legacyParseFamily } from './family-client-v1-compat';
 import { cancelReceipt, choiceReceipt, family, familyEnv, jsonResponse, preview } from './family-fixtures.test-helper';
 import { id } from './fixtures.test-helper';
 
@@ -115,4 +116,19 @@ it('never exposes raw server or transport messages', async () => {
   try { await createFamilyClient(familyEnv, send, memory).read(); throw Error('Expected refusal'); } catch (error) {
     expect(familyError(error)).not.toMatch(/database|diagnostic|42501|stack/);
   }
+});
+
+
+it.each([true,false])('preserves only typed card-refund eligibility %s in the safe family projection',eligible=>{
+ const raw=family();Object.assign(raw.items[0],{can_request_card_refund:eligible,payment_id:id(999),method:'stripe'});
+ const parsed=parseFamily({ok:true,family:raw});expect(parsed.items[0].can_request_card_refund).toBe(eligible);
+ expect(parsed.items[0]).not.toHaveProperty('payment_id');expect(parsed.items[0]).not.toHaveProperty('method');
+});
+it('defaults an old response to false while old33a ignores the additive new field',()=>{
+ const raw=family();Reflect.deleteProperty(raw.items[0],'can_request_card_refund');
+ expect(parseFamily({ok:true,family:raw}).items[0].can_request_card_refund).toBe(false);
+ Object.assign(raw.items[0],{can_request_card_refund:true});expect(legacyParseFamily({ok:true,family:raw}).items[0]).not.toHaveProperty('can_request_card_refund');
+});
+it.each([null,'true',0,1,{},[],undefined])('refuses present nonboolean card-refund eligibility %s',value=>{
+ const raw=family();Object.assign(raw.items[0],{can_request_card_refund:value});expect(()=>parseFamily({ok:true,family:raw})).toThrow();
 });

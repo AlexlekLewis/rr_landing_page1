@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { catalog, id, slot, slots, starts } from './fixtures.test-helper';
-import { dayLabel, deepLink, emptyDraft, localStart, parseCatalog, parseSlots, recoveredIntent, requestIntent, slotAccessibleLabel, timeLabel } from './booking-model';
+import { dayLabel, deepLink, emptyDraft, localStart, parseCatalog, parseCoachOffers, parseSlots, recoveredIntent, requestIntent, slotAccessibleLabel, timeLabel } from './booking-model';
 describe('public booking model', () => {
   it('keeps only declared public facts, including nested price and series fields', () => {
     const raw = slots(); Object.assign(raw.by_coach[0].slots[0], { net: { lane: 7 }, family_email: 'test-private@example.test' }); Object.assign(raw.by_coach[0], { pay_rate: 99 });
@@ -50,5 +50,18 @@ describe('public booking model', () => {
   it('a recovered retry cannot forward stored prices, player IDs, clocks, nets or provider metadata', () => {
     const intent = requestIntent(draft(), { ...slot(), profile_id: id(3) }); const recovered = recoveredIntent({ payload: JSON.stringify({ ...intent, amount_cents: 1, player_id: id(99), as_at: '2030-01-01', net: 7, provider_ids: ['secret'] }) });
     expect(recovered).toEqual(intent); expect(recoveredIntent({ payload: '{bad' })).toBeNull();
+  });
+});
+
+
+describe('explicit per-coach formats',()=>{
+  it.each([{one_on_one:true,group:true},{one_on_one:true,group:false},{one_on_one:false,group:true},{one_on_one:false,group:false}])('retains the exact two booleans %j',offers=>{
+    const raw=catalog();raw.coaches[0].offers=offers;
+    expect(parseCatalog(raw).coaches[0].offers).toEqual(offers);
+    expect(parseCoachOffers(offers)).toEqual(offers);
+  });
+  it.each([undefined,null,{},[],true,{one_on_one:true},{one_on_one:'true',group:false},{one_on_one:true,group:0},{one_on_one:true,group:true,private_note:'never'}])('rejects legacy or malformed offers %j instead of inferring formats',offers=>{
+    const raw=catalog();Object.assign(raw.coaches[0],{offers});
+    expect(()=>parseCatalog(raw)).toThrow('unavailable');
   });
 });

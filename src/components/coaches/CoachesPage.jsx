@@ -6,6 +6,8 @@ import CoachesLeadership from './CoachesLeadership';
 import CoachesMission from './CoachesMission';
 import CoachesBios from './CoachesBios';
 import CoachesJoin from './CoachesJoin';
+import CoachesPrivate from './CoachesPrivate';
+import { COACH_PAGES_ENABLED } from '../coach-profile/coachPagesConfig';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
 const SECTIONS = ['hero', 'leadership', 'mission', 'bios', 'join'];
@@ -34,6 +36,7 @@ const CoachesPage = () => {
                 <div id="bios">
                     <CoachesBios />
                 </div>
+                {COACH_PAGES_ENABLED && <div id="private"><CoachesPrivate /></div>}
                 <div id="join">
                     <CoachesJoin />
                 </div>

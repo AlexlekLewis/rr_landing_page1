@@ -1,8 +1,10 @@
+import { COACH_GOALS, COACH_GOAL_LABELS } from '../coach-profile/coachProfiles';
+export { COACH_GOALS };
 export const TIME_ZONE = 'Australia/Melbourne';
 export const FOCUS_LABELS = { batting: 'Batting', pace: 'Pace bowling', spin: 'Spin bowling', keeping: 'Wicketkeeping', allround: 'All-round skills' };
-// Intent keys only, from PR157 coachProfiles.js. Marketing copy and pages remain there.
-export const GOALS = { batting: 'Batting', 't20-cricket': 'T20 cricket', 'all-round-development': 'All-round development', 'batting-technique': 'Batting technique', 'building-an-innings': 'Building an innings', 'school-cricket': 'School cricket', wicketkeeping: 'Wicketkeeping', 'top-order-batting': 'Top-order batting', 'small-group-batting': 'Small-group batting', 'club-batting': 'Batting for club cricket' };
-export const COACH_GOALS = { 'ikroop-dhanoa': ['batting', 't20-cricket', 'all-round-development'], 'alex-thornhill': ['batting-technique', 'building-an-innings', 'school-cricket'], 'ritin-raman': ['wicketkeeping', 'top-order-batting', 'all-round-development'], 'mihiraj-jayasekara': ['batting-technique', 'small-group-batting', 'club-batting'] };
+// Accepted keys derive from the published strengths. Retain existing generic labels for saved drafts.
+const retainedGoalLabels = { batting: 'Batting', 't20-cricket': 'T20 cricket', 'all-round-development': 'All-round development', 'batting-technique': 'Batting technique', 'building-an-innings': 'Building an innings', 'school-cricket': 'School cricket', wicketkeeping: 'Wicketkeeping', 'top-order-batting': 'Top-order batting', 'small-group-batting': 'Small-group batting', 'club-batting': 'Batting for club cricket' };
+export const GOALS = Object.freeze(Object.fromEntries(Object.entries(COACH_GOAL_LABELS).map(([key, label]) => [key, retainedGoalLabels[key] ?? label])));
 export const uuid = value => typeof value === 'string' && /^[a-f\d]{8}(?:-[a-f\d]{4}){3}-[a-f\d]{12}$/i.test(value);
 const object = value => value && typeof value === 'object' && !Array.isArray(value);
 const text = (value, max = 200) => typeof value === 'string' && value.length <= max;
@@ -30,10 +32,14 @@ export const money = cents => integer(cents) ? new Intl.NumberFormat('en-AU', { 
 export const lengthLabel = minutes => ({ 60: '1 hour', 90: '1½ hours', 120: '2 hours' })[minutes] ?? `${minutes} minutes`;
 export const addDays = (date, count) => new Date(Date.parse(date + 'T12:00:00Z') + count * 86400000).toISOString().slice(0, 10);
 function fail() { throw new Error('unavailable'); }
+export function parseCoachOffers(value) {
+  if (!object(value) || Object.keys(value).length !== 2 || !Object.hasOwn(value, 'one_on_one') || !Object.hasOwn(value, 'group') || typeof value.one_on_one !== 'boolean' || typeof value.group !== 'boolean') fail();
+  return { one_on_one: value.one_on_one, group: value.group };
+}
 export function parseCatalog(raw) {
   if (!object(raw) || !Array.isArray(raw.centres) || !Array.isArray(raw.coaches) || !Array.isArray(raw.durations_minutes) || !Array.isArray(raw.group_sizes) || !Array.isArray(raw.focus) || !object(raw.prices) || !object(raw.prices.group_player_hour_cents) || !object(raw.block_discount) || !object(raw.cancellation)) fail();
   const centres = raw.centres.map(c => { if (!object(c) || !uuid(c.id) || !['mickleham', 'cranbourne-north'].includes(c.slug) || !text(c.name, 200) || !text(c.suburb, 120) || !(c.address === null || text(c.address, 500))) fail(); return { id: c.id, slug: c.slug, name: c.name, suburb: c.suburb, address: c.address }; });
-  const coaches = raw.coaches.map(c => { if (!object(c) || !uuid(c.profile_id) || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(c.slug) || !text(c.display_name, 120) || !Array.isArray(c.centres) || c.centres.some(s => !centres.some(centre => centre.slug === s)) || !Array.isArray(c.coaches_what)) fail(); return { profile_id: c.profile_id, slug: c.slug, display_name: c.display_name, home_centre: c.home_centre, centres: c.centres, coaches_what: c.coaches_what.filter(f => Object.hasOwn(FOCUS_LABELS, f)), photo_url: typeof c.photo_url === 'string' && /^https:\/\//.test(c.photo_url) ? c.photo_url : null }; });
+  const coaches = raw.coaches.map(c => { if (!object(c) || !uuid(c.profile_id) || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(c.slug) || !text(c.display_name, 120) || !Array.isArray(c.centres) || c.centres.some(s => !centres.some(centre => centre.slug === s)) || !Array.isArray(c.coaches_what)) fail(); return { profile_id: c.profile_id, slug: c.slug, display_name: c.display_name, home_centre: c.home_centre, centres: c.centres, coaches_what: c.coaches_what.filter(f => Object.hasOwn(FOCUS_LABELS, f)), offers: parseCoachOffers(c.offers), photo_url: typeof c.photo_url === 'string' && /^https:\/\//.test(c.photo_url) ? c.photo_url : null }; });
   if (raw.durations_minutes.some(d => ![60, 90, 120].includes(d)) || !raw.durations_minutes.length || raw.group_sizes.some(g => ![2, 3, 4].includes(g)) || !raw.group_sizes.length || raw.focus.some(f => !Object.hasOwn(FOCUS_LABELS, f)) || !raw.focus.length || !integer(raw.max_weeks, 1, 104) || !integer(raw.block_discount.min_sessions, 1, 104) || !integer(raw.block_discount.percent, 0, 100) || !integer(raw.cancellation.free_hours, 0, 8760) || !integer(raw.cancellation.late_fee_cents)) fail();
   return { centres, coaches, durations_minutes: raw.durations_minutes, group_sizes: raw.group_sizes, focus: raw.focus, max_weeks: raw.max_weeks, block_discount: { min_sessions: raw.block_discount.min_sessions, percent: raw.block_discount.percent }, cancellation: { free_hours: raw.cancellation.free_hours, late_fee_cents: raw.cancellation.late_fee_cents }, prices: { one_on_one_hour_cents: integer(raw.prices.one_on_one_hour_cents, 1) ? raw.prices.one_on_one_hour_cents : null, group_player_hour_cents: Object.fromEntries(raw.group_sizes.map(g => [g, integer(raw.prices.group_player_hour_cents[g], 1) ? raw.prices.group_player_hour_cents[g] : null])) } };
 }
