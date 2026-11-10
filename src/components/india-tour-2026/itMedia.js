@@ -73,7 +73,7 @@ const DEFAULT_ALT =
 const CAPTIONS = {
     '01-warmup-main-ground.webp': {
         alt: 'Rajasthan Royals Academy Melbourne players warming up on the main ground at the Rajasthan Royals High Performance Centre, beside a banner welcoming the academy',
-        caption: 'Warm-up on the main ground. The centre put up a banner to welcome us.',
+        caption: 'Warm-up on the main ground.',
     },
     '02-player-in-nets.webp': {
         alt: 'A Rajasthan Royals Academy Melbourne player waiting to bat in the nets at the centre',
