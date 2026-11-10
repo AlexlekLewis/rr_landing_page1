@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import heroTeamTalk from '../../assets/india-tour-2026/hero-team-talk.webp';
 import heroTeamTalkSm from '../../assets/india-tour-2026/hero-team-talk-sm.webp';
 import heroCafe from '../../assets/india-tour-2026/hero-royals-cafe.webp';
-import { TOURS, CAMP_PDF, TOUR_STATUS, REGISTRATIONS_CLOSE_AT } from './itCopy';
+import { CAMP_PDF, TOUR_STATUS, REGISTRATIONS_CLOSE_AT } from './itCopy';
 import ITCountdown from './ITCountdown';
 
 const scrollToRegister = () =>
@@ -93,29 +93,6 @@ const ITHero = ({ copy }) => {
                 </span>
             </motion.div>
 
-            {/* The upcoming tour(s), named by window (exact dates are not set). Same
-                flex order as the dateline, so it always sits straight under it. */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: 'easeOut', delay: 0.18 }}
-                className="order-3 mt-5 max-w-xl"
-            >
-                <p className="text-[11px] font-bold text-rr-pink uppercase tracking-[0.25em]">
-                    {c.toursLabel}
-                </p>
-                <ul className={`mt-3 grid grid-cols-1 gap-3 ${TOURS.length > 1 ? 'sm:grid-cols-2' : 'sm:max-w-xs'}`}>
-                    {TOURS.map((t) => (
-                        <li key={t.id} className="rounded-xl border border-white/20 bg-white/5 px-4 py-3">
-                            <span className="block text-base font-black text-white leading-snug">{t.window}</span>
-                            <span className="block text-[11px] font-bold text-white/60 uppercase tracking-widest mt-1">
-                                {c.tourLength}
-                            </span>
-                        </li>
-                    ))}
-                </ul>
-                <p className="text-sm text-white/70 font-medium leading-relaxed mt-3">{c.toursNote}</p>
-            </motion.div>
 
             {showClock && (
                 <motion.div
