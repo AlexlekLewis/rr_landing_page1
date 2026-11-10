@@ -200,6 +200,7 @@ const STANDARD = {
         dateline: 'Nagpur, India · April\u00a02027',
         toursLabel: 'The tour',
         tourLength: `About ${TOUR_LENGTH_DAYS} days`,
+        photoTag: 'Nagpur · September 2026',
         toursNote:
             'Exact dates are not set yet. Register your interest now and we will write to you when ' +
             'they are.',
@@ -444,6 +445,7 @@ const SIMPLE = {
         dateline: 'Nagpur, India · April\u00a02027',
         toursLabel: 'The tour',
         tourLength: `About ${TOUR_LENGTH_DAYS} days`,
+        photoTag: 'Nagpur · September 2026',
         toursNote:
             'The exact dates are not set yet. Put your name down now and we will tell you when the ' +
             'dates are set.',

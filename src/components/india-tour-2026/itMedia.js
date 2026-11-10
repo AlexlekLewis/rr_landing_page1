@@ -12,6 +12,10 @@
 //     filename. Without one, a general description is used and no caption shown.
 //     Captions never name a person unless we are sure who it is.
 //   They appear in a swipeable carousel, so there is no limit on how many you add.
+//   - Never add a repeat. Check new photos first:
+//       python3 scripts/check-photo-duplicates.py new1.jpg new2.jpg
+//     It compares what the pictures look like, so a resized or re-sent copy is
+//     still caught. Skip anything it marks DUPLICATE.
 //
 // ADDING A VIDEO TO THE VIDEO CAROUSEL
 //   1. Upload it (Supabase storage like the home page video, or /public/tours/).
@@ -78,6 +82,34 @@ const CAPTIONS = {
     '09-player-batting-drill.webp': {
         alt: 'A Rajasthan Royals Academy Melbourne player in his stance during a batting drill in the nets',
         caption: 'Putting it into practice in a batting drill.',
+    },
+    '10-bowling-coach-with-bowler.webp': {
+        alt: 'A Royals coach watching closely as a young Rajasthan Royals Academy Melbourne bowler walks back to his mark in the nets',
+        caption: 'Every ball watched: one-on-one with a Royals bowling coach.',
+    },
+    '11-coach-group-batting-drill.webp': {
+        alt: 'A Royals coach explaining a batting drill to three Rajasthan Royals Academy Melbourne players holding training bats in the nets',
+        caption: 'Small groups, so every player gets the coach\u2019s attention.',
+    },
+    '12-coach-explains-grip.webp': {
+        alt: 'A Royals coach explaining the grip to a young Rajasthan Royals Academy Melbourne batter in the nets',
+        caption: 'Getting the basics right: a Royals coach on the grip.',
+    },
+    '13-warm-up-in-front-of-hpc.webp': {
+        alt: 'Rajasthan Royals Academy Melbourne players warming up in a line on the main ground in front of the Rajasthan Royals High Performance Centre building',
+        caption: 'Warming up in front of the Rajasthan Royals High Performance Centre.',
+    },
+    '14-centre-wicket-practice.webp': {
+        alt: 'A Rajasthan Royals Academy Melbourne batter on strike during centre-wicket practice on a turf pitch at the centre',
+        caption: 'Centre-wicket practice on turf, in a game-like setting.',
+    },
+    '15-coach-watches-batting-drill.webp': {
+        alt: 'A Royals coach watching a Rajasthan Royals Academy Melbourne player work through a batting footwork drill in the nets',
+        caption: 'A Royals coach watching every movement in a footwork drill.',
+    },
+    '16-coach-and-batter-in-nets.webp': {
+        alt: 'A Royals coach standing beside a Rajasthan Royals Academy Melbourne player during a batting drill in the nets',
+        caption: 'Side by side with a Royals coach in the nets.',
     },
 };
 
