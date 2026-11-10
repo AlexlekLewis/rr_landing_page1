@@ -27,6 +27,8 @@ export const SECTIONS = [
             { path: 'jr.heroTitle', label: 'Title', type: 'text' },
             { path: 'jr.heroTitleAccent', label: 'Title, pink second line', type: 'text' },
             { path: 'jr.heroSub', label: 'Subtitle', type: 'text' },
+            { path: 'jr.heroForTitle', label: 'Who it\'s for: heading', type: 'text' },
+            { path: 'jr.heroFor', label: 'Who it\'s for: list', type: 'list' },
             { path: 'jr.heroLead', label: 'Intro paragraph', type: 'textarea' },
             { path: 'jr.factLine', label: 'Times and nights line', type: 'textarea' },
             { path: 'jr.joinLine', label: 'Join any week line', type: 'text' },

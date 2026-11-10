@@ -47,6 +47,26 @@ const JRT3Hero = () => {
                     {JR_T4.heroSub}
                 </motion.p>
 
+                {/* Who it's for (Andy, 10 Nov 2026), then the one-line description. */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="mb-4 max-w-xl"
+                    data-jr-hero-for
+                >
+                    <p className="text-sm md:text-lg text-white font-bold mb-2">{JR_T4.heroForTitle}</p>
+                    <ul className="space-y-1.5">
+                        {JR_T4.heroFor.map((line) => (
+                            <li key={line} className="flex items-start gap-2 text-sm md:text-lg text-white/80 font-medium">
+                                <svg className="w-5 h-5 mt-0.5 shrink-0 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>{line}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </motion.div>
                 <motion.p
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
