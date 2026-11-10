@@ -3,20 +3,17 @@ import { motion } from 'framer-motion';
 import heroTeamTalk from '../../assets/india-tour-2026/hero-team-talk.webp';
 import heroTeamTalkSm from '../../assets/india-tour-2026/hero-team-talk-sm.webp';
 import heroCafe from '../../assets/india-tour-2026/hero-royals-cafe.webp';
-import { TOURS, PRICE_ESTIMATE_AUD, fmtRangeAUD, CAMP_PDF, TOUR_STATUS, REGISTRATIONS_CLOSE_AT } from './itCopy';
+import { TOURS, CAMP_PDF, TOUR_STATUS, REGISTRATIONS_CLOSE_AT } from './itCopy';
 import ITCountdown from './ITCountdown';
 
 const scrollToRegister = () =>
     document.getElementById('register')?.scrollIntoView({ behavior: 'smooth' });
 
-const scrollToPricing = () =>
-    document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
-
 const HERO_FEATURE_ALT =
     'Royals coaches talking to Rajasthan Royals Academy Melbourne players on the main ground at the ' +
-    'High Performance Centre in Nagpur, September 2026';
+    'Rajasthan Royals High Performance Centre in Nagpur, September 2026';
 const HERO_INSET_ALT =
-    'Our touring group at lunch in the Royals Cafe at the High Performance Centre, under a wall of ' +
+    'Our touring group at lunch in the Royals Cafe at the Rajasthan Royals High Performance Centre, under a wall of ' +
     'Royals legends';
 
 const ITHero = ({ copy }) => {
@@ -26,39 +23,6 @@ const ITHero = ({ copy }) => {
     // and the page open (a standing EOI) there is nothing to show, so no gap either.
     const showClock = closed || Boolean(REGISTRATIONS_CLOSE_AT);
 
-    // The estimate, up front. It always travels with "estimate" and "per player",
-    // and with the promise that the exact price and inclusions come in writing
-    // before anyone commits: a bare "$7,000–$8,000" would read as a quote.
-    const priceBand = (
-        <>
-            <p className="text-[11px] font-bold text-rr-pink uppercase tracking-[0.25em]">
-                {c.priceLabel}
-            </p>
-
-            <p className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <span className="text-3xl md:text-4xl font-black text-white leading-none">
-                    {fmtRangeAUD(PRICE_ESTIMATE_AUD)}
-                </span>
-                <span className="text-[11px] font-bold text-white/70 uppercase tracking-widest">
-                    {c.priceUnit}
-                </span>
-            </p>
-
-            <p className="text-sm text-white/75 font-medium leading-relaxed mt-3">{c.priceNote}</p>
-
-            <button
-                onClick={scrollToPricing}
-                data-cta="hero-see-pricing"
-                className="mt-3 -ml-1 px-1 py-3 text-sm font-bold text-rr-pink hover:text-white uppercase tracking-widest inline-flex items-center gap-2 transition-colors"
-            >
-                {c.seePrice}
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                </svg>
-            </button>
-        </>
-    );
-
     // Ordered as a flex column so the price band can jump ABOVE the intro
     // paragraph on phones. On a 375x812 screen the prices otherwise land right
     // on the fold, and on anything smaller they fall under it — which defeats
@@ -66,21 +30,49 @@ const ITHero = ({ copy }) => {
     // intro first, then costs.
     const content = (
         <div className="max-w-3xl flex flex-col">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: 'easeOut' }}
-                className="order-1 inline-flex items-center gap-2 bg-rr-pink rounded-full px-4 py-2.5 mb-4 md:mb-6 self-start shadow-lg"
-            >
-                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                <span className="text-xs font-black text-white uppercase tracking-[0.2em]">{closed ? c.closedBadge : c.badge}</span>
-            </motion.div>
+            {/* The headline for the April 2027 tour: coming soon, register now. Tapping
+                it goes straight to the form. On a closed page it shows the closed badge. */}
+            {closed ? (
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, ease: 'easeOut' }}
+                    className="order-1 inline-flex items-center gap-2 bg-rr-pink rounded-full px-4 py-2.5 mb-6 self-start shadow-lg"
+                >
+                    <span className="text-xs font-black text-white uppercase tracking-[0.2em]">{c.closedBadge}</span>
+                </motion.div>
+            ) : (
+                <motion.button
+                    type="button"
+                    onClick={scrollToRegister}
+                    data-cta="hero-coming-soon"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, ease: 'easeOut' }}
+                    className="order-1 group self-start text-left mb-6 md:mb-8 rounded-2xl bg-rr-pink hover:bg-rr-light-pink px-5 py-4 md:px-7 md:py-5 shadow-[0_0_40px_rgba(229,6,149,0.35)] transition-colors"
+                >
+                    <span className="flex items-center gap-2 text-[11px] md:text-xs font-black text-white/80 uppercase tracking-[0.25em]">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                        {c.comingSoonLabel}
+                    </span>
+                    <span className="mt-1 flex flex-wrap items-center gap-x-3 text-2xl sm:text-3xl md:text-4xl font-black text-white uppercase tracking-tight leading-tight">
+                        {c.comingSoon}
+                        <span aria-hidden="true" className="text-white/60">—</span>
+                        <span className="inline-flex items-center gap-2">
+                            {c.comingSoonAction}
+                            <svg className="w-6 h-6 md:w-7 md:h-7 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </span>
+                    </span>
+                </motion.button>
+            )}
 
             <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: 'easeOut', delay: 0.05 }}
-                className="order-2 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none"
+                className="order-2 text-3xl sm:text-5xl md:text-6xl font-black text-white uppercase tracking-tighter leading-[0.95]"
             >
                 <span className="block text-xs md:text-sm font-bold text-white/60 tracking-[0.25em] mb-3">
                     {c.kicker}
@@ -144,16 +136,6 @@ const ITHero = ({ copy }) => {
             >
                 {c.lead}
             </motion.p>
-
-            {/* The estimated price, up front, always labelled as an estimate. */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: 'easeOut', delay: 0.32 }}
-                className="order-5 md:order-6 mt-6 md:mt-7 pt-5 md:pt-6 border-t border-white/20 max-w-xl"
-            >
-                {priceBand}
-            </motion.div>
 
             <motion.div
                 initial={{ opacity: 0, y: 20 }}

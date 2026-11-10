@@ -92,7 +92,7 @@ const PROGRAMS_DROPDOWN = [
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Register Your Interest', badgeColor: 'bg-green-500' },
     { label: 'Private Coaching', route: '/mickleham', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },
     // Closed but real — it belongs here rather than in the home-page modal.
-    { label: 'High Performance Camp · India', route: '/tours', badge: 'Register Your Interest', badgeColor: 'bg-green-500' },
+    { label: 'Rajasthan Royals High Performance Centre Camp · India', route: '/tours', badge: 'Coming Soon · Register Now', badgeColor: 'bg-green-500' },
 ];
 
 // navLinksOverride replaces the variant's section links (e.g. /junior-royals).

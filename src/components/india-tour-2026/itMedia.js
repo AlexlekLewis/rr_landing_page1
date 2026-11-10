@@ -48,7 +48,7 @@ const DEFAULT_ALT =
 // Optional caption + description per file, keyed by filename.
 const CAPTIONS = {
     '01-warmup-main-ground.webp': {
-        alt: 'Rajasthan Royals Academy Melbourne players warming up on the main ground at the Royals High Performance Centre, beside a banner welcoming the academy',
+        alt: 'Rajasthan Royals Academy Melbourne players warming up on the main ground at the Rajasthan Royals High Performance Centre, beside a banner welcoming the academy',
         caption: 'Warm-up on the main ground. The centre put up a banner to welcome us.',
     },
     '02-player-in-nets.webp': {
@@ -114,7 +114,7 @@ const CAPTIONS = {
     // Coaches below were named by Andy (10 Nov 2026). Only name someone the
     // Academy has identified; never guess from a face.
     '17-sid-trivedi-sets-up-drill.webp': {
-        alt: 'Royals coach Sid Trivedi pointing across the nets as he sets up a drill, under the High Performance Centre banner',
+        alt: 'Royals coach Sid Trivedi pointing across the nets as he sets up a drill, under the Rajasthan Royals High Performance Centre banner',
         caption: 'Sid Trivedi setting up the next drill.',
     },
     '18-faiz-fazal-with-batter.webp': {
