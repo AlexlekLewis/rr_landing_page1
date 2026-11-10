@@ -144,12 +144,30 @@ const photo = (name, alt, caption) => ({
     alt,
     caption,
 });
+const benefitPhoto = (name, alt) => ({
+    src: `/assets/junior-royals/benefits/${name}.webp`,
+    srcSm: `/assets/junior-royals/benefits/${name}-sm.webp`,
+    alt,
+    caption: name,
+});
 export const JR_PHOTOS = {
     // NO DUPLICATES (Andy, 10 Nov 2026: "Please ensure that there is never a duplicate"): every
     // photo appears once on the page. The hero uses the two photos that aren't in the strip;
     // jrPhotos.test.ts fails if a file is used twice.
     hero: photo('batting-with-coach', 'A young batter playing a pull shot as a coach feeds the ball', 'Batting with a coach'),
     heroFeature: photo('hands-on-batting', 'A coach guiding a young batter into position while another player plays a forward defence', 'Hands-on coaching'),
+    // One photo per benefit card in "Why Junior Royals", in the same order as JR_T4.benefits
+    // (Andy, 10 Nov 2026: "select the right images and size them properly for the Why Junior
+    // Royals section"). Cropped to 4:3 around the action, 800px + 480px .webp, in
+    // public/assets/junior-royals/benefits/. None of them is used anywhere else on the page.
+    benefits: [
+        benefitPhoto('coach-briefing-batters', 'A coach in a COACH shirt briefing a group of padded-up young batters in the nets'),
+        benefitPhoto('small-group-two-coaches', 'Two coaches talking with a small group of young batters in helmets and pads'),
+        benefitPhoto('warm-up-game', 'A group of young players in a warm-up game with a coach watching'),
+        benefitPhoto('bowling-arm-drill', 'Young players kneeling in a line, practising their bowling arm'),
+        benefitPhoto('batter-full-shot', 'A young batter in helmet and pads playing a full shot in the nets'),
+        benefitPhoto('warm-up-run', 'Smiling young players running a warm-up towards their coach'),
+    ],
     // The photo strip under the hero (Andy, 10 Nov 2026: "a scrolling photo section below the
     // hero section, as we have for the /tours page"), in the order Andy sent them.
     gallery: [
