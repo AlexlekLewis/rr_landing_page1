@@ -9,7 +9,6 @@ import ITBenefits from './ITBenefits';
 import ITHomeOfRoyals from './ITHomeOfRoyals';
 import ITSeptember2026 from './ITSeptember2026';
 import ITCoaching from './ITCoaching';
-import ITAspiration from './ITAspiration';
 import ITPricing from './ITPricing';
 import ITForm from './ITForm';
 import ITReadingToggle from './ITReadingToggle';
@@ -29,7 +28,7 @@ const getRefFromUrl = () => {
 
 const IndiaTour2026 = () => {
     usePageAnalytics('/tours', {
-        sections: ['hero', 'september-2026', 'videos', 'benefits', 'home-of-the-royals', 'coaching', 'aspiration', 'pricing', 'register'],
+        sections: ['hero', 'september-2026', 'videos', 'benefits', 'home-of-the-royals', 'coaching', 'pricing', 'register'],
     });
 
     const { simple, showToggle, setMode } = useReadingMode();
@@ -66,7 +65,6 @@ const IndiaTour2026 = () => {
                 <div id="benefits"><ITBenefits copy={copy} /></div>
                 <div id="home-of-the-royals"><ITHomeOfRoyals copy={copy} /></div>
                 <div id="coaching"><ITCoaching copy={copy} /></div>
-                <div id="aspiration"><ITAspiration copy={copy} /></div>
                 <div id="pricing"><ITPricing copy={copy} /></div>
                 <div id="register"><ITForm copy={copy} referralCode={referralCode} /></div>
             </main>
