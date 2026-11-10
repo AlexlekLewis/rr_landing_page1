@@ -31,13 +31,13 @@
 // With VIDEOS empty the video section is hidden.
 // ---------------------------------------------------------------------------
 
-// The home page intro video (Sid Lahiri) is the first one until tour videos arrive.
+// Sid Lahiri's intro video was removed (Andy, 10 Nov 2026).
 export const VIDEOS = [
     {
-        src: 'https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/RRAM%20MAIN/General%20Coaching%20Edit%20RR%20Sid%20V2.mov',
-        poster: '/assets/intro-video-poster.jpg',
-        title: 'Meet Siddhartha Lahiri',
-        caption: 'Head of International Player Development and Performance Coach, Rajasthan Royals.',
+        src: '/tours/kunwar.mp4',
+        poster: '/tours/kunwar.jpg',
+        title: 'In the nets',
+        caption: 'Batting in the nets.',
     },
 ];
 
