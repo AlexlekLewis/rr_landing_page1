@@ -47,6 +47,15 @@ const JRT3Hero = () => {
                     {JR_T4.heroSub}
                 </motion.p>
 
+                {/* Who it's for (Andy, 10 Nov 2026), then the one-line description. */}
+                <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="text-sm md:text-lg text-white/80 font-medium mb-3 max-w-xl"
+                >
+                    {JR_T4.heroFor}
+                </motion.p>
                 <motion.p
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}

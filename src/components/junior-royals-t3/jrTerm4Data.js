@@ -217,6 +217,8 @@ export const JR_T4 = {
     heroTitle: 'JUNIOR ROYALS',
     heroTitleAccent: 'CRICKET FOR AGES 7–12',
     heroSub: 'Weekly coaching · Join any week · Pay weekly',
+    // Who the program is for, above heroLead (Andy, 10 Nov 2026, his wording).
+    heroFor: 'Perfect program for beginners, kids new to the game, those needing more work on the basics, friends wanting to train together, youngsters with ambition to train in our Performance Squads and players under 10 with skills wanting more training to drill their skills to a higher level.',
     heroLead: 'One hour of cricket coaching each week, in a small group of players their own age, with Rajasthan Royals Academy coaches.',
     // THE BENEFITS, short and plain (8 Nov 2026: "be clear about the benefits"), in a softer,
     // parent-facing voice (10 Nov 2026: "make this a bit more softer and customer focused").
