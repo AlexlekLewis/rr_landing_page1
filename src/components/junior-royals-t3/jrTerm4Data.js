@@ -206,6 +206,8 @@ export const JR_VIDEOS = [
     video('session-montage', 'A Junior Royals session', 'Catching, fielding and batting, all in one session'),
     // Added 10 Nov 2026 (file "AW_coaching_youngster"). Coach: Andrew Walton (Andy, 10 Nov 2026).
     video('coaching-young-batter', 'Coaching a young batter', 'Andrew Walton one-on-one with a young batter in the nets'),
+    // Added 10 Nov 2026 (file "IMG_3550").
+    video('bowling-machine-drill', 'Bowling machine drill', 'Batting against the bowling machine while the group runs in from the cones'),
 ];
 
 export const JR_T4 = {
