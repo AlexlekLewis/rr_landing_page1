@@ -198,8 +198,8 @@ export const JR_VIDEOS = [
     // Added 10 Nov 2026 (file "v2_Hallam_JR"; filmed at the Elite Cricket Centre). Junior Royals no
     // longer runs at Hallam, so the caption doesn't name it.
     video('session-montage', 'A Junior Royals session', 'Catching, fielding and batting, all in one session'),
-    // Added 10 Nov 2026 (file "AW_coaching_youngster"). Coach not named until confirmed.
-    video('coaching-young-batter', 'Coaching a young batter', 'One-on-one with a young batter in the nets'),
+    // Added 10 Nov 2026 (file "AW_coaching_youngster"). Coach: Andrew Walton (Andy, 10 Nov 2026).
+    video('coaching-young-batter', 'Coaching a young batter', 'Andrew Walton one-on-one with a young batter in the nets'),
 ];
 
 export const JR_T4 = {
