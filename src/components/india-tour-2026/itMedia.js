@@ -176,3 +176,20 @@ export const SEPT_2026_MEDIA = Object.keys(files)
         };
     });
 
+// ---------------------------------------------------------------------------
+// WHY GO PHOTOS: one photo per benefit card, from
+// src/assets/india-tour-2026/why-go/. Start each filename with the card number
+// (1-6, same order as the benefits in itCopy.js): e.g. "1-hpc-building.webp",
+// "4-recovery.webp". A card with no photo keeps its icon. Alt text below.
+const whyGoFiles = import.meta.glob(
+    '../../assets/india-tour-2026/why-go/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
+    { eager: true, import: 'default' },
+);
+const WHY_GO_ALT = {};
+export const WHY_GO_PHOTOS = Object.keys(whyGoFiles).reduce((acc, path) => {
+    const name = path.split('/').pop();
+    const n = parseInt(name, 10);
+    if (n >= 1 && n <= 6) acc[n - 1] = { src: whyGoFiles[path], alt: WHY_GO_ALT[name] || '' };
+    return acc;
+}, {});
+
