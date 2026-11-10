@@ -190,6 +190,8 @@ const whyGoFiles = import.meta.glob(
 const WHY_GO_ALT = {
     '1-team-talk.webp':
         'Royals coaches talking Rajasthan Royals Academy Melbourne players through the session on the main ground at the Rajasthan Royals High Performance Centre',
+    '4-warm-up-session.webp':
+        'Rajasthan Royals Academy Melbourne players lined up on the ground, watching a coach demonstrate a warm-up drill',
 };
 export const WHY_GO_PHOTOS = Object.keys(whyGoFiles).reduce((acc, path) => {
     const name = path.split('/').pop();

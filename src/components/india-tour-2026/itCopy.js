@@ -138,7 +138,7 @@ const BENEFITS_COPY = {
                 'with a written plan that says exactly what to work on next.',
         },
         {
-            title: 'Learn how professionals prepare',
+            title: 'Learn how the Royals prepare for the IPL',
             body:
                 'Strength and conditioning, physio, recovery, nutrition and mental skills. The things that ' +
                 'keep a player on the field, taught the way the pros do it.',
