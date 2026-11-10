@@ -165,6 +165,20 @@ export const JR_PHOTOS = {
     ],
 };
 
+// VIDEOS under the photo strip (Andy, 10 Nov 2026: "add a video section such as we have done
+// in the /tours page, underneath the photos section. Add these 4 videos as a starting point").
+// Same player and carousel as /tours (india-tour-2026/ITVideos.jsx VideoCard). Files are in
+// public/junior-royals/videos/: compressed to 720x1080 like /tours, with a poster frame (.jpg).
+// To add one: put <name>.mp4 + <name>.jpg there and add an entry here. Players' names stay
+// out of titles and captions; coaches are named.
+const video = (name, title, caption) => ({ src: `/junior-royals/videos/${name}.mp4`, poster: `/junior-royals/videos/${name}.jpg`, title, caption });
+export const JR_VIDEOS = [
+    video('front-foot-defence', 'Front-foot defence', 'Sid helping out with front-foot defence'),
+    video('run-out-drill', 'Run-out drill', 'A fielding drill: back up, gather, hit the stumps'),
+    video('pull-shots', 'Pull shots', 'Jinang feeding pull shots in the nets'),
+    video('sweep-shot', 'The sweep', 'Andre Walton teaching the sweep'),
+];
+
 export const JR_T4 = {
     // Page wording that used to sit in the JSX, here so the admin Junior Royals Editor
     // (admin/JuniorRoyalsEditor.jsx, jrContent.js) can change it.
