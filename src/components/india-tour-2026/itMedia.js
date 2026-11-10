@@ -176,3 +176,36 @@ export const SEPT_2026_MEDIA = Object.keys(files)
         };
     });
 
+// ---------------------------------------------------------------------------
+// WHY GO PHOTOS: one photo per benefit card, from
+// src/assets/india-tour-2026/why-go/. Start each filename with the card number
+// (1-6, same order as the benefits in itCopy.js). Prepare each one with
+//   python3 scripts/prepare-why-go-photo.py <card> <photo> <short-name>
+// which crops it to exactly 1200x900 (4:3), so every card is the same size
+// whatever photo is sent. A card with no photo keeps its icon. Alt text below.
+const whyGoFiles = import.meta.glob(
+    '../../assets/india-tour-2026/why-go/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
+    { eager: true, import: 'default' },
+);
+const WHY_GO_ALT = {
+    '1-team-talk.webp':
+        'Royals coaches talking Rajasthan Royals Academy Melbourne players through the session on the main ground at the Rajasthan Royals High Performance Centre',
+    // Stand-in from the carousel (photo 08) until Andy sends a card 2 photo.
+    '2-coach-hands-on.webp':
+        'A Royals coach guiding a Rajasthan Royals Academy Melbourne player\u2019s hands on the bat during a batting drill in the nets',
+    '3-royals-cafe.webp':
+        'Rajasthan Royals Academy Melbourne players at lunch in the Royals Cafe at the Rajasthan Royals High Performance Centre, under a wall of Royals legends',
+    '4-recovery-session.webp':
+        'Rajasthan Royals Academy Melbourne players lying on mats on the ground during a recovery and mindfulness session at the Rajasthan Royals High Performance Centre',
+    '6-tiger-safari.webp':
+        'Rajasthan Royals Academy Melbourne players eating at a table beside a lake during a tiger safari outing',
+    '5-warm-up-session.webp':
+        'Rajasthan Royals Academy Melbourne players lined up on the ground, watching a coach demonstrate a warm-up drill',
+};
+export const WHY_GO_PHOTOS = Object.keys(whyGoFiles).reduce((acc, path) => {
+    const name = path.split('/').pop();
+    const n = parseInt(name, 10);
+    if (n >= 1 && n <= 6) acc[n - 1] = { src: whyGoFiles[path], alt: WHY_GO_ALT[name] || '' };
+    return acc;
+}, {});
+

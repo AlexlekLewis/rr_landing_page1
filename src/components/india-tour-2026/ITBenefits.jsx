@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import ITSectionHeader from './ITSectionHeader';
 import ITRegisterButton from './ITRegisterButton';
+import { WHY_GO_PHOTOS } from './itMedia';
 
 // "What your player gets": the benefits of the tour, each one an outcome for the
 // player, not a line from the camp document. (The players the centre has
@@ -30,25 +31,49 @@ const ITBenefits = ({ copy }) => {
             <div className="max-w-6xl mx-auto px-6">
                 <ITSectionHeader eyebrow={c.eyebrow} heading={c.heading} accent={c.headingAccent} lead={c.lead} />
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-10">
-                    {c.items.map((b, i) => (
-                        <motion.div
-                            key={b.title}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.05 * i }}
-                            className="rounded-2xl border border-slate-200 bg-slate-50 p-6 md:p-7"
-                        >
-                            <span className="w-12 h-12 rounded-xl bg-gradient-to-br from-rr-pink to-rr-blue flex items-center justify-center">
-                                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={ICONS[i % ICONS.length]} />
-                                </svg>
-                            </span>
-                            <h3 className="mt-5 text-lg font-black text-rr-dark uppercase tracking-wide leading-snug">{b.title}</h3>
-                            <p className="mt-2 text-sm md:text-base text-rr-charcoal font-medium leading-relaxed">{b.body}</p>
-                        </motion.div>
-                    ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+                    {c.items.map((b, i) => {
+                        const photo = WHY_GO_PHOTOS[i];
+                        const num = String(i + 1).padStart(2, '0');
+                        return (
+                            <motion.article
+                                key={b.title}
+                                initial={{ opacity: 0, y: 24 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: '-40px' }}
+                                transition={{ duration: 0.5, delay: 0.06 * (i % 3) }}
+                                className="group flex flex-col rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                            >
+                                {photo ? (
+                                    <div className="relative aspect-[4/3] overflow-hidden bg-slate-200">
+                                        <img
+                                            src={photo.src}
+                                            alt={photo.alt}
+                                            loading="lazy"
+                                            decoding="async"
+                                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-rr-navy/70 via-rr-navy/10 to-transparent" />
+                                        <span className="absolute left-4 bottom-4 text-white/90 text-xs font-black tracking-[0.3em]">{num}</span>
+                                        <span className="absolute left-0 bottom-0 h-1 w-full bg-gradient-to-r from-rr-pink to-rr-blue scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" />
+                                    </div>
+                                ) : (
+                                    <div className="px-6 pt-6 md:px-7 md:pt-7">
+                                        <span className="w-12 h-12 rounded-xl bg-gradient-to-br from-rr-pink to-rr-blue flex items-center justify-center">
+                                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={ICONS[i % ICONS.length]} />
+                                            </svg>
+                                        </span>
+                                    </div>
+                                )}
+                                <div className="flex-1 p-6 md:p-7">
+                                    <h3 className="text-lg font-black text-rr-dark uppercase tracking-wide leading-snug">{b.title}</h3>
+                                    <div className="w-10 h-0.5 bg-rr-pink mt-3 mb-3" />
+                                    <p className="text-sm md:text-base text-rr-charcoal font-medium leading-relaxed">{b.body}</p>
+                                </div>
+                            </motion.article>
+                        );
+                    })}
                 </div>
                 <p className="mt-5 text-xs text-rr-charcoal/70 font-medium">{c.note}</p>
 

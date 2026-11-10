@@ -120,7 +120,7 @@ const BENEFITS_COPY = {
         'prepares and thinks about the game. This is what you take home.',
     items: [
         {
-            title: 'Train like a professional',
+            title: 'Train like the Royals',
             body:
                 'Live and train at the Rajasthan Royals High Performance Centre, with the facilities, ' +
                 'routines and standards of a professional cricketer, every day.',
@@ -132,16 +132,18 @@ const BENEFITS_COPY = {
                 'the same drills and feedback they do: batting, bowling, fielding and mental skills.',
         },
         {
-            title: 'Come home with a personal plan',
+            // Replaced 'Come home with a personal plan' (Andy, 10 Nov 2026).
+            title: 'Immerse yourself in the Royals environment',
             body:
-                'Every player is filmed and assessed, then sits down one-on-one with a coach. They leave ' +
-                'with a written plan that says exactly what to work on next.',
+                'Eat, rest and recover where the Royals do: the Royals Cafe, the players\u2019 lounge and ' +
+                'the grounds, surrounded by the club\u2019s history. For about ten days, the Royals ' +
+                'environment is your environment.',
         },
         {
-            title: 'Learn how professionals prepare',
+            title: 'Leave no stone unturned in pursuit of improving your game',
             body:
-                'Strength and conditioning, physio, recovery, nutrition and mental skills. The things that ' +
-                'keep a player on the field, taught the way the pros do it.',
+                'Strength and conditioning, physio, recovery, nutrition and mental skills, the way the ' +
+                'Royals prepare for the IPL. The things that keep a player on the field and improving.',
         },
         {
             title: 'Test your game in Indian conditions',
@@ -152,8 +154,9 @@ const BENEFITS_COPY = {
         {
             title: 'Grow as a person',
             body:
-                'About ten days away with team-mates, living like a professional cricketer. Players come ' +
-                'back more independent, more confident and hungrier to improve.',
+                'About ten days away with team-mates, living like a professional cricketer, with time to ' +
+                'see India too: on our September 2026 tour, members of the group went on a tiger safari. ' +
+                'Players come back more independent, more confident and hungrier to improve.',
         },
     ],
     note:
