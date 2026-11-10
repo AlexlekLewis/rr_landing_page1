@@ -60,8 +60,8 @@ const CAPTIONS = {
         caption: 'One-on-one time with a Royals coach.',
     },
     '04-coach-on-ground.webp': {
-        alt: 'A Royals coach giving instructions on the training ground',
-        caption: 'Royals coaches ran every session.',
+        alt: 'Somi Bhinder, resident fast bowling coach at the Rajasthan Royals High Performance Centre, giving instructions on the training ground',
+        caption: 'Somi Bhinder, the centre\u2019s resident fast bowling coach, running the session.',
     },
     '05-players-lounge.webp': {
         alt: 'Rajasthan Royals Academy Melbourne players resting in the players’ lounge at the centre between sessions',
@@ -111,7 +111,7 @@ const CAPTIONS = {
         alt: 'A Royals coach standing beside a Rajasthan Royals Academy Melbourne player during a batting drill in the nets',
         caption: 'Side by side with a Royals coach in the nets.',
     },
-    // Coaches named here were identified by Andy (10 Nov 2026), including photo 06. Only name someone the
+    // Coaches named here were identified by Andy (10 Nov 2026), including photos 04 and 06. Only name someone the
     // Academy has identified; never guess from a face.
     '17-sid-trivedi-sets-up-drill.webp': {
         alt: 'Royals coach Sid Trivedi pointing across the nets as he sets up a drill, under the Rajasthan Royals High Performance Centre banner',
