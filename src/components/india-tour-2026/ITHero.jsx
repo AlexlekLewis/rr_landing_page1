@@ -93,6 +93,33 @@ const ITHero = ({ copy }) => {
                 </span>
             </motion.div>
 
+            {/* Phones and tablets: the same two photos as the desktop pair, stacked so
+                they tell the story at a glance: the team talk, with lunch in the Royals
+                Cafe overlapping its corner. Sits under the title, above the opening line. */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
+                className="order-4 lg:hidden relative mt-7 mb-2 pb-14 sm:pb-20 max-w-xl"
+            >
+                <img
+                    src={heroTeamTalkSm}
+                    srcSet={`${heroTeamTalkSm} 800w, ${heroTeamTalk} 1600w`}
+                    sizes="(min-width: 640px) 520px, 88vw"
+                    alt={HERO_FEATURE_ALT}
+                    className="ml-auto w-[88%] aspect-[4/3] object-cover object-[35%_50%] rounded-2xl border-4 border-white/10"
+                />
+                <img
+                    src={heroCafe}
+                    alt={HERO_INSET_ALT}
+                    loading="lazy"
+                    className="absolute left-0 bottom-0 w-[55%] aspect-[4/3] object-cover object-[60%_50%] rounded-2xl border-4 border-rr-dark"
+                />
+                <span className="absolute right-2 bottom-3 sm:bottom-6 bg-rr-pink text-white text-[10px] sm:text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-full">
+                    {c.photoTag}
+                </span>
+            </motion.div>
+
 
             {showClock && (
                 <motion.div
