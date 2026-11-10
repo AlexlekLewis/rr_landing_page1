@@ -101,7 +101,7 @@ export const fmtRangeAUD = (r) => `${fmtAUD(r.min)}–${fmtAUD(r.max)}`;
 const VIDEOS_COPY = {
     eyebrow: 'Watch',
     heading: 'Inside The',
-    headingAccent: 'Royals HPC',
+    headingAccent: 'The Rajasthan Royals HPC',
     lead: 'Hear from the coaches and see what training with the Royals looks like.',
     carouselLabel: 'Videos',
     prevLabel: 'Previous video',
@@ -119,7 +119,7 @@ const BENEFITS_COPY = {
         {
             title: 'Train where India stars were built',
             body:
-                'The Royals’ own High Performance Centre in Nagpur. Not a ground hired for the week, ' +
+                'The Rajasthan Royals High Performance Centre in Nagpur. Not a ground hired for the week, ' +
                 'but the place the Royals use all year to develop their players.',
         },
         {
@@ -158,7 +158,7 @@ const BENEFITS_COPY = {
         'with the price, before anyone commits.',
     producedHereEyebrow: 'They Trained Here',
     producedHereHeading: 'Built At This Centre',
-    producedHereLead: 'Players the Royals have developed at the High Performance Centre.',
+    producedHereLead: 'Players the Royals have developed at the Rajasthan Royals High Performance Centre.',
 };
 
 const SEPTEMBER_COPY = {
@@ -166,8 +166,8 @@ const SEPTEMBER_COPY = {
     heading: 'Our First Tour,',
     headingAccent: 'In Pictures',
     lead:
-        'In September 2026 our first touring group spent a week at the Royals High Performance ' +
-        'Centre. This is what it looked like.',
+        'In September 2026 our first touring group spent a week at the Rajasthan Royals High ' +
+        'Performance Centre. This is what it looked like.',
     stats: [
         { value: '7', label: 'nights at the centre' },
         { value: '6', label: 'full coaching days' },
@@ -194,9 +194,12 @@ const STANDARD = {
 
     hero: {
         badge: 'Expressions Of Interest Open',
-        h1: 'High Performance',
+        h1: 'Rajasthan Royals High Performance',
         h1Accent: 'Centre Camp',
-        kicker: 'Rajasthan Royals Academy',
+        kicker: 'Rajasthan Royals Academy Melbourne',
+        comingSoon: 'Coming Soon',
+        comingSoonAction: 'Register Now',
+        comingSoonLabel: 'April 2027 Tour',
         dateline: 'Nagpur, India · April\u00a02027',
         toursLabel: 'The tour',
         tourLength: `About ${TOUR_LENGTH_DAYS} days`,
@@ -206,7 +209,7 @@ const STANDARD = {
             'they are.',
         lead:
             `A tour of about ${TOUR_LENGTH_DAYS} days to the Rajasthan Royals' talent factory in Nagpur — ` +
-            'the franchise\'s own High Performance Centre, and the place that built the games of ' +
+            'the Rajasthan Royals High Performance Centre, and the place that built the games of ' +
             'Yashasvi Jaiswal, Dhruv Jurel and Riyan Parag. It is where Vaibhav Sooryavanshi ' +
             'trains, alongside the coach who is his legal guardian. Our first touring group trained there ' +
             'with the Royals\' own high performance staff in September 2026, and our Melbourne coaches ' +
@@ -236,7 +239,7 @@ const STANDARD = {
         closedBadge: 'Applications Closed',
         closedHeading: 'Applications for this tour have closed',
         closedBody:
-            'This High Performance Centre Camp is now closed to new applications, and our ' +
+            'This Rajasthan Royals High Performance Centre Camp is now closed to new applications, and our ' +
             'coaches are confirming the touring squad. A new tour will be announced shortly.',
         closedNext: 'New tour announcement coming soon.',
         countdownClosed: 'Applications for this tour have closed.',
@@ -251,8 +254,8 @@ const STANDARD = {
         headingAccent: 'Talent Factory',
         lead:
             'Academies run tours. Almost none of them get inside the building an IPL franchise actually ' +
-            'uses. Each Rajasthan Royals Academy Melbourne tour goes to the Royals\' High Performance ' +
-            `Centre in Nagpur for about ${TOUR_LENGTH_DAYS} days.`,
+            'uses. Each Rajasthan Royals Academy Melbourne tour goes to the Rajasthan Royals High ' +
+            `Performance Centre in Nagpur for about ${TOUR_LENGTH_DAYS} days.`,
         producedHereLabel: 'Built at this centre',
         points: [
             {
@@ -330,7 +333,7 @@ const STANDARD = {
         includedNote: 'Identical for both prices. Once you are in Nagpur, everything below is already paid for.',
         included: [
             {
-                title: 'Seven nights inside the Royals HPC',
+                title: 'Seven nights inside the Rajasthan Royals High Performance Centre',
                 body:
                     'Shared air-conditioned rooms inside the Rajasthan Royals High Performance Centre in ' +
                     'Nagpur. You fly in the day before camp starts, train across six full camp days, and ' +
@@ -439,9 +442,12 @@ const SIMPLE = {
 
     hero: {
         badge: 'Now Taking Names',
-        h1: 'High Performance',
+        h1: 'Rajasthan Royals High Performance',
         h1Accent: 'Centre Camp',
-        kicker: 'Rajasthan Royals Academy',
+        kicker: 'Rajasthan Royals Academy Melbourne',
+        comingSoon: 'Coming Soon',
+        comingSoonAction: 'Register Now',
+        comingSoonLabel: 'April 2027 Tour',
         dateline: 'Nagpur, India · April\u00a02027',
         toursLabel: 'The tour',
         tourLength: `About ${TOUR_LENGTH_DAYS} days`,

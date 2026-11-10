@@ -41,7 +41,7 @@ const COACHES = [
         role: 'Rajasthan Royals Team Manager · Batting & Leadership',
         image: '/assets/rra/romi-bhinder.png',
         bio:
-            'Romi lives at the High Performance Centre and trains the Royals players there all year ' +
+            'Romi lives at the Rajasthan Royals High Performance Centre and trains the Royals players there all year ' +
             'round. He is the legal guardian of Vaibhav Sooryavanshi.',
     },
     {
@@ -66,7 +66,7 @@ const COACHES = [
         image: '/assets/rra/neeta-adhau.jpg',
         bio:
             'A performance psychology specialist focused on emotional resilience and athlete ' +
-            'development — a core pillar of the High Performance Centre, not an add-on.',
+            'development — a core pillar of the Rajasthan Royals High Performance Centre, not an add-on.',
     },
 ];
 
@@ -102,7 +102,7 @@ const ITCoaching = ({ copy }) => (
                     transition={{ delay: 0.1 }}
                     className="text-base md:text-lg text-rr-charcoal font-medium leading-relaxed"
                 >
-                    These coaches worked with our first touring group at the Royals&rsquo; High Performance
+                    These coaches worked with our first touring group at the Rajasthan Royals High Performance
                     Centre in Nagpur, in September 2026. Some of them work at the centre all year, coaching
                     the Royals&rsquo; own players. Who coaches each new tour is not set yet.
                 </motion.p>
