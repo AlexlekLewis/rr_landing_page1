@@ -68,8 +68,8 @@ const CAPTIONS = {
         caption: 'Between sessions in the players’ lounge, the same room the Royals players use.',
     },
     '06-coach-and-batter-in-nets.webp': {
-        alt: 'A Royals coach talking a padded-up batter through the next drill in the nets',
-        caption: 'Talking it through with a Royals coach before batting.',
+        alt: 'Indian cricket legend and former Royals cricketer Faiz Fazal talking a padded-up batter through the next drill in the nets',
+        caption: 'Talking it through with Faiz Fazal, Indian cricket legend and former Royals cricketer.',
     },
     '07-bowler-in-nets.webp': {
         alt: 'A Rajasthan Royals Academy Melbourne player bowling in the nets at the centre',
@@ -111,15 +111,15 @@ const CAPTIONS = {
         alt: 'A Royals coach standing beside a Rajasthan Royals Academy Melbourne player during a batting drill in the nets',
         caption: 'Side by side with a Royals coach in the nets.',
     },
-    // Coaches below were named by Andy (10 Nov 2026). Only name someone the
+    // Coaches named here were identified by Andy (10 Nov 2026), including photo 06. Only name someone the
     // Academy has identified; never guess from a face.
     '17-sid-trivedi-sets-up-drill.webp': {
         alt: 'Royals coach Sid Trivedi pointing across the nets as he sets up a drill, under the Rajasthan Royals High Performance Centre banner',
         caption: 'Sid Trivedi setting up the next drill.',
     },
     '18-faiz-fazal-with-batter.webp': {
-        alt: 'Faiz Fazal, former India international, talking a padded-up batter through his plan on the ground',
-        caption: 'Faiz Fazal, former India international, talking a batter through his plan.',
+        alt: 'Faiz Fazal, Indian cricket legend and former Royals cricketer, talking a padded-up batter through his plan on the ground',
+        caption: 'Faiz Fazal talking a batter through his plan.',
     },
     '19-sid-lahiri-with-batter-in-nets.webp': {
         alt: 'Siddhartha Lahiri, Head of International Player Development at the Rajasthan Royals, with a padded-up batter in the nets',
