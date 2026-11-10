@@ -29,3 +29,13 @@ describe('mandatory training shirt', () => {
         expect(suggestedSize('')).toBe('');
     });
 });
+
+describe('shirtCheckoutUrl', () => {
+    it('sends "no shirt" families to the link with the shirt, and only "yes" to the other', async () => {
+        const { shirtCheckoutUrl } = await import('./trainingShirt');
+        const links = { withShirt: 'https://buy.stripe.com/WITH', noShirt: 'https://buy.stripe.com/WITHOUT' };
+        expect(shirtCheckoutUrl(links, { has: 'no', size: '28' }, { id: 'r1', email: 'a@b.co' })).toBe('https://buy.stripe.com/WITH?client_reference_id=r1&prefilled_email=a%40b.co');
+        expect(shirtCheckoutUrl(links, { has: 'yes' }, { id: 'r1' })).toBe('https://buy.stripe.com/WITHOUT?client_reference_id=r1');
+        expect(shirtCheckoutUrl(links, { has: '' })).toBe('https://buy.stripe.com/WITH');
+    });
+});

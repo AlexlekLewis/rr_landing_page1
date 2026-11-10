@@ -46,3 +46,16 @@ export const shirtError = (v) => {
 };
 // What is saved with the booking (e.g. in `source`): "|shirt=has" or "|shirt=order-28".
 export const shirtTag = (v) => (needsShirt(v) ? `|shirt=order-${String(v.size).split(' ')[0]}` : '|shirt=has');
+
+// PAYMENT LINK PAGES: every paid program sold through a Stripe Payment Link has a PAIR of
+// links (CLAUDE.md): `withShirt` (training shirt locked at quantity 1) and `noShirt`. This picks
+// the one that matches the family's answer and adds the booking id and email.
+//   shirtCheckoutUrl({ withShirt: LINK_A, noShirt: LINK_B }, shirt, { id, email })
+// "No" (or no answer) always gets the shirt: a booking never reaches Stripe without a shirt
+// unless the family said the player already has one.
+export const shirtCheckoutUrl = (links, shirt, { id, email } = {}) => {
+    const u = new URL(shirt?.has === 'yes' && links.noShirt ? links.noShirt : links.withShirt);
+    if (id) u.searchParams.set('client_reference_id', id);
+    if (email) u.searchParams.set('prefilled_email', email);
+    return u.toString();
+};
