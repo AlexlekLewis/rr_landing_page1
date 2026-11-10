@@ -48,8 +48,8 @@ export const SECTIONS = [
                 { path: `jr.benefits.${i}.head`, label: `Benefit ${i + 1}: heading`, type: 'text' },
                 { path: `jr.benefits.${i}.body`, label: `Benefit ${i + 1}: text`, type: 'textarea' },
             ]),
-            { path: 'jr.olderLead', label: 'Older players line', type: 'text' },
-            { path: 'jr.olderLinkLabel', label: 'Older players link', type: 'text' },
+            { path: 'jr.olderLead', label: 'More advanced players line (before the link)', type: 'text' },
+            { path: 'jr.olderLinkLabel', label: 'More advanced players link text', type: 'text' },
         ],
     },
     {
