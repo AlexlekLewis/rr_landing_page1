@@ -177,6 +177,9 @@ export const JR_VIDEOS = [
     video('run-out-drill', 'Run-out drill', 'A fielding drill: back up, gather, hit the stumps'),
     video('pull-shots', 'Pull shots', 'Jinang feeding pull shots in the nets'),
     video('sweep-shot', 'The sweep', 'Andre Walton teaching the sweep'),
+    // Added 10 Nov 2026 (file "v2_Hallam_JR"; filmed at the Elite Cricket Centre). Junior Royals no
+    // longer runs at Hallam, so the caption doesn't name it.
+    video('session-montage', 'A Junior Royals session', 'Catching, fielding and batting, all in one session'),
 ];
 
 export const JR_T4 = {

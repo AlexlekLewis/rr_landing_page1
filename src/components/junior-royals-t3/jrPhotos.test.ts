@@ -40,7 +40,7 @@ describe('Junior Royals videos', () => {
         for (const v of JR_VIDEOS) {
             expect(existsSync(`public${v.src}`), v.src).toBe(true);
             expect(existsSync(`public${v.poster}`), v.poster).toBe(true);
-            expect(`${v.title} ${v.caption}`).not.toMatch(/Brodie|Netz/i);
+            expect(`${v.title} ${v.caption}`).not.toMatch(/Brodie|Netz|Hallam/i);
         }
     });
 });
