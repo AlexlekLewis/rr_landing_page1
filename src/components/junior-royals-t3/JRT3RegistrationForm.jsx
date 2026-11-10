@@ -5,6 +5,8 @@ import { HONEYPOT_FIELD, isHoneypotTripped } from '../../lib/security/bot.js';
 import { JR_T4, PAY_OPTIONS, groupFor, nextSession, sessionLong, lastSessionLine, bookingOpen, breakLine } from './jrTerm4Data';
 import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squads/data';
 import TrainingShirtStep from '../shared/TrainingShirtStep';
+import GovernanceConsents from '../shared/GovernanceConsents';
+import { EMPTY_CONSENTS, consentErrors, consentColumns } from '../../lib/governance';
 import { EMPTY_SHIRT, shirtError, shirtTag, needsShirt, TRAINING_SHIRT } from '../../lib/kit/trainingShirt';
 
 // Junior Royals booking form (paid from 19 Oct 2026). JOIN ANY WEEK, WEEKLY ONLY
@@ -93,6 +95,9 @@ const JRT3RegistrationForm = () => {
     const [errors, setErrors] = useState({});
     const [honeypot, setHoneypot] = useState('');
     const [shirt, setShirt] = useState(EMPTY_SHIRT);
+    // Governance boxes (Andy, 10 Nov 2026): the same four as Holiday Programs and Junior Royals
+    // Term 2, all required, on every entry (bookings and standby requests).
+    const [consents, setConsents] = useState(EMPTY_CONSENTS);
     const [form, setForm] = useState({
         parent_name: '', parent_email: '', parent_phone: '',
         player_name: '', player_age: '', preferred_centre: '',
@@ -113,6 +118,7 @@ const JRT3RegistrationForm = () => {
         if (!form.preferred_centre) e.preferred_centre = 'Please pick a centre.';
         if (nightChoice === 'other' && !altDay) e.alt_day = 'Please pick the night you would like.';
         if (nightChoice !== 'other' && shirtError(shirt)) e.shirt = shirtError(shirt);
+        Object.assign(e, consentErrors(consents));
         setErrors(e);
         return Object.keys(e).length === 0;
     };
@@ -147,6 +153,7 @@ const JRT3RegistrationForm = () => {
                 preferred_centre: centre,
                 preferred_day: centreDay,
                 source,
+                ...consentColumns(consents),
                 page_referrer: document.referrer ? document.referrer.slice(0, 500) : null,
                 ...getUTMParams(),
             };
@@ -345,6 +352,10 @@ const JRT3RegistrationForm = () => {
                                 <ul className="space-y-1.5 text-rr-charcoal text-sm font-medium leading-relaxed list-disc pl-5">
                                     {JR_T4.renewLines.map((l) => <li key={l}>{l}</li>)}
                                 </ul>
+                            </div>
+                            <div className="mt-6">
+                                <GovernanceConsents value={consents} errors={errors}
+                                    onChange={(v) => { setConsents(v); setErrors((p) => ({ ...p, ...Object.fromEntries(Object.keys(v).filter((k) => v[k]).map((k) => [k, undefined])) })); }} />
                             </div>
                             {errors.form && <div className="bg-red-50 border border-red-200 rounded-xl p-4 mt-6"><p className="text-red-600 text-sm font-medium">{errors.form}</p></div>}
                             {onBreak && <div className="rounded-xl border-2 border-rr-pink bg-rr-pink/5 p-4 mt-6" data-jr-on-break><p className="text-rr-dark text-sm font-bold leading-relaxed">{breakLine(pickedCentre)}</p></div>}

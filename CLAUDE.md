@@ -2,6 +2,30 @@
 
 Rules for every change to this site, whoever makes it (Andy, Alex or the development team).
 
+## Governance boxes on every paid program sign-up
+
+Andy, 10 Nov 2026: *"make sure that this page, and all other pages where people are signing up
+and paying for a program, that they are ticking our governance boxes … the same one we use for
+holiday program/previous versions of junior royals."*
+
+**Applies to:** every form where a family signs up and pays for a program (same scope as the
+shirt rule below). Use `<GovernanceConsents>` (`src/components/shared/GovernanceConsents.jsx`,
+rules in `src/lib/governance.js`): the "Agreements & Consent" section from the Holiday Programs
+and Junior Royals Term 2 forms, same look and wording. **All four are required:**
+
+1. Terms & Conditions and Privacy Policy, and the information is accurate (`accept_terms`)
+2. Player Code of Conduct, linked to `/assets/RRA_Player_Code_of_Conduct.pdf` (`accept_player_code`)
+3. Parent/Guardian Code of Conduct, linked to `/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf`
+   (`accept_parent_code`). Only for programs that also take adults: players 18+ skip this one
+   (`adult` prop / `{ adult: true }`).
+4. Photo and video consent for social media and marketing (`accept_social_media`)
+
+The form must not submit until `consentErrors()` is empty, and must save `consentColumns()` into
+four boolean columns of those names (add them with a migration, applied BEFORE the form is
+deployed). Add the form to `PAID_SIGNUP_FORMS` in `src/lib/governance.test.ts` in the same PR:
+that test fails if a listed form loses a box or links a Code of Conduct to the wrong page.
+Program-specific boxes (helmet and stem guard, plays at own risk) go in addition, never instead.
+
 ## Mandatory training shirt on every paid program page
 
 Andy, 9 Nov 2026: *"on every page we ever create … the mandatory shirt ordering component that

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { CLUBS, PROGRAM, SPIN_TYPES, SQUAD_STATUS, SQUAD_NOTE, PRICES, STRIPE_LINK, upcomingNights } from './scOptions';
+import GovernanceConsents from '../shared/GovernanceConsents';
+import { EMPTY_CONSENTS, consentErrors, consentColumns } from '../../lib/governance';
 
 const getUTMParams = () => {
     const p = new URLSearchParams(window.location.search);
@@ -31,6 +33,10 @@ const SCForm = () => {
     const [error, setError] = useState('');
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    // Governance boxes (Andy, 10 Nov 2026), saved in the four accept_* columns of `applications`.
+    // Players 18 and over aren't asked the Parent/Guardian Code.
+    const [consents, setConsents] = useState(EMPTY_CONSENTS);
+    const [consentErr, setConsentErr] = useState({});
 
     const set = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
 
@@ -47,6 +53,9 @@ const SCForm = () => {
         if (!form.phone.trim()) return 'Please give us a phone number.';
         if (ageNum < 18 && !form.parent_name.trim()) return 'For players under 18, please give a parent or guardian’s name.';
         if (!form.intent) return 'Please tick the box to say you will come on the night you picked.';
+        const missing = consentErrors(consents, { adult: ageNum >= 18 });
+        setConsentErr(missing);
+        if (Object.keys(missing).length) return 'Please tick the Agreements & Consent boxes.';
         return '';
     };
 
@@ -89,6 +98,7 @@ const SCForm = () => {
                 source: `spin-club-${club?.key || 'unknown'}`,
                 bio: notes,
                 page_referrer: document.referrer || null,
+                ...consentColumns(consents),
                 ...utmParams,
             },
         ]);
@@ -278,6 +288,9 @@ const SCForm = () => {
                             </span>
                         </span>
                     </label>
+
+                    <GovernanceConsents value={consents} errors={consentErr} adult={ageNum >= 18}
+                        onChange={(v) => { setConsents(v); setConsentErr((p) => Object.fromEntries(Object.entries(p).filter(([k]) => !v[k]))); }} />
 
                     {error && (
                         <p className="text-sm font-bold text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">

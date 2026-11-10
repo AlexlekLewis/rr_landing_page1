@@ -43,6 +43,10 @@ scratch folder (`W=<scratchpad>/handoff-<slug>`), never inside the repo.
 - On the branch with the change, `git fetch origin main` and confirm the page builds (`npx vite build`).
 - Note the branch, the latest commit, and the pull request (if any). Commits that aren't pushed
   yet are fine; step 6 handles them.
+- **Paid program page? The governance boxes must be there** (`CLAUDE.md`, Andy 10 Nov 2026):
+  `<GovernanceConsents>` with the four required boxes, saved in four `accept_*` columns, and the
+  form listed in `src/lib/governance.test.ts`. If a new table needs the columns, the migration
+  goes in the brief's steps as "apply BEFORE deploying". Missing = not ready to hand off.
 - **Paid program page? The mandatory training shirt must be there** (`CLAUDE.md`, Andy 9 Nov
   2026). Check the form has `<TrainingShirtStep>`, blocks without an answer, and that the
   checkout charges the shirt for "No" without letting it be removed. If it's missing, stop and
