@@ -34,10 +34,16 @@
 // Sid Lahiri's intro video was removed (Andy, 10 Nov 2026).
 export const VIDEOS = [
     {
+        src: '/tours/romi-kunwar-front-shoulder.mp4',
+        poster: '/tours/romi-kunwar-front-shoulder.jpg',
+        title: 'The front shoulder',
+        caption: 'Romi Bhinder and Kunwar working on his front shoulder.',
+    },
+    {
         src: '/tours/kunwar.mp4',
         poster: '/tours/kunwar.jpg',
         title: 'In the nets',
-        caption: 'Batting in the nets.',
+        caption: 'Kunwar batting in the nets.',
     },
     {
         src: '/tours/faiz-wet-ball-drill.mp4',
