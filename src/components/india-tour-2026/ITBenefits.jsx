@@ -2,11 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import ITSectionHeader from './ITSectionHeader';
 import ITRegisterButton from './ITRegisterButton';
-import { PRODUCED_HERE } from './itCopy';
 
 // "What your player gets": the benefits of the tour, each one an outcome for the
-// player, not a line from the camp document. Then the players the centre has
-// developed, so the claim "India stars were built here" has names behind it.
+// player, not a line from the camp document. (The players the centre has
+// developed now sit in ITHomeOfRoyals, with the HPC video.)
 
 // One simple outline icon per benefit, in the same order as copy.benefits.items.
 const ICONS = [
@@ -53,24 +52,8 @@ const ITBenefits = ({ copy }) => {
                 </div>
                 <p className="mt-5 text-xs text-rr-charcoal/70 font-medium">{c.note}</p>
 
-                {/* Players developed at the centre */}
-                <div className="mt-16 rounded-3xl bg-rr-navy p-8 md:p-12">
-                    <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">{c.producedHereEyebrow}</p>
-                    <h3 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight leading-none">
-                        {c.producedHereHeading}
-                    </h3>
-                    <p className="mt-3 text-sm md:text-base text-white/70 font-medium">{c.producedHereLead}</p>
-                    <ul className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {PRODUCED_HERE.map((p) => (
-                            <li key={p.name} className="rounded-xl border border-white/15 bg-white/5 px-5 py-4">
-                                <span className="block text-base font-black text-white uppercase tracking-wide">{p.name}</span>
-                                <span className="block text-xs text-white/60 font-bold uppercase tracking-widest mt-1">{p.note}</span>
-                            </li>
-                        ))}
-                    </ul>
-                    <div className="mt-8">
-                        <ITRegisterButton label={copy.hero.cta} id="benefits-register" />
-                    </div>
+                <div className="mt-10">
+                    <ITRegisterButton label={copy.hero.cta} id="benefits-register" />
                 </div>
             </div>
         </section>

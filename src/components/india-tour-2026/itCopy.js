@@ -87,7 +87,9 @@ export const PRODUCED_HERE = [
     { name: 'Yashasvi Jaiswal', note: 'India Test opener' },
     { name: 'Dhruv Jurel', note: 'India wicketkeeper-batter' },
     { name: 'Riyan Parag', note: 'India international' },
-    { name: 'Vaibhav Sooryavanshi', note: 'trains at the centre' },
+    { name: 'Vaibhav Sooryavanshi', note: 'discovered at the centre' },
+    // Brijesh Sharma: discovered at the centre (Andy, 10 Nov 2026).
+    { name: 'Brijesh Sharma', note: 'discovered at the centre' },
     { name: 'Luhan-dre Pretorius', note: 'Royals top order' },
 ];
 
@@ -156,9 +158,27 @@ const BENEFITS_COPY = {
     note:
         'Based on our September 2026 tour. The exact April 2027 programme is confirmed in writing ' +
         'with the price, before anyone commits.',
-    producedHereEyebrow: 'Follow The Pathway',
-    producedHereHeading: 'Train Where They Trained',
-    producedHereLead: 'You train on the same grounds where these players developed their games.',
+};
+
+// The home of the Royals (Andy's words, 10 Nov 2026), with the HPC promo video.
+const HOME_COPY = {
+    eyebrow: 'Steeped In History',
+    heading: 'The Home Of The',
+    headingAccent: 'Rajasthan Royals',
+    paragraphs: [
+        'The Rajasthan Royals High Performance Centre is the home training and high performance ' +
+            'base of the Rajasthan Royals.',
+        'It is where aspiring Royals players trial for the franchise, and where Brijesh Sharma ' +
+            'and Vaibhav Sooryavanshi were discovered.',
+        'It is where the next generation of Royals aspirants will train and build their skillset. ' +
+            'On this tour, that includes you.',
+    ],
+    listHeading: 'Train Where They Trained',
+    video: {
+        src: '/tours/hpc-home-of-the-royals.mp4',
+        poster: '/tours/hpc-home-of-the-royals.jpg',
+        title: 'The Rajasthan Royals High Performance Centre',
+    },
 };
 
 const SEPTEMBER_COPY = {
@@ -188,6 +208,7 @@ const SEPTEMBER_COPY = {
 // --- standard -------------------------------------------------------------
 
 const STANDARD = {
+    home: HOME_COPY,
     videos: VIDEOS_COPY,
     benefits: BENEFITS_COPY,
     september: SEPTEMBER_COPY,
@@ -402,6 +423,7 @@ const STANDARD = {
 // Grade 4–5 reading level. Short lines. The value still lands.
 
 const SIMPLE = {
+    home: HOME_COPY,
     videos: VIDEOS_COPY,
     benefits: BENEFITS_COPY,
     september: SEPTEMBER_COPY,

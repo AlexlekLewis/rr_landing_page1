@@ -10,7 +10,7 @@ import { VIDEOS } from './itMedia';
 // them in a swipeable carousel. Only one plays at a time. Videos are listed in
 // itMedia.js; with none listed the section is hidden.
 
-const VideoCard = ({ v, id, activeId, setActiveId }) => {
+export const VideoCard = ({ v, id, activeId, setActiveId }) => {
     const ref = useRef(null);
     const [playing, setPlaying] = useState(false);
     const [started, setStarted] = useState(false);
