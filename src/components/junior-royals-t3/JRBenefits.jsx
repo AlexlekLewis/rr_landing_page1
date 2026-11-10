@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { JR_T4 } from './jrTerm4Data';
+import { JR_T4, JR_PHOTOS } from './jrTerm4Data';
 import JRSectionCTA from './JRSectionCTA';
 import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squads/data';
 
@@ -20,14 +20,19 @@ const JRBenefits = () => (
 
             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {JR_T4.benefits.map((b, i) => (
-                    <motion.li key={b.head} {...fade(i)} className="bg-white border border-slate-200 rounded-2xl p-6">
-                        <span className="inline-flex w-9 h-9 rounded-full bg-rr-pink/10 items-center justify-center mb-4">
-                            <svg className="w-4 h-4 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <h3 className="text-lg font-black text-rr-dark uppercase tracking-tight mb-2">{b.head}</h3>
-                        <p className="text-rr-charcoal font-medium leading-relaxed">{b.body}</p>
+                    <motion.li key={b.head} {...fade(i)} className="bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col">
+                        {/* A photo for each benefit (JR_PHOTOS.benefits, same order), 4:3. */}
+                        {JR_PHOTOS.benefits[i] && (
+                            <img src={JR_PHOTOS.benefits[i].src}
+                                srcSet={`${JR_PHOTOS.benefits[i].srcSm} 480w, ${JR_PHOTOS.benefits[i].src} 800w`}
+                                sizes="(min-width: 1024px) 352px, (min-width: 640px) 50vw, 100vw"
+                                alt={JR_PHOTOS.benefits[i].alt} loading="lazy" decoding="async" width="800" height="600"
+                                className="w-full aspect-[4/3] object-cover" />
+                        )}
+                        <div className="p-6">
+                            <h3 className="text-lg font-black text-rr-dark uppercase tracking-tight mb-2">{b.head}</h3>
+                            <p className="text-rr-charcoal font-medium leading-relaxed">{b.body}</p>
+                        </div>
                     </motion.li>
                 ))}
             </ul>

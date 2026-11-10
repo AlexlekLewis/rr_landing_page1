@@ -5,7 +5,7 @@ import { JR_PHOTOS } from './jrTerm4Data';
 // Andy, 10 Nov 2026: "Please ensure that there is never a duplicate". Every photo on
 // /junior-royals (hero, framed photo, photo strip) is a different file and a different shot.
 describe('Junior Royals photos', () => {
-    const all = [JR_PHOTOS.hero, JR_PHOTOS.heroFeature, ...JR_PHOTOS.gallery];
+    const all = [JR_PHOTOS.hero, JR_PHOTOS.heroFeature, ...JR_PHOTOS.gallery, ...JR_PHOTOS.benefits];
     const stem = (p: { src: string }) => p.src.split('/').pop()!.replace('.webp', '');
 
     it('never uses the same photo twice on the page', () => {
@@ -15,7 +15,7 @@ describe('Junior Royals photos', () => {
         expect(stems).not.toContain('girl-batting');
     });
 
-    it('has every file, at both sizes, with alt text and a caption', () => {
+    it('has every file, at both sizes, with alt text and a caption', async () => {
         for (const p of all) {
             expect(existsSync(`public${p.src}`), p.src).toBe(true);
             expect(existsSync(`public${p.srcSm}`), p.srcSm).toBe(true);
@@ -23,6 +23,9 @@ describe('Junior Royals photos', () => {
             expect(p.caption.length).toBeGreaterThan(3);
         }
         expect(JR_PHOTOS.gallery).toHaveLength(8);
+        // One photo per benefit card, no more, no fewer.
+        const { JR_T4 } = await import('./jrTerm4Data');
+        expect(JR_PHOTOS.benefits).toHaveLength(JR_T4.benefits.length);
     });
 
     it('no other Junior Royals component hard-codes a photo', () => {
