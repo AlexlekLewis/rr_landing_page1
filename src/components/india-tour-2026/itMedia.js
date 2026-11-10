@@ -108,10 +108,10 @@ const CAPTIONS = {
         caption: 'A Royals coach watching every movement in a footwork drill.',
     },
     '16-coach-and-batter-in-nets.webp': {
-        alt: 'A Royals coach standing beside a Rajasthan Royals Academy Melbourne player during a batting drill in the nets',
-        caption: 'Side by side with a Royals coach in the nets.',
+        alt: 'Rajasthan Royals Academy Melbourne player Joshua Richardson side by side with Faiz Fazal, Indian cricket legend and former Royals cricketer, during a batting drill in the nets',
+        caption: 'Joshua Richardson side by side with Faiz Fazal in the nets.',
     },
-    // Coaches named here were identified by Andy (10 Nov 2026), including photos 04, 06, 10 and 12. Only name someone the
+    // Coaches named here were identified by Andy (10 Nov 2026), including photos 04, 06, 10, 12 and 16. Only name someone the
     // Academy has identified; never guess from a face.
     '17-sid-trivedi-sets-up-drill.webp': {
         alt: 'Siddharth (Sid) Trivedi, legendary Rajasthan Royals bowler, pointing across the nets as he sets up a drill, under the Rajasthan Royals High Performance Centre banner',
