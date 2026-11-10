@@ -6,6 +6,7 @@ import PartnerStack from '../power-game/PartnerStack';
 import ITHero from './ITHero';
 import ITVideos from './ITVideos';
 import ITBenefits from './ITBenefits';
+import ITHomeOfRoyals from './ITHomeOfRoyals';
 import ITSeptember2026 from './ITSeptember2026';
 import ITCoaching from './ITCoaching';
 import ITAspiration from './ITAspiration';
@@ -28,7 +29,7 @@ const getRefFromUrl = () => {
 
 const IndiaTour2026 = () => {
     usePageAnalytics('/tours', {
-        sections: ['hero', 'september-2026', 'videos', 'benefits', 'coaching', 'aspiration', 'pricing', 'register'],
+        sections: ['hero', 'september-2026', 'videos', 'benefits', 'home-of-the-royals', 'coaching', 'aspiration', 'pricing', 'register'],
     });
 
     const { simple, showToggle, setMode } = useReadingMode();
@@ -63,6 +64,7 @@ const IndiaTour2026 = () => {
                 <div id="september-2026"><ITSeptember2026 copy={copy} /></div>
                 <div id="videos"><ITVideos copy={copy} /></div>
                 <div id="benefits"><ITBenefits copy={copy} /></div>
+                <div id="home-of-the-royals"><ITHomeOfRoyals copy={copy} /></div>
                 <div id="coaching"><ITCoaching copy={copy} /></div>
                 <div id="aspiration"><ITAspiration copy={copy} /></div>
                 <div id="pricing"><ITPricing copy={copy} /></div>
