@@ -266,8 +266,9 @@ const JRT3RegistrationForm = () => {
                                             </p>
                                         )}
                                         <p className="text-slate-500 text-xs font-medium leading-relaxed mt-2">
-                                            {JR_T4.olderLead} Our Performance Squads are for players aged {PS_MIN_AGE} to {PS_MAX_AGE}.{' '}
-                                            <Link to={JR_T4.olderRoute} className="text-rr-pink font-bold underline">{JR_T4.olderLinkLabel}</Link>
+                                            {JR_T4.olderLead}{' '}
+                                            <Link to={JR_T4.olderRoute} className="text-rr-pink font-bold underline">{JR_T4.olderLinkLabel}</Link>{' '}
+                                            (ages {PS_MIN_AGE} to {PS_MAX_AGE}).
                                         </p>
                                     </div>
                                 </div>

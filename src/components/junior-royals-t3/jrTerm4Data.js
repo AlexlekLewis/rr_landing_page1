@@ -268,8 +268,11 @@ export const JR_T4 = {
     // as part of the organisation for the moment." Don't name them on the page.
     twoCentres: 'Junior Royals runs at two centres: Mickleham Indoor Sports Centre in North Melbourne, and the Elite Cricket Centre in Cranbourne North, South-East Melbourne.',
     // Players older than 12 go to Performance Squads (Alex, 5 Oct 2026).
-    olderLead: 'Aged 10 or over?', // Andy, 9 Nov 2026: Performance Squads start at 10
-    olderLinkLabel: 'See Performance Squads',
+    // Andy, 10 Nov 2026: "If you feel your child is more advanced than the Junior Royals
+    // program, please visit our Performance Squad program". Shown as
+    // "<olderLead> <link: olderLinkLabel> (ages 10 to 25)." in the benefits and the form.
+    olderLead: 'If you feel your child is more advanced than the Junior Royals program, please visit our',
+    olderLinkLabel: 'Performance Squads program',
     olderRoute: '/performance-squads',
     centres: [
         {

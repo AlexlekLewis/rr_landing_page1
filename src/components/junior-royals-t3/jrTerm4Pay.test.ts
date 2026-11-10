@@ -135,6 +135,7 @@ describe('Junior Royals Term 4 payments', () => {
         expect(jrTerm4Payment({ source: 'junior-royals-term4-booking|pay=weekly|group=5pm|shirt=order-26', paid: true, amount_paid_cents: 7490, paid_at: '2026-11-09T05:00:00Z' }))
             .toMatch(/PAID \$74\.90 .*Shirt: ORDER size 26$/);
         expect(JR_T4.shirtLine).not.toMatch(/set the shirt to 0/);
-        expect(JR_T4.olderLead).toBe('Aged 10 or over?');
+        expect(JR_T4.olderLead).toBe('If you feel your child is more advanced than the Junior Royals program, please visit our');
+        expect(JR_T4.olderLinkLabel).toBe('Performance Squads program');
     });
 });
