@@ -134,6 +134,21 @@ it can be read as one piece. If tone matters, show Alex the plain draft first.
   **sheet tab** in the sync, **Meta Pixel** events (`meta-pixel.md`: Lead on submit, InitiateCheckout,
   Purchase on the success page).
 - Surfaces: `site-structure.md` §3. Hidden page → none of them.
+- **Governance boxes on every paid program sign-up** (Andy, 10 Nov 2026): `<GovernanceConsents>`
+  (`src/components/shared/GovernanceConsents.jsx`), the four required "Agreements & Consent"
+  boxes from the Holiday Programs / Junior Royals Term 2 forms: Terms & Privacy, Player Code,
+  Parent/Guardian Code (skipped for 18+ only on adult programs), photo/video consent. Block
+  submit on `consentErrors()`, save `consentColumns()` (four `accept_*` boolean columns, migration
+  applied before deploy), add the form to `PAID_SIGNUP_FORMS` in `src/lib/governance.test.ts`.
+  Full rule: `CLAUDE.md`.
+- **Mandatory training shirt on every paid program page** (Andy, 9 Nov 2026 — "this MUST be
+  in everything either I or Alex does"): the booking form uses `<TrainingShirtStep>`
+  (`src/components/shared/TrainingShirtStep.jsx`), won't submit until `shirtError()` is null,
+  saves `shirtTag()` with the booking, shows the size in the sheet tab and on the success
+  page, and charges the shirt so it can't be skipped: server checkout adds the shirt line for
+  "No"; Payment Links come in a pair (shirt **locked** at 1 for "No", no shirt for "Yes"),
+  both in the webhook map. Full rule: `CLAUDE.md` in the repo root. Not for the shop, free
+  events, interest-only forms or tour deposits.
 
 ### B5. Audit your own page — the gate
 
@@ -148,6 +163,12 @@ it can be read as one piece. If tone matters, show Alex the plain draft first.
 5. Meta Pixel fires Lead / InitiateCheckout / Purchase on the preview (Events Manager → Test events).
    Backend QA (`backend.md` §5): test submission, test payment, sheet tab appears.
 6. `npm run build` passes; verify in the preview (desktop + mobile).
+7a. **Paid page → governance check** (`CLAUDE.md`): submit with no boxes ticked (blocked, one
+   error per box), then all ticked (the saved row has the four `accept_*` columns true).
+   `src/lib/governance.test.ts` lists the form and passes.
+7. **Paid page → training shirt check** (`CLAUDE.md`): submit without answering the shirt
+   question (blocked), with "No" (size required; checkout has the shirt and it can't be
+   removed) and with "Yes" (checkout without it). A paid page that fails this doesn't ship.
 
 ### B6. Ship
 
@@ -200,6 +221,12 @@ The build isn't done until all of these are true, checked on rramelbourne.com it
       on route change, no personal data in events (`meta-pixel.md`).
    2b. **Location** — the hero and SEO say Melbourne; every venue has its suburb; two centres are
       shown as separate places (`language.md` §4b).
+   2e. **Governance boxes** (paid sign-ups, `CLAUDE.md`) — any of the four missing or optional,
+      not saved to the database, or a Code of Conduct link that opens the wrong page (Match
+      Registration linked both Codes to /terms-conditions until 10 Nov 2026). Blocks the page.
+   2d. **Mandatory training shirt** (paid program pages, `CLAUDE.md`) — no shirt question,
+      a question that can be skipped, a size that isn't asked, or a checkout where the shirt
+      can be set to 0. Any of these blocks the page.
    2a. **Consumer law** (`consumer-law.md`) — prices without "incl. GST", compulsory fees not
       beside the headline price, "non-refundable" without the ACL carve-out, expired
       early-bird / was-now prices, "free" that isn't.

@@ -339,7 +339,7 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
                                     error={errors.accept_player_code}
                                 >
                                     I have read, understood, and agree to the{' '}
-                                    <a href="/terms-conditions" target="_blank" rel="noreferrer" className="text-rr-light-pink underline hover:text-white">Player Code of Conduct</a>.
+                                    <a href="/assets/RRA_Player_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-light-pink underline hover:text-white">Player Code of Conduct</a>.
                                 </MRCheckbox>
                             </div>
 
@@ -350,7 +350,7 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
                                     error={errors.accept_parent_code}
                                 >
                                     I have read, understood, and agree to the{' '}
-                                    <a href="/terms-conditions" target="_blank" rel="noreferrer" className="text-rr-light-pink underline hover:text-white">Parent/Guardian Code of Conduct</a>.
+                                    <a href="/assets/RRA_Parent_Guardian_Code_of_Conduct.pdf" target="_blank" rel="noreferrer" className="text-rr-light-pink underline hover:text-white">Parent/Guardian Code of Conduct</a>.
                                 </MRCheckbox>
                             </div>
 

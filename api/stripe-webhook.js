@@ -114,6 +114,9 @@ const PAYMENT_LINK_PROGRAMS = {
   // product name (classifyJrT4), so a renamed product can't misfile a payment.
   'plink_1US8PnIo52UEA50y1mEdWz1P': { program: 'junior_royals', program_variant: 'term_4_upfront', program_label: 'Junior Royals Term 4 — upfront ($349, 8 weeks)' },
   'plink_1US8NNIo52UEA50y5UuUuuyo': { program: 'junior_royals', program_variant: 'term_4_weekly', program_label: 'Junior Royals Term 4 — weekly ($44.95 a week)' },
+  // Same weekly price, NO training shirt: only for families who said on the form the player
+  // already has one (mandatory shirt rule, 9 Nov 2026; the link above now locks the shirt at 1).
+  'plink_1Ua0GJIo52UEA50yubADf8P8': { program: 'junior_royals', program_variant: 'term_4_weekly', program_label: 'Junior Royals — weekly ($44.95 a week), has own shirt' },
   'plink_1UR3QNIo52UEA50yq6GKVkSy': { program: 'lower_plenty_jr_day', program_variant: null, program_label: 'Junior Royals are coming to Lower Plenty — $10 entry fee, Sun 25 Oct 2026' },
 };
 

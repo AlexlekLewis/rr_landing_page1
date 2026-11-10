@@ -48,6 +48,13 @@
 // because api/stripe-webhook.js still files earlier upfront payments.
 export const UPFRONT_LINK = 'https://buy.stripe.com/14A14n4fn3ud0uU7jJ9Zm0Y';
 export const WEEKLY_LINK = 'https://buy.stripe.com/7sYeVd9zH3udgtSavV9Zm0X';
+// MANDATORY SHIRT (Andy, 9 Nov 2026; src/lib/kit/trainingShirt.js). WEEKLY_LINK is for players
+// without a shirt: its training shirt must be LOCKED at 1 in Stripe (adjustable quantity OFF).
+// GO-LIVE STEP: it is still adjustable (0–99) because the live page tells families to set it to 0;
+// switch "adjustable quantity" off on plink_1US8NNIo52UEA50y5UuUuuyo the day this form goes live.
+// WEEKLY_NO_SHIRT_LINK (plink_1Ua0GJIo52UEA50yubADf8P8) is the same weekly price with no
+// shirt, only for families who answer "Yes, they have one" on the form.
+export const WEEKLY_NO_SHIRT_LINK = 'https://buy.stripe.com/dRmfZh13b3ud5Pe9rR9Zm0Z';
 
 const money = (n) => `$${Number.isInteger(n) ? n : n.toFixed(2)}`;
 export const PRICE = { weekly: 44.95, shirt: 29.95 };
@@ -59,7 +66,8 @@ export const PAY_OPTIONS = {
         amount: money(PRICE.weekly),
         per: 'a week',
         detail: 'A weekly direct debit, by card, Apple Pay or Klarna. The first payment is taken when you book, then one each week while sessions are running. Over the holiday breaks, payments are paused and you keep your spot.',
-        link: WEEKLY_LINK,
+        link: WEEKLY_LINK,                 // with the shirt (locked)
+        linkNoShirt: WEEKLY_NO_SHIRT_LINK, // player already has a shirt
         value: PRICE.weekly,
     },
 };
@@ -137,24 +145,24 @@ const photo = (name, alt, caption) => ({
     caption,
 });
 export const JR_PHOTOS = {
-    hero: photo('squad-talk', 'A Junior Royals coach talking to a squad of young players sitting in front of a Rajasthan Royals Academy Melbourne banner', 'Squad talk'),
-    heroFeature: photo('coach-demo-bat', 'A Junior Royals coach showing a group of young players how to hold the bat', 'One coaching point to hold on to'),
-    heroInset: photo('ecc-bowling-pair', 'Two young players practising their bowling action in the nets while a coach watches', 'Bowling, one skill at a time'),
+    // NO DUPLICATES (Andy, 10 Nov 2026: "Please ensure that there is never a duplicate"): every
+    // photo appears once on the page. The hero uses the two photos that aren't in the strip;
+    // jrPhotos.test.ts fails if a file is used twice.
+    hero: photo('batting-with-coach', 'A young batter playing a pull shot as a coach feeds the ball', 'Batting with a coach'),
+    heroFeature: photo('hands-on-batting', 'A coach guiding a young batter into position while another player plays a forward defence', 'Hands-on coaching'),
+    // The photo strip under the hero (Andy, 10 Nov 2026: "a scrolling photo section below the
+    // hero section, as we have for the /tours page"), in the order Andy sent them.
     gallery: [
-        photo('coach-demo-bat', 'A Junior Royals coach showing a group of young players how to hold the bat', 'One coaching point to hold on to'),
-        photo('hands-on-batting', 'A coach guiding a young batter into position while another player plays a forward defence', 'Hands-on coaching'),
-        photo('bowling-line-drill', 'A line of young players kneeling to practise their bowling arm with a coach watching', 'Bowling drills, together'),
         photo('squad-talk', 'A Junior Royals coach talking to a squad of young players sitting in front of a Rajasthan Royals Academy Melbourne banner', 'Learning as a squad'),
-        photo('batting-with-coach', 'A young batter playing a pull shot as a coach feeds the ball', 'Batting with a coach'),
-        photo('ecc-bowling-pair', 'Two young players practising their bowling action in the nets while a coach watches', 'Bowling, one skill at a time'),
-        photo('girl-batting', 'A young girl in a helmet and pads playing a shot in the nets', 'Batting in the nets'),
-        photo('bowler-running-in', 'A young bowler running in to bowl in the nets while teammates wait their turn', 'In the nets'),
+        photo('bowler-running-in', 'A young bowler running in to bowl in the nets while teammates wait their turn', 'Bowling in the nets'),
         photo('coach-watching-nets', 'A coach watching a young bowler in the nets with a batter waiting', 'Coaches in the nets'),
+        photo('cones-batting-drill', 'Two young batters in helmets and pads practising a front-foot drill between coloured cones', 'Batting drills, one skill at a time'),
+        photo('girl-batting-pull', 'A young girl in a helmet and pads playing a pull shot in the nets as a coach feeds the ball', 'Batting in the nets'),
+        // Added 10 Nov 2026, in the order Andy sent them.
+        photo('bowling-line-drill', 'A line of young players kneeling to practise their bowling arm with a coach watching', 'Bowling drills, together'),
+        photo('ecc-bowling-pair', 'Two young players practising their bowling action in the nets while a coach watches', 'Bowling, one skill at a time'),
+        photo('coach-demo-bat', 'A Junior Royals coach showing a group of young players how to hold the bat', 'One coaching point to hold on to'),
     ],
-    centres: {
-        mickleham: photo('hands-on-batting', 'Junior Royals batting practice at the Mickleham Indoor Sports Centre', 'Mickleham'),
-        'cranbourne-north': photo('ecc-bowling-pair', 'Junior Royals bowling practice at the Elite Cricket Centre, Cranbourne North', 'Cranbourne North'),
-    },
 };
 
 export const JR_T4 = {
@@ -182,7 +190,7 @@ export const JR_T4 = {
     factLine: 'Ages 7–9: 5:00pm – 6:00pm · Ages 10–12: 6:00pm – 7:00pm · Mondays at Mickleham, Wednesdays at Cranbourne North',
     groupsLine: GROUPS_LINE,
     priceLine: `${money(PRICE.weekly)} a week, incl. GST. Join any week and pay week by week: no upfront term fee.`,
-    shirtLine: `Plus the Junior Royals training shirt, ${money(PRICE.shirt)} incl. GST, bought once at checkout. Players wear it at every session; if your player already has one, set the shirt to 0 at checkout.`,
+    shirtLine: `Every player needs the Junior Royals training shirt. If your player doesn't have one, it's ${money(PRICE.shirt)} incl. GST, added to the first payment; tell us the size when you book.`,
     joinLine: 'Join any week: your player starts at the next session after you book.',
     ctaLabel: 'Secure Your Place',
     stickyLabel: 'Secure Your Place · $44.95 a week incl. GST',
@@ -224,7 +232,7 @@ export const JR_T4 = {
     // as part of the organisation for the moment." Don't name them on the page.
     twoCentres: 'Junior Royals runs at two centres: Mickleham Indoor Sports Centre in North Melbourne, and the Elite Cricket Centre in Cranbourne North, South-East Melbourne.',
     // Players older than 12 go to Performance Squads (Alex, 5 Oct 2026).
-    olderLead: 'Aged 13 or older?',
+    olderLead: 'Aged 10 or over?', // Andy, 9 Nov 2026: Performance Squads start at 10
     olderLinkLabel: 'See Performance Squads',
     olderRoute: '/performance-squads',
     centres: [

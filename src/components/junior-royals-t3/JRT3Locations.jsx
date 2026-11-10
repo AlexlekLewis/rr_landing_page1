@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Calendar, Clock } from 'lucide-react';
-import { JR_T4, JR_PHOTOS } from './jrTerm4Data';
+import { JR_T4 } from './jrTerm4Data';
 
 // Term 4 centres only, each with its own night and dates (19 Oct 2026: Mickleham
 // Mondays, Cranbourne North Wednesdays, both 5:00pm – 7:00pm). The Term 3 cards, session accordions and prices were
@@ -34,10 +34,6 @@ const JRT3Locations = () => {
                             viewport={{ once: true }} transition={{ duration: 0.6, delay: i * 0.1 }}
                             className="bg-white rounded-2xl overflow-hidden border border-slate-100">
                             <div className="h-4" style={{ background: loc.gradient }} />
-                            <div className="h-56 overflow-hidden">
-                                <img src={JR_PHOTOS.centres[loc.value]?.src || loc.image} alt={JR_PHOTOS.centres[loc.value]?.alt || `${loc.venue}, ${loc.suburb}`} loading="lazy"
-                                    className="w-full h-full object-cover object-[center_35%] hover:scale-105 transition-transform duration-500" />
-                            </div>
                             <div className="p-6">
                                 <p className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-1">{loc.region}</p>
                                 <h3 className="text-lg font-black text-rr-dark uppercase tracking-wide mb-1">{loc.venue}</h3>

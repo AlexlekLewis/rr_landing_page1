@@ -19,8 +19,16 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SER
 const BASE_URL = process.env.VITE_APP_URL || 'https://rramelbourne.com';
 const BLOCK_FEE_CENTS = 98900; // $989 — 8-week phase
 
+// CLOSED (Andy, 10 Nov 2026: "just close the payment link and say 'this program is closed for
+// now'"). The program ran 27 Jul – 20 Sep 2026 but /PGP2026/apply, /elite-royals and the
+// passcode links still opened a $989 checkout. No new checkout is created while this is true;
+// the forms show the message. Set to false (and update the dates) when a new intake opens.
+export const PROGRAM_CLOSED = true;
+export const CLOSED_MESSAGE = 'This program is closed for now. Email info@rramelbourne.com and we\'ll let you know when it opens again.';
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  if (PROGRAM_CLOSED) return res.status(410).json({ error: CLOSED_MESSAGE, closed: true });
   try {
     const { application, email, playerName, squadId, uniformItems, uniformTotalCents, uniformSelection, giftOffer, allowPromo, scholarshipToken } = req.body || {};
     // Early-bird gift offer (shared link). Server owns which garments are free —

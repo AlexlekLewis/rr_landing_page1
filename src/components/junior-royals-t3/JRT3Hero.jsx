@@ -100,14 +100,12 @@ const JRT3Hero = () => {
                 </motion.div>
                 </div>
 
-                {/* Desktop: two framed photos from real sessions. */}
+                {/* Desktop: one framed photo from a real session (not one used anywhere else on the page). */}
                 <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4, duration: 0.7 }}
                     className="hidden lg:block relative h-[560px]">
                     <img src={JR_PHOTOS.heroFeature.src} alt={JR_PHOTOS.heroFeature.alt}
-                        className="absolute right-0 top-0 w-[78%] h-[480px] object-cover rounded-3xl border-4 border-white/10" />
-                    <img src={JR_PHOTOS.heroInset.src} alt={JR_PHOTOS.heroInset.alt}
-                        className="absolute left-0 bottom-0 w-[48%] h-[300px] object-cover rounded-3xl border-4 border-rr-dark" />
-                    <span className="absolute right-4 bottom-24 bg-rr-pink text-white text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full">Ages 7–12 · Melbourne</span>
+                        className="absolute inset-x-6 top-0 h-[520px] w-[calc(100%-3rem)] object-cover rounded-3xl border-4 border-white/10" />
+                    <span className="absolute right-10 bottom-14 bg-rr-pink text-white text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full">Ages 7–12 · Melbourne</span>
                 </motion.div>
             </div>
 

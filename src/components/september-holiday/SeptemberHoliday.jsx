@@ -11,7 +11,7 @@ import CoachesSection from './CoachesSection';
 import ActionImage from './ActionImage';
 import PricingSection from './PricingSection';
 import LocationsSection from './LocationsSection';
-import SeptRegistrationForm from './SeptRegistrationForm';
+import SeptRegistrationForm, { PROGRAM_CLOSED } from './SeptRegistrationForm';
 import JoinTheFamily from './JoinTheFamily';
 import GotAQuestion from './GotAQuestion';
 
@@ -39,7 +39,7 @@ const SeptemberHoliday = () => {
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
                         <main className="flex-1 w-full overflow-hidden">
-                <PromoBanner />
+                {!PROGRAM_CLOSED && <PromoBanner />}
                 <Navbar variant="holiday" />
                 <div id="hero">
                     <HeroSection />
@@ -67,7 +67,7 @@ const SeptemberHoliday = () => {
                 </div>
                 <GotAQuestion />
             </main>
-                        <StickyCTA />
+                        {!PROGRAM_CLOSED && <StickyCTA />}
                 <PartnerStack />
                 <Footer />
         </div>
