@@ -61,6 +61,15 @@ const COACHES = [
             'there every day, not flown in for a visit.',
     },
     {
+        // Added at Andy's request (10 Nov 2026): bowling coach on the September 2026 tour.
+        name: 'Siddharth Trivedi',
+        role: 'Bowling Coach',
+        image: '/assets/rra/siddharth-trivedi.jpg',
+        bio:
+            'A legendary Rajasthan Royals bowler, Siddharth coached the bowlers on our first tour ' +
+            'in September 2026.',
+    },
+    {
         name: 'Dr Neeta Adhau',
         role: 'Performance Psychology',
         image: '/assets/rra/neeta-adhau.jpg',
