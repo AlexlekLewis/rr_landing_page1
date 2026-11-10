@@ -194,12 +194,12 @@ export const JR_VIDEOS = [
     video('front-foot-defence', 'Front-foot defence', 'Sid helping out with front-foot defence'),
     video('run-out-drill', 'Run-out drill', 'A fielding drill: back up, gather, hit the stumps'),
     video('pull-shots', 'Pull shots', 'Jinang feeding pull shots in the nets'),
-    video('sweep-shot', 'The sweep', 'Andre Walton teaching the sweep'),
+    video('sweep-shot', 'The sweep', 'Andrew Walton teaching the sweep'),
     // Added 10 Nov 2026 (file "v2_Hallam_JR"; filmed at the Elite Cricket Centre). Junior Royals no
     // longer runs at Hallam, so the caption doesn't name it.
     video('session-montage', 'A Junior Royals session', 'Catching, fielding and batting, all in one session'),
-    // Added 10 Nov 2026 (file "AW_coaching_youngster"). Coach not named until confirmed.
-    video('coaching-young-batter', 'Coaching a young batter', 'One-on-one with a young batter in the nets'),
+    // Added 10 Nov 2026 (file "AW_coaching_youngster"). Coach: Andrew Walton (Andy, 10 Nov 2026).
+    video('coaching-young-batter', 'Coaching a young batter', 'Andrew Walton one-on-one with a young batter in the nets'),
 ];
 
 export const JR_T4 = {
