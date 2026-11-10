@@ -190,6 +190,9 @@ const whyGoFiles = import.meta.glob(
 const WHY_GO_ALT = {
     '1-team-talk.webp':
         'Royals coaches talking Rajasthan Royals Academy Melbourne players through the session on the main ground at the Rajasthan Royals High Performance Centre',
+    // Stand-in from the carousel (photo 08) until Andy sends a card 2 photo.
+    '2-coach-hands-on.webp':
+        'A Royals coach guiding a Rajasthan Royals Academy Melbourne player\u2019s hands on the bat during a batting drill in the nets',
     '3-royals-cafe.webp':
         'Rajasthan Royals Academy Melbourne players at lunch in the Royals Cafe at the Rajasthan Royals High Performance Centre, under a wall of Royals legends',
     '4-recovery-session.webp':
