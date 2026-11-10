@@ -70,19 +70,13 @@ const JRT3Hero = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="text-sm md:text-lg text-white/80 font-medium mb-4 max-w-xl"
+                    className="text-sm md:text-lg text-white/80 font-medium mb-6 max-w-xl"
                 >
                     {JR_T4.heroLead}
                 </motion.p>
 
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.45 }}
-                    className="text-sm md:text-base text-white font-semibold mb-6 max-w-xl"
-                >
-                    {JR_T4.factLine}
-                </motion.p>
+                {/* The ages/times/nights line (JR_T4.factLine) moved lower down too (Andy, 10 Nov 2026):
+                    it's in each centre's card in Where & When and in the booking section. */}
 
                 {/* Venue pills — the two Term 4 centres, each with its suburb */}
                 <motion.div
