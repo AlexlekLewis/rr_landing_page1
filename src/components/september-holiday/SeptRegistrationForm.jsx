@@ -45,6 +45,8 @@ const emptyForm = {
     accept_parent_code: false, accept_social_media: false,
 };
 
+export const PROGRAM_CLOSED = true; // 10 Nov 2026: camp finished 2 Oct; see the closed notice below
+
 const SeptRegistrationForm = () => {
     const [form, setForm] = useState(emptyForm);
     const [errors, setErrors] = useState({});
@@ -183,6 +185,24 @@ const SeptRegistrationForm = () => {
             setSubmitting(false);
         }
     };
+
+    // CLOSED (Andy, 10 Nov 2026): the camp ran 30 Sep – 2 Oct 2026 and this form was still
+    // sending families to Stripe. No form and no payment while PROGRAM_CLOSED is true; its
+    // Stripe link is also deactivated. Set to false with new dates (and a new link) to reopen.
+    if (PROGRAM_CLOSED) {
+        return (
+            <section id="registration-form" className="py-24 bg-slate-50" data-program-closed>
+                <div className="max-w-2xl mx-auto px-6 text-center">
+                    <h2 className="text-3xl md:text-4xl font-black text-rr-dark uppercase tracking-wide mb-4">This program is closed for now</h2>
+                    <p className="text-rr-charcoal font-medium leading-relaxed">
+                        Bookings and payments for the Junior Royals Holiday Program are closed. Email{' '}
+                        <a href="mailto:info@rramelbourne.com" className="text-rr-pink font-bold hover:underline">info@rramelbourne.com</a>{' '}
+                        and we&apos;ll let you know when the next holiday program opens.
+                    </p>
+                </div>
+            </section>
+        );
+    }
 
     if (submitted) {
         return (
