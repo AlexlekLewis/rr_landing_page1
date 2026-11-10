@@ -54,10 +54,10 @@ const COACHES = [
     },
     {
         name: 'Somi Bhinder',
-        role: 'Resident Fast Bowling Coach',
+        role: 'Resident Coach',
         image: '/assets/rra/somi-bhinder.jpg',
         bio:
-            'A former fast bowler and coach, Somi is the centre\'s resident fast bowling coach. He is ' +
+            'A former fast bowler, Somi is a resident coach at the centre. He is ' +
             'there every day, not flown in for a visit.',
     },
     {
