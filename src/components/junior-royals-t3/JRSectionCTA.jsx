@@ -1,7 +1,7 @@
 import React from 'react';
 import { JR_T4 } from './jrTerm4Data';
 
-// "Secure Your Place" at the end of each section (Andy, 10 Nov 2026: "remove the floating
+// The Join Now button (JR_T4.ctaLabel; was "Secure Your Place") at the end of each section (Andy, 10 Nov 2026: "remove the floating
 // SECURE YOUR PLACE button, and instead have a secure your place button on each section").
 // Same pill as the hero button; takes the family to the booking form. `id` names the section
 // for analytics (data-cta="jr-secure-<id>").

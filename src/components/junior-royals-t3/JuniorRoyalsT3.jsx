@@ -12,6 +12,7 @@ import JRT3Locations from './JRT3Locations';
 import JRT3RegistrationForm from './JRT3RegistrationForm';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { useJrContent } from './jrContent';
+import { JR_T4 } from './jrTerm4Data';
 
 // 8 Nov 2026 (Andy): benefits first, less on the page. About the Program and the app
 // section are gone; the benefits say it in six short cards.
@@ -32,7 +33,7 @@ const JuniorRoyalsT3 = () => {
     useEffect(() => { window.scrollTo(0, 0); }, []);
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
-            <Navbar variant="junior-royals" navLinksOverride={NAV} />
+            <Navbar variant="junior-royals" navLinksOverride={NAV} ctaLabelOverride={JR_T4.ctaLabel.toUpperCase()} />
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero"><JRT3Hero /></div>
                 <div id="photos"><JRGallery /></div>
