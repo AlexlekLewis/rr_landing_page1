@@ -248,7 +248,8 @@ export const JR_T4 = {
     priceLine: `${money(PRICE.weekly)} a week, incl. GST. Join any week and pay week by week: no upfront term fee.`,
     shirtLine: `Every player needs the Junior Royals training shirt. If your player doesn't have one, it's ${money(PRICE.shirt)} incl. GST, added to the first payment; tell us the size when you book.`,
     joinLine: 'Join any week: your player starts at the next session after you book.',
-    ctaLabel: 'Secure Your Place',
+    // Every button on the page, the top menu's included (Andy, 10 Nov 2026: "The buttons should say Join Now").
+    ctaLabel: 'Join Now',
     placeLine: 'Your place is booked once you have paid.',
     // AUTOMATIC RE-ENROLMENT, OPT-OUT (Alex, 20 Oct 2026): "it's an automatic enrolment
     // into the next term (opt out system) … we will be in touch to confirm. Direct debits

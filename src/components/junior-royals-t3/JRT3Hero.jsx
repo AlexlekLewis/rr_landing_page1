@@ -4,7 +4,6 @@ import { ChevronDown } from 'lucide-react';
 import { JR_T4, JR_PHOTOS } from './jrTerm4Data';
 
 // Junior Royals. Every fact here comes from jrTerm4Data.js.
-// Join any week, weekly price only (8 Nov 2026): the price sits beside the button, with the shirt.
 const JRT3Hero = () => {
     const scrollToForm = () =>
         document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' });
@@ -71,19 +70,13 @@ const JRT3Hero = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="text-sm md:text-lg text-white/80 font-medium mb-4 max-w-xl"
+                    className="text-sm md:text-lg text-white/80 font-medium mb-6 max-w-xl"
                 >
                     {JR_T4.heroLead}
                 </motion.p>
 
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.45 }}
-                    className="text-sm md:text-base text-white font-semibold mb-6 max-w-xl"
-                >
-                    {JR_T4.factLine}
-                </motion.p>
+                {/* The ages/times/nights line (JR_T4.factLine) moved lower down too (Andy, 10 Nov 2026):
+                    it's in each centre's card in Where & When and in the booking section. */}
 
                 {/* Venue pills — the two Term 4 centres, each with its suburb */}
                 <motion.div
@@ -114,9 +107,9 @@ const JRT3Hero = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
                     </button>
-                    <p className="text-white text-sm md:text-base font-black mt-4 max-w-xl">{JR_T4.priceLine}</p>
-                    <p className="text-white/70 text-sm font-medium mt-1 max-w-xl">{JR_T4.joinLine}</p>
-                    <p className="text-white/70 text-sm font-medium mt-1 max-w-xl">{JR_T4.shirtLine}</p>
+                    {/* Price, join-any-week and shirt lines moved out of the hero (Andy, 10 Nov 2026:
+                        "this information can be added lower down"): they sit in the booking section
+                        (JRT3RegistrationForm) and Where & When. */}
                 </motion.div>
                 </div>
 
