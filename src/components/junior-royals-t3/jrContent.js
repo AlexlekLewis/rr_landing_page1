@@ -36,7 +36,6 @@ export const SECTIONS = [
         title: 'Buttons',
         fields: [
             { path: 'jr.ctaLabel', label: 'Main button', type: 'text' },
-            { path: 'jr.stickyLabel', label: 'Floating button at the bottom of the screen', type: 'text' },
             { path: 'jr.placeLine', label: 'Line under the booking button', type: 'text' },
         ],
     },

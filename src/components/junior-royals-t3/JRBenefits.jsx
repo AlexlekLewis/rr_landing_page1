@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { JR_T4 } from './jrTerm4Data';
+import JRSectionCTA from './JRSectionCTA';
 import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squads/data';
 
 // What your player gets: the benefits in six short cards (Andy, 8 Nov 2026: "be clear
@@ -35,6 +36,7 @@ const JRBenefits = () => (
                 {JR_T4.olderLead} Our Performance Squads are for players aged {PS_MIN_AGE} to {PS_MAX_AGE}.{' '}
                 <Link to={JR_T4.olderRoute} className="text-rr-pink font-bold underline underline-offset-2">{JR_T4.olderLinkLabel}</Link>
             </p>
+            <JRSectionCTA id="benefits" className="mt-10" />
         </div>
     </section>
 );

@@ -9,7 +9,6 @@ import JRT4RoyalsWay from './JRT4RoyalsWay';
 import JRT3Coaches from './JRT3Coaches';
 import JRT3Locations from './JRT3Locations';
 import JRT3RegistrationForm from './JRT3RegistrationForm';
-import JRT3StickyCTA from './JRT3StickyCTA';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { useJrContent } from './jrContent';
 
@@ -43,7 +42,6 @@ const JuniorRoyalsT3 = () => {
             </main>
             <PartnerStack />
             <Footer />
-            <JRT3StickyCTA />
         </div>
     );
 };

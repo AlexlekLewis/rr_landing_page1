@@ -193,7 +193,6 @@ export const JR_T4 = {
     shirtLine: `Every player needs the Junior Royals training shirt. If your player doesn't have one, it's ${money(PRICE.shirt)} incl. GST, added to the first payment; tell us the size when you book.`,
     joinLine: 'Join any week: your player starts at the next session after you book.',
     ctaLabel: 'Secure Your Place',
-    stickyLabel: 'Secure Your Place · $44.95 a week incl. GST',
     placeLine: 'Your place is booked once you have paid.',
     // AUTOMATIC RE-ENROLMENT, OPT-OUT (Alex, 20 Oct 2026): "it's an automatic enrolment
     // into the next term (opt out system) … we will be in touch to confirm. Direct debits

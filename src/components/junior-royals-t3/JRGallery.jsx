@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { JR_PHOTOS } from './jrTerm4Data';
+import JRSectionCTA from './JRSectionCTA';
 import { useCarousel, CarouselTrack, CarouselControls } from '../india-tour-2026/ITCarousel';
 
 // The scrolling photo strip directly under the hero (Andy, 10 Nov 2026: "a scrolling photo
@@ -82,6 +83,7 @@ const JRGallery = () => {
                     ))}
                 </CarouselTrack>
                 <CarouselControls carousel={carousel} total={total} prevLabel="Previous photo" nextLabel="Next photo" idPrefix="jr-photos" />
+                <JRSectionCTA id="photos" />
             </div>
 
             <AnimatePresence>
