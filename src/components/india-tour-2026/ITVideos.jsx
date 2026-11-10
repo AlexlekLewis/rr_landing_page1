@@ -54,7 +54,13 @@ export const VideoCard = ({ v, id, activeId, setActiveId }) => {
                         <video
                             ref={ref}
                             className="absolute inset-0 w-full h-full object-cover"
-                            onPlay={() => setPlaying(true)}
+                            onPlay={() => {
+                                setPlaying(true);
+                                // One video at a time across the whole page, not just this carousel.
+                                document.querySelectorAll('video').forEach((other) => {
+                                    if (other !== ref.current && !other.paused) other.pause();
+                                });
+                            }}
                             onPause={() => setPlaying(false)}
                             onEnded={() => setPlaying(false)}
                             playsInline

@@ -21,5 +21,11 @@ for in in "$@"; do
     -c:v libx264 -preset slow -crf 28 -profile:v high -pix_fmt yuv420p \
     -c:a aac -b:a 96k -ac 2 -movflags +faststart "$mp4"
   ffmpeg -y -loglevel error -ss 1 -i "$mp4" -frames:v 1 -q:v 4 "$jpg"
+  # A video git ignores never reaches the live site: it plays here but not for
+  # customers. Fail loudly instead.
+  if git -C "$out_dir" check-ignore -q "$mp4"; then
+    echo "ERROR: git ignores $mp4, so it would never be deployed. Fix .gitignore." >&2
+    exit 1
+  fi
   printf '%s  %s -> %s (%s)\n' "ok" "$(basename "$in")" "public/tours/$base.mp4" "$(du -h "$mp4" | cut -f1)"
 done
