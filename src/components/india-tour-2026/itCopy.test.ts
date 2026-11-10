@@ -34,8 +34,8 @@ describe("the tours and the estimate", () => {
   });
 
   it("shows the estimate as both ends of the range", () => {
-    expect(PRICE_ESTIMATE_AUD).toEqual({ min: 7000, max: 8000 });
-    expect(fmtRangeAUD(PRICE_ESTIMATE_AUD)).toBe("$7,000–$8,000");
+    expect(PRICE_ESTIMATE_AUD).toEqual({ min: 6000, max: 8000 });
+    expect(fmtRangeAUD(PRICE_ESTIMATE_AUD)).toBe("$6,000–$8,000");
   });
 
   it("keeps the September inclusions hidden until the new tours' inclusions are confirmed", () => {
@@ -70,7 +70,7 @@ describe.each(["simple", "standard"] as const)("%s copy", (level) => {
   const rendered = allStrings({ ...copy, pricing }).join("\n");
 
   it("says the price is an estimate, per player, and that the exact price comes before anyone commits", () => {
-    expect(copy.pricing.heading).toBe("About $7,000–$8,000");
+    expect(copy.pricing.heading).toBe("About $6,000–$8,000");
     expect(copy.hero.priceLabel).toMatch(/estimated/i);
     expect(copy.hero.priceUnit).toBe("per player");
     expect(copy.hero.priceNote).toMatch(/estimate/i);

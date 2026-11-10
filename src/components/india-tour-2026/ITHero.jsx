@@ -3,6 +3,32 @@ import { motion } from 'framer-motion';
 import heroTeamTalk from '../../assets/india-tour-2026/hero-team-talk.webp';
 import heroTeamTalkSm from '../../assets/india-tour-2026/hero-team-talk-sm.webp';
 import heroCafe from '../../assets/india-tour-2026/hero-royals-cafe.webp';
+import heroTeamTalkJpg from '../../assets/india-tour-2026/hero-team-talk.jpg';
+import heroTeamTalkSmJpg from '../../assets/india-tour-2026/hero-team-talk-sm.jpg';
+import heroCafeJpg from '../../assets/india-tour-2026/hero-royals-cafe.jpg';
+
+// WebP first, JPEG for any phone that cannot show WebP (iOS 13 and older).
+// Never lazy-loaded: these sit at the top of the page.
+const TeamTalk = ({ sizes, alt = '', className, ...rest }) => (
+    <picture>
+        <source type="image/webp" srcSet={`${heroTeamTalkSm} 800w, ${heroTeamTalk} 1600w`} sizes={sizes} />
+        <img
+            src={heroTeamTalkSmJpg}
+            srcSet={`${heroTeamTalkSmJpg} 800w, ${heroTeamTalkJpg} 1600w`}
+            sizes={sizes}
+            alt={alt}
+            decoding="async"
+            className={className}
+            {...rest}
+        />
+    </picture>
+);
+const Cafe = ({ alt, className }) => (
+    <picture>
+        <source type="image/webp" srcSet={heroCafe} />
+        <img src={heroCafeJpg} alt={alt} decoding="async" className={className} />
+    </picture>
+);
 import { CAMP_PDF, TOUR_STATUS, REGISTRATIONS_CLOSE_AT } from './itCopy';
 import ITCountdown from './ITCountdown';
 
@@ -102,17 +128,13 @@ const ITHero = ({ copy }) => {
                 transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
                 className="order-4 lg:hidden relative mt-7 mb-2 pb-14 sm:pb-20 max-w-xl"
             >
-                <img
-                    src={heroTeamTalkSm}
-                    srcSet={`${heroTeamTalkSm} 800w, ${heroTeamTalk} 1600w`}
+                <TeamTalk
                     sizes="(min-width: 640px) 520px, 88vw"
                     alt={HERO_FEATURE_ALT}
-                    className="ml-auto w-[88%] aspect-[4/3] object-cover object-[35%_50%] rounded-2xl border-4 border-white/10"
+                    className="block ml-auto w-[88%] aspect-[4/3] object-cover object-[35%_50%] rounded-2xl border-4 border-white/10"
                 />
-                <img
-                    src={heroCafe}
+                <Cafe
                     alt={HERO_INSET_ALT}
-                    loading="lazy"
                     className="absolute left-0 bottom-0 w-[55%] aspect-[4/3] object-cover object-[60%_50%] rounded-2xl border-4 border-rr-dark"
                 />
                 <span className="absolute right-2 bottom-3 sm:bottom-6 bg-rr-pink text-white text-[10px] sm:text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-full">
@@ -191,11 +213,8 @@ const ITHero = ({ copy }) => {
     // talk on the ground with the Royals coaches, and lunch in the Royals Cafe.
     return (
         <section className="relative min-h-screen flex items-center overflow-hidden bg-rr-dark">
-            <img
-                src={heroTeamTalk}
-                srcSet={`${heroTeamTalkSm} 800w, ${heroTeamTalk} 1600w`}
+            <TeamTalk
                 sizes="100vw"
-                alt=""
                 aria-hidden="true"
                 fetchPriority="high"
                 className="absolute inset-0 w-full h-full object-cover object-[center_45%] opacity-50 lg:opacity-15"
@@ -214,13 +233,12 @@ const ITHero = ({ copy }) => {
                     transition={{ delay: 0.4, duration: 0.7 }}
                     className="hidden lg:block relative h-[560px]"
                 >
-                    <img
-                        src={heroTeamTalk}
+                    <TeamTalk
+                        sizes="560px"
                         alt={HERO_FEATURE_ALT}
                         className="absolute right-0 top-0 w-[86%] h-[400px] object-cover object-[35%_50%] rounded-3xl border-4 border-white/10"
                     />
-                    <img
-                        src={heroCafe}
+                    <Cafe
                         alt={HERO_INSET_ALT}
                         className="absolute left-0 bottom-0 w-[62%] h-[250px] object-cover object-[60%_50%] rounded-3xl border-4 border-rr-dark"
                     />

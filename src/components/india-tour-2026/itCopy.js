@@ -39,7 +39,8 @@ export const TOUR_LENGTH_DAYS = 10;
 // the page always says so: the exact price, and what it includes, are confirmed in
 // writing before anyone commits. Don't say what it covers (flights, accommodation,
 // meals…) until Alex has confirmed it.
-export const PRICE_ESTIMATE_AUD = { min: 7000, max: 8000 };
+// Changed from $7,000 to $6,000 at the bottom of the range (Andy, 10 Nov 2026).
+export const PRICE_ESTIMATE_AUD = { min: 6000, max: 8000 };
 
 // What the price covers is not confirmed yet, so the pricing section shows a
 // "confirmed with the price" note instead of an inclusions list. The `included`
@@ -94,7 +95,7 @@ export const PRODUCED_HERE = [
 ];
 
 export const fmtAUD = (n) => `$${Number(n).toLocaleString('en-AU')}`;
-// "$7,000–$8,000" — en dash, both sides signed so neither number reads as a total.
+// "$6,000–$8,000" — en dash, both sides signed so neither number reads as a total.
 export const fmtRangeAUD = (r) => `${fmtAUD(r.min)}–${fmtAUD(r.max)}`;
 
 // --- the new sections (Nov 2026) --------------------------------------------
