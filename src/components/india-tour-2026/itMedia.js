@@ -192,7 +192,9 @@ const WHY_GO_ALT = {
         'Royals coaches talking Rajasthan Royals Academy Melbourne players through the session on the main ground at the Rajasthan Royals High Performance Centre',
     '3-royals-cafe.webp':
         'Rajasthan Royals Academy Melbourne players at lunch in the Royals Cafe at the Rajasthan Royals High Performance Centre, under a wall of Royals legends',
-    '4-warm-up-session.webp':
+    '4-recovery-session.webp':
+        'Rajasthan Royals Academy Melbourne players lying on mats on the ground during a recovery and mindfulness session at the Rajasthan Royals High Performance Centre',
+    '5-warm-up-session.webp':
         'Rajasthan Royals Academy Melbourne players lined up on the ground, watching a coach demonstrate a warm-up drill',
 };
 export const WHY_GO_PHOTOS = Object.keys(whyGoFiles).reduce((acc, path) => {

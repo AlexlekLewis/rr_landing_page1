@@ -140,10 +140,10 @@ const BENEFITS_COPY = {
                 'environment is your environment.',
         },
         {
-            title: 'Learn how the Royals prepare for the IPL',
+            title: 'Leave no stone unturned in pursuit of improving your game',
             body:
-                'Strength and conditioning, physio, recovery, nutrition and mental skills. The things that ' +
-                'keep a player on the field, taught the way the pros do it.',
+                'Strength and conditioning, physio, recovery, nutrition and mental skills, the way the ' +
+                'Royals prepare for the IPL. The things that keep a player on the field and improving.',
         },
         {
             title: 'Test your game in Indian conditions',
