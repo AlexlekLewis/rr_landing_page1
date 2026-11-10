@@ -344,8 +344,8 @@ const STANDARD = {
                     'Rajasthan Royals, leads the camp. ' +
                     'Batting and leadership with Romi Bhinder — the Rajasthan Royals team manager, who ' +
                     'lives at the centre and trains the Royals players there all year round — and with ' +
-                    'Faiz Fazal, a former India international and Ranji Trophy-winning captain. Fast ' +
-                    'bowling with Somi Bhinder, the centre\'s resident fast-bowling coach. Mental ' +
+                    'Faiz Fazal, a former India international and Ranji Trophy-winning captain. ' +
+                    'Somi Bhinder, a resident coach at the centre. Mental ' +
                     'performance with Dr Neeta Adhau.',
             },
             {
@@ -548,7 +548,7 @@ const SIMPLE = {
                     'camp. Romi ' +
                     'Bhinder is the Rajasthan Royals team manager — he lives at the centre and coaches ' +
                     'their players all year. Faiz Fazal played for India and captained a title-winning ' +
-                    'team. Somi Bhinder coaches fast bowling. Dr Neeta Adhau helps you with the mental side.',
+                    'team. Somi Bhinder is a resident coach at the centre. Dr Neeta Adhau helps you with the mental side.',
             },
             {
                 title: 'A video of you and a plan',

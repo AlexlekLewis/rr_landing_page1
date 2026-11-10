@@ -72,8 +72,8 @@ const CAPTIONS = {
         caption: 'Faiz Fazal working one-on-one with Khilesh Mamtani.',
     },
     '04-coach-on-ground.webp': {
-        alt: 'Somi Bhinder, resident fast bowling coach at the Rajasthan Royals High Performance Centre, giving instructions on the training ground',
-        caption: 'Somi Bhinder, the centre\u2019s resident fast bowling coach, running the session.',
+        alt: 'Somi Bhinder, resident coach at the Rajasthan Royals High Performance Centre, giving instructions on the training ground',
+        caption: 'Somi Bhinder, resident coach at the centre, running the session.',
     },
     '05-players-lounge.webp': {
         alt: 'Rajasthan Royals Academy Melbourne players resting in the players’ lounge at the centre between sessions',
