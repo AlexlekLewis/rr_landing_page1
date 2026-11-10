@@ -336,5 +336,10 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ]
+  ],
+  "git": {
+    "deploymentEnabled": {
+      "codex/private-renewal-offers": false
+    }
+  }
 }
