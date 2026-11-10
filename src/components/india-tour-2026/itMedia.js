@@ -69,6 +69,12 @@ export const VIDEOS = [
         title: 'The downswing',
         caption: 'Sid talks the group through the downswing.',
     },
+    {
+        src: '/tours/somi-with-player.mp4',
+        poster: '/tours/somi-with-player.jpg',
+        title: 'One-on-one with Somi',
+        caption: 'Somi Bhinder, resident coach, talks a player through his technique.',
+    },
 ];
 
 const DEFAULT_ALT =
