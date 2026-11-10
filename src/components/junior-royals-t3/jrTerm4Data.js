@@ -145,9 +145,11 @@ const photo = (name, alt, caption) => ({
     caption,
 });
 export const JR_PHOTOS = {
-    hero: photo('squad-talk', 'A Junior Royals coach talking to a squad of young players sitting in front of a Rajasthan Royals Academy Melbourne banner', 'Squad talk'),
-    heroFeature: photo('coach-demo-bat', 'A Junior Royals coach showing a group of young players how to hold the bat', 'One coaching point to hold on to'),
-    heroInset: photo('ecc-bowling-pair', 'Two young players practising their bowling action in the nets while a coach watches', 'Bowling, one skill at a time'),
+    // NO DUPLICATES (Andy, 10 Nov 2026: "Please ensure that there is never a duplicate"): every
+    // photo appears once on the page. The hero uses the two photos that aren't in the strip;
+    // jrPhotos.test.ts fails if a file is used twice.
+    hero: photo('batting-with-coach', 'A young batter playing a pull shot as a coach feeds the ball', 'Batting with a coach'),
+    heroFeature: photo('hands-on-batting', 'A coach guiding a young batter into position while another player plays a forward defence', 'Hands-on coaching'),
     // The photo strip under the hero (Andy, 10 Nov 2026: "a scrolling photo section below the
     // hero section, as we have for the /tours page"), in the order Andy sent them.
     gallery: [
@@ -156,11 +158,11 @@ export const JR_PHOTOS = {
         photo('coach-watching-nets', 'A coach watching a young bowler in the nets with a batter waiting', 'Coaches in the nets'),
         photo('cones-batting-drill', 'Two young batters in helmets and pads practising a front-foot drill between coloured cones', 'Batting drills, one skill at a time'),
         photo('girl-batting-pull', 'A young girl in a helmet and pads playing a pull shot in the nets as a coach feeds the ball', 'Batting in the nets'),
+        // Added 10 Nov 2026, in the order Andy sent them.
+        photo('bowling-line-drill', 'A line of young players kneeling to practise their bowling arm with a coach watching', 'Bowling drills, together'),
+        photo('ecc-bowling-pair', 'Two young players practising their bowling action in the nets while a coach watches', 'Bowling, one skill at a time'),
+        photo('coach-demo-bat', 'A Junior Royals coach showing a group of young players how to hold the bat', 'One coaching point to hold on to'),
     ],
-    centres: {
-        mickleham: photo('hands-on-batting', 'Junior Royals batting practice at the Mickleham Indoor Sports Centre', 'Mickleham'),
-        'cranbourne-north': photo('ecc-bowling-pair', 'Junior Royals bowling practice at the Elite Cricket Centre, Cranbourne North', 'Cranbourne North'),
-    },
 };
 
 export const JR_T4 = {
