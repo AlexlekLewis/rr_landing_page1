@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' https://connect.facebook.net; img-src https://www.facebook.com; connect-src https://www.facebook.com;">
+  <title>Private coaching analytics</title>
+</head>
+<body>
+<script>
+  (() => {
+    if (window.parent === window) return;
+    const productionOrigins = new Set(['https://rramelbourne.com', 'https://www.rramelbourne.com']);
+    const eventIdPattern = /^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/;
+
+    function loadPixel() {
+      if (window.fbq) return window.fbq;
+      const fbq = function () {
+        if (fbq.callMethod) fbq.callMethod.apply(fbq, arguments);
+        else fbq.queue.push(arguments);
+      };
+      window.fbq = window._fbq = fbq;
+      fbq.push = fbq;
+      fbq.loaded = true;
+      fbq.version = '2.0';
+      fbq.queue = [];
+      const pixelId = '3125499870991789';
+      fbq('set', 'autoConfig', false, pixelId);
+      fbq('init', pixelId);
+      const script = document.createElement('script');
+      script.async = true;
+      script.referrerPolicy = 'no-referrer';
+      script.src = 'https://connect.facebook.net/en_US/fbevents.js';
+      document.head.appendChild(script);
+      return fbq;
+    }
+
+    window.addEventListener('message', ({ source, origin, data }) => {
+      if (source !== window.parent || !productionOrigins.has(origin) ||
+          !data || data.namespace !== 'rra-private-booking-pixel') return;
+      const { event, eventId, chargedCents } = data;
+      if (event === 'PageView') {
+        loadPixel()('track', event);
+        return;
+      }
+      if (typeof eventId !== 'string' || !eventIdPattern.test(eventId)) return;
+      if (event === 'Lead' || event === 'InitiateCheckout') {
+        loadPixel()('track', event, {}, { eventID: eventId });
+      } else if (event === 'Purchase' && Number.isSafeInteger(chargedCents) && chargedCents > 0 && chargedCents <= 999999999) {
+        loadPixel()('track', event, { value: chargedCents / 100, currency: 'AUD' }, { eventID: eventId });
+      }
+    });
+  })();
+</script>
+</body>
+</html>

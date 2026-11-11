@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { dayLabel, money, timeLabel } from './booking-model';
 import { familyError } from './family-client';
 import { useFamilyService } from './family-context';
+import { trackPrivateBooking } from './private-booking-pixel';
 import './booking.css';
 const FamilyRecovery = React.lazy(() => import('./recovery/FamilyRecovery'));
 
@@ -55,6 +56,9 @@ export default function FamilyManagePage() {
     let active = true; const controller = new AbortController();
     client.read(controller.signal).then(data => { if (active) {
       latestFamily.current = data;
+      for (const event of data.purchase_events ?? []) {
+        trackPrivateBooking('Purchase', event.request_id, event.charged_cents);
+      }
       setChoices(previous => Object.fromEntries(Object.entries(previous).filter(([event, choice]) =>
         data.items.some(item => item.pending_choice_event === event && allowedOutcome(item, choice)))));
       setView({ data, loading: false, stale: false, error: '' });

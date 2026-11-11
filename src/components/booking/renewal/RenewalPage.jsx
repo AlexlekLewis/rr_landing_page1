@@ -4,6 +4,7 @@ import { createRenewalClient, renewalError } from './renewal-client';
 import { createRenewalOperation } from './renewal-operation';
 import { isRenewalFamilyFields } from './renewal-model';
 import Turnstile from '../Turnstile';
+import { trackPrivateBooking } from '../private-booking-pixel';
 import '../booking.css';
 const empty = () => ({ parent: { name: '', email: '', phone: '' }, note: '', confirm_players: false, consent_save_card: false });
 const clock = new Intl.DateTimeFormat('en-AU', { timeZone: 'Australia/Melbourne', dateStyle: 'full', timeStyle: 'long' });
@@ -14,6 +15,9 @@ function operation() { return documentOperation ?? (documentOperation = createRe
 export default function RenewalPage() {
   const [session] = useState(operation), state = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot), has = useSyncExternalStore(renewalMemory.subscribe, renewalMemory.has, () => false);
   const [fields, setFields] = useState(empty), [mode, setMode] = useState('accept'), [reason, setReason] = useState(''), [confirm, setConfirm] = useState(false), [turnstile, setTurnstile] = useState(''), [reset, setReset] = useState(0);
+  useEffect(() => {
+    if (['requested', 'venue_told'].includes(state.current?.request_state)) trackPrivateBooking('Lead', state.current.request_id);
+  }, [state.current]);
   const locked = state.pending || state.paused || state.phase === 'unknown', offer = state.preview?.view_kind === 'renewal_offer' ? state.preview : null, quote = state.quote, known = state.receipt;
   useEffect(() => { document.title = 'Private coaching renewal offer'; if (has && session.getSnapshot().phase === 'empty' && !session.busy()) void session.preview().catch(() => {}); }, [has, session]);
   useEffect(() => { const stop = e => { if (session.blocked()) { e.preventDefault(); e.stopPropagation(); if (e.type === 'beforeunload') e.returnValue = ''; } }, links = e => { if (e.target instanceof Element && e.target.closest('a[href]')) stop(e); }, hide = () => { session.dispose(); setFields(empty()); setReason(''); setTurnstile(''); documentOperation = undefined; }; document.addEventListener('click', links, true); document.addEventListener('submit', stop, true); window.addEventListener('beforeunload', stop); window.addEventListener('pagehide', hide); return () => { document.removeEventListener('click', links, true); document.removeEventListener('submit', stop, true); window.removeEventListener('beforeunload', stop); window.removeEventListener('pagehide', hide); }; }, [session]);
@@ -39,7 +43,7 @@ export default function RenewalPage() {
       {known ? <div className="booking-notice" role="status"><h2>Original renewal receipt</h2><p>The original {known.operation === 'accept' ? 'acceptance created a new request with card Checkout pending' : 'decline released only this offer reservation'}. Your earlier booking was unchanged.</p><p>Original fixed deadline: {at(known.expires_real_at)} · UTC {known.expires_real_at}. This historical receipt does not prove the new request’s current payment or venue state.</p></div> : null}
       {state.current ? <div className="booking-notice" role="status"><h2>Current renewal request state</h2>{state.current.view_kind === 'renewal_successor_current' ? <><p>Request: {state.current.request_state.replaceAll('_', ' ')} · payment: {state.current.payment_state.replaceAll('_', ' ')}. Current state is separate from the original receipt.</p>{state.current.checkout_state === 'ready' && state.current.checkout_url ? <>
         <p>Checkout opens in a new tab. Return here afterward to check the current request status.</p>
-        <a className="booking-primary" href={state.current.checkout_url} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">Continue the current new-request Checkout</a>
+        <a className="booking-primary" href={state.current.checkout_url} onClick={() => trackPrivateBooking('InitiateCheckout', state.current.request_id)} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">Continue the current new-request Checkout</a>
       </> : <p>No open Checkout is available. Contact the Academy if you need help.</p>}</> : <><p>This offer has no available current successor Checkout.</p>{offer && !known ? <button type="button" className="booking-secondary" disabled={locked} onClick={returnToOffer}>Return to this offer review</button> : null}</>}</div> : null}
       {state.paused ? <p role="alert">This visit is paused. Keep any original command unchanged and contact the Academy.</p> : null}{state.error ? <p role="alert" className="booking-error">{renewalError(state.error)}</p> : null}<button type="button" className="booking-link" disabled={locked} onClick={() => invoke('current')}>Read current renewal request or Checkout separately</button>
     </>}

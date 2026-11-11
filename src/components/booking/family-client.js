@@ -46,7 +46,20 @@ export function parseFamily(data) {
     if (Date.parse(ends_at) <= Date.parse(starts_at)) fail();
     return { booking_id: id(b.booking_id), request_id: id(b.request_id), starts_at, ends_at, coach: b.coach === null ? null : text(b.coach, 120), centre: text(b.centre), state: state(b.state), state_plain: text(b.state_plain, 120), can_cancel_free_until: stamp(b.can_cancel_free_until), late_fee_cents: cents(b.late_fee_cents), cancellation_fee_cents: b.cancellation_fee_cents === null ? null : cents(b.cancellation_fee_cents), pending_choice_event: b.pending_choice_event === null ? null : id(b.pending_choice_event), can_request_card_refund: cardRefundEligibility(b) };
   }), 'booking_id');
-  return { as_of: stamp(value.as_of), players, items };
+  const family = { as_of: stamp(value.as_of), players, items };
+  if (!Array.isArray(value.purchase_events)) return family;
+  const confirmed = new Set(items.filter(item => item.state === 'confirmed').map(item => item.request_id));
+  if (value.purchase_events.length > confirmed.size) return family;
+  const reported = new Set();
+  const purchase_events = [];
+  for (const event of value.purchase_events) {
+    const request_id = event?.request_id, charged_cents = event?.charged_cents;
+    if (!confirmed.has(request_id) || reported.has(request_id) ||
+        !Number.isSafeInteger(charged_cents) || charged_cents <= 0 || charged_cents > 999999999) return family;
+    reported.add(request_id);
+    purchase_events.push({ request_id, charged_cents });
+  }
+  return { ...family, purchase_events };
 }
 export function parseCancelPreview(data, booking) {
   if (data?.ok !== true) fail();

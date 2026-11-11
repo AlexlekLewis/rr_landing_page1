@@ -34,6 +34,17 @@ it('projects only family DTO fields and rejects invalid money, states and duplic
   const duplicate = family(); duplicate.players.push(duplicate.players[0]); expect(() => parseFamily({ ok: true, family: duplicate })).toThrow();
   const state = family(); state.items[0].state = 'paid'; expect(() => parseFamily({ ok: true, family: state })).toThrow();
 });
+it('accepts only positive charged amounts tied to a visible confirmed request', () => {
+  const raw = family();
+  const confirmed = raw.items.find(item => item.state === 'confirmed');
+  if (!confirmed) throw new Error('Missing confirmed fixture');
+  const event = { request_id: confirmed.request_id, charged_cents: 26000 };
+  expect(parseFamily({ ok: true, family: { ...raw, purchase_events: [{ ...event, payment_id: 'private' }] } }))
+    .toHaveProperty('purchase_events', [event]);
+  for (const purchase_events of [[{ ...event, request_id: id(999) }], [{ ...event, charged_cents: -1 }], [event, event]]) {
+    expect(parseFamily({ ok: true, family: { ...raw, purchase_events } })).not.toHaveProperty('purchase_events');
+  }
+});
 it.each([null, 0, 3500])('preserves the applied cancellation fee as %s without inventing a decision', applied => {
   const raw = family(); Object.assign(raw.items[0], { cancellation_fee_cents: applied });
   expect(parseFamily({ ok: true, family: raw }).items[0].cancellation_fee_cents).toBe(applied);

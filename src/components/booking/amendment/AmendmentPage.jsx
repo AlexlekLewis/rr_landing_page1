@@ -4,6 +4,7 @@ import {createAmendmentClient,amendmentError} from './amendment-client';
 import {createAmendmentOperation} from './amendment-operation';
 import {isAmendmentFamilyFields} from './amendment-model';
 import Turnstile from '../Turnstile';
+import { trackPrivateBooking } from '../private-booking-pixel';
 import '../booking.css';
 const empty=()=>({parent:{name:'',email:'',phone:''},note:'',confirm_players:false,consent_save_card:false});
 const clock=new Intl.DateTimeFormat('en-AU',{timeZone:'Australia/Melbourne',dateStyle:'full',timeStyle:'long'}),at=v=>clock.format(new Date(v)),money=v=>new Intl.NumberFormat('en-AU',{style:'currency',currency:'AUD'}).format(v/100);
@@ -13,6 +14,9 @@ function Terms({title,terms}){return <section className="booking-summary"><h2>{t
 export default function AmendmentPage(){
  const [session]=useState(operation),state=useSyncExternalStore(session.subscribe,session.getSnapshot,session.getSnapshot),has=useSyncExternalStore(amendmentMemory.subscribe,amendmentMemory.has,()=>false);
  const [fields,setFields]=useState(empty),[confirm,setConfirm]=useState(false),[challenge,setChallenge]=useState(''),[reset,setReset]=useState(0);
+ useEffect(() => {
+   if (['requested', 'venue_told'].includes(state.current?.request_state)) trackPrivateBooking('Lead', state.current.request_id);
+ }, [state.current]);
  const amendment=state.preview?.state==='available'?state.preview.amendment:null,locked=state.pending||state.paused||state.phase==='unknown',known=state.receipt;
  useEffect(()=>{document.title='Review changed private coaching';if(has&&session.getSnapshot().phase==='empty'&&!session.busy())void session.preview().then(p=>{if(p.state==='available')setFields({...p.fields,confirm_players:false,consent_save_card:false});}).catch(()=>{});},[has,session]);
  useEffect(()=>{const stop=e=>{if(session.blocked()){e.preventDefault();e.stopPropagation();if(e.type==='beforeunload')e.returnValue='';}},links=e=>{if(e.target instanceof Element&&e.target.closest('a[href]'))stop(e);},hide=()=>{session.dispose();setFields(empty());setChallenge('');documentOperation=undefined;};document.addEventListener('click',links,true);document.addEventListener('submit',stop,true);window.addEventListener('beforeunload',stop);window.addEventListener('pagehide',hide);return()=>{document.removeEventListener('click',links,true);document.removeEventListener('submit',stop,true);window.removeEventListener('beforeunload',stop);window.removeEventListener('pagehide',hide);};},[session]);
@@ -35,7 +39,7 @@ export default function AmendmentPage(){
  {known?<div className="booking-notice" role="status"><h2>Original changed-request receipt</h2><p>{known.outcome==='accepted'?'The original attempt created a new request with card Checkout pending.':known.outcome==='needs_review'?'The original attempt requires Academy review.':'The original attempt could not create a new request.'} This historical receipt does not prove current payment or venue confirmation.</p></div>:null}
  {state.current?<div className="booking-notice" role="status"><h2>Current new request</h2>{state.current.view_kind==='amendment_successor_current'?<><p>Request: {state.current.request_state.replaceAll('_',' ')} · payment: {state.current.payment_state.replaceAll('_',' ')}.</p>{state.current.checkout_state==='ready'&&state.current.checkout_url?<>
         <p>Checkout opens in a new tab. Return here afterward to check the current request status.</p>
-        <a className="booking-primary" href={state.current.checkout_url} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">Continue the current new-request Checkout</a>
+        <a className="booking-primary" href={state.current.checkout_url} onClick={() => trackPrivateBooking('InitiateCheckout', state.current.request_id)} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">Continue the current new-request Checkout</a>
       </>:<p>No open Checkout is available. Contact the Academy for help.</p>}</>:<><p>No current successor Checkout is available.</p>{amendment&&!known?<button type="button" disabled={locked} onClick={returnToReview}>Return to changed terms</button>:null}</>}</div>:null}
  {state.paused?<p role="alert">This visit is paused. Keep your original attempt unchanged and contact the Academy.</p>:null}{state.error?<p role="alert">{amendmentError(state.error)}</p>:null}<button type="button" className="booking-link" disabled={locked||!state.preview} onClick={()=>invoke('current')}>Read current new request or Checkout separately</button>
  </>}

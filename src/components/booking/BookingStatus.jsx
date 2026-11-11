@@ -2,6 +2,7 @@ import React, { useEffect, useState, useSyncExternalStore } from 'react';
 import { createPublicClient, publicError } from './public-client';
 import { dayLabel, money } from './booking-model';
 import { creditError } from './credit-client';
+import { trackPrivateBooking } from './private-booking-pixel';
 function addCalendar(request) {
   const stamp = iso => new Date(iso).toISOString().replace(/[-:]|\.\d{3}/g, '');
   const status = request.state === 'confirmed' ? 'CONFIRMED' : 'TENTATIVE';
@@ -44,6 +45,9 @@ export default function BookingStatus({ initial, checkpoint, onNew, onUpdate, op
     };
   }, [state.received]);
   const request = state.request;
+  useEffect(() => {
+    if (['requested', 'venue_told'].includes(request?.state)) trackPrivateBooking('Lead', request.request_id);
+  }, [request]);
   if (!request) return <div className="booking-stack"><h1>Checking your request</h1><p>We’re checking the result with the Academy. A Checkout return page doesn’t confirm a booking.</p>{state.error ? <p className="booking-error" role="alert">{state.error}</p> : <p role="status">Checking…</p>}<button type="button" className="booking-secondary" disabled={operation.paused} onClick={() => setReload(n => n + 1)}>Check again</button></div>;
   if (request.state === 'needs_review') return <div role="status"><h1>We’ll check the details with you</h1><p>We’ll be in touch {request.call_by_plain}. No card hold has been requested and no session is confirmed.</p></div>;
   const funding=request.funding_mode??request.price.funding_mode??'card',setup=funding==='setup',recorded=funding==='recorded',credit=request.price.credit_reserved_cents??0;
@@ -65,7 +69,7 @@ export default function BookingStatus({ initial, checkpoint, onNew, onUpdate, op
           : <p>Card hold: <strong>{money(request.price.first_session_hold_cents)}</strong>. This step places a hold. The Academy charges after venue confirmation.</p>}
         <p>Time left to finish: <strong>{minutes}</strong></p>
       </div>
-      {request.checkout_url ? <a className="booking-primary" href={request.checkout_url} referrerPolicy="no-referrer">{setup ? 'Continue to secure card setup' : 'Continue to the secure card hold'}</a>
+      {request.checkout_url ? <a className="booking-primary" href={request.checkout_url} referrerPolicy="no-referrer" onClick={() => trackPrivateBooking('InitiateCheckout', request.request_id)}>{setup ? 'Continue to secure card setup' : 'Continue to the secure card hold'}</a>
         : <p role="status">Preparing secure Checkout. Your time stays reserved until the deadline above.</p>}
       <p className="booking-help">After Checkout, return here. We only show a request as received after {setup ? 'the saved card' : 'the card hold'} is verified.</p>
     </> : null}
