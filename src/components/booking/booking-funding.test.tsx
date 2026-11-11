@@ -63,3 +63,19 @@ it('rechecks at zero and offers another time after the server confirms the hold 
   fireEvent.click(screen.getByRole('button', { name: 'Find another time' }));
   expect(onNew).toHaveBeenCalledOnce();
 });
+
+it('hides stale Checkout when the tab returns after the deadline', () => {
+  const clock = vi.spyOn(performance, 'now').mockReturnValue(1000);
+  const checkout = parseRequest({ ok: true, request: {
+    ...result, state: 'checkout', expires_in_seconds: 2, checkout_state: 'ready',
+    checkout_url: 'https://checkout.stripe.com/c/pay/cs_test_Funding',
+  } });
+  render(<BookingStatus initial={checkout} checkpoint={null} onNew={() => {}} />);
+  expect(screen.getByRole('link', { name: 'Continue to the secure card hold' })).toBeTruthy();
+
+  clock.mockReturnValue(4000);
+  fireEvent(document, new Event('visibilitychange'));
+  expect(screen.getByText('0:00')).toBeTruthy();
+  expect(screen.queryByRole('link', { name: 'Continue to the secure card hold' })).toBeNull();
+  expect(screen.queryByText(/We released this time/)).toBeNull();
+});

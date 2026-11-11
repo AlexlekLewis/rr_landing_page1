@@ -34,7 +34,15 @@ export default function BookingStatus({ initial, checkpoint, onNew, onUpdate, op
     if (checkpoint) void check();
     return () => { active = false; clearTimeout(timer); controller.abort(); };
   }, [checkpoint, reload, onUpdate, operationGate, creditMode]);
-  useEffect(() => { const timer = setInterval(() => setElapsed(Math.floor((performance.now() - state.received) / 1000)), 1000); return () => clearInterval(timer); }, [state.received]);
+  useEffect(() => {
+    const updateCountdown = () => setElapsed(Math.floor((performance.now() - state.received) / 1000));
+    const timer = setInterval(updateCountdown, 1000);
+    document.addEventListener('visibilitychange', updateCountdown);
+    return () => {
+      clearInterval(timer);
+      document.removeEventListener('visibilitychange', updateCountdown);
+    };
+  }, [state.received]);
   const request = state.request;
   if (!request) return <div className="booking-stack"><h1>Checking your request</h1><p>We’re checking the result with the Academy. A Checkout return page doesn’t confirm a booking.</p>{state.error ? <p className="booking-error" role="alert">{state.error}</p> : <p role="status">Checking…</p>}<button type="button" className="booking-secondary" disabled={operation.paused} onClick={() => setReload(n => n + 1)}>Check again</button></div>;
   if (request.state === 'needs_review') return <div role="status"><h1>We’ll check the details with you</h1><p>We’ll be in touch {request.call_by_plain}. No card hold has been requested and no session is confirmed.</p></div>;
