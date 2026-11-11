@@ -4,7 +4,8 @@ import { motion as Motion } from 'framer-motion';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
-import { CENTRES, COACH_ORDER, COACH_PROFILES, FIVE_AREAS } from './coachProfiles';
+import { CENTRES, FIVE_AREAS } from './coachProfiles';
+import { coachMatchesCatalog, coachPageProfile, listedCoachPages } from './coachPageProfiles';
 import { coachOffers, formatMoney, getCatalog, sessionPriceCents } from './bookingClient';
 import { Photo, SectionHead, TickList } from './CPShared';
 import CPStrengths from './CPStrengths';
@@ -20,7 +21,7 @@ const SECTIONS = ['hero', 'areas', 'strengths', 'record', 'how', 'prices', 'book
 
 export default function CoachProfilePage() {
     const { slug } = useParams();
-    const profile = COACH_PROFILES[slug];
+    const profile = coachPageProfile(slug);
     const [gate] = useState(createFamilyOperationGate);
     return profile ? <CoachProfileContent key={slug} profile={profile} gate={gate} /> : <Navigate to="/coaches" replace />;
 }
@@ -48,7 +49,7 @@ function CoachProfileContent({ profile, gate }) {
         return () => { live = false; controller.abort(); };
     }, [slug, profile, reader]);
 
-    const catalogCoach = catalog?.coaches.find((c) => c.slug === profile.slug) || null;
+    const catalogCoach = catalog?.coaches.find((c) => coachMatchesCatalog(profile, c)) || null;
     const offers = coachOffers(catalogCoach);
     const toggle = (key) => setPicks((p) => (p.includes(key) ? p.filter((k) => k !== key) : [...p, key]));
     const sourcePage = `/coaches/${profile.slug}`;
@@ -256,7 +257,7 @@ function Prices({ profile, catalog, offers }) {
 }
 
 function OtherCoaches({ profile, catalog }) {
-    const others = COACH_ORDER.filter(s => s !== profile.slug && catalog?.coaches.some(c => c.slug === s)).map(s => COACH_PROFILES[s]);
+    const others = listedCoachPages(catalog).filter(coach => coach.slug !== profile.slug);
     if (!others.length) return null;
     return (
         <section className="py-16 md:py-24 bg-white">

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion as Motion } from 'framer-motion';
-import { COACH_ORDER, COACH_PROFILES, CENTRES } from '../coach-profile/coachProfiles';
+import { CENTRES } from '../coach-profile/coachProfiles';
+import { listedCoachPages } from '../coach-profile/coachPageProfiles';
 import { Photo } from '../coach-profile/CPShared';
 import { getCatalog } from '../coach-profile/bookingClient';
 
@@ -15,7 +16,7 @@ const CoachesPrivate = () => {
             .catch(problem => { if (live && problem.name !== 'AbortError') setError(true); });
         return () => { live = false; controller.abort(); };
     }, []);
-    const listed = COACH_ORDER.filter(slug => catalog?.coaches.some(coach => coach.slug === slug));
+    const listed = listedCoachPages(catalog);
     return (
     <section className="py-16 md:py-24 bg-slate-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -29,10 +30,9 @@ const CoachesPrivate = () => {
             </Motion.div>
             {error ? <p role="status">Live private-coaching options could not be verified. <Link className="font-bold underline" to="/book">Check the booking service or ask us.</Link></p> : !catalog ? <p role="status">Reading live private-coaching options…</p> : !listed.length ? <p>No published coach in this launch set is currently bookable. <Link className="font-bold underline" to="/book">Ask the Academy about private coaching.</Link></p> : null}
             <div className="grid grid-cols-2 gap-5 lg:grid-cols-4 lg:gap-7">
-                {listed.map((slug) => {
-                    const c = COACH_PROFILES[slug];
+                {listed.map((c) => {
                     return (
-                        <Link key={slug} to={`/coaches/${slug}`} className="group grid gap-2 min-w-0">
+                        <Link key={c.slug} to={`/coaches/${c.slug}`} className="group grid gap-2 min-w-0">
                             <Photo profile={c} className="rounded-xl aspect-[3/4]" />
                             <h3 className="mt-1 text-[17px] font-black uppercase tracking-wide text-rr-dark">{c.name}</h3>
                             <p className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-rr-pink">{c.card.strengths}</p>

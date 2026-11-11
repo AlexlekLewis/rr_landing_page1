@@ -7,6 +7,8 @@ import { createFamilyPublicReader } from '../booking/family-public-reader';
 import { deepLink } from '../booking/booking-model';
 import { catalog, id, slots } from '../booking/fixtures.test-helper';
 import { coachPagesEnabled } from './coachPagesConfig';
+import { coachPageProfile, listedCoachPages } from './coachPageProfiles';
+import { QA_PUBLIC_ORIGIN, QA_SUPABASE_URL } from '../booking/private-runtime';
 
 const env = { VITE_APP_ENV: 'local', VITE_PRIVATE_BOOKING_URL: 'http://127.0.0.1:54321/functions/v1', VITE_PRIVATE_BOOKING_KEY: 'synthetic-public-key', VITE_PRIVATE_BOOKING_MOCK: 'false' };
 const rawCatalog = () => { const c = catalog(); c.coaches[0]!.slug = 'ikroop-dhanoa'; return c; };
@@ -80,4 +82,41 @@ it('refuses an explicitly unsupported format or invalid kind before availability
   await expect(getCoachSlots({ ...query, coach: { ...coach, offers: { one_on_one: false, group: true } }, kind: 'one_on_one', reader })).rejects.toMatchObject({ code: 'invalid_request' });
   await expect(getCoachSlots({ ...query, kind: 'toString', reader })).rejects.toMatchObject({ code: 'invalid_request' });
   expect(send).not.toHaveBeenCalled();
+});
+
+it('opens the fictional coach only on the exact isolated site and only lists its exact live identity', () => {
+  const backend = QA_SUPABASE_URL;
+  const qa = {
+    VITE_APP_ENV: 'test', VITE_QA_SUPABASE_URL: backend, VITE_QA_PUBLIC_ORIGIN: QA_PUBLIC_ORIGIN,
+    VITE_COACH_PAGES: 'on', VITE_PRIVATE_BOOKING_URL: backend + '/functions/v1', VITE_SUPABASE_URL: backend,
+    VITE_PRIVATE_BOOKING_KEY: 'fictional-test-publishable-key', VITE_SUPABASE_ANON_KEY: 'fictional-test-publishable-key',
+  };
+  const slug = 'qa-synthetic-coach';
+  const profile = coachPageProfile(slug, qa, QA_PUBLIC_ORIGIN);
+  expect(profile).toMatchObject({ slug, profileId: 'a9640000-0000-4000-8000-000000000401', name: 'QA Synthetic Coach' });
+  expect(coachPageProfile(slug, qa, 'https://rramelbourne.com')).toBeNull();
+  expect(coachPageProfile(slug, { ...qa, VITE_APP_ENV: 'production' }, QA_PUBLIC_ORIGIN)).toBeNull();
+  expect(coachPageProfile(slug, { ...qa, VITE_COACH_PAGES: 'off' }, QA_PUBLIC_ORIGIN)).toBeNull();
+  expect(coachPageProfile(slug, { ...qa, VITE_SUPABASE_URL: 'https://another.supabase.co' }, QA_PUBLIC_ORIGIN)).toBeNull();
+  expect(coachPageProfile('constructor', qa, QA_PUBLIC_ORIGIN)).toBeNull();
+  expect(coachPageProfile('unknown-coach', qa, QA_PUBLIC_ORIGIN)).toBeNull();
+  expect(coachPageProfile('ikroop-dhanoa', env, 'https://rramelbourne.com')).toEqual(COACH_PROFILES['ikroop-dhanoa']);
+  const live = { slug, profileId: profile?.profileId };
+  expect(listedCoachPages({ coaches: [live] }, qa, QA_PUBLIC_ORIGIN)).toEqual([profile]);
+  expect(listedCoachPages({ coaches: [live] }, qa, 'https://rramelbourne.com')).toEqual([]);
+  expect(listedCoachPages({ coaches: [{ ...live, profileId: id(4) }] }, qa, QA_PUBLIC_ORIGIN)).toEqual([]);
+  expect(listedCoachPages({ coaches: [] }, qa, QA_PUBLIC_ORIGIN)).toEqual([]);
+  expect(COACH_ORDER).not.toContain(slug);
+});
+
+it('carries the exact fictional coach, goals and source page into the real booking wizard', () => {
+  const raw = rawCatalog();
+  raw.coaches[0]!.slug = 'qa-synthetic-coach';
+  raw.coaches[0]!.profile_id = 'a9640000-0000-4000-8000-000000000401';
+  const href = buildBookUrl({ centre: 'mickleham', coach: 'qa-synthetic-coach', startsAt: '2026-11-11T06:00:00Z',
+    minutes: 60, focus: 'batting', goals: ['batting', 'leg-spin'] });
+  expect(deepLink(href.slice(href.indexOf('?')), raw)).toMatchObject({
+    centre: 'mickleham', profile_id: raw.coaches[0]!.profile_id, focus: 'batting', start_hint: '2026-11-11T17:00',
+    goals: ['batting', 'leg-spin'], source_page: '/coaches/qa-synthetic-coach', duration_minutes: 60,
+  });
 });
