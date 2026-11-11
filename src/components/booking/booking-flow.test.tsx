@@ -9,8 +9,17 @@ vi.mock('./public-client', async () => ({ ...await vi.importActual<object>('./pu
 vi.mock('./Turnstile', () => ({ default: ({ onToken }: { onToken: (token: string) => void }) => <button type="button" onClick={() => onToken('unit-test-challenge')}>Complete unit security check</button> }));
 import BookPage from './BookPage';
 import AskUs from './AskUs';
+import { Quote } from './SeriesDates';
 beforeEach(() => { vi.resetAllMocks(); sessionStorage.clear(); history.replaceState(null, '', '/book?centre=mickleham&coach=test-coach&start=2026-11-11T17%3A00&duration=60&focus=batting'); api.catalog.mockResolvedValue(parseCatalog(catalog())); api.slots.mockResolvedValue(parseSlots(slots(), 'mickleham')); });
 afterEach(cleanup);
+it('shows the discounted group quote per player as well as the amount due for the whole group', () => {
+  const price = { per_session_cents: 16200, sessions: 6, discount_applied: true, total_cents: 97200 };
+  render(<Quote slot={{ price }} groupSize={3} />);
+  expect(screen.getByText('6 actual sessions · whole group')).toBeTruthy();
+  expect(screen.getByText('$972')).toBeTruthy();
+  expect(screen.getByText('$162 per session · block discount included.')).toBeTruthy();
+  expect(screen.getByText('Per player · $54 per session · $324 for the block.')).toBeTruthy();
+});
 it('a validated coach deep link reaches weeks only after a real slot-adapter read', async () => {
   render(<BookPage />); await screen.findByRole('heading', { name: 'How many weeks?' }); expect(api.slots).toHaveBeenCalled(); expect(screen.getByText(/1 actual session/)).toBeTruthy(); expect(api.reserve).not.toHaveBeenCalled();
 });
