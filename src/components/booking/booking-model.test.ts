@@ -1,7 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { catalog, id, slot, slots, starts } from './fixtures.test-helper';
-import { dayLabel, deepLink, emptyDraft, localStart, parseCatalog, parseCoachOffers, parseSlots, recoveredIntent, requestIntent, slotAccessibleLabel, timeLabel } from './booking-model';
+import { bookingWeekLimit, dayLabel, deepLink, emptyDraft, localStart, parseCatalog, parseCoachOffers, parseSlots, recoveredIntent, requestIntent, slotAccessibleLabel, timeLabel } from './booking-model';
 describe('public booking model', () => {
+  it('uses the server’s exclusive cutoff and both week-count limits', () => {
+    const start = '2026-11-13T17:00:00+11:00';
+    const window = { before: '2027-01-20T00:00:00+11:00', max_weeks: 20 };
+    expect(bookingWeekLimit(start, window, 20)).toBe(10);
+    expect(bookingWeekLimit(start, window, 8)).toBe(8);
+    expect(bookingWeekLimit(start, { ...window, max_weeks: 7 }, 20)).toBe(7);
+    expect(bookingWeekLimit(start, { ...window, before: start }, 20)).toBe(0);
+  });
+  it('counts the same Melbourne start time across the daylight-saving change', () => {
+    const start = '2026-03-30T17:00:00+11:00';
+    expect(bookingWeekLimit(start, { before: '2026-04-06T17:00:00+10:00', max_weeks: 20 }, 20)).toBe(1);
+    expect(bookingWeekLimit(start, { before: '2026-04-06T17:01:00+10:00', max_weeks: 20 }, 20)).toBe(2);
+  });
   it('keeps only declared public facts, including nested price and series fields', () => {
     const raw = slots(); Object.assign(raw.by_coach[0].slots[0], { net: { lane: 7 }, family_email: 'test-private@example.test' }); Object.assign(raw.by_coach[0], { pay_rate: 99 });
     const value = parseSlots(raw, 'mickleham'); expect(JSON.stringify(value)).not.toMatch(/family_email|test-private|pay_rate|lane/); expect(value.by_coach[0].slots[0].price.total_cents).toBe(13000);

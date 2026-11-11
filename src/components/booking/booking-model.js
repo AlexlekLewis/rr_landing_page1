@@ -31,6 +31,15 @@ export function slotAccessibleLabel(iso, coachCount) {
 export const money = cents => integer(cents) ? new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', maximumFractionDigits: cents % 100 ? 2 : 0 }).format(cents / 100) : 'Price unavailable';
 export const lengthLabel = minutes => ({ 60: '1 hour', 90: '1½ hours', 120: '2 hours' })[minutes] ?? `${minutes} minutes`;
 export const addDays = (date, count) => new Date(Date.parse(date + 'T12:00:00Z') + count * 86400000).toISOString().slice(0, 10);
+export function bookingWeekLimit(startsAt, window, catalogueLimit) {
+  const start = localStart(startsAt), before = localStart(window.before);
+  const day = start.slice(0, 10), time = start.slice(10);
+  const limit = Math.min(catalogueLimit, window.max_weeks);
+  // The cutoff controls the choices shown here. The series quote still checks every date.
+  let weeks = 0;
+  while (weeks < limit && `${addDays(day, 7 * weeks)}${time}` < before) weeks++;
+  return weeks;
+}
 function fail() { throw new Error('unavailable'); }
 export function parseCoachOffers(value) {
   if (!object(value) || Object.keys(value).length !== 2 || !Object.hasOwn(value, 'one_on_one') || !Object.hasOwn(value, 'group') || typeof value.one_on_one !== 'boolean' || typeof value.group !== 'boolean') fail();

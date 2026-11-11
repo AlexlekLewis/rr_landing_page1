@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { deepLink, dayLabel, emptyDraft, FOCUS_LABELS, lengthLabel, localDate, matchingSlot, money, playerProblem, recoveredIntent, requestIntent, searchIntent, timeLabel } from './booking-model';
+import { bookingWeekLimit, deepLink, dayLabel, emptyDraft, FOCUS_LABELS, lengthLabel, localDate, matchingSlot, money, playerProblem, recoveredIntent, requestIntent, searchIntent, timeLabel } from './booking-model';
 import { createPublicClient, publicError } from './public-client';
 import { clearDraft, readAttempt, readDraft, requestCheckpoint, writeAttempt, writeDraft } from './private-draft';
 import AskUs from './AskUs';
@@ -65,7 +65,6 @@ function BookingForm({ credit, familyService }) {
       // A complete group link skips the size screen, so size its player fields here too.
       if (next.kind === 'group' && next.group_size) next.players = playersForSize(next.players, next.group_size);
       else if (next.kind === 'one_on_one') next.players = playersForSize(next.players, 1);
-      next.weeks = Math.min(next.weeks, data.max_weeks);
       setDraft(next); setHint(hasLink ? hints.start_hint ?? '' : '');
       if (!initialCheckpoint && !(credit && gate?.getSnapshot().pending?.kind === 'credit_request')) setStep(firstStep(next));
     }).catch(problem => { if (live && problem.name !== 'AbortError') setCatalogError(credit ? creditError(problem) : publicError(problem)); });
@@ -87,27 +86,31 @@ function BookingForm({ credit, familyService }) {
     setPending(true); setError(''); setNearest([]);
     const next = { ...draft, ...(profile !== draft.profile_id ? clearCoachContext() : {}), profile_id: profile, starts_at: startsAt, skip_dates: [], consent_save_card: false };
     try {
-      const data = await publicReads.slots(searchIntent(next, localDate(startsAt), localDate(startsAt), { coach: profile }));
+      const data = await publicReads.slots(searchIntent(next, localDate(startsAt), localDate(startsAt), { coach: profile, weeks: 1 }));
       if (!active.current) return;
       const selected = matchingSlot(data, next);
       if (!selected) { setError('That time has just been taken. Choose another time at this centre.'); setStep('find'); return; }
-      setDraft(next); setQuote({ key: quoteKey(next), slot: selected }); setStep('weeks');
+      setDraft(next);
+      setQuote({ key: quoteKey(next), slot: next.weeks === 1 ? selected : null, window: data.window });
+      setStep('weeks');
     } catch (problem) { if (active.current) setError(credit ? creditError(problem) : publicError(problem)); }
     finally { if (active.current) setPending(false); }
   }, [catalog, draft, publicReads, credit]);
   const currentKey = quoteKey(draft), slot = quote?.key === currentKey ? quote.slot : null;
+  const weeksLimit = quote?.window && draft.starts_at ? bookingWeekLimit(draft.starts_at, quote.window, catalog.max_weeks) : 0;
+  const weeksBlocked = Boolean(quote?.window) && draft.weeks > weeksLimit;
   useEffect(() => {
-    if (step !== 'weeks' || !draft.starts_at || !draft.profile_id) return;
+    if (step !== 'weeks' || !draft.starts_at || !draft.profile_id || weeksBlocked) return;
     let live = true; const controller = new AbortController();
     const timer = setTimeout(() => {
       publicReads.slots(searchIntent(draft, localDate(draft.starts_at), localDate(draft.starts_at), { coach: draft.profile_id }), controller.signal).then(data => {
         if (!live) return; const selected = matchingSlot(data, draft);
-        if (selected) { setQuote({ key: currentKey, slot: selected }); setError(''); }
+        if (selected) { setQuote({ key: currentKey, slot: selected, window: data.window }); setError(''); }
         else { setError('That time is no longer available. Choose another start at this centre.'); setStep('find'); }
       }).catch(problem => { if (live && problem.name !== 'AbortError') setError(credit ? creditError(problem) : publicError(problem)); });
     }, 350);
     return () => { live = false; clearTimeout(timer); controller.abort(); };
-  }, [step, currentKey, draft, publicReads, credit]);
+  }, [step, currentKey, draft, publicReads, credit, weeksBlocked]);
   async function review() {
     const problem = playerProblem(draft); if (problem) { setError(problem); return; }
     if (operation.paused || operation.pending) { setError(familyError({ code: operation.paused ? 'rate_limited' : 'outcome_unknown' })); return; }
@@ -123,7 +126,7 @@ function BookingForm({ credit, familyService }) {
       if (!active.current) return; const fresh = matchingSlot(result, draft);
       if (!fresh?.series_check.ready) { setError('One or more dates changed. Check the dates again before requesting.'); setStep('weeks'); return; }
       if (!fresh.decision_quote) { setError('The confirmation deadline is unavailable. Check the dates again before requesting.'); return; }
-      setQuote({ key: currentKey, slot: fresh }); setStep('review');
+      setQuote({ key: currentKey, slot: fresh, window: result.window }); setStep('review');
     } catch (problem) { if (active.current) { if (credit) { setCreditQuote(null); setStep('players'); } setError(credit ? creditError(problem) : publicError(problem)); } }
     finally { if (active.current) setPending(false); }
   }
@@ -172,9 +175,9 @@ function BookingForm({ credit, familyService }) {
         if (!active.current) return;
         if (!fresh?.series_check.ready) { setError('That time has changed. Choose another start at this centre.'); setStep('find'); return; }
         if (!fresh.decision_quote || fresh.decision_quote.kind !== slot.decision_quote.kind || Date.parse(fresh.decision_quote.confirm_by) < Date.parse(slot.decision_quote.confirm_by)) {
-          setQuote({ key: currentKey, slot: fresh }); update({ consent_save_card: false }); setError('The confirmation deadline changed or is unavailable. Review it and give card permission again.'); return;
+          setQuote({ key: currentKey, slot: fresh, window: result.window }); update({ consent_save_card: false }); setError('The confirmation deadline changed or is unavailable. Review it and give card permission again.'); return;
         }
-        if (JSON.stringify(fresh.price) !== JSON.stringify(slot.price) || JSON.stringify(fresh.series_check.dates) !== JSON.stringify(slot.series_check.dates)) { setQuote({ key: currentKey, slot: fresh }); update({ consent_save_card: false }); setError('The dates or quote changed at the final check. Review them and give card permission again.'); return; }
+        if (JSON.stringify(fresh.price) !== JSON.stringify(slot.price) || JSON.stringify(fresh.series_check.dates) !== JSON.stringify(slot.series_check.dates)) { setQuote({ key: currentKey, slot: fresh, window: result.window }); update({ consent_save_card: false }); setError('The dates or quote changed at the final check. Review them and give card permission again.'); return; }
         intent = requestIntent(draft, fresh);
       }
       if (!retry) { attempt.current = { nonce: crypto.randomUUID(), payload: JSON.stringify(intent) }; writeAttempt('request', attempt.current); setHasAttempt(true); }
@@ -204,7 +207,23 @@ function BookingForm({ credit, familyService }) {
         {step === 'duration' ? <div className="booking-grid">{catalog.durations_minutes.map(duration => { const rate = draft.kind === 'group' ? catalog.prices.group_player_hour_cents[draft.group_size] : catalog.prices.one_on_one_hour_cents; return <button type="button" className="booking-choice" disabled={rate === null} key={duration} onClick={() => choose({ duration_minutes: duration }, 'find')}><strong>{lengthLabel(duration)}</strong><small>{rate === null ? 'Price unavailable' : `${money(Math.round(rate * duration / 60))}${draft.kind === 'group' ? ' per player' : ''}, incl. GST before any block discount`}</small></button>; })}</div> : null}
         {nearest.length && step === 'find' ? <div className="booking-notice"><h2>Other times at this centre</h2><div className="booking-times">{nearest.map(a => <button className="booking-secondary" type="button" key={a.profile_id + a.starts_at} disabled={pending} onClick={() => selectSlot(a.profile_id, a.starts_at)}>{dayLabel(a.starts_at)}, {timeLabel(a.starts_at)}</button>)}</div></div> : null}
         {step === 'find' ? <SlotPicker draft={draft} catalog={catalog} hint={hint} onDropHint={dropHint} onSelect={selectSlot} pending={pending || operation.paused} readClient={publicReads} errorMessage={credit ? creditError : publicError} /> : null}
-        {step === 'weeks' ? <div className="booking-stack"><p>{catalog.block_discount.percent}% off every session when {catalog.block_discount.min_sessions} or more actual sessions are requested together.</p><label className="booking-field">Number of weeks<select value={draft.weeks} onChange={e => update({ weeks: Number(e.target.value), consent_save_card: false })}>{Array.from({ length: catalog.max_weeks }, (_, i) => <option key={i + 1} value={i + 1}>{i + 1} week{i ? 's' : ''}</option>)}</select></label>{slot ? <><SeriesDates slot={slot} draft={draft} onSkip={date => update({ skip_dates: draft.skip_dates.includes(date) ? draft.skip_dates.filter(d => d !== date) : [...draft.skip_dates, date], consent_save_card: false })} onAlternative={a => selectSlot(a.profile_id, a.starts_at)} onAdd={draft.weeks < catalog.max_weeks ? () => update({ weeks: draft.weeks + 1, consent_save_card: false }) : undefined} /><button type="button" className="booking-primary" disabled={!slot.series_check.ready || pending} onClick={() => setStep('players')}>Continue with {slot.price.sessions} session{slot.price.sessions === 1 ? '' : 's'}</button></> : <p role="status">Checking every date and the block quote…</p>}</div> : null}
+        {step === 'weeks' ? <div className="booking-stack">
+          <p>{catalog.block_discount.percent}% off every session when {catalog.block_discount.min_sessions} or more actual sessions are requested together.</p>
+          <label className="booking-field">Number of weeks
+            <select value={draft.weeks} disabled={!weeksLimit} aria-describedby={weeksBlocked ? 'booking-weeks-blocked' : undefined}
+              onChange={e => update({ weeks: Number(e.target.value), consent_save_card: false })}>
+              {weeksBlocked ? <option value={draft.weeks} disabled>{draft.weeks} week{draft.weeks === 1 ? '' : 's'} · unavailable</option> : null}
+              {Array.from({ length: weeksLimit }, (_, i) => <option key={i + 1} value={i + 1}>{i + 1} week{i ? 's' : ''}</option>)}
+            </select>
+          </label>
+          {weeksBlocked ? <p className="booking-error" id="booking-weeks-blocked" role="alert">
+            Your selection is outside the booking window for this start. {weeksLimit ? `Choose up to ${weeksLimit} week${weeksLimit === 1 ? '' : 's'}, or choose a different start.` : 'Choose a different start.'}
+          </p> : slot ? <>
+            <SeriesDates slot={slot} draft={draft} onSkip={date => update({ skip_dates: draft.skip_dates.includes(date) ? draft.skip_dates.filter(d => d !== date) : [...draft.skip_dates, date], consent_save_card: false })}
+              onAlternative={a => selectSlot(a.profile_id, a.starts_at)} onAdd={draft.weeks < weeksLimit ? () => update({ weeks: draft.weeks + 1, consent_save_card: false }) : undefined} />
+            <button type="button" className="booking-primary" disabled={!slot.series_check.ready || pending} onClick={() => setStep('players')}>Continue with {slot.price.sessions} session{slot.price.sessions === 1 ? '' : 's'}</button>
+          </> : <p role="status">Checking every date and the block quote…</p>}
+        </div> : null}
         {step === 'players' ? <PlayerDetails draft={draft} coachSlug={coach?.slug} onChange={update} onContinue={review} error={error} /> : null}
         {step === 'review' && credit ? <CreditBookingReview quote={creditQuote} fields={draft} coachName={coach?.display_name ?? 'Academy coach'} centre={centre} cancellation={catalog.cancellation} pending={pending} blocked={operation.paused || Boolean(operation.pending)} consent={draft.consent_save_card} turnstileToken={token} widgetReset={widgetReset} onConsent={checked => update({ consent_save_card: checked })} onToken={setToken} onRequest={() => reserve(false)} onRefresh={review} /> : null}
         {step === 'review' && !credit && slot ? <BookingReview slot={slot} draft={draft} catalog={catalog} coach={coach} centre={centre} pending={pending || operation.paused || Boolean(operation.pending && operation.pending.kind !== 'card_request')} token={token} widgetReset={widgetReset} onConsent={checked => update({ consent_save_card: checked })} onToken={setToken} onReserve={() => reserve(false)} /> : null}

@@ -2,8 +2,9 @@
 import React from 'react';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { parseCatalog, parseSlots } from './booking-model';
-import { catalog, id, slots } from './fixtures.test-helper';
+import { emptyDraft, parseCatalog, parseSlots } from './booking-model';
+import { catalog, id, slots, starts } from './fixtures.test-helper';
+import { writeDraft } from './private-draft';
 const api = vi.hoisted(() => ({ catalog: vi.fn(), slots: vi.fn(), enquiry: vi.fn(), reserve: vi.fn(), status: vi.fn() }));
 vi.mock('./public-client', async () => ({ ...await vi.importActual<object>('./public-client'), createPublicClient: () => api }));
 vi.mock('./Turnstile', () => ({ default: ({ onToken }: { onToken: (token: string) => void }) => <button type="button" onClick={() => onToken('unit-test-challenge')}>Complete unit security check</button> }));
@@ -22,6 +23,43 @@ it('shows the discounted group quote per player as well as the amount due for th
 });
 it('a validated coach deep link reaches weeks only after a real slot-adapter read', async () => {
   render(<BookPage />); await screen.findByRole('heading', { name: 'How many weeks?' }); expect(api.slots).toHaveBeenCalled(); expect(screen.getByText(/1 actual session/)).toBeTruthy(); expect(api.reserve).not.toHaveBeenCalled();
+});
+it('offers only weeks inside the selected start’s server window', async () => {
+  render(<BookPage />);
+  await screen.findByRole('heading', { name: 'How many weeks?' });
+  expect(screen.getByRole('option', { name: '10 weeks' })).toBeTruthy();
+  expect(screen.queryByRole('option', { name: '11 weeks' })).toBeNull();
+  expect(screen.queryByRole('option', { name: '20 weeks' })).toBeNull();
+});
+it.each([12, 21])('retains the saved %s-week selection as blocked until the player changes it', async weeks => {
+  history.replaceState(null, '', '/book');
+  writeDraft({ ...emptyDraft(), centre: 'mickleham', kind: 'one_on_one', focus: 'batting', duration_minutes: 60, profile_id: id(3), starts_at: starts, weeks });
+  render(<BookPage />);
+  fireEvent.click(await screen.findByRole('button', { name: 'Wednesday 11 November 2026, 5pm Melbourne time, 1 coach free' }));
+  const select = await screen.findByLabelText('Number of weeks') as HTMLSelectElement;
+  expect(select.value).toBe(String(weeks));
+  expect((screen.getByRole('option', { name: `${weeks} weeks · unavailable` }) as HTMLOptionElement).disabled).toBe(true);
+  expect(screen.getByRole('alert').textContent).toContain('Choose up to 10 weeks');
+  expect(screen.queryByRole('button', { name: /Continue with/ })).toBeNull();
+  expect(api.slots.mock.calls.every(([query]) => query.weeks === 1)).toBe(true);
+  fireEvent.change(select, { target: { value: '1' } });
+  expect(await screen.findByRole('button', { name: 'Continue with 1 session' })).toBeTruthy();
+  expect(api.reserve).not.toHaveBeenCalled();
+});
+it('uses the server’s actual series conflicts for a week count that fits the window', async () => {
+  api.slots.mockImplementation(async query => {
+    const result = parseSlots(slots(), 'mickleham');
+    if (query.weeks === 2) {
+      const slot = result.by_coach[0].slots[0];
+      slot.decision_quote = null;
+      Object.assign(slot.series_check, { requested_weeks: 2, ready: false, blocked: [{ date: '2026-11-18', kind: 'coach', reason_plain: 'Coach unavailable that week', auto_skipped: false, alternative: null }] });
+    }
+    return result;
+  });
+  render(<BookPage />);
+  fireEvent.change(await screen.findByLabelText('Number of weeks'), { target: { value: '2' } });
+  expect(await screen.findByText('Coach unavailable that week')).toBeTruthy();
+  expect((screen.getByRole('button', { name: 'Continue with 1 session' }) as HTMLButtonElement).disabled).toBe(true);
 });
 it('an invalid centre is asked again instead of silently booking a fallback', async () => {
   history.replaceState(null, '', '/book?centre=williamstown&coach=test-coach&duration=30'); render(<BookPage />); await screen.findByRole('button', { name: /Mickleham Test Mickleham/ }); expect(screen.getByRole('heading', { name: 'Where would you like to train?' })).toBeTruthy(); expect(api.slots).not.toHaveBeenCalled();
