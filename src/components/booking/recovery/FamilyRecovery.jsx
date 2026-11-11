@@ -14,14 +14,14 @@ function Dates({ dates }) {
   return <ul className="booking-date-list">{dates.map(day => <li key={day.date}>{dayLabel(day.date)}, {timeLabel(day.starts_at)}–{timeLabel(day.ends_at)} Melbourne time</li>)}</ul>;
 }
 function CardLink({ href, disabled, children }) {
-  return disabled ? <button className="booking-primary" type="button" disabled>{children}</button> : <a className="booking-primary" href={href} rel="noreferrer" referrerPolicy="no-referrer">{children}</a>;
+  return disabled ? <button className="booking-primary" type="button" disabled>{children}</button> : <a className="booking-primary" href={href} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">{children}</a>;
 }
 function CurrentRequest({ current, busy, stale, onCheck }) {
   const request = current?.request;
   return <div className="booking-stack"><h3>Current fresh request</h3>
     <p>This is its current status. It is separate from the original submission receipt.</p>
     {request ? <><p>Status: <strong>{({ checkout: 'Awaiting card authorisation', requested: 'Awaiting the Academy', venue_told: 'Awaiting venue confirmation', confirmed: 'Confirmed', expired: 'Expired', declined: 'Declined', cancelled: 'Cancelled' })[request.state]}</strong></p><Dates dates={request.dates} />
-      {request.checkout_state === 'ready' && request.checkout_url ? <CardLink href={request.checkout_url} disabled={busy || stale}>Continue the original card authorisation</CardLink> : request.state === 'checkout' ? <p>The original card page is {request.checkout_state === 'preparing' ? 'being prepared' : 'closed'}. Check its current status or contact the Academy.</p> : null}</> : <p>No accepted fresh request is linked to this expired request.</p>}
+      {request.checkout_state === 'ready' && request.checkout_url ? <><CardLink href={request.checkout_url} disabled={busy || stale}>Continue the original card authorisation</CardLink><p>Stripe opens in a new tab. Keep this page open to check the request afterwards.</p></> : request.state === 'checkout' ? <p>The original card page is {request.checkout_state === 'preparing' ? 'being prepared' : 'closed'}. Check its current status or contact the Academy.</p> : null}</> : <p>No accepted fresh request is linked to this expired request.</p>}
     <p className="booking-help">Returning from a card page does not confirm payment or a booking.</p>
     <button className="booking-secondary" type="button" disabled={busy} onClick={onCheck}>Check current fresh request</button>
   </div>;
@@ -30,7 +30,7 @@ function Balance({ value, busy, stale, onCheck }) {
   const text = { preparing: 'The Academy is preparing a secure payment option. No new payment has been submitted here.', ready: 'Pay this remaining balance once on the secure card page. This is a payment, not a new card hold.', paid: 'The booking service records this balance as paid.', expired: 'This payment page has expired. Contact the Academy for the current payment option.', review: 'The Academy needs to review this balance. Contact them before making another payment.' };
   const heading = value.state === 'paid' ? 'Recorded balance payment' : value.state === 'review' ? 'Balance under review' : 'Remaining balance';
   return <div className="booking-stack"><h3>{heading} · {money(value.amount_cents)}</h3><p>{text[value.state]}</p>
-    {value.state === 'ready' ? <><p>Card page available until {dayLabel(value.expires_at)}, {timeLabel(value.expires_at)} Melbourne time.</p><CardLink href={value.checkout_url} disabled={busy || stale}>Pay {money(value.amount_cents)} remaining balance</CardLink></> : null}
+    {value.state === 'ready' ? <><p>Card page available until {dayLabel(value.expires_at)}, {timeLabel(value.expires_at)} Melbourne time.</p><CardLink href={value.checkout_url} disabled={busy || stale}>Pay {money(value.amount_cents)} remaining balance</CardLink><p>Stripe opens in a new tab. Keep this page open to check the balance afterwards.</p></> : null}
     <p className="booking-help">Checking this page does not charge a card. A card-page return alone is not proof of payment.</p>
     <button className="booking-secondary" type="button" disabled={busy} onClick={onCheck}>Check remaining balance again</button>
   </div>;

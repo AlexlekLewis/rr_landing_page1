@@ -76,6 +76,8 @@ it('shows a one-off amount only with a strict ready current link, separate from 
   const operation = createRecoveryOperation(client, gate); await operation.inspect(prior, 'remaining');
   render(<RecoveryProvider value={{ recovery: operation, gate }}><FamilyRecovery /></RecoveryProvider>);
   const link = screen.getByRole('link', { name: 'Pay $130 remaining balance' }); expect(link.getAttribute('href')).toBe(url); expect(link.getAttribute('referrerpolicy')).toBe('no-referrer');
+  expect(link.getAttribute('target')).toBe('_blank'); expect(link.getAttribute('rel')).toBe('noopener noreferrer');
+  expect(screen.getByText('Stripe opens in a new tab. Keep this page open to check the balance afterwards.')).toBeTruthy();
   expect(screen.getByText(/This is a payment, not a new card hold/)).toBeTruthy(); expect(screen.queryByRole('checkbox')).toBeNull();
 });
 it('removes every financial href after visit429, including retained current data after refresh', async () => {
@@ -83,7 +85,9 @@ it('removes every financial href after visit429, including retained current data
   const currentRead = vi.fn(async () => ({ ...current(), request: { ...receipt().receipt.result, checkout_state: 'ready', checkout_url: url } }));
   const client = { current: currentRead, dispose: vi.fn() }, operation = createRecoveryOperation(client, gate);
   await operation.inspect(prior, 'fresh'); render(<RecoveryProvider value={{ recovery: operation, gate }}><FamilyRecovery /></RecoveryProvider>);
-  expect(screen.getByRole('link', { name: 'Continue the original card authorisation' }).getAttribute('href')).toBe(url);
+  const originalCheckout = screen.getByRole('link', { name: 'Continue the original card authorisation' });
+  expect(originalCheckout.getAttribute('href')).toBe(url); expect(originalCheckout.getAttribute('target')).toBe('_blank');
+  expect(screen.getByText('Stripe opens in a new tab. Keep this page open to check the request afterwards.')).toBeTruthy();
   currentRead.mockImplementationOnce(async () => { gate.pause(); throw { code: 'rate_limited' }; });
   fireEvent.click(screen.getByRole('button', { name: 'Check current fresh request' }));
   await waitFor(() => expect(operation.getSnapshot().error).toBe('rate_limited'));
