@@ -1,169 +1,57 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { PRICING, BOOKING_RULES, LAUNCH_OFFER } from './pcOptions';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { money } from '../booking/booking-model';
+import { createPublicClient } from '../booking/public-client';
 
-const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+export default function PCPricing() {
+    const [catalog, setCatalog] = useState(undefined);
 
-// Laid out in even rows so no row is left with an orphan card: the assessment
-// runs full width because everyone starts there, then three per-session rates,
-// then the two weekly packages. Grouping also matches how a parent decides.
-const byKey = (k) => PRICING.find((p) => p.key === k);
-const FEATURED = byKey('consult');
-const PER_SESSION = ['academy', 'leadership', 'group'].map(byKey).filter(Boolean);
-const PACKAGES = ['term', 'season'].map(byKey).filter(Boolean);
+    useEffect(() => {
+        const controller = new AbortController();
+        createPublicClient().catalog(controller.signal)
+            .then(result => { if (!controller.signal.aborted) setCatalog(result); })
+            .catch(() => { if (!controller.signal.aborted) setCatalog(null); });
+        return () => controller.abort();
+    }, []);
 
-const Card = ({ p, featured = false, delay = 0 }) => (
-    <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.45, delay }}
-        className={`bg-white rounded-2xl border shadow-sm p-7 flex flex-col ${
-            featured ? 'border-rr-pink' : 'border-slate-200'
-        }`}
-    >
-        <div className="flex flex-wrap items-start justify-between gap-4 mb-3">
-            <h3 className="text-lg md:text-xl font-black text-rr-dark uppercase tracking-tight leading-tight max-w-sm">
-                {p.label}
-            </h3>
-            <div className="flex items-end gap-2.5 shrink-0">
-                <span className={`text-3xl font-black tracking-tight leading-none ${p.accent === 'blue' ? 'text-rr-blue' : 'text-rr-pink'}`}>
-                    {p.price}
-                </span>
-                {p.wasPrice && (
-                    <span className="text-xl font-bold text-slate-400 line-through leading-none mb-0.5">
-                        {p.wasPrice}
-                    </span>
-                )}
-            </div>
-        </div>
-
-        <p className="text-[11px] font-bold text-rr-charcoal/60 uppercase tracking-widest mb-4">
-            {p.unit}
-        </p>
-
-        <p className="text-rr-charcoal text-[15px] font-medium leading-relaxed mb-5">
-            {p.detail}
-        </p>
-
-        <p className="mt-auto text-sm font-semibold text-rr-dark border-t border-slate-100 pt-4">
-            <span className="text-rr-pink">Minimum booking:</span> {p.minimum}
-        </p>
-    </motion.div>
-);
-
-const RowLabel = ({ children }) => (
-    <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-5">{children}</p>
-);
-
-const PCPricing = () => {
     return (
-        <section className="bg-slate-50 py-24">
-            <div className="max-w-6xl mx-auto px-6">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
-                    className="max-w-3xl mb-14"
-                >
-                    <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">What We Offer &amp; What It Costs</p>
-                    <h2 className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-5">
-                        Every option, every price
-                    </h2>
-                    <p className="text-rr-charcoal font-medium leading-relaxed">
-                        All prices include GST and cover the coach and the lane — there is nothing to
-                        pay at the centre on the night. Every player starts with the assessment session
-                        at the top of this list; everything below it is what you can book afterwards,
-                        once Alex has assigned your coach.
-                    </p>
-                </motion.div>
-
-                {FEATURED && (
-                    <div className="mb-12">
-                        <RowLabel>Start here — every player</RowLabel>
-                        <Card p={FEATURED} featured />
-                    </div>
-                )}
-
-                <div className="mb-12">
-                    <RowLabel>Then, per session</RowLabel>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                        {PER_SESSION.map((p, i) => (
-                            <Card key={p.key} p={p} delay={i * 0.05} />
-                        ))}
-                    </div>
-                </div>
-
-                <div className="mb-12">
-                    <RowLabel>Or book by the term or season</RowLabel>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        {PACKAGES.map((p, i) => (
-                            <Card key={p.key} p={p} delay={i * 0.05} />
-                        ))}
-                    </div>
-                </div>
-
-                {/* Launch offer on groups — separate from the $50 assessment offer. */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
-                    className="bg-rr-dark rounded-2xl p-7 md:p-9 mb-12"
-                >
-                    <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">
-                        {LAUNCH_OFFER.headline}
-                    </p>
-                    <p className="text-white/85 font-medium leading-relaxed max-w-3xl">
-                        {LAUNCH_OFFER.detail}
-                    </p>
-                </motion.div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                    {BOOKING_RULES.map((r, i) => (
-                        <motion.div
-                            key={r.title}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.45, delay: i * 0.06 }}
-                            className="border-t-2 border-slate-200 pt-4"
-                        >
-                            <h3 className="text-base font-black text-rr-dark uppercase tracking-tight leading-tight mb-2.5">
-                                {r.title}
-                            </h3>
-                            <p className="text-rr-charcoal text-[15px] font-medium leading-relaxed">
-                                {r.body}
+        <section className="bg-slate-50 py-16 md:py-24" aria-labelledby="centre-session-prices">
+            <div className="mx-auto max-w-6xl px-6">
+                <h2 id="centre-session-prices" className="mb-3 text-3xl font-black tracking-tight text-rr-dark md:text-5xl">Session prices</h2>
+                {catalog ? (
+                    <>
+                        <p className="mb-6 text-rr-charcoal">All prices incl. GST.</p>
+                        <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                            <div className="rounded-2xl border border-slate-200 bg-white p-5">
+                                <dt className="font-bold text-rr-dark">One-on-one</dt>
+                                <dd className="mt-2 text-rr-charcoal">
+                                    {catalog.prices.one_on_one_hour_cents == null ? 'Check current prices in booking.' : `${money(catalog.prices.one_on_one_hour_cents)} per hour`}
+                                </dd>
+                            </div>
+                            {catalog.group_sizes.map(size => (
+                                <div key={size} className="rounded-2xl border border-slate-200 bg-white p-5">
+                                    <dt className="font-bold text-rr-dark">Group of {size}</dt>
+                                    <dd className="mt-2 text-rr-charcoal">
+                                        {catalog.prices.group_player_hour_cents[size] == null ? 'Check current prices in booking.' : `${money(catalog.prices.group_player_hour_cents[size])} per player per hour`}
+                                    </dd>
+                                </div>
+                            ))}
+                        </dl>
+                        {catalog.block_discount.percent > 0 && (
+                            <p className="mt-6 font-semibold text-rr-dark">
+                                {catalog.block_discount.percent}% off every session when you book {catalog.block_discount.min_sessions} or more together.
                             </p>
-                        </motion.div>
-                    ))}
-                </div>
-
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
-                    className="text-center"
-                >
-                    <p className="text-rr-charcoal font-medium mb-6 max-w-2xl mx-auto">
-                        Nothing is paid online. Register your interest, our administration team will
-                        organise your time, and you decide on your block after the assessment session.
+                        )}
+                    </>
+                ) : (
+                    <p role="status" className="text-rr-charcoal">
+                        {catalog === undefined ? 'Loading session prices…' : 'Open booking to see current session prices.'}
                     </p>
-                    <button
-                        onClick={() => scrollTo('eoi-form')}
-                        className="group bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] inline-flex items-center gap-3"
-                    >
-                        Register Your Interest
-                        <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </button>
-                </motion.div>
+                )}
+                <Link className="mt-6 inline-flex min-h-11 items-center font-bold text-rr-dark underline underline-offset-4" to="/book?centre=mickleham">
+                    Check times and prices at Mickleham
+                </Link>
             </div>
         </section>
     );
-};
-
-export default PCPricing;
+}

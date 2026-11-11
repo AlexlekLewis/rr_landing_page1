@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { CENTRE, VENUE_FACTS } from './pcOptions';
-
-const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
 // Venue-first hero: the Mickleham ISC exterior when the photo is supplied
 // (drop it at /assets/private-coaching/mickleham-exterior.jpg), falling back
@@ -40,12 +39,7 @@ const PCHero = () => {
                     transition={{ duration: 0.8, ease: 'easeOut' }}
                 >
                     <div className="flex flex-wrap items-center gap-4 mb-6">
-                        <div className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 backdrop-blur-sm">
-                            <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse shrink-0" />
-                            <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">
-                                Now Open — {CENTRE.name}
-                            </span>
-                        </div>
+                        <p className="text-sm font-semibold text-white">Rajasthan Royals Academy · Melbourne</p>
                         {/* Venue co-brand lockup */}
                         <img
                             src="/assets/powergame/partners/mickleham-isc.png"
@@ -54,20 +48,11 @@ const PCHero = () => {
                         />
                     </div>
 
-                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white uppercase tracking-tighter leading-none mb-6">
-                        Private<br />Coaching
+                    <h1 className="max-w-4xl text-4xl sm:text-6xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none mb-6">
+                        Private cricket coaching at Mickleham
                     </h1>
                     <p className="text-base md:text-lg text-white/80 font-medium leading-relaxed max-w-2xl mb-6">
-                        One-on-one and small-group coaching at {CENTRE.name} — led personally by
-                        Academy Head Coach Alex Lewis. Register your interest and our administration
-                        team will be in touch to organise a time.
-                    </p>
-
-                    {/* Why this venue — the centre is the Academy's high-performance home in the north. */}
-                    <p className="text-base md:text-lg text-white font-semibold leading-relaxed max-w-2xl mb-6">
-                        This is the Academy’s high-performance home in Melbourne’s north. Our Elite
-                        squad, our Junior Royals and our Power League squads all train here — the same
-                        floor, the same lanes and the same coaches your player would be working with.
+                        One-on-one and small-group sessions at {CENTRE.name}, {CENTRE.address}.
                     </p>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-4 max-w-3xl mb-10">
@@ -82,21 +67,21 @@ const PCHero = () => {
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-4">
-                        <button
-                            onClick={() => scrollTo('eoi-form')}
+                        <Link
+                            to="/book?centre=mickleham"
                             className="group bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] flex items-center gap-3 w-full sm:w-auto justify-center"
                         >
-                            Register Your Interest
-                            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            Find a time at Mickleham
+                            <svg aria-hidden="true" className="w-4 h-4 shrink-0 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                             </svg>
-                        </button>
-                        <button
-                            onClick={() => scrollTo('how-it-works')}
-                            className="text-white/80 hover:text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full border-2 border-white/25 hover:border-white/60 transition-colors w-full sm:w-auto"
+                        </Link>
+                        <Link
+                            to="/coaches"
+                            className="text-center text-white/80 hover:text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full border-2 border-white/25 hover:border-white/60 transition-colors w-full sm:w-auto"
                         >
-                            How It Works
-                        </button>
+                            View the coaches
+                        </Link>
                     </div>
                 </motion.div>
             </div>
