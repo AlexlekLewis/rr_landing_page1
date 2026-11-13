@@ -8,7 +8,7 @@ const coaches = [
         role: 'Guest Coach',
         badge: 'T20 & Power Hitting',
         bio: 'Academy Director and T20 specialist. An experienced professional cricketer, coach and sports executive, Andy will make guest appearances at the Junior Royals Holiday Camp to lead dedicated T20 and power hitting sessions — bringing the same coaching philosophy that underpins every RRA Melbourne program.',
-        img: '/assets/coaches/andy-crook.jpg',
+        img: '/assets/coaches/andy-crook-halla.jpg',
     },
     {
         name: 'Jinang Shah',

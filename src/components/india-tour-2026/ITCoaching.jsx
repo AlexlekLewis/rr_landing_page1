@@ -24,7 +24,7 @@ const COACHES = [
     {
         name: 'Siddhartha Lahiri',
         role: 'Head of International Player Development and Performance Coach, Rajasthan Royals',
-        image: '/assets/rra/sid-lahiri-profile.png',
+        image: '/assets/coaches/sid-lahiri-halla.jpg',
         bio:
             'Sid coached our first touring group in Nagpur in September 2026. He also coaches batting ' +
             'for Birmingham Phoenix and oversees the Rajasthan Royals Academy Melbourne.',

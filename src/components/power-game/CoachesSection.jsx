@@ -9,13 +9,13 @@ const leadership = [
     {
         name: "Siddhartha Lahiri",
         role: "Royals Group Performance Coach — Head of Global Academies",
-        image: "/assets/coaches/siddhartha-lahiri.jpg",
+        image: "/assets/coaches/sid-lahiri-halla.jpg",
         bio: "Performance coach for the Rajasthan and Paarl Royals and head of the Royals' global talent network — he oversees player development across every Royals Academy worldwide, giving our best players a direct line to one of the IPL's biggest franchises.",
     },
     {
         name: "Andy Crook",
         role: "Director of Cricket — T20 & Power Hitting",
-        image: "/assets/coaches/andy-crook.jpg",
+        image: "/assets/coaches/andy-crook-halla.jpg",
         bio: "Former South Australian Redback (debut at 17), Lancashire and Northamptonshire player, and part of Australia's 2025 T20 Masters World Cup-winning squad. He was in county grounds when T20 was born and has built his coaching around it ever since.",
     },
     {
