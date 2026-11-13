@@ -1,5 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Plus, Minus, MapPin, Play, Check } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Plus, Minus, MapPin, Check } from 'lucide-react';
+import { VideoCard } from '../india-tour-2026/ITVideos';
+import { useCarousel, CarouselTrack, CarouselControls } from '../india-tour-2026/ITCarousel';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import PartnerStack from '../power-game/PartnerStack';
@@ -253,40 +255,31 @@ const Coaches = ({ onPick }) => (
 );
 
 // ── SEE IT: video ──────────────────────────────────────
-const VideoCard = ({ v }) => {
-    const ref = useRef(null);
-    const [playing, setPlaying] = useState(false);
-    const start = () => { ref.current?.play(); setPlaying(true); };
+// Same player and carousel as /junior-royals and /tours (Andy, 13 Nov 2026): big play
+// button, play/pause + mute, one video at a time, swipe on a phone. Each caption says
+// where it was filmed.
+const Video = () => {
+    const total = VIDEOS.length;
+    const carousel = useCarousel(total);
+    const [activeId, setActiveId] = useState(null);
     return (
-        <figure>
-            <div className="relative rounded-2xl overflow-hidden bg-black aspect-[9/16]">
-                <video ref={ref} src={v.src} poster={v.poster} playsInline controls={playing} preload="none" className="w-full h-full object-cover" />
-                {!playing && (
-                    <button type="button" onClick={start} aria-label={`Play: ${v.title}`} className="absolute inset-0 flex items-center justify-center bg-rr-dark/30">
-                        <span className="w-16 h-16 rounded-full bg-rr-pink flex items-center justify-center"><Play className="w-7 h-7 text-white fill-white ml-1" /></span>
-                    </button>
-                )}
+        <section className="bg-rr-dark py-20 md:py-28 overflow-hidden">
+            <div className="max-w-6xl mx-auto px-6">
+                <Eyebrow dark>See it in the lane</Eyebrow>
+                <H2 dark className="mb-10">One coach. One player.</H2>
+                <CarouselTrack carousel={carousel} label="Videos of Royals one-to-one coaching">
+                    {VIDEOS.map((v, i) => (
+                        <div key={v.src} data-slide role="group" aria-roledescription="slide" aria-label={`${i + 1} / ${total}`}
+                            className="snap-start shrink-0 w-[72%] sm:w-[42%] md:w-[31%] lg:w-[calc((100%-3rem)/4)]">
+                            <VideoCard v={{ ...v, caption: `${v.caption} (${v.where})` }} id={i} activeId={activeId} setActiveId={setActiveId} />
+                        </div>
+                    ))}
+                </CarouselTrack>
+                <CarouselControls carousel={carousel} total={total} prevLabel="Previous video" nextLabel="Next video" dark idPrefix="pc-videos" />
             </div>
-            <figcaption className="mt-3">
-                <p className="text-white font-black uppercase tracking-wide text-sm">{v.title}</p>
-                <p className="text-white/70 text-xs font-medium leading-snug">{v.caption}</p>
-                <p className="text-rr-light-pink text-[11px] font-bold mt-0.5">{v.where}</p>
-            </figcaption>
-        </figure>
+        </section>
     );
 };
-
-const Video = () => (
-    <section className="bg-rr-dark py-20 md:py-28">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <Eyebrow dark>See it in the lane</Eyebrow>
-            <H2 dark className="mb-12">One coach. One player.</H2>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                {VIDEOS.map((v) => <VideoCard key={v.src} v={v} />)}
-            </div>
-        </div>
-    </section>
-);
 
 // ── FAQ ─────────────────────────────────────────────────
 const Faq = () => {
