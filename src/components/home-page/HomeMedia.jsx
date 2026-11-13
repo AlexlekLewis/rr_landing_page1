@@ -176,7 +176,7 @@ const HomeMedia = () => {
                         Inside the <span className="text-rr-pink">Academy</span>
                     </h2>
                     <p className="text-rr-charcoal font-medium mt-4 max-w-2xl mx-auto">
-                        Real sessions from our programs across Melbourne, and our players at the Rajasthan Royals High Performance Centre in India. Choose a program to explore {totalPhotos} photos and {totalVideos} videos.
+                        Real Junior Royals sessions in Melbourne, and our players at the Rajasthan Royals High Performance Centre in India. Choose a program to explore {totalPhotos} photos and {totalVideos} videos.
                     </p>
                 </motion.div>
 
