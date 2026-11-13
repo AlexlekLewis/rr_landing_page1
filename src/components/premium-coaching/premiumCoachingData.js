@@ -159,6 +159,12 @@ export const TIERS = [
 // Master Landing Page): Harkirat Bajwa, Ikroop Dhanoa, Rittin Raman. Andy's brief
 // spelt them "Harkrat", "Ikrup Danoa", "Ritan Rahman": TODO Andy, confirm.
 // Bios come from copy already live on the site; Siddharth Banerjee has none yet.
+//
+// HEADSHOTS (Andy, 13 Nov 2026: "make sure that they have background like Alex Lewis
+// photo has"): every photo is on the pink HALLA BOL! media wall. The *-halla.jpg files
+// are the original headshots cut out and placed on that wall (rebuilt from Alex Lewis's
+// photo), framed head-and-shoulders like his. Originals are untouched for other pages.
+// A new coach photo should be shot on the wall, or treated the same way.
 export const COACHES = [
     {
         slug: 'alex-thornhill',
@@ -177,7 +183,7 @@ export const COACHES = [
         tier: 'performance',
         role: 'Performance Coach',
         specialism: 'Spin bowling',
-        img: '/assets/coach-harkirat-bajwa.jpg', // Royals-kit headshot (Spin Club); the /coaches/ one is in Australia kit
+        img: '/assets/coaches/harkirat-bajwa-halla.jpg',
         bio: 'Played for Australia in the Under-19 World Cup and plays Premier Cricket. An attacking off spinner who teaches the variations and tactics that win matches.',
     },
     {
@@ -207,7 +213,7 @@ export const COACHES = [
         tier: 'performance',
         role: 'Performance Coach',
         specialism: 'Batting, 360° T20',
-        img: '/assets/coaches/ikroop-dhanoa.jpg',
+        img: '/assets/coaches/ikroop-dhanoa-halla.jpg',
         bio: 'A First XI batter for Essendon in Victorian Premier Cricket and a Victorian pathway player up to Under-19s. He coaches a modern, attacking 360° game.',
     },
     {
@@ -217,7 +223,7 @@ export const COACHES = [
         tier: 'academy',
         role: 'Academy Coach',
         specialism: 'Wicketkeeping',
-        img: '/assets/coaches/rittin-raman.jpg',
+        img: '/assets/coaches/rittin-raman-halla.jpg',
         bio: 'A wicketkeeper-batter playing First XI cricket for Melbourne Cricket Club, and a state-level representative. High energy and precise with technique.',
     },
     // RAVENHALL (M9 Sports Centre) — Andy, 13 Nov 2026: "One-to-one coaches in Ravenhall
@@ -240,7 +246,7 @@ export const COACHES = [
         tier: null, // TODO Andy
         role: 'Royals Coach',
         specialism: null, // TODO Andy
-        img: '/assets/coaches/jinang-shah.png',
+        img: '/assets/coaches/jinang-shah-halla.jpg',
         // From his Holiday Programs bio (holiday-programs/CoachesSection.jsx), without the
         // "current Elite Program participant" line, which may be out of date.
         bio: 'A high-quality cricketer with hands-on experience coaching young and developing players. Jinang coaches in our Junior Royals and holiday programs.',
