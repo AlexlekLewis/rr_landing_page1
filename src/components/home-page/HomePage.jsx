@@ -6,6 +6,7 @@ import HomeTrustBar from './HomeTrustBar';
 import HomeAbout from './HomeAbout';
 import HomeProgramCards from './HomeProgramCards';
 import HomeVideo from './HomeVideo';
+import HomeMedia from './HomeMedia';
 import HomeCareersBanner from './HomeCareersBanner';
 import HomeShopFeature from './HomeShopFeature';
 import HomeCinematicBreak from './HomeCinematicBreak';
@@ -20,7 +21,7 @@ import OpenDaysModal from './OpenDaysModal';
 import OpenDaysTicket from './OpenDaysTicket';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
-const SECTIONS = ['hero', 'trust', 'about', 'video', 'programs', 'coaches', 'faq', 'final-cta'];
+const SECTIONS = ['hero', 'trust', 'about', 'video', 'photos', 'programs', 'coaches', 'faq', 'final-cta'];
 const OPEN_DAYS_KEY = 'openDaysModalDismissed';
 
 const HomePage = () => {
@@ -65,6 +66,8 @@ const HomePage = () => {
                 <div id="hero"><HomeHero onRegisterClick={openDrawer} /></div>
                 <div id="about"><HomeAbout /></div>
                 <div id="video"><HomeVideo /></div>
+                {/* Photos & videos from every program (Andy, 13 Nov 2026) */}
+                <div id="photos" className="scroll-mt-24"><HomeMedia /></div>
                 <div id="careers-banner"><HomeCareersBanner /></div>
                 <div id="programs"><HomeProgramCards /></div>
                 <div id="shop"><HomeShopFeature /></div>
