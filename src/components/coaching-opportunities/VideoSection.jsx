@@ -20,7 +20,7 @@ const VideoSection = () => {
     };
 
     return (
-        <section className="relative py-24 md:py-32 bg-slate-50 overflow-hidden">
+        <section className="relative py-24 md:py-32 bg-white overflow-hidden">
             <div className="relative max-w-5xl mx-auto px-6">
                 {/* Header */}
                 <div className="text-center mb-12">
@@ -30,7 +30,7 @@ const VideoSection = () => {
                         viewport={{ once: true }}
                         className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-4"
                     >
-                        Leadership
+                        From Our Head Coach
                     </motion.p>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -39,7 +39,7 @@ const VideoSection = () => {
                         transition={{ delay: 0.1 }}
                         className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-6"
                     >
-                        Hear From Our <span className="text-rr-pink">Leadership.</span>
+                        What Coaching Here <span className="text-rr-pink">Involves.</span>
                     </motion.h2>
                     <motion.div
                         initial={{ opacity: 0, scaleX: 0 }}

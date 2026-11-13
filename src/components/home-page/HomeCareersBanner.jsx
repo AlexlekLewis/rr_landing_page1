@@ -30,14 +30,14 @@ const HomeCareersBanner = () => (
                     {/* Right — Content */}
                     <div className="text-white">
                         <p className="text-sm md:text-base lg:text-lg font-bold tracking-[0.28em] text-white/85 uppercase mb-3 md:mb-5">
-                            We're Hiring
+                            We're Hiring Coaches
                         </p>
                         <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-tight leading-[0.95] mb-4 md:mb-6">
                             Shape The Next<br className="hidden sm:inline" /> Generation
                         </h2>
                         <p className="text-sm md:text-base text-white/85 font-medium max-w-xl leading-relaxed mb-6 md:mb-8">
-                            Coaching, content, social media and admin roles inside the Royals Academy network.
-                            See the roles and how to apply.
+                            Cricket coaching roles at our Melbourne centres, from Cadet Coach to Performance
+                            Squad Coach. See the coaching roles and how to apply.
                         </p>
 
                         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
@@ -46,7 +46,7 @@ const HomeCareersBanner = () => (
                                 className="inline-flex items-center justify-center gap-2 bg-rr-dark hover:bg-rr-navy text-white font-black uppercase tracking-widest text-xs md:text-sm px-6 py-3.5 rounded-full transition-all duration-300 hover:shadow-[0_0_24px_rgba(0,29,72,0.45)] hover:-translate-y-0.5 group w-fit"
                                 data-cta="home-careers-banner"
                             >
-                                See The Roles
+                                See Coaching Roles
                                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                             </Link>
                         </div>

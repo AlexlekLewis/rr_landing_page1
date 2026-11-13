@@ -5,11 +5,11 @@ import { supabase } from '../../lib/supabase';
 const SOURCE_TAG = 'careers';
 
 const ROLE_INTEREST_OPTIONS = [
-    { value: 'cricket-coach', label: 'Cricket Coach' },
-    { value: 'junior-assistant-coach', label: 'Junior / Assistant Coach' },
-    { value: 'operations-admin', label: 'Operations & Admin' },
-    { value: 'media-content', label: 'Media & Content' },
-    { value: 'other', label: 'Other / Pitch Us' },
+    // Coaching roles only (13 Nov 2026). Values kept as before so existing rows and
+    // the sign-up sheet still read the same way; 'cadet-coach' is new.
+    { value: 'cricket-coach', label: 'Performance Squad Coach' },
+    { value: 'junior-assistant-coach', label: 'Junior Royals Coach' },
+    { value: 'cadet-coach', label: 'Cadet Coach (new to coaching)' },
 ];
 
 const ENGAGEMENT_TYPE_OPTIONS = [
@@ -20,7 +20,6 @@ const ENGAGEMENT_TYPE_OPTIONS = [
     { value: 'full-time', label: 'Full-Time' },
 ];
 
-const COACHING_ROLES = ['cricket-coach', 'junior-assistant-coach'];
 
 const EMPLOYMENT_OPTIONS = [
     { value: 'full-time', label: 'Employed full-time' },
@@ -147,7 +146,6 @@ const ApplicationForm = () => {
     const [roleInterest, setRoleInterest] = useState([]);
     const [engagementTypes, setEngagementTypes] = useState([]);
 
-    const isCoachingApplicant = roleInterest.some(r => COACHING_ROLES.includes(r));
 
     const toggleAgeGroup = (val) => {
         setAgeGroups(prev => prev.includes(val) ? prev.filter(v => v !== val) : [...prev, val]);
@@ -174,9 +172,9 @@ const ApplicationForm = () => {
         else if (Number(form.age) < 16) newErrors.age = 'You need to be 16 or older to apply. If you are younger and want work experience, email andy.crook@rramelbourne.com.';
         if (!form.employment_status) newErrors.employment_status = 'Please select your employment status.';
         if (!form.wwc_status) newErrors.wwc_status = 'Please select your WWC status.';
-        if (!roleInterest.length) newErrors.roleInterest = 'Please select at least one area of interest.';
+        if (!roleInterest.length) newErrors.roleInterest = 'Please select at least one coaching role.';
         if (!engagementTypes.length) newErrors.engagementTypes = 'Please select at least one engagement type.';
-        if (isCoachingApplicant && !form.preferred_tier) newErrors.preferred_tier = 'Please select your preferred coaching stream.';
+        if (!form.preferred_tier) newErrors.preferred_tier = 'Please select your preferred coaching stream.';
         if (!acceptAccuracy) newErrors.acceptAccuracy = 'Please confirm the information is accurate.';
         if (!acceptContact) newErrors.acceptContact = 'Please agree to be contacted.';
         setErrors(newErrors);
@@ -216,7 +214,7 @@ const ApplicationForm = () => {
                 referral_source: form.referral_source || null,
                 role_interest: roleInterest,
                 engagement_types: engagementTypes,
-                preferred_tier: isCoachingApplicant ? form.preferred_tier : null,
+                preferred_tier: form.preferred_tier,
                 highest_playing_level: form.highest_playing_level || null,
                 years_playing: form.years_playing ? parseInt(form.years_playing, 10) : null,
                 current_club: form.current_club.trim() || null,
@@ -287,7 +285,7 @@ const ApplicationForm = () => {
                         </h2>
                         <div className="w-16 h-1 rounded-full bg-rr-pink mx-auto mb-6" />
                         <p className="text-rr-charcoal font-medium leading-relaxed mb-4">
-                            Thanks <strong>{form.full_name.split(' ')[0]}</strong> — your application has been received. Our leadership team personally reviews every application and will be in touch within 5 business days at <strong>{form.email}</strong>.
+                            Thanks <strong>{form.full_name.split(' ')[0]}</strong> — your coaching application has been received. Our leadership team personally reviews every application and will be in touch within 5 business days at <strong>{form.email}</strong>.
                         </p>
                         <p className="text-rr-charcoal/70 text-sm font-medium">
                             Questions in the meantime? Email{' '}
@@ -320,7 +318,7 @@ const ApplicationForm = () => {
                         className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6"
                     >
                         <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Apply Now</span>
+                        <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">Coaching Application</span>
                     </motion.div>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -329,7 +327,7 @@ const ApplicationForm = () => {
                         transition={{ delay: 0.1 }}
                         className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mb-4"
                     >
-                        REGISTER YOUR <span className="text-rr-pink">INTEREST</span>
+                        APPLY TO <span className="text-rr-pink">COACH</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -338,7 +336,7 @@ const ApplicationForm = () => {
                         transition={{ delay: 0.2 }}
                         className="text-white/70 font-medium"
                     >
-                        Tell us about yourself. Our leadership team personally reviews every application.
+                        Tell us about your cricket and your coaching. Our Head Coach and Director of Cricket personally read every coaching application.
                     </motion.p>
                 </div>
 
@@ -405,7 +403,7 @@ const ApplicationForm = () => {
                                     <p className={helperClass}>You don't need one to apply. You do need one before you work with players — we'll walk you through it.</p>
                                 </div>
                                 <div>
-                                    <label className={labelClass}>How did you hear about this opportunity?</label>
+                                    <label className={labelClass}>How did you hear about this coaching role?</label>
                                     <select name="referral_source" value={form.referral_source} onChange={handleChange} className={inputClass('referral_source')}>
                                         <option value="">Select an option</option>
                                         {REFERRAL_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
@@ -416,10 +414,10 @@ const ApplicationForm = () => {
 
                         {/* Role & Availability */}
                         <div className="mb-8">
-                            <h3 className={sectionHeading}>Role & Availability</h3>
+                            <h3 className={sectionHeading}>Coaching Role & Availability</h3>
                             <div className="space-y-6">
                                 <div data-error={!!errors.roleInterest}>
-                                    <label className={labelClass}>Which area interests you? * <span className="normal-case font-medium text-rr-charcoal">(select all that apply)</span></label>
+                                    <label className={labelClass}>Which coaching role are you applying for? * <span className="normal-case font-medium text-rr-charcoal">(select all that apply)</span></label>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-2">
                                         {ROLE_INTEREST_OPTIONS.map(o => {
                                             const checked = roleInterest.includes(o.value);
@@ -459,8 +457,7 @@ const ApplicationForm = () => {
                             </div>
                         </div>
 
-                        {/* Preferred Tier — coaching applicants only */}
-                        {isCoachingApplicant && (
+                        {/* Preferred coaching stream */}
                         <div className="mb-8">
                             <h3 className={sectionHeading}>Preferred Coaching Stream</h3>
                             <div data-error={!!errors.preferred_tier}>
@@ -473,10 +470,8 @@ const ApplicationForm = () => {
                                 {errors.preferred_tier && <p className="text-red-500 text-xs font-medium mt-1">{errors.preferred_tier}</p>}
                             </div>
                         </div>
-                        )}
 
-                        {/* Cricket CV — coaching applicants only */}
-                        {isCoachingApplicant && (
+                        {/* Cricket CV */}
                         <div className="mb-8">
                             <h3 className={sectionHeading}>Cricket CV</h3>
                             <div className="space-y-5">
@@ -511,13 +506,11 @@ const ApplicationForm = () => {
                                 </div>
                             </div>
                         </div>
-                        )}
 
                         {/* Experience & Ambitions */}
                         <div className="mb-8">
-                            <h3 className={sectionHeading}>{isCoachingApplicant ? 'Coaching CV & Ambitions' : 'Experience & Ambitions'}</h3>
+                            <h3 className={sectionHeading}>Coaching CV & Ambitions</h3>
                             <div className="space-y-5">
-                                {isCoachingApplicant && (<>
                                 <div>
                                     <label className={labelClass}>Highest Coaching Accreditation</label>
                                     <select name="coaching_accreditation" value={form.coaching_accreditation} onChange={handleChange} className={inputClass('coaching_accreditation')}>
@@ -552,16 +545,8 @@ const ApplicationForm = () => {
                                     <textarea name="coaching_cv" value={form.coaching_cv} onChange={handleChange} maxLength={1500} rows={5} className={inputClass('coaching_cv')} placeholder="Where have you coached? Programs, age groups, what you were responsible for, and a session you were proud of." />
                                     <p className={helperClass}>{form.coaching_cv.length}/1500</p>
                                 </div>
-                                </>)}
-                                {!isCoachingApplicant && (
                                 <div>
-                                    <label className={labelClass}>Relevant Experience & Skills</label>
-                                    <textarea name="coaching_cv" value={form.coaching_cv} onChange={handleChange} maxLength={1500} rows={5} className={inputClass('coaching_cv')} placeholder="Tell us about your relevant experience — study, work, volunteering, projects, or skills you'd bring to the academy." />
-                                    <p className={helperClass}>{form.coaching_cv.length}/1500</p>
-                                </div>
-                                )}
-                                <div>
-                                    <label className={labelClass}>{isCoachingApplicant ? 'Goals & Ambitions as a Coach' : 'Goals & Ambitions'}</label>
+                                    <label className={labelClass}>Goals & Ambitions as a Coach</label>
                                     <textarea name="goals_ambitions" value={form.goals_ambitions} onChange={handleChange} maxLength={1500} rows={5} className={inputClass('goals_ambitions')} placeholder="Why RRA Melbourne? What do you want to develop? Where do you want to be in 3 years?" />
                                     <p className={helperClass}>{form.goals_ambitions.length}/1500</p>
                                 </div>
@@ -607,7 +592,7 @@ const ApplicationForm = () => {
                                 </>
                             ) : (
                                 <>
-                                    Submit Application
+                                    Submit Coaching Application
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                     </svg>

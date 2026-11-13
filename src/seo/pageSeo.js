@@ -247,6 +247,11 @@ export const PAGE_SEO = {
     description:
       'The official Rajasthan Royals Academy Melbourne shop — training kit, playing uniform and academy merchandise.',
   },
+  '/careers': {
+    title: 'Cricket Coaching Jobs Melbourne | Rajasthan Royals',
+    description:
+      'Coach cricket with Rajasthan Royals Academy Melbourne. Performance Squad, Junior Royals and Cadet coaching roles at Mickleham and Cranbourne North.',
+  },
   '/coaching-opportunities': {
     title: 'Cricket Coaching Jobs Melbourne | Rajasthan Royals',
     description:

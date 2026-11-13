@@ -2,15 +2,13 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 
-// The roles we're hiring for, surfaced in the hero so a reader knows within two
-// seconds whether there's a job here for them. Each one jumps to its full card
-// in the Open Roles section below.
+// The coaching roles we're hiring for, surfaced in the hero so a coach knows within
+// two seconds whether there's a job here for them. Each one jumps to its full card
+// in the Coaching Roles section below.
 const HERO_ROLES = [
-    { label: 'Cricket Coaches', anchor: 'role-cricket-coaches' },
-    { label: 'Junior / Assistant Coaches', anchor: 'role-junior-assistant-coaches' },
-    { label: 'Operations & Admin', anchor: 'role-operations-admin' },
-    { label: 'Media & Content', anchor: 'role-media-content' },
-    { label: "Don't See Your Role?", anchor: 'role-pitch-us' },
+    { label: 'Performance Squad Coach', anchor: 'role-performance-squad-coach' },
+    { label: 'Junior Royals Coach', anchor: 'role-junior-royals-coach' },
+    { label: 'Cadet Coach (start here)', anchor: 'role-cadet-coach' },
 ];
 
 const HeroSection = () => {
@@ -18,8 +16,8 @@ const HeroSection = () => {
         document.getElementById('application-form')?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    const scrollToAbout = () => {
-        document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+    const scrollToRoles = () => {
+        document.getElementById('roles')?.scrollIntoView({ behavior: 'smooth' });
     };
 
     const scrollToRole = (anchor) => {
@@ -32,12 +30,12 @@ const HeroSection = () => {
             {/* Mobile background */}
             <div
                 className="absolute inset-0 bg-cover bg-[center_top] bg-no-repeat md:hidden"
-                style={{ backgroundImage: "url('/assets/lahiri-coaching.jpg')" }}
+                style={{ backgroundImage: "url('/junior-royals/videos/coaching-young-batter.jpg')" }}
             />
             {/* Desktop background */}
             <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat hidden md:block"
-                style={{ backgroundImage: "url('/assets/lahiri-coaching.jpg')" }}
+                style={{ backgroundImage: "url('/assets/holiday-clinic-action.jpg')" }}
             />
             {/* Gradient overlays */}
             <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/70 to-rr-dark/30 md:hidden" />
@@ -52,7 +50,7 @@ const HeroSection = () => {
                     className="inline-flex items-center gap-2 bg-rr-pink/10 border border-rr-pink/30 rounded-full px-4 py-2 mb-6"
                 >
                     <span className="w-1.5 h-1.5 rounded-full bg-rr-pink animate-pulse" />
-                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">We're Hiring</span>
+                    <span className="text-xs font-bold text-rr-pink uppercase tracking-widest">We're Hiring Coaches</span>
                 </motion.div>
 
                 {/* Headline */}
@@ -62,7 +60,7 @@ const HeroSection = () => {
                     transition={{ duration: 0.6, delay: 0.15 }}
                     className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none mb-6"
                 >
-                    CAREERS AT<br />
+                    COACH WITH<br />
                     <span className="text-rr-pink">RAJASTHAN ROYALS</span><br />
                     ACADEMY MELBOURNE
                 </motion.h1>
@@ -83,7 +81,7 @@ const HeroSection = () => {
                     className="mb-8"
                 >
                     <p className="text-[11px] font-bold text-white/50 uppercase tracking-[0.3em] mb-3">
-                        Roles we're hiring — tap one to read it
+                        Coaching roles — tap one to read it
                     </p>
                     <div className="flex flex-wrap gap-2 md:gap-3">
                         {HERO_ROLES.map((role) => (
@@ -109,7 +107,7 @@ const HeroSection = () => {
                     transition={{ duration: 0.6, delay: 0.4 }}
                     className="text-base md:text-xl text-white/85 font-medium leading-relaxed max-w-3xl mb-6"
                 >
-                    We're recruiting across coaching, operations and media ahead of the October season, at our Melbourne centres.
+                    We're recruiting cricket coaches for the 2026–27 season at our Melbourne centres in Mickleham and Cranbourne North. Experienced coach or just starting out, there's a coaching role here for you.
                 </motion.p>
 
                 {/* CTAs */}
@@ -123,23 +121,23 @@ const HeroSection = () => {
                         onClick={scrollToForm}
                         className="group bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 md:px-10 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] flex items-center gap-3 justify-center"
                     >
-                        Apply Now
+                        Apply to Coach
                         <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                     </button>
                     <button
-                        onClick={scrollToAbout}
+                        onClick={scrollToRoles}
                         className="group bg-white/5 hover:bg-white/10 border border-white/20 hover:border-white/40 text-white font-bold uppercase tracking-widest px-8 md:px-10 py-4 rounded-full transition-all duration-300 flex items-center gap-3 justify-center"
                     >
-                        Learn More
+                        See the Coaching Roles
                     </button>
                 </motion.div>
             </div>
 
             {/* Scroll indicator */}
             <motion.button
-                onClick={scrollToAbout}
+                onClick={scrollToRoles}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.2 }}

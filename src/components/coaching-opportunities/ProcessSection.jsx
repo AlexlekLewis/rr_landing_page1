@@ -5,17 +5,17 @@ const STEPS = [
     {
         number: '01',
         title: 'Apply',
-        body: 'Submit your application below. Tell us about your background, your skills, and what you want to achieve.',
+        body: 'Fill in the coaching application below. Tell us about your playing and coaching background, and the coach you want to become.',
     },
     {
         number: '02',
         title: 'Conversation',
-        body: 'Shortlisted applicants meet with our leadership team to discuss fit, role, and pathway.',
+        body: 'Shortlisted coaches meet our Head Coach and Director of Cricket to talk through your coaching, the right role for you, and your pathway.',
     },
     {
         number: '03',
         title: 'Onboard & Deliver',
-        body: 'We sort your Working With Children Check and induction, then set you up. Coaches work 10 paid assisted hours alongside a Lead before running a group solo; every other role gets a supported handover.',
+        body: 'We sort your Working With Children Check and induction, then set you up. New coaches work 10 paid assisted hours alongside a Lead Coach before running a group solo.',
     },
 ];
 
@@ -35,7 +35,7 @@ const ProcessSection = () => {
                         viewport={{ once: true }}
                         className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-4"
                     >
-                        How It Works
+                        How to Become a Coach
                     </motion.p>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -44,7 +44,7 @@ const ProcessSection = () => {
                         transition={{ delay: 0.1 }}
                         className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-6"
                     >
-                        Our <span className="text-rr-pink">Hiring Process.</span>
+                        Three Steps <span className="text-rr-pink">To Coaching.</span>
                     </motion.h2>
                     <motion.div
                         initial={{ opacity: 0, scaleX: 0 }}
@@ -93,7 +93,7 @@ const ProcessSection = () => {
                         onClick={scrollToForm}
                         className="group bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-10 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] inline-flex items-center gap-3"
                     >
-                        Start Step One
+                        Apply to Coach
                         <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>

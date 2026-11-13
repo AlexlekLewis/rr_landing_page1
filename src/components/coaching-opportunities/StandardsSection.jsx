@@ -64,7 +64,7 @@ const StandardsSection = () => {
                         viewport={{ once: true }}
                         className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-4"
                     >
-                        Our Standards
+                        What We Look For in a Coach
                     </motion.p>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -73,7 +73,7 @@ const StandardsSection = () => {
                         transition={{ delay: 0.1 }}
                         className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight leading-none mb-6"
                     >
-                        What We're <span className="text-rr-pink">Looking For.</span>
+                        Coaching <span className="text-rr-pink">Standards.</span>
                     </motion.h2>
                     <motion.div
                         initial={{ opacity: 0, scaleX: 0 }}
@@ -89,7 +89,7 @@ const StandardsSection = () => {
                         transition={{ delay: 0.3 }}
                         className="text-base md:text-lg text-white/70 font-medium leading-relaxed"
                     >
-                        We run two coaching streams — Performance Squads (our representative teams) and Junior Royals (our program for younger players) — each with different demands. Below is a guide to what we look for in coaches; operations, admin, and media roles are assessed on merit through the application form. If you don't tick every box but believe in our approach, we still want to hear from you.
+                        We run two coaching streams — Performance Squads (our representative teams) and Junior Royals (our program for younger players) — each with different demands. Below is a guide to what we look for in coaches in each stream. If you don't tick every box but believe in our approach, we still want to hear from you.
                     </motion.p>
                 </div>
 
@@ -137,7 +137,7 @@ const StandardsSection = () => {
                     transition={{ delay: 0.4 }}
                     className="text-xs md:text-sm text-white/40 font-medium text-center max-w-2xl mx-auto"
                 >
-                    All team members sign the RRA Code of Conduct and complete a structured onboarding process before working independently. A Working With Children Check is required for every role.
+                    Every coach signs the Rajasthan Royals Academy Code of Conduct and completes a structured onboarding process before coaching independently. A Working With Children Check is required for every coaching role.
                 </motion.p>
             </div>
         </section>

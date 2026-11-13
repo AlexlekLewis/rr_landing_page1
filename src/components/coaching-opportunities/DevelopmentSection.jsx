@@ -20,7 +20,7 @@ const DEVELOPMENT = [
     },
     {
         title: 'Coach Overseas on Tour',
-        body: 'In September 2026 we take our first group of players to the Rajasthan Royals’ High Performance Centre in Nagpur, India. Coaching places on future tours are selected on performance — a real opportunity, not a promise, and we won’t pretend otherwise.',
+        body: 'Our academy tours take players to the Rajasthan Royals’ High Performance Centre in Nagpur, India. Coaching places on tours are selected on performance — a real opportunity, not a promise, and we won’t pretend otherwise.',
     },
     {
         title: 'Annual Recertification',
@@ -44,7 +44,7 @@ const DevelopmentSection = () => {
                         viewport={{ once: true }}
                         className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-4"
                     >
-                        Your Development
+                        Coach Development
                     </motion.p>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -53,7 +53,7 @@ const DevelopmentSection = () => {
                         transition={{ delay: 0.1 }}
                         className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-6"
                     >
-                        What We <span className="text-rr-pink">Offer.</span>
+                        How We Develop <span className="text-rr-pink">Our Coaches.</span>
                     </motion.h2>
                     <motion.div
                         initial={{ opacity: 0, scaleX: 0 }}
@@ -69,7 +69,7 @@ const DevelopmentSection = () => {
                         transition={{ delay: 0.25 }}
                         className="text-base md:text-lg text-rr-charcoal font-medium leading-relaxed"
                     >
-                        However you start — work experience, volunteering, or a casual role — there's a supported route towards part-time and full-time positions for people who deliver.
+                        Every coach gets the same support, from a first-season Cadet to a Performance Squad Coach. This is what your coaching year looks like with us.
                     </motion.p>
                 </div>
 
@@ -81,7 +81,7 @@ const DevelopmentSection = () => {
                     transition={{ delay: 0.3 }}
                     className="flex flex-wrap items-center gap-2 md:gap-3 mb-12"
                 >
-                    {['Work Experience', 'Volunteer', 'Casual', 'Part-Time', 'Full-Time'].map((stage, i, arr) => (
+                    {['Cadet Coach', 'Assistant Coach', 'Lead Coach', 'Performance Squad Coach', 'Centre Head Coach'].map((stage, i, arr) => (
                         <React.Fragment key={stage}>
                             <span className="bg-white border border-slate-200 text-rr-dark text-[11px] md:text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-sm">
                                 {stage}

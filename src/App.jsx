@@ -212,8 +212,8 @@ function App() {
         <Route path="/female-cricket-kickstart" element={<FemaleCricketIntroduction />} />
         <Route path="/female-cricket-kickstart/success" element={<FemaleCricketSuccess />} />
         <Route path="/female-empowerment" element={<FemaleEmpowerment />} />
-        {/* Careers — We're Hiring landing page (rebuilt from Coaching Opportunities, now covers
-            all roles: coaching, ops/admin, media & content across volunteer → full-time) */}
+        {/* Careers — coaching-only hiring page (13 Nov 2026: coaching roles only; ops/admin
+            and media roles removed). /coaching-opportunities redirects here. */}
         <Route path="/careers" element={<CoachingOpportunities />} />
         <Route path="/coaching-opportunities" element={<Navigate to="/careers" replace />} />
         {/* Player Induction — generic, reusable form for ad-hoc program launches. Hidden from

@@ -37,14 +37,14 @@ const HallaBolCTA = () => {
                     </div>
 
                     <p className="text-white/60 text-base md:text-lg font-semibold leading-relaxed max-w-sm mx-auto md:mx-0 mb-8">
-                        Build your career inside one of world cricket's most iconic brands.
+                        Build your coaching career inside one of world cricket's most iconic brands.
                     </p>
 
                     <button
                         onClick={scrollToForm}
                         className="group bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-10 py-4 rounded-full transition-all duration-300 hover:shadow-[0_0_28px_rgba(229,6,149,0.45)] inline-flex items-center gap-3"
                     >
-                        Apply Now
+                        Apply to Coach
                         <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
