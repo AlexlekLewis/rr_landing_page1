@@ -18,6 +18,7 @@
 //   SUPABASE_SERVICE_ROLE_KEY               — for config lookup + back-fill
 //   GOOGLE_SERVICE_ACCOUNT_JSON             — same JSON used by export-to-sheets
 //   SUPABASE_WEBHOOK_SECRET                 — shared secret in webhook header
+//                                             (unset → every request is refused)
 //   (optional) VITE_SUPABASE_URL            — defaults to RRA project
 //
 // Supabase Database Webhook configuration (in Supabase dashboard):
@@ -29,6 +30,7 @@
 
 import { google } from 'googleapis';
 import { createClient } from '@supabase/supabase-js';
+import { checkWebhookSecret } from './_lib/webhookSecret.js';
 
 export const config = {
   api: { bodyParser: { sizeLimit: '256kb' } },
@@ -199,15 +201,9 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   // Shared-secret verification — Supabase webhooks let you add custom headers.
-  // If SUPABASE_WEBHOOK_SECRET is set in Vercel, require it match.
-  const expected = process.env.SUPABASE_WEBHOOK_SECRET;
-  if (expected) {
-    const got = req.headers['x-webhook-secret'];
-    if (got !== expected) {
-      console.warn('sync-holiday-row: bad/missing webhook secret');
-      return res.status(401).json({ error: 'unauthorized' });
-    }
-  }
+  // Fails closed: refused if SUPABASE_WEBHOOK_SECRET is unset in this environment.
+  const denied = checkWebhookSecret(req, 'sync-holiday-row');
+  if (denied) return res.status(denied.status).json({ error: denied.error });
 
   // Supabase DB webhook payload shape:
   //   { type: 'INSERT'|'UPDATE'|'DELETE', table, schema, record, old_record }
