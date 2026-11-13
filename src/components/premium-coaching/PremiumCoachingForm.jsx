@@ -224,7 +224,7 @@ const PremiumCoachingForm = ({ initialCentre = '' }) => {
                                 {coaches.map((c) => (
                                     <Choice key={c.slug} on={form.coach === c.slug} bad={errors.coach}
                                         onClick={() => set('coach', c.slug)}
-                                        title={c.name} sub={[tierOf(c.tier)?.name, c.specialism].filter(Boolean).join(' · ')} />
+                                        title={c.name} sub={[tierOf(c.tier)?.name || 'Royals Coach', c.specialism].filter(Boolean).join(' · ')} />
                                 ))}
                                 <Choice on={form.coach === MATCH_ME} bad={errors.coach} onClick={() => set('coach', MATCH_ME)}
                                     title="Match me with a coach"

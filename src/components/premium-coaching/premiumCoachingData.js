@@ -220,14 +220,49 @@ export const COACHES = [
         img: '/assets/coaches/rittin-raman.jpg',
         bio: 'A wicketkeeper-batter playing First XI cricket for Melbourne Cricket Club, and a state-level representative. High energy and precise with technique.',
     },
+    // RAVENHALL (M9 Sports Centre) — Andy, 13 Nov 2026: "One-to-one coaches in Ravenhall
+    // are Hamid Qadri, Jinang Shah, Kavya Khatri." Tier not given yet: tier null shows
+    // "Royals Coach" and saves coach_tier null. TODO Andy: tier, specialism, bio, photo.
+    {
+        slug: 'hamid-qadri',
+        name: 'Hamid Qadri',
+        centre: 'ravenhall',
+        tier: null, // TODO Andy
+        role: 'Royals Coach',
+        specialism: null, // TODO Andy
+        img: null, // TODO: headshot → /assets/coaches/hamid-qadri.jpg
+        bio: null, // TODO Andy
+    },
+    {
+        slug: 'jinang-shah',
+        name: 'Jinang Shah',
+        centre: 'ravenhall',
+        tier: null, // TODO Andy
+        role: 'Royals Coach',
+        specialism: null, // TODO Andy
+        img: '/assets/coaches/jinang-shah.png',
+        // From his Holiday Programs bio (holiday-programs/CoachesSection.jsx), without the
+        // "current Elite Program participant" line, which may be out of date.
+        bio: 'A high-quality cricketer with hands-on experience coaching young and developing players. Jinang coaches in our Junior Royals and holiday programs.',
+    },
+    {
+        slug: 'kavya-khatri',
+        name: 'Kavya Khatri',
+        centre: 'ravenhall',
+        tier: null, // TODO Andy
+        role: 'Royals Coach',
+        specialism: null, // TODO Andy
+        img: null, // TODO: headshot → /assets/coaches/kavya-khatri.jpg
+        bio: null, // TODO Andy
+    },
 ];
 
 // ── WHERE: the three centres ──────────────────────────────
 // Cranbourne North address = the Academy Shop pickup list (Alex, 5 Oct 2026).
 // Andy's brief says "Hallam or Cranbourne North": older pages show the Elite
 // Cricket Centre at 8-9 Becon Ct, Hallam. TODO Andy: confirm Medley Drive is right.
-// The West Centre (M9 Sports Centre, Ravenhall) is NEW: address, days and
-// coaches are all TODO.
+// The West Centre (M9 Sports Centre, Ravenhall) is NEW: address and days are TODO.
+// Coaches: Hamid Qadri, Jinang Shah, Kavya Khatri (Andy, 13 Nov 2026).
 export const CENTRES = [
     {
         slug: 'cranbourne-north',
@@ -251,7 +286,7 @@ export const CENTRES = [
         suburb: 'Ravenhall',
         region: 'Western Melbourne · our West Centre',
         address: null, // TODO Andy: street address
-        note: 'Our new West Centre. Coaches announced soon.',
+        note: 'Our new West Centre in Melbourne’s west.',
         isNew: true,
     },
 ];

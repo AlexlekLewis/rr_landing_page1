@@ -197,9 +197,9 @@ const CoachCard = ({ c }) => (
             {c.img ? <img src={c.img} alt={c.name} loading="lazy" className="w-full h-full object-cover object-top" /> : <Initials name={c.name} />}
         </div>
         <div className="p-5 flex-1">
-            <p className="text-[11px] font-black uppercase tracking-widest text-rr-pink mb-1">{tierOf(c.tier)?.name}</p>
+            <p className="text-[11px] font-black uppercase tracking-widest text-rr-pink mb-1">{tierOf(c.tier)?.name || 'Royals Coach'}</p>
             <h4 className="text-lg font-black text-rr-dark uppercase tracking-wide leading-tight">{c.name}</h4>
-            <p className="text-xs font-bold text-slate-500 mb-3">{[c.role, c.specialism].filter(Boolean).join(' · ')}</p>
+            <p className="text-xs font-bold text-slate-500 mb-3">{[c.tier ? c.role : null, c.specialism].filter(Boolean).join(' · ') || '\u00a0'}</p>
             <p className="text-sm text-rr-charcoal font-medium leading-relaxed">{c.bio || 'Full profile coming soon.'}</p>
         </div>
     </div>
