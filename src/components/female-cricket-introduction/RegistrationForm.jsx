@@ -153,23 +153,8 @@ const RegistrationForm = () => {
 
             if (kickstartError) console.error('Kickstart table insert error:', kickstartError);
 
-            // Send to Zapier webhook (flows to Google Sheet)
-            // Uses sendBeacon — survives page navigation and bypasses CORS
-            const webhookData = new URLSearchParams({
-                parent_name: payload.parent1_name,
-                parent_email: payload.parent1_email,
-                parent_phone: payload.parent1_phone,
-                player_name: payload.first_name,
-                player_dob: payload.dob || '',
-                suburb: payload.suburb,
-                location: payload.location,
-                experience_level: payload.experience_level,
-                program: payload.program,
-                source: payload.source,
-                submitted_at: new Date().toISOString(),
-            });
-            const blob = new Blob([webhookData.toString()], { type: 'application/x-www-form-urlencoded' });
-            navigator.sendBeacon('https://hooks.zapier.com/hooks/catch/23705820/upvtk83/', blob);
+            // Zapier webhook removed — this page is retired (410). The old hook URL is still in git history.
+            // Registration data is already written to Supabase above.
 
             // Redirect to Stripe checkout
             window.location.href = 'https://buy.stripe.com/aFa28r5jr2q92D26fF9Zm09';

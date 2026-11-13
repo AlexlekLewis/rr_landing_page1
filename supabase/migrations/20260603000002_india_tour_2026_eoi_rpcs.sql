@@ -1,3 +1,6 @@
+-- 2026-09-27: the shared token that used to be written below was removed from this file
+-- (it had been committed to a public repo). The function no longer uses a shared token:
+-- see 20260927120000_sheet_sync_secrets_to_vault.sql.
 -- India Tour 2026 — RPCs for the EOI page.
 -- 1) Token-gated export for the Google Sheets sync (Apps Script polls this every minute).
 CREATE OR REPLACE FUNCTION public.export_india_tour_2026_eoi(p_token text)
@@ -7,7 +10,7 @@ SECURITY DEFINER
 SET search_path = public
 AS $$
 BEGIN
-    IF p_token IS NULL OR p_token <> 'it26_976803fcea81a687074b255fcb09402c62619d1f9711c51e' THEN
+    IF p_token IS NULL OR p_token <> '<redacted>' THEN
         RAISE EXCEPTION 'unauthorized';
     END IF;
     RETURN QUERY SELECT * FROM public.india_tour_2026_eoi ORDER BY created_at ASC;

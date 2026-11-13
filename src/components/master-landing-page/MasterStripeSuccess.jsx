@@ -220,16 +220,7 @@ const MasterStripeSuccess = () => {
             localStorage.removeItem('payment_option_selected');
             localStorage.removeItem('master_cohort_id');
 
-            // Fire Zapier webhook if configured
-            const webhookUrl = import.meta.env.VITE_LP3_WEBHOOK_URL;
-            if (webhookUrl) {
-                const webhookData = { ...onboardingData, player_name: playerName.trim(), cohort_id: cohortId };
-                const formData = new URLSearchParams();
-                Object.entries(webhookData).forEach(([key, value]) => {
-                    formData.append(key, typeof value === 'object' ? JSON.stringify(value) : String(value ?? ''));
-                });
-                fetch(webhookUrl, { method: 'POST', body: formData }).catch(() => { });
-            }
+            // Zapier webhook removed — component is not imported anywhere.
 
             setOnboardingComplete(true);
         } catch (err) {

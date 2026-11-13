@@ -18,7 +18,9 @@
  *   3. Project Settings → Script properties → add:
  *        SUPABASE_URL          https://pudldzgmluwoocwxtzhw.supabase.co
  *        SUPABASE_SERVICE_KEY  <service_role key — Supabase → Project Settings → API>
- *        SYNC_TOKEN            <token expected by export_power_game_inquiries>
+ *        SYNC_TOKEN            only needed until migration
+ *                              20260927120000_sheet_sync_secrets_to_vault.sql is
+ *                              applied; after that it is ignored and can be deleted.
  *        SHEET_ID              18y5BxkTAEict_rlrlpYSzhXovf_5554Kv2G7L9A_uNs  (optional)
  *   4. Run `syncPowerGameInquiries` once and approve the authorization prompt.
  *   5. Run `installTrigger` once to schedule it every minute.
@@ -46,7 +48,7 @@ function _prop(key, fallback) {
 function syncPowerGameInquiries() {
   var supabaseUrl = _prop('SUPABASE_URL');
   var serviceKey  = _prop('SUPABASE_SERVICE_KEY');
-  var syncToken   = _prop('SYNC_TOKEN');
+  var syncToken   = _prop('SYNC_TOKEN', '');  // ignored once the Vault migration is applied
   var sheetId     = _prop('SHEET_ID', DEFAULT_SHEET_ID);
 
   var res = UrlFetchApp.fetch(supabaseUrl + '/rest/v1/rpc/export_power_game_inquiries', {
