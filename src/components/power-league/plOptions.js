@@ -1,24 +1,28 @@
 // Every fact about the Power League nomination day lives here.
 //
 // Sources: the Performance Squads briefing (28 Sep 2026) for how Power League
-// works, and Alex, 16 Oct and 19 Oct 2026, for this match day. 25 October 2026
-// is a Sunday, which matches the standing "Power League runs on Sundays".
+// works, and Alex, 16 Oct and 19 Oct 2026, for the open invitation. The first
+// date, Sunday 25 October 2026, was rained out (called off 23 Oct).
 //
-// Alex, 19 Oct 2026: an open invite for players 10 to 25, a 24-hour window to
-// nominate, picked players told within the next 24 hours, one game on the
-// Sunday fixtured for a 12pm or 3pm start depending on the fixture and the side,
-// $35 per player for the game. Alex, later 19 Oct: the day runs 12pm to 7pm; make
-// it clear they play WITH our Performance Squad players; it is a filmed event. The form asks for the weekend club, the highest
-// level played on a weekend, name, date of birth and the usual consents.
+// NEW DATE (Alex, 30 Oct 2026): Sunday 15 November 2026, afternoon games from 1pm
+// at Montmorency Park, same grounds and same $35. Nominations close Tuesday
+// 10 November, 9pm, and picked players hear by Wednesday 11 November, 9pm: the
+// same lead times as last time.
 //
-// DATED CONTENT — REVIEW 26 Oct 2026: retire or repoint the page after the match.
+// Alex, 19 Oct 2026: an open invite for players 10 to 25, picked players told
+// within 24 hours of nominations closing, one game on the Sunday, $35 per player
+// for the game; make it clear they play WITH our Performance Squad players; it is
+// a filmed event. The form asks for the weekend club, the highest level played on
+// a weekend, name, date of birth and the usual consents.
+//
+// DATED CONTENT — REVIEW 16 Nov 2026: retire or repoint the page after the match.
 // The form closes itself at `closesAt`; nothing else on the page changes date.
 
 export const MATCH = {
-    date: 'Sunday 25 October',
-    time: '12pm to 7pm',
-    starts: 'Games start at 12pm or 3pm',
-    timeDetail: 'The match day runs from 12pm to 7pm. Each player plays one game, starting at 12pm or 3pm depending on the fixture and the side they are picked for. We tell you the start time when we tell you they are picked.',
+    date: 'Sunday 15 November',
+    time: 'games from 1pm',
+    starts: 'We tell you the start time when we tell you the player is picked',
+    timeDetail: 'Games are in the afternoon, from 1pm. Each player plays one game; the start time depends on the fixture and the side they are picked for. We tell you the start time when we tell you they are picked.',
     venues: ['Lower Plenty Cricket Club', 'Montmorency Cricket Club'],
     where: 'Montmorency Park, Montmorency',
     whereDetail: 'Lower Plenty and Montmorency cricket clubs’ grounds, both in Montmorency Park, north-east Melbourne',
@@ -26,11 +30,11 @@ export const MATCH = {
     fee: '$35 incl. GST',
     feeUnit: 'per player, for the game',
     ages: '10 to 25',
-    ageOn: '2026-10-25',
-    closes: 'Tuesday 20 October, 9pm',
+    ageOn: '2026-11-15',
+    closes: 'Tuesday 10 November, 9pm',
     // 9pm Melbourne time (AEDT, UTC+11). The form stops taking nominations here.
-    closesAt: '2026-10-20T21:00:00+11:00',
-    notifyBy: 'Wednesday 21 October, 9pm',
+    closesAt: '2026-11-10T21:00:00+11:00',
+    notifyBy: 'Wednesday 11 November, 9pm',
 };
 
 export const nominationsClosed = (now = Date.now()) => now >= Date.parse(MATCH.closesAt);
@@ -57,7 +61,7 @@ export const STEPS = [
     [`Pay ${MATCH.fee} for the game`,
      'Our message includes a link to pay. Paying confirms the player in the side. Nothing is paid before then.'],
     [`Play on ${MATCH.date}`,
-     'The day runs 12pm to 7pm at Montmorency Park. Each player plays one T20 game with our Performance Squad players, starting at 12pm or 3pm. The game is filmed. We send what to bring and what to wear with the pick.'],
+     'Games are in the afternoon, from 1pm, at Montmorency Park. Each player plays one T20 game with our Performance Squad players. The game is filmed. We send the start time, what to bring and what to wear with the pick.'],
 ];
 
 // From the Performance Squads briefing, 28 Sep 2026 (the first three), and

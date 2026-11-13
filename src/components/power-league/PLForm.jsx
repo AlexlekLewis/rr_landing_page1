@@ -122,7 +122,7 @@ const PLForm = () => {
             `Nominated for Power League, ${MATCH.date}`,
             `Plays: ${form.role}`,
             `Highest weekend level: ${form.level}${form.grade.trim() ? ` (${form.grade.trim()})` : ''}`,
-            `Available for a 12pm or 3pm start: yes`,
+            `Available for any afternoon start from 1pm: yes`,
             form.medical.trim() ? `Medical or injuries: ${form.medical.trim()}` : '',
             form.squad_interest ? 'Also wants to hear about Performance Squad trials: yes' : '',
             form.notes.trim() ? `Notes: ${form.notes.trim()}` : '',
@@ -327,9 +327,9 @@ const PLForm = () => {
                     </div>
 
                     <Tick checked={form.available} onChange={tick('available')}>
-                        They can play at either start time on {MATCH.date} — 12pm or 3pm.
+                        They can play at any afternoon start time on {MATCH.date}, from 1pm.
                         <span className="block text-rr-dark/60 font-medium mt-1">
-                            We set the start time when we pick the sides, so we need to know either one works.
+                            We set the start time when we pick the sides, so we need to know any afternoon start works.
                         </span>
                     </Tick>
 
