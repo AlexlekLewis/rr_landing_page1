@@ -1,0 +1,333 @@
+<meta name="dash-one-writer">
+<style>
+  .ep { display: flex; flex-direction: column; gap: var(--cds-gap-xl); font-family: var(--font-anthropic-sans); color: var(--color-fg); }
+  .ep h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
+  .ep h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; text-wrap: balance; }
+  .ep p { margin: 0; max-width: 68ch; line-height: 1.5; }
+  .ep .muted { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .ep .lede { font-size: var(--cds-font-size-body); }
+  .ep .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--cds-gap-md); }
+  .ep .tile { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-xs); min-width: 0; }
+  .ep .tile .v { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; }
+  .ep .tile .k { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .ep .sec { display: flex; flex-direction: column; gap: var(--cds-gap-sm); min-width: 0; }
+  .ep .legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .ep .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .ep .sw { width: 10px; height: 10px; border-radius: 2px; display: inline-block; background: var(--cds-chart-muted); }
+  .ep .chart { position: relative; min-height: 260px; min-width: 0; }
+  .ep .chart.short { min-height: 150px; }
+  .ep .pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--cds-gap-xl); }
+  .ep .chart svg { display: block; overflow: visible; }
+  .ep .axis text { fill: var(--cds-text-secondary); font-size: var(--cds-font-size-caption); font-family: var(--font-anthropic-sans); }
+  .ep .axis line, .ep .axis path { stroke: var(--cds-chart-axis); }
+  .ep .grid line { stroke: var(--cds-chart-grid); }
+  .ep .vlab { fill: var(--cds-text-secondary); font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+  .ep .tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); box-shadow: var(--cds-shadow-popover); border-radius: var(--cds-radius); padding: var(--cds-pad-sm) var(--cds-pad-md); font-size: var(--cds-font-size-caption); line-height: 1.45; white-space: nowrap; z-index: 2; }
+  .ep .tip b { display: block; color: var(--color-fg); }
+  .ep .tip span { display: block; color: var(--cds-text-secondary); }
+  .ep .tablewrap { overflow-x: auto; }
+  .ep table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: var(--cds-font-size-body); }
+  .ep th, .ep td { text-align: right; padding: var(--cds-pad-xs) var(--cds-pad-md); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+  .ep th:first-child, .ep td:first-child { text-align: left; }
+  .ep th { font-weight: var(--cds-font-weight-medium); color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .ep details summary { cursor: pointer; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .ep details p { margin-top: var(--cds-gap-sm); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  [data-dash-source-state=refreshing] { opacity: .5; }
+</style>
+
+<div class="ep">
+  <header class="sec" id="top">
+    <h1>Elite T20 Purchase Timing</h1>
+    <p class="lede" data-read lang="en">Sales came in one launch burst and then a long tail. <b data-draw="stat" data-source="launch" data-field="first3" data-row="0">—</b> of the <b data-draw="stat" data-source="totals" data-field="total" data-row="0">—</b> first purchases landed in the first three days of sales, and <b data-draw="stat" data-source="evening" data-field="share" data-row="0">—</b> were made between 6pm and midnight.</p>
+    <p class="muted">RRA Melbourne T20 Elite Program 2026, Cutting Edge Cricket Centre, Bundoora (program ran 14 Apr – 4 Jul). Dates and times are Melbourne time. Each Flexi subscription is counted once, on the day the family first signed up. Later monthly instalments are left out.</p>
+  </header>
+
+  <section class="tiles" id="totals">
+    <div class="tile"><span class="v" data-draw="stat" data-source="totals" data-field="total" data-row="0">—</span><span class="k">First purchases</span></div>
+    <div class="tile"><span class="v" data-draw="stat" data-source="totals" data-field="one_time" data-row="0">—</span><span class="k">Paid in full ($2,995)</span></div>
+    <div class="tile"><span class="v" data-draw="stat" data-source="totals" data-field="subscription" data-row="0">—</span><span class="k">Flexi subscriptions started ($748.75 × 4)</span></div>
+    <div class="tile"><span class="v" data-draw="stat" data-source="totals" data-field="plan" data-row="0">—</span><span class="k">Payment plans and special deals</span></div>
+    <div class="tile"><span class="v" data-draw="stat" data-fmt="aud" data-source="totals" data-field="revenue_aud" data-row="0">—</span><span class="k">Collected at first purchase (AUD)</span></div>
+  </section>
+
+  <section class="sec" id="daily-purchases">
+    <h2>First purchases per day</h2>
+    <p class="muted">Busiest day: <b data-draw="stat" data-fmt="date" data-source="top_days" data-field="day" data-row="0">—</b>, with <b data-draw="stat" data-source="top_days" data-field="total" data-row="0">—</b> purchases. Point at a bar for that day's detail.</p>
+    <div class="legend">
+      <span><i class="sw" data-i="0"></i>Paid in full</span>
+      <span><i class="sw" data-i="1"></i>Flexi subscription (first payment)</span>
+      <span><i class="sw" data-i="2"></i>Payment plan or special deal</span>
+    </div>
+    <div class="chart" data-draw="daily" data-source="daily"></div>
+  </section>
+
+  <section class="sec" id="applications">
+    <h2>Elite applications per day, same dates</h2>
+    <p class="muted">Applications submitted on the Elite form, on the same dates as the chart above. The big run of applications in the week of 22 February sits just before the 2–4 March purchase spike.</p>
+    <div class="chart short" data-draw="apps" data-source="applications daily"></div>
+  </section>
+
+  <div class="pair">
+    <section class="sec" id="weekday">
+      <h2>By day of week</h2>
+      <p class="muted">Nobody bought on a Saturday, which is training and match day.</p>
+      <div class="chart short" data-draw="weekday" data-source="by_weekday"></div>
+    </section>
+    <section class="sec" id="hour">
+      <h2>By hour of day</h2>
+      <p class="muted">Evenings after dinner are the peak buying window.</p>
+      <div class="chart short" data-draw="hour" data-source="by_hour"></div>
+    </section>
+  </div>
+
+  <section class="sec" id="top-days">
+    <h2>Six busiest days</h2>
+    <div class="tablewrap">
+      <table data-source="top_days" data-row-key="day">
+        <thead><tr><th data-field="day">Day</th><th data-field="total">Total</th><th data-field="one_time">Paid in full</th><th data-field="subscription">Flexi</th><th data-field="plan">Plan / deal</th></tr></thead>
+        <tbody data-draw="toptable"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sec" id="catchments">
+    <h2>Where Elite families travelled from</h2>
+    <p class="lede" data-read lang="en">If Ravenhall and Hallam had also run the program, an estimated <b data-draw="cstat" data-source="switch_overall" data-field="moved" data-row="0">—</b> of the <b data-draw="cstat" data-source="switch_overall" data-field="located" data-row="0">—</b> players with a known suburb (<b data-draw="cstat" data-source="switch_overall" data-field="share" data-row="0">—</b>) would have had a centre at least 10 minutes closer than Bundoora. <b data-draw="cstat" data-source="switch_overall" data-field="over45" data-row="0">—</b> players had an estimated drive of more than 45 minutes each way to Cutting Edge.</p>
+    <div class="tiles">
+      <div class="tile"><span class="v" data-draw="cstat" data-source="catchment_summary" data-field="players" data-where="centre=Bundoora">—</span><span class="k"><i class="sw" data-i="0"></i> Would stay at Bundoora</span><span class="k">Average drive ~<span data-draw="cstat" data-source="catchment_summary" data-field="avg_min" data-where="centre=Bundoora">—</span> min</span></div>
+      <div class="tile"><span class="v" data-draw="cstat" data-source="catchment_summary" data-field="players" data-where="centre=Ravenhall">—</span><span class="k"><i class="sw" data-i="1"></i> Likely to choose Ravenhall</span><span class="k">~<span data-draw="cstat" data-source="catchment_summary" data-field="avg_min" data-where="centre=Ravenhall">—</span> min instead of ~<span data-draw="cstat" data-source="catchment_summary" data-field="avg_bundoora_min" data-where="centre=Ravenhall">—</span> min to Bundoora</span></div>
+      <div class="tile"><span class="v" data-draw="cstat" data-source="catchment_summary" data-field="players" data-where="centre=Hallam">—</span><span class="k"><i class="sw" data-i="2"></i> Likely to choose Hallam</span><span class="k">~<span data-draw="cstat" data-source="catchment_summary" data-field="avg_min" data-where="centre=Hallam">—</span> min instead of ~<span data-draw="cstat" data-source="catchment_summary" data-field="avg_bundoora_min" data-where="centre=Hallam">—</span> min to Bundoora</span></div>
+      <div class="tile"><span class="v" data-draw="cstat" data-source="catchment_summary" data-field="players" data-where="centre=Unknown">—</span><span class="k">Suburb not recorded</span></div>
+    </div>
+    <p class="muted">Each dot is a suburb, sized by players and coloured by the centre the family would likely choose. Dashed rings show roughly 30 minutes' drive from each centre. Point at a dot for its drive times. Not on the map (regional): <span data-draw="offmap">—</span>.</p>
+    <div class="chart" data-draw="map" data-source="catchment coords"></div>
+  </section>
+
+  <section class="sec" id="catchment-timing">
+    <h2>When each group bought</h2>
+    <p class="muted">Running total of first purchases, grouped by the centre each family would likely choose. Families who would have chosen another centre still bought, and some bought later than the Bundoora group.</p>
+    <div class="chart" data-draw="catchtime" data-source="catchment_daily"></div>
+  </section>
+
+  <section class="sec" id="suburbs">
+    <h2>Suburbs and estimated drive times</h2>
+    <p class="muted">Drive times are one-way estimates in minutes. "Bought in launch" counts players whose family bought in the first three days of sales.</p>
+    <div class="tablewrap">
+      <table data-source="catchment" data-row-key="place">
+        <thead><tr><th data-field="suburb">Suburb</th><th data-field="region">Region</th><th data-field="players">Players</th><th data-field="bundoora_min">Bundoora</th><th data-field="ravenhall_min">Ravenhall</th><th data-field="hallam_min">Hallam</th><th data-field="centre">Likely centre</th><th data-field="launch">Bought in launch</th></tr></thead>
+        <tbody data-draw="catchtable"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <details id="notes">
+    <summary>How purchases are counted</summary>
+    <p>Source: completed Stripe payments for the Elite program, as recorded in the Academy database. "Paid in full" is the $2,995 Autumn 2026 checkout. "Flexi subscription" is the 4-payment option; only its first payment is counted, which is the day the subscription was taken out. "Payment plan or special deal" covers the deposit plus 3 monthly plan, tailored plans, subsidised pricing and an ambassador one-off. Siblings bought separately count as separate purchases. Applications are rows on the Elite application form, which has no program name set.</p>
+    <p>Locations: each player's suburb from the Elite roster (or their club's suburb where none was given), placed at the suburb's approximate centre. Centres are placed at the centre of Bundoora, Ravenhall and Hallam. Drive times are estimates, not route lookups: road distance is taken as 1.3 times the straight-line distance, with 6 minutes to get going, about 50 km/h for the first 25 km and about 80 km/h after that. That is close to a weekday-evening drive in Melbourne, but real traffic will vary. A family counts against Ravenhall or Hallam only if that centre would be at least 10 minutes closer than Bundoora. Siblings count as two players.</p>
+  </details>
+</div>
+
+<script>
+  ['daily', 'applications', 'weekday_hour'].forEach((id) => dash.loader(id, {description: 'Reads the rows out of the database tool\'s text answer.', fn: ({answer}) => {
+    if (Array.isArray(answer)) return answer;
+    const text = typeof answer === 'string' ? answer : (answer && typeof answer.result === 'string' ? answer.result : null);
+    if (text == null) throw new Error('The database returned an unexpected answer.');
+    const end = text.lastIndexOf('</untrusted-data-');
+    const body = end < 0 ? text : text.slice(0, end);
+    const start = body.lastIndexOf('>\n');
+    const json = (start < 0 ? body : body.slice(start + 2)).trim();
+    if (!json.startsWith('[')) throw new Error(text.slice(0, 300));
+    return JSON.parse(json);
+  }}));
+
+  dash.calc('totals', {inputs: ['daily'], title: 'Totals by payment type', description: 'Adds up each payment type across every day.', fn: (daily) => {
+    const sum = (k) => daily.reduce((a, r) => a + Number(r[k]), 0);
+    return [{total: sum('total'), one_time: sum('one_time'), subscription: sum('subscription'), plan: sum('plan'), revenue_aud: Math.round(sum('revenue_aud'))}];
+  }});
+
+  dash.calc('launch', {inputs: ['daily'], title: 'Launch three days', description: 'Purchases in the first three calendar days of sales.', fn: (daily) => {
+    if (!daily.length) return [];
+    const days = daily.map((r) => r.day).sort();
+    const end = new Date(Date.parse(days[0] + 'T00:00:00Z') + 3 * 864e5).toISOString().slice(0, 10);
+    const first3 = daily.filter((r) => r.day < end).reduce((a, r) => a + Number(r.total), 0);
+    const all = daily.reduce((a, r) => a + Number(r.total), 0);
+    return [{first_day: days[0], first3, share: Math.round(100 * first3 / all) + '%'}];
+  }});
+
+  dash.calc('evening', {inputs: ['weekday_hour'], title: 'Evening purchases', description: 'Share of purchases made from 6pm to midnight.', fn: (weekday_hour) => {
+    const all = weekday_hour.reduce((a, r) => a + Number(r.purchases), 0);
+    const evening = weekday_hour.filter((r) => Number(r.hour) >= 18).reduce((a, r) => a + Number(r.purchases), 0);
+    return all ? [{evening, share: Math.round(100 * evening / all) + '%'}] : [];
+  }});
+
+  dash.calc('by_weekday', {inputs: ['weekday_hour'], title: 'Purchases by day of week', description: 'Purchases for each weekday, Monday first.', fn: (weekday_hour) =>
+    ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((label, i) => ({weekday: i + 1, label, purchases: weekday_hour.filter((r) => Number(r.weekday) === i + 1).reduce((a, r) => a + Number(r.purchases), 0)}))
+  });
+
+  dash.calc('by_hour', {inputs: ['weekday_hour'], title: 'Purchases by hour', description: 'Purchases for each hour of the day, Melbourne time.', fn: (weekday_hour) =>
+    Array.from({length: 24}, (_, h) => ({hour: h, purchases: weekday_hour.filter((r) => Number(r.hour) === h).reduce((a, r) => a + Number(r.purchases), 0)}))
+  });
+
+  dash.calc('top_days', {inputs: ['daily'], title: 'Busiest days', description: 'The six days with the most first purchases.', fn: (daily) =>
+    [...daily].sort((a, b) => Number(b.total) - Number(a.total) || (a.day < b.day ? -1 : 1)).slice(0, 6)
+      .map((r) => ({day: r.day, total: Number(r.total), one_time: Number(r.one_time), subscription: Number(r.subscription), plan: Number(r.plan)}))
+  });
+
+  dash.onData(() => {
+    document.querySelectorAll('.ep .sw[data-i]').forEach((e) => { e.style.background = dash.colors[Number(e.dataset.i)] || ''; });
+  });
+</script>
+
+<script>
+  window.epParse = d3.utcParse('%Y-%m-%d');
+  window.epFmtDay = d3.utcFormat('%a %-d %b');
+
+  dash.draw('stat', (el) => {
+    const d = dash.data(el.dataset.source);
+    const row = Number(el.dataset.row || 0);
+    if (d.status !== 'ok' || !Array.isArray(d.data) || !d.data[row]) { el.textContent = '—'; return; }
+    const v = d.data[row][el.dataset.field];
+    if (el.dataset.fmt === 'aud') el.textContent = '$' + d3.format(',.0f')(Number(v));
+    else if (el.dataset.fmt === 'date') el.textContent = window.epFmtDay(window.epParse(v));
+    else el.textContent = typeof v === 'number' ? d3.format(',')(v) : String(v);
+  });
+
+  window.epDays = (rows) => {
+    const keys = rows.map((r) => r.day).sort();
+    const start = d3.utcDay.offset(window.epParse(keys[0]), -1);
+    const end = d3.utcDay.offset(window.epParse(keys[keys.length - 1]), 2);
+    return d3.utcDay.range(start, end).map(d3.utcFormat('%Y-%m-%d'));
+  };
+
+  window.epTip = (el) => {
+    const tip = document.createElement('div');
+    tip.className = 'tip';
+    tip.hidden = true;
+    const show = (ev, lines) => {
+      tip.replaceChildren(...lines.map((t, i) => { const n = document.createElement(i ? 'span' : 'b'); n.textContent = t; return n; }));
+      tip.hidden = false;
+      const box = el.getBoundingClientRect();
+      const px = ev.clientX - box.left, py = ev.clientY - box.top;
+      const w = tip.offsetWidth;
+      tip.style.left = Math.max(0, Math.min(box.width - w, px - w / 2)) + 'px';
+      tip.style.top = Math.max(0, py - tip.offsetHeight - 12) + 'px';
+    };
+    return {tip, show, hide: () => { tip.hidden = true; }};
+  };
+
+  window.epPlaceholder = (el, d) => {
+    el.replaceChildren();
+    const p = document.createElement('p');
+    p.className = 'muted';
+    p.textContent = d.status === 'error' ? 'Failed to load' : '—';
+    el.append(p);
+  };
+
+  dash.draw('daily', (el) => {
+    const d = dash.data('daily');
+    if (d.status !== 'ok' || !d.data.length) { window.epPlaceholder(el, d); return; }
+    const rows = d.data.map((r) => ({day: r.day, one_time: Number(r.one_time), subscription: Number(r.subscription), plan: Number(r.plan), total: Number(r.total), revenue: Number(r.revenue_aud)}));
+    const byDay = new Map(rows.map((r) => [r.day, r]));
+    const ap = dash.data('applications');
+    const days = window.epDays(rows.concat(ap.status === 'ok' ? ap.data : []));
+    const full = days.map((k) => byDay.get(k) || {day: k, one_time: 0, subscription: 0, plan: 0, total: 0, revenue: 0});
+    const keys = ['one_time', 'subscription', 'plan'];
+    const W = Math.max(280, el.clientWidth), H = 260, m = {t: 12, r: 6, b: 26, l: 26};
+    const x = d3.scaleBand(days, [m.l, W - m.r]).padding(0.15);
+    const y = d3.scaleLinear([0, d3.max(full, (r) => r.total)], [H - m.b, m.t]).nice();
+    const svg = d3.create('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img')
+      .attr('aria-label', 'Bar chart of Elite program first purchases per day from early March to late April 2026, stacked by payment type. The biggest spike is 2 to 4 March.');
+    svg.append('g').attr('class', 'grid').selectAll('line').data(y.ticks(4)).join('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y).attr('y2', y);
+    svg.append('g').attr('class', 'axis').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(4).tickSize(0).tickPadding(6).tickFormat(d3.format('d'))).call((g) => g.select('.domain').remove());
+    const mondays = days.filter((k) => window.epParse(k).getUTCDay() === 1);
+    const step = W < 520 ? 2 : 1;
+    svg.append('g').attr('class', 'axis').attr('transform', `translate(0,${H - m.b})`)
+      .call(d3.axisBottom(x).tickValues(mondays.filter((_, i) => i % step === 0)).tickSize(3).tickFormat((k) => d3.utcFormat('%-d %b')(window.epParse(k))));
+    const series = d3.stack().keys(keys)(full);
+    svg.append('g').selectAll('g').data(series).join('g').style('fill', (s, i) => dash.colors[i])
+      .selectAll('rect').data((s) => s).join('rect')
+      .attr('x', (p) => x(p.data.day)).attr('width', x.bandwidth()).attr('y', (p) => y(p[1])).attr('height', (p) => Math.max(0, y(p[0]) - y(p[1])));
+    const peak = full.reduce((a, r) => (r.total > a.total ? r : a), full[0]);
+    svg.append('text').attr('class', 'vlab').attr('x', x(peak.day) + x.bandwidth() + 4).attr('y', y(peak.total) + 10).text(`${peak.total} on ${d3.utcFormat('%-d %b')(window.epParse(peak.day))}`);
+    const t = window.epTip(el);
+    svg.append('g').selectAll('rect').data(full).join('rect')
+      .attr('x', (r) => x(r.day) - (x.step() - x.bandwidth()) / 2).attr('width', x.step()).attr('y', m.t).attr('height', H - m.b - m.t).attr('fill', 'transparent')
+      .on('pointermove', (ev, r) => t.show(ev, [window.epFmtDay(window.epParse(r.day)), `${r.total} first purchase${r.total === 1 ? '' : 's'}`, `Paid in full: ${r.one_time}`, `Flexi started: ${r.subscription}`, `Plan or deal: ${r.plan}`, `Collected: $${d3.format(',.2f')(r.revenue)}`]))
+      .on('pointerleave', t.hide);
+    el.replaceChildren(svg.node(), t.tip);
+  });
+
+  dash.draw('apps', (el) => {
+    const a = dash.data('applications'), d = dash.data('daily');
+    if (a.status !== 'ok' || d.status !== 'ok' || !d.data.length) { window.epPlaceholder(el, a.status !== 'ok' ? a : d); return; }
+    const days = window.epDays(d.data.concat(a.data));
+    const byDay = new Map(a.data.map((r) => [r.day, Number(r.applications)]));
+    const full = days.map((k) => ({day: k, n: byDay.get(k) || 0}));
+    const W = Math.max(280, el.clientWidth), H = 150, m = {t: 8, r: 6, b: 26, l: 26};
+    const x = d3.scaleBand(days, [m.l, W - m.r]).padding(0.15);
+    const y = d3.scaleLinear([0, d3.max(full, (r) => r.n) || 1], [H - m.b, m.t]).nice();
+    const svg = d3.create('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'Bar chart of Elite applications per day over the same dates as the purchases chart.');
+    svg.append('g').attr('class', 'grid').selectAll('line').data(y.ticks(3)).join('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y).attr('y2', y);
+    svg.append('g').attr('class', 'axis').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(3).tickSize(0).tickPadding(6).tickFormat(d3.format('d'))).call((g) => g.select('.domain').remove());
+    const mondays = days.filter((k) => window.epParse(k).getUTCDay() === 1);
+    const step = W < 520 ? 2 : 1;
+    svg.append('g').attr('class', 'axis').attr('transform', `translate(0,${H - m.b})`)
+      .call(d3.axisBottom(x).tickValues(mondays.filter((_, i) => i % step === 0)).tickSize(3).tickFormat((k) => d3.utcFormat('%-d %b')(window.epParse(k))));
+    svg.append('g').style('fill', 'var(--cds-chart-muted)').selectAll('rect').data(full).join('rect')
+      .attr('x', (r) => x(r.day)).attr('width', x.bandwidth()).attr('y', (r) => y(r.n)).attr('height', (r) => y(0) - y(r.n));
+    const t = window.epTip(el);
+    svg.append('g').selectAll('rect').data(full).join('rect')
+      .attr('x', (r) => x(r.day) - (x.step() - x.bandwidth()) / 2).attr('width', x.step()).attr('y', m.t).attr('height', H - m.b - m.t).attr('fill', 'transparent')
+      .on('pointermove', (ev, r) => t.show(ev, [window.epFmtDay(window.epParse(r.day)), `${r.n} application${r.n === 1 ? '' : 's'}`]))
+      .on('pointerleave', t.hide);
+    el.replaceChildren(svg.node(), t.tip);
+  });
+
+  window.epBars = (el, rows, label, ariaLabel, every) => {
+    const W = Math.max(260, el.clientWidth), H = 150, m = {t: 16, r: 4, b: 24, l: 4};
+    const x = d3.scaleBand(rows.map((r) => r.key), [m.l, W - m.r]).padding(0.2);
+    const y = d3.scaleLinear([0, d3.max(rows, (r) => r.n) || 1], [H - m.b, m.t]);
+    const svg = d3.create('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', ariaLabel);
+    svg.append('g').style('fill', dash.colors[0]).selectAll('rect').data(rows).join('rect')
+      .attr('x', (r) => x(r.key)).attr('width', x.bandwidth()).attr('y', (r) => y(r.n)).attr('height', (r) => y(0) - y(r.n));
+    svg.append('g').selectAll('text').data(rows.filter((r) => r.n > 0 && (every === 1 || x.bandwidth() > 14))).join('text').attr('class', 'vlab')
+      .attr('text-anchor', 'middle').attr('x', (r) => x(r.key) + x.bandwidth() / 2).attr('y', (r) => y(r.n) - 4).text((r) => r.n);
+    svg.append('g').attr('class', 'axis').attr('transform', `translate(0,${H - m.b})`)
+      .call(d3.axisBottom(x).tickValues(rows.filter((_, i) => i % every === 0).map((r) => r.key)).tickSize(0).tickPadding(6).tickFormat(label))
+      .call((g) => g.select('.domain').remove());
+    const t = window.epTip(el);
+    svg.append('g').selectAll('rect').data(rows).join('rect')
+      .attr('x', (r) => x(r.key) - (x.step() - x.bandwidth()) / 2).attr('width', x.step()).attr('y', m.t).attr('height', H - m.b - m.t).attr('fill', 'transparent')
+      .on('pointermove', (ev, r) => t.show(ev, [r.title, `${r.n} purchase${r.n === 1 ? '' : 's'}`]))
+      .on('pointerleave', t.hide);
+    el.replaceChildren(svg.node(), t.tip);
+  };
+
+  dash.draw('weekday', (el) => {
+    const d = dash.data('by_weekday');
+    if (d.status !== 'ok' || !Array.isArray(d.data) || !d.data.length) { window.epPlaceholder(el, d); return; }
+    const rows = d.data.map((r) => ({key: r.label, n: r.purchases, title: r.label}));
+    window.epBars(el, rows, (k) => k, 'Bar chart of Elite first purchases by day of week. Tuesday and Monday lead; Saturday has none.', 1);
+  });
+
+  dash.draw('hour', (el) => {
+    const d = dash.data('by_hour');
+    if (d.status !== 'ok' || !Array.isArray(d.data) || !d.data.length) { window.epPlaceholder(el, d); return; }
+    const name = (h) => (h % 12 === 0 ? 12 : h % 12) + (h < 12 ? 'am' : 'pm');
+    const rows = d.data.map((r) => ({key: String(r.hour), n: r.purchases, title: `${name(r.hour)} – ${name((r.hour + 1) % 24)}`}));
+    window.epBars(el, rows, (k) => name(Number(k)), 'Bar chart of Elite first purchases by hour of day, Melbourne time. The peak is 8pm to 11pm.', 3);
+  });
+
+  dash.draw('toptable', (tb) => {
+    const d = dash.data('top_days');
+    tb.replaceChildren();
+    if (d.status !== 'ok' || !Array.isArray(d.data)) return;
+    d.data.forEach((r) => {
+      const tr = document.createElement('tr');
+      tr.dataset.key = r.day;
+      [window.epFmtDay(window.epParse(r.day)), r.total, r.one_time, r.subscription, r.plan].forEach((v) => { const td = document.createElement('td'); td.textContent = String(v); tr.append(td); });
+      tb.append(tr);
+    });
+  });
+</script>
+<script src="catchment.js"></script>
