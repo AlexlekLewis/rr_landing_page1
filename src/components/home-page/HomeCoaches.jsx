@@ -18,6 +18,24 @@ const coaches = [
         image: '/assets/coaches/andy-crook.jpg',
         initials: 'AC',
     },
+    // Alex Lewis + Alex Thornhill added to the leadership team (Alex, 3 Nov 2026).
+    // Bios follow the approved copy in coaches/coachData.js.
+    {
+        name: 'Alex Lewis',
+        role: 'Director of Cricket and Head Coach',
+        org: 'Rajasthan Royals Academy Melbourne',
+        bio: 'Alex leads the Academy’s program development, talent identification and the running of both centres, and is Head Coach at the Mickleham centre. His focus is giving young players a safe place to chase their growth, without the fear of failure or judgement.',
+        image: '/assets/coaches/alex-lewis.jpg',
+        initials: 'AL',
+    },
+    {
+        name: 'Alex Thornhill',
+        role: 'Cranbourne North · South-East Manager',
+        org: 'Rajasthan Royals Academy Melbourne',
+        bio: 'Alex runs the Academy’s Cranbourne North centre and manages the South-East Melbourne region. A batting specialist, he has coached in the English county system and at Fitzroy Doncaster in Victorian Premier Cricket, and leads the cricket program at Xavier College.',
+        image: '/assets/coaches/alex-thornhill.jpg',
+        initials: 'AT',
+    },
 ];
 
 const HomeCoaches = () => {
