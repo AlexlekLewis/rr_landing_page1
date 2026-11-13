@@ -23,6 +23,12 @@ const TIERS: CompetitionTierInput[] = [
   { code: "REP-16M", ctiValue: 0.45, expectedMidpointAge: 15 },
 ];
 
+// The date the ages in the case descriptions are true on ("16yo", "14yo"…). The engine
+// works age out at this date, not today, so the study doesn't age with the calendar.
+// A, B and J have 1 September birthdays: on 1 Sep 2026 A turned 17 and B turned 15,
+// and G1/G2 started failing.
+const NOW = new Date(2026, 6, 1); // 1 Jul 2026
+
 // ── The age-appropriateness guardrail (the layer the website team must implement) ──
 const BANDS = [
   { name: "U11-U13", hi: 13 },
@@ -83,6 +89,7 @@ function run(f: MiniForm) {
     ],
     competitionTiers: TIERS,
     currentSeasonStartYear: 2025,
+    asAt: NOW,
   });
   const lane =
     dna.battingScore != null && (dna.bowlingScore == null || dna.battingScore >= dna.bowlingScore) ? "Batting" : "Bowling";

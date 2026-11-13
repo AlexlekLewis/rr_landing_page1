@@ -4,8 +4,19 @@
 //   • play_up is a COACH FLAG, set only for rep + graded senior; it never moves anyone.
 //   Age bands (PG_BANDS): ≤14 → 12-14 · 15-16 → 14-16 · ≥17 → 17+
 // ============================================================
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeAll, afterAll, vi } from "vitest";
 import { BLANK_FORM, computePlacement, type ApplyForm } from "./flow";
+
+// computePlacement works each player's age out from today's date, and these fixtures use
+// literal birth dates (the trailing comments give the age). Freeze the test clock at a date
+// those ages are true on; otherwise every player here turns a year older on 1 Jan 2027 and
+// some land in the next band up.
+beforeAll(() => {
+  vi.setSystemTime(new Date(2026, 6, 1)); // 1 Jul 2026
+});
+afterAll(() => {
+  vi.useRealTimers();
+});
 
 const mk = (dob: string, extra: Partial<ApplyForm> = {}): ApplyForm => ({
   ...BLANK_FORM,
