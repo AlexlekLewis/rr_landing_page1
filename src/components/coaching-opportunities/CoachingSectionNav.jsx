@@ -5,16 +5,10 @@ import React, { useEffect, useRef, useState } from 'react';
 // reference to coaching"). It sits under the fixed pink Navbar and highlights the
 // section currently on screen; on a phone it scrolls sideways.
 export const COACHING_SECTIONS = [
-    { id: 'where-when', label: 'Where & When' },
-    { id: 'roles', label: 'Coaching Roles' },
-    { id: 'pathway', label: 'Coaching Pathway' },
-    { id: 'coaches-at-work', label: 'Coaches at Work' },
-    { id: 'why-coach', label: 'Why Coach Here' },
-    { id: 'video', label: 'Hear From Our Head Coach' },
-    { id: 'standards', label: 'Coaching Standards' },
-    { id: 'development', label: 'Coach Development' },
-    { id: 'hub', label: 'Coaching Hub' },
-    { id: 'process', label: 'How to Become a Coach' },
+    { id: 'what-it-is', label: 'What Coaching Here Is' },
+    { id: 'benefits', label: 'Coaching Benefits' },
+    { id: 'coaches-at-work', label: 'Coaches in Action' },
+    { id: 'how-to-join', label: 'How to Become a Coach' },
 ];
 
 const CoachingSectionNav = () => {

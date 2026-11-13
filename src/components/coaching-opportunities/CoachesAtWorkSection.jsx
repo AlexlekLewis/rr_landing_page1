@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import SectionHeader from './SectionHeader';
 
 // Our own coaches, in our own sessions: Junior Royals nights at the Melbourne
 // centres and the India tour nets. Every image is already in /public — stills taken
@@ -18,43 +19,14 @@ const PHOTOS = [
 ];
 
 const CoachesAtWorkSection = () => (
-    <section className="relative py-24 md:py-32 bg-white overflow-hidden">
+    <section className="relative py-20 md:py-28 bg-white overflow-hidden">
         <div className="relative max-w-6xl mx-auto px-6">
-            <div className="max-w-3xl mb-12">
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-4"
-                >
-                    Coaches at Work
-                </motion.p>
-                <motion.h2
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.1 }}
-                    className="text-3xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-6"
-                >
-                    What Coaching Here <span className="text-rr-pink">Looks Like.</span>
-                </motion.h2>
-                <motion.div
-                    initial={{ opacity: 0, scaleX: 0 }}
-                    whileInView={{ opacity: 1, scaleX: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.2 }}
-                    className="w-12 h-px bg-gradient-to-r from-rr-pink to-rr-blue mb-8 origin-left"
-                />
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.25 }}
-                    className="text-base md:text-lg text-rr-charcoal font-medium leading-relaxed"
-                >
-                    Small groups, real feedback, and coaches who get hands-on. These are our coaches in our own sessions — in the Melbourne nets and on tour in India.
-                </motion.p>
-            </div>
+            <SectionHeader
+                eyebrow="Coaches at Work"
+                title="Our Coaches"
+                accent="In Action."
+                intro="Small groups, real feedback and hands-on coaching, in the Melbourne nets and on tour in India."
+            />
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                 {PHOTOS.map((photo, i) => (

@@ -2,27 +2,13 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 
-// The coaching roles we're hiring for, surfaced in the hero so a coach knows within
-// two seconds whether there's a job here for them. Each one jumps to its full card
-// in the Coaching Roles section below.
-const HERO_ROLES = [
-    { label: 'Performance Squad Coach', anchor: 'role-performance-squad-coach' },
-    { label: 'Junior Royals Coach', anchor: 'role-junior-royals-coach' },
-    { label: 'Cadet Coach (start here)', anchor: 'role-cadet-coach' },
-];
-
 const HeroSection = () => {
     const scrollToForm = () => {
         document.getElementById('application-form')?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    const scrollToRoles = () => {
-        document.getElementById('roles')?.scrollIntoView({ behavior: 'smooth' });
-    };
-
-    const scrollToRole = (anchor) => {
-        const target = document.getElementById(anchor) || document.getElementById('roles');
-        target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const scrollToBenefits = () => {
+        document.getElementById('benefits')?.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (
@@ -73,33 +59,6 @@ const HeroSection = () => {
                     className="w-16 h-px bg-gradient-to-r from-rr-pink to-rr-blue mb-6 origin-left"
                 />
 
-                {/* Role quick-links — the actual jobs, clickable, straight to the detail */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.45 }}
-                    className="mb-8"
-                >
-                    <p className="text-[11px] font-bold text-white/50 uppercase tracking-[0.3em] mb-3">
-                        Coaching roles — tap one to read it
-                    </p>
-                    <div className="flex flex-wrap gap-2 md:gap-3">
-                        {HERO_ROLES.map((role) => (
-                            <button
-                                key={role.anchor}
-                                type="button"
-                                onClick={() => scrollToRole(role.anchor)}
-                                className="group bg-white/5 hover:bg-rr-pink border border-white/20 hover:border-rr-pink text-white text-[11px] md:text-xs font-bold uppercase tracking-widest px-4 py-2.5 rounded-full backdrop-blur-sm transition-all duration-300 inline-flex items-center gap-2"
-                            >
-                                {role.label}
-                                <svg className="w-3 h-3 opacity-50 group-hover:opacity-100 group-hover:translate-y-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                                </svg>
-                            </button>
-                        ))}
-                    </div>
-                </motion.div>
-
                 {/* Subhead */}
                 <motion.p
                     initial={{ opacity: 0, y: 20 }}
@@ -107,7 +66,7 @@ const HeroSection = () => {
                     transition={{ duration: 0.6, delay: 0.4 }}
                     className="text-base md:text-xl text-white/85 font-medium leading-relaxed max-w-3xl mb-6"
                 >
-                    We're recruiting cricket coaches for the 2026–27 season at our Melbourne centres in Mickleham and Cranbourne North. Experienced coach or just starting out, there's a coaching role here for you.
+                    Coach some of Melbourne's best young cricketers inside the Royals Group, with the chance to travel to the Rajasthan Royals High Performance Centre in India. Experienced coach or just starting out, there's a role for you.
                 </motion.p>
 
                 {/* CTAs */}
@@ -127,17 +86,17 @@ const HeroSection = () => {
                         </svg>
                     </button>
                     <button
-                        onClick={scrollToRoles}
+                        onClick={scrollToBenefits}
                         className="group bg-white/5 hover:bg-white/10 border border-white/20 hover:border-white/40 text-white font-bold uppercase tracking-widest px-8 md:px-10 py-4 rounded-full transition-all duration-300 flex items-center gap-3 justify-center"
                     >
-                        See the Coaching Roles
+                        See the Benefits
                     </button>
                 </motion.div>
             </div>
 
             {/* Scroll indicator */}
             <motion.button
-                onClick={scrollToRoles}
+                onClick={scrollToBenefits}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.2 }}

@@ -336,7 +336,7 @@ const ApplicationForm = () => {
                         transition={{ delay: 0.2 }}
                         className="text-white/70 font-medium"
                     >
-                        Tell us about your cricket and your coaching. Our Head Coach and Director of Cricket personally read every coaching application.
+                        Tell us about your cricket and your coaching. Our coaching leadership reads every application.
                     </motion.p>
                 </div>
 
