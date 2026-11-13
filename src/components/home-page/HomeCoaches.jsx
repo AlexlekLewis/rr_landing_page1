@@ -7,7 +7,7 @@ const coaches = [
         role: 'Head of International Player Development and Performance Coach',
         org: 'Rajasthan Royals',
         bio: 'With deep roots in the Rajasthan Royals organisation, Siddhartha leads the RRA Melbourne vision — bridging IPL-level performance philosophy with grassroots cricket development across Victoria.',
-        image: '/assets/coaches/siddhartha-lahiri.jpg',
+        image: '/assets/coaches/sid-lahiri-halla.jpg',
         initials: 'SL',
     },
     {
@@ -15,7 +15,7 @@ const coaches = [
         role: 'Academy Director',
         org: 'Rajasthan Royals Academy Melbourne',
         bio: 'An experienced professional cricketer, coach and sports executive, Andy oversees the coaching standards and program delivery across all RRA Melbourne programs, ensuring every session reflects the Royals Way.',
-        image: '/assets/coaches/andy-crook.jpg',
+        image: '/assets/coaches/andy-crook-halla.jpg',
         initials: 'AC',
     },
 ];

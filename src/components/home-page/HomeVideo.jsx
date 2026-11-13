@@ -61,7 +61,7 @@ const HomeVideo = () => {
                         {/* Speaker credit */}
                         <div className="flex items-center gap-4 p-4 bg-white/5 border border-white/10 rounded-2xl">
                             <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 border-2 border-rr-pink/40">
-                                <img src="/assets/coaches/siddhartha-lahiri.jpg" alt="Siddhartha Lahiri" className="w-full h-full object-cover object-top" />
+                                <img src="/assets/coaches/sid-lahiri-halla.jpg" alt="Siddhartha Lahiri" className="w-full h-full object-cover object-top" />
                             </div>
                             <div>
                                 <p className="text-white font-black uppercase tracking-wide text-sm">Siddhartha Lahiri</p>
