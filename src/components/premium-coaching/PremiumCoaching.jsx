@@ -5,11 +5,12 @@ import Footer from '../Footer';
 import PartnerStack from '../power-game/PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import PremiumCoachingForm from './PremiumCoachingForm';
+import PremiumCoachingGallery from './PremiumCoachingGallery';
 import {
     ROUTE, FORM_ANCHOR, HERO, WHY, TECH, STEPS, FORMATS, TIERS, CENTRES, FAQ,
     coachesAt, tierOf,
 } from './premiumCoachingData';
-import { HERO_IMAGE, PHOTOS, VIDEOS } from './premiumCoachingMedia';
+import { HERO_IMAGE, VIDEOS } from './premiumCoachingMedia';
 
 // Royals Private Coaching: the premium one-to-one offer (Andy, 13 Nov 2026).
 // Order: Hero (Why line + What facts + CTA) → WHY different → HOW: the tech →
@@ -287,29 +288,6 @@ const Video = () => (
     </section>
 );
 
-// ── SEE IT: photos ─────────────────────────────────────
-const Photos = () => (
-    <section className="bg-white py-20 md:py-28">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <Eyebrow>Photos</Eyebrow>
-            <H2 className="mb-12">Every ball, up close</H2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
-                {PHOTOS.map((p) => (
-                    <figure key={p.caption}>
-                        <div className="aspect-[3/4] rounded-2xl overflow-hidden bg-slate-100">
-                            <img src={p.src} alt={p.alt} loading="lazy" className="w-full h-full object-cover" />
-                        </div>
-                        <figcaption className="mt-2">
-                            <p className="text-sm text-rr-dark font-bold leading-snug">{p.caption}</p>
-                            <p className="text-xs text-slate-500 font-medium">{p.where}</p>
-                        </figcaption>
-                    </figure>
-                ))}
-            </div>
-        </div>
-    </section>
-);
-
 // ── FAQ ─────────────────────────────────────────────────
 const Faq = () => {
     const [open, setOpen] = useState(0);
@@ -371,7 +349,7 @@ const PremiumCoaching = () => {
                 <div id="options" className={ANCHOR}><Options /></div>
                 <div id="coaches" className={ANCHOR}><Coaches onPick={pickCentre} /></div>
                 <div id="video" className={ANCHOR}><Video /></div>
-                <div id="photos" className={ANCHOR}><Photos /></div>
+                <div id="photos" className={ANCHOR}><PremiumCoachingGallery /></div>
                 <div id={FORM_ANCHOR} className={ANCHOR}><PremiumCoachingForm key={formKey} initialCentre={centre} /></div>
                 <div id="faq" className={ANCHOR}><Faq /></div>
             </main>
