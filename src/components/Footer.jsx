@@ -28,6 +28,7 @@ const PROGRAMS = [
 
 const ACADEMY = [
     { label: 'Our Coaches', to: '/coaches' },
+    { label: 'News & Features', to: '/news' },
     { label: 'Coaching Jobs — We\'re Hiring', to: '/careers' },
     { label: 'Academy Shop', to: '/academy-shop' },
     { label: 'Reviews', to: '/reviews' },

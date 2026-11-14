@@ -6,6 +6,22 @@
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+  <!-- News & features (Andy, 14 Nov 2026): add each new story here too -->
+  <url>
+    <loc>https://rramelbourne.com/news</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rramelbourne.com/news/inside-our-first-tour-rajasthan-royals-high-performance-centre</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rramelbourne.com/news/alex-lewis-power-league-round-two</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
   <url>
     <loc>https://rramelbourne.com/tours</loc>
     <changefreq>weekly</changefreq>

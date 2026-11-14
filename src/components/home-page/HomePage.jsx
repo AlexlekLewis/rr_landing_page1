@@ -7,6 +7,7 @@ import HomeAbout from './HomeAbout';
 import HomeProgramCards from './HomeProgramCards';
 import HomeVideo from './HomeVideo';
 import HomeMedia from './HomeMedia';
+import HomeNews from '../news/HomeNews';
 import HomeCareersBanner from './HomeCareersBanner';
 import HomeShopFeature from './HomeShopFeature';
 import HomeCinematicBreak from './HomeCinematicBreak';
@@ -21,7 +22,7 @@ import OpenDaysModal from './OpenDaysModal';
 import OpenDaysTicket from './OpenDaysTicket';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
-const SECTIONS = ['hero', 'trust', 'about', 'video', 'photos', 'programs', 'coaches', 'faq', 'final-cta'];
+const SECTIONS = ['hero', 'trust', 'about', 'video', 'photos', 'news', 'programs', 'coaches', 'faq', 'final-cta'];
 const OPEN_DAYS_KEY = 'openDaysModalDismissed';
 
 const HomePage = () => {
@@ -68,6 +69,8 @@ const HomePage = () => {
                 <div id="video"><HomeVideo /></div>
                 {/* Photos & videos from every program (Andy, 13 Nov 2026) */}
                 <div id="photos" className="scroll-mt-24"><HomeMedia /></div>
+                {/* News & features: the three latest stories (Andy, 14 Nov 2026) */}
+                <div id="news" className="scroll-mt-24"><HomeNews tone="grey" /></div>
                 <div id="careers-banner"><HomeCareersBanner /></div>
                 <div id="programs"><HomeProgramCards /></div>
                 <div id="shop"><HomeShopFeature /></div>

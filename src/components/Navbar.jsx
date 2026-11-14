@@ -37,6 +37,7 @@ const HOME_NAV = [
     { label: 'Coaches', id: 'coaches' },
     { label: 'Private Coaching', route: '/mickleham', tag: 'Mickleham' },
     { label: 'Coach With Us', route: '/careers' },
+    { label: 'News', route: '/news' },
     { label: 'FAQ', id: 'faq' },
 ];
 

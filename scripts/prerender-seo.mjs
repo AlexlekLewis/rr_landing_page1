@@ -36,7 +36,11 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist');
 
-const ROUTES = ['/performance-squads', '/performance-squads-open-trial', '/sid-juniors', '/junior-royals', '/spin-club', '/power-league', '/lower-plenty-junior-royals-day'];
+const { NEWS_STORIES } = await import('../src/components/news/newsStories.js');
+// News: the /news page and every story, so each story's link previews with its own photo.
+const NEWS_ROUTES = ['/news', ...NEWS_STORIES.map((n) => `/news/${n.slug}`)];
+
+const ROUTES = [...NEWS_ROUTES, '/performance-squads', '/performance-squads-open-trial', '/sid-juniors', '/junior-royals', '/spin-club', '/power-league', '/lower-plenty-junior-royals-day'];
 
 const escapeAttr = (s) =>
     String(s)
