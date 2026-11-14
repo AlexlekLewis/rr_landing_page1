@@ -8,7 +8,7 @@ import NotFound from '../NotFound';
 import ShareBar from './ShareBar';
 import HomeNews from './HomeNews';
 import { ProgramsCta } from './NewsPage';
-import { STORIES } from './news';
+import { useStories } from './news';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
 // A story's own page, /news/<slug>: the link people copy and share. Same layout as a story
@@ -18,9 +18,12 @@ const SECTIONS = ['story', 'more', 'programs'];
 
 const StoryPage = () => {
     const { slug } = useParams();
-    const story = STORIES.find((s) => s.id === slug);
+    const { stories, ready } = useStories();
+    const story = stories.find((s) => s.id === slug);
     usePageAnalytics(`/news/${slug}`, { sections: SECTIONS });
     useEffect(() => { window.scrollTo(0, 0); }, [slug]);
+    // A story shared from Power Cricket arrives with its feed: wait for it before saying "not found".
+    if (!story && !ready) return <div className="min-h-screen bg-slate-50" aria-busy="true" />;
     if (!story) return <NotFound />;
 
     return (

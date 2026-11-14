@@ -19,6 +19,11 @@
 //   gallery       optional extra photos shown under the story
 //   cta           optional { label, href } button to the program the story is about
 //   source        optional { name, note }: where a story was pulled in from
+//   sites         where it appears: ['rra-melbourne'] (this site, the default if left out),
+//                 ['power-cricket'] or ['rra-melbourne', 'power-cricket'] for both. A story tagged
+//                 'power-cricket' is published in our feed (rramelbourne.com/news-feed.json) and
+//                 shows on the Power Cricket site's News & features too (see network.js).
+//                 Never tag a story for Power Cricket that only makes sense to Academy families.
 //
 // RULES (same editorial rules as Power Cricket's content/EDITORIAL_GUIDE.md):
 //   - Only facts from material Andy or Alex supplied, or copy already approved on the
@@ -26,11 +31,10 @@
 //   - Never name a junior player (under 18). Coaches and adult captains can be named.
 //   - Australian English. Lead with the news; short paragraphs; finish with what to do next.
 //
-// PULLING STORIES IN FROM OTHER SITES: a story from another part of the network (Power
-// Cricket, Power League, Power Game) is copied in here with `source`, shown in full on our
-// site with a "From Power Cricket" line. powercricket.com.au is not public yet ("Coming
-// soon"), so we show the story here rather than link out to it. When both sites read
-// stories from Supabase, this file can pull them in automatically instead.
+// STORIES FROM POWER CRICKET arrive by themselves: when the Power Cricket journalist tags a
+// story for 'rra-melbourne', it appears here from Power Cricket's feed (network.js), shown in
+// full with a "From Power Cricket" line, with no change to this file. A story only needs
+// copying in here to change its wording for our site (our copy wins on the same slug).
 //
 // This file is plain data on purpose: scripts/prerender-seo.mjs and src/seo/pageSeo.js
 // read it in Node to give every story its own share preview.
@@ -41,11 +45,13 @@ const IMG = '/assets/news';
 
 export const NEWS_STORIES = [
     {
-        // Pulled in from Power Cricket (src/data/news-stories.js, slug alex-lewis-power-league-round-two),
-        // approved for posting by Andy on 13 Nov 2026. Text as published there, except the last
-        // sentence: it pointed to Power Cricket's squads story, which is not on this site because
-        // its full junior squads name players under 18.
+        // Also in Power Cricket's feed (tagged for both sites there), but kept here because our
+        // wording differs: approved for posting by Andy on 13 Nov 2026, text as published on Power
+        // Cricket except the last sentence, which pointed to Power Cricket's squads story. That
+        // story is not on this site because its full junior squads name players under 18.
+        // Our copy wins over the feed's (same slug).
         slug: 'alex-lewis-power-league-round-two',
+        sites: ['rra-melbourne'],
         brand: 'Power League',
         type: 'article',
         publishedAt: '2026-11-13',
@@ -76,6 +82,7 @@ export const NEWS_STORIES = [
         // Written from copy already approved and live on /tours (india-tour-2026/itCopy.js,
         // itMedia.js captions, Andy 10 Nov 2026). No quotes, prices or players' names.
         slug: 'inside-our-first-tour-rajasthan-royals-high-performance-centre',
+        sites: ['rra-melbourne'],
         brand: 'India Tour',
         type: 'article',
         publishedAt: '2026-11-14',

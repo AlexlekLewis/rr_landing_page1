@@ -4,7 +4,7 @@ import Navbar from '../Navbar';
 import Footer from '../Footer';
 import PartnerStack from '../power-game/PartnerStack';
 import NewsCard from './NewsCard';
-import { STORIES } from './news';
+import { useStories } from './news';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
 // /news: every story, newest first. The newest is the big featured card. Stories: newsStories.js.
@@ -27,7 +27,8 @@ export const ProgramsCta = () => (
 const NewsPage = () => {
     usePageAnalytics('/news', { sections: SECTIONS });
     useEffect(() => { window.scrollTo(0, 0); }, []);
-    const [lead, ...rest] = STORIES;
+    const { stories } = useStories();
+    const [lead, ...rest] = stories;
 
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">

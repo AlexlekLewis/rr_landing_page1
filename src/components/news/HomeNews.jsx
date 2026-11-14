@@ -2,12 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import NewsCard from './NewsCard';
-import { latest } from './news';
+import { useStories } from './news';
 
 // "News & features" strip: the three latest stories, with a link to /news. On the home page,
 // and as "More news" under every story. Hidden when there are no stories to show.
 const HomeNews = ({ eyebrow = 'News & features', title = <>The latest from <span className="text-rr-pink">the Academy</span></>, excludeId = null, tone = 'white' }) => {
-    const stories = latest(3, excludeId);
+    const { stories: all } = useStories();
+    const stories = all.filter((s) => s.id !== excludeId).slice(0, 3);
     if (stories.length === 0) return null;
     return (
         <section className={`py-16 md:py-20 ${tone === 'grey' ? 'bg-slate-50' : 'bg-white'}`} data-home-news>
