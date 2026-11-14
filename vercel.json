@@ -37,6 +37,10 @@
     {
       "path": "/api/sync-jr-term4",
       "schedule": "5 * * * *"
+    },
+    {
+      "path": "/api/notify-coach-applications",
+      "schedule": "*/10 * * * *"
     }
   ],
   "headers": [
