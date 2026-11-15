@@ -65,6 +65,23 @@ A paid page without this is not finished: don't open the PR, hand it off or put 
 Section numbers that skills cite (e.g. "CLAUDE.md §1") refer to the master CLAUDE.md in the
 team's Master Landing Page folder, not this file.
 
+## Shop, kit and stock: the Power Shop agent
+
+Andy, 15 Nov 2026: the shop (Royals Academy apparel, Royals supporter wear and other merchandise) is run by **Power
+Cricket (Whitewall Sport)** and shown on both powercricket.com.au and the RRA sites. One agent owns it. Its
+instructions live in the Power Cricket repo (`AlexlekLewis/power_cricket`): `.claude/skills/power-shop/SKILL.md`, with
+the current state in `docs/shop/STATUS.md`. Read both (local `../Power_Cricket` or GitHub) before changing:
+
+- the Academy Shop (`src/components/academy-shop/*`, `api/create-checkout-session.js`, the shop parts of
+  `api/stripe-webhook.js`, `api/sync-from-stripe.js`, `ShopOrdersDashboard.jsx`),
+- kit prices or kit checkouts (`api/_lib/uniformPricing.js`, `performance-squad-kit-checkout.js`, `TrainingShirtStep`),
+- the Academy stock system tables (`store_*`).
+
+Every page that sells kit or a training shirt (see the shirt rule above) must also leave the shirt countable in
+stock: a size, and a row in `store_entitlements` or `store_orders`. Add a dated note to `docs/shop/STATUS.md`
+"Hand-offs" in the Power Cricket repo whenever you add or change something that sells a physical product.
+Program kit stays sold by the Academy through RRA's Stripe; Power Shop orders never go into RRA tables.
+
 ## Skills for this site
 
 - `rr-page-generator`: build or audit a page (copy, structure, backend, promo surfaces).
