@@ -31,6 +31,8 @@ const formatDateTime = (iso) => {
 };
 
 const VENUE_LABELS = {
+    mickleham: 'Mickleham Indoor Sports Centre',
+    'cranbourne-north': 'Elite Cricket Centre — Cranbourne North',
     bundoora: 'Cutting Edge Cricket — Bundoora',
     hallam: 'Cricket Connect — Hallam',
 };
@@ -152,7 +154,10 @@ const ShopOrdersDashboard = () => {
         if (order.stripe_session_id) {
             setStripeLoading(true);
             try {
-                const res = await fetch(`/api/get-stripe-payment?session_id=${encodeURIComponent(order.stripe_session_id)}`);
+                const { data: { session } } = await supabase.auth.getSession();
+                const res = await fetch(`/api/get-stripe-payment?session_id=${encodeURIComponent(order.stripe_session_id)}`, {
+                    headers: session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {},
+                });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Failed to load Stripe data');
                 setStripeData(data);

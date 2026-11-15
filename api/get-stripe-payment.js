@@ -13,12 +13,36 @@
 // ============================================================
 
 import Stripe from 'stripe';
+import { createClient } from '@supabase/supabase-js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const SUPABASE_URL_FALLBACK = 'https://pudldzgmluwoocwxtzhw.supabase.co';
+
+// Customer payment details: dashboard staff only (same check as /api/sync-from-stripe).
+// Until 15 Nov 2026 this answered anyone who had a session id.
+async function verifyAdmin(req) {
+  const auth = req.headers.authorization || '';
+  const token = auth.startsWith('Bearer ') ? auth.slice(7) : null;
+  if (!token) return false;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!key) throw new Error('SUPABASE_SERVICE_ROLE_KEY is not set');
+  const sb = createClient(process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || SUPABASE_URL_FALLBACK, key);
+  const { data: { user }, error } = await sb.auth.getUser(token);
+  if (error || !user?.email) return false;
+  const { data } = await sb.from('dashboard_users').select('email').eq('email', user.email).eq('active', true).maybeSingle();
+  return Boolean(data);
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  try {
+    if (!(await verifyAdmin(req))) return res.status(401).json({ error: 'Not authorised' });
+  } catch (err) {
+    console.error('get-stripe-payment auth failed:', err.message);
+    return res.status(500).json({ error: 'Auth check failed' });
   }
 
   const { session_id } = req.query;
@@ -28,7 +52,7 @@ export default async function handler(req, res) {
 
   try {
     const session = await stripe.checkout.sessions.retrieve(session_id, {
-      expand: ['line_items', 'payment_intent', 'payment_intent.latest_charge'],
+      expand: ['line_items', 'payment_intent', 'payment_intent.latest_charge', 'shipping_cost.shipping_rate'],
     });
 
     const charge = session.payment_intent?.latest_charge;
@@ -50,7 +74,8 @@ export default async function handler(req, res) {
       amount_subtotal: session.amount_subtotal,
       amount_total: session.amount_total,
       amount_shipping: session.shipping_cost?.amount_total ?? 0,
-      shipping_label: session.shipping_cost?.shipping_rate_details?.display_name || '',
+      shipping_label: session.shipping_cost?.shipping_rate?.display_name || '',
+      sizes: session.metadata?.sizes || '',
       customer: {
         name: session.customer_details?.name || '',
         email: session.customer_details?.email || '',

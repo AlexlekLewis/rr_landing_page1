@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ShoppingBag, Plus, Minus, Trash2, Truck, MapPin } from 'lucide-react';
 import { useCart } from './CartContext';
-import { supabase } from '../../lib/supabase';
 import { PICKUP_VENUES, PICKUP_SUMMARY } from './pickupVenues';
 
 const FULFILLMENT_OPTIONS = [
@@ -48,50 +47,8 @@ const CartDrawer = () => {
     setCheckoutError(null);
 
     try {
-      // Split items by product type
-      const iplItems = items.filter(i => i.product.madeToOrder);
-      const trainingItems = items.filter(i => !i.product.madeToOrder);
-
-      const buildPayload = (lineItems) => ({
-        items: lineItems.map(i => ({
-          product_id: i.product.id,
-          product_name: i.product.name,
-          size: i.size,
-          quantity: i.quantity,
-          unit_price: i.product.price,
-        })),
-        fulfillment_method: fulfillment,
-        subtotal: lineItems.reduce((s, i) => s + (i.product.price ?? 0) * i.quantity, 0),
-        shipping_cost: fulfillmentCost,
-        total: grandTotal,
-        payment_status: 'pending',
-      });
-
-      // Log IPL shirt order to shop_orders_ipl
-      if (iplItems.length > 0) {
-        try {
-          const { data } = await supabase
-            .from('shop_orders_ipl')
-            .insert([{ ...buildPayload(iplItems), supplier_status: 'awaiting_bulk_order', pickup_venue: pickupVenue || null, pickup_day: pickupVenue ? PICKUP_VENUES.find(v => v.id === pickupVenue)?.days : null }])
-            .select('id').single();
-          if (data?.id) localStorage.setItem('shop_order_ipl_id', data.id);
-        } catch (e) { console.warn('IPL order log failed:', e); }
-      }
-
-      // Log training kit order to shop_orders_training
-      let orderData = null;
-      if (trainingItems.length > 0) {
-        try {
-          const { data } = await supabase
-            .from('shop_orders_training')
-            .insert([{ ...buildPayload(trainingItems), fulfillment_status: 'unfulfilled', pickup_venue: pickupVenue || null, pickup_day: pickupVenue ? PICKUP_VENUES.find(v => v.id === pickupVenue)?.days : null }])
-            .select('id').single();
-          orderData = data;
-          if (data?.id) localStorage.setItem('shop_order_id', data.id);
-        } catch (e) { console.warn('Training order log failed:', e); }
-      }
-
-      // Save fulfillment details for success page
+      // The server saves the order (with sizes and venue) before Stripe opens: see
+      // api/create-checkout-session.js. The browser no longer writes order rows.
       localStorage.setItem('shop_fulfillment', fulfillment);
       if (pickupVenue) localStorage.setItem('shop_pickup_venue', pickupVenue);
 
@@ -107,15 +64,15 @@ const CartDrawer = () => {
           })),
           fulfillment,
           pickupVenue: pickupVenue || null,
-          mtoSurcharge,
-          mtoQty,
-          orderId: localStorage.getItem('shop_order_id') || '',
-          iplOrderId: localStorage.getItem('shop_order_ipl_id') || '',
         }),
       });
 
       const { url, error: stripeError } = await response.json();
-      if (stripeError) throw new Error(stripeError);
+      if (stripeError) {
+        setCheckoutError(stripeError);
+        setIsCheckingOut(false);
+        return;
+      }
       if (url) {
         window.location.href = url;
       } else {

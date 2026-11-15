@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle, ArrowLeft, MapPin, Truck, Clock } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
-import { supabase } from '../../lib/supabase';
 import { pickupVenueDetails } from './pickupVenues';
 
 const ShopSuccess = () => {
-  const [updated, setUpdated] = useState(false);
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const fulfillment = params.get('fulfillment') || localStorage.getItem('shop_fulfillment');
@@ -20,33 +18,9 @@ const ShopSuccess = () => {
     localStorage.removeItem('shop_fulfillment');
     localStorage.removeItem('shop_pickup_venue');
 
-    const updateOrders = async () => {
-      const trainingId = localStorage.getItem('shop_order_id');
-      if (trainingId) {
-        try {
-          await supabase.from('shop_orders_training')
-            .update({ payment_status: 'completed' }).eq('id', trainingId);
-          localStorage.removeItem('shop_order_id');
-        } catch (e) { console.warn('Training order update failed:', e); }
-      }
-
-      const iplId = localStorage.getItem('shop_order_ipl_id');
-      if (iplId) {
-        try {
-          await supabase.from('shop_orders_ipl')
-            .update({ payment_status: 'completed' }).eq('id', iplId);
-          localStorage.removeItem('shop_order_ipl_id');
-        } catch (e) { console.warn('IPL order update failed:', e); }
-      }
-
-      if (trainingId || iplId) setUpdated(true);
-
-      // Clear fulfillment details
-      localStorage.removeItem('shop_fulfillment');
-      localStorage.removeItem('shop_pickup_venue');
-    };
-
-    updateOrders();
+    // Payment is confirmed by the Stripe webhook, never from the browser.
+    localStorage.removeItem('shop_order_id');
+    localStorage.removeItem('shop_order_ipl_id');
   }, []);
 
   const isPickup = fulfillment === 'pickup';
