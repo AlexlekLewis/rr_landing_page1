@@ -10,7 +10,7 @@
 // Keep in step with src/components/academy-shop/shopConfig.js.
 
 export const SHOP_PRODUCTS = {
-  'ipl-replica-shirt': { priceId: 'price_1TRJe7Io52UEA50yZ4i5OPwH', name: '2026 Rajasthan Royals IPL Replica Playing Shirt', madeToOrder: true, oneSize: false },
+  // The IPL replica shirt (price_1TRJe7Io52UEA50yZ4i5OPwH) was taken off sale on 15 Nov 2026, so checkout refuses it.
   'training-shirt':    { priceId: 'price_1TRJinIo52UEA50yaIwEA8Ni', name: 'RRA Melbourne Training Shirt', madeToOrder: false, oneSize: false },
   'training-shorts':   { priceId: 'price_1TRJqhIo52UEA50ycGPuIieZ', name: 'RRA Melbourne Training Shorts', madeToOrder: false, oneSize: false },
   'training-pants':    { priceId: 'price_1TRJt4Io52UEA50ydwZmfUKh', name: 'RRA Melbourne Training Pants', madeToOrder: false, oneSize: false },

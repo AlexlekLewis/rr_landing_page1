@@ -33,7 +33,7 @@ const ProductGrid = ({ products = PRODUCTS, embedded = false }) => {
                     <div className="mt-auto bg-rr-pink/5 border border-rr-pink/20 rounded-xl px-4 py-3">
                       <p className="text-xs font-bold text-rr-pink uppercase tracking-widest mb-1">Interested?</p>
                       <a
-                        href="mailto:info@rramelbourne.com?subject=IPL Replica Shirt Enquiry"
+                        href="mailto:info@rramelbourne.com?subject=Academy Shop Enquiry"
                         className="text-sm font-black text-rr-dark hover:text-rr-pink transition-colors break-all"
                       >
                         info@rramelbourne.com
