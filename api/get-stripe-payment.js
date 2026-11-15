@@ -81,7 +81,7 @@ export default async function handler(req, res) {
         email: session.customer_details?.email || '',
         phone: session.customer_details?.phone || '',
       },
-      shipping_address: session.shipping_details?.address || null,
+      shipping_address: session.collected_information?.shipping_details?.address || session.shipping_details?.address || null,
       line_items: lineItems,
       payment: charge ? {
         charge_id: charge.id,

@@ -123,7 +123,7 @@ const syncOneSession = async (sessionId) => {
   const customerName    = session.customer_details?.name || '';
   const customerEmail   = session.customer_details?.email || '';
   const customerPhone   = session.customer_details?.phone || '';
-  const shippingAddress = session.shipping_details?.address || null;
+  const shippingAddress = session.collected_information?.shipping_details?.address || session.shipping_details?.address || null;
   const fulfillmentMethod = fulfilmentFromSession(session);
 
   const lineItems = (session.line_items?.data || []).map(i => ({
