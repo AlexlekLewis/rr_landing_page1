@@ -37,7 +37,7 @@ export const HomeHeader = ({ onRegister }) => {
     const jump = (id) => (e) => { e.preventDefault(); setMenuOpen(false); document.getElementById(id)?.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth' }); };
     const register = (e) => { e.preventDefault(); setMenuOpen(false); onRegister(); };
     const progLinks = PROGRAMS_DROPDOWN.map((p) => (
-        <Link key={p.route} to={p.route} onClick={() => { setProgOpen(false); setMenuOpen(false); }}>
+        <Link key={p.route} to={p.route} data-cta={`nav-program-${p.route.slice(1)}`} onClick={() => { setProgOpen(false); setMenuOpen(false); }}>
             {p.label} {p.badge && <span className={tagClass(p.badgeColor)}>{p.badge}</span>}
         </Link>
     ));
@@ -61,7 +61,7 @@ export const HomeHeader = ({ onRegister }) => {
                     <div className="hdr-main">
                         <nav className="mainnav" aria-label="Main">
                             <div className={`ni${progOpen ? ' open' : ''}`} ref={progRef}>
-                                <button className="nl" type="button" aria-expanded={progOpen} aria-controls="progMenu" onClick={(e) => { e.stopPropagation(); setProgOpen((o) => !o); }}>
+                                <button className="nl" type="button" data-cta="nav-programs" aria-expanded={progOpen} aria-controls="progMenu" onClick={(e) => { e.stopPropagation(); setProgOpen((o) => !o); }}>
                                     Programs <ChevronDown />
                                 </button>
                                 <div className="dd" id="progMenu">
@@ -69,17 +69,17 @@ export const HomeHeader = ({ onRegister }) => {
                                     <a className="all" href="#programs" onClick={jump('hero')}>View All Programs →</a>
                                 </div>
                             </div>
-                            <div className="ni"><a className="nl" href="#about" onClick={jump('about')}>About</a></div>
-                            <div className="ni"><a className="nl" href="#coaches" onClick={jump('coaches')}>Coaches</a></div>
-                            <div className="ni"><Link className="nl" to="/mickleham">Private Coaching</Link></div>
-                            <div className="ni"><Link className="nl" to="/news">News</Link></div>
-                            <div className="ni"><Link className="nl" to="/careers">Careers</Link></div>
-                            <div className="ni"><a className="nl" href="#faq" onClick={jump('faq')}>FAQ</a></div>
+                            <div className="ni"><a className="nl" href="#about" data-cta="nav-about" onClick={jump('about')}>About</a></div>
+                            <div className="ni"><a className="nl" href="#coaches" data-cta="nav-coaches" onClick={jump('coaches')}>Coaches</a></div>
+                            <div className="ni"><Link className="nl" to="/mickleham" data-cta="nav-private-coaching">Private Coaching</Link></div>
+                            <div className="ni"><Link className="nl" to="/news" data-cta="nav-news">News</Link></div>
+                            <div className="ni"><Link className="nl" to="/careers" data-cta="nav-careers">Careers</Link></div>
+                            <div className="ni"><a className="nl" href="#faq" data-cta="nav-faq" onClick={jump('faq')}>FAQ</a></div>
                         </nav>
                         <div className="hdr-actions">
-                            <Link className="shop-link" to="/academy-shop"><ShoppingCart /><span>Shop</span></Link>
+                            <Link className="shop-link" to="/academy-shop" data-cta="nav-shop"><ShoppingCart /><span>Shop</span></Link>
                             <a className="btn" href="#register" onClick={register} data-cta="home-header-register">Register Now</a>
-                            <button className="menu-btn" type="button" aria-expanded={menuOpen} aria-controls="mnav" aria-label={menuOpen ? 'Close menu' : 'Open menu'} onClick={() => setMenuOpen((o) => !o)}>
+                            <button className="menu-btn" type="button" data-cta="nav-phone-menu" aria-expanded={menuOpen} aria-controls="mnav" aria-label={menuOpen ? 'Close menu' : 'Open menu'} onClick={() => setMenuOpen((o) => !o)}>
                                 {menuOpen ? <X /> : <Menu />}
                             </button>
                         </div>
@@ -120,11 +120,11 @@ export const WhatsOn = ({ onOpen }) => {
     );
     return (
         <div className="ticker" role="region" aria-label="What's On">
-            <button type="button" className="tk-label" onClick={onOpen} style={{ border: 0, color: '#fff', cursor: 'pointer' }}><span className="tk-dot" aria-hidden="true" />WHAT'S ON</button>
+            <button type="button" className="tk-label" data-cta="ticker-label" onClick={onOpen} style={{ border: 0, color: '#fff', cursor: 'pointer' }}><span className="tk-dot" aria-hidden="true" />WHAT'S ON</button>
             <div className="tk-track"><div className="tk-run">{run(false)}{run(true)}</div></div>
             <div className="tk-actions">
-                <button className="btn btn-sm tk-more" type="button" onClick={onOpen}>See more</button>
-                <button className="tk-x" type="button" aria-label="Hide the What's On strip" onClick={() => setHidden(true)}>×</button>
+                <button className="btn btn-sm tk-more" type="button" data-cta="ticker-see-more" onClick={onOpen}>See more</button>
+                <button className="tk-x" type="button" aria-label="Hide the What's On strip" data-cta="ticker-close" onClick={() => setHidden(true)}>×</button>
             </div>
         </div>
     );
@@ -211,8 +211,8 @@ export const Banner = ({ onRegister, onPrograms }) => {
                     </div>
                 </div>
                 <div className="car-nav">
-                    <button type="button" aria-label="Previous slide" onClick={() => { go(-1); start(); }}><ChevronLeft /></button>
-                    <button type="button" aria-label="Next slide" onClick={() => { go(1); start(); }}><ChevronRight /></button>
+                    <button type="button" aria-label="Previous slide" data-cta="banner-prev" onClick={() => { go(-1); start(); }}><ChevronLeft /></button>
+                    <button type="button" aria-label="Next slide" data-cta="banner-next" onClick={() => { go(1); start(); }}><ChevronRight /></button>
                 </div>
             </div>
         </section>
@@ -227,7 +227,7 @@ export const NewsStrip = () => {
     return (
         <section className="strip" id="news">
             <div className="wrap">
-                <div className="strip-head"><h2>NEWS</h2><Link className="more" to="/news">View More</Link></div>
+                <div className="strip-head"><h2>NEWS</h2><Link className="more" to="/news" data-cta="home-news-more">View More</Link></div>
                 <div className={`row c3`}>
                     {picked.map((s) => (
                         <Link key={s.id} className="ncard" to={storyPath(s.id)} data-cta={`home-news-${s.id}`}>
@@ -272,8 +272,8 @@ export const Leadership = () => {
                             </article>
                         );
                     })}
-                    <button className="cnav prev" type="button" aria-label="Previous leader" onClick={() => show(ci - 1)}><ChevronLeft /></button>
-                    <button className="cnav next" type="button" aria-label="Next leader" onClick={() => show(ci + 1)}><ChevronRight /></button>
+                    <button className="cnav prev" type="button" aria-label="Previous leader" data-cta="leader-prev" onClick={() => show(ci - 1)}><ChevronLeft /></button>
+                    <button className="cnav next" type="button" aria-label="Next leader" data-cta="leader-next" onClick={() => show(ci + 1)}><ChevronRight /></button>
                     <div className="cdots" role="tablist" aria-label="Choose a leader">
                         {LEADERS.map((c, k) => <button key={c.name} type="button" role="tab" aria-selected={k === ci} aria-label={c.name} onClick={() => show(k)} />)}
                     </div>
@@ -288,7 +288,7 @@ export const Leadership = () => {
                     </div>
                     <div className="team-row" ref={rowRef}>
                         {TEAM.map((t) => (
-                            <Link key={t.name} className="tm" to="/coaches">
+                            <Link key={t.name} className="tm" to="/coaches" data-cta={`coach-${t.name.toLowerCase().replace(/\s+/g, '-')}`}>
                                 {t.img
                                     ? <span className="av"><img src={t.img} alt="" style={t.pos ? { objectPosition: t.pos } : undefined} /></span>
                                     : <span className="av av-initials" aria-hidden="true">{t.name.split(' ').map((w) => w[0]).join('')}</span>}
@@ -327,7 +327,7 @@ export const Store = () => (
         <div className="wrap">
             <div className="strip-head">
                 <div className="store-head"><img className="store-logo" src="/assets/powergame/power-cricket-logo.png" alt="Power Cricket" /><h2>POWER CRICKET STORE</h2></div>
-                <Link className="more" to="/academy-shop">View More</Link>
+                <Link className="more" to="/academy-shop" data-cta="home-store-more">View More</Link>
             </div>
             <p className="strip-sub">Official RRA Melbourne academy kit and IPL replica gear — now available online.</p>
             <div className="row">
@@ -357,7 +357,7 @@ export const Faq = ({ onRegister }) => {
                 <div className="faq">
                     {faqs.map((f, i) => (
                         <div className="qa" key={f.q}>
-                            <button type="button" aria-expanded={open === i} aria-controls={`faq-a${i}`} id={`faq-q${i}`} onClick={() => setOpen(open === i ? null : i)}>
+                            <button type="button" aria-expanded={open === i} aria-controls={`faq-a${i}`} id={`faq-q${i}`} data-cta={`faq-${i + 1}`} onClick={() => setOpen(open === i ? null : i)}>
                                 {f.q}<ChevronDown />
                             </button>
                             <p className="ans" id={`faq-a${i}`} hidden={open !== i}>{f.a}</p>
