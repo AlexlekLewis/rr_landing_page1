@@ -120,7 +120,8 @@ const MasterStripeSuccess = () => {
         s.parentNode.insertBefore(t,s)}(window, document,'script',
         'https://connect.facebook.net/en_US/fbevents.js');
         window.fbq('init', '3125499870991789');
-        window.fbq('track', 'PageView');
+        // No PageView here: index.html (first load) and MetaPixelPageviewTracker
+        // (route changes) already count this page.
     }, []);
 
     /* -- Form validation -- */

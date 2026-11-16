@@ -8,8 +8,8 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 // navigates here. This gives a unique thank-you URL where the Meta Pixel
 // conversion fires — attributable/optimisable in Meta Ads and usable for a
 // URL-based Custom Conversion. The base Pixel (fbq init + PageView) lives
-// globally in index.html; here we register a PageView for this SPA route change
-// plus the Lead conversion, firing ONCE per real registration.
+// globally in index.html and SPA route-change PageViews come from
+// MetaPixelPageviewTracker; here we fire the Lead conversion, ONCE per real registration.
 
 const InfoPanel = ({ icon, title, delay, children }) => (
     <motion.div
@@ -36,9 +36,7 @@ const InfoPanel = ({ icon, title, delay, children }) => (
 const fireMetaConversion = (config) => {
     try {
         if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
-            // Register a PageView for this client-side route change (the global base
-            // Pixel only fires PageView on the initial document load), then the Lead.
-            window.fbq('track', 'PageView');
+            // The route-change PageView comes from MetaPixelPageviewTracker (App.jsx).
             window.fbq('track', 'Lead', {
                 content_name: config.pixelName,
                 content_category: config.pixelCategory,
