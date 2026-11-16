@@ -8,6 +8,8 @@
 // Canonical URLs only: use /mickleham (not the /private-coaching 308) and /elite-royals
 // as the primary for the shared Elite/PowerGame page (/PGP2026 canonicalises to it).
 
+import { NEWS_STORIES } from '../components/news/newsStories.js';
+
 export const SITE = {
   name: 'Rajasthan Royals Academy Melbourne',
   baseUrl: 'https://rramelbourne.com',
@@ -273,3 +275,29 @@ export const PAGE_SEO = {
       'The terms and conditions for using the Rajasthan Royals Academy Melbourne website and programs.',
   },
 };
+
+// NEWS & FEATURES (Andy, 14 Nov 2026): the /news page and one entry per story, built from
+// components/news/newsStories.js so a new story gets its own share preview (headline,
+// summary, photo) with no extra step. scripts/prerender-seo.mjs bakes these into the HTML.
+const clip = (s, n) => (s.length <= n ? s : `${s.slice(0, n - 1).replace(/\s+\S*$/, '')}…`);
+PAGE_SEO['/news'] = {
+  title: 'News & Features | Rajasthan Royals Academy Melbourne',
+  description: 'News and features from Rajasthan Royals Academy Melbourne: our programs, our players, tours and the wider Royals family.',
+};
+for (const s of NEWS_STORIES) {
+  PAGE_SEO[`/news/${s.slug}`] = {
+    title: clip(`${s.title.replace(/[“”]/g, '"')} | RRA Melbourne`, 90),
+    description: clip(s.excerpt, 160),
+    ogImage: s.heroImage,
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@type': 'NewsArticle',
+      headline: s.title,
+      description: s.excerpt,
+      image: [`${SITE.baseUrl}${s.heroImage}`],
+      datePublished: s.publishedAt,
+      publisher: { '@type': 'Organization', name: SITE.name, url: SITE.baseUrl },
+      mainEntityOfPage: `${SITE.baseUrl}/news/${s.slug}`,
+    },
+  };
+}

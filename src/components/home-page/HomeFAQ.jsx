@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const faqs = [
+export const faqs = [
     {
         q: 'Who are RRA Melbourne programs designed for?',
         a: 'Our programs are designed for cricketers of all ages and skill levels — from beginners picking up a bat for the first time to advanced players looking to break into elite competition. Each program specifies its target age groups and skill levels so you can find the right fit.',

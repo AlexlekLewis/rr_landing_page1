@@ -19,7 +19,7 @@ import { PROGRAM_ROW as LP_JR_DAY_ROW, LP_JR_DAY_ROUTE, lpJrDayOpen } from '../l
 // (both finished 4–5 Oct).
 // The Lower Plenty row (first) shows only until registrations close, Fri 23 Oct
 // 9:00pm (lpJrDayOpen). REVIEW 26 OCT 2026 — delete it and its import.
-const PROGRAMS = [
+export const PROGRAMS = [
     ...(lpJrDayOpen() ? [{ label: LP_JR_DAY_ROW.heroLabel, route: LP_JR_DAY_ROUTE, badge: LP_JR_DAY_ROW.heroBadge, badgeColor: 'bg-rr-pink' }] : []),
     { label: 'Spin Club', route: '/spin-club', badge: 'Spin bowlers 10 to 25 · Wednesdays, $60 a night', badgeColor: 'bg-rr-pink' },
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Register your interest · next intake', badgeColor: 'bg-green-500' },
