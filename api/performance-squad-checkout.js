@@ -20,6 +20,7 @@
 // ============================================================
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { attributionMetadata } from './_lib/metaCapi.js';
 import { UNIFORM_CATALOG } from './_lib/uniformPricing.js';
 import { getProgramPrices } from './_lib/performanceSquadPrices.js';
 
@@ -154,7 +155,8 @@ export default async function handler(req, res) {
                 metadata,
             },
             client_reference_id: registration_id,
-            metadata,
+            // Ad-click details for the webhook's Meta Purchase (session only, not the subscription).
+            metadata: { ...metadata, ...attributionMetadata(req, req.body?.attribution) },
             allow_promotion_codes: false,
             success_url: `${BASE_URL}/performance-squads/welcome/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${BASE_URL}/performance-squads/welcome?checkout=cancelled#checkout`,

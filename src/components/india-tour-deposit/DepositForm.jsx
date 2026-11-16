@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import DateOfBirthInput from '../DateOfBirthInput';
-import { utmSearchParams } from '../../lib/attribution';
+import { getAttribution, utmSearchParams } from '../../lib/attribution';
 
 const DEPOSIT_LABEL = '$2,200';       // AUD total
 const DEPOSIT_SUBLABEL = '$2,000 deposit + $200 GST';
@@ -124,7 +124,7 @@ const DepositForm = ({ accessKey }) => {
             const r = await fetch('/api/india-tour-deposit-checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
+                body: JSON.stringify({ ...payload, attribution: getAttribution() }),
             });
             const d = await r.json();
             if (!r.ok || !d.url) throw new Error(d.error || 'Could not start checkout.');

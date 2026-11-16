@@ -18,6 +18,7 @@
 // ============================================================
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { attributionMetadata } from './_lib/metaCapi.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const BASE_URL = process.env.VITE_APP_URL || 'https://rramelbourne.com';
@@ -157,6 +158,8 @@ export default async function handler(req, res) {
         player_name: playerName.slice(0, 200),
         traveller_count: String(b.traveller_count || ''),
         gst_cents: String(GST_CENTS),
+        // Ad-click details for the webhook's Meta Purchase.
+        ...attributionMetadata(req, b.attribution),
       },
       payment_intent_data: {
         description: `India Tour Sept 2026 deposit — ${playerName}`.slice(0, 200),

@@ -9,6 +9,7 @@
 
 import Stripe from 'stripe';
 import { pickupLabel } from './_lib/pickupVenues.js';
+import { attributionMetadata } from './_lib/metaCapi.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -107,6 +108,8 @@ export default async function handler(req, res) {
         order_id: orderId || '',
         ipl_order_id: iplOrderId || '',
         fulfillment_method: fulfillment,
+        // Ad-click details for the webhook's Meta Purchase.
+        ...attributionMetadata(req, req.body?.attribution),
       },
       // Redirect URLs
       success_url: `${BASE_URL}/academy-shop/success?session_id={CHECKOUT_SESSION_ID}&fulfillment=${fulfillment}&venue=${pickupVenue || ''}`,

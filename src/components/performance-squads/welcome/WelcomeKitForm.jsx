@@ -6,6 +6,7 @@ import { REGIONS, WELCOME } from './welcomeConfig';
 import usePrices, { fmt } from './usePrices';
 import { TOPS_SIZES, SHORTS_SIZES, PANTS_SIZES, JACKET_SIZES } from '../../academy-shop/sizeData';
 import SizeGuide from '../../academy-shop/SizeGuide';
+import { getAttribution } from '../../../lib/attribution';
 
 // ─────────────────────────────────────────────────────────────
 // Performance Squad kit order — PARTICIPANT prices.
@@ -119,6 +120,7 @@ const WelcomeKitForm = ({ player: confirmed, onChangePlayer, onFound }) => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+                    attribution: getAttribution(),
                     registration_id: confirmed?.registration_id || null,
                     has_own_kit: ownKit,
                     player: {

@@ -4,6 +4,7 @@ import { X, ShoppingBag, Plus, Minus, Trash2, Truck, MapPin } from 'lucide-react
 import { useCart } from './CartContext';
 import { supabase } from '../../lib/supabase';
 import { PICKUP_VENUES, PICKUP_SUMMARY } from './pickupVenues';
+import { getAttribution } from '../../lib/attribution';
 
 const FULFILLMENT_OPTIONS = [
   { id: 'pickup',   label: 'Academy Pickup (Free)', icon: MapPin, price: 0, description: PICKUP_SUMMARY },
@@ -107,6 +108,7 @@ const CartDrawer = () => {
           })),
           fulfillment,
           pickupVenue: pickupVenue || null,
+          attribution: getAttribution(),
           mtoSurcharge,
           mtoQty,
           orderId: localStorage.getItem('shop_order_id') || '',
