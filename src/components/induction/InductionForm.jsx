@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
+import { utmSearchParams } from '../../lib/attribution';
 
 // Cricket skill options. Stored as plain text in the DB, so this list can be
 // edited freely without a migration.
@@ -15,7 +16,7 @@ const SKILL_OPTIONS = [
 ];
 
 const getUTMParams = () => {
-    const params = new URLSearchParams(window.location.search);
+    const params = utmSearchParams();
     return {
         utm_source: params.get('utm_source') || null,
         utm_medium: params.get('utm_medium') || null,

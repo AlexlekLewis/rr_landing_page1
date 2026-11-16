@@ -3,9 +3,10 @@ import { supabase } from '../../lib/supabase';
 import { CLUBS, PROGRAM, SPIN_TYPES, SQUAD_STATUS, SQUAD_NOTE, PRICES, STRIPE_LINK, upcomingNights } from './scOptions';
 import GovernanceConsents from '../shared/GovernanceConsents';
 import { EMPTY_CONSENTS, consentErrors, consentColumns } from '../../lib/governance';
+import { utmSearchParams } from '../../lib/attribution';
 
 const getUTMParams = () => {
-    const p = new URLSearchParams(window.location.search);
+    const p = utmSearchParams();
     return {
         utm_source: p.get('utm_source') || null,
         utm_medium: p.get('utm_medium') || null,

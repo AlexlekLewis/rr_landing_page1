@@ -8,6 +8,7 @@ import PartnerStack from '../power-game/PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { fadeUp, SectionHeading, Label, FieldError, Chevron, inputClass, selectClass } from './shared';
 import { ACTIVE_CENTRES, PLAYING_ROLES, MIN_AGE, MAX_AGE } from './data';
+import { utmSearchParams } from '../../lib/attribution';
 
 // ─────────────────────────────────────────────────────────────
 // PERFORMANCE SQUADS — "I can't make a trial" registration
@@ -110,7 +111,7 @@ const InterestPage = () => {
         setErrors({});
         setSubmitting(true);
         try {
-            const params = new URLSearchParams(window.location.search);
+            const params = utmSearchParams();
             const utm = {};
             ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach((k) => {
                 if (params.get(k)) utm[k] = params.get(k);

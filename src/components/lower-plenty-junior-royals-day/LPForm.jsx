@@ -11,6 +11,7 @@ import {
     PRICE, REFUND_LINE, payUrlFor,
 } from './lpJrDayData';
 import { placesLine } from './usePlaces';
+import { utmSearchParams } from '../../lib/attribution';
 
 // Registration for "Junior Royals are coming to Lower Plenty": $10 per player.
 //
@@ -63,7 +64,7 @@ const throttleRecord = () => {
 };
 
 const collectUtm = () => {
-    const params = new URLSearchParams(window.location.search);
+    const params = utmSearchParams();
     const utm = {};
     ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'].forEach((k) => {
         if (params.get(k)) utm[k] = params.get(k).slice(0, 200);

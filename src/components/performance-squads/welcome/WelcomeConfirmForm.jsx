@@ -4,6 +4,7 @@ import { supabase } from '../../../lib/supabase';
 import { Label, FieldError, Chevron, inputClass, selectClass, PSCheckbox, scrollTo } from '../shared';
 import { REGIONS } from './welcomeConfig';
 import { Eyebrow } from './welcomeShared';
+import { utmSearchParams } from '../../../lib/attribution';
 
 // The row id is made in the browser. The public can insert into this table but
 // can't read rows back, so the id can't come from the database. It is also
@@ -86,7 +87,7 @@ const WelcomeConfirmForm = ({ config, isDraft, onSaved }) => {
 
         setSubmitting(true);
         try {
-            const params = new URLSearchParams(window.location.search);
+            const params = utmSearchParams();
             const first = form.first_name.trim();
             const last = form.last_name.trim();
             const region = REGIONS.find((r) => r.slug === form.region);

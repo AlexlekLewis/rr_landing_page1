@@ -5,6 +5,11 @@ import posthog from 'posthog-js'
 import { PostHogProvider } from 'posthog-js/react'
 import './index.css'
 import App from './App.jsx'
+import { captureAttribution } from './lib/attribution'
+
+// Store ad tags (utm_*, fbclid) before any page reads them, so they survive
+// in-site navigation. See src/lib/attribution.js.
+captureAttribution()
 
 // Initialize PostHog
 const posthogKey = import.meta.env.VITE_PUBLIC_POSTHOG_KEY

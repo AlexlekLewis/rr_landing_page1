@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+import { utmSearchParams } from '../../lib/attribution';
 
 const getUTMParams = () => {
-    const params = new URLSearchParams(window.location.search);
+    const params = utmSearchParams();
     return {
         utm_source: params.get('utm_source') || null,
         utm_medium: params.get('utm_medium') || null,

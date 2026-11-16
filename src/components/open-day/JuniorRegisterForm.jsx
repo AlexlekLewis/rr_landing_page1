@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+import { utmSearchParams } from '../../lib/attribution';
 
 // Reusable Junior Royals registration form, shared by every open-day centre
 // (Williamstown, Hallam, Mickleham). Registration is now required "due to popular
@@ -18,7 +19,7 @@ import { supabase } from '../../lib/supabase';
 // confirmation on success and fires a Meta Pixel Lead (distinct content_name).
 
 const getUTMParams = () => {
-    const p = new URLSearchParams(window.location.search);
+    const p = utmSearchParams();
     return {
         utm_source: p.get('utm_source') || null,
         utm_medium: p.get('utm_medium') || null,

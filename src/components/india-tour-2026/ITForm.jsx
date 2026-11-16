@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
 import { getPlayerTypes, TOURS, TOUR_STATUS } from './itCopy';
+import { utmSearchParams } from '../../lib/attribution';
 
 // Where an expression of interest goes: the shared applications table only, the
 // same home as every other website EOI (Spin Club, Private Coaching, …).
@@ -27,7 +28,7 @@ const PLAYER_TYPE_LABEL = {
 };
 
 const getUTMParams = () => {
-    const params = new URLSearchParams(window.location.search);
+    const params = utmSearchParams();
     return {
         utm_source: params.get('utm_source') || null,
         utm_medium: params.get('utm_medium') || null,

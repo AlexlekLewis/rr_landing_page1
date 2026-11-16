@@ -14,6 +14,7 @@ import {
     getSelectableSessionCount, getSessionLabel, getSessionCentreSlug,
     getSessionsForCentre, arrivalLine, isSessionFull, WAITLIST, OPEN_CENTRES,
 } from './openAgeData';
+import { utmSearchParams } from '../../lib/attribution';
 
 // Open age trial registration.
 //
@@ -107,7 +108,7 @@ const Honeypot = ({ value, onChange }) => (
 );
 
 const collectUtm = () => {
-    const params = new URLSearchParams(window.location.search);
+    const params = utmSearchParams();
     const utm = {};
     ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach((k) => {
         if (params.get(k)) utm[k] = params.get(k);

@@ -8,6 +8,7 @@ import TrainingShirtStep from '../shared/TrainingShirtStep';
 import GovernanceConsents from '../shared/GovernanceConsents';
 import { EMPTY_CONSENTS, consentErrors, consentColumns } from '../../lib/governance';
 import { EMPTY_SHIRT, shirtError, shirtTag, needsShirt, TRAINING_SHIRT } from '../../lib/kit/trainingShirt';
+import { utmSearchParams } from '../../lib/attribution';
 
 // Junior Royals booking form (paid from 19 Oct 2026). JOIN ANY WEEK, WEEKLY ONLY
 // (8 Nov 2026): one way to pay, the weekly subscription; the player starts at the
@@ -52,7 +53,7 @@ export const entrySource = ({ request, altDay, option, group, shirt }) =>
 const dayName = (d) => (d ? d.charAt(0).toUpperCase() + d.slice(1) : '');
 
 const getUTMParams = () => {
-    const p = new URLSearchParams(window.location.search);
+    const p = utmSearchParams();
     return { utm_source: p.get('utm_source') || null, utm_medium: p.get('utm_medium') || null, utm_campaign: p.get('utm_campaign') || null };
 };
 

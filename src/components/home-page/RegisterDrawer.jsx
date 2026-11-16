@@ -4,6 +4,7 @@ import { X, ArrowRight, ChevronLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { PROGRAM_ROW as LP_JR_DAY_ROW, LP_JR_DAY_ROUTE, lpJrDayOpen } from '../lower-plenty-junior-royals-day/lpJrDayPromo';
+import { utmSearchParams } from '../../lib/attribution';
 
 const AGE_GROUPS = ['U10', 'U12', 'U14', 'U16', 'U18', 'Adult'];
 const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Advanced', 'Elite'];
@@ -129,7 +130,7 @@ const PathUpcoming = ({ onBack, onSuccess }) => {
         setLoading(true);
         setError('');
         try {
-            const params = new URLSearchParams(window.location.search);
+            const params = utmSearchParams();
             const { error: err } = await supabase.from('upcoming_program_interest').insert([{
                 ...form,
                 utm_source: params.get('utm_source') || null,
@@ -201,7 +202,7 @@ const PathMoreInfo = ({ onBack, onSuccess }) => {
         setLoading(true);
         setError('');
         try {
-            const params = new URLSearchParams(window.location.search);
+            const params = utmSearchParams();
             const { error: err } = await supabase.from('general_enquiries').insert([{
                 ...form,
                 utm_source: params.get('utm_source') || null,

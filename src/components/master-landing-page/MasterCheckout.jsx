@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { AlertCircle, Loader2, CheckCircle2, X } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
+import { utmSearchParams } from '../../lib/attribution';
 
 /* ─── Stripe URLs (temporarily disabled — waitlist mode) ─── */
 const FLEXIPAY_URL = 'https://buy.stripe.com/fZu8wPbHP9SB2D2bzZ9Zm06';
@@ -231,7 +232,7 @@ const MasterCheckout = () => {
 
             const cohortId = crypto.randomUUID();
 
-            const utmParams = new URLSearchParams(window.location.search);
+            const utmParams = utmSearchParams();
 
             // 1. Basic lead log to applications (lightweight)
             const applicationsPayload = {

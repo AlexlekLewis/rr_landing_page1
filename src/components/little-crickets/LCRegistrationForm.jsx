@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
+import { utmSearchParams } from '../../lib/attribution';
 
 const AGE_OPTIONS = Array.from({ length: 9 }, (_, i) => i + 7); // 7–15
 
@@ -47,7 +48,7 @@ const SUPABASE_TABLE = {
 };
 
 const getUTMParams = () => {
-    const params = new URLSearchParams(window.location.search);
+    const params = utmSearchParams();
     return {
         utm_source:   params.get('utm_source')   || null,
         utm_medium:   params.get('utm_medium')   || null,

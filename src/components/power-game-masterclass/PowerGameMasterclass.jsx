@@ -7,6 +7,7 @@ import Navbar from '../Navbar';
 import Footer from '../Footer';
 import PartnerStack from '../power-game/PartnerStack';
 import HallaBol from '../holiday-programs/HallaBol';
+import { utmSearchParams } from '../../lib/attribution';
 
 // ─────────────────────────────────────────────────────────────
 // POWER GAME MASTERCLASS — Sept 6 & 13, 2026
@@ -184,7 +185,7 @@ const PowerGameMasterclass = () => {
         }
         setSubmitting(true);
         try {
-            const params = new URLSearchParams(window.location.search);
+            const params = utmSearchParams();
             const utm = {};
             ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach((k) => {
                 if (params.get(k)) utm[k] = params.get(k);

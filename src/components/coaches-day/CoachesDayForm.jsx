@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
+import { utmSearchParams } from '../../lib/attribution';
 
 const LEVEL_OPTIONS = [
     'Junior / local club',
@@ -50,7 +51,7 @@ const icsHref =
     );
 
 const getUTMParams = () => {
-    const params = new URLSearchParams(window.location.search);
+    const params = utmSearchParams();
     return {
         utm_source: params.get('utm_source') || null,
         utm_medium: params.get('utm_medium') || null,

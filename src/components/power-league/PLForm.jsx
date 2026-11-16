@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
 import { MATCH, ROLES, LEVELS, STEPS, nominationsClosed, ageOnMatchDay } from './plOptions';
+import { utmSearchParams } from '../../lib/attribution';
 
 // Power League nomination form (Alex, 19 Oct 2026).
 //
@@ -53,7 +54,7 @@ const throttleRecord = () => {
 };
 
 const getUTMParams = () => {
-    const p = new URLSearchParams(window.location.search);
+    const p = utmSearchParams();
     return {
         utm_source: p.get('utm_source') || null,
         utm_medium: p.get('utm_medium') || null,

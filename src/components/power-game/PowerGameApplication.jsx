@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Loader2, CheckCircle2 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
+import { utmSearchParams } from '../../lib/attribution';
 
 // Meta Pixel — fire a Lead conversion on successful application submit.
 const fireLeadEvent = () => {
@@ -156,7 +157,7 @@ const PowerGameApplication = () => {
                 cvUrl = data.publicUrl;
             }
 
-            const utmParams = new URLSearchParams(window.location.search);
+            const utmParams = utmSearchParams();
 
             const applicationsPayload = {
                 first_name: formData.firstName.trim(),
@@ -265,7 +266,7 @@ const PowerGameApplication = () => {
         setIsSubmitting(true);
         setSubmitError('');
         try {
-            const utmParams = new URLSearchParams(window.location.search);
+            const utmParams = utmSearchParams();
             const payload = {
                 first_name: capData.firstName.trim(),
                 last_name: capData.lastName.trim(),

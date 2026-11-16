@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import { CENTRE, OFFER, endDateLabel } from './launchConfig';
+import { utmSearchParams } from '../../lib/attribution';
 
 const DAYS = [
     { value: 'tuesday', label: 'Tuesday' },
@@ -10,7 +11,7 @@ const DAYS = [
 ];
 
 const getUTMParams = () => {
-    const p = new URLSearchParams(window.location.search);
+    const p = utmSearchParams();
     return {
         utm_source: p.get('utm_source') || null,
         utm_medium: p.get('utm_medium') || null,

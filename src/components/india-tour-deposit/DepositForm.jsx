@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import DateOfBirthInput from '../DateOfBirthInput';
+import { utmSearchParams } from '../../lib/attribution';
 
 const DEPOSIT_LABEL = '$2,200';       // AUD total
 const DEPOSIT_SUBLABEL = '$2,000 deposit + $200 GST';
 
 const getUTM = () => {
-    const p = new URLSearchParams(window.location.search);
+    const p = utmSearchParams();
     return {
         utm_source: p.get('utm_source') || null,
         utm_medium: p.get('utm_medium') || null,

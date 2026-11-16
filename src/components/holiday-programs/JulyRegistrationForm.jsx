@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
+import { utmSearchParams } from '../../lib/attribution';
 
 // ── Omtex shirt sizing data ──────────────────────────────────
 const SHIRT_SIZES_JUNIOR = [
@@ -54,7 +55,7 @@ const JulyRegistrationForm = () => {
 
     // Capture UTM params from URL
     const getUTM = () => {
-        const p = new URLSearchParams(window.location.search);
+        const p = utmSearchParams();
         return {
             utm_source:   p.get('utm_source')   || null,
             utm_medium:   p.get('utm_medium')   || null,

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
+import { utmSearchParams } from '../../lib/attribution';
 
 const SOURCE_TAG = 'girls-kickstart';
 
@@ -13,7 +14,7 @@ const EXPERIENCE_OPTIONS = [
 ];
 
 const getUTMParams = () => {
-    const params = new URLSearchParams(window.location.search);
+    const params = utmSearchParams();
     return {
         utm_source: params.get('utm_source') || null,
         utm_medium: params.get('utm_medium') || null,

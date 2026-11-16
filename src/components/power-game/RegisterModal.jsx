@@ -3,12 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Check, AlertCircle, X } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
+import { utmSearchParams } from '../../lib/attribution';
 
 const SOURCE_TAG = 'power-game';
 const PROGRAM_LABEL = 'The Power Game Program';
 
 const getUTMParams = () => {
-    const params = new URLSearchParams(window.location.search);
+    const params = utmSearchParams();
     return {
         utm_source: params.get('utm_source') || null,
         utm_medium: params.get('utm_medium') || null,

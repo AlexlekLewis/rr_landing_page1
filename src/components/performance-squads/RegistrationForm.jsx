@@ -15,6 +15,7 @@ import {
     isSquadTrialBookable, getBookableOpenAgeTrials, joinDays,
     OPEN_AGE_TRIAL_ROUTE,
 } from './trialCalendar';
+import { utmSearchParams } from '../../lib/attribution';
 
 const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
     const [form, setForm] = useState({
@@ -126,7 +127,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
         setErrors({});
         setSubmitting(true);
         try {
-            const params = new URLSearchParams(window.location.search);
+            const params = utmSearchParams();
             const utm = {};
             ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach((k) => {
                 if (params.get(k)) utm[k] = params.get(k);

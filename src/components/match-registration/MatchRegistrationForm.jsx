@@ -7,6 +7,7 @@ import {
     inputClass, selectClass,
 } from '../performance-squads/shared';
 import { ACTIVE_MATCH, MIN_AGE, MAX_AGE } from './matchConfig';
+import { utmSearchParams } from '../../lib/attribution';
 
 const MRCheckbox = ({ checked, onToggle, error, children }) => (
     <div className="mb-3.5">
@@ -132,7 +133,7 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
         setErrors({});
         setSubmitting(true);
         try {
-            const params = new URLSearchParams(window.location.search);
+            const params = utmSearchParams();
             const utm = {};
             ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach((k) => {
                 if (params.get(k)) utm[k] = params.get(k);

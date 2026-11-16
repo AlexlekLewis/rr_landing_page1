@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '../../lib/supabase';
+import { utmSearchParams } from '../../lib/attribution';
 
 // Expression-of-interest form for the September/October school holiday program at
 // Centres across Melbourne. NO payment is taken here — the program dates,
@@ -24,7 +25,7 @@ const WEEKS = [
 ];
 
 const getUTMParams = () => {
-    const p = new URLSearchParams(window.location.search);
+    const p = utmSearchParams();
     return {
         utm_source: p.get('utm_source') || null,
         utm_medium: p.get('utm_medium') || null,

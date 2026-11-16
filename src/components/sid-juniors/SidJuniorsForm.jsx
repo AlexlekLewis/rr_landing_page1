@@ -11,6 +11,7 @@ import {
     FORM_COPY, FULL_COPY, CLOSED_COPY, NOTES_FIELD, PHOTO_CONSENT, CONTACT_EMAIL,
     submitCopyFor,
 } from './sidJuniorsData';
+import { utmSearchParams } from '../../lib/attribution';
 
 // Booking section for /sid-juniors. What it renders depends on PAGE_STATE in
 // sidJuniorsData.js:
@@ -91,7 +92,7 @@ const FieldLabel = ({ htmlFor, children, required, hint }) => (
 );
 
 const collectUtm = () => {
-    const params = new URLSearchParams(window.location.search);
+    const params = utmSearchParams();
     const utm = {};
     ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach((k) => {
         if (params.get(k)) utm[k] = params.get(k);

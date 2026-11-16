@@ -4,6 +4,7 @@ import Navbar from '../Navbar';
 import Footer from '../Footer';
 import PartnerStack from '../power-game/PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
+import { utmSearchParams } from '../../lib/attribution';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Elite Program 2026 — feedback + win-back survey  (public, share link with the cohort)
@@ -212,7 +213,7 @@ const ProgramFeedback = () => {
 
     setSubmitting(true);
     try {
-      const params = new URLSearchParams(window.location.search);
+      const params = utmSearchParams();
       const payload = {
         ...f,
         nps: f.nps < 0 ? undefined : f.nps,
