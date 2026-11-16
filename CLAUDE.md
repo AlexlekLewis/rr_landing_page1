@@ -69,3 +69,5 @@ team's Master Landing Page folder, not this file.
 
 - `rr-page-generator`: build or audit a page (copy, structure, backend, promo surfaces).
 - `dev-handoff`: the developer hand-off PDF and Google Drive folder after any page change.
+- `meta-ads-agent`: runs Meta (Facebook/Instagram) ads in-house. It acts on its own and finds answers
+  itself instead of asking Andy; Andy signs off only on ads going live, creative, and new spend.
