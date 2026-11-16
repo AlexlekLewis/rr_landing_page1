@@ -14,6 +14,8 @@
 //   SUPABASE_SERVICE_ROLE_KEY = eyJ...
 //   RESEND_API_KEY            = re_...   (optional, enables auto emails)
 //   ZAPIER_SHOP_WEBHOOK_URL   = ...      (optional)
+//   META_CAPI_ACCESS_TOKEN    = ...      (optional, Meta Conversions API Purchase)
+//   META_TEST_EVENT_CODE      = TEST...  (optional, Meta Test Events only)
 // ============================================================
 
 import Stripe from 'stripe';
@@ -22,6 +24,7 @@ import { sendOrderConfirmation } from './_lib/orderEmail.js';
 import { unpackApplication, buildPaidRow } from './_lib/pgpCheckout.js';
 import { sendPgpConfirmation } from './_lib/pgpEmail.js';
 import { isJrT3Session, classifyJrT3, completeJrT3Registration } from './_lib/jrTerm3.js';
+import { sendMetaPurchase } from './_lib/metaCapi.js';
 
 // Stripe signature verification requires the *raw* request body. Vercel's
 // default body parser returns a parsed object, which would always fail
@@ -318,6 +321,35 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Session expansion failed' });
   }
 
+  // Meta Conversions API Purchase. Started here so it runs alongside the
+  // Supabase/Sheets filing, never in front of it; sendMetaPurchase never throws
+  // and times out in 3s. Awaited only after fileSession has answered Stripe, so
+  // Vercel doesn't freeze the function before the request goes out.
+  const metaPurchase = sendMetaPurchase(session, { contentName: metaContentName(session) });
+  try {
+    return await fileSession(res, session);
+  } finally {
+    await metaPurchase;
+  }
+}
+
+// What the payment was for, as Meta's content_name: the program label when the
+// session classifies as a program, else its source tag or first line item.
+const metaContentName = (session) => {
+  try {
+    const items = (session.line_items?.data || []).map((i) => ({ description: i.description, price_id: i.price?.id }));
+    return classifyAsProgram(session, items)?.program_label
+      || session.metadata?.program_label
+      || session.metadata?.source
+      || items[0]?.description
+      || null;
+  } catch {
+    return null;
+  }
+};
+
+// Files one paid Checkout Session (everything after signature check and expansion).
+async function fileSession(res, session) {
   const customerName    = session.customer_details?.name || '';
   const customerEmail   = session.customer_details?.email || '';
   const customerPhone   = session.customer_details?.phone || '';
