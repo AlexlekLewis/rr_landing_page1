@@ -20,13 +20,13 @@ const FacebookIcon = () => (
 // by name rather than to a closed offering. It is kept here (and only here) so the
 // page is not fully orphaned — it is deliberately NOT in the program pickers,
 // because /elite-royals renders without a Navbar and dead-ends the visitor.
-const PROGRAMS = [
+export const PROGRAMS = [
     { label: 'Junior Royals', to: '/junior-royals' },
     { label: 'Private Coaching', to: '/mickleham' },
     { label: 'Performance Squads', to: '/performance-squads' },
 ];
 
-const ACADEMY = [
+export const ACADEMY = [
     { label: 'Our Coaches', to: '/coaches' },
     { label: 'News & Features', to: '/news' },
     { label: 'Coaching Jobs — We\'re Hiring', to: '/careers' },
@@ -34,7 +34,7 @@ const ACADEMY = [
     { label: 'Reviews', to: '/reviews' },
 ];
 
-const COMPANY = [
+export const COMPANY = [
     { label: 'Home', to: '/' },
     { label: 'Privacy Policy', to: '/privacy-policy' },
     { label: 'Terms & Conditions', to: '/terms-conditions' },
