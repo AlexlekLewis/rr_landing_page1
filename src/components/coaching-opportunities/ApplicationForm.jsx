@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import { utmSearchParams } from '../../lib/attribution';
+import { trackCustom } from '../../lib/metaPixel';
 
 const SOURCE_TAG = 'careers';
 
@@ -257,6 +258,9 @@ const ApplicationForm = () => {
                 }]);
             } catch (_) { /* non-blocking */ }
 
+            // A custom event, not Lead: job applications must not feed the
+            // family-lead optimisation in Meta Ads.
+            trackCustom('CareersApplication', { content_name: 'Careers application', content_category: SOURCE_TAG });
             setSubmitted(true);
         } catch (err) {
             console.error('Submission error:', err);

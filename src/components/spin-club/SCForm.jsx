@@ -4,6 +4,11 @@ import { CLUBS, PROGRAM, SPIN_TYPES, SQUAD_STATUS, SQUAD_NOTE, PRICES, STRIPE_LI
 import GovernanceConsents from '../shared/GovernanceConsents';
 import { EMPTY_CONSENTS, consentErrors, consentColumns } from '../../lib/governance';
 import { utmSearchParams } from '../../lib/attribution';
+import { track } from '../../lib/metaPixel';
+
+// Meta Pixel: program and price only. NIGHT_PRICE follows the price on the page.
+const PROGRAM_PIXEL_NAME = 'Spin Club';
+const NIGHT_PRICE = Number(PRICES[0].headline.replace(/[^0-9.]/g, '')) || undefined;
 
 const getUTMParams = () => {
     const p = utmSearchParams();
@@ -110,6 +115,7 @@ const SCForm = () => {
             setError('Something went wrong sending your sign-up. Please try again, or email info@rramelbourne.com and we will add you by hand.');
             return;
         }
+        track('Lead', { content_name: PROGRAM_PIXEL_NAME, content_category: `spin-club-${club?.key || 'unknown'}`, value: NIGHT_PRICE, currency: 'AUD' });
         setSubmitted(true);
     };
 
@@ -133,6 +139,7 @@ const SCForm = () => {
                         href={STRIPE_LINK}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => track('InitiateCheckout', { content_name: PROGRAM_PIXEL_NAME, value: NIGHT_PRICE, currency: 'AUD' })}
                         className="inline-flex items-center justify-center gap-3 bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-10 py-5 rounded-full transition-colors duration-300 mb-5"
                     >
                         Pay {PRICES[0].headline} for this night

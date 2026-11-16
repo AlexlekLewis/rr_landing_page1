@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import { CENTRE, DAY_AVAILABILITY } from './pcOptions';
 import { utmSearchParams } from '../../lib/attribution';
+import { track } from '../../lib/metaPixel';
 
 const getUTMParams = () => {
     const p = utmSearchParams();
@@ -106,6 +107,7 @@ const PCForm = () => {
             }]);
         } catch (_) { /* non-blocking */ }
 
+        track('Lead', { content_name: 'Private Coaching enquiry', content_category: `private-coaching-${CENTRE.slug}` });
         setSubmitting(false);
         setSubmitted(true);
     };

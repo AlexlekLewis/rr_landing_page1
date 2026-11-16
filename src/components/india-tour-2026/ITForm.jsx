@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
 import { getPlayerTypes, TOURS, TOUR_STATUS } from './itCopy';
 import { utmSearchParams } from '../../lib/attribution';
+import { track } from '../../lib/metaPixel';
 
 // Where an expression of interest goes: the shared applications table only, the
 // same home as every other website EOI (Spin Club, Private Coaching, …).
@@ -251,6 +252,7 @@ const ITForm = ({ copy, referralCode, referralName }) => {
             }]);
             if (insertError) throw insertError;
 
+            track('Lead', { content_name: 'India Tour expression of interest', content_category: SOURCE_TAG });
             setSubmitted(true);
             window.scrollTo({ top: document.getElementById('register')?.offsetTop || 0, behavior: 'smooth' });
         } catch (err) {

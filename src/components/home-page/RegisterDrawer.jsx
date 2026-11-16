@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { PROGRAM_ROW as LP_JR_DAY_ROW, LP_JR_DAY_ROUTE, lpJrDayOpen } from '../lower-plenty-junior-royals-day/lpJrDayPromo';
 import { utmSearchParams } from '../../lib/attribution';
+import { track } from '../../lib/metaPixel';
 
 const AGE_GROUPS = ['U10', 'U12', 'U14', 'U16', 'U18', 'Adult'];
 const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Advanced', 'Elite'];
@@ -139,6 +140,7 @@ const PathUpcoming = ({ onBack, onSuccess }) => {
                 page_referrer: document.referrer || null,
             }]);
             if (err) throw err;
+            track('Lead', { content_name: 'Home register: upcoming programs', content_category: 'upcoming-program-interest' });
             onSuccess('We\'ll be in touch as soon as new programs are announced. Our team will match you to the right opportunity.');
         } catch {
             setError('Something went wrong. Please try again or email us directly.');
@@ -211,6 +213,7 @@ const PathMoreInfo = ({ onBack, onSuccess }) => {
                 page_referrer: document.referrer || null,
             }]);
             if (err) throw err;
+            track('Lead', { content_name: 'Home register: more information', content_category: 'general-enquiry' });
             onSuccess('Thanks for reaching out. One of our team will be in touch within 48 hours to help find the right program for you.');
         } catch {
             setError('Something went wrong. Please try again or email us directly.');

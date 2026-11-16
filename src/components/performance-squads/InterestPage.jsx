@@ -9,6 +9,7 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { fadeUp, SectionHeading, Label, FieldError, Chevron, inputClass, selectClass } from './shared';
 import { ACTIVE_CENTRES, PLAYING_ROLES, MIN_AGE, MAX_AGE } from './data';
 import { utmSearchParams } from '../../lib/attribution';
+import { track } from '../../lib/metaPixel';
 
 // ─────────────────────────────────────────────────────────────
 // PERFORMANCE SQUADS — "I can't make a trial" registration
@@ -138,6 +139,7 @@ const InterestPage = () => {
                 },
             ]);
             if (error) throw error;
+            track('Lead', { content_name: 'Performance Squads interest', content_category: `performance-squads-${form.preferred_centre}` });
             setSubmitted(true);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         } catch (err) {
