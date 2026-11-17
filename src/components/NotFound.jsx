@@ -34,6 +34,7 @@ export const KNOWN_ROUTES = [
     '/coaches',
     '/tours',
     '/academy-shop',
+    '/careers',
     '/coaching-opportunities',
     '/reviews',
     '/privacy-policy',

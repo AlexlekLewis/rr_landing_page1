@@ -442,11 +442,11 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
     <div style="font-size:11px; font-weight:800; letter-spacing:.2em; text-transform:uppercase; color:var(--slate); text-align:center; margin-bottom:18px;">Leadership Team</div>
     <div class="grid g3">
       <div class="card" style="padding:0; overflow:hidden;">
-        <img src="/assets/coaches/siddhartha-lahiri.jpg" alt="Siddhartha Lahiri" style="width:100%; aspect-ratio:3/4; object-fit:cover;">
+        <img src="/assets/coaches/sid-lahiri-halla.jpg" alt="Siddhartha Lahiri" style="width:100%; aspect-ratio:3/4; object-fit:cover;">
         <div style="padding:15px;"><div style="font-weight:900; font-size:15px;">Siddhartha Lahiri</div><div style="font-size:11.5px; color:var(--pink); font-weight:700; margin:3px 0 8px;">Head of International Player Development and Performance Coach, Rajasthan Royals</div><p style="font-size:12px; color:var(--slate); line-height:1.5; font-weight:500;">Performance coach for the Rajasthan and Paarl Royals and head of the Royals' global talent network — he oversees player development across every Royals Academy worldwide, giving our best players a direct line to one of the IPL's biggest franchises.</p></div>
       </div>
       <div class="card" style="padding:0; overflow:hidden;">
-        <img src="/assets/coaches/andy-crook.jpg" alt="Andy Crook" style="width:100%; aspect-ratio:3/4; object-fit:cover;">
+        <img src="/assets/coaches/andy-crook-halla.jpg" alt="Andy Crook" style="width:100%; aspect-ratio:3/4; object-fit:cover;">
         <div style="padding:15px;"><div style="font-weight:900; font-size:15px;">Andy Crook</div><div style="font-size:11.5px; color:var(--pink); font-weight:700; margin:3px 0 8px;">Director of Cricket — T20 &amp; Power Hitting</div><p style="font-size:12px; color:var(--slate); line-height:1.5; font-weight:500;">Former South Australian Redback (debut at 17), Lancashire and Northamptonshire player, and part of Australia's 2025 T20 Masters World Cup-winning squad. He was in county grounds when T20 was born and has built his coaching around it ever since.</p></div>
       </div>
       <div class="card" style="padding:0; overflow:hidden;">

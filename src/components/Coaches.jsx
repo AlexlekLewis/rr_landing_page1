@@ -7,7 +7,7 @@ const coaches = [
         name: "Siddhartha Lahiri",
         role: "Head of International Player Development",
         bio: "Leading talent identification and performance globally for the Royals Group of franchises and the Royals Academy network.",
-        image: "/assets/rra/headcoach-lahiri.png",
+        image: "/assets/coaches/sid-lahiri-halla.jpg",
         fullBio: "Sid oversees the Rajasthan Royals Academy system within his portfolio, including the Rajasthan Royals Academy Melbourne. As well as an assistant or performance coach to Rajasthan, Paarl and Barbados Royals, he is a key figure in the global scouting network for the Royals Group and an expert in identifying performance talent. His eye for raw talent has unearthed some of the most exciting names in modern T20 cricket."
     },
     {
