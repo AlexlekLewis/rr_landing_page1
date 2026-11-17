@@ -26,8 +26,20 @@ What makes it work, and what every new design copies:
 
 Andy, 17 Nov 2026: *"I love the justification of the key headline to the left ... I like the line
 and the proportions."* He wants promos, job ads, alerts and results to look like this. So:
-- **Headline left-aligned at the 64px margin**, never centred. Two words stacked, huge
-  (150-220px on 1080 wide), filling about half the frame width or more.
+**MASTER REFERENCE: `brand/reference/MASTER-game-day-cover.png`** ("This is the style I like").
+Open it and compare side by side before sending anything. Measured on the 1080x1350 frame:
+- Logo top-left x64 y64, ~96px wide. Chips top-right, right edge x1016, top y64, 12px apart.
+- **Headline**: Montserrat 900, **245px**, line-height 0.88, tracking -0.02em, left x64.
+  Line 1 cap top y301, line 2 cap top y517. The longest word ends by about **x900**
+  (GAME ends at x805), so the lion keeps its space on the right. Long words: shrink to fit
+  that, never past it.
+- **Statement block** (the "NORTH MELBOURNE vs SOUTH-EAST MELBOURNE" slot) from y745: white 800
+  ~40px uppercase lines, with a small pink 26px connector line between them.
+- **Cards** from y975: two across, 464x220 each, 24px gap, radius 14. Blue eyebrow 18px,
+  navy 900 title 36px, grey 20px line, navy chip (800, 23px). Four items: 2x2 from y755.
+- Lion: line-art lion, height 1080, right -110px, top 120px, opacity 0.6 on this PNG.
+- Footer: navy bar 100px at y1250.
+- **Headline left-aligned at the 64px margin**, never centred. Two words stacked.
 - **Proportions**: top band (logo left, chips right) ~ 20%; headline ~ 25%; content ~ 45%;
   footer bar 100px. Everything hangs off the same left line: logo, headline, subline, cards.
 - **Subline** in Montserrat 800 uppercase, ~30px, directly under the headline.
