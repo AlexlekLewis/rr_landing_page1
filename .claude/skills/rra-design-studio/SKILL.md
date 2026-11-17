@@ -24,12 +24,19 @@ and the rules for using them: `drive-map.md` (next to this file). Read it before
 The approved reference is the Game Day cover + Junior Game team sheet (Sun 15 Nov 2026).
 What makes it work, and what every new design copies:
 
+Andy, 17 Nov 2026: *"I love the justification of the key headline to the left ... I like the line
+and the proportions."* He wants promos, job ads, alerts and results to look like this. So:
+- **Headline left-aligned at the 64px margin**, never centred. Two words stacked, huge
+  (150-220px on 1080 wide), filling about half the frame width or more.
+- **Proportions**: top band (logo left, chips right) ~ 20%; headline ~ 25%; content ~ 45%;
+  footer bar 100px. Everything hangs off the same left line: logo, headline, subline, cards.
+- **Subline** in Montserrat 800 uppercase, ~30px, directly under the headline.
 - **One idea per frame.** One huge headline, one supporting line, the facts in cards. No clutter.
 - **Two-word headline, two colours.** First word white, second word pink, Montserrat 900,
   tight leading (0.9), uppercase. GAME / DAY, JUNIOR / GAME, NOW / HIRING, TERM 1 / OPEN.
 - **Brand gradient background**: `linear-gradient(165deg, #001D48 0%, #E11F8F 100%)`.
 - **White line-art lion** bleeding off the right edge, large (~80% frame height), opacity 0.35-0.45.
-  Files: `brand/logos/lion-rampant-white.png`, `public/assets/rr-lion-white.png`.
+  File: `brand/logos/lion-rampant-white.png` (line-art lion with horn). It is already faint: use opacity ~0.6.
 - **White logo top-left**, generous clear space.
 - **Chips** for date / format / time: solid pink, solid Admiral Blue `#1226AA` or navy, white
   Montserrat 800 uppercase, letter-spacing 0.06em, square-ish corners (4px).
@@ -63,7 +70,7 @@ Romagna/Romagna Exo is the IPL franchise display face: we don't have a licence, 
 | `rra-melbourne-blue.svg/.png` | White or very light backgrounds only |
 | `rra-melbourne-pink.png` | White backgrounds only (merch, print on white) |
 | `rra-australia-white.svg/.png` / `-blue` | National comms, job ads for the national body, tours |
-| `lion-rampant-white.png`, `lion-white.png` | Brand element, not a logo |
+| `lion-rampant-white.png` | Brand element, not a logo |
 
 Rules (master guide): white on gradient or black, pink or blue on white. Never recolour,
 stretch, rotate, outline, add shadow/glow, crop, or put it in a box/badge shape. Clear space =
@@ -93,7 +100,11 @@ Use Melbourne for anything run by the Melbourne academy; Australia for national.
 - **Job ad**: NOW / HIRING, role title in white 800, 3 bullets max (what you'll do / who you are /
   where), "Apply: rramelbourne.com/careers" chip. Australia logo if it's a national role. No salary
   unless Andy gives it. Include "Working With Children Check required" for any coaching role.
-- **Result / congrats / player spotlight**: photo full-bleed, desaturated with pink-blue duotone
+- **Weekend results**: template `brand/templates/weekend-results/` (TOP / KNOCKS batting feed,
+  TOP / SPELLS bowling feed, WEEKEND / WRAP story). White cards: blue eyebrow (club team · day),
+  navy name, big pink figure right-aligned with the unit under it, navy "IN PROGRESS" tag for
+  unfinished matches. Edit the HTML, run `node brand/templates/weekend-results/render.cjs`.
+- **Player spotlight (photo)**: photo full-bleed, desaturated with pink-blue duotone
   (master guide photo rule), gradient fading up from the bottom, name in 900, stat in pink.
 - **Web tile**: same type system, no footer bar, larger safe area for responsive crops; hand to
   the dev team with the `dev-handoff` skill.
@@ -123,6 +134,17 @@ Organic formats and how they should look:
 - **Story**: one fact per frame, use stickers (poll, countdown, link) inside the safe area.
 - **Captions**: first line is the hook, then 2-4 short lines, then CTA if any, then hashtags
   `#RoyalsAcademyMelbourne #RajasthanRoyals #HallaBol` (+ up to 3 relevant). Tag clubs and venues.
+
+## 5c. Restyling the team's work (Alex and others)
+
+Andy, 17 Nov 2026: anything Alex or others put in the Drive does not yet meet the standard.
+Treat their files as **source material, not finished creative**. For each one:
+1. Take the facts (names, scores, dates, venues, captions, holds) from their files and notes.
+2. Rebuild it in the house style (section 1), using a template where one exists.
+3. Run The Gate on the rebuilt version.
+4. Save to a new folder next to theirs: `<YYYY-MM-DD> · <topic> · RRA STANDARD`, with the PNGs
+   and a `CAPTIONS + BRAND CHECK.txt`. Never overwrite or delete their originals.
+5. Tell Andy what changed and anything that still needs checking.
 
 ## 6. Build and render
 

@@ -33,5 +33,5 @@ Loose docs in the root: Sid Visit Melbourne March 2026, Kumar Visit Melbourne, K
   footage of players whose families ticked photo consent.
 - Royals player images (ROYALS PLAYER IMAGES) are Rajasthan Royals IP: only in approved contexts.
 - Download originals to the scratchpad; never upload compressed copies back over originals.
-- Put finished creatives in a new dated folder (`<YYYY-MM-DD> · <topic>`) inside the right folder
+- Put finished creatives in a new dated folder (`<YYYY-MM-DD> · <topic> · RRA STANDARD`) inside the right folder
   above, with the PNG/MP4s, captions and the Gate table. Nothing is posted from here: a person posts it.
