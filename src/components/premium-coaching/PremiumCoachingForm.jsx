@@ -387,7 +387,7 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
                         <div className="rounded-2xl bg-rr-dark text-white p-5 sm:p-6" data-summary>
                             <p className="text-[11px] font-black uppercase tracking-widest text-rr-light-pink mb-3">Your booking</p>
                             <dl className="space-y-1.5 text-sm">
-                                <div className="flex justify-between gap-4"><dt className="text-white/70">Coach</dt><dd className="font-bold text-right">{coach ? `${coach.name} · ${tierOf(tier)?.short || 'Royals Coach'}` : 'We will match you'}</dd></div>
+                                <div className="flex justify-between gap-4"><dt className="text-white/70">Coach</dt><dd className="font-bold text-right">{coach ? `${coach.name} · ${tierOf(tier)?.name || 'Royals Coach'}` : 'We will match you'}</dd></div>
                                 {centre && <div className="flex justify-between gap-4"><dt className="text-white/70">Centre</dt><dd className="font-bold text-right">{centre.suburb}</dd></div>}
                                 {form.format && <div className="flex justify-between gap-4"><dt className="text-white/70">Format</dt><dd className="font-bold text-right">{form.format === '1-2' ? '1-to-2, shared' : '1-to-1'}</dd></div>}
                                 {form.sessions > 0 && <div className="flex justify-between gap-4"><dt className="text-white/70">Sessions</dt><dd className="font-bold text-right">{form.sessions} × {money(per)}</dd></div>}

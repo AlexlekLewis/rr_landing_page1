@@ -12,7 +12,7 @@
 //     share the price"). No 1:3.
 //   • Tier 1 = $180 for 1 session, $170 a session for 3, $160 a session for 5.
 //   • Tier 1: Alex Thornhill (Head Coach of our South-East Region), Hamid Qadri
-//     (West), Alex Lewis (North AND West). Tier 3: Jinang Shah (North AND West).
+//     (West), Alex Lewis (North AND West). Tier 3: Jinang Shah (West only from 18 Nov).
 //   • A coach NEVER has private sessions at two centres on the same night.
 //   • Show each coach's availability, mirrored live from the coach portal; once
 //     paid, sessions are subject to lane availability and confirmation.
@@ -47,26 +47,12 @@ export const HERO = {
         + 'bowling maps. Train one-to-one, or bring a training partner and share the price.',
     facts: [
         { label: 'Format', value: '1-to-1 or 1-to-2, same price' },
-        { label: 'Price', value: 'Tier 1 from $160 a session incl. GST' },
+        { label: 'Price', value: 'Elite Coach from $160 a session incl. GST' },
         { label: 'Where', value: 'Cranbourne North · Mickleham · Ravenhall' },
         { label: 'Now', value: 'Bookings open, including our new West Centre' },
     ],
     cta: 'Book Your Coach',
     secondary: 'See Coaches & Times',
-};
-
-// ── WHY: what makes this different, and why we push 1:2 ──
-export const WHY = {
-    eyebrow: 'Why it is different',
-    title: 'Not just a lesson. A coach with data.',
-    body: [
-        'In most private lessons the coach watches, and tells you what they saw. Here the coach '
-        + 'watches, and then shows you. Where every ball pitched. Where every shot went. What it looks '
-        + 'like next to last week.',
-        'Every Royals private coach is trained to use the same tools and systems we use in our elite '
-        + 'programs. Your player sees their own game on the screen, understands it, and knows what to '
-        + 'work on when they leave the lane.',
-    ],
 };
 
 // The belief Andy wants carried through the page (17 Nov 2026).
@@ -81,52 +67,62 @@ export const TOGETHER = {
     ],
 };
 
-// ── WHAT a player receives in every session (keep each line true at every centre) ──
-export const RECEIVES = {
-    eyebrow: 'In every session',
-    title: 'What your player receives',
-    items: [
-        { title: 'A full hour with a Royals coach', body: 'One coach and one lane, for your player alone or shared with one training partner.' },
-        { title: 'The Match Centre', body: 'A real match scenario set on the iPad: the field, the bowler, the ground. Then your player plays it.' },
-        { title: 'Bowling maps and heat maps', body: 'Where each ball pitched, and where each shot went. Seen on the screen, in the lane.' },
-        { title: 'Performance Partner tech', body: 'Full Track AI video and ball tracking, and Str8bat bat data, when the session calls for it.' },
-        { title: 'Progress you can see', body: 'The first session sets a baseline. After that, today is compared with last month.' },
-        { title: 'A plan to take home', body: 'The one or two things to practise before the next session.' },
-    ],
-};
-
-// ── HOW: the tech (only tools the Academy already runs; see PartnerStack) ──
+// ── HOW: the tools in the lane (Andy, 18 Nov 2026: the "Not just a lesson" section and
+// the tech section said the same thing twice, so they are ONE section now, built on the
+// "tools in the lane" version, with a visual for every tool). `visual` picks what shows:
+//   photo:<path>  a real frame from our own footage
+//   bowling-map / heat-map  an illustrated EXAMPLE (TechVisuals.jsx), labelled as one
 export const TECH = {
     eyebrow: 'The tools in the lane',
-    title: 'Royals technology, built around your player',
+    title: 'Not just a lesson. A coach with data.',
     intro:
-        'Our squads use these tools in groups. In private coaching the coach uses them on your player, '
-        + 'every session.',
+        'In most private lessons the coach watches, and tells you what they saw. Here the coach '
+        + 'watches, then shows you: where every ball pitched, where every shot went, and how it '
+        + 'compares with last week. Our squads use these tools in groups. In private coaching the '
+        + 'coach uses them on your player, every session.',
     items: [
         {
             key: 'match-centre',
             title: 'Match Centre',
-            body: 'Our iPad match-up tool. The coach sets the field, the scenario and the ground size, then shows where the player bowled and where the ball went.',
+            body: 'Our iPad match-up tool. The coach sets the field, the scenario and the ground size, then your player plays it in the lane.',
             more: 'It turns a net session into a match. A batter learns where the gaps are against a real field. A bowler learns which ball to bowl to which field. Players in our elite programs use it in every Execute phase.',
-        },
-        {
-            key: 'fielding-heat-maps',
-            title: 'Fielding heat maps',
-            body: 'A map of where the ball goes. The hot areas show where the player hits it, or where catches come to them.',
-            more: 'Batters see their scoring areas and the parts of the ground they never reach. Fielders and keepers see where the work is. The coach uses it to choose what to train next.',
+            visual: 'photo:/assets/premium-coaching/tech-match-centre.jpg',
+            caption: 'Setting a live field in the Match Centre, Melbourne.',
         },
         {
             key: 'bowling-maps',
             title: 'Bowling maps',
-            body: 'Every ball the player bowls, plotted on the pitch: line and length, ball by ball.',
+            body: 'Every ball your player bowls, plotted on the pitch: line and length, ball by ball.',
             more: 'A bowler can see their good length, how often they hit it, and what happens when they get tired. It is the same picture the professionals look at after a spell.',
+            visual: 'bowling-map',
+            caption: 'Example: a bowling map from one spell.',
+        },
+        {
+            key: 'fielding-heat-maps',
+            title: 'Heat maps',
+            body: 'Where the ball goes. The hot areas show where your player scores, or where catches come to them in the field.',
+            more: 'Batters see their scoring areas and the parts of the ground they never reach. Fielders and keepers see where the work is. The coach uses it to choose what to train next.',
+            visual: 'heat-map',
+            caption: 'Example: a batter’s scoring areas.',
         },
         {
             key: 'performance-partners',
-            title: 'Our Performance Partners',
-            body: 'Video and ball tracking from Full Track AI, and bat sensor data from Str8bat, when the session calls for it.',
-            more: 'Full Track AI measures ball speed and where the ball pitched from video. Str8bat measures bat speed and the bat’s path through the ball. The coach chooses which tool to use and when.',
+            title: 'Performance Partners',
+            body: 'Full Track AI measures ball speed, swing and spin from video. Str8bat measures bat speed and the bat’s path through the ball.',
+            more: 'The coach chooses which tool to use and when. Players see the numbers straight away, in the lane, and can compare them session to session.',
+            visual: 'photo:/assets/premium-coaching/tech-fulltrack.jpg',
+            caption: 'Full Track AI in our lanes: swing, spin and speed on every ball.',
+            logos: [
+                { name: 'Full Track AI', src: '/assets/powergame/partners/full-track-ai.png' },
+                { name: 'Str8bat', src: '/assets/str8bat-logo.png' },
+            ],
         },
+    ],
+    // What every session includes, beyond the tools above.
+    every: [
+        'A full hour with a Royals coach, one lane',
+        'A baseline first, then progress compared session to session',
+        'A plan to take home: the one or two things to practise',
     ],
 };
 
@@ -161,8 +157,8 @@ export const PACKAGES = [
 
 export const TIER_PRICES = {
     head: { 1: 180, 3: 170, 5: 160 }, // per session, incl. GST
-    performance: null, // TODO Andy: Tier 2 prices
-    academy: null, // TODO Andy: Tier 3 prices
+    performance: null, // TODO Andy: Performance Coach prices
+    academy: null, // TODO Andy: Academy Coach prices
 };
 
 export const perSession = (tier, sessions) => TIER_PRICES[tier]?.[sessions] ?? null;
@@ -191,27 +187,26 @@ export const paymentLinksFor = (tier, sessions) => {
 };
 
 // ── WHAT: the three coach tiers (draft copy, Andy to review) ───
-// Tier NAMES avoid job titles on purpose: "Head Coach" is Alex Thornhill's title
-// (Head Coach of our South-East Region), not something every Tier 1 coach holds.
+// Shown as Elite Coach / Performance Coach / Academy Coach, never "Tier 1/2/3"
+// (Andy, 18 Nov 2026: tier numbers "could be a little bit derogatory"). The keys stay
+// head / performance / academy. "Head Coach" is Alex Thornhill's own title (Head Coach
+// of our South-East Region), not the name of the Elite Coach group.
 export const TIERS = [
     {
         key: 'head',
-        name: 'Tier 1 · Elite Coach',
-        short: 'Tier 1',
+        name: 'Elite Coach',
         body: 'Our most experienced coaches, including the people who lead our regions, design our programs and develop our other coaches. They coach every part of the game.',
         bestFor: 'Players who want the most experienced eye on their game, or are pushing for representative and Premier Cricket selection.',
     },
     {
         key: 'performance',
-        name: 'Tier 2 · Performance Coach',
-        short: 'Tier 2',
+        name: 'Performance Coach',
         body: 'Current Premier Cricket players with state and national pathway experience. Each brings a specialist skill, and coaches the whole game around it.',
         bestFor: 'Players who want a specialist who is still playing at a high level.',
     },
     {
         key: 'academy',
-        name: 'Tier 3 · Academy Coach',
-        short: 'Tier 3',
+        name: 'Academy Coach',
         body: 'Talented young cricketers who coach in our programs every week. Trained on all of our tools and systems, and close in age to the players they coach.',
         bestFor: 'Younger players, and anyone building good habits through regular sessions.',
     },
@@ -228,8 +223,8 @@ export const TIERS = [
 // HEADSHOTS (Andy, 13 Nov 2026): every photo is on the pink HALLA BOL! media wall.
 // The *-halla.jpg files are the original headshots cut out and placed on that wall.
 //
-// TIERS STILL DRAFT (not confirmed by Andy): Harkirat T2, Ikroop T2, Rittin T3,
-// Siddharth T3. Kavya Khatri has no tier yet.
+// STILL DRAFT (not confirmed by Andy): Harkirat and Ikroop Performance Coach, Rittin
+// Academy Coach. Kavya Khatri has no coach type yet.
 const ALL_ASPECTS = 'Coaches all aspects of the game: batting, bowling, fielding and match play.';
 
 export const COACHES = [
@@ -257,8 +252,8 @@ export const COACHES = [
         slug: 'siddharth-banerjee',
         name: 'Siddharth Banerjee',
         centres: ['cranbourne-north'],
-        tier: 'academy', // DRAFT
-        role: 'Academy Coach',
+        tier: 'performance', // Andy, 18 Nov 2026
+        role: 'Performance Coach',
         specialism: null, // TODO Andy
         img: null, // TODO: headshot
         bio: null, // TODO Andy
@@ -296,7 +291,7 @@ export const COACHES = [
     {
         slug: 'jinang-shah',
         name: 'Jinang Shah',
-        centres: ['mickleham', 'ravenhall'], // Andy, 17 Nov: Tier 3 in North and West
+        centres: ['ravenhall'], // Andy, 18 Nov 2026: removed from Mickleham one-to-ones; West only
         tier: 'academy',
         role: 'Academy Coach',
         specialism: null, // TODO Andy: Jinang's specialty
@@ -307,8 +302,8 @@ export const COACHES = [
         slug: 'hamid-qadri',
         name: 'Hamid Qadri',
         centres: ['ravenhall'],
-        tier: 'head', // Andy, 17 Nov: Tier 1, "replicate the Alex Thornhill version"
-        role: 'Tier 1 Coach, West', // TODO Andy: Hamid's title
+        tier: 'head', // Andy, 17 Nov: Elite Coach, "replicate the Alex Thornhill version"
+        role: 'Elite Coach, West Centre', // TODO Andy: Hamid's title
         specialism: null, // TODO Andy: Hamid's specialty
         img: null, // TODO: headshot on the HALLA BOL! wall
         bio: null, // TODO Andy: two lines (playing and coaching background)

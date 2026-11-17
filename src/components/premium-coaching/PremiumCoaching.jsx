@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Minus, MapPin, Check, CalendarClock } from 'lucide-react';
+import { Plus, Minus, Check } from 'lucide-react';
 import { VideoCard } from '../india-tour-2026/ITVideos';
 import { useCarousel, CarouselTrack, CarouselControls } from '../india-tour-2026/ITCarousel';
 import Navbar from '../Navbar';
@@ -8,13 +8,12 @@ import PartnerStack from '../power-game/PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import PremiumCoachingForm from './PremiumCoachingForm';
 import PremiumCoachingGallery from './PremiumCoachingGallery';
+import CoachFinder from './CoachFinder';
 import {
-    ROUTE, FORM_ANCHOR, HERO, WHY, TOGETHER, RECEIVES, TECH, STEPS, FORMATS, TIERS, CENTRES, FAQ,
-    PACKAGES, TIER_PRICES, AVAILABILITY_NOTE, coachesAt, tierOf, centreOf, perSession, packageTotal, money,
+    ROUTE, FORM_ANCHOR, HERO, TOGETHER, TECH, STEPS, FORMATS, TIERS, FAQ,
+    PACKAGES, TIER_PRICES, perSession, packageTotal, money,
 } from './premiumCoachingData';
-import { useAllAvailability, groupByNight, nightLabel, timeLabel } from './useCoachAvailability';
-
-const TIER_ORDER = { head: 0, performance: 1, academy: 2 };
+import { BowlingMap, HeatMap } from './TechVisuals';
 import { HERO_IMAGE, VIDEOS } from './premiumCoachingMedia';
 
 // Royals Private Coaching: the premium one-to-one offer (Andy, 13 Nov 2026; tiers,
@@ -23,7 +22,7 @@ import { HERO_IMAGE, VIDEOS } from './premiumCoachingMedia';
 // HOW: the steps → WHAT: formats + coach tiers → WHAT: coaches by centre → see it
 // (video, photos) → form → FAQ. PREVIEW ONLY: hidden route, noindex, no surfaces.
 
-const SECTIONS = ['hero', 'why', 'together', 'tech', 'how', 'options', 'coaches', 'video', 'photos', FORM_ANCHOR, 'faq'];
+const SECTIONS = ['hero', 'tech', 'together', 'how', 'options', 'coaches', 'video', 'photos', FORM_ANCHOR, 'faq'];
 const ANCHOR = 'scroll-mt-24 md:scroll-mt-28';
 const go = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
@@ -47,12 +46,6 @@ const Reveal = ({ label, children, dark }) => {
         </div>
     );
 };
-
-const Initials = ({ name }) => (
-    <div className="w-full h-full flex items-center justify-center text-white text-4xl font-black" style={{ backgroundImage: 'var(--image-gradient-rr)' }}>
-        {name.split(' ').map((p) => p[0]).join('')}
-    </div>
-);
 
 // ── HERO ────────────────────────────────────────────────
 const Hero = () => (
@@ -92,33 +85,6 @@ const Hero = () => (
     </section>
 );
 
-// ── WHY ─────────────────────────────────────────────────
-const Why = () => (
-    <section className="bg-white py-20 md:py-28">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 grid md:grid-cols-12 gap-10 md:gap-14">
-            <div className="md:col-span-5">
-                <Eyebrow>{WHY.eyebrow}</Eyebrow>
-                <H2 className="mb-6">{WHY.title}</H2>
-                {WHY.body.map((p) => <p key={p.slice(0, 20)} className="text-rr-charcoal font-medium leading-relaxed mb-4">{p}</p>)}
-            </div>
-            <div className="md:col-span-7">
-                <p className="text-xs font-black uppercase tracking-[0.3em] mb-5 text-rr-pink">{RECEIVES.title}, {RECEIVES.eyebrow.toLowerCase()}</p>
-                <div className="grid sm:grid-cols-2 gap-x-8 gap-y-7">
-                    {RECEIVES.items.map((b) => (
-                        <div key={b.title} className="border-t-2 border-rr-pink pt-4 flex gap-3">
-                            <Check className="w-5 h-5 text-rr-pink shrink-0 mt-0.5" />
-                            <div>
-                                <h3 className="text-base font-black text-rr-dark uppercase tracking-wide mb-1.5">{b.title}</h3>
-                                <p className="text-sm text-rr-charcoal font-medium leading-relaxed">{b.body}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </div>
-    </section>
-);
-
 // ── The belief: players learn best with other players ──
 const Together = () => (
     <section className="py-16 md:py-20 text-white" style={{ backgroundImage: 'var(--image-gradient-rr)' }}>
@@ -138,30 +104,61 @@ const Together = () => (
     </section>
 );
 
-// ── HOW: the tech ──────────────────────────────────────
+// ── HOW: the tools in the lane (merged "not just a lesson" + tech, Andy 18 Nov 2026) ──
+const TechVisual = ({ item }) => {
+    const isPhoto = item.visual.startsWith('photo:');
+    return (
+        <figure>
+            <div className={`rounded-2xl overflow-hidden ${isPhoto ? 'bg-black' : ''}`}>
+                {isPhoto && <img src={item.visual.slice(6)} alt={item.caption} loading="lazy" className="w-full h-auto block" />}
+                {item.visual === 'bowling-map' && <div className="max-w-[260px] mx-auto"><BowlingMap /></div>}
+                {item.visual === 'heat-map' && <HeatMap />}
+            </div>
+            <figcaption className="mt-2 text-xs text-white/60 font-semibold">
+                {!isPhoto && <span className="inline-block bg-white/15 text-white text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full mr-2">Example</span>}
+                {item.caption}
+            </figcaption>
+        </figure>
+    );
+};
+
 const Tech = () => (
     <section className="bg-rr-navy py-20 md:py-28">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 grid md:grid-cols-12 gap-10 items-start">
-            <div className="md:col-span-7">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            <div className="max-w-3xl mb-14">
                 <Eyebrow dark>{TECH.eyebrow}</Eyebrow>
                 <H2 dark className="mb-5">{TECH.title}</H2>
-                <p className="text-white/80 font-medium leading-relaxed mb-10 max-w-xl">{TECH.intro}</p>
-                <div className="grid sm:grid-cols-2 gap-x-8 gap-y-8">
-                    {TECH.items.map((t, i) => (
-                        <div key={t.key} className="border-t border-white/20 pt-4">
-                            <p className="text-rr-light-pink text-xs font-black tracking-widest mb-1">0{i + 1}</p>
-                            <h3 className="text-lg font-black text-white uppercase tracking-wide mb-1.5">{t.title}</h3>
-                            <p className="text-sm text-white/80 font-medium leading-relaxed">{t.body}</p>
-                            <Reveal dark label="More">{t.more}</Reveal>
-                        </div>
-                    ))}
-                </div>
+                <p className="text-white/80 font-medium leading-relaxed">{TECH.intro}</p>
             </div>
-            <div className="md:col-span-5 md:sticky md:top-28">
-                <div className="mx-auto max-w-[320px] rounded-3xl overflow-hidden bg-black aspect-[9/16]">
-                    <video src={VIDEOS[0].src} poster={VIDEOS[0].poster} muted loop playsInline autoPlay preload="metadata" className="w-full h-full object-cover" aria-label={VIDEOS[0].caption} />
-                </div>
-                <p className="text-center text-white/70 text-xs font-medium mt-3 max-w-[320px] mx-auto">{VIDEOS[0].caption}</p>
+            <div className="space-y-14 md:space-y-20">
+                {TECH.items.map((t, i) => (
+                    <div key={t.key} className="grid md:grid-cols-12 gap-6 md:gap-12 items-center">
+                        <div className={`md:col-span-6 ${i % 2 ? 'md:order-2' : ''}`}>
+                            <div className="max-w-[440px] mx-auto"><TechVisual item={t} /></div>
+                        </div>
+                        <div className={`md:col-span-6 ${i % 2 ? 'md:order-1' : ''}`}>
+                            <p className="text-rr-light-pink text-xs font-black tracking-widest mb-1">0{i + 1}</p>
+                            <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight mb-3">{t.title}</h3>
+                            <p className="text-white/85 font-medium leading-relaxed">{t.body}</p>
+                            <Reveal dark label="More">{t.more}</Reveal>
+                            {t.logos && (
+                                <div className="flex items-center gap-3 mt-5">
+                                    {t.logos.map((l) => (
+                                        <span key={l.name} className="bg-white rounded-xl h-14 px-4 flex items-center"><img src={l.src} alt={l.name} className="max-h-8 w-auto" /></span>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                ))}
+            </div>
+            <div className="mt-16 border-t border-white/15 pt-8">
+                <p className="text-xs font-black uppercase tracking-[0.3em] text-rr-light-pink mb-4">And in every session</p>
+                <ul className="grid sm:grid-cols-3 gap-4">
+                    {TECH.every.map((e) => (
+                        <li key={e} className="flex gap-2.5 text-white font-semibold text-sm leading-snug"><Check className="w-5 h-5 text-rr-light-pink shrink-0" />{e}</li>
+                    ))}
+                </ul>
             </div>
         </div>
     </section>
@@ -190,7 +187,7 @@ const How = () => (
 const PriceTable = () => (
     <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
         <div className="px-5 sm:px-6 pt-5 pb-3">
-            <p className="text-xs font-black uppercase tracking-widest text-rr-pink mb-1">Tier 1 · Elite Coach prices</p>
+            <p className="text-xs font-black uppercase tracking-widest text-rr-pink mb-1">Elite Coach prices</p>
             <p className="text-sm text-rr-charcoal font-medium">Per one-hour session, incl. GST. 1-to-1 and 1-to-2 are the same price: in a 1-to-2 the two families share it.</p>
         </div>
         <table className="w-full text-left text-sm">
@@ -212,7 +209,7 @@ const PriceTable = () => (
                 })}
             </tbody>
         </table>
-        <p className="px-5 sm:px-6 py-3 text-xs text-slate-500 font-medium border-t border-slate-100">Training shirt $29.95 incl. GST, only if your player doesn’t have one. Tier 2 and Tier 3 prices coming soon.</p>
+        <p className="px-5 sm:px-6 py-3 text-xs text-slate-500 font-medium border-t border-slate-100">Training shirt $29.95 incl. GST, only if your player doesn’t have one. Performance Coach and Academy Coach prices coming soon.</p>
     </div>
 );
 
@@ -221,7 +218,7 @@ const Options = () => (
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <Eyebrow>Your options</Eyebrow>
             <H2 className="mb-4">Choose the coach. Bring a partner.</H2>
-            <p className="text-rr-charcoal font-medium leading-relaxed max-w-2xl mb-12">Every session gets the same tools and systems. The coach’s tier sets the price, and 1-to-2 costs the same as 1-to-1.</p>
+            <p className="text-rr-charcoal font-medium leading-relaxed max-w-2xl mb-12">Every session gets the same tools and systems. The type of coach sets the price, and 1-to-2 costs the same as 1-to-1.</p>
 
             <div className="grid md:grid-cols-2 gap-5 mb-10">
                 {FORMATS.map((f) => (
@@ -238,14 +235,13 @@ const Options = () => (
 
             <div className="mb-14"><PriceTable /></div>
 
-            <h3 className="text-xl font-black text-rr-dark uppercase tracking-wide mb-2">Our three tiers of coach</h3>
-            <p className="text-sm text-rr-charcoal font-medium mb-5 max-w-2xl">Every Royals private coach is trained on the same tools and systems, and coaches every part of the game. The tier tells you their experience.</p>
+            <h3 className="text-xl font-black text-rr-dark uppercase tracking-wide mb-2">Elite, Performance and Academy Coaches</h3>
+            <p className="text-sm text-rr-charcoal font-medium mb-5 max-w-2xl">Every Royals private coach is trained on the same tools and systems, and coaches every part of the game. Choose the experience that suits your player.</p>
             <div className="grid md:grid-cols-3 gap-5">
                 {TIERS.map((t, i) => (
                     <div key={t.key} className={`rounded-2xl p-6 flex flex-col ${i === 0 ? 'text-white' : 'bg-white border border-slate-200'}`}
                         style={i === 0 ? { backgroundImage: 'var(--image-gradient-rr)' } : undefined}>
-                        <p className={`text-xs font-black uppercase tracking-widest mb-2 ${i === 0 ? 'text-white/80' : 'text-rr-pink'}`}>{t.short}</p>
-                        <h4 className={`text-xl font-black uppercase tracking-wide mb-2 ${i === 0 ? 'text-white' : 'text-rr-dark'}`}>{t.name.split('· ')[1]}</h4>
+                        <h4 className={`text-xl font-black uppercase tracking-wide mb-2 ${i === 0 ? 'text-white' : 'text-rr-dark'}`}>{t.name}</h4>
                         <p className={`text-sm font-medium leading-relaxed mb-3 ${i === 0 ? 'text-white/90' : 'text-rr-charcoal'}`}>{t.body}</p>
                         <p className={`text-xs font-semibold leading-relaxed mb-5 ${i === 0 ? 'text-white/75' : 'text-slate-500'}`}><b>Best for:</b> {t.bestFor}</p>
                         <p className={`mt-auto text-sm font-black ${i === 0 ? 'text-white' : 'text-rr-dark'}`}>
@@ -253,104 +249,6 @@ const Options = () => (
                         </p>
                     </div>
                 ))}
-            </div>
-        </div>
-    </section>
-);
-
-// ── WHAT: coaches by centre, with live availability ────
-const Availability = ({ coach, centre }) => {
-    const { slots, loaded } = useAllAvailability();
-    const nights = groupByNight(slots, coach.slug, centre).slice(0, 4);
-    const elsewhere = coach.centres.length > 1;
-    return (
-        <div className="mt-4 rounded-xl bg-slate-50 border border-slate-200 p-4">
-            <p className="text-[11px] font-black uppercase tracking-widest text-rr-dark mb-2 flex items-center gap-1.5"><CalendarClock className="w-3.5 h-3.5 text-rr-pink" /> Open times here</p>
-            {!loaded && <p className="text-xs text-slate-500 font-medium">Loading…</p>}
-            {loaded && nights.length === 0 && (
-                <p className="text-xs text-rr-charcoal font-medium leading-relaxed">New times are published each week. Book now and choose your preferred times; we will confirm them with you.</p>
-            )}
-            {nights.length > 0 && (
-                <ul className="space-y-1.5">
-                    {nights.map((n) => (
-                        <li key={n.date} className="text-xs text-rr-dark">
-                            <span className="font-black">{nightLabel(n.date)}</span>{' '}
-                            <span className="font-medium text-rr-charcoal">{n.slots.map((s) => timeLabel(s.start)).join(' · ')}</span>
-                        </li>
-                    ))}
-                </ul>
-            )}
-            {elsewhere && <p className="text-[11px] text-slate-500 font-medium mt-2">{coach.name.split(' ')[0]} also coaches at {coach.centres.filter((c) => c !== centre).map((c) => centreOf(c).suburb).join(' and ')}, never two centres on the same night.</p>}
-        </div>
-    );
-};
-
-const CoachCard = ({ c, centre, onBook }) => {
-    const tier = tierOf(c.tier);
-    return (
-        <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col">
-            <div className="relative aspect-[4/5] bg-slate-100 overflow-hidden">
-                {c.img ? <img src={c.img} alt={c.name} loading="lazy" className="w-full h-full object-cover object-top" /> : <Initials name={c.name} />}
-                {tier && <span className={`absolute top-3 left-3 text-[11px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full ${c.tier === 'head' ? 'bg-white text-rr-pink' : 'bg-rr-dark text-white'}`}>{tier.short}</span>}
-            </div>
-            <div className="p-5 flex-1 flex flex-col">
-                <p className="text-[11px] font-black uppercase tracking-widest text-rr-pink mb-1">{tier?.name || 'Royals Coach'}</p>
-                <h4 className="text-lg font-black text-rr-dark uppercase tracking-wide leading-tight">{c.name}</h4>
-                <p className="text-xs font-bold text-slate-500 mb-3">{c.role}</p>
-                {c.specialism && <p className="text-sm font-black text-rr-dark mb-1">{c.specialism}</p>}
-                <p className="text-sm text-rr-charcoal font-medium leading-relaxed mb-2">{c.bio || 'Full profile coming soon.'}</p>
-                <p className="text-xs text-rr-charcoal font-semibold leading-relaxed">{c.allAspects}</p>
-                {c.bookable && (
-                    <>
-                        <p className="mt-4 text-sm text-rr-dark"><span className="font-black">{money(perSession(c.tier, 1))}</span> <span className="font-medium text-slate-500">a session incl. GST · from {money(perSession(c.tier, 5))} in a 5-pack</span></p>
-                        <Availability coach={c} centre={centre} />
-                        <button type="button" data-cta={`book-${c.slug}`} onClick={() => onBook(centre, c.slug)}
-                            className="mt-4 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-xs px-5 py-3 rounded-full transition-colors">
-                            Book {c.name.split(' ')[0]}
-                        </button>
-                    </>
-                )}
-                {!c.bookable && <p className="mt-4 text-xs font-bold text-slate-500">Price coming soon. Request {c.name.split(' ')[0]} on the form and we will be in touch.</p>}
-            </div>
-        </div>
-    );
-};
-
-const Coaches = ({ onBook }) => (
-    <section className="bg-white py-20 md:py-28">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <Eyebrow>Coaches, centres and times</Eyebrow>
-            <H2 className="mb-4">Three centres across Melbourne</H2>
-            <p className="text-rr-charcoal font-medium leading-relaxed max-w-2xl mb-3">Pick the centre closest to you, then the coach. Tier 1 coaches show their open times, updated every week.</p>
-            <p className="text-xs text-slate-500 font-semibold leading-relaxed max-w-2xl mb-12">{AVAILABILITY_NOTE}</p>
-            <div className="space-y-16">
-                {CENTRES.map((centre) => {
-                    const list = [...coachesAt(centre.slug)].sort((a, b) => (TIER_ORDER[a.tier] ?? 9) - (TIER_ORDER[b.tier] ?? 9));
-                    return (
-                        <div key={centre.slug}>
-                            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-b-2 border-rr-dark pb-4 mb-6">
-                                <div>
-                                    <p className="text-xs font-black uppercase tracking-widest text-rr-pink mb-1">
-                                        {centre.region}{centre.badge && <span className="ml-2 bg-rr-pink text-white px-2 py-0.5 rounded-full">{centre.badge}</span>}
-                                    </p>
-                                    <h3 className="text-2xl md:text-3xl font-black text-rr-dark uppercase tracking-tight">{centre.suburb}</h3>
-                                    <p className="text-sm font-semibold text-rr-charcoal flex items-start gap-1.5 mt-1">
-                                        <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-rr-pink" />
-                                        <span>{centre.name}{centre.address ? ` · ${centre.address}` : `, ${centre.suburb}`}</span>
-                                    </p>
-                                    <p className="text-sm text-slate-500 font-medium mt-1">{centre.note}</p>
-                                </div>
-                                <button type="button" data-cta={`centre-${centre.slug}`} onClick={() => onBook(centre.slug, '')}
-                                    className="self-start md:self-auto bg-rr-dark hover:bg-rr-pink text-white font-black uppercase tracking-widest text-xs px-6 py-3 rounded-full transition-colors">
-                                    Book in {centre.suburb}
-                                </button>
-                            </div>
-                            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
-                                {list.map((c) => <CoachCard key={c.slug} c={c} centre={centre.slug} onBook={onBook} />)}
-                            </div>
-                        </div>
-                    );
-                })}
             </div>
         </div>
     </section>
@@ -439,12 +337,11 @@ const PremiumCoaching = () => {
             <Navbar variant="private-coaching" navLinksOverride={NAV} ctaLabelOverride="BOOK YOUR COACH" ctaTargetOverride={FORM_ANCHOR} />
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero"><Hero /></div>
-                <div id="why" className={ANCHOR}><Why /></div>
-                <div id="together" className={ANCHOR}><Together /></div>
                 <div id="tech" className={ANCHOR}><Tech /></div>
+                <div id="together" className={ANCHOR}><Together /></div>
                 <div id="how" className={ANCHOR}><How /></div>
                 <div id="options" className={ANCHOR}><Options /></div>
-                <div id="coaches" className={ANCHOR}><Coaches onBook={book} /></div>
+                <div id="coaches" className={ANCHOR}><CoachFinder onBook={book} /></div>
                 <div id="video" className={ANCHOR}><Video /></div>
                 <div id="photos" className={ANCHOR}><PremiumCoachingGallery /></div>
                 <div id={FORM_ANCHOR} className={ANCHOR}><PremiumCoachingForm key={formKey} initialCentre={pick.centre} initialCoach={pick.coach} /></div>
