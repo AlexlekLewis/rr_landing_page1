@@ -187,29 +187,62 @@ const How = () => (
 const PriceTable = () => (
     <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
         <div className="px-5 sm:px-6 pt-5 pb-3">
-            <p className="text-xs font-black uppercase tracking-widest text-rr-pink mb-1">Elite Coach prices</p>
-            <p className="text-sm text-rr-charcoal font-medium">Per one-hour session, incl. GST. 1-to-1 and 1-to-2 are the same price: in a 1-to-2 the two families share it.</p>
+            <p className="text-xs font-black uppercase tracking-widest text-rr-pink mb-1">Prices per one-hour session, incl. GST</p>
+            <p className="text-sm text-rr-charcoal font-medium">1-to-1 and 1-to-2 are the same price. In a 1-to-2 the two families share it, so each pays half.</p>
         </div>
-        <table className="w-full text-left text-sm">
-            <thead className="bg-slate-50 text-[11px] uppercase tracking-widest text-slate-500">
-                <tr><th className="px-5 sm:px-6 py-2.5 font-black">Package</th><th className="py-2.5 font-black">Per session</th><th className="py-2.5 font-black">Total</th><th className="pr-5 sm:pr-6 py-2.5 font-black">1-to-2, each family</th></tr>
-            </thead>
-            <tbody>
-                {PACKAGES.map((p) => {
-                    const per = perSession('head', p.sessions);
-                    const total = packageTotal('head', p.sessions);
-                    return (
-                        <tr key={p.sessions} className="border-t border-slate-100">
+        {/* Phone: one card per coach type */}
+        <div className="md:hidden divide-y divide-slate-100 border-t border-slate-100">
+            {TIERS.map((t) => (
+                <div key={t.key} className="px-5 py-4">
+                    <p className="text-sm font-black text-rr-dark uppercase tracking-wide mb-2">{t.name}</p>
+                    <ul className="space-y-1.5">
+                        {PACKAGES.map((p) => {
+                            const per = perSession(t.key, p.sessions);
+                            const total = packageTotal(t.key, p.sessions);
+                            return (
+                                <li key={p.sessions} className="flex items-baseline justify-between gap-3 text-sm">
+                                    <span className="font-bold text-rr-dark">{p.label}</span>
+                                    <span className="text-right">
+                                        <span className="font-black text-rr-dark">{money(per)}</span><span className="text-xs text-slate-500 font-medium"> a session{p.sessions > 1 ? ` · ${money(total)}` : ''}</span>
+                                        <span className="block text-xs text-rr-pink font-bold">1-to-2: {money(total / 2)} each</span>
+                                    </span>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>
+            ))}
+        </div>
+        {/* Larger screens: one table */}
+        <div className="hidden md:block">
+            <table className="w-full text-left text-sm">
+                <thead className="bg-slate-50 text-[11px] uppercase tracking-widest text-slate-500">
+                    <tr>
+                        <th className="px-5 sm:px-6 py-2.5 font-black">Package</th>
+                        {TIERS.map((t) => <th key={t.key} className="py-2.5 pr-4 font-black">{t.name}</th>)}
+                    </tr>
+                </thead>
+                <tbody>
+                    {PACKAGES.map((p) => (
+                        <tr key={p.sessions} className="border-t border-slate-100 align-top">
                             <td className="px-5 sm:px-6 py-3 font-black text-rr-dark">{p.label}</td>
-                            <td className="py-3 font-bold text-rr-dark">{money(per)}</td>
-                            <td className="py-3 text-rr-charcoal font-medium">{money(total)}</td>
-                            <td className="pr-5 sm:pr-6 py-3 text-rr-pink font-black">{money(total / 2)}</td>
+                            {TIERS.map((t) => {
+                                const per = perSession(t.key, p.sessions);
+                                const total = packageTotal(t.key, p.sessions);
+                                return (
+                                    <td key={t.key} className="py-3 pr-4">
+                                        <span className="block font-black text-rr-dark">{money(per)} <span className="font-medium text-slate-500 text-xs">a session</span></span>
+                                        {p.sessions > 1 && <span className="block text-xs text-rr-charcoal font-medium">{money(total)} total</span>}
+                                        <span className="block text-xs text-rr-pink font-bold">1-to-2: {money(total / 2)} each</span>
+                                    </td>
+                                );
+                            })}
                         </tr>
-                    );
-                })}
-            </tbody>
-        </table>
-        <p className="px-5 sm:px-6 py-3 text-xs text-slate-500 font-medium border-t border-slate-100">Training shirt $29.95 incl. GST, only if your player doesn’t have one. Performance Coach and Academy Coach prices coming soon.</p>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+        <p className="px-5 sm:px-6 py-3 text-xs text-slate-500 font-medium border-t border-slate-100">Training shirt $29.95 incl. GST, only if your player doesn’t have one.</p>
     </div>
 );
 

@@ -47,7 +47,7 @@ export const HERO = {
         + 'bowling maps. Train one-to-one, or bring a training partner and share the price.',
     facts: [
         { label: 'Format', value: '1-to-1 or 1-to-2, same price' },
-        { label: 'Price', value: 'Elite Coach from $160 a session incl. GST' },
+        { label: 'Price', value: 'From $120 a session incl. GST' },
         { label: 'Where', value: 'Cranbourne North · Mickleham · Ravenhall' },
         { label: 'Now', value: 'Bookings open, including our new West Centre' },
     ],
@@ -157,8 +157,8 @@ export const PACKAGES = [
 
 export const TIER_PRICES = {
     head: { 1: 180, 3: 170, 5: 160 }, // per session, incl. GST
-    performance: null, // TODO Andy: Performance Coach prices
-    academy: null, // TODO Andy: Academy Coach prices
+    performance: { 1: 160, 3: 150, 5: 140 }, // Andy, 18 Nov 2026
+    academy: { 1: 140, 3: 130, 5: 120 }, // Andy, 18 Nov 2026
 };
 
 export const perSession = (tier, sessions) => TIER_PRICES[tier]?.[sessions] ?? null;
@@ -176,6 +176,16 @@ export const money = (n) => `$${Number.isInteger(n) ? n : n.toFixed(2)}`;
 // While a pair is null the form saves a booking request and takes no payment.
 export const PAYMENT_LINKS = {
     head: {
+        1: { withShirt: null, noShirt: null },
+        3: { withShirt: null, noShirt: null },
+        5: { withShirt: null, noShirt: null },
+    },
+    performance: {
+        1: { withShirt: null, noShirt: null },
+        3: { withShirt: null, noShirt: null },
+        5: { withShirt: null, noShirt: null },
+    },
+    academy: {
         1: { withShirt: null, noShirt: null },
         3: { withShirt: null, noShirt: null },
         5: { withShirt: null, noShirt: null },
