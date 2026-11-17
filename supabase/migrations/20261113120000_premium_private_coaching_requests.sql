@@ -8,10 +8,12 @@
 -- Page: rramelbourne.com/private-coaching-premium (PREVIEW, hidden, noindex)
 -- Facts: src/components/premium-coaching/premiumCoachingData.js
 --
--- One row = one family asking for private coaching for one player (the lead player
--- of a 1-to-2 or 1-to-3 group; the others are named in other_players).
--- NO PAYMENT IS TAKEN YET: there are no payment links. Staff confirm the coach and
--- time, then send the payment link. A row is a request, not a booked session.
+-- One row = one family booking private coaching for one player (in a 1-to-2 the
+-- training partner is named in other_players). Formats: 1-to-1 or 1-to-2 at the SAME
+-- price (Andy, 17 Nov 2026). Packages: 1, 3 or 5 sessions.
+-- Prices are stored as shown on the page (GST-inclusive). While a tier has no Stripe
+-- Payment Link the row is a REQUEST: nothing charged, staff send the payment link.
+-- Paid or not, each session is subject to lane availability and staff confirmation.
 --
 -- Governance (CLAUDE.md): the four accept_* boxes are required by the form.
 -- Training shirt (CLAUDE.md): shirt_size is set when the family said the player has
@@ -27,10 +29,15 @@ create table if not exists public.premium_private_coaching_requests (
   created_at timestamptz not null default now(),
   -- what they asked for
   centre text not null,                            -- 'cranbourne-north' | 'mickleham' | 'ravenhall'
-  format text not null,                            -- '1-1' | '1-2' | '1-3'
+  format text not null check (format in ('1-1', '1-2')),
   coach_slug text,                                 -- e.g. 'alex-lewis'; null = "match me with a coach"
   coach_tier text,                                 -- 'head' | 'performance' | 'academy'; null when matched by staff
-  other_players text,                              -- names and ages of the rest of a 1-to-2 / 1-to-3 group
+  other_players text,                              -- name and age of the training partner in a 1-to-2
+  package_sessions smallint check (package_sessions in (1, 3, 5)),
+  price_per_session numeric(8,2),                  -- incl. GST, as shown; null for tiers not priced yet
+  package_total numeric(8,2),                      -- incl. GST, before the training shirt
+  selected_slots jsonb,                            -- [{date, start, end, centre}] chosen from the coach's live availability
+  payment_status text not null default 'request',  -- request (no link yet) | sent_to_stripe | paid
   -- player
   player_first_name text not null,
   player_last_name text not null,
@@ -61,9 +68,9 @@ create table if not exists public.premium_private_coaching_requests (
 );
 
 comment on table public.premium_private_coaching_requests is
-  'Royals Private Coaching (premium 1-to-1 / 1-to-2 / 1-to-3 with Academy tech). One row = one family '
-  'requesting private coaching for one player at Cranbourne North, Mickleham or Ravenhall (M9). No '
-  'payment taken online yet: staff confirm coach and time, then send a payment link. Form: '
+  'Royals Private Coaching (premium 1-to-1 / 1-to-2 with Academy tech). One row = one family '
+  'booking 1, 3 or 5 sessions for one player at Cranbourne North, Mickleham or Ravenhall (M9). '
+  'Sessions are subject to lane availability and staff confirmation. Form: '
   'rramelbourne.com/private-coaching-premium. Facts: src/components/premium-coaching/premiumCoachingData.js.';
 comment on column public.premium_private_coaching_requests.coach_slug is 'The coach the family chose. Null = they asked us to match them.';
 comment on column public.premium_private_coaching_requests.shirt_size is 'Training shirt size to order and hand out ($29.95 incl. GST, added to the first payment). Null = the player already has one.';
@@ -82,4 +89,4 @@ alter table public.premium_private_coaching_requests enable row level security;
 drop policy if exists "public insert" on public.premium_private_coaching_requests;
 create policy "public insert" on public.premium_private_coaching_requests
   for insert to anon, authenticated
-  with check (status = 'new' and staff_notes is null);
+  with check (status = 'new' and staff_notes is null and payment_status in ('request', 'sent_to_stripe'));

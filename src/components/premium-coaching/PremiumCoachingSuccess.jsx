@@ -1,26 +1,46 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import { needsShirt, TRAINING_SHIRT } from '../../lib/kit/trainingShirt';
-import { ROUTE, SUCCESS, centreOf, FORMATS } from './premiumCoachingData';
+import { ROUTE, SUCCESS, PROGRAM_NAME, AVAILABILITY_NOTE, centreOf, money } from './premiumCoachingData';
+import { nightLabel, timeLabel } from './useCoachAvailability';
 
-// After a booking REQUEST. Nothing is paid here (no payment links yet, Andy 13 Nov 2026),
-// so this page fires no Purchase event. When payment arrives, the paid confirmation
-// (with Purchase) belongs on the Stripe success redirect, and the shirt line stays.
+// After a booking. Two ways in:
+//   • straight from the form (no payment link for that tier yet): router state;
+//   • back from Stripe (?session_id=...): the form saved the booking in sessionStorage
+//     before sending the family to Stripe. Purchase fires once, here, with the Stripe
+//     session id as eventID so a refresh doesn't double count.
 const PremiumCoachingSuccess = () => {
-    const { state } = useLocation();
-    const s = state || {};
-    useEffect(() => { window.scrollTo(0, 0); }, []);
-    const centre = centreOf(s.centre);
-    const format = FORMATS.find((f) => f.value === s.format);
-    const sizeNo = needsShirt(s.shirt) ? String(s.shirt.size).split(' ')[0] : null;
+    const { state, search } = useLocation();
+    const sessionId = new URLSearchParams(search).get('session_id');
+    const s = useMemo(() => {
+        if (state) return state;
+        try { return JSON.parse(sessionStorage.getItem('premium_pc_booking') || '{}'); } catch { return {}; }
+    }, [state]);
+    const paid = !!sessionId;
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        if (!paid) return;
+        try {
+            const key = `premium_pc_purchase_${sessionId}`;
+            if (typeof window.fbq === 'function' && !sessionStorage.getItem(key)) {
+                window.fbq('track', 'Purchase', { content_name: PROGRAM_NAME, value: s.total || 0, currency: 'AUD' }, { eventID: sessionId });
+                sessionStorage.setItem(key, '1');
+            }
+        } catch { /* never blocks the page */ }
+    }, [paid, sessionId, s.total]);
+
+    const centre = centreOf(s.centre);
+    const sizeNo = needsShirt(s.shirt) ? String(s.shirt.size).split(' ')[0] : null;
     const rows = [
-        centre && ['Centre', `${centre.name}, ${centre.suburb}`],
-        format && ['Format', `${format.label}: ${format.title.toLowerCase()}`],
         ['Coach', s.coachName ? `${s.coachName}${s.tierName ? ` (${s.tierName})` : ''}` : 'We will match you with a coach'],
-        s.shirt?.has && ['Training shirt', sizeNo ? `Size ${sizeNo}, ordered with this booking (${TRAINING_SHIRT.priceLabel}, added to your first payment)` : 'Already has one'],
+        centre && ['Centre', `${centre.name}, ${centre.suburb}`],
+        s.format && ['Format', s.format === '1-2' ? '1-to-2, shared with a training partner' : '1-to-1'],
+        s.sessions > 0 && s.per != null && ['Package', `${s.sessions} session${s.sessions > 1 ? 's' : ''} × ${money(s.per)} = ${money(s.total)} incl. GST${s.format === '1-2' ? ` (${money(s.total / 2)} each family)` : ''}`],
+        s.picked?.length > 0 && ['Times requested', s.picked.map((p) => `${nightLabel(p.date)} ${timeLabel(p.start)}`).join(', ')],
+        s.shirt?.has && ['Training shirt', sizeNo ? `Size ${sizeNo}, ordered with this booking (${TRAINING_SHIRT.priceLabel})` : 'Already has one'],
     ].filter(Boolean);
 
     return (
@@ -34,8 +54,8 @@ const PremiumCoachingSuccess = () => {
                     <h1 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-none mb-5">
                         {SUCCESS.title}{s.first ? `, ${s.first}` : ''}
                     </h1>
-                    <p className="text-white/85 font-medium leading-relaxed mb-2">{SUCCESS.body}</p>
-                    <p className="text-white/60 font-medium leading-relaxed mb-10">{SUCCESS.nothingPaid}</p>
+                    <p className="text-white/85 font-medium leading-relaxed mb-2">{paid ? SUCCESS.paid : SUCCESS.body}</p>
+                    <p className="text-white/60 font-medium leading-relaxed mb-10">{paid ? AVAILABILITY_NOTE : SUCCESS.nothingPaid}</p>
 
                     {rows.length > 1 && (
                         <dl className="text-left bg-white rounded-2xl p-6 space-y-4 mb-10">

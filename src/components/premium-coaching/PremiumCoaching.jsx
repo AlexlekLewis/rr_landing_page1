@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Minus, MapPin, Check } from 'lucide-react';
+import { Plus, Minus, MapPin, Check, CalendarClock } from 'lucide-react';
 import { VideoCard } from '../india-tour-2026/ITVideos';
 import { useCarousel, CarouselTrack, CarouselControls } from '../india-tour-2026/ITCarousel';
 import Navbar from '../Navbar';
@@ -9,17 +9,21 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 import PremiumCoachingForm from './PremiumCoachingForm';
 import PremiumCoachingGallery from './PremiumCoachingGallery';
 import {
-    ROUTE, FORM_ANCHOR, HERO, WHY, TECH, STEPS, FORMATS, TIERS, CENTRES, FAQ,
-    coachesAt, tierOf,
+    ROUTE, FORM_ANCHOR, HERO, WHY, TOGETHER, RECEIVES, TECH, STEPS, FORMATS, TIERS, CENTRES, FAQ,
+    PACKAGES, TIER_PRICES, AVAILABILITY_NOTE, coachesAt, tierOf, centreOf, perSession, packageTotal, money,
 } from './premiumCoachingData';
+import { useAllAvailability, groupByNight, nightLabel, timeLabel } from './useCoachAvailability';
+
+const TIER_ORDER = { head: 0, performance: 1, academy: 2 };
 import { HERO_IMAGE, VIDEOS } from './premiumCoachingMedia';
 
-// Royals Private Coaching: the premium one-to-one offer (Andy, 13 Nov 2026).
+// Royals Private Coaching: the premium one-to-one offer (Andy, 13 Nov 2026; tiers,
+// prices, 1:2, live availability and booking added 17 Nov 2026).
 // Order: Hero (Why line + What facts + CTA) → WHY different → HOW: the tech →
 // HOW: the steps → WHAT: formats + coach tiers → WHAT: coaches by centre → see it
 // (video, photos) → form → FAQ. PREVIEW ONLY: hidden route, noindex, no surfaces.
 
-const SECTIONS = ['hero', 'why', 'tech', 'how', 'options', 'coaches', 'video', 'photos', FORM_ANCHOR, 'faq'];
+const SECTIONS = ['hero', 'why', 'together', 'tech', 'how', 'options', 'coaches', 'video', 'photos', FORM_ANCHOR, 'faq'];
 const ANCHOR = 'scroll-mt-24 md:scroll-mt-28';
 const go = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
@@ -97,13 +101,38 @@ const Why = () => (
                 <H2 className="mb-6">{WHY.title}</H2>
                 {WHY.body.map((p) => <p key={p.slice(0, 20)} className="text-rr-charcoal font-medium leading-relaxed mb-4">{p}</p>)}
             </div>
-            <div className="md:col-span-7 grid sm:grid-cols-2 gap-x-8 gap-y-7">
-                {WHY.benefits.map((b) => (
-                    <div key={b.title} className="border-t-2 border-rr-pink pt-4">
-                        <h3 className="text-base font-black text-rr-dark uppercase tracking-wide mb-1.5">{b.title}</h3>
-                        <p className="text-sm text-rr-charcoal font-medium leading-relaxed">{b.body}</p>
-                    </div>
-                ))}
+            <div className="md:col-span-7">
+                <p className="text-xs font-black uppercase tracking-[0.3em] mb-5 text-rr-pink">{RECEIVES.title}, {RECEIVES.eyebrow.toLowerCase()}</p>
+                <div className="grid sm:grid-cols-2 gap-x-8 gap-y-7">
+                    {RECEIVES.items.map((b) => (
+                        <div key={b.title} className="border-t-2 border-rr-pink pt-4 flex gap-3">
+                            <Check className="w-5 h-5 text-rr-pink shrink-0 mt-0.5" />
+                            <div>
+                                <h3 className="text-base font-black text-rr-dark uppercase tracking-wide mb-1.5">{b.title}</h3>
+                                <p className="text-sm text-rr-charcoal font-medium leading-relaxed">{b.body}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    </section>
+);
+
+// ── The belief: players learn best with other players ──
+const Together = () => (
+    <section className="py-16 md:py-20 text-white" style={{ backgroundImage: 'var(--image-gradient-rr)' }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 grid md:grid-cols-12 gap-8 items-center">
+            <div className="md:col-span-6">
+                <p className="text-xs font-black uppercase tracking-[0.3em] mb-3 text-white/80">{TOGETHER.eyebrow}</p>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight leading-[0.95]">{TOGETHER.title}</h2>
+            </div>
+            <div className="md:col-span-6">
+                {TOGETHER.body.map((p) => <p key={p.slice(0, 20)} className="text-white/90 font-medium leading-relaxed mb-4">{p}</p>)}
+                <button type="button" data-cta="together" onClick={() => go(FORM_ANCHOR)}
+                    className="mt-2 bg-white text-rr-dark hover:bg-rr-dark hover:text-white font-black uppercase tracking-widest px-7 py-3.5 rounded-full transition-colors text-sm">
+                    Book 1-to-2 with a partner
+                </button>
             </div>
         </div>
     </section>
@@ -143,7 +172,7 @@ const How = () => (
     <section className="bg-white py-20 md:py-28">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <Eyebrow>How it works</Eyebrow>
-            <H2 className="mb-12">From request to first ball</H2>
+            <H2 className="mb-12">From booking to first ball</H2>
             <ol className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 {STEPS.map((s, i) => (
                     <li key={s.title}>
@@ -157,34 +186,70 @@ const How = () => (
     </section>
 );
 
-// ── WHAT: formats + tiers ──────────────────────────────
+// ── WHAT: formats, prices, tiers ───────────────────────
+const PriceTable = () => (
+    <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
+        <div className="px-5 sm:px-6 pt-5 pb-3">
+            <p className="text-xs font-black uppercase tracking-widest text-rr-pink mb-1">Tier 1 · Elite Coach prices</p>
+            <p className="text-sm text-rr-charcoal font-medium">Per one-hour session, incl. GST. 1-to-1 and 1-to-2 are the same price: in a 1-to-2 the two families share it.</p>
+        </div>
+        <table className="w-full text-left text-sm">
+            <thead className="bg-slate-50 text-[11px] uppercase tracking-widest text-slate-500">
+                <tr><th className="px-5 sm:px-6 py-2.5 font-black">Package</th><th className="py-2.5 font-black">Per session</th><th className="py-2.5 font-black">Total</th><th className="pr-5 sm:pr-6 py-2.5 font-black">1-to-2, each family</th></tr>
+            </thead>
+            <tbody>
+                {PACKAGES.map((p) => {
+                    const per = perSession('head', p.sessions);
+                    const total = packageTotal('head', p.sessions);
+                    return (
+                        <tr key={p.sessions} className="border-t border-slate-100">
+                            <td className="px-5 sm:px-6 py-3 font-black text-rr-dark">{p.label}</td>
+                            <td className="py-3 font-bold text-rr-dark">{money(per)}</td>
+                            <td className="py-3 text-rr-charcoal font-medium">{money(total)}</td>
+                            <td className="pr-5 sm:pr-6 py-3 text-rr-pink font-black">{money(total / 2)}</td>
+                        </tr>
+                    );
+                })}
+            </tbody>
+        </table>
+        <p className="px-5 sm:px-6 py-3 text-xs text-slate-500 font-medium border-t border-slate-100">Training shirt $29.95 incl. GST, only if your player doesn’t have one. Tier 2 and Tier 3 prices coming soon.</p>
+    </div>
+);
+
 const Options = () => (
     <section className="bg-slate-50 py-20 md:py-28">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <Eyebrow>Your options</Eyebrow>
-            <H2 className="mb-4">Choose the format. Choose the coach.</H2>
-            <p className="text-rr-charcoal font-medium leading-relaxed max-w-2xl mb-12">Every format gets the same tools. The coach tier sets the price.</p>
+            <H2 className="mb-4">Choose the coach. Bring a partner.</H2>
+            <p className="text-rr-charcoal font-medium leading-relaxed max-w-2xl mb-12">Every session gets the same tools and systems. The coach’s tier sets the price, and 1-to-2 costs the same as 1-to-1.</p>
 
-            <div className="grid md:grid-cols-3 gap-5 mb-14">
+            <div className="grid md:grid-cols-2 gap-5 mb-10">
                 {FORMATS.map((f) => (
-                    <div key={f.value} className="bg-white border border-slate-200 rounded-2xl p-6">
-                        <p className="text-4xl font-black text-rr-pink tracking-tight mb-2">{f.label}</p>
-                        <h3 className="text-base font-black text-rr-dark uppercase tracking-wide mb-1.5">{f.title}</h3>
-                        <p className="text-sm text-rr-charcoal font-medium leading-relaxed">{f.body}</p>
+                    <div key={f.value} className={`rounded-2xl p-6 ${f.recommended ? 'bg-rr-dark text-white' : 'bg-white border border-slate-200'}`}>
+                        <div className="flex items-center gap-3 mb-2">
+                            <p className={`text-4xl font-black tracking-tight ${f.recommended ? 'text-rr-light-pink' : 'text-rr-pink'}`}>{f.label}</p>
+                            {f.recommended && <span className="bg-rr-pink text-white text-[11px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full">We recommend</span>}
+                        </div>
+                        <h3 className={`text-base font-black uppercase tracking-wide mb-1.5 ${f.recommended ? 'text-white' : 'text-rr-dark'}`}>{f.title}</h3>
+                        <p className={`text-sm font-medium leading-relaxed ${f.recommended ? 'text-white/80' : 'text-rr-charcoal'}`}>{f.body}</p>
                     </div>
                 ))}
             </div>
 
-            <h3 className="text-xl font-black text-rr-dark uppercase tracking-wide mb-5">Three tiers of Royals coach</h3>
+            <div className="mb-14"><PriceTable /></div>
+
+            <h3 className="text-xl font-black text-rr-dark uppercase tracking-wide mb-2">Our three tiers of coach</h3>
+            <p className="text-sm text-rr-charcoal font-medium mb-5 max-w-2xl">Every Royals private coach is trained on the same tools and systems, and coaches every part of the game. The tier tells you their experience.</p>
             <div className="grid md:grid-cols-3 gap-5">
                 {TIERS.map((t, i) => (
-                    <div key={t.key} className={`rounded-2xl p-6 ${i === 0 ? 'text-white' : 'bg-white border border-slate-200'}`}
+                    <div key={t.key} className={`rounded-2xl p-6 flex flex-col ${i === 0 ? 'text-white' : 'bg-white border border-slate-200'}`}
                         style={i === 0 ? { backgroundImage: 'var(--image-gradient-rr)' } : undefined}>
                         <p className={`text-xs font-black uppercase tracking-widest mb-2 ${i === 0 ? 'text-white/80' : 'text-rr-pink'}`}>{t.short}</p>
-                        <h4 className={`text-xl font-black uppercase tracking-wide mb-2 ${i === 0 ? 'text-white' : 'text-rr-dark'}`}>{t.name}</h4>
-                        <p className={`text-sm font-medium leading-relaxed mb-5 ${i === 0 ? 'text-white/85' : 'text-rr-charcoal'}`}>{t.body}</p>
-                        <p className={`text-sm font-black ${i === 0 ? 'text-white' : 'text-rr-dark'}`}>
-                            {t.price ? <>${t.price} <span className="font-medium">{t.unit}, incl. GST</span></> : 'Price confirmed when we book you'}
+                        <h4 className={`text-xl font-black uppercase tracking-wide mb-2 ${i === 0 ? 'text-white' : 'text-rr-dark'}`}>{t.name.split('· ')[1]}</h4>
+                        <p className={`text-sm font-medium leading-relaxed mb-3 ${i === 0 ? 'text-white/90' : 'text-rr-charcoal'}`}>{t.body}</p>
+                        <p className={`text-xs font-semibold leading-relaxed mb-5 ${i === 0 ? 'text-white/75' : 'text-slate-500'}`}><b>Best for:</b> {t.bestFor}</p>
+                        <p className={`mt-auto text-sm font-black ${i === 0 ? 'text-white' : 'text-rr-dark'}`}>
+                            {TIER_PRICES[t.key] ? <>From {money(perSession(t.key, 5))} a session <span className="font-medium">incl. GST</span></> : 'Price coming soon'}
                         </p>
                     </div>
                 ))}
@@ -193,36 +258,80 @@ const Options = () => (
     </section>
 );
 
-// ── WHAT: coaches by centre ────────────────────────────
-const CoachCard = ({ c }) => (
-    <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col">
-        <div className="aspect-[4/5] bg-slate-100 overflow-hidden">
-            {c.img ? <img src={c.img} alt={c.name} loading="lazy" className="w-full h-full object-cover object-top" /> : <Initials name={c.name} />}
+// ── WHAT: coaches by centre, with live availability ────
+const Availability = ({ coach, centre }) => {
+    const { slots, loaded } = useAllAvailability();
+    const nights = groupByNight(slots, coach.slug, centre).slice(0, 4);
+    const elsewhere = coach.centres.length > 1;
+    return (
+        <div className="mt-4 rounded-xl bg-slate-50 border border-slate-200 p-4">
+            <p className="text-[11px] font-black uppercase tracking-widest text-rr-dark mb-2 flex items-center gap-1.5"><CalendarClock className="w-3.5 h-3.5 text-rr-pink" /> Open times here</p>
+            {!loaded && <p className="text-xs text-slate-500 font-medium">Loading…</p>}
+            {loaded && nights.length === 0 && (
+                <p className="text-xs text-rr-charcoal font-medium leading-relaxed">New times are published each week. Book now and choose your preferred times; we will confirm them with you.</p>
+            )}
+            {nights.length > 0 && (
+                <ul className="space-y-1.5">
+                    {nights.map((n) => (
+                        <li key={n.date} className="text-xs text-rr-dark">
+                            <span className="font-black">{nightLabel(n.date)}</span>{' '}
+                            <span className="font-medium text-rr-charcoal">{n.slots.map((s) => timeLabel(s.start)).join(' · ')}</span>
+                        </li>
+                    ))}
+                </ul>
+            )}
+            {elsewhere && <p className="text-[11px] text-slate-500 font-medium mt-2">{coach.name.split(' ')[0]} also coaches at {coach.centres.filter((c) => c !== centre).map((c) => centreOf(c).suburb).join(' and ')}, never two centres on the same night.</p>}
         </div>
-        <div className="p-5 flex-1">
-            <p className="text-[11px] font-black uppercase tracking-widest text-rr-pink mb-1">{tierOf(c.tier)?.name || 'Royals Coach'}</p>
-            <h4 className="text-lg font-black text-rr-dark uppercase tracking-wide leading-tight">{c.name}</h4>
-            <p className="text-xs font-bold text-slate-500 mb-3">{[c.tier ? c.role : null, c.specialism].filter(Boolean).join(' · ') || '\u00a0'}</p>
-            <p className="text-sm text-rr-charcoal font-medium leading-relaxed">{c.bio || 'Full profile coming soon.'}</p>
-        </div>
-    </div>
-);
+    );
+};
 
-const Coaches = ({ onPick }) => (
+const CoachCard = ({ c, centre, onBook }) => {
+    const tier = tierOf(c.tier);
+    return (
+        <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col">
+            <div className="relative aspect-[4/5] bg-slate-100 overflow-hidden">
+                {c.img ? <img src={c.img} alt={c.name} loading="lazy" className="w-full h-full object-cover object-top" /> : <Initials name={c.name} />}
+                {tier && <span className={`absolute top-3 left-3 text-[11px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full ${c.tier === 'head' ? 'bg-white text-rr-pink' : 'bg-rr-dark text-white'}`}>{tier.short}</span>}
+            </div>
+            <div className="p-5 flex-1 flex flex-col">
+                <p className="text-[11px] font-black uppercase tracking-widest text-rr-pink mb-1">{tier?.name || 'Royals Coach'}</p>
+                <h4 className="text-lg font-black text-rr-dark uppercase tracking-wide leading-tight">{c.name}</h4>
+                <p className="text-xs font-bold text-slate-500 mb-3">{c.role}</p>
+                {c.specialism && <p className="text-sm font-black text-rr-dark mb-1">{c.specialism}</p>}
+                <p className="text-sm text-rr-charcoal font-medium leading-relaxed mb-2">{c.bio || 'Full profile coming soon.'}</p>
+                <p className="text-xs text-rr-charcoal font-semibold leading-relaxed">{c.allAspects}</p>
+                {c.bookable && (
+                    <>
+                        <p className="mt-4 text-sm text-rr-dark"><span className="font-black">{money(perSession(c.tier, 1))}</span> <span className="font-medium text-slate-500">a session incl. GST · from {money(perSession(c.tier, 5))} in a 5-pack</span></p>
+                        <Availability coach={c} centre={centre} />
+                        <button type="button" data-cta={`book-${c.slug}`} onClick={() => onBook(centre, c.slug)}
+                            className="mt-4 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-xs px-5 py-3 rounded-full transition-colors">
+                            Book {c.name.split(' ')[0]}
+                        </button>
+                    </>
+                )}
+                {!c.bookable && <p className="mt-4 text-xs font-bold text-slate-500">Price coming soon. Request {c.name.split(' ')[0]} on the form and we will be in touch.</p>}
+            </div>
+        </div>
+    );
+};
+
+const Coaches = ({ onBook }) => (
     <section className="bg-white py-20 md:py-28">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <Eyebrow>Coaches and centres</Eyebrow>
+            <Eyebrow>Coaches, centres and times</Eyebrow>
             <H2 className="mb-4">Three centres across Melbourne</H2>
-            <p className="text-rr-charcoal font-medium leading-relaxed max-w-2xl mb-12">Pick the centre closest to you, then the coach.</p>
+            <p className="text-rr-charcoal font-medium leading-relaxed max-w-2xl mb-3">Pick the centre closest to you, then the coach. Tier 1 coaches show their open times, updated every week.</p>
+            <p className="text-xs text-slate-500 font-semibold leading-relaxed max-w-2xl mb-12">{AVAILABILITY_NOTE}</p>
             <div className="space-y-16">
                 {CENTRES.map((centre) => {
-                    const list = coachesAt(centre.slug);
+                    const list = [...coachesAt(centre.slug)].sort((a, b) => (TIER_ORDER[a.tier] ?? 9) - (TIER_ORDER[b.tier] ?? 9));
                     return (
                         <div key={centre.slug}>
                             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-b-2 border-rr-dark pb-4 mb-6">
                                 <div>
                                     <p className="text-xs font-black uppercase tracking-widest text-rr-pink mb-1">
-                                        {centre.region}{centre.isNew && <span className="ml-2 bg-rr-pink text-white px-2 py-0.5 rounded-full">New</span>}
+                                        {centre.region}{centre.badge && <span className="ml-2 bg-rr-pink text-white px-2 py-0.5 rounded-full">{centre.badge}</span>}
                                     </p>
                                     <h3 className="text-2xl md:text-3xl font-black text-rr-dark uppercase tracking-tight">{centre.suburb}</h3>
                                     <p className="text-sm font-semibold text-rr-charcoal flex items-start gap-1.5 mt-1">
@@ -231,21 +340,14 @@ const Coaches = ({ onPick }) => (
                                     </p>
                                     <p className="text-sm text-slate-500 font-medium mt-1">{centre.note}</p>
                                 </div>
-                                <button type="button" data-cta={`centre-${centre.slug}`} onClick={() => onPick(centre.slug)}
+                                <button type="button" data-cta={`centre-${centre.slug}`} onClick={() => onBook(centre.slug, '')}
                                     className="self-start md:self-auto bg-rr-dark hover:bg-rr-pink text-white font-black uppercase tracking-widest text-xs px-6 py-3 rounded-full transition-colors">
-                                    Request a coach in {centre.suburb}
+                                    Book in {centre.suburb}
                                 </button>
                             </div>
-                            {list.length > 0 ? (
-                                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                                    {list.map((c) => <CoachCard key={c.slug} c={c} />)}
-                                </div>
-                            ) : (
-                                <div className="rounded-2xl border-2 border-dashed border-slate-300 p-8 text-center">
-                                    <p className="font-black text-rr-dark uppercase tracking-wide mb-1">Coaches announced soon</p>
-                                    <p className="text-sm text-rr-charcoal font-medium">Request now and we will match your player with a Royals coach at our West Centre.</p>
-                                </div>
-                            )}
+                            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
+                                {list.map((c) => <CoachCard key={c.slug} c={c} centre={centre.slug} onBook={onBook} />)}
+                            </div>
                         </div>
                     );
                 })}
@@ -314,36 +416,38 @@ const Faq = () => {
 
 const NAV = [
     { label: 'THE TECH', id: 'tech' },
-    { label: 'OPTIONS', id: 'options' },
-    { label: 'COACHES', id: 'coaches' },
+    { label: 'PRICES', id: 'options' },
+    { label: 'COACHES & TIMES', id: 'coaches' },
     { label: 'FAQ', id: 'faq' },
 ];
 
 const PremiumCoaching = () => {
     usePageAnalytics(ROUTE, { sections: SECTIONS });
-    const [centre, setCentre] = useState('');
+    const [pick, setPick] = useState({ centre: '', coach: '' });
     const [formKey, setFormKey] = useState(0);
     useEffect(() => { window.scrollTo(0, 0); }, []);
 
-    const pickCentre = (slug) => {
-        setCentre(slug);
-        setFormKey((k) => k + 1); // remount the form with that centre chosen
+    // "Book Alex" / "Book in Ravenhall": open the form with that centre (and coach) chosen.
+    const book = (centre, coach = '') => {
+        setPick({ centre, coach });
+        setFormKey((k) => k + 1); // remount the form with the choice applied
         setTimeout(() => go(FORM_ANCHOR), 0);
     };
 
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white">
-            <Navbar variant="private-coaching" navLinksOverride={NAV} ctaLabelOverride="REQUEST YOUR COACH" ctaTargetOverride={FORM_ANCHOR} />
+            <Navbar variant="private-coaching" navLinksOverride={NAV} ctaLabelOverride="BOOK YOUR COACH" ctaTargetOverride={FORM_ANCHOR} />
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero"><Hero /></div>
                 <div id="why" className={ANCHOR}><Why /></div>
+                <div id="together" className={ANCHOR}><Together /></div>
                 <div id="tech" className={ANCHOR}><Tech /></div>
                 <div id="how" className={ANCHOR}><How /></div>
                 <div id="options" className={ANCHOR}><Options /></div>
-                <div id="coaches" className={ANCHOR}><Coaches onPick={pickCentre} /></div>
+                <div id="coaches" className={ANCHOR}><Coaches onBook={book} /></div>
                 <div id="video" className={ANCHOR}><Video /></div>
                 <div id="photos" className={ANCHOR}><PremiumCoachingGallery /></div>
-                <div id={FORM_ANCHOR} className={ANCHOR}><PremiumCoachingForm key={formKey} initialCentre={centre} /></div>
+                <div id={FORM_ANCHOR} className={ANCHOR}><PremiumCoachingForm key={formKey} initialCentre={pick.centre} initialCoach={pick.coach} /></div>
                 <div id="faq" className={ANCHOR}><Faq /></div>
             </main>
             <PartnerStack />

@@ -6,9 +6,20 @@
 // our Melbourne centres. Every caption says where it was taken. Names come from the
 // captions already published on /tours (india-tour-2026/itMedia.js).
 //
-// WANTED from Andy (replace these as they arrive): one-to-one photos and clips at
-// Mickleham, Cranbourne North and M9 Ravenhall; a landscape hero; a coach and one player
-// reviewing a bowling map or heat map on the iPad without burned-in captions.
+// HOW TO ADD 1:1 / 1:2 MEDIA (Andy, 17 Nov 2026: "so we can load 1:1 videos and photos"):
+//   • Photo: put the file in public/assets/premium-coaching/photos/ and add a line to
+//     PHOTOS: { src: '/assets/premium-coaching/photos/<file>.jpg', alt, caption, where }.
+//     It appears in the photo carousel straight away. Portrait (3:4) looks best.
+//   • Video: put the .mp4 (portrait, H.264) and a poster .jpg in
+//     public/assets/premium-coaching/ and add a line to VIDEOS. Keep clips under ~15 MB.
+//   • Video from a still (what the still-*.mp4 clips are): a slow zoom or pan made from
+//     one photo with ffmpeg zoompan, 7 seconds, 720x1080, with a poster frame. Same
+//     treatment as the clips on the other recent pages.
+//   • Always say where it was taken in `where`.
+//
+// WANTED from Andy (replace these as they arrive): one-to-one and one-to-two photos and
+// clips at Mickleham, Cranbourne North and M9 Ravenhall; a landscape hero; a coach and one
+// player reviewing a bowling map or heat map on the iPad without burned-in captions.
 
 import heroHandsOn from '../../assets/india-tour-2026/why-go/2-coach-hands-on.webp';
 import handsOn from '../../assets/india-tour-2026/september-2026/08-coach-hands-on-batting-drill.webp';
@@ -17,7 +28,6 @@ import oneOnOne from '../../assets/india-tour-2026/september-2026/03-coach-one-o
 import bowler from '../../assets/india-tour-2026/september-2026/10-bowling-coach-with-bowler.webp';
 import sideBySide from '../../assets/india-tour-2026/september-2026/16-coach-and-batter-in-nets.webp';
 import sidLahiri from '../../assets/india-tour-2026/september-2026/19-sid-lahiri-with-batter-in-nets.webp';
-import groupOfThree from '../../assets/india-tour-2026/september-2026/11-coach-group-batting-drill.webp';
 import nextDrill from '../../assets/india-tour-2026/september-2026/06-coach-and-batter-in-nets.webp';
 
 const INDIA = 'Royals High Performance Centre, India';
@@ -32,11 +42,11 @@ export const HERO_IMAGE = {
 
 // Gallery order: Melbourne first where we have it, then the strongest tour shots.
 export const PHOTOS = [
+    { src: '/assets/junior-royals/gallery/hands-on-batting.webp', alt: 'A Royals coach guiding a young batter’s technique in an indoor lane while a second young batter practises alongside', caption: 'Learning alongside another player: hands-on in a Mickleham lane.', where: MELB },
     { src: handsOn, alt: 'A Royals coach guiding a player’s hands on the bat during a batting drill in the nets', caption: 'Hands on: a Royals coach shapes the swing.', where: INDIA },
     { src: grip, alt: 'Faiz Fazal, Indian cricket legend and former Royals cricketer, explaining the grip to a young Rajasthan Royals Academy Melbourne batter', caption: 'Faiz Fazal on the grip.', where: INDIA },
     { src: bowler, alt: 'Siddharth Trivedi, legendary Rajasthan Royals bowler, watching a young bowler walk back to his mark', caption: 'Every ball watched: Siddharth Trivedi with a young bowler.', where: INDIA },
     { src: oneOnOne, alt: 'Faiz Fazal working one-on-one with Khilesh Mamtani on a batting point in the nets', caption: 'Faiz Fazal one-on-one with Khilesh Mamtani.', where: INDIA },
-    { src: groupOfThree, alt: 'A Royals coach explaining a batting drill to three players holding training bats in the nets', caption: '1-to-3: small enough for every player to get the coach.', where: INDIA },
     { src: sideBySide, alt: 'Joshua Richardson side by side with Faiz Fazal during a batting drill in the nets', caption: 'Joshua Richardson side by side with Faiz Fazal.', where: INDIA },
     { src: sidLahiri, alt: 'Siddhartha Lahiri, Head of International Player Development at the Rajasthan Royals, with a padded-up batter in the nets', caption: 'Siddhartha Lahiri with a batter before his net session.', where: INDIA },
     { src: nextDrill, alt: 'Faiz Fazal talking a padded-up batter through the next drill in the nets', caption: 'Talking it through before the next drill.', where: INDIA },
@@ -48,7 +58,11 @@ export const PHOTOS = [
 // on the roster (Alex, 5 Oct 2026). TODO Andy: use it or not?
 export const VIDEOS = [
     { src: '/assets/premium-coaching/match-centre-ipad.mp4', poster: '/assets/premium-coaching/match-centre-ipad.jpg', title: 'The Match Centre', caption: 'Setting a live field on the iPad, then playing the scenario in the lane.', where: 'Melbourne' },
+    { src: '/assets/premium-coaching/still-1to2-mickleham.mp4', poster: '/assets/premium-coaching/still-1to2-mickleham.jpg', title: 'Learning together', caption: 'Hands-on with one batter while a second works alongside.', where: MELB },
     { src: '/junior-royals/videos/pull-shots.mp4', poster: '/junior-royals/videos/pull-shots.jpg', title: 'Pull shots', caption: 'Jinang feeding pull shots, one batter in the lane.', where: MELB },
+    { src: '/assets/premium-coaching/still-hands-on.mp4', poster: '/assets/premium-coaching/still-hands-on.jpg', title: 'Hands on', caption: 'A Royals coach shapes the swing.', where: INDIA },
+    { src: '/assets/premium-coaching/still-grip.mp4', poster: '/assets/premium-coaching/still-grip.jpg', title: 'The grip', caption: 'Faiz Fazal on the basics of the grip.', where: INDIA },
+    { src: '/assets/premium-coaching/still-bowler.mp4', poster: '/assets/premium-coaching/still-bowler.jpg', title: 'Every ball watched', caption: 'Siddharth Trivedi with a young bowler.', where: INDIA },
     { src: '/tours/somi-with-player.mp4', poster: '/tours/somi-with-player.jpg', title: 'One-on-one with Somi', caption: 'Somi Bhinder, resident coach, talks a player through his technique.', where: INDIA },
     { src: '/tours/romi-kunwar-front-shoulder.mp4', poster: '/tours/romi-kunwar-front-shoulder.jpg', title: 'The front shoulder', caption: 'Romi Bhinder and Kunwar work on his front shoulder.', where: INDIA },
 ];

@@ -2,17 +2,26 @@
 // premiumCoachingData.js: every fact and line of copy for the premium
 // Royals Private Coaching page (/private-coaching-premium).
 //
-// Brief: Andy, 13 Nov 2026. A PREMIUM one-to-one (and one-to-two, one-to-three)
-// offer where the coach uses all of the Academy's tech in the lane: the Match
-// Centre, fielding heat maps, bowling maps. Priced ABOVE ordinary private
-// coaching (we don't have to say so on the page, but nothing here should read
-// like a budget product). Three price tiers, set by coach, all under the Royals
-// brand. Three centres.
+// Brief: Andy, 13 Nov 2026. A PREMIUM private coaching offer where the coach uses
+// all of the Academy's tech in the lane: the Match Centre, fielding heat maps,
+// bowling maps. Priced ABOVE ordinary private coaching. Three coach tiers, all
+// under the Royals brand. Three centres.
+//
+// Andy, 17 Nov 2026:
+//   • Formats are 1:1 and 1:2 ONLY, at the SAME price ("the ability to do 1:2 to
+//     share the price"). No 1:3.
+//   • Tier 1 = $180 for 1 session, $170 a session for 3, $160 a session for 5.
+//   • Tier 1: Alex Thornhill (Head Coach of our South-East Region), Hamid Qadri
+//     (West), Alex Lewis (North AND West). Tier 3: Jinang Shah (North AND West).
+//   • A coach NEVER has private sessions at two centres on the same night.
+//   • Show each coach's availability, mirrored live from the coach portal; once
+//     paid, sessions are subject to lane availability and confirmation.
+//   • West bookings are open now.
+//   • Message: we believe players learn best working with other players.
 //
 // STATUS: PREVIEW ONLY. Hidden route, noindex, not on the nav, the home page,
-// What's On, the sitemap or programs_config. No payment links yet ("that'll
-// come in time"), so the form takes a booking REQUEST: nothing is charged
-// online, our team confirms the coach and time, then sends the payment link.
+// What's On, the sitemap or programs_config. Stripe links are coming from Andy;
+// until they are in PAYMENT_LINKS the form takes a booking REQUEST (nothing charged).
 //
 // Everything marked TODO is a fact we don't have yet. Don't invent it.
 //
@@ -23,6 +32,7 @@
 export const ROUTE = '/private-coaching-premium';
 export const SUCCESS_ROUTE = `${ROUTE}/success`;
 export const DB_TABLE = 'premium_private_coaching_requests';
+export const AVAILABILITY_VIEW = 'private_coaching_open_slots';
 export const PROGRAM_NAME = 'Royals Private Coaching';
 export const FORM_ANCHOR = 'request';
 
@@ -34,18 +44,18 @@ export const HERO = {
     lead:
         'Private cricket coaching in Melbourne with a Rajasthan Royals Academy coach, and all of '
         + 'the Academy’s technology in the lane with you: the Match Centre, fielding heat maps and '
-        + 'bowling maps. One-to-one, or share the lane with one or two friends.',
+        + 'bowling maps. Train one-to-one, or bring a training partner and share the price.',
     facts: [
-        { label: 'Format', value: '1-to-1, 1-to-2 or 1-to-3' },
+        { label: 'Format', value: '1-to-1 or 1-to-2, same price' },
+        { label: 'Price', value: 'Tier 1 from $160 a session incl. GST' },
         { label: 'Where', value: 'Cranbourne North · Mickleham · Ravenhall' },
-        { label: 'Coaches', value: 'Three tiers of Royals coach' },
-        { label: 'Today', value: 'Request your coach. Nothing to pay yet.' },
+        { label: 'Now', value: 'Bookings open, including our new West Centre' },
     ],
-    cta: 'Request Your Coach',
-    secondary: 'Meet the Coaches',
+    cta: 'Book Your Coach',
+    secondary: 'See Coaches & Times',
 };
 
-// ── WHY: what makes this different from an ordinary private lesson ──
+// ── WHY: what makes this different, and why we push 1:2 ──
 export const WHY = {
     eyebrow: 'Why it is different',
     title: 'Not just a lesson. A coach with data.',
@@ -53,27 +63,44 @@ export const WHY = {
         'In most private lessons the coach watches, and tells you what they saw. Here the coach '
         + 'watches, and then shows you. Where every ball pitched. Where every shot went. What it looks '
         + 'like next to last week.',
-        'Every Royals private coach is trained to use the same tools we use in our elite programs. '
-        + 'Your player sees their own game on the screen, understands it, and knows what to work on '
-        + 'when they leave the lane.',
+        'Every Royals private coach is trained to use the same tools and systems we use in our elite '
+        + 'programs. Your player sees their own game on the screen, understands it, and knows what to '
+        + 'work on when they leave the lane.',
     ],
-    // Benefits, plain words. Each one must stay true at every centre.
-    benefits: [
-        { title: 'The whole session is yours', body: 'One coach and one lane for your player. Or share it with one or two friends at the same level.' },
-        { title: 'Every ball on a map', body: 'Bowling maps show where each ball pitched. Batting and fielding maps show where the ball went.' },
-        { title: 'The Match Centre', body: 'The coach sets up a real match scenario on the iPad: the field, the bowler, the ground. Then your player plays it.' },
-        { title: 'Progress you can see', body: 'Today next to last month, on the screen. Not just “it feels better”.' },
-        { title: 'Choose your coach', body: 'Three tiers of Royals coach, at three centres. Pick one, or ask us to match you.' },
-        { title: 'A plan you take home', body: 'You leave each session knowing the one or two things to practise before the next one.' },
+};
+
+// The belief Andy wants carried through the page (17 Nov 2026).
+export const TOGETHER = {
+    eyebrow: 'What we believe',
+    title: 'Players learn best with other players.',
+    body: [
+        'We believe cricketers improve fastest when they train alongside someone else. They watch, '
+        + 'they compete, they push each other, and they learn from each other’s mistakes as much as their own.',
+        'So 1-to-2 costs the same as 1-to-1. Bring a teammate, a friend or a sibling at a similar level, '
+        + 'share the price, and both players get the coach, the technology and the data.',
+    ],
+};
+
+// ── WHAT a player receives in every session (keep each line true at every centre) ──
+export const RECEIVES = {
+    eyebrow: 'In every session',
+    title: 'What your player receives',
+    items: [
+        { title: 'A full hour with a Royals coach', body: 'One coach and one lane, for your player alone or shared with one training partner.' },
+        { title: 'The Match Centre', body: 'A real match scenario set on the iPad: the field, the bowler, the ground. Then your player plays it.' },
+        { title: 'Bowling maps and heat maps', body: 'Where each ball pitched, and where each shot went. Seen on the screen, in the lane.' },
+        { title: 'Performance Partner tech', body: 'Full Track AI video and ball tracking, and Str8bat bat data, when the session calls for it.' },
+        { title: 'Progress you can see', body: 'The first session sets a baseline. After that, today is compared with last month.' },
+        { title: 'A plan to take home', body: 'The one or two things to practise before the next session.' },
     ],
 };
 
 // ── HOW: the tech (only tools the Academy already runs; see PartnerStack) ──
 export const TECH = {
     eyebrow: 'The tools in the lane',
-    title: 'Royals technology, one player at a time',
+    title: 'Royals technology, built around your player',
     intro:
-        'Our squads use these tools in groups. In private coaching, the coach uses them on one player, '
+        'Our squads use these tools in groups. In private coaching the coach uses them on your player, '
         + 'every session.',
     items: [
         {
@@ -103,172 +130,205 @@ export const TECH = {
     ],
 };
 
-// ── HOW: the steps from request to first session ──────────
+// ── HOW: the steps from booking to first session ──────────
 export const STEPS = [
-    { title: 'Request your coach', body: 'Choose a centre, a format (1-to-1, 1-to-2 or 1-to-3) and a coach. Or ask us to match you. It takes about three minutes.' },
-    { title: 'We confirm your time', body: 'Our team calls or emails you to agree the day and time, and sends you the payment link. Nothing is charged until then.' },
-    { title: 'First session: the baseline', body: 'The coach measures where your player is today, with the tools, so every session after it can be compared.' },
-    { title: 'Every session after', body: 'Work on the plan, check the data together, and leave with the next thing to practise.' },
+    { title: 'Choose your coach', body: 'Pick a centre and a coach, see their open times, and choose 1, 3 or 5 sessions, 1-to-1 or 1-to-2.' },
+    { title: 'Pick your times and pay', body: 'Choose the sessions you want from the coach’s live availability, then pay securely.' },
+    { title: 'We confirm your lane', body: 'Our team confirms each session once the lane is booked at the centre. If a time can’t be confirmed, we offer the nearest one.' },
+    { title: 'Train with the tools', body: 'The first session sets a baseline. Every session after works the plan, checks the data, and ends with the next thing to practise.' },
 ];
 
-// ── WHAT: formats ─────────────────────────────────────────
-// Prices are per tier (below), not per format: TODO Andy, does 1:2 / 1:3 price per
-// player or per lane? Until then the page shows no price.
+// Shown beside the availability and again before payment (Andy, 17 Nov 2026).
+export const AVAILABILITY_NOTE =
+    'Times shown are the coach’s availability, updated weekly. Once paid, each session is subject to '
+    + 'lane availability at the centre and confirmation of the sessions you selected.';
+
+// ── WHAT: formats (Andy, 17 Nov 2026: only 1:1 and 1:2, same price) ──
 export const FORMATS = [
-    { value: '1-1', label: '1-to-1', title: 'One coach, one player', body: 'The full session on your player. The most detail, the most data.' },
-    { value: '1-2', label: '1-to-2', title: 'One coach, two players', body: 'Train with a friend or a sibling at a similar level. Both players get the data.' },
-    { value: '1-3', label: '1-to-3', title: 'One coach, three players', body: 'The most players we take in one private session. Still small enough for every ball to be measured.' },
+    { value: '1-1', label: '1-to-1', title: 'One coach, one player', body: 'The whole session, every ball, on your player.' },
+    { value: '1-2', label: '1-to-2', title: 'One coach, two players', body: 'Same price, shared between two families. Train with a teammate or a sibling at a similar level, and both players get the data.', recommended: true },
 ];
 
-// ── WHAT: the three coach tiers ───────────────────────────
-// DRAFT TIERING (13 Nov 2026, Claude): Andy said "each coach will be price tiered
-// under the Royals brand", but not which coach sits in which tier, or the names
-// or prices. This draft puts one coach of each tier at each of the two named
-// centres. ANDY TO CONFIRM before the page goes live.
-// price: null → the page shows "Price confirmed when we book you". When you add a
-// price, it MUST be the GST-inclusive figure and the page labels it "incl. GST".
+// ── WHAT: packages and prices (GST-inclusive; the page labels every price "incl. GST") ──
+// Tier 1 set by Andy, 17 Nov 2026. 1:2 is the SAME price as 1:1, shared by the two
+// families (shown as "each" = half). TODO Andy: confirm the split, and whether each
+// family pays its half or one family pays the whole session.
+export const PACKAGES = [
+    { sessions: 1, label: '1 session' },
+    { sessions: 3, label: '3 sessions' },
+    { sessions: 5, label: '5 sessions' },
+];
+
+export const TIER_PRICES = {
+    head: { 1: 180, 3: 170, 5: 160 }, // per session, incl. GST
+    performance: null, // TODO Andy: Tier 2 prices
+    academy: null, // TODO Andy: Tier 3 prices
+};
+
+export const perSession = (tier, sessions) => TIER_PRICES[tier]?.[sessions] ?? null;
+export const packageTotal = (tier, sessions) => {
+    const p = perSession(tier, sessions);
+    return p == null ? null : p * sessions;
+};
+export const money = (n) => `$${Number.isInteger(n) ? n : n.toFixed(2)}`;
+
+// Stripe Payment Links (Andy is creating them). CLAUDE.md: every package needs a PAIR,
+// `withShirt` (training shirt locked at quantity 1) for families who answer "No", and
+// `noShirt` for "Yes". Add both plink_ ids to PAYMENT_LINK_PROGRAMS in
+// api/stripe-webhook.js, and set each link's After-payment redirect to
+// /private-coaching-premium/success?session_id={CHECKOUT_SESSION_ID}.
+// While a pair is null the form saves a booking request and takes no payment.
+export const PAYMENT_LINKS = {
+    head: {
+        1: { withShirt: null, noShirt: null },
+        3: { withShirt: null, noShirt: null },
+        5: { withShirt: null, noShirt: null },
+    },
+};
+export const paymentLinksFor = (tier, sessions) => {
+    const l = PAYMENT_LINKS[tier]?.[sessions];
+    return l?.withShirt && l?.noShirt ? l : null;
+};
+
+// ── WHAT: the three coach tiers (draft copy, Andy to review) ───
+// Tier NAMES avoid job titles on purpose: "Head Coach" is Alex Thornhill's title
+// (Head Coach of our South-East Region), not something every Tier 1 coach holds.
 export const TIERS = [
     {
         key: 'head',
-        name: 'Royals Head Coach',
+        name: 'Tier 1 · Elite Coach',
         short: 'Tier 1',
-        body: 'The coaches who lead our centres and design our programs.',
-        price: null, // TODO Andy: price per session, incl. GST
-        unit: 'per session',
+        body: 'Our most experienced coaches, including the people who lead our regions, design our programs and develop our other coaches. They coach every part of the game.',
+        bestFor: 'Players who want the most experienced eye on their game, or are pushing for representative and Premier Cricket selection.',
     },
     {
         key: 'performance',
-        name: 'Royals Performance Coach',
+        name: 'Tier 2 · Performance Coach',
         short: 'Tier 2',
-        body: 'Current Premier Cricket players with state and national pathway experience.',
-        price: null, // TODO Andy
-        unit: 'per session',
+        body: 'Current Premier Cricket players with state and national pathway experience. Each brings a specialist skill, and coaches the whole game around it.',
+        bestFor: 'Players who want a specialist who is still playing at a high level.',
     },
     {
         key: 'academy',
-        name: 'Royals Academy Coach',
+        name: 'Tier 3 · Academy Coach',
         short: 'Tier 3',
-        body: 'High-level players who coach in our programs every week, trained on all of our tools.',
-        price: null, // TODO Andy
-        unit: 'per session',
+        body: 'Talented young cricketers who coach in our programs every week. Trained on all of our tools and systems, and close in age to the players they coach.',
+        bestFor: 'Younger players, and anyone building good habits through regular sessions.',
     },
 ];
 
 // ── WHAT: the coaches ────────────────────────────────────
 // Spelling follows the names already published on the site (Power Game,
-// Master Landing Page): Harkirat Bajwa, Ikroop Dhanoa, Rittin Raman. Andy's brief
-// spelt them "Harkrat", "Ikrup Danoa", "Ritan Rahman": TODO Andy, confirm.
-// Bios come from copy already live on the site; Siddharth Banerjee has none yet.
+// Master Landing Page): Harkirat Bajwa, Ikroop Dhanoa, Rittin Raman.
 //
-// HEADSHOTS (Andy, 13 Nov 2026: "make sure that they have background like Alex Lewis
-// photo has"): every photo is on the pink HALLA BOL! media wall. The *-halla.jpg files
-// are the original headshots cut out and placed on that wall (rebuilt from Alex Lewis's
-// photo), framed head-and-shoulders like his. Originals are untouched for other pages.
-// A new coach photo should be shot on the wall, or treated the same way.
+// `centres` is a list: a coach can work at more than one centre, but NEVER at two
+// centres on the same night (enforced in the database, see the availability migration).
+// `bookable` is true when the coach has a tier with prices (Tier 1 today).
+//
+// HEADSHOTS (Andy, 13 Nov 2026): every photo is on the pink HALLA BOL! media wall.
+// The *-halla.jpg files are the original headshots cut out and placed on that wall.
+//
+// TIERS STILL DRAFT (not confirmed by Andy): Harkirat T2, Ikroop T2, Rittin T3,
+// Siddharth T3. Kavya Khatri has no tier yet.
+const ALL_ASPECTS = 'Coaches all aspects of the game: batting, bowling, fielding and match play.';
+
 export const COACHES = [
     {
         slug: 'alex-thornhill',
         name: 'Alex Thornhill',
-        centre: 'cranbourne-north',
+        centres: ['cranbourne-north'],
         tier: 'head',
-        role: 'Head Coach, Cranbourne North',
-        specialism: 'Batting',
+        role: 'Head Coach, South-East Region',
+        specialism: 'Batting specialist',
         img: '/assets/coaches/alex-thornhill.jpg',
-        bio: 'A batting specialist with coaching experience in UK county cricket and the Australian premier system. He leads the Cranbourne North centre and the Academy’s South-East Melbourne region.',
+        bio: 'Head Coach of our South-East Region and a batting specialist, with coaching experience in UK county cricket and the Australian premier system. He coaches the cricket program at Xavier College and within the Fitzroy Doncaster Academy.',
     },
     {
         slug: 'harkirat-bajwa',
         name: 'Harkirat Bajwa',
-        centre: 'cranbourne-north',
-        tier: 'performance',
+        centres: ['cranbourne-north'],
+        tier: 'performance', // DRAFT
         role: 'Performance Coach',
-        specialism: 'Spin bowling',
+        specialism: 'Spin bowling specialist (off spin)',
         img: '/assets/coaches/harkirat-bajwa-halla.jpg',
-        bio: 'Played for Australia in the Under-19 World Cup and plays Premier Cricket. An attacking off spinner who teaches the variations and tactics that win matches.',
+        bio: 'Played for Australia at the Under-19 World Cup and plays Premier Cricket. An attacking off spinner who teaches the variations and tactics that win matches.',
     },
     {
         slug: 'siddharth-banerjee',
         name: 'Siddharth Banerjee',
-        centre: 'cranbourne-north',
-        tier: 'academy',
+        centres: ['cranbourne-north'],
+        tier: 'academy', // DRAFT
         role: 'Academy Coach',
         specialism: null, // TODO Andy
-        img: null, // TODO: headshot → /assets/coaches/siddharth-banerjee.jpg
-        bio: null, // TODO Andy: two lines (current club and level, what he coaches)
+        img: null, // TODO: headshot
+        bio: null, // TODO Andy
     },
     {
         slug: 'alex-lewis',
         name: 'Alex Lewis',
-        centre: 'mickleham',
+        centres: ['mickleham', 'ravenhall'], // Andy, 17 Nov: North, and may also coach in the West
         tier: 'head',
         role: 'Director of Cricket · Academy Head Coach',
-        specialism: 'Bowling and all-round',
+        specialism: 'Bowling specialist (pace and spin)',
         img: '/assets/coaches/alex-lewis.jpg',
-        bio: 'More than 20 years coaching young cricketers through the representative pathways. Head of Academy at Fitzroy Doncaster, a Victorian Premier Cricket club, and a Cricket Australia Level 2 coach.',
+        bio: 'More than 20 years coaching young cricketers through the representative pathways. Head of Academy and Head Bowling Coach at Fitzroy Doncaster, a Victorian Premier Cricket club, and a Cricket Australia Level 2 coach.',
     },
     {
         slug: 'ikroop-dhanoa',
         name: 'Ikroop Dhanoa',
-        centre: 'mickleham',
-        tier: 'performance',
+        centres: ['mickleham'],
+        tier: 'performance', // DRAFT
         role: 'Performance Coach',
-        specialism: 'Batting, 360° T20',
+        specialism: 'Batting specialist (360° and T20 power)',
         img: '/assets/coaches/ikroop-dhanoa-halla.jpg',
         bio: 'A First XI batter for Essendon in Victorian Premier Cricket and a Victorian pathway player up to Under-19s. He coaches a modern, attacking 360° game.',
     },
     {
         slug: 'rittin-raman',
         name: 'Rittin Raman',
-        centre: 'mickleham',
-        tier: 'academy',
+        centres: ['mickleham'],
+        tier: 'academy', // DRAFT
         role: 'Academy Coach',
-        specialism: 'Wicketkeeping',
+        specialism: 'Wicketkeeping specialist',
         img: '/assets/coaches/rittin-raman-halla.jpg',
         bio: 'A wicketkeeper-batter playing First XI cricket for Melbourne Cricket Club, and a state-level representative. High energy and precise with technique.',
-    },
-    // RAVENHALL (M9 Sports Centre) — Andy, 13 Nov 2026: "One-to-one coaches in Ravenhall
-    // are Hamid Qadri, Jinang Shah, Kavya Khatri." Tier not given yet: tier null shows
-    // "Royals Coach" and saves coach_tier null. TODO Andy: tier, specialism, bio, photo.
-    {
-        slug: 'hamid-qadri',
-        name: 'Hamid Qadri',
-        centre: 'ravenhall',
-        tier: null, // TODO Andy
-        role: 'Royals Coach',
-        specialism: null, // TODO Andy
-        img: null, // TODO: headshot → /assets/coaches/hamid-qadri.jpg
-        bio: null, // TODO Andy
     },
     {
         slug: 'jinang-shah',
         name: 'Jinang Shah',
-        centre: 'ravenhall',
-        tier: null, // TODO Andy
-        role: 'Royals Coach',
-        specialism: null, // TODO Andy
+        centres: ['mickleham', 'ravenhall'], // Andy, 17 Nov: Tier 3 in North and West
+        tier: 'academy',
+        role: 'Academy Coach',
+        specialism: null, // TODO Andy: Jinang's specialty
         img: '/assets/coaches/jinang-shah-halla.jpg',
-        // From his Holiday Programs bio (holiday-programs/CoachesSection.jsx), without the
-        // "current Elite Program participant" line, which may be out of date.
         bio: 'A high-quality cricketer with hands-on experience coaching young and developing players. Jinang coaches in our Junior Royals and holiday programs.',
+    },
+    {
+        slug: 'hamid-qadri',
+        name: 'Hamid Qadri',
+        centres: ['ravenhall'],
+        tier: 'head', // Andy, 17 Nov: Tier 1, "replicate the Alex Thornhill version"
+        role: 'Tier 1 Coach, West', // TODO Andy: Hamid's title
+        specialism: null, // TODO Andy: Hamid's specialty
+        img: null, // TODO: headshot on the HALLA BOL! wall
+        bio: null, // TODO Andy: two lines (playing and coaching background)
     },
     {
         slug: 'kavya-khatri',
         name: 'Kavya Khatri',
-        centre: 'ravenhall',
+        centres: ['ravenhall'],
         tier: null, // TODO Andy
         role: 'Royals Coach',
         specialism: null, // TODO Andy
-        img: null, // TODO: headshot → /assets/coaches/kavya-khatri.jpg
+        img: null, // TODO: headshot
         bio: null, // TODO Andy
     },
-];
+].map((c) => ({ ...c, allAspects: ALL_ASPECTS, bookable: !!TIER_PRICES[c.tier] }));
 
 // ── WHERE: the three centres ──────────────────────────────
 // Cranbourne North address = the Academy Shop pickup list (Alex, 5 Oct 2026).
-// Andy's brief says "Hallam or Cranbourne North": older pages show the Elite
-// Cricket Centre at 8-9 Becon Ct, Hallam. TODO Andy: confirm Medley Drive is right.
-// The West Centre (M9 Sports Centre, Ravenhall) is NEW: address and days are TODO.
-// Coaches: Hamid Qadri, Jinang Shah, Kavya Khatri (Andy, 13 Nov 2026).
+// TODO Andy: confirm Medley Drive (older pages show 8-9 Becon Ct, Hallam).
+// West Centre (M9 Sports Centre, Ravenhall): bookings open now (Andy, 17 Nov 2026).
 export const CENTRES = [
     {
         slug: 'cranbourne-north',
@@ -292,12 +352,14 @@ export const CENTRES = [
         suburb: 'Ravenhall',
         region: 'Western Melbourne · our West Centre',
         address: null, // TODO Andy: street address
-        note: 'Our new West Centre in Melbourne’s west.',
+        note: 'Our new West Centre. Bookings open now.',
         isNew: true,
+        badge: 'Bookings open',
     },
 ];
 
-export const coachesAt = (centreSlug) => COACHES.filter((c) => c.centre === centreSlug);
+export const coachesAt = (centreSlug) => COACHES.filter((c) => c.centres.includes(centreSlug));
+export const coachOf = (slug) => COACHES.find((c) => c.slug === slug);
 export const tierOf = (key) => TIERS.find((t) => t.key === key);
 export const centreOf = (slug) => CENTRES.find((c) => c.slug === slug);
 
@@ -328,16 +390,16 @@ export const FAQ = [
         a: 'The coach brings the Academy’s technology into the lane: the Match Centre, bowling maps and fielding heat maps, plus our Performance Partners’ tools. Your player doesn’t only hear what to fix. They see it, and they see it improve.',
     },
     {
-        q: 'Do I pay anything today?',
-        a: 'No. Today you request a coach. Our team contacts you to agree the day and time, then sends a payment link. Your session is booked when it is paid.',
+        q: 'How does 1-to-2 work?',
+        a: 'Two players, one coach, one lane, for the same price as 1-to-1. The two families share it. We believe players learn best training with other players, so we make it easy to bring a teammate, a friend or a sibling at a similar level. Tell us their name on the form and we send their family a short form before the first session.',
     },
     {
-        q: 'Can my child train with a friend?',
-        a: 'Yes. Choose 1-to-2 or 1-to-3 and tell us the other players’ names. They should be at a similar level and age, so the session works for everyone. We send each extra player’s family their own short form before the first session.',
+        q: 'How do the times work?',
+        a: 'Each coach marks their availability every week, and the page shows it as it is updated. Choose the sessions you want. Once paid, each session is subject to lane availability at the centre and our confirmation. If a time can’t be confirmed, we offer the nearest one.',
     },
     {
         q: 'Which coach should we choose?',
-        a: 'Choose by centre first, then by what your player wants to work on: each coach shows their specialism. Not sure? Choose “Match me with a coach” and we will pick the best fit.',
+        a: 'Choose by centre first, then by what your player wants to work on: each coach shows their specialty, and every coach covers all aspects of the game. Not sure? Choose “Match me with a coach” and we will pick the best fit.',
     },
     {
         q: 'What ages do you coach?',
@@ -357,7 +419,8 @@ export const FAQ = [
 
 // ── Success page ─────────────────────────────────────────
 export const SUCCESS = {
-    title: 'Request received',
-    body: 'Our team will contact you within two business days to confirm your coach, day and time, and send your payment link.', // TODO Andy: confirm the response time
-    nothingPaid: 'Nothing has been charged. Your session is booked once it is paid.',
+    title: 'Booking received',
+    body: 'Our team will confirm each session once the lane is booked at the centre, usually within two business days.', // TODO Andy: confirm the response time
+    nothingPaid: 'Nothing has been charged yet. We will send your payment link with the confirmation.',
+    paid: 'Payment received. Your sessions are subject to lane availability and our confirmation.',
 };
