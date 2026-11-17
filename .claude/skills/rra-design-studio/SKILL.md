@@ -1,0 +1,136 @@
+---
+name: rra-design-studio
+description: Design studio and brand gate for Rajasthan Royals Academy (Melbourne and Australia). Use for ANY visual or outbound creative - social posts, stories, reels/video, flyers, posters, job ads, web tiles and banners, email headers, event signage, certificates - and for checking someone else's design before it is posted, sent or put on the website. Trigger on "make a post", "design a flyer", "social tile", "job ad", "story", "reel", "banner", "graphic for", "is this on brand", "brand check", "can we post this", or when Andy shares a design he likes as a reference. Game-day team sheets use the royals-game-day-creatives skill, and still pass the gate here.
+---
+
+# RRA Design Studio
+
+Andy (owner) wants every creative to look like it came from one studio: clean, bold, on brand.
+Nothing goes on the website, socials, email or print until it passes **The Gate** (section 7).
+Speak to Andy plainly; he isn't a designer or developer.
+
+Sources, in order of authority:
+1. Royals brand team rulings (Khyati Shah, khyati.shah@rajasthanroyals.com; Srnjayi Jain)
+2. `RR-MASTER BRAND GUIDELINES (1).pdf` (95 pp, repo root) and RRA 26 Design Guidelines
+   (Google Drive id 1oCaboeXeRKIBvlCX0sM0DR2ED2hfVj2a)
+3. `Branding Guidlines/BRAND_GUIDE.md` and `BRAND_GUIDE.md` (summaries of the above)
+4. Andy's house style (this file). It refines the guidelines; it never breaks them.
+
+## 1. House style: "the Game Day look" (Andy's reference, Nov 2026)
+
+The approved reference is the Game Day cover + Junior Game team sheet (Sun 15 Nov 2026).
+What makes it work, and what every new design copies:
+
+- **One idea per frame.** One huge headline, one supporting line, the facts in cards. No clutter.
+- **Two-word headline, two colours.** First word white, second word pink, Montserrat 900,
+  tight leading (0.9), uppercase. GAME / DAY, JUNIOR / GAME, NOW / HIRING, TERM 1 / OPEN.
+- **Brand gradient background**: `linear-gradient(165deg, #001D48 0%, #E11F8F 100%)`.
+- **White line-art lion** bleeding off the right edge, large (~80% frame height), opacity 0.35-0.45.
+  Files: `brand/logos/lion-rampant-white.png`, `public/assets/rr-lion-white.png`.
+- **White logo top-left**, generous clear space.
+- **Chips** for date / format / time: solid pink, solid Admiral Blue `#1226AA` or navy, white
+  Montserrat 800 uppercase, letter-spacing 0.06em, square-ish corners (4px).
+- **Fact cards**: white cards (radius 12-16px) with blue eyebrow label, navy 900 title, grey
+  sub-line, navy chip for the time. On team sheets: translucent navy panels instead (no white).
+- **Navy footer bar**: "FINDING A WAY TO *WIN* FROM ANYWHERE" (WIN pink, 900 italic) and
+  "HALLA BOL!" right-aligned.
+- **Margins**: 64px safe area on 1080-wide frames. Nothing important within 64px of an edge.
+  Stories: keep 250px top and bottom clear of text (Instagram UI covers it).
+
+## 2. Brand tokens
+
+| Token | Hex | Use |
+|---|---|---|
+| RR Pink | `#E11F8F` | Accent word, chips, numbers, underlines, CTA buttons |
+| Admiral / RR Blue | `#1226AA` | Secondary chips, eyebrow labels |
+| Deep Navy | `#001D48` | Gradient start, footer bar, card titles, panels |
+| Light Pink | `#E96BB0` | Hover/secondary only |
+| Logo Blue | `#0075C9` | Only inside the supplied blue logo file. Never recolour, never use as a UI colour |
+| White | `#FFFFFF` | Headlines, logo on dark, cards |
+
+Font: **Montserrat only** (500-900; 900 italic for WIN). Local files: `Branding Guidlines/Montserrat.zip`
+or `npm pack @fontsource/montserrat`. PowerPoints use Verdana (master guide rule).
+Romagna/Romagna Exo is the IPL franchise display face: we don't have a licence, so don't fake it.
+
+## 3. Logos (`brand/logos/`)
+
+| File | Use on |
+|---|---|
+| `rra-melbourne-white.svg/.png` | Gradient, navy, photos (DEFAULT for social) |
+| `rra-melbourne-blue.svg/.png` | White or very light backgrounds only |
+| `rra-melbourne-pink.png` | White backgrounds only (merch, print on white) |
+| `rra-australia-white.svg/.png` / `-blue` | National comms, job ads for the national body, tours |
+| `lion-rampant-white.png`, `lion-white.png` | Brand element, not a logo |
+
+Rules (master guide): white on gradient or black, pink or blue on white. Never recolour,
+stretch, rotate, outline, add shadow/glow, crop, or put it in a box/badge shape. Clear space =
+width of the "R" in ROYALS on every side. Minimum 70px wide on screen, 25mm in print.
+Use Melbourne for anything run by the Melbourne academy; Australia for national.
+
+## 4. Formats
+
+| Output | Size (px) | Notes |
+|---|---|---|
+| Instagram/Facebook feed | 1080 x 1350 | Default for every post |
+| Square (LinkedIn, FB event) | 1080 x 1080 | |
+| Story / Reel / TikTok | 1080 x 1920 | 250px top/bottom text-free |
+| LinkedIn job ad / link image | 1200 x 627 | |
+| Web hero tile | 1920 x 800 (+ 1080 x 1350 phone crop) | Check against the live site |
+| Web card tile | 1200 x 900 | |
+| Email header | 1200 x 400 | |
+| A4 flyer | 2480 x 3508 (300dpi) + PDF with 3mm bleed | QR code bottom-right, URL under it |
+| Video | 1080 x 1920 and 1080 x 1350, 30fps, 6-20s | Captions burned in, logo end card 1.5s |
+
+## 5. Recipes
+
+- **Program / term promo**: headline pair (TERM 1 / OPEN), one line of who/when/where,
+  2-3 fact cards (Ages, Venue, Starts), pink CTA chip "BOOK AT RRAMELBOURNE.COM", footer.
+  Price only if the page shows it. Link to the real page (check it exists).
+- **Event / open day / camp**: date chip + format chip top-right, headline pair, venue card(s), CTA.
+- **Job ad**: NOW / HIRING, role title in white 800, 3 bullets max (what you'll do / who you are /
+  where), "Apply: rramelbourne.com/careers" chip. Australia logo if it's a national role. No salary
+  unless Andy gives it. Include "Working With Children Check required" for any coaching role.
+- **Result / congrats / player spotlight**: photo full-bleed, desaturated with pink-blue duotone
+  (master guide photo rule), gradient fading up from the bottom, name in 900, stat in pink.
+- **Web tile**: same type system, no footer bar, larger safe area for responsive crops; hand to
+  the dev team with the `dev-handoff` skill.
+- **Video (reels, story, ad)**: build with Remotion (`remotion-assets/`). Motion: headline words
+  slide up 12px + fade, 300ms, 80ms stagger; lion drifts 20px over the clip; chips pop (scale
+  0.9->1). Cuts on the beat. Burned-in captions in Montserrat 800 white with navy box.
+  End card = gradient + white logo + URL. Licensed music only.
+
+## 6. Build and render
+
+Build each frame as static HTML at exact pixel size, local images and embedded Montserrat,
+then screenshot with Playwright (`deviceScaleFactor: 1` at final size, or 2 for print). Look at
+every PNG yourself before sending. Send files named `<n>-<Thing>-<Format>.png`.
+When Andy shares a design he likes: list what makes it work, add it to section 1 if it's a
+new pattern, and ask before it overrides an existing rule.
+
+Copy: Australian English, plain words (multilingual families), no jargon, no exclamation
+marks except HALLA BOL!. Names spelled exactly as given. Dates as "Sunday 15 November".
+Never put children's surnames + school + photo together. Only use photos of players with
+photo consent (`accept_social_media` = true).
+
+## 7. The Gate (run on EVERY creative before it is posted, sent or put live)
+
+Check the final rendered file, not the source. Report a table: item, PASS/FAIL, fix.
+
+1. **Logo**: correct entity (Melbourne vs Australia), supplied file, correct colour for the
+   background, not recoloured/stretched/boxed, clear space, >= 70px wide.
+2. **Colour**: only tokens from section 2. No off-brand blues, greens, golds, black bars.
+3. **Type**: Montserrat only. No outlined/hollow text, no drop shadows, no more than 3 weights.
+4. **Hierarchy**: one headline, readable at phone size (headline >= 90px on 1080 frames,
+   body >= 28px). Nothing in the safe-area margins.
+5. **Brand elements**: gradient + lion or approved photo treatment; footer on social posts.
+6. **Facts**: dates, days, times, venues, prices and URLs match the website/booking page.
+   Day matches date. Links resolve. No arrival/warm-up times on game-day posts.
+7. **People**: names spelled right, photo consent held, no child identifiable with school.
+8. **Copy**: plain English, Australian spelling, no typos, CTA present when there's something to book.
+9. **Format**: right size for the channel, file under 8MB (image) / 100MB (video).
+10. **Approval**: anything using the Rajasthan Royals name for a new campaign, paid ad, partner
+    or press goes to Khyati Shah / Srnjayi Jain at the Royals before it goes out.
+
+Any FAIL = don't post. Fix it, re-render, re-run the Gate. If someone else (Alex or the team)
+sends a design for checking, run the Gate on it and send back the table plus a corrected
+version where you can.

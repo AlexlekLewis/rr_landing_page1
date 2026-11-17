@@ -62,10 +62,21 @@ Worked example: Junior Royals (`src/components/junior-royals-t3/JRT3Registration
 
 A paid page without this is not finished: don't open the PR, hand it off or put it live.
 
+## Brand gate on every creative
+
+Andy, 17 Nov 2026: *"make sure that we don't ever post on websites, socials or other channels
+something that doesn't fit the design brief for our business."*
+
+Every image, video, flyer, tile or banner that goes on the site, socials, email or print must
+pass **The Gate** in `.claude/skills/rra-design-studio/SKILL.md` §7 first (logo, colour,
+Montserrat, hierarchy, facts, consent, approval). Use the logo files in `brand/logos/` only:
+never redraw, recolour or screenshot a logo. Any FAIL means it doesn't go out.
+
 Section numbers that skills cite (e.g. "CLAUDE.md §1") refer to the master CLAUDE.md in the
 team's Master Landing Page folder, not this file.
 
 ## Skills for this site
 
 - `rr-page-generator`: build or audit a page (copy, structure, backend, promo surfaces).
+- `rra-design-studio`: social posts, flyers, job ads, web tiles, video, and the brand gate.
 - `dev-handoff`: the developer hand-off PDF and Google Drive folder after any page change.
