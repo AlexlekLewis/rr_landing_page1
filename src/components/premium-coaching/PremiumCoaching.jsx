@@ -122,47 +122,68 @@ const TechVisual = ({ item }) => {
     );
 };
 
-const Tech = () => (
-    <section className="bg-rr-navy py-20 md:py-28">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <div className="max-w-3xl mb-14">
-                <Eyebrow dark>{TECH.eyebrow}</Eyebrow>
-                <H2 dark className="mb-5">{TECH.title}</H2>
-                <p className="text-white/80 font-medium leading-relaxed">{TECH.intro}</p>
-            </div>
-            <div className="space-y-14 md:space-y-20">
-                {TECH.items.map((t, i) => (
-                    <div key={t.key} className="grid md:grid-cols-12 gap-6 md:gap-12 items-center">
-                        <div className={`md:col-span-6 ${i % 2 ? 'md:order-2' : ''}`}>
-                            <div className="max-w-[440px] mx-auto"><TechVisual item={t} /></div>
-                        </div>
-                        <div className={`md:col-span-6 ${i % 2 ? 'md:order-1' : ''}`}>
-                            <p className="text-rr-light-pink text-xs font-black tracking-widest mb-1">0{i + 1}</p>
-                            <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight mb-3">{t.title}</h3>
-                            <p className="text-white/85 font-medium leading-relaxed">{t.body}</p>
-                            <Reveal dark label="More">{t.more}</Reveal>
-                            {t.logos && (
-                                <div className="flex items-center gap-3 mt-5">
-                                    {t.logos.map((l) => (
-                                        <span key={l.name} className="bg-white rounded-xl h-14 px-4 flex items-center"><img src={l.src} alt={l.name} className="max-h-8 w-auto" /></span>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
+const Tech = () => {
+    const [feature, ...rest] = TECH.items;
+    return (
+        <section className="bg-rr-navy py-20 md:py-28">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6">
+                <div className="max-w-3xl mb-10 md:mb-12">
+                    <Eyebrow dark>{TECH.eyebrow}</Eyebrow>
+                    <H2 dark className="mb-5">{TECH.title}</H2>
+                    <p className="text-white/80 font-medium leading-relaxed">{TECH.intro}</p>
+                </div>
+
+                {/* The Match Centre: the one big picture */}
+                <div className="grid md:grid-cols-12 gap-6 md:gap-10 items-center mb-10 md:mb-12">
+                    <div className="md:col-span-7"><TechVisual item={feature} /></div>
+                    <div className="md:col-span-5">
+                        <p className="text-rr-light-pink text-xs font-black tracking-widest mb-1">01</p>
+                        <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight mb-3">{feature.title}</h3>
+                        <p className="text-white/85 font-medium leading-relaxed">{feature.body}</p>
+                        <Reveal dark label="More">{feature.more}</Reveal>
                     </div>
-                ))}
-            </div>
-            <div className="mt-16 border-t border-white/15 pt-8">
-                <p className="text-xs font-black uppercase tracking-[0.3em] text-rr-light-pink mb-4">And in every session</p>
-                <ul className="grid sm:grid-cols-3 gap-4">
-                    {TECH.every.map((e) => (
-                        <li key={e} className="flex gap-2.5 text-white font-semibold text-sm leading-snug"><Check className="w-5 h-5 text-rr-light-pink shrink-0" />{e}</li>
+                </div>
+
+                {/* The rest: compact, same-size cards */}
+                <div className="grid sm:grid-cols-3 gap-4 md:gap-5">
+                    {rest.map((t, i) => (
+                        <div key={t.key} className="bg-rr-dark border border-white/10 rounded-2xl overflow-hidden flex flex-col">
+                            <div className="h-44 md:h-48 bg-black flex items-center justify-center overflow-hidden">
+                                {t.visual.startsWith('photo:')
+                                    ? <img src={t.visual.slice(6)} alt={t.caption} loading="lazy" className="w-full h-full object-cover object-top" />
+                                    : <div className={`h-full ${t.visual === 'bowling-map' ? 'w-[110px]' : 'w-[180px]'} flex items-center`}>{t.visual === 'bowling-map' ? <BowlingMap /> : <HeatMap />}</div>}
+                            </div>
+                            <div className="p-4 md:p-5 flex-1 flex flex-col">
+                                <p className="text-rr-light-pink text-xs font-black tracking-widest mb-1">0{i + 2}</p>
+                                <h3 className="text-lg font-black text-white uppercase tracking-tight mb-1.5">{t.title}</h3>
+                                <p className="text-sm text-white/80 font-medium leading-relaxed">{t.body}</p>
+                                <p className="mt-2 text-[11px] text-white/50 font-semibold">
+                                    {!t.visual.startsWith('photo:') && <span className="inline-block bg-white/15 text-white text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full mr-1.5">Example</span>}
+                                    {t.caption}
+                                </p>
+                                {t.logos && (
+                                    <div className="flex items-center gap-2 mt-3">
+                                        {t.logos.map((l) => <span key={l.name} className="bg-white rounded-lg h-9 px-3 flex items-center"><img src={l.src} alt={l.name} className="max-h-5 w-auto" /></span>)}
+                                    </div>
+                                )}
+                                <div className="mt-auto"><Reveal dark label="More">{t.more}</Reveal></div>
+                            </div>
+                        </div>
                     ))}
-                </ul>
+                </div>
+
+                <div className="mt-10 border-t border-white/15 pt-7">
+                    <p className="text-xs font-black uppercase tracking-[0.3em] text-rr-light-pink mb-4">And in every session</p>
+                    <ul className="grid sm:grid-cols-3 gap-4">
+                        {TECH.every.map((e) => (
+                            <li key={e} className="flex gap-2.5 text-white font-semibold text-sm leading-snug"><Check className="w-5 h-5 text-rr-light-pink shrink-0" />{e}</li>
+                        ))}
+                    </ul>
+                </div>
             </div>
-        </div>
-    </section>
-);
+        </section>
+    );
+};
 
 // ── HOW: steps ──────────────────────────────────────────
 const How = () => (

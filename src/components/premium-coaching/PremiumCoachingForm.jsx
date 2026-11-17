@@ -7,7 +7,7 @@ import TrainingShirtStep from '../shared/TrainingShirtStep';
 import { EMPTY_CONSENTS, consentErrors, consentColumns } from '../../lib/governance';
 import { EMPTY_SHIRT, shirtError, shirtTag, needsShirt, shirtCheckoutUrl, TRAINING_SHIRT } from '../../lib/kit/trainingShirt';
 import {
-    CENTRES, FORMATS, PACKAGES, FOCUS_OPTIONS, LEVEL_OPTIONS, MATCH_ME, DB_TABLE, PROGRAM_NAME, SUCCESS_ROUTE,
+    CENTRES, FORMATS, PACKAGES, FOCUS_OPTIONS, LEVEL_OPTIONS, DB_TABLE, PROGRAM_NAME, SUCCESS_ROUTE,
     AVAILABILITY_NOTE, coachesAt, coachOf, tierOf, centreOf, perSession, packageTotal, money, paymentLinksFor,
 } from './premiumCoachingData';
 import { useAllAvailability, groupByNight, nightLabel, timeLabel, slotKey } from './useCoachAvailability';
@@ -61,7 +61,7 @@ const Choice = ({ on, onClick, title, sub, bad, disabled }) => (
 );
 
 const EMPTY = {
-    centre: '', coach: '', format: '', partner: '', sessions: 0, preferred_times: '',
+    centre: '', coach: '', format: '', partner: '', sessions: 0,
     player_first_name: '', player_last_name: '', player_age: '', focus: '', level: '', club: '',
     parent_name: '', email: '', phone: '', suburb: '', notes: '',
     [HONEYPOT_FIELD]: '',
@@ -69,7 +69,7 @@ const EMPTY = {
 
 const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
     const navigate = useNavigate();
-    const [form, setForm] = useState({ ...EMPTY, centre: initialCentre, coach: initialCoach });
+    const [form, setForm] = useState({ ...EMPTY, centre: initialCentre, coach: coachOf(initialCoach)?.bookable ? initialCoach : '' });
     const [picked, setPicked] = useState([]); // [{date,start,end,centre}]
     const [shirt, setShirt] = useState(EMPTY_SHIRT);
     const [consents, setConsents] = useState(EMPTY_CONSENTS);
@@ -83,8 +83,9 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
 
     const age = parseInt(form.player_age, 10);
     const adult = Number.isFinite(age) && age >= 18;
-    const coaches = coachesAt(form.centre);
-    const coach = form.coach && form.coach !== MATCH_ME ? coachOf(form.coach) : null;
+    // Only coaches with a price can be booked; families pick from the coach's open times.
+    const coaches = coachesAt(form.centre).filter((c) => c.bookable);
+    const coach = form.coach ? coachOf(form.coach) : null;
     const tier = coach?.tier || null;
     const priced = !!(coach?.bookable);
     const coachSlug = coach?.slug || '';
@@ -93,6 +94,7 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
     const total = priced && form.sessions ? packageTotal(tier, form.sessions) : null;
     const links = priced && form.sessions ? paymentLinksFor(tier, form.sessions) : null;
     const maxPicks = form.sessions || 0;
+    const openCount = nights.reduce((n, x) => n + x.slots.length, 0);
 
     const chooseCentre = (slug) => { setForm((f) => ({ ...f, centre: slug, coach: '' })); setPicked([]); };
     const chooseCoach = (slug) => { setForm((f) => ({ ...f, coach: slug, sessions: coachOf(slug)?.bookable ? f.sessions : 0 })); setPicked([]); };
@@ -107,10 +109,12 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
     const validate = () => {
         const e = {};
         if (!form.centre) e.centre = 'Please choose a centre.';
-        if (!form.coach) e.coach = 'Please choose a coach, or “Match me with a coach”.';
+        if (!form.coach) e.coach = 'Please choose a coach.';
+        else if (openCount === 0) e.coach = 'This coach has no open times right now. Please choose another coach or check back soon.';
+        if (form.coach && openCount > 0 && !form.sessions) e.sessions = 'Please choose 1, 3 or 5 sessions.';
+        if (form.sessions && picked.length !== form.sessions) e.times = `Please choose ${form.sessions} session time${form.sessions > 1 ? 's' : ''} (${picked.length} chosen).`;
         if (!form.format) e.format = 'Please choose 1-to-1 or 1-to-2.';
         if (form.format === '1-2' && !form.partner.trim()) e.partner = 'Please tell us who is training with your player.';
-        if (priced && !form.sessions) e.sessions = 'Please choose 1, 3 or 5 sessions.';
         if (!form.player_first_name.trim()) e.player_first_name = 'Please enter the player’s first name.';
         if (!form.player_last_name.trim()) e.player_last_name = 'Please enter the player’s last name.';
         if (!Number.isFinite(age) || age < 5 || age > 70) e.player_age = 'Please enter the player’s age.';
@@ -161,7 +165,6 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
             email: form.email.trim().toLowerCase(),
             phone: form.phone.trim(),
             suburb: form.suburb.trim() || null,
-            availability: form.preferred_times.trim() || null,
             notes: form.notes.trim() || null,
             shirt_size: needsShirt(shirt) ? shirt.size : null,
             source: `premium-private-coaching${shirtTag(shirt)}`,
@@ -176,6 +179,14 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
             setFailed('Something went wrong sending your booking. Please try again, or text us with the chat button.');
             return;
         }
+
+        // Tell the coach straight away (api/notify-private-coaching-bookings.js emails them with
+        // one-tap Call / Text / WhatsApp buttons). Fire and forget: the 10-minute job retries.
+        try {
+            fetch('/api/notify-private-coaching-bookings', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }), keepalive: true,
+            }).catch(() => {});
+        } catch { /* never blocks the booking */ }
 
         try {
             if (typeof window.fbq === 'function') {
@@ -230,49 +241,32 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
                         {!form.centre && <p className="text-sm text-slate-500 font-medium">Choose a centre first.</p>}
                         {form.centre && (
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                {coaches.map((c) => (
-                                    <Choice key={c.slug} on={form.coach === c.slug} bad={errors.coach} onClick={() => chooseCoach(c.slug)}
-                                        title={c.name}
-                                        sub={[tierOf(c.tier)?.name || 'Royals Coach', c.bookable ? `${money(perSession(c.tier, 1))} a session` : 'price coming soon'].join(' · ')} />
-                                ))}
-                                <Choice on={form.coach === MATCH_ME} bad={errors.coach} onClick={() => chooseCoach(MATCH_ME)}
-                                    title="Match me with a coach" sub="We choose the best fit and confirm the price with you." />
+                                {coaches.map((c) => {
+                                    const open = groupByNight(slots, c.slug, form.centre).reduce((n, x) => n + x.slots.length, 0);
+                                    return (
+                                        <Choice key={c.slug} on={form.coach === c.slug} bad={errors.coach} onClick={() => chooseCoach(c.slug)}
+                                            title={c.name}
+                                            sub={`${tierOf(c.tier)?.name} · ${money(perSession(c.tier, 1))} a session · ${open ? `${open} open time${open > 1 ? 's' : ''}` : 'no open times right now'}`} />
+                                    );
+                                })}
                             </div>
                         )}
                         <Err>{errors.coach}</Err>
                     </div>
 
-                    {/* 3. Format */}
-                    <div id="f-format">
-                        <p className={labelCls}>3. 1-to-1 or 1-to-2 *</p>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            {FORMATS.map((f) => (
-                                <Choice key={f.value} on={form.format === f.value} bad={errors.format} onClick={() => set('format', f.value)}
-                                    title={`${f.label}${f.recommended ? ' · we recommend' : ''}`} sub={f.value === '1-2' ? 'Same price, shared by the two families.' : f.title} />
-                            ))}
-                        </div>
-                        <Err>{errors.format}</Err>
-                        {form.format === '1-2' && (
-                            <div className="mt-4">
-                                <Field id="partner" label="Training partner" error={errors.partner} hint="Name and age. We send their family a short form before the first session.">
-                                    <input id="partner" value={form.partner} onChange={ev('partner')} className={input(errors.partner)} placeholder="e.g. Sam Lee (12)" />
-                                </Field>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* 4. Package */}
-                    {priced && (
+                    {/* 3. Package */}
+                    {coach && openCount > 0 && (
                         <div id="f-sessions">
-                            <p className={labelCls}>4. How many sessions? *</p>
+                            <p className={labelCls}>3. How many sessions? *</p>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                 {PACKAGES.map((p) => {
                                     const pp = perSession(tier, p.sessions);
                                     const tt = packageTotal(tier, p.sessions);
+                                    const short = openCount < p.sessions;
                                     return (
-                                        <Choice key={p.sessions} on={form.sessions === p.sessions} bad={errors.sessions} onClick={() => chooseSessions(p.sessions)}
+                                        <Choice key={p.sessions} on={form.sessions === p.sessions} bad={errors.sessions} disabled={short} onClick={() => chooseSessions(p.sessions)}
                                             title={`${p.label} · ${money(tt)}`}
-                                            sub={`${money(pp)} a session incl. GST${form.format === '1-2' ? ` · ${money(tt / 2)} each family` : ''}`} />
+                                            sub={short ? `Only ${openCount} open time${openCount > 1 ? 's' : ''} right now` : `${money(pp)} a session incl. GST${form.format === '1-2' ? ` · ${money(tt / 2)} each family` : ''}`} />
                                     );
                                 })}
                             </div>
@@ -280,45 +274,55 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
                         </div>
                     )}
 
-                    {/* 5. Times */}
-                    {coach && (
+                    {/* 4. Times: chosen from the coach's open times only */}
+                    {coach && openCount > 0 && form.sessions > 0 && (
                         <div id="f-times">
-                            <p className={labelCls}>{priced ? '5' : '4'}. Choose your times</p>
-                            {nights.length > 0 ? (
-                                <>
-                                    <p className="text-xs text-rr-charcoal font-medium mb-3">
-                                        {coach.name.split(' ')[0]}’s open times at {centre?.suburb}.{' '}
-                                        {maxPicks ? `Pick up to ${maxPicks} (${picked.length} chosen).` : 'Choose your number of sessions first.'}
-                                    </p>
-                                    <div className="space-y-3">
-                                        {nights.map((n) => (
-                                            <div key={n.date}>
-                                                <p className="text-xs font-black text-rr-dark uppercase tracking-wide mb-1.5">{nightLabel(n.date)}</p>
-                                                <div className="flex flex-wrap gap-2">
-                                                    {n.slots.map((s) => {
-                                                        const on = picked.some((x) => slotKey(x) === slotKey(s));
-                                                        const full = !on && (picked.length >= maxPicks);
-                                                        return (
-                                                            <button type="button" key={slotKey(s)} onClick={() => togglePick(s)} disabled={full} aria-pressed={on}
-                                                                className={`px-3 py-2 rounded-lg border-2 text-xs font-black transition-colors disabled:opacity-40 ${on ? 'border-rr-pink bg-rr-pink text-white' : 'border-slate-200 text-rr-dark hover:border-rr-pink/50'}`}>
-                                                                {timeLabel(s.start)}
-                                                            </button>
-                                                        );
-                                                    })}
-                                                </div>
-                                            </div>
-                                        ))}
+                            <p className={labelCls}>4. Choose your {form.sessions > 1 ? `${form.sessions} sessions` : 'session'} *</p>
+                            <p className="text-xs text-rr-charcoal font-medium mb-3">
+                                {coach.name.split(' ')[0]}’s open times at {centre?.suburb}. {picked.length} of {maxPicks} chosen.
+                            </p>
+                            <div className="space-y-3">
+                                {nights.map((n) => (
+                                    <div key={n.date} className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-4">
+                                        <p className="text-xs font-black text-rr-dark uppercase tracking-wide sm:w-32 shrink-0">{nightLabel(n.date)}</p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {n.slots.map((s) => {
+                                                const on = picked.some((x) => slotKey(x) === slotKey(s));
+                                                const full = !on && picked.length >= maxPicks;
+                                                return (
+                                                    <button type="button" key={slotKey(s)} onClick={() => togglePick(s)} disabled={full} aria-pressed={on}
+                                                        className={`px-3.5 py-2 rounded-lg border-2 text-xs font-black transition-colors disabled:opacity-40 ${on ? 'border-rr-pink bg-rr-pink text-white' : 'border-slate-200 text-rr-dark hover:border-rr-pink/50'}`}>
+                                                        {timeLabel(s.start)}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
                                     </div>
-                                </>
-                            ) : (
-                                <p className="text-xs text-rr-charcoal font-medium mb-3">{coach.name.split(' ')[0]}’s times for the coming weeks aren’t published yet. Tell us what suits you and we will confirm.</p>
-                            )}
-                            <div className="mt-4">
-                                <Field id="preferred_times" label={nights.length ? 'Other days or times that suit' : 'Days and times that suit'} optional hint="e.g. Tuesday or Thursday after 5pm">
-                                    <input id="preferred_times" value={form.preferred_times} onChange={ev('preferred_times')} className={input(false)} />
-                                </Field>
+                                ))}
                             </div>
-                            <p className="text-[11px] text-slate-500 font-semibold leading-relaxed mt-2">{AVAILABILITY_NOTE}</p>
+                            <Err>{errors.times}</Err>
+                            <p className="text-[11px] text-slate-500 font-semibold leading-relaxed mt-3">{AVAILABILITY_NOTE}</p>
+                        </div>
+                    )}
+
+                    {/* 5. Format */}
+                    {coach && openCount > 0 && (
+                        <div id="f-format">
+                            <p className={labelCls}>5. 1-to-1 or 1-to-2 *</p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                {FORMATS.map((f) => (
+                                    <Choice key={f.value} on={form.format === f.value} bad={errors.format} onClick={() => set('format', f.value)}
+                                        title={`${f.label}${f.recommended ? ' · we recommend' : ''}`} sub={f.value === '1-2' ? 'Same price, shared by the two families.' : f.title} />
+                                ))}
+                            </div>
+                            <Err>{errors.format}</Err>
+                            {form.format === '1-2' && (
+                                <div className="mt-4">
+                                    <Field id="partner" label="Training partner" error={errors.partner} hint="Name and age. We send their family a short form before the first session.">
+                                        <input id="partner" value={form.partner} onChange={ev('partner')} className={input(errors.partner)} placeholder="e.g. Sam Lee (12)" />
+                                    </Field>
+                                </div>
+                            )}
                         </div>
                     )}
 
@@ -383,7 +387,7 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
                     <GovernanceConsents value={consents} onChange={setConsents} errors={errors} adult={adult} />
 
                     {/* Summary before booking (CLAUDE.md: the shirt shows here) */}
-                    {(coach || form.coach === MATCH_ME) && (
+                    {coach && (
                         <div className="rounded-2xl bg-rr-dark text-white p-5 sm:p-6" data-summary>
                             <p className="text-[11px] font-black uppercase tracking-widest text-rr-light-pink mb-3">Your booking</p>
                             <dl className="space-y-1.5 text-sm">

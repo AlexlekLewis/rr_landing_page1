@@ -400,11 +400,11 @@ export const FAQ = [
     },
     {
         q: 'How do the times work?',
-        a: 'Each coach marks their availability every week, and the page shows it as it is updated. Choose the sessions you want. Once paid, each session is subject to lane availability at the centre and our confirmation. If a time can’t be confirmed, we offer the nearest one.',
+        a: 'Each coach marks their availability every week in our coaching portal, and the page shows it as it is updated. When you book, you choose your sessions from the coach’s open times. Once paid, each session is subject to lane availability at the centre and our confirmation. If a time can’t be confirmed, we offer the nearest one.',
     },
     {
         q: 'Which coach should we choose?',
-        a: 'Choose by centre first, then by what your player wants to work on: each coach shows their specialty, and every coach covers all aspects of the game. Not sure? Choose “Match me with a coach” and we will pick the best fit.',
+        a: 'Choose by centre first, then by what your player wants to work on: each coach shows their specialty, and every coach covers all aspects of the game. Not sure? Text us with the chat button and we will help you choose.',
     },
     {
         q: 'What ages do you coach?',

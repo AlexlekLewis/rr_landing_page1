@@ -13,7 +13,8 @@ import { useAllAvailability, groupByNight, nightLabel, timeLabel } from './useCo
 //      Phone: one slim row per coach. Tablet/desktop: a grid of cards.
 //      The full bio is one tap away ("About <name>").
 // Times come live from the coach's availability (useCoachAvailability); a coach is never
-// offered at two centres on the same night.
+// offered at two centres on the same night. Book only works when the coach has open times:
+// families choose from the coach's times, they don't send us times that suit (Andy, 18 Nov).
 
 const TIER_ORDER = { head: 0, performance: 1, academy: 2 };
 const firstName = (n) => n.split(' ')[0];
@@ -44,7 +45,7 @@ const NextTimes = ({ c, centre }) => {
         <div className="mt-3">
             <p className="text-[10px] font-black uppercase tracking-widest text-rr-dark mb-1.5 flex items-center gap-1"><CalendarClock className="w-3.5 h-3.5 text-rr-pink" /> Next open times</p>
             {!loaded && <p className="text-xs text-slate-400 font-medium">Loading…</p>}
-            {loaded && next.length === 0 && <p className="text-xs text-rr-charcoal font-medium">New times each week. Book and tell us what suits.</p>}
+            {loaded && next.length === 0 && <p className="text-xs text-rr-charcoal font-medium">No open times right now. New times are added every week.</p>}
             {next.length > 0 && (
                 <div className="flex flex-wrap gap-1.5">
                     {next.map((s) => (
@@ -58,6 +59,9 @@ const NextTimes = ({ c, centre }) => {
 
 const CoachCard = ({ c, centre, onBook }) => {
     const [open, setOpen] = useState(false);
+    const { slots } = useAllAvailability();
+    const openTimes = groupByNight(slots, c.slug, centre).reduce((n, x) => n + x.slots.length, 0);
+    const canBook = c.bookable && openTimes > 0;
     const others = c.centres.filter((x) => x !== centre).map((x) => centreOf(x).suburb);
     return (
         <article className="bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col" data-coach={c.slug}>
@@ -85,9 +89,9 @@ const CoachCard = ({ c, centre, onBook }) => {
                     </div>
                 )}
                 <div className="mt-auto pt-4 flex gap-2">
-                    <button type="button" data-cta={`book-${c.slug}`} onClick={() => onBook(centre, c.slug)}
-                        className="flex-1 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-xs px-4 py-3 rounded-full transition-colors">
-                        {c.bookable ? `Book ${firstName(c.name)}` : `Request ${firstName(c.name)}`}
+                    <button type="button" data-cta={`book-${c.slug}`} onClick={() => onBook(centre, c.slug)} disabled={!canBook}
+                        className="flex-1 bg-rr-pink hover:bg-rr-light-pink disabled:bg-slate-200 disabled:text-slate-500 text-white font-black uppercase tracking-widest text-xs px-4 py-3 rounded-full transition-colors">
+                        {canBook ? `Book ${firstName(c.name)}` : c.bookable ? 'No open times yet' : 'Coming soon'}
                     </button>
                     <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open}
                         className="inline-flex items-center gap-1 text-rr-dark font-black uppercase tracking-widest text-xs px-4 py-3 rounded-full border-2 border-slate-200 hover:border-rr-dark transition-colors">
@@ -154,12 +158,6 @@ const CoachFinder = ({ onBook }) => {
                     {shown.map((c) => <CoachCard key={`${centreSlug}-${c.slug}`} c={c} centre={centreSlug} onBook={onBook} />)}
                 </div>
 
-                <div className="mt-8 text-center">
-                    <button type="button" data-cta={`centre-${centreSlug}`} onClick={() => onBook(centreSlug, 'match-me')}
-                        className="text-rr-dark font-black uppercase tracking-widest text-xs px-6 py-3 rounded-full border-2 border-rr-dark hover:bg-rr-dark hover:text-white transition-colors">
-                        Not sure? Match me with a coach in {centre.suburb}
-                    </button>
-                </div>
             </div>
         </section>
     );
