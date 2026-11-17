@@ -16,6 +16,9 @@ Sources, in order of authority:
 3. `Branding Guidlines/BRAND_GUIDE.md` and `BRAND_GUIDE.md` (summaries of the above)
 4. Andy's house style (this file). It refines the guidelines; it never breaks them.
 
+Photos, footage, results packs and testimonials live in the Content Google Drive. Folder IDs
+and the rules for using them: `drive-map.md` (next to this file). Read it before looking for media.
+
 ## 1. House style: "the Game Day look" (Andy's reference, Nov 2026)
 
 The approved reference is the Game Day cover + Junior Game team sheet (Sun 15 Nov 2026).
