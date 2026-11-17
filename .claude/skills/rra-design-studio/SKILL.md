@@ -1,6 +1,6 @@
 ---
 name: rra-design-studio
-description: Design studio and brand gate for Rajasthan Royals Academy (Melbourne and Australia). Use for ANY visual or outbound creative - social posts, stories, reels/video, flyers, posters, job ads, web tiles and banners, email headers, event signage, certificates - and for checking someone else's design before it is posted, sent or put on the website. Trigger on "make a post", "design a flyer", "social tile", "job ad", "story", "reel", "banner", "graphic for", "is this on brand", "brand check", "can we post this", or when Andy shares a design he likes as a reference. Game-day team sheets use the royals-game-day-creatives skill, and still pass the gate here.
+description: Organic content design studio and brand gate for Rajasthan Royals Academy (Melbourne and Australia). Not for paid ad campaigns (a separate paid-ads agent does those). Use for ANY organic visual or outbound creative - social posts, stories, reels/video, flyers, posters, job ads, web tiles and banners, email headers, event signage, certificates - and for checking someone else's design before it is posted, sent or put on the website. Trigger on "make a post", "design a flyer", "social tile", "job ad", "story", "reel", "banner", "graphic for", "is this on brand", "brand check", "can we post this", or when Andy shares a design he likes as a reference. Game-day team sheets use the royals-game-day-creatives skill, and still pass the gate here.
 ---
 
 # RRA Design Studio
@@ -98,6 +98,28 @@ Use Melbourne for anything run by the Melbourne academy; Australia for national.
   slide up 12px + fade, 300ms, 80ms stagger; lion drifts 20px over the clip; chips pop (scale
   0.9->1). Cuts on the beat. Burned-in captions in Montserrat 800 white with navy box.
   End card = gradient + white logo + URL. Licensed music only.
+
+## 5b. Organic first (paid ads belong to the separate paid-ads agent)
+
+This studio makes **organic** content: posts, carousels, stories, reels, community and club
+updates. Don't build ad sets, targeting or ad copy variants; if asked, hand off to the paid-ads agent.
+The paid-ads agent's creatives still pass The Gate (§7).
+
+Organic content pillars (rotate so the feed isn't all promo; aim for no more than 1 in 4 posts selling):
+1. **Game day and results**: covers, team sheets, scorecards, player of the match.
+2. **Inside the Academy**: training clips, drills, coach tips ("one fix for your cover drive").
+3. **Our people**: player and coach spotlights, milestones, families, volunteers.
+4. **Royals connection**: Rajasthan Royals news, pathway stories, India tour moments.
+5. **What's on**: terms, holiday programs, camps, open days (the selling 1 in 4).
+
+Organic formats and how they should look:
+- **Carousel (1080 x 1350, 3-8 slides)**: slide 1 = Game Day-style headline pair that makes
+  people swipe; middle slides one point each, same grid; last slide = logo + one CTA.
+- **Reel (1080 x 1920, 7-20s)**: real footage first, hook in the first second as on-screen text,
+  burned-in captions, brand end card. Phone footage is fine; graded with the pink-blue treatment.
+- **Story**: one fact per frame, use stickers (poll, countdown, link) inside the safe area.
+- **Captions**: first line is the hook, then 2-4 short lines, then CTA if any, then hashtags
+  `#RoyalsAcademyMelbourne #RajasthanRoyals #HallaBol` (+ up to 3 relevant). Tag clubs and venues.
 
 ## 6. Build and render
 
