@@ -1,0 +1,126 @@
+// ============================================================
+// invitations.js: every "invitation list" campaign page (Andy, 17 Nov 2026).
+//
+// An invitation page is NOT a full landing page. It is a short page for a link
+// shared on social media: what the event is, where it is, how the invitation
+// list works, and a form. A family registers their details; the Academy gets in
+// touch only if there is a place.
+//
+// ONE entry below = ONE page. To add a campaign:
+//   1. Copy the RAVENHALL entry, change the slug, route and wording.
+//   2. Add it to INVITATIONS at the bottom. The route, the SEO tags and the
+//      share-preview (Facebook / WhatsApp) all follow from that list.
+//   3. Nothing to do in the database: every campaign saves to the same table,
+//      public.invitation_list_registrations, with `campaign` = the slug.
+//
+// Plain data only (no JSX, no imports): scripts/prerender-seo.mjs reads this
+// file in Node at build time.
+//
+// These pages are free "register your interest" pages, so the mandatory
+// training shirt and the four governance boxes (CLAUDE.md) do not apply.
+// If a campaign ever takes payment, it is no longer an invitation page:
+// build it with the paid-program rules instead.
+// ============================================================
+
+export const RAVENHALL = {
+    slug: 'ravenhall-opening-session',     // saved in the `campaign` column: never change after launch
+    route: '/ravenhall',
+    // Hidden page: reached by direct link only. Kept out of Google until Andy
+    // says it is public. REVIEW when the session date is set (Andy, 17 Nov 2026).
+    noindex: true,
+    open: true,                            // false = the form is replaced by the `closed` message
+
+    seo: {
+        title: "Exclusive Opening Session | Rajasthan Royals Academy, Melbourne's West",
+        description:
+            "The Rajasthan Royals Academy is opening in Ravenhall, Melbourne's West. Register for the invitation list for the exclusive opening coaching session. Places are limited.",
+        ogImage: '/assets/community-coaches.jpg',
+    },
+
+    hero: {
+        image: '/assets/community-coaches.jpg',
+        imageAlt: 'Players and coaches at a Rajasthan Royals Academy Melbourne coaching session',
+        badge: 'By invitation only',
+        eyebrow: "Ravenhall · Melbourne's West",
+        title: ['The Exclusive', 'Opening Session'],
+        lead:
+            "The Rajasthan Royals Academy is opening in Ravenhall, in Melbourne's West, in conjunction with M9 Sports Centre. The first coaching session is by invitation. Register your details to go on the invitation list.",
+        footnote: 'No payment to register · Places are limited',
+    },
+
+    cta: 'Register for the Invitation List',
+
+    // The three or four facts a visitor needs before they scroll.
+    facts: [
+        { label: 'What', value: 'A Rajasthan Royals Academy coaching session' },
+        { label: 'Where', value: "Ravenhall, Melbourne's West" },
+        { label: 'When', value: 'Date and time sent with your invitation' },
+        { label: 'Who', value: 'Players who will train on the day' },
+    ],
+
+    how: {
+        eyebrow: 'How it works',
+        title: 'The Invitation List',
+        steps: [
+            { n: '01', t: 'Register your details', d: 'It takes two minutes. Tell us who will attend and where you live. You pay nothing.' },
+            { n: '02', t: 'We review the list', d: 'Places are limited. We send invitations based on the space we have and how close you live to Ravenhall.' },
+            { n: '03', t: 'We contact you', d: 'If there is a place for you, we email or call you with your invitation, the date and the time.' },
+        ],
+        // The one thing nobody may misread. Shown in a box under the steps and again above the submit button.
+        notice: {
+            title: 'Registering does not guarantee an invitation',
+            body: 'You will only receive an invitation if there is space. We choose based on the number of places and how close you live to the venue.',
+        },
+    },
+
+    about: {
+        eyebrow: 'The session',
+        title: 'A Royals Coaching Session',
+        image: '/assets/junior-royals/gallery/squad-talk.webp',
+        imageAlt: 'A coach talking to a group of players at a Rajasthan Royals Academy Melbourne session',
+        paragraphs: [
+            'This is a real coaching session, run by Rajasthan Royals Academy Melbourne coaches. Every place is for a player who will take part.',
+            'That is why the form asks who will attend, their date of birth and how much cricket they have played. It helps us plan the right session for the players we invite.',
+        ],
+        links: [
+            { label: 'About the Academy', to: '/' },
+            { label: 'Meet the coaches', to: '/coaches' },
+        ],
+    },
+
+    form: {
+        eyebrow: 'Invitation list',
+        title: 'Register Your Details',
+        intro: 'Two minutes. No payment. We will contact you if there is a place.',
+        maxPlayers: 4,
+        venueShort: 'Ravenhall',
+        submit: 'Register for the Invitation List',
+    },
+
+    success: {
+        title: "You're On The Invitation List",
+        body: 'Thank you. We have your details. If there is a place for you at the opening session in Ravenhall, we will email or call you with your invitation, the date and the time.',
+        reminder: 'Being on the list does not guarantee an invitation. Places depend on space and how close you live to the venue.',
+        links: [
+            { label: 'Explore the Academy', to: '/' },
+            { label: 'Junior Royals', to: '/junior-royals' },
+            { label: 'Performance Squads', to: '/performance-squads' },
+        ],
+    },
+
+    closed: {
+        title: 'The Invitation List Is Closed',
+        body: 'Registrations for this session have closed. See what else is on at the Academy.',
+    },
+
+    // Meta Pixel "Lead" event: campaign name only, never a name, email or phone.
+    pixelName: 'Ravenhall Opening Session: Invitation List',
+};
+
+export const INVITATIONS = [RAVENHALL];
+
+// For src/seo/pageSeo.js and scripts/prerender-seo.mjs.
+export const INVITATION_ROUTES = INVITATIONS.map((c) => c.route);
+export const INVITATION_SEO = Object.fromEntries(
+    INVITATIONS.map((c) => [c.route, { ...c.seo, noindex: !!c.noindex }]),
+);

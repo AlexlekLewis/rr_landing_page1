@@ -34,6 +34,8 @@ import CoachesDay from './components/coaches-day/CoachesDay';
 import CoachesPage from './components/coaches/CoachesPage';
 import PrivateCoaching from './components/private-coaching/PrivateCoaching';
 import MicklehamLaunch from './components/mickleham-launch/MicklehamLaunch';
+import InvitationPage from './components/invitation/InvitationPage';
+import { INVITATIONS } from './components/invitation/invitations';
 import Reviews from './components/reviews/Reviews';
 import ProgramFeedback from './components/program-feedback/ProgramFeedback';
 import SpinClub from './components/spin-club/SpinClub';
@@ -235,6 +237,13 @@ function App() {
         <Route path="/mickleham-launch" element={<MicklehamLaunch />} />
         <Route path="/Mickleham_Launch" element={<MicklehamLaunch />} />
         <Route path="/launch" element={<MicklehamLaunch />} />
+        {/* Invitation-list pages (Andy, 17 Nov 2026): short campaign pages shared by direct
+            link. One entry in components/invitation/invitations.js = one page. Hidden: not in
+            the nav, footer or home page. First: /ravenhall (Ravenhall opening session).
+            Form → invitation_list_registrations. */}
+        {INVITATIONS.map((c) => (
+            <Route key={c.route} path={c.route} element={<InvitationPage campaign={c} />} />
+        ))}
         {/* An Afternoon for Coaches — free coaches afternoon, junior & senior (Sun 26 Jul 2026).
             Standalone registration, writes to coaches_day_registrations. Share the link directly. */}
         <Route path="/coaches-day" element={<CoachesDay />} />
