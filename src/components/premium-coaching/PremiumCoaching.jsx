@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Minus, Check, UserCheck, CreditCard, ShieldCheck, Target } from 'lucide-react';
+import { Plus, Minus, Check } from 'lucide-react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import PartnerStack from '../power-game/PartnerStack';
@@ -196,39 +196,28 @@ const Tech = () => {
     );
 };
 
-// ── HOW: steps (Andy, 18 Nov 2026: "needs to look much more professional") ──
-// A timeline: four steps joined by a line, each with an icon and a "Step 01" label.
-// Desktop: across the page. Phone: down the page with the line on the left.
-const STEP_ICONS = { coach: UserCheck, pay: CreditCard, confirm: ShieldCheck, train: Target };
-
+// ── HOW: steps (Andy, 18 Nov 2026: professional, no icons, the focus on the steps) ──
+// Big step numbers, a short title and one sentence each. Four across on a computer,
+// stacked on a phone.
 const How = () => (
     <section className="bg-slate-50 py-20 md:py-28">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <div className="max-w-2xl mb-12 md:mb-16">
+            <div className="max-w-2xl mb-12 md:mb-14">
                 <Eyebrow>How it works</Eyebrow>
                 <H2>From booking to first ball</H2>
             </div>
-            <div className="relative">
-                {/* the connecting line */}
-                <div aria-hidden="true" className="absolute left-7 top-7 bottom-7 w-0.5 bg-slate-200 lg:left-[12.5%] lg:right-[12.5%] lg:top-7 lg:bottom-auto lg:w-auto lg:h-0.5" />
-                <ol className="relative grid gap-8 lg:grid-cols-4 lg:gap-6 list-none p-0 m-0">
-                    {STEPS.map((s, i) => {
-                        const Icon = STEP_ICONS[s.key] || Check;
-                        return (
-                            <li key={s.key} className="flex gap-5 lg:flex-col lg:items-center lg:text-center">
-                                <span className="relative z-10 w-14 h-14 shrink-0 rounded-2xl flex items-center justify-center text-white" style={{ backgroundImage: 'var(--image-gradient-rr)' }}>
-                                    <Icon className="w-6 h-6" aria-hidden="true" />
-                                </span>
-                                <div className="pt-1 lg:pt-5">
-                                    <p className="text-[11px] font-black uppercase tracking-[0.25em] text-rr-pink mb-1">Step {String(i + 1).padStart(2, '0')}</p>
-                                    <h3 className="text-lg font-black text-rr-dark uppercase tracking-tight leading-tight mb-2">{s.title}</h3>
-                                    <p className="text-sm text-rr-charcoal font-medium leading-relaxed lg:max-w-[15rem] lg:mx-auto">{s.body}</p>
-                                </div>
-                            </li>
-                        );
-                    })}
-                </ol>
-            </div>
+            <ol className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8 list-none p-0 m-0">
+                {STEPS.map((s, i) => (
+                    <li key={s.key} className="border-t-2 border-rr-dark pt-5">
+                        <p className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-500 mb-1">Step</p>
+                        <p className="inline-block text-6xl md:text-7xl font-black leading-none tracking-tighter mb-4 pr-1 bg-clip-text text-transparent" style={{ backgroundImage: 'var(--image-gradient-rr)' }}>
+                            {String(i + 1).padStart(2, '0')}
+                        </p>
+                        <h3 className="text-lg font-black text-rr-dark uppercase tracking-tight leading-tight mb-2">{s.title}</h3>
+                        <p className="text-sm text-rr-charcoal font-medium leading-relaxed">{s.body}</p>
+                    </li>
+                ))}
+            </ol>
         </div>
     </section>
 );
