@@ -10,8 +10,8 @@ import PremiumCoachingForm from './PremiumCoachingForm';
 import PremiumCoachingGallery from './PremiumCoachingGallery';
 import CoachFinder from './CoachFinder';
 import {
-    ROUTE, FORM_ANCHOR, HERO, TOGETHER, TECH, STEPS, FORMATS, TIERS, FAQ,
-    PACKAGES, TIER_PRICES, perSession, packageTotal, money,
+    ROUTE, FORM_ANCHOR, HERO, TOGETHER, TECH, STEPS, TIERS, COACHES, FAQ,
+    PACKAGES, perSession, money,
 } from './premiumCoachingData';
 import { BowlingMap, HeatMap } from './TechVisuals';
 import { HERO_IMAGE, VIDEOS } from './premiumCoachingMedia';
@@ -216,109 +216,102 @@ const How = () => (
     </section>
 );
 
-// ── WHAT: formats, prices, tiers ───────────────────────
-const PriceTable = () => (
-    <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
-        <div className="px-5 sm:px-6 pt-5 pb-3">
-            <p className="text-xs font-black uppercase tracking-widest text-rr-pink mb-1">Prices per one-hour session, incl. GST</p>
-            <p className="text-sm text-rr-charcoal font-medium">1-to-1 and 1-to-2 are the same price. In a 1-to-2 the two families share it, so each pays half.</p>
-        </div>
-        {/* Phone: one card per coach type */}
-        <div className="md:hidden divide-y divide-slate-100 border-t border-slate-100">
-            {TIERS.map((t) => (
-                <div key={t.key} className="px-5 py-4">
-                    <p className="text-sm font-black text-rr-dark uppercase tracking-wide mb-2">{t.name}</p>
-                    <ul className="space-y-1.5">
-                        {PACKAGES.map((p) => {
-                            const per = perSession(t.key, p.sessions);
-                            const total = packageTotal(t.key, p.sessions);
-                            return (
-                                <li key={p.sessions} className="flex items-baseline justify-between gap-3 text-sm">
-                                    <span className="font-bold text-rr-dark">{p.label}</span>
-                                    <span className="text-right">
-                                        <span className="font-black text-rr-dark">{money(per)}</span><span className="text-xs text-slate-500 font-medium"> a session{p.sessions > 1 ? ` · ${money(total)}` : ''}</span>
-                                        <span className="block text-xs text-rr-pink font-bold">1-to-2: {money(total / 2)} each</span>
-                                    </span>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </div>
+// ── WHAT: choose your coach (Andy, 18 Nov 2026: "a lot more customer friendly") ──
+// One switch (1-to-1 / 1-to-2) changes every price on the section, then three side-by-side
+// coach-type cards: faces, "great for", three plain prices, and a button to meet them.
+const Avatars = ({ list }) => (
+    <div className="flex items-center">
+        <div className="flex -space-x-3">
+            {list.slice(0, 4).map((c) => (
+                <span key={c.slug} className="w-11 h-11 rounded-full border-2 border-white overflow-hidden bg-slate-200 shrink-0">
+                    {c.img
+                        ? <img src={c.img} alt="" className="w-full h-full object-cover object-top" />
+                        : <span className="w-full h-full flex items-center justify-center text-white text-[11px] font-black" style={{ backgroundImage: 'var(--image-gradient-rr)' }}>{c.name.split(' ').map((x) => x[0]).join('')}</span>}
+                </span>
             ))}
         </div>
-        {/* Larger screens: one table */}
-        <div className="hidden md:block">
-            <table className="w-full text-left text-sm">
-                <thead className="bg-slate-50 text-[11px] uppercase tracking-widest text-slate-500">
-                    <tr>
-                        <th className="px-5 sm:px-6 py-2.5 font-black">Package</th>
-                        {TIERS.map((t) => <th key={t.key} className="py-2.5 pr-4 font-black">{t.name}</th>)}
-                    </tr>
-                </thead>
-                <tbody>
-                    {PACKAGES.map((p) => (
-                        <tr key={p.sessions} className="border-t border-slate-100 align-top">
-                            <td className="px-5 sm:px-6 py-3 font-black text-rr-dark">{p.label}</td>
-                            {TIERS.map((t) => {
-                                const per = perSession(t.key, p.sessions);
-                                const total = packageTotal(t.key, p.sessions);
-                                return (
-                                    <td key={t.key} className="py-3 pr-4">
-                                        <span className="block font-black text-rr-dark">{money(per)} <span className="font-medium text-slate-500 text-xs">a session</span></span>
-                                        {p.sessions > 1 && <span className="block text-xs text-rr-charcoal font-medium">{money(total)} total</span>}
-                                        <span className="block text-xs text-rr-pink font-bold">1-to-2: {money(total / 2)} each</span>
-                                    </td>
-                                );
-                            })}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-        <p className="px-5 sm:px-6 py-3 text-xs text-slate-500 font-medium border-t border-slate-100">Training shirt $29.95 incl. GST, only if your player doesn’t have one.</p>
     </div>
 );
 
-const Options = () => (
-    <section className="bg-slate-50 py-20 md:py-28">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <Eyebrow>Your options</Eyebrow>
-            <H2 className="mb-4">Choose the coach. Bring a partner.</H2>
-            <p className="text-rr-charcoal font-medium leading-relaxed max-w-2xl mb-12">Every session gets the same tools and systems. The type of coach sets the price, and 1-to-2 costs the same as 1-to-1.</p>
+const Options = ({ onMeet }) => {
+    const [pair, setPair] = useState(false);
+    const price = (key, n) => {
+        const per = perSession(key, n);
+        return pair ? per / 2 : per;
+    };
+    return (
+        <section className="bg-white py-20 md:py-28">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6">
+                <div className="max-w-2xl mb-8">
+                    <Eyebrow>Prices</Eyebrow>
+                    <H2 className="mb-4">Choose your coach</H2>
+                    <p className="text-rr-charcoal font-medium leading-relaxed">Three kinds of Royals coach. Every one uses the same tools and systems and coaches the whole game. Pick the experience that suits your player.</p>
+                </div>
 
-            <div className="grid md:grid-cols-2 gap-5 mb-10">
-                {FORMATS.map((f) => (
-                    <div key={f.value} className={`rounded-2xl p-6 ${f.recommended ? 'bg-rr-dark text-white' : 'bg-white border border-slate-200'}`}>
-                        <div className="flex items-center gap-3 mb-2">
-                            <p className={`text-4xl font-black tracking-tight ${f.recommended ? 'text-rr-light-pink' : 'text-rr-pink'}`}>{f.label}</p>
-                            {f.recommended && <span className="bg-rr-pink text-white text-[11px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full">We recommend</span>}
-                        </div>
-                        <h3 className={`text-base font-black uppercase tracking-wide mb-1.5 ${f.recommended ? 'text-white' : 'text-rr-dark'}`}>{f.title}</h3>
-                        <p className={`text-sm font-medium leading-relaxed ${f.recommended ? 'text-white/80' : 'text-rr-charcoal'}`}>{f.body}</p>
-                    </div>
-                ))}
+                {/* 1-to-1 or 1-to-2: switches every price below */}
+                <div role="radiogroup" aria-label="Who is training" className="inline-grid grid-cols-2 gap-1 p-1 bg-slate-100 rounded-full mb-3 w-full sm:w-auto">
+                    {[{ v: false, label: 'Just my player', sub: '1-to-1' }, { v: true, label: 'With a partner', sub: '1-to-2 · we recommend' }].map((o) => (
+                        <button key={o.sub} type="button" role="radio" aria-checked={pair === o.v} onClick={() => setPair(o.v)}
+                            className={`rounded-full px-4 sm:px-6 py-2.5 text-center transition-colors ${pair === o.v ? 'bg-rr-dark text-white' : 'text-rr-dark hover:bg-white'}`}>
+                            <span className="block text-sm font-black leading-tight">{o.label}</span>
+                            <span className={`block text-[11px] font-semibold ${pair === o.v ? 'text-white/70' : 'text-slate-500'}`}>{o.sub}</span>
+                        </button>
+                    ))}
+                </div>
+                <p className="text-sm text-rr-charcoal font-medium mb-10 max-w-2xl">
+                    {pair
+                        ? 'Bring a teammate, friend or sibling at a similar level. Same coach, same lane, same price, shared: each family pays half.'
+                        : 'The whole session on your player. Prefer to share? Switch to “With a partner” and each family pays half.'}
+                </p>
+
+                <div className="grid md:grid-cols-3 gap-5 items-stretch">
+                    {TIERS.map((t, i) => {
+                        const elite = i === 0;
+                        const list = COACHES.filter((c) => c.tier === t.key);
+                        return (
+                            <div key={t.key} className={`rounded-3xl p-6 md:p-7 flex flex-col ${elite ? 'text-white' : 'bg-white border-2 border-slate-200'}`}
+                                style={elite ? { backgroundImage: 'var(--image-gradient-rr)' } : undefined}>
+                                <div className="flex items-start justify-between gap-3 mb-4">
+                                    <div>
+                                        <h3 className={`text-2xl font-black uppercase tracking-tight leading-none ${elite ? 'text-white' : 'text-rr-dark'}`}>{t.name}</h3>
+                                        <p className={`text-sm font-semibold mt-1.5 ${elite ? 'text-white/85' : 'text-slate-500'}`}>{t.plain}</p>
+                                    </div>
+                                    {list.length > 0 && <Avatars list={list} />}
+                                </div>
+                                {list.length > 0 && <p className={`text-xs font-semibold mb-5 ${elite ? 'text-white/80' : 'text-rr-charcoal'}`}>{list.map((c) => c.name).join(', ')}</p>}
+
+                                <ul className="space-y-1.5 mb-6">
+                                    {t.greatFor.map((g) => (
+                                        <li key={g} className={`flex items-start gap-2 text-sm font-medium ${elite ? 'text-white' : 'text-rr-charcoal'}`}>
+                                            <Check className={`w-4 h-4 mt-0.5 shrink-0 ${elite ? 'text-white' : 'text-rr-pink'}`} />{g}
+                                        </li>
+                                    ))}
+                                </ul>
+
+                                <div className={`mt-auto rounded-2xl p-4 ${elite ? 'bg-white text-rr-dark' : 'bg-slate-50'}`}>
+                                    <p className="text-[11px] font-black uppercase tracking-widest text-slate-500 mb-2">{pair ? 'Each family pays, per session' : 'Per one-hour session'}</p>
+                                    {PACKAGES.map((p) => (
+                                        <div key={p.sessions} className="flex items-baseline justify-between py-1">
+                                            <span className="text-sm font-semibold text-rr-charcoal">{p.sessions === 1 ? 'Single session' : `${p.sessions}-session pack`}</span>
+                                            <span className="text-lg font-black text-rr-dark">{money(price(t.key, p.sessions))}</span>
+                                        </div>
+                                    ))}
+                                    <p className="text-[11px] text-slate-500 font-semibold mt-1">All prices incl. GST.</p>
+                                </div>
+
+                                <button type="button" onClick={onMeet} data-cta={`meet-${t.key}`}
+                                    className={`mt-4 w-full font-black uppercase tracking-widest text-xs px-5 py-3.5 rounded-full transition-colors ${elite ? 'bg-white text-rr-pink hover:bg-rr-dark hover:text-white' : 'bg-rr-dark text-white hover:bg-rr-pink'}`}>
+                                    Meet our {t.name}es
+                                </button>
+                            </div>
+                        );
+                    })}
+                </div>
+                <p className="text-xs text-slate-500 font-medium mt-6">Need a training shirt? It’s $29.95 incl. GST, added at booking only if your player doesn’t have one.</p>
             </div>
-
-            <div className="mb-14"><PriceTable /></div>
-
-            <h3 className="text-xl font-black text-rr-dark uppercase tracking-wide mb-2">Elite, Performance and Academy Coaches</h3>
-            <p className="text-sm text-rr-charcoal font-medium mb-5 max-w-2xl">Every Royals private coach is trained on the same tools and systems, and coaches every part of the game. Choose the experience that suits your player.</p>
-            <div className="grid md:grid-cols-3 gap-5">
-                {TIERS.map((t, i) => (
-                    <div key={t.key} className={`rounded-2xl p-6 flex flex-col ${i === 0 ? 'text-white' : 'bg-white border border-slate-200'}`}
-                        style={i === 0 ? { backgroundImage: 'var(--image-gradient-rr)' } : undefined}>
-                        <h4 className={`text-xl font-black uppercase tracking-wide mb-2 ${i === 0 ? 'text-white' : 'text-rr-dark'}`}>{t.name}</h4>
-                        <p className={`text-sm font-medium leading-relaxed mb-3 ${i === 0 ? 'text-white/90' : 'text-rr-charcoal'}`}>{t.body}</p>
-                        <p className={`text-xs font-semibold leading-relaxed mb-5 ${i === 0 ? 'text-white/75' : 'text-slate-500'}`}><b>Best for:</b> {t.bestFor}</p>
-                        <p className={`mt-auto text-sm font-black ${i === 0 ? 'text-white' : 'text-rr-dark'}`}>
-                            {TIER_PRICES[t.key] ? <>From {money(perSession(t.key, 5))} a session <span className="font-medium">incl. GST</span></> : 'Price coming soon'}
-                        </p>
-                    </div>
-                ))}
-            </div>
-        </div>
-    </section>
-);
+        </section>
+    );
+};
 
 // ── SEE IT: video ──────────────────────────────────────
 // Same player and carousel as /junior-royals and /tours (Andy, 13 Nov 2026): big play
@@ -406,7 +399,7 @@ const PremiumCoaching = () => {
                 <div id="tech" className={ANCHOR}><Tech /></div>
                 <div id="together" className={ANCHOR}><Together /></div>
                 <div id="how" className={ANCHOR}><How /></div>
-                <div id="options" className={ANCHOR}><Options /></div>
+                <div id="options" className={ANCHOR}><Options onMeet={() => go('coaches')} /></div>
                 <div id="coaches" className={ANCHOR}><CoachFinder onBook={book} /></div>
                 <div id="video" className={ANCHOR}><Video /></div>
                 <div id="photos" className={ANCHOR}><PremiumCoachingGallery /></div>

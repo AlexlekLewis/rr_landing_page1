@@ -50,6 +50,7 @@ export const HERO = {
     // Who it's for (Andy, 18 Nov 2026), a ticked list like Junior Royals' "perfect for".
     forTitle: 'Royals Private Coaching is perfect for players who:',
     forList: [
+        'Want a personal approach: coaching built around their own game, not a group plan',
         'Take their cricket seriously and want to keep getting better',
         'Want more than cones, balls and stumps',
         'Want to see and understand their own game, with real data',
@@ -215,6 +216,7 @@ export const paymentLinksFor = (tier, sessions) => {
 export const TIERS = [
     {
         key: 'head',
+        greatFor: ['Players pushing for representative or Premier Cricket selection', 'Players who want the most experienced eye on their game', 'Serious players of any age'],
         plain: 'Our most experienced coaches',
         name: 'Elite Coach',
         body: 'Our most experienced coaches, including the people who lead our regions, design our programs and develop our other coaches. They coach every part of the game.',
@@ -222,6 +224,7 @@ export const TIERS = [
     },
     {
         key: 'performance',
+        greatFor: ['Players who want a specialist who still plays at a high level', 'Sharpening one skill: batting, spin, pace or keeping', 'Teenagers stepping up into senior cricket'],
         plain: 'Current Premier Cricket players',
         name: 'Performance Coach',
         body: 'Current Premier Cricket players with state and national pathway experience. Each brings a specialist skill, and coaches the whole game around it.',
@@ -229,6 +232,7 @@ export const TIERS = [
     },
     {
         key: 'academy',
+        greatFor: ['Younger players', 'Building good habits through regular sessions', 'Training 1-to-2 with a friend'],
         plain: 'Young coaches, great with younger players',
         name: 'Academy Coach',
         body: 'Talented young cricketers who coach in our programs every week. Trained on all of our tools and systems, and close in age to the players they coach.',
