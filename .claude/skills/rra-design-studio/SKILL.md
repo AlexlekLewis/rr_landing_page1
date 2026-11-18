@@ -115,7 +115,7 @@ Use Melbourne for anything run by the Melbourne academy; Australia for national.
 - **Weekend results**: template `brand/templates/weekly-results/` (see 5d) (TOP / KNOCKS batting feed,
   TOP / SPELLS bowling feed, WEEKEND / WRAP story). White cards: blue eyebrow (club team · day),
   navy name, big pink figure right-aligned with the unit under it, navy "IN PROGRESS" tag for
-  unfinished matches. Edit the HTML, run `node brand/templates/weekend-results/render.cjs`.
+  unfinished matches. Run the commands in 5d.
 - **Player spotlight (photo)**: photo full-bleed, desaturated with pink-blue duotone
   (master guide photo rule), gradient fading up from the bottom, name in 900, stat in pink.
 - **Web tile**: same type system, no footer bar, larger safe area for responsive crops; hand to
