@@ -4,6 +4,8 @@ import Navbar from '../Navbar';
 import Footer from '../Footer';
 import PartnerStack from '../power-game/PartnerStack';
 import InvitationForm from './InvitationForm';
+import HomeMedia from '../home-page/HomeMedia';
+import { ACADEMY_MEDIA } from '../home-page/homeMediaData';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
 // One short "invitation list" page, drawn entirely from a campaign entry in
@@ -50,8 +52,8 @@ const HeroText = ({ hero, cta, wide = false }) => (
 );
 
 const InvitationPage = ({ campaign }) => {
-    const { hero, facts, how, about, cta } = campaign;
-    usePageAnalytics(campaign.route, { sections: ['hero', 'how', 'about', 'register'] });
+    const { hero, facts, how, about, cta, media } = campaign;
+    usePageAnalytics(campaign.route, { sections: ['hero', 'how', 'academy', 'about', 'register'] });
 
     useEffect(() => { window.scrollTo(0, 0); }, []);
 
@@ -126,6 +128,9 @@ const InvitationPage = ({ campaign }) => {
                     </div>
                 </section>
 
+                {/* THE ACADEMY: photos and videos, so nobody takes this for a children's activity */}
+                {media && <HomeMedia id="academy" media={ACADEMY_MEDIA} eyebrow={media.eyebrow} title={media.title} intro={media.intro} />}
+
                 {/* THE SESSION */}
                 <section id="about" className="bg-slate-50 py-16 md:py-24">
                     <div className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
@@ -133,7 +138,7 @@ const InvitationPage = ({ campaign }) => {
                             src={about.image}
                             alt={about.imageAlt}
                             loading="lazy"
-                            className="w-full aspect-[4/5] md:aspect-[4/5] max-h-[520px] object-cover rounded-2xl"
+                            className="w-full aspect-[3/2] object-cover rounded-2xl"
                         />
                         <div>
                             <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">{about.eyebrow}</p>

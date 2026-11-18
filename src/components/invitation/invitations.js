@@ -79,11 +79,20 @@ export const RAVENHALL = {
         },
     },
 
+    // The photo and video carousel. The media itself is the Academy's shared list
+    // (ACADEMY_MEDIA in home-page/homeMediaData.js): older players and Royals coaches
+    // first. Remove this block and the page has no carousel.
+    media: {
+        eyebrow: 'Photos & videos',
+        title: 'Inside the Royals Academy',
+        intro: 'This is a cricket academy for players who want to improve, from juniors to open age. See our coaches and players at work.',
+    },
+
     about: {
         eyebrow: 'The session',
         title: 'A Royals Coaching Session',
-        image: '/assets/junior-royals/gallery/squad-talk.webp',
-        imageAlt: 'A coach talking to a group of players at a Rajasthan Royals Academy Melbourne session',
+        image: '/assets/community-coaches.jpg',
+        imageAlt: 'Players of different ages with their coaches after a Rajasthan Royals Academy Melbourne session',
         paragraphs: [
             'This is a real coaching session, run by Rajasthan Royals Academy Melbourne coaches. Every place is for a player who will take part.',
             'That is why the form asks who will attend, their date of birth and how much cricket they have played. It helps us plan the right session for the players we invite.',
