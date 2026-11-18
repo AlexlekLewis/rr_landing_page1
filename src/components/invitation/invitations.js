@@ -48,7 +48,7 @@ export const RAVENHALL = {
         imageAlt: "The new indoor centre in Ravenhall, with the Rajasthan Royals Academy Melbourne logo and the words: Coming soon to Melbourne's West",
         badge: 'By invitation only',
         eyebrow: "Ravenhall · Melbourne's West",
-        title: ['The Exclusive', 'Opening Session'],
+        title: ['Exclusive', 'Opening Session'],
         lead:
             "The Rajasthan Royals Academy is opening in Ravenhall, in Melbourne's West, in conjunction with M9 Sports Centre. The first coaching session is by invitation. Register your details to go on the invitation list.",
         footnote: 'No payment to register · Places are limited',
