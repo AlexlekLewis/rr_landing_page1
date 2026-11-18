@@ -65,6 +65,26 @@ or by email (`rra_email_key(email) = any(m.emails)`). Payments: `program_registr
 - Where players live: `suburb` (free text: normalise with `initcap(lower(btrim()))`).
 - Flag data problems you see (unpaid but attending, orphan payments, unconfirmed term dates).
 
+### Address lookup: answer in under a minute
+
+Andy: "If I ask for an address, find it. It should never take you that long." Do these in
+order, stop at the first hit, give the address with where and when it was entered. No long
+searches, no asking Andy where to look first.
+
+1. **Get the family's emails, phones and parent names** in one query: the player's
+   `rra_players_master` row, or for anyone not in it, every `applications` /
+   `rra_player_submissions` row whose payload matches the child's name (try spelling variants:
+   Tanay/Tane/Tanya).
+2. **Database addresses**, one query, newest first: `v_rra_home_addresses`, plus
+   `shipping_address` on `shop_orders_training`, `shop_orders_ipl`, `store_orders`,
+   `performance_squad_kit_orders`, `program_registrations`, matched by those emails/phones.
+3. **Stripe**, one Sigma query (`stripe_analytics` → `execute_query_run`, account
+   `acct_1T2jKFIo52UEA50y`): `charges` joined to `customers`, where `receipt_email`/customer
+   email is any family email OR `card_name` contains the surname. Return `card_address_*`,
+   `shipping_address_*`, `customers.address_*`. Shop orders take the address here even when
+   our own row says pickup.
+4. Only if all three are empty: say so in one line and offer to text the parent.
+
 ## 4. Communicating with families
 
 Sender: **andy.crook@rramelbourne.com** for anything going to a parent or player. If the
