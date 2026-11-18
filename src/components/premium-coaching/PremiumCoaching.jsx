@@ -61,7 +61,20 @@ const Hero = () => (
                     {HERO.h1[0]}<br /><span className="text-rr-pink">{HERO.h1[1]}</span>
                 </h1>
                 <p className="text-xl md:text-2xl text-white font-black leading-snug mb-4">{HERO.why}</p>
-                <p className="order-4 md:order-none text-base text-white/80 font-medium leading-relaxed mb-7">{HERO.lead}</p>
+                <div className="order-4 md:order-none mb-6" data-pc-hero-for>
+                    <p className="text-sm md:text-lg text-white font-bold mb-2">{HERO.forTitle}</p>
+                    <ul className="space-y-1.5">
+                        {HERO.forList.map((line) => (
+                            <li key={line} className="flex items-start gap-2 text-sm md:text-base text-white/85 font-medium">
+                                <svg className="w-5 h-5 mt-0.5 shrink-0 text-rr-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>{line}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <p className="hidden md:block text-base text-white/80 font-medium leading-relaxed mb-7">{HERO.lead}</p>
                 <dl className="order-5 md:order-none grid grid-cols-2 gap-x-6 gap-y-4 mb-2 md:mb-8">
                     {HERO.facts.map((f) => (
                         <div key={f.label} className="border-t border-white/25 pt-2.5">

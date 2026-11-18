@@ -45,6 +45,15 @@ export const HERO = {
         'Private cricket coaching in Melbourne with a Rajasthan Royals Academy coach, and all of '
         + 'the Academy’s technology in the lane with you: the Match Centre, fielding heat maps and '
         + 'bowling maps. Train one-to-one, or bring a training partner and share the price.',
+    // Who it's for (Andy, 18 Nov 2026), a ticked list like Junior Royals' "perfect for".
+    forTitle: 'Royals Private Coaching is perfect for players who:',
+    forList: [
+        'Take their cricket seriously and want to keep getting better',
+        'Want more than cones, balls and stumps',
+        'Want to see and understand their own game, with real data',
+        'Want to learn the Royals way, from Royals coaches, with Royals technology',
+        'Want to train alongside a teammate and push each other',
+    ],
     facts: [
         { label: 'Format', value: '1-to-1 or 1-to-2, same price' },
         { label: 'Price', value: 'From $120 a session incl. GST' },
