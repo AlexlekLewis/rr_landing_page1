@@ -7,8 +7,6 @@ import {
     inputClass, selectClass,
 } from '../performance-squads/shared';
 import { ACTIVE_MATCH, MIN_AGE, MAX_AGE } from './matchConfig';
-import { EMPTY_ADDRESS, addressErrors, addressColumns } from '../../lib/homeAddress';
-import HomeAddressFields from '../shared/HomeAddressFields';
 
 const MRCheckbox = ({ checked, onToggle, error, children }) => (
     <div className="mb-3.5">
@@ -80,7 +78,6 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
         volunteer: false,
         volunteer_role: '',
     });
-    const [address, setAddress] = useState(EMPTY_ADDRESS);
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
@@ -111,7 +108,6 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
         if (!form.email.trim()) next.email = 'Please enter an email address';
         else if (!/^\S+@\S+\.\S+$/.test(form.email.trim())) next.email = 'Please enter a valid email address';
         if (!form.phone.trim()) next.phone = 'Please enter a contact mobile number';
-        Object.assign(next, addressErrors(address));
 
         if (!form.accept_terms) next.accept_terms = 'You must agree to the Terms & Conditions and Privacy Policy';
         if (!form.accept_player_code) next.accept_player_code = 'You must agree to the Player Code of Conduct';
@@ -130,7 +126,7 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
         if (Object.keys(next).length) {
             setErrors(next);
             const firstKey = Object.keys(next)[0];
-            document.getElementById(firstKey.startsWith('home_') ? `address-${firstKey}` : `mr-${firstKey}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            document.getElementById(`mr-${firstKey}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
         setErrors({});
@@ -153,7 +149,6 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
                     parent_name: form.parent_name.trim(),
                     email: form.email.trim(),
                     phone: form.phone.trim(),
-                    ...addressColumns(address),
                     accept_terms: form.accept_terms,
                     accept_player_code: form.accept_player_code,
                     accept_parent_code: form.accept_parent_code,
@@ -318,8 +313,6 @@ const MatchRegistrationForm = ({ onRequestPayment, match = ACTIVE_MATCH }) => {
                             />
                             <FieldError msg={errors.phone} />
                         </div>
-
-                        <HomeAddressFields value={address} onChange={setAddress} errors={errors} theme="dark" />
 
                         {/* ── Governance ── */}
                         <div className="pt-7 border-t border-white/10">

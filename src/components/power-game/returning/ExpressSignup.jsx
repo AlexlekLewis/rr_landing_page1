@@ -32,8 +32,6 @@ import { fmtAud } from '../apply/kit';
 import { squadsForPlacement, CENTRE_BY_SLUG, ACTIVE_CENTRES } from '../../../lib/booking/squads';
 import { PG_BANDS, homeBandIdx, eligibleBands as eligibleBandsFor } from '../../../lib/scoring/guardrail';
 import { TOPS_SIZES, SHORTS_SIZES, PANTS_SIZES, JACKET_SIZES } from '../../academy-shop/sizeData';
-import { EMPTY_ADDRESS, addressErrors, addressColumns } from '../../../lib/homeAddress';
-import HomeAddressFields from '../../shared/HomeAddressFields';
 
 const LIVE_PAYMENTS = !!(import.meta?.env?.VITE_PG_LIVE_PAYMENTS === '1');
 const BLOCK_FEE_CENTS = 98900; // $989 — 8-week Power Pre-Season (matches api/power-game-checkout)
@@ -104,9 +102,6 @@ export default function ExpressSignup({ config }) {
   const [kit, setKit] = useState(BLANK_KIT);
   const [sessionId, setSessionId] = useState('');
   const [errors, setErrors] = useState([]);
-  // Home address — required in every variant (accepted, returning, scholarship, full-ride).
-  const [address, setAddress] = useState(EMPTY_ADDRESS);
-  const [addressErrs, setAddressErrs] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [localDone, setLocalDone] = useState(false);
@@ -247,7 +242,6 @@ export default function ExpressSignup({ config }) {
     if (FIELDS.parentName && minor && !form.parent_name.trim()) e.push('Parent/guardian name is required for under-18s.');
     if (!emailOk(form.contact_email)) e.push('Please enter a valid contact email.');
     if (FIELDS.phone && !form.contact_phone.trim()) e.push('Please enter a contact phone number.');
-    e.push(...Object.values(addressErrors(address)));
     if (!form.centre) e.push('Please choose a centre.');
     else if (!selectedSession) e.push('Please choose a session time.');
     if (requireKit) {
@@ -264,8 +258,7 @@ export default function ExpressSignup({ config }) {
   function buildPayload() {
     // These players already consented (original application), so the five compliance
     // flags travel as true (the checkout API requires them server-side).
-    // The old Suburb box is gone: suburb comes from the home address.
-    const apForm = { ...BLANK_FORM, ...form, suburb: addressColumns(address).home_suburb || '', ...EXPRESS_CONSENTS };
+    const apForm = { ...BLANK_FORM, ...form, ...EXPRESS_CONSENTS };
     const centre = CENTRE_BY_SLUG[form.centre];
     const placement = selectedSession ? { placedBand: selectedSession.band } : null;
     const squad = selectedSession
@@ -276,13 +269,12 @@ export default function ExpressSignup({ config }) {
       uniformSelection: form.needs_uniform ? kitSummaryText : '',
       kitTotalCents: form.needs_uniform ? kitTotalCents : 0,
     });
-    return { ...row, ...addressColumns(address), source: config.source, bio: config.bio };
+    return { ...row, source: config.source, bio: config.bio };
   }
 
   async function pay() {
     if (submitting) return;
     const e = validate();
-    setAddressErrs(addressErrors(address));
     if (e.length) { setErrors(e); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
     setErrors([]);
     setSubmitting(true);
@@ -497,7 +489,12 @@ export default function ExpressSignup({ config }) {
             )}
           </div>
 
-          <HomeAddressFields value={address} onChange={setAddress} errors={addressErrs} theme="dark" />
+          {FIELDS.suburb && (
+            <div>
+              <label className={labelCls}>Suburb <span className="text-white/25 normal-case tracking-normal font-medium">(optional)</span></label>
+              <input type="text" value={form.suburb} onChange={(e) => set('suburb', e.target.value)} placeholder="e.g. Point Cook" className={fieldCls} />
+            </div>
+          )}
 
           {/* Centre + session */}
           <div className="bg-white/5 border border-white/10 rounded-xl p-4">

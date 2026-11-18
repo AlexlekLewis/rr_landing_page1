@@ -15,8 +15,6 @@ import {
     isSquadTrialBookable, getBookableOpenAgeTrials, joinDays,
     OPEN_AGE_TRIAL_ROUTE,
 } from './trialCalendar';
-import HomeAddressFields from '../shared/HomeAddressFields';
-import { EMPTY_ADDRESS, addressErrors, addressColumns } from '../../lib/homeAddress';
 
 const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
     const [form, setForm] = useState({
@@ -36,8 +34,6 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
         accept_social_media: false,
     });
     const [errors, setErrors] = useState({});
-    // Home address (Andy, 18 Nov 2026), saved in the four home_* columns of `performance_squad_leads`.
-    const [address, setAddress] = useState(EMPTY_ADDRESS);
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [submittedResult, setSubmittedResult] = useState(null);
@@ -117,7 +113,6 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
         if (showSessionPicker && form.trial_session_dates.length === 0) {
             next.trial_session_dates = 'Please choose at least one trial session';
         }
-        Object.assign(next, addressErrors(address));
         if (!isWaitlist) {
             if (!form.accept_terms) next.accept_terms = 'You must agree to the Terms & Conditions and Privacy Policy';
             if (!form.accept_player_code) next.accept_player_code = 'You must agree to the Player Code of Conduct';
@@ -150,7 +145,6 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                     playing_role: form.playing_role,
                     trial_sessions: showSessionPicker ? form.trial_session_dates.length : null,
                     trial_session_dates: showSessionPicker ? form.trial_session_dates : null,
-                    ...addressColumns(address),
                     accept_terms: form.accept_terms,
                     accept_player_code: form.accept_player_code,
                     accept_parent_code: form.accept_parent_code,
@@ -377,9 +371,6 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
                                 </p>
                             </div>
                         )}
-
-                        <HomeAddressFields value={address} errors={errors} theme="dark"
-                            onChange={(v) => { setAddress(v); setErrors((p) => Object.fromEntries(Object.entries(p).filter(([k]) => !k.startsWith('home_') || k in addressErrors(v)))); }} />
 
                         {/* Governance — required for trial registrations, not for waitlist sign-ups */}
                         {!isWaitlist && (

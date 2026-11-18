@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
-import HomeAddressFields from '../shared/HomeAddressFields';
-import { EMPTY_ADDRESS, addressErrors, addressColumns } from '../../lib/homeAddress';
 
 const SOURCE_TAG = 'girls-kickstart';
 
@@ -50,9 +48,6 @@ const RegistrationForm = () => {
     const [acceptPlayerCode, setAcceptPlayerCode] = useState(false);
     const [acceptParentCode, setAcceptParentCode] = useState(false);
     const [acceptSocialMedia, setAcceptSocialMedia] = useState(false);
-    // Home address (Andy, 18 Nov 2026): required on every program sign-up (src/lib/homeAddress.js).
-    // It replaces the old "Suburb Travelling From" box; `suburb` is still saved, from the address.
-    const [address, setAddress] = useState(EMPTY_ADDRESS);
 
     const [form, setForm] = useState({
         parent_name: '',
@@ -61,6 +56,7 @@ const RegistrationForm = () => {
         player_name: '',
         player_dob: '',
         player_age: '',
+        suburb: '',
         location: '',
         experience: '',
     });
@@ -72,13 +68,13 @@ const RegistrationForm = () => {
         if (!form.parent_phone.trim()) newErrors.parent_phone = 'Phone number is required.';
         if (!form.player_name.trim()) newErrors.player_name = 'Player name is required.';
         if (!form.player_dob) newErrors.player_dob = 'Date of birth is required.';
+        if (!form.suburb.trim()) newErrors.suburb = 'Suburb is required.';
         if (!form.location) newErrors.location = 'Please select a location.';
         if (!form.experience) newErrors.experience = 'Please select a cricket experience level.';
         if (!acceptTerms) newErrors.acceptTerms = 'You must agree to the Terms & Conditions and Privacy Policy.';
         if (!acceptPlayerCode) newErrors.acceptPlayerCode = 'You must agree to the Player Code of Conduct.';
         if (!acceptParentCode) newErrors.acceptParentCode = 'You must agree to the Parent/Guardian Code of Conduct.';
         if (!acceptSocialMedia) newErrors.acceptSocialMedia = 'You must confirm your consent for social media use.';
-        Object.assign(newErrors, addressErrors(address));
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -110,8 +106,7 @@ const RegistrationForm = () => {
                 // Player (mapped to applications table columns)
                 first_name: form.player_name.trim(),
                 dob: form.player_dob || null,
-                suburb: addressColumns(address).home_suburb,
-                ...addressColumns(address),
+                suburb: form.suburb.trim(),
 
                 // Program-specific
                 location: form.location,
@@ -145,8 +140,7 @@ const RegistrationForm = () => {
                     parent_phone: form.parent_phone.trim(),
                     player_name: form.player_name.trim(),
                     player_dob: form.player_dob || null,
-                    suburb: addressColumns(address).home_suburb,
-                    ...addressColumns(address),
+                    suburb: form.suburb.trim(),
                     location: form.location,
                     experience_level: form.experience,
                     accept_terms: acceptTerms,
@@ -305,6 +299,11 @@ const RegistrationForm = () => {
                                     {errors.player_dob && <p className="text-red-500 text-xs font-medium mt-1">{errors.player_dob}</p>}
                                 </div>
                                 <div>
+                                    <label className={labelClass}>Suburb Travelling From *</label>
+                                    <input name="suburb" value={form.suburb} onChange={handleChange} className={inputClass('suburb')} placeholder="e.g. Doncaster East" />
+                                    {errors.suburb && <p className="text-red-500 text-xs font-medium mt-1">{errors.suburb}</p>}
+                                </div>
+                                <div>
                                     <label className={labelClass}>Cricket Experience *</label>
                                     <select name="experience" value={form.experience} onChange={handleChange} className={inputClass('experience')}>
                                         <option value="">Select experience level</option>
@@ -331,10 +330,6 @@ const RegistrationForm = () => {
                                 {errors.location && <p className="text-red-500 text-xs font-medium mt-1">{errors.location}</p>}
                             </div>
                         </div>
-
-                        {/* Home address */}
-                        <HomeAddressFields value={address} errors={errors}
-                            onChange={(v) => { setAddress(v); setErrors((p) => ({ ...p, ...Object.fromEntries(Object.keys(v).filter((k) => v[k] !== address[k]).map((k) => [k, undefined])) })); }} />
 
                         {/* Compliance */}
                         <div className="mb-8 pt-6 border-t border-slate-100">

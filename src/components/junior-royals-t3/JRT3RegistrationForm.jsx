@@ -6,8 +6,6 @@ import { JR_T4, PAY_OPTIONS, groupFor, nextSession, sessionLong, lastSessionLine
 import { MIN_AGE as PS_MIN_AGE, MAX_AGE as PS_MAX_AGE } from '../performance-squads/data';
 import TrainingShirtStep from '../shared/TrainingShirtStep';
 import GovernanceConsents from '../shared/GovernanceConsents';
-import HomeAddressFields from '../shared/HomeAddressFields';
-import { EMPTY_ADDRESS, addressErrors, addressColumns, addressLine } from '../../lib/homeAddress';
 import { EMPTY_CONSENTS, consentErrors, consentColumns } from '../../lib/governance';
 import { EMPTY_SHIRT, shirtError, shirtTag, needsShirt, TRAINING_SHIRT } from '../../lib/kit/trainingShirt';
 
@@ -100,8 +98,6 @@ const JRT3RegistrationForm = () => {
     // Governance boxes (Andy, 10 Nov 2026): the same four as Holiday Programs and Junior Royals
     // Term 2, all required, on every entry (bookings and standby requests).
     const [consents, setConsents] = useState(EMPTY_CONSENTS);
-    // Home address (Andy, 18 Nov 2026): required on every program sign-up (src/lib/homeAddress.js).
-    const [address, setAddress] = useState(EMPTY_ADDRESS);
     const [form, setForm] = useState({
         parent_name: '', parent_email: '', parent_phone: '',
         player_name: '', player_age: '', preferred_centre: '',
@@ -122,7 +118,6 @@ const JRT3RegistrationForm = () => {
         if (!form.preferred_centre) e.preferred_centre = 'Please pick a centre.';
         if (nightChoice === 'other' && !altDay) e.alt_day = 'Please pick the night you would like.';
         if (nightChoice !== 'other' && shirtError(shirt)) e.shirt = shirtError(shirt);
-        Object.assign(e, addressErrors(address));
         Object.assign(e, consentErrors(consents));
         setErrors(e);
         return Object.keys(e).length === 0;
@@ -158,7 +153,6 @@ const JRT3RegistrationForm = () => {
                 preferred_centre: centre,
                 preferred_day: centreDay,
                 source,
-                ...addressColumns(address),
                 ...consentColumns(consents),
                 page_referrer: document.referrer ? document.referrer.slice(0, 500) : null,
                 ...getUTMParams(),
@@ -347,11 +341,6 @@ const JRT3RegistrationForm = () => {
                                             ? `${dayName(altDay)} nights aren't running yet. Nothing to pay and no place held; we'll contact you first if they open.`
                                             : `${startLine(pickedCentre)} ${lastSessionLine(pickedCentre)}`}
                                     </p>
-                                    {addressLine(address) && (
-                                        <p className="text-rr-charcoal text-sm font-medium leading-relaxed mt-1" data-jr-address-summary>
-                                            Home address: {addressLine(address)}
-                                        </p>
-                                    )}
                                     {nightChoice !== 'other' && needsShirt(shirt) && shirt.size && (
                                         <p className="text-rr-dark text-sm font-bold leading-relaxed mt-1" data-jr-shirt-summary>
                                             Plus the training shirt, size {shirt.size}: {TRAINING_SHIRT.priceLabel}, added to the first payment.
@@ -364,10 +353,6 @@ const JRT3RegistrationForm = () => {
                                 <ul className="space-y-1.5 text-rr-charcoal text-sm font-medium leading-relaxed list-disc pl-5">
                                     {JR_T4.renewLines.map((l) => <li key={l}>{l}</li>)}
                                 </ul>
-                            </div>
-                            <div className="mt-6">
-                                <HomeAddressFields value={address} errors={errors}
-                                    onChange={(v) => { setAddress(v); setErrors((p) => ({ ...p, ...Object.fromEntries(Object.keys(v).filter((k) => v[k] !== address[k]).map((k) => [k, undefined])) })); }} />
                             </div>
                             <div className="mt-6">
                                 <GovernanceConsents value={consents} errors={errors}

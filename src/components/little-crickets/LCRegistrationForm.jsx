@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
-import HomeAddressFields from '../shared/HomeAddressFields';
-import { EMPTY_ADDRESS, addressErrors, addressColumns } from '../../lib/homeAddress';
 
 const AGE_OPTIONS = Array.from({ length: 9 }, (_, i) => i + 7); // 7–15
 
@@ -83,9 +81,6 @@ const LCRegistrationForm = () => {
     const [acceptPlayerCode, setAcceptPlayerCode] = useState(false);
     const [acceptParentCode, setAcceptParentCode] = useState(false);
     const [acceptSocialMedia, setAcceptSocialMedia] = useState(false);
-    // Home address (Andy, 18 Nov 2026): required on every program sign-up (src/lib/homeAddress.js).
-    // It replaces the old "Suburb Travelling From" box; `suburb` is still saved, from the address.
-    const [address, setAddress] = useState(EMPTY_ADDRESS);
 
     const [form, setForm] = useState({
         parent_name: '',
@@ -94,6 +89,7 @@ const LCRegistrationForm = () => {
         player_name: '',
         player_age: '',
         player_gender: '',
+        suburb: '',
         location: '',
         group_selection: '',
         time_slot: '',
@@ -132,6 +128,7 @@ const LCRegistrationForm = () => {
         if (!form.player_name.trim()) newErrors.player_name = 'Player name is required.';
         if (!form.player_age) newErrors.player_age = 'Player age is required.';
         if (!form.player_gender) newErrors.player_gender = 'Please select a cricket type.';
+        if (!form.suburb.trim()) newErrors.suburb = 'Suburb is required.';
         if (!form.location) newErrors.location = 'Please select a location.';
         if (!form.group_selection) newErrors.group_selection = 'Please select a group.';
         if (!form.time_slot) newErrors.time_slot = 'Please select a session time.';
@@ -140,7 +137,6 @@ const LCRegistrationForm = () => {
         if (!acceptPlayerCode) newErrors.acceptPlayerCode = 'You must agree to the Player Code of Conduct.';
         if (!acceptParentCode) newErrors.acceptParentCode = 'You must agree to the Parent/Guardian Code of Conduct.';
         if (!acceptSocialMedia) newErrors.acceptSocialMedia = 'You must confirm your consent for social media use.';
-        Object.assign(newErrors, addressErrors(address));
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -165,8 +161,7 @@ const LCRegistrationForm = () => {
                 player_name: form.player_name.trim(),
                 player_age: parseInt(form.player_age, 10),
                 player_gender: form.player_gender,
-                suburb: addressColumns(address).home_suburb,
-                ...addressColumns(address),
+                suburb: form.suburb.trim(),
                 location: form.location,
                 group_selection: form.group_selection,
                 time_slot: form.time_slot,
@@ -193,7 +188,6 @@ const LCRegistrationForm = () => {
                     phone: form.parent_phone.trim(),
                     source: `junior-royals-${form.location}`,
                     program_type: 'Junior Royals',
-                    ...addressColumns(address),
                     ...utmParams,
                     page_referrer: document.referrer || null,
                 }]);
@@ -319,6 +313,11 @@ const LCRegistrationForm = () => {
                                         {errors.player_gender && <p className="text-red-500 text-xs font-medium mt-1">{errors.player_gender}</p>}
                                     </div>
                                 </div>
+                                <div>
+                                    <label className={labelClass}>Suburb Travelling From *</label>
+                                    <input name="suburb" value={form.suburb} onChange={handleChange} className={inputClass('suburb')} placeholder="e.g. Bundoora" />
+                                    {errors.suburb && <p className="text-red-500 text-xs font-medium mt-1">{errors.suburb}</p>}
+                                </div>
                             </div>
                         </div>
 
@@ -373,10 +372,6 @@ const LCRegistrationForm = () => {
                                 )}
                             </div>
                         </div>
-
-                        {/* Home address */}
-                        <HomeAddressFields value={address} errors={errors}
-                            onChange={(v) => { setAddress(v); setErrors((p) => ({ ...p, ...Object.fromEntries(Object.keys(v).filter((k) => v[k] !== address[k]).map((k) => [k, undefined])) })); }} />
 
                         {/* Compliance */}
                         <div className="mb-8 pt-6 border-t border-slate-100">

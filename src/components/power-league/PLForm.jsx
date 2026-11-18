@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import DateOfBirthInput from '../DateOfBirthInput';
 import { MATCH, ROLES, LEVELS, STEPS, nominationsClosed, ageOnMatchDay } from './plOptions';
-import HomeAddressFields from '../shared/HomeAddressFields';
-import { EMPTY_ADDRESS, addressErrors, addressColumns } from '../../lib/homeAddress';
 
 // Power League nomination form (Alex, 19 Oct 2026).
 //
@@ -83,9 +81,6 @@ const PLForm = () => {
     const [error, setError] = useState('');
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
-    // Home address (Andy, 18 Nov 2026), saved in the four home_* columns of `applications`.
-    const [address, setAddress] = useState(EMPTY_ADDRESS);
-    const [addressErr, setAddressErr] = useState({});
     const set = (f) => (e) => setForm((s) => ({ ...s, [f]: e.target.value }));
     const tick = (f) => (e) => setForm((s) => ({ ...s, [f]: e.target.checked }));
 
@@ -104,9 +99,6 @@ const PLForm = () => {
         if (!form.email.trim() || !form.email.includes('@')) return 'Please give an email address we can reply to.';
         if (form.phone.replace(/\D/g, '').length < 8) return 'Please give a phone number we can call or text.';
         if (!form.available) return `Please confirm the player can play at either start time on ${MATCH.date}.`;
-        const badAddress = addressErrors(address);
-        setAddressErr(badAddress);
-        if (Object.keys(badAddress).length) return 'Please fill in the home address.';
         if (!form.accept_terms) return 'Please agree to the Terms & Conditions and Privacy Policy.';
         if (!form.accept_player_code) return 'Please agree to the Player Code of Conduct.';
         if (isMinor && !form.accept_parent_code) return 'The parent or guardian needs to agree to the Parent/Guardian Code of Conduct.';
@@ -154,7 +146,6 @@ const PLForm = () => {
             program: `Power League — ${MATCH.date}`,
             source: SOURCE,
             payment_option_selected: `${MATCH.fee} ${MATCH.feeUnit}, only if picked`,
-            ...addressColumns(address),
             accept_terms: form.accept_terms,
             accept_player_code: form.accept_player_code,
             accept_parent_code: isMinor ? form.accept_parent_code : null,
@@ -348,9 +339,6 @@ const PLForm = () => {
                             Dates are not set yet. Nothing to pay.
                         </span>
                     </Tick>
-
-                    <HomeAddressFields value={address} errors={addressErr}
-                        onChange={(v) => { setAddress(v); setAddressErr((p) => Object.fromEntries(Object.entries(p).filter(([k]) => k in addressErrors(v)))); }} />
 
                     <p className="text-[11px] font-black text-rr-pink uppercase tracking-[0.25em] pt-4">Agreements &amp; consent</p>
                     <Tick checked={form.accept_terms} onChange={tick('accept_terms')}>

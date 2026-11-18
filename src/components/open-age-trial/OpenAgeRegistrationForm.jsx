@@ -14,8 +14,6 @@ import {
     getSelectableSessionCount, getSessionLabel, getSessionCentreSlug,
     getSessionsForCentre, arrivalLine, isSessionFull, WAITLIST, OPEN_CENTRES,
 } from './openAgeData';
-import HomeAddressFields from '../shared/HomeAddressFields';
-import { EMPTY_ADDRESS, addressErrors, addressColumns } from '../../lib/homeAddress';
 
 // Open age trial registration.
 //
@@ -143,8 +141,6 @@ const WaitlistCapture = () => {
     // it would file half this list under the wrong coach's sheet.
     const [form, setForm] = useState({ player_name: '', player_age: '', email: '', centre: '', company: '' });
     const [errors, setErrors] = useState({});
-    // Home address (Andy, 18 Nov 2026), saved in the four home_* columns of `performance_squad_leads`.
-    const [address, setAddress] = useState(EMPTY_ADDRESS);
     const [submitting, setSubmitting] = useState(false);
     const [done, setDone] = useState(false);
 
@@ -159,7 +155,6 @@ const WaitlistCapture = () => {
         if (ageMsg) next.player_age = ageMsg;
         if (!form.email.trim() || !/^\S+@\S+\.\S+$/.test(form.email)) next.email = 'A valid email is required';
         if (!form.centre) next.centre = 'Please choose the centre you would trial at';
-        Object.assign(next, addressErrors(address));
         if (Object.keys(next).length) {
             setErrors(next);
             return;
@@ -197,7 +192,6 @@ const WaitlistCapture = () => {
                     // a non-trial entry as owing nothing and will not chase them.
                     trial_sessions: null,
                     trial_session_dates: null,
-                    ...addressColumns(address),
                     accept_terms: false,
                     accept_player_code: false,
                     accept_parent_code: false,
@@ -282,9 +276,6 @@ const WaitlistCapture = () => {
                             </div>
                             <FieldError msg={errors.centre} />
                         </div>
-                        <HomeAddressFields value={address} errors={errors} theme="dark"
-                            onChange={(v) => { setAddress(v); setErrors((p) => Object.fromEntries(Object.entries(p).filter(([k]) => !k.startsWith('home_') || k in addressErrors(v)))); }} />
-
                         {errors.form && (
                             <p className="text-rr-pink text-sm font-bold mb-4 text-center">{errors.form}</p>
                         )}
@@ -327,8 +318,6 @@ const BookingForm = ({ onRequestPayment }) => {
         company: '',
     });
     const [errors, setErrors] = useState({});
-    // Home address (Andy, 18 Nov 2026), saved in the four home_* columns of `performance_squad_leads`.
-    const [address, setAddress] = useState(EMPTY_ADDRESS);
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [submittedResult, setSubmittedResult] = useState(null);
@@ -393,7 +382,6 @@ const BookingForm = ({ onRequestPayment }) => {
             next.phone = isMinor ? 'A parent or guardian mobile number is required' : 'Phone number is required';
         }
         if (!form.playing_role) next.playing_role = 'Please choose a playing role';
-        Object.assign(next, addressErrors(address));
         if (form.trial_session_dates.length === 0) {
             next.trial_session_dates = 'Please choose at least one trial session';
         } else if (form.trial_session_dates.some(isSessionFull)) {
@@ -453,7 +441,6 @@ const BookingForm = ({ onRequestPayment }) => {
                     playing_role: form.playing_role,
                     trial_sessions: form.trial_session_dates.length,
                     trial_session_dates: form.trial_session_dates,
-                    ...addressColumns(address),
                     accept_terms: form.accept_terms,
                     accept_player_code: form.accept_player_code,
                     accept_parent_code: form.accept_parent_code,
@@ -682,9 +669,6 @@ const BookingForm = ({ onRequestPayment }) => {
                                 )}.
                             </p>
                         </div>
-
-                        <HomeAddressFields value={address} errors={errors} theme="dark"
-                            onChange={(v) => { setAddress(v); setErrors((p) => Object.fromEntries(Object.entries(p).filter(([k]) => !k.startsWith('home_') || k in addressErrors(v)))); }} />
 
                         {/* Governance. Same columns as the squads trial form so Alex
                             Thornhill's sheet reads identically, but three changes:

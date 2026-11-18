@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
-import HomeAddressFields from '../shared/HomeAddressFields';
-import { EMPTY_ADDRESS, addressErrors, addressColumns } from '../../lib/homeAddress';
 
 // ── Omtex shirt sizing data ──────────────────────────────────
 const SHIRT_SIZES_JUNIOR = [
@@ -41,7 +39,7 @@ const labelClass = 'block text-rr-dark font-bold text-xs uppercase tracking-wide
 const emptyForm = {
     parent_name: '', parent_email: '', parent_phone: '',
     player_name: '', player_age: '', player_gender: '',
-    primary_club: '', location: '',
+    primary_club: '', suburb: '', location: '',
     has_shirt: false, shirt_size: '',
     accept_terms: false, accept_player_code: false,
     accept_parent_code: false, accept_social_media: false,
@@ -52,9 +50,6 @@ export const PROGRAM_CLOSED = true; // 10 Nov 2026: camp finished 2 Oct; see the
 const SeptRegistrationForm = () => {
     const [form, setForm] = useState(emptyForm);
     const [errors, setErrors] = useState({});
-    // Home address (Andy, 18 Nov 2026): required on every program sign-up (src/lib/homeAddress.js).
-    // It replaces the old Suburb box; `suburb` is still saved, from the address.
-    const [address, setAddress] = useState(EMPTY_ADDRESS);
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [showSizeChart, setShowSizeChart] = useState(false);
@@ -139,12 +134,12 @@ const SeptRegistrationForm = () => {
         if (parseInt(form.player_age) < 7 || parseInt(form.player_age) > 15) e.player_age = 'Must be 7–15';
         if (!form.player_gender)       e.player_gender = 'Required';
         if (!form.primary_club.trim()) e.primary_club = 'Required';
+        if (!form.suburb.trim())       e.suburb       = 'Required';
         if (!form.location)            e.location     = 'Please select a location';
         if (!form.has_shirt && !form.shirt_size) e.shirt_size = 'Please select a shirt size';
         if (!form.accept_terms)        e.accept_terms = 'Required';
         if (!form.accept_player_code)  e.accept_player_code = 'Required';
         if (!form.accept_parent_code)  e.accept_parent_code = 'Required';
-        Object.assign(e, addressErrors(address));
         return e;
     };
 
@@ -162,8 +157,7 @@ const SeptRegistrationForm = () => {
                 player_age:          parseInt(form.player_age),
                 player_gender:       form.player_gender,
                 primary_club:        form.primary_club.trim(),
-                suburb:              addressColumns(address).home_suburb,
-                ...addressColumns(address),
+                suburb:              form.suburb.trim(),
                 location:            form.location,
                 has_shirt:           false,
                 shirt_size:          form.shirt_size,
@@ -277,6 +271,11 @@ const SeptRegistrationForm = () => {
                             <label className={labelClass}>Phone Number</label>
                             <input name="parent_phone" value={form.parent_phone} onChange={handleChange} className={inputClass(errors.parent_phone)} placeholder="04XX XXX XXX" />
                             {errors.parent_phone && <p className="text-red-500 text-xs mt-1">{errors.parent_phone}</p>}
+                        </div>
+                        <div>
+                            <label className={labelClass}>Suburb</label>
+                            <input name="suburb" value={form.suburb} onChange={handleChange} className={inputClass(errors.suburb)} placeholder="Bundoora" />
+                            {errors.suburb && <p className="text-red-500 text-xs mt-1">{errors.suburb}</p>}
                         </div>
                     </div>
 
@@ -426,10 +425,6 @@ const SeptRegistrationForm = () => {
                         </div>
                         )}
                     </div>
-
-                    {/* ── HOME ADDRESS ── */}
-                    <HomeAddressFields value={address} errors={errors}
-                        onChange={(v) => { setAddress(v); setErrors((p) => ({ ...p, ...Object.fromEntries(Object.keys(v).filter((k) => v[k] !== address[k]).map((k) => [k, null])) })); }} />
 
                     {/* ── COMPLIANCE ── */}
                     <p className="text-xs font-black text-rr-pink uppercase tracking-widest mb-6 pb-2 border-b border-slate-100">Agreements</p>
