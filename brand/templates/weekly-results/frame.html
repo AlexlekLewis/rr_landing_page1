@@ -17,10 +17,11 @@ body{font-family:M,sans-serif;color:#fff}
 .h{position:absolute;left:64px;font-size:245px;font-weight:900;text-transform:uppercase;line-height:.88;letter-spacing:-.02em;white-space:nowrap}
 .h span{display:block}.h .p{color:var(--pink)}
 .st{position:absolute;left:64px;font-weight:800;text-transform:uppercase}
+.st .tm{font-weight:500;font-size:30px;text-transform:none;margin-top:10px;opacity:.9;white-space:nowrap}.st .nm{font-size:52px}
 .st .a{font-size:40px;letter-spacing:.01em;white-space:nowrap}.st .v{color:var(--pink);font-size:26px;margin:14px 0 12px;letter-spacing:.06em}
 .grid{position:absolute;left:64px;display:grid;gap:24px}
 .gc{background:#fff;border-radius:14px;color:var(--navy);padding:30px 28px 0;overflow:hidden}
-.gc.span{grid-column:1 / -1}
+.gc.span{grid-column:1 / -1}.gc.span .t{margin-top:0}
 .eb{color:var(--blue);font-weight:800;font-size:18px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
 .t{font-weight:900;font-size:36px;line-height:1.1;margin-top:10px;white-space:nowrap}
 .s{color:#5b6475;font-weight:500;font-size:20px;margin-top:8px;white-space:nowrap}
@@ -41,7 +42,7 @@ const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 const sub=i=>[i.day,i.inprog?'match in progress':''].filter(Boolean).join(' · ');
 let html=`<img class="lion" src="../../logos/lion-rampant-white.png" style="top:${V?360:120}px${V?';height:1300px;right:-170px':''}">
 <img class="logo" src="../../logos/rra-melbourne-white.svg" style="top:${top0-8}px">
-<div class="chips" style="top:${top0}px;right:${RIGHT}px"><span class="chip pink">${esc(P.chip1)}</span><span class="chip blue">${esc(P.chip2)}</span></div>
+<div class="chips" style="top:${top0}px;right:${RIGHT}px"><span class="chip pink">${esc(P.dates||P.chip1)}</span></div>
 <div class="h" id="h"><span>${esc(P.head[0])}</span><span class="p">${esc(P.head[1])}</span></div>`;
 const capTop=V?520:301;                                  // headline line-1 cap top (master: 301)
 const contentW=W-64-RIGHT;
@@ -52,31 +53,28 @@ const group=P.group?`PLAYER IN OUR|${P.group}`:null;
 const proud=P.group?['PROUD OF EVERY','PLAYER IN OUR',P.group]:['PROUD OF ALL 175','PLAYERS IN OUR','ACADEMY COMMUNITY'];
 if(P.type==='spot'){
   const i=P.items[0];
-  stmt=[i.name,'FOR',i.team];
-  const verb=i.kind==='bowl'?'THE SPELL':i.kind==='bat'?'THE KNOCK':'BEHIND THE STUMPS';
+  stmt={name:i.name,team:i.team};
   const [main,extra]=i.chip.split(' · ');
-  const title=i.kind==='bowl'?`${main} off ${extra.replace(' OVERS','').replace(' OVER','')} overs`:i.kind==='bat'?main.replace(' OFF ',' off ')+' balls':main;
-  const when=(i.day+(i.inprog?' · in progress':'')).toUpperCase();
-  const catches=i.kind==='bat'&&extra?extra:null;
-  html+=`<div class="grid" id="g">
-   <div class="gc"><div class="eb">${verb}</div><div class="t">${esc(title)}</div><div class="s wrap">${esc(i.opp?'v '+i.opp:i.team)}</div><div class="k">${esc(when)}</div></div>
-   <div class="gc"><div class="eb">Royals Academy</div><div class="t">${esc(i.program)}</div><div class="s wrap">${esc(catches?(i.centre||''):'Rajasthan Royals Academy')}</div><div class="k">${esc(catches?'+ '+catches:(i.centre||'MELBOURNE').toUpperCase())}</div></div></div>`;
+  const unitBits=i.kind==='bowl'?`${extra}`:i.kind==='bat'?(main.includes(' OFF ')?main.split(' OFF ')[1]+' BALLS':''):'';
+  const catches=i.kind==='bat'&&extra?extra.toLowerCase():'';
+  const when=i.longday+(i.inprog?' · match still in progress':'')+(catches?' · '+catches+' behind the stumps':'');
+  html+=`<div class="grid" id="g"><div class="gc span"><div class="t">${esc(i.opp?'v '+i.opp:i.team)}</div><div class="s wrap">${esc(when)}</div>${unitBits?`<div class="k">${esc(unitBits)}</div>`:''}</div></div>`;
   stY=V?960:745; gridY=V?1200:975;
 }else if(n<=2){
-  stmt=proud; stY=V?960:745; gridY=V?1200:975; if(n===1)cls='span';
+  stmt=null; stY=0; gridY=V?1100:780; if(n===1)cls='span';
   html+=`<div class="grid" id="g">${P.items.map(i=>card(i,cls)).join('')}</div>`;
 }else if(!V&&n<=4){
-  stmt=[n===4&&P.items.every(i=>i.kind==='bat'&&parseInt(i.big)>=50)?'FOUR FIFTIES ACROSS OUR CLUBS':'ACROSS OUR CLUBS THIS WEEKEND'];
+  stmt=n===4&&P.items.every(i=>i.kind==='bat'&&parseInt(i.big)>=50)?['FOUR FIFTIES']:null;
   stY=655; gridY=755; cardH=225;
   html+=`<div class="grid" id="g" style="row-gap:20px">${P.items.map((i,k)=>card(i,k===2&&n===3?'span':'')).join('')}</div>`;
 }else if(!V){
-  stmt=['ACROSS OUR CLUBS THIS WEEKEND']; stY=640; gridY=720; cardH=154;
+  stmt=null; stY=0; gridY=690; cardH=162;
   html+=`<div class="grid" id="g" style="row-gap:16px">${P.items.map((i,k)=>card(i,'compact'+(k===4&&n===5?' span':''))).join('')}</div>`;
 }else{ // vertical list: full-width rows
-  stmt=['ACROSS OUR CLUBS THIS WEEKEND']; stY=900; gridY=980; cols=1; cardH=n<=4?122:100;
+  stmt=null; stY=0; gridY=980; cols=1; cardH=n<=4?122:100;
   html+=`<div class="grid" id="g" style="gap:${n<=4?16:12}px">${P.items.map(i=>`<div class="gc row" style="padding-top:0"><div><div class="eb">${esc(i.team)}</div><div class="t" style="font-size:${n<=4?32:28}px">${esc(i.name)}</div></div><div class="k" style="background:var(--pink)">${esc(i.chip)}</div></div>`).join('')}</div>`;
 }
-if(stmt) html+=`<div class="st" id="st">${stmt.length===3?`<div class="a">${esc(stmt[0])}</div><div class="v">${esc(stmt[1])}</div><div class="a">${esc(stmt[2])}</div>`:`<div class="a">${esc(stmt[0])}</div>`}</div>`;
+if(stmt) html+=`<div class="st" id="st">${stmt.name?`<div class="a nm">${esc(stmt.name)}</div><div class="tm">${esc(stmt.team)}</div>`:`<div class="a">${esc(stmt[0])}</div>`}</div>`;
 html+=`<div class="footer" style="height:${V?420:100}px;align-items:${V?'flex-start':'center'};padding-top:${V?44:0}px"><b>HALLA BOL!</b><span>RRAMELBOURNE.COM</span></div>`;
 f.innerHTML=html;
 const g=document.getElementById('g'), st=document.getElementById('st'), h=document.getElementById('h');
@@ -92,6 +90,7 @@ document.fonts.load('900 100px M').then(()=>document.fonts.load('800 40px M')).t
   let fs=Math.min(245, (!V&&st)?Math.floor((stY-34-capTop)/1.58):245); h.style.fontSize=fs+'px';
   while(Math.max(...[...h.children].map(width))>limit&&fs>60){fs-=2;h.style.fontSize=fs+'px'}
   h.style.top=(capTop-0.098*fs)+'px';
+  if(!V&&!st&&P.type!=='spot'){const hb=capTop+1.58*fs; if(gridY>hb+110&&P.items.length<=2) g.style.top=(hb+110)+'px'}
   if(V){ // vertical: stack statement and cards under the headline, rows fill down to the footer
     const hb=capTop+1.58*fs; let y=hb+58;
     if(st){st.style.top=y+'px'; y=st.getBoundingClientRect().bottom+44}
@@ -101,7 +100,7 @@ document.fonts.load('900 100px M').then(()=>document.fonts.load('800 40px M')).t
       const rh=Math.min(130,Math.floor((room-gap*(rows.length-1))/rows.length));rows.forEach(r=>r.style.height=rh+'px')}
   }
   // statement: sits under the headline when the headline shrank
-  if(st) st.querySelectorAll('.a').forEach(a=>shrink(a,contentW,26));
+  if(st) st.querySelectorAll('.a,.tm').forEach(a=>shrink(a,contentW,24));
   g.querySelectorAll('.t,.eb,.s:not(.wrap),.k').forEach(el=>{const card=el.closest('.gc');const room=card.clientWidth-56-(el.parentElement.classList.contains('row')?0:0);shrink(el,el.closest('.row')?(card.clientWidth-56)*0.55:room,14)});
   document.body.dataset.ready='1';
 });

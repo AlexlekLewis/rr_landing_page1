@@ -23,7 +23,8 @@
     "big": "98",
     "unit": "RUNS",
     "fig": "98",
-    "chip": "98 OFF 65"
+    "chip": "98 OFF 65",
+    "longday": "Friday 13 November"
    },
    {
     "name": "Leith Salwathura",
@@ -38,7 +39,8 @@
     "big": "73",
     "unit": "RUNS",
     "fig": "73",
-    "chip": "73 OFF 73"
+    "chip": "73 OFF 73",
+    "longday": "Sunday 15 November"
    },
    {
     "name": "Cooper Lewin",
@@ -53,7 +55,8 @@
     "big": "70",
     "unit": "RUNS",
     "fig": "70",
-    "chip": "70 OFF 74"
+    "chip": "70 OFF 74",
+    "longday": "Friday 13 November"
    },
    {
     "name": "Dheer Chaudhari",
@@ -68,10 +71,12 @@
     "big": "70",
     "unit": "RUNS",
     "fig": "70",
-    "chip": "70 OFF 91"
+    "chip": "70 OFF 91",
+    "longday": "Sunday 15 November"
    }
   ],
-  "source": "03-feed/top-performances"
+  "source": "03-feed/top-performances",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_ALL-ACADEMY_02-highlights-mosaic",
@@ -97,7 +102,8 @@
     "big": "98",
     "unit": "RUNS",
     "fig": "98",
-    "chip": "98 OFF 65"
+    "chip": "98 OFF 65",
+    "longday": "Friday 13 November"
    },
    {
     "name": "Leith Salwathura",
@@ -112,7 +118,8 @@
     "big": "73",
     "unit": "RUNS",
     "fig": "73",
-    "chip": "73 OFF 73"
+    "chip": "73 OFF 73",
+    "longday": "Sunday 15 November"
    },
    {
     "name": "Cooper Lewin",
@@ -127,7 +134,8 @@
     "big": "70",
     "unit": "RUNS",
     "fig": "70",
-    "chip": "70 OFF 74"
+    "chip": "70 OFF 74",
+    "longday": "Friday 13 November"
    },
    {
     "name": "Dheer Chaudhari",
@@ -142,7 +150,8 @@
     "big": "70",
     "unit": "RUNS",
     "fig": "70",
-    "chip": "70 OFF 91"
+    "chip": "70 OFF 91",
+    "longday": "Sunday 15 November"
    },
    {
     "name": "Priyam Sharma",
@@ -157,7 +166,8 @@
     "big": "5",
     "unit": "WICKETS",
     "fig": "5/43",
-    "chip": "5/43 · 8 OVERS"
+    "chip": "5/43 · 8 OVERS",
+    "longday": "Saturday 14 November"
    },
    {
     "name": "Aarav Vinothkumar",
@@ -172,10 +182,12 @@
     "big": "4",
     "unit": "WICKETS",
     "fig": "4/8",
-    "chip": "4/8 · 5.5 OVERS"
+    "chip": "4/8 · 5.5 OVERS",
+    "longday": "Saturday 14 November"
    }
   ],
-  "source": "03-feed/highlights-mosaic"
+  "source": "03-feed/highlights-mosaic",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_ALL-ACADEMY_03-batting-1",
@@ -201,10 +213,12 @@
     "big": "98",
     "unit": "RUNS",
     "fig": "98",
-    "chip": "98 OFF 65"
+    "chip": "98 OFF 65",
+    "longday": "Friday 13 November"
    }
   ],
-  "source": "03-feed/batting-1"
+  "source": "03-feed/batting-1",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_ALL-ACADEMY_04-batting-2",
@@ -230,10 +244,12 @@
     "big": "73",
     "unit": "RUNS",
     "fig": "73",
-    "chip": "73 OFF 73"
+    "chip": "73 OFF 73",
+    "longday": "Sunday 15 November"
    }
   ],
-  "source": "03-feed/batting-2"
+  "source": "03-feed/batting-2",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_ALL-ACADEMY_05-batting-3",
@@ -259,10 +275,12 @@
     "big": "70",
     "unit": "RUNS",
     "fig": "70",
-    "chip": "70 OFF 74"
+    "chip": "70 OFF 74",
+    "longday": "Friday 13 November"
    }
   ],
-  "source": "03-feed/batting-3"
+  "source": "03-feed/batting-3",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_ALL-ACADEMY_06-bowling-1",
@@ -288,10 +306,12 @@
     "big": "5",
     "unit": "WICKETS",
     "fig": "5/43",
-    "chip": "5/43 · 8 OVERS"
+    "chip": "5/43 · 8 OVERS",
+    "longday": "Saturday 14 November"
    }
   ],
-  "source": "03-feed/bowling-1"
+  "source": "03-feed/bowling-1",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_ALL-ACADEMY_07-bowling-2",
@@ -317,10 +337,12 @@
     "big": "4",
     "unit": "WICKETS",
     "fig": "4/8",
-    "chip": "4/8 · 5.5 OVERS"
+    "chip": "4/8 · 5.5 OVERS",
+    "longday": "Saturday 14 November"
    }
   ],
-  "source": "03-feed/bowling-2"
+  "source": "03-feed/bowling-2",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_ALL-ACADEMY_08-bowling-3",
@@ -346,10 +368,12 @@
     "big": "4",
     "unit": "WICKETS",
     "fig": "4/31",
-    "chip": "4/31 · 5 OVERS"
+    "chip": "4/31 · 5 OVERS",
+    "longday": "Sunday 15 November"
    }
   ],
-  "source": "03-feed/bowling-3"
+  "source": "03-feed/bowling-3",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_ELITE-MELBOURNE_01-top-performances",
@@ -375,7 +399,8 @@
     "big": "98",
     "unit": "RUNS",
     "fig": "98",
-    "chip": "98 OFF 65"
+    "chip": "98 OFF 65",
+    "longday": "Friday 13 November"
    },
    {
     "name": "Leith Salwathura",
@@ -390,7 +415,8 @@
     "big": "73",
     "unit": "RUNS",
     "fig": "73",
-    "chip": "73 OFF 73"
+    "chip": "73 OFF 73",
+    "longday": "Sunday 15 November"
    },
    {
     "name": "Cooper Lewin",
@@ -405,7 +431,8 @@
     "big": "70",
     "unit": "RUNS",
     "fig": "70",
-    "chip": "70 OFF 74"
+    "chip": "70 OFF 74",
+    "longday": "Friday 13 November"
    },
    {
     "name": "Dheer Chaudhari",
@@ -420,10 +447,12 @@
     "big": "70",
     "unit": "RUNS",
     "fig": "70",
-    "chip": "70 OFF 91"
+    "chip": "70 OFF 91",
+    "longday": "Sunday 15 November"
    }
   ],
-  "source": "elite-melbourne/top-performances"
+  "source": "elite-melbourne/top-performances",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_ELITE-MELBOURNE_02-highlights-mosaic",
@@ -449,7 +478,8 @@
     "big": "98",
     "unit": "RUNS",
     "fig": "98",
-    "chip": "98 OFF 65"
+    "chip": "98 OFF 65",
+    "longday": "Friday 13 November"
    },
    {
     "name": "Leith Salwathura",
@@ -464,7 +494,8 @@
     "big": "73",
     "unit": "RUNS",
     "fig": "73",
-    "chip": "73 OFF 73"
+    "chip": "73 OFF 73",
+    "longday": "Sunday 15 November"
    },
    {
     "name": "Cooper Lewin",
@@ -479,7 +510,8 @@
     "big": "70",
     "unit": "RUNS",
     "fig": "70",
-    "chip": "70 OFF 74"
+    "chip": "70 OFF 74",
+    "longday": "Friday 13 November"
    },
    {
     "name": "Dheer Chaudhari",
@@ -494,7 +526,8 @@
     "big": "70",
     "unit": "RUNS",
     "fig": "70",
-    "chip": "70 OFF 91"
+    "chip": "70 OFF 91",
+    "longday": "Sunday 15 November"
    },
    {
     "name": "Priyam Sharma",
@@ -509,7 +542,8 @@
     "big": "5",
     "unit": "WICKETS",
     "fig": "5/43",
-    "chip": "5/43 · 8 OVERS"
+    "chip": "5/43 · 8 OVERS",
+    "longday": "Saturday 14 November"
    },
    {
     "name": "Ishita Tiwari",
@@ -524,10 +558,12 @@
     "big": "54",
     "unit": "RUNS",
     "fig": "54",
-    "chip": "54 OFF 39"
+    "chip": "54 OFF 39",
+    "longday": "Sunday 15 November"
    }
   ],
-  "source": "elite-melbourne/highlights-mosaic"
+  "source": "elite-melbourne/highlights-mosaic",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_ELITE-MELBOURNE_03-batting-1",
@@ -553,10 +589,12 @@
     "big": "98",
     "unit": "RUNS",
     "fig": "98",
-    "chip": "98 OFF 65"
+    "chip": "98 OFF 65",
+    "longday": "Friday 13 November"
    }
   ],
-  "source": "elite-melbourne/batting-1"
+  "source": "elite-melbourne/batting-1",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_ELITE-MELBOURNE_04-batting-2",
@@ -582,10 +620,12 @@
     "big": "73",
     "unit": "RUNS",
     "fig": "73",
-    "chip": "73 OFF 73"
+    "chip": "73 OFF 73",
+    "longday": "Sunday 15 November"
    }
   ],
-  "source": "elite-melbourne/batting-2"
+  "source": "elite-melbourne/batting-2",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_ELITE-MELBOURNE_05-batting-3",
@@ -611,10 +651,12 @@
     "big": "70",
     "unit": "RUNS",
     "fig": "70",
-    "chip": "70 OFF 74"
+    "chip": "70 OFF 74",
+    "longday": "Friday 13 November"
    }
   ],
-  "source": "elite-melbourne/batting-3"
+  "source": "elite-melbourne/batting-3",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_ELITE-MELBOURNE_06-bowling-1",
@@ -640,10 +682,12 @@
     "big": "5",
     "unit": "WICKETS",
     "fig": "5/43",
-    "chip": "5/43 · 8 OVERS"
+    "chip": "5/43 · 8 OVERS",
+    "longday": "Saturday 14 November"
    }
   ],
-  "source": "elite-melbourne/bowling-1"
+  "source": "elite-melbourne/bowling-1",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_ELITE-MELBOURNE_07-bowling-2",
@@ -669,10 +713,12 @@
     "big": "3",
     "unit": "WICKETS",
     "fig": "3/19",
-    "chip": "3/19 · 6 OVERS"
+    "chip": "3/19 · 6 OVERS",
+    "longday": "Saturday 14 November"
    }
   ],
-  "source": "elite-melbourne/bowling-2"
+  "source": "elite-melbourne/bowling-2",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_PERFORMANCE-CRANBOURNE-NORTH_01-top-performances",
@@ -698,7 +744,8 @@
     "big": "4",
     "unit": "WICKETS",
     "fig": "4/8",
-    "chip": "4/8 · 5.5 OVERS"
+    "chip": "4/8 · 5.5 OVERS",
+    "longday": "Saturday 14 November"
    },
    {
     "name": "Inderjot Singh",
@@ -713,7 +760,8 @@
     "big": "4",
     "unit": "WICKETS",
     "fig": "4/31",
-    "chip": "4/31 · 5 OVERS"
+    "chip": "4/31 · 5 OVERS",
+    "longday": "Sunday 15 November"
    },
    {
     "name": "Zac Eipper",
@@ -728,7 +776,8 @@
     "big": "52*",
     "unit": "NOT OUT",
     "fig": "52*",
-    "chip": "52* OFF 41"
+    "chip": "52* OFF 41",
+    "longday": "Sunday 15 November"
    },
    {
     "name": "Aarav Bhasin",
@@ -743,10 +792,12 @@
     "big": "3",
     "unit": "WICKETS",
     "fig": "3/42",
-    "chip": "3/42 · 7 OVERS"
+    "chip": "3/42 · 7 OVERS",
+    "longday": "Saturday 14 November"
    }
   ],
-  "source": "perf-cranbourne/top-performances"
+  "source": "perf-cranbourne/top-performances",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_PERFORMANCE-CRANBOURNE-NORTH_02-highlights-mosaic",
@@ -772,7 +823,8 @@
     "big": "4",
     "unit": "WICKETS",
     "fig": "4/8",
-    "chip": "4/8 · 5.5 OVERS"
+    "chip": "4/8 · 5.5 OVERS",
+    "longday": "Saturday 14 November"
    },
    {
     "name": "Inderjot Singh",
@@ -787,7 +839,8 @@
     "big": "4",
     "unit": "WICKETS",
     "fig": "4/31",
-    "chip": "4/31 · 5 OVERS"
+    "chip": "4/31 · 5 OVERS",
+    "longday": "Sunday 15 November"
    },
    {
     "name": "Zac Eipper",
@@ -802,7 +855,8 @@
     "big": "52*",
     "unit": "NOT OUT",
     "fig": "52*",
-    "chip": "52* OFF 41"
+    "chip": "52* OFF 41",
+    "longday": "Sunday 15 November"
    },
    {
     "name": "Aarav Bhasin",
@@ -817,7 +871,8 @@
     "big": "3",
     "unit": "WICKETS",
     "fig": "3/42",
-    "chip": "3/42 · 7 OVERS"
+    "chip": "3/42 · 7 OVERS",
+    "longday": "Saturday 14 November"
    },
    {
     "name": "Shivang Kotnala",
@@ -832,7 +887,8 @@
     "big": "40",
     "unit": "RUNS",
     "fig": "40",
-    "chip": "40 OFF 34"
+    "chip": "40 OFF 34",
+    "longday": "Sunday 15 November"
    },
    {
     "name": "Zach van der Nest",
@@ -847,10 +903,12 @@
     "big": "39",
     "unit": "RUNS",
     "fig": "39",
-    "chip": "39 OFF 28"
+    "chip": "39 OFF 28",
+    "longday": "Friday 13 November"
    }
   ],
-  "source": "perf-cranbourne/highlights-mosaic"
+  "source": "perf-cranbourne/highlights-mosaic",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_PERFORMANCE-CRANBOURNE-NORTH_03-batting-1",
@@ -876,10 +934,12 @@
     "big": "52*",
     "unit": "NOT OUT",
     "fig": "52*",
-    "chip": "52* OFF 41"
+    "chip": "52* OFF 41",
+    "longday": "Sunday 15 November"
    }
   ],
-  "source": "perf-cranbourne/batting-1"
+  "source": "perf-cranbourne/batting-1",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_PERFORMANCE-CRANBOURNE-NORTH_04-batting-2",
@@ -905,10 +965,12 @@
     "big": "40",
     "unit": "RUNS",
     "fig": "40",
-    "chip": "40 OFF 34"
+    "chip": "40 OFF 34",
+    "longday": "Sunday 15 November"
    }
   ],
-  "source": "perf-cranbourne/batting-2"
+  "source": "perf-cranbourne/batting-2",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_PERFORMANCE-CRANBOURNE-NORTH_05-batting-3",
@@ -934,10 +996,12 @@
     "big": "39",
     "unit": "RUNS",
     "fig": "39",
-    "chip": "39 OFF 28"
+    "chip": "39 OFF 28",
+    "longday": "Friday 13 November"
    }
   ],
-  "source": "perf-cranbourne/batting-3"
+  "source": "perf-cranbourne/batting-3",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_PERFORMANCE-CRANBOURNE-NORTH_06-bowling-1",
@@ -963,10 +1027,12 @@
     "big": "4",
     "unit": "WICKETS",
     "fig": "4/8",
-    "chip": "4/8 · 5.5 OVERS"
+    "chip": "4/8 · 5.5 OVERS",
+    "longday": "Saturday 14 November"
    }
   ],
-  "source": "perf-cranbourne/bowling-1"
+  "source": "perf-cranbourne/bowling-1",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_PERFORMANCE-CRANBOURNE-NORTH_07-bowling-2",
@@ -992,10 +1058,12 @@
     "big": "4",
     "unit": "WICKETS",
     "fig": "4/31",
-    "chip": "4/31 · 5 OVERS"
+    "chip": "4/31 · 5 OVERS",
+    "longday": "Sunday 15 November"
    }
   ],
-  "source": "perf-cranbourne/bowling-2"
+  "source": "perf-cranbourne/bowling-2",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_PERFORMANCE-CRANBOURNE-NORTH_08-bowling-3",
@@ -1021,10 +1089,12 @@
     "big": "3",
     "unit": "WICKETS",
     "fig": "3/42",
-    "chip": "3/42 · 7 OVERS"
+    "chip": "3/42 · 7 OVERS",
+    "longday": "Saturday 14 November"
    }
   ],
-  "source": "perf-cranbourne/bowling-3"
+  "source": "perf-cranbourne/bowling-3",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_PERFORMANCE-MICKLEHAM_01-top-performances",
@@ -1050,7 +1120,8 @@
     "big": "50*",
     "unit": "NOT OUT",
     "fig": "50*",
-    "chip": "50* OFF 57"
+    "chip": "50* OFF 57",
+    "longday": "Friday 13 November"
    },
    {
     "name": "Harsh Sinha",
@@ -1065,10 +1136,12 @@
     "big": "36",
     "unit": "RUNS",
     "fig": "36",
-    "chip": "36 OFF 85"
+    "chip": "36 OFF 85",
+    "longday": "Saturday 14 November"
    }
   ],
-  "source": "perf-mickleham/top-performances"
+  "source": "perf-mickleham/top-performances",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_PERFORMANCE-MICKLEHAM_02-highlights-mosaic",
@@ -1094,7 +1167,8 @@
     "big": "50*",
     "unit": "NOT OUT",
     "fig": "50*",
-    "chip": "50* OFF 57"
+    "chip": "50* OFF 57",
+    "longday": "Friday 13 November"
    },
    {
     "name": "Harsh Sinha",
@@ -1109,10 +1183,12 @@
     "big": "36",
     "unit": "RUNS",
     "fig": "36",
-    "chip": "36 OFF 85"
+    "chip": "36 OFF 85",
+    "longday": "Saturday 14 November"
    }
   ],
-  "source": "perf-mickleham/highlights-mosaic"
+  "source": "perf-mickleham/highlights-mosaic",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_PERFORMANCE-MICKLEHAM_03-batting-1",
@@ -1138,10 +1214,12 @@
     "big": "50*",
     "unit": "NOT OUT",
     "fig": "50*",
-    "chip": "50* OFF 57"
+    "chip": "50* OFF 57",
+    "longday": "Friday 13 November"
    }
   ],
-  "source": "perf-mickleham/batting-1"
+  "source": "perf-mickleham/batting-1",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_PERFORMANCE-MICKLEHAM_04-batting-2",
@@ -1167,10 +1245,12 @@
     "big": "36",
     "unit": "RUNS",
     "fig": "36",
-    "chip": "36 OFF 85"
+    "chip": "36 OFF 85",
+    "longday": "Saturday 14 November"
    }
   ],
-  "source": "perf-mickleham/batting-2"
+  "source": "perf-mickleham/batting-2",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_POWER-HALLAM_01-top-performances",
@@ -1196,7 +1276,8 @@
     "big": "50*",
     "unit": "NOT OUT",
     "fig": "50*",
-    "chip": "50* OFF 45 · 2 CATCHES"
+    "chip": "50* OFF 45 · 2 CATCHES",
+    "longday": "Sunday 15 November"
    },
    {
     "name": "Tanish Singh",
@@ -1211,7 +1292,8 @@
     "big": "43",
     "unit": "RUNS",
     "fig": "43",
-    "chip": "43 OFF 67"
+    "chip": "43 OFF 67",
+    "longday": "Saturday 14 November"
    },
    {
     "name": "Aarav Bhasin",
@@ -1226,7 +1308,8 @@
     "big": "3",
     "unit": "WICKETS",
     "fig": "3/42",
-    "chip": "3/42 · 7 OVERS"
+    "chip": "3/42 · 7 OVERS",
+    "longday": "Saturday 14 November"
    },
    {
     "name": "Gurfateh Singh Shergill",
@@ -1241,10 +1324,12 @@
     "big": "32*",
     "unit": "NOT OUT",
     "fig": "32*",
-    "chip": "32* OFF 34"
+    "chip": "32* OFF 34",
+    "longday": "Friday 13 November"
    }
   ],
-  "source": "power-hallam/top-performances"
+  "source": "power-hallam/top-performances",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_POWER-HALLAM_02-highlights-mosaic",
@@ -1270,7 +1355,8 @@
     "big": "50*",
     "unit": "NOT OUT",
     "fig": "50*",
-    "chip": "50* OFF 45 · 2 CATCHES"
+    "chip": "50* OFF 45 · 2 CATCHES",
+    "longday": "Sunday 15 November"
    },
    {
     "name": "Tanish Singh",
@@ -1285,7 +1371,8 @@
     "big": "43",
     "unit": "RUNS",
     "fig": "43",
-    "chip": "43 OFF 67"
+    "chip": "43 OFF 67",
+    "longday": "Saturday 14 November"
    },
    {
     "name": "Aarav Bhasin",
@@ -1300,7 +1387,8 @@
     "big": "3",
     "unit": "WICKETS",
     "fig": "3/42",
-    "chip": "3/42 · 7 OVERS"
+    "chip": "3/42 · 7 OVERS",
+    "longday": "Saturday 14 November"
    },
    {
     "name": "Gurfateh Singh Shergill",
@@ -1315,7 +1403,8 @@
     "big": "32*",
     "unit": "NOT OUT",
     "fig": "32*",
-    "chip": "32* OFF 34"
+    "chip": "32* OFF 34",
+    "longday": "Friday 13 November"
    },
    {
     "name": "Hrishikesh Padmanabhan",
@@ -1329,10 +1418,12 @@
     "kind": "keeper",
     "big": "1",
     "unit": "DISMISSAL",
-    "chip": "1 KEEPER DISMISSAL"
+    "chip": "1 KEEPER DISMISSAL",
+    "longday": "Friday 13 November"
    }
   ],
-  "source": "power-hallam/highlights-mosaic"
+  "source": "power-hallam/highlights-mosaic",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_POWER-HALLAM_03-batting-1",
@@ -1358,10 +1449,12 @@
     "big": "50*",
     "unit": "NOT OUT",
     "fig": "50*",
-    "chip": "50* OFF 45 · 2 CATCHES"
+    "chip": "50* OFF 45 · 2 CATCHES",
+    "longday": "Sunday 15 November"
    }
   ],
-  "source": "power-hallam/batting-1"
+  "source": "power-hallam/batting-1",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_POWER-HALLAM_04-batting-2",
@@ -1387,10 +1480,12 @@
     "big": "43",
     "unit": "RUNS",
     "fig": "43",
-    "chip": "43 OFF 67"
+    "chip": "43 OFF 67",
+    "longday": "Saturday 14 November"
    }
   ],
-  "source": "power-hallam/batting-2"
+  "source": "power-hallam/batting-2",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_POWER-HALLAM_05-batting-3",
@@ -1416,10 +1511,12 @@
     "big": "32*",
     "unit": "NOT OUT",
     "fig": "32*",
-    "chip": "32* OFF 34"
+    "chip": "32* OFF 34",
+    "longday": "Friday 13 November"
    }
   ],
-  "source": "power-hallam/batting-3"
+  "source": "power-hallam/batting-3",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_POWER-HALLAM_06-bowling-1",
@@ -1445,10 +1542,12 @@
     "big": "3",
     "unit": "WICKETS",
     "fig": "3/42",
-    "chip": "3/42 · 7 OVERS"
+    "chip": "3/42 · 7 OVERS",
+    "longday": "Saturday 14 November"
    }
   ],
-  "source": "power-hallam/bowling-1"
+  "source": "power-hallam/bowling-1",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_POWER-MICKLEHAM_01-top-performances",
@@ -1474,7 +1573,8 @@
     "big": "42",
     "unit": "RUNS",
     "fig": "42",
-    "chip": "42 OFF 46"
+    "chip": "42 OFF 46",
+    "longday": "Friday 13 November"
    },
    {
     "name": "Harsh Sinha",
@@ -1489,10 +1589,12 @@
     "big": "36",
     "unit": "RUNS",
     "fig": "36",
-    "chip": "36 OFF 85"
+    "chip": "36 OFF 85",
+    "longday": "Saturday 14 November"
    }
   ],
-  "source": "power-mickleham/top-performances"
+  "source": "power-mickleham/top-performances",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_POWER-MICKLEHAM_02-highlights-mosaic",
@@ -1518,7 +1620,8 @@
     "big": "42",
     "unit": "RUNS",
     "fig": "42",
-    "chip": "42 OFF 46"
+    "chip": "42 OFF 46",
+    "longday": "Friday 13 November"
    },
    {
     "name": "Harsh Sinha",
@@ -1533,10 +1636,12 @@
     "big": "36",
     "unit": "RUNS",
     "fig": "36",
-    "chip": "36 OFF 85"
+    "chip": "36 OFF 85",
+    "longday": "Saturday 14 November"
    }
   ],
-  "source": "power-mickleham/highlights-mosaic"
+  "source": "power-mickleham/highlights-mosaic",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_POWER-MICKLEHAM_03-batting-1",
@@ -1562,10 +1667,12 @@
     "big": "42",
     "unit": "RUNS",
     "fig": "42",
-    "chip": "42 OFF 46"
+    "chip": "42 OFF 46",
+    "longday": "Friday 13 November"
    }
   ],
-  "source": "power-mickleham/batting-1"
+  "source": "power-mickleham/batting-1",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_POWER-MICKLEHAM_04-batting-2",
@@ -1591,10 +1698,12 @@
     "big": "36",
     "unit": "RUNS",
     "fig": "36",
-    "chip": "36 OFF 85"
+    "chip": "36 OFF 85",
+    "longday": "Saturday 14 November"
    }
   ],
-  "source": "power-mickleham/batting-2"
+  "source": "power-mickleham/batting-2",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_POWER-WILLIAMSTOWN_01-top-performances",
@@ -1620,10 +1729,12 @@
     "big": "51*",
     "unit": "NOT OUT",
     "fig": "51*",
-    "chip": "51* OFF 41"
+    "chip": "51* OFF 41",
+    "longday": "Sunday 15 November"
    }
   ],
-  "source": "power-williamstown/top-performances"
+  "source": "power-williamstown/top-performances",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_POWER-WILLIAMSTOWN_02-highlights-mosaic",
@@ -1649,10 +1760,12 @@
     "big": "51*",
     "unit": "NOT OUT",
     "fig": "51*",
-    "chip": "51* OFF 41"
+    "chip": "51* OFF 41",
+    "longday": "Sunday 15 November"
    }
   ],
-  "source": "power-williamstown/highlights-mosaic"
+  "source": "power-williamstown/highlights-mosaic",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_POWER-WILLIAMSTOWN_03-batting-1",
@@ -1678,10 +1791,12 @@
     "big": "51*",
     "unit": "NOT OUT",
     "fig": "51*",
-    "chip": "51* OFF 41"
+    "chip": "51* OFF 41",
+    "longday": "Sunday 15 November"
    }
   ],
-  "source": "power-williamstown/batting-1"
+  "source": "power-williamstown/batting-1",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_SPIN-CRANBOURNE-NORTH_01-top-performances",
@@ -1707,10 +1822,12 @@
     "big": "5",
     "unit": "WICKETS",
     "fig": "5/43",
-    "chip": "5/43 · 8 OVERS"
+    "chip": "5/43 · 8 OVERS",
+    "longday": "Saturday 14 November"
    }
   ],
-  "source": "spin-cranbourne/top-performances"
+  "source": "spin-cranbourne/top-performances",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_SPIN-CRANBOURNE-NORTH_02-highlights-mosaic",
@@ -1736,10 +1853,12 @@
     "big": "5",
     "unit": "WICKETS",
     "fig": "5/43",
-    "chip": "5/43 · 8 OVERS"
+    "chip": "5/43 · 8 OVERS",
+    "longday": "Saturday 14 November"
    }
   ],
-  "source": "spin-cranbourne/highlights-mosaic"
+  "source": "spin-cranbourne/highlights-mosaic",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  },
  {
   "file": "2026-11-18_RESULTS_SPIN-CRANBOURNE-NORTH_03-bowling-1",
@@ -1765,9 +1884,11 @@
     "big": "5",
     "unit": "WICKETS",
     "fig": "5/43",
-    "chip": "5/43 · 8 OVERS"
+    "chip": "5/43 · 8 OVERS",
+    "longday": "Saturday 14 November"
    }
   ],
-  "source": "spin-cranbourne/bowling-1"
+  "source": "spin-cranbourne/bowling-1",
+  "dates": "FRI 13 – SUN 15 NOVEMBER"
  }
 ]
