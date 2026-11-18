@@ -8,7 +8,7 @@ const TODAY = new Date(2026, 10, 17);
 const child = { ...emptyPlayer(), first_name: 'Arjun', last_name: 'Sharma', dob: '2014-03-02', experience: 'club', club_name: 'Caroline Springs CC' };
 const good = {
     ...EMPTY_FORM, attendee_type: 'child', contact_name: 'Priya Sharma', email: ' Priya@Example.com ', phone: '0400 000 000',
-    in_australia: 'yes', in_melbourne: 'yes', suburb: 'Caroline Springs', postcode: '3023', accept_terms: true,
+    in_melbourne: 'yes', suburb: 'Caroline Springs', postcode: '3023', accept_terms: true,
 };
 
 describe('invitation list form', () => {
@@ -25,7 +25,7 @@ describe('invitation list form', () => {
 
     it('blocks an empty form, one message per missing answer', () => {
         const e = validate(EMPTY_FORM, [emptyPlayer()], TODAY);
-        for (const k of ['attendee_type', 'p0_first_name', 'p0_last_name', 'p0_dob', 'p0_experience', 'email', 'phone', 'in_australia', 'accept_terms']) {
+        for (const k of ['attendee_type', 'p0_first_name', 'p0_last_name', 'p0_dob', 'p0_experience', 'email', 'phone', 'in_melbourne', 'accept_terms']) {
             expect(e[k], k).toBeTruthy();
         }
     });
@@ -35,14 +35,17 @@ describe('invitation list form', () => {
         expect(e.p0_dob).toMatch(/parent or guardian/);
     });
 
-    it('asks Australians for suburb and a 4-digit postcode, and overseas families for country and city', () => {
-        expect(validate({ ...good, postcode: '30' }, [child], TODAY).postcode).toBeTruthy();
+    it('asks one location question: do you live in Melbourne? (Andy, 18 Nov 2026)', () => {
         expect(validate({ ...good, in_melbourne: '' }, [child], TODAY).in_melbourne).toBeTruthy();
-        const overseas = { ...good, in_australia: 'no', in_melbourne: '', postcode: '', suburb: '', country: '' };
-        const e = validate(overseas, [child], TODAY);
-        expect(e.country).toBeTruthy();
+        expect(validate({ ...good, postcode: '30' }, [child], TODAY).postcode).toBeTruthy();
+        const away = { ...good, in_melbourne: 'no', postcode: '', suburb: '', country: '' };
+        const e = validate(away, [child], TODAY);
         expect(e.suburb).toBeTruthy();
+        expect(e.country).toBeTruthy();
         expect(e.postcode).toBeUndefined();
+        expect(validate({ ...away, suburb: 'Geelong', country: 'Victoria' }, [child], TODAY)).toEqual({});
+        const [row] = buildRows('x', { ...away, suburb: 'Geelong', country: 'Victoria' }, [child], { submissionId: 'abc' });
+        expect(row).toMatchObject({ lives_in_melbourne: false, lives_in_australia: null, country: 'Victoria', suburb: 'Geelong' });
     });
 
     it('saves one row per player, sharing the contact details and submission id', () => {
@@ -52,7 +55,7 @@ describe('invitation list form', () => {
         expect(rows[0]).toMatchObject({
             campaign: 'ravenhall-opening-session', submission_id: 'abc', attendee_type: 'child',
             player_first_name: 'Arjun', contact_name: 'Priya Sharma', email: 'priya@example.com',
-            lives_in_australia: true, lives_in_melbourne: true, country: 'Australia', suburb: 'Caroline Springs', postcode: '3023',
+            lives_in_australia: true, lives_in_melbourne: true, country: null, suburb: 'Caroline Springs', postcode: '3023',
             accept_terms: true, utm_source: 'instagram',
         });
         expect(rows[1].player_first_name).toBe('Meera');

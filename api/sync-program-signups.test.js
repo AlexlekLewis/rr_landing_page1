@@ -784,10 +784,11 @@ describe('invitation list tab', () => {
     expect(col(row, 'Invitation Status')).toMatch(/no decision yet/);
   });
 
-  it('says so when an adult registered themself, when they live overseas, and when invited', () => {
-    const row = invitationRow(invite({ attendee_type: 'self', lives_in_australia: false, lives_in_melbourne: null, country: 'India', status: 'invited' }), NOW);
+  it('says so when an adult registered themself, when they do not live in Melbourne, and when invited', () => {
+    const row = invitationRow(invite({ attendee_type: 'self', lives_in_melbourne: false, lives_in_australia: null, country: 'Victoria', suburb: 'Geelong', status: 'invited' }), NOW);
     expect(col(row, 'Who Is Attending')).toMatch(/adult/);
-    expect(col(row, 'Lives in Melbourne?')).toMatch(/overseas/);
+    expect(col(row, 'Lives in Melbourne?')).toBe('No');
+    expect(col(row, 'State / Country (if not Melbourne)')).toBe('Victoria');
     expect(col(row, 'Invitation Status')).toBe('INVITED');
   });
 

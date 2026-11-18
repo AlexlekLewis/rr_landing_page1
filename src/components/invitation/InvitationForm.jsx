@@ -280,38 +280,29 @@ const InvitationForm = ({ campaign }) => {
                         Invitations depend on how close you live to {cfg.venueShort}.
                     </p>
                     <div className="space-y-5">
-                        <Field label="Do you live in Australia?" id="in_australia" error={errors.in_australia}>
-                            <Choice name="aus" cols="grid-cols-2" options={YES_NO} value={form.in_australia} onChange={set('in_australia')} />
+                        <Field label="Do you live in Melbourne?" id="in_melbourne" error={errors.in_melbourne}>
+                            <Choice name="melb" cols="grid-cols-2" options={YES_NO} value={form.in_melbourne} onChange={set('in_melbourne')} />
                         </Field>
 
-                        {form.in_australia === 'yes' && (
+                        {form.in_melbourne && (
                             <>
-                                <Field label="Do you live in Melbourne?" id="in_melbourne" error={errors.in_melbourne}>
-                                    <Choice name="melb" cols="grid-cols-2" options={YES_NO} value={form.in_melbourne} onChange={set('in_melbourne')} />
-                                </Field>
                                 <div className="grid grid-cols-1 sm:grid-cols-[1fr_10rem] gap-5">
-                                    <Field label="Suburb" id="suburb" error={errors.suburb}>
+                                    <Field label={form.in_melbourne === 'yes' ? 'Suburb' : 'Suburb, town or city'} id="suburb" error={errors.suburb}>
                                         <input className={inputCls} value={form.suburb} onChange={set('suburb')} autoComplete="address-level2" />
                                     </Field>
-                                    <Field label="Postcode" id="postcode" error={errors.postcode}>
-                                        <input className={inputCls} value={form.postcode} onChange={set('postcode')} inputMode="numeric" maxLength={4} autoComplete="postal-code" />
+                                    <Field label="Postcode" required={form.in_melbourne === 'yes'} id="postcode" error={errors.postcode}>
+                                        <input className={inputCls} value={form.postcode} onChange={set('postcode')} inputMode={form.in_melbourne === 'yes' ? 'numeric' : 'text'} maxLength={form.in_melbourne === 'yes' ? 4 : 10} autoComplete="postal-code" />
                                     </Field>
                                 </div>
+                                {form.in_melbourne === 'no' && (
+                                    <Field label="State or country" id="country" error={errors.country}>
+                                        <input className={inputCls} value={form.country} onChange={set('country')} />
+                                    </Field>
+                                )}
                                 <Field label="Street address" required={false} id="street_address">
                                     <input className={inputCls} value={form.street_address} onChange={set('street_address')} autoComplete="street-address" />
                                 </Field>
                             </>
-                        )}
-
-                        {form.in_australia === 'no' && (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                                <Field label="Country" id="country" error={errors.country}>
-                                    <input className={inputCls} value={form.country} onChange={set('country')} autoComplete="country-name" />
-                                </Field>
-                                <Field label="Town or city" id="suburb" error={errors.suburb}>
-                                    <input className={inputCls} value={form.suburb} onChange={set('suburb')} autoComplete="address-level2" />
-                                </Field>
-                            </div>
                         )}
                     </div>
                 </div>
