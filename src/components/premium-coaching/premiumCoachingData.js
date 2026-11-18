@@ -213,18 +213,21 @@ export const paymentLinksFor = (tier, sessions) => {
 export const TIERS = [
     {
         key: 'head',
+        plain: 'Our most experienced coaches',
         name: 'Elite Coach',
         body: 'Our most experienced coaches, including the people who lead our regions, design our programs and develop our other coaches. They coach every part of the game.',
         bestFor: 'Players who want the most experienced eye on their game, or are pushing for representative and Premier Cricket selection.',
     },
     {
         key: 'performance',
+        plain: 'Current Premier Cricket players',
         name: 'Performance Coach',
         body: 'Current Premier Cricket players with state and national pathway experience. Each brings a specialist skill, and coaches the whole game around it.',
         bestFor: 'Players who want a specialist who is still playing at a high level.',
     },
     {
         key: 'academy',
+        plain: 'Young coaches, great with younger players',
         name: 'Academy Coach',
         body: 'Talented young cricketers who coach in our programs every week. Trained on all of our tools and systems, and close in age to the players they coach.',
         bestFor: 'Younger players, and anyone building good habits through regular sessions.',
@@ -249,6 +252,7 @@ const ALL_ASPECTS = 'Coaches all aspects of the game: batting, bowling, fielding
 export const COACHES = [
     {
         slug: 'alex-thornhill',
+        focus: ['batting'], // for the "what to work on" filter
         name: 'Alex Thornhill',
         centres: ['cranbourne-north'],
         tier: 'head',
@@ -259,6 +263,7 @@ export const COACHES = [
     },
     {
         slug: 'harkirat-bajwa',
+        focus: ['bowling'], // for the "what to work on" filter
         name: 'Harkirat Bajwa',
         centres: ['cranbourne-north'],
         tier: 'performance', // DRAFT
@@ -279,6 +284,7 @@ export const COACHES = [
     },
     {
         slug: 'alex-lewis',
+        focus: ['bowling'], // for the "what to work on" filter
         name: 'Alex Lewis',
         centres: ['mickleham', 'ravenhall'], // Andy, 17 Nov: North, and may also coach in the West
         tier: 'head',
@@ -289,6 +295,7 @@ export const COACHES = [
     },
     {
         slug: 'ikroop-dhanoa',
+        focus: ['batting'], // for the "what to work on" filter
         name: 'Ikroop Dhanoa',
         centres: ['mickleham'],
         tier: 'performance', // DRAFT
@@ -299,6 +306,7 @@ export const COACHES = [
     },
     {
         slug: 'rittin-raman',
+        focus: ['wicketkeeping', 'batting'], // for the "what to work on" filter
         name: 'Rittin Raman',
         centres: ['mickleham'],
         tier: 'academy', // DRAFT
@@ -337,7 +345,7 @@ export const COACHES = [
         img: null, // TODO: headshot
         bio: null, // TODO Andy
     },
-].map((c) => ({ ...c, allAspects: ALL_ASPECTS, bookable: !!TIER_PRICES[c.tier] }));
+].map((c) => ({ focus: [], ...c, allAspects: ALL_ASPECTS, bookable: !!TIER_PRICES[c.tier] }));
 
 // ── WHERE: the three centres ──────────────────────────────
 // Cranbourne North address = the Academy Shop pickup list (Alex, 5 Oct 2026).
@@ -346,6 +354,7 @@ export const COACHES = [
 export const CENTRES = [
     {
         slug: 'cranbourne-north',
+        near: 'Hallam, Narre Warren, Berwick, Cranbourne',
         name: 'Elite Cricket Centre',
         suburb: 'Cranbourne North',
         region: 'South-East Melbourne',
@@ -354,6 +363,7 @@ export const CENTRES = [
     },
     {
         slug: 'mickleham',
+        near: 'Craigieburn, Kalkallo, Donnybrook, Greenvale',
         name: 'Mickleham Indoor Sports Centre',
         suburb: 'Mickleham',
         region: 'Northern Melbourne',
@@ -362,6 +372,7 @@ export const CENTRES = [
     },
     {
         slug: 'ravenhall',
+        near: 'Caroline Springs, Deer Park, Derrimut, Truganina',
         name: 'M9 Sports Centre',
         suburb: 'Ravenhall',
         region: 'Western Melbourne · our West Centre',
@@ -370,6 +381,14 @@ export const CENTRES = [
         isNew: true,
         badge: 'Bookings open',
     },
+];
+
+// The "what does your player want to work on?" filter in the coach finder.
+export const FOCUS_FILTERS = [
+    { key: 'all', label: 'Everything' },
+    { key: 'batting', label: 'Batting' },
+    { key: 'bowling', label: 'Bowling' },
+    { key: 'wicketkeeping', label: 'Wicketkeeping' },
 ];
 
 export const coachesAt = (centreSlug) => COACHES.filter((c) => c.centres.includes(centreSlug));
