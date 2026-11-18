@@ -42,7 +42,7 @@ export const HERO_IMAGE = {
 
 // Gallery order: Melbourne first where we have it, then the strongest tour shots.
 export const PHOTOS = [
-    { src: '/assets/junior-royals/gallery/hands-on-batting.webp', alt: 'A Royals coach guiding a young batter’s technique in an indoor lane while a second young batter practises alongside', caption: 'Learning alongside another player: hands-on in a Mickleham lane.', where: MELB },
+    { src: '/assets/junior-royals/gallery/hands-on-batting.webp', alt: 'A Royals Academy coach guiding a young batter’s technique in an indoor lane while a second young batter practises alongside', caption: 'Learning alongside another player: hands-on in a Mickleham lane.', where: MELB },
     { src: handsOn, alt: 'A Royals coach guiding a player’s hands on the bat during a batting drill in the nets', caption: 'Hands on: a Royals coach shapes the swing.', where: INDIA },
     { src: grip, alt: 'Faiz Fazal, Indian cricket legend and former Royals cricketer, explaining the grip to a young Royals Academy batter', caption: 'Faiz Fazal on the grip.', where: INDIA },
     { src: bowler, alt: 'Siddharth Trivedi, legendary Rajasthan Royals bowler, watching a young bowler walk back to his mark', caption: 'Every ball watched: Siddharth Trivedi with a young bowler.', where: INDIA },

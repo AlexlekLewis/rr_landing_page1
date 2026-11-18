@@ -251,7 +251,7 @@ const Options = ({ onMeet }) => {
                 <div className="max-w-2xl mb-8">
                     <Eyebrow>Prices</Eyebrow>
                     <H2 className="mb-4">Choose your coach</H2>
-                    <p className="text-rr-charcoal font-medium leading-relaxed">Three kinds of Royals coach. Every one uses the same tools and systems and coaches the whole game. Pick the experience that suits your player.</p>
+                    <p className="text-rr-charcoal font-medium leading-relaxed">Three kinds of Royals Academy coach. Every one uses the same tools and systems and coaches the whole game. Pick the experience that suits your player.</p>
                 </div>
 
                 {/* 1-to-1 or 1-to-2: switches every price below */}

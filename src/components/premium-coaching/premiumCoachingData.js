@@ -54,7 +54,7 @@ export const HERO = {
         'Take their cricket seriously and want to keep getting better',
         'Want more than cones, balls and stumps',
         'Want to see and understand their own game, with real data',
-        'Want to learn the Royals way, from Royals coaches, with Royals technology',
+        'Want to learn the Royals way, from Royals Academy coaches, with Royals technology',
         'Want to train alongside a teammate and push each other',
     ],
     facts: [
@@ -132,7 +132,7 @@ export const TECH = {
     ],
     // What every session includes, beyond the tools above.
     every: [
-        'A full hour with a Royals coach, one lane',
+        'A full hour with a Royals Academy coach, one lane',
         'A baseline first, then progress compared session to session',
         'A plan to take home: the one or two things to practise',
     ],
@@ -140,7 +140,7 @@ export const TECH = {
 
 // ── HOW: the steps from booking to first session ──────────
 export const STEPS = [
-    { key: 'coach', title: 'Choose your coach', body: 'Pick your preferred location and a Royals coach, then 1, 3 or 5 sessions, 1-to-1 or 1-to-2.' },
+    { key: 'coach', title: 'Choose your coach', body: 'Pick your preferred location and a Royals Academy coach, then 1, 3 or 5 sessions, 1-to-1 or 1-to-2.' },
     { key: 'pay', title: 'Pick your times and pay', body: 'Choose from the coach’s open times and pay securely by card. Your times are held while you pay.' },
     // Andy, 18 Nov 2026: after payment the booking goes to the coach, who confirms the times
     // and is the family's contact from then on, unless there are significant changes or issues.
@@ -326,7 +326,7 @@ export const COACHES = [
         name: 'Kavya Khatri',
         centres: ['ravenhall'],
         tier: null, // TODO Andy
-        role: 'Royals Coach',
+        role: 'Royals Academy Coach',
         specialism: null, // TODO Andy
         img: null, // TODO: headshot
         bio: null, // TODO Andy
