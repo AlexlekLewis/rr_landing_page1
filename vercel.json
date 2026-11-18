@@ -41,6 +41,10 @@
     {
       "path": "/api/notify-coach-applications",
       "schedule": "*/10 * * * *"
+    },
+    {
+      "path": "/api/notify-private-coaching-bookings",
+      "schedule": "*/10 * * * *"
     }
   ],
   "headers": [

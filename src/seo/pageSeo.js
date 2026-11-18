@@ -177,6 +177,16 @@ export const PAGE_SEO = {
   },
   '/elite-royals': { ...ELITE },
   '/PGP2026': { ...ELITE, canonical: '/elite-royals' },
+  // PREVIEW (Andy, 13 Nov 2026): premium private coaching. noindex until Andy signs it
+  // off; then drop noindex and add it to the sitemap.
+  '/private-coaching-premium': {
+    title: 'Private Cricket Coaching | Rajasthan Royals Academy',
+    description:
+      'Premium 1-to-1 and 1-to-2 cricket coaching with Royals coaches and tech: Match Centre, bowling maps, heat maps. Cranbourne North, Mickleham, Ravenhall.',
+    noindex: true,
+  },
+  '/private-coaching-premium/success': { title: 'Booking Confirmed | Royals Private Coaching', noindex: true },
+  '/private-coaching-premium/partner': { title: 'Training Partner Form | Royals Private Coaching', noindex: true },
   '/mickleham': {
     title: 'Private Cricket Coaching Melbourne | Rajasthan Royals',
     description:
