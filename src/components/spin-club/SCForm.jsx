@@ -3,6 +3,8 @@ import { supabase } from '../../lib/supabase';
 import { CLUBS, PROGRAM, SPIN_TYPES, SQUAD_STATUS, SQUAD_NOTE, PRICES, STRIPE_LINK, upcomingNights } from './scOptions';
 import GovernanceConsents from '../shared/GovernanceConsents';
 import { EMPTY_CONSENTS, consentErrors, consentColumns } from '../../lib/governance';
+import HomeAddressFields from '../shared/HomeAddressFields';
+import { EMPTY_ADDRESS, addressErrors, addressColumns } from '../../lib/homeAddress';
 
 const getUTMParams = () => {
     const p = new URLSearchParams(window.location.search);
@@ -37,6 +39,9 @@ const SCForm = () => {
     // Players 18 and over aren't asked the Parent/Guardian Code.
     const [consents, setConsents] = useState(EMPTY_CONSENTS);
     const [consentErr, setConsentErr] = useState({});
+    // Home address (Andy, 18 Nov 2026), saved in the four home_* columns of `applications`.
+    const [address, setAddress] = useState(EMPTY_ADDRESS);
+    const [addressErr, setAddressErr] = useState({});
 
     const set = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
 
@@ -52,6 +57,9 @@ const SCForm = () => {
         if (!form.email.trim() || !form.email.includes('@')) return 'Please give us an email address we can reply to.';
         if (!form.phone.trim()) return 'Please give us a phone number.';
         if (ageNum < 18 && !form.parent_name.trim()) return 'For players under 18, please give a parent or guardian’s name.';
+        const badAddress = addressErrors(address);
+        setAddressErr(badAddress);
+        if (Object.keys(badAddress).length) return 'Please fill in your home address.';
         if (!form.intent) return 'Please tick the box to say you will come on the night you picked.';
         const missing = consentErrors(consents, { adult: ageNum >= 18 });
         setConsentErr(missing);
@@ -98,6 +106,7 @@ const SCForm = () => {
                 source: `spin-club-${club?.key || 'unknown'}`,
                 bio: notes,
                 page_referrer: document.referrer || null,
+                ...addressColumns(address),
                 ...consentColumns(consents),
                 ...utmParams,
             },
@@ -272,6 +281,9 @@ const SCForm = () => {
                         <label className={lc} htmlFor="sc-notes">Anything the coach should know? <span className="text-rr-dark/40 font-bold normal-case tracking-normal">(optional)</span></label>
                         <textarea id="sc-notes" rows={3} className={ic} value={form.notes} onChange={set('notes')} placeholder="How long you have bowled spin, what you want to get better at, or any other nights you want to come to." />
                     </div>
+
+                    <HomeAddressFields value={address} errors={addressErr}
+                        onChange={(v) => { setAddress(v); setAddressErr((p) => Object.fromEntries(Object.entries(p).filter(([k]) => k in addressErrors(v)))); }} />
 
                     <label className="flex items-start gap-3 bg-slate-50 border border-slate-200 rounded-2xl p-5 cursor-pointer">
                         <input

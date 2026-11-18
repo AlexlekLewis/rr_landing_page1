@@ -4,6 +4,8 @@ import { supabase } from '../../../lib/supabase';
 import { Label, FieldError, Chevron, inputClass, selectClass, PSCheckbox, scrollTo } from '../shared';
 import { REGIONS } from './welcomeConfig';
 import { Eyebrow } from './welcomeShared';
+import HomeAddressFields from '../../shared/HomeAddressFields';
+import { EMPTY_ADDRESS, addressErrors, addressColumns } from '../../../lib/homeAddress';
 
 // The row id is made in the browser. The public can insert into this table but
 // can't read rows back, so the id can't come from the database. It is also
@@ -46,6 +48,8 @@ const WelcomeConfirmForm = ({ config, isDraft, onSaved }) => {
         accept_liability: false,
     });
     const [errors, setErrors] = useState({});
+    // Home address (Andy, 18 Nov 2026), saved in the four home_* columns of `performance_squads_registrations`.
+    const [address, setAddress] = useState(EMPTY_ADDRESS);
     const [submitting, setSubmitting] = useState(false);
     const [saved, setSaved] = useState(null); // { id, draft }
 
@@ -60,6 +64,7 @@ const WelcomeConfirmForm = ({ config, isDraft, onSaved }) => {
         if (!form.email.trim()) next.email = 'Please enter an email address';
         else if (!/^\S+@\S+\.\S+$/.test(form.email.trim())) next.email = 'Please check the email address';
         if (!form.phone.trim()) next.phone = 'Please enter a mobile number';
+        Object.assign(next, addressErrors(address));
         Object.entries(AGREEMENT_ERRORS).forEach(([key, msg]) => {
             if (!form[key]) next[key] = msg;
         });
@@ -71,7 +76,8 @@ const WelcomeConfirmForm = ({ config, isDraft, onSaved }) => {
         const next = validate();
         if (Object.keys(next).length) {
             setErrors(next);
-            document.getElementById(`psw-${Object.keys(next)[0]}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            const first = Object.keys(next)[0];
+            document.getElementById(first.startsWith('home_') ? `address-${first}` : `psw-${first}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
         setErrors({});
@@ -108,6 +114,7 @@ const WelcomeConfirmForm = ({ config, isDraft, onSaved }) => {
                     phone: form.phone.trim(),
                     centre_slug: region.slug,
                     venue_name: region.venue,
+                    ...addressColumns(address),
                     accept_terms: form.accept_terms,
                     accept_player_code: form.accept_player_code,
                     accept_parent_code: form.accept_parent_code,
@@ -225,6 +232,9 @@ const WelcomeConfirmForm = ({ config, isDraft, onSaved }) => {
                     <FieldError msg={errors.phone} />
                 </div>
             </div>
+
+            <HomeAddressFields value={address} errors={errors} theme="dark"
+                onChange={(v) => { setAddress(v); setErrors((p) => Object.fromEntries(Object.entries(p).filter(([k]) => !k.startsWith('home_') || k in addressErrors(v)))); }} />
 
             <div className="pt-7 border-t border-white/10">
                 <Eyebrow className="mb-2">Agreements</Eyebrow>

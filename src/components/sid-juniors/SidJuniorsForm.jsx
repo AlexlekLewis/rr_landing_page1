@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Check, CreditCard, Mail, UserPlus, Camera, CalendarClock } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { HONEYPOT_FIELD, isHoneypotTripped } from '../../lib/security/bot.js';
+import { EMPTY_ADDRESS, addressErrors, addressColumns } from '../../lib/homeAddress';
+import HomeAddressFields from '../shared/HomeAddressFields';
 import {
     fadeUp, SectionHeading, FieldError, inputClass, PSCheckbox,
 } from '../performance-squads/shared';
@@ -211,6 +213,7 @@ const SessionChoice = ({ value, onChoose, error }) => (
 
 const BookingForm = () => {
     const [form, setForm] = useState(EMPTY);
+    const [address, setAddress] = useState(EMPTY_ADDRESS);
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
     const [done, setDone] = useState(null); // { firstName, email, sessionKey } once saved
@@ -240,6 +243,7 @@ const BookingForm = () => {
         else if (!/^\S+@\S+\.\S+$/.test(form.email.trim())) next.email = 'Please enter a valid email address';
         if (!form.phone.trim()) next.phone = 'Please enter a mobile number';
         else if (form.phone.replace(/\D/g, '').length < 8) next.phone = 'Please check the mobile number';
+        Object.assign(next, addressErrors(address));
         if (!form.accept_terms) next.accept_terms = 'Please agree to the Terms & Conditions and Privacy Policy';
         if (!form.accept_player_code) next.accept_player_code = 'Please agree to the Player Code of Conduct';
         if (!form.accept_parent_code) next.accept_parent_code = 'Please agree to the Parent/Guardian Code of Conduct';
@@ -253,7 +257,8 @@ const BookingForm = () => {
         const next = validate();
         if (Object.keys(next).length) {
             setErrors(next);
-            document.getElementById(`sj-${Object.keys(next)[0]}`)
+            const firstKey = Object.keys(next)[0];
+            document.getElementById(firstKey.startsWith('home_') ? `address-${firstKey}` : `sj-${firstKey}`)
                 ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
@@ -288,6 +293,7 @@ const BookingForm = () => {
                     parent_name: form.parent_name.trim(),
                     email,
                     phone: form.phone.trim(),
+                    ...addressColumns(address),
                     club: form.club.trim() || null,
                     notes: form.notes.trim() || null,
                     accept_terms: form.accept_terms,
@@ -489,6 +495,8 @@ const BookingForm = () => {
                                 <FieldError msg={errors.phone} />
                             </div>
                         </div>
+
+                        <HomeAddressFields value={address} onChange={setAddress} errors={errors} theme="dark" />
 
                         <div className="pt-6 border-t border-white/10">
                             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-rr-pink mb-4">

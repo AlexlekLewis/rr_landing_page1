@@ -14,6 +14,8 @@ import CentreAvailabilityGrid from '../CentreAvailabilityGrid';
 import { submitApplication, buildApplicationRow } from './submit';
 import UniformSizeGuideModal from '../UniformSizeGuideModal';
 import { TOPS_SIZES, SHORTS_SIZES, PANTS_SIZES, JACKET_SIZES, KIDS_AGE_CHART } from '../../academy-shop/sizeData';
+import { EMPTY_ADDRESS, addressErrors, addressColumns, addressLine } from '../../../lib/homeAddress';
+import HomeAddressFields from '../../shared/HomeAddressFields';
 
 const INPUT_STEPS = ['player'];
 // Visible progress stepper — the internal steps collapse into 4 phases families
@@ -89,6 +91,10 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
   const [form, setForm] = useState({ ...BLANK_FORM, ...(initialSession ? { centre: initialSession.centre } : {}) });
   const [step, setStep] = useState(initialSession ? 'player' : 'centre');
   const [errors, setErrors] = useState([]);
+  // Home address (required, src/lib/homeAddress.js). Replaces the old Suburb box: the
+  // legacy `suburb` field is kept filled from the address so flow.ts and the row still see it.
+  const [address, setAddressState] = useState(EMPTY_ADDRESS);
+  const [addressErrs, setAddressErrs] = useState({});
   const [result, setResult] = useState(null); // { dna, placement }
   const [selected, setSelected] = useState(initialSession || null); // chosen session
   const [hold, setHold] = useState(null); // { holdId }
@@ -127,6 +133,10 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
   const totalDueCents = blockFeeCents + (form.needs_uniform ? kitTotalCents : 0);
 
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
+  const setAddress = (a) => {
+    setAddressState(a);
+    setForm((p) => ({ ...p, suburb: addressColumns(a).home_suburb || '' }));
+  };
 
   const rootRef = useRef(null);
   // Stripe cancel returns to /PGP2026/apply?cancelled=1 — tell the family nothing
@@ -157,6 +167,7 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
     const session = SQUADS.find((s) => s.id === 'w-sat3') || null;
     const r = computePlacement(demoForm);
     setForm(demoForm);
+    setAddressState({ home_street: '1 Demo Street', home_suburb: 'Williamstown', home_state: 'VIC', home_postcode: '3016' });
     setResult(r);
     setSelected(session);
     const app = applications.create(applicationFromPlacement(demoForm, r, 'auto'));
@@ -172,7 +183,15 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
 
   function next() {
     if (INPUT_STEPS.includes(step)) {
-      const errs = validateStep(step, form);
+      // The home address replaces the Suburb box, so its own errors stand in for flow.ts's
+      // "Suburb is required." (form.suburb is filled from the address).
+      const addrErrs = step === 'player' ? addressErrors(address) : {};
+      const errs = [
+        ...validateStep(step, { ...form, suburb: addressColumns(address).home_suburb || '' })
+          .filter((e) => e !== 'Suburb is required.'),
+        ...Object.values(addrErrs),
+      ];
+      setAddressErrs(addrErrs);
       setErrors(errs);
       if (errs.length) return;
     }
@@ -245,11 +264,15 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
         // confirms payment (api/power-game-webhook, with api/power-game-verify-session as
         // the success-page backstop). So an unpaid applicant never locks a spot in the DB
         // or the Google Sheet. The full payload travels in the Stripe session metadata.
-        const application = buildApplicationRow(form, result.placement, selected, {
-          kind: 'standard',
-          centreName: CENTRE_BY_SLUG[form.centre]?.name,
-          ...buildUniformOpts(),
-        });
+        const application = {
+          ...buildApplicationRow(form, result.placement, selected, {
+            kind: 'standard',
+            centreName: CENTRE_BY_SLUG[form.centre]?.name,
+            ...buildUniformOpts(),
+          }),
+          // Travels through the Stripe metadata into the power_game_applications row.
+          ...addressColumns(address),
+        };
         try {
           sessionStorage.setItem('pgp_confirmation', JSON.stringify({
             playerName: form.player_name,
@@ -470,11 +493,11 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
                     </motion.div>
                   )}
                 </AnimatePresence>
-                <div className="grid grid-cols-2 gap-3">
-                  <Field label="Best contact mobile"><input className={inputCls} value={form.contact_phone} onChange={(e) => set('contact_phone', e.target.value)} placeholder="0412 345 678" /></Field>
-                  <Field label="Suburb"><input className={inputCls} value={form.suburb} onChange={(e) => set('suburb', e.target.value)} placeholder="e.g. Hallam" /></Field>
-                </div>
+                <Field label="Best contact mobile"><input className={inputCls} value={form.contact_phone} onChange={(e) => set('contact_phone', e.target.value)} placeholder="0412 345 678" /></Field>
                 <Field label="Best contact email"><input className={inputCls} value={form.contact_email} onChange={(e) => set('contact_email', e.target.value)} placeholder="jane@email.com" /></Field>
+                <div className="pt-2">
+                  <HomeAddressFields value={address} onChange={setAddress} errors={addressErrs} theme="dark" />
+                </div>
 
                 {/* ── CRICKET (optional) — last-3-years highest level, for our coaches' context only ── */}
                 <div className="pt-3 mt-1 border-t border-white/10">
@@ -610,6 +633,7 @@ export default function ApplyFlow({ embedded = false, initialSession = null }) {
                   <SummaryRow k="Player" v={form.player_name} />
                   <SummaryRow k="Centre" v={CENTRE_BY_SLUG[form.centre]?.name} />
                   <SummaryRow k="Session" v={sessionLabel} />
+                  <SummaryRow k="Address" v={addressLine(address)} />
                   {sessionWindow(selected.day) && (
                     <SummaryRow k="Dates" v={`${sessionWindow(selected.day).start} – ${sessionWindow(selected.day).end} · 8 weeks`} />
                   )}
