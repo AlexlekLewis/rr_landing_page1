@@ -142,7 +142,9 @@ export const TECH = {
 export const STEPS = [
     { key: 'coach', title: 'Choose your coach', body: 'Pick your preferred location and a Royals coach, then 1, 3 or 5 sessions, 1-to-1 or 1-to-2.' },
     { key: 'pay', title: 'Pick your times and pay', body: 'Choose from the coach’s open times and pay securely by card. Your times are held while you pay.' },
-    { key: 'confirm', title: 'We confirm your lane', body: 'We book the lane at the centre and confirm each session with you. If a time can’t go ahead, we offer the nearest one.' },
+    // Andy, 18 Nov 2026: after payment the booking goes to the coach, who confirms the times
+    // and is the family's contact from then on, unless there are significant changes or issues.
+    { key: 'confirm', title: 'Your coach confirms', body: 'Your booking goes straight to your coach, who gets in touch to confirm your times. From then on they’re your main contact, unless there’s a big change or issue.' },
     { key: 'train', title: 'Train with the tools', body: 'Your first session sets a baseline. Every session after works the plan and tracks the progress.' },
 ]
 
