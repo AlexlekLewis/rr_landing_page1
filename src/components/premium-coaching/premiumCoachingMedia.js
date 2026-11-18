@@ -66,3 +66,12 @@ export const VIDEOS = [
     { src: '/tours/somi-with-player.mp4', poster: '/tours/somi-with-player.jpg', title: 'One-on-one with Somi', caption: 'Somi Bhinder, resident coach, talks a player through his technique.', where: INDIA },
     { src: '/tours/romi-kunwar-front-shoulder.mp4', poster: '/tours/romi-kunwar-front-shoulder.jpg', title: 'The front shoulder', caption: 'Romi Bhinder and Kunwar work on his front shoulder.', where: INDIA },
 ];
+
+// ONE mixed carousel of photos and videos (Andy, 18 Nov 2026: "combine the photos and video
+// section ... in a combination style as you've done in other pages"), alternating photo,
+// video, photo... Rendered by home-page/HomeMedia.jsx, the same strip as the home page.
+const alternate = (a, b) => Array.from({ length: Math.max(a.length, b.length) }, (_, i) => [a[i], b[i]]).flat().filter(Boolean);
+export const MEDIA = alternate(
+    PHOTOS.map((p) => ({ ...p, type: 'image', caption: `${p.caption} (${p.where})` })),
+    VIDEOS.map((v) => ({ ...v, type: 'video', caption: `${v.caption} (${v.where})` })),
+);

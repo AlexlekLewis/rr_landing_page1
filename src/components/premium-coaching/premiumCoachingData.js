@@ -20,8 +20,8 @@
 //   • Message: we believe players learn best working with other players.
 //
 // STATUS: PREVIEW ONLY. Hidden route, noindex, not on the nav, the home page,
-// What's On, the sitemap or programs_config. Stripe links are coming from Andy;
-// until they are in PAYMENT_LINKS the form takes a booking REQUEST (nothing charged).
+// What's On, the sitemap or programs_config. Families choose the coach's times and pay at
+// booking (Stripe, server checkout).
 //
 // Everything marked TODO is a fact we don't have yet. Don't invent it.
 //
@@ -74,8 +74,8 @@ export const TOGETHER = {
     body: [
         'We believe cricketers improve fastest when they train alongside someone else. They watch, '
         + 'they compete, they push each other, and they learn from each other’s mistakes as much as their own.',
-        'So 1-to-2 costs the same as 1-to-1. Bring a teammate, a friend or a sibling at a similar level, '
-        + 'share the price, and both players get the coach, the technology and the data.',
+        'So 1-to-2 costs the same as 1-to-1. Bring a teammate, a friend or a sibling at a similar level: '
+        + 'one family books and pays, you split it between you, and both players get the coach, the technology and the data.',
     ],
 };
 
@@ -141,7 +141,7 @@ export const TECH = {
 // ── HOW: the steps from booking to first session ──────────
 export const STEPS = [
     { title: 'Choose your coach', body: 'Pick a centre and a coach, see their open times, and choose 1, 3 or 5 sessions, 1-to-1 or 1-to-2.' },
-    { title: 'Pick your times and pay', body: 'Choose the sessions you want from the coach’s live availability, then pay securely.' },
+    { title: 'Pick your times and pay', body: 'Choose your sessions from the coach’s open times, then pay securely by card to book them.' },
     { title: 'We confirm your lane', body: 'Our team confirms each session once the lane is booked at the centre. If a time can’t be confirmed, we offer the nearest one.' },
     { title: 'Train with the tools', body: 'The first session sets a baseline. Every session after works the plan, checks the data, and ends with the next thing to practise.' },
 ];
@@ -180,33 +180,11 @@ export const packageTotal = (tier, sessions) => {
 };
 export const money = (n) => `$${Number.isInteger(n) ? n : n.toFixed(2)}`;
 
-// Stripe Payment Links (Andy is creating them). CLAUDE.md: every package needs a PAIR,
-// `withShirt` (training shirt locked at quantity 1) for families who answer "No", and
-// `noShirt` for "Yes". Add both plink_ ids to PAYMENT_LINK_PROGRAMS in
-// api/stripe-webhook.js, and set each link's After-payment redirect to
-// /private-coaching-premium/success?session_id={CHECKOUT_SESSION_ID}.
-// While a pair is null the form saves a booking request and takes no payment.
-export const PAYMENT_LINKS = {
-    head: {
-        1: { withShirt: null, noShirt: null },
-        3: { withShirt: null, noShirt: null },
-        5: { withShirt: null, noShirt: null },
-    },
-    performance: {
-        1: { withShirt: null, noShirt: null },
-        3: { withShirt: null, noShirt: null },
-        5: { withShirt: null, noShirt: null },
-    },
-    academy: {
-        1: { withShirt: null, noShirt: null },
-        3: { withShirt: null, noShirt: null },
-        5: { withShirt: null, noShirt: null },
-    },
-};
-export const paymentLinksFor = (tier, sessions) => {
-    const l = PAYMENT_LINKS[tier]?.[sessions];
-    return l?.withShirt && l?.noShirt ? l : null;
-};
+// PAYMENT (Andy, 18 Nov 2026): families pay at booking through the site's own Stripe
+// checkout (api/private-coaching-checkout.js), priced on the server from TIER_PRICES above.
+// No Stripe Payment Links are needed. 1-to-2: the booker pays the whole session price and
+// the two families settle up between themselves; the second player completes their own
+// form (governance + shirt) before the first session (/private-coaching-premium/partner).
 
 // ── WHAT: the three coach tiers (draft copy, Andy to review) ───
 // Shown as Elite Coach / Performance Coach / Academy Coach, never "Tier 1/2/3"
@@ -425,44 +403,13 @@ export const LEVEL_OPTIONS = [
 
 export const MATCH_ME = 'match-me';
 
-// ── FAQ (tap to open) ────────────────────────────────────
-export const FAQ = [
-    {
-        q: 'How is this different from a normal private lesson?',
-        a: 'The coach brings the Academy’s technology into the lane: the Match Centre, bowling maps and fielding heat maps, plus our Performance Partners’ tools. Your player doesn’t only hear what to fix. They see it, and they see it improve.',
-    },
-    {
-        q: 'How does 1-to-2 work?',
-        a: 'Two players, one coach, one lane, for the same price as 1-to-1. The two families share it. We believe players learn best training with other players, so we make it easy to bring a teammate, a friend or a sibling at a similar level. Tell us their name on the form and we send their family a short form before the first session.',
-    },
-    {
-        q: 'How do the times work?',
-        a: 'Each coach marks their availability every week in our coaching portal, and the page shows it as it is updated. When you book, you choose your sessions from the coach’s open times. Once paid, each session is subject to lane availability at the centre and our confirmation. If a time can’t be confirmed, we offer the nearest one.',
-    },
-    {
-        q: 'Which coach should we choose?',
-        a: 'Choose by centre first, then by what your player wants to work on: each coach shows their specialty, and every coach covers all aspects of the game. Not sure? Text us with the chat button and we will help you choose.',
-    },
-    {
-        q: 'What ages do you coach?',
-        // TODO Andy: confirm the age range for this program.
-        a: 'Juniors and senior players. Tell us your player’s age and level on the form and we will match the right coach.',
-    },
-    {
-        q: 'What does my player need to bring?',
-        a: 'Their own cricket gear, water, and the Royals Academy training shirt. If they don’t have the shirt yet, you can order it on the form ($29.95 incl. GST) and it is added to the first payment.',
-    },
-    {
-        q: 'What if we need to cancel or move a session?',
-        // TODO Andy: notice period and make-up policy.
-        a: 'Tell us as early as you can and we will try to move it. Our full cancellation terms are in the Terms & Conditions, and they never remove your rights under Australian Consumer Law.',
-    },
-];
+// (No FAQ: the Questions section was removed, Andy 18 Nov 2026.)
 
 // ── Success page ─────────────────────────────────────────
 export const SUCCESS = {
-    title: 'Booking received',
-    body: 'Our team will confirm each session once the lane is booked at the centre, usually within two business days.', // TODO Andy: confirm the response time
-    nothingPaid: 'Nothing has been charged yet. We will send your payment link with the confirmation.',
-    paid: 'Payment received. Your sessions are subject to lane availability and our confirmation.',
+    title: 'You’re booked',
+    paid: 'Payment received. Your coach has been told and will be in touch. Each session is subject to lane availability at the centre and our confirmation.',
+    unpaid: 'We haven’t received your payment yet. If you closed the payment page, please book again: your times are held for 30 minutes.',
+    partnerTitle: 'Your training partner needs to complete their form',
+    partnerBody: 'Before the first session, the other player’s family must fill in a short form: their details, our agreements and consent, and the training shirt. Send them this link.',
 };

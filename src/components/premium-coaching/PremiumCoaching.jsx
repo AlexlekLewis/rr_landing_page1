@@ -1,28 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { Plus, Minus, Check } from 'lucide-react';
-import { VideoCard } from '../india-tour-2026/ITVideos';
-import { useCarousel, CarouselTrack, CarouselControls } from '../india-tour-2026/ITCarousel';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import PartnerStack from '../power-game/PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import PremiumCoachingForm from './PremiumCoachingForm';
-import PremiumCoachingGallery from './PremiumCoachingGallery';
+import HomeMedia from '../home-page/HomeMedia';
 import CoachFinder from './CoachFinder';
 import {
-    ROUTE, FORM_ANCHOR, HERO, TOGETHER, TECH, STEPS, TIERS, COACHES, FAQ,
+    ROUTE, FORM_ANCHOR, HERO, TOGETHER, TECH, STEPS, TIERS, COACHES,
     PACKAGES, perSession, money,
 } from './premiumCoachingData';
 import { BowlingMap, HeatMap } from './TechVisuals';
-import { HERO_IMAGE, VIDEOS } from './premiumCoachingMedia';
+import { HERO_IMAGE, MEDIA } from './premiumCoachingMedia';
 
 // Royals Private Coaching: the premium one-to-one offer (Andy, 13 Nov 2026; tiers,
 // prices, 1:2, live availability and booking added 17 Nov 2026).
 // Order: Hero (Why line + What facts + CTA) → WHY different → HOW: the tech →
 // HOW: the steps → WHAT: formats + coach tiers → WHAT: coaches by centre → see it
-// (video, photos) → form → FAQ. PREVIEW ONLY: hidden route, noindex, no surfaces.
+// (one mixed photo + video carousel) → book and pay. No Questions section (Andy, 18 Nov
+// 2026). PREVIEW ONLY: hidden route, noindex, no surfaces.
 
-const SECTIONS = ['hero', 'tech', 'together', 'how', 'options', 'coaches', 'video', 'photos', FORM_ANCHOR, 'faq'];
+const SECTIONS = ['hero', 'tech', 'together', 'how', 'options', 'coaches', 'media', FORM_ANCHOR];
 const ANCHOR = 'scroll-mt-24 md:scroll-mt-28';
 const go = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
@@ -260,8 +259,8 @@ const Options = ({ onMeet }) => {
                 </div>
                 <p className="text-sm text-rr-charcoal font-medium mb-10 max-w-2xl">
                     {pair
-                        ? 'Bring a teammate, friend or sibling at a similar level. Same coach, same lane, same price, shared: each family pays half.'
-                        : 'The whole session on your player. Prefer to share? Switch to “With a partner” and each family pays half.'}
+                        ? 'Bring a teammate, friend or sibling at a similar level. Same coach, same lane, same price. One family books and pays; split it between you and it works out at half each.'
+                        : 'The whole session on your player. Prefer to share? Switch to “With a partner” to see what it works out at for each family.'}
                 </p>
 
                 <div className="grid md:grid-cols-3 gap-5 items-stretch">
@@ -289,7 +288,7 @@ const Options = ({ onMeet }) => {
                                 </ul>
 
                                 <div className={`mt-auto rounded-2xl p-4 ${elite ? 'bg-white text-rr-dark' : 'bg-slate-50'}`}>
-                                    <p className="text-[11px] font-black uppercase tracking-widest text-slate-500 mb-2">{pair ? 'Each family pays, per session' : 'Per one-hour session'}</p>
+                                    <p className="text-[11px] font-black uppercase tracking-widest text-slate-500 mb-2">{pair ? 'Works out per family, per session' : 'Per one-hour session'}</p>
                                     {PACKAGES.map((p) => (
                                         <div key={p.sessions} className="flex items-baseline justify-between py-1">
                                             <span className="text-sm font-semibold text-rr-charcoal">{p.sessions === 1 ? 'Single session' : `${p.sessions}-session pack`}</span>
@@ -313,69 +312,10 @@ const Options = ({ onMeet }) => {
     );
 };
 
-// ── SEE IT: video ──────────────────────────────────────
-// Same player and carousel as /junior-royals and /tours (Andy, 13 Nov 2026): big play
-// button, play/pause + mute, one video at a time, swipe on a phone. Each caption says
-// where it was filmed.
-const Video = () => {
-    const total = VIDEOS.length;
-    const carousel = useCarousel(total);
-    const [activeId, setActiveId] = useState(null);
-    return (
-        <section className="bg-rr-dark py-20 md:py-28 overflow-hidden">
-            <div className="max-w-6xl mx-auto px-6">
-                <Eyebrow dark>See it in the lane</Eyebrow>
-                <H2 dark className="mb-10">One coach. One player.</H2>
-                <CarouselTrack carousel={carousel} label="Videos of Royals one-to-one coaching">
-                    {VIDEOS.map((v, i) => (
-                        <div key={v.src} data-slide role="group" aria-roledescription="slide" aria-label={`${i + 1} / ${total}`}
-                            className="snap-start shrink-0 w-[72%] sm:w-[42%] md:w-[31%] lg:w-[calc((100%-3rem)/4)]">
-                            <VideoCard v={{ ...v, caption: `${v.caption} (${v.where})` }} id={i} activeId={activeId} setActiveId={setActiveId} />
-                        </div>
-                    ))}
-                </CarouselTrack>
-                <CarouselControls carousel={carousel} total={total} prevLabel="Previous video" nextLabel="Next video" dark idPrefix="pc-videos" />
-            </div>
-        </section>
-    );
-};
-
-// ── FAQ ─────────────────────────────────────────────────
-const Faq = () => {
-    const [open, setOpen] = useState(0);
-    return (
-        <section className="bg-white py-20 md:py-28">
-            <div className="max-w-3xl mx-auto px-4 sm:px-6">
-                <Eyebrow>Questions</Eyebrow>
-                <H2 className="mb-10">Before you book</H2>
-                <div className="divide-y divide-slate-200 border-y border-slate-200">
-                    {FAQ.map((f, i) => (
-                        <div key={f.q}>
-                            <button type="button" onClick={() => setOpen(open === i ? -1 : i)} aria-expanded={open === i}
-                                className="w-full flex items-center justify-between gap-4 py-5 text-left">
-                                <span className="font-black text-rr-dark">{f.q}</span>
-                                {open === i ? <Minus className="w-5 h-5 text-rr-pink shrink-0" /> : <Plus className="w-5 h-5 text-rr-pink shrink-0" />}
-                            </button>
-                            {open === i && <p className="pb-5 text-rr-charcoal font-medium leading-relaxed">{f.a}</p>}
-                        </div>
-                    ))}
-                </div>
-                <div className="mt-12 text-center">
-                    <button type="button" data-cta="faq-primary" onClick={() => go(FORM_ANCHOR)}
-                        className="inline-flex items-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-8 py-4 rounded-full transition-colors">
-                        <Check className="w-4 h-4" /> {HERO.cta}
-                    </button>
-                </div>
-            </div>
-        </section>
-    );
-};
-
 const NAV = [
     { label: 'THE TECH', id: 'tech' },
     { label: 'PRICES', id: 'options' },
     { label: 'COACHES & TIMES', id: 'coaches' },
-    { label: 'FAQ', id: 'faq' },
 ];
 
 const PremiumCoaching = () => {
@@ -401,10 +341,11 @@ const PremiumCoaching = () => {
                 <div id="how" className={ANCHOR}><How /></div>
                 <div id="options" className={ANCHOR}><Options onMeet={() => go('coaches')} /></div>
                 <div id="coaches" className={ANCHOR}><CoachFinder onBook={book} /></div>
-                <div id="video" className={ANCHOR}><Video /></div>
-                <div id="photos" className={ANCHOR}><PremiumCoachingGallery /></div>
+                <div id="media" className={ANCHOR}>
+                    <HomeMedia items={MEDIA} idPrefix="pc-media" eyebrow="Photos & videos" label="Photos and videos of Royals private coaching"
+                        title={<>See it <span className="text-rr-pink">in the lane</span></>} sectionClass="py-16 md:py-20 bg-white" />
+                </div>
                 <div id={FORM_ANCHOR} className={ANCHOR}><PremiumCoachingForm key={formKey} initialCentre={pick.centre} initialCoach={pick.coach} /></div>
-                <div id="faq" className={ANCHOR}><Faq /></div>
             </main>
             <PartnerStack />
             <Footer />

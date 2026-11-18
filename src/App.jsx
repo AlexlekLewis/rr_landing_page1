@@ -91,6 +91,7 @@ const LowerPlentyJrDayPay = React.lazy(() => import('./components/lower-plenty-j
 // Facts: components/premium-coaching/premiumCoachingData.js. Form → premium_private_coaching_requests.
 const PremiumCoaching = React.lazy(() => import('./components/premium-coaching/PremiumCoaching'));
 const PremiumCoachingSuccess = React.lazy(() => import('./components/premium-coaching/PremiumCoachingSuccess'));
+const PremiumCoachingPartner = React.lazy(() => import('./components/premium-coaching/PremiumCoachingPartner'));
 // Match Registration — reusable match-day registration + payment page. Match-specific
 // detail lives in src/components/match-registration/matchConfig.js, so the next block
 // of matches is a config swap, not a new page. HIDDEN: noindex, direct URL only.
@@ -292,6 +293,7 @@ function App() {
             Power League Matches, Mon 28 & Tue 29 September. */}
         <Route path="/private-coaching-premium" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PremiumCoaching /></React.Suspense>} />
         <Route path="/private-coaching-premium/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PremiumCoachingSuccess /></React.Suspense>} />
+        <Route path="/private-coaching-premium/partner" element={<React.Suspense fallback={<div className="min-h-screen bg-white" />}><PremiumCoachingPartner /></React.Suspense>} />
         <Route path="/match-registration" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><MatchRegistration /></React.Suspense>} />
         <Route path="/match-registration/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><MatchRegistrationSuccess /></React.Suspense>} />
         {/* Performance Squad price. Same page, same form, same consents.

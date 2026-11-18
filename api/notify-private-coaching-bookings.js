@@ -4,7 +4,8 @@
 // "send a message, an email or a text message or a WhatsApp message directly to a coach
 // to say that someone has booked a session and to contact them").
 //
-// For each new booking in premium_private_coaching_requests (coach_notified_at IS NULL):
+// For each PAID booking in premium_private_coaching_requests (coach_notified_at IS NULL;
+// families pay at booking, Andy 18 Nov 2026, so the coach is only told about paid bookings):
 //   • EMAIL the coach (address from private_coaching_coaches), copying the Academy inbox,
 //     with one-tap Call / Text / WhatsApp / Email buttons for the family.
 //   • TEXT MESSAGE the coach too, once Twilio is set up (TWILIO_ACCOUNT_SID,
@@ -59,7 +60,12 @@ async function notifyOne(sb, r, inbox) {
         const { data } = await sb.from('private_coaching_coaches').select('*').eq('coach_slug', r.coach_slug).eq('active', true).maybeSingle();
         coach = data && (data.email || data.mobile) ? data : null;
     }
-    const alert = buildAlert(r, coach);
+    let partner = null;
+    if (r.format === '1-2') {
+        const { data } = await sb.from('premium_private_coaching_partners').select('id').eq('booking_id', r.id).maybeSingle();
+        partner = { done: !!data, link: `${process.env.VITE_APP_URL || 'https://rramelbourne.com'}/private-coaching-premium/partner?b=${r.id}` };
+    }
+    const alert = buildAlert(r, coach, partner);
     const coachEmail = coach?.notify_email && coach.email ? [coach.email] : [];
     const to = coachEmail.length ? coachEmail : inbox;
     const cc = coachEmail.length ? inbox.filter((x) => !coachEmail.includes(x)) : [];
@@ -85,7 +91,7 @@ export default async function handler(req, res) {
         const id = String((req.body && req.body.id) || '');
         if (!/^[0-9a-f-]{36}$/i.test(id)) return res.status(400).json({ error: 'bad id' });
         const since = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-        const { data: r } = await sb.from(TABLE).select('*').eq('id', id).is('coach_notified_at', null).gte('created_at', since).maybeSingle();
+        const { data: r } = await sb.from(TABLE).select('*').eq('id', id).eq('payment_status', 'paid').is('coach_notified_at', null).gte('created_at', since).maybeSingle();
         if (!r) return res.status(200).json({ ok: true, skipped: true });
         try { return res.status(200).json({ ok: true, ...(await notifyOne(sb, r, inbox)) }); } catch (e) { return res.status(502).json({ ok: false, error: e.message }); }
     }
@@ -93,7 +99,7 @@ export default async function handler(req, res) {
     // Cron: everything still waiting.
     const token = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
     if (!process.env.CRON_SECRET || token !== process.env.CRON_SECRET) return res.status(401).json({ error: 'unauthorised' });
-    const { data, error } = await sb.from(TABLE).select('*').is('coach_notified_at', null).order('created_at').limit(25);
+    const { data, error } = await sb.from(TABLE).select('*').eq('payment_status', 'paid').is('coach_notified_at', null).order('created_at').limit(25);
     if (error) return res.status(500).json({ error: error.message });
     const out = { sent: [], failed: [] };
     for (const r of data || []) {

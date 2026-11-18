@@ -118,7 +118,7 @@ const CoachFinder = ({ onBook }) => {
                 </div>
 
                 {/* 1. Centre */}
-                <Step n={1}>Where do you train?</Step>
+                <Step n={1}>Your preferred location</Step>
                 <div role="tablist" aria-label="Centre" className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mb-3">
                     {CENTRES.map((c) => {
                         const on = c.slug === centreSlug;

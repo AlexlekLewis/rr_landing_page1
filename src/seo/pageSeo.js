@@ -185,7 +185,8 @@ export const PAGE_SEO = {
       'Premium 1-to-1 and 1-to-2 cricket coaching with Royals coaches and tech: Match Centre, bowling maps, heat maps. Cranbourne North, Mickleham, Ravenhall.',
     noindex: true,
   },
-  '/private-coaching-premium/success': { title: 'Request Received | Royals Private Coaching', noindex: true },
+  '/private-coaching-premium/success': { title: 'Booking Confirmed | Royals Private Coaching', noindex: true },
+  '/private-coaching-premium/partner': { title: 'Training Partner Form | Royals Private Coaching', noindex: true },
   '/mickleham': {
     title: 'Private Cricket Coaching Melbourne | Rajasthan Royals',
     description:

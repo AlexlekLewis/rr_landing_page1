@@ -43,7 +43,7 @@ const nightTime = (s) => {
 };
 
 // One booking row (+ the coach row, if any) → everything the alert needs.
-export const buildAlert = (r, coach) => {
+export const buildAlert = (r, coach, partner = null) => {
     const player = `${r.player_first_name} ${r.player_last_name}`.trim();
     const contactName = r.parent_name || player;
     const centre = CENTRE_NAMES[r.centre] || r.centre;
@@ -52,12 +52,12 @@ export const buildAlert = (r, coach) => {
         ? `${r.package_sessions} session${r.package_sessions > 1 ? 's' : ''}${r.price_per_session != null ? ` × ${money(r.price_per_session)} = ${money(r.package_total)} incl. GST` : ''}`
         : null;
     const times = Array.isArray(r.selected_slots) && r.selected_slots.length ? r.selected_slots.map(nightTime).join(', ') : null;
-    const paid = r.payment_status === 'paid' ? 'Paid' : r.payment_status === 'sent_to_stripe' ? 'Gone to payment (Stripe)' : 'Not paid yet: the Academy sends the payment link once times are confirmed';
+    const paid = r.payment_status === 'paid' ? `Paid in full${r.amount_paid_cents ? ` (${money(r.amount_paid_cents / 100)} incl. GST)` : ''}` : 'Not paid';
     const wa = auMobileDigits(r.phone);
     const firstNamePlayer = r.player_first_name;
     const hello = coach?.name ? `Hi ${firstName(coach.name)},` : 'Hi team,';
     const lead = coach
-        ? `${contactName} has booked you for private coaching. Please contact them within 24 hours to confirm the times, then confirm the lane with the centre.`
+        ? `${contactName} has booked and paid for private coaching with you. Please contact them within 24 hours to confirm the times, then confirm the lane with the centre.`
         : r.coach_slug
             ? `A family has booked ${r.coach_slug} for private coaching, but there are no contact details on file for that coach in private_coaching_coaches. Please pass this on.`
             : 'A family has asked us to match them with a coach. Please choose a coach and contact the family.';
@@ -81,6 +81,7 @@ export const buildAlert = (r, coach) => {
         ['Notes for the coach', r.notes],
         ['Training shirt', r.shirt_size ? `Ordering size ${r.shirt_size}` : 'Has one'],
         ['Payment', paid],
+        ['Training partner form', partner ? (partner.done ? 'Completed' : `NOT completed yet. The partner must complete it before the first session: ${partner.link}`) : null],
         ['Contact', contactName],
         ['Mobile', r.phone],
         ['Email', r.email],

@@ -21,7 +21,7 @@ describe('private coaching booking alert', () => {
         const a = buildAlert(row, { name: 'Hamid Qadri', email: 'coach@example.com' });
         expect(a.subject).toMatch(/New private coaching booking: Test Player/);
         expect(a.html).toContain('Hi Hamid,');
-        expect(a.html).toContain('Pat Parent has booked you');
+        expect(a.html).toContain('Pat Parent has booked and paid for private coaching with you');
         expect(a.html).toContain('Fri, 20 Nov 5:00pm');
         expect(a.html).toContain('3 sessions × $170 = $510 incl. GST');
         expect(a.html).toContain('1-to-2 with Sam Lee (12)');

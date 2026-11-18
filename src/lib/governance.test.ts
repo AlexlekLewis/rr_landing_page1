@@ -26,6 +26,7 @@ const PAID_SIGNUP_FORMS = [
     'src/components/power-league/PLForm.jsx',
     'src/components/open-age-trial/OpenAgeRegistrationForm.jsx',
     'src/components/premium-coaching/PremiumCoachingForm.jsx',
+    'src/components/premium-coaching/PremiumCoachingPartner.jsx',
 ];
 
 describe('governance boxes', () => {

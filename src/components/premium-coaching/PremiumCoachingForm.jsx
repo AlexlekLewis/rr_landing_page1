@@ -5,21 +5,21 @@ import { HONEYPOT_FIELD, isHoneypotTripped } from '../../lib/security/bot.js';
 import GovernanceConsents from '../shared/GovernanceConsents';
 import TrainingShirtStep from '../shared/TrainingShirtStep';
 import { EMPTY_CONSENTS, consentErrors, consentColumns } from '../../lib/governance';
-import { EMPTY_SHIRT, shirtError, shirtTag, needsShirt, shirtCheckoutUrl, TRAINING_SHIRT } from '../../lib/kit/trainingShirt';
+import { EMPTY_SHIRT, shirtError, shirtTag, needsShirt, TRAINING_SHIRT } from '../../lib/kit/trainingShirt';
 import {
     CENTRES, FORMATS, PACKAGES, FOCUS_OPTIONS, LEVEL_OPTIONS, DB_TABLE, PROGRAM_NAME, SUCCESS_ROUTE,
-    AVAILABILITY_NOTE, coachesAt, coachOf, tierOf, centreOf, perSession, packageTotal, money, paymentLinksFor,
+    AVAILABILITY_NOTE, coachesAt, coachOf, tierOf, centreOf, perSession, packageTotal, money,
 } from './premiumCoachingData';
 import { useAllAvailability, groupByNight, nightLabel, timeLabel, slotKey } from './useCoachAvailability';
 
 // Booking form for Royals Private Coaching (premium). Andy, 17 Nov 2026:
 //   centre → coach → 1-to-1 or 1-to-2 (same price) → 1, 3 or 5 sessions → times from the
 //   coach's live availability → player, shirt, contact, governance → summary → book.
-// Payment: when the coach's tier has a Stripe Payment Link pair for the package
-// (PAYMENT_LINKS in premiumCoachingData.js) the family goes straight to Stripe, with the
-// training shirt locked in for "No" (CLAUDE.md). Until then the row is a booking request
-// and staff send the payment link. Either way each session is subject to lane
-// availability and confirmation.
+// Payment (Andy, 18 Nov 2026): the row is saved, then api/private-coaching-checkout.js
+// prices it on the server, holds the chosen times for 30 minutes and opens Stripe. The
+// training shirt is a line on that checkout when the family answered "No" (CLAUDE.md).
+// 1-to-2: the booker pays it all; the partner completes /partner before the first session.
+// Each session is still subject to lane availability and confirmation.
 //
 // The id is made here and the insert never chains .select(): the public role can insert
 // but not read the table back.
@@ -92,7 +92,6 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
     const nights = coachSlug ? groupByNight(slots, coachSlug, form.centre) : [];
     const per = priced && form.sessions ? perSession(tier, form.sessions) : null;
     const total = priced && form.sessions ? packageTotal(tier, form.sessions) : null;
-    const links = priced && form.sessions ? paymentLinksFor(tier, form.sessions) : null;
     const maxPicks = form.sessions || 0;
     const openCount = nights.reduce((n, x) => n + x.slots.length, 0);
 
@@ -154,7 +153,7 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
             price_per_session: per,
             package_total: total,
             selected_slots: picked.length ? picked : null,
-            payment_status: links ? 'sent_to_stripe' : 'request',
+            payment_status: 'request', // the checkout API moves it to sent_to_stripe, the webhook to paid
             player_first_name: form.player_first_name.trim(),
             player_last_name: form.player_last_name.trim(),
             player_age: age,
@@ -180,33 +179,35 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
             return;
         }
 
-        // Tell the coach straight away (api/notify-private-coaching-bookings.js emails them with
-        // one-tap Call / Text / WhatsApp buttons). Fire and forget: the 10-minute job retries.
-        try {
-            fetch('/api/notify-private-coaching-bookings', {
-                method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }), keepalive: true,
-            }).catch(() => {});
-        } catch { /* never blocks the booking */ }
-
         try {
             if (typeof window.fbq === 'function') {
                 window.fbq('track', 'Lead', { content_name: PROGRAM_NAME, content_category: form.centre }, { eventID: id });
-                if (links) window.fbq('track', 'InitiateCheckout', { content_name: PROGRAM_NAME, value: total, currency: 'AUD' });
+                window.fbq('track', 'InitiateCheckout', { content_name: PROGRAM_NAME, value: total + (needsShirt(shirt) ? TRAINING_SHIRT.price : 0), currency: 'AUD' });
             }
         } catch { /* never blocks the booking */ }
 
         const summary = {
-            first: row.player_first_name, centre: form.centre, format: form.format,
+            id, first: row.player_first_name, centre: form.centre, format: form.format, partner: row.other_players,
             coachName: coach?.name || null, tierName: tier ? tierOf(tier)?.name : null,
             sessions: form.sessions, per, total, picked, shirt,
         };
         try { sessionStorage.setItem('premium_pc_booking', JSON.stringify(summary)); } catch { /* optional */ }
 
-        if (links) {
-            window.location.assign(shirtCheckoutUrl(links, shirt, { id, email: row.email }));
-            return;
+        // Pay now (Andy, 18 Nov 2026: "we need to get the payment on the day"). The server
+        // works out the price, holds the chosen times for 30 minutes and opens Stripe.
+        try {
+            const r = await fetch('/api/private-coaching-checkout', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }),
+            });
+            const out = await r.json().catch(() => ({}));
+            if (r.ok && out.url) { window.location.assign(out.url); return; }
+            setSubmitting(false);
+            if (r.status === 409) setPicked([]);
+            setFailed(out.error || 'Payment could not start. Please try again, or text us with the chat button.');
+        } catch {
+            setSubmitting(false);
+            setFailed('Payment could not start. Please check your connection and try again.');
         }
-        navigate(SUCCESS_ROUTE, { state: summary });
     };
 
     const centre = centreOf(form.centre);
@@ -217,7 +218,7 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
                 <div className="text-center mb-10">
                     <p className="text-xs font-black text-rr-pink uppercase tracking-[0.3em] mb-3">Royals Private Coaching</p>
                     <h2 className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-4">Book Your Coach</h2>
-                    <p className="text-rr-charcoal font-medium leading-relaxed max-w-xl mx-auto">About three minutes. {AVAILABILITY_NOTE}</p>
+                    <p className="text-rr-charcoal font-medium leading-relaxed max-w-xl mx-auto">Choose your coach and times, then pay securely to book. About three minutes.</p>
                 </div>
 
                 <form onSubmit={submit} noValidate className="bg-white border border-slate-200 rounded-3xl p-5 sm:p-8 md:p-10 space-y-8">
@@ -266,7 +267,7 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
                                     return (
                                         <Choice key={p.sessions} on={form.sessions === p.sessions} bad={errors.sessions} disabled={short} onClick={() => chooseSessions(p.sessions)}
                                             title={`${p.label} · ${money(tt)}`}
-                                            sub={short ? `Only ${openCount} open time${openCount > 1 ? 's' : ''} right now` : `${money(pp)} a session incl. GST${form.format === '1-2' ? ` · ${money(tt / 2)} each family` : ''}`} />
+                                            sub={short ? `Only ${openCount} open time${openCount > 1 ? 's' : ''} right now` : `${money(pp)} a session incl. GST`} />
                                     );
                                 })}
                             </div>
@@ -312,7 +313,7 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 {FORMATS.map((f) => (
                                     <Choice key={f.value} on={form.format === f.value} bad={errors.format} onClick={() => set('format', f.value)}
-                                        title={`${f.label}${f.recommended ? ' · we recommend' : ''}`} sub={f.value === '1-2' ? 'Same price, shared by the two families.' : f.title} />
+                                        title={`${f.label}${f.recommended ? ' · we recommend' : ''}`} sub={f.value === '1-2' ? 'Same price as 1-to-1. You pay; split it with the other family.' : f.title} />
                                 ))}
                             </div>
                             <Err>{errors.format}</Err>
@@ -393,14 +394,14 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
                             <dl className="space-y-1.5 text-sm">
                                 <div className="flex justify-between gap-4"><dt className="text-white/70">Coach</dt><dd className="font-bold text-right">{coach ? `${coach.name} · ${tierOf(tier)?.name || 'Royals Coach'}` : 'We will match you'}</dd></div>
                                 {centre && <div className="flex justify-between gap-4"><dt className="text-white/70">Centre</dt><dd className="font-bold text-right">{centre.suburb}</dd></div>}
-                                {form.format && <div className="flex justify-between gap-4"><dt className="text-white/70">Format</dt><dd className="font-bold text-right">{form.format === '1-2' ? '1-to-2, shared' : '1-to-1'}</dd></div>}
+                                {form.format && <div className="flex justify-between gap-4"><dt className="text-white/70">Format</dt><dd className="font-bold text-right">{form.format === '1-2' ? '1-to-2 with a training partner' : '1-to-1'}</dd></div>}
                                 {form.sessions > 0 && <div className="flex justify-between gap-4"><dt className="text-white/70">Sessions</dt><dd className="font-bold text-right">{form.sessions} × {money(per)}</dd></div>}
                                 {picked.length > 0 && <div className="flex justify-between gap-4"><dt className="text-white/70">Times chosen</dt><dd className="font-bold text-right">{picked.map((p) => `${nightLabel(p.date)} ${timeLabel(p.start)}`).join(', ')}</dd></div>}
                                 {needsShirt(shirt) && shirt.size && <div className="flex justify-between gap-4"><dt className="text-white/70">Training shirt</dt><dd className="font-bold text-right">Size {String(shirt.size).split(' ')[0]} · {money(TRAINING_SHIRT.price)}</dd></div>}
                                 {total != null && (
                                     <div className="flex justify-between gap-4 pt-2 mt-2 border-t border-white/15 text-base">
                                         <dt className="font-black">Total incl. GST</dt>
-                                        <dd className="font-black text-right">{money(total + (needsShirt(shirt) ? TRAINING_SHIRT.price : 0))}{form.format === '1-2' && <span className="block text-xs font-semibold text-rr-light-pink">Sessions shared: {money(total / 2)} each family</span>}</dd>
+                                        <dd className="font-black text-right">{money(total + (needsShirt(shirt) ? TRAINING_SHIRT.price : 0))}{form.format === '1-2' && <span className="block text-xs font-semibold text-rr-light-pink">You pay the full amount. Split with your partner’s family, it’s {money(total / 2)} each.</span>}</dd>
                                     </div>
                                 )}
                             </dl>
@@ -415,10 +416,10 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
 
                     <button type="submit" disabled={submitting}
                         className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-60 text-white font-black uppercase tracking-widest px-8 py-4 rounded-full transition-colors">
-                        {submitting ? 'Sending…' : links ? 'Continue to Payment' : 'Book Your Coach'}
+                        {submitting ? 'Opening secure payment…' : 'Continue to Payment'}
                     </button>
                     <p className="text-center text-xs text-slate-500 font-medium">
-                        {links ? 'You will pay securely with Stripe.' : 'Nothing is charged today. We confirm your sessions, then send your payment link.'}
+                        You pay securely with Stripe. {AVAILABILITY_NOTE}
                     </p>
                 </form>
             </div>
