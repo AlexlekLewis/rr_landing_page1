@@ -180,9 +180,9 @@ export const PAGE_SEO = {
   // PREVIEW (Andy, 13 Nov 2026): premium private coaching. noindex until Andy signs it
   // off; then drop noindex and add it to the sitemap.
   '/private-coaching-premium': {
-    title: 'Private Cricket Coaching Melbourne | Rajasthan Royals',
+    title: 'Private Cricket Coaching | Rajasthan Royals Academy',
     description:
-      'Premium 1-to-1 cricket coaching in Melbourne with Royals coaches and tech: Match Centre, bowling maps, heat maps. Cranbourne North, Mickleham, Ravenhall.',
+      'Premium 1-to-1 and 1-to-2 cricket coaching with Royals coaches and tech: Match Centre, bowling maps, heat maps. Cranbourne North, Mickleham, Ravenhall.',
     noindex: true,
   },
   '/private-coaching-premium/success': { title: 'Request Received | Royals Private Coaching', noindex: true },

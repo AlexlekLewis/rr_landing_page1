@@ -38,11 +38,13 @@ export const FORM_ANCHOR = 'request';
 
 // ── The one-line belief (Why) ──────────────────────────────
 export const HERO = {
-    eyebrow: 'Royals Private Coaching · Melbourne',
+    // No city in general copy (Andy, 18 Nov 2026: "we will soon be in Perth and Brisbane").
+    // Name a city only where it is specific, e.g. a centre's address.
+    eyebrow: 'Rajasthan Royals Academy · Private Coaching',
     h1: ['Royals', 'Private Coaching'],
     // No tagline under the title (Andy, 18 Nov 2026: removed "One coach. Your player. Every ball measured.").
     lead:
-        'Private cricket coaching in Melbourne with a Rajasthan Royals Academy coach, and all of '
+        'Private cricket coaching with a Rajasthan Royals Academy coach, and all of '
         + 'the Academy’s technology in the lane with you: the Match Centre, fielding heat maps and '
         + 'bowling maps. Train one-to-one, or bring a training partner and share the price.',
     // Who it's for (Andy, 18 Nov 2026), a ticked list like Junior Royals' "perfect for".
@@ -96,7 +98,7 @@ export const TECH = {
             body: 'Our iPad match-up tool. The coach sets the field, the scenario and the ground size, then your player plays it in the lane.',
             more: 'It turns a net session into a match. A batter learns where the gaps are against a real field. A bowler learns which ball to bowl to which field. Players in our elite programs use it in every Execute phase.',
             visual: 'photo:/assets/premium-coaching/tech-match-centre.jpg',
-            caption: 'Setting a live field in the Match Centre, Melbourne.',
+            caption: 'Setting a live field in the Match Centre.',
         },
         {
             key: 'bowling-maps',
@@ -357,7 +359,8 @@ export const CENTRES = [
         near: 'Hallam, Narre Warren, Berwick, Cranbourne',
         name: 'Elite Cricket Centre',
         suburb: 'Cranbourne North',
-        region: 'South-East Melbourne',
+        city: 'Melbourne', // for when Perth and Brisbane centres are added
+        region: 'South-East',
         address: '30 Medley Drive, Cranbourne North VIC 3977',
         note: 'Close to Hallam, Narre Warren and Berwick.',
     },
@@ -366,7 +369,8 @@ export const CENTRES = [
         near: 'Craigieburn, Kalkallo, Donnybrook, Greenvale',
         name: 'Mickleham Indoor Sports Centre',
         suburb: 'Mickleham',
-        region: 'Northern Melbourne',
+        city: 'Melbourne',
+        region: 'North',
         address: '3 Eclipse Drive, Mickleham VIC 3064',
         note: 'The Academy’s high-performance home in the north.',
     },
@@ -375,7 +379,8 @@ export const CENTRES = [
         near: 'Caroline Springs, Deer Park, Derrimut, Truganina',
         name: 'M9 Sports Centre',
         suburb: 'Ravenhall',
-        region: 'Western Melbourne · our West Centre',
+        city: 'Melbourne',
+        region: 'West · our West Centre',
         address: null, // TODO Andy: street address
         note: 'Our new West Centre. Bookings open now.',
         isNew: true,

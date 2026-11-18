@@ -31,7 +31,7 @@ import sidLahiri from '../../assets/india-tour-2026/september-2026/19-sid-lahiri
 import nextDrill from '../../assets/india-tour-2026/september-2026/06-coach-and-batter-in-nets.webp';
 
 const INDIA = 'Royals High Performance Centre, India';
-const MELB = 'Mickleham, Melbourne';
+const MELB = 'Mickleham';
 // (junior-royals/gallery/batting-with-coach.webp is the same moment as the pull-shots
 // clip below, so it isn't repeated in the photos.)
 
@@ -44,7 +44,7 @@ export const HERO_IMAGE = {
 export const PHOTOS = [
     { src: '/assets/junior-royals/gallery/hands-on-batting.webp', alt: 'A Royals coach guiding a young batter’s technique in an indoor lane while a second young batter practises alongside', caption: 'Learning alongside another player: hands-on in a Mickleham lane.', where: MELB },
     { src: handsOn, alt: 'A Royals coach guiding a player’s hands on the bat during a batting drill in the nets', caption: 'Hands on: a Royals coach shapes the swing.', where: INDIA },
-    { src: grip, alt: 'Faiz Fazal, Indian cricket legend and former Royals cricketer, explaining the grip to a young Rajasthan Royals Academy Melbourne batter', caption: 'Faiz Fazal on the grip.', where: INDIA },
+    { src: grip, alt: 'Faiz Fazal, Indian cricket legend and former Royals cricketer, explaining the grip to a young Royals Academy batter', caption: 'Faiz Fazal on the grip.', where: INDIA },
     { src: bowler, alt: 'Siddharth Trivedi, legendary Rajasthan Royals bowler, watching a young bowler walk back to his mark', caption: 'Every ball watched: Siddharth Trivedi with a young bowler.', where: INDIA },
     { src: oneOnOne, alt: 'Faiz Fazal working one-on-one with Khilesh Mamtani on a batting point in the nets', caption: 'Faiz Fazal one-on-one with Khilesh Mamtani.', where: INDIA },
     { src: sideBySide, alt: 'Joshua Richardson side by side with Faiz Fazal during a batting drill in the nets', caption: 'Joshua Richardson side by side with Faiz Fazal.', where: INDIA },
@@ -57,7 +57,7 @@ export const PHOTOS = [
 // one-to-one clip filmed in Melbourne, but the coach in it (Andrew Walton) is no longer
 // on the roster (Alex, 5 Oct 2026). TODO Andy: use it or not?
 export const VIDEOS = [
-    { src: '/assets/premium-coaching/match-centre-ipad.mp4', poster: '/assets/premium-coaching/match-centre-ipad.jpg', title: 'The Match Centre', caption: 'Setting a live field on the iPad, then playing the scenario in the lane.', where: 'Melbourne' },
+    { src: '/assets/premium-coaching/match-centre-ipad.mp4', poster: '/assets/premium-coaching/match-centre-ipad.jpg', title: 'The Match Centre', caption: 'Setting a live field on the iPad, then playing the scenario in the lane.', where: 'In our lanes' },
     { src: '/assets/premium-coaching/still-1to2-mickleham.mp4', poster: '/assets/premium-coaching/still-1to2-mickleham.jpg', title: 'Learning together', caption: 'Hands-on with one batter while a second works alongside.', where: MELB },
     { src: '/junior-royals/videos/pull-shots.mp4', poster: '/junior-royals/videos/pull-shots.jpg', title: 'Pull shots', caption: 'Jinang feeding pull shots, one batter in the lane.', where: MELB },
     { src: '/assets/premium-coaching/still-hands-on.mp4', poster: '/assets/premium-coaching/still-hands-on.jpg', title: 'Hands on', caption: 'A Royals coach shapes the swing.', where: INDIA },
