@@ -140,11 +140,11 @@ export const TECH = {
 
 // ── HOW: the steps from booking to first session ──────────
 export const STEPS = [
-    { title: 'Choose your coach', body: 'Pick a centre and a coach, see their open times, and choose 1, 3 or 5 sessions, 1-to-1 or 1-to-2.' },
-    { title: 'Pick your times and pay', body: 'Choose your sessions from the coach’s open times, then pay securely by card to book them.' },
-    { title: 'We confirm your lane', body: 'Our team confirms each session once the lane is booked at the centre. If a time can’t be confirmed, we offer the nearest one.' },
-    { title: 'Train with the tools', body: 'The first session sets a baseline. Every session after works the plan, checks the data, and ends with the next thing to practise.' },
-];
+    { key: 'coach', title: 'Choose your coach', body: 'Pick your preferred location and a Royals coach, then 1, 3 or 5 sessions, 1-to-1 or 1-to-2.' },
+    { key: 'pay', title: 'Pick your times and pay', body: 'Choose from the coach’s open times and pay securely by card. Your times are held while you pay.' },
+    { key: 'confirm', title: 'We confirm your lane', body: 'We book the lane at the centre and confirm each session with you. If a time can’t go ahead, we offer the nearest one.' },
+    { key: 'train', title: 'Train with the tools', body: 'Your first session sets a baseline. Every session after works the plan and tracks the progress.' },
+]
 
 // Shown beside the availability and again before payment (Andy, 17 Nov 2026).
 export const AVAILABILITY_NOTE =
