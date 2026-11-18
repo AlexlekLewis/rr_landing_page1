@@ -19,9 +19,8 @@ export const EMPTY_FORM = {
     contact_name: '',         // parent/guardian name; unused for 'self' (the player is the contact)
     email: '',
     phone: '',
-    in_australia: '',         // 'yes' | 'no'
-    in_melbourne: '',         // 'yes' | 'no' (only asked when in Australia)
-    country: '',              // only asked when not in Australia
+    in_melbourne: '',         // 'yes' | 'no': the one location question (Andy, 18 Nov 2026)
+    country: '',              // state or country, only asked when not in Melbourne
     street_address: '',
     suburb: '',
     postcode: '',
@@ -62,15 +61,14 @@ export const validate = (form, players, today = new Date()) => {
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim())) e.email = 'Please enter a valid email address.';
     if (form.phone.replace(/\D/g, '').length < 8) e.phone = 'Please enter a valid phone number.';
 
-    if (!form.in_australia) e.in_australia = 'Please choose yes or no.';
-    if (form.in_australia === 'yes') {
-        if (!form.in_melbourne) e.in_melbourne = 'Please choose yes or no.';
+    if (!form.in_melbourne) e.in_melbourne = 'Please choose yes or no.';
+    if (form.in_melbourne === 'yes') {
         if (!form.suburb.trim()) e.suburb = 'Please enter your suburb.';
         if (!/^\d{4}$/.test(form.postcode.trim())) e.postcode = 'Please enter your 4-digit postcode.';
     }
-    if (form.in_australia === 'no') {
-        if (!form.country.trim()) e.country = 'Please enter your country.';
-        if (!form.suburb.trim()) e.suburb = 'Please enter your town or city.';
+    if (form.in_melbourne === 'no') {
+        if (!form.suburb.trim()) e.suburb = 'Please enter your suburb, town or city.';
+        if (!form.country.trim()) e.country = 'Please enter your state or country.';
     }
 
     if (!form.accept_terms) e.accept_terms = 'Please tick this box to register.';
@@ -80,7 +78,7 @@ export const validate = (form, players, today = new Date()) => {
 // One row per player. Every row carries the same contact details and submission_id.
 export const buildRows = (campaignSlug, form, players, { submissionId, attribution = {} }) => {
     const self = form.attendee_type === 'self';
-    const inAus = form.in_australia === 'yes';
+    const inMelb = form.in_melbourne === 'yes';
     return players.map((p) => {
         const first = p.first_name.trim();
         const last = p.last_name.trim();
@@ -97,9 +95,9 @@ export const buildRows = (campaignSlug, form, players, { submissionId, attributi
             contact_name: self ? `${first} ${last}` : form.contact_name.trim(),
             email: form.email.trim().toLowerCase(),
             phone: form.phone.trim(),
-            lives_in_australia: inAus,
-            lives_in_melbourne: inAus ? form.in_melbourne === 'yes' : null,
-            country: inAus ? 'Australia' : form.country.trim(),
+            lives_in_melbourne: inMelb,
+            lives_in_australia: inMelb ? true : null,   // no longer asked
+            country: inMelb ? null : form.country.trim(),
             street_address: form.street_address.trim() || null,
             suburb: form.suburb.trim(),
             postcode: form.postcode.trim() || null,
