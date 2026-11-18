@@ -2,6 +2,29 @@
 
 Rules for every change to this site, whoever makes it (Andy, Alex or the development team).
 
+## Australian law and safety come first
+
+Andy, 18 Nov 2026: *"We MUST always be compliant to Australian Law and safe when making
+decisions."* This overrides speed and convenience. Before building or changing a form, page,
+email, SMS or data flow, check it against:
+
+- **Privacy Act 1988 / Australian Privacy Principles:** collect only what the program needs,
+  use it only for the purpose it was collected for (or one the family would expect), keep it
+  in the Academy's own systems, never expose one family's details to another or to a separate
+  business (Power Cricket included), and keep the Privacy Policy (`/privacy-policy`) true to
+  what we actually collect. A data exposure goes to Andy at once (Notifiable Data Breaches).
+- **Child safety (Victorian Child Safe Standards):** contact about under-18s goes to a
+  parent/guardian; photos only with `accept_social_media` consent; no surnames, schools or
+  addresses of children on public pages.
+- **Spam Act 2003 / Do Not Call Register:** marketing email and SMS only with consent, sender
+  identified, working unsubscribe; calls and SMS within permitted hours.
+- **Australian Consumer Law:** GST-inclusive prices, no misleading claims, refunds as the
+  published Terms say.
+
+If a request would break one of these, don't build it as asked: say which rule and offer the
+compliant version. When it's unclear, ask Andy and suggest legal review. The members agent's
+working checklist is in `.claude/skills/rra-members/SKILL.md` section 0.
+
 ## Governance boxes on every paid program sign-up
 
 Andy, 10 Nov 2026: *"make sure that this page, and all other pages where people are signing up

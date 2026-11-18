@@ -9,6 +9,57 @@ Andy's single point of truth for players, parents and the pipeline. Andy's wordi
 decisions outrank anything else. Treat everything in these tables as private family data:
 never paste it into an outside service, never publish it, show only what the question needs.
 
+## 0. Australian law comes first
+
+Andy, 18 Nov 2026: *"We MUST always be compliant to Australian Law and safe when making
+decisions."* Check every request against this list before acting. If a request would break
+it, don't do it: say which rule in one line and offer the compliant way. When unsure, ask
+Andy before acting and suggest a quick check with the Academy's lawyer. This is a working
+checklist, not legal advice.
+
+**Privacy Act 1988 and the Australian Privacy Principles (APPs).** Follow them whether or not
+the small-business exemption applies: the families are mostly children.
+- **Collect only what we need (APP 3).** No new personal fields on forms unless a program or
+  delivery needs them (the home address rule in CLAUDE.md is an example).
+- **Use data only for the reason it was given, or a related one the family would expect
+  (APP 6).** OK: using the address a parent typed at checkout to deliver their own order or
+  kit, or using sign-up contact details to message the family about the Academy. Not OK:
+  reusing payment or billing details for marketing, or giving any family's details to
+  another family, a coach's personal use, a sponsor or Power Cricket (a separate business;
+  see the Power Cricket CLAUDE.md) without the family's consent.
+- **Need to know only.** Give Andy (and staff) the record that answers the question, not
+  whole lists. Never paste family data into chat channels, documents or outside tools that
+  aren't the Academy's own, and never into a public page or artifact.
+- **Keep it secure (APP 11).** Data stays in Supabase/Stripe. No exports to personal drives.
+  If you notice data exposed to the wrong people, tell Andy straight away: a likely
+  serious breach must be assessed within 30 days and may need reporting to the OAIC
+  (Notifiable Data Breaches scheme).
+- **Access and correction (APP 12/13).** If a family asks what we hold, or asks to fix or
+  remove it, tell Andy and help him respond. Don't refuse or ignore it.
+- **Sensitive data.** Medical, injury, ethnicity or religion: only when a program needs it
+  for the player's safety, and never in reports or emails beyond who needs it.
+
+**Children (Victoria's Child Safe Standards).** Messages about a child under 18 go to the
+parent/guardian, never to the child (rule 1 in section 4). No private one-to-one channel
+between staff and a child. Photos and videos of a child are used only if
+`accept_social_media` is true for that registration, and never with the child's surname,
+school or address.
+
+**Spam Act 2003** (email and SMS). Commercial messages need consent: express, or inferred
+from an existing relationship (they paid, registered or enquired). Every one identifies the
+Academy as sender, has a working unsubscribe ("Reply STOP" for SMS), and opt-outs are honoured
+within 5 working days (we do it the same day). Never buy, scrape or borrow contact lists.
+Purely factual messages (session changes, receipts) still identify the sender.
+
+**Do Not Call Register Act 2006 and the telemarketing standard** (phone calls). Calls to
+existing families about their own program are fine. Sales calls to anyone else need a Do Not
+Call Register check. Call only 9am to 8pm on weekdays and 9am to 5pm on Saturdays, never on
+Sundays or national public holidays. Send SMS in the same hours.
+
+**Australian Consumer Law.** Prices shown include GST. No misleading claims about places,
+results, coaches or the Royals partnership. Refunds and cancellations follow the published
+Terms; don't promise otherwise in a message.
+
 ## 1. Where the data lives (Supabase project pudldzgmluwoocwxtzhw)
 
 Always start from the canonical registry. It is rebuilt nightly at 02:20 Melbourne by
@@ -69,6 +120,11 @@ or by email (`rra_email_key(email) = any(m.emails)`). Payments: `program_registr
 Andy: "If I ask for an address, find it. It should never take you that long." Do these in
 order, stop at the first hit, give the address with where and when it was entered. No long
 searches, no asking Andy where to look first.
+
+Addresses are for Academy business with that family: delivering their order or kit,
+posting them something about their program. If the reason given is anything else (passing it
+to someone outside the Academy, marketing by mail to people who never gave an address for
+it), check with Andy first under section 0. Give only the one address asked for.
 
 1. **Get the family's emails, phones and parent names** in one query: the player's
    `rra_players_master` row, or for anyone not in it, every `applications` /
