@@ -67,7 +67,7 @@ export const validate = (form, players, today = new Date()) => {
         if (!/^\d{4}$/.test(form.postcode.trim())) e.postcode = 'Please enter your 4-digit postcode.';
     }
     if (form.in_melbourne === 'no') {
-        if (!form.suburb.trim()) e.suburb = 'Please enter your suburb, town or city.';
+        if (!form.suburb.trim()) e.suburb = 'Please tell us the town or suburb you live in.';
         if (!form.country.trim()) e.country = 'Please enter your state or country.';
     }
 

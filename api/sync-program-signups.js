@@ -1049,7 +1049,8 @@ export const invitationRow = (r, now = new Date()) => {
     r.contact_name || '',
     r.email || '',
     asText(r.phone || ''),
-    yesNo(r.lives_in_melbourne),
+    // "No" always says where, so nobody near Melbourne (Geelong) is passed over (Andy, 18 Nov 2026).
+    r.lives_in_melbourne ? 'Yes' : `No — lives in ${[r.suburb, r.country].filter(Boolean).join(', ') || 'place not given'}`,
     r.suburb || '',
     asText(r.postcode || ''),
     r.country || '',
