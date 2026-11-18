@@ -50,8 +50,8 @@ export const RAVENHALL = {
         eyebrow: "Ravenhall · Melbourne's West",
         title: ['Exclusive', 'Opening Session'],
         lead:
-            "The Rajasthan Royals Academy is opening in Ravenhall, in Melbourne's West, in conjunction with M9 Sports Centre. The first coaching session is by invitation. Register your details to go on the invitation list.",
-        footnote: 'No payment to register · Places are limited',
+            "The Rajasthan Royals Academy is opening in Ravenhall, in Melbourne's West, in conjunction with M9 Sports Centre. The opening coaching sessions are by invitation. Register your details to go on the invitation list.",
+        footnote: 'No payment to register · Places are limited · Dates not set yet',
     },
 
     cta: 'Register for the Invitation List',
@@ -60,7 +60,7 @@ export const RAVENHALL = {
     facts: [
         { label: 'What', value: 'A Rajasthan Royals Academy coaching session' },
         { label: 'Where', value: "Ravenhall, Melbourne's West" },
-        { label: 'When', value: 'Date and time sent with your invitation' },
+        { label: 'When', value: 'Dates are not set yet. We will send your session time with your invitation' },
         { label: 'Who', value: 'Players who will train on the day' },
     ],
 
@@ -69,9 +69,15 @@ export const RAVENHALL = {
         title: 'The Invitation List',
         steps: [
             { n: '01', t: 'Register your details', d: 'It takes two minutes. Tell us who will attend and where you live. You pay nothing.' },
-            { n: '02', t: 'We review the list', d: 'Places are limited. We send invitations based on the space we have and how close you live to Ravenhall.' },
-            { n: '03', t: 'We contact you', d: 'If there is a place for you, we email or call you with your invitation, the date and the time.' },
+            { n: '02', t: 'We plan the sessions', d: 'When registrations are in, we set the session dates and times, and group players into sessions. Places depend on space and how close you live to Ravenhall.' },
+            { n: '03', t: 'We send your invitation', d: 'If there is a place for you, we email or call you with your session, its date and its time. You do not need to contact us.' },
         ],
+        // Andy, 18 Nov 2026: say plainly that no dates are set, or families will ask
+        // "when am I doing it?". Shown under the steps and on the confirmation screen.
+        dates: {
+            title: 'There are no dates yet',
+            body: 'We have not set the session dates or times. Once we have everyone’s details, we will plan the sessions and invite each player to a set session and time. We will contact you when that is ready, so there is no need to ask us for your time.',
+        },
         // The one thing nobody may misread. Shown in a box under the steps and again above the submit button.
         notice: {
             title: 'Registering does not guarantee an invitation',
@@ -113,7 +119,7 @@ export const RAVENHALL = {
 
     success: {
         title: "You're On The Invitation List",
-        body: 'Thank you. We have your details. If there is a place for you at the opening session in Ravenhall, we will email or call you with your invitation, the date and the time.',
+        body: 'Thank you. We have your details. There are no session dates yet. Once we have everyone’s details, we will plan the sessions. If there is a place for you in Ravenhall, we will email or call you with your session, its date and its time.',
         reminder: 'Being on the list does not guarantee an invitation. Places depend on space and how close you live to the venue.',
         links: [
             { label: 'Explore the Academy', to: '/' },

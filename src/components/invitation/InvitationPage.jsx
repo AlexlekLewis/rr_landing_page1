@@ -121,6 +121,13 @@ const InvitationPage = ({ campaign }) => {
                             ))}
                         </ol>
 
+                        {how.dates && (
+                            <div className="border-l-4 border-rr-blue bg-slate-50 rounded-r-2xl p-6 mb-4">
+                            <h3 className="text-base font-black text-rr-dark uppercase tracking-wide mb-1.5">{how.dates.title}</h3>
+                            <p className="text-rr-charcoal font-medium leading-relaxed">{how.dates.body}</p>
+                        </div>
+                        )}
+
                         <div className="border-l-4 border-rr-pink bg-pink-50 rounded-r-2xl p-6">
                             <h3 className="text-base font-black text-rr-dark uppercase tracking-wide mb-1.5">{how.notice.title}</h3>
                             <p className="text-rr-charcoal font-medium leading-relaxed">{how.notice.body}</p>

@@ -81,6 +81,13 @@ describe('invitation campaigns', () => {
         }
     });
 
+    it('Ravenhall: says no dates are set, so nobody asks "when am I doing it?" (Andy, 18 Nov 2026)', () => {
+        const c: any = INVITATIONS[0];
+        expect(c.how.dates.title).toMatch(/no dates yet/i);
+        expect(c.facts.find((f: any) => f.label === 'When').value).toMatch(/not set yet/i);
+        expect(c.success.body).toMatch(/no session dates yet/i);
+    });
+
     it('Ravenhall: the venue is named the way Andy asked (17 Nov 2026)', () => {
         const text = JSON.stringify(INVITATIONS[0]);
         expect(text).toContain("Ravenhall, in Melbourne's West, in conjunction with M9 Sports Centre");

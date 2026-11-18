@@ -179,6 +179,7 @@ const InvitationForm = ({ campaign }) => {
                 <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">{cfg.eyebrow}</p>
                 <h2 className="text-4xl md:text-5xl font-black text-rr-dark uppercase tracking-tight leading-none mb-4">{cfg.title}</h2>
                 <p className="text-lg text-rr-charcoal font-medium">{cfg.intro}</p>
+                {campaign.how.dates && <p className="text-[15px] text-rr-charcoal font-semibold mt-3">Dates are not set yet. We will send your session time with your invitation.</p>}
             </div>
 
             <form onSubmit={handleSubmit} noValidate className="space-y-12">
