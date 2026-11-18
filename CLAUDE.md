@@ -26,6 +26,24 @@ deployed). Add the form to `PAID_SIGNUP_FORMS` in `src/lib/governance.test.ts` i
 that test fails if a listed form loses a box or links a Code of Conduct to the wrong page.
 Program-specific boxes (helmet and stem guard, plays at own risk) go in addition, never instead.
 
+## Home address on every sign-up
+
+Andy, 18 Nov 2026: *"add a home address to everyone's fields because we need the ability to be
+able to send things to people."*
+
+**Applies to:** every form where a family signs up for a program, paid or free (same forms as the
+governance boxes, plus free program sign-ups). Use `<HomeAddressFields>`
+(`src/components/shared/HomeAddressFields.jsx`, rules in `src/lib/homeAddress.js`): street, suburb,
+state, postcode, **all required**.
+
+The form must not submit until `addressErrors()` is empty, and must save `addressColumns()` into
+four text columns `home_street`, `home_suburb`, `home_state`, `home_postcode` (add them with a
+migration, applied BEFORE the form is deployed). If the form also has a `suburb` column, fill it
+from the address instead of asking twice. Add the form to `ADDRESS_SIGNUP_FORMS` in
+`src/lib/homeAddress.test.ts` in the same PR, and add its table to `v_rra_home_addresses`
+(see `supabase/migrations/20261118090000_home_address_on_signups.sql`) so the members agent can
+find the address.
+
 ## Mandatory training shirt on every paid program page
 
 Andy, 9 Nov 2026: *"on every page we ever create … the mandatory shirt ordering component that
