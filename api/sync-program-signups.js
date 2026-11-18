@@ -967,8 +967,19 @@ export const lpJrDayRow = (r, pay = null) => {
 // staff choose who is invited (space, then distance from the venue) and set
 // `status` on the row in the database.
 const INVITATION_TABLE = 'invitation_list_registrations';
+//
+// extraWorkbookId: a second workbook that gets the same tab on every run. Andy's
+// own sheet in the Academy Drive (18 Nov 2026: "set it up in my Rajasthan Royals
+// Academy Google Drive ... every 10 minutes"), because the main workbook is not
+// shared with him. That sheet must be shared (Editor) with the service account
+// in GOOGLE_SERVICE_ACCOUNT_JSON. If it is not, this copy is skipped and logged;
+// the main workbook still syncs.
 export const INVITATION_TABS = [
-  { key: 'ravenhall-invitation', campaign: 'ravenhall-opening-session' },
+  {
+    key: 'ravenhall-invitation',
+    campaign: 'ravenhall-opening-session',
+    extraWorkbookId: '1ggwg6G6DsZylA1dwPhBTKkmy9TluMGllKplk8sF3umg',
+  },
 ];
 
 export const INVITATION_HEADERS = [
@@ -1428,6 +1439,23 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
     ));
   }
 
+  // ── Invitation lists also go to their own workbook, where one is set. Never
+  // allowed to break the main sync: a sheet that is not shared with the service
+  // account is logged and skipped.
+  const extraCopies = [];
+  if (!invitations.missing) {
+    for (const t of INVITATION_TABS.filter((x) => x.extraWorkbookId)) {
+      try {
+        const rows = (invitations.data || []).filter((r) => r.campaign === t.campaign).map((r) => invitationRow(r));
+        const res = await reconcileTab(sheets, t.extraWorkbookId, tabName(t.key), INVITATION_HEADERS, rows, SAFE_COL_LABEL);
+        extraCopies.push({ key: t.key, workbook: t.extraWorkbookId, ok: true, ...res });
+      } catch (err) {
+        console.warn(`sync-program-signups: could not write ${t.key} to workbook ${t.extraWorkbookId}:`, err.message);
+        extraCopies.push({ key: t.key, workbook: t.extraWorkbookId, ok: false, error: err.message });
+      }
+    }
+  }
+
   // ── Payments tab, including unmatched, which is the whole point of listing it.
   const payRows = payments.map((p) => {
     const hit = matchByPayment.get(p.sessionId);
@@ -1466,6 +1494,7 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
 
   return {
     programs: tabResults,
+    extraCopies,
     payments: {
       ...payResult,
       stripePaymentsFound: payments.length,
