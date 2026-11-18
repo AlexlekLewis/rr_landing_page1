@@ -50,7 +50,7 @@ export const HERO = {
     // Who it's for (Andy, 18 Nov 2026), a ticked list like Junior Royals' "perfect for".
     forTitle: 'Royals Private Coaching is perfect for players who:',
     forList: [
-        'Want a personal approach: coaching built around their own game, not a group plan',
+        'Want a personal approach to coaching?',
         'Take their cricket seriously and want to keep getting better',
         'Want more than cones, balls and stumps',
         'Want to see and understand their own game, with real data',
