@@ -99,7 +99,6 @@ export const RAVENHALL = {
         ],
         links: [
             { label: 'About the Academy', to: '/' },
-            { label: 'Meet the coaches', to: '/coaches' },
         ],
     },
 
