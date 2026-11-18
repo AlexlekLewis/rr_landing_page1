@@ -1,0 +1,1773 @@
+[
+ {
+  "file": "2026-11-18_RESULTS_ALL-ACADEMY_01-top-performances",
+  "type": "list",
+  "head": [
+   "TOP",
+   "KNOCKS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "ALL ACADEMY",
+  "group": null,
+  "items": [
+   {
+    "name": "Vrishti Mangrolia",
+    "team": "SMCC U13 RN",
+    "opp": "Laurimar U13 Grey",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/fdea50d2-a359-44cf-896e-1f2f36e38b38",
+    "kind": "bat",
+    "big": "98",
+    "unit": "RUNS",
+    "fig": "98",
+    "chip": "98 OFF 65"
+   },
+   {
+    "name": "Leith Salwathura",
+    "team": "MCC 2",
+    "opp": "Caulfield Grammarians/NCG 1",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/5ccc9f36-f0f6-4ecb-b4b5-13c0d1bc2703",
+    "kind": "bat",
+    "big": "73",
+    "unit": "RUNS",
+    "fig": "73",
+    "chip": "73 OFF 73"
+   },
+   {
+    "name": "Cooper Lewin",
+    "team": "Laurimar U17 Black",
+    "opp": "Panton Hill U17 Mixed",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/47450c0e-3148-483e-abd5-d29724a5c519",
+    "kind": "bat",
+    "big": "70",
+    "unit": "RUNS",
+    "fig": "70",
+    "chip": "70 OFF 74"
+   },
+   {
+    "name": "Dheer Chaudhari",
+    "team": "Donvale Sunday 3rd XI",
+    "opp": "North Alphington Sunday 1st XI",
+    "day": "Sun 15 Nov",
+    "inprog": true,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/cc6b080d-20a5-4ebe-bf27-a707c78b8d6a",
+    "kind": "bat",
+    "big": "70",
+    "unit": "RUNS",
+    "fig": "70",
+    "chip": "70 OFF 91"
+   }
+  ],
+  "source": "03-feed/top-performances"
+ },
+ {
+  "file": "2026-11-18_RESULTS_ALL-ACADEMY_02-highlights-mosaic",
+  "type": "list",
+  "head": [
+   "WEEKEND",
+   "WRAP"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "ALL ACADEMY",
+  "group": null,
+  "items": [
+   {
+    "name": "Vrishti Mangrolia",
+    "team": "SMCC U13 RN",
+    "opp": "Laurimar U13 Grey",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/fdea50d2-a359-44cf-896e-1f2f36e38b38",
+    "kind": "bat",
+    "big": "98",
+    "unit": "RUNS",
+    "fig": "98",
+    "chip": "98 OFF 65"
+   },
+   {
+    "name": "Leith Salwathura",
+    "team": "MCC 2",
+    "opp": "Caulfield Grammarians/NCG 1",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/5ccc9f36-f0f6-4ecb-b4b5-13c0d1bc2703",
+    "kind": "bat",
+    "big": "73",
+    "unit": "RUNS",
+    "fig": "73",
+    "chip": "73 OFF 73"
+   },
+   {
+    "name": "Cooper Lewin",
+    "team": "Laurimar U17 Black",
+    "opp": "Panton Hill U17 Mixed",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/47450c0e-3148-483e-abd5-d29724a5c519",
+    "kind": "bat",
+    "big": "70",
+    "unit": "RUNS",
+    "fig": "70",
+    "chip": "70 OFF 74"
+   },
+   {
+    "name": "Dheer Chaudhari",
+    "team": "Donvale Sunday 3rd XI",
+    "opp": "North Alphington Sunday 1st XI",
+    "day": "Sun 15 Nov",
+    "inprog": true,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/cc6b080d-20a5-4ebe-bf27-a707c78b8d6a",
+    "kind": "bat",
+    "big": "70",
+    "unit": "RUNS",
+    "fig": "70",
+    "chip": "70 OFF 91"
+   },
+   {
+    "name": "Priyam Sharma",
+    "team": "Ormond 3rd XI",
+    "opp": "Moorabbin 3rd XI",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/b066dc2e-bace-4815-b15e-f0cc4ff2780e",
+    "kind": "bowl",
+    "big": "5",
+    "unit": "WICKETS",
+    "fig": "5/43",
+    "chip": "5/43 · 8 OVERS"
+   },
+   {
+    "name": "Aarav Vinothkumar",
+    "team": "Ormond 3rd XI",
+    "opp": "Moorabbin 3rd XI",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Performance Squad",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/b066dc2e-bace-4815-b15e-f0cc4ff2780e",
+    "kind": "bowl",
+    "big": "4",
+    "unit": "WICKETS",
+    "fig": "4/8",
+    "chip": "4/8 · 5.5 OVERS"
+   }
+  ],
+  "source": "03-feed/highlights-mosaic"
+ },
+ {
+  "file": "2026-11-18_RESULTS_ALL-ACADEMY_03-batting-1",
+  "type": "spot",
+  "head": [
+   "98",
+   "RUNS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "ALL ACADEMY",
+  "group": null,
+  "items": [
+   {
+    "name": "Vrishti Mangrolia",
+    "team": "SMCC U13 RN",
+    "opp": "Laurimar U13 Grey",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/fdea50d2-a359-44cf-896e-1f2f36e38b38",
+    "kind": "bat",
+    "big": "98",
+    "unit": "RUNS",
+    "fig": "98",
+    "chip": "98 OFF 65"
+   }
+  ],
+  "source": "03-feed/batting-1"
+ },
+ {
+  "file": "2026-11-18_RESULTS_ALL-ACADEMY_04-batting-2",
+  "type": "spot",
+  "head": [
+   "73",
+   "RUNS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "ALL ACADEMY",
+  "group": null,
+  "items": [
+   {
+    "name": "Leith Salwathura",
+    "team": "MCC 2",
+    "opp": "Caulfield Grammarians/NCG 1",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/5ccc9f36-f0f6-4ecb-b4b5-13c0d1bc2703",
+    "kind": "bat",
+    "big": "73",
+    "unit": "RUNS",
+    "fig": "73",
+    "chip": "73 OFF 73"
+   }
+  ],
+  "source": "03-feed/batting-2"
+ },
+ {
+  "file": "2026-11-18_RESULTS_ALL-ACADEMY_05-batting-3",
+  "type": "spot",
+  "head": [
+   "70",
+   "RUNS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "ALL ACADEMY",
+  "group": null,
+  "items": [
+   {
+    "name": "Cooper Lewin",
+    "team": "Laurimar U17 Black",
+    "opp": "Panton Hill U17 Mixed",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/47450c0e-3148-483e-abd5-d29724a5c519",
+    "kind": "bat",
+    "big": "70",
+    "unit": "RUNS",
+    "fig": "70",
+    "chip": "70 OFF 74"
+   }
+  ],
+  "source": "03-feed/batting-3"
+ },
+ {
+  "file": "2026-11-18_RESULTS_ALL-ACADEMY_06-bowling-1",
+  "type": "spot",
+  "head": [
+   "5",
+   "WICKETS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "ALL ACADEMY",
+  "group": null,
+  "items": [
+   {
+    "name": "Priyam Sharma",
+    "team": "Ormond 3rd XI",
+    "opp": "Moorabbin 3rd XI",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/b066dc2e-bace-4815-b15e-f0cc4ff2780e",
+    "kind": "bowl",
+    "big": "5",
+    "unit": "WICKETS",
+    "fig": "5/43",
+    "chip": "5/43 · 8 OVERS"
+   }
+  ],
+  "source": "03-feed/bowling-1"
+ },
+ {
+  "file": "2026-11-18_RESULTS_ALL-ACADEMY_07-bowling-2",
+  "type": "spot",
+  "head": [
+   "4",
+   "WICKETS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "ALL ACADEMY",
+  "group": null,
+  "items": [
+   {
+    "name": "Aarav Vinothkumar",
+    "team": "Ormond 3rd XI",
+    "opp": "Moorabbin 3rd XI",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Performance Squad",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/b066dc2e-bace-4815-b15e-f0cc4ff2780e",
+    "kind": "bowl",
+    "big": "4",
+    "unit": "WICKETS",
+    "fig": "4/8",
+    "chip": "4/8 · 5.5 OVERS"
+   }
+  ],
+  "source": "03-feed/bowling-2"
+ },
+ {
+  "file": "2026-11-18_RESULTS_ALL-ACADEMY_08-bowling-3",
+  "type": "spot",
+  "head": [
+   "4",
+   "WICKETS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "ALL ACADEMY",
+  "group": null,
+  "items": [
+   {
+    "name": "Inderjot Singh",
+    "team": "Moorabbin Saints U17 Red",
+    "opp": "Bayside U17",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Performance Squad",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/4f5b2eed-0f3a-4309-92e5-b1df4712eb58",
+    "kind": "bowl",
+    "big": "4",
+    "unit": "WICKETS",
+    "fig": "4/31",
+    "chip": "4/31 · 5 OVERS"
+   }
+  ],
+  "source": "03-feed/bowling-3"
+ },
+ {
+  "file": "2026-11-18_RESULTS_ELITE-MELBOURNE_01-top-performances",
+  "type": "list",
+  "head": [
+   "TOP",
+   "KNOCKS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "ELITE PROGRAM · MELBOURNE",
+  "group": "ELITE PROGRAM",
+  "items": [
+   {
+    "name": "Vrishti Mangrolia",
+    "team": "SMCC U13 RN",
+    "opp": "Laurimar U13 Grey",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/fdea50d2-a359-44cf-896e-1f2f36e38b38",
+    "kind": "bat",
+    "big": "98",
+    "unit": "RUNS",
+    "fig": "98",
+    "chip": "98 OFF 65"
+   },
+   {
+    "name": "Leith Salwathura",
+    "team": "MCC 2",
+    "opp": "Caulfield Grammarians/NCG 1",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/5ccc9f36-f0f6-4ecb-b4b5-13c0d1bc2703",
+    "kind": "bat",
+    "big": "73",
+    "unit": "RUNS",
+    "fig": "73",
+    "chip": "73 OFF 73"
+   },
+   {
+    "name": "Cooper Lewin",
+    "team": "Laurimar U17 Black",
+    "opp": "Panton Hill U17 Mixed",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/47450c0e-3148-483e-abd5-d29724a5c519",
+    "kind": "bat",
+    "big": "70",
+    "unit": "RUNS",
+    "fig": "70",
+    "chip": "70 OFF 74"
+   },
+   {
+    "name": "Dheer Chaudhari",
+    "team": "Donvale Sunday 3rd XI",
+    "opp": "North Alphington Sunday 1st XI",
+    "day": "Sun 15 Nov",
+    "inprog": true,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/cc6b080d-20a5-4ebe-bf27-a707c78b8d6a",
+    "kind": "bat",
+    "big": "70",
+    "unit": "RUNS",
+    "fig": "70",
+    "chip": "70 OFF 91"
+   }
+  ],
+  "source": "elite-melbourne/top-performances"
+ },
+ {
+  "file": "2026-11-18_RESULTS_ELITE-MELBOURNE_02-highlights-mosaic",
+  "type": "list",
+  "head": [
+   "WEEKEND",
+   "WRAP"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "ELITE PROGRAM · MELBOURNE",
+  "group": "ELITE PROGRAM",
+  "items": [
+   {
+    "name": "Vrishti Mangrolia",
+    "team": "SMCC U13 RN",
+    "opp": "Laurimar U13 Grey",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/fdea50d2-a359-44cf-896e-1f2f36e38b38",
+    "kind": "bat",
+    "big": "98",
+    "unit": "RUNS",
+    "fig": "98",
+    "chip": "98 OFF 65"
+   },
+   {
+    "name": "Leith Salwathura",
+    "team": "MCC 2",
+    "opp": "Caulfield Grammarians/NCG 1",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/5ccc9f36-f0f6-4ecb-b4b5-13c0d1bc2703",
+    "kind": "bat",
+    "big": "73",
+    "unit": "RUNS",
+    "fig": "73",
+    "chip": "73 OFF 73"
+   },
+   {
+    "name": "Cooper Lewin",
+    "team": "Laurimar U17 Black",
+    "opp": "Panton Hill U17 Mixed",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/47450c0e-3148-483e-abd5-d29724a5c519",
+    "kind": "bat",
+    "big": "70",
+    "unit": "RUNS",
+    "fig": "70",
+    "chip": "70 OFF 74"
+   },
+   {
+    "name": "Dheer Chaudhari",
+    "team": "Donvale Sunday 3rd XI",
+    "opp": "North Alphington Sunday 1st XI",
+    "day": "Sun 15 Nov",
+    "inprog": true,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/cc6b080d-20a5-4ebe-bf27-a707c78b8d6a",
+    "kind": "bat",
+    "big": "70",
+    "unit": "RUNS",
+    "fig": "70",
+    "chip": "70 OFF 91"
+   },
+   {
+    "name": "Priyam Sharma",
+    "team": "Ormond 3rd XI",
+    "opp": "Moorabbin 3rd XI",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/b066dc2e-bace-4815-b15e-f0cc4ff2780e",
+    "kind": "bowl",
+    "big": "5",
+    "unit": "WICKETS",
+    "fig": "5/43",
+    "chip": "5/43 · 8 OVERS"
+   },
+   {
+    "name": "Ishita Tiwari",
+    "team": "Dandenong 1sts T20",
+    "opp": "Ringwood 1sts T20",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/aba7c0ab-bbde-489f-b38b-bd725aa113fe",
+    "kind": "bat",
+    "big": "54",
+    "unit": "RUNS",
+    "fig": "54",
+    "chip": "54 OFF 39"
+   }
+  ],
+  "source": "elite-melbourne/highlights-mosaic"
+ },
+ {
+  "file": "2026-11-18_RESULTS_ELITE-MELBOURNE_03-batting-1",
+  "type": "spot",
+  "head": [
+   "98",
+   "RUNS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "ELITE PROGRAM · MELBOURNE",
+  "group": "ELITE PROGRAM",
+  "items": [
+   {
+    "name": "Vrishti Mangrolia",
+    "team": "SMCC U13 RN",
+    "opp": "Laurimar U13 Grey",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/fdea50d2-a359-44cf-896e-1f2f36e38b38",
+    "kind": "bat",
+    "big": "98",
+    "unit": "RUNS",
+    "fig": "98",
+    "chip": "98 OFF 65"
+   }
+  ],
+  "source": "elite-melbourne/batting-1"
+ },
+ {
+  "file": "2026-11-18_RESULTS_ELITE-MELBOURNE_04-batting-2",
+  "type": "spot",
+  "head": [
+   "73",
+   "RUNS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "ELITE PROGRAM · MELBOURNE",
+  "group": "ELITE PROGRAM",
+  "items": [
+   {
+    "name": "Leith Salwathura",
+    "team": "MCC 2",
+    "opp": "Caulfield Grammarians/NCG 1",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/5ccc9f36-f0f6-4ecb-b4b5-13c0d1bc2703",
+    "kind": "bat",
+    "big": "73",
+    "unit": "RUNS",
+    "fig": "73",
+    "chip": "73 OFF 73"
+   }
+  ],
+  "source": "elite-melbourne/batting-2"
+ },
+ {
+  "file": "2026-11-18_RESULTS_ELITE-MELBOURNE_05-batting-3",
+  "type": "spot",
+  "head": [
+   "70",
+   "RUNS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "ELITE PROGRAM · MELBOURNE",
+  "group": "ELITE PROGRAM",
+  "items": [
+   {
+    "name": "Cooper Lewin",
+    "team": "Laurimar U17 Black",
+    "opp": "Panton Hill U17 Mixed",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/47450c0e-3148-483e-abd5-d29724a5c519",
+    "kind": "bat",
+    "big": "70",
+    "unit": "RUNS",
+    "fig": "70",
+    "chip": "70 OFF 74"
+   }
+  ],
+  "source": "elite-melbourne/batting-3"
+ },
+ {
+  "file": "2026-11-18_RESULTS_ELITE-MELBOURNE_06-bowling-1",
+  "type": "spot",
+  "head": [
+   "5",
+   "WICKETS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "ELITE PROGRAM · MELBOURNE",
+  "group": "ELITE PROGRAM",
+  "items": [
+   {
+    "name": "Priyam Sharma",
+    "team": "Ormond 3rd XI",
+    "opp": "Moorabbin 3rd XI",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/b066dc2e-bace-4815-b15e-f0cc4ff2780e",
+    "kind": "bowl",
+    "big": "5",
+    "unit": "WICKETS",
+    "fig": "5/43",
+    "chip": "5/43 · 8 OVERS"
+   }
+  ],
+  "source": "elite-melbourne/bowling-1"
+ },
+ {
+  "file": "2026-11-18_RESULTS_ELITE-MELBOURNE_07-bowling-2",
+  "type": "spot",
+  "head": [
+   "3",
+   "WICKETS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "ELITE PROGRAM · MELBOURNE",
+  "group": "ELITE PROGRAM",
+  "items": [
+   {
+    "name": "Sartaj Singh Dhanoa",
+    "team": "Ivanhoe 1st XI",
+    "opp": "Camberwell 1st XI",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Elite Program",
+    "centre": "Melbourne",
+    "scorecard": "https://play.cricket.com.au/match/a5925a5a-f478-4fe2-99c5-740d5a8cd1b3",
+    "kind": "bowl",
+    "big": "3",
+    "unit": "WICKETS",
+    "fig": "3/19",
+    "chip": "3/19 · 6 OVERS"
+   }
+  ],
+  "source": "elite-melbourne/bowling-2"
+ },
+ {
+  "file": "2026-11-18_RESULTS_PERFORMANCE-CRANBOURNE-NORTH_01-top-performances",
+  "type": "list",
+  "head": [
+   "STAND",
+   "OUTS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "PERFORMANCE · CRANBOURNE NTH",
+  "group": "PERFORMANCE SQUAD",
+  "items": [
+   {
+    "name": "Aarav Vinothkumar",
+    "team": "Ormond 3rd XI",
+    "opp": "Moorabbin 3rd XI",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Performance Squad",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/b066dc2e-bace-4815-b15e-f0cc4ff2780e",
+    "kind": "bowl",
+    "big": "4",
+    "unit": "WICKETS",
+    "fig": "4/8",
+    "chip": "4/8 · 5.5 OVERS"
+   },
+   {
+    "name": "Inderjot Singh",
+    "team": "Moorabbin Saints U17 Red",
+    "opp": "Bayside U17",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Performance Squad",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/4f5b2eed-0f3a-4309-92e5-b1df4712eb58",
+    "kind": "bowl",
+    "big": "4",
+    "unit": "WICKETS",
+    "fig": "4/31",
+    "chip": "4/31 · 5 OVERS"
+   },
+   {
+    "name": "Zac Eipper",
+    "team": "Oakleigh U17",
+    "opp": "Box Hill U17 Mixed Sunday",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Performance Squad",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/943de65b-0e0a-4781-99fc-53c790621bc9",
+    "kind": "bat",
+    "big": "52*",
+    "unit": "NOT OUT",
+    "fig": "52*",
+    "chip": "52* OFF 41"
+   },
+   {
+    "name": "Aarav Bhasin",
+    "team": "BGS 1ST XI",
+    "opp": "HY 1ST XI",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Performance Squad",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/d8e564d7-b4b8-42f2-b3fe-2716783769ab",
+    "kind": "bowl",
+    "big": "3",
+    "unit": "WICKETS",
+    "fig": "3/42",
+    "chip": "3/42 · 7 OVERS"
+   }
+  ],
+  "source": "perf-cranbourne/top-performances"
+ },
+ {
+  "file": "2026-11-18_RESULTS_PERFORMANCE-CRANBOURNE-NORTH_02-highlights-mosaic",
+  "type": "list",
+  "head": [
+   "WEEKEND",
+   "WRAP"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "PERFORMANCE · CRANBOURNE NTH",
+  "group": "PERFORMANCE SQUAD",
+  "items": [
+   {
+    "name": "Aarav Vinothkumar",
+    "team": "Ormond 3rd XI",
+    "opp": "Moorabbin 3rd XI",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Performance Squad",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/b066dc2e-bace-4815-b15e-f0cc4ff2780e",
+    "kind": "bowl",
+    "big": "4",
+    "unit": "WICKETS",
+    "fig": "4/8",
+    "chip": "4/8 · 5.5 OVERS"
+   },
+   {
+    "name": "Inderjot Singh",
+    "team": "Moorabbin Saints U17 Red",
+    "opp": "Bayside U17",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Performance Squad",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/4f5b2eed-0f3a-4309-92e5-b1df4712eb58",
+    "kind": "bowl",
+    "big": "4",
+    "unit": "WICKETS",
+    "fig": "4/31",
+    "chip": "4/31 · 5 OVERS"
+   },
+   {
+    "name": "Zac Eipper",
+    "team": "Oakleigh U17",
+    "opp": "Box Hill U17 Mixed Sunday",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Performance Squad",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/943de65b-0e0a-4781-99fc-53c790621bc9",
+    "kind": "bat",
+    "big": "52*",
+    "unit": "NOT OUT",
+    "fig": "52*",
+    "chip": "52* OFF 41"
+   },
+   {
+    "name": "Aarav Bhasin",
+    "team": "BGS 1ST XI",
+    "opp": "HY 1ST XI",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Performance Squad",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/d8e564d7-b4b8-42f2-b3fe-2716783769ab",
+    "kind": "bowl",
+    "big": "3",
+    "unit": "WICKETS",
+    "fig": "3/42",
+    "chip": "3/42 · 7 OVERS"
+   },
+   {
+    "name": "Shivang Kotnala",
+    "team": "Moorabbin Saints U17 Red",
+    "opp": "Bayside U17",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Performance Squad",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/4f5b2eed-0f3a-4309-92e5-b1df4712eb58",
+    "kind": "bat",
+    "big": "40",
+    "unit": "RUNS",
+    "fig": "40",
+    "chip": "40 OFF 34"
+   },
+   {
+    "name": "Zach van der Nest",
+    "team": "Parkdale U16 1",
+    "opp": "Hampton United U16 1",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Performance Squad",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/cc29261e-e20c-4f6f-903e-1937e344589c",
+    "kind": "bat",
+    "big": "39",
+    "unit": "RUNS",
+    "fig": "39",
+    "chip": "39 OFF 28"
+   }
+  ],
+  "source": "perf-cranbourne/highlights-mosaic"
+ },
+ {
+  "file": "2026-11-18_RESULTS_PERFORMANCE-CRANBOURNE-NORTH_03-batting-1",
+  "type": "spot",
+  "head": [
+   "52*",
+   "NOT OUT"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "PERFORMANCE · CRANBOURNE NTH",
+  "group": "PERFORMANCE SQUAD",
+  "items": [
+   {
+    "name": "Zac Eipper",
+    "team": "Oakleigh U17",
+    "opp": "Box Hill U17 Mixed Sunday",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Performance Squad",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/943de65b-0e0a-4781-99fc-53c790621bc9",
+    "kind": "bat",
+    "big": "52*",
+    "unit": "NOT OUT",
+    "fig": "52*",
+    "chip": "52* OFF 41"
+   }
+  ],
+  "source": "perf-cranbourne/batting-1"
+ },
+ {
+  "file": "2026-11-18_RESULTS_PERFORMANCE-CRANBOURNE-NORTH_04-batting-2",
+  "type": "spot",
+  "head": [
+   "40",
+   "RUNS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "PERFORMANCE · CRANBOURNE NTH",
+  "group": "PERFORMANCE SQUAD",
+  "items": [
+   {
+    "name": "Shivang Kotnala",
+    "team": "Moorabbin Saints U17 Red",
+    "opp": "Bayside U17",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Performance Squad",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/4f5b2eed-0f3a-4309-92e5-b1df4712eb58",
+    "kind": "bat",
+    "big": "40",
+    "unit": "RUNS",
+    "fig": "40",
+    "chip": "40 OFF 34"
+   }
+  ],
+  "source": "perf-cranbourne/batting-2"
+ },
+ {
+  "file": "2026-11-18_RESULTS_PERFORMANCE-CRANBOURNE-NORTH_05-batting-3",
+  "type": "spot",
+  "head": [
+   "39",
+   "RUNS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "PERFORMANCE · CRANBOURNE NTH",
+  "group": "PERFORMANCE SQUAD",
+  "items": [
+   {
+    "name": "Zach van der Nest",
+    "team": "Parkdale U16 1",
+    "opp": "Hampton United U16 1",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Performance Squad",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/cc29261e-e20c-4f6f-903e-1937e344589c",
+    "kind": "bat",
+    "big": "39",
+    "unit": "RUNS",
+    "fig": "39",
+    "chip": "39 OFF 28"
+   }
+  ],
+  "source": "perf-cranbourne/batting-3"
+ },
+ {
+  "file": "2026-11-18_RESULTS_PERFORMANCE-CRANBOURNE-NORTH_06-bowling-1",
+  "type": "spot",
+  "head": [
+   "4",
+   "WICKETS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "PERFORMANCE · CRANBOURNE NTH",
+  "group": "PERFORMANCE SQUAD",
+  "items": [
+   {
+    "name": "Aarav Vinothkumar",
+    "team": "Ormond 3rd XI",
+    "opp": "Moorabbin 3rd XI",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Performance Squad",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/b066dc2e-bace-4815-b15e-f0cc4ff2780e",
+    "kind": "bowl",
+    "big": "4",
+    "unit": "WICKETS",
+    "fig": "4/8",
+    "chip": "4/8 · 5.5 OVERS"
+   }
+  ],
+  "source": "perf-cranbourne/bowling-1"
+ },
+ {
+  "file": "2026-11-18_RESULTS_PERFORMANCE-CRANBOURNE-NORTH_07-bowling-2",
+  "type": "spot",
+  "head": [
+   "4",
+   "WICKETS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "PERFORMANCE · CRANBOURNE NTH",
+  "group": "PERFORMANCE SQUAD",
+  "items": [
+   {
+    "name": "Inderjot Singh",
+    "team": "Moorabbin Saints U17 Red",
+    "opp": "Bayside U17",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Performance Squad",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/4f5b2eed-0f3a-4309-92e5-b1df4712eb58",
+    "kind": "bowl",
+    "big": "4",
+    "unit": "WICKETS",
+    "fig": "4/31",
+    "chip": "4/31 · 5 OVERS"
+   }
+  ],
+  "source": "perf-cranbourne/bowling-2"
+ },
+ {
+  "file": "2026-11-18_RESULTS_PERFORMANCE-CRANBOURNE-NORTH_08-bowling-3",
+  "type": "spot",
+  "head": [
+   "3",
+   "WICKETS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "PERFORMANCE · CRANBOURNE NTH",
+  "group": "PERFORMANCE SQUAD",
+  "items": [
+   {
+    "name": "Aarav Bhasin",
+    "team": "BGS 1ST XI",
+    "opp": "HY 1ST XI",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Performance Squad",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/d8e564d7-b4b8-42f2-b3fe-2716783769ab",
+    "kind": "bowl",
+    "big": "3",
+    "unit": "WICKETS",
+    "fig": "3/42",
+    "chip": "3/42 · 7 OVERS"
+   }
+  ],
+  "source": "perf-cranbourne/bowling-3"
+ },
+ {
+  "file": "2026-11-18_RESULTS_PERFORMANCE-MICKLEHAM_01-top-performances",
+  "type": "list",
+  "head": [
+   "TOP",
+   "KNOCKS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "PERFORMANCE · MICKLEHAM",
+  "group": "PERFORMANCE SQUAD",
+  "items": [
+   {
+    "name": "Mubasheeruddin Jamal Mohammed",
+    "team": "TCC Boys U/17A Friday",
+    "opp": "Melton Centrals U17A Friday",
+    "day": "Fri 13 Nov",
+    "inprog": false,
+    "program": "Performance Squad",
+    "centre": "Mickleham",
+    "scorecard": "https://play.cricket.com.au/match/c59884df-6b2f-46de-b827-3329bd7d6854",
+    "kind": "bat",
+    "big": "50*",
+    "unit": "NOT OUT",
+    "fig": "50*",
+    "chip": "50* OFF 57"
+   },
+   {
+    "name": "Harsh Sinha",
+    "team": "Fitzroy Doncaster 4th XI",
+    "opp": "Greenvale Kangaroos 4th XI",
+    "day": "Sat 14 Nov",
+    "inprog": true,
+    "program": "Performance Squad",
+    "centre": "Mickleham",
+    "scorecard": "https://play.cricket.com.au/match/a1b4f98c-89fb-4e39-b61d-56db4d85c00c",
+    "kind": "bat",
+    "big": "36",
+    "unit": "RUNS",
+    "fig": "36",
+    "chip": "36 OFF 85"
+   }
+  ],
+  "source": "perf-mickleham/top-performances"
+ },
+ {
+  "file": "2026-11-18_RESULTS_PERFORMANCE-MICKLEHAM_02-highlights-mosaic",
+  "type": "list",
+  "head": [
+   "WEEKEND",
+   "WRAP"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "PERFORMANCE · MICKLEHAM",
+  "group": "PERFORMANCE SQUAD",
+  "items": [
+   {
+    "name": "Mubasheeruddin Jamal Mohammed",
+    "team": "TCC Boys U/17A Friday",
+    "opp": "Melton Centrals U17A Friday",
+    "day": "Fri 13 Nov",
+    "inprog": false,
+    "program": "Performance Squad",
+    "centre": "Mickleham",
+    "scorecard": "https://play.cricket.com.au/match/c59884df-6b2f-46de-b827-3329bd7d6854",
+    "kind": "bat",
+    "big": "50*",
+    "unit": "NOT OUT",
+    "fig": "50*",
+    "chip": "50* OFF 57"
+   },
+   {
+    "name": "Harsh Sinha",
+    "team": "Fitzroy Doncaster 4th XI",
+    "opp": "Greenvale Kangaroos 4th XI",
+    "day": "Sat 14 Nov",
+    "inprog": true,
+    "program": "Performance Squad",
+    "centre": "Mickleham",
+    "scorecard": "https://play.cricket.com.au/match/a1b4f98c-89fb-4e39-b61d-56db4d85c00c",
+    "kind": "bat",
+    "big": "36",
+    "unit": "RUNS",
+    "fig": "36",
+    "chip": "36 OFF 85"
+   }
+  ],
+  "source": "perf-mickleham/highlights-mosaic"
+ },
+ {
+  "file": "2026-11-18_RESULTS_PERFORMANCE-MICKLEHAM_03-batting-1",
+  "type": "spot",
+  "head": [
+   "50*",
+   "NOT OUT"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "PERFORMANCE · MICKLEHAM",
+  "group": "PERFORMANCE SQUAD",
+  "items": [
+   {
+    "name": "Mubasheeruddin Jamal Mohammed",
+    "team": "TCC Boys U/17A Friday",
+    "opp": "Melton Centrals U17A Friday",
+    "day": "Fri 13 Nov",
+    "inprog": false,
+    "program": "Performance Squad",
+    "centre": "Mickleham",
+    "scorecard": "https://play.cricket.com.au/match/c59884df-6b2f-46de-b827-3329bd7d6854",
+    "kind": "bat",
+    "big": "50*",
+    "unit": "NOT OUT",
+    "fig": "50*",
+    "chip": "50* OFF 57"
+   }
+  ],
+  "source": "perf-mickleham/batting-1"
+ },
+ {
+  "file": "2026-11-18_RESULTS_PERFORMANCE-MICKLEHAM_04-batting-2",
+  "type": "spot",
+  "head": [
+   "36",
+   "RUNS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "PERFORMANCE · MICKLEHAM",
+  "group": "PERFORMANCE SQUAD",
+  "items": [
+   {
+    "name": "Harsh Sinha",
+    "team": "Fitzroy Doncaster 4th XI",
+    "opp": "Greenvale Kangaroos 4th XI",
+    "day": "Sat 14 Nov",
+    "inprog": true,
+    "program": "Performance Squad",
+    "centre": "Mickleham",
+    "scorecard": "https://play.cricket.com.au/match/a1b4f98c-89fb-4e39-b61d-56db4d85c00c",
+    "kind": "bat",
+    "big": "36",
+    "unit": "RUNS",
+    "fig": "36",
+    "chip": "36 OFF 85"
+   }
+  ],
+  "source": "perf-mickleham/batting-2"
+ },
+ {
+  "file": "2026-11-18_RESULTS_POWER-HALLAM_01-top-performances",
+  "type": "list",
+  "head": [
+   "STAND",
+   "OUTS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "POWER GAME · HALLAM",
+  "group": "POWER GAME SQUAD",
+  "items": [
+   {
+    "name": "Riaan Pasuleti",
+    "team": "CUCC Astros U15C Mixed Turf Sunday",
+    "opp": "Clayton District U15 Sunday Yellow",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Power Game",
+    "centre": "Hallam",
+    "scorecard": "https://play.cricket.com.au/match/96201183-4de7-4c32-8422-9f7338215aa6",
+    "kind": "bat",
+    "big": "50*",
+    "unit": "NOT OUT",
+    "fig": "50*",
+    "chip": "50* OFF 45 · 2 CATCHES"
+   },
+   {
+    "name": "Tanish Singh",
+    "team": "HY 10A",
+    "opp": "WC 10A",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Power Game",
+    "centre": "Hallam",
+    "scorecard": "https://play.cricket.com.au/match/4ad44b75-dc47-4cf7-afe3-75ce77fac4a7",
+    "kind": "bat",
+    "big": "43",
+    "unit": "RUNS",
+    "fig": "43",
+    "chip": "43 OFF 67"
+   },
+   {
+    "name": "Aarav Bhasin",
+    "team": "BGS 1ST XI",
+    "opp": "HY 1ST XI",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Power Game",
+    "centre": "Hallam",
+    "scorecard": "https://play.cricket.com.au/match/d8e564d7-b4b8-42f2-b3fe-2716783769ab",
+    "kind": "bowl",
+    "big": "3",
+    "unit": "WICKETS",
+    "fig": "3/42",
+    "chip": "3/42 · 7 OVERS"
+   },
+   {
+    "name": "Gurfateh Singh Shergill",
+    "team": "Moorabbin U14 2",
+    "opp": "East Sandringham/Hampton Central U14 1",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Power Game",
+    "centre": "Hallam",
+    "scorecard": "https://play.cricket.com.au/match/b7416a72-efa3-4920-b3dc-9bbb71156508",
+    "kind": "bat",
+    "big": "32*",
+    "unit": "NOT OUT",
+    "fig": "32*",
+    "chip": "32* OFF 34"
+   }
+  ],
+  "source": "power-hallam/top-performances"
+ },
+ {
+  "file": "2026-11-18_RESULTS_POWER-HALLAM_02-highlights-mosaic",
+  "type": "list",
+  "head": [
+   "WEEKEND",
+   "WRAP"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "POWER GAME · HALLAM",
+  "group": "POWER GAME SQUAD",
+  "items": [
+   {
+    "name": "Riaan Pasuleti",
+    "team": "CUCC Astros U15C Mixed Turf Sunday",
+    "opp": "Clayton District U15 Sunday Yellow",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Power Game",
+    "centre": "Hallam",
+    "scorecard": "https://play.cricket.com.au/match/96201183-4de7-4c32-8422-9f7338215aa6",
+    "kind": "bat",
+    "big": "50*",
+    "unit": "NOT OUT",
+    "fig": "50*",
+    "chip": "50* OFF 45 · 2 CATCHES"
+   },
+   {
+    "name": "Tanish Singh",
+    "team": "HY 10A",
+    "opp": "WC 10A",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Power Game",
+    "centre": "Hallam",
+    "scorecard": "https://play.cricket.com.au/match/4ad44b75-dc47-4cf7-afe3-75ce77fac4a7",
+    "kind": "bat",
+    "big": "43",
+    "unit": "RUNS",
+    "fig": "43",
+    "chip": "43 OFF 67"
+   },
+   {
+    "name": "Aarav Bhasin",
+    "team": "BGS 1ST XI",
+    "opp": "HY 1ST XI",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Power Game",
+    "centre": "Hallam",
+    "scorecard": "https://play.cricket.com.au/match/d8e564d7-b4b8-42f2-b3fe-2716783769ab",
+    "kind": "bowl",
+    "big": "3",
+    "unit": "WICKETS",
+    "fig": "3/42",
+    "chip": "3/42 · 7 OVERS"
+   },
+   {
+    "name": "Gurfateh Singh Shergill",
+    "team": "Moorabbin U14 2",
+    "opp": "East Sandringham/Hampton Central U14 1",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Power Game",
+    "centre": "Hallam",
+    "scorecard": "https://play.cricket.com.au/match/b7416a72-efa3-4920-b3dc-9bbb71156508",
+    "kind": "bat",
+    "big": "32*",
+    "unit": "NOT OUT",
+    "fig": "32*",
+    "chip": "32* OFF 34"
+   },
+   {
+    "name": "Hrishikesh Padmanabhan",
+    "team": "Moorabbin U14 1",
+    "opp": "Hampton U14 1",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Power Game",
+    "centre": "Hallam",
+    "scorecard": "https://play.cricket.com.au/match/d40cf5c8-59dd-44e2-8e10-1dfc84b8b23c",
+    "kind": "keeper",
+    "big": "1",
+    "unit": "DISMISSAL",
+    "chip": "1 KEEPER DISMISSAL"
+   }
+  ],
+  "source": "power-hallam/highlights-mosaic"
+ },
+ {
+  "file": "2026-11-18_RESULTS_POWER-HALLAM_03-batting-1",
+  "type": "spot",
+  "head": [
+   "50*",
+   "NOT OUT"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "POWER GAME · HALLAM",
+  "group": "POWER GAME SQUAD",
+  "items": [
+   {
+    "name": "Riaan Pasuleti",
+    "team": "CUCC Astros U15C Mixed Turf Sunday",
+    "opp": "Clayton District U15 Sunday Yellow",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Power Game",
+    "centre": "Hallam",
+    "scorecard": "https://play.cricket.com.au/match/96201183-4de7-4c32-8422-9f7338215aa6",
+    "kind": "bat",
+    "big": "50*",
+    "unit": "NOT OUT",
+    "fig": "50*",
+    "chip": "50* OFF 45 · 2 CATCHES"
+   }
+  ],
+  "source": "power-hallam/batting-1"
+ },
+ {
+  "file": "2026-11-18_RESULTS_POWER-HALLAM_04-batting-2",
+  "type": "spot",
+  "head": [
+   "43",
+   "RUNS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "POWER GAME · HALLAM",
+  "group": "POWER GAME SQUAD",
+  "items": [
+   {
+    "name": "Tanish Singh",
+    "team": "HY 10A",
+    "opp": "WC 10A",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Power Game",
+    "centre": "Hallam",
+    "scorecard": "https://play.cricket.com.au/match/4ad44b75-dc47-4cf7-afe3-75ce77fac4a7",
+    "kind": "bat",
+    "big": "43",
+    "unit": "RUNS",
+    "fig": "43",
+    "chip": "43 OFF 67"
+   }
+  ],
+  "source": "power-hallam/batting-2"
+ },
+ {
+  "file": "2026-11-18_RESULTS_POWER-HALLAM_05-batting-3",
+  "type": "spot",
+  "head": [
+   "32*",
+   "NOT OUT"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "POWER GAME · HALLAM",
+  "group": "POWER GAME SQUAD",
+  "items": [
+   {
+    "name": "Gurfateh Singh Shergill",
+    "team": "Moorabbin U14 2",
+    "opp": "East Sandringham/Hampton Central U14 1",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Power Game",
+    "centre": "Hallam",
+    "scorecard": "https://play.cricket.com.au/match/b7416a72-efa3-4920-b3dc-9bbb71156508",
+    "kind": "bat",
+    "big": "32*",
+    "unit": "NOT OUT",
+    "fig": "32*",
+    "chip": "32* OFF 34"
+   }
+  ],
+  "source": "power-hallam/batting-3"
+ },
+ {
+  "file": "2026-11-18_RESULTS_POWER-HALLAM_06-bowling-1",
+  "type": "spot",
+  "head": [
+   "3",
+   "WICKETS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "POWER GAME · HALLAM",
+  "group": "POWER GAME SQUAD",
+  "items": [
+   {
+    "name": "Aarav Bhasin",
+    "team": "BGS 1ST XI",
+    "opp": "HY 1ST XI",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Power Game",
+    "centre": "Hallam",
+    "scorecard": "https://play.cricket.com.au/match/d8e564d7-b4b8-42f2-b3fe-2716783769ab",
+    "kind": "bowl",
+    "big": "3",
+    "unit": "WICKETS",
+    "fig": "3/42",
+    "chip": "3/42 · 7 OVERS"
+   }
+  ],
+  "source": "power-hallam/bowling-1"
+ },
+ {
+  "file": "2026-11-18_RESULTS_POWER-MICKLEHAM_01-top-performances",
+  "type": "list",
+  "head": [
+   "TOP",
+   "KNOCKS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "POWER GAME · MICKLEHAM",
+  "group": "POWER GAME SQUAD",
+  "items": [
+   {
+    "name": "Atharv Sharma",
+    "team": "Westmeadows U14 Gold",
+    "opp": "PVH Panthers U14 Red",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Power Game",
+    "centre": "Mickleham",
+    "scorecard": "https://play.cricket.com.au/match/2d7617ae-f54b-4c63-894b-956569a9d3b8",
+    "kind": "bat",
+    "big": "42",
+    "unit": "RUNS",
+    "fig": "42",
+    "chip": "42 OFF 46"
+   },
+   {
+    "name": "Harsh Sinha",
+    "team": "Fitzroy Doncaster 4th XI",
+    "opp": "Greenvale Kangaroos 4th XI",
+    "day": "Sat 14 Nov",
+    "inprog": true,
+    "program": "Power Game",
+    "centre": "Mickleham",
+    "scorecard": "https://play.cricket.com.au/match/a1b4f98c-89fb-4e39-b61d-56db4d85c00c",
+    "kind": "bat",
+    "big": "36",
+    "unit": "RUNS",
+    "fig": "36",
+    "chip": "36 OFF 85"
+   }
+  ],
+  "source": "power-mickleham/top-performances"
+ },
+ {
+  "file": "2026-11-18_RESULTS_POWER-MICKLEHAM_02-highlights-mosaic",
+  "type": "list",
+  "head": [
+   "WEEKEND",
+   "WRAP"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "POWER GAME · MICKLEHAM",
+  "group": "POWER GAME SQUAD",
+  "items": [
+   {
+    "name": "Atharv Sharma",
+    "team": "Westmeadows U14 Gold",
+    "opp": "PVH Panthers U14 Red",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Power Game",
+    "centre": "Mickleham",
+    "scorecard": "https://play.cricket.com.au/match/2d7617ae-f54b-4c63-894b-956569a9d3b8",
+    "kind": "bat",
+    "big": "42",
+    "unit": "RUNS",
+    "fig": "42",
+    "chip": "42 OFF 46"
+   },
+   {
+    "name": "Harsh Sinha",
+    "team": "Fitzroy Doncaster 4th XI",
+    "opp": "Greenvale Kangaroos 4th XI",
+    "day": "Sat 14 Nov",
+    "inprog": true,
+    "program": "Power Game",
+    "centre": "Mickleham",
+    "scorecard": "https://play.cricket.com.au/match/a1b4f98c-89fb-4e39-b61d-56db4d85c00c",
+    "kind": "bat",
+    "big": "36",
+    "unit": "RUNS",
+    "fig": "36",
+    "chip": "36 OFF 85"
+   }
+  ],
+  "source": "power-mickleham/highlights-mosaic"
+ },
+ {
+  "file": "2026-11-18_RESULTS_POWER-MICKLEHAM_03-batting-1",
+  "type": "spot",
+  "head": [
+   "42",
+   "RUNS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "POWER GAME · MICKLEHAM",
+  "group": "POWER GAME SQUAD",
+  "items": [
+   {
+    "name": "Atharv Sharma",
+    "team": "Westmeadows U14 Gold",
+    "opp": "PVH Panthers U14 Red",
+    "day": "Fri 13 Nov",
+    "inprog": true,
+    "program": "Power Game",
+    "centre": "Mickleham",
+    "scorecard": "https://play.cricket.com.au/match/2d7617ae-f54b-4c63-894b-956569a9d3b8",
+    "kind": "bat",
+    "big": "42",
+    "unit": "RUNS",
+    "fig": "42",
+    "chip": "42 OFF 46"
+   }
+  ],
+  "source": "power-mickleham/batting-1"
+ },
+ {
+  "file": "2026-11-18_RESULTS_POWER-MICKLEHAM_04-batting-2",
+  "type": "spot",
+  "head": [
+   "36",
+   "RUNS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "POWER GAME · MICKLEHAM",
+  "group": "POWER GAME SQUAD",
+  "items": [
+   {
+    "name": "Harsh Sinha",
+    "team": "Fitzroy Doncaster 4th XI",
+    "opp": "Greenvale Kangaroos 4th XI",
+    "day": "Sat 14 Nov",
+    "inprog": true,
+    "program": "Power Game",
+    "centre": "Mickleham",
+    "scorecard": "https://play.cricket.com.au/match/a1b4f98c-89fb-4e39-b61d-56db4d85c00c",
+    "kind": "bat",
+    "big": "36",
+    "unit": "RUNS",
+    "fig": "36",
+    "chip": "36 OFF 85"
+   }
+  ],
+  "source": "power-mickleham/batting-2"
+ },
+ {
+  "file": "2026-11-18_RESULTS_POWER-WILLIAMSTOWN_01-top-performances",
+  "type": "list",
+  "head": [
+   "TOP",
+   "KNOCKS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "POWER GAME · WILLIAMSTOWN",
+  "group": "POWER GAME SQUAD",
+  "items": [
+   {
+    "name": "Daksh Garg",
+    "team": "WJCC Boys U15A SUN",
+    "opp": "WESC U15 Mixed",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Power Game",
+    "centre": "Williamstown",
+    "scorecard": "https://play.cricket.com.au/match/18de72f1-0b78-45ba-9214-791b843f1418",
+    "kind": "bat",
+    "big": "51*",
+    "unit": "NOT OUT",
+    "fig": "51*",
+    "chip": "51* OFF 41"
+   }
+  ],
+  "source": "power-williamstown/top-performances"
+ },
+ {
+  "file": "2026-11-18_RESULTS_POWER-WILLIAMSTOWN_02-highlights-mosaic",
+  "type": "list",
+  "head": [
+   "WEEKEND",
+   "WRAP"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "POWER GAME · WILLIAMSTOWN",
+  "group": "POWER GAME SQUAD",
+  "items": [
+   {
+    "name": "Daksh Garg",
+    "team": "WJCC Boys U15A SUN",
+    "opp": "WESC U15 Mixed",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Power Game",
+    "centre": "Williamstown",
+    "scorecard": "https://play.cricket.com.au/match/18de72f1-0b78-45ba-9214-791b843f1418",
+    "kind": "bat",
+    "big": "51*",
+    "unit": "NOT OUT",
+    "fig": "51*",
+    "chip": "51* OFF 41"
+   }
+  ],
+  "source": "power-williamstown/highlights-mosaic"
+ },
+ {
+  "file": "2026-11-18_RESULTS_POWER-WILLIAMSTOWN_03-batting-1",
+  "type": "spot",
+  "head": [
+   "51*",
+   "NOT OUT"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "POWER GAME · WILLIAMSTOWN",
+  "group": "POWER GAME SQUAD",
+  "items": [
+   {
+    "name": "Daksh Garg",
+    "team": "WJCC Boys U15A SUN",
+    "opp": "WESC U15 Mixed",
+    "day": "Sun 15 Nov",
+    "inprog": false,
+    "program": "Power Game",
+    "centre": "Williamstown",
+    "scorecard": "https://play.cricket.com.au/match/18de72f1-0b78-45ba-9214-791b843f1418",
+    "kind": "bat",
+    "big": "51*",
+    "unit": "NOT OUT",
+    "fig": "51*",
+    "chip": "51* OFF 41"
+   }
+  ],
+  "source": "power-williamstown/batting-1"
+ },
+ {
+  "file": "2026-11-18_RESULTS_SPIN-CRANBOURNE-NORTH_01-top-performances",
+  "type": "list",
+  "head": [
+   "TOP",
+   "SPELLS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "SPIN CLUB · CRANBOURNE NTH",
+  "group": "SPIN CLUB",
+  "items": [
+   {
+    "name": "Priyam Sharma",
+    "team": "Ormond 3rd XI",
+    "opp": "Moorabbin 3rd XI",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Spin Club",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/b066dc2e-bace-4815-b15e-f0cc4ff2780e",
+    "kind": "bowl",
+    "big": "5",
+    "unit": "WICKETS",
+    "fig": "5/43",
+    "chip": "5/43 · 8 OVERS"
+   }
+  ],
+  "source": "spin-cranbourne/top-performances"
+ },
+ {
+  "file": "2026-11-18_RESULTS_SPIN-CRANBOURNE-NORTH_02-highlights-mosaic",
+  "type": "list",
+  "head": [
+   "WEEKEND",
+   "WRAP"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "SPIN CLUB · CRANBOURNE NTH",
+  "group": "SPIN CLUB",
+  "items": [
+   {
+    "name": "Priyam Sharma",
+    "team": "Ormond 3rd XI",
+    "opp": "Moorabbin 3rd XI",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Spin Club",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/b066dc2e-bace-4815-b15e-f0cc4ff2780e",
+    "kind": "bowl",
+    "big": "5",
+    "unit": "WICKETS",
+    "fig": "5/43",
+    "chip": "5/43 · 8 OVERS"
+   }
+  ],
+  "source": "spin-cranbourne/highlights-mosaic"
+ },
+ {
+  "file": "2026-11-18_RESULTS_SPIN-CRANBOURNE-NORTH_03-bowling-1",
+  "type": "spot",
+  "head": [
+   "5",
+   "WICKETS"
+  ],
+  "chip1": "13–15 NOVEMBER",
+  "chip2": "SPIN CLUB · CRANBOURNE NTH",
+  "group": "SPIN CLUB",
+  "items": [
+   {
+    "name": "Priyam Sharma",
+    "team": "Ormond 3rd XI",
+    "opp": "Moorabbin 3rd XI",
+    "day": "Sat 14 Nov",
+    "inprog": false,
+    "program": "Spin Club",
+    "centre": "Cranbourne North",
+    "scorecard": "https://play.cricket.com.au/match/b066dc2e-bace-4815-b15e-f0cc4ff2780e",
+    "kind": "bowl",
+    "big": "5",
+    "unit": "WICKETS",
+    "fig": "5/43",
+    "chip": "5/43 · 8 OVERS"
+   }
+  ],
+  "source": "spin-cranbourne/bowling-1"
+ }
+]

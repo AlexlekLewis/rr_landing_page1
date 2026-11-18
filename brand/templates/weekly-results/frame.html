@@ -1,0 +1,108 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- RRA standard frame. Master reference: brand/reference/MASTER-game-day-cover.png.
+     The renderer injects window.PIECE and window.FORMAT ('feed' 1080x1350 | 'vert' 1080x1920). -->
+<style>
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-900-normal.woff2);font-weight:900}
+:root{--pink:#E11F8F;--blue:#1226AA;--navy:#001D48}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:M,sans-serif;color:#fff}
+.frame{position:relative;width:1080px;overflow:hidden;background:linear-gradient(165deg,#001D48 0%,#E11F8F 100%)}
+.lion{position:absolute;right:-110px;height:1080px;opacity:.6}
+.logo{position:absolute;left:64px;width:96px}
+.chips{position:absolute;right:64px;display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+.chip{font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:12px 24px;border-radius:4px;font-size:26px;line-height:1.15;white-space:nowrap}
+.pink{background:var(--pink)}.blue{background:var(--blue)}
+.h{position:absolute;left:64px;font-size:245px;font-weight:900;text-transform:uppercase;line-height:.88;letter-spacing:-.02em;white-space:nowrap}
+.h span{display:block}.h .p{color:var(--pink)}
+.st{position:absolute;left:64px;font-weight:800;text-transform:uppercase}
+.st .a{font-size:40px;letter-spacing:.01em;white-space:nowrap}.st .v{color:var(--pink);font-size:26px;margin:14px 0 12px;letter-spacing:.06em}
+.grid{position:absolute;left:64px;display:grid;gap:24px}
+.gc{background:#fff;border-radius:14px;color:var(--navy);padding:30px 28px 0;overflow:hidden}
+.gc.span{grid-column:1 / -1}
+.eb{color:var(--blue);font-weight:800;font-size:18px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.t{font-weight:900;font-size:36px;line-height:1.1;margin-top:10px;white-space:nowrap}
+.s{color:#5b6475;font-weight:500;font-size:20px;margin-top:8px;white-space:nowrap}
+.k{display:inline-block;margin-top:18px;background:var(--navy);color:#fff;font-weight:800;font-size:23px;letter-spacing:.02em;padding:9px 16px;border-radius:3px;white-space:nowrap}
+.compact{padding:24px 26px 0}.compact .s{display:none}.s.wrap{white-space:normal;line-height:1.25;max-height:50px;overflow:hidden;font-size:19px}.compact .t{font-size:30px;margin-top:6px}.compact .k{margin-top:12px;font-size:21px}
+.row{display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+.row .k{margin-top:0}.row .t{margin-top:4px}
+.footer{position:absolute;left:0;right:0;bottom:0;background:var(--navy);display:flex;justify-content:space-between;padding:0 64px}
+.footer b{font-weight:900;font-size:38px;letter-spacing:.04em}
+.footer span{font-weight:800;font-size:22px;letter-spacing:.12em;opacity:.85}
+</style></head><body><div class="frame" id="f"></div>
+<script>
+const P=window.PIECE, V=window.FORMAT==='vert';
+const W=1080, H=V?1920:1350, RIGHT=V?124:64;            // vertical: keep clear of TikTok's right-hand buttons
+const f=document.getElementById('f'); f.style.height=H+'px';
+const top0=V?250:64;                                     // vertical: Instagram/TikTok top UI zone
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const sub=i=>[i.day,i.inprog?'match in progress':''].filter(Boolean).join(' · ');
+let html=`<img class="lion" src="../../logos/lion-rampant-white.png" style="top:${V?360:120}px${V?';height:1300px;right:-170px':''}">
+<img class="logo" src="../../logos/rra-melbourne-white.svg" style="top:${top0-8}px">
+<div class="chips" style="top:${top0}px;right:${RIGHT}px"><span class="chip pink">${esc(P.chip1)}</span><span class="chip blue">${esc(P.chip2)}</span></div>
+<div class="h" id="h"><span>${esc(P.head[0])}</span><span class="p">${esc(P.head[1])}</span></div>`;
+const capTop=V?520:301;                                  // headline line-1 cap top (master: 301)
+const contentW=W-64-RIGHT;
+const card=(i,cls='')=>`<div class="gc ${cls}"><div class="eb">${esc(i.team)}</div><div class="t">${esc(i.name)}</div><div class="s">${esc(sub(i))}</div><div class="k">${esc(i.chip)}</div></div>`;
+const n=P.items.length;
+let stY, gridY, cols=2, cardH=220, cls='', stmt=null;
+const group=P.group?`PLAYER IN OUR|${P.group}`:null;
+const proud=P.group?['PROUD OF EVERY','PLAYER IN OUR',P.group]:['PROUD OF ALL 175','PLAYERS IN OUR','ACADEMY COMMUNITY'];
+if(P.type==='spot'){
+  const i=P.items[0];
+  stmt=[i.name,'FOR',i.team];
+  const verb=i.kind==='bowl'?'THE SPELL':i.kind==='bat'?'THE KNOCK':'BEHIND THE STUMPS';
+  const [main,extra]=i.chip.split(' · ');
+  const title=i.kind==='bowl'?`${main} off ${extra.replace(' OVERS','').replace(' OVER','')} overs`:i.kind==='bat'?main.replace(' OFF ',' off ')+' balls':main;
+  const when=(i.day+(i.inprog?' · in progress':'')).toUpperCase();
+  const catches=i.kind==='bat'&&extra?extra:null;
+  html+=`<div class="grid" id="g">
+   <div class="gc"><div class="eb">${verb}</div><div class="t">${esc(title)}</div><div class="s wrap">${esc(i.opp?'v '+i.opp:i.team)}</div><div class="k">${esc(when)}</div></div>
+   <div class="gc"><div class="eb">Royals Academy</div><div class="t">${esc(i.program)}</div><div class="s wrap">${esc(catches?(i.centre||''):'Rajasthan Royals Academy')}</div><div class="k">${esc(catches?'+ '+catches:(i.centre||'MELBOURNE').toUpperCase())}</div></div></div>`;
+  stY=V?960:745; gridY=V?1200:975;
+}else if(n<=2){
+  stmt=proud; stY=V?960:745; gridY=V?1200:975; if(n===1)cls='span';
+  html+=`<div class="grid" id="g">${P.items.map(i=>card(i,cls)).join('')}</div>`;
+}else if(!V&&n<=4){
+  stmt=[n===4&&P.items.every(i=>i.kind==='bat'&&parseInt(i.big)>=50)?'FOUR FIFTIES ACROSS OUR CLUBS':'ACROSS OUR CLUBS THIS WEEKEND'];
+  stY=655; gridY=755; cardH=225;
+  html+=`<div class="grid" id="g" style="row-gap:20px">${P.items.map((i,k)=>card(i,k===2&&n===3?'span':'')).join('')}</div>`;
+}else if(!V){
+  stmt=['ACROSS OUR CLUBS THIS WEEKEND']; stY=640; gridY=720; cardH=154;
+  html+=`<div class="grid" id="g" style="row-gap:16px">${P.items.map((i,k)=>card(i,'compact'+(k===4&&n===5?' span':''))).join('')}</div>`;
+}else{ // vertical list: full-width rows
+  stmt=['ACROSS OUR CLUBS THIS WEEKEND']; stY=900; gridY=980; cols=1; cardH=n<=4?122:100;
+  html+=`<div class="grid" id="g" style="gap:${n<=4?16:12}px">${P.items.map(i=>`<div class="gc row" style="padding-top:0"><div><div class="eb">${esc(i.team)}</div><div class="t" style="font-size:${n<=4?32:28}px">${esc(i.name)}</div></div><div class="k" style="background:var(--pink)">${esc(i.chip)}</div></div>`).join('')}</div>`;
+}
+if(stmt) html+=`<div class="st" id="st">${stmt.length===3?`<div class="a">${esc(stmt[0])}</div><div class="v">${esc(stmt[1])}</div><div class="a">${esc(stmt[2])}</div>`:`<div class="a">${esc(stmt[0])}</div>`}</div>`;
+html+=`<div class="footer" style="height:${V?420:100}px;align-items:${V?'flex-start':'center'};padding-top:${V?44:0}px"><b>HALLA BOL!</b><span>RRAMELBOURNE.COM</span></div>`;
+f.innerHTML=html;
+const g=document.getElementById('g'), st=document.getElementById('st'), h=document.getElementById('h');
+g.style.top=gridY+'px'; g.style.width=contentW+'px'; g.style.gridTemplateColumns=cols===2?'1fr 1fr':'1fr';
+g.querySelectorAll('.gc').forEach(c=>c.style.height=cardH+'px');
+if(st) st.style.top=stY+'px';
+const width=el=>{const r=document.createRange();r.selectNodeContents(el);return r.getBoundingClientRect().width};
+const shrink=(el,max,min)=>{let s=parseFloat(getComputedStyle(el).fontSize);while(width(el)>max&&s>min){s-=1;el.style.fontSize=s+'px'}};
+document.fonts.load('900 100px M').then(()=>document.fonts.load('800 40px M')).then(()=>document.fonts.ready).then(()=>{
+  // headline: master 245px; longest word ends by x=900 (feed) so the lion keeps its space
+  const limit=(V?820:836);
+  // feed: headline must clear the statement (line-2 cap bottom = capTop + 1.58 x size)
+  let fs=Math.min(245, (!V&&st)?Math.floor((stY-34-capTop)/1.58):245); h.style.fontSize=fs+'px';
+  while(Math.max(...[...h.children].map(width))>limit&&fs>60){fs-=2;h.style.fontSize=fs+'px'}
+  h.style.top=(capTop-0.098*fs)+'px';
+  if(V){ // vertical: stack statement and cards under the headline, rows fill down to the footer
+    const hb=capTop+1.58*fs; let y=hb+58;
+    if(st){st.style.top=y+'px'; y=st.getBoundingClientRect().bottom+44}
+    g.style.top=y+'px';
+    const rows=[...g.querySelectorAll('.gc.row')];
+    if(rows.length){const gap=parseFloat(getComputedStyle(g).rowGap)||12;const room=(H-420-36)-y;
+      const rh=Math.min(130,Math.floor((room-gap*(rows.length-1))/rows.length));rows.forEach(r=>r.style.height=rh+'px')}
+  }
+  // statement: sits under the headline when the headline shrank
+  if(st) st.querySelectorAll('.a').forEach(a=>shrink(a,contentW,26));
+  g.querySelectorAll('.t,.eb,.s:not(.wrap),.k').forEach(el=>{const card=el.closest('.gc');const room=card.clientWidth-56-(el.parentElement.classList.contains('row')?0:0);shrink(el,el.closest('.row')?(card.clientWidth-56)*0.55:room,14)});
+  document.body.dataset.ready='1';
+});
+</script></body></html>

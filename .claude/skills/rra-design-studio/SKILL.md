@@ -54,8 +54,8 @@ Open it and compare side by side before sending anything. Measured on the 1080x1
   Montserrat 800 uppercase, letter-spacing 0.06em, square-ish corners (4px).
 - **Fact cards**: white cards (radius 12-16px) with blue eyebrow label, navy 900 title, grey
   sub-line, navy chip for the time. On team sheets: translucent navy panels instead (no white).
-- **Navy footer bar**: "FINDING A WAY TO *WIN* FROM ANYWHERE" (WIN pink, 900 italic) and
-  "HALLA BOL!" right-aligned.
+- **Navy footer bar**: **HALLA BOL!** on the left (900, 38px) and RRAMELBOURNE.COM on the right
+  (800, 22px). Andy, 18 Nov 2026: never use "Finding a way to win from anywhere"; Halla Bol is better.
 - **Margins**: 64px safe area on 1080-wide frames. Nothing important within 64px of an edge.
   Stories: keep 250px top and bottom clear of text (Instagram UI covers it).
 
@@ -112,7 +112,7 @@ Use Melbourne for anything run by the Melbourne academy; Australia for national.
 - **Job ad**: NOW / HIRING, role title in white 800, 3 bullets max (what you'll do / who you are /
   where), "Apply: rramelbourne.com/careers" chip. Australia logo if it's a national role. No salary
   unless Andy gives it. Include "Working With Children Check required" for any coaching role.
-- **Weekend results**: template `brand/templates/weekend-results/` (TOP / KNOCKS batting feed,
+- **Weekend results**: template `brand/templates/weekly-results/` (see 5d) (TOP / KNOCKS batting feed,
   TOP / SPELLS bowling feed, WEEKEND / WRAP story). White cards: blue eyebrow (club team · day),
   navy name, big pink figure right-aligned with the unit under it, navy "IN PROGRESS" tag for
   unfinished matches. Edit the HTML, run `node brand/templates/weekend-results/render.cjs`.
@@ -158,6 +158,31 @@ Treat their files as **source material, not finished creative**. For each one:
    and a `CAPTIONS + BRAND CHECK.txt`. Never overwrite or delete their originals.
 5. Tell Andy what changed and anything that still needs checking.
 
+## 5d. FINAL VERSIONS, naming and tagging (Andy, 18 Nov 2026)
+
+Every finished piece goes to Drive **Content / FINAL VERSIONS** (`1WCP9pPd74Gv_mLcnNJcyjaAdKYO-1t-R`)
+and gets a row in **00 POSTING LOG** (Google Sheet there). Team rules: Doc
+**00 HOW WE NAME AND TAG EVERYTHING** in the same folder.
+
+- Folders: `FINAL VERSIONS / YYYY-MM MONTH / YYYY-MM-DD · PILLAR · Topic / AUDIENCE /`
+- Files: `POSTDATE_PILLAR_AUDIENCE_NN-piece_FORMAT.png` (+ `_v2` for corrections; never overwrite)
+  - PILLAR: RESULTS, GAMEDAY, PROGRAM, PEOPLE, ROYALS, CAREERS, ALERT
+  - AUDIENCE: ALL-ACADEMY (public socials) or the squad/centre (ELITE-MELBOURNE, POWER-HALLAM...)
+  - FORMAT: `FEED-4x5` (1080x1350, Instagram + Facebook feed) and `VERT-9x16` (1080x1920,
+    IG Story, Reel cover, TikTok). **Every piece is made in both.**
+- Each audience folder gets `POSTDATE_PILLAR_AUDIENCE_CAPTIONS.txt`.
+- Vertical safe zones (Instagram + TikTok): nothing important above y250, below y1480, or right
+  of x956 (TikTok buttons).
+- Never change the team's originals: replicate them in our style; ours go in FINAL VERSIONS.
+
+Weekly results from Alex's packs: `brand/templates/weekly-results/`
+```
+python3 build_pieces.py <unzipped packs dir> <post date> > pieces.json
+node render.cjs pieces.json <outdir>      # every piece in FEED-4x5 + VERT-9x16, with layout checks
+python3 captions.py pieces.json <outdir>  # captions per audience
+```
+Name the unzipped pack folders as in `PACKS` in build_pieces.py (03-feed, elite-melbourne, ...).
+
 ## 6. Build and render
 
 Build each frame as static HTML at exact pixel size, local images and embedded Montserrat,
@@ -181,7 +206,8 @@ Check the final rendered file, not the source. Report a table: item, PASS/FAIL, 
 3. **Type**: Montserrat only. No outlined/hollow text, no drop shadows, no more than 3 weights.
 4. **Hierarchy**: one headline, readable at phone size (headline >= 90px on 1080 frames,
    body >= 28px). Nothing in the safe-area margins.
-5. **Brand elements**: gradient + lion or approved photo treatment; footer on social posts.
+5. **Brand elements**: gradient + lion or approved photo treatment; HALLA BOL! footer (never
+   "Finding a way to win from anywhere").
 6. **Facts**: dates, days, times, venues, prices and URLs match the website/booking page.
    Day matches date. Links resolve. No arrival/warm-up times on game-day posts.
 7. **People**: names spelled right, photo consent held, no child identifiable with school.
