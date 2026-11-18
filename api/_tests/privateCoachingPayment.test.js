@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { bookingCheckout, partnerShirtCheckout, toStripeLineItems } from '../_lib/privateCoachingPayment.js';
+import { RATE_CARDS } from '../../src/components/premium-coaching/premiumCoachingData.js';
 
 const base = {
     coach_slug: 'alex-thornhill', centre: 'cranbourne-north', format: '1-1', package_sessions: 3, player_first_name: 'Jack',
@@ -19,7 +20,7 @@ describe('private coaching checkout pricing (server side)', () => {
         expect(out.totalCents).toBe(51000);
     });
 
-    it('1-to-2 costs the same as 1-to-1 (the booker pays it all)', () => {
+    it('1-to-2 uses the coach 1-to-2 rate (same as 1-to-1 until Andy sets it)', () => {
         expect(bookingCheckout({ ...base, format: '1-2' }).totalCents).toBe(51000);
     });
 
@@ -44,6 +45,16 @@ describe('private coaching checkout pricing (server side)', () => {
         expect(bookingCheckout({ ...base, coach_slug: 'kavya-khatri', centre: 'ravenhall' }).error).toMatch(/can’t be booked/);
         expect(bookingCheckout({ ...base, centre: 'mickleham', selected_slots: base.selected_slots.map((s) => ({ ...s, centre: 'mickleham' })) }).error).toMatch(/doesn’t coach at that centre/);
         expect(bookingCheckout({ ...base, selected_slots: [...base.selected_slots.slice(0, 2), { ...base.selected_slots[2], centre: 'ravenhall' }] }).error).toMatch(/same centre/);
+    });
+
+    it('charges the coach own rate card, per option', () => {
+        RATE_CARDS['alex-thornhill'] = { '1-1': { 1: 180, 3: 170, 5: 160 }, '1-2': { 1: 220, 3: 210, 5: 200 } };
+        try {
+            expect(bookingCheckout({ ...base, format: '1-1' }).totalCents).toBe(3 * 17000);
+            expect(bookingCheckout({ ...base, format: '1-2' }).totalCents).toBe(3 * 21000);
+            expect(bookingCheckout({ ...base, format: '1-2' }).items[0].name).toContain('1-to-2');
+            expect(bookingCheckout({ ...base, format: '1-3' }).error).toMatch(/1-to-1 or 1-to-2/);
+        } finally { delete RATE_CARDS['alex-thornhill']; }
     });
 
     it('partner shirt is $29.95 and Stripe line items are AUD', () => {

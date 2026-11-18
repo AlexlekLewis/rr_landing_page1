@@ -4,10 +4,10 @@ import Navbar from '../Navbar';
 import Footer from '../Footer';
 import PartnerStack from '../power-game/PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
-import PremiumCoachingForm from './PremiumCoachingForm';
+import CoachBooking from './CoachBooking';
 import HomeMedia from '../home-page/HomeMedia';
 import CoachFinder from './CoachFinder';
-import { ROUTE, FORM_ANCHOR, HERO, TOGETHER, TECH, STEPS } from './premiumCoachingData';
+import { ROUTE, HERO, TOGETHER, TECH, STEPS } from './premiumCoachingData';
 import { BowlingMap, HeatMap } from './TechVisuals';
 import { HERO_IMAGE, MEDIA } from './premiumCoachingMedia';
 
@@ -18,7 +18,7 @@ import { HERO_IMAGE, MEDIA } from './premiumCoachingMedia';
 // (one mixed photo + video carousel) → book and pay. No Questions section (Andy, 18 Nov
 // 2026). PREVIEW ONLY: hidden route, noindex, no surfaces.
 
-const SECTIONS = ['hero', 'tech', 'together', 'how', 'coaches', 'media', FORM_ANCHOR];
+const SECTIONS = ['hero', 'tech', 'together', 'how', 'coaches', 'media'];
 const ANCHOR = 'scroll-mt-24 md:scroll-mt-28';
 const go = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
@@ -79,7 +79,7 @@ const Hero = () => (
                     ))}
                 </dl>
                 <div className="order-3 md:order-none flex flex-col sm:flex-row gap-3 mb-8 md:mb-0">
-                    <button type="button" data-cta="hero-primary" onClick={() => go(FORM_ANCHOR)}
+                    <button type="button" data-cta="hero-primary" onClick={() => go('coaches')}
                         className="bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-8 py-4 rounded-full transition-colors">
                         {HERO.cta}
                     </button>
@@ -103,7 +103,7 @@ const Together = () => (
             </div>
             <div className="md:col-span-6">
                 {TOGETHER.body.map((p) => <p key={p.slice(0, 20)} className="text-white/90 font-medium leading-relaxed mb-4">{p}</p>)}
-                <button type="button" data-cta="together" onClick={() => go(FORM_ANCHOR)}
+                <button type="button" data-cta="together" onClick={() => go('coaches')}
                     className="mt-2 bg-white text-rr-dark hover:bg-rr-dark hover:text-white font-black uppercase tracking-widest px-7 py-3.5 rounded-full transition-colors text-sm">
                     Book 1-to-2 with a partner
                 </button>
@@ -226,32 +226,24 @@ const NAV = [
 
 const PremiumCoaching = () => {
     usePageAnalytics(ROUTE, { sections: SECTIONS });
-    const [pick, setPick] = useState({ centre: '', coach: '' });
-    const [formKey, setFormKey] = useState(0);
+    const [open, setOpen] = useState(null); // { coach, centre } while a coach's profile is open
     useEffect(() => { window.scrollTo(0, 0); }, []);
-
-    // "Book Alex" / "Book in Ravenhall": open the form with that centre (and coach) chosen.
-    const book = (centre, coach = '') => {
-        setPick({ centre, coach });
-        setFormKey((k) => k + 1); // remount the form with the choice applied
-        setTimeout(() => go(FORM_ANCHOR), 0);
-    };
 
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white">
-            <Navbar variant="private-coaching" navLinksOverride={NAV} ctaLabelOverride="BOOK YOUR COACH" ctaTargetOverride={FORM_ANCHOR} />
+            <Navbar variant="private-coaching" navLinksOverride={NAV} ctaLabelOverride="BOOK YOUR COACH" ctaTargetOverride="coaches" />
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero"><Hero /></div>
                 <div id="tech" className={ANCHOR}><Tech /></div>
                 <div id="together" className={ANCHOR}><Together /></div>
                 <div id="how" className={ANCHOR}><How /></div>
-                <div id="coaches" className={ANCHOR}><CoachFinder onBook={book} /></div>
+                <div id="coaches" className={ANCHOR}><CoachFinder onOpen={(coach, centre) => setOpen({ coach, centre })} /></div>
                 <div id="media" className={ANCHOR}>
                     <HomeMedia items={MEDIA} idPrefix="pc-media" eyebrow="Photos & videos" label="Photos and videos of Royals private coaching"
                         title={<>See it <span className="text-rr-pink">in the lane</span></>} sectionClass="py-16 md:py-20 bg-white" />
                 </div>
-                <div id={FORM_ANCHOR} className={ANCHOR}><PremiumCoachingForm key={formKey} initialCentre={pick.centre} initialCoach={pick.coach} /></div>
             </main>
+            {open && <CoachBooking key={`${open.coach}-${open.centre}`} coachSlug={open.coach} centreSlug={open.centre} onClose={() => setOpen(null)} />}
             <PartnerStack />
             <Footer />
         </div>

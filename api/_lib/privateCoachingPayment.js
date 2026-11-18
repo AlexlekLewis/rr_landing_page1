@@ -2,8 +2,8 @@
 // Royals Private Coaching — payment at booking (Andy, 18 Nov 2026: "we need to get the
 // payment on the day ... choose the time of the coach and then pay for what they want").
 //
-// Prices come from ONE place, premiumCoachingData.js (TIER_PRICES), the same table the
-// page shows, and are worked out here on the server from the saved booking. Nothing the
+// Prices come from ONE place, each coach's rate card in premiumCoachingData.js
+// (rateCardFor: RATE_CARDS, else the coach type's prices), the same card the coach's profile shows, and are worked out here on the server from the saved booking. Nothing the
 // browser sends is trusted for price.
 //
 // 1-to-2: the booker pays the whole session price (Andy: "the booker needs to pay it all,
@@ -14,7 +14,7 @@
 // line on the same checkout ($29.95 incl. GST, size in the description) and can't be removed.
 // ============================================================
 import { UNIFORM_CATALOG } from './uniformPricing.js';
-import { COACHES, TIERS, PACKAGES, CENTRES, perSession, PROGRAM_NAME, ROUTE } from '../../src/components/premium-coaching/premiumCoachingData.js';
+import { COACHES, PACKAGES, CENTRES, FORMAT_LABELS, coachPrice, PROGRAM_NAME, ROUTE } from '../../src/components/premium-coaching/premiumCoachingData.js';
 
 export const SOURCE_BOOKING = 'premium-private-coaching';
 export const SOURCE_PARTNER_SHIRT = 'premium-private-coaching-partner-shirt';
@@ -27,18 +27,19 @@ export const bookingCheckout = (row) => {
     const coach = COACHES.find((c) => c.slug === row.coach_slug);
     if (!coach || !coach.bookable) return { error: 'This coach can’t be booked yet.' };
     if (!PACKAGES.some((p) => p.sessions === row.package_sessions)) return { error: 'Please choose 1, 3 or 5 sessions.' };
-    const per = perSession(coach.tier, row.package_sessions);
+    if (!FORMAT_LABELS[row.format]) return { error: 'Please choose 1-to-1 or 1-to-2.' };
+    // The coach's own rate card, for the option the family chose (1-to-1 or 1-to-2).
+    const per = coachPrice(coach, row.format, row.package_sessions);
     if (per == null) return { error: 'No price for this coach yet.' };
     const slots = Array.isArray(row.selected_slots) ? row.selected_slots : [];
     if (slots.length !== row.package_sessions) return { error: `Please choose ${row.package_sessions} session time${row.package_sessions > 1 ? 's' : ''}.` };
     if (slots.some((s) => s.centre !== row.centre)) return { error: 'All sessions must be at the same centre.' };
     if (!coach.centres.includes(row.centre)) return { error: 'This coach doesn’t coach at that centre.' };
 
-    const tier = TIERS.find((t) => t.key === coach.tier);
     const centre = CENTRES.find((c) => c.slug === row.centre);
     const fmt = row.format === '1-2' ? '1-to-2' : '1-to-1';
     const items = [{
-        name: `${PROGRAM_NAME}: ${coach.name} (${tier.name})`,
+        name: `${PROGRAM_NAME}: ${coach.name}, ${FORMAT_LABELS[row.format]}`,
         description: `${row.package_sessions} × one-hour ${fmt} session${row.package_sessions > 1 ? 's' : ''} at ${centre?.suburb || row.centre}, for ${row.player_first_name}. Sessions subject to lane availability and confirmation.`,
         unit_amount: cents(per),
         quantity: row.package_sessions,

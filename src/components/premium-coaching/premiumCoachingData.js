@@ -144,8 +144,8 @@ export const TECH = {
 
 // ── HOW: the steps from booking to first session ──────────
 export const STEPS = [
-    { key: 'coach', title: 'Choose your coach', body: 'Pick your preferred location and a Royals Academy coach, and see when they’re available.' },
-    { key: 'pay', title: 'Pick your times and pay', body: 'Choose 1, 3 or 5 of the coach’s open times. You see the price for that coach, then pay securely by card.' },
+    { key: 'coach', title: 'Choose your coach', body: 'Pick your preferred location, then tap a Royals Academy coach to see their profile and times.' },
+    { key: 'pay', title: 'Pick your times and pay', body: 'Choose 1-to-1 or 1-to-2 and 1, 3 or 5 sessions from the coach’s rate card, pick their times, and pay securely by card.' },
     // Andy, 18 Nov 2026: after payment the booking goes to the coach, who confirms the times
     // and is the family's contact from then on, unless there are significant changes or issues.
     { key: 'confirm', title: 'Your coach confirms', body: 'Your booking goes straight to your coach, who gets in touch to confirm your times. From then on they’re your main contact, unless there’s a big change or issue.' },
@@ -179,9 +179,26 @@ export const TIER_PRICES = {
     academy: { 1: 140, 3: 130, 5: 120 }, // Andy, 18 Nov 2026
 };
 
-export const perSession = (tier, sessions) => TIER_PRICES[tier]?.[sessions] ?? null;
-export const packageTotal = (tier, sessions) => {
-    const p = perSession(tier, sessions);
+// EACH COACH HAS THEIR OWN RATE CARD (Andy, 18 Nov 2026: "each coach is going to basically
+// have their own rate card", with a 1-to-1 and a 1-to-2 option). A family opens a coach's
+// profile, taps one option (1-to-1 or 1-to-2, 1, 3 or 5 sessions) and pays that price.
+// Per session, incl. GST. A coach not listed here uses their coach type's 1-to-1 prices
+// for BOTH options. TODO Andy: the 1-to-2 prices (and any coach-specific 1-to-1 prices).
+//   'alex-thornhill': { '1-1': { 1: 180, 3: 170, 5: 160 }, '1-2': { 1: 200, 3: 190, 5: 180 } },
+export const RATE_CARDS = {};
+
+export const FORMAT_LABELS = { '1-1': '1-to-1', '1-2': '1-to-2' };
+
+export const rateCardFor = (coach) => {
+    if (!coach) return null;
+    if (RATE_CARDS[coach.slug]) return RATE_CARDS[coach.slug];
+    const base = TIER_PRICES[coach.tier];
+    return base ? { '1-1': base, '1-2': base } : null;
+};
+// Price per session for one coach, option and package (incl. GST), or null.
+export const coachPrice = (coach, format, sessions) => rateCardFor(coach)?.[format]?.[sessions] ?? null;
+export const coachTotal = (coach, format, sessions) => {
+    const p = coachPrice(coach, format, sessions);
     return p == null ? null : p * sessions;
 };
 export const money = (n) => `$${Number.isInteger(n) ? n : n.toFixed(2)}`;
@@ -335,7 +352,7 @@ export const COACHES = [
         img: null, // TODO: headshot
         bio: null, // TODO Andy
     },
-].map((c) => ({ focus: [], ...c, allAspects: ALL_ASPECTS, bookable: !!TIER_PRICES[c.tier] }));
+].map((c) => ({ focus: [], ...c, allAspects: ALL_ASPECTS, bookable: !!(RATE_CARDS[c.slug] || TIER_PRICES[c.tier]) }));
 
 // ── WHERE: the three centres ──────────────────────────────
 // Cranbourne North address = the Academy Shop pickup list (Alex, 5 Oct 2026).
