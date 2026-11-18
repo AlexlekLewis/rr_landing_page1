@@ -34,12 +34,18 @@ export const RAVENHALL = {
         title: "Exclusive Opening Session | Rajasthan Royals Academy, Melbourne's West",
         description:
             "The Rajasthan Royals Academy is opening in Ravenhall, Melbourne's West. Register for the invitation list for the exclusive opening coaching session. Places are limited.",
-        ogImage: '/assets/community-coaches.jpg',
+        ogImage: '/assets/invitation/ravenhall-coming-soon.jpg',
     },
 
     hero: {
-        image: '/assets/community-coaches.jpg',
-        imageAlt: 'Players and coaches at a Rajasthan Royals Academy Melbourne coaching session',
+        // The "Coming soon to Melbourne's West" picture from the social posts (Andy, 18 Nov
+        // 2026: "use this image as people have seen this previously"). It has the logo and
+        // words in it, so it is shown as it is (poster), never darkened behind the headline.
+        // poster: true  = the picture is shown whole, beside the headline (above it on a phone).
+        // poster: false = the picture is a dark backdrop behind the headline.
+        poster: true,
+        image: '/assets/invitation/ravenhall-coming-soon.webp',
+        imageAlt: "The new indoor centre in Ravenhall, with the Rajasthan Royals Academy Melbourne logo and the words: Coming soon to Melbourne's West",
         badge: 'By invitation only',
         eyebrow: "Ravenhall · Melbourne's West",
         title: ['The Exclusive', 'Opening Session'],

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import PartnerStack from '../power-game/PartnerStack';
@@ -19,6 +18,37 @@ const Arrow = () => (
     </svg>
 );
 
+const HeroText = ({ hero, cta, wide = false }) => (
+    <>
+        <div className="inline-flex items-center gap-2.5 border border-white/40 rounded-full px-4 py-1.5 mb-5">
+            <span className="w-2 h-2 rounded-full bg-rr-pink shrink-0" />
+            <span className="text-xs font-black text-white uppercase tracking-widest">{hero.badge}</span>
+        </div>
+
+        <p className="text-xs md:text-sm font-bold text-rr-light-pink uppercase tracking-[0.25em] mb-3">
+            Rajasthan Royals Academy · {hero.eyebrow}
+        </p>
+
+        <h1 className={`text-[2.5rem] font-black text-white uppercase tracking-tighter leading-[0.92] mb-5 ${wide ? 'md:text-7xl lg:text-8xl' : 'md:text-6xl lg:text-7xl'}`}>
+            {hero.title.map((line) => <span key={line} className="block">{line}</span>)}
+        </h1>
+
+        <p className={`text-base md:text-lg text-white/90 font-semibold leading-relaxed mb-8 ${wide ? 'max-w-2xl mx-auto md:text-xl' : 'max-w-xl mx-auto md:mx-0'}`}>
+            {hero.lead}
+        </p>
+
+        <button
+            onClick={scrollToForm}
+            className="bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm md:text-base px-8 md:px-10 py-5 rounded-full transition-colors duration-300 inline-flex items-center gap-3"
+        >
+            {cta}
+            <Arrow />
+        </button>
+
+        <p className="text-white/60 text-sm font-medium mt-5">{hero.footnote}</p>
+    </>
+);
+
 const InvitationPage = ({ campaign }) => {
     const { hero, facts, how, about, cta } = campaign;
     usePageAnalytics(campaign.route, { sections: ['hero', 'how', 'about', 'register'] });
@@ -31,44 +61,33 @@ const InvitationPage = ({ campaign }) => {
 
             <main className="flex-1 w-full overflow-hidden">
                 {/* HERO: what it is, where it is, one button */}
-                <section id="hero" className="relative flex items-center overflow-hidden bg-rr-dark">
-                    <div className="absolute inset-0">
-                        <img src={hero.image} alt={hero.imageAlt} className="w-full h-full object-cover object-center" />
-                        <div className="absolute inset-0 bg-rr-dark/75" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/70 to-rr-dark/40" />
-                    </div>
-
-                    <div className="relative w-full max-w-4xl mx-auto px-6 pt-36 md:pt-48 pb-16 md:pb-24 text-center">
-                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: 'easeOut' }}>
-                            <div className="inline-flex items-center gap-2.5 border border-white/40 rounded-full px-5 py-2 mb-6">
-                                <span className="w-2 h-2 rounded-full bg-rr-pink shrink-0" />
-                                <span className="text-xs md:text-sm font-black text-white uppercase tracking-widest">{hero.badge}</span>
+                {hero.poster ? (
+                    <section id="hero" className="bg-rr-dark">
+                        <div className="max-w-6xl mx-auto md:px-6 pt-20 md:pt-36 md:pb-16 grid grid-cols-1 md:grid-cols-2 md:gap-12 items-center">
+                            {/* The picture people have already seen, shown as it is. On a phone it is
+                                trimmed to its lower part, where the logo and the words are. */}
+                            <img
+                                src={hero.image}
+                                alt={hero.imageAlt}
+                                className="w-full aspect-[5/4] md:aspect-[4/5] object-cover object-bottom md:rounded-2xl md:order-2"
+                            />
+                            <div className="px-6 md:px-0 py-9 md:py-0 text-center md:text-left">
+                                <HeroText hero={hero} cta={cta} />
                             </div>
-
-                            <p className="text-xs md:text-sm font-bold text-rr-light-pink uppercase tracking-[0.3em] mb-4">
-                                Rajasthan Royals Academy · {hero.eyebrow}
-                            </p>
-
-                            <h1 className="text-[2.6rem] md:text-7xl lg:text-8xl font-black text-white uppercase tracking-tighter leading-[0.92] mb-6">
-                                {hero.title.map((line) => <span key={line} className="block">{line}</span>)}
-                            </h1>
-
-                            <p className="text-base md:text-xl text-white/90 font-semibold leading-relaxed max-w-2xl mx-auto mb-9">
-                                {hero.lead}
-                            </p>
-
-                            <button
-                                onClick={scrollToForm}
-                                className="group bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm md:text-base px-8 md:px-12 py-5 rounded-full transition-colors duration-300 inline-flex items-center gap-3"
-                            >
-                                {cta}
-                                <Arrow />
-                            </button>
-
-                            <p className="text-white/60 text-sm font-medium mt-5">{hero.footnote}</p>
-                        </motion.div>
-                    </div>
-                </section>
+                        </div>
+                    </section>
+                ) : (
+                    <section id="hero" className="relative flex items-center overflow-hidden bg-rr-dark">
+                        <div className="absolute inset-0">
+                            <img src={hero.image} alt={hero.imageAlt} className="w-full h-full object-cover object-center" />
+                            <div className="absolute inset-0 bg-rr-dark/75" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-rr-dark via-rr-dark/70 to-rr-dark/40" />
+                        </div>
+                        <div className="relative w-full max-w-4xl mx-auto px-6 pt-36 md:pt-48 pb-16 md:pb-24 text-center">
+                            <HeroText hero={hero} cta={cta} wide />
+                        </div>
+                    </section>
+                )}
 
                 {/* FACTS */}
                 <section className="bg-rr-navy">
