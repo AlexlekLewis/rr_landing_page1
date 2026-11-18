@@ -284,11 +284,17 @@ const InvitationForm = ({ campaign }) => {
                             <Choice name="melb" cols="grid-cols-2" options={YES_NO} value={form.in_melbourne} onChange={set('in_melbourne')} />
                         </Field>
 
+                        {form.in_melbourne === 'no' && (
+                            <p className="text-[15px] text-rr-dark font-bold leading-relaxed" data-not-melbourne>
+                                Where do you live? Please tell us your town or suburb, so we can see how far you are from {cfg.venueShort}.
+                            </p>
+                        )}
+
                         {form.in_melbourne && (
                             <>
                                 <div className="grid grid-cols-1 sm:grid-cols-[1fr_10rem] gap-5">
-                                    <Field label={form.in_melbourne === 'yes' ? 'Suburb' : 'Suburb, town or city'} id="suburb" error={errors.suburb}>
-                                        <input className={inputCls} value={form.suburb} onChange={set('suburb')} autoComplete="address-level2" />
+                                    <Field label={form.in_melbourne === 'yes' ? 'Suburb' : 'Town or suburb you live in'} id="suburb" error={errors.suburb}>
+                                        <input className={inputCls} value={form.suburb} onChange={set('suburb')} autoComplete="address-level2" placeholder={form.in_melbourne === 'no' ? 'For example: Geelong' : undefined} />
                                     </Field>
                                     <Field label="Postcode" required={form.in_melbourne === 'yes'} id="postcode" error={errors.postcode}>
                                         <input className={inputCls} value={form.postcode} onChange={set('postcode')} inputMode={form.in_melbourne === 'yes' ? 'numeric' : 'text'} maxLength={form.in_melbourne === 'yes' ? 4 : 10} autoComplete="postal-code" />
@@ -296,7 +302,7 @@ const InvitationForm = ({ campaign }) => {
                                 </div>
                                 {form.in_melbourne === 'no' && (
                                     <Field label="State or country" id="country" error={errors.country}>
-                                        <input className={inputCls} value={form.country} onChange={set('country')} />
+                                        <input className={inputCls} value={form.country} onChange={set('country')} placeholder="For example: Victoria" />
                                     </Field>
                                 )}
                                 <Field label="Street address" required={false} id="street_address">
