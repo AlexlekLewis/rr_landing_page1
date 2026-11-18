@@ -40,7 +40,7 @@ export const FORM_ANCHOR = 'request';
 export const HERO = {
     eyebrow: 'Royals Private Coaching · Melbourne',
     h1: ['Royals', 'Private Coaching'],
-    why: 'One coach. Your player. Every ball measured.',
+    // No tagline under the title (Andy, 18 Nov 2026: removed "One coach. Your player. Every ball measured.").
     lead:
         'Private cricket coaching in Melbourne with a Rajasthan Royals Academy coach, and all of '
         + 'the Academy’s technology in the lane with you: the Match Centre, fielding heat maps and '

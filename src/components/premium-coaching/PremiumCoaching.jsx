@@ -60,7 +60,6 @@ const Hero = () => (
                 <h1 className="text-5xl sm:text-6xl md:text-7xl font-black text-white uppercase tracking-tighter leading-[0.9] mb-5">
                     {HERO.h1[0]}<br /><span className="text-rr-pink">{HERO.h1[1]}</span>
                 </h1>
-                <p className="text-xl md:text-2xl text-white font-black leading-snug mb-4">{HERO.why}</p>
                 <div className="order-4 md:order-none mb-6" data-pc-hero-for>
                     <p className="text-sm md:text-lg text-white font-bold mb-2">{HERO.forTitle}</p>
                     <ul className="space-y-1.5">
