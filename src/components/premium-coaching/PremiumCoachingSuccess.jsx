@@ -49,7 +49,7 @@ const PremiumCoachingSuccess = () => {
     const centre = centreOf(s.centre);
     const sizeNo = needsShirt(s.shirt) ? String(s.shirt.size).split(' ')[0] : null;
     const rows = [
-        s.coachName && ['Coach', `${s.coachName}${s.tierName ? ` (${s.tierName})` : ''}`],
+        s.coachName && ['Coach', s.coachName],
         centre && ['Centre', `${centre.name}, ${centre.suburb}`],
         s.format && ['Format', s.format === '1-2' ? `1-to-2 with ${s.partner || 'a training partner'}` : '1-to-1'],
         s.sessions > 0 && s.per != null && ['Sessions', `${s.sessions} × ${money(s.per)} = ${money(s.total)} incl. GST`],

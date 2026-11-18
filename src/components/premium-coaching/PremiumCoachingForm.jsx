@@ -8,7 +8,7 @@ import { EMPTY_CONSENTS, consentErrors, consentColumns } from '../../lib/governa
 import { EMPTY_SHIRT, shirtError, shirtTag, needsShirt, TRAINING_SHIRT } from '../../lib/kit/trainingShirt';
 import {
     CENTRES, FORMATS, PACKAGES, FOCUS_OPTIONS, LEVEL_OPTIONS, DB_TABLE, PROGRAM_NAME, SUCCESS_ROUTE,
-    AVAILABILITY_NOTE, coachesAt, coachOf, tierOf, centreOf, perSession, packageTotal, money,
+    AVAILABILITY_NOTE, coachesAt, coachOf, centreOf, perSession, packageTotal, money,
 } from './premiumCoachingData';
 import { useAllAvailability, groupByNight, nightLabel, timeLabel, slotKey } from './useCoachAvailability';
 
@@ -69,7 +69,10 @@ const EMPTY = {
 
 const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
     const navigate = useNavigate();
-    const [form, setForm] = useState({ ...EMPTY, centre: initialCentre, coach: coachOf(initialCoach)?.bookable ? initialCoach : '' });
+    // From a coach card: that coach, at the card's location (or their only centre).
+    const startCoach = coachOf(initialCoach)?.bookable ? coachOf(initialCoach) : null;
+    const startCentre = initialCentre || (startCoach?.centres.length === 1 ? startCoach.centres[0] : '');
+    const [form, setForm] = useState({ ...EMPTY, centre: startCentre, coach: startCoach && (!startCentre || startCoach.centres.includes(startCentre)) ? startCoach.slug : '' });
     const [picked, setPicked] = useState([]); // [{date,start,end,centre}]
     const [shirt, setShirt] = useState(EMPTY_SHIRT);
     const [consents, setConsents] = useState(EMPTY_CONSENTS);
@@ -95,7 +98,7 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
     const maxPicks = form.sessions || 0;
     const openCount = nights.reduce((n, x) => n + x.slots.length, 0);
 
-    const chooseCentre = (slug) => { setForm((f) => ({ ...f, centre: slug, coach: '' })); setPicked([]); };
+    const chooseCentre = (slug) => { setForm((f) => ({ ...f, centre: slug, coach: coachOf(f.coach)?.centres.includes(slug) ? f.coach : '' })); setPicked([]); };
     const chooseCoach = (slug) => { setForm((f) => ({ ...f, coach: slug, sessions: coachOf(slug)?.bookable ? f.sessions : 0 })); setPicked([]); };
     const chooseSessions = (n) => { set('sessions', n); setPicked((p) => p.slice(0, n)); };
     const togglePick = (s) => setPicked((p) => {
@@ -188,7 +191,7 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
 
         const summary = {
             id, first: row.player_first_name, centre: form.centre, format: form.format, partner: row.other_players,
-            coachName: coach?.name || null, tierName: tier ? tierOf(tier)?.name : null,
+            coachName: coach?.name || null,
             sessions: form.sessions, per, total, picked, shirt,
         };
         try { sessionStorage.setItem('premium_pc_booking', JSON.stringify(summary)); } catch { /* optional */ }
@@ -247,7 +250,7 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
                                     return (
                                         <Choice key={c.slug} on={form.coach === c.slug} bad={errors.coach} onClick={() => chooseCoach(c.slug)}
                                             title={c.name}
-                                            sub={`${tierOf(c.tier)?.name} · ${money(perSession(c.tier, 1))} a session · ${open ? `${open} open time${open > 1 ? 's' : ''}` : 'no open times right now'}`} />
+                                            sub={`${c.specialism || 'All aspects of the game'} · ${open ? `${open} open time${open > 1 ? 's' : ''}` : 'no open times right now'}`} />
                                     );
                                 })}
                             </div>
@@ -392,7 +395,7 @@ const PremiumCoachingForm = ({ initialCentre = '', initialCoach = '' }) => {
                         <div className="rounded-2xl bg-rr-dark text-white p-5 sm:p-6" data-summary>
                             <p className="text-[11px] font-black uppercase tracking-widest text-rr-light-pink mb-3">Your booking</p>
                             <dl className="space-y-1.5 text-sm">
-                                <div className="flex justify-between gap-4"><dt className="text-white/70">Coach</dt><dd className="font-bold text-right">{coach ? `${coach.name} · ${tierOf(tier)?.name || 'Royals Academy Coach'}` : 'We will match you'}</dd></div>
+                                <div className="flex justify-between gap-4"><dt className="text-white/70">Coach</dt><dd className="font-bold text-right">{coach ? coach.name : 'We will match you'}</dd></div>
                                 {centre && <div className="flex justify-between gap-4"><dt className="text-white/70">Centre</dt><dd className="font-bold text-right">{centre.suburb}</dd></div>}
                                 {form.format && <div className="flex justify-between gap-4"><dt className="text-white/70">Format</dt><dd className="font-bold text-right">{form.format === '1-2' ? '1-to-2 with a training partner' : '1-to-1'}</dd></div>}
                                 {form.sessions > 0 && <div className="flex justify-between gap-4"><dt className="text-white/70">Sessions</dt><dd className="font-bold text-right">{form.sessions} × {money(per)}</dd></div>}

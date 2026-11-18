@@ -7,10 +7,7 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 import PremiumCoachingForm from './PremiumCoachingForm';
 import HomeMedia from '../home-page/HomeMedia';
 import CoachFinder from './CoachFinder';
-import {
-    ROUTE, FORM_ANCHOR, HERO, TOGETHER, TECH, STEPS, TIERS, COACHES,
-    PACKAGES, perSession, money,
-} from './premiumCoachingData';
+import { ROUTE, FORM_ANCHOR, HERO, TOGETHER, TECH, STEPS } from './premiumCoachingData';
 import { BowlingMap, HeatMap } from './TechVisuals';
 import { HERO_IMAGE, MEDIA } from './premiumCoachingMedia';
 
@@ -21,7 +18,7 @@ import { HERO_IMAGE, MEDIA } from './premiumCoachingMedia';
 // (one mixed photo + video carousel) → book and pay. No Questions section (Andy, 18 Nov
 // 2026). PREVIEW ONLY: hidden route, noindex, no surfaces.
 
-const SECTIONS = ['hero', 'tech', 'together', 'how', 'options', 'coaches', 'media', FORM_ANCHOR];
+const SECTIONS = ['hero', 'tech', 'together', 'how', 'coaches', 'media', FORM_ANCHOR];
 const ANCHOR = 'scroll-mt-24 md:scroll-mt-28';
 const go = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
@@ -222,106 +219,8 @@ const How = () => (
     </section>
 );
 
-// ── WHAT: choose your coach (Andy, 18 Nov 2026: "a lot more customer friendly") ──
-// One switch (1-to-1 / 1-to-2) changes every price on the section, then three side-by-side
-// coach-type cards: faces, "great for", three plain prices, and a button to meet them.
-const Avatars = ({ list }) => (
-    <div className="flex items-center">
-        <div className="flex -space-x-3">
-            {list.slice(0, 4).map((c) => (
-                <span key={c.slug} className="w-11 h-11 rounded-full border-2 border-white overflow-hidden bg-slate-200 shrink-0">
-                    {c.img
-                        ? <img src={c.img} alt="" className="w-full h-full object-cover object-top" />
-                        : <span className="w-full h-full flex items-center justify-center text-white text-[11px] font-black" style={{ backgroundImage: 'var(--image-gradient-rr)' }}>{c.name.split(' ').map((x) => x[0]).join('')}</span>}
-                </span>
-            ))}
-        </div>
-    </div>
-);
-
-const Options = ({ onMeet }) => {
-    const [pair, setPair] = useState(false);
-    const price = (key, n) => {
-        const per = perSession(key, n);
-        return pair ? per / 2 : per;
-    };
-    return (
-        <section className="bg-white py-20 md:py-28">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6">
-                <div className="max-w-2xl mb-8">
-                    <Eyebrow>Prices</Eyebrow>
-                    <H2 className="mb-4">Choose your coach</H2>
-                    <p className="text-rr-charcoal font-medium leading-relaxed">Three kinds of Royals Academy coach. Every one uses the same tools and systems and coaches the whole game. Pick the experience that suits your player.</p>
-                </div>
-
-                {/* 1-to-1 or 1-to-2: switches every price below */}
-                <div role="radiogroup" aria-label="Who is training" className="inline-grid grid-cols-2 gap-1 p-1 bg-slate-100 rounded-full mb-3 w-full sm:w-auto">
-                    {[{ v: false, label: 'Just my player', sub: '1-to-1' }, { v: true, label: 'With a partner', sub: '1-to-2 · we recommend' }].map((o) => (
-                        <button key={o.sub} type="button" role="radio" aria-checked={pair === o.v} onClick={() => setPair(o.v)}
-                            className={`rounded-full px-4 sm:px-6 py-2.5 text-center transition-colors ${pair === o.v ? 'bg-rr-dark text-white' : 'text-rr-dark hover:bg-white'}`}>
-                            <span className="block text-sm font-black leading-tight">{o.label}</span>
-                            <span className={`block text-[11px] font-semibold ${pair === o.v ? 'text-white/70' : 'text-slate-500'}`}>{o.sub}</span>
-                        </button>
-                    ))}
-                </div>
-                <p className="text-sm text-rr-charcoal font-medium mb-10 max-w-2xl">
-                    {pair
-                        ? 'Bring a teammate, friend or sibling at a similar level. Same coach, same lane, same price. One family books and pays; split it between you and it works out at half each.'
-                        : 'The whole session on your player. Prefer to share? Switch to “With a partner” to see what it works out at for each family.'}
-                </p>
-
-                <div className="grid md:grid-cols-3 gap-5 items-stretch">
-                    {TIERS.map((t, i) => {
-                        const elite = i === 0;
-                        const list = COACHES.filter((c) => c.tier === t.key);
-                        return (
-                            <div key={t.key} className={`rounded-3xl p-6 md:p-7 flex flex-col ${elite ? 'text-white' : 'bg-white border-2 border-slate-200'}`}
-                                style={elite ? { backgroundImage: 'var(--image-gradient-rr)' } : undefined}>
-                                <div className="flex items-start justify-between gap-3 mb-4">
-                                    <div>
-                                        <h3 className={`text-2xl font-black uppercase tracking-tight leading-none ${elite ? 'text-white' : 'text-rr-dark'}`}>{t.name}</h3>
-                                        <p className={`text-sm font-semibold mt-1.5 ${elite ? 'text-white/85' : 'text-slate-500'}`}>{t.plain}</p>
-                                    </div>
-                                    {list.length > 0 && <Avatars list={list} />}
-                                </div>
-                                {list.length > 0 && <p className={`text-xs font-semibold mb-5 ${elite ? 'text-white/80' : 'text-rr-charcoal'}`}>{list.map((c) => c.name).join(', ')}</p>}
-
-                                <ul className="space-y-1.5 mb-6">
-                                    {t.greatFor.map((g) => (
-                                        <li key={g} className={`flex items-start gap-2 text-sm font-medium ${elite ? 'text-white' : 'text-rr-charcoal'}`}>
-                                            <Check className={`w-4 h-4 mt-0.5 shrink-0 ${elite ? 'text-white' : 'text-rr-pink'}`} />{g}
-                                        </li>
-                                    ))}
-                                </ul>
-
-                                <div className={`mt-auto rounded-2xl p-4 ${elite ? 'bg-white text-rr-dark' : 'bg-slate-50'}`}>
-                                    <p className="text-[11px] font-black uppercase tracking-widest text-slate-500 mb-2">{pair ? 'Works out per family, per session' : 'Per one-hour session'}</p>
-                                    {PACKAGES.map((p) => (
-                                        <div key={p.sessions} className="flex items-baseline justify-between py-1">
-                                            <span className="text-sm font-semibold text-rr-charcoal">{p.sessions === 1 ? 'Single session' : `${p.sessions}-session pack`}</span>
-                                            <span className="text-lg font-black text-rr-dark">{money(price(t.key, p.sessions))}</span>
-                                        </div>
-                                    ))}
-                                    <p className="text-[11px] text-slate-500 font-semibold mt-1">All prices incl. GST.</p>
-                                </div>
-
-                                <button type="button" onClick={onMeet} data-cta={`meet-${t.key}`}
-                                    className={`mt-4 w-full font-black uppercase tracking-widest text-xs px-5 py-3.5 rounded-full transition-colors ${elite ? 'bg-white text-rr-pink hover:bg-rr-dark hover:text-white' : 'bg-rr-dark text-white hover:bg-rr-pink'}`}>
-                                    Meet our {t.name}es
-                                </button>
-                            </div>
-                        );
-                    })}
-                </div>
-                <p className="text-xs text-slate-500 font-medium mt-6">Need a training shirt? It’s $29.95 incl. GST, added at booking only if your player doesn’t have one.</p>
-            </div>
-        </section>
-    );
-};
-
 const NAV = [
     { label: 'THE TECH', id: 'tech' },
-    { label: 'PRICES', id: 'options' },
     { label: 'COACHES & TIMES', id: 'coaches' },
 ];
 
@@ -346,7 +245,6 @@ const PremiumCoaching = () => {
                 <div id="tech" className={ANCHOR}><Tech /></div>
                 <div id="together" className={ANCHOR}><Together /></div>
                 <div id="how" className={ANCHOR}><How /></div>
-                <div id="options" className={ANCHOR}><Options onMeet={() => go('coaches')} /></div>
                 <div id="coaches" className={ANCHOR}><CoachFinder onBook={book} /></div>
                 <div id="media" className={ANCHOR}>
                     <HomeMedia items={MEDIA} idPrefix="pc-media" eyebrow="Photos & videos" label="Photos and videos of Royals private coaching"

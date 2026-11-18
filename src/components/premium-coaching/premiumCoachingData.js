@@ -19,6 +19,10 @@
 //   • West bookings are open now.
 //   • Message: we believe players learn best working with other players.
 //
+// MARKETPLACE (Andy, 18 Nov 2026): the page shows NO prices and NO coach hierarchy. It sells
+// the benefits and the coaches. The price appears only once a family has chosen a coach and
+// is booking times (the booking form). TIER_PRICES still sets each coach's price behind that.
+//
 // STATUS: PREVIEW ONLY. Hidden route, noindex, not on the nav, the home page,
 // What's On, the sitemap or programs_config. Families choose the coach's times and pay at
 // booking (Stripe, server checkout).
@@ -58,8 +62,8 @@ export const HERO = {
         'Want to train alongside a teammate and push each other',
     ],
     facts: [
-        { label: 'Format', value: '1-to-1 or 1-to-2, same price' },
-        { label: 'Price', value: 'From $120 a session incl. GST' },
+        { label: 'Format', value: 'One-to-one, or bring a training partner' },
+        { label: 'Coaches', value: 'Royals Academy coaches, trained on all our tools' },
         { label: 'Where', value: 'Cranbourne North · Mickleham · Ravenhall' },
         { label: 'Now', value: 'Bookings open, including our new West Centre' },
     ],
@@ -74,8 +78,8 @@ export const TOGETHER = {
     body: [
         'We believe cricketers improve fastest when they train alongside someone else. They watch, '
         + 'they compete, they push each other, and they learn from each other’s mistakes as much as their own.',
-        'So 1-to-2 costs the same as 1-to-1. Bring a teammate, a friend or a sibling at a similar level: '
-        + 'one family books and pays, you split it between you, and both players get the coach, the technology and the data.',
+        'So bring a teammate, a friend or a sibling at a similar level and train 1-to-2, at no extra cost. '
+        + 'Both players get the coach, the technology and the data.',
     ],
 };
 
@@ -140,8 +144,8 @@ export const TECH = {
 
 // ── HOW: the steps from booking to first session ──────────
 export const STEPS = [
-    { key: 'coach', title: 'Choose your coach', body: 'Pick your preferred location and a Royals Academy coach, then 1, 3 or 5 sessions, 1-to-1 or 1-to-2.' },
-    { key: 'pay', title: 'Pick your times and pay', body: 'Choose from the coach’s open times and pay securely by card. Your times are held while you pay.' },
+    { key: 'coach', title: 'Choose your coach', body: 'Pick your preferred location and a Royals Academy coach, and see when they’re available.' },
+    { key: 'pay', title: 'Pick your times and pay', body: 'Choose 1, 3 or 5 of the coach’s open times. You see the price for that coach, then pay securely by card.' },
     // Andy, 18 Nov 2026: after payment the booking goes to the coach, who confirms the times
     // and is the family's contact from then on, unless there are significant changes or issues.
     { key: 'confirm', title: 'Your coach confirms', body: 'Your booking goes straight to your coach, who gets in touch to confirm your times. From then on they’re your main contact, unless there’s a big change or issue.' },
