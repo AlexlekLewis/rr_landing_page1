@@ -22,8 +22,7 @@ tables from the source forms + Alex's roster overrides).
 | `rra_program_participation` | One row per player per program intake per centre. `status`: paid, unpaid, waitlist, interest, registered (free event), scholarship. `enrolment_status` (active / withdrawn / injured / removed) comes from Alex's confirmations. |
 | `rra_player_submissions` | The full original form row (jsonb) for every submission: consents, shirt sizes, goals, bio, UTM source. Use it for "everything about a player". |
 | `v_rra_member_status` | One row per real player with `member_status`, `current_age`, `current_programs`, `last_paid_program`, `total_paid_cents`, `last_contact_at`, `never_contacted`. |
-| `v_rra_contacts` | Who to talk to: `contact_role` parent (under 18 or age unknown) or player (18+), `email`, `phone`, opt-out flags, latest `home_address`. |
-| `v_rra_home_addresses` | Every home address a sign-up form captured (`home_street/suburb/state/postcode`, `address_line`, `captured_at`), with email/phone keys to match a player. Forms ask for it from 18 Nov 2026; families who signed up before then have no street address on file, so fall back to the billing address the family typed at checkout in Stripe (`charges.card_address_*`, matched by receipt email or cardholder name) and say that's where it came from and when. If neither has it, offer to ask the family. |
+| `v_rra_contacts` | Who to talk to: `contact_role` parent (under 18 or age unknown) or player (18+), `email`, `phone`, opt-out flags. |
 | `rra_program_terms` | Start/end dates per intake. `confirmed=false` rows are estimates: ask Andy/Alex to confirm. Add a row for every new intake, or its players never count as current. |
 | `rra_comms_log` | Every email/SMS sent or received through this agent. Log every send. |
 | `rra_comms_optouts` | Unsubscribes. Always honoured. |
@@ -75,14 +74,14 @@ searches, no asking Andy where to look first.
    `rra_players_master` row, or for anyone not in it, every `applications` /
    `rra_player_submissions` row whose payload matches the child's name (try spelling variants:
    Tanay/Tane/Tanya).
-2. **Database addresses**, one query, newest first: `v_rra_home_addresses`, plus
-   `shipping_address` on `shop_orders_training`, `shop_orders_ipl`, `store_orders`,
+2. **Database addresses**, one query, newest first: `shipping_address` on `shop_orders_training`, `shop_orders_ipl`, `store_orders`,
    `performance_squad_kit_orders`, `program_registrations`, matched by those emails/phones.
 3. **Stripe**, one Sigma query (`stripe_analytics` → `execute_query_run`, account
    `acct_1T2jKFIo52UEA50y`): `charges` joined to `customers`, where `receipt_email`/customer
    email is any family email OR `card_name` contains the surname. Return `card_address_*`,
    `shipping_address_*`, `customers.address_*`. Shop orders take the address here even when
-   our own row says pickup.
+   our own row says pickup. Program sign-up forms don't ask for an address (Andy, 18 Nov 2026),
+   so the shop and Stripe are where addresses live.
 4. Only if all three are empty: say so in one line and offer to text the parent.
 
 ## 4. Communicating with families

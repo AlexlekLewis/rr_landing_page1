@@ -26,23 +26,16 @@ deployed). Add the form to `PAID_SIGNUP_FORMS` in `src/lib/governance.test.ts` i
 that test fails if a listed form loses a box or links a Code of Conduct to the wrong page.
 Program-specific boxes (helmet and stem guard, plays at own risk) go in addition, never instead.
 
-## Home address on every sign-up
+## Home address: only where we need it
 
-Andy, 18 Nov 2026: *"add a home address to everyone's fields because we need the ability to be
-able to send things to people."*
+Andy, 18 Nov 2026: *"I only want to automatically collect addresses when we need to. For
+example, in the shop environment."*
 
-**Applies to:** every form where a family signs up for a program, paid or free (same forms as the
-governance boxes, plus free program sign-ups). Use `<HomeAddressFields>`
-(`src/components/shared/HomeAddressFields.jsx`, rules in `src/lib/homeAddress.js`): street, suburb,
-state, postcode, **all required**.
-
-The form must not submit until `addressErrors()` is empty, and must save `addressColumns()` into
-four text columns `home_street`, `home_suburb`, `home_state`, `home_postcode` (add them with a
-migration, applied BEFORE the form is deployed). If the form also has a `suburb` column, fill it
-from the address instead of asking twice. Add the form to `ADDRESS_SIGNUP_FORMS` in
-`src/lib/homeAddress.test.ts` in the same PR, and add its table to `v_rra_home_addresses`
-(see `supabase/migrations/20261118090000_home_address_on_signups.sql`) so the members agent can
-find the address.
+Don't add a home address to program sign-up forms. Ask for one only where something has to be
+posted or delivered: the shop and kit orders (Stripe Checkout `shipping_address_collection`, or
+`billing_address_collection`). When a form does need it, use `<HomeAddressFields>`
+(`src/components/shared/HomeAddressFields.jsx`, rules in `src/lib/homeAddress.js`) and save
+`addressColumns()` into `home_street`, `home_suburb`, `home_state`, `home_postcode`.
 
 ## Mandatory training shirt on every paid program page
 
