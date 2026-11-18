@@ -59,7 +59,8 @@ comment on table public.invitation_list_registrations is
   'Invitation lists for campaign pages (first: Ravenhall opening session, rramelbourne.com/ravenhall). '
   'One row = one player put forward for one invitation list; `campaign` says which page. A row is NOT a '
   'place and no payment is taken: staff invite based on space and distance from the venue, and record '
-  'the outcome in `status`. Players sent in one form share submission_id. Campaigns are configured in '
+  'the outcome in `status`. Players sent in one form share submission_id. '
+  'Synced to Google Sheet "RRA - Program Sign-Ups", one tab per campaign ("Ravenhall Invitation List - DO NOT EDIT"), every 10 min by api/sync-program-signups.js. Campaigns are configured in '
   'src/components/invitation/invitations.js.';
 comment on column public.invitation_list_registrations.campaign is
   'Which invitation page the row came from. Matches the slug in src/components/invitation/invitations.js.';

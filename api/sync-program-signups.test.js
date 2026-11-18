@@ -27,6 +27,9 @@ import {
   jrTerm4CentreStatus,
   LP_JR_DAY_HEADERS,
   lpJrDayRow,
+  INVITATION_HEADERS,
+  invitationRow,
+  invitationAge,
   lpJrDayClub,
   allocateLpJrDay,
   isTourEntryInWindow,
@@ -155,6 +158,15 @@ const payment = (over = {}) => ({
   ...over,
 });
 
+const invite = (over = {}) => ({
+  id: 'inv-1', created_at: '2026-11-18T01:00:00.000Z', campaign: 'ravenhall-opening-session',
+  attendee_type: 'child', player_first_name: 'Arjun', player_last_name: 'Sharma', player_dob: '2014-03-02',
+  cricket_experience: 'club', club_name: 'Caroline Springs CC', contact_name: 'Priya Sharma',
+  email: 'priya@example.com', phone: '0400111222', lives_in_australia: true, lives_in_melbourne: true,
+  country: 'Australia', suburb: 'Caroline Springs', postcode: '3023', status: 'registered',
+  ...over,
+});
+
 // ------------------------------------------------------------
 // Program identifiers. A tab that silently empties is the worst failure here,
 // because it looks exactly like "nobody has signed up".
@@ -193,6 +205,7 @@ describe('row width matches its header block', () => {
     ['jr term 4', jrTerm4Row(jrT4()), JR_TERM4_HEADERS],
     ['lower plenty jr day', lpJrDayRow(lpReg()), LP_JR_DAY_HEADERS],
     ['power league', powerLeagueRow(plNom()), POWER_LEAGUE_HEADERS],
+    ['invitation list', invitationRow(invite()), INVITATION_HEADERS],
     ['payments', payRow(payment()), PAY_HEADERS],
   ])('%s', (_name, row, headers) => {
     expect(row).toHaveLength(headers.length);
@@ -750,5 +763,36 @@ describe('power league rows', () => {
     const text = guideLines([], { powerLeague: 7 }).map((r) => r[0]).join('\n');
     expect(text).toContain(`${PROGRAM_LABELS['power-league']}: column ${colLetter(POWER_LEAGUE_HEADERS.length)} onwards`);
     expect(text).toContain('Currently 7 nominations');
+  });
+});
+
+// ------------------------------------------------------------
+// Invitation lists (Ravenhall opening session). Whoever chooses the invitations
+// reads age, postcode and status off this tab.
+// ------------------------------------------------------------
+describe('invitation list tab', () => {
+  const col = (row, name) => row[INVITATION_HEADERS.indexOf(name)];
+  const NOW = new Date('2026-11-18T03:00:00.000Z');
+
+  it('shows the age today, the postcode and a plain status', () => {
+    const row = invitationRow(invite(), NOW);
+    expect(String(col(row, 'Age Today'))).toContain('12');
+    expect(String(col(row, 'Date of Birth'))).toContain('02/03/2014');
+    expect(String(col(row, 'Postcode'))).toContain('3023');
+    expect(col(row, 'Lives in Melbourne?')).toBe('Yes');
+    expect(col(row, 'Cricket Experience')).toBe('Plays for a club');
+    expect(col(row, 'Invitation Status')).toMatch(/no decision yet/);
+  });
+
+  it('says so when an adult registered themself, when they live overseas, and when invited', () => {
+    const row = invitationRow(invite({ attendee_type: 'self', lives_in_australia: false, lives_in_melbourne: null, country: 'India', status: 'invited' }), NOW);
+    expect(col(row, 'Who Is Attending')).toMatch(/adult/);
+    expect(col(row, 'Lives in Melbourne?')).toMatch(/overseas/);
+    expect(col(row, 'Invitation Status')).toBe('INVITED');
+  });
+
+  it('counts a birthday that has not happened yet this year', () => {
+    expect(invitationAge('2014-12-25', NOW)).toBe(11);
+    expect(invitationAge('', NOW)).toBe('');
   });
 });
