@@ -50,3 +50,12 @@ const mix = (photos, videos, every = 2) => {
 };
 
 export const HOME_MEDIA = mix(alternate(jrPhotos, tourPhotosTyped), alternate(jrVideos, tourVideos));
+
+// The same media for the invitation-list pages (Andy, 18 Nov 2026: "show more about our
+// academy ... I don't want them to think it's just a simple child's thing"). Same lists,
+// but the older players and the Royals coaches go first, and it opens on a video.
+export const ACADEMY_MEDIA = (() => {
+    const photos = alternate(tourPhotosTyped, jrPhotos);
+    const videos = alternate(tourVideos, jrVideos);
+    return videos.length ? [videos[0], ...mix(photos, videos.slice(1))] : photos;
+})();
