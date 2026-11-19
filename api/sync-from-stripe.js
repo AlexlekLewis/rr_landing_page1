@@ -21,6 +21,7 @@
 
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { fulfilmentFromSession, itemsHaveSizes } from './_lib/shopOrder.js';
 
 // Lazy-init so a missing env var returns a clean JSON error instead of
 // crashing the function at module load (which yields a "A server error
@@ -76,13 +77,6 @@ const isShopSession = (session, lineItems) => {
   return lineItems.some(i => SHOP_PRICE_IDS.has(i.price_id));
 };
 
-const inferFulfillmentMethod = (label) => {
-  const l = (label || '').toLowerCase();
-  if (l.includes('pickup')) return 'pickup';
-  if (l.includes('express')) return 'express';
-  return 'standard';
-};
-
 const partitionLineItems = (lineItems) => {
   const ipl = [], training = [];
   for (const i of lineItems) {
@@ -129,9 +123,8 @@ const syncOneSession = async (sessionId) => {
   const customerName    = session.customer_details?.name || '';
   const customerEmail   = session.customer_details?.email || '';
   const customerPhone   = session.customer_details?.phone || '';
-  const shippingAddress = session.shipping_details?.address || null;
-  const shippingLabel   = session.shipping_cost?.shipping_rate_details?.display_name || '';
-  const fulfillmentMethod = inferFulfillmentMethod(shippingLabel);
+  const shippingAddress = session.collected_information?.shipping_details?.address || session.shipping_details?.address || null;
+  const fulfillmentMethod = fulfilmentFromSession(session);
 
   const lineItems = (session.line_items?.data || []).map(i => ({
     name: i.description,
@@ -166,7 +159,22 @@ const syncOneSession = async (sessionId) => {
     customer_phone:           customerPhone,
     shipping_address:         shippingAddress,
     fulfillment_method:       fulfillmentMethod,
+    ...(session.metadata?.pickup_venue ? { pickup_venue: session.metadata.pickup_venue } : {}),
     stripe_metadata:          session.metadata || null,
+  };
+
+  // Never replace the family's sizes with Stripe's size-less lines: if the row (or its draft)
+  // already has sized items, update everything except items and the cart totals.
+  const saveRow = async (table, payload, draftId) => {
+    let q = supabase.from(table).select('id, items');
+    q = draftId ? q.eq('id', draftId) : q.eq('stripe_session_id', session.id);
+    const { data: existing } = await q.maybeSingle();
+    if (existing && itemsHaveSizes(existing.items)) {
+      const { items: _i, subtotal: _s, total: _t, ...rest } = payload;
+      return supabase.from(table).update(rest).eq('id', existing.id);
+    }
+    if (existing) return supabase.from(table).update(payload).eq('id', existing.id);
+    return supabase.from(table).upsert(payload, { onConflict: 'stripe_session_id' });
   };
 
   const { ipl, training } = partitionLineItems(lineItems);
@@ -185,17 +193,15 @@ const syncOneSession = async (sessionId) => {
   const results = { session_id: session.id, training: null, ipl: null };
 
   if (training.length > 0) {
-    const { error } = await supabase
-      .from('shop_orders_training')
-      .upsert({ ...shared, items: training, ...totalsFor(training) }, { onConflict: 'stripe_session_id' });
+    const { error } = await saveRow('shop_orders_training',
+      { ...shared, items: training, ...totalsFor(training) }, session.metadata?.order_id || null);
     results.training = error ? { error: error.message } : 'upserted';
   }
 
   if (ipl.length > 0) {
-    const { error } = await supabase
-      .from('shop_orders_ipl')
-      .upsert({ ...shared, items: ipl, ...totalsFor(ipl), supplier_status: 'awaiting_bulk_order' },
-              { onConflict: 'stripe_session_id' });
+    const { error } = await saveRow('shop_orders_ipl',
+      { ...shared, items: ipl, ...totalsFor(ipl), supplier_status: 'awaiting_bulk_order' },
+      session.metadata?.ipl_order_id || null);
     results.ipl = error ? { error: error.message } : 'upserted';
   }
 
