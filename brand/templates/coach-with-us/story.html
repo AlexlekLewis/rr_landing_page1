@@ -18,7 +18,7 @@
 .cards{position:absolute;left:64px;display:grid;gap:16px}
 .gc{background:#fff;border-radius:14px;color:var(--navy);padding:22px 30px}
 .eb{color:var(--blue);font-weight:800;font-size:19px;letter-spacing:.14em;text-transform:uppercase}
-ul{list-style:none;margin-top:8px}
+ul{list-style:none;margin:0}
 li{font-weight:800;font-size:28px;line-height:1.2;padding:5px 0 5px 26px;position:relative}
 li::before{content:"";position:absolute;left:0;top:16px;width:12px;height:12px;border-radius:2px;background:var(--pink)}
 li small{display:block;font-weight:500;font-size:20px;color:#5b6475;margin-top:3px}
@@ -34,17 +34,15 @@ li small{display:block;font-weight:500;font-size:20px;color:#5b6475;margin-top:3
 <img class="logo" src="../../logos/rra-melbourne-white.svg">
 <span class="chip">Now hiring</span>
 <div class="h" id="h"><span>COACH</span><span class="p">WITH US</span></div>
-<div class="sub" id="sub">Join the Royals Group<span class="v">IPL · SA20 · CPL</span></div>
+<div class="sub" id="sub">Join the Royals Academy</div>
 <div class="cards" id="cards">
- <div class="gc"><div class="eb">Short-term</div><ul>
-  <li>Junior Royals holiday programs</li>
+ <div class="gc"><ul>
+  <li>Junior Royals</li>
   <li>Power League match days</li>
-  <li>Clinics, carnivals and come-and-try days</li></ul></div>
- <div class="gc"><div class="eb">Long-term</div><ul>
-  <li>Junior Royals term coaching</li>
-  <li>Performance Squads and the Elite Program</li>
-  <li>Private 1:1 coaching</li>
-  <li>Spin Club and specialist coaching</li></ul></div>
+  <li>Performance Squads</li>
+  <li>Elite Program</li>
+  <li>Spin Club and specialist coaching</li>
+  <li>Private coaching</li></ul></div>
 </div>
 <div class="perks" id="perks">Paid casual and part-time hours<br>We pay for your Royals Coaching Hub course<br>Coach beside visiting Royals coaches</div>
 <div class="cta" id="cta"><span class="a">APPLY NOW</span><span class="u">RRAMELBOURNE.COM/CAREERS</span></div>
@@ -53,15 +51,21 @@ li small{display:block;font-weight:500;font-size:20px;color:#5b6475;margin-top:3
 const V=new URLSearchParams(location.search).get('f')!=='feed', H=V?1920:1350, RIGHT=V?124:64, top0=V?250:64;
 const $=id=>document.getElementById(id), f=$('f'); f.style.height=H+'px';
 const lion=document.querySelector('.lion'); Object.assign(lion.style,V?{top:'330px',right:'-170px',height:'1300px'}:{top:'120px',right:'-110px',height:'1080px'});
-document.querySelector('.logo').style.top=(top0-8)+'px';
+const logo=document.querySelector('.logo'); logo.style.top=(top0-8)+'px'; if(V) logo.style.width='130px';
 Object.assign(document.querySelector('.chip').style,{top:top0+'px',right:RIGHT+'px'});
 $('cards').style.width=(1080-64-RIGHT)+'px';
 const ft=$('ft'); ft.style.height=(V?330:100)+'px'; ft.style.alignItems=V?'flex-start':'center'; ft.style.paddingTop=(V?44:0)+'px';
 document.fonts.load('900 100px M').then(()=>document.fonts.ready).then(()=>{
-  const fs=V?150:170, cap=V?440:290, h=$('h'); h.style.fontSize=fs+'px'; h.style.top=(cap-0.098*fs)+'px';
-  let y=cap+1.58*fs+(V?44:30); $('sub').style.top=y+'px'; y=$('sub').getBoundingClientRect().bottom+(V?36:24);
+  const h=$('h'); const wid=el=>{const r=document.createRange();r.selectNodeContents(el);return r.getBoundingClientRect().width};
+  // story: headline as big as fits inside the safe width; starts a clear gap below the logo
+  let fs=V?240:170; h.style.fontSize=fs+'px';
+  while(V&&Math.max(...[...h.children].map(wid))>1080-64-RIGHT&&fs>100){fs-=2;h.style.fontSize=fs+'px'}
+  const cap=V?logo.getBoundingClientRect().bottom+80:290; h.style.top=(cap-0.098*fs)+'px';
+  let y=cap+1.58*fs+(V?40:30); $('sub').style.top=y+'px'; y=$('sub').getBoundingClientRect().bottom+(V?30:24);
+  if(V){document.querySelectorAll('li').forEach(l=>{l.style.fontSize='25px'});$('sub').style.fontSize='28px';$('perks').style.fontSize='21px';
+        document.querySelector('.cta .a').style.fontSize='28px';document.querySelector('.cta .a').style.padding='14px 24px';document.querySelector('.cta .u').style.fontSize='22px';document.querySelector('.cta .u').style.padding='17px 20px'}
   if(!V){document.querySelectorAll('li').forEach(l=>{l.style.fontSize='24px';l.style.padding='5px 0 5px 24px'});document.querySelectorAll('li').forEach(l=>l.style.setProperty('--t','16px'));
-         $('cards').style.gridTemplateColumns='1fr 1fr';$('cards').style.gap='20px'}
+         $('cards').style.gap='20px'}
   $('cards').style.top=y+'px'; y=$('cards').getBoundingClientRect().bottom+(V?26:26);
   $('perks').style.top=y+'px'; y=$('perks').getBoundingClientRect().bottom+24;
   $('cta').style.top=y+'px';

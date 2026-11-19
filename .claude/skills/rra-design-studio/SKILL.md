@@ -125,6 +125,24 @@ Use Melbourne for anything run by the Melbourne academy; Australia for national.
   0.9->1). Cuts on the beat. Burned-in captions in Montserrat 800 white with navy box.
   End card = gradient + white logo + URL. Licensed music only.
 
+## 5a. Copy rules: Andy's corrections (19 Nov 2026). Read before writing any words.
+
+- We are **the Royals Academy** (Rajasthan Royals Academy Melbourne). Never "join the Royals
+  Group", and never list franchises or leagues (IPL · SA20 · CPL, Paarl/Barbados Royals) unless
+  Andy asks for it.
+- **Use Andy's words and lists exactly**, in his order. When he gives options ("short and
+  long-term opportunities"), that's guidance for what to include, not a heading to print. Don't
+  add labels, groupings or sections he didn't write.
+- Program names: **Junior Royals, Power League match days, Performance Squads, Elite Program,
+  Spin Club and specialist coaching, Private coaching** ("private coaching", never "1:1").
+  Don't split one program into variants (no "holiday programs" + "term coaching").
+- Coaching roles: **no full-time roles, no "Cadet" roles.** Paid casual and part-time only.
+- No filler or slogan lines ("across our clubs", "proud of every player", "finding a way to
+  win"). No blue label chips. Facts only. If a line isn't something Andy said or a fact on the
+  website, leave it out.
+- Story proportions: logo 130px wide at y242, clear gap (~80px) under it, headline as large as
+  fits the safe width (x64 to x956), supporting text a size smaller than on the feed.
+
 ## 5b. Organic first (paid ads belong to the separate paid-ads agent)
 
 This studio makes **organic** content: posts, carousels, stories, reels, community and club
