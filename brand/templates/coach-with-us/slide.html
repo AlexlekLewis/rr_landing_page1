@@ -1,0 +1,54 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- COACH WITH US carousel. Copy comes from the careers page (src/components/coaching-opportunities). Master grid: brand/reference/MASTER-game-day-cover.png -->
+<style>
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-900-normal.woff2);font-weight:900}
+:root{--pink:#E11F8F;--blue:#1226AA;--navy:#001D48}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:M,sans-serif;color:#fff}
+.frame{position:relative;width:1080px;overflow:hidden;background:linear-gradient(165deg,#001D48 0%,#E11F8F 100%)}
+.lion{position:absolute;right:-110px;height:1080px;opacity:.6}
+.logo{position:absolute;left:64px;width:96px}
+.chip{position:absolute;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:12px 24px;border-radius:4px;font-size:26px;background:var(--pink);white-space:nowrap}
+.h{position:absolute;left:64px;font-size:245px;font-weight:900;text-transform:uppercase;line-height:.88;letter-spacing:-.02em;white-space:nowrap}
+.h span{display:block}.h .p{color:var(--pink)}
+.st{position:absolute;left:64px;font-weight:800;text-transform:uppercase}
+.st .a{font-size:40px;white-space:nowrap}.st .v{color:var(--pink);font-size:26px;margin:14px 0 12px;letter-spacing:.06em;white-space:nowrap}
+.grid{position:absolute;left:64px;display:grid;gap:24px}
+.gc{background:#fff;border-radius:14px;color:var(--navy);padding:28px 28px 0;overflow:hidden}
+.span{grid-column:1/-1}
+.eb{color:var(--blue);font-weight:800;font-size:18px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.t{font-weight:900;font-size:34px;line-height:1.1;margin-top:10px}
+.s{color:#5b6475;font-weight:500;font-size:21px;line-height:1.35;margin-top:8px}
+.k{display:inline-block;margin-top:16px;background:var(--navy);color:#fff;font-weight:800;font-size:23px;padding:9px 16px;border-radius:3px;white-space:nowrap}
+.sm{padding-top:22px}.sm .t{font-size:28px;margin-top:0}.sm .s{font-size:19px;margin-top:6px}
+.footer{position:absolute;left:0;right:0;bottom:0;background:var(--navy);display:flex;justify-content:space-between;padding:0 64px}
+.footer b{font-weight:900;font-size:38px;letter-spacing:.04em}.footer span{font-weight:800;font-size:22px;letter-spacing:.12em;opacity:.85}
+</style></head><body><div class="frame" id="f"></div><script>
+const S=window.SLIDE, V=window.FORMAT==='vert', H=V?1920:1350, RIGHT=V?124:64, W=1080-64-RIGHT, top0=V?250:64, capTop=V?(window.SLIDE.vCap||520):301;
+const f=document.getElementById('f'); f.style.height=H+'px';
+f.innerHTML=`<img class="lion" src="../../logos/lion-rampant-white.png" style="top:${V?360:120}px${V?';height:1300px;right:-170px':''}">
+<img class="logo" src="../../logos/rra-melbourne-white.svg" style="top:${top0-8}px">
+<span class="chip" style="top:${top0}px;right:${RIGHT}px">${S.chip}</span>
+<div class="h" id="h"><span>${S.head[0]}</span><span class="p">${S.head[1]}</span></div>
+${S.st?`<div class="st" id="st">${S.st.filter(Boolean).map((l,i)=>`<div class="${i===1?'v':'a'}">${l}</div>`).join('')}</div>`:''}
+<div class="grid" id="g" style="width:${W}px;grid-template-columns:repeat(${V&&S.file!=='01-cover'?1:S.cols},1fr)">${S.cards.map(c=>`<div class="gc ${c.cls||''} ${S.small?'sm':''}">${c.eb?`<div class="eb">${c.eb}</div>`:''}<div class="t">${c.t}</div>${c.s?`<div class="s">${c.s}</div>`:''}${c.k?`<div class="k">${c.k}</div>`:''}</div>`).join('')}</div>
+<div class="footer" style="height:${V?420:100}px;align-items:${V?'flex-start':'center'};padding-top:${V?44:0}px"><b>HALLA BOL!</b><span>RRAMELBOURNE.COM/CAREERS</span></div>`;
+const h=document.getElementById('h'),st=document.getElementById('st'),g=document.getElementById('g');
+const width=el=>{const r=document.createRange();r.selectNodeContents(el);return r.getBoundingClientRect().width};
+document.fonts.load('900 100px M').then(()=>document.fonts.load('800 40px M')).then(()=>document.fonts.ready).then(()=>{
+  let fs=Math.min(245,(V?S.vMaxHead:0)||S.maxHead||245);h.style.fontSize=fs+'px';
+  while(Math.max(...[...h.children].map(width))>(V?820:836)&&fs>60){fs-=2;h.style.fontSize=fs+'px'}
+  h.style.top=(capTop-0.098*fs)+'px';
+  let y=capTop+1.58*fs+60;
+  if(st){st.style.top=y+'px';st.querySelectorAll('div').forEach(d=>{let s=parseFloat(getComputedStyle(d).fontSize);while(width(d)>W&&s>20){s--;d.style.fontSize=s+'px'}});y=st.getBoundingClientRect().bottom+(S.stGap||48)}
+  const bottom=H-(V?420:100)-(V?40:55);
+  g.style.top=y+'px';
+  // cards share the room left above the footer; feed with 2 cards keeps the Game Day 220px card
+  const cols=V&&S.file!=='01-cover'?1:S.cols; const rows=Math.ceil(S.cards.reduce((a,c)=>a+(c.cls==='span'?cols:1),0)/cols);
+  const gap=(V&&rows>3)?14:24; g.style.gap=gap+'px'; const room=bottom-y, ch=Math.min(V?(S.vCardMax||S.cardMax||260):(S.cardMax||260),Math.floor((room-gap*(rows-1))/rows));
+  g.querySelectorAll('.gc').forEach(c=>c.style.height=ch+'px');
+  if(!V&&S.anchorBottom){g.style.top=(bottom-(ch*rows+gap*(rows-1)))+'px'}
+  document.body.dataset.ready='1';
+});
+</script></body></html>

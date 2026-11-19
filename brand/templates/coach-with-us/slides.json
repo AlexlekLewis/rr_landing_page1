@@ -1,0 +1,149 @@
+[
+ {
+  "file": "01-cover",
+  "chip": "NOW HIRING · MELBOURNE",
+  "head": [
+   "COACH",
+   "WITH US"
+  ],
+  "st": [
+   "1:1, TEAM AND CLUB COACHES",
+   "JOIN THE ROYALS GROUP",
+   "IPL · SA20 · CPL"
+  ],
+  "cols": 2,
+  "cardMax": 220,
+  "anchorBottom": true,
+  "cards": [
+   {
+    "eb": "Coach inside",
+    "t": "The Royals Group",
+    "s": "Rajasthan, Paarl and Barbados Royals",
+    "k": "ONE COACHING PHILOSOPHY"
+   },
+   {
+    "eb": "The work",
+    "t": "Paid and flexible",
+    "s": "Casual, part-time or full-time",
+    "k": "APPLY NOW"
+   }
+  ],
+  "vCardMax": 300
+ },
+ {
+  "file": "02-why-us",
+  "chip": "COACH WITH US",
+  "head": [
+   "WHY",
+   "US"
+  ],
+  "cols": 2,
+  "small": true,
+  "cardMax": 170,
+  "cards": [
+   {
+    "t": "Coach inside the Royals",
+    "s": "Rajasthan, Paarl and Barbados Royals. One coaching philosophy."
+   },
+   {
+    "t": "Learn from IPL coaches",
+    "s": "We pay for your Royals Coaching Hub course."
+   },
+   {
+    "t": "Coach in India",
+    "s": "Coaching places on our tours to the Royals HPC in Nagpur."
+   },
+   {
+    "t": "A clear path up",
+    "s": "A mentor, monthly catch-ups. Cadet to Lead to Squad Coach."
+   },
+   {
+    "t": "Coach top young talent",
+    "s": "From Junior Royals to our Performance Squads."
+   },
+   {
+    "t": "Paid, flexible hours",
+    "s": "Casual, part-time or full-time."
+   }
+  ],
+  "maxHead": 200,
+  "vCardMax": 118,
+  "vMaxHead": 150,
+  "vCap": 470
+ },
+ {
+  "file": "03-the-roles",
+  "chip": "COACH WITH US",
+  "head": [
+   "THE",
+   "ROLES"
+  ],
+  "cols": 2,
+  "small": true,
+  "cardMax": 230,
+  "cards": [
+   {
+    "eb": "Team coaches",
+    "t": "Performance Squad Coach",
+    "s": "Lead a representative squad: sessions, player plans and weekend matches.",
+    "k": "PREMIER OR REP BACKGROUND"
+   },
+   {
+    "eb": "Small groups",
+    "t": "Junior Royals Coach",
+    "s": "Coach our younger players. Start with 10 paid hours beside a Lead Coach.",
+    "k": "GREAT WITH KIDS"
+   },
+   {
+    "eb": "New to coaching",
+    "t": "Cadet Coach",
+    "s": "Run stations and drills with a mentor beside you, then move up to Assistant and Lead.",
+    "k": "WE TRAIN YOU",
+    "cls": "span"
+   }
+  ],
+  "maxHead": 215,
+  "vCardMax": 215,
+  "vMaxHead": 160,
+  "vCap": 470
+ },
+ {
+  "file": "04-apply",
+  "chip": "COACH WITH US",
+  "head": [
+   "APPLY",
+   "NOW"
+  ],
+  "st": [
+   "KNOW A GREAT COACH?",
+   "SHARE THIS POST WITH THEM",
+   ""
+  ],
+  "cols": 1,
+  "small": true,
+  "cardMax": 132,
+  "anchorBottom": true,
+  "cards": [
+   {
+    "eb": "Step 1",
+    "t": "Apply at rramelbourne.com/careers",
+    "s": "Tell us about your cricket and your coaching."
+   },
+   {
+    "eb": "Step 2",
+    "t": "Meet our coaching leadership",
+    "s": "Shortlisted coaches talk through the right role."
+   },
+   {
+    "eb": "Step 3",
+    "t": "Start coaching",
+    "s": "We help with your Working With Children Check and onboarding."
+   }
+  ],
+  "maxHead": 160,
+  "vCardMax": 160,
+  "stGap": 36,
+  "vMaxHead": 200,
+  "vCap": 480
+ }
+]
