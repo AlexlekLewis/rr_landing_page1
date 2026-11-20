@@ -353,8 +353,8 @@ export const CENTRES = [
         note: 'Close to Hallam, Narre Warren and Berwick.',
     },
     {
-        // Added Andy, 20 Nov 2026: same coaches as Cranbourne North. Address = the Elite
-        // Cricket Centre used on the site's earlier Hallam pages. TODO Andy: confirm.
+        // Added Andy, 20 Nov 2026: same coaches as Cranbourne North. Address confirmed by
+        // Andy, 20 Nov 2026.
         slug: 'hallam',
         near: 'Dandenong, Endeavour Hills, Doveton, Narre Warren',
         name: 'Elite Cricket Centre',
