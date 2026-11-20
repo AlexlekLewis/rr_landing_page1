@@ -4,8 +4,8 @@ import { CENTRES, COACHES, AVAILABILITY_NOTE, centreOf } from './premiumCoaching
 import { useAllAvailability, groupByNight, nightLabel, timeLabel } from './useCoachAvailability';
 
 // "Meet our coaches", a marketplace (Andy, 18 Nov 2026): no prices and no coach hierarchy
-// on the page; coaches shown by location, A–Z. Each card: photo, name, specialty, next
-// available time. Tapping a coach opens their profile (CoachBooking.jsx): their own rate card
+// on the page; coaches shown by location, A–Z. Each card: photo, name, next available time
+// (no description under the photo, Andy 20 Nov 2026). Tapping a coach opens their profile (CoachBooking.jsx): their own rate card
 // (1-to-1 or 1-to-2, 1, 3 or 5 sessions), their times, details, pay.
 
 
@@ -25,7 +25,6 @@ const CoachCard = ({ c, location, onOpen }) => {
                 <div className="w-28 sm:w-full shrink-0 sm:aspect-square bg-slate-100 overflow-hidden"><Photo c={c} /></div>
                 <div className="p-4 sm:px-5 sm:pt-4 sm:pb-0 min-w-0">
                     <h3 className="text-xl font-black text-rr-dark uppercase tracking-tight leading-tight">{c.name}</h3>
-                    <p className="mt-1 text-sm font-bold text-rr-pink leading-snug">{c.specialism || 'Coaches all aspects of the game'}</p>
                     {c.centres.length > 1 && <p className="mt-1.5 text-xs font-semibold text-slate-500">Also at {c.centres.filter((x) => x !== location).map((x) => centreOf(x).suburb).join(', ')}</p>}
                 </div>
             </div>

@@ -71,17 +71,7 @@ export const HERO = {
     secondary: 'See Coaches & Times',
 };
 
-// The belief Andy wants carried through the page (17 Nov 2026).
-export const TOGETHER = {
-    eyebrow: 'What we believe',
-    title: 'Players learn best with other players.',
-    body: [
-        'We believe cricketers improve fastest when they train alongside someone else. They watch, '
-        + 'they compete, they push each other, and they learn from each other’s mistakes as much as their own.',
-        'So bring a teammate, a friend or a sibling at a similar level and train 1-to-2, at no extra cost. '
-        + 'Both players get the coach, the technology and the data.',
-    ],
-};
+// ("What we believe: players learn best with other players" section removed, Andy 20 Nov 2026.)
 
 // ── HOW: the tools in the lane (Andy, 18 Nov 2026: the "Not just a lesson" section and
 // the tech section said the same thing twice, so they are ONE section now, built on the
@@ -252,7 +242,8 @@ export const TIERS = [
 // HEADSHOTS (Andy, 13 Nov 2026): every photo is on the pink HALLA BOL! media wall.
 // The *-halla.jpg files are the original headshots cut out and placed on that wall.
 //
-// STILL DRAFT (not confirmed by Andy): Harkirat and Ikroop Performance Coach, Rittin
+// Harkirat Bajwa removed from private coaching (Andy, 20 Nov 2026).
+// STILL DRAFT (not confirmed by Andy): Ikroop Performance Coach, Rittin
 // Academy Coach. Kavya Khatri has no coach type yet.
 const ALL_ASPECTS = 'Coaches all aspects of the game: batting, bowling, fielding and match play.';
 
@@ -267,17 +258,6 @@ export const COACHES = [
         specialism: 'Batting specialist',
         img: '/assets/coaches/alex-thornhill.jpg',
         bio: 'Head Coach of our South-East Region and a batting specialist, with coaching experience in UK county cricket and the Australian premier system. He coaches the cricket program at Xavier College and within the Fitzroy Doncaster Academy.',
-    },
-    {
-        slug: 'harkirat-bajwa',
-        focus: ['bowling'], // for the "what to work on" filter
-        name: 'Harkirat Bajwa',
-        centres: ['cranbourne-north'],
-        tier: 'performance', // DRAFT
-        role: 'Performance Coach',
-        specialism: 'Spin bowling specialist (off spin)',
-        img: '/assets/coaches/harkirat-bajwa-halla.jpg',
-        bio: 'Played for Australia at the Under-19 World Cup and plays Premier Cricket. An attacking off spinner who teaches the variations and tactics that win matches.',
     },
     {
         slug: 'siddharth-banerjee',

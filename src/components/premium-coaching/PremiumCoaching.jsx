@@ -7,7 +7,7 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 import CoachBooking from './CoachBooking';
 import HomeMedia from '../home-page/HomeMedia';
 import CoachFinder from './CoachFinder';
-import { ROUTE, HERO, TOGETHER, TECH, STEPS } from './premiumCoachingData';
+import { ROUTE, HERO, TECH, STEPS } from './premiumCoachingData';
 import { BowlingMap, HeatMap } from './TechVisuals';
 import { HERO_IMAGE, MEDIA } from './premiumCoachingMedia';
 
@@ -18,7 +18,7 @@ import { HERO_IMAGE, MEDIA } from './premiumCoachingMedia';
 // (one mixed photo + video carousel) → book and pay. No Questions section (Andy, 18 Nov
 // 2026). PREVIEW ONLY: hidden route, noindex, no surfaces.
 
-const SECTIONS = ['hero', 'tech', 'together', 'how', 'coaches', 'media'];
+const SECTIONS = ['hero', 'tech', 'how', 'coaches', 'media'];
 const ANCHOR = 'scroll-mt-24 md:scroll-mt-28';
 const go = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
@@ -88,25 +88,6 @@ const Hero = () => (
                         {HERO.secondary}
                     </button>
                 </div>
-            </div>
-        </div>
-    </section>
-);
-
-// ── The belief: players learn best with other players ──
-const Together = () => (
-    <section className="py-16 md:py-20 text-white" style={{ backgroundImage: 'var(--image-gradient-rr)' }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 grid md:grid-cols-12 gap-8 items-center">
-            <div className="md:col-span-6">
-                <p className="text-xs font-black uppercase tracking-[0.3em] mb-3 text-white/80">{TOGETHER.eyebrow}</p>
-                <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight leading-[0.95]">{TOGETHER.title}</h2>
-            </div>
-            <div className="md:col-span-6">
-                {TOGETHER.body.map((p) => <p key={p.slice(0, 20)} className="text-white/90 font-medium leading-relaxed mb-4">{p}</p>)}
-                <button type="button" data-cta="together" onClick={() => go('coaches')}
-                    className="mt-2 bg-white text-rr-dark hover:bg-rr-dark hover:text-white font-black uppercase tracking-widest px-7 py-3.5 rounded-full transition-colors text-sm">
-                    Book 1-to-2 with a partner
-                </button>
             </div>
         </div>
     </section>
@@ -235,7 +216,6 @@ const PremiumCoaching = () => {
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero"><Hero /></div>
                 <div id="tech" className={ANCHOR}><Tech /></div>
-                <div id="together" className={ANCHOR}><Together /></div>
                 <div id="how" className={ANCHOR}><How /></div>
                 <div id="coaches" className={ANCHOR}><CoachFinder onOpen={(coach, centre) => setOpen({ coach, centre })} /></div>
                 <div id="media" className={ANCHOR}>

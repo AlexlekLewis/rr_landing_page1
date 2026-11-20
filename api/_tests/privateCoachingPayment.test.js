@@ -33,7 +33,7 @@ describe('private coaching checkout pricing (server side)', () => {
 
     it('prices Performance and Academy Coaches from the same table', () => {
         const one = (slug, centre) => bookingCheckout({ ...base, coach_slug: slug, centre, package_sessions: 1, selected_slots: [{ ...base.selected_slots[0], centre }] });
-        expect(one('harkirat-bajwa', 'cranbourne-north').totalCents).toBe(16000);
+        expect(one('siddharth-banerjee', 'cranbourne-north').totalCents).toBe(16000);
         expect(one('jinang-shah', 'ravenhall').totalCents).toBe(14000);
         const five = bookingCheckout({ ...base, coach_slug: 'jinang-shah', centre: 'ravenhall', package_sessions: 5, selected_slots: Array.from({ length: 5 }, (_, i) => ({ date: `2026-11-2${i}`, start: '17:00', centre: 'ravenhall' })) });
         expect(five.totalCents).toBe(5 * 12000);
