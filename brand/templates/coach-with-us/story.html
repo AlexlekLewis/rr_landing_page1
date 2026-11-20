@@ -15,6 +15,7 @@
 .h{position:absolute;left:64px;font-weight:900;text-transform:uppercase;line-height:.88;letter-spacing:-.02em;white-space:nowrap}
 .h span{display:block}.h .p{color:var(--pink)}
 .sub{position:absolute;left:64px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.sub .loc{display:block;color:var(--pink);font-size:.72em;letter-spacing:.08em;margin-top:10px}
 .list{position:absolute;left:64px;display:grid;column-gap:40px}
 .row{display:flex;align-items:center;gap:18px;border-top:2px solid rgba(255,255,255,.22)}
 .row:last-child,.row.lastcol{border-bottom:2px solid rgba(255,255,255,.22)}
@@ -33,8 +34,8 @@
 <img class="lion" src="../../logos/lion-rampant-white.png">
 <img class="logo" id="logo" src="../../logos/rra-melbourne-white.svg">
 <span class="chip" id="chip">Now hiring</span>
-<div class="h" id="h"><span>COACH</span><span class="p">WITH US</span></div>
-<div class="sub" id="sub">Join the Royals Academy</div>
+<div class="h" id="h"><span>COACH</span><span class="p">WITH US!</span></div>
+<div class="sub" id="sub">Join the Royals Academy<span class="loc">North · East · South-East · West Melbourne</span></div>
 <div class="list" id="list"></div>
 <div class="perks" id="perks">
  <div>Opportunity to coach overseas and shadow coach at the High Performance Centre and Royals franchises</div>
@@ -49,7 +50,7 @@
 // Andy's order (20 Nov 2026)
 const PROGRAMS=['Elite T20 Program','Performance Squads','Power League match days','Private coaching','Spin Club and specialist coaching','Junior Royals'];
 const V=new URLSearchParams(location.search).get('f')!=='feed', H=V?1920:1350, RIGHT=V?124:64, W=1080-64-RIGHT, top0=V?250:64;
-const L=V?{logo:150,fs0:186,gapLogo:48,sub:32,cols:1,rowH:56,num:26,prog:33,perk:22,cta:[28,22,60],footH:260}
+const L=V?{logo:150,fs0:186,gapLogo:42,sub:32,cols:1,rowH:52,num:26,prog:33,perk:22,cta:[28,22,60],footH:260}
          :{logo:110,fs0:150,gapLogo:44,sub:28,cols:2,rowH:58,num:20,prog:21,perk:21,cta:[26,21,58],footH:100};
 const $=id=>document.getElementById(id), f=$('f'); f.style.height=H+'px';
 Object.assign(document.querySelector('.lion').style,V?{top:'330px',right:'-170px',height:'1300px'}:{top:'120px',right:'-110px',height:'1080px'});
