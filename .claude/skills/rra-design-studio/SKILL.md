@@ -133,8 +133,11 @@ Use Melbourne for anything run by the Melbourne academy; Australia for national.
 - **Use Andy's words and lists exactly**, in his order. When he gives options ("short and
   long-term opportunities"), that's guidance for what to include, not a heading to print. Don't
   add labels, groupings or sections he didn't write.
-- Program names: **Junior Royals, Power League match days, Performance Squads, Elite Program,
-  Spin Club and specialist coaching, Private coaching** ("private coaching", never "1:1").
+- Program names, in this order (Andy, 20 Nov): **Elite T20 Program, Performance Squads, Power League
+  match days, Private coaching, Spin Club and specialist coaching, Junior Royals** ("private coaching", never "1:1").
+- Lists look designed, not like bullet points: no white box; numbered rows on the gradient
+  (pink 01-06, white 800 names, faint white dividers), like the team sheets. Template:
+  `brand/templates/coach-with-us/story.html`.
   Don't split one program into variants (no "holiday programs" + "term coaching").
 - Coaching roles: **no full-time roles, no "Cadet" roles.** Paid casual and part-time only.
 - No filler or slogan lines ("across our clubs", "proud of every player", "finding a way to

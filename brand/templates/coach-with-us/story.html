@@ -1,82 +1,80 @@
 <!doctype html><html><head><meta charset="utf-8">
-<!-- COACH WITH US one-pager (Andy, 19 Nov 2026): Stories first. No full-time roles, no "cadet" roles.
-     Programs listed are ones on rramelbourne.com. FORMAT via ?f=vert (1080x1920) or ?f=feed (1080x1350). -->
+<!-- COACH WITH US one-pager. Andy, 20 Nov 2026: no white box; programs in his order; tidy and professional.
+     Programs are a numbered list on the gradient (team-sheet style: pink numbers, faint dividers).
+     ?f=vert (1080x1920, Stories first) or ?f=feed (1080x1350). -->
 <style>
 @font-face{font-family:M;src:url(../../fonts/montserrat-latin-500-normal.woff2);font-weight:500}
 @font-face{font-family:M;src:url(../../fonts/montserrat-latin-800-normal.woff2);font-weight:800}
 @font-face{font-family:M;src:url(../../fonts/montserrat-latin-900-normal.woff2);font-weight:900}
-:root{--pink:#E11F8F;--blue:#1226AA;--navy:#001D48}
+:root{--pink:#E11F8F;--navy:#001D48}
 *{box-sizing:border-box;margin:0;padding:0}body{font-family:M,sans-serif;color:#fff}
 .frame{position:relative;width:1080px;overflow:hidden;background:linear-gradient(165deg,#001D48 0%,#E11F8F 100%)}
-.lion{position:absolute;opacity:.6}
-.logo{position:absolute;left:64px;width:96px}
+.lion{position:absolute;opacity:.5}
+.logo{position:absolute;left:64px}
 .chip{position:absolute;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:12px 24px;border-radius:4px;font-size:26px;background:var(--pink)}
 .h{position:absolute;left:64px;font-weight:900;text-transform:uppercase;line-height:.88;letter-spacing:-.02em;white-space:nowrap}
 .h span{display:block}.h .p{color:var(--pink)}
-.sub{position:absolute;left:64px;font-weight:800;text-transform:uppercase;font-size:34px;line-height:1.25}
-.sub .v{color:var(--pink);font-size:24px;letter-spacing:.06em;display:block;margin-top:8px}
-.cards{position:absolute;left:64px;display:grid;gap:16px}
-.gc{background:#fff;border-radius:14px;color:var(--navy);padding:22px 30px}
-.eb{color:var(--blue);font-weight:800;font-size:19px;letter-spacing:.14em;text-transform:uppercase}
-ul{list-style:none;margin:0}
-li{font-weight:800;font-size:28px;line-height:1.2;padding:4px 0 4px 26px;position:relative}
-li::before{content:"";position:absolute;left:0;top:16px;width:12px;height:12px;border-radius:2px;background:var(--pink)}
-li small{display:block;font-weight:500;font-size:20px;color:#5b6475;margin-top:3px}
-.perks{position:absolute;left:64px;font-weight:800;font-size:23px;line-height:1.3}
-.perks div{position:relative;padding:3px 0 3px 24px}.perks div::before{content:"";position:absolute;left:0;top:12px;width:10px;height:10px;border-radius:2px;background:#fff}
-.perks b{color:#fff}.perks i{font-style:normal;color:var(--pink);margin:0 10px}
-.cta{position:absolute;left:64px;display:flex;gap:14px;align-items:center}
-.cta .a{background:var(--pink);font-weight:900;font-size:34px;padding:16px 28px;border-radius:4px;letter-spacing:.03em}
-.cta .u{background:var(--navy);font-weight:800;font-size:26px;padding:20px 24px;border-radius:4px;letter-spacing:.04em}
+.sub{position:absolute;left:64px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.list{position:absolute;left:64px;display:grid;column-gap:40px}
+.row{display:flex;align-items:center;gap:18px;border-top:2px solid rgba(255,255,255,.22)}
+.row:last-child,.row.lastcol{border-bottom:2px solid rgba(255,255,255,.22)}
+.n{color:var(--pink);font-weight:900;letter-spacing:.02em;min-width:44px}
+.p2{font-weight:800;white-space:nowrap}
+.perks{position:absolute;left:64px;font-weight:500;line-height:1.35}
+.perks div{position:relative;padding-left:26px;margin:5px 0}
+.perks div::before{content:"";position:absolute;left:0;top:.55em;width:12px;height:3px;background:var(--pink)}
+.perks b{font-weight:800}
+.cta{position:absolute;left:64px;display:flex;align-items:stretch}
+.cta .a{background:var(--pink);font-weight:900;letter-spacing:.04em;display:flex;align-items:center}
+.cta .u{background:var(--navy);font-weight:800;letter-spacing:.06em;display:flex;align-items:center}
 .footer{position:absolute;left:0;right:0;bottom:0;background:var(--navy);display:flex;justify-content:space-between;padding:0 64px}
 .footer b{font-weight:900;font-size:38px;letter-spacing:.04em}.footer span{font-weight:800;font-size:22px;letter-spacing:.12em;opacity:.85}
 </style></head><body><div class="frame" id="f">
 <img class="lion" src="../../logos/lion-rampant-white.png">
-<img class="logo" src="../../logos/rra-melbourne-white.svg">
-<span class="chip">Now hiring</span>
+<img class="logo" id="logo" src="../../logos/rra-melbourne-white.svg">
+<span class="chip" id="chip">Now hiring</span>
 <div class="h" id="h"><span>COACH</span><span class="p">WITH US</span></div>
 <div class="sub" id="sub">Join the Royals Academy</div>
-<div class="cards" id="cards">
- <div class="gc"><ul>
-  <li>Junior Royals</li>
-  <li>Power League match days</li>
-  <li>Performance Squads</li>
-  <li>Elite Program</li>
-  <li>Spin Club and specialist coaching</li>
-  <li>Private coaching</li></ul></div>
-</div>
+<div class="list" id="list"></div>
 <div class="perks" id="perks">
  <div>Opportunity to coach overseas and shadow coach at the High Performance Centre and Royals franchises</div>
  <div>We pay for your Royals coach education</div>
  <div>Coaching uniform supplied</div>
  <div>Coach alongside Rajasthan Royals coaches</div>
- <div>Paid contract, casual and part-time hours</div></div>
+ <div>Paid contract, casual and part-time hours</div>
+</div>
 <div class="cta" id="cta"><span class="a">APPLY NOW</span><span class="u">RRAMELBOURNE.COM/CAREERS</span></div>
 <div class="footer" id="ft"><b>HALLA BOL!</b><span>RRAMELBOURNE.COM</span></div>
 </div><script>
-const V=new URLSearchParams(location.search).get('f')!=='feed', H=V?1920:1350, RIGHT=V?124:64, top0=V?250:64;
+// Andy's order (20 Nov 2026)
+const PROGRAMS=['Elite T20 Program','Performance Squads','Power League match days','Private coaching','Spin Club and specialist coaching','Junior Royals'];
+const V=new URLSearchParams(location.search).get('f')!=='feed', H=V?1920:1350, RIGHT=V?124:64, W=1080-64-RIGHT, top0=V?250:64;
+const L=V?{logo:150,fs0:186,gapLogo:48,sub:32,cols:1,rowH:56,num:26,prog:33,perk:22,cta:[28,22,60],footH:260}
+         :{logo:110,fs0:150,gapLogo:44,sub:28,cols:2,rowH:58,num:20,prog:21,perk:21,cta:[26,21,58],footH:100};
 const $=id=>document.getElementById(id), f=$('f'); f.style.height=H+'px';
-const lion=document.querySelector('.lion'); Object.assign(lion.style,V?{top:'330px',right:'-170px',height:'1300px'}:{top:'120px',right:'-110px',height:'1080px'});
-const logo=document.querySelector('.logo'); logo.style.top=(top0-8)+'px'; if(V) logo.style.width='130px';
-Object.assign(document.querySelector('.chip').style,{top:top0+'px',right:RIGHT+'px'});
-$('cards').style.width=(1080-64-RIGHT)+'px'; $('perks').style.width=(1080-64-RIGHT)+'px';
-const ft=$('ft'); ft.style.height=(V?330:100)+'px'; ft.style.alignItems=V?'flex-start':'center'; ft.style.paddingTop=(V?44:0)+'px';
-document.fonts.load('900 100px M').then(()=>document.fonts.ready).then(()=>{
-  const h=$('h'); const wid=el=>{const r=document.createRange();r.selectNodeContents(el);return r.getBoundingClientRect().width};
-  // story: headline as big as fits inside the safe width; starts a clear gap below the logo
-  let fs=V?240:150; h.style.fontSize=fs+'px';
-  while(V&&Math.max(...[...h.children].map(wid))>1080-64-RIGHT&&fs>100){fs-=2;h.style.fontSize=fs+'px'}
-  const cap=V?logo.getBoundingClientRect().bottom+70:290; h.style.top=(cap-0.098*fs)+'px';
-  let y=cap+1.58*fs+(V?40:30); $('sub').style.top=y+'px'; y=$('sub').getBoundingClientRect().bottom+(V?30:24);
-  if(V){document.querySelectorAll('li').forEach(l=>{l.style.fontSize='25px'});$('sub').style.fontSize='28px';$('perks').style.fontSize='21px';
-        document.querySelector('.cta .a').style.fontSize='28px';document.querySelector('.cta .a').style.padding='14px 24px';document.querySelector('.cta .u').style.fontSize='22px';document.querySelector('.cta .u').style.padding='17px 20px'}
-  if(!V){$('perks').style.fontSize='20px';document.querySelectorAll('li').forEach(l=>{l.style.fontSize='24px';l.style.padding='5px 0 5px 24px'});document.querySelectorAll('li').forEach(l=>l.style.setProperty('--t','16px'));
-         $('cards').style.gap='20px'}
-  $('cards').style.top=y+'px'; y=$('cards').getBoundingClientRect().bottom+(V?26:26);
-  $('perks').style.top=y+'px'; y=$('perks').getBoundingClientRect().bottom+24;
-  $('cta').style.top=y+'px';
-  const ctaB=$('cta').getBoundingClientRect().bottom, limit=V?1560:H-100-30;
-  document.body.dataset.fit=ctaB<=limit?'ok':'OVER by '+Math.round(ctaB-limit);
+Object.assign(document.querySelector('.lion').style,V?{top:'330px',right:'-170px',height:'1300px'}:{top:'120px',right:'-110px',height:'1080px'});
+const logo=$('logo'); logo.style.width=L.logo+'px'; logo.style.top=(top0-8)+'px';
+Object.assign($('chip').style,{top:top0+'px',right:RIGHT+'px'});
+$('list').innerHTML=PROGRAMS.map((p,i)=>`<div class="row"><span class="n" style="font-size:${L.num}px">${String(i+1).padStart(2,'0')}</span><span class="p2" style="font-size:${L.prog}px">${p}</span></div>`).join('');
+const list=$('list'); list.style.width=W+'px';
+if(L.cols===2){list.style.gridTemplateColumns='1fr 1fr';list.style.gridAutoFlow='column';list.style.gridTemplateRows=`repeat(3,${L.rowH}px)`;
+  [...list.children].forEach((r,i)=>{if(i%3===2)r.classList.add('lastcol')})}
+[...list.children].forEach(r=>r.style.height=L.rowH+'px');
+const perks=$('perks'); perks.style.width=W+'px'; perks.style.fontSize=L.perk+'px';
+const [a,u,ch]=L.cta, cta=$('cta'); cta.style.height=ch+'px';
+Object.assign(cta.querySelector('.a').style,{fontSize:a+'px',padding:'0 28px'}); Object.assign(cta.querySelector('.u').style,{fontSize:u+'px',padding:'0 24px'});
+const ft=$('ft'); ft.style.height=L.footH+'px'; ft.style.alignItems=V?'flex-start':'center'; ft.style.paddingTop=(V?44:0)+'px';
+const wid=el=>{const r=document.createRange();r.selectNodeContents(el);return r.getBoundingClientRect().width};
+document.fonts.load('900 100px M').then(()=>document.fonts.load('800 40px M')).then(()=>document.fonts.ready).then(()=>{
+  const h=$('h'); let fs=L.fs0; h.style.fontSize=fs+'px';
+  while(Math.max(...[...h.children].map(wid))>W&&fs>100){fs-=2;h.style.fontSize=fs+'px'}
+  const cap=logo.getBoundingClientRect().bottom+L.gapLogo; h.style.top=(cap-0.098*fs)+'px';
+  let y=cap+1.58*fs+(V?36:30); const sub=$('sub'); sub.style.fontSize=L.sub+'px'; sub.style.top=y+'px';
+  y=sub.getBoundingClientRect().bottom+(V?26:26); list.style.top=y+'px';
+  y=list.getBoundingClientRect().bottom+(V?24:22); perks.style.top=y+'px';
+  y=perks.getBoundingClientRect().bottom+(V?24:24); cta.style.top=y+'px';
+  const over=cta.getBoundingClientRect().bottom-(H-L.footH-30);
+  document.body.dataset.fit=over<=0?'ok':'OVER by '+Math.round(over);
   document.body.dataset.ready='1';
 });
 </script></body></html>
