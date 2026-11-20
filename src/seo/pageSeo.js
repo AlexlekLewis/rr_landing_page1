@@ -182,7 +182,7 @@ export const PAGE_SEO = {
   '/private-coaching-premium': {
     title: 'Private Cricket Coaching | Rajasthan Royals Academy',
     description:
-      'Premium 1-to-1 and 1-to-2 cricket coaching with Royals coaches and tech: Match Centre, bowling maps, heat maps. Cranbourne North, Mickleham, Ravenhall.',
+      '1-to-1 and 1-to-2 cricket coaching with Royals coaches and tech: Match Centre, bowling maps, heat maps. Cranbourne North, Hallam, Mickleham, Ravenhall.',
     noindex: true,
   },
   '/private-coaching-premium/success': { title: 'Booking Confirmed | Royals Private Coaching', noindex: true },

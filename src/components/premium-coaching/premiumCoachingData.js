@@ -64,7 +64,7 @@ export const HERO = {
     facts: [
         { label: 'Format', value: 'One-to-one, or bring a training partner' },
         { label: 'Coaches', value: 'Royals Academy coaches, trained on all our tools' },
-        { label: 'Where', value: 'Cranbourne North · Mickleham · Ravenhall' },
+        { label: 'Where', value: 'Cranbourne North · Hallam · Mickleham · Ravenhall' },
         { label: 'Now', value: 'Bookings open, including our new West Centre' },
     ],
     cta: 'Book Your Coach',
@@ -242,7 +242,7 @@ export const TIERS = [
 // HEADSHOTS (Andy, 13 Nov 2026): every photo is on the pink HALLA BOL! media wall.
 // The *-halla.jpg files are the original headshots cut out and placed on that wall.
 //
-// Harkirat Bajwa removed from private coaching (Andy, 20 Nov 2026).
+// Harkirat Bajwa and Alex Lewis removed from private coaching (Andy, 20 Nov 2026).
 // STILL DRAFT (not confirmed by Andy): Ikroop Performance Coach, Rittin
 // Academy Coach. Kavya Khatri has no coach type yet.
 const ALL_ASPECTS = 'Coaches all aspects of the game: batting, bowling, fielding and match play.';
@@ -252,7 +252,7 @@ export const COACHES = [
         slug: 'alex-thornhill',
         focus: ['batting'], // for the "what to work on" filter
         name: 'Alex Thornhill',
-        centres: ['cranbourne-north'],
+        centres: ['cranbourne-north', 'hallam'], // Hallam added Andy 20 Nov 2026: same coaches as Cranbourne North
         tier: 'head',
         role: 'Head Coach, South-East Region',
         specialism: 'Batting specialist',
@@ -262,7 +262,7 @@ export const COACHES = [
     {
         slug: 'siddharth-banerjee',
         name: 'Siddharth Banerjee',
-        centres: ['cranbourne-north'],
+        centres: ['cranbourne-north', 'hallam'], // Hallam added Andy 20 Nov 2026: same coaches as Cranbourne North
         tier: 'performance', // Andy, 18 Nov 2026
         role: 'Performance Coach',
         specialism: null, // TODO Andy
@@ -270,15 +270,18 @@ export const COACHES = [
         bio: null, // TODO Andy
     },
     {
-        slug: 'alex-lewis',
-        focus: ['bowling'], // for the "what to work on" filter
-        name: 'Alex Lewis',
-        centres: ['mickleham', 'ravenhall'], // Andy, 17 Nov: North, and may also coach in the West
-        tier: 'head',
-        role: 'Director of Cricket · Academy Head Coach',
-        specialism: 'Bowling specialist (pace and spin)',
-        img: '/assets/coaches/alex-lewis.jpg',
-        bio: 'More than 20 years coaching young cricketers through the representative pathways. Head of Academy and Head Bowling Coach at Fitzroy Doncaster, a Victorian Premier Cricket club, and a Cricket Australia Level 2 coach.',
+        // Added Andy, 20 Nov 2026 (Mickleham). Profile from his coaching CV; no contact
+        // details or referees on the page. TODO Andy: coach type (sets his rate card) and
+        // headshot file (to go on the HALLA BOL! wall like the others).
+        slug: 'mihiraj-jayasekara',
+        name: 'Mihiraj Jayasekara',
+        centres: ['mickleham'],
+        tier: null, // TODO Andy: Elite, Performance or Academy Coach (no price until set)
+        focus: ['batting'],
+        role: 'Royals Academy Coach',
+        specialism: 'Batting specialist',
+        img: null, // TODO: headshot → /assets/coaches/mihiraj-jayasekara-halla.jpg
+        bio: 'A high-performance cricket coach with more than 25 years of coaching in Australia, England, India, Sri Lanka, the UAE and Nepal. He has been head coach of academies in the UAE, India and Nepal, coached First XI batting at leading Sri Lankan schools, and now coaches batting at Strathmore Cricket Club in Melbourne.',
     },
     {
         slug: 'ikroop-dhanoa',
@@ -341,13 +344,25 @@ export const COACHES = [
 export const CENTRES = [
     {
         slug: 'cranbourne-north',
-        near: 'Hallam, Narre Warren, Berwick, Cranbourne',
+        near: 'Narre Warren, Berwick, Cranbourne, Clyde North',
         name: 'Elite Cricket Centre',
         suburb: 'Cranbourne North',
         city: 'Melbourne', // for when Perth and Brisbane centres are added
         region: 'South-East',
         address: '30 Medley Drive, Cranbourne North VIC 3977',
         note: 'Close to Hallam, Narre Warren and Berwick.',
+    },
+    {
+        // Added Andy, 20 Nov 2026: same coaches as Cranbourne North. Address = the Elite
+        // Cricket Centre used on the site's earlier Hallam pages. TODO Andy: confirm.
+        slug: 'hallam',
+        near: 'Dandenong, Endeavour Hills, Doveton, Narre Warren',
+        name: 'Elite Cricket Centre',
+        suburb: 'Hallam',
+        city: 'Melbourne',
+        region: 'South-East',
+        address: '8-9 Becon Ct, Hallam VIC 3803',
+        note: 'Our South-East centre in Hallam.',
     },
     {
         slug: 'mickleham',

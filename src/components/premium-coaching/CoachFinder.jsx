@@ -64,7 +64,7 @@ const CoachFinder = ({ onOpen }) => {
                 </div>
 
                 <p className="text-sm font-black text-rr-dark uppercase tracking-wide mb-3">Your preferred location</p>
-                <div role="tablist" aria-label="Location" className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mb-3">
+                <div role="tablist" aria-label="Location" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 mb-3">
                     {CENTRES.map((c) => {
                         const on = c.slug === location;
                         return (

@@ -7,6 +7,7 @@
 
 export const CENTRE_NAMES = {
     'cranbourne-north': 'Elite Cricket Centre, Cranbourne North',
+    hallam: 'Elite Cricket Centre, Hallam',
     mickleham: 'Mickleham Indoor Sports Centre',
     ravenhall: 'M9 Sports Centre, Ravenhall',
 };
