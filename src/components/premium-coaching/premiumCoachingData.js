@@ -182,6 +182,11 @@ export const RATE_CARDS = {
         '1-1': { 1: 155, 3: 155, 5: 155 },
         '1-2': { 1: 190, 3: 190, 5: 190 },
     },
+    // Andy, 20 Nov 2026: Rittin, Ikroop, Mihiraj and Siddharth: 1-to-1 $145, training partner $170.
+    ...Object.fromEntries(['rittin-raman', 'ikroop-dhanoa', 'mihiraj-jayasekara', 'siddharth-banerjee'].map((slug) => [slug, {
+        '1-1': { 1: 145, 3: 145, 5: 145 },
+        '1-2': { 1: 170, 3: 170, 5: 170 },
+    }])),
 };
 
 // Andy, 20 Nov 2026: 1-to-2 is called a "training partner session".
@@ -292,7 +297,7 @@ export const COACHES = [
         focus: ['batting'],
         role: 'Royals Academy Coach',
         specialism: 'Batting specialist',
-        img: null, // TODO: headshot → /assets/coaches/mihiraj-jayasekara-halla.jpg
+        img: '/assets/coaches/mihiraj-jayasekara-halla.jpg',
         bio: 'A high-performance cricket coach with more than 25 years of coaching in Australia, England, India, Sri Lanka, the UAE and Nepal. He has been head coach of academies in the UAE, India and Nepal, coached First XI batting at leading Sri Lankan schools, and now coaches batting at Strathmore Cricket Club in Melbourne.',
     },
     {
@@ -334,7 +339,7 @@ export const COACHES = [
         tier: 'head', // Andy, 17 Nov: Elite Coach, "replicate the Alex Thornhill version"
         role: 'Elite Coach, West Centre', // TODO Andy: Hamid's title
         specialism: null, // TODO Andy: Hamid's specialty
-        img: null, // TODO: headshot on the HALLA BOL! wall
+        img: '/assets/coaches/hamid-qadri-halla.jpg', // Andy's photo, Royals training shirt + HALLA BOL! wall
         bio: null, // TODO Andy: two lines (playing and coaching background)
     },
     {
