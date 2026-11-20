@@ -9,12 +9,13 @@ import BenefitsSection from './BenefitsSection';
 import CoachesAtWorkSection from './CoachesAtWorkSection';
 import HowToJoinSection from './HowToJoinSection';
 import ApplicationForm from './ApplicationForm';
+import CoachEnquirySection from './CoachEnquirySection';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
 // /careers is a coaching-only page (Andy, 13 Nov 2026). Kept deliberately short
 // (Andy, 13 Nov 2026: "reduce fluff, keep the images"): what it is, the benefits,
 // our coaches in action, how to become a Royals Academy coach, then the form.
-const SECTIONS = ['hero', 'what-it-is', 'benefits', 'coaches-at-work', 'how-to-join', 'application-form'];
+const SECTIONS = ['hero', 'what-it-is', 'benefits', 'coaches-at-work', 'how-to-join', 'more-info', 'application-form'];
 
 // Offsets anchor jumps so a heading is not hidden under the fixed Navbar plus the
 // sticky coaching section bar.
@@ -43,6 +44,7 @@ const CoachingOpportunities = () => {
                 <div id="benefits" className={ANCHOR}><BenefitsSection /></div>
                 <div id="coaches-at-work" className={ANCHOR}><CoachesAtWorkSection /></div>
                 <div id="how-to-join" className={ANCHOR}><HowToJoinSection /></div>
+                <div id="more-info" className={ANCHOR}><CoachEnquirySection /></div>
                 <div id="application-form" className={ANCHOR}><ApplicationForm /></div>
             </main>
             <PartnerStack />

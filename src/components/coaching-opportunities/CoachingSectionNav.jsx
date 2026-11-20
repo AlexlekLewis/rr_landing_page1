@@ -9,6 +9,7 @@ export const COACHING_SECTIONS = [
     { id: 'benefits', label: 'Coaching Benefits' },
     { id: 'coaches-at-work', label: 'Coaches in Action' },
     { id: 'how-to-join', label: 'How to Become a Coach' },
+    { id: 'more-info', label: 'Not Ready? Get Coaching Info' },
 ];
 
 const CoachingSectionNav = () => {
