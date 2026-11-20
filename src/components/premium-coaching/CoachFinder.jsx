@@ -40,7 +40,7 @@ const CoachCard = ({ c, location, onOpen }) => {
                 </div>
                 <span className="mt-auto pt-4">
                     <span className="block w-full text-center bg-rr-pink group-hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm px-4 py-3.5 rounded-full transition-colors">
-                        View times &amp; book
+                        View times, prices &amp; book
                     </span>
                 </span>
             </div>

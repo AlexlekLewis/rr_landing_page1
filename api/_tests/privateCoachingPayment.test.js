@@ -12,23 +12,25 @@ const base = {
 };
 
 describe('private coaching checkout pricing (server side)', () => {
-    it('Elite Coach, 3 sessions = 3 × $170, no shirt', () => {
+    it('Alex Thornhill 1-to-1, 3 sessions = 3 × $155, no shirt', () => {
         const out = bookingCheckout(base);
         expect(out.error).toBeUndefined();
         expect(out.items).toHaveLength(1);
-        expect(out.items[0]).toMatchObject({ unit_amount: 17000, quantity: 3 });
-        expect(out.totalCents).toBe(51000);
+        expect(out.items[0]).toMatchObject({ unit_amount: 15500, quantity: 3 });
+        expect(out.totalCents).toBe(46500);
     });
 
-    it('1-to-2 uses the coach 1-to-2 rate (same as 1-to-1 until Andy sets it)', () => {
-        expect(bookingCheckout({ ...base, format: '1-2' }).totalCents).toBe(51000);
+    it('Alex Thornhill training partner session (1-to-2) is $190 a session', () => {
+        const out = bookingCheckout({ ...base, format: '1-2' });
+        expect(out.totalCents).toBe(3 * 19000);
+        expect(out.items[0].name).toContain('Training partner session');
     });
 
     it('adds the training shirt line with the size when ordered', () => {
         const out = bookingCheckout({ ...base, shirt_size: '32' });
         expect(out.items[1]).toMatchObject({ unit_amount: 2995, quantity: 1 });
         expect(out.items[1].description).toContain('Size 32');
-        expect(out.totalCents).toBe(51000 + 2995);
+        expect(out.totalCents).toBe(46500 + 2995);
     });
 
     it('prices Performance and Academy Coaches from the same table', () => {
@@ -48,13 +50,14 @@ describe('private coaching checkout pricing (server side)', () => {
     });
 
     it('charges the coach own rate card, per option', () => {
+        const saved = RATE_CARDS['alex-thornhill'];
         RATE_CARDS['alex-thornhill'] = { '1-1': { 1: 180, 3: 170, 5: 160 }, '1-2': { 1: 220, 3: 210, 5: 200 } };
         try {
             expect(bookingCheckout({ ...base, format: '1-1' }).totalCents).toBe(3 * 17000);
             expect(bookingCheckout({ ...base, format: '1-2' }).totalCents).toBe(3 * 21000);
-            expect(bookingCheckout({ ...base, format: '1-2' }).items[0].name).toContain('1-to-2');
+            expect(bookingCheckout({ ...base, format: '1-2' }).items[0].name).toContain('Training partner session');
             expect(bookingCheckout({ ...base, format: '1-3' }).error).toMatch(/1-to-1 or 1-to-2/);
-        } finally { delete RATE_CARDS['alex-thornhill']; }
+        } finally { RATE_CARDS['alex-thornhill'] = saved; }
     });
 
     it('partner shirt is $29.95 and Stripe line items are AUD', () => {

@@ -8,7 +8,7 @@ import TrainingShirtStep from '../shared/TrainingShirtStep';
 import { EMPTY_CONSENTS, consentErrors, consentColumns } from '../../lib/governance';
 import { EMPTY_SHIRT, shirtError, shirtTag, needsShirt, TRAINING_SHIRT } from '../../lib/kit/trainingShirt';
 import {
-    PACKAGES, FORMAT_LABELS, DB_TABLE, PROGRAM_NAME, SUCCESS_ROUTE, AVAILABILITY_NOTE,
+    PACKAGES, FORMAT_LABELS, FORMAT_BLURBS, DB_TABLE, PROGRAM_NAME, SUCCESS_ROUTE, AVAILABILITY_NOTE,
     coachOf, centreOf, coachPrice, coachTotal, money,
 } from './premiumCoachingData';
 import { useAllAvailability, groupByNight, nightLabel, timeLabel, slotKey } from './useCoachAvailability';
@@ -92,7 +92,7 @@ const CoachBooking = ({ coachSlug, centreSlug, onClose }) => {
     const total = form.format && form.sessions ? coachTotal(coach, form.format, form.sessions) : null;
     const grand = total != null ? total + (needsShirt(shirt) ? TRAINING_SHIRT.price : 0) : null;
 
-    const chooseOption = (format, sessions) => { setForm((f) => ({ ...f, format, sessions })); setPicked((p) => p.slice(0, sessions)); };
+    const chooseOption = (format, sessions) => { setForm((f) => ({ ...f, format, sessions, partner: format === '1-2' ? f.partner : '' })); setPicked((p) => p.slice(0, sessions)); };
     const chooseCentre = (slug) => { setCentre(slug); setPicked([]); };
     const togglePick = (s) => setPicked((p) => {
         const k = slotKey(s);
@@ -103,7 +103,8 @@ const CoachBooking = ({ coachSlug, centreSlug, onClose }) => {
 
     const validate = () => {
         const e = {};
-        if (!form.format || !form.sessions) e.option = 'Please choose an option: 1-to-1 or 1-to-2, and how many sessions.';
+        if (!form.format) e.option = 'Please choose 1-to-1 or a training partner session.';
+        else if (!form.sessions) e.option = 'Please choose how many sessions.';
         if (form.sessions && picked.length !== form.sessions) e.times = `Please choose ${form.sessions} time${form.sessions > 1 ? 's' : ''} (${picked.length} chosen).`;
         if (form.format === '1-2' && !form.partner.trim()) e.partner = 'Please tell us who is training with your player.';
         if (!form.player_first_name.trim()) e.player_first_name = 'Please enter the player’s first name.';
@@ -239,40 +240,52 @@ const CoachBooking = ({ coachSlug, centreSlug, onClose }) => {
 
                     {loaded && openCount > 0 && (
                         <>
-                            {/* 1. Option: the coach's own rate card */}
+                            {/* 1. Session type, with the coach's price per session */}
                             <div id="f-option">
-                                <StepTitle n={1}>Choose your option</StepTitle>
+                                <StepTitle n={1}>Choose your session</StepTitle>
                                 <div className="grid sm:grid-cols-2 gap-3">
-                                    {['1-1', '1-2'].map((fmt) => (
-                                        <div key={fmt} className="rounded-2xl border-2 border-slate-200 overflow-hidden">
-                                            <div className="px-4 py-3 bg-slate-50 border-b border-slate-200">
-                                                <p className="text-lg font-black text-rr-dark uppercase tracking-tight">{FORMAT_LABELS[fmt]}</p>
-                                                <p className="text-xs font-semibold text-slate-500">{fmt === '1-1' ? 'One coach, your player' : 'One coach, your player and a training partner'}</p>
-                                            </div>
+                                    {['1-1', '1-2'].map((fmt) => {
+                                        const one = coachPrice(coach, fmt, 1);
+                                        if (one == null) return null;
+                                        const on = form.format === fmt;
+                                        return (
+                                            <button key={fmt} type="button" onClick={() => chooseOption(fmt, form.sessions || 0)} aria-pressed={on} data-format={fmt}
+                                                className={`text-left rounded-2xl border-2 p-4 sm:p-5 transition-colors ${on ? 'border-rr-pink bg-rr-pink/5' : errors.option && !form.format ? 'border-red-300' : 'border-slate-200 hover:border-rr-pink/50'}`}>
+                                                <span className="block text-lg font-black text-rr-dark uppercase tracking-tight leading-tight">{FORMAT_LABELS[fmt]}</span>
+                                                <span className="block text-xs font-semibold text-slate-500 mt-1">{FORMAT_BLURBS[fmt]}</span>
+                                                <span className="block mt-3"><span className="text-3xl font-black text-rr-dark">{money(one)}</span> <span className="text-sm font-semibold text-slate-500">per one-hour session, incl. GST</span></span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+
+                                {/* How many sessions, with the total */}
+                                {form.format && (
+                                    <div className="mt-5" id="f-sessions">
+                                        <p className={labelCls}>How many sessions?</p>
+                                        <div className="grid grid-cols-3 gap-2">
                                             {PACKAGES.map((p) => {
-                                                const price = coachPrice(coach, fmt, p.sessions);
-                                                const on = form.format === fmt && form.sessions === p.sessions;
-                                                const short = openCount < p.sessions;
+                                                const price = coachPrice(coach, form.format, p.sessions);
                                                 if (price == null) return null;
+                                                const on = form.sessions === p.sessions;
+                                                const short = openCount < p.sessions;
+                                                const discounted = price < coachPrice(coach, form.format, 1);
                                                 return (
-                                                    <button key={p.sessions} type="button" disabled={short} onClick={() => chooseOption(fmt, p.sessions)} aria-pressed={on}
-                                                        className={`w-full flex items-center justify-between gap-3 px-4 py-3 border-t border-slate-100 first:border-t-0 text-left transition-colors disabled:opacity-40 ${on ? 'bg-rr-pink text-white' : 'hover:bg-rr-pink/5'}`}>
-                                                        <span className="text-sm font-bold">{p.label}{short && <span className="block text-[11px] font-semibold opacity-80">Only {openCount} open time{openCount > 1 ? 's' : ''} now</span>}</span>
-                                                        <span className="text-right">
-                                                            <span className="block text-base font-black">{money(price * p.sessions)}</span>
-                                                            {p.sessions > 1 && <span className={`block text-[11px] font-semibold ${on ? 'text-white/80' : 'text-slate-500'}`}>{money(price)} a session</span>}
-                                                        </span>
+                                                    <button key={p.sessions} type="button" disabled={short} onClick={() => chooseOption(form.format, p.sessions)} aria-pressed={on}
+                                                        className={`rounded-xl border-2 px-3 py-3 text-center transition-colors disabled:opacity-40 ${on ? 'border-rr-pink bg-rr-pink text-white' : 'border-slate-200 text-rr-dark hover:border-rr-pink/50'}`}>
+                                                        <span className="block text-sm font-black">{p.label}</span>
+                                                        <span className="block text-base font-black mt-0.5">{money(price * p.sessions)}</span>
+                                                        <span className={`block text-[11px] font-semibold ${on ? 'text-white/80' : 'text-slate-500'}`}>{short ? `Only ${openCount} open now` : discounted ? `${money(price)} a session` : 'total'}</span>
                                                     </button>
                                                 );
                                             })}
                                         </div>
-                                    ))}
-                                </div>
-                                <p className="text-[11px] text-slate-500 font-semibold mt-2">Prices incl. GST. One-hour sessions.</p>
+                                    </div>
+                                )}
                                 <Err>{errors.option}</Err>
                                 {form.format === '1-2' && (
                                     <div className="mt-4">
-                                        <Field id="partner" label="Training partner" error={errors.partner} hint="Their name and age. You pay for both; their family fills in a short form before the first session.">
+                                        <Field id="partner" label="Training partner" error={errors.partner} hint="Their name and age. You pay for the session; their family fills in a short form before the first session.">
                                             <input id="partner" value={form.partner} onChange={ev('partner')} className={input(errors.partner)} placeholder="e.g. Sam Lee (12)" />
                                         </Field>
                                     </div>
@@ -332,7 +345,7 @@ const CoachBooking = ({ coachSlug, centreSlug, onClose }) => {
                                     <p className="text-[11px] font-black uppercase tracking-widest text-rr-light-pink mb-3">Your booking</p>
                                     <dl className="space-y-1.5 text-sm">
                                         <div className="flex justify-between gap-4"><dt className="text-white/70">Coach</dt><dd className="font-bold text-right">{coach.name}, {loc?.suburb}</dd></div>
-                                        <div className="flex justify-between gap-4"><dt className="text-white/70">Option</dt><dd className="font-bold text-right">{FORMAT_LABELS[form.format]} · {form.sessions} × {money(per)}</dd></div>
+                                        <div className="flex justify-between gap-4"><dt className="text-white/70">Session</dt><dd className="font-bold text-right">{FORMAT_LABELS[form.format]} · {form.sessions} × {money(per)}</dd></div>
                                         {picked.length > 0 && <div className="flex justify-between gap-4"><dt className="text-white/70">Times</dt><dd className="font-bold text-right">{picked.map((p) => `${nightLabel(p.date)} ${timeLabel(p.start)}`).join(', ')}</dd></div>}
                                         {needsShirt(shirt) && shirt.size && <div className="flex justify-between gap-4"><dt className="text-white/70">Training shirt</dt><dd className="font-bold text-right">Size {String(shirt.size).split(' ')[0]} · {money(TRAINING_SHIRT.price)}</dd></div>}
                                         <div className="flex justify-between gap-4 pt-2 mt-2 border-t border-white/15 text-base"><dt className="font-black">Total incl. GST</dt><dd className="font-black">{money(grand)}</dd></div>
@@ -344,7 +357,7 @@ const CoachBooking = ({ coachSlug, centreSlug, onClose }) => {
                             {Object.keys(errors).length > 0 && !failed && <p className="text-red-600 text-sm font-semibold text-center">Please check the {Object.keys(errors).length === 1 ? 'item' : `${Object.keys(errors).length} items`} marked in red.</p>}
                             <button type="submit" disabled={submitting || !form.sessions}
                                 className="w-full bg-rr-pink hover:bg-rr-light-pink disabled:opacity-50 text-white font-black uppercase tracking-widest px-8 py-4 rounded-full transition-colors">
-                                {submitting ? 'Opening secure payment…' : grand != null ? `Pay ${money(grand)}` : 'Choose an option to continue'}
+                                {submitting ? 'Opening secure payment…' : grand != null ? `Pay ${money(grand)}` : 'Choose your session to continue'}
                             </button>
                             <p className="text-center text-xs text-slate-500 font-medium">You pay securely by card with Stripe.</p>
                         </>

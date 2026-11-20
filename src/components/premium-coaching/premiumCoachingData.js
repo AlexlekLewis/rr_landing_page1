@@ -175,9 +175,21 @@ export const TIER_PRICES = {
 // Per session, incl. GST. A coach not listed here uses their coach type's 1-to-1 prices
 // for BOTH options. TODO Andy: the 1-to-2 prices (and any coach-specific 1-to-1 prices).
 //   'alex-thornhill': { '1-1': { 1: 180, 3: 170, 5: 160 }, '1-2': { 1: 200, 3: 190, 5: 180 } },
-export const RATE_CARDS = {};
+export const RATE_CARDS = {
+    // Andy, 20 Nov 2026: Alex Thornhill is the first coach with his own card. Same price per
+    // session whether a family books 1, 3 or 5 (no pack discount for now).
+    'alex-thornhill': {
+        '1-1': { 1: 155, 3: 155, 5: 155 },
+        '1-2': { 1: 190, 3: 190, 5: 190 },
+    },
+};
 
-export const FORMAT_LABELS = { '1-1': '1-to-1', '1-2': '1-to-2' };
+// Andy, 20 Nov 2026: 1-to-2 is called a "training partner session".
+export const FORMAT_LABELS = { '1-1': '1-to-1', '1-2': 'Training partner session' };
+export const FORMAT_BLURBS = {
+    '1-1': 'One coach, your player. The whole session is theirs.',
+    '1-2': 'One coach, your player and a training partner (1-to-2).',
+};
 
 export const rateCardFor = (coach) => {
     if (!coach) return null;
