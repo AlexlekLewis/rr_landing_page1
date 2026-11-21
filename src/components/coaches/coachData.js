@@ -41,7 +41,7 @@ export const REGIONAL_COACHES = [
     {
         slug: 'alex-thornhill',
         name: 'Alex Thornhill',
-        role: 'Head Coach — Cranbourne North · Regional Manager, South-East Melbourne',
+        role: 'Cranbourne North · South-East Manager',
         centre: 'Elite Cricket Centre, Cranbourne North',
         region: 'South-East Melbourne',
         img: '/assets/coaches/alex-thornhill.jpg',
@@ -51,7 +51,7 @@ export const REGIONAL_COACHES = [
         credentials: ['England County System', 'Xavier College Cricket Lead', 'Fitzroy Doncaster Academy'],
         bio: [
             'A high-quality coach and a key part of the Academy’s Elite Program, Alex is a batting specialist with coaching experience across two continents — UK county cricket and the Australian premier system.',
-            'Alex leads the Cranbourne North centre as Head Coach and manages the Academy’s South-East Melbourne region. Beyond the Academy he coaches within the Fitzroy Doncaster Academy and leads the cricket program at Xavier College.',
+            'Alex runs the Cranbourne North centre and manages the Academy’s South-East Melbourne region. Beyond the Academy he coaches within the Fitzroy Doncaster Academy and leads the cricket program at Xavier College.',
         ],
     },
 ];

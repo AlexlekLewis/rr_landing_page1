@@ -468,7 +468,7 @@ const SHADOW_HTML = `<style>@import url('https://fonts.googleapis.com/css2?famil
       <details>
         <summary>Elite Performance Coaches <span class="cnt">8 Coaches</span></summary>
         <div class="rosterrow"><span class="nm">Ikroop Dhanoa</span><span class="rl">Performance Coach — 360 Batting</span></div>
-        <div class="rosterrow"><span class="nm">Rittin Raman</span><span class="rl">Performance Coach — Wicketkeeping</span></div>
+        <div class="rosterrow"><span class="nm">Ritin Raman</span><span class="rl">Performance Coach — Wicketkeeping</span></div>
         <div class="rosterrow"><span class="nm">Zac Parr</span><span class="rl">Performance Coach — Pace Bowling</span></div>
         <div class="rosterrow"><span class="nm">Alex Thornhill</span><span class="rl">Performance Coach — Batting</span></div>
         <div class="rosterrow"><span class="nm">Adelaide Campion</span><span class="rl">Performance Coach</span></div>
