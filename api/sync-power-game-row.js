@@ -15,6 +15,7 @@
 //   POWER_GAME_SHEET_ID           — the Google Sheet (workbook) ID to write to
 //   POWER_GAME_PAID_TAB           — paid tab name (defaults to 'Paid players')
 //   SUPABASE_WEBHOOK_SECRET       — shared secret sent in x-webhook-secret
+//                                   (unset → every request is refused)
 //
 // IMPORTANT: share the target Google Sheet with the service account's
 // client_email (from GOOGLE_SERVICE_ACCOUNT_JSON) as an Editor.
@@ -23,6 +24,7 @@
 import {
   getSheets, PAID_HEADERS, buildPaidRow, ensureTab, ensureHeader, findRowById,
 } from './_lib/pgpSheets.js';
+import { checkWebhookSecret } from './_lib/webhookSecret.js';
 
 export const config = {
   api: { bodyParser: { sizeLimit: '256kb' } },
@@ -44,15 +46,9 @@ const resolveTab = (record) => {
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  // Shared-secret verification (matches holiday sync).
-  const expected = process.env.SUPABASE_WEBHOOK_SECRET;
-  if (expected) {
-    const got = req.headers['x-webhook-secret'];
-    if (got !== expected) {
-      console.warn('sync-power-game-row: bad/missing webhook secret');
-      return res.status(401).json({ error: 'unauthorized' });
-    }
-  }
+  // Shared-secret verification (matches holiday sync). Fails closed.
+  const denied = checkWebhookSecret(req, 'sync-power-game-row');
+  if (denied) return res.status(denied.status).json({ error: denied.error });
 
   const { type, table, record } = req.body || {};
   if (!type || !table) return res.status(400).json({ error: 'invalid payload' });
