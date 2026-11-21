@@ -4,8 +4,9 @@
 // THE ONE CONFIG FILE. Every fact and every line of copy on the page, the
 // success page and the promo rows (lpJrDayPromo.js) comes from here.
 //
-// CONFIRMED by Alex, 16 Oct 2026:
-//   • Sunday 25 October 2026, 9:00am – 11:00am.
+// CONFIRMED by Alex, 16 Oct 2026 (date moved by Alex, 30 Oct 2026, after the
+// 25 October washout):
+//   • Sunday 15 November 2026, 9:00am – 11:00am (was Sunday 25 October).
 //   • $10 per player (Alex, 16 Oct 2026; was free until then). Paid through the
 //     Stripe Payment Link "Junior Royals Carnival Day Entry Fee" (PAYMENT_LINK).
 //   • Lower Plenty Cricket Club, on Para Road. Players aged 7 to 12.
@@ -45,15 +46,14 @@
 // (lower_plenty_jr_day_limits() in the migration). CAPACITY and CLOSES_AT
 // here only drive what the page says. Change both places together.
 //
-// CANCELLED 23 Oct 2026 (Alex): heavy rain is forecast, so the morning is called off.
-// The page shows CANCELLED_COPY (bottom of this file) on the shared FinishedEventPage:
-// no form, no payment, noindex. Registrations were closed early, in the database and in
-// CLOSES_AT_ISO, and every promo surface dropped the event. To bring the morning back,
-// set CANCELLED to false AND move the close time forward in lower_plenty_jr_day_limits()
-// (the database refuses sign-ups until then).
+// 25 Oct 2026 was CANCELLED for the weather (23 Oct). BACK ON for Sunday 15 November
+// (Alex, 30 Oct 2026): CANCELLED is false, the dates below moved, and the database
+// close time moved to Fri 13 Nov, 9pm in lower_plenty_jr_day_limits(). If the weather
+// cancels it again: set CANCELLED to true, check CANCELLED_COPY's words, and move the
+// database close time to a moment already past (see the 23 Oct migration).
 //
-// REVIEW 26 OCT 2026: the morning would have been Sunday 25 October. Retire the page,
-// or keep the cancelled notice up for families who still follow old links.
+// REVIEW 16 NOV 2026: the morning is over. Take it off every promo surface
+// (lpJrDayPromo.js lists them) and close or retire the page.
 // ─────────────────────────────────────────────────────────────
 
 export const ROUTE = '/lower-plenty-junior-royals-day';
@@ -77,19 +77,20 @@ export const MAX_AGE = 12;
 export const AGES = `${MIN_AGE}–${MAX_AGE}`;
 export const AGES_SPOKEN = `${MIN_AGE} to ${MAX_AGE}`;
 
-export const DAY = 'Sunday 25 October';
-export const DATE_FULL = 'Sunday 25 October 2026';
-export const SHORT_DAY = 'Sun 25 Oct';
+// New date (Alex, 30 Oct 2026): the 25 October morning was rained out and moves to
+// Sunday 15 November 2026. Same times, price and places; registrations close the
+// Friday before at 9:00pm, as last time.
+export const DAY = 'Sunday 15 November';
+export const DATE_FULL = 'Sunday 15 November 2026';
+export const SHORT_DAY = 'Sun 15 Nov';
 export const TIME = '9:00am – 11:00am';
 export const ARRIVE_BY = '8:45am'; // ASSUMPTION — 15 minutes to sign in
-export const START_ISO = '2026-10-25T09:00:00+11:00';
-export const END_ISO = '2026-10-25T11:00:00+11:00';
+export const START_ISO = '2026-11-15T09:00:00+11:00';
+export const END_ISO = '2026-11-15T11:00:00+11:00';
 
 export const CAPACITY = 60;
-export const CLOSES = 'Friday 23 October, 9:00pm'; // the deadline first published
-// Moved from 9:00pm to 8:30am on Fri 23 Oct 2026 when the morning was cancelled. The
-// database close time moved to the same moment (migration 20261023083000).
-export const CLOSES_AT_ISO = '2026-10-23T08:30:00+11:00'; // must match the database
+export const CLOSES = 'Friday 13 November, 9:00pm';
+export const CLOSES_AT_ISO = '2026-11-13T21:00:00+11:00'; // must match the database (lower_plenty_jr_day_limits)
 // ── Price and payment (Alex, 16 Oct 2026) ──
 // $10 per player, GST included (Stripe price is tax-inclusive, automatic tax
 // off, so the family pays exactly $10). One payment per player.
@@ -164,7 +165,8 @@ export const CTA = 'Secure Your Place';
 export const CTA_WITH_PRICE = `Secure Your Place · $${PRICE}`;
 
 export const HERO = {
-    kicker: 'Rajasthan Royals Academy · Melbourne',
+    // "New date" (Alex, 30 Oct 2026): families saw the 25 October posters.
+    kicker: 'New date · Rajasthan Royals Academy',
     withClub: `At ${CLUB}`,
     // Alex's own purpose for the morning (16 Oct 2026), in plain words.
     why:
@@ -402,7 +404,9 @@ export const PAY_PAGE = {
 // Registrations were closed in the database at 8:30am on Fri 23 Oct (see CLOSES_AT_ISO).
 // Paid players are refunded in full, in Stripe, by staff (REFUND_LINE promises it).
 // The Stripe Payment Link is deactivated separately, in Stripe.
-export const CANCELLED = true;
+// Back on for Sun 15 Nov 2026 (Alex, 30 Oct 2026), so false. The Stripe link has to
+// be switched back on in Stripe before families can pay.
+export const CANCELLED = false;
 
 // The morning that was planned, listed on the cancelled page in the shared layout.
 export const CANCELLED_SESSIONS = [
