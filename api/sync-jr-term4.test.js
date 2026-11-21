@@ -80,4 +80,17 @@ describe('Junior Royals Term 4 standalone sheet', () => {
     ]).map((r) => r.id);
     expect(kept).toEqual(['new', 'later']);
   });
+
+  // 21 Oct 2026 live test: two different children from one email with the same first word
+  // ("TEST Player" 8, "TEST Request" 11) were merged, and the booking was hidden behind the request.
+  it('never merges different ages, and never hides a booking behind a later request', () => {
+    const booking = row({ id: 'bk', player_name: 'TEST Player', player_age: 8, created_at: '2026-10-21T00:32:00Z' });
+    const request = row({ id: 'rq', player_name: 'TEST Request', player_age: 11, created_at: '2026-10-21T00:32:46Z', preferred_centre: 'any', preferred_day: null, source: 'junior-royals-term4-night-request|day=thursday|group=6pm|centre=cranbourne-north' });
+    expect(duplicateOf([booking, request]).size).toBe(0);
+    // The same child books Mondays and also asks for Thursdays: the booking is the one that counts.
+    const sameKidRequest = row({ id: 'rq2', created_at: '2026-10-21T00:40:00Z', preferred_day: null, source: 'junior-royals-term4-night-request|day=thursday|group=5pm' });
+    const d = duplicateOf([row({ id: 'bk2', created_at: '2026-10-21T00:30:00Z' }), sameKidRequest]);
+    expect(d.get('rq2')?.id).toBe('bk2');
+    expect(d.has('bk2')).toBe(false);
+  });
 });
