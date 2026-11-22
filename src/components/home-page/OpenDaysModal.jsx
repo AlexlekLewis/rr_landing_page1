@@ -41,6 +41,7 @@ const OpenDaysModal = ({ open, onClose }) => {
                 {/* close */}
                 <button
                     onClick={onClose}
+                    data-cta="whatson-popup-close"
                     aria-label="Close"
                     className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition-colors"
                 >
@@ -63,6 +64,7 @@ const OpenDaysModal = ({ open, onClose }) => {
                         <a
                             key={d.key}
                             href={d.href}
+                            data-cta={`whatson-popup-${d.key}`}
                             className={`group block rounded-2xl px-5 py-4 transition-all duration-300 ${d.highlight
                                 ? 'rr-featured-glow bg-rr-pink/15 border border-rr-pink/50 hover:bg-rr-pink/25'
                                 : 'bg-white/5 border border-white/10 hover:bg-white/10'}`}

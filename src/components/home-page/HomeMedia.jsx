@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, Play, Pause, Volume2, VolumeX } from 'lucide-react';
 import { HOME_MEDIA } from './homeMediaData';
@@ -11,8 +11,8 @@ import { useCarousel, CarouselTrack, CarouselControls } from '../india-tour-2026
 // Built like the /junior-royals photo strip (same carousel, arrows, progress bar and
 // counter). The media and the mix: homeMediaData.js.
 
-// Reusable (Royals Private Coaching uses it with its own media, 18 Nov 2026): pass `items`,
-// `eyebrow`, `title`, `label` and `idPrefix`; with no props it is exactly the home page strip.
+// Reusable. Home page: no props. Invitation-list pages pass media, eyebrow, title, intro.
+// Royals Private Coaching (18 Nov 2026) passes items, label, idPrefix and sectionClass too.
 
 const Lightbox = ({ photos, index, onClose, onStep }) => {
     const touchX = useRef(null);
@@ -125,15 +125,12 @@ const VideoSlide = ({ v }) => {
 };
 
 const HomeMedia = ({
-    items = HOME_MEDIA,
-    eyebrow = <>Photos &amp; videos</>,
-    title = <>Inside the <span className="text-rr-pink">Royals Academy</span></>,
+    media: mediaProp, items, eyebrow = 'Photos & videos', title, intro, id,
     label = 'Photos and videos from Rajasthan Royals Academy Melbourne',
-    idPrefix = 'home-media',
-    sectionClass = 'py-16 md:py-20 bg-white',
+    idPrefix = 'home-media', sectionClass = 'py-16 md:py-20 bg-white',
 }) => {
-    const media = items;
-    const photos = media.filter((m) => m.type === 'image');
+    const media = items || mediaProp || HOME_MEDIA;
+    const photos = useMemo(() => media.filter((m) => m.type === 'image'), [media]);
     const total = media.length;
     const carousel = useCarousel(total);
     const [open, setOpen] = useState(null);
@@ -142,11 +139,14 @@ const HomeMedia = ({
     if (total === 0) return null;
 
     return (
-        <section className={sectionClass} data-home-media={idPrefix === 'home-media' ? '' : undefined} data-media-carousel={idPrefix}>
+        <section id={id} className={sectionClass} data-home-media={idPrefix === 'home-media' ? '' : undefined} data-media-carousel={idPrefix}>
             <div className="max-w-6xl mx-auto px-6">
                 <div className="mb-8">
                     <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">{eyebrow}</p>
-                    <h2 className="text-3xl md:text-4xl font-black text-rr-dark uppercase tracking-tight">{title}</h2>
+                    <h2 className="text-3xl md:text-4xl font-black text-rr-dark uppercase tracking-tight">
+                        {title || <>Inside the <span className="text-rr-pink">Royals Academy</span></>}
+                    </h2>
+                    {intro && <p className="text-lg text-rr-charcoal font-medium leading-relaxed max-w-2xl mt-4">{intro}</p>}
                 </div>
 
                 <CarouselTrack carousel={carousel} label={label}>

@@ -1,84 +1,68 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../Navbar';
-import Footer from '../Footer';
-import HomeHero from './HomeHero';
-import HomeTrustBar from './HomeTrustBar';
-import HomeAbout from './HomeAbout';
-import HomeProgramCards from './HomeProgramCards';
 import HomeVideo from './HomeVideo';
 import HomeMedia from './HomeMedia';
-import HomeCareersBanner from './HomeCareersBanner';
-import HomeShopFeature from './HomeShopFeature';
-import HomeCinematicBreak from './HomeCinematicBreak';
-import HomeCoaches from './HomeCoaches';
-import HomeFAQ from './HomeFAQ';
-import HomeFinalCTA from './HomeFinalCTA';
 import HomeStickyCTA from './HomeStickyCTA';
 import RegisterDrawer from './RegisterDrawer';
 import PartnerStack from '../power-game/PartnerStack';
-import HomeTopBanner from './HomeTopBanner';
 import OpenDaysModal from './OpenDaysModal';
-import OpenDaysTicket from './OpenDaysTicket';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
+import { HomeHeader, WhatsOn, Banner, NewsStrip, Leadership, RoyalsWay, Store, Faq, Hire, HomeFooter } from '../home-v2/HomeV2Parts';
+import '../home-v2/homeV2.css';
 
-const SECTIONS = ['hero', 'trust', 'about', 'video', 'photos', 'programs', 'coaches', 'faq', 'final-cta'];
+// THE HOME PAGE in the rajasthanroyals.com layout (Andy, 16 Nov 2026, from his mock-up):
+// two-row pink header, What's On strip, banner carousel, news, photos & videos, leadership
+// and coaching team, the Royals Way, the Power Cricket Store, FAQ, hiring, partners, footer.
+// "Except I want the photo/video section to be as it currently is on the live site": the
+// "Introducing RRA Melbourne" video and the "Inside the Royals Academy" carousel are the
+// live components, unchanged. Sections and their data: components/home-v2/.
+// The previous home page sections (HomeHero, HomeAbout, HomeProgramCards, HomeShopFeature,
+// HomeCoaches, HomeFAQ, HomeCareersBanner, HomeTopBanner, OpenDaysTicket) stay in the repo;
+// several still supply data to the new layout.
+
+const SECTIONS = ['hero', 'news', 'video', 'photos', 'coaches', 'about', 'store', 'faq', 'careers-banner'];
 const OPEN_DAYS_KEY = 'openDaysModalDismissed';
 
 const HomePage = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [openDaysModal, setOpenDaysModal] = useState(false);
-    const [openDaysTicket, setOpenDaysTicket] = useState(false);
 
     usePageAnalytics('/', { sections: SECTIONS });
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        // Show the open-days modal to every visitor once per session; after they
-        // close it, a ticket-style reminder persists (and re-opens it on tap).
+        // The What's On pop-up shows once per visit, as before.
         let dismissed = false;
-        try { dismissed = !!sessionStorage.getItem(OPEN_DAYS_KEY); } catch (_) { /* ignore */ }
-        if (dismissed) setOpenDaysTicket(true);
-        else setOpenDaysModal(true);
+        try { dismissed = !!sessionStorage.getItem(OPEN_DAYS_KEY); } catch { /* ignore */ }
+        if (!dismissed) setOpenDaysModal(true); // eslint-disable-line react-hooks/set-state-in-effect
     }, []);
 
     const openDrawer = () => setDrawerOpen(true);
-    const closeDrawer = () => setDrawerOpen(false);
-
     const closeOpenDays = () => {
         setOpenDaysModal(false);
-        setOpenDaysTicket(true);
-        try { sessionStorage.setItem(OPEN_DAYS_KEY, '1'); } catch (_) { /* ignore */ }
+        try { sessionStorage.setItem(OPEN_DAYS_KEY, '1'); } catch { /* ignore */ }
     };
-    const reopenOpenDays = () => { setOpenDaysTicket(false); setOpenDaysModal(true); };
-    const dismissTicket = () => setOpenDaysTicket(false);
+    const openPrograms = () => setOpenDaysModal(true);
 
     return (
-        <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white relative">
-            <Navbar variant="home" onRegisterClick={openDrawer} />
-            {/* The Special Event banner. It also clears the fixed nav, so the
-                ticker below is not hidden under it — when no event is running it
-                renders only that spacer. */}
-            <HomeTopBanner />
-            {/* "What's On" ticker — sits under the nav once the modal is closed */}
-            <OpenDaysTicket show={openDaysTicket && !openDaysModal} onOpen={reopenOpenDays} onDismiss={dismissTicket} />
-
+        <div className="rrh min-h-screen flex flex-col selection:bg-rr-pink selection:text-white relative">
+            <HomeHeader onRegister={openDrawer} />
+            <WhatsOn onOpen={openPrograms} />
             <main className="flex-1 w-full overflow-hidden">
-                <div id="hero"><HomeHero onRegisterClick={openDrawer} /></div>
-                <div id="about"><HomeAbout /></div>
+                <Banner onRegister={openDrawer} onPrograms={openPrograms} />
+                <NewsStrip />
+                {/* Photos & videos: as on the live site */}
                 <div id="video"><HomeVideo /></div>
-                {/* Photos & videos from every program (Andy, 13 Nov 2026) */}
                 <div id="photos" className="scroll-mt-24"><HomeMedia /></div>
-                <div id="careers-banner"><HomeCareersBanner /></div>
-                <div id="programs"><HomeProgramCards /></div>
-                <div id="shop"><HomeShopFeature /></div>
-                <div id="coaches"><HomeCoaches /></div>
-                <div id="faq"><HomeFAQ onRegisterClick={openDrawer} /></div>
+                <Leadership />
+                <RoyalsWay />
+                <Store />
+                <Faq onRegister={openDrawer} />
+                <Hire />
             </main>
-
             <PartnerStack theme="light" />
-            <Footer />
+            <HomeFooter />
             <HomeStickyCTA onRegisterClick={openDrawer} />
-            <RegisterDrawer isOpen={drawerOpen} onClose={closeDrawer} />
+            <RegisterDrawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} />
             <OpenDaysModal open={openDaysModal} onClose={closeOpenDays} />
         </div>
     );

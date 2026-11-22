@@ -168,6 +168,8 @@ export const PROGRAM_PAYMENT_LINKS = {
     'https://buy.stripe.com/5kQdR99zHd4N0uUdI79Zm0W': { label: 'Entry fee', sessions: 1, feeCents: 1000 },
   },
   'power-league': {},
+  // Invitation list: nothing is paid.
+  'ravenhall-invitation': {},
 };
 
 // $30 per player, per session. Source of truth is PAYMENT_OPTIONS in
@@ -183,6 +185,7 @@ const NO_PAYMENT_LINE = {
   'tour-interest': 'Nothing to pay — this is an expression of interest only',
   'jr-term4': 'Nothing to pay — an entry only. No place is held until we confirm one.',
   'power-league': 'Nomination only — nothing paid. Picked players pay $35 incl. GST through the link we send them.',
+  'ravenhall-invitation': 'Invitation list only — nothing paid and no place held',
 };
 
 // Readable centre names for CELL values. Deliberately separate from anything
@@ -446,6 +449,7 @@ export const PROGRAM_LABELS = {
   'jr-term4': 'Junior Royals Term 4',
   'lp-jr-day': 'Lower Plenty Junior Royals Day',
   'power-league': 'Power League',
+  'ravenhall-invitation': 'Ravenhall Invitation List',
 };
 const tabName = (key) => `${PROGRAM_LABELS[key]}${DNE}`;
 
@@ -954,6 +958,110 @@ export const lpJrDayRow = (r, pay = null) => {
   ];
 };
 
+// ── Invitation lists ────────────────────────────────────────
+// The invitation-list campaign pages (Andy, 17 Nov 2026) all save to ONE table,
+// invitation_list_registrations, with `campaign` = the page's slug
+// (src/components/invitation/invitations.js). Each campaign gets its own tab.
+// First: 'ravenhall-opening-session' (rramelbourne.com/ravenhall).
+// One row = one player put forward. A ROW IS NOT A PLACE and nothing is paid:
+// staff choose who is invited (space, then distance from the venue) and set
+// `status` on the row in the database.
+const INVITATION_TABLE = 'invitation_list_registrations';
+//
+// extraWorkbookId: a second workbook that gets the same tab on every run. Andy's
+// own sheet in the Academy Drive (18 Nov 2026: "set it up in my Rajasthan Royals
+// Academy Google Drive ... every 10 minutes"), because the main workbook is not
+// shared with him. That sheet must be shared (Editor) with the service account
+// in GOOGLE_SERVICE_ACCOUNT_JSON. If it is not, this copy is skipped and logged;
+// the main workbook still syncs.
+export const INVITATION_TABS = [
+  {
+    key: 'ravenhall-invitation',
+    campaign: 'ravenhall-opening-session',
+    extraWorkbookId: '1ggwg6G6DsZylA1dwPhBTKkmy9TluMGllKplk8sF3umg',
+  },
+];
+
+export const INVITATION_HEADERS = [
+  'Registration ID',
+  'Registered (Melbourne)',
+  'Who Is Attending',
+  'Player First Name',
+  'Player Last Name',
+  'Date of Birth',
+  'Age Today',
+  'Gender',
+  'Cricket Experience',
+  'Club',
+  'Contact Name',
+  'Email',
+  'Phone',
+  'Lives in Melbourne?',
+  'Suburb / City',
+  'Postcode',
+  'State / Country (if not Melbourne)',
+  'Street Address',
+  'Notes from Family',
+  'Wants Academy News?',
+  'Invitation Status',
+  'Came From',
+];
+
+const INVITATION_EXPERIENCE = {
+  new: 'New to cricket',
+  social: 'School, backyard or social cricket',
+  club: 'Plays for a club',
+  representative: 'Representative or Premier level',
+};
+
+const INVITATION_STATUS = {
+  registered: 'On the list — no decision yet',
+  invited: 'INVITED',
+  confirmed: 'CONFIRMED — coming',
+  declined: 'Declined by family',
+  'not-invited': 'Not invited this time',
+};
+
+// Whole years between a YYYY-MM-DD date of birth and `now`.
+export const invitationAge = (dob, now = new Date()) => {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(dob || '');
+  if (!m) return '';
+  const [y, mo, d] = [Number(m[1]), Number(m[2]), Number(m[3])];
+  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Australia/Melbourne' }).format(now).split('-').map(Number);
+  let age = today[0] - y;
+  if (today[1] < mo || (today[1] === mo && today[2] < d)) age -= 1;
+  return age;
+};
+
+export const invitationRow = (r, now = new Date()) => {
+  const dob = /^(\d{4})-(\d{2})-(\d{2})/.exec(r.player_dob || '');
+  return [
+    r.id || '',
+    asText(fmtMelb(r.created_at)),
+    r.attendee_type === 'self' ? 'Themself (adult player)' : 'Their child',
+    r.player_first_name || '',
+    r.player_last_name || '',
+    asText(dob ? `${dob[3]}/${dob[2]}/${dob[1]}` : ''),
+    asText(invitationAge(r.player_dob, now)),
+    r.player_gender || '',
+    INVITATION_EXPERIENCE[r.cricket_experience] || r.cricket_experience || '',
+    r.club_name || '',
+    r.contact_name || '',
+    r.email || '',
+    asText(r.phone || ''),
+    // "No" always says where, so nobody near Melbourne (Geelong) is passed over (Andy, 18 Nov 2026).
+    r.lives_in_melbourne ? 'Yes' : `No — lives in ${[r.suburb, r.country].filter(Boolean).join(', ') || 'place not given'}`,
+    r.suburb || '',
+    asText(r.postcode || ''),
+    r.country || '',
+    r.street_address || '',
+    r.notes || '',
+    yesNo(r.marketing_opt_in),
+    INVITATION_STATUS[r.status] || r.status || '',
+    [r.utm_source, r.utm_campaign].filter(Boolean).join(' / '),
+  ];
+};
+
 // ── Payments (Stripe) ───────────────────────────────────────
 // Every payment on a configured link, INCLUDING the ones we could not attach to
 // a sign-up. An unmatched payment is never dropped — it is listed so a human can
@@ -1066,6 +1174,12 @@ export const guideLines = (linkLines = [], counts = {}) => {
     ['  IS NOT A PLACE: nothing is paid until a picked player pays the $35 incl. GST link we send.'],
     [`  Sort by "Highest Weekend Level" and age to pick the sides. Currently ${counts.powerLeague ?? 0} nominations.`],
     [''],
+    [`"${PROGRAM_LABELS['ravenhall-invitation']}" — players put forward for the exclusive opening session of the`],
+    ["  Rajasthan Royals Academy in Ravenhall, Melbourne's West (rramelbourne.com/ravenhall). One row = one player."],
+    ['  A ROW IS NOT A PLACE and nothing is paid: invitations go out based on space and how close the'],
+    ['  family lives to Ravenhall. Sort by Postcode and Age Today to choose. "Invitation Status" comes from'],
+    [`  the database (status), so changing it here does nothing. Currently ${counts.ravenhallInvitation ?? 0} on the list.`],
+    [''],
     [`"${PROGRAM_LABELS['tour-interest']}" — players who want to go on an India tour, from`],
     ['  rramelbourne.com/tours. An expression of interest, not a booking: nothing has'],
     ['  been paid and no place is held.'],
@@ -1100,6 +1214,7 @@ export const guideLines = (linkLines = [], counts = {}) => {
     [`  ${PROGRAM_LABELS['jr-term4']}: column ${safeCol(JR_TERM4_HEADERS)} onwards`],
     [`  ${PROGRAM_LABELS['lp-jr-day']}: column ${safeCol(LP_JR_DAY_HEADERS)} onwards`],
     [`  ${PROGRAM_LABELS['power-league']}: column ${safeCol(POWER_LEAGUE_HEADERS)} onwards`],
+    [`  ${PROGRAM_LABELS['ravenhall-invitation']}: column ${safeCol(INVITATION_HEADERS)} onwards`],
     [`  ${PROGRAM_LABELS['tour-interest']}: column ${safeCol(TOUR_HEADERS)} onwards`],
     [`  Payments (Stripe): column ${safeCol(PAY_HEADERS)} onwards`],
     [''],
@@ -1199,7 +1314,7 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
   // would quietly stop putting people on a coach's tab with nothing to show it
   // had happened. ROW_CAP is well above any of these (240 in
   // performance_squad_leads at 30 Sep 2026) and hitting it is logged loudly.
-  const [squadLeads, spinClub, sidBookings, tourApps, tourEois, jrTerm4, lpJrDayRaw, powerLeague] = await Promise.all([
+  const [squadLeads, spinClub, sidBookings, tourApps, tourEois, jrTerm4, lpJrDayRaw, powerLeague, invitationsRaw] = await Promise.all([
     // ALL performance_squad_leads, not just the open-trial ones: payments are
     // allocated across the whole table so this workbook and the Performance
     // Squads workbook can never disagree about who has paid. Filtered down to
@@ -1212,12 +1327,17 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
     sb.from(JR_TERM4_TABLE).select('*').order('created_at', { ascending: true }).limit(ROW_CAP),
     sb.from(LP_JR_DAY_TABLE).select('*').order('created_at', { ascending: true }).limit(ROW_CAP),
     sb.from('applications').select('*').eq('program_type', POWER_LEAGUE_PROGRAM).eq('is_test', false).order('created_at', { ascending: true }).limit(ROW_CAP),
+    sb.from(INVITATION_TABLE).select('*').order('created_at', { ascending: true }).limit(ROW_CAP),
   ]);
   // The newest source: if its table is ever missing (a fresh database, a
   // rename), the other tabs must still sync. Every other error still throws.
   const lpJrDay = lpJrDayRaw.error && ['42P01', 'PGRST205'].includes(lpJrDayRaw.error.code)
     ? (console.warn(`sync-program-signups: ${LP_JR_DAY_TABLE} not found — tab skipped this run`), { data: [], error: null, missing: true })
     : lpJrDayRaw;
+  // Same rule for the invitation lists: a missing table skips its tabs, nothing else.
+  const invitations = invitationsRaw.error && ['42P01', 'PGRST205'].includes(invitationsRaw.error.code)
+    ? (console.warn(`sync-program-signups: ${INVITATION_TABLE} not found — tabs skipped this run`), { data: [], error: null, missing: true })
+    : invitationsRaw;
   const sources = {
     performance_squad_leads: squadLeads,
     'applications (Spin Club)': spinClub,
@@ -1227,6 +1347,7 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
     jr_term4_waitlist: jrTerm4,
     [LP_JR_DAY_TABLE]: lpJrDay,
     'applications (Power League)': powerLeague,
+    [INVITATION_TABLE]: invitations,
   };
   for (const [name, r] of Object.entries(sources)) {
     if (r.error) throw r.error;
@@ -1297,6 +1418,11 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
       headers: POWER_LEAGUE_HEADERS,
       rows: (powerLeague.data || []).map(powerLeagueRow),
     },
+    ...(invitations.missing ? [] : INVITATION_TABS.map((t) => ({
+      key: t.key,
+      headers: INVITATION_HEADERS,
+      rows: (invitations.data || []).filter((r) => r.campaign === t.campaign).map((r) => invitationRow(r)),
+    }))),
     {
       key: 'tour-interest',
       headers: TOUR_HEADERS,
@@ -1312,6 +1438,23 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
     tabResults.push(await reconcileTab(
       sheets, spreadsheetId, tabName(t.key), t.headers, t.rows, SAFE_COL_LABEL,
     ));
+  }
+
+  // ── Invitation lists also go to their own workbook, where one is set. Never
+  // allowed to break the main sync: a sheet that is not shared with the service
+  // account is logged and skipped.
+  const extraCopies = [];
+  if (!invitations.missing) {
+    for (const t of INVITATION_TABS.filter((x) => x.extraWorkbookId)) {
+      try {
+        const rows = (invitations.data || []).filter((r) => r.campaign === t.campaign).map((r) => invitationRow(r));
+        const res = await reconcileTab(sheets, t.extraWorkbookId, tabName(t.key), INVITATION_HEADERS, rows, SAFE_COL_LABEL);
+        extraCopies.push({ key: t.key, workbook: t.extraWorkbookId, ok: true, ...res });
+      } catch (err) {
+        console.warn(`sync-program-signups: could not write ${t.key} to workbook ${t.extraWorkbookId}:`, err.message);
+        extraCopies.push({ key: t.key, workbook: t.extraWorkbookId, ok: false, error: err.message });
+      }
+    }
   }
 
   // ── Payments tab, including unmatched, which is the whole point of listing it.
@@ -1340,6 +1483,7 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
     lpJrDay: (lpJrDay.data || []).filter((r) => !r.cancelled_at).length,
     lpJrDayPaid: (lpJrDay.data || []).filter((r) => !r.cancelled_at && lpJrDayPaid(r, paidById.get(r.id) || null)).length,
     powerLeague: (powerLeague.data || []).length,
+    ravenhallInvitation: (invitations.data || []).filter((r) => r.campaign === 'ravenhall-opening-session').length,
     jrTerm4Closed: (jrTerm4.data || [])
       .filter((r) => !JR_TERM4_CENTRES[r.preferred_centre]).length,
   });
@@ -1351,6 +1495,7 @@ export async function reconcileProgramSignups(sheets, spreadsheetId, sb = null, 
 
   return {
     programs: tabResults,
+    extraCopies,
     payments: {
       ...payResult,
       stripePaymentsFound: payments.length,

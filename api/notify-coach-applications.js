@@ -3,6 +3,7 @@
 // "send any coaching applications to andy.crook@whitewallsport.com").
 // Runs every 10 minutes. Picks up rows with notified_at IS NULL from:
 //   coaching_opportunities_applications  (/careers form)
+//   coaching_enquiries                   (/careers "not ready to apply" form)
 //   coaches_day_registrations            (/coaches-day form)
 // sends one plain table email per lead via Resend, then stamps notified_at.
 // A failed send leaves notified_at NULL, so the next run retries it.
@@ -41,6 +42,17 @@ const SOURCES = [
             ['Age groups coached', list(r.age_groups_coached)], ['Coaching CV', r.coaching_cv],
             ['Goals', r.goals_ambitions], ['CV link', r.cv_resume_url], ['Heard via', r.referral_source],
             ['UTM', [r.utm_source, r.utm_medium, r.utm_campaign].filter(Boolean).join(' / ')],
+        ],
+    },
+    {
+        table: 'coaching_enquiries',
+        label: 'Coaching enquiry: wants more information (/careers)',
+        name: (r) => r.full_name,
+        rows: (r) => [
+            ['Name', r.full_name], ['Phone', r.phone], ['Email', r.email], ['Suburb', r.suburb],
+            ['Role interest', r.role_interest || 'Not sure yet'],
+            ['UTM', [r.utm_source, r.utm_medium, r.utm_campaign].filter(Boolean).join(' / ')],
+            ['Came from', r.page_referrer],
         ],
     },
     {

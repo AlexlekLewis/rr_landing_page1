@@ -92,6 +92,13 @@ const HeroSection = () => {
                         See the Benefits
                     </button>
                 </motion.div>
+                <button
+                    type="button"
+                    onClick={() => document.getElementById('more-info')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="mt-5 text-sm text-white/80 hover:text-white font-semibold underline underline-offset-4 decoration-rr-pink"
+                >
+                    Not ready to apply? Get more information
+                </button>
             </div>
 
             {/* Scroll indicator */}

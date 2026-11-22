@@ -344,9 +344,10 @@ export const COACHES = [
         centres: ['ravenhall'],
         tier: 'head', // Andy, 17 Nov: Elite Coach, "replicate the Alex Thornhill version"
         role: 'Royals Academy Coach', // TODO Andy: Hamid's title (no tier names on the page)
-        specialism: null, // TODO Andy: Hamid's specialty
+        specialism: 'Former county cricketer: Derbyshire and Kent, and England Under-19', // Andy, 22 Nov 2026
         img: '/assets/coaches/hamid-qadri-halla.jpg', // Andy's photo, Royals training shirt + HALLA BOL! wall
-        bio: null, // TODO Andy: two lines (playing and coaching background)
+        // Andy, 22 Nov 2026.
+        bio: 'Hamid brings eight seasons of UK first-class county cricket to his coaching, having played professionally for Derbyshire and Kent, and represented England at Under-19 level. His sessions sharpen players’ tactical awareness and build a deep technical understanding of their own game, with high-tempo drills that challenge players physically while keeping training energetic and fun.',
     },
     {
         slug: 'kavya-khatri',
