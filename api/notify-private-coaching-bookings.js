@@ -24,7 +24,9 @@
 //      CRON_SECRET, PRIVATE_COACHING_ALERT_CC (optional, comma-separated; default below),
 //      TWILIO_ACCOUNT_SID / TWILIO_AUTH_TOKEN / TWILIO_FROM (optional, for texts).
 // ============================================================
+import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { handlePrivateCoachingPaid } from './_lib/privateCoachingPayment.js';
 import { buildAlert } from './_lib/privateCoachingAlert.js';
 import { sendEmail, sendSms, twilioReady, academyInbox } from './_lib/privateCoachingSend.js';
 
@@ -66,6 +68,18 @@ export default async function handler(req, res) {
     if (req.method === 'POST') {
         const id = String((req.body && req.body.id) || '');
         if (!/^[0-9a-f-]{36}$/i.test(id)) return res.status(400).json({ error: 'bad id' });
+        // Back from Stripe: confirm the payment with Stripe directly, so the booking is marked
+        // paid even if the webhook is slow (or, on a preview, goes to the live site instead).
+        const sid = String((req.body && req.body.session_id) || '');
+        if (/^cs_[A-Za-z0-9_]+$/.test(sid) && process.env.STRIPE_SECRET_KEY) {
+            try {
+                const session = await new Stripe(process.env.STRIPE_SECRET_KEY).checkout.sessions.retrieve(sid);
+                const { data: pending } = await sb.from(TABLE).select('payment_status').eq('id', id).maybeSingle();
+                if (session.payment_status === 'paid' && session.client_reference_id === id && pending && pending.payment_status !== 'paid') {
+                    await handlePrivateCoachingPaid(sb, session);
+                }
+            } catch (e) { console.error('stripe confirm failed', e.message); }
+        }
         const since = new Date(Date.now() - 60 * 60 * 1000).toISOString();
         const { data: r } = await sb.from(TABLE).select('*').eq('id', id).eq('payment_status', 'paid').is('coach_notified_at', null).gte('paid_at', since).maybeSingle();
         if (!r) return res.status(200).json({ ok: true, skipped: true });

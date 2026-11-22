@@ -37,10 +37,10 @@ const PremiumCoachingSuccess = () => {
             }
         } catch { /* never blocks the page */ }
         if (bookingId) {
-            // Give the webhook a moment, then ask for the coach alert.
+            // Confirm the payment with Stripe (marks it paid if the webhook hasn't yet), then the coach alert.
             const t = setTimeout(() => {
-                fetch('/api/notify-private-coaching-bookings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: bookingId }) }).catch(() => {});
-            }, 4000);
+                fetch('/api/notify-private-coaching-bookings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: bookingId, session_id: sessionId }) }).catch(() => {});
+            }, 1500);
             return () => clearTimeout(t);
         }
         return undefined;
@@ -76,7 +76,7 @@ const PremiumCoachingSuccess = () => {
                     </h1>
                     <p className="text-white/85 font-medium leading-relaxed mb-10">{paid ? SUCCESS.paid : SUCCESS.unpaid}</p>
 
-                    {paid && s.format === '1-2' && partnerLink && (
+                    {paid && s.format === '1-2' && s.share !== 2 && partnerLink && (
                         <div className="text-left rounded-2xl p-6 mb-8 border-2 border-rr-pink bg-white" data-partner-link>
                             <p className="text-[11px] font-black uppercase tracking-widest text-rr-pink mb-1">Important</p>
                             <h2 className="text-lg font-black text-rr-dark mb-2">{SUCCESS.partnerTitle}</h2>
