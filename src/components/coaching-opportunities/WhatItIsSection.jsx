@@ -25,8 +25,6 @@ const ROLES = [
 ];
 
 const FACTS = [
-    { label: 'Where', value: 'Mickleham and Cranbourne North, Melbourne' },
-    { label: 'When', value: 'October to March · Mon, Wed, Fri' },
     { label: 'Who can apply', value: 'Anyone in Melbourne, 16 or older' },
 ];
 
