@@ -14,7 +14,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Map product IDs to live Stripe Price IDs
 const PRICE_MAP = {
-  'ipl-replica-shirt': 'price_1TRJe7Io52UEA50yZ4i5OPwH',
+  // 'ipl-replica-shirt' taken off sale (Andy, 15 and 23 Nov 2026): checkout now refuses it.
   'training-shirt':    'price_1TRJinIo52UEA50yaIwEA8Ni',
   'training-shorts':   'price_1TRJqhIo52UEA50ycGPuIieZ',
   'training-pants':    'price_1TRJt4Io52UEA50ydwZmfUKh',

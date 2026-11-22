@@ -83,7 +83,8 @@ export const ROYALS_WAY = {
 };
 
 // Power Cricket Store band (Andy, 9 Nov 2026: the shop with the Power Cricket logo and name).
-const STORE_IDS = ['ipl-replica-shirt', 'training-shirt', 'pink-cap', 'fleece-jacket'];
+// The IPL replica shirt is off sale (Andy, 23 Nov 2026); the training shorts take its place.
+const STORE_IDS = ['training-shirt', 'training-shorts', 'pink-cap', 'fleece-jacket'];
 export const STORE = STORE_IDS.map((id) => PRODUCTS.find((p) => p.id === id)).filter(Boolean).map((p) => ({
     id: p.id,
     name: p.name,
