@@ -49,7 +49,8 @@ export const HomeHeader = ({ onRegister }) => {
                     <div className="hdr-top">
                         <div className="toplinks">
                             <a href="https://www.rajasthanroyals.com" target="_blank" rel="noopener noreferrer">rajasthanroyals.com</a>
-                            <span>Mickleham &amp; Cranbourne North</span>
+                            {/* Every centre (Andy, 23 Nov 2026) */}
+                            <span>Mickleham · Cranbourne North · Hallam · Ravenhall</span>
                         </div>
                         <div className="topright">
                             <a href={INSTAGRAM} target="_blank" rel="noopener noreferrer" aria-label="Follow RRA Melbourne on Instagram"><IgIcon /></a>
