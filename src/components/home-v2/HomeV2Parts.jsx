@@ -188,7 +188,7 @@ export const Banner = ({ onRegister, onPrograms }) => {
         }
         return (
             <article key={`${s.href}${i}`} className={`slide${s.split ? ' split' : ''}${i === pos ? ' is-active' : ''}`} aria-roledescription="slide" aria-label={label} aria-hidden={clone || undefined}>
-                <img className="bg" src={s.src} alt={clone ? '' : s.alt} />
+                <img className="bg" src={s.src} alt={clone ? '' : s.alt} style={s.position ? { objectPosition: s.position } : undefined} />
                 <div className="scrim" />
                 <div className="copy">
                     <span className="kicker">Choose a current program</span>
