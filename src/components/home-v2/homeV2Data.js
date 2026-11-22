@@ -54,14 +54,15 @@ export const LEADERS = [
 ];
 
 // Our coaching team row (from Andy's mock-up). Headshots on the HALLA BOL! wall where we have
-// them; no photo yet = initials. Each links to /coaches.
+// them; no photo yet = initials. Each links to /coaches. The line under each name is WHERE THEY
+// COACH, not their skill set (Andy, 23 Nov 2026).
 export const TEAM = [
-    { name: 'Alex Thornhill', line: 'Cranbourne North · South-East Manager', img: '/assets/coaches/alex-thornhill.jpg' },
-    { name: 'Ikroop Dhanoa', line: 'Leg spin, batting and T20 cricket', img: '/assets/coaches/ikroop-dhanoa-halla.jpg', pos: '50% 22%' },
-    { name: 'Ritin Raman', line: 'Wicketkeeping and top-order batting', img: '/assets/coaches/ritin-raman-halla.jpg', pos: '50% 22%' },
-    { name: 'Mihiraj Jayasekara', line: 'Batting', img: '/assets/coaches/mihiraj-jayasekara.jpg', pos: '50% 22%' },
-    { name: 'Jinang Shah', line: 'Junior Royals Program Coach', img: '/assets/coaches/jinang-shah-halla.jpg', pos: '50% 15%' },
-    { name: 'Kavya Khatri', line: 'Junior Royals · Performance Squads', img: null },
+    { name: 'Alex Thornhill', line: 'Cranbourne North & Hallam', img: '/assets/coaches/alex-thornhill.jpg' },
+    { name: 'Ikroop Dhanoa', line: 'Mickleham', img: '/assets/coaches/ikroop-dhanoa-halla.jpg', pos: '50% 22%' },
+    { name: 'Ritin Raman', line: 'Mickleham', img: '/assets/coaches/ritin-raman-halla.jpg', pos: '50% 22%' },
+    { name: 'Mihiraj Jayasekara', line: 'Mickleham', img: '/assets/coaches/mihiraj-jayasekara.jpg', pos: '50% 22%' },
+    { name: 'Jinang Shah', line: 'Mickleham & Ravenhall', img: '/assets/coaches/jinang-shah-halla.jpg', pos: '50% 15%' },
+    { name: 'Kavya Khatri', line: 'Mickleham & Ravenhall', img: null },
 ];
 
 // The Royals Way in Melbourne: the "Who we are" section's own words and photos.
