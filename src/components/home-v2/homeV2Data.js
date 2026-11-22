@@ -24,7 +24,8 @@ import { PRODUCTS } from '../academy-shop/shopConfig';
 // Photos are chosen per program page; a program without one here uses the welcome photo.
 const SLIDE_PHOTO = {
     '/spin-club': { src: '/assets/jadeja-rr-bowling.webp', alt: 'Ravindra Jadeja bowling for the Rajasthan Royals', split: true },
-    '/performance-squads': { src: '/assets/cec-lanes.jpg', alt: 'Training lanes at the Elite Cricket Centre' },
+    // Power League match photo (Andy, 23 Nov 2026), trimmed 40px on the left to drop a cut-off overlay logo.
+    '/performance-squads': { src: '/assets/home/performance-squads-power-league.jpg', alt: 'A Power League T20 match, with Power League, rramelbourne.com and Whitewall banners on the boundary' },
     '/junior-royals': { src: '/assets/junior-royals/gallery/squad-talk.webp', alt: 'Junior Royals players at training' },
 };
 export const WELCOME_SLIDE = {
