@@ -6,7 +6,7 @@ import {
     Settings, LogOut, ChevronLeft, ChevronRight, Menu, X,
     Send, CheckCircle2, Eye, ClipboardList, UserCheck, Shield, ChevronDown,
     UserCircle, ShoppingBag, Trophy, GraduationCap, PenLine, Crown, Sun, Sparkles,
-    MessageCircle, Plane, Zap, Star
+    MessageCircle, Plane, Zap, Star, Shirt
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { ProgramProvider, useProgram } from './ProgramContext';
@@ -60,6 +60,7 @@ const NAV_GROUPS = [
         items: [
             { label: 'Program Registrations', path: '/rramadmin_26/program-registrations', icon: Trophy },
             { label: 'Shop Orders', path: '/rramadmin_26/shop-orders', icon: ShoppingBag },
+            { label: 'Uniforms', path: '/rramadmin_26/uniforms', icon: Shirt },
         ],
     },
     {

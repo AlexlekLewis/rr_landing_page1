@@ -113,6 +113,7 @@ import PlayerProfiles from './components/admin/PlayerProfiles';
 import HomeLeadsDashboard from './components/admin/HomeLeadsDashboard';
 import PowerGameInquiries from './components/admin/PowerGameInquiries';
 import ShopOrdersDashboard from './components/admin/ShopOrdersDashboard';
+import UniformsDashboard from './components/admin/UniformsDashboard';
 import ProgramRegistrationsDashboard from './components/admin/ProgramRegistrationsDashboard';
 import HolidaySubProgramDashboard from './components/admin/HolidaySubProgramDashboard';
 import IndiaTour2026Dashboard from './components/admin/IndiaTour2026Dashboard';
@@ -374,6 +375,7 @@ function App() {
         <Route path="/rramadmin_26/home-leads" element={<AdminLayout><HomeLeadsDashboard /></AdminLayout>} />
         <Route path="/rramadmin_26/power-game" element={<AdminLayout><PowerGameInquiries /></AdminLayout>} />
         <Route path="/rramadmin_26/shop-orders" element={<AdminLayout><ShopOrdersDashboard /></AdminLayout>} />
+        <Route path="/rramadmin_26/uniforms" element={<AdminLayout><UniformsDashboard /></AdminLayout>} />
         <Route path="/rramadmin_26/program-registrations" element={<AdminLayout><ProgramRegistrationsDashboard /></AdminLayout>} />
         <Route path="/rramadmin_26/holiday/:programSlug" element={<AdminLayout><HolidaySubProgramDashboard /></AdminLayout>} />
         <Route path="/rramadmin_26/india-tour-2026" element={<AdminLayout><IndiaTour2026Dashboard /></AdminLayout>} />

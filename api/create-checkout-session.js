@@ -1,129 +1,150 @@
 // ============================================================
-// Vercel Serverless Function — Create Stripe Checkout Session
+// Vercel Serverless Function — Create Stripe Checkout Session (Academy Shop)
 // POST /api/create-checkout-session
 // ============================================================
 // Required environment variables (set in Vercel Dashboard):
-//   STRIPE_SECRET_KEY = sk_live_...
-//   VITE_APP_URL      = https://rramelbourne.com (or your Vercel URL)
+//   STRIPE_SECRET_KEY         = sk_live_...
+//   SUPABASE_SERVICE_ROLE_KEY = service role key (writes the order draft)
+//   VITE_APP_URL              = https://rramelbourne.com (or your Vercel URL)
 // ============================================================
+// The server (not the browser) checks the cart, saves the order draft with every size and the
+// pickup venue, then sends the sizes and venue to Stripe too. The webhook marks the draft paid.
+// If the draft can't be saved, no checkout is created: a family must never pay for an order
+// we can't see. See api/_lib/shopOrder.js for why.
 
 import Stripe from 'stripe';
+import { createClient } from '@supabase/supabase-js';
 import { pickupLabel } from './_lib/pickupVenues.js';
+import { validateCart, sizeSummary, stripeLineItems } from './_lib/shopOrder.js';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
-// Map product IDs to live Stripe Price IDs
-const PRICE_MAP = {
-  'ipl-replica-shirt': 'price_1TRJe7Io52UEA50yZ4i5OPwH',
-  'training-shirt':    'price_1TRJinIo52UEA50yaIwEA8Ni',
-  'training-shorts':   'price_1TRJqhIo52UEA50ycGPuIieZ',
-  'training-pants':    'price_1TRJt4Io52UEA50ydwZmfUKh',
-  'pink-cap':          'price_1TRNozIo52UEA50yEkWYWKAq',
-  'fleece-jacket':     'price_1TRNwaIo52UEA50yIChLyg1J',
-};
-
+const SUPABASE_URL_FALLBACK = 'https://pudldzgmluwoocwxtzhw.supabase.co';
 const BASE_URL = process.env.VITE_APP_URL || 'https://rramelbourne.com';
 
+// Stripe Shipping Rate IDs
+const STRIPE_SHIPPING_RATES = {
+  standard: 'shr_1TROdrIo52UEA50yMijZecJJ',
+  express:  'shr_1TROf8Io52UEA50yeADIIgxr',
+};
+
+let _stripe = null;
+const getStripe = () => (_stripe ||= new Stripe(process.env.STRIPE_SECRET_KEY));
+
+let _supabase = null;
+const getSupabase = () => {
+  if (_supabase) return _supabase;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!key) throw new Error('SUPABASE_SERVICE_ROLE_KEY is not set');
+  const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || SUPABASE_URL_FALLBACK;
+  _supabase = createClient(url, key);
+  return _supabase;
+};
+
+/** Unit prices straight from Stripe, so the saved order matches what the family is charged. */
+async function stripeUnitPrices(stripe, lines) {
+  const ids = [...new Set(lines.map((l) => l.price_id))];
+  const prices = await Promise.all(ids.map((id) => stripe.prices.retrieve(id)));
+  return Object.fromEntries(prices.map((p) => [p.id, p.unit_amount]));
+}
+
+async function insertDraft(supabase, table, row) {
+  const { data, error } = await supabase.from(table).insert([row]).select('id').single();
+  if (error || !data?.id) throw new Error(`${table} draft failed: ${error?.message || 'no id'}`);
+  return data.id;
+}
+
 export default async function handler(req, res) {
-  // Only allow POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  const { items, fulfillment, pickupVenue } = req.body || {};
+  const cart = validateCart({ items, fulfillment, pickupVenue });
+  if (cart.error) return res.status(400).json({ error: cart.error });
+  const { lines, mtoQty } = cart;
+
   try {
-    const { items, fulfillment, orderId, iplOrderId } = req.body;
+    const stripe = getStripe();
+    const supabase = getSupabase();
+    const unit = await stripeUnitPrices(stripe, lines);
 
-    if (!items || items.length === 0) {
-      return res.status(400).json({ error: 'No items provided' });
-    }
+    const isPickup = fulfillment === 'pickup';
+    const venue = isPickup ? pickupVenue : null;
 
-    // Build Stripe line items from cart
-    const lineItems = items.map(item => {
-      const priceId = PRICE_MAP[item.product_id];
-      if (!priceId) throw new Error(`Unknown product: ${item.product_id}`);
+    const draftItems = (subset) => subset.map((l) => ({
+      product_id: l.product_id,
+      product_name: l.product_name,
+      size: l.size,
+      quantity: l.quantity,
+      unit_price: unit[l.price_id],
+      price_id: l.price_id,
+    }));
+    const draftRow = (subset) => {
+      const subtotal = subset.reduce((s, l) => s + unit[l.price_id] * l.quantity, 0);
       return {
-        price: priceId,
-        quantity: item.quantity,
+        items: draftItems(subset),
+        fulfillment_method: fulfillment,
+        pickup_venue: venue,
+        subtotal,
+        shipping_cost: 0,
+        total: subtotal,
+        payment_status: 'pending',
+        source: 'academy-shop',
       };
-    });
-
-    // Stripe Shipping Rate IDs
-    const STRIPE_SHIPPING_RATES = {
-      standard: 'shr_1TROdrIo52UEA50yMijZecJJ',
-      express:  'shr_1TROf8Io52UEA50yeADIIgxr',
     };
 
-    const { pickupVenue, mtoSurcharge, mtoQty } = req.body;
-    let shippingOptions;
-    if (fulfillment === 'pickup') {
-      const venueLabel = pickupLabel(pickupVenue);
-      shippingOptions = [{
-        shipping_rate_data: {
-          type: 'fixed_amount',
-          fixed_amount: { amount: 0, currency: 'aud' },
-          display_name: venueLabel,
-        },
-      }];
-    } else {
-      // Standard or Express — use real Stripe Shipping Rate IDs
-      shippingOptions = [{ shipping_rate: STRIPE_SHIPPING_RATES[fulfillment] }];
-    }
+    // Same split as before: made-to-order items (IPL shirt, jacket) → shop_orders_ipl, the rest → training.
+    const mto = lines.filter((l) => l.made_to_order);
+    const stock = lines.filter((l) => !l.made_to_order);
+    const iplOrderId = mto.length
+      ? await insertDraft(supabase, 'shop_orders_ipl', { ...draftRow(mto), supplier_status: 'awaiting_bulk_order' })
+      : '';
+    const orderId = stock.length
+      ? await insertDraft(supabase, 'shop_orders_training', { ...draftRow(stock), fulfillment_status: 'unfulfilled' })
+      : '';
 
-    // Collect shipping address for standard/express only
-    
+    const sizes = sizeSummary(lines);
+    const shippingOptions = isPickup
+      ? [{ shipping_rate_data: { type: 'fixed_amount', fixed_amount: { amount: 0, currency: 'aud' }, display_name: pickupLabel(venue) } }]
+      : [{ shipping_rate: STRIPE_SHIPPING_RATES[fulfillment] }];
 
-    // Add MTO per-item surcharge as line item when shipping (not pickup)
-    if (fulfillment !== 'pickup' && mtoSurcharge && mtoSurcharge > 0) {
-      lineItems.push({
-        price_data: {
-          currency: 'aud',
-          unit_amount: 1200,
-          product_data: {
-            name: 'Made-to-Order Delivery Surcharge',
-            description: `Separate international delivery for ${mtoQty} made-to-order item${mtoQty > 1 ? 's' : ''}`,
-          },
-        },
-        quantity: mtoQty,
-      });
-    }
+    const metadata = {
+      source: 'academy-shop',
+      order_id: orderId,
+      ipl_order_id: iplOrderId,
+      fulfillment_method: fulfillment,
+      pickup_venue: venue || '',
+      sizes,
+    };
 
-    // Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       allow_promotion_codes: true,
-      line_items: lineItems,
+      line_items: stripeLineItems(lines, fulfillment, mtoQty),
       shipping_options: shippingOptions,
-      // Collect customer details
       billing_address_collection: 'auto',
-      shipping_address_collection: fulfillment !== 'pickup'
-        ? { allowed_countries: ['AU'] }
-        : undefined,
+      shipping_address_collection: isPickup ? undefined : { allowed_countries: ['AU'] },
       phone_number_collection: { enabled: true },
-      // Pass order IDs through to success page via metadata. The `source` tag
-      // is the primary signal used by the webhook + sync endpoints to
-      // distinguish shop orders from program registrations.
-      metadata: {
-        source: 'academy-shop',
-        order_id: orderId || '',
-        ipl_order_id: iplOrderId || '',
-        fulfillment_method: fulfillment,
-      },
-      // Redirect URLs
-      success_url: `${BASE_URL}/academy-shop/success?session_id={CHECKOUT_SESSION_ID}&fulfillment=${fulfillment}&venue=${pickupVenue || ''}`,
+      // Shown under the Pay button, so the family sees the sizes they're paying for.
+      custom_text: { submit: { message: `Sizes: ${sizes}`.slice(0, 1200) } },
+      metadata,
+      success_url: `${BASE_URL}/academy-shop/success?session_id={CHECKOUT_SESSION_ID}&fulfillment=${fulfillment}&venue=${venue || ''}`,
       cancel_url: `${BASE_URL}/academy-shop`,
-      // Payment settings
       payment_intent_data: {
-        metadata: {
-          order_id: orderId || '',
-          ipl_order_id: iplOrderId || '',
-        },
+        // The payment's description in Stripe (and on the receipt): what to pick, in which size.
+        description: `Academy Shop: ${sizes}`.slice(0, 1000),
+        metadata,
       },
     });
 
-    return res.status(200).json({ url: session.url });
+    // Link the drafts to the session so a sync or the webhook always finds them.
+    await Promise.all([
+      orderId && supabase.from('shop_orders_training').update({ stripe_session_id: session.id }).eq('id', orderId),
+      iplOrderId && supabase.from('shop_orders_ipl').update({ stripe_session_id: session.id }).eq('id', iplOrderId),
+    ].filter(Boolean));
 
+    return res.status(200).json({ url: session.url });
   } catch (err) {
-    console.error('Stripe Checkout Session error:', err);
-    return res.status(500).json({ error: err.message });
+    console.error('Academy Shop checkout error:', err);
+    return res.status(500).json({ error: 'We could not start checkout. Please try again, or text us and we will sort it out.' });
   }
 }

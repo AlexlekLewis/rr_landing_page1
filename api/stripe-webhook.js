@@ -19,6 +19,8 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import { sendOrderConfirmation } from './_lib/orderEmail.js';
+import { fulfilmentFromSession, refundStatus } from './_lib/shopOrder.js';
+import { pickupLabel } from './_lib/pickupVenues.js';
 import { unpackApplication, buildPaidRow } from './_lib/pgpCheckout.js';
 import { sendPgpConfirmation } from './_lib/pgpEmail.js';
 import { isJrT3Session, classifyJrT3, completeJrT3Registration } from './_lib/jrTerm3.js';
@@ -243,13 +245,6 @@ const classifyAsProgram = (session, lineItems) => {
   return null;
 };
 
-const inferFulfillmentMethod = (shippingLabel) => {
-  const l = (shippingLabel || '').toLowerCase();
-  if (l.includes('pickup')) return 'pickup';
-  if (l.includes('express')) return 'express';
-  return 'standard';
-};
-
 const partitionLineItems = (lineItems) => {
   const ipl = [], training = [];
   for (const i of lineItems) {
@@ -304,6 +299,24 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: err.message });
   }
 
+  // Refunds: mark the shop order so it isn't handed out or posted. (The webhook endpoint must be
+  // subscribed to charge.refunded in the Stripe dashboard.)
+  if (event.type === 'charge.refunded') {
+    const charge = event.data.object;
+    const status = refundStatus(charge);
+    const pi = typeof charge.payment_intent === 'string' ? charge.payment_intent : charge.payment_intent?.id;
+    if (!status || !pi) return res.status(200).json({ received: true, ignored: 'refund_without_payment_intent' });
+    const supabase = getSupabase();
+    const results = await Promise.all(['shop_orders_training', 'shop_orders_ipl'].map((t) =>
+      supabase.from(t).update({ payment_status: status }).eq('stripe_payment_intent_id', pi).select('id')));
+    const failed = results.find((r) => r.error);
+    if (failed) {
+      console.error('shop refund update failed:', failed.error);
+      return res.status(500).json({ error: 'shop refund update failed' });
+    }
+    return res.status(200).json({ received: true, kind: 'shop_refund', status, rows: results.reduce((n, r) => n + (r.data?.length || 0), 0) });
+  }
+
   if (event.type !== 'checkout.session.completed') {
     return res.status(200).json({ received: true, ignored: event.type });
   }
@@ -321,9 +334,13 @@ export default async function handler(req, res) {
   const customerName    = session.customer_details?.name || '';
   const customerEmail   = session.customer_details?.email || '';
   const customerPhone   = session.customer_details?.phone || '';
-  const shippingAddress = session.shipping_details?.address || null;
-  const shippingLabel   = session.shipping_cost?.shipping_rate_details?.display_name || '';
-  const fulfillmentMethod = inferFulfillmentMethod(shippingLabel);
+  const shippingAddress = session.collected_information?.shipping_details?.address || session.shipping_details?.address || null;
+  // The session carries no shipping-rate label, so this used to read '' and save every order as
+  // "standard". Our own metadata says what the family chose.
+  const fulfillmentMethod = fulfilmentFromSession(session);
+  const shippingLabel   = fulfillmentMethod === 'pickup'
+    ? pickupLabel(session.metadata?.pickup_venue)
+    : fulfillmentMethod === 'express' ? 'Express Shipping' : 'Standard Shipping';
 
   const lineItems = (session.line_items?.data || []).map(i => ({
     name: i.description,
@@ -716,21 +733,31 @@ export default async function handler(req, res) {
     };
   };
 
-  if (trainingItems.length > 0 || draftTrainingId) {
-    await upsertOrder('shop_orders_training', {
+  // With drafts (every checkout since 15 Nov 2026 writes them on the server), only those drafts are
+  // updated: they hold the sizes, and the server already split made-to-order items from the rest.
+  // Without drafts (older sessions), fall back to splitting Stripe's line items.
+  const hasDrafts = Boolean(draftTrainingId || draftIplId);
+  const writes = [];
+  if (hasDrafts ? draftTrainingId : trainingItems.length > 0) {
+    writes.push(upsertOrder('shop_orders_training', {
       ...stripePayloadShared,
       items: trainingItems,
       ...totalsForSubset(trainingItems),
-    }, draftTrainingId);
+    }, draftTrainingId));
   }
-
-  if (iplItems.length > 0 || draftIplId) {
-    await upsertOrder('shop_orders_ipl', {
+  if (hasDrafts ? draftIplId : iplItems.length > 0) {
+    writes.push(upsertOrder('shop_orders_ipl', {
       ...stripePayloadShared,
       items: iplItems,
       ...totalsForSubset(iplItems),
       supplier_status: 'awaiting_bulk_order',
-    }, draftIplId);
+    }, draftIplId));
+  }
+  const saved = await Promise.all(writes);
+  if (saved.some((row) => !row)) {
+    // A 500 makes Stripe retry; the upsert is keyed on the session, so a retry can't duplicate.
+    console.error('Academy Shop order not saved; asking Stripe to retry', { session_id: session.id });
+    return res.status(500).json({ error: 'shop order save failed' });
   }
 
   // Fetch original items from Supabase to get size info for Zapier
