@@ -56,7 +56,7 @@ const StepTitle = ({ n, children }) => (
 const EMPTY = {
     format: '', sessions: 0, partner: '',
     player_first_name: '', player_last_name: '', player_age: '',
-    parent_name: '', email: '', phone: '', notes: '',
+    parent_name: '', email: '', phone: '', notes: '', availability: '',
     [HONEYPOT_FIELD]: '',
 };
 
@@ -105,7 +105,8 @@ const CoachBooking = ({ coachSlug, centreSlug, onClose }) => {
         const e = {};
         if (!form.format) e.option = 'Please choose 1-to-1 or a training partner session.';
         else if (!form.sessions) e.option = 'Please choose how many sessions.';
-        if (form.sessions && picked.length !== form.sessions) e.times = `Please choose ${form.sessions} time${form.sessions > 1 ? 's' : ''} (${picked.length} chosen).`;
+        if (form.sessions && !openCount && form.availability.trim().length < 3) e.times = 'Please tell us the days and times that suit you.';
+        if (form.sessions && openCount && picked.length !== form.sessions) e.times = `Please choose ${form.sessions} time${form.sessions > 1 ? 's' : ''} (${picked.length} chosen).`;
         if (form.format === '1-2' && !form.partner.trim()) e.partner = 'Please tell us who is training with your player.';
         if (!form.player_first_name.trim()) e.player_first_name = 'Please enter the player’s first name.';
         if (!form.player_last_name.trim()) e.player_last_name = 'Please enter the player’s last name.';
@@ -143,7 +144,8 @@ const CoachBooking = ({ coachSlug, centreSlug, onClose }) => {
             package_sessions: form.sessions,
             price_per_session: per,
             package_total: total,
-            selected_slots: picked,
+            selected_slots: openCount ? picked : [],
+            availability: openCount ? null : form.availability.trim(),
             payment_status: 'request', // checkout API → sent_to_stripe, webhook → paid
             player_first_name: form.player_first_name.trim(),
             player_last_name: form.player_last_name.trim(),
@@ -232,13 +234,7 @@ const CoachBooking = ({ coachSlug, centreSlug, onClose }) => {
                     </div>
 
                     {!loaded && <p className="text-sm text-slate-500">Checking {coach.name.split(' ')[0]}’s times…</p>}
-                    {loaded && openCount === 0 && (
-                        <div className="rounded-2xl bg-slate-50 p-5 text-sm text-rr-charcoal font-medium">
-                            {coach.name.split(' ')[0]} has no open times at {loc?.suburb} right now. New times are added every week, so please check back soon{coach.centres.length > 1 ? ', or try their other location' : ''}.
-                        </div>
-                    )}
-
-                    {loaded && openCount > 0 && (
+                    {loaded && (
                         <>
                             {/* 1. Session type, with the coach's price per session */}
                             <div id="f-option">
@@ -268,7 +264,7 @@ const CoachBooking = ({ coachSlug, centreSlug, onClose }) => {
                                                 const price = coachPrice(coach, form.format, p.sessions);
                                                 if (price == null) return null;
                                                 const on = form.sessions === p.sessions;
-                                                const short = openCount < p.sessions;
+                                                const short = openCount > 0 && openCount < p.sessions;
                                                 const discounted = price < coachPrice(coach, form.format, 1);
                                                 return (
                                                     <button key={p.sessions} type="button" disabled={short} onClick={() => chooseOption(form.format, p.sessions)} aria-pressed={on}
@@ -293,7 +289,15 @@ const CoachBooking = ({ coachSlug, centreSlug, onClose }) => {
                             </div>
 
                             {/* 2. Times */}
-                            {form.sessions > 0 && (
+                            {form.sessions > 0 && !openCount && (
+                                <div id="f-times">
+                                    <StepTitle n={2}>When suits you?</StepTitle>
+                                    <p className="text-sm text-rr-charcoal font-medium mb-3">Tell us the days and times that work for you. {coach.name.split(' ')[0]} will contact you within 24 hours of booking to lock in your {form.sessions > 1 ? `${form.sessions} sessions` : 'session'} at {loc?.suburb}.</p>
+                                    <textarea id="availability" rows={3} value={form.availability} onChange={ev('availability')} className={input(errors.times)} placeholder="e.g. Tuesday or Thursday after 4pm, Saturday mornings" />
+                                    <Err>{errors.times}</Err>
+                                </div>
+                            )}
+                            {form.sessions > 0 && openCount > 0 && (
                                 <div id="f-times">
                                     <StepTitle n={2}>Choose your {form.sessions > 1 ? `${form.sessions} times` : 'time'}</StepTitle>
                                     <p className="text-xs text-rr-charcoal font-medium mb-3">{picked.length} of {form.sessions} chosen.</p>
@@ -347,6 +351,7 @@ const CoachBooking = ({ coachSlug, centreSlug, onClose }) => {
                                         <div className="flex justify-between gap-4"><dt className="text-white/70">Coach</dt><dd className="font-bold text-right">{coach.name}, {loc?.suburb}</dd></div>
                                         <div className="flex justify-between gap-4"><dt className="text-white/70">Session</dt><dd className="font-bold text-right">{FORMAT_LABELS[form.format]} · {form.sessions} × {money(per)}</dd></div>
                                         {picked.length > 0 && <div className="flex justify-between gap-4"><dt className="text-white/70">Times</dt><dd className="font-bold text-right">{picked.map((p) => `${nightLabel(p.date)} ${timeLabel(p.start)}`).join(', ')}</dd></div>}
+                                        {!openCount && <div className="flex justify-between gap-4"><dt className="text-white/70">Times</dt><dd className="font-bold text-right">{coach.name.split(' ')[0]} will contact you to lock them in</dd></div>}
                                         {needsShirt(shirt) && shirt.size && <div className="flex justify-between gap-4"><dt className="text-white/70">Training shirt</dt><dd className="font-bold text-right">Size {String(shirt.size).split(' ')[0]} · {money(TRAINING_SHIRT.price)}</dd></div>}
                                         <div className="flex justify-between gap-4 pt-2 mt-2 border-t border-white/15 text-base"><dt className="font-black">Total incl. GST</dt><dd className="font-black">{money(grand)}</dd></div>
                                     </dl>

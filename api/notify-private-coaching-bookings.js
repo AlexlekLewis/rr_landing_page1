@@ -63,7 +63,7 @@ async function notifyOne(sb, r, inbox) {
     let partner = null;
     if (r.format === '1-2') {
         const { data } = await sb.from('premium_private_coaching_partners').select('id').eq('booking_id', r.id).maybeSingle();
-        partner = { done: !!data, link: `${process.env.VITE_APP_URL || 'https://rramelbourne.com'}/private-coaching-premium/partner?b=${r.id}` };
+        partner = { done: !!data, link: `${process.env.VITE_APP_URL || 'https://rramelbourne.com'}/private-coaching/partner?b=${r.id}` };
     }
     const alert = buildAlert(r, coach, partner);
     const coachEmail = coach?.notify_email && coach.email ? [coach.email] : [];

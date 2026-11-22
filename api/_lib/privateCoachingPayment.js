@@ -32,7 +32,9 @@ export const bookingCheckout = (row) => {
     const per = coachPrice(coach, row.format, row.package_sessions);
     if (per == null) return { error: 'No price for this coach yet.' };
     const slots = Array.isArray(row.selected_slots) ? row.selected_slots : [];
-    if (slots.length !== row.package_sessions) return { error: `Please choose ${row.package_sessions} session time${row.package_sessions > 1 ? 's' : ''}.` };
+    // No times online for this coach yet: the family pays, tells us what suits (row.availability), and the coach sets the times.
+    if (slots.length === 0 && !String(row.availability || '').trim()) return { error: 'Please tell us the days and times that suit you.' };
+    if (slots.length && slots.length !== row.package_sessions) return { error: `Please choose ${row.package_sessions} session time${row.package_sessions > 1 ? 's' : ''}.` };
     if (slots.some((s) => s.centre !== row.centre)) return { error: 'All sessions must be at the same centre.' };
     if (!coach.centres.includes(row.centre)) return { error: 'This coach doesn’t coach at that centre.' };
 
@@ -40,7 +42,7 @@ export const bookingCheckout = (row) => {
     const fmt = row.format === '1-2' ? '1-to-2' : '1-to-1';
     const items = [{
         name: `${PROGRAM_NAME}: ${coach.name}, ${FORMAT_LABELS[row.format]}`,
-        description: `${row.package_sessions} × one-hour ${fmt} session${row.package_sessions > 1 ? 's' : ''} at ${centre?.suburb || row.centre}, for ${row.player_first_name}. Sessions subject to lane availability and confirmation.`,
+        description: `${row.package_sessions} × one-hour ${fmt} session${row.package_sessions > 1 ? 's' : ''} at ${centre?.suburb || row.centre}, for ${row.player_first_name}. ${slots.length ? '' : 'Times to be set with your coach. '}Sessions subject to lane availability and confirmation.`,
         unit_amount: cents(per),
         quantity: row.package_sessions,
     }];

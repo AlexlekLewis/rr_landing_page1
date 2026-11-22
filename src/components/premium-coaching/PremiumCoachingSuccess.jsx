@@ -54,6 +54,7 @@ const PremiumCoachingSuccess = () => {
         s.format && ['Format', s.format === '1-2' ? `1-to-2 with ${s.partner || 'a training partner'}` : '1-to-1'],
         s.sessions > 0 && s.per != null && ['Sessions', `${s.sessions} × ${money(s.per)} = ${money(s.total)} incl. GST`],
         s.picked?.length > 0 && ['Your times', s.picked.map((p) => `${nightLabel(p.date)} ${timeLabel(p.start)}`).join(', ')],
+        s.picked && !s.picked.length && ['Your times', `${(s.coachName || 'Your coach').split(' ')[0]} will contact you within 24 hours to lock them in`],
         s.shirt?.has && ['Training shirt', sizeNo ? `Size ${sizeNo}, ordered with this booking (${TRAINING_SHIRT.priceLabel})` : 'Already has one'],
     ].filter(Boolean);
 

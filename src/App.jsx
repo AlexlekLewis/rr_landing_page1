@@ -230,11 +230,10 @@ function App() {
         <Route path="/coaches" element={<CoachesPage />} />
         {/* Private Coaching at Mickleham. EOI form → Head Coach assigns a coach.
             Writes to private_coaching_eoi (anon insert only). Canonical URL is
-            /mickleham (per Alex); /private-coaching 308s in vercel.json, with a
-            client redirect here for any in-app navigations. */}
+            /mickleham (per Alex). /private-coaching is now Royals Private Coaching
+            (Andy, 22 Nov 2026), further down. */}
         <Route path="/mickleham" element={<PrivateCoaching />} />
         <Route path="/Mickleham" element={<PrivateCoaching />} />
-        <Route path="/private-coaching" element={<Navigate to="/mickleham" replace />} />
         {/* Mickleham 30-Day Launch Special — campaign page for the front-desk flyer
             QR code + Instagram link. /Mickleham_Launch is the published short link;
             /launch kept as a fallback so nothing already shared breaks. */}
@@ -291,9 +290,9 @@ function App() {
         {/* Match Registration — reusable match-day registration + payment. HIDDEN:
             noindex, not in nav or sitemap, direct URL only. Currently serving the
             Power League Matches, Mon 28 & Tue 29 September. */}
-        <Route path="/private-coaching-premium" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PremiumCoaching /></React.Suspense>} />
-        <Route path="/private-coaching-premium/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PremiumCoachingSuccess /></React.Suspense>} />
-        <Route path="/private-coaching-premium/partner" element={<React.Suspense fallback={<div className="min-h-screen bg-white" />}><PremiumCoachingPartner /></React.Suspense>} />
+        <Route path="/private-coaching" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PremiumCoaching /></React.Suspense>} />
+        <Route path="/private-coaching/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PremiumCoachingSuccess /></React.Suspense>} />
+        <Route path="/private-coaching/partner" element={<React.Suspense fallback={<div className="min-h-screen bg-white" />}><PremiumCoachingPartner /></React.Suspense>} />
         <Route path="/match-registration" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><MatchRegistration /></React.Suspense>} />
         <Route path="/match-registration/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><MatchRegistrationSuccess /></React.Suspense>} />
         {/* Performance Squad price. Same page, same form, same consents.

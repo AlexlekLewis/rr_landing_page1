@@ -68,3 +68,16 @@ describe('private coaching checkout pricing (server side)', () => {
         expect(li[0].price_data.currency).toBe('aud');
     });
 });
+
+describe('booking a coach with no times online yet', () => {
+    const flex = { ...base, selected_slots: [], availability: 'Tue or Thu after 4pm' };
+    it('is paid in full, times set with the coach', () => {
+        const out = bookingCheckout(flex);
+        expect(out.error).toBeUndefined();
+        expect(out.totalCents).toBe(3 * 15500);
+        expect(out.items[0].description).toContain('Times to be set with your coach');
+    });
+    it('needs the days and times that suit', () => {
+        expect(bookingCheckout({ ...flex, availability: '' }).error).toMatch(/days and times/);
+    });
+});

@@ -113,9 +113,9 @@
       "permanent": true
     },
     {
-      "source": "/private-coaching",
-      "destination": "/mickleham",
-      "permanent": true
+      "source": "/private-coaching-premium/:path*",
+      "destination": "/private-coaching/:path*",
+      "permanent": false
     },
     {
       "source": "/india-tour-2026",

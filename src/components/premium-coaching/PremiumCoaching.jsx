@@ -16,7 +16,7 @@ import { HERO_IMAGE, MEDIA } from './premiumCoachingMedia';
 // Order: Hero (Why line + What facts + CTA) → WHY different → HOW: the tech →
 // HOW: the steps → WHAT: formats + coach tiers → WHAT: coaches by centre → see it
 // (one mixed photo + video carousel) → book and pay. No Questions section (Andy, 18 Nov
-// 2026). PREVIEW ONLY: hidden route, noindex, no surfaces.
+// 2026). Live at /private-coaching (Andy, 22 Nov 2026).
 
 const SECTIONS = ['hero', 'tech', 'how', 'coaches', 'media'];
 const ANCHOR = 'scroll-mt-24 md:scroll-mt-28';

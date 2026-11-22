@@ -33,7 +33,7 @@
 // $130/$160 an hour) lives in components/private-coaching and is untouched.
 // ============================================================
 
-export const ROUTE = '/private-coaching-premium';
+export const ROUTE = '/private-coaching'; // Andy, 22 Nov 2026: live at /private-coaching
 export const SUCCESS_ROUTE = `${ROUTE}/success`;
 export const DB_TABLE = 'premium_private_coaching_requests';
 export const AVAILABILITY_VIEW = 'private_coaching_open_slots';
