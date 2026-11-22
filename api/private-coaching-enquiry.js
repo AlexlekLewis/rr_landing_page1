@@ -15,6 +15,7 @@ import { COACHES } from '../src/components/premium-coaching/premiumCoachingData.
 import { auMobileDigits } from './_lib/privateCoachingAlert.js';
 import { sendEmail, sendSms, twilioReady, academyInbox } from './_lib/privateCoachingSend.js';
 
+export const FORMAT_PREFS = { '1-1': '1-to-1', '1-2': 'Training partner session (1-to-2)', 'not-sure': 'Not sure yet' };
 const BASE_URL = process.env.VITE_APP_URL || 'https://rramelbourne.com';
 const baseFor = (req) => {
     const host = req.headers['x-forwarded-host'] || req.headers.host;
@@ -31,6 +32,7 @@ export const validateEnquiry = (b) => {
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(clean(b.email, 200))) e.email = 'Please enter a valid email address.';
     if (String(b.phone || '').replace(/\D/g, '').length < 8) e.phone = 'Please enter a valid phone number.';
     if (clean(b.suburb).length < 2) e.suburb = 'Please enter your suburb.';
+    if (!FORMAT_PREFS[b.format_pref]) e.format_pref = 'Please choose 1-to-1, training partner session, or not sure.';
     return e;
 };
 
@@ -39,16 +41,16 @@ export const enquiryAlert = (q, coach, coachName, hubUrl) => {
     const tel = String(q.phone).replace(/[^\d+]/g, '');
     const wa = auMobileDigits(q.phone);
     const btn = (href, label, bg) => `<a href="${esc(href)}" style="display:inline-block;margin:0 8px 8px 0;padding:12px 18px;border-radius:999px;background:${bg};color:#fff;font-weight:700;font-size:14px;text-decoration:none">${label}</a>`;
-    const rows = [['Parent / contact', q.parent_name], ['Player', q.player_name || 'Same person'], ['Mobile', q.phone], ['Email', q.email], ['Suburb', q.suburb]];
+    const rows = [['Looking for', FORMAT_PREFS[q.format_pref] || 'Not said'], ['Parent / contact', q.parent_name], ['Player', q.player_name || 'Same person'], ['Mobile', q.phone], ['Email', q.email], ['Suburb', q.suburb]];
     const html = `<div style="font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;max-width:640px;color:#111">
 <p style="margin:0 0 4px;font-size:12px;color:#E11F8F;font-weight:700;text-transform:uppercase;letter-spacing:.1em">Royals Private Coaching: new enquiry</p>
 <p style="margin:0 0 6px;font-size:16px">Hi ${esc(first(coachName))},</p>
-<p style="margin:0 0 16px;font-size:15px;line-height:1.5">${esc(q.parent_name)} wants private coaching with you${q.player_name ? ` for ${esc(q.player_name)}` : ''}. They have your number too, so they may call first. Please get in touch today, agree the times, and book the lane with the centre.</p>
+<p style="margin:0 0 16px;font-size:15px;line-height:1.5">${esc(q.parent_name)} wants private coaching with you${q.player_name ? ` for ${esc(q.player_name)}` : ''}${q.format_pref && q.format_pref !== 'not-sure' ? ` (${esc(FORMAT_PREFS[q.format_pref])})` : ''}. They have your number too, so they may call first. Please get in touch today, agree the times, and book the lane with the centre.</p>
 <div style="margin:0 0 16px">${btn(`tel:${tel}`, `Call ${esc(first(q.parent_name))}`, '#111921')}${btn(`sms:${tel}`, 'Text', '#1226AA')}${wa ? btn(`https://wa.me/${wa}?text=${encodeURIComponent(`Hi ${first(q.parent_name)}, it's ${coachName} from the Rajasthan Royals Academy about private coaching for ${first(player)}.`)}`, 'WhatsApp', '#1A9E52') : ''}${btn(`mailto:${q.email}`, 'Email', '#E11F8F')}</div>
 <table style="border-collapse:collapse">${rows.map(([k, v]) => `<tr><td style="padding:6px 12px 6px 0;color:#666;font-size:13px">${esc(k)}</td><td style="padding:6px 0;font-size:14px">${esc(v)}</td></tr>`).join('')}</table>
 ${hubUrl ? `<p style="margin:18px 0 6px;font-size:15px;line-height:1.5"><b>Once you've agreed the times:</b> open your coach page, record the session${'s'} and send the family their pay link. You'll get an email when they've paid.</p>${btn(hubUrl, 'Open my coach page', '#E11F8F')}` : ''}
 <p style="margin:16px 0 0;font-size:12px;color:#666">Sent automatically by rramelbourne.com.</p></div>`;
-    const sms = `Royals Private Coaching: new enquiry from ${q.parent_name}${q.player_name ? ` for ${q.player_name}` : ''} (${q.suburb}). Call them: ${q.phone}. Details and your coach page link in your email.`;
+    const sms = `Royals Private Coaching: new enquiry from ${q.parent_name}${q.player_name ? ` for ${q.player_name}` : ''} (${q.suburb}), ${FORMAT_PREFS[q.format_pref] || 'format not said'}. Call them: ${q.phone}. Details and your coach page link in your email.`;
     return { subject: `New private coaching enquiry: ${q.parent_name}, ${q.suburb}`, html, sms };
 };
 
@@ -64,7 +66,7 @@ export default async function handler(req, res) {
     const coachInfo = COACHES.find((c) => c.slug === b.coach);
     const q = {
         coach_slug: b.coach, parent_name: clean(b.parent_name), player_name: clean(b.player_name) || null,
-        email: clean(b.email, 200).toLowerCase(), phone: clean(b.phone, 40), suburb: clean(b.suburb),
+        email: clean(b.email, 200).toLowerCase(), phone: clean(b.phone, 40), suburb: clean(b.suburb), format_pref: b.format_pref,
         utm_source: clean(b.utm_source) || null, utm_medium: clean(b.utm_medium) || null,
         utm_campaign: clean(b.utm_campaign) || null, utm_content: clean(b.utm_content) || null,
         page_referrer: clean(b.page_referrer, 300) || null,

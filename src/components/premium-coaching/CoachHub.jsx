@@ -245,6 +245,7 @@ const CoachHub = ({ slug }) => {
                                     <div>
                                         <p className="font-black text-lg">{q.parent_name}{q.player_name ? <span className="font-semibold text-slate-500"> for {q.player_name}</span> : null}</p>
                                         <p className="text-sm text-slate-500 font-semibold">{q.suburb} · {ago(q.created_at)}{q.status === 'contacted' ? ' · contacted' : ''}</p>
+                                        {q.format_pref && <p className="mt-1 inline-block text-xs font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-rr-pink/10 text-rr-pink">{{ '1-1': '1-to-1', '1-2': 'Training partner session', 'not-sure': 'Not sure: 1-to-1 or partner' }[q.format_pref]}</p>}
                                     </div>
                                     <div className="flex gap-2">
                                         <a href={telHref(q.phone)} className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-rr-dark text-white text-xs font-black uppercase"><Phone className="w-3.5 h-3.5" />Call</a>
@@ -253,7 +254,7 @@ const CoachHub = ({ slug }) => {
                                 </div>
                                 <p className="text-sm font-medium mt-1">{q.phone} · <span className="break-all">{q.email}</span></p>
                                 <div className="flex flex-wrap gap-2 mt-3">
-                                    <button type="button" onClick={() => { const [fn, ...ln] = String(q.player_name || q.parent_name).split(' '); setCreated(null); setForm({ enquiry_id: q.id, player_first_name: fn, player_last_name: ln.join(' '), parent_name: q.player_name ? q.parent_name : '', email: q.email, phone: q.phone }); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="px-4 py-2 rounded-full bg-rr-pink text-white text-xs font-black uppercase tracking-wider">Record booking</button>
+                                    <button type="button" onClick={() => { const [fn, ...ln] = String(q.player_name || q.parent_name).split(' '); setCreated(null); setForm({ enquiry_id: q.id, ...(q.format_pref === '1-2' ? { format: '1-2' } : {}), player_first_name: fn, player_last_name: ln.join(' '), parent_name: q.player_name ? q.parent_name : '', email: q.email, phone: q.phone }); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="px-4 py-2 rounded-full bg-rr-pink text-white text-xs font-black uppercase tracking-wider">Record booking</button>
                                     {q.status === 'new' && <button type="button" onClick={() => post({ action: 'enquiry_status', id: q.id, status: 'contacted' })} className="px-4 py-2 rounded-full bg-slate-200 text-xs font-black uppercase tracking-wider">Mark contacted</button>}
                                     <button type="button" onClick={() => post({ action: 'enquiry_status', id: q.id, status: 'closed' })} className="px-4 py-2 rounded-full bg-slate-100 text-slate-500 text-xs font-black uppercase tracking-wider">Not going ahead</button>
                                 </div>

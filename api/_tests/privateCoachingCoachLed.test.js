@@ -63,7 +63,7 @@ describe('pay link: governance boxes and shirt are required', () => {
 
 describe('Book now enquiry', () => {
     it('needs name, email, phone, suburb', () => {
-        expect(validateEnquiry({ coach: 'alex-thornhill', parent_name: 'Pat', email: 'a@b.co', phone: '0412345678', suburb: 'Berwick' })).toEqual({});
-        expect(Object.keys(validateEnquiry({ coach: 'nobody' }))).toEqual(['coach', 'parent_name', 'email', 'phone', 'suburb']);
+        expect(validateEnquiry({ coach: 'alex-thornhill', parent_name: 'Pat', email: 'a@b.co', phone: '0412345678', suburb: 'Berwick', format_pref: '1-2' })).toEqual({});
+        expect(Object.keys(validateEnquiry({ coach: 'nobody' }))).toEqual(['coach', 'parent_name', 'email', 'phone', 'suburb', 'format_pref']);
     });
 });

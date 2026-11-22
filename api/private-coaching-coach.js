@@ -88,7 +88,7 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
         const since = new Date(Date.now() - 120 * 864e5).toISOString();
         const [{ data: enquiries }, { data: bookings }] = await Promise.all([
-            sb.from('private_coaching_enquiries').select('id, created_at, parent_name, player_name, email, phone, suburb, status').eq('coach_slug', coach.slug).gte('created_at', since).order('created_at', { ascending: false }),
+            sb.from('private_coaching_enquiries').select('id, created_at, parent_name, player_name, email, phone, suburb, status, format_pref').eq('coach_slug', coach.slug).gte('created_at', since).order('created_at', { ascending: false }),
             sb.from(TABLE).select('id, created_at, created_by, pay_share, linked_booking_id, centre, format, package_sessions, price_per_session, package_total, selected_slots, availability, payment_status, paid_at, player_first_name, player_last_name, parent_name, email, phone, other_players, pay_expires_at, accept_terms').eq('coach_slug', coach.slug).gte('created_at', since).in('payment_status', ['request', 'sent_to_stripe', 'paid']).order('created_at', { ascending: false }),
         ]);
         const list = (bookings || []).filter((b) => b.created_by === 'coach' || b.payment_status === 'paid');

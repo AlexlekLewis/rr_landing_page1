@@ -6,7 +6,7 @@ import Footer from '../Footer';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { ROUTE, FORMAT_LABELS, FORMAT_BLURBS, coachOf, centreOf, coachPrice, money, TECH } from './premiumCoachingData';
 import { Field, Photo } from './pcUi';
-import { input, utm, waDigits, telHref } from './pcHelpers';
+import { input, labelCls, utm, waDigits, telHref } from './pcHelpers';
 
 // A coach's own page (Andy, 22 Nov 2026, coach-led like the "cash coach" economy):
 // /private-coaching-<coach>. Their bio, prices, usual times, terms and specialities.
@@ -14,7 +14,7 @@ import { input, utm, waDigits, telHref } from './pcHelpers';
 // tell the coach (email, and text once Twilio is set up). The coach then agrees the times
 // with the family and the centre, and sends a pay link from their coach page.
 
-const EMPTY = { parent_name: '', player_name: '', email: '', phone: '', suburb: '', website: '' };
+const EMPTY = { format_pref: '', parent_name: '', player_name: '', email: '', phone: '', suburb: '', website: '' };
 
 const Enquire = ({ coach, onDone }) => {
     const [form, setForm] = useState(EMPTY);
@@ -27,6 +27,7 @@ const Enquire = ({ coach, onDone }) => {
     const submit = async (e) => {
         e.preventDefault();
         const err = {};
+        if (!form.format_pref) err.format_pref = 'Please choose one.';
         if (form.parent_name.trim().length < 2) err.parent_name = 'Please enter your name.';
         if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim())) err.email = 'Please enter a valid email address.';
         if (form.phone.replace(/\D/g, '').length < 8) err.phone = 'Please enter a valid phone number.';
@@ -52,6 +53,19 @@ const Enquire = ({ coach, onDone }) => {
     return (
         <form onSubmit={submit} noValidate className="space-y-4" data-enquiry>
             <p className="text-sm text-rr-charcoal font-medium">A few details, then we’ll show you {first}’s number so you can arrange your times. We’ll let {first} know you’re coming too.</p>
+            <div id="f-format_pref">
+                <p className={labelCls}>What are you looking for? *</p>
+                <div className="grid sm:grid-cols-3 gap-2" role="radiogroup" aria-label="What are you looking for?">
+                    {[['1-1', '1-to-1', money(coachPrice(coach, '1-1', 1))], ['1-2', 'Training partner session', money(coachPrice(coach, '1-2', 1))], ['not-sure', 'Not sure yet', 'Talk it through']].map(([v, label, sub]) => (
+                        <button key={v} type="button" role="radio" aria-checked={form.format_pref === v} data-pref={v} onClick={() => { setForm((f) => ({ ...f, format_pref: v })); setErrors((x) => ({ ...x, format_pref: undefined })); }}
+                            className={`text-left rounded-xl border-2 px-4 py-3 transition-colors ${form.format_pref === v ? 'border-rr-pink bg-rr-pink/5' : errors.format_pref ? 'border-red-300' : 'border-slate-200 hover:border-rr-pink/50'}`}>
+                            <span className="block text-sm font-black text-rr-dark">{label}</span>
+                            <span className="block text-xs font-semibold text-slate-500">{v === 'not-sure' ? sub : `${sub} a session`}</span>
+                        </button>
+                    ))}
+                </div>
+                {errors.format_pref && <p className="text-red-500 text-xs font-medium mt-1">{errors.format_pref}</p>}
+            </div>
             <div className="grid sm:grid-cols-2 gap-4">
                 <Field id="parent_name" label="Your name" error={errors.parent_name}><input id="parent_name" value={form.parent_name} onChange={set('parent_name')} className={input(errors.parent_name)} autoComplete="name" /></Field>
                 <Field id="player_name" label="Player’s name, if different" optional><input id="player_name" value={form.player_name} onChange={set('player_name')} className={input(false)} /></Field>

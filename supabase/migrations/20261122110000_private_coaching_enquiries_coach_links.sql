@@ -49,3 +49,7 @@ drop policy if exists "public insert" on public.premium_private_coaching_request
 create policy "public insert" on public.premium_private_coaching_requests for insert to anon, authenticated
     with check ((status = 'new') and (staff_notes is null) and (payment_status = any (array['request', 'sent_to_stripe']))
         and (created_by = 'family') and (enquiry_id is null) and (pay_share = 1) and (linked_booking_id is null));
+
+-- What the family is after (Andy, 22 Nov 2026): 1-to-1, a training partner session, or not sure.
+alter table public.private_coaching_enquiries
+    add column if not exists format_pref text check (format_pref is null or format_pref in ('1-1', '1-2', 'not-sure'));
