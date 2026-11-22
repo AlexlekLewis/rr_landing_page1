@@ -8,23 +8,7 @@
 export const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
 export const PRODUCTS = [
-  {
-    id: 'ipl-replica-shirt',
-    name: '2026 Rajasthan Royals IPL Replica Playing Shirt',
-    shortName: 'IPL Replica Shirt',
-    description: 'The official 2026 IPL season playing shirt worn by the Rajasthan Royals. Premium quality replica in authentic team colours.',
-    price: 9995,
-    displayPrice: '$99.95',
-    category: 'Shirts',
-    badge: 'Made to Order',
-    badgeColor: 'bg-rr-blue',
-    madeToOrder: true,
-    madeToOrderNote: 'Made to order. Available for pickup at Mickleham Indoor Sports Centre and the Elite Cricket Centre (Cranbourne North), and for postage, approximately 18th May. You will be updated via text message on your order status.',
-    imagePlaceholder: false,
-    images: { front: '/shop/ipl-shirt-front.jpeg', back: null },
-    // Stripe Price IDs — one per size (create in Stripe Dashboard → Products)
-    stripePriceId: 'price_1TRJe7Io52UEA50yZ4i5OPwH',
-  },
+  // 2026 Rajasthan Royals IPL replica playing shirt ($99.95): taken off sale 15 Nov 2026 (Andy).
   {
     id: 'training-shirt',
     madeToOrder: false,
