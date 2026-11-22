@@ -9,6 +9,7 @@
 // as the primary for the shared Elite/PowerGame page (/PGP2026 canonicalises to it).
 
 import { NEWS_STORIES } from '../components/news/newsStories.js';
+import { INVITATION_SEO } from '../components/invitation/invitations.js';
 
 export const SITE = {
   name: 'Rajasthan Royals Academy Melbourne',
@@ -33,6 +34,9 @@ const ELITE = {
 };
 
 export const PAGE_SEO = {
+  // Invitation-list pages (/ravenhall …): titles and share images live with each
+  // campaign in components/invitation/invitations.js.
+  ...INVITATION_SEO,
   // Spin Club — ANNOUNCED 26 Sep 2026 (Alex): it is in the nav, the home-page
   // modal and the ticker, so the noindex came off and the route went into the
   // sitemap. A page we promote to every visitor should not be hidden from search.

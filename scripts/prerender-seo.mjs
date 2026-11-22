@@ -103,7 +103,10 @@ async function main() {
         process.exit(1);
     }
 
-    for (const route of ROUTES) {
+    // Invitation-list pages are shared on social media, so each needs its own
+    // share preview. They come from the campaign list, not from ROUTES above.
+    const { INVITATION_ROUTES } = await import('../src/components/invitation/invitations.js');
+    for (const route of [...ROUTES, ...INVITATION_ROUTES]) {
         const cfg = PAGE_SEO[route];
         if (!cfg) {
             // Loud, not silent. A route here with no config would ship a page

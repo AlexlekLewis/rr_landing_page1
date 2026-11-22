@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, Play, Pause, Volume2, VolumeX } from 'lucide-react';
 import { HOME_MEDIA } from './homeMediaData';
@@ -11,10 +11,7 @@ import { useCarousel, CarouselTrack, CarouselControls } from '../india-tour-2026
 // Built like the /junior-royals photo strip (same carousel, arrows, progress bar and
 // counter). The media and the mix: homeMediaData.js.
 
-const media = HOME_MEDIA;
-const photos = media.filter((m) => m.type === 'image');
-
-const Lightbox = ({ index, onClose, onStep }) => {
+const Lightbox = ({ photos, index, onClose, onStep }) => {
     const touchX = useRef(null);
     useEffect(() => {
         const onKey = (e) => {
@@ -124,22 +121,26 @@ const VideoSlide = ({ v }) => {
     );
 };
 
-const HomeMedia = () => {
+// Used as it is on the home page. Other pages (the invitation-list pages) pass their own
+// media list and heading: <HomeMedia media={ACADEMY_MEDIA} eyebrow="…" title="…" intro="…" />.
+const HomeMedia = ({ media = HOME_MEDIA, eyebrow = 'Photos & videos', title, intro, id }) => {
+    const photos = useMemo(() => media.filter((m) => m.type === 'image'), [media]);
     const total = media.length;
     const carousel = useCarousel(total);
     const [open, setOpen] = useState(null);
-    const step = useCallback((d) => setOpen((i) => (i + d + photos.length) % photos.length), []);
+    const step = useCallback((d) => setOpen((i) => (i + d + photos.length) % photos.length), [photos.length]);
     const close = useCallback(() => setOpen(null), []);
     if (total === 0) return null;
 
     return (
-        <section className="py-16 md:py-20 bg-white" data-home-media>
+        <section id={id} className="py-16 md:py-20 bg-white" data-home-media>
             <div className="max-w-6xl mx-auto px-6">
                 <div className="mb-8">
-                    <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Photos &amp; videos</p>
+                    <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">{eyebrow}</p>
                     <h2 className="text-3xl md:text-4xl font-black text-rr-dark uppercase tracking-tight">
-                        Inside the <span className="text-rr-pink">Royals Academy</span>
+                        {title || <>Inside the <span className="text-rr-pink">Royals Academy</span></>}
                     </h2>
+                    {intro && <p className="text-lg text-rr-charcoal font-medium leading-relaxed max-w-2xl mt-4">{intro}</p>}
                 </div>
 
                 <CarouselTrack carousel={carousel} label="Photos and videos from Rajasthan Royals Academy Melbourne">
@@ -156,7 +157,7 @@ const HomeMedia = () => {
             </div>
 
             <AnimatePresence>
-                {open !== null && <Lightbox index={open} onClose={close} onStep={step} />}
+                {open !== null && <Lightbox photos={photos} index={open} onClose={close} onStep={step} />}
             </AnimatePresence>
         </section>
     );
