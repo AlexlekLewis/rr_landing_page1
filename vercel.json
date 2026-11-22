@@ -94,6 +94,15 @@
           "value": "no-store"
         }
       ]
+    },
+    {
+      "source": "/private-coaching(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
     }
   ],
   "redirects": [

@@ -280,13 +280,14 @@ export const COACHES = [
         // TODO Alex: his usual times and his own terms (cancellation, rescheduling).
         normalTimes: null,
         terms: null,
+        payLinks: true, // the coach-led Stripe funnel (pay links, ticks). Alex only for now (Andy, 22 Nov 2026).
     },
     {
         slug: 'siddharth-banerjee',
         name: 'Siddharth Banerjee',
         centres: ['cranbourne-north', 'hallam'], // Hallam added Andy 20 Nov 2026: same coaches as Cranbourne North
         tier: 'performance', // Andy, 18 Nov 2026
-        role: 'Performance Coach',
+        role: 'Royals Academy Coach',
         specialism: null, // TODO Andy
         img: null, // TODO: headshot
         bio: null, // TODO Andy
@@ -311,7 +312,7 @@ export const COACHES = [
         name: 'Ikroop Dhanoa',
         centres: ['mickleham'],
         tier: 'performance', // DRAFT
-        role: 'Performance Coach',
+        role: 'Royals Academy Coach',
         specialism: 'Batting specialist (360° and T20 power)',
         img: '/assets/coaches/ikroop-dhanoa-halla.jpg',
         bio: 'A First XI batter for Essendon in Victorian Premier Cricket and a Victorian pathway player up to Under-19s. He coaches a modern, attacking 360° game.',
@@ -322,7 +323,7 @@ export const COACHES = [
         name: 'Rittin Raman',
         centres: ['mickleham'],
         tier: 'academy', // DRAFT
-        role: 'Academy Coach',
+        role: 'Royals Academy Coach',
         specialism: 'Wicketkeeping specialist',
         img: '/assets/coaches/rittin-raman-halla.jpg',
         bio: 'A wicketkeeper-batter playing First XI cricket for Melbourne Cricket Club, and a state-level representative. High energy and precise with technique.',
@@ -332,7 +333,7 @@ export const COACHES = [
         name: 'Jinang Shah',
         centres: ['ravenhall'], // Andy, 18 Nov 2026: removed from Mickleham one-to-ones; West only
         tier: 'academy',
-        role: 'Academy Coach',
+        role: 'Royals Academy Coach',
         specialism: null, // TODO Andy: Jinang's specialty
         img: '/assets/coaches/jinang-shah-halla.jpg',
         bio: 'A high-quality cricketer with hands-on experience coaching young and developing players. Jinang coaches in our Junior Royals and holiday programs.',
@@ -342,7 +343,7 @@ export const COACHES = [
         name: 'Hamid Qadri',
         centres: ['ravenhall'],
         tier: 'head', // Andy, 17 Nov: Elite Coach, "replicate the Alex Thornhill version"
-        role: 'Elite Coach, West Centre', // TODO Andy: Hamid's title
+        role: 'Royals Academy Coach', // TODO Andy: Hamid's title (no tier names on the page)
         specialism: null, // TODO Andy: Hamid's specialty
         img: '/assets/coaches/hamid-qadri-halla.jpg', // Andy's photo, Royals training shirt + HALLA BOL! wall
         bio: null, // TODO Andy: two lines (playing and coaching background)
@@ -357,7 +358,9 @@ export const COACHES = [
         img: null, // TODO: headshot
         bio: null, // TODO Andy
     },
-].map((c) => ({ focus: [], ...c, allAspects: ALL_ASPECTS, bookable: !!(RATE_CARDS[c.slug] || TIER_PRICES[c.tier]) }));
+// Every coach has their own page at /private-coaching-<slug> (Andy, 22 Nov 2026). Anything
+// missing (bio, photo, usual times, terms) is simply left off their page until Andy sends it.
+].map((c) => ({ focus: [], normalTimes: null, terms: null, payLinks: false, ...c, allAspects: ALL_ASPECTS, bookable: !!(RATE_CARDS[c.slug] || TIER_PRICES[c.tier]) }));
 
 // ── WHERE: the three centres ──────────────────────────────
 // Cranbourne North address = the Academy Shop pickup list (Alex, 5 Oct 2026).

@@ -7,6 +7,7 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { ROUTE, FORMAT_LABELS, FORMAT_BLURBS, coachOf, centreOf, coachPrice, money, TECH } from './premiumCoachingData';
 import { Field, Photo } from './pcUi';
 import { input, labelCls, utm, waDigits, telHref } from './pcHelpers';
+import { SMS_DISPLAY, INFO_EMAIL } from '../../lib/academyContact';
 
 // A coach's own page (Andy, 22 Nov 2026, coach-led like the "cash coach" economy):
 // /private-coaching-<coach>. Their bio, prices, usual times, terms and specialities.
@@ -56,11 +57,11 @@ const Enquire = ({ coach, onDone }) => {
             <div id="f-format_pref">
                 <p className={labelCls}>What are you looking for? *</p>
                 <div className="grid sm:grid-cols-3 gap-2" role="radiogroup" aria-label="What are you looking for?">
-                    {[['1-1', '1-to-1', money(coachPrice(coach, '1-1', 1))], ['1-2', 'Training partner session', money(coachPrice(coach, '1-2', 1))], ['not-sure', 'Not sure yet', 'Talk it through']].map(([v, label, sub]) => (
+                    {[['1-1', '1-to-1', coachPrice(coach, '1-1', 1)], ['1-2', 'Training partner session', coachPrice(coach, '1-2', 1)], ['not-sure', 'Not sure yet', null]].map(([v, label, price]) => (
                         <button key={v} type="button" role="radio" aria-checked={form.format_pref === v} data-pref={v} onClick={() => { setForm((f) => ({ ...f, format_pref: v })); setErrors((x) => ({ ...x, format_pref: undefined })); }}
                             className={`text-left rounded-xl border-2 px-4 py-3 transition-colors ${form.format_pref === v ? 'border-rr-pink bg-rr-pink/5' : errors.format_pref ? 'border-red-300' : 'border-slate-200 hover:border-rr-pink/50'}`}>
                             <span className="block text-sm font-black text-rr-dark">{label}</span>
-                            <span className="block text-xs font-semibold text-slate-500">{v === 'not-sure' ? sub : `${sub} a session`}</span>
+                            <span className="block text-xs font-semibold text-slate-500">{v === 'not-sure' ? 'Talk it through' : price != null ? `${money(price)} a session` : 'Ask the coach'}</span>
                         </button>
                     ))}
                 </div>
@@ -103,8 +104,8 @@ const Contact = ({ coach, done }) => {
                         {c.email && <a href={`mailto:${c.email}?subject=${encodeURIComponent('Private coaching')}`} className={`${btn} bg-rr-pink`}><Mail className="w-4 h-4" />Email</a>}
                     </div>
                 </>
-            ) : <p className="text-sm text-rr-charcoal font-medium">{first} will call you within 24 hours to arrange your times.</p>}
-            <p className="text-xs text-slate-500 font-medium">Once you’ve agreed your times, {first} books the lane and sends you a link to confirm and pay.</p>
+            ) : <p className="text-sm text-rr-charcoal font-medium">We’ve passed your details to {first}, who will call you within 24 hours to arrange your times. Questions before then? Text us on {SMS_DISPLAY} or email {INFO_EMAIL}.</p>}
+            <p className="text-xs text-slate-500 font-medium">{coach.payLinks ? `Once you’ve agreed your times, ${first} books the lane and sends you a link to confirm and pay.` : `Once you’ve agreed your times, ${first} books the lane and confirms your sessions with you.`}</p>
         </div>
     );
 };
@@ -147,6 +148,7 @@ const CoachPage = ({ slug }) => {
                     <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-10">
                         <div>
                             <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-5">Sessions and prices</h2>
+                            {!formats.length && <p className="bg-white rounded-2xl border border-slate-200 p-5 text-sm font-semibold text-rr-charcoal">1-to-1 and training partner sessions. Ask {first} for prices when you get in touch.</p>}
                             <div className="grid sm:grid-cols-2 gap-4">
                                 {formats.map((f) => (
                                     <div key={f} className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6">
@@ -188,7 +190,7 @@ const CoachPage = ({ slug }) => {
                         <div>
                             <h3 className="text-sm font-black uppercase tracking-widest mb-3">How it works</h3>
                             <ol className="grid sm:grid-cols-4 gap-3 text-sm font-medium text-rr-charcoal">
-                                {[`Tap Book now and leave your details.`, `Contact ${first} (or ${first} contacts you) to agree your times.`, `${first} books the lane and texts you a link to confirm and pay.`, 'Train. Your player’s own data, every session.'].map((t, i) => (
+                                {[`Tap Book now and leave your details.`, `Contact ${first} (or ${first} contacts you) to agree your times.`, coach.payLinks ? `${first} books the lane and texts you a link to confirm and pay.` : `${first} books the lane and confirms your sessions.`, 'Train. Your player’s own data, every session.'].map((t, i) => (
                                     <li key={t} className="bg-white rounded-2xl border border-slate-200 p-4"><span className="block text-2xl font-black text-rr-pink mb-1">0{i + 1}</span>{t}</li>
                                 ))}
                             </ol>

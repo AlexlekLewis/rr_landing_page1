@@ -80,6 +80,11 @@ export default async function handler(req, res) {
 
     // Tell the coach now. A failure here never stops the family seeing the contact details.
     const alert = enquiryAlert(q, coach, coach?.name || coachInfo.name, hubUrl);
+    // No contact on file for this coach yet: it comes to the Academy inbox to pass on.
+    if (!coach?.email) {
+        alert.subject = `PLEASE PASS TO ${coachInfo.name.toUpperCase()}: ${alert.subject}`;
+        alert.html = `<p style="font-family:Arial,sans-serif;background:#FFF4D6;padding:10px 14px;border-radius:8px;font-size:14px"><b>We don't have ${coachInfo.name}'s contact details yet.</b> Please pass this enquiry to them, and send their mobile and email so it goes straight to them next time.</p>${alert.html}`;
+    }
     const inbox = academyInbox();
     const coachEmail = coach?.notify_email !== false && coach?.email ? [coach.email] : [];
     let notified = false;
