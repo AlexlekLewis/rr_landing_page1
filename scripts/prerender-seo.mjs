@@ -36,7 +36,11 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist');
 
-const ROUTES = ['/performance-squads', '/performance-squads-open-trial', '/sid-juniors', '/junior-royals', '/spin-club', '/power-league', '/lower-plenty-junior-royals-day'];
+const { NEWS_STORIES } = await import('../src/components/news/newsStories.js');
+// News: the /news page and every story, so each story's link previews with its own photo.
+const NEWS_ROUTES = ['/news', ...NEWS_STORIES.map((n) => `/news/${n.slug}`)];
+
+const ROUTES = [...NEWS_ROUTES, '/performance-squads', '/performance-squads-open-trial', '/sid-juniors', '/junior-royals', '/spin-club', '/power-league', '/lower-plenty-junior-royals-day'];
 
 const escapeAttr = (s) =>
     String(s)
@@ -120,6 +124,40 @@ async function main() {
         await mkdir(dir, { recursive: true });
         await writeFile(join(dir, 'index.html'), html, 'utf8');
         console.log(`prerender-seo: wrote dist${route}/index.html`);
+    }
+
+    // NETWORK NEWS (Andy, 14 Nov 2026), see src/components/news/network.js.
+    // 1. Our feed: the stories we share with Power Cricket, at rramelbourne.com/news-feed.json.
+    const { buildFeed, storiesFromFeed, PARTNER_FEED_URL, FEED_FILE } = await import('../src/components/news/network.js');
+    const feed = buildFeed(NEWS_STORIES);
+    await writeFile(join(DIST, FEED_FILE), JSON.stringify(feed, null, 2), 'utf8');
+    console.log(`prerender-seo: wrote dist/${FEED_FILE} (${feed.stories.length} shared)`);
+
+    // 2. Power Cricket's stories tagged for us: give each its share preview here too. If their feed
+    //    can't be reached, skip it (the stories still show; their links just preview generically).
+    let partner = [];
+    try {
+        const res = await fetch(PARTNER_FEED_URL, { signal: AbortSignal.timeout(8000) });
+        if (res.ok) partner = storiesFromFeed(await res.json());
+    } catch {
+        console.warn('prerender-seo: Power Cricket news feed not reachable; shared stories get the default preview');
+    }
+    const own = new Set(NEWS_STORIES.map((s) => s.slug));
+    for (const s of partner.filter((p) => !own.has(p.slug))) {
+        const route = `/news/${s.slug}`;
+        // Their photos already have full addresses, so build the tags with an empty base URL.
+        const cfg = {
+            title: `${s.title} | RRA Melbourne`,
+            description: s.excerpt,
+            canonical: SITE.baseUrl + route,
+            ogImage: s.heroImage || SITE.baseUrl + SITE.defaultOgImage,
+        };
+        const head = headFor(route, cfg, { ...SITE, baseUrl: '' }, DEFAULT_SEO);
+        const html = shell.replace(/\s*<title>[\s\S]*?<\/title>/i, '').replace('</head>', `${head}\n</head>`);
+        const dir = join(DIST, route.replace(/^\//, ''));
+        await mkdir(dir, { recursive: true });
+        await writeFile(join(dir, 'index.html'), html, 'utf8');
+        console.log(`prerender-seo: wrote dist${route}/index.html (from Power Cricket)`);
     }
 }
 

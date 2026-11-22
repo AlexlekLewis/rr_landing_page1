@@ -37,6 +37,7 @@ const HOME_NAV = [
     { label: 'Coaches', id: 'coaches' },
     { label: 'Private Coaching', route: '/mickleham', tag: 'Mickleham' },
     { label: 'Coach With Us', route: '/careers' },
+    { label: 'News', route: '/news' },
     { label: 'FAQ', id: 'faq' },
 ];
 
@@ -82,7 +83,7 @@ const PC_NAV = [
 //   Spin Club          — Wednesdays 7 Oct – 25 Nov 2026, sold one night at a
 //                        time, $60 incl. GST (Alex, 9 Oct 2026; spin-club/
 //                        scOptions.js). REVIEW 26 NOV 2026: pull the badge.
-const PROGRAMS_DROPDOWN = [
+export const PROGRAMS_DROPDOWN = [
     ...(lpJrDayOpen() ? [{ label: LP_JR_DAY_ROW.navLabel, route: LP_JR_DAY_ROUTE, badge: LP_JR_DAY_ROW.navBadge, badgeColor: 'bg-rr-pink' }] : []),
     { label: 'Spin Club · Spinners 10-25', route: '/spin-club', badge: 'Wednesdays · $60 a night', badgeColor: 'bg-rr-pink' },
     // REVIEW 16 Dec 2026 — last Term 4 session; the badge is wrong after that.

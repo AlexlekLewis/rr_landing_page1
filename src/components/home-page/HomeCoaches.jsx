@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const coaches = [
+export const coaches = [
     {
         name: 'Siddhartha Lahiri',
         role: 'Head of International Player Development and Performance Coach',
