@@ -35,7 +35,7 @@ describe('private coaching checkout pricing (server side)', () => {
 
     it('prices each coach from their own card, else the tier table', () => {
         const one = (slug, centre) => bookingCheckout({ ...base, coach_slug: slug, centre, package_sessions: 1, selected_slots: [{ ...base.selected_slots[0], centre }] });
-        expect(one('siddharth-banerjee', 'cranbourne-north').totalCents).toBe(14500);
+        expect(one('siddhartha-banerjee', 'cranbourne-north').totalCents).toBe(14500);
         expect(one('mihiraj-jayasekara', 'mickleham').totalCents).toBe(14500);
         expect(bookingCheckout({ ...base, coach_slug: 'rittin-raman', centre: 'mickleham', format: '1-2', package_sessions: 1, selected_slots: [{ ...base.selected_slots[0], centre: 'mickleham' }] }).totalCents).toBe(17000);
         expect(one('jinang-shah', 'ravenhall').totalCents).toBe(14000);

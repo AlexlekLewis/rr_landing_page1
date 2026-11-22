@@ -120,6 +120,11 @@
   ],
   "redirects": [
     {
+      "source": "/private-coaching-siddharth-banerjee",
+      "destination": "/private-coaching-siddhartha-banerjee",
+      "permanent": false
+    },
+    {
       "source": "/carnival",
       "destination": "/lower-plenty-junior-royals-day",
       "permanent": false

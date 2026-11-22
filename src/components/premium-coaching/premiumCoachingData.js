@@ -184,7 +184,7 @@ export const RATE_CARDS = {
         '1-2': { 1: 190, 3: 190, 5: 190 },
     },
     // Andy, 20 Nov 2026: Rittin, Ikroop, Mihiraj and Siddharth: 1-to-1 $145, training partner $170.
-    ...Object.fromEntries(['rittin-raman', 'ikroop-dhanoa', 'mihiraj-jayasekara', 'siddharth-banerjee'].map((slug) => [slug, {
+    ...Object.fromEntries(['rittin-raman', 'ikroop-dhanoa', 'mihiraj-jayasekara', 'siddhartha-banerjee'].map((slug) => [slug, {
         '1-1': { 1: 145, 3: 145, 5: 145 },
         '1-2': { 1: 170, 3: 170, 5: 170 },
     }])),
@@ -283,14 +283,16 @@ export const COACHES = [
         payLinks: true, // the coach-led Stripe funnel (pay links, ticks). Alex only for now (Andy, 22 Nov 2026).
     },
     {
-        slug: 'siddharth-banerjee',
-        name: 'Siddharth Banerjee',
+        // Spelling from his own profile sheet (Andy, 22 Nov 2026): Siddhartha. Known as Sid.
+        slug: 'siddhartha-banerjee',
+        name: 'Siddhartha Banerjee',
         centres: ['cranbourne-north', 'hallam'], // Hallam added Andy 20 Nov 2026: same coaches as Cranbourne North
         tier: 'performance', // Andy, 18 Nov 2026
         role: 'Royals Academy Coach',
-        specialism: null, // TODO Andy
-        img: null, // TODO: headshot
-        bio: null, // TODO Andy
+        specialism: 'Pace bowling and talent development',
+        img: '/assets/coaches/siddhartha-banerjee-halla.jpg', // Andy's photo, standard HALLA BOL! wall + training shirt
+        // From his profile sheet (Andy, 22 Nov 2026).
+        bio: 'An ICC-certified coach and a member of Cricket Coaches Australia for 20 years, Sid has played, trained and coached in India, England, Canada and Australia. He trained under fast bowling greats Dennis Lillee and Graham McKenzie at the MRF Pace Foundation and Pace Australia, and was a squad member of the MRF Indian Combined XI. He coaches every age, from juniors to seniors, and in 2025 won gold with Victoria at the Cricket Australia Masters National Championship (Over 50s) as the tournament’s highest scorer.',
     },
     {
         // Added Andy, 20 Nov 2026 (Mickleham). Profile from his coaching CV; no contact
