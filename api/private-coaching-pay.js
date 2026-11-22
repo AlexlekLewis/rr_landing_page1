@@ -58,15 +58,25 @@ export default async function handler(req, res) {
     if (!/^[0-9a-f-]{36}$/i.test(id)) return res.status(400).json({ error: 'This link isn’t right. Please ask your coach to send it again.' });
     if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return res.status(503).json({ error: 'Payments are not set up yet.' });
     const sb = createClient(process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://pudldzgmluwoocwxtzhw.supabase.co', process.env.SUPABASE_SERVICE_ROLE_KEY);
-    const { data: row } = await sb.from(TABLE).select('*').eq('id', id).eq('created_by', 'coach').maybeSingle();
-    if (!row) return res.status(404).json({ error: 'We couldn’t find this booking. Please ask your coach to send the link again.' });
+    const { data: row } = await sb.from(TABLE).select('*').eq('id', id).maybeSingle();
+    // Pay links are only for bookings a coach recorded; the confirmation page reads any paid booking.
+    if (!row || (row.created_by !== 'coach' && !(req.method === 'GET' && row.payment_status === 'paid'))) {
+        return res.status(404).json({ error: 'We couldn’t find this booking. Please ask your coach to send the link again.' });
+    }
     const coach = COACHES.find((c) => c.slug === row.coach_slug);
     const centre = CENTRES.find((c) => c.slug === row.centre);
     const expired = row.payment_status !== 'paid' && row.pay_expires_at && new Date(row.pay_expires_at) < new Date();
 
     if (req.method === 'GET') {
         const pay = bookingCheckout(row);
+        // Once paid, the confirmation page shows the coach's contact details.
+        let contact = null;
+        if (row.payment_status === 'paid') {
+            const { data: c } = await sb.from('private_coaching_coaches').select('name, mobile, email').eq('coach_slug', row.coach_slug).eq('active', true).maybeSingle();
+            if (c && (c.mobile || c.email)) contact = { mobile: c.mobile || null, email: c.email || null };
+        }
         return res.status(200).json({
+            contact, amountPaidCents: row.amount_paid_cents, shirtSize: row.shirt_size, createdBy: row.created_by,
             id: row.id, paid: row.payment_status === 'paid', expired,
             coach: { slug: coach?.slug, name: coach?.name, img: coach?.img },
             centre: { name: centre?.name, suburb: centre?.suburb, address: centre?.address },

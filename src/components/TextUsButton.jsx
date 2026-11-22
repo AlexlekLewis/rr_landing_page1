@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
-const SMS_NUMBER = '0421261825';
+import { SMS_NUMBER } from '../lib/academyContact';
 const MOBILE_MESSAGE = 'Hi - Let us know if you have a question!';
 const DESKTOP_MESSAGE = 'Hi, I have a question about RRA Melbourne programs';
 

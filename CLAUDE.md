@@ -62,6 +62,24 @@ Worked example: Junior Royals (`src/components/junior-royals-t3/JRT3Registration
 
 A paid page without this is not finished: don't open the PR, hand it off or put it live.
 
+## Confirmation page and Purchase pixel after every payment
+
+Andy, 22 Nov 2026: *"everybody that we create here needs a confirmation page once they've paid … to
+say thank you, and then they also need a pixel too."*
+
+**Applies to:** every page where a family pays (same scope as the shirt rule). Every Stripe checkout
+(server Checkout Session `success_url`, or a Payment Link's "after payment" redirect) must send the
+family to a purpose-built confirmation page on our site, never Stripe's default page. That page:
+
+1. Says thank you and shows what they paid for (read from the server where possible, so it works on
+   any device), and what happens next.
+2. Fires the Meta `Purchase` pixel once, with the amount paid, `currency: 'AUD'` and the Stripe
+   session id as `eventID` (guard against firing twice on reload).
+3. Shows who to contact with questions: the coach or program lead where there is one, **Text us**
+   (`SMS_NUMBER` in `src/lib/academyContact.js`) and `info@rramelbourne.com`.
+
+Worked example: `src/components/premium-coaching/PremiumCoachingSuccess.jsx` (`/private-coaching/success`).
+
 Section numbers that skills cite (e.g. "CLAUDE.md §1") refer to the master CLAUDE.md in the
 team's Master Landing Page folder, not this file.
 
