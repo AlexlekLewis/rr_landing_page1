@@ -23,7 +23,9 @@ import { PRODUCTS } from '../academy-shop/shopConfig';
 // The banner: the welcome slide, then one slide per program currently on the hero list.
 // Photos are chosen per program page; a program without one here uses the welcome photo.
 const SLIDE_PHOTO = {
-    '/spin-club': { src: '/assets/jadeja-rr-bowling.webp', alt: 'Ravindra Jadeja bowling for the Rajasthan Royals', split: true },
+    // One of our own players bowling (Andy, 23 Nov 2026: "a spin bowler bowling from within our
+    // academy"), from a Power League match; cropped so the bowler sits right of the headline.
+    '/spin-club': { src: '/assets/home/spin-club-bowler.jpg', alt: 'A Rajasthan Royals Academy Melbourne bowler gathering to bowl in a Power League match, with the umpire watching' },
     // Power League match photo (Andy, 23 Nov 2026), trimmed 40px on the left to drop a cut-off overlay logo.
     '/performance-squads': { src: '/assets/home/performance-squads-power-league.jpg', alt: 'A Power League T20 match, with Power League, rramelbourne.com and Whitewall banners on the boundary' },
     // The March Junior Royals intake (1800 x 1200, sharp): Andy, 23 Nov 2026, "a nice full image"
