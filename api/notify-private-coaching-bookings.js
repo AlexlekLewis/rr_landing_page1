@@ -1,4 +1,4 @@
-/* global process, Buffer */
+/* global process */
 // ============================================================
 // Royals Private Coaching — tell the coach the moment a family books (Andy, 18 Nov 2026:
 // "send a message, an email or a text message or a WhatsApp message directly to a coach
@@ -15,8 +15,8 @@
 //
 // Two ways in:
 //   POST { id }  — the booking form calls this straight after saving, so the coach hears
-//                  within seconds. Only acts on that one row, only if it is under an hour
-//                  old and not yet notified, so it can't be used to spam anyone.
+//                  within seconds. Only acts on that one row, only if it was paid in the
+//                  last hour and not yet notified, so it can't be used to spam anyone.
 //   GET (cron)   — every 10 minutes (vercel.json), catches anything the POST missed.
 //                  Needs Authorization: Bearer CRON_SECRET.
 //
@@ -25,34 +25,10 @@
 //      TWILIO_ACCOUNT_SID / TWILIO_AUTH_TOKEN / TWILIO_FROM (optional, for texts).
 // ============================================================
 import { createClient } from '@supabase/supabase-js';
-import { buildAlert, auMobileDigits } from './_lib/privateCoachingAlert.js';
+import { buildAlert } from './_lib/privateCoachingAlert.js';
+import { sendEmail, sendSms, twilioReady, academyInbox } from './_lib/privateCoachingSend.js';
 
-const DEFAULT_CC = 'andy.crook@whitewallsport.com';
-const FROM_DEFAULT = 'Royals Melbourne Academy <onboarding@resend.dev>';
 const TABLE = 'premium_private_coaching_requests';
-
-async function sendEmail({ to, cc, subject, html }) {
-    const res = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ from: process.env.RESEND_FROM_EMAIL || FROM_DEFAULT, to, cc: cc.length ? cc : undefined, subject, html }),
-    });
-    if (!res.ok) throw new Error(`Resend ${res.status}: ${await res.text()}`);
-}
-
-const twilioReady = () => !!(process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_FROM);
-async function sendSms(toMobile, body) {
-    const sid = process.env.TWILIO_ACCOUNT_SID;
-    const res = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`, {
-        method: 'POST',
-        headers: {
-            Authorization: `Basic ${Buffer.from(`${sid}:${process.env.TWILIO_AUTH_TOKEN}`).toString('base64')}`,
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({ To: `+${auMobileDigits(toMobile)}`, From: process.env.TWILIO_FROM, Body: body }),
-    });
-    if (!res.ok) throw new Error(`Twilio ${res.status}: ${await res.text()}`);
-}
 
 async function notifyOne(sb, r, inbox) {
     let coach = null;
@@ -84,14 +60,14 @@ export default async function handler(req, res) {
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
     if (!key) return res.status(500).json({ error: 'SUPABASE_SERVICE_ROLE_KEY not set' });
     const sb = createClient(process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://pudldzgmluwoocwxtzhw.supabase.co', key);
-    const inbox = (process.env.PRIVATE_COACHING_ALERT_CC || DEFAULT_CC).split(',').map((s) => s.trim()).filter(Boolean);
+    const inbox = academyInbox();
 
     // From the booking form: one fresh row only.
     if (req.method === 'POST') {
         const id = String((req.body && req.body.id) || '');
         if (!/^[0-9a-f-]{36}$/i.test(id)) return res.status(400).json({ error: 'bad id' });
         const since = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-        const { data: r } = await sb.from(TABLE).select('*').eq('id', id).eq('payment_status', 'paid').is('coach_notified_at', null).gte('created_at', since).maybeSingle();
+        const { data: r } = await sb.from(TABLE).select('*').eq('id', id).eq('payment_status', 'paid').is('coach_notified_at', null).gte('paid_at', since).maybeSingle();
         if (!r) return res.status(200).json({ ok: true, skipped: true });
         try { return res.status(200).json({ ok: true, ...(await notifyOne(sb, r, inbox)) }); } catch (e) { return res.status(502).json({ ok: false, error: e.message }); }
     }

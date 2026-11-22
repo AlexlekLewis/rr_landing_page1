@@ -14,6 +14,7 @@
 // line on the same checkout ($29.95 incl. GST, size in the description) and can't be removed.
 // ============================================================
 import { UNIFORM_CATALOG } from './uniformPricing.js';
+import { createSessions } from './privateCoachingPayouts.js';
 import { COACHES, PACKAGES, CENTRES, FORMAT_LABELS, coachPrice, PROGRAM_NAME, ROUTE } from '../../src/components/premium-coaching/premiumCoachingData.js';
 
 export const SOURCE_BOOKING = 'premium-private-coaching';
@@ -29,8 +30,11 @@ export const bookingCheckout = (row) => {
     if (!PACKAGES.some((p) => p.sessions === row.package_sessions)) return { error: 'Please choose 1, 3 or 5 sessions.' };
     if (!FORMAT_LABELS[row.format]) return { error: 'Please choose 1-to-1 or 1-to-2.' };
     // The coach's own rate card, for the option the family chose (1-to-1 or 1-to-2).
-    const per = coachPrice(coach, row.format, row.package_sessions);
-    if (per == null) return { error: 'No price for this coach yet.' };
+    const full = coachPrice(coach, row.format, row.package_sessions);
+    if (full == null) return { error: 'No price for this coach yet.' };
+    // Training partner session split between the two families: each pays half.
+    const share = row.format === '1-2' && Number(row.pay_share) === 2 ? 2 : 1;
+    const per = Math.round((full / share) * 100) / 100;
     const slots = Array.isArray(row.selected_slots) ? row.selected_slots : [];
     // No times online for this coach yet: the family pays, tells us what suits (row.availability), and the coach sets the times.
     if (slots.length === 0 && !String(row.availability || '').trim()) return { error: 'Please tell us the days and times that suit you.' };
@@ -41,7 +45,7 @@ export const bookingCheckout = (row) => {
     const centre = CENTRES.find((c) => c.slug === row.centre);
     const fmt = row.format === '1-2' ? '1-to-2' : '1-to-1';
     const items = [{
-        name: `${PROGRAM_NAME}: ${coach.name}, ${FORMAT_LABELS[row.format]}`,
+        name: `${PROGRAM_NAME}: ${coach.name}, ${FORMAT_LABELS[row.format]}${share === 2 ? ' (your half)' : ''}`,
         description: `${row.package_sessions} × one-hour ${fmt} session${row.package_sessions > 1 ? 's' : ''} at ${centre?.suburb || row.centre}, for ${row.player_first_name}. ${slots.length ? '' : 'Times to be set with your coach. '}Sessions subject to lane availability and confirmation.`,
         unit_amount: cents(per),
         quantity: row.package_sessions,
@@ -81,12 +85,16 @@ export async function handlePrivateCoachingPaid(supabase, session) {
     const src = session?.metadata?.source;
     if (src === SOURCE_BOOKING) {
         const id = session.metadata.booking_id || session.client_reference_id;
-        const { data: row } = await supabase.from('premium_private_coaching_requests').select('id, selected_slots, coach_slug, payment_status').eq('id', id).maybeSingle();
+        const { data: row } = await supabase.from('premium_private_coaching_requests').select('id, selected_slots, coach_slug, centre, format, package_sessions, payment_status, linked_booking_id').eq('id', id).maybeSingle();
         if (!row) return { handled: true, note: `booking ${id} not found` };
         await supabase.from('premium_private_coaching_requests').update({
             payment_status: 'paid', paid_at: new Date().toISOString(),
             amount_paid_cents: session.amount_total ?? null, stripe_session_id: session.id,
+            stripe_payment_intent: typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id || null,
         }).eq('id', id);
+        // One row per session, for the coach's "Turned up" ticks (and payouts).
+        // (A split training partner booking keeps its sessions on the first family's row.)
+        if (!row.linked_booking_id) await createSessions(supabase, row);
         // The held hours are now booked.
         await supabase.from('private_coaching_availability').update({ status: 'booked', held_until: null })
             .eq('held_by', id).in('status', ['held', 'open']);

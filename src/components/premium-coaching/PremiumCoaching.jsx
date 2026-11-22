@@ -4,7 +4,6 @@ import Navbar from '../Navbar';
 import Footer from '../Footer';
 import PartnerStack from '../power-game/PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
-import CoachBooking from './CoachBooking';
 import HomeMedia from '../home-page/HomeMedia';
 import CoachFinder from './CoachFinder';
 import { ROUTE, HERO, TECH, STEPS } from './premiumCoachingData';
@@ -207,7 +206,6 @@ const NAV = [
 
 const PremiumCoaching = () => {
     usePageAnalytics(ROUTE, { sections: SECTIONS });
-    const [open, setOpen] = useState(null); // { coach, centre } while a coach's profile is open
     useEffect(() => { window.scrollTo(0, 0); }, []);
 
     return (
@@ -217,13 +215,12 @@ const PremiumCoaching = () => {
                 <div id="hero"><Hero /></div>
                 <div id="tech" className={ANCHOR}><Tech /></div>
                 <div id="how" className={ANCHOR}><How /></div>
-                <div id="coaches" className={ANCHOR}><CoachFinder onOpen={(coach, centre) => setOpen({ coach, centre })} /></div>
+                <div id="coaches" className={ANCHOR}><CoachFinder /></div>
                 <div id="media" className={ANCHOR}>
                     <HomeMedia items={MEDIA} idPrefix="pc-media" eyebrow="Photos & videos" label="Photos and videos of Royals private coaching"
                         title={<>See it <span className="text-rr-pink">in the lane</span></>} sectionClass="py-16 md:py-20 bg-white" />
                 </div>
             </main>
-            {open && <CoachBooking key={`${open.coach}-${open.centre}`} coachSlug={open.coach} centreSlug={open.centre} onClose={() => setOpen(null)} />}
             <PartnerStack />
             <Footer />
         </div>

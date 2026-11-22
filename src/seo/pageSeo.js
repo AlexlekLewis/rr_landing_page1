@@ -1,3 +1,4 @@
+import { COACHES } from '../components/premium-coaching/premiumCoachingData.js';
 // Central SEO config for all public pages, consumed by <RouteSeo/> (react-helmet-async).
 // One entry per public route. Titles target the non-branded category terms we currently
 // rank for NOTHING on (per the GSC baseline: 100% branded traffic today).
@@ -185,6 +186,15 @@ export const PAGE_SEO = {
   },
   '/private-coaching/success': { title: 'Booking Confirmed | Royals Private Coaching', noindex: true },
   '/private-coaching/partner': { title: 'Training Partner Form | Royals Private Coaching', noindex: true },
+  '/private-coaching/pay': { title: 'Confirm and Pay | Royals Private Coaching', noindex: true },
+  // Each coach's own page (Andy, 22 Nov 2026), and their private coach page (noindex).
+  ...Object.fromEntries(COACHES.flatMap((c) => [
+    [`/private-coaching-${c.slug}`, {
+      title: `${c.name} | Private Cricket Coaching | Rajasthan Royals Academy`,
+      description: `Private cricket coaching with ${c.name}, Rajasthan Royals Academy coach${c.centres.length ? ` at ${c.centres.map((x) => ({ 'cranbourne-north': 'Cranbourne North', hallam: 'Hallam', mickleham: 'Mickleham', ravenhall: 'Ravenhall' }[x] || x)).join(' and ')}` : ''}. 1-to-1 and training partner sessions with Royals coaching tech.`,
+    }],
+    [`/private-coaching-${c.slug}/coach`, { title: `Coach page | ${c.name}`, noindex: true }],
+  ])),
   '/mickleham': {
     title: 'Private Cricket Coaching Melbourne | Rajasthan Royals',
     description:

@@ -57,7 +57,9 @@ export const buildAlert = (r, coach, partner = null) => {
     const wa = auMobileDigits(r.phone);
     const firstNamePlayer = r.player_first_name;
     const hello = coach?.name ? `Hi ${firstName(coach.name)},` : 'Hi team,';
-    const lead = coach
+    const lead = coach && r.created_by === 'coach'
+        ? `${contactName} has paid for the session${r.package_sessions > 1 ? 's' : ''} you arranged for ${firstNamePlayer}. You're all set. After each session, tick "Turned up" in your coach page.`
+        : coach
         ? `${contactName} has booked and paid for private coaching with you. Please contact them within 24 hours to confirm the times, then confirm the lane with the centre.`
         : r.coach_slug
             ? `A family has booked ${r.coach_slug} for private coaching, but there are no contact details on file for that coach in private_coaching_coaches. Please pass this on.`
@@ -88,7 +90,9 @@ export const buildAlert = (r, coach, partner = null) => {
         ['Email', r.email],
     ].filter(([, v]) => v !== null && v !== undefined && String(v).trim() !== '');
 
-    const subject = coach
+    const subject = coach && r.created_by === 'coach'
+        ? `Paid: ${player}, ${r.package_sessions} private coaching session${r.package_sessions > 1 ? 's' : ''}`
+        : coach
         ? `New private coaching booking: ${player}, ${r.centre === 'cranbourne-north' ? 'Cranbourne North' : centre.split(',').pop().trim().replace('Mickleham Indoor Sports Centre', 'Mickleham')}. Please contact the family`
         : r.coach_slug
             ? `Private coaching booking for ${r.coach_slug}: no coach contact on file`

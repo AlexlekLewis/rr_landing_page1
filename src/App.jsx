@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { COACHES as PC_COACHES } from './components/premium-coaching/premiumCoachingData';
 import RouteSeo from './seo/RouteSeo';
 import NotFound from './components/NotFound';
 import PrivacyPolicy from './components/PrivacyPolicy';
@@ -92,6 +93,9 @@ const LowerPlentyJrDayPay = React.lazy(() => import('./components/lower-plenty-j
 const PremiumCoaching = React.lazy(() => import('./components/premium-coaching/PremiumCoaching'));
 const PremiumCoachingSuccess = React.lazy(() => import('./components/premium-coaching/PremiumCoachingSuccess'));
 const PremiumCoachingPartner = React.lazy(() => import('./components/premium-coaching/PremiumCoachingPartner'));
+const PCCoachPage = React.lazy(() => import('./components/premium-coaching/CoachPage'));
+const PCCoachHub = React.lazy(() => import('./components/premium-coaching/CoachHub'));
+const PCPayPage = React.lazy(() => import('./components/premium-coaching/PayPage'));
 // Match Registration — reusable match-day registration + payment page. Match-specific
 // detail lives in src/components/match-registration/matchConfig.js, so the next block
 // of matches is a config swap, not a new page. HIDDEN: noindex, direct URL only.
@@ -293,6 +297,11 @@ function App() {
         <Route path="/private-coaching" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PremiumCoaching /></React.Suspense>} />
         <Route path="/private-coaching/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PremiumCoachingSuccess /></React.Suspense>} />
         <Route path="/private-coaching/partner" element={<React.Suspense fallback={<div className="min-h-screen bg-white" />}><PremiumCoachingPartner /></React.Suspense>} />
+        {/* Coach-led private coaching (Andy, 22 Nov 2026): each coach's own page, their private
+            coach page (enquiries, pay links, attendance ticks), and the pay link families get. */}
+        <Route path="/private-coaching/pay" element={<React.Suspense fallback={<div className="min-h-screen bg-slate-50" />}><PCPayPage /></React.Suspense>} />
+        {PC_COACHES.map((c) => <Route key={c.slug} path={`/private-coaching-${c.slug}`} element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PCCoachPage slug={c.slug} /></React.Suspense>} />)}
+        {PC_COACHES.map((c) => <Route key={`${c.slug}-hub`} path={`/private-coaching-${c.slug}/coach`} element={<React.Suspense fallback={<div className="min-h-screen bg-slate-50" />}><PCCoachHub slug={c.slug} /></React.Suspense>} />)}
         <Route path="/match-registration" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><MatchRegistration /></React.Suspense>} />
         <Route path="/match-registration/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><MatchRegistrationSuccess /></React.Suspense>} />
         {/* Performance Squad price. Same page, same form, same consents.

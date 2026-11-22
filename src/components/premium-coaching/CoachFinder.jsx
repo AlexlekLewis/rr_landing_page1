@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { MapPin, CalendarClock } from 'lucide-react';
-import { CENTRES, COACHES, AVAILABILITY_NOTE, centreOf } from './premiumCoachingData';
+import { CENTRES, COACHES, AVAILABILITY_NOTE, centreOf, coachPath } from './premiumCoachingData';
 import { useAllAvailability, groupByNight, nightLabel, timeLabel } from './useCoachAvailability';
 
 // "Meet our coaches", a marketplace (Andy, 18 Nov 2026): no prices and no coach hierarchy
@@ -15,11 +16,11 @@ const Photo = ({ c }) => (
         : <div className="w-full h-full flex items-center justify-center text-white text-3xl font-black" style={{ backgroundImage: 'var(--image-gradient-rr)' }}>{c.name.split(' ').map((p) => p[0]).join('')}</div>
 );
 
-const CoachCard = ({ c, location, onOpen }) => {
+const CoachCard = ({ c, location }) => {
     const { slots, loaded } = useAllAvailability();
     const times = groupByNight(slots, c.slug, location).flatMap((n) => n.slots);
     return (
-        <button type="button" onClick={() => onOpen(c.slug, location)} data-coach={c.slug} data-cta={`open-${c.slug}`}
+        <Link to={coachPath(c.slug)} data-coach={c.slug} data-cta={`open-${c.slug}`}
             className="group text-left bg-white border border-slate-200 hover:border-rr-pink rounded-2xl overflow-hidden flex flex-col transition-colors focus:outline-none focus-visible:ring-4 focus-visible:ring-rr-pink/40">
             <div className="flex sm:block w-full">
                 <div className="w-28 sm:w-full shrink-0 sm:aspect-square bg-slate-100 overflow-hidden"><Photo c={c} /></div>
@@ -40,15 +41,15 @@ const CoachCard = ({ c, location, onOpen }) => {
                 </div>
                 <span className="mt-auto pt-4">
                     <span className="block w-full text-center bg-rr-pink group-hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm px-4 py-3.5 rounded-full transition-colors">
-                        View times, prices &amp; book
+                        View profile &amp; book
                     </span>
                 </span>
             </div>
-        </button>
+        </Link>
     );
 };
 
-const CoachFinder = ({ onOpen }) => {
+const CoachFinder = () => {
     const [location, setLocation] = useState(CENTRES[0].slug);
     const centre = centreOf(location);
     const shown = COACHES.filter((c) => c.centres.includes(location)).sort((a, b) => a.name.localeCompare(b.name));
@@ -60,7 +61,7 @@ const CoachFinder = ({ onOpen }) => {
                 <div className="max-w-2xl mb-10">
                     <p className="text-xs font-black uppercase tracking-[0.3em] mb-3 text-rr-pink">Find your coach</p>
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight leading-[0.95] text-rr-dark mb-4">Meet our coaches</h2>
-                    <p className="text-rr-charcoal font-medium leading-relaxed">Every one a Royals Academy coach, trained on all our tools, coaching every part of the game. Choose your location, then tap a coach to see their times and book.</p>
+                    <p className="text-rr-charcoal font-medium leading-relaxed">Every one a Royals Academy coach, trained on all our tools, coaching every part of the game. Choose your location, then tap a coach to see their profile, prices and how to book.</p>
                 </div>
 
                 <p className="text-sm font-black text-rr-dark uppercase tracking-wide mb-3">Your preferred location</p>
@@ -83,7 +84,7 @@ const CoachFinder = ({ onOpen }) => {
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 items-stretch">
-                    {shown.map((c) => <CoachCard key={`${location}-${c.slug}`} c={c} location={location} onOpen={onOpen} />)}
+                    {shown.map((c) => <CoachCard key={`${location}-${c.slug}`} c={c} location={location} />)}
                 </div>
                 <p className="text-xs text-slate-500 font-semibold leading-relaxed max-w-2xl mt-6">{AVAILABILITY_NOTE}</p>
             </div>

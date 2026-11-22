@@ -34,6 +34,8 @@
 // ============================================================
 
 export const ROUTE = '/private-coaching'; // Andy, 22 Nov 2026: live at /private-coaching
+// Each coach's own page (Andy, 22 Nov 2026): /private-coaching-alex-thornhill etc.
+export const coachPath = (slug) => `${ROUTE}-${slug}`;
 export const SUCCESS_ROUTE = `${ROUTE}/success`;
 export const DB_TABLE = 'premium_private_coaching_requests';
 export const AVAILABILITY_VIEW = 'private_coaching_open_slots';
@@ -134,11 +136,10 @@ export const TECH = {
 
 // ── HOW: the steps from booking to first session ──────────
 export const STEPS = [
-    { key: 'coach', title: 'Choose your coach', body: 'Pick your preferred location, then tap a Royals Academy coach to see their profile and times.' },
-    { key: 'pay', title: 'Pick your times and pay', body: 'Choose 1-to-1 or 1-to-2 and 1, 3 or 5 sessions from the coach’s rate card, pick their times, and pay securely by card.' },
-    // Andy, 18 Nov 2026: after payment the booking goes to the coach, who confirms the times
-    // and is the family's contact from then on, unless there are significant changes or issues.
-    { key: 'confirm', title: 'Your coach confirms', body: 'Your booking goes straight to your coach, who gets in touch to confirm your times. From then on they’re your main contact, unless there’s a big change or issue.' },
+    // Andy, 22 Nov 2026: coach-led, like the "cash coach" economy.
+    { key: 'coach', title: 'Choose your coach', body: 'Pick your location, then tap a Royals Academy coach to see their profile, prices and how they work.' },
+    { key: 'contact', title: 'Connect with your coach', body: 'Tap Book now, leave a few details, and you get your coach’s number straight away. Your coach hears from us too.' },
+    { key: 'pay', title: 'Agree times, then pay', body: 'You and your coach agree the times. Your coach books the lane and sends you a link to confirm and pay securely.' },
     { key: 'train', title: 'Train with the tools', body: 'Your first session sets a baseline. Every session after works the plan and tracks the progress.' },
 ]
 
@@ -275,6 +276,10 @@ export const COACHES = [
         specialism: 'Batting specialist',
         img: '/assets/coaches/alex-thornhill.jpg',
         bio: 'Head Coach of our South-East Region and a batting specialist, with coaching experience in UK county cricket and the Australian premier system. He coaches the cricket program at Xavier College and within the Fitzroy Doncaster Academy.',
+        // Coach-led page (Andy, 22 Nov 2026): anything the coach wants on their own page.
+        // TODO Alex: his usual times and his own terms (cancellation, rescheduling).
+        normalTimes: null,
+        terms: null,
     },
     {
         slug: 'siddharth-banerjee',
