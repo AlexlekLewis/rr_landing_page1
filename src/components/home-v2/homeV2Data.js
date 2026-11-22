@@ -26,9 +26,9 @@ const SLIDE_PHOTO = {
     '/spin-club': { src: '/assets/jadeja-rr-bowling.webp', alt: 'Ravindra Jadeja bowling for the Rajasthan Royals', split: true },
     // Power League match photo (Andy, 23 Nov 2026), trimmed 40px on the left to drop a cut-off overlay logo.
     '/performance-squads': { src: '/assets/home/performance-squads-power-league.jpg', alt: 'A Power League T20 match, with Power League, rramelbourne.com and Whitewall banners on the boundary' },
-    // Portrait video frame (900px wide): shown as a split slide (photo on the right) so it isn't
-    // stretched or cropped through the middle (Andy, 23 Nov 2026: "very pixelated ... not aligned").
-    '/junior-royals': { src: '/assets/junior-royals/gallery/squad-talk.webp', alt: 'A Junior Royals coach talking to a squad of young players in front of a Rajasthan Royals Academy Melbourne banner', split: true, position: '50% 42%' },
+    // The March Junior Royals intake (1800 x 1200, sharp): Andy, 23 Nov 2026, "a nice full image"
+    // of Junior Royals at one of our centres, replacing the pixelated squad-talk video frame.
+    '/junior-royals': { src: '/assets/community-coaches.jpg', alt: 'Junior Royals players and coaches at the March intake, in front of the Rajasthan Royals Academy Melbourne banners', position: '50% 62%' },
 };
 export const WELCOME_SLIDE = {
     src: '/assets/hero-vs-full.jpg',
