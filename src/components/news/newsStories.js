@@ -76,6 +76,36 @@ export const NEWS_STORIES = [
         ),
     },
     {
+        // Also in Power Cricket's feed (tagged for both sites). Senior game only; the junior report follows
+        // when Alex sends the junior scores. Scores: FrogBox match centre, match 7753804.
+        slug: 'ghotra-85-south-east-melbourne-senior-win',
+        sites: ['rra-melbourne'],
+        brand: 'Power League',
+        type: 'article',
+        publishedAt: '2026-11-15',
+        title: 'Ghotra’s unbeaten 85 powers South-East Melbourne to 73-run senior win',
+        excerpt:
+            'Jaskaran Ghotra hit 85 not out off 56 balls as South-East Melbourne posted 6/184 and beat North Melbourne by 73 runs in the Power League senior game at Montmorency Park.',
+        heroImage: `${IMG}/power-league-15-nov-ghotra-delivery-wide.jpg`,
+        heroAlt: 'Jaskaran Ghotra faces a delivery at Montmorency Park, with the Power League banner behind',
+        gallery: [
+            { src: `${IMG}/power-league-15-nov-senior-bowler.jpg`, alt: 'A South-East Melbourne bowler in his delivery stride' },
+            { src: `${IMG}/power-league-15-nov-royals-flags.jpg`, alt: 'Players talk tactics beside the Royals Academy flags' },
+            { src: `${IMG}/power-league-15-nov-chase-scoreboard.jpg`, alt: 'The scoreboard during North Melbourne’s chase of 185' },
+            { src: `${IMG}/power-league-15-nov-senior-quick.jpg`, alt: 'A South-East Melbourne player between overs' },
+        ],
+        body: paragraphs(
+            'Jaskaran Ghotra hit an unbeaten 85 off 56 balls as South-East Melbourne beat North Melbourne by 73 runs in the Power League senior game at Montmorency Park’s South Oval on Sunday 15 November.',
+            'South-East Melbourne won the toss, batted and made 6/184 from their 20 overs. North Melbourne were 7/111 when their innings closed after 16 overs.',
+            'Ghotra came in at No.4 and batted through to the end. He hit nine fours and three sixes, and cut loose in the final overs to take South-East Melbourne past 180.',
+            'Gurbir Singh set the tone at the top of the order with 37 off 23 balls, including six fours and a six, while two wickets fell at the other end. Ojas Taneja trapped him lbw, but Gurjaap Goraya kept the pressure on with 33 off 16.',
+            'North Melbourne’s bowlers had their moments. Levi Templeton took 1/7 from two overs, Sanchit Dhingra 1/8 from two and Mitchel Clark 1/11 from three.',
+            'Captain Ikroop Dhanoa gave the chase a fast start, hitting six fours in his 32 off 23 balls before Ghotra had him caught. Soham Sagar struck two sixes in his 27 off 20, and North Melbourne were 2/64 after eight overs.',
+            'South-East Melbourne’s bowlers then took control. North Melbourne lost four wickets for 26 runs to slide from 2/64 to 6/90. Arunjit Singh (2/24) and Abhiveer Behl (2/33) shared four wickets, and Zach van der Nest picked up 1/19.',
+            'Mukund finished unbeaten on 20 off just six balls, but the result had long been settled.',
+        ),
+    },
+    {
         // Also in Power Cricket's feed (tagged for both sites there), but kept here because our
         // wording differs: approved for posting by Andy on 13 Nov 2026, text as published on Power
         // Cricket except the last sentence, which pointed to Power Cricket's squads story. That
