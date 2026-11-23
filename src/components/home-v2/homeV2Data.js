@@ -35,7 +35,9 @@ export const SLIDE_PHOTO = {
     '/private-coaching': { src: '/assets/home/private-coaching-sid-batter-melbourne.jpg', alt: 'Siddhartha Lahiri coaching a batter one-on-one in a Rajasthan Royals Academy Melbourne net', position: '55% 35%' },
 };
 export const WELCOME_SLIDE = {
-    src: '/assets/hero-vs-full.jpg',
+    // Trimmed copy of hero-vs-full.jpg without its built-in maroon border, which showed around the photo
+    // on phones (Andy, 23 Nov 2026: "doesn't fill the full space ... got a red component around it").
+    src: '/assets/home/hero-suryavanshi.jpg',
     position: '70% 30%',
     kicker: '2026 Programs now open',
     lead: 'Melbourne’s Official Rajasthan Royals Academy.',
