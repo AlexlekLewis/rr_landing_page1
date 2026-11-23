@@ -4,12 +4,13 @@ import Footer from '../Footer';
 import PartnerStack from '../power-game/PartnerStack';
 import SCHero from './SCHero';
 import SCWhatItIs from './SCWhatItIs';
+import SCMedia from './SCMedia';
 import SCClubs from './SCClubs';
 import SCPricing from './SCPricing';
 import SCForm from './SCForm';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
-const SECTIONS = ['hero', 'what-it-is', 'clubs', 'pricing', 'apply'];
+const SECTIONS = ['hero', 'media', 'what-it-is', 'clubs', 'pricing', 'apply'];
 
 // Anchored sections sit under a fixed navbar — offset them so a jumped-to
 // heading lands below the bar instead of behind it.
@@ -29,6 +30,9 @@ const SpinClub = () => {
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero">
                     <SCHero />
+                </div>
+                <div id="media" className={ANCHOR}>
+                    <SCMedia />
                 </div>
                 <div id="what-it-is" className={ANCHOR}>
                     <SCWhatItIs />
