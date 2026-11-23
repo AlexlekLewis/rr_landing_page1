@@ -393,7 +393,7 @@ export const Store = () => (
                 <div className="store-head"><img className="store-logo" src="/assets/powergame/power-cricket-logo.png" alt="Power Cricket" /><h2>POWER CRICKET STORE</h2></div>
                 <Link className="more" to="/academy-shop" data-cta="home-store-more">View More</Link>
             </div>
-            <p className="strip-sub">Official RRA Melbourne academy kit and IPL replica gear — now available online.</p>
+            <p className="strip-sub">Official RRA Melbourne academy kit — now available online.</p>
             <div className="row">
                 {STORE.map((p) => (
                     <article key={p.id} className="scard">

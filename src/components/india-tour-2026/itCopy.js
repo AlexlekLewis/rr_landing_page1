@@ -106,7 +106,7 @@ export const fmtRangeAUD = (r) => `${fmtAUD(r.min)}–${fmtAUD(r.max)}`;
 const VIDEOS_COPY = {
     eyebrow: 'Watch',
     heading: 'Inside The',
-    headingAccent: 'The Rajasthan Royals HPC',
+    headingAccent: 'Rajasthan Royals HPC',
     lead: 'Hear from the coaches and see what training with the Royals looks like.',
     carouselLabel: 'Videos',
     prevLabel: 'Previous video',

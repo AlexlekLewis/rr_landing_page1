@@ -35,19 +35,20 @@ const TIERS = [
 ];
 
 const sizeClasses = {
-    large: 'h-24 md:h-28 px-6',
-    medium: 'h-20 md:h-24 px-6',
+    // Phones: smaller boxes, two to a row (Andy, 23 Nov 2026: mobile review).
+    large: 'h-20 md:h-28 px-5 md:px-6',
+    medium: 'h-16 md:h-24 px-3 md:px-6',
 };
 
 const PartnerLogo = ({ partner, size }) => (
     <div
-        className={`w-full flex items-center justify-center rounded-2xl border ${sizeClasses[size]} ${partner.big ? 'py-1.5' : 'py-4'} overflow-hidden transition-all duration-300 hover:border-rr-pink/40 hover:shadow-[0_8px_30px_rgba(225,31,143,0.10)] ${partner.dark ? 'bg-rr-dark border-white/10' : 'bg-white border-slate-200'}`}
+        className={`w-full flex items-center justify-center rounded-2xl border ${sizeClasses[size]} ${partner.big ? 'py-1.5' : 'py-3 md:py-4'} overflow-hidden transition-all duration-300 hover:border-rr-pink/40 hover:shadow-[0_8px_30px_rgba(225,31,143,0.10)] ${partner.dark ? 'bg-rr-dark border-white/10' : 'bg-white border-slate-200'}`}
     >
         {partner.logo ? (
             <img
                 src={partner.logo}
                 alt={partner.name}
-                className="max-h-full max-w-full w-auto object-contain"
+                className="w-full h-full min-w-0 object-contain"
                 style={partner.offset ? { transform: `translate(${partner.offset.x || 0}px, ${partner.offset.y || 0}px)` } : undefined}
             />
         ) : (
@@ -69,10 +70,10 @@ const PartnerLogo = ({ partner, size }) => (
 const PartnerStack = ({ theme = 'light' }) => {
     const isDark = theme === 'dark';
     return (
-        <section className={isDark ? 'py-20 px-5' : 'bg-white py-24 md:py-32'}>
+        <section className={isDark ? 'py-14 md:py-20 px-5' : 'bg-white py-14 md:py-32'}>
             <div className="max-w-5xl mx-auto px-6">
                 <motion.div
-                    className="text-center mb-16"
+                    className="text-center mb-10 md:mb-16"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.3 }}
@@ -91,7 +92,7 @@ const PartnerStack = ({ theme = 'light' }) => {
                     </p>
                 </motion.div>
 
-                <div className="space-y-14">
+                <div className="space-y-9 md:space-y-14">
                     {TIERS.map((tier, idx) => (
                         <motion.div
                             key={tier.level}
@@ -100,14 +101,14 @@ const PartnerStack = ({ theme = 'light' }) => {
                             viewport={{ once: true, amount: 0.2 }}
                             transition={{ duration: 0.5, delay: idx * 0.1, ease: 'easeOut' }}
                         >
-                            <div className="flex items-center gap-4 mb-7">
+                            <div className="flex items-center gap-4 mb-5 md:mb-7">
                                 <div className={`h-px flex-1 bg-gradient-to-r from-transparent ${isDark ? 'to-white/15' : 'to-slate-200'}`} />
                                 <span className={`text-xs md:text-sm font-black uppercase tracking-widest text-center ${isDark ? 'text-rr-light-pink' : 'text-rr-blue'}`}>
                                     {tier.level}
                                 </span>
                                 <div className={`h-px flex-1 bg-gradient-to-l from-transparent ${isDark ? 'to-white/15' : 'to-slate-200'}`} />
                             </div>
-                            <div className={`grid grid-cols-1 sm:grid-cols-2 ${tier.partners.length >= 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-2'} gap-5 md:gap-6 ${tier.partners.length >= 3 ? 'max-w-4xl' : 'max-w-2xl'} mx-auto justify-items-center`}>
+                            <div className={`grid ${tier.partners.length >= 2 ? 'grid-cols-2' : 'grid-cols-1'} ${tier.partners.length >= 3 ? 'lg:grid-cols-3' : ''} gap-3 md:gap-6 ${tier.partners.length >= 3 ? 'max-w-4xl' : 'max-w-2xl'} mx-auto justify-items-center`}>
                                 {tier.partners.map((partner) => (
                                     <PartnerLogo key={partner.name} partner={partner} size={tier.size} />
                                 ))}

@@ -26,7 +26,7 @@ const TextUsButton = () => {
     if (cartOpen) return null;
 
     return (
-        <div className="fixed bottom-24 right-4 z-50 flex flex-col items-end gap-3">
+        <div className="fixed bottom-24 right-3 sm:right-4 z-50 flex flex-col items-end gap-3">
             {tooltip && (
                 <div className="bg-rr-dark text-white text-xs font-bold px-3 py-2 rounded-xl shadow-lg whitespace-nowrap">
                     Text us: {SMS_NUMBER}
@@ -37,12 +37,12 @@ const TextUsButton = () => {
                 onMouseEnter={() => setTooltip(true)}
                 onMouseLeave={() => setTooltip(false)}
                 aria-label="Text us"
-                className="flex items-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-xs px-4 py-3 rounded-full shadow-lg hover:shadow-[0_0_24px_rgba(229,6,149,0.5)] transition-all duration-300 hover:scale-105"
+                className="flex items-center gap-2 bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-xs p-3.5 sm:px-4 sm:py-3 rounded-full shadow-lg hover:shadow-[0_0_24px_rgba(229,6,149,0.5)] transition-all duration-300 hover:scale-105"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-4 sm:h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                 </svg>
-                Text Us
+                <span className="hidden sm:inline">Text Us</span>
             </button>
         </div>
     );

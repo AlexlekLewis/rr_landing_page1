@@ -26,7 +26,7 @@ const HomeStickyCTA = ({ onRegisterClick }) => {
                 >
                     <div className="max-w-sm mx-auto flex items-center gap-3">
                         <div className="flex-1 min-w-0">
-                            <p className="text-xs font-bold text-rr-charcoal uppercase tracking-widest truncate">Ready to play the Royals Way?</p>
+                            <p className="text-xs font-bold text-rr-charcoal uppercase tracking-wide leading-snug">Ready to play the Royals Way?</p>
                         </div>
                         <button
                             onClick={onRegisterClick}

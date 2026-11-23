@@ -32,7 +32,7 @@ const StoryPage = () => {
             <main className="flex-1 w-full overflow-hidden">
                 <article id="story" className="pt-28 md:pt-36 pb-12 bg-slate-50">
                     <div className="max-w-3xl mx-auto px-4 sm:px-6">
-                        <Link to="/news" className="mb-5 inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-[0.16em] text-rr-charcoal/60 hover:text-rr-pink">
+                        <Link to="/news" className="mb-3 py-2.5 inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-[0.16em] text-rr-charcoal/60 hover:text-rr-pink">
                             <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" /> All news
                         </Link>
                         <div className="overflow-hidden rounded-3xl bg-white border border-slate-200">

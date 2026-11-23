@@ -19,7 +19,7 @@ const HomeNews = ({ eyebrow = 'News & features', title = <>The latest from <span
                         <h2 className="text-3xl md:text-4xl font-black text-rr-dark uppercase tracking-tight">{title}</h2>
                     </div>
                     <Link to="/news" data-cta="news-all"
-                        className="inline-flex items-center gap-2 text-xs md:text-sm font-black uppercase tracking-widest text-rr-dark hover:text-rr-pink transition-colors">
+                        className="inline-flex items-center gap-2 py-2.5 text-xs md:text-sm font-black uppercase tracking-widest text-rr-dark hover:text-rr-pink transition-colors">
                         All news <ArrowRight className="w-4 h-4" aria-hidden="true" />
                     </Link>
                 </div>
