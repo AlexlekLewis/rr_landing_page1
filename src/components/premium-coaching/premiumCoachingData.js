@@ -269,9 +269,10 @@ export const COACHES = [
         centres: ['cranbourne-north', 'hallam'], // Hallam added Andy 20 Nov 2026: same coaches as Cranbourne North
         tier: 'head',
         role: 'Head Coach, South-East Region',
-        specialism: 'Batting specialist',
+        specialism: 'Batting: technique, video analysis, mental preparation and power hitting',
         img: '/assets/coaches/alex-thornhill.jpg',
-        bio: 'Head Coach of our South-East Region and a batting specialist, with coaching experience in UK county cricket and the Australian premier system. He coaches the cricket program at Xavier College and within the Fitzroy Doncaster Academy.',
+        // Andy, 23 Nov 2026: Alex's updated bio, summarised.
+        bio: 'A highly regarded batting coach, Alex helps players understand their game, build confidence and reach their full potential. He has coached across Australia and the UK, from junior representative cricket to senior club cricket and high-performance academy programs, including as a batting coach in county academies in the UK. He is Head Coach of Subbies powerhouse Oakleigh CC and an Academy Coach at Fitzroy Doncaster CC, where he coaches the Dowling Shield program. As a player he won the Sussex Premier League in 2023, and that year represented the Sussex League Invitational XI against professionals from Sussex CCC.',
         // Coach-led page (Andy, 22 Nov 2026): anything the coach wants on their own page.
         // TODO Alex: his usual times and his own terms (cancellation, rescheduling).
         normalTimes: null,
