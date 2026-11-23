@@ -25,7 +25,7 @@ const HomeShopFeature = () => {
                         WEAR THE <span className="text-rr-pink">ROYALS COLOURS</span>
                     </h2>
                     <p className="text-white/60 font-medium mt-3 max-w-xl mx-auto">
-                        Official RRA Melbourne academy kit and IPL replica gear — now available online.
+                        Train in Academy kit. Training shirts, shorts, pants, caps and jackets in junior and senior sizes.
                     </p>
                 </motion.div>
 
@@ -43,8 +43,8 @@ const HomeShopFeature = () => {
                         <div className="absolute -inset-4 bg-rr-pink/20 rounded-3xl blur-2xl opacity-40" />
                         <div className="relative rounded-2xl overflow-hidden bg-white/5 border border-white/10 aspect-square">
                             <img
-                                src="/shop/ipl-shirt-front.jpeg"
-                                alt="RRA Melbourne IPL Supporter Shirt"
+                                src="/shop/training-shirt-front.png"
+                                alt="RRA Melbourne Training Shirt"
                                 className="w-full h-full object-contain p-6"
                             />
                         </div>
@@ -60,23 +60,21 @@ const HomeShopFeature = () => {
                     >
                         {/* Badge */}
                         <span className="inline-flex items-center gap-2 bg-rr-pink text-white text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-full w-fit mb-6">
-                            ⭐ Official IPL — Featured Item
+                            Academy Kit
                         </span>
 
                         <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-wide leading-tight mb-2">
-                            2026 Rajasthan Royals<br />
-                            <span className="text-rr-pink">IPL Supporter Shirt</span>
+                            RRA Melbourne<br />
+                            <span className="text-rr-pink">Training Kit</span>
                         </h3>
 
-                        <p className="text-4xl font-black text-white mb-4">$99.95</p>
-
                         <p className="text-white/60 font-medium leading-relaxed mb-8">
-                            The official 2026 IPL season supporter shirt of the Rajasthan Royals. Premium quality in authentic team colours — wear the same colours as your favourite Royals players.
+                            The kit our players train in, in RRA Melbourne colours. Order online and collect it free at Mickleham or Cranbourne North, or have it posted.
                         </p>
 
                         {/* Features */}
                         <div className="grid grid-cols-2 gap-3 mb-8">
-                            {['Official IPL Merchandise', 'Premium Fabric', 'Authentic Team Colours', 'All Sizes Available'].map(f => (
+                            {['Training Shirt', 'Shorts & Pants', 'Cap & Fleece Jacket', 'Junior & Senior Sizes'].map(f => (
                                 <div key={f} className="flex items-center gap-2">
                                     <span className="w-1.5 h-1.5 rounded-full bg-rr-pink shrink-0" />
                                     <span className="text-white/70 text-sm font-medium">{f}</span>

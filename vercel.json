@@ -341,6 +341,14 @@
       "destination": "/lower-plenty-junior-royals-day/index.html"
     },
     {
+      "source": "/programs",
+      "destination": "/programs/index.html"
+    },
+    {
+      "source": "/programs/",
+      "destination": "/programs/index.html"
+    },
+    {
       "source": "/junior-royals",
       "destination": "/junior-royals/index.html"
     },

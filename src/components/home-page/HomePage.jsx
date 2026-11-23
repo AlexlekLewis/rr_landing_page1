@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import HomeVideo from './HomeVideo';
 import HomeMedia from './HomeMedia';
 import HomeStickyCTA from './HomeStickyCTA';
 import RegisterDrawer from './RegisterDrawer';
 import PartnerStack from '../power-game/PartnerStack';
-import OpenDaysModal from './OpenDaysModal';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { HomeHeader, WhatsOn, Banner, NewsStrip, Leadership, RoyalsWay, Store, Faq, Hire, HomeFooter } from '../home-v2/HomeV2Parts';
+import HomeIntro from '../home-v2/HomeIntro';
 import '../home-v2/homeV2.css';
 
 // THE HOME PAGE in the rajasthanroyals.com layout (Andy, 16 Nov 2026, from his mock-up):
@@ -20,38 +19,34 @@ import '../home-v2/homeV2.css';
 // several still supply data to the new layout.
 
 const SECTIONS = ['hero', 'news', 'video', 'photos', 'coaches', 'about', 'store', 'faq', 'careers-banner'];
-const OPEN_DAYS_KEY = 'openDaysModalDismissed';
 
 const HomePage = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const [openDaysModal, setOpenDaysModal] = useState(false);
 
     usePageAnalytics('/', { sections: SECTIONS });
 
+    // No pop-up on arrival (Andy, 23 Nov 2026: "I just want you to be able to go straight to the
+    // website. Let's keep pop-ups for something a bit more special"). The What's On pop-up
+    // (OpenDaysModal.jsx) stays in the repo for a special occasion. A link from another page to
+    // a home-page section (/#coaches) lands on that section.
     useEffect(() => {
-        window.scrollTo(0, 0);
-        // The What's On pop-up shows once per visit, as before.
-        let dismissed = false;
-        try { dismissed = !!sessionStorage.getItem(OPEN_DAYS_KEY); } catch { /* ignore */ }
-        if (!dismissed) setOpenDaysModal(true); // eslint-disable-line react-hooks/set-state-in-effect
+        const id = window.location.hash.slice(1);
+        if (!id) { window.scrollTo(0, 0); return undefined; }
+        const t = setTimeout(() => document.getElementById(id)?.scrollIntoView(), 300);
+        return () => clearTimeout(t);
     }, []);
 
     const openDrawer = () => setDrawerOpen(true);
-    const closeOpenDays = () => {
-        setOpenDaysModal(false);
-        try { sessionStorage.setItem(OPEN_DAYS_KEY, '1'); } catch { /* ignore */ }
-    };
-    const openPrograms = () => setOpenDaysModal(true);
 
     return (
         <div className="rrh min-h-screen flex flex-col selection:bg-rr-pink selection:text-white relative">
             <HomeHeader onRegister={openDrawer} />
-            <WhatsOn onOpen={openPrograms} />
+            <WhatsOn />
             <main className="flex-1 w-full overflow-hidden">
-                <Banner onRegister={openDrawer} onPrograms={openPrograms} />
+                <Banner onRegister={openDrawer} />
                 <NewsStrip />
-                {/* Photos & videos: as on the live site */}
-                <div id="video"><HomeVideo /></div>
+                {/* Introducing RRA Melbourne: Sid's video (Andy, 23 Nov 2026: Option B), then photos & videos */}
+                <HomeIntro />
                 <div id="photos" className="scroll-mt-24"><HomeMedia /></div>
                 <Leadership />
                 <RoyalsWay />
@@ -63,7 +58,6 @@ const HomePage = () => {
             <HomeFooter />
             <HomeStickyCTA onRegisterClick={openDrawer} />
             <RegisterDrawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} />
-            <OpenDaysModal open={openDaysModal} onClose={closeOpenDays} />
         </div>
     );
 };

@@ -302,6 +302,10 @@ export const PAGE_SEO = {
 // components/news/newsStories.js so a new story gets its own share preview (headline,
 // summary, photo) with no extra step. scripts/prerender-seo.mjs bakes these into the HTML.
 const clip = (s, n) => (s.length <= n ? s : `${s.slice(0, n - 1).replace(/\s+\S*$/, '')}…`);
+PAGE_SEO['/programs'] = {
+  title: 'Cricket Programs Melbourne | Rajasthan Royals Academy',
+  description: 'Every Rajasthan Royals Academy Melbourne program in one place: Junior Royals, Spin Club, Performance Squads, Private Coaching and our High Performance Camp in India.',
+};
 PAGE_SEO['/news'] = {
   title: 'News & Features | Rajasthan Royals Academy Melbourne',
   description: 'News and features from Rajasthan Royals Academy Melbourne: our programs, our players, tours and the wider Royals family.',

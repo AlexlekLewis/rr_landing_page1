@@ -31,6 +31,7 @@ import IndiaTour2026 from './components/india-tour-2026/IndiaTour2026';
 // revived, but they are no longer imported or reachable.
 import HomePage from './components/home-page/HomePage';
 import NewsPage from './components/news/NewsPage';
+import ProgramsPage from './components/programs/ProgramsPage';
 import StoryPage from './components/news/StoryPage';
 import InductionPage from './components/induction/InductionPage';
 import CoachesDay from './components/coaches-day/CoachesDay';
@@ -239,6 +240,8 @@ function App() {
         {/* News & features (Andy, 14 Nov 2026). Stories: components/news/newsStories.js */}
         <Route path="/news" element={<NewsPage />} />
         <Route path="/news/:slug" element={<StoryPage />} />
+        {/* Every program on one page (Andy, 23 Nov 2026). Data: components/programs/programsData.js */}
+        <Route path="/programs" element={<ProgramsPage />} />
         {/* Private Coaching at Mickleham. EOI form → Head Coach assigns a coach.
             Writes to private_coaching_eoi (anon insert only). Canonical URL is
             /mickleham (per Alex). /private-coaching is now Royals Private Coaching

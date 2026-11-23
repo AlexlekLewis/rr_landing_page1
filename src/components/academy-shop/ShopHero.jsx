@@ -41,7 +41,7 @@ const ShopHero = () => {
           </h1>
 
           <p className="text-white/70 text-lg font-medium max-w-xl mt-4">
-            Official Rajasthan Royals Academy Melbourne training and replica kit. Wear the badge with pride.
+            Official Rajasthan Royals Academy Melbourne training kit. Wear the badge with pride.
           </p>
         </motion.div>
       </div>

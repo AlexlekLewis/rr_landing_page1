@@ -28,7 +28,9 @@
 // RULES (same editorial rules as Power Cricket's content/EDITORIAL_GUIDE.md):
 //   - Only facts from material Andy or Alex supplied, or copy already approved on the
 //     site. Never invent scores, names, quotes, dates or prices.
-//   - Never name a junior player (under 18). Coaches and adult captains can be named.
+//   - Under-18s can be named if they are in the T20 Elite Program, Power Game Pre-Season or
+//     Performance Squads (families ticked consent; Andy, 23 Nov 2026). Never name players who are
+//     only in Junior Royals.
 //   - Australian English. Lead with the news; short paragraphs; finish with what to do next.
 //
 // STORIES FROM POWER CRICKET arrive by themselves: when the Power Cricket journalist tags a
@@ -44,6 +46,35 @@ const paragraphs = (...ps) => ps.join('\n\n');
 const IMG = '/assets/news';
 
 export const NEWS_STORIES = [
+    {
+        // Weekend Wrap, 20-22 Nov 2026: written by the Power Cricket journalist and tagged for both sites
+        // there. Kept here too so it shows on our site straight away; our copy wins on the same slug.
+        slug: 'weekend-wrap-20-22-november',
+        sites: ['rra-melbourne'],
+        brand: 'Weekend Wrap',
+        type: 'article',
+        publishedAt: '2026-11-23',
+        title: 'Unbeaten eighties and a five-for headline a big weekend for our players',
+        excerpt:
+            'Siddhant Goel and Dhruva Bezawada carried their bats in Premier Under-18s, Jake Frederiksen took 5/45 for Diamond Creek’s 1st XI, and Sridhar Srivatsan made fifties on back-to-back days.',
+        heroImage: `${IMG}/weekend-wrap-20-22-nov-header.jpg`,
+        heroAlt: 'Weekend Wrap, 20 to 22 November: our top performers in club cricket',
+        gallery: [
+            { src: `${IMG}/weekend-wrap-20-22-nov-top-knocks.jpg`, alt: 'Top knocks, 20 to 22 November' },
+            { src: `${IMG}/weekend-wrap-20-22-nov-top-spells.jpg`, alt: 'Top spells, 20 to 22 November' },
+        ],
+        galleryAspect: '4/5',
+        body: paragraphs(
+            'Two unbeaten eighties in Premier Under-18 cricket and a five-wicket haul in a 1st XI led the way as players from our T20 Elite Program, Power Game Pre-Season and Performance Squads lit up Melbourne club cricket from Friday 20 to Sunday 22 November.',
+            'Siddhant Goel produced the innings of the weekend, carrying his bat for 86 not out off 107 balls for Richmond against Ringwood on Sunday. Dhruva Bezawada was just as composed, finishing 81 not out off 98 as Camberwell Magpies chased down their target against Melbourne University with six wickets to spare.',
+            'Ranen Gandhi ground out 75 off 129 balls in school 1st XI cricket on Saturday, an innings built on patience that set up a 23-run win. Guransh Singh followed on Sunday with 58 off 67 for Point Cook Centrals’ Sunday XI in a 102-run victory.',
+            'Sridhar Parthasarathy Srivatsan had the busiest weekend of anyone. He made 52 for Burnside Springs United’s 1st XI on Saturday, then backed it up with 50 not out and two catches as Werribee’s Sunday XI cruised home by seven wickets.',
+            'There were runs in the women’s game too. Anuki Dassanayake struck 50 off 71 as Greenvale Kangaroos won by five wickets in Women’s Premier Seconds, while Sahasra Pulibandla smashed 37 not out off just 19 balls, with seven fours, for Carlton. Vrishti Mangrolia added 37 not out for South Morang Lions.',
+            'Syed Shayan Ahmad hit 38 off 39 and took two catches for Northcote in Premier Under-18s, Girik Wadhwa raced to 34 not out off 20 balls in Under-13s, and Tanish Singh and Dheer Chaudhari both made 33.',
+            'With the ball, Jake Frederiksen was the standout. His 5/45 from eight overs bowled Diamond Creek’s 1st XI to an 18-run win over Heidelberg on Saturday. Angad Singh Pantlya was miserly for Indigos on Sunday, taking 3/13 from six overs, including two maidens, as they won by five wickets.',
+            'Behind the stumps and in the field, Vishar Bellur took two catches and completed a stumping for Western Lions in Under-13s.',
+        ),
+    },
     {
         // Also in Power Cricket's feed (tagged for both sites there), but kept here because our
         // wording differs: approved for posting by Andy on 13 Nov 2026, text as published on Power

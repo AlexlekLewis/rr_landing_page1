@@ -249,7 +249,7 @@ const Navbar = ({ variant = 'lp1', onRegisterClick, ctaLabelOverride, ctaTargetO
                                             })}
                                             <div className="px-5 py-3 bg-slate-50 border-t border-slate-100">
                                                 <Link
-                                                    to="/#programs"
+                                                    to="/programs"
                                                     onClick={() => { setProgramsOpen(false); setTimeout(() => document.getElementById('programs')?.scrollIntoView({ behavior: 'smooth' }), 100); }}
                                                     className="text-xs font-bold text-rr-pink hover:text-rr-light-pink uppercase tracking-widest transition-colors"
                                                 >

@@ -40,7 +40,9 @@ export const TOUR_LENGTH_DAYS = 10;
 // writing before anyone commits. Don't say what it covers (flights, accommodation,
 // meals…) until Alex has confirmed it.
 // Changed from $7,000 to $6,000 at the bottom of the range (Andy, 10 Nov 2026).
-export const PRICE_ESTIMATE_AUD = { min: 6000, max: 8000 };
+// Andy, 23 Nov 2026: budget approximately $6,000 to $7,000 per player; final price
+// and dates to be confirmed. (Was $6,000–$8,000, and before that $7,000–$8,000.)
+export const PRICE_ESTIMATE_AUD = { min: 6000, max: 7000 };
 
 // What the price covers is not confirmed yet, so the pricing section shows a
 // "confirmed with the price" note instead of an inclusions list. The `included`
@@ -95,7 +97,7 @@ export const PRODUCED_HERE = [
 ];
 
 export const fmtAUD = (n) => `$${Number(n).toLocaleString('en-AU')}`;
-// "$6,000–$8,000" — en dash, both sides signed so neither number reads as a total.
+// "$6,000–$7,000" — en dash, both sides signed so neither number reads as a total.
 export const fmtRangeAUD = (r) => `${fmtAUD(r.min)}–${fmtAUD(r.max)}`;
 
 // --- the new sections (Nov 2026) --------------------------------------------
@@ -272,12 +274,13 @@ const STANDARD = {
 
     pricing: {
         eyebrow: 'What It Costs',
-        heading: `About ${fmtRangeAUD(PRICE_ESTIMATE_AUD)}`,
+        heading: `Budget Approximately ${fmtRangeAUD(PRICE_ESTIMATE_AUD)}`,
         headingAccent: 'Per Player',
         intro:
-            `That is our estimate for the tour of about ${TOUR_LENGTH_DAYS} days, not a final price. ` +
-            'The dates and the final price are not set yet. Before anyone commits, we ' +
-            'confirm in writing the exact price and exactly what it includes.',
+            `Budget for approximately ${fmtAUD(PRICE_ESTIMATE_AUD.min)} to ${fmtAUD(PRICE_ESTIMATE_AUD.max)} ` +
+            `per player for the tour of about ${TOUR_LENGTH_DAYS} days, with the final price and dates to ` +
+            'be confirmed. Before anyone commits, we confirm in writing the exact price, the dates and ' +
+            'exactly what it includes.',
         includesEyebrow: 'What the price includes',
         includesHeading: 'Not Confirmed Yet',
         includesBody:
@@ -485,12 +488,13 @@ const SIMPLE = {
 
     pricing: {
         eyebrow: 'What It Costs',
-        heading: `About ${fmtRangeAUD(PRICE_ESTIMATE_AUD)}`,
+        heading: `Budget Approximately ${fmtRangeAUD(PRICE_ESTIMATE_AUD)}`,
         headingAccent: 'Per Player',
         intro:
-            `That is our estimate for the tour of about ${TOUR_LENGTH_DAYS} days. It is not the final ` +
-            'price, and the dates are not set yet either. Before you say yes, we tell you the exact ' +
-            'price and what it covers, in writing.',
+            `Budget for approximately ${fmtAUD(PRICE_ESTIMATE_AUD.min)} to ${fmtAUD(PRICE_ESTIMATE_AUD.max)} ` +
+            `per player for the tour of about ${TOUR_LENGTH_DAYS} days. The final price and dates are ` +
+            'to be confirmed. Before you say yes, we tell you the exact price, the dates and what it ' +
+            'covers, in writing.',
         includesEyebrow: 'What the price covers',
         includesHeading: 'Not Set Yet',
         includesBody:
