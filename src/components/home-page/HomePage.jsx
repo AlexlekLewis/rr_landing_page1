@@ -6,7 +6,7 @@ import RegisterDrawer from './RegisterDrawer';
 import PartnerStack from '../power-game/PartnerStack';
 import OpenDaysModal from './OpenDaysModal';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
-import { HomeHeader, WhatsOn, Banner, NewsStrip, Leadership, RoyalsWay, Store, Faq, Hire, HomeFooter } from '../home-v2/HomeV2Parts';
+import { HomeHeader, WhatsOn, Banner, NewsStrip, WeekendWrap, Leadership, RoyalsWay, Store, Faq, Hire, HomeFooter } from '../home-v2/HomeV2Parts';
 import '../home-v2/homeV2.css';
 
 // THE HOME PAGE in the rajasthanroyals.com layout (Andy, 16 Nov 2026, from his mock-up):
@@ -19,7 +19,7 @@ import '../home-v2/homeV2.css';
 // HomeCoaches, HomeFAQ, HomeCareersBanner, HomeTopBanner, OpenDaysTicket) stay in the repo;
 // several still supply data to the new layout.
 
-const SECTIONS = ['hero', 'news', 'video', 'photos', 'coaches', 'about', 'store', 'faq', 'careers-banner'];
+const SECTIONS = ['hero', 'news', 'weekend-wrap', 'video', 'photos', 'coaches', 'about', 'store', 'faq', 'careers-banner'];
 const OPEN_DAYS_KEY = 'openDaysModalDismissed';
 
 const HomePage = () => {
@@ -50,6 +50,7 @@ const HomePage = () => {
             <main className="flex-1 w-full overflow-hidden">
                 <Banner onRegister={openDrawer} onPrograms={openPrograms} />
                 <NewsStrip />
+                <WeekendWrap />
                 {/* Photos & videos: as on the live site */}
                 <div id="video"><HomeVideo /></div>
                 <div id="photos" className="scroll-mt-24"><HomeMedia /></div>

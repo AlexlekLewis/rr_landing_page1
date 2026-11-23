@@ -58,7 +58,7 @@ const StoryPage = () => {
                                 {story.gallery.length > 0 && (
                                     <div className="my-8 grid grid-cols-1 sm:grid-cols-2 gap-3">
                                         {story.gallery.map((g) => (
-                                            <img key={g.src} src={g.src} alt={g.alt || ''} loading="lazy" decoding="async" className="w-full aspect-[4/3] object-cover rounded-2xl" />
+                                            <img key={g.src} src={g.src} alt={g.alt || ''} loading="lazy" decoding="async" className="w-full object-cover rounded-2xl" style={{ aspectRatio: story.galleryAspect || '4/3' }} />
                                         ))}
                                     </div>
                                 )}

@@ -6,6 +6,7 @@ import { ANNOUNCEMENTS } from '../home-page/openDaysData';
 import { faqs } from '../home-page/HomeFAQ';
 import { PROGRAMS as FOOTER_PROGRAMS, ACADEMY as FOOTER_ACADEMY, COMPANY as FOOTER_COMPANY } from '../Footer';
 import { useStories, storyPath } from '../news/news';
+import { useWeekendWrap } from '../news/weekendWrap';
 import { WELCOME_SLIDE, PROGRAM_SLIDES, LEADERS, TEAM, ROYALS_WAY, STORE } from './homeV2Data';
 
 // The home page sections in the rajasthanroyals.com layout (Andy's mock-up, 16 Nov 2026).
@@ -240,6 +241,44 @@ export const NewsStrip = () => {
                             </span>
                         </Link>
                     ))}
+                </div>
+            </div>
+        </section>
+    );
+};
+
+/* ── Weekend Wrap: our program players' best club performances (components/news/weekendWrap.js) ── */
+const WrapList = ({ title, items }) => (items && items.length ? (
+    <div className="wwp">
+        <h3>{title}</h3>
+        <ul>
+            {items.map((p) => (
+                <li key={p.name + p.figure}>
+                    <span className="wwn"><b>{p.name}</b><small>{p.detail}</small></span>
+                    <span className="wwf">{p.figure}</span>
+                </li>
+            ))}
+        </ul>
+    </div>
+) : null);
+
+export const WeekendWrap = () => {
+    const wrap = useWeekendWrap();
+    if (!wrap) return null;
+    return (
+        <section className="strip ww" id="weekend-wrap">
+            <div className="wrap">
+                <div className="strip-head">
+                    <div><span className="eyebrow">{wrap.label} · Club cricket</span><h2>WEEKEND WRAP</h2></div>
+                    {wrap.storySlug && <Link className="more" to={storyPath(wrap.storySlug)} data-cta="home-weekend-wrap">Read the weekend wrap</Link>}
+                </div>
+                <p className="strip-sub">{wrap.headline}.</p>
+                <div className="wwg">
+                    <WrapList title="Top knocks" items={wrap.knocks.slice(0, 8)} />
+                    <div className="wws">
+                        <WrapList title="Top spells" items={wrap.spells} />
+                        <WrapList title="In the field" items={wrap.fielding} />
+                    </div>
                 </div>
             </div>
         </section>

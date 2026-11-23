@@ -424,3 +424,21 @@
 @media (max-width:640px){.rrh .slide .h1like{font-size:34px}}
 /* Icons from lucide in places the mock-up used inline SVG */
 .rrh .nl svg,.rrh .menu-btn svg,.rrh .shop-link svg{flex:none}
+
+/* ── Weekend Wrap (Andy, 23 Nov 2026) ── */
+.rrh .ww{background:var(--navy);color:var(--white)}
+.rrh .ww .strip-head h2,.rrh .ww .more{color:var(--white)}
+.rrh .ww .eyebrow{color:var(--pink-soft)}
+.rrh .ww .strip-sub{color:rgba(255,255,255,.85);margin:0 0 18px}
+.rrh .wwg{display:grid;gap:16px;grid-template-columns:3fr 2fr}
+.rrh .wws{display:flex;flex-direction:column;gap:16px}
+.rrh .wwp{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:14px 18px 6px}
+.rrh .wwp h3{margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pink-soft)}
+.rrh .wwp ul{list-style:none;margin:0;padding:0}
+.rrh .wwp li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.rrh .wwp li:last-child{border-bottom:0}
+.rrh .wwn{min-width:0;display:flex;flex-direction:column}
+.rrh .wwn b{font-weight:800;text-transform:uppercase;font-size:14px;letter-spacing:.01em}
+.rrh .wwn small{font-size:12px;color:rgba(255,255,255,.7);line-height:1.4}
+.rrh .wwf{flex:none;font-weight:900;font-size:20px;color:var(--pink)}
+@media (max-width:760px){.rrh .wwg{grid-template-columns:1fr}}
