@@ -69,7 +69,6 @@ const Hero = () => (
                         ))}
                     </ul>
                 </div>
-                <p className="hidden md:block text-base text-white/80 font-medium leading-relaxed mb-7">{HERO.lead}</p>
                 <dl className="order-5 md:order-none grid grid-cols-2 gap-x-6 gap-y-4 mb-2 md:mb-8">
                     {HERO.facts.map((f) => (
                         <div key={f.label} className="border-t border-white/25 pt-2.5">

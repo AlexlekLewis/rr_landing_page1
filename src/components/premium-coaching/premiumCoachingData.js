@@ -49,18 +49,16 @@ export const HERO = {
     eyebrow: 'Rajasthan Royals Academy · Private Coaching',
     h1: ['Royals', 'Private Coaching'],
     // No tagline under the title (Andy, 18 Nov 2026: removed "One coach. Your player. Every ball measured.").
-    lead:
-        'Private cricket coaching with a Rajasthan Royals Academy coach, and all of '
-        + 'the Academy’s technology in the lane with you: the Match Centre, fielding heat maps and '
-        + 'bowling maps. Train one-to-one, or bring a training partner and share the price.',
+    // Lead paragraph removed (Andy, 23 Nov 2026: redundant; the ticks say it).
     // Who it's for (Andy, 18 Nov 2026), a ticked list like Junior Royals' "perfect for".
     forTitle: 'Royals Private Coaching is perfect for players who:',
     forList: [
         'Want a personal approach to coaching',
+        'Want their own secured indoor net to develop their skills', // Andy, 23 Nov 2026: a major benefit
         'Take their cricket seriously and want to keep getting better',
         'Want more than cones, balls and stumps',
         'Want to see and understand their own game, with real data',
-        'Want to learn the Royals way, from Royals Academy coaches, with Royals technology',
+        'Want to learn the Royals way, from Royals Academy coaches, with our technology in the lane: Match Centre, bowling maps and heat maps',
         'Want to train alongside a teammate and push each other',
     ],
     facts: [
@@ -70,7 +68,7 @@ export const HERO = {
         { label: 'Now', value: 'Bookings open, including our new West Centre' },
     ],
     cta: 'Book Your Coach',
-    secondary: 'See Coaches & Times',
+    secondary: 'See Our Coaches',
 };
 
 // ("What we believe: players learn best with other players" section removed, Andy 20 Nov 2026.)
