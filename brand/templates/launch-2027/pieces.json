@@ -33,8 +33,8 @@
    "ELITE",
    "T20"
   ],
-  "photo": "sid-lahiri-coaching-2026.jpg",
-  "pos": "55% 25%",
+  "photo": "elite-t20-bowler-2026.jpg",
+  "pos": "50% 0%",
   "photoW": 0.62,
   "headW": 0.55,
   "sub": "The 12-week T20 Program",
@@ -56,7 +56,8 @@
    "APPLY NOW",
    "RRAMELBOURNE.COM/ELITE-ROYALS"
   ],
-  "photoH": 0.6
+  "photoH": 0.6,
+  "vpos": "45% 40%"
  },
  {
   "file": "03-performance-squads",
