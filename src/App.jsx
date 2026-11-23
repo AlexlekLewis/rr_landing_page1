@@ -229,7 +229,6 @@ function App() {
         {/* News & features (Andy, 14 Nov 2026). Stories: components/news/newsStories.js */}
         <Route path="/news" element={<NewsPage />} />
         <Route path="/news/:slug" element={<StoryPage />} />
-        {/* Fixtures & results (Andy, 23 Nov 2026). DRAFT: data in components/fixtures/fixturesData.js */}
         {/* Private Coaching at Mickleham. EOI form → Head Coach assigns a coach.
             Writes to private_coaching_eoi (anon insert only). Canonical URL is
             /mickleham (per Alex); /private-coaching 308s in vercel.json, with a
