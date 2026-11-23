@@ -22,6 +22,7 @@ import { sendOrderConfirmation } from './_lib/orderEmail.js';
 import { unpackApplication, buildPaidRow } from './_lib/pgpCheckout.js';
 import { sendPgpConfirmation } from './_lib/pgpEmail.js';
 import { isJrT3Session, classifyJrT3, completeJrT3Registration } from './_lib/jrTerm3.js';
+import { handlePrivateCoachingPaid } from './_lib/privateCoachingPayment.js';
 
 // Stripe signature verification requires the *raw* request body. Vercel's
 // default body parser returns a parsed object, which would always fail
@@ -316,6 +317,19 @@ export default async function handler(req, res) {
   } catch (err) {
     console.error('Session expansion failed:', err.message);
     return res.status(500).json({ error: 'Session expansion failed' });
+  }
+
+  // ── Royals Private Coaching (server checkout, api/private-coaching-checkout.js) ──
+  // Booking paid → row paid + held hours booked; partner shirt paid → stamped. Handled
+  // here first so these sessions never fall into the program/holiday classification below.
+  if (String(session.metadata?.source || '').startsWith('premium-private-coaching')) {
+    try {
+      const out = await handlePrivateCoachingPaid(getSupabase(), session);
+      return res.status(200).json({ received: true, privateCoaching: out });
+    } catch (err) {
+      console.error('Private coaching webhook failed:', err.message);
+      return res.status(500).json({ error: 'private coaching update failed' });
+    }
   }
 
   const customerName    = session.customer_details?.name || '';

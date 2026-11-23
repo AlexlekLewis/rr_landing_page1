@@ -11,6 +11,9 @@ import { useCarousel, CarouselTrack, CarouselControls } from '../india-tour-2026
 // Built like the /junior-royals photo strip (same carousel, arrows, progress bar and
 // counter). The media and the mix: homeMediaData.js.
 
+// Reusable. Home page: no props. Invitation-list pages pass media, eyebrow, title, intro.
+// Royals Private Coaching (18 Nov 2026) passes items, label, idPrefix and sectionClass too.
+
 const Lightbox = ({ photos, index, onClose, onStep }) => {
     const touchX = useRef(null);
     useEffect(() => {
@@ -121,9 +124,12 @@ const VideoSlide = ({ v }) => {
     );
 };
 
-// Used as it is on the home page. Other pages (the invitation-list pages) pass their own
-// media list and heading: <HomeMedia media={ACADEMY_MEDIA} eyebrow="…" title="…" intro="…" />.
-const HomeMedia = ({ media = HOME_MEDIA, eyebrow = 'Photos & videos', title, intro, id }) => {
+const HomeMedia = ({
+    media: mediaProp, items, eyebrow = 'Photos & videos', title, intro, id,
+    label = 'Photos and videos from Rajasthan Royals Academy Melbourne',
+    idPrefix = 'home-media', sectionClass = 'py-16 md:py-20 bg-white',
+}) => {
+    const media = items || mediaProp || HOME_MEDIA;
     const photos = useMemo(() => media.filter((m) => m.type === 'image'), [media]);
     const total = media.length;
     const carousel = useCarousel(total);
@@ -133,7 +139,7 @@ const HomeMedia = ({ media = HOME_MEDIA, eyebrow = 'Photos & videos', title, int
     if (total === 0) return null;
 
     return (
-        <section id={id} className="py-16 md:py-20 bg-white" data-home-media>
+        <section id={id} className={sectionClass} data-home-media={idPrefix === 'home-media' ? '' : undefined} data-media-carousel={idPrefix}>
             <div className="max-w-6xl mx-auto px-6">
                 <div className="mb-8">
                     <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">{eyebrow}</p>
@@ -143,7 +149,7 @@ const HomeMedia = ({ media = HOME_MEDIA, eyebrow = 'Photos & videos', title, int
                     {intro && <p className="text-lg text-rr-charcoal font-medium leading-relaxed max-w-2xl mt-4">{intro}</p>}
                 </div>
 
-                <CarouselTrack carousel={carousel} label="Photos and videos from Rajasthan Royals Academy Melbourne">
+                <CarouselTrack carousel={carousel} label={label}>
                     {media.map((m, i) => (
                         <div key={m.src} data-slide role="group" aria-roledescription="slide" aria-label={`${i + 1} / ${total}`}
                             className="snap-start shrink-0 w-[72%] sm:w-[40%] lg:w-[calc((100%-3rem)/4)] aspect-[3/4]">
@@ -153,7 +159,7 @@ const HomeMedia = ({ media = HOME_MEDIA, eyebrow = 'Photos & videos', title, int
                         </div>
                     ))}
                 </CarouselTrack>
-                <CarouselControls carousel={carousel} total={total} prevLabel="Previous" nextLabel="Next" idPrefix="home-media" />
+                <CarouselControls carousel={carousel} total={total} prevLabel="Previous" nextLabel="Next" idPrefix={idPrefix} />
             </div>
 
             <AnimatePresence>

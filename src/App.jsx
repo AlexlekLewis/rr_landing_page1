@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { COACHES as PC_COACHES } from './components/premium-coaching/premiumCoachingData';
 import RouteSeo from './seo/RouteSeo';
 import NotFound from './components/NotFound';
 import PrivacyPolicy from './components/PrivacyPolicy';
@@ -91,6 +92,15 @@ const SidJuniorsSuccess = React.lazy(() => import('./components/sid-juniors/SidJ
 const LowerPlentyJrDay = React.lazy(() => import('./components/lower-plenty-junior-royals-day/LowerPlentyJrDay'));
 const LowerPlentyJrDaySuccess = React.lazy(() => import('./components/lower-plenty-junior-royals-day/LowerPlentyJrDaySuccess'));
 const LowerPlentyJrDayPay = React.lazy(() => import('./components/lower-plenty-junior-royals-day/LowerPlentyJrDayPay'));
+// Royals Private Coaching (premium 1-to-1 / 1-to-2 / 1-to-3 with the Academy's tech), Andy 13 Nov 2026.
+// PREVIEW ONLY: hidden, noindex, linked from nowhere. Booking REQUESTS, no payment yet.
+// Facts: components/premium-coaching/premiumCoachingData.js. Form → premium_private_coaching_requests.
+const PremiumCoaching = React.lazy(() => import('./components/premium-coaching/PremiumCoaching'));
+const PremiumCoachingSuccess = React.lazy(() => import('./components/premium-coaching/PremiumCoachingSuccess'));
+const PremiumCoachingPartner = React.lazy(() => import('./components/premium-coaching/PremiumCoachingPartner'));
+const PCCoachPage = React.lazy(() => import('./components/premium-coaching/CoachPage'));
+const PCCoachHub = React.lazy(() => import('./components/premium-coaching/CoachHub'));
+const PCPayPage = React.lazy(() => import('./components/premium-coaching/PayPage'));
 // Match Registration — reusable match-day registration + payment page. Match-specific
 // detail lives in src/components/match-registration/matchConfig.js, so the next block
 // of matches is a config swap, not a new page. HIDDEN: noindex, direct URL only.
@@ -234,11 +244,10 @@ function App() {
         <Route path="/programs" element={<ProgramsPage />} />
         {/* Private Coaching at Mickleham. EOI form → Head Coach assigns a coach.
             Writes to private_coaching_eoi (anon insert only). Canonical URL is
-            /mickleham (per Alex); /private-coaching 308s in vercel.json, with a
-            client redirect here for any in-app navigations. */}
+            /mickleham (per Alex). /private-coaching is now Royals Private Coaching
+            (Andy, 22 Nov 2026), further down. */}
         <Route path="/mickleham" element={<PrivateCoaching />} />
         <Route path="/Mickleham" element={<PrivateCoaching />} />
-        <Route path="/private-coaching" element={<Navigate to="/mickleham" replace />} />
         {/* Mickleham 30-Day Launch Special — campaign page for the front-desk flyer
             QR code + Instagram link. /Mickleham_Launch is the published short link;
             /launch kept as a fallback so nothing already shared breaks. */}
@@ -302,6 +311,14 @@ function App() {
         {/* Match Registration — reusable match-day registration + payment. HIDDEN:
             noindex, not in nav or sitemap, direct URL only. Currently serving the
             Power League Matches, Mon 28 & Tue 29 September. */}
+        <Route path="/private-coaching" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PremiumCoaching /></React.Suspense>} />
+        <Route path="/private-coaching/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PremiumCoachingSuccess /></React.Suspense>} />
+        <Route path="/private-coaching/partner" element={<React.Suspense fallback={<div className="min-h-screen bg-white" />}><PremiumCoachingPartner /></React.Suspense>} />
+        {/* Coach-led private coaching (Andy, 22 Nov 2026): each coach's own page, their private
+            coach page (enquiries, pay links, attendance ticks), and the pay link families get. */}
+        <Route path="/private-coaching/pay" element={<React.Suspense fallback={<div className="min-h-screen bg-slate-50" />}><PCPayPage /></React.Suspense>} />
+        {PC_COACHES.map((c) => <Route key={c.slug} path={`/private-coaching-${c.slug}`} element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><PCCoachPage slug={c.slug} /></React.Suspense>} />)}
+        {PC_COACHES.map((c) => <Route key={`${c.slug}-hub`} path={`/private-coaching-${c.slug}/coach`} element={<React.Suspense fallback={<div className="min-h-screen bg-slate-50" />}><PCCoachHub slug={c.slug} /></React.Suspense>} />)}
         <Route path="/match-registration" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><MatchRegistration /></React.Suspense>} />
         <Route path="/match-registration/success" element={<React.Suspense fallback={<div className="min-h-screen bg-rr-dark" />}><MatchRegistrationSuccess /></React.Suspense>} />
         {/* Performance Squad price. Same page, same form, same consents.

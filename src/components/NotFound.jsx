@@ -17,7 +17,7 @@ const LINKS = [
     { label: 'Home', to: '/' },
     { label: 'Performance Squads', to: '/performance-squads' },
     { label: 'Junior Royals', to: '/junior-royals' },
-    { label: 'Private Coaching', to: '/mickleham' },
+    { label: 'Private Coaching', to: '/private-coaching' },
     { label: 'Elite Program', to: '/elite-royals' },
     { label: 'Our Coaches', to: '/coaches' },
 ];

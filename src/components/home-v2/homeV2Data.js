@@ -19,6 +19,7 @@ import { PROGRAMS as HERO_PROGRAMS } from '../home-page/HomeHero';
 import { coaches as LEADERS_TOP } from '../home-page/HomeCoaches';
 import { DIRECTOR } from '../coaches/coachData';
 import { PRODUCTS } from '../academy-shop/shopConfig';
+import { HERO_IMAGE as PC_HERO } from '../premium-coaching/premiumCoachingMedia';
 
 // The banner: the welcome slide, then one slide per program currently on the hero list.
 // Photos are chosen per program page; a program without one here uses the welcome photo.
@@ -31,6 +32,7 @@ export const SLIDE_PHOTO = {
     // The March Junior Royals intake (1800 x 1200, sharp): Andy, 23 Nov 2026, "a nice full image"
     // of Junior Royals at one of our centres, replacing the pixelated squad-talk video frame.
     '/junior-royals': { src: '/assets/community-coaches.jpg', alt: 'Junior Royals players and coaches at the March intake, in front of the Rajasthan Royals Academy Melbourne banners', position: '50% 62%' },
+    '/private-coaching': { src: PC_HERO.src, alt: PC_HERO.alt }, // Andy, 23 Nov 2026
 };
 export const WELCOME_SLIDE = {
     src: '/assets/hero-vs-full.jpg',
@@ -78,9 +80,10 @@ export const LEADERS = [
 // COACH, not their skill set (Andy, 23 Nov 2026).
 export const TEAM = [
     { name: 'Alex Thornhill', line: 'Cranbourne North & Hallam', img: '/assets/coaches/alex-thornhill.jpg' },
+    { name: 'Siddhartha Banerjee', line: 'Cranbourne North & Hallam', img: '/assets/coaches/siddhartha-banerjee-halla.jpg', pos: '50% 22%' }, // Andy, 23 Nov 2026
     { name: 'Ikroop Dhanoa', line: 'Mickleham', img: '/assets/coaches/ikroop-dhanoa-halla.jpg', pos: '50% 22%' },
     { name: 'Ritin Raman', line: 'Mickleham', img: '/assets/coaches/ritin-raman-halla.jpg', pos: '50% 22%' },
-    { name: 'Mihiraj Jayasekara', line: 'Mickleham', img: '/assets/coaches/mihiraj-jayasekara.jpg', pos: '50% 22%' },
+    { name: 'Mihiraj Jayasekara', line: 'Mickleham', img: '/assets/coaches/mihiraj-jayasekara-halla.jpg', pos: '50% 22%' },
     { name: 'Jinang Shah', line: 'Mickleham & Ravenhall', img: '/assets/coaches/jinang-shah-halla.jpg', pos: '50% 15%' },
     { name: 'Kavya Khatri', line: 'Mickleham & Ravenhall', img: null },
 ];
