@@ -19,7 +19,6 @@ import { PROGRAMS as HERO_PROGRAMS } from '../home-page/HomeHero';
 import { coaches as LEADERS_TOP } from '../home-page/HomeCoaches';
 import { DIRECTOR } from '../coaches/coachData';
 import { PRODUCTS } from '../academy-shop/shopConfig';
-import { HERO_IMAGE as PC_HERO } from '../premium-coaching/premiumCoachingMedia';
 
 // The banner: the welcome slide, then one slide per program currently on the hero list.
 // Photos are chosen per program page; a program without one here uses the welcome photo.
@@ -32,7 +31,8 @@ export const SLIDE_PHOTO = {
     // The March Junior Royals intake (1800 x 1200, sharp): Andy, 23 Nov 2026, "a nice full image"
     // of Junior Royals at one of our centres, replacing the pixelated squad-talk video frame.
     '/junior-royals': { src: '/assets/community-coaches.jpg', alt: 'Junior Royals players and coaches at the March intake, in front of the Rajasthan Royals Academy Melbourne banners', position: '50% 62%' },
-    '/private-coaching': { src: PC_HERO.src, alt: PC_HERO.alt }, // Andy, 23 Nov 2026
+    // Sid coaching a batter in one of our Melbourne nets (Andy, 23 Nov 2026: "as it is done in Melbourne").
+    '/private-coaching': { src: '/assets/home/private-coaching-sid-batter-melbourne.jpg', alt: 'Siddhartha Lahiri coaching a batter one-on-one in a Rajasthan Royals Academy Melbourne net', position: '55% 35%' },
 };
 export const WELCOME_SLIDE = {
     src: '/assets/hero-vs-full.jpg',
