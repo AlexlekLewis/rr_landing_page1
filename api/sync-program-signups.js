@@ -1119,7 +1119,7 @@ export const guideLines = (linkLines = [], counts = {}) => {
     [`  takes money online. Currently ${counts.openTrial ?? 0} sign-ups.`],
     [''],
     [`"${PROGRAM_LABELS['spin-club']}" — spin bowlers 10 to 25 registering interest in the`],
-    ['  8-week Wednesday block at rramelbourne.com/spin-club. Nothing is paid: these'],
+    ['  next Wednesday program at rramelbourne.com/spin-club. Nothing is paid: these'],
     [`  people have put their hand up, not bought anything. Currently ${counts.spinClub ?? 0} sign-ups.`],
     [''],
     [`"${PROGRAM_LABELS['sid-juniors']}" — the junior sessions with Siddhartha Lahiri for`],

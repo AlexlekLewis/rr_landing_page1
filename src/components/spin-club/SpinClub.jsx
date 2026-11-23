@@ -6,11 +6,10 @@ import SCHero from './SCHero';
 import SCWhatItIs from './SCWhatItIs';
 import SCMedia from './SCMedia';
 import SCClubs from './SCClubs';
-import SCPricing from './SCPricing';
 import SCForm from './SCForm';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 
-const SECTIONS = ['hero', 'media', 'what-it-is', 'clubs', 'pricing', 'apply'];
+const SECTIONS = ['hero', 'media', 'what-it-is', 'clubs', 'apply'];
 
 // Anchored sections sit under a fixed navbar — offset them so a jumped-to
 // heading lands below the bar instead of behind it.
@@ -39,9 +38,6 @@ const SpinClub = () => {
                 </div>
                 <div id="clubs" className={ANCHOR}>
                     <SCClubs />
-                </div>
-                <div id="pricing" className={ANCHOR}>
-                    <SCPricing />
                 </div>
                 <div id="apply" className={ANCHOR}>
                     <SCForm />

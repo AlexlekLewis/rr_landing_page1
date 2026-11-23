@@ -80,12 +80,11 @@ const PC_NAV = [
 //                        (Alex, 16 Oct 2026). The row hides itself when
 //                        registrations close, Fri 23 Oct 9:00pm (lpJrDayOpen).
 //                        REVIEW 26 OCT 2026: pull the row and its import.
-//   Spin Club          — Wednesdays 7 Oct – 25 Nov 2026, sold one night at a
-//                        time, $60 incl. GST (Alex, 9 Oct 2026; spin-club/
-//                        scOptions.js). REVIEW 26 NOV 2026: pull the badge.
+//   Spin Club          — off sale 23 Nov 2026 (Andy): registrations of interest
+//                        for the next program only, no price (spin-club/scOptions.js).
 export const PROGRAMS_DROPDOWN = [
     ...(lpJrDayOpen() ? [{ label: LP_JR_DAY_ROW.navLabel, route: LP_JR_DAY_ROUTE, badge: LP_JR_DAY_ROW.navBadge, badgeColor: 'bg-rr-pink' }] : []),
-    { label: 'Spin Club · Spinners 10-25', route: '/spin-club', badge: 'Wednesdays · $60 a night', badgeColor: 'bg-rr-pink' },
+    { label: 'Spin Club · Spinners 10-25', route: '/spin-club', badge: 'Register interest', badgeColor: 'bg-green-500' },
     // REVIEW 16 Dec 2026 — last Term 4 session; the badge is wrong after that.
     // Holiday camp (/junior-royals-holiday) taken off every promo surface 5 Oct 2026
     // (Alex): that camp finished 2 Oct. The page stays at its address for old links.

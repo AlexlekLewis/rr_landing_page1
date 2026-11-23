@@ -63,7 +63,7 @@ export const PAGE_SEO = {
   '/spin-club': {
     title: 'Spin Bowling Coaching Melbourne | Royals Spin Club',
     description:
-      'A Wednesday night club for spin bowlers aged 10 to 25, at Mickleham and Cranbourne North. Run by Rajasthan Royals Academy Melbourne. Sign up one night at a time.',
+      'A Wednesday night club for spin bowlers aged 10 to 25, at Mickleham and Cranbourne North. Run by Rajasthan Royals Academy Melbourne. Register your interest for the next program.',
     // A shared link is how most people meet this page — off a poster QR, or
     // forwarded in WhatsApp. The logo told them nothing, so this card carries
     // the headline, the price and both coaches.
@@ -89,15 +89,6 @@ export const PAGE_SEO = {
         suggestedMinAge: 10,
         suggestedMaxAge: 25,
       },
-      offers: {
-        '@type': 'Offer',
-        price: '60.00',
-        priceCurrency: 'AUD',
-        category: 'Per session',
-        description: 'One 1.5-hour Wednesday session, GST included.',
-        url: 'https://rramelbourne.com/spin-club',
-        availability: 'https://schema.org/InStock',
-      },
       hasCourseInstance: [
         {
           '@type': 'CourseInstance',
@@ -108,8 +99,6 @@ export const PAGE_SEO = {
             '@type': 'Schedule',
             repeatFrequency: 'P1W',
             byDay: 'https://schema.org/Wednesday',
-            startDate: '2026-10-07',
-            endDate: '2026-11-25',
             startTime: '18:00',
             endTime: '19:30',
             scheduleTimezone: 'Australia/Melbourne',
@@ -134,8 +123,6 @@ export const PAGE_SEO = {
             '@type': 'Schedule',
             repeatFrequency: 'P1W',
             byDay: 'https://schema.org/Wednesday',
-            startDate: '2026-10-07',
-            endDate: '2026-11-25',
             startTime: '18:00',
             endTime: '19:30',
             scheduleTimezone: 'Australia/Melbourne',

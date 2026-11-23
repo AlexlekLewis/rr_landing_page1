@@ -111,8 +111,8 @@ const SCWhatItIs = () => (
                     ))}
                 </div>
                 <p className="text-[13px] text-white/50 font-medium mt-6">
-                    {PROGRAM.time} on a {PROGRAM.day} night. {PROGRAM.sessionLength} on the floor,
-                    for {PROGRAM.weeks} weeks, then straight on through January, February and March.
+                    {PROGRAM.time} on a {PROGRAM.day} night, {PROGRAM.sessionLength} on the floor.
+                    Dates for the next program go to everyone who has registered their interest first.
                 </p>
             </div>
         </div>

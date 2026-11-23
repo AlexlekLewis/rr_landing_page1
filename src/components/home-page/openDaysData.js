@@ -24,7 +24,7 @@
 // ORDER = nearest real deadline first. Review dates:
 //   Power League       — 26 Oct 2026, the day after the game (drops out at 9pm Tue 20 Oct)
 //   Performance Squads — when the next intake has dates, put them in the tag
-//   Spin Club          — 26 Nov 2026, the day after the last night
+//   Spin Club          — registering interest since 23 Nov 2026; update when the next program has dates
 //   Junior Royals T4   — 16 Dec 2026, the last Term 4 session
 //
 // Each item links via a full-page <a href> so the global Meta Pixel PageView
@@ -73,12 +73,11 @@ export const ANNOUNCEMENTS = [
     {
         key: 'spin-club',
         name: 'Spin Club',
-        // Sold one night at a time since 9 Oct 2026 (spin-club/scOptions.js).
-        // REVIEW 26 NOV 2026 — the last night is Wed 25 Nov.
-        tag: 'Spin bowlers 10 to 25 · Wednesday nights, 6:00–7:30pm, until 25 Nov · $60 a night',
-        detail: 'Mickleham & Cranbourne North · book one night at a time, $60 incl. GST',
+        // Off sale 23 Nov 2026 (Andy): registrations of interest for the next program only.
+        tag: 'Spin bowlers 10 to 25 · Wednesday nights, 6:00–7:30pm · next program coming',
+        detail: 'Mickleham & Cranbourne North · register your interest and hear about the dates first',
         href: '/spin-club',
-        badge: 'Book a night',
+        badge: 'Register interest',
     },
     {
         key: 'junior-royals-t4',

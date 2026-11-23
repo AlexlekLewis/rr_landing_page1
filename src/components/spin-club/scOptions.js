@@ -1,8 +1,7 @@
 // Every fact about Spin Club lives here, so the page and the form can never
 // disagree with each other. Change a price or a time once, here.
 //
-// STILL TO CONFIRM (Alex, 27 Sep 2026): how many places there are at each
-// centre. Deliberately absent from the page rather than guessed.
+// 23 Nov 2026: OFF SALE, registrations of interest only (see NEXT_PROGRAM below).
 
 export const PROGRAM = {
     academy: 'Rajasthan Royals Academy Melbourne',
@@ -11,39 +10,10 @@ export const PROGRAM = {
     time: '6:00–7:30pm',
     sessionLength: '1.5 hours',
     ages: '10 to 25',
-    weeks: 8,
-    totalHours: 12, // 8 nights x 1.5 hours
 };
 
-// Confirmed by Alex, 27 Sep 2026. 7 October 2026 is a Wednesday; eight weekly
-// nights from there run to Wednesday 25 November.
-export const START_DATE = 'Wednesday 7 October';
-export const END_DATE = 'Wednesday 25 November';
-export const NIGHTS = [
-    '7 October', '14 October', '21 October', '28 October',
-    '4 November', '11 November', '18 November', '25 November',
-];
-
-// Same eight nights with their dates attached, so the sign-up form can drop the
-// ones that have already been played rather than offering a night in the past.
-export const NIGHT_DATES = [
-    { label: '7 October', iso: '2026-10-07' },
-    { label: '14 October', iso: '2026-10-14' },
-    { label: '21 October', iso: '2026-10-21' },
-    { label: '28 October', iso: '2026-10-28' },
-    { label: '4 November', iso: '2026-11-04' },
-    { label: '11 November', iso: '2026-11-11' },
-    { label: '18 November', iso: '2026-11-18' },
-    { label: '25 November', iso: '2026-11-25' },
-];
-
-export const upcomingNights = (now = new Date()) => {
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    return NIGHT_DATES.filter((n) => {
-        const [y, m, d] = n.iso.split('-').map(Number);
-        return new Date(y, m - 1, d) >= today;
-    });
-};
+// The first program ran Wednesdays 7 Oct – 25 Nov 2026 (8 nights). Dates for the next one
+// are not set yet, so none are shown (23 Nov 2026).
 
 export const CLUBS = [
     {
@@ -127,54 +97,33 @@ export const EVERY_SPIN = {
     long: 'Both centres take every type of spin \u2014 off spin, leg spin, left-arm orthodox, left-arm wrist spin, and anyone still working out what it is they bowl. Your Royal Spin Coach bowls one of them. They coach all of them.',
 };
 
-// Prices. 9 Oct 2026: the 8-night block prices are WITHDRAWN. Spin Club sells
-// one 1.5-hour Wednesday session at a time.
+// OFF SALE (Andy, 23 Nov 2026): "remove the $60 a week … turning the entire page into a
+// register here for the next program start … take it from sale to a registration process".
+// The first block (Wednesdays 7 Oct – 25 Nov 2026, $60 incl. GST a night, Stripe link
+// buy.stripe.com/cNi8wPh29ggZgtScE39Zm0V) has finished. The page now takes registrations
+// of interest only: no price, no dates, no payment.
 //
-// Alex, 9 Oct 2026: "$60 including GST for 1.5 hours." So unlike every earlier
-// Spin Club price, this one is GST-INCLUSIVE as stated — $60 is the total
-// payable, and the ex-GST figure is $60 / 1.1 = $54.55.
-//
-// Performance Squad members do not buy from this page at all; their rate is
-// arranged through their head coach.
-export const GST_NOTE = 'Every price on this page includes GST.';
-
-export const PRICES = [
-    {
-        key: 'single',
-        question: 'One Wednesday night',
-        headline: '$60',
-        unit: 'for the 1.5-hour session',
-        exGst: '$54.55 plus GST',
-        perNight: 'You pay for the nights you come to, and nothing else.',
-        who: 'Open to any spin bowler aged 10 to 25. Come to one night or come to all of them.',
-        feature: true,
-    },
-];
-
-
-// Verified against the live checkout on 9 Oct 2026: the product reads
-// "Spin Club Session Price" and charges A$60.00, which matches PRICES above.
-// Re-check this if the price on the page ever changes — a page and a checkout
-// that disagree is the one thing we must never ship.
-export const STRIPE_LINK = 'https://buy.stripe.com/cNi8wPh29ggZgtScE39Zm0V';
+// BEFORE PUTTING IT BACK ON SALE: add the price and dates here, a payment step, the
+// training-shirt step and the governance boxes (CLAUDE.md), and put SCForm.jsx back on
+// PAID_SIGNUP_FORMS in src/lib/governance.test.ts.
+export const NEXT_PROGRAM = {
+    status: 'Registrations of interest open',
+    line: 'Our first Spin Club program has finished. Register now and you hear about the next one first: the dates, the price and the places, before they go anywhere else.',
+    short: 'Next program: register your interest',
+};
 
 export const SQUAD_NOTE = {
-    members: 'Already in a Royals Academy Performance Squad? Do not pay here \u2014 speak to your head coach directly and they will sort your rate out with you.',
+    members: 'Already in a Royals Academy Performance Squad? Register here too \u2014 your head coach will sort out your rate when the next program opens.',
     joiners: 'Not in a squad, and want to be?',
     linkLabel: 'See the Performance Squads',
     href: '/performance-squads',
 };
 
+// What every night gives you, whichever program you join.
 export const INCLUDED = [
-    ['12 hours of coaching', '8 nights, an hour and a half each.'],
+    ['An hour and a half on the floor', 'Every Wednesday night, 6:00 to 7:30pm.'],
     ['Two coaches in the room', 'Six players per coach, so you get looked at properly.'],
     ['Your own lane time', 'One lane for every six players, every night.'],
-];
-
-export const HOW_PAYING_WORKS = [
-    ['Tell us who you are', 'Pick your centre and the Wednesday you want. It takes a minute.'],
-    ['Pay for that night', 'The payment button comes up as soon as you have signed up.'],
-    ['Turn up and bowl', 'We will have a lane and a coach ready for you.'],
 ];
 
 export const SPIN_TYPES = [

@@ -8,7 +8,8 @@ import { existsSync } from 'node:fs';
 // goes on this list in the same PR that builds it (CLAUDE.md).
 const PAID_SIGNUP_FORMS = [
     'src/components/junior-royals-t3/JRT3RegistrationForm.jsx',
-    'src/components/spin-club/SCForm.jsx',
+    // Spin Club (spin-club/SCForm.jsx) is off: registrations of interest only since 23 Nov 2026,
+    // nothing paid. Put it back here when it goes on sale again.
     'src/components/holiday-programs/RegistrationForm.jsx',
     'src/components/holiday-programs/JulyRegistrationForm.jsx',
     'src/components/september-holiday/RegistrationForm.jsx',

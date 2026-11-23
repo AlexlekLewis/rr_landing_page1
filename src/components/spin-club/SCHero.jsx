@@ -1,15 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { PROGRAM, START_DATE, END_DATE, FOUNDER, HEADLINE } from './scOptions';
+import { PROGRAM, FOUNDER, HEADLINE, NEXT_PROGRAM } from './scOptions';
 
 const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
 // Analytics, 9 Oct 2026: two thirds of visitors saw the hero and never scrolled.
-// So the headline is now the problem a spinner recognises, not the product name,
-// and the price has moved down to the pricing section where the value is explained.
+// 23 Nov 2026: off sale. No dates and no price here until the next program is set.
 const FACTS = [
     { title: `Ages ${PROGRAM.ages}`, detail: 'Spin bowlers only, at every standard of cricket' },
-    { title: `${PROGRAM.weeks} Wednesday nights`, detail: `${PROGRAM.time}, ${START_DATE.replace('Wednesday ', '')} through to ${END_DATE.replace('Wednesday ', '')}` },
+    { title: 'Wednesday nights', detail: `${PROGRAM.time}, ${PROGRAM.sessionLength} on the floor` },
     { title: 'Two centres', detail: 'Mickleham in the north, Cranbourne North in the south-east' },
 ];
 
@@ -53,12 +52,16 @@ const SCHero = () => (
                     car on the way home. Spin Club is where you work it out with other spinners.
                 </p>
 
+                <p className="text-base md:text-lg text-white/80 font-semibold leading-snug max-w-2xl mb-8">
+                    {NEXT_PROGRAM.line}
+                </p>
+
                 <div className="flex flex-col sm:flex-row gap-4 mb-10">
                     <button
                         onClick={() => scrollTo('apply')}
                         className="group bg-rr-pink hover:bg-rr-light-pink text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 flex items-center justify-center gap-3"
                     >
-                        Sign up for a night
+                        Register your interest
                         <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
@@ -73,10 +76,10 @@ const SCHero = () => (
 
                 <div className="flex flex-wrap items-center gap-3 mb-8">
                     <span className="bg-rr-pink text-white text-xs md:text-sm font-black uppercase tracking-widest rounded-full px-4 py-2">
-                        Spinners aged {PROGRAM.ages}
+                        {NEXT_PROGRAM.short}
                     </span>
                     <span className="border-2 border-white/35 text-white text-xs md:text-sm font-black uppercase tracking-widest rounded-full px-4 py-2">
-                        Places are limited
+                        Spinners aged {PROGRAM.ages}
                     </span>
                     <span className="border-2 border-white/35 text-white text-xs md:text-sm font-black uppercase tracking-widest rounded-full px-4 py-2">
                         Every type of spin
