@@ -6,8 +6,8 @@ import React, { useEffect, useRef, useState } from 'react';
 // section currently on screen; on a phone it scrolls sideways.
 export const COACHING_SECTIONS = [
     { id: 'what-it-is', label: 'What Coaching Here Is' },
-    { id: 'benefits', label: 'Coaching Benefits' },
     { id: 'coaches-at-work', label: 'Coaches in Action' },
+    { id: 'benefits', label: 'Coaching Benefits' },
     { id: 'how-to-join', label: 'How to Become a Coach' },
 ];
 
