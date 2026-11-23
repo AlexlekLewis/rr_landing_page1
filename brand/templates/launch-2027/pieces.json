@@ -1,0 +1,164 @@
+[
+ {
+  "file": "01-bring-on-2027",
+  "chip": "2027 PROGRAMS",
+  "head": [
+   "BRING ON",
+   "2027"
+  ],
+  "sub": "Join the Royals Academy<br><span class=\"pk\">North · East · South-East · West Melbourne</span>",
+  "list": [
+   [
+    "Elite T20 Program"
+   ],
+   [
+    "Performance Squads"
+   ],
+   [
+    "Power League"
+   ],
+   [
+    "Junior Royals"
+   ]
+  ],
+  "cta": [
+   "FIND YOUR PROGRAM",
+   "RRAMELBOURNE.COM"
+  ]
+ },
+ {
+  "file": "02-elite-t20",
+  "chip": "2027",
+  "head": [
+   "ELITE",
+   "T20"
+  ],
+  "photo": "sid-lahiri-coaching-2026.jpg",
+  "pos": "55% 25%",
+  "photoW": 0.62,
+  "headW": 0.55,
+  "sub": "The 12-week T20 Program",
+  "stats": [
+   [
+    "12",
+    "Weeks"
+   ],
+   [
+    "48",
+    "Hours of coaching"
+   ],
+   [
+    "8",
+    "Core pillars"
+   ]
+  ],
+  "cta": [
+   "APPLY NOW",
+   "RRAMELBOURNE.COM/ELITE-ROYALS"
+  ],
+  "photoH": 0.6
+ },
+ {
+  "file": "03-performance-squads",
+  "chip": "PERFORMANCE SQUADS",
+  "head": [
+   "GET",
+   "SELECTED"
+  ],
+  "cut": "selected-player-fist-pump.png",
+  "headW": 1.0,
+  "sub": "Performance Squads 2027",
+  "list": [
+   [
+    "North",
+    "LIVE",
+    "live"
+   ],
+   [
+    "South-East",
+    "LIVE",
+    "live"
+   ],
+   [
+    "West",
+    "NEW 2027",
+    "new"
+   ],
+   [
+    "East",
+    "NEW 2027",
+    "new"
+   ]
+  ],
+  "listW": 0.6,
+  "cta": [
+   "TRIAL FOR 2027",
+   "RRAMELBOURNE.COM/PERFORMANCE-SQUADS"
+  ]
+ },
+ {
+  "file": "04-power-league",
+  "chip": "POWER LEAGUE",
+  "head": [
+   "POWER",
+   "LEAGUE"
+  ],
+  "vs": [
+   "ACADEMY SQUAD",
+   "ACADEMY SQUAD"
+  ],
+  "cards": [
+   [
+    "The format",
+    "T20 match days",
+    "Matches, not trials."
+   ],
+   [
+    "The sides",
+    "Academy squads",
+    "Picked by our coaches to develop every player."
+   ]
+  ],
+  "cta": [
+   "PLAY IN 2027",
+   "RRAMELBOURNE.COM/POWER-LEAGUE"
+  ]
+ },
+ {
+  "file": "05-junior-royals",
+  "chip": "AGES 7–12",
+  "head": [
+   "JUNIOR",
+   "ROYALS"
+  ],
+  "photo": "hands-on-batting.webp",
+  "pos": "center 55%",
+  "photoW": 0.5,
+  "headW": 0.52,
+  "sub": "Learn the Royals Way",
+  "badges": [
+   [
+    "Discover",
+    "Rock or Step",
+    "rock-or-step-ribbon.svg"
+   ],
+   [
+    "Develop",
+    "Forward or Back",
+    "forward-or-back-ribbon.svg"
+   ],
+   [
+    "Elevate",
+    "Pick the Length",
+    "pick-the-length-ribbon.svg"
+   ]
+  ],
+  "cta": [
+   "BOOK NOW",
+   "RRAMELBOURNE.COM/JUNIOR-ROYALS"
+  ],
+  "photoTop": 0.12,
+  "vpos": "center 50%",
+  "photoH": 1
+ }
+]

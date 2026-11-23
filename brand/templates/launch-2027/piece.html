@@ -1,0 +1,103 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- 2027 launch set. Master style: brand/reference/MASTER-game-day-cover.png.
+     window.PIECE (from pieces.js) + window.FMT ('feed' 1080x1350 | 'vert' 1080x1920 | 'sq' 1080x1080).
+     Layout flows top-down; the headline shrinks until everything fits above the footer. -->
+<style>
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:M;src:url(../../fonts/montserrat-latin-900-normal.woff2);font-weight:900}
+:root{--pink:#E11F8F;--blue:#1226AA;--navy:#001D48;--line:rgba(255,255,255,.22)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:M,sans-serif;color:#fff}
+.frame{position:relative;width:1080px;overflow:hidden;background:linear-gradient(165deg,#001D48 0%,#E11F8F 100%)}
+.lion{position:absolute;opacity:.5}
+/* photo: brand treatment = desaturated, pink/navy toned, fading into the gradient */
+.photo{position:absolute;right:0;top:0;overflow:hidden}
+.photo img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.15) brightness(.95)}
+.photo::after{content:"";position:absolute;inset:0;background:linear-gradient(165deg,#001D48 0%,#E11F8F 100%);mix-blend-mode:color;opacity:.95}
+.photo .fade{position:absolute;inset:0;z-index:2}
+.cut{position:absolute;z-index:1;filter:drop-shadow(0 20px 40px rgba(0,0,0,.35))}
+.logo{position:absolute;left:64px;z-index:5}
+.chip{position:absolute;z-index:5;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:12px 24px;border-radius:4px;background:var(--pink);white-space:nowrap}
+.blk{position:absolute;left:64px;z-index:4}
+.h{text-shadow:0 6px 30px rgba(0,0,0,.18)}
+.h{font-weight:900;text-transform:uppercase;line-height:.88;letter-spacing:-.02em;white-space:nowrap}
+.h span{display:block}.h .p{color:var(--pink)}
+.sub{font-weight:800;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.sub .pk{color:var(--pink)}
+.vs .a{font-weight:800;text-transform:uppercase;white-space:nowrap}.vs .v{color:var(--pink);font-weight:800;margin:10px 0}
+.list .row{display:flex;align-items:center;gap:20px;border-top:2px solid var(--line)}
+.list .row:last-child{border-bottom:2px solid var(--line)}
+.n{color:var(--pink);font-weight:900;min-width:1.9em}
+.nm{font-weight:800;white-space:nowrap;flex:1}
+.tag{font-weight:800;letter-spacing:.08em;padding:6px 12px;border-radius:3px;white-space:nowrap}
+.tag.live{background:var(--pink)}.tag.new{border:2px solid #fff}
+.stats{display:grid;grid-template-columns:repeat(3,1fr)}
+.stat{padding:0 0 0 22px;border-left:3px solid var(--pink)}
+.stat b{display:block;font-weight:900;line-height:.95;letter-spacing:-.02em}
+.stat span{display:block;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-top:6px;opacity:.92}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.gc{background:#fff;border-radius:14px;color:var(--navy);padding:26px 26px}
+.eb{color:var(--blue);font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.t{font-weight:900;line-height:1.1;margin-top:8px}
+.s{color:#5b6475;font-weight:500;margin-top:6px;line-height:1.3}
+.badges{display:flex;gap:28px;align-items:flex-end}
+.badge{text-align:center}.badge img{display:block;margin:0 auto 10px}
+.badge b{display:block;font-weight:900;text-transform:uppercase;letter-spacing:.06em}
+.badge span{display:block;font-weight:500;opacity:.9;margin-top:4px}
+.cta{display:flex}.cta .a{background:var(--pink);font-weight:900;letter-spacing:.04em;display:flex;align-items:center}
+.cta .u{background:var(--navy);font-weight:800;letter-spacing:.06em;display:flex;align-items:center}
+.footer{position:absolute;left:0;right:0;bottom:0;z-index:6;background:var(--navy);display:flex;justify-content:space-between;padding:0 64px}
+.footer b{font-weight:900;letter-spacing:.04em}.footer span{font-weight:800;letter-spacing:.12em;opacity:.85}
+</style></head><body><div class="frame" id="f"></div><script>
+const P=window.PIECE, FMT=window.FMT||'feed';
+const SZ={feed:{H:1350,top:64,R:64,foot:100,logo:100,chip:24,k:1},vert:{H:1920,top:250,R:124,foot:260,logo:140,chip:26,k:1.12},sq:{H:1080,top:56,R:64,foot:88,logo:84,chip:22,k:.84}}[FMT];
+const H=SZ.H, W=1080-64-SZ.R, k=SZ.k, f=document.getElementById('f'); f.style.height=H+'px';
+const e=(s)=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+let html='';
+// background art: photo (right side), cut-out player, or the lion
+if(P.photo){const vert=FMT==='vert'; const pw=vert?1080:Math.round(1080*(P.photoW||.56));
+  const top=vert?0:Math.round((H-SZ.foot)*(P.photoTop||0)); const ph=vert?Math.round(H*.5):Math.round((H-SZ.foot)*(P.photoH||1))-top;
+  const mask=vert?'linear-gradient(180deg,transparent 2%,#000 22%,#000 55%,transparent 88%)':'linear-gradient(90deg,transparent 0%,#000 42%),linear-gradient(180deg,#000 58%,transparent 100%)';
+  html+=`<div class="photo" style="width:${pw}px;height:${ph}px;top:${top}px;-webkit-mask-image:${mask};-webkit-mask-composite:source-in;mask-composite:intersect"><img src="${P.photo}" style="object-position:${(vert&&P.vpos)||P.pos||'center'}"></div>`}
+else if(P.cut){const ch=FMT==='vert'?1180:FMT==='sq'?820:1050; html+=`<img class="cut" src="${P.cut}" style="height:${ch}px;right:${FMT==='vert'?-60:-40}px;bottom:${SZ.foot}px">`}
+else html+=`<img class="lion" src="../../logos/lion-rampant-white.png" style="top:${FMT==='vert'?330:110}px;right:${FMT==='vert'?-170:-110}px;height:${FMT==='vert'?1300:FMT==='sq'?900:1080}px">`;
+html+=`<img class="logo" id="logo" src="../../logos/rra-melbourne-white.svg" style="width:${SZ.logo}px;top:${SZ.top-8}px">
+<span class="chip" style="top:${SZ.top}px;right:${SZ.R}px;font-size:${SZ.chip}px">${e(P.chip)}</span>
+<div class="blk h" id="h"><span>${e(P.head[0])}</span><span class="p">${e(P.head[1])}</span></div>`;
+const parts=[];
+if(P.sub) parts.push(`<div class="blk sub" style="font-size:${30*k}px">${P.sub}</div>`);
+if(P.vs) parts.push(`<div class="blk vs"><div class="a" style="font-size:${40*k}px">${e(P.vs[0])}</div><div class="v" style="font-size:${26*k}px">VS</div><div class="a" style="font-size:${40*k}px">${e(P.vs[1])}</div></div>`);
+if(P.list) parts.push(`<div class="blk list" style="width:${P.listW?Math.round(W*P.listW):W}px">${P.list.map((r,i)=>`<div class="row" style="height:${(FMT==='sq'?54:62)*k}px"><span class="n" style="font-size:${26*k}px">${String(i+1).padStart(2,'0')}</span><span class="nm" style="font-size:${34*k}px">${e(r[0])}</span>${r[1]?`<span class="tag ${r[2]||''}" style="font-size:${17*k}px">${e(r[1])}</span>`:''}</div>`).join('')}</div>`);
+if(P.stats) parts.push(`<div class="blk stats" style="width:${W}px">${P.stats.map(s=>`<div class="stat"><b style="font-size:${110*k}px">${e(s[0])}</b><span style="font-size:${22*k}px">${e(s[1])}</span></div>`).join('')}</div>`);
+if(P.badges) parts.push(`<div class="blk badges">${P.badges.map(b=>`<div class="badge"><img src="${b[2]}" style="height:${150*k}px"><b style="font-size:${22*k}px">${e(b[0])}</b><span style="font-size:${18*k}px">${e(b[1])}</span></div>`).join('')}</div>`);
+if(P.cards) parts.push(`<div class="blk cards" style="width:${W}px">${P.cards.map(c=>`<div class="gc"><div class="eb" style="font-size:${17*k}px">${e(c[0])}</div><div class="t" style="font-size:${32*k}px">${e(c[1])}</div><div class="s" style="font-size:${20*k}px">${e(c[2])}</div></div>`).join('')}</div>`);
+if(P.line) parts.push(`<div class="blk sub" style="font-size:${26*k}px;text-transform:none;font-weight:500;white-space:normal;width:${W}px">${e(P.line)}</div>`);
+parts.push(`<div class="blk cta" style="height:${62*k}px"><span class="a" style="font-size:${28*k}px;padding:0 ${26*k}px">${e(P.cta[0])}</span><span class="u" style="font-size:${22*k}px;padding:0 ${22*k}px">${e(P.cta[1])}</span></div>`);
+html+=parts.join('');
+html+=`<div class="footer" style="height:${SZ.foot}px;align-items:${FMT==='vert'?'flex-start':'center'};padding-top:${FMT==='vert'?44:0}px"><b style="font-size:${FMT==='sq'?32:38}px">HALLA BOL!</b><span style="font-size:${FMT==='sq'?19:22}px">RRAMELBOURNE.COM</span></div>`;
+f.innerHTML=html;
+const $=id=>document.getElementById(id), h=$('h'), logo=$('logo');
+const blocks=[...document.querySelectorAll('.blk')].filter(b=>b!==h);
+const wid=el=>{const r=document.createRange();r.selectNodeContents(el);return r.getBoundingClientRect().width};
+const GAP=(FMT==='sq'?26:36)*k, limit=H-SZ.foot-(FMT==='vert'?36:FMT==='sq'?36:48);
+const hLimit=(P.headW&&!(FMT==='vert'&&P.photo))?Math.round(W*P.headW):Math.min(W,836);
+function layout(fs){
+  h.style.fontSize=fs+'px';
+  // 9:16 photo pieces: the photo owns the top, the headline starts just under it
+  const cap=(FMT==='vert'&&P.photo)?Math.round(H*.40):logo.getBoundingClientRect().bottom+(FMT==='sq'?36:56); h.style.top=(cap-0.098*fs)+'px';
+  let y=cap+1.58*fs+GAP;
+  for(const b of blocks){b.style.top=y+'px'; y=b.getBoundingClientRect().bottom+GAP*(b.classList.contains('sub')?.75:1)}
+  return y-GAP;
+}
+document.fonts.load('900 100px M').then(()=>document.fonts.load('800 40px M')).then(()=>document.fonts.ready).then(()=>{
+  let fs=P.maxHead?P.maxHead[FMT]||245:245; h.style.fontSize=fs+'px';
+  while(Math.max(...[...h.children].map(wid))>hLimit&&fs>80){fs-=2;h.style.fontSize=fs+'px'}
+  let end=layout(fs); while(end>limit&&fs>90){fs-=4;end=layout(fs)}
+  // anchor the content block to the bottom when there's spare room (keeps Game Day proportions)
+  const spare=limit-end; if(spare>0&&P.anchor!==false){const sh=Math.min(spare, FMT==='vert'?140:90); blocks.forEach(b=>b.style.top=(parseFloat(b.style.top)+sh)+'px')}
+  document.querySelectorAll('.cta').forEach(c=>{const u=c.querySelector('.u');let fz=parseFloat(u.style.fontSize);u.style.whiteSpace='nowrap';while(c.scrollWidth>W&&fz>14){fz-=1;u.style.fontSize=fz+'px'}});
+  const over=[];document.querySelectorAll('.gc,.row,.blk').forEach(el=>{if(el.scrollWidth>el.clientWidth+2)over.push(el.className)});
+  document.body.dataset.fit=(end<=limit?'ok':'OVER '+Math.round(end-limit))+(over.length?' | wide: '+over.join(','):'')+' | head '+fs;
+  document.body.dataset.ready='1';
+});
+</script></body></html>
