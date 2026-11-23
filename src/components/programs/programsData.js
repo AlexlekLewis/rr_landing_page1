@@ -17,14 +17,13 @@ import { SLIDE_PHOTO, HPC_CAMP_SLIDE } from '../home-v2/homeV2Data';
 // Names, photos and wording for programs that have no What's On line.
 const EXTRA = {
     '/spin-club': { name: 'Spin Club' },
-    '/mickleham': {
-        name: 'Private Coaching',
-        // PCHero.jsx wording (the Private Coaching page).
-        line: 'One-on-one and small-group coaching at Mickleham Indoor Sports Centre, led personally by Academy Head Coach Alex Lewis.',
-        detail: 'Register your interest and our team will be in touch to organise a time.',
-        src: '/assets/programs/private-coaching-lanes.jpg',
-        alt: 'The indoor nets at Mickleham, with Rajasthan Royals Academy Melbourne banners',
-        cta: 'Register Interest',
+    // Royals Private Coaching (Andy, 23 Nov 2026: every private coaching link goes to /private-coaching).
+    // Wording: the page's own SEO description (seo/pageSeo.js). Photo: the page's hero (homeV2Data).
+    '/private-coaching': {
+        name: 'Royals Private Coaching',
+        line: '1-to-1 and training partner coaching with Royals Academy coaches and tech: Match Centre, bowling maps, heat maps.',
+        detail: 'Cranbourne North, Hallam, Mickleham and Ravenhall · enquire now',
+        cta: 'Enquire Now',
     },
     '/tours': {
         name: 'High Performance Camp · India',
