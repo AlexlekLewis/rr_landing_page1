@@ -96,7 +96,7 @@
       ]
     },
     {
-      "source": "/private-coaching(.*)",
+      "source": "/private-coaching/:path+",
       "headers": [
         {
           "key": "X-Robots-Tag",
@@ -114,6 +114,15 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=300"
+        }
+      ]
+    },
+    {
+      "source": "/private-coaching-:coach/coach",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
         }
       ]
     }

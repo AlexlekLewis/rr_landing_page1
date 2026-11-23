@@ -184,14 +184,11 @@ export const PAGE_SEO = {
   },
   '/elite-royals': { ...ELITE },
   '/PGP2026': { ...ELITE, canonical: '/elite-royals' },
-  // Royals Private Coaching. Andy, 22 Nov 2026: live at /private-coaching for Alex to test, but NOT
-  // discoverable yet: noindex here and on every coach page, not in the sitemap, not linked from the
-  // site nav or footer. When Andy says go: remove the noindex lines and add the URLs to the sitemap.
+  // Royals Private Coaching: public from 23 Nov 2026 (Andy: live, on the home page, in the nav).
   '/private-coaching': {
     title: 'Private Cricket Coaching | Rajasthan Royals Academy',
     description:
       '1-to-1 and training partner cricket coaching with Royals Academy coaches and tech: Match Centre, bowling maps, heat maps. Cranbourne North, Hallam, Mickleham, Ravenhall.',
-    noindex: true,
   },
   '/private-coaching/success': { title: 'Booking Confirmed | Royals Private Coaching', noindex: true },
   '/private-coaching/partner': { title: 'Training Partner Form | Royals Private Coaching', noindex: true },
@@ -201,7 +198,6 @@ export const PAGE_SEO = {
     [`/private-coaching-${c.slug}`, {
       title: `${c.name} | Private Cricket Coaching | Rajasthan Royals Academy`,
       description: `Private cricket coaching with ${c.name}, Rajasthan Royals Academy coach${c.centres.length ? ` at ${c.centres.map((x) => ({ 'cranbourne-north': 'Cranbourne North', hallam: 'Hallam', mickleham: 'Mickleham', ravenhall: 'Ravenhall' }[x] || x)).join(' and ')}` : ''}. 1-to-1 and training partner sessions with Royals coaching tech.`,
-      noindex: true, // not discoverable yet (Andy, 22 Nov 2026)
     }],
     [`/private-coaching-${c.slug}/coach`, { title: `Coach page | ${c.name}`, noindex: true }],
   ])),

@@ -54,6 +54,51 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://rramelbourne.com/private-coaching</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://rramelbourne.com/private-coaching-alex-thornhill</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rramelbourne.com/private-coaching-siddhartha-banerjee</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rramelbourne.com/private-coaching-mihiraj-jayasekara</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rramelbourne.com/private-coaching-ikroop-dhanoa</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rramelbourne.com/private-coaching-rittin-raman</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rramelbourne.com/private-coaching-jinang-shah</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rramelbourne.com/private-coaching-hamid-qadri</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://rramelbourne.com/private-coaching-kavya-khatri</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://rramelbourne.com/coaches</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

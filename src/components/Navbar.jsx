@@ -35,7 +35,7 @@ const IT_NAV = [
 const HOME_NAV = [
     { label: 'About', id: 'about' },
     { label: 'Coaches', id: 'coaches' },
-    { label: 'Private Coaching', route: '/mickleham', tag: 'Mickleham' },
+    { label: 'Private Coaching', route: '/private-coaching' },
     { label: 'Coach With Us', route: '/careers' },
     { label: 'News', route: '/news' },
     { label: 'FAQ', id: 'faq' },
@@ -91,7 +91,7 @@ export const PROGRAMS_DROPDOWN = [
     // (Alex): that camp finished 2 Oct. The page stays at its address for old links.
     { label: 'Junior Royals', route: '/junior-royals', badge: 'Join any week', badgeColor: 'bg-green-500' },
     { label: 'Performance Squads', route: '/performance-squads', badge: 'Register Your Interest', badgeColor: 'bg-green-500' },
-    { label: 'Private Coaching', route: '/mickleham', badge: 'Now Open · Mickleham', badgeColor: 'bg-green-500' },
+    { label: 'Private Coaching', route: '/private-coaching', badge: 'Enquire now · all four centres', badgeColor: 'bg-green-500' },
     // Closed but real — it belongs here rather than in the home-page modal.
     { label: 'Rajasthan Royals High Performance Centre Camp · India', route: '/tours', badge: 'Coming Soon · Register Now', badgeColor: 'bg-green-500' },
 ];

@@ -19,6 +19,7 @@ import { PROGRAMS as HERO_PROGRAMS } from '../home-page/HomeHero';
 import { coaches as LEADERS_TOP } from '../home-page/HomeCoaches';
 import { DIRECTOR } from '../coaches/coachData';
 import { PRODUCTS } from '../academy-shop/shopConfig';
+import { HERO_IMAGE as PC_HERO } from '../premium-coaching/premiumCoachingMedia';
 
 // The banner: the welcome slide, then one slide per program currently on the hero list.
 // Photos are chosen per program page; a program without one here uses the welcome photo.
@@ -26,6 +27,7 @@ const SLIDE_PHOTO = {
     '/spin-club': { src: '/assets/jadeja-rr-bowling.webp', alt: 'Ravindra Jadeja bowling for the Rajasthan Royals', split: true },
     '/performance-squads': { src: '/assets/cec-lanes.jpg', alt: 'Training lanes at the Elite Cricket Centre' },
     '/junior-royals': { src: '/assets/junior-royals/gallery/squad-talk.webp', alt: 'Junior Royals players at training' },
+    '/private-coaching': { src: PC_HERO.src, alt: PC_HERO.alt },
 };
 export const WELCOME_SLIDE = {
     src: '/assets/hero-vs-full.jpg',

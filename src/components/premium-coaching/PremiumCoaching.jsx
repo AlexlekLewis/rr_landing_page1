@@ -185,7 +185,7 @@ const PremiumCoaching = () => {
 
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col selection:bg-rr-pink selection:text-white">
-            <Navbar variant="private-coaching" navLinksOverride={NAV} ctaLabelOverride="BOOK YOUR COACH" ctaTargetOverride="coaches" />
+            <Navbar variant="private-coaching" navLinksOverride={NAV} ctaLabelOverride="FIND YOUR COACH" ctaTargetOverride="coaches" />
             <main className="flex-1 w-full overflow-hidden">
                 <div id="hero"><Hero /></div>
                 <div id="tech" className={ANCHOR}><Tech /></div>

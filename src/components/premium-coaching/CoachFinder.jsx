@@ -29,7 +29,7 @@ const CoachCard = ({ c, location }) => {
             <div className="px-4 sm:px-5 pb-4 sm:pb-5 pt-3 w-full flex-1 flex flex-col">
                 <span className="mt-auto pt-4">
                     <span className="block w-full text-center bg-rr-pink group-hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm px-4 py-3.5 rounded-full transition-colors">
-                        View profile &amp; book
+                        View profile &amp; enquire
                     </span>
                 </span>
             </div>
@@ -49,7 +49,7 @@ const CoachFinder = () => {
                 <div className="max-w-2xl mb-10">
                     <p className="text-xs font-black uppercase tracking-[0.3em] mb-3 text-rr-pink">Find your coach</p>
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight leading-[0.95] text-rr-dark mb-4">Meet our coaches</h2>
-                    <p className="text-rr-charcoal font-medium leading-relaxed">Every one a Royals Academy coach, trained on all our tools, coaching every part of the game. Choose your location, then tap a coach to see their profile, prices and how to book.</p>
+                    <p className="text-rr-charcoal font-medium leading-relaxed">Every one a Royals Academy coach, trained on all our tools, coaching every part of the game. Choose your location, then tap a coach to see their profile and enquire.</p>
                 </div>
 
                 <p className="text-sm font-black text-rr-dark uppercase tracking-wide mb-3">Your preferred location</p>

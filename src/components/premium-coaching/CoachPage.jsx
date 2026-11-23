@@ -4,14 +4,14 @@ import { MapPin, Phone, MessageCircle, Mail, Check, ArrowLeft } from 'lucide-rea
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
-import { ROUTE, FORMAT_LABELS, FORMAT_BLURBS, coachOf, centreOf, coachPrice, money, TECH } from './premiumCoachingData';
+import { ROUTE, FORMAT_LABELS, FORMAT_BLURBS, coachOf, centreOf, TECH } from './premiumCoachingData';
 import { Field, Photo } from './pcUi';
 import { input, labelCls, utm, waDigits, telHref } from './pcHelpers';
-import { SMS_DISPLAY, INFO_EMAIL } from '../../lib/academyContact';
+import { SMS_NUMBER, SMS_DISPLAY, INFO_EMAIL } from '../../lib/academyContact';
 
 // A coach's own page (Andy, 22 Nov 2026, coach-led like the "cash coach" economy):
-// /private-coaching-<coach>. Their bio, prices, usual times, terms and specialities.
-// Book Now → the family leaves basic details → we show the coach's contact details and
+// /private-coaching-<coach>. Their bio, usual times, terms and specialities. No prices on
+// the page (Andy, 23 Nov 2026: enquire about pricing). Enquire now → the family leaves basic details → we show the coach's contact details and
 // tell the coach (email, and text once Twilio is set up). The coach then agrees the times
 // with the family and the centre, and sends a pay link from their coach page.
 
@@ -57,11 +57,11 @@ const Enquire = ({ coach, onDone }) => {
             <div id="f-format_pref">
                 <p className={labelCls}>What are you looking for? *</p>
                 <div className="grid sm:grid-cols-3 gap-2" role="radiogroup" aria-label="What are you looking for?">
-                    {[['1-1', '1-to-1', coachPrice(coach, '1-1', 1)], ['1-2', 'Training partner session', coachPrice(coach, '1-2', 1)], ['not-sure', 'Not sure yet', null]].map(([v, label, price]) => (
+                    {[['1-1', '1-to-1', 'One coach, your player'], ['1-2', 'Training partner session', 'Your player and a partner'], ['not-sure', 'Not sure yet', 'Talk it through']].map(([v, label, sub]) => (
                         <button key={v} type="button" role="radio" aria-checked={form.format_pref === v} data-pref={v} onClick={() => { setForm((f) => ({ ...f, format_pref: v })); setErrors((x) => ({ ...x, format_pref: undefined })); }}
                             className={`text-left rounded-xl border-2 px-4 py-3 transition-colors ${form.format_pref === v ? 'border-rr-pink bg-rr-pink/5' : errors.format_pref ? 'border-red-300' : 'border-slate-200 hover:border-rr-pink/50'}`}>
                             <span className="block text-sm font-black text-rr-dark">{label}</span>
-                            <span className="block text-xs font-semibold text-slate-500">{v === 'not-sure' ? 'Talk it through' : price != null ? `${money(price)} a session` : 'Ask the coach'}</span>
+                            <span className="block text-xs font-semibold text-slate-500">{sub}</span>
                         </button>
                     ))}
                 </div>
@@ -104,7 +104,19 @@ const Contact = ({ coach, done }) => {
                         {c.email && <a href={`mailto:${c.email}?subject=${encodeURIComponent('Private coaching')}`} className={`${btn} bg-rr-pink`}><Mail className="w-4 h-4" />Email</a>}
                     </div>
                 </>
-            ) : <p className="text-sm text-rr-charcoal font-medium">We’ve passed your details to {first}, who will call you within 24 hours to arrange your times. Questions before then? Text us on {SMS_DISPLAY} or email {INFO_EMAIL}.</p>}
+            ) : (
+                <>
+                    <p className="text-sm text-rr-charcoal font-medium">We’ve passed your details to {first}. To get started sooner, text or email the Academy and we’ll put you in touch:</p>
+                    <div className="rounded-2xl bg-slate-50 p-4 space-y-1">
+                        <p className="text-lg font-black text-rr-dark">{SMS_DISPLAY}</p>
+                        <p className="text-sm font-semibold text-rr-charcoal break-all">{INFO_EMAIL}</p>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-2">
+                        <a href={`sms:${SMS_NUMBER}?&body=${encodeURIComponent(`Hi, it's ${done.name}. I've just enquired about private coaching with ${coach.name}.`)}`} className={`${btn} bg-rr-pink`}><MessageCircle className="w-4 h-4" />Text us</a>
+                        <a href={`mailto:${INFO_EMAIL}?subject=${encodeURIComponent(`Private coaching with ${coach.name}`)}`} className={`${btn} bg-rr-dark`}><Mail className="w-4 h-4" />Email us</a>
+                    </div>
+                </>
+            )}
             <p className="text-xs text-slate-500 font-medium">{coach.payLinks ? `Once you’ve agreed your times, ${first} books the lane and sends you a link to confirm and pay.` : `Once you’ve agreed your times, ${first} books the lane and confirms your sessions with you.`}</p>
         </div>
     );
@@ -118,12 +130,11 @@ const CoachPage = ({ slug }) => {
     useEffect(() => { window.scrollTo(0, 0); }, []);
     if (!coach) return null;
     const first = coach.name.split(' ')[0];
-    const formats = ['1-1', '1-2'].filter((f) => coachPrice(coach, f, 1) != null);
     const book = () => { setOpen(true); setTimeout(() => document.getElementById('book')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50); };
 
     return (
         <div className="min-h-screen bg-white text-rr-dark font-sans flex flex-col">
-            <Navbar variant="private-coaching" navLinksOverride={[]} ctaLabelOverride="BOOK NOW" ctaTargetOverride="book" />
+            <Navbar variant="private-coaching" navLinksOverride={[]} ctaLabelOverride="ENQUIRE NOW" ctaTargetOverride="book" />
             <main className="flex-1 w-full">
                 {/* The coach */}
                 <section className="bg-rr-dark text-white pt-28 md:pt-36 pb-14 md:pb-20">
@@ -137,7 +148,7 @@ const CoachPage = ({ slug }) => {
                                 {coach.role && <p className="text-lg font-bold text-white/85 mb-4">{coach.role}</p>}
                                 <p className="flex items-start gap-1.5 text-sm font-semibold text-white/75 mb-6"><MapPin className="w-4 h-4 mt-0.5 shrink-0 text-rr-light-pink" />{coach.centres.map((c) => centreOf(c)?.suburb).join(' · ')}</p>
                                 {coach.bio && <p className="text-white/85 font-medium leading-relaxed mb-7">{coach.bio}</p>}
-                                <button type="button" onClick={book} className="bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-8 py-4 rounded-full transition-colors" data-cta="book-now">Book now</button>
+                                <button type="button" onClick={book} className="bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-8 py-4 rounded-full transition-colors" data-cta="book-now">Enquire now</button>
                             </div>
                         </div>
                     </div>
@@ -147,19 +158,16 @@ const CoachPage = ({ slug }) => {
                 <section className="py-14 md:py-20 bg-slate-50">
                     <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-10">
                         <div>
-                            <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-5">Sessions and prices</h2>
-                            {!formats.length && <p className="bg-white rounded-2xl border border-slate-200 p-5 text-sm font-semibold text-rr-charcoal">1-to-1 and training partner sessions. Ask {first} for prices when you get in touch.</p>}
+                            <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-5">Sessions</h2>
                             <div className="grid sm:grid-cols-2 gap-4">
-                                {formats.map((f) => (
+                                {['1-1', '1-2'].map((f) => (
                                     <div key={f} className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6">
                                         <p className="text-lg font-black uppercase tracking-tight">{FORMAT_LABELS[f]}</p>
                                         <p className="text-sm text-slate-500 font-semibold mt-1">{FORMAT_BLURBS[f]}</p>
-                                        <p className="mt-4"><span className="text-4xl font-black">{money(coachPrice(coach, f, 1))}</span> <span className="text-sm font-semibold text-slate-500">per one-hour session, incl. GST</span></p>
-                                        {f === '1-2' && <p className="text-xs text-slate-500 font-medium mt-2">One family can pay for both players, or each family pays half.</p>}
                                     </div>
                                 ))}
                             </div>
-                            <p className="text-xs text-slate-500 font-medium mt-3">Every session is in a Royals lane with {first}’s full coaching tools. Lane booked by {first} with the centre.</p>
+                            <p className="text-sm text-rr-charcoal font-semibold mt-4">One-hour sessions in a secured indoor lane, with {first}’s full coaching tools. <button type="button" onClick={book} className="text-rr-pink underline underline-offset-2">Enquire about pricing</button>.</p>
                         </div>
 
                         <div className="grid md:grid-cols-2 gap-8">
@@ -190,7 +198,7 @@ const CoachPage = ({ slug }) => {
                         <div>
                             <h3 className="text-sm font-black uppercase tracking-widest mb-3">How it works</h3>
                             <ol className="grid sm:grid-cols-4 gap-3 text-sm font-medium text-rr-charcoal">
-                                {[`Tap Book now and leave your details.`, `Contact ${first} (or ${first} contacts you) to agree your times.`, coach.payLinks ? `${first} books the lane and texts you a link to confirm and pay.` : `${first} books the lane and confirms your sessions.`, 'Train. Your player’s own data, every session.'].map((t, i) => (
+                                {[`Tap Enquire now and leave your details.`, `Contact ${first} (or ${first} contacts you) to agree your times.`, coach.payLinks ? `${first} books the lane and texts you a link to confirm and pay.` : `${first} books the lane and confirms your sessions.`, 'Train. Your player’s own data, every session.'].map((t, i) => (
                                     <li key={t} className="bg-white rounded-2xl border border-slate-200 p-4"><span className="block text-2xl font-black text-rr-pink mb-1">0{i + 1}</span>{t}</li>
                                 ))}
                             </ol>
@@ -201,10 +209,10 @@ const CoachPage = ({ slug }) => {
                 {/* Book now */}
                 <section id="book" className="py-14 md:py-20 scroll-mt-24">
                     <div className="max-w-2xl mx-auto px-4 sm:px-6">
-                        <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight mb-5">Book {first}</h2>
+                        <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight mb-5">Enquire now with {first}</h2>
                         {done ? <Contact coach={coach} done={done} />
                             : open ? <Enquire coach={coach} onDone={setDone} />
-                                : <button type="button" onClick={() => setOpen(true)} className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-8 py-4 rounded-full transition-colors">Book now</button>}
+                                : <button type="button" onClick={() => setOpen(true)} className="w-full bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest px-8 py-4 rounded-full transition-colors">Enquire now</button>}
                     </div>
                 </section>
             </main>

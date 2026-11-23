@@ -67,7 +67,7 @@ export const HERO = {
         { label: 'Where', value: 'Cranbourne North · Hallam · Mickleham · Ravenhall' },
         { label: 'Now', value: 'Bookings open, including our new West Centre' },
     ],
-    cta: 'Book Your Coach',
+    cta: 'Find Your Coach',
     secondary: 'See Our Coaches',
 };
 
@@ -137,9 +137,9 @@ export const TECH = {
 // ── HOW: the steps from booking to first session ──────────
 export const STEPS = [
     // Andy, 22 Nov 2026: coach-led, like the "cash coach" economy.
-    { key: 'coach', title: 'Choose your coach', body: 'Pick your location, then tap a Royals Academy coach to see their profile, prices and how they work.' },
-    { key: 'contact', title: 'Connect with your coach', body: 'Tap Book now, leave a few details, and you get your coach’s number straight away. Your coach hears from us too.' },
-    { key: 'pay', title: 'Agree times, then pay', body: 'You and your coach agree the times. Your coach books the lane and sends you a link to confirm and pay securely.' },
+    { key: 'coach', title: 'Choose your coach', body: 'Pick your location, then tap a Royals Academy coach to see their profile and how they work.' },
+    { key: 'contact', title: 'Enquire with your coach', body: 'Tap Enquire now and leave a few details. Your coach hears from us straight away and gets in touch.' },
+    { key: 'pay', title: 'Agree times and price', body: 'You and your coach agree the times. Your coach books the lane and confirms your sessions.' },
     { key: 'train', title: 'Train with the tools', body: 'Your first session sets a baseline. Every session after works the plan and tracks the progress.' },
 ]
 
