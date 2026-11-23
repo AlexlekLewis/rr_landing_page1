@@ -83,7 +83,7 @@ const SizeGuide = ({ productId, ageGroup }) => {
     <div className="mt-1">
       <button
         onClick={() => setOpen(v => !v)}
-        className="flex items-center gap-1.5 text-xs font-bold text-rr-blue hover:text-rr-pink transition-colors uppercase tracking-wider"
+        className="flex items-center gap-1.5 py-2.5 text-xs font-bold text-rr-blue hover:text-rr-pink transition-colors uppercase tracking-wider"
       >
         <Ruler className="w-3.5 h-3.5" />
         Size Guide
