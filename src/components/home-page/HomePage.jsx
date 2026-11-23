@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import HomeVideo from './HomeVideo';
 import HomeMedia from './HomeMedia';
 import HomeStickyCTA from './HomeStickyCTA';
 import RegisterDrawer from './RegisterDrawer';
@@ -7,7 +6,6 @@ import PartnerStack from '../power-game/PartnerStack';
 import OpenDaysModal from './OpenDaysModal';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { HomeHeader, WhatsOn, Banner, NewsStrip, Leadership, RoyalsWay, Store, Faq, Hire, HomeFooter } from '../home-v2/HomeV2Parts';
-import HomeFixtures from '../fixtures/HomeFixtures';
 import HomeIntro from '../home-v2/HomeIntro';
 import '../home-v2/homeV2.css';
 
@@ -21,17 +19,10 @@ import '../home-v2/homeV2.css';
 // HomeCoaches, HomeFAQ, HomeCareersBanner, HomeTopBanner, OpenDaysTicket) stay in the repo;
 // several still supply data to the new layout.
 
-const SECTIONS = ['hero', 'news', 'fixtures', 'video', 'photos', 'coaches', 'about', 'store', 'faq', 'careers-banner'];
+const SECTIONS = ['hero', 'news', 'video', 'photos', 'coaches', 'about', 'store', 'faq', 'careers-banner'];
 const OPEN_DAYS_KEY = 'openDaysModalDismissed';
 
-// DRAFT (Andy, 23 Nov 2026): options for the "Introducing RRA Melbourne" section, previewed with
-// /?intro=a, /?intro=b or /?intro=c. Without it the page shows the live section.
-const introOption = () => {
-    try { const o = new URLSearchParams(window.location.search).get('intro'); return ['a', 'b', 'c'].includes(o) ? o : null; } catch { return null; }
-};
-
 const HomePage = () => {
-    const [intro] = useState(introOption);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [openDaysModal, setOpenDaysModal] = useState(false);
 
@@ -59,10 +50,8 @@ const HomePage = () => {
             <main className="flex-1 w-full overflow-hidden">
                 <Banner onRegister={openDrawer} onPrograms={openPrograms} />
                 <NewsStrip />
-                {/* Fixtures (DRAFT, Andy 23 Nov 2026) */}
-                <HomeFixtures />
-                {/* Photos & videos: as on the live site */}
-                {intro ? <HomeIntro option={intro} /> : <div id="video"><HomeVideo /></div>}
+                {/* Introducing RRA Melbourne: Sid's video (Andy, 23 Nov 2026: Option B), then photos & videos */}
+                <HomeIntro />
                 <div id="photos" className="scroll-mt-24"><HomeMedia /></div>
                 <Leadership />
                 <RoyalsWay />
