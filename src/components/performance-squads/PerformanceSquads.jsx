@@ -2,13 +2,10 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import HeroSection from './HeroSection';
-import AudienceSection from './AudienceSection';
 import OpportunitySection from './OpportunitySection';
-import PathwaySection from './PathwaySection';
 import TrialsSection from './TrialsSection';
-import CoachesSection from './CoachesSection';
-import PowerLeagueSection from './PowerLeagueSection';
 import ProgramSection from './ProgramSection';
+import HighlightsSection from './HighlightsSection';
 import MembershipSection from './MembershipSection';
 import RegistrationForm from './RegistrationForm';
 import FAQSection from './FAQSection';
@@ -25,6 +22,7 @@ import { getUpcomingTrials, getBookableOpenAgeTrials, joinDays, dayOf } from './
 //
 // THE PERMANENT LANDING PAGE for the program (Alex, 2 October 2026). It says
 // what the squads are now, lists the next trial dates (or "to be confirmed"),
+// shows match-day highlights,
 // and explains the membership: a yearly fee paid weekly, cancel any time, and
 // the joining fee is paid again to come back.
 //
@@ -39,15 +37,16 @@ import { getUpcomingTrials, getBookableOpenAgeTrials, joinDays, dayOf } from './
 
 // Section ids are kept from the old page ('trials' = Trial Dates, 'pricing' =
 // Membership) so analytics and any shared #links keep working.
+// Page order since 22 Nov 2026 (Andy: "reduce it in size"), 13 sections → 8:
+// Hero → Trials & Centres → How It Works → Highlights → Royals Pathway →
+// Membership → Register → FAQ. Who It's For, The Pathway, Coaches and the Power
+// League were folded into How It Works and the FAQ.
 const SECTIONS = [
     'hero',
     'trials',
     'program',
-    'who-its-for',
+    'highlights',
     'opportunity',
-    'pathway',
-    'coaches',
-    'power-league',
     'pricing',
     'register-pay',
     'faq',
@@ -64,7 +63,7 @@ const heroAnnouncement = () => {
     if (next) {
         return { label: 'Next trial', text: dayOf(next.label), target: 'trials' };
     }
-    return { label: 'Next trials', text: 'Dates to be confirmed. Register your interest to hear first.', target: 'register-pay' };
+    return { label: 'New', text: 'West Melbourne squad now open at M9 Sports Centre, Ravenhall. Trial dates to be confirmed.', target: 'trials' };
 };
 
 const PerformanceSquads = () => {
@@ -94,9 +93,9 @@ const PerformanceSquads = () => {
                 <div id="hero">
                     <HeroSection
                         announcement={heroAnnouncement()}
-                        body={`Our Performance Squads are the representative arm of the Rajasthan Royals Academy: squads of like-skilled players aged ${MIN_AGE} to ${MAX_AGE} who train together every week and play matches together from September to April. Every player earns their place at a trial.`}
+                        body={`The Rajasthan Royals Academy’s representative squads in Melbourne, for players aged ${MIN_AGE} to ${MAX_AGE}. Train every week, play T20 matches from September to April, and earn your place at a trial. Squads in North, South-East and West Melbourne.`}
                         primary={{ label: 'See Trial Dates', target: 'trials' }}
-                        secondary={{ label: 'How Membership Works', target: 'pricing' }}
+                        secondary={{ label: 'Watch Highlights', target: 'highlights' }}
                     />
                 </div>
                 <div id="trials" className="scroll-mt-28 lg:scroll-mt-32">
@@ -105,20 +104,11 @@ const PerformanceSquads = () => {
                 <div id="program" className="scroll-mt-28 lg:scroll-mt-32">
                     <ProgramSection />
                 </div>
-                <div id="who-its-for" className="scroll-mt-28 lg:scroll-mt-32">
-                    <AudienceSection />
+                <div id="highlights" className="scroll-mt-28 lg:scroll-mt-32">
+                    <HighlightsSection />
                 </div>
                 <div id="opportunity" className="scroll-mt-28 lg:scroll-mt-32">
-                    <OpportunitySection />
-                </div>
-                <div id="pathway" className="scroll-mt-28 lg:scroll-mt-32">
-                    <PathwaySection />
-                </div>
-                <div id="coaches" className="scroll-mt-28 lg:scroll-mt-32">
-                    <CoachesSection />
-                </div>
-                <div id="power-league" className="scroll-mt-28 lg:scroll-mt-32">
-                    <PowerLeagueSection />
+                    <OpportunitySection closing={false} />
                 </div>
                 <div id="pricing" className="scroll-mt-28 lg:scroll-mt-32">
                     <MembershipSection />
@@ -138,7 +128,7 @@ const PerformanceSquads = () => {
                 </div>
             </main>
             <Footer />
-            <StickyCTA label="See Trial Dates" targetId="trials" />
+            <StickyCTA label="Register Your Interest" targetId="register-pay" />
             <PaymentModal open={!!payModal} registration={payModal} onClose={() => setPayModal(null)} />
         </div>
     );

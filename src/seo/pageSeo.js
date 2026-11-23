@@ -209,7 +209,7 @@ export const PAGE_SEO = {
   '/performance-squads': {
     title: 'Cricket Performance Squads Melbourne | Rajasthan Royals',
     description:
-      'Rajasthan Royals Academy Performance Squads for players 10 to 25 in North and South-East Melbourne. Weekly training, T20 matches, trial dates, membership.',
+      'Rajasthan Royals Academy Performance Squads for players 10 to 25 in North, South-East and West Melbourne (Mickleham, Cranbourne North, Ravenhall). Weekly training, T20 matches, trial dates, highlights.',
     ogImage: '/assets/performance-squads/selected-player-fist-pump.png',
   },
   // It must not be discoverable: it is a no-fee route into the squads sitting

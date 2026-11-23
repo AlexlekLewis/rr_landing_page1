@@ -1,9 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, MapPin, CalendarDays, Star, Bell } from 'lucide-react';
+import { ArrowRight, MapPin, CalendarDays, Star } from 'lucide-react';
 import { BatIcon } from './CricketIcons';
-import { fadeUp, scrollTo, SectionHeading } from './shared';
-import { CENTRES, ACTIVE_CENTRES, TRIAL_PRICE, getCentre, money } from './data';
+import { fadeUp, SectionHeading } from './shared';
+import { ACTIVE_CENTRES, TRIAL_PRICE, getCentre, money } from './data';
 import {
     getUpcomingTrials,
     getBookableOpenAgeTrials,
@@ -19,7 +19,8 @@ import {
 //
 // This page is permanent, so this section always says where trials stand:
 // the next dates when they are set, "to be confirmed" when they are not, and
-// a register-your-interest route for everyone a current trial does not cover.
+// a register-your-interest button on every centre card. Every live centre in
+// ACTIVE_CENTRES (./data.js) gets a card: North, South-East and West Melbourne.
 // Nothing here is typed by hand — every date comes from ./trialCalendar.js.
 // ─────────────────────────────────────────────────────────────
 
@@ -32,12 +33,14 @@ const TrialsSection = ({ onChooseCentre, now = new Date() }) => {
     const openAgeOn = openAge.length > 0;
 
     return (
-        <section className="py-20 px-5 bg-white/[0.02]">
+        <section className="py-14 sm:py-20 px-5 bg-white/[0.02]">
             <div className="max-w-5xl mx-auto">
                 <SectionHeading
-                    eyebrow="Trial Dates"
+                    eyebrow="Trials & Centres"
                     title={upcoming.length ? 'Next Trials' : 'Next Trials: Dates To Be Confirmed'}
-                    sub="Trial dates for both centres. We post new dates here as soon as they are set."
+                    sub={upcoming.length
+                        ? `Three squads across Melbourne, for players ${SQUAD_AGE_LINE}. No trial at your centre yet? Register your interest: there is nothing to pay, and we tell you first when dates are set.`
+                        : `Three squads across Melbourne, for players ${SQUAD_AGE_LINE}. Choose your centre and register your interest. There is nothing to pay, and we tell you first when trial dates are set.`}
                 />
 
                 {/* The trial running right now, said plainly before anything else. */}
@@ -73,41 +76,22 @@ const TrialsSection = ({ onChooseCentre, now = new Date() }) => {
                     </motion.div>
                 )}
 
-                {/* Everyone the current trial does not cover. */}
-                <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0.05}
-                    className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 mb-8 flex flex-col sm:flex-row sm:items-center gap-5">
-                    <Bell className="w-8 h-8 text-rr-pink shrink-0" />
-                    <div className="flex-1">
-                        <h3 className="text-lg sm:text-xl font-black uppercase mb-1.5">
-                            {openAgeOn ? 'Not 16 to 25, or can’t make these dates?' : 'Be first to hear about the next trial'}
-                        </h3>
-                        <p className="text-white/70 text-[15px] font-medium leading-relaxed">
-                            {openAgeOn
-                                ? 'There is no trial open for other ages yet. Register your interest and we will let you know as soon as the next trial opens. There is nothing to pay.'
-                                : 'Register your interest and we will let you know as soon as the next trial dates are set. There is nothing to pay.'}
-                        </p>
-                    </div>
-                    <button onClick={() => scrollTo('register-pay')} className={`${primaryBtn} shrink-0`}>
-                        Register Your Interest <ArrowRight className="w-4 h-4" />
-                    </button>
-                </motion.div>
-
                 {/* Each centre: where it is, who runs it, and its next trial. */}
-                <div className="grid sm:grid-cols-2 gap-5 mb-6">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {ACTIVE_CENTRES.map((c, i) => {
                         const trials = upcoming.filter((t) => t.centre === c.slug);
                         const openAgeHere = trials.some((t) => t.kind === 'open-age' && !t.full);
                         const squadHere = trials.some((t) => t.kind === 'squad' && !t.full);
                         return (
                             <motion.div key={c.slug} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i * 0.1}
-                                className="bg-white/5 border border-white/10 hover:border-rr-pink/50 rounded-2xl p-7 flex flex-col transition-colors">
+                                className={`bg-white/5 border ${c.isNew ? 'border-rr-pink/50' : 'border-white/10'} hover:border-rr-pink/50 rounded-2xl p-6 flex flex-col transition-colors`}>
                                 <div className="flex items-center justify-between mb-4">
-                                    <span className={`text-[10px] font-black uppercase tracking-[0.2em] rounded-full px-3 py-1.5 ${trials.length ? 'text-rr-pink bg-rr-pink/10' : 'text-white/50 bg-white/5'}`}>
-                                        {trials.length ? 'Next trial set' : 'Dates to be confirmed'}
+                                    <span className={`text-[10px] font-black uppercase tracking-[0.2em] rounded-full px-3 py-1.5 ${c.isNew ? 'text-white bg-rr-pink' : trials.length ? 'text-rr-pink bg-rr-pink/10' : 'text-white/50 bg-white/5'}`}>
+                                        {c.isNew ? 'New squad' : trials.length ? 'Next trial set' : 'Dates to be confirmed'}
                                     </span>
                                     <BatIcon className="w-5 h-5 text-white/30" />
                                 </div>
-                                <h3 className="text-2xl font-black uppercase mb-4">{c.name}</h3>
+                                <h3 className="text-xl sm:text-2xl font-black uppercase mb-4">{c.name}</h3>
                                 <div className="space-y-3 mb-6">
                                     <div className="flex items-start gap-3">
                                         <MapPin className="w-4 h-4 text-rr-pink shrink-0 mt-0.5" />
@@ -115,12 +99,15 @@ const TrialsSection = ({ onChooseCentre, now = new Date() }) => {
                                             {c.venue}{c.suburb ? `, ${c.suburb}` : ''}
                                         </span>
                                     </div>
-                                    <div className="flex items-start gap-3">
-                                        <Star className="w-4 h-4 text-rr-pink shrink-0 mt-0.5" />
-                                        <span className="text-white/75 text-sm font-medium">
-                                            {c.coachTitle}: <span className="text-white font-bold">{c.coach}</span>
-                                        </span>
-                                    </div>
+                                    {/* No coach line until one is named (West Melbourne, Nov 2026). */}
+                                    {c.coach && (
+                                        <div className="flex items-start gap-3">
+                                            <Star className="w-4 h-4 text-rr-pink shrink-0 mt-0.5" />
+                                            <span className="text-white/75 text-sm font-medium">
+                                                {c.coachTitle}: <span className="text-white font-bold">{c.coach}</span>
+                                            </span>
+                                        </div>
+                                    )}
                                     <div className="flex items-start gap-3">
                                         <CalendarDays className="w-4 h-4 text-rr-pink shrink-0 mt-0.5" />
                                         {trials.length ? (
@@ -174,18 +161,6 @@ const TrialsSection = ({ onChooseCentre, now = new Date() }) => {
                     })}
                 </div>
 
-                {/* Future centres */}
-                <div className="grid sm:grid-cols-2 gap-5">
-                    {CENTRES.filter((c) => !c.active).map((c) => (
-                        <div key={c.slug} className="bg-white/[0.03] border border-dashed border-white/15 rounded-2xl p-7 opacity-60">
-                            <span className="inline-block text-[10px] font-black uppercase tracking-[0.2em] text-white/50 bg-white/5 rounded-full px-3 py-1.5 mb-4">
-                                Coming 2027
-                            </span>
-                            <h3 className="text-2xl font-black uppercase mb-2 text-white/70">{c.name}</h3>
-                            <p className="text-white/40 text-sm font-medium">{c.venue}</p>
-                        </div>
-                    ))}
-                </div>
             </div>
         </section>
     );

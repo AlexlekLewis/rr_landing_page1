@@ -13,8 +13,10 @@ import { OPPORTUNITIES, CASE_STUDIES } from './data';
 // trial page uses it to say, where the reader actually meets the claim, that
 // these are squad opportunities and not trial outcomes. /performance-squads
 // passes nothing and renders exactly what it always has.
-const OpportunitySection = ({ lead = null }) => (
-    <section className="py-20 px-5 bg-white/[0.02]">
+// `closing` (default true) shows the summing-up line under the proof cards;
+// /performance-squads turns it off to keep the page short (22 Nov 2026).
+const OpportunitySection = ({ lead = null, closing = true }) => (
+    <section className="py-14 sm:py-20 px-5 bg-white/[0.02]">
         <div className="max-w-5xl mx-auto">
             <SectionHeading
                 eyebrow="The Royals Pathway"
@@ -89,7 +91,7 @@ const OpportunitySection = ({ lead = null }) => (
                 ))}
             </div>
 
-            <motion.p
+            {closing && <motion.p
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
@@ -102,7 +104,7 @@ const OpportunitySection = ({ lead = null }) => (
                 <span className="text-white font-bold">
                     Getting noticed no longer depends on one selection panel.
                 </span>
-            </motion.p>
+            </motion.p>}
         </div>
     </section>
 );

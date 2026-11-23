@@ -16,7 +16,7 @@ const FAQSection = ({
     const [open, setOpen] = useState(null);
 
     return (
-        <section className="py-20 px-5">
+        <section className="py-14 sm:py-20 px-5">
             <div className="max-w-3xl mx-auto">
                 <SectionHeading eyebrow={eyebrow} title={title} sub={sub} />
                 <div className="space-y-3">

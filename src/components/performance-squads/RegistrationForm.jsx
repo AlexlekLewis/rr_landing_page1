@@ -178,7 +178,7 @@ const RegistrationForm = ({ selectedCentre, onRequestPayment }) => {
     const sc = (key) => selectClass(errors, key);
 
     return (
-        <section className="py-20 px-5">
+        <section className="py-14 sm:py-20 px-5">
             <div className="max-w-2xl mx-auto">
                 <SectionHeading
                     eyebrow={isWaitlist ? 'Register Interest' : 'Register & Pay'}

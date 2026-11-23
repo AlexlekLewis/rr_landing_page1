@@ -46,9 +46,26 @@ export const CENTRES = [
         maxTrialSessions: 2,
         active: true,
     },
-    // Future squads — displayed as "Coming 2027", not selectable.
-    { slug: 'west-melbourne', name: 'West Melbourne', venue: 'Venue to be announced', suburb: '', coach: null, trialSessions: [], maxTrialSessions: 0, active: false },
-    { slug: 'east-melbourne', name: 'East Melbourne', venue: 'Venue to be announced', suburb: '', coach: null, trialSessions: [], maxTrialSessions: 0, active: false },
+    // WEST MELBOURNE — opened by Andy, 22 Nov 2026: "We need the West Melbourne
+    // open, and we need to be calling that M9 Sports Centre, Ravenhall. We don't
+    // need to put the head coach as yet ... the next trial dates to be confirmed."
+    // No coach shown until Andy names one (coach: null hides the line). Add trial
+    // sessions here when the dates are set; until then the page says "to be
+    // confirmed" and the form takes register-your-interest sign-ups for West.
+    {
+        slug: 'west-melbourne',
+        name: 'West Melbourne',
+        venue: 'M9 Sports Centre',
+        suburb: 'Ravenhall',
+        coach: null,
+        coachTitle: 'Head Coach',
+        trialSessions: [],
+        maxTrialSessions: 2,
+        active: true,
+        isNew: true,
+    },
+    // East Melbourne is not shown anywhere yet (Andy, 22 Nov 2026: "we don't need
+    // East Melbourne yet"). Add it back here, as active: true, when it opens.
 ];
 
 export const ACTIVE_CENTRES = CENTRES.filter((c) => c.active);
@@ -298,7 +315,7 @@ export const TRIAL_INCLUDES = [
 ];
 
 export const SELECTED_INCLUDES = [
-    'A place in either the North Melbourne or Sth-East Melbourne Performance Squad',
+    'A place in your centre’s Performance Squad (North, South-East or West Melbourne)',
     'Weekly training opportunity with your squad led by your Head Coach',
     'Selection for Power League fixtures staged at various times between Sept 2026 – April 2027',
     'Selection for fixtures against external opposition in showcase games',
@@ -351,11 +368,7 @@ export const FAQS = [
     },
     {
         q: 'How do I get into a squad?',
-        a: 'Through a trial. Players in our T20 Elite and Pre-Season Programs are also eligible for selection. Trial dates are listed under Trial Dates on this page as soon as they are set. If there is no trial open for your age, register your interest and we will let you know as soon as the next one opens.',
-    },
-    {
-        q: 'When is the next trial?',
-        a: 'Check Trial Dates on this page. We post new dates there as soon as they are set. If none are listed for you yet, the dates are still to be confirmed. Register your interest and we will tell you first.',
+        a: 'Through a trial. Players in our T20 Elite and Pre-Season Programs are also eligible for selection. We post trial dates on this page as soon as they are set. If none are listed for your centre yet, the dates are still to be confirmed: register your interest and we will tell you first.',
     },
     {
         q: 'What happens at a trial?',
@@ -363,7 +376,7 @@ export const FAQS = [
     },
     {
         q: 'What does it cost?',
-        a: `A ${money(TRIAL_PRICE)} trial fee per session to be assessed. If you are offered a place, you pay a one-off ${money(MEMBERSHIP.joiningFee)} joining fee, then your membership: a yearly fee of ${money(MEMBERSHIP_YEARLY)}, broken down for your convenience into ${money(MEMBERSHIP.weeklyFee)} a week. Match fees are separate and set for each match.`,
+        a: `All prices include GST. A ${money(TRIAL_PRICE)} trial fee per session to be assessed. If you are offered a place, you pay a one-off ${money(MEMBERSHIP.joiningFee)} joining fee (non-refundable), then your membership: a yearly fee of ${money(MEMBERSHIP_YEARLY)}, broken down for your convenience into ${money(MEMBERSHIP.weeklyFee)} a week, charged weekly in advance. Match fees are separate: they are set for each match, depending on whether it is played on turf or synthetic. You must stay financial to receive member benefits and to be selected for matches.`,
     },
     {
         q: 'Can I cancel my membership?',
@@ -374,19 +387,15 @@ export const FAQS = [
         a: `While your membership is active, you get member pricing on our programs, such as Spin Club, masterclasses, the 12-week T20 Program and the Pre-Season Program. For tours, including High Performance Centre tours, you get member pricing if you will have been a member for ${TOUR_MEMBER_MONTHS_WORD} months in a row by the date the tour starts. If you cancel before the tour starts, the member discount becomes payable, and if you cancel and rejoin, the ${TOUR_MEMBER_MONTHS_WORD} months start again. The full rules are in ${TERMS_MEMBERSHIP_CLAUSE} of our Terms & Conditions.`,
     },
     {
-        q: 'What do I get as a member?',
-        a: 'Weekly training with your Head Coach and a squad coach, 5 to 10 T20 match days across the season, Royals and guest coaches from time to time, invitations to High Performance Centre camps, and the chance to train with Royals franchise teams and play Global Royals Inter-Academy matches. Members also get member pricing on our other programs.',
-    },
-    {
         q: 'Are the global opportunities real?',
         a: 'Yes. Our Rajasthan Royals Academy selection team has put forward four players for consideration as training partners with the Paarl Royals in the SA20, and Royals Academies in the USA have sent players as training partners of the Barbados Royals. Selection is competitive and never guaranteed, but the routes exist and are being used.',
     },
     {
         q: 'When are matches played?',
-        a: 'From September to April. Squad players get 5 to 10 T20 match days across the season, about one a month, in the Power League and showcase matches. Selection is at the coaching staff’s discretion, and not every player plays every game.',
+        a: 'From September to April. Squad players get 5 to 10 match days across the season, about one a month. Most are in the Power League, where the Academy squads play each other in T20, T10 and 100-ball matches, and some are showcase matches against outside teams. Each centre fields a First XI and extra teams by age and level, so every squad member gets real game time. Selection is at the coaching staff’s discretion, not every player plays every game, and we tell you the team before each match.',
     },
     {
         q: 'Which centres are running squads?',
-        a: 'North Melbourne (Mickleham Indoor Sports Centre) and South-East Melbourne (Elite Cricket Centre, Cranbourne North) are live now. West and East Melbourne arrive in 2027.',
+        a: 'Three: North Melbourne (Mickleham Indoor Sports Centre, Mickleham), South-East Melbourne (Elite Cricket Centre, Cranbourne North) and our new West Melbourne squad (M9 Sports Centre, Ravenhall). West Melbourne trial dates are to be confirmed. Register your interest and we will tell you first.',
     },
 ];
