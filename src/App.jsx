@@ -36,7 +36,6 @@ import StoryPage from './components/news/StoryPage';
 import InductionPage from './components/induction/InductionPage';
 import CoachesDay from './components/coaches-day/CoachesDay';
 import CoachesPage from './components/coaches/CoachesPage';
-import PrivateCoaching from './components/private-coaching/PrivateCoaching';
 import MicklehamLaunch from './components/mickleham-launch/MicklehamLaunch';
 import InvitationPage from './components/invitation/InvitationPage';
 import { INVITATIONS } from './components/invitation/invitations';
@@ -246,8 +245,10 @@ function App() {
             Writes to private_coaching_eoi (anon insert only). Canonical URL is
             /mickleham (per Alex). /private-coaching is now Royals Private Coaching
             (Andy, 22 Nov 2026), further down. */}
-        <Route path="/mickleham" element={<PrivateCoaching />} />
-        <Route path="/Mickleham" element={<PrivateCoaching />} />
+        {/* Andy, 23 Nov 2026: /mickleham now goes to Royals Private Coaching (/private-coaching), so old
+            ads, flyers and QR codes land on the new page. vercel.json redirects it too. */}
+        <Route path="/mickleham" element={<Navigate to="/private-coaching" replace />} />
+        <Route path="/Mickleham" element={<Navigate to="/private-coaching" replace />} />
         {/* Mickleham 30-Day Launch Special — campaign page for the front-desk flyer
             QR code + Instagram link. /Mickleham_Launch is the published short link;
             /launch kept as a fallback so nothing already shared breaks. */}

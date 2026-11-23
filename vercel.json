@@ -129,6 +129,21 @@
   ],
   "redirects": [
     {
+      "source": "/mickleham",
+      "destination": "/private-coaching",
+      "permanent": false
+    },
+    {
+      "source": "/mickleham/",
+      "destination": "/private-coaching",
+      "permanent": false
+    },
+    {
+      "source": "/Mickleham",
+      "destination": "/private-coaching",
+      "permanent": false
+    },
+    {
       "source": "/private-coaching-siddharth-banerjee",
       "destination": "/private-coaching-siddhartha-banerjee",
       "permanent": false

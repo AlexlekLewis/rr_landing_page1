@@ -29,7 +29,7 @@ export const KNOWN_ROUTES = [
     '/performance-squads-open-trial',
     '/junior-royals',
     '/junior-royals-holiday',
-    '/mickleham',
+    '/private-coaching',
     '/elite-royals',
     '/coaches',
     '/tours',
