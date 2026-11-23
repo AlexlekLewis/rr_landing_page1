@@ -445,7 +445,7 @@
 
 /* ── "Introducing RRA Melbourne" (HomeIntro.jsx): banner with Sid's photo on the right; the video opens in a pop-up ── */
 .rrh .intro-b{position:relative;overflow:hidden;color:var(--white);background:linear-gradient(115deg,#7A0350 0%,#4A0D6E 55%,#1D0C36 100%);min-height:440px;display:flex;align-items:center}
-.rrh .ib-bg{position:absolute;top:0;right:0;height:100%;width:58%;object-fit:cover;object-position:50% 30%}
+.rrh .ib-bg{position:absolute;top:0;right:0;height:100%;width:58%;object-fit:cover;object-position:50% 45%}
 .rrh .intro-b::after{content:"";position:absolute;top:0;bottom:0;right:0;width:58%;background:linear-gradient(90deg,#5E0866 0%,rgba(94,8,102,.55) 22%,rgba(29,12,54,0) 55%)}
 .rrh .ib-in{position:relative;z-index:1;padding-block:64px;width:100%}
 .rrh .ib-in > *{max-width:520px}
@@ -469,7 +469,7 @@
 .rrh .iv-ctl svg{width:16px;height:16px}
 @media (max-width:860px){
 .rrh .intro-b{display:block;min-height:0}
-.rrh .ib-bg{position:relative;width:100%;height:auto;aspect-ratio:4/3;object-position:50% 25%;display:block}
+.rrh .ib-bg{position:relative;width:100%;height:auto;aspect-ratio:4/3;object-position:50% 40%;display:block}
 .rrh .intro-b::after{top:0;bottom:auto;width:100%;aspect-ratio:4/3;background:linear-gradient(180deg,rgba(29,12,54,0) 55%,#5E0866 100%)}
 .rrh .ib-in{padding-block:24px 40px;background:#5E0866}
 .rrh .i-h{font-size:34px}}

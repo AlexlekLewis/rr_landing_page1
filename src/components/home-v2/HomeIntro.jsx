@@ -7,8 +7,10 @@ import { Play, Pause, Volume2, VolumeX, X } from 'lucide-react';
 // words as the previous section (home-page/HomeVideo.jsx, kept in the repo).
 
 const VIDEO_URL = 'https://pudldzgmluwoocwxtzhw.supabase.co/storage/v1/object/public/RRAM%20MAIN/General%20Coaching%20Edit%20RR%20Sid%20V2.mov';
-// Sid coaching in the nets (2026), as on the Performance Squads page.
-const PHOTO = '/assets/performance-squads/sid-lahiri-coaching-2026.jpg';
+// Sid giving a team talk at the Elite Cricket Centre, in front of the Rajasthan Royals Academy
+// Melbourne banner (Andy, 23 Nov 2026: "can you use a portion of this?"). Cropped from his photo;
+// players are seen from behind in helmets, not named.
+const PHOTO = '/assets/home/sid-lahiri-ecc-team-talk.jpg';
 const LINE = 'Hear from Siddhartha Lahiri, Head of International Player Development and Performance Coach at the Rajasthan Royals.';
 
 /* Sid's portrait video with play / pause / mute; starts as the pop-up opens. */
@@ -49,7 +51,7 @@ const HomeIntro = () => {
     }, [open]);
     return (
         <section className="intro-b" id="video">
-            <img className="ib-bg" src={PHOTO} alt="Siddhartha Lahiri coaching in the nets" loading="lazy" decoding="async" />
+            <img className="ib-bg" src={PHOTO} alt="Siddhartha Lahiri giving a team talk to Rajasthan Royals Academy Melbourne players at the Elite Cricket Centre" loading="lazy" decoding="async" />
             <div className="wrap ib-in">
                 <span className="eyebrow">From the Academy</span>
                 <h2 className="i-h">INTRODUCING<br />RRA MELBOURNE</h2>
