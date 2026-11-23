@@ -35,7 +35,13 @@ export const HomeHeader = ({ onRegister }) => {
         document.addEventListener('keydown', onKey);
         return () => { document.removeEventListener('click', onDoc); document.removeEventListener('keydown', onKey); };
     }, []);
-    const jump = (id) => (e) => { e.preventDefault(); setMenuOpen(false); document.getElementById(id)?.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth' }); };
+    // A home-page section: scroll to it here, or open the home page at it from another page (/programs).
+    const jump = (id) => (e) => {
+        e.preventDefault(); setMenuOpen(false);
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth' });
+        else window.location.assign(`/#${id}`);
+    };
     const register = (e) => { e.preventDefault(); setMenuOpen(false); onRegister(); };
     const progLinks = PROGRAMS_DROPDOWN.map((p) => (
         <Link key={p.route} to={p.route} data-cta={`nav-program-${p.route.slice(1)}`} onClick={() => { setProgOpen(false); setMenuOpen(false); }}>
@@ -68,7 +74,7 @@ export const HomeHeader = ({ onRegister }) => {
                                 </button>
                                 <div className="dd" id="progMenu">
                                     {progLinks}
-                                    <a className="all" href="#programs" onClick={jump('hero')}>View All Programs →</a>
+                                    <Link className="all" to="/programs" data-cta="nav-all-programs" onClick={() => setProgOpen(false)}>View All Programs →</Link>
                                 </div>
                             </div>
                             <div className="ni"><a className="nl" href="#about" data-cta="nav-about" onClick={jump('about')}>About</a></div>
@@ -91,7 +97,7 @@ export const HomeHeader = ({ onRegister }) => {
             {menuOpen && (
                 <div className="mnav" id="mnav">
                     <div className="mlabel">Programs</div>
-                    <div className="msub">{progLinks}</div>
+                    <div className="msub">{progLinks}<Link to="/programs" data-cta="nav-phone-all-programs" onClick={() => setMenuOpen(false)}>View All Programs →</Link></div>
                     <a href="#about" onClick={jump('about')}>About</a>
                     <a href="#coaches" onClick={jump('coaches')}>Coaches</a>
                     <Link to="/mickleham">Private Coaching</Link>
@@ -108,7 +114,8 @@ export const HomeHeader = ({ onRegister }) => {
 };
 
 /* ── What's On strip (the same items as the What's On pop-up) ──────────── */
-export const WhatsOn = ({ onOpen }) => {
+// "What's On" and "See more" open the Programs page (Andy, 23 Nov 2026: no pop-up on arrival).
+export const WhatsOn = () => {
     const [hidden, setHidden] = useState(false);
     if (hidden || ANNOUNCEMENTS.length === 0) return null;
     const run = (copy) => (
@@ -122,10 +129,10 @@ export const WhatsOn = ({ onOpen }) => {
     );
     return (
         <div className="ticker" role="region" aria-label="What's On">
-            <button type="button" className="tk-label" data-cta="ticker-label" onClick={onOpen} style={{ border: 0, color: '#fff', cursor: 'pointer' }}><span className="tk-dot" aria-hidden="true" />WHAT'S ON</button>
+            <Link to="/programs" className="tk-label" data-cta="ticker-label" style={{ color: '#fff', textDecoration: 'none' }}><span className="tk-dot" aria-hidden="true" />WHAT'S ON</Link>
             <div className="tk-track"><div className="tk-run">{run(false)}{run(true)}</div></div>
             <div className="tk-actions">
-                <button className="btn btn-sm tk-more" type="button" data-cta="ticker-see-more" onClick={onOpen}>See more</button>
+                <Link className="btn btn-sm tk-more" to="/programs" data-cta="ticker-see-more">See more</Link>
                 <button className="tk-x" type="button" aria-label="Hide the What's On strip" data-cta="ticker-close" onClick={() => setHidden(true)}>×</button>
             </div>
         </div>
@@ -133,7 +140,7 @@ export const WhatsOn = ({ onOpen }) => {
 };
 
 /* ── Banner carousel: centred slide, neighbours peeking, every 5 s, loops ─ */
-export const Banner = ({ onRegister, onPrograms }) => {
+export const Banner = ({ onRegister }) => {
     const slides = [{ welcome: true }, ...PROGRAM_SLIDES];
     const n = slides.length;
     const all = [slides[n - 1], ...slides, slides[0]]; // clones at both ends for the loop
@@ -182,7 +189,7 @@ export const Banner = ({ onRegister, onPrograms }) => {
                         <div className="ctas">
                             <a className="btn" href="#register" {...tab} onClick={(e) => { e.preventDefault(); onRegister(); }} data-cta="home-banner-register">Register Now</a>
                             <span className="or">OR</span>
-                            <a className="btn btn-line" href="#programs" {...tab} onClick={(e) => { e.preventDefault(); onPrograms(); }} data-cta="home-banner-programs">Explore All Programs</a>
+                            <Link className="btn btn-line" to="/programs" {...tab} data-cta="home-banner-programs">Explore All Programs</Link>
                         </div>
                     </div>
                 </article>

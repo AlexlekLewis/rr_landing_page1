@@ -22,7 +22,7 @@ import { PRODUCTS } from '../academy-shop/shopConfig';
 
 // The banner: the welcome slide, then one slide per program currently on the hero list.
 // Photos are chosen per program page; a program without one here uses the welcome photo.
-const SLIDE_PHOTO = {
+export const SLIDE_PHOTO = {
     // One of our own players bowling (Andy, 23 Nov 2026: "a spin bowler bowling from within our
     // academy"), from a Power League match; cropped so the bowler sits right of the headline.
     '/spin-club': { src: '/assets/home/spin-club-bowler.jpg', alt: 'A Rajasthan Royals Academy Melbourne bowler gathering to bowl in a Power League match, with the umpire watching' },
@@ -42,7 +42,7 @@ export const WELCOME_SLIDE = {
 // High Performance Camp at the Rajasthan Royals High Performance Centre (Andy, 23 Nov 2026):
 // its own slide, straight after the welcome slide, "so people can click on it and register now for
 // our April tour" on the /tours page. Wording as the /tours page and the Programs menu have it.
-const HPC_CAMP_SLIDE = {
+export const HPC_CAMP_SLIDE = {
     title: 'High Performance Camp',
     line: 'Our April 2027 tour to the Rajasthan Royals High Performance Centre, India',
     href: '/tours',

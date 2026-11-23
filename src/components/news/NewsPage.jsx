@@ -16,7 +16,7 @@ export const ProgramsCta = () => (
             <p className="text-xs font-bold text-rr-pink uppercase tracking-[0.3em] mb-3">Play the Royals Way</p>
             <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight">Find your <span className="text-rr-pink">program</span></h2>
             <p className="text-white/70 font-medium mt-4 max-w-xl mx-auto">Junior coaching, representative squads, private coaching and tours, across Melbourne.</p>
-            <a href="/#programs" data-cta="news-explore-programs"
+            <a href="/programs" data-cta="news-explore-programs"
                 className="mt-8 inline-flex items-center bg-rr-pink hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm rounded-full px-8 py-4 transition-colors">
                 Explore programs
             </a>
