@@ -8,6 +8,7 @@ import HomeMedia from '../home-page/HomeMedia';
 import CoachFinder from './CoachFinder';
 import { ROUTE, HERO, TECH, STEPS } from './premiumCoachingData';
 import { BowlingMap, HeatMap } from './TechVisuals';
+import { useCarousel, CarouselTrack, CarouselControls } from '../india-tour-2026/ITCarousel';
 import { HERO_IMAGE, MEDIA } from './premiumCoachingMedia';
 
 // Royals Private Coaching: the premium one-to-one offer (Andy, 13 Nov 2026; tiers,
@@ -92,82 +93,57 @@ const Hero = () => (
     </section>
 );
 
-// ── HOW: the tools in the lane (merged "not just a lesson" + tech, Andy 18 Nov 2026) ──
-const TechVisual = ({ item }) => {
-    const isPhoto = item.visual.startsWith('photo:');
+// ── HOW: the tools in the lane (Andy, 23 Nov 2026: smaller, one carousel of equal cards
+// people can scroll through; every picture shown whole, so Full Track can be seen) ──
+const TechCardVisual = ({ t }) => {
+    const isPhoto = t.visual.startsWith('photo:');
     return (
-        <figure>
-            <div className={`rounded-2xl overflow-hidden ${isPhoto ? 'bg-black' : ''}`}>
-                {isPhoto && <img src={item.visual.slice(6)} alt={item.caption} loading="lazy" className="w-full h-auto block" />}
-                {item.visual === 'bowling-map' && <div className="max-w-[260px] mx-auto"><BowlingMap /></div>}
-                {item.visual === 'heat-map' && <HeatMap />}
-            </div>
-            <figcaption className="mt-2 text-xs text-white/60 font-semibold">
-                {!isPhoto && <span className="inline-block bg-white/15 text-white text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full mr-2">Example</span>}
-                {item.caption}
-            </figcaption>
-        </figure>
+        <div className="aspect-[4/5] bg-[#0b1b4d] flex items-center justify-center overflow-hidden">
+            {isPhoto
+                ? <img src={t.visual.slice(6)} alt={t.caption} loading="lazy" className="w-full h-full object-cover object-center" />
+                : <div className={`h-full py-3 ${t.visual === 'bowling-map' ? 'w-[58%]' : 'w-[92%]'} flex items-center`}>{t.visual === 'bowling-map' ? <BowlingMap /> : <HeatMap />}</div>}
+        </div>
     );
 };
 
 const Tech = () => {
-    const [feature, ...rest] = TECH.items;
+    const carousel = useCarousel(TECH.items.length);
     return (
-        <section className="bg-rr-navy py-20 md:py-28">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6">
-                <div className="max-w-3xl mb-10 md:mb-12">
-                    <Eyebrow dark>{TECH.eyebrow}</Eyebrow>
-                    <H2 dark className="mb-5">{TECH.title}</H2>
-                    <p className="text-white/80 font-medium leading-relaxed">{TECH.intro}</p>
-                </div>
-
-                {/* The Match Centre: the one big picture */}
-                <div className="grid md:grid-cols-12 gap-6 md:gap-10 items-center mb-10 md:mb-12">
-                    <div className="md:col-span-7"><TechVisual item={feature} /></div>
-                    <div className="md:col-span-5">
-                        <p className="text-rr-light-pink text-xs font-black tracking-widest mb-1">01</p>
-                        <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight mb-3">{feature.title}</h3>
-                        <p className="text-white/85 font-medium leading-relaxed">{feature.body}</p>
-                        <Reveal dark label="More">{feature.more}</Reveal>
+        <section className="bg-rr-navy py-14 md:py-20 overflow-hidden">
+            <div className="max-w-6xl mx-auto px-6">
+                <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3 md:gap-10 mb-7">
+                    <div className="max-w-2xl">
+                        <Eyebrow dark>{TECH.eyebrow}</Eyebrow>
+                        <H2 dark>{TECH.title}</H2>
                     </div>
+                    <p className="text-white/75 font-medium leading-relaxed md:max-w-sm text-sm md:text-base">{TECH.short}</p>
                 </div>
 
-                {/* The rest: compact, same-size cards */}
-                <div className="grid sm:grid-cols-3 gap-4 md:gap-5">
-                    {rest.map((t, i) => (
-                        <div key={t.key} className="bg-rr-dark border border-white/10 rounded-2xl overflow-hidden flex flex-col">
-                            <div className="h-44 md:h-48 bg-black flex items-center justify-center overflow-hidden">
-                                {t.visual.startsWith('photo:')
-                                    ? <img src={t.visual.slice(6)} alt={t.caption} loading="lazy" className="w-full h-full object-cover object-top" />
-                                    : <div className={`h-full ${t.visual === 'bowling-map' ? 'w-[110px]' : 'w-[180px]'} flex items-center`}>{t.visual === 'bowling-map' ? <BowlingMap /> : <HeatMap />}</div>}
-                            </div>
-                            <div className="p-4 md:p-5 flex-1 flex flex-col">
-                                <p className="text-rr-light-pink text-xs font-black tracking-widest mb-1">0{i + 2}</p>
-                                <h3 className="text-lg font-black text-white uppercase tracking-tight mb-1.5">{t.title}</h3>
-                                <p className="text-sm text-white/80 font-medium leading-relaxed">{t.body}</p>
-                                <p className="mt-2 text-[11px] text-white/50 font-semibold">
-                                    {!t.visual.startsWith('photo:') && <span className="inline-block bg-white/15 text-white text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full mr-1.5">Example</span>}
-                                    {t.caption}
-                                </p>
+                <CarouselTrack carousel={carousel} label="The tools in the lane">
+                    {TECH.items.map((t, i) => (
+                        <article key={t.key} data-slide aria-roledescription="slide" aria-label={`${i + 1} / ${TECH.items.length}: ${t.title}`}
+                            className="snap-start shrink-0 w-[72%] sm:w-[40%] lg:w-[calc((100%-3rem)/4)] bg-rr-dark border border-white/10 rounded-2xl overflow-hidden flex flex-col">
+                            <TechCardVisual t={t} />
+                            <div className="p-4 flex-1 flex flex-col">
+                                <h3 className="text-base font-black text-white uppercase tracking-tight mb-1">{t.title}</h3>
+                                <p className="text-[13px] text-white/80 font-medium leading-snug">{t.body}</p>
+                                {!t.visual.startsWith('photo:') && <p className="mt-2"><span className="inline-block bg-white/15 text-white text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full">Example</span></p>}
                                 {t.logos && (
                                     <div className="flex items-center gap-2 mt-3">
-                                        {t.logos.map((l) => <span key={l.name} className="bg-white rounded-lg h-9 px-3 flex items-center"><img src={l.src} alt={l.name} className="max-h-5 w-auto" /></span>)}
+                                        {t.logos.map((l) => <span key={l.name} className="bg-white rounded-lg h-8 px-2.5 flex items-center"><img src={l.src} alt={l.name} className="max-h-4 w-auto" /></span>)}
                                     </div>
                                 )}
-                                <div className="mt-auto"><Reveal dark label="More">{t.more}</Reveal></div>
                             </div>
-                        </div>
+                        </article>
                     ))}
-                </div>
+                </CarouselTrack>
+                <div className="lg:hidden"><CarouselControls carousel={carousel} total={TECH.items.length} prevLabel="Previous tool" nextLabel="Next tool" dark idPrefix="pc-tech" /></div>
 
-                <div className="mt-10 border-t border-white/15 pt-7">
-                    <p className="text-xs font-black uppercase tracking-[0.3em] text-rr-light-pink mb-4">And in every session</p>
-                    <ul className="grid sm:grid-cols-3 gap-4">
-                        {TECH.every.map((e) => (
-                            <li key={e} className="flex gap-2.5 text-white font-semibold text-sm leading-snug"><Check className="w-5 h-5 text-rr-light-pink shrink-0" />{e}</li>
-                        ))}
-                    </ul>
-                </div>
+                <ul className="mt-6 flex flex-wrap gap-2">
+                    {TECH.every.map((e) => (
+                        <li key={e} className="inline-flex items-center gap-1.5 bg-white/10 text-white text-xs font-semibold rounded-full px-3 py-1.5"><Check className="w-3.5 h-3.5 text-rr-light-pink shrink-0" />{e}</li>
+                    ))}
+                </ul>
             </div>
         </section>
     );
@@ -201,7 +177,7 @@ const How = () => (
 
 const NAV = [
     { label: 'THE TECH', id: 'tech' },
-    { label: 'COACHES & TIMES', id: 'coaches' },
+    { label: 'COACHES', id: 'coaches' },
 ];
 
 const PremiumCoaching = () => {

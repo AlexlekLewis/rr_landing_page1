@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, CalendarClock } from 'lucide-react';
-import { CENTRES, COACHES, AVAILABILITY_NOTE, centreOf, coachPath } from './premiumCoachingData';
-import { useAllAvailability, groupByNight, nightLabel, timeLabel } from './useCoachAvailability';
+import { MapPin } from 'lucide-react';
+import { CENTRES, COACHES, centreOf, coachPath } from './premiumCoachingData';
 
 // "Meet our coaches", a marketplace (Andy, 18 Nov 2026): no prices and no coach hierarchy
 // on the page; coaches shown by location, A–Z. Each card: photo, name, next available time
@@ -17,8 +16,6 @@ const Photo = ({ c }) => (
 );
 
 const CoachCard = ({ c, location }) => {
-    const { slots, loaded } = useAllAvailability();
-    const times = groupByNight(slots, c.slug, location).flatMap((n) => n.slots);
     return (
         <Link to={coachPath(c.slug)} data-coach={c.slug} data-cta={`open-${c.slug}`}
             className="group text-left bg-white border border-slate-200 hover:border-rr-pink rounded-2xl overflow-hidden flex flex-col transition-colors focus:outline-none focus-visible:ring-4 focus-visible:ring-rr-pink/40">
@@ -30,15 +27,6 @@ const CoachCard = ({ c, location }) => {
                 </div>
             </div>
             <div className="px-4 sm:px-5 pb-4 sm:pb-5 pt-3 w-full flex-1 flex flex-col">
-                <div className={`rounded-xl px-3 py-2.5 flex items-center gap-2 ${times.length ? 'bg-rr-pink/10' : 'bg-slate-50'}`}>
-                    <CalendarClock className={`w-4 h-4 shrink-0 ${times.length ? 'text-rr-pink' : 'text-slate-400'}`} />
-                    <p className="text-xs font-bold text-rr-dark leading-snug">
-                        {!loaded ? 'Checking times…'
-                            : times.length
-                                ? <>Next available: {nightLabel(times[0].date)}, {timeLabel(times[0].start)}{times.length > 1 && <span className="text-slate-500 font-semibold"> · {times.length - 1} more</span>}</>
-                                : <span className="text-slate-500">New times coming soon</span>}
-                    </p>
-                </div>
                 <span className="mt-auto pt-4">
                     <span className="block w-full text-center bg-rr-pink group-hover:bg-rr-light-pink text-white font-black uppercase tracking-widest text-sm px-4 py-3.5 rounded-full transition-colors">
                         View profile &amp; book
@@ -86,7 +74,6 @@ const CoachFinder = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 items-stretch">
                     {shown.map((c) => <CoachCard key={`${location}-${c.slug}`} c={c} location={location} />)}
                 </div>
-                <p className="text-xs text-slate-500 font-semibold leading-relaxed max-w-2xl mt-6">{AVAILABILITY_NOTE}</p>
             </div>
         </section>
     );

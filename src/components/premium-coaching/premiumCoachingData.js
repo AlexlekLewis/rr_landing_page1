@@ -88,6 +88,8 @@ export const TECH = {
         + 'watches, then shows you: where every ball pitched, where every shot went, and how it '
         + 'compares with last week. Our squads use these tools in groups. In private coaching the '
         + 'coach uses them on your player, every session.',
+    // The one line shown beside the title (Andy, 23 Nov 2026: a smaller section).
+    short: 'Most coaches tell you what they saw. Ours show you: where every ball pitched, where every shot went, and how it compares with last week.',
     items: [
         {
             key: 'match-centre',
@@ -143,10 +145,6 @@ export const STEPS = [
     { key: 'train', title: 'Train with the tools', body: 'Your first session sets a baseline. Every session after works the plan and tracks the progress.' },
 ]
 
-// Shown beside the availability and again before payment (Andy, 17 Nov 2026).
-export const AVAILABILITY_NOTE =
-    'Times shown are the coach’s availability, updated weekly. Once paid, each session is subject to '
-    + 'lane availability at the centre and confirmation of the sessions you selected.';
 
 // ── WHAT: formats (Andy, 17 Nov 2026: only 1:1 and 1:2, same price) ──
 export const FORMATS = [
