@@ -442,3 +442,34 @@
 .rrh .wwn small{font-size:12px;color:rgba(255,255,255,.7);line-height:1.4}
 .rrh .wwf{flex:none;font-weight:900;font-size:20px;color:var(--pink)}
 @media (max-width:760px){.rrh .wwg{grid-template-columns:1fr}}
+
+/* ── "Introducing RRA Melbourne" (HomeIntro.jsx): banner with Sid's photo on the right; the video opens in a pop-up ── */
+.rrh .intro-b{position:relative;overflow:hidden;color:var(--white);background:linear-gradient(115deg,#7A0350 0%,#4A0D6E 55%,#1D0C36 100%);min-height:440px;display:flex;align-items:center}
+.rrh .ib-bg{position:absolute;top:0;right:0;height:100%;width:58%;object-fit:cover;object-position:50% 30%}
+.rrh .intro-b::after{content:"";position:absolute;top:0;bottom:0;right:0;width:58%;background:linear-gradient(90deg,#5E0866 0%,rgba(94,8,102,.55) 22%,rgba(29,12,54,0) 55%)}
+.rrh .ib-in{position:relative;z-index:1;padding-block:64px;width:100%}
+.rrh .ib-in > *{max-width:520px}
+.rrh .intro-b .eyebrow{color:var(--pink-soft)}
+.rrh .i-h{margin:0 0 14px;font-size:clamp(34px,4.4vw,56px);font-weight:800;line-height:.95;text-transform:uppercase;letter-spacing:-.01em}
+.rrh .i-lead{margin:0 0 26px;font-size:16px;line-height:1.55;color:rgba(255,255,255,.9)}
+.rrh .ib-play{display:inline-flex;align-items:center;gap:14px;border:0;background:none;color:var(--white);font:700 15px/1 var(--font);text-transform:uppercase;letter-spacing:.06em;cursor:pointer;padding:0}
+.rrh .ib-play span{width:64px;height:64px;border-radius:50%;background:var(--pink);display:grid;place-items:center;box-shadow:0 0 0 8px rgba(255,255,255,.16);transition:transform .2s}
+.rrh .ib-play:hover span{transform:scale(1.06)}
+.rrh .ib-play svg{width:26px;height:26px;margin-left:3px}
+.rrh .ib-pop{position:fixed;inset:0;z-index:80;background:rgba(10,6,24,.88);display:grid;place-items:center;padding:56px 16px 16px}
+.rrh .ib-pop > div{position:relative;width:min(340px,100%)}
+.rrh .ib-x{position:absolute;top:-46px;right:0;width:36px;height:36px;border-radius:50%;border:0;background:var(--white);color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.rrh .iv{position:relative;aspect-ratio:9/16;width:100%;max-height:82vh;margin-inline:auto;border-radius:8px;overflow:hidden;background:#000}
+.rrh .iv video{width:100%;height:100%;object-fit:cover;display:block}
+.rrh .iv-play{position:absolute;inset:0;margin:auto;width:76px;height:76px;border-radius:50%;border:0;background:var(--pink);color:var(--white);display:grid;place-items:center;cursor:pointer}
+.rrh .iv-play svg{width:30px;height:30px;margin-left:4px}
+.rrh .iv-ctl{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;padding:12px;background:linear-gradient(transparent,rgba(0,0,0,.7));transition:opacity .3s}
+.rrh .iv.playing .iv-ctl{opacity:0}.rrh .iv.playing:hover .iv-ctl{opacity:1}
+.rrh .iv-ctl button{width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.22);color:var(--white);display:grid;place-items:center;cursor:pointer}
+.rrh .iv-ctl svg{width:16px;height:16px}
+@media (max-width:860px){
+.rrh .intro-b{display:block;min-height:0}
+.rrh .ib-bg{position:relative;width:100%;height:auto;aspect-ratio:4/3;object-position:50% 25%;display:block}
+.rrh .intro-b::after{top:0;bottom:auto;width:100%;aspect-ratio:4/3;background:linear-gradient(180deg,rgba(29,12,54,0) 55%,#5E0866 100%)}
+.rrh .ib-in{padding-block:24px 40px;background:#5E0866}
+.rrh .i-h{font-size:34px}}

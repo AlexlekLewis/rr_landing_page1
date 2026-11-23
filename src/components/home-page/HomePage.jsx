@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import HomeVideo from './HomeVideo';
 import HomeMedia from './HomeMedia';
 import HomeStickyCTA from './HomeStickyCTA';
 import RegisterDrawer from './RegisterDrawer';
@@ -7,6 +6,7 @@ import PartnerStack from '../power-game/PartnerStack';
 import OpenDaysModal from './OpenDaysModal';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { HomeHeader, WhatsOn, Banner, NewsStrip, Leadership, RoyalsWay, Store, Faq, Hire, HomeFooter } from '../home-v2/HomeV2Parts';
+import HomeIntro from '../home-v2/HomeIntro';
 import '../home-v2/homeV2.css';
 
 // THE HOME PAGE in the rajasthanroyals.com layout (Andy, 16 Nov 2026, from his mock-up):
@@ -50,8 +50,8 @@ const HomePage = () => {
             <main className="flex-1 w-full overflow-hidden">
                 <Banner onRegister={openDrawer} onPrograms={openPrograms} />
                 <NewsStrip />
-                {/* Photos & videos: as on the live site */}
-                <div id="video"><HomeVideo /></div>
+                {/* Introducing RRA Melbourne: Sid's video (Andy, 23 Nov 2026: Option B), then photos & videos */}
+                <HomeIntro />
                 <div id="photos" className="scroll-mt-24"><HomeMedia /></div>
                 <Leadership />
                 <RoyalsWay />
