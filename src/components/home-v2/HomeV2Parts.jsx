@@ -196,7 +196,7 @@ export const Banner = ({ onRegister, onPrograms }) => {
                     <span className="kicker">Choose a current program</span>
                     <h2>{s.title}</h2>
                     <p className="line">{s.line}</p>
-                    <div className="ctas"><Link className="btn" to={s.href} {...tab} data-cta={`home-banner-${s.href.slice(1)}`}>View Program</Link></div>
+                    <div className="ctas"><Link className="btn" to={s.href} {...tab} data-cta={`home-banner-${s.href.slice(1)}`}>{s.cta || 'View Program'}</Link></div>
                 </div>
             </article>
         );

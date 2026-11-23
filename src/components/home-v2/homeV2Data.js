@@ -39,12 +39,27 @@ export const WELCOME_SLIDE = {
     lead: 'Melbourne’s Official Rajasthan Royals Academy.',
     body: 'From elite players to beginners, we provide opportunities for male and female cricketers, players of all ages and abilities. The Royals Way has shaped IPL, global and local cricket stars — now available to cricketers across Melbourne.',
 };
-export const PROGRAM_SLIDES = HERO_PROGRAMS.map((p) => ({
-    title: p.label,
-    line: p.badge,
-    href: p.route,
-    ...(SLIDE_PHOTO[p.route] || { src: WELCOME_SLIDE.src, alt: '' }),
-}));
+// High Performance Camp at the Rajasthan Royals High Performance Centre (Andy, 23 Nov 2026):
+// its own slide, straight after the welcome slide, "so people can click on it and register now for
+// our April tour" on the /tours page. Wording as the /tours page and the Programs menu have it.
+const HPC_CAMP_SLIDE = {
+    title: 'High Performance Camp',
+    line: 'Our April 2027 tour to the Rajasthan Royals High Performance Centre, India',
+    href: '/tours',
+    cta: 'Register Now',
+    src: '/assets/home/hpc-camp-team-talk.jpg',
+    alt: 'Rajasthan Royals Academy Melbourne players with Royals coaches on the ground at the Rajasthan Royals High Performance Centre',
+};
+
+export const PROGRAM_SLIDES = [
+    HPC_CAMP_SLIDE,
+    ...HERO_PROGRAMS.map((p) => ({
+        title: p.label,
+        line: p.badge,
+        href: p.route,
+        ...(SLIDE_PHOTO[p.route] || { src: WELCOME_SLIDE.src, alt: '' }),
+    })),
+];
 
 // Leadership carousel: Sid and Andy (as on the home page), then Alex Lewis.
 export const LEADERS = [
