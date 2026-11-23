@@ -79,7 +79,7 @@ export const HomeHeader = ({ onRegister }) => {
                             </div>
                             <div className="ni"><a className="nl" href="#about" data-cta="nav-about" onClick={jump('about')}>About</a></div>
                             <div className="ni"><a className="nl" href="#coaches" data-cta="nav-coaches" onClick={jump('coaches')}>Coaches</a></div>
-                            <div className="ni"><Link className="nl" to="/mickleham" data-cta="nav-private-coaching">Private Coaching</Link></div>
+                            <div className="ni"><Link className="nl" to="/private-coaching" data-cta="nav-private-coaching">Private Coaching</Link></div>
                             <div className="ni"><Link className="nl" to="/news" data-cta="nav-news">News</Link></div>
                             <div className="ni"><Link className="nl" to="/careers" data-cta="nav-careers">Careers</Link></div>
                             <div className="ni"><a className="nl" href="#faq" data-cta="nav-faq" onClick={jump('faq')}>FAQ</a></div>
@@ -100,7 +100,7 @@ export const HomeHeader = ({ onRegister }) => {
                     <div className="msub">{progLinks}<Link to="/programs" data-cta="nav-phone-all-programs" onClick={() => setMenuOpen(false)}>View All Programs →</Link></div>
                     <a href="#about" onClick={jump('about')}>About</a>
                     <a href="#coaches" onClick={jump('coaches')}>Coaches</a>
-                    <Link to="/mickleham">Private Coaching</Link>
+                    <Link to="/private-coaching">Private Coaching</Link>
                     <Link to="/news">News</Link>
                     <Link to="/careers">Careers</Link>
                     <a href="#faq" onClick={jump('faq')}>FAQ</a>
@@ -298,7 +298,24 @@ export const Leadership = () => {
     const show = (i) => setCi((i + LEADERS.length) % LEADERS.length);
     const rowRef = useRef(null);
     const step = () => { const tm = rowRef.current?.querySelector('.tm'); return tm ? (tm.getBoundingClientRect().width + 16) * 2 : 300; };
-    const scroll = (d) => rowRef.current?.scrollBy({ left: d * step(), behavior: reduceMotion() ? 'auto' : 'smooth' });
+    // The arrows (Andy, 23 Nov 2026: they did nothing): shown only when the row is wider than the
+    // screen; at either end they wrap round to the other end.
+    const [canScroll, setCanScroll] = useState(false);
+    useEffect(() => {
+        const el = rowRef.current; if (!el) return undefined;
+        const check = () => setCanScroll(el.scrollWidth > el.clientWidth + 4);
+        check();
+        const ro = new ResizeObserver(check); ro.observe(el);
+        return () => ro.disconnect();
+    }, []);
+    const scroll = (d) => {
+        const el = rowRef.current; if (!el) return;
+        const behavior = reduceMotion() ? 'auto' : 'smooth';
+        const max = el.scrollWidth - el.clientWidth;
+        if (d > 0 && el.scrollLeft >= max - 4) el.scrollTo({ left: 0, behavior });
+        else if (d < 0 && el.scrollLeft <= 4) el.scrollTo({ left: max, behavior });
+        else el.scrollBy({ left: d * step(), behavior });
+    };
     return (
         <section className="band band-players strip" id="coaches">
             <div className="wrap">
@@ -328,10 +345,10 @@ export const Leadership = () => {
                 <div className="team">
                     <div className="team-head">
                         <h3>OUR COACHING TEAM</h3>
-                        <div className="team-ctl">
-                            <button type="button" aria-label="Scroll the coaching team left" onClick={() => scroll(-1)}><ChevronLeft /></button>
-                            <button type="button" aria-label="Scroll the coaching team right" onClick={() => scroll(1)}><ChevronRight /></button>
-                        </div>
+                        {canScroll && <div className="team-ctl">
+                            <button type="button" aria-label="Scroll the coaching team left" data-cta="team-prev" onClick={() => scroll(-1)}><ChevronLeft /></button>
+                            <button type="button" aria-label="Scroll the coaching team right" data-cta="team-next" onClick={() => scroll(1)}><ChevronRight /></button>
+                        </div>}
                     </div>
                     <div className="team-row" ref={rowRef}>
                         {TEAM.map((t) => (
