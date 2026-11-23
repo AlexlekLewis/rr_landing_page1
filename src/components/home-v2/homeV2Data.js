@@ -57,9 +57,10 @@ export const LEADERS = [
 // them; no photo yet = initials. Each links to /coaches.
 export const TEAM = [
     { name: 'Alex Thornhill', line: 'Cranbourne North · South-East Manager', img: '/assets/coaches/alex-thornhill.jpg' },
+    { name: 'Siddhartha Banerjee', line: 'Pace bowling and talent development', img: '/assets/coaches/siddhartha-banerjee-halla.jpg', pos: '50% 22%' }, // Andy, 23 Nov 2026
     { name: 'Ikroop Dhanoa', line: 'Leg spin, batting and T20 cricket', img: '/assets/coaches/ikroop-dhanoa-halla.jpg', pos: '50% 22%' },
     { name: 'Ritin Raman', line: 'Wicketkeeping and top-order batting', img: '/assets/coaches/ritin-raman-halla.jpg', pos: '50% 22%' },
-    { name: 'Mihiraj Jayasekara', line: 'Batting', img: '/assets/coaches/mihiraj-jayasekara.jpg', pos: '50% 22%' },
+    { name: 'Mihiraj Jayasekara', line: 'Batting', img: '/assets/coaches/mihiraj-jayasekara-halla.jpg', pos: '50% 22%' },
     { name: 'Jinang Shah', line: 'Junior Royals Program Coach', img: '/assets/coaches/jinang-shah-halla.jpg', pos: '50% 15%' },
     { name: 'Kavya Khatri', line: 'Junior Royals · Performance Squads', img: null },
 ];
