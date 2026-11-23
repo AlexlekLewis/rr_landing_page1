@@ -8,6 +8,7 @@ import OpenDaysModal from './OpenDaysModal';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { HomeHeader, WhatsOn, Banner, NewsStrip, Leadership, RoyalsWay, Store, Faq, Hire, HomeFooter } from '../home-v2/HomeV2Parts';
 import HomeFixtures from '../fixtures/HomeFixtures';
+import HomeIntro from '../home-v2/HomeIntro';
 import '../home-v2/homeV2.css';
 
 // THE HOME PAGE in the rajasthanroyals.com layout (Andy, 16 Nov 2026, from his mock-up):
@@ -23,7 +24,14 @@ import '../home-v2/homeV2.css';
 const SECTIONS = ['hero', 'news', 'fixtures', 'video', 'photos', 'coaches', 'about', 'store', 'faq', 'careers-banner'];
 const OPEN_DAYS_KEY = 'openDaysModalDismissed';
 
+// DRAFT (Andy, 23 Nov 2026): options for the "Introducing RRA Melbourne" section, previewed with
+// /?intro=a, /?intro=b or /?intro=c. Without it the page shows the live section.
+const introOption = () => {
+    try { const o = new URLSearchParams(window.location.search).get('intro'); return ['a', 'b', 'c'].includes(o) ? o : null; } catch { return null; }
+};
+
 const HomePage = () => {
+    const [intro] = useState(introOption);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [openDaysModal, setOpenDaysModal] = useState(false);
 
@@ -54,7 +62,7 @@ const HomePage = () => {
                 {/* Fixtures (DRAFT, Andy 23 Nov 2026) */}
                 <HomeFixtures />
                 {/* Photos & videos: as on the live site */}
-                <div id="video"><HomeVideo /></div>
+                {intro ? <HomeIntro option={intro} /> : <div id="video"><HomeVideo /></div>}
                 <div id="photos" className="scroll-mt-24"><HomeMedia /></div>
                 <Leadership />
                 <RoyalsWay />
