@@ -1,0 +1,110 @@
+{
+  "issue": 1,
+  "sendDate": "2026-12-01",
+  "monthLabel": "December 2026",
+  "campaign": "royals-report-01",
+  "subjects": [
+    "He’s 15 and just hit 204 off 53 🏏",
+    "Andy’s note: records, runs and India in April"
+  ],
+  "preheader": "Plus our players’ big weekend, Junior Royals before Christmas and gift ideas from the Academy store.",
+  "greeting": "Hello Royals family,",
+  "intro": [
+    "Welcome to the first Royals Report. Every second Tuesday I’ll send you a short note on what’s happening across the Academy: how our players are going, what’s coming up, and the best of the wider Royals family.",
+    "It’s been a big fortnight. Our players had one of their best weekends of club cricket, Power League is in full swing at Montmorency Park, and one of the Royals’ own teenagers rewrote the record books.",
+    "Thanks for being part of it."
+  ],
+  "signoff": { "name": "Andy Crook", "role": "Academy Director", "photo": "/assets/coaches/andy-crook-halla.jpg" },
+  "feature": {
+    "kicker": "From the Royals family",
+    "title": "204 off 53. He’s 15.",
+    "body": "Rajasthan Royals teenager Vaibhav Sooryavanshi hit the fastest hundred (28 balls) and fastest double hundred in List A history, with a world-record 28 sixes, as India A beat the UAE in Doha.",
+    "image": "/assets/news/sooryavanshi-204-hero.jpg",
+    "alt": "Vaibhav Sooryavanshi: 204 off 53 balls",
+    "cta": { "label": "Read the story", "href": "/news/sooryavanshi-204-off-53-record-night" },
+    "slot": "feature-sooryavanshi"
+  },
+  "players": {
+    "kicker": "Our players",
+    "title": "Runs, wickets and wins",
+    "cards": [
+      {
+        "title": "Unbeaten eighties and a five-for",
+        "body": "Siddhant Goel (86*) and Dhruva Bezawada (81*) carried their bats in Premier Under-18s, and Jake Frederiksen took 5/45 for Diamond Creek’s 1st XI.",
+        "image": "/assets/news/weekend-wrap-20-22-nov-header.jpg",
+        "alt": "Weekend Wrap, 20 to 22 November: our top performers in club cricket",
+        "cta": { "label": "Weekend Wrap", "href": "/news/weekend-wrap-20-22-november" },
+        "slot": "players-weekend-wrap"
+      },
+      {
+        "title": "Ghotra’s 85 not out",
+        "body": "Jaskaran Ghotra hit 85* off 56 as South-East Melbourne beat North Melbourne by 73 runs in Power League at Montmorency Park.",
+        "image": "/assets/news/power-league-15-nov-ghotra-delivery-wide.jpg",
+        "alt": "Jaskaran Ghotra faces a delivery at Montmorency Park",
+        "cta": { "label": "Match report", "href": "/news/ghotra-85-south-east-melbourne-senior-win" },
+        "slot": "players-power-league"
+      }
+    ]
+  },
+  "programs": {
+    "kicker": "Coming up",
+    "title": "Find the right program",
+    "items": [
+      {
+        "tag": "Ages 7 to 12",
+        "title": "Junior Royals",
+        "body": "Fun, skills-first cricket in small groups by age. $44.95 a week, join any week. Last sessions before Christmas are mid-December.",
+        "cta": { "label": "Join this week", "href": "/junior-royals" },
+        "slot": "programs-junior-royals"
+      },
+      {
+        "tag": "1-to-1 or with a training partner",
+        "title": "Private Coaching",
+        "body": "Work one-on-one with an Academy coach, or share a session with a training partner, at Cranbourne North, Mickleham or Ravenhall.",
+        "cta": { "label": "Enquire now", "href": "/private-coaching" },
+        "slot": "programs-private-coaching"
+      },
+      {
+        "tag": "April 2027 · India",
+        "title": "High Performance Camp",
+        "body": "About ten days at the Rajasthan Royals High Performance Centre. Registering interest is free and commits you to nothing. We’ll send dates and price first to those registered.",
+        "cta": { "label": "Register interest", "href": "/tours" },
+        "slot": "programs-hpc-camp"
+      },
+      {
+        "tag": "Ages 10 to 25",
+        "title": "Performance Squads",
+        "body": "Season-long squads at Mickleham and Cranbourne North. Register now and we’ll tell you first when the next trial dates are set.",
+        "cta": { "label": "Register interest", "href": "/performance-squads" },
+        "slot": "programs-performance-squads"
+      }
+    ]
+  },
+  "story": {
+    "kicker": "Inside the Academy",
+    "title": "Our first tour to the home of the Royals",
+    "body": "In September our first touring group trained at the Rajasthan Royals High Performance Centre in Nagpur, coached by Faiz Fazal, Siddharth Trivedi and Sid Lahiri on turf nets and in centre-wicket sessions.",
+    "image": "/assets/news/india-tour-warm-up-hpc-wide.jpg",
+    "alt": "Academy players warming up in front of the Rajasthan Royals High Performance Centre in Nagpur",
+    "stats": [ { "n": "7", "l": "nights at the centre" }, { "n": "6", "l": "full coaching days" }, { "n": "1", "l": "match on turf" } ],
+    "cta": { "label": "Read the tour story", "href": "/news/inside-our-first-tour-rajasthan-royals-high-performance-centre" },
+    "slot": "story-india-tour"
+  },
+  "tip": {
+    "kicker": "From the nets",
+    "title": "Training in the heat",
+    "body": "Melbourne summer cricket is hot. Drink before you feel thirsty: a few big mouthfuls before training, then small sips at every drinks break. Wear a cap, re-apply sunscreen at the break, and pack a piece of fruit for after. Recovery starts the minute you walk off.",
+    "needsApproval": true
+  },
+  "shop": {
+    "kicker": "Christmas gift ideas",
+    "title": "From the Academy store",
+    "items": [
+      { "name": "Training Shirt", "price": "$62.95", "image": "/shop/training-shirt-front.png" },
+      { "name": "Academy Cap", "price": "$38.50", "image": "/shop/pink-cap-front.png" },
+      { "name": "Fleece Lined Jacket", "price": "$96.95", "image": "/shop/fleece-jacket-front.png", "note": "Made to order" }
+    ],
+    "cta": { "label": "Shop the store", "href": "/academy-shop" },
+    "slot": "shop-christmas"
+  }
+}
