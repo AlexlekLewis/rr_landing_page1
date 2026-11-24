@@ -6,11 +6,12 @@ import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { HomeHeader, HomeFooter } from '../home-v2/HomeV2Parts';
 import { WELCOME_SLIDE } from '../home-v2/homeV2Data';
 import { ALL_PROGRAMS } from './programsData';
+import Newsletter from '../home-v2/Newsletter';
 import '../home-v2/homeV2.css';
 
 // /programs: every program on one page, in the new home-page style (Andy, 23 Nov 2026).
 // Each card goes straight to that program's own page. Data: programsData.js.
-const SECTIONS = ['programs-hero', 'programs-list', 'programs-help'];
+const SECTIONS = ['programs-hero', 'programs-list', 'newsletter', 'programs-help'];
 
 const ProgramsPage = () => {
     usePageAnalytics('/programs', { sections: SECTIONS });
@@ -49,6 +50,8 @@ const ProgramsPage = () => {
                         </div>
                     </div>
                 </section>
+
+                <Newsletter source="programs" />
 
                 <section className="strip white" id="programs-help">
                     <div className="wrap prog-help">

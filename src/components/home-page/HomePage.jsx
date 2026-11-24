@@ -6,6 +6,7 @@ import PartnerStack from '../power-game/PartnerStack';
 import usePageAnalytics from '../../hooks/usePageAnalytics';
 import { HomeHeader, WhatsOn, Banner, NewsStrip, Leadership, RoyalsWay, Store, Faq, Hire, HomeFooter } from '../home-v2/HomeV2Parts';
 import HomeIntro from '../home-v2/HomeIntro';
+import Newsletter from '../home-v2/Newsletter';
 import '../home-v2/homeV2.css';
 
 // THE HOME PAGE in the rajasthanroyals.com layout (Andy, 16 Nov 2026, from his mock-up):
@@ -18,7 +19,7 @@ import '../home-v2/homeV2.css';
 // HomeCoaches, HomeFAQ, HomeCareersBanner, HomeTopBanner, OpenDaysTicket) stay in the repo;
 // several still supply data to the new layout.
 
-const SECTIONS = ['hero', 'news', 'video', 'photos', 'coaches', 'about', 'store', 'faq', 'careers-banner'];
+const SECTIONS = ['hero', 'news', 'video', 'photos', 'coaches', 'about', 'store', 'faq', 'newsletter', 'careers-banner'];
 
 const HomePage = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -52,6 +53,8 @@ const HomePage = () => {
                 <RoyalsWay />
                 <Store />
                 <Faq onRegister={openDrawer} />
+                {/* Register for more information: the newsletter (Andy, 24 Nov 2026) */}
+                <Newsletter source="home" />
                 <Hire />
             </main>
             <PartnerStack theme="light" />

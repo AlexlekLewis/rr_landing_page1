@@ -497,3 +497,33 @@
 .rrh .prog-help .strip-sub{margin:0}
 @media (max-width:980px){.rrh .prog-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:620px){.rrh .prog-grid{grid-template-columns:1fr}.rrh .pg-hero{padding-block:36px 32px}}
+
+/* ── Newsletter / "Register for more information" (Newsletter.jsx) ── */
+.rrh .nl-wrap{padding-top:8px}
+.rrh .nlbox{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);gap:40px;align-items:center;padding:40px 44px;border-radius:10px;background:linear-gradient(115deg,#7A0350 0%,#4A0D6E 50%,#1D0C36 100%);color:var(--white)}
+.rrh .nlbox::before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(115deg,rgba(255,255,255,.06) 0 2px,transparent 2px 110px)}
+.rrh .nlbox > *{position:relative}
+.rrh .nlbox .eyebrow{color:var(--pink-soft)}
+.rrh .nlbox h2{margin:0 0 10px;font-size:clamp(26px,3vw,38px);font-weight:800;line-height:1.02}
+.rrh .nl-copy p{margin:0;font-size:15px;line-height:1.55;color:rgba(255,255,255,.88);max-width:460px}
+.rrh .nl-form{display:flex;flex-direction:column;gap:12px;background:var(--card);color:var(--ink);border-radius:8px;padding:20px;box-shadow:0 18px 40px rgba(10,4,30,.35)}
+.rrh .nl-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rrh .nl-field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.rrh .nl-field > span{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.rrh .nl-field input,.rrh .nl-field select{height:44px;width:100%;box-sizing:border-box;padding:0 12px;border:1px solid var(--line);border-radius:5px;background:#FAFAFD;font:500 15px var(--font);color:var(--ink)}
+.rrh .nl-field input:focus,.rrh .nl-field select:focus{outline:2px solid var(--pink);outline-offset:-1px;background:var(--white)}
+.rrh .nl-consent{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;line-height:1.45;color:var(--muted);cursor:pointer}
+.rrh .nl-consent input{width:18px;height:18px;margin:1px 0 0;flex:none;accent-color:var(--pink)}
+.rrh .nl-consent a{color:var(--pink);font-weight:700}
+.rrh .nl-err{margin:0;font-size:13px;font-weight:600;color:#C0262D}
+.rrh .nl-btn{height:46px;width:100%;font-size:15px}
+.rrh .nl-btn svg{width:18px;height:18px}
+.rrh .nl-btn[disabled]{opacity:.7;cursor:wait}
+.rrh .nl-done{display:flex;gap:14px;align-items:center;background:var(--card);color:var(--ink);border-radius:8px;padding:22px}
+.rrh .nl-done b{display:block;font-size:17px;margin-bottom:4px}
+.rrh .nl-done span{font-size:13.5px;color:var(--muted)}
+.rrh .nl-tick{flex:none;width:44px;height:44px;border-radius:50%;background:var(--pink);color:var(--white);display:grid;place-items:center}
+.rrh .nl-tick svg{width:22px;height:22px}
+@media (max-width:860px){.rrh .nlbox{grid-template-columns:1fr;gap:22px;padding:28px 20px}}
+@media (max-width:480px){.rrh .nl-row{grid-template-columns:1fr}.rrh .nl-form{padding:16px}}
+.rrh .nl-done .nl-tick{color:var(--white);font-size:0}
