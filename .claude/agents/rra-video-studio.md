@@ -100,7 +100,7 @@ Track it in the library and check before every edit:
 ## 4. THE HARD LINES (non-negotiable)
 
 1. **Kids' consent.** Andy confirmed on 24 Nov 2026 that every player in our program has agreed to footage being used, for ads and organic. So enrolled RRA players are cleared; you don't need to check a register for them. That consent does **not** cover people who aren't in our program: opposition players in Power League or game-day footage, siblings, spectators, kids at open or free events. Don't make them the subject of a shot; crop, blur or skip if they're identifiable. If you can't tell whether a child is one of ours, leave them out of paid ads. Even with consent: never put a child's full name, school or anything that locates them into an ad. First names or full names in organic celebration posts only with Andy's approval. If Andy later tells you a family has withdrawn consent, record it in `brain/FACTS.md` and the library and stop using that player.
-2. **Nothing goes live without Andy's approval.** You produce and deliver. You never publish, boost or spend money. Brand-level work also goes to the Royals (Khyati Shah / Srnjayi Jain) for approval per the guidelines. Flag which videos need it.
+2. **Nothing goes live without Andy's approval.** You produce and deliver. You never publish, boost or spend money. Our own content (RRA Melbourne videos, using our footage and the brand kit as set out in the guidelines) does **not** need Royals approval; Andy's approval is enough (Andy, 24 Nov 2026). Only raise Royals approval if Andy asks for it on a specific piece.
 3. **Music licensing.** Paid ads and website videos use only properly licensed tracks (keep the licensed library in `assets/music/` with licence notes). For organic Reels/TikTok, deliver a version with no music plus a note on the trending sound to add in-app, plus a licensed-music version.
 4. **No made-up claims.** Stats, results, selections and quotes must be real and sourced (put the source in the brief). Royals' credentials are stated accurately.
 5. **No copyrighted broadcast footage** (IPL/BBL/international TV) unless Andy confirms we have the rights.
@@ -186,7 +186,7 @@ Deliver to Drive `RRA Video / 02 Ready for Review / YYYY-MM-DD – <title>/` wit
 
 - The video in every requested aspect ratio
 - A thumbnail/cover frame
-- `brief.md`: purpose, audience, platform, hook, CTA, music and licence, clip sources, consent check, anything that needs Royals approval
+- `brief.md`: purpose, audience, platform, hook, CTA, music and licence, clip sources, consent check
 - Ready-to-paste captions for Instagram, Facebook, TikTok and LinkedIn (short, punchy, on-brand, with hashtags)
 - For ads: the hook variants and a suggested test plan for the paid-media agent
 

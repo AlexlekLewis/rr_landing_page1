@@ -7,7 +7,7 @@ Updated 2026-11-24 (first run). Source of truth: "RRA 26 Design Guidelines" PDF 
 - Lion (primary brand element) in three variants ONLY: brand pink at 100%, white (opacity can vary), white stroke (opacity can vary).
 - Gradient: spread equally from Admiral Blue to Pink (or reverse). The darker blue is used ONLY in the gradient.
 - Don't overuse the logo; align it proportionately with partner logos; no use of the logo, tagline or war cry without permission.
-- Design approval SOP: submit designs to Khyati Shah (Khyati.Shah@rajasthanroyals.com) and Srnjayi Jain (srnjayi.jain@rajasthanroyals.com).
+- Design approval SOP in the guidelines names Khyati Shah and Srnjayi Jain at the Royals. Andy, 24 Nov 2026: not needed for our own content; Andy's approval is enough.
 - The PDF has no written spec for a "signature line"; it is taken from recent creatives (below).
 
 ## Colours
