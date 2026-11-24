@@ -15,26 +15,34 @@ Updated 2026-11-24 (first run). Source of truth: "RRA 26 Design Guidelines" PDF 
 - Background gradient used in video: `linear-gradient(165deg, #001D48 0%, #1226AA 50%, #E11F8F 100%)`.
 - Panels: `rgba(0,29,72,0.62)`, 28px radius, light blur. Never white panels.
 
-## Type (1080×1920)
+## Type and layout (from our real creatives: Weekend Wrap, game-day set, site components)
+- Left-aligned blocks, 50–64px from the left edge. Never centred.
+- Pills: pink (primary) + Admiral Blue (secondary), 800 weight, letter-spacing 0.12em, uppercase.
+- Kicker: 800, 30px, letter-spacing 0.22em, pink or white (the site's `tracking-[0.2em] text-rr-pink` style).
+- Headlines: 900, uppercase, stacked two-tone (white line over pink line), line-height 0.86, letter-spacing −0.025em.
+- Launch beats: one statement per beat, full frame, 128–230px, slammed (scale 1.45→1.0 in 0.16s).
+- Captions for on-camera speech: 800, 46px, uppercase, navy 0.78 panel, pink keyword, left at y≈1200–1240.
+- HALLA BOL!: Montserrat 900 italic, white HALLA + pink BOL!, ≤150px on 9:16, once per video, as a designed moment (best when someone says it on camera). Not the brush PNG. The guidelines specify Romagna for Halla Bol; we don't have that font.
+
+## Type (1080×1920, earlier notes)
 - Headlines: Montserrat 900, uppercase, line-height 0.92, 88–120px. Pink on the word that matters, rest solid white. No outlines.
 - Slam numbers (2026 / 2027 / stats): 230–350px, 900.
 - Chips: 800, 32px, letter-spacing 0.1em, pill, pink (primary) or Admiral Blue (secondary).
 - Support text: 600, 30–40px.
 - 16:9: the 9:16 type layer is reused at 0.73 scale, left column (photo scenes) or centred (graphic scenes).
 
-## The signature line (PENDING ANDY'S CONFIRMATION)
-- Navy bar, full width, `rgba(0,29,72,0.82)`, 66px tall.
-- Left: `FINDING A WAY TO WIN FROM ANYWHERE`, Montserrat 800, 27px, letter-spacing 0.12em, "WIN" in pink 900 italic. Right: `HALLA BOL!` same style, white.
-- Matches the footer on the Weekend Wrap and game-day creatives.
-- 9:16: top edge at y=1446 so it stays above the Reels/TikTok bottom UI zone (bottom 400px). 16:9: bottom of frame (y=1014).
-- On screen for the whole video, including the end card.
-- Confirm frame: `video-out/2026-11-24-2026-recap-2027-launch/style-01_signature-line_hook.jpg`.
+## The signature line = the brand ARROW (graphic, not text)
+- The footer bar with "Finding a way to WIN from anywhere" is DEAD. Never use that phrase or a footer strip (Andy, v2 notes).
+- Source: RR Master Brand Guidelines PDF (repo root, `RR-MASTER BRAND GUIDELINES (1).pdf`), p.29 "Key visual asset: Evolution". The arrow evolved from the crown: a thick chevron stroke with a rounded apex, a pink↔blue gradient along its length. Seen in applications on p.32 ("Royal at heart"), p.37 (HALLA BOL! hoardings) and p.38 (bus).
+- Rules from the guidelines: no more than 3 arrows per creative; all arrows in one creative share one stroke width; the gradient is managed by hand (not a flat colour); use it boldly.
+- Video spec (1080×1920): SVG path `M 640 -80 L 1080 520 Q 1140 600 1080 680 L 640 1280`, stroke 80–96px, gradient #E11F8F → #1226AA, partly off-frame on the right, drawn on over 0.45s (stroke-dashoffset) as the beat lands. 1–2 per frame.
+- Still to confirm with Andy: `video-out/2026-11-24-2026-recap-2027-launch-v3/still-03_end-card-arrow.jpg`.
 
 ## Logos and the lion (local files in the site repo)
 - Melbourne logo, white: `public/assets/Logo_White_Transparent.png` (500×500; good to ~460px tall). Pink: `public/assets/rr-logo-pink.png` (619×1200). Blue: `MELBOURNE.png`.
 - Trumpeting lion, white stroke: `public/assets/rr-rampant-lion-white.png` (570×1200). Use it 1400–1750px tall at 0.22–0.42 opacity. Never a corner stamp.
 - HALLA BOL! lockup, white: `public/assets/performance-squads/halla-bol-white.png`.
-- Melbourne logo top-right at 230px tall (9:16, y=256) from frame 1; large (460px) on the end card.
+- Melbourne logo TOP-LEFT at 200px tall (9:16, x=56, y=252), as on our Weekend Wrap and game-day creatives; large (420px) on the end card.
 
 ## Grading (ffmpeg, works on our footage)
 - Outdoor: `eq=contrast=1.10:saturation=1.30:brightness=0.015,colorbalance=rs=-0.03:bs=0.07:rm=0.04:bm=-0.03:rh=0.02,unsharp=5:5:0.4`
@@ -44,12 +52,12 @@ Updated 2026-11-24 (first run). Source of truth: "RRA 26 Design Guidelines" PDF 
 ## Motion kit (HTML + Playwright frame renderer)
 - Renderer: `comp.html` with a deterministic `render(t)`; Playwright screenshots each frame at 30fps; one H.264 file per scene; concat `-c copy`; audio added with `-c:v copy`. A 43s video renders in ~90s.
 - Moves: slam (scale 1.7→1.0 in 0.2s + small shake), slide-in left (140px, cubic ease-out), rise (60px), pop (back-ease) for cards, fade.
-- Pink flash (screen blend, 0.75 → 0 over 5 frames) on every cut. Pink and blue light leaks drifting (screen blend, blurred radial gradients).
+- No pink flash on every cut. A light white flash (0.35) only on 2027 statement slams. No drifting light leaks.
 - Ken Burns on stills: zoom 1.00→1.09 over the shot, or pan.
 - One breath per video: slowed clip (65%) with a quote card.
 
 ## Sound
-- No licensed music library yet. Generated sound design is allowed (sub impacts, noise whooshes). Master −14 LUFS social, −16 web once music is in.
+- No whooshes or sweeps, ever. No synthetic impacts unless subtle and on a real hit. Natural sound, on-camera voices and (later) licensed music carry the cuts. Master −14 LUFS social, −16 web once music is in.
 
 ## Action footage first (FEEDBACK 2026-11-24)
 - Moving action is the spine (v2 = 82% video). Stills only as sub-1.5s filler.
@@ -64,5 +72,10 @@ Updated 2026-11-24 (first run). Source of truth: "RRA 26 Design Guidelines" PDF 
 - `public/assets/powergame/royals-academy-video.mp4`: edited promo with VO and baked captions. Fulltrack clip at 201–205 is usable cropped to the top 780px.
 - Don't use: `public/tours/hpc-home-of-the-royals.mp4` (a Royals promo with pros and baked captions); `Media/Hero_Scroll.mp4` (IPL broadcast-style footage plus music).
 
+## Sangakkara clips (Media/Kumar Sangakkara V2.mp4 and Video.mp4: same audio)
+- They do NOT contain "creative and curious". Words, located with offline pocketsphinx plus forced alignment: 0.3 "Hi, I'm Kumar Sangakkara, Director of Cricket, Rajasthan Royals"; 7.46–11.6 "and I'm delighted to announce the launch of the Rajasthan Royals Academy"; 12–16 "...this beautiful city of Melbourne". Andy to confirm by ear.
+- Sid Lahiri: royals-academy-video.mp4 7.2–9.8 "Let's play the Royals way, Halla Bol!" (to camera).
+- Whisper and Vosk models can't download here (huggingface.co, openaipublic and alphacephei are blocked). pocketsphinx (pip, bundled model) works for alignment.
+
 ## Approved / rejected
-- 2026 Recap v1: "good start, needs more action videos". v2 delivered 2026-11-24, awaiting verdict.
+- 2026 Recap v1: "good start, needs more action videos". v2: liked the data scene and the boys/girls line; wanted better graphics, no tagline footer, no whooshes, more match day, bigger 2027. v3 delivered 2026-11-24, awaiting verdict.

@@ -36,3 +36,6 @@ Check this before writing any on-screen claim. Add the source and date to every 
 - [2026-11-24] Kumar Sangakkara: Director of Cricket, Rajasthan Royals (lower third in the Academy's own video `Media/Kumar Sangakkara V2.mp4`). At the Melbourne Academy launch he advised players to be "creative and curious". SOURCE: `src/components/landing-page-3/AcceptanceForm.jsx`.
 - [2026-11-24] Alex Lewis: Director of Cricket and Head Coach, Rajasthan Royals Academy Melbourne. SOURCE: `homeV2Data.js`, news story 13 Nov 2026.
 - [2026-11-24] Rajasthan Royals: 2008 IPL Champions, led by Shane Warne. SOURCE: `homeV2Data.js` (ROYALS_WAY).
+
+## 2027 statements (Andy, 24 Nov 2026, v2 review notes; he is the source)
+- [2026-11-24] T20 Elite Program is back. Junior Royals is back, new and improved. Holiday camps. April: tour to the Rajasthan Royals High Performance Centre, during the IPL. Siddhartha Lahiri is back. SOURCE: Andy. No dates or prices yet.
