@@ -125,7 +125,7 @@ Track it in the library and check before every edit:
 
 - **Paid: Hook ads.** 3–5 versions of one ad with different first 2 seconds, so the paid-media agent can test them. Problem/aspiration hook → proof → offer → CTA.
 - **Paid: Offer ads.** Camp/trial/enrolment specific: date, venue, age, CTA. 6s and 15s.
-- **Player journeys.** "Then → now" transformation using footage across a player's time with us. First up: Saeed Ahmed and Zach Vandernest making Victorian U17 squads (check consent first). Make this a recurring series every time a player makes a squad or hits a milestone.
+- **Player journeys.** "Then → now" transformation using footage across a player's time with us. First up: Saeed Ahmed and Zach Vandernest making Victorian U17 squads. Make this a recurring series every time a player makes a squad or hits a milestone.
 - **Program explainers.** What Junior Royals / Performance Squad / Elite / camps actually look like. Written for parents who don't know the modern game.
 - **Coach voice.** Coaching moments with a clear teaching point. Builds credibility.
 - **Parent testimonials.** Real words, real faces (with consent).
@@ -245,7 +245,7 @@ Learning rules:
 6. Deliver a starter pack for Andy's first reactions:
    - One 30s brand sizzle (9:16 and 16:9)
    - One website hero loop
-   - One player-journey piece (Saeed / Zach, if consent allows)
+   - One player-journey piece (Saeed / Zach)
    - One paid ad with 3 hook variants for the next camp or trial
    - A style frame sheet: 6 stills showing the new vibrant look with the signature line, for a fast yes/no
 7. Write the run report with what you found in the library (volume, gaps, best material, footage we're missing and should shoot next).
